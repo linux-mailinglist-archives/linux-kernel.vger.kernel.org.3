@@ -2,135 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 470B9501DB2
+	by mail.lfdr.de (Postfix) with ESMTP id 8F74D501DB3
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234969AbiDNVxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51284 "EHLO
+        id S237663AbiDNVwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiDNVxW (ORCPT
+        with ESMTP id S232439AbiDNVwR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:53:22 -0400
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F187420193
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:50:55 -0700 (PDT)
-Received: from [IPv6:::1] ([IPv6:2607:fb90:7391:dbf4:ac39:3cd7:6899:402e])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 23ELn22M2798814
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 14 Apr 2022 14:49:06 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 23ELn22M2798814
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022040301; t=1649972954;
-        bh=jiFuth2NsJ6kFB5qJAnKixgQm17ojdbszGGbG4v/FeY=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=WlSCH46pkTTvkaONLTYtjSkmVwtV4qIeEdMmXnK56j8qtfwYS7JikfRA16t5MViVC
-         EM1qWGvWzhlh2WlFCdtk8/UVeYPWJN9pelM2/l0cF13oibPwWutbgFsYCsjE65uNxL
-         UzaMe4CX9mRVu4ZeBkEf3DAcp1R7Lu0Q4CjYfJaSmfE341ksWVeh/c/jWjfchMFBDB
-         Kc/0+g7g2/qKBHAy4Z8aTTrUnbJmj1jVMpR2c1aRJI76xB5zAdlw1ESnuyChATNlb9
-         ESUZ4Kayt9mmYcOKPJjEWAfQnrQPber7lZBL2bGlkPEFzqEejAivyie3AdvPo+WqEc
-         sBsC/PwpLjncQ==
-Date:   Thu, 14 Apr 2022 14:49:01 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Rob Herring <robh@kernel.org>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "open list:HARDWARE RANDOM NUMBER GENERATOR CORE" 
-        <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@vger.kernel.org>,
-        "open list:MIPS" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_01/11=5D_timekeeping=3A_add_ra?= =?US-ASCII?Q?w_clock_fallback_for_random=5Fget=5Fentropy=28=29?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YliHAl0XpQ57FSGy@robh.at.kernel.org>
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-2-Jason@zx2c4.com> <CAL_JsqJYq5Oe_zBbcwYNMpfpqGLGCyaSfGqOrPjZ_Pj=nF73mA@mail.gmail.com> <CAHmME9pn++c0qHzq39YWyXogcKRbn2XK=yA3kFqch0wH7qPcAg@mail.gmail.com> <YliHAl0XpQ57FSGy@robh.at.kernel.org>
-Message-ID: <B465920D-5799-4799-A0AC-68837E159D66@zytor.com>
+        Thu, 14 Apr 2022 17:52:17 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E51C13CDB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:49:51 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id f5so3920916ilj.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=q0JHKXPIUQwXKIyQID2uNw8AWiNJuyCq0B2NuHEUdjw=;
+        b=dv9D5fNYDGcObkc1VhdDNV3GXjucyxDSnq8AFxBOd4Ons3E2R04iKBRBObfrlte5Xd
+         KWo1msVoXlM72zJxXJj9OjCnEHb5QPDwTL8l5vZsIwbhhOdEp0nriEZ20xAt/MT7H61x
+         oPJ5/FMYlbmLuywl6Jyn2lT+zDeQzb5mhxNhY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
+         :content-transfer-encoding;
+        bh=q0JHKXPIUQwXKIyQID2uNw8AWiNJuyCq0B2NuHEUdjw=;
+        b=5MozBL7WKIDciSEdg7/nNlR1lLCrhHqBKVYozYKTV2UkNAbFD0y9aM5Uwi7jj9kBlX
+         ZjCzYtQzg2j9PG0ZzppjH1nVNkFtwxyZiVn71PD1piI2dJkKpsiEcmUrteQ/+OHkTgFt
+         34Kyi84SDnWQOBW6sDi9kAaWGeLfWI4jjdb+CvP1FOIAXY1GN0Ihu4xOyqrShDCIYJ2X
+         zh3JyGPbtluiSXrMPE38/fFymltMlpkJuOaVJZvb1oKfxJRonMp1j2llEkIWEPi91k2n
+         MpjCt+TCq2J6mbBb2znrPKvNqy9YU3BUrhtOqftW1aMtvPnQMvG3rfFTRkESJqyKsgOi
+         9IpA==
+X-Gm-Message-State: AOAM533FY1su4rfSxWchIHfKxQy/FD7E40OlBTyX0Ak1tCjindfkOMvX
+        9fVwQFhVOYQ85/1q6Gqq1KfZnw==
+X-Google-Smtp-Source: ABdhPJxzMy3EDhRCosc7hcDTPIL3RBmm5BQ8HqWic0WC9oy4qeJYkXOIMPf9IS63ZcjhoaqKzpnvXg==
+X-Received: by 2002:a92:6c08:0:b0:2c6:123f:48c9 with SMTP id h8-20020a926c08000000b002c6123f48c9mr1972848ilc.22.1649972990653;
+        Thu, 14 Apr 2022 14:49:50 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id v11-20020a92d24b000000b002caacf87598sm1657423ilg.1.2022.04.14.14.49.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 14:49:50 -0700 (PDT)
+Subject: Re: [PATCH 4/4] selftest/vm: add skip support to mremap_test
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
+        akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
+ <20220414171529.62058-5-sidhartha.kumar@oracle.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <ae52647e-8d14-b86b-eea3-24331ad488b0@linuxfoundation.org>
+Date:   Thu, 14 Apr 2022 15:49:49 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220414171529.62058-5-sidhartha.kumar@oracle.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 14, 2022 1:41:38 PM PDT, Rob Herring <robh@kernel=2Eorg> wrote:
->On Thu, Apr 14, 2022 at 12:38:49AM +0200, Jason A=2E Donenfeld wrote:
->> Hi Rob,
->>=20
->> On Wed, Apr 13, 2022 at 4:32 PM Rob Herring <robh@kernel=2Eorg> wrote:
->> > 'does not have a usable get_cycles(), =2E=2E=2E' as clearly some arch=
-es have
->> > get_cycles() and yet still need a fallback=2E
->> >
->> > Why not handle the 'if get_cycles() returns 0 do the fallback' within
->> > a weak random_get_entropy() function? Then more arches don't need any
->> > random_get_entropy() implementation=2E
->>=20
->> No, this doesn't really work=2E Actually, most archs don't need a
->> random_get_entropy() function, because it exists in asm-generic doing
->> the thing we want=2E So that's taken care of=2E But weak functions as y=
-ou
->> suggested would be quite suboptimal, because on, e=2Eg=2E x86, what we
->> have now gets inlined into a single rdtsc instruction=2E Also, the
->> relation between get_cycles() and random_get_entropy() doesn't always
->> hold; some archs may not have a working get_cycles() function but do
->> have a path for a random_get_entropy()=2E Etc, etc=2E So I'm pretty sur=
-e
->> that this commit is really the most simple and optimal thing to do=2E I
->> really don't want to go the weak functions route=2E
->
->Is random_get_entropy() a hot path?
->
->
->It doesn't have to be a weak function, but look at it this way=2E We have=
-=20
->the following possibilities for what random_get_entropy() does:
->
->- get_cycles()
->- get_cycles() but returns 0 sometimes
->- returns 0
->- something else
->
->You're handling the 3rd case=2E
->
->For the 2nd case, that's riscv, arm, nios2, and x86=2E That's not a lot,=
-=20
->but is 2 or 3 of the most widely used architectures=2E Is it really too=
-=20
->much to ask to support the 2nd case in the generic code/header?
->
->Rob
+On 4/14/22 11:15 AM, Sidhartha Kumar wrote:
+> Allow the mremap test to be skipped due to errors
+> such as failing to find a valid remap region and
+> failure to parse the mmap_min_addr sysctl.
+> 
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> ---
+>   tools/testing/selftests/vm/run_vmtests.sh | 11 ++++++++---
+>   1 file changed, 8 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/vm/run_vmtests.sh b/tools/testing/selftests/vm/run_vmtests.sh
+> index 88e15fbb5027..eae98f5de2cc 100755
+> --- a/tools/testing/selftests/vm/run_vmtests.sh
+> +++ b/tools/testing/selftests/vm/run_vmtests.sh
+> @@ -272,11 +272,16 @@ echo "-------------------"
+>   echo "running mremap_test"
+>   echo "-------------------"
+>   ./mremap_test
+> -if [ $? -ne 0 ]; then
+> +ret_val=$?
+> +
+> +if [ $ret_val -eq 0 ]; then
+> +	echo "[PASS]"
+> +elif [ $ret_val -eq $ksft_skip ]; then
+> +	 echo "[SKIP]"
+> +	 exitcode=$ksft_skip
+> +else
+>   	echo "[FAIL]"
+>   	exitcode=1
+> -else
+> -	echo "[PASS]"
+>   fi
+>   
+>   echo "-----------------"
+> 
 
-It goes into interrupts, which means it is latency critical=2E
+Thank you. Looks good to me.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah

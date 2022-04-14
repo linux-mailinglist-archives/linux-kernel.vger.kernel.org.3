@@ -2,140 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC42500ABC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B7500AC0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbiDNKIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35254 "EHLO
+        id S241575AbiDNKJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:09:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242253AbiDNKIH (ORCPT
+        with ESMTP id S229634AbiDNKJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:08:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12A46AA74
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 03:05:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D78761DA5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86612C385A5;
-        Thu, 14 Apr 2022 10:05:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649930741;
-        bh=Dmla2dPaUtWMTVxmNVoyiq1mZIf/bZdj49HOCheIL5g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HgQc04JQWUYRZZuWRorf2UFDSTE8CLHFAtlO4puAc+Q3y4L+aCZSmbUMDs0XKmFNn
-         qh/tGovkPUIPvH1T+AzLn9SYhMb92IpB+ZfMo1pVqGkFiMdy0KPXxL6zEpz7HEaRK/
-         S3rQ+H6cm3PWi6Z0gckzFTY4pbpCj2rTbtvzPg4qKjWspYJDZ5dtfcCA/yT7wjL6nc
-         cm5u1O+pck4AzObjG3Zd0xmTkvZTb5UUmjiHJBHQm4+m+5J8h92mMsT2Eq49zRXqwt
-         o5Uj9haFXd1fIsRoxsT12YQUS8t98KrKzB0c8x7tfbUfdxIbvX/5t1uJZXwOg2/Iso
-         KryjHogmPHsnQ==
-Date:   Thu, 14 Apr 2022 11:05:35 +0100
-From:   Will Deacon <will@kernel.org>
-To:     Steven Price <steven.price@arm.com>
-Cc:     Muchun Song <songmuchun@bytedance.com>, catalin.marinas@arm.com,
-        akpm@linux-foundation.org, anshuman.khandual@arm.com,
-        lengxujun2007@126.com, arnd@arndb.de, smuchun@gmail.com,
-        duanxiongchun@bytedance.com, quic_qiancai@quicinc.com,
-        aneesh.kumar@linux.ibm.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: mm: fix pmd_leaf()
-Message-ID: <20220414100535.GB2298@willie-the-truck>
-References: <20220411122653.40284-1-songmuchun@bytedance.com>
- <20220413101929.GA1229@willie-the-truck>
- <64d4288e-7776-a3fd-5ee4-70486dfd0394@arm.com>
+        Thu, 14 Apr 2022 06:09:47 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FE770924;
+        Thu, 14 Apr 2022 03:07:22 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id r13so6186001wrr.9;
+        Thu, 14 Apr 2022 03:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFoJHVfLIsD3E+on3fTDKrttYh+nASwnL70uWLoYl9Q=;
+        b=VscGeHgYpmqeZ24KSQ/hrzLntZvcTorl7hNN8mWj2wVp30uAyGkYNMQKP5pAepk+Un
+         fNtFCRZwDfFHcKQwosalJ5McUw/MADo+ebT8PWfvovN8VSCSqBKMSOW1np+kXuePcXna
+         49NUH9NxDn2VbsWyBzOycnqrPo2Y0a9zlQiXlFizwLte3fS+claG54t0m4apRKQj0mvU
+         HKHvpLFJ9cAUuthpQNFjY5hSHW9txaW25djdd3mMjbfP6uHCzjJBZepwJHkGx8+jCYQK
+         tjzhX0TJwAJsW6jKFJDRL96bIHEmFXBsBZYcH0LunRq3Irg9Gh16yKiAEfWVar4GDwun
+         AQHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FFoJHVfLIsD3E+on3fTDKrttYh+nASwnL70uWLoYl9Q=;
+        b=EGMFb1g9mPAi0hKxWrNfe7k3nvc8NawQ9JEO9qs59MLKi/POswVGz4FV++YhhPUO4i
+         EtPhSmJKUIlpaBAlYcIUuwZQB0MMfcj37IyEh4Kckxe5089tDJYp60fAo+sc3mGiMuAS
+         oat2yOsxnTcJyjXtgXqXXhKf712UTaLUFodq7fPW4JgOIwLypNv60sfdKAJa5Jlwt4CX
+         aOBriAi7FI8SmJ8+7GGDcT2A8mqzLknCdBh/2x7ZMiwomgObZzD0aHIkfszY/KWIu1Z8
+         wv1EvJLOlNsih8FQ0d1hDXcI7grxptEh4unbhEaGxrBCYsMEr02LGWKe7ZL/Yspivk7i
+         euyg==
+X-Gm-Message-State: AOAM532i3ozPVYiQnzkT4Izl0UnX09GmKxV+QM0tvWr0A6hUebMhP8XZ
+        Mls4mRHdo1HfdeaJXi2p3ws=
+X-Google-Smtp-Source: ABdhPJyH8xWu3hK9Rp5rWB/cER0XqvTzFgaHtKIxauOasle6toXEo+fVD2SGosOUt/9LjDccndSFHQ==
+X-Received: by 2002:a5d:4d02:0:b0:207:a6e8:ef4a with SMTP id z2-20020a5d4d02000000b00207a6e8ef4amr1501714wrt.245.1649930841574;
+        Thu, 14 Apr 2022 03:07:21 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c2c4700b0038eb7d8df69sm1580412wmg.11.2022.04.14.03.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 03:07:21 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: VMX: make read-only const array vmx_uret_msrs_list static
+Date:   Thu, 14 Apr 2022 11:07:20 +0100
+Message-Id: <20220414100720.295502-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64d4288e-7776-a3fd-5ee4-70486dfd0394@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:39:49AM +0100, Steven Price wrote:
-> On 13/04/2022 11:19, Will Deacon wrote:
-> > On Mon, Apr 11, 2022 at 08:26:53PM +0800, Muchun Song wrote:
-> >> The pmd_leaf() is used to test a leaf mapped PMD, however, it misses
-> >> the PROT_NONE mapped PMD on arm64.  Fix it.  A real world issue [1]
-> >> caused by this was reported by Qian Cai.
-> >>
-> >> Link: https://patchwork.kernel.org/comment/24798260/ [1]
-> >> Fixes: 8aa82df3c123 ("arm64: mm: add p?d_leaf() definitions")
-> >> Reported-by: Qian Cai <quic_qiancai@quicinc.com>
-> >> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
-> >> ---
-> >> v2:
-> >> - Replace pmd_present() with pmd_val() since we expect pmd_leaf() works
-> >>   well on non-present pmd case.
-> >>
-> >>  arch/arm64/include/asm/pgtable.h | 2 +-
-> >>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>
-> >> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> >> index ad9b221963d4..00cdd2d895d3 100644
-> >> --- a/arch/arm64/include/asm/pgtable.h
-> >> +++ b/arch/arm64/include/asm/pgtable.h
-> >> @@ -551,7 +551,7 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
-> >>  				 PMD_TYPE_TABLE)
-> >>  #define pmd_sect(pmd)		((pmd_val(pmd) & PMD_TYPE_MASK) == \
-> >>  				 PMD_TYPE_SECT)
-> >> -#define pmd_leaf(pmd)		pmd_sect(pmd)
-> >> +#define pmd_leaf(pmd)		(pmd_val(pmd) && !(pmd_val(pmd) & PMD_TABLE_BIT))
-> >>  #define pmd_bad(pmd)		(!pmd_table(pmd))
-> > 
-> > I'm still trying to get my head around the desired semantics here.
-> > 
-> > If we want to fix the original report, then we need to take PROT_NONE
-> > entries into account. The easiest way to do that is, as you originally
-> > suggested, by using pmd_present():
-> > 
-> > #define pmd_leaf(pmd)	(pmd_present(pmd) && !pmd_table(pmd))
-> > 
-> > But now you seem to be saying that !pmd_present() entries should also be
-> > considered as pmd_leaf() -- is there a real need for that?
-> > 
-> > If so, then I think this simply becomes:
-> > 
-> > #define pmd_leaf(pmd)	(!pmd_table(pmd))
-> > 
-> > which is, amusingly, identical to pmd_bad().
-> > 
-> > The documentation/comment that Steven referred to also desperately needs
-> > clarifying as it currently states:
-> > 
-> >   "Only meaningful when called on a valid entry."
-> > 
-> > whatever that means.
-> 
-> The intention at the time is that this had the same meaning as
-> pmd_huge() (when CONFIG_HUGETLB_PAGE is defined), which would then match
-> this patch. This is referred in the comment, albeit in a rather weak way:
-> 
-> >  * This differs from p?d_huge() by the fact that they are always available (if
-> >  * the architecture supports large pages at the appropriate level) even
-> >  * if CONFIG_HUGETLB_PAGE is not defined.
-> 
-> However, the real issue here is that the definition of pmd_leaf() isn't
-> clear. I know what the original uses of it needed but since then it's
-> been used in other areas, and I'm afraid my 'documentation' isn't
-> precise enough to actually be useful.
-> 
-> At the time I wrote that comment I think I meant "valid" in the AArch64
-> sense (i.e. the LSB of the entry). PROT_NONE isn't 'valid' by that
-> definition (and I hadn't considered it). But of course that definition
-> of 'valid' is pretty meaningless in the cross-architecture case.
+Don't populate the read-only array vmx_uret_msrs_list on the stack
+but instead make it static. Also makes the object code a little smaller.
 
-arm64 'valid' + PROT_NONE is roughly what 'present' means. So we could say
-that this only works for present entries, but then Muchun's latest patch
-wants to work with !present which is why I tried to work this through.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ arch/x86/kvm/vmx/vmx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Will
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index c654c9d76e09..36429e2bb918 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7871,7 +7871,7 @@ static __init void vmx_setup_user_return_msrs(void)
+ 	 * but is never loaded into hardware.  MSR_CSTAR is also never loaded
+ 	 * into hardware and is here purely for emulation purposes.
+ 	 */
+-	const u32 vmx_uret_msrs_list[] = {
++	static const u32 vmx_uret_msrs_list[] = {
+ 	#ifdef CONFIG_X86_64
+ 		MSR_SYSCALL_MASK, MSR_LSTAR, MSR_CSTAR,
+ 	#endif
+-- 
+2.35.1
+

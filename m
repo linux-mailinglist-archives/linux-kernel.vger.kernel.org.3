@@ -2,238 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4388B50063F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA89500646
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240066AbiDNGlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 02:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35478 "EHLO
+        id S240084AbiDNGoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 02:44:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234478AbiDNGlS (ORCPT
+        with ESMTP id S234478AbiDNGoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 02:41:18 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA2F31DFB;
-        Wed, 13 Apr 2022 23:38:52 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220414063850euoutp013d3a81c830570d4e44c36506643ddb5e~lr-rAXsDP0823308233euoutp01a;
-        Thu, 14 Apr 2022 06:38:50 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220414063850euoutp013d3a81c830570d4e44c36506643ddb5e~lr-rAXsDP0823308233euoutp01a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1649918330;
-        bh=iZJ0s+Xj2eet3xX8TAKGb2899dU+i00esTWn1QUmUaE=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=swaPJwNZ/dok3lpu7CKnLpFvMNK66+bsViY0NWvnGzO+i3Cx4SIh+69lzQr7kPluQ
-         WkXXWLFmS4+SS65FURorJUHhid6/2/Pq0bG6fb3BkREkY6gcKzwO+HLKX0H4YpJafb
-         oJfgPJwWyNflwR107wF/yAHK00ENO85PcPDV2yZI=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220414063849eucas1p2edb867a5d82f16c3ecd193c3c5253ca1~lr-quG01i2885528855eucas1p2J;
-        Thu, 14 Apr 2022 06:38:49 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 27.72.09887.971C7526; Thu, 14
-        Apr 2022 07:38:49 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9~lr-qSAv_c3094930949eucas1p1_;
-        Thu, 14 Apr 2022 06:38:49 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20220414063849eusmtrp1feb8830483e8f0c8cc09abb606d918bc~lr-qQt94F1095910959eusmtrp1f;
-        Thu, 14 Apr 2022 06:38:49 +0000 (GMT)
-X-AuditID: cbfec7f4-45bff7000000269f-36-6257c1797257
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 19.B3.09404.971C7526; Thu, 14
-        Apr 2022 07:38:49 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220414063847eusmtip12bd90501637cb3e6303ce2fd8295e5d3~lr-oxFH-51804918049eusmtip1m;
-        Thu, 14 Apr 2022 06:38:47 +0000 (GMT)
-Message-ID: <3a24ef01-3231-1bee-7429-dce5680c5682@samsung.com>
-Date:   Thu, 14 Apr 2022 08:38:46 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
-        Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [PATCH v4 11/13] pinctrl: meson: Replace custom code by
- gpiochip_node_count() call
+        Thu, 14 Apr 2022 02:44:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867A03B2B6;
+        Wed, 13 Apr 2022 23:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649918515; x=1681454515;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=nXF+pZdAt7v3TwIDTmHwLaGWf75vmwfzScwxX3+KNE4=;
+  b=cW0CioG5KCdQ74/vvn0DWNf1MASNWB8xdpnZWKvypoGbj0xY+nLQ2nAg
+   X2tHuegDro2A4jUPJRxHOogrf1NUpeJScDfJz/852b54pNBxM0ALftRjP
+   6UzQR2686mHAlacX6CsS5TJQ4nbh1w1Hy8jJX8HxQ4WCbpXPsLG+YvCiY
+   o6o0/kuz0wtvvgtvtaxladT/MBha5ppVYYFcPmIIr4lV7rVDNy+1E0Nw0
+   e97zBb+JOs3nC/7TK7T7VwfUl7NJxJ1fJ8O1vs0b8wOTPUXz/vrt9lybX
+   YMOBrhCjHCvDNvSxhBSAQqXmJ/Wu51QMDR5tP5+RLCh1xnPyimKtNSIeJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="250152151"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="250152151"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 23:41:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="591071865"
+Received: from fmsmsx605.amr.corp.intel.com ([10.18.126.85])
+  by orsmga001.jf.intel.com with ESMTP; 13 Apr 2022 23:41:54 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx605.amr.corp.intel.com (10.18.126.85) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Wed, 13 Apr 2022 23:41:54 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Wed, 13 Apr 2022 23:41:54 -0700
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Wed, 13 Apr 2022 23:41:54 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oaOZuOS+3r/ezFlM950uTcKDb9VlabnUn1MS+2pwGLUO50+8fUz7GkUAHWVb6QryiprSz26qyeyA3DLSdCOAZlgLB/hiMs7VV467K0ze4svfuzHNDus4dbegLk6t9f9FVMSsdkxynfI2wccYGt0csZ3vLgWIbcvKOVkvGTDfqE+HqMUN1gZ6K3RbNrBYZSoqIOyKXXTxi/NtY44WA41UfOL/PD4s6YP87R08S7ahR9hHxvvvp6QcUi+WIEz8xaDJgy28yL+eocbg3EhP2qjWdxRFBsHOXB3p93wtONUl0TkiUsQbjxB4GkOySWDdV9Cxob5AH73w3N14xUwW2QQjWQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZHH4cX989dKwuRp99Zu+WqVq8GGW9yRUFVHaZRwQ2j4=;
+ b=fyAUCP2r2A2CXjkzrIxgJ/fFeYFmQREvWyNMx1FXXXyQj9HxIXFLxjf7PJUsiMVyN0faOboOEUFjopmJ4l9tIJeliS0P4LI6L2yMULWyE08bpXgnAKkFMscKGeJ7O6BpmCYbi++RaEQ4m4X80xlEhMbRXTdUDuvOxKkjNqMB0/bKdkjnlVyaV1rMa6pBCujVJ0VJXPapHEvgH3cRv5PxNjXm+vXbeEUL7MDIP8kFVzIkkpBUrRYVIfPgjrn4sZfCI5jT3gw0VvM/IDE5awnabV/LD8SnLZuWhIkaMoO7sUoS7zkEF9YXPxg0KPz/q5/zyj/VztOU5jRpHGyAXkfFmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BYAPR11MB3367.namprd11.prod.outlook.com (2603:10b6:a03:79::29)
+ by SJ0PR11MB4816.namprd11.prod.outlook.com (2603:10b6:a03:2ad::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
+ 2022 06:41:53 +0000
+Received: from BYAPR11MB3367.namprd11.prod.outlook.com
+ ([fe80::c8d9:8c9:f41:8106]) by BYAPR11MB3367.namprd11.prod.outlook.com
+ ([fe80::c8d9:8c9:f41:8106%6]) with mapi id 15.20.5164.018; Thu, 14 Apr 2022
+ 06:41:53 +0000
+From:   "G, GurucharanX" <gurucharanx.g@intel.com>
+To:     Jianglei Nie <niejianglei2021@163.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [Intel-wired-lan] [PATCH] ice: Fix memory leak in
+ ice_get_orom_civd_data()
+Thread-Topic: [Intel-wired-lan] [PATCH] ice: Fix memory leak in
+ ice_get_orom_civd_data()
+Thread-Index: AQHYRdCcBpO6yZ8+Y0ehAJFIE980MqzvCaig
+Date:   Thu, 14 Apr 2022 06:41:52 +0000
+Message-ID: <BYAPR11MB3367D0896E6DD74BE81196FCFCEF9@BYAPR11MB3367.namprd11.prod.outlook.com>
+References: <20220401080051.16846-1-niejianglei2021@163.com>
+In-Reply-To: <20220401080051.16846-1-niejianglei2021@163.com>
+Accept-Language: en-GB, en-US
 Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Qianggui Song <qianggui.song@amlogic.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Fabien Dessenne <fabien.dessenne@foss.st.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com
-Cc:     Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20220401103604.8705-12-andriy.shevchenko@linux.intel.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfVCTdRy/3/M8e56xbvrwUvykDBtpV54ggne/3hQ6iCf/iouLkg7b3HNs
-        8nqbM3ERyiEYhw5RYYw5Xsx4iUq28bLlCJCck3JFB6Ix4oqlEAScWm4n0MaDxX+f7+f7/Xy+
-        L/fl40E3yTC+POcgq8gRZ4lIAdF51XNjW35fqmR7Y0ME8kxVATRh6CSR09WPo5NF1RjyVJ/C
-        kNY2gSPrhC/xR4+GROdrKwHSN+ejmd8GcOQpNWPI6bxEobOPmjBUX/sEMv4+wkOmukcA/WzV
-        k6hj6i+fh7MHQ2Ujkzx0tdFBIIvewUOGxS95qP9UGrpefJdArvFrBLJ5fZZXZkp5aM4Tj6y9
-        xyjkNU8D1Gr1udl62wlU4v2cjItgBtq+AMzc6HGKuTDyC48xtKkZt6aDYk7/sI2x6FwUU29U
-        Me6KMxRjbP2UZMZGLpOMwZHMmD4rZJzaBsBYuu9hjGZx+9vBewWvSdks+SFWEbXrQ4FsvmuZ
-        ypt/6vBwXdhRYAsqAwF8SMfCJacNlAEBP4huBvDa5XMEF9wH8ErfAM4F9wC82ViMPZac/mZp
-        NdEE4HDXhVXJAoDOi2Okv0pI74Kdy+WUHxP0Zmi+O4dzfCB01EwSfvwkLYHne8ZX+GBaDIsm
-        ZlZ4nA6FtyfrML9pCP09AYvsxyh/gNNOEs4Pcx1IOhqWzZat4AA6CXqNOopTh8OuWf3KfJCe
-        EcCWKi3BDZ4A62YvkhwOhtN2M8XhZ+DgmXJfDd+Hc+GiNoajD8ORP9twDr8Kx254SX8JTr8I
-        v7ZGcXQ8HNLVkJxyHRydDeQmWAcrO6txjhbCEyWrt94Cdfav/uvZ9+MQXgFEujVX0a3ZXrdm
-        F93/fesB0QpCWZUyO4NV7shhP4pUirOVqpyMyP252Ubg+/3BJfv9btA0vRDZDzA+6AeQj4tC
-        hLc0qZIgoVScf4RV5O5TqLJYZT94mk+IQoX75ZfEQXSG+CCbybJ5rOJxFuMHhB3FykffKc2v
-        fPfWwORguOMhDLmzszfh7z17LUndTa3rqQQoO2dIkbRo3HBo0+5wd7q8QntWujF4Uzxb+lPK
-        cnPlBvMHjslBvalkxx55mv2tcY09/OVl12JlS7r6nxfEb2SrEjOj1d9GifriTMkD+u6tSYZD
-        cQdqAtUWSrevIeZN03cF6Ynlue89V6vfYNKeTMQjyY8pT2ceMot7xqSCSE2yUf5r1WY13+O2
-        SAseeHdmbixP6b0jWaiJ6IiZKnq++sC4tb3koWXaeCKK9r7vEu6ueEU2lXa9ME8EjhTLFh3t
-        D3i1z1bdrm2J3aLtWv86CmAlqbGuAuknsoythXVLx3NEhFImjn4JVyjF/wJe+8E9agQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrDKsWRmVeSWpSXmKPExsVy+t/xu7qVB8OTDHZuYrP4+XIao8WDedvY
-        LM7fPcRs0ds0ncni5/Q+JosZex8wW+x6AJR4tq+fzWLu7EmMFnNWVFq8eXSE2eJn+xYmi/Pn
-        N7BbTPmznMliwWxui02Pr7FabJ7/h9Hi8q45bBZbX74DmnF+H5NF17UnrBbHFp1ksdg55ySr
-        xby/a1ktDvVFW5xqecFicffeCRaLvb+ARh5+085q8f6no8WuA43sFr+2vGK0WLULaNreAxtZ
-        LNp+LWNzUPY4smY1o8f7G63sHouv3Wb1mLem2uNp/1Z2j4lndT12zrrL7rFgU6nH0wmT2T02
-        repk87hzbQ+bx7yTgR6bl9R7nJ+xkNFj547PTB79fw0ChKP0bIryS0tSFTLyi0tslaINLYz0
-        DC0t9IxMLPUMjc1jrYxMlfTtbFJSczLLUov07RL0Mj5s/89e8EGs4up8qQbGvUJdjJwcEgIm
-        EhN3/2PuYuTiEBJYyihx70sHK0RCRuLktAYoW1jiz7UuNoii94wSF7qOs4EkeAXsJLb972EH
-        sVkEVCW2vHjPDBEXlDg58wkLiC0qkCTxYttzRhBbWCBRounBG7A4s4C4xK0n85lAhooInGOR
-        uHCulxXEYRa4yCYxedcKqJuaGCX2PnwFNpZNwFCi620X2GpOAXeJX5tmsUOMMpPo2trFCGHL
-        S2x/O4d5AqPQLCSXzEKycRaSlllIWhYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQITHbb
-        jv3csoNx5auPeocYmTgYDzFKcDArifDe7A9PEuJNSaysSi3Kjy8qzUktPsRoCgyOicxSosn5
-        wHSbVxJvaGZgamhiZmlgamlmrCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXA5HZNZmJ915EU
-        zk8a4k5mYjuWb77+1mpFYYPKuqenVt8Pdv4hMt/blndi0WtHpcZbbWqPnSZHxyV/q16pWrV5
-        bVL59uOrj1et19XQmfqO779z9arVR/f0v9asaNV5cie09O1n8cqzG+S/tFe7bNn1/djKraIV
-        5VNYw96oBZ1q4zPyZOzaXWb7bYWbjoqH65EI/mcNfAUbPzxgOfPEJjLWP/ZCyHn1/rSTjFdu
-        7eqfuN98mtBDeVblbb8Oyi9WcZgWo3NaZntotPTyttnl1zqeX53Uf27u2TTnB8Jr1h+R9KlT
-        6rP70Ld2Vm7EjHl1Fk4HGppLOT7kneFOeF+8YFXMNO1NS221OSsSNWdP4Us6qcRSnJFoqMVc
-        VJwIAKE4crP/AwAA
-X-CMS-MailID: 20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9
-References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
-        <20220401103604.8705-12-andriy.shevchenko@linux.intel.com>
-        <CGME20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-8.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9e932d43-25cb-41b3-3b87-08da1de1dc82
+x-ms-traffictypediagnostic: SJ0PR11MB4816:EE_
+x-microsoft-antispam-prvs: <SJ0PR11MB48162720A1928BDA9D2747A2FCEF9@SJ0PR11MB4816.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kDT5Jdk1e1diXcvWPki5X05blgUbtVp3Yb3v1tZthPjfnu9hPScLXUgvY3g5DPp73JuyCQh+F4cB3E7+nVMiZOvlB/foC6epwO1M7MJb2z1A4EYgkDdl6x5NhRVVgDsGAxcKomWhX48fJjif+VEC5bqMel/jhsVaXioKY9/RsHdemLRa85sJSC4QpOffNoO/3lJydyxBdGhJNCeq+TETRdQHzVizxbj4F/kQ9q5tKGuCOvaV/mWpo/2CH/3JWxmrQz62d7jZHG71hUJkAqtMJMuQkHdKSU0fgPIGcqYarYBN1C4mlZD4qfjTLXczkhRyTxSvA+rok9kufO1UQ1b6ZBbyRT0KvC+nn3X6CpVfKVL5D5bxSJRpfuugpnSxQvXOUoBl7sBucVG7TBk6x/tmwjpP9OLA86Y1wRAK5R6VhqE3ntSPs7dGciSeT0IxQBmx9LBB/CWhAYXkCBa6WjVspR18ooxKDElOMCV0GftZQoP58sm0/9/iRu4x70eeIU9tfPepaqIzjh92RV4Bvj8bOPsWzf9X1P7p4VP2jV7Qd4074DOSW+kvOotQJCqTo9fvcOKvQQH35Zkt72TDxBFqg60cLht25UrcQk12ORFbmCQVswyUPE4fgiL2npjqjaJx5C3yNuLLcc48a2gaXfNCVK4BoRve3Yk1/Ri1+z/UguTWv83ro4/HlavTcXZC9rGgIC+/Ckambf9RyMeTSYRU3Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3367.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(66476007)(64756008)(66556008)(6506007)(83380400001)(55236004)(55016003)(53546011)(7696005)(52536014)(4326008)(9686003)(26005)(186003)(33656002)(71200400001)(5660300002)(86362001)(8676002)(82960400001)(8936002)(4744005)(2906002)(66446008)(76116006)(66946007)(54906003)(110136005)(38070700005)(38100700002)(316002)(122000001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?ixopFbUITuzZTn+ZqKOorszaa+t88WBNPPN7wkqlkviEb1bDhG3S7xlS9V4C?=
+ =?us-ascii?Q?+Ms31gSp6HY52OeZV+sb1Wjuy/ir3ey6w/kkSBuTVqQOq4cnR8TcBKCBEkxT?=
+ =?us-ascii?Q?2IbJ7CB8PVPyIU7cjKtQUxKE3cMVXCUTl52Ca7fRWIzK1PqWMvt7boF7S7SW?=
+ =?us-ascii?Q?Zj8gyZ/fke92Gl16N9ilJIz00W2gz9fA1MJ75NVdbr09vxgpYDey68ipYwJ+?=
+ =?us-ascii?Q?X8rRgwGqgXz8Q2VxZeoVQe94ARDXgrTdboEJRypj9AxAQkK3/M6AuYOq8YM7?=
+ =?us-ascii?Q?omxj62mz3wk3Y2ZdUachsNoIczzkCyiP67MNF1g5I9Wu9e48/LxmPl1B8oWr?=
+ =?us-ascii?Q?fDYLjltDQH2upPBrt6gKRzuTgmQn3rTUAXBpWfUN+5h8G0OJsPnP5VNgeRSM?=
+ =?us-ascii?Q?WTTaDclo0kWBCmdPIboG1OPsMZ2tEJ7KGZKtGuUn3H7kLbZudI/VSuLXsEZT?=
+ =?us-ascii?Q?jdXneFPpeLewmPA9waHOyOL8pkXpozfNrAIn8axYR/EPWPGHX6w1LenBJXeX?=
+ =?us-ascii?Q?l5srcR8IW7L8h5/9h6FCgNygG8L4xXakL2nOz3V68hnTJY+YcRhzt3woQrV1?=
+ =?us-ascii?Q?GIGY8LuU5RIVuGYbuA02IjuXxuUmsMar7sO+nKshpUXYk1cTurN8mXbxrAKk?=
+ =?us-ascii?Q?lY8fGYaEV30TNSU/KqG3V5uhR2iG2RjT0vxO5TIkTlVqKm/B+KhC5uJ5/07U?=
+ =?us-ascii?Q?p2i3tcVvNrxLPCwnX/mBh8SlCGjFkoyewWUWC6y+zk9GtRmT3mq0rNT6v2oG?=
+ =?us-ascii?Q?T8IZGbxvmhvSHlYsBYRYp7aSrSO04u4+vmiCsNckc0qZBnGYqnZEjaAam3WZ?=
+ =?us-ascii?Q?At3fBBMwTg0XSx3pP8cuDwiRaxgBUOFZGYZZm9yK0G1ML8gxytIpShLidCjI?=
+ =?us-ascii?Q?cZ+nPDs+8N6UMQWRvrMeY7MuG6PWznxhn9VsrTkU9v1tR/opZC8mo2jibZm9?=
+ =?us-ascii?Q?1mvYm4tjCOApVS6vQo+Cn43ERzcD8qxROv1dtQb1HZK9vSkTjk2TO9/XHGzo?=
+ =?us-ascii?Q?PMgpXI29NZAPqTT87Ty93BT0e2j34oVHww/tSCNp+otS7rMBU0h1eDHtexay?=
+ =?us-ascii?Q?uzI5GnqmmCbCydcGJzqdYPTUWRca1SYyv3nuiEANm2bCkMWRSpnTNUKJJppj?=
+ =?us-ascii?Q?s96/iDQAP9r5bvtuK1NCB5r9OVABxiBEsYYa3rRcn0wJELjUsg11spYFbn7/?=
+ =?us-ascii?Q?8DZYazgrgVTu8H4983+YErP4DZ8GF6KELO+fgveBdFPNlCrgYTcrEUF4paRZ?=
+ =?us-ascii?Q?v3qqt9lTEOKl/zOOk166gsXXlWMx4TIBRS4KxxVsJsOTUkgAJ9bFGr26pTsX?=
+ =?us-ascii?Q?4luaIrc2/JtkfGSu4CvmTGbAqub0VRN0JXrV1BIUFUS1kpyNLvWrNxn4cbsz?=
+ =?us-ascii?Q?XBFjWw4GcKV6f2O9q0ChNkISJLuj2fyG5BJzd8+cocvXIGrOAFF7O2DpKOVg?=
+ =?us-ascii?Q?X4BVgeq2WaKNlQOPmV1KdTmKprz/X/CcHYFwe4K3ZRbF6uxQsFPjVbFsHEIY?=
+ =?us-ascii?Q?ykaKR2FGA6b8JIVliqN1pU4qW+0zhwdwblUMgQyQUJSbncTZDItTyNhKimE+?=
+ =?us-ascii?Q?7KwEwpxENkq1EN6MxpI3dkT2X30Bsgqc2I8STVlfNG54uRzpssVJb7lRy879?=
+ =?us-ascii?Q?obTfMlz7PC3f6v5vQMmLv9ulvDJGqQPDZjlUFRo6MYAi/dDb985qNYlRQTCq?=
+ =?us-ascii?Q?myv5VY8kUVHx3lii6FHsR04qiDGK05F3TJmEoXMqHQZruvzfquCMtShY1AqB?=
+ =?us-ascii?Q?n9brZI6u9w=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3367.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e932d43-25cb-41b3-3b87-08da1de1dc82
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 06:41:52.9466
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g5EF7Z5Xtzsd/LQv2/Ngn9gOfUmrEIJIM0blTI0gaoqpDIOPEcd27vaIN6H2/UamisDxnT+tCO4jGNWF8/lklw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4816
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
 
-On 01.04.2022 12:36, Andy Shevchenko wrote:
-> Since we have generic function to count GPIO controller nodes
-> under a given device, there is no need to open code it. Replace
-> custom code by gpiochip_node_count() call.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Reviewed-by: Neil Armstrong <narmstrong@baylibre.com>
 
-This patch landed in linux next-20220413 as commit 88834c75cae5 
-("pinctrl: meson: Replace custom code by gpiochip_node_count() call"). 
-Unfortunately it breaks booting of all my Amlogic-based test boards 
-(Odroid C4, N2, Khadas VIM3, VIM3l). MMC driver is no longer probed and 
-boards are unable to mount rootfs. Reverting this patch on top of 
-linux-next fixes the issue.
-
+> -----Original Message-----
+> From: Intel-wired-lan <intel-wired-lan-bounces@osuosl.org> On Behalf Of
+> Jianglei Nie
+> Sent: Friday, April 1, 2022 1:31 PM
+> To: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
+> <anthony.l.nguyen@intel.com>; davem@davemloft.net; kuba@kernel.org
+> Cc: netdev@vger.kernel.org; intel-wired-lan@lists.osuosl.org; linux-
+> kernel@vger.kernel.org; Jianglei Nie <niejianglei2021@163.com>
+> Subject: [Intel-wired-lan] [PATCH] ice: Fix memory leak in
+> ice_get_orom_civd_data()
+>=20
+> Line 637 allocates a memory chunk for orom_data by vzmalloc(). But when
+> ice_read_flash_module() fails, the allocated memory is not freed, which w=
+ill
+> lead to a memory leak.
+>=20
+> We can fix it by freeing the orom_data when ce_read_flash_module() fails.
+>=20
+> Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
 > ---
->   drivers/pinctrl/meson/pinctrl-meson.c | 28 ++++++++++++---------------
->   1 file changed, 12 insertions(+), 16 deletions(-)
->
-> diff --git a/drivers/pinctrl/meson/pinctrl-meson.c b/drivers/pinctrl/meson/pinctrl-meson.c
-> index 5b46a0979db7..1b078da81523 100644
-> --- a/drivers/pinctrl/meson/pinctrl-meson.c
-> +++ b/drivers/pinctrl/meson/pinctrl-meson.c
-> @@ -49,6 +49,7 @@
->   #include <linux/pinctrl/pinctrl.h>
->   #include <linux/pinctrl/pinmux.h>
->   #include <linux/platform_device.h>
-> +#include <linux/property.h>
->   #include <linux/regmap.h>
->   #include <linux/seq_file.h>
->   
-> @@ -662,27 +663,22 @@ static struct regmap *meson_map_resource(struct meson_pinctrl *pc,
->   	return devm_regmap_init_mmio(pc->dev, base, &meson_regmap_config);
->   }
->   
-> -static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc,
-> -				  struct device_node *node)
-> +static int meson_pinctrl_parse_dt(struct meson_pinctrl *pc)
->   {
-> -	struct device_node *np, *gpio_np = NULL;
-> +	struct device_node *gpio_np;
-> +	unsigned int chips;
->   
-> -	for_each_child_of_node(node, np) {
-> -		if (!of_find_property(np, "gpio-controller", NULL))
-> -			continue;
-> -		if (gpio_np) {
-> -			dev_err(pc->dev, "multiple gpio nodes\n");
-> -			of_node_put(np);
-> -			return -EINVAL;
-> -		}
-> -		gpio_np = np;
-> -	}
-> -
-> -	if (!gpio_np) {
-> +	chips = gpiochip_node_count(pc->dev);
-> +	if (!chips) {
->   		dev_err(pc->dev, "no gpio node found\n");
->   		return -EINVAL;
->   	}
-> +	if (chips > 1) {
-> +		dev_err(pc->dev, "multiple gpio nodes\n");
-> +		return -EINVAL;
-> +	}
->   
-> +	gpio_np = to_of_node(device_get_named_child_node(pc->dev, "gpio-controller"));
->   	pc->of_node = gpio_np;
->   
->   	pc->reg_mux = meson_map_resource(pc, gpio_np, "mux");
-> @@ -751,7 +747,7 @@ int meson_pinctrl_probe(struct platform_device *pdev)
->   	pc->dev = dev;
->   	pc->data = (struct meson_pinctrl_data *) of_device_get_match_data(dev);
->   
-> -	ret = meson_pinctrl_parse_dt(pc, dev->of_node);
-> +	ret = meson_pinctrl_parse_dt(pc);
->   	if (ret)
->   		return ret;
->   
+>  drivers/net/ethernet/intel/ice/ice_nvm.c | 1 +
+>  1 file changed, 1 insertion(+)
+>=20
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Tested-by: Gurucharan <gurucharanx.g@intel.com> (A Contingent worker at Int=
+el)

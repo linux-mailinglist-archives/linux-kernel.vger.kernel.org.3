@@ -2,228 +2,814 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BB375013E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:23:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDD23501622
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348021AbiDNOdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47344 "EHLO
+        id S1346576AbiDNOu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344487AbiDNNll (ORCPT
+        with ESMTP id S1344853AbiDNNoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:41:41 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21D1120
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:39:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649943554; x=1681479554;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=9sR7owQE5ZUl2ihOUj2ae6wPFfL5eZk8LFuKWdqGElc=;
-  b=BjiQU3aJdLT8LgY01FkJHTsuYz2AKbPQHAMywx/oRMwiBxX5CaCHpIKQ
-   r5yeZ1pGNpPOoDW4ajg8FWFdv7ym9pvmrn/Rm47POpjNhJSfJ+0x9PkX5
-   PcncKM7zblWtvqESH5bvvrofO3eAB80ncOwgoop5bYE90vq6K7i10JpLo
-   t8/nXMSNSKkPxP/VyfWIwH8P3ggfWquJJq1YINsCYkIjC2lUIEz8JS4Wr
-   JmxNPZ977nCriWhX3VYqJ/GTrAnwqNoOvf8WCDFZwEoDRVX05DfTFOmYL
-   SmUmYBiqrJ4lyNXZ5eENqAQI7evbwM4j00ae2RCc9TSWSVRly+SLR07ig
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="262683338"
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="262683338"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 06:39:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
-   d="scan'208";a="552685035"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 14 Apr 2022 06:39:14 -0700
-Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Thu, 14 Apr 2022 06:39:13 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 06:39:13 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Thu, 14 Apr 2022 06:39:13 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gFHO/qkg5gVEOHDfRas1I8onh+73xlunnqK6xnHIzLT04U1OXIR35ul9JPxMRZuqmqZ2MqEQBuM7bw3hW6Uab7aeiJSPPMSHxiI2QEU4PxobIPVvxlRcG7TqiMxWkOSQTIRSYKTot4ZRvdaZyqSLz10f/A+1wUVDlhb/7QRA00DDTsIWHQqBIQDvkSuAii81UZpwjgBG9S4j9hrhXeoAcgymdjaC5ItxwgOVEARwqB94xOCW0sCCL+JUE8HXSuYHjFPxv//PPosi4CpKPIXK1kqOMNG9kUcqvfkZJN+lGBsodsNm602KaJcpZz7vaitTNdXCL8trbhCaezopoPKVRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JpOiaLmsIiqmI8LBhUp5c3LLqS5tzu63ud4aFs/us4E=;
- b=PFOoqi+5vNPij43M89toAiu3L3M9aTeR9fzxeW67qFgYIehCGdHesyNhmScxkkaqztaSgqo7apELY+aTAMZgvmv4R+y0UDGiTydhwU/j9R/5qe/gZptNTNLzobiIrftYji4FC4fBM1Vq8xWp4aTQMlHLFonUHDDC+TG2DnqLHYrS2ye1Q5Z56/LLod3jcETMtZbYs4XO3vurlkW3t1mBkwME1Bqc5s9yGKRp69QyIfbyaSw3z/3fd19sYLhot0OGxv+/iHMY/j2wF+XUfU6q4/EXnYk25q0dKBOan5fii60a4ZzgSokOCO+1nvqEEAaKYte1+NSjQ/T46YxLTCsbLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com (2603:10b6:5:388::7) by
- BY5PR11MB3910.namprd11.prod.outlook.com (2603:10b6:a03:185::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 13:39:11 +0000
-Received: from DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab]) by DM4PR11MB5549.namprd11.prod.outlook.com
- ([fe80::e5b8:93eb:e06b:f1ab%6]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 13:39:11 +0000
-From:   "Wang, Zhi A" <zhi.a.wang@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>
-Subject: Re: refactor the i915 GVT support and move to the modern mdev API v3
-Thread-Topic: refactor the i915 GVT support and move to the modern mdev API v3
-Thread-Index: AQHYTa50HopuXX46aU+QxtIWwnq/0azt3o0AgAAhbQCAAANggIAAeVIAgAACNICAANnfgIAAFJ2AgAABUQA=
-Date:   Thu, 14 Apr 2022 13:39:11 +0000
-Message-ID: <ae3bec3f-b89a-2845-a924-046874fa38c7@intel.com>
-References: <20220411141403.86980-1-hch@lst.de>
- <82c13d8e-1cb4-2873-86e9-16fd38e15b27@intel.com>
- <20220413154642.GA28095@lst.de> <871qy1geko.fsf@intel.com>
- <5af7726e-920e-603a-bad3-8adb09d2ba89@intel.com>
- <20220413232053.GA2120790@nvidia.com>
- <1c3aaab9-3bd4-95d4-9f9f-4be9e10e6516@intel.com>
- <20220414133427.GB2120790@nvidia.com>
-In-Reply-To: <20220414133427.GB2120790@nvidia.com>
-Accept-Language: en-FI, en-US
-Content-Language: aa
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 9b41ae0a-7ff6-410e-9b01-08da1e1c28bb
-x-ms-traffictypediagnostic: BY5PR11MB3910:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <BY5PR11MB391018D6CCED93CCC4A1169DCAEF9@BY5PR11MB3910.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: cKoJ6hargtj7XxNhaGJECYRJVQA/2oTZebwYEk7Ynu02RVJHdMtSm8PdKvhul8TUGcD4qV9bHLk6woQs+Sz6mSDZ4WVk3Ivd3ijIo0P70zlbtItSVkI7dvzmWAu5C0uy3MG8Uy8A/MP3ykRLQte7VMvOBsRA07X7mmtQpMwj+7DDgug0rdOdA9WTvrX8cG4fM9ct1I8Iy61nfNrdKMYGHWoyvUqFLfaB7EFIr3xD3B4DvQXcDNPavJWo58Lff4ZGwg37Ln0geQCCHkGh0fh69l7cs17HzgqeW0j+R1D1pe5dxHP1AtNXLBjliNUPBwbf7orEwihXDSEtavSbuaLOVhCHXMXTj4R9V9JKa7nVNZFqHVd9DSaFPH+SRGfcGQv9g1AQawOSQOc4XCjJxqAkcHOFTrOrCrwb2TqZHf1+PxARxfQyMCyWRw2ZaklxSKqqj9xhO+iNT6ZZkXS0l5UcCioMomnNDNbnSRAC+DdadoZIDhZacTrfzDR+AKHVqXAykbt+tq9whybA3FTJKqNw1DIsF7AhshsoeMzRVt2eL0/4ljE0HJWcF/j6FIHPChTkOjLQlEo9LlHtvml/uBttTaG9OhsPgqlsUSA8B2tsxYGrxr6/DxYHAGEoRzgo4G2Mzvsu9cLjnkwtrKzXP3JuJgFxvle1y5QmaT70SGi7p1VrGmcDjtXHYS/Xl3AAdDHuhPFeRp006UG4SwCxaAfpb3wCf2YWunohe0lhUjIi58ok+RdUFqeC4tCQt7Kn+f1f5ohYLpWl7hp6dLsuK1+ZrISa8yMEoPucF3QOZBNGAWH3COOIIKpKwdNMzLEjEnt/sxCFfBBZWKFgZ+f+GCt2XoAiT9lwRgULmNor2ckcp+s=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5549.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(38100700002)(6486002)(66556008)(26005)(2906002)(186003)(71200400001)(91956017)(36756003)(966005)(122000001)(76116006)(31686004)(86362001)(83380400001)(2616005)(64756008)(38070700005)(66946007)(4326008)(82960400001)(508600001)(66446008)(8676002)(316002)(7416002)(8936002)(5660300002)(53546011)(31696002)(110136005)(54906003)(6506007)(6512007)(66476007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?Windows-1252?Q?yYtR2VKG2pu1xVY3lBsFonqPr9yC0PX9Vg60xKJTuHTfiejK1GVptJFp?=
- =?Windows-1252?Q?VjduVl1AjcuQpKywz78dB+PvxfcgzoIRwHJHMB/CGGFuRXJjbMXCRPDC?=
- =?Windows-1252?Q?sFuFa+BzGHpYM/exNJgL3JlQVzRe2szNd4Fc5ZEgkDkIORmJRa9WEF6x?=
- =?Windows-1252?Q?ml6WgXGaz/Zg2y5Foi8E0pbiZ7Om6tqqXCtMyX6G4b/9y96OdMHJwbxU?=
- =?Windows-1252?Q?i60YM+k5QyA89RCEz/nSiND8aCbO9f68NcnLEIgZoZ4zA1r2csLc0DPj?=
- =?Windows-1252?Q?Clwq5YptzqzgAhTtIs4+wQoAHLOc0a6knZxmji9keEMuXzAMGf7cqPHS?=
- =?Windows-1252?Q?8b4RvUJMjTG7fYCkrj0KFv0sQeDcwElPFJ8fr2bFDxwsR7smFWm6ZE8+?=
- =?Windows-1252?Q?9RaIZc9tT11PdH3bAW62om7Qmfkm5KAPp1qnadFRGS6O6eMCQeZXwo4B?=
- =?Windows-1252?Q?KnQ+pYsLZiVn8UoC3vaI8Q5jvjk8NjMdyZhpjirK/UQ8753oadatbQ8K?=
- =?Windows-1252?Q?4sUvi8FG4xly22pM/heQ1mZM8phXDZMVzEC8e7umYPA+NNEONgqPqBMD?=
- =?Windows-1252?Q?D7TFvGkNVE/927AvE9U2wSQL0rQXKM92DHyGweeUpJskudvF2l1nDW1u?=
- =?Windows-1252?Q?IP9Qr7S0fYp5tEoayuoQkMruhJu7wGv68xwxdakKZx6oekxGKzey2dYt?=
- =?Windows-1252?Q?wzGCOIFhe5BiOoEwiPHhwrYKXfhHUhRSsLS4mS6t0HTYCXPzd9/lVw9V?=
- =?Windows-1252?Q?oF0h8I1TC6hTLC30DyasKGFDZ1Gz4OfMwXQy17aMWviZNdl675vvjrzi?=
- =?Windows-1252?Q?i6pIKhESwmm1fPq3+gmeVZOdknso6aSjKKASYIkL/ABLOliigSSdjUwy?=
- =?Windows-1252?Q?pz98bxUts7cck5e8dOPq7TE98FBaNXlzUlIf3MViDKA9/qERK9pcNj71?=
- =?Windows-1252?Q?nj/d9ZfJBLD3L7XOKcIQhHdBged+TMFgc+Z40dNuXHyQalKr5qmdHFae?=
- =?Windows-1252?Q?12w+2KkxXfEcpxapI5wxaLLcjgvtcPMAXyNUskw5j8dW0rtw9z21/6Rt?=
- =?Windows-1252?Q?qrJ8jC7v+HsgvMGINuyYR5E6ElJzfm23apVR46udADWzfRfw/iPTmBhN?=
- =?Windows-1252?Q?yA8lrYEr7F79X8u05/Obj0oYp5xntwZ8Ha765CvaLjVd0kwLyQj8LTtG?=
- =?Windows-1252?Q?sY7JJinkrmQEg0JvPn9VSZWTdzvYhoMEoX5FaCwvPIL9CVQjeZ3V6j8Q?=
- =?Windows-1252?Q?9hkv3abJ3TAhRQj6FUf1+3zJ/1blRlwVSj38LBHCuUq4hYLEEMjHOZw/?=
- =?Windows-1252?Q?jeRWf01xNjno4Fn5hnchXdVoc8w0vex+8FlzSwzY2IFyUBBQMmKoWb1T?=
- =?Windows-1252?Q?FyTYoROUZHf1zTCxr/Zif2dyfzHJttyKMapDJ71hNNF1vXeGsOs69xG/?=
- =?Windows-1252?Q?fAStxGMJb75oECBaKPJg84jYsHyuOvo6u2HSYzWuAIE3SR8/wwM3WDqQ?=
- =?Windows-1252?Q?4LM9lRKU+wfFRhrFrWvVbiK31motCnXlD3f8+mv1hw67wLm7egWBrCiw?=
- =?Windows-1252?Q?VLRFvq9Lte1nowthCpSLD46enfC1Ymj7GYYUuNgCBm07OnTqZM11630a?=
- =?Windows-1252?Q?HKb+HK0VdQsnlv/5FfZzbGPb2d3Jq77cZw0iiIG/PVv1C+j8z9SYJZQt?=
- =?Windows-1252?Q?9y2GV1REWl8DL3HbYq6KUh6kV028Z2+D/WEP5Zp1PDNVYgReyT91UPa3?=
- =?Windows-1252?Q?t/MzlLZKv5j1lqvN8ULeiIXug24YorB4mRPgPyOp15yP0fTqO3IMF3X8?=
- =?Windows-1252?Q?0/s+xz76ntC3cxn0dMYlwIOLF1+SfF4hFkec5zakEwgulDAHrgKNhrWg?=
- =?Windows-1252?Q?tSXobmMsdxcF4A=3D=3D?=
-Content-Type: text/plain; charset="Windows-1252"
-Content-ID: <30DDE82D73B52F4EAB05A482BE55A01D@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 14 Apr 2022 09:44:44 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAC739158
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:40:22 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id q8so2889510wmc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:40:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=iAc7lpd+4nLmuT0cGiCP3JMhHZxoF8IqIslQp63gOcM=;
+        b=M4QmYbEs3ZdWGSqViwM60QQLjNJ4jPBVlG63bnzHv/f2mL/yBHKqPeOhbjwDn9piDb
+         +ZkV3hQx+ZIygp/hzjBYvXsO2aIDCuYQjfGANiMJXx8Rfcf5Fo/htBFGmvU0sRbuAt39
+         /V05QXFHvwYcIsgDX0qeE9JoqXQbwJMA5XBp+QAaDjUK4zn4rPQVIwBWHOwJBLsYT9Za
+         T2OY8FSKNGeICkg5+cuRyNi0lsB/4zgUOyAmyXEPFjNVcnubbRXYazdaW9WNA4oNWQuU
+         o6cSU7275vmhmPYyx/sUW4qVw+Bx73CPl9iW49/VDSr7Xl075cW9KsVH+BFmwwkdRR9i
+         uNdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=iAc7lpd+4nLmuT0cGiCP3JMhHZxoF8IqIslQp63gOcM=;
+        b=W3IG+nBQ7lwN65zPnxih03HysDWk7AHVj8eKCAT0VL2NS16I9BQ+3g0OuTcSQFOGCN
+         DO6vS2KZ3Wpkc+pwr0/JwKN8YgcWxrpmBVYgeEOJuoDXgvStTZUZLBn4vCKkMcbqmkzX
+         A6G3zZqMYZwKqoGRAZjCpx0l55A/I4pMnwfhtdvgkYlbncap/DI0wp4TFzhRQx1vBhah
+         e9RN+JQKbGmRG0CFGI4IygcxA+j49VznAwt53OeTXOumKjNQo5lD24L/zd6Wh8MhrnSG
+         nzSA/KaQwW9vWBTtt7J725fS31SmTeUaLPlckDFbINZMVCnweJ1Byw3WhDTfU9thKJ1h
+         gnKA==
+X-Gm-Message-State: AOAM533iuixay7qjegpT6KLxkr+ErItPQ4eh4C9hoiM7K3VJiuyF3Dqc
+        PJmDiqbrG8T6zPDrNyvAFcQ1Hi/YaIQq0DnV0fI3iQ==
+X-Google-Smtp-Source: ABdhPJze+2iSsIxbpwLJh/dAt3QDZrZaU/uh5h8iGzqYbY30zMgO5wurSSRsVfFk95cyQy4Soc6bZaHF4g9cMmC10/8=
+X-Received: by 2002:a7b:cbc2:0:b0:388:faec:2036 with SMTP id
+ n2-20020a7bcbc2000000b00388faec2036mr3309643wmi.190.1649943621373; Thu, 14
+ Apr 2022 06:40:21 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5549.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b41ae0a-7ff6-410e-9b01-08da1e1c28bb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Apr 2022 13:39:11.6866
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: t7PbbyxeUNHY2OBY1i8bGw6zdQBvfS3cmu6cMlvsW6BCyEfMJ7sPfSQzZ+SPDlUNgQsKyRcCEPcbWhl+y3pe4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB3910
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412125035.40312-1-quic_jinlmao@quicinc.com>
+ <20220412125035.40312-10-quic_jinlmao@quicinc.com> <f8c758a0-8e6d-85e6-3af2-640b33a92ce9@gmail.com>
+ <4464bd92-c104-3c3c-d077-d1b8ced76410@quicinc.com>
+In-Reply-To: <4464bd92-c104-3c3c-d077-d1b8ced76410@quicinc.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Thu, 14 Apr 2022 14:40:10 +0100
+Message-ID: <CAJ9a7VhxPiA_arCg2LRki8eqx-OyipTxLp7TbiVfe2Dajm3wig@mail.gmail.com>
+Subject: Re: [PATCH v5 09/10] ARM: dts: msm: Add coresight components for SM8250
+To:     Jinlong Mao <quic_jinlmao@quicinc.com>
+Cc:     Konrad Dybcio <konradybcio@gmail.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Tingwei Zhang <quic_tingweiz@quicinc.com>,
+        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
+        Tao Zhang <quic_taozha@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Hao Zhang <quic_hazha@quicinc.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 1:34 PM, Jason Gunthorpe wrote:
-> On Thu, Apr 14, 2022 at 12:20:42PM +0000, Wang, Zhi A wrote:
->> On 4/13/22 11:20 PM, Jason Gunthorpe wrote:
->>> On Wed, Apr 13, 2022 at 11:13:06PM +0000, Wang, Zhi A wrote:
->>>> Hi folks:
->>>>
->>>> Thanks so much for the efforts. I prepared a branch which contains all=
- our patches.The aim of the branch is for the VFIO maintainers to pull the =
-whole bunch easily after the drm-intel-next got merged through drm (as one =
-of the MMIO patches depends on a patch in drm-intel-next).
->>>>
->>>> I dropped patch 4 and patch 5 as they have been covered by Jani's patc=
-hes. Some conflicts was solved.
->>>> QA is going to test it today.=20
->>>>
->>>> You can find it here:
->>>>
->>>> git clone https://github.com/intel/gvt-linux -b for-christoph
->>>
->>> There are alot of extra commits on there - is it possible to base this
->>> straight on rc1 not on some kind of existing DRM tree?
->>>
->>> Why did you choose drm/i915/fbc: Call intel_fbc_activate() directly
->>> from frontbuffer flush  as a base?
->>>
->>> Jason
->>>
->>
->> Hi Jason:
->>
-This one belongs to i915, which has already been queued in drm-intel-next, =
-but
-not yet reached to the top. When it is landed in -rc, I will rebase this br=
-anch
-on it, then we can drop this patch in this branch.
+Hi
 
->> I updated the branch. You can check if those are what you are expecting.=
- :)
->=20
-> This is better, except for the first commit:
->=20
->  [DON'T PULL] drm/i915/dmc: split out dmc registers to a separate file
->  THIS PATCH WILL GO THROUGH DRM-INTEL-NEXT TO UPSTREAM
->=20
->  Clean up the massive i915_reg.h a bit with this isolated set of
->  registers.
->=20
->  v2: Remove stale comment (Lucas)
->=20
-> Clean the commit message and send that as a proper PR to
-> drm-intel-next, then everything else is OK.
->=20
-> Jason
->=20
+On Wed, 13 Apr 2022 at 17:45, Jinlong Mao <quic_jinlmao@quicinc.com> wrote:
+>
+> Hi Konrad,
+>
+> Thank you for the review.
+>
+> On 4/13/2022 5:58 PM, Konrad Dybcio wrote:
+> > Hi,
+> >
+> >
+> > I added Bjorn, the linux-arm-msm maintainer to CC as he was missing
+> > for some reason.
+> >
+> >
+> > On 12/04/2022 14:50, Mao Jinlong wrote:
+> >> Add coresight device tree for sm8250. STM/ETM are added.
+> >>
+> >> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
+> >> Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+> >> ---
+> >>   .../arm64/boot/dts/qcom/sm8250-coresight.dtsi | 526 ++++++++++++++++++
+> >>   arch/arm64/boot/dts/qcom/sm8250.dtsi          |   2 +
+> >>   2 files changed, 528 insertions(+)
+> >>   create mode 100644 arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> >>
+> >> diff --git a/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> >> b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> >> new file mode 100644
+> >> index 000000000000..1de42fd39248
+> >> --- /dev/null
+> >> +++ b/arch/arm64/boot/dts/qcom/sm8250-coresight.dtsi
+> >> @@ -0,0 +1,526 @@
+> >> +// SPDX-License-Identifier: GPL-2.0
+> >
+> > sm8250.dtsi is BSD-3-Clause. Please consider relicensing.
+> >
+> >
+> >> +/*
+> >> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights
+> >> reserved.
+> >> + */
+> >> +
+> >> +&soc {
+> >> +
+> >> +    stm@6002000 {
+> >> +        compatible = "arm,coresight-stm", "arm,primecell";
+> >> +        reg = <0 0x06002000 0 0x1000>,
+> >
+> > You don't need to break the line at so few characters.
+> >
+> >
+> >> +              <0 0x16280000 0 0x180000>;
+> >> +        reg-names = "stm-base", "stm-stimulus-base";
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                stm_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&funnel0_in7>;
+> >
+> > Same here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    funnel@6041000 {
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        reg = <0 0x06041000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                funnel0_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&merge_funnel_in0>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@7 {
+> >> +                reg = <7>;
+> >> +                funnel0_in7: endpoint {
+> >> +                    remote-endpoint = <&stm_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    funnel@6042000 {
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        reg = <0 0x06042000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                funnel2_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&merge_funnel_in2>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@2 {
+> >> +                reg = <4>;
+> >> +                funnel2_in5: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_merge_funnel_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    funnel@6b04000 {
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        arm,primecell-periphid = <0x000bb908>;
+> >> +
+> >> +        reg = <0 0x6b04000 0 0x1000>;
+> >> +        reg-names = "funnel-base";
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                merge_funnel_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                        <&etf_in>;
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@7 {
+> >> +                reg = <7>;
+> >> +                funnel_swao_in_funnel_merg: endpoint {
+> >> +                    remote-endpoint=
+> >
+> > And here.
+> >
+> >
+> >> + <&funnel_merg_out_funnel_swao>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +    };
+> >> +
+> >> +    funnel@6045000 {
+> >
+> > The nodes are not sorted properly (by address). Please fix that.
+> >
+> >
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        reg = <0 0x06045000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                funnel_merg_out_funnel_swao: endpoint {
+> >> +                    remote-endpoint = <&funnel_swao_in_funnel_merg>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@1 {
+> >> +                reg = <0>;
+> >> +                merge_funnel_in0: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&funnel0_out>;
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@2 {
+> >> +                reg = <1>;
+> >> +                merge_funnel_in2: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&funnel2_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    replicator@6046000 {
+> >> +        compatible = "arm,coresight-dynamic-replicator",
+> >> "arm,primecell";
+> >> +        reg = <0 0x06046000 0 0x1000>;
+> >> +
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                replicator_out: endpoint {
+> >> +                    remote-endpoint = <&etr_in>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            port {
+> >> +                replicator_cx_in_swao_out: endpoint {
+> >> +                    remote-endpoint = <&replicator_swao_out_cx_in>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    replicator@6b06000 {
+> >> +        compatible = "arm,coresight-dynamic-replicator",
+> >> "arm,primecell";
+> >> +        reg = <0 0x06b06000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                replicator_swao_out_cx_in: endpoint {
+> >> +                    remote-endpoint = <&replicator_cx_in_swao_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            port {
+> >> +                replicator_in: endpoint {
+> >> +                    remote-endpoint = <&etf_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etf@6b05000 {
+> >> +        compatible = "arm,coresight-tmc", "arm,primecell";
+> >> +        reg = <0 0x6b05000 0 0x1000>;
+> >
+> > Please pad the address to 8 chars.
+> >
+> >
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etf_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&replicator_in>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@1 {
+> >> +                reg = <0>;
+> >> +                etf_in: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&merge_funnel_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etr@6048000 {
+> >> +        compatible = "arm,coresight-tmc", "arm,primecell";
+> >> +        reg = <0 0x06048000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,scatter-gather;
+> >> +
+> >> +        in-ports {
+> >> +            port {
+> >> +                etr_in: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&replicator_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7040000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07040000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU0>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm0_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in0>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7140000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07140000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU1>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm1_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in1>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7240000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07240000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU2>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm2_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in2>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7340000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07340000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU3>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm3_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in3>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7440000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07440000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU4>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm4_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in4>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7540000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07540000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU5>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm5_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in5>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7640000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07640000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU6>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm6_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in6>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    etm@7740000 {
+> >> +        compatible = "arm,coresight-etm4x", "arm,primecell";
+> >> +        reg = <0 0x07740000 0 0x1000>;
+> >> +
+> >> +        cpu = <&CPU7>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +        arm,coresight-loses-context-with-cpu;
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                etm7_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_in7>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    funnel@7800000 {
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        reg = <0 0x07800000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                apss_funnel_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_merge_funnel_in>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            #address-cells = <1>;
+> >> +            #size-cells = <0>;
+> >> +
+> >> +            port@0 {
+> >> +                reg = <0>;
+> >> +                apss_funnel_in0: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm0_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@1 {
+> >> +                reg = <1>;
+> >> +                apss_funnel_in1: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm1_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@2 {
+> >> +                reg = <2>;
+> >> +                apss_funnel_in2: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm2_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@3 {
+> >> +                reg = <3>;
+> >> +                apss_funnel_in3: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm3_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@4 {
+> >> +                reg = <4>;
+> >> +                apss_funnel_in4: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm4_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@5 {
+> >> +                reg = <5>;
+> >> +                apss_funnel_in5: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm5_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@6 {
+> >> +                reg = <6>;
+> >> +                apss_funnel_in6: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm6_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +
+> >> +            port@7 {
+> >> +                reg = <7>;
+> >> +                apss_funnel_in7: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&etm7_out>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +
+> >> +    funnel@7810000 {
+> >> +        compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
+> >> +        reg = <0 0x07810000 0 0x1000>;
+> >> +
+> >> +        clocks = <&aoss_qmp>;
+> >> +        clock-names = "apb_pclk";
+> >> +
+> >> +        out-ports {
+> >> +            port {
+> >> +                apss_merge_funnel_out: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&funnel2_in5>;
+> >
+> > And here.
+> >
+> >
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +
+> >> +        in-ports {
+> >> +            port@1 {
+> >> +                reg = <0>;
+> >> +                apss_merge_funnel_in: endpoint {
+> >> +                    remote-endpoint =
+> >> +                      <&apss_funnel_out>;
+> >> +                };
+> >> +            };
+> >> +        };
+> >> +    };
+> >> +};
+> >> diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> >> b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> >> index af8f22636436..115623392183 100644
+> >> --- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> >> +++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
+> >> @@ -5434,3 +5434,5 @@
+> >>           };
+> >>       };
+> >>   };
+> >> +
+> >> +#include "sm8250-coresight.dtsi"
+> >
+> > Why should everybody want coresight? It's not enabled on (most)
+> > production devices and may cause a platform crash when you try to use
+> > it on such ones.
+> >
+> >
+> > These nodes should probably be added to sm8250.dtsi, all with status =
+> > "disabled" by default, so that they don't break the devices that do
+> > not support it due to fuse configuration.
+> >
+> I will address your comments above.
+> I create coresight dtsi because of that there are dozens of coresight
+> nodes for qualcomm HW.
+> Add all the nodes in a separate file is easy to maintain.
+> For disabling all the nodes by default, i will check internally and get
+> back to you.
+>
 
+If the nodes are "disabled", then the base .dts files for platforms
+that do include coresight would have to be updated to enable all those
+nodes - which leaves potential for errors if nodes are accidentally
+omitted.
+
+Because sm8250-coresight.dtsi contains only Coresight devices, would
+it not be better to include this directly in the base .dts file for
+platforms that do have Coresight, and omit it from those that do not.
+
+Regards
+
+Mike
+
+
+>
+> Thanks
+> Jinlong Mao
+>
+>
+> >
+> > Konrad
+> >
+
+
+
+-- 
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

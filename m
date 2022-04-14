@@ -2,244 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FE77501E00
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0920501E05
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346974AbiDNWIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56242 "EHLO
+        id S243797AbiDNWJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343871AbiDNWHu (ORCPT
+        with ESMTP id S1346949AbiDNWJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:07:50 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC501ADD61
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:05:23 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so10448961pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:05:23 -0700 (PDT)
+        Thu, 14 Apr 2022 18:09:00 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3422ADD76;
+        Thu, 14 Apr 2022 15:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=subject:date:message-id:in-reply-to:references:mime-version
-         :content-transfer-encoding:cc:from:to;
-        bh=uLn9nEAVfqfhF99bZmCoDyMs8/O9emD7jJiMXxYFAyY=;
-        b=aCpk+hiR1i6NQteJMGoSFJLdn5Rgm8st+ic8YTNlQHLfaUlgHtMcfuGAfhQl3K+6g4
-         UmI+PZBc6djUKQNDbQ28uCRN+kmDtOXIVTEKtwMumAnydxR3HnsqPH3DA0sbMlbQAwrU
-         jpy7qcIA5R2RjbhZPPRb0MbiE3lAy7OS3Iwj1cDXaC4TvcQoItO9lj4SSCoUz8N2T03c
-         am9CxRoIA8kWRn5kdkC7F60d0pSGRFKNubmWK4iNXouTAsvDUaX7fSzOK0gKgvqKwaub
-         Qi9xqMYtyCJ43ckr4k2sI2wGmYCS0qBvDvWN1moO+kJfRhoTr4apwv5ff6foANjKKm0d
-         vijA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding:cc:from:to;
-        bh=uLn9nEAVfqfhF99bZmCoDyMs8/O9emD7jJiMXxYFAyY=;
-        b=X+JfOH6xIBnC1z5BWlzvf9CkfWn/zrdM9cjZ2JPshBxok9y0Q0uxnuD6ZJdol8rpdl
-         T2Nfse+jNeclMEsc6TyZ9f9cQLjh/YQeVeA9jBmZDVeCy7rR25qqNfVEBShnpw1swvWV
-         FTKehBpYTzh3hZB1LLsvnRdUWcx3qCOBcZ2lZnJaMhptMV5iheQ7c8a68YkWmNwAY0Xc
-         lhuvC/j/FqfX8XX1dgjyuwj8yaH0+NbN7PNERmTed1iBOc4lDrctollUFGSH7fsO9CAN
-         7ulUwegLfQX8fo40DjoKvPvIWVbSPQScLylNEVAeUgSBXsw5wTrEGAzcjwM5zXha81EH
-         B58A==
-X-Gm-Message-State: AOAM532/WndaaR4P/PL4SxSJoIfuwnfFJH5IPdV3ZlOTXnZPl0bAbO2D
-        sDgsaO9Yg/RHQG1d5n9LAljAvQ==
-X-Google-Smtp-Source: ABdhPJzhfrbMDiR890Mvpaf1KfA0KcEG1o/qsHftMGK/3W28SItjuhSFgVLfw1qtTLZgABu0T8DOAQ==
-X-Received: by 2002:a17:90a:a78f:b0:1bc:8042:9330 with SMTP id f15-20020a17090aa78f00b001bc80429330mr685887pjq.229.1649973923305;
-        Thu, 14 Apr 2022 15:05:23 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id r8-20020a17090a0ac800b001c9e35d3a3asm2852568pje.24.2022.04.14.15.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 15:05:22 -0700 (PDT)
-Subject: [PATCH v3 7/7] csky: Move to generic ticket-spinlock
-Date:   Thu, 14 Apr 2022 15:02:14 -0700
-Message-Id: <20220414220214.24556-8-palmer@rivosinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220414220214.24556-1-palmer@rivosinc.com>
-References: <20220414220214.24556-1-palmer@rivosinc.com>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1649973992; x=1681509992;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xVp5TAphqYTgZpbaJdav7ZSflN0pUeu1cQ9O+2F3xb8=;
+  b=ObhgheizD7sxrohog/qMBJIQtApS5bhqgEqmYf8quzWWGYpTO3ae8Vbw
+   xy/1mJ3Uk0jHz+ipXxe+ZVx1SGzd910ex6n+9HfvhAV3qoC5QZgktQF0A
+   8CpE+SWBDjHsaYYCvtIhyLfbmKqIU/bgntLmcv5oi6lbEe1tSuTw2xIe8
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 14 Apr 2022 15:06:32 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 15:06:31 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 14 Apr 2022 15:06:30 -0700
+Received: from [10.110.19.13] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 14 Apr
+ 2022 15:06:29 -0700
+Message-ID: <2039ef97-4fdb-bffe-1e02-18ae79c18be4@quicinc.com>
+Date:   Thu, 14 Apr 2022 15:06:28 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2] drm/msm/dp: enhance both connect and disconnect
+ pending_timeout handle
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <bjorn.andersson@linaro.org>,
+        <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1649280493-4393-1-git-send-email-quic_khsieh@quicinc.com>
+ <625ce8a0-4e25-5513-5599-c1cdebf5a3a5@linaro.org>
+ <09fd563f-4a2c-f670-51c2-0e5ff023816d@quicinc.com>
+ <CAA8EJpqzucFGf8ndDi2LZqtKiOt_w=_h1oPAUNVCdmUyh_3+zA@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAA8EJpqzucFGf8ndDi2LZqtKiOt_w=_h1oPAUNVCdmUyh_3+zA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Cc:     peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, longman@redhat.com,
-        boqun.feng@gmail.com, jonas@southpole.se,
-        stefan.kristiansson@saunalahti.fi,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, aou@eecs.berkeley.edu,
-        Arnd Bergmann <arnd@arndb.de>, macro@orcam.me.uk,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, wangkefeng.wang@huawei.com,
-        jszhang@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de, guoren@kernel.org,
-        shorne@gmail.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
 
-There is no benefit from custom implementation for ticket-spinlock,
-so move to generic ticket-spinlock for easy maintenance.
+On 4/8/2022 4:59 PM, Dmitry Baryshkov wrote:
+> On Fri, 8 Apr 2022 at 23:30, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>>
+>> On 4/8/2022 5:27 AM, Dmitry Baryshkov wrote:
+>>> On 07/04/2022 00:28, Kuogee Hsieh wrote:
+>>>> dp_hpd_plug_handle() is responsible for setting up main link and send
+>>>> uevent to notify user space framework to start video stream. Similarly,
+>>>> dp_hdp_unplug_handle is responsible to send uevent to notify user space
+>>>> framework to stop video stream and then tear down main link.
+>>>> However there are rare cases, such as in the middle of system
+>>>> suspending,
+>>>> that uevent could not be delivered to user space framework. Therefore
+>>>> some kind of recover mechanism armed by timer need to be in place in the
+>>>> case of user space framework does not respond to uevent.
+>>> Hmm, how does userpsace 'respond' to the uevent? The driver should
+>>> send hotplug notifications to userspace, but it must not expect any
+>>> particular reaction. The userspace might be as simple, as fbdev
+>>> emulation, but the driver still should function correctly.
+>> yes, driver is function correctly by setting up main link. but it does
+>> not know which resolution to display.
+>>
+>> It send hotplug notification through uevent to framework after main link
+>> is ready.
+>>
+>> Framework  is responsible to set up MDP timing engine to start video stream.
+>>
+>>
+>> However it does not know which
+> It's of no concern to the driver. It is completely the userspace
+> problem. After resuming, it should reread available video output
+> properties. The display could have been changed while the system is
+> suspended.
+>  From your description I still do not understand why you need the
+> 'recovery' mechanism.
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
----
- arch/csky/include/asm/Kbuild           |  3 +
- arch/csky/include/asm/spinlock.h       | 89 --------------------------
- arch/csky/include/asm/spinlock_types.h | 27 --------
- 3 files changed, 3 insertions(+), 116 deletions(-)
- delete mode 100644 arch/csky/include/asm/spinlock.h
- delete mode 100644 arch/csky/include/asm/spinlock_types.h
+I mean "recovery" means  dp driver may leave stay at link ready 
+mistakenly after dongle unplugged due to missing framework action to 
+tear down main link so that next dongle plug in will not work.
 
-diff --git a/arch/csky/include/asm/Kbuild b/arch/csky/include/asm/Kbuild
-index 888248235c23..103207a58f97 100644
---- a/arch/csky/include/asm/Kbuild
-+++ b/arch/csky/include/asm/Kbuild
-@@ -3,7 +3,10 @@ generic-y += asm-offsets.h
- generic-y += extable.h
- generic-y += gpio.h
- generic-y += kvm_para.h
-+generic-y += spinlock.h
-+generic-y += spinlock_types.h
- generic-y += qrwlock.h
-+generic-y += qrwlock_types.h
- generic-y += parport.h
- generic-y += user.h
- generic-y += vmlinux.lds.h
-diff --git a/arch/csky/include/asm/spinlock.h b/arch/csky/include/asm/spinlock.h
-deleted file mode 100644
-index 69f5aa249c5f..000000000000
---- a/arch/csky/include/asm/spinlock.h
-+++ /dev/null
-@@ -1,89 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--
--#ifndef __ASM_CSKY_SPINLOCK_H
--#define __ASM_CSKY_SPINLOCK_H
--
--#include <linux/spinlock_types.h>
--#include <asm/barrier.h>
--
--/*
-- * Ticket-based spin-locking.
-- */
--static inline void arch_spin_lock(arch_spinlock_t *lock)
--{
--	arch_spinlock_t lockval;
--	u32 ticket_next = 1 << TICKET_NEXT;
--	u32 *p = &lock->lock;
--	u32 tmp;
--
--	asm volatile (
--		"1:	ldex.w		%0, (%2) \n"
--		"	mov		%1, %0	 \n"
--		"	add		%0, %3	 \n"
--		"	stex.w		%0, (%2) \n"
--		"	bez		%0, 1b   \n"
--		: "=&r" (tmp), "=&r" (lockval)
--		: "r"(p), "r"(ticket_next)
--		: "cc");
--
--	while (lockval.tickets.next != lockval.tickets.owner)
--		lockval.tickets.owner = READ_ONCE(lock->tickets.owner);
--
--	smp_mb();
--}
--
--static inline int arch_spin_trylock(arch_spinlock_t *lock)
--{
--	u32 tmp, contended, res;
--	u32 ticket_next = 1 << TICKET_NEXT;
--	u32 *p = &lock->lock;
--
--	do {
--		asm volatile (
--		"	ldex.w		%0, (%3)   \n"
--		"	movi		%2, 1	   \n"
--		"	rotli		%1, %0, 16 \n"
--		"	cmpne		%1, %0     \n"
--		"	bt		1f         \n"
--		"	movi		%2, 0	   \n"
--		"	add		%0, %0, %4 \n"
--		"	stex.w		%0, (%3)   \n"
--		"1:				   \n"
--		: "=&r" (res), "=&r" (tmp), "=&r" (contended)
--		: "r"(p), "r"(ticket_next)
--		: "cc");
--	} while (!res);
--
--	if (!contended)
--		smp_mb();
--
--	return !contended;
--}
--
--static inline void arch_spin_unlock(arch_spinlock_t *lock)
--{
--	smp_mb();
--	WRITE_ONCE(lock->tickets.owner, lock->tickets.owner + 1);
--}
--
--static inline int arch_spin_value_unlocked(arch_spinlock_t lock)
--{
--	return lock.tickets.owner == lock.tickets.next;
--}
--
--static inline int arch_spin_is_locked(arch_spinlock_t *lock)
--{
--	return !arch_spin_value_unlocked(READ_ONCE(*lock));
--}
--
--static inline int arch_spin_is_contended(arch_spinlock_t *lock)
--{
--	struct __raw_tickets tickets = READ_ONCE(lock->tickets);
--
--	return (tickets.next - tickets.owner) > 1;
--}
--#define arch_spin_is_contended	arch_spin_is_contended
--
--#include <asm/qrwlock.h>
--
--#endif /* __ASM_CSKY_SPINLOCK_H */
-diff --git a/arch/csky/include/asm/spinlock_types.h b/arch/csky/include/asm/spinlock_types.h
-deleted file mode 100644
-index db87a12c3827..000000000000
---- a/arch/csky/include/asm/spinlock_types.h
-+++ /dev/null
-@@ -1,27 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--
--#ifndef __ASM_CSKY_SPINLOCK_TYPES_H
--#define __ASM_CSKY_SPINLOCK_TYPES_H
--
--#ifndef __LINUX_SPINLOCK_TYPES_RAW_H
--# error "please don't include this file directly"
--#endif
--
--#define TICKET_NEXT	16
--
--typedef struct {
--	union {
--		u32 lock;
--		struct __raw_tickets {
--			/* little endian */
--			u16 owner;
--			u16 next;
--		} tickets;
--	};
--} arch_spinlock_t;
--
--#define __ARCH_SPIN_LOCK_UNLOCKED	{ { 0 } }
--
--#include <asm-generic/qrwlock_types.h>
--
--#endif /* __ASM_CSKY_SPINLOCK_TYPES_H */
--- 
-2.34.1
+Currently it was armed with timeout function and it will fired if 
+framework did not call msm_dp_display_disable() after 5 second.
+
+Anyway, we think this approach is not good. therefore it is replaced 
+with  below patch.
+
+drm/msm/dp: tear down main link at unplug handle immediately
+
 

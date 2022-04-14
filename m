@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75C2A50172D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5927F5012F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243650AbiDNPWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:22:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
+        id S1345085AbiDNOKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347595AbiDNN7W (ORCPT
+        with ESMTP id S1344064AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D7543EDA;
-        Thu, 14 Apr 2022 06:50:16 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D91EA24B;
+        Thu, 14 Apr 2022 06:27:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D970F61DA0;
-        Thu, 14 Apr 2022 13:50:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8A7EC385A1;
-        Thu, 14 Apr 2022 13:50:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 754B861B18;
+        Thu, 14 Apr 2022 13:27:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC03C385A1;
+        Thu, 14 Apr 2022 13:27:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944215;
-        bh=fLFQ4pTdFMxQEWltQFVuFY+wlufNVyHPuJ7cjZoX2sI=;
+        s=korg; t=1649942839;
+        bh=xbBQBzINFs6LxkUG7pxqlo8dkxusPhIVLMasdMaRVhA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VhARvOlI/UZx9ctnV6VKlE8DSrNWcZs1epXCRRIgjgDKx/GlAZh9oiCm9x/drxo7n
-         r6Pg/fmUaxeGDwA7k8b23kFQLxdc4xKUc/F7vi0i47B0XPohFr6tybuPL9PEK21vTJ
-         ALDmwGiMba04CNEc5gkNxHQZlkokEAJFpDqq5AeU=
+        b=dV2u7SNkoyyvGrZ/2HGd4HJmT+M+5bmby1cj8OyfFH2uTtlddvruSJeGBp1Gf/CJi
+         nXY3GIf5GbI1TdjhdQYVNgIJgsr/CDpzZd+CFILHg6RZ1So8hucLmSmWXfhFZqVewz
+         J9lwR3pF5RFZ/MNtIiR4mstoQ9JmTwJzyYE9R3E4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, "Juergen E. Fischer" <fischer@norbit.de>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 395/475] net/smc: correct settings of RMB window update limit
-Date:   Thu, 14 Apr 2022 15:13:00 +0200
-Message-Id: <20220414110906.125255947@linuxfoundation.org>
+Subject: [PATCH 4.19 278/338] scsi: aha152x: Fix aha152x_setup() __setup handler return value
+Date:   Thu, 14 Apr 2022 15:13:01 +0200
+Message-Id: <20220414110846.799916094@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dust Li <dust.li@linux.alibaba.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 6bf536eb5c8ca011d1ff57b5c5f7c57ceac06a37 ]
+[ Upstream commit cc8294ec4738d25e2bb2d71f7d82a9bf7f4a157b ]
 
-rmbe_update_limit is used to limit announcing receive
-window updating too frequently. RFC7609 request a minimal
-increase in the window size of 10% of the receive buffer
-space. But current implementation used:
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; doing so just pollutes init's
+environment with strings that are not init arguments/parameters).
 
-  min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2)
+Return 1 from aha152x_setup() to indicate that the boot option has been
+handled.
 
-and SOCK_MIN_SNDBUF / 2 == 2304 Bytes, which is almost
-always less then 10% of the receive buffer space.
-
-This causes the receiver always sending CDC message to
-update its consumer cursor when it consumes more then 2K
-of data. And as a result, we may encounter something like
-"TCP silly window syndrome" when sending 2.5~8K message.
-
-This patch fixes this using max(rmbe_size / 10, SOCK_MIN_SNDBUF / 2).
-
-With this patch and SMC autocorking enabled, qperf 2K/4K/8K
-tcp_bw test shows 45%/75%/40% increase in throughput respectively.
-
-Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Link: https://lore.kernel.org/r/20220223000623.5920-1-rdunlap@infradead.org
+Cc: "Juergen E. Fischer" <fischer@norbit.de>
+Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/aha152x.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
-index 12672019f76c..66cdfd5725ac 100644
---- a/net/smc/smc_core.c
-+++ b/net/smc/smc_core.c
-@@ -734,7 +734,7 @@ static struct smc_buf_desc *smc_buf_get_slot(int compressed_bufsize,
-  */
- static inline int smc_rmb_wnd_update_limit(int rmbe_size)
- {
--	return min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
-+	return max_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
- }
+diff --git a/drivers/scsi/aha152x.c b/drivers/scsi/aha152x.c
+index 4d7b0e0adbf7..2690098d4411 100644
+--- a/drivers/scsi/aha152x.c
++++ b/drivers/scsi/aha152x.c
+@@ -3379,13 +3379,11 @@ static int __init aha152x_setup(char *str)
+ 	setup[setup_count].synchronous = ints[0] >= 6 ? ints[6] : 1;
+ 	setup[setup_count].delay       = ints[0] >= 7 ? ints[7] : DELAY_DEFAULT;
+ 	setup[setup_count].ext_trans   = ints[0] >= 8 ? ints[8] : 0;
+-	if (ints[0] > 8) {                                                /*}*/
++	if (ints[0] > 8)
+ 		printk(KERN_NOTICE "aha152x: usage: aha152x=<IOBASE>[,<IRQ>[,<SCSI ID>"
+ 		       "[,<RECONNECT>[,<PARITY>[,<SYNCHRONOUS>[,<DELAY>[,<EXT_TRANS>]]]]]]]\n");
+-	} else {
++	else
+ 		setup_count++;
+-		return 0;
+-	}
  
- static struct smc_buf_desc *smcr_new_buf_create(struct smc_link_group *lgr,
+ 	return 1;
+ }
 -- 
 2.35.1
 

@@ -2,63 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8935B5018BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:35:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767645018BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:35:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237455AbiDNQfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:35:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53800 "EHLO
+        id S234552AbiDNQe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbiDNQef (ORCPT
+        with ESMTP id S239452AbiDNQeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:34:35 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3FC6ED90E;
-        Thu, 14 Apr 2022 09:02:02 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-d39f741ba0so5657670fac.13;
-        Thu, 14 Apr 2022 09:02:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=7KsLQRipqF2R1uTMIte3i9/IDcR/0h8XgddwnNJ3ITE=;
-        b=8QpoPIhGhAR6OCEs6CyltORZj5h9f+XNxatCot1BOe/si+aWRf48Pj8DPZ+J57bPrW
-         F/0tbf95AI4bZVFs+lfqw7WYRtHBEKRf/mhOTeHJ8WmGgs2wvw4FD4MEFODXLzb4d9Pj
-         fLwcfFFw5Gr2/pZqzqxNSL9cmj8HEHCJM3EcGM1x948k0XFzA80NXc8QCKStCPuOUv7U
-         U0+u5pZTjWzC6k3WPxlIpd7UwXdCGgeVao/a8B8GCu8MvDmum4ll/xcFWLvlFcHC3Iu2
-         RW8cFFdUxUfnEADVP78C1iBDs6e9RLjvWdDVW8sV5+eJlpS/MxUkay5NQmy+h3PUdOE5
-         puYw==
-X-Gm-Message-State: AOAM530jAq81cPFl4VWTuqZJb6C5bkZQzzS2RoSe1f7xcJSX6xnQ3yuy
-        aw7+3Xi3EThQ7QWKWM7YoA==
-X-Google-Smtp-Source: ABdhPJzuFrRAnqEOjn2Y036KhsZvM/oPgRNGTA4p69Jxmvf28J/M6tED0pEVCoQb189X/X79bsYoqQ==
-X-Received: by 2002:a05:6871:1d0:b0:da:b3f:2b28 with SMTP id q16-20020a05687101d000b000da0b3f2b28mr1845203oad.199.1649952121431;
-        Thu, 14 Apr 2022 09:02:01 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j16-20020a544810000000b002fa6ba4317esm138611oij.44.2022.04.14.09.02.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 09:02:00 -0700 (PDT)
-Received: (nullmailer pid 2136331 invoked by uid 1000);
-        Thu, 14 Apr 2022 16:02:00 -0000
-Date:   Thu, 14 Apr 2022 11:02:00 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     vigneshr@ti.com, richard@nod.at, miquel.raynal@bootlin.com,
-        joern@lazybastard.org, kernel@axis.com,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        krzk+dt@kernel.org, frowand.list@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 3/4] mtd: phram: Allow probing via reserved-memory
-Message-ID: <YlhFeEvOPHHsMC34@robh.at.kernel.org>
-References: <20220412135302.1682890-1-vincent.whitchurch@axis.com>
- <20220412135302.1682890-4-vincent.whitchurch@axis.com>
+        Thu, 14 Apr 2022 12:34:36 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB26DF1EB1;
+        Thu, 14 Apr 2022 09:02:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=XNjGhdRc5rgm9FzJSGOEdNif3xZg8UrHYjqABxVus/c=; b=LOXPXb4yWDQhvDn6IVISE4zjvL
+        oyuO1vIPwaFqgLqlyhd7g9vuHEeK35IqKEI1JCt4JiLRH4L/tcP3g9p9IBUhGjgI1z8ipBLyrxki8
+        v+aFvc6EI97OwOF11f5onuj1KxHxJ2aV2hT1j43mBFQvaQJCD2L4ogtebYIk0VlLLwxlQXesMP655
+        MlUxYdejpEobFsL2JmqnVwlO0LvY7ZyTF1+fUqE8+3Cn5xafqJu4UjVAKjon9frz5/esQFOXY6gUd
+        vqFMzjFmY66GmavTi4wFJzzBVTem28rTEXabT+UTXjyalf/jMTjD6b2tT6WO7rKHOQwog8NW1t3CG
+        yRnNUCkw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nf1vB-0053Wm-Ud; Thu, 14 Apr 2022 16:02:14 +0000
+Message-ID: <5f2712c2-9fc1-679d-b196-e7b7f8f4540d@infradead.org>
+Date:   Thu, 14 Apr 2022 09:02:07 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412135302.1682890-4-vincent.whitchurch@axis.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 4.19 003/338] hv: utils: add PTP_1588_CLOCK to Kconfig to
+ fix build
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        linux-hyperv@vger.kernel.org,
+        Michael Kelley <mikelley@microsoft.com>,
+        =?UTF-8?Q?Petr_=c5=a0tetiar?= <ynezz@true.cz>
+References: <20220414110838.883074566@linuxfoundation.org>
+ <20220414110838.987014792@linuxfoundation.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220414110838.987014792@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,22 +63,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 03:53:01PM +0200, Vincent Whitchurch wrote:
-> Allow phram to be probed from the devicetree.  It expects to be in a
-> reserved-memory node as documented by the bindings.  This allows things
-> like partitioning to be specified via the devicetree.
+
+
+On 4/14/22 06:08, Greg Kroah-Hartman wrote:
+> From: Randy Dunlap <rdunlap@infradead.org>
 > 
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+> commit 1dc2f2b81a6a9895da59f3915760f6c0c3074492 upstream.
+> 
+> The hyperv utilities use PTP clock interfaces and should depend a
+> a kconfig symbol such that they will be built as a loadable module or
+> builtin so that linker errors do not happen.
+> 
+> Prevents these build errors:
+> 
+> ld: drivers/hv/hv_util.o: in function `hv_timesync_deinit':
+> hv_util.c:(.text+0x37d): undefined reference to `ptp_clock_unregister'
+> ld: drivers/hv/hv_util.o: in function `hv_timesync_init':
+> hv_util.c:(.text+0x738): undefined reference to `ptp_clock_register'
+> 
+> Fixes: 3716a49a81ba ("hv_utils: implement Hyper-V PTP source")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: "K. Y. Srinivasan" <kys@microsoft.com>
+> Cc: Haiyang Zhang <haiyangz@microsoft.com>
+> Cc: Stephen Hemminger <sthemmin@microsoft.com>
+> Cc: Wei Liu <wei.liu@kernel.org>
+> Cc: Dexuan Cui <decui@microsoft.com>
+> Cc: linux-hyperv@vger.kernel.org
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+> Link: https://lore.kernel.org/r/20211126023316.25184-1-rdunlap@infradead.org
+> Signed-off-by: Wei Liu <wei.liu@kernel.org>
+> Cc: Petr Štetiar <ynezz@true.cz>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
+>  drivers/hv/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Notes:
->     v3:
->     - Add missing semicolon after MODULE_DEVICE_TABLE causing build errors on some
->       configs.
-> 
->  drivers/mtd/devices/phram.c | 67 ++++++++++++++++++++++++++++++++++---
->  drivers/of/platform.c       |  1 +
+> --- a/drivers/hv/Kconfig
+> +++ b/drivers/hv/Kconfig
+> @@ -16,6 +16,7 @@ config HYPERV_TSCPAGE
+>  config HYPERV_UTILS
+>  	tristate "Microsoft Hyper-V Utilities driver"
+>  	depends on HYPERV && CONNECTOR && NLS
+> +	depends on PTP_1588_CLOCK_OPTIONAL
+>  	help
+>  	  Select this option to enable the Hyper-V Utilities.
 
-For DT,
+Please drop this one also. PTP_1588_CLOCK_OPTIONAL is not present
+in 4.x kernels.
 
-Acked-by: Rob Herring <robh@kernel.org>
+Sorry for the problem.
+
+-- 
+~Randy

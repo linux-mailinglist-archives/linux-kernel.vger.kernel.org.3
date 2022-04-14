@@ -2,173 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4976B50184B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CF350184D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344027AbiDNQIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S1344301AbiDNQIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353488AbiDNP5r (ORCPT
+        with ESMTP id S1355238AbiDNP6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:57:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 39938B1A97
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649951099;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vMP8U6acyvSo2AqnmSO46KNXbyqLZPh6bqWCcn4O7oU=;
-        b=XU42JXJ8t+wyiT0tC004u3r3fUuG9hcggjwlMCeTV4Vt3TD7yChgsYde969MJIsKYmmnLu
-        S6lHrBIMKPM0rutvy1QPhNUK35UELHHmFvkK/h0kYitH4+K1SdTKotlpQRcT3DFWwI9jxB
-        aK1nrEHcTvuOGElrBe8xVnqDjPRP/10=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-374-wBoLS_3PMKq8B-834IHxxQ-1; Thu, 14 Apr 2022 11:44:58 -0400
-X-MC-Unique: wBoLS_3PMKq8B-834IHxxQ-1
-Received: by mail-qv1-f70.google.com with SMTP id a3-20020a056214062300b00443cd6175c8so4699829qvx.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:44:58 -0700 (PDT)
+        Thu, 14 Apr 2022 11:58:21 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B754DBD09
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:46:16 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id 12so5787555oix.12
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:46:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KR/Wxn4SQ4JrdCT3cLRPKdG0x0HkSw7hlrSRgpKxYRQ=;
+        b=WxGLEf6RY4Ooaba17rTS2bxOsi1wbArLPsvCGHueZ0EgeXSKI8ehlSomOomZ843peY
+         MT99q2ov+J3Rtn4ISYH30xr3Fqbf1IGsbgowwpBIDPIQvgFnzUWNEuWywdaoAGAPT4uL
+         hjKlgfvRRNnsfCBpmargyVQR5vZhmFI5OBkEE4wLrszAftAXofSKCQld/66XgO2DCTzt
+         RdHJMW1EqEcEf710V5z7bovMgvXw2ghZFAhDl/dFmakku7S9OTCE0rp8sP+1XcjWQdUk
+         RtYoMrRiKmRwVSW8GhJXnybLCwgwXRs8DxCsmkBZI9WovUrqv0NCVpQt02+LJAwNCNn8
+         EyJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vMP8U6acyvSo2AqnmSO46KNXbyqLZPh6bqWCcn4O7oU=;
-        b=mDUw3QG2pixE9cwPd0eafYgn3a0BEMRLqJGgt6tnyxaLxH8BZIBDngHqssN9+gQviu
-         lOnhmh1jQ5zpIPg+D4SG/qBfvUGRcFdg4zM6x4Dw571847Z7e0prnqJItzKAaOGYS7Dz
-         nuNhtkmIpfpsuJm0FtHB/nB8JMshfoAV+fuaWKWr88MGxA42IZBxPTAxFj4GzHYp0BUr
-         lVy7Av4XEipPG2e51chx1yMIaJ3fMNeQ+x8Y/nKUUjWVy/SDsu/9QhCJ4ixW5biHMo3R
-         BXlmnFNqt5mCYsjQxwThp9rCmmoB4L9vfYw4xcDchE8LzsVDEttZpTplrpPOQIhgJSqU
-         rSXQ==
-X-Gm-Message-State: AOAM533pLosnsoeTTNPn1/xGcr5WAAA38U1Eb5C9BXSZGFgaT6XjPNng
-        aiY/7RrOdJhl1bl++uZodUqTb0dMfJFK6svK56sAc8DrEPxCfcK6300cWtbY2/MrF0jWQH46rEs
-        Tejeu0/YhcKg9i0GPR5pRYnbW
-X-Received: by 2002:a05:6214:411e:b0:443:d734:df45 with SMTP id kc30-20020a056214411e00b00443d734df45mr3910219qvb.46.1649951097781;
-        Thu, 14 Apr 2022 08:44:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzPSl5UqbvmN3OXkngc7R14B74QLECDPhbZ8cySPu52TnrkaPQ73bXHMsvsyjiUI2Vd/nm8MQ==
-X-Received: by 2002:a05:6214:411e:b0:443:d734:df45 with SMTP id kc30-20020a056214411e00b00443d734df45mr3910199qvb.46.1649951097508;
-        Thu, 14 Apr 2022 08:44:57 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id n22-20020ac85b56000000b002f1d7a2867dsm1360462qtw.67.2022.04.14.08.44.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:44:56 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 08:44:49 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 10/18] objtool: Extricate ibt from stack validation
-Message-ID: <20220414154449.5moa7xsczwybbqhd@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <44a73f724b51c4a994edc43536b7a7ee5e972b40.1649891421.git.jpoimboe@redhat.com>
- <YlfS7twQVCHGgtCV@hirez.programming.kicks-ass.net>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KR/Wxn4SQ4JrdCT3cLRPKdG0x0HkSw7hlrSRgpKxYRQ=;
+        b=Wi5u3KKjpv15MsMViuwbRCX5Bo/ZFyX+YfBbh5gxBi6n9OiEu34nK8YSEbPMTyuBRL
+         frcfPXBvixepvsMaIiwKJKVa4hOvUFxBow9NqjhKgWnnVY35dMYR0LO6OcRbhJb6aHqV
+         frwKRjIPy2dr+4gYOWRq8Lhf0ik61BAVKW623dniHtHUBr3xqYCoySWeWSy4HZqkczO2
+         MLGhtUt67jZRQHqwrPqgDYWNmhB/IMHdIGhhG3t9vItkfFagu++EIacn/20Bpg8D6FT7
+         PHJvfwXVDelet9GSgBrF3EfQhy5je0sp+6HejAy2rOFq+4FsB7wm36WwvO7jChGBsGOy
+         Xyig==
+X-Gm-Message-State: AOAM533l5eCA9go/pQb++2HXjzP1MH+FD1nG++CvcGF2eq+Q97XtTICN
+        Ix1Cm0fefj4/4lKUkGQ1WNyYJNqc7beKeQ==
+X-Google-Smtp-Source: ABdhPJzcKsa2KobE36DJzPycSbTLyQTt+rNh4aIE9O5a2+cQJKtrZ72LtxatOUPkgz5FF2E/PjnEbw==
+X-Received: by 2002:a05:6808:18a0:b0:2d9:bde3:5776 with SMTP id bi32-20020a05680818a000b002d9bde35776mr1996277oib.29.1649951175554;
+        Thu, 14 Apr 2022 08:46:15 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
+        by smtp.gmail.com with ESMTPSA id pp23-20020a0568709d1700b000e2d876505dsm759641oab.32.2022.04.14.08.46.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 08:46:15 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <8d067bcc-3405-420e-655f-ce97b8b5e798@lwfinger.net>
+Date:   Thu, 14 Apr 2022 10:46:14 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YlfS7twQVCHGgtCV@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: staging: r8188eu: struct rt_firmware_header issues
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Michael Straube' <straube.linux@gmail.com>
+Cc:     Phillip Potter <phil@philpotter.co.uk>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
+ <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
+ <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
+ <a40a2a1b-a8f1-e720-be92-48858d4f6678@gmail.com>
+ <74ff67ec85e14e16bb2e9f57a4fccb17@AcuMS.aculab.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <74ff67ec85e14e16bb2e9f57a4fccb17@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 09:53:18AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 13, 2022 at 04:19:45PM -0700, Josh Poimboeuf wrote:
-> > Extricate ibt from validate_branch() in preparation for making stack
-> > validation optional.
+On 4/14/22 05:14, David Laight wrote:
+> From: Michael Straube
+>> Sent: 14 April 2022 11:08
+>>
+>> On 4/14/22 10:41, David Laight wrote:
+>>> From: Michael Straube
+>>>> Sent: 13 April 2022 20:42
+>>>>
+>>>> On 4/13/22 18:27, Michael Straube wrote:
+>>>>> Hi all,
+>>>>>
+>>>>> I think the rt_firmware_hdr structure in rtw_fw.c has some issues.
+>>>>>
+>>>>>
+>>>>> struct rt_firmware_hdr {
+>>>>>        /*  8-byte alinment required */
+>>>
+>>> Probably need an __aligned(8) at the bottom then?
+>>
+>> I don't see any reason why this is needed. Do I miss something?
 > 
-> It does a bit more..
+> Dunno, the comment might be wrong.
 
-Indeed.
+Actually, the le16_to_cpu() references require alignment 4 (I think I got that 
+right).
 
-> > -		/* already done in validate_branch() */
-> > -		if (sec->sh.sh_flags & SHF_EXECINSTR)
-> > -			continue;
-> >  
-> > -		if (!sec->reloc)
-> >  			continue;
-> >  
-> > -		if (!strncmp(sec->name, ".orc", 4))
-> > -			continue;
-> >  
-> > -		if (!strncmp(sec->name, ".discard", 8))
-> >  			continue;
-> >  
-> > -		if (!strncmp(sec->name, ".debug", 6))
-> >  			continue;
-> >  
-> > -		if (!strcmp(sec->name, "_error_injection_whitelist"))
-> >  			continue;
-> >  
-> > -		if (!strcmp(sec->name, "_kprobe_blacklist"))
-> >  			continue;
-> >  
-> > -		is_data = strstr(sec->name, ".data") || strstr(sec->name, ".rodata");
-> >  
-> > -		list_for_each_entry(reloc, &sec->reloc->reloc_list, list) {
-> > -			struct instruction *dest;
-> >  
-> > -			dest = validate_ibt_reloc(file, reloc);
-> > -			if (is_data && dest && !dest->noendbr)
-> > -				warn_noendbr("data ", sec, reloc->offset, dest);
-> > -		}
-> 
-> So this iterates all sections and excludes a bunch, and only reports
-> fail for .data/.rodata.
-
-Oops.
-
-> > +static int validate_ibt(struct objtool_file *file)
-> > +{
-> > +	struct section *sec;
-> > +	struct reloc *reloc;
-> > +	struct instruction *insn;
-> > +	int warnings = 0;
-> > +
-> > +	for_each_insn(file, insn)
-> > +		warnings += validate_ibt_insn(file, insn);
-> 
-> So I specifically didn't do this because I wanted to reduce the amount
-> of loops we do over those instructions. But yeah, if you really want to
-> allow --ibt without --stack-validate (but why?) then I suppose so.
-> 
-> Esp. for the vmlinux.o case, iterating all insn can quickly add up to
-> significant time.
-
-I didn't look at the performance, but if it's a problem then we can
-eventually look at combining several of the for_each_insn() features
-into a single loop: retpolines, ibt, reachability check, maybe even some
-of decode_sections().
-
-> 
-> > +	for_each_sec(file, sec) {
-> > +
-> > +		if (!strstr(sec->name, ".data") && !strstr(sec->name, ".rodata"))
-> > +			continue;
-> 
-> But this only iterates .data/.rodata.
-> 
-> That's not the same, specifically, it'll not iterate stuff like ksymtab
-> that contains the EXPORT_SYMBOL* crud. The result being that we can now
-> seal EXPORT'ed symbols, which will make modules really sad.
-> 
-> There's also the .initcall sections, sealing initcalls typcally ends really
-> badly.
-> 
-> And there might be a few others I forgot about.
-
-Ok.  That was subtle, it needs a comment or two.  I had the distinct
-feeling I was introducing a bug, then I got distracted ;-)
-
-Doesn't the compiler give those special cases ENDBR anyway?  Just
-wondering why we avoid the warning for those.
-
--- 
-Josh
+Larry
 

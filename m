@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F01500880
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20BB4500882
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240892AbiDNIlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:41:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S240992AbiDNIlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233337AbiDNIlR (ORCPT
+        with ESMTP id S233337AbiDNIld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:41:17 -0400
-Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172E664706;
-        Thu, 14 Apr 2022 01:38:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1649925521; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=NvD+He9LTHj4iPrpnA0nshq/DhpIAe2/QeIQIih2Va3vqj5AZCXdwggyysDWJF195Jcz4EizJ0tJlP2G/qLtn/OSOeFol1tRye3EDPEcbBboRd/hbQ5Oz8EU9AkZ7Zx8D90l7bB4zg4sYNnBhSd0jP9GhnI6gGMvkdKwNnWUH+s=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1649925521; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=YYffcehGFoYVVT+n2RAolMjOhDAqqdJAaaNaFG5yQqU=; 
-        b=ZLJ4342N5Q9Y4GPwgmzX2YMiWc2c4O8QTVwobaJN0dnZ6YgMJzyq2D9iCFpWqrThViLJp/jgnS9VKSpHVODVB74iI1b9ITvhSK+cHTg4cmlQXMIHRWy3L6UB9Edu8QCnJjPh3ZKE/ueSmZ0SyRWPSohw/E3rBRW4I6gevYm2v/Y=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649925521;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=YYffcehGFoYVVT+n2RAolMjOhDAqqdJAaaNaFG5yQqU=;
-        b=J0GqQTvciMcJUvBhIOBR9sw9kTm2fxjym5o68F4guSg+XqOUesLPNJSQXA1Em2VQ
-        mn5dZwh+e6q6uOFVmIb56Qv7EU6Dn2/9mfNQSTH8rRtG2hq2pDLYJNzRSLvv6oV3vIV
-        KU1B6Tzuem1YRfp35dZtFgBP3vUl8WEUiha9HsdU=
-Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
-        with SMTPS id 1649925519751170.1146785751522; Thu, 14 Apr 2022 01:38:39 -0700 (PDT)
-Message-ID: <8eb29967-83ca-97c5-d6b9-808cf3ddeb16@arinc9.com>
-Date:   Thu, 14 Apr 2022 11:38:33 +0300
+        Thu, 14 Apr 2022 04:41:33 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5D26515D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:39:09 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id r13so8679970ejd.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:39:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kB4kilg+/jA91cTYXeFtmrlj5e57Ul2uuK4gQaNzlZw=;
+        b=nKjsgM333Aqv36Jl50BZR8f5Q58KG4h1RfldtzhYuK4xT5FDh0eDV4Xo3qM5CSzz7U
+         bOtGoNbyHlftPQ0y/Z8tIbJ79jQkXqEyoPvP7YPdeMD7TjxIw8CUHRouEhzyxdBa0hW/
+         tLgngXExu8pkPHdL6DS09WjgrrxQ6E5G/yvL2IR3ex0o+ujLDY0ZpAV3xNr9Z6H4fucx
+         UvKLUqXj3T5OVUluZxuL9tiiLWJxOWhwc2T/gAl3GEvlINdilBw2abTWvf0sDNfT2z3H
+         v1mWsjSEP/nE1uB1fnH3fekvWqieAWA9CE+vytjMvu1/Mb8OZoagtCIf36Qernep1mnU
+         32cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kB4kilg+/jA91cTYXeFtmrlj5e57Ul2uuK4gQaNzlZw=;
+        b=MMGxzkHCYPNHFWkAGdRXLgo8tqQcMK3RujVwNIwF01QLHdViOkZT+lE6jM4tnFTAur
+         +htpVCbyqbPB1+ue4G0QSfj/4OQ3UxCorkf6b2nec7m2aQs/4JU5pSwWbUKa5V36x5az
+         NDp1pMW0QyacHuO4es/SbHcKnkPgAkUfsH2f0H/cuIC24bJHUR5oW6lykpNrKnJ7dKU6
+         b7SGd1zZZozR0X9k9lIbvTnANkpuVNF0VIJ3YdDXbLl8l9CxeZxtOQnZpZAa0o/TOCM+
+         JzeHg3/JdR4LH9HinOT0Soh4W6b1Bzlm489mYG1BJMmbA/uWsGSij7bzgLt7okh+BLaL
+         Yq6A==
+X-Gm-Message-State: AOAM530IYXk+wOCpZugqpbh+Fu1FotG/w5JeXSlUBSOBSihNq+4rn1BO
+        a+VjBWiY4uiHV6liqAUDt60=
+X-Google-Smtp-Source: ABdhPJylS83UA9NAUOMN8mCqXYytG7ayAcCQNLZ1+NLN8soWkn4QWK+JG7C5Ja+ktAorYgS8+RE4ng==
+X-Received: by 2002:a17:907:7f94:b0:6da:64ec:fabc with SMTP id qk20-20020a1709077f9400b006da64ecfabcmr1395566ejc.717.1649925548124;
+        Thu, 14 Apr 2022 01:39:08 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb6b.dynamic.kabel-deutschland.de. [95.90.187.107])
+        by smtp.gmail.com with ESMTPSA id ah13-20020a1709069acd00b006e8a0b3e071sm418138ejc.110.2022.04.14.01.39.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:39:07 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/7] staging: r8188eu: fix and clean up some firmware code
+Date:   Thu, 14 Apr 2022 10:38:46 +0200
+Message-Id: <20220414083853.3422-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 09/14] mips: dts: ralink: mt7621: use the new compatible
- string for MT7621 pinctrl
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <20220413060729.27639-1-arinc.unal@arinc9.com>
- <20220413060729.27639-10-arinc.unal@arinc9.com>
- <b415523c-34e3-28a1-bcce-4682e7c67e77@linaro.org>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <b415523c-34e3-28a1-bcce-4682e7c67e77@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series fixes wrong size of struct rt_firmware_hdr in the first
+patch and does some cleanups in rtl8188e_firmware_download() in the
+other patches.
 
+Tested on x86_64 with Inter-Tech DMG-02.
 
-On 13/04/2022 18:27, Krzysztof Kozlowski wrote:
-> On 13/04/2022 08:07, Arınç ÜNAL wrote:
->> Use the new compatible string "ralink,mt7621-pinctrl" for the Ralink MT7621
->> pinctrl subdriver on mt7621.dtsi.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> ---
->>   arch/mips/boot/dts/ralink/mt7621.dtsi | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> index 3222684915ac..ee2ec78c8952 100644
->> --- a/arch/mips/boot/dts/ralink/mt7621.dtsi
->> +++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
->> @@ -151,7 +151,7 @@ spi0: spi@b00 {
->>   	};
->>   
->>   	pinctrl: pinctrl {
->> -		compatible = "ralink,rt2880-pinmux";
->> +		compatible = "ralink,mt7621-pinctrl";
-> 
-> The change is non-bisectable and causes issues all other users of DT
-> (other projects, systems etc). This is discouraged in general, so you
-> should describe it. The commit msg lacks answer to the main question:
-> Why? You focused only on what you are doing, but why you are doing is
-> actually more important for such change.
+Michael Straube (7):
+  staging: r8188eu: fix struct rt_firmware_hdr
+  staging: r8188eu: clean up comments in struct rt_firmware_hdr
+  staging: r8188eu: rename fields of struct rt_firmware_hdr
+  staging: r8188eu: use sizeof instead of hardcoded firmware header size
+  staging: r8188eu: remove variables from rtl8188e_firmware_download()
+  staging: r8188eu: always log firmware info
+  staging: r8188eu: check firmware header existence before access
 
-As it's seen on any other pinctrl subdriver that calls code from a main 
-driver, each subdriver needs to have a different compatible string. We 
-don't want the same compatible string to match a different subdriver's 
-pinmux data as it's not for our SoC.
+ drivers/staging/r8188eu/core/rtw_fw.c | 75 ++++++++++-----------------
+ 1 file changed, 26 insertions(+), 49 deletions(-)
 
-I'll add what I typed above to the commit log.
+-- 
+2.35.1
 
-Arınç

@@ -2,111 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FC1501961
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F24E850196B
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:01:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242570AbiDNRDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51468 "EHLO
+        id S241726AbiDNRDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241739AbiDNRCO (ORCPT
+        with ESMTP id S244405AbiDNRCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:02:14 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D1BF9546
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=4X+Jq1i8p1Zvr7xXgePsT13L/w0211RpRgQvinilEoU=; b=ixL+7Ua9Xbp8XciRqWrCDg1iLL
-        DUVWPGpnNP9uiPaABHJAOWuXQYanOJUEG4uMJ+Lcyk00lTlcVvQb1LYfkJFQMku2pCoiNVJItwatL
-        hHdXbL96u/agQihpdkz/NDSbHTqKgu634M0Estw0JaYG+r/PZCuosn8h06/E8YN3GJBkYZwjSwPJI
-        0wJyOurYrF7rvtenvsLNV1wIGNnBTYRUlNmp+NVu6PGB2U0bqFZQ6c/A7VS3Im7txF/GnSa4yOYZL
-        2W1aj+KVdAPdQnTxoeholZ6TxMJm0HN9vWirmh09HtR91owJDRlhmGVInohuvBvdtOYkjy3CVntk/
-        F53M07sw==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nf2Sj-00545G-Io; Thu, 14 Apr 2022 16:36:53 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 4F5AD30031E;
-        Thu, 14 Apr 2022 18:36:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2943C32321547; Thu, 14 Apr 2022 18:36:51 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 18:36:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 02/18] objtool: Support data symbol printing
-Message-ID: <YlhNo026PgjJuCIU@hirez.programming.kicks-ass.net>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
- <YlfHy011VP2oPFjV@hirez.programming.kicks-ass.net>
- <20220414152148.cwdefx744kymqcut@treble>
- <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
- <20220414153854.rqkt465xn4vzndr7@treble>
+        Thu, 14 Apr 2022 13:02:36 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BA4646D;
+        Thu, 14 Apr 2022 09:38:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1649954254; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=Efq3hAgZ3JW72GIjcSqmPNhOXvfV0qLZnaUMdx5YXtI6lHY9j8oOWB71TPPFwpF05yK0MoXU18FA3hyw0Qeikt9BTCBKfOhYtY9EhkawPzO2Le9P5ebktcpAd1vdiX0LLhrTG9olKbj2bHm56lrrLTHNHq3tZNOvZF7y1VTXvZE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1649954254; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=M6x4pm1vbOy3um3QdMOsMA8jgAP9SJyU0JGvXSzrgKQ=; 
+        b=kZoXga6nOdc/2RaQbkfLKPCXZnNpumUj8B6d9pGc2EU3sA+UFU64Lar9dQW2sUkvAKzk5KnkBp8PJzL5ONxgQ6ngpK/INUMhAHl3rI2CRVmGB0a6uGc44Whj8b8YH1wa7+QLf1Aqk+8DnIWTW41FMEhT2VyBvLw3qAiLi59ZK44=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1649954254;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=M6x4pm1vbOy3um3QdMOsMA8jgAP9SJyU0JGvXSzrgKQ=;
+        b=SkCb1ICmhSpTm8ptaGnPJ2s4AbmDHUPiDTmCtBRWilsQZHMDL0wMv2RjWabWCO6H
+        QPyJ+f8aOObEv84FgwlyK3oFzu6myK1zrK7RY47vf8yyQlx4yEAYIytsTo+6mJzdhy+
+        KIbGxLC1o1pf0CFHsBAwJZPzLFSltPjep3Rltn3Y=
+Received: from [10.10.10.3] (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1649954252283729.6912314444173; Thu, 14 Apr 2022 09:37:32 -0700 (PDT)
+Message-ID: <87c9bf7e-f290-7d38-0844-7a7243688f5a@arinc9.com>
+Date:   Thu, 14 Apr 2022 19:37:25 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414153854.rqkt465xn4vzndr7@treble>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 10/14] dt-bindings: pinctrl: rt2880: fix binding name, pin
+ groups and functions
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <20220413060729.27639-1-arinc.unal@arinc9.com>
+ <20220413060729.27639-11-arinc.unal@arinc9.com>
+ <ba7cd13f-d216-0ac6-97e1-6c13f1e15f38@linaro.org>
+ <550b20f2-098e-0f25-ad9f-3ff523879cb7@arinc9.com>
+ <YlhJGerakzbsXwnv@robh.at.kernel.org>
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <YlhJGerakzbsXwnv@robh.at.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 08:38:54AM -0700, Josh Poimboeuf wrote:
-
-> > Yes, I'd not seen that yet, what's that for? The Changelog alludes to
-> > something, but I don't think it actually does get used later.
+On 14/04/2022 19:17, Rob Herring wrote:
+> On Thu, Apr 14, 2022 at 11:34:31AM +0300, Arınç ÜNAL wrote:
+>> On 13/04/2022 18:25, Krzysztof Kozlowski wrote:
+>>> On 13/04/2022 08:07, Arınç ÜNAL wrote:
+>>>> Change binding name from ralink,rt2880-pinmux to ralink,rt2880-pinctrl.
+>>>> This is the binding for the Ralink RT2880 pinctrl subdriver.
+>>>
+>>> What I don't see here is why you are doing this. pinmux/pinctrl have the
+>>> same meaning, I guess?
+>>
+>> What I understand is pinmux is rather a specific term for the muxing of pins
+>> or pin groups. Pinctrl is what we prefer here since the term is more
+>> inclusive of what the subdriver does: controlling pins. Any mediatek
+>> driver/subdriver is called pinctrl so I'm not doing something uncommon.
 > 
-> Nick had asked for something like that, it's just a way to avoid doing
-> math every time we look at a warning, i.e. to convert func+offset to
-> sec+offset.
+> The correct name is really whatever the h/w block is called, not
+> whatever we've come up with for some class of devices.
 > 
-> But it's kind of ugly and I'm not 100% happy with it.
+>>
+>>>
+>>>>
+>>>> Current pin group and function bindings are for MT7621. Put bindings for
+>>>> RT2880 instead.
+>>>>
+>>>> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>> ---
+>>>>    ...pinmux.yaml => ralink,rt2880-pinctrl.yaml} | 24 +++++++++----------
+>>>>    1 file changed, 12 insertions(+), 12 deletions(-)
+>>>>    rename Documentation/devicetree/bindings/pinctrl/{ralink,rt2880-pinmux.yaml => ralink,rt2880-pinctrl.yaml} (56%)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+>>>> similarity index 56%
+>>>> rename from Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+>>>> rename to Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+>>>> index 9de8b0c075e2..c657bbf9fdda 100644
+>>>> --- a/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinmux.yaml
+>>>> +++ b/Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
+>>>> @@ -1,21 +1,23 @@
+>>>>    # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>>>>    %YAML 1.2
+>>>>    ---
+>>>> -$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinmux.yaml#
+>>>> +$id: http://devicetree.org/schemas/pinctrl/ralink,rt2880-pinctrl.yaml#
+>>>>    $schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> -title: Ralink rt2880 pinmux controller
+>>>> +title: Ralink RT2880 Pin Controller
+>>>>    maintainers:
+>>>> +  - Arınç ÜNAL <arinc.unal@arinc9.com>
+>>>
+>>> Mention this in commit msg.
+>>
+>> Will do.
+>>
+>>>
+>>>>      - Sergio Paracuellos <sergio.paracuellos@gmail.com>
+>>>>    description:
+>>>> -  The rt2880 pinmux can only set the muxing of pin groups. Muxing indiviual pins
+>>>> +  Ralink RT2880 pin controller for RT2880 SoC.
+>>>> +  The pin controller can only set the muxing of pin groups. Muxing indiviual pins
+>>>>      is not supported. There is no pinconf support.
+>>>>    properties:
+>>>>      compatible:
+>>>> -    const: ralink,rt2880-pinmux
+>>>> +    const: ralink,rt2880-pinctrl
+>>>
+>>> you need to deprecate old property and add a new one.
+>>
+>> Do we really have to? That property name was inaccurate from the start. I
+>> don't see a reason to keep it being referred to on the binding.
 > 
-> Maybe it should be behind an option (--sec-offsets)?
+> It's an ABI. There are exceptions, but you've got to spell out the
+> reasoning in the commit message.
 
-Can do I suppose... Myself, I have this script:
+Oh, I thought by deprecating, I was supposed to keep the old one on the 
+YAML binding. I'll properly explain the reason in the commit message.
 
-$ cat objdump-func.sh
-#!/bin/bash
+> 
+> Really, who cares. It's just a unique identifier. Unless you also had a
+> h/w block called 'pinmux' in addition to a 'pinctrl' block it doesn't
+> matter. We could use just GUIDs instead.
 
-OBJ=$1; shift
-FUNC=$1; shift
+Understood, thanks Rob!
 
-objdump -wdr $@ $OBJ | awk "/^\$/ { P=0; } /$FUNC[^>]*>:\$/ { P=1; O=strtonum(\"0x\" \$1); } { if (P) { o=strtonum(\"0x\" \$1); printf(\"%04x \", o-O); print \$0; } }"
-
-That prints a symbol relative offset next to the section, something
-like:
-
-$ ./objdump-func.sh defconfig-build/vmlinux.o pick_next_task_idle
-0000 00000000000a9eb0 <pick_next_task_idle>:
-0000    a9eb0:  41 54                   push   %r12
-0002    a9eb2:  4c 8b a7 28 09 00 00    mov    0x928(%rdi),%r12
-0009    a9eb9:  53                      push   %rbx
-000a    a9eba:  48 89 fb                mov    %rdi,%rbx
-000d    a9ebd:  66 90                   xchg   %ax,%ax
-000f    a9ebf:  66 90                   xchg   %ax,%ax
-0011    a9ec1:  4c 89 e0                mov    %r12,%rax
-0014    a9ec4:  5b                      pop    %rbx
-0015    a9ec5:  41 5c                   pop    %r12
-0017    a9ec7:  c3                      ret    
-0018    a9ec8:  e8 00 00 00 00          call   a9ecd <pick_next_task_idle+0x1d> a9ec9: R_X86_64_PLT32   __update_idle_core-0x4
-001d    a9ecd:  eb f0                   jmp    a9ebf <pick_next_task_idle+0xf>
-001f    a9ecf:  4c 89 e0                mov    %r12,%rax
-0022    a9ed2:  83 83 b8 0b 00 00 01    addl   $0x1,0xbb8(%rbx)
-0029    a9ed9:  5b                      pop    %rbx
-002a    a9eda:  41 5c                   pop    %r12
-002c    a9edc:  c3                      ret    
-002d    a9edd:  0f 1f 00                nopl   (%rax)
-
+Arınç

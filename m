@@ -2,121 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F5EB501716
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57B5850118D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:59:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244848AbiDNPUI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
+        id S240080AbiDNNem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347752AbiDNN7b (ORCPT
+        with ESMTP id S244346AbiDNN0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF5EBCB71;
-        Thu, 14 Apr 2022 06:52:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 14 Apr 2022 09:26:30 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5999E9E1;
+        Thu, 14 Apr 2022 06:19:56 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id 6ff0503fedc9cd83; Thu, 14 Apr 2022 15:19:55 +0200
+Received: from kreacher.localnet (unknown [213.134.181.101])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 794DB61E33;
-        Thu, 14 Apr 2022 13:52:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A2DEC385A5;
-        Thu, 14 Apr 2022 13:52:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944348;
-        bh=IrHkgNkTjMspQ/PfQua7POCpkCgUgP/xW+Bu2KBXnK8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vcsLJACfltArfJfkuh+OLl98yxSAjLsKdNSTkAZNlb22a6SZU/JsLj7e9e9GbcvJ0
-         ZgBURMIid11mWkUmnhVXy1uPhg4CVnAj/W4QLk/yIRZq5ufFohhTUruDoLhYkylf3U
-         nAfV+d1jC4GUkv8WgVkWLifrJIGfSFTZ2tBkARic=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 475/475] ACPI: processor idle: Check for architectural support for LPI
-Date:   Thu, 14 Apr 2022 15:14:20 +0200
-Message-Id: <20220414110908.349507329@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
-User-Agent: quilt/0.66
+        by v370.home.net.pl (Postfix) with ESMTPSA id 3DC4666BE86;
+        Thu, 14 Apr 2022 15:19:54 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PCI <linux-pci@vger.kernel.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+Subject: [PATCH v3 6/9] PCI/PM: Clean up pci_set_low_power_state()
+Date:   Thu, 14 Apr 2022 15:15:31 +0200
+Message-ID: <1749771.VLH7GnMWUR@kreacher>
+In-Reply-To: <5838942.lOV4Wx5bFT@kreacher>
+References: <4419002.LvFx2qVVIh@kreacher> <11975904.O9o76ZdvQC@kreacher> <5838942.lOV4Wx5bFT@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.181.101
+X-CLIENT-HOSTNAME: 213.134.181.101
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelfedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvffufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvjeelgffhiedukedtleekkedvudfggefhgfegjefgueekjeelvefggfdvledutdenucfkphepvddufedrudefgedrudekuddruddtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukedurddutddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphgtihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehm
+ ihhkrgdrfigvshhtvghrsggvrhhgsehlihhnuhigrdhinhhtvghlrdgtohhm
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-commit eb087f305919ee8169ad65665610313e74260463 upstream.
+Make the following assorted non-essential changes in
+pci_set_low_power_state():
 
-When `osc_pc_lpi_support_confirmed` is set through `_OSC` and `_LPI` is
-populated then the cpuidle driver assumes that LPI is fully functional.
+ 1. Drop two redundant checks from it (the caller takes care of these
+    conditions).
 
-However currently the kernel only provides architectural support for LPI
-on ARM.  This leads to high power consumption on X86 platforms that
-otherwise try to enable LPI.
+ 2. Modify error messages printed by it to make them more consistent
+    with the messages printed by pci_power_up() and
+    pci_set_full_power_state().
 
-So probe whether or not LPI support is implemented before enabling LPI in
-the kernel.  This is done by overloading `acpi_processor_ffh_lpi_probe` to
-check whether it returns `-EOPNOTSUPP`. It also means that all future
-implementations of `acpi_processor_ffh_lpi_probe` will need to follow
-these semantics as well.
+ 3. Change the log level of one of the messages to "debug", because
+    it only indicates a programming mistake.
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+ 4. Make it return -ENODEV (instead of -EIO) when the device is not
+    accessible.
+
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/acpi/processor_idle.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
 
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -1201,6 +1201,11 @@ static int flatten_lpi_states(struct acp
- 	return 0;
- }
- 
-+int __weak acpi_processor_ffh_lpi_probe(unsigned int cpu)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- static int acpi_processor_get_lpi_info(struct acpi_processor *pr)
+v1 -> v3:
+   * Added R-by from Mika.
+
+---
+ drivers/pci/pci.c |   13 +++----------
+ 1 file changed, 3 insertions(+), 10 deletions(-)
+
+Index: linux-pm/drivers/pci/pci.c
+===================================================================
+--- linux-pm.orig/drivers/pci/pci.c
++++ linux-pm/drivers/pci/pci.c
+@@ -1345,16 +1345,9 @@ static int pci_set_low_power_state(struc
  {
- 	int ret, i;
-@@ -1209,6 +1214,11 @@ static int acpi_processor_get_lpi_info(s
- 	struct acpi_device *d = NULL;
- 	struct acpi_lpi_states_array info[2], *tmp, *prev, *curr;
+ 	u16 pmcsr;
  
-+	/* make sure our architecture has support */
-+	ret = acpi_processor_ffh_lpi_probe(pr->id);
-+	if (ret == -EOPNOTSUPP)
-+		return ret;
-+
- 	if (!osc_pc_lpi_support_confirmed)
- 		return -EOPNOTSUPP;
- 
-@@ -1260,11 +1270,6 @@ static int acpi_processor_get_lpi_info(s
- 	return 0;
- }
- 
--int __weak acpi_processor_ffh_lpi_probe(unsigned int cpu)
--{
--	return -ENODEV;
--}
+-	/* Check if we're already there */
+-	if (dev->current_state == state)
+-		return 0;
 -
- int __weak acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
- {
- 	return -ENODEV;
+ 	if (!dev->pm_cap)
+ 		return -EIO;
+ 
+-	if (state < PCI_D1 || state > PCI_D3hot)
+-		return -EINVAL;
+-
+ 	/*
+ 	 * Validate transition: We can enter D0 from any state, but if
+ 	 * we're already in a low-power state, we can only go deeper.  E.g.,
+@@ -1362,7 +1355,7 @@ static int pci_set_low_power_state(struc
+ 	 * we'd have to go from D3 to D0, then to D1.
+ 	 */
+ 	if (dev->current_state <= PCI_D3cold && dev->current_state > state) {
+-		pci_err(dev, "invalid power transition (from %s to %s)\n",
++		pci_dbg(dev, "Invalid power transition (from %s to %s)\n",
+ 			pci_power_name(dev->current_state),
+ 			pci_power_name(state));
+ 		return -EINVAL;
+@@ -1375,10 +1368,10 @@ static int pci_set_low_power_state(struc
+ 
+ 	pci_read_config_word(dev, dev->pm_cap + PCI_PM_CTRL, &pmcsr);
+ 	if (PCI_POSSIBLE_ERROR(pmcsr)) {
+-		pci_err(dev, "can't change power state from %s to %s (config space inaccessible)\n",
++		pci_err(dev, "Unable to change power state from %s to %s, device inaccessible\n",
+ 			pci_power_name(dev->current_state),
+ 			pci_power_name(state));
+-		return -EIO;
++		return -ENODEV;
+ 	}
+ 
+ 	pmcsr &= ~PCI_PM_CTRL_STATE_MASK;
+
 
 

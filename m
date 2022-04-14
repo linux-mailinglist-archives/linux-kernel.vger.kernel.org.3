@@ -2,156 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7CA501C5B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CCF6501C62
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346080AbiDNUJ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:09:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53738 "EHLO
+        id S1346095AbiDNUL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234182AbiDNUJ0 (ORCPT
+        with ESMTP id S234182AbiDNULZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:09:26 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E2FE72BD
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:07:00 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id a186so2248672qkc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:07:00 -0700 (PDT)
+        Thu, 14 Apr 2022 16:11:25 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47223E72BD;
+        Thu, 14 Apr 2022 13:08:59 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id e128so2859444qkd.7;
+        Thu, 14 Apr 2022 13:08:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVQjffk0zdFrlFy9d1t7mkrDpOeN4HI9CGLfF9WJi4I=;
-        b=uQ07X8c4piH/ZIrhE89f40fnoVL45/1UfAUHhTvoR3FDA9zI7EoY8YOnvOSTf6PSN2
-         19LSmqpQ4ctHuh5lWxitEjcgkUSCwJh8HLs39QQ8793OOhfuY137KAk73YZG+njkvMwP
-         oG51OUWfHQQbR6UoHYb0WRglMSHWZuTUsDyQQ=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Q4kreATfvq0PCaErDqGIK51qsHXx4Hc2V23ylLftIFw=;
+        b=S2p8PHRmvbHylIwf9EywH65p/YVOMq5tltG2DuWda+hJlblQT/P1SMnQp2tGUzNuvm
+         Gv/FQgW8wFml5y6o1zrKALK3f02vG55M9QvKUR2SxskMpptmKDABXJ41/sgmZxyaq2eh
+         SQw2bTObHrIIvXIOTw+SMrk41IYc0WdNwpR/oNYu+HfGLJfI0WF7St2kGTVmRxcJcNgn
+         /BFcyPTOHQay1afj1FBn6RfMUu15WZcO51MnwSKRxI0fjlTsWv165PsZ18SGoU/DD27f
+         cduV/vxpiPGoeNWQAtAGWc0bvlD0k4EMEYgyWWMIEf2OMn/2n9IcwxpT0IrPb/gWAazm
+         oVvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xVQjffk0zdFrlFy9d1t7mkrDpOeN4HI9CGLfF9WJi4I=;
-        b=hUXdYxhcYOwcq6lm43XEmuKu4xhZLabl3kjSmHq8yFJ5GF0h9U5adv90/G5FgqOEzE
-         gZahicIhhkXUL59sC0Y/2sMR5/7UKxHszbcuw0A7ArmLAXH1u5XjZmshIF22fqECVyvr
-         vKZ7r0mEffXPHXjMq2UTSfF1EOeXJg76ZDichqh0+Qy5I+JiypxPQE4BG+yJT8RxnspQ
-         JsNQpzz/pmpny83A2hNLkffsY8zKnjYsHTjPDP7BaqLcj+q+uxd7P1Xon/OZ4Mv5Uf6n
-         fQRWdwLt84AXB4TKe5D5WxKQ4Y0h2bl/0XZV4IfAixWlW48SWWWH0ngCJogCJfa2W7zr
-         X46w==
-X-Gm-Message-State: AOAM532I/btV6iAvkpPdEfz6OykuPlnsqmfnHCP9dbK07S7N2I7QJf+R
-        qRkQu1x4SkqWF8nfGkNCvI6hu479YdxqEA==
-X-Google-Smtp-Source: ABdhPJzuv44il/wBJ41NU3pHox9b2DdV47fk3XIlBrf23loBkc3kI2T6cwl6Lrp8TFBkPD8JMhaaaQ==
-X-Received: by 2002:a05:620a:440f:b0:67d:2133:ec26 with SMTP id v15-20020a05620a440f00b0067d2133ec26mr3245571qkp.658.1649966819426;
-        Thu, 14 Apr 2022 13:06:59 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id f20-20020ac87f14000000b002f1d318efebsm1862081qtk.83.2022.04.14.13.06.58
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Q4kreATfvq0PCaErDqGIK51qsHXx4Hc2V23ylLftIFw=;
+        b=g8zezIlydSgMHUfejlD9Uw1Z9rRf1xHm8/veHWtRicMP+OojGtfpODgpF1L2T7aZUr
+         r/q/XkwvxHVsg+gma6ZCB7ysPx/Jt06+pjWmoUPMaH7GpByovzRjc+2HZjVPD7mFHKz3
+         sXuQIpfhciE7jQkS1zzKPCzXt+zCfqsItUBWtMjyySRSwcnf0MmIflUTLD73pcsHcqzW
+         z6/fpy2Q01OkauqzvhN42ekP+qEuW3RURmwrun3qFs3ZpGdiayG7qY47MlBgeyevJZNX
+         7QWhNrSqZCRK4/D3Vyk7fXeBEtjp5moa2KXJ35EPsD0yHK/k2z3Y2xQuUXJnflzawmtA
+         eWYA==
+X-Gm-Message-State: AOAM5312Kckuccq6CdHmlR0DjhSXuxlvxEOmZ9dfZLoIrLCmEBl5tVr6
+        Ah3KUpvCvEKY9yqB01I15Q==
+X-Google-Smtp-Source: ABdhPJyqV76gySzIL0/xph1+Z6yrRbCplKzU6+1U5ggnhq15OLcGE2TkXRm/iyBYA0JmDcSnoCe6Eg==
+X-Received: by 2002:a37:4c3:0:b0:69c:84ca:5923 with SMTP id 186-20020a3704c3000000b0069c84ca5923mr1983372qke.503.1649966938325;
+        Thu, 14 Apr 2022 13:08:58 -0700 (PDT)
+Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id q17-20020a05622a031100b002f1d478c218sm1939035qtw.62.2022.04.14.13.08.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 13:06:59 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH v2] rcu/nocb: Add an option to offload all CPUs on boot
-Date:   Thu, 14 Apr 2022 20:06:42 +0000
-Message-Id: <20220414200642.1778806-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+        Thu, 14 Apr 2022 13:08:57 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 13:08:54 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
+Message-ID: <20220414200854.GA2729@bytedance>
+References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
+ <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
+ <20220414131424.744aa842@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414131424.744aa842@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Fernandes <joel@joelfernandes.org>
+Hi Jakub,
 
-On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-which ends up not offloading any CPU. This patch removes a dependency
-from the bootloader having to know about RCU, about how many CPUs the
-system has, and about how to provide the mask.
+On Thu, Apr 14, 2022 at 01:14:24PM +0200, Jakub Kicinski wrote:
+> On Mon, 11 Apr 2022 15:33:00 -0700 Peilin Ye wrote:
+> > I couldn't find a proper Fixes: tag for this fix; please comment if you
+> > have any sugguestions.  Thanks!
+> 
+> What's wrong with
+> 
+> Fixes: 6712abc168eb ("ip6_gre: add ip6 gre and gretap collect_md mode")
+> 
+> ?
 
-With the new option enabled, all CPUs will be offloaded on boot.
+Thanks!  I will add this in v2 soon.
 
-Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
----
- Documentation/admin-guide/kernel-parameters.txt |  4 ++++
- kernel/rcu/Kconfig                              | 12 ++++++++++++
- kernel/rcu/tree_nocb.h                          | 11 +++++++++++
- 3 files changed, 27 insertions(+)
+> > diff --git a/net/ipv6/ip6_gre.c b/net/ipv6/ip6_gre.c
+> > index b43a46449130..976236736146 100644
+> > --- a/net/ipv6/ip6_gre.c
+> > +++ b/net/ipv6/ip6_gre.c
+> > @@ -733,9 +733,6 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+> >  	else
+> >  		fl6->daddr = tunnel->parms.raddr;
+> >  
+> > -	if (skb_cow_head(skb, dev->needed_headroom ?: tunnel->hlen))
+> > -		return -ENOMEM;
+> > -
+> >  	/* Push GRE header. */
+> >  	protocol = (dev->type == ARPHRD_ETHER) ? htons(ETH_P_TEB) : proto;
+> >  
+> > @@ -763,6 +760,9 @@ static netdev_tx_t __gre6_xmit(struct sk_buff *skb,
+> >  			(TUNNEL_CSUM | TUNNEL_KEY | TUNNEL_SEQ);
+> 
+> We should also reject using SEQ with collect_md, but that's a separate
+> issue.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..fd8165237954 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4398,6 +4398,10 @@
- 			no-callback mode from boot but the mode may be
- 			toggled at runtime via cpusets.
- 
-+			Note that this argument has no effect if the kernel
-+			is built with CONFIG_RCU_NOCB_CPU_ALL=y, in which case
-+			all CPUs will be offloaded on boot.
-+
- 	rcu_nocb_poll	[KNL]
- 			Rather than requiring that offloaded CPUs
- 			(specified by rcu_nocbs= above) explicitly
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index bf8e341e75b4..00a040f17b1d 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -223,6 +223,18 @@ config RCU_NOCB_CPU
- 	  Say Y here if you need reduced OS jitter, despite added overhead.
- 	  Say N here if you are unsure.
- 
-+config RCU_NOCB_CPU_ALL
-+	bool "Offload RCU callback processing from all CPUs"
-+	depends on RCU_NOCB_CPU
-+	default n
-+	help
-+	  Use this option to offload callback processing from all CPUs.
-+	  This also avoids the need to use any boot arguments to achieve
-+	  the same effect, when it is desired to offload all CPUs.
-+
-+	  Say Y here if you are sure you always want all CPUs offloaded.
-+	  Say N here if you are unsure.
-+
- config TASKS_TRACE_RCU_READ_MB
- 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
- 	depends on RCU_EXPERT
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index eeafb546a7a0..df2e4c0a6178 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1168,6 +1168,13 @@ void __init rcu_init_nohz(void)
- 	bool need_rcu_nocb_mask = false;
- 	struct rcu_data *rdp;
- 
-+	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_ALL)) {
-+		if (rcu_nocb_is_setup) {
-+			pr_info("Kernel is configured to offload all CPUs, rcu_nocbs= passed but has no effect.\n");
-+		}
-+		need_rcu_nocb_mask = true;
-+	}
-+
- #if defined(CONFIG_NO_HZ_FULL)
- 	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
- 		need_rcu_nocb_mask = true;
-@@ -1191,6 +1198,10 @@ void __init rcu_init_nohz(void)
- 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
- #endif /* #if defined(CONFIG_NO_HZ_FULL) */
- 
-+	/* Set all CPUs as offloaded if RCU_NOCB_CPU_ALL=y. */
-+	if (IS_ENABLED(CONFIG_RCU_NOCB_CPU_ALL))
-+		cpumask_setall(rcu_nocb_mask);
-+
- 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
- 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
- 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
--- 
-2.36.0.rc0.470.gd361397f0d-goog
+Could you explain this a bit more?  It seems that commit 77a5196a804e
+("gre: add sequence number for collect md mode.") added this
+intentionally.
+
+Thanks,
+Peilin Ye
 

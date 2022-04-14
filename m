@@ -2,61 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1F2E500C30
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD03B500C34
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234277AbiDNLdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53344 "EHLO
+        id S240057AbiDNLdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbiDNLc4 (ORCPT
+        with ESMTP id S235417AbiDNLdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:32:56 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 766473B554;
-        Thu, 14 Apr 2022 04:30:28 -0700 (PDT)
-X-UUID: 07e456226ac141088f6f5809255d7a44-20220414
-X-UUID: 07e456226ac141088f6f5809255d7a44-20220414
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1569299293; Thu, 14 Apr 2022 19:30:22 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 14 Apr 2022 19:30:21 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
- 2022 19:30:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 19:30:20 +0800
-Message-ID: <4374e31115bbcbd783003cd5c648163a1f4ff0d1.camel@mediatek.com>
-Subject: Re: [PATCH V2 11/15] cpufreq: mediatek: Update logic of
- voltage_tracking()
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     Kevin Hilman <khilman@baylibre.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 19:30:20 +0800
-In-Reply-To: <7hczhr5lm3.fsf@baylibre.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-12-rex-bc.chen@mediatek.com>
-         <7hczhr5lm3.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 14 Apr 2022 07:33:06 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E866941612;
+        Thu, 14 Apr 2022 04:30:41 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23EA52Nm027817;
+        Thu, 14 Apr 2022 11:30:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=nmaAQd4dwn2U67py14DWo8m4aBMKeyjAN7fmOivPwJA=;
+ b=I6ViywZi1GfQGOs9M0yj54GUIDq1AlG051Y+NxxNkcnbSYd53b/3ZwuIgDWZLD45wt1+
+ iJmgI/8w7zLg3h9QB+xK3N4yv43T1XD9H6NtBwSfhbm0TaVd2ZluSDkIdjSrjZ1YfZko
+ rj+uXjtB7zHzynruKiWBe+RebYj8135nKKnnfBjuc8v9PEDRmEb7kH6XuiCyC1smaPb3
+ ijj3kiiqNk2q7h6vVg3i3s74HsWRLaXyZXZ6CdtB7w3hMEgFa9M7Ax4gQgnKfNt3PoqB
+ +wCnphkbxpQd9zJZ+iOsjWA6KtSuOeZdeLq/O+7XRwQz1tYL5LQnkjhimMvReRKtiiK3 zw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3febxa00v3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:30:41 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23EBFThR018078;
+        Thu, 14 Apr 2022 11:30:41 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3febxa00u4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:30:40 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23EBI8RC025033;
+        Thu, 14 Apr 2022 11:30:38 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma06fra.de.ibm.com with ESMTP id 3fbsj05nv4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 14 Apr 2022 11:30:38 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23EBUYmw25690418
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 14 Apr 2022 11:30:34 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C124FA4065;
+        Thu, 14 Apr 2022 11:30:34 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 44046A405C;
+        Thu, 14 Apr 2022 11:30:34 +0000 (GMT)
+Received: from [9.145.89.230] (unknown [9.145.89.230])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu, 14 Apr 2022 11:30:34 +0000 (GMT)
+Message-ID: <cc057c0a-58ee-1012-34e4-575b053230db@linux.ibm.com>
+Date:   Thu, 14 Apr 2022 13:30:33 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v10 01/19] KVM: s390: pv: leak the topmost page table when
+ destroy fails
+Content-Language: en-US
+To:     Claudio Imbrenda <imbrenda@linux.ibm.com>, kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, thuth@redhat.com, pasic@linux.ibm.com,
+        david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        mimu@linux.ibm.com, nrb@linux.ibm.com
+References: <20220414080311.1084834-1-imbrenda@linux.ibm.com>
+ <20220414080311.1084834-2-imbrenda@linux.ibm.com>
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20220414080311.1084834-2-imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pHaqE5irsv5cQHvsFG02lxyl6xOfacfH
+X-Proofpoint-ORIG-GUID: eJX2892CoFLhA2EN96R_SOtu-RmxxX7o
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_03,2022-04-14_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ mlxscore=0 bulkscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ malwarescore=0 phishscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204140060
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,43 +98,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 14:08 -0700, Kevin Hilman wrote:
-> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+On 4/14/22 10:02, Claudio Imbrenda wrote:
+> Each secure guest must have a unique ASCE (address space control
+> element); we must avoid that new guests use the same page for their
+> ASCE, to avoid errors.
 > 
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > - Remove VOLT_TOL because CCI may share the same sram and vproc
-> >   regulators with CPU. Therefore, set the max voltage in
-> >   regulator_set_voltage() to the proc{sram}_max_volt.
+> Since the ASCE mostly consists of the address of the topmost page table
+> (plus some flags), we must not return that memory to the pool unless
+> the ASCE is no longer in use.
 > 
-> This could you a bit more detailed explanation.  Why does VOLT_TOL
-> get
-> in the way when regulators are shared between CPU & CCI?
-
-Hello Kevin,
-
-Here we use 'sram_min_volt' and 'sram_max_volt' to determine the
-voltage boundary of sram regulator.
-And use (sram_min_volt - min_volt_shift) and 'proc_max_volt' to
-determine the voltage boundary of vproc regulator.
-We use them as platform data to replace VOLT_TOL (voltage tolerance)
-when determing the voltage boundary and invoking regulator_set_voltage.
-
-I will add this to commit message in next version.
-
+> Only a successful Destroy Secure Configuration UVC will make the ASCE
+> reusable again.
 > 
-> > - Move comparison of new and old voltages to
-> >   mtk_cpufreq_voltage_tracking().
+> If the Destroy Configuration UVC fails, the ASCE cannot be reused for a
+> secure guest (either for the ASCE or for other memory areas). To avoid
+> a collision, it must not be used again. This is a permanent error and
+> the page becomes in practice unusable, so we set it aside and leak it.
+> On failure we already leak other memory that belongs to the ultravisor
+> (i.e. the variable and base storage for a guest) and not leaking the
+> topmost page table was an oversight.
 > 
-> Why?  And how is this related to the above change?  Seems to me that
-> it
-> belongs in a separate patch.
+> This error (and thus the leakage) should not happen unless the hardware
+> is broken or KVM has some unknown serious bug.
 > 
-> Kevin
 
-I think there are some mistake for this.
-I will remove this commit message in next version.
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-BRs,
-Rex
+> +	/*
+> +	 * In case the ASCE needs to be "removed" multiple times, for example
+> +	 * if the VM is rebooted into secure mode several times
+> +	 * concurrently, or if s390_replace_asce fails after calling
+> +	 * s390_remove_old_asce and is attempted again later. In that case
+> +	 * the old asce has been removed from the list, and therefore it
+> +	 * will not be freed when the VM terminates, but the ASCE is still
+> +	 * in use and still pointed to.
+> +	 * A subsequent call to replace_asce will follow the pointer and try
+> +	 * to remove the same page from the list again.
+> +	 * Therefore it's necessary that the page of the ASCE has valid
+> +	 * pointers, so list_del can work (and do nothing) without
+> +	 * dereferencing stale or invalid pointers.
+> +	 */
+> +	INIT_LIST_HEAD(&old->lru);
+> +	spin_unlock(&gmap->guest_table_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(s390_remove_old_asce);
+> +
+> +/**
+> + * s390_replace_asce - Try to replace the current ASCE of a gmap with
+> + * another equivalent one.
+
+with a copy?
+
+> + * @gmap the gmap
+> + *
+> + * If the allocation of the new top level page table fails, the ASCE is not
+> + * replaced.
+> + * In any case, the old ASCE is always removed from the list. Therefore the
+
+removed from the gmap crst list
+
+> + * caller has to make sure to save a pointer to it beforehands, unless an
+> + * intentional leak is intended.
+> + */
+> +int s390_replace_asce(struct gmap *gmap)
+> +{
+> +	unsigned long asce;
+> +	struct page *page;
+> +	void *table;
+> +
+> +	s390_remove_old_asce(gmap);
+> +
+> +	page = alloc_pages(GFP_KERNEL_ACCOUNT, CRST_ALLOC_ORDER);
+> +	if (!page)
+> +		return -ENOMEM;
+> +	table = page_to_virt(page);
+> +	memcpy(table, gmap->table, 1UL << (CRST_ALLOC_ORDER + PAGE_SHIFT));
+> +
+> +	/*
+> +	 * The caller has to deal with the old ASCE, but here we make sure
+> +	 * the new one is properly added to the list of page tables, so that
+> +	 * it will be freed when the VM is torn down.
+> +	 */
+> +	spin_lock(&gmap->guest_table_lock);
+> +	list_add(&page->lru, &gmap->crst_list);
+> +	spin_unlock(&gmap->guest_table_lock);
+> +
+> +	/* Set new table origin while preserving existing ASCE control bits */
+> +	asce = (gmap->asce & ~_ASCE_ORIGIN) | __pa(table);
+> +	WRITE_ONCE(gmap->asce, asce);
+> +	WRITE_ONCE(gmap->mm->context.gmap_asce, asce);
+> +	WRITE_ONCE(gmap->table, table);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(s390_replace_asce);
 

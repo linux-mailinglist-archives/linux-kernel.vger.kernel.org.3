@@ -2,161 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5912E501780
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2495501783
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348440AbiDNPkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S1348967AbiDNPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353130AbiDNOfP (ORCPT
+        with ESMTP id S1353168AbiDNOf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:35:15 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F8D8D080F;
-        Thu, 14 Apr 2022 07:27:45 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id w127so5529121oig.10;
-        Thu, 14 Apr 2022 07:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Ghx9VRtlfgShp3TcMoFRap3M442/0OWo2bPqHQs6UAE=;
-        b=gHWaANPMU9CipERwlcyUeT+voADP3ARYJXLBWyHcz6zT8ljGHeCJfPZn/VVTKIFQUR
-         cegqVuD1psvzt4afE+eIfZQzuqyBI5Cpyj3tQ7Lu565hJyi7weAFQB74/0ULE2Kkjwd9
-         X6l+ocX1Pg2ao01crl1lN8vig4dvxveZYVQ7pB1uVi71L2YGeQtYMByZ3NiC8q75NBfU
-         Lp/VJ6aeqbQYw51fr5WBTX5pE1GVi9AWLuHDhn4nM++C1tvhklX1sWogNz+mm/D+7v4T
-         cZMrrojPmFLbFcHOn1FV2WQ+CNjxnHHl4Vsw7P9Pg2k/OMGawnAeR/AolMbSl5OiGZNA
-         C6tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Ghx9VRtlfgShp3TcMoFRap3M442/0OWo2bPqHQs6UAE=;
-        b=rQASV5XyFHUHsA4wqQupIR9c1MAqcDPuLLXQ5cExJmKnwUxQ78QqXSDX2HLvmdHgYD
-         HpQ/Gp1WJIyIFNTGDgWH6rhZjuCbol/p4YdUmxvyqv8AiPeo1ru58YWD/za2kjCQhlhA
-         T/IM7pA/WMbVz7cscUtN0u9Vs74Q9eWKJefFnXYfC3QIv+e15kHitzghrxH5oaova2xa
-         wuo34EVgzG4vPSRAPZ4ExmIEkiz+VnRQOUmbLVzgQeaEN1VcqOgwqmBZ9yzh3+TUQPrM
-         xjw9eMHNBsRu9Ppe+O1OrYrcbGk7LqUJMjHVhh5SRj99jQagT19u2xiOiwn5+Di6ULpf
-         8ziA==
-X-Gm-Message-State: AOAM533Rm795wS8e1DrAuE68g19/LNBHyTPoNgsFx01524bDMpZ1ATr3
-        An6QCIKnNCMsvQGlbEZ8hb49aLnEc2MIPLX9mKXX4OaN
-X-Google-Smtp-Source: ABdhPJzLmH7U04QAV2zWy6SAp0AkYkEt8E0dLfWvxiVGBthB4cupY68g+0MdWmbJpLAEJLLTXUUQanjh3xC913ZTe5k=
-X-Received: by 2002:a05:6808:1486:b0:2f9:e821:51d9 with SMTP id
- e6-20020a056808148600b002f9e82151d9mr1484330oiw.253.1649946464573; Thu, 14
- Apr 2022 07:27:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <BN9PR12MB5145ECB75120FF9AC1AA4CFB8DEC9@BN9PR12MB5145.namprd12.prod.outlook.com>
- <CADnq5_OjPwzYtW99a-L6OrHz-oH0MqSNi+Me4T-x1vY8zEXLcQ@mail.gmail.com>
- <BN9PR12MB5145D81F9978B656E9BB67C78DEF9@BN9PR12MB5145.namprd12.prod.outlook.com>
- <a1203367-834f-a4d0-3478-9e16787a3b8b@amd.com>
-In-Reply-To: <a1203367-834f-a4d0-3478-9e16787a3b8b@amd.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Thu, 14 Apr 2022 10:27:33 -0400
-Message-ID: <CADnq5_MTQSZs7R+DTQWRyGqqQcff6mCb43s_7jtE8w00k+YxQg@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Rodrigo Siqueira Jordao <rjordrigo@amd.com>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Zhang, Dingchen (David)" <Dingchen.Zhang@amd.com>,
-        "Kotarac, Pavle" <Pavle.Kotarac@amd.com>,
-        "Chung, ChiaHsuan (Tom)" <ChiaHsuan.Chung@amd.com>,
+        Thu, 14 Apr 2022 10:35:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81E79D0811
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:27:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3875CB829D6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:27:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F59C385A1;
+        Thu, 14 Apr 2022 14:27:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649946475;
+        bh=tv0ZyPejhNVJIC2/gOEs9RAJTEBZHd2tc7EDYWiVeWU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cUFsG+ssXiitZzQH2dFqquickLykGtIy+KPcIU0tOfpS45sWP9CWaIzJVfWIvFtM4
+         ks0fYXDEE3Q+El1sfA/qU4ViMelLPpb7O7/eKxuRU/Jf5uOYO1QUkJ6Qy54s3Wgsna
+         vdR9JS1bR0dSAZT+ik0m6guvHz6+1R/e8N78ZEnw=
+Date:   Thu, 14 Apr 2022 16:27:53 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "Siqueira, Rodrigo" <Rodrigo.Siqueira@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YlgvaSozV5jU49Y0@kroah.com>
+References: <YlVHSvkyUBXZPUr2@arm.com>
+ <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
+ <YlVOTsaTVkBOxthG@arm.com>
+ <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
+ <YlVxGAHHD/j6lW3c@arm.com>
+ <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
+ <YlaOIbSA7B/G9222@arm.com>
+ <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
+ <YlezcPbFOkSUygBJ@kroah.com>
+ <CAMj1kXFWJXbT+fMEx=wzX1wS6xW1DeGxZ+mWBbY8Z4hj4kc_dw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXFWJXbT+fMEx=wzX1wS6xW1DeGxZ+mWBbY8Z4hj4kc_dw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:23 AM Rodrigo Siqueira Jordao
-<rjordrigo@amd.com> wrote:
->
-> Hi Alex,
->
-> Do we need to apply David's patch [1] to drm-misc-next? If so, I can
-> merge it there. Also, I noticed that drm-misc-next changed the dp header
-> path; in that way, I had to change the original patch a little bit.
->
-> 1. https://patchwork.freedesktop.org/patch/480331/?series=102035&rev=1
->
+On Thu, Apr 14, 2022 at 03:52:53PM +0200, Ard Biesheuvel wrote:
+> On Thu, 14 Apr 2022 at 07:38, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, Apr 13, 2022 at 09:53:24AM -1000, Linus Torvalds wrote:
+> > > On Tue, Apr 12, 2022 at 10:47 PM Catalin Marinas
+> > > <catalin.marinas@arm.com> wrote:
+> > > >
+> > > > I agree. There is also an implicit expectation that the DMA API works on
+> > > > kmalloc'ed buffers and that's what ARCH_DMA_MINALIGN is for (and the
+> > > > dynamic arch_kmalloc_minalign() in this series). But the key point is
+> > > > that the driver doesn't need to know the CPU cache topology, coherency,
+> > > > the DMA API and kmalloc() take care of these.
+> > >
+> > > Honestly, I think it would probably be worth discussing the "kmalloc
+> > > DMA alignment" issues.
+> > >
+> > > 99.9% of kmalloc users don't want to do DMA.
+> > >
+> > > And there's actually a fair amount of small kmalloc for random stuff.
+> > > Right now on my laptop, I have
+> > >
+> > >     kmalloc-8          16907  18432      8  512    1 : ...
+> > >
+> > > according to slabinfo, so almost 17 _thousand_ allocations of 8 bytes.
+> > >
+> > > It's all kinds of sad if those allocations need to be 64 bytes in size
+> > > just because of some silly DMA alignment issue, when none of them want
+> > > it.
+> > >
+> 
+> Actually, the alignment for non-cache coherent DMA is 128 bytes on
+> arm64, not 64 bytes.
+> 
+> > > Yeah, yeah, wasting a megabyte of memory is "just a megabyte" these
+> > > days. Which is crazy. It's literally memory that could have been used
+> > > for something much more useful than just pure and utter waste.
+> > >
+> > > I think we could and should just say "people who actually require DMA
+> > > accesses should say so at kmalloc time". We literally have that
+> > > GFP_DMA and ZOME_DMA for various historical reasons, so we've been
+> > > able to do that before.
+> > >
+> > > No, that historical GFP_DMA isn't what arm64 wants - it's the old
+> > > crazy "legacy 16MB DMA" thing that ISA DMA used to have.
+> > >
+> > > But the basic issue was true then, and is true now - DMA allocations
+> > > are fairly special, and should not be that hard to just mark as such.
+> >
+> > "fairly special" == "all USB transactions", so it will take a lot of
+> > auditing here.  I think also many SPI controllers require this and maybe
+> > I2C?  Perhaps other bus types do as well.
+> >
+> > So please don't make this change without some way of figuring out just
+> > what drivers need to be fixed up, as it's going to be a lot...
+> >
+> 
+> Yeah, the current de facto contract of being able to DMA map anything
+> that was allocated via the linear map makes it quite hard to enforce
+> the use of dma_kmalloc() for this.
+> 
+> What we might do, given the fact that only inbound non-cache coherent
+> DMA is problematic, is dropping the kmalloc alignment to 8 like on
+> x86, and falling back to bounce buffering when a misaligned, non-cache
+> coherent inbound DMA mapping is created, using the SWIOTLB bounce
+> buffering code that we already have, and is already in use on most
+> affected systems for other reasons (i.e., DMA addressing limits)
 
-Ideally it would have gone through drm-misc, but since we are the only
-ones using it at this point, I think it's ok to take through my tree.
-I'll make a note about the path change when I send the PR.
+Ick, that's a mess.
 
-Alex
+> This will cause some performance regressions, but in a way that seems
+> fixable to me: taking network drivers as an example, the RX buffers
+> that are filled using inbound DMA are typically owned by the driver
+> itself, which could be updated to round up its allocations and DMA
+> mappings. Block devices typically operate on quantities that are
+> aligned sufficiently already. In other cases, we will likely notice
+> if/when this fallback is taken on a hot path, but if we don't, at
+> least we know a bounce buffer is being used whenever we cannot perform
+> the DMA safely in-place.
 
-> Best Regards,
-> Siqueira
->
-> On 2022-04-14 10:08, Zhang, Dingchen (David) wrote:
-> > [AMD Official Use Only]
-> >
-> >
-> > Thanks for clarifying, Alex.
-> > ------------------------------------------------------------------------
-> > *From:* Alex Deucher <alexdeucher@gmail.com>
-> > *Sent:* Wednesday, April 13, 2022 10:18 AM
-> > *To:* Zhang, Dingchen (David) <Dingchen.Zhang@amd.com>
-> > *Cc:* Stephen Rothwell <sfr@canb.auug.org.au>; Kotarac, Pavle
-> > <Pavle.Kotarac@amd.com>; Chung, ChiaHsuan (Tom)
-> > <ChiaHsuan.Chung@amd.com>; Linux Kernel Mailing List
-> > <linux-kernel@vger.kernel.org>; Linux Next Mailing List
-> > <linux-next@vger.kernel.org>
-> > *Subject:* Re: linux-next: build failure after merge of the amdgpu tree
-> > The patch should be there now.
-> >
-> > Alex
-> >
-> > On Wed, Apr 13, 2022 at 10:09 AM Zhang, Dingchen (David)
-> > <Dingchen.Zhang@amd.com> wrote:
-> >>
-> >> [AMD Official Use Only]
-> >>
-> >>
-> >> hi Stephen,
-> >>
-> >> Could you please check if below patch (which has been upstreamed) is in your Linux code base?
-> >>
-> >> ~~~~
-> >> eb2bb029bacf David Zhang         12 days ago    drm: add PSR2 support and capability definition as per eDP 1.5
-> >> ~~~~~
-> >>
-> >> Thanks
-> >> David
-> >> ________________________________ From: Stephen Rothwell
-> >> Sent: Tuesday, April 12, 2022 10:32 PM
-> >> To: Alex Deucher
-> >> Cc: Zhang, Dingchen (David); Kotarac, Pavle; Chung, ChiaHsuan (Tom); Linux Kernel Mailing List; Linux Next Mailing List
-> >> Subject: linux-next: build failure after merge of the amdgpu tree
-> >>
-> >> Hi all,
-> >>
-> >> After merging the amdgpu tree, today's linux-next build (x86_64
-> >> allmodconfig) failed like this:
-> >>
-> >> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c: In function 'is_psr_su_specific_panel':
-> >> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61: error: 'DP_PSR2_WITH_Y_COORD_ET_SUPPORTED' undeclared (first use in this function); did you mean 'DP_PSR2_WITH_Y_COORD_IS_SUPPORTED'?
-> >>   798 |                 if (link->dpcd_caps.psr_info.psr_version >= DP_PSR2_WITH_Y_COORD_ET_SUPPORTED)
-> >>       |                                                             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >>       |                                                             DP_PSR2_WITH_Y_COORD_IS_SUPPORTED
-> >> drivers/gpu/drm/amd/amdgpu/../display/modules/power/power_helpers.c:798:61: note: each undeclared identifier is reported only once for each function it appears in
-> >>
-> >> Caused by commit
-> >>
-> >>   901029aa0017 ("drm/amd/display: implement shared PSR-SU sink validation helper")
-> >>
-> >> Please start including an x86_64 allmodconfig build in your local testing.
-> >>
-> >> I have used the amdgpu tree from next-20220412 for today.
-> >>
-> >> --
-> >> Cheers,
-> >> Stephen Rothwell
->
+We can move to having an "allocator-per-bus" for memory like this to
+allow the bus to know if this is a DMA requirement or not.
+
+So for all USB drivers, we would have:
+	usb_kmalloc(size, flags);
+and then it might even be easier to verify with static tools that the
+USB drivers are sending only properly allocated data.  Same for SPI and
+other busses.
+
+https://lore.kernel.org/r/230a9486fc68ea0182df46255e42a51099403642.1648032613.git.christophe.leroy@csgroup.eu
+is an example of a SPI driver that has been there "for forever" yet
+always got it wrong.  If we could have had some way to know "only memory
+allocated with this function is allowed on the bus" that would have
+fixed the issue a long time ago.
+
+Anyway, just an idea, it's up to you all if this is worth it or not.
+Adding performance regressions at the expense of memory size feels like
+a rough trade-off to go through until things are fixed up.
+
+greg k-h

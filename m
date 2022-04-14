@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 086A5501653
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA6095010CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353980AbiDNOzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
+        id S1344724AbiDNNoc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:44:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242879AbiDNNuc (ORCPT
+        with ESMTP id S245502AbiDNN3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:50:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9648A76CF;
-        Thu, 14 Apr 2022 06:44:16 -0700 (PDT)
+        Thu, 14 Apr 2022 09:29:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF9AD103;
+        Thu, 14 Apr 2022 06:23:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 785F6B82986;
-        Thu, 14 Apr 2022 13:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F66C385A1;
-        Thu, 14 Apr 2022 13:44:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB4B4B8296A;
+        Thu, 14 Apr 2022 13:23:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A4CC385A1;
+        Thu, 14 Apr 2022 13:23:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943854;
-        bh=M1gU7GJAdKfEoxBo0mmxgvDmkAOM71wt/lDiYoCEucE=;
+        s=korg; t=1649942581;
+        bh=tval/IBg4GPCmAj5nZw7Y9LaHeQY9NcnveuXJnoFTcg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FH8E8wGFtWeRkY1D0hF+k9kB42n9fRwkrcmAqL/+yL9nCMhcZREyte6Z489pXN5F+
-         oQgo1ZwQDpUjruAck6MsDmstLNYoqCL47aS8lNPzZTKOgCSRm9EjyjLlQ3oxXahFHT
-         QhE0WCf415lYdSoDwwsO+o03X/7U2MYxYcdB3kiQ=
+        b=MjJ1r0O5rj7MBCAbOoGXbY0qwo6rizWQqYRU9do9g9hy7tcPZMy5Ft7jDGlSSYGPg
+         DJLu4eZWJK+fKuwibA9lOJV3KfopAcmbSbCItytppEPqUIaqTwlpwtsb/COJKvUeRp
+         Q7Ie/wMycxfXziCZIPo3TFZKBIVBbrMzyG+srhdA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 303/475] media: cx88-mpeg: clear interrupt status register before streaming video
-Date:   Thu, 14 Apr 2022 15:11:28 +0200
-Message-Id: <20220414110903.572333287@linuxfoundation.org>
+Subject: [PATCH 4.19 186/338] NFSv4/pNFS: Fix another issue with a list iterator pointing to the head
+Date:   Thu, 14 Apr 2022 15:11:29 +0200
+Message-Id: <20220414110844.191925251@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,41 +55,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+From: Trond Myklebust <trond.myklebust@hammerspace.com>
 
-[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
+[ Upstream commit 7c9d845f0612e5bcd23456a2ec43be8ac43458f1 ]
 
-Some cx88 video cards may have transport stream status interrupts set
-to 1 from cold start, causing errors like this:
+In nfs4_callback_devicenotify(), if we don't find a matching entry for
+the deviceid, we're left with a pointer to 'struct nfs_server' that
+actually points to the list of super blocks associated with our struct
+nfs_client.
+Furthermore, even if we have a valid pointer, nothing pins the super
+block, and so the struct nfs_server could end up getting freed while
+we're using it.
 
-  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
-  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+Since all we want is a pointer to the struct pnfs_layoutdriver_type,
+let's skip all the iteration over super blocks, and just use APIs to
+find the layout driver directly.
 
-According to CX2388x datasheet, the interrupt status register should be
-cleared before enabling IRQs to stream video.
-
-Fix it by clearing the Transport Stream Interrupt Status register.
-
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+Reported-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Fixes: 1be5683b03a7 ("pnfs: CB_NOTIFY_DEVICEID")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ fs/nfs/callback_proc.c | 27 +++++++++------------------
+ fs/nfs/pnfs.c          | 11 +++++++++++
+ fs/nfs/pnfs.h          |  2 ++
+ 3 files changed, 22 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index a57c991b165b..10d2971ef062 100644
---- a/drivers/media/pci/cx88/cx88-mpeg.c
-+++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -162,6 +162,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
- 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
- 	q->count = 0;
+diff --git a/fs/nfs/callback_proc.c b/fs/nfs/callback_proc.c
+index 868d66ed8bcf..f2a854805f0e 100644
+--- a/fs/nfs/callback_proc.c
++++ b/fs/nfs/callback_proc.c
+@@ -364,12 +364,11 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 				  struct cb_process_state *cps)
+ {
+ 	struct cb_devicenotifyargs *args = argp;
++	const struct pnfs_layoutdriver_type *ld = NULL;
+ 	uint32_t i;
+ 	__be32 res = 0;
+-	struct nfs_client *clp = cps->clp;
+-	struct nfs_server *server = NULL;
  
-+	/* clear interrupt status register */
-+	cx_write(MO_TS_INTSTAT,  0x1f1111);
+-	if (!clp) {
++	if (!cps->clp) {
+ 		res = cpu_to_be32(NFS4ERR_OP_NOT_IN_SESSION);
+ 		goto out;
+ 	}
+@@ -377,23 +376,15 @@ __be32 nfs4_callback_devicenotify(void *argp, void *resp,
+ 	for (i = 0; i < args->ndevs; i++) {
+ 		struct cb_devicenotifyitem *dev = &args->devs[i];
+ 
+-		if (!server ||
+-		    server->pnfs_curr_ld->id != dev->cbd_layout_type) {
+-			rcu_read_lock();
+-			list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link)
+-				if (server->pnfs_curr_ld &&
+-				    server->pnfs_curr_ld->id == dev->cbd_layout_type) {
+-					rcu_read_unlock();
+-					goto found;
+-				}
+-			rcu_read_unlock();
+-			continue;
++		if (!ld || ld->id != dev->cbd_layout_type) {
++			pnfs_put_layoutdriver(ld);
++			ld = pnfs_find_layoutdriver(dev->cbd_layout_type);
++			if (!ld)
++				continue;
+ 		}
+-
+-	found:
+-		nfs4_delete_deviceid(server->pnfs_curr_ld, clp, &dev->cbd_dev_id);
++		nfs4_delete_deviceid(ld, cps->clp, &dev->cbd_dev_id);
+ 	}
+-
++	pnfs_put_layoutdriver(ld);
+ out:
+ 	kfree(args->devs);
+ 	return res;
+diff --git a/fs/nfs/pnfs.c b/fs/nfs/pnfs.c
+index c900cb2119ba..0f1c15859418 100644
+--- a/fs/nfs/pnfs.c
++++ b/fs/nfs/pnfs.c
+@@ -92,6 +92,17 @@ find_pnfs_driver(u32 id)
+ 	return local;
+ }
+ 
++const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id)
++{
++	return find_pnfs_driver(id);
++}
 +
- 	/* enable irqs */
- 	dprintk(1, "setting the interrupt mask\n");
- 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
++void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld)
++{
++	if (ld)
++		module_put(ld->owner);
++}
++
+ void
+ unset_pnfs_layoutdriver(struct nfs_server *nfss)
+ {
+diff --git a/fs/nfs/pnfs.h b/fs/nfs/pnfs.h
+index 80fafa29e567..d5d818b1ac9d 100644
+--- a/fs/nfs/pnfs.h
++++ b/fs/nfs/pnfs.h
+@@ -225,6 +225,8 @@ struct pnfs_devicelist {
+ 
+ extern int pnfs_register_layoutdriver(struct pnfs_layoutdriver_type *);
+ extern void pnfs_unregister_layoutdriver(struct pnfs_layoutdriver_type *);
++extern const struct pnfs_layoutdriver_type *pnfs_find_layoutdriver(u32 id);
++extern void pnfs_put_layoutdriver(const struct pnfs_layoutdriver_type *ld);
+ 
+ /* nfs4proc.c */
+ extern size_t max_response_pages(struct nfs_server *server);
 -- 
 2.34.1
 

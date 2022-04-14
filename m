@@ -2,120 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC0E50181D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B011501830
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350269AbiDNQBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:01:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
+        id S1347174AbiDNQDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359844AbiDNPrZ (ORCPT
+        with ESMTP id S1344086AbiDNPxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:47:25 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B611F70FB;
-        Thu, 14 Apr 2022 08:32:54 -0700 (PDT)
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nf1Se-0006Mb-Q0; Thu, 14 Apr 2022 17:32:44 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1nf1Se-000PQJ-F2; Thu, 14 Apr 2022 17:32:44 +0200
-Subject: Re: [RFC PATCH 0/1] sample: bpf: introduce irqlat
-To:     Song Chen <chensong_2000@189.cn>
-References: <1649927240-18991-1-git-send-email-chensong_2000@189.cn>
- <2e6ee265-903c-2b5c-aefd-ec24f930c999@iogearbox.net>
- <ac371d36-2624-cdd8-0c15-62ccf53bed81@189.cn>
-Cc:     ast@kernel.org, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, brendan.d.gregg@gmail.com
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <f4267d24-28ca-bd99-100e-6fa4ee84cc50@iogearbox.net>
-Date:   Thu, 14 Apr 2022 17:32:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 14 Apr 2022 11:53:42 -0400
+Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAE9FC113;
+        Thu, 14 Apr 2022 08:34:07 -0700 (PDT)
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-df22f50e0cso5624157fac.3;
+        Thu, 14 Apr 2022 08:34:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=XgRBiTVC/FFWfC6f7VFIlxavcDc/C7IkOvLYm4Mfzvs=;
+        b=QQ2vRYRmlckrTL2uohmikWroCLGEKLv0jKTlcPyESt926PPnpwMcTeFzlpWehuNSTA
+         tflGx73ggnfWtCf6c07p7TFZ1CVVxqQcZhqcEhCZ55OCx4Mp3eLY0X+mW5bWx11g8RQE
+         jm//i5g41NtucMGPNs2z2rjn4QxE0Y4ZrWp6pVGNcHsmg5AWMECHdD+0ggFQTOsmPiHR
+         bQU2cvhqzbLzle/L9M7aOVB3Y/7KrukGrBCJxB/FFvg/iDnhH93ZGN2vnnVx5mxz3d/f
+         uVtG2LtyzFoxQjlK0WNUxzmO9nugzThEUg4HQx6GEy/OVnLlVs1ggHm/kjHm8CEHJeS+
+         6QjA==
+X-Gm-Message-State: AOAM532mhJzNiOj+41uxL2P01P3UkUGOxiY96GmtfB0szSeanPpnGO/c
+        /FxYjxmCzhDIIf5MNheDEA==
+X-Google-Smtp-Source: ABdhPJxO41UyWKPRLV35Yj+ApQ4PFF6XoQyq8uSctU7sQmGIJXL6DxUImc9X9hOqKaDbOcuZF4s6Kw==
+X-Received: by 2002:a05:6870:434f:b0:bf:9f2a:26f0 with SMTP id x15-20020a056870434f00b000bf9f2a26f0mr1521011oah.40.1649950446230;
+        Thu, 14 Apr 2022 08:34:06 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h8-20020a056830400800b005cdceb42261sm120283ots.66.2022.04.14.08.34.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 08:34:05 -0700 (PDT)
+Received: (nullmailer pid 2095983 invoked by uid 1000);
+        Thu, 14 Apr 2022 15:34:04 -0000
+Date:   Thu, 14 Apr 2022 10:34:04 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Anjelique Melendez <quic_amelende@quicinc.com>
+Cc:     dmitry.torokhov@gmail.com, corbet@lwn.net, sre@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, collinsd@codeaurora.org,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        skakit@codeaurora.org, linux-doc@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        David Collins <quic_collinsd@quicinc.com>
+Subject: Re: [PATCH v5 1/5] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Message-ID: <Ylg+7MVRS4sKbOFb@robh.at.kernel.org>
+References: <20220411200506.22891-1-quic_amelende@quicinc.com>
+ <20220411200506.22891-2-quic_amelende@quicinc.com>
 MIME-Version: 1.0
-In-Reply-To: <ac371d36-2624-cdd8-0c15-62ccf53bed81@189.cn>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.5/26512/Thu Apr 14 10:28:56 2022)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411200506.22891-2-quic_amelende@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
-
-On 4/14/22 1:25 PM, Song Chen wrote:
-> hi Daniel,
+On Mon, Apr 11, 2022 at 01:05:03PM -0700, Anjelique Melendez wrote:
+> From: David Collins <quic_collinsd@quicinc.com>
 > 
-> Thanks for liking the idea.
+> Update the description of "reg" property to add the PON_PBS base
+> address along with PON_HLOS base address.  Also add "reg-names"
+> property description.
 > 
-> My target is embedded devices, that's why i get started from ebpf C.bcc and bpftrace is a good idea, but i prefer taking one thing at a time, what's more, i'm not familiar with python, it might take longer.
+> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+> ---
+>  .../bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
 > 
-> Once C code is accepted, i will move myself to bcc and bpftrace. Is it ok for you?
+> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> index 353f155d..542200b2 100644
+> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+> +++ b/Documentation/bindings/power/reset/qcom,pon.yaml
+> @@ -26,7 +26,25 @@ properties:
+>        - qcom,pm8998-pon
+>  
+>    reg:
+> -    maxItems: 1
+> +    description: |
+> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+> +      facilitate software debouncing on some PMICs.
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  reg-names:
+> +    description: |
+> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
+> +      "pon_hlos" and optionally "pon_pbs".
+> +    minItems: 1
+> +    maxItems: 2
+> +    items:
+> +      - const: pon_hlos
+> +      - const: pon_pbs
+> +      - const: pon
 
-The libbpf-based tools from the mentioned link in BCC are all C, not Python. Also bpftrace
-has guidelines for building it more portably that would be suitable for embedded devices [2].
-I'd presume these should still match your requirements?
+This says there are 3 entries, but you limited to 2. The schema also 
+doesn't match what the description says. Entries should be extended by 
+adding new entries to the end and keeping optional entries last. So like 
+this:
 
-Right now samples/bpf/ is a bit of a dumping ground of random things, some BPF samples better
-maintained than others, but generally samples/bpf/ is a bit of a mess. BPF has a huge ecosystem
-outside of kernel in its various areas it covers, so it has outgrown the few samples in there
-long ago, and you'll find many resources on how to get started in the wild.
+minItems: 1
+items:
+  - const: pon
+  - const: pon_hlos
+  - const: pon_pbs
 
-Adding this as a samples/bpf/ will have little value to others, since people may not be aware
-of them, and if they are they need to manually build/ship it, etc. If you upstream and can improve
-the tools in bpftrace/bcc as pointed out, then a lot more people will be able to consume them
-and benefit from it, and you get the shipping via distros for free.
-
-   [2] https://github.com/iovisor/bpftrace/blob/master/docs/embedded_builds.md
-
-Thanks again,
-Daniel
-
-> BR
-> 
-> Song
-> 
-> 
-> 在 2022/4/14 17:47, Daniel Borkmann 写道:
->> On 4/14/22 11:07 AM, Song Chen wrote:
->>> I'm planning to implement a couple of ebpf tools for preempt rt,
->>> including irq latency, preempt latency and so on, how does it sound
->>> to you?
->>
->> Sounds great, thanks! Please add these tools for upstream inclusion either to bpftrace [0] or
->> bcc [1], then a wider range of users would be able to benefit from them as well as they are
->> also shipped as distro packages and generally more widely used compared to kernel samples.
->>
->> Thanks Song!
->>
->>    [0] https://github.com/iovisor/bpftrace/tree/master/tools
->>    [1] https://github.com/iovisor/bcc/tree/master/libbpf-tools
->>
->>> Song Chen (1):
->>>    sample: bpf: introduce irqlat
->>>
->>>   samples/bpf/.gitignore    |   1 +
->>>   samples/bpf/Makefile      |   5 ++
->>>   samples/bpf/irqlat_kern.c |  81 ++++++++++++++++++++++++++++++
->>>   samples/bpf/irqlat_user.c | 100 ++++++++++++++++++++++++++++++++++++++
->>>   4 files changed, 187 insertions(+)
->>>   create mode 100644 samples/bpf/irqlat_kern.c
->>>   create mode 100644 samples/bpf/irqlat_user.c
->>>
->>
->>
-
+Rob

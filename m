@@ -2,107 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A65A501F1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D79501F0E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 01:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347722AbiDNXeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 19:34:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32866 "EHLO
+        id S1347620AbiDNXdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 19:33:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347661AbiDNXdy (ORCPT
+        with ESMTP id S241351AbiDNXde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 19:33:54 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 894FAAD132
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:31:23 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id BBE672C03CF;
-        Thu, 14 Apr 2022 23:31:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1649979081;
-        bh=YgP1SqE7JxanVpyL/fogzYYkXKiLRl3c7aan9hD9/9M=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i+GL+YkIueZ2/1aLlcyOa1valuRloLGYwUZH4vm2nHKEDIEBO1w5jaCMTRbcsz3tb
-         DT0tmXUX4xeUeF5pca/y1BOjtQm0WDOJkSUCvhSTKkwNo7DLIx7+w+/1QDu4cB/oVT
-         HxDb0kBA5GXa2eKd6fsqlAIVSkcjAewaDy/+cCO4fyzWVgspCVOsKpMV8V06J0sbc/
-         uoU4pRyvFwmV3lyerEPz4552iiAiN+IZZkmZUfey2Xa5YeoOj8B94lrJgtiIV/iVbo
-         23wzMfUflZdbAYBQb1SB8S8bOjAZRqW3XeH0P2FzBeWHUQnIKmeGGJMtMM3yMDUAxa
-         xnuf9XbRr8jyQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B6258aec90004>; Fri, 15 Apr 2022 11:31:21 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-        by pat.atlnz.lc (Postfix) with ESMTP id 28C7413EE11;
-        Fri, 15 Apr 2022 11:31:21 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-        id 7AC3F2A2679; Fri, 15 Apr 2022 11:31:16 +1200 (NZST)
-From:   Chris Packham <chris.packham@alliedtelesis.co.nz>
-To:     linus.walleij@linaro.org, robh+dt@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, andrew@lunn.ch,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        kostap@marvell.com, robert.marko@sartura.hr
-Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v4 4/4] arm64: marvell: enable the 98DX2530 pinctrl driver
-Date:   Fri, 15 Apr 2022 11:30:55 +1200
-Message-Id: <20220414233055.586962-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220414233055.586962-1-chris.packham@alliedtelesis.co.nz>
-References: <20220414233055.586962-1-chris.packham@alliedtelesis.co.nz>
+        Thu, 14 Apr 2022 19:33:34 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAE5A76F3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:31:08 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so3915916ioy.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 16:31:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=cacxPvYX+7YoVTe1rbwEqAdwSgHbgFcryjKRqnj4k6o=;
+        b=Ztt8oG97gzB/D4ZSJdjdD3KmUo85hx7e9/axpKRFHz8rMaYoBjN3u5VzDVdMyhjdhF
+         Kd8xQSb3X1sdc/fhyupxiSkjtnFr24RDJQChLktbWnWhe6QnlEgO7SMG19yEheef3Xh2
+         3sgPEz0kC4Mfhcd/Ee2fhFcwL69yvcX/saGa2B46vHi0bBDV6p4gv4FrzbZtopUCxkBA
+         YD23vYKyt3Jm11I2k+vifF4srgP7TSUYOu5mLps7aADJqwY0+KPA3WO3399gCQoR1rUI
+         od7vwI97y3YrZn4vrPAu8jYwOLgVi61mpIATL4QKhH9JC9YCRhv3HA+ELwEvUy44+wUf
+         Tqmw==
+X-Gm-Message-State: AOAM533fPkaPq9rZsuQnIC99m6LE/xn9kqkBqLcinOosg7/sb/mRaD+f
+        GAOZR0blu3qkP0Q9cqFbyDk2T3ZvdjHMAnnx0lO9IhNsTLCq
+X-Google-Smtp-Source: ABdhPJyIevyU0774Z/8ufRGfExJNo+ANrxot63r6R9B7mINzokzQuOulhQeJNK64zaCiOhEPwslyPLTq+36eX8PN6//sDidtLde9
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=L59jvNb8 c=1 sm=1 tr=0 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=z0gMJWrwH1QA:10 a=XQcNo-tEeLJW46c85tUA:9
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6638:16d2:b0:323:7285:474b with SMTP id
+ g18-20020a05663816d200b003237285474bmr2431975jat.61.1649979067429; Thu, 14
+ Apr 2022 16:31:07 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 16:31:07 -0700
+In-Reply-To: <9ff91977-a6b5-90f9-3502-58ac641e1307@gmail.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003378b905dca5b0e6@google.com>
+Subject: Re: [syzbot] UBSAN: array-index-out-of-bounds in pvr2_i2c_core_init
+From:   syzbot <syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com>
+To:     isely@pobox.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, mchehab@kernel.org,
+        paskripkin@gmail.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit makes sure the drivers for the 98DX2530 pin controller is
-enabled.
+Hello,
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
----
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Notes:
-    Changes in v4:
-    - None
-    Changes in v3:
-    - Add review from Andrew
-    Changes in v2:
-    - None
+Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
 
- arch/arm64/Kconfig.platforms | 2 ++
- 1 file changed, 2 insertions(+)
+Tested on:
 
-diff --git a/arch/arm64/Kconfig.platforms b/arch/arm64/Kconfig.platforms
-index 21697449d762..6bbb56901794 100644
---- a/arch/arm64/Kconfig.platforms
-+++ b/arch/arm64/Kconfig.platforms
-@@ -183,11 +183,13 @@ config ARCH_MVEBU
- 	select PINCTRL_ARMADA_37XX
- 	select PINCTRL_ARMADA_AP806
- 	select PINCTRL_ARMADA_CP110
-+	select PINCTRL_AC5
- 	help
- 	  This enables support for Marvell EBU familly, including:
- 	   - Armada 3700 SoC Family
- 	   - Armada 7K SoC Family
- 	   - Armada 8K SoC Family
-+	   - 98DX2530 SoC Family
-=20
- config ARCH_MXC
- 	bool "ARMv8 based NXP i.MX SoC family"
---=20
-2.35.1
+commit:         115acbb5 Merge tag 's390-5.18-3' of git://git.kernel.o..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=eb177500e563582f
+dashboard link: https://syzkaller.appspot.com/bug?extid=1a247e36149ffd709a9b
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=113c24e0f00000
 
+Note: testing is done by a robot and is best-effort only.

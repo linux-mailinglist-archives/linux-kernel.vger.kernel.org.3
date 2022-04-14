@@ -2,125 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4380F500954
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E92EA50095D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:08:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239982AbiDNJKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43452 "EHLO
+        id S241556AbiDNJLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:11:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238109AbiDNJK2 (ORCPT
+        with ESMTP id S238109AbiDNJLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:10:28 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6546E540;
-        Thu, 14 Apr 2022 02:08:04 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id ll10so4534597pjb.5;
-        Thu, 14 Apr 2022 02:08:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qYtINvSR5Dih3lqIftjEIHDwvXs93GlfwwGB+RQETjg=;
-        b=G06GEOeVuuzjlWUCEo6hbJXjPuVWMHJvuXq9cM78tfK5tfEvemHx0U8OfWz1npch4h
-         C+3BDn1yqytd1BrwWAwbciqRL/gs79YcAZ6HLGqwPqp5BAKzKWoQ6ATsh69IJOERDMxf
-         M/dxJruoPKM/vxd2jZejIfb3hhrVVOq3y/VaiX0VBIZD9dFdwa1QudQChkYwV4DXHMr2
-         QbZ1+XNAQfrurRt5meXb4lL7cYh5pDUdo/6TOAew4qs678sRKKaI8xSB1VfRct/mHN44
-         o3cvXe1icyX3v4giaOJwOPbWkdjgxG/8vX2iWxWY/cJgmkdI4dsBM8fEovaj0qx3Wf0e
-         uM2A==
+        Thu, 14 Apr 2022 05:11:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 159DE6D962
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:08:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649927330;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EXK01xwL5FfymBT2O/wpbjGm/1sDlFHcoIHw2SavFDU=;
+        b=QysLLuvY3cd+YKWYSHCFG8D3GjXzVC1h68M7zupw2QdjESsWHjzdx0qQx9LiG1uPGVd7mc
+        RZcuDq0S9t/EMJVrWyILaTLhsWVsz292wK5Vy5TEJF7NjAmS/+1LHk4EDpet/LOpYpmVO8
+        WQbG9SStZiOHAjJYj39IscBoIbumjAU=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-217-VBUScGSiOHi0Z3iZISBSTw-1; Thu, 14 Apr 2022 05:08:48 -0400
+X-MC-Unique: VBUScGSiOHi0Z3iZISBSTw-1
+Received: by mail-wr1-f69.google.com with SMTP id k20-20020adfc714000000b001e305cd1597so743211wrg.19
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:08:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=qYtINvSR5Dih3lqIftjEIHDwvXs93GlfwwGB+RQETjg=;
-        b=wd5XairboKg1WtY0lVmKSK3q773m87YWmUjPLs0X/6ytEzKHKaWFDRMJ9nm/OBqiTy
-         mwjZ9IVOQfKAIEzSIHX8YEHxLcZmPRGUZcLpq96OYDlAOszSwaoVj8IAr9K8H5Jdgcha
-         QXBWtPRryr+pGtFM1ous+j2xJ1q9E2o470urO3esZeDyzBhD6lqx/iajZLz+43yfW2TH
-         fPGqwfVo6tVoCMIoSFHAa11uDYKJld2XDQpD/L5TuHMLAU18+DNycxGFHsxfiJK3b0rO
-         pd/8Yg3DU7YCf5mbWubq1Cz9YFBd6ENWCSj8m3v3HexUctX3nYAK0qcRDVZ/9XDzea7/
-         K14g==
-X-Gm-Message-State: AOAM531nsfa7FDGe7s5u0gd+in1kOscyqlLuNiD1kC2URh113b+CVMEt
-        zkW6LJqlQIU1ZPB9QgHan+c=
-X-Google-Smtp-Source: ABdhPJz+6ah9if//yY1c2sHC40NolRb/XwCaxX0VprNKeLwyb7PtImEh0zH5k1pYYFwgPSqdAGNk9A==
-X-Received: by 2002:a17:90b:3b84:b0:1cd:fe1c:151 with SMTP id pc4-20020a17090b3b8400b001cdfe1c0151mr2179837pjb.182.1649927283900;
-        Thu, 14 Apr 2022 02:08:03 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a150800b001cbaf536a3esm5496865pja.18.2022.04.14.02.08.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 02:08:03 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     grygorii.strashko@ti.com
-Cc:     davem@davemloft.net, kuba@kernel.org, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: ethernet: ti: davinci_emac: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Thu, 14 Apr 2022 09:08:00 +0000
-Message-Id: <20220414090800.2542064-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=EXK01xwL5FfymBT2O/wpbjGm/1sDlFHcoIHw2SavFDU=;
+        b=JFLPe2jM/xoGB2gOb9t2tgHgWxKPVT6SzM6dl4HozEiWXZE4m9JJQylXsfc+CzKR4t
+         KaqxQcV9m3xuiBqRD9YGEwGK2FU0hgp7aWXfUfi5Elnjj58tcKAhk5x2g2s/623FpI39
+         aTP4ZZr2rH1Y2aVhfIjusBr9zscXOh4yPjaOqAPPE2GMflpEK6DI7ax+3hHg+Ewkdobh
+         mS/uhZiR4u/uvux+Dr/1yrKC2lE0m+/YFvhpWTKU0QTcEvuPU+0QCNjxQwn779zFxc16
+         obUdVUixiYZEHRU6VQXtvBspqu+YPdoezIALfZQbfDjP6KiUVElrGDA/VAYCE3AM0xae
+         QjVw==
+X-Gm-Message-State: AOAM533fU4bhfwE9Vi68Vea19XZxHOaBrIRkuP90FKPmm52K0mqQCwOh
+        4oNllFg27zPIiSb+nCXl5adXnEgOKxoIriZ7x1vH/Cl3cXIMQvpJ3NNJcsOos0Kh2HfoP717Mde
+        wLUDtGijZAJHV/KRdkvWr0ZTy
+X-Received: by 2002:a5d:64a5:0:b0:205:8e66:e9b1 with SMTP id m5-20020a5d64a5000000b002058e66e9b1mr1312051wrp.464.1649927327735;
+        Thu, 14 Apr 2022 02:08:47 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwAXM3iNNx7LZYO7MKlv+Z8ZcSXxb0BvT2R6br6VU+ZZLHt08JHqpN2CnaubzNSWxNIqo5rdQ==
+X-Received: by 2002:a5d:64a5:0:b0:205:8e66:e9b1 with SMTP id m5-20020a5d64a5000000b002058e66e9b1mr1312028wrp.464.1649927327531;
+        Thu, 14 Apr 2022 02:08:47 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:c8dd:75d4:99ab:290a? ([2001:b07:6468:f312:c8dd:75d4:99ab:290a])
+        by smtp.googlemail.com with ESMTPSA id r4-20020a05600c35c400b0038cbd8c41e9sm4947976wmq.12.2022.04.14.02.08.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 02:08:46 -0700 (PDT)
+Message-ID: <683974e7-5801-e289-8fa4-c8a8d21ec1b2@redhat.com>
+Date:   Thu, 14 Apr 2022 11:08:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+Content-Language: en-US
+To:     Lai Jiangshan <jiangshanlai@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
+References: <20220330132152.4568-1-jiangshanlai@gmail.com>
+ <20220330132152.4568-4-jiangshanlai@gmail.com> <YlXrshJa2Sd1WQ0P@google.com>
+ <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On 4/14/22 11:07, Lai Jiangshan wrote:
+>> I don't think this will work for shadow paging.  CR3 only has to be 32-byte aligned
+>> for PAE paging.  Unless I'm missing something subtle in the code, KVM will incorrectly
+>> reuse a pae_root if the guest puts multiple PAE CR3s on a single page because KVM's
+>> gfn calculation will drop bits 11:5.
+> 
+> I forgot about it.
 
-Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-pm_runtime_put_noidle. This change is just to simplify the code, no
-actual functional changes.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/net/ethernet/ti/davinci_emac.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+Isn't the pae_root always rebuilt by
 
-diff --git a/drivers/net/ethernet/ti/davinci_emac.c b/drivers/net/ethernet/ti/davinci_emac.c
-index 4b6aed78d392..9d1e98db308b 100644
---- a/drivers/net/ethernet/ti/davinci_emac.c
-+++ b/drivers/net/ethernet/ti/davinci_emac.c
-@@ -1422,9 +1422,8 @@ static int emac_dev_open(struct net_device *ndev)
- 	struct phy_device *phydev = NULL;
- 	struct device *phy = NULL;
- 
--	ret = pm_runtime_get_sync(&priv->pdev->dev);
-+	ret = pm_runtime_resume_and_get(&priv->pdev->dev);
- 	if (ret < 0) {
--		pm_runtime_put_noidle(&priv->pdev->dev);
- 		dev_err(&priv->pdev->dev, "%s: failed to get_sync(%d)\n",
- 			__func__, ret);
- 		return ret;
-@@ -1661,9 +1660,8 @@ static struct net_device_stats *emac_dev_getnetstats(struct net_device *ndev)
- 	u32 stats_clear_mask;
- 	int err;
- 
--	err = pm_runtime_get_sync(&priv->pdev->dev);
-+	err = pm_runtime_resume_and_get(&priv->pdev->dev);
- 	if (err < 0) {
--		pm_runtime_put_noidle(&priv->pdev->dev);
- 		dev_err(&priv->pdev->dev, "%s: failed to get_sync(%d)\n",
- 			__func__, err);
- 		return &ndev->stats;
-@@ -1954,9 +1952,8 @@ static int davinci_emac_probe(struct platform_device *pdev)
- 	netif_napi_add(ndev, &priv->napi, emac_poll, EMAC_POLL_WEIGHT);
- 
- 	pm_runtime_enable(&pdev->dev);
--	rc = pm_runtime_get_sync(&pdev->dev);
-+	rc = pm_runtime_resume_and_get(&pdev->dev);
- 	if (rc < 0) {
--		pm_runtime_put_noidle(&pdev->dev);
- 		dev_err(&pdev->dev, "%s: failed to get_sync(%d)\n",
- 			__func__, rc);
- 		goto err_napi_del;
--- 
-2.25.1
+         if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
+                 kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
 
+in load_pdptrs?  I think reuse cannot happen.
+
+Paolo
 

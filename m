@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE378501175
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:59:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009045016DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344596AbiDNOJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S1346600AbiDNPPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344076AbiDNNaS (ORCPT
+        with ESMTP id S1347214AbiDNN6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066A7219A;
-        Thu, 14 Apr 2022 06:27:51 -0700 (PDT)
+        Thu, 14 Apr 2022 09:58:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4779B82C1;
+        Thu, 14 Apr 2022 06:49:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 98EAC619DA;
-        Thu, 14 Apr 2022 13:27:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5543C385A5;
-        Thu, 14 Apr 2022 13:27:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4DBFBB82894;
+        Thu, 14 Apr 2022 13:49:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9445FC385A1;
+        Thu, 14 Apr 2022 13:49:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942870;
-        bh=Ae9q9nxSN3EVFhjOM8eyzrCND6wo/9iVMMHTDrWSK90=;
+        s=korg; t=1649944149;
+        bh=cBqeMbl+UOPWrgSvxQeVCurOeOpmkuHKlzDZEIm6juw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xB6Ox/K82KdKz5Ot9ikeQZ84tIKPOEc6qExSfz84qm+NPTzD7rGxPwrST33NzPevr
-         7tUMmB/F0o5MnB5lIoquE2fh59xHQKHYU3cvFuyj3lOx80KeIHg2i8HPWP9ykdTYYU
-         0lD2vE/TkuLrDPWMd9RKGIxyxEcPDBsKFAm6Qd5A=
+        b=TXmKDCVC+0kyt5PW+J00PcvUDQ30B7b45RQ194W+gZRwHXTnrmTT2KtnEvoogX8sf
+         i1avT9MWdmAmwZsxlgxczBsDFGTAfzV2wUx1RljqIBItnQySuoTwhwZrjgsSoCn9GW
+         RAWgtCFj3LjMDqJplfbOrDm+PfNR1nylVfK+xWIw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Joe Jin <joe.jin@oracle.com>,
+        Dongli Zhang <dongli.zhang@oracle.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 292/338] clk: Enforce that disjoints limits are invalid
-Date:   Thu, 14 Apr 2022 15:13:15 +0200
-Message-Id: <20220414110847.199578361@linuxfoundation.org>
+Subject: [PATCH 5.4 411/475] xen: delay xen_hvm_init_time_ops() if kdump is boot on vcpu>=32
+Date:   Thu, 14 Apr 2022 15:13:16 +0200
+Message-Id: <20220414110906.566683136@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,100 +56,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Maxime Ripard <maxime@cerno.tech>
+From: Dongli Zhang <dongli.zhang@oracle.com>
 
-[ Upstream commit 10c46f2ea914202482d19cf80dcc9c321c9ff59b ]
+[ Upstream commit eed05744322da07dd7e419432dcedf3c2e017179 ]
 
-If we were to have two users of the same clock, doing something like:
+The sched_clock() can be used very early since commit 857baa87b642
+("sched/clock: Enable sched clock early"). In addition, with commit
+38669ba205d1 ("x86/xen/time: Output xen sched_clock time from 0"), kdump
+kernel in Xen HVM guest may panic at very early stage when accessing
+&__this_cpu_read(xen_vcpu)->time as in below:
 
-clk_set_rate_range(user1, 1000, 2000);
-clk_set_rate_range(user2, 3000, 4000);
+setup_arch()
+ -> init_hypervisor_platform()
+     -> x86_init.hyper.init_platform = xen_hvm_guest_init()
+         -> xen_hvm_init_time_ops()
+             -> xen_clocksource_read()
+                 -> src = &__this_cpu_read(xen_vcpu)->time;
 
-The second call would fail with -EINVAL, preventing from getting in a
-situation where we end up with impossible limits.
+This is because Xen HVM supports at most MAX_VIRT_CPUS=32 'vcpu_info'
+embedded inside 'shared_info' during early stage until xen_vcpu_setup() is
+used to allocate/relocate 'vcpu_info' for boot cpu at arbitrary address.
 
-However, this is never explicitly checked against and enforced, and
-works by relying on an undocumented behaviour of clk_set_rate().
+However, when Xen HVM guest panic on vcpu >= 32, since
+xen_vcpu_info_reset(0) would set per_cpu(xen_vcpu, cpu) = NULL when
+vcpu >= 32, xen_clocksource_read() on vcpu >= 32 would panic.
 
-Indeed, on the first clk_set_rate_range will make sure the current clock
-rate is within the new range, so it will be between 1000 and 2000Hz. On
-the second clk_set_rate_range(), it will consider (rightfully), that our
-current clock is outside of the 3000-4000Hz range, and will call
-clk_core_set_rate_nolock() to set it to 3000Hz.
+This patch calls xen_hvm_init_time_ops() again later in
+xen_hvm_smp_prepare_boot_cpu() after the 'vcpu_info' for boot vcpu is
+registered when the boot vcpu is >= 32.
 
-clk_core_set_rate_nolock() will then call clk_calc_new_rates() that will
-eventually check that our rate 3000Hz rate is outside the min 3000Hz max
-2000Hz range, will bail out, the error will propagate and we'll
-eventually return -EINVAL.
+This issue can be reproduced on purpose via below command at the guest
+side when kdump/kexec is enabled:
 
-This solely relies on the fact that clk_calc_new_rates(), and in
-particular clk_core_determine_round_nolock(), won't modify the new rate
-allowing the error to be reported. That assumption won't be true for all
-drivers, and most importantly we'll break that assumption in a later
-patch.
+"taskset -c 33 echo c > /proc/sysrq-trigger"
 
-It can also be argued that we shouldn't even reach the point where we're
-calling clk_core_set_rate_nolock().
+The bugfix for PVM is not implemented due to the lack of testing
+environment.
 
-Let's make an explicit check for disjoints range before we're doing
-anything.
+[boris: xen_hvm_init_time_ops() returns on errors instead of jumping to end]
 
-Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-Link: https://lore.kernel.org/r/20220225143534.405820-4-maxime@cerno.tech
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Cc: Joe Jin <joe.jin@oracle.com>
+Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+Reviewed-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
+Link: https://lore.kernel.org/r/20220302164032.14569-3-dongli.zhang@oracle.com
+Signed-off-by: Boris Ostrovsky <boris.ostrovsky@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/clk.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ arch/x86/xen/smp_hvm.c |  6 ++++++
+ arch/x86/xen/time.c    | 24 +++++++++++++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index a9490c8e82a7..32606d1094fe 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -523,6 +523,24 @@ static void clk_core_get_boundaries(struct clk_core *core,
- 		*max_rate = min(*max_rate, clk_user->max_rate);
- }
+diff --git a/arch/x86/xen/smp_hvm.c b/arch/x86/xen/smp_hvm.c
+index f8d39440b292..e5bd9eb42191 100644
+--- a/arch/x86/xen/smp_hvm.c
++++ b/arch/x86/xen/smp_hvm.c
+@@ -18,6 +18,12 @@ static void __init xen_hvm_smp_prepare_boot_cpu(void)
+ 	 */
+ 	xen_vcpu_setup(0);
  
-+static bool clk_core_check_boundaries(struct clk_core *core,
-+				      unsigned long min_rate,
-+				      unsigned long max_rate)
-+{
-+	struct clk *user;
++	/*
++	 * Called again in case the kernel boots on vcpu >= MAX_VIRT_CPUS.
++	 * Refer to comments in xen_hvm_init_time_ops().
++	 */
++	xen_hvm_init_time_ops();
 +
-+	lockdep_assert_held(&prepare_lock);
-+
-+	if (min_rate > core->max_rate || max_rate < core->min_rate)
-+		return false;
-+
-+	hlist_for_each_entry(user, &core->clks, clks_node)
-+		if (min_rate > user->max_rate || max_rate < user->min_rate)
-+			return false;
-+
-+	return true;
-+}
-+
- void clk_hw_set_rate_range(struct clk_hw *hw, unsigned long min_rate,
- 			   unsigned long max_rate)
+ 	/*
+ 	 * The alternative logic (which patches the unlock/lock) runs before
+ 	 * the smp bootup up code is activated. Hence we need to set this up
+diff --git a/arch/x86/xen/time.c b/arch/x86/xen/time.c
+index befbdd8b17f0..4ec6c80f7687 100644
+--- a/arch/x86/xen/time.c
++++ b/arch/x86/xen/time.c
+@@ -547,6 +547,11 @@ static void xen_hvm_setup_cpu_clockevents(void)
+ 
+ void __init xen_hvm_init_time_ops(void)
  {
-@@ -2066,6 +2084,11 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
- 	clk->min_rate = min;
- 	clk->max_rate = max;
++	static bool hvm_time_initialized;
++
++	if (hvm_time_initialized)
++		return;
++
+ 	/*
+ 	 * vector callback is needed otherwise we cannot receive interrupts
+ 	 * on cpu > 0 and at this point we don't know how many cpus are
+@@ -556,7 +561,22 @@ void __init xen_hvm_init_time_ops(void)
+ 		return;
  
-+	if (!clk_core_check_boundaries(clk->core, min, max)) {
-+		ret = -EINVAL;
-+		goto out;
+ 	if (!xen_feature(XENFEAT_hvm_safe_pvclock)) {
+-		pr_info("Xen doesn't support pvclock on HVM, disable pv timer");
++		pr_info_once("Xen doesn't support pvclock on HVM, disable pv timer");
++		return;
 +	}
 +
- 	rate = clk_core_get_rate_nolock(clk->core);
- 	if (rate < min || rate > max) {
- 		/*
-@@ -2094,6 +2117,7 @@ int clk_set_rate_range(struct clk *clk, unsigned long min, unsigned long max)
- 		}
++	/*
++	 * Only MAX_VIRT_CPUS 'vcpu_info' are embedded inside 'shared_info'.
++	 * The __this_cpu_read(xen_vcpu) is still NULL when Xen HVM guest
++	 * boots on vcpu >= MAX_VIRT_CPUS (e.g., kexec), To access
++	 * __this_cpu_read(xen_vcpu) via xen_clocksource_read() will panic.
++	 *
++	 * The xen_hvm_init_time_ops() should be called again later after
++	 * __this_cpu_read(xen_vcpu) is available.
++	 */
++	if (!__this_cpu_read(xen_vcpu)) {
++		pr_info("Delay xen_init_time_common() as kernel is running on vcpu=%d\n",
++			xen_vcpu_nr(0));
+ 		return;
  	}
  
-+out:
- 	if (clk->exclusive_count)
- 		clk_core_rate_protect(clk->core);
+@@ -568,6 +588,8 @@ void __init xen_hvm_init_time_ops(void)
+ 	x86_platform.calibrate_tsc = xen_tsc_khz;
+ 	x86_platform.get_wallclock = xen_get_wallclock;
+ 	x86_platform.set_wallclock = xen_set_wallclock;
++
++	hvm_time_initialized = true;
+ }
+ #endif
  
 -- 
 2.35.1

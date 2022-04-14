@@ -2,53 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF21501C1B
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71C7501C11
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345730AbiDNTnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39434 "EHLO
+        id S1345795AbiDNTnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:43:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345798AbiDNTmp (ORCPT
+        with ESMTP id S1345896AbiDNTm5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:42:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C9B49FBD;
-        Thu, 14 Apr 2022 12:40:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B1D7961DF9;
-        Thu, 14 Apr 2022 19:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C62E0C385A1;
-        Thu, 14 Apr 2022 19:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649965218;
-        bh=VhIo5zoKkNLmMaQV6qXIkHE2FIUbCi00PmoyQe9eHpw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=qlqZnMvO27lGJle6LAb52uCOq6TnKoo+7vlwx+15HTq6j4K2xSaJ2fJsrqDeTuNKn
-         Q+2NraIbrwVDYVpH59ClklZ6EoEMIJQuelB+KXJKCdlREfJwbUaeX6weDlmdhcs6qL
-         ng2MhT1b8nM/UpgUigg6haFROAvMEsXGMGu2DKXuc13O2LQHDztogsrtRptutIYcn4
-         +eiH/PLthKez9NVoaPRCQsBGR83LGeeXJLtrDNIU7gOiyvP1I5w5EGa9ycvSOOXNEx
-         AZ5qHV4lEXbQVhHOn1nxYarxVF8YZ59cff0uPVD95Y34TtLqQ0EsLg2ThQBmbsMnQ0
-         oTi1dx7D3qq0g==
-Date:   Thu, 14 Apr 2022 14:40:16 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Li Yang <leoyang.li@nxp.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Hou Zhiqiang <Zhiqiang.Hou@nxp.com>,
-        Rob Herring <robh@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] dt-bindings: pci: layerscape-pci: define AER/PME
- interrupts
-Message-ID: <20220414194016.GA764042@bhelgaas>
+        Thu, 14 Apr 2022 15:42:57 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7B44A3F3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:40:31 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id m16-20020a9d73d0000000b005f8edc0599eso2383588otk.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:40:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=IZs+lSCZqoVK/AKlAjq1EPKE7N59AQDgaVEofEcz/4k=;
+        b=ETgEm9IDuhcJCpRZjCKvwitdHctDrYi29lxjTbWawEHjmBCyLjRt4MYCErwWxyIiIU
+         9oGWk2XpMi1dM7n5ZXoIhJ0xbZW+2UzdP/epWdGbxtw72AUKBsEqN300BmeuFGb6JktJ
+         WiZk4JZpzp/44sQgTfDviIGsknHKZQ6/7y4R4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=IZs+lSCZqoVK/AKlAjq1EPKE7N59AQDgaVEofEcz/4k=;
+        b=1MxPpLkjRQ8oZM1WRVnB8A3I6tqu4Kuabh8i6oPMZ4alDHhgKud5Bk5+Q+J5dFYBoA
+         I3qWEiGAjdyVLvthtY4Jmn+c32JwEm5DMHvo6iW3uc5xJl9L3s5s6XnA6e+dyJnP5+dE
+         anomdT6bZsRvWco4aIVAD+FdkBdBByIH74XvLi0AAEpf1RQD3cT53rxBlmpfaRLd0spO
+         bu4qw6IXImIfXkWZQZLfoRy2xiW1ymrhSEpR8xowTEddoGM6oMajnJWRVqlOf7560A7H
+         thJ6vRVcA+iD/XAKeqld7VM9bZ7fj2CRURIPK63T1ROJN5B7kP5tfupIuao4pTz9hVBe
+         6b9A==
+X-Gm-Message-State: AOAM5337nuy1giYQEZL9oDeVnO3Ivm5HVR2rBWJp+Y7TaqQxUa1xG8wM
+        4QonBm/Dk43D2drPt8v28BTxIOPV1cc/OZ8mOYFOSQ==
+X-Google-Smtp-Source: ABdhPJzlgZCJ3S0otpiIbEsDjjXXeYSCOZF8aExMi2XEL/qGTFsnoTp0g7uybuwoqYnKkMyfeBWPcXWlvFAuimKyVBc=
+X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
+ x30-20020a9d20a1000000b005e8d2b6f63fmr1455625ota.159.1649965230478; Thu, 14
+ Apr 2022 12:40:30 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 14 Apr 2022 12:40:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220311234938.8706-5-leoyang.li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <81c3a9fb-4c92-6969-c715-ca085322f9c6@linaro.org>
+References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com>
+ <1649938766-6768-2-git-send-email-quic_sbillaka@quicinc.com>
+ <CAD=FV=Wmiv2WGhFCLYmXbWESNOh5FfobjNme85aU6YtN1SLVDA@mail.gmail.com> <81c3a9fb-4c92-6969-c715-ca085322f9c6@linaro.org>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 14 Apr 2022 12:40:29 -0700
+Message-ID: <CAE-0n50obe_aqzwQY-X1yH4emjjOErOJ_wj9sQe=HoWEZ3vjTw@mail.gmail.com>
+Subject: Re: [PATCH v7 1/4] drm/msm/dp: Add eDP support via aux_bus
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Doug Anderson <dianders@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>, devicetree@vger.kernel.org,
+        Rob Clark <robdclark@gmail.com>,
+        Sean Paul <seanpaul@chromium.org>,
+        quic_kalyant <quic_kalyant@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        quic_vproddut <quic_vproddut@quicinc.com>,
+        Aravind Venkateswaran <quic_aravindh@quicinc.com>,
+        Steev Klimaszewski <steev@kali.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,121 +83,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 11, 2022 at 05:49:38PM -0600, Li Yang wrote:
-> Different platforms using this controller are using different numbers of
-> interrupt lines and the routing of events to these interrupt lines are
-> different too.  So instead of trying to define names for these interrupt
-> lines, we define the more specific AER/PME events that are routed to
-> these interrupt lines.
-> 
-> For platforms which only has a single interrupt line for miscellaneous
-> controller events, we can keep using the original "intr" name for
-> backward compatibility.
-> 
-> Also change the example from ls1021a to ls1088a for better representation.
-> 
-> Signed-off-by: Li Yang <leoyang.li@nxp.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Quoting Dmitry Baryshkov (2022-04-14 12:16:14)
+>
+> I think it's too verbose and a bit incorrect.
+> This is a bit saner:
+> /*
+>   * These ops do not make sense for eDP, since they are provided
+>   * by the panel-bridge corresponding to the attached eDP panel.
+>   */
+>
+> My question was whether we really need to disable them for eDP since for
+> eDP the detect and and get_modes will be overridden anyway.
 
-1) Please pay attention to your subject lines and make them match.
-In this series you have:
-
-  dt-bindings: pci: layerscape-pci: Add a optional property big-endian
-  dt-bindings: pci: layerscape-pci: Update the description of SCFG property
-  dt-bindings: pci: layerscape-pci: Add EP mode compatible strings for ls1028a
-  dt-bindings: pci: layerscape-pci: define AER/PME interrupt
-
-Note that all are capitalized except "define AER/PME interrupt".
-
-2) Also capitalize "AER" in the comment below so it matches usage in
-the commit log and the property descriptions.
-
-3) This diff is HUGE because you replace a bunch of tabs with spaces.
-That seems like a pointless change, but if you want to do it, at least
-do it in a separate patch all by itself that *only* changes tabs to
-spaces.  Then we'll be able to see what actually happened in the
-patch that adds the properties.
-
-This has already been merged, so unless you need to update this series
-for some other reason, these are just tips for the future.
-
-> ---
->  .../bindings/pci/layerscape-pci.txt           | 58 ++++++++++---------
->  1 file changed, 32 insertions(+), 26 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/layerscape-pci.txt b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> index 8fd6039a826b..ee8a4791a78b 100644
-> --- a/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> +++ b/Documentation/devicetree/bindings/pci/layerscape-pci.txt
-> @@ -31,8 +31,14 @@ Required properties:
->  - reg: base addresses and lengths of the PCIe controller register blocks.
->  - interrupts: A list of interrupt outputs of the controller. Must contain an
->    entry for each entry in the interrupt-names property.
-> -- interrupt-names: Must include the following entries:
-> -  "intr": The interrupt that is asserted for controller interrupts
-> +- interrupt-names: It could include the following entries:
-> +  "aer": Used for interrupt line which reports AER events when
-> +	 non MSI/MSI-X/INTx mode is used
-> +  "pme": Used for interrupt line which reports PME events when
-> +	 non MSI/MSI-X/INTx mode is used
-> +  "intr": Used for SoCs(like ls2080a, lx2160a, ls2080a, ls2088a, ls1088a)
-> +	  which has a single interrupt line for miscellaneous controller
-> +	  events(could include AER and PME events).
->  - fsl,pcie-scfg: Must include two entries.
->    The first entry must be a link to the SCFG device node
->    The second entry is the physical PCIe controller index starting from '0'.
-> @@ -47,27 +53,27 @@ Optional properties:
->  
->  Example:
->  
-> -	pcie@3400000 {
-> -		compatible = "fsl,ls1021a-pcie";
-> -		reg = <0x00 0x03400000 0x0 0x00010000   /* controller registers */
-> -		       0x40 0x00000000 0x0 0x00002000>; /* configuration space */
-> -		reg-names = "regs", "config";
-> -		interrupts = <GIC_SPI 177 IRQ_TYPE_LEVEL_HIGH>; /* controller interrupt */
-> -		interrupt-names = "intr";
-> -		fsl,pcie-scfg = <&scfg 0>;
-> -		#address-cells = <3>;
-> -		#size-cells = <2>;
-> -		device_type = "pci";
-> -		dma-coherent;
-> -		num-lanes = <4>;
-> -		bus-range = <0x0 0xff>;
-> -		ranges = <0x81000000 0x0 0x00000000 0x40 0x00010000 0x0 0x00010000   /* downstream I/O */
-> -			  0xc2000000 0x0 0x20000000 0x40 0x20000000 0x0 0x20000000   /* prefetchable memory */
-> -			  0x82000000 0x0 0x40000000 0x40 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> -		#interrupt-cells = <1>;
-> -		interrupt-map-mask = <0 0 0 7>;
-> -		interrupt-map = <0000 0 0 1 &gic GIC_SPI 91  IRQ_TYPE_LEVEL_HIGH>,
-> -				<0000 0 0 2 &gic GIC_SPI 188 IRQ_TYPE_LEVEL_HIGH>,
-> -				<0000 0 0 3 &gic GIC_SPI 190 IRQ_TYPE_LEVEL_HIGH>,
-> -				<0000 0 0 4 &gic GIC_SPI 192 IRQ_TYPE_LEVEL_HIGH>;
-> -	};
-> +        pcie@3400000 {
-> +                compatible = "fsl,ls1088a-pcie";
-> +                reg = <0x00 0x03400000 0x0 0x00100000>, /* controller registers */
-> +                      <0x20 0x00000000 0x0 0x00002000>; /* configuration space */
-> +                reg-names = "regs", "config";
-> +                interrupts = <0 108 IRQ_TYPE_LEVEL_HIGH>; /* aer interrupt */
-> +                interrupt-names = "aer";
-> +                #address-cells = <3>;
-> +                #size-cells = <2>;
-> +                device_type = "pci";
-> +                dma-coherent;
-> +                num-viewport = <256>;
-> +                bus-range = <0x0 0xff>;
-> +                ranges = <0x81000000 0x0 0x00000000 0x20 0x00010000 0x0 0x00010000   /* downstream I/O */
-> +                          0x82000000 0x0 0x40000000 0x20 0x40000000 0x0 0x40000000>; /* non-prefetchable memory */
-> +                msi-parent = <&its>;
-> +                #interrupt-cells = <1>;
-> +                interrupt-map-mask = <0 0 0 7>;
-> +                interrupt-map = <0000 0 0 1 &gic 0 0 0 109 IRQ_TYPE_LEVEL_HIGH>,
-> +                                <0000 0 0 2 &gic 0 0 0 110 IRQ_TYPE_LEVEL_HIGH>,
-> +                                <0000 0 0 3 &gic 0 0 0 111 IRQ_TYPE_LEVEL_HIGH>,
-> +                                <0000 0 0 4 &gic 0 0 0 112 IRQ_TYPE_LEVEL_HIGH>;
-> +                iommu-map = <0 &smmu 0 1>; /* Fixed-up by bootloader */
-> +        };
-> -- 
-> 2.25.1
-> 
+And to go further, I'd expect that a bridge should expose the
+functionality that it supports, regardless of what is connected down the
+chain. Otherwise we won't be able to mix and match bridges because the
+code is brittle, making assumptions about what is connected.

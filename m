@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2168E501627
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FB25015CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347040AbiDNOv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S1346441AbiDNOKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345261AbiDNNpj (ORCPT
+        with ESMTP id S245202AbiDNN2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FD22DE0;
-        Thu, 14 Apr 2022 06:43:14 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE5AAAC9E;
+        Thu, 14 Apr 2022 06:21:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB7B61D68;
-        Thu, 14 Apr 2022 13:43:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B11C385A5;
-        Thu, 14 Apr 2022 13:43:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B55B8B82986;
+        Thu, 14 Apr 2022 13:21:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 249E7C385A1;
+        Thu, 14 Apr 2022 13:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943793;
-        bh=//upt9aXEQTw+CA9VI8866Bot8/P0CR2+SmLNylYp3A=;
+        s=korg; t=1649942516;
+        bh=ZFEcl4bqberCbPKajHiZ82H8yxMZMcuKz3U015bFo00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lnDKbEbjT5lioQl1VjQPWilIs5bu9X33aoKsI7F0mfpbta4j7WM/pMEa+ibCwcgiL
-         Og31hOBf7bGOyA8NroZrh6LkvQ4dn5J6yToYyRqAuQowWrpyMbBUbtudAaYfA3SyAi
-         ZiRAO+YFBUHQxN4U+P8KqEZ2zhjYCtM9/OzCPir4=
+        b=qZGDZhGBRGuAPLkcPyFQ62j79aToZV0Cgd2M43fL5PYUwVtEfwrCv7IiQL28kvkpv
+         KQj8cev0Lq5Hqy/1W6JFMp2fPL6L4zKS5hcTPK5n703d4z94iawQz4qR6S4q7mNqzT
+         Hd8Bzq+qkTZGf/yzd96WedYSYsAiYfK91w5+gYlI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Joerg Roedel <joro@8bytes.org>, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        iommu@lists.linux-foundation.org,
+        Robin Murphy <robin.murphy@arm.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 283/475] ACPICA: Avoid walking the ACPI Namespace if it is not there
+Subject: [PATCH 4.19 165/338] dma-debug: fix return value of __setup handlers
 Date:   Thu, 14 Apr 2022 15:11:08 +0200
-Message-Id: <20220414110903.019478689@linuxfoundation.org>
+Message-Id: <20220414110843.597427578@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +59,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit 80e4390981618e290616dbd06ea190d4576f219d ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+When valid kernel command line parameters
+  dma_debug=off dma_debug_entries=100
+are used, they are reported as Unknown parameters and added to init's
+environment strings, polluting it.
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
+  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc5
+    dma_debug=off dma_debug_entries=100", will be passed to user space.
 
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
+and
 
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     dma_debug=off
+     dma_debug_entries=100
+
+Return 1 from these __setup handlers to indicate that the command line
+option has been handled.
+
+Fixes: 59d3daafa1726 ("dma-debug: add kernel command line parameters")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Cc: Joerg Roedel <joro@8bytes.org>
+Cc: Christoph Hellwig <hch@lst.de>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: iommu@lists.linux-foundation.org
+Cc: Robin Murphy <robin.murphy@arm.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ kernel/dma/debug.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index ceea6af79d12..bf4eb642f423 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
- 
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
+diff --git a/kernel/dma/debug.c b/kernel/dma/debug.c
+index 1c82b0d25498..9c9a5b12f92f 100644
+--- a/kernel/dma/debug.c
++++ b/kernel/dma/debug.c
+@@ -1056,7 +1056,7 @@ static __init int dma_debug_cmdline(char *str)
+ 		global_disable = true;
  	}
  
- 	/* Null child means "get first node" */
+-	return 0;
++	return 1;
+ }
+ 
+ static __init int dma_debug_entries_cmdline(char *str)
+@@ -1065,7 +1065,7 @@ static __init int dma_debug_entries_cmdline(char *str)
+ 		return -EINVAL;
+ 	if (!get_option(&str, &nr_prealloc_entries))
+ 		nr_prealloc_entries = PREALLOC_DMA_DEBUG_ENTRIES;
+-	return 0;
++	return 1;
+ }
+ 
+ __setup("dma_debug=", dma_debug_cmdline);
 -- 
 2.34.1
 

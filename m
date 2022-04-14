@@ -2,99 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D335500D1D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:22:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15DE1500D20
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 14:22:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243161AbiDNMYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 08:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
+        id S243170AbiDNMYw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 08:24:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiDNMYO (ORCPT
+        with ESMTP id S230168AbiDNMYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 08:24:14 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1B3383;
-        Thu, 14 Apr 2022 05:21:49 -0700 (PDT)
-X-UUID: 4e0f2ce5434b4f0086595e96746f347f-20220414
-X-UUID: 4e0f2ce5434b4f0086595e96746f347f-20220414
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1621537180; Thu, 14 Apr 2022 20:21:45 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 14 Apr 2022 20:21:44 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
- 2022 20:21:43 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 20:21:43 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
+        Thu, 14 Apr 2022 08:24:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B7375224;
+        Thu, 14 Apr 2022 05:22:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B494961F8E;
+        Thu, 14 Apr 2022 12:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 951F1C385A1;
+        Thu, 14 Apr 2022 12:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649938942;
+        bh=8Xnx1DikNC8S2miol9o95pX0WhJ5fuI422FUZIL5zhg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=N8vF0SYdpsOHP/kq1h8sVjrcKPvnImlfhaeWieGFCt9WQNoz+/pC8GVsQ7LgHgwx6
+         bahUHfWLmPARFdsuDbP75vQxEYigTxwlYRfHpEfDMYnB5Cx7Icft0fLLLON1CH1Eui
+         eaGX/bXDgdmvvEpOs23AYeh1DMgsk7QIC3pCWMkpRwZq8O1yp3sV7SYHEfctNv9b44
+         nM5uBbKrIJQx6Vh3VQa44flG/cxsz7Cve7gu9W9pAufjz96fBQfw0riFR/yLYfstWQ
+         BU97D2C6ww4KepktXtYrxxSqFqh6HcU1zWTTDK3mdHuzV1O3Tt2i/GZagEIBwPIN5i
+         05vzYceWGgdgQ==
+Date:   Thu, 14 Apr 2022 14:22:12 +0200
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Dylan Hung <dylan_hung@aspeedtech.com>
+Cc:     <robh+dt@kernel.org>, <joel@jms.id.au>, <andrew@aj.id.au>,
+        <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <pabeni@redhat.com>,
+        <p.zabel@pengutronix.de>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-remoteproc@vger.kernel.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Subject: [PATCH v2 2/2] remoteproc: mediatek: allow reading firmware-name from DT
-Date:   Thu, 14 Apr 2022 20:21:40 +0800
-Message-ID: <20220414122140.6114-3-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220414122140.6114-1-allen-kh.cheng@mediatek.com>
-References: <20220414122140.6114-1-allen-kh.cheng@mediatek.com>
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <krzk+dt@kernel.org>,
+        <BMC-SW@aspeedtech.com>
+Subject: Re: [PATCH v5 0/3] Add reset deassertion for Aspeed MDIO
+Message-ID: <20220414142212.258fcb37@kernel.org>
+In-Reply-To: <20220413121037.23748-1-dylan_hung@aspeedtech.com>
+References: <20220413121037.23748-1-dylan_hung@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SCP firmware blob differs between platforms and SoCs. We add
-support in the SCP driver for reading the path of firmware file from
-DT in order to allow these files to live in a generic file system
-(or linux-firmware).
+On Wed, 13 Apr 2022 20:10:34 +0800 Dylan Hung wrote:
+> Add missing reset deassertion for Aspeed MDIO bus controller. The reset
+> is asserted by the hardware when power-on so the driver only needs to
+> deassert it. To be able to work with the old DT blobs, the reset is
+> optional since it may be deasserted by the bootloader or the previous
+> kernel.
 
-The firmware-name property is optional and the code falls back to the
-old filename if the property isn't present.
-
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- drivers/remoteproc/mtk_scp.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-index ee6c4009586e..82813d74e829 100644
---- a/drivers/remoteproc/mtk_scp.c
-+++ b/drivers/remoteproc/mtk_scp.c
-@@ -809,9 +809,14 @@ static int scp_probe(struct platform_device *pdev)
- 	struct mtk_scp *scp;
- 	struct rproc *rproc;
- 	struct resource *res;
--	char *fw_name = "scp.img";
-+	const char *fw_name = "scp.img";
- 	int ret, i;
- 
-+	ret = of_property_read_string(pdev->dev.of_node, "firmware-name",
-+				      &fw_name);
-+	if (ret < 0 && ret != -EINVAL)
-+		return ret;
-+
- 	rproc = devm_rproc_alloc(dev, np->name, &scp_ops, fw_name, sizeof(*scp));
- 	if (!rproc)
- 		return dev_err_probe(dev, -ENOMEM, "unable to allocate remoteproc\n");
--- 
-2.18.0
-
+I presume you want this applied to net-next, but it appears there 
+is a conflict or something. Could you resend the patches based on
+net-next/master?

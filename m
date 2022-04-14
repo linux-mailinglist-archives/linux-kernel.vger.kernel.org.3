@@ -2,255 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E73150086C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C319D500871
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbiDNIeR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:34:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40638 "EHLO
+        id S240955AbiDNIe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233163AbiDNIeO (ORCPT
+        with ESMTP id S237689AbiDNIe5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:34:14 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 724D162BC7;
-        Thu, 14 Apr 2022 01:31:50 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23E8VgfR045981;
-        Thu, 14 Apr 2022 03:31:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1649925102;
-        bh=fRUF0LmPzEq7B63eyHtG91nstfOlpLaJqL90GK1pl0Q=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=i3jutaT9CxToz77KJ9K4efBxo1obAXAi0chdR5uOlEv1ym0qzrHFtuALFLnLjEU48
-         TYFJZXCQlnKByYaSNVzhQi75I9dRlexyB4VYQD94Zgr23WlUrdgFOdPoJKBaeDBQlN
-         lgo4grQKNg4dSHig3Lc4wL8Zztmx74G4uZJc38ag=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23E8VgJR070232
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 14 Apr 2022 03:31:42 -0500
-Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 14
- Apr 2022 03:31:41 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE108.ent.ti.com
- (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Thu, 14 Apr 2022 03:31:41 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23E8VLNo025547;
-        Thu, 14 Apr 2022 03:31:37 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Roger Quadros <rogerq@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/2] usb: typec: tipd: Add support for polling interrupts status when interrupt line is not connected
-Date:   Thu, 14 Apr 2022 14:01:18 +0530
-Message-ID: <20220414083120.22535-3-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220414083120.22535-1-a-govindraju@ti.com>
-References: <20220414083120.22535-1-a-govindraju@ti.com>
+        Thu, 14 Apr 2022 04:34:57 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B00363391;
+        Thu, 14 Apr 2022 01:32:33 -0700 (PDT)
+Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 99A1125B;
+        Thu, 14 Apr 2022 10:32:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1649925151;
+        bh=f95sAmWwdjHUVI8Avcc4pPnkl/AY78Md6cw7xBbSuOw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=vHnKDAOozWKdm9KwKMINztx80dsZqkPD9YUHKngyWssNiBI1T7OkTyynBzZIozuIT
+         l4Dn2O+eAWi5OB2z6Bd+IZcRoMfcU8Ab0DQsirXjNwgvIp8JlCGz5a60gr+3jCNSLe
+         Fr+VPChZjLnp7FfaxMIiJIyxyvUlmW+d3DM5vJKg=
+Message-ID: <b2afddb7-13fc-9ed8-ad0f-fe5a33ee9da0@ideasonboard.com>
+Date:   Thu, 14 Apr 2022 11:32:27 +0300
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RESEND][PATCH] omapdrm: fix missing check on list iterator
+Content-Language: en-US
+To:     Xiaomeng Tong <xiam0nd.tong@gmail.com>, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220414061410.7678-1-xiam0nd.tong@gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20220414061410.7678-1-xiam0nd.tong@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In some cases the interrupt line from the pd controller may not be
-connected. In these cases, poll the status of various events.
+Hi,
 
-Suggested-by: Roger Quadros <rogerq@kernel.org>
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
- drivers/usb/typec/tipd/core.c | 99 +++++++++++++++++++++++++++++++----
- 1 file changed, 88 insertions(+), 11 deletions(-)
+On 14/04/2022 09:14, Xiaomeng Tong wrote:
+> The bug is here:
+> 	bus_flags = connector->display_info.bus_flags;
+> 
+> The list iterator 'connector-' will point to a bogus position containing
+> HEAD if the list is empty or no element is found. This case must
+> be checked before any use of the iterator, otherwise it will lead
+> to a invalid memory access.
+> 
+> To fix this bug, add an check. Use a new value 'iter' as the list
+> iterator, while use the old value 'connector' as a dedicated variable
+> to point to the found element.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: ("drm/omap: Add support for drm_panel")
+> Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+> ---
+>   drivers/gpu/drm/omapdrm/omap_encoder.c | 14 +++++++++-----
+>   1 file changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/omapdrm/omap_encoder.c b/drivers/gpu/drm/omapdrm/omap_encoder.c
+> index 4dd05bc732da..d648ab4223b1 100644
+> --- a/drivers/gpu/drm/omapdrm/omap_encoder.c
+> +++ b/drivers/gpu/drm/omapdrm/omap_encoder.c
+> @@ -76,14 +76,16 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
+>   	struct omap_encoder *omap_encoder = to_omap_encoder(encoder);
+>   	struct omap_dss_device *output = omap_encoder->output;
+>   	struct drm_device *dev = encoder->dev;
+> -	struct drm_connector *connector;
+> +	struct drm_connector *connector = NULL, *iter;
+>   	struct drm_bridge *bridge;
+>   	struct videomode vm = { 0 };
+>   	u32 bus_flags;
+>   
+> -	list_for_each_entry(connector, &dev->mode_config.connector_list, head) {
+> -		if (connector->encoder == encoder)
+> +	list_for_each_entry(iter, &dev->mode_config.connector_list, head) {
+> +		if (iter->encoder == encoder) {
+> +			connector = iter;
+>   			break;
+> +		}
+>   	}
 
-diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-index 16b4560216ba..72fd586ac080 100644
---- a/drivers/usb/typec/tipd/core.c
-+++ b/drivers/usb/typec/tipd/core.c
-@@ -15,6 +15,8 @@
- #include <linux/interrupt.h>
- #include <linux/usb/typec.h>
- #include <linux/usb/role.h>
-+#include <linux/workqueue.h>
-+#include <linux/devm-helpers.h>
- 
- #include "tps6598x.h"
- #include "trace.h"
-@@ -93,6 +95,8 @@ struct tps6598x {
- 	struct power_supply *psy;
- 	struct power_supply_desc psy_desc;
- 	enum power_supply_usb_type usb_type;
-+
-+	struct delayed_work wq_poll;
- };
- 
- static enum power_supply_property tps6598x_psy_props[] = {
-@@ -473,9 +477,8 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
- 	}
- }
- 
--static irqreturn_t cd321x_interrupt(int irq, void *data)
-+static int cd321x_handle_interrupt_status(struct tps6598x *tps)
- {
--	struct tps6598x *tps = data;
- 	u64 event;
- 	u32 status;
- 	int ret;
-@@ -513,14 +516,45 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
- err_unlock:
- 	mutex_unlock(&tps->lock);
- 
-+	if (ret)
-+		return ret;
-+
- 	if (event)
--		return IRQ_HANDLED;
--	return IRQ_NONE;
-+		return 0;
-+	return 1;
- }
- 
--static irqreturn_t tps6598x_interrupt(int irq, void *data)
-+static irqreturn_t cd321x_interrupt(int irq, void *data)
- {
- 	struct tps6598x *tps = data;
-+	int ret;
-+
-+	ret = cd321x_handle_interrupt_status(tps);
-+	if (ret)
-+		return IRQ_NONE;
-+	return IRQ_HANDLED;
-+}
-+
-+/* Time interval for Polling */
-+#define POLL_INTERVAL   500 /* msecs */
-+static void cd321x_poll_work(struct work_struct *work)
-+{
-+	struct tps6598x *tps = container_of(to_delayed_work(work),
-+					    struct tps6598x, wq_poll);
-+	int ret;
-+
-+	ret = cd321x_handle_interrupt_status(tps);
-+	/*
-+	 * If there is an error while reading the interrupt registers
-+	 * then stop polling else, schedule another poll work item
-+	 */
-+	if (!(ret < 0))
-+		queue_delayed_work(system_power_efficient_wq,
-+				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
-+}
-+
-+static int tps6598x_handle_interrupt_status(struct tps6598x *tps)
-+{
- 	u64 event1;
- 	u64 event2;
- 	u32 status;
-@@ -561,9 +595,39 @@ static irqreturn_t tps6598x_interrupt(int irq, void *data)
- err_unlock:
- 	mutex_unlock(&tps->lock);
- 
-+	if (ret)
-+		return ret;
-+
- 	if (event1 | event2)
--		return IRQ_HANDLED;
--	return IRQ_NONE;
-+		return 0;
-+	return 1;
-+}
-+
-+static irqreturn_t tps6598x_interrupt(int irq, void *data)
-+{
-+	struct tps6598x *tps = data;
-+	int ret;
-+
-+	ret = tps6598x_handle_interrupt_status(tps);
-+	if (ret)
-+		return IRQ_NONE;
-+	return IRQ_HANDLED;
-+}
-+
-+static void tps6598x_poll_work(struct work_struct *work)
-+{
-+	struct tps6598x *tps = container_of(to_delayed_work(work),
-+					    struct tps6598x, wq_poll);
-+	int ret;
-+
-+	ret = tps6598x_handle_interrupt_status(tps);
-+	/*
-+	 * If there is an error while reading the interrupt registers
-+	 * then stop polling else, schedule another poll work item
-+	 */
-+	if (!(ret < 0))
-+		queue_delayed_work(system_power_efficient_wq,
-+				   &tps->wq_poll, msecs_to_jiffies(POLL_INTERVAL));
- }
- 
- static int tps6598x_check_mode(struct tps6598x *tps)
-@@ -704,6 +768,7 @@ static int devm_tps6598_psy_register(struct tps6598x *tps)
- static int tps6598x_probe(struct i2c_client *client)
- {
- 	irq_handler_t irq_handler = tps6598x_interrupt;
-+	work_func_t work_poll_handler = tps6598x_poll_work;
- 	struct device_node *np = client->dev.of_node;
- 	struct typec_capability typec_cap = { };
- 	struct tps6598x *tps;
-@@ -748,6 +813,7 @@ static int tps6598x_probe(struct i2c_client *client)
- 			APPLE_CD_REG_INT_PLUG_EVENT;
- 
- 		irq_handler = cd321x_interrupt;
-+		work_poll_handler = cd321x_poll_work;
- 	} else {
- 		/* Enable power status, data status and plug event interrupts */
- 		mask1 = TPS_REG_INT_POWER_STATUS_UPDATE |
-@@ -842,10 +908,21 @@ static int tps6598x_probe(struct i2c_client *client)
- 			dev_err(&client->dev, "failed to register partner\n");
- 	}
- 
--	ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
--					irq_handler,
--					IRQF_SHARED | IRQF_ONESHOT,
--					dev_name(&client->dev), tps);
-+	if (client->irq) {
-+		ret = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-+						irq_handler,
-+						IRQF_SHARED | IRQF_ONESHOT,
-+						dev_name(&client->dev), tps);
-+	} else {
-+		dev_warn(&client->dev, "Unable to find the interrupt, switching to polling\n");
-+		ret = devm_delayed_work_autocancel(tps->dev, &tps->wq_poll, work_poll_handler);
-+		if (ret)
-+			dev_err(&client->dev, "error while initializing workqueue\n");
-+		else
-+			queue_delayed_work(system_power_efficient_wq, &tps->wq_poll,
-+					   msecs_to_jiffies(POLL_INTERVAL));
-+	}
-+
- 	if (ret) {
- 		tps6598x_disconnect(tps, 0);
- 		typec_unregister_port(tps->port);
--- 
-2.17.1
+When does this bug happen? How do you get omap_encoder_mode_set() called 
+for an encoder with a connector that is not valid?
 
+>   
+>   	drm_display_mode_to_videomode(adjusted_mode, &vm);
+> @@ -106,8 +108,10 @@ static void omap_encoder_mode_set(struct drm_encoder *encoder,
+>   		omap_encoder_update_videomode_flags(&vm, bus_flags);
+>   	}
+>   
+> -	bus_flags = connector->display_info.bus_flags;
+> -	omap_encoder_update_videomode_flags(&vm, bus_flags);
+> +	if (connector) {
+> +		bus_flags = connector->display_info.bus_flags;
+> +		omap_encoder_update_videomode_flags(&vm, bus_flags);
+> +	}
+>   
+>   	/* Set timings for all devices in the display pipeline. */
+>   	dss_mgr_set_timings(output, &vm);
+
+How does this fix the issue? You just skip the lines that set up the 
+videomode, but then pass that videomode to dss_mgr_set_timings()...
+
+  Tomi

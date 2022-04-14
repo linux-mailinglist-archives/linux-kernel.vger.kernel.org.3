@@ -2,80 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36F2E500463
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84F56500465
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:41:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiDNCnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S239587AbiDNCoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:44:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235844AbiDNCnb (ORCPT
+        with ESMTP id S234632AbiDNCoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:43:31 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43531AF3E
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:41:03 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id y32so6749743lfa.6
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mCEuHD36brVtOxyd++nob/+Gm+DiKQiXoh2FckYZDmo=;
-        b=qd4NjLduoTAivuhSPCDziNZX9mUcFXnmlw0uTDhfvoEc3UafX5fs5Re0iD5b+7/sVb
-         AuBdeBCPpzky8ysbFOez7GVVHVyGoUYg8jXiZ8+TMpoaxEu1zbClTRkD1CF1JWKtXY3T
-         m/RpH8GcI/cwf2hrMURfH8Kaf4wc6DfrsF4Z0pOB2uWuMnsv08kT1pFZX8x184An2FbJ
-         Z4jP1pywbNvYV9F/jBKYOv6eC4LRaQELvQaJkSfASd2BXKcbC8X4+zLYDvR8++t/Jo8j
-         NSLXuSrD/vgzZfXgs95l/lyN4dMgLLGeVEx0ZGBpIspJHN7BwklFYrjUOCf9YDeH5OG6
-         Cl5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mCEuHD36brVtOxyd++nob/+Gm+DiKQiXoh2FckYZDmo=;
-        b=adwCXj9mLRLI0Sbss51YiayHnzq3/O+cszUcDPEZOivBSEYtSVX3rzGFzriK2h7wCQ
-         yim+ZVRLv/Fzd7+W5Aoc5qVpPg5bJuF/T2ol/LTzOBMKAvAoTgQNlZVsDmrVLci0oT/q
-         dZAl9EyUV5H4RDkcS94fa78LgVE+DP57o5VLXp1P+Ca6YsV6YrWEITcJBRv1DKnbzdkx
-         Sz8DSlVgqwbeXJxn89C2yhAZGF/qdWg4uLyf9qdvhR1pqS4+wvAfH+DNeqSKkRA/v1+E
-         g7mbC2g4Hcc0oIuZ7bSirY0Z3ki/Ehc07xHLiBKGZ30TOvpxGe6TOa1tQHDFztAtXv/2
-         F81w==
-X-Gm-Message-State: AOAM530fUoRR+azrRz9bpo2TZ4m/nUnFcrmM+VRIPbuf+mVWfJTvp5Lh
-        WZvzR6+vO2JBX2z3//H9Sx6mT7vUTYdWQ22lI1skSfVO8zJ6Cg==
-X-Google-Smtp-Source: ABdhPJy/TxGaYjTzpc+8A8MTSoJRPdE5fFBg22cQwIv0h2c92kph7QuwX3ILyCMgrSuPwtGXMdSS1pMVcrZUnUSseEA=
-X-Received: by 2002:a05:6512:10c8:b0:44a:9305:77bd with SMTP id
- k8-20020a05651210c800b0044a930577bdmr482301lfg.404.1649904061833; Wed, 13 Apr
- 2022 19:41:01 -0700 (PDT)
+        Wed, 13 Apr 2022 22:44:09 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED09E33E15;
+        Wed, 13 Apr 2022 19:41:46 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Kf3cN2dvHzfYmt;
+        Thu, 14 Apr 2022 10:41:08 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 14 Apr 2022 10:41:45 +0800
+Received: from [10.174.176.52] (10.174.176.52) by
+ kwepemm600015.china.huawei.com (7.193.23.52) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 14 Apr 2022 10:41:44 +0800
+Message-ID: <88231dee-760f-b992-f1d1-81309076071e@huawei.com>
+Date:   Thu, 14 Apr 2022 10:41:43 +0800
 MIME-Version: 1.0
-References: <20220413122925.33856-1-patrick.wang.shcn@gmail.com> <20220413122826.792a859d90b6c2822b1c796a@linux-foundation.org>
-In-Reply-To: <20220413122826.792a859d90b6c2822b1c796a@linux-foundation.org>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Thu, 14 Apr 2022 10:40:50 +0800
-Message-ID: <CAGcnep_rWWYBr+NFYzh7wNhoenFpwbxy=15a6w5vpJAH8P1dDg@mail.gmail.com>
-Subject: Re: [PATCH] mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     catalin.marinas@arm.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.1
+Subject: Re: [PATCH -next 0/2] fix nfsv4 bugs of opening with O_ACCMODE flag
+To:     Lyu Tao <tao.lyu@epfl.ch>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        "anna@kernel.org" <anna@kernel.org>,
+        "bjschuma@netapp.com" <bjschuma@netapp.com>
+CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "liuyongqiang13@huawei.com" <liuyongqiang13@huawei.com>,
+        "yi.zhang@huawei.com" <yi.zhang@huawei.com>,
+        "zhangxiaoxu5@huawei.com" <zhangxiaoxu5@huawei.com>
+References: <20220329113208.2466000-1-chenxiaosong2@huawei.com>
+ <68b65889-3b2c-fb72-a0a8-d0afc15a03e0@huawei.com>
+ <e0c2d7ec62b447cabddbc8a9274be955@epfl.ch>
+ <0b6546f7-8a04-9d6e-50c3-483c8a1a6591@huawei.com>
+ <d73a51a2-6b63-b536-61e6-3d18563f027d@huawei.com>
+ <3ee78045f18b4932b1651de776ee73c4@epfl.ch>
+ <f927bec5-1078-dcb9-6f3e-a64d304efd5b@huawei.com>
+ <55415e44b4b04bbfa66c42d5f2788384@epfl.ch>
+From:   "chenxiaosong (A)" <chenxiaosong2@huawei.com>
+In-Reply-To: <55415e44b4b04bbfa66c42d5f2788384@epfl.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.52]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:28 AM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed, 13 Apr 2022 20:29:25 +0800 Patrick Wang <patrick.wang.shcn@gmail.com> wrote:
->
-> > The kmemleak_*_phys() apis do not check the address for lowmem's min
-> > boundary, while the caller may pass an address below lowmem, which
-> > will trigger an oops:
->
-> Do you believe this fix should be backported into -stable kernels?
+在 2022/4/13 23:32, Lyu Tao 写道:
+> Got it. Thank you for detailed explanation!
+> 
+> 
+> Best,
+> 
+> Tao
+> 
 
-Yes, I think so. The callers may not quite know the actual address they
-pass(e.g. from devicetree). So the kmemleak_*_phys() apis should guarantee
-the address they finally use is in lowmem range.
+By the way, it seems that the kernel mailing list will reject rich text 
+format, your emails can not be seen in NFS mailing list.
+
+https://patchwork.kernel.org/project/linux-nfs/cover/20220329113208.2466000-1-chenxiaosong2@huawei.com/

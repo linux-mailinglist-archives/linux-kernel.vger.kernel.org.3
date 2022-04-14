@@ -2,131 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA33501EB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BBDF501EB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347307AbiDNWuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S1347047AbiDNWvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347356AbiDNWuB (ORCPT
+        with ESMTP id S230455AbiDNWvf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:50:01 -0400
-Received: from mail-4316.protonmail.ch (mail-4316.protonmail.ch [185.70.43.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C84C74A4;
-        Thu, 14 Apr 2022 15:47:33 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 22:47:20 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
-        s=protonmail2; t=1649976451;
-        bh=wBk9JjddsWdkPL3+TnZwqvhbFqPlgDryFkVFtACVs5s=;
-        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
-         References:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-         Message-ID;
-        b=nOwFrCMQqgdnT5ACg0miHsryQvMGaVe1VVs6T+wkBBVk40W6TE0Oxjlsqbiiqtd4i
-         IL3o3iY4Fmhszf3elBnEFfupsT+BLDg2f0H4qXtRtsemsQkLk8jIQ9ZubVi6/8Mj0C
-         WSO0kpOQNupTzmMubOERMBBZKtgMtH9nko71yWrOKqgqTgLI6YoUgUiUMxyn77ZNzn
-         B4gmE8cw6m7FaO8iBFxmb5lmu/zAbxSCDY+JMXFJ2mue0BKKsVwYAGHThryC4JPvB7
-         hqVfIWqC1Bv4OFOZY6FypF77uCtCS32X6gX/aV7jChafN1KUc8WV9PUzrVlWlFTDd0
-         50OCb5uCi1WOQ==
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-From:   Alexander Lobakin <alobakin@pm.me>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?utf-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org, llvm@lists.linux.dev
-Reply-To: Alexander Lobakin <alobakin@pm.me>
-Subject: [PATCH bpf-next 11/11] samples: bpf: xdpsock: fix -Wmaybe-uninitialized
-Message-ID: <20220414223704.341028-12-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-1-alobakin@pm.me>
-References: <20220414223704.341028-1-alobakin@pm.me>
+        Thu, 14 Apr 2022 18:51:35 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F01C6F00
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:49:09 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id j17so6050098pfi.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 15:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZpnIt1SvBZYeiyTQzg8zajT9zTmRqMyyhzIh67HnITc=;
+        b=FIY3CPPiipmHcw8nqEuMh5Z1JOvA3XPw1nf+FgJfGYOwP4czCvczPGH6oWfAc/hpPG
+         VNIbMhqj6H/OFrlNQ7zJIOYQBPhzN4f3eLgik4ub5Q+hQc3/XNPe/B7oWqtTeUWPdoIs
+         Z0unZhGh0H99MmssZWzt+N5ZzgJTCVlrbMVis=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZpnIt1SvBZYeiyTQzg8zajT9zTmRqMyyhzIh67HnITc=;
+        b=wB+SZSadHn9Y2aNiPM+oxclLzeh3oeNQaI5R9NIaHbrxE+jqw+K/9XHhluoAx/ipvE
+         kB0LzV1BeSEiYGh4CS/p3ZtRwqEMpqYZFk2na22Qw0S6gbM5oP0Vp4iikMKcsfaOkgP8
+         unyCKbG3TGUoCxh6mngE6FIZtwk27U8JSNUqpS+bM9kYexen2XFJYXvTR6QvRW/8az5b
+         Udbrlv1MjSC6LVveEaR/SQUkC/ZnLMK3uZRT9KTLQf+et0pXVrcDc/xbbVXt7urA/ZDc
+         tk/4cKrdKSWzgI3F0YSKNB94sXkXFK1ICrHj02brfe69KWawK1vLYcVkTIRv1Q20gMxT
+         S7lA==
+X-Gm-Message-State: AOAM530L/yFvuwA/L09pL5XazGb8SQ222LxNGueGfyjYrMUmyLR2+Zcu
+        0jpNMc6lYKa9Eiv6qTOShaT+hA==
+X-Google-Smtp-Source: ABdhPJwYfOsHO2BI/jF1Y04THNwTg0wnx21olhpSd2to0D3A4ipcVh32WfvDpCFI6hkvVF+tyaVrvA==
+X-Received: by 2002:a63:2b0b:0:b0:39d:890a:ab68 with SMTP id r11-20020a632b0b000000b0039d890aab68mr3964291pgr.247.1649976548592;
+        Thu, 14 Apr 2022 15:49:08 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:7064:6d7:29ae:2a8c])
+        by smtp.gmail.com with UTF8SMTPSA id h21-20020a056a001a5500b004fb71896e49sm864489pfv.25.2022.04.14.15.49.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 15:49:08 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 15:49:06 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
+        srinivas.kandagatla@linaro.org, dianders@chromium.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        Venkata Prasad Potturu <quic_potturu@quicinc.com>
+Subject: Re: [PATCH v10 2/2] arm64: dts: qcom: sc7280: add lpass lpi pin
+ controller node
+Message-ID: <Ylik4jdqFyxIZtBv@google.com>
+References: <1649944827-6455-1-git-send-email-quic_srivasam@quicinc.com>
+ <1649944827-6455-3-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <1649944827-6455-3-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix two sort-of-false-positives in the xdpsock userspace part:
+On Thu, Apr 14, 2022 at 07:30:27PM +0530, Srinivasa Rao Mandadapu wrote:
+> Add LPASS LPI pinctrl node required for Audio functionality on sc7280
+> based platforms.
+> 
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
 
-samples/bpf/xdpsock_user.c: In function 'main':
-samples/bpf/xdpsock_user.c:1531:47: warning: 'tv_usec' may be used uninitia=
-lized in this function [-Wmaybe-uninitialized]
- 1531 |                         pktgen_hdr->tv_usec =3D htonl(tv_usec);
-      |                                               ^~~~~~~~~~~~~~
-samples/bpf/xdpsock_user.c:1500:26: note: 'tv_usec' was declared here
- 1500 |         u32 idx, tv_sec, tv_usec;
-      |                          ^~~~~~~
-samples/bpf/xdpsock_user.c:1530:46: warning: 'tv_sec' may be used uninitial=
-ized in this function [-Wmaybe-uninitialized]
- 1530 |                         pktgen_hdr->tv_sec =3D htonl(tv_sec);
-      |                                              ^~~~~~~~~~~~~
-samples/bpf/xdpsock_user.c:1500:18: note: 'tv_sec' was declared here
- 1500 |         u32 idx, tv_sec, tv_usec;
-      |                  ^~~~~~
-
-Both variables are always initialized when @opt_tstamp =3D=3D true and
-they're being used also only when @opt_tstamp =3D=3D true. However, that
-variable comes from the BSS and is being toggled from another
-function. They can't be executed simultaneously to actually trigger
-undefined behaviour, but purely technically it is a correct warning.
-Just initialize them with zeroes.
-
-Fixes: eb68db45b747 ("samples/bpf: xdpsock: Add timestamp for Tx-only opera=
-tion")
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
----
- samples/bpf/xdpsock_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/samples/bpf/xdpsock_user.c b/samples/bpf/xdpsock_user.c
-index 399b999fcec2..1dc7ad5dbef4 100644
---- a/samples/bpf/xdpsock_user.c
-+++ b/samples/bpf/xdpsock_user.c
-@@ -1496,7 +1496,7 @@ static void rx_drop_all(void)
- static int tx_only(struct xsk_socket_info *xsk, u32 *frame_nb,
- =09=09   int batch_size, unsigned long tx_ns)
- {
--=09u32 idx, tv_sec, tv_usec;
-+=09u32 idx, tv_sec =3D 0, tv_usec =3D 0;
- =09unsigned int i;
-
- =09while (xsk_ring_prod__reserve(&xsk->tx, batch_size, &idx) <
---
-2.35.2
-
-
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

@@ -2,147 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4735003A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:29:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980D45003AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:30:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239424AbiDNBbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:31:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S239436AbiDNBc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:32:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiDNBbf (ORCPT
+        with ESMTP id S229580AbiDNBc0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:31:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F283A5C6;
-        Wed, 13 Apr 2022 18:29:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kf21G4Cmrz4xLV;
-        Thu, 14 Apr 2022 11:29:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649899747;
-        bh=pp/aukWEqq5VoSeu88AH961QoroesxT0DgxQKGb4Ifg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Aq5PvSAm2IesyO58yJ5qZnGyshWh8wgKpor4ibGGRqME2p/U26fdrGil41SFEEVq8
-         2iAciBahF/JLsXZ8egM7KJGv8ssKNGiS+1zVFV0HbPyKQg+71CvlPTS0VQFRUcEK/C
-         j9141g2+mtfwny/MxqlTlGaQ32AvgE97KSk8XYzZUEi+lgeaJBYFHCvO/ZYTgnsz2A
-         zk/qsSH0ksHwZ2IL4mML9hme+/2rKhg6WWI3TLQzyjsIGR21XxKn4PUlb7/kUcvQnl
-         G8fK39oR/Ruq5ZgRzEZklnBtgk4GfqvonHYlAdwwH9dxrQzPlEFFJW1lnGiWUhMl0C
-         gm5zuT9TeDxGg==
-Date:   Thu, 14 Apr 2022 11:29:05 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Yan Zhu <zhuyan34@huawei.com>,
-        tangmeng <tangmeng@uniontech.com>
-Subject: linux-next: manual merge of the tip tree with the bpf-next, sysctl
- trees
-Message-ID: <20220414112812.652190b5@canb.auug.org.au>
+        Wed, 13 Apr 2022 21:32:26 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F05A51E6C;
+        Wed, 13 Apr 2022 18:30:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+        :In-Reply-To:References:Cc:To:From:Subject:MIME-Version:Date:Message-ID:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=rdV4U6Dx5iBLv5DSJriCcbwBfEfG5Skakdx5e0vTqJI=; b=EN4GFDr93s9t6NJdwQfwKiAi05
+        WytFxzB96JCnVezYDMLImqtxokbbECrU18PxzXhNYzUsUvJrkJmJfkX5B6ah0ftKjIk011Lpq6TGC
+        KuarskbrFY4pDbFdQ22n59wvmEmY8gxnNAXJjbJq7hujNwvsot9N/C3Lz0IfPrwOvCtOPpQ+CzEpZ
+        YdvRJV649mCwtHBtNnu7L4EPoodVgujxcEz1ZHKPVh8OBuhUSodGpnF6u+3dO63/IZ50OLaZhr9OJ
+        NMPrrH+mZxbEo4zRvOmUMyNGh4Olf/EH/8KrqwXQVGOCexHhAtq/hjUwkVj6bzCNbjnGAMyhAk+bb
+        jJQ9JQJw==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1neoJ4-004qna-RZ; Thu, 14 Apr 2022 01:29:59 +0000
+Message-ID: <909c4006-255a-a70d-afa2-c821a6e7b28d@infradead.org>
+Date:   Wed, 13 Apr 2022 18:29:54 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/s+VHg_BL/x9.q4IjCyuAbeV";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] kernel-doc: support DECLARE_PHY_INTERFACE_MASK()
+Content-Language: en-US
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     linux-kernel@vger.kernel.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        linux-doc@vger.kernel.org
+References: <20211030020813.32654-1-rdunlap@infradead.org>
+ <Ylavaf+OlgTVeI6a@shell.armlinux.org.uk>
+ <6fe36857-1c94-a421-0701-caf9c38b1c92@infradead.org>
+In-Reply-To: <6fe36857-1c94-a421-0701-caf9c38b1c92@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/s+VHg_BL/x9.q4IjCyuAbeV
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi all,
 
-Today's linux-next merge of the tip tree got a conflict in:
+On 4/13/22 08:19, Randy Dunlap wrote:
+> 
+> 
+> On 4/13/22 04:09, Russell King (Oracle) wrote:
+>> On Fri, Oct 29, 2021 at 07:08:13PM -0700, Randy Dunlap wrote:
+>>> Support the DECLARE_PHY_INTERFACE_MASK() macro that is used to declare
+>>> a bitmap by converting the macro to DECLARE_BITMAP(), as has been done
+>>> for the __ETHTOOL_DECLARE_LINK_MODE_MASK() macro.
+>>>
+>>> This fixes a 'make htmldocs' warning:
+>>>
+>>> include/linux/phylink.h:82: warning: Function parameter or member 'DECLARE_PHY_INTERFACE_MASK(supported_interfaces' not described in 'phylink_config'
+>>>
+>>> that was introduced by commit
+>>>   38c310eb46f5 ("net: phylink: add MAC phy_interface_t bitmap")
+>>>
+>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+>>> Cc: Russell King (Oracle) <linux@armlinux.org.uk>
+>>
+>> Thanks Randy, sorry I missed this patch.
+>>
+>> Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+>>
+>> What is the intention for merging this patch? Will Jon merge it?
+>> Your tags said To: Jon but you don't seem to have included him in
+>> the email.
+> 
+> Hm, I didn't notice that.
+> Guess I'll resend it with your R-b.
 
-  kernel/sysctl.c
+No need to resend it. It's already merged into mainline.
 
-between commit:
-
-  2900005ea287 ("bpf: Move BPF sysctls from kernel/sysctl.c to BPF core")
-
-from the bpf-next, sysctl trees and commit:
-
-  efaa0227f6c6 ("timers: Move timer sysctl into the timer code")
-
-from the tip tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc kernel/sysctl.c
-index 47139877f62d,5b7b1a82ae6a..000000000000
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@@ -2227,17 -2288,24 +2227,6 @@@ static struct ctl_table kern_table[] =3D=
-=20
-  		.extra1		=3D SYSCTL_ZERO,
-  		.extra2		=3D SYSCTL_ONE,
-  	},
-- #if defined(CONFIG_SMP) && defined(CONFIG_NO_HZ_COMMON)
- -#ifdef CONFIG_BPF_SYSCALL
---	{
-- 		.procname	=3D "timer_migration",
-- 		.data		=3D &sysctl_timer_migration,
-- 		.maxlen		=3D sizeof(unsigned int),
- -		.procname	=3D "unprivileged_bpf_disabled",
- -		.data		=3D &sysctl_unprivileged_bpf_disabled,
- -		.maxlen		=3D sizeof(sysctl_unprivileged_bpf_disabled),
---		.mode		=3D 0644,
-- 		.proc_handler	=3D timer_migration_handler,
- -		.proc_handler	=3D bpf_unpriv_handler,
---		.extra1		=3D SYSCTL_ZERO,
-- 		.extra2		=3D SYSCTL_ONE,
- -		.extra2		=3D SYSCTL_TWO,
- -	},
- -	{
- -		.procname	=3D "bpf_stats_enabled",
- -		.data		=3D &bpf_stats_enabled_key.key,
- -		.maxlen		=3D sizeof(bpf_stats_enabled_key),
- -		.mode		=3D 0644,
- -		.proc_handler	=3D bpf_stats_handler,
---	},
---#endif
-  #if defined(CONFIG_TREE_RCU)
-  	{
-  		.procname	=3D "panic_on_rcu_stall",
-
---Sig_/s+VHg_BL/x9.q4IjCyuAbeV
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJXeOEACgkQAVBC80lX
-0Gw6RAgAh1BS8Iy+6RkbDLZKbn3Ap3HnfnSC6uLB86N9nj6jR3Ab616w8FgCRR58
-bk/bTwIqG7OCxV+N58k/qkzvWiBUbMmKlfjpX0O63Nn2MxtIu19OdTWbhPgkPODO
-GW7Jlc1kohF2mo+dQJq1y3ASaFvG2SVM45+Sm8/A7Gtlsh1rO8IArZb4ecdmGIgL
-xICOOCYj45Df//gaxzwHkCL9tsuFmKQ1Qvg2YL038oPTAGIA3GgNNPO68lyptGBj
-chXRN3dxS0xPMFlQEQYSjoSSYpZmiAhW758bqKGZkn4AX3PH+VGKDEsoquDbT1uT
-9Hi3vEHCp/ftQHfuceJzwx38ayGgJg==
-=vp9F
------END PGP SIGNATURE-----
-
---Sig_/s+VHg_BL/x9.q4IjCyuAbeV--
+-- 
+~Randy

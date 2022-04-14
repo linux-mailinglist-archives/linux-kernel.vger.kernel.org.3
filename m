@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1A18501382
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28933501611
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345636AbiDNNxz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:53:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
+        id S1344300AbiDNOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245655AbiDNN3N (ORCPT
+        with ESMTP id S1345139AbiDNNpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:29:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548D3AF1E9;
-        Thu, 14 Apr 2022 06:23:28 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA3818392;
+        Thu, 14 Apr 2022 06:42:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A5261158;
-        Thu, 14 Apr 2022 13:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1BBEC385A1;
-        Thu, 14 Apr 2022 13:23:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 378D9612E6;
+        Thu, 14 Apr 2022 13:42:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43F3FC385AA;
+        Thu, 14 Apr 2022 13:42:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942607;
-        bh=spp/pBvR0UT2dPXHmzefxhdVtTjFVL6s5suj8ISh1Ks=;
+        s=korg; t=1649943768;
+        bh=HsY3DRjCKJW8f2PgxoHQHpP1seqO9d0yvMdx77Gtv/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CW6mIOmF35ovOLBKBoG7WVzi9oR1wavHv11Z3mTKTOai7y5tgKptoAMqSEJWXXgAr
-         AjBPtkIER0E1NGTDQOxkAJs1Sa4CtfT/fURUI9fefImA6tvmbVQpw3u0uxkTBYnjaT
-         agcrxNmYP4yovWM5Zgck3AIbFknn90KKSc4kcfrE=
+        b=2Z7eGdXTfTfL6Wuke0zNN1V0HryM/njw4MwbysSV4XlDviWzwFXw17+LtInH9+Z6f
+         J1wc1GSqOfMvkjlkHQs6VOoR4BcuIchSYeRKingmLbUAtlN0X/HvS7hfnxprjFRTjW
+         cBeBBWR0pj/1NkxZV1PdaizDvXeE/wE8Nka+cUdc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andre Nash <alnash@fb.com>,
-        Neil Spring <ntspring@fb.com>, Wei Wang <weiwan@google.com>,
-        Yuchung Cheng <ycheng@google.com>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 156/338] tcp: ensure PMTU updates are processed during fastopen
-Date:   Thu, 14 Apr 2022 15:10:59 +0200
-Message-Id: <20220414110843.341093176@linuxfoundation.org>
+Subject: [PATCH 5.4 275/475] pinctrl: npcm: Fix broken references to chip->parent_device
+Date:   Thu, 14 Apr 2022 15:11:00 +0200
+Message-Id: <20220414110902.799092604@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,66 +55,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jakub Kicinski <kuba@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
 
-[ Upstream commit ed0c99dc0f499ff8b6e75b5ae6092ab42be1ad39 ]
+[ Upstream commit f7e53e2255808ca3abcc8f38d18ad0823425e771 ]
 
-tp->rx_opt.mss_clamp is not populated, yet, during TFO send so we
-rise it to the local MSS. tp->mss_cache is not updated, however:
+The npcm driver has a bunch of references to the irq_chip parent_device
+field, but never sets it.
 
-tcp_v6_connect():
-  tp->rx_opt.mss_clamp = IPV6_MIN_MTU - headers;
-  tcp_connect():
-     tcp_connect_init():
-       tp->mss_cache = min(mtu, tp->rx_opt.mss_clamp)
-     tcp_send_syn_data():
-       tp->rx_opt.mss_clamp = tp->advmss
+Fix it by fishing that reference from somewhere else, but it is
+obvious that these debug statements were never used. Also remove
+an unused field in a local data structure.
 
-After recent fixes to ICMPv6 PTB handling we started dropping
-PMTU updates higher than tp->mss_cache. Because of the stale
-tp->mss_cache value PMTU updates during TFO are always dropped.
-
-Thanks to Wei for helping zero in on the problem and the fix!
-
-Fixes: c7bb4b89033b ("ipv6: tcp: drop silly ICMPv6 packet too big messages")
-Reported-by: Andre Nash <alnash@fb.com>
-Reported-by: Neil Spring <ntspring@fb.com>
-Reviewed-by: Wei Wang <weiwan@google.com>
-Acked-by: Yuchung Cheng <ycheng@google.com>
-Acked-by: Martin KaFai Lau <kafai@fb.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Reviewed-by: Eric Dumazet <edumazet@google.com>
-Link: https://lore.kernel.org/r/20220321165957.1769954-1-kuba@kernel.org
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Acked-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Link: https://lore.kernel.org/r/20220201120310.878267-11-maz@kernel.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv4/tcp_output.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c | 25 +++++++++++------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index c97c027a8d77..97c3b616d594 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3425,6 +3425,7 @@ static void tcp_connect_queue_skb(struct sock *sk, struct sk_buff *skb)
-  */
- static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- {
-+	struct inet_connection_sock *icsk = inet_csk(sk);
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_fastopen_request *fo = tp->fastopen_req;
- 	int space, err = 0;
-@@ -3439,8 +3440,10 @@ static int tcp_send_syn_data(struct sock *sk, struct sk_buff *syn)
- 	 * private TCP options. The cost is reduced data space in SYN :(
- 	 */
- 	tp->rx_opt.mss_clamp = tcp_mss_clamp(tp, tp->rx_opt.mss_clamp);
-+	/* Sync mss_cache after updating the mss_clamp */
-+	tcp_sync_mss(sk, icsk->icsk_pmtu_cookie);
+diff --git a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+index 17f909d8b63a..e7dc97e099f2 100644
+--- a/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
++++ b/drivers/pinctrl/nuvoton/pinctrl-npcm7xx.c
+@@ -78,7 +78,6 @@ struct npcm7xx_gpio {
+ 	struct gpio_chip	gc;
+ 	int			irqbase;
+ 	int			irq;
+-	void			*priv;
+ 	struct irq_chip		irq_chip;
+ 	u32			pinctrl_id;
+ 	int (*direction_input)(struct gpio_chip *chip, unsigned offset);
+@@ -226,7 +225,7 @@ static void npcmgpio_irq_handler(struct irq_desc *desc)
+ 	chained_irq_enter(chip, desc);
+ 	sts = ioread32(bank->base + NPCM7XX_GP_N_EVST);
+ 	en  = ioread32(bank->base + NPCM7XX_GP_N_EVEN);
+-	dev_dbg(chip->parent_device, "==> got irq sts %.8x %.8x\n", sts,
++	dev_dbg(bank->gc.parent, "==> got irq sts %.8x %.8x\n", sts,
+ 		en);
  
--	space = __tcp_mtu_to_mss(sk, inet_csk(sk)->icsk_pmtu_cookie) -
-+	space = __tcp_mtu_to_mss(sk, icsk->icsk_pmtu_cookie) -
- 		MAX_TCP_OPTION_SPACE;
+ 	sts &= en;
+@@ -241,33 +240,33 @@ static int npcmgpio_set_irq_type(struct irq_data *d, unsigned int type)
+ 		gpiochip_get_data(irq_data_get_irq_chip_data(d));
+ 	unsigned int gpio = BIT(d->hwirq);
  
- 	space = min_t(size_t, space, fo->size);
+-	dev_dbg(d->chip->parent_device, "setirqtype: %u.%u = %u\n", gpio,
++	dev_dbg(bank->gc.parent, "setirqtype: %u.%u = %u\n", gpio,
+ 		d->irq, type);
+ 	switch (type) {
+ 	case IRQ_TYPE_EDGE_RISING:
+-		dev_dbg(d->chip->parent_device, "edge.rising\n");
++		dev_dbg(bank->gc.parent, "edge.rising\n");
+ 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
+ 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
+ 		break;
+ 	case IRQ_TYPE_EDGE_FALLING:
+-		dev_dbg(d->chip->parent_device, "edge.falling\n");
++		dev_dbg(bank->gc.parent, "edge.falling\n");
+ 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
+ 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
+ 		break;
+ 	case IRQ_TYPE_EDGE_BOTH:
+-		dev_dbg(d->chip->parent_device, "edge.both\n");
++		dev_dbg(bank->gc.parent, "edge.both\n");
+ 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_EVBE, gpio);
+ 		break;
+ 	case IRQ_TYPE_LEVEL_LOW:
+-		dev_dbg(d->chip->parent_device, "level.low\n");
++		dev_dbg(bank->gc.parent, "level.low\n");
+ 		npcm_gpio_set(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
+ 		break;
+ 	case IRQ_TYPE_LEVEL_HIGH:
+-		dev_dbg(d->chip->parent_device, "level.high\n");
++		dev_dbg(bank->gc.parent, "level.high\n");
+ 		npcm_gpio_clr(&bank->gc, bank->base + NPCM7XX_GP_N_POL, gpio);
+ 		break;
+ 	default:
+-		dev_dbg(d->chip->parent_device, "invalid irq type\n");
++		dev_dbg(bank->gc.parent, "invalid irq type\n");
+ 		return -EINVAL;
+ 	}
+ 
+@@ -289,7 +288,7 @@ static void npcmgpio_irq_ack(struct irq_data *d)
+ 		gpiochip_get_data(irq_data_get_irq_chip_data(d));
+ 	unsigned int gpio = d->hwirq;
+ 
+-	dev_dbg(d->chip->parent_device, "irq_ack: %u.%u\n", gpio, d->irq);
++	dev_dbg(bank->gc.parent, "irq_ack: %u.%u\n", gpio, d->irq);
+ 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVST);
+ }
+ 
+@@ -301,7 +300,7 @@ static void npcmgpio_irq_mask(struct irq_data *d)
+ 	unsigned int gpio = d->hwirq;
+ 
+ 	/* Clear events */
+-	dev_dbg(d->chip->parent_device, "irq_mask: %u.%u\n", gpio, d->irq);
++	dev_dbg(bank->gc.parent, "irq_mask: %u.%u\n", gpio, d->irq);
+ 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVENC);
+ }
+ 
+@@ -313,7 +312,7 @@ static void npcmgpio_irq_unmask(struct irq_data *d)
+ 	unsigned int gpio = d->hwirq;
+ 
+ 	/* Enable events */
+-	dev_dbg(d->chip->parent_device, "irq_unmask: %u.%u\n", gpio, d->irq);
++	dev_dbg(bank->gc.parent, "irq_unmask: %u.%u\n", gpio, d->irq);
+ 	iowrite32(BIT(gpio), bank->base + NPCM7XX_GP_N_EVENS);
+ }
+ 
+@@ -323,7 +322,7 @@ static unsigned int npcmgpio_irq_startup(struct irq_data *d)
+ 	unsigned int gpio = d->hwirq;
+ 
+ 	/* active-high, input, clear interrupt, enable interrupt */
+-	dev_dbg(d->chip->parent_device, "startup: %u.%u\n", gpio, d->irq);
++	dev_dbg(gc->parent, "startup: %u.%u\n", gpio, d->irq);
+ 	npcmgpio_direction_input(gc, gpio);
+ 	npcmgpio_irq_ack(d);
+ 	npcmgpio_irq_unmask(d);
 -- 
 2.34.1
 

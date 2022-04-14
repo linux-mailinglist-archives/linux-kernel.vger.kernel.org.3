@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E587501214
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596E3501420
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:25:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344804AbiDNNti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57402 "EHLO
+        id S1343724AbiDNOJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344073AbiDNNaR (ORCPT
+        with ESMTP id S1344070AbiDNNaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 09:30:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FAF1CF7;
-        Thu, 14 Apr 2022 06:27:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06471D64;
+        Thu, 14 Apr 2022 06:27:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 052D4B8296A;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A9C07B82941;
+        Thu, 14 Apr 2022 13:27:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3A1BC385A5;
         Thu, 14 Apr 2022 13:27:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52C0DC385A5;
-        Thu, 14 Apr 2022 13:27:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942850;
-        bh=kG83fm/uw9f9FgbFT6dnBntrYvXbw3LuHcg8CbvN6tU=;
+        s=korg; t=1649942853;
+        bh=3iLHWJ9oMVew3w5dKq0ip6r7rm2TZisUU8LmVzgiauw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B5tBBIvhN5WzktlcwsA2QsI3gD8+y4MSJJFBCdiMHqT1LzPoR8MuZqx5mP/m1wyEq
-         3LalH7EaB8pAd8UYek1OgzxySqc2l4oUZEkcav7kh1CuyDLIo9JQ2eWzey/uKPJtik
-         O7Sse7f/u9Os7nxC+YWf5ycaQepp+B6BS6iVpppM=
+        b=G7k3P2BWe17RxE0zu+J5sdXgINRDGXvMbcZNgvGD2JF7pBy03W/Ii1bpn0C3bJVXU
+         2Rxr4e+NU3X0+5svb+4Z+NU3eTS130Ho8phge3y7vjvpYHNAH3aIt6NCdmyTLSVWid
+         qpmoXv3ioH7Y1E+sCZGtqht+nCEjqS+rQfT9Zqds=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <oliver.sang@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Subject: [PATCH 4.19 244/338] ACPI: CPPC: Avoid out of bounds access when parsing _CPC data
-Date:   Thu, 14 Apr 2022 15:12:27 +0200
-Message-Id: <20220414110845.836088561@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.19 245/338] mm/mmap: return 1 from stack_guard_gap __setup() handler
+Date:   Thu, 14 Apr 2022 15:12:28 +0200
+Message-Id: <20220414110845.864034268@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -55,37 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 40d8abf364bcab23bc715a9221a3c8623956257b upstream.
+commit e6d094936988910ce6e8197570f2753898830081 upstream.
 
-If the NumEntries field in the _CPC return package is less than 2, do
-not attempt to access the "Revision" element of that package, because
-it may not be present then.
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; it just pollutes init's
+environment).  This prevents:
 
-Fixes: 337aadff8e45 ("ACPI: Introduce CPU performance controls using CPPC")
-BugLink: https://lore.kernel.org/lkml/20220322143534.GC32582@xsang-OptiPlex-9020/
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Reviewed-by: Huang Rui <ray.huang@amd.com>
+  Unknown kernel command line parameters \
+  "BOOT_IMAGE=/boot/bzImage-517rc5 stack_guard_gap=100", will be \
+  passed to user space.
+
+  Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     stack_guard_gap=100
+
+Return 1 to indicate that the boot option has been handled.
+
+Note that there is no warning message if someone enters:
+	stack_guard_gap=anything_invalid
+and 'val' and stack_guard_gap are both set to 0 due to the use of
+simple_strtoul(). This could be improved by using kstrtoxxx() and
+checking for an error.
+
+It appears that having stack_guard_gap == 0 is valid (if unexpected) since
+using "stack_guard_gap=0" on the kernel command line does that.
+
+Link: https://lkml.kernel.org/r/20220222005817.11087-1-rdunlap@infradead.org
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 1be7107fbe18e ("mm: larger stack guard gap, between vmas")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Hugh Dickins <hughd@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/cppc_acpi.c |    5 +++++
- 1 file changed, 5 insertions(+)
+ mm/mmap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/acpi/cppc_acpi.c
-+++ b/drivers/acpi/cppc_acpi.c
-@@ -742,6 +742,11 @@ int acpi_cppc_processor_probe(struct acp
- 	cpc_obj = &out_obj->package.elements[0];
- 	if (cpc_obj->type == ACPI_TYPE_INTEGER)	{
- 		num_ent = cpc_obj->integer.value;
-+		if (num_ent <= 1) {
-+			pr_debug("Unexpected _CPC NumEntries value (%d) for CPU:%d\n",
-+				 num_ent, pr->id);
-+			goto out_free;
-+		}
- 	} else {
- 		pr_debug("Unexpected entry type(%d) for NumEntries\n",
- 				cpc_obj->type);
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2469,7 +2469,7 @@ static int __init cmdline_parse_stack_gu
+ 	if (!*endptr)
+ 		stack_guard_gap = val << PAGE_SHIFT;
+ 
+-	return 0;
++	return 1;
+ }
+ __setup("stack_guard_gap=", cmdline_parse_stack_guard_gap);
+ 
 
 

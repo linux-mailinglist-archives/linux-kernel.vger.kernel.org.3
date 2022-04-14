@@ -2,57 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5782D5019D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDC95019E6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:18:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245301AbiDNRRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:17:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57396 "EHLO
+        id S245703AbiDNRU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:20:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245527AbiDNRQq (ORCPT
+        with ESMTP id S1345501AbiDNRTI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:16:46 -0400
-Received: from out28-173.mail.aliyun.com (out28-173.mail.aliyun.com [115.124.28.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3BF03617D;
-        Thu, 14 Apr 2022 10:11:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.1074771|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.0686534-0.00765563-0.923691;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047212;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=17;RT=17;SR=0;TI=SMTPD_---.NQlfgH1_1649956298;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NQlfgH1_1649956298)
-          by smtp.aliyun-inc.com(33.38.168.42);
-          Fri, 15 Apr 2022 01:11:39 +0800
-Subject: Re: [PATCH v2 1/2] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-To:     "H. Nikolaus Schaller" <hns@goldelico.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        hminas@synopsys.com, Rob Herring <robh+dt@kernel.org>,
-        linux-usb@vger.kernel.org, linux-mips <linux-mips@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS 
-        <devicetree@vger.kernel.org>, dragancecavac@yahoo.com,
-        dongsheng.qiu@ingenic.com, qipengzhen <aric.pzqi@ingenic.com>,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1649788201-87620-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649788201-87620-2-git-send-email-zhouyanjie@wanyeetech.com>
- <6F03670F-9040-4560-AD78-CC7A03EC678F@goldelico.com>
- <c79a8ff7-7a3f-9627-f910-dbbf942e34cb@wanyeetech.com>
- <0AE74BF9-46F1-44EC-8E5F-40EA12851AD0@goldelico.com>
- <76ea346b-0645-97b5-f8fb-5b46b4bcc80b@linaro.org>
- <F6929BAA-D552-4C34-B392-33AEA263F0C9@goldelico.com>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <40d34f8b-4ab7-5ced-b533-da1f4b501cdc@wanyeetech.com>
-Date:   Fri, 15 Apr 2022 01:11:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Thu, 14 Apr 2022 13:19:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFE75F9C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:15:05 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 883AE1F747;
+        Thu, 14 Apr 2022 17:15:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649956503; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RI4vY7SM3nGEvLVWVvIyfXvrCtyaLTk6ZtXdIjy/7XI=;
+        b=0WIrx6FIqdSAruwf5lhWFHS8dCyQmcvo0Vl1gBzblLGWa3nWwl2QtPL8C/77cock9Bj1CY
+        QEFSSfivasMVuzIs0dyRkP48cd+vcIzuQGRT7cmU7HK5K3IQIE/+8unDSvnCQ4lQmmSiI8
+        b9SCYyRbCQJQhCjmYYHeN9fuhRuzydA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649956503;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RI4vY7SM3nGEvLVWVvIyfXvrCtyaLTk6ZtXdIjy/7XI=;
+        b=WUH+I7Uzjz1uKrRfEhnCMZiS3wSqkYgxcOOIqZ9KF0lYMOt75GjoMILRbdgQPyiYUOkDnf
+        kEs1jAU7U5ZyuTAg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 256E213A86;
+        Thu, 14 Apr 2022 17:15:03 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 34VKCJdWWGL/GAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 14 Apr 2022 17:15:03 +0000
+Message-ID: <9005b167-db08-c967-463b-5e0e092cbb6c@suse.cz>
+Date:   Thu, 14 Apr 2022 19:15:02 +0200
 MIME-Version: 1.0
-In-Reply-To: <F6929BAA-D552-4C34-B392-33AEA263F0C9@goldelico.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
 Content-Language: en-US
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-15-david@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v3 14/16] mm: support GUP-triggered unsharing of anonymous
+ pages
+In-Reply-To: <20220329160440.193848-15-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,48 +97,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 3/29/22 18:04, David Hildenbrand wrote:
+> Whenever GUP currently ends up taking a R/O pin on an anonymous page that
+> might be shared -- mapped R/O and !PageAnonExclusive() -- any write fault
+> on the page table entry will end up replacing the mapped anonymous page
+> due to COW, resulting in the GUP pin no longer being consistent with the
+> page actually mapped into the page table.
+> 
+> The possible ways to deal with this situation are:
+>  (1) Ignore and pin -- what we do right now.
+>  (2) Fail to pin -- which would be rather surprising to callers and
+>      could break user space.
+>  (3) Trigger unsharing and pin the now exclusive page -- reliable R/O
+>      pins.
+> 
+> We want to implement 3) because it provides the clearest semantics and
+> allows for checking in unpin_user_pages() and friends for possible BUGs:
+> when trying to unpin a page that's no longer exclusive, clearly
+> something went very wrong and might result in memory corruptions that
+> might be hard to debug. So we better have a nice way to spot such
+> issues.
+> 
+> To implement 3), we need a way for GUP to trigger unsharing:
+> FAULT_FLAG_UNSHARE. FAULT_FLAG_UNSHARE is only applicable to R/O mapped
+> anonymous pages and resembles COW logic during a write fault. However, in
+> contrast to a write fault, GUP-triggered unsharing will, for example, still
+> maintain the write protection.
+> 
+> Let's implement FAULT_FLAG_UNSHARE by hooking into the existing write fault
+> handlers for all applicable anonymous page types: ordinary pages, THP and
+> hugetlb.
+> 
+> * If FAULT_FLAG_UNSHARE finds a R/O-mapped anonymous page that has been
+>   marked exclusive in the meantime by someone else, there is nothing to do.
+> * If FAULT_FLAG_UNSHARE finds a R/O-mapped anonymous page that's not
+>   marked exclusive, it will try detecting if the process is the exclusive
+>   owner. If exclusive, it can be set exclusive similar to reuse logic
+>   during write faults via page_move_anon_rmap() and there is nothing
+>   else to do; otherwise, we either have to copy and map a fresh,
+>   anonymous exclusive page R/O (ordinary pages, hugetlb), or split the
+>   THP.
+> 
+> This commit is heavily based on patches by Andrea.
+> 
+> Co-developed-by: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 
-On 2022/4/14 下午6:00, H. Nikolaus Schaller wrote:
->
->> Am 14.04.2022 um 09:32 schrieb Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>:
->>
->> On 13/04/2022 21:30, H. Nikolaus Schaller wrote:
->>> So we need "snps,dwc2" to get any driver match and I thought the "ingenic,jz4780-otg" is redundant.
->>>
->>> But maintainers convinced me to keep it as a dummy compatible in the .dtsi for potential future
->>> specialization (which does not exist and seems not to be necessary).
->> Isn't exactly the next patch 2/2 using such specialization?
->>
->>> Unless I can convince them
->>> that this is never ever needed. Which is beyond my knowledge and almost everyone.
->>>
->>> So we can't remove the "snps,dwc2" here.
->>>
->>> Well, we can with more work elsewhere.
->>> You have to extend the dwc2_of_match_table to include all ingenic devices.
->>>
->>> Therefore we now know 3 potential solutions:
->>> a) remove "ingenic,jz4780-otg" from jz4780.dtsi (my proposal)
->>> b) add "ingenic,jz4780-otg" to dwc2.yaml together with "snps,dwc2" (your proposal + my suggestion here)
->>> c) add only "ingenic,jz4780-otg" to dwc2.yaml and extend the match table in drivers//usb/dwc2/params.c (new proposals)
->>>
->>>  From consistency point of view I think variant b) is the right one. a) was rejected and c) only adds redundant code.
->> c) was already proposed by Zhou, so if you think the code is not correct
->> (the params for jz4780) maybe nack it there, so we will know that driver
->> needs fixes.
-> Ah, ok. Now I see. I was just focussed on this patch and related dtbscheck
-> messages and did not read patch 2/2.
->
-> Yes, looking at both, they are variant c). Sorry that I didn't see it earlier.
+Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-It looks like we need a [3/3] to remove "snps,dwc2", which not only solves
-the dtbscheck complaining problem, but also doesn't affect normal use after
-removing "snps,dwc2".
+Modulo a nit and suspected logical bug below.
 
+<snip>
 
->
-> As said: I am open to anything as long as the dtbscheck doesn't complain any more.
->
-> BR and sorry for the confusion,
-> Nikolaus
+> @@ -3072,6 +3082,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  		 * mmu page tables (such as kvm shadow page tables), we want the
+>  		 * new page to be mapped directly into the secondary page table.
+>  		 */
+> +		BUG_ON(unshare && pte_write(entry));
+>  		set_pte_at_notify(mm, vmf->address, vmf->pte, entry);
+>  		update_mmu_cache(vma, vmf->address, vmf->pte);
+>  		if (old_page) {
+> @@ -3121,7 +3132,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>  			free_swap_cache(old_page);
+>  		put_page(old_page);
+>  	}
+> -	return page_copied ? VM_FAULT_WRITE : 0;
+> +	return page_copied && !unshare ? VM_FAULT_WRITE : 0;
+
+Could be just me but I would prefer (page_copied && !unshare) as I rarely
+see these operators together like this to remember their relative priority
+very well.
+
+>  oom_free_new:
+>  	put_page(new_page);
+>  oom:
+
+<snip>
+
+> @@ -4515,8 +4550,11 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
+>  /* `inline' is required to avoid gcc 4.1.2 build error */
+>  static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>  {
+> +	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+> +
+>  	if (vma_is_anonymous(vmf->vma)) {
+> -		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+> +		if (unlikely(unshare) &&
+
+Is this condition flipped, should it be "likely(!unshare)"? As the similar
+code in do_wp_page() does.
+
+> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>  			return handle_userfault(vmf, VM_UFFD_WP);
+>  		return do_huge_pmd_wp_page(vmf);
+>  	}
+> @@ -4651,10 +4689,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+>  		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
+>  		goto unlock;
+>  	}
+> -	if (vmf->flags & FAULT_FLAG_WRITE) {
+> +	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
+>  		if (!pte_write(entry))
+>  			return do_wp_page(vmf);
+> -		entry = pte_mkdirty(entry);
+> +		else if (likely(vmf->flags & FAULT_FLAG_WRITE))
+> +			entry = pte_mkdirty(entry);
+>  	}
+>  	entry = pte_mkyoung(entry);
+>  	if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,

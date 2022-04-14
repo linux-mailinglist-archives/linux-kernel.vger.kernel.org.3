@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D84C50176F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BAF6501771
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237561AbiDNPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37902 "EHLO
+        id S243551AbiDNPiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350468AbiDNOWW (ORCPT
+        with ESMTP id S1350508AbiDNOWZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:22:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0059C559C;
-        Thu, 14 Apr 2022 07:14:16 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 14:14:13 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649945654;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zIr4M3QpkhZ27uYr8qH26LQUlJTGuaEdmvLzEra2awI=;
-        b=DQcQ0wBmY5ZEPT3/sRn62sx9BzIOfd6C24/BPV99lB4dKwkfSq+Tl+A0m1UOwWUjdnuv8x
-        CGm6tcs0C4I+PYmp5cmw8F0UZNI+Iy81NKUGobY79sthLFIWBnZ9Ly7D2bQoBdEXJK6Mrs
-        P5RNJPzjvlytUrNO8mMn9SjYvgOtfaTkQqmKMfAzRSQVWKwXaesfd/Q+cyNibkie8S/azx
-        da2KiPOs7jOm/hljdjfI+CFhaRCUeeVp3PIuYMPB7ciqRWMNX3WRPtOKteYuesrb2Wrflj
-        i/Wm9AL3IPjpt6jvBKY0GbT5UieaCavDUcxtYXhP+bKePISGq90c4cgoYBKWmw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649945654;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zIr4M3QpkhZ27uYr8qH26LQUlJTGuaEdmvLzEra2awI=;
-        b=6mejPmbqNLlHFxDkB+3xJWMIrs32bqTE5xGhGMSZ2DxVixMOP0FYhT0mXsO8TJYGUF8UvP
-        VVGCp5SECrMO6zDw==
-From:   "tip-bot2 for Marc Zyngier" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/core] genirq: Take the proposed affinity at face value if
- force==true
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
-References: <4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com>
+        Thu, 14 Apr 2022 10:22:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B2551C122
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:14:27 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-48-avZjpdW1Ouads2I4a0YvDg-1; Thu, 14 Apr 2022 15:14:24 +0100
+X-MC-Unique: avZjpdW1Ouads2I4a0YvDg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 14 Apr 2022 15:14:22 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 14 Apr 2022 15:14:22 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Vincent Guittot' <vincent.guittot@linaro.org>
+CC:     Qais Yousef <qais.yousef@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "parth@linux.ibm.com" <parth@linux.ibm.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
+        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
+        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
+        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        Wei Wang <wvw@google.com>
+Subject: RE: Scheduling tasks on idle cpu
+Thread-Topic: Scheduling tasks on idle cpu
+Thread-Index: AdhNfEgLjonPVH3ESQeb3O9OCn/HMQAeBEWAABN1gYAAZKysEwAAL2fQAAKuEIAAB3al0A==
+Date:   Thu, 14 Apr 2022 14:14:22 +0000
+Message-ID: <5fc162f60ba84ab3a61992084d76c726@AcuMS.aculab.com>
+References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
+ <20220411233447.rcencjivkhyltyxm@airbuntu>
+ <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
+ <CAKfTPtBWUvvFMsSnfcKsOpHFdvxvSWpjfuLpjwwQrwhQc7+xuw@mail.gmail.com>
+ <20220413235719.xs72pm2kgihia46g@airbuntu>
+ <CAKfTPtBtzmgJNM=2ekmE0-HT+r=qLqBJ6R1cggkGCNHbb3FPdQ@mail.gmail.com>
+ <2956e0e1bbfe4309a749ebb3c8736799@AcuMS.aculab.com>
+ <CAKfTPtB0EniWa_Wqx9596Zm5ZyoB3CRWwkgcYgxYB=318eWsWQ@mail.gmail.com>
+In-Reply-To: <CAKfTPtB0EniWa_Wqx9596Zm5ZyoB3CRWwkgcYgxYB=318eWsWQ@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Message-ID: <164994565359.4207.6678120431812780133.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/core branch of tip:
+RnJvbTogVmluY2VudCBHdWl0dG90DQo+IFNlbnQ6IDE0IEFwcmlsIDIwMjIgMTE6MTcNCi4uLg0K
+PiA+ID4gRGF2aWQgY2FuIHJlcnVuIGlzIHVzZSBjYXNlIGFmdGVyIGRpc2FibGluZyBzY2hlZF9m
+ZWF0KFNJU19QUk9QKQ0KPiA+DQo+ID4gSG93IHdvdWxkIEkgZG8gdGhhdD8NCj4gDQo+IGVjaG8g
+Tk9fU0lTX1BST1AgPiAvc3lzL2tlcm5lbC9kZWJ1Zy9zY2hlZC9mZWF0dXJlcw0KDQpUaGF0IG1h
+eSBub3QgYmUgaW4gdGhlIGtlcm5lbCBJJ20gdXNpbmcuDQoNCiMgY2F0IC9zeXMva2VybmVsL2Rl
+YnVnL3NjaGVkX2ZlYXR1cmVzDQpHRU5UTEVfRkFJUl9TTEVFUEVSUyBTVEFSVF9ERUJJVCBOT19O
+RVhUX0JVRERZIExBU1RfQlVERFkgQ0FDSEVfSE9UX0JVRERZIFdBS0VVUF9QUkVFTVBUSU9OIEFS
+Q0hfUE9XRVIgTk9fSFJUSUNLIE5PX0RPVUJMRV9USUNLIExCX0JJQVMgTk9OVEFTS19QT1dFUiBU
+VFdVX1FVRVVFIFJUX1JVTlRJTUVfU0hBUkUgTk9fTEJfTUlOIE5VTUEgTlVNQV9GQVZPVVJfSElH
+SEVSIE5PX05VTUFfUkVTSVNUX0xPV0VSDQoNCkkndmUgYmVlbiBsb29raW5nIGF0IGFub3RoZXIg
+ZnRyYWNlIG91dHB1dC4NClRoZSBzY2hlZHVsZXIgZG9lcyBsaWtlIG1pZ3JhdGluZyB0aGUgcHJv
+Y2VzcyB0byB0aGUgY3VycmVudCBjcHUuDQpJIGhhdmUgc2VlbiBpdCBtaWdyYXRlIGZyb20gb25l
+IGlkbGUgY3B1IHRvIGFub3RoZXIgaWRsZSBjcHUuDQpJJ3ZlIG5vdCBzZWVuIGl0IG1pZ3JhdGUg
+ZnJvbSBhbiBpZGxlIGNwdSB0byB0aGUgY3VycmVudCBjcHUuDQogIChCdXQgSSd2ZSBub3QgbG9v
+a2VkIGhhcmQuKQ0KDQpUaGVzZSBhcmUgYWxsIHRoZSBtaWdyYXRlczoNCiAgICBUaU5HIHRhc2s6
+MTItMTAwNSAgWzAyNl0gZC4uLiAxMTExMDgxLjc5NjU2MDogc2NoZWRfbWlncmF0ZV90YXNrOiBj
+b21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19jcHU9MTEgZGVzdF9jcHU9MTYN
+CiAgICBUaU5HIHRhc2s6MzEtMTAyNiAgWzAwNV0gZC4uLiAxMTExMDgxLjgzNjU1Njogc2NoZWRf
+bWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19jcHU9
+MTYgZGVzdF9jcHU9MTENCiAgICBUaU5HIHRhc2s6MjgtMTAyMyAgWzAzM10gZC4uLiAxMTExMDgx
+Ljg1NjU4OTogc2NoZWRfbWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJp
+bz0xMjAgb3JpZ19jcHU9MTEgZGVzdF9jcHU9MzMNCiAgICBUaU5HIHRhc2s6MTEtMTAwNCAgWzAx
+M10gZC4uLiAxMTExMDgxLjg1NjYwNjogc2NoZWRfbWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2Nr
+ZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19jcHU9MzMgZGVzdF9jcHU9MTMNCiAgICBUaU5HIHRh
+c2s6MTktMTAxMiAgWzAwMl0gZC4uLiAxMTExMDgxLjg5NjU2NDogc2NoZWRfbWlncmF0ZV90YXNr
+OiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19jcHU9MTMgZGVzdF9jcHU9
+MTANCiAgICBUaU5HIHRhc2s6MjYtMTAxOSAgWzAwOF0gZC4uLiAxMTExMDgxLjk1NjU1MTogc2No
+ZWRfbWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19j
+cHU9MTAgZGVzdF9jcHU9MTgNCiAgICBUaU5HIHRhc2s6MzQtMTAyOSAgWzAwMV0gZC4uLiAxMTEx
+MDgyLjAxNjUyNzogc2NoZWRfbWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAg
+cHJpbz0xMjAgb3JpZ19jcHU9MTggZGVzdF9jcHU9MQ0KICAgIFRpTkcgdGFzazoyMC0xMDEzICBb
+MDIxXSBkLi4uIDExMTEwODIuMDE2NTg5OiBzY2hlZF9taWdyYXRlX3Rhc2s6IGNvbW09UlRQIHNv
+Y2tldHMgcGlkPTk5MCBwcmlvPTEyMCBvcmlnX2NwdT0xIGRlc3RfY3B1PTIxDQogICAgVGlORyB0
+YXNrOjMyLTEwMjcgIFswMDBdIGQuLi4gMTExMTA4Mi4wMzY0NTU6IHNjaGVkX21pZ3JhdGVfdGFz
+azogY29tbT1SVFAgc29ja2V0cyBwaWQ9OTkwIHByaW89MTIwIG9yaWdfY3B1PTIxIGRlc3RfY3B1
+PTINCiAgICBUaU5HIHRhc2s6MTUtMTAwOCAgWzAwNl0gZC4uLiAxMTExMDgyLjA1NjUzOTogc2No
+ZWRfbWlncmF0ZV90YXNrOiBjb21tPVJUUCBzb2NrZXRzIHBpZD05OTAgcHJpbz0xMjAgb3JpZ19j
+cHU9MiBkZXN0X2NwdT0xNA0KICAgIFRpTkcgdGFzazozNC0xMDI5ICBbMDAxXSBkLi4uIDExMTEw
+ODIuMDc2NTM2OiBzY2hlZF9taWdyYXRlX3Rhc2s6IGNvbW09UlRQIHNvY2tldHMgcGlkPTk5MCBw
+cmlvPTEyMCBvcmlnX2NwdT0xNCBkZXN0X2NwdT0xDQogICAgVGlORyB0YXNrOjIxLTEwMTQgIFsw
+MDRdIGQuLi4gMTExMTA4Mi4wNzY1ODk6IHNjaGVkX21pZ3JhdGVfdGFzazogY29tbT1SVFAgc29j
+a2V0cyBwaWQ9OTkwIHByaW89MTIwIG9yaWdfY3B1PTEgZGVzdF9jcHU9NA0KICAgIFRpTkcgdGFz
+azoxMS0xMDA0ICBbMDEzXSBkLi4uIDExMTEwODIuMDk2NTI2OiBzY2hlZF9taWdyYXRlX3Rhc2s6
+IGNvbW09UlRQIHNvY2tldHMgcGlkPTk5MCBwcmlvPTEyMCBvcmlnX2NwdT00IGRlc3RfY3B1PTEz
+DQogICAgVGlORyB0YXNrOjI4LTEwMjMgIFswMzNdIGQuLi4gMTExMTA4Mi4wOTY1ODQ6IHNjaGVk
+X21pZ3JhdGVfdGFzazogY29tbT1SVFAgc29ja2V0cyBwaWQ9OTkwIHByaW89MTIwIG9yaWdfY3B1
+PTEzIGRlc3RfY3B1PTMzDQogICAgVGlORyB0YXNrOjI1LTEwMTggIFswMjldIGQuLi4gMTExMTA4
+Mi4xMTY1NDk6IHNjaGVkX21pZ3JhdGVfdGFzazogY29tbT1SVFAgc29ja2V0cyBwaWQ9OTkwIHBy
+aW89MTIwIG9yaWdfY3B1PTMzIGRlc3RfY3B1PTExDQogICAgVGlORyB0YXNrOjI3LTEwMjAgIFsw
+MzJdIGQuLi4gMTExMTA4Mi4xNzY1MTk6IHNjaGVkX21pZ3JhdGVfdGFzazogY29tbT1SVFAgc29j
+a2V0cyBwaWQ9OTkwIHByaW89MTIwIG9yaWdfY3B1PTExIGRlc3RfY3B1PTE2DQpUaGVyZSBhcmUg
+YSBjb3VwbGUgb2YgcGxhY2VzIHdoZXJlIHRoZXJlIDIgd2FrZXVwcyBiZWZvcmUgdGhlIHNjaGVk
+dWxlLg0KVGhlIHNjaGVkdWxlciBkZWZpbml0ZWx5IGRvZXNuJ3QgbGlrZSB3YWtpbmcgdXAgYSBw
+cm9jZXNzIG9uIGFuIGV2ZW4gY3B1IGZyb20gb24gb2RkIG9uZS4NCkJ1dCB0aGVyZSBhcmUgYWxz
+byB0aGUgMTMtPjMzIGFuZCAxLT4yMSBvbmVzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBB
+ZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMs
+IE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Commit-ID:     c48c8b829d2b966a6649827426bcdba082ccf922
-Gitweb:        https://git.kernel.org/tip/c48c8b829d2b966a6649827426bcdba082ccf922
-Author:        Marc Zyngier <maz@kernel.org>
-AuthorDate:    Thu, 14 Apr 2022 15:00:11 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 14 Apr 2022 16:11:25 +02:00
-
-genirq: Take the proposed affinity at face value if force==true
-
-Although setting the affinity of an interrupt to a set of CPUs that doesn't
-have any online CPU is generally frowned apon, there are a few limited
-cases where such affinity is set from a CPUHP notifier, setting the
-affinity to a CPU that isn't online yet.
-
-The saving grace is that this is always done using the 'force' attribute,
-which gives a hint that the affinity setting can be outside of the online
-CPU mask and the callsite set this flag with the knowledge that the
-underlying interrupt controller knows to handle it.
-
-This restores the expected behaviour on Marek's system.
-
-Fixes: 33de0aa4bae9 ("genirq: Always limit the affinity to online CPUs")
-Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-Link: https://lore.kernel.org/r/4b7fc13c-887b-a664-26e8-45aed13f048a@samsung.com
-Link: https://lore.kernel.org/r/20220414140011.541725-1-maz@kernel.org
-
----
- kernel/irq/manage.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index f71ecc1..f1d5a94 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -266,10 +266,16 @@ int irq_do_set_affinity(struct irq_data *data, const struct cpumask *mask,
- 		prog_mask = mask;
- 	}
- 
--	/* Make sure we only provide online CPUs to the irqchip */
-+	/*
-+	 * Make sure we only provide online CPUs to the irqchip,
-+	 * unless we are being asked to force the affinity (in which
-+	 * case we do as we are told).
-+	 */
- 	cpumask_and(&tmp_mask, prog_mask, cpu_online_mask);
--	if (!cpumask_empty(&tmp_mask))
-+	if (!force && !cpumask_empty(&tmp_mask))
- 		ret = chip->irq_set_affinity(data, &tmp_mask, force);
-+	else if (force)
-+		ret = chip->irq_set_affinity(data, mask, force);
- 	else
- 		ret = -EINVAL;
- 

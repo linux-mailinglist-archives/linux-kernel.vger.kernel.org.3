@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B0005014C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2168E501627
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244673AbiDNNmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
+        id S1347040AbiDNOv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:51:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245176AbiDNN2i (ORCPT
+        with ESMTP id S1345261AbiDNNpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E6FAAB49;
-        Thu, 14 Apr 2022 06:21:56 -0700 (PDT)
+        Thu, 14 Apr 2022 09:45:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4FD22DE0;
+        Thu, 14 Apr 2022 06:43:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4A60B82910;
-        Thu, 14 Apr 2022 13:21:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40DB7C385A1;
-        Thu, 14 Apr 2022 13:21:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB7B61D68;
+        Thu, 14 Apr 2022 13:43:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63B11C385A5;
+        Thu, 14 Apr 2022 13:43:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942513;
-        bh=mySOYTpYSRxOyhLtxIIOh2DgClbmvAJDruUbUN7PLzI=;
+        s=korg; t=1649943793;
+        bh=//upt9aXEQTw+CA9VI8866Bot8/P0CR2+SmLNylYp3A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kSEYKcQx5LTUHZWPsfnXrWhieiDsGMqpVD70YX6OGaaDKHEPg7Ez+Xx4L6h6wuUkX
-         jO483Z8RXeS9btpbXzKLuI46U8MZnwmSJQkzGcCOkOjSO5zW3qcZhOuqotjy1+mfpK
-         Ck36pcRLorsTSZicU8k7TQb6OMfBGIfAcN9x1X7Q=
+        b=lnDKbEbjT5lioQl1VjQPWilIs5bu9X33aoKsI7F0mfpbta4j7WM/pMEa+ibCwcgiL
+         Og31hOBf7bGOyA8NroZrh6LkvQ4dn5J6yToYyRqAuQowWrpyMbBUbtudAaYfA3SyAi
+         ZiRAO+YFBUHQxN4U+P8KqEZ2zhjYCtM9/OzCPir4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 164/338] iio: adc: Add check for devm_request_threaded_irq
-Date:   Thu, 14 Apr 2022 15:11:07 +0200
-Message-Id: <20220414110843.569854517@linuxfoundation.org>
+Subject: [PATCH 5.4 283/475] ACPICA: Avoid walking the ACPI Namespace if it is not there
+Date:   Thu, 14 Apr 2022 15:11:08 +0200
+Message-Id: <20220414110903.019478689@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,36 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
+[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value and return
-error if fails.
+ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
 
-Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Prevent acpi_ns_walk_namespace() from crashing when called with
+start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
+instantiated yet and acpi_gbl_root_node is NULL.
+
+For instance, this can happen if the kernel is run with "acpi=off"
+in the command line.
+
+Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
+Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
+Reported-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/twl6030-gpadc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/acpi/acpica/nswalk.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
-index e470510e76ea..765aaee157e2 100644
---- a/drivers/iio/adc/twl6030-gpadc.c
-+++ b/drivers/iio/adc/twl6030-gpadc.c
-@@ -927,6 +927,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
- 	ret = devm_request_threaded_irq(dev, irq, NULL,
- 				twl6030_gpadc_irq_handler,
- 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
+index ceea6af79d12..bf4eb642f423 100644
+--- a/drivers/acpi/acpica/nswalk.c
++++ b/drivers/acpi/acpica/nswalk.c
+@@ -169,6 +169,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
  
- 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
- 	if (ret < 0) {
+ 	if (start_node == ACPI_ROOT_OBJECT) {
+ 		start_node = acpi_gbl_root_node;
++		if (!start_node) {
++			return_ACPI_STATUS(AE_NO_NAMESPACE);
++		}
+ 	}
+ 
+ 	/* Null child means "get first node" */
 -- 
 2.34.1
 

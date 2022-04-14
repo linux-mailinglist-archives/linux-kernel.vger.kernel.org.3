@@ -2,132 +2,504 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D88500477
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:54:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C66850047A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:56:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239664AbiDNC4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37958 "EHLO
+        id S239657AbiDNC64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239657AbiDNC4q (ORCPT
+        with ESMTP id S232667AbiDNC6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:56:46 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6DC2C6;
-        Wed, 13 Apr 2022 19:54:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kf3vc1VfYz4x7Y;
-        Thu, 14 Apr 2022 12:54:20 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1649904861;
-        bh=fDOuMrroHlBGTn7iGqRePYiPTvzDieExQ2YVV6a/kDE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=VaX7MahQsZeO/DFFbnHbgfU/6w581lDRdSTL/EQWyzXVZ8QrmO94KF/oiIaqiOPOi
-         XMoy/3xtqKCV4NXpMtDQPwIwCGjElFtd1jA7Izg/lHNnaE0JonkVY4Idn7D7xpfvJu
-         +WMow5UhsokdRMi5r/YJvnfz5H/kyECaN84mEuv7pYfYJNCR951IScLSuRyCI4K0B3
-         5S9PJ/EAwP2DsnGoXunY8CL/VBkAC77KTCYet+JilxgOF3WsT6wUFqLd+poi6trg8N
-         d+9LTS4EUKoIzIn2bMChbeGqTmZbyUX7vlLkFaHTgEtvCGNl77rbArjr6RkYJ4HIwr
-         XqgPtjfxiN97Q==
-Date:   Thu, 14 Apr 2022 12:54:19 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Borislav Petkov <bp@suse.de>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Dov Murik <dovmurik@linux.ibm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the efi tree with the tip tree
-Message-ID: <20220414125419.1c2e346d@canb.auug.org.au>
+        Wed, 13 Apr 2022 22:58:54 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D47C1B7B9
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:56:31 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id a16-20020a17090a6d9000b001c7d6c1bb13so4372992pjk.4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:56:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2ogPqArEX5hZN34iXz3XscIlzPa7BxkqdqDn4uF+REI=;
+        b=TY6ZaY2/lVfjk8Jn6NGEPefwcgdk7Vvh/HaAb0TMKRvUmMKYIZ5tOracf6p/6UvNWu
+         f2VKcrCnz4WG9x+hbkNQvCFbsLZA6JgTbuePNCsBlEItO38Sp3miWp5XCnW5B7FolmnP
+         4l4/ctoVMX9v2k3jz3g2rTl3rQkHkhuXGBXMLxUNWu6s8kWnLC18juhRQjKwnuyIlZdW
+         fqmuZr4q+zzXXWBbvlbDjLnl2iuYpZ6F5ZhuAFgFg9it6JxX5fnzVrt1XS5FiH7+21Qv
+         0iAo0euM2/BNvUXzWRrlaWhPMkD4dFcAcEm6Gxz0BNRHyVzrVtqsJcVTfVfpftdNoCrE
+         3Fjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2ogPqArEX5hZN34iXz3XscIlzPa7BxkqdqDn4uF+REI=;
+        b=BRXczzus0kUZFXs2fAWi93+egase0ZC9m5pKQSGxmJxHNUA7aw20MI8rcIbtBQOPy2
+         7eLmg7A882/6+zjiPWBixZnbqMZTl6MbgTYcGodMYOVmiMNIVVUonHqnYx+fn7m5bCrU
+         OEA1BE/BrS8nQxp/CnXsUSdPmwaNBpPu/aKsy3mWbIo2xkmU6QDcxHw6TtqiRkQLwmsj
+         zv0wM18tTKrB9KeScno0UK+n/NRf6HbqqDChzuGHeF6qi15I9MN19rb17JfYaFKOzKEv
+         iGIR4+XlUhWz3T0c+gN5fa+h4pgA/JTpS2XjsJrdiZ+ASwT7wR4fja9vvj9yyNNz6upm
+         4w1w==
+X-Gm-Message-State: AOAM530aNUqkJ+wPB0gZ4PFF0M9mZ1kLKLblv+jiSN2POZIhvjtIqWT0
+        OHfRE25C4fMo29NIWbT0jq4ocA==
+X-Google-Smtp-Source: ABdhPJxgvvYYxKXEfB7D+NdPmTs1pZUw/k2Vrn40366yMe2+BP1xrrpHQvV2HUpbpNUXV9Y/1e5wHQ==
+X-Received: by 2002:a17:90a:6c64:b0:1cb:a150:52d with SMTP id x91-20020a17090a6c6400b001cba150052dmr1335478pjj.111.1649904990367;
+        Wed, 13 Apr 2022 19:56:30 -0700 (PDT)
+Received: from localhost.localdomain ([49.37.166.144])
+        by smtp.gmail.com with ESMTPSA id md4-20020a17090b23c400b001cb66e3e1f8sm418282pjb.0.2022.04.13.19.56.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Apr 2022 19:56:28 -0700 (PDT)
+From:   Arun Ajith S <aajith@arista.com>
+To:     netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, dsahern@kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
+        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
+        noureddine@arista.com, gk@arista.com, aajith@arista.com
+Subject: [PATCH net-next v4] net/ipv6: Introduce accept_unsolicited_na knob to implement router-side changes for RFC9131
+Date:   Thu, 14 Apr 2022 02:56:09 +0000
+Message-Id: <20220414025609.578-1-aajith@arista.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jR1S7OkN960Cn7djWsJSW5U";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jR1S7OkN960Cn7djWsJSW5U
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Add a new neighbour cache entry in STALE state for routers on receiving
+an unsolicited (gratuitous) neighbour advertisement with
+target link-layer-address option specified.
+This is similar to the arp_accept configuration for IPv4.
+A new sysctl endpoint is created to turn on this behaviour:
+/proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
 
-Hi all,
+Signed-off-by: Arun Ajith S <aajith@arista.com>
+Reviewed-by: David Ahern <dsahern@kernel.org>
+---
+ Documentation/networking/ip-sysctl.rst        |  23 ++
+ include/linux/ipv6.h                          |   1 +
+ include/uapi/linux/ipv6.h                     |   1 +
+ net/ipv6/addrconf.c                           |  10 +
+ net/ipv6/ndisc.c                              |  20 +-
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../net/ndisc_unsolicited_na_test.sh          | 255 ++++++++++++++++++
+ 7 files changed, 310 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
 
-Today's linux-next merge of the efi tree got conflicts in:
+diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
+index b0024aa7b051..9e17efe343ac 100644
+--- a/Documentation/networking/ip-sysctl.rst
++++ b/Documentation/networking/ip-sysctl.rst
+@@ -2467,6 +2467,29 @@ drop_unsolicited_na - BOOLEAN
+ 
+ 	By default this is turned off.
+ 
++accept_unsolicited_na - BOOLEAN
++	Add a new neighbour cache entry in STALE state for routers on receiving an
++	unsolicited neighbour advertisement with target link-layer address option
++	specified. This is as per router-side behavior documented in RFC9131.
++	This has lower precedence than drop_unsolicited_na.
++	 drop   accept  fwding                   behaviour
++	 ----   ------  ------  ----------------------------------------------
++	    1        X       X  Drop NA packet and don't pass up the stack
++	    0        0       X  Pass NA packet up the stack, don't update NC
++	    0        1       0  Pass NA packet up the stack, don't update NC
++	    0        1       1  Pass NA packet up the stack, and add a STALE
++	                          NC entry
++	This will optimize the return path for the initial off-link communication
++	that is initiated by a directly connected host, by ensuring that
++	the first-hop router which turns on this setting doesn't have to
++	buffer the initial return packets to do neighbour-solicitation.
++	The prerequisite is that the host is configured to send
++	unsolicited neighbour advertisements on interface bringup.
++	This setting should be used in conjunction with the ndisc_notify setting
++	on the host to satisfy this prerequisite.
++
++	By default this is turned off.
++
+ enhanced_dad - BOOLEAN
+ 	Include a nonce option in the IPv6 neighbor solicitation messages used for
+ 	duplicate address detection per RFC7527. A received DAD NS will only signal
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 16870f86c74d..918bfea4ef5f 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -61,6 +61,7 @@ struct ipv6_devconf {
+ 	__s32		suppress_frag_ndisc;
+ 	__s32		accept_ra_mtu;
+ 	__s32		drop_unsolicited_na;
++	__s32		accept_unsolicited_na;
+ 	struct ipv6_stable_secret {
+ 		bool initialized;
+ 		struct in6_addr secret;
+diff --git a/include/uapi/linux/ipv6.h b/include/uapi/linux/ipv6.h
+index d4178dace0bf..549ddeaf788b 100644
+--- a/include/uapi/linux/ipv6.h
++++ b/include/uapi/linux/ipv6.h
+@@ -194,6 +194,7 @@ enum {
+ 	DEVCONF_IOAM6_ID,
+ 	DEVCONF_IOAM6_ID_WIDE,
+ 	DEVCONF_NDISC_EVICT_NOCARRIER,
++	DEVCONF_ACCEPT_UNSOLICITED_NA,
+ 	DEVCONF_MAX
+ };
+ 
+diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
+index 1afc4c024981..6473dc84b71d 100644
+--- a/net/ipv6/addrconf.c
++++ b/net/ipv6/addrconf.c
+@@ -5587,6 +5587,7 @@ static inline void ipv6_store_devconf(struct ipv6_devconf *cnf,
+ 	array[DEVCONF_IOAM6_ID] = cnf->ioam6_id;
+ 	array[DEVCONF_IOAM6_ID_WIDE] = cnf->ioam6_id_wide;
+ 	array[DEVCONF_NDISC_EVICT_NOCARRIER] = cnf->ndisc_evict_nocarrier;
++	array[DEVCONF_ACCEPT_UNSOLICITED_NA] = cnf->accept_unsolicited_na;
+ }
+ 
+ static inline size_t inet6_ifla6_size(void)
+@@ -7037,6 +7038,15 @@ static const struct ctl_table addrconf_sysctl[] = {
+ 		.extra1		= (void *)SYSCTL_ZERO,
+ 		.extra2		= (void *)SYSCTL_ONE,
+ 	},
++	{
++		.procname	= "accept_unsolicited_na",
++		.data		= &ipv6_devconf.accept_unsolicited_na,
++		.maxlen		= sizeof(int),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++		.extra1		= (void *)SYSCTL_ZERO,
++		.extra2		= (void *)SYSCTL_ONE,
++	},
+ 	{
+ 		/* sentinel */
+ 	}
+diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
+index fcb288b0ae13..254addad0dd3 100644
+--- a/net/ipv6/ndisc.c
++++ b/net/ipv6/ndisc.c
+@@ -979,6 +979,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	struct inet6_dev *idev = __in6_dev_get(dev);
+ 	struct inet6_ifaddr *ifp;
+ 	struct neighbour *neigh;
++	bool create_neigh;
+ 
+ 	if (skb->len < sizeof(struct nd_msg)) {
+ 		ND_PRINTK(2, warn, "NA: packet too short\n");
+@@ -999,6 +1000,7 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 	/* For some 802.11 wireless deployments (and possibly other networks),
+ 	 * there will be a NA proxy and unsolicitd packets are attacks
+ 	 * and thus should not be accepted.
++	 * drop_unsolicited_na takes precedence over accept_unsolicited_na
+ 	 */
+ 	if (!msg->icmph.icmp6_solicited && idev &&
+ 	    idev->cnf.drop_unsolicited_na)
+@@ -1039,7 +1041,23 @@ static void ndisc_recv_na(struct sk_buff *skb)
+ 		in6_ifa_put(ifp);
+ 		return;
+ 	}
+-	neigh = neigh_lookup(&nd_tbl, &msg->target, dev);
++	/* RFC 9131 updates original Neighbour Discovery RFC 4861.
++	 * An unsolicited NA can now create a neighbour cache entry
++	 * on routers if it has Target LL Address option.
++	 *
++	 * drop   accept  fwding                   behaviour
++	 * ----   ------  ------  ----------------------------------------------
++	 *    1        X       X  Drop NA packet and don't pass up the stack
++	 *    0        0       X  Pass NA packet up the stack, don't update NC
++	 *    0        1       0  Pass NA packet up the stack, don't update NC
++	 *    0        1       1  Pass NA packet up the stack, and add a STALE
++	 *                          NC entry
++	 * Note that we don't do a (daddr == all-routers-mcast) check.
++	 */
++	create_neigh = !msg->icmph.icmp6_solicited && lladdr &&
++		       idev && idev->cnf.forwarding &&
++		       idev->cnf.accept_unsolicited_na;
++	neigh = __neigh_lookup(&nd_tbl, &msg->target, dev, create_neigh);
+ 
+ 	if (neigh) {
+ 		u8 old_flags = neigh->flags;
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 3fe2515aa616..af7f6e6ff182 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -36,6 +36,7 @@ TEST_PROGS += srv6_end_dt4_l3vpn_test.sh
+ TEST_PROGS += srv6_end_dt6_l3vpn_test.sh
+ TEST_PROGS += vrf_strict_mode_test.sh
+ TEST_PROGS += arp_ndisc_evict_nocarrier.sh
++TEST_PROGS += ndisc_unsolicited_na_test.sh
+ TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
+ TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
+ TEST_GEN_FILES =  socket nettest
+diff --git a/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+new file mode 100755
+index 000000000000..f508657ee126
+--- /dev/null
++++ b/tools/testing/selftests/net/ndisc_unsolicited_na_test.sh
+@@ -0,0 +1,255 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This test is for the accept_unsolicited_na feature to
++# enable RFC9131 behaviour. The following is the test-matrix.
++# drop   accept  fwding                   behaviour
++# ----   ------  ------  ----------------------------------------------
++#    1        X       X  Drop NA packet and don't pass up the stack
++#    0        0       X  Pass NA packet up the stack, don't update NC
++#    0        1       0  Pass NA packet up the stack, don't update NC
++#    0        1       1  Pass NA packet up the stack, and add a STALE
++#                           NC entry
++
++ret=0
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++PAUSE_ON_FAIL=no
++PAUSE=no
++
++HOST_NS="ns-host"
++ROUTER_NS="ns-router"
++
++HOST_INTF="veth-host"
++ROUTER_INTF="veth-router"
++
++ROUTER_ADDR="2000:20::1"
++HOST_ADDR="2000:20::2"
++SUBNET_WIDTH=64
++ROUTER_ADDR_WITH_MASK="${ROUTER_ADDR}/${SUBNET_WIDTH}"
++HOST_ADDR_WITH_MASK="${HOST_ADDR}/${SUBNET_WIDTH}"
++
++IP_HOST="ip -6 -netns ${HOST_NS}"
++IP_HOST_EXEC="ip netns exec ${HOST_NS}"
++IP_ROUTER="ip -6 -netns ${ROUTER_NS}"
++IP_ROUTER_EXEC="ip netns exec ${ROUTER_NS}"
++
++tcpdump_stdout=
++tcpdump_stderr=
++
++log_test()
++{
++	local rc=$1
++	local expected=$2
++	local msg="$3"
++
++	if [ ${rc} -eq ${expected} ]; then
++		printf "    TEST: %-60s  [ OK ]\n" "${msg}"
++		nsuccess=$((nsuccess+1))
++	else
++		ret=1
++		nfail=$((nfail+1))
++		printf "    TEST: %-60s  [FAIL]\n" "${msg}"
++		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
++		echo
++			echo "hit enter to continue, 'q' to quit"
++			read a
++			[ "$a" = "q" ] && exit 1
++		fi
++	fi
++
++	if [ "${PAUSE}" = "yes" ]; then
++		echo
++		echo "hit enter to continue, 'q' to quit"
++		read a
++		[ "$a" = "q" ] && exit 1
++	fi
++}
++
++setup()
++{
++	set -e
++
++	local drop_unsolicited_na=$1
++	local accept_unsolicited_na=$2
++	local forwarding=$3
++
++	# Setup two namespaces and a veth tunnel across them.
++	# On end of the tunnel is a router and the other end is a host.
++	ip netns add ${HOST_NS}
++	ip netns add ${ROUTER_NS}
++	${IP_ROUTER} link add ${ROUTER_INTF} type veth \
++                peer name ${HOST_INTF} netns ${HOST_NS}
++
++	# Enable IPv6 on both router and host, and configure static addresses.
++	# The router here is the DUT
++	# Setup router configuration as specified by the arguments.
++	# forwarding=0 case is to check that a non-router
++	# doesn't add neighbour entries.
++        ROUTER_CONF=net.ipv6.conf.${ROUTER_INTF}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.forwarding=${forwarding}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.drop_unsolicited_na=${drop_unsolicited_na}
++	${IP_ROUTER_EXEC} sysctl -qw \
++                ${ROUTER_CONF}.accept_unsolicited_na=${accept_unsolicited_na}
++	${IP_ROUTER_EXEC} sysctl -qw ${ROUTER_CONF}.disable_ipv6=0
++	${IP_ROUTER} addr add ${ROUTER_ADDR_WITH_MASK} dev ${ROUTER_INTF}
++
++	# Turn on ndisc_notify on host interface so that
++	# the host sends unsolicited NAs.
++	HOST_CONF=net.ipv6.conf.${HOST_INTF}
++	${IP_HOST_EXEC} sysctl -qw ${HOST_CONF}.ndisc_notify=1
++	${IP_HOST_EXEC} sysctl -qw ${HOST_CONF}.disable_ipv6=0
++	${IP_HOST} addr add ${HOST_ADDR_WITH_MASK} dev ${HOST_INTF}
++
++	set +e
++}
++
++start_tcpdump() {
++	set -e
++	tcpdump_stdout=`mktemp`
++	tcpdump_stderr=`mktemp`
++	${IP_ROUTER_EXEC} timeout 15s \
++                tcpdump --immediate-mode -tpni ${ROUTER_INTF} -c 1 \
++                "icmp6 && icmp6[0] == 136 && src ${HOST_ADDR}" \
++                > ${tcpdump_stdout} 2> /dev/null
++	set +e
++}
++
++cleanup_tcpdump()
++{
++	set -e
++	[[ ! -z  ${tcpdump_stdout} ]] && rm -f ${tcpdump_stdout}
++	[[ ! -z  ${tcpdump_stderr} ]] && rm -f ${tcpdump_stderr}
++	tcpdump_stdout=
++	tcpdump_stderr=
++	set +e
++}
++
++cleanup()
++{
++	cleanup_tcpdump
++	ip netns del ${HOST_NS}
++	ip netns del ${ROUTER_NS}
++}
++
++link_up() {
++	set -e
++	${IP_ROUTER} link set dev ${ROUTER_INTF} up
++	${IP_HOST} link set dev ${HOST_INTF} up
++	set +e
++}
++
++verify_ndisc() {
++	local drop_unsolicited_na=$1
++	local accept_unsolicited_na=$2
++	local forwarding=$3
++
++	neigh_show_output=$(${IP_ROUTER} neigh show \
++                to ${HOST_ADDR} dev ${ROUTER_INTF} nud stale)
++	if [ ${drop_unsolicited_na} -eq 0 ] && \
++			[ ${accept_unsolicited_na} -eq 1 ] && \
++			[ ${forwarding} -eq 1 ]; then
++		# Neighbour entry expected to be present for 011 case
++		[[ ${neigh_show_output} ]]
++	else
++		# Neighbour entry expected to be absent for all other cases
++		[[ -z ${neigh_show_output} ]]
++	fi
++}
++
++test_unsolicited_na_common()
++{
++	# Setup the test bed, but keep links down
++	setup $1 $2 $3
++
++	# Bring the link up, wait for the NA,
++	# and add a delay to ensure neighbour processing is done.
++	link_up
++	start_tcpdump
++
++	# Verify the neighbour table
++	verify_ndisc $1 $2 $3
++
++}
++
++test_unsolicited_na_combination() {
++	test_unsolicited_na_common $1 $2 $3
++	test_msg=("test_unsolicited_na: "
++		"drop_unsolicited_na=$1 "
++		"accept_unsolicited_na=$2 "
++		"forwarding=$3")
++	log_test $? 0 "${test_msg[*]}"
++	cleanup
++}
++
++test_unsolicited_na_combinations() {
++	# Args: drop_unsolicited_na accept_unsolicited_na forwarding
++
++	# Expect entry
++	test_unsolicited_na_combination 0 1 1
++
++	# Expect no entry
++	test_unsolicited_na_combination 0 0 0
++	test_unsolicited_na_combination 0 0 1
++	test_unsolicited_na_combination 0 1 0
++	test_unsolicited_na_combination 1 0 0
++	test_unsolicited_na_combination 1 0 1
++	test_unsolicited_na_combination 1 1 0
++	test_unsolicited_na_combination 1 1 1
++}
++
++###############################################################################
++# usage
++
++usage()
++{
++	cat <<EOF
++usage: ${0##*/} OPTS
++        -p          Pause on fail
++        -P          Pause after each test before cleanup
++EOF
++}
++
++###############################################################################
++# main
++
++while getopts :pPh o
++do
++	case $o in
++		p) PAUSE_ON_FAIL=yes;;
++		P) PAUSE=yes;;
++		h) usage; exit 0;;
++		*) usage; exit 1;;
++	esac
++done
++
++# make sure we don't pause twice
++[ "${PAUSE}" = "yes" ] && PAUSE_ON_FAIL=no
++
++if [ "$(id -u)" -ne 0 ];then
++	echo "SKIP: Need root privileges"
++	exit $ksft_skip;
++fi
++
++if [ ! -x "$(command -v ip)" ]; then
++	echo "SKIP: Could not run test without ip tool"
++	exit $ksft_skip
++fi
++
++if [ ! -x "$(command -v tcpdump)" ]; then
++	echo "SKIP: Could not run test without tcpdump tool"
++	exit $ksft_skip
++fi
++
++# start clean
++cleanup &> /dev/null
++
++test_unsolicited_na_combinations
++
++printf "\nTests passed: %3d\n" ${nsuccess}
++printf "Tests failed: %3d\n"   ${nfail}
++
++exit $ret
+-- 
+2.27.0
+---
+Changes from v3:
+1. Fix typo in new test file extension: .py -> .sh
+2. Add Reviewed-by: David Ahern <dsahern@kernel.org>
 
-  drivers/virt/Kconfig
-  drivers/virt/Makefile
-
-between commit:
-
-  fce96cf04430 ("virt: Add SEV-SNP guest driver")
-
-from the tip tree and commit:
-
-  cbabf03c3ef3 ("virt: Add efi_secret module to expose confidential computi=
-ng secrets")
-
-from the efi tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/virt/Kconfig
-index 7d3273cfab27,c877da072d4d..000000000000
---- a/drivers/virt/Kconfig
-+++ b/drivers/virt/Kconfig
-@@@ -48,6 -48,6 +48,8 @@@ source "drivers/virt/nitro_enclaves/Kco
- =20
-  source "drivers/virt/acrn/Kconfig"
- =20
- +source "drivers/virt/coco/sevguest/Kconfig"
- +
-+ source "drivers/virt/coco/efi_secret/Kconfig"
-+=20
-  endif
-diff --cc drivers/virt/Makefile
-index 7b87a7ba1972,067b5427f40f..000000000000
---- a/drivers/virt/Makefile
-+++ b/drivers/virt/Makefile
-@@@ -9,4 -9,4 +9,5 @@@ obj-y				+=3D vboxguest
- =20
-  obj-$(CONFIG_NITRO_ENCLAVES)	+=3D nitro_enclaves/
-  obj-$(CONFIG_ACRN_HSM)		+=3D acrn/
- +obj-$(CONFIG_SEV_GUEST)		+=3D coco/sevguest/
-+ obj-$(CONFIG_EFI_SECRET)	+=3D coco/efi_secret/
-
---Sig_/jR1S7OkN960Cn7djWsJSW5U
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJXjNsACgkQAVBC80lX
-0GxCRAf8CDeqd0Pq8oWyPwkCa8MTyGXN/q2hLZxOlMDqlaCGeVkjW2odEOlAj2tc
-eBtYvjlnBx/bBqgVmko1rMyLJKacEcCYE72H6m3tdYJRBvClc/AaFTjDChY3WqEB
-rYROqlFrDAwDVm96Ujj9437O+ZJBwmPLsq3tVsEsTAhTL/4uIoaR2gfA4rQrNPr6
-QvCKSfCsiauu4oahbFeCshDai8qi0vSiptWcWikibtwxMjpfdP+6iTL9edmq57pv
-D7YT1o5DjMa4M6cVHPVAlu//tO71ct6J+jBh7TXNhJTvQEUuGxHiJTP25F3OX8S9
-kf3z3oI0z4LwQ8/VzdRpug+GFy0hlQ==
-=TvwK
------END PGP SIGNATURE-----
-
---Sig_/jR1S7OkN960Cn7djWsJSW5U--
+Note that I am keeping the knob as a sysctl for consistency with existing ND and ARP knobs as suggested by David.

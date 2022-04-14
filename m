@@ -2,147 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D913500910
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE3950092E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241314AbiDNJAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
+        id S241358AbiDNJEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:04:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241320AbiDNJAJ (ORCPT
+        with ESMTP id S241495AbiDNJB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:00:09 -0400
-Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10075.outbound.protection.outlook.com [40.107.1.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14A76A049;
-        Thu, 14 Apr 2022 01:57:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EAKekkIZ9SJWGAnLaEAaZ82bAEgzDpjzIoUGurjz+GazMPV1UNItDYIZJvt5Yjs5w2Vgw2zNMFc9dsx5X6TAKrKdAbht3enZXfSQTkY7fzmRqhqKr+qfUIDDlNQxqbM5YWEiQ2KbBUxPZhqbeFB6Gg+uNR+jCZuMS+vQoZ1I9Y+Phx3khgpKhRKqDZ4dUqFcT5YMMgZXAcD4k13h+b9opNrngfISbSRik3rGHPLuLI7iqcVDBjcJ227jIRVzZ8CuCAowwUjhHttHSeRugg2bVo+/yx/3JC+eq/apC3BtufwzHzb4KRNFSUPJfiOrS0+OWMW1DZOSf8+Mi/jo1lLZ2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Xhw8Jsl6Cq3akNhM9czpuGMs2PfZ+hvKY2Wr/srftBE=;
- b=KoCF1uaek0DaMKB5AHZnt3yl9HI0vnWfpSDj3/UZLGOSwdKCzK9eQDCZuuEEygAmyJRi9ee/tv7+rxBeHIpqUcFJeeHUlCUnQvGV8UTOE08nx9PGkuy9wZ1ZDHCQZhekX1t/efaC3moVh/xElQTtMOu50KhNSaQwlCVfXguQ2fXvcg8aMAYoPFGnCfTKLw6yCohku+N2IiskTK4Qcakhqi+dQI6+mI2w/DQQeNelhV87LI0i6FXR6/nga5tBtKgu66Iq92c5IJX5DOyJlswFUE7LaHd4W3EylE61c3+BNKX+t4u8Ou8BFEIhI01mWg6pOGsgR3KP7Tj8J2vQaupV/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Xhw8Jsl6Cq3akNhM9czpuGMs2PfZ+hvKY2Wr/srftBE=;
- b=bnkQWE8bb/jYw0LU0kd4nnbWa9yPAktsOSstWVihOjyYh1AxTNwt1fj+Ep3m0v/2Gvwt1rIByztvNQC1qJHFoBJtfeMBPhyeTpUUr2oyryiLNpFPtZMFzPZDPtpu6OnsGGyXOgAI3FuTBUSJ9D4k+o+lEe3ePufcxfd0iBr3LXw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
- by VI1PR04MB7101.eurprd04.prod.outlook.com (2603:10a6:800:12e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Thu, 14 Apr
- 2022 08:57:40 +0000
-Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::d8b5:5914:5189:ffa5]) by AM6PR04MB6341.eurprd04.prod.outlook.com
- ([fe80::d8b5:5914:5189:ffa5%6]) with mapi id 15.20.5164.020; Thu, 14 Apr 2022
- 08:57:40 +0000
-From:   Ming Qian <ming.qian@nxp.com>
-To:     mchehab@kernel.org, shawnguo@kernel.org
-Cc:     hverkuil-cisco@xs4all.nl, robh+dt@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, aisheng.dong@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3] media: amphion: fix decoder's interlaced field
-Date:   Thu, 14 Apr 2022 16:57:22 +0800
-Message-Id: <20220414085722.3919-1-ming.qian@nxp.com>
-X-Mailer: git-send-email 2.35.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0007.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::11) To AM6PR04MB6341.eurprd04.prod.outlook.com
- (2603:10a6:20b:d8::14)
+        Thu, 14 Apr 2022 05:01:59 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D650123BF4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:31 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id h5so4226766pgc.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=VXU9f8brElqQjQUQyo4iKTj+TdVz9PS035pWXZROjPs=;
+        b=CMsTgOCmxpH9Ya24bTQBUOlRMe8yjhRIe9zC3tPsZTskOcuJ8mb3Cphb6DXR0p6KDJ
+         bsYdwi1vMMybsPx64eS8pO386Q0GhssSVrBfdy8I1gNtmnFAhJKaH1sreyl7+r0bLUG9
+         PrPYb4xCSzo6XXo8iqJxcfv9vD9UqMDcq4R+O5hHMJUZohK/UMAQc8g3Ws5x7ivvCrir
+         m1Dj8YQD2ZlnD4vUpu+jmQgxn1siLSmZh8k9eM7oEqK37KPx+vzf7MqnN/D6750AK9eQ
+         Uxm5LJF8mJpXNCes2xnd8zVQIfH58lrEQG7KNNsUzaR7nCSiftL5VQ2RT6Jg1EnERwbv
+         psFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=VXU9f8brElqQjQUQyo4iKTj+TdVz9PS035pWXZROjPs=;
+        b=n2ZamBVsK3YggWciWAaqsNaIV6gwuCykVcauJRXnZ3lxQIhN35th1WR7ew3h5Bb73P
+         bORB7qQ59enTOIE0PdluFBxXnSjfbw86y3UwMkWlUVqEb+lquxdBtq05Ex46kk6qilkx
+         CtpkNzkCJXlhSjEdF2zDvEd88GH+y/2wQQZW489F79VIlZm8S1Yl17CKGHvqg/cEba+i
+         vOY05PuWS93Di4CfR23PAZtwqlBISMWDB//49q/btGqdJaFv+7xZEtLN4uK82NPsoX+A
+         YrLOLMSOzVm5h1+oyDZcHg1DDRZCkPHsWjpd8C0vSE5I6MeObssykq1l8EbNVYruAmJ4
+         8o9w==
+X-Gm-Message-State: AOAM531yHctxU+htbFwEsJSP33pjOBKcgkBObwoDeky5t+0huqIfPgXV
+        /D8bDm0QGJvY98mulc7v14g=
+X-Google-Smtp-Source: ABdhPJyWukxNFbT9XT5Je4C9MNigf2VP/qCuFkDFIKDtoulNW7LOXhOtKS3m58upU+oMh1k3yvO1RA==
+X-Received: by 2002:a05:6a00:1141:b0:506:d0e:6640 with SMTP id b1-20020a056a00114100b005060d0e6640mr2875392pfm.73.1649926771272;
+        Thu, 14 Apr 2022 01:59:31 -0700 (PDT)
+Received: from hyeyoo.. ([114.29.24.243])
+        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:59:29 -0700 (PDT)
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Marco Elver <elver@google.com>,
+        Matthew WilCox <willy@infradead.org>,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 18/23] mm/sl[au]b: generalize kmalloc subsystem
+Date:   Thu, 14 Apr 2022 17:57:22 +0900
+Message-Id: <20220414085727.643099-19-42.hyeyoo@gmail.com>
+X-Mailer: git-send-email 2.32.0
+In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a5a62c05-9084-41e9-eb45-08da1df4d4a8
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7101:EE_
-X-Microsoft-Antispam-PRVS: <VI1PR04MB7101DF47AA2C419005E42549E7EF9@VI1PR04MB7101.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ujq++/7QePM0WOdHyqw1rUX1SAfmz/AsDVu2ONd5lnm8tZb6vnYaKVqL9Jy29w0X3M0l8bq4g5mHLwAYjam84BseWi3ToV0/L/TXudvaQs7D9YTYRnBp80f1T4n5J0Y90MrcV3TvOa31c5tg8d7UgMOxcCwHhFKRUPuKrIAO6bJAgGH0E5aOPl8Cz4iJo9mxe+wOuXfUHcAT3fhwdLvSSclhHagEmHaHm5dj89YxsQblHY/zLMglPsQZNT97+H+Yo3cLDqmiwfWNjoFP9QNmTLDKLRhaGLusdOw+gHsVUQHhJEv6qQSw/DEuOCqfnHmcQ9RgcfaMcpGOB7TZ8sHCnkP+P6QkdmzJ9b84nBhZYoIyasoMmc4vvt7Bx0p+T1BKapjonbVXueBIMHAUpdhXQWE2XsFwZNlgi9wcYAQrmHF1ixeZIANEnFfzlkmdiL+/scwTnpnXUy1JQ6lXYCO2YRAiVmZi4Nk55aEpXhxcQBXPAqYiOicWV4+yZqdoYcxYoqOHSRBAGLqBCrFY4xGfeGsoycvd0W1R40FHpO+eszZNkbHuFffhYN0b6WhheOyp5ybpqNyJ6sSFBtN51B7JkG4Z+DxrRCXTJ5VkikSGCOOVB3F6bnqOshQxR+RaTCWPJCJWdW+vcld9Ks1PP0zQLtLJhQ2UOvQ9biUtmpY8Q42iELDTPTd2tmUs/mGW26Mp/DpTKNPmTcJmA0f7Do4yqg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(508600001)(5660300002)(6486002)(2906002)(8676002)(2616005)(6666004)(6506007)(4326008)(52116002)(86362001)(316002)(6512007)(36756003)(38100700002)(38350700002)(26005)(186003)(66556008)(83380400001)(66476007)(1076003)(66946007)(7416002)(8936002)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FuXOrDP0ZYXQAQk4B3mIB9Yc45O1SE/P9jNAIB0hwIyFpWji5edbV+3/Idjh?=
- =?us-ascii?Q?sd7Gkq13nZeWCWweV0uWJQvSg2LaDqxd+aeRK+lILsxeJWLdAXPvFtY8emv5?=
- =?us-ascii?Q?LWlSHDm9D+jcOi6vt1i8ax7W0DQecnjaVjamyrgWxm5ZfXRmrdAYOJuQVR5m?=
- =?us-ascii?Q?91vBW2+iREThmYyHHf5mgi/ibIOBLFlA+6IxPH0fUUzfJdLdNHCc6IjR+GgQ?=
- =?us-ascii?Q?UBFcbh55AnfsB53+UWt4wT+oU4EGzVmnX+0XwlYcRzDNchB8Xk/TWRPKuBvP?=
- =?us-ascii?Q?0sXunc2vpadpnk9zZ4KNd+gS2+zUXHh4CmNCFh2KUpJgUL0EV3mezE841SAH?=
- =?us-ascii?Q?GQiwk1UIsZf9ixVs43WhCfTeFXkkqEvi6UHMKbB3v7vhubF/i6hF4sTs9bgD?=
- =?us-ascii?Q?R2eimkCPmc65U55Ec05d1xlzLNQvO1Qv2viphm08kkCFqKtF1eWPpNJcc7Ar?=
- =?us-ascii?Q?ShKjhR0RTunQS5Um4b/PVuFYdEpOYnpn0ZTQfuphBNrCH7Z8w5Mn1FRSsB1L?=
- =?us-ascii?Q?Mq0mVGq4LV/i9LtRpRK8zahMRKHdmop3+WqCQfYAiTrSfgX+yPPUpSuWlAxc?=
- =?us-ascii?Q?srz44zwHdmvsICoixKHq0HRApxycWhAcu68+ECPCvvfMGh+maNTr1Y1b3wJ0?=
- =?us-ascii?Q?4Ah7lCpwyrh2BEBw6hZtuTdfIT5kwMbAtb4WUU6x6VE0YL2weA0w5J73D7h8?=
- =?us-ascii?Q?m4J+ZCrn5P/KJMqEd85HHVBlQlvIKh9k9ZuRJ3MZ8Xrl3TmWnF1W4oDFuYXb?=
- =?us-ascii?Q?/16S6tX/cNxLSEtMKTdrRfo8y/rF2C0yphKoiDRzbqcxGaHIDOF3SzVNyHP7?=
- =?us-ascii?Q?0dcWFgPp8kUjBH/zV1BdJV/3/7UhU0RlhlpcAsKqEnIffsusST6+jy61Tr7h?=
- =?us-ascii?Q?e39HktNj5ou/hj+iVxE4EkHRq1LQW3mOxCjQgouDgHoLMh3I+baMCIy+DAXE?=
- =?us-ascii?Q?HwJ7cYSZuUGyeXLxy36LQyhI6EllPjGbBRrlAXG6bsz4IQn+LpYdTK86WV7T?=
- =?us-ascii?Q?p4ey+7XOmrDpSPx0+A9iSivu0ipIQ6U4mGlT9GFTlsGQnu+IwmYm/BmhVh84?=
- =?us-ascii?Q?xYYxbZmXwfuEJraWJqWO/yEWaeWqy0/beUz74bEPoYEKX5YufXBx/6/Jknns?=
- =?us-ascii?Q?9fwbP3O3QvuF8ea+3vi0kHAg2llRPVH30SBugJRDFksCbHEdv9UtnzphbX+D?=
- =?us-ascii?Q?Phe75NJAcLrKCRh+2y/xf5GdB4iMVe3Gd4KTs04ytXoJOZr6I1yLtcjJqc9q?=
- =?us-ascii?Q?xInRG9mLicfdb/ZbWBwQ7K537g55ddNCoWXGj9qnZEwCREsgK/OFdn9iFRct?=
- =?us-ascii?Q?odvCZTVI1QsdmYt0EW39Z7mTIrLa6IZ+aw2Fc7y8D6lfqx6QhfqKMBEfIy8B?=
- =?us-ascii?Q?dE16+hL7soPThtxYYYwqV0H8PxV1fZS7U9Bpxz3Acowk7pv7OuqJi9SoqPJ7?=
- =?us-ascii?Q?kOfPaCy4zqSYxYrRB93075N7oOV9jrXO6FwrYSuMZhGnVFVUK/uPFJraLABd?=
- =?us-ascii?Q?VpVZyAHgi3Q6qgZV8oYuTlfsF9SXcYppscKgWM7VD0yJ2/iXOMRgBk5INdQW?=
- =?us-ascii?Q?hTMl4mN7TAO60j7OhyW0gSqm6Tj0eYZKDCrIqLnUBvVzzoU9KCeDCiZujwxg?=
- =?us-ascii?Q?mlWHNMNAOqca1ZmGooehuR31805i5mVW3z5/TVspvUKjbSqW209hQrjPO4ID?=
- =?us-ascii?Q?zWo2S2L7zc+axh/IZVjOZcv8oLu1af8fLwYAm9T/zPEj6pWf2CFme4aEFSwV?=
- =?us-ascii?Q?VFJjdW+rog=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5a62c05-9084-41e9-eb45-08da1df4d4a8
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 08:57:40.6537
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vknaH93W39ygm9oq0ilGhrxJfa3Hh/SDAI46AYQu18CvqFGU93FTHfN+MX4ejuSr+D1BIexvzBgyZpmTVd2yng==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7101
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For interlaced frame, the amphion vpu will store the
-two fields sequential into one buffer, top-bottom order
-so the field should be set to V4L2_FIELD_SEQ_TB.
-fix the previous bug that set it to V4L2_FIELD_SEQ_BT wrongly.
+Now everything in kmalloc subsystem can be generalized.
+Let's do it!
 
-Fixes: 6de8d628df6e ("media: amphion: add v4l2 m2m vpu decoder stateful driver")
-Signed-off-by: Ming Qian <ming.qian@nxp.com>
-Reviewed-by: Nicolas Dufresne <nicolas.dufresne@collabora.com>
+Generalize __kmalloc_node_track_caller(), kfree(), __ksize(),
+__kmalloc_node() and move them to slab_common.c.
+
+Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- drivers/media/platform/amphion/vdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/slab.c        | 94 -----------------------------------------------
+ mm/slab_common.c | 95 ++++++++++++++++++++++++++++++++++++++++++++++++
+ mm/slub.c        | 88 --------------------------------------------
+ 3 files changed, 95 insertions(+), 182 deletions(-)
 
-diff --git a/drivers/media/platform/amphion/vdec.c b/drivers/media/platform/amphion/vdec.c
-index 09628dd0c855..0a1976852b0d 100644
---- a/drivers/media/platform/amphion/vdec.c
-+++ b/drivers/media/platform/amphion/vdec.c
-@@ -804,7 +804,7 @@ static void vdec_init_fmt(struct vpu_inst *inst)
- 	if (vdec->codec_info.progressive)
- 		inst->cap_format.field = V4L2_FIELD_NONE;
- 	else
--		inst->cap_format.field = V4L2_FIELD_SEQ_BT;
-+		inst->cap_format.field = V4L2_FIELD_SEQ_TB;
- 	if (vdec->codec_info.color_primaries == V4L2_COLORSPACE_DEFAULT)
- 		vdec->codec_info.color_primaries = V4L2_COLORSPACE_REC709;
- 	if (vdec->codec_info.transfer_chars == V4L2_XFER_FUNC_DEFAULT)
+diff --git a/mm/slab.c b/mm/slab.c
+index d35873da5572..fc00aca62ae3 100644
+--- a/mm/slab.c
++++ b/mm/slab.c
+@@ -3527,36 +3527,6 @@ void *kmem_cache_alloc_node_trace(struct kmem_cache *cachep,
+ EXPORT_SYMBOL(kmem_cache_alloc_node_trace);
+ #endif
+ 
+-static __always_inline void *
+-__do_kmalloc_node(size_t size, gfp_t flags, int node, unsigned long caller)
+-{
+-	struct kmem_cache *cachep;
+-	void *ret;
+-
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, flags, node);
+-	cachep = kmalloc_slab(size, flags);
+-	if (unlikely(ZERO_OR_NULL_PTR(cachep)))
+-		return cachep;
+-	ret = kmem_cache_alloc_node_trace(cachep, flags, node, size);
+-	ret = kasan_kmalloc(cachep, ret, size, flags);
+-
+-	return ret;
+-}
+-
+-void *__kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	return __do_kmalloc_node(size, flags, node, _RET_IP_);
+-}
+-EXPORT_SYMBOL(__kmalloc_node);
+-
+-void *__kmalloc_node_track_caller(size_t size, gfp_t flags,
+-		int node, unsigned long caller)
+-{
+-	return __do_kmalloc_node(size, flags, node, caller);
+-}
+-EXPORT_SYMBOL(__kmalloc_node_track_caller);
+-
+ #ifdef CONFIG_PRINTK
+ void kmem_obj_info(struct kmem_obj_info *kpp, void *object, struct slab *slab)
+ {
+@@ -3635,43 +3605,6 @@ void kmem_cache_free_bulk(struct kmem_cache *orig_s, size_t size, void **p)
+ }
+ EXPORT_SYMBOL(kmem_cache_free_bulk);
+ 
+-/**
+- * kfree - free previously allocated memory
+- * @objp: pointer returned by kmalloc.
+- *
+- * If @objp is NULL, no operation is performed.
+- *
+- * Don't free memory not originally allocated by kmalloc()
+- * or you will run into trouble.
+- */
+-void kfree(const void *objp)
+-{
+-	struct kmem_cache *c;
+-	unsigned long flags;
+-	struct folio *folio;
+-
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(objp)))
+-		return;
+-
+-	folio = virt_to_folio(objp);
+-	if (!folio_test_slab(folio)) {
+-		free_large_kmalloc(folio, (void *)objp);
+-		return;
+-	}
+-
+-	c = folio_slab(folio)->slab_cache;
+-	trace_kmem_cache_free(c->name, _RET_IP_, objp);
+-
+-	local_irq_save(flags);
+-	kfree_debugcheck(objp);
+-	debug_check_no_locks_freed(objp, c->object_size);
+-	debug_check_no_obj_freed(objp, c->object_size);
+-	__cache_free(c, (void *)objp, _RET_IP_);
+-	local_irq_restore(flags);
+-}
+-EXPORT_SYMBOL(kfree);
+-
+ /*
+  * This initializes kmem_cache_node or resizes various caches for all nodes.
+  */
+@@ -4074,30 +4007,3 @@ void __check_heap_object(const void *ptr, unsigned long n,
+ 	usercopy_abort("SLAB object", cachep->name, to_user, offset, n);
+ }
+ #endif /* CONFIG_HARDENED_USERCOPY */
+-
+-/**
+- * __ksize -- Uninstrumented ksize.
+- * @objp: pointer to the object
+- *
+- * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
+- * safety checks as ksize() with KASAN instrumentation enabled.
+- *
+- * Return: size of the actual memory used by @objp in bytes
+- */
+-size_t __ksize(const void *objp)
+-{
+-	struct kmem_cache *c;
+-	struct folio *folio;
+-
+-	BUG_ON(!objp);
+-	if (unlikely(objp == ZERO_SIZE_PTR))
+-		return 0;
+-
+-	folio = virt_to_folio(objp);
+-	if (!folio_test_slab(folio))
+-		return folio_size(folio);
+-
+-	c = folio_slab(folio)->slab_cache;
+-	return c->object_size;
+-}
+-EXPORT_SYMBOL(__ksize);
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 3cd5d7a47ec7..daf626e25e12 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -918,6 +918,101 @@ void free_large_kmalloc(struct folio *folio, void *object)
+ 			      -(PAGE_SIZE << order));
+ 	__free_pages(folio_page(folio, 0), order);
+ }
++
++void *__kmalloc_node(size_t size, gfp_t flags, int node)
++{
++	struct kmem_cache *s;
++	void *ret;
++
++	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
++		return kmalloc_large_node(size, flags, node);
++
++	s = kmalloc_slab(size, flags);
++
++	if (unlikely(ZERO_OR_NULL_PTR(s)))
++		return s;
++
++	ret = __kmem_cache_alloc_node(s, NULL, flags, node, _RET_IP_);
++	ret = kasan_kmalloc(s, ret, size, flags);
++
++	return ret;
++}
++EXPORT_SYMBOL(__kmalloc_node);
++
++void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
++					int node, unsigned long caller)
++{
++	struct kmem_cache *s;
++	void *ret;
++
++	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
++		return kmalloc_large_node(size, gfpflags, node);
++
++	s = kmalloc_slab(size, gfpflags);
++
++	if (unlikely(ZERO_OR_NULL_PTR(s)))
++		return s;
++
++	ret = __kmem_cache_alloc_node(s, NULL, gfpflags, node, caller);
++
++	return ret;
++}
++EXPORT_SYMBOL(__kmalloc_node_track_caller);
++
++/**
++ * kfree - free previously allocated memory
++ * @objp: pointer returned by kmalloc.
++ *
++ * If @objp is NULL, no operation is performed.
++ *
++ * Don't free memory not originally allocated by kmalloc()
++ * or you will run into trouble.
++ */
++void kfree(const void *object)
++{
++	struct folio *folio;
++	struct slab *slab;
++	struct kmem_cache *s;
++
++	if (unlikely(ZERO_OR_NULL_PTR(object)))
++		return;
++
++	folio = virt_to_folio(object);
++	if (unlikely(!folio_test_slab(folio))) {
++		free_large_kmalloc(folio, (void *)object);
++		return;
++	}
++
++	slab = folio_slab(folio);
++	s = slab->slab_cache;
++	__kmem_cache_free(s, object, _RET_IP_);
++}
++EXPORT_SYMBOL(kfree);
++
++/**
++ * __ksize -- Uninstrumented ksize.
++ * @objp: pointer to the object
++ *
++ * Unlike ksize(), __ksize() is uninstrumented, and does not provide the same
++ * safety checks as ksize() with KASAN instrumentation enabled.
++ *
++ * Return: size of the actual memory used by @objp in bytes
++ */
++size_t __ksize(const void *object)
++{
++	struct folio *folio;
++
++	if (unlikely(object == ZERO_SIZE_PTR))
++		return 0;
++
++	folio = virt_to_folio(object);
++
++	if (unlikely(!folio_test_slab(folio)))
++		return folio_size(folio);
++
++	return slab_ksize(folio_slab(folio)->slab_cache);
++}
++EXPORT_SYMBOL(__ksize);
+ #endif /* !CONFIG_SLOB */
+ 
+ gfp_t kmalloc_fix_flags(gfp_t flags)
+diff --git a/mm/slub.c b/mm/slub.c
+index a72a2d08e793..bc9c96ce0521 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -4338,30 +4338,6 @@ static int __init setup_slub_min_objects(char *str)
+ 
+ __setup("slub_min_objects=", setup_slub_min_objects);
+ 
+-void *__kmalloc_node(size_t size, gfp_t flags, int node)
+-{
+-	struct kmem_cache *s;
+-	void *ret;
+-
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, flags, node);
+-
+-	s = kmalloc_slab(size, flags);
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(s)))
+-		return s;
+-
+-	ret = slab_alloc_node(s, NULL, flags, node, _RET_IP_, size);
+-
+-	trace_kmem_cache_alloc(s->name, _RET_IP_, ret, size,
+-			       s->size, flags, node);
+-
+-	ret = kasan_kmalloc(s, ret, size, flags);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL(__kmalloc_node);
+-
+ #ifdef CONFIG_HARDENED_USERCOPY
+ /*
+  * Rejects incorrectly sized objects and objects that are to be copied
+@@ -4412,46 +4388,6 @@ void __check_heap_object(const void *ptr, unsigned long n,
+ }
+ #endif /* CONFIG_HARDENED_USERCOPY */
+ 
+-size_t __ksize(const void *object)
+-{
+-	struct folio *folio;
+-
+-	if (unlikely(object == ZERO_SIZE_PTR))
+-		return 0;
+-
+-	folio = virt_to_folio(object);
+-
+-	if (unlikely(!folio_test_slab(folio)))
+-		return folio_size(folio);
+-
+-	return slab_ksize(folio_slab(folio)->slab_cache);
+-}
+-EXPORT_SYMBOL(__ksize);
+-
+-void kfree(const void *x)
+-{
+-	struct folio *folio;
+-	struct slab *slab;
+-	void *object = (void *)x;
+-	struct kmem_cache *s;
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(x)))
+-		return;
+-
+-	folio = virt_to_folio(x);
+-	if (unlikely(!folio_test_slab(folio))) {
+-		free_large_kmalloc(folio, object);
+-		return;
+-	}
+-
+-	slab = folio_slab(folio);
+-	s = slab->slab_cache;
+-
+-	trace_kmem_cache_free(s->name, _RET_IP_, x);
+-	slab_free(s, slab, object, NULL, 1, _RET_IP_);
+-}
+-EXPORT_SYMBOL(kfree);
+-
+ #define SHRINK_PROMOTE_MAX 32
+ 
+ /*
+@@ -4799,30 +4735,6 @@ int __kmem_cache_create(struct kmem_cache *s, slab_flags_t flags)
+ 	return 0;
+ }
+ 
+-void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+-					int node, unsigned long caller)
+-{
+-	struct kmem_cache *s;
+-	void *ret;
+-
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
+-		return kmalloc_large_node(size, gfpflags, node);
+-
+-	s = kmalloc_slab(size, gfpflags);
+-
+-	if (unlikely(ZERO_OR_NULL_PTR(s)))
+-		return s;
+-
+-	ret = slab_alloc_node(s, NULL, gfpflags, node, caller, size);
+-
+-	/* Honor the call site pointer we received. */
+-	trace_kmem_cache_alloc(s->name, caller, ret, size,
+-			       s->size, gfpflags, node);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL(__kmalloc_node_track_caller);
+-
+ #ifdef CONFIG_SYSFS
+ static int count_inuse(struct slab *slab)
+ {
 -- 
-2.35.1
+2.32.0
 

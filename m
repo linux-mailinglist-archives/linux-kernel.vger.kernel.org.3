@@ -2,114 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A89F5009EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F1F5009F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240529AbiDNJeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        id S241820AbiDNJeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:34:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiDNJef (ORCPT
+        with ESMTP id S241096AbiDNJer (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:34:35 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE6C6E574
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=1gnVKcslmL9jjdvWv9rXEVHSWDeQjeOFVmI2MFK5p+k=; b=D6crr4sOv+1HkELGgdRMFLXlIZ
-        Q8yOUQtUVuePMl/TeHNBnmfoRJV2cGP06LHk6I5P4ybDda2tSABoTvdB8drghMfFtqIyRxPc8xhQs
-        RMWWYKuR+q3HkiJBVeNyrAyGeyhsRROAwdLnR0TalQRH5vMDuBzHB4DvFwW3t9SCKDkuJ0/InhJT3
-        faLjB6i4cS+mlAT0sG1WL/LY47a8Y72jIp3DPej8Hcj5kVYUtFz41ZbaZEsPeiHKprGyLNKgY1Ogd
-        AKZWF+ImWpxpOb+nJdj6YorxvNI06YiR2DE/4C6yBqc823Q+UkZCkJgfdlmsHW8V+rZch1QBFORtI
-        XgECsyLQ==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nevpe-004yVm-Cz; Thu, 14 Apr 2022 09:32:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 59E1230031E;
-        Thu, 14 Apr 2022 11:32:04 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 1723C2B3A873C; Thu, 14 Apr 2022 11:32:04 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 11:32:04 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Zqiang <qiang1.zhang@intel.com>
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] irq_work: Add event-tracing points for irq_work
-Message-ID: <YlfqFJLau+7PlPJ3@hirez.programming.kicks-ass.net>
-References: <20220414063829.2472251-1-qiang1.zhang@intel.com>
+        Thu, 14 Apr 2022 05:34:47 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B269F70F48;
+        Thu, 14 Apr 2022 02:32:23 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id x200so8308866ybe.13;
+        Thu, 14 Apr 2022 02:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=18iN7isOnbwaCP/A+6P5FUZa7tPpEP9mZVkoMTWqVbk=;
+        b=TaiSOkeG0C4eCouXZg0Cyq9AzWHpM+023cwzNOxyLUeMgaHNwgys3LzUfQSa+8lcyk
+         tc0wP3ET5ZCnxwFPmu874Ex5pQ0hAm2LrgwJdhvNXVvSX7kQLQgacueikDMxqwAjiaf6
+         CTg/9CQ3tfr/lSaW9M9Dlv+CAZxQpu/u5F8SXHyDRXCEFzfUpnlfqlArAiVeLrBiPnlC
+         IZlEu5dmRiC5hlpYtFE16mXx0n+JCyz/LVf55wFifLy2SZ8tf7JAmeXWhuGaSZR2GFYr
+         /mEdk+bF0X4vKkkS17+h4yscsq1DHS3G8VYuqaqiI9Jkowu7zNMXKyetJ6NHiiHsf0AQ
+         J02w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=18iN7isOnbwaCP/A+6P5FUZa7tPpEP9mZVkoMTWqVbk=;
+        b=RDTNLlBOld9ONIXGzvzDT208ZS4bHhBEOqEw2PwFlmPNmRZepW7J7L8A690SaNpxk+
+         PGw+dFg2ggdjRfDUwXhwRdHQSg2+F9OMk4XqHR6JkHRr4JbaAcb4jEdrmMzxKraI6Ac7
+         c/HyRuLv3sQzNwjb068+dDJ0YY0GA3ViqSHDcOCxT0qWp9D1AnGQeIjFB0jQCm7gb8Eb
+         Hz13n1XI2cr2IRNgHa7zLNZB4Ax9mlSNGL06OXtda/HqQIyh5icBv3qxOZcpVGDbS89d
+         RXJMdi6a5/O7Hainhg1oZi060EQfapRSYG2VjSL1Nt//FU14RT2rwbp/PLomlA/q68nr
+         3tzQ==
+X-Gm-Message-State: AOAM5306bsSZsAM5moKAZ35QhRMnz6UVHQeTNOvmX9svXnyxHv6qbkeP
+        QIu41con4kIyxq4P3QFW5clYpW4iIFuTUi3zbpU=
+X-Google-Smtp-Source: ABdhPJzgK9aC518klHOSSzwcux3CKiMlGdS3vuNoXXMM7KFp3sHe6L7qBScGGrXRgCJrCFXtsycXOEsGhbOrTGlARtM=
+X-Received: by 2002:a05:6902:124a:b0:641:c7b8:9833 with SMTP id
+ t10-20020a056902124a00b00641c7b89833mr1017162ybu.428.1649928742386; Thu, 14
+ Apr 2022 02:32:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414063829.2472251-1-qiang1.zhang@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220330132152.4568-1-jiangshanlai@gmail.com> <20220330132152.4568-4-jiangshanlai@gmail.com>
+ <YlXrshJa2Sd1WQ0P@google.com> <CAJhGHyD-4YFDhkxk2SQFmKe3ooqw_0wE+9u3+sZ8zOdSUfbnxw@mail.gmail.com>
+ <683974e7-5801-e289-8fa4-c8a8d21ec1b2@redhat.com>
+In-Reply-To: <683974e7-5801-e289-8fa4-c8a8d21ec1b2@redhat.com>
+From:   Lai Jiangshan <jiangshanlai@gmail.com>
+Date:   Thu, 14 Apr 2022 17:32:11 +0800
+Message-ID: <CAJhGHyCgo-FEgvuRfuLZikgJSyo7HGm1OfU3gme35-WBmqo7yQ@mail.gmail.com>
+Subject: Re: [RFC PATCH V3 3/4] KVM: X86: Alloc role.pae_root shadow page
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
+        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        X86 ML <x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
+        linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:38:29PM +0800, Zqiang wrote:
-> Add irq_work_queue_on tracepoints allow tracing when and how
-> a irq-work is queued, irq_work_execute_start/end tracepoints
-> allow know when a irq-work is executed and the executed time.
+On Thu, Apr 14, 2022 at 5:08 PM Paolo Bonzini <pbonzini@redhat.com> wrote:
+>
+> On 4/14/22 11:07, Lai Jiangshan wrote:
+> >> I don't think this will work for shadow paging.  CR3 only has to be 32-byte aligned
+> >> for PAE paging.  Unless I'm missing something subtle in the code, KVM will incorrectly
+> >> reuse a pae_root if the guest puts multiple PAE CR3s on a single page because KVM's
+> >> gfn calculation will drop bits 11:5.
+> >
+> > I forgot about it.
+>
+>
+> Isn't the pae_root always rebuilt by
+>
+>          if (!tdp_enabled && memcmp(mmu->pdptrs, pdpte, sizeof(mmu->pdptrs)))
+>                  kvm_mmu_free_roots(vcpu->kvm, mmu, KVM_MMU_ROOT_CURRENT);
+>
+> in load_pdptrs?  I think reuse cannot happen.
+>
 
-Yeah, but why?
+In this patchset, root sp can be reused if it is found from the hash,
+including new pae root.
 
-> diff --git a/kernel/irq_work.c b/kernel/irq_work.c
-> index 7afa40fe5cc4..edad992556d0 100644
-> --- a/kernel/irq_work.c
-> +++ b/kernel/irq_work.c
-> @@ -22,6 +22,9 @@
->  #include <asm/processor.h>
->  #include <linux/kasan.h>
->  
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/irq_work.h>
-> +
->  static DEFINE_PER_CPU(struct llist_head, raised_list);
->  static DEFINE_PER_CPU(struct llist_head, lazy_list);
->  static DEFINE_PER_CPU(struct task_struct *, irq_workd);
-> @@ -81,7 +84,9 @@ static void __irq_work_queue_local(struct irq_work *work)
->  	bool rt_lazy_work = false;
->  	bool lazy_work = false;
->  	int work_flags;
-> +	int cpu = smp_processor_id();
->  
-> +	trace_irq_work_queue_on(cpu, work);
+All new kinds of sp added in this patchset are in the hash too.
 
-That's not very nice, you made this function more expensive for no
-reason. And you violated coding style while doing it :/
+No more special root pages.
 
->  	work_flags = atomic_read(&work->node.a_flags);
->  	if (work_flags & IRQ_WORK_LAZY)
->  		lazy_work = true;
-> @@ -143,7 +148,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu)
->  	if (cpu != smp_processor_id()) {
->  		/* Arch remote IPI send/receive backend aren't NMI safe */
->  		WARN_ON_ONCE(in_nmi());
-> -
-> +		trace_irq_work_queue_on(cpu, work);
->  		/*
->  		 * On PREEMPT_RT the items which are not marked as
->  		 * IRQ_WORK_HARD_IRQ are added to the lazy list and a HARD work
-> @@ -208,7 +213,9 @@ void irq_work_single(void *arg)
->  	smp_mb();
->  
->  	lockdep_irq_work_enter(flags);
-> +	trace_irq_work_execute_start(work);
->  	work->func(work);
-> +	trace_irq_work_execute_end(work);
->  	lockdep_irq_work_exit(flags);
->  
->  	/*
+kvm_mmu_free_roots() can not free those new types of sp if they are still
+valid.  And different vcpu can use the same pae root sp if the guest cr3
+of the vcpus are the same.
 
-
+And new pae root can be put in prev_root too (not implemented yet)
+because they are not too special anymore.  As long as sp->gfn, sp->pae_off,
+sp->role are matched, they can be reused.

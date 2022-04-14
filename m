@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52C01500586
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 07:38:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0B3500587
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 07:39:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238517AbiDNFkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 01:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
+        id S239536AbiDNFl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 01:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiDNFkN (ORCPT
+        with ESMTP id S229908AbiDNFlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 01:40:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC8E3CFE6;
-        Wed, 13 Apr 2022 22:37:50 -0700 (PDT)
+        Thu, 14 Apr 2022 01:41:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A3A3CFEA
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 22:39:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D2DE461E49;
-        Thu, 14 Apr 2022 05:37:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F4D6C385A1;
-        Thu, 14 Apr 2022 05:37:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649914669;
-        bh=OvCUBTX1ZAgB8ToDSbNbmHnIQ8kXnV7+uWxjqjVKne4=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A677B82836
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 05:39:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49332C385A5;
+        Thu, 14 Apr 2022 05:38:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649914738;
+        bh=EGbkB7EyGIphnUo8cRrJq675aEDUsCnVi4Pkg2u+IpI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JvF5esoQdpTyrqK52quS/FxxjB6PsrHksGx2OwyQ32LgEPhrRjWvKRZApfVZzXLzw
-         mA/YzjocNeAB361OfVk1iLricCnMsGhmKaQQqqMfLFpVUocSK4EhKtAscdPfSwqhrq
-         61hU3bfa98o3jlZ/v1AgXq1C3TVpQ0yveoZNwhXTnKyverfK8/aZ5gQ+2fv5F/6Yha
-         f763hQHqXQoT1EGd9LR0VdPPty+PIp2BUpsTOsGjGR8Te7nd4gHYNJPOaRk/g7SOWW
-         4zLCRUHSSRU7olwtqyyhe8J0FK1EaMKmywiIk1SaQ+5kZ5/lRPH3EdDz8v3kaL4BRH
-         l0m1h0e63GeeQ==
-Date:   Thu, 14 Apr 2022 11:07:44 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Liu Ying <victor.liu@nxp.com>
-Cc:     linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
-        robh+dt@kernel.org, andrzej.hajda@intel.com,
-        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        agx@sigxcpu.org, robert.chiras@nxp.com, martin.kepplinger@puri.sm,
-        robert.foss@linaro.org
-Subject: Re: [PATCH v6 resend 2/5] phy: Add LVDS configuration options
-Message-ID: <YlezKAw+W8HOa322@matsya>
-References: <20220402052451.2517469-1-victor.liu@nxp.com>
- <20220402052451.2517469-3-victor.liu@nxp.com>
- <YlZpnrKt9NbHZv26@matsya>
- <d77b41d911e126331138ddaca146a581d316bd09.camel@nxp.com>
- <YlaqwoFCfusFgIIe@matsya>
- <a2731b2d77f9bf2adf36f0c05cb5e3b14a5a91a9.camel@nxp.com>
+        b=U/5xlB2FGJQ4d9YonjZ1eh/VOSVq/JGZbcaKEVZ/X3gneeL6e+c8n4oWQVEM2nC37
+         NUC4dasWX2knhep41oieB/4y70NBWjonRL99uQmXxgCzCTu04LVcoNKtRdt9zuG80Y
+         UfyeJhMFJLi5uXjds7FMprNpoWpIZbZFFw7DiC/E=
+Date:   Thu, 14 Apr 2022 07:38:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YlezcPbFOkSUygBJ@kroah.com>
+References: <Yk/6ts5sVDMDpKj3@arm.com>
+ <Yk/8QExHlggU8KgC@gondor.apana.org.au>
+ <YlVHSvkyUBXZPUr2@arm.com>
+ <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
+ <YlVOTsaTVkBOxthG@arm.com>
+ <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
+ <YlVxGAHHD/j6lW3c@arm.com>
+ <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
+ <YlaOIbSA7B/G9222@arm.com>
+ <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2731b2d77f9bf2adf36f0c05cb5e3b14a5a91a9.camel@nxp.com>
+In-Reply-To: <CAHk-=wjr9-n7vHiVdm-L-KX4kXWyY45++8jenFA1QV5oc=yhZg@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,64 +69,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13-04-22, 20:39, Liu Ying wrote:
-> On Wed, 2022-04-13 at 16:19 +0530, Vinod Koul wrote:
-> > On 13-04-22, 18:04, Liu Ying wrote:
-> > > Hi Vinod,
-> > > 
-> > > On Wed, 2022-04-13 at 11:41 +0530, Vinod Koul wrote:
-> > > > On 02-04-22, 13:24, Liu Ying wrote:
-> > > > > This patch allows LVDS PHYs to be configured through
-> > > > > the generic functions and through a custom structure
-> > > > > added to the generic union.
-> > > > > 
-> > > > > The parameters added here are based on common LVDS PHY
-> > > > > implementation practices.  The set of parameters
-> > > > > should cover all potential users.
-> > > > > 
-> > > > > Cc: Kishon Vijay Abraham I <kishon@ti.com>
-> > > > > Cc: Vinod Koul <vkoul@kernel.org>
-> > > > > Cc: NXP Linux Team <linux-imx@nxp.com>
-> > > > > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > > > > ---
+On Wed, Apr 13, 2022 at 09:53:24AM -1000, Linus Torvalds wrote:
+> On Tue, Apr 12, 2022 at 10:47 PM Catalin Marinas
+> <catalin.marinas@arm.com> wrote:
+> >
+> > I agree. There is also an implicit expectation that the DMA API works on
+> > kmalloc'ed buffers and that's what ARCH_DMA_MINALIGN is for (and the
+> > dynamic arch_kmalloc_minalign() in this series). But the key point is
+> > that the driver doesn't need to know the CPU cache topology, coherency,
+> > the DMA API and kmalloc() take care of these.
 > 
-> [...]
+> Honestly, I think it would probably be worth discussing the "kmalloc
+> DMA alignment" issues.
 > 
-> > > > > + */
-> > > > > +
-> > > > > +#ifndef __PHY_LVDS_H_
-> > > > > +#define __PHY_LVDS_H_
-> > > > > +
-> > > > > +/**
-> > > > > + * struct phy_configure_opts_lvds - LVDS configuration set
-> > > > > + * @bits_per_lane_and_dclk_cycle:	Number of bits per data
-> > > > > lane
-> > > > > and
-> > > > > + *					differential clock
-> > > > > cycle.
-> > > > 
-> > > > What does it mean by bits per data lane and differential clock
-> > > > cycle?
-> > > 
-> > > Please check
-> > > Documentation/devicetree/bindings/display/panel/lvds.yaml.
-> > > lvds.yaml metions slot.  'bits_per_lane_and_dclk_cycle' means the
-> > > number of slots.  But, I don't find the word 'slot' in my lvds
-> > > relevant
-> > > specs which mentioned in lvds.yaml, so 'slots' is probably not a
-> > > generic name(lvds.yaml is for display panel).  So, I use
-> > > 'bits_per_lane_and_dclk_cycle' as the name tells what it means.
-> > 
-> > variable name is fine, explanation for bit per lane and differential
-> > clock cycle didnt help, maybe add better explanation of what this
-> > variable means
+> 99.9% of kmalloc users don't want to do DMA.
 > 
-> I may add an example diagram as below...
+> And there's actually a fair amount of small kmalloc for random stuff.
+> Right now on my laptop, I have
+> 
+>     kmalloc-8          16907  18432      8  512    1 : ...
+> 
+> according to slabinfo, so almost 17 _thousand_ allocations of 8 bytes.
+> 
+> It's all kinds of sad if those allocations need to be 64 bytes in size
+> just because of some silly DMA alignment issue, when none of them want
+> it.
+> 
+> Yeah, yeah, wasting a megabyte of memory is "just a megabyte" these
+> days. Which is crazy. It's literally memory that could have been used
+> for something much more useful than just pure and utter waste.
+> 
+> I think we could and should just say "people who actually require DMA
+> accesses should say so at kmalloc time". We literally have that
+> GFP_DMA and ZOME_DMA for various historical reasons, so we've been
+> able to do that before.
+> 
+> No, that historical GFP_DMA isn't what arm64 wants - it's the old
+> crazy "legacy 16MB DMA" thing that ISA DMA used to have.
+> 
+> But the basic issue was true then, and is true now - DMA allocations
+> are fairly special, and should not be that hard to just mark as such.
 
-Not really a diagram, you can add if you like.. But something which
-explains in a sentence or few about the variable.
+"fairly special" == "all USB transactions", so it will take a lot of
+auditing here.  I think also many SPI controllers require this and maybe
+I2C?  Perhaps other bus types do as well.
 
-bits per lane per differential clock cycle ?
+So please don't make this change without some way of figuring out just
+what drivers need to be fixed up, as it's going to be a lot...
 
--- 
-~Vinod
+thanks,
+
+greg k-h

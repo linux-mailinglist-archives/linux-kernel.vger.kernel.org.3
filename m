@@ -2,181 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBBCE50042A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:27:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 357AA50042D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:28:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238366AbiDNC3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51488 "EHLO
+        id S239070AbiDNCaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229991AbiDNC32 (ORCPT
+        with ESMTP id S229991AbiDNCaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:29:28 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2096.outbound.protection.outlook.com [40.107.93.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68B0643AEE;
-        Wed, 13 Apr 2022 19:27:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bM/OX9hO3GzAqZ03UHAkqc6u80IzyJiYRrcYGWZq+sSFSv5tAOluZkqjRgNNdlNH6AOK3Q/uxCDlYVklpou84nwxLiwJDEa7BTtzO0Z/j3NxObGn/Gfs/9XlHO6kiQ7jxkccufYW/AdCKzsmmazbRxSuN1M7/fBKhqEqrCtJdqYt39S2p+0QxIhPbpQ6rLLBv3+0pHhSI/G9v546a8fGIu2R0lXepyoOjKiW6Mp+IcPMYvXwLemeDdb5h/OgpAKS57LFJhf6vvjy4eJ95BsRSNtzuKcb/XmaIluOmGu6+qDyIqWcDDY5PiHRoQT6ZSDF+jxkg19QgCez/5Me3sqHMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CY46XyQbf7CMld4qUjFkIUKKV6RoxhWgPHQaLMoBpbI=;
- b=e4YWstGrg3yp0N+glKWmTG2lcv5o8nTuWoUP9FTHwXBgX6hJbY+Nyrwu2PjoDcOWnHuJIXKeXJGesAexNvTdE3wBDLR7bpyUDrZhpJ68SY8xCy5laCJLg8AzaUrSZ3629YGmS9BoHONCYfdcJ0bM+biUOmelDg5oIDWV+JNFB78iTbtmGDHokxoogVrqlJZSGN1Aj430ZDI0KaTK3xj6AqYOBK0V7FoKOzCRSd4Uao9r9gZTrdnSkKWq73ux2mZUctUK3Z6NehEnioJRxAc5Lu1SIUk4NGcCa+tdyYTWp4rYtIIpI0pnzCv+CSexAemBwnhI17lvv1/of+NRQpHQcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=analogixsemi.com; dmarc=pass action=none
- header.from=analogixsemi.com; dkim=pass header.d=analogixsemi.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Analogixsemi.onmicrosoft.com; s=selector2-Analogixsemi-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CY46XyQbf7CMld4qUjFkIUKKV6RoxhWgPHQaLMoBpbI=;
- b=hZ8orU1YLNpknOGYihpd2+vTmErWsKZsDJBbAcyr4XalK+p14duiyQ4oyl9F2qU5J1/uqjBI6lJq46K2ZWBBHik9tqeVg/8QrTCs9EKvcauJNKb8QD6MqdPMaceB+yIZCslAfSuUtNVZ0thFemldxHAwL4OT5lwdsJs6w0FN9oI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=analogixsemi.com;
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com (2603:10b6:a03:229::8)
- by CH2PR04MB6680.namprd04.prod.outlook.com (2603:10b6:610:93::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Thu, 14 Apr
- 2022 02:27:03 +0000
-Received: from BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::e9ba:4c90:6e9c:39f]) by BY5PR04MB6739.namprd04.prod.outlook.com
- ([fe80::e9ba:4c90:6e9c:39f%3]) with mapi id 15.20.5144.030; Thu, 14 Apr 2022
- 02:27:03 +0000
-Date:   Thu, 14 Apr 2022 10:26:55 +0800
-From:   Xin Ji <xji@analogixsemi.com>
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, bliang@analogixsemi.com,
-        qwen@analogixsemi.com, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dt-bindings: drm/bridge: anx7625: Change bus-type to
- 7 (DPI)
-Message-ID: <20220414022655.GA606685@anxtwsw-Precision-3640-Tower>
-References: <20220328120956.1848795-1-xji@analogixsemi.com>
- <20220328120956.1848795-3-xji@analogixsemi.com>
- <YkswTpDiPYfdIFtE@robh.at.kernel.org>
- <20220409044740.GA595530@anxtwsw-Precision-3640-Tower>
- <CAG3jFyt1Srtn2aTFQ6b8Rxc6F_GCzU2mKxiEiWwgskMwHHjj5Q@mail.gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG3jFyt1Srtn2aTFQ6b8Rxc6F_GCzU2mKxiEiWwgskMwHHjj5Q@mail.gmail.com>
-X-ClientProxiedBy: HK2PR06CA0017.apcprd06.prod.outlook.com
- (2603:1096:202:2e::29) To BY5PR04MB6739.namprd04.prod.outlook.com
- (2603:10b6:a03:229::8)
+        Wed, 13 Apr 2022 22:30:23 -0400
+Received: from smtp233.corp-email.com (smtp233.corp-email.com [222.73.234.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5883844A07
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:27:53 -0700 (PDT)
+Received: from ([114.119.32.142])
+        by smtp233.corp-email.com ((D)) with ASMTP (SSL) id IWP00146;
+        Thu, 14 Apr 2022 10:27:46 +0800
+Received: from [172.16.35.4] (172.16.35.4) by GCY-MBS-28.TCL.com (10.136.3.28)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.18; Thu, 14 Apr
+ 2022 10:27:45 +0800
+Message-ID: <ba76460f-4e22-634a-d46f-78e1fd4ac10e@tcl.com>
+Date:   Thu, 14 Apr 2022 10:27:44 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0e1e596b-fb7c-41b1-37cf-08da1dbe42a2
-X-MS-TrafficTypeDiagnostic: CH2PR04MB6680:EE_
-X-Microsoft-Antispam-PRVS: <CH2PR04MB6680BED7619E5FE7EA965018C7EF9@CH2PR04MB6680.namprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 980fY/zlanhHEOCfQQXItnfr7i1G/sOdfqUyxcOvDstEjSKmR+aRpRCcRE/+i2bJmfPWSLA7xjbXMuC52UP7lLmLNPWJ81yZDGfUw+yQPXKB6HCrQthN+7ZcBmh+Ji5p3wmPQ59xEAomxvc1jRblyiB+/Ll7ezFgMu5VPPBmCmTnpHS87OjJSNUXqQxZCSDBl4iezshyEmQLt5/H2p1G3gkg9VWgjU6prsbGChZcNwtTNnyVx+5Twc6gJbMxaRD+TAvMMUc6cc0XzO3hxP8F/rNu7JKoPxlPtW2vTOY6beVh1w4V6wNxip8U6x2gL0SU3fHS7/aHGFZ85UyA0TcOS+PFHkfwVMD1gkkJGZxb4Xc8mN7/nJbAanFUmYD9EKVSMAyxDgkaRHbflXEU4tBQJuqVS4LXUXzMFzsKZZ10avDscl9/hGOIIFHgKpW0yummkEdxbQ/7alstMnR0AZHkivvteuMLZkBt3iMPi4LEAnRGdEY18uoyKunJubjT1n3cbcu8/D2nn3S+TEniatQCXCtNYT6gxX6rE5haJwDXqqOJl5H2h1kRXE+n55nyW3ZhsmgM9PIBicmCsToFZTyiiH9DVOpEqhIFf6e0GXoyzdPSND8Xf05GKsTUEg9YVE2S58u3w6ghJWfX47CAc5fIIkhlYvIBsP0yjnsB/ugX7TlBDrfYvX2sS0ox40hoGCep0PmVMRD1AebLolNFGPmQsQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR04MB6739.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(38100700002)(66946007)(1076003)(54906003)(508600001)(8936002)(6666004)(55236004)(6512007)(5660300002)(52116002)(7416002)(4326008)(6506007)(38350700002)(66476007)(8676002)(66556008)(86362001)(9686003)(83380400001)(33716001)(316002)(6486002)(966005)(2906002)(33656002)(186003)(26005)(6916009)(45080400002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wALdjCFwHTr8HoMA1x7woshKgZ7V35VgtTCr2wCF0/68nK09Zvz1lae4B5Ag?=
- =?us-ascii?Q?3C4dVWKNVumcD2dwvgdJt3VQAIEGRLweLy3MjNr9v22ghJzzC1rI9WC7Atv9?=
- =?us-ascii?Q?P+p+g/GvMLedFSHGatlgpiLK3BIWgg0YSyIQqtotCvlSvhYs+hnf+RIj+RoV?=
- =?us-ascii?Q?kZ5wQEbjueuMQ/TaNrHdwb3R00C3LP8xUzA+4zQTEH4FaRnibYW+oSq1OAgs?=
- =?us-ascii?Q?lP4S8CB6z5JcnyDHgr+XnGSkauX39K05D9dUN/L3yF7RgGQ/h6BzpRapCq+d?=
- =?us-ascii?Q?YwZxERT3V6M2ahIXTHgXebx6LxUecpkA4OUHnJvlYukEFxS4ZwdNrtkDX1Cc?=
- =?us-ascii?Q?KmfXO/4dB0LI0xgHCMOE1pnjD5p9fWr70V9/ITBbZvNYc7pnqRCZMw1eH/cD?=
- =?us-ascii?Q?pUg/HG0xqGBW955yuc7tR0iZXSyBO1kZwedpPk94S5BmVc9QHrnZAfLZS291?=
- =?us-ascii?Q?KPBLhGGDDzN5PrbQ23a31K0AQm4XkDxsV8zK+e9SuHewO28hV/0Kh2iJAhhg?=
- =?us-ascii?Q?nsMWOy5lgQc/gD9fyci4XHC1qNvVE/NQJ24Nj3EhD6DardKbzWD9KPkOIYQx?=
- =?us-ascii?Q?S+CzsippDy/I0eNV5sTFUqpoG6Q1SVO6pSVKGRKODSkPgJ4YEx1Bxbb5VgYu?=
- =?us-ascii?Q?JN0t14Fnbe477hnVEZElR4+8uFO2xdgqhnHI929AGtwI0RI196gU+Agdci7f?=
- =?us-ascii?Q?DMYEb2REt/fAXU6UF/Cb//cwNTeNsSz78qnUqGkuYALC5cEZfMaLvQIWpIYy?=
- =?us-ascii?Q?WuRQ7lr6M3/1B19ZukZeb024GvBbWnOr3cVNTbWAt0IpmNDvD8KAx376ZVjJ?=
- =?us-ascii?Q?EBLBoXfPUJvwPjsqLIbJyMK/09ORY5s1rXbowTfRpvfLddmQff03OACxSeOp?=
- =?us-ascii?Q?m9CIyC+NhwHEKRd38zJWPcNRldHCa6qdIsVLfMXUzoCWT2ZciVLuiO7GmUVD?=
- =?us-ascii?Q?K8dr5/C94O8yE/kGxy/Q5DJnVSvDcoBQP0Vur3K+KM2tPgpgMi2OaEFwiyW9?=
- =?us-ascii?Q?NV0R9UH2d+eYzfB7XyLYlmP8pPpXEYB5X1kUcdqW1o/g8DUn64FzHkp36y61?=
- =?us-ascii?Q?Milla5ufXWkV5wL67HuR38C0kd/w+owAZnQ91YgjzixUuwrzu9GpSD3UyL+Z?=
- =?us-ascii?Q?fcQe0ABL0YV10o7R/AlbriTUrcQh8VvxehyaKBP+PN+9V4kTomrpbezzZlo1?=
- =?us-ascii?Q?H+bNAgs/bTvOzv7nXFlD80A/FA3wrbLb19670HT/T+hcoY+S2VIxznpk/9t7?=
- =?us-ascii?Q?JgNyKcgmjOIEF69/PFWo+g3Xps6msODSa2XbuPQC0CfolJMOLqdDhhVWidrK?=
- =?us-ascii?Q?tHceedT4C32GI32j3UcSIviIgnlvQk+GBPL1xhTX1YE7BvjIkSm+cWl6uaCz?=
- =?us-ascii?Q?GHNaErUUvc2TJgN2HjA0q28Pv8U00TMqv7vQlz0N1ncFrBwuG7/zTQOFYmXp?=
- =?us-ascii?Q?rUiP7vieb7dFrGoSQRjYOKLCXi5Pah04nzUMQQ+7ZQEf8VUfeFhgRZ07ml7p?=
- =?us-ascii?Q?4bF915wlAFJbHkH5AwBNTi78USq87w4umhpoATDR67TVaSIUd3CC4xvWJWuZ?=
- =?us-ascii?Q?jf/IG+OmWztngC7eK4QzV8YakDkO4dZyPUSnEt5feoO0HVqYe0j18DqPr1Er?=
- =?us-ascii?Q?NsYEb6JtnJMcoKEzPyNL3We1gHJ6JmdY2ZOT82ZcAy+V7nKRqDdO+V+so1tH?=
- =?us-ascii?Q?rKUBAQLt6VsP1kZIGjXZ7rc3ddStT75mNEu391qL8PYbuFwakY0aOzbVgFeH?=
- =?us-ascii?Q?V6FilNKJSw=3D=3D?=
-X-OriginatorOrg: analogixsemi.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0e1e596b-fb7c-41b1-37cf-08da1dbe42a2
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR04MB6739.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Apr 2022 02:27:02.9495
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: b099b0b4-f26c-4cf5-9a0f-d5be9acab205
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZOTaktAYSz1zYIEztLbck2UQ8HtxsAkuGVI2YXtWM0P5bHrsMoricHZ+BPcOHjBHdntZXz9/kYnN441TxcyArA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6680
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] f2fs: avoid deadlock in gc thread under low memory
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+CC:     <linux-f2fs-devel@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>, <tang.ding@tcl.com>
+References: <660530eb62e71fb6520d3596704162e5@sslemail.net>
+ <YlcBxSA5qYN4z1ia@google.com> <39c4ded0-09c0-3e38-85cb-5535099b177d@tcl.com>
+ <YleEXOHl1Vhlr3x3@google.com>
+From:   Wu Yan <wu-yan@tcl.com>
+In-Reply-To: <YleEXOHl1Vhlr3x3@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.35.4]
+X-ClientProxiedBy: GCY-EXS-25.TCL.com (10.74.128.65) To GCY-MBS-28.TCL.com
+ (10.136.3.28)
+tUid:   20224141027462c065553eb15e849b85c1fd0b57e91a8
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 04:28:51PM +0200, Robert Foss wrote:
-> On Sat, 9 Apr 2022 at 06:47, Xin Ji <xji@analogixsemi.com> wrote:
-> >
-> > On Mon, Apr 04, 2022 at 12:52:14PM -0500, Rob Herring wrote:
-> > > On Mon, Mar 28, 2022 at 08:09:54PM +0800, Xin Ji wrote:
-> > > > Change bus-type define for DPI.
-> > > >
-> > > > Fixes: a43661e7e819 ("dt-bindings:drm/bridge:anx7625:add vendor define")
-> > > >
-> > > > Signed-off-by: Xin Ji <xji@analogixsemi.com>
-> > > > ---
-> > > >  .../devicetree/bindings/display/bridge/analogix,anx7625.yaml  | 4 ++--
-> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > index 0d38d6fe3983..4590186c4a0b 100644
-> > > > --- a/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > +++ b/Documentation/devicetree/bindings/display/bridge/analogix,anx7625.yaml
-> > > > @@ -106,7 +106,7 @@ properties:
-> > > >                remote-endpoint: true
-> > > >
-> > > >                bus-type:
-> > > > -                enum: [1, 5]
-> > > > +                enum: [7]
-> > >
-> > > Changing is an ABI break, but didn't we revert adding this?
-> > Hi Rob, sorry, what do you mean about ABI break? Do I need remove this
-> > patch in this serial? Or do I need revert patch
-> > https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Fpatchwork.freedesktop.org%2Fpatch%2F462331%2F&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C10f5b0213f434592936008da1d59f566%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637854569490105386%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=vK0Vmb9S425kHZc1WurfnNhnoXDMbUGkkdY1PVnfS9g%3D&amp;reserved=0, I don't know how to do
-> > it.
-> >
+On 4/14/22 10:18, Jaegeuk Kim wrote:
+> On 04/14, Wu Yan wrote:
+>> On 4/14/22 01:00, Jaegeuk Kim wrote:
+>>> On 04/13, Rokudo Yan wrote:
+>>>> There is a potential deadlock in gc thread may happen
+>>>> under low memory as below:
+>>>>
+>>>> gc_thread_func
+>>>>    -f2fs_gc
+>>>>     -do_garbage_collect
+>>>>      -gc_data_segment
+>>>>       -move_data_block
+>>>>        -set_page_writeback(fio.encrypted_page);
+>>>>        -f2fs_submit_page_write
+>>>> as f2fs_submit_page_write try to do io merge when possible, so the
+>>>> encrypted_page is marked PG_writeback but may not submit to block
+>>>> layer immediately, if system enter low memory when gc thread try
+>>>> to move next data block, it may do direct reclaim and enter fs layer
+>>>> as below:
+>>>>      -move_data_block
+>>>>       -f2fs_grab_cache_page(index=?, for_write=false)
+>>>>        -grab_cache_page
+>>>>         -find_or_create_page
+>>>>          -pagecache_get_page
+>>>>           -__page_cache_alloc --  __GFP_FS is set
+>>>>            -alloc_pages_node
+>>>>             -__alloc_pages
+>>>>              -__alloc_pages_slowpath
+>>>>               -__alloc_pages_direct_reclaim
+>>>>                -__perform_reclaim
+>>>>                 -try_to_free_pages
+>>>>                  -do_try_to_free_pages
+>>>>                   -shrink_zones
+>>>>                    -mem_cgroup_soft_limit_reclaim
+>>>>                     -mem_cgroup_soft_reclaim
+>>>>                      -mem_cgroup_shrink_node
+>>>>                       -shrink_node_memcg
+>>>>                        -shrink_list
+>>>>                         -shrink_inactive_list
+>>>>                          -shrink_page_list
+>>>>                           -wait_on_page_writeback -- the page is marked
+>>>>                          writeback during previous move_data_block call
+>>>>
+>>>> the gc thread wait for the encrypted_page writeback complete,
+>>>> but as gc thread held sbi->gc_lock, the writeback & sync thread
+>>>> may blocked waiting for sbi->gc_lock, so the bio contain the
+>>>> encrypted_page may nerver submit to block layer and complete the
+>>>> writeback, which cause deadlock. To avoid this deadlock condition,
+>>>> we mark the gc thread with PF_MEMALLOC_NOFS flag, then it will nerver
+>>>> enter fs layer when try to alloc cache page during move_data_block.
+>>>>
+>>>> Signed-off-by: Rokudo Yan <wu-yan@tcl.com>
+>>>> ---
+>>>>    fs/f2fs/gc.c | 6 ++++++
+>>>>    1 file changed, 6 insertions(+)
+>>>>
+>>>> diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+>>>> index e020804f7b07..cc71f77b98c8 100644
+>>>> --- a/fs/f2fs/gc.c
+>>>> +++ b/fs/f2fs/gc.c
+>>>> @@ -38,6 +38,12 @@ static int gc_thread_func(void *data)
+>>>>    	wait_ms = gc_th->min_sleep_time;
+>>>> +	/*
+>>>> +	 * Make sure that no allocations from gc thread will ever
+>>>> +	 * recurse to the fs layer to avoid deadlock as it will
+>>>> +	 * hold sbi->gc_lock during garbage collection
+>>>> +	 */
+>>>> +	memalloc_nofs_save();
+>>>
+>>> I think this cannot cover all the f2fs_gc() call cases. Can we just avoid by:
+>>>
+>>> --- a/fs/f2fs/gc.c
+>>> +++ b/fs/f2fs/gc.c
+>>> @@ -1233,7 +1233,7 @@ static int move_data_block(struct inode *inode, block_t bidx,
+>>>                                   CURSEG_ALL_DATA_ATGC : CURSEG_COLD_DATA;
+>>>
+>>>           /* do not read out */
+>>> -       page = f2fs_grab_cache_page(inode->i_mapping, bidx, false);
+>>> +       page = f2fs_grab_cache_page(inode->i_mapping, bidx, true);
+>>>           if (!page)
+>>>                   return -ENOMEM;
+>>>
+>>> Thanks,
+>>>
+>>>>    	set_freezable();
+>>>>    	do {
+>>>>    		bool sync_mode, foreground = false;
+>>>> -- 
+>>>> 2.25.1
+>>
+>> Hi, Jaegeuk
+>>
+>> I'm not sure if any other case may trigger the issue, but the stack traces I
+>> have caught so far are all the same as below:
+>>
+>> f2fs_gc-253:12  D 226966.808196 572 302561 150976 0x1200840 0x0 572
+>> 237207473347056
+>> <ffffff889d88668c> __switch_to+0x134/0x150
+>> <ffffff889e764b6c> __schedule+0xd5c/0x1100
+>> <ffffff889e76554c> io_schedule+0x90/0xc0
+>> <ffffff889d9fb880> wait_on_page_bit+0x194/0x208
+>> <ffffff889da167b4> shrink_page_list+0x62c/0xe74
+>> <ffffff889da1d354> shrink_inactive_list+0x2c0/0x698
+>> <ffffff889da181f4> shrink_node_memcg+0x3dc/0x97c
+>> <ffffff889da17d44> mem_cgroup_shrink_node+0x144/0x218
+>> <ffffff889da6610c> mem_cgroup_soft_limit_reclaim+0x188/0x47c
+>> <ffffff889da17a40> do_try_to_free_pages+0x204/0x3a0
+>> <ffffff889da176c8> try_to_free_pages+0x35c/0x4d0
+>> <ffffff889da05d60> __alloc_pages_nodemask+0x7a4/0x10d0
+>> <ffffff889d9fc82c> pagecache_get_page+0x184/0x2ec
 > 
-> I contributed to the confusion about this, let's see if we can clear it up.
+> Is this deadlock trying to grab a lock, instead of waiting for writeback?
+> Could you share all the backtraces of the tasks?
 > 
-> An issue was found related to which enum values were used to represent
-> what late in the last release cycle. As a result a revert[1] patch for
-> everything touching bus-type in anx7625 was merged.
+> For writeback above, looking at the code, f2fs_gc uses three mappings, meta,
+> node, and data, and meta/node inodes are masking GFP_NOFS in f2fs_iget(),
+> while data inode does not. So, the above f2fs_grab_cache_page() in
+> move_data_block() is actually calling w/o NOFS.
 > 
-> This patch, does not apply to drm-misc-next due to the revert, and if
-> Xin Ji rebases his work on the drm-misc-next there should be no
-> ABI-change as this patch when fixed up will introduce bus-type to the
-> nax7625 ABI.
-> 
-> Xin: Does this make sense to you?
-Hi Robert Foss, yes, my work is based on drm-misc-next, all I can do,
-just make a fix up patch(this patch) to change the bus-type define.
+>> <ffffff889dbf8860> do_garbage_collect+0xfe0/0x2828
+>> <ffffff889dbf7434> f2fs_gc+0x4a0/0x8ec
+>> <ffffff889dbf6bf4> gc_thread_func+0x240/0x4d4
+>> <ffffff889d8de9b0> kthread+0x17c/0x18c
+>> <ffffff889d88567c> ret_from_fork+0x10/0x18
+>>
+>> Thanks
+>> yanwu
 
-Thanks,
-Xin
-> 
-> [1] https://nam10.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcgit.freedesktop.org%2Fdrm%2Fdrm-misc%2Fcommit%2F%3Fid%3D979452fbc43028675b5a5da156f91928b739dea8&amp;data=04%7C01%7Cxji%40analogixsemi.com%7C10f5b0213f434592936008da1d59f566%7Cb099b0b4f26c4cf59a0fd5be9acab205%7C0%7C0%7C637854569490105386%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=onmKAoEEP1XDbl%2FaeAIfVYJ4cSbiTfTBYCd%2BHCA9fzw%3D&amp;reserved=0
+Hi, Jaegeuk
+
+The gc thread is blocked on wait_on_page_writeback(encrypted page submit 
+before) when it try grab data inode page, the parsed stack traces as below:
+
+ppid=572 pid=572 D cpu=1 prio=120 wait=378s f2fs_gc-253:12
+    Native callstack:
+	vmlinux  wait_on_page_bit_common(page=0xFFFFFFBF7D2CD700, state=2, 
+lock=false) + 304 
+                                <mm/filemap.c:1035>
+	vmlinux  wait_on_page_bit(page=0xFFFFFFBF7D2CD700, bit_nr=15) + 400 
+ 
+                             <mm/filemap.c:1074>
+	vmlinux  wait_on_page_writeback(page=0xFFFFFFBF7D2CD700) + 36 
+ 
+                             <include/linux/pagemap.h:557>
+	vmlinux  shrink_page_list(page_list=0xFFFFFF8011E83418, 
+pgdat=contig_page_data, sc=0xFFFFFF8011E835B8, ttu_flags=0, 
+stat=0xFFFFFF8011E833F0, force_reclaim=false) + 1576  <mm/vmscan.c:1171>
+	vmlinux  shrink_inactive_list(lruvec=0xFFFFFFE003C304C0, 
+sc=0xFFFFFF8011E835B8, lru=LRU_INACTIVE_FILE) + 700 
+                                          <mm/vmscan.c:1966>
+	vmlinux  shrink_list(lru=LRU_INACTIVE_FILE, lruvec=0xFFFFFF8011E834B8, 
+sc=0xFFFFFF8011E835B8) + 128 
+                            <mm/vmscan.c:2350>
+	vmlinux  shrink_node_memcg(pgdat=contig_page_data, 
+memcg=0xFFFFFFE003C1A300, sc=0xFFFFFF8011E835B8, 
+lru_pages=0xFFFFFF8011E835B0) + 984 
+<mm/vmscan.c:2726>
+	vmlinux  mem_cgroup_shrink_node(memcg=0xFFFFFFE003C1A300, 
+gfp_mask=21102794, noswap=false, pgdat=contig_page_data, 
+nr_scanned=0xFFFFFF8011E836A0) + 320                   <mm/vmscan.c:3416>
+	vmlinux  mem_cgroup_soft_reclaim(root_memcg=0xFFFFFFE003C1A300, 
+pgdat=contig_page_data) + 164 
+                                   <mm/memcontrol.c:1643>
+	vmlinux  mem_cgroup_soft_limit_reclaim(pgdat=contig_page_data, order=0, 
+gfp_mask=21102794, total_scanned=0xFFFFFF8011E83720) + 388 
+                           <mm/memcontrol.c:2913>
+	vmlinux  shrink_zones(zonelist=contig_page_data + 14784, 
+sc=0xFFFFFF8011E83790) + 352 
+                                          <mm/vmscan.c:3094>
+	vmlinux  do_try_to_free_pages(zonelist=contig_page_data + 14784, 
+sc=0xFFFFFF8011E83790) + 512 
+                                  <mm/vmscan.c:3164>
+	vmlinux  try_to_free_pages(zonelist=contig_page_data + 14784, order=0, 
+gfp_mask=21102794, nodemask=0) + 856 
+                            <mm/vmscan.c:3370>
+	vmlinux  __perform_reclaim(gfp_mask=300431548, order=0, 
+ac=0xFFFFFF8011E83900) + 60 
+                                           <mm/page_alloc.c:3831>
+	vmlinux  __alloc_pages_direct_reclaim(gfp_mask=300431548, order=0, 
+alloc_flags=300431604, ac=0xFFFFFF8011E83900) + 60 
+                                <mm/page_alloc.c:3853>
+	vmlinux  __alloc_pages_slowpath(gfp_mask=300431548, order=0, 
+ac=0xFFFFFF8011E83900) + 1244 
+                                      <mm/page_alloc.c:4240>
+	vmlinux  __alloc_pages_nodemask() + 1952 
+ 
+                             <mm/page_alloc.c:4463>
+	vmlinux  __alloc_pages(gfp_mask=21102794, order=0, preferred_nid=0) + 
+16 
+                             <include/linux/gfp.h:515>
+	vmlinux  __alloc_pages_node(nid=0, gfp_mask=21102794, order=0) + 16 
+ 
+                             <include/linux/gfp.h:528>
+	vmlinux  alloc_pages_node(nid=0, gfp_mask=21102794, order=0) + 16 
+ 
+                             <include/linux/gfp.h:542>
+	vmlinux  __page_cache_alloc(gfp=21102794) + 16 
+ 
+                             <include/linux/pagemap.h:226>
+	vmlinux  pagecache_get_page() + 384 
+ 
+                             <mm/filemap.c:1520>
+	vmlinux  find_or_create_page(offset=209) + 112 
+ 
+                             <include/linux/pagemap.h:333>
+	vmlinux  grab_cache_page(index=209) + 112 
+ 
+                             <include/linux/pagemap.h:399>
+	vmlinux  f2fs_grab_cache_page(index=209, for_write=false) + 112 
+ 
+                             <fs/f2fs/f2fs.h:2429>
+	vmlinux  move_data_block(inode=0xFFFFFFDFD578EEA0, gc_type=300432152, 
+segno=21904, off=145) + 3584 
+                             <fs/f2fs/gc.c:1119>
+	vmlinux  gc_data_segment(sbi=0xFFFFFFE007C03000, 
+sum=0xFFFFFF8011E83B10, gc_list=0xFFFFFF8011E83AB8, segno=21904, 
+gc_type=300432152) + 3644                               <fs/f2fs/gc.c:1475>
+	vmlinux  do_garbage_collect(sbi=0xFFFFFFE007C03000, start_segno=21904, 
+gc_list=0xFFFFFF8011E83CF0, gc_type=0) + 4060 
+                            <fs/f2fs/gc.c:1592>
+	vmlinux  f2fs_gc(sbi=0xFFFFFFE007C03000, background=true, 
+segno=4294967295) + 1180 
+                                         <fs/f2fs/gc.c:1684>
+	vmlinux  gc_thread_func(data=0xFFFFFFE007C03000) + 572 
+ 
+                             <fs/f2fs/gc.c:118>
+	vmlinux  kthread() + 376 
+ 
+                             <kernel/kthread.c:232>
+	vmlinux  ret_from_fork() +
+
+Thanks
+yanwu

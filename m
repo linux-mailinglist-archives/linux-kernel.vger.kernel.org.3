@@ -2,141 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6F9501823
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C395017F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346271AbiDNQB3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:01:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59238 "EHLO
+        id S245460AbiDNPw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:52:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359010AbiDNPmd (ORCPT
+        with ESMTP id S1359158AbiDNPmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:42:33 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3963AF211A;
-        Thu, 14 Apr 2022 08:26:01 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bg10so10752416ejb.4;
-        Thu, 14 Apr 2022 08:26:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0EhNSpMEIQGwegy6XwubyizxkyeN0Yst2h+T5pwc7wQ=;
-        b=XSdI9SNB3jBQqpAUl2AkG4FTRNx/rdgEV/ie4LGU/cNA+rGhpI1sdCNLipuVapA0uo
-         JRw6MqoFe3lSaO9LY7dB8t7RMDFS9yyI44MU9veZ8hi9/HgRly2OP7Ax9KVEzxwehmMW
-         42QJpXyApV/qSQDgVxunEy/DsnNErAsOTkMzIW/94gU9eQTpQgaCeZZ9HwHYeAfojxEq
-         2mxP4lSaiteo310zBUdYGqnoFjef3Dt3PglOjgNzV+ajpubTaGw6KdHieGIgtrft6pw9
-         anQwFYnG43K9KulTzEPzYvHoXtYkldZczBhtINTfNMMhY3+RpPZUzpQvCoM0AoDQtVC1
-         bMXA==
+        Thu, 14 Apr 2022 11:42:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 745F413E17
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649950121;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AznoU5JPVUK2tlvR9fU3oFCYDoJwS4fKkDjVBXTU/c0=;
+        b=g1YvuE1bYCZzdqYzohwq6J2i3ib1cMRpydHumQ3JFMSp/9fup+izFZA0/9vAieYJ1QYi8T
+        QHG63GI/R3AmbneYWWEl5BJvnjKJ4lJtjEGqP2hWp4R2uVC1CCme1+AyuZSNnbxlXwKJjO
+        hTzp3nZ8V0l1SWfxpgdZpj+71pFZeSc=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-635-8fR2puYONkOHyLv2sdbGpA-1; Thu, 14 Apr 2022 11:28:40 -0400
+X-MC-Unique: 8fR2puYONkOHyLv2sdbGpA-1
+Received: by mail-io1-f71.google.com with SMTP id z16-20020a05660217d000b006461c7cbee3so3175094iox.21
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:28:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0EhNSpMEIQGwegy6XwubyizxkyeN0Yst2h+T5pwc7wQ=;
-        b=O9dLuhfTGVulnkb8OLtdWp8bGz0YHCYkrw2y4B4AErsNTVeld0dMmY9Jh5u0CqCy39
-         qgbo0sPcaO/AJ/EAP/xM64zQ2qV4HGERSvxQIhEQ75pyBVG9PdmnInN52UpPlNxwiI3z
-         Ram1EY3jE88wzdK74u+KnICj9kGipm5UYih2l9LTuu2MMeuQaTRGbO6pM/bIE8KDH+r/
-         Xy1KzQg9xNSLtHCUVDOnCIfv4BDqWsC0CNSNTe7ys3wYfp9R/S/Dqpbl9nwaBXuNFKQL
-         MMcp9z3Sal2JxNCQFl5wMGIvgP9ds6cX7v9vjE+hsYdIbZ+UTG21U7KHlI006mcYrDxe
-         f4dQ==
-X-Gm-Message-State: AOAM531lm4bE2WGn20VW/BdNYH77OvEmpvTc+g2ocQU4gXZ2psn8/KWQ
-        wU0If+cbQrD44luYmGW4KpCTvXcWL8wloV3F9+g=
-X-Google-Smtp-Source: ABdhPJzje0FYaro4GDs25WGq9DJiciPtbOYkFrF+6xfThZJOs30FaUMCXOrLnhtC+hG05TTiN9HH49esY1mMEsGnvdA=
-X-Received: by 2002:a17:906:1692:b0:6e8:d245:44a9 with SMTP id
- s18-20020a170906169200b006e8d24544a9mr2783204ejd.639.1649949959614; Thu, 14
- Apr 2022 08:25:59 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=AznoU5JPVUK2tlvR9fU3oFCYDoJwS4fKkDjVBXTU/c0=;
+        b=SywEN7P3+ELrcp+V950/tSHvbFWxzPXcRtifS01ZhqSjo6iUkzr/3vPXk5J83j3d7c
+         /0DLgX59UXAPslCHmj4XNHDpODTARQ81j0aSFf9l/6b+M0dRttmDX5Rs+7B1RZ8Jq+js
+         KY8h50UdTCB08ng0haRwZLDAgVg+tzwxbtoadJ7sZzhDqDu1Eh3ifJnkNLyaS8giksdI
+         K3P/zAK3aIpX8/2rHwcGZk9a9KQQxwFYDPsb0hHQenm2SvabBaK62TYNQ2DJkQXeuEOS
+         N6xu43Mv88B6yGLQTBxwxx2qkdpay7ZjrRyyh+QTUM0Lx3OAERzyAaE4asoZbOeavWWG
+         RPiA==
+X-Gm-Message-State: AOAM531bf9y9A9+56XJ2Xx2e5aEwhN16UTUTVgnvk/G2M53cb/8YG+SO
+        yL6VQnhhUNEE+aE1xYbzEl8OlseqsatsHe10JftmUf/8I875Jf2EKXqlFIQIglzz/zhdeuuNmSP
+        7wq7pdgCKR4qasJ1YCBq9GzNHNS6xnAvpj07XnmwUtnSU3R+7rbLtyJ1x2AJhgufoO4pHbDnsEw
+        ==
+X-Received: by 2002:a05:6638:1682:b0:323:6b82:462c with SMTP id f2-20020a056638168200b003236b82462cmr1384472jat.51.1649950119712;
+        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzZ2tFi9fIYu99oZWnzZqpTjI19HE1BJz+91dM4flMSDY5iIH+Wiale8seireyE8OGnYPbpAA==
+X-Received: by 2002:a05:6638:1682:b0:323:6b82:462c with SMTP id f2-20020a056638168200b003236b82462cmr1384458jat.51.1649950119321;
+        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
+Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id y6-20020a056e02174600b002c7f247b3a7sm1308626ill.54.2022.04.14.08.28.38
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, peterx@redhat.com,
+        David Matlack <dmatlack@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: [PATCH v2] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
+Date:   Thu, 14 Apr 2022 11:28:37 -0400
+Message-Id: <20220414152837.83320-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220414025705.598-1-mario.limonciello@amd.com>
-In-Reply-To: <20220414025705.598-1-mario.limonciello@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 14 Apr 2022 18:25:23 +0300
-Message-ID: <CAHp75Vcxw+4mqfkiaDid-n4_n=Bg49UzH8X-12H2MQwEcNXQoA@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Richard.Gong@amd.com, Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 5:57 AM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before
-> initialization") attempted to fix a race condition that lead to a NULL
-> pointer, but in the process caused a regression for _AEI/_EVT declared
-> GPIOs. This manifests in messages showing deferred probing while trying
-> to allocate IRQs like so:
->
-> [    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
-> [    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
-> [    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
-> [    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003E to IRQ, err -517
-> [    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003A to IRQ, err -517
-> [    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003B to IRQ, err -517
-> [    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0002 to IRQ, err -517
-> [    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0011 to IRQ, err -517
-> [    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0012 to IRQ, err -517
-> [    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0007 to IRQ, err -517
->
-> The code for walking _AEI doesn't handle deferred probing and so this leads
-> to non-functional GPIO interrupts.
->
-> Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` to
-> occur after gc->irc.initialized is set.
+Our QE team reported test failure on access_tracking_perf_test:
 
-Good catch, Mario, and thanks for the prompt fix!
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+guest physical test memory offset: 0x3fffbffff000
 
-> Cc: Shreeya Patel <shreeya.patel@collabora.com>
-> Cc: stable@vger.kernel.org
-> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
-> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-> Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/gpio/gpiolib.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 085348e08986..b7694171655c 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->
->         gpiochip_set_irq_hooks(gc);
->
-> -       acpi_gpiochip_request_interrupts(gc);
-> -
->         /*
->          * Using barrier() here to prevent compiler from reordering
->          * gc->irq.initialized before initialization of above
-> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->
->         gc->irq.initialized = true;
->
-> +       acpi_gpiochip_request_interrupts(gc);
-> +
->         return 0;
->  }
->
-> --
-> 2.34.1
->
+Populating memory             : 0.684014577s
+Writing to populated memory   : 0.006230175s
+Reading from populated memory : 0.004557805s
+==== Test Assertion Failure ====
+  lib/kvm_util.c:1411: false
+  pid=125806 tid=125809 errno=4 - Interrupted system call
+     1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
+     2   (inlined by) addr_gpa2hva at kvm_util.c:1405
+     3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
+     4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
+     5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
+     6  0x00007fefe9ff81ce: ?? ??:0
+     7  0x00007fefe9c64d82: ?? ??:0
+  No vm physical memory at 0xffbffff000
 
+I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46 bits
+PA.
 
+It turns out that the address translation for clearing idle page tracking
+returned wrong result, in which addr_gva2gpa()'s last step (upon
+"pte[index[0]].pfn") did the calculation with 40 bits length so the
+overflowed bits got cut off.  In above case the GPA address to be returned
+should be 0x3fffbffff000 for GVA 0xc0000000, but it got cut-off into
+0xffbffff000, then it caused further lookup failure in the gpa2hva mapping.
+
+Fix it by forcing all ->pfn fetching for all layers of pgtables with force
+cast to uint64_t.
+
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ .../selftests/kvm/lib/x86_64/processor.c      | 26 ++++++++++++++-----
+ 1 file changed, 19 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 9f000dfb5594..32832d1f9acb 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -51,6 +51,18 @@ struct pageTableEntry {
+ 	uint64_t execute_disable:1;
+ };
+ 
++/*
++ * Let's always remember to reference PFN within pgtables using this macro.
++ * It's complier's choice to decide whether further calculation upon the
++ * pfn field will also be limited to 40 bits (which is the bit length
++ * defined for .pfn in either pageUpperEntry or pageTableEntry) so the
++ * output could overflow.  For example, gcc version 11.1.1 20210428 will do
++ * the cut-off, while clang version 12.0.1 does not.
++ *
++ * To make it always work, force a cast.
++ */
++#define  __get_pfn(entry)  ((uint64_t)(entry.pfn))
++
+ void regs_dump(FILE *stream, struct kvm_regs *regs,
+ 	       uint8_t indent)
+ {
+@@ -335,7 +347,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
+ 		(rsvd_mask | (1ull << 7))) == 0,
+ 		"Unexpected reserved bits set.");
+ 
+-	pdpe = addr_gpa2hva(vm, pml4e[index[3]].pfn * vm->page_size);
++	pdpe = addr_gpa2hva(vm, __get_pfn(pml4e[index[3]]) * vm->page_size);
+ 	TEST_ASSERT(pdpe[index[2]].present,
+ 		"Expected pdpe to be present for gva: 0x%08lx", vaddr);
+ 	TEST_ASSERT(pdpe[index[2]].page_size == 0,
+@@ -343,7 +355,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
+ 	TEST_ASSERT((*(uint64_t*)(&pdpe[index[2]]) & rsvd_mask) == 0,
+ 		"Unexpected reserved bits set.");
+ 
+-	pde = addr_gpa2hva(vm, pdpe[index[2]].pfn * vm->page_size);
++	pde = addr_gpa2hva(vm, __get_pfn(pdpe[index[2]]) * vm->page_size);
+ 	TEST_ASSERT(pde[index[1]].present,
+ 		"Expected pde to be present for gva: 0x%08lx", vaddr);
+ 	TEST_ASSERT(pde[index[1]].page_size == 0,
+@@ -351,7 +363,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
+ 	TEST_ASSERT((*(uint64_t*)(&pde[index[1]]) & rsvd_mask) == 0,
+ 		"Unexpected reserved bits set.");
+ 
+-	pte = addr_gpa2hva(vm, pde[index[1]].pfn * vm->page_size);
++	pte = addr_gpa2hva(vm, __get_pfn(pde[index[1]]) * vm->page_size);
+ 	TEST_ASSERT(pte[index[0]].present,
+ 		"Expected pte to be present for gva: 0x%08lx", vaddr);
+ 
+@@ -575,19 +587,19 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	if (!pml4e[index[3]].present)
+ 		goto unmapped_gva;
+ 
+-	pdpe = addr_gpa2hva(vm, pml4e[index[3]].pfn * vm->page_size);
++	pdpe = addr_gpa2hva(vm, __get_pfn(pml4e[index[3]]) * vm->page_size);
+ 	if (!pdpe[index[2]].present)
+ 		goto unmapped_gva;
+ 
+-	pde = addr_gpa2hva(vm, pdpe[index[2]].pfn * vm->page_size);
++	pde = addr_gpa2hva(vm, __get_pfn(pdpe[index[2]]) * vm->page_size);
+ 	if (!pde[index[1]].present)
+ 		goto unmapped_gva;
+ 
+-	pte = addr_gpa2hva(vm, pde[index[1]].pfn * vm->page_size);
++	pte = addr_gpa2hva(vm, __get_pfn(pde[index[1]]) * vm->page_size);
+ 	if (!pte[index[0]].present)
+ 		goto unmapped_gva;
+ 
+-	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
++	return (__get_pfn(pte[index[0]]) * vm->page_size) + (gva & 0xfffu);
+ 
+ unmapped_gva:
+ 	TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
 -- 
-With Best Regards,
-Andy Shevchenko
+2.32.0
+

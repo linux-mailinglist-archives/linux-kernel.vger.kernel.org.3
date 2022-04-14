@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D08A501D8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8318C501D8F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343747AbiDNVhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S244456AbiDNVjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:39:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230438AbiDNVhR (ORCPT
+        with ESMTP id S232240AbiDNVjB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:37:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4AC66673F2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:34:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649972089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+y0rTsN9NYq4kk+FFTr/ajEtcI961W4Mxu4oUxgLxck=;
-        b=MbMYpQoFDmF9MBsW2Nh2sFZNR/zrp47NLeSFb0ibMffBijDI2jqGnX0bmEXfuE+6P55nAT
-        xs8McMV9h31BvSYIfO4mF+gVNOzNzK2S72zHDRU+7gFjGpsnSABjUewav/1E7Z4AUEwPTO
-        n9G2LPgV1VxRVbUFKlnsFudeVYzgeaw=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-203-yv0bw-JKOEmuUcxmqaOaMw-1; Thu, 14 Apr 2022 17:34:48 -0400
-X-MC-Unique: yv0bw-JKOEmuUcxmqaOaMw-1
-Received: by mail-il1-f200.google.com with SMTP id i2-20020a056e021d0200b002cac9b3b46cso3759096ila.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:34:48 -0700 (PDT)
+        Thu, 14 Apr 2022 17:39:01 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706F36BDCF
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:36:35 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so6943591pja.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:36:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ZwqsSd8kK//Ty3psSXbHkN/qQik6vo6YZ0uDueArJzs=;
+        b=rSdQRfJjuZsb4h+Fu1jiDnVTCJBmeCSwUBTVNomZ5qdc6nxby4DM9FZTFmV9m1HXGV
+         JZF7Mhn7w+8f0QZ6saI+07Dm6ngeweQYMdPPnGIN5pqUWo++ilejxzQR4CXSJgsdcddH
+         Z8BRvmrPDnhoobFy1t/iI8BLxqs9/dzBFRftvSKticHSkTLhZb4NJvzOlovlfQsk8+xO
+         CcRiG3BScyhOvQjj+AQNKbqqBmU8bmvd8Fqf9NzlERdR/lof59yeFO9LlT2H7kP6JzFF
+         PPXvNuwwEeE56IWQ30Lg7ZTTkcOq8exKo/9AQPn/8VTjlYFGbpwv94/xSM9PxauUho2o
+         YJJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=+y0rTsN9NYq4kk+FFTr/ajEtcI961W4Mxu4oUxgLxck=;
-        b=hd4ofT0CpLZ1CAu7UXFNGe0XZG0eE4DOkW9k4RIOQ6LY9rcVlJzwXU/kU6tYhMrDKW
-         xVwaHb0H9wzT/FY9Vr7EE+43ViGzZ91DYTHPFLBm6CTkDOGjOBuoBk0XhymmfhroCGIa
-         zRkkw5EY+uCFSCRMb0IpcT+wxt2n39Vplo/MqdUJiq9tJzmhbeOBoFFoqAzj81wfz9T0
-         uYlnrPIIBhbzrNZyxRgX5Hsi308J3THfygW/byk5syRIK9G14e5wFBW4+A7nSBoxukrx
-         jc0suaMCP1kIncSQ2NGvWrxgIUyLy7fJjpSvi6+yDJntreyS1ZMy6rpnc8OxX7gx4tb1
-         nKSQ==
-X-Gm-Message-State: AOAM531hFzg6Bx2+eAZcIUTzRqCYEsfYmpf49zu649vaf8baJH7aD881
-        hN5wbeywBOVcBvqtspsp02oHui4tQ3dAB15FFiJhckdlZguEz6ZOwpY+P6HBjNu1F97NQN6ier3
-        vslr8uKgFTYnSS/YriEyU6yIx
-X-Received: by 2002:a05:6638:268a:b0:326:6fab:af6 with SMTP id o10-20020a056638268a00b003266fab0af6mr2056939jat.280.1649972087658;
-        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwsz/H4zEgmUI9w3ohVvbnJW3K1Q3UuNlt8K1nemKc/C6G191ZhUEQeiG0Kzgr3FBEBEPhcSA==
-X-Received: by 2002:a05:6638:268a:b0:326:6fab:af6 with SMTP id o10-20020a056638268a00b003266fab0af6mr2056928jat.280.1649972087404;
-        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id e4-20020a056e020b2400b002ca9ffbb8fesm1825796ilu.72.2022.04.14.14.34.46
+        bh=ZwqsSd8kK//Ty3psSXbHkN/qQik6vo6YZ0uDueArJzs=;
+        b=SNPjwakBhHmz3tsnPWO0I8DppdCYq7uzNArMPzln3Rv0Mp1wGpQJlhL2UsXV1OAqML
+         z7uw1l0LQyA8aHW/A53NwH54hzTGMKpk22mKunf0eK4m7f540nA51AdWU69kh7xSrikf
+         neGwFtrxVmhghkJCgkn0nzb7DQHt3DEBEI68sbYqRoQN5euK3+e7Z6QpVLobHwQ3zmTY
+         HG2AXTyAk6X9PJ5GNzlUDEs7sjBYqI+5Ggez7EKhevim2R1Kf/GHrckrpt0VWhG6odbo
+         VWEcF07VKFAPnQ+EO+h+hW4lZ8X7jNmTcgRuWqj0DbJJm7y/q1Pbl3NI5nbTS94cwl/O
+         N4iA==
+X-Gm-Message-State: AOAM531oq53YcajrLDDqnbSgo+2QlASocv9piz84uHxazuXPN0ifhz8E
+        NHtp101xiCGRowespjW52GBwcQ==
+X-Google-Smtp-Source: ABdhPJxShsm33JtSld9PyGypzrkdDGtOwK8ZlnrDjirccYqaCHu+mWwMwAhczp8ZxD/X+N8l6YvZAQ==
+X-Received: by 2002:a17:903:249:b0:153:857c:a1fe with SMTP id j9-20020a170903024900b00153857ca1femr49062962plh.44.1649972194773;
+        Thu, 14 Apr 2022 14:36:34 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y3-20020a056a00190300b004fa2411bb92sm818081pfi.93.2022.04.14.14.36.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 14:34:47 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 17:34:45 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
+        Thu, 14 Apr 2022 14:36:34 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 21:36:30 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, kvm <kvm@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
         David Matlack <dmatlack@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Subject: Re: [PATCH] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
-Message-ID: <YliTdb1LjfJoIcFc@xz-m1.local>
-References: <20220414010703.72683-1-peterx@redhat.com>
- <Ylgn/Jw+FMIFqqc0@google.com>
- <bf15209d-2c50-9957-af24-c4f428f213b1@redhat.com>
+        Jim Mattson <jmattson@google.com>,
+        David Dunn <daviddunn@google.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH v5 06/10] KVM: selftests: Add NX huge pages test
+Message-ID: <YliT3rWLDDMjjLJN@google.com>
+References: <20220413175944.71705-1-bgardon@google.com>
+ <20220413175944.71705-7-bgardon@google.com>
+ <YldQOJjqLJxRz6Ea@google.com>
+ <CANgfPd-LOxaJSvOhxQQ2MvJauimUHugrKRi0TFxNpq0ShL8rRg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bf15209d-2c50-9957-af24-c4f428f213b1@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANgfPd-LOxaJSvOhxQQ2MvJauimUHugrKRi0TFxNpq0ShL8rRg@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 04:14:22PM +0200, Paolo Bonzini wrote:
-> On 4/14/22 15:56, Sean Christopherson wrote:
-> > > -	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> > > +	return ((vm_paddr_t)pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> > This is but one of many paths that can get burned by pfn being 40 bits.  The
-> > most backport friendly fix is probably to add a pfn=>gpa helper and use that to
-> > place the myriad "pfn * vm->page_size" instances.
-> > 
-> > For a true long term solution, my vote is to do away with the bit field struct
-> > and use #define'd masks and whatnot.
+On Thu, Apr 14, 2022, Ben Gardon wrote:
+> On Wed, Apr 13, 2022 at 3:35 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > diff --git a/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > > new file mode 100755
+> > > index 000000000000..19fc95723fcb
+> > > --- /dev/null
+> > > +++ b/tools/testing/selftests/kvm/x86_64/nx_huge_pages_test.sh
+> > > @@ -0,0 +1,25 @@
+> > > +#!/bin/bash
+> > > +# SPDX-License-Identifier: GPL-2.0-only */
+> > > +
+> > > +# tools/testing/selftests/kvm/nx_huge_page_test.sh
+> > > +# Copyright (C) 2022, Google LLC.
+> >
+> > This should either check for root or use sudo.
 > 
-> Yes, bitfields larger than 32 bits are a mess.
+> Is there not any scenario where the below setup commands could work
+> without root?
 
-It's very interesting to know this..
+Technically, yes, someone could be running the test as a non-root user with
+the necessary permissions.  Practically speaking, I would be surprised if anyone
+configures module params in that way.
 
-I just tried out with <32 bits bitfield and indeed gcc will behave
-differently, by having the calculation done with 32bit (eax) rather than
-64bit (rax).
-
-The question is for >=32 bits it needs an extra masking instruction, while
-that does not exist for the <32bits bitfield.
-
----8<---
-#include <stdio.h>
-
-struct test1 {
-    unsigned long a:${X};
-    unsigned long b:10;
-};
-
-int main(void)
-{
-    struct test1 val;
-    val.a = 0x1234;
-    printf("0x%lx\n", val.a * 16);
-    return 0;
-}
----8<---
-
-When X=20:
-
-0000000000401126 <main>:                                                                      
-  401126:       55                      push   %rbp     
-  401127:       48 89 e5                mov    %rsp,%rbp
-  40112a:       48 83 ec 10             sub    $0x10,%rsp
-  40112e:       8b 45 f8                mov    -0x8(%rbp),%eax
-  401131:       25 00 00 f0 ff          and    $0xfff00000,%eax
-  401136:       0d 34 12 00 00          or     $0x1234,%eax
-  40113b:       89 45 f8                mov    %eax,-0x8(%rbp)
-  40113e:       8b 45 f8                mov    -0x8(%rbp),%eax
-  401141:       25 ff ff 0f 00          and    $0xfffff,%eax
-  401146:       c1 e0 04                shl    $0x4,%eax     <----------- calculation (no further masking)
-  401149:       89 c6                   mov    %eax,%esi
-  40114b:       bf 10 20 40 00          mov    $0x402010,%edi
-  401150:       b8 00 00 00 00          mov    $0x0,%eax
-  401155:       e8 d6 fe ff ff          callq  401030 <printf@plt>
-
-When X=40:
-
-0000000000401126 <main>:                                                                      
-  401126:       55                      push   %rbp                
-  401127:       48 89 e5                mov    %rsp,%rbp                                      
-  40112a:       48 83 ec 10             sub    $0x10,%rsp      
-  40112e:       48 8b 45 f8             mov    -0x8(%rbp),%rax                                
-  401132:       48 ba 00 00 00 00 00    movabs $0xffffff0000000000,%rdx                       
-  401139:       ff ff ff                                                                      
-  40113c:       48 21 d0                and    %rdx,%rax
-  40113f:       48 0d 34 12 00 00       or     $0x1234,%rax
-  401145:       48 89 45 f8             mov    %rax,-0x8(%rbp)
-  401149:       48 b8 ff ff ff ff ff    movabs $0xffffffffff,%rax
-  401150:       00 00 00 
-  401153:       48 23 45 f8             and    -0x8(%rbp),%rax
-  401157:       48 c1 e0 04             shl    $0x4,%rax    <------------ calculation
-  40115b:       48 ba ff ff ff ff ff    movabs $0xffffffffff,%rdx
-  401162:       00 00 00 
-  401165:       48 21 d0                and    %rdx,%rax    <------------ masking (again)
-  401168:       48 89 c6                mov    %rax,%rsi
-  40116b:       bf 10 20 40 00          mov    $0x402010,%edi
-  401170:       b8 00 00 00 00          mov    $0x0,%eax
-  401175:       e8 b6 fe ff ff          callq  401030 <printf@plt>
-
-That feels a bit less consistent to me, comparing to clang where at least
-the behavior keeps the same for whatever length of bits in the bitfields.
-
-Thanks,
-
--- 
-Peter Xu
-
+That said, there's certainly no harm in using sudo as a fall back.

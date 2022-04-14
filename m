@@ -2,189 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAF1C500BAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66718500BBA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:01:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237797AbiDNK7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S241502AbiDNLD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiDNK7W (ORCPT
+        with ESMTP id S238053AbiDNLDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:59:22 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C64775E4B;
-        Thu, 14 Apr 2022 03:56:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A59F21F746;
-        Thu, 14 Apr 2022 10:56:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649933816; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qHwXlFiPhb+8uq3WbY4A9X/xnSchmkHO2lazKJa/1C0=;
-        b=xTC5BJvI3EIrrso3wUf3g1Nr7SOacNh0j7iO37GlzhLh9dS93gEQUQ7+pC7UTv3Yxp9HHo
-        7a95Me/ooKHX3mLKAkBbwlwnRM4Z11xTG3FPMqFZy85xh1nplyN07tFTpohWc1Q3zZHx3G
-        SZ6KliHB8WrlgfICPUQ5iTNTJ5bMMH8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649933816;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=qHwXlFiPhb+8uq3WbY4A9X/xnSchmkHO2lazKJa/1C0=;
-        b=HSr8JiCOgkenIg7wB2Xon9FwkRKUvHaA6puuu4B3JMM3Ug4KlPFkmiOeosnWoqQEzSxbJN
-        ziYtJKRIz8IMNDDw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8533E132C0;
-        Thu, 14 Apr 2022 10:56:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NbhsIPj9V2JxCQAAMHmgww
-        (envelope-from <iivanov@suse.de>); Thu, 14 Apr 2022 10:56:56 +0000
-Date:   Thu, 14 Apr 2022 13:56:56 +0300
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Phil Elwell <phil@raspberrypi.org>,
-        kernel test robot <lkp@intel.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
-Message-ID: <20220414105656.qt52zmr5vjmjdcxc@suse>
-References: <20220404125113.80239-1-iivanov@suse.de>
+        Thu, 14 Apr 2022 07:03:55 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45293AA52
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:01:30 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 21so5905679edv.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:01:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qVPWX0NcwYPADIuSMjN5vY8ZOKBiZLiUPYzVutSubY0=;
+        b=h32dmWUvdgZ9qgpE9bvZg9GQoBPG9oV8SxUqleymdkXJMcHKUmXFdOzXldZFMPB2pf
+         Y9Oj5UqPXfyR7/kXBaVqWOzHVtB3SuAbbOph9QrqCTCSxezSMK3J3I2ucT4V6wke1EDX
+         y2NbwAj2o8bG1cpkC4CN/E7teW9lxYQfsAq3pFHOVQZ6lutESB5218RbTCdh7aSEar8B
+         FBOMg9AQhpbJTdZaKcSZu+M2dx8XDlr6AZH9IJq+UUY/1Odxds0JGJTmc9DexM2yqDtm
+         khh2FUrYQIiWkCngjI9ZNXjW+x/Ma84Sb+OkxNb2QQfYSoQBwvzwPxvhuBVxojTz2SMH
+         sIfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qVPWX0NcwYPADIuSMjN5vY8ZOKBiZLiUPYzVutSubY0=;
+        b=VeY4bi+3T4xsVxapt0+lG5rZ95mpVCAu7PYKcbKy9pejAxkk7GdDAXtTkpN+rbSWge
+         GkdHi/8DenRFq1UOhY74BSWjusFPJR/DvBy6EuKQmgXHGn5IwYsBxWA/N9poy83Qw6st
+         iPepXKlI6gPj6tdw07o9hegsJrB9fZdSkHqgoSzaY+lssF2aOKiQDsEMMJPJ03zy+u8C
+         SE1dvAjm5GNsPjz7sqqmmdn/FeTyV0pMWSisIUMz6RNBAUc8N3N3JggmcCAMW8nIUaU1
+         kF+w3kFIpDDACQfRLjN8FJJXoRTsK174HbH99CV8TGn5fC0cZR2Vts6ncfk+5qL2EK6m
+         KADw==
+X-Gm-Message-State: AOAM533VSKLvdebE3edJXGaeJnO61deayZqzOlwMgV4GrBBEL2QTz0jl
+        w2vZ8peD2O5WEs7Oz20gESSC1Q==
+X-Google-Smtp-Source: ABdhPJwb61LRI992HKv1xOAGxblCmB9FMrhAPcn3lxwB++HcuxKWM56ugynaBRppuJhRse1afygEJA==
+X-Received: by 2002:aa7:d497:0:b0:41d:6fed:9f90 with SMTP id b23-20020aa7d497000000b0041d6fed9f90mr2309569edr.325.1649934089340;
+        Thu, 14 Apr 2022 04:01:29 -0700 (PDT)
+Received: from leoy-ThinkPad-X240s ([104.245.96.34])
+        by smtp.gmail.com with ESMTPSA id ah13-20020a1709069acd00b006e8a0b3e071sm523169ejc.110.2022.04.14.04.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 04:01:28 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 19:01:24 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
+        German Gomez <german.gomez@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
+ event
+Message-ID: <20220414110124.GB598831@leoy-ThinkPad-X240s>
+References: <20220413092317.756022-1-leo.yan@linaro.org>
+ <Yld4fzWWY07ksB+5@kernel.org>
+ <9ad30442-41f8-6e17-cb4a-ab102b3ebd69@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404125113.80239-1-iivanov@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <9ad30442-41f8-6e17-cb4a-ab102b3ebd69@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stefan,
+On Thu, Apr 14, 2022 at 11:29:48AM +0100, James Clark wrote:
+> On 14/04/2022 02:27, Arnaldo Carvalho de Melo wrote:
+> > Em Wed, Apr 13, 2022 at 05:23:17PM +0800, Leo Yan escreveu:
+> >> Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
+> >> is not available") "perf mem report" and "perf report --mem-mode"
+> >> don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
+> >> type.
+> >>
+> >> The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
+> >> partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
+> >> event, this allows the perf data file generated by kernel v5.18-rc1 or
+> >> later version can be reported properly.
+> >>
+> >> On the other hand, perf tool still fails to be backward compatibility
+> >> for a data file recorded by an older version's perf which contains Arm
+> >> SPE trace data.  This patch is a workaround in reporting phase, when
+> >> detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
+> >> force to set the bit in the sample type and give a warning info.
+> >>
+> >> Fixes: bb30acae4c4d ("perf report: Bail out --mem-mode if mem info is not available")
+> >> Signed-off-by: Leo Yan <leo.yan@linaro.org>
+> >> Tested-by: German Gomez <german.gomez@arm.com>
+> >> ---
+> >> v2: Change event name from "arm_spe_" to "arm_spe";
+> >>     Add German's test tag.
+> > 
+> > Tentatively applied, would be great to have James' and Ravi's
+> > Acked-by/Reviewed-by, which I'll add before pushing this out if provided
+> > in time.
+> > 
+> > - Arnaldo
+> >  
+> >>  tools/perf/builtin-report.c | 16 ++++++++++++++++
+> >>  1 file changed, 16 insertions(+)
+> >>
+> >> diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+> >> index 1ad75c7ba074..acb07a4a9b67 100644
+> >> --- a/tools/perf/builtin-report.c
+> >> +++ b/tools/perf/builtin-report.c
+> >> @@ -353,6 +353,7 @@ static int report__setup_sample_type(struct report *rep)
+> >>  	struct perf_session *session = rep->session;
+> >>  	u64 sample_type = evlist__combined_sample_type(session->evlist);
+> >>  	bool is_pipe = perf_data__is_pipe(session->data);
+> >> +	struct evsel *evsel;
+> >>  
+> >>  	if (session->itrace_synth_opts->callchain ||
+> >>  	    session->itrace_synth_opts->add_callchain ||
+> >> @@ -407,6 +408,21 @@ static int report__setup_sample_type(struct report *rep)
+> >>  	}
+> >>  
+> >>  	if (sort__mode == SORT_MODE__MEMORY) {
+> >> +		/*
+> >> +		 * FIXUP: prior to kernel 5.18, Arm SPE missed to set
+> >> +		 * PERF_SAMPLE_DATA_SRC bit in sample type.  For backward
+> >> +		 * compatibility, set the bit if it's an old perf data file.
+> >> +		 */
+> >> +		evlist__for_each_entry(session->evlist, evsel) {
+> >> +			if (strstr(evsel->name, "arm_spe") &&
+> >> +				!(sample_type & PERF_SAMPLE_DATA_SRC)) {
+> >> +				ui__warning("PERF_SAMPLE_DATA_SRC bit is not set "
+> >> +					    "for Arm SPE event.\n");
+> 
+> Looks ok to me. Personally I would remove the warning, otherwise people are going to start
+> thinking that they need to do something about it or something bad has happened.
+> 
+> But because we've fixed it up there shouldn't really need to be a warning or any action.
 
-Please, could you take a look into following patch?
+Understand.  The warning is not bad for developers but it might
+introduce confusion for users, and if we really want to check the sample
+type then we can use 'perf evlist' command, so it's not very useful for
+the warning.
 
-Thanks!
-Ivan
+I will remove the warning and resend a new patch.
 
-On 04-04 15:51, Ivan T. Ivanov wrote:
-> Subject: [PATCH v2] clk: bcm2835: Round UART input clock up
-> Message-Id: <20220404125113.80239-1-iivanov@suse.de>
+> I don't feel too strongly about this though, so I will leave it up to Leo to make the
+> final decision:
 > 
-> The UART clock is initialised to be as close to the requested
-> frequency as possible without exceeding it. Now that there is a
-> clock manager that returns the actual frequencies, an expected
-> 48MHz clock is reported as 47999625. If the requested baudrate
-> == requested clock/16, there is no headroom and the slight
-> reduction in actual clock rate results in failure.
-> 
-> If increasing a clock by less than 0.1% changes it from ..999..
-> to ..000.., round it up.
-> 
-> This is reworked version of a downstream fix:
-> https://github.com/raspberrypi/linux/commit/ab3f1b39537f6d3825b8873006fbe2fc5ff057b7
-> 
-> Cc: Phil Elwell <phil@raspberrypi.org>
-> Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
-> ---
-> Changes since v1
-> Make bcm2835_clock_round() static to fix following warning
-> when compiling for riscv:
-> drivers/clk/bcm/clk-bcm2835.c:997:15: warning: no previous prototype for 'bcm2835_clock_round' [-Wmissing-prototypes]
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
->  drivers/clk/bcm/clk-bcm2835.c | 30 ++++++++++++++++++++++++++++--
->  1 file changed, 28 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/clk/bcm/clk-bcm2835.c b/drivers/clk/bcm/clk-bcm2835.c
-> index 3ad20e75fd23..c29b643d1bf5 100644
-> --- a/drivers/clk/bcm/clk-bcm2835.c
-> +++ b/drivers/clk/bcm/clk-bcm2835.c
-> @@ -502,6 +502,8 @@ struct bcm2835_clock_data {
->  	bool low_jitter;
->  
->  	u32 tcnt_mux;
-> +
-> +	bool round_up;
->  };
->  
->  struct bcm2835_gate_data {
-> @@ -992,12 +994,30 @@ static long bcm2835_clock_rate_from_divisor(struct bcm2835_clock *clock,
->  	return temp;
->  }
->  
-> +static unsigned long bcm2835_clock_round(unsigned long clk)
-> +{
-> +	unsigned long scaler;
-> +
-> +	/*
-> +	 * If increasing a clock by less than 0.1% changes it
-> +	 * from ..999.. to ..000.., round up.
-> +	 */
-> +	scaler = 1;
-> +	while (scaler * 100000 < clk)
-> +		scaler *= 10;
-> +	if ((clk + scaler - 1) / scaler % 1000 == 0)
-> +		clk = (clk / scaler + 1) * scaler;
-> +
-> +	return clk;
-> +}
-> +
->  static unsigned long bcm2835_clock_get_rate(struct clk_hw *hw,
->  					    unsigned long parent_rate)
->  {
->  	struct bcm2835_clock *clock = bcm2835_clock_from_hw(hw);
->  	struct bcm2835_cprman *cprman = clock->cprman;
->  	const struct bcm2835_clock_data *data = clock->data;
-> +	unsigned long rate;
->  	u32 div;
->  
->  	if (data->int_bits == 0 && data->frac_bits == 0)
-> @@ -1005,7 +1025,12 @@ static unsigned long bcm2835_clock_get_rate(struct clk_hw *hw,
->  
->  	div = cprman_read(cprman, data->div_reg);
->  
-> -	return bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-> +	rate = bcm2835_clock_rate_from_divisor(clock, parent_rate, div);
-> +
-> +	if (data->round_up)
-> +		rate = bcm2835_clock_round(rate);
-> +
-> +	return rate;
->  }
->  
->  static void bcm2835_clock_wait_busy(struct bcm2835_clock *clock)
-> @@ -2142,7 +2167,8 @@ static const struct bcm2835_clk_desc clk_desc_array[] = {
->  		.div_reg = CM_UARTDIV,
->  		.int_bits = 10,
->  		.frac_bits = 12,
-> -		.tcnt_mux = 28),
-> +		.tcnt_mux = 28,
-> +		.round_up = true),
->  
->  	/* TV encoder clock.  Only operating frequency is 108Mhz.  */
->  	[BCM2835_CLOCK_VEC]	= REGISTER_PER_CLK(
-> -- 
-> 2.26.2
+> Reviewed-by: James Clark <james.clark@arm.com>
+
+Thanks a lot for reviewing.
+Leo

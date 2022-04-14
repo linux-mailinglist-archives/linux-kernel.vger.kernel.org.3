@@ -2,160 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5886C500814
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:15:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DBD500817
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239483AbiDNISB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
+        id S240476AbiDNIS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbiDNIRq (ORCPT
+        with ESMTP id S239893AbiDNISz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:17:46 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD347398
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:15:21 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CB6C1FF816;
-        Thu, 14 Apr 2022 08:15:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1649924120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nWm9bZunBtm2q1dNTg2vdZaOIRSEGlUFwF3f06as1a8=;
-        b=Jgwn6TbX910FliwV1PHbs5lOv5Ghiyr41L5OupnYamnqmBbGbFvnCVCD2WZB0AHnXJiWhx
-        cHybwrETldtG0BJG6BlqgfP57Ue3CwehdTARFOh777K7sPWnJ7uagMlX14YcBIG/EzOh8C
-        /9c8NuMOHW6xSutXQ87Bou6L2tdk8HE0C1Tb1OlhimWosPi4buyeAkpvywQmHy06eMfGdc
-        p0UKKz0Lk+77VbE4rMWHJdyzsbJVREsOLh5dby4YrMVE+cBvehztPZA3snCVVS3BRxYB85
-        lcq9EVNxhWS1pNFUp54zjxlH+5oWljKw+UQqVZr6R3yXNKlghJuWCfnClkrMHw==
-Date:   Thu, 14 Apr 2022 10:15:17 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     mani@kernel.org, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, konrad.dybcio@somainline.org,
-        quic_srichara@quicinc.com
-Subject: Re: [PATCH] mtd: rawnand: qcom: fix memory corruption that causes
- panic
-Message-ID: <20220414101517.7bbc5e9d@xps13>
-In-Reply-To: <1649914773-22434-1-git-send-email-quic_mdalam@quicinc.com>
-References: <1649914773-22434-1-git-send-email-quic_mdalam@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Thu, 14 Apr 2022 04:18:55 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B14483B7;
+        Thu, 14 Apr 2022 01:16:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=6YMpm44acphdMuRGEx9DBy3vdiDjBzEpIjiQ/MN8cI8=; b=V9L2VcKqDpUCMVFPhIRU+cC5lb
+        oAwHcN+Gl9Km7FecMITzEBk68MACkuskRzc8YFegR19juSR6D5IlIy5TMpvyvvxryCW3ez4S9ohqW
+        LCCE67T+Osu8LzvuSYSKaMbSy7iJByDg7CZ4WXB2mTnx6fIz2AHiV8wXfEoNWuRPB1Fc=;
+Received: from p200300ccff1771001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff17:7100:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1neudp-0001ui-UW; Thu, 14 Apr 2022 10:15:50 +0200
+Date:   Thu, 14 Apr 2022 10:15:48 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        =?UTF-8?B?T25kxZllag==?= Jirman <x@xff.cz>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liang Chen <cl@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 02/16] dt-bindings: display: rockchip: Add EBC
+ binding
+Message-ID: <20220414101548.2b9c3dad@aktux>
+In-Reply-To: <20220413221916.50995-3-samuel@sholland.org>
+References: <20220413221916.50995-1-samuel@sholland.org>
+        <20220413221916.50995-3-samuel@sholland.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Md,
+Hi Samuel,
 
-quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 11:09:33 +0530:
+for comparison, here is my submission for the IMX EPDC bindings:
 
-> This patch fixes a memory corruption that occurred in the
-> nand_scan() path for Hynix nand device.
->=20
-> On boot, for Hynix nand device will panic at a weird place:
-> | Unable to handle kernel NULL pointer dereference at virtual
->   address 00000070
-> | [00000070] *pgd=3D00000000
-> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-> | Modules linked in:
-> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
->   #38
-> | Hardware name: Generic DT based system
-> | PC is at nandc_set_reg+0x8/0x1c
-> | LR is at qcom_nandc_command+0x20c/0x5d0
-> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
-> | r10: 000000a3  r9 : 00000000  r8 : 00000040
-> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-> | Control: 10c5387d  Table: 8020406a  DAC: 00000051
-> | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
->   64 size 2048
-> | Process swapper/0 (pid: 1, stack limit =3D 0x(ptrval))
-> | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
-> | qcom_nandc_command from nand_readid_op+0x198/0x1e8
-> | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
-> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-> | qcom_nandc_probe from platform_probe+0x58/0xac
->=20
-> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
-> is updating the nandc->max_cwperpage from 1 to 4.This causes the
-> sg_init_table of clear_bam_transaction() in the driver's
-> qcom_nandc_command() to memset much more than what was initially
-> allocated by alloc_bam_transaction().
+https://lore.kernel.org/linux-devicetree/20220206080016.796556-2-andreas@kemnade.info/
 
-Thanks for investigating!
+On Wed, 13 Apr 2022 17:19:02 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
-> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
-> returns, and remove updating nandc->max_cwperpage from
-> qcom_nand_attach_chip call back.
+[...]
+we have sy7636a driver in kernel which should be suitable for powering a EPD
+and temperature measurement. So I would expect that to be 
+> +  io-channels:
+> +    maxItems: 1
+> +    description: I/O channel for panel temperature measurement
+> +
+so how would I reference the hwmon/thermal(-zone) of the sy7636a here?
 
-The fix does not look right, as far as I understand, this should be
-properly handled during the attach phase. That is where we have all
-information about the chip and do the configuration for this chip.
+> +  panel-supply:
+> +    description: Regulator supplying the panel's logic voltage
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  vcom-supply:
+> +    description: Regulator supplying the panel's compensation voltage
+> +
+> +  vdrive-supply:
+> +    description: Regulator supplying the panel's gate and source drivers
+> +
+SY7636a has only one logical regulator in kernel for for the latter two.
 
-If you update max_cwperpage there you should probably update other
-internal variables that depend on it as well.
+If we have a separate panel node, than maybe these regulators should go
+there as they belong to the panel as they are powering the panel and
+not the EBC.
 
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> ---
->  drivers/mtd/nand/raw/qcom_nandc.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
-m_nandc.c
-> index 1a77542..aa3ec45 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -2652,9 +2652,6 @@ static int qcom_nand_attach_chip(struct nand_chip *=
-chip)
-> =20
->  	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
-> =20
-> -	nandc->max_cwperpage =3D max_t(unsigned int, nandc->max_cwperpage,
-> -				     cwperpage);
-> -
->  	/*
->  	 * DATA_UD_BYTES varies based on whether the read/write command protects
->  	 * spare data with ECC too. We protect spare data by default, so we set
-> @@ -2909,7 +2906,7 @@ static int qcom_nand_host_init_and_register(struct =
-qcom_nand_controller *nandc,
->  	struct nand_chip *chip =3D &host->chip;
->  	struct mtd_info *mtd =3D nand_to_mtd(chip);
->  	struct device *dev =3D nandc->dev;
-> -	int ret;
-> +	int ret, cwperpage;
-> =20
->  	ret =3D of_property_read_u32(dn, "reg", &host->cs);
->  	if (ret) {
-> @@ -2955,6 +2952,9 @@ static int qcom_nand_host_init_and_register(struct =
-qcom_nand_controller *nandc,
->  	if (ret)
->  		return ret;
-> =20
-> +	cwperpage =3D mtd->writesize / NANDC_STEP_SIZE;
-> +	nandc->max_cwperpage =3D max_t(unsigned int, nandc->max_cwperpage,
-> +				     cwperpage);
->  	if (nandc->props->is_bam) {
->  		free_bam_transaction(nandc);
->  		nandc->bam_txn =3D alloc_bam_transaction(nandc);
+> +  port:
+> +    $ref: /schemas/graph.yaml#/properties/port
+> +    description: OF graph port for the attached display panel
+> +
+In my approach for the IMX EPDC, (I will send a better commented one
+soon) I have no separate subnode to avoid messing with additional
+display parameters. Not sure what is really better here.
 
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - resets
+> +  - reset-names
+> +  - power-domains
+> +  - panel-supply
+> +  - vcom-supply
+> +  - vdrive-supply
 
-Thanks,
-Miqu=C3=A8l
+If things differ how the different phyiscally existing regulators are
+mapped into logical ones (even the vdrive supply is still a bunch of
+physical regulators mapped into one logical one), then not everything
+can be required.
+
+Regards,
+Andreas

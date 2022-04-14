@@ -2,52 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45F2250099E
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:22:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0665009A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241669AbiDNJYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:24:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50850 "EHLO
+        id S241677AbiDNJYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241659AbiDNJYT (ORCPT
+        with ESMTP id S241659AbiDNJYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:24:19 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC6D50458
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:21:54 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Thu, 14 Apr 2022 05:24:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 753B06D969;
+        Thu, 14 Apr 2022 02:22:11 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 2791C21618;
+        Thu, 14 Apr 2022 09:22:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1649928130; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1D0VEhOpVvUmapzR3MOMggwweTNTJqKNVFz59K58euw=;
+        b=Fc5126Ix3T8l7GhJ495UyQ46krwecnUqZ2gqPLTw6f7uk+933AEdhUBvTRN5DrSORyhl6d
+        NNW2+NeTOHDio6DwIXpZSUdZq+/po8m2umLkwn5Ow/aYg0E0D14NDfjYVhvrQ4x/TfCpbD
+        4sVfOUOONiurkdlZQ7g9x9dYAIRBG6E=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1649928130;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1D0VEhOpVvUmapzR3MOMggwweTNTJqKNVFz59K58euw=;
+        b=cHV902LwJcurrTx8Awd5+FcD/np+OCj1UNRnG54ofTi5Kqii3XZblc/tjMSKzZTi9wCk0E
+        i9yMNiAzOppJ4UDg==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 1719C2223A;
-        Thu, 14 Apr 2022 11:21:53 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1649928113;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AuHb8XTtomchg7Wt1V7cWuPTosd89yhrLtbFPGpuEFM=;
-        b=iNm9G2cOC5ItU4EwMF4hlS6D+qlTkw1IuOESG7ITyrYAJE50h5DrFeiIIBGQNN6kuM5Dmv
-        y+vvnsZzYPrnAIq0Sp8T/Rxfy0ZzGnNigU8v+huiowMW8cDnL+FpCJGFNG4h/qsHCd13fo
-        KWKUIgmhNrYPxHs3wdOHT2B6xI8bW+E=
+        by relay2.suse.de (Postfix) with ESMTPS id BA67BA3B88;
+        Thu, 14 Apr 2022 09:22:09 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 4B353A061E; Thu, 14 Apr 2022 11:22:09 +0200 (CEST)
+Date:   Thu, 14 Apr 2022 11:22:09 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Ye Bin <yebin10@huawei.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jack@suse.cz, lczerner@redhat.com
+Subject: Re: [PATCH -next] ext4: fix use-after-free in ext4_rename_dir_prepare
+Message-ID: <20220414092209.adqzw4grph3fkjdr@quack3>
+References: <20220414025223.4113128-1-yebin10@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-Date:   Thu, 14 Apr 2022 11:21:52 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>
-Cc:     p.yadav@ti.com, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, nicolas.ferre@microchip.com
-Subject: Re: [PATCH v3 3/3] mtd: spi-nor: Favor the BFPT-parsed
- set_4byte_addr_mode method
-In-Reply-To: <20220411125346.118274-4-tudor.ambarus@microchip.com>
-References: <20220411125346.118274-1-tudor.ambarus@microchip.com>
- <20220411125346.118274-4-tudor.ambarus@microchip.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <a6519a1ce39534c35760334cd69396b3@walle.cc>
-X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414025223.4113128-1-yebin10@huawei.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -58,132 +64,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-11 14:53, schrieb Tudor Ambarus:
-> JESD216 SFDP defines in the BFPT standard methods to enter and exit the
-> 4-Byte Address Mode. The flash parameters and settings that are 
-> retrieved
-> from SFDP have higher precedence than the static initialized ones, 
-> because
-> they should be more accurate and less error prone than those 
-> initialized
-> statically. Favor the BFPT-parsed set_4byte_addr_mode method and use 
-> the
-> generic core methods where possible.
-> This patch may introduce regressions in case BFPT contains wrong data. 
-> The
-> fix is to introduce a post_bfpt() fixup hook and update the wrong BFPT
-> data.
+On Thu 14-04-22 10:52:23, Ye Bin wrote:
+> We got issue as follows:
+> EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
+> ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
+> ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
+> ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
+> ==================================================================
+> BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
+> Read of size 4 at addr ffff88810beee6ae by task rep/1895
 > 
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@microchip.com>
-> Reviewed-by: Pratyush Yadav <p.yadav@ti.com>
-> ---
-> v3: no changes
+> CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
+> Call Trace:
+>  dump_stack+0xbe/0xf9
+>  print_address_description.constprop.0+0x1e/0x220
+>  kasan_report.cold+0x37/0x7f
+>  ext4_rename_dir_prepare+0x152/0x220
+>  ext4_rename+0xf44/0x1ad0
+>  ext4_rename2+0x11c/0x170
+>  vfs_rename+0xa84/0x1440
+>  do_renameat2+0x683/0x8f0
+>  __x64_sys_renameat+0x53/0x60
+>  do_syscall_64+0x33/0x40
+>  entry_SYSCALL_64_after_hwframe+0x44/0xa9
+> RIP: 0033:0x7f45a6fc41c9
+> RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
+> RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
+> RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
+> RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
+> R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
+> R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
 > 
->  drivers/mtd/spi-nor/core.c      |  7 ++++++-
->  drivers/mtd/spi-nor/macronix.c  | 10 ++++++++--
->  drivers/mtd/spi-nor/micron-st.c |  9 ++++++---
->  3 files changed, 20 insertions(+), 6 deletions(-)
+> The buggy address belongs to the page:
+> page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
+> flags: 0x200000000000000()
+> raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
+> raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
+> page dumped because: kasan: bad access detected
 > 
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 4d45cda4f9d3..888516d98884 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2416,6 +2416,8 @@ static void spi_nor_init_fixup_flags(struct 
-> spi_nor *nor)
->   */
->  static void spi_nor_late_init_params(struct spi_nor *nor)
->  {
-> +	struct spi_nor_flash_parameter *params = nor->params;
+> Memory state around the buggy address:
+>  ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> >ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>                                   ^
+>  ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>  ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+> ==================================================================
+> Disabling lock debugging due to kernel taint
+> ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
+> ext4_rename_dir_prepare: [3] dir=0xffff888124170140
+> ext4_rename_dir_prepare: [4] ino=2
+> ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
+> 
+> Reason is first directory entry which 'rec_len' is 34478, then will get illegal
+> parent entry. Now, we do not check directory entry after read directory block
+> in 'ext4_get_first_dir_block'.
+> To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
+> 
+> Signed-off-by: Ye Bin <yebin10@huawei.com>
+
+Looks good to me. Feel free to add:
+
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
+> index e37da8d5cd0c..2f78544b1d47 100644
+> --- a/fs/ext4/namei.c
+> +++ b/fs/ext4/namei.c
+> @@ -3455,6 +3455,9 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
+>  	struct buffer_head *bh;
+>  
+>  	if (!ext4_has_inline_data(inode)) {
+> +		struct ext4_dir_entry_2 *de;
+> +		unsigned int offset;
 > +
->  	if (nor->manufacturer && nor->manufacturer->fixups &&
->  	    nor->manufacturer->fixups->late_init)
->  		nor->manufacturer->fixups->late_init(nor);
-> @@ -2423,6 +2425,10 @@ static void spi_nor_late_init_params(struct 
-> spi_nor *nor)
->  	if (nor->info->fixups && nor->info->fixups->late_init)
->  		nor->info->fixups->late_init(nor);
-> 
-> +	/* Default method kept for backward compatibility. */
-> +	if (!params->set_4byte_addr_mode)
-> +		params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
-
-Can this be moved past..
-
+>  		/* The first directory block must not be a hole, so
+>  		 * treat it as DIRENT_HTREE
+>  		 */
+> @@ -3463,9 +3466,28 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
+>  			*retval = PTR_ERR(bh);
+>  			return NULL;
+>  		}
+> -		*parent_de = ext4_next_entry(
+> -					(struct ext4_dir_entry_2 *)bh->b_data,
+> -					inode->i_sb->s_blocksize);
 > +
->  	spi_nor_init_flags(nor);
->  	spi_nor_init_fixup_flags(nor);
-
-.. these two lines, so it is next to the "set default
-locking ops"?
-
-> 
-> @@ -2490,7 +2496,6 @@ static void spi_nor_init_default_params(struct
-> spi_nor *nor)
->  	struct device_node *np = spi_nor_get_flash_node(nor);
-> 
->  	params->quad_enable = spi_nor_sr2_bit1_quad_enable;
-> -	params->set_4byte_addr_mode = spi_nor_set_4byte_addr_mode_brwr;
->  	params->otp.org = &info->otp_org;
-> 
->  	/* Default to 16-bit Write Status (01h) Command */
-> diff --git a/drivers/mtd/spi-nor/macronix.c 
-> b/drivers/mtd/spi-nor/macronix.c
-> index 85e8655d362c..c267cbcc7f1d 100644
-> --- a/drivers/mtd/spi-nor/macronix.c
-> +++ b/drivers/mtd/spi-nor/macronix.c
-> @@ -105,12 +105,18 @@ static const struct flash_info 
-> macronix_nor_parts[] = {
->  static void macronix_nor_default_init(struct spi_nor *nor)
->  {
->  	nor->params->quad_enable = spi_nor_sr1_bit6_quad_enable;
-> -	nor->params->set_4byte_addr_mode =
-> -		spi_nor_set_4byte_addr_mode_en4b_ex4b;
-> +}
+> +		de = (struct ext4_dir_entry_2 *) bh->b_data;
+> +		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
+> +					 bh->b_size, 0) ||
+> +		    le32_to_cpu(de->inode) != inode->i_ino ||
+> +		    strcmp(".", de->name)) {
+> +			ext4_warning_inode(inode, "directory missing '.'");
+> +			brelse(bh);
+> +			return NULL;
+> +		}
+> +		offset = ext4_rec_len_from_disk(de->rec_len,
+> +						inode->i_sb->s_blocksize);
+> +		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
+> +		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
+> +					 bh->b_size, offset) ||
+> +		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
+> +			ext4_warning_inode(inode, "directory missing '..'");
+> +			brelse(bh);
+> +			return NULL;
+> +		}
+> +		*parent_de = de;
 > +
-> +static void macronix_nor_late_init(struct spi_nor *nor)
-> +{
-> +	if (!nor->params->set_4byte_addr_mode)
-> +		nor->params->set_4byte_addr_mode =
-> +			spi_nor_set_4byte_addr_mode_en4b_ex4b;
-
-This is more of a general question. Can we have this in one
-line? IMHO this looks awful and since linux nowadays relaxed the
-80 chars rule a bit and we have such long names.. I think it makes
-sense to allow some lines to be longer than 80 chars.
-
->  }
+>  		return bh;
+>  	}
+>  
+> -- 
+> 2.31.1
 > 
->  static const struct spi_nor_fixups macronix_nor_fixups = {
->  	.default_init = macronix_nor_default_init,
-> +	.late_init = macronix_nor_late_init,
->  };
-> 
->  const struct spi_nor_manufacturer spi_nor_macronix = {
-> diff --git a/drivers/mtd/spi-nor/micron-st.c 
-> b/drivers/mtd/spi-nor/micron-st.c
-> index 2d1cbb1f37c8..9e9b107f2018 100644
-> --- a/drivers/mtd/spi-nor/micron-st.c
-> +++ b/drivers/mtd/spi-nor/micron-st.c
-> @@ -414,14 +414,17 @@ static void micron_st_nor_default_init(struct
-> spi_nor *nor)
->  	nor->flags |= SNOR_F_HAS_LOCK;
->  	nor->flags &= ~SNOR_F_HAS_16BIT_SR;
->  	nor->params->quad_enable = NULL;
-> -	nor->params->set_4byte_addr_mode =
-> -		spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
->  }
-> 
->  static void micron_st_nor_late_init(struct spi_nor *nor)
->  {
-> +	struct spi_nor_flash_parameter *params = nor->params;
-> +
->  	if (nor->info->mfr_flags & USE_FSR)
-> -		nor->params->ready = micron_st_nor_ready;
-> +		params->ready = micron_st_nor_ready;
-> +	if (!params->set_4byte_addr_mode)
-> +		params->set_4byte_addr_mode =
-> +			spi_nor_set_4byte_addr_mode_wren_en4b_ex4b;
-
-same here.
-
--michael
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

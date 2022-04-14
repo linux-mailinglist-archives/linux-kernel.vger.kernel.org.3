@@ -2,99 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFE5500691
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:07:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD77500693
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 09:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240228AbiDNHJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 03:09:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
+        id S240242AbiDNHKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 03:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240219AbiDNHJp (ORCPT
+        with ESMTP id S240232AbiDNHJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 03:09:45 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B7CF2E9C9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:07:20 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id c6so5153902edn.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 00:07:20 -0700 (PDT)
+        Thu, 14 Apr 2022 03:09:56 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 685A353E06;
+        Thu, 14 Apr 2022 00:07:32 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id p15so8263386ejc.7;
+        Thu, 14 Apr 2022 00:07:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=N59VpskwVzxKvrwhY6+QNdNZxdpuBQRHq8FPB+3/fNY=;
-        b=V1rTg1vM2pH5UT/dmwyv12wBruW0s5c72LNfIVSnl31+6Daq5+wA1Wfcx7PTEsK8/E
-         jEhpU7fQw2TV8ov0/70msTwUsCz++T6sxGF+AJ+S3K1x1dwX0WIoEj98YeUgldpEhPJ4
-         8ipRFssbu1ExGGEdIriOaks65x1NrDVea64Itvx6YYRky2JydYFXRCidvgIvj1HqZ0sE
-         okIAQHdvzLZx2uynd7ea0Rzufe12K7Kx+AFpDK/cbCrIng/FjpfnCPH5hC5E3WtGaArU
-         6uhdaUZFgDdzne239bw57hT8MXslYXF06PDPNQgFP8PY9mgAbZSQVtD+k+9Y8gq/J1YT
-         tAbQ==
+        d=gmail.com; s=20210112;
+        h=message-id:subject:from:to:cc:date:in-reply-to:references
+         :user-agent:mime-version:content-transfer-encoding;
+        bh=oqwnBa3vRK8c7PWrMJXfLYeX+P589KiwcMk0Kfia4mA=;
+        b=Qc9E+wfQBU77wff9QdMJNpl1nbiuPHN4F3Tp+X2wNcFaNgeeepIJiX2qPGwOp7oyZL
+         B+2DJnGUjMdjqTO0wOENN9ShyxDU2usArOX9UTFZDGrNyNACPQcaNsEkdcn9RttdFG5S
+         pHbHUzgtRFH9IrYdt26x2B57aNUWLOgFXhtycGubpXKFhGp4iyk462xtIRQSeOHumUK1
+         hiLTHvnyNFwyU4k+opM2Ht6bRwaXJrk+OGPn3z8YGy7xYw6+U9tZbGQ+8+Onc37Bhxti
+         6QisIl6d8mZgwVBgSgO1tvZsloUmjQTEsgBjzGSVqQQN130s6qag7kSLKpa0CbSF55JB
+         rDVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=N59VpskwVzxKvrwhY6+QNdNZxdpuBQRHq8FPB+3/fNY=;
-        b=7x+nw4WjZH6dLAS5WOQjvU27Ybos+dPj4/CRhYBTB3ZQc0vcdseAP22nq5UFoh5dVR
-         AeavaxZJ34Kwac4Ro28oO5gaEUUFazONeEwGKqBGVOUko61pkNF4VDKZUDoJ7VnWi9cZ
-         kIjlDQ2H4Fzrwiye7rIve5tII47izOM1kM3R16UtQL+F6B3B/vBLEeQxclSAzQ70gNdF
-         sniWwFKoOc2Snte0Cmu808V9dOIRJ5mjglJ4raIt98u8ZaCnVVxhAcMjR73X6YxMO24/
-         Anm8fRNz1p8W6fhJlck2iz0vvIBq4fQvYL2oQQwkT72xecXWJ0bfIfwQXuDPe1g4zyTW
-         Gz1w==
-X-Gm-Message-State: AOAM531n4wjbnFZvAtlVCoUiNmr9rj7FPzZOOhr3PHN0g7khcnCLHqlM
-        SpTd6ijL9vH/y/SRc1JzcLEPWA==
-X-Google-Smtp-Source: ABdhPJzInxt/pldRqvrXl3OI1n1SZfZ22+rbQStVtA37uKDx5GjqIyzOwuCsVR6yIHoUVd75Lfl5uQ==
-X-Received: by 2002:aa7:cac8:0:b0:410:cc6c:6512 with SMTP id l8-20020aa7cac8000000b00410cc6c6512mr1462205edt.408.1649920038730;
-        Thu, 14 Apr 2022 00:07:18 -0700 (PDT)
-Received: from [192.168.0.209] (xdsl-188-155-201-27.adslplus.ch. [188.155.201.27])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170906774300b006e79ea98369sm349759ejn.151.2022.04.14.00.07.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 00:07:18 -0700 (PDT)
-Message-ID: <b7718ca1-c502-67a1-993c-460a6c55cc5e@linaro.org>
-Date:   Thu, 14 Apr 2022 09:07:16 +0200
+        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
+         :references:user-agent:mime-version:content-transfer-encoding;
+        bh=oqwnBa3vRK8c7PWrMJXfLYeX+P589KiwcMk0Kfia4mA=;
+        b=7nbRKk/Nqa8n+jzsWdTxXXxOQE8VDkpEhIXimwFubgy8T/p1q5yjo22mg5EBz7SFlJ
+         NRTHVQRi3cupzLkAUQ/78TLDyJoyZkR8rZ7mprFKZk4blZefQe582phkzJyPYVUQ7dew
+         EipR2J6f10utf56eImHPC/sOPQIhBT4j+USbAFctf2ogri0sMwl+FQvOjSDTQZf2Vjb5
+         lyVG++Fa5MH7comi4Y7ubtW0EzGHiEjCSHg0xDspGcmCjyUEV9UOIJ/EoQV/eP5QxPow
+         BMBe7wbM6RMnxznvE94NoJuQNQ0t2WxyL31/SKM449hhl7ciEzv61yJ4b6x9vhjfdhYV
+         DB4A==
+X-Gm-Message-State: AOAM532UiLO3tj4EHTXSNPwEzSoj0ybIrcINK/YuVRnoVQhFN2X730qs
+        OMvRYXhwJEWjQQVs9lXFOME=
+X-Google-Smtp-Source: ABdhPJy9iBPa3gYce292bgP1ajNTxKBPZO03zfLAllYQv/BAhGL7Pb3FTNcFsG9XN8UgBHiQMNlAkg==
+X-Received: by 2002:a17:907:2d90:b0:6e8:720c:d8e1 with SMTP id gt16-20020a1709072d9000b006e8720cd8e1mr1152183ejc.514.1649920050834;
+        Thu, 14 Apr 2022 00:07:30 -0700 (PDT)
+Received: from ?IPv6:2001:a61:2b2c:c401:dd5:7d95:7a65:6518? ([2001:a61:2b2c:c401:dd5:7d95:7a65:6518])
+        by smtp.gmail.com with ESMTPSA id g23-20020a170906199700b006e874c0f5eesm345987ejd.198.2022.04.14.00.07.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 00:07:30 -0700 (PDT)
+Message-ID: <03fa4823b820b3eb2499a002a7570e79641b4a78.camel@gmail.com>
+Subject: Re: [PATCH v1 3/3] iio: imu: adis16480: Fix getting the optional
+ clocks
+From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        "Sa, Nuno" <Nuno.Sa@analog.com>
+Cc:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Date:   Thu, 14 Apr 2022 09:07:29 +0200
+In-Reply-To: <YlcBMGkdmGTq/mnr@smile.fi.intel.com>
+References: <20220413144124.72537-1-andriy.shevchenko@linux.intel.com>
+         <20220413144124.72537-3-andriy.shevchenko@linux.intel.com>
+         <PH0PR03MB67865D24BB7546CAF805D7BE99EC9@PH0PR03MB6786.namprd03.prod.outlook.com>
+         <YlcBMGkdmGTq/mnr@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 4/4] dt-bindings: soc: qcom,rpmh-rsc: convert to dtschema
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vamsi krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220411085935.130072-1-krzysztof.kozlowski@linaro.org>
- <20220411085935.130072-4-krzysztof.kozlowski@linaro.org>
- <Yldyccqaqgcj/Kvc@robh.at.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Yldyccqaqgcj/Kvc@robh.at.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/04/2022 03:01, Rob Herring wrote:
->> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
->> new file mode 100644
->> index 000000000000..f5ecf4a8c377
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,rpmh-rsc.yaml
->> @@ -0,0 +1,272 @@
->> +# SPDX-License-Identifier: GPL-2.0-only
+On Wed, 2022-04-13 at 19:58 +0300, Andy Shevchenko wrote:
+> On Wed, Apr 13, 2022 at 03:38:47PM +0000, Sa, Nuno wrote:
+> > > From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > > Sent: Wednesday, April 13, 2022 4:41 PM
 > 
-> Surely this file was all QCom or QCom LT authors and can be dual 
-> licensed. After all, it was QCom that complained to me about GPL only 
-> DT licensing...
+> > > The extended clocks are optional and may not be present for some
+> > > SoCs
+> > > supported by this driver. Nevertheless, in case the clock is
+> > > provided
+> > > but some error happens during its getting, that error should be
+> > > handled
+> > > properly. Use devm_clk_get_optional() API for that. Also report
+> > > possible
+> > > errors using dev_err_probe() to handle properly -EPROBE_DEFER
+> > > error.
+> 
+> > This is a nice cleanup patch... But the subject might be a bit
+> > misleading as it says "Fix". So I would expect a Fixes tag which
+> > I'm not sure it's really worth it here. Yes, the code was pretty
+> > much
+> > doing clk_get_optional() "by hand" but I think it was still
+> > functional.
+> > So to me, this is more an improvement rather than a fix...
+> 
+> Actually it is a fix, but not critical since no-one complains aloud
+> so far.
+> The problematic part is logs exhausting if repetitive deferred probe
+> happens.
+> 
 
-I'll work on this.
+Still not really agree with it... In the commit message you state that
+errors are not properly handled and so let's use
+'devm_clk_get_optional()'. I don't think that is true because If im not
+missing nothing there's no fundamental change between the previous code
+and using 'devm_clk_get_optional()'. So to me this is an enhancement
+because we were doing something "by hand" when we have an API for it.
 
-Best regards,
-Krzysztof
+That said, introducing dev_err_probe() indeed stops possibly annoying
+error messages for EPROBE_DEFER (and that could be seen as a fix, not
+really devm_clk_get_optional()). I honestly still don't see it as fix
+but we are also not adding a Fixes tag so I don't really care :).
+
+(But I still think the commit message is a bit misleading)
+
+- Nuno Sá
+> 
+> 
+

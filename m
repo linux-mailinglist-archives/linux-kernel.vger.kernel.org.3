@@ -2,252 +2,633 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6FC500820
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:19:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BAA4500827
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240491AbiDNIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58338 "EHLO
+        id S240742AbiDNIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233330AbiDNIVT (ORCPT
+        with ESMTP id S239844AbiDNIVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:21:19 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BAF53E32;
-        Thu, 14 Apr 2022 01:18:54 -0700 (PDT)
-X-UUID: 459a53c71c984665960a7f6183dc996d-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:e81c5580-aadf-4766-a885-d550ae18b7f9,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:45
-X-CID-INFO: VERSION:1.1.4,REQID:e81c5580-aadf-4766-a885-d550ae18b7f9,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:45
-X-CID-META: VersionHash:faefae9,CLOUDID:56345d78-0afa-4dca-bdec-ca54c998425a,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 459a53c71c984665960a7f6183dc996d-20220414
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 287361542; Thu, 14 Apr 2022 16:18:48 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Thu, 14 Apr 2022 16:18:47 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
- 2022 16:18:46 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 16:18:46 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <alice.chao@mediatek.com>
-CC:     <Chaotian.Jing@mediatek.com>, <Chun-hung.Wu@mediatek.com>,
-        <Lin.Gui@mediatek.com>, <Powen.Kao@mediatek.com>,
-        <Qilin.Tan@mediatek.com>, <Yanxu.Wei@mediatek.com>,
-        <cc.chou@mediatek.com>, <jejb@linux.ibm.com>,
-        <jiajie.hao@mediatek.com>, <jonathan.hsu@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
-        <miles.chen@mediatek.com>, <peter.wang@mediatek.com>,
-        <stanley.chu@mediatek.com>, <wsd_upstream@mediatek.com>
-Subject: Re: [PATCH v2 1/1] scsi: Fix racing between dev init and dev reset
-Date:   Thu, 14 Apr 2022 16:18:46 +0800
-Message-ID: <20220414081846.31356-1-miles.chen@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <7ad2e7fc39ce0d2b145f651d530d157c67c04f29.camel@mediatek.com>
-References: <7ad2e7fc39ce0d2b145f651d530d157c67c04f29.camel@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 04:21:55 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A5B6113F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:19:24 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id y6so4073842plg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=huaqin-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id;
+        bh=l2HtqDOHyMA7c7JTusOknpjvo1wbyGLOWNaw23q4LBM=;
+        b=H3FGU0WYrmzlJwgI0DTziTrj4GNE9nEWBDN8duhGTGdTa/ioZYqfcm0yr3NZlP64yh
+         vkaLWScqQm53pOV6+tO5uZLZhbnkOwvr/qUtpoZK6DYGXijR0bbCtutb45i0EfSBjAHT
+         Z6WLhm6llzyRHxjHuPeoqQZxMg4UgXDfyfELQX5fwI8J3HForxi5EPyrmY9LgPAI1ftw
+         R7Q6m7pe5XC3XfSqBNAg3G2FAEvPbssmkLpZ+dZDVlyA8NfFPh1/xYiIEORJLDKzQT15
+         YcL0URz/fZFH8L0phuWPTxEGqEOBzrf+yA0JUGSA397nd6nfTFg7oWHzqOl13FoQydCD
+         ok7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id;
+        bh=l2HtqDOHyMA7c7JTusOknpjvo1wbyGLOWNaw23q4LBM=;
+        b=W6qzIgxXMwnSKG50r736uygkPwd4yuV3K0GJ8AO0BpfWIxBsuxDbsu2mALRr6U7+M2
+         offHljEZDMK2/AJ3JnFEGtzmzgK0pzKNt2kdHLd/lBJuuNvFabPa7jLJ0egGZ+u0Rtyn
+         9Qi41ldPzqjbDLT58rPfgg8wQd98akwnbB0GkUJ8yLqX0hce0CbFuw5WvRIUyALSNWYn
+         b61ankYPKwFzjy8oxZJ4q57q9ysL6qmgTVGvumSwkCt5n7HDeQIY6B7WlYOkDSBk40Mj
+         267jQl8ydIcHHvM91rLW2CCJxYQzyPa2UrlmW4BGj+cg6w/7BU5qG1pF9bDVUxioI9K7
+         hCew==
+X-Gm-Message-State: AOAM533Cpg0LcZezhyN2IZUPTpNhDGBqSEU/QfCHrp15TCCgblIQ++uq
+        ogjj/CTBdC4qOPlEIPimIfihjg==
+X-Google-Smtp-Source: ABdhPJzQswLmBxQCwU6lJkoB0lFwQtnFgdtzQ6V6BgFA8IOHL6WHjhQLKW7o8AIx45Dic2KPzBuk5g==
+X-Received: by 2002:a17:90a:af86:b0:1c7:db8e:8589 with SMTP id w6-20020a17090aaf8600b001c7db8e8589mr2495799pjq.94.1649924363513;
+        Thu, 14 Apr 2022 01:19:23 -0700 (PDT)
+Received: from ubuntu.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id j9-20020aa78009000000b004fde2dd78b0sm1304394pfi.109.2022.04.14.01.19.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 01:19:23 -0700 (PDT)
+From:   xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+To:     thierry.reding@gmail.com, sam@ravnborg.org, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+Subject: [RESEND v2 1/2] drm/panel: Add inx Himax8279d MIPI-DSI LCD panel driver
+Date:   Thu, 14 Apr 2022 16:19:15 +0800
+Message-Id: <20220414081916.11766-1-xiazhengqiao@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alice, 
+Add STARRY 2081101QFH032011-53G 10.1" WUXGA TFT LCD panel
 
->Hi Miles,
->
->On Wed, 2022-03-09 at 07:23 +0800, Miles Chen wrote:
->> Hi Alice,
->> 
->> Thanks for your patch. I have some questions.
->> 
->> > Device reset thread uses kobject_uevent_env() to get kobj.parent
->> > after scsi_evt_emit(), and it races with device init thread which
->> > calls device_add() to create kobj.parent before
->> > kobject_uevent_env().
->> > 
->> > Device reset call trace:
->> > fill_kobj_path
->> > kobject_get_path
->> > kobject_uevent_env
->> > scsi_evt_emit			<- add wait_event()
->> > scsi_evt_thread
->> > 
->> > Device init call trace:
->> > fill_kobj_path
->> > kobject_get_path
->> > kobject_uevent_env
->> > device_add				<- create kobj.parent
->> > scsi_target_add
->> > scsi_sysfs_add_sdev
->> > scsi_add_lun
->> > scsi_probe_and_add_lun
->> 
->> These are backtraces, and the things above looks like your solution,
->> not
->> the problem.
->> It's better to describe the problem first and solution later:
->> 
->> Device init call:                              Device reset call:   
->> scsi_probe_and_add_lun()                       scsi_evt_thread()
->>   scsi_add_lun()
->>     scsi_sysfs_add_sdev()                        scsi_evt_emit()
->>       scsi_target_add()                            kobject_uevent_env
->> () 
->>         device_add()                                 kobject_get_path
->> () // something wrong?
->> 	                                               fill_kobj_path()
->> 	  get_device_parent() // I see a get, not create parent kobj,
->> could you show me that point?
->> 	  kobject_uevent()
->>             kobject_uevent_env()
->>               kobject_get_path()
->>                 fill_kobj_path()
->> 
->
->Device init call:	   Device reset call:
->scsi_probe_and_add_lun()   scsi_evt_thread()
->  scsi_add_lun()	    scsi_evt_emit()
->   scsi_sysfs_add_sdev()     kobject_uevent_env() //get kobj.parent
->    scsi_target_add()	      kobject_get_path() //get wrong
->kobj.parent     device_add() // add kobj.parent  fill_kobj_path()
->      kobject_uevent_env()
->       kobject_get_path()
->        fill_kobj_path()
->Above backtrace describes the problem, device reset thread will get
->wrong kobj.parent when device init thread didn’t add kobj.parent yet.
+Signed-off-by: xiazhengqiao <xiazhengqiao@huaqin.corp-partner.google.com>
+Tested-by: Hsin-Yi Wang <hsinyi@chromium.org>
+Reviewed-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/gpu/drm/panel/Kconfig                 |   9 +
+ drivers/gpu/drm/panel/Makefile                |   1 +
+ .../gpu/drm/panel/panel-innolux-himax8279d.c  | 515 ++++++++++++++++++
+ 3 files changed, 525 insertions(+)
+ create mode 100644 drivers/gpu/drm/panel/panel-innolux-himax8279d.c
 
-Thanks for sharing the error log, I think it is clearer this way:
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index ddf5f38e8731..375a67f69230 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -180,6 +180,15 @@ config DRM_PANEL_INNOLUX_EJ030NA
+           320x480 3.0" panel as found in the RS97 V2.1, RG300(non-ips)
+           and LDK handheld gaming consoles.
+ 
++config DRM_PANEL_INNOLUX_HIMAX8279D
++	tristate "INX 2081101qfh032011-53g 1200x1920 video panel"
++	depends on OF
++	depends on DRM_MIPI_DSI
++	depends on BACKLIGHT_CLASS_DEVICE
++	help
++	  Say Y here if you want to support for inx 2081101qfh032011-53g
++	  1200x1920 video panel.
++
+ config DRM_PANEL_INNOLUX_P079ZCA
+ 	tristate "Innolux P079ZCA panel"
+ 	depends on OF
+diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+index 5740911f637c..a57e72dcbb12 100644
+--- a/drivers/gpu/drm/panel/Makefile
++++ b/drivers/gpu/drm/panel/Makefile
+@@ -16,6 +16,7 @@ obj-$(CONFIG_DRM_PANEL_ILITEK_IL9322) += panel-ilitek-ili9322.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9341) += panel-ilitek-ili9341.o
+ obj-$(CONFIG_DRM_PANEL_ILITEK_ILI9881C) += panel-ilitek-ili9881c.o
+ obj-$(CONFIG_DRM_PANEL_INNOLUX_EJ030NA) += panel-innolux-ej030na.o
++obj-$(CONFIG_DRM_PANEL_INNOLUX_HIMAX8279D) += panel-innolux-himax8279d.o
+ obj-$(CONFIG_DRM_PANEL_INNOLUX_P079ZCA) += panel-innolux-p079zca.o
+ obj-$(CONFIG_DRM_PANEL_JDI_LT070ME05000) += panel-jdi-lt070me05000.o
+ obj-$(CONFIG_DRM_PANEL_JDI_R63452) += panel-jdi-fhd-r63452.o
+diff --git a/drivers/gpu/drm/panel/panel-innolux-himax8279d.c b/drivers/gpu/drm/panel/panel-innolux-himax8279d.c
+new file mode 100644
+index 000000000000..6840449548e4
+--- /dev/null
++++ b/drivers/gpu/drm/panel/panel-innolux-himax8279d.c
+@@ -0,0 +1,515 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (c) 2021, Huaqin Telecom Technology Co., Ltd
++ * Author: Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>
++ */
++
++#include <linux/delay.h>
++#include <linux/gpio/consumer.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/of_device.h>
++#include <linux/regulator/consumer.h>
++
++#include <drm/drm_connector.h>
++#include <drm/drm_crtc.h>
++#include <drm/drm_mipi_dsi.h>
++#include <drm/drm_panel.h>
++
++#include <video/mipi_display.h>
++
++struct panel_desc {
++	const struct drm_display_mode *modes;
++	unsigned int bpc;
++
++	/**
++	 * @width_mm: width of the panel's active display area
++	 * @height_mm: height of the panel's active display area
++	 */
++	struct {
++		unsigned int width_mm;
++		unsigned int height_mm;
++	} size;
++
++	unsigned long mode_flags;
++	enum mipi_dsi_pixel_format format;
++	const struct panel_init_cmd *init_cmds;
++	unsigned int lanes;
++	bool discharge_on_disable;
++};
++
++struct inx_panel {
++	struct drm_panel base;
++	struct mipi_dsi_device *dsi;
++
++	const struct panel_desc *desc;
++
++	enum drm_panel_orientation orientation;
++	struct regulator *pp1800;
++	struct regulator *avee;
++	struct regulator *avdd;
++	struct gpio_desc *enable_gpio;
++
++	bool prepared;
++};
++
++enum dsi_cmd_type {
++	INIT_DCS_CMD,
++	DELAY_CMD,
++};
++
++struct panel_init_cmd {
++	enum dsi_cmd_type type;
++	size_t len;
++	const char *data;
++};
++
++#define _INIT_DCS_CMD(...) { \
++	.type = INIT_DCS_CMD, \
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++#define _INIT_DELAY_CMD(...) { \
++	.type = DELAY_CMD,\
++	.len = sizeof((char[]){__VA_ARGS__}), \
++	.data = (char[]){__VA_ARGS__} }
++
++static const struct panel_init_cmd starry_qfh032011_53g_init_cmd[] = {
++	_INIT_DCS_CMD(0xB0, 0x01),
++	_INIT_DCS_CMD(0xC3, 0x4F),
++	_INIT_DCS_CMD(0xC4, 0x40),
++	_INIT_DCS_CMD(0xC5, 0x40),
++	_INIT_DCS_CMD(0xC6, 0x40),
++	_INIT_DCS_CMD(0xC7, 0x40),
++	_INIT_DCS_CMD(0xC8, 0x4D),
++	_INIT_DCS_CMD(0xC9, 0x52),
++	_INIT_DCS_CMD(0xCA, 0x51),
++	_INIT_DCS_CMD(0xCD, 0x5D),
++	_INIT_DCS_CMD(0xCE, 0x5B),
++	_INIT_DCS_CMD(0xCF, 0x4B),
++	_INIT_DCS_CMD(0xD0, 0x49),
++	_INIT_DCS_CMD(0xD1, 0x47),
++	_INIT_DCS_CMD(0xD2, 0x45),
++	_INIT_DCS_CMD(0xD3, 0x41),
++	_INIT_DCS_CMD(0xD7, 0x50),
++	_INIT_DCS_CMD(0xD8, 0x40),
++	_INIT_DCS_CMD(0xD9, 0x40),
++	_INIT_DCS_CMD(0xDA, 0x40),
++	_INIT_DCS_CMD(0xDB, 0x40),
++	_INIT_DCS_CMD(0xDC, 0x4E),
++	_INIT_DCS_CMD(0xDD, 0x52),
++	_INIT_DCS_CMD(0xDE, 0x51),
++	_INIT_DCS_CMD(0xE1, 0x5E),
++	_INIT_DCS_CMD(0xE2, 0x5C),
++	_INIT_DCS_CMD(0xE3, 0x4C),
++	_INIT_DCS_CMD(0xE4, 0x4A),
++	_INIT_DCS_CMD(0xE5, 0x48),
++	_INIT_DCS_CMD(0xE6, 0x46),
++	_INIT_DCS_CMD(0xE7, 0x42),
++	_INIT_DCS_CMD(0xB0, 0x03),
++	_INIT_DCS_CMD(0xBE, 0x03),
++	_INIT_DCS_CMD(0xCC, 0x44),
++	_INIT_DCS_CMD(0xC8, 0x07),
++	_INIT_DCS_CMD(0xC9, 0x05),
++	_INIT_DCS_CMD(0xCA, 0x42),
++	_INIT_DCS_CMD(0xCD, 0x3E),
++	_INIT_DCS_CMD(0xCF, 0x60),
++	_INIT_DCS_CMD(0xD2, 0x04),
++	_INIT_DCS_CMD(0xD3, 0x04),
++	_INIT_DCS_CMD(0xD4, 0x01),
++	_INIT_DCS_CMD(0xD5, 0x00),
++	_INIT_DCS_CMD(0xD6, 0x03),
++	_INIT_DCS_CMD(0xD7, 0x04),
++	_INIT_DCS_CMD(0xD9, 0x01),
++	_INIT_DCS_CMD(0xDB, 0x01),
++	_INIT_DCS_CMD(0xE4, 0xF0),
++	_INIT_DCS_CMD(0xE5, 0x0A),
++	_INIT_DCS_CMD(0xB0, 0x00),
++	_INIT_DCS_CMD(0xCC, 0x08),
++	_INIT_DCS_CMD(0xC2, 0x08),
++	_INIT_DCS_CMD(0xC4, 0x10),
++	_INIT_DCS_CMD(0xB0, 0x02),
++	_INIT_DCS_CMD(0xC0, 0x00),
++	_INIT_DCS_CMD(0xC1, 0x0A),
++	_INIT_DCS_CMD(0xC2, 0x20),
++	_INIT_DCS_CMD(0xC3, 0x24),
++	_INIT_DCS_CMD(0xC4, 0x23),
++	_INIT_DCS_CMD(0xC5, 0x29),
++	_INIT_DCS_CMD(0xC6, 0x23),
++	_INIT_DCS_CMD(0xC7, 0x1C),
++	_INIT_DCS_CMD(0xC8, 0x19),
++	_INIT_DCS_CMD(0xC9, 0x17),
++	_INIT_DCS_CMD(0xCA, 0x17),
++	_INIT_DCS_CMD(0xCB, 0x18),
++	_INIT_DCS_CMD(0xCC, 0x1A),
++	_INIT_DCS_CMD(0xCD, 0x1E),
++	_INIT_DCS_CMD(0xCE, 0x20),
++	_INIT_DCS_CMD(0xCF, 0x23),
++	_INIT_DCS_CMD(0xD0, 0x07),
++	_INIT_DCS_CMD(0xD1, 0x00),
++	_INIT_DCS_CMD(0xD2, 0x00),
++	_INIT_DCS_CMD(0xD3, 0x0A),
++	_INIT_DCS_CMD(0xD4, 0x13),
++	_INIT_DCS_CMD(0xD5, 0x1C),
++	_INIT_DCS_CMD(0xD6, 0x1A),
++	_INIT_DCS_CMD(0xD7, 0x13),
++	_INIT_DCS_CMD(0xD8, 0x17),
++	_INIT_DCS_CMD(0xD9, 0x1C),
++	_INIT_DCS_CMD(0xDA, 0x19),
++	_INIT_DCS_CMD(0xDB, 0x17),
++	_INIT_DCS_CMD(0xDC, 0x17),
++	_INIT_DCS_CMD(0xDD, 0x18),
++	_INIT_DCS_CMD(0xDE, 0x1A),
++	_INIT_DCS_CMD(0xDF, 0x1E),
++	_INIT_DCS_CMD(0xE0, 0x20),
++	_INIT_DCS_CMD(0xE1, 0x23),
++	_INIT_DCS_CMD(0xE2, 0x07),
++	_INIT_DCS_CMD(0X11),
++	_INIT_DELAY_CMD(120),
++	_INIT_DCS_CMD(0X29),
++	_INIT_DELAY_CMD(80),
++	{},
++};
++
++static inline struct inx_panel *to_inx_panel(struct drm_panel *panel)
++{
++	return container_of(panel, struct inx_panel, base);
++}
++
++static int inx_panel_init_dcs_cmd(struct inx_panel *inx)
++{
++	struct mipi_dsi_device *dsi = inx->dsi;
++	struct drm_panel *panel = &inx->base;
++	int i, err = 0;
++
++	if (inx->desc->init_cmds) {
++		const struct panel_init_cmd *init_cmds = inx->desc->init_cmds;
++
++		for (i = 0; init_cmds[i].len != 0; i++) {
++			const struct panel_init_cmd *cmd = &init_cmds[i];
++
++			switch (cmd->type) {
++			case DELAY_CMD:
++				msleep(cmd->data[0]);
++				err = 0;
++				break;
++
++			case INIT_DCS_CMD:
++				err = mipi_dsi_dcs_write(dsi, cmd->data[0],
++							 cmd->len <= 1 ? NULL :
++							 &cmd->data[1],
++							 cmd->len - 1);
++				break;
++
++			default:
++				err = -EINVAL;
++			}
++
++			if (err < 0) {
++				dev_err(panel->dev,
++					"failed to write command %u\n", i);
++				return err;
++			}
++		}
++	}
++	return 0;
++}
++
++static int inx_panel_enter_sleep_mode(struct inx_panel *inx)
++{
++	struct mipi_dsi_device *dsi = inx->dsi;
++	int ret;
++
++	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
++
++	ret = mipi_dsi_dcs_set_display_off(dsi);
++	if (ret < 0)
++		return ret;
++
++	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int inx_panel_unprepare(struct drm_panel *panel)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	int ret;
++
++	if (!inx->prepared)
++		return 0;
++
++	ret = inx_panel_enter_sleep_mode(inx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to set panel off: %d\n", ret);
++		return ret;
++	}
++
++	msleep(150);
++
++	if (inx->desc->discharge_on_disable) {
++		regulator_disable(inx->avee);
++		regulator_disable(inx->avdd);
++		usleep_range(5000, 7000);
++		gpiod_set_value(inx->enable_gpio, 0);
++		usleep_range(5000, 7000);
++		regulator_disable(inx->pp1800);
++	} else {
++		gpiod_set_value(inx->enable_gpio, 0);
++		usleep_range(500, 1000);
++		regulator_disable(inx->avee);
++		regulator_disable(inx->avdd);
++		usleep_range(5000, 7000);
++		regulator_disable(inx->pp1800);
++	}
++
++	inx->prepared = false;
++
++	return 0;
++}
++
++static int inx_panel_prepare(struct drm_panel *panel)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	int ret;
++
++	if (inx->prepared)
++		return 0;
++
++	gpiod_set_value(inx->enable_gpio, 0);
++	usleep_range(1000, 1500);
++
++	ret = regulator_enable(inx->pp1800);
++	if (ret < 0)
++		return ret;
++
++	usleep_range(3000, 5000);
++
++	ret = regulator_enable(inx->avdd);
++	if (ret < 0)
++		goto poweroff1v8;
++	ret = regulator_enable(inx->avee);
++	if (ret < 0)
++		goto poweroffavdd;
++
++	usleep_range(5000, 10000);
++
++	gpiod_set_value(inx->enable_gpio, 1);
++	usleep_range(1000, 2000);
++	gpiod_set_value(inx->enable_gpio, 0);
++	usleep_range(1000, 2000);
++	gpiod_set_value(inx->enable_gpio, 1);
++	usleep_range(6000, 10000);
++
++	ret = inx_panel_init_dcs_cmd(inx);
++	if (ret < 0) {
++		dev_err(panel->dev, "failed to init panel: %d\n", ret);
++		goto poweroff;
++	}
++
++	inx->prepared = true;
++
++	return 0;
++
++poweroff:
++	regulator_disable(inx->avee);
++poweroffavdd:
++	regulator_disable(inx->avdd);
++poweroff1v8:
++	usleep_range(5000, 7000);
++	regulator_disable(inx->pp1800);
++	gpiod_set_value(inx->enable_gpio, 0);
++
++	return ret;
++}
++
++static int inx_panel_enable(struct drm_panel *panel)
++{
++	msleep(130);
++	return 0;
++}
++
++static const struct drm_display_mode starry_qfh032011_53g_default_mode = {
++	.clock = 165731,
++	.hdisplay = 1200,
++	.hsync_start = 1200 + 100,
++	.hsync_end = 1200 + 100 + 10,
++	.htotal = 1200 + 100 + 10 + 100,
++	.vdisplay = 1920,
++	.vsync_start = 1920 + 14,
++	.vsync_end = 1920 + 14 + 10,
++	.vtotal = 1920 + 14 + 10 + 15,
++};
++
++static const struct panel_desc starry_qfh032011_53g_desc = {
++	.modes = &starry_qfh032011_53g_default_mode,
++	.bpc = 8,
++	.size = {
++		.width_mm = 135,
++		.height_mm = 216,
++	},
++	.lanes = 4,
++	.format = MIPI_DSI_FMT_RGB888,
++	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
++		      MIPI_DSI_MODE_LPM,
++	.init_cmds = starry_qfh032011_53g_init_cmd,
++	.discharge_on_disable = false,
++};
++
++static int inx_panel_get_modes(struct drm_panel *panel,
++			       struct drm_connector *connector)
++{
++	struct inx_panel *inx = to_inx_panel(panel);
++	const struct drm_display_mode *m = inx->desc->modes;
++	struct drm_display_mode *mode;
++
++	mode = drm_mode_duplicate(connector->dev, m);
++	if (!mode) {
++		dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
++			m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
++		return -ENOMEM;
++	}
++
++	mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
++	drm_mode_set_name(mode);
++	drm_mode_probed_add(connector, mode);
++
++	connector->display_info.width_mm = inx->desc->size.width_mm;
++	connector->display_info.height_mm = inx->desc->size.height_mm;
++	connector->display_info.bpc = inx->desc->bpc;
++	drm_connector_set_panel_orientation(connector, inx->orientation);
++
++	return 1;
++}
++
++static const struct drm_panel_funcs inx_panel_funcs = {
++	.unprepare = inx_panel_unprepare,
++	.prepare = inx_panel_prepare,
++	.enable = inx_panel_enable,
++	.get_modes = inx_panel_get_modes,
++};
++
++static int inx_panel_add(struct inx_panel *inx)
++{
++	struct device *dev = &inx->dsi->dev;
++	int err;
++
++	inx->avdd = devm_regulator_get(dev, "avdd");
++	if (IS_ERR(inx->avdd))
++		return PTR_ERR(inx->avdd);
++
++	inx->avee = devm_regulator_get(dev, "avee");
++	if (IS_ERR(inx->avee))
++		return PTR_ERR(inx->avee);
++
++	inx->pp1800 = devm_regulator_get(dev, "pp1800");
++	if (IS_ERR(inx->pp1800))
++		return PTR_ERR(inx->pp1800);
++
++	inx->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
++	if (IS_ERR(inx->enable_gpio)) {
++		dev_err(dev, "cannot get reset-gpios %ld\n",
++			PTR_ERR(inx->enable_gpio));
++		return PTR_ERR(inx->enable_gpio);
++	}
++
++	gpiod_set_value(inx->enable_gpio, 0);
++
++	drm_panel_init(&inx->base, dev, &inx_panel_funcs,
++		       DRM_MODE_CONNECTOR_DSI);
++	err = of_drm_get_panel_orientation(dev->of_node, &inx->orientation);
++	if (err < 0) {
++		dev_err(dev, "%pOF: failed to get orientation %d\n", dev->of_node, err);
++		return err;
++	}
++
++	err = drm_panel_of_backlight(&inx->base);
++	if (err)
++		return err;
++
++	inx->base.funcs = &inx_panel_funcs;
++	inx->base.dev = &inx->dsi->dev;
++
++	drm_panel_add(&inx->base);
++
++	return 0;
++}
++
++static int inx_panel_probe(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx;
++	int ret;
++	const struct panel_desc *desc;
++
++	inx = devm_kzalloc(&dsi->dev, sizeof(*inx), GFP_KERNEL);
++	if (!inx)
++		return -ENOMEM;
++
++	desc = of_device_get_match_data(&dsi->dev);
++	dsi->lanes = desc->lanes;
++	dsi->format = desc->format;
++	dsi->mode_flags = desc->mode_flags;
++	inx->desc = desc;
++	inx->dsi = dsi;
++	ret = inx_panel_add(inx);
++	if (ret < 0)
++		return ret;
++
++	mipi_dsi_set_drvdata(dsi, inx);
++
++	ret = mipi_dsi_attach(dsi);
++	if (ret)
++		drm_panel_remove(&inx->base);
++
++	return ret;
++}
++
++static void inx_panel_shutdown(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx = mipi_dsi_get_drvdata(dsi);
++
++	drm_panel_disable(&inx->base);
++	drm_panel_unprepare(&inx->base);
++}
++
++static int inx_panel_remove(struct mipi_dsi_device *dsi)
++{
++	struct inx_panel *inx = mipi_dsi_get_drvdata(dsi);
++	int ret;
++
++	inx_panel_shutdown(dsi);
++
++	ret = mipi_dsi_detach(dsi);
++	if (ret < 0)
++		dev_err(&dsi->dev, "failed to detach from DSI host: %d\n", ret);
++
++	if (inx->base.dev)
++		drm_panel_remove(&inx->base);
++
++	return 0;
++}
++
++static const struct of_device_id inx_of_match[] = {
++	{ .compatible = "starry,2081101qfh032011-53g",
++	  .data = &starry_qfh032011_53g_desc
++	},
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, inx_of_match);
++
++static struct mipi_dsi_driver inx_panel_driver = {
++	.driver = {
++		.name = "panel-innolux-himax8279d",
++		.of_match_table = inx_of_match,
++	},
++	.probe = inx_panel_probe,
++	.remove = inx_panel_remove,
++	.shutdown = inx_panel_shutdown,
++};
++module_mipi_dsi_driver(inx_panel_driver);
++
++MODULE_AUTHOR("Zhengqiao Xia <xiazhengqiao@huaqin.corp-partner.google.com>");
++MODULE_DESCRIPTION("INNOLUX HIMAX8279D 1200x1920 video mode panel driver");
++MODULE_LICENSE("GPL v2");
+-- 
+2.17.1
 
-Device init call:	           Device reset call:
-scsi_probe_and_add_lun()              scsi_evt_thread()
-  scsi_add_lun()	                scsi_evt_emit()
-   scsi_sysfs_add_sdev()                  kobject_uevent_env() //get kobj.parent
-    scsi_target_add()	                    kobject_get_path()
-                                              len = get_kobj_path_length () // len=1 because parent is not create yet     
-    device_add() // add kobj.parent               
-      kobject_uevent_env()                 
-       kobject_get_path()                     path = kzalloc()
-        fill_kobj_path()	              fill_kobj_path() // --length; length -= cur is a negative value
-	                                        memcpy(path + length, kobject_name(parent), cur); // slab OOB!
-
-Now I understood this slab OOB issue, please add the kasan log and the
-analysis to the commit message so the maintainers can see it and help.
-
->
->> > 
->> > These two jobs are scheduled asynchronously, we can't guaranteed
->> > that
->> > kobj.parent will be created in device init thread before device
->> > reset
->> > thread calls kobj_get_path().
->> 
->> What happens if device reset thread calls kobj_get_path() before
->> kobj.parent's
->> creation? a crash or something?
->> 
->
->It will cause slab-out-of-bounds in kobject_get_path and kernel panic
->than crash.
-
-Okay, please add the KASAN slab-out-of-bounds error in the commit message.
-
-Thanks,
-Miles
->
->> > 
->> > To resolve the racing issue between device init thread and device
->> > reset thread, we use wait_event() in scsi_evt_emit() to wait for
->> > device_add() to complete the creation of kobj.parent.
->> > 
->> > Signed-off-by: Alice Chao <alice.chao@mediatek.com>
->> 
->> When we send patch N+1, we have to put the change log between patch
->> v1 to vN
->> under a "---", so others can understand the changes between patch N
->> and N+1.
->> e.g.,
->> 
->> ---
->> 
->> Change since v1
->> - remove Change-Id
->> 
->> > ---
->> >  drivers/scsi/scsi_lib.c  | 1 +
->> >  drivers/scsi/scsi_scan.c | 1 +
->> >  2 files changed, 2 insertions(+)
->> > 
->> > diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
->> > index 0a70aa763a96..abf9a71ed77c 100644
->> > --- a/drivers/scsi/scsi_lib.c
->> > +++ b/drivers/scsi/scsi_lib.c
->> > @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device
->> > *sdev, struct scsi_event *evt)
->> >  		break;
->> >  	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
->> >  		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
->> > +		wait_event(sdev->host->host_wait, sdev-
->> > >sdev_gendev.kobj.parent != NULL);
->> >  		break;
->> >  	default:
->> >  		/* do nothing */
->> > diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
->> > index f4e6c68ac99e..431f229ac435 100644
->> > --- a/drivers/scsi/scsi_scan.c
->> > +++ b/drivers/scsi/scsi_scan.c
->> > @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct
->> > Scsi_Host *shost)
->> >  	} else {
->> >  		scsi_scan_host_selected(shost, SCAN_WILD_CARD,
->> > SCAN_WILD_CARD,
->> >  				SCAN_WILD_CARD, 0);
->> > +		wake_up(&shost->host_wait);
->> 
->> do_scsi_scan_host() is not in the call trace above, could you show
->> the relationship
->> of do_scsi_scan_host in the call flow?
->> 
->
->ufshcd_async_scan()
->scsi_scan_host()
->do_scsi_scan_host()  << here
->scsi_scan_host_selected()
-> __scsi_scan_target()
->scsi_probe_and_add_lun()
->scsi_sysfs_add_sdev()
->device_add()
->kobject_uevent_env()
->kobject_get_path()
->fill_kobj_path()
->
->After we add wake_up here, we can ensure that device reset thread will
->get kobject after device init thread finishes adding parent.
->
->> thanks,
->> Miles
->> 
->> >  	}
->> >  }
->
->

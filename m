@@ -2,189 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6777501DAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:49:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B966501DAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242185AbiDNVuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S237142AbiDNVu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232439AbiDNVuO (ORCPT
+        with ESMTP id S232439AbiDNVu4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:50:14 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EC8939F2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:47:49 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id x9so3934223ilc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:47:49 -0700 (PDT)
+        Thu, 14 Apr 2022 17:50:56 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BD995485
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:48:29 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id mm4-20020a17090b358400b001cb93d8b137so10423474pjb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:48:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-language:content-transfer-encoding;
-        bh=uODln0vhOum+2TmooGakPEQyd171bQ+mLLWEZrWqTtc=;
-        b=EvbgG93teZuoQFogrfgcb/t3dQ0nNizMxjjAe1NOWX+E1MXm+QCLg+Y96hefcOTRMa
-         aLJjZIuP7eGzJR5Zfng32friME4aRgo68ROrj0xDMgz+M4FxZwW5lZDaSYRXCPEFfm37
-         NOquHBfk4dDuS3EGt45XVo6CWaNJW5kubJkhw=
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:in-reply-to:date:message-id:mime-version;
+        bh=waPudPlVhHtHMA9moxAZ6Byzf/Q9LiHGndFwnvJTw84=;
+        b=sq26syXLy4lhHszxXm4VE59PlRWIiN0fJq/WC5AsgDkzVY+FMzC6W8M4G+c9XhxJ7M
+         RPa8qQV3RjWQEkANg49pLuYOPJbqHWpDom/qBhXcNiTU2x/EUP7vMzD8EaTfWnWQopXg
+         6RzI1HzBPjwsvZa5bVcRJlJkLO3FFHQYq5GbP/A+l8WjhxU64qfiE5ATq+qhBzIoJa+p
+         5piiW3jrqQXYxkj6b2iWx54liMxXtnSnkXoh5h0JG+ag9jvbyNIOEYFHQ2xS5N2VzCEQ
+         m0x0W90S9aYJ86OUJVnVBt19ASYxD+EqdjdzGQfCt2UusLeecEGN9+WyVUK2leOCsIpM
+         wlJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-language
-         :content-transfer-encoding;
-        bh=uODln0vhOum+2TmooGakPEQyd171bQ+mLLWEZrWqTtc=;
-        b=q0e5+2DlHLMNdYitBb1R/WiKienKq3lMZWIs1HRpa+lpCXLhkEfdrDpxdXKHRHlPv6
-         Qj4SRYFJOXbpYDe+5Wm+R85f7iJaG6xxirLytiIT4JGmRWiCO0QFd5HoKjx+Jd7lKShA
-         H+WHJ/A/iKPZfnmfXwd7bwSxuseZSfVR55P8ob1EL3yvkRWjPUDR/4XKplH2BnuhhUWR
-         BX4CzJ3x8u8UtFyHMfIL2FW0y/HatXsICcNDrAjR7C65qF+bdTsU2ViQsgrPunfqHmPw
-         jWI3jE9+5vwdUE2kBcoARGp1DzkdMfWEnjNAe/JBfWdqvCi+h6u1nodvwiw4yD6x8+Bu
-         Zd/w==
-X-Gm-Message-State: AOAM532XbSr71rENSX9NO1UDocdcDzHIJcj1mzneZIRql0FeR+J0Vyxp
-        gz9xk+FmJCSBw6EdwO/UfhOCiVpCbZqc6A==
-X-Google-Smtp-Source: ABdhPJwm1f0gSHMWMogFULROo6XpNNk3n4FrlkZHWlqC8j2dQyRz19Hrh73SmO6aqUyxxJLBWVoSNg==
-X-Received: by 2002:a92:640d:0:b0:2ca:ad76:3e88 with SMTP id y13-20020a92640d000000b002caad763e88mr1746974ilb.84.1649972868142;
-        Thu, 14 Apr 2022 14:47:48 -0700 (PDT)
-Received: from [192.168.1.128] ([71.205.29.0])
-        by smtp.gmail.com with ESMTPSA id d195-20020a6bb4cc000000b0064fceb8033dsm1318892iof.7.2022.04.14.14.47.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 14:47:47 -0700 (PDT)
-Subject: Re: [PATCH 2/4] selftest/vm: verify remap destination address in
- mremap_test
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>, shuah@kernel.org,
-        akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220414171529.62058-1-sidhartha.kumar@oracle.com>
- <20220414171529.62058-3-sidhartha.kumar@oracle.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <e6cc5cf6-b6bc-2eca-255d-5dd247253255@linuxfoundation.org>
-Date:   Thu, 14 Apr 2022 15:47:46 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=x-gm-message-state:from:to:cc:subject:in-reply-to:date:message-id
+         :mime-version;
+        bh=waPudPlVhHtHMA9moxAZ6Byzf/Q9LiHGndFwnvJTw84=;
+        b=wiW7YXnsC1UcV+jntpjp2WJQ/rivM8ehiNZ1oGYJmmVv/h5diyKMVeImqgxg24TjxM
+         x56E07OTmSqmLUmUXIkBqSGcya7pQflaE332ct8OPG4OjkhW6rqX1HoW+22Gojh/p7z+
+         81YSLxK+H3fMez7FqIdYDE7jctfmKi2C6eOtubYoGcD9ujc74aGiPLJIQrwC633AOufH
+         PmvB8A53I/S05wymVnBKcsMthVErYGhxmuwg0PXcn80WpHRSr/7ESSsciavLIzoRByLz
+         nOMx/OifX/SJiLfHbwnXjQBBTrImc+c60L57aqGaApoaohySW/9lQedN49SSx+fnJdM/
+         sI2g==
+X-Gm-Message-State: AOAM533BX5Tv17jRn7vKyyyNtrGYSZ0DSdT6BSxG6Tl0Kj23o/0fa6M7
+        fVvlmK0tjOoT4tbMLu6A6WnAsg==
+X-Google-Smtp-Source: ABdhPJzrSS547mp4Ducl8jVLogQ25Z5tF6TpXhzlX/3f9wSauuf4/iNhSVnZHTPi6dTUidziqtR1IA==
+X-Received: by 2002:a17:90b:4c45:b0:1cd:4fa3:6ee4 with SMTP id np5-20020a17090b4c4500b001cd4fa36ee4mr663031pjb.96.1649972908766;
+        Thu, 14 Apr 2022 14:48:28 -0700 (PDT)
+Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a3e8400b001cd37f6c0b7sm2717486pjc.46.2022.04.14.14.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 14:48:28 -0700 (PDT)
+From:   Kevin Hilman <khilman@baylibre.com>
+To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
+        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
+Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
+        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH V2 13/15] cpufreq: mediatek: Link CCI device to CPU
+In-Reply-To: <12c630946ce9d7b8c80143615496238759323981.camel@mediatek.com>
+Date:   Thu, 14 Apr 2022 14:48:27 -0700
+Message-ID: <7hbkx3fiac.fsf@baylibre.com>
 MIME-Version: 1.0
-In-Reply-To: <20220414171529.62058-3-sidhartha.kumar@oracle.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 11:15 AM, Sidhartha Kumar wrote:
-> Because mremap does not have a NOREPLACE flag,
-> it can destroy existing mappings. This can
-> cause a segfault if regions such as text are
-> destroyed.
+Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
 
-Please explain the reason for segfault.
+> On Wed, 2022-04-13 at 14:41 -0700, Kevin Hilman wrote:
+>> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+>> 
+>> [...]
+>> 
+>> > From the Chanwoo's devfreq passive govonor series, it's impossible
+>> > to
+>> > let cci devreq probed done before cpufreq because the passive
+>> > govonor
+>> > will search for cpufreq node and use it.
+>> > 
+>> > Ref: function: cpufreq_passive_register_notifier()
+>> > 
+>> > 
+> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/linux.git/commit/?h=devfreq-testing&id=b670978ddc43eb0c60735c3af6e4a370603ab673__;!!CTRNKA9wMg0ARbw!z58Lc1p9REo88oHn-NkxroN_fBd0TsHYmhscNZwnWwT71ecRkTeqZ6vFl5l7HpkTdM6t$
+>> >  
+>> 
+>> Well this is a problem, because CCI depends on CPUfreq, but CPUfreq
+>> depends on CCI, so one of them has to load and then wait for the
+>> other.
+>> 
+>> > After I discuss with Angelo and Jia-wei, we think we are keeping
+>> > the
+>> > function in target_index and if the cci is not ready we will use
+>> > the
+>> > voltage which is set by bootloader to prevent high freqeuncy low
+>> > voltage crash. And then we can keep seting the target frequency.
+>> > 
+>> 
+>>  > We assume the setting of bootloader is correct and we can do this.
+>> 
+>> I'm still not crazy about this because you're lying to the CPUfreq
+>> framework.  It's requesting one OPP, but you're not setting that,
+>> you're
+>> just keeping the bootloader frequency.
+>> 
+>> In my earlier reply, I gave two other options for handling this.
+>> 
+>> 1) set a (temporary) constraint on the voltage regulator so that it
+>> cannot change.
+>> 
+>> or more clean, IMO:
+>> 
+>> 2) set a CPUfreq policy that restricts available OPPs to ones that
+>> will
+>> not break CCI.
+>> 
+>> Either of these solutions allow you to load the CPUfreq driver early,
+>> and then wait for the CCI driver to be ready before removing the
+>> restrictions.
+>
+> Hello Kevin,
+>
+> I think I do not describe this clearly.
+> The proposal is:
+>
+> In cpufreq probe:
+> we record the voltage value which is set by bootloader.
+>
+> In mtk_cpufreq_set_target():
+> We do NOT directly return 0.
+> Instead, we will find the voltage of target cpufreq and use the value
+> max(booting voltage, target cpufreq voltage)
+>
+> mtk_cpufreq_set_target() {
+> 	/* NOT return 0 if !is_ccifreq_ready */
+> 	....
+> 	vproc = get voltage of target cpufreq from opp.
+>
+> 	if (ccifreq_supported && !is_ccifreq_ready)
+> 		vproc = max(vproc, vproc_on_boot)
+>
+> 	//setting voltage and target frequency
+> 	....
+> }
 
-Add a blank line here. Makes it easier to read.
+You explained this well, but it's still not an appropriate solution IMO,
+because you're still not setting the target that is requested by the
+CPUfreq core.
 
-Verify the requested mremap destination
-> address does not overlap any existing mappings
-> by using mmap's FIXED_NOREPLACE flag and checking
+The job of ->set_target() is to set the frequency *requested by CPUfreq
+core*.  If you cannot do that, you should return failure.  What you posted
+in the original patch and what you're proposing here is to ignore the
+frequency passed to ->set_target() and do something else.  In the
+orignal patch, you propose do to nothing.  Now, you're ignoring the 
+target passed in and setting something else.  In both cases, the CPUfreq
+core things you have successfuly set the frequency requested, but you
+have not.  This means there's a mismatch between what the CPUfreq core &
+governer things the frequency is and what is actually set.  *This* is
+the part that I think is wrong.
 
-Spell this out fully - MAP_FIXED_NOREPLACE
-> for the EEXIST error code. Keep incrementing the
-> destination address until a valid mapping is found
-> or max address is reached.
-> 
+Instead, the proper way of restricting available frequencies is to use
+governors or policies.  This ensures that the core & governors are
+aligned with what the platform driver actually does.
 
-Essentially mremap() doesn't check for overlaps and removes
-or overwrites existing mappings? The way you are fixing it
-is by verifying by calling mremap() with MAP_FIXED_NOREPLACE
-flag and check for EEXIST.
+As I proposed earlier, I think a clean solution to this problem is to
+create a temporary policy at probe time that restricts the available
+OPPs based on what the current CCI freq/voltage are.  Once CCI driver is
+loaded and working, this policy can be removed.
 
-What happens when max address is reached?
-
-Same comment on # of chars per line in commit log. Also
-
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> ---
->   tools/testing/selftests/vm/mremap_test.c | 36 ++++++++++++++++++++++++
->   1 file changed, 36 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vm/mremap_test.c b/tools/testing/selftests/vm/mremap_test.c
-> index 58600fee4b81..98e9cff34aa7 100644
-> --- a/tools/testing/selftests/vm/mremap_test.c
-> +++ b/tools/testing/selftests/vm/mremap_test.c
-> @@ -10,6 +10,7 @@
->   #include <string.h>
->   #include <sys/mman.h>
->   #include <time.h>
-> +#include <limits.h>
->   
->   #include "../kselftest.h"
->   
-> @@ -65,6 +66,34 @@ enum {
->   	.expect_failure = should_fail				\
->   }
->   
-> +/*
-> + * Returns 0 if the requested remap region overlaps with an
-> + * existing mapping (e.g text, stack) else returns 1.
-> + */
-> +static int remap_region_valid(void *addr, unsigned long long size)
-
-This returns bool 0 (false) 1 (true)
-
-Please name the routine - is_remap_region_valid() and change it to
-return bool.
-
-> +{
-> +	void *remap_addr = NULL;
-> +	int ret = 1;
-> +
-> +	if ((unsigned long long) addr > ULLONG_MAX - size) {
-> +		ksft_print_msg("Can't find a valid region to remap to\n");
-
-Change it to "Couldn't" - also this message doesn't look right. We hav't
-looked for valid region yet and it just exceeds the limits?
+Kevin
 
 
-> +		exit(KSFT_SKIP);> +	}
-> +
-> +	/* Use MAP_FIXED_NOREPLACE flag to ensure region is not mapped */
-> +	remap_addr = mmap(addr, size, PROT_READ | PROT_WRITE,
-> +			MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
-> +			-1, 0);
-
-Alignment should match open parenthesis here and in other places. Makes it
-easier to read the code.
-
-> +	if (remap_addr == MAP_FAILED) {
-> +		if (errno == EEXIST)
-> +			ret = 0;
-> +	} else {
-> +		munmap(remap_addr, size);
-> +	}
-> +
-> +	return ret;
-> +}
-> +
->   /* Returns mmap_min_addr sysctl */
->   static unsigned long long get_mmap_min_addr(void)
->   {
-> @@ -180,6 +209,13 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
->   	if (!((unsigned long long) addr & c.dest_alignment))
->   		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
->   
-> +	/* Don't destroy existing mappings unless expected to overlap */
-> +	while (!remap_region_valid(addr, c.region_size)) {
-> +		if (c.overlapping)
-> +			break;
-> +		addr += c.src_alignment;
-> +	}
-> +
->   	clock_gettime(CLOCK_MONOTONIC, &t_start);
->   	dest_addr = mremap(src_addr, c.region_size, c.region_size,
->   			MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
-> 
-
-thanks,
--- Shuah

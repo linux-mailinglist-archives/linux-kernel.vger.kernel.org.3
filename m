@@ -2,129 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A638500805
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:10:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF70500808
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240736AbiDNIM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 04:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48916 "EHLO
+        id S238017AbiDNIOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240997AbiDNIMq (ORCPT
+        with ESMTP id S233097AbiDNIOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 04:12:46 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E9E26AF7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:10:22 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id h63so4558716iof.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to;
-        bh=80GuG9Z2OB5edjjpunkIyc1yhfEaarhhzGyq+14i704=;
-        b=M5KQ7mfZv6mFYhtnrBqG00dB7LnKFIRZKqw/pvrepjt7LV24VvlIxp5D7/Zz+9yyXR
-         pcPjKG43Q7cC/d27eRU9Uby1RPUAJagk37XLqjEYf0jrR3uZ0NTRg/BqxNix5DT830yN
-         blUsYDqUPI6g4xemqC5mcga57q1wFsimEU2d4ClWinFeFdloxNm4+KyNvyrmWGeB7TnC
-         xOngQ5jnzDeIF3XJ7SWRDm7xX90JSeRdnTrSeQO2u/JsNzoe4X1kiUvv2BWKzItBFiOn
-         VNF2kjjlqE1CGO8JP7USrdhkvHGrgL56OIwU5At1X5HRheWcOfAqA91iYGuCnSiVo0A1
-         mlsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to;
-        bh=80GuG9Z2OB5edjjpunkIyc1yhfEaarhhzGyq+14i704=;
-        b=zpkxnsQt0zewvphadpXotyciSrRWBEd3carSBvuqT0YsCTLZCalS1xvGuxnsJB1m1F
-         Dou6A+KJKckswPZx0orAQCuay3R9AHq3zEXlv8t/EHYJPPJekTIs2yeRvIfjDrjFYBEF
-         uagWnRwVnzbv4+LhwBkXsumwXLg9lzFWyEXyMoKAMkJMlrOKynLEf4nlx5n4stGkD5e/
-         TnsA18c6siFS/vwda7TNZH39TnWj0b3t4BKdWJcttkc1+MV1a8d86MTXYIaSM0WZgW4W
-         zLII0aY+No1104WiZhCrwMjp03PlwXA2hEUUUcNRN9xhyr6xR9ifwB9K1+Ej3QR3QSFj
-         lLGA==
-X-Gm-Message-State: AOAM530fDRoccZ90GwITE6o6cRtp4369BvBSdCL5Ytb9/+rt0B/KMzmU
-        KUigwuvmZ9FWGLBYrg+7zLYfvfJK+St7FEHrIsAlyw==
-X-Google-Smtp-Source: ABdhPJyQyyUIJu7HSaI/sHH6jgGH90kBT3f1SyDRMUnKe+RNtKh/8DVg+hrLhzrO3qrrF7NYPZxCyZP+Y63gqiTXviI=
-X-Received: by 2002:a05:6638:3e8f:b0:326:72cb:2b49 with SMTP id
- ch15-20020a0566383e8f00b0032672cb2b49mr715190jab.247.1649923821659; Thu, 14
- Apr 2022 01:10:21 -0700 (PDT)
+        Thu, 14 Apr 2022 04:14:08 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09AB146658
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:11:40 -0700 (PDT)
+X-UUID: cc846f08a8b14c8188298998acd3a84c-20220414
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:4c515ac7-047f-47eb-a159-2ab1329cdf3b,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:54
+X-CID-INFO: VERSION:1.1.4,REQID:4c515ac7-047f-47eb-a159-2ab1329cdf3b,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:54,FILE:0,RULE:Release_UHam,ACTI
+        ON:release,TS:54
+X-CID-META: VersionHash:faefae9,CLOUDID:197720a9-d103-4e36-82b9-b0e86991b3df,C
+        OID:10fbb2c55067,Recheck:0,SF:13|15|28|100|16|19|48|101,TC:nil,Content:0,E
+        DM:-3,File:nil,QS:0,BEC:nil
+X-UUID: cc846f08a8b14c8188298998acd3a84c-20220414
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 450445553; Thu, 14 Apr 2022 16:11:33 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Thu, 14 Apr 2022 16:11:32 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 14 Apr 2022 16:11:32 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Miles Chen <miles.chen@mediatek.com>,
+        <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH -next] sound/oss/dmasound: fix 'dmasound_setup' defined but not used
+Date:   Thu, 14 Apr 2022 16:11:18 +0800
+Message-ID: <20220414081119.30851-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220406075612.60298-1-jefflexu@linux.alibaba.com> <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
-In-Reply-To: <YlLS47A9TpHyZJQi@B-P7TQMD6M-0146.local>
-From:   Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Date:   Thu, 14 Apr 2022 16:10:10 +0800
-Message-ID: <CAFQAk7iUuaUL40NGzOkCOL=P9d6PgsDjRoKLs_5KDycaA9RQ4w@mail.gmail.com>
-Subject: Re: Re: [PATCH v8 00/20] fscache,erofs: fscache-based on-demand read semantics
-To:     Jeffle Xu <jefflexu@linux.alibaba.com>, dhowells@redhat.com,
-        linux-cachefs@redhat.com, xiang@kernel.org, chao@kernel.org,
-        linux-erofs@lists.ozlabs.org, torvalds@linux-foundation.org,
-        gregkh@linuxfoundation.org, willy@infradead.org,
-        linux-fsdevel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        bo.liu@linux.alibaba.com, tao.peng@linux.alibaba.com,
-        gerry@linux.alibaba.com, eguan@linux.alibaba.com,
-        linux-kernel@vger.kernel.org, luodaowen.backend@bytedance.com,
-        tianzichen@kuaishou.com, fannaihao@baidu.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 10, 2022 at 8:52 PM Gao Xiang <hsiangkao@linux.alibaba.com> wrote:
->
-> On Wed, Apr 06, 2022 at 03:55:52PM +0800, Jeffle Xu wrote:
-> > changes since v7:
-> > - rebased to 5.18-rc1
-> > - include "cachefiles: unmark inode in use in error path" patch into
-> >   this patchset to avoid warning from test robot (patch 1)
-> > - cachefiles: rename [cookie|volume]_key_len field of struct
-> >   cachefiles_open to [cookie|volume]_key_size to avoid potential
-> >   misunderstanding. Also add more documentation to
-> >   include/uapi/linux/cachefiles.h. (patch 3)
-> > - cachefiles: valid check for error code returned from user daemon
-> >   (patch 3)
-> > - cachefiles: change WARN_ON_ONCE() to pr_info_once() when user daemon
-> >   closes anon_fd prematurely (patch 4/5)
-> > - ready for complete review
-> >
-> >
-> > Kernel Patchset
-> > ---------------
-> > Git tree:
-> >
-> >     https://github.com/lostjeffle/linux.git jingbo/dev-erofs-fscache-v8
-> >
-> > Gitweb:
-> >
-> >     https://github.com/lostjeffle/linux/commits/jingbo/dev-erofs-fscache-v8
-> >
-> >
-> > User Daemon for Quick Test
-> > --------------------------
-> > Git tree:
-> >
-> >     https://github.com/lostjeffle/demand-read-cachefilesd.git main
-> >
-> > Gitweb:
-> >
-> >     https://github.com/lostjeffle/demand-read-cachefilesd
-> >
->
-> Btw, we've also finished a preliminary end-to-end on-demand download
-> daemon in order to test the fscache on-demand kernel code as a real
-> end-to-end workload for container use cases:
->
-> User guide: https://github.com/dragonflyoss/image-service/blob/fscache/docs/nydus-fscache.md
-> Video: https://youtu.be/F4IF2_DENXo
->
-> Thanks,
-> Gao Xiang
+We observed: 'dmasound_setup' defined but not used error with
+COMPILER=gcc ARCH=m68k DEFCONFIG=allmodconfig build.
 
-Hi Xiang,
+__setup() does not work if MODULE is defined.
+Fix it by warpping dmasound_setup with #ifndef MODULES.
 
-I think this feature is interesting and promising. So I have performed
-some tests according to the user guide. Hope it can be an upstream
-feature.
+Error(s):
+sound/oss/dmasound/dmasound_core.c:1431:12: error: 'dmasound_setup' defined but not used [-Werror=unused-function]
 
-Thanks,
-Jiachen
+Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+---
+ sound/oss/dmasound/dmasound_core.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/sound/oss/dmasound/dmasound_core.c b/sound/oss/dmasound/dmasound_core.c
+index 9c48f3a9e3d1..a1b3e71beadf 100644
+--- a/sound/oss/dmasound/dmasound_core.c
++++ b/sound/oss/dmasound/dmasound_core.c
+@@ -1428,6 +1428,7 @@ void dmasound_deinit(void)
+ 		unregister_sound_dsp(sq_unit);
+ }
+ 
++#ifndef MODULE
+ static int dmasound_setup(char *str)
+ {
+ 	int ints[6], size;
+@@ -1470,6 +1471,7 @@ static int dmasound_setup(char *str)
+ }
+ 
+ __setup("dmasound=", dmasound_setup);
++#endif
+ 
+     /*
+      *  Conversion tables
+-- 
+2.18.0
+

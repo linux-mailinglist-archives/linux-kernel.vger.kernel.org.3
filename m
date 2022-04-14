@@ -2,152 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28576500C79
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAE1500C7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:55:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242849AbiDNL4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S242854AbiDNL5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242837AbiDNL4t (ORCPT
+        with ESMTP id S242847AbiDNL47 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:56:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D98922601
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649937260;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OQBMvEl7TG/AErRLlCgZmZf9IXOWECBGWVuV+R4YE1k=;
-        b=hE0kuTmheN0tAJeQ5pVFtsGVTXB42krmkhagxjUCz31modDRgl5hjLvjZPrRC8+Ba6DGZF
-        BikHVcK9PPPHTVtGC/vJLb1TivLX8wOgEOu1eowAg1ZpMDtfGBCPyf5C5/kJsK9fzX/WQQ
-        xhoZLvfIi39lCCMOVjHJUQnQ88xcSyU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-575-25F8uyOHM2SzyhDdigj-zA-1; Thu, 14 Apr 2022 07:54:17 -0400
-X-MC-Unique: 25F8uyOHM2SzyhDdigj-zA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 97063296A61C;
-        Thu, 14 Apr 2022 11:54:16 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.193.235])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 9AF4040EC010;
-        Thu, 14 Apr 2022 11:54:13 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 14 Apr 2022 13:54:15 +0200 (CEST)
-Date:   Thu, 14 Apr 2022 13:54:12 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220414115410.GA32752@redhat.com>
-References: <20220412114421.691372568@infradead.org>
- <20220412114853.842942162@infradead.org>
- <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
+        Thu, 14 Apr 2022 07:56:59 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777061A062
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:54:33 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id B009C1F479A1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649937272;
+        bh=b1Qs+7yt5i52Y0vqCOXaUWCnj9gXnqVJSriesALO6dU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BVo9/App19AXDvXABST6TIBcWiKh16uI6AF2q698a+uy8uLiJItQWXBgQf7+vVD0p
+         xWtH3pmTQia4xYUp4WNnEp87B3gAH7Lvc6c4PAd7VgeDigmKlNjz8ZXX759Xy/C+E+
+         hdI6fLFHxfcC6D5hvAG9H8WMk0ZF7KD/6orE8w5Kwk5Qh2S+s7f52MFrg8G4E4eBzb
+         PRefpTpEJqcfnADQI2Kg2SDxDLkRLTP+0rnQ3EYV+cOeorjfR/AmX5PKXlahNZUYE7
+         dbAvPxUBwRHMKIet4tXusWPoGt9fJ4z+rdlPuts0D3EfXVBKQvcZBUF1LxkktjqbRm
+         i7UUWaUnSD9fw==
+Message-ID: <d7234c71-f5c4-d623-16c4-e16c34b6de35@collabora.com>
+Date:   Thu, 14 Apr 2022 13:54:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413195612.GC2762@worktop.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH -next] sound/oss/dmasound: fix 'dmasound_setup' defined
+ but not used
+Content-Language: en-US
+To:     Miles Chen <miles.chen@mediatek.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220414081119.30851-1-miles.chen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220414081119.30851-1-miles.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/13, Peter Zijlstra wrote:
->
-> On Wed, Apr 13, 2022 at 09:20:53PM +0200, Peter Zijlstra wrote:
-> > On Wed, Apr 13, 2022 at 08:59:10PM +0200, Oleg Nesterov wrote:
-> >
-> >
-> > > +		// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-> > > +		// wrong, needs siglock
-> > > +		current->jobctl &= ~JOBCTL_TRACED_XXX;
-> > > +		wake_up_bit(&current->jobctl, ~JOBCTL_TRACED_XXX_BIT);
-> > 		  __wake_up_common_lock()
-> > 		    spin_lock_irqsave()
-> > 		      current_save_and_set_rtlock_wait_state();
+Il 14/04/22 10:11, Miles Chen ha scritto:
+> We observed: 'dmasound_setup' defined but not used error with
+> COMPILER=gcc ARCH=m68k DEFCONFIG=allmodconfig build.
+> 
+> __setup() does not work if MODULE is defined.
+> Fix it by warpping dmasound_setup with #ifndef MODULES.
+> 
+> Error(s):
+> sound/oss/dmasound/dmasound_core.c:1431:12: error: 'dmasound_setup' defined but not used [-Werror=unused-function]
+> 
+> Signed-off-by: Miles Chen <miles.chen@mediatek.com>
+> ---
+>   sound/oss/dmasound/dmasound_core.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/sound/oss/dmasound/dmasound_core.c b/sound/oss/dmasound/dmasound_core.c
+> index 9c48f3a9e3d1..a1b3e71beadf 100644
+> --- a/sound/oss/dmasound/dmasound_core.c
+> +++ b/sound/oss/dmasound/dmasound_core.c
+> @@ -1428,6 +1428,7 @@ void dmasound_deinit(void)
+>   		unregister_sound_dsp(sq_unit);
+>   }
+>   
+> +#ifndef MODULE
+>   static int dmasound_setup(char *str)
 
-OOPS, thanks.
+Hello Miles,
+I agree with Takashi, __maybe_unused looks way better.
 
-> Something that might work; since there's only the one ptracer, is to
-> instead do something like:
->
-> 	current->jobctl &= ~JOBCTL_TRACED_XXX; // siglock
-> 	if (current->ptrace)
-> 		wake_up_process(current->parent);
-> 	preempt_enable_no_resched();
-> 	schedule();
->
->
-> vs
->
-> 	for (;;) {
-> 		set_current_state(TASK_UNINTERRUPTIBLE);
-> 		if (!(p->jobctl & JOBCTL_TRACED_XXX))
-> 			break;
-> 		schedule();
-
-Yes, thanks... this is racy, see below, but probably fixeable.
-
-> ptrace_detach() needs some additional magic as well I think, but this
-> might just work.
-
-I don't think so, JOBCTL_TRACED_XXX must be always cleared in ptrace_stop()
-and ptrace_detach() implies ptrace_check_attach().
-
-
-Lets forget about the proble above for the moment. There is another problem
-with my patch,
-
-	if (!(child->ptrace && child->parent == current))
-		return ret;
-
-this check is racy without tasklist, we can race with another task attaching
-to our natural child (so that child->parent == current), ptrace_attach() sets
-task->ptrace = flags first and changes child->parent after that.
-
-In this case:
-
-	if (ignore_state)
-		return 0;
-
-this is just wrong,
-
-	if (wait_on_bit(&task->jobctl, JOBCTL_TRACED_XXX_BIT, TASK_KILLABLE))
-		return -EINTR;
-
-this is fine,
-
-	if (!wait_task_inactive(child, __TASK_TRACED))
-
-this not right too. wait_task_inactive() can loop "forever" doing schedule_hrtimeout()
-if the actual debugger stops/resumes the tracee continuously. This is pure theoretical,
-but still.
-
-And this also means that the code above needs some changes too, we can rely on
-wake_up_process(current->parent).
-
-OK, let me think about it. Thanks!
-
-Oleg.
-
+Regards,
+Angelo

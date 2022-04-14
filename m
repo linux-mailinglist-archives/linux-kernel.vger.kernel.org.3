@@ -2,115 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FDBC500A16
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C17F5500A2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:44:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237816AbiDNJoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39692 "EHLO
+        id S241947AbiDNJq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiDNJoc (ORCPT
+        with ESMTP id S241376AbiDNJqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:44:32 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0128718349;
-        Thu, 14 Apr 2022 02:42:09 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B224921618;
-        Thu, 14 Apr 2022 09:42:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1649929327; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xhIDvCKjfyFxJfvLw8YkmEsEs0zMe7xZBlVmf1UZvqc=;
-        b=nWYLi6h3qRmu62qtpkfGuq7ABIO9ie/jO+FTUGkmm2jz8vHj2w5rhlVyB4Le99PDWR3FC/
-        RUzqsC6LbAjMzixr+DI/wM3McEFQkzpDljVea2RcUjaNKr+ftoZgZRrKZQI8Avd9/JRoZE
-        qM8aKwrqcth6rMFZWvunRPL2AWwft88=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1649929327;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xhIDvCKjfyFxJfvLw8YkmEsEs0zMe7xZBlVmf1UZvqc=;
-        b=gxOv7XA1s08yF06K7CRDDLSNiIcGAhlG2Mj5R37M08QywYdcPKGr/+TsYZ3mzAACTPZ/PN
-        sbqcIijHZ0HTvIDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 852C513A86;
-        Thu, 14 Apr 2022 09:42:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id lI+HH2/sV2JoaQAAMHmgww
-        (envelope-from <jslaby@suse.cz>); Thu, 14 Apr 2022 09:42:07 +0000
-Message-ID: <ace87421-eefb-f4f6-307f-cd2990fb25eb@suse.cz>
-Date:   Thu, 14 Apr 2022 11:42:07 +0200
+        Thu, 14 Apr 2022 05:46:14 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Apr 2022 02:43:50 PDT
+Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAD56F49F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:43:49 -0700 (PDT)
+Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 20220414094240d59dc1823e7e034b5c
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 14 Apr 2022 11:42:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
+ bh=11aQEbG0uJXoDTit7eTTEggwscwc7PJvAx4LM5VfELI=;
+ b=dzXnulYxrV70irSyorXVmlpMQ7UmX1cxZmsueRplhnKmxMEJMrvqyeNWefXn9T8Ao/QOvn
+ fRSl46cZABUsXbXOq1+5q7Hd+kZWWyfwx6HEAWhzBz7PNJ3OhUdlGqwKh2Vw0jDUgnFWiO0B
+ KncTpPr1f+wE18BiaRRX+KpNMIY2E=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 03/20] tty: n_gsm: fix decoupled mux resource
+Date:   Thu, 14 Apr 2022 02:42:08 -0700
+Message-Id: <20220414094225.4527-3-daniel.starke@siemens.com>
+In-Reply-To: <20220414094225.4527-1-daniel.starke@siemens.com>
+References: <20220414094225.4527-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] scripts: dummy-tools, add pahole
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-References: <20220414091419.7654-1-jslaby@suse.cz>
- <CAK7LNATn2QrFn0fTixnbtZ-VOtWid2PvFKPmjfX+z_UtZgTMgA@mail.gmail.com>
-From:   Jiri Slaby <jslaby@suse.cz>
-In-Reply-To: <CAK7LNATn2QrFn0fTixnbtZ-VOtWid2PvFKPmjfX+z_UtZgTMgA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14. 04. 22, 11:33, Masahiro Yamada wrote:
-> On Thu, Apr 14, 2022 at 6:14 PM Jiri Slaby <jslaby@suse.cz> wrote:
->>
->> CONFIG_PAHOLE_VERSION is a part of a config since the commit below. And
->> when multiple people update the config, this value constantly changes.
->> Even if they use dummy scripts.
->>
->> To fix this:
->> * add a pahole dummy script returning v99.99 -> 9999
->> * call it in Makefile taking CROSS_COMPILE into account.
->>
->> The latter happens only if $(CROSS_COMPILE)pahole really exists. This is
->> because a cross pahole likely exists only in dummy tools now, not in
->> real cross tools.
-> 
-> 
-> I do not think this is the right thing to do.
-> 
-> (As I said somewhere, I am opposed to checking pahole version in Kconfig).
+From: Daniel Starke <daniel.starke@siemens.com>
 
-If you ask me, I am all for removal as this causes pain. But it's there, 
-so I cannot do anything about that.
+The active mux instances are managed in the gsm_mux array and via mux_get()
+and mux_put() functions separately. This gives a very loose coupling
+between the actual instance and the gsm_mux array which manages it. It also
+results in unnecessary lockings which makes it prone to failures. And it
+creates a race condition if more than the maximum number of mux instances
+are requested while the user changes the parameters of an active instance.
+The user may loose ownership of the current mux instance in this case.
+Fix this by moving the gsm_mux array handling to the mux allocation and
+deallocation functions.
 
-> Also, $(CROSS_COMPILE)pahole looks insane.
-> 
-> You can create a dummy pahole in your local system.
-> 
-> $ echo 'echo v99.99' > $HOME/bin/dummy-pahole
-> $ chmod +x  $HOME/bin/dummy-pahole
-> $ make CROSS_COMPILE=scripts/dummy-tools  PAHOLE=dummy-pahole  menuconfig
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 63 +++++++++++++++++++++++++++------------------
+ 1 file changed, 38 insertions(+), 25 deletions(-)
 
-Well, the question is how do I that for every kernel developer in SUSE?
-
-thanks,
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index daaffcfadaae..f546dfe03d29 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2136,18 +2136,6 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ 	/* Finish outstanding timers, making sure they are done */
+ 	del_timer_sync(&gsm->t2_timer);
+ 
+-	spin_lock(&gsm_mux_lock);
+-	for (i = 0; i < MAX_MUX; i++) {
+-		if (gsm_mux[i] == gsm) {
+-			gsm_mux[i] = NULL;
+-			break;
+-		}
+-	}
+-	spin_unlock(&gsm_mux_lock);
+-	/* open failed before registering => nothing to do */
+-	if (i == MAX_MUX)
+-		return;
+-
+ 	/* Free up any link layer users */
+ 	for (i = 0; i < NUM_DLCI; i++)
+ 		if (gsm->dlci[i])
+@@ -2171,7 +2159,6 @@ static void gsm_cleanup_mux(struct gsm_mux *gsm, bool disc)
+ static int gsm_activate_mux(struct gsm_mux *gsm)
+ {
+ 	struct gsm_dlci *dlci;
+-	int i = 0;
+ 
+ 	timer_setup(&gsm->t2_timer, gsm_control_retransmit, 0);
+ 	init_waitqueue_head(&gsm->event);
+@@ -2183,18 +2170,6 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+ 	else
+ 		gsm->receive = gsm1_receive;
+ 
+-	spin_lock(&gsm_mux_lock);
+-	for (i = 0; i < MAX_MUX; i++) {
+-		if (gsm_mux[i] == NULL) {
+-			gsm->num = i;
+-			gsm_mux[i] = gsm;
+-			break;
+-		}
+-	}
+-	spin_unlock(&gsm_mux_lock);
+-	if (i == MAX_MUX)
+-		return -EBUSY;
+-
+ 	dlci = gsm_dlci_alloc(gsm, 0);
+ 	if (dlci == NULL)
+ 		return -ENOMEM;
+@@ -2210,6 +2185,15 @@ static int gsm_activate_mux(struct gsm_mux *gsm)
+  */
+ static void gsm_free_mux(struct gsm_mux *gsm)
+ {
++	int i;
++
++	for (i = 0; i < MAX_MUX; i++) {
++		if (gsm == gsm_mux[i]) {
++			gsm_mux[i] = NULL;
++			break;
++		}
++	}
++	mutex_destroy(&gsm->mutex);
+ 	kfree(gsm->txframe);
+ 	kfree(gsm->buf);
+ 	kfree(gsm);
+@@ -2229,12 +2213,20 @@ static void gsm_free_muxr(struct kref *ref)
+ 
+ static inline void mux_get(struct gsm_mux *gsm)
+ {
++	unsigned long flags;
++
++	spin_lock_irqsave(&gsm_mux_lock, flags);
+ 	kref_get(&gsm->ref);
++	spin_unlock_irqrestore(&gsm_mux_lock, flags);
+ }
+ 
+ static inline void mux_put(struct gsm_mux *gsm)
+ {
++	unsigned long flags;
++
++	spin_lock_irqsave(&gsm_mux_lock, flags);
+ 	kref_put(&gsm->ref, gsm_free_muxr);
++	spin_unlock_irqrestore(&gsm_mux_lock, flags);
+ }
+ 
+ static inline unsigned int mux_num_to_base(struct gsm_mux *gsm)
+@@ -2255,6 +2247,7 @@ static inline unsigned int mux_line_to_num(unsigned int line)
+ 
+ static struct gsm_mux *gsm_alloc_mux(void)
+ {
++	int i;
+ 	struct gsm_mux *gsm = kzalloc(sizeof(struct gsm_mux), GFP_KERNEL);
+ 	if (gsm == NULL)
+ 		return NULL;
+@@ -2284,6 +2277,26 @@ static struct gsm_mux *gsm_alloc_mux(void)
+ 	gsm->mtu = 64;
+ 	gsm->dead = true;	/* Avoid early tty opens */
+ 
++	/* Store the instance to the mux array or abort if no space is
++	 * available.
++	 */
++	spin_lock(&gsm_mux_lock);
++	for (i = 0; i < MAX_MUX; i++) {
++		if (!gsm_mux[i]) {
++			gsm_mux[i] = gsm;
++			gsm->num = i;
++			break;
++		}
++	}
++	spin_unlock(&gsm_mux_lock);
++	if (i == MAX_MUX) {
++		mutex_destroy(&gsm->mutex);
++		kfree(gsm->txframe);
++		kfree(gsm->buf);
++		kfree(gsm);
++		return NULL;
++	}
++
+ 	return gsm;
+ }
+ 
 -- 
-js
-suse labs
+2.25.1
+

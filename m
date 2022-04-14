@@ -2,147 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9E10501633
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A72B50165D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348086AbiDNOwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:52:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S1353071AbiDNOy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243491AbiDNNp4 (ORCPT
+        with ESMTP id S1343613AbiDNNuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:56 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7ED85FFB
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:43:31 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i14-20020a056e020ece00b002ca198245e6so3042630ilk.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 06:43:31 -0700 (PDT)
+        Thu, 14 Apr 2022 09:50:20 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B574A6E30;
+        Thu, 14 Apr 2022 06:44:11 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id v4so6418729edl.7;
+        Thu, 14 Apr 2022 06:44:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=5coa3OBWaIiXyJ1TJsvTvbGW8ucgi9WcCkL0M7ii1Ac=;
+        b=nrNu1svoISX1APZ50+JiEAl8u9jDBuz8d9Cxyz6EuUVB/sY5Ykf1r7CgRiowPFTY7b
+         Le13noEzoOmLbca8xuw39YtKrgs0gf7eyF8i9mrtfw9PfEVfNzNGnWZWLLCi7Uyu1S/R
+         dkY13N/1vInqBApx9uuZC8/NyKPQnhECC1m92z8HhjLbrRs8IXLm/2ILivrKpx2n7cLZ
+         +SRLPDxhRyaCwRTV3DHRoJbFxLdqC77dEBsT6JLzRN5a30di6rb3TcTuaGL80D5+ZMUr
+         rfa9qUZc4fdOfvWdibJ5h82FWUEhD1TPBSUCg6qzSlS1F/dP3TLhd2LyxItRws/6H+NE
+         pXvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to:cc;
-        bh=2VrWD7opmJFlL7T6rbv4Z/qjhpNRkx9YT608QCgTBxY=;
-        b=Ax43Z/ijqWk5kOwp2IEHtIYqbwdrsy1PP6uryUGgQ0tbbwwXb4W/MJgx82vODy+jlB
-         nWki3/PVWCAoPM3UiAjcFi+NDOl3lAOsNn5jKaezRmGOkjeAjklqedZoprUi01V4yxBk
-         wtaPE6R7OXphhf2ujs2oUeH8UMY4tZ06xeEV0emc9Kv4E3LGFfIQ+ymjAiFerI8r/fat
-         3IJH8f1AofFShI+wvbD/73hFAiJmmkfN8YsugtINKBtq2wqZyapnS4zVSgyGfuCx/4rM
-         9C5rUHIw6eEAj1AT7m66lBHdRvE2DdqrQTZAz4nO0srjoWXyiK/GSkR/C0MdX16lRYaj
-         1VaA==
-X-Gm-Message-State: AOAM531Yaj9NZQSOblyldWwRGs0t9XjMg77Kk3qur92NpDdjptiAzjTv
-        qhOdLYFMlgxQzgEvTA5A9BqYkxbboODz1JeMsvjtvhZyVLrD
-X-Google-Smtp-Source: ABdhPJzJ0j2GI6IjPYE4GhvLOvIIkMP1+B/Dag4tF8n6BC5RtTyEfK6x/ex5ztjKQ7agboIv4tJcdcFCyqpld4pc3aAI1H4tRzqy
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=5coa3OBWaIiXyJ1TJsvTvbGW8ucgi9WcCkL0M7ii1Ac=;
+        b=FXATKJ5mMijKM6wWHzdFqlCK4ndW2L/hDWuCB88nqbhtgOAYhoJ15azNbZJlDJgZgw
+         FP51ynXGtbakXVvs4fVzDSiY/luKb4nkUMBX3mMKCA+QsIygADWwLskyOCLoNTG5cGCJ
+         8l3q8D0rd9wmRIosNeSKYoUHEIsgMwL18ThJSV2cOPdt2FCSoCTer7YHAHPhb8zwTnig
+         pUQ0cpJGHRlT6yfP015E1IBj6qhXDFLxeY6EvnhkrTi585DkrDmJyClY4NP9dYCgRd3x
+         Tg4RdqoMmvRKFQ01XYw6oYsFDztACsSZrqBXO0zDp2BJ+0mtfHIoMALZJyz6bFOkDx6F
+         qgjQ==
+X-Gm-Message-State: AOAM530DOHgC9fv09MUkdGDS+xM1PJ3fJvpvwHTTf4noVVnRXaUp2mTp
+        SvU48P2TRcdutRufO0gpVZw=
+X-Google-Smtp-Source: ABdhPJzkQUDBsDWQTu01bvGCEc2uVQV5houVOM1xZHAxz4SHp+vELS6VLTdLSUAfysTUbV9b6QBWNA==
+X-Received: by 2002:a05:6402:5c9:b0:420:aac6:257b with SMTP id n9-20020a05640205c900b00420aac6257bmr3086166edx.128.1649943849435;
+        Thu, 14 Apr 2022 06:44:09 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id k14-20020a50e18e000000b0041b6f23f7f6sm1039363edl.22.2022.04.14.06.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 06:44:09 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 16:44:06 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 01/12] net: dsa: add support for Renesas RZ/N1
+ A5PSW switch tag code
+Message-ID: <20220414134406.qk6zxlmsqwaamg4c@skbuf>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+ <20220414122250.158113-2-clement.leger@bootlin.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:14cb:b0:646:3b7d:6aee with SMTP id
- b11-20020a05660214cb00b006463b7d6aeemr1254503iow.178.1649943811352; Thu, 14
- Apr 2022 06:43:31 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 06:43:31 -0700
-In-Reply-To: <20220414110903.185132971@linuxfoundation.org>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c6715b05dc9d7ab5@google.com>
-Subject: Re: [PATCH 5.4 289/475] ext4: dont BUG if someone dirty pages without
- asking ext4 first
-From:   syzbot 
-        <syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     gregkh@linuxfoundation.org, lee.jones@linaro.org,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220414122250.158113-2-clement.leger@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Theodore Ts'o <tytso@mit.edu>
->
-> [ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
->
-> [un]pin_user_pages_remote is dirtying pages without properly warning
-> the file system in advance.  A related race was noted by Jan Kara in
-> 2018[1]; however, more recently instead of it being a very hard-to-hit
-> race, it could be reliably triggered by process_vm_writev(2) which was
-> discovered by Syzbot[2].
->
-> This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-> that if some other kernel subsystem dirty pages without properly
-> notifying the file system using page_mkwrite(), ext4 will BUG, while
-> other file systems will not BUG (although data will still be lost).
->
-> So instead of crashing with a BUG, issue a warning (since there may be
-> potential data loss) and just mark the page as clean to avoid
-> unprivileged denial of service attacks until the problem can be
-> properly fixed.  More discussion and background can be found in the
-> thread starting at [2].
->
-> [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> [2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
->
-> Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-> Reported-by: Lee Jones <lee.jones@linaro.org>
-> Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-> Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
+On Thu, Apr 14, 2022 at 02:22:39PM +0200, Clément Léger wrote:
+> Add DSA tag code for Renesas RZ/N1 Advanced 5 port switch. This switch
+> uses a special VLAN type followed by 6 bytes which contains other
+> useful information (port, timestamp, etc).
+> 
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
 > ---
->  fs/ext4/inode.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-> index dcbd8ac8d471..0d62f05f8925 100644
-> --- a/fs/ext4/inode.c
-> +++ b/fs/ext4/inode.c
-> @@ -2161,6 +2161,15 @@ static int ext4_writepage(struct page *page,
->  	else
->  		len = PAGE_SIZE;
+
+Please squash this with the next patch.
+
+>  include/net/dsa.h | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/include/net/dsa.h b/include/net/dsa.h
+> index 934958fda962..2aa8eaae4eb9 100644
+> --- a/include/net/dsa.h
+> +++ b/include/net/dsa.h
+> @@ -53,6 +53,7 @@ struct phylink_link_state;
+>  #define DSA_TAG_PROTO_SJA1110_VALUE		23
+>  #define DSA_TAG_PROTO_RTL8_4_VALUE		24
+>  #define DSA_TAG_PROTO_RTL8_4T_VALUE		25
+> +#define DSA_TAG_PROTO_RZN1_A5PSW_VALUE		26
 >  
-> +	/* Should never happen but for bugs in other kernel subsystems */
-> +	if (!page_has_buffers(page)) {
-> +		ext4_warning_inode(inode,
-> +		   "page %lu does not have buffers attached", page->index);
-> +		ClearPageDirty(page);
-> +		unlock_page(page);
-> +		return 0;
-> +	}
-> +
->  	page_bufs = page_buffers(page);
->  	/*
->  	 * We cannot do block allocation or other extent handling in this
-> @@ -2710,6 +2719,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
->  			wait_on_page_writeback(page);
->  			BUG_ON(PageWriteback(page));
+>  enum dsa_tag_protocol {
+>  	DSA_TAG_PROTO_NONE		= DSA_TAG_PROTO_NONE_VALUE,
+> @@ -81,6 +82,7 @@ enum dsa_tag_protocol {
+>  	DSA_TAG_PROTO_SJA1110		= DSA_TAG_PROTO_SJA1110_VALUE,
+>  	DSA_TAG_PROTO_RTL8_4		= DSA_TAG_PROTO_RTL8_4_VALUE,
+>  	DSA_TAG_PROTO_RTL8_4T		= DSA_TAG_PROTO_RTL8_4T_VALUE,
+> +	DSA_TAG_PROTO_RZN1_A5PSW	= DSA_TAG_PROTO_RZN1_A5PSW_VALUE,
+>  };
 >  
-> +			/*
-> +			 * Should never happen but for buggy code in
-> +			 * other subsystems that call
-> +			 * set_page_dirty() without properly warning
-> +			 * the file system first.  See [1] for more
-> +			 * information.
-> +			 *
-> +			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-> +			 */
-> +			if (!page_has_buffers(page)) {
-> +				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-> +				ClearPageDirty(page);
-> +				unlock_page(page);
-> +				continue;
-> +			}
-> +
->  			if (mpd->map.m_len == 0)
->  				mpd->first_page = page->index;
->  			mpd->next_page = page->index + 1;
+>  struct dsa_switch;
 > -- 
 > 2.34.1
->
->
->
-
-I see the command but can't find the corresponding bug.
-The email is sent to  syzbot+HASH@syzkaller.appspotmail.com address
-but the HASH does not correspond to any known bug.
-Please double check the address.
-
+> 

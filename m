@@ -2,180 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D734501CD0
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B32A5501CC9
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346528AbiDNUim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
+        id S1346572AbiDNUjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346530AbiDNUig (ORCPT
+        with ESMTP id S239274AbiDNUjI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:38:36 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DD4FE338C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:36:09 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id n134so1614279iod.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 13:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=VOwb/LIajkynds1NOWj0jp1Wh/dVLVu/LuQcUbDz8pc=;
-        b=Fl/3pmZMMXpOUXW9mpvpX/dnQQ8iA+BLm4Msn7syrUbuGNt6ScyDa/OeLqypvbAZD3
-         mn/YqmGq1kRjD8kCuAkSd7Rl/xsRv9+bu/uYkJZYO6ztOmnXAmlF/Um+oHvfq8CBWlG8
-         nmo2fZO/3i/n8sBlau9jKc8ktVdxUIL6KfVQt1UTGh6oKY3BuxQRcBomVOMM5T+JSRpZ
-         G0XFcWIeCNOiY9mH6ebjC64b+MRHtWCr1HGLIEb9kbrQnYiAAybYpZVzGbnl8gaqCwCk
-         4N7JMm/Zuv+rdDf+LtmAAt0BOUCUoOUGMh0tFQTPiieWZn2K8CxtWysktqjJtG83yiFW
-         kv1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VOwb/LIajkynds1NOWj0jp1Wh/dVLVu/LuQcUbDz8pc=;
-        b=vngB0ebQxpW7wOfMc/5jHEUd1jdLSX+m9SX6HK1bX6YJYpSKK8xuWUjjua2ZZz1X1T
-         pFn0BqBqr511K8GGhFwYV3MJs2f1gyZorNG93DO1Yr5fiEZiSbKoCZS4unbAUC4Gt2h5
-         zux1c8wC9g+uKQmexmpajoMChFMoKoeXsOiGhY6euc0QRGLy4f0lXYGif8jBQesYJj75
-         i/ua4mqtDFgFtSV0i9Cmitfc2X65271zPQIRfHWHLO+z2z9UPtBzkqgDjhTwKCmGwbJ9
-         RU9b5+Hi+55yiCgAm3sMOsD7FNhVnvBRiEoMqrlZuspXbdXIEzrEWvF5j5zaCFl1gFW4
-         xXAQ==
-X-Gm-Message-State: AOAM531EqLK8iy0ERqPwDPyAO/V5i3Ay2lzC3mewdh8P0I0qFRPa0TAp
-        jVqWrGrjMbzyL61N/axNSI8uVg==
-X-Google-Smtp-Source: ABdhPJzV9I/1jO0ij8KF1ngerhZUW0uge9IpUFXv4nROGyQiw1Pt6a1Zao6nhgJZ9LT4b07U+qKwrA==
-X-Received: by 2002:a05:6602:2f0a:b0:64f:99ed:d732 with SMTP id q10-20020a0566022f0a00b0064f99edd732mr1851747iow.150.1649968569030;
-        Thu, 14 Apr 2022 13:36:09 -0700 (PDT)
-Received: from google.com ([2620:15c:183:200:e02:decc:64d3:b1d3])
-        by smtp.gmail.com with ESMTPSA id h7-20020a056e021d8700b002ca753db1c9sm1660605ila.77.2022.04.14.13.36.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 13:36:08 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 14:36:03 -0600
-From:   Yu Zhao <yuzhao@google.com>
-To:     Barry Song <21cnbao@gmail.com>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        x86 <x86@kernel.org>, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
-Message-ID: <YliFs3NOHeo2LeXl@google.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
- <20220407031525.2368067-7-yuzhao@google.com>
- <CAGsJ_4xqm4L4E4dW4PPHos8Ed9ej6hph28tSGy21Re3u7WiuOA@mail.gmail.com>
+        Thu, 14 Apr 2022 16:39:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA85E2F72;
+        Thu, 14 Apr 2022 13:36:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C3BFAB8293E;
+        Thu, 14 Apr 2022 20:36:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 573B5C385A1;
+        Thu, 14 Apr 2022 20:36:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649968599;
+        bh=0YOUcX1s+MakPztIpP6ZGkf5l+r7N3LY6huJ438u3gE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SFX8IfO7A6lIiz20UEEOHyavGrH//NtmZf0Ki54L0u4FBuu5DKoqH/kehrkh27AVX
+         98xok0tBD6AEAas5XX5Sgpdyk3twGgLijE02NDR2v592aVnwgTy8aLP4QqtXdA15KC
+         ERLxPe/ELkNJTC9Aa1SSSNi++YTHjPlHClLG4IGlEi6yA/MowGfDalYMPsFKSgv2UN
+         3/cTPrR5UFZqvgC5UVZZRD5n5EB9vOisR22/6vFU+N+R2/TAKkdsArjAvMuzD8kZaW
+         7b8YMnA/FL511ONoM+vvpFI2BCIFUY1YdTeS2wzh9+QjsZCGiaFgIVFBJYYyZFVGg/
+         ElBSRk35oOUsA==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nf6Ci-004Phs-Sn; Thu, 14 Apr 2022 21:36:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGsJ_4xqm4L4E4dW4PPHos8Ed9ej6hph28tSGy21Re3u7WiuOA@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Thu, 14 Apr 2022 21:36:36 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] PCI: dwc: rockchip: add legacy interrupt support
+In-Reply-To: <20220413133731.242870-3-pgwipeout@gmail.com>
+References: <20220413133731.242870-1-pgwipeout@gmail.com>
+ <20220413133731.242870-3-pgwipeout@gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <c493261cef27714181a523545dab6d0e@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 06:03:10PM +1200, Barry Song wrote:
+On 2022-04-13 14:37, Peter Geis wrote:
+> The legacy interrupts on the rk356x pcie controller are handled by a
+> single muxed interrupt. Add irq domain support to the pcie-dw-rockchip
+> driver to support the virtual domain.
 > 
-> On Thu, Apr 7, 2022 at 3:16 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > +
-> > +static int isolate_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness,
-> > +                         int *type_scanned, struct list_head *list)
-> > +{
-> > +       int i;
-> > +       int type;
-> > +       int scanned;
-> > +       int tier = -1;
-> > +       DEFINE_MIN_SEQ(lruvec);
-> > +
-> > +       VM_BUG_ON(!seq_is_valid(lruvec));
-> > +
-> > +       /*
-> > +        * Try to make the obvious choice first. When anon and file are both
-> > +        * available from the same generation, interpret swappiness 1 as file
-> > +        * first and 200 as anon first.
-> > +        */
+> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
+> ---
+>  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 123 +++++++++++++++++-
+>  1 file changed, 121 insertions(+), 2 deletions(-)
 > 
-> Has this changed the ABI of swapiness?
-
-No.
-
-> or it is only something
-> meaningful for the internal code?
-
-This is how swappiness is interpreted.
-
-> if so, can we rename it to
-> something else? otherwise, it is quite confusing.
-
-Feel free to suggest something.
-
-> it seems 1 is set internally as a magic number here:
-> +static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct
-> scan_control *sc)
+> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> index c9b341e55cbb..a8b1dc03d3cc 100644
+> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> @@ -10,9 +10,12 @@
+> 
+>  #include <linux/clk.h>
+>  #include <linux/gpio/consumer.h>
+> +#include <linux/irqchip/chained_irq.h>
+> +#include <linux/irqdomain.h>
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/module.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_irq.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> @@ -36,10 +39,13 @@
+>  #define PCIE_LINKUP			(PCIE_SMLH_LINKUP | PCIE_RDLH_LINKUP)
+>  #define PCIE_L0S_ENTRY			0x11
+>  #define PCIE_CLIENT_GENERAL_CONTROL	0x0
+> +#define PCIE_CLIENT_INTR_STATUS_LEGACY	0x8
+> +#define PCIE_CLIENT_INTR_MASK_LEGACY	0x1c
+>  #define PCIE_CLIENT_GENERAL_DEBUG	0x104
+> -#define PCIE_CLIENT_HOT_RESET_CTRL      0x180
+> +#define PCIE_CLIENT_HOT_RESET_CTRL	0x180
+>  #define PCIE_CLIENT_LTSSM_STATUS	0x300
+> -#define PCIE_LTSSM_ENABLE_ENHANCE       BIT(4)
+> +#define PCIE_LEGACY_INT_ENABLE		GENMASK(3, 0)
+> +#define PCIE_LTSSM_ENABLE_ENHANCE	BIT(4)
+>  #define PCIE_LTSSM_STATUS_MASK		GENMASK(5, 0)
+> 
+>  struct rockchip_pcie {
+> @@ -51,6 +57,8 @@ struct rockchip_pcie {
+>  	struct reset_control		*rst;
+>  	struct gpio_desc		*rst_gpio;
+>  	struct regulator                *vpcie3v3;
+> +	struct irq_domain		*irq_domain;
+> +	raw_spinlock_t			irq_lock;
+>  };
+> 
+>  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
+> @@ -65,6 +73,105 @@ static void rockchip_pcie_writel_apb(struct
+> rockchip_pcie *rockchip,
+>  	writel_relaxed(val, rockchip->apb_base + reg);
+>  }
+> 
+> +static void rockchip_pcie_legacy_int_handler(struct irq_desc *desc)
 > +{
-> + ...
-> + else if (!cgroup_reclaim(sc) && get_swappiness(lruvec, sc))
-> + swappiness = 1;
-> + else
-> + swappiness = 0;
-> + }
-> obviously this swappiness is neither /proc/sys/vm/swappiness  nor
-> /sys/fs/cgroup/memory/<group>/>memory.swappiness, right?
+> +	struct irq_chip *chip = irq_desc_get_chip(desc);
+> +	struct rockchip_pcie *rockchip = irq_desc_get_handler_data(desc);
+> +	struct device *dev = rockchip->pci.dev;
+> +	u32 reg;
+> +	u32 hwirq;
+> +	u32 virq;
+> +
+> +	chained_irq_enter(chip, desc);
+> +
+> +	reg = rockchip_pcie_readl_apb(rockchip, 
+> PCIE_CLIENT_INTR_STATUS_LEGACY);
+> +
+> +	while (reg) {
+> +		hwirq = ffs(reg) - 1;
+> +		reg &= ~BIT(hwirq);
 
-Right.
+The whole construct would be better served by for_each_set_bit().
 
-> > @@ -3928,6 +4726,11 @@ static void age_active_anon(struct pglist_data *pgdat,
-> >         struct mem_cgroup *memcg;
-> >         struct lruvec *lruvec;
-> >
-> > +       if (lru_gen_enabled()) {
-> > +               lru_gen_age_node(pgdat, sc);
-> > +               return;
-> > +       }
+> +
+> +		virq = irq_find_mapping(rockchip->irq_domain, hwirq);
+> +		if (virq)
+> +			generic_handle_irq(virq);
+
+Please replace this with generic_handle_domain_irq().
+
+> +		else
+> +			dev_err(dev, "unexpected IRQ, INT%d\n", hwirq);
+
+This hardly serves any purpose. At best, this is a debug statement.
+At worse, this is a DoS. In any case, please remove it.
+
+> +	}
+> +
+> +	chained_irq_exit(chip, desc);
+> +}
+> +
+> +static void rockchip_intx_mask(struct irq_data *data)
+> +{
+> +	struct rockchip_pcie *rockchip = irq_data_get_irq_chip_data(data);
+> +	unsigned long flags;
+> +	u32 val;
+> +
+> +	/* disable legacy interrupts */
+> +	raw_spin_lock_irqsave(&rockchip->irq_lock, flags);
+> +	val = HIWORD_UPDATE_BIT(PCIE_LEGACY_INT_ENABLE);
+> +	val |= PCIE_LEGACY_INT_ENABLE;
+> +	rockchip_pcie_writel_apb(rockchip, val, 
+> PCIE_CLIENT_INTR_MASK_LEGACY);
+> +	raw_spin_unlock_irqrestore(&rockchip->irq_lock, flags);
+> +};
+> +
+> +static void rockchip_intx_unmask(struct irq_data *data)
+> +{
+> +	struct rockchip_pcie *rockchip = irq_data_get_irq_chip_data(data);
+> +	unsigned long flags;
+> +	u32 val;
+> +
+> +	/* enable legacy interrupts */
+> +	raw_spin_lock_irqsave(&rockchip->irq_lock, flags);
+> +	val = HIWORD_UPDATE_BIT(PCIE_LEGACY_INT_ENABLE);
+> +	val &= ~PCIE_LEGACY_INT_ENABLE;
+> +	rockchip_pcie_writel_apb(rockchip, val, 
+> PCIE_CLIENT_INTR_MASK_LEGACY);
+> +	raw_spin_unlock_irqrestore(&rockchip->irq_lock, flags);
+> +};
+> +
+> +static struct irq_chip rockchip_intx_irq_chip = {
+> +	.flags			= IRQCHIP_SKIP_SET_WAKE | IRQCHIP_MASK_ON_SUSPEND,
+> +	.irq_mask		= rockchip_intx_mask,
+> +	.irq_unmask		= rockchip_intx_unmask,
+> +	.name			= "INTx",
+
+For consistency, please place 'name' at the top, and 'flags' at the end.
+
+> +};
+> +
+> +static int rockchip_pcie_intx_map(struct irq_domain *domain, unsigned 
+> int irq,
+> +				  irq_hw_number_t hwirq)
+> +{
+> +	irq_set_chip_and_handler(irq, &rockchip_intx_irq_chip, 
+> handle_simple_irq);
+
+Why isn't this a *level* handler, as per the PCI spec?
+
+> +	irq_set_chip_data(irq, domain->host_data);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct irq_domain_ops intx_domain_ops = {
+> +	.map = rockchip_pcie_intx_map,
+> +};
+> +
+> +static int rockchip_pcie_init_irq_domain(struct rockchip_pcie 
+> *rockchip)
+> +{
+> +	struct device *dev = rockchip->pci.dev;
+> +	struct device_node *intc;
+> +
+> +	raw_spin_lock_init(&rockchip->irq_lock);
+> +
+> +	intc = of_get_child_by_name(dev->of_node, 
+> "legacy-interrupt-controller");
+> +	if (!intc) {
+> +		dev_err(dev, "missing child interrupt-controller node\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	rockchip->irq_domain = irq_domain_add_linear(intc, PCI_NUM_INTX,
+> +						    &intx_domain_ops, rockchip);
+> +	of_node_put(intc);
+> +	if (!rockchip->irq_domain) {
+> +		dev_err(dev, "failed to get a INTx IRQ domain\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  static void rockchip_pcie_enable_ltssm(struct rockchip_pcie *rockchip)
+>  {
+>  	rockchip_pcie_writel_apb(rockchip, PCIE_CLIENT_ENABLE_LTSSM,
+> @@ -111,7 +218,19 @@ static int rockchip_pcie_host_init(struct 
+> pcie_port *pp)
+>  {
+>  	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+>  	struct rockchip_pcie *rockchip = to_rockchip_pcie(pci);
+> +	struct device *dev = rockchip->pci.dev;
+>  	u32 val = HIWORD_UPDATE_BIT(PCIE_LTSSM_ENABLE_ENHANCE);
+> +	int irq, ret;
+> +
+> +	irq = of_irq_get_byname(dev->of_node, "legacy");
+> +	if (irq < 0)
+> +		return irq;
+> +
+> +	irq_set_chained_handler_and_data(irq,
+> rockchip_pcie_legacy_int_handler, rockchip);
+> +
+
+Installing the handler before the domain is instantiated is
+unlikely to end well if you have a pending interrupt...
+
+> +	ret = rockchip_pcie_init_irq_domain(rockchip);
+> +	if (ret < 0)
+> +		dev_err(dev, "failed to init irq domain\n");
 > 
-> is it really a good place for  lru_gen_age_node() since the function
-> is named age_active_anon()
-> but here you are doing aging for both anon and file pages?
+>  	/* LTSSM enable control mode */
+>  	rockchip_pcie_writel_apb(rockchip, val, PCIE_CLIENT_HOT_RESET_CTRL);
 
-Yes.
+Thanks,
 
-> obviously
-> lru_gen_age_node() is not
-> doing "age active anon".
-
-We can rename it if you have something in mind.
+         M.
+-- 
+Jazz is not dead. It just smells funny...

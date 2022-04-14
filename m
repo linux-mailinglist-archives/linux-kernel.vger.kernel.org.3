@@ -2,84 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F95B500C65
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:49:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67532500C69
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 13:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242798AbiDNLvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 07:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
+        id S238157AbiDNLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 07:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiDNLvl (ORCPT
+        with ESMTP id S229990AbiDNLxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 07:51:41 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5320C86E01
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 04:49:16 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfHkh1pZJzgYhR;
-        Thu, 14 Apr 2022 19:47:24 +0800 (CST)
-Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
- (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
- 2022 19:49:14 +0800
-From:   Miaohe Lin <linmiaohe@huawei.com>
-To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
-CC:     <shy828301@gmail.com>, <david@redhat.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH v2 2/2] mm/memory-failure.c: dissolve truncated hugetlb page
-Date:   Thu, 14 Apr 2022 19:49:41 +0800
-Message-ID: <20220414114941.11223-3-linmiaohe@huawei.com>
-X-Mailer: git-send-email 2.23.0
-In-Reply-To: <20220414114941.11223-1-linmiaohe@huawei.com>
-References: <20220414114941.11223-1-linmiaohe@huawei.com>
+        Thu, 14 Apr 2022 07:53:35 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C2754BD0;
+        Thu, 14 Apr 2022 04:51:11 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 1EEEC1F47996
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649937067;
+        bh=FQo3+DfDK/439bMdjsIJSbbQW7m+3RsLgRDDfki4H+U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=YtZBD7RNl720F69+xtlmXyfdDxjpi1ksA1V3yHN1HBA6AEH5w+VeB7DI9ibavjKHp
+         ZjGwaDwxN6p4gy8x8MbJRnoAamqkn+diH9XzFHyDYHLNqyUhI5IkEXRuv1V9yIzUDU
+         AYKcVdlaGGJYKVZd0ruW3n8o5eHJ/KA0XifmgbWE0Zi+B8mz0QSBmBpFmHyQTnPCGV
+         qiWeXeq4ZGX5n+lMeRiDzj4II7gDE09xt+ks3FgMSN1jDl1LJ5P3bgAvEVMRBgwHdA
+         5FFEZ0UDm6uyqdjercTqlpjz0C2WX369JjI3QCtFbS/aax9x7MO9bYwmNdz+pG65OE
+         re3ANfGXiXIIA==
+Message-ID: <ee2f0819-8c9e-4160-c4ae-fb4ad0da3f3b@collabora.com>
+Date:   Thu, 14 Apr 2022 13:51:04 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.124.27]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 1/2] dt-bindings: Add DT schema for Arm Mali Valhall
+ GPU
+Content-Language: en-US
+To:     Nick Fan <Nick.Fan@mediatek.com>, Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     devicetree@vger.kernel.org, srv_heupstream@mediatek.com,
+        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-mediatek@lists.infradead.org,
+        alyssa.rosenzweig@collabora.com, Daniel Vetter <daniel@ffwll.ch>,
+        wenst@chromium.org, linux-arm-kernel@lists.infradead.org
+References: <20220414025023.11516-1-Nick.Fan@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220414025023.11516-1-Nick.Fan@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If me_huge_page meets a truncated but not yet freed hugepage, it won't be
-dissolved even if we hold the last refcnt. It's because the hugepage has
-NULL page_mapping while it's not anonymous hugepage too. Thus we lose the
-last chance to dissolve it into buddy to save healthy subpages. Remove
-PageAnon check to handle these hugepages too.
+Il 14/04/22 04:50, Nick Fan ha scritto:
+> Add devicetree schema for Arm Mali Valhall GPU
+> 
+> Define a compatible string for the Mali Valhall GPU
+> for MediaTek's SoC platform.
+> 
+> Signed-off-by: Nick Fan <Nick.Fan@mediatek.com>
 
-Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
----
- mm/memory-failure.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
+Hello Nick,
+Unfortunately, this binding is completely wrong.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 488aaca72340..1d64bfff339d 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -1041,12 +1041,11 @@ static int me_huge_page(struct page_state *ps, struct page *p)
- 		res = MF_FAILED;
- 		unlock_page(hpage);
- 		/*
--		 * migration entry prevents later access on error anonymous
--		 * hugepage, so we can free and dissolve it into buddy to
--		 * save healthy subpages.
-+		 * migration entry prevents later access on error hugepage,
-+		 * so we can free and dissolve it into buddy to save healthy
-+		 * subpages.
- 		 */
--		if (PageAnon(hpage))
--			put_page(hpage);
-+		put_page(hpage);
- 		if (__page_handle_poison(p)) {
- 			page_ref_inc(p);
- 			res = MF_RECOVERED;
--- 
-2.23.0
+First of all, there's no arm,mali-valhall driver upstream - this will be managed
+by panfrost later, yes, but right now there's no support.
+Then, you're also setting opp-microvolt in a way that will never (or, at least,
+not anytime soon) be supported by the upstream driver, as it manages only one
+supply for devfreq scaling.
 
+Besides, please don't push bindings that have no upstream driver, especially if
+these are for downstream drivers requiring proprietary components, while a
+completely open source implementation is in the works.
+
+Regards,
+Angelo

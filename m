@@ -2,105 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F9E501C41
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:58:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25654501C48
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 22:00:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345999AbiDNUAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 16:00:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S1346005AbiDNUC1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 16:02:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiDNUAc (ORCPT
+        with ESMTP id S234051AbiDNUCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 16:00:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69942DAFD2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:58:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649966286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AE6ziqzRc2dhrjIjlkzQM+upeliMWRHPoIvV5hVYL48=;
-        b=aw2F20EUMsUai1MZtEDHIwFgANVTZ1Vwj89JKS9PmO2aRG0GiTVAQzq1kSiLcVuoKbHu+P
-        J223FHGrFW2r9rbNRXbdyGbPF/uqPb7+1V2Bc6L2S1QQdcBy96H5zNIHjutZQzzV+XXRyH
-        TwN2tyWeQGcPY6toDn1LuTz95BUYbnM=
-Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
- [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-421-tIr68SCtP5yJPrr2Ub9ZFQ-1; Thu, 14 Apr 2022 15:58:05 -0400
-X-MC-Unique: tIr68SCtP5yJPrr2Ub9ZFQ-1
-Received: by mail-oo1-f71.google.com with SMTP id z8-20020a4a8088000000b0032422c5af67so3141261oof.2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:58:05 -0700 (PDT)
+        Thu, 14 Apr 2022 16:02:23 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDB1D3734
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:59:57 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id x17so10896372lfa.10
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KjO7qutuK1oWFLm/iSWg0Q078FDs2tsCz+NAqsezLsQ=;
+        b=WgQTMOywpmOVGqjaW2tMdnCeS3P5tDzXnO/dR9II6/D8/55RBRrG24sis1JO9vuEZy
+         zH2ySwbddNCDII7Qewsui2mim/KEXaJ2GqCGNvKT40YDtM9AJ1Mrl2/IY6beN1XXiSpv
+         GitsUrqJCl0a6VxN/RoziJwiRyHG1g4g9NGd6ZMckvx94JijtKCF4sTsp8xPazm/Au5O
+         RVFWSxI2szGJzC3dabNHkmpoF2zaD6h3Mpa4tjK+WZ2eKH4RIN3Jc+iVWT1Q8cGQQTYR
+         TO7zo/B7UmWu2Jkm8NqJf/gsah+cRGx09d+MLtBtg5b8IKvOimzTpm+PW7X7B+a2WYV7
+         iLuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:organization
-         :mime-version:content-transfer-encoding;
-        bh=AE6ziqzRc2dhrjIjlkzQM+upeliMWRHPoIvV5hVYL48=;
-        b=j+Z0a+QVywkAgr5LsuQ+fsO3CQi27k00s4AoorzqIN5yi+Wz0tHLx8TWL4U3feuTuq
-         VGUvbrvgkAhRDl+kDHyZDr4DDebT1K/nRUZe28aevN6T4ZJsqc4+jFpnTnGBCLwG1Qgm
-         n5kYWnczW36dePq2R8OWHQS2XCyaDuPIjHci22oCaNOy5Wkkl/uyQsAoE4kX1Dcq8yY3
-         K74/EOj/aDmH2m4FM+xQzvGmPdFn/H8ez1Na67sUap5wbrCJM7APejI9TD4knOwE8R2e
-         YkieeiH8hUReQKTbEEDsBasVUTW6N2oBdj3vFCJsQJmv+IT7fCCP9TS0ZTYEn5VJVYNb
-         Fesw==
-X-Gm-Message-State: AOAM5322mJ2Oy/ldMQcIyZ7492ocskrDXPbTA1juYZlhufBqSwg77f2f
-        J8+o777FqR1vqS8U+H/sKaBwzeUM+siDLWqpJqEj0RhAcVvdBSqiBw/ssWDG/UvlTqG9Yo2UP2G
-        WJegQnibaMMejeOXuhPCxjJl5
-X-Received: by 2002:a05:6808:1384:b0:322:2bcc:42c0 with SMTP id c4-20020a056808138400b003222bcc42c0mr109654oiw.11.1649966284303;
-        Thu, 14 Apr 2022 12:58:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwlq+M8kVUY+y/WxhC3Noj7QLeNYSzazjp1aXJ5+G0+DkrFoIZIkKPXMlgomFVi58BL5erFyQ==
-X-Received: by 2002:a05:6808:1384:b0:322:2bcc:42c0 with SMTP id c4-20020a056808138400b003222bcc42c0mr109648oiw.11.1649966284072;
-        Thu, 14 Apr 2022 12:58:04 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id s4-20020a0568301e0400b006015bafee43sm402266otr.46.2022.04.14.12.58.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 12:58:03 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 13:58:01 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [GIT PULL] VFIO fixes for v5.18-rc3
-Message-ID: <20220414135801.306f33dd.alex.williamson@redhat.com>
-Organization: Red Hat
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=KjO7qutuK1oWFLm/iSWg0Q078FDs2tsCz+NAqsezLsQ=;
+        b=OpkB1PjE6qyx/0B3GCWzuHpSeOYba3t3RbAbRw7bh4HD4/pWo5H483jwCgh/fGGQff
+         0Bl3Rz8CSE2eRlvbUvxfHLtcB1crz4k8Qs5rHvp5hBDQJNY2VjsPHEalymfjv3i5A/RU
+         0mHdP9bc/mIehmaZ0GGlMzKsTppZVJzuw3/5DNvNfPMwKrF9XFNJvdkRM6HaZy5Jt2GC
+         klt7AKow4Fx2MG/Vb1yd2q9taeRIhjyjlZpSE43o4PP3sCHrGHlJWrzNfKLX2UZL2pLE
+         kc4OI9PzfxnzG7riMWIfwCO7GLmSQi4xqdnNEj0YCzlsye/DujOGd37ZEKv+2YxegB5P
+         XCTw==
+X-Gm-Message-State: AOAM531CbiF0lbWAG04zMb4HBjVfWATSz5MGqhRENC/WzPqssl35VSVR
+        FVJ2hUYDSuQoncr1fGy/8gGqpg==
+X-Google-Smtp-Source: ABdhPJxG24h9VEnca2r0dBBAMaP0vTXTtuXQiz9HrGReH8pCSBk399n1kfsIMWl2nG52NepnBGrAnA==
+X-Received: by 2002:a05:6512:401f:b0:46d:28a:a5d3 with SMTP id br31-20020a056512401f00b0046d028aa5d3mr2821781lfb.632.1649966395900;
+        Thu, 14 Apr 2022 12:59:55 -0700 (PDT)
+Received: from [192.168.1.211] ([37.153.55.125])
+        by smtp.gmail.com with ESMTPSA id a13-20020a195f4d000000b00443a5302315sm95708lfj.30.2022.04.14.12.59.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 12:59:55 -0700 (PDT)
+Message-ID: <be3141cb-1fa9-4a9c-6b18-c0d73b9efe80@linaro.org>
+Date:   Thu, 14 Apr 2022 22:59:54 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3] drm/msm/dp: stop event kernel thread when DP unbind
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        bjorn.andersson@linaro.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1649957137-24620-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1649957137-24620-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 14/04/2022 20:25, Kuogee Hsieh wrote:
+> Current DP driver implementation, event thread is kept running
+> after DP display is unbind. This patch fix this problem by disabling
+> DP irq and stop event thread to exit gracefully at dp_display_unbind().
+> 
+> Changes in v2:
+> -- start event thread at dp_display_bind()
+> 
+> Changes in v3:
+> -- disable all HDP interrupts at unbind
+> -- replace dp_hpd_event_setup() with dp_hpd_event_thread_start()
+> -- replace dp_hpd_event_stop() with dp_hpd_event_thread_stop()
+> -- move init_waitqueue_head(&dp->event_q) to probe()
+> -- move spin_lock_init(&dp->event_lock) to probe()
+> 
+> Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 42 ++++++++++++++++++++++++++++---------
+>   1 file changed, 32 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 01453db..0b9a96f 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -113,6 +113,7 @@ struct dp_display_private {
+>   	u32 hpd_state;
+>   	u32 event_pndx;
+>   	u32 event_gndx;
+> +	struct task_struct *ev_tsk;
+>   	struct dp_event event_list[DP_EVENT_Q_MAX];
+>   	spinlock_t event_lock;
+>   
+> @@ -230,6 +231,29 @@ void dp_display_signal_audio_complete(struct msm_dp *dp_display)
+>   	complete_all(&dp->audio_comp);
+>   }
+>   
+> +static int hpd_event_thread(void *data);
+> +
+> +static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv)
+> +{
+> +	int err = 0;
+> +
+> +	dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> +	if (IS_ERR(dp_priv->ev_tsk)) {
+> +		DRM_ERROR("failed to create DP event thread\n");
+> +		err = PTR_ERR(dp_priv->ev_tsk);
+> +	}
+> +	return err;
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+Generally the preference is for the following style:
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+if (error) {
+    return error;
+}
 
-are available in the Git repository at:
+return 0;
 
-  https://github.com/awilliam/linux-vfio.git tags/vfio-v5.18-rc3
+It makes it clear that at the end the function succeeds.
 
-for you to fetch changes up to 1ef3342a934e235aca72b4bcc0d6854d80a65077:
 
-  vfio/pci: Fix vf_token mechanism when device-specific VF drivers are used (2022-04-13 11:37:44 -0600)
+> +}
+> +
+> +static void dp_hpd_event_thread_stop(struct dp_display_private *dp_priv)
+> +{
+> +	kthread_stop(dp_priv->ev_tsk);
+> +
+> +	/* reset event q to empty */
+> +	dp_priv->event_gndx = 0;
+> +	dp_priv->event_pndx = 0;
+> +}
+> +
+>   static int dp_display_bind(struct device *dev, struct device *master,
+>   			   void *data)
+>   {
+> @@ -269,6 +293,7 @@ static int dp_display_bind(struct device *dev, struct device *master,
+>   	if (rc)
+>   		DRM_ERROR("Audio registration Dp failed\n");
 
-----------------------------------------------------------------
-VFIO fixes for v5.18-rc3
+Isn't 'goto end' missing here?
 
- - Fix VF token checking for vfio-pci variant drivers (Jason Gunthorpe)
+That's why it's suggested not to mix error and success paths.
 
-----------------------------------------------------------------
-Jason Gunthorpe (1):
-      vfio/pci: Fix vf_token mechanism when device-specific VF drivers are used
+>   
+> +	rc = dp_hpd_event_thread_start(dp);
+>   end:
+>   	return rc;
+>   }
+> @@ -280,6 +305,9 @@ static void dp_display_unbind(struct device *dev, struct device *master,
+>   	struct drm_device *drm = dev_get_drvdata(master);
+>   	struct msm_drm_private *priv = drm->dev_private;
+>   
+> +	/* disable all HPD interrupts */
+> +	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
 
- drivers/vfio/pci/vfio_pci_core.c | 124 +++++++++++++++++++++++----------------
- include/linux/vfio_pci_core.h    |   2 +
- 2 files changed, 76 insertions(+), 50 deletions(-)
+Generic nit: if we had _enable and _disable functions, one wouldn't need 
+the comment here. It would be obvious from the code itself.
 
+
+> +	dp_hpd_event_thread_stop(dp);
+>   	dp_power_client_deinit(dp->power);
+>   	dp_aux_unregister(dp->aux);
+>   	priv->dp[dp->id] = NULL;
+> @@ -1054,7 +1082,7 @@ static int hpd_event_thread(void *data)
+>   
+>   	dp_priv = (struct dp_display_private *)data;
+>   
+> -	while (1) {
+> +	while (!kthread_should_stop()) {
+>   		if (timeout_mode) {
+>   			wait_event_timeout(dp_priv->event_q,
+>   				(dp_priv->event_pndx == dp_priv->event_gndx),
+> @@ -1132,13 +1160,6 @@ static int hpd_event_thread(void *data)
+>   	return 0;
+>   }
+>   
+> -static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
+> -{
+> -	init_waitqueue_head(&dp_priv->event_q);
+> -	spin_lock_init(&dp_priv->event_lock);
+> -
+> -	kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> -}
+>   
+>   static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+>   {
+> @@ -1266,7 +1287,10 @@ static int dp_display_probe(struct platform_device *pdev)
+>   		return -EPROBE_DEFER;
+>   	}
+>   
+> +	/* setup event q */
+>   	mutex_init(&dp->event_mutex);
+> +	init_waitqueue_head(&dp->event_q);
+> +	spin_lock_init(&dp->event_lock);
+>   
+>   	/* Store DP audio handle inside DP display */
+>   	dp->dp_display.dp_audio = dp->audio;
+> @@ -1441,8 +1465,6 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+>   
+>   	dp = container_of(dp_display, struct dp_display_private, dp_display);
+>   
+> -	dp_hpd_event_setup(dp);
+> -
+>   	dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+>   }
+>   
+
+
+-- 
+With best wishes
+Dmitry

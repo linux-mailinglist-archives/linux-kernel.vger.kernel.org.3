@@ -2,66 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD780500AF4
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 274FC500AF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 12:20:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238944AbiDNKVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 06:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
+        id S241213AbiDNKVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 06:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbiDNKVF (ORCPT
+        with ESMTP id S240386AbiDNKVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 06:21:05 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35B271ED7;
-        Thu, 14 Apr 2022 03:18:40 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so5643852wmb.4;
-        Thu, 14 Apr 2022 03:18:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3r7O9jHU98BWgcu+jBEa/rllRwW774nvph0dWvI3Q58=;
-        b=ewn8QLRlCSPgCWU2xGDKwaGsKBJvKuehotVP23Tc9czCjucDaQixnCkYBFqOh5Lorg
-         OBDyN93rY2Srmdv17UVs3oPZri8dyuuZaj9ZTADrJteDGYrG4ITPCJ4vVPEpAHPzeKfT
-         1erhhKcK9e9jmaDpHhfCwJ2JCZCSYKWrAwAqql9KvcOCB3OkYViPKPWWPTVw56ehd88w
-         JBJ05Mli9oYcr/tSB56DIrqIbr+okc2ZgnPX3JQ9eCIQ46QqJ13oTsTDrXFI+xNBLisF
-         CobF+xlEVB8LXeCRtZrhuHIsZs0i/RlWmyR4cVWo1crkT3519dKLMSecQGvlTIs6zWJi
-         Sq3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=3r7O9jHU98BWgcu+jBEa/rllRwW774nvph0dWvI3Q58=;
-        b=yV23the4J7wW5RcCiGOaIiaWsCcn0NoE3JxQWwwDepLc7G6P4X4MosxpF67BwKalDx
-         b7FzAUI7XHkcvEOz/3NNe06m4lly2mckfRJ7xHfgFSMmhpVyymeU31b6MULJTxUELChw
-         x0TWxqL9Wfiad1EKn+UJUht7IwZwlQk8sZ0vXfSWz8CNvrNpt0wYm4aRhU9rzuXzio/7
-         Gqk6JIbHv51Jnn1xk+wCbjCzBJ4WvjW+mA1Ck5k4B0Q7ndUf7cvWLYRxFdSBxS0KWfnr
-         kyiNeSMkzF62go8mVPGctDKeXovUhKHzfZo4CE2+uh2NiKqQ2zhan/JQbZHghcvqhf7A
-         KSzA==
-X-Gm-Message-State: AOAM530B4fBwWhh7tEh6m4uQlLy/FJNcrfi0ui1pEKurtyeUOEJwSpMB
-        cIude1jyLcIOadDe2BxZdUA+Wq/7U1+4Lg==
-X-Google-Smtp-Source: ABdhPJzmHm+1Q6N/ukniEJqJEgv0gHvZkFocvlhvKx1KJWDfVWoIO8oyF10j0cQgKu+jK5zR9YqGEQ==
-X-Received: by 2002:a05:600c:3ba9:b0:38e:c8c6:ae0d with SMTP id n41-20020a05600c3ba900b0038ec8c6ae0dmr2466305wms.120.1649931519234;
-        Thu, 14 Apr 2022 03:18:39 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id r129-20020a1c2b87000000b0038e6a025d05sm1777745wmr.18.2022.04.14.03.18.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 03:18:38 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: rtl8192u: make read-only array EWC11NHTCap static const
-Date:   Thu, 14 Apr 2022 11:18:38 +0100
-Message-Id: <20220414101838.296944-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Thu, 14 Apr 2022 06:21:31 -0400
+Received: from out30-44.freemail.mail.aliyun.com (out30-44.freemail.mail.aliyun.com [115.124.30.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F4771EDE;
+        Thu, 14 Apr 2022 03:19:06 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R191e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04357;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VA25ZSb_1649931543;
+Received: from 192.168.193.180(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0VA25ZSb_1649931543)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 14 Apr 2022 18:19:03 +0800
+Message-ID: <f7a5642f-bfcb-865d-7039-d0b9d62a3360@linux.alibaba.com>
+Date:   Thu, 14 Apr 2022 03:19:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220413213917.711770-1-keescook@chromium.org>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <20220413213917.711770-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,29 +46,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the read-only array EWC11NHTCap on the stack but instead
-make it static const. Also makes the object code a little smaller. Move
-comment to clean up checkpatch warning.
+Hi, Kees,
+Thanks for the rewrite. I tested this patch, and it works fine for
+me except for a few minor comments below :)
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On 4/13/22 14:39, Kees Cook wrote:
+> +/* The ultimate ROP gadget. */
+> +static noinline __no_ret_protection
+> +void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if(*ret_addr == expected)
+> +		*ret_addr = (addr);
+> +	else
+> +		/* Check architecture, stack layout, or compiler behavior... */
+> +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> +			*ret_addr, addr);
+> +}
+> +
+> +static noinline
+> +void set_return_addr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if(*ret_addr == expected)
+> +		*ret_addr = (addr);
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-index 358c35d9589c..b4cbe499ba37 100644
---- a/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-+++ b/drivers/staging/rtl8192u/ieee80211/rtl819x_HTProc.c
-@@ -480,7 +480,8 @@ void HTConstructCapabilityElement(struct ieee80211_device *ieee, u8 *posHTCap, u
- 	}
- 	memset(posHTCap, 0, *len);
- 	if (pHT->ePeerHTSpecVer == HT_SPEC_VER_EWC) {
--		u8	EWC11NHTCap[] = {0x00, 0x90, 0x4c, 0x33};	// For 11n EWC definition, 2007.07.17, by Emily
-+		/* For 11n EWC definition, 2007.07.17, by Emily */
-+		static const u8	EWC11NHTCap[] = {0x00, 0x90, 0x4c, 0x33};
- 
- 		memcpy(posHTCap, EWC11NHTCap, sizeof(EWC11NHTCap));
- 		pCapELE = (struct ht_capability_ele *)&posHTCap[4];
--- 
-2.35.1
+When PAC is enabled, I get a mismatch as follows:
 
+/kselftest_install/lkdtm # ./CFI_BACKWARD.sh
+[  182.120133] lkdtm: Performing direct entry CFI_BACKWARD
+[  182.120665] lkdtm: Attempting unchecked stack return address redirection ...
+[  182.122543] lkdtm: ok: redirected stack return address.
+[  182.123521] lkdtm: Attempting checked stack return address redirection ...
+[  182.123964] lkdtm: Eek: return address mismatch! bfff800008fa8014 != ffff800008fa8030
+[  182.124502] lkdtm: ok: control flow unchanged.
+CFI_BACKWARD: saw 'call trace:|ok: control flow unchanged': ok
+
+We may need to ignore the pac high bits of return address according
+to TCR.T1SZ (or simply remove the high 16 bits before comparing).
+
+> +	else
+> +		/* Check architecture, stack layout, or compiler behavior... */
+> +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> +			*ret_addr, addr);
+
+According to the context, it might be "expected" here?
+
+		pr_warn("Eek: return address mismatch! %px != %px\n",
+			*ret_addr, expected);
+
+I simply ignored the upper 16 bits, and tested it separately
+in gcc/llvm 12 with SCS/PAC and all the four cases worked fine for me.
+
+Thanks,
+Dan.

@@ -2,138 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 507BB500915
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:59:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4095008FD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240409AbiDNJBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
+        id S241293AbiDNI76 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 04:59:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241431AbiDNJBN (ORCPT
+        with ESMTP id S241273AbiDNI7n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:01:13 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2B96BDE1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:47 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso5048368pjf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=7gSbtqBRr2wSdYKirc6pWSRHibf6eUTgwDuPBAZwnl8=;
-        b=d1aUNa4xAf9AFLk27JROnTj7gTMxi+QKNfpwzKujGplZaDWjcUHJbpmmyHUlxNQWWv
-         up2SXBZ/CPbl36VLVAS6pP9Ll2Rm8ygAHJ548vam92dc7eGxOpgDCT1CCw/0Nc8WaUgy
-         WM0WARRtqcLQfaHYHSUoRl1wWH0bPL/Oe/nQoHD1XbeEAnN0Zdx64Cb9lIxHowMa2bF+
-         3nlolC3fzeGVtaGqAztkZhJiyoT3BRjQN32KkJnoa2vwiTJ0aOY4X/xgbXsLwD+kq7z7
-         hQZXajkx77QNN/8G6PLQQ52NcVzmt1tSOD3484narV1c5YgHPL9lPDq2c+s+9DDIElQ0
-         NE0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=7gSbtqBRr2wSdYKirc6pWSRHibf6eUTgwDuPBAZwnl8=;
-        b=lYpzkGYIYRW1PvzCDFM1FWDfNlzRdRY1hIAl7kEMifX6tE5U6IwQW01NmEEaS90NpA
-         CyMh1Ynuim8d8MbVcORVBUpqsu9u2N2hSrIVajeJ6dJ8vMDcnk9pWApNPag1J7SKjdf2
-         WMpBZohYZ9tiOH42GoiuVxF610FgH9KAlXZBLO/ocXVWme6471XqP6PfeU2bvW+2n+Wq
-         stw3a+UnVDxCrnq+t87CaVP9iAL5osDS5TVQnohUyyP7QYhRmWPGSMrxID0WDHcx5bzO
-         Q+9dCuGby52StP1xBYA4MyBPBE8Ck2yMoM2RmR7ZjdRrBV8KZlWCC8BeqbaqUIOMF+M7
-         ODWA==
-X-Gm-Message-State: AOAM533twjkrzEepL0KMuk1RmI/ZPYqok0UmNejaUi502EJ4VfIr3wed
-        4VsoJ7yOC8Ai6S81jrbuvog=
-X-Google-Smtp-Source: ABdhPJzj3pUgRnAQ9AeoN1UcTJDOaBjCMDcKEporHnxQE//dhFhbfvsbYssdkFT4Us/0SBKGseAknQ==
-X-Received: by 2002:a17:902:b495:b0:158:8318:4cf9 with SMTP id y21-20020a170902b49500b0015883184cf9mr13579160plr.33.1649926726962;
-        Thu, 14 Apr 2022 01:58:46 -0700 (PDT)
-Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.58.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 01:58:45 -0700 (PDT)
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Marco Elver <elver@google.com>,
-        Matthew WilCox <willy@infradead.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/23] mm/slab_common: kmalloc_node: pass large requests to page allocator
-Date:   Thu, 14 Apr 2022 17:57:15 +0900
-Message-Id: <20220414085727.643099-12-42.hyeyoo@gmail.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
-References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
+        Thu, 14 Apr 2022 04:59:43 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15B75689B5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:57:19 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A86CD139F;
+        Thu, 14 Apr 2022 01:57:18 -0700 (PDT)
+Received: from [10.32.36.25] (e121896.Emea.Arm.com [10.32.36.25])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F3203F5A1;
+        Thu, 14 Apr 2022 01:57:17 -0700 (PDT)
+Message-ID: <b3e647de-8efd-4db2-a910-77e37b026ae7@arm.com>
+Date:   Thu, 14 Apr 2022 09:57:15 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 00/15] Make ETM register accesses consistent with
+ sysreg.h
+Content-Language: en-US
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>
+Cc:     suzuki.poulose@arm.com, coresight@lists.linaro.org,
+        mike.leach@linaro.org, anshuman.khandual@arm.com,
+        leo.yan@linaro.com, Leo Yan <leo.yan@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220304171913.2292458-1-james.clark@arm.com>
+ <20220323162257.GC3248686@p14s>
+ <4ef77445-b58d-a71a-0ddc-70e308ea99c8@arm.com> <20220413170844.GA547134@p14s>
+From:   James Clark <james.clark@arm.com>
+In-Reply-To: <20220413170844.GA547134@p14s>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that kmalloc_large_node() is in common code, pass large requests
-to page allocator in kmalloc_node() using kmalloc_large_node().
 
-Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Reviewed-by: Vlastimil Babka <vbabka@suse.cz>
----
- include/linux/slab.h | 26 +++++++++++++++++++-------
- 1 file changed, 19 insertions(+), 7 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 1b5bdcb0fd31..eb457f20f415 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -608,23 +608,35 @@ static __always_inline __alloc_size(1) void *kmalloc(size_t size, gfp_t flags)
- 	return __kmalloc(size, flags);
- }
- 
-+#ifndef CONFIG_SLOB
- static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
- {
--#ifndef CONFIG_SLOB
--	if (__builtin_constant_p(size) &&
--		size <= KMALLOC_MAX_CACHE_SIZE) {
--		unsigned int i = kmalloc_index(size);
-+	if (__builtin_constant_p(size)) {
-+		unsigned int index;
- 
--		if (!i)
-+		if (size > KMALLOC_MAX_CACHE_SIZE)
-+			return kmalloc_large_node(size, flags, node);
-+
-+		index = kmalloc_index(size);
-+
-+		if (!index)
- 			return ZERO_SIZE_PTR;
- 
- 		return kmem_cache_alloc_node_trace(
--				kmalloc_caches[kmalloc_type(flags)][i],
-+				kmalloc_caches[kmalloc_type(flags)][index],
- 						flags, node, size);
- 	}
--#endif
- 	return __kmalloc_node(size, flags, node);
- }
-+#else
-+static __always_inline __alloc_size(1) void *kmalloc_node(size_t size, gfp_t flags, int node)
-+{
-+	if (__builtin_constant_p(size) && size > KMALLOC_MAX_CACHE_SIZE)
-+		return kmalloc_large_node(size, flags, node);
-+
-+	return __kmalloc_node(size, flags, node);
-+}
-+#endif
- 
- /**
-  * kmalloc_array - allocate memory for an array.
--- 
-2.32.0
+On 13/04/2022 18:08, Mathieu Poirier wrote:
+> On Mon, Mar 28, 2022 at 11:41:48AM +0100, James Clark wrote:
+>>
+>>
+>> On 23/03/2022 16:22, Mathieu Poirier wrote:
+>>> On Fri, Mar 04, 2022 at 05:18:57PM +0000, James Clark wrote:
+>>>> Changes since v2:
+>>>>  * Implement Mike's suggestion of not having _SHIFT and using the existing
+>>>>    FIELD_GET and FIELD_PREP methods.
+>>>>  * Dropped the change to add the new REG_VAL macro because of the above.
+>>>>  * FIELD_PREP could be used in some trivial cases, but in some cases the
+>>>>    shift is still required but can be calculated with __bf_shf
+>>>>  * Improved the commit messages.
+>>>>  * The change is still binary equivalent, but requires an extra step 
+>>>>    mentioned at the end of this cover letter.
+>>>>
+>>>> Applies to coresight/next 3619ee28488
+>>>> Also available at https://gitlab.arm.com/linux-arm/linux-jc/-/tree/james-cs-register-refactor-v3
+>>>>
+>>>> To check for binary equivalence follow the same steps in the cover letter
+>>>> of v2, but apply the following change to coresight-priv.h. This is because
+>>>> the existing version of the macros wrap the expression in a new scope {}
+>>>> that flips something in the compiler:
+>>>>
+>>>>   #undef FIELD_GET
+>>>>   #define FIELD_GET(_mask, _reg) (((_reg) & (_mask)) >> __bf_shf(_mask))
+>>>>   #undef FIELD_PREP
+>>>>   #define FIELD_PREP(_mask, _val) (((_val) << __bf_shf(_mask)) & (_mask))
+>>>>
+>>>> Thanks
+>>>> James
+>>>>
+>>>> James Clark (15):
+>>>>   coresight: etm4x: Cleanup TRCIDR0 register accesses
+>>>>   coresight: etm4x: Cleanup TRCIDR2 register accesses
+>>>>   coresight: etm4x: Cleanup TRCIDR3 register accesses
+>>>>   coresight: etm4x: Cleanup TRCIDR4 register accesses
+>>>>   coresight: etm4x: Cleanup TRCIDR5 register accesses
+>>>>   coresight: etm4x: Cleanup TRCCONFIGR register accesses
+>>>>   coresight: etm4x: Cleanup TRCEVENTCTL1R register accesses
+>>>>   coresight: etm4x: Cleanup TRCSTALLCTLR register accesses
+>>>>   coresight: etm4x: Cleanup TRCVICTLR register accesses
+>>>>   coresight: etm3x: Cleanup ETMTECR1 register accesses
+>>>>   coresight: etm4x: Cleanup TRCACATRn register accesses
+>>>>   coresight: etm4x: Cleanup TRCSSCCRn and TRCSSCSRn register accesses
+>>>>   coresight: etm4x: Cleanup TRCSSPCICRn register accesses
+>>>>   coresight: etm4x: Cleanup TRCBBCTLR register accesses
+>>>>   coresight: etm4x: Cleanup TRCRSCTLRn register accesses
+>>>>
+>>>>  .../coresight/coresight-etm3x-core.c          |   2 +-
+>>>>  .../coresight/coresight-etm3x-sysfs.c         |   2 +-
+>>>>  .../coresight/coresight-etm4x-core.c          | 136 +++++--------
+>>>>  .../coresight/coresight-etm4x-sysfs.c         | 180 +++++++++---------
+>>>>  drivers/hwtracing/coresight/coresight-etm4x.h | 122 ++++++++++--
+>>>>  5 files changed, 244 insertions(+), 198 deletions(-)
+>>>
+>>> I am done reviewing this set.  I will wait until rc1 or rc2 before moving
+>>> forward.  If there are other comments needing a respin then I will wait for the
+>>> next revision.  Otherwise I will apply this one after correcting the extra lines
+>>> at the end of patch 15.
+>>>  
+>>
+>> Thanks for the review!
+>>
+> 
+> I have applied this set.
 
+Thanks Mathieu
+
+> 
+>>> Thanks,
+>>> Mathieu
+>>>
+>>>>
+>>>> -- 
+>>>> 2.28.0
+>>>>

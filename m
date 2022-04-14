@@ -2,44 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AC26501151
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C729A50126A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:08:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345814AbiDNNyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:54:19 -0400
+        id S1345850AbiDNNya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:54:30 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344151AbiDNNal (ORCPT
+        with ESMTP id S1344153AbiDNNar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:30:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5BB22F;
-        Thu, 14 Apr 2022 06:28:16 -0700 (PDT)
+        Thu, 14 Apr 2022 09:30:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD26E6;
+        Thu, 14 Apr 2022 06:28:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 665DB619DA;
-        Thu, 14 Apr 2022 13:28:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76861C385A1;
-        Thu, 14 Apr 2022 13:28:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09DEEB82941;
+        Thu, 14 Apr 2022 13:28:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CBEBC385A5;
+        Thu, 14 Apr 2022 13:28:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942895;
-        bh=ziZhs4w4fOyVTrMqEsZJFqB0xAp5wYEYXJ6zPtEua6Y=;
+        s=korg; t=1649942898;
+        bh=YuDOzA+Mt0VY+KeuS+JDMgf0KsxPohbBkJDAyuTdF70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q9I51YNynTrykyOamzb6nuEajHc/Hoy4qgjyd9tI9IZfUcZjd+8xmffa+ySweQ8NI
-         ZMdDeFXi8N0zOh4am9xka85a8H4SAk4NZxN5vDpuSk0MuO+KtpKkTlXLRSbklRkDz7
-         MRm7+m6cDy9Gfban/Y01LerFoH3pV39Lzbx0Kumw=
+        b=Hm0Vg4KZoLbAS7ynC0V6hh9MwU2u43T0nlmFZfRUeuRBytUBBkQGhNY6HcC2vUbt+
+         P6uc39fNF3Pw1ZaNGTVm7G5YpFaRdVDqqBFzW1jBTHgXfduDOPgbQOrocFyUB7ky5P
+         Jre16qUHBFivsz/MeF/qEAZaIU0zMmnyhUTj2k3M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Willem de Bruijn <willemb@google.com>,
-        Soheil Hassas Yeganeh <soheil@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        stable@vger.kernel.org,
+        Mauricio Faria de Oliveira <mfo@canonical.com>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        Minchan Kim <minchan@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Dan Hill <daniel.hill@canonical.com>,
+        Dan Streetman <dan.streetman@canonical.com>,
+        Dongdong Tao <dongdong.tao@canonical.com>,
+        Gavin Guo <gavin.guo@canonical.com>,
+        Gerald Yang <gerald.yang@canonical.com>,
+        Heitor Alves de Siqueira <halves@canonical.com>,
+        Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>,
+        Jay Vosburgh <jay.vosburgh@canonical.com>,
+        Matthew Ruffell <matthew.ruffell@canonical.com>,
+        Ponnuvel Palaniyappan <ponnuvel.palaniyappan@canonical.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 300/338] net: add missing SOF_TIMESTAMPING_OPT_ID support
-Date:   Thu, 14 Apr 2022 15:13:23 +0200
-Message-Id: <20220414110847.423397855@linuxfoundation.org>
+Subject: [PATCH 4.19 301/338] mm: fix race between MADV_FREE reclaim and blkdev direct IO read
+Date:   Thu, 14 Apr 2022 15:13:24 +0200
+Message-Id: <20220414110847.451459141@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
 References: <20220414110838.883074566@linuxfoundation.org>
@@ -57,148 +72,461 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Willem de Bruijn <willemb@google.com>
+From: Mauricio Faria de Oliveira <mfo@canonical.com>
 
-[ Upstream commit 8f932f762e7928d250e21006b00ff9b7718b0a64 ]
+commit 6c8e2a256915a223f6289f651d6b926cd7135c9e upstream.
 
-SOF_TIMESTAMPING_OPT_ID is supported on TCP, UDP and RAW sockets.
-But it was missing on RAW with IPPROTO_IP, PF_PACKET and CAN.
+Problem:
+=======
 
-Add skb_setup_tx_timestamp that configures both tx_flags and tskey
-for these paths that do not need corking or use bytestream keys.
+Userspace might read the zero-page instead of actual data from a direct IO
+read on a block device if the buffers have been called madvise(MADV_FREE)
+on earlier (this is discussed below) due to a race between page reclaim on
+MADV_FREE and blkdev direct IO read.
 
-Fixes: 09c2d251b707 ("net-timestamp: add key to disambiguate concurrent datagrams")
-Signed-off-by: Willem de Bruijn <willemb@google.com>
-Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+- Race condition:
+  ==============
+
+During page reclaim, the MADV_FREE page check in try_to_unmap_one() checks
+if the page is not dirty, then discards its rmap PTE(s) (vs.  remap back
+if the page is dirty).
+
+However, after try_to_unmap_one() returns to shrink_page_list(), it might
+keep the page _anyway_ if page_ref_freeze() fails (it expects exactly
+_one_ page reference, from the isolation for page reclaim).
+
+Well, blkdev_direct_IO() gets references for all pages, and on READ
+operations it only sets them dirty _later_.
+
+So, if MADV_FREE'd pages (i.e., not dirty) are used as buffers for direct
+IO read from block devices, and page reclaim happens during
+__blkdev_direct_IO[_simple]() exactly AFTER bio_iov_iter_get_pages()
+returns, but BEFORE the pages are set dirty, the situation happens.
+
+The direct IO read eventually completes.  Now, when userspace reads the
+buffers, the PTE is no longer there and the page fault handler
+do_anonymous_page() services that with the zero-page, NOT the data!
+
+A synthetic reproducer is provided.
+
+- Page faults:
+  ===========
+
+If page reclaim happens BEFORE bio_iov_iter_get_pages() the issue doesn't
+happen, because that faults-in all pages as writeable, so
+do_anonymous_page() sets up a new page/rmap/PTE, and that is used by
+direct IO.  The userspace reads don't fault as the PTE is there (thus
+zero-page is not used/setup).
+
+But if page reclaim happens AFTER it / BEFORE setting pages dirty, the PTE
+is no longer there; the subsequent page faults can't help:
+
+The data-read from the block device probably won't generate faults due to
+DMA (no MMU) but even in the case it wouldn't use DMA, that happens on
+different virtual addresses (not user-mapped addresses) because `struct
+bio_vec` stores `struct page` to figure addresses out (which are different
+from user-mapped addresses) for the read.
+
+Thus userspace reads (to user-mapped addresses) still fault, then
+do_anonymous_page() gets another `struct page` that would address/ map to
+other memory than the `struct page` used by `struct bio_vec` for the read.
+(The original `struct page` is not available, since it wasn't freed, as
+page_ref_freeze() failed due to more page refs.  And even if it were
+available, its data cannot be trusted anymore.)
+
+Solution:
+========
+
+One solution is to check for the expected page reference count in
+try_to_unmap_one().
+
+There should be one reference from the isolation (that is also checked in
+shrink_page_list() with page_ref_freeze()) plus one or more references
+from page mapping(s) (put in discard: label).  Further references mean
+that rmap/PTE cannot be unmapped/nuked.
+
+(Note: there might be more than one reference from mapping due to
+fork()/clone() without CLONE_VM, which use the same `struct page` for
+references, until the copy-on-write page gets copied.)
+
+So, additional page references (e.g., from direct IO read) now prevent the
+rmap/PTE from being unmapped/dropped; similarly to the page is not freed
+per shrink_page_list()/page_ref_freeze()).
+
+- Races and Barriers:
+  ==================
+
+The new check in try_to_unmap_one() should be safe in races with
+bio_iov_iter_get_pages() in get_user_pages() fast and slow paths, as it's
+done under the PTE lock.
+
+The fast path doesn't take the lock, but it checks if the PTE has changed
+and if so, it drops the reference and leaves the page for the slow path
+(which does take that lock).
+
+The fast path requires synchronization w/ full memory barrier: it writes
+the page reference count first then it reads the PTE later, while
+try_to_unmap() writes PTE first then it reads page refcount.
+
+And a second barrier is needed, as the page dirty flag should not be read
+before the page reference count (as in __remove_mapping()).  (This can be
+a load memory barrier only; no writes are involved.)
+
+Call stack/comments:
+
+- try_to_unmap_one()
+  - page_vma_mapped_walk()
+    - map_pte()			# see pte_offset_map_lock():
+        pte_offset_map()
+        spin_lock()
+
+  - ptep_get_and_clear()	# write PTE
+  - smp_mb()			# (new barrier) GUP fast path
+  - page_ref_count()		# (new check) read refcount
+
+  - page_vma_mapped_walk_done()	# see pte_unmap_unlock():
+      pte_unmap()
+      spin_unlock()
+
+- bio_iov_iter_get_pages()
+  - __bio_iov_iter_get_pages()
+    - iov_iter_get_pages()
+      - get_user_pages_fast()
+        - internal_get_user_pages_fast()
+
+          # fast path
+          - lockless_pages_from_mm()
+            - gup_{pgd,p4d,pud,pmd,pte}_range()
+                ptep = pte_offset_map()		# not _lock()
+                pte = ptep_get_lockless(ptep)
+
+                page = pte_page(pte)
+                try_grab_compound_head(page)	# inc refcount
+                                            	# (RMW/barrier
+                                             	#  on success)
+
+                if (pte_val(pte) != pte_val(*ptep)) # read PTE
+                        put_compound_head(page) # dec refcount
+                        			# go slow path
+
+          # slow path
+          - __gup_longterm_unlocked()
+            - get_user_pages_unlocked()
+              - __get_user_pages_locked()
+                - __get_user_pages()
+                  - follow_{page,p4d,pud,pmd}_mask()
+                    - follow_page_pte()
+                        ptep = pte_offset_map_lock()
+                        pte = *ptep
+                        page = vm_normal_page(pte)
+                        try_grab_page(page)	# inc refcount
+                        pte_unmap_unlock()
+
+- Huge Pages:
+  ==========
+
+Regarding transparent hugepages, that logic shouldn't change, as MADV_FREE
+(aka lazyfree) pages are PageAnon() && !PageSwapBacked()
+(madvise_free_pte_range() -> mark_page_lazyfree() -> lru_lazyfree_fn())
+thus should reach shrink_page_list() -> split_huge_page_to_list() before
+try_to_unmap[_one](), so it deals with normal pages only.
+
+(And in case unlikely/TTU_SPLIT_HUGE_PMD/split_huge_pmd_address() happens,
+which should not or be rare, the page refcount should be greater than
+mapcount: the head page is referenced by tail pages.  That also prevents
+checking the head `page` then incorrectly call page_remove_rmap(subpage)
+for a tail page, that isn't even in the shrink_page_list()'s page_list (an
+effect of split huge pmd/pmvw), as it might happen today in this unlikely
+scenario.)
+
+MADV_FREE'd buffers:
+===================
+
+So, back to the "if MADV_FREE pages are used as buffers" note.  The case
+is arguable, and subject to multiple interpretations.
+
+The madvise(2) manual page on the MADV_FREE advice value says:
+
+1) 'After a successful MADV_FREE ... data will be lost when
+   the kernel frees the pages.'
+2) 'the free operation will be canceled if the caller writes
+   into the page' / 'subsequent writes ... will succeed and
+   then [the] kernel cannot free those dirtied pages'
+3) 'If there is no subsequent write, the kernel can free the
+   pages at any time.'
+
+Thoughts, questions, considerations... respectively:
+
+1) Since the kernel didn't actually free the page (page_ref_freeze()
+   failed), should the data not have been lost? (on userspace read.)
+2) Should writes performed by the direct IO read be able to cancel
+   the free operation?
+   - Should the direct IO read be considered as 'the caller' too,
+     as it's been requested by 'the caller'?
+   - Should the bio technique to dirty pages on return to userspace
+     (bio_check_pages_dirty() is called/used by __blkdev_direct_IO())
+     be considered in another/special way here?
+3) Should an upcoming write from a previously requested direct IO
+   read be considered as a subsequent write, so the kernel should
+   not free the pages? (as it's known at the time of page reclaim.)
+
+And lastly:
+
+Technically, the last point would seem a reasonable consideration and
+balance, as the madvise(2) manual page apparently (and fairly) seem to
+assume that 'writes' are memory access from the userspace process (not
+explicitly considering writes from the kernel or its corner cases; again,
+fairly)..  plus the kernel fix implementation for the corner case of the
+largely 'non-atomic write' encompassed by a direct IO read operation, is
+relatively simple; and it helps.
+
+Reproducer:
+==========
+
+@ test.c (simplified, but works)
+
+	#define _GNU_SOURCE
+	#include <fcntl.h>
+	#include <stdio.h>
+	#include <unistd.h>
+	#include <sys/mman.h>
+
+	int main() {
+		int fd, i;
+		char *buf;
+
+		fd = open(DEV, O_RDONLY | O_DIRECT);
+
+		buf = mmap(NULL, BUF_SIZE, PROT_READ | PROT_WRITE,
+                	   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+
+		for (i = 0; i < BUF_SIZE; i += PAGE_SIZE)
+			buf[i] = 1; // init to non-zero
+
+		madvise(buf, BUF_SIZE, MADV_FREE);
+
+		read(fd, buf, BUF_SIZE);
+
+		for (i = 0; i < BUF_SIZE; i += PAGE_SIZE)
+			printf("%p: 0x%x\n", &buf[i], buf[i]);
+
+		return 0;
+	}
+
+@ block/fops.c (formerly fs/block_dev.c)
+
+	+#include <linux/swap.h>
+	...
+	... __blkdev_direct_IO[_simple](...)
+	{
+	...
+	+	if (!strcmp(current->comm, "good"))
+	+		shrink_all_memory(ULONG_MAX);
+	+
+         	ret = bio_iov_iter_get_pages(...);
+	+
+	+	if (!strcmp(current->comm, "bad"))
+	+		shrink_all_memory(ULONG_MAX);
+	...
+	}
+
+@ shell
+
+        # NUM_PAGES=4
+        # PAGE_SIZE=$(getconf PAGE_SIZE)
+
+        # yes | dd of=test.img bs=${PAGE_SIZE} count=${NUM_PAGES}
+        # DEV=$(losetup -f --show test.img)
+
+        # gcc -DDEV=\"$DEV\" \
+              -DBUF_SIZE=$((PAGE_SIZE * NUM_PAGES)) \
+              -DPAGE_SIZE=${PAGE_SIZE} \
+               test.c -o test
+
+        # od -tx1 $DEV
+        0000000 79 0a 79 0a 79 0a 79 0a 79 0a 79 0a 79 0a 79 0a
+        *
+        0040000
+
+        # mv test good
+        # ./good
+        0x7f7c10418000: 0x79
+        0x7f7c10419000: 0x79
+        0x7f7c1041a000: 0x79
+        0x7f7c1041b000: 0x79
+
+        # mv good bad
+        # ./bad
+        0x7fa1b8050000: 0x0
+        0x7fa1b8051000: 0x0
+        0x7fa1b8052000: 0x0
+        0x7fa1b8053000: 0x0
+
+Note: the issue is consistent on v5.17-rc3, but it's intermittent with the
+support of MADV_FREE on v4.5 (60%-70% error; needs swap).  [wrap
+do_direct_IO() in do_blockdev_direct_IO() @ fs/direct-io.c].
+
+- v5.17-rc3:
+
+        # for i in {1..1000}; do ./good; done \
+            | cut -d: -f2 | sort | uniq -c
+           4000  0x79
+
+        # mv good bad
+        # for i in {1..1000}; do ./bad; done \
+            | cut -d: -f2 | sort | uniq -c
+           4000  0x0
+
+        # free | grep Swap
+        Swap:             0           0           0
+
+- v4.5:
+
+        # for i in {1..1000}; do ./good; done \
+            | cut -d: -f2 | sort | uniq -c
+           4000  0x79
+
+        # mv good bad
+        # for i in {1..1000}; do ./bad; done \
+            | cut -d: -f2 | sort | uniq -c
+           2702  0x0
+           1298  0x79
+
+        # swapoff -av
+        swapoff /swap
+
+        # for i in {1..1000}; do ./bad; done \
+            | cut -d: -f2 | sort | uniq -c
+           4000  0x79
+
+Ceph/TCMalloc:
+=============
+
+For documentation purposes, the use case driving the analysis/fix is Ceph
+on Ubuntu 18.04, as the TCMalloc library there still uses MADV_FREE to
+release unused memory to the system from the mmap'ed page heap (might be
+committed back/used again; it's not munmap'ed.) - PageHeap::DecommitSpan()
+-> TCMalloc_SystemRelease() -> madvise() - PageHeap::CommitSpan() ->
+TCMalloc_SystemCommit() -> do nothing.
+
+Note: TCMalloc switched back to MADV_DONTNEED a few commits after the
+release in Ubuntu 18.04 (google-perftools/gperftools 2.5), so the issue
+just 'disappeared' on Ceph on later Ubuntu releases but is still present
+in the kernel, and can be hit by other use cases.
+
+The observed issue seems to be the old Ceph bug #22464 [1], where checksum
+mismatches are observed (and instrumentation with buffer dumps shows
+zero-pages read from mmap'ed/MADV_FREE'd page ranges).
+
+The issue in Ceph was reasonably deemed a kernel bug (comment #50) and
+mostly worked around with a retry mechanism, but other parts of Ceph could
+still hit that (rocksdb).  Anyway, it's less likely to be hit again as
+TCMalloc switched out of MADV_FREE by default.
+
+(Some kernel versions/reports from the Ceph bug, and relation with
+the MADV_FREE introduction/changes; TCMalloc versions not checked.)
+- 4.4 good
+- 4.5 (madv_free: introduction)
+- 4.9 bad
+- 4.10 good? maybe a swapless system
+- 4.12 (madv_free: no longer free instantly on swapless systems)
+- 4.13 bad
+
+[1] https://tracker.ceph.com/issues/22464
+
+Thanks:
+======
+
+Several people contributed to analysis/discussions/tests/reproducers in
+the first stages when drilling down on ceph/tcmalloc/linux kernel:
+
+- Dan Hill
+- Dan Streetman
+- Dongdong Tao
+- Gavin Guo
+- Gerald Yang
+- Heitor Alves de Siqueira
+- Ioanna Alifieraki
+- Jay Vosburgh
+- Matthew Ruffell
+- Ponnuvel Palaniyappan
+
+Reviews, suggestions, corrections, comments:
+
+- Minchan Kim
+- Yu Zhao
+- Huang, Ying
+- John Hubbard
+- Christoph Hellwig
+
+[mfo@canonical.com: v4]
+  Link: https://lkml.kernel.org/r/20220209202659.183418-1-mfo@canonical.comLink: https://lkml.kernel.org/r/20220131230255.789059-1-mfo@canonical.com
+
+Fixes: 802a3a92ad7a ("mm: reclaim MADV_FREE pages")
+Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Yu Zhao <yuzhao@google.com>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: Miaohe Lin <linmiaohe@huawei.com>
+Cc: Dan Hill <daniel.hill@canonical.com>
+Cc: Dan Streetman <dan.streetman@canonical.com>
+Cc: Dongdong Tao <dongdong.tao@canonical.com>
+Cc: Gavin Guo <gavin.guo@canonical.com>
+Cc: Gerald Yang <gerald.yang@canonical.com>
+Cc: Heitor Alves de Siqueira <halves@canonical.com>
+Cc: Ioanna Alifieraki <ioanna-maria.alifieraki@canonical.com>
+Cc: Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc: Matthew Ruffell <matthew.ruffell@canonical.com>
+Cc: Ponnuvel Palaniyappan <ponnuvel.palaniyappan@canonical.com>
+Cc: <stable@vger.kernel.org>
+Cc: Christoph Hellwig <hch@infradead.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+[mfo: backport: replace folio/test_flag with page/flag equivalents;
+ real Fixes: 854e9ed09ded ("mm: support madvise(MADV_FREE)") in v4.]
+Signed-off-by: Mauricio Faria de Oliveira <mfo@canonical.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/sock.h     | 25 +++++++++++++++++++++----
- net/can/raw.c          |  2 +-
- net/ipv4/raw.c         |  2 +-
- net/ipv6/raw.c         |  2 +-
- net/packet/af_packet.c |  6 +++---
- 5 files changed, 27 insertions(+), 10 deletions(-)
+ mm/rmap.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 2bf8dcf863f2..7d3a4c2eea95 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -2400,22 +2400,39 @@ static inline void sock_recv_ts_and_drops(struct msghdr *msg, struct sock *sk,
- void __sock_tx_timestamp(__u16 tsflags, __u8 *tx_flags);
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 699f445e3e78..e578eb942317 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1594,7 +1594,30 @@ static bool try_to_unmap_one(struct page *page, struct vm_area_struct *vma,
  
- /**
-- * sock_tx_timestamp - checks whether the outgoing packet is to be time stamped
-+ * _sock_tx_timestamp - checks whether the outgoing packet is to be time stamped
-  * @sk:		socket sending this packet
-  * @tsflags:	timestamping flags to use
-  * @tx_flags:	completed with instructions for time stamping
-+ * @tskey:      filled in with next sk_tskey (not for TCP, which uses seqno)
-  *
-  * Note: callers should take care of initial ``*tx_flags`` value (usually 0)
-  */
--static inline void sock_tx_timestamp(const struct sock *sk, __u16 tsflags,
--				     __u8 *tx_flags)
-+static inline void _sock_tx_timestamp(struct sock *sk, __u16 tsflags,
-+				      __u8 *tx_flags, __u32 *tskey)
- {
--	if (unlikely(tsflags))
-+	if (unlikely(tsflags)) {
- 		__sock_tx_timestamp(tsflags, tx_flags);
-+		if (tsflags & SOF_TIMESTAMPING_OPT_ID && tskey &&
-+		    tsflags & SOF_TIMESTAMPING_TX_RECORD_MASK)
-+			*tskey = sk->sk_tskey++;
-+	}
- 	if (unlikely(sock_flag(sk, SOCK_WIFI_STATUS)))
- 		*tx_flags |= SKBTX_WIFI_STATUS;
- }
- 
-+static inline void sock_tx_timestamp(struct sock *sk, __u16 tsflags,
-+				     __u8 *tx_flags)
-+{
-+	_sock_tx_timestamp(sk, tsflags, tx_flags, NULL);
-+}
+ 			/* MADV_FREE page check */
+ 			if (!PageSwapBacked(page)) {
+-				if (!PageDirty(page)) {
++				int ref_count, map_count;
 +
-+static inline void skb_setup_tx_timestamp(struct sk_buff *skb, __u16 tsflags)
-+{
-+	_sock_tx_timestamp(skb->sk, tsflags, &skb_shinfo(skb)->tx_flags,
-+			   &skb_shinfo(skb)->tskey);
-+}
++				/*
++				 * Synchronize with gup_pte_range():
++				 * - clear PTE; barrier; read refcount
++				 * - inc refcount; barrier; read PTE
++				 */
++				smp_mb();
 +
- /**
-  * sk_eat_skb - Release a skb if it is no longer needed
-  * @sk: socket to eat this skb from
-diff --git a/net/can/raw.c b/net/can/raw.c
-index d0fb5a57c66d..2a6db8752b61 100644
---- a/net/can/raw.c
-+++ b/net/can/raw.c
-@@ -814,7 +814,7 @@ static int raw_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
- 	if (err < 0)
- 		goto free_skb;
- 
--	sock_tx_timestamp(sk, sk->sk_tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sk->sk_tsflags);
- 
- 	skb->dev = dev;
- 	skb->sk  = sk;
-diff --git a/net/ipv4/raw.c b/net/ipv4/raw.c
-index 8cae691c3c9f..654f586fc0d7 100644
---- a/net/ipv4/raw.c
-+++ b/net/ipv4/raw.c
-@@ -391,7 +391,7 @@ static int raw_send_hdrinc(struct sock *sk, struct flowi4 *fl4,
- 
- 	skb->ip_summed = CHECKSUM_NONE;
- 
--	sock_tx_timestamp(sk, sockc->tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sockc->tsflags);
- 
- 	if (flags & MSG_CONFIRM)
- 		skb_set_dst_pending_confirm(skb, 1);
-diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
-index 98c8f98a7660..ad7bd40b6d53 100644
---- a/net/ipv6/raw.c
-+++ b/net/ipv6/raw.c
-@@ -660,7 +660,7 @@ static int rawv6_send_hdrinc(struct sock *sk, struct msghdr *msg, int length,
- 
- 	skb->ip_summed = CHECKSUM_NONE;
- 
--	sock_tx_timestamp(sk, sockc->tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sockc->tsflags);
- 
- 	if (flags & MSG_CONFIRM)
- 		skb_set_dst_pending_confirm(skb, 1);
-diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-index d65051959f85..b951f411dded 100644
---- a/net/packet/af_packet.c
-+++ b/net/packet/af_packet.c
-@@ -1978,7 +1978,7 @@ static int packet_sendmsg_spkt(struct socket *sock, struct msghdr *msg,
- 	skb->mark = sk->sk_mark;
- 	skb->tstamp = sockc.transmit_time;
- 
--	sock_tx_timestamp(sk, sockc.tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sockc.tsflags);
- 
- 	if (unlikely(extra_len == 4))
- 		skb->no_fcs = 1;
-@@ -2501,7 +2501,7 @@ static int tpacket_fill_skb(struct packet_sock *po, struct sk_buff *skb,
- 	skb->priority = po->sk.sk_priority;
- 	skb->mark = po->sk.sk_mark;
- 	skb->tstamp = sockc->transmit_time;
--	sock_tx_timestamp(&po->sk, sockc->tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sockc->tsflags);
- 	skb_zcopy_set_nouarg(skb, ph.raw);
- 
- 	skb_reserve(skb, hlen);
-@@ -2965,7 +2965,7 @@ static int packet_snd(struct socket *sock, struct msghdr *msg, size_t len)
- 		goto out_free;
- 	}
- 
--	sock_tx_timestamp(sk, sockc.tsflags, &skb_shinfo(skb)->tx_flags);
-+	skb_setup_tx_timestamp(skb, sockc.tsflags);
- 
- 	if (!vnet_hdr.gso_type && (len > dev->mtu + reserve + extra_len) &&
- 	    !packet_extra_vlan_len_allowed(dev, skb)) {
++				ref_count = page_ref_count(page);
++				map_count = page_mapcount(page);
++
++				/*
++				 * Order reads for page refcount and dirty flag
++				 * (see comments in __remove_mapping()).
++				 */
++				smp_rmb();
++
++				/*
++				 * The only page refs must be one from isolation
++				 * plus the rmap(s) (dropped by discard:).
++				 */
++				if (ref_count == 1 + map_count &&
++				    !PageDirty(page)) {
+ 					/* Invalidate as we cleared the pte */
+ 					mmu_notifier_invalidate_range(mm,
+ 						address, address + PAGE_SIZE);
 -- 
 2.35.1
 

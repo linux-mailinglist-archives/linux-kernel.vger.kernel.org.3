@@ -2,148 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BFEE5016EA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76D44501713
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349766AbiDNPQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43374 "EHLO
+        id S229914AbiDNPTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347657AbiDNN7Z (ORCPT
+        with ESMTP id S1347709AbiDNN7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:59:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293CB338AB;
-        Thu, 14 Apr 2022 06:51:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DA51121613;
-        Thu, 14 Apr 2022 13:50:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1649944259; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w48CeVx/KrAp2wYmVlzeqrFMXv/esKDNwCLFBwxR02s=;
-        b=uaeMI/WNT2E/95xcEZ4JcQ06Tm3X0TddvO3ah9jLlN9Oyu476ryR9nE/gc0hsoQMF9Xwet
-        42oI+/ew7Nt4soJEztWKc0aUUJgjzRCuWPMawiC+Zip4wPYybteVu1qcHlzXuqwFUSBR5f
-        QkCHiQFPi3/MVQY1tUAblYHf2Cb8UKg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1649944259;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w48CeVx/KrAp2wYmVlzeqrFMXv/esKDNwCLFBwxR02s=;
-        b=eatG4gJ5bW2m1wSrnnkUmuPzvJUWTkADZ8rmg6fn0riFO4RrBXCPQqc8ISHqJQUVX8puMA
-        +oACCwSr942bhbCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6A822132C0;
-        Thu, 14 Apr 2022 13:50:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id yBMNF8MmWGJnTgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Thu, 14 Apr 2022 13:50:59 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 527b0df8;
-        Thu, 14 Apr 2022 13:51:24 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [PATCH v4 1/4] ceph: add support for encrypted snapshot names
-Date:   Thu, 14 Apr 2022 14:51:19 +0100
-Message-Id: <20220414135122.26821-2-lhenriques@suse.de>
-In-Reply-To: <20220414135122.26821-1-lhenriques@suse.de>
-References: <20220414135122.26821-1-lhenriques@suse.de>
+        Thu, 14 Apr 2022 09:59:30 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4259BB0A8;
+        Thu, 14 Apr 2022 06:51:56 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id l7so10218372ejn.2;
+        Thu, 14 Apr 2022 06:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VkVkOAS9A0MIQPbsfpNua8Mc2ZR7CENLAnkVniIdPoc=;
+        b=CXFcqAASxG+Z7VaPl8afDddAJZU3KVfQsH4a1JGZ1EjQwUWtZOh58dCXqu1CRt0nRH
+         GbroBEhSONj1yEyS1nlMjO2dTZs5iIHj3amuNDroTKV8vuWjGlUxmp6N8l0rJzVuL9iS
+         SK1pfqweFFp8qNmsy1ouvojo1qwb0OkgYbmw5cI1wWa07tZDoFoyAqHiu63K1oCpvGXv
+         JCFOxbvoB1FH365GTO/MeElQ0rQQ182PE1dbIz0Nw0J7NGFvquCeeFsdv6sqLOE6QIn0
+         C7C+hEmjvWZeIfvuZm9FyH27VeOaKjraYed4fP9gI2wtI0kf1Yw8FEPqUkn+IykqKHnl
+         lMFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VkVkOAS9A0MIQPbsfpNua8Mc2ZR7CENLAnkVniIdPoc=;
+        b=mvf5AbjI6CIGozSsows67t6PVUnH9LUF6Nvvzx4ISOXuYWk01KyRSSLcNt0grvSB9h
+         PYDjR314Oor82yrhW2EJGLVGn3hUZVcLOPDJA/q4L3LE+q5xcv99NrUT9oj6KJfLZSZA
+         0tnkqcrUKPOBvIpwdvYb57vBtxowwtV7G82I+hJSzF9JsxC+D3PSXy6W13eKw7S8Oups
+         EhGuOkrAUpKwbc4On0+xJL9NUKgSuFoINI0ifp0bucTpFANArCZn6xJsZmzw7FMMjXcI
+         LQHDqCpzGUPXZcTRpCllo1rZ0np/lUbQd8D0aQP/Mjc6eF3NV2uRGlm/AZuWvM/t5lY8
+         2KCA==
+X-Gm-Message-State: AOAM530WlAdB4kBkghUgnW2cZ2eaReGhhVfc6HLYf3E06ENVULtSbzhi
+        rZRr7nMdAeq1nx6mkJcG9VKqDWLr/ApmEZ+HFdc=
+X-Google-Smtp-Source: ABdhPJxL5jFoyaZVlB5dK/sqGFzMiTnpEAX7i3HpaSvcMs3Sr81F+WGQbyWSGSsYbk2dWKrwQ76KhtaYazmSqwcH7pQ=
+X-Received: by 2002:a17:907:628e:b0:6d9:c6fa:6168 with SMTP id
+ nd14-20020a170907628e00b006d9c6fa6168mr2412944ejc.132.1649944315429; Thu, 14
+ Apr 2022 06:51:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220401103604.8705-1-andriy.shevchenko@linux.intel.com>
+ <CGME20220414063849eucas1p126e41b53ff0d342f5c48408994b704e9@eucas1p1.samsung.com>
+ <20220401103604.8705-12-andriy.shevchenko@linux.intel.com> <3a24ef01-3231-1bee-7429-dce5680c5682@samsung.com>
+In-Reply-To: <3a24ef01-3231-1bee-7429-dce5680c5682@samsung.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 14 Apr 2022 16:51:19 +0300
+Message-ID: <CAHp75VfMPpfeMpawRyLo_GtLR8+gVGgm8zW-fatp6=9a9wK18A@mail.gmail.com>
+Subject: Re: [PATCH v4 11/13] pinctrl: meson: Replace custom code by
+ gpiochip_node_count() call
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Qianggui Song <qianggui.song@amlogic.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Fabien Dessenne <fabien.dessenne@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        linux-amlogic <linux-amlogic@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Samsung SOC <linux-samsung-soc@vger.kernel.org>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since filenames in encrypted directories are already encrypted and shown
-as a base64-encoded string when the directory is locked, snapshot names
-should show a similar behaviour.
+On Thu, Apr 14, 2022 at 12:44 PM Marek Szyprowski
+<m.szyprowski@samsung.com> wrote:
+> On 01.04.2022 12:36, Andy Shevchenko wrote:
+> > Since we have generic function to count GPIO controller nodes
+> > under a given device, there is no need to open code it. Replace
+> > custom code by gpiochip_node_count() call.
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ceph/inode.c | 31 +++++++++++++++++++++++++++----
- 1 file changed, 27 insertions(+), 4 deletions(-)
+...
 
-diff --git a/fs/ceph/inode.c b/fs/ceph/inode.c
-index fa0d3018d981..8e97efa2b1a7 100644
---- a/fs/ceph/inode.c
-+++ b/fs/ceph/inode.c
-@@ -91,9 +91,15 @@ struct inode *ceph_new_inode(struct inode *dir, struct dentry *dentry,
- 	if (err < 0)
- 		goto out_err;
- 
--	err = ceph_fscrypt_prepare_context(dir, inode, as_ctx);
--	if (err)
--		goto out_err;
-+	/*
-+	 * We'll skip setting fscrypt context for snapshots, leaving that for
-+	 * the handle_reply().
-+	 */
-+	if (ceph_snap(dir) != CEPH_SNAPDIR) {
-+		err = ceph_fscrypt_prepare_context(dir, inode, as_ctx);
-+		if (err)
-+			goto out_err;
-+	}
- 
- 	return inode;
- out_err:
-@@ -157,6 +163,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
- 	};
- 	struct inode *inode = ceph_get_inode(parent->i_sb, vino, NULL);
- 	struct ceph_inode_info *ci = ceph_inode(inode);
-+	int ret = -ENOTDIR;
- 
- 	if (IS_ERR(inode))
- 		return inode;
-@@ -182,6 +189,22 @@ struct inode *ceph_get_snapdir(struct inode *parent)
- 	ci->i_rbytes = 0;
- 	ci->i_btime = ceph_inode(parent)->i_btime;
- 
-+	/* if encrypted, just borrow fscrypt_auth from parent */
-+	if (IS_ENCRYPTED(parent)) {
-+		struct ceph_inode_info *pci = ceph_inode(parent);
-+
-+		ci->fscrypt_auth = kmemdup(pci->fscrypt_auth,
-+					   pci->fscrypt_auth_len,
-+					   GFP_KERNEL);
-+		if (ci->fscrypt_auth) {
-+			inode->i_flags |= S_ENCRYPTED;
-+			ci->fscrypt_auth_len = pci->fscrypt_auth_len;
-+		} else {
-+			dout("Failed to alloc snapdir fscrypt_auth\n");
-+			ret = -ENOMEM;
-+			goto err;
-+		}
-+	}
- 	if (inode->i_state & I_NEW) {
- 		inode->i_op = &ceph_snapdir_iops;
- 		inode->i_fop = &ceph_snapdir_fops;
-@@ -195,7 +218,7 @@ struct inode *ceph_get_snapdir(struct inode *parent)
- 		discard_new_inode(inode);
- 	else
- 		iput(inode);
--	return ERR_PTR(-ENOTDIR);
-+	return ERR_PTR(ret);
- }
- 
- const struct inode_operations ceph_file_iops = {
+> This patch landed in linux next-20220413 as commit 88834c75cae5
+> ("pinctrl: meson: Replace custom code by gpiochip_node_count() call").
+> Unfortunately it breaks booting of all my Amlogic-based test boards
+> (Odroid C4, N2, Khadas VIM3, VIM3l). MMC driver is no longer probed and
+> boards are unable to mount rootfs. Reverting this patch on top of
+> linux-next fixes the issue.
+
+Thank you for letting me know, I'll withdraw it and investigate.
+
+-- 
+With Best Regards,
+Andy Shevchenko

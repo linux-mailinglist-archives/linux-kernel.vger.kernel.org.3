@@ -2,195 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1C395017F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FF7E5017F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245460AbiDNPw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:52:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58344 "EHLO
+        id S245599AbiDNPwk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:52:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359158AbiDNPmo (ORCPT
+        with ESMTP id S1359210AbiDNPmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:42:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 745F413E17
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649950121;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=AznoU5JPVUK2tlvR9fU3oFCYDoJwS4fKkDjVBXTU/c0=;
-        b=g1YvuE1bYCZzdqYzohwq6J2i3ib1cMRpydHumQ3JFMSp/9fup+izFZA0/9vAieYJ1QYi8T
-        QHG63GI/R3AmbneYWWEl5BJvnjKJ4lJtjEGqP2hWp4R2uVC1CCme1+AyuZSNnbxlXwKJjO
-        hTzp3nZ8V0l1SWfxpgdZpj+71pFZeSc=
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
- [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-635-8fR2puYONkOHyLv2sdbGpA-1; Thu, 14 Apr 2022 11:28:40 -0400
-X-MC-Unique: 8fR2puYONkOHyLv2sdbGpA-1
-Received: by mail-io1-f71.google.com with SMTP id z16-20020a05660217d000b006461c7cbee3so3175094iox.21
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:28:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=AznoU5JPVUK2tlvR9fU3oFCYDoJwS4fKkDjVBXTU/c0=;
-        b=SywEN7P3+ELrcp+V950/tSHvbFWxzPXcRtifS01ZhqSjo6iUkzr/3vPXk5J83j3d7c
-         /0DLgX59UXAPslCHmj4XNHDpODTARQ81j0aSFf9l/6b+M0dRttmDX5Rs+7B1RZ8Jq+js
-         KY8h50UdTCB08ng0haRwZLDAgVg+tzwxbtoadJ7sZzhDqDu1Eh3ifJnkNLyaS8giksdI
-         K3P/zAK3aIpX8/2rHwcGZk9a9KQQxwFYDPsb0hHQenm2SvabBaK62TYNQ2DJkQXeuEOS
-         N6xu43Mv88B6yGLQTBxwxx2qkdpay7ZjrRyyh+QTUM0Lx3OAERzyAaE4asoZbOeavWWG
-         RPiA==
-X-Gm-Message-State: AOAM531bf9y9A9+56XJ2Xx2e5aEwhN16UTUTVgnvk/G2M53cb/8YG+SO
-        yL6VQnhhUNEE+aE1xYbzEl8OlseqsatsHe10JftmUf/8I875Jf2EKXqlFIQIglzz/zhdeuuNmSP
-        7wq7pdgCKR4qasJ1YCBq9GzNHNS6xnAvpj07XnmwUtnSU3R+7rbLtyJ1x2AJhgufoO4pHbDnsEw
-        ==
-X-Received: by 2002:a05:6638:1682:b0:323:6b82:462c with SMTP id f2-20020a056638168200b003236b82462cmr1384472jat.51.1649950119712;
-        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzZ2tFi9fIYu99oZWnzZqpTjI19HE1BJz+91dM4flMSDY5iIH+Wiale8seireyE8OGnYPbpAA==
-X-Received: by 2002:a05:6638:1682:b0:323:6b82:462c with SMTP id f2-20020a056638168200b003236b82462cmr1384458jat.51.1649950119321;
-        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
-Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id y6-20020a056e02174600b002c7f247b3a7sm1308626ill.54.2022.04.14.08.28.38
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 14 Apr 2022 08:28:39 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, peterx@redhat.com,
-        David Matlack <dmatlack@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        Ben Gardon <bgardon@google.com>
-Subject: [PATCH v2] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
-Date:   Thu, 14 Apr 2022 11:28:37 -0400
-Message-Id: <20220414152837.83320-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        Thu, 14 Apr 2022 11:42:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F21236;
+        Thu, 14 Apr 2022 08:29:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5706C61DC2;
+        Thu, 14 Apr 2022 15:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8EE4C385AC;
+        Thu, 14 Apr 2022 15:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649950157;
+        bh=VfDxvkyS/FpdFkcDiBcJ2hxm8R6mL94Wq9ENWeNdGqE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=HsD10AHd0KGAwx7G5NxJBlhBRD+OFG+cya++yOxAm/FJtdGmX0EDMX+C0AA+dBPiw
+         EItMI2kNRUVIvX0D87gGolIsTXtt8vCS7QU41FzNnSBVhqw6iL0SP8DlfAVsKWgJ0f
+         5OCK4VS8pAaBv0aOJ1mEGSC1EpCOIU8NAlAStDJvMqpB2B5F1vY3YxNoxmNEJB5Lzr
+         NTK9gpz9HWwpLSpI4v3h+4/mFebrGH10EUHSdX7njvA/hWPQZ6DjaYsG2p70yW8QMV
+         WJ+w/mt4+s9AwJ75eOYbSHDG/omxo8BXgxf2EQ+RBmoQbp+Ec61w/8EfMu8/EROwZA
+         4G/7VPu68KXew==
+Received: by mail-il1-f176.google.com with SMTP id y5so3324158ilg.4;
+        Thu, 14 Apr 2022 08:29:17 -0700 (PDT)
+X-Gm-Message-State: AOAM531hAWeRhupNxvN0sg8cmn0Z53PP5aN/gwXY/rfStY3EADoMidTn
+        r9bUQmGTuED13rauu3nhvQuLN7MwlLDoCI/drg==
+X-Google-Smtp-Source: ABdhPJy1TIctwgBcCZ2Dvctvarm3ytHizMQCj2YY3IXTqJtr+cOZYJRLcBeXwBjfV5QaFOGt+zSh79l1q5plG517MH4=
+X-Received: by 2002:a92:dd86:0:b0:2bc:805c:23c7 with SMTP id
+ g6-20020a92dd86000000b002bc805c23c7mr1202482iln.279.1649950156691; Thu, 14
+ Apr 2022 08:29:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220411154347.491396-1-krzysztof.kozlowski@linaro.org>
+ <20220411154347.491396-4-krzysztof.kozlowski@linaro.org> <Ylg83Ub7wuElT+Bu@robh.at.kernel.org>
+In-Reply-To: <Ylg83Ub7wuElT+Bu@robh.at.kernel.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 14 Apr 2022 10:29:05 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKmr_4rQPMYMvUyr9PL9NBPS0sjUsg3Z7VuDguMx7NwqQ@mail.gmail.com>
+Message-ID: <CAL_JsqKmr_4rQPMYMvUyr9PL9NBPS0sjUsg3Z7VuDguMx7NwqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/6] dt-bindings: ufs: common: add OPP table
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        linux-clk <linux-clk@vger.kernel.org>,
+        devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        SCSI <linux-scsi@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Our QE team reported test failure on access_tracking_perf_test:
+On Thu, Apr 14, 2022 at 10:25 AM Rob Herring <robh@kernel.org> wrote:
+>
+> On Mon, Apr 11, 2022 at 05:43:44PM +0200, Krzysztof Kozlowski wrote:
+> > Except scaling UFS and bus clocks, it's necessary to scale also the
+> > voltages of regulators or power domain performance state levels.  Adding
+> > Operating Performance Points table allows to adjust power domain
+> > performance state, depending on the UFS clock speed.
+> >
+> > OPPv2 deprecates previous property limited to clock scaling:
+> > freq-table-hz.
+> >
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >
+> > ---
+> >
+> > Not adding Rob's review tag because patch changed significantly.
+> > ---
+> >  .../devicetree/bindings/ufs/ufs-common.yaml   | 34 +++++++++++++++++--
+> >  1 file changed, 31 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/Documentation/devicetree/bindings/ufs/ufs-common.yaml b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> > index 47a4e9e1a775..d7d2c8a136bb 100644
+> > --- a/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> > +++ b/Documentation/devicetree/bindings/ufs/ufs-common.yaml
+> > @@ -20,11 +20,24 @@ properties:
+> >        items:
+> >          - description: Minimum frequency for given clock in Hz
+> >          - description: Maximum frequency for given clock in Hz
+> > +    deprecated: true
+> >      description: |
+> > +      Preferred is operating-points-v2.
+> > +
+> >        Array of <min max> operating frequencies in Hz stored in the same order
+> > -      as the clocks property. If this property is not defined or a value in the
+> > -      array is "0" then it is assumed that the frequency is set by the parent
+> > -      clock or a fixed rate clock source.
+> > +      as the clocks property. If either this property or operating-points-v2 is
+> > +      not defined or a value in the array is "0" then it is assumed that the
+> > +      frequency is set by the parent clock or a fixed rate clock source.
+> > +
+> > +  operating-points-v2:
+> > +    description:
+> > +      Preferred over freq-table-hz.
+> > +      If present, each OPP must contain array of frequencies stored in the same
+> > +      order for each clock.  If clock frequency in the array is "0" then it is
+> > +      assumed that the frequency is set by the parent clock or a fixed rate
+> > +      clock source.
+> > +
+> > +  opp-table: true
+> >
+> >    interrupts:
+> >      maxItems: 1
+> > @@ -75,8 +88,23 @@ properties:
+> >
+> >  dependencies:
+> >    freq-table-hz: [ 'clocks' ]
+> > +  operating-points-v2: [ 'clocks', 'clock-names' ]
+> >
+> >  required:
+> >    - interrupts
+> >
+> > +allOf:
+> > +  - if:
+> > +      required:
+> > +        - freq-table-hz
+> > +    then:
+> > +      properties:
+> > +        operating-points-v2: false
+> > +  - if:
+> > +      required:
+> > +        - operating-points-v2
+> > +    then:
+> > +      properties:
+> > +        freq-table-hz: false
+>
+> You could also express this as:
+>
+> oneOf:
+>   - required: [ freq-table-hz ]
+>   - required: [ operating-points-v2 ]
+>   - not:
+>       required: [ freq-table-hz, operating-points-v2 ]
 
-Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
-guest physical test memory offset: 0x3fffbffff000
+Err, NM. That doesn't work...
 
-Populating memory             : 0.684014577s
-Writing to populated memory   : 0.006230175s
-Reading from populated memory : 0.004557805s
-==== Test Assertion Failure ====
-  lib/kvm_util.c:1411: false
-  pid=125806 tid=125809 errno=4 - Interrupted system call
-     1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
-     2   (inlined by) addr_gpa2hva at kvm_util.c:1405
-     3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
-     4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
-     5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
-     6  0x00007fefe9ff81ce: ?? ??:0
-     7  0x00007fefe9c64d82: ?? ??:0
-  No vm physical memory at 0xffbffff000
-
-I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46 bits
-PA.
-
-It turns out that the address translation for clearing idle page tracking
-returned wrong result, in which addr_gva2gpa()'s last step (upon
-"pte[index[0]].pfn") did the calculation with 40 bits length so the
-overflowed bits got cut off.  In above case the GPA address to be returned
-should be 0x3fffbffff000 for GVA 0xc0000000, but it got cut-off into
-0xffbffff000, then it caused further lookup failure in the gpa2hva mapping.
-
-Fix it by forcing all ->pfn fetching for all layers of pgtables with force
-cast to uint64_t.
-
-Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- .../selftests/kvm/lib/x86_64/processor.c      | 26 ++++++++++++++-----
- 1 file changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 9f000dfb5594..32832d1f9acb 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -51,6 +51,18 @@ struct pageTableEntry {
- 	uint64_t execute_disable:1;
- };
- 
-+/*
-+ * Let's always remember to reference PFN within pgtables using this macro.
-+ * It's complier's choice to decide whether further calculation upon the
-+ * pfn field will also be limited to 40 bits (which is the bit length
-+ * defined for .pfn in either pageUpperEntry or pageTableEntry) so the
-+ * output could overflow.  For example, gcc version 11.1.1 20210428 will do
-+ * the cut-off, while clang version 12.0.1 does not.
-+ *
-+ * To make it always work, force a cast.
-+ */
-+#define  __get_pfn(entry)  ((uint64_t)(entry.pfn))
-+
- void regs_dump(FILE *stream, struct kvm_regs *regs,
- 	       uint8_t indent)
- {
-@@ -335,7 +347,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
- 		(rsvd_mask | (1ull << 7))) == 0,
- 		"Unexpected reserved bits set.");
- 
--	pdpe = addr_gpa2hva(vm, pml4e[index[3]].pfn * vm->page_size);
-+	pdpe = addr_gpa2hva(vm, __get_pfn(pml4e[index[3]]) * vm->page_size);
- 	TEST_ASSERT(pdpe[index[2]].present,
- 		"Expected pdpe to be present for gva: 0x%08lx", vaddr);
- 	TEST_ASSERT(pdpe[index[2]].page_size == 0,
-@@ -343,7 +355,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
- 	TEST_ASSERT((*(uint64_t*)(&pdpe[index[2]]) & rsvd_mask) == 0,
- 		"Unexpected reserved bits set.");
- 
--	pde = addr_gpa2hva(vm, pdpe[index[2]].pfn * vm->page_size);
-+	pde = addr_gpa2hva(vm, __get_pfn(pdpe[index[2]]) * vm->page_size);
- 	TEST_ASSERT(pde[index[1]].present,
- 		"Expected pde to be present for gva: 0x%08lx", vaddr);
- 	TEST_ASSERT(pde[index[1]].page_size == 0,
-@@ -351,7 +363,7 @@ static struct pageTableEntry *_vm_get_page_table_entry(struct kvm_vm *vm, int vc
- 	TEST_ASSERT((*(uint64_t*)(&pde[index[1]]) & rsvd_mask) == 0,
- 		"Unexpected reserved bits set.");
- 
--	pte = addr_gpa2hva(vm, pde[index[1]].pfn * vm->page_size);
-+	pte = addr_gpa2hva(vm, __get_pfn(pde[index[1]]) * vm->page_size);
- 	TEST_ASSERT(pte[index[0]].present,
- 		"Expected pte to be present for gva: 0x%08lx", vaddr);
- 
-@@ -575,19 +587,19 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
- 	if (!pml4e[index[3]].present)
- 		goto unmapped_gva;
- 
--	pdpe = addr_gpa2hva(vm, pml4e[index[3]].pfn * vm->page_size);
-+	pdpe = addr_gpa2hva(vm, __get_pfn(pml4e[index[3]]) * vm->page_size);
- 	if (!pdpe[index[2]].present)
- 		goto unmapped_gva;
- 
--	pde = addr_gpa2hva(vm, pdpe[index[2]].pfn * vm->page_size);
-+	pde = addr_gpa2hva(vm, __get_pfn(pdpe[index[2]]) * vm->page_size);
- 	if (!pde[index[1]].present)
- 		goto unmapped_gva;
- 
--	pte = addr_gpa2hva(vm, pde[index[1]].pfn * vm->page_size);
-+	pte = addr_gpa2hva(vm, __get_pfn(pde[index[1]]) * vm->page_size);
- 	if (!pte[index[0]].present)
- 		goto unmapped_gva;
- 
--	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-+	return (__get_pfn(pte[index[0]]) * vm->page_size) + (gva & 0xfffu);
- 
- unmapped_gva:
- 	TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
--- 
-2.32.0
-
+Reviewed-by: Rob Herring <robh@kernel.org>

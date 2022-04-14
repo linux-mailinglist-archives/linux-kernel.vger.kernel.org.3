@@ -2,46 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9329501369
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:20:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10661501608
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245623AbiDNNiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:38:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47794 "EHLO
+        id S237203AbiDNOrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244697AbiDNN2B (ORCPT
+        with ESMTP id S1345103AbiDNNpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:28:01 -0400
+        Thu, 14 Apr 2022 09:45:08 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D211A27E0;
-        Thu, 14 Apr 2022 06:20:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750E29D4C6;
+        Thu, 14 Apr 2022 06:42:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EDD49B82968;
-        Thu, 14 Apr 2022 13:20:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4495AC385A1;
-        Thu, 14 Apr 2022 13:20:43 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2664BB828F4;
+        Thu, 14 Apr 2022 13:41:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ACB0C385A5;
+        Thu, 14 Apr 2022 13:41:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649942443;
-        bh=ngRrhzncTbjiA99aaFaDmwRpCh3UoSw4bOm17ouFh6w=;
+        s=korg; t=1649943717;
+        bh=H3Dt4cJJwR/zpCWMq7h5pmwL4k+5EyFj/mhPC5rRNJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2CTchbHvpLfwWqdFuHrZzn4ZABmy6FHG2OQez+h5C3kRDg+tj3GrMEcFa4E0VGnGG
-         K3k4gSA1AqfSTqB2po+S04vslBh2xM4AH96c1R6yiPLSG8a1EhAAbPVVwRP3Ufk6nl
-         BpW7Xbuni3bWxf9lg0g7Pl2qzmjwx4C5qk4GXVz8=
+        b=0T6GTAJn44Pb9xY9d1D/nldgd3/dzSjwhUtwuBEUqAsT830zdIOtsUutfA0Lwto3J
+         ZWO2EiMB/Q3iTmEBRSm+KMMmedyl77Jw46PyFafCXfGQK4bXgRiMuOTEnfTMklbGrx
+         nxrAIaY8wlx5m7Vn5P+g8lXO4CStxYKKgq/3pfAQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nishanth Menon <nm@ti.com>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        stable@vger.kernel.org, Jingoo Han <jg1.han@samsung.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Julian Wiedmann <jwi@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        linuxppc-dev@lists.ozlabs.org,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Randy Dunlap <rdunlap@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 137/338] drm/bridge: cdns-dsi: Make sure to to create proper aliases for dt
+Subject: [PATCH 5.4 255/475] tty: hvc: fix return value of __setup handler
 Date:   Thu, 14 Apr 2022 15:10:40 +0200
-Message-Id: <20220414110842.806761931@linuxfoundation.org>
+Message-Id: <20220414110902.246799352@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
-References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,36 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nishanth Menon <nm@ti.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit ffb5c099aaa13ab7f73c29ea6ae26bce8d7575ae ]
+[ Upstream commit 53819a0d97aace1425bb042829e3446952a9e8a9 ]
 
-Add MODULE_DEVICE_TABLE to the device tree table to create required
-aliases needed for module to be loaded with device tree based platform.
+__setup() handlers should return 1 to indicate that the boot option
+has been handled or 0 to indicate that it was not handled.
+Add a pr_warn() message if the option value is invalid and then
+always return 1.
 
-Fixes: e19233955d9e ("drm/bridge: Add Cadence DSI driver")
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/20210921174059.17946-1-nm@ti.com
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 86b40567b917 ("tty: replace strict_strtoul() with kstrtoul()")
+Cc: Jingoo Han <jg1.han@samsung.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Julian Wiedmann <jwi@linux.ibm.com>
+Cc: Vasily Gorbik <gor@linux.ibm.com>
+Cc: linuxppc-dev@lists.ozlabs.org
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Link: https://lore.kernel.org/r/20220308024228.20477-1-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/bridge/cdns-dsi.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/tty/hvc/hvc_iucv.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/bridge/cdns-dsi.c b/drivers/gpu/drm/bridge/cdns-dsi.c
-index ce9496d13986..0573c5250a41 100644
---- a/drivers/gpu/drm/bridge/cdns-dsi.c
-+++ b/drivers/gpu/drm/bridge/cdns-dsi.c
-@@ -1604,6 +1604,7 @@ static const struct of_device_id cdns_dsi_of_match[] = {
- 	{ .compatible = "cdns,dsi" },
- 	{ },
- };
-+MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
+diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
+index 2af1e5751bd6..796fbff623f6 100644
+--- a/drivers/tty/hvc/hvc_iucv.c
++++ b/drivers/tty/hvc/hvc_iucv.c
+@@ -1470,7 +1470,9 @@ static int __init hvc_iucv_init(void)
+  */
+ static	int __init hvc_iucv_config(char *val)
+ {
+-	 return kstrtoul(val, 10, &hvc_iucv_devices);
++	if (kstrtoul(val, 10, &hvc_iucv_devices))
++		pr_warn("hvc_iucv= invalid parameter value '%s'\n", val);
++	return 1;
+ }
  
- static struct platform_driver cdns_dsi_platform_driver = {
- 	.probe  = cdns_dsi_drm_probe,
+ 
 -- 
 2.34.1
 

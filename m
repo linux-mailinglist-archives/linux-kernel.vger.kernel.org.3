@@ -2,61 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0B6501C39
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AD1C501C24
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345986AbiDNTyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:54:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S1345902AbiDNTqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:46:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234846AbiDNTyh (ORCPT
+        with ESMTP id S1345896AbiDNTqV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:54:37 -0400
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30983DA0A9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:52:11 -0700 (PDT)
-Received: from [IPv6:::1] ([IPv6:2607:fb90:7391:dbf4:ac39:3cd7:6899:402e])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.15.2) with ESMTPSA id 23EJp85B2752024
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 14 Apr 2022 12:51:11 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 23EJp85B2752024
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022040301; t=1649965875;
-        bh=/BfbkVBNXXWXvD67lDcz7ZEDHdrIeL3N3o3RiijcK/8=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=Ih1N5WnNg/CUOzYCRiUlmBCjhBc//rksM7yddZRMTFGF8Uocg3oC42OfEA2rSuBaQ
-         L5Dme8+oj2fdSEdk/CxJMQPZs/zYnFik3LdwTHGYDohHpZXX6qcFFcvZCs/PB4FMFc
-         XmSuFGQW3BgjOHVQbPknw0P2yjwJQXRqaPXHHq0GGsuvwlPEG9YTwI76DZS0zVMXk/
-         QlK9c5QdQFKsH5aY9qCbqxzlwred9ckWKCSZJFXav5KgFgy7zjduOSo9pwYkttwNJr
-         3LnCQBPB8SFFclqvnQZTPvwAfiwTz3r8s87Q4F+gUiNy4I9rsT68Xuq4xGFjAbzhXv
-         kUBJUiDoikUTA==
-Date:   Thu, 14 Apr 2022 12:43:33 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-CC:     Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: =?US-ASCII?Q?Re=3A_=5BRFC_PATCH_2/6=5D_virtio=3A_add_optio?= =?US-ASCII?Q?n_to_restrict_memory_access_under_Xen?=
-User-Agent: K-9 Mail for Android
-In-Reply-To: <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com> <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
-Message-ID: <5A795507-715D-494B-B56B-B12E5BE348A4@zytor.com>
+        Thu, 14 Apr 2022 15:46:21 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F3DED9C3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:43:55 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z16so5731317pfh.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HoOTe7YE1Mi7xuJrmm/HVDsML2ycAntXdv9+Mjx+eA8=;
+        b=5t0ZJQfdz5maXzWjYugPMQc/fDTCQUV5q+XBgBy/6l1iKUPV2lNe7VuF/nxT3pCtT1
+         1I6TITDBexQeA7vrARtqzq6TzeNVUG9N8s2fS9HhtrfMrvqWjSUHaDH197eS155kUqOM
+         uKp21Hvk91zXDWkOWdBZvWARGkna8Fhxi+G8yQXkYsTGoXK3f95b2rC7YeCCEuNj8WZy
+         z1rdAOwboXWEKI1xRxJ54UoO4aP2A53BGS+fLT7f8EvDqfubPAdx8g/cABvSEJb7OBsa
+         idJMJNbfK2bkpn692xb9BBXHFGuueBhl18Td0o6QoVO1+WhCg7VDRNy6JsP0orim6HPw
+         oeZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HoOTe7YE1Mi7xuJrmm/HVDsML2ycAntXdv9+Mjx+eA8=;
+        b=OVhanEsLE1IN2tLObwicc28Bu/ZgJ94FeTMfjMwatnjEPwKBVWRtuO6/i5QJ2xioT5
+         /V0HYe++fEFEkZetpc/9IPIi5iEM0l8z7DaWiGvX8AD/Bu9kDNB19nH++afxsO0A4xvc
+         Q/pTC0IYq8P2OFIXsGgNGkgow9sesSXYZqTqjysQzL5fhgbBkaywnCeNL0NlHYTSlEG9
+         pR0fcgl48RwaSMXnQHyJcg/SkJ7iVkd3NDnDdQ98yrDQrZywhbVHTdm7aTP8NnHliwx6
+         +6I2+LFoDPB4CFWtYVlJMnvpdNFifcps6i+IuOajXFSnVooYmWVV0raJl6TV0yPQmxFj
+         UE0A==
+X-Gm-Message-State: AOAM533qelyq0v8g5F2wKtndcvv+gOXFiiEcxD579xm6sSlsyRe5qius
+        ccuNoiQd7I/Yy73RxvKjl3oUww==
+X-Google-Smtp-Source: ABdhPJzlnAEM0ZydIi4iBdfWU4lsspLSPyZZdr0qS3LhVt5qVMjZWphp5KG6zcuzjev8SP5KpT0/ug==
+X-Received: by 2002:a63:e146:0:b0:39d:1b00:e475 with SMTP id h6-20020a63e146000000b0039d1b00e475mr3517147pgk.537.1649965434831;
+        Thu, 14 Apr 2022 12:43:54 -0700 (PDT)
+Received: from x1 ([2601:1c2:1001:7090:5b60:6a76:138d:2646])
+        by smtp.gmail.com with ESMTPSA id x7-20020aa784c7000000b005058d220b37sm629861pfn.64.2022.04.14.12.43.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 12:43:54 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 12:44:40 -0700
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: wkup-m3-ipc: Add ti,set-io-isolation
+ property
+Message-ID: <Ylh5qPs57uruokUh@x1>
+References: <20220414192722.2978837-1-dfustini@baylibre.com>
+ <20220414192722.2978837-2-dfustini@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414192722.2978837-2-dfustini@baylibre.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,349 +75,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On April 14, 2022 12:19:29 PM PDT, Oleksandr Tyshchenko <olekstysh@gmail=2E=
-com> wrote:
->From: Juergen Gross <jgross@suse=2Ecom>
->
->In order to support virtio in Xen guests add a config option enabling
->the user to specify whether in all Xen guests virtio should be able to
->access memory via Xen grant mappings only on the host side=2E
->
->This applies to fully virtualized guests only, as for paravirtualized
->guests this is mandatory=2E
->
->This requires to switch arch_has_restricted_virtio_memory_access()
->from a pure stub to a real function on x86 systems (Arm systems are
->not covered by now)=2E
->
->Add the needed functionality by providing a special set of DMA ops
->handling the needed grant operations for the I/O pages=2E
->
->Signed-off-by: Juergen Gross <jgross@suse=2Ecom>
->---
-> arch/x86/mm/init=2Ec        |  15 ++++
-> arch/x86/mm/mem_encrypt=2Ec |   5 --
-> arch/x86/xen/Kconfig      |   9 +++
-> drivers/xen/Kconfig       |  20 ++++++
-> drivers/xen/Makefile      |   1 +
-> drivers/xen/xen-virtio=2Ec  | 177 ++++++++++++++++++++++++++++++++++++++=
-++++++++
-> include/xen/xen-ops=2Eh     |   8 +++
-> 7 files changed, 230 insertions(+), 5 deletions(-)
-> create mode 100644 drivers/xen/xen-virtio=2Ec
->
->diff --git a/arch/x86/mm/init=2Ec b/arch/x86/mm/init=2Ec
->index d8cfce2=2E=2E526a3b2 100644
->--- a/arch/x86/mm/init=2Ec
->+++ b/arch/x86/mm/init=2Ec
->@@ -8,6 +8,8 @@
-> #include <linux/kmemleak=2Eh>
-> #include <linux/sched/task=2Eh>
->=20
->+#include <xen/xen=2Eh>
->+
-> #include <asm/set_memory=2Eh>
-> #include <asm/e820/api=2Eh>
-> #include <asm/init=2Eh>
->@@ -1065,3 +1067,16 @@ unsigned long max_swapfile_size(void)
-> 	return pages;
-> }
-> #endif
->+
->+#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->+int arch_has_restricted_virtio_memory_access(void)
->+{
->+	if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
->+		return 1;
->+	if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
->+		return 1;
->+
->+	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->+}
->+EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->+#endif
->diff --git a/arch/x86/mm/mem_encrypt=2Ec b/arch/x86/mm/mem_encrypt=2Ec
->index 50d2099=2E=2Edda020f 100644
->--- a/arch/x86/mm/mem_encrypt=2Ec
->+++ b/arch/x86/mm/mem_encrypt=2Ec
->@@ -77,8 +77,3 @@ void __init mem_encrypt_init(void)
-> 	print_mem_encrypt_feature_info();
-> }
->=20
->-int arch_has_restricted_virtio_memory_access(void)
->-{
->-	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->-}
->-EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->diff --git a/arch/x86/xen/Kconfig b/arch/x86/xen/Kconfig
->index 85246dd=2E=2Edffdffd 100644
->--- a/arch/x86/xen/Kconfig
->+++ b/arch/x86/xen/Kconfig
->@@ -92,3 +92,12 @@ config XEN_DOM0
-> 	select X86_X2APIC if XEN_PVH && X86_64
-> 	help
-> 	  Support running as a Xen Dom0 guest=2E
->+
->+config XEN_PV_VIRTIO
->+	bool "Xen virtio support for PV guests"
->+	depends on XEN_VIRTIO && XEN_PV
->+	default y
->+	help
->+	  Support virtio for running as a paravirtualized guest=2E This will
->+	  need support on the backend side (qemu or kernel, depending on the
->+	  virtio device types used)=2E
->diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
->index 120d32f=2E=2Efc61f7a 100644
->--- a/drivers/xen/Kconfig
->+++ b/drivers/xen/Kconfig
->@@ -335,4 +335,24 @@ config XEN_UNPOPULATED_ALLOC
-> 	  having to balloon out RAM regions in order to obtain physical memory
-> 	  space to create such mappings=2E
->=20
->+config XEN_VIRTIO
->+	bool "Xen virtio support"
->+	default n
->+	depends on VIRTIO && DMA_OPS
->+	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->+	help
->+	  Enable virtio support for running as Xen guest=2E Depending on the
->+	  guest type this will require special support on the backend side
->+	  (qemu or kernel, depending on the virtio device types used)=2E
->+
->+config XEN_HVM_VIRTIO_GRANT
->+	bool "Require virtio for fully virtualized guests to use grant mappings=
-"
->+	depends on XEN_VIRTIO && X86_64
->+	default y
->+	help
->+	  Require virtio for fully virtualized guests to use grant mappings=2E
->+	  This will avoid the need to give the backend the right to map all
->+	  of the guest memory=2E This will need support on the backend side
->+	  (qemu or kernel, depending on the virtio device types used)=2E
->+
-> endmenu
->diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
->index 5aae66e=2E=2E767009c 100644
->--- a/drivers/xen/Makefile
->+++ b/drivers/xen/Makefile
->@@ -39,3 +39,4 @@ xen-gntalloc-y				:=3D gntalloc=2Eo
-> xen-privcmd-y				:=3D privcmd=2Eo privcmd-buf=2Eo
-> obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+=3D xen-front-pgdir-shbuf=2Eo
-> obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+=3D unpopulated-alloc=2Eo
->+obj-$(CONFIG_XEN_VIRTIO)		+=3D xen-virtio=2Eo
->diff --git a/drivers/xen/xen-virtio=2Ec b/drivers/xen/xen-virtio=2Ec
->new file mode 100644
->index 00000000=2E=2Ecfd5eda
->--- /dev/null
->+++ b/drivers/xen/xen-virtio=2Ec
->@@ -0,0 +1,177 @@
->+// SPDX-License-Identifier: GPL-2=2E0-only
->+/***********************************************************************=
-*******
->+ * Xen virtio driver - enables using virtio devices in Xen guests=2E
->+ *
->+ * Copyright (c) 2021, Juergen Gross <jgross@suse=2Ecom>
->+ */
->+
->+#include <linux/module=2Eh>
->+#include <linux/dma-map-ops=2Eh>
->+#include <linux/pci=2Eh>
->+#include <linux/pfn=2Eh>
->+#include <linux/virtio_config=2Eh>
->+#include <xen/xen=2Eh>
->+#include <xen/grant_table=2Eh>
->+
->+#define XEN_GRANT_ADDR_OFF	0x8000000000000000ULL
->+
->+static inline dma_addr_t grant_to_dma(grant_ref_t grant)
->+{
->+	return XEN_GRANT_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
->+}
->+
->+static inline grant_ref_t dma_to_grant(dma_addr_t dma)
->+{
->+	return (grant_ref_t)((dma & ~XEN_GRANT_ADDR_OFF) >> PAGE_SHIFT);
->+}
->+
->+/*
->+ * DMA ops for Xen virtio frontends=2E
->+ *
->+ * Used to act as a kind of software IOMMU for Xen guests by using grant=
-s as
->+ * DMA addresses=2E
->+ * Such a DMA address is formed by using the grant reference as a frame
->+ * number and setting the highest address bit (this bit is for the backe=
-nd
->+ * to be able to distinguish it from e=2Eg=2E a mmio address)=2E
->+ *
->+ * Note that for now we hard wire dom0 to be the backend domain=2E In or=
-der to
->+ * support any domain as backend we'd need to add a way to communicate t=
-he
->+ * domid of this backend, e=2Eg=2E via Xenstore or via the PCI-device's =
-config
->+ * space=2E
->+ */
->+static void *xen_virtio_dma_alloc(struct device *dev, size_t size,
->+				  dma_addr_t *dma_handle, gfp_t gfp,
->+				  unsigned long attrs)
->+{
->+	unsigned int n_pages =3D PFN_UP(size);
->+	unsigned int i;
->+	unsigned long pfn;
->+	grant_ref_t grant;
->+	void *ret;
->+
->+	ret =3D (void *)__get_free_pages(gfp, get_order(size));
->+	if (!ret)
->+		return NULL;
->+
->+	pfn =3D virt_to_pfn(ret);
->+
->+	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
->+		free_pages((unsigned long)ret, get_order(size));
->+		return NULL;
->+	}
->+
->+	for (i =3D 0; i < n_pages; i++) {
->+		gnttab_grant_foreign_access_ref(grant + i, 0,
->+						pfn_to_gfn(pfn + i), 0);
->+	}
->+
->+	*dma_handle =3D grant_to_dma(grant);
->+
->+	return ret;
->+}
->+
->+static void xen_virtio_dma_free(struct device *dev, size_t size, void *v=
-addr,
->+				dma_addr_t dma_handle, unsigned long attrs)
->+{
->+	unsigned int n_pages =3D PFN_UP(size);
->+	unsigned int i;
->+	grant_ref_t grant;
->+
->+	grant =3D dma_to_grant(dma_handle);
->+
->+	for (i =3D 0; i < n_pages; i++)
->+		gnttab_end_foreign_access_ref(grant + i);
->+
->+	gnttab_free_grant_reference_seq(grant, n_pages);
->+
->+	free_pages((unsigned long)vaddr, get_order(size));
->+}
->+
->+static struct page *xen_virtio_dma_alloc_pages(struct device *dev, size_=
-t size,
->+					       dma_addr_t *dma_handle,
->+					       enum dma_data_direction dir,
->+					       gfp_t gfp)
->+{
->+	WARN_ONCE(1, "xen_virtio_dma_alloc_pages size %ld\n", size);
->+	return NULL;
->+}
->+
->+static void xen_virtio_dma_free_pages(struct device *dev, size_t size,
->+				      struct page *vaddr, dma_addr_t dma_handle,
->+				      enum dma_data_direction dir)
->+{
->+	WARN_ONCE(1, "xen_virtio_dma_free_pages size %ld\n", size);
->+}
->+
->+static dma_addr_t xen_virtio_dma_map_page(struct device *dev, struct pag=
-e *page,
->+					  unsigned long offset, size_t size,
->+					  enum dma_data_direction dir,
->+					  unsigned long attrs)
->+{
->+	grant_ref_t grant;
->+
->+	if (gnttab_alloc_grant_references(1, &grant))
->+		return 0;
->+
->+	gnttab_grant_foreign_access_ref(grant, 0, xen_page_to_gfn(page),
->+					dir =3D=3D DMA_TO_DEVICE);
->+
->+	return grant_to_dma(grant) + offset;
->+}
->+
->+static void xen_virtio_dma_unmap_page(struct device *dev, dma_addr_t dma=
-_handle,
->+				      size_t size, enum dma_data_direction dir,
->+				      unsigned long attrs)
->+{
->+	grant_ref_t grant;
->+
->+	grant =3D dma_to_grant(dma_handle);
->+
->+	gnttab_end_foreign_access_ref(grant);
->+
->+	gnttab_free_grant_reference(grant);
->+}
->+
->+static int xen_virtio_dma_map_sg(struct device *dev, struct scatterlist =
-*sg,
->+				 int nents, enum dma_data_direction dir,
->+				 unsigned long attrs)
->+{
->+	WARN_ONCE(1, "xen_virtio_dma_map_sg nents %d\n", nents);
->+	return -EINVAL;
->+}
->+
->+static void xen_virtio_dma_unmap_sg(struct device *dev, struct scatterli=
-st *sg,
->+				    int nents, enum dma_data_direction dir,
->+				    unsigned long attrs)
->+{
->+	WARN_ONCE(1, "xen_virtio_dma_unmap_sg nents %d\n", nents);
->+}
->+
->+static int xen_virtio_dma_dma_supported(struct device *dev, u64 mask)
->+{
->+	return 1;
->+}
->+
->+static const struct dma_map_ops xen_virtio_dma_ops =3D {
->+	=2Ealloc =3D xen_virtio_dma_alloc,
->+	=2Efree =3D xen_virtio_dma_free,
->+	=2Ealloc_pages =3D xen_virtio_dma_alloc_pages,
->+	=2Efree_pages =3D xen_virtio_dma_free_pages,
->+	=2Emmap =3D dma_common_mmap,
->+	=2Eget_sgtable =3D dma_common_get_sgtable,
->+	=2Emap_page =3D xen_virtio_dma_map_page,
->+	=2Eunmap_page =3D xen_virtio_dma_unmap_page,
->+	=2Emap_sg =3D xen_virtio_dma_map_sg,
->+	=2Eunmap_sg =3D xen_virtio_dma_unmap_sg,
->+	=2Edma_supported =3D xen_virtio_dma_dma_supported,
->+};
->+
->+void xen_virtio_setup_dma_ops(struct device *dev)
->+{
->+	dev->dma_ops =3D &xen_virtio_dma_ops;
->+}
->+EXPORT_SYMBOL_GPL(xen_virtio_setup_dma_ops);
->+
->+MODULE_DESCRIPTION("Xen virtio support driver");
->+MODULE_AUTHOR("Juergen Gross <jgross@suse=2Ecom>");
->+MODULE_LICENSE("GPL");
->diff --git a/include/xen/xen-ops=2Eh b/include/xen/xen-ops=2Eh
->index a3584a3=2E=2Eae3c1bc 100644
->--- a/include/xen/xen-ops=2Eh
->+++ b/include/xen/xen-ops=2Eh
->@@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) {=
- }
->=20
-> #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
->=20
->+#ifdef CONFIG_XEN_VIRTIO
->+void xen_virtio_setup_dma_ops(struct device *dev);
->+#else
->+static inline void xen_virtio_setup_dma_ops(struct device *dev)
->+{
->+}
->+#endif /* CONFIG_XEN_VIRTIO */
->+
-> #endif /* INCLUDE_XEN_OPS_H */
+On Thu, Apr 14, 2022 at 12:27:23PM -0700, Drew Fustini wrote:
+> Add documentation for the ti,set-io-isolation DT property on the wkup_m3_ipc
+> node which tells the wkup_m3_ipc driver to use the wkup_m3 to enable
+> IO Isolation during low power mode transitions on am43xx platforms.
+> 
+> Signed-off-by: Dave Gerlach <d-gerlach@ti.com>
+> [dfustini: convert to YAML, make DTS example that passes check]
+> Signed-off-by: Drew Fustini <dfustini@baylibre.com>
+> ---
+> Changes from v2:
+> - correct indentation of the 'allOf:' block
+> 
+> Changes from v1:
+> - correct typo of 'ti,set-io-isolation' property in subject
+> - make 'ti,set-io-isolation' only valid for 'ti,am4372-wkup-m3-ipc'
+> 
+>  .../bindings/soc/ti/wkup-m3-ipc.yaml          | 78 +++++++++++++++++--
+>  1 file changed, 73 insertions(+), 5 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> index 7f4a75c5fcaa..f0ae86250fe4 100644
+> --- a/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> +++ b/Documentation/devicetree/bindings/soc/ti/wkup-m3-ipc.yaml
+> @@ -24,14 +24,22 @@ description: |+
+>    A wkup_m3_ipc device node is used to represent the IPC registers within an
+>    SoC.
+>  
+> -  Support for VTT Toggle
+> -  ==================================
+> +  Support for VTT Toggle with GPIO pin
+> +  ====================================
+>    On some boards like the AM335x EVM-SK and the AM437x GP EVM, a GPIO pin is
+>    connected to the enable pin on the DDR VTT regulator. This allows the
+>    regulator to be disabled upon suspend and enabled upon resume. Please note
+>    that the GPIO pin must be part of the GPIO0 module as only this GPIO module
+>    is in the wakeup power domain.
+>  
+> +  Support for IO Isolation
+> +  ========================
+> +  On AM437x SoCs, certain pins can be forced into an alternate state when IO
+> +  isolation is activated. Those pins have pad control registers prefixed by
+> +  'CTRL_CONF_' that contain DS0 (e.g. deep sleep) configuration bits that can
+> +  override the pin's existing bias (pull-up/pull-down) and value (high/low) when
+> +  IO isolation is active.
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -63,6 +71,24 @@ properties:
+>      $ref: /schemas/types.yaml#/definitions/uint32
+>      description: GPIO pin connected to enable pin on VTT regulator
+>  
+> +  ti,set-io-isolation:
+> +    type: boolean
+> +    description:
+> +      If this property is present, then the wkup_m3_ipc driver will instruct
+> +      the CM3 firmware to activate IO isolation when suspending to deep sleep.
+> +      This can be leveraged by a board design to put other devices on the board
+> +      into a low power state.
+> +allOf:
 
-Can you please encapsulate the Xen part of the test in some Xen-specific f=
-ile?
+Rob - sorry for the churn.  I realize now that there should have been a
+blank line before 'allOf:'.  Should I send a v4 or (if there are not
+other issues) could that just added when applying?
+
+Thank you,
+Drew

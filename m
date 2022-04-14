@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38E9C500909
+	by mail.lfdr.de (Postfix) with ESMTP id C999850090B
 	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 10:59:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241365AbiDNJBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:01:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
+        id S241369AbiDNJBI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:01:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238973AbiDNJAu (ORCPT
+        with ESMTP id S241363AbiDNJAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:00:50 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C396C927
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:22 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id c12so4123957plr.6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:22 -0700 (PDT)
+        Thu, 14 Apr 2022 05:00:54 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E97C66A03E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:28 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id md4so4512073pjb.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:58:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=RAAeRzDkd8VHwI1btUNFRYh6M+YjRVYA6C41AKkMgWk=;
-        b=LviAtoyKtaKBlZ2FL6h97l5iQCipPPEbnpaURSu/Q6d31pZSaLfk737UHtPjVNNsya
-         8UjFYt0XMpXiAj6EBZwDZVB762UoYzBR2Lzj9I3sMXWCZ8YFQ8tYaOt1+aE2v0m9SmXH
-         1kAPmDPsZ8J3ypTav1BKdu93hoc1ICkpd0CgIAdtvDBuioCInx4v2XMaSw2rMgpRmQ0V
-         x8zQIQ3/oGnkXGZ+54jI0wCM1PCUt+vZfoGONGUa2q+VSonlhy6okbOOfU2p36TJPYAS
-         r3WdtXJQHOamPnjAmWsDfakB80v3/UcMgboUJRkgjAUuGThAWyyCkumDxlZIQvS0PPPQ
-         0zBg==
+        bh=mklZHMW5WaloeJehusu1yiX1f4fRcVma2Hx+8tQuib8=;
+        b=GYW1lVzkhSeESKJQugH4CvCpPCnM0yPtooYZPpJUL6/o3mTK9iJDo6dDN9vtod3Tgb
+         hIfURH8rHJq9vbAWy4FYs6rd2oixfZmowPP4xMb6FvHfcTvY2MMjGKgxqZRMiSUIXenf
+         3gtIboofh9pvDm4R8qhwIzmlgIBKfYIH17OyeN8t9ltupuXBZWK+nFkoopWnfj3LfdbU
+         5TPi9waabu9rOMIsIS2YJ/2qwe+RZav6Mlhi/yu8/1S0sF/zXnI2CzP8KZwBeWWwrAmC
+         JCFSArnAlY2GARjH5PlUy6sgyKvZN65XnLSiD3kdqnrakHEeNNu8Mhkzy0bAfZwbM7tv
+         XH/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=RAAeRzDkd8VHwI1btUNFRYh6M+YjRVYA6C41AKkMgWk=;
-        b=0bbed0SfElJxsD5k6Pbo+5d4BoLqvxoeK2Qc+Xpi2bcLOLnaqmEb8gzNdYWoyM/Se/
-         JKBoJ9zBn7H44PHmuuP2xbNQfqUFiMsgjsHq1PVstILoXzPE6zytjT4VmWrCI+eOkDtg
-         uug5oicV/YdVaFwzZpq3mXVH6IY6M8rq2wANyKW94ZMWHBpyeDnqnE0gjcBkqa4jdtCn
-         MlytNNYqkbhV9icXFLLZLEa/y42acxgEGe2Ka6q1sQ9Cyz6NEcWpXKjENMg5f+ytZR7X
-         Lv2eQ03y8SoaeSsOslk14BQnhg6SOTYPA/H5q0IPylu9+l51CwmKPiOf5NNcNr1NlgZS
-         SDsw==
-X-Gm-Message-State: AOAM533FPxI6vOgdGcPUPKluKeron0B9ylKFW70CKxvp9xLOhVqCYA5s
-        FgfiOq1B1ZdAySYkY9DNZ3c=
-X-Google-Smtp-Source: ABdhPJyC2Gz8AiXe//HxfShI0SN9Ulacz6Yh5OZH2akI/9dzq5MTL9VvmXVj1hdw+LWLAjf1fwUBCw==
-X-Received: by 2002:a17:90b:4d01:b0:1cd:46e8:215a with SMTP id mw1-20020a17090b4d0100b001cd46e8215amr2635214pjb.73.1649926702169;
-        Thu, 14 Apr 2022 01:58:22 -0700 (PDT)
+        bh=mklZHMW5WaloeJehusu1yiX1f4fRcVma2Hx+8tQuib8=;
+        b=3uXrsFN2GEE2a+i28U34yiCuX41gsReyV0qOR+Vwdd9SA8y3P1wX0+JEANiqqEdJJb
+         WFe0MaGTOaOeJldrQrSCeE0UWDa2cx5wROKgz5rmkCUT03IuRP7TgfUsihXFdHDnZSLy
+         Qi82BbI5n77aj8VlNcBen38B6rFx5gWwvH/hthXWPPUpIOlzdN8wOikl0KKgV7EDvs7/
+         o4u6jvuuyDbRa7itC1LaXb7ReL9dXngBYHACHugvW+EW+HsNaE4LEh+9FIYt0HNqyvUt
+         wHcZ1iceDOXnnbmwrOd0Erg0yT++E20SlVC+Y5kc4yBhpNIpgpYh4ZziB5e8ajAalH5B
+         k6Gw==
+X-Gm-Message-State: AOAM530iObbMOUyi2ups3ws/6erpQZGBuCoeuSqVYGEXnhCFiTAS7/R6
+        D7Etz0WyvzP7ZExrvXhQY7o=
+X-Google-Smtp-Source: ABdhPJz5Qe3GUHD4nEk7hJm0HJO2KG9nnWXjtA/yZzhLdrdjyrKfgdCsRiLJZQUTpyory4+gb0nIgQ==
+X-Received: by 2002:a17:90b:4f44:b0:1cb:c539:5acc with SMTP id pj4-20020a17090b4f4400b001cbc5395accmr3233335pjb.152.1649926708329;
+        Thu, 14 Apr 2022 01:58:28 -0700 (PDT)
 Received: from hyeyoo.. ([114.29.24.243])
-        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.58.16
+        by smtp.gmail.com with ESMTPSA id p9-20020aa79e89000000b00505fada20dfsm1403537pfq.117.2022.04.14.01.58.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 01:58:20 -0700 (PDT)
+        Thu, 14 Apr 2022 01:58:26 -0700 (PDT)
 From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
 To:     Vlastimil Babka <vbabka@suse.cz>
 Cc:     Marco Elver <elver@google.com>,
@@ -60,9 +60,9 @@ Cc:     Marco Elver <elver@google.com>,
         Hyeonggon Yoo <42.hyeyoo@gmail.com>,
         Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 07/23] mm/slub: move kmalloc_large_node() to slab_common.c
-Date:   Thu, 14 Apr 2022 17:57:11 +0900
-Message-Id: <20220414085727.643099-8-42.hyeyoo@gmail.com>
+Subject: [PATCH v2 08/23] mm/slab_common: make kmalloc_large_node() consistent with kmalloc_large()
+Date:   Thu, 14 Apr 2022 17:57:12 +0900
+Message-Id: <20220414085727.643099-9-42.hyeyoo@gmail.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220414085727.643099-1-42.hyeyoo@gmail.com>
 References: <20220414085727.643099-1-42.hyeyoo@gmail.com>
@@ -78,109 +78,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In later patch SLAB will also pass requests larger than order-1 page
-to page allocator. Move kmalloc_large_node() to slab_common.c.
-
-Fold kmalloc_large_node_hook() into kmalloc_large_node() as there is
-no other caller.
+Move tracepoints into kmalloc_large_node() and add missing flag fix code.
 
 Signed-off-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
 ---
- include/linux/slab.h |  3 +++
- mm/slab_common.c     | 22 ++++++++++++++++++++++
- mm/slub.c            | 25 -------------------------
- 3 files changed, 25 insertions(+), 25 deletions(-)
+ mm/slab_common.c |  6 ++++++
+ mm/slub.c        | 22 ++++------------------
+ 2 files changed, 10 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 6f6e22959b39..97336acbebbf 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -486,6 +486,9 @@ static __always_inline void *kmem_cache_alloc_node_trace(struct kmem_cache *s, g
- 
- extern void *kmalloc_large(size_t size, gfp_t flags) __assume_page_alignment
- 						     __alloc_size(1);
-+
-+extern void *kmalloc_large_node(size_t size, gfp_t flags, int node)
-+				__assume_page_alignment __alloc_size(1);
- /**
-  * kmalloc - allocate memory
-  * @size: how many bytes of memory are required.
 diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 308cd5449285..e72089515030 100644
+index e72089515030..cf17be8cd9ad 100644
 --- a/mm/slab_common.c
 +++ b/mm/slab_common.c
-@@ -949,6 +949,28 @@ void *kmalloc_large(size_t size, gfp_t flags)
- }
- EXPORT_SYMBOL(kmalloc_large);
+@@ -955,6 +955,9 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+ 	void *ptr = NULL;
+ 	unsigned int order = get_order(size);
  
-+void *kmalloc_large_node(size_t size, gfp_t flags, int node)
-+{
-+	struct page *page;
-+	void *ptr = NULL;
-+	unsigned int order = get_order(size);
++	if (unlikely(flags & GFP_SLAB_BUG_MASK))
++		flags = kmalloc_fix_flags(flags);
 +
-+	flags |= __GFP_COMP;
-+	page = alloc_pages_node(node, flags, order);
-+	if (page) {
-+		ptr = page_address(page);
-+		mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
-+				      PAGE_SIZE << order);
-+	}
-+
-+	ptr = kasan_kmalloc_large(ptr, size, flags);
-+	/* As ptr might get tagged, call kmemleak hook after KASAN. */
-+	kmemleak_alloc(ptr, size, 1, flags);
-+
-+	return ptr;
-+}
-+EXPORT_SYMBOL(kmalloc_large_node);
-+
- #ifdef CONFIG_SLAB_FREELIST_RANDOM
- /* Randomize a generic freelist */
- static void freelist_randomize(struct rnd_state *state, unsigned int *list,
+ 	flags |= __GFP_COMP;
+ 	page = alloc_pages_node(node, flags, order);
+ 	if (page) {
+@@ -966,6 +969,9 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node)
+ 	ptr = kasan_kmalloc_large(ptr, size, flags);
+ 	/* As ptr might get tagged, call kmemleak hook after KASAN. */
+ 	kmemleak_alloc(ptr, size, 1, flags);
++	trace_kmalloc_node(_RET_IP_, ptr,
++			   size, PAGE_SIZE << order,
++			   flags, node);
+ 
+ 	return ptr;
+ }
 diff --git a/mm/slub.c b/mm/slub.c
-index 44170b4f084b..640712706f2b 100644
+index 640712706f2b..f10a892f1772 100644
 --- a/mm/slub.c
 +++ b/mm/slub.c
-@@ -1679,14 +1679,6 @@ static bool freelist_corrupted(struct kmem_cache *s, struct slab *slab,
-  * Hooks for other subsystems that check memory allocations. In a typical
-  * production configuration these hooks all should produce no code at all.
-  */
--static inline void *kmalloc_large_node_hook(void *ptr, size_t size, gfp_t flags)
--{
--	ptr = kasan_kmalloc_large(ptr, size, flags);
--	/* As ptr might get tagged, call kmemleak hook after KASAN. */
--	kmemleak_alloc(ptr, size, 1, flags);
--	return ptr;
--}
--
- static __always_inline void kfree_hook(void *x)
- {
- 	kmemleak_free(x);
-@@ -4399,23 +4391,6 @@ static int __init setup_slub_min_objects(char *str)
- 
- __setup("slub_min_objects=", setup_slub_min_objects);
- 
--static void *kmalloc_large_node(size_t size, gfp_t flags, int node)
--{
--	struct page *page;
--	void *ptr = NULL;
--	unsigned int order = get_order(size);
--
--	flags |= __GFP_COMP;
--	page = alloc_pages_node(node, flags, order);
--	if (page) {
--		ptr = page_address(page);
--		mod_lruvec_page_state(page, NR_SLAB_UNRECLAIMABLE_B,
--				      PAGE_SIZE << order);
--	}
--
--	return kmalloc_large_node_hook(ptr, size, flags);
--}
--
- void *__kmalloc_node(size_t size, gfp_t flags, int node)
- {
+@@ -4396,15 +4396,8 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node)
  	struct kmem_cache *s;
+ 	void *ret;
+ 
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+-		ret = kmalloc_large_node(size, flags, node);
+-
+-		trace_kmalloc_node(_RET_IP_, ret,
+-				   size, PAGE_SIZE << get_order(size),
+-				   flags, node);
+-
+-		return ret;
+-	}
++	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
++		return kmalloc_large_node(size, flags, node);
+ 
+ 	s = kmalloc_slab(size, flags);
+ 
+@@ -4861,15 +4854,8 @@ void *__kmalloc_node_track_caller(size_t size, gfp_t gfpflags,
+ 	struct kmem_cache *s;
+ 	void *ret;
+ 
+-	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE)) {
+-		ret = kmalloc_large_node(size, gfpflags, node);
+-
+-		trace_kmalloc_node(caller, ret,
+-				   size, PAGE_SIZE << get_order(size),
+-				   gfpflags, node);
+-
+-		return ret;
+-	}
++	if (unlikely(size > KMALLOC_MAX_CACHE_SIZE))
++		return kmalloc_large_node(size, gfpflags, node);
+ 
+ 	s = kmalloc_slab(size, gfpflags);
+ 
 -- 
 2.32.0
 

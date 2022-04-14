@@ -2,667 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEF145005C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:09:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB75C5005C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 08:09:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239893AbiDNGL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 02:11:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41158 "EHLO
+        id S239968AbiDNGMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 02:12:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbiDNGLz (ORCPT
+        with ESMTP id S239942AbiDNGMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 02:11:55 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968EC5596;
-        Wed, 13 Apr 2022 23:09:25 -0700 (PDT)
-X-UUID: 3cfd25a2a4c240feb78ba9881f4f08ec-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:6083d4c6-98d1-43b2-919c-f30578e4b1ca,OB:0,LO
-        B:10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,AC
-        TION:release,TS:53
-X-CID-INFO: VERSION:1.1.4,REQID:6083d4c6-98d1-43b2-919c-f30578e4b1ca,OB:0,LOB:
-        10,IP:0,URL:8,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:53
-X-CID-META: VersionHash:faefae9,CLOUDID:2c311ca9-d103-4e36-82b9-b0e86991b3df,C
-        OID:34a5c23fb1e5,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,Fi
-        le:nil,QS:0,BEC:nil
-X-UUID: 3cfd25a2a4c240feb78ba9881f4f08ec-20220414
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <jia-wei.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 997238934; Thu, 14 Apr 2022 14:09:20 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 14 Apr 2022 14:09:18 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 14:09:18 +0800
-Message-ID: <9e211d22cb8ca16cdecbf9ea9438f02b107919e2.camel@mediatek.com>
-Subject: Re: [PATCH 2/2] soc: mediatek: svs: add support for mt8186
-From:   Jia-Wei Chang <jia-wei.chang@mediatek.com>
-To:     Kevin Hilman <khilman@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Roger Lu <roger.lu@mediatek.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <hsinyi@google.com>
-Date:   Thu, 14 Apr 2022 14:09:18 +0800
-In-Reply-To: <7h1qy152p5.fsf@baylibre.com>
-References: <20220412112127.21570-1-jia-wei.chang@mediatek.com>
-         <20220412112127.21570-3-jia-wei.chang@mediatek.com>
-         <7h1qy152p5.fsf@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 14 Apr 2022 02:12:03 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4CACA195
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 23:09:36 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-277-8hWWm93nOMqUDarmxETpHg-1; Thu, 14 Apr 2022 07:09:33 +0100
+X-MC-Unique: 8hWWm93nOMqUDarmxETpHg-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.32; Thu, 14 Apr 2022 07:09:32 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.033; Thu, 14 Apr 2022 07:09:32 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Qais Yousef' <qais.yousef@arm.com>
+CC:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "parth@linux.ibm.com" <parth@linux.ibm.com>,
+        "chris.hyser@oracle.com" <chris.hyser@oracle.com>,
+        "pkondeti@codeaurora.org" <pkondeti@codeaurora.org>,
+        "Valentin.Schneider@arm.com" <Valentin.Schneider@arm.com>,
+        "patrick.bellasi@matbug.net" <patrick.bellasi@matbug.net>,
+        "pjt@google.com" <pjt@google.com>, "pavel@ucw.cz" <pavel@ucw.cz>,
+        "tj@kernel.org" <tj@kernel.org>,
+        "qperret@google.com" <qperret@google.com>,
+        "tim.c.chen@linux.intel.com" <tim.c.chen@linux.intel.com>,
+        Wei Wang <wvw@google.com>
+Subject: RE: Scheduling tasks on idle cpu
+Thread-Topic: Scheduling tasks on idle cpu
+Thread-Index: AdhNfEgLjonPVH3ESQeb3O9OCn/HMQAeBEWAABN1gYAAUbPRgAANeFfQ
+Date:   Thu, 14 Apr 2022 06:09:32 +0000
+Message-ID: <c831736b76c3411baea48a7c3e18cf4d@AcuMS.aculab.com>
+References: <030aacb0c1304e43ab917924dcf4f138@AcuMS.aculab.com>
+ <20220411233447.rcencjivkhyltyxm@airbuntu>
+ <4ca5cd70904d47bea0df93f7c0979c66@AcuMS.aculab.com>
+ <20220413235121.tzefvdvnwcipzo7p@airbuntu>
+In-Reply-To: <20220413235121.tzefvdvnwcipzo7p@airbuntu>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Authentication-Results: relay.mimecast.com;
+        auth=pass smtp.auth=C51A453 smtp.mailfrom=david.laight@aculab.com
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 15:58 -0700, Kevin Hilman wrote:
-> Tim Chang <jia-wei.chang@mediatek.com> writes:
-> 
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > MT8186 svs has a number of banks which used as optimization of opp
-> > voltage table for corresponding dvfs drivers.
-> > MT8186 svs big core uses 2-line high bank and low bank to optimize
-> > the
-> > voltage of opp table for higher and lower frequency respectively.
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> Theres' no upstream DTS for MT8186, so it's impossible for others to
-> test this.  Similar to my comments on other patches, could you please
-> explain how this was tested, and on what platforms.  If you have an
-> integration branch someplace that includes DTS, that would be very
-> helpful for reviewers to see the platform DTS that's used.
-> 
-
-Hi Kevin,
-
-1. Since the first beginning version of MT8186 dts is under review [1],
-so I can NOT update svs content in dts unless the first beginning
-version is accepted.  And I will update it once the first beginning dts
-is accpeted.
-
-2. MT8186 svs was tested on MT8186 chromebook prototype and comparing
-the register results between chromebook prototype's and MediaTek
-internal evaluation by feeding the same input e-fuse data.
-
-Here's the svs content in mt8186.dtsi on chromebook prototype.
-/ {
-	soc {
-		/* ... */
-+		svs: svs@1100b000 {
-+			compatible = "mediatek,mt8186-svs";
-+			reg = <0 0x1100b000 0 0x1000>;
-+			interrupts = <GIC_SPI 142 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_THERM>;
-+			clock-names = "main";
-+			nvmem-cells = <&svs_calibration>, <&lvts_e_data1>;
-+			nvmem-cell-names = "svs-calibration-data", "t-
-calibration-data";
-+			resets = <&infracfg_rst 1>;
-+			reset-names = "svs_rst";
-+		};
-		/* ... */
-		efuse: efuse@11cb0000 {
-			/* ... */
-+			svs_calibration: calib {
-+				reg = <0x550 0x50>;
-+			};
-			/* ... */
-		};
-		/* ... */
-	};
-};
-
-[1]: 
-https://lore.kernel.org/all/e06b7f3e-fbc7-63ab-c7b9-0c879cb10807@gmail.com/
-
-> Most of the changes here seem to be conditional on the MT8186 bank
-> data,
-> but there also appears to be changes that are common, and will affect
-> other SoCs.  Has this been tested with MT8183 to be sure these
-> changes
-> don't break it?
-> 
-
-Yes, I use Roger Lu's svs v22 [2] as the codebase and compare the
-results between with MT8186 svs series or without it on the MT8183
-chromebook as well.  The comparison result is approved by Roger.
-
-[2]: Message ID: 20220221063939.14969-1-roger.lu@mediatek.com
-
-> Other than that, the code looks OK, but it would really good to see
-> the
-> platform DTS that's used to enable this on MT8183 and MT8186.
-> 
-
-The svs content of MT8186 is given above.
-I will update it once the first beginning dts is accpeted.
-
-Thanks.
-
-> Thanks,
-> 
-> Kevin
-> 
-> 
-> > ---
-> >  drivers/soc/mediatek/mtk-svs.c | 349
-> > ++++++++++++++++++++++++++++++++-
-> >  1 file changed, 342 insertions(+), 7 deletions(-)
-> > 
-> > diff --git a/drivers/soc/mediatek/mtk-svs.c
-> > b/drivers/soc/mediatek/mtk-svs.c
-> > index 83af7ac8cafb..a44176125871 100644
-> > --- a/drivers/soc/mediatek/mtk-svs.c
-> > +++ b/drivers/soc/mediatek/mtk-svs.c
-> > @@ -356,6 +356,7 @@ struct svs_platform_data {
-> >   * @dcbdet: svs efuse data
-> >   * @dcmdet: svs efuse data
-> >   * @turn_pt: 2-line turn point tells which opp_volt calculated by
-> > high/low bank
-> > + * @vbin_turn_pt: voltage bin turn point helps to know which
-> > svsb_volt should be overridden
-> >   * @type: bank type to represent it is 2-line (high/low) bank or
-> > 1-line bank
-> >   *
-> >   * Svs bank will generate suitalbe voltages by below general math
-> > equation
-> > @@ -419,6 +420,7 @@ struct svs_bank {
-> >  	u32 dcbdet;
-> >  	u32 dcmdet;
-> >  	u32 turn_pt;
-> > +	u32 vbin_turn_pt;
-> >  	u32 type;
-> >  };
-> >  
-> > @@ -694,11 +696,12 @@ static int svs_status_debug_show(struct
-> > seq_file *m, void *v)
-> >  
-> >  	ret = thermal_zone_get_temp(svsb->tzd, &tzone_temp);
-> >  	if (ret)
-> > -		seq_printf(m, "%s: temperature ignore, turn_pt = %u\n",
-> > -			   svsb->name, svsb->turn_pt);
-> > +		seq_printf(m, "%s: temperature ignore, vbin_turn_pt =
-> > %u, turn_pt = %u\n",
-> > +			   svsb->name, svsb->vbin_turn_pt, svsb-
-> > >turn_pt);
-> >  	else
-> > -		seq_printf(m, "%s: temperature = %d, turn_pt = %u\n",
-> > -			   svsb->name, tzone_temp, svsb->turn_pt);
-> > +		seq_printf(m, "%s: temperature = %d, vbin_turn_pt = %u,
-> > turn_pt = %u\n",
-> > +			   svsb->name, tzone_temp, svsb->vbin_turn_pt,
-> > +			   svsb->turn_pt);
-> >  
-> >  	for (i = 0; i < svsb->opp_count; i++) {
-> >  		opp = dev_pm_opp_find_freq_exact(svsb->opp_dev,
-> > @@ -891,9 +894,11 @@ static void svs_get_bank_volts_v3(struct
-> > svs_platform *svsp)
-> >  		opp_stop = svsb->opp_count;
-> >  	}
-> >  
-> > -	for (i = opp_start; i < opp_stop; i++)
-> > +	for (i = opp_start; i < opp_stop; i++) {
-> >  		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
-> >  			svsb->volt[i] -= svsb->dvt_fixed;
-> > +		svsb->volt[i] += svsb->volt_od;
-> > +	}
-> >  }
-> >  
-> >  static void svs_set_bank_freq_pct_v3(struct svs_platform *svsp)
-> > @@ -984,6 +989,10 @@ static void svs_get_bank_volts_v2(struct
-> > svs_platform *svsp)
-> >  	struct svs_bank *svsb = svsp->pbank;
-> >  	u32 temp, i;
-> >  
-> > +	if (svsb->phase == SVSB_PHASE_MON &&
-> > +	    svsb->volt_flags & SVSB_MON_VOLT_IGNORE)
-> > +		return;
-> > +
-> >  	temp = svs_readl_relaxed(svsp, VOP74);
-> >  	svsb->volt[14] = (temp >> 24) & GENMASK(7, 0);
-> >  	svsb->volt[12] = (temp >> 16) & GENMASK(7, 0);
-> > @@ -1009,8 +1018,34 @@ static void svs_get_bank_volts_v2(struct
-> > svs_platform *svsp)
-> >  				     svsb->volt[14],
-> >  				     svsb->freq_pct[15]);
-> >  
-> > -	for (i = 0; i < svsb->opp_count; i++)
-> > +	for (i = 0; i < svsb->opp_count; i++) {
-> > +		if (svsb->volt_flags & SVSB_REMOVE_DVTFIXED_VOLT)
-> > +			svsb->volt[i] -= svsb->dvt_fixed;
-> >  		svsb->volt[i] += svsb->volt_od;
-> > +	}
-> > +
-> > +	/* For voltage bin support */
-> > +	if (svsb->opp_dfreq[0] > svsb->freq_base) {
-> > +		svsb->volt[0] = svs_opp_volt_to_bank_volt(svsb-
-> > >opp_dvolt[0],
-> > +							  svsb-
-> > >volt_step,
-> > +							  svsb-
-> > >volt_base);
-> > +
-> > +		/* Find voltage bin turn point */
-> > +		for (i = 0; i < svsb->opp_count; i++) {
-> > +			if (svsb->opp_dfreq[i] <= svsb->freq_base) {
-> > +				svsb->vbin_turn_pt = i;
-> > +				break;
-> > +			}
-> > +		}
-> > +
-> > +		/* Override svs bank voltages */
-> > +		for (i = 1; i < svsb->vbin_turn_pt; i++)
-> > +			svsb->volt[i] =	interpolate(svsb-
-> > >freq_pct[0],
-> > +						    svsb-
-> > >freq_pct[svsb->vbin_turn_pt],
-> > +						    svsb->volt[0],
-> > +						    svsb->volt[svsb-
-> > >vbin_turn_pt],
-> > +						    svsb->freq_pct[i]);
-> > +	}
-> >  }
-> >  
-> >  static void svs_set_bank_freq_pct_v2(struct svs_platform *svsp)
-> > @@ -1564,7 +1599,12 @@ static int svs_bank_resource_setup(struct
-> > svs_platform *svsp)
-> >  			svsb->name = "SVSB_CPU_LITTLE";
-> >  			break;
-> >  		case SVSB_CPU_BIG:
-> > -			svsb->name = "SVSB_CPU_BIG";
-> > +			if (svsb->type == SVSB_HIGH)
-> > +				svsb->name = "SVSB_CPU_BIG_HIGH";
-> > +			else if (svsb->type == SVSB_LOW)
-> > +				svsb->name = "SVSB_CPU_BIG_LOW";
-> > +			else
-> > +				svsb->name = "SVSB_CPU_BIG";
-> >  			break;
-> >  		case SVSB_CCI:
-> >  			svsb->name = "SVSB_CCI";
-> > @@ -1726,6 +1766,102 @@ static bool svs_mt8192_efuse_parsing(struct
-> > svs_platform *svsp)
-> >  	return true;
-> >  }
-> >  
-> > +static bool svs_mt8186_efuse_parsing(struct svs_platform *svsp)
-> > +{
-> > +	struct svs_bank *svsb;
-> > +	struct nvmem_cell *cell;
-> > +	u32 idx, i, golden_temp;
-> > +
-> > +	for (i = 0; i < svsp->efuse_max; i++)
-> > +		if (svsp->efuse[i])
-> > +			dev_info(svsp->dev, "M_HW_RES%d: 0x%08x\n",
-> > +				 i, svsp->efuse[i]);
-> > +
-> > +	if (!svsp->efuse[0]) {
-> > +		dev_notice(svsp->dev, "svs_efuse[0] = 0x0?\n");
-> > +		return false;
-> > +	}
-> > +
-> > +	/* Svs efuse parsing */
-> > +	for (idx = 0; idx < svsp->bank_max; idx++) {
-> > +		svsb = &svsp->banks[idx];
-> > +
-> > +		switch (svsb->sw_id) {
-> > +		case SVSB_CPU_BIG:
-> > +			if (svsb->type == SVSB_HIGH) {
-> > +				svsb->mdes = (svsp->efuse[2] >> 24) &
-> > GENMASK(7, 0);
-> > +				svsb->bdes = (svsp->efuse[2] >> 16) &
-> > GENMASK(7, 0);
-> > +				svsb->mtdes = svsp->efuse[2] &
-> > GENMASK(7, 0);
-> > +				svsb->dcmdet = (svsp->efuse[13] >> 8) &
-> > GENMASK(7, 0);
-> > +				svsb->dcbdet = svsp->efuse[13] &
-> > GENMASK(7, 0);
-> > +			} else if (svsb->type == SVSB_LOW) {
-> > +				svsb->mdes = (svsp->efuse[3] >> 24) &
-> > GENMASK(7, 0);
-> > +				svsb->bdes = (svsp->efuse[3] >> 16) &
-> > GENMASK(7, 0);
-> > +				svsb->mtdes = svsp->efuse[3] &
-> > GENMASK(7, 0);
-> > +				svsb->dcmdet = (svsp->efuse[14] >> 24)
-> > & GENMASK(7, 0);
-> > +				svsb->dcbdet = (svsp->efuse[14] >> 16)
-> > & GENMASK(7, 0);
-> > +			}
-> > +			break;
-> > +		case SVSB_CPU_LITTLE:
-> > +			svsb->mdes = (svsp->efuse[4] >> 24) &
-> > GENMASK(7, 0);
-> > +			svsb->bdes = (svsp->efuse[4] >> 16) &
-> > GENMASK(7, 0);
-> > +			svsb->mtdes = svsp->efuse[4] & GENMASK(7, 0);
-> > +			svsb->dcmdet = (svsp->efuse[14] >> 8) &
-> > GENMASK(7, 0);
-> > +			svsb->dcbdet = svsp->efuse[14] & GENMASK(7, 0);
-> > +			break;
-> > +		case SVSB_CCI:
-> > +			svsb->mdes = (svsp->efuse[5] >> 24) &
-> > GENMASK(7, 0);
-> > +			svsb->bdes = (svsp->efuse[5] >> 16) &
-> > GENMASK(7, 0);
-> > +			svsb->mtdes = svsp->efuse[5] & GENMASK(7, 0);
-> > +			svsb->dcmdet = (svsp->efuse[15] >> 24) &
-> > GENMASK(7, 0);
-> > +			svsb->dcbdet = (svsp->efuse[15] >> 16) &
-> > GENMASK(7, 0);
-> > +			break;
-> > +		case SVSB_GPU:
-> > +			svsb->mdes = (svsp->efuse[6] >> 24) &
-> > GENMASK(7, 0);
-> > +			svsb->bdes = (svsp->efuse[6] >> 16) &
-> > GENMASK(7, 0);
-> > +			svsb->mtdes = svsp->efuse[6] & GENMASK(7, 0);
-> > +			svsb->dcmdet = (svsp->efuse[15] >> 8) &
-> > GENMASK(7, 0);
-> > +			svsb->dcbdet = svsp->efuse[15] & GENMASK(7, 0);
-> > +			break;
-> > +		default:
-> > +			dev_err(svsb->dev, "unknown sw_id: %u\n", svsb-
-> > >sw_id);
-> > +			return false;
-> > +		}
-> > +
-> > +		svsb->vmax += svsb->dvt_fixed;
-> > +	}
-> > +
-> > +	/* Thermal efuse parsing */
-> > +	cell = nvmem_cell_get(svsp->dev, "t-calibration-data");
-> > +	if (IS_ERR_OR_NULL(cell)) {
-> > +		dev_err(svsp->dev, "no thermal cell, no mon mode\n");
-> > +		return false;
-> > +	}
-> > +
-> > +	svsp->tefuse = nvmem_cell_read(cell, &svsp->tefuse_max);
-> > +	if (IS_ERR(svsp->tefuse)) {
-> > +		dev_err(svsp->dev, "cannot read thermal efuse: %ld\n",
-> > +			PTR_ERR(svsp->tefuse));
-> > +		nvmem_cell_put(cell);
-> > +		return false;
-> > +	}
-> > +
-> > +	svsp->tefuse_max /= sizeof(u32);
-> > +	nvmem_cell_put(cell);
-> > +
-> > +	golden_temp = (svsp->tefuse[0] >> 24) & GENMASK(7, 0);
-> > +	if (!golden_temp)
-> > +		golden_temp = 50;
-> > +
-> > +	for (idx = 0; idx < svsp->bank_max; idx++) {
-> > +		svsb = &svsp->banks[idx];
-> > +		svsb->mts = 409;
-> > +		svsb->bts = (((500 * golden_temp + 204650) / 1000) -
-> > 25) * 4;
-> > +	}
-> > +
-> > +	return true;
-> > +}
-> > +
-> >  static bool svs_mt8183_efuse_parsing(struct svs_platform *svsp)
-> >  {
-> >  	struct svs_bank *svsb;
-> > @@ -2041,6 +2177,49 @@ static int svs_mt8192_platform_probe(struct
-> > svs_platform *svsp)
-> >  	return 0;
-> >  }
-> >  
-> > +static int svs_mt8186_platform_probe(struct svs_platform *svsp)
-> > +{
-> > +	struct device *dev;
-> > +	struct svs_bank *svsb;
-> > +	u32 idx;
-> > +
-> > +	svsp->rst = devm_reset_control_get_optional(svsp->dev,
-> > "svs_rst");
-> > +	if (IS_ERR(svsp->rst)) {
-> > +		dev_err_probe(svsp->dev, PTR_ERR(svsp->rst),
-> > +			      "cannot get svs reset control\n");
-> > +		return PTR_ERR(svsp->rst);
-> > +	}
-> > +
-> > +	dev = svs_add_device_link(svsp, "lvts");
-> > +	if (IS_ERR(dev))
-> > +		return PTR_ERR(dev);
-> > +
-> > +	for (idx = 0; idx < svsp->bank_max; idx++) {
-> > +		svsb = &svsp->banks[idx];
-> > +
-> > +		switch (svsb->sw_id) {
-> > +		case SVSB_CPU_LITTLE:
-> > +		case SVSB_CPU_BIG:
-> > +			svsb->opp_dev = get_cpu_device(svsb->cpu_id);
-> > +			break;
-> > +		case SVSB_CCI:
-> > +			svsb->opp_dev = svs_add_device_link(svsp,
-> > "cci");
-> > +			break;
-> > +		case SVSB_GPU:
-> > +			svsb->opp_dev = svs_add_device_link(svsp,
-> > "mali");
-> > +			break;
-> > +		default:
-> > +			dev_err(svsb->dev, "unknown sw_id: %u\n", svsb-
-> > >sw_id);
-> > +			return -EINVAL;
-> > +		}
-> > +
-> > +		if (IS_ERR(svsb->opp_dev))
-> > +			return PTR_ERR(svsb->opp_dev);
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> >  static int svs_mt8183_platform_probe(struct svs_platform *svsp)
-> >  {
-> >  	struct device *dev;
-> > @@ -2135,6 +2314,149 @@ static struct svs_bank svs_mt8192_banks[] =
-> > {
-> >  	},
-> >  };
-> >  
-> > +static struct svs_bank svs_mt8186_banks[] = {
-> > +	{
-> > +		.sw_id			= SVSB_CPU_BIG,
-> > +		.type			= SVSB_LOW,
-> > +		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-> > +		.get_volts		= svs_get_bank_volts_v3,
-> > +		.cpu_id			= 6,
-> > +		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT,
-> > +		.mode_support		= SVSB_MODE_INIT02,
-> > +		.opp_count		= MAX_OPP_ENTRIES,
-> > +		.freq_base		= 1670000000,
-> > +		.turn_freq_base		= 1670000000,
-> > +		.volt_step		= 6250,
-> > +		.volt_base		= 400000,
-> > +		.volt_od		= 4,
-> > +		.vmax			= 0x59,
-> > +		.vmin			= 0x20,
-> > +		.age_config		= 0x1,
-> > +		.dc_config		= 0x1,
-> > +		.dvt_fixed		= 0x3,
-> > +		.vco			= 0x10,
-> > +		.chk_shift		= 0x87,
-> > +		.core_sel		= 0x0fff0100,
-> > +		.int_st			= BIT(0),
-> > +		.ctl0			= 0x00540003,
-> > +	},
-> > +	{
-> > +		.sw_id			= SVSB_CPU_BIG,
-> > +		.type			= SVSB_HIGH,
-> > +		.set_freq_pct		= svs_set_bank_freq_pct_v3,
-> > +		.get_volts		= svs_get_bank_volts_v3,
-> > +		.cpu_id			= 6,
-> > +		.tzone_name		= "cpu_big0",
-> > +		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-> > +					  SVSB_MON_VOLT_IGNORE,
-> > +		.mode_support		= SVSB_MODE_INIT02 |
-> > SVSB_MODE_MON,
-> > +		.opp_count		= MAX_OPP_ENTRIES,
-> > +		.freq_base		= 2050000000,
-> > +		.turn_freq_base		= 1670000000,
-> > +		.volt_step		= 6250,
-> > +		.volt_base		= 400000,
-> > +		.volt_od		= 4,
-> > +		.vmax			= 0x73,
-> > +		.vmin			= 0x20,
-> > +		.age_config		= 0x1,
-> > +		.dc_config		= 0x1,
-> > +		.dvt_fixed		= 0x6,
-> > +		.vco			= 0x10,
-> > +		.chk_shift		= 0x87,
-> > +		.core_sel		= 0x0fff0101,
-> > +		.int_st			= BIT(1),
-> > +		.ctl0			= 0x00540003,
-> > +		.tzone_htemp		= 85000,
-> > +		.tzone_htemp_voffset	= 8,
-> > +		.tzone_ltemp		= 25000,
-> > +		.tzone_ltemp_voffset	= 8,
-> > +	},
-> > +	{
-> > +		.sw_id			= SVSB_CPU_LITTLE,
-> > +		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-> > +		.get_volts		= svs_get_bank_volts_v2,
-> > +		.cpu_id			= 0,
-> > +		.tzone_name		= "cpu_zone0",
-> > +		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-> > +					  SVSB_MON_VOLT_IGNORE,
-> > +		.mode_support		= SVSB_MODE_INIT02 |
-> > SVSB_MODE_MON,
-> > +		.opp_count		= MAX_OPP_ENTRIES,
-> > +		.freq_base		= 2000000000,
-> > +		.volt_step		= 6250,
-> > +		.volt_base		= 400000,
-> > +		.volt_od		= 3,
-> > +		.vmax			= 0x65,
-> > +		.vmin			= 0x20,
-> > +		.age_config		= 0x1,
-> > +		.dc_config		= 0x1,
-> > +		.dvt_fixed		= 0x6,
-> > +		.vco			= 0x10,
-> > +		.chk_shift		= 0x87,
-> > +		.core_sel		= 0x0fff0102,
-> > +		.int_st			= BIT(2),
-> > +		.ctl0			= 0x3210000f,
-> > +		.tzone_htemp		= 85000,
-> > +		.tzone_htemp_voffset	= 8,
-> > +		.tzone_ltemp		= 25000,
-> > +		.tzone_ltemp_voffset	= 8,
-> > +	},
-> > +	{
-> > +		.sw_id			= SVSB_CCI,
-> > +		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-> > +		.get_volts		= svs_get_bank_volts_v2,
-> > +		.tzone_name		= "cpu_zone0",
-> > +		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-> > +					  SVSB_MON_VOLT_IGNORE,
-> > +		.mode_support		= SVSB_MODE_INIT02 |
-> > SVSB_MODE_MON,
-> > +		.opp_count		= MAX_OPP_ENTRIES,
-> > +		.freq_base		= 1400000000,
-> > +		.volt_step		= 6250,
-> > +		.volt_base		= 400000,
-> > +		.volt_od		= 3,
-> > +		.vmax			= 0x65,
-> > +		.vmin			= 0x20,
-> > +		.age_config		= 0x1,
-> > +		.dc_config		= 0x1,
-> > +		.dvt_fixed		= 0x6,
-> > +		.vco			= 0x10,
-> > +		.chk_shift		= 0x87,
-> > +		.core_sel		= 0x0fff0103,
-> > +		.int_st			= BIT(3),
-> > +		.ctl0			= 0x3210000f,
-> > +		.tzone_htemp		= 85000,
-> > +		.tzone_htemp_voffset	= 8,
-> > +		.tzone_ltemp		= 25000,
-> > +		.tzone_ltemp_voffset	= 8,
-> > +	},
-> > +	{
-> > +		.sw_id			= SVSB_GPU,
-> > +		.set_freq_pct		= svs_set_bank_freq_pct_v2,
-> > +		.get_volts		= svs_get_bank_volts_v2,
-> > +		.tzone_name		= "mfg",
-> > +		.volt_flags		= SVSB_REMOVE_DVTFIXED_VOLT |
-> > +					  SVSB_MON_VOLT_IGNORE,
-> > +		.mode_support		= SVSB_MODE_INIT02 |
-> > SVSB_MODE_MON,
-> > +		.opp_count		= MAX_OPP_ENTRIES,
-> > +		.freq_base		= 850000000,
-> > +		.volt_step		= 6250,
-> > +		.volt_base		= 400000,
-> > +		.vmax			= 0x58,
-> > +		.vmin			= 0x20,
-> > +		.age_config		= 0x555555,
-> > +		.dc_config		= 0x1,
-> > +		.dvt_fixed		= 0x4,
-> > +		.vco			= 0x10,
-> > +		.chk_shift		= 0x87,
-> > +		.core_sel		= 0x0fff0104,
-> > +		.int_st			= BIT(4),
-> > +		.ctl0			= 0x00100003,
-> > +		.tzone_htemp		= 85000,
-> > +		.tzone_htemp_voffset	= 8,
-> > +		.tzone_ltemp		= 25000,
-> > +		.tzone_ltemp_voffset	= 7,
-> > +	},
-> > +};
-> > +
-> >  static struct svs_bank svs_mt8183_banks[] = {
-> >  	{
-> >  		.sw_id			= SVSB_CPU_LITTLE,
-> > @@ -2249,6 +2571,16 @@ static const struct svs_platform_data
-> > svs_mt8192_platform_data = {
-> >  	.bank_max = ARRAY_SIZE(svs_mt8192_banks),
-> >  };
-> >  
-> > +static const struct svs_platform_data svs_mt8186_platform_data = {
-> > +	.name = "mt8186-svs",
-> > +	.banks = svs_mt8186_banks,
-> > +	.efuse_parsing = svs_mt8186_efuse_parsing,
-> > +	.probe = svs_mt8186_platform_probe,
-> > +	.irqflags = IRQF_TRIGGER_HIGH,
-> > +	.regs = svs_regs_v2,
-> > +	.bank_max = ARRAY_SIZE(svs_mt8186_banks),
-> > +};
-> > +
-> >  static const struct svs_platform_data svs_mt8183_platform_data = {
-> >  	.name = "mt8183-svs",
-> >  	.banks = svs_mt8183_banks,
-> > @@ -2263,6 +2595,9 @@ static const struct of_device_id
-> > svs_of_match[] = {
-> >  	{
-> >  		.compatible = "mediatek,mt8192-svs",
-> >  		.data = &svs_mt8192_platform_data,
-> > +	}, {
-> > +		.compatible = "mediatek,mt8186-svs",
-> > +		.data = &svs_mt8186_platform_data,
-> >  	}, {
-> >  		.compatible = "mediatek,mt8183-svs",
-> >  		.data = &svs_mt8183_platform_data,
-> > -- 
-> > 2.18.0
+RnJvbTogUWFpcyBZb3VzZWYNCj4gU2VudDogMTQgQXByaWwgMjAyMiAwMDo1MQ0KPiANCj4gT24g
+MDQvMTIvMjIgMDg6MzksIERhdmlkIExhaWdodCB3cm90ZToNCj4gPiBGcm9tOiBRYWlzIFlvdXNl
+Zg0KPiA+ID4gU2VudDogMTIgQXByaWwgMjAyMiAwMDozNQ0KPiA+ID4NCj4gPiA+IE9uIDA0LzEx
+LzIyIDA4OjI2LCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4gPiA+IEZyb206IFFhaXMgWW91c2Vm
+DQo+ID4gPiA+ID4gU2VudDogMDkgQXByaWwgMjAyMiAxODowOQ0KPiA+ID4gPiAuLi4NCj4gPiA+
+ID4gPiBSVCBzY2hlZHVsZXIgd2lsbCBwdXNoL3B1bGwgdGFza3MgdG8gZW5zdXJlIHRoZSB0YXNr
+IHdpbGwgZ2V0IHRvIHJ1biBBU0FQIGlmDQo+ID4gPiA+ID4gdGhlcmUncyBhbm90aGVyIGNwdSBh
+dCBsb3dlciBwcmlvcml0eSBpcyBhdmFpbGFibGUNCj4gPiA+ID4NCj4gPiA+ID4gRG9lcyB0aGF0
+IGFjdHVhbGx5IGhhcHBlbj8NCj4gPiA+DQo+ID4gPiBGb3IgUlQgdGFza3MsIHllcy4gVGhleSBz
+aG91bGQgZ2V0IGRpc3RyaWJ1dGVkLg0KPiA+DQo+ID4gT2ssIHRoYXQgaXMgc29tZXRoaW5nIHNs
+aWdodGx5IGRpZmZlcmVudCBmcm9tIHdoYXQgSSdtIHNlZWluZy4NCj4gDQo+IElmIHlvdSBoYXZl
+IG11bHRpcGxlIFNDSEVEX0ZJRk8vU0NIRURfUlIgdGFza3Mgd2l0aCB0aGUgc2FtZSBwcmlvcml0
+eSwgdGhleQ0KPiBkb24ndCBlbmQgdXAgYmVpbmcgZGlzdHJpYnV0ZWQgb24gZGlmZmVyZW50IENQ
+VXM/IEFzc3VtaW5nIG51bWJlciBvZiB0YXNrcyBpcw0KPiBub3QgaGlnaGVyIHRoYW4gbnVtYmVy
+IG9mIENQVXMuDQo+IA0KPiBHZW5lcmFsbHkgaWYgdGhlcmUgYXJlIHR3byBSVCB0YXNrcyBvbiB0
+aGUgc2FtZSBDUFUgYW5kIHRoZXJlJ3MgYW5vdGhlciBDUFUNCj4gdGhhdCBpcyBydW5uaW5nIHNv
+bWV0aGluZyB0aGF0IGlzIGxvd2VyIHByaW9yaXR5IHRoYW4gdGhlc2UgdHdvLCB0aGVuIHRoZSBs
+b3dlcg0KPiBwcmlvcml0eSBvZiB0aGVzZSAyIHRhc2tzIHNob3VsZCBtb3ZlIHRvIHRoYXQgQ1BV
+Lg0KPiANCj4gRWgsIGhvcGUgdGhhdCdzIHJlYWRhYmxlIDotKQ0KDQpUaGF0IGlzIChqdXN0IGFi
+b3V0KSByZWFkYWJsZSwgYW5kIGlzIGhhcHBlbmluZy4NCg0KPiA+ID4gPiBJJ3ZlIHNlZW4gdGhl
+IGZvbGxvd2luZzoNCj4gPiA+ID4gICAzNDUzMyBbMDE3XTogc3lzX2Z1dGV4KHVhZGRyOiAxMDQ5
+MTA0LCBvcDogODUsIHZhbDogMSwgdXRpbWU6IDEsIHVhZGRyMjogMTA0OTEwMCwgdmFsMzoNCj4g
+NDAwMDAwMSkNCj4gPiA+ID4gICAzNDUzMyBbMDE3XTogc2NoZWRfbWlncmF0ZV90YXNrOiBwaWQ9
+MzQ1MTIgcHJpbz0xMjAgb3JpZ19jcHU9MTQgZGVzdF9jcHU9MTcNCj4gPiA+ID4gICAzNDUzMyBb
+MDE3XTogc2NoZWRfd2FrZXVwOiBwaWQ9MzQ1MTIgcHJpbz0xMjAgc3VjY2Vzcz0xIHRhcmdldF9j
+cHU9MDE3DQo+ID4gPg0KPiA+ID4gcHJpbz0xMjAgaXMgYSBDRlMgdGFzaywgbm8/DQo+ID4NCj4g
+PiBDRlMgPSAnbm9ybWFsIHRpbWUtc2xpY2UgcHJvY2Vzc2VzID8gVGhlbiB5ZXMuDQo+IA0KPiBT
+b3JyeSwgeWVzLiBDRlMgPSBTQ0hFRF9OT1JNQUwvU0NIRURfT1RIRVIuDQo+IA0KPiA+DQo+ID4g
+PiA+IGFuZCBwaWQgMzQ1MTIgZG9lc24ndCBnZXQgc2NoZWR1bGVkIHVudGlsIHBpZCAzNDUzMyBm
+aW5hbGx5IHNsZWVwcy4NCj4gPiA+ID4gVGhpcyBpcyBpbiBzcGl0ZSBvZiB0aGVyZSBiZWluZyA1
+IGlkbGUgY3B1Lg0KPiA+ID4gPiBjcHUgMTQgaXMgYnVzeSBydW5uaW5nIGEgUlQgdGhyZWFkLCBi
+dXQgbWlncmF0aW5nIHRvIGNwdSAxNyBzZWVtcyB3cm9uZy4NCj4gPiA+ID4NCj4gPiA+ID4gVGhp
+cyBpcyBvbiBhIFJIRUw3IGtlcm5lbCwgSSd2ZSBub3QgcmVwbGljYXRlZCBpdCBvbiBhbnl0aGlu
+ZyByZWNlbnQuDQo+ID4gPiA+IEJ1dCBJJ3ZlIHZlcnkgbXVjaCBsaWtlIGEgUlQgdGhyZWFkIHRv
+IGJlIGFibGUgdG8gc2NoZWR1bGUgYSBub24tUlQNCj4gPiA+ID4gdGhyZWFkIHRvIHJ1biBvbiBh
+biBpZGxlIGNwdS4NCj4gPiA+DQo+ID4gPiBPaCwgeW91IHdhbnQgQ0ZTIHRvIGF2b2lkIENQVXMg
+dGhhdCBhcmUgcnVubmluZyBSVCB0YXNrcy4NCj4gPiA+DQo+ID4gPiBXZSBoYWQgYSBwcm9wb3Nh
+bCBpbiB0aGUgcGFzdCwgYnV0IGl0IHdhc24ndCBnb29kIGVub3VnaA0KPiA+ID4NCj4gPiA+IAlo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9sa21sLzE1NjcwNDg1MDItNjA2NC0xLWdpdC1zZW5kLWVt
+YWlsLWppbmctdGluZy53dUBtZWRpYXRlay5jb20vDQo+ID4NCj4gPiBUaGF0IHNlZW1zIHRvIGJl
+IHNvbWV0aGluZyBkaWZmZXJlbnQuDQo+ID4gUmVsYXRlZCB0byBzb21ldGhpbmcgZWxzZSBJJ3Zl
+IHNlZW4gd2hlcmUgYSBSVCBwcm9jZXNzIGlzIHNjaGVkdWxlZA0KPiA+IG9uIGl0cyBvbGQgY3B1
+ICh0byBnZXQgdGhlIGhvdCBjYWNoZSkgYnV0IHRoZSBwcm9jZXNzIHJ1bm5pbmcgb24NCj4gPiB0
+aGF0IGNwdSBpcyBsb29waW5nIGluIGtlcm5lbCAtIHNvIHRoZSBSVCBwcm9jZXNzIGRvZXNuJ3Qg
+c3RhcnQuDQo+IA0KPiBJICp0aGluayogeW91J3JlIGhpdHRpbmcgc29mdGlycSBsYXRlbmNpZXMu
+IE1vc3QgbGlrZWx5IGl0J3MgdGhlIG5ldHdvcmsgUlgNCj4gc29mdGlycSBwcm9jZXNzaW5nIHRo
+ZSBwYWNrZXRzLiBJZiB0aGlzIGxhdGVuY3kgaXMgYSBwcm9ibGVtLCB0aGVuIFBSRUVNUFRfUlQN
+Cj4gWzFdIHNob3VsZCBoZWxwIHdpdGggdGhpcy4gRm9yIEFuZHJvaWQgd2UgaGl0IHRoaXMgaXNz
+dWUgYW5kIHRoZXJlJ3MgYSBsb25nDQo+IGxpdmluZyBvdXQgb2YgdHJlZSBwYXRjaCB0aGF0IEkn
+bSB0cnlpbmcgdG8gZmluZCBhbiB1cHN0cmVhbSByZXBsYWNlbWVudCBmb3IuDQoNCkkgc3VzcGVj
+dCB0aGUgY29zdHMgb2YgUFJFRU1QVF9SVCB3b3VsZCBzbG93IHRoaW5ncyBkb3duIHRvbyBtdWNo
+Lg0KVGhpcyB0ZXN0IHN5c3RlbSBoYXMgNDAgY3B1LCAzNSBvZiB0aGVtIGFyZSBSVCBhbmQgcHJv
+Y2Vzc2luZyB0aGUgc2FtZSAnam9icycuDQpJdCBkb2Vzbid0IHJlYWxseSBtYXR0ZXIgaWYgb25l
+IGlzIGRlbGF5ZWQgYnkgdGhlIG5ldHdvcmsgaXJxICsgc29mdGlycSBjb2RlLg0KVGhlIHByb2Js
+ZW1zIGFyaXNlIGlmIHRoZXkgYWxsIHN0b3AuDQpUaGUgJ2pvYicgbGlzdCB3YXMgcHJvdGVjdGVk
+IGJ5IGEgbXV0ZXggLSB1c3VhbGx5IG5vdCB0b28gYmFkLg0KQnV0IGlmIGEgbmV0d29yayBpcnEg
+aW50ZXJydXB0cyB0aGUgY29kZSB3aGlsZSBpdCBob2xkcyB0aGUgbXV0ZXggdGhlbiBhbGwNCnRo
+ZSBSVCB0YXNrcyBzdGFsbCB1bnRpbCB0aGUgc29mdGlycSBjb2RlIGNvbXBsZXRlcy4NCkkndmUg
+cmVwbGFjZWQgdGhlIGxpbmtlZCBsaXN0IHdpdGggYW4gYXJyYXkgYW5kIHVzZWQgYXRvbWljX2lu
+YygpLg0KDQpJIGNhbiBpbWFnaW5lIHRoYXQgYSBQUkVFTVBUX1JUIGtlcm5lbCB3aWxsIGhhdmUg
+dGhlIHNhbWUgcHJvYmxlbQ0KYmVjYXVzZSAoSSB0aGluaykgYWxsIHRoZSBzcGluIGxvY2tzIGdl
+dCByZXBsYWNlZCBieSBzbGVlcCBsb2Nrcy4NCg0KPiANCj4gVGhlcmUncyBhIG5ldyBrbm9iIHRv
+IHJlZHVjZSBob3cgbG9uZyBuZXRkZXYgc3BlbmRzIGluIHRoZSBsb29wLiBNaWdodCBiZSB3b3J0
+aA0KPiBhIHRyeToNCj4gDQo+IAlodHRwczovL2xvcmUua2VybmVsLm9yZy9uZXRkZXYvMTQ5MjYx
+OTgzMC03NTYxLTEtZ2l0LXNlbmQtZW1haWwtdGVkaGVhZHN0ZXJAZ21haWwuY29tLw0KPiANCj4g
+WzFdIGh0dHBzOi8vd2lraS5saW51eGZvdW5kYXRpb24ub3JnL3JlYWx0aW1lL3N0YXJ0DQoNCkkg
+dGhpbmsgdGhlIHBhdGNoIHRoYXQgcnVucyB0aGUgc29mdGlycSBpbiBhIHNlcGFyYXRlIHRocmVh
+ZCBtaWdodCBoZWxwLg0KQnV0IGl0IHByb2JhYmx5IG5lZWRzIGEgdGVzdCB0byBvbmx5IHRvIHRo
+YXQgaWYgaXQgd291bGQgJ3N0YWxsJyBhIFJUIHByb2Nlc3MuDQoNCj4gPiBJJ3ZlIGF2b2lkZWQg
+bW9zdCBvZiB0aGUgcGFpbiB0aGF0IGNhdXNlZCBieSBub3QgdXNpbmcgYSBzaW5nbGUNCj4gPiBj
+dl9icm9hZGNhc3QoKSB0byB3YWtlIHVwIHRoZSAzNCBSVCB0aHJlYWRzIChpbiB0aGlzIGNvbmZp
+ZykuDQo+ID4gKEVhY2gga2VybmVsIHRocmVhZCBzZWVtZWQgdG8gd2FrZSB1cCB0aGUgbmV4dCBv
+bmUsIHNvIHRoZQ0KPiA+IGRlbGF5cyB3ZXJlIGN1bXVsYXRpdmUuKQ0KPiA+IEluc3RlYWQgdGhl
+cmUgaXMgYSBzZXBhcmF0ZSBjdiBmb3IgZWFjaCBSVCB0aHJlYWQuDQo+ID4gSSBhY3R1YWxseSB3
+YW50IHRoZSAnaGVyZCBvZiB3aWxkZWJlZXN0JyA6LSkNCj4gDQo+IEl0IHNlZW1zIHlvdSBoYXZl
+IGEgYmlnIFJUIGFwcCBydW5uaW5nIGluIHVzZXJzcGFjZS4gSSB0aG91Z2h0IGluaXRpYWxseSB5
+b3UncmUNCj4gaGl0dGluZyBpc3N1ZXMgd2l0aCByYW5kb20ga3RocmVhZHMgb3Igc29tZXRoaW5n
+LiBJZiB5b3UgaGF2ZSBjb250cm9sIG92ZXINCj4gdGhlc2UgdGFza3MsIHRoZW4gdGhhdCBzaG91
+bGQgYmUgZWFzaWVyIHRvIGhhbmRsZSAoYXMgeW91IHN1Z2dlc3QgYXQgdGhlIGVuZCkuDQoNCkkn
+dmUgYSBiaWcgYXBwIHdpdGggYSBsb3Qgb2YgUlQgdGhyZWFkcyBkb2luZyBuZXR3b3JrIHNlbmQv
+cmVjZWl2ZS4NCihBbGwgdGhlIHBhY2tldHMgYXMgfjIwMCBieXRlIFVEUCwgNTAvc2VjIG9uIDEw
+MDArIHBvcnQgbnVtYmVycy4pDQpCdXQgdGhlcmUgYXJlIG90aGVyIHRoaW5ncyBnb2luZyBvbiBh
+cyB3ZWxsLg0KDQo+IEknbSBub3Qgc3VyZSBhYm91dCB0aGUgZGVsYXlzIHdoZW4gdXNpbmcgY3Zf
+YnJvYWRjYXN0KCkuIENvdWxkIGl0IGJlIHRoZSB3YXkNCj4gdGhpcyBsaWJyYXJ5IGlzIGltcGxl
+bWVudGVkIGlzIGNhdXNpbmcgdGhlIHByb2JsZW0gcmF0aGVyIHRoYW4gYSBrZXJuZWwNCj4gbGlt
+aXRhdGlvbj8NCg0KSSB3YXMgZGVmaW5pdGVseSBzZWVpbmcgdGhlIHRocmVhZHMgd2FrZSB1cCBv
+bmUgYnkgb25lLg0KRXZlcnkgMTBtcyBvbmUgb2YgdGhlIFJUIHRocmVhZHMgd2FrZXMgdXAgYW5k
+IHRoZW4gd2FrZXMgdXAgYWxsIHRoZSBvdGhlcnMuDQpUaGVyZSB3ZXJlbid0IGFueSAnZXh0cmEn
+IHN5c3RlbSBjYWxscywgb25jZSBvbmUgdGhyZWFkIHdhcyBydW5uaW5nDQppbiBrZXJuZWwgdGhl
+IG5leHQgb25lIGdvdCB3b2tlbiB1cC4NCk1vc3QgKGFuZCBhbHdheXMpIG5vdGljZWFibGUgd2Vy
+ZSB0aGUgZGVsYXlzIGdldHRpbmcgZWFjaCBjcHUgb3V0DQpvZiBpdHMgc2xlZXAgc3RhdGUuDQpC
+dXQgaWYgb25lIG9mIHRoZSByZXF1aXJlZCBjcHUgd2FzIChlZykgcnVubmluZyB0aGUgc29mdGlu
+dCBjb2RlDQpub25lIG9mIHRoZSBsYXR0ZXIgb25lcyB3b3VsZCB3YWtlIHVwLg0KDQo+ID4gPiBU
+aGUgYXBwcm9hY2ggaW4gdGhhdCBwYXRjaCBtb2RpZmllZCBSVCB0byBhdm9pZCBDRlMgYWN0dWFs
+bHkuDQo+ID4NCj4gPiBZZXMgSSB3YW50IHRoZSBDRlMgc2NoZWR1bGVyIHRvIHBpY2sgYW4gaWRs
+ZSBjcHUgaW4gcHJlZmVyZW5jZQ0KPiA+IHRvIGFuIGFjdGl2ZSBSVCBvbmUuDQo+IA0KPiBJIHRo
+aW5rIHRoYXQncyB3aGF0IHNob3VsZCBoYXBwZW4uIEJ1dCBJIHRoaW5rIGl0J3MgcmFjeS4gVmlu
+Y2VudCBrbm93cyB0aGlzDQo+IGNvZGUgYmV0dGVyIHRob3VnaCwgc28gSSdsbCBkZWZlciB0byBo
+aW0uDQo+IA0KPiA+DQo+ID4gPiBDYW4geW91IHZlcmlmeSB3aGV0aGVyIHRoZSBSVCB0YXNrIHdv
+a2UgdXAgYWZ0ZXIgdGFzayAzNDUxMiB3YXMgbWlncmF0ZWQgdG8gQ1BVDQo+ID4gPiAxNz8gTG9v
+a2luZyBhdCB0aGUgZGVmaW5pdGlvbiBvZiBhdmFpbGFibGVfaWRsZV9jcHUoKSB3ZSBzaG91bGQg
+aGF2ZSBhdm9pZGVkDQo+ID4gPiB0aGF0IENQVSBpZiB0aGUgUlQgdGFzayB3YXMgYWxyZWFkeSBy
+dW5uaW5nLiBCb3RoIHdha2luZyB1cCBhdCB0aGUgc2FtZSB0aW1lDQo+ID4gPiB3b3VsZCBleHBs
+YWluIHdoYXQgeW91IHNlZS4gT3RoZXJ3aXNlIEknbSBub3Qgc3VyZSB3aHkgaXQgcGlja2VkIENQ
+VSAxNy4NCj4gPg0KPiA+IEFsbCAzNSBSVCB0YXNrcyBhcmUgcnVubmluZyB3aGVuIHRoZSByZXF1
+ZXN0IHRvIHNjaGVkdWxlIHRhc2sgMzQ1MTIgaXMgbWFkZS4NCj4gPiAoVGhleSB3YWtlIGV2ZXJ5
+IDEwbXMgdG8gcHJvY2VzcyBVRFAvUlRQIGF1ZGlvIHBhY2tldHMuKQ0KPiA+IFRoZSBSVCB0YXNr
+IG9uIGNwdSAxNyBjYXJyaWVkIG9uIHJ1bm5pbmcgdW50aWwgaXQgcmFuIG91dCBvZiB3b3JrIChh
+ZnRlciBhYm91dCAxbXMpLg0KPiA+IFRhc2sgMzQ1MTIgdGhlbiByYW4gb24gY3B1IDE3Lg0KPiA+
+DQo+ID4gSW4gdGhpcyBjYXNlIHRhc2sgMzQ1MTIgYWN0dWFsbHkgZmluaXNoZWQgcXVpdGUgcXVp
+Y2tseS4NCj4gPiAoSXQgaXMgY3JlYXRpbmcgYW5kIGJpbmRpbmcgbW9yZSBVRFAgc29ja2V0cy4p
+DQo+ID4gQnV0IGl0IGxvb2tzIGxpa2UgaWYgaXQgd2VyZSBzdGlsbCBydW5uaW5nIG9uIHRoZSBu
+ZXh0IDEwbXMgJ3RpY2snDQo+ID4gaXQgd291bGQgYmUgcHJlLWVtcHRlZCBieSB0aGUgUlQgdGFz
+ayBhbmQgYmUgaWRsZS4NCj4gPiBOb3QgaWRlYWwgd2hlbiBJJ20gdHJ5aW5nIHRvIHNjaGVkdWxl
+IGEgYmFja2dyb3VuZCBhY3Rpdml0eS4NCj4gPg0KPiA+IEkgZG9uJ3QgdGhpbmsgdGhlIGxvYWQt
+YmFsYW5jZXIgd2lsbCBldmVyIHBpY2sgaXQgdXAuDQo+ID4gQWxsIHRoZSBwcm9jZXNzIHNjaGVk
+dWxpbmcgaXMgaGFwcGVuaW5nIGZhciB0b28gZmFzdC4NCj4gPg0KPiA+IFdoYXQgSSB0aGluayBt
+aWdodCBiZSBoYXBwZW5pbmcgaXMgdGhhdCB0aGUgZnV0ZXgoKSBjb2RlIGlzIHJlcXVlc3RpbmcN
+Cj4gPiB0aGUgd29rZW4gdXAgdGhyZWFkIHJ1biBvbiB0aGUgY3VycmVudCBjcHUuDQo+IA0KPiBI
+bW0uIExvb2tpbmcgYXQga2VybmVsL2Z1dGV4L3dhaXR3YWtlLmM6OmZ1dGV4X3dha2UoKSBpdCBq
+dXN0IGVuZHMgdXAgY2FsbGluZw0KPiB3YWtlX3VwX3Byb2Nlc3MoKS4gU28gdGhhdCBtaWdodCBu
+b3QgYmUgdGhlIGNhc2UuDQo+IA0KPiA+IFRoaXMgY2FuIGJlIGFkdmFudGFnZW91cyBpbiBzb21l
+IGNpcmN1bXN0YW5jZXMgLSB1c3VhbGx5IGlmIHlvdQ0KPiA+IGtub3cgdGhlIGN1cnJlbnQgdGhy
+ZWFkIGlzIGFib3V0IHRvIHNsZWVwLg0KPiA+IChJIHJlbWVtYmVyIGFub3RoZXIgc2NoZWR1bGVy
+IGRvaW5nIHRoYXQsIGJ1dCBJIGNhbid0IHJlbWVtYmVyIHdoeSENCj4gPiBUaGUgb25seSBzZXF1
+ZW5jZSBJIGNhbiB0aGluayBvZiBpcyBhIHNoZWxsIGRvaW5nIGZvcmsrZXhlYyt3YWl0LikNCj4g
+PiBCdXQgaXQgc2VlbXMgbGlrZSBhIGJhZCBpZGVhIHdoZW4gYSBSVCB0aHJlYWQgaXMgd2FraW5n
+IGEgQ0ZTIG9uZS4NCj4gPiAoT3IgYW55IGNhc2Ugd2hlcmUgdGhlIG9uZSBiZWluZyB3b2tlbiBp
+cyBsb3dlciBwcmlvcml0eS4pDQo+ID4NCj4gPiBJIG1pZ2h0IGhhdmUgdG8gcnVuIHRoZSAnYmFj
+a2dyb3VuZCB0YXNrcycgYXQgbG93IFJUIHByaW9yaXR5DQo+ID4ganVzdCB0byBnZXQgdGhlbSBz
+Y2hlZHVsZWQgb24gaWRsZSBjcHUuDQo+IA0KPiBJZiB5b3UgbWFrZSBpdCBhbiBSVCB0YXNrICh3
+aGljaCBJIHRoaW5rIGlzIGEgZ29vZCBpZGVhKSwgdGhlbiB0aGUgUlQgc2NoZWR1bGVyDQo+IHdp
+bGwgaGFuZGxlIGl0IGluIHRoZSBwdXNoL3B1bGwgcmVtYXJrIHRoYXQgc2VlbSB0byBoYXZlIHN0
+YXJ0ZWQgdGhpcw0KPiBkaXNjdXNzaW9uIGFuZCBnZXQgcHVzaGVkL3B1bGxlZCB0byBhbm90aGVy
+IENQVSB0aGF0IGlzIHJ1bm5pbmcgbG93ZXIgcHJpb3JpdHkNCj4gdGFzay4NCg0KVGhlIHByb2Js
+ZW0gaXMgdGhhdCB3aGlsZSBJJ2QgbGlrZSB0aGlzIHRocmVhZCB0byBzdGFydCBpbW1lZGlhdGVs
+eQ0Kd2hhdCBpdCBpcyBkb2luZyBpc24ndCBUSEFUIGltcG9ydGFudC4NClRoZXJlIGFyZSBvdGhl
+ciB0aGluZ3MgdGhhdCBtaWdodCBydW4gb24gdGhlIENGUyBzY2hlZHVsZXIgdGhhdCBhcmUNCm1v
+cmUgaW1wb3J0YW50Lg0KSSBjYW4gbWFrZSBpdCBSVCBmb3IgZXhwZXJpbWVudHMuDQoNCglEYXZp
+ZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwgTW91bnQg
+RmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzogMTM5NzM4
+NiAoV2FsZXMpDQo=
 

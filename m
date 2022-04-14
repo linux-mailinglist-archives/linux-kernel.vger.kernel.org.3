@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1E8501740
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2300E5016A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357032AbiDNPZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43174 "EHLO
+        id S243057AbiDNPJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:09:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346824AbiDNN57 (ORCPT
+        with ESMTP id S1346907AbiDNN6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:57:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA5FB3DDA;
-        Thu, 14 Apr 2022 06:48:08 -0700 (PDT)
+        Thu, 14 Apr 2022 09:58:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D655A5EBA;
+        Thu, 14 Apr 2022 06:48:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5ABC61D7E;
-        Thu, 14 Apr 2022 13:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3DCDC385A5;
-        Thu, 14 Apr 2022 13:48:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5E387B82987;
+        Thu, 14 Apr 2022 13:48:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A13C2C385A5;
+        Thu, 14 Apr 2022 13:48:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944087;
-        bh=y5acm9QtIYIh4TAQnZ1YLQpJn15sclndKlvdLyihpLA=;
+        s=korg; t=1649944090;
+        bh=M9u1RAZAGMjU3Wn2c8g1bwEv1KTFdivymiq/HDAcSnk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1CYpQGSDDye42xPHMsLYDxdohHTamG73+PjrzSxK17/vRykRGCREUd2Zz5XHhK/Sn
-         Hl2lpylVC3MYgHXqsQXSg42zEBRYf/wFVRAKhazbuFomsRT3A+fFJuwCt/Szyn96lL
-         IlUro/XP2sH7IAVWIG4pxKCQ+Fn3Z5Rkgk2qvm/Y=
+        b=rDyWxHpELXZRJow0hFKA+LqQhCB+8abighBpTfYWc4GWvwdaP9bep6CkKyAgOwLKh
+         oUq9UJHAoa3g67LK3T456EsC0xTYn8n18sd5DatyAe7VF8D883gjAD4NjW9LC6v2zy
+         BHDNmHpIsiO7BLqBTc6l5YM8hpHaCyEfCgC7S048=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
-        Neal Liu <neal_liu@aspeedtech.com>,
+        stable@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 387/475] usb: ehci: add pci device support for Aspeed platforms
-Date:   Thu, 14 Apr 2022 15:12:52 +0200
-Message-Id: <20220414110905.898555779@linuxfoundation.org>
+Subject: [PATCH 5.4 388/475] PCI: pciehp: Add Qualcomm quirk for Command Completed erratum
+Date:   Thu, 14 Apr 2022 15:12:53 +0200
+Message-Id: <20220414110905.931007496@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -55,50 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Neal Liu <neal_liu@aspeedtech.com>
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-[ Upstream commit c3c9cee592828528fd228b01d312c7526c584a42 ]
+[ Upstream commit 9f72d4757cbe4d1ed669192f6d23817c9e437c4b ]
 
-Enable Aspeed quirks in commit 7f2d73788d90 ("usb: ehci:
-handshake CMD_RUN instead of STS_HALT") to support Aspeed
-ehci-pci device.
+The Qualcomm PCI bridge device (Device ID 0x0110) found in chipsets such as
+SM8450 does not set the Command Completed bit unless writes to the Slot
+Command register change "Control" bits.
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
-Signed-off-by: Neal Liu <neal_liu@aspeedtech.com>
-Link: https://lore.kernel.org/r/20220208101657.76459-1-neal_liu@aspeedtech.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This results in timeouts like below:
+
+  pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+
+Add the device to the Command Completed quirk to mark commands "completed"
+immediately unless they change the "Control" bits.
+
+Link: https://lore.kernel.org/r/20220210145003.135907-1-manivannan.sadhasivam@linaro.org
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/host/ehci-pci.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ drivers/pci/hotplug/pciehp_hpc.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/host/ehci-pci.c b/drivers/usb/host/ehci-pci.c
-index 774ccaa5acee..1962140a59f2 100644
---- a/drivers/usb/host/ehci-pci.c
-+++ b/drivers/usb/host/ehci-pci.c
-@@ -21,6 +21,9 @@ static const char hcd_name[] = "ehci-pci";
- /* defined here to avoid adding to pci_ids.h for single instance use */
- #define PCI_DEVICE_ID_INTEL_CE4100_USB	0x2e70
- 
-+#define PCI_VENDOR_ID_ASPEED		0x1a03
-+#define PCI_DEVICE_ID_ASPEED_EHCI	0x2603
-+
- /*-------------------------------------------------------------------------*/
- #define PCI_DEVICE_ID_INTEL_QUARK_X1000_SOC		0x0939
- static inline bool is_intel_quark_x1000(struct pci_dev *pdev)
-@@ -223,6 +226,12 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
- 			ehci->has_synopsys_hc_bug = 1;
- 		}
- 		break;
-+	case PCI_VENDOR_ID_ASPEED:
-+		if (pdev->device == PCI_DEVICE_ID_ASPEED_EHCI) {
-+			ehci_info(ehci, "applying Aspeed HC workaround\n");
-+			ehci->is_aspeed = 1;
-+		}
-+		break;
- 	}
- 
- 	/* optional debug port, normally in the first BAR */
+diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
+index 8a890eed63d0..13f3bc239c66 100644
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -959,6 +959,8 @@ static void quirk_cmd_compl(struct pci_dev *pdev)
+ }
+ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_INTEL, PCI_ANY_ID,
+ 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
++DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0110,
++			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
+ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0400,
+ 			      PCI_CLASS_BRIDGE_PCI, 8, quirk_cmd_compl);
+ DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_VENDOR_ID_QCOM, 0x0401,
 -- 
 2.35.1
 

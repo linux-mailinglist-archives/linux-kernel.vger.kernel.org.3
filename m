@@ -2,113 +2,312 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CF350184D
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C157C50184E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344301AbiDNQIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:08:39 -0400
+        id S1344422AbiDNQIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:08:48 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355238AbiDNP6V (ORCPT
+        with ESMTP id S1355764AbiDNP6k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 11:58:21 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B754DBD09
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:46:16 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id 12so5787555oix.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:46:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KR/Wxn4SQ4JrdCT3cLRPKdG0x0HkSw7hlrSRgpKxYRQ=;
-        b=WxGLEf6RY4Ooaba17rTS2bxOsi1wbArLPsvCGHueZ0EgeXSKI8ehlSomOomZ843peY
-         MT99q2ov+J3Rtn4ISYH30xr3Fqbf1IGsbgowwpBIDPIQvgFnzUWNEuWywdaoAGAPT4uL
-         hjKlgfvRRNnsfCBpmargyVQR5vZhmFI5OBkEE4wLrszAftAXofSKCQld/66XgO2DCTzt
-         RdHJMW1EqEcEf710V5z7bovMgvXw2ghZFAhDl/dFmakku7S9OTCE0rp8sP+1XcjWQdUk
-         RtYoMrRiKmRwVSW8GhJXnybLCwgwXRs8DxCsmkBZI9WovUrqv0NCVpQt02+LJAwNCNn8
-         EyJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=KR/Wxn4SQ4JrdCT3cLRPKdG0x0HkSw7hlrSRgpKxYRQ=;
-        b=Wi5u3KKjpv15MsMViuwbRCX5Bo/ZFyX+YfBbh5gxBi6n9OiEu34nK8YSEbPMTyuBRL
-         frcfPXBvixepvsMaIiwKJKVa4hOvUFxBow9NqjhKgWnnVY35dMYR0LO6OcRbhJb6aHqV
-         frwKRjIPy2dr+4gYOWRq8Lhf0ik61BAVKW623dniHtHUBr3xqYCoySWeWSy4HZqkczO2
-         MLGhtUt67jZRQHqwrPqgDYWNmhB/IMHdIGhhG3t9vItkfFagu++EIacn/20Bpg8D6FT7
-         PHJvfwXVDelet9GSgBrF3EfQhy5je0sp+6HejAy2rOFq+4FsB7wm36WwvO7jChGBsGOy
-         Xyig==
-X-Gm-Message-State: AOAM533l5eCA9go/pQb++2HXjzP1MH+FD1nG++CvcGF2eq+Q97XtTICN
-        Ix1Cm0fefj4/4lKUkGQ1WNyYJNqc7beKeQ==
-X-Google-Smtp-Source: ABdhPJzcKsa2KobE36DJzPycSbTLyQTt+rNh4aIE9O5a2+cQJKtrZ72LtxatOUPkgz5FF2E/PjnEbw==
-X-Received: by 2002:a05:6808:18a0:b0:2d9:bde3:5776 with SMTP id bi32-20020a05680818a000b002d9bde35776mr1996277oib.29.1649951175554;
-        Thu, 14 Apr 2022 08:46:15 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
-        by smtp.gmail.com with ESMTPSA id pp23-20020a0568709d1700b000e2d876505dsm759641oab.32.2022.04.14.08.46.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 08:46:15 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <8d067bcc-3405-420e-655f-ce97b8b5e798@lwfinger.net>
-Date:   Thu, 14 Apr 2022 10:46:14 -0500
+        Thu, 14 Apr 2022 11:58:40 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B66E38BB
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:46:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649951202; x=1681487202;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to;
+  bh=uAhqgnl1kawPXwaAA7Oh8LVeG+sDmv9ZViRW52v9suY=;
+  b=Otw2SjqIdW72+0PFmZYOKTOvXrSZgJvF+8Cs0Cn76MEomzz+R4i+CEnE
+   bBeZQIAfTID4jV73PLysqbelu5JCFgEMvYUz7l/Af6RKuClvSQbRnxTkJ
+   gpRJstJzKsSP4jMxp8X/NKKavd9+MMZVpk1tEDHV8/u6Z3U9aq3y2r9JH
+   eYnKBPjtBUQ7DGjdTNvhKUaAxaaI60edlK12w4Im5F2j5DRNfZ0lOYlzQ
+   Ct88hYsAIu9tbvnL+D37P0ydo6utCNBv5PuZh45WflJVscKSddxytrMNO
+   GhMYnhtWXPEw7k9GlpYFmNKXtDgyAhpAg0m5IGDpFx2DIeDQBxtez77NM
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="263137012"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="263137012"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 08:46:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="612377905"
+Received: from msahoo-mobl1.amr.corp.intel.com (HELO [10.212.62.78]) ([10.212.62.78])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 08:46:29 -0700
+Content-Type: multipart/mixed; boundary="------------LYGojPVYD6BcZ9cjMhM0heIe"
+Message-ID: <d2f927c9-187a-906c-e1f3-33541b3b5a84@intel.com>
+Date:   Thu, 14 Apr 2022 08:46:36 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: staging: r8188eu: struct rt_firmware_header issues
 Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Michael Straube' <straube.linux@gmail.com>
-Cc:     Phillip Potter <phil@philpotter.co.uk>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "open list:STAGING SUBSYSTEM" <linux-staging@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <94a72ecc-3acd-758b-15a4-a7d56bf03fbe@gmail.com>
- <86a66ea4-45e3-cfa2-9130-f698ae212bfd@gmail.com>
- <51e706400b914552bfda6353020da17e@AcuMS.aculab.com>
- <a40a2a1b-a8f1-e720-be92-48858d4f6678@gmail.com>
- <74ff67ec85e14e16bb2e9f57a4fccb17@AcuMS.aculab.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <74ff67ec85e14e16bb2e9f57a4fccb17@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     x86@kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+References: <20220404103741.809025935@linutronix.de>
+ <20220404104820.656881574@linutronix.de>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [patch 2/3] x86/fpu/xsave: Prepare for optimized compaction
+In-Reply-To: <20220404104820.656881574@linutronix.de>
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 05:14, David Laight wrote:
-> From: Michael Straube
->> Sent: 14 April 2022 11:08
->>
->> On 4/14/22 10:41, David Laight wrote:
->>> From: Michael Straube
->>>> Sent: 13 April 2022 20:42
->>>>
->>>> On 4/13/22 18:27, Michael Straube wrote:
->>>>> Hi all,
->>>>>
->>>>> I think the rt_firmware_hdr structure in rtw_fw.c has some issues.
->>>>>
->>>>>
->>>>> struct rt_firmware_hdr {
->>>>>        /*  8-byte alinment required */
->>>
->>> Probably need an __aligned(8) at the bottom then?
->>
->> I don't see any reason why this is needed. Do I miss something?
+This is a multi-part message in MIME format.
+--------------LYGojPVYD6BcZ9cjMhM0heIe
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 4/4/22 05:11, Thomas Gleixner wrote:
+...
+> For copy_uabi_to_xstate() it's more effort when supervisor states are
+> supported and active. If the user space buffer has active states which are
+> not in the set of current states of the XSTATE buffer, then the buffer
+> layout will change which means the supervisor states might be overwritten.
 > 
-> Dunno, the comment might be wrong.
+> Provide a function, which moves them out of the way and invoke it before
+> any of the extended features is copied from the user space buffer.
 
-Actually, the le16_to_cpu() references require alignment 4 (I think I got that 
-right).
+This took me a minute to sort through.  There are three kinds of state
+in the kernel buffer in copy_uabi_to_xstate().
 
-Larry
+1. User state, set in hdr.features which is copied from uabi buffer
+2. User state, clear in hdr.features.  Feature will be set to its init
+   state because xsave->header.xfeatures is cleared.
+3. Supervisor state which is preserved.
 
+I was confused for a *moment* because the space for a #2 might be
+overwritten by a #1 copy-in from userspace.  But, that only happens for
+states that will end up being set to init.  No harm, no foul.
+
+Any interest in doing something like the attached to make
+copy_uabi_to_xstate() easier to read?
+
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -1147,10 +1147,10 @@ void __copy_xstate_to_uabi_buf(struct me
+>  			pkru.pkru = pkru_val;
+>  			membuf_write(&to, &pkru, sizeof(pkru));
+>  		} else {
+> -			copy_feature(header.xfeatures & BIT_ULL(i), &to,
+> -				     __raw_xsave_addr(xsave, i),
+> -				     __raw_xsave_addr(xinit, i),
+> -				     xstate_sizes[i]);
+> +			bool active = header.xfeatures & BIT_ULL(i);
+> +			void *from = __raw_xsave_addr(active ? xsave : xinit, i);
+> +
+> +			membuf_write(&to, from, xstate_sizes[i]);
+>  		}
+>  		/*
+>  		 * Keep track of the last copied state in the non-compacted
+> @@ -1195,6 +1195,73 @@ static int copy_from_buffer(void *dst, u
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Prepare the kernel XSTATE buffer for saving the user supplied XSTATE. If
+> + * the XGETBV1 based optimization is in use then the kernel buffer might
+> + * not have the user supplied active features set and an eventual active
+> + * supervisor state has to be moved out of the way. With optimized
+> + * compaction the features which are to be stored need to be set in the
+> + * XCOMP_BV field of the XSTATE header.
+> + */
+
+What does "eventual active supervisor state" mean?  Just that the state
+needs to be preserved since it needs to be restored eventually?  I found
+that phrase a bit confusing.
+
+I was thinking of a comment more along these lines:
+
+/*
+ * Adjust 'fpstate' so that it can additionally store all the xfeatures
+ * set in 'xuser' when optimized compaction is enabled.  All bits in
+ * 'xuser' will be set in XCOMP_BV.  Supervisor state will be preserved
+ * and may be moved to make room for new 'xuser' states.  User state may
+ * be destroyed.
+ */
+
+> +static void xsave_adjust_xcomp(struct fpstate *fpstate, u64 xuser)
+> +{
+> +	struct xregs_state *xsave = &fpstate->regs.xsave;
+> +	u64 xtmp, xall, xbv, xcur = xsave->header.xfeatures;
+> +	int i;
+> +
+> +	/* Nothing to do if optimized compaction is not in use */
+> +	if (!xsave_use_xgetbv1())
+> +		return;
+
+The comment makes me wonder if we need a more descriptive name for
+xsave_use_xgetbv1(), like:
+
+	if (!xsave_do_optimized_compaction())
+		return;
+
+> +	/*
+> +	 * Check whether the current xstate buffer contains supervisor
+> +	 * state. If not, just set the user supplied features.
+> +	 */
+> +	if (!(xcur & XFEATURE_MASK_SUPERVISOR_ALL)) {
+> +		__xstate_init_xcomp_bv(xsave, xuser);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Set legacy features. They are at a fixed offset and do not
+> +	 * affect the layout.
+> +	 */
+> +	xbv = xsave->header.xcomp_bv;
+> +	xbv |= xuser & (XFEATURE_MASK_FP | XFEATURE_MASK_SSE);
+> +
+> +	/*
+> +	 * Check whether there is new extended state in the user supplied
+> +	 * buffer. If not, then nothing has to be moved around.
+> +	 */
+> +	if (!(xuser & ~xbv)) {
+> +		__xstate_init_xcomp_bv(xsave, xbv);
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * No more optimizations. Set the user features and move the
+> +	 * supervisor state(s). If the new user feature is past
+> +	 * the supervisor state, then the loop is moving nothing.
+> +	 */
+> +	xtmp = xbv & XFEATURE_MASK_SUPERVISOR_ALL;
+> +	xall = xbv | xuser;
+
+
+I'd probably at least comment why the loop is backwards:
+
+	/*
+	 * Features are only be moved up in the buffer.  Start with
+	 * high features to avoid overwriting them with a lower ones.
+	 */
+
+I know this is a very typical way to implement non-destructive moves,
+but my stupid brain seems to default to assuming that for loops only go
+forward.
+
+> +	for (i = fls64(xtmp) - 1; i >= FIRST_EXTENDED_XFEATURE;
+> +	     i = fls64(xtmp) - 1) {
+> +		unsigned int to, from;
+
+Is it worth a check here like:
+
+		/* Do not move features in their init state: */
+		if (!(xcur & BIT_ULL(i))) {
+			xtmp &= ~BIT_ULL(i);
+			continue;
+		}
+
+(probably also moving the &= around instead of copying it)
+
+> +		from = xfeature_get_offset(xbv, i);
+> +		to = xfeature_get_offset(xall, i);
+> +		if (from < to) {
+> +			memmove((void *)xsave + to, (void *)xsave + from,
+> +				xstate_sizes[i]);
+> +		} else {
+> +			WARN_ON_ONCE(to < from);
+> +		}
+> +		xtmp &= ~BIT_ULL(i);
+> +	}
+> +	__xstate_init_xcomp_bv(xsave, xall);
+> +}
+>  
+>  static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>  			       const void __user *ubuf)
+> @@ -1232,6 +1299,8 @@ static int copy_uabi_to_xstate(struct fp
+>  		}
+>  	}
+>  
+> +	xsave_adjust_xcomp(fpstate, hdr.xfeatures);
+> +
+>  	for (i = 0; i < XFEATURE_MAX; i++) {
+>  		u64 mask = ((u64)1 << i);
+>  
+> --- a/arch/x86/kernel/fpu/xstate.h
+> +++ b/arch/x86/kernel/fpu/xstate.h
+> @@ -10,14 +10,22 @@
+>  DECLARE_PER_CPU(u64, xfd_state);
+>  #endif
+>  
+> -static inline void xstate_init_xcomp_bv(struct xregs_state *xsave, u64 mask)
+> +static inline bool xsave_use_xgetbv1(void) { return false; }
+> +
+> +static inline void __xstate_init_xcomp_bv(struct xregs_state *xsave, u64 mask)
+>  {
+>  	/*
+>  	 * XRSTORS requires these bits set in xcomp_bv, or it will
+> -	 * trigger #GP:
+> +	 * trigger #GP. It's also required for XRSTOR when the buffer
+> +	 * was saved with XSAVEC in compacted format.
+>  	 */
+> +	xsave->header.xcomp_bv = mask | XCOMP_BV_COMPACTED_FORMAT;
+> +}
+> +
+> +static inline void xstate_init_xcomp_bv(struct xregs_state *xsave, u64 mask)
+> +{
+>  	if (cpu_feature_enabled(X86_FEATURE_XCOMPACTED))
+> -		xsave->header.xcomp_bv = mask | XCOMP_BV_COMPACTED_FORMAT;
+> +		__xstate_init_xcomp_bv(xsave, mask);
+>  }
+>  
+>  static inline u64 xstate_get_group_perm(bool guest)
+
+--------------LYGojPVYD6BcZ9cjMhM0heIe
+Content-Type: text/x-patch; charset=UTF-8; name="copy_uabi_to_xstate.1.patch"
+Content-Disposition: attachment; filename="copy_uabi_to_xstate.1.patch"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9mcHUveHN0YXRlLmMgYi9hcmNoL3g4Ni9r
+ZXJuZWwvZnB1L3hzdGF0ZS5jCmluZGV4IDM5ZTFjODYyNmFiOS4uOGEzMmE4Mzk4ZTFmIDEw
+MDY0NAotLS0gYS9hcmNoL3g4Ni9rZXJuZWwvZnB1L3hzdGF0ZS5jCisrKyBiL2FyY2gveDg2
+L2tlcm5lbC9mcHUveHN0YXRlLmMKQEAgLTExNzgsNiArMTE3OCwxNSBAQCBzdGF0aWMgaW50
+IGNvcHlfZnJvbV9idWZmZXIodm9pZCAqZHN0LCB1bnNpZ25lZCBpbnQgb2Zmc2V0LCB1bnNp
+Z25lZCBpbnQgc2l6ZSwKIH0KIAogCisvKgorICogUmVwbGFjZSBhbGwgdXNlciB4ZmVhdHVy
+ZXMgd2l0aCBkYXRhIGZyb20gJ3VidWYnLiAgRmVhdHVyZXMKKyAqIG1hcmtlZCBhcyBpbml0
+IGluICd1YnVmJyB3aWxsIGJlIG1hcmtlZCBhcyBpbml0IGluIHRoZSBrZXJuZWwKKyAqIGJ1
+ZmZlci4gIFN1cGVydmlzb3IgeGZlYXR1cmVzIHdpbGwgYmUgcHJlc2VydmVkLgorICoKKyAq
+IFJldHVybnMgMCBvbiBzdWNjZXNzLiAgTm9uLXplcm8gcmV0dXJuIGNvZGVzIGluZGljYXRl
+IHRoYXQKKyAqIHRoZSBrZXJuZWwgeHNhdmUgYnVmZmVyIG1heSBoYXZlIGJlZW4gbGVmdCBp
+biBhbiBpbmNvbnNpc3RlbnQKKyAqIHN0YXRlLiAgQ2FsbGVyIG11c3QgcmVzZXQgZnBzdGF0
+ZSB0byByZWNvdmVyLgorICovCiBzdGF0aWMgaW50IGNvcHlfdWFiaV90b194c3RhdGUoc3Ry
+dWN0IGZwc3RhdGUgKmZwc3RhdGUsIGNvbnN0IHZvaWQgKmtidWYsCiAJCQkgICAgICAgY29u
+c3Qgdm9pZCBfX3VzZXIgKnVidWYpCiB7CkBAIC0xMjE0LDMwICsxMjIzLDMwIEBAIHN0YXRp
+YyBpbnQgY29weV91YWJpX3RvX3hzdGF0ZShzdHJ1Y3QgZnBzdGF0ZSAqZnBzdGF0ZSwgY29u
+c3Qgdm9pZCAqa2J1ZiwKIAkJfQogCX0KIAorCS8qCisJICogTGVhdmUgb25seSBzdXBlcnZp
+c29yIHN0YXRlcyBpbiAneGZlYXR1cmVzJy4gIFVzZXIgeGZlYXR1cmUKKwkgKiBiaXRzIGFy
+ZSBzZXQgaW4gdGhlIGxvb3AgYmVsb3cuCisJICovCisJeHNhdmUtPmhlYWRlci54ZmVhdHVy
+ZXMgJj0gWEZFQVRVUkVfTUFTS19TVVBFUlZJU09SX0FMTDsKKwogCWZvciAoaSA9IDA7IGkg
+PCBYRkVBVFVSRV9NQVg7IGkrKykgewogCQl1NjQgbWFzayA9ICgodTY0KTEgPDwgaSk7CisJ
+CXZvaWQgKmRzdCA9IF9fcmF3X3hzYXZlX2FkZHIoeHNhdmUsIGkpOwogCi0JCWlmIChoZHIu
+eGZlYXR1cmVzICYgbWFzaykgewotCQkJdm9pZCAqZHN0ID0gX19yYXdfeHNhdmVfYWRkcih4
+c2F2ZSwgaSk7Ci0KLQkJCW9mZnNldCA9IHhzdGF0ZV9vZmZzZXRzW2ldOwotCQkJc2l6ZSA9
+IHhzdGF0ZV9zaXplc1tpXTsKLQotCQkJaWYgKGNvcHlfZnJvbV9idWZmZXIoZHN0LCBvZmZz
+ZXQsIHNpemUsIGtidWYsIHVidWYpKQotCQkJCXJldHVybiAtRUZBVUxUOworCQlpZiAoIWhk
+ci54ZmVhdHVyZXMgJiBtYXNrKSB7CisJCQkvKiBGZWF0dXJlIHdhcyBtYXJrZWQgYXMgaW5p
+dCBpbiB1YWJpIGJ1ZmZlcjogKi8KKwkJCXhzYXZlLT5oZWFkZXIueGZlYXR1cmVzICY9IH5t
+YXNrOworCQkJY29udGludWUKIAkJfQotCX0KKwkJLyogRmVhdHVyZSB3YXMgcHJlc2VudCBp
+biB1YWJpIGJ1ZmZlcjogKi8KKwkJeHNhdmUtPmhlYWRlci54ZmVhdHVyZXMgfD0gbWFzazsK
+IAotCS8qCi0JICogVGhlIHN0YXRlIHRoYXQgY2FtZSBpbiBmcm9tIHVzZXJzcGFjZSB3YXMg
+dXNlci1zdGF0ZSBvbmx5LgotCSAqIE1hc2sgYWxsIHRoZSB1c2VyIHN0YXRlcyBvdXQgb2Yg
+J3hmZWF0dXJlcyc6Ci0JICovCi0JeHNhdmUtPmhlYWRlci54ZmVhdHVyZXMgJj0gWEZFQVRV
+UkVfTUFTS19TVVBFUlZJU09SX0FMTDsKKwkJb2Zmc2V0ID0geHN0YXRlX29mZnNldHNbaV07
+CisJCXNpemUgPSB4c3RhdGVfc2l6ZXNbaV07CiAKLQkvKgotCSAqIEFkZCBiYWNrIGluIHRo
+ZSBmZWF0dXJlcyB0aGF0IGNhbWUgaW4gZnJvbSB1c2Vyc3BhY2U6Ci0JICovCi0JeHNhdmUt
+PmhlYWRlci54ZmVhdHVyZXMgfD0gaGRyLnhmZWF0dXJlczsKKwkJaWYgKGNvcHlfZnJvbV9i
+dWZmZXIoZHN0LCBvZmZzZXQsIHNpemUsIGtidWYsIHVidWYpKQorCQkJcmV0dXJuIC1FRkFV
+TFQ7CisJfQogCiAJcmV0dXJuIDA7CiB9Cg==
+
+--------------LYGojPVYD6BcZ9cjMhM0heIe--

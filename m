@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC8A8501882
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A19450189E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241736AbiDNQM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40300 "EHLO
+        id S232384AbiDNQO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347432AbiDNQJ5 (ORCPT
+        with ESMTP id S1347774AbiDNQKN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:09:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52719FA20A;
-        Thu, 14 Apr 2022 08:53:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10C8BB82A61;
-        Thu, 14 Apr 2022 15:53:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98755C385A1;
-        Thu, 14 Apr 2022 15:53:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1649951607;
-        bh=vXueds4VuC74iLCMybsPZmL3wsTpJ6AYZXEWJtsFltc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gVlrHrq9iS0fvnwKbYeUOEnnL9wxjnCbN3bSgvsuN9aJYKMx77j/5W27OQZ9xYl/e
-         g7yIjWea4TGP9Rs9l7bSoBH3mf0TcuEQeqTbKbbNZUnGAkGDoKKWuqE0jxNP8hJcRi
-         u3viLk71BcM/9sstR79aHyKX8ng6N77guDgz/wLrVN+bY2+YzZdcsezJ+gatRX72r0
-         kU6le2F7BlDoRbjf6580EeI8KyuaDXGJJn252kb62h5id5pzPy09f+ZIaxrhn5doAe
-         zqcDtY6rEycMwDCi3UXSn7Dl9ApANob09OGNu4YZpqrC3dd6Brgft1X4QgNNw/pVAo
-         6tvGAgnqoFg8A==
-Date:   Thu, 14 Apr 2022 21:23:19 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     Md Sadre Alam <quic_mdalam@quicinc.com>, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH V2] mtd: rawnand: qcom: fix memory corruption that causes
- panic
-Message-ID: <20220414155319.GB20493@thinkpad>
-References: <1649950217-32272-1-git-send-email-quic_mdalam@quicinc.com>
- <20220414173642.56baedf5@xps13>
+        Thu, 14 Apr 2022 12:10:13 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C19DC93183
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649951754; x=1681487754;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=Cox/lk173R1lAWkMXSn8T0qitOusiwh1PkHxQFAhQ88=;
+  b=ZmQdnfIEbLfMFkGl4u7e0onE2Dn6lgv8p9X4tOp6YOz2lVpVHGX7c/Au
+   ocPMXmXv9L5aGt4Fda2YHNUA5XAkLEc5B79qnZ9j4QTYRTU3ggkQyudI6
+   884rnS4LccCme0eu86MVIEGOwm2aIxo6klziW/EOjrPtEY+uQ71JvOYTV
+   K5n+Gr1ezepgEQ0Xm2isfQF9wFldEkIxOgOuSdxaU4hK36zHKLUJYvbRE
+   ihrF+JtR76boSs4bsChb17CiSkqldJyPfN2YvTM9JUhe0aXUtS0dLoFr1
+   ZZbJ3QVp2LhFoECFEyiKXTDv+qreGwRNYkUbHLmEdZvYx7ZT215dplot2
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243549331"
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="243549331"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 08:54:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,260,1643702400"; 
+   d="scan'208";a="508457350"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2022 08:54:18 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nf1nV-00015l-Ll;
+        Thu, 14 Apr 2022 15:54:17 +0000
+Date:   Thu, 14 Apr 2022 23:54:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: include/linux/fortify-string.h:267:25: warning: call to
+ '__write_overflow_field' declared with attribute warning: detected write
+ beyond size of field (1st parameter); maybe use struct_group()?
+Message-ID: <202204142318.vDqjjSFn-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220414173642.56baedf5@xps13>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,68 +63,135 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 05:36:42PM +0200, Miquel Raynal wrote:
-> Hi Md,
-> 
-> quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 21:00:17 +0530:
-> 
-> > This patch fixes a memory corruption that occurred in the
-> > nand_scan() path for Hynix nand device.
-> > 
-> > On boot, for Hynix nand device will panic at a weird place:
-> > | Unable to handle kernel NULL pointer dereference at virtual
-> >   address 00000070
-> > | [00000070] *pgd=00000000
-> > | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-> > | Modules linked in:
-> > | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
-> >   #38
-> > | Hardware name: Generic DT based system
-> > | PC is at nandc_set_reg+0x8/0x1c
-> > | LR is at qcom_nandc_command+0x20c/0x5d0
-> > | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-> > | sp : c14adc50  ip : c14ee208  fp : c0cc970c
-> > | r10: 000000a3  r9 : 00000000  r8 : 00000040
-> > | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-> > | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-> > | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-> > | Control: 10c5387d  Table: 8020406a  DAC: 00000051
-> > | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
-> >   64 size 2048
-> > | Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
-> > | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
-> > | qcom_nandc_command from nand_readid_op+0x198/0x1e8
-> > | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
-> > | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-> > | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-> > | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-> > | qcom_nandc_probe from platform_probe+0x58/0xac
-> > 
-> > The problem is that the nand_scan()'s qcom_nand_attach_chip callback
-> > is updating the nandc->max_cwperpage from 1 to 4.This causes the
-> > sg_init_table of clear_bam_transaction() in the driver's
-> > qcom_nandc_command() to memset much more than what was initially
-> > allocated by alloc_bam_transaction().
-> > 
-> > This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
-> > returns, and remove updating nandc->max_cwperpage from
-> > qcom_nand_attach_chip call back.
-> 
-> Please update also the commit log.
-> 
-> Fixes: ?
-> Cc: stable ?
+Hi Kees,
 
-Also please add Reported-by to credit Konrad.
+FYI, the error/warning still remains.
 
-Thanks,
-Mani
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a19944809fe9942e6a96292490717904d0690c21
+commit: f68f2ff91512c199ec24883001245912afc17873 fortify: Detect struct member overflows in memcpy() at compile-time
+date:   9 weeks ago
+config: arm-randconfig-r012-20220414 (https://download.01.org/0day-ci/archive/20220414/202204142318.vDqjjSFn-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f68f2ff91512c199ec24883001245912afc17873
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f68f2ff91512c199ec24883001245912afc17873
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm SHELL=/bin/bash drivers/usb/serial/
 
-> 
-> > Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> > Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
-> > ---
-> > [V2]
-> 
-> Thanks,
-> Miquèl
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:253,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/usb/serial/whiteheat.c:17:
+   In function 'fortify_memcpy_chk',
+       inlined from 'firm_send_command' at drivers/usb/serial/whiteheat.c:587:4:
+>> include/linux/fortify-string.h:267:25: warning: call to '__write_overflow_field' declared with attribute warning: detected write beyond size of field (1st parameter); maybe use struct_group()? [-Wattribute-warning]
+     267 |                         __write_overflow_field(p_size_field, size);
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/__write_overflow_field +267 include/linux/fortify-string.h
+
+   213	
+   214	/*
+   215	 * To make sure the compiler can enforce protection against buffer overflows,
+   216	 * memcpy(), memmove(), and memset() must not be used beyond individual
+   217	 * struct members. If you need to copy across multiple members, please use
+   218	 * struct_group() to create a named mirror of an anonymous struct union.
+   219	 * (e.g. see struct sk_buff.) Read overflow checking is currently only
+   220	 * done when a write overflow is also present, or when building with W=1.
+   221	 *
+   222	 * Mitigation coverage matrix
+   223	 *					Bounds checking at:
+   224	 *					+-------+-------+-------+-------+
+   225	 *					| Compile time  |   Run time    |
+   226	 * memcpy() argument sizes:		| write | read  | write | read  |
+   227	 *        dest     source   length      +-------+-------+-------+-------+
+   228	 * memcpy(known,   known,   constant)	|   y   |   y   |  n/a  |  n/a  |
+   229	 * memcpy(known,   unknown, constant)	|   y   |   n   |  n/a  |   V   |
+   230	 * memcpy(known,   known,   dynamic)	|   n   |   n   |   B   |   B   |
+   231	 * memcpy(known,   unknown, dynamic)	|   n   |   n   |   B   |   V   |
+   232	 * memcpy(unknown, known,   constant)	|   n   |   y   |   V   |  n/a  |
+   233	 * memcpy(unknown, unknown, constant)	|   n   |   n   |   V   |   V   |
+   234	 * memcpy(unknown, known,   dynamic)	|   n   |   n   |   V   |   B   |
+   235	 * memcpy(unknown, unknown, dynamic)	|   n   |   n   |   V   |   V   |
+   236	 *					+-------+-------+-------+-------+
+   237	 *
+   238	 * y = perform deterministic compile-time bounds checking
+   239	 * n = cannot perform deterministic compile-time bounds checking
+   240	 * n/a = no run-time bounds checking needed since compile-time deterministic
+   241	 * B = can perform run-time bounds checking (currently unimplemented)
+   242	 * V = vulnerable to run-time overflow (will need refactoring to solve)
+   243	 *
+   244	 */
+   245	__FORTIFY_INLINE void fortify_memcpy_chk(__kernel_size_t size,
+   246						 const size_t p_size,
+   247						 const size_t q_size,
+   248						 const size_t p_size_field,
+   249						 const size_t q_size_field,
+   250						 const char *func)
+   251	{
+   252		if (__builtin_constant_p(size)) {
+   253			/*
+   254			 * Length argument is a constant expression, so we
+   255			 * can perform compile-time bounds checking where
+   256			 * buffer sizes are known.
+   257			 */
+   258	
+   259			/* Error when size is larger than enclosing struct. */
+   260			if (p_size > p_size_field && p_size < size)
+   261				__write_overflow();
+   262			if (q_size > q_size_field && q_size < size)
+   263				__read_overflow2();
+   264	
+   265			/* Warn when write size argument larger than dest field. */
+   266			if (p_size_field < size)
+ > 267				__write_overflow_field(p_size_field, size);
+   268			/*
+   269			 * Warn for source field over-read when building with W=1
+   270			 * or when an over-write happened, so both can be fixed at
+   271			 * the same time.
+   272			 */
+   273			if ((IS_ENABLED(KBUILD_EXTRA_WARN1) || p_size_field < size) &&
+   274			    q_size_field < size)
+   275				__read_overflow2_field(q_size_field, size);
+   276		}
+   277		/*
+   278		 * At this point, length argument may not be a constant expression,
+   279		 * so run-time bounds checking can be done where buffer sizes are
+   280		 * known. (This is not an "else" because the above checks may only
+   281		 * be compile-time warnings, and we want to still warn for run-time
+   282		 * overflows.)
+   283		 */
+   284	
+   285		/*
+   286		 * Always stop accesses beyond the struct that contains the
+   287		 * field, when the buffer's remaining size is known.
+   288		 * (The -1 test is to optimize away checks where the buffer
+   289		 * lengths are unknown.)
+   290		 */
+   291		if ((p_size != (size_t)(-1) && p_size < size) ||
+   292		    (q_size != (size_t)(-1) && q_size < size))
+   293			fortify_panic(func);
+   294	}
+   295	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

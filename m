@@ -2,112 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0160501746
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 239FE501745
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:58:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344574AbiDNP0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57286 "EHLO
+        id S244799AbiDNPZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348222AbiDNOCi (ORCPT
+        with ESMTP id S1348224AbiDNOCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 14 Apr 2022 10:02:38 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DCBF04;
-        Thu, 14 Apr 2022 07:00:09 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id u15so10178889ejf.11;
-        Thu, 14 Apr 2022 07:00:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uYldqlfvDnUO//XnpL4/gJepKZlc0bM1hOqCfUDNXHQ=;
-        b=hskXrMh1N9NmYRDTvxW0ec01jIgWA993bv1y/GsRkBmbTF28G2+VMlnMu4qN+Zwbb9
-         TgaW0UQnmQR/k+m62R2GhWbDQ6yKD1gI/QMfCKcPgeJtJxIZZ8vjBapbZT7bDzkGzoQ8
-         vqcWMY2+P50WGkhM1i0sjP2RYnZu/s4ibVgiVK7yxrYaBV45EnnMlwByJuRGFxRYjvKj
-         7Gly2BTlU0rhrcP3xBQ4a9VLxxWPfoZsI/SwiGADF5r/AI2mQXDTY5zCJcBSVI3ZH3zl
-         2ZpiAcCeo7Fg4owqDDGVZLW5xGddnlKy/m4102X/WcNfMzgNax8V8VtLCYwDEmF4gA7A
-         PZKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uYldqlfvDnUO//XnpL4/gJepKZlc0bM1hOqCfUDNXHQ=;
-        b=TVt8CcXK1Q3ueATtP0Hee+6+5z/sJNz/vctL443DZPGJ/ZJC6oeQlQNBpSTv4+EVr0
-         RjurO0IRJg7RXSKCVNCQDrzlysCgs95n0PV0uvFlr2YPieJKy0tGFYtVfEdgGx8A2zkL
-         WhA7dG+IDEjjTl6JNbb92/A1zyL8YBPU2y6lw5H2aAsP5rqKKckiJ6at2nD23xbbermh
-         EbNiqfLj6A8FTDM4miHemb9xf9b5XXCw+APu8jGhnq8vwOt+4IJ34MJlfKMQySRwEPnf
-         +MCgsLG/ryHRiMVWMtfCzHGm3K+zvEIxvlHGKiPU7EJR0OkzhpSgWim/vBHpsDYE+6xv
-         hn9w==
-X-Gm-Message-State: AOAM530HwOwXZm6IAFmP3Wgnjd1RCL1K5Gj5QBOd8O9uyxfXYV1SdxGu
-        QVQjWXdI64PldV7HC8KZN332frmPs1EJ0vvMBbiippn//HE=
-X-Google-Smtp-Source: ABdhPJyOygFKO+afsVUqX3DdPz4sed3ITgkgQl1oxS4o0XSnUaTgC1kuQTMo1AuwJCyAua90KZGknDI/5amZ8fSCNRY=
-X-Received: by 2002:a17:907:a423:b0:6e8:8ffd:6e5e with SMTP id
- sg35-20020a170907a42300b006e88ffd6e5emr2382624ejc.708.1649944808390; Thu, 14
- Apr 2022 07:00:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220409120901.267526-1-dzm91@hust.edu.cn> <CAHp75Vc4hGOJ8gr9R5WqgZ1QkC-uEeQ7WXAqO0YjynDx9jOvnw@mail.gmail.com>
-In-Reply-To: <CAHp75Vc4hGOJ8gr9R5WqgZ1QkC-uEeQ7WXAqO0YjynDx9jOvnw@mail.gmail.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 14 Apr 2022 21:59:41 +0800
-Message-ID: <CAD-N9QU2A58QKs9JkYmbH2hdLZOU6Qeqk1WG0Ftv1i9nYjq0tw@mail.gmail.com>
-Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        Oliver Neukum <oliver@neukum.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
-        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71EE360F6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 07:00:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649944813; x=1681480813;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=aD5+QRaeAVBYOadKFnSr3s0EBewo7xTExRjzcuYYGVc=;
+  b=c0Qt0ubluryIxFIzYeEa8e4CTMph7mHDS/4zmcurmgEEV+I1t0ea3fc4
+   cjtx5xjRCHY5z/tbJgyEV2clqn7mbVZ4+SbidmeqpcMlA3EcE3KrlZ2ZR
+   6SEW3rR/g1ri5vgdh4PkEQ7NG4fudEuxzVpifAedjh78G8JE0xdXuXn2p
+   mkxyojlm5by+ivPVRd7BtPIK0Hn71NMAtqhpXH74uPdI/Aj7IvGYErzo3
+   cGdLFVuNHorS9vmQ38RqgdNJqIFGbA1kuPE4U5VqGqeHf/6OOb/X6gPKf
+   d0L5pa4Zx/ekU4crbbU47sUT27gtaycP7w9k85tKCNV1kMEwo0iZW41NC
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="349369435"
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="349369435"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:00:13 -0700
+X-IronPort-AV: E=Sophos;i="5.90,259,1643702400"; 
+   d="scan'208";a="803142043"
+Received: from aviljane-mobl.ger.corp.intel.com (HELO [10.249.254.86]) ([10.249.254.86])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 07:00:09 -0700
+Message-ID: <8f25394fb9fa71eeec2f6184ea854a391b415d22.camel@linux.intel.com>
+Subject: Re: [PATCH v2 3/5] drm/i915: ttm move/clear logic fix
+From:   Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>
+To:     Robert Beckett <bob.beckett@collabora.com>,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     Matthew Auld <matthew.auld@intel.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 14 Apr 2022 16:00:06 +0200
+In-Reply-To: <20220412151838.1298956-4-bob.beckett@collabora.com>
+References: <20220412151838.1298956-1-bob.beckett@collabora.com>
+         <20220412151838.1298956-4-bob.beckett@collabora.com>
+Organization: Intel Sweden AB, Registration Number: 556189-6027
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.40.4 (3.40.4-3.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 10:55 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> On Sun, Apr 10, 2022 at 5:14 AM Dongliang Mu <dzm91@hust.edu.cn> wrote:
-> >
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > cdc_ncm_bind calls cdc_ncm_bind_common and sets dev->data[0]
-> > with ctx. However, in the unbind function - cdc_ncm_unbind,
-> > it calls cdc_ncm_free and frees ctx, leaving dev->data[0] as
-> > a dangling pointer. The following ioctl operation will trigger
-> > the UAF in the function cdc_ncm_set_dgram_size.
->
-> First of all, please use the standard form of referring to the func()
-> as in this sentence.
+On Tue, 2022-04-12 at 15:18 +0000, Robert Beckett wrote:
+> ttm managed buffers start off with system resource definitions and
+> ttm_tt
+> tracking structures allocated (though unpopulated).
+> currently this prevents clearing of buffers on first move to desired
+> placements.
+> 
+> The desired behaviour is to clear user allocated buffers and any
+> kernel
+> buffers that specifically requests it only.
+> Make the logic match the desired behaviour.
+> 
+> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
 
-OK, no problem.
+Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
 
->
-> > Fix this by setting dev->data[0] as zero.
-> >
-> > ==================================================================
-> > BUG: KASAN: use-after-free in cdc_ncm_set_dgram_size+0xc91/0xde0
-> > Read of size 8 at addr ffff8880755210b0 by task dhcpcd/3174
-> >
->
-> Please, avoid SO noisy commit messages. Find the core part of the
-> traceback(s) which should be rarely more than 5-10 lines.
 
-Sure. I will revise them in the v2 patch.
+> ---
+>  drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c | 22
+> +++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+> b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+> index 9fe8132de3b2..9cf85f91edb5 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_ttm_move.c
+> @@ -3,6 +3,7 @@
+>   * Copyright © 2021 Intel Corporation
+>   */
+>  
+> +#include "drm/ttm/ttm_tt.h"
+>  #include <drm/ttm/ttm_bo_driver.h>
+>  
+>  #include "i915_deps.h"
+> @@ -470,6 +471,25 @@ __i915_ttm_move(struct ttm_buffer_object *bo,
+>         return fence;
+>  }
+>  
+> +static bool
+> +allow_clear(struct drm_i915_gem_object *obj, struct ttm_tt *ttm,
+> struct ttm_resource *dst_mem)
+> +{
+> +       /* never clear stolen */
+> +       if (dst_mem->mem_type == I915_PL_STOLEN)
+> +               return false;
+> +       /*
+> +        * we want to clear user buffers and any kernel buffers
+> +        * that specifically request clearing.
+> +        */
+> +       if (obj->flags & I915_BO_ALLOC_USER)
+> +               return true;
+> +
+> +       if (ttm && ttm->page_flags & TTM_TT_FLAG_ZERO_ALLOC)
+> +               return true;
+> +
+> +       return false;
+> +}
+> +
+>  /**
+>   * i915_ttm_move - The TTM move callback used by i915.
+>   * @bo: The buffer object.
+> @@ -520,7 +540,7 @@ int i915_ttm_move(struct ttm_buffer_object *bo,
+> bool evict,
+>                 return PTR_ERR(dst_rsgt);
+>  
+>         clear = !i915_ttm_cpu_maps_iomem(bo->resource) && (!ttm ||
+> !ttm_tt_is_populated(ttm));
+> -       if (!(clear && ttm && !(ttm->page_flags &
+> TTM_TT_FLAG_ZERO_ALLOC))) {
+> +       if (!clear || allow_clear(obj, ttm, dst_mem)) {
+>                 struct i915_deps deps;
+>  
+>                 i915_deps_init(&deps, GFP_KERNEL | __GFP_NORETRY |
+> __GFP_NOWARN);
 
->
-> ...
->
-> The code seems fine.
->
-> --
-> With Best Regards,
-> Andy Shevchenko
+

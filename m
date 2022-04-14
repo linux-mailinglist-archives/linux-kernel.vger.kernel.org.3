@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FD150163C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2882501298
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349429AbiDNOxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S245131AbiDNNiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:38:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345098AbiDNNpH (ORCPT
+        with ESMTP id S244604AbiDNN1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C6409399F;
-        Thu, 14 Apr 2022 06:41:52 -0700 (PDT)
+        Thu, 14 Apr 2022 09:27:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10F7CA147B;
+        Thu, 14 Apr 2022 06:20:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA867B8296A;
-        Thu, 14 Apr 2022 13:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42304C385A5;
-        Thu, 14 Apr 2022 13:41:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD23618F8;
+        Thu, 14 Apr 2022 13:20:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB78C385A5;
+        Thu, 14 Apr 2022 13:20:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943709;
-        bh=o3pGqSu2GanwNI3pTFglfDWENtvDH6R8INEeGQC4wWg=;
+        s=korg; t=1649942432;
+        bh=+pom7rYuiu1GHH2u/bfaDM5Mokwk4HiMpu7sSxFzKzc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VCx8NpUWVEMdENxSJvbkjH6mcCHX76xiOL6ll5YnRW9gbwgJMotjwhBVMqJZHxOnp
-         WwicDt7dvkbGo+GNG00+wnSurIqAzGxM6I8M2fYWgA6tS3SuWRnpFus1aMUxmZdTTu
-         yWpXeZLmsWRT3vNkbkdH8gr1rPfIiHPUTlSD30xU=
+        b=H9Yo7hxWtXZGzlJ4rGCfU13+VSymLwoFECkS/NX+1M3Kj9XokE2OKko7gzIWwcE0O
+         tsMGyWTumI4DU12q2A6qaFvT7zKcs0uDp0qxfALxuE4JOwCI1Gt0jWTkwAho0rxGCW
+         DzAJzUE4nsAIkmY6Ie1pqjkK+RVS4aXlixKrNodg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 252/475] pinctrl: mediatek: paris: Fix pingroup pin config state readback
+        stable@vger.kernel.org, Zhang Yi <yi.zhang@huawei.com>,
+        Jan Kara <jack@suse.cz>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 134/338] ext2: correct max file size computing
 Date:   Thu, 14 Apr 2022 15:10:37 +0200
-Message-Id: <20220414110902.164485378@linuxfoundation.org>
+Message-Id: <20220414110842.713711498@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +54,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Zhang Yi <yi.zhang@huawei.com>
 
-[ Upstream commit 54fe55fb384ade630ef20b9a8b8f3b2a89ad97f2 ]
+[ Upstream commit 50b3a818991074177a56c87124c7a7bdf5fa4f67 ]
 
-mtk_pconf_group_get(), used to read back pingroup pin config state,
-simply returns a set of configs saved from a previous invocation of
-mtk_pconf_group_set(). This is an unfiltered, unvalidated set passed
-in from the pinconf core, which does not match the current hardware
-state.
+We need to calculate the max file size accurately if the total blocks
+that can address by block tree exceed the upper_limit. But this check is
+not correct now, it only compute the total data blocks but missing
+metadata blocks are needed. So in the case of "data blocks < upper_limit
+&& total blocks > upper_limit", we will get wrong result. Fortunately,
+this case could not happen in reality, but it's confused and better to
+correct the computing.
 
-Since the driver library is designed to have one pin per group, pass
-through mtk_pconf_group_get() to mtk_pinconf_get(), to read back the
-current pin config state of the only pin in the group.
+  bits   data blocks   metadatablocks   upper_limit
+  10        16843020            66051    2147483647
+  11       134480396           263171    1073741823
+  12      1074791436          1050627     536870911 (*)
+  13      8594130956          4198403     268435455 (*)
+  14     68736258060         16785411     134217727 (*)
+  15    549822930956         67125251      67108863 (*)
+  16   4398314962956        268468227      33554431 (*)
 
-Also drop the assignment of pin config state to the group.
+  [*] Need to calculate in depth.
 
-Fixes: 805250982bb5 ("pinctrl: mediatek: add pinctrl-paris that implements the vendor dt-bindings")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-5-wenst@chromium.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Fixes: 1c2d14212b15 ("ext2: Fix underflow in ext2_max_size()")
+Link: https://lore.kernel.org/r/20220212050532.179055-1-yi.zhang@huawei.com
+Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Signed-off-by: Jan Kara <jack@suse.cz>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/mediatek/pinctrl-paris.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ fs/ext2/super.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pinctrl/mediatek/pinctrl-paris.c b/drivers/pinctrl/mediatek/pinctrl-paris.c
-index e8bfaaccca68..31449514a8c0 100644
---- a/drivers/pinctrl/mediatek/pinctrl-paris.c
-+++ b/drivers/pinctrl/mediatek/pinctrl-paris.c
-@@ -646,10 +646,10 @@ static int mtk_pconf_group_get(struct pinctrl_dev *pctldev, unsigned group,
- 			       unsigned long *config)
- {
- 	struct mtk_pinctrl *hw = pinctrl_dev_get_drvdata(pctldev);
-+	struct mtk_pinctrl_group *grp = &hw->groups[group];
+diff --git a/fs/ext2/super.c b/fs/ext2/super.c
+index 80a3038e0e46..ad9fd08f66ba 100644
+--- a/fs/ext2/super.c
++++ b/fs/ext2/super.c
+@@ -780,8 +780,12 @@ static loff_t ext2_max_size(int bits)
+ 	res += 1LL << (bits-2);
+ 	res += 1LL << (2*(bits-2));
+ 	res += 1LL << (3*(bits-2));
++	/* Compute how many metadata blocks are needed */
++	meta_blocks = 1;
++	meta_blocks += 1 + ppb;
++	meta_blocks += 1 + ppb + ppb * ppb;
+ 	/* Does block tree limit file size? */
+-	if (res < upper_limit)
++	if (res + meta_blocks <= upper_limit)
+ 		goto check_lfs;
  
--	*config = hw->groups[group].config;
--
--	return 0;
-+	 /* One pin per group only */
-+	return mtk_pinconf_get(pctldev, grp->pin, config);
- }
- 
- static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
-@@ -665,8 +665,6 @@ static int mtk_pconf_group_set(struct pinctrl_dev *pctldev, unsigned group,
- 				      pinconf_to_config_argument(configs[i]));
- 		if (ret < 0)
- 			return ret;
--
--		grp->config = configs[i];
- 	}
- 
- 	return 0;
+ 	res = upper_limit;
 -- 
 2.34.1
 

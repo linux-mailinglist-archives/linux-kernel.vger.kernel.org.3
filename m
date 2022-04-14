@@ -2,105 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B778D5004B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:40:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D815004BA
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 05:43:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239679AbiDNDnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 23:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49576 "EHLO
+        id S239709AbiDNDpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 23:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235002AbiDNDnK (ORCPT
+        with ESMTP id S234059AbiDNDph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 23:43:10 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DB615A0E;
-        Wed, 13 Apr 2022 20:40:44 -0700 (PDT)
-X-UUID: c05a8078b41941aa8233f4154241fc9b-20220414
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:818fe170-59ba-46af-8fc6-e370c6b59fba,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:a40217a9-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: c05a8078b41941aa8233f4154241fc9b-20220414
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <rex-bc.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1906566215; Thu, 14 Apr 2022 11:40:39 +0800
-Received: from mtkexhb02.mediatek.inc (172.21.101.103) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 14 Apr 2022 11:40:38 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by mtkexhb02.mediatek.inc
- (172.21.101.103) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Thu, 14 Apr
- 2022 11:40:37 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 14 Apr 2022 11:40:37 +0800
-Message-ID: <fc1e157470d7ad68efd823f38fe4a360ba3dfbde.camel@mediatek.com>
-Subject: Re: [PATCH V2 12/15] cpufreq: mediatek: Use maximum voltage in init
- stage
-From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
-        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
-        <krzk+dt@kernel.org>
-CC:     <matthias.bgg@gmail.com>, <jia-wei.chang@mediatek.com>,
-        <roger.lu@mediatek.com>, <hsinyi@google.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Thu, 14 Apr 2022 11:40:37 +0800
-In-Reply-To: <5f788a8f-7092-19ca-8499-d3626c4a386d@collabora.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
-         <20220408045908.21671-13-rex-bc.chen@mediatek.com>
-         <5f788a8f-7092-19ca-8499-d3626c4a386d@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 13 Apr 2022 23:45:37 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AED165B4
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 20:43:13 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=guanghuifeng@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VA0LwpP_1649907790;
+Received: from 30.225.28.199(mailfrom:guanghuifeng@linux.alibaba.com fp:SMTPD_---0VA0LwpP_1649907790)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Thu, 14 Apr 2022 11:43:11 +0800
+Message-ID: <9e5758e2-c9a7-2253-ee69-9979ae31afdd@linux.alibaba.com>
+Date:   Thu, 14 Apr 2022 11:43:10 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH RFC v1] arm64: mm: change mem_map to use block/section
+ mapping with crashkernel
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     will@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, baolin.wang@linux.alibaba.com
+References: <1649754476-8713-1-git-send-email-guanghuifeng@linux.alibaba.com>
+ <YlcAEo3lpKJg8HJf@arm.com>
+From:   "guanghui.fgh" <guanghuifeng@linux.alibaba.com>
+In-Reply-To: <YlcAEo3lpKJg8HJf@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.2 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-08 at 15:37 +0200, AngeloGioacchino Del Regno wrote:
-> Il 08/04/22 06:59, Rex-BC Chen ha scritto:
-> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> > 
-> > Two or more clients may use the same regulator, and it could cause
-> > the
-> > issue of high-freqeuncy-low-voltage.
-> > To prevent this, we use maximum voltage in
-> > mtk_cpu_dvfs_info_init().
-> > 
-> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
-> 
-> Is this happening for proc-supply (proc_reg)?
-> ...because it looks like it is, so you should send this commit
-> separately
-> and with an appropriate Fixes: tag.
+Thanks for your response!
 
-Hello all,
+在 2022/4/14 0:53, Catalin Marinas 写道:
+> On Tue, Apr 12, 2022 at 05:07:56PM +0800, Guanghui Feng wrote:
+>> There are many changes and discussions:
+>> commit 031495635b46
+>> commit 1a8e1cef7603
+>> commit 8424ecdde7df
+>> commit 0a30c53573b0
+>> commit 2687275a5843
+>>
+>> When using DMA/DMA32 zone and crashkernel, disable rodata full and kfence,
+>> mem_map will use non block/section mapping(for crashkernel requires to shrink
+>> the region in page granularity). But it will degrade performance when doing
+>> larging continuous mem access in kernel(memcpy/memmove, etc).
+>>
+>> This patch firstly do block/section mapping at mem_map, reserve crashkernel
+>> memory. And then walking pagetable to split block/section mapping
+>> to non block/section mapping [only] for crashkernel mem. We will accelerate
+>> mem access about 10-20% performance improvement, and reduce the cpu dTLB miss
+>> conspicuously on some platform with this optimization.
+> Do you actually have some real world use-cases where this improvement
+> matters? I don't deny that large memcpy over the kernel linear map may
+> be slightly faster but where does this really matter?
+When doing fio test, there may be about 10-20% performance gap.
+The test method:
+1.prepare env with shell script
 
-If we use the value of max(booting voltage, target cpufreq voltage)
-when cci is not ready, I think we don't need this patch to prevent high
-frequenc low voltage issue.
-(mentioned in [1])
+set -x
+modprobe -r brd
+modprobe brd rd_nr=1 rd_size=134217728
+dmsetup remove_all
+wipefs -a --force /dev/ram0
+mkfs -t ext4 -E lazy_itable_init=0,lazy_journal_init=0 -q -F /dev/ram0
+mkdir -p /fs/ram0
+mount -t ext4 /dev/ram0 /fs/ram0
+#sed -i s/scan_lvs = 1/scan_lvs = 1/ /etc/lvm/lvm.conf
 
-I will drop this patch in next version.
+2.prepare fio env with setting file in [x.fio]:
 
-Thanks.
+[global]
+bs=4k
+ioengine=psync
+iodepth=128
+size=8G
+direct=1
+runtime=30
+invalidate=1
+#fallocate=native
+group_reporting
+thread=1
+time_based=1
+rw=read
+directory=/fs/ram0
+#filename=/dev/ram0
+numjobs=1
 
-[1]:https://patchwork.kernel.org/comment/24816091/
+[task_0]
+cpus_allowed=16
+stonewall=1
 
-BRs,
-Rex
+3.running fio testcase:
+sudo fio x.fio
+-----------------------------------------------------
+At the same time, I have test memcpy in the double envs
+(block/section mapping + non block/section mapping):
+1.alloc many continuous pages(src/dst: 10000 * 2^10 bytes): 
+alloc_pages(GFP_KERNEL, 10)
+2.memcpy for src to dst
+
+>> +static void init_crashkernel_pmd(pud_t *pudp, unsigned long addr,
+>> +				 unsigned long end, phys_addr_t phys,
+>> +				 pgprot_t prot,
+>> +				 phys_addr_t (*pgtable_alloc)(int), int flags)
+>> +{
+>> +	phys_addr_t map_offset;
+>> +	unsigned long next;
+>> +	pmd_t *pmdp;
+>> +	pmdval_t pmdval;
+>> +
+>> +	pmdp = pmd_offset(pudp, addr);
+>> +	do {
+>> +		next = pmd_addr_end(addr, end);
+>> +		if (!pmd_none(*pmdp) && pmd_sect(*pmdp)) {
+>> +			phys_addr_t pte_phys = pgtable_alloc(PAGE_SHIFT);
+>> +			pmd_clear(pmdp);
+>> +			pmdval = PMD_TYPE_TABLE | PMD_TABLE_UXN;
+>> +			if (flags & NO_EXEC_MAPPINGS)
+>> +				pmdval |= PMD_TABLE_PXN;
+>> +			__pmd_populate(pmdp, pte_phys, pmdval);
+>> +			flush_tlb_kernel_range(addr, addr + PAGE_SIZE);
+> The architecture requires us to do a break-before-make here, so
+> pmd_clear(), TLBI, __pmd_populate() - in this order. And that's where it
+> gets tricky, if the kernel happens to access this pmd range while it is
+> unmapped, you'd get a translation fault.
+OK, Thanks.
+
++			if (map_offset)
++			    alloc_init_cont_pte(pmdp, addr & PMD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
+
++
++			map_offset = addr - (addr & PUD_MASK);
++			if (map_offset)
++			    alloc_init_cont_pmd(pudp, addr & PUD_MASK, addr,
++						phys - map_offset, prot,
++						pgtable_alloc, flags);
++
+
+Sorry，There is a defect. When rebuilding normal pmd/pte(out of crashkernel mem),
+the flags should strip NO_BLOCK_MAPPINGS | NO_CONT_MAPPINGS on some scenes:
+!(can_set_direct_map() || IS_ENABLED(CONFIG_KFENCE)).
+So we will use as many as possible block/section mapping.
 

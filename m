@@ -2,124 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC516501B98
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:11:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B88501B9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 21:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242012AbiDNTOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 15:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S242337AbiDNTRR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 15:17:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232417AbiDNTOM (ORCPT
+        with ESMTP id S243690AbiDNTRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 15:14:12 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD8BE996B;
-        Thu, 14 Apr 2022 12:11:46 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (Authenticated sender: shreeya)
-        with ESMTPSA id A99041F47C76
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1649963504;
-        bh=QzazdTkJUyPxoWMBQtS0j3+6PWTkOSNi4bctVgjyFy4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=SnxNYl7LNmTWZVkOCTGlL6LmjkwXInzk0zIBF9kXMlaKKZ8bMWzDBl9BjJe0BVjKe
-         4Yud9mz9d8h9Ed6luJlZTVHyY2QuBGZ+EQKjZHaJzQY34tCqeRJ68MZuVebpKzH188
-         t9v7fC7/VFJQGn3jmAtrU6bFFFwQKeRZU+CxwDKL9VQY5u3iP2b/qDteB4k+wo6Q6U
-         zI9ON8nPLrsMHmiXEcSF07pTqx9zWj7E0DAsuHm4Bo1GWzrUgFxGeun3PFfwJm/Nxm
-         +iqsnGNFnXMRInUdaAGKhp0pHMP59zrA9uVbBt1Sfy0IvYDZEYNjMj79TjUC4tLcWT
-         U0lPYUwffoP5w==
-Message-ID: <207d6171-173a-3d77-4b13-ea6f7476478d@collabora.com>
-Date:   Fri, 15 Apr 2022 00:41:36 +0530
+        Thu, 14 Apr 2022 15:17:15 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 935AF5576C
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:14:47 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id s14so5451067plk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 12:14:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OLpoNikIwKzHyxOkuuLmqnVg9l69T4aIpkTmaIZU6cI=;
+        b=36P/S+TPGjuP18o4mfymROCEfJKxomfzeZgS8zhE51/8vWk21IADf9c/9tJGPRsyUW
+         quaFJ74T08IZ6XsilNDIyiIi2N0yKFNspdo6lYalpBWd3EQjK4zAeO5T3rVvyzD1tN6s
+         5mvciKzugNEvwPIGzaUbPrrco/Nu43QutjtEGT3busF9wGRkLl2BsYtkZ9tLwPF4OEzD
+         lGkzSwQ/HvKC6JIy/Lt/t0YV8YqA1x/4QEBjmbkguV+G/1r2gHqPRPToW1aXkBZZ2utN
+         S/kt0hCn0CgmfOlrZDpfgH4zc/kDpuFKumminBBjIXvTLJvpiNxRXueWmQiZAJnMuzzv
+         fVNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OLpoNikIwKzHyxOkuuLmqnVg9l69T4aIpkTmaIZU6cI=;
+        b=5zXzfA1sKMI4puf6isxNru99vX7vmhnvISPUcv51fbMJskxZSRHOIfUXOXe5lTME9n
+         OfmGHhhlvBfB3QlwR/rT8WJMoFr00CAzGt3GpLOiyu5Pwxwcf6/y3kmgFoRKW4wgwGf+
+         Mgi+Evme8X8jJzlYM4XkTGt7Xb+oL0tphizGjxLRoYCYYxuyrM+z8F45VVhXYIh3NfSr
+         DmszNx5P5Cr+Ciq7WWsjFCRkPzxIEqNRuKLfUouBMu2DKaKKS7DXdczUGr0v1ey+NqiB
+         AevdU9kBmBMAgKX0VMUAYnxPc7jKPn9rnj1ESHxTuUWXctZDMtC1HR9Kf3ZI3F6AW+uK
+         rhGA==
+X-Gm-Message-State: AOAM532j7bnWml6/KHyN6tvVYxXQmOPrT3gNNRJ6gx6Xe9kTREO/NXIQ
+        nKi4QCcoaPaaCrvPE/AQPiCHYMDmwEFRFw==
+X-Google-Smtp-Source: ABdhPJwPtSuZ0eBGCgl7AiJMO7dVGNMmnw3CbwKeP2CO7PB8SMhgf/CJnXhWpKDI0Ntmta4j4oiy9g==
+X-Received: by 2002:a17:902:e2d3:b0:158:9fcc:e0f9 with SMTP id l19-20020a170902e2d300b001589fcce0f9mr9669561plc.9.1649963687062;
+        Thu, 14 Apr 2022 12:14:47 -0700 (PDT)
+Received: from x1.hsd1.or.comcast.net ([2601:1c2:1001:7090:5b60:6a76:138d:2646])
+        by smtp.gmail.com with ESMTPSA id e12-20020a056a001a8c00b004fab88d7de8sm614148pfv.132.2022.04.14.12.14.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 12:14:46 -0700 (PDT)
+From:   Drew Fustini <dfustini@baylibre.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Dave Gerlach <d-gerlach@ti.com>,
+        Tony Lindgren <tony@atomide.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Drew Fustini <dfustini@baylibre.com>
+Subject: [PATCH v2 0/2] soc: ti: wkup_m3_ipc: Add support for IO Isolation
+Date:   Thu, 14 Apr 2022 12:12:48 -0700
+Message-Id: <20220414191250.2969282-1-dfustini@baylibre.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
-Content-Language: en-US
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Basavaraj.Natikar@amd.com, Richard.Gong@amd.com,
-        stable@vger.kernel.org, open list <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        gabriel Krisman Bertazi <krisman@collabora.com>,
-        Collabora Kernel ML <kernel@collabora.com>
-References: <20220414025705.598-1-mario.limonciello@amd.com>
-From:   Shreeya Patel <shreeya.patel@collabora.com>
-In-Reply-To: <20220414025705.598-1-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+TI AM437x SoCs support isolation of the IOs so that control is taken
+from the peripheral they are connected to and overridden by values
+present in the control register for that pad. This series documents a
+new property 'ti,set-io-isolation' and updates the wkup_m3_ipc driver to
+inform the CM3 firmware when that property is set.
 
-On 14/04/22 08:27, Mario Limonciello wrote:
-> commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before
-> initialization") attempted to fix a race condition that lead to a NULL
-> pointer, but in the process caused a regression for _AEI/_EVT declared
-> GPIOs. This manifests in messages showing deferred probing while trying
-> to allocate IRQs like so:
->
-> [    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0000 to IRQ, err -517
-> [    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x002C to IRQ, err -517
-> [    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003D to IRQ, err -517
-> [    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003E to IRQ, err -517
-> [    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003A to IRQ, err -517
-> [    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x003B to IRQ, err -517
-> [    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0002 to IRQ, err -517
-> [    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0011 to IRQ, err -517
-> [    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0012 to IRQ, err -517
-> [    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin 0x0007 to IRQ, err -517
->
-> The code for walking _AEI doesn't handle deferred probing and so this leads
-> to non-functional GPIO interrupts.
->
-> Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` to
-> occur after gc->irc.initialized is set.
+A prerequisite for this series is:
+[PATCH v2 0/2] soc: ti: wkup_m3_ipc: support vtt toggle
+https://lore.kernel.org/lkml/20220409211215.2529387-1-dfustini@baylibre.com/T/
 
+Changes from v1:
+- correct typo of 'ti,set-io-isolation' property
+- make 'ti,set-io-isolation' only valid for 'ti,am4372-wkup-m3-ipc'
 
-Thanks Mario for sending a fix for this issue, I didn't realize 
-gpiod_to_irq() was also
-being called through acpi_gpiochip_request_interrupts().
-Change looks good to me.
-Reviewed-by: Shreeya Patel <shreeya.patel@collabora.com>
+Dave Gerlach (1):
+  soc: ti: wkup_m3_ipc: Add support for IO Isolation
 
-> Cc: Shreeya Patel <shreeya.patel@collabora.com>
-> Cc: stable@vger.kernel.org
-> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members before initialization")
-> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
-> Link: https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->   drivers/gpio/gpiolib.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
-> index 085348e08986..b7694171655c 100644
-> --- a/drivers/gpio/gpiolib.c
-> +++ b/drivers/gpio/gpiolib.c
-> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->   
->   	gpiochip_set_irq_hooks(gc);
->   
-> -	acpi_gpiochip_request_interrupts(gc);
-> -
->   	/*
->   	 * Using barrier() here to prevent compiler from reordering
->   	 * gc->irq.initialized before initialization of above
-> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip *gc,
->   
->   	gc->irq.initialized = true;
->   
-> +	acpi_gpiochip_request_interrupts(gc);
-> +
->   	return 0;
->   }
->   
+Drew Fustini (1):
+  dt-bindings: wkup-m3-ipc: Add ti,set-io-isolation property
+
+ .../bindings/soc/ti/wkup-m3-ipc.yaml          | 79 +++++++++++++++++--
+ drivers/soc/ti/wkup_m3_ipc.c                  | 14 +++-
+ include/linux/wkup_m3_ipc.h                   |  1 +
+ 3 files changed, 87 insertions(+), 7 deletions(-)
+
+-- 
+2.32.0
+

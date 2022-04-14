@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE2750188A
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C214501863
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:08:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242941AbiDNQND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 12:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
+        id S231271AbiDNQK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 12:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343919AbiDNQII (ORCPT
+        with ESMTP id S1347078AbiDNQJw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 12:08:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E548B1042A5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649951407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=8D7+XOXU9/ThUKgFTw5tvJGCfDTFVw/+YuhuBqPpcA4=;
-        b=YqX9av/ALWv/2mnstwo44xOqyunZkJ063obFMbRc5ndNozWD9HUK/7vkhS4a2PnZv8LSWa
-        xcCV6OpBJ4LCb5nmzVJ2/CUTbcy0/v7fO8eVjGY3KgEP9+E/DpkD2buaoVhsjxnP4BPELU
-        kUann/lTNuJ+Q1YK0aFZiY1nA94j8HI=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-1wwDwwIdOseBfzROo0BcqA-1; Thu, 14 Apr 2022 11:49:58 -0400
-X-MC-Unique: 1wwDwwIdOseBfzROo0BcqA-1
-Received: by mail-qk1-f199.google.com with SMTP id h8-20020a05620a244800b00699fb28d5e4so3505507qkn.22
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 08:49:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=8D7+XOXU9/ThUKgFTw5tvJGCfDTFVw/+YuhuBqPpcA4=;
-        b=WD0gSB3JntYyQYTA0vo5U901rAf4S72S0ZeT/uaaO9jbLquEs/P5x3bPU+k8BNBBHu
-         WTX65kUK4/qAiJc+Tp1wG76AjZDu0mbvJELoVSYZywmRKDYE9QuG0pWjOt/uBp2TByOY
-         ku96/pLsPThK8X5oDWorZn1W8fQi3MVm6FNpPn+Mlay+GiQMWTcXagxHfZGpf/j4FKIH
-         C3H9orVBJs2jp3MhPZA3Em9PJhx4KI20hpkdcTTN+Ks/vjxm4h0LQQKjaKrttCzjm9YU
-         rWrhEY0VKXk4CQTOiVjh+QAifrQLi3inT6yddVAUpDzRco/sWAHtiL0bXZB8Ehn7RfIl
-         Lm7g==
-X-Gm-Message-State: AOAM530x+3cPoCJlR8dAWGdpEdb/oYsWa/Ae3GGXVUIt4SoibcBGDXRa
-        86KYOd7e8eM3NnqQYRsjLj0InBJ0PE0M3QdDT/VvCH9ZKKVMj37YPQNpgypRKHyaeHGunhonkhL
-        +EMkgeeYXqQgGjxANetFi2f0o
-X-Received: by 2002:ac8:5994:0:b0:2e0:5d77:4b5c with SMTP id e20-20020ac85994000000b002e05d774b5cmr2267052qte.289.1649951398201;
-        Thu, 14 Apr 2022 08:49:58 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyurAOacsp1J5ypPcymXOPFueuel96WgSthlPnqzRpQHW2dly7609r5byiGD3Y+Jx818HiHpQ==
-X-Received: by 2002:ac8:5994:0:b0:2e0:5d77:4b5c with SMTP id e20-20020ac85994000000b002e05d774b5cmr2267030qte.289.1649951397914;
-        Thu, 14 Apr 2022 08:49:57 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id u12-20020ac858cc000000b002ef01d55d2asm1429491qta.78.2022.04.14.08.49.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 08:49:57 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 08:49:54 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 14/18] objtool: Add toolchain hacks cmdline option
-Message-ID: <20220414154954.tjv5peczw3tadd27@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <e04ec8f01fcb537675d6bd94ef65103a0a749318.1649891421.git.jpoimboe@redhat.com>
- <YlfWynPt6MGR5BZP@hirez.programming.kicks-ass.net>
+        Thu, 14 Apr 2022 12:09:52 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467B11066F8;
+        Thu, 14 Apr 2022 08:51:08 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:aefc:13d9:b947:5c76])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by bhuna.collabora.co.uk (Postfix) with ESMTPSA id 68C011F47BB1;
+        Thu, 14 Apr 2022 16:51:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1649951466;
+        bh=0MdOcwSw6al69IA+FsMeVjUYxtwt5yjgyejYGRWyDoo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=IDdHmQZi+s+WqBuPzdQn1KevORA6zg93AhFiALrwcMFF4ZDBI8Fa7Kgo2lQqe1PpE
+         jSyAPFrfpSci05WVuvHv6yxOEcn9GKLIg/6QzZU9pJ6jMo4/al3SuS3cL65ENpUHyB
+         zXoh0uulcsqUssQeLoEqFER1a3fm4iSIWLA9LiCyUMkxw+csgDSZ4H09+RSYEsw8zP
+         IElE2rTldKR2yhNVsKYCRoa8I2ulE+hBI7BBezwxgo4el+MTPIcCbK6KeRKClAgzvl
+         XDRvgfrdDCPk0qIJO8ZYtG+5iNDaeC15+74YIiqzPLRm1F7Fm+4VQCKHwOs4z4uyyJ
+         oxc52d3BvIwdw==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        mchehab@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        jon@nanocrew.net, aford173@gmail.com, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [PATCH] media: hantro: HEVC: Fix output frame chroma offset
+Date:   Thu, 14 Apr 2022 17:50:59 +0200
+Message-Id: <20220414155059.1172593-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YlfWynPt6MGR5BZP@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,21 +53,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:09:46AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 13, 2022 at 04:19:49PM -0700, Josh Poimboeuf wrote:
-> > Objtool secretly does a few awful hacks to overcome toolchain
-> > limitations.  Make those hacks explicit (and optional for other arches)
-> > by associating them with a new '--hacks' cmdline option and
-> > corresponding CONFIG_HAVE_TOOLCHAIN_HACKS.
-> 
-> Should we either clarify the specific hacks done, or split this in two
-> options?
-> 
->   --hack-jump_label
->   --hack-noinstr
+Hantro decoder doesn't take care of the requested and aligned size
+of the capture buffer.
+Stop using the bitstream width/height and use capture frame size
+stored in the context to get the correct values.
 
-Yeah, maybe we should split them out somehow.
+hantro_hevc_chroma_offset() and hantro_hevc_motion_vectors_offset()
+are only used in hantro_g2_hevc_dec.c so take the opportunity
+to move them here.
 
+fluster HEVC score goes up from 77 to 85 successful tests (over 147)
+with this patch.
+
+Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+---
+ .../staging/media/hantro/hantro_g2_hevc_dec.c | 19 ++++++++++++++++---
+ drivers/staging/media/hantro/hantro_hevc.c    | 17 -----------------
+ drivers/staging/media/hantro/hantro_hw.h      |  2 --
+ 3 files changed, 16 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+index c524af41baf5..6deb31b7b993 100644
+--- a/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
++++ b/drivers/staging/media/hantro/hantro_g2_hevc_dec.c
+@@ -8,6 +8,20 @@
+ #include "hantro_hw.h"
+ #include "hantro_g2_regs.h"
+ 
++#define G2_ALIGN	16
++
++static size_t hantro_hevc_chroma_offset(struct hantro_ctx *ctx)
++{
++	return ctx->dst_fmt.width * ctx->dst_fmt.height;
++}
++
++static size_t hantro_hevc_motion_vectors_offset(struct hantro_ctx *ctx)
++{
++	size_t cr_offset = hantro_hevc_chroma_offset(ctx);
++
++	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
++}
++
+ static void prepare_tile_info_buffer(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_dev *vpu = ctx->dev;
+@@ -335,7 +349,6 @@ static void set_ref_pic_list(struct hantro_ctx *ctx)
+ static int set_ref(struct hantro_ctx *ctx)
+ {
+ 	const struct hantro_hevc_dec_ctrls *ctrls = &ctx->hevc_dec.ctrls;
+-	const struct v4l2_ctrl_hevc_sps *sps = ctrls->sps;
+ 	const struct v4l2_ctrl_hevc_pps *pps = ctrls->pps;
+ 	const struct v4l2_ctrl_hevc_decode_params *decode_params = ctrls->decode_params;
+ 	const struct v4l2_hevc_dpb_entry *dpb = decode_params->dpb;
+@@ -343,8 +356,8 @@ static int set_ref(struct hantro_ctx *ctx)
+ 	struct hantro_dev *vpu = ctx->dev;
+ 	struct vb2_v4l2_buffer *vb2_dst;
+ 	struct hantro_decoded_buffer *dst;
+-	size_t cr_offset = hantro_hevc_chroma_offset(sps);
+-	size_t mv_offset = hantro_hevc_motion_vectors_offset(sps);
++	size_t cr_offset = hantro_hevc_chroma_offset(ctx);
++	size_t mv_offset = hantro_hevc_motion_vectors_offset(ctx);
+ 	u32 max_ref_frames;
+ 	u16 dpb_longterm_e;
+ 	static const struct hantro_reg cur_poc[] = {
+diff --git a/drivers/staging/media/hantro/hantro_hevc.c b/drivers/staging/media/hantro/hantro_hevc.c
+index b49a41d7ae91..5d446b599219 100644
+--- a/drivers/staging/media/hantro/hantro_hevc.c
++++ b/drivers/staging/media/hantro/hantro_hevc.c
+@@ -27,23 +27,6 @@
+ 
+ #define UNUSED_REF	-1
+ 
+-#define G2_ALIGN		16
+-
+-size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps)
+-{
+-	int bytes_per_pixel = sps->bit_depth_luma_minus8 == 0 ? 1 : 2;
+-
+-	return sps->pic_width_in_luma_samples *
+-	       sps->pic_height_in_luma_samples * bytes_per_pixel;
+-}
+-
+-size_t hantro_hevc_motion_vectors_offset(const struct v4l2_ctrl_hevc_sps *sps)
+-{
+-	size_t cr_offset = hantro_hevc_chroma_offset(sps);
+-
+-	return ALIGN((cr_offset * 3) / 2, G2_ALIGN);
+-}
+-
+ static void hantro_hevc_ref_init(struct hantro_ctx *ctx)
+ {
+ 	struct hantro_hevc_dec_hw_ctx *hevc_dec = &ctx->hevc_dec;
+diff --git a/drivers/staging/media/hantro/hantro_hw.h b/drivers/staging/media/hantro/hantro_hw.h
+index ed018e293ba0..8fc6c9ab63f0 100644
+--- a/drivers/staging/media/hantro/hantro_hw.h
++++ b/drivers/staging/media/hantro/hantro_hw.h
+@@ -340,8 +340,6 @@ int hantro_hevc_dec_prepare_run(struct hantro_ctx *ctx);
+ dma_addr_t hantro_hevc_get_ref_buf(struct hantro_ctx *ctx, int poc);
+ int hantro_hevc_add_ref_buf(struct hantro_ctx *ctx, int poc, dma_addr_t addr);
+ void hantro_hevc_ref_remove_unused(struct hantro_ctx *ctx);
+-size_t hantro_hevc_chroma_offset(const struct v4l2_ctrl_hevc_sps *sps);
+-size_t hantro_hevc_motion_vectors_offset(const struct v4l2_ctrl_hevc_sps *sps);
+ 
+ static inline unsigned short hantro_vp9_num_sbs(unsigned short dimension)
+ {
 -- 
-Josh
+2.32.0
 

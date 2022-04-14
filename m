@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E039501DE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3AA3501DE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 00:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343613AbiDNWEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 18:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48516 "EHLO
+        id S1344752AbiDNWEe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 18:04:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244949AbiDNWEG (ORCPT
+        with ESMTP id S245017AbiDNWEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 18:04:06 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC12A27D4;
-        Thu, 14 Apr 2022 15:01:40 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bg10so12533327ejb.4;
-        Thu, 14 Apr 2022 15:01:40 -0700 (PDT)
+        Thu, 14 Apr 2022 18:04:07 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE21EA5E91;
+        Thu, 14 Apr 2022 15:01:41 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id g18so12478057ejc.10;
+        Thu, 14 Apr 2022 15:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=97fWddKSGmLrVBKXP8D65MNLbFu69dXpLbEp8OeL0JY=;
-        b=FUvHvo6j7z/nZmhOKzzWjHUmJ4eCUfA52MLjv0C1a1gYlEgCZRDzdW7Z/sAswcJ8Vw
-         pBBixz88dtnyDEuD2J5KG9aVX/FU3TWV3a0nH7GXgyoWqsPulG8AtaU+zkPfQpmsEHg0
-         rIv6rhd1AHkghutCniAfuUVgdjxrJGKA/ObPj2tW6mqn9whp500GYi3FyO8196AeUbyy
-         58bzkKq/aZBxqFxEmYjE6BOBvtO5YG5UCmzSUEjnBPWnG3nyoNgFNVb9OnPBVcMW4IFd
-         vsJqqUcS5Kf1JOc66KBlty8zpG8Bx/9eP/rq6zeafRpubY4stVzQWaoQuRlwumzu1cP1
-         U/0A==
+        bh=looIiUbZXlEHUGlU5ZBgu9xV9eMHycErO1AbrDOXdUA=;
+        b=FyV2uV6NBhFd3wt4SJN67bzxmm3Am6xXqYpdq05DNRDI3AGnX7ZXwVtyMCg6wc3fLw
+         qdEdRUjzkKCromLtTM74dHOaZBKjTkaWATPsattxuHAgrIgrYaPwpS0DACeWcLD5EETD
+         3Z2sAW6OnK4wU/zrJg7JWpf3oDxq1ivY8DnS0v6qDEVjt11zQL6tRGtTlBhN1+fp5QyE
+         WNTWikUB2XCx7icC2O6H+JDy5WDAku1iJAkfD2SIaDTGRbqLvkWGdnOC5MPcxOR2aqKp
+         qVTFKRLfw3AmbHBnxXA6hkbjzPnPkdnDu6wMPsGevjuvmuyrGE35WvghmM2qaUxZ9vYv
+         XMBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=97fWddKSGmLrVBKXP8D65MNLbFu69dXpLbEp8OeL0JY=;
-        b=70P0bd5lGzJBqmKn5dBCkApt4/jT1mVYxZ6OUzBsAJEqLsSF6kkK7+SAdxtSijfr13
-         Y9quSGx0YdLNypxupNwr4VWROfZSWvGwYv0tFHKjM8/Vae+TCmwtlSx7wHf2b9H8mFYL
-         +6RJQaGYfXPy/ZpyeTcE0gEK0iwU1o6j1V5sl29RmnqGdkgfkS04CF9AUCkv4dBRPeQi
-         oNXdLQyrwkJ6bb9SlhTRlq29oXWvsneic4eVtql+wRhBMte19sPppM0KTFHBeB6p1dHu
-         Qw24Vt/kJ97hQ/dZNu5aSVS2t+dh9llKFR6clwMeVk/wo2p7ua6zf0a9lMv3YaZzeYMA
-         qXhg==
-X-Gm-Message-State: AOAM532OLhHGexaI1KSLlt8DaqFYI+5Ro/wtwjks7qwRNUh6ZCZhsbI3
-        K1GHMQZiKEDqxm18m6b0ydA=
-X-Google-Smtp-Source: ABdhPJyRm/v7Vx4UBoSkb0eWxpgcRh2pP8zouhRhRLyiuAmxjdoay1zCFHoFGsfnqU9VaXGCgpTTrg==
-X-Received: by 2002:a17:907:7f8d:b0:6da:b3d6:a427 with SMTP id qk13-20020a1709077f8d00b006dab3d6a427mr3898689ejc.509.1649973698847;
-        Thu, 14 Apr 2022 15:01:38 -0700 (PDT)
+        bh=looIiUbZXlEHUGlU5ZBgu9xV9eMHycErO1AbrDOXdUA=;
+        b=trloA9EHdcm+YPloVsjJq8dbF7hZg67RXkhXZAG+u1KinnmTcOEQAD8DngZ4JDXvd0
+         rI4JnpJXvPpZCjkO1p0fv8KLzHwDEYdH/TSjrpCgDUlvrQm6QZyDAmoJD7QjY/G22aOG
+         Kx4Cjcs/8RjjqzS71WEbhHm4oFO7jGnrlwfTh1toeCM+SG3rtEx/vcToBg4WM6BmyIQa
+         ynyQf/X9pYAwRqWolN3ttqD8YoS54F1BAm29oqLpAiekG717zZ15hSsI/+RBEVIX2BWs
+         D6dWPxaKJLiRJq8pQktiQl4bRq3cc+68nhfSkM8Icz5iQg04GkRAp1J6DnCH1vopXIf7
+         D+zg==
+X-Gm-Message-State: AOAM533VAlNv2nHX0cTa60BsNFez290Hdd7Ro06kHOYLcAqIXF1vLQYk
+        XgMy3Str0oxx1VAoTgvwX/Y=
+X-Google-Smtp-Source: ABdhPJwjM+0SouYfVuEnSBI4qzOhytGd+BsNEp+lc539PycxGXCxQj9sG42ebPORnmP4hKKJXbw0Ug==
+X-Received: by 2002:a17:906:7955:b0:6e8:a9b:8c7b with SMTP id l21-20020a170906795500b006e80a9b8c7bmr3963680ejo.691.1649973700278;
+        Thu, 14 Apr 2022 15:01:40 -0700 (PDT)
 Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id e15-20020a170906044f00b006e897e110fcsm1060948eja.48.2022.04.14.15.01.37
+        by smtp.gmail.com with ESMTPSA id e15-20020a170906044f00b006e897e110fcsm1060948eja.48.2022.04.14.15.01.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 15:01:38 -0700 (PDT)
+        Thu, 14 Apr 2022 15:01:39 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         asutoshd@codeaurora.org, jejb@linux.ibm.com,
@@ -55,13 +55,14 @@ To:     alim.akhtar@samsung.com, avri.altman@wdc.com,
         beanhuo@micron.com, bvanassche@acm.org, tomas.winkler@intel.com,
         daejun7.park@samsung.com, powen.kao@mediatek.com
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/4] scsi: ufshpb: Remove 0 assignment for enum value
-Date:   Fri, 15 Apr 2022 00:01:25 +0200
-Message-Id: <20220414220127.587917-3-huobean@gmail.com>
+Subject: [PATCH v1 3/4] scsi: ufshpb: Cleanup the handler when device reset HPB information
+Date:   Fri, 15 Apr 2022 00:01:26 +0200
+Message-Id: <20220414220127.587917-4-huobean@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220414220127.587917-1-huobean@gmail.com>
 References: <20220414220127.587917-1-huobean@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -75,29 +76,80 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bean Huo <beanhuo@micron.com>
 
-If the first enumerator has no initializer, the value of the corresponding
-constant is zero.
+"When the device is powered off by the host, the device may restore L2P map data
+upon power up or build from the host’s HPB READ command. In case device powered
+up and lost HPB information, device can signal to the host through HPB Sense data,
+by setting HPB Operation as ‘2’ which will inform the host that device reset HPB
+information."
+
+This patch is to clean up the handler and make the intent of this handler more
+readable.
 
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 ---
- drivers/scsi/ufs/ufshpb.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/ufs/ufshpb.c | 35 +++++++++++++++++++++++------------
+ 1 file changed, 23 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/scsi/ufs/ufshpb.h b/drivers/scsi/ufs/ufshpb.h
-index 2825ec69a6a6..b7e2817d4e76 100644
---- a/drivers/scsi/ufs/ufshpb.h
-+++ b/drivers/scsi/ufs/ufshpb.h
-@@ -59,8 +59,8 @@ enum UFSHPB_MODE {
- };
+diff --git a/drivers/scsi/ufs/ufshpb.c b/drivers/scsi/ufs/ufshpb.c
+index 4463a0fc619f..ac442f19d7f7 100644
+--- a/drivers/scsi/ufs/ufshpb.c
++++ b/drivers/scsi/ufs/ufshpb.c
+@@ -1231,7 +1231,10 @@ static void ufshpb_rsp_req_region_update(struct ufshpb_lu *hpb,
+ 		queue_work(ufshpb_wq, &hpb->map_work);
+ }
  
- enum UFSHPB_STATE {
--	HPB_INIT = 0,
--	HPB_PRESENT = 1,
-+	HPB_INIT,
-+	HPB_PRESENT,
- 	HPB_SUSPEND,
- 	HPB_FAILED,
- 	HPB_RESET,
+-static void ufshpb_dev_reset_handler(struct ufshpb_lu *hpb)
++/**
++ * Set the flags of all active regions to RGN_FLAG_UPDATE, letting the host reload its L2P entries.
++ */
++static void ufshpb_set_region_update(struct ufshpb_lu *hpb)
+ {
+ 	struct victim_select_info *lru_info = &hpb->lru_info;
+ 	struct ufshpb_region *rgn;
+@@ -1245,6 +1248,24 @@ static void ufshpb_dev_reset_handler(struct ufshpb_lu *hpb)
+ 	spin_unlock_irqrestore(&hpb->rgn_state_lock, flags);
+ }
+ 
++static void ufshpb_dev_reset_handler(struct ufs_hba *hba)
++{
++	struct scsi_device *sdev;
++	struct ufshpb_lu *hpb;
++
++	__shost_for_each_device(sdev, hba->host) {
++		hpb = ufshpb_get_hpb_data(sdev);
++		if (hpb && hpb->is_hcm)
++			/*
++			 * For the HPB host mode, in case device powered up and lost HPB
++			 * information, we will set the region flag to be RGN_FLAG_UPDATE,
++			 * it will let host reload its L2P entries(re-activate the region
++			 * in the UFS device).
++			 */
++			ufshpb_set_region_update(hpb);
++	}
++}
++
+ /*
+  * This function will parse recommended active subregion information in sense
+  * data field of response UPIU with SAM_STAT_GOOD state.
+@@ -1319,17 +1340,7 @@ void ufshpb_rsp_upiu(struct ufs_hba *hba, struct ufshcd_lrb *lrbp)
+ 	case HPB_RSP_DEV_RESET:
+ 		dev_warn(&hpb->sdev_ufs_lu->sdev_dev,
+ 			 "UFS device lost HPB information during PM.\n");
+-
+-		if (hpb->is_hcm) {
+-			struct scsi_device *sdev;
+-
+-			__shost_for_each_device(sdev, hba->host) {
+-				struct ufshpb_lu *h = sdev->hostdata;
+-
+-				if (h)
+-					ufshpb_dev_reset_handler(h);
+-			}
+-		}
++		ufshpb_dev_reset_handler(hba);
+ 
+ 		break;
+ 	default:
 -- 
 2.34.1
 

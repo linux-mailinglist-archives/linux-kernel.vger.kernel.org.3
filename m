@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6AE5019F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72AC15019F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:22:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245114AbiDNRYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
+        id S245314AbiDNRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240799AbiDNRYa (ORCPT
+        with ESMTP id S245248AbiDNRYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:24:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D05CBBC85D
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649956924;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=i/2YUxZHXeRUBoBs87Jt7Yv5tGwLCyCxoPCR5L1KNRo=;
-        b=XmvI2loGuqlSwuwXjARDBEhj15KqVcnoZ0PUGOKPNGr3dJdSVFDWywJ3GL5HhGhXs/oVML
-        1Gj/10VZWgwaEAHsVu4sWQMstPJf4DVfszffraHdHRZwZSdK7dazqDyP8dx+irdH9NlCuU
-        j3/KuSmlfiEDXGru76DHVDJDs4JDOmM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-459-bWC2LJc2PaeVa3PuLtbN4A-1; Thu, 14 Apr 2022 13:22:03 -0400
-X-MC-Unique: bWC2LJc2PaeVa3PuLtbN4A-1
-Received: by mail-qv1-f69.google.com with SMTP id jx11-20020a0562142b0b00b0044444479dcbso4899160qvb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
+        Thu, 14 Apr 2022 13:24:46 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF0F2BC866
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso6281627pjf.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=74YOS5V1qHXZZ1fLoG5JxUvAs7/uENmkI5e8dEDxses=;
+        b=iP28I5g0myp4w/7aNYzjc3WyyPOxckjdXhNgkDQjobWLTAXQkU73Qgd0OL6OYIcFiZ
+         7TuqFSQhN5HPnyy4iqyfBSWtpSwySLdgUqwmpPNPnSN+nbp/stQkNNRigCCyyPHN/Amv
+         CP92wNGgq5xuHIV5YjMikUjlIFzM0CXlpzBGE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=i/2YUxZHXeRUBoBs87Jt7Yv5tGwLCyCxoPCR5L1KNRo=;
-        b=VBHvDy8GWBB2FWOPtEAp8FunpyzkrQUVBZbXS55cNH1pJxO3tlfzlhUAkk/vJA+UO6
-         ODWD6p9SWeFYGyKfGWgM7d1alU/qBVHvyLpfv9rbNOcElhLvG5SMpE7gsGi15nSaIdwg
-         XQg6KGjex2uVD5H0DmJiiH8rC7aDUjrvvXorvPxHADu16/UOw7bkeCkeAn1jCdyXlhB0
-         rRwWiarjvtjSelOc0AIZ0V8lIqeKghx9SFuzFrePdgWE5P4YJx9h1txn3fZBlmLBSj8a
-         /pkd+r6gMsVVGssD5fb+SVxImUzwfOliPwgjhNPW+FDRH8blPujysYjo1FKIZj78UQG8
-         8VSg==
-X-Gm-Message-State: AOAM530FogvhbuH0FC+zmNbQSItVjwQUsvCRC6qR67TUmwTLPe+wmC9g
-        DwmepxaNPjH5r7J886qjY9JvFDYEUj4doBO5b4CFIuXnhmEvanf4Gj67Pre8mB+2C2QPRhjpDda
-        PIWj/VyHnBNwGD2dS60WAo6+j
-X-Received: by 2002:ad4:5cca:0:b0:446:77:b7b9 with SMTP id iu10-20020ad45cca000000b004460077b7b9mr11441315qvb.124.1649956923343;
-        Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzcbP7PUfSOKwIHCCFuza3bdqjoIPR1W8UBAPI9RJhgHhZ6h+uJqJ6vTJekn4aE7DlGSkBA5g==
-X-Received: by 2002:ad4:5cca:0:b0:446:77:b7b9 with SMTP id iu10-20020ad45cca000000b004460077b7b9mr11441296qvb.124.1649956923101;
-        Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id x19-20020ae9e913000000b0069bf9aedce6sm1220069qkf.29.2022.04.14.10.22.01
+        bh=74YOS5V1qHXZZ1fLoG5JxUvAs7/uENmkI5e8dEDxses=;
+        b=EzrxYJcaz4hCGPDrb1HgI2Y1ZBhJSExsAQVUAu7pTWgtt1pusKwJZlFzu2FZcODBVI
+         msGF/7SKuYCTWAo1J7XjLXPjywm9NU2SDD6P8/iqQC89b5qKSAEZ068IULWWZWcWQNYu
+         FTDWJearc2Sj0MFDuR584v26+vbD7MiZ+4jW/S8tcfYapYtRWGZcHtbjn6abZIuRk0JZ
+         OD/oecamt7NYAnRG3/SM6eTmIGUAWNZK7CHIkr+9DhH1CKlUPAaA5SOqCrtPvU9y1SCo
+         xtuwJjKcruxCEMYxWyw8JuDInk9FyFdU4Tf2ZjjaOdHIWd/c4vIjUF/knEkAUM2o0SQb
+         i10w==
+X-Gm-Message-State: AOAM531Ymq1GkEdVGRHN9e3ubmDNWyWKzB66VLb5YkuTrscK8JUjjGOQ
+        oIrqzgIXFagHrG3buP8fzm3L4Q==
+X-Google-Smtp-Source: ABdhPJxAprf/p03cPbZ5hRrExWbkfNTc3juXB5tKGk3RtI0L1iw6o5BW7MusfTN8dyZm5rA7k+YW7A==
+X-Received: by 2002:a17:902:e808:b0:156:cbfd:4235 with SMTP id u8-20020a170902e80800b00156cbfd4235mr48710529plg.24.1649956940429;
+        Thu, 14 Apr 2022 10:22:20 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id h20-20020aa786d4000000b00505dfd42f2fsm503493pfo.22.2022.04.14.10.22.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 10:22:02 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 10:21:59 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Subject: Re: [PATCH 02/18] objtool: Support data symbol printing
-Message-ID: <20220414172159.orf3ojiesksqrhsu@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
- <YlfHy011VP2oPFjV@hirez.programming.kicks-ass.net>
- <20220414152148.cwdefx744kymqcut@treble>
- <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
- <20220414153854.rqkt465xn4vzndr7@treble>
- <YlhNo026PgjJuCIU@hirez.programming.kicks-ass.net>
- <20220414170100.c66rfyvk7dp33bxx@treble>
+        Thu, 14 Apr 2022 10:22:19 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 10:22:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida@linux.alibaba.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Message-ID: <202204141019.CD9152A7@keescook>
+References: <20220413213917.711770-1-keescook@chromium.org>
+ <f7a5642f-bfcb-865d-7039-d0b9d62a3360@linux.alibaba.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220414170100.c66rfyvk7dp33bxx@treble>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <f7a5642f-bfcb-865d-7039-d0b9d62a3360@linux.alibaba.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:01:04AM -0700, Josh Poimboeuf wrote:
-> On Thu, Apr 14, 2022 at 06:36:51PM +0200, Peter Zijlstra wrote:
-> > On Thu, Apr 14, 2022 at 08:38:54AM -0700, Josh Poimboeuf wrote:
-> > 
-> > > > Yes, I'd not seen that yet, what's that for? The Changelog alludes to
-> > > > something, but I don't think it actually does get used later.
-> > > 
-> > > Nick had asked for something like that, it's just a way to avoid doing
-> > > math every time we look at a warning, i.e. to convert func+offset to
-> > > sec+offset.
-> > > 
-> > > But it's kind of ugly and I'm not 100% happy with it.
-> > > 
-> > > Maybe it should be behind an option (--sec-offsets)?
-> > 
-> > Can do I suppose... Myself, I have this script:
-> > 
-> > $ cat objdump-func.sh
-> > #!/bin/bash
-> > 
-> > OBJ=$1; shift
-> > FUNC=$1; shift
-> > 
-> > objdump -wdr $@ $OBJ | awk "/^\$/ { P=0; } /$FUNC[^>]*>:\$/ { P=1; O=strtonum(\"0x\" \$1); } { if (P) { o=strtonum(\"0x\" \$1); printf(\"%04x \", o-O); print \$0; } }"
+On Thu, Apr 14, 2022 at 03:19:02AM -0700, Dan Li wrote:
+> Hi, Kees,
+> Thanks for the rewrite. I tested this patch, and it works fine for
+> me except for a few minor comments below :)
 > 
-> That is nice, just added to my ~/bin.
+> On 4/13/22 14:39, Kees Cook wrote:
+> > +/* The ultimate ROP gadget. */
+> > +static noinline __no_ret_protection
+> > +void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
+> > +{
+> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> > +
+> > +	/* Make sure we've found the right place on the stack before writing it. */
+> > +	if(*ret_addr == expected)
+> > +		*ret_addr = (addr);
+> > +	else
+> > +		/* Check architecture, stack layout, or compiler behavior... */
+> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> > +			*ret_addr, addr);
+> > +}
+> > +
+> > +static noinline
+> > +void set_return_addr(unsigned long *expected, unsigned long *addr)
+> > +{
+> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> > +
+> > +	/* Make sure we've found the right place on the stack before writing it. */
+> > +	if(*ret_addr == expected)
+> > +		*ret_addr = (addr);
 > 
-> And how am I just learning about objdump "-w" ?!?!
+> When PAC is enabled, I get a mismatch as follows:
 > 
-> I wrote up a new version of that patch which adds a '--sec-address'
-> option (see below), but maybe I'll just drop it for now.  It's not
-> really relevant to this set anyway.
+> /kselftest_install/lkdtm # ./CFI_BACKWARD.sh
+> [  182.120133] lkdtm: Performing direct entry CFI_BACKWARD
+> [  182.120665] lkdtm: Attempting unchecked stack return address redirection ...
+> [  182.122543] lkdtm: ok: redirected stack return address.
+> [  182.123521] lkdtm: Attempting checked stack return address redirection ...
+> [  182.123964] lkdtm: Eek: return address mismatch! bfff800008fa8014 != ffff800008fa8030
+> [  182.124502] lkdtm: ok: control flow unchanged.
+> CFI_BACKWARD: saw 'call trace:|ok: control flow unchanged': ok
+> 
+> We may need to ignore the pac high bits of return address according
+> to TCR.T1SZ (or simply remove the high 16 bits before comparing).
 
-But now, testing the IBT code, I realize it would still be helpful for
-data addresses.  So maybe I'll keep it.
+Oh! Hah, yes, I totally forgot that. Thanks for testing -- getting PAC
+emulation working in QEMU has eluded me. I think untagged_addr() will
+work yes? i.e.:
+
+	if((untagged_addr(*ret_addr) == expected)
+
+> 
+> > +	else
+> > +		/* Check architecture, stack layout, or compiler behavior... */
+> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> > +			*ret_addr, addr);
+> 
+> According to the context, it might be "expected" here?
+> 
+> 		pr_warn("Eek: return address mismatch! %px != %px\n",
+> 			*ret_addr, expected);
+> 
+> I simply ignored the upper 16 bits, and tested it separately
+> in gcc/llvm 12 with SCS/PAC and all the four cases worked fine for me.
+
+Great! Do you have the PAC "Oops" text handy so I can include it in the
+commit log as an example of what should be expected?
+
+Thanks!
 
 -- 
-Josh
-
+Kees Cook

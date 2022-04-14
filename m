@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16973501D86
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 443AB501D8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 23:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346922AbiDNVeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 17:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
+        id S1345484AbiDNVeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 17:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346901AbiDNVe0 (ORCPT
+        with ESMTP id S1346918AbiDNVe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 17:34:26 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610FA2E68A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:31:59 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 125so5858410pgc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 14:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=p5umN/eT2yUlngm37Zc5I2AOTVEAYdcyPGsqi0WLgoI=;
-        b=rq+D7FgkQSefBxCU9ED8GK3ke8819zxBSsQDmlKMR6RzAanoJ+pIUhWFqGsCQRhn5a
-         T1b7M5p10Q77JtdA+STmiITCnnYLP6ygw3UTMjerkhQXYddkvRMnkJeGapa7QFumdrGh
-         uDZTSRHXa8+a8A5EkfScSm663N4mBd8FOwtVbbFIvJF+ZPytgmvX3awgIv4nS2WWQVen
-         pZvOtGqUVgroB423PTIhk9DOg8BEofQy3l+7udrziRMjslAvX81WFVWviAu9V3nroG8a
-         o5S3EjLJkXdKv9ZU3s6c/By0RoiEBt/i7gIOBzjTaLxqwLHB7WaWP7E13jAH90UG1KeV
-         2kHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=p5umN/eT2yUlngm37Zc5I2AOTVEAYdcyPGsqi0WLgoI=;
-        b=S62YvmXFn3mFidm+guWkFK2kRGCGQd7T7RcWEBh5uw3DNf4JPUpg+JUMA4MOOHpXpN
-         VtfohTT8sP1PbttCWewDs2SLiGlMYRYFf9xDBdcj4CkkxkZjQJswhSwXGOeQ2IZprVGv
-         /SKclS0fPYNSHe/jYO8Ej7/uAuCSm/zvQmAORXESU8YV1Xb4aM8IVhmM+RL1+grCuHks
-         IqUVK5z2MzL7QiwMmUkZwZJ1TfWWCVVL9/vzQNBRp4ETreBYgUpgkfTmZQ8TbnXTWwON
-         WR1g+6YtD/mB9uwthfw3L9SEyNoGhWrmjha+62G5E5sYAeg9U4MmQs25+KXmkmsnU4G9
-         X1rg==
-X-Gm-Message-State: AOAM533U/vOFpJ9Vxe8Cqr5QX3CCVxWOAFmSNru6mI7uSROa1z2Z1CEd
-        kPURGkL6L1Xjxz2s9y/EOfne3Q==
-X-Google-Smtp-Source: ABdhPJytmCsb/e3RCFrNvI0gjCXUWASIQxycQtme8apNI4BdaG6KnfjbK3+CC7ZKEbaqbGCHu/IH5A==
-X-Received: by 2002:a63:4721:0:b0:382:70fa:479d with SMTP id u33-20020a634721000000b0038270fa479dmr3916862pga.259.1649971918877;
-        Thu, 14 Apr 2022 14:31:58 -0700 (PDT)
-Received: from localhost.localdomain ([223.233.64.97])
-        by smtp.gmail.com with ESMTPSA id 5-20020a631045000000b0039d942d18f0sm2673706pgq.48.2022.04.14.14.31.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 14:31:58 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, robh+dt@kernel.org,
-        bjorn.andersson@linaro.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 2/2] arm64: dts: qcom: sa8155p-adp: Add support for uSD card
-Date:   Fri, 15 Apr 2022 03:01:39 +0530
-Message-Id: <20220414213139.476240-3-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220414213139.476240-1-bhupesh.sharma@linaro.org>
-References: <20220414213139.476240-1-bhupesh.sharma@linaro.org>
+        Thu, 14 Apr 2022 17:34:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD8F43ACD;
+        Thu, 14 Apr 2022 14:31:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F772B82B61;
+        Thu, 14 Apr 2022 21:31:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 268F4C385A8;
+        Thu, 14 Apr 2022 21:31:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649971917;
+        bh=741+NhL2jQDQGOCdJacAQ/0PGuWXjqe75UvxTyLT4JY=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=DS4bV6APLmTzfWTKQkDgM20XgeM1rzy5FVacYznldFXwpWVfBeXjmKIHJLxdmKeqf
+         9d52G8VMAzzFQHQVbFLpeOF2HuvC50OFwfz0Ol/y5qUTJFUEkxnW7ArEgXkrwjtGfX
+         cLPJjqJgWr/KEI8wLCfNi9KDgzWrYrH/QMZVE0xWaei+qUmHFvlwEGgCT3w/DgZrcJ
+         v1iJFDoWaOSKH5K/9mRJf2HprLxXC4Y4B6eIlyS0gwcp2DkPa+gUyWnOT2WkS3epHy
+         6B+VCx6dI2KAm+s2qfP9yRDb5RzmBsOLuR77aeo2jXv+3ejqJCgBQuFzVGJDjIHNFp
+         lnLPEnxWrTMnQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id BFA215C03A5; Thu, 14 Apr 2022 14:31:56 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 14:31:56 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu <rcu@vger.kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: Re: [PATCH RFC] rcu/nocb: Provide default all-CPUs mask for
+ RCU_NOCB_CPU=y
+Message-ID: <20220414213156.GZ4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <CAEXW_YQ+oE3xQ0tLnBMFxRXLqKZkT5UfjF+CULxnhf9F-dEA2g@mail.gmail.com>
+ <CAEXW_YRK2t2JO4RyBTd8cR9sTVpgP7Z5Ywhb1g7CRz3HJ_kNQA@mail.gmail.com>
+ <20220408205440.GL4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YTunj5j7cxT3VYGGmJwcQowpDiyqmewiwHjyXP-zJd4FA@mail.gmail.com>
+ <20220411154109.GX4285@paulmck-ThinkPad-P17-Gen-1>
+ <Ylhz1LOIf+JyjH7n@google.com>
+ <20220414194204.GU4285@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YS5b_51tqmdf27QqQHqsgJKbTys1V3h+Bek3XN4FjBmbw@mail.gmail.com>
+ <20220414210933.GW4285@paulmck-ThinkPad-P17-Gen-1>
+ <YliOnZC6gva5WZrG@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YliOnZC6gva5WZrG@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,102 +71,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for uSD card on SA8155p-ADP board using the SDHC2
-interface.
+On Thu, Apr 14, 2022 at 09:14:05PM +0000, Joel Fernandes wrote:
+> On Thu, Apr 14, 2022 at 02:09:33PM -0700, Paul E. McKenney wrote:
+> > On Thu, Apr 14, 2022 at 03:49:16PM -0400, Joel Fernandes wrote:
+> > > On Thu, Apr 14, 2022 at 3:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > On Thu, Apr 14, 2022 at 07:19:48PM +0000, Joel Fernandes wrote:
+> > > > > On Mon, Apr 11, 2022 at 08:41:09AM -0700, Paul E. McKenney wrote:
+> > > > > [..]
+> > > > > > > > [4]     All CPUs are offloaded at boot, and any CPU can be de-offloaded
+> > > > > > > >         and offloaded at runtime.  This is the same behavior that
+> > > > > > > >         you would currently get with CONFIG_RCU_NOCB_CPU_ALL=n and
+> > > > > > > >         rcu_nocbs=0-N.
+> > > > > > >
+> > > > > > > Yes, this is the behavior I intend. So then there would not be a need
+> > > > > > > to pass a mask (and I suspect for a large number of users, it
+> > > > > > > simplifies boot params).
+> > > > > >
+> > > > > > Very good, and from what I can see, this should work for everyone.
+> > > > >
+> > > > > Just to clarify, what I am going to do is, if this new option =y, then
+> > > > > rcu_nocbs effectively wont do anything. i.e. All CPUs are offloaded at boot.
+> > > > > Let me know if we are not on the same page about it though. I do feel that is
+> > > > > a sensible choice given =y. If we are on same page, please ignore my comment.
+> > > >
+> > > > I was assuming that the rcu_nocbs=??? for non-empty "???" would override
+> > > > the CONFIG_RCU_NOCB_CPU_ALL=y.  If you choose not to do that, shouldn't
+> > > > you at least issue some sort of diagnostic?  After all, the sysadmin
+> > > > gave a kernel-boot parameter asking the code to do something and the
+> > > > code is choosing not to do that something.
+> > > >
+> > > > Of course, such a sysadmin might want the CONFIG_RCU_NOCB_CPU_ALL=y
+> > > > Kconfig option to affect only the default, that is, when no rcu_nocbs
+> > > > kernel boot parameter is specified.  This would change the second "[4]"
+> > > > in my original table to "[2]".
+> > > >
+> > > > Thoughts?
+> > > 
+> > > I thought about that. I feel that since we are defaulting the new
+> > > config option to =n , it is a conscious choice by the distro to set it
+> > > to =y.  In such a case, they should be Ok with offloading all CPUs. If
+> > > they decide to selectively offload some CPUs in the future, then they
+> > > could revisit the config option at that time.
+> > > 
+> > > I feel the kernel config should override the boot parameter behavior.
+> > > It is the same effect as a sysadmin passing kernel parameter X
+> > > assuming the kernel does something but the CONFIG option might not
+> > > even build code corresponding to X.
+> > > 
+> > > I feel to address your concern, we can document in kernel command line
+> > > documentation that rcu_nocbs= does not have an effect if
+> > > CONFIG_RCU_NOCB_CPU_ALL=y, would that work for you?
+> > 
+> > Not me so much, because I would just set CONFIG_RCU_NOCB_CPU_ALL=n so
+> > as to not worry about it.
+> > 
+> > But I am not at all looking forward to complaints about rcu_nocbs not
+> > working the way people expect.  So let's take some time to think more
+> > carefully about this.
+> 
+> That's a fair concern. But we are defaulting it to 'n' so I think if it is
+> unconsciously enabled without someone reading documentation, then that's a
+> slightly different issue.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc: Rob Herring <robh@kernel.org>
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
- arch/arm64/boot/dts/qcom/sa8155p-adp.dts | 68 ++++++++++++++++++++++++
- 1 file changed, 68 insertions(+)
+Suppose that one group decides to change to CONFIG_RCU_NOCB_CPU_ALL=y,
+and some other group on some other continent happens to be using the
+rcu_nocbs boot parameter (having read the documentation).  And suppose
+that the level of communication between the two groups is typical,
+that is to say, nonexistent.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-index 8756c2b25c7e..b561a8139cb9 100644
---- a/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-+++ b/arch/arm64/boot/dts/qcom/sa8155p-adp.dts
-@@ -317,6 +317,20 @@ &remoteproc_cdsp {
- 	firmware-name = "qcom/sa8155p/cdsp.mdt";
- };
- 
-+&sdhc_2 {
-+	status = "okay";
-+
-+	cd-gpios = <&tlmm 4 GPIO_ACTIVE_LOW>;
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-0 = <&sdc2_on>;
-+	pinctrl-1 = <&sdc2_off>;
-+	vqmmc-supply = <&vreg_l13c_2p96>; /* IO line power */
-+	vmmc-supply = <&vreg_l17a_2p96>;  /* Card power line */
-+	bus-width = <4>;
-+	no-sdio;
-+	no-emmc;
-+};
-+
- &uart2 {
- 	status = "okay";
- };
-@@ -390,6 +404,60 @@ &usb_2_qmpphy {
- &tlmm {
- 	gpio-reserved-ranges = <0 4>;
- 
-+	sdc2_on: sdc2_on {
-+		clk {
-+			pins = "sdc2_clk";
-+			bias-disable;		/* No pull */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		cmd {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		data {
-+			pins = "sdc2_data";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <16>;	/* 16 MA */
-+		};
-+
-+		sd-cd {
-+			pins = "gpio96";
-+			function = "gpio";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+	};
-+
-+	sdc2_off: sdc2_off {
-+		clk {
-+			pins = "sdc2_clk";
-+			bias-disable;		/* No pull */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		cmd {
-+			pins = "sdc2_cmd";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		data {
-+			pins = "sdc2_data";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+
-+		sd-cd {
-+			pins = "gpio96";
-+			function = "gpio";
-+			bias-pull-up;		/* pull up */
-+			drive-strength = <2>;	/* 2 MA */
-+		};
-+	};
-+
- 	usb2phy_ac_en1_default: usb2phy_ac_en1_default {
- 		mux {
- 			pins = "gpio113";
--- 
-2.35.1
+Sure, we can argue that groups should communicate, but our making that
+argument won't necessarily prevent the group using rcu_nocbs from taking
+us to task in the course of their debugging effort.
 
+> On the other hand, I can also make it such that if rcu_nocbs= is passed, then
+> the CONFIG does not take effect. That's quite a bit weird/quirky IMHO.
+
+Not at all.  We can simply say that CONFIG_RCU_NOCB_CPU_ALL controls
+only the default situation, that is, when rcu_nocbs is not specified.
+
+							Thanx, Paul
+
+> thanks,
+> 
+>  - Joel
+> 
+> 
+> 
+> > 							Thanx, Paul
+> > 
+> > > Thanks,
+> > > 
+> > > - Joel
+> > > 
+> > > >
+> > > > > > > > I believe that Steve Rostedt's review would carry weight for ChromeOS,
+> > > > > > > > however, I am suffering a senior moment on the right person for Android.
+> > > > > > >
+> > > > > > > I think for Android, Kalesh Singh is in the kernel team and Tim Murray
+> > > > > > > is the performance lead. They could appropriately represent their RCU
+> > > > > > > needs.
+> > > > > >
+> > > > > > Sounds good!  Please collect a Reviewed-by from one or both of them.
+> > > > >
+> > > > > Ok.
+> > > >
+> > > >                                                         Thanx, Paul

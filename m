@@ -2,44 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F61550045F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A56D3500471
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 04:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbiDNCkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 22:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57690 "EHLO
+        id S239639AbiDNCzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 22:55:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbiDNCkS (ORCPT
+        with ESMTP id S236394AbiDNCzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 22:40:18 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D022B0F;
-        Wed, 13 Apr 2022 19:37:54 -0700 (PDT)
-Received: from canpemm500010.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kf3Rf2hPLzCqwc;
-        Thu, 14 Apr 2022 10:33:34 +0800 (CST)
-Received: from huawei.com (10.175.127.227) by canpemm500010.china.huawei.com
- (7.192.105.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 14 Apr
- 2022 10:37:52 +0800
-From:   Ye Bin <yebin10@huawei.com>
-To:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>,
-        <linux-ext4@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <jack@suse.cz>,
-        <lczerner@redhat.com>, Ye Bin <yebin10@huawei.com>
-Subject: [PATCH -next] ext4: fix use-after-free in ext4_rename_dir_prepare
-Date:   Thu, 14 Apr 2022 10:52:23 +0800
-Message-ID: <20220414025223.4113128-1-yebin10@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 13 Apr 2022 22:55:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B01D612086
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 19:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649904757;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=08wAUOLAjmVi5WGA9fNEcUbOxst9UNJnV+1CTWd2dkE=;
+        b=OlEPx/DiveueAfXftWy2bLbMxUnsTBNS2CW5ezY+gwBE29lkOJUVwPoTWNPNfKfQEs/5SQ
+        tOsCfdRSXFdv2kQv/OuHVPeLx+4MlEiI9JHW9nShipNyH8LqBA9WxSNugqLCKO0Ck93wrk
+        j1uAjM1s2rH/n9F/zdA3QuIcJ41NdBY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-605-PASSujPYP5OPmZu3dnfN_g-1; Wed, 13 Apr 2022 22:52:34 -0400
+X-MC-Unique: PASSujPYP5OPmZu3dnfN_g-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B3D91C05156;
+        Thu, 14 Apr 2022 02:52:33 +0000 (UTC)
+Received: from localhost (ovpn-13-186.pek2.redhat.com [10.72.13.186])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id B6D512166B4F;
+        Thu, 14 Apr 2022 02:52:32 +0000 (UTC)
+Date:   Thu, 14 Apr 2022 10:52:29 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        konrad.wilk@oracle.com, boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v7 7/8] x86/crash: Add x86 crash hotplug support for
+ kexec_file_load
+Message-ID: <YleMbVq5XcSX+mWZ@MiWiFi-R3L-srv>
+References: <20220413164237.20845-1-eric.devolder@oracle.com>
+ <20220413164237.20845-8-eric.devolder@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500010.china.huawei.com (7.192.105.118)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413164237.20845-8-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,113 +67,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We got issue as follows:
-EXT4-fs (loop0): mounted filesystem without journal. Opts: ,errors=continue
-ext4_get_first_dir_block: bh->b_data=0xffff88810bee6000 len=34478
-ext4_get_first_dir_block: *parent_de=0xffff88810beee6ae bh->b_data=0xffff88810bee6000
-ext4_rename_dir_prepare: [1] parent_de=0xffff88810beee6ae
-==================================================================
-BUG: KASAN: use-after-free in ext4_rename_dir_prepare+0x152/0x220
-Read of size 4 at addr ffff88810beee6ae by task rep/1895
+On 04/13/22 at 12:42pm, Eric DeVolder wrote:
+> For x86_64, when CPU or memory is hot un/plugged, the crash
+> elfcorehdr, which describes the CPUs and memory in the system,
+> must also be updated.
+> 
+> To update the elfcorehdr for x86_64, a new elfcorehdr must be
+> generated from the available CPUs and memory. The new elfcorehdr
+> is prepared into a buffer, and then installed over the top of
+> the existing elfcorehdr.
+> 
+> In the patch 'kexec: exclude elfcorehdr from the segment digest'
+> the need to update purgatory due to the change in elfcorehdr was
+> eliminated.  As a result, no changes to purgatory or boot_params
+> (as the elfcorehdr= kernel command line parameter pointer
+> remains unchanged and correct) are needed, just elfcorehdr.
+> 
+> To accommodate a growing number of resources via hotplug, the
+> elfcorehdr segment must be sufficiently large enough to accommodate
+> changes, see the CRASH_HOTPLUG_ELFCOREHDR_SZ configure item.
+> 
+> With this change, crash hotplug for kexec_file_load syscall
+> is supported. When loading the crash kernel via kexec_file_load,
+> the elfcorehdr is identified at load time in crash_load_segments().
+> 
+> Signed-off-by: Eric DeVolder <eric.devolder@oracle.com>
+> ---
+>  arch/x86/kernel/crash.c | 117 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 117 insertions(+)
+> 
+> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
+> index 9db41cce8d97..47adf69c9f71 100644
+> --- a/arch/x86/kernel/crash.c
+> +++ b/arch/x86/kernel/crash.c
+> @@ -25,6 +25,7 @@
+>  #include <linux/slab.h>
+>  #include <linux/vmalloc.h>
+>  #include <linux/memblock.h>
+> +#include <linux/highmem.h>
+>  
+>  #include <asm/processor.h>
+>  #include <asm/hardirq.h>
+> @@ -398,7 +399,17 @@ int crash_load_segments(struct kimage *image)
+>  	image->elf_headers = kbuf.buffer;
+>  	image->elf_headers_sz = kbuf.bufsz;
+>  
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
+> +	kbuf.memsz = CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ;
+> +	/* For marking as usable to crash kernel */
+> +	image->elf_headers_sz = kbuf.memsz;
+> +	/* Record the index of the elfcorehdr segment */
+> +	image->elfcorehdr_index = image->nr_segments;
+> +	image->elfcorehdr_index_valid = true;
+> +#else
+>  	kbuf.memsz = kbuf.bufsz;
+> +#endif
+>  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
+>  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
+>  	ret = kexec_add_buffer(&kbuf);
+> @@ -413,3 +424,109 @@ int crash_load_segments(struct kimage *image)
+>  	return ret;
+>  }
+>  #endif /* CONFIG_KEXEC_FILE */
+> +
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +static void *map_crash_pages(unsigned long paddr, unsigned long size)
+> +{
+> +	/*
+> +	 * NOTE: The addresses and sizes passed to this routine have
+> +	 * already been fully aligned on page boundaries. There is no
+> +	 * need for massaging the address or size.
+> +	 */
+> +	void *ptr = NULL;
+> +
+> +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
+> +	if (size > 0) {
+> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
+> +
+> +		ptr = kmap(page);
+> +	}
+> +
+> +	return ptr;
+> +}
+> +
+> +static void unmap_crash_pages(void **ptr)
+> +{
+> +	if (ptr) {
+> +		if (*ptr)
+> +			kunmap(*ptr);
+> +		*ptr = NULL;
+> +	}
+> +}
+> +
+> +/**
+> + * arch_crash_hotplug_handler() - Handle hotplug elfcorehdr changes
+> + * @image: the active struct kimage
+> + * @hp_action: the hot un/plug action being handled
+> + * @cpu: when hp_action is KEXEC_CRASH_HP_ADD|REMOVE_CPU, the affected cpu
+> + *
+> + * To accurately reflect hot un/plug changes, the elfcorehdr (which
+> + * is passed to the crash kernel via the elfcorehdr= parameter)
+> + * must be updated with the new list of CPUs and memories. The new
+> + * elfcorehdr is prepared in a kernel buffer, and then it is
+> + * written on top of the existing/old elfcorehdr.
+> + *
+> + * For hotplug changes to elfcorehdr to work, two conditions are
+> + * needed:
+> + * First, the segment containing the elfcorehdr must be large enough
+> + * to permit a growing number of resources. See
+> + * CONFIG_CRASH_HOTPLUG_ELFCOREHDR_SZ.
+> + * Second, purgatory must explicitly exclude the elfcorehdr from the
+> + * list of segments it checks (since the elfcorehdr changes and thus
+> + * would require an update to purgatory itself to update the digest).
+> + *
+> + */
+> +void arch_crash_hotplug_handler(struct kimage *image,
+> +	unsigned int hp_action, unsigned int cpu)
 
-CPU: 13 PID: 1895 Comm: rep Not tainted 5.10.0+ #241
-Call Trace:
- dump_stack+0xbe/0xf9
- print_address_description.constprop.0+0x1e/0x220
- kasan_report.cold+0x37/0x7f
- ext4_rename_dir_prepare+0x152/0x220
- ext4_rename+0xf44/0x1ad0
- ext4_rename2+0x11c/0x170
- vfs_rename+0xa84/0x1440
- do_renameat2+0x683/0x8f0
- __x64_sys_renameat+0x53/0x60
- do_syscall_64+0x33/0x40
- entry_SYSCALL_64_after_hwframe+0x44/0xa9
-RIP: 0033:0x7f45a6fc41c9
-RSP: 002b:00007ffc5a470218 EFLAGS: 00000246 ORIG_RAX: 0000000000000108
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f45a6fc41c9
-RDX: 0000000000000005 RSI: 0000000020000180 RDI: 0000000000000005
-RBP: 00007ffc5a470240 R08: 00007ffc5a470160 R09: 0000000020000080
-R10: 00000000200001c0 R11: 0000000000000246 R12: 0000000000400bb0
-R13: 00007ffc5a470320 R14: 0000000000000000 R15: 0000000000000000
+We have stored the necessary information into kimage, e.g image->hotplug_event,
+image->offlinecpu, do we still need to pass down the hp_action and cpu
+in arch_crash_hotplug_handler()? Do you foresee it will be used in other
+architectures?
 
-The buggy address belongs to the page:
-page:00000000440015ce refcount:0 mapcount:0 mapping:0000000000000000 index:0x1 pfn:0x10beee
-flags: 0x200000000000000()
-raw: 0200000000000000 ffffea00043ff4c8 ffffea0004325608 0000000000000000
-raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-
-Memory state around the buggy address:
- ffff88810beee580: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee600: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff88810beee680: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                  ^
- ffff88810beee700: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88810beee780: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-Disabling lock debugging due to kernel taint
-ext4_rename_dir_prepare: [2] parent_de->inode=3537895424
-ext4_rename_dir_prepare: [3] dir=0xffff888124170140
-ext4_rename_dir_prepare: [4] ino=2
-ext4_rename_dir_prepare: ent->dir->i_ino=2 parent=-757071872
-
-Reason is first directory entry which 'rec_len' is 34478, then will get illegal
-parent entry. Now, we do not check directory entry after read directory block
-in 'ext4_get_first_dir_block'.
-To solve this issue, check directory entry in 'ext4_get_first_dir_block'.
-
-Signed-off-by: Ye Bin <yebin10@huawei.com>
----
- fs/ext4/namei.c | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
-
-diff --git a/fs/ext4/namei.c b/fs/ext4/namei.c
-index e37da8d5cd0c..2f78544b1d47 100644
---- a/fs/ext4/namei.c
-+++ b/fs/ext4/namei.c
-@@ -3455,6 +3455,9 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
- 	struct buffer_head *bh;
- 
- 	if (!ext4_has_inline_data(inode)) {
-+		struct ext4_dir_entry_2 *de;
-+		unsigned int offset;
-+
- 		/* The first directory block must not be a hole, so
- 		 * treat it as DIRENT_HTREE
- 		 */
-@@ -3463,9 +3466,28 @@ static struct buffer_head *ext4_get_first_dir_block(handle_t *handle,
- 			*retval = PTR_ERR(bh);
- 			return NULL;
- 		}
--		*parent_de = ext4_next_entry(
--					(struct ext4_dir_entry_2 *)bh->b_data,
--					inode->i_sb->s_blocksize);
-+
-+		de = (struct ext4_dir_entry_2 *) bh->b_data;
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, 0) ||
-+		    le32_to_cpu(de->inode) != inode->i_ino ||
-+		    strcmp(".", de->name)) {
-+			ext4_warning_inode(inode, "directory missing '.'");
-+			brelse(bh);
-+			return NULL;
-+		}
-+		offset = ext4_rec_len_from_disk(de->rec_len,
-+						inode->i_sb->s_blocksize);
-+		de = ext4_next_entry(de, inode->i_sb->s_blocksize);
-+		if (ext4_check_dir_entry(inode, NULL, de, bh, bh->b_data,
-+					 bh->b_size, offset) ||
-+		    le32_to_cpu(de->inode) == 0 || strcmp("..", de->name)) {
-+			ext4_warning_inode(inode, "directory missing '..'");
-+			brelse(bh);
-+			return NULL;
-+		}
-+		*parent_de = de;
-+
- 		return bh;
- 	}
- 
--- 
-2.31.1
+> +{
+> +	struct kexec_segment *ksegment;
+> +	unsigned char *ptr = NULL;
+> +	unsigned long elfsz = 0;
+> +	void *elfbuf = NULL;
+> +	unsigned long mem, memsz;
+> +
+> +	if (!image->elfcorehdr_index_valid) {
+> +		pr_err("crash hp: unable to locate elfcorehdr segment");
+> +		goto out;
+> +	}
+> +
+> +	ksegment = &image->segment[image->elfcorehdr_index];
+> +	mem = ksegment->mem;
+> +	memsz = ksegment->memsz;
+> +
+> +	/*
+> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
+> +	 * memory resources.
+> +	 */
+> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
+> +		pr_err("crash hp: unable to prepare elfcore headers");
+> +		goto out;
+> +	}
+> +	if (elfsz > memsz) {
+> +		pr_err("crash hp: update elfcorehdr elfsz %lu > memsz %lu",
+> +			elfsz, memsz);
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * At this point, we are all but assured of success.
+> +	 * Copy new elfcorehdr into destination.
+> +	 */
+> +	ptr = map_crash_pages(mem, memsz);
+> +	if (ptr) {
+> +		/*
+> +		 * Temporarily invalidate the crash image while the
+> +		 * elfcorehdr is updated.
+> +		 */
+> +		xchg(&kexec_crash_image, NULL);
+> +		memcpy_flushcache((void *)ptr, elfbuf, elfsz);
+> +		xchg(&kexec_crash_image, image);
+> +	}
+> +	unmap_crash_pages((void **)&ptr);
+> +	pr_debug("crash hp: re-loaded elfcorehdr at 0x%lx\n", mem);
+> +
+> +out:
+> +	if (elfbuf)
+> +		vfree(elfbuf);
+> +}
+> +#endif /* CONFIG_CRASH_HOTPLUG */
+> -- 
+> 2.27.0
+> 
 

@@ -2,122 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2AF250177C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 18:00:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAF50501776
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:59:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347465AbiDNPjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S1344345AbiDNPjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 11:39:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351684AbiDNOb1 (ORCPT
+        with ESMTP id S1351923AbiDNObk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 10:31:27 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E81EB36AE;
-        Thu, 14 Apr 2022 07:21:50 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 14:21:48 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1649946109;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xG0YNv6UpmTWIvybxRgaQrZpZmMJBavRFa1QDKMAijY=;
-        b=jAUaU3bf2lGKNCIiX7EWhCHJcoRDl03lRXP4cloKxnJOMdkvo3Dl2NZ2FwZJcUUnJkeBWa
-        JzqUJfgk2ukX2mkuokO2QjMnij6ke379QLH2rbBncIAE/7cuAX34AMtBQfaa5pVNelU0HG
-        5IcZMkCdWnk5aJ322sAcGx7X5ympD9ajDj61FLbj2nsBvGqYukfY7xSKb/bvOMUXNbp4Sw
-        4Z2i2cElzuClJ0rujbvM4L5zGPnQQznWv1TDP1CGQ8QEoTmVUoZTrwQriEiL2OvOG5IQEx
-        0Ib+1SltjZi2+r9FGnt67xIfumdPcfVdM8mOKKJwDy3Nci33pbdNNjTqWYfkaQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1649946109;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=xG0YNv6UpmTWIvybxRgaQrZpZmMJBavRFa1QDKMAijY=;
-        b=8dfz2LXEAG/kV/cIq6zkrIS+9+QfLuW2ZhYcZ1JJffnz2jQeSuvQ/SEXAwEw4q8Ikmn6Gp
-        yw4ctHzrbt0NBGDg==
-From:   "tip-bot2 for Anna-Maria Behnsen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: timers/core] tracing/timer: Add missing argument documentation
- of trace points
-Cc:     "Anna-Maria Behnsen" <anna-maria@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20220411140115.24185-1-anna-maria@linutronix.de>
-References: <20220411140115.24185-1-anna-maria@linutronix.de>
+        Thu, 14 Apr 2022 10:31:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11DB8BF50C;
+        Thu, 14 Apr 2022 07:22:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 504B5CE29FC;
+        Thu, 14 Apr 2022 14:22:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA04C385A5;
+        Thu, 14 Apr 2022 14:22:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649946153;
+        bh=6KHWLF00LdDXTDsdgdSMyyxznGVeWW993v3+X2qt0e0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=PBEkFKJ1s98l6NEJRKoRHtb6+6FM5cxc40HbkdUTsgDlNZ9lDwiZj9gKVt3WfGzmA
+         jfgjMH0c5qHiApceeazD6KGu81VEiZNHWnuWxSmjqxzhDqtIJ7M3TE/khjETpJKgdh
+         mxCNH+MCaj8Z8YfclR5HtztOBmrv+BEwMghTBQeHuom4bXzQcD0ZKmESSsfbHb8Vaw
+         fP+E5sZ8Df3HG4YtfBBrubMEWhmFa0HhiBTOxvGCH3juFQfuxX5RJ1bN+N1OGELF5m
+         2YauZSbdnnJ6Fz676KPzz1WhebryuQpzkZqKkGi9NgB4mxFB0NwkwJBU7nNWripu9b
+         ZGg7u+XCylsmw==
+Received: by mail-oi1-f177.google.com with SMTP id w127so5511639oig.10;
+        Thu, 14 Apr 2022 07:22:33 -0700 (PDT)
+X-Gm-Message-State: AOAM533dNJsme3OKzY4RViw/q5z+ntiQMVNZbYwAW20wikOn/BHQfrYX
+        I+dfR/+5Yv9iIfP2ErYyAFFnVwMdBdLa0vHcGKA=
+X-Google-Smtp-Source: ABdhPJz0hXNO3bGfmO9eIett9cTqRcuRl2zxrNPqfzDqkzq9oHtV4CR9+PYBW8D9Xd8Z3skzhx8tw2bwUTQPDjfiDQc=
+X-Received: by 2002:a05:6808:1513:b0:2fa:7a40:c720 with SMTP id
+ u19-20020a056808151300b002fa7a40c720mr1452810oiw.126.1649946152949; Thu, 14
+ Apr 2022 07:22:32 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <164994610801.4207.12614965303442956238.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220414110838.883074566@linuxfoundation.org> <20220414110844.817011928@linuxfoundation.org>
+ <CAMj1kXG9ibOZfo60_pjwqACWhfPt8=38MDJD8C_CBoLrTYmCOw@mail.gmail.com>
+ <Ylgi3Nh8mbAOvXi6@kroah.com> <CAMj1kXFwQ+WrM4G=xa5+1CVd0z3RDLRUbFnpYRirWVHwbtvXGg@mail.gmail.com>
+ <Ylgty0IzV+5i4T0g@kroah.com>
+In-Reply-To: <Ylgty0IzV+5i4T0g@kroah.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Thu, 14 Apr 2022 16:22:21 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXG_+e_oy91umztu5tD6T=jdLdUrFGL03ckVtBiJgY7qEw@mail.gmail.com>
+Message-ID: <CAMj1kXG_+e_oy91umztu5tD6T=jdLdUrFGL03ckVtBiJgY7qEw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 208/338] ARM: ftrace: avoid redundant loads or
+ clobbering IP
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "# 3.4.x" <stable@vger.kernel.org>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Sasha Levin <sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the timers/core branch of tip:
+On Thu, 14 Apr 2022 at 16:21, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Apr 14, 2022 at 04:13:06PM +0200, Ard Biesheuvel wrote:
+> > On Thu, 14 Apr 2022 at 15:57, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Thu, Apr 14, 2022 at 03:25:29PM +0200, Ard Biesheuvel wrote:
+> > > > On Thu, 14 Apr 2022 at 15:23, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > From: Ard Biesheuvel <ardb@kernel.org>
+> > > > >
+> > > > > [ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
+> > > > >
+> > > >
+> > > > NAK. Please don't backport these patches to -stable, I thought I had
+> > > > been clear on this.
+> > >
+> > > I dropped the patches you asked to be dropped, but this is a different
+> > > one and is already in the following releases:
+> > >         5.10.110 5.15.33 5.16.19 5.17.2
+> > >
+> > > I can also drop it from here and the 5.4 queue if you do not want it
+> > > there.
+> > >
+> >
+> > This is not how I remember it:
+> >
+> > On Tue, 5 Apr 2022 at 18:52, Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > On Tue, Apr 05, 2022 at 12:01:19PM +0200, Ard Biesheuvel wrote:
+> > > > On Tue, 5 Apr 2022 at 11:54, Greg Kroah-Hartman
+> > > > <gregkh@linuxfoundation.org> wrote:
+> > > > >
+> > > > > From: Ard Biesheuvel <ardb@kernel.org>
+> > > > >
+> > > > > [ Upstream commit d11967870815b5ab89843980e35aab616c97c463 ]
+> > > > >
+> > ..
+> > > >
+> > > > Please drop all the 32-bit ARM patches authored by me from the stable
+> > > > queues except the ones that have fixes tags. These are highly likely
+> > > > to cause an explosion of regressions, and they should have never been
+> > > > selected, as I don't remember anyone proposing these for stable.
+> > >
+> > > From what I can tell, that is only this commit.  I'll go drop it from
+> > > all trees, thanks.
+> > >
+> >
+> > Can you *please* exclude all patches authored by me from consideration
+> > by this bot? Consider this a blanket NAK to all AUTOSEL patches cc'ed
+> > to me.
+>
+> Ick, I thought I dropped this from everywhere, very odd, sorry about
+> that.  Ah, I dropped dd88b03ff0c8 ("ARM: ftrace: ensure that ADR takes
+> the Thumb bit into account"), not this one.  {sigh}
+>
 
-Commit-ID:     fde33ca4cb2bae6472714123b451475fdfd9995c
-Gitweb:        https://git.kernel.org/tip/fde33ca4cb2bae6472714123b451475fdfd9995c
-Author:        Anna-Maria Behnsen <anna-maria@linutronix.de>
-AuthorDate:    Mon, 11 Apr 2022 16:01:15 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Thu, 14 Apr 2022 16:14:49 +02:00
-
-tracing/timer: Add missing argument documentation of trace points
-
-Documentation of trace points timer_start, timer_expire_entry and
-hrtimer_start lack always the last argument. Add it to keep implementation
-and documentation in sync.
-
-Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Link: https://lore.kernel.org/r/20220411140115.24185-1-anna-maria@linutronix.de
-
----
- include/trace/events/timer.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/trace/events/timer.h b/include/trace/events/timer.h
-index 6ad031c..2e713a7 100644
---- a/include/trace/events/timer.h
-+++ b/include/trace/events/timer.h
-@@ -48,6 +48,7 @@ DEFINE_EVENT(timer_class, timer_init,
-  * timer_start - called when the timer is started
-  * @timer:	pointer to struct timer_list
-  * @expires:	the timers expiry time
-+ * @flags:	the timers flags
-  */
- TRACE_EVENT(timer_start,
- 
-@@ -84,6 +85,7 @@ TRACE_EVENT(timer_start,
- /**
-  * timer_expire_entry - called immediately before the timer callback
-  * @timer:	pointer to struct timer_list
-+ * @baseclk:	value of timer_base::clk when timer expires
-  *
-  * Allows to determine the timer latency.
-  */
-@@ -190,7 +192,8 @@ TRACE_EVENT(hrtimer_init,
- 
- /**
-  * hrtimer_start - called when the hrtimer is started
-- * @hrtimer: pointer to struct hrtimer
-+ * @hrtimer:	pointer to struct hrtimer
-+ * @mode:	the hrtimers mode
-  */
- TRACE_EVENT(hrtimer_start,
- 
+Ah, that's the only one that did have a fixes: tag :-)

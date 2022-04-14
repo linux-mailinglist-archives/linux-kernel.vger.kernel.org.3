@@ -2,176 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5CF501970
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1EA50197D
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243044AbiDNREB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:04:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51430 "EHLO
+        id S242453AbiDNRE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243675AbiDNRDU (ORCPT
+        with ESMTP id S240302AbiDNRDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:03:20 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9773A49F99
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:39:52 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 21so7125637edv.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:39:52 -0700 (PDT)
+        Thu, 14 Apr 2022 13:03:43 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3ED972BD;
+        Thu, 14 Apr 2022 09:40:03 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id k17so5054764vsq.0;
+        Thu, 14 Apr 2022 09:40:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=nYg934FepxhPHJYVYrZutxuJmtuv3DcX7+LrwvmwUiI=;
-        b=eGFM3ztMn9Emo9AjWCLBFf6FEEMtubNIu4UVefX1GeJ26mF6dhm/kQWOM5JylyVuYl
-         AHn+lsZ0Yi4quPDxF8v/hLAKDCzF3fDmkLwshBHfrSsZIyCpo3q5P97DH5qN01gnoVSV
-         2s/CAcL2joy6KFQjXDYCrSGLKApreqzCGzpJc=
+         :cc:content-transfer-encoding;
+        bh=NUpVA5eYOb2M8t4G0qrVj0JSOzxiO0fCAejkOocIXao=;
+        b=Gpc5QjXr+gtvBrwu7vWEx+QgDTN+050AGC7nmF62hwXczPBWzSoA9w+knrsKgpTcgk
+         8oa3CY/ypOG50jZJ572CW7fZW/rm647lLzGc9pwMBpmScXddg/wDSXYF60ScPb6tOdo3
+         tiWaBYP/19QHNemVehQ+q3FbXzHyQBS7oSlDwg8C89KYWJo7Ct4lEu9vnzd/UDSCWV+j
+         Gz8njvyp8lJTmOQyjvlOrfjbhWAb7KaN5ye2exn60ZWWIt3yk6MGxnlZ59N9BIPf7ETO
+         ejvwjhrl7fQh62xrW7q24AZtsJc2pbNRYblgKWT1uiyH7/05ialXUCpzQBxn5XwHHnSw
+         kNxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=nYg934FepxhPHJYVYrZutxuJmtuv3DcX7+LrwvmwUiI=;
-        b=43lHCE7vKusTm/XsEK4HZo4anLK+8bnJXeM0eqxvxPYvmLk04Kj7/TECvZvClWtr4U
-         2846OSqeV8uHPnEcLDuUjtz/ASDniHKZd7fSxBsUoes3IBTkhG65GQTvK0V6oUO254bT
-         4khY9XkwA/fRJSVXow2+M3V9kO0FU59EWvddsYzWjUq+mTVQignCMXbeyIJmZHLNQ/Ay
-         A+FMYx/ssoSRUVsyixh92wQVhTx6QGjtzbnEP0+rh17OPhbx0CZ/fTk3VuSZnma1RKR/
-         ETXBRg9mjAfOx21UkOOlCEBZL5NWYqbg3Nvw6OiQbjxd5ruj3NcEz8u6hcfSNpHb3MoK
-         o8Mg==
-X-Gm-Message-State: AOAM531e5pThMXKC1OF7fIHWGZP+/LGKRoIDTZPS7gYh0x+l+APFHRUX
-        ZJM4EA3dRSNmq/3iHs5kPcU8A4DZ5kK9ZpPL
-X-Google-Smtp-Source: ABdhPJw6WShDi03suRIWIAIHP/pm9U+3Ino57J7025v9wvk84pLDuD+bu3zoMffy4ZtSCb8MagDu5Q==
-X-Received: by 2002:a05:6402:1707:b0:41d:9794:6421 with SMTP id y7-20020a056402170700b0041d97946421mr3883033edu.212.1649954390887;
-        Thu, 14 Apr 2022 09:39:50 -0700 (PDT)
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com. [209.85.128.45])
-        by smtp.gmail.com with ESMTPSA id f2-20020a50e082000000b0041df731649asm1240677edl.60.2022.04.14.09.39.49
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 09:39:49 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so6329059wmb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 09:39:49 -0700 (PDT)
-X-Received: by 2002:a05:600c:502b:b0:38f:f7c6:3609 with SMTP id
- n43-20020a05600c502b00b0038ff7c63609mr3225672wmr.15.1649954388394; Thu, 14
- Apr 2022 09:39:48 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=NUpVA5eYOb2M8t4G0qrVj0JSOzxiO0fCAejkOocIXao=;
+        b=w+vrgJWrrkK9lDSXoCY7RSXIBzKcIRzgEhW1HeObqfzv5kqnKTlUAdWruNY46231cC
+         3Aby9JXpr8gsI1iGWO5jfV9qlXlYvnC0SJUFyBrwDXqah8l2vckW1g8p7vGwFeH+vHTp
+         lNlT8sE80InOAzcer/x5MNyWyRMW4siBuroVdXOGKgP7ZRSWS9/JksWv70pPO1h8joC7
+         qeY1duzxGHUuD26EHH1u/Z3BCDV19jV6UsrMuWQOOXRZpSe+lB6tiAAzRO9tluk6Ntr2
+         xKaVIj6h1RCInsxNs7XQgWZH1uaUWTXzakctMSl6d9ME8SNy7cDoVUtlMJY7u7s0tSAK
+         3SZA==
+X-Gm-Message-State: AOAM532SZHcEOvyTEkGBEGj9kx8CEhAHa/GzVVkgW4CRFPyTC8pNGLFi
+        cAsGdCqScsxR6REXLUm6Ciq+j5tiv9iC9TH9Pq0FIw+bt8gRMQ==
+X-Google-Smtp-Source: ABdhPJwlTQ30MpDobYUv402hkhofITTJDYdzziScW5eD+bv9NrbvfnClwP7ariZr7LHydPMeaASPDSZ0j6vywLPfbMM=
+X-Received: by 2002:a67:a44d:0:b0:320:601b:2a08 with SMTP id
+ p13-20020a67a44d000000b00320601b2a08mr1644691vsh.70.1649954402542; Thu, 14
+ Apr 2022 09:40:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <1649938766-6768-1-git-send-email-quic_sbillaka@quicinc.com> <1649938766-6768-3-git-send-email-quic_sbillaka@quicinc.com>
-In-Reply-To: <1649938766-6768-3-git-send-email-quic_sbillaka@quicinc.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 14 Apr 2022 09:39:36 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=Uc+qVKH7fAkqtB+Y_jHpWXy5tOABRCN=8TH1bibAp+8Q@mail.gmail.com>
-Message-ID: <CAD=FV=Uc+qVKH7fAkqtB+Y_jHpWXy5tOABRCN=8TH1bibAp+8Q@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] drm/msm/dp: Support only IRQ_HPD and REPLUG
- interrupts for eDP
-To:     Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Rob Clark <robdclark@gmail.com>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        quic_kalyant <quic_kalyant@quicinc.com>,
-        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>,
-        "Kuogee Hsieh (QUIC)" <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        quic_vproddut <quic_vproddut@quicinc.com>,
-        "Aravind Venkateswaran (QUIC)" <quic_aravindh@quicinc.com>,
-        Steev Klimaszewski <steev@kali.org>
+References: <20220411135136.GG15609@suse.cz> <20220411155540.36853-1-schspa@gmail.com>
+ <09c2a9ce-3b04-ed94-1d62-0e5a072b9dac@suse.com> <CAMA88TpjDczKAGN3f+tcsa98rbM7EA0XgT3bHn8UjDqNJ_DeFQ@mail.gmail.com>
+ <c3577a83-9889-c741-bb74-051a6d9a0f61@suse.com>
+In-Reply-To: <c3577a83-9889-c741-bb74-051a6d9a0f61@suse.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Fri, 15 Apr 2022 00:39:49 +0800
+Message-ID: <CAMA88ToGtzgmS2820NO3_Di+OnAti7_BS4c8qS+L+xhKST7jOQ@mail.gmail.com>
+Subject: Re: [PATCH v2] btrfs: zstd: use spin_lock in timer callback
+To:     Nikolay Borisov <nborisov@suse.com>
+Cc:     dsterba@suse.cz, clm@fb.com, dsterba@suse.com,
+        Josef Bacik <josef@toxicpanda.com>,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        terrelln@fb.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Nikolay Borisov <nborisov@suse.com> writes:
 
-On Thu, Apr 14, 2022 at 5:20 AM Sankeerth Billakanti
-<quic_sbillaka@quicinc.com> wrote:
+> On 13.04.22 =D0=B3. 19:03 =D1=87., Schspa Shi wrote:
+>> Nikolay Borisov <nborisov@suse.com> writes:
+>>
+>>> On 11.04.22 =D0=B3. 18:55 =D1=87., Schspa Shi wrote:
+>>>> This is an optimization for fix fee13fe96529 ("btrfs:
+>>>> correct zstd workspace manager lock to use spin_lock_bh()")
+>>>> The critical region for wsm.lock is only accessed by the process conte=
+xt and
+>>>> the softirq context.
+>>>> Because in the soft interrupt, the critical section will not be preemp=
+ted by
+>>>> the
+>>>> soft interrupt again, there is no need to call spin_lock_bh(&wsm.lock)=
+ to turn
+>>>> off the soft interrupt, spin_lock(&wsm.lock) is enough for this situat=
+ion.
+>>>> Changelog:
+>>>> v1 -> v2:
+>>>>       - Change the commit message to make it more readable.
+>>>> [1] https://lore.kernel.org/all/20220408181523.92322-1-schspa@gmail.co=
+m/
+>>>> Signed-off-by: Schspa Shi <schspa@gmail.com>
+>>>
+>>> Has there been any measurable impact by this change? While it's correct=
+ it does mean that
+>>>   someone looking at the code would see that in one call site we use pl=
+ain spinlock and in
+>>> another a _bh version and this is somewhat inconsistent.
+>>>
+>> Yes, it may seem a little confused. but it's allowed to save some
+>> little peace of CPU times.
+>> and "static inline void red_adaptative_timer(struct timer_list *t) in
+>> net/sched/sch_red.c"
+>> have similar usage.
+>>
+>>> What's more I believe this is a noop since when softirqs are executing =
+preemptible() would
+>>> be false due to preempt_count() being non-0 and in the bh-disabling cod=
+e
+>>> in the spinlock we have:
+>>>
+>>>   /* First entry of a task into a BH disabled section? */
+>>>      1         if (!current->softirq_disable_cnt) {
+>>>    167                 if (preemptible()) {
+>>>      1                         local_lock(&softirq_ctrl.lock);
+>>>      2                         /* Required to meet the RCU bottomhalf r=
+equirements. */
+>>>      3                         rcu_read_lock();
+>>>      4                 } else {
+>>>      5                         DEBUG_LOCKS_WARN_ON(this_cpu_read(softir=
+q_ctrl.cnt));
+>>>      6                 }
+>>>      7         }
+>>>
+>>>
+>>> In this case we'd hit the else branch.
+>> We won't hit the else branch. because current->softirq_disable_cnt
+>> won't be zero in the origin case.
+>> __do_softirq(void)
+>>          softirq_handle_begin(void)
+>>          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);
+>>                          current->softirq_disable_cnt will be > 0 at thi=
+s time.
 >
-> The panel-edp enables the eDP panel power during probe, get_modes
-> and enable.
+> That's only relevant on CONFIG_PREEMPT_RT though, on usual kernels
+> softirq_handle_being is empty. Furthermore, in case of the non-preempt
+> rt if preemptible() always returns false this means that even in the
+> __do_softirq path we'll never increment softirq_disable_cnt. So if
+> anything this change is only beneficial (theoretically at that in preempt=
+_rt
+> scenarios).
+>
+For either case, __local_bh_disable_ip will add preempt count or something =
+else.
+for CONFIG_PREEMPT_RT we have discussed, it will be OK and some beneficial.
 
-Technically the panel-edp powers on the panel in pre_enable()
+In the case of CONFIG_TRACE_IRQFLAGS:
 
+#ifdef CONFIG_TRACE_IRQFLAGS
+void __local_bh_disable_ip(unsigned long ip, unsigned int cnt)
+{
+        unsigned long flags;
 
-> The eDP connect and disconnect interrupts for the eDP/DP
-> controller are directly dependent on panel power. As eDP display can be
-> assumed as always connected, the controller driver can skip the eDP
-> connect and disconnect interrupts. Any disruption in the link status
-> will be indicated via the IRQ_HPD interrupts.
->
-> So, the eDP controller driver can just enable the IRQ_HPD and replug
-> interrupts. The DP controller driver still needs to enable all the
-> interrupts.
->
-> Signed-off-by: Sankeerth Billakanti <quic_sbillaka@quicinc.com>
-> ---
->
-> Changes in v7:
->   - reordered the patch in the series
->   - modified the return statement for isr
->   - connector check modified to just check for eDP
->
->  drivers/gpu/drm/msm/dp/dp_catalog.c |  9 +++------
->  drivers/gpu/drm/msm/dp/dp_display.c | 22 +++++++++++++++++++++-
->  2 files changed, 24 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> index fac815f..07f2389 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-> @@ -569,10 +569,6 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
->
->         u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
->
-> -       /* enable HPD plug and unplug interrupts */
-> -       dp_catalog_hpd_config_intr(dp_catalog,
-> -               DP_DP_HPD_PLUG_INT_MASK | DP_DP_HPD_UNPLUG_INT_MASK, true);
-> -
->         /* Configure REFTIMER and enable it */
->         reftimer |= DP_DP_HPD_REFTIMER_ENABLE;
->         dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
-> @@ -599,13 +595,14 @@ u32 dp_catalog_hpd_get_intr_status(struct dp_catalog *dp_catalog)
->  {
->         struct dp_catalog_private *catalog = container_of(dp_catalog,
->                                 struct dp_catalog_private, dp_catalog);
-> -       int isr = 0;
-> +       int isr, mask;
->
->         isr = dp_read_aux(catalog, REG_DP_DP_HPD_INT_STATUS);
->         dp_write_aux(catalog, REG_DP_DP_HPD_INT_ACK,
->                                  (isr & DP_DP_HPD_INT_MASK));
-> +       mask = dp_read_aux(catalog, REG_DP_DP_HPD_INT_MASK);
->
-> -       return isr;
-> +       return isr & (mask | ~DP_DP_HPD_INT_MASK);
+        WARN_ON_ONCE(in_hardirq());
 
-Please add a comment above this explaining what the goal of the above
-statement is. I guess it's something like this, though you might want
-to modify it to remove snark and insert the real reason unless you
-like being snarky:
+        raw_local_irq_save(flags);
+        /*
+         * The preempt tracer hooks into preempt_count_add and will break
+         * lockdep because it calls back into lockdep after SOFTIRQ_OFFSET
+         * is set and before current->softirq_enabled is cleared.
+         * We must manually increment preempt_count here and manually
+         * call the trace_preempt_off later.
+         */
+        __preempt_count_add(cnt);
+        /*
+         * Were softirqs turned off above:
+         */
+        if (softirq_count() =3D=3D (cnt & SOFTIRQ_MASK))
+                lockdep_softirqs_off(ip);
+        raw_local_irq_restore(flags);
 
-  /*
-   * Report the raw status of all interrupts (AKA we still report the
-   * interrupt as asserted even if it's masked) _except_ for HPD-related.
-   * interrupts. We only report HPD-related interrupts if they're
-   * unmasked. We do it this way because we thought it would be extra
-   * confusing for readers of this code and we were bribed by Mordac to
-   * confuse you.  OK, maybe that's not true. We actually do it this way
-   * because of <insert your compelling reason here>.
-   */
+        if (preempt_count() =3D=3D cnt) {
+#ifdef CONFIG_DEBUG_PREEMPT
+                current->preempt_disable_ip =3D get_lock_parent_ip();
+#endif
+                trace_preempt_off(CALLER_ADDR0, get_lock_parent_ip());
+        }
+}
+EXPORT_SYMBOL(__local_bh_disable_ip);
+#endif /* CONFIG_TRACE_IRQFLAGS */
 
-Along the same lines as my comments in patch #1, I don't have a great
-feel for exactly when the various HPD bits are enabled / disabled and
-it feels like it need to be made super obvious / well documented. That
-being said, I'd be OK w/ that happening in the proposed cleanup.
+There is also __preempt_count_add(cnt), local IRQ disable. which
+reduces the system's
+corresponding speed.
 
+In another case (usual kernels):
 
--Doug
+#if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_TRACE_IRQFLAGS)
+extern void __local_bh_disable_ip(unsigned long ip, unsigned int cnt);
+#else
+static __always_inline void __local_bh_disable_ip(unsigned long ip,
+unsigned int cnt)
+{
+        preempt_count_add(cnt);
+        barrier();
+}
+#endif
+
+There is preempt_count_add(cnt), and it's useless in the timer's callback.
+
+In summary:
+There is a benefit for all the cases to replace spin_lock_bh with spin_lock=
+ in
+timer's callback.
+
+>>      ......
+>>          zstd_reclaim_timer_fn(struct timer_list *timer)
+>>                          spin_lock_bh(&wsm.lock);
+>>                          __local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET)=
+;
+>>                          if (!current->softirq_disable_cnt) {
+>>                                                  // this if branch won't=
+ hit
+>>                                          }
+>>          softirq_handle_end();
+>> In this case, the "__local_bh_disable_ip(_RET_IP_, SOFTIRQ_OFFSET);"
+>> won't do anything useful it only
+>> increase softirq disable depth and decrease it in
+>> "__local_bh_enable_ip(_RET_IP_, SOFTIRQ_LOCK_OFFSET);".
+>> So it's safe to replace spin_lock_bh with spin_lock in a timer
+>> callback function.
+>>
+>> For the ksoftirqd, it's all the same.
+>>

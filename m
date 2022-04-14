@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E8CC501632
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 611CF501634
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:48:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348041AbiDNOwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:52:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
+        id S1348156AbiDNOw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243469AbiDNNp4 (ORCPT
+        with ESMTP id S245454AbiDNNp7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:56 -0400
+        Thu, 14 Apr 2022 09:45:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6735FD5;
-        Thu, 14 Apr 2022 06:43:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAAE5FE4;
+        Thu, 14 Apr 2022 06:43:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E68FB61B51;
-        Thu, 14 Apr 2022 13:43:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0554FC385A1;
-        Thu, 14 Apr 2022 13:43:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC81F61D29;
+        Thu, 14 Apr 2022 13:43:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B747AC385AA;
+        Thu, 14 Apr 2022 13:43:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943810;
-        bh=w51WdM5aHvUcdwBxHUAYODPLjNrTY/mf+S4fCEB517g=;
+        s=korg; t=1649943813;
+        bh=JDgnhN3MSlCM+3tBS3nKBXEXX80jRKTZVSXwNmSC/NM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lCp6B4NU2UmvKGL2rMBtJg1Lcl9IvXj7+UXbf30pgQQXTjwLGWudR/vioSdJn4QJk
-         ORfv5y7PTYjZDOsskDYNez1IMHcUGGBq3ZYHx3X7RubA0Km8J0AG4bhErCC76Wj6WR
-         H7azeOONqNW3dU+LtcnmGMvTqxpr53jifpjfi1Vs=
+        b=brEU3CJ0crjcGFjb/N95jwQLTWZOwu23hL/gN+X1B6mr9t3kCBMOzH+8t7ukqIwJu
+         +0WiVZuGVv8nfcZbwYO+DXaOe+iW+sZOnT64DnHc8p4JsRjmDk4Gu8VoOmgsrGw49I
+         onVaKfL/K6wxZECV2AywPA9y+2HSQciW3bKSQnz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com,
-        Lee Jones <lee.jones@linaro.org>, Theodore Tso <tytso@mit.edu>,
+        syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        Anton Altaparmakov <anton@tuxera.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 289/475] ext4: dont BUG if someone dirty pages without asking ext4 first
-Date:   Thu, 14 Apr 2022 15:11:14 +0200
-Message-Id: <20220414110903.185132971@linuxfoundation.org>
+Subject: [PATCH 5.4 290/475] ntfs: add sanity check on allocation size
+Date:   Thu, 14 Apr 2022 15:11:15 +0200
+Message-Id: <20220414110903.212675091@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
 References: <20220414110855.141582785@linuxfoundation.org>
@@ -56,82 +59,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Theodore Ts'o <tytso@mit.edu>
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-[ Upstream commit cc5095747edfb054ca2068d01af20be3fcc3634f ]
+[ Upstream commit 714fbf2647b1a33d914edd695d4da92029c7e7c0 ]
 
-[un]pin_user_pages_remote is dirtying pages without properly warning
-the file system in advance.  A related race was noted by Jan Kara in
-2018[1]; however, more recently instead of it being a very hard-to-hit
-race, it could be reliably triggered by process_vm_writev(2) which was
-discovered by Syzbot[2].
+ntfs_read_inode_mount invokes ntfs_malloc_nofs with zero allocation
+size.  It triggers one BUG in the __ntfs_malloc function.
 
-This is technically a bug in mm/gup.c, but arguably ext4 is fragile in
-that if some other kernel subsystem dirty pages without properly
-notifying the file system using page_mkwrite(), ext4 will BUG, while
-other file systems will not BUG (although data will still be lost).
+Fix this by adding sanity check on ni->attr_list_size.
 
-So instead of crashing with a BUG, issue a warning (since there may be
-potential data loss) and just mark the page as clean to avoid
-unprivileged denial of service attacks until the problem can be
-properly fixed.  More discussion and background can be found in the
-thread starting at [2].
-
-[1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-[2] https://lore.kernel.org/r/Yg0m6IjcNmfaSokM@google.com
-
-Reported-by: syzbot+d59332e2db681cf18f0318a06e994ebbb529a8db@syzkaller.appspotmail.com
-Reported-by: Lee Jones <lee.jones@linaro.org>
-Signed-off-by: Theodore Ts'o <tytso@mit.edu>
-Link: https://lore.kernel.org/r/YiDS9wVfq4mM2jGK@mit.edu
+Link: https://lkml.kernel.org/r/20220120094914.47736-1-dzm91@hust.edu.cn
+Reported-by: syzbot+3c765c5248797356edaa@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+Acked-by: Anton Altaparmakov <anton@tuxera.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ext4/inode.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ fs/ntfs/inode.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index dcbd8ac8d471..0d62f05f8925 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -2161,6 +2161,15 @@ static int ext4_writepage(struct page *page,
- 	else
- 		len = PAGE_SIZE;
- 
-+	/* Should never happen but for bugs in other kernel subsystems */
-+	if (!page_has_buffers(page)) {
-+		ext4_warning_inode(inode,
-+		   "page %lu does not have buffers attached", page->index);
-+		ClearPageDirty(page);
-+		unlock_page(page);
-+		return 0;
-+	}
-+
- 	page_bufs = page_buffers(page);
- 	/*
- 	 * We cannot do block allocation or other extent handling in this
-@@ -2710,6 +2719,22 @@ static int mpage_prepare_extent_to_map(struct mpage_da_data *mpd)
- 			wait_on_page_writeback(page);
- 			BUG_ON(PageWriteback(page));
- 
-+			/*
-+			 * Should never happen but for buggy code in
-+			 * other subsystems that call
-+			 * set_page_dirty() without properly warning
-+			 * the file system first.  See [1] for more
-+			 * information.
-+			 *
-+			 * [1] https://lore.kernel.org/linux-mm/20180103100430.GE4911@quack2.suse.cz
-+			 */
-+			if (!page_has_buffers(page)) {
-+				ext4_warning_inode(mpd->inode, "page %lu does not have buffers attached", page->index);
-+				ClearPageDirty(page);
-+				unlock_page(page);
-+				continue;
-+			}
-+
- 			if (mpd->map.m_len == 0)
- 				mpd->first_page = page->index;
- 			mpd->next_page = page->index + 1;
+diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
+index ea18e4a2a691..cf222c9225d6 100644
+--- a/fs/ntfs/inode.c
++++ b/fs/ntfs/inode.c
+@@ -1881,6 +1881,10 @@ int ntfs_read_inode_mount(struct inode *vi)
+ 		}
+ 		/* Now allocate memory for the attribute list. */
+ 		ni->attr_list_size = (u32)ntfs_attr_size(a);
++		if (!ni->attr_list_size) {
++			ntfs_error(sb, "Attr_list_size is zero");
++			goto put_err_out;
++		}
+ 		ni->attr_list = ntfs_malloc_nofs(ni->attr_list_size);
+ 		if (!ni->attr_list) {
+ 			ntfs_error(sb, "Not enough memory to allocate buffer "
 -- 
 2.34.1
 

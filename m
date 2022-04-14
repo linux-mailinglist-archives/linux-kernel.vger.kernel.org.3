@@ -2,101 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31B94501AFA
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8923501AFD
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 20:23:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245081AbiDNSYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 14:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58494 "EHLO
+        id S1343563AbiDNSZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 14:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243914AbiDNSYg (ORCPT
+        with ESMTP id S243914AbiDNSZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 14:24:36 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9005B645E;
-        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 15so7068410ljw.8;
-        Thu, 14 Apr 2022 11:22:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
-        b=RbkSxphZC1+PfPjuq7th0mCg7rl5O1p6S2Y1dozh+P1yhRJutgNhLWnAEVy1odmFFc
-         9SiuzS4AkV62jW0bMYsHo7TLHVN/c+7vFd+P7HmgLr+3PsK79uKCYNfvmrsWaN25Rw3I
-         5P3CVfuPaWCNBiDn6AMXsPR5j7CWbsBBNRuu/86rwpNb/xwJW/31iLFGaVf/qUQp9gg3
-         NlfwSRATcnBGIoLb/uUYv6ScsbJe2JbEWxHA+vgy0qZrk5uz34rnOm5YmdtI3qcIs9/k
-         H2hVr6M3zz7U2wpeiqlQLHcXuCe07uPizBv+GkIRQ4+KwUBVb1YZleMvxVcU4Jg1PAJA
-         4h5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bZRq3oZhUdWM7gotP1i/Bzhd8FwXVmJKlpEbuaU9E70=;
-        b=15V648oVigSXanTslayohCg0S/1HaFYymPj53LSLhpcBkyclEtoQc0V+KvJnv5Q0IC
-         m3Ej2xZ4HVzi0ylrciEB5/K+de5y8y0ZBtBt+ymlcAQF2ATLtfipGPgeKPLBoH0v9zC2
-         iWafwlGiJxOaX0WZ1c2UdFxlRMC3Selx26evH++T9+kRU06/YbVTToiuWnBzdBygWw/0
-         kRsb9kwjG8roTEJ+rsXe7z4YMvZu2fSm0odOScPICMus6QCsAxu5Q97JGJc8xuaGDbdw
-         jMT2wlsG8Zm6yqc5lHixQG3C2YKk6iN1PO5IDkpUoWfwt821SQIztXOPG0RtCmP5kuNV
-         q3DA==
-X-Gm-Message-State: AOAM530DtmART9QBipuTJwhCz5Z4lMoaimdQFtip3TjkDBuQHGcfZUpA
-        lp840xyhqHqTzQvcA3m2QA3K7OrGSzqefWlD4wcL4CjNF4Q=
-X-Google-Smtp-Source: ABdhPJzdR7mcr/SyAmuNMV8NMAWpk3ps0biU05hpbUXl8no8U+aWyizyZ1JvmS5AVU4ZTOANZXpj5XPBh1kNlxGGI3o=
-X-Received: by 2002:a2e:93d5:0:b0:24b:5637:bbde with SMTP id
- p21-20020a2e93d5000000b0024b5637bbdemr2275131ljh.256.1649960529062; Thu, 14
- Apr 2022 11:22:09 -0700 (PDT)
+        Thu, 14 Apr 2022 14:25:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D24E38BB;
+        Thu, 14 Apr 2022 11:22:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FE2D61766;
+        Thu, 14 Apr 2022 18:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 137B8C385A5;
+        Thu, 14 Apr 2022 18:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1649960577;
+        bh=OExAKGni0n4Oy0ArWcJ2aR6/4OU/2MYPH8WzRih0Q1o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hq5+poRb8yTgjJjGY+Upu9uoVdwhYmxP+WHCp1rAt4Y5VWoTeMnwvcwJgSrR8twW7
+         uw14jPIg3Uhi3rsugbOQIv6g0+HTqBGaBiM4v8nyQQaEidRLBwPbafBOBJ2kKiMOQb
+         kW8KIpKy1xsZMkzO+nkiSGC9WwlPlfmKzYLumz6vda8BYm4Cc+3aQ3/YRdnqrmrKvQ
+         LNSo2hnn8ZoXucnltl3SWNQFomVHGyElz5NtPebL2jF6NgdQy4XRwjdHyRKym02b/C
+         nfqGGXYS6j2RcncpT/SgH5Tiyt6YJH+sM91bidJT9O/Ha1VWNdHLZydfmwTj0CeFK8
+         3wsk6ZP28JXrw==
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
+        Borislav Petkov <bp@alien8.de>,
+        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>
+Cc:     Mika Westerberg <mika.westerberg@linux.intel.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Myron Stowe <myron.stowe@redhat.com>,
+        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
+        =?UTF-8?q?Benoit=20Gr=C3=A9goire?= <benoitg@coeus.ca>,
+        Hui Wang <hui.wang@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v2 0/3] x86/PCI: Log E820 clipping
+Date:   Thu, 14 Apr 2022 13:22:49 -0500
+Message-Id: <20220414182252.758742-1-helgaas@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAD56B7dMg073f56vfaxp38=dZiAFU0iCn6kmDGiNcNtCijyFoA@mail.gmail.com>
- <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
-In-Reply-To: <c2e2c7b0-cdfb-8eb0-9550-0fb59b5cd10c@hartkopp.net>
-From:   Paul Thomas <pthomas8589@gmail.com>
-Date:   Thu, 14 Apr 2022 14:21:57 -0400
-Message-ID: <CAD56B7ebyPr8h2J8WCV9rBXr9LFeakB6DV1Sk2hBYdY7OEJkyA@mail.gmail.com>
-Subject: Re: peak_usb: urb aborted
-To:     Oliver Hartkopp <socketcan@hartkopp.net>
-Cc:     linux-can@vger.kernel.org,
-        =?UTF-8?Q?St=C3=A9phane_Grosjean?= <s.grosjean@peak-system.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        support@peak-system.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On 08.04.22 18:35, Paul Thomas wrote:
-> > Folks,
-> >
-> > I'm using a PCAN-USB adapter, and it seems to have a lot of trouble
-> > under medium load. I'm getting these urb aborted messages.
-> > [125054.082248] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-71)
-> > [125077.886850] peak_usb 3-2.4.4:1.0 can0: Rx urb aborted (-32)
->
-> As I run the same hardware here it is very likely that you have a faulty
-> CAN bus setup with
->
-> - wrong bitrate setting / sample points / etc
-> - wrong or no termination
-> - missing or wrong configured (other) CAN nodes
-Thanks Oliver, this might have been it, I'm using 1Mbit (up from
-100kbit) on a different board, and not getting those errors.
+From: Bjorn Helgaas <bhelgaas@google.com>
 
->
-> I added the maintainer of the PEAK USB adapter (Stephane) to the
-> recipient list.
->
-> Having the linux-can mailing list and Stephane in the recipient list is
-> sufficient to answer the above details.
->
-> Regards,
-> Oliver
->
+This is still work-in-progress on the issue of PNP0A03 _CRS methods that
+are buggy or not interpreted correctly by Linux.
+
+The previous try at:
+  https://lore.kernel.org/r/20220304035110.988712-1-helgaas@kernel.org
+caused regressions on some Chromebooks:
+  https://lore.kernel.org/r/Yjyv03JsetIsTJxN@sirena.org.uk
+
+This v2 drops the commit that caused the Chromebook regression, so it also
+doesn't fix the issue we were *trying* to fix on Lenovo Yoga and Clevo
+Barebones.
+
+The point of this v2 update is to split the logging patch into (1) a pure
+logging addition and (2) the change to only clip PCI windows, which was
+previously hidden inside the logging patch and not well documented.
+
+Bjorn Helgaas (3):
+  x86/PCI: Eliminate remove_e820_regions() common subexpressions
+  x86: Log resource clipping for E820 regions
+  x86/PCI: Clip only host bridge windows for E820 regions
+
+ arch/x86/include/asm/e820/api.h |  5 +++++
+ arch/x86/kernel/resource.c      | 23 ++++++++++++++++-------
+ arch/x86/pci/acpi.c             |  5 +++++
+ 3 files changed, 26 insertions(+), 7 deletions(-)
+
+-- 
+2.25.1
+

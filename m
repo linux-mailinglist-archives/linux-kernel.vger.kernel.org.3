@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B255019F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6AE5019F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 19:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245208AbiDNRXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 13:23:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50796 "EHLO
+        id S245114AbiDNRYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 13:24:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238700AbiDNRW3 (ORCPT
+        with ESMTP id S240799AbiDNRYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 13:22:29 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BB93DA5E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:03 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id bo5so5444911pfb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:20:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:in-reply-to:references:date:message-id
-         :mime-version;
-        bh=FfSoG7Td6Wp+hFUw88AieR0tVnt6wZxfF+2zMZy9eaA=;
-        b=u1dsiSU8Oc8b8MGmKSXynmmw14Fwb78ccQEfVYdGz2ligTny5q/N6pnA6Ebe28h6Qg
-         9rGnEHQNiSaC61xxeIRqzttu6T5MKhxMX6EGXNDv0bHalHqIas60PEfUt06tX9DHEfOH
-         V0wRk2ynFkERT2/lHsbehTn5wPHw1thtrieHyN90V8JxpzH5OVYM+zdlH3OWT9Wt27nt
-         ptAEJxf0UJYKz8qackmb4vXAapzFRg+BMddZw6pyUOxEtELf4A72XfikvVE1zRTnlRkr
-         LfIPUAVJId1kbo7Nrwzic79JTC5bcC8GIxFkxARqw/kkK3YY7mPDEw5RhVBo5f0LH3IC
-         zGyg==
+        Thu, 14 Apr 2022 13:24:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D05CBBC85D
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649956924;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i/2YUxZHXeRUBoBs87Jt7Yv5tGwLCyCxoPCR5L1KNRo=;
+        b=XmvI2loGuqlSwuwXjARDBEhj15KqVcnoZ0PUGOKPNGr3dJdSVFDWywJ3GL5HhGhXs/oVML
+        1Gj/10VZWgwaEAHsVu4sWQMstPJf4DVfszffraHdHRZwZSdK7dazqDyP8dx+irdH9NlCuU
+        j3/KuSmlfiEDXGru76DHVDJDs4JDOmM=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-459-bWC2LJc2PaeVa3PuLtbN4A-1; Thu, 14 Apr 2022 13:22:03 -0400
+X-MC-Unique: bWC2LJc2PaeVa3PuLtbN4A-1
+Received: by mail-qv1-f69.google.com with SMTP id jx11-20020a0562142b0b00b0044444479dcbso4899160qvb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:in-reply-to:references:date
-         :message-id:mime-version;
-        bh=FfSoG7Td6Wp+hFUw88AieR0tVnt6wZxfF+2zMZy9eaA=;
-        b=0eLtX9QOajcZygL4PqLHw83zepDqnJxGIUPX0598n/jC2+A82M19xN6IVXjHtD3Wq8
-         gGY+2nTieZ4FJ013wNey2hg+sYEXvKqzJpQqhNxxy+GcOAd16s4pUs9l+JKmTgCpYFV6
-         ONe54hjqUcoq8fCnse6kTjNWLUPFsAvkUIVyA1Lk5R85P0WmWZZRc7hXzY8pMxb81Jfu
-         aVPzqHpblCD8PDdpKN/PcF/vBOYVbi/nJ5+WDXmY86h4sjocYwNUDP5iBSDE7LdE/Wng
-         +xmJvNkoVSJOoxT68ZiZvBYd4g5MD1SS0M26MD7w48Uv1SugH/ZaQkCYrKDBnvTED22y
-         MTYg==
-X-Gm-Message-State: AOAM5331M61SZ4CA2XoNE4Wp/5MZewB/KoyCICs5wBZzOInm1Nrs4bR/
-        IAojduhwwJ7sU5HSLqMt2wx4Wg==
-X-Google-Smtp-Source: ABdhPJw/SW4QlRCUT88YW6sv8vX3wad3KLpdA5XMS4E4+CURIKOHEWUI9+4tm4ZEYV/Gaq5GfqQoiA==
-X-Received: by 2002:a65:5ac2:0:b0:399:dea:cd1f with SMTP id d2-20020a655ac2000000b003990deacd1fmr3117689pgt.80.1649956802674;
-        Thu, 14 Apr 2022 10:20:02 -0700 (PDT)
-Received: from localhost (c-71-197-186-152.hsd1.wa.comcast.net. [71.197.186.152])
-        by smtp.gmail.com with ESMTPSA id p8-20020aa78608000000b005082c3cbfd2sm421053pfn.218.2022.04.14.10.20.02
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=i/2YUxZHXeRUBoBs87Jt7Yv5tGwLCyCxoPCR5L1KNRo=;
+        b=VBHvDy8GWBB2FWOPtEAp8FunpyzkrQUVBZbXS55cNH1pJxO3tlfzlhUAkk/vJA+UO6
+         ODWD6p9SWeFYGyKfGWgM7d1alU/qBVHvyLpfv9rbNOcElhLvG5SMpE7gsGi15nSaIdwg
+         XQg6KGjex2uVD5H0DmJiiH8rC7aDUjrvvXorvPxHADu16/UOw7bkeCkeAn1jCdyXlhB0
+         rRwWiarjvtjSelOc0AIZ0V8lIqeKghx9SFuzFrePdgWE5P4YJx9h1txn3fZBlmLBSj8a
+         /pkd+r6gMsVVGssD5fb+SVxImUzwfOliPwgjhNPW+FDRH8blPujysYjo1FKIZj78UQG8
+         8VSg==
+X-Gm-Message-State: AOAM530FogvhbuH0FC+zmNbQSItVjwQUsvCRC6qR67TUmwTLPe+wmC9g
+        DwmepxaNPjH5r7J886qjY9JvFDYEUj4doBO5b4CFIuXnhmEvanf4Gj67Pre8mB+2C2QPRhjpDda
+        PIWj/VyHnBNwGD2dS60WAo6+j
+X-Received: by 2002:ad4:5cca:0:b0:446:77:b7b9 with SMTP id iu10-20020ad45cca000000b004460077b7b9mr11441315qvb.124.1649956923343;
+        Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzcbP7PUfSOKwIHCCFuza3bdqjoIPR1W8UBAPI9RJhgHhZ6h+uJqJ6vTJekn4aE7DlGSkBA5g==
+X-Received: by 2002:ad4:5cca:0:b0:446:77:b7b9 with SMTP id iu10-20020ad45cca000000b004460077b7b9mr11441296qvb.124.1649956923101;
+        Thu, 14 Apr 2022 10:22:03 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id x19-20020ae9e913000000b0069bf9aedce6sm1220069qkf.29.2022.04.14.10.22.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 10:20:02 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     matthias.bgg@gmail.com, jia-wei.chang@mediatek.com,
-        roger.lu@mediatek.com, hsinyi@google.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH V2 10/15] cpufreq: mediatek: Make sram regulator optional
-In-Reply-To: <be86691b529dd691203fbb5b35f8572e7e9119a8.camel@mediatek.com>
-References: <20220408045908.21671-1-rex-bc.chen@mediatek.com>
- <20220408045908.21671-11-rex-bc.chen@mediatek.com>
- <7ho81b5n9v.fsf@baylibre.com>
- <be86691b529dd691203fbb5b35f8572e7e9119a8.camel@mediatek.com>
-Date:   Thu, 14 Apr 2022 10:20:01 -0700
-Message-ID: <7hfsmf37lq.fsf@baylibre.com>
+        Thu, 14 Apr 2022 10:22:02 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 10:21:59 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Miroslav Benes <mbenes@suse.cz>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [PATCH 02/18] objtool: Support data symbol printing
+Message-ID: <20220414172159.orf3ojiesksqrhsu@treble>
+References: <cover.1649891421.git.jpoimboe@redhat.com>
+ <097057f88605aa67b0e3ec573fcf394ae7ac4d6f.1649891421.git.jpoimboe@redhat.com>
+ <YlfHy011VP2oPFjV@hirez.programming.kicks-ass.net>
+ <20220414152148.cwdefx744kymqcut@treble>
+ <Ylg+bewBpaqqYgeB@hirez.programming.kicks-ass.net>
+ <20220414153854.rqkt465xn4vzndr7@treble>
+ <YlhNo026PgjJuCIU@hirez.programming.kicks-ass.net>
+ <20220414170100.c66rfyvk7dp33bxx@treble>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220414170100.c66rfyvk7dp33bxx@treble>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
+On Thu, Apr 14, 2022 at 10:01:04AM -0700, Josh Poimboeuf wrote:
+> On Thu, Apr 14, 2022 at 06:36:51PM +0200, Peter Zijlstra wrote:
+> > On Thu, Apr 14, 2022 at 08:38:54AM -0700, Josh Poimboeuf wrote:
+> > 
+> > > > Yes, I'd not seen that yet, what's that for? The Changelog alludes to
+> > > > something, but I don't think it actually does get used later.
+> > > 
+> > > Nick had asked for something like that, it's just a way to avoid doing
+> > > math every time we look at a warning, i.e. to convert func+offset to
+> > > sec+offset.
+> > > 
+> > > But it's kind of ugly and I'm not 100% happy with it.
+> > > 
+> > > Maybe it should be behind an option (--sec-offsets)?
+> > 
+> > Can do I suppose... Myself, I have this script:
+> > 
+> > $ cat objdump-func.sh
+> > #!/bin/bash
+> > 
+> > OBJ=$1; shift
+> > FUNC=$1; shift
+> > 
+> > objdump -wdr $@ $OBJ | awk "/^\$/ { P=0; } /$FUNC[^>]*>:\$/ { P=1; O=strtonum(\"0x\" \$1); } { if (P) { o=strtonum(\"0x\" \$1); printf(\"%04x \", o-O); print \$0; } }"
+> 
+> That is nice, just added to my ~/bin.
+> 
+> And how am I just learning about objdump "-w" ?!?!
+> 
+> I wrote up a new version of that patch which adds a '--sec-address'
+> option (see below), but maybe I'll just drop it for now.  It's not
+> really relevant to this set anyway.
 
-> On Fri, 2022-04-08 at 13:32 -0700, Kevin Hilman wrote:
->> Rex-BC Chen <rex-bc.chen@mediatek.com> writes:
->> 
->> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> > 
->> > For some MediaTek SoCs, like MT8186, it's possible that the sram
->> > regulator
->> > is shared between CPU and CCI.
->> > 
->> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
->> 
->> nit: missing your sign-off.
->> 
->> > ---
->> >  drivers/cpufreq/mediatek-cpufreq.c | 2 +-
->> >  1 file changed, 1 insertion(+), 1 deletion(-)
->> > 
->> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
->> > b/drivers/cpufreq/mediatek-cpufreq.c
->> > index 9e9bce0ff235..8f688d47e64b 100644
->> > --- a/drivers/cpufreq/mediatek-cpufreq.c
->> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
->> > @@ -435,7 +435,7 @@ static int mtk_cpu_dvfs_info_init(struct
->> > mtk_cpu_dvfs_info *info, int cpu)
->> >  	}
->> >  
->> >  	/* Both presence and absence of sram regulator are valid cases.
->> > */
->> > -	info->sram_reg = regulator_get_exclusive(cpu_dev, "sram");
->> > +	info->sram_reg = regulator_get_optional(cpu_dev, "sram");
->> 
->> The changelog says that this regulator may be shared with CCI, so I
->> understand it's no longer exclusive.  But here you make it optional,
->> which should be explained in the changelog.  If it's not actually
->> optional, then it should just be normal "get".
->> 
->> Kevin
->
-> Hello Kevin,
->
-> Since cpufreq and cci devfreq might share the same sram regulator in
-> MediaTek SoC, it is no longer exclusive as you mentioned.
->
-> The reason to use regulator_get_optional is we hope regulator framework
-> can return error for error handling rather than a dummy handler from
-> regulator_get api.
->
-> I will add this to commit message in next version.
+But now, testing the IBT code, I realize it would still be helpful for
+data addresses.  So maybe I'll keep it.
 
-OK, sounds good.
+-- 
+Josh
 
-Thanks,
-
-Kevin

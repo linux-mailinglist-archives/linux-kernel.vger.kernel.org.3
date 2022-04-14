@@ -2,151 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F6675014A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:32:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73941501068
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 16:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244669AbiDNNfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 09:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47782 "EHLO
+        id S1352851AbiDNOd5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:33:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244219AbiDNN0f (ORCPT
+        with ESMTP id S1344490AbiDNNln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:26:35 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C03E9E9CE;
-        Thu, 14 Apr 2022 06:19:55 -0700 (PDT)
-Received: from leknes.fjasle.eu ([46.142.96.207]) by mrelayeu.kundenserver.de
- (mreue109 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M9Frd-1ncUUo06fH-006M6Y; Thu, 14 Apr 2022 15:16:41 +0200
-Received: from localhost.fjasle.eu (bergen.fjasle.eu [IPv6:fdda:8718:be81:0:6f0:21ff:fe91:394])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by leknes.fjasle.eu (Postfix) with ESMTPS id F148D3C07B;
-        Thu, 14 Apr 2022 15:16:38 +0200 (CEST)
-Authentication-Results: leknes.fjasle.eu; dkim=none; dkim-atps=neutral
-Received: by localhost.fjasle.eu (Postfix, from userid 1000)
-        id 176FB489; Thu, 14 Apr 2022 15:09:43 +0200 (CEST)
+        Thu, 14 Apr 2022 09:41:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCD8120;
+        Thu, 14 Apr 2022 06:39:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18FAB61BA7;
+        Thu, 14 Apr 2022 13:39:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29117C385A1;
+        Thu, 14 Apr 2022 13:39:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1649943557;
+        bh=u7dqo7xzU04dRpQZ+ywfuJhM0M8SJ9rMSWBEkvkCExU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Gi1ZuBy5/iKOdDqr8+Qkpt0x88wyDBqAXEIjEnl9DCFKEIcFOT/f1+1qXwg0ML7Vy
+         xj8lGuQYHnBxiTipB6TLDMRzBDN4NlMfE91Ob2j7IMigE7EkHZFMOuZDsMj+4q1Z6S
+         k2lWchUej0Dyxy8Kk8GJk8Tes8v+DXJuRE/yVy2M=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 198/475] KVM: x86: Fix emulation in writing cr8
 Date:   Thu, 14 Apr 2022 15:09:43 +0200
-From:   Nicolas Schier <nicolas@fjasle.eu>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Yann Droneaud <ydroneaud@opteya.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCHv1] kbuild: support W=e to make build abort in case of
- warning
-Message-ID: <YlgdF9qmJyYGHKXZ@bergen.fjasle.eu>
-References: <1422803720-14723-1-git-send-email-ydroneaud@opteya.com>
- <20220408084607.106468-1-ydroneaud@opteya.com>
- <CAK7LNAQZLt_OecOogOQiSu5snW+sffsMoFgVcjPTx_idj_=_tQ@mail.gmail.com>
- <CAKwvOd=yNnKsHJo0QWvoTuFF9p-y=cTftTD+7FY-wJ_f23zFTQ@mail.gmail.com>
- <81585705-6ed8-12e5-1355-332a6a5d2b17@infradead.org>
- <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
+Message-Id: <20220414110900.670021352@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+References: <20220414110855.141582785@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAK7LNAS6ap9dR=kzRgQgt+d7FBBbVrwEqGU9g_pFD+nzMUt+gQ@mail.gmail.com>
-Jabber-ID: nicolas@jabber.no
-X-Operating-System: Debian GNU/Linux bookworm/sid
-X-Provags-ID: V03:K1:VTplRYcqIA5m2LMYqAqfH7kOd6LlSKl27R7wPnUpoSX7DH+yGlI
- RdfbT5Dvgi1MV94r997k8qAfnPAh9w/CQ3C7C0GRNvpCsdEA1pn71/H/o3GPfzye/76CSfx
- dIl8ftEj0I1iuA5ikapiNgX2Rdtf7LnynYC9QbICwSIRgg9t/qJN91tNKyqipzTSYZgwRyU
- H9kv5Re/u8EPsrx8a1Tjg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:frxQrqfiJnI=:fPuItlHpxR50/T1pphQzzo
- YNfmgEBLM2Wulpvd6R7Yycyca81nrmYHvKCdFb4vLTkH0Tw8APtUX7ZI/3O2VsVUDUjbbnUbz
- 19UhkPEzJHAa9XUhhvEafoUgtKDuEZ9Jqgpo1RQK6ASk6yxu2lwKY4r5WS45MngI9Oa/MGyPm
- s2jpq4OkSPTS40K+3kZbPFRlE2CltVwT38uKO1zbui6HA91gLNY6ftVFKi0S/AySx5h9eLZzj
- 8tw6dwkL/HL6YNB9P0Wg6zcfyTdaRT5aabguMW+viGWLJN8QSEQgQ9hv7NCah2mLs3hPgdsbK
- wEzuWvmjFcnHtl5CJLx/25MRinnqPUfb89GhAXAR4LL9J2lSuASkrlJta8SS40JmWEpgTuyOK
- JodFVro5mQ3TBRh47F0yMhHqp5KfoiIqDAULNDS3TVWYs5eD2nLMG97xJgpOWLCGB4UfsCUnr
- n4dHxnI2Y9I4Whm1ZNJU0BjEGsp94Czcyui58oOQo9h0MtJM6aWiryQCRfbPRNggqL/NP4q1+
- n66vqIYQDyn19VmKIJccd0q8zzYDaL573K87fY1gxziLJjEWkgTTdkvwmIslAPExDxXnis2eQ
- NJqgkhuWJwPG2y/FwUyhobYrrWHud9wj8nE9QXAlvJys6kMDuQG6WBS7Q3ufCQ/NXwXHIXRSq
- 8LAfQO7c3SAJUri3ZYauvPUH3zCuIohyXQ7u7UmFRdfliHg+2bsEnuxrWS5vy1zxDo74=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_BL,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_MSPIKE_ZBI,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-På lø. 09. april 2022 kl. 10.47 +0000 skrev Masahiro Yamada:
-> On Sat, Apr 9, 2022 at 5:36 AM Randy Dunlap <rdunlap@infradead.org> Wrote:
-> >
-> >
-> >
-> > On 4/8/22 13:29, Nick Desaulniers wrote:
-> > > On Fri, Apr 8, 2022 at 4:06 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
-> > >>
-> > >> On Fri, Apr 8, 2022 at 5:46 PM Yann Droneaud <ydroneaud@opteya.com> wrote:
-> > >>>
-> > >>> When developing new code/feature, CONFIG_WERROR is most
-> > >>> often turned off, especially for people using make W=12 to
-> > >>> get more warnings.
-> > >>>
-> > >>> In such case, turning on -Werror temporarily would require
-> > >>> switching on CONFIG_WERROR in the configuration, building,
-> > >>> then switching off CONFIG_WERROR.
-> > >>>
-> > >>> For this use case, this patch introduces a new 'e' modifier
-> > >>> to W= as a short hand for KCFLAGS+=-Werror" so that -Werror
-> > >>> got added to the kernel (built-in) and modules' CFLAGS.
-> > >>>
-> > >>> Signed-off-by: Yann Droneaud <ydroneaud@opteya.com>
-> > >>> ---
-> > >>>  Makefile                   |  1 +
-> > >>>  scripts/Makefile.extrawarn | 13 +++++++++++--
-> > >>>  2 files changed, 12 insertions(+), 2 deletions(-)
-> > >>>
-> > >>> Changes since v0[0]:
-> > >>>
-> > >>>  - rebase on top of commit 64a91907c896 ("kbuild: refactor scripts/Makefile.extrawarn")
-> > >>>  - document use case after commit 3fe617ccafd6 ("Enable '-Werror' by default for all kernel builds")
-> > >>>
-> > >>> [0] https://lore.kernel.org/all/1422803720-14723-1-git-send-email-ydroneaud@opteya.com/
-> > >>
-> > >>
-> > >> I remembered the previous submission, I liked it, but I had lost it.
-> > >>
-> > >> It seems already 7 years ago, (before I became the Kbuild maintainer).
-> > >> Thanks for coming back to this.
-> > >>
-> > >>
-> > >> I like this, but I will wait some time for review comments.
-> > >
-> > > Dunno, this seems pretty simple:
-> > >
-> > > $ ./scripts/config -e WERROR
-> > > $ make ... W=12
-> >
-> > Yeah, that's about what I was thinking too..
-> 
-> 
-> 
-> But, you cannot change the .config
-> when you build external modules.
-> 
-> "make W=e" might be useful for people who strive to
-> keep their downstream modules warning-free.
-> 
-> 
-> W=e is the same pattern.
-> I do not see much downside.
+From: Zhenzhong Duan <zhenzhong.duan@intel.com>
 
-If I set CONFIG_WERROR=y on the make command line, I could have the 
-same result, don't I?
+[ Upstream commit f66af9f222f08d5b11ea41c1bd6c07a0f12daa07 ]
 
-  make CONFIG_WERROR=1 ...
+In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
+is kept.
 
-no matter if in-tree or for external kernel modules.
+According to Intel SDM 10.8.6.1(baremetal scenario):
+"APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
 
-Kind regards,
-Nicolas
+and SDM 28.3(use TPR shadow):
+"MOV to CR8. The instruction stores bits 3:0 of its source operand into
+bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
+cleared.";
+
+and AMD's APM 16.6.4:
+"Task Priority Sub-class (TPS)-Bits 3 : 0. The TPS field indicates the
+current sub-priority to be used when arbitrating lowest-priority messages.
+This field is written with zero when TPR is written using the architectural
+CR8 register.";
+
+so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
+as in other scenarios.
+
+This doesn't impact evaluation and delivery of pending virtual interrupts
+because processor does not use the processor-priority sub-class to
+determine which interrupts to delivery and which to inhibit.
+
+Sub-class is used by hardware to arbitrate lowest priority interrupts,
+but KVM just does a round-robin style delivery.
+
+Fixes: b93463aa59d6 ("KVM: Accelerated apic support")
+Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220210094506.20181-1-zhenzhong.duan@intel.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/x86/kvm/lapic.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index eea2d6f10f59..afe3b8e61514 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2099,10 +2099,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
+ 
+ void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
+ {
+-	struct kvm_lapic *apic = vcpu->arch.apic;
+-
+-	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
+-		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
++	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
+ }
+ 
+ u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
+-- 
+2.34.1
+
+
+

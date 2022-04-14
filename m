@@ -2,110 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D13B500373
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8613150036F
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 03:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239348AbiDNBJn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 13 Apr 2022 21:09:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41204 "EHLO
+        id S239344AbiDNBJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 13 Apr 2022 21:09:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239350AbiDNBJk (ORCPT
+        with ESMTP id S229759AbiDNBJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 13 Apr 2022 21:09:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82D1851E41
-        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649898437; x=1681434437;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kfwuCFOe4z5GV1OG7/YLBg8051tRnVLDcfKqUuH/G78=;
-  b=Qd2dhC1HnCeePlPpIGuwWQVJ4iOKJW/9C/qXqktA6bLm3ihIgPLshqEs
-   ln7hi+/6l9gzvnKR4Mzyk72zkD0jp7yCVJcKXOzRfRqWtQvp8FzeM1Ga/
-   meF4fwfSvZIac7dqoEg7m8GN6x7XKH2a5uZfYR8+InyGXCu/N14VIZL3f
-   1++nc2CBlU3lxjbjh7MgwDHBKAZ2+6KpLS2urcD68x2a4+mmJz7NnlR7K
-   t/9N0kv6BxphY4YKLfumJqhq09P9u5Fb+r5+0X+FqPDn3rJ9idnh2emm9
-   W0+Off8BZApguTfnMdKiERxbz0V1d0LNORfJGwHbN+4joR46/fsUMB8KY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10316"; a="261662259"
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="261662259"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Apr 2022 18:07:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,258,1643702400"; 
-   d="scan'208";a="527175479"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 13 Apr 2022 18:07:16 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nenx5-0000kb-An;
-        Thu, 14 Apr 2022 01:07:15 +0000
-Date:   Thu, 14 Apr 2022 09:06:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpoimboe:objtool-run 11/29] arch/mips/kernel/process.c:46:1:
- warning: 'noreturn' function does return
-Message-ID: <202204140853.6K6wh9eM-lkp@intel.com>
+        Wed, 13 Apr 2022 21:09:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D39CA51E41
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:07:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649898428;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ipdLR9D3/YHkROrPusy96LZmG+ZMYEbsweiplBcf04I=;
+        b=bdBkEA0GBfq4DcsNvClDvAuXFKNtb5b7JdaaOpPRye4lkD3m7Uda+yWBKo/sbuF1bQPdoJ
+        IkVI6NWZwsNxRLVloLFMrLTsNPCbrkczQ1sVqcQnkRxoX1qYyvRxK36mc7kStT2VgR++iO
+        bbkCOKsxBZzGbs2slYuNlHksIyRPThg=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-529-V4vvXB0iOViff2H9bojB4g-1; Wed, 13 Apr 2022 21:07:07 -0400
+X-MC-Unique: V4vvXB0iOViff2H9bojB4g-1
+Received: by mail-il1-f200.google.com with SMTP id m3-20020a056e02158300b002b6e3d1f97cso2180258ilu.19
+        for <linux-kernel@vger.kernel.org>; Wed, 13 Apr 2022 18:07:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ipdLR9D3/YHkROrPusy96LZmG+ZMYEbsweiplBcf04I=;
+        b=IssVVlPflCx081z1cyBqVGlE0VCjdsgQa0juGsVtgUX3hNvZfFkbvtTBI9Itw1PPtX
+         PzKdB4gRoivXhX9XS5H3m7iB7sW04cpOlYko3g1ahD6gdAlZY6UBIB9/0NcFR4VnurvW
+         KTJiwUqm+rNqLD/hIhlEpBVW+a7Ivsa8+trZwzz1a5gLN6rMteYf3SfKviLtoMp6jGUi
+         3I9rmjDUl0WY5DoPb90JU/cJA93fjXEqmZfrCk2+OX6+FDGEJn+1cVynx0rypik5BClB
+         Rx5gdK3pg06kcq85ogEz4DOmInO3PvPq4uvjZJlnMOgpEmFJie8ZlOfx6fbJa/FPd0J2
+         PojQ==
+X-Gm-Message-State: AOAM533/qfF+N3eRY0SL5bB0JDOSwDKJXnKUML6HFuN9hsLPespN9PzF
+        d5a5CawnamLAd+tR/BoJ14dhF3Hl2tYhE1GnhGOneNGNlOtto9qpMUG+rhCMTIzwSgSSgo5yBr/
+        xprKtP5ov7nc6GUisjQ0LzqcU
+X-Received: by 2002:a05:6602:2aca:b0:646:a866:9fd4 with SMTP id m10-20020a0566022aca00b00646a8669fd4mr180446iov.92.1649898426195;
+        Wed, 13 Apr 2022 18:07:06 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyuxd/QXHcWzmra/hRATB55ofGcpqDqowN6F2H5IZ0ylulAPo2vQ083vUVZwvjMon3JIjv/eA==
+X-Received: by 2002:a05:6602:2aca:b0:646:a866:9fd4 with SMTP id m10-20020a0566022aca00b00646a8669fd4mr180426iov.92.1649898425812;
+        Wed, 13 Apr 2022 18:07:05 -0700 (PDT)
+Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id a15-20020a92ce4f000000b002cbdcef5a76sm259749ilr.84.2022.04.13.18.07.04
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 13 Apr 2022 18:07:05 -0700 (PDT)
+From:   Peter Xu <peterx@redhat.com>
+To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>, peterx@redhat.com,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Jones <drjones@redhat.com>
+Subject: [PATCH] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
+Date:   Wed, 13 Apr 2022 21:07:03 -0400
+Message-Id: <20220414010703.72683-1-peterx@redhat.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
-head:   6d60b700d2179c68f134da8eda4d9879d460d1a3
-commit: f5a10245e0eab8e93b77aa796fdf404d10b32468 [11/29] sched: Mark arch_cpu_idle_dead() __noreturn
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220414/202204140853.6K6wh9eM-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=f5a10245e0eab8e93b77aa796fdf404d10b32468
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe objtool-run
-        git checkout f5a10245e0eab8e93b77aa796fdf404d10b32468
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/kernel/
+Our QE team reported test failure on access_tracking_perf_test:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+guest physical test memory offset: 0x3fffbffff000
 
-All warnings (new ones prefixed by >>):
+Populating memory             : 0.684014577s
+Writing to populated memory   : 0.006230175s
+Reading from populated memory : 0.004557805s
+==== Test Assertion Failure ====
+  lib/kvm_util.c:1411: false
+  pid=125806 tid=125809 errno=4 - Interrupted system call
+     1  0x0000000000402f7c: addr_gpa2hva at kvm_util.c:1411
+     2   (inlined by) addr_gpa2hva at kvm_util.c:1405
+     3  0x0000000000401f52: lookup_pfn at access_tracking_perf_test.c:98
+     4   (inlined by) mark_vcpu_memory_idle at access_tracking_perf_test.c:152
+     5   (inlined by) vcpu_thread_main at access_tracking_perf_test.c:232
+     6  0x00007fefe9ff81ce: ?? ??:0
+     7  0x00007fefe9c64d82: ?? ??:0
+  No vm physical memory at 0xffbffff000
 
-   arch/mips/kernel/process.c: In function 'arch_cpu_idle_dead':
->> arch/mips/kernel/process.c:46:1: warning: 'noreturn' function does return
-      46 | }
-         | ^
+And I can easily reproduce it with a Intel(R) Xeon(R) CPU E5-2630 with 46
+bits PA.
 
+It turns out that the address translation for clearing idle page tracking
+returned wrong result, in which addr_gva2gpa()'s last step should have
+treated "pte[index[0]].pfn" to be a 32bit value.  In above case the GPA
+address 0x3fffbffff000 got cut-off into 0xffbffff000, then it caused
+further lookup failure in the gpa2hva mapping.
 
-vim +/noreturn +46 arch/mips/kernel/process.c
+I didn't yet check any other test that may fail too on some hosts, but
+logically any test using addr_gva2gpa() could suffer.
 
-^1da177e4c3f41 Linus Torvalds  2005-04-16  41  
-cdbedc61c8d012 Thomas Gleixner 2013-03-21  42  #ifdef CONFIG_HOTPLUG_CPU
-cdbedc61c8d012 Thomas Gleixner 2013-03-21  43  void arch_cpu_idle_dead(void)
-^1da177e4c3f41 Linus Torvalds  2005-04-16  44  {
-cdbedc61c8d012 Thomas Gleixner 2013-03-21  45  	play_dead();
-cdbedc61c8d012 Thomas Gleixner 2013-03-21 @46  }
-cdbedc61c8d012 Thomas Gleixner 2013-03-21  47  #endif
-1b2bc75c1bde65 Ralf Baechle    2009-06-23  48  
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=2075036
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-:::::: The code at line 46 was first introduced by commit
-:::::: cdbedc61c8d0122ad682815936f0d11df1fe5f57 mips: Use generic idle loop
-
-:::::: TO: Thomas Gleixner <tglx@linutronix.de>
-:::::: CC: Thomas Gleixner <tglx@linutronix.de>
-
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 9f000dfb5594..6c356fb4a9bf 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -587,7 +587,7 @@ vm_paddr_t addr_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	if (!pte[index[0]].present)
+ 		goto unmapped_gva;
+ 
+-	return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
++	return ((vm_paddr_t)pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
+ 
+ unmapped_gva:
+ 	TEST_FAIL("No mapping for vm virtual address, gva: 0x%lx", gva);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.32.0
+

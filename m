@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AE850160C
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:47:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B64A50150E
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343666AbiDNOsk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 10:48:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58490 "EHLO
+        id S1343627AbiDNNjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 09:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345111AbiDNNpI (ORCPT
+        with ESMTP id S244806AbiDNN2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:45:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BE66A0BE4;
-        Thu, 14 Apr 2022 06:42:12 -0700 (PDT)
+        Thu, 14 Apr 2022 09:28:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1793E98F72;
+        Thu, 14 Apr 2022 06:20:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 32AF061D68;
-        Thu, 14 Apr 2022 13:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37B40C385A5;
-        Thu, 14 Apr 2022 13:42:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38E37618FE;
+        Thu, 14 Apr 2022 13:20:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B449C385A1;
+        Thu, 14 Apr 2022 13:20:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649943731;
-        bh=B7iP0fhFtuzC5RIPTN4X4kWqSQBwh3wnlKttlydx0YM=;
+        s=korg; t=1649942457;
+        bh=95enodTn+WAJPTR7ml7Tog7FDIDV+y2//+FOw339URA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lxWas5vD2jJ2xA8P5A2IyfJdDe0/dDTMBmvWeeHJLFva9iJQUcA1iaCStxl9YLj9g
-         7gNbR4qcixbFNH7hxegkSsiQeoPkb3zbcYDD16AyDylLubYFBBmOKy68t0vGE5lYYj
-         4J3t4HCuBqcL+IA/GWzPWzDQ43V86RGR4bQcJRKU=
+        b=P+IdcpK6l0s4Xks7yS6wRf2u5i0wDlwi6hhyxvqelJ5QcrIG3cHNvsbe9vRZvsmCr
+         ypTRUiVutY4q55w0uf2EX4rdBBGIZBfYG1AQ6/BTbnKclbm8siU9FeONVmJ9OaAtVT
+         xJMB4weGafG6XX2y1lEeoXjbol0ddGazlfVGbYTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Feng Tang <feng.tang@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 259/475] driver core: dd: fix return value of __setup handler
-Date:   Thu, 14 Apr 2022 15:10:44 +0200
-Message-Id: <20220414110902.358734880@linuxfoundation.org>
+        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.19 142/338] i2c: xiic: Make bus names unique
+Date:   Thu, 14 Apr 2022 15:10:45 +0200
+Message-Id: <20220414110842.946860183@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,57 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Robert Hancock <robert.hancock@calian.com>
 
-[ Upstream commit f2aad54703dbe630f9d8b235eb58e8c8cc78f37d ]
+[ Upstream commit 1d366c2f9df8279df2adbb60471f86fc40a1c39e ]
 
-When "driver_async_probe=nulltty" is used on the kernel boot command line,
-it causes an Unknown parameter message and the string is added to init's
-environment strings, polluting them.
+This driver is for an FPGA logic core, so there can be arbitrarily many
+instances of the bus on a given system. Previously all of the I2C bus
+names were "xiic-i2c" which caused issues with lm_sensors when trying to
+map human-readable names to sensor inputs because it could not properly
+distinguish the busses, for example. Append the platform device name to
+the I2C bus name so it is unique between different instances.
 
-  Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc6
-  driver_async_probe=nulltty", will be passed to user space.
-
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc6
-     driver_async_probe=nulltty
-
-Change the return value of the __setup function to 1 to indicate
-that the __setup option has been handled.
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1ea61b68d0f8 ("async: Add cmdline option to specify drivers to be async probed")
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Feng Tang <feng.tang@intel.com>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220301041829.15137-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
+Signed-off-by: Robert Hancock <robert.hancock@calian.com>
+Tested-by: Michal Simek <michal.simek@xilinx.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/base/dd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-xiic.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index cf7e5b4afc1b..26cd4ce3ac75 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -747,7 +747,7 @@ static int __init save_async_options(char *buf)
- 			"Too long list of driver names for 'driver_async_probe'!\n");
+diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
+index 8d6b6eeef71c..52acb185a29c 100644
+--- a/drivers/i2c/busses/i2c-xiic.c
++++ b/drivers/i2c/busses/i2c-xiic.c
+@@ -724,7 +724,6 @@ static const struct i2c_adapter_quirks xiic_quirks = {
  
- 	strlcpy(async_probe_drv_names, buf, ASYNC_DRV_NAMES_MAX_LEN);
--	return 0;
-+	return 1;
- }
- __setup("driver_async_probe=", save_async_options);
+ static const struct i2c_adapter xiic_adapter = {
+ 	.owner = THIS_MODULE,
+-	.name = DRIVER_NAME,
+ 	.class = I2C_CLASS_DEPRECATED,
+ 	.algo = &xiic_algorithm,
+ 	.quirks = &xiic_quirks,
+@@ -761,6 +760,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
+ 	i2c_set_adapdata(&i2c->adap, i2c);
+ 	i2c->adap.dev.parent = &pdev->dev;
+ 	i2c->adap.dev.of_node = pdev->dev.of_node;
++	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
++		 DRIVER_NAME " %s", pdev->name);
  
+ 	mutex_init(&i2c->lock);
+ 	init_waitqueue_head(&i2c->wait);
 -- 
 2.34.1
 

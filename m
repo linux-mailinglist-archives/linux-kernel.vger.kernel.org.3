@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87615016A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7B885013B5
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 17:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245125AbiDNPJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 11:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S245716AbiDNOEq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 10:04:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346859AbiDNN6D (ORCPT
+        with ESMTP id S1343721AbiDNN3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 09:58:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8296CB3DC5;
-        Thu, 14 Apr 2022 06:48:07 -0700 (PDT)
+        Thu, 14 Apr 2022 09:29:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6811972C2;
+        Thu, 14 Apr 2022 06:25:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6933B828E6;
-        Thu, 14 Apr 2022 13:48:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28204C385A1;
-        Thu, 14 Apr 2022 13:48:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BA7A60C14;
+        Thu, 14 Apr 2022 13:25:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39063C385A5;
+        Thu, 14 Apr 2022 13:25:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649944084;
-        bh=Eh81wfN4ZPUofqlmK4fta/KW+c1tYgY6OEMdrVyC3eU=;
+        s=korg; t=1649942718;
+        bh=vwmuZqbJK0KqW6xKxen/8iR9Vo2RXhr+F1ti4l//GUM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oOADXjwGOsKDiyE0fMyWHcrjlsruvkD4PeLbh0bjB8TDOHRdifeTKUSWWE7zFXBUb
-         +rZX8yaoVsDwZWwnG+YVKxrjmDFvFhuML3++QR16M28ZZ/mH+fKt2xZFNT/2h6Iwty
-         SyT9MD/GgenPvtEZ9fC2LzyZKE5VtVl6ptJ4Hxw0=
+        b=WqYYcHEIZ15anILIygFOuGHtMF6lIzRcE4h1fDmxJrk7KzVUYbco229cV0QAOUfgQ
+         ZSvzgyCwp3SwBS/Al2yIouX/HAr3zrIjmGm2J2lXTtPbcNZeA7wBd77T9H4PfHgpTg
+         Yrv7Bxk4OYuiCofaKUUx2eXlZFB/+HgEZeQna504=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen Jingwen <chenjingwen6@huawei.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 5.4 351/475] powerpc/kasan: Fix early region not updated correctly
-Date:   Thu, 14 Apr 2022 15:12:16 +0200
-Message-Id: <20220414110904.903800669@linuxfoundation.org>
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.19 234/338] ubifs: Fix deadlock in concurrent rename whiteout and inode writeback
+Date:   Thu, 14 Apr 2022 15:12:17 +0200
+Message-Id: <20220414110845.548577310@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.2
-In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
-References: <20220414110855.141582785@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+References: <20220414110838.883074566@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,82 +54,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Jingwen <chenjingwen6@huawei.com>
+From: Zhihao Cheng <chengzhihao1@huawei.com>
 
-commit dd75080aa8409ce10d50fb58981c6b59bf8707d3 upstream.
+commit afd427048047e8efdedab30e8888044e2be5aa9c upstream.
 
-The shadow's page table is not updated when PTE_RPN_SHIFT is 24
-and PAGE_SHIFT is 12. It not only causes false positives but
-also false negative as shown the following text.
+Following hung tasks:
+[   77.028764] task:kworker/u8:4    state:D stack:    0 pid:  132
+[   77.028820] Call Trace:
+[   77.029027]  schedule+0x8c/0x1b0
+[   77.029067]  mutex_lock+0x50/0x60
+[   77.029074]  ubifs_write_inode+0x68/0x1f0 [ubifs]
+[   77.029117]  __writeback_single_inode+0x43c/0x570
+[   77.029128]  writeback_sb_inodes+0x259/0x740
+[   77.029148]  wb_writeback+0x107/0x4d0
+[   77.029163]  wb_workfn+0x162/0x7b0
 
-Fix it by bringing the logic of kasan_early_shadow_page_entry here.
+[   92.390442] task:aa              state:D stack:    0 pid: 1506
+[   92.390448] Call Trace:
+[   92.390458]  schedule+0x8c/0x1b0
+[   92.390461]  wb_wait_for_completion+0x82/0xd0
+[   92.390469]  __writeback_inodes_sb_nr+0xb2/0x110
+[   92.390472]  writeback_inodes_sb_nr+0x14/0x20
+[   92.390476]  ubifs_budget_space+0x705/0xdd0 [ubifs]
+[   92.390503]  do_rename.cold+0x7f/0x187 [ubifs]
+[   92.390549]  ubifs_rename+0x8b/0x180 [ubifs]
+[   92.390571]  vfs_rename+0xdb2/0x1170
+[   92.390580]  do_renameat2+0x554/0x770
 
-1. False Positive:
-==================================================================
-BUG: KASAN: vmalloc-out-of-bounds in pcpu_alloc+0x508/0xa50
-Write of size 16 at addr f57f3be0 by task swapper/0/1
+, are caused by concurrent rename whiteout and inode writeback processes:
+	rename_whiteout(Thread 1)	        wb_workfn(Thread2)
+ubifs_rename
+  do_rename
+    lock_4_inodes (Hold ui_mutex)
+    ubifs_budget_space
+      make_free_space
+        shrink_liability
+	  __writeback_inodes_sb_nr
+	    bdi_split_work_to_wbs (Queue new wb work)
+					      wb_do_writeback(wb work)
+						__writeback_single_inode
+					          ubifs_write_inode
+					            LOCK(ui_mutex)
+							   ↑
+	      wb_wait_for_completion (Wait wb work) <-- deadlock!
 
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.15.0-12267-gdebe436e77c7 #1
-Call Trace:
-[c80d1c20] [c07fe7b8] dump_stack_lvl+0x4c/0x6c (unreliable)
-[c80d1c40] [c02ff668] print_address_description.constprop.0+0x88/0x300
-[c80d1c70] [c02ff45c] kasan_report+0x1ec/0x200
-[c80d1cb0] [c0300b20] kasan_check_range+0x160/0x2f0
-[c80d1cc0] [c03018a4] memset+0x34/0x90
-[c80d1ce0] [c0280108] pcpu_alloc+0x508/0xa50
-[c80d1d40] [c02fd7bc] __kmem_cache_create+0xfc/0x570
-[c80d1d70] [c0283d64] kmem_cache_create_usercopy+0x274/0x3e0
-[c80d1db0] [c2036580] init_sd+0xc4/0x1d0
-[c80d1de0] [c00044a0] do_one_initcall+0xc0/0x33c
-[c80d1eb0] [c2001624] kernel_init_freeable+0x2c8/0x384
-[c80d1ef0] [c0004b14] kernel_init+0x24/0x170
-[c80d1f10] [c001b26c] ret_from_kernel_thread+0x5c/0x64
+Reproducer (Detail program in [Link]):
+  1. SYS_renameat2("/mp/dir/file", "/mp/dir/whiteout", RENAME_WHITEOUT)
+  2. Consume out of space before kernel(mdelay) doing budget for whiteout
 
-Memory state around the buggy address:
- f57f3a80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3b00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->f57f3b80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-                                               ^
- f57f3c00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- f57f3c80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
-==================================================================
+Fix it by doing whiteout space budget before locking ubifs inodes.
+BTW, it also fixes wrong goto tag 'out_release' in whiteout budget
+error handling path(It should at least recover dir i_size and unlock
+4 ubifs inodes).
 
-2. False Negative (with KASAN tests):
-==================================================================
-Before fix:
-    ok 45 - kmalloc_double_kzfree
-    # vmalloc_oob: EXPECTATION FAILED at lib/test_kasan.c:1039
-    KASAN failure expected in "((volatile char *)area)[3100]", but none occurred
-    not ok 46 - vmalloc_oob
-    not ok 1 - kasan
-
-==================================================================
-After fix:
-    ok 1 - kasan
-
-Fixes: cbd18991e24fe ("powerpc/mm: Fix an Oops in kasan_mmu_init()")
-Cc: stable@vger.kernel.org # 5.4.x
-Signed-off-by: Chen Jingwen <chenjingwen6@huawei.com>
-Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20211229035226.59159-1-chenjingwen6@huawei.com
-[chleroy: Backport for 5.4]
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=214733
+Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/mm/kasan/kasan_init_32.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/ubifs/dir.c |   25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
---- a/arch/powerpc/mm/kasan/kasan_init_32.c
-+++ b/arch/powerpc/mm/kasan/kasan_init_32.c
-@@ -121,7 +121,7 @@ static void __init kasan_remap_early_sha
- 		pmd_t *pmd = pmd_offset(pud_offset(pgd_offset_k(k_cur), k_cur), k_cur);
- 		pte_t *ptep = pte_offset_kernel(pmd, k_cur);
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1341,6 +1341,7 @@ static int do_rename(struct inode *old_d
  
--		if ((pte_val(*ptep) & PTE_RPN_MASK) != pa)
-+		if (pte_page(*ptep) != virt_to_page(lm_alias(kasan_early_shadow_page)))
- 			continue;
+ 	if (flags & RENAME_WHITEOUT) {
+ 		union ubifs_dev_desc *dev = NULL;
++		struct ubifs_budget_req wht_req;
  
- 		__set_pte_at(&init_mm, k_cur, ptep, pfn_pte(PHYS_PFN(pa), prot), 0);
+ 		dev = kmalloc(sizeof(union ubifs_dev_desc), GFP_NOFS);
+ 		if (!dev) {
+@@ -1362,6 +1363,20 @@ static int do_rename(struct inode *old_d
+ 		whiteout_ui->data = dev;
+ 		whiteout_ui->data_len = ubifs_encode_dev(dev, MKDEV(0, 0));
+ 		ubifs_assert(c, !whiteout_ui->dirty);
++
++		memset(&wht_req, 0, sizeof(struct ubifs_budget_req));
++		wht_req.dirtied_ino = 1;
++		wht_req.dirtied_ino_d = ALIGN(whiteout_ui->data_len, 8);
++		/*
++		 * To avoid deadlock between space budget (holds ui_mutex and
++		 * waits wb work) and writeback work(waits ui_mutex), do space
++		 * budget before ubifs inodes locked.
++		 */
++		err = ubifs_budget_space(c, &wht_req);
++		if (err) {
++			iput(whiteout);
++			goto out_release;
++		}
+ 	}
+ 
+ 	lock_4_inodes(old_dir, new_dir, new_inode, whiteout);
+@@ -1436,16 +1451,6 @@ static int do_rename(struct inode *old_d
+ 	}
+ 
+ 	if (whiteout) {
+-		struct ubifs_budget_req wht_req = { .dirtied_ino = 1,
+-				.dirtied_ino_d = \
+-				ALIGN(ubifs_inode(whiteout)->data_len, 8) };
+-
+-		err = ubifs_budget_space(c, &wht_req);
+-		if (err) {
+-			iput(whiteout);
+-			goto out_release;
+-		}
+-
+ 		inc_nlink(whiteout);
+ 		mark_inode_dirty(whiteout);
+ 
 
 

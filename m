@@ -2,67 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFB050091F
-	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D717D500925
+	for <lists+linux-kernel@lfdr.de>; Thu, 14 Apr 2022 11:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241481AbiDNJCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 05:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S241480AbiDNJE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 05:04:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241394AbiDNJBx (ORCPT
+        with ESMTP id S241595AbiDNJCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 05:01:53 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7186E547
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:14 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id s14so4117857plk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 01:59:14 -0700 (PDT)
+        Thu, 14 Apr 2022 05:02:41 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8FB11146
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:00:17 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id t12so4121350pll.7
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 02:00:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0LUCoLOqsjdmuMA9Sv/GTYrqnMUY1MiY7Yfiq4vegQE=;
-        b=HomuRkNsmV7IKhzIJt76YdeNNTkW/NrcqeA7SzFmKUtPaY3/VHAjsS6yZ7zHOBKR8r
-         zCbX6k8iFJINPRJt9zuZu8/CXDMqLnhSxOGqYIJpYeDl+0FvJm/iSC9G3LsO52+Oz2dg
-         rsYn2iXkkOEIHk3i3p7NtE9HPSbQsp1vtXzXF2xhtp8OUDuCvSp+B5vvOv5814PjX+ok
-         4LMXXWwLCY54XIJCI9Ibtxe+l/9oNMHcSY+At3un98WY7TMznKD02N7Wk8UNO8TB52aB
-         47NserAFqEUbjQx9vcfA+BEoQm5QtpTY7JEe5FLzJ5a8cfqTN4598JvJjiu2XQgMRIRQ
-         rsog==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bm6j4Sj81g1kNoBEMCttfjxLkn0RWePq1WSEM7XPmtI=;
+        b=fxHH32p5j0e+cdXaMKgpfUspQX84794ZwP+Pf19RC5R0BLWEj+NyAaWz8nz7IPUrOW
+         1NOs4YA249O7wbPC0KZzR/8lHcPHtMGBkjJ456cIFSglWwHyTuq4jY81Y6MBvG2fiyY+
+         nt8oLvp/huyt+32y5hg6RHMqA9v2+w3OteeRA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0LUCoLOqsjdmuMA9Sv/GTYrqnMUY1MiY7Yfiq4vegQE=;
-        b=C8qKh1XaJzA+GdxkvA49umTHWin+/X8TPESMXBGn+dZVsp84qVkW3AQCX7xQ38zFN4
-         5UtqTPqRAGQoFL1VfRWNnt1GmFAaBqgH78PX9m0Ug9GLDaIClLKkHbRBStrxpMYI60n3
-         v3EQJnsT2DDWlEbqcYBM0IQQovW9RkveOZFDnsBt/gqz9cEysB8OWvRJiK5961MGddMo
-         /3Bqmow0ocRpvacb5mLYPXQw7jXqFlKingvpseShEpy6HyRLL7DpdMGMrLcDyMOA4Wnp
-         X3p6ljYTPJRULk6f/t7wz+uU2As+v9g5f7MskwZ1FA7ukRKnV1tQBD8s3SIYmyop4LXA
-         Q7PQ==
-X-Gm-Message-State: AOAM531XirlKKSsPIE6KLRmnQpFypBL7hAkk0W2lMBQO3r76IwnC71mQ
-        iijGS6bdJYrXVvIHiEPV7AJs8hXsduXisZeXapGcQA==
-X-Google-Smtp-Source: ABdhPJxlr3HwneXRMQWmwp1QPVtDvPbaeJ6+jvqdb1zomhx1OdLrBeAIymtji6CSi0zshAF41yPRZfFxQZO+hbVuwLs=
-X-Received: by 2002:a17:902:7205:b0:156:1a0a:2c39 with SMTP id
- ba5-20020a170902720500b001561a0a2c39mr46589099plb.88.1649926754208; Thu, 14
- Apr 2022 01:59:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Bm6j4Sj81g1kNoBEMCttfjxLkn0RWePq1WSEM7XPmtI=;
+        b=tBx310n7kYY9KgXKPA/rl5EfD9o2GFDbQo2EpC3GUewohrxpWxEwZVg6rTjD+ZN4W5
+         h0h0G+UrCJiUEKXGMkBKd+b+uhNYk4uslkVEx+GU01Icv3+gd0Mc45rLZqSWFOxXEDGA
+         h7c5Il6hNZrXtLlLSFfsk/nBeWflf6l0BUQfclj0284l8TOMUZlinzWnWjZ8mrKSvByU
+         SQ/HAVxuAeK/vMXiO0xEYtra7jk4AccQMVQzzWu+7nl63x7tFmdcvihE81Uf0Fdp57mY
+         I7pnyl39NQvAedb891X7G6aB0Dht5LbVSU6cnfFSKUkUZsEfs4O5bQjRjCFV/H6W7qzn
+         EzWQ==
+X-Gm-Message-State: AOAM533R1bte8iyqKzvZNCqT99bZCXJL/u84mU3c1oU4DaxiJm0JEmmv
+        bJKf2eDp8EqJT+HifVFDGA1qyg==
+X-Google-Smtp-Source: ABdhPJx7X+z3T7obGlkfwniBmq4ySimshUk0QxfezcyPmQw82MV8mGhksCsy7itbjwsr0JNQdzeAVg==
+X-Received: by 2002:a17:90b:4b11:b0:1cb:2a65:f275 with SMTP id lx17-20020a17090b4b1100b001cb2a65f275mr3229394pjb.33.1649926816349;
+        Thu, 14 Apr 2022 02:00:16 -0700 (PDT)
+Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:b53a:7315:ec5:64b0])
+        by smtp.gmail.com with ESMTPSA id q9-20020a638c49000000b00398677b6f25sm1340942pgn.70.2022.04.14.02.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 02:00:15 -0700 (PDT)
+From:   Hsin-Yi Wang <hsinyi@chromium.org>
+To:     Robert Foss <robert.foss@linaro.org>, Xin Ji <xji@analogixsemi.com>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maxime Ripard <maxime@cerno.tech>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: anx7625: Fill in empty ELD when no connector
+Date:   Thu, 14 Apr 2022 17:00:04 +0800
+Message-Id: <20220414090003.1806535-1-hsinyi@chromium.org>
+X-Mailer: git-send-email 2.35.1.1178.g4f1659d476-goog
 MIME-Version: 1.0
-References: <20220414025609.578-1-aajith@arista.com> <0bf37720-870a-9dde-d825-92e12633ce38@gmail.com>
-In-Reply-To: <0bf37720-870a-9dde-d825-92e12633ce38@gmail.com>
-From:   Arun Ajith S <aajith@arista.com>
-Date:   Thu, 14 Apr 2022 14:29:01 +0530
-Message-ID: <CAOvjArTBoxSnX_ck_pW9Fq1cVXtT1sQ9zVHL207fdwj5v5iygQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v4] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        dsahern@kernel.org, yoshfuji@linux-ipv6.org, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwn.net, prestwoj@gmail.com,
-        gilligan@arista.com, noureddine@arista.com, gk@arista.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,83 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you.
-Do I have to post a v5 with the fixup ?
+Speaker may share I2S with DP and .get_eld callback will be called when
+speaker is playing. When HDMI wans't connected, the connector will be
+null. Instead of return an error, fill in empty ELD.
 
--Arun
+Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
+---
+ drivers/gpu/drm/bridge/analogix/anx7625.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
--Arun
+diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
+index 6516f9570b86..f2bc30c98c77 100644
+--- a/drivers/gpu/drm/bridge/analogix/anx7625.c
++++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
+@@ -1932,14 +1932,14 @@ static int anx7625_audio_get_eld(struct device *dev, void *data,
+ 	struct anx7625_data *ctx = dev_get_drvdata(dev);
+ 
+ 	if (!ctx->connector) {
+-		dev_err(dev, "connector not initial\n");
+-		return -EINVAL;
++		/* Pass en empty ELD if connector not available */
++		memset(buf, 0, len);
++	} else {
++		dev_dbg(dev, "audio copy eld\n");
++		memcpy(buf, ctx->connector->eld,
++		       min(sizeof(ctx->connector->eld), len));
+ 	}
+ 
+-	dev_dbg(dev, "audio copy eld\n");
+-	memcpy(buf, ctx->connector->eld,
+-	       min(sizeof(ctx->connector->eld), len));
+-
+ 	return 0;
+ }
+ 
+-- 
+2.35.1.1178.g4f1659d476-goog
 
-
-On Thu, Apr 14, 2022 at 11:42 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->
-> On 4/14/22 09:56, Arun Ajith S wrote:
-> > Add a new neighbour cache entry in STALE state for routers on receiving
-> > an unsolicited (gratuitous) neighbour advertisement with
-> > target link-layer-address option specified.
-> > This is similar to the arp_accept configuration for IPv4.
-> > A new sysctl endpoint is created to turn on this behaviour:
-> > /proc/sys/net/ipv6/conf/interface/accept_unsolicited_na.
-> >
->
-> Hi,
->
-> Building the documentation (htmldocs) with this patch, I got:
->
-> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2475:
-> WARNING: Unexpected indentation.
-> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2477:
-> WARNING: Unexpected indentation.
-> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2481:
-> WARNING: Unexpected indentation.
-> /home/bagas/repo/linux-stable/Documentation/networking/ip-sysctl.rst:2482:
-> WARNING: Block quote ends without a blank line; unexpected unindent.
->
-> I have applied following fixup.
->
-> ---- 8> ----
-> From 304846b43a9f962f53f3841afabfd597b3b80951 Mon Sep 17 00:00:00 2001
-> From: Bagas Sanjaya <bagasdotme@gmail.com>
-> Date: Thu, 14 Apr 2022 12:59:46 +0700
-> Subject: [PATCH] fixup for "net/ipv6: Introduce accept_unsolicited_na knob to
->  implement router-side changes for RFC9131"
->
-> Fix the simple table syntax.
->
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Documentation/networking/ip-sysctl.rst | 6 +++++-
->  1 file changed, 5 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-> index 9e17efe343a..433f2e4a5fe 100644
-> --- a/Documentation/networking/ip-sysctl.rst
-> +++ b/Documentation/networking/ip-sysctl.rst
-> @@ -2472,13 +2472,17 @@ accept_unsolicited_na - BOOLEAN
->         unsolicited neighbour advertisement with target link-layer address option
->         specified. This is as per router-side behavior documented in RFC9131.
->         This has lower precedence than drop_unsolicited_na.
-> +
-> +        ====   ======  ======  ==============================================
->          drop   accept  fwding                   behaviour
->          ----   ------  ------  ----------------------------------------------
->             1        X       X  Drop NA packet and don't pass up the stack
->             0        0       X  Pass NA packet up the stack, don't update NC
->             0        1       0  Pass NA packet up the stack, don't update NC
->             0        1       1  Pass NA packet up the stack, and add a STALE
-> -                                 NC entry
-> +                               NC entry
-> +        ====   ======  ======  ==============================================
-> +
->         This will optimize the return path for the initial off-link communication
->         that is initiated by a directly connected host, by ensuring that
->         the first-hop router which turns on this setting doesn't have to
->
-> base-commit: 38e01f46e0e7f88b92ca0b3f52ac6b9909ed413b
-> --
-> An old man doll... just what I always wanted! - Clara
->
-> Thanks.
->
-> --
-> An old man doll... just what I always wanted! - Clara

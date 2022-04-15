@@ -2,105 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E54F501F78
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:10:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95265501F79
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347649AbiDOANL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37872 "EHLO
+        id S1345649AbiDOAQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:16:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236720AbiDOAMe (ORCPT
+        with ESMTP id S236720AbiDOAQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:12:34 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8580D27FE3
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:10:05 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id q189so7081365oia.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:10:05 -0700 (PDT)
+        Thu, 14 Apr 2022 20:16:25 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EB571ECE
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:13:58 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x132-20020a25ce8a000000b00640812b1ebaso5580853ybe.14
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:13:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=6sga8ftndk8vtvx+W3R7gg8jxRC7DJXugsbes7nhBXQ=;
-        b=l/OJaJEMJuIxkKbI41XC1yk4B5atKv9xuBaVDrSQnmUa6ApdnPZGbgsFNWWtl0Y32t
-         2uhDHpzRAob1wqAGSp0LCZssCCEFpOJe5c2b7fe27oHplkIrQRJWfLIj7ZEUrS8Sq5p9
-         sTOcFmiBXl5Y+uJx2arJt+cZEZAUuELFanK1o=
+        d=google.com; s=20210112;
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=Gevz/8s4aTZa7UyionFqz1/O0wnMKNH0sOq9DFAK64A=;
+        b=cHodgi5G8YDwnd+F/sUNqeULiv5a2otEAcRL114qBW2xlh/SRBZdEjfgDO6fZYvM9R
+         GtJUidXJWIGyT1Zh7fpPTknVt1yHFQuF8CFz6t7PG9weYbfNqhof9A9p89iBAkI8y6am
+         LSuEfH52/f6DDWKQ9Jsx6fwiO8Xs+rfy+L3Zvt5WbTTwi0r6ydjYRJNAG4WL37wtwl2g
+         4i4oER60OYbZN2a8k5A7ZeCxDarZ1wQh6jy7gCtcHBTG1gDTqUriLYsr5e7L8BmRU+gi
+         XNaDNDKN0Dbqv23g+jRYNirSlFXxOeDq+JuwLn6yngSyjxEafTxEIguTTRcBwof4Cvjr
+         Y0dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=6sga8ftndk8vtvx+W3R7gg8jxRC7DJXugsbes7nhBXQ=;
-        b=Y32MT1MDb/aDk+SQX7SRJv+eW0C64FEebHo2Z6x1sq2luHxOLN9fqpXUZa3WjvCD5U
-         fEo5CXHU3CVWPvsoD8FGKeuBWvKaQ8e6O/jHeA/K8K6WYb7WDMOdYVcERcRBp4nM+tlG
-         YECxdPol1fFkygctKzMr58kTwpKTNau6KqRNEOEhUkKbrjQsCV0zZLiOaDBnigczjtmL
-         XCWy+D28s77gy0fzZjB2ONDcJUhs5tdgZ/R+/93d6LsbMSquwVdL+GwRTJH/jHEM5mHw
-         7giq3yZDZYtE8f1z0srOYY/++gouk3bsRdSHapZjqJSw/hX2wXL2xj5EGw5jK3p2isCT
-         cSiA==
-X-Gm-Message-State: AOAM532eE1eArPvgfLQauI9xYzOyDmJoQ4sV+Ke1tLqsjH+65TQbK3iv
-        pFcmKxoD8cG8WZgaT/Ycl0B/ipyRrPwPm0xSfjJu6g==
-X-Google-Smtp-Source: ABdhPJymbaf6NLHP66wW8lvpB5W/WVW2uTuj/EQkoXXOwQgytb/AicoR9wghg6OFqgUtOg1YyKgB2vugeV27/mYgqVE=
-X-Received: by 2002:aca:bd41:0:b0:2ec:ff42:814f with SMTP id
- n62-20020acabd41000000b002ecff42814fmr515213oif.63.1649981404878; Thu, 14 Apr
- 2022 17:10:04 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 14 Apr 2022 17:10:04 -0700
-MIME-Version: 1.0
-In-Reply-To: <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
-References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com> <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 14 Apr 2022 17:10:04 -0700
-Message-ID: <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
-Subject: Re: [PATCH V10 4/9] mfd: pm8008: Add reset-gpios
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_jprakash@quicinc.com
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=Gevz/8s4aTZa7UyionFqz1/O0wnMKNH0sOq9DFAK64A=;
+        b=VTv2wsAcfm0SigQYyGmiiOXI2odOcJBAKAqod9b+sKtbLSJOUiMauExCqUz2s13ni6
+         E8NcxDEJkf0ICwYatyUZlhh5asZTZjHZ4FDbfdH65W3F3/cqcKvwhhWGwrpGrknEaNzo
+         yarhe2FsMBDSTVsKuLyX7uyMPN11aVxNvWeMiZin/QeJ0B2G4+xK7y0lKsUYFOtVXPzj
+         63j4+tWJ9vyks8a6qzpjrncKcWsrOqpWQk/0rMOmbCwl+EhMkZIiPdtGsbeF/BqCa0t4
+         6UD23LxgkvcFcQB4UAbhH2NsMUjFWbFIncIt1EtpGjNZCgcr2guEHUUj2e1XeM7wZDzx
+         Xg1A==
+X-Gm-Message-State: AOAM530E610dxNsjgThjqA0eHm3cNgLqS6KFvieoUVz6c6iC9gW7oS06
+        DWXemRDZuML0SQT4xV4v+NJxZbQreG92
+X-Google-Smtp-Source: ABdhPJwrid+hNYnF7HPIwgJoxOUopxCoZtb7MzlmmsoaM3mFgprbZJzVZz1qPEl6JzQ5fEmn7MaTLTvwmK31
+X-Received: from pigloo.svl.corp.google.com ([2620:15c:2c5:13:7d77:8cae:9dfe:95c])
+ (user=jmeurin job=sendgmr) by 2002:a25:fe0c:0:b0:63d:958d:bf5f with SMTP id
+ k12-20020a25fe0c000000b0063d958dbf5fmr3696825ybe.353.1649981638133; Thu, 14
+ Apr 2022 17:13:58 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 17:13:18 -0700
+In-Reply-To: <20220207163409.19c3bc4c@xps13>
+Message-Id: <20220415001321.252848-1-jmeurin@google.com>
+Mime-Version: 1.0
+References: <20220207163409.19c3bc4c@xps13>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH v3 0/3] mtd: mtdoops: Add timestamp to the dumped oops header.
+From:   Jean-Marc Eurin <jmeurin@google.com>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jean-Marc Eurin <jmeurin@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-04-14 05:30:13)
-> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
-> index c472d7f..97a72da 100644
-> --- a/drivers/mfd/qcom-pm8008.c
-> +++ b/drivers/mfd/qcom-pm8008.c
-> @@ -239,6 +241,13 @@ static int pm8008_probe(struct i2c_client *client)
->                         dev_err(chip->dev, "Failed to probe irq periphs: %d\n", rc);
->         }
->
-> +       chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
-> +       if (IS_ERR(chip->reset_gpio)) {
-> +               dev_err(chip->dev, "failed to acquire reset gpio\n");
 
-The API looks to print debug messages. This print doesn't look required.
+The current header consists of 2 32-bit values which makes it difficult
+and error prone to expand. This creates a structure for the header.
 
-> +               return PTR_ERR(chip->reset_gpio);
-> +       }
-> +       gpiod_set_value(chip->reset_gpio, 1);
+Some oops only have time relative to boot, this adds an absolute timestamp.
 
-Does this do anything? Does this work just as well?
+Changelog since v2:
+- Add a timestamp to the header
 
-	reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
-	if (IS_ERR(reset_gpio))
-		return PTR_ERR(reset_gpio);
+Changelog since v1:
+- Create a header structure to simplify code.
+- Patches in series.
+- Patch prefix.
 
-Note that there's no point to store the reset gpio in the structure if
-it won't be used outside of probe. This should work fine? I used
-GPIOD_OUT_LOW to indicate that the reset should be returned to this
-function deasserted, i.e. taking the PMIC out of reset.
+Jean-Marc Eurin (3):
+  mtd: mtdoops: Fix the size of the header read buffer.
+  mtd: mtdoops: Create a header structure for the saved mtdoops.
+  mtd: mtdoops: Add a timestamp to the mtdoops header.
 
-> +
->         return devm_of_platform_populate(chip->dev);
+ drivers/mtd/mtdoops.c | 61 +++++++++++++++++++++++++------------------
+ 1 file changed, 36 insertions(+), 25 deletions(-)
+
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

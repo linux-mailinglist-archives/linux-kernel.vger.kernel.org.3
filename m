@@ -2,204 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54C8B5025C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:44:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A81D5025CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350639AbiDOGqu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:46:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
+        id S1350652AbiDOGrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245567AbiDOGqr (ORCPT
+        with ESMTP id S1350735AbiDOGrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:46:47 -0400
-Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9185EAFB3F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:44:19 -0700 (PDT)
-Received: by mail-io1-xd2c.google.com with SMTP id 125so7597662iov.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=/fLGJbyPSE6xRKCPoqOb0r29CUXjvQxIOZTemHPZg9I=;
-        b=dfGKPZIrjcd9mm+yubZt6QjiN5aGfnKq8fln8jmtj6lgprpmUfDA/ocuYvoro1yuX/
-         Aaw4gnYOVtnG8xAqM4x8YukqX6UHi1qPVR512nIqQ0alEUiD79cE5dbK4+9MChqkGQ8D
-         Vl7TqarR4PYbuygD3gGYOjB+19TitOapup1F9ynJRRI5B0ugNwc/+PhUZUYwqu93mjE2
-         hLYsF9igmKUd/MPswbIdk5HiZIygq0ynFVby2OjjcI0hws9yHg42+0b3YbT8cC18hohQ
-         R/zQPDZBGaORvQ5GsPDzcM8UExE/AH5eVxGhxDC6vrw9GFS2aV35ptlvCM0/nQfFlcpX
-         Cnsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=/fLGJbyPSE6xRKCPoqOb0r29CUXjvQxIOZTemHPZg9I=;
-        b=B0obwTsFAEqpF5iubtoNt726GdhitszJcUgdsCfatSK68oDETrlRIUp1KJ6wIbSGaU
-         fkhUAlkgeyDtgAJtHA8K5LHRWmx/BOE5YSaIBOKsPrrH6TQs5Dpww8EbZXtDmRhMGVfm
-         /nIXr0sVThankVovy26piz60RQuQKhAgMs8f6AjQ8qZV5dtwfzRBoCyQ4sLWa6v6AYN2
-         7/Eu6BO1i8L2NqM/QFlADM6o8hbjt3tRvgjU3Z/R5ZzOIpCuZmIIPzJf+JIqzCFbs0bA
-         8A69YltcR4nXTa0JdduO2NbLBro3Tybr6jtUKbXvXamwDlN57gRpFXhq1wUaUIpbZgVx
-         sv4Q==
-X-Gm-Message-State: AOAM533LMrQw7NSoFgbIXJCyDnPoTED4XHrbn5I5EzTiJGmmo4mkATfC
-        R87/L1RwOYzly4E49CHqt8rzSw==
-X-Google-Smtp-Source: ABdhPJyLCRXzb7HIHHESkI0VcqbNjDKYQkRX+ir+tnPRtFjnFebfY+a4CCujF2b5x20BRFZderliUg==
-X-Received: by 2002:a5d:848a:0:b0:648:b2f4:d5cd with SMTP id t10-20020a5d848a000000b00648b2f4d5cdmr2706447iom.53.1650005058681;
-        Thu, 14 Apr 2022 23:44:18 -0700 (PDT)
-Received: from google.com ([2620:15c:183:200:e02:decc:64d3:b1d3])
-        by smtp.gmail.com with ESMTPSA id f15-20020a056e020c6f00b002cbc9935527sm2191136ilj.83.2022.04.14.23.44.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 23:44:18 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 00:44:14 -0600
-From:   Yu Zhao <yuzhao@google.com>
-To:     Chen Wandun <chenwandun@huawei.com>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>, linux-mm@kvack.org,
-        Andi Kleen <ak@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, page-reclaim@google.com,
-        x86@kernel.org, Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?iso-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
-Message-ID: <YlkUPmi77qtZTaV9@google.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
- <20220407031525.2368067-7-yuzhao@google.com>
- <71af92d2-0777-c318-67fb-8f7d52c800bb@huawei.com>
- <YliJzrfXzwwxiCId@google.com>
- <4c416f09-5304-07fd-cb53-5c9c8c75f6fa@huawei.com>
- <YlkBrHOFgah3vHaK@google.com>
- <9e3ca922-1448-2eb1-b056-218236e7c72f@huawei.com>
+        Fri, 15 Apr 2022 02:47:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F84BB0A4B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650005111;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mVx9cF7b07Hlw+Jyd93aqAlgfIPY+0nd7PYc9dSwC+U=;
+        b=UfS9Q+8ugo+f7MBqWRAQh0wo+WSzO1qaYGF785YRZ/N+8duVdAgzSnJIpk4lhsLa9KWw+N
+        2D7BRUqrQLbyItApdzvp2Ntc1IH/q9VbJTnMHbW8K9LgeNySdo87Ii0OZez0ULB3s+vl3P
+        LVgvYRIHeszkZOTgfgIamck1FG1kNB4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-164-4Am9g_ddMfCYYooyATDL9w-1; Fri, 15 Apr 2022 02:45:05 -0400
+X-MC-Unique: 4Am9g_ddMfCYYooyATDL9w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 283DB801E67;
+        Fri, 15 Apr 2022 06:45:05 +0000 (UTC)
+Received: from [10.72.13.171] (ovpn-13-171.pek2.redhat.com [10.72.13.171])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1C7E040CF8F6;
+        Fri, 15 Apr 2022 06:44:58 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH v5 00/10] KVM: arm64: Add support for hypercall services
+ selection
+To:     Raghavendra Rao Ananta <rananta@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+References: <20220407011605.1966778-1-rananta@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <92eb2304-9259-0461-247f-d3a4e5eb4fd5@redhat.com>
+Date:   Fri, 15 Apr 2022 14:44:55 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9e3ca922-1448-2eb1-b056-218236e7c72f@huawei.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407011605.1966778-1-rananta@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 02:31:37PM +0800, Chen Wandun wrote:
-> 
-> 
-> 在 2022/4/15 13:25, Yu Zhao 写道:
-> > On Fri, Apr 15, 2022 at 10:23:18AM +0800, Chen Wandun wrote:
-> > > 在 2022/4/15 4:53, Yu Zhao 写道:
-> > > > On Thu, Apr 14, 2022 at 07:47:54PM +0800, Chen Wandun wrote:
-> > > > > On 2022/4/7 11:15, Yu Zhao wrote:
-> > > > > > +static void inc_min_seq(struct lruvec *lruvec)
-> > > > > > +{
-> > > > > > +	int type;
-> > > > > > +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
-> > > > > > +
-> > > > > > +	VM_BUG_ON(!seq_is_valid(lruvec));
-> > > > > > +
-> > > > > > +	for (type = 0; type < ANON_AND_FILE; type++) {
-> > > > > > +		if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
-> > > > > > +			continue;
-> > > > > I'm confused about relation between aging and LRU list operation.
-> > > > > 
-> > > > > In function inc_max_seq,  both min_seq and max_seq will increase，
-> > > > > the lrugen->lists[] indexed by lru_gen_from_seq(max_seq + 1) may
-> > > > > be non-empty?
-> > > > Yes.
-> > > > 
-> > > > > for example,
-> > > > > before inc_max_seq:
-> > > > > min_seq == 0, lrugen->lists[0][type][zone]
-> > > > > max_seq ==3, lrugen->lists[3][type][zone]
-> > > > > 
-> > > > > after inc_max_seq:
-> > > > > min_seq ==1, lrugen->lists[1][type][zone]
-> > > > > max_seq ==4, lrugen->lists[0][type][zone]
-> > > > > 
-> > > > > If lrugen->lists[0][type][zone] is not empty before inc_max_seq and it is
-> > > > > the most inactive list，however lurgen->lists[0][type][zone] will become
-> > > > > the most active list after inc_max_seq.
-> > > > Correct.
-> > > > 
-> > > > > So,  in this place,
-> > > > > 
-> > > > > if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
-> > > > > 	continue;
-> > > > > 
-> > > > > should change to
-> > > > > 
-> > > > > if (get_nr_gens(lruvec, type) == MAX_NR_GENS)
-> > > > > 	continue;
-> > > > No, because max/min_seq will overlap if we do so.
-> > > > 
-> > > > lrugen->lists[max_seq+1] can only be non-empty for anon LRU, for a
-> > > > couple of reasons:
-> > > > 1. We can't swap at all.
-> > > > 2. Swapping is constrained, e.g., swapfile is full.
-> > > > 
-> > > > Both cases are similar to a producer (the aging) overrunning a
-> > > > consumer (the eviction). We used to handle them, but I simplified the
-> > > > code because I don't feel they are worth handling [1].
-> > > Can lrugen->lists[max_seq+1]  also be non-empty for file LRU？
-> > On reclaim path, no. But it can be forced to do so via debugfs.
-> > 
-> > > such as in dont reclaim mapped file page case(isolation will fail).
-> > You mean may_unmap=false? Pages stays in the same generation if
-> > isolation fails. So lrugen->lists[min_seq] won't be empty in this
-> > case.
-> > 
-> > > If so, after aging, eviction will reclaim memory start from
-> > > lrugen->lists[min_seq+1], but some oldest file page still
-> > > remain in lrugen->lists[max_seq+1].
-> > > 
-> > > sort_folio can help to put misplaced pages to the right
-> > > LRU list, but in this case, it does't help, because sort_folio
-> > > only sort lrugen->lists[min_seq+1].
-> > On reclaim path, inc_max_seq() is only called when need_aging=true,
-> > and this guarantees max_seq-min_seq[LRU_GEN_FILE]+1 < MAX_NR_GENS.
-> yes, I think so, but I did't find the logical in function get_nr_evictable,
-> or am I missing something
-> 
->         if (min_seq[LRU_GEN_FILE] + MIN_NR_GENS > max_seq)
->                 *need_aging = true;
->         else if (min_seq[LRU_GEN_FILE] + MIN_NR_GENS < max_seq)
->                 *need_aging = false;
+Hi Raghavendra,
 
-This branch.
+On 4/7/22 9:15 AM, Raghavendra Rao Ananta wrote:
+> Continuing the discussion from [1], the series tries to add support
+> for the userspace to elect the hypercall services that it wishes
+> to expose to the guest, rather than the guest discovering them
+> unconditionally. The idea employed by the series was taken from
+> [1] as suggested by Marc Z.
+> 
+> In a broad sense, the concept is similar to the current implementation
+> of PSCI interface- create a 'firmware psuedo-register' to handle the
+> firmware revisions. The series extends this idea to all the other
+> hypercalls such as TRNG (True Random Number Generator), PV_TIME
+> (Paravirtualized Time), and PTP (Precision Time protocol).
+> 
+> For better categorization and future scaling, these firmware registers
+> are categorized based on the service call owners. Also, unlike the
+> existing firmware psuedo-registers, they hold the features supported
+> in the form of a bitmap.
+> 
+> During the VM initialization, the registers holds an upper-limit of
+> the features supported by each one of them. It's expected that the
+> userspace discover the features provided by each register via GET_ONE_REG,
+> and writeback the desired values using SET_ONE_REG. KVM allows this
+> modification only until the VM has started.
+> 
+> Some of the standard function-ids, such as ARM_SMCCC_VERSION_FUNC_ID,
+> need not be associated with a feature bit. For such ids, the series
+> introduced an allowed-list, hvc_func_default_allowed_list[], that holds
+> all such ids. As a result, the functions that are not elected by userspace,
+> or if they are not a part of this allowed-list, will be denied for when
+> the guests invoke them.
+> 
+> Older VMMs can simply ignore this interface and the hypercall services
+> will be exposed unconditionally to the guests, thus ensuring backward
+> compatibility.
+> 
 
-And the following is also relavent:
+[...]
 
-    static int __init init_lru_gen(void)
-    {
-        BUILD_BUG_ON(MIN_NR_GENS + 1 >= MAX_NR_GENS);
+I rethinking about the design again and just get one question. Hopefully,
+someone have the answer for us. The newly added 3 pseudo registers and
+the existing ones like KVM_REG_ARM_PSCI_VERSION are all tied up with
+vcpu, instead of VM. I don't think it's correct. I'm not sure if VM-scoped
+pseudo registers aren't allowed by ARM architecture or the effort isn't
+worthy to support it.
+
+These pseudo registers are introduced to present the available hypercalls,
+and then they can be disabled from userspace. In the implementation, these 3
+registers are vcpu scoped. It means that multiple vcpus can be asymmetric
+in terms of usable hypercalls. For example, ARM_SMCCC_TRNG hypercalls
+can be enabled on vcpu0, but disabled on vcpu1. I don't think it's expected.
+
+On the other hand, the information stored in these 3 registers needs to
+be migrated through {GET,SET}_ONE_REG by VMM (QEMU). all the information
+stored in these 3 registers are all same on all vcpus, which is exactly
+as we expect. In migration circumstance, we're transporting identical
+information for all vcpus and it's unnecessary.
+
+Thanks,
+Gavin
+
+
+

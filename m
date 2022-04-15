@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38662502679
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:03:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F8650267D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:04:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351296AbiDOIGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
+        id S1351309AbiDOIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244921AbiDOIGJ (ORCPT
+        with ESMTP id S1351298AbiDOIGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:06:09 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A0159A61;
-        Fri, 15 Apr 2022 01:03:40 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23F83J9P130367;
-        Fri, 15 Apr 2022 03:03:19 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650009799;
-        bh=NTy+10/rvDVv3oXf+hx+iRizmeAw7E8r66BdzQEdhq4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=lsgpdF1FJ4rrxua3gRmJL4ijFC0xjqwg+yoeNRIs7RAZg7aCcKfkFLO+rKrxvK3jZ
-         pCCSHj1sbaeeuTEvQbhDXS5kBoaxp+4lMVDtD5UKa0XQr1Nw22H2SVTD/98dPFF7cI
-         uZ1W7QA7Gv4Zv+e8s/Eo3mNXBigRf3xqzicj7G80=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23F83J0n002373
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Apr 2022 03:03:19 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
- Apr 2022 03:03:19 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 15 Apr 2022 03:03:19 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23F83Fn4088810;
-        Fri, 15 Apr 2022 03:03:16 -0500
-Message-ID: <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
-Date:   Fri, 15 Apr 2022 13:33:14 +0530
+        Fri, 15 Apr 2022 04:06:36 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590DDA2046
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:04:09 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id lc2so14135294ejb.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:04:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=wRw/pC6iJAbq8IgOgAwHeaA7kFsJWyDEzT/CDMq/3c0=;
+        b=DyPzs60VOqjaquhFCmTIU1huFGvTpFS2Q3D8ea17oC6cXKiIq9dnCvyq5soefWSwGO
+         SMq1Yf6sIYKoQEPi59fEdu5nQsTR16XNV4vcLAu9WVg4Am9H7w9dSYyEDFw2tA1q/wok
+         BzdDb7/zJhi3Goum3Zkv7ZYoFQA4Z7L/IiaQ/VOryKHwS7Z9VxoHfoZ1Ob1dmztlo01o
+         8I+vIeqTz6emCxQ8Cgf73kRNtvqaD1DcEe+Hni03k/DlHD3S1MBlHqqsKUcJA2yrQsf6
+         1adGXAnL5VAtweeyBVtw5Oo+mTmVCovnG/bJ99kYQhc1OR0Lgl13jLEH5bs9beH02HTD
+         bSoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wRw/pC6iJAbq8IgOgAwHeaA7kFsJWyDEzT/CDMq/3c0=;
+        b=cfrGtocqh+Vam02HaUpPHjev8+c9QGjDxfUcBiaiZbNkL1RX5NGDZp4sZvzIU1cMMi
+         VqdCON+kvjcTyehhQYK8Bym9HD4UvdasR04u9sYBeYPmiWKTWT+QrZ2ZcdV7wUO+DNAw
+         NpQjtn6+rhWDxsajx45LGWSgHN6aQ+A2lKsdOdeHfrlHepxhTn8vVCiXEWPFF0+G7baT
+         dWQ+vgO+kolTZ12UVy1UFfmSETI02HpVsy/ihVLr+t/eP8s3PWTfrSagz7B4Sd0nsve2
+         kg+a8Uu60gEPcQRGMzPAHIbNOwL6eY0wvwO41feiaJzJYdd5p6We5pp8eOQkPF/ItcKp
+         cBcw==
+X-Gm-Message-State: AOAM530VrXyDa0ydTSMN9325v5gYW5wtNLfEdXh5gAvrjvzYw9muOQ+2
+        mJZlI7kjLBXdo1QMJcBSNT7vud+uBaE=
+X-Google-Smtp-Source: ABdhPJwNIcoC4r4J7MSintYlBjxhytSXAjiatuIfoyyRuCFmh+rjzGV+vqz1XLARpUQAcbUS5Me7jQ==
+X-Received: by 2002:a17:907:7204:b0:6e8:c19e:93da with SMTP id dr4-20020a170907720400b006e8c19e93damr5276877ejc.695.1650009847891;
+        Fri, 15 Apr 2022 01:04:07 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1252:fb60:1dce:acd2:1722:e6e8? ([2a02:908:1252:fb60:1dce:acd2:1722:e6e8])
+        by smtp.gmail.com with ESMTPSA id y13-20020a50eb8d000000b0041f112a63c4sm2313487edr.52.2022.04.15.01.04.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 01:04:07 -0700 (PDT)
+Message-ID: <675a2d33-b286-d1d0-e4e7-05d6516026c0@gmail.com>
+Date:   Fri, 15 Apr 2022 10:04:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 2/2] rtc: Introduce ti-k3-rtc
+ Thunderbird/91.7.0
+Subject: Re: [Bug][5.18-rc0] Between commits ed4643521e6a and 34af78c4e616,
+ appears warning "WARNING: CPU: 31 PID: 51848 at
+ drivers/dma-buf/dma-fence-array.c:191 dma_fence_array_create+0x101/0x120" and
+ some games stopped working.
 Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
-References: <20220412073138.25027-1-nm@ti.com>
- <20220412073138.25027-3-nm@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220412073138.25027-3-nm@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        thomas.hellstrom@linux.intel.com,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        "Deucher, Alexander" <alexander.deucher@amd.com>, Ken.Xue@amd.com
+References: <CABXGCsNVp=R5zC9B3PXWJ5nddtt3gkRzDsAsRKvhXq7exGjSAg@mail.gmail.com>
+ <f3bc34e1-0eaf-84ef-486e-b7759e60b792@amd.com>
+ <CABXGCsOD+tDdFcM37NP_1nS9eLym7qC=jUQy3iqYkc1m2iQgxw@mail.gmail.com>
+ <0d5f66d8-9852-b6a9-0e27-9eb9e736d698@amd.com>
+ <CABXGCsPi68Lyvg+6UjTK2aJm6PVBs83YJuP6x68mcrzAQgpuZg@mail.gmail.com>
+ <eef04fc4-741d-606c-c2c6-f054e4e3fffd@amd.com>
+ <CABXGCsNNwEjo_dvWJL7GLULBPy+RmwsC9ObpowR_M1nQ3fKt3g@mail.gmail.com>
+ <4d0cbb79-4955-a3ed-4aa2-7f6cdaa00481@gmail.com>
+ <CABXGCsP19VFRgTx5yGn68iCK3NxPxi_b9MTq=AmHtFPv9xR5sA@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CABXGCsP19VFRgTx5yGn68iCK3NxPxi_b9MTq=AmHtFPv9xR5sA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,206 +89,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Am 15.04.22 um 07:38 schrieb Mikhail Gavrilov:
+> On Sat, Apr 9, 2022 at 7:27 PM Christian König
+> <ckoenig.leichtzumerken@gmail.com> wrote:
+>> That's unfortunately not the end of the story.
+>>
+>> This is fixing your problem, but reintroducing the original problem that
+>> we call the syncobj with a lock held which can crash badly as well.
+>>
+>> Going to take a closer look on Monday. I hope you can test a few more
+>> patches to help narrow down what's actually going wrong here.
+>>
+>> Thanks,
+>> Christian.
+>>
+> Hi Christian.
+> I'm sorry to trouble you.
+> Have you forgotten about this issue?
+>
 
-On 12/04/22 1:01 pm, Nishanth Menon wrote:
-> +/**
-> + * k3rtc_fence  - Ensure a register sync took place between the two domains
-> + * @priv:      pointer to priv data
-> + *
-> + * Return: 0 if the sync took place, else returns -ETIMEDOUT
-> + */
-> +static int k3rtc_fence(struct ti_k3_rtc *priv)
-> +{
-> +	u32 timeout = priv->sync_timeout_us;
-> +	u32 mask = K3RTC_RD_PEND_BIT | K3RTC_WR_PEND_BIT;
-> +	u32 val = 0;
-> +
-> +	while (timeout--) {
-> +		val = k3rtc_readl(priv, REG_K3RTC_SYNCPEND);
-> +		if (!(val & mask))
-> +			return 0;
-> +		usleep_range(1, 2);
-> +	}
+No, I just couldn't find time during all that bug fixing :)
 
-readl_poll_timeout() ?
+Sorry for the delay, going to take a look after the eastern holiday here.
 
-> +
-> +	pr_err("RTC Fence timeout: 0x%08x\n", val);
-
-Can we use dev_err()?  Provides better indication of the driver throwing
-error.
-
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static inline int k3rtc_check_unlocked(struct ti_k3_rtc *priv)
-> +{
-> +	u32 val;
-> +
-> +	val = k3rtc_readl(priv, REG_K3RTC_GENERAL_CTL);
-> +	return (val & K3RTC_UNLOCK_BIT) ? 0 : 1;
-> +}
-> +
-> +static int k3rtc_unlock_rtc(struct ti_k3_rtc *priv)
-> +{
-> +	u32 timeout = priv->sync_timeout_us;
-> +	int ret;
-> +
-> +	ret = k3rtc_check_unlocked(priv);
-> +	if (!ret)
-> +		return ret;
-> +
-> +	k3rtc_writel(priv, REG_K3RTC_KICK0, K3RTC_KICK0_UNLOCK_VALUE);
-> +	k3rtc_writel(priv, REG_K3RTC_KICK1, K3RTC_KICK1_UNLOCK_VALUE);
-> +
-> +	/* Skip fence since we are going to check the unlock bit as fence */
-> +	while (timeout--) {
-> +		ret = k3rtc_check_unlocked(priv);
-> +		if (!ret)
-> +			return ret;
-> +		usleep_range(1, 2);
-> +	}
-
-readl_poll_timeout() ?
-
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static int k3rtc_configure(struct device *dev)
-> +{
-> +	int ret;
-> +	u32 ctl;
-> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
-> +
-> +	/*
-> +	 * HWBUG: The compare statemachine is broken if the RTC module
-> +	 * is NOT unlocked in under one second of boot - which is pretty long
-> +	 * time from the perspective of Linux driver (module load, u-boot
-> +	 * shell all can take much longer than this.
-> +	 *
-> +	 * In such occurrence, it is assumed that the RTC module is un-usable
-> +	 */
-> +	if (priv->soc->unlock_irq_erratum) {
-> +		ret = k3rtc_check_unlocked(priv);
-> +		/* If there is an error OR if we are locked, return error */
-> +		if (ret) {
-> +			dev_err(dev, HW_ERR "Erratum i2327 unlock QUIRK! Cannot operate!!\n");
-> +			return -EFAULT;
-> +		}
-> +	} else {
-> +		/* May Need to explicitly unlock first time */
-> +		ret = k3rtc_unlock_rtc(priv);
-> +		if (ret) {
-> +			dev_err(dev, "Failed to unlock(%d)!\n", ret);
-> +			return ret;
-> +		}
-> +	}
-> +
-> +	/* Enable Shadow register sync on 32k clk boundary */
-> +	ctl = k3rtc_readl(priv, REG_K3RTC_GENERAL_CTL);
-> +	ctl |= K3RTC_O32K_OSC_DEP_EN_BIT;
-> +	k3rtc_writel(priv, REG_K3RTC_GENERAL_CTL, ctl);
-> +
-> +	/*
-> +	 * Wait at least 2 clk sync time before proceeding further programming.
-> +	 * This ensures that the 32k based sync is active.
-> +	 */
-> +	usleep_range(priv->sync_timeout_us, priv->sync_timeout_us + 5);
-> +
-> +	/* We need to ensure fence here to make sure sync here */
-> +	ret = k3rtc_fence(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed fence osc_dep enable(%d) - is 32k clk working?!\n",
-> +			ret);
-> +		return ret;
-> +	}
-> +
-> +	/* Lets just make sure we get consistent time value */
-> +	ctl &= ~K3RTC_CNT_FMODE_MASK;
-> +	/*
-> +	 * FMODE setting: Reading lower seconds will freeze value on higher
-> +	 * seconds. This also implies that we must *ALWAYS* read lower seconds
-> +	 * prior to reading higher seconds
-> +	 */
-> +	ctl |= K3RTC_CNT_FMODE_S_CNT_VALUE;
-> +	k3rtc_writel(priv, REG_K3RTC_GENERAL_CTL, ctl);
-> +
-> +	/* Clear any spurious IRQ sources if any */
-> +	k3rtc_writel(priv, REG_K3RTC_IRQSTATUS_SYS,
-> +		     K3RTC_EVENT_ON_OFF_BIT | K3RTC_EVENT_OFF_ON_BIT);
-> +	/* Disable all IRQs */
-> +	k3rtc_writel(priv, REG_K3RTC_IRQENABLE_CLR_SYS,
-> +		     K3RTC_EVENT_ON_OFF_BIT | K3RTC_EVENT_OFF_ON_BIT);
-> +
-> +	/* And.. Let us Sync the writes in */
-> +	ret = k3rtc_fence(priv);
-> +	if (ret) {
-> +		dev_err(dev, "Failed to fence(%d)!\n", ret);
-> +		return ret;
-
-nit: this can be dropped as next statement will return error code anyway
-
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-
-[...]
-
-> +
-> +static const struct ti_k3_rtc_soc_data ti_k3_am62_data = {
-> +	.unlock_irq_erratum = true,
-> +};
-> +
-> +static const struct of_device_id ti_k3_rtc_of_match_table[] = {
-> +	{.compatible = "ti,am62-rtc", .data = &ti_k3_am62_data},
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(of, ti_k3_rtc_of_match_table);
-> +
-> +#ifdef CONFIG_PM_SLEEP
-> +static int ti_k3_rtc_suspend(struct device *dev)
-
- __maybe_unused preferred instead of #ifdef for better compile coverage
-but upto you.
-
-> +{
-> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
-> +
-> +	if (device_may_wakeup(dev))
-> +		enable_irq_wake(priv->irq);
-> +	return 0;
-> +}
-> +
-> +static int ti_k3_rtc_resume(struct device *dev)
-> +{
-> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
-> +
-> +	if (device_may_wakeup(dev))
-> +		disable_irq_wake(priv->irq);
-> +	return 0;
-> +}
-> +#endif
-> +
-> +static SIMPLE_DEV_PM_OPS(ti_k3_rtc_pm_ops, ti_k3_rtc_suspend, ti_k3_rtc_resume);
-> +
-> +static struct platform_driver ti_k3_rtc_driver = {
-> +	.probe = ti_k3_rtc_probe,
-> +	.driver = {
-> +		   .name = "rtc-ti-k3",
-> +		   .of_match_table = ti_k3_rtc_of_match_table,
-> +		   .pm = &ti_k3_rtc_pm_ops,
-> +		   },
-Extra tab?
-
-> +};
-> +module_platform_driver(ti_k3_rtc_driver);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("TI K3 RTC driver");
-> +MODULE_AUTHOR("Nishanth Menon");
-> +MODULE_ALIAS("platform:rtc-ti-k3");
-> -- 2.31.1
+Christian.

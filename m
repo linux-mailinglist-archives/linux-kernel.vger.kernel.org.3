@@ -2,121 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04711502568
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:15:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDCEA50256C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350224AbiDOGSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
+        id S1350282AbiDOGT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350192AbiDOGSC (ORCPT
+        with ESMTP id S235301AbiDOGT0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:18:02 -0400
-Received: from mail.meizu.com (edge05.meizu.com [157.122.146.251])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B5FE44A05
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:15:30 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail12.meizu.com
- (172.16.1.108) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 15 Apr
- 2022 14:15:28 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 15 Apr
- 2022 14:15:27 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V4] staging: rtl8192e: Fix signedness bug in rtllib_rx_assoc_resp()
-Date:   Fri, 15 Apr 2022 14:15:25 +0800
-Message-ID: <1650003325-26568-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <4370787.8F6SAcFxjW@leap>
-References: <4370787.8F6SAcFxjW@leap>
+        Fri, 15 Apr 2022 02:19:26 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62749AFAD3;
+        Thu, 14 Apr 2022 23:16:59 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id s14so6433416plk.8;
+        Thu, 14 Apr 2022 23:16:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Jatt+V+nXfhqQM9//07B65SFV6bMNiaWeVlnWsPUEY8=;
+        b=LeUSar5B5rvRe12ca2HvwfsVrBkcS7B5f3PFuXsUAtqfFCTENTy3DNmOjAu0dXQ6ce
+         VEvEHCb49p8sHqRbzPcJW+sZFgJ3RwMDydc+m/12fEmiOS4OgNZXWfMGxqQ6zzAyxAlS
+         o7AjjKHlHiwFbDNe+H3dQmtZLC7gcjsD/t9UGTICwxqL6JbR2vVugF6SJ7QZMBg5PpwH
+         HDaXu/rxmXVGxnh2e60yCk/nvpy5ANAnD+UJtek/THOl1cMa89SCw7BmSJG6R9giD0tP
+         BmOdvdyptPOFvmUzIbrSYCMeFmFFgLqFPTCus8q72vLxEn58i0hps40w1pC1q+9AutZl
+         598A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Jatt+V+nXfhqQM9//07B65SFV6bMNiaWeVlnWsPUEY8=;
+        b=5jYjquN8cej1gmd22l6FMD9L8i02HnlKo8Z2VmbkIkrH9cAmHkT3mVYNta44Qfa9j7
+         GrlfEZA4MG4g+1Wd8iHj0dX6AdXExS2824lnP4VuSLuqfb7u9diF/+IEWKS8SNk+GAFM
+         Q7jIQx2ro5ttJJ/ppUfPNwt21OFy6dO7OyCP8mhrztTkGA1cz5f12LW5Ty8ne/jtFN48
+         TKzSzZ86PlyoFbYNCl1YIjFhPdTAwWxgy2Xy5/6RsomOo9ljb0M8SqYfh6kyB+2WuQoK
+         geIZrdJR2rbu7dqMVzDCiy5FePf8m+2lKTqLF6brqGr3N5Y/epuYVlB0S1LIUGSWkMhY
+         xAZA==
+X-Gm-Message-State: AOAM532sXxOKrMqaA39G3W38PilAAi8YdNxUIncjOYsxkRXIkMYfxery
+        esuYn6CY5bs9y8r9Rh5eE84=
+X-Google-Smtp-Source: ABdhPJxXl2J8MrOMJqY9UdpMm/pHQYL5wUpT7PmiQkXC6CUQF1tguXDxp0bE3E9oeAy+7fsxAK1UUA==
+X-Received: by 2002:a17:903:2cb:b0:14f:4fb6:2fb0 with SMTP id s11-20020a17090302cb00b0014f4fb62fb0mr49422092plk.172.1650003418858;
+        Thu, 14 Apr 2022 23:16:58 -0700 (PDT)
+Received: from d3 ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
+        by smtp.gmail.com with ESMTPSA id h18-20020a056a001a5200b0050a43bb7ae6sm479281pfv.161.2022.04.14.23.16.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 23:16:58 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 15:16:52 +0900
+From:   Benjamin Poirier <benjamin.poirier@gmail.com>
+To:     Yihao Han <hanyihao@vivo.com>, Wen Gong <quic_wgong@quicinc.com>
+Cc:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH] ath11k: simplify if-if to if-else
+Message-ID: <YlkN1FsTd0Bozz0K@d3>
+References: <20220414092042.78152-1-hanyihao@vivo.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414092042.78152-1-hanyihao@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit message suggested by Dan Carpenter as below:
+On 2022-04-14 02:20 -0700, Yihao Han wrote:
+> Replace `if (!ab->is_reset)` with `else` for simplification
+> and add curly brackets according to the kernel coding style:
+> 
+> "Do not unnecessarily use braces where a single statement will do."
+> 
+> ...
+> 
+> "This does not apply if only one branch of a conditional statement is
+> a single statement; in the latter case use braces in both branches"
+> 
+> Please refer to:
+> https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
 
-The rtllib_rx_assoc_resp() function has a signedness bug because it's
-a declared as a u16 but it return -ENOMEM.  When you look at it more
-closely it returns a mix of error codes including 0xcafe, -ENOMEM, and
-a->status which is WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG.  This is a mess.
+Same comment about the curly brackets part of the log as for the qlcnic
+patch, it doesn't match the changes.
 
-Clean it up to just return standard kernel error codes.  We can print
-out the a->status before returning a regular error code.  The printks
-in the caller need to be adjusted as well.
+> 
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+>  drivers/net/wireless/ath/ath11k/core.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath11k/core.c b/drivers/net/wireless/ath/ath11k/core.c
+> index cbac1919867f..80009482165a 100644
+> --- a/drivers/net/wireless/ath/ath11k/core.c
+> +++ b/drivers/net/wireless/ath/ath11k/core.c
+> @@ -1532,8 +1532,7 @@ static void ath11k_core_restart(struct work_struct *work)
+>  
+>  	if (ab->is_reset)
+>  		complete_all(&ab->reconfigure_complete);
+> -
+> -	if (!ab->is_reset)
+> +	else
+>  		ath11k_core_post_reconfigure_recovery(ab);
+>  }
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: reduce return random value; print its own error message.
-V2->V3: change commit message; change s16 -> int.
-V3->V4: add message suggested by in title.
-
- drivers/staging/rtl8192e/rtllib_softmac.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 82bf05eb1cbf..4a1b9a94930f 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -1764,7 +1764,7 @@ static void rtllib_softmac_check_all_nets(struct rtllib_device *ieee)
- 	spin_unlock_irqrestore(&ieee->lock, flags);
- }
- 
--static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
-+static inline int auth_parse(struct net_device *dev, struct sk_buff *skb,
- 			     u8 **challenge, int *chlen)
- {
- 	struct rtllib_authentication *a;
-@@ -1773,7 +1773,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 	if (skb->len <  (sizeof(struct rtllib_authentication) -
- 	    sizeof(struct rtllib_info_element))) {
- 		netdev_dbg(dev, "invalid len in auth resp: %d\n", skb->len);
--		return 0xcafe;
-+		return -EINVAL;
- 	}
- 	*challenge = NULL;
- 	a = (struct rtllib_authentication *) skb->data;
-@@ -1787,7 +1787,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 				return -ENOMEM;
- 		}
- 	}
--	return le16_to_cpu(a->status);
-+	return a->status;
- }
- 
- static int auth_rq_parse(struct net_device *dev, struct sk_buff *skb, u8 *dest)
-@@ -2282,7 +2282,7 @@ rtllib_rx_assoc_resp(struct rtllib_device *ieee, struct sk_buff *skb,
- 
- static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- {
--	u16 errcode;
-+	int errcode;
- 	u8 *challenge;
- 	int chlen = 0;
- 	bool bSupportNmode = true, bHalfSupportNmode = false;
-@@ -2292,8 +2292,8 @@ static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- 	if (errcode) {
- 		ieee->softmac_stats.rx_auth_rs_err++;
- 		netdev_info(ieee->dev,
--			    "Authentication response status code 0x%x",
--			    errcode);
-+			    "Authentication response status code %d",
-+			    le16_to_cpu(errcode));
- 		rtllib_associate_abort(ieee);
- 		return;
- 	}
--- 
-2.7.4
-
+It seems there is no synchronization around is_reset but is it
+guaranteed that it cannot be changed by ath11k_core_reset() between the
+two tests? I'm not familiar with the driver.

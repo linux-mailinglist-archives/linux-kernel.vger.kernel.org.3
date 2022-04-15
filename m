@@ -2,60 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53951502AE0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E4F502AED
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353977AbiDONYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S1353983AbiDONak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352586AbiDONX6 (ORCPT
+        with ESMTP id S229982AbiDONai (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:23:58 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF91ABF6C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 06:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650028889; x=1681564889;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=J5IdjM4bTiGgHDJNdfSgOfYbVJ4mpNxn9qhhWj7kVfU=;
-  b=ZulwdtGveVJK2Ta6dBq+uq/Lx1D1QO8obNfKfznUdU6mJ3tZCz04VeT4
-   QOteX3iiLQ90dKktRNaooRUTWer9S3LbHOMrUORKTBgUoamQSsur7c2tu
-   qFh16d7VOtODFK6rKkAk7Hw1lexG7VsRQEKWXIEIj7VA1fUiNdH5ulRdi
-   2CSJg+lNpH4QipPsn6JyiFjMSJIJnvuEndroJ39kmiGlD9jJq5sa4JyEz
-   YGcZBeYiG2pGm9awqJQutF8EZMN54KeSqR0XE1OkK33OwF0uZbYlXSq/J
-   JwLtUcUMDVSNaVnHFhclEHTzswfekWwAbT7g+FGvGpWpWacLM33TZi3qP
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="326055751"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="326055751"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:21:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="662085064"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 06:21:28 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfLt9-0001yL-Gb;
-        Fri, 15 Apr 2022 13:21:27 +0000
-Date:   Fri, 15 Apr 2022 21:21:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [morimoto:r4-2022-04-15-v2 15/24]
- drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
-Message-ID: <202204152116.8xUwPO61-lkp@intel.com>
+        Fri, 15 Apr 2022 09:30:38 -0400
+Received: from mail.parknet.co.jp (mail.parknet.co.jp [210.171.160.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDC495C37E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 06:28:10 -0700 (PDT)
+Received: from ibmpc.myhome.or.jp (server.parknet.ne.jp [210.171.168.39])
+        by mail.parknet.co.jp (Postfix) with ESMTPSA id 5436915F939;
+        Fri, 15 Apr 2022 22:28:10 +0900 (JST)
+Received: from devron.myhome.or.jp (foobar@devron.myhome.or.jp [192.168.0.3])
+        by ibmpc.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 23FDS9K7063447
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 22:28:10 +0900
+Received: from devron.myhome.or.jp (foobar@localhost [127.0.0.1])
+        by devron.myhome.or.jp (8.16.1/8.16.1/Debian-3) with ESMTPS id 23FDS9jn130716
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 22:28:09 +0900
+Received: (from hirofumi@localhost)
+        by devron.myhome.or.jp (8.16.1/8.16.1/Submit) id 23FDS8fs130713;
+        Fri, 15 Apr 2022 22:28:08 +0900
+From:   OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>
+To:     Chung-Chiang Cheng <cccheng@synology.com>
+Cc:     linux-kernel@vger.kernel.org, kernel@cccheng.net,
+        shepjeng@gmail.com
+Subject: Re: [PATCH v3 2/3] fat: make ctime and mtime identical explicitly
+References: <20220415094518.380543-1-cccheng@synology.com>
+        <20220415094518.380543-2-cccheng@synology.com>
+Date:   Fri, 15 Apr 2022 22:28:08 +0900
+In-Reply-To: <20220415094518.380543-2-cccheng@synology.com> (Chung-Chiang
+        Cheng's message of "Fri, 15 Apr 2022 17:45:17 +0800")
+Message-ID: <87czhitr13.fsf@mail.parknet.co.jp>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/29.0.50 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,108 +52,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/morimoto/linux r4-2022-04-15-v2
-head:   88d865b299bcaa6c0a206a60dbf20e4e13130568
-commit: 680cb6c79b44aacc594165e88b4af5d4acfa9f7c [15/24] i2c: rcar: use flags instead of atomic_xfer
-config: arm64-randconfig-r022-20220414 (https://download.01.org/0day-ci/archive/20220415/202204152116.8xUwPO61-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/morimoto/linux/commit/680cb6c79b44aacc594165e88b4af5d4acfa9f7c
-        git remote add morimoto https://github.com/morimoto/linux
-        git fetch --no-tags morimoto r4-2022-04-15-v2
-        git checkout 680cb6c79b44aacc594165e88b4af5d4acfa9f7c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Chung-Chiang Cheng <cccheng@synology.com> writes:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> -	fat_truncate_time(dir, NULL, S_ATIME|S_MTIME);
+> +	fat_truncate_time(dir, NULL, S_ATIME|S_CTIME|S_MTIME);
 
-All errors (new ones prefixed by >>):
+fat_truncate_time() updates i_ctime too. So S_CTIME should not be
+necessary here. And I think this is better to use only S_MTIME to tell
+this is the point of mtime update.
 
->> drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
-           priv->flags &= ~ID_P_ATOMIC
-                                      ^
-                                      ;
-   drivers/i2c/busses/i2c-rcar.c:1041:18: warning: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
-           priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
-                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   1 warning and 1 error generated.
+(And, in fat_truncate_time(), I think S_CTIME is not required, because
+we ignore ctime change, isn't it?)
 
+Or you are going to update mtime on rename, etc too?
 
-vim +806 drivers/i2c/busses/i2c-rcar.c
+> +	/*
+> +	 * ctime and mtime share the same on-disk field, and should be
+> +	 * identical in memory.
+> +	 */
+> +	if (flags & (S_CTIME|S_MTIME)) {
+>  		fat_truncate_mtime(sbi, now, &inode->i_mtime);
+> +		inode->i_ctime = inode->i_mtime;
+> +	}
 
-   796	
-   797	static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
-   798					struct i2c_msg *msgs,
-   799					int num)
-   800	{
-   801		struct rcar_i2c_priv *priv = i2c_get_adapdata(adap);
-   802		struct device *dev = rcar_i2c_priv_to_dev(priv);
-   803		int i, ret;
-   804		long time_left;
-   805	
- > 806		priv->flags &= ~ID_P_ATOMIC
-   807	
-   808		pm_runtime_get_sync(dev);
-   809	
-   810		/* Check bus state before init otherwise bus busy info will be lost */
-   811		ret = rcar_i2c_bus_barrier(priv);
-   812		if (ret < 0)
-   813			goto out;
-   814	
-   815		/* Gen3 needs a reset before allowing RXDMA once */
-   816		if (priv->devtype == I2C_RCAR_GEN3) {
-   817			priv->flags |= ID_P_NO_RXDMA;
-   818			if (!IS_ERR(priv->rstc)) {
-   819				ret = rcar_i2c_do_reset(priv);
-   820				if (ret == 0)
-   821					priv->flags &= ~ID_P_NO_RXDMA;
-   822			}
-   823		}
-   824	
-   825		rcar_i2c_init(priv);
-   826	
-   827		for (i = 0; i < num; i++)
-   828			rcar_i2c_request_dma(priv, msgs + i);
-   829	
-   830		/* init first message */
-   831		priv->msg = msgs;
-   832		priv->msgs_left = num;
-   833		priv->flags = (priv->flags & ID_P_MASK) | ID_FIRST_MSG;
-   834		rcar_i2c_prepare_msg(priv);
-   835	
-   836		time_left = wait_event_timeout(priv->wait, priv->flags & ID_DONE,
-   837					     num * adap->timeout);
-   838	
-   839		/* cleanup DMA if it couldn't complete properly due to an error */
-   840		if (priv->dma_direction != DMA_NONE)
-   841			rcar_i2c_cleanup_dma(priv, true);
-   842	
-   843		if (!time_left) {
-   844			rcar_i2c_init(priv);
-   845			ret = -ETIMEDOUT;
-   846		} else if (priv->flags & ID_NACK) {
-   847			ret = -ENXIO;
-   848		} else if (priv->flags & ID_ARBLOST) {
-   849			ret = -EAGAIN;
-   850		} else {
-   851			ret = num - priv->msgs_left; /* The number of transfer */
-   852		}
-   853	out:
-   854		pm_runtime_put(dev);
-   855	
-   856		if (ret < 0 && ret != -ENXIO)
-   857			dev_err(dev, "error %d : %x\n", ret, priv->flags);
-   858	
-   859		return ret;
-   860	}
-   861	
+[...]
 
+>  	clear_nlink(inode);
+> -	fat_truncate_time(inode, NULL, S_CTIME);
+> +	fat_truncate_time(inode, NULL, S_CTIME|S_MTIME);
+
+This is the point to update ctime. You want to affect ctime change to
+mtime? As I said in previous post, I think we are better to ignore ctime
+change, because it may become yet another incompatible behavior.
+
+>  	fat_detach(inode);
+>  out:
+>  	mutex_unlock(&MSDOS_SB(sb)->s_lock);
+> @@ -415,7 +415,7 @@ static int msdos_unlink(struct inode *dir, struct dentry *dentry)
+>  	if (err)
+>  		goto out;
+>  	clear_nlink(inode);
+> -	fat_truncate_time(inode, NULL, S_CTIME);
+> +	fat_truncate_time(inode, NULL, S_CTIME|S_MTIME);
+
+ditto
+
+>  	fat_detach(inode);
+>  out:
+>  	mutex_unlock(&MSDOS_SB(sb)->s_lock);
+> @@ -550,7 +550,7 @@ static int do_msdos_rename(struct inode *old_dir, unsigned char *old_name,
+>  		drop_nlink(new_inode);
+>  		if (is_dir)
+>  			drop_nlink(new_inode);
+> -		fat_truncate_time(new_inode, &ts, S_CTIME);
+> +		fat_truncate_time(new_inode, &ts, S_CTIME|S_MTIME);
+
+ditto
+
+>  	}
+>  out:
+
+[...]
+
+> @@ -981,7 +981,7 @@ static int vfat_rename(struct user_namespace *mnt_userns, struct inode *old_dir,
+>  		drop_nlink(new_inode);
+>  		if (is_dir)
+>  			drop_nlink(new_inode);
+> -		fat_truncate_time(new_inode, &ts, S_CTIME);
+> +		fat_truncate_time(new_inode, &ts, S_CTIME|S_MTIME);
+
+ditto
+
+Thanks.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+OGAWA Hirofumi <hirofumi@mail.parknet.co.jp>

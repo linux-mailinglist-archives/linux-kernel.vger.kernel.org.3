@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01A0C502ADD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:20:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53951502AE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:21:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353850AbiDONWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
+        id S1353977AbiDONYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:24:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353606AbiDONWO (ORCPT
+        with ESMTP id S1352586AbiDONX6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:22:14 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115E327CEE;
-        Fri, 15 Apr 2022 06:19:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23FDJVHq019635;
-        Fri, 15 Apr 2022 08:19:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650028771;
-        bh=ymIg58exA+OTnbhtNf4ShBPNkFeIT4HSqOnVXQqtd30=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=wt6f+lLO8j4m1KpakSiHVZvf3DNiYN3O/HpIrfWe8nAt5KkKGrEIl5y5tjwzLaC2U
-         RFEzUhSl7UyqwapJVDJ6E25n9D4G3pUNkZxiicy0/SwFnyOmD5HFNsG/Ed6mVYuqx6
-         kMAh4ReKw3hqkuBYa0UjSD47tLPfW/pX3wQjji/Y=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23FDJUKx012070
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Apr 2022 08:19:31 -0500
-Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
- Apr 2022 08:19:30 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 15 Apr 2022 08:19:30 -0500
-Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23FDJIkA104572;
-        Fri, 15 Apr 2022 08:19:27 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-am625-sk: Enable on board peripherals
-Date:   Fri, 15 Apr 2022 18:49:17 +0530
-Message-ID: <20220415131917.431137-3-vigneshr@ti.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220415131917.431137-1-vigneshr@ti.com>
-References: <20220415131917.431137-1-vigneshr@ti.com>
+        Fri, 15 Apr 2022 09:23:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAF91ABF6C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 06:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650028889; x=1681564889;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=J5IdjM4bTiGgHDJNdfSgOfYbVJ4mpNxn9qhhWj7kVfU=;
+  b=ZulwdtGveVJK2Ta6dBq+uq/Lx1D1QO8obNfKfznUdU6mJ3tZCz04VeT4
+   QOteX3iiLQ90dKktRNaooRUTWer9S3LbHOMrUORKTBgUoamQSsur7c2tu
+   qFh16d7VOtODFK6rKkAk7Hw1lexG7VsRQEKWXIEIj7VA1fUiNdH5ulRdi
+   2CSJg+lNpH4QipPsn6JyiFjMSJIJnvuEndroJ39kmiGlD9jJq5sa4JyEz
+   YGcZBeYiG2pGm9awqJQutF8EZMN54KeSqR0XE1OkK33OwF0uZbYlXSq/J
+   JwLtUcUMDVSNaVnHFhclEHTzswfekWwAbT7g+FGvGpWpWacLM33TZi3qP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="326055751"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="326055751"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:21:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="662085064"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 06:21:28 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfLt9-0001yL-Gb;
+        Fri, 15 Apr 2022 13:21:27 +0000
+Date:   Fri, 15 Apr 2022 21:21:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [morimoto:r4-2022-04-15-v2 15/24]
+ drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
+Message-ID: <202204152116.8xUwPO61-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,339 +63,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for I2C IO expander, OSPI Flash, Eth PHYs, SD and eMMC that
-are present on AM625 SK board.
+tree:   https://github.com/morimoto/linux r4-2022-04-15-v2
+head:   88d865b299bcaa6c0a206a60dbf20e4e13130568
+commit: 680cb6c79b44aacc594165e88b4af5d4acfa9f7c [15/24] i2c: rcar: use flags instead of atomic_xfer
+config: arm64-randconfig-r022-20220414 (https://download.01.org/0day-ci/archive/20220415/202204152116.8xUwPO61-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/morimoto/linux/commit/680cb6c79b44aacc594165e88b4af5d4acfa9f7c
+        git remote add morimoto https://github.com/morimoto/linux
+        git fetch --no-tags morimoto r4-2022-04-15-v2
+        git checkout 680cb6c79b44aacc594165e88b4af5d4acfa9f7c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am625-sk.dts | 271 +++++++++++++++++++++++++
- 1 file changed, 271 insertions(+)
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 0de4113ccd5d..a0ea2cc66b31 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -9,6 +9,7 @@
- 
- #include <dt-bindings/leds/common.h>
- #include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/net/ti-dp83867.h>
- #include "k3-am625.dtsi"
- 
- / {
-@@ -17,6 +18,10 @@ / {
- 
- 	aliases {
- 		serial2 = &main_uart0;
-+		mmc0 = &sdhci0;
-+		mmc1 = &sdhci1;
-+		mmc2 = &sdhci2;
-+		spi0 = &ospi0;
- 	};
- 
- 	chosen {
-@@ -87,6 +92,33 @@ vcc_3v3_sys: regulator-2 {
- 		regulator-boot-on;
- 	};
- 
-+	vdd_mmc1: fixed-regulator-sd {
-+		/* TPS22918DBVR */
-+		compatible = "regulator-fixed";
-+		regulator-name = "vdd_mmc1";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		enable-active-high;
-+		vin-supply = <&vcc_3v3_sys>;
-+		gpio = <&exp1 3 GPIO_ACTIVE_HIGH>;
-+	};
-+
-+	vdd_sd_dv: gpio-regulator-TLV71033 {
-+		/* Output of TLV71033 */
-+		compatible = "regulator-gpio";
-+		regulator-name = "tlv71033";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&vdd_sd_dv_pins_default>;
-+		regulator-min-microvolt = <1800000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-boot-on;
-+		vin-supply = <&vcc_5v0>;
-+		gpios = <&main_gpio0 31 GPIO_ACTIVE_HIGH>;
-+		states = <1800000 0x0>,
-+			 <3300000 0x1>;
-+	};
-+
- 	leds {
- 		compatible = "gpio-leds";
- 		pinctrl-names = "default";
-@@ -124,11 +156,114 @@ AM62X_IOPAD(0x1ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
- 		>;
- 	};
- 
-+	main_i2c2_pins_default: main-i2c2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x0b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
-+			AM62X_IOPAD(0x0b4, PIN_INPUT_PULLUP, 1) /* (K24) GPMC0_CSn3.I2C2_SDA */
-+		>;
-+	};
-+
-+	main_mmc0_pins_default: main-mmc0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x220, PIN_INPUT, 0) /* (Y3) MMC0_CMD */
-+			AM62X_IOPAD(0x218, PIN_INPUT, 0) /* (AB1) MMC0_CLK */
-+			AM62X_IOPAD(0x214, PIN_INPUT, 0) /* (AA2) MMC0_DAT0 */
-+			AM62X_IOPAD(0x210, PIN_INPUT, 0) /* (AA1) MMC0_DAT1 */
-+			AM62X_IOPAD(0x20c, PIN_INPUT, 0) /* (AA3) MMC0_DAT2 */
-+			AM62X_IOPAD(0x208, PIN_INPUT, 0) /* (Y4) MMC0_DAT3 */
-+			AM62X_IOPAD(0x204, PIN_INPUT, 0) /* (AB2) MMC0_DAT4 */
-+			AM62X_IOPAD(0x200, PIN_INPUT, 0) /* (AC1) MMC0_DAT5 */
-+			AM62X_IOPAD(0x1fc, PIN_INPUT, 0) /* (AD2) MMC0_DAT6 */
-+			AM62X_IOPAD(0x1f8, PIN_INPUT, 0) /* (AC2) MMC0_DAT7 */
-+		>;
-+	};
-+
-+	main_mmc1_pins_default: main-mmc1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x23c, PIN_INPUT, 0) /* (A21) MMC1_CMD */
-+			AM62X_IOPAD(0x234, PIN_INPUT, 0) /* (B22) MMC1_CLK */
-+			AM62X_IOPAD(0x230, PIN_INPUT, 0) /* (A22) MMC1_DAT0 */
-+			AM62X_IOPAD(0x22c, PIN_INPUT, 0) /* (B21) MMC1_DAT1 */
-+			AM62X_IOPAD(0x228, PIN_INPUT, 0) /* (C21) MMC1_DAT2 */
-+			AM62X_IOPAD(0x224, PIN_INPUT, 0) /* (D22) MMC1_DAT3 */
-+			AM62X_IOPAD(0x240, PIN_INPUT, 0) /* (D17) MMC1_SDCD */
-+		>;
-+	};
-+
- 	usr_led_pins_default: usr-led-pins-default {
- 		pinctrl-single,pins = <
- 			AM62X_IOPAD(0x244, PIN_OUTPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
- 		>;
- 	};
-+
-+	main_mdio1_pins_default: main-mdio1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x160, PIN_OUTPUT, 0) /* (AD24) MDIO0_MDC */
-+			AM62X_IOPAD(0x15c, PIN_INPUT, 0) /* (AB22) MDIO0_MDIO */
-+		>;
-+	};
-+
-+	main_rgmii1_pins_default: main-rgmii1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x14c, PIN_INPUT, 0) /* (AB17) RGMII1_RD0 */
-+			AM62X_IOPAD(0x150, PIN_INPUT, 0) /* (AC17) RGMII1_RD1 */
-+			AM62X_IOPAD(0x154, PIN_INPUT, 0) /* (AB16) RGMII1_RD2 */
-+			AM62X_IOPAD(0x158, PIN_INPUT, 0) /* (AA15) RGMII1_RD3 */
-+			AM62X_IOPAD(0x148, PIN_INPUT, 0) /* (AD17) RGMII1_RXC */
-+			AM62X_IOPAD(0x144, PIN_INPUT, 0) /* (AE17) RGMII1_RX_CTL */
-+			AM62X_IOPAD(0x134, PIN_OUTPUT, 0) /* (AE20) RGMII1_TD0 */
-+			AM62X_IOPAD(0x138, PIN_OUTPUT, 0) /* (AD20) RGMII1_TD1 */
-+			AM62X_IOPAD(0x13c, PIN_OUTPUT, 0) /* (AE18) RGMII1_TD2 */
-+			AM62X_IOPAD(0x140, PIN_OUTPUT, 0) /* (AD18) RGMII1_TD3 */
-+			AM62X_IOPAD(0x130, PIN_OUTPUT, 0) /* (AE19) RGMII1_TXC */
-+			AM62X_IOPAD(0x12c, PIN_OUTPUT, 0) /* (AD19) RGMII1_TX_CTL */
-+		>;
-+	};
-+
-+	main_rgmii2_pins_default: main-rgmii2-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x184, PIN_INPUT, 0) /* (AE23) RGMII2_RD0 */
-+			AM62X_IOPAD(0x188, PIN_INPUT, 0) /* (AB20) RGMII2_RD1 */
-+			AM62X_IOPAD(0x18c, PIN_INPUT, 0) /* (AC21) RGMII2_RD2 */
-+			AM62X_IOPAD(0x190, PIN_INPUT, 0) /* (AE22) RGMII2_RD3 */
-+			AM62X_IOPAD(0x180, PIN_INPUT, 0) /* (AD23) RGMII2_RXC */
-+			AM62X_IOPAD(0x17c, PIN_INPUT, 0) /* (AD22) RGMII2_RX_CTL */
-+			AM62X_IOPAD(0x16c, PIN_OUTPUT, 0) /* (Y18) RGMII2_TD0 */
-+			AM62X_IOPAD(0x170, PIN_OUTPUT, 0) /* (AA18) RGMII2_TD1 */
-+			AM62X_IOPAD(0x174, PIN_OUTPUT, 0) /* (AD21) RGMII2_TD2 */
-+			AM62X_IOPAD(0x178, PIN_OUTPUT, 0) /* (AC20) RGMII2_TD3 */
-+			AM62X_IOPAD(0x168, PIN_OUTPUT, 0) /* (AE21) RGMII2_TXC */
-+			AM62X_IOPAD(0x164, PIN_OUTPUT, 0) /* (AA19) RGMII2_TX_CTL */
-+		>;
-+	};
-+
-+	ospi0_pins_default: ospi0-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x000, PIN_OUTPUT, 0) /* (H24) OSPI0_CLK */
-+			AM62X_IOPAD(0x02c, PIN_OUTPUT, 0) /* (F23) OSPI0_CSn0 */
-+			AM62X_IOPAD(0x00c, PIN_INPUT, 0) /* (E25) OSPI0_D0 */
-+			AM62X_IOPAD(0x010, PIN_INPUT, 0) /* (G24) OSPI0_D1 */
-+			AM62X_IOPAD(0x014, PIN_INPUT, 0) /* (F25) OSPI0_D2 */
-+			AM62X_IOPAD(0x018, PIN_INPUT, 0) /* (F24) OSPI0_D3 */
-+			AM62X_IOPAD(0x01c, PIN_INPUT, 0) /* (J23) OSPI0_D4 */
-+			AM62X_IOPAD(0x020, PIN_INPUT, 0) /* (J25) OSPI0_D5 */
-+			AM62X_IOPAD(0x024, PIN_INPUT, 0) /* (H25) OSPI0_D6 */
-+			AM62X_IOPAD(0x028, PIN_INPUT, 0) /* (J22) OSPI0_D7 */
-+			AM62X_IOPAD(0x008, PIN_INPUT, 0) /* (J24) OSPI0_DQS */
-+		>;
-+	};
-+
-+	vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x07c, PIN_OUTPUT, 7) /* (P25) GPMC0_CLK.GPIO0_31 */
-+		>;
-+	};
-+
-+	main_gpio1_ioexp_intr_pins_default: main-gpio1-ioexp-intr-pins-default {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x01d4, PIN_INPUT, 7) /* (B15) UART0_RTSn.GPIO1_23 */
-+		>;
-+	};
- };
- 
- &wkup_uart0 {
-@@ -188,6 +323,33 @@ &main_i2c1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&main_i2c1_pins_default>;
- 	clock-frequency = <400000>;
-+
-+	exp1: gpio@22 {
-+		compatible = "ti,tca6424";
-+		reg = <0x22>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		gpio-line-names = "GPIO_CPSW2_RST", "GPIO_CPSW1_RST",
-+				   "PRU_DETECT", "MMC1_SD_EN",
-+				   "VPP_LDO_EN", "EXP_PS_3V3_En",
-+				   "EXP_PS_5V0_En", "EXP_HAT_DETECT",
-+				   "GPIO_AUD_RSTn", "GPIO_eMMC_RSTn",
-+				   "UART1_FET_BUF_EN", "WL_LT_EN",
-+				   "GPIO_HDMI_RSTn", "CSI_GPIO1",
-+				   "CSI_GPIO2", "PRU_3V3_EN",
-+				   "HDMI_INTn", "TEST_GPIO2",
-+				   "MCASP1_FET_EN", "MCASP1_BUF_BT_EN",
-+				   "MCASP1_FET_SEL", "UART1_FET_SEL",
-+				   "TSINT#", "IO_EXP_TEST_LED";
-+
-+		interrupt-parent = <&main_gpio1>;
-+		interrupts = <23 IRQ_TYPE_EDGE_FALLING>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&main_gpio1_ioexp_intr_pins_default>;
-+	};
- };
- 
- &main_i2c2 {
-@@ -198,9 +360,118 @@ &main_i2c3 {
- 	status = "disabled";
- };
- 
-+&sdhci0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc0_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&sdhci1 {
-+	/* SD/MMC */
-+	vmmc-supply = <&vdd_mmc1>;
-+	vqmmc-supply = <&vdd_sd_dv>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mmc1_pins_default>;
-+	ti,driver-strength-ohm = <50>;
-+	disable-wp;
-+};
-+
-+&cpsw3g {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mdio1_pins_default
-+		     &main_rgmii1_pins_default
-+		     &main_rgmii2_pins_default>;
-+};
-+
-+&cpsw_port1 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy0>;
-+};
-+
-+&cpsw_port2 {
-+	phy-mode = "rgmii-rxid";
-+	phy-handle = <&cpsw3g_phy1>;
-+};
-+
-+&cpsw3g_mdio {
-+	cpsw3g_phy0: ethernet-phy@0 {
-+		reg = <0>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+
-+	cpsw3g_phy1: ethernet-phy@1 {
-+		reg = <1>;
-+		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
-+		ti,fifo-depth = <DP83867_PHYCR_FIFO_DEPTH_4_B_NIB>;
-+		ti,min-output-impedance;
-+	};
-+};
-+
- &mailbox0_cluster0 {
- 	mbox_m4_0: mbox-m4-0 {
- 		ti,mbox-rx = <0 0 0>;
- 		ti,mbox-tx = <1 0 0>;
- 	};
- };
-+
-+&ospi0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&ospi0_pins_default>;
-+
-+	flash@0{
-+		compatible = "jedec,spi-nor";
-+		reg = <0x0>;
-+		spi-tx-bus-width = <8>;
-+		spi-rx-bus-width = <8>;
-+		spi-max-frequency = <25000000>;
-+		cdns,tshsl-ns = <60>;
-+		cdns,tsd2d-ns = <60>;
-+		cdns,tchsh-ns = <60>;
-+		cdns,tslch-ns = <60>;
-+		cdns,read-delay = <4>;
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "ospi.tiboot3";
-+				reg = <0x0 0x80000>;
-+			};
-+
-+			partition@80000 {
-+				label = "ospi.tispl";
-+				reg = <0x80000 0x200000>;
-+			};
-+
-+			partition@280000 {
-+				label = "ospi.u-boot";
-+				reg = <0x280000 0x400000>;
-+			};
-+
-+			partition@680000 {
-+				label = "ospi.env";
-+				reg = <0x680000 0x40000>;
-+			};
-+
-+			partition@6c0000 {
-+				label = "ospi.env.backup";
-+				reg = <0x6c0000 0x40000>;
-+			};
-+
-+			partition@800000 {
-+				label = "ospi.rootfs";
-+				reg = <0x800000 0x37c0000>;
-+			};
-+
-+			partition@3fc0000 {
-+				label = "ospi.phypattern";
-+				reg = <0x3fc0000 0x40000>;
-+			};
-+		};
-+	};
-+};
+All errors (new ones prefixed by >>):
+
+>> drivers/i2c/busses/i2c-rcar.c:806:29: error: expected ';' after expression
+           priv->flags &= ~ID_P_ATOMIC
+                                      ^
+                                      ;
+   drivers/i2c/busses/i2c-rcar.c:1041:18: warning: cast to smaller integer type 'enum rcar_i2c_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           priv->devtype = (enum rcar_i2c_type)of_device_get_match_data(dev);
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
+
+
+vim +806 drivers/i2c/busses/i2c-rcar.c
+
+   796	
+   797	static int rcar_i2c_master_xfer(struct i2c_adapter *adap,
+   798					struct i2c_msg *msgs,
+   799					int num)
+   800	{
+   801		struct rcar_i2c_priv *priv = i2c_get_adapdata(adap);
+   802		struct device *dev = rcar_i2c_priv_to_dev(priv);
+   803		int i, ret;
+   804		long time_left;
+   805	
+ > 806		priv->flags &= ~ID_P_ATOMIC
+   807	
+   808		pm_runtime_get_sync(dev);
+   809	
+   810		/* Check bus state before init otherwise bus busy info will be lost */
+   811		ret = rcar_i2c_bus_barrier(priv);
+   812		if (ret < 0)
+   813			goto out;
+   814	
+   815		/* Gen3 needs a reset before allowing RXDMA once */
+   816		if (priv->devtype == I2C_RCAR_GEN3) {
+   817			priv->flags |= ID_P_NO_RXDMA;
+   818			if (!IS_ERR(priv->rstc)) {
+   819				ret = rcar_i2c_do_reset(priv);
+   820				if (ret == 0)
+   821					priv->flags &= ~ID_P_NO_RXDMA;
+   822			}
+   823		}
+   824	
+   825		rcar_i2c_init(priv);
+   826	
+   827		for (i = 0; i < num; i++)
+   828			rcar_i2c_request_dma(priv, msgs + i);
+   829	
+   830		/* init first message */
+   831		priv->msg = msgs;
+   832		priv->msgs_left = num;
+   833		priv->flags = (priv->flags & ID_P_MASK) | ID_FIRST_MSG;
+   834		rcar_i2c_prepare_msg(priv);
+   835	
+   836		time_left = wait_event_timeout(priv->wait, priv->flags & ID_DONE,
+   837					     num * adap->timeout);
+   838	
+   839		/* cleanup DMA if it couldn't complete properly due to an error */
+   840		if (priv->dma_direction != DMA_NONE)
+   841			rcar_i2c_cleanup_dma(priv, true);
+   842	
+   843		if (!time_left) {
+   844			rcar_i2c_init(priv);
+   845			ret = -ETIMEDOUT;
+   846		} else if (priv->flags & ID_NACK) {
+   847			ret = -ENXIO;
+   848		} else if (priv->flags & ID_ARBLOST) {
+   849			ret = -EAGAIN;
+   850		} else {
+   851			ret = num - priv->msgs_left; /* The number of transfer */
+   852		}
+   853	out:
+   854		pm_runtime_put(dev);
+   855	
+   856		if (ret < 0 && ret != -ENXIO)
+   857			dev_err(dev, "error %d : %x\n", ret, priv->flags);
+   858	
+   859		return ret;
+   860	}
+   861	
+
 -- 
-2.35.3
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

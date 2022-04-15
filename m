@@ -2,104 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC39502061
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:22:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DDCA502064
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348638AbiDOCZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
+        id S1348646AbiDOCZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239639AbiDOCZK (ORCPT
+        with ESMTP id S239639AbiDOCZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:25:10 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC85A4091F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:22:43 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1649989360;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6agPn/uOZaGtcLyCxoffejAHcyBt7tyZhpc93AjirHc=;
-        b=p+sebDUYWKWgOOM1UWGUwgUfvVkxT+WLYRAQd6zFy9hkt7PDx1jCLkqb2pk4QHo0LO4YAh
-        gKkQwrq/A9Z5+7AnwOdNjB3e508qJpxRaJvUR1IAoc1VaaNlOptd266V1LCSv2iy28D0E1
-        tbB2Ep3mGUM6OhyDYuSfnAgtCCB6Qds=
-From:   Tao Zhou <tao.zhou@linux.dev>
-To:     LKML <linux-kernel@vger.kernel.org>, Tao Zhou <tao.zhou@linux.dev>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: [PATCH V1 RESEND]: sched/fair: Revise comment about lb decision matrix
-Date:   Fri, 15 Apr 2022 10:22:46 +0800
-Message-Id: <20220415022246.14902-1-tao.zhou@linux.dev>
+        Thu, 14 Apr 2022 22:25:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE93D433A1;
+        Thu, 14 Apr 2022 19:23:22 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kfg7F6cDXzgYSS;
+        Fri, 15 Apr 2022 10:21:29 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 10:23:20 +0800
+Received: from [10.174.178.178] (10.174.178.178) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 10:23:18 +0800
+Message-ID: <4c416f09-5304-07fd-cb53-5c9c8c75f6fa@huawei.com>
+Date:   Fri, 15 Apr 2022 10:23:18 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.3
+Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
+To:     Yu Zhao <yuzhao@google.com>
+CC:     Stephen Rothwell <sfr@rothwell.id.au>, <linux-mm@kvack.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Hillf Danton" <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <page-reclaim@google.com>, <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-7-yuzhao@google.com>
+ <71af92d2-0777-c318-67fb-8f7d52c800bb@huawei.com>
+ <YliJzrfXzwwxiCId@google.com>
+From:   Chen Wandun <chenwandun@huawei.com>
+In-Reply-To: <YliJzrfXzwwxiCId@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.178.178]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If busiest group type is group_misfit_task, the local
-group type must be group_has_spare according to below
-code in update_sd_pick_busiest():
-
-if (sgs->group_type == group_misfit_task &&
-    (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
-     sds->local_stat.group_type != group_has_spare))
-         return false;
-
-group type imbalanced and overloaded and fully_busy are filtered in here.
-misfit and asym are filtered before in update_sg_lb_stats().
-So, change the decision matrix to:
-
-busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
-has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
-fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
-misfit_task      force     N/A        N/A    N/A  *N/A*      *N/A*
-asym_packing     force     force      N/A    N/A  force      force
-imbalanced       force     force      N/A    N/A  force      force
-overloaded       force     force      N/A    N/A  force      avg_load
-
-Fixes: 0b0695f2b34a ("sched/fair: Rework load_balance()")
-Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Signed-off-by: Tao Zhou <tao.zhou@linux.dev>
----
-
-v1 changelog:
-(1) Send to MAINTAINERS/REVIEWS get from `./scripts/get_maintainer.pl`
-    suggested by Dietmar Eggemann.
-(2) Based on v5.18-rc2
 
 
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+在 2022/4/15 4:53, Yu Zhao 写道:
+> On Thu, Apr 14, 2022 at 07:47:54PM +0800, Chen Wandun wrote:
+>> On 2022/4/7 11:15, Yu Zhao wrote:
+>>> +static void inc_min_seq(struct lruvec *lruvec)
+>>> +{
+>>> +	int type;
+>>> +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
+>>> +
+>>> +	VM_BUG_ON(!seq_is_valid(lruvec));
+>>> +
+>>> +	for (type = 0; type < ANON_AND_FILE; type++) {
+>>> +		if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
+>>> +			continue;
+>> I'm confused about relation between aging and LRU list operation.
+>>
+>> In function inc_max_seq,  both min_seq and max_seq will increase，
+>> the lrugen->lists[] indexed by lru_gen_from_seq(max_seq + 1) may
+>> be non-empty?
+> Yes.
+>
+>> for example,
+>> before inc_max_seq:
+>> min_seq == 0, lrugen->lists[0][type][zone]
+>> max_seq ==3, lrugen->lists[3][type][zone]
+>>
+>> after inc_max_seq:
+>> min_seq ==1, lrugen->lists[1][type][zone]
+>> max_seq ==4, lrugen->lists[0][type][zone]
+>>
+>> If lrugen->lists[0][type][zone] is not empty before inc_max_seq and it is
+>> the most inactive list，however lurgen->lists[0][type][zone] will become
+>> the most active list after inc_max_seq.
+> Correct.
+>
+>> So,  in this place,
+>>
+>> if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
+>> 	continue;
+>>
+>> should change to
+>>
+>> if (get_nr_gens(lruvec, type) == MAX_NR_GENS)
+>> 	continue;
+> No, because max/min_seq will overlap if we do so.
+>
+> lrugen->lists[max_seq+1] can only be non-empty for anon LRU, for a
+> couple of reasons:
+> 1. We can't swap at all.
+> 2. Swapping is constrained, e.g., swapfile is full.
+>
+> Both cases are similar to a producer (the aging) overrunning a
+> consumer (the eviction). We used to handle them, but I simplified the
+> code because I don't feel they are worth handling [1].
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index d4bd299d67ab..b8c67e7c8cf3 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -9495,7 +9495,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
-  * busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
-  * has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
-  * fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
-- * misfit_task      force     N/A        N/A    N/A  force      force
-+ * misfit_task      force     N/A        N/A    N/A  N/A        N/A
-  * asym_packing     force     force      N/A    N/A  force      force
-  * imbalanced       force     force      N/A    N/A  force      force
-  * overloaded       force     force      N/A    N/A  force      avg_load
--- 
-2.35.2
+Can lrugen->lists[max_seq+1]  also be non-empty for file LRU？
+such as in dont reclaim mapped file page case(isolation will fail).
+
+If so, after aging, eviction will reclaim memory start from
+lrugen->lists[min_seq+1], but some oldest file page still
+remain in lrugen->lists[max_seq+1].
+
+sort_folio can help to put misplaced pages to the right
+LRU list, but in this case, it does't help, because sort_folio
+only sort lrugen->lists[min_seq+1].
+
+Thanks
+Wandun
+>
+> [1] https://lore.kernel.org/r/CAOUHufbDfwgm8PgCGkhCjbhMbm=fekfjgRR56NL-j+5iUGfVuw@mail.gmail.com/
+> .
 

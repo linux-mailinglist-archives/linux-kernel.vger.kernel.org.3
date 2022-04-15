@@ -2,61 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CE0E503110
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91CF35031A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355005AbiDOV3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S1354902AbiDOVe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355472AbiDOV25 (ORCPT
+        with ESMTP id S230476AbiDOVez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:28:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E7DAFDE;
-        Fri, 15 Apr 2022 14:25:36 -0700 (PDT)
+        Fri, 15 Apr 2022 17:34:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B7FAAC8B;
+        Fri, 15 Apr 2022 14:32:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6AD620BE;
-        Fri, 15 Apr 2022 21:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D654EC385A4;
-        Fri, 15 Apr 2022 21:25:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650057935;
-        bh=vwSHnKHKO3IOmpaR8ZgMY3Rm4mueE+R5d078hf6Pu6A=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=UPgphip03sbzXT0W362vRLwvBo87HGwgbf+Qs4PKqK+EUiZbVUXITL8h1+XZbUSM4
-         ucR+/iiXoUS1KdvQAmWHEE8IQPcG7NY+THUUKWzttQN1N8bYZfr0d6+WkSNdc/GY6D
-         e/BFs090rGQF6n+AXTBmV7xqdt9/T5F2A0FmlJ9ImQcuDkjp17Z2r+658ZaM8D6EaV
-         lQC45eOilvVFEYJ43XPRriG9Q5jxJW3RWex7H/cORwMAle213xWPxsIPlo/5oiYe3p
-         pKL4ubLHIsk5l9DX/VAF169crMRvqrGHSHv8io/gtKCB9wthiCwRlO/X6ZcfV6iNUx
-         qr+JP2DvJcXxQ==
-Date:   Fri, 15 Apr 2022 16:25:33 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
-        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
- suspend/resume
-Message-ID: <20220415212533.GA844147@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAAd53p6DX2C7KVRV=uu_mmPTTjE7=RsXfNPxjbOBLRbf-pXi5A@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB7062185;
+        Fri, 15 Apr 2022 21:32:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ADA9C385A4;
+        Fri, 15 Apr 2022 21:32:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1650058343;
+        bh=3UWUcyacMiJlx7p1411HKtWv5JjN8giHOd5i3EG0zSU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JrZnPatO9LRi5eqCzk79CipiGJo5Y/fO7qwH9Qd+NPfbU1e/C3vo7TPs8SeoPNNBn
+         QBs9tMWzjWV+goiaCOE99AzqZXatzAUIhtMAy03dOsjf4od9MMdhDi8q6b4cPyAcf4
+         KHcD5FHBDK5ACrThpIUEFXS/39sgtHveD+V3oKUk=
+Date:   Fri, 15 Apr 2022 14:32:20 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Justin Forbes <jforbes@fedoraproject.org>,
+        Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        Holger =?ISO-8859-1?Q?Hoffst=E4tte?= 
+        <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
+Message-Id: <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
+In-Reply-To: <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+        <20220407031525.2368067-9-yuzhao@google.com>
+        <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
+        <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
+        <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
+        <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
+        <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
+        <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,85 +96,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 10:26:19PM +0800, Kai-Heng Feng wrote:
-> On Fri, Apr 15, 2022 at 12:41 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Wed, Apr 13, 2022 at 08:19:26AM +0800, Kai-Heng Feng wrote:
-> > > On Wed, Apr 13, 2022 at 6:50 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > > ...
-> >
-> > > >   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
-> > > >     must be configured while ASPM L1 is disabled, but I don't think we
-> > > >     currently guarantee this: we restore all the upstream component
-> > > >     state first, and we don't know the ASPM state of the downstream
-> > > >     one.  Maybe we need to:
-> > > >
-> > > >       * When restoring upstream component,
-> > > >           + disable its ASPM
-> > > >
-> > > >       * When restoring downstream component,
-> > > >           + disable its ASPM
-> > > >           + restore upstream component's LTR, L1SS
-> > > >           + restore downstream component's LTR, L1SS
-> > > >           + restore upstream component's ASPM
-> > > >           + restore downstream component's ASPM
-> > >
-> > > Right now L1SS isn't reprogrammed after S3, and that causes WD NVMe
-> > > starts to spew lots of AER errors.
-> >
-> > Right now we don't fully restore L1SS-related state after S3, so maybe
-> > there's some inconsistency that leads to the AER errors.
+On Fri, 15 Apr 2022 14:11:32 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-> > Could you collect the "lspci -vv" state before and after S3 so we can
-> > compare them?
 > >
-> > > So yes please restore L1SS upon resume. Meanwhile I am asking vendor
-> > > _why_ restoring L1SS is crucial for it to work.
-> > >
-> > > I also wonder what's the purpose of pcie_aspm_pm_state_change()? Can't
-> > > we just restore ASPM bits like other configs?
-> >
-> > Good question.  What's the context?  This is in the
-> > pci_raw_set_power_state() path, not the pci_restore_state() path, so
-> > seems like a separate discussion.
+> > I grabbed
+> > https://kojipkgs.fedoraproject.org//packages/kernel/5.18.0/0.rc2.23.fc37/src/kernel-5.18.0-0.rc2.23.fc37.src.rpm
+> > and
 > 
-> Because this patch alone doesn't restore T_PwrOn and LTR1.2_Threshold.
+> Yes, Fedora/RHEL is one concrete example of the model I mentioned
+> above (experimental/stable). I added Justin, the Fedora kernel
+> maintainer, and he can further clarify.
+> 
+> If we don't want more VM_BUG_ONs, I'll remove them. But (let me
+> reiterate) it seems to me that just defeats the purpose of having
+> CONFIG_DEBUG_VM.
+> 
 
-I assume the post-S3 path is basically this:
+Well, I feel your pain.  It was never expected that VM_BUG_ON() would
+get subverted in this fashion.
 
-  pci_pm_resume_noirq
-    pci_pm_default_resume_early
-      pci_power_up
-        pci_raw_set_power_state(D0)
-          pcie_aspm_pm_state_change
-            pcie_config_aspm_path
-              pcie_config_aspm_link
-                pcie_config_aspm_l1ss
-                  clear PCI_EXP_LNKCTL_ASPM_L1 etc
-                  set PCI_L1SS_CTL1_ASPM_L1_1 etc
-                pcie_config_aspm_dev
-                  set PCI_EXP_LNKCTL_ASPM_L1 etc
-      pci_restore_state
-        pci_restore_ltr_state
-        pci_restore_aspm_l1ss_state     # after this patch
-        pci_restore_pcie_state
+We could create a new MM-developer-only assertion.  Might even call it
+MM_BUG_ON().  With compile-time enablement but perhaps not a runtime
+switch.
 
-Hmm...  I think I see what you're saying.  pcie_aspm_pm_state_change()
-fiddles with ASPM and L1SS enable bits.  It likely disables L1,
-enables L1SS, enables L1, but never restores the LTR capability or the
-T_PwrOn and LTR1.2_Threshold bits you mention.
+With nice simple semantics, please.  Like "it returns void" and "if you
+pass an expression with side-effects then you lose".  And "if you send
+a patch which produces warnings when CONFIG_MM_BUG_ON=n then you get to
+switch to windows95 for a month".
 
-Then we turn around and overwrite all that stuff (and the LTR cap) in
-pci_restore_state().  That all seems fairly broken, and I agree, I
-don't know why pcie_aspm_pm_state_change() exists.
+Let's leave the mglru assertions in place for now and let's think about
+creating something more suitable, with a view to switching mglru over
+to that at a later time.
 
-> So I forced the pcie_aspm_pm_state_change() calling path to eventually
-> call aspm_calc_l1ss_info() which solved the problem for me.
 
-This would update T_PwrOn and LTR1.2_Threshold, so I guess it makes
-sense that this would help.  But I think we need to figure out the
-reason why pcie_aspm_pm_state_change() exists and get rid of it or at
-least better integrate it with pci_restore_state().
 
-If we call pcie_aspm_pm_state_change() after D3cold or reset, things
-still aren't going to work because the LTR cap isn't restored or
-programmed.
+But really, none of this addresses the core problem: *_BUG_ON() often
+kills the kernel.  So guess what we just did?  We killed the user's
+kernel at the exact time when we least wished to do so: when they have
+a bug to report to us.  So the thing is self-defeating.
+
+It's much much better to WARN and to attempt to continue.  This makes
+it much more likely that we'll get to hear about the kernel flaw.

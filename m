@@ -2,77 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EB1502E00
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:47:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABD15502DFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355975AbiDOQtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S1349617AbiDOQtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355970AbiDOQtk (ORCPT
+        with ESMTP id S236184AbiDOQs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:49:40 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DD2DD966;
-        Fri, 15 Apr 2022 09:47:11 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E9570C0006;
-        Fri, 15 Apr 2022 16:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650041229;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kqx76FGCWY9T5n5gaf7tqiaERTtvIFYRxivjOi7DJAY=;
-        b=VQQ8Xiqp2cyrNI9GijO8dGgMuIEA9uZZMevCeq4Kk4x41bLZRA4yZrXc5DNgKVzCtFfSEf
-        V9pEhQLWxgPvK9g47UAZ4O8MOwn29FgqNbhuF5GyiM3ZyXRCq0HWRWBdIiVqq18+Q5i8BY
-        lLxadXlbVEES0uc4EVOh5cJh/d7L9hRAO+NOtk6eVoYz1VAyboG1o0hyo0PrgLwUXR0iaZ
-        FSeWqsFaz1rBbC7L1I0V6d9MzrrWLEqOwz//c/Epv0LQYy5Z9idsu1KU6YPb+Qd7/XqPoR
-        L/ihZTkUgUcRS8DvD3BSzcNp5ApDefEBGWY9w/US9S1fe8ez5tEKPQXu8GK84A==
-Date:   Fri, 15 Apr 2022 18:45:41 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
- converter
-Message-ID: <20220415184541.0a6928f5@fixe.home>
-In-Reply-To: <YlmbIjoIZ8Xb4Kh/@lunn.ch>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-10-clement.leger@bootlin.com>
-        <YlismVi8y3Vf6PZ0@lunn.ch>
-        <20220415102453.1b5b3f77@fixe.home>
-        <Yll+Tpnwo5410B9H@lunn.ch>
-        <20220415163853.683c0b6d@fixe.home>
-        <YlmLWv4Hsm2uk8pa@lunn.ch>
-        <20220415172954.64e53086@fixe.home>
-        <YlmbIjoIZ8Xb4Kh/@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        Fri, 15 Apr 2022 12:48:57 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6284396A8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id n18so7521915plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ItPn/AcYuP2hdhsdSFglkfktyf1iLOm6R95lIRQYTZY=;
+        b=JS96M1iHtXQEhUuFoqlaiZ2VRIlhckrTO6Ij+BqZyqgaE8i/vjuqr3iwPAM31Qe1pU
+         nVGCc2V86N2/l3lhhwmPjSe+1NSVhGrWzLgz01qOgzQpML3gf0R2zensKqD9EirmUpcE
+         keaKxzUHNn1xgI6Ls/PKoYT1oVMsK2wrQheR4OS/uc8dFCOVM6IsONgT2L0PgunTiA35
+         5DalFyKEsd6ZwfsEeVL0Cycuepa9OKvPgJQPsWST2LX9Dr2+MNc4Hb4I83m7qtMnvHiK
+         Ypti60XVTPZP+yryoYLh3SP85K+fLvWwD5h709bL4SEOMSDO1MXhHVCnYGWETmkkQaqc
+         eRRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
+         :mime-version:content-transfer-encoding;
+        bh=ItPn/AcYuP2hdhsdSFglkfktyf1iLOm6R95lIRQYTZY=;
+        b=fRaU4FujzysbmDlDKVGqtWwQe7FA7BLSYDD+HygyWTnTUTqwKIkgpCYuIn5YZBst+f
+         I/kkfgO/TqjyvaFxyW9w6W55gyqdnjylJBG/Hg9UTa5IU6yOCW3b8afXfWSBaFMzSjV5
+         5MiRGUDD0oHdQIx6DJ26+1t6RxnMB8COJ2S7ddjUyr5zQU9A5VY6z2tVOXW6j4ydddFw
+         0jf6SxTHKfLEdOzzi6XPYoi4hSZ/F9DcTd3w3E9J82mheOIbQ4ue5NUNxu55u1Q/GF4S
+         R3ewrZvYwV9dzHLYcaOq/QMG0ZQSEYzMZF6NHk6D+dEoAxsNoH6d7ixdEeL6TxhyX9tZ
+         r1MA==
+X-Gm-Message-State: AOAM532ia+hZhyhT78Ok7lLxjErMaJN/F5FHpdUN35tREanK67VvWYJA
+        iUAGxLqBQYrgEf/VTFaThYeb4w==
+X-Google-Smtp-Source: ABdhPJyj45WdgDS2kp+bLcsEYoXnZD1J4gN7xaPkEirpU1SwtjNOLeYhYjs838zc/dCSPVG7lSSoPw==
+X-Received: by 2002:a17:90b:3882:b0:1cd:41c1:712a with SMTP id mu2-20020a17090b388200b001cd41c1712amr5110813pjb.72.1650041187144;
+        Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
+Received: from localhost ([12.3.194.138])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f7728a4346sm3584771pfj.79.2022.04.15.09.46.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 09:46:26 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 09:46:26 -0700 (PDT)
+X-Google-Original-Date: Fri, 15 Apr 2022 09:46:08 PDT (-0700)
+Subject:     Re: [PATCH v3 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
+In-Reply-To: <1e26726b-721e-7197-8834-8aff2b4c4bc3@redhat.com>
+CC:     Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de, guoren@kernel.org,
+        shorne@gmail.com, peterz@infradead.org, mingo@redhat.com,
+        Will Deacon <will@kernel.org>, boqun.feng@gmail.com,
+        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, macro@orcam.me.uk,
+        Greg KH <gregkh@linuxfoundation.org>,
+        sudipm.mukherjee@gmail.com, wangkefeng.wang@huawei.com,
+        jszhang@kernel.org, linux-csky@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openrisc@lists.librecores.org,
+        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     longman@redhat.com
+Message-ID: <mhng-f4d144dd-b6ed-4f3f-bfc3-6dc29fab14e4@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,36 +79,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 15 Apr 2022 18:19:46 +0200,
-Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
+On Thu, 14 Apr 2022 18:27:12 PDT (-0700), longman@redhat.com wrote:
+> On 4/14/22 18:02, Palmer Dabbelt wrote:
+>> From: Peter Zijlstra <peterz@infradead.org>
+>>
+>> This is a simple, fair spinlock.  Specifically it doesn't have all the
+>> subtle memory model dependencies that qspinlock has, which makes it more
+>> suitable for simple systems as it is more likely to be correct.  It is
+>> implemented entirely in terms of standard atomics and thus works fine
+>> without any arch-specific code.
+>>
+>> This replaces the existing asm-generic/spinlock.h, which just errored
+>> out on SMP systems.
+>>
+>> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+>> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>> ---
+>>   include/asm-generic/spinlock.h       | 85 +++++++++++++++++++++++++---
+>>   include/asm-generic/spinlock_types.h | 17 ++++++
+>>   2 files changed, 94 insertions(+), 8 deletions(-)
+>>   create mode 100644 include/asm-generic/spinlock_types.h
+>>
+>> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
+>> index adaf6acab172..ca829fcb9672 100644
+>> --- a/include/asm-generic/spinlock.h
+>> +++ b/include/asm-generic/spinlock.h
+>> @@ -1,12 +1,81 @@
+>>   /* SPDX-License-Identifier: GPL-2.0 */
+>> -#ifndef __ASM_GENERIC_SPINLOCK_H
+>> -#define __ASM_GENERIC_SPINLOCK_H
+>> +
+>>   /*
+>> - * You need to implement asm/spinlock.h for SMP support. The generic
+>> - * version does not handle SMP.
+>> + * 'Generic' ticket-lock implementation.
+>> + *
+>> + * It relies on atomic_fetch_add() having well defined forward progress
+>> + * guarantees under contention. If your architecture cannot provide this, stick
+>> + * to a test-and-set lock.
+>> + *
+>> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
+>> + * sub-word of the value. This is generally true for anything LL/SC although
+>> + * you'd be hard pressed to find anything useful in architecture specifications
+>> + * about this. If your architecture cannot do this you might be better off with
+>> + * a test-and-set.
+>> + *
+>> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
+>> + * uses atomic_fetch_add() which is SC to create an RCsc lock.
+>> + *
+>> + * The implementation uses smp_cond_load_acquire() to spin, so if the
+>> + * architecture has WFE like instructions to sleep instead of poll for word
+>> + * modifications be sure to implement that (see ARM64 for example).
+>> + *
+>>    */
+>> -#ifdef CONFIG_SMP
+>> -#error need an architecture specific asm/spinlock.h
+>> -#endif
+>>
+>> -#endif /* __ASM_GENERIC_SPINLOCK_H */
+>> +#ifndef __ASM_GENERIC_TICKET_LOCK_H
+>> +#define __ASM_GENERIC_TICKET_LOCK_H
+> It is not conventional to use a macro name that is different from the
+> header file name.
 
-> > I think it would be good to modify it like this:
-> >=20
-> > eth-miic@44030000 {
-> >     ...
-> >   converters {
-> >     mii_conv0: mii-conv@0 {
-> >       // Even if useless, maybe keeping it for the sake of coherency
-> >       renesas,miic-input =3D <MIIC_GMAC1>;
-> >       reg =3D <0>;
-> >     }; =20
->=20
-> This is not a 'bus', so using reg, and @0, etc is i think wrong.  You
-> just have a collection of properties.
+Sorry, that was just a mistake: I renamed the header, but forgot to 
+rename the guard.  I'll likely send a v4 due to Boqun's questions, I'll 
+fix this as well.
 
-Agreed, but this is the same thing that is done for DSA ports (at least
-I think). It uses reg which describe the port number, this is not a
-real bus per se, it only refer to port indices.
+>> +
+>> +#include <linux/atomic.h>
+>> +#include <asm-generic/spinlock_types.h>
+>> +
+>> +static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
+>> +{
+>> +	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
+>> +	u16 ticket = val >> 16;
+>> +
+>> +	if (ticket == (u16)val)
+>> +		return;
+>> +
+>> +	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
+>> +}
+>> +
+>> +static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+>> +{
+>> +	u32 old = atomic_read(lock);
+>> +
+>> +	if ((old >> 16) != (old & 0xffff))
+>> +		return false;
+>> +
+>> +	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
+>> +}
+>> +
+>> +static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
+>> +{
+>> +	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
+>> +	u32 val = atomic_read(lock);
+>> +
+>> +	smp_store_release(ptr, (u16)val + 1);
+>> +}
+>> +
+>> +static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
+>> +{
+>> +	u32 val = atomic_read(lock);
+>> +
+>> +	return ((val >> 16) != (val & 0xffff));
+>> +}
+>> +
+>> +static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
+>> +{
+>> +	u32 val = atomic_read(lock);
+>> +
+>> +	return (s16)((val >> 16) - (val & 0xffff)) > 1;
+>> +}
+>> +
+>> +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
+>> +{
+>> +	return !arch_spin_is_locked(&lock);
+>> +}
+>> +
+>> +#include <asm/qrwlock.h>
+>> +
+>> +#endif /* __ASM_GENERIC_TICKET_LOCK_H */
+>> diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
+>> new file mode 100644
+>> index 000000000000..e56ddb84d030
+>> --- /dev/null
+>> +++ b/include/asm-generic/spinlock_types.h
+>> @@ -0,0 +1,17 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +
+>> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
+>> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
+>> +
+>> +#include <linux/types.h>
+>> +typedef atomic_t arch_spinlock_t;
+>> +
+>> +/*
+>> + * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
+>> + * include.
+>> + */
+>> +#include <asm/qrwlock_types.h>
+>
+> I believe that if you guard the include line by
+>
+> #ifdef CONFIG_QUEUED_RWLOCK
+> #include <asm/qrwlock_types.h>
+> #endif
+>
+> You may not need to do the hack in patch 5.
 
-But if you think this should not be done like this, what do you propose
-then ? These nodes are also reference from "pcs-handle" properties in
-switch to retrieve the PCS. Would you suggest using something like
-pcs-handle =3D <&eth_miic port_index> and remove the nodes then ?
+Yes, and we actually had it that way the first time around (specifically 
+the ARCH_USES_QUEUED_RWLOCKS, but IIUC that's the same here).  The goal 
+was to avoid adding the ifdef to the asm-generic code and instead keep 
+the oddness in arch/riscv, it's only there for that one commit (and just 
+so we can split out the spinlock conversion from the rwlock conversion, 
+in case there's a bug and these need to be bisected later).
 
-Thanks,
+I'd also considered renaming qrwlock* to rwlock*, which would avoid the 
+ifdef and make it a touch easier to override the rwlock implementation, 
+but that didn't seem useful enough to warrant the diff.  These all seem 
+a bit more coupled than I expected them to be (both 
+{spin,qrw}lock{,_types}.h and the bits in linux/), I looked into 
+cleaning that up a bit but it seemed like too much for just the one 
+patch set.
 
+> You can also directly use the <asm-generic/qrwlock_types.h> line without
+> importing it to include/asm.
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+Yes, along with qrwlock.h (which has some unnecessary #include shims in 
+a handful of arch dirs).  That's going to make the patch set bigger, 
+I'll include it in the v4.
+
+Thanks!

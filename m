@@ -2,125 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7447502D0E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A4E502D2E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355780AbiDOPji (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:39:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55556 "EHLO
+        id S1355524AbiDOPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:40:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355798AbiDOPhq (ORCPT
+        with ESMTP id S1355927AbiDOPiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:37:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548C09E9FF
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650036855; x=1681572855;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Qdg2petk+soq0HdicT5JUNfEl4DJ5673ftDQCa4sp94=;
-  b=iDUd5qzAxzRD3kE9y7MdpJkYAU6et9XwdYWwLOIBr38+B8wljoeiHw7p
-   EmXjFb6QD0+P2HVCAKpjwxfgDnVR7hI6XERhs4jqFn4WuBPBYfTn+tceH
-   QyjDbLO+XekOW5vykpJpNHVhJj7oW5lwlUZOtAQdWekfGR+F50FQwRUSi
-   xcdkWSS7/2xSSE1aBQfdTV/XnOJE75R4eMUKAI7WXMYKZzp+oQzjU/QmW
-   WT+i/X9iATJgoNHSayXzS7ZCvC8GE3xHZgAm/dqq5ySV84D9VDe9bR6vW
-   vA7gox0V4DxL8SE8bFlj3NHuJsrA2vCJ1wl9FEWmJnCJu/dTsv8BV2pIp
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="245055714"
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="245055714"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 08:34:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="508973300"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 08:34:13 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfNxd-000261-6V;
-        Fri, 15 Apr 2022 15:34:13 +0000
-Date:   Fri, 15 Apr 2022 23:33:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_kvm_no_group 2/11]
- arch/x86/kvm/../../../virt/kvm/vfio.c:356:58: warning: cast to pointer from
- integer of different size
-Message-ID: <202204152347.iVwF28RC-lkp@intel.com>
+        Fri, 15 Apr 2022 11:38:17 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5205D3B287;
+        Fri, 15 Apr 2022 08:35:41 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso12065866pju.1;
+        Fri, 15 Apr 2022 08:35:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=9bXHH0l+tz0VBMaePEudc9a7Sz7QmbB3aIYivqju7Dw=;
+        b=L9phSgW4sQxIe2PQ24Ubkjg8xsBECRdeYaJibMQ6FXnZNlB5Od0qbuGoGCvXqHpqpz
+         vDFWUL+tJwDODl+g7lox8Vyg+0TyPZxKKyGhk0Tyg7qQFu0raX1/+H5fTQ6t2kGKsUZC
+         v8zI4kj3YZMlps2LThodMhXmJ+JOW+07BnGwOhrO7XESGUj/qK3u2jhFPCbIAKWey4DN
+         gjwBgZwy3zd1qnasenZvs/QLjlVBVu2m8CmSXQSi8F0CjmVbnYW3HPGZ3NYQGz60vTUI
+         Mb4zIQgJsXsmDUpG3A5+gdo8P+E223LVxwf/CtRE88n5z8uULkCMnUnkmBKpHcfQO1lM
+         2ojA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=9bXHH0l+tz0VBMaePEudc9a7Sz7QmbB3aIYivqju7Dw=;
+        b=wF1jqHGZeZtVwa9ZdFj+O+EsQ9FsBzByRyW1URvHweLDnY182u70kk1x/UYI8MX3jk
+         3MOBTUFOQhbE9zCwKozWc+4rnlNOb8H1m7epzacoIluDoaxbo2F3kzakn7DfRqUT+Z8C
+         MZ5Td88WEBaDZJIy5+1eIPTSjE8B5oCwtCTohCZkgUkKsLwN0VGacAA8PH0nGX5+F3fg
+         VcFDz1wvb3uqalqWGLjB2BEf1Xf2BKIFY6WXFLxxVf+0KG7DcgrIKovhvldjufgygHS7
+         nGTMDEMjbyqM5ZSS+cVUwnxcbwF7OwJ6A4N989i3V+pVIwjSL2NwnlGTnEmwPPSkWz3X
+         GARw==
+X-Gm-Message-State: AOAM530reV9dluRD/7ZVNo6QHt9XAL4v+YLJZjlqgpRe2nOVK7HdQ0A8
+        9iSOOmqyAnpKnTaBCRBafPM=
+X-Google-Smtp-Source: ABdhPJyXbKEnVBoHg+gPIRp8ZyglmrYLkX+7u+E/WwxXb5Ep7LCaFTbFx98GwgE9//2MtlmcWFJdUg==
+X-Received: by 2002:a17:902:e9d3:b0:158:8521:1e8f with SMTP id 19-20020a170902e9d300b0015885211e8fmr18865907plk.82.1650036940787;
+        Fri, 15 Apr 2022 08:35:40 -0700 (PDT)
+Received: from [192.168.1.249] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id j6-20020aa79286000000b004fdf02851eesm3193421pfa.4.2022.04.15.08.35.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 08:35:39 -0700 (PDT)
+Message-ID: <51328779-1a28-ef82-6847-47e45018647b@gmail.com>
+Date:   Fri, 15 Apr 2022 08:35:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 5.4 000/475] 5.4.189-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220414110855.141582785@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220414110855.141582785@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux vfio_kvm_no_group
-head:   0a779a04652d97c98d71a1538a37f89145dba9ed
-commit: c068aae365aaf0ecde7abf0842298c59d7ed0d9c [2/11] kvm/vfio: Reduce the scope of PPC #ifdefs
-config: i386-randconfig-a003 (https://download.01.org/0day-ci/archive/20220415/202204152347.iVwF28RC-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/jgunthorpe/linux/commit/c068aae365aaf0ecde7abf0842298c59d7ed0d9c
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_kvm_no_group
-        git checkout c068aae365aaf0ecde7abf0842298c59d7ed0d9c
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   arch/x86/kvm/../../../virt/kvm/vfio.c: In function 'kvm_vfio_set_group':
->> arch/x86/kvm/../../../virt/kvm/vfio.c:356:58: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     356 |                 return kvm_vfio_group_set_spapr_tce(dev, (void __user *)arg);
-         |                                                          ^
 
 
-vim +356 arch/x86/kvm/../../../virt/kvm/vfio.c
+On 4/14/2022 6:06 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.189 release.
+> There are 475 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sat, 16 Apr 2022 11:07:54 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.189-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  338  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  339  static int kvm_vfio_set_group(struct kvm_device *dev, long attr, u64 arg)
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  340  {
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  341  	int32_t __user *argp = (int32_t __user *)(unsigned long)arg;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  342  	int32_t fd;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  343  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  344  	switch (attr) {
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  345  	case KVM_DEV_VFIO_GROUP_ADD:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  346  		if (get_user(fd, argp))
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  347  			return -EFAULT;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  348  		return kvm_vfio_group_add(dev, fd);
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  349  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  350  	case KVM_DEV_VFIO_GROUP_DEL:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  351  		if (get_user(fd, argp))
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  352  			return -EFAULT;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  353  		return kvm_vfio_group_del(dev, fd);
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  354  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  355  	case KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30 @356  		return kvm_vfio_group_set_spapr_tce(dev, (void __user *)arg);
-ec53500fae421e Alex Williamson 2013-10-30  357  	}
-ec53500fae421e Alex Williamson 2013-10-30  358  
-ec53500fae421e Alex Williamson 2013-10-30  359  	return -ENXIO;
-ec53500fae421e Alex Williamson 2013-10-30  360  }
-ec53500fae421e Alex Williamson 2013-10-30  361  
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-:::::: The code at line 356 was first introduced by commit
-:::::: 26d16e3ba7292b7fce26d25a2ba8f44b8c28ffe3 kvm/vfio: Move KVM_DEV_VFIO_GROUP_* ioctls into functions
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Florian

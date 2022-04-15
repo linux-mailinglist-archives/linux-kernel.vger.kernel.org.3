@@ -2,225 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CA6A502DA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:18:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A3E502D66
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:02:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355785AbiDOQUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55922 "EHLO
+        id S1350745AbiDOQFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237533AbiDOQUk (ORCPT
+        with ESMTP id S1355691AbiDOQFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:20:40 -0400
-Received: from 18.mo581.mail-out.ovh.net (18.mo581.mail-out.ovh.net [188.165.56.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECADD9D4EE
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:18:10 -0700 (PDT)
-Received: from player788.ha.ovh.net (unknown [10.109.146.163])
-        by mo581.mail-out.ovh.net (Postfix) with ESMTP id CC68E21373
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:38:59 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player788.ha.ovh.net (Postfix) with ESMTPSA id 6079629867051;
-        Fri, 15 Apr 2022 15:38:54 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003578593f1-443d-463e-8331-d38840e060bb,
-                    77125C2C2681624F8512B69FC7A1C9B53E6602B4) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH 5/6] ASoC: tas*: use i2c_match_id and simple i2c probe
-Date:   Fri, 15 Apr 2022 17:38:16 +0200
-Message-Id: <20220415153817.141364-6-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220415153817.141364-1-steve@sk2.org>
-References: <20220415153817.141364-1-steve@sk2.org>
+        Fri, 15 Apr 2022 12:05:04 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814E89D4CB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:02:35 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id a10so6714047qvm.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:02:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+DljWZKXAubVXqG1Ro0omqGdweveuV0cYgdZ65EqJ9s=;
+        b=w/T5XzJUgWoGLquTxc3I8nvLvpbyCUQti/1pvnZJaqrBJghV4AuwUl1UM2MqzhauZm
+         35gJC1bZ0ZbQcrJ4wSvSUoYUt2xjKnv6RQ6CbDkltUmFo36Jg0fArEv07L0Dvz8aT5Gb
+         lPL+2udLzxV+RB6W714RhFqkMqsMLwSSirWD4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=+DljWZKXAubVXqG1Ro0omqGdweveuV0cYgdZ65EqJ9s=;
+        b=zD4qARYgJURqtn/mNBrTEG5mvFpECFa/Xdtt/ts5TM82qdKDFBHZE/wLz4BphbDehz
+         PSR8emb7eJpKJFMSeZIcNC70Jj8oUNBGURFeRaIZ0HTeTbCY1XzDFrb62TtCS//kBTy2
+         +kjpBRE+UWNXTsEGP1zgLEaz8YDI5jB+XlhEx7BHbT7aV/5OziW0IFdz3ey4n0mmSaIT
+         1ZbXuUVxcD0+4KC5RPtW6fnRgTUEbiYDKAL2CJRF//pxxhnZXdGuZyCgc45qCo5fF7lq
+         XTAvc0VniFoChWGtTq1Sfwh3v2Yuvyrh54opt4zonVGWtgThE443UQRQ05GAnCAo8bhb
+         qX8w==
+X-Gm-Message-State: AOAM532Y0/l8YGNEA1utSp/04lBEZNLJ7ODTdorjls2E1AsCH2PSgwZX
+        cp5w8mf3358poo63Z1xdqKlmwefblnBc6w==
+X-Google-Smtp-Source: ABdhPJwAzENcYv4aGYA8ZMIaha5k+ZD1mGr5UPM81CPNKLxpqywnC9WqLy4bR8wR5pAcj+CpJgOeLA==
+X-Received: by 2002:a05:6214:d62:b0:446:2e4a:1f30 with SMTP id 2-20020a0562140d6200b004462e4a1f30mr5910873qvs.74.1650038554384;
+        Fri, 15 Apr 2022 09:02:34 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id bl22-20020a05620a1a9600b00680da570a5dsm2699890qkb.61.2022.04.15.09.02.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 09:02:33 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
+Subject: [PATCH v3] rcu/nocb: Add an option to offload all CPUs on boot
+Date:   Fri, 15 Apr 2022 16:02:24 +0000
+Message-Id: <20220415160224.1904505-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 10489727957861238406
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the ongoing i2c transition to the simple probe
-("probe_new"), this patch uses i2c_match_id to retrieve the
-driver_data for the probed device. The id parameter is thus no longer
-necessary and the simple probe can be used instead.
+From: Joel Fernandes <joel@joelfernandes.org>
 
-The i2c id tables are moved up before the probe function, as
-suggested by Wolfram Sang, except where the existing code already had
-a declaration for the of_device_id table.
+On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+which ends up not offloading any CPU. This patch removes a dependency
+from the bootloader having to know about RCU, about how many CPUs the
+system has, and about how to provide the mask.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
+With the new option enabled, all CPUs will be offloaded on boot.
+
+Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
 ---
- sound/soc/codecs/tas2562.c | 25 +++++++++++++------------
- sound/soc/codecs/tas571x.c | 11 +++++++----
- sound/soc/codecs/tas5720.c | 21 +++++++++++----------
- 3 files changed, 31 insertions(+), 26 deletions(-)
+v2 was forcing the option to override no_cbs=
+v3 is back to v1 but with a config option defaulting to 'n'.
 
-diff --git a/sound/soc/codecs/tas2562.c b/sound/soc/codecs/tas2562.c
-index 10302552195e..e62a3da16aed 100644
---- a/sound/soc/codecs/tas2562.c
-+++ b/sound/soc/codecs/tas2562.c
-@@ -754,17 +754,27 @@ static int tas2562_parse_dt(struct tas2562_data *tas2562)
- 	return ret;
- }
+ Documentation/admin-guide/kernel-parameters.txt |  3 +++
+ kernel/rcu/Kconfig                              | 13 +++++++++++++
+ kernel/rcu/tree_nocb.h                          | 16 ++++++++++++++--
+ 3 files changed, 30 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index f5a27f067db9..7648a7dd335e 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -4398,6 +4398,9 @@
+ 			no-callback mode from boot but the mode may be
+ 			toggled at runtime via cpusets.
  
--static int tas2562_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static const struct i2c_device_id tas2562_id[] = {
-+	{ "tas2562", TAS2562 },
-+	{ "tas2563", TAS2563 },
-+	{ "tas2564", TAS2564 },
-+	{ "tas2110", TAS2110 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, tas2562_id);
++			Note that this argument takes precedence over
++			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
 +
-+static int tas2562_probe(struct i2c_client *client)
+ 	rcu_nocb_poll	[KNL]
+ 			Rather than requiring that offloaded CPUs
+ 			(specified by rcu_nocbs= above) explicitly
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index bf8e341e75b4..2f8bd694ed85 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -223,6 +223,19 @@ config RCU_NOCB_CPU
+ 	  Say Y here if you need reduced OS jitter, despite added overhead.
+ 	  Say N here if you are unsure.
+ 
++config RCU_NOCB_CPU_DEFAULT_ALL
++	bool "Offload RCU callback processing from all CPUs by default"
++	depends on RCU_NOCB_CPU
++	default n
++	help
++	  Use this option to offload callback processing from all CPUs
++	  by default, in the absence of the rcu_nocbs boot parameter.
++	  This also avoids the need to use any boot parameters to achieve
++	  the effect of offloading all CPUs on boot.
++
++	  Say Y here if you want offload all CPUs by default on boot.
++	  Say N here if you are unsure.
++
+ config TASKS_TRACE_RCU_READ_MB
+ 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+ 	depends on RCU_EXPERT
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index eeafb546a7a0..673fa0d1f801 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1165,12 +1165,21 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+ void __init rcu_init_nohz(void)
  {
- 	struct device *dev = &client->dev;
- 	struct tas2562_data *data;
- 	int ret;
-+	const struct i2c_device_id *id;
+ 	int cpu;
+-	bool need_rcu_nocb_mask = false;
++	bool need_rcu_nocb_mask = false, offload_all = false;
+ 	struct rcu_data *rdp;
  
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
-+	id = i2c_match_id(tas2562_id, client);
- 	data->client = client;
- 	data->dev = &client->dev;
- 	data->model_id = id->driver_data;
-@@ -792,15 +802,6 @@ static int tas2562_probe(struct i2c_client *client,
- 
- }
- 
--static const struct i2c_device_id tas2562_id[] = {
--	{ "tas2562", TAS2562 },
--	{ "tas2563", TAS2563 },
--	{ "tas2564", TAS2564 },
--	{ "tas2110", TAS2110 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, tas2562_id);
--
- #ifdef CONFIG_OF
- static const struct of_device_id tas2562_of_match[] = {
- 	{ .compatible = "ti,tas2562", },
-@@ -817,7 +818,7 @@ static struct i2c_driver tas2562_i2c_driver = {
- 		.name = "tas2562",
- 		.of_match_table = of_match_ptr(tas2562_of_match),
- 	},
--	.probe = tas2562_probe,
-+	.probe_new = tas2562_probe,
- 	.id_table = tas2562_id,
- };
- 
-diff --git a/sound/soc/codecs/tas571x.c b/sound/soc/codecs/tas571x.c
-index a3e682376946..dd289774efb2 100644
---- a/sound/soc/codecs/tas571x.c
-+++ b/sound/soc/codecs/tas571x.c
-@@ -774,9 +774,9 @@ static struct snd_soc_dai_driver tas571x_dai = {
- };
- 
- static const struct of_device_id tas571x_of_match[] __maybe_unused;
-+static const struct i2c_device_id tas571x_i2c_id[];
- 
--static int tas571x_i2c_probe(struct i2c_client *client,
--			     const struct i2c_device_id *id)
-+static int tas571x_i2c_probe(struct i2c_client *client)
- {
- 	struct tas571x_private *priv;
- 	struct device *dev = &client->dev;
-@@ -791,8 +791,11 @@ static int tas571x_i2c_probe(struct i2c_client *client,
- 	of_id = of_match_device(tas571x_of_match, dev);
- 	if (of_id)
- 		priv->chip = of_id->data;
--	else
-+	else {
-+		const struct i2c_device_id *id =
-+			i2c_match_id(tas571x_i2c_id, client);
- 		priv->chip = (void *) id->driver_data;
++#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
++	if (!rcu_nocb_is_setup) {
++		need_rcu_nocb_mask = true;
++		offload_all = true;
 +	}
- 
- 	priv->mclk = devm_clk_get(dev, "mclk");
- 	if (IS_ERR(priv->mclk) && PTR_ERR(priv->mclk) != -ENOENT) {
-@@ -914,7 +917,7 @@ static struct i2c_driver tas571x_i2c_driver = {
- 		.name = "tas571x",
- 		.of_match_table = of_match_ptr(tas571x_of_match),
- 	},
--	.probe = tas571x_i2c_probe,
-+	.probe_new = tas571x_i2c_probe,
- 	.remove = tas571x_i2c_remove,
- 	.id_table = tas571x_i2c_id,
- };
-diff --git a/sound/soc/codecs/tas5720.c b/sound/soc/codecs/tas5720.c
-index 9ff644ddb470..17034abef568 100644
---- a/sound/soc/codecs/tas5720.c
-+++ b/sound/soc/codecs/tas5720.c
-@@ -633,12 +633,19 @@ static struct snd_soc_dai_driver tas5720_dai[] = {
- 	},
- };
- 
--static int tas5720_probe(struct i2c_client *client,
--			 const struct i2c_device_id *id)
-+static const struct i2c_device_id tas5720_id[] = {
-+	{ "tas5720", TAS5720 },
-+	{ "tas5722", TAS5722 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, tas5720_id);
++#endif
 +
-+static int tas5720_probe(struct i2c_client *client)
- {
- 	struct device *dev = &client->dev;
- 	struct tas5720_data *data;
- 	const struct regmap_config *regmap_config;
-+	const struct i2c_device_id *id;
- 	int ret;
- 	int i;
+ #if defined(CONFIG_NO_HZ_FULL)
+-	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
++	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
+ 		need_rcu_nocb_mask = true;
++		offload_all = false; /* NO_HZ_FULL has its own mask. */
++	}
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
  
-@@ -646,6 +653,7 @@ static int tas5720_probe(struct i2c_client *client,
- 	if (!data)
- 		return -ENOMEM;
+ 	if (need_rcu_nocb_mask) {
+@@ -1191,6 +1200,9 @@ void __init rcu_init_nohz(void)
+ 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
  
-+	id = i2c_match_id(tas5720_id, client);
- 	data->tas5720_client = client;
- 	data->devtype = id->driver_data;
- 
-@@ -704,13 +712,6 @@ static int tas5720_probe(struct i2c_client *client,
- 	return 0;
- }
- 
--static const struct i2c_device_id tas5720_id[] = {
--	{ "tas5720", TAS5720 },
--	{ "tas5722", TAS5722 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, tas5720_id);
--
- #if IS_ENABLED(CONFIG_OF)
- static const struct of_device_id tas5720_of_match[] = {
- 	{ .compatible = "ti,tas5720", },
-@@ -725,7 +726,7 @@ static struct i2c_driver tas5720_i2c_driver = {
- 		.name = "tas5720",
- 		.of_match_table = of_match_ptr(tas5720_of_match),
- 	},
--	.probe = tas5720_probe,
-+	.probe_new = tas5720_probe,
- 	.id_table = tas5720_id,
- };
- 
++	if (offload_all)
++		cpumask_setall(rcu_nocb_mask);
++
+ 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+ 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
 -- 
-2.27.0
+2.36.0.rc0.470.gd361397f0d-goog
 

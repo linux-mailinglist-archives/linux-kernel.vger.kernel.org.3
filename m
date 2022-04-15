@@ -2,141 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7F05029AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B7C5029B0
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240741AbiDOM2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53838 "EHLO
+        id S1345829AbiDOM3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 08:29:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353467AbiDOM2C (ORCPT
+        with ESMTP id S230172AbiDOM3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:28:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB10BF946
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:25:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B0AA61771
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 12:25:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA82CC385A6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 12:25:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650025534;
-        bh=peoji69cmwuartQe2i8D75ZJFCK0CFwaXH4nduVKmKI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=tOHxKo7/rNGCwK41O/fR8wXFKYKKKZ0wQ0CZFboPixfg+fU9canaSUDY+bA8bdFmi
-         jkKUDq43xMCjzuq7VJjgfCzszITzQ4scBSJ3y0Fs0VgiCfXD720S0ihI2rQHX3VQ0K
-         dFoaBmZp3SJSnFVeuiXRooCOpQ1hm9f0WO4a/vwEzvJl1AhXgf24e9TnyEN3NJjktH
-         t6VNXOUh4xvPfy3/9zBmMmtNurk7chYHBab/sE7+XYl2KJ0lgkLESTDypXDW7kBQYY
-         NNLGCwpAeutGw1JDJGKQpGyTXTvKoOakUp9DnSETCD7cqe7fESVtQgXm5Ycu5AecUs
-         SfQPKmK0a8vrQ==
-Received: by mail-ot1-f43.google.com with SMTP id i23-20020a9d6117000000b005cb58c354e6so5279982otj.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:25:33 -0700 (PDT)
-X-Gm-Message-State: AOAM530qPr2dhV9PSbd3+s6FnziiZ0KVs4XnRgs0iIWaNQk56VoInTT7
-        hlmBY9Gw+IMCILQDKSUykGXEl7vZYtiTABU96Ls=
-X-Google-Smtp-Source: ABdhPJyq39krpe9z+Gp7B5aYHY58HMPsCZSR8rk8R3+dy4FhmDm7RCJ4PRkY/ftj0dMkr/QFZfSuIwG7hhI/028eLpo=
-X-Received: by 2002:a05:6830:2e7:b0:5b2:68c1:182a with SMTP id
- r7-20020a05683002e700b005b268c1182amr2547283ote.71.1650025533158; Fri, 15 Apr
- 2022 05:25:33 -0700 (PDT)
+        Fri, 15 Apr 2022 08:29:18 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35895C1C9D;
+        Fri, 15 Apr 2022 05:26:50 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 4C8D392009C; Fri, 15 Apr 2022 14:26:48 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 4517592009B;
+        Fri, 15 Apr 2022 13:26:48 +0100 (BST)
+Date:   Fri, 15 Apr 2022 13:26:48 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+        X86 ML <x86@kernel.org>, linux-xtensa@linux-xtensa.org
+Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
+ instead of zero
+In-Reply-To: <YlfoeGRM6w2O+eXA@zx2c4.com>
+Message-ID: <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
+References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk> <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
+ <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk> <YlfoeGRM6w2O+eXA@zx2c4.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-References: <YlVJKjXkcHqkwyt4@gondor.apana.org.au> <YlVOTsaTVkBOxthG@arm.com>
- <YlVSBuEqMt2S1Gi6@gondor.apana.org.au> <YlVxGAHHD/j6lW3c@arm.com>
- <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <YlkV7NtatO7KFusX@gondor.apana.org.au>
- <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
- <YlkkGpVx8rhcsBot@gondor.apana.org.au> <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
- <YllirUEhaxCDaV3X@arm.com>
-In-Reply-To: <YllirUEhaxCDaV3X@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 15 Apr 2022 14:25:21 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH6r+Yf348-0uWu+9wFjnufKb7f970UgdMmoRbve7g_SA@mail.gmail.com>
-Message-ID: <CAMj1kXH6r+Yf348-0uWu+9wFjnufKb7f970UgdMmoRbve7g_SA@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 at 14:19, Catalin Marinas <catalin.marinas@arm.com> wrote:
->
-> On Fri, Apr 15, 2022 at 10:05:21AM +0200, Ard Biesheuvel wrote:
-> > On Fri, 15 Apr 2022 at 09:52, Herbert Xu <herbert@gondor.apana.org.au> wrote:
-> > > On Fri, Apr 15, 2022 at 09:49:12AM +0200, Ard Biesheuvel wrote:
-> > > > I'm not sure I understand what would go wrong if that assumption no
-> > > > longer holds.
-> > >
-> > > It's very simple, we don't do anything to the pointer returned
-> > > by kmalloc before returning it as a tfm or other object with
-> > > an alignment of CRYPTO_MINALIGN.  IOW if kmalloc starts returning
-> > > pointers that are not aligned to CRYPTO_MINALIGN then we'd be
-> > > lying to the compiler.
-> >
-> > I guess that should be fixable. GIven that this is about padding
-> > rather than alignment, we could do something like
-> >
-> > struct crypto_request {
-> >   union {
-> >       struct {
-> >         ... fields ...
-> >       };
-> >       u8 __padding[ARCH_DMA_MINALIGN];
-> >    };
-> >     void __ctx[]  __align(CRYPTO_MINALIGN);
-> > };
-> >
-> > And then hopefully, we can get rid of the padding once we fix drivers
-> > doing non-cache coherent inbound DMA into those structures.
->
-> But if we keep CRYPTO_MINALIGN as 128, don't we get the padding
-> automatically?
->
+Hi Jason,
 
-I suppose, yes.
+> >  It depends on the exact system.  Some have a 32-bit high-resolution 
+> > counter in the chipset (arch/mips/kernel/csrc-ioasic.c) giving like 25MHz 
+> > resolution, some have nothing but jiffies.
+> 
+> Alright, so there _are_ machines with no c0 cycles but with a good
+> clock. Yet, 25MHz is still less than the cpu cycle, so this c0 random
+> ORing trick remains useful perhaps.
 
-> struct crypto_request {
->         ...
->         void *__ctx[] CRYPTO_MINALIGN_ATTR;
-> };
->
-> __alignof__(struct crypto_request) == 128;
-> sizeof(struct crypto_request) == N * 128
->
-> The same alignment and size is true for a structure like:
->
-> struct crypto_alg {
->         ...
-> } CRYPTO_MINALIGN_ATTR;
->
-> Any kmalloc() of sizeof(the above structures) will return a pointer
-> aligned to 128, irrespective of what ARCH_KMALLOC_MINALIGN is.
->
-> The problem is if you have a structure without any alignment attribute
-> (just ABI default), making its sizeof() smaller than ARCH_DMA_MINALIGN.
-> In this case kmalloc() could return a pointer aligned to something
-> smaller. Is this the case in the crypto code today? I can see it uses
-> the right alignment annotations already, no need for kmalloc() hacks.
->
+ It's not much less than the CPU cycle really, given that the R3k CPUs are 
+clocked at up to 40MHz in the systems concerned and likewise the buggy R4k 
+CPUs run at up to 60MHz (and mind that their CP0 Count register increments 
+at half the clock rate, so the rate is up to 30MHz anyway).  The overhead 
+of the calculation is more than that, let alone the latency and issue rate 
+of an uncached MMIO access to the chipset register.
 
-As long as CRYPTO_MINALIGN >= ARCH_KMALLOC_MINALIGN, we won't be lying
-to the compiler when casting kmalloc buffers to these struct types.
+ Also the systems I have in mind and that lack a counter in the chipset 
+actually can make use of the buggy CP0 timer, because it's only when CP0 
+timer interrupts are used that the erratum matters, but they use a DS1287 
+RTC interrupt instead unconditionally as the clock event (see the comment 
+at the bottom of arch/mips/dec/time.c).  But this has not been factored in 
+with `can_use_mips_counter' (should it just check for `mips_hpt_frequency' 
+being zero perhaps, meaning the timer interrupt not being used?).
 
-I'd still like to fix the bad DMA behavior but I suppose it is a separate issue.
+ Thomas, do you happen to know if any of the SGI systems that we support 
+had buggy early R4k chips?
+
+> >  It seems like a reasonable idea to me, but the details would have to be 
+> > sorted out, because where a chipset high-resolution counter is available 
+> > we want to factor it in, and otherwise we need to extract the right bits 
+> > from the CP0 Random register, either 13:8 for the R3k or 5:0 for the R4k.
+> 
+> One thing we could do here that would seemingly cover all the cases
+> without losing _that_ much would be:
+> 
+>     return (random_get_entropy_fallback() << 13) | ((1<<13) - read_c0_random());
+
+ Except this would have to be:
+
+    return (random_get_entropy_fallback() << 14) | ((1<<14) - read_c0_random());
+
+of course, as bit 13 is still one of the active ones in the R3k CP0 Random 
+register.
+
+> Or in case the 13 turns out to be wrong on some hardware, we could
+> mitigate the effect with:
+> 
+>     return (random_get_entropy_fallback() << 13) ^ ((1<<13) - read_c0_random());
+
+ There are two variants only of the CP0 Random register that we can ever 
+encounter, as it's been de-facto standardised in early 1990s already and 
+then written down in the MIPSr1 architecture specification ~2000.  So I 
+think it may make sense to actually handle them both explictitly with 
+individual calculations, possibly conditionalised on a CONFIG setting or 
+`cpu_has_3kex', because kernels that support the two variants of the MMU 
+architecture are mutually incompatible.
+
+ Ah, there's that buggy non-compliant JZ4740 chip too.  I guess we can 
+figure out how many CP0 Random bits it implements, though it may be worth 
+noting that architecturally the register is not required to decrement, so 
+again it may be good to double-check how the JZ4740 selects the values 
+there.
+
+ I think the check for a buggy CP0 timer in `can_use_mips_counter' should 
+also be qualified with !(CONFIG_CPU_MIPS32 || CONFIG_CPU_MIPS64), which 
+will reduce the function to a constant 1 for the overwhelming majority of 
+systems out there, without a need to refer to CP0 PRId every time.
+
+> As mentioned in the 1/xx patch of this series,
+> random_get_entropy_fallback() should call the highest resolution thing.
+> We then shave off the least-changing bits and stuff in the
+> faster-changing bits from read_c0_random(). Then, in order to keep it
+> counting up instead of down, we do the subtraction there.
+
+ Isn't it going to be an issue for an entropy source that the distribution 
+of values obtained from the CP0 Random bit-field is not even, that is some 
+values from the 6-bit range will never appear?
+
+> What do you think of this plan?
+
+ Otherwise it makes absolute sense to me.
+
+  Maciej

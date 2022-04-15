@@ -2,158 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F38502B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D297E502B60
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:57:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354198AbiDON7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
+        id S1354217AbiDON7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237509AbiDON7R (ORCPT
+        with ESMTP id S1354209AbiDON7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:59:17 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2107.outbound.protection.outlook.com [40.107.215.107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A614B3B3CF;
-        Fri, 15 Apr 2022 06:56:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X7T6f5alnfhZM8Cf3I81XC7xPIbfJI3jrox0XEvL8jc+Qn0/Iib1Okm/rnci0ObPtmuYgZdD1/+tv6pUO+4KF/+62PW6JQbbftTCrLTF5TtNr++EWtZkWNMuS5AxYBIesg0O3sLzN7Q8HqDPR4mk1y8JdmlHKyx6+9O4v1R2aeiDQ0EgJX2iJs9Teybl9MXMTw40I3tDi8V+KSIb8YVqT8biv0ocsynC3HGcGE7UJ5NkbeJjFqQhmYgiNkTNvJSaZzP0Hr+vZOpniKNod6JWy8AblBsuuWFYATO46JKuVS8Jrqorh5E8eqOfzLcr9TgLJIrMD5tptCLE4yMFH4iH/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bDKAql1ylDNNspwqVW4QQRDxaEihZc22yK9P5S+mxI8=;
- b=mJDLPbZpqP6J9B+vZFCQlmC5YCS7t53wKchm3YUrm40De3PnRXqz86/OIR6gtVEATXNuDeiXz8M3fwsAoCfde27awdLDx32gxB/Z+hjBbYZ23BJapGZty0N8jZaLcjYECIgyr9zRskEMdgVtNHurCcO26fOkB4Q2OjSZaiqn8Zatrur7OCjcWV3WuM6gtxquKmehIP3p38NuMhmN8+1OUCa160IURw2bvwLH1uDWzTyPRWKOtN+c/jSbjvSX9vnsMxgbznIbx9CcKj/ZFcazD62PwkPFug2WwzfT2mLDaW3OIJGXChmu9C1gDaifoJ6XQsEtY2isrzoigawhVk2WRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bDKAql1ylDNNspwqVW4QQRDxaEihZc22yK9P5S+mxI8=;
- b=FuGY8kka6IXz02bTo/1MJVQSPjJFA6yrrqHDqcTBpcbKUO1ewOSALaiIDTsloTa6CglVv0Wo8QarK21WhC2/YXCTNRnWX19W/zt/DEQ02ostyAeABu7IOelPgexESNY+uxOP/onmmm/Wp57k5HmqVmarEQU02azFhQtXD5rQh9E=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by SG2PR06MB3015.apcprd06.prod.outlook.com (2603:1096:4:75::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5144.29; Fri, 15 Apr 2022 13:56:44 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb%4]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 13:56:44 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Yihao Han <hanyihao@vivo.com>, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com
-Subject: [PATCH] sparc: kernel: Add missing put_device() calls
-Date:   Fri, 15 Apr 2022 06:55:43 -0700
-Message-Id: <20220415135609.87538-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: TYAPR01CA0063.jpnprd01.prod.outlook.com
- (2603:1096:404:2b::27) To TYZPR06MB4173.apcprd06.prod.outlook.com
- (2603:1096:400:26::14)
+        Fri, 15 Apr 2022 09:59:34 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC467BD88F;
+        Fri, 15 Apr 2022 06:57:04 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id q8so4760567wmc.0;
+        Fri, 15 Apr 2022 06:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Maz5xoTaFvagiEiYVNsdjFdtdhjySTzdO4J3MDS0ljg=;
+        b=PQhI5XhtbWgspkqUQV96x6HMNR8jL0F2cARfxur1DpmHsehj0+9gQSIsjRezZKvZOt
+         B1EMBjfexEJXhTG0TiUZBxFAmxbWRRIy0+iy6HhGtM/0P2Ghu2dLCr3Sh3g33Zl413o5
+         AM+eZUbLCRvk1tS3DxCYl9DxlHbz4UJbJ5OuAiyZdWbhvXfvqW11R+t2bCho9i3LR5gm
+         Cno2QDqWMtNyl4DzE7Um4A2A6032kcpXrVnx2RlO6j9R2faUHEKHzma7WbwpMTmAbYwX
+         zq2ehLfJ7PUKatDoRWgxR4eyda38hMa4NBi5fY6nDhlzykiY7iK+kJun9sr6ZEQiVV7v
+         7MIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Maz5xoTaFvagiEiYVNsdjFdtdhjySTzdO4J3MDS0ljg=;
+        b=J/nmTgHp6Qe74Q1oXzo187z4BI9NyWv9ehouErm7Ejug75WLW7yw7IAyUNUheP0v8G
+         kSp6dmcFTrJK7M4TUjKW/SsPm03T34hq8B4pIOPUDNUnvcMfNdVH30xneM/Msk9d4egQ
+         3g2Sp1cwGLF7r3OtryO6twmiBZYj36LHyUZHqgm0MGofTCavuYe9sP4H/h4RsglHPNM0
+         I92yYcu5FwoyiXzOBBe0LETzvYWKcX0aGhme/PLpU0mO/DB3av+rWfBKqr9FsBIqStxa
+         3LNNS518OlCJrLZTE/DnJmhAQ4Jf5NTIbcCSgd1uOLcUzsonKQd3CrbhBEl6362YsFtm
+         EMeg==
+X-Gm-Message-State: AOAM533xmIVRYNdr04GN6f90L6aR/QMLP4nEVWixMH0nqA4y3rBnd/S+
+        b6u7ttQBYT8gIKWdxdAYMwg=
+X-Google-Smtp-Source: ABdhPJzctoYrkubqpHYNepUtNtdLD3U9dEsw3LzHBLrRK1N58BbqqInXs0AGzmC9mLR76e4JlpO/Cg==
+X-Received: by 2002:a05:600c:2306:b0:38e:bf1a:a669 with SMTP id 6-20020a05600c230600b0038ebf1aa669mr3400805wmo.11.1650031023261;
+        Fri, 15 Apr 2022 06:57:03 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id 100-20020adf806d000000b00205ba671b25sm4089214wrk.56.2022.04.15.06.57.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 06:57:02 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <a9043bd0-1467-e922-20f3-243db5e30183@redhat.com>
+Date:   Fri, 15 Apr 2022 15:56:59 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9550f7a1-d644-4e60-51c3-08da1ee7c660
-X-MS-TrafficTypeDiagnostic: SG2PR06MB3015:EE_
-X-Microsoft-Antispam-PRVS: <SG2PR06MB3015EB9950C889BF3C61FC19A2EE9@SG2PR06MB3015.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yDm8mpFUUw/D6rWVp9DvX5R3mEOrbgjGfd5Pg/Pskoq7WoycJAKg8LnUeWAJQZw5yXO5kgCUfbyzYLtjIppc0Mk0hcN5dMI8v71njs/zkaSHpX7c5xu6VXqq1sGjXQfK7OqmRBglMpYJXlIM4StuePfhiKETewme2chrP7khC7Dchl0ZY1uwQ3TlImCkvLKGi4I10Jx9BnRdLZEWPVgO4bPe78TaND3Rc7utNeF0n4S8w0IDyw0QEZzvwAhDcJfzHQqTx32SpS776wBEOXmvrSjeLQrb7Op8v8MTWTCNL0dtd3Yp8VmddeD2JKfKnRSDMjAjPIDb+ZyWUG1TyEeEaApqhjMSlMp8papaDBivfrOtziRLkUg+lUugDDcJAXOom6+Ng3WNXy61fy7q4KMScW4ZOwhlqTscSvB2JDt2e8KkQO7cnl7i2y0LWI4UJ0qk2dKK55ZWdCspx2mLxVcW7fD8eh19795VDhyycqzh+xvJ5NdvkfTRQSVt9ApivR/RawEFkBWWx1CSRLxLwoHsRt13ApMLJharqz+NGnAQou8Rmp0CxqnwZeOsaxqB15fEIAM+4++65zS09xFXcGke7aR55MFBMzGWupFwFv7bUv67inDAfWbQ7yE1UaiCMc0EJ01ijRruh/ub4z6xvQ1SuES6LLil/vlsZK3XhplCCOQyQmqBqbVMOHn4NjbhPzvhrm0LovFuY9yotiho62gpgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(2616005)(52116002)(107886003)(316002)(36756003)(6506007)(1076003)(8936002)(5660300002)(6512007)(38350700002)(38100700002)(508600001)(6486002)(110136005)(2906002)(26005)(86362001)(83380400001)(8676002)(66556008)(4326008)(186003)(66946007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7o1SzhWAtY3lPtjrwcn3PbQIYEMp0aKKMVL63ZYQqhns/x9EejzRAjwXzZ6J?=
- =?us-ascii?Q?Lm9iJAj1xkCTJMmPQcQkXl8iLcScnVVv/E3lMApFr1KFR9aOT+0DxFVRdEJG?=
- =?us-ascii?Q?oft4+A+gX9hMYkHBt0lV4Cy/b1Y1Cgv55S0UCBfZwTsXm/dKWijeoNhk0UL+?=
- =?us-ascii?Q?ICMEZLBmGa0Ne7eaO9sSEdcSb/49BSZw6GgyxjeG/9cakBEHqCCSjmwpS/9D?=
- =?us-ascii?Q?dP4gMlSEvADk07Mt4XfSgen9vOifstXv/OJRebVjo6c0y8oAPZvMxmKAamRw?=
- =?us-ascii?Q?Nhdw8r3GVtuOnAArFBj3E3O9rpASFS7qchpaBFjfRJ+Z+xrMJ6MsHme9E+Ld?=
- =?us-ascii?Q?mMGTRKrjk9CDoQ6qHp8uXbnkKuTka08ZJMph+sMLNg9CtPf8TOwXG4aCDjRy?=
- =?us-ascii?Q?frTMVq7P0+eQUcfry852PjHM5mkFX1c9QMrFcpiJPQBMn5sIjh6yVeytG6xk?=
- =?us-ascii?Q?5pWxg0FGP5UZmS4X/15DenENS6LRuWzNKHExF4vqQDRMLbNlH3+KAr09cspI?=
- =?us-ascii?Q?4DA13kQpYYy5KRZcTdDGyrpYwfajgAAkLDc1Az66KVyW3EW0jvZhss6ICQL8?=
- =?us-ascii?Q?EwRq4mlYMH1tMpVge+i+g+Sr5wlPILPcFn6Ylg77jCynQtrB2lIFqtEF7Q2q?=
- =?us-ascii?Q?0RZQb8eN1Fjxu5TVckhQA0xrjnX+V+/yB7slm5E9rq1758Qivk+v7EOAR8OC?=
- =?us-ascii?Q?c9T0F8uwhE+hr90936IeUrIxF8qqqI71kx6wKyapNJoNQG2+MLO4Hu9XJP29?=
- =?us-ascii?Q?WndR5mt1VcSi1MguVkgFOpMDpeFigiX3HVLQNXo7TTuZ+nbUz7XQvej8HtJ4?=
- =?us-ascii?Q?o3KsXrCxdywQTjbq0ehBbSNKHoL+RL0xkvt8UGZFSYcKrtZovUMMWMKQrKBP?=
- =?us-ascii?Q?m3Etr+gFpKFgJybAjLsN8QUlPJxvepJ2Gjmv+RAWkUS6N+heGTzUpZ8zNelW?=
- =?us-ascii?Q?yR3gOauIMQP3VaFYc6xfypY49RjcFmtjVcS2etknZYUJwTpf9GNPv/tPblZr?=
- =?us-ascii?Q?Lr5LZo651rp76BZzQuWbiQczttxFPZRYq2sCJTRfOVHkW+hATrC27/2NpJy6?=
- =?us-ascii?Q?nNqNvEGo0joxhKOyAxW629bXHyFGpYQHWzRBw3watMku0f4hmPgyYSHuELNP?=
- =?us-ascii?Q?ZkUx91l78gThphEJkLOjujV4EvjEnGgQhf+QllDZnyIQ4PxSnBTeXfZSD+d8?=
- =?us-ascii?Q?gu558fVLVyfgtwQgiEa0JaugEqWKBcJPRx6BLdxJzFPAzqwv1NF+DEQs0hdG?=
- =?us-ascii?Q?etEtyeFfwFlx8Cmzft0ovdiypStvbFfXbC2wS5CXDK2ho/WPvaE+vb+MNghd?=
- =?us-ascii?Q?4/UbEUpmyI2aM0OcmQBHHSsS9IuiJFHMnB44jmBVCGK6nWXufay28/KQRisv?=
- =?us-ascii?Q?8c8O/lrrBl1HKgGF7dVaSwZwnKMexEps8rNCX3nfCwIeGUrFw1OuZWubuy4P?=
- =?us-ascii?Q?bW48C57okBx3Va/BgxjNywNMfPj39oPP5W0iHy8WWCOF6bqkiPjiCr0iuvAt?=
- =?us-ascii?Q?oyuKLQAa7o9iXwMAqljO+6SOkS2by2KQdCNKhLeKrHxd9TkRKqTP0vSzmxSO?=
- =?us-ascii?Q?aBGLFoyF2lQRVFDey48RT6gXoEoMRkgaBVPY4B76s0guJ9hRdD4d5DWqF8q+?=
- =?us-ascii?Q?4TT0BT2BZqHUsAILRb3oD8fzeaLdexMcMAyzPyPvu+ivvWDywmuj0Qkqp4OH?=
- =?us-ascii?Q?85n0g4+6E8ei0HeFagXXeB4yHDXyV/g6To3ckoh5PN8XEIkKqijSYYQ0GiRt?=
- =?us-ascii?Q?SIko21oP2auZIe9gi8JM2+qycElcx8Q=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9550f7a1-d644-4e60-51c3-08da1ee7c660
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 13:56:44.2231
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9PEmdTWYaM2LwVDdmuJJ61Rj2y0hYG4UIfDhedFVjYHnFkmCp+eDn3wnoN18nQOl/pUVNP7vgsspB8mMSAgGHg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3015
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 065/104] KVM: TDX: vcpu_run: save/restore host
+ state(host kernel gs)
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <47bfde64180fc00ed236a2e13b25423c984a0eef.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <47bfde64180fc00ed236a2e13b25423c984a0eef.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A coccicheck run provided information like the following.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> On entering/exiting TDX vcpu, Preserved or clobbered CPU state is different
+> from VMX case.  Add TDX hooks to save/restore host/guest CPU state.
+> Save/restore kernel GS base MSR.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/main.c    | 28 +++++++++++++++++++++++++--
+>   arch/x86/kvm/vmx/tdx.c     | 39 ++++++++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/tdx.h     |  4 ++++
+>   arch/x86/kvm/vmx/x86_ops.h |  4 ++++
+>   4 files changed, 73 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index 2e5a7a72d560..f9d43f2de145 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -89,6 +89,30 @@ static void vt_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
+>   	return vmx_vcpu_reset(vcpu, init_event);
+>   }
+>   
+> +static void vt_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * All host state is saved/restored across SEAMCALL/SEAMRET, and the
+> +	 * guest state of a TD is obviously off limits.  Deferring MSRs and DRs
+> +	 * is pointless because the TDX module needs to load *something* so as
+> +	 * not to expose guest state.
+> +	 */
+> +	if (is_td_vcpu(vcpu)) {
+> +		tdx_prepare_switch_to_guest(vcpu);
+> +		return;
+> +	}
+> +
+> +	vmx_prepare_switch_to_guest(vcpu);
+> +}
+> +
+> +static void vt_vcpu_put(struct kvm_vcpu *vcpu)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_vcpu_put(vcpu);
+> +
+> +	return vmx_vcpu_put(vcpu);
+> +}
+> +
+>   static fastpath_t vt_vcpu_run(struct kvm_vcpu *vcpu)
+>   {
+>   	if (is_td_vcpu(vcpu))
+> @@ -174,9 +198,9 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>   	.vcpu_free = vt_vcpu_free,
+>   	.vcpu_reset = vt_vcpu_reset,
+>   
+> -	.prepare_guest_switch = vmx_prepare_switch_to_guest,
+> +	.prepare_guest_switch = vt_prepare_switch_to_guest,
+>   	.vcpu_load = vmx_vcpu_load,
+> -	.vcpu_put = vmx_vcpu_put,
+> +	.vcpu_put = vt_vcpu_put,
+>   
+>   	.update_exception_bitmap = vmx_update_exception_bitmap,
+>   	.get_msr_feature = vmx_get_msr_feature,
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index ebe4f9bf19e7..7a288aae03ba 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   #include <linux/cpu.h>
+> +#include <linux/mmu_context.h>
+>   
+>   #include <asm/tdx.h>
+>   
+> @@ -407,6 +408,9 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+>   	vcpu->arch.guest_state_protected =
+>   		!(to_kvm_tdx(vcpu->kvm)->attributes & TDX_TD_ATTRIBUTE_DEBUG);
+>   
+> +	tdx->host_state_need_save = true;
+> +	tdx->host_state_need_restore = false;
+> +
+>   	return 0;
+>   
+>   free_tdvpx:
+> @@ -420,6 +424,39 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+>   	return ret;
+>   }
+>   
+> +void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +
+> +	if (!tdx->host_state_need_save)
+> +		return;
+> +
+> +	if (likely(is_64bit_mm(current->mm)))
+> +		tdx->msr_host_kernel_gs_base = current->thread.gsbase;
+> +	else
+> +		tdx->msr_host_kernel_gs_base = read_msr(MSR_KERNEL_GS_BASE);
+> +
+> +	tdx->host_state_need_save = false;
+> +}
+> +
+> +static void tdx_prepare_switch_to_host(struct kvm_vcpu *vcpu)
+> +{
+> +	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> +
+> +	tdx->host_state_need_save = true;
+> +	if (!tdx->host_state_need_restore)
+> +		return;
+> +
+> +	wrmsrl(MSR_KERNEL_GS_BASE, tdx->msr_host_kernel_gs_base);
+> +	tdx->host_state_need_restore = false;
+> +}
+> +
+> +void tdx_vcpu_put(struct kvm_vcpu *vcpu)
+> +{
+> +	vmx_vcpu_pi_put(vcpu);
+> +	tdx_prepare_switch_to_host(vcpu);
+> +}
+> +
+>   void tdx_vcpu_free(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> @@ -535,6 +572,8 @@ fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
+>   
+>   	tdx_vcpu_enter_exit(vcpu, tdx);
+>   
+> +	tdx->host_state_need_restore = true;
+> +
+>   	vcpu->arch.regs_avail &= ~VMX_REGS_LAZY_LOAD_SET;
+>   	trace_kvm_exit(vcpu, KVM_ISA_VMX);
+>   
+> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
+> index e950404ce5de..8b1cf9c158e3 100644
+> --- a/arch/x86/kvm/vmx/tdx.h
+> +++ b/arch/x86/kvm/vmx/tdx.h
+> @@ -84,6 +84,10 @@ struct vcpu_tdx {
+>   	union tdx_exit_reason exit_reason;
+>   
+>   	bool initialized;
+> +
+> +	bool host_state_need_save;
+> +	bool host_state_need_restore;
+> +	u64 msr_host_kernel_gs_base;
+>   };
+>   
+>   static inline bool is_td(struct kvm *kvm)
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 44404dd25737..8b871c5f52cf 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -141,6 +141,8 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu);
+>   void tdx_vcpu_free(struct kvm_vcpu *vcpu);
+>   void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
+>   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu);
+> +void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu);
+> +void tdx_vcpu_put(struct kvm_vcpu *vcpu);
+>   
+>   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
+>   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
+> @@ -162,6 +164,8 @@ static inline int tdx_vcpu_create(struct kvm_vcpu *vcpu) { return -EOPNOTSUPP; }
+>   static inline void tdx_vcpu_free(struct kvm_vcpu *vcpu) {}
+>   static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+>   static inline fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+> +static inline void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+> +static inline void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+>   
+>   static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+>   static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -EOPNOTSUPP; }
 
-arch/sparc/kernel/pci_sabre.c:335:2-8: ERROR: missing
-put_device; call of_find_device_by_node on line 324, but
-without a corresponding object release within this function.
-arch/sparc/kernel/pci_sabre.c:369:0-1: ERROR: missing
-put_device; call of_find_device_by_node on line 324, but
-without a corresponding object release within this function.
-
-Generated by: scripts/coccinelle/free/put_device.cocci
-
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
- arch/sparc/kernel/pci_sabre.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/arch/sparc/kernel/pci_sabre.c b/arch/sparc/kernel/pci_sabre.c
-index 3c38ca40a22b..5d0d13840ac3 100644
---- a/arch/sparc/kernel/pci_sabre.c
-+++ b/arch/sparc/kernel/pci_sabre.c
-@@ -331,8 +331,10 @@ static void sabre_register_error_handlers(struct pci_pbm_info *pbm)
- 	 * 2: CE ERR
- 	 * 3: POWER FAIL
- 	 */
--	if (op->archdata.num_irqs < 4)
-+	if (op->archdata.num_irqs < 4) {
-+		put_device(op);
- 		return;
-+	}
- 
- 	/* We clear the error bits in the appropriate AFSR before
- 	 * registering the handler so that we don't get spurious
-@@ -366,6 +368,7 @@ static void sabre_register_error_handlers(struct pci_pbm_info *pbm)
- 	tmp = upa_readq(base + SABRE_PCICTRL);
- 	tmp |= SABRE_PCICTRL_ERREN;
- 	upa_writeq(tmp, base + SABRE_PCICTRL);
-+	put_device(op);
- }
- 
- static void apb_init(struct pci_bus *sabre_bus)
--- 
-2.17.1
-
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

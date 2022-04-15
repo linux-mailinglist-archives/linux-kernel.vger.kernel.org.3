@@ -2,61 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF5D501FFB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:11:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C5E501FF7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348448AbiDOBNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 21:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56632 "EHLO
+        id S1348386AbiDOBMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 21:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348413AbiDOBNL (ORCPT
+        with ESMTP id S1348410AbiDOBMh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:13:11 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B0B4D601
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 18:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649985044; x=1681521044;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hLUQTVT3fXniMftO+Cz0lIZn4cdhUU4ujYgrdC47HCE=;
-  b=G/BkbZBEudVhqHtSSxBDFgp7Q66LoSBBWn7V6OZsHPkm0VRwjyYs5848
-   0UNHdafZ2SvFwAnuG4vjXcmTAwi0OluT5YksCP1KERUaYhtLEAX6MPrnC
-   2g6S+KjjDDGZDcZGDW6v7foze/GrPhYpHMoIeYUF+nDoz+NgSvIA8Ip/Y
-   Tl/FDMjR4rY0I02HjyqQkF6zgcIYRp0F9l8kAcJSRGbHZWcHGQCpU7lmQ
-   WVJ+6Opz1BDGEFT0V70psPKyX3gZmHkR2zoU88sU8AgkHKOhsxyp72puc
-   KBu64UbhPD4VuZPYMS8ATyPcBBb5S1Zp0wrkF7AsK8IQhRzflA0qG/2JI
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="288129755"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="288129755"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 18:10:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="700876992"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2022 18:10:43 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfATy-0001Mj-JI;
-        Fri, 15 Apr 2022 01:10:42 +0000
-Date:   Fri, 15 Apr 2022 09:10:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/apic] BUILD SUCCESS
- daf3af4705ba8f49d33ea9b7bafdc9fd9efd49e0
-Message-ID: <6258c5ed.0Kj8UtuV+nRVav0K%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 14 Apr 2022 21:12:37 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E58D73AA7B;
+        Thu, 14 Apr 2022 18:10:10 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KfdRw2QDQzCr0W;
+        Fri, 15 Apr 2022 09:05:48 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 09:10:07 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 09:10:07 +0800
+Subject: Re: [PATCH -next 10/11] block, bfq: decrease
+ 'num_groups_with_pending_reqs' earlier
+From:   "yukuai (C)" <yukuai3@huawei.com>
+To:     Jan Kara <jack@suse.cz>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <20220305091205.4188398-11-yukuai3@huawei.com>
+ <20220413112816.fwobg4cp6ttpnpk6@quack3.lan>
+ <f3ed507a-7c85-cd69-3ad5-3e9c0e75c372@huawei.com>
+Message-ID: <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
+Date:   Fri, 15 Apr 2022 09:10:06 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <f3ed507a-7c85-cd69-3ad5-3e9c0e75c372@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,132 +59,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/apic
-branch HEAD: daf3af4705ba8f49d33ea9b7bafdc9fd9efd49e0  x86/apic: Clarify i82489DX bit overlap in APIC_LVT0
+在 2022/04/13 19:40, yukuai (C) 写道:
+> 在 2022/04/13 19:28, Jan Kara 写道:
+>> On Sat 05-03-22 17:12:04, Yu Kuai wrote:
+>>> Currently 'num_groups_with_pending_reqs' won't be decreased when
+>>> the group doesn't have any pending requests, while some child group
+>>> still have pending requests. The decrement is delayed to when all the
+>>> child groups doesn't have any pending requests.
+>>>
+>>> For example:
+>>> 1) t1 issue sync io on root group, t2 and t3 issue sync io on the same
+>>> child group. num_groups_with_pending_reqs is 2 now.
+>>> 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 and
+>>> t3 still can't be handled concurrently.
+>>>
+>>> Fix the problem by decreasing 'num_groups_with_pending_reqs'
+>>> immediately upon the weights_tree removal of last bfqq of the group.
+>>>
+>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>
+>> So I'd find the logic easier to follow if you completely removed
+>> entity->in_groups_with_pending_reqs and did updates of
+>> bfqd->num_groups_with_pending_reqs like:
+>>
+>>     if (!bfqg->num_entities_with_pending_reqs++)
+>>         bfqd->num_groups_with_pending_reqs++;
+>>
+> Hi,
+> 
+> Indeed, this is an excellent idle, and much better than the way I did.
+> 
+> Thanks,
+> Kuai
+> 
+>> and similarly on the remove side. And there would we literally two places
+>> (addition & removal from weight tree) that would need to touch these
+>> counters. Pretty obvious and all can be done in patch 9.
+>>
+>>                                 Honza
+Hi, Jan
 
-elapsed time: 1897m
+I think with this change, we can count root_group while activating bfqqs
+that are under root_group, thus there is no need to modify
+for_each_entity(or fake bfq_sched_data) any more.
 
-configs tested: 108
-configs skipped: 82
+The special case is that weight racing bfqqs are not inserted into
+weights tree, and I think this can be handled by adding a fake
+bfq_weight_counter for such bfqqs.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+What do you think ?
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-arc                        vdk_hs38_defconfig
-mips                  decstation_64_defconfig
-openrisc                  or1klitex_defconfig
-mips                      maltasmvp_defconfig
-xtensa                         virt_defconfig
-m68k                       m5475evb_defconfig
-arm                        shmobile_defconfig
-arm                        oxnas_v6_defconfig
-arm                        keystone_defconfig
-arm                             rpc_defconfig
-mips                         mpc30x_defconfig
-powerpc                     pq2fads_defconfig
-ia64                          tiger_defconfig
-parisc64                            defconfig
-powerpc                     taishan_defconfig
-sh                  sh7785lcr_32bit_defconfig
-arm                         assabet_defconfig
-parisc                generic-64bit_defconfig
-x86_64                           alldefconfig
-arm                           sunxi_defconfig
-xtensa                           alldefconfig
-x86_64                              defconfig
-sh                             sh03_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220413
-arm                  randconfig-c002-20220414
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                               defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220413
-arm                  randconfig-c002-20220413
-i386                          randconfig-c001
-riscv                randconfig-c006-20220413
-mips                 randconfig-c004-20220413
-powerpc              randconfig-c003-20220414
-arm                  randconfig-c002-20220414
-arm                      tct_hammer_defconfig
-powerpc                     tqm5200_defconfig
-arm                        multi_v5_defconfig
-mips                           mtx1_defconfig
-arm                        spear3xx_defconfig
-arm                       mainstone_defconfig
-arm                       netwinder_defconfig
-mips                        workpad_defconfig
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-hexagon              randconfig-r041-20220414
-hexagon              randconfig-r045-20220414
-riscv                randconfig-r042-20220414
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kuai

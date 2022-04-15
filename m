@@ -2,49 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE830503072
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A63B15030AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356352AbiDOWh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 18:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
+        id S1356355AbiDOWlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 18:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbiDOWh4 (ORCPT
+        with ESMTP id S231616AbiDOWlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 18:37:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37FAB8221;
-        Fri, 15 Apr 2022 15:35:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PVyEZSQLSR1NaLXbDUnQkPyRRRCDx872THQc6EzVVu8=; b=COp+AaTKD8gkC8NmZZcEaYufBk
-        Dk7ASQjGWH2fIw3M94VIh/ifoJU88e0puL2aCCl0Nv0NxrsL8pK1FYpeRe9F2aEW73O5wmoBoRaRs
-        Sq/8u5TXneETEG9ei7+A4veRR61FIN4I4P+Bjqcw2QTNKwznzHOCH8BFRVBo/ziZsfdk3Csc18k2F
-        zYCwtH/BdcBJIRYZncL8Ytl4jPLGbLrECTxkcImnOCu3awMd44XbVFmW6cvMuHLUWyD+mnTZtbd4u
-        xRX7fqueAqK5YkS+LVkKh5rN3w5W1Mtntz5wdsTMCxyOuR+KwdKUaHq/2eKBiJCWAHKcuEIJUjtkr
-        wkSL595Q==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfUX9-00BbNz-AK; Fri, 15 Apr 2022 22:35:19 +0000
-Date:   Fri, 15 Apr 2022 15:35:19 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Meng Tang <tangmeng@uniontech.com>
-Cc:     keescook@chromium.org, yzaikin@google.com, nixiaoming@huawei.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Davidlohr Bueso <dave@stgolabs.net>
-Subject: Re: [PATCH] fs/proc: Introduce list_for_each_table_entry for proc
- sysctl
-Message-ID: <YlnzJxHPqc96rFE+@bombadil.infradead.org>
-References: <20220411051205.6694-1-tangmeng@uniontech.com>
+        Fri, 15 Apr 2022 18:41:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9158BBF950;
+        Fri, 15 Apr 2022 15:39:12 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 21so11306277edv.1;
+        Fri, 15 Apr 2022 15:39:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Xd/TY0lCcvOfD4XwdghjY2Bw0dW7OQwwq4wE6xzj5Lg=;
+        b=DR/30Z2Bvad/UzIT+ijDNS7EQ34yE1Pw3naYQ3q+XlCXXEyDjF3+PrMlBAubnmlni7
+         +trIkPmZC5h+TH+9vSvNCUmlqE3fF9RF8qkGvBAgXeoiPc7RX44K9GfEwud4URY1tvOd
+         6par0+Pbu16FR7dY8se477ubWO0UHSHTy1n4n/7cmI6R8HkE5puayoB5XsTYapzQCJI8
+         XAJrolV9Cx3hX7Ojfq2OZr9SLssGk3pZ/olC4RB3XwOVRhHCDJhCrDqiwDa+Ri1mf97s
+         HOl645v6UCQIMWr+LSS5z/8CzEXgPyU/PjT2bQUF6qz60ePlSrctbrC6neF3YnT1hEbU
+         q6bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Xd/TY0lCcvOfD4XwdghjY2Bw0dW7OQwwq4wE6xzj5Lg=;
+        b=67GqoAay7+vsThi2gZ0A/P6Xp+4k4207FY8JAE417j8BQAdCeD3pOP3olYUPsI6UOx
+         ZyGtlaBGZwdqb9qAtGLWjqO39tYlL4l/z81qgysuHzkNohTmyc76hEovAvPbz+LkKs1T
+         xxjBa8HBM7wByApphdsFEHnMBmlWZRuhpPL6mj5pcpopIybSluSP1Hd2/gwlNkt29DYZ
+         D9gVfh+pZagN62bOZkYaE49a6+hfTKWagkbY3V3/a1rTRGSOVnInlPM+v3Cml0JdYxco
+         xJ0H6OaFZKwoYusnLnd0jHktEdLNqT8VAcwrlH9HN3W0uN1Wm1CAcxRWl/m/ruJ3YoBX
+         zehw==
+X-Gm-Message-State: AOAM532h44BpDiUWJDtRAjj+pIwaN+Fc8lqZkPQENz+Aw4gArsD2Zxyw
+        zDrHNmS7TpzIVd6EV9qSufQ=
+X-Google-Smtp-Source: ABdhPJwj12+saMkHxF3CiI2y5YsDBikvUq2Ikj7bmWZvCIhpz/z403Arc3JrJj4hZw7osqi8n9jZBg==
+X-Received: by 2002:a05:6402:448a:b0:41d:793d:8252 with SMTP id er10-20020a056402448a00b0041d793d8252mr1256813edb.6.1650062350990;
+        Fri, 15 Apr 2022 15:39:10 -0700 (PDT)
+Received: from krava ([95.82.134.228])
+        by smtp.gmail.com with ESMTPSA id b23-20020a05640202d700b00422da9b980esm1015481edx.22.2022.04.15.15.39.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 15:39:10 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 00:39:08 +0200
+From:   Jiri Olsa <olsajiri@gmail.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>
+Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
+Message-ID: <Yln0DCVKAf9yZicG@krava>
+References: <20220407125224.310255-1-jolsa@kernel.org>
+ <20220407125224.310255-2-jolsa@kernel.org>
+ <20220408231925.uc2cfeev7p6nzfww@MBP-98dd607d3435.dhcp.thefacebook.com>
+ <YlXlF5ivTR1QLMfk@krava>
+ <20220415094727.2880a321bb6674d94e104110@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220411051205.6694-1-tangmeng@uniontech.com>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220415094727.2880a321bb6674d94e104110@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,21 +82,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 01:12:05PM +0800, Meng Tang wrote:
-> Use the list_for_each_table_entry macro to optimize the scenario
-> of traverse ctl_table. This make the code neater and easier to
-> understand.
+On Fri, Apr 15, 2022 at 09:47:27AM +0900, Masami Hiramatsu wrote:
+> Hi Jiri,
 > 
-> Suggested-by: Davidlohr Bueso<dave@stgolabs.net>
-> Signed-off-by: Meng Tang <tangmeng@uniontech.com>
+> Sorry for replying later.
+> 
+> On Tue, 12 Apr 2022 22:46:15 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+> 
+> > On Fri, Apr 08, 2022 at 04:19:25PM -0700, Alexei Starovoitov wrote:
+> > > On Thu, Apr 07, 2022 at 02:52:21PM +0200, Jiri Olsa wrote:
+> > > > Adding kallsyms_lookup_names function that resolves array of symbols
+> > > > with single pass over kallsyms.
+> > > > 
+> > > > The user provides array of string pointers with count and pointer to
+> > > > allocated array for resolved values.
+> > > > 
+> > > >   int kallsyms_lookup_names(const char **syms, u32 cnt,
+> > > >                             unsigned long *addrs)
+> > > > 
+> > > > Before we iterate kallsyms we sort user provided symbols by name and
+> > > > then use that in kalsyms iteration to find each kallsyms symbol in
+> > > > user provided symbols.
+> > > > 
+> > > > We also check each symbol to pass ftrace_location, because this API
+> > > > will be used for fprobe symbols resolving. This can be optional in
+> > > > future if there's a need.
+> > > > 
+> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
+> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+> > > > ---
+> > > >  include/linux/kallsyms.h |  6 +++++
+> > > >  kernel/kallsyms.c        | 48 ++++++++++++++++++++++++++++++++++++++++
+> > > >  2 files changed, 54 insertions(+)
+> > > > 
+> > > > diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
+> > > > index ce1bd2fbf23e..5320a5e77f61 100644
+> > > > --- a/include/linux/kallsyms.h
+> > > > +++ b/include/linux/kallsyms.h
+> > > > @@ -72,6 +72,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
+> > > >  #ifdef CONFIG_KALLSYMS
+> > > >  /* Lookup the address for a symbol. Returns 0 if not found. */
+> > > >  unsigned long kallsyms_lookup_name(const char *name);
+> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs);
+> > > >  
+> > > >  extern int kallsyms_lookup_size_offset(unsigned long addr,
+> > > >  				  unsigned long *symbolsize,
+> > > > @@ -103,6 +104,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
+> > > >  	return 0;
+> > > >  }
+> > > >  
+> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+> > > > +{
+> > > > +	return -ERANGE;
+> > > > +}
+> > > > +
+> > > >  static inline int kallsyms_lookup_size_offset(unsigned long addr,
+> > > >  					      unsigned long *symbolsize,
+> > > >  					      unsigned long *offset)
+> > > > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+> > > > index 79f2eb617a62..a3738ddf9e87 100644
+> > > > --- a/kernel/kallsyms.c
+> > > > +++ b/kernel/kallsyms.c
+> > > > @@ -29,6 +29,8 @@
+> > > >  #include <linux/compiler.h>
+> > > >  #include <linux/module.h>
+> > > >  #include <linux/kernel.h>
+> > > > +#include <linux/bsearch.h>
+> > > > +#include <linux/sort.h>
+> > > >  
+> > > >  /*
+> > > >   * These will be re-linked against their real values
+> > > > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
+> > > >  	return __sprint_symbol(buffer, address, -1, 1, 1);
+> > > >  }
+> > > >  
+> > > > +static int symbols_cmp(const void *a, const void *b)
+> > > > +{
+> > > > +	const char **str_a = (const char **) a;
+> > > > +	const char **str_b = (const char **) b;
+> > > > +
+> > > > +	return strcmp(*str_a, *str_b);
+> > > > +}
+> > > > +
+> > > > +struct kallsyms_data {
+> > > > +	unsigned long *addrs;
+> > > > +	const char **syms;
+> > > > +	u32 cnt;
+> > > > +	u32 found;
+> > > > +};
+> > > > +
+> > > > +static int kallsyms_callback(void *data, const char *name,
+> > > > +			     struct module *mod, unsigned long addr)
+> > > > +{
+> > > > +	struct kallsyms_data *args = data;
+> > > > +
+> > > > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
+> > > > +		return 0;
+> > > > +
+> > > > +	addr = ftrace_location(addr);
+> > > > +	if (!addr)
+> > > > +		return 0;
+> > > > +
+> > > > +	args->addrs[args->found++] = addr;
+> > > > +	return args->found == args->cnt ? 1 : 0;
+> > > > +}
+> > > > +
+> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
+> > > > +{
+> > > > +	struct kallsyms_data args;
+> > > > +
+> > > > +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
+> > > 
+> > > It's nice to share symbols_cmp for sort and bsearch,
+> > > but messing technically input argument 'syms' like this will cause
+> > > issues sooner or later.
+> > > Lets make caller do the sort.
+> > > Unordered input will cause issue with bsearch, of course,
+> > > but it's a lesser evil. imo.
+> > > 
+> > 
+> > Masami,
+> > this logic bubbles up to the register_fprobe_syms, because user
+> > provides symbols as its argument. Can we still force this assumption
+> > to the 'syms' array, like with the comment change below?
+> > 
+> > FYI the bpf side does not use register_fprobe_syms, it uses
+> > register_fprobe_ips, because it always needs ips as search
+> > base for cookie values
+> 
+> Hmm, in that case fprobe can call sort() in the register function.
+> That will be much easier and safer. The bpf case, the input array will
+> be generated by the bpftool (not by manual), so it can ensure the 
+> syms is sorted. But we don't know how fprobe user passes syms array.
+> Then register_fprobe_syms() will always requires sort(). I don't like
+> such redundant requirements.
 
-Thanks! Queued onto sysctl-testing [0].
+ok, I'll add it to register_fprobe_syms
 
-Feel free to let start sending in the rest of the stuff you were working
-on. But please note I'll wait to push this to sysctl-next to get testing
-under linux-next until this gets at least some compilation testing
-without issues from sysctl-testing.
-
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
-
-  Luis
+thanks,
+jirka

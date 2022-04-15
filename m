@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5E9502B4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4909502B5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354167AbiDONyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S1354206AbiDON7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:59:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354157AbiDONyt (ORCPT
+        with ESMTP id S244328AbiDON7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:54:49 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8442DBC856;
-        Fri, 15 Apr 2022 06:52:20 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i27so15466357ejd.9;
-        Fri, 15 Apr 2022 06:52:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=y9bMKIoMA4ZWyNr76PabwIny+psaRVtbI7l3QYKzBGY=;
-        b=WrfxT9w7Xdhji7RtpZX1oY7/s8uJg2kgLfnL3b6m8oCjCAI71ddOuNXAYx/YQpt+46
-         QSVQhfHGmfh+BJRtMzLFXhE+23lJfpf3/8mE59bikRDPbUzYp37yynqVA0cOsnduKfkf
-         Vdj4BHMWS6MkLiuSI8AUTwQfdzZInroEwhfSXmmMmMSda4JTUzanJDWfhIm1JrqzTlo0
-         GWMMjDbG9su97cr30EVxDw7rQCtt0/9ay4l6NOLMHRf14mp5Tw5bOzyYHnbqSj3Tp3sm
-         oksZnGQVbzJ7UVNJ11e/UAImQelQf+B6GuimWIea5h7geVMl7k/bvrAzQq8JWCLKRYlM
-         HqxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=y9bMKIoMA4ZWyNr76PabwIny+psaRVtbI7l3QYKzBGY=;
-        b=ausbNNtMRk22RAOkdpaWcQ2+UljbUlQ1TzaRpKfZ1z0evpHLyVkcmP+T7h/t3HNt17
-         Mvjx0BjwAz7fOTHt9Od7LtB3KAze9Vgnx2ZjSpJ1YdtRmFdLCch5Qe026QWQw7mmbzl2
-         gNf1OPx7T+FboXEQA9ZhPwq1+pR0F+M2aNjR0aqiorLUh10rc0IyO4zTG4nJ7714TLH2
-         v9LwGWlwfIdRqnMRa9k9qxAg6AzQ3/GmzLpopFD3phg78duYIpfiKZGMybPNX4zW6wbZ
-         3SiJT/wfr8o8/qVlEKVeXDn+J9FgaRNgUG40lbc3ArcsPdf1/EOIqpV5zdv3WZN8Ep3w
-         Bo/w==
-X-Gm-Message-State: AOAM531UTUCe/b0Iq8EXHOuFRsCZ5pABPMrFBV/RZx+n+FSNnDoL8d3Z
-        EginXjVkgmcaeRNfqOsA9oBieUlrjZQpEQ==
-X-Google-Smtp-Source: ABdhPJz0gleb4vbgpmjhsEr/g1gMmnuJZmdWwUakwBghvIs9O1+imICeQyCPgXNy4WFhjB+yVOJ2rw==
-X-Received: by 2002:a17:907:3da5:b0:6e8:c2c8:1f18 with SMTP id he37-20020a1709073da500b006e8c2c81f18mr6298391ejc.728.1650030738952;
-        Fri, 15 Apr 2022 06:52:18 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id r29-20020a50c01d000000b00415fb0dc793sm2781482edb.47.2022.04.15.06.52.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 06:52:18 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <d95791fc-a278-9002-2f12-6aeaa1d1e47f@redhat.com>
-Date:   Fri, 15 Apr 2022 15:52:14 +0200
+        Fri, 15 Apr 2022 09:59:17 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D565DA73;
+        Fri, 15 Apr 2022 06:56:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650031009; x=1681567009;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=v7unE14WbUKaCZVPi7jLQZ+PksxOmPjhyzrGT7gMB60=;
+  b=Pw5T44ZDGTnPLTz36aivPdEFhX/H+D/cvWXuvoRNefRbo8S7NuuLS/D+
+   X1ewhA5l4Z+uf+T321WDBuc6Jum8H88hMzlVGEYOBUx19Tx+8+cUWlcMY
+   AGYrl8a6m0w3UlR7rJmE9GO0cWQX48QpVhvKJs7JKfvOaLidfkrrHrsQR
+   Jy9Nhm9rrqnj4gZtFE9I3gLF64gaNNSMnTAPrDLnxQqpMsuzER3Pf1O35
+   chQv02CwxYUBAjXnt3VWIYDF+fNv83b/jydINVThQjJbhR3T62gy6AS/6
+   2L0VrBPAyLsSUtQkbiBEA87d+zZkqyRJKEa6Irtn4zDuVFnjnd+C51pi+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="326059413"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="326059413"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:56:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="527400057"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2022 06:56:46 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 23FDui6E023636;
+        Fri, 15 Apr 2022 14:56:44 +0100
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Fei Liu <feliu@redhat.com>, netdev@vger.kernel.org,
+        mschmidt@redhat.com, Brett Creeley <brett@pensando.io>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [Intel-wired-lan] [PATCH net] ice: Protect vf_state check by cfg_lock in ice_vc_process_vf_msg()
+Date:   Fri, 15 Apr 2022 15:53:54 +0200
+Message-Id: <20220415135354.478687-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <YlldsfrRJURXpp5d@boxer>
+References: <20220413072259.3189386-1-ivecera@redhat.com> <YlldFriBVkKEgbBs@boxer> <YlldsfrRJURXpp5d@boxer>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 061/104] KVM: TDX: Finalize VM initialization
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <83768bf0f786d24f49d9b698a45ba65441ef5ef0.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <83768bf0f786d24f49d9b698a45ba65441ef5ef0.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,91 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> To protect the initial contents of the guest TD, the TDX module measures
-> the guest TD during the build process as SHA-384 measurement.  The
-> measurement of the guest TD contents needs to be completed to make the
-> guest TD ready to run.
-> 
-> Add a new subcommand, KVM_TDX_FINALIZE_VM, for VM-scoped
-> KVM_MEMORY_ENCRYPT_OP to finalize the measurement and mark the TDX VM ready
-> to run.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/include/uapi/asm/kvm.h       |  1 +
->   arch/x86/kvm/vmx/tdx.c                | 21 +++++++++++++++++++++
->   tools/arch/x86/include/uapi/asm/kvm.h |  1 +
->   3 files changed, 23 insertions(+)
-> 
-> diff --git a/arch/x86/include/uapi/asm/kvm.h b/arch/x86/include/uapi/asm/kvm.h
-> index 77f46260d868..943219a08fcd 100644
-> --- a/arch/x86/include/uapi/asm/kvm.h
-> +++ b/arch/x86/include/uapi/asm/kvm.h
-> @@ -534,6 +534,7 @@ enum kvm_tdx_cmd_id {
->   	KVM_TDX_INIT_VM,
->   	KVM_TDX_INIT_VCPU,
->   	KVM_TDX_INIT_MEM_REGION,
-> +	KVM_TDX_FINALIZE_VM,
->   
->   	KVM_TDX_CMD_NR_MAX,
->   };
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index cd726c41d362..85d5f961d97e 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -1103,6 +1103,24 @@ static int tdx_init_mem_region(struct kvm *kvm, struct kvm_tdx_cmd *cmd)
->   	return ret;
->   }
->   
-> +static int tdx_td_finalizemr(struct kvm *kvm)
-> +{
-> +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> +	u64 err;
-> +
-> +	if (!is_td_initialized(kvm) || is_td_finalized(kvm_tdx))
-> +		return -EINVAL;
-> +
-> +	err = tdh_mr_finalize(kvm_tdx->tdr.pa);
-> +	if (WARN_ON_ONCE(err)) {
-> +		pr_tdx_error(TDH_MR_FINALIZE, err, NULL);
-> +		return -EIO;
-> +	}
-> +
-> +	kvm_tdx->finalized = true;
-> +	return 0;
-> +}
-> +
->   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
->   {
->   	struct kvm_tdx_cmd tdx_cmd;
-> @@ -1123,6 +1141,9 @@ int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
->   	case KVM_TDX_INIT_MEM_REGION:
->   		r = tdx_init_mem_region(kvm, &tdx_cmd);
->   		break;
-> +	case KVM_TDX_FINALIZE_VM:
-> +		r = tdx_td_finalizemr(kvm);
-> +		break;
->   	default:
->   		r = -EINVAL;
->   		goto out;
-> diff --git a/tools/arch/x86/include/uapi/asm/kvm.h b/tools/arch/x86/include/uapi/asm/kvm.h
-> index 77f46260d868..943219a08fcd 100644
-> --- a/tools/arch/x86/include/uapi/asm/kvm.h
-> +++ b/tools/arch/x86/include/uapi/asm/kvm.h
-> @@ -534,6 +534,7 @@ enum kvm_tdx_cmd_id {
->   	KVM_TDX_INIT_VM,
->   	KVM_TDX_INIT_VCPU,
->   	KVM_TDX_INIT_MEM_REGION,
-> +	KVM_TDX_FINALIZE_VM,
->   
->   	KVM_TDX_CMD_NR_MAX,
->   };
+From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
+Date: Fri, 15 Apr 2022 13:57:37 +0200
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> On Fri, Apr 15, 2022 at 01:55:10PM +0200, Maciej Fijalkowski wrote:
+> > On Wed, Apr 13, 2022 at 09:22:59AM +0200, Ivan Vecera wrote:
+> > > Previous patch labelled "ice: Fix incorrect locking in
+> > > ice_vc_process_vf_msg()"  fixed an issue with ignored messages
+> > 
+> > tiny tiny nit: double space after "
+> > Also, has mentioned patch landed onto some tree so that we could provide
+> > SHA-1 of it? If not, then maybe squashing this one with the mentioned one
+> > would make sense?
+> 
+> Again, Brett's Intel address is bouncing, so:
+> CC: Brett Creeley <brett@pensando.io>
 
-Note however that errors should be passed back in the struct.
+Cc: Jacob Keller <jacob.e.keller@intel.com>
 
-Paolo
+> 
+> > 
+> > > sent by VF driver but a small race window still left.
+
+--- 8< ---
+
+> > > -- 
+> > > 2.35.1
+
+Al

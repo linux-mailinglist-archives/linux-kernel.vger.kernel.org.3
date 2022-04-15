@@ -2,116 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B092E502DBF
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:28:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 031D0502DC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:32:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345671AbiDOQa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S1355843AbiDOQe2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:34:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237934AbiDOQaz (ORCPT
+        with ESMTP id S239143AbiDOQeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:30:55 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E91829D4EC;
-        Fri, 15 Apr 2022 09:28:25 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id c64so10413401edf.11;
-        Fri, 15 Apr 2022 09:28:25 -0700 (PDT)
+        Fri, 15 Apr 2022 12:34:25 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0181AC6274
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id e4so8825162oif.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Lt30n1Aq/tzWW8ndjvKsPkYlvSJxMZf9UGwNEhedf/A=;
-        b=Ff9oqa1iAsuPAzGx0tVdZPiY0U3yCIp95gYwLMxSfyTD3QrAiHfCwy+aZzgMr2P5zs
-         1D0zHpZgKEink25n9Sv6+JlfcJD6HHnBJKmyfYiQKvlLf9lxajkLafHRrInxVx8SoF/m
-         5x1BR2A4bowsQFVr2pBQDNGSt4wmcuLKoI2rB7wn+OUk67+M3n0kUjD7N2o26S+ofxl2
-         N3hhVQ1lM5MOTb4w5hfXves4/BgMNqYOr/pQ4zsZj5jHt4BQVdIlfYwGIkEaSLEIwkqy
-         1V5m3NCTMg4YW9iD6OaYjgzbVfCOIFzIIkCj1fTvsEfd1Iu7xc3kl5ODW3l8AFoEIuiC
-         6hjA==
+        d=linuxfoundation.org; s=google;
+        h=to:cc:from:subject:message-id:date:user-agent:mime-version
+         :content-language;
+        bh=pqvzZriBexnb3dTylqBqJsPxraE3tG2um5dSfrVfcK4=;
+        b=iOEz3x8Z5i7XaP5WoupZj+zZM9SAcWo9yiJzKmd9YPjxjtDmBXzsUg1pFIfAS+wvMJ
+         1TBS3NqaJUjDjaSa9g4gMh0/WJQdcci2WgUADRlTrbPTOr70mcNevlfoXpYNENxWfbFG
+         EHiyoYpNIHo2CcZotZsR7y93jEF1LzxASvVTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Lt30n1Aq/tzWW8ndjvKsPkYlvSJxMZf9UGwNEhedf/A=;
-        b=T2MEu+fhvC4otrSOW7aceeks3Bn2kMUWSnVW7GDjnUulZjavksWwXCmyCjJ+FL5QPP
-         Lo/h0fHERpkF95ildCBOGEQLNsv3nQFHuZZ363Ghk1FkgFdyyNsHvHEmcoeNngmZ8FAe
-         oLnkmOLVPqvxq47qJQLaobs8ozotnzWLWTwSdUIcfvwmqCreLhterG+2ZTITqQ+IGf8o
-         XWfAD2pWkv4K6jRMagvMWmcnjNel8mdN3HGQR5AEnjmG3MOc+TmHHua4So2bUSOVvRp/
-         SOCrThJ7d+apU0jf3HekjeAV5oz42NdRnyPOT96VN6nER5GyeXQdoSIypcHN4jq/+TSu
-         52Dw==
-X-Gm-Message-State: AOAM531aXTfBd+cjb6S2xcVzsESku7n1njwVH5AIlJ5b1LQWcqt5eZVO
-        H9XEatBVFFiDDER6XCnTiKM=
-X-Google-Smtp-Source: ABdhPJyx+TJF7YU3cKfpbeJfitnyKRE7+FSxxS2OY5D6atRrP0ktRKcRDKOFaZfRyc1P2n8NwRyWcg==
-X-Received: by 2002:aa7:d3c7:0:b0:41d:805a:153a with SMTP id o7-20020aa7d3c7000000b0041d805a153amr48460edr.316.1650040104512;
-        Fri, 15 Apr 2022 09:28:24 -0700 (PDT)
-Received: from anparri (host-79-52-64-69.retail.telecomitalia.it. [79.52.64.69])
-        by smtp.gmail.com with ESMTPSA id lg4-20020a170906f88400b006e869103240sm1800717ejb.131.2022.04.15.09.28.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 09:28:23 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 18:28:11 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 6/6] Drivers: hv: vmbus: Refactor the ring-buffer
- iterator functions
-Message-ID: <20220415162811.GA47513@anparri>
-References: <20220413204742.5539-1-parri.andrea@gmail.com>
- <20220413204742.5539-7-parri.andrea@gmail.com>
- <PH0PR21MB302516C5334076716966B7EED7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
- <20220415070031.GE2961@anparri>
+        h=x-gm-message-state:to:cc:from:subject:message-id:date:user-agent
+         :mime-version:content-language;
+        bh=pqvzZriBexnb3dTylqBqJsPxraE3tG2um5dSfrVfcK4=;
+        b=IeAmj9NqdkWN3DYotIE35zwC534qe9moyrg8nuckZ1s2OLLgywWO6qIQvbo67yoYuw
+         Cw13DR8GIJIKr7AkZ7g2m3b04iwYpo8bc52EbVfCcxaRCKYuS63c9BMWIMDXG0ZT5oSg
+         SU//8RlSjqvNE62wJjPfGc7xhm3+ictvhv4Osb8slDhBhLf9jk7uKS8CKj7vkgrQRHVc
+         aBBDnb4hC1WeJw+hSnEokm18l3vndKJzk00XKOLS2XtwbSGO1yeKrp+XdQ2qlXc3nl1s
+         NZ/aFItjvk64d8ZUNr6tmEHaafQomOcI/32cJIiOWKTUD9uXIgvOmsZI/aE3NnBZ2l5Z
+         s6pg==
+X-Gm-Message-State: AOAM530Byj4EJIrws3zjKdhRAQWesyjdCE0ze39Vah4ogwvV8j9inh5P
+        LQHwt+59EGMSAP+hm5PpLONfpQXwSSMCXg==
+X-Google-Smtp-Source: ABdhPJwe//uT5w4loxD+P4rBi0KJh/lS7dSBtamroE/I+6cJ+VknoekxfBPjg+PyFtXNtmVq80baUQ==
+X-Received: by 2002:a05:6808:1709:b0:2f9:30ec:c95b with SMTP id bc9-20020a056808170900b002f930ecc95bmr1887836oib.240.1650040314065;
+        Fri, 15 Apr 2022 09:31:54 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm1189608otu.30.2022.04.15.09.31.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 09:31:53 -0700 (PDT)
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest update for Linux 5.18-rc3
+Message-ID: <c7ff0298-f0d7-2159-2af0-4c94abc5c52d@linuxfoundation.org>
+Date:   Fri, 15 Apr 2022 10:31:52 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415070031.GE2961@anparri>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed;
+ boundary="------------5F0255C4A9D090820370A2E0"
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:00:31AM +0200, Andrea Parri wrote:
-> > > @@ -470,7 +471,6 @@ struct vmpacket_descriptor *hv_pkt_iter_first_raw(struct
-> > > vmbus_channel *channel)
-> > > 
-> > >  	return (struct vmpacket_descriptor *)(hv_get_ring_buffer(rbi) + rbi-
-> > > >priv_read_index);
-> > >  }
-> > > -EXPORT_SYMBOL_GPL(hv_pkt_iter_first_raw);
-> > 
-> > Does hv_pkt_iter_first_raw() need to be retained at all as a
-> > separate function?  I think after these changes, the only caller
-> > is hv_pkt_iter_first(), in which case the code could just go
-> > inline in hv_pkt_iter_first().  Doing that combining would
-> > also allow the elimination of the duplicate call to 
-> > hv_pkt_iter_avail().
+This is a multi-part message in MIME format.
+--------------5F0255C4A9D090820370A2E0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Back to this, can you clarify what you mean by "the elimination of..."?
-After moving the function "inline", hv_pkt_iter_avail() would be called
-in to check for a non-NULL descriptor (in the inline function) and later
-in the computation of bytes_avail.
+Hi Linus,
 
-Thanks,
-  Andrea
+Please pull the following Kselftest update for Linux 5.18-rc3.
+
+This Kselftest fixes update consists of a mqueue perf test memory leak
+bug fix. mq_perf_tests fail to call CPU_FREE to free memory allocated
+by CPU_SET.
+
+diff is attached.
+
+thanks,
+-- Shuah
 
 
-> 
-> Good point.  Will do.
-> 
-> Thanks,
->   Andrea
+----------------------------------------------------------------
+The following changes since commit 79ee8aa31d518c1fd5f3b1b1ac39dd1fb4dc7039:
+
+   selftests/harness: Pass variant to teardown (2022-04-04 13:37:48 -0600)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-5.18-rc3
+
+for you to fetch changes up to ce64763c63854b4079f2e036638aa881a1fb3fbc:
+
+   testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set (2022-04-12 13:54:49 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-5.18-rc3
+
+This Kselftest fixes update consists of a mqueue perf test memory leak
+bug fix. mq_perf_tests fail to call CPU_FREE to free memory allocated
+by CPU_SET.
+
+----------------------------------------------------------------
+Athira Rajeev (1):
+       testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
+
+  tools/testing/selftests/mqueue/mq_perf_tests.c | 25 +++++++++++++++++--------
+  1 file changed, 17 insertions(+), 8 deletions(-)
+----------------------------------------------------------------
+
+--------------5F0255C4A9D090820370A2E0
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-5.18-rc3.diff"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment;
+ filename="linux-kselftest-fixes-5.18-rc3.diff"
+
+diff --git a/tools/testing/selftests/mqueue/mq_perf_tests.c b/tools/testing/selftests/mqueue/mq_perf_tests.c
+index b019e0b8221c..84fda3b49073 100644
+--- a/tools/testing/selftests/mqueue/mq_perf_tests.c
++++ b/tools/testing/selftests/mqueue/mq_perf_tests.c
+@@ -180,6 +180,9 @@ void shutdown(int exit_val, char *err_cause, int line_no)
+ 	if (in_shutdown++)
+ 		return;
+ 
++	/* Free the cpu_set allocated using CPU_ALLOC in main function */
++	CPU_FREE(cpu_set);
++
+ 	for (i = 0; i < num_cpus_to_pin; i++)
+ 		if (cpu_threads[i]) {
+ 			pthread_kill(cpu_threads[i], SIGUSR1);
+@@ -551,6 +554,12 @@ int main(int argc, char *argv[])
+ 		perror("sysconf(_SC_NPROCESSORS_ONLN)");
+ 		exit(1);
+ 	}
++
++	if (getuid() != 0)
++		ksft_exit_skip("Not running as root, but almost all tests "
++			"require root in order to modify\nsystem settings.  "
++			"Exiting.\n");
++
+ 	cpus_online = min(MAX_CPUS, sysconf(_SC_NPROCESSORS_ONLN));
+ 	cpu_set = CPU_ALLOC(cpus_online);
+ 	if (cpu_set == NULL) {
+@@ -589,7 +598,7 @@ int main(int argc, char *argv[])
+ 						cpu_set)) {
+ 					fprintf(stderr, "Any given CPU may "
+ 						"only be given once.\n");
+-					exit(1);
++					goto err_code;
+ 				} else
+ 					CPU_SET_S(cpus_to_pin[cpu],
+ 						  cpu_set_size, cpu_set);
+@@ -607,7 +616,7 @@ int main(int argc, char *argv[])
+ 				queue_path = malloc(strlen(option) + 2);
+ 				if (!queue_path) {
+ 					perror("malloc()");
+-					exit(1);
++					goto err_code;
+ 				}
+ 				queue_path[0] = '/';
+ 				queue_path[1] = 0;
+@@ -622,17 +631,12 @@ int main(int argc, char *argv[])
+ 		fprintf(stderr, "Must pass at least one CPU to continuous "
+ 			"mode.\n");
+ 		poptPrintUsage(popt_context, stderr, 0);
+-		exit(1);
++		goto err_code;
+ 	} else if (!continuous_mode) {
+ 		num_cpus_to_pin = 1;
+ 		cpus_to_pin[0] = cpus_online - 1;
+ 	}
+ 
+-	if (getuid() != 0)
+-		ksft_exit_skip("Not running as root, but almost all tests "
+-			"require root in order to modify\nsystem settings.  "
+-			"Exiting.\n");
+-
+ 	max_msgs = fopen(MAX_MSGS, "r+");
+ 	max_msgsize = fopen(MAX_MSGSIZE, "r+");
+ 	if (!max_msgs)
+@@ -740,4 +744,9 @@ int main(int argc, char *argv[])
+ 			sleep(1);
+ 	}
+ 	shutdown(0, "", 0);
++
++err_code:
++	CPU_FREE(cpu_set);
++	exit(1);
++
+ }
+
+--------------5F0255C4A9D090820370A2E0--

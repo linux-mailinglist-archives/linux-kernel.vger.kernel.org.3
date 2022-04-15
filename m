@@ -2,208 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C55F5026FB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:43:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D5315026F9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:43:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351410AbiDOIpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53604 "EHLO
+        id S241902AbiDOIqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:46:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351612AbiDOIp0 (ORCPT
+        with ESMTP id S1351576AbiDOIpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:45:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B39BA31B;
-        Fri, 15 Apr 2022 01:42:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1B9EFB82C42;
-        Fri, 15 Apr 2022 08:42:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2186EC385A8;
-        Fri, 15 Apr 2022 08:42:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650012161;
-        bh=cu5bN2T1sput01IUK44V65OIVMTltnqIip044jyH98U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l++9rF2+wdQSpuGnK7HUIuDBk8geTdWFjbMMtmn6B9BNWav6dGtUmI1+Dd/HD9XUE
-         h7MYVu34TY2NTDX3fO4CW9D6l2AHZ30xM7CvpyQVwbscZnrEonz3ACU5R9xK0CmSfl
-         BaUpjXjK6j40X6TOzAYIFW3fT3oLEfKY3WxVnnTs=
-Date:   Fri, 15 Apr 2022 10:42:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiri Slaby <jslaby@suse.cz>
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] tty: serial: introduce uart_port_tx{,_limit}()
- helpers
-Message-ID: <Ylkv/s7hRfXK07hD@kroah.com>
-References: <20220411105405.9519-1-jslaby@suse.cz>
- <20220411105405.9519-2-jslaby@suse.cz>
- <YlhMhy9FhK0j3MId@kroah.com>
- <d8d4236e-3b76-1dde-e952-76a64c906c85@suse.cz>
+        Fri, 15 Apr 2022 04:45:53 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37F8BA306;
+        Fri, 15 Apr 2022 01:43:24 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Kfqbv3ZGDz9sTc;
+        Fri, 15 Apr 2022 10:43:23 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id o1KDD6TW0Pqt; Fri, 15 Apr 2022 10:43:23 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Kfqbs4rsVz9sTl;
+        Fri, 15 Apr 2022 10:43:21 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 9568F8B778;
+        Fri, 15 Apr 2022 10:43:21 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id bgbcjTYnZO2O; Fri, 15 Apr 2022 10:43:21 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 760C38B764;
+        Fri, 15 Apr 2022 10:43:21 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 23F8hCb31535259
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 10:43:12 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 23F8hB0O1535258;
+        Fri, 15 Apr 2022 10:43:11 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH net-next v2] sungem: Prepare cleanup of powerpc's asm/prom.h
+Date:   Fri, 15 Apr 2022 10:43:06 +0200
+Message-Id: <11d54e799ff339f9d4aa00a741dc1e04755db7a7.1650012142.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1650012185; l=1363; s=20211009; h=from:subject:message-id; bh=bCm0zqSsYokEpqhcDYAd6mbAIoE9wmARPAxgSl0MFjw=; b=i7kE5Q+9YNOpEXM9DwIpgfOrQWR9skVh2xgNWHKtCHXjROctk0aJjODJwyKYieYQ1Qza4Ie7lmHZ gKLPG0zqDqW9xftdr8b4HejoB0fkn3yXkRMC4h36zng61/j8ryOC
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d8d4236e-3b76-1dde-e952-76a64c906c85@suse.cz>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:47:26AM +0200, Jiri Slaby wrote:
-> On 14. 04. 22, 18:32, Greg KH wrote:
-> > On Mon, Apr 11, 2022 at 12:54:03PM +0200, Jiri Slaby wrote:
-> > > Many serial drivers do the same thing:
-> > > * send x_char if set
-> > > * keep sending from the xmit circular buffer until either
-> > >    - the loop reaches the end of the xmit buffer
-> > >    - TX is stopped
-> > >    - HW fifo is full
-> > > * check for pending characters and:
-> > >    - wake up tty writers to fill for more data into xmit buffer
-> > >    - stop TX if there is nothing in the xmit buffer
-> > > 
-> > > The only differences are:
-> > > * how to write the character to the HW fifo
-> > > * the check of the end condition:
-> > >    - is the HW fifo full?
-> > >    - is limit of the written characters reached?
-> > > 
-> > > So unify the above into two helpers:
-> > > * uart_port_tx_limit() -- the generic one, it performs the above taking
-> > >    into account the written characters limit
-> > > * uart_port_tx() -- calls the above with ~0 as the limit. So it only
-> > >    checks the HW fullness.
-> > > 
-> > > We need three more hooks in struct uart_ops for all this to work:
-> > > * tx_ready() -- returns true if HW can accept more data.
-> > > * put_char() -- write a character to the device.
-> > > * tx_done() -- when the write loop is done, perform arbitrary action
-> > >    before potential invocation of ops->stop_tx() happens.
-> > > 
-> > > NOTE1: Maybe the three hooks in uart_ops above are overkill. We can
-> > > instead pass pointers to the three functions directly to the new helpers
-> > > as they are not used elsewhere. Similar to uart_console_write() and its
-> > > putchar().
-> > > 
-> > > NOTE2: These two new helper functions call the hooks per every character
-> > > processed. I was unable to measure any difference, provided most time is
-> > > spent by readb (or alike) in the hooks themselves.  First, LTO might
-> > > help to eliminate these explicit calls (we might need NOTE1 to be
-> > > implemented for this to be true). Second, if this turns out to be a
-> > > problem, we can introduce a macro to build the helper in the driver's
-> > > code instead of serial_core. That is, similar to wait_event().
-> > > 
-> > > Signed-off-by: Jiri Slaby <jslaby@suse.cz>
-> > > ---
-> > >   Documentation/driver-api/serial/driver.rst | 28 ++++++++++++
-> > >   drivers/tty/serial/serial_core.c           | 53 ++++++++++++++++++++++
-> > >   include/linux/serial_core.h                |  9 ++++
-> > >   3 files changed, 90 insertions(+)
-> > > 
-> > > diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
-> > > index 06ec04ba086f..7dc3791addeb 100644
-> > > --- a/Documentation/driver-api/serial/driver.rst
-> > > +++ b/Documentation/driver-api/serial/driver.rst
-> > > @@ -80,6 +80,34 @@ hardware.
-> > >   	This call must not sleep
-> > > +  tx_ready(port)
-> > > +	The driver returns true if the HW can accept more data to be sent.
-> > > +
-> > > +	Locking: port->lock taken.
-> > > +
-> > > +	Interrupts: locally disabled.
-> > > +
-> > > +	This call must not sleep.
-> > > +
-> > > +  put_char(port, ch)
-> > > +	The driver is asked to write ch to the device.
-> > > +
-> > > +	Locking: port->lock taken.
-> > > +
-> > > +	Interrupts: locally disabled.
-> > > +
-> > > +	This call must not sleep.
-> > > +
-> > > +  tx_done(port)
-> > > +	When the write loop is done, the driver can perform arbitrary action
-> > > +	here before potential invocation of ops->stop_tx() happens.
-> > > +
-> > > +	Locking: port->lock taken.
-> > > +
-> > > +	Interrupts: locally disabled.
-> > > +
-> > > +	This call must not sleep.
-> > > +
-> > >     set_mctrl(port, mctrl)
-> > >   	This function sets the modem control lines for port described
-> > >   	by 'port' to the state described by mctrl.  The relevant bits
-> > > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> > > index 6a8963caf954..1be14e90066c 100644
-> > > --- a/drivers/tty/serial/serial_core.c
-> > > +++ b/drivers/tty/serial/serial_core.c
-> > > @@ -107,6 +107,59 @@ void uart_write_wakeup(struct uart_port *port)
-> > >   }
-> > >   EXPORT_SYMBOL(uart_write_wakeup);
-> > > +static bool uart_port_tx_always_ready(struct uart_port *port)
-> > > +{
-> > > +	return true;
-> > > +}
-> > > +
-> > > +/**
-> > > + * uart_port_tx_limit -- transmit helper for uart_port
-> > > + * @port: from which port to transmit
-> > > + * @count: limit count
-> > > + *
-> > > + * uart_port_tx_limit() transmits characters from the xmit buffer to the
-> > > + * hardware using @uart_port::ops::put_char(). It does so until @count
-> > > + * characters are sent and while @uart_port::ops::tx_ready() still returns
-> > > + * non-zero (if non-NULL).
-> > > + *
-> > > + * Return: number of characters in the xmit buffer when done.
-> > > + */
-> > > +unsigned int uart_port_tx_limit(struct uart_port *port, unsigned int count)
-> > > +{
-> > > +	struct circ_buf *xmit = &port->state->xmit;
-> > > +	bool (*tx_ready)(struct uart_port *) = port->ops->tx_ready ? :
-> > > +		uart_port_tx_always_ready;
-> > > +	unsigned int pending;
-> > > +
-> > > +	for (; count && tx_ready(port); count--, port->icount.tx++) {
-> > > +		if (port->x_char) {
-> > > +			port->ops->put_char(port, port->x_char);
-> > > +			port->x_char = 0;
-> > > +			continue;
-> > > +		}
-> > > +
-> > > +		if (uart_circ_empty(xmit) || uart_tx_stopped(port))
-> > > +			break;
-> > > +
-> > > +		port->ops->put_char(port, xmit->buf[xmit->tail]);
-> > 
-> > That's a lot of redirection and function pointer mess per each character
-> > sent now.  With the spectre overhead here (and only getting worse), this
-> > feels like a step backwards.
-> > 
-> > I doubt throughput matters here given cpu speeds now, _but_ the cpu load
-> > should go up.
-> > 
-> > Although on smaller cpus with slower Mhz and faster line rates, this
-> > feels like a lot of extra work happening for no real good reason.
-> 
-> I know… Did you miss NOTE2 in the commit log? Any idea on that?
+powerpc's asm/prom.h brings some headers that it doesn't
+need itself.
 
-I did see it, but I LTO can not handle function pointer redirection.  I
-was wondering if you ran any benchmarks to see if this is noticeable.
+In order to clean it up in a further step, first clean all
+files that include asm/prom.h
 
-I am all for making the drivers smaller, but not at the increased
-overhead of every character being sent :(
+Some files don't need asm/prom.h at all. For those ones,
+just remove inclusion of asm/prom.h
 
-thanks,
+Some files don't need any of the items provided by asm/prom.h,
+but need some of the headers included by asm/prom.h. For those
+ones, add the needed headers that are brought by asm/prom.h at
+the moment, then remove asm/prom.h
 
-greg k-h
+Some files really need asm/prom.h but also need some of the
+headers included by asm/prom.h. For those one, leave asm/prom.h
+but also add the needed headers so that they can be removed
+from asm/prom.h in a later step.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+v2: More detailed commit description
+---
+ drivers/net/sungem_phy.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/net/sungem_phy.c b/drivers/net/sungem_phy.c
+index 4daac5fda073..ff22b6b1c686 100644
+--- a/drivers/net/sungem_phy.c
++++ b/drivers/net/sungem_phy.c
+@@ -29,11 +29,7 @@
+ #include <linux/mii.h>
+ #include <linux/ethtool.h>
+ #include <linux/delay.h>
+-
+-#ifdef CONFIG_PPC_PMAC
+-#include <asm/prom.h>
+-#endif
+-
++#include <linux/of.h>
+ #include <linux/sungem_phy.h>
+ 
+ /* Link modes of the BCM5400 PHY */
+-- 
+2.35.1
+

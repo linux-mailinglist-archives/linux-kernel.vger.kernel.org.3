@@ -2,132 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD8D95033FB
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ED805032D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356481AbiDOXXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43124 "EHLO
+        id S1356460AbiDOXYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:24:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356469AbiDOXX2 (ORCPT
+        with ESMTP id S230103AbiDOXYM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:23:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1933D494;
-        Fri, 15 Apr 2022 16:20:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2964B82FAE;
-        Fri, 15 Apr 2022 23:20:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C758C385B1;
-        Fri, 15 Apr 2022 23:20:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650064856;
-        bh=H5LJwPbVhvyvTjl53a9PdwZH87MlV/bckKSPVid1hFM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=G4T6wE40lgyvJa3jOlMgxoai6nBzgbMje5k8IcYpW83uNnMLhXURA86/bCqrCIhU9
-         uYztFsyvoZ0hqpMKcJUEfvfdfxAb5e4z1ui4xXYZ+tcNmO0pLfRdVSKo8bXbNUcmK+
-         sW0Oi4SlL5KEWsLmqAyZsNPOQ0H5kbCYHmq4XirCYnXv+t/HGTYaEuBdz4bsiXOSJ6
-         +14QF1NxHMzZSooNcbFNzsMTj9Eld9hG8Vd8z7Fx0AlCpRffAibJ9OYx02VOiodjpk
-         mEhxO+wlljqUz6lib05uSPulr8Xsa9cnHybkfosNHVPtguTDBhsk6osOMV/MeZtQU5
-         orB/w4FGXc+2Q==
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-2eba37104a2so95889987b3.0;
-        Fri, 15 Apr 2022 16:20:56 -0700 (PDT)
-X-Gm-Message-State: AOAM5318N/yHMJFrZeYOOvLpIReAGrskfEnzXbyet0XcGNR+CMwLCjDk
-        6V33KhqgzZW7X8JU9KBx0xqNHUN5BFAY7kdy1aM=
-X-Google-Smtp-Source: ABdhPJxkXwLE32cy9vO7zAkTLquRKkeV5Pv4mTYQklMv/2cDtiOUZg+7j4dLOyNKcRICXvJ4LlZHOTfeJlkbxbPWvXc=
-X-Received: by 2002:a81:14c8:0:b0:2eb:eb91:d88f with SMTP id
- 191-20020a8114c8000000b002ebeb91d88fmr1212396ywu.148.1650064855126; Fri, 15
- Apr 2022 16:20:55 -0700 (PDT)
+        Fri, 15 Apr 2022 19:24:12 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E193EAA9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:21:42 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id g34so16685648ybj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=nuo7iHZ1RNifX3JTO2eCwX7T0jOUxZ1qwp7LLcocIVI=;
+        b=XEBSZwb2Tz6Zmz6ducvRkE4UvXRTLcZOtZX2rRoWnKxpWRJf6ljXu8Vc3NyRkjEjrS
+         VBK0GW3CUTODz59QZq9Oj64X9t8amPvFT8P64/JUpfWeYWRl/kfpPl+//vs4HoW22Bd1
+         TlIg+kPVUfMDJV4qLOHQtkmwBcP0g2B+j6YK5NESXMEfcRMp2Nfd1bjSNL1Ly5wL4oj8
+         8ipcgdXXQ+Q/v67AIaS5Te/hACSNHlJQwMGnaABI2ol2K5et7tKpr44M/7YrS9cdGQxV
+         3OgLqHBHy3PaCa1i4Qa0Y4e3mP27DqaD0rIZK2McBbpKrAY/AIS5qugVGrSd7aVHFK0P
+         jPOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=nuo7iHZ1RNifX3JTO2eCwX7T0jOUxZ1qwp7LLcocIVI=;
+        b=ziNyD/dLTbrhXRi/3va+0hQAGORJ5hyvJZlhc78NfKfhVOuWTvRvdX2XbqOOJoZwsd
+         9p2tGi1VcGZozUkn9BwkLZwjeADvN+tTGA5JP85R5sa0yHTsdZiSw5xBjmKxQVUWHUho
+         VyZvG26vO7K2qeWHCTesFbPN15ax3V32LtdXyft60Yqu3QZxRPIaL6pOzI5xvs5KeHgU
+         3lQxaR3yv+x01k8X/onAuYR3XYZT9cvKdhbkBmhoZANhIyqNmLNaqB+UzFPtHJ3wNXr4
+         zLUvTraQB6mokiyvFh26+D29KcgobklULisBbY5BWV/VmLA4vgyEdmKpTTNiEKxOsa85
+         LxMA==
+X-Gm-Message-State: AOAM5325Oskjviq5863y0aZiLnq6V/tFdcvIpzJEFwwfrz4yfJtOl0Jg
+        hbrpVl6ds12voa74aZZah+fF+dviK2Awcdi60pEOQg==
+X-Google-Smtp-Source: ABdhPJxjBW3mXMuVLFyhRvmnClhk4vp3fKUtEpPFDSc1AuAHVIn6BHStkQ4Jww+esZZnyxTN+zvadMzQnK6p0Ebp5kM=
+X-Received: by 2002:a05:6902:154b:b0:644:b5e4:aa34 with SMTP id
+ r11-20020a056902154b00b00644b5e4aa34mr1414126ybu.126.1650064901749; Fri, 15
+ Apr 2022 16:21:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-2-alobakin@pm.me>
- <CAPhsuW7qrH6Fc-MSJSJzS0r_vDzTfHyaaRDGhrTjo9vijQwpWg@mail.gmail.com>
-In-Reply-To: <CAPhsuW7qrH6Fc-MSJSJzS0r_vDzTfHyaaRDGhrTjo9vijQwpWg@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 15 Apr 2022 16:20:44 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4SZS9p6OQ0yAaOo_BdNT3HeA4T9pLCCEiazc+HmJBZKQ@mail.gmail.com>
-Message-ID: <CAPhsuW4SZS9p6OQ0yAaOo_BdNT3HeA4T9pLCCEiazc+HmJBZKQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with !CONFIG_PERF_EVENTS
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
+References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
+ <20220409135104.3733193-2-wuyun.abel@bytedance.com> <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
+ <56ded56d-f7ad-a49f-c19c-8aa40fb33a29@bytedance.com> <CABk29Nu+6vh825SqyNmSJoWBQmEBgCsk6mcEtWLmXCq_T0xUjg@mail.gmail.com>
+ <45fdb9f1-ac3e-2b92-9bd9-0f5e5886e2c9@bytedance.com>
+In-Reply-To: <45fdb9f1-ac3e-2b92-9bd9-0f5e5886e2c9@bytedance.com>
+From:   Josh Don <joshdon@google.com>
+Date:   Fri, 15 Apr 2022 16:21:30 -0700
+Message-ID: <CABk29NtifQV7+kgg_8yLqGHraMAS48BJjmU9WfkJihu-C4c8hw@mail.gmail.com>
+Subject: Re: [RFC v2 1/2] sched/fair: filter out overloaded cpus in SIS
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 4:07 PM Song Liu <song@kernel.org> wrote:
+> > Does this check help that much? Given that you added the filter below
+> > to cut out searching overloaded cpus, I would think that the below is
+> > sufficient.
 >
-> On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
-> >
-> > When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
-> > However, the structure is being used by bpftool indirectly via BTF.
-> > This leads to:
-> >
-> > skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
-> >         return BPF_CORE_READ(event, bpf_cookie);
-> >                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
-> >
-> > ...
-> >
-> > skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
-> >         return BPF_CORE_READ(event, bpf_cookie);
-> >                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >
-> > Tools and samples can't use any CONFIG_ definitions, so the fields
-> > used there should always be present.
-> > Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
-> > to make it available unconditionally.
-> >
-> > Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
-> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> I see a ~10% performance drop in the higher load part of the hackbench
+> and tbench without this check, in which cases system is quite overloaded
+> and idle cpus can hardly exist.
 >
-> While I can't think of a real failure with this approach, it does feel
-> weird to me. Can we fix this with bpf_core_field_exists()?
+> >
+> > Another use case that would break with the above:
+> >
+> > A few cpus are reserved for a job, so that it always has a couple cpus
+> > dedicated to it. It can run across the entire machine though (no
+> > affinity restriction). If the rest of the machine is very busy, we'd
+> > still want to be able to search for and find the idle reserved cpus
+> > for the job.
+>
+> Yes, this could be true if very few cpus are reserved for the job. Along
+> with the previous affinity case, I think the following might help both:
+>
+> static inline bool
+> sched_domain_overloaded(struct sched_domain *sd, int nr_overloaded)
+> {
+>         return nr_overloaded == sd->span_weight;
+> }
+>
+> Besides, I think sched_idle_balance() will work well on this case.
 
-Hmm.. the error happens at compile time, so I guess it is not very easy.
-
-Andrii,
-Do you have some recommendation on this?
-
-Song
+The change to sched_domain_overloaded SGTM. But note that an async
+load balancing operation such as sched_idle_balance() can't be relied
+on for keeping wakeup latency low if we fail to find an idle cpu to
+wake on (and one exists).

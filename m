@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FFF7503173
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD445503090
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353886AbiDOVXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36410 "EHLO
+        id S244738AbiDOVXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354043AbiDOVWd (ORCPT
+        with ESMTP id S1354560AbiDOVWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:22:33 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A227F3C703;
-        Fri, 15 Apr 2022 14:19:54 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso7934903pjv.0;
-        Fri, 15 Apr 2022 14:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to:user-agent;
-        bh=gQjMse/tU1IHt4tZkhdWjeMaB5otgPpvVS0b4/z5Ptw=;
-        b=FSxfRkR+oDX+rgDN9EG6Ss8iEba237QXZMX7KKHOtvtXZuNn66HR2x5xCM2y1VI4+R
-         mBKBc+PVJQYi5Pj602EW5ymCIR8WHWSCBQG0Y7ivopjbyzmooHhy2U8NfJRxPO2TsqQ7
-         eEtghjJiP0hFBefRThKYPukYArPaM8jNnzJ0G4yjf9X02PgwvQaqUJQAm7R5Yi+zcEpu
-         v9qf0awsOhjNPWq41QhghUFEMf0na5WzbdYF4R0UUjEe6xT0PhzJ4AKf9dXnRziIaa0T
-         XRGTUiLvwiLsy/7S8ghwYGJxt5Nsu1UBBJNBZd/yAYaBEJwCGNFAm/uaOjjWek25cR81
-         7XPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to:user-agent;
-        bh=gQjMse/tU1IHt4tZkhdWjeMaB5otgPpvVS0b4/z5Ptw=;
-        b=5HVv6tKmvmeEb2AKbMDTqejR1w4wRl00PjLqX6X0FfPMwKzhj3IG2uVnmDcz0izuJF
-         rbmi31dUil1FrZ1eXq9AgDYGSA1fDgc3BPcbKDuD5Lktq+AkircZrIz/1KWn4PLt9vH4
-         rNkLlzaS9V9/vj3L6JJXF1Wvmb/VOltw7i+LnckWbkf+7qFXglKAjPpoQqFOLBclrRGE
-         MDjgjGEF90e6PQ2ZXKjeFPHNu1Df8Kn3u6dqXWXUcEpEq9EGiZZRTIwZmNXBZXsd8O6b
-         eZ5CGlpPGCcf9D20JLs5Avpjxtg0bbl6aNOpmu7K5Mb3VaeofqgAprZJRUCf6MKELQEV
-         Szzw==
-X-Gm-Message-State: AOAM531t/jD+aBQ8C7AVKJRPv8ooLYwlJu17GjklPJ6/NVkeTjlMZQ7u
-        ArNV84gL3O3GuNMD2lcIMYY=
-X-Google-Smtp-Source: ABdhPJyVdyfobNaoLYq0/yrSeS21r3R4JIrrKGURs6GCDVbQZa/3+rOhLvjvgk7i0An+QhVcppEuVg==
-X-Received: by 2002:a17:90a:6402:b0:1c9:9377:dd0e with SMTP id g2-20020a17090a640200b001c99377dd0emr753895pjj.211.1650057593993;
-        Fri, 15 Apr 2022 14:19:53 -0700 (PDT)
-Received: from localhost (c-107-3-154-88.hsd1.ca.comcast.net. [107.3.154.88])
-        by smtp.gmail.com with ESMTPSA id d16-20020a17090ad99000b001bcbc4247a0sm5363455pjv.57.2022.04.15.14.19.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 14:19:53 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 14:19:47 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [RFC PATCH v5 000/104] KVM TDX basic feature support
-Message-ID: <20220415211947.GA1182280@private.email.ne.jp>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <4a508ded-8554-2e54-8b61-50481e536854@redhat.com>
+        Fri, 15 Apr 2022 17:22:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D341939AC;
+        Fri, 15 Apr 2022 14:20:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11B37B82E3F;
+        Fri, 15 Apr 2022 21:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8955C385A4;
+        Fri, 15 Apr 2022 21:20:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650057616;
+        bh=l2ZVDxltKOnnpwoAj210vzCJVoPCYcAtL2GWUQC4cj4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RnjJ5AjuKUPX1wRtxl+3BVj4UkbCIrdib1v5NY1rBC74VkZOMwsi85R7jyzu5YU5c
+         p2PdOnsi3Zbzp8xmmxQuKT/gzSqTDpne8HPUY2L+KS6zDZBE7kB53hyROLvaxznOyJ
+         EVgwjihJz7OBD8m5ltnhBUwAPQhuMJQlH8Biq2ae040sMURV9oBWtAFFGnsSq9JyS+
+         zWhggHGjmwVyGqZ7KF95qTMg+C1ZOLqoRibKd2YCQxTa7xI9aTgtxqnwGxKec8A6qR
+         mz6bnCeZX0n8qsjrakw0NFg2+8XgR8S1OerzKYagpq9LKwELDXouL3tFwRfkNx4ALi
+         delCa2KV3VeUQ==
+Date:   Fri, 15 Apr 2022 23:20:12 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: qcom-geni: Use dev_err_probe() for GPI DMA error
+Message-ID: <YlnhjDeL28/BqRsB@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-arm-msm@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220412212601.2384274-1-bjorn.andersson@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="OV+uEBO8NXGeJuvr"
 Content-Disposition: inline
-In-Reply-To: <4a508ded-8554-2e54-8b61-50481e536854@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220412212601.2384274-1-bjorn.andersson@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 05:18:42PM +0200,
-Paolo Bonzini <pbonzini@redhat.com> wrote:
 
-> On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> > From: Isaku Yamahata <isaku.yamahata@intel.com>
-> > 
-> > Hi.  Now TDX host kernel patch series was posted, I've rebased this patch
-> > series to it and make it work.
-> > 
-> >    https://lore.kernel.org/lkml/cover.1646007267.git.kai.huang@intel.com/
-> > 
-> > Changes from v4:
-> > - rebased to TDX host kernel patch series.
-> > - include all the patches to make this patch series working.
-> > - add [MARKER] patches to mark the patch layer clear.
-> 
-> I think I have reviewed everything except the TDP MMU parts (48, 54-57).  I
-> will do those next week, but in the meanwhile feel free to send v6 if you
-> have it ready.  A lot of the requests have been cosmetic.
+--OV+uEBO8NXGeJuvr
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you so much. I'm updating patches now.
+On Tue, Apr 12, 2022 at 02:26:01PM -0700, Bjorn Andersson wrote:
+> The GPI DMA engine driver can be compiled as a module, in which case the
+> likely probe deferral "error" shows up in the kernel log. Switch to
+> using dev_err_probe() to silence this warning and to ensure that
+> "devices_deferred" in debugfs carries this information.
+>=20
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+Applied to for-current, thanks!
 
 
-> If you would like to use something like Trello to track all the changes, and
-> submit before you have done all of them, that's fine by me.
+--OV+uEBO8NXGeJuvr
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Sure. I've created public trello board.
-If you want to edit it, please let me know. I'll add you to the project member.
+-----BEGIN PGP SIGNATURE-----
 
-https://trello.com/kvmtdxreview
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ4YwACgkQFA3kzBSg
+KbYwtg//aA/fMooSYp4Jb9nM70vfuH8wDAmD4x77SDbcLIgucludzPYo4cMVl7BG
+iYhEi79oOe9IKPxF3sL1QiKYhdje6iv3mSjILqq5i7dzVn1XMOaYc77PqQcHdmjn
+KBF+//H0xMzs0pPzla/BRi0SSgzb1QzK67xAtCPwh5BFYGCaGvcVQiy1dpI3twx5
+lBfIouFl1TN9qIEIXfdKCbjlSpEhWnv+GeG4Td8wOdd9qqqw6CupdaPyRZiJeBgk
+SQMYjxRcB5nehyfGMRNb+PRksfQLKAuINjfFoKEIYG9NzpaX5U99FVw73RQ6meyR
+2ik8f8LO9lOCFYqI+TmvOcdwLpXT2C1aYU9cgsm+PhDNeLnzGIVzNeXxrjdhlf8c
+GFt796I+HcKKRuvtuxiYaVnXhiB4jH9SSYjFtxlG2Mnp1+KnuM8Wy3ADi3xS8htV
+M2zqLgZ7SzTXlHZfSRmnJXmv6h2qmWEFBBNcdPtWGc/r97+aH1r92Gdwer9mS8tn
+QN1XbxY0sbCGRZ6/lH0tl1MMKyVibtsSqGj2nBR6YfguhnbLd9an+MuYNYfMqkyz
+ZdoaiqiF+vRC4HUBfhDF+FIN/f3wTnp7e60isyVlv+04ZIUdi92zIb5/rb/MxBic
+IuLOimNA+Yx3lExK0jaucdj+z9Atn7EqgzE6cbn+9mV2AGJ5gn4=
+=mUvB
+-----END PGP SIGNATURE-----
 
-thanks,
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
+--OV+uEBO8NXGeJuvr--

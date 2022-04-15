@@ -2,182 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8586D502C17
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:43:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B572502C18
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354631AbiDOOos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S1354656AbiDOOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:46:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354601AbiDOOoq (ORCPT
+        with ESMTP id S1349655AbiDOOqA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:44:46 -0400
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0C84091B;
-        Fri, 15 Apr 2022 07:42:18 -0700 (PDT)
-Received: by mail-yb1-f179.google.com with SMTP id t67so14843280ybi.2;
-        Fri, 15 Apr 2022 07:42:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=VQSHKKZVZ0Nt1UyzeBgM0+KthK67tcnYKJdeT0jg73Y=;
-        b=woSmk1w0v3r731HOfjLsGuCoC2uJuiiu6qrV6P45CFgQpo1T/NO6JYjp6UZDlNeIqz
-         ddRqRtzDx7ao7Tf1f4NmHT4roftQF+7aKknfCVvC7LFUoLM7+16+sC10zZ0u9bB2RGw7
-         rIx4oZWzRN6qO+c22GlPJOKTUVuujG26wC5Q62ASnRIV/wLmmk8nuHqZ0Ps7/i8XOcq4
-         7jcI3+iwzzTprxqcC9NujB9IsgG6sip3r+k9eJpSCIEyD+Z2rLzEJmwRkkxKX7JpyReM
-         wqkJO8PiOOAtDFSBx5wVi33KwSlsJbnUGX+7Khiiu85eVk4Fuqwu461OWtvYv+O+MFlM
-         7o3Q==
-X-Gm-Message-State: AOAM531e0OhLTWQTB4wPE2n12Udufywa78CA/pc8Tybbdklrl2rh2PTp
-        /TeR56wg8W+++qzDdGBApOmWNCCvHi6mXsxsiLc=
-X-Google-Smtp-Source: ABdhPJzHImZ6AlstLn7pVijrPVyShFWryTuDK7hJhgtHmoiyUY6jExoXezPsWwLknhi0wsShbmhDkbJ9zA8uv2Zpyuw=
-X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
- j13-20020a25230d000000b00641375cb5admr5695905ybj.137.1650033737467; Fri, 15
- Apr 2022 07:42:17 -0700 (PDT)
+        Fri, 15 Apr 2022 10:46:00 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DC3A6E34
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:43:32 -0700 (PDT)
+Received: from [192.168.88.87] (unknown [36.80.217.41])
+        by gnuweeb.org (Postfix) with ESMTPSA id 561D17E39E;
+        Fri, 15 Apr 2022 14:43:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1650033811;
+        bh=JVo0hjyg1hSKX87XfbS3BPrkSnnFNAJbNMwabt4e32c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AcrCB7JNhXYp/CnkBXkBWxY1+dEzyO6LSipAEl47LtHKAa5MJBHNdvLW/dHjFRx6a
+         KMDEoS94WwkbqrwTtD/5tqzMf4uKss1Fr93cq8l9mg9opUwyVCdLPoczYTIdwc1QPc
+         452lFjQ1Qx3wavC5QKmWXvRYR2XXhLVkILRJdaITwJD/dyrJmthygFmK0Nq1OZMAcB
+         yvULNjMKmaEeQNpfmUw8j+vOzaCwaG0OX8Ie9UEvgPS8ohAEeMedzvXin7MVW92lKT
+         C+RzUgJ5nOo3WofuuBD9NyZYT2fHJ1ywj61S8AFjQGGy5wMOK+vHG1NKtntugrJmRF
+         aCEC0rRC5EofA==
+Message-ID: <b6136c05-5ce8-c475-989c-083933226bca@gnuweeb.org>
+Date:   Fri, 15 Apr 2022 21:43:13 +0700
 MIME-Version: 1.0
-References: <20220412224348.1038613-1-tansuresh@google.com> <20220412224348.1038613-2-tansuresh@google.com>
-In-Reply-To: <20220412224348.1038613-2-tansuresh@google.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Apr 2022 16:42:06 +0200
-Message-ID: <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
-To:     Tanjore Suresh <tansuresh@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme <linux-nvme@lists.infradead.org>,
-        Linux PCI <linux-pci@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [Linux 5.18-rc1] WARNING: CPU: 1 PID: 0 at
+ kernel/sched/fair.c:3355 update_blocked_averages
+Content-Language: en-US
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <b86541ea-7d96-5a24-1b65-37c24c70d3ff@gnuweeb.org>
+ <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
+ <675544de-3369-e26e-65ba-3b28fff5c126@gnuweeb.org>
+ <000457c2-57af-95e3-7dff-2cbd99f0de5f@arm.com>
+ <7f4b3fbf-c7c6-22cb-019b-520ad6a663aa@gnuweeb.org>
+ <786190b3-b2cb-464d-9808-325d774c62a5@arm.com>
+ <e1f9421d-e9dd-589c-bf88-407533e40797@gnuweeb.org>
+ <457e1f88-4eb0-53c4-a750-c8930c803272@arm.com>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+In-Reply-To: <457e1f88-4eb0-53c4-a750-c8930c803272@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 12:44 AM Tanjore Suresh <tansuresh@google.com> wrote:
->
-> This changes the bus driver interface with additional entry points
-> to enable devices to implement asynchronous shutdown. The existing
-> synchronous interface to shutdown is unmodified and retained for
-> backward compatibility.
->
-> This changes the common device shutdown code to enable devices to
-> participate in asynchronous shutdown implementation.
->
-> Signed-off-by: Tanjore Suresh <tansuresh@google.com>
+On 4/14/22 4:38 PM, Dietmar Eggemann wrote:
+> Looks like you saw the same issue which got fixed here:
+> 
+> https://lkml.kernel.org/r/20220414015940.9537-1-kuyo.chang@mediatek.com
+> 
+> So nothing to do with CFS BW control. It's triggered by a task with very
+> low nice value and load_avg=1 during cfs_rq attach.
 
-Is there any specific reason why you didn't follow the design of, say,
-dpm_suspend(), where the "async" devices only need to have a flag set
-and the driver is not required to implement any new callbacks?
+Yeah, it looks like I hit the same SCHED_WARN_ON() with what is explained
+in that patch. As such, I assume it's fixed then. I didn't manage to
+reproduce the bug, but I am moving on from this now.
 
-IMO having different driver interfaces for asynchronous suspend and
-shutdown would be quite confusing for driver developers, wouldn't it?
+Thanks for the update!
 
-> ---
->  drivers/base/core.c        | 38 +++++++++++++++++++++++++++++++++++++-
->  include/linux/device/bus.h | 12 ++++++++++++
->  2 files changed, 49 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/base/core.c b/drivers/base/core.c
-> index 3d6430eb0c6a..ba267ae70a22 100644
-> --- a/drivers/base/core.c
-> +++ b/drivers/base/core.c
-> @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
->  void device_shutdown(void)
->  {
->         struct device *dev, *parent;
-> +       LIST_HEAD(async_shutdown_list);
->
->         wait_for_device_probe();
->         device_block_probing();
-> @@ -4523,7 +4524,13 @@ void device_shutdown(void)
->                                 dev_info(dev, "shutdown_pre\n");
->                         dev->class->shutdown_pre(dev);
->                 }
-> -               if (dev->bus && dev->bus->shutdown) {
-> +               if (dev->bus && dev->bus->async_shutdown_start) {
-> +                       if (initcall_debug)
-> +                               dev_info(dev, "async_shutdown_start\n");
-> +                       dev->bus->async_shutdown_start(dev);
-> +                       list_add_tail(&dev->kobj.entry,
-> +                               &async_shutdown_list);
-> +               } else if (dev->bus && dev->bus->shutdown) {
->                         if (initcall_debug)
->                                 dev_info(dev, "shutdown\n");
->                         dev->bus->shutdown(dev);
-> @@ -4543,6 +4550,35 @@ void device_shutdown(void)
->                 spin_lock(&devices_kset->list_lock);
->         }
->         spin_unlock(&devices_kset->list_lock);
-> +
-> +       /*
-> +        * Second pass spin for only devices, that have configured
-> +        * Asynchronous shutdown.
-> +        */
-> +       while (!list_empty(&async_shutdown_list)) {
-> +               dev = list_entry(async_shutdown_list.next, struct device,
-> +                               kobj.entry);
-> +               parent = get_device(dev->parent);
-> +               get_device(dev);
-> +               /*
-> +                * Make sure the device is off the  list
-> +                */
-> +               list_del_init(&dev->kobj.entry);
-> +               if (parent)
-> +                       device_lock(parent);
-> +               device_lock(dev);
-> +               if (dev->bus && dev->bus->async_shutdown_end) {
-> +                       if (initcall_debug)
-> +                               dev_info(dev,
-> +                               "async_shutdown_end called\n");
-> +                       dev->bus->async_shutdown_end(dev);
-> +               }
-> +               device_unlock(dev);
-> +               if (parent)
-> +                       device_unlock(parent);
-> +               put_device(dev);
-> +               put_device(parent);
-> +       }
->  }
->
->  /*
-> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
-> index a039ab809753..f582c9d21515 100644
-> --- a/include/linux/device/bus.h
-> +++ b/include/linux/device/bus.h
-> @@ -49,6 +49,16 @@ struct fwnode_handle;
->   *             will never get called until they do.
->   * @remove:    Called when a device removed from this bus.
->   * @shutdown:  Called at shut-down time to quiesce the device.
-> + * @async_shutdown_start:      Called at the shutdown-time to start
-> + *                             the shutdown process on the device.
-> + *                             This entry point will be called only
-> + *                             when the bus driver has indicated it would
-> + *                             like to participate in asynchronous shutdown
-> + *                             completion.
-> + * @async_shutdown_end:        Called at shutdown-time  to complete the shutdown
-> + *                     process of the device. This entry point will be called
-> + *                     only when the bus drive has indicated it would like to
-> + *                     participate in the asynchronous shutdown completion.
->   *
->   * @online:    Called to put the device back online (after offlining it).
->   * @offline:   Called to put the device offline for hot-removal. May fail.
-> @@ -93,6 +103,8 @@ struct bus_type {
->         void (*sync_state)(struct device *dev);
->         void (*remove)(struct device *dev);
->         void (*shutdown)(struct device *dev);
-> +       void (*async_shutdown_start)(struct device *dev);
-> +       void (*async_shutdown_end)(struct device *dev);
->
->         int (*online)(struct device *dev);
->         int (*offline)(struct device *dev);
-> --
-> 2.36.0.rc0.470.gd361397f0d-goog
->
+-- 
+Ammar Faizi

@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C740502F44
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADE0502F3C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349446AbiDOTXE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 15:23:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37620 "EHLO
+        id S1349959AbiDOTXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 15:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349044AbiDOTW1 (ORCPT
+        with ESMTP id S1349078AbiDOTW2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 15:22:27 -0400
+        Fri, 15 Apr 2022 15:22:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15FE63EA8B;
-        Fri, 15 Apr 2022 12:19:58 -0700 (PDT)
-Message-ID: <20220415161206.648485667@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A749F3E5F2;
+        Fri, 15 Apr 2022 12:19:59 -0700 (PDT)
+Message-ID: <20220415161206.706185092@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650050396;
+        s=2020; t=1650050398;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=MF+qC2b0dJXg+oWZw84Sqe0wCeDxratrkAn7t5wMy58=;
-        b=lN/Ir/t5CAtSnnNArbT4UHK+I31zNocAKQbzU6/XaqOweCDkAjninvFHeB7bqF09HE/T0W
-        OaDAHd/bIYPu7GNcb4OD+k61SxNgwDtJAbMdpbQDbxWNRAekNkEskPQFs9Ln/EIU9A9RDl
-        5F8Rb7nSmdQrowXLg+3N6wD5FyB8BQaPwTMw1rXjno2yVO7itltOnv9wwtqYj5TCPLIlvU
-        EeSZ8iJOCncNDUO61Pcge6Y6upbt48DrEwzPymS44LUe3DnxbmowfsF6T4Gbw6EJIW00mn
-        iqFoikvHHePXdoeGMjmwh+NnQALfUtZUa+7KqWOzRhHq6OMRUgF7MmC0kEmxTQ==
+         references:references; bh=FTV8lnVO85bSeErs2BRV8ovYyYYdf2QvdWY7WdpkMVY=;
+        b=QM69v4F9Rs7cCn1x18m1a4OxD9Wo9tW8sYaLQpsfNJhJvEsCvtaLjIf5wzAxmtOiOs/z29
+        be1ejBwTW5za5cEagfS/MuWS107TDCk+dD33oL8ZJ1XRejRxFNyf50ex3dh10ZDLa15V2t
+        uj96a8RxvryGzp69MlN9pLDIdCzMLleQdoll5JS2qfV2Eeh7QkWPIyc6CLAaMw0KE2QnST
+        NJ0ieovXJEuI21z12g1JXJTfI59dBXPpJ0AFLH3jFh8qU55Sf30JQdcYCc33b3YIb2qXt6
+        r1zS6b/oZK6rsqCw7n71TdURWVLJVzylhpzydkN4Ua9tBZkfLAJd8fa2biePhA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650050396;
+        s=2020e; t=1650050398;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=MF+qC2b0dJXg+oWZw84Sqe0wCeDxratrkAn7t5wMy58=;
-        b=erZk8fiVQlqE6cG6sr4GDcQgl/rSmofTc9yhYqX4/jlB0u/eLJN6chvug1bvG89nCXAMfW
-        QXreSiOxq4uFB4Bg==
+         references:references; bh=FTV8lnVO85bSeErs2BRV8ovYyYYdf2QvdWY7WdpkMVY=;
+        b=F+kg3SLCvyNvc7RHgfJ3DzCpfJqGJFaGISAoYOFiYoLzj4TyGiKBd75Ir9QVn1X2RYGjEp
+        T4pRaaZcFoxqKXCg==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
         linux-pm@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
         "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [patch 05/10] x86/aperfmperf: Put frequency invariance aperf/mperf
- data into a struct
+Subject: [patch 06/10] x86/aperfmperf: Restructure arch_scale_freq_tick()
 References: <20220415133356.179706384@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 15 Apr 2022 21:19:56 +0200 (CEST)
+Date:   Fri, 15 Apr 2022 21:19:57 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -61,71 +60,58 @@ No functional change.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 ---
- arch/x86/kernel/cpu/aperfmperf.c |   26 +++++++++++++++-----------
- 1 file changed, 15 insertions(+), 11 deletions(-)
+ arch/x86/kernel/cpu/aperfmperf.c |   36 +++++++++++++++++++++---------------
+ 1 file changed, 21 insertions(+), 15 deletions(-)
 
 --- a/arch/x86/kernel/cpu/aperfmperf.c
 +++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -22,6 +22,13 @@
+@@ -477,22 +477,9 @@ static DECLARE_WORK(disable_freq_invaria
  
- #include "cpu.h"
+ DEFINE_PER_CPU(unsigned long, arch_freq_scale) = SCHED_CAPACITY_SCALE;
  
-+struct aperfmperf {
-+	u64		aperf;
-+	u64		mperf;
-+};
-+
-+static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples);
-+
- struct aperfmperf_sample {
- 	unsigned int	khz;
- 	atomic_t	scfpending;
-@@ -194,8 +201,6 @@ unsigned int arch_freq_get_on_cpu(int cp
- 
- DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
- 
--static DEFINE_PER_CPU(u64, arch_prev_aperf);
--static DEFINE_PER_CPU(u64, arch_prev_mperf);
- static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
- static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
- 
-@@ -407,8 +412,8 @@ static void init_counter_refs(void)
- 	rdmsrl(MSR_IA32_APERF, aperf);
- 	rdmsrl(MSR_IA32_MPERF, mperf);
- 
--	this_cpu_write(arch_prev_aperf, aperf);
--	this_cpu_write(arch_prev_mperf, mperf);
-+	this_cpu_write(cpu_samples.aperf, aperf);
-+	this_cpu_write(cpu_samples.mperf, mperf);
- }
- 
- #ifdef CONFIG_PM_SLEEP
-@@ -474,9 +479,8 @@ DEFINE_PER_CPU(unsigned long, arch_freq_
- 
- void arch_scale_freq_tick(void)
+-void arch_scale_freq_tick(void)
++static void scale_freq_tick(u64 acnt, u64 mcnt)
  {
--	u64 freq_scale;
--	u64 aperf, mperf;
--	u64 acnt, mcnt;
-+	struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
-+	u64 aperf, mperf, acnt, mcnt, freq_scale;
- 
- 	if (!arch_scale_freq_invariant())
- 		return;
-@@ -484,11 +488,11 @@ void arch_scale_freq_tick(void)
- 	rdmsrl(MSR_IA32_APERF, aperf);
- 	rdmsrl(MSR_IA32_MPERF, mperf);
- 
--	acnt = aperf - this_cpu_read(arch_prev_aperf);
--	mcnt = mperf - this_cpu_read(arch_prev_mperf);
-+	acnt = aperf - s->aperf;
-+	mcnt = mperf - s->mperf;
- 
--	this_cpu_write(arch_prev_aperf, aperf);
--	this_cpu_write(arch_prev_mperf, mperf);
-+	s->aperf = aperf;
-+	s->mperf = mperf;
+-	struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
+-	u64 aperf, mperf, acnt, mcnt, freq_scale;
+-
+-	if (!arch_scale_freq_invariant())
+-		return;
+-
+-	rdmsrl(MSR_IA32_APERF, aperf);
+-	rdmsrl(MSR_IA32_MPERF, mperf);
+-
+-	acnt = aperf - s->aperf;
+-	mcnt = mperf - s->mperf;
+-
+-	s->aperf = aperf;
+-	s->mperf = mperf;
++	u64 freq_scale;
  
  	if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
  		goto error;
+@@ -514,4 +501,23 @@ void arch_scale_freq_tick(void)
+ 	pr_warn("Scheduler frequency invariance went wobbly, disabling!\n");
+ 	schedule_work(&disable_freq_invariance_work);
+ }
++
++void arch_scale_freq_tick(void)
++{
++	struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
++	u64 acnt, mcnt, aperf, mperf;
++
++	if (!arch_scale_freq_invariant())
++		return;
++
++	rdmsrl(MSR_IA32_APERF, aperf);
++	rdmsrl(MSR_IA32_MPERF, mperf);
++	acnt = aperf - s->aperf;
++	mcnt = mperf - s->mperf;
++
++	s->aperf = aperf;
++	s->mperf = mperf;
++
++	scale_freq_tick(acnt, mcnt);
++}
+ #endif /* CONFIG_X86_64 && CONFIG_SMP */
 

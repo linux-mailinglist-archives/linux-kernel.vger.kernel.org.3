@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B73B9502BC9
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A72BD502BAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:21:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354488AbiDOOYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:24:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51552 "EHLO
+        id S1354400AbiDOOXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:23:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354478AbiDOOYL (ORCPT
+        with ESMTP id S1354406AbiDOOXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:24:11 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946DC69486;
-        Fri, 15 Apr 2022 07:21:33 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id bh17so15604390ejb.8;
-        Fri, 15 Apr 2022 07:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=08pfEuyLiFmPHxey+T5VgpFceM9bwO2n4GmdqLEQlVc=;
-        b=GB9aMwZ3gJcqu2BKR+IN+hR48poSHukDJxGnGzokdAQ+Lndz7ZjWILiFS1UAkXW89+
-         b6hROebMXuZrFMahuTLeIOJ8t7LAvpzCNRchpEhd5fwfJsRHaauwnmsmooEMWWXZ++yL
-         3lAHUOOo2gtYAmrvz2d3EWp2TbU/MmHdUlOdK3m6mO+Ey4GUGiF6z54UB7n67Tnoqs5/
-         wrwsfIHaKVqEziJRb3yKliqUcruYNIO6OKcOyA3Pf09hTTt85XGIL8Qajo8l5nAkZ8+q
-         SJuzDIl26VID/DK+VnlJ5RJP7FYSTMuvjN/FjEENDnxT7MceQMtbQgjAW22wLQZ8xFfT
-         2RDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=08pfEuyLiFmPHxey+T5VgpFceM9bwO2n4GmdqLEQlVc=;
-        b=SfVaBaVWMmMVwOlR3DtHBDSaPhgodI6fP1nYHZddVe0X1OS05Nu8oJSs0LrCapvoUw
-         rzJpKTkdMir2TvBRFsJN75wbN55W2gqccvdtV99gkgSNRRLKBnYjrWPGIpMNFSg+Cuqm
-         7ck9/kbY/EWRZDoQKwD9gaYUG7J5xjTv6+dWbcOVjtn9bxHKyv7QMbTjG6R7d/qTsq+m
-         PpVnJwrBJtQFMjO5UE+vhVyD6AkYQQW6BfApbguhw6mfXxXb+B1KiTJwqv5hLxaaDJ7p
-         9hpjgzRa0wbNEx16AVQEkFgAoDrYnC101SSYDtFi2a/dl5ynMAQKdLxyEHjbPp+qGF4v
-         KIog==
-X-Gm-Message-State: AOAM532z6NvRS4ipUorPtoQ9UdeFFbXh9U1YZM9qnbqigdTNbSlEIQDB
-        P37A3QO9acMihzOXGZcNYqM=
-X-Google-Smtp-Source: ABdhPJy6D30gSEs5AmXyDE2/N8v9BXaFZOLMA/lUKPgmI8twyUI3L/SzXSqGQganb+33NYwailZedw==
-X-Received: by 2002:a17:906:7746:b0:6ce:a12e:489f with SMTP id o6-20020a170906774600b006cea12e489fmr6298375ejn.551.1650032492096;
-        Fri, 15 Apr 2022 07:21:32 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id er15-20020a056402448f00b0042110981d13sm2380526edb.48.2022.04.15.07.21.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 07:21:31 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <5fd8d6dd-07be-9bf1-1ad9-5536c4e40182@redhat.com>
-Date:   Fri, 15 Apr 2022 16:20:56 +0200
+        Fri, 15 Apr 2022 10:23:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069D29BBBE;
+        Fri, 15 Apr 2022 07:21:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2549662021;
+        Fri, 15 Apr 2022 14:21:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D91CC385A7;
+        Fri, 15 Apr 2022 14:20:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650032459;
+        bh=5dZZoj3pOKho1MGAkY4/NjwfVebCG/c1u6DOO+KCsXk=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=aoy5PBKEaK6SDewNMRsObqZAfJKPFcfrASqHE2kpJMp7JREmx1sEiZ4X+FB75LVS6
+         PhZNiB2msnvrXDu06lGbVejgoyTw34WBIzwIvaKTWwY4HPA+fp3EBEIb0X4lZ4el5d
+         L0ICSgERZD32oH6M+8F0b9q76UbbkifG13Z/mGWiuW4eZLJ8IPEw2V1oCuU6VRejlS
+         EBmS/bsRUh4LkfZn1q+VFrJyEmTd1ohjexn56o/7PXGKbEtsXw63qB5Dfa9TBInoBF
+         hs8AFmTSgP4xtVDtqHkGjgWB1DckUd+HnoWgoUbeQAGcGGXZCrfotNztQO6jVGAeam
+         kD8x4B7hPihgg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 1EA355C034B; Fri, 15 Apr 2022 07:20:59 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 07:20:59 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        David Howells <dhowells@redhat.com>,
+        Jade Alglave <j.alglave@ucl.ac.uk>,
+        Luc Maranget <luc.maranget@inria.fr>,
+        Akira Yokosawa <akiyks@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        llvm@lists.linux.dev, Marco Elver <elver@google.com>,
+        Charalampos Mainas <charalampos.mainas@gmail.com>,
+        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
+        "Jose E. Marchesi" <jemarch@gnu.org>
+Subject: Re: Dangerous addr to ctrl dependency transformation in
+ fs/nfs/delegation.c::nfs_server_return_marked_delegations()?
+Message-ID: <20220415142059.GI4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <Yk7/T8BJITwz+Og1@Pauls-MacBook-Pro.local>
+ <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 071/104] KVM: TDX: restore debug store when TD exit
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <c7f81bd80af0f57ff2fabef24a218fb43c3d0e3c.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <c7f81bd80af0f57ff2fabef24a218fb43c3d0e3c.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOdkEULT_OOeaaCneJjbrE=O3kC8SMDs2thFa9gBfpuo2Jg@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,37 +76,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
+On Thu, Apr 14, 2022 at 02:21:25PM -0700, Nick Desaulniers wrote:
+> On Thu, Apr 7, 2022 at 8:22 AM Paul Heidekrüger
+> <paul.heidekrueger@in.tum.de> wrote:
+> >
+> > Hi all,
+> >
+> > work on my dependency checker tool is progressing nicely, and it is
+> > flagging, what I believe is, a harmful addr to ctrl dependency
+> > transformation. For context, see [1] and [2]. I'm using the Clang
+> > compiler.
+> > [1]: https://linuxplumbersconf.org/event/7/contributions/821/attachments/598/1075/LPC_2020_--_Dependency_ordering.pdf
+> > [2]: https://lore.kernel.org/llvm/YXknxGFjvaB46d%2Fp@Pauls-MacBook-Pro/T/#u
 > 
-> Because debug store is clobbered, restore it on TD exit.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/events/intel/ds.c | 1 +
->   arch/x86/kvm/vmx/tdx.c     | 1 +
->   2 files changed, 2 insertions(+)
-> 
-> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-> index 376cc3d66094..cdba4227ad3b 100644
-> --- a/arch/x86/events/intel/ds.c
-> +++ b/arch/x86/events/intel/ds.c
-> @@ -2256,3 +2256,4 @@ void perf_restore_debug_store(void)
->   
->   	wrmsrl(MSR_IA32_DS_AREA, (unsigned long)ds);
->   }
-> +EXPORT_SYMBOL_GPL(perf_restore_debug_store);
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index 3cb2fbd1c12c..37cf7d43435d 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -620,6 +620,7 @@ fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
->   	tdx_vcpu_enter_exit(vcpu, tdx);
->   
->   	tdx_user_return_update_cache();
-> +	perf_restore_debug_store();
->   	tdx_restore_host_xsave_state(vcpu);
->   	tdx->host_state_need_restore = true;
->   
+> Hi Paul,
+> Thanks for the report and your (and your team's) work on this tool.
+> Orthogonal to your report, Jose (cc'ed) and I are currently in the
+> planning process to put together a Kernel+Toolchain microconference
+> track at Linux Plumbers Conference [0] this year (Sept 12-14) in
+> Dublin, Ireland.  Would you or someone from your group be able and
+> interested in presenting more information about your work to an
+> audience of kernel and toolchain developers at such an event?
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
++1 on presenting at Plumbers!
+
+							Thanx, Paul
+
+> Would others be interested in such a topic? (What do they say in
+> Starship Troopers...?...Would you like to know more?)
+> 
+> [0] https://lpc.events/event/16/
+> -- 
+> Thanks,
+> ~Nick Desaulniers

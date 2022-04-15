@@ -2,223 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63B15030AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69116503085
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356355AbiDOWlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 18:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42918 "EHLO
+        id S229896AbiDOWrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 18:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbiDOWlm (ORCPT
+        with ESMTP id S229864AbiDOWra (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 18:41:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9158BBF950;
-        Fri, 15 Apr 2022 15:39:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 21so11306277edv.1;
-        Fri, 15 Apr 2022 15:39:12 -0700 (PDT)
+        Fri, 15 Apr 2022 18:47:30 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4290A3A5F5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:45:00 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id h8so16482027ybj.11
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:45:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Xd/TY0lCcvOfD4XwdghjY2Bw0dW7OQwwq4wE6xzj5Lg=;
-        b=DR/30Z2Bvad/UzIT+ijDNS7EQ34yE1Pw3naYQ3q+XlCXXEyDjF3+PrMlBAubnmlni7
-         +trIkPmZC5h+TH+9vSvNCUmlqE3fF9RF8qkGvBAgXeoiPc7RX44K9GfEwud4URY1tvOd
-         6par0+Pbu16FR7dY8se477ubWO0UHSHTy1n4n/7cmI6R8HkE5puayoB5XsTYapzQCJI8
-         XAJrolV9Cx3hX7Ojfq2OZr9SLssGk3pZ/olC4RB3XwOVRhHCDJhCrDqiwDa+Ri1mf97s
-         HOl645v6UCQIMWr+LSS5z/8CzEXgPyU/PjT2bQUF6qz60ePlSrctbrC6neF3YnT1hEbU
-         q6bw==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=D1FL2N+vbxbnFM4V9Gp8h4r8ZEbQ6gNAmnc+BbEJA0M=;
+        b=wQ6ryNU2t32Z7XVkKnortBSO1vhP4kNPzE0wqr1RTT36Eri4XnOpb/3V6ixh/8vGAs
+         Z+nJYq1++Fh1TKaMJpA5wDoyoxeS5Rkn/VjHRPMPneKdBztWu9M+2YMaIMv/tsvX3CyF
+         rHn3b8miFRaLQ7uHjvvU8P4Dd0l8whW3Ztz7odKEr7rXUovyybYAY6XgYaZX3wZN4iJ1
+         pcRhHMwSRmTw9M2cFkAypPhNtMK9vG67z4EDS7Axx5q23QNG3WPbUpVQY5A4YWI3loUY
+         lFD1LZ6dPA1G+Y8Twg+dr21cvKs/pm4X+vuxEh+9j10TDmCaeWYCM5yqjlj4dP8GyDXT
+         dqlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Xd/TY0lCcvOfD4XwdghjY2Bw0dW7OQwwq4wE6xzj5Lg=;
-        b=67GqoAay7+vsThi2gZ0A/P6Xp+4k4207FY8JAE417j8BQAdCeD3pOP3olYUPsI6UOx
-         ZyGtlaBGZwdqb9qAtGLWjqO39tYlL4l/z81qgysuHzkNohTmyc76hEovAvPbz+LkKs1T
-         xxjBa8HBM7wByApphdsFEHnMBmlWZRuhpPL6mj5pcpopIybSluSP1Hd2/gwlNkt29DYZ
-         D9gVfh+pZagN62bOZkYaE49a6+hfTKWagkbY3V3/a1rTRGSOVnInlPM+v3Cml0JdYxco
-         xJ0H6OaFZKwoYusnLnd0jHktEdLNqT8VAcwrlH9HN3W0uN1Wm1CAcxRWl/m/ruJ3YoBX
-         zehw==
-X-Gm-Message-State: AOAM532h44BpDiUWJDtRAjj+pIwaN+Fc8lqZkPQENz+Aw4gArsD2Zxyw
-        zDrHNmS7TpzIVd6EV9qSufQ=
-X-Google-Smtp-Source: ABdhPJwj12+saMkHxF3CiI2y5YsDBikvUq2Ikj7bmWZvCIhpz/z403Arc3JrJj4hZw7osqi8n9jZBg==
-X-Received: by 2002:a05:6402:448a:b0:41d:793d:8252 with SMTP id er10-20020a056402448a00b0041d793d8252mr1256813edb.6.1650062350990;
-        Fri, 15 Apr 2022 15:39:10 -0700 (PDT)
-Received: from krava ([95.82.134.228])
-        by smtp.gmail.com with ESMTPSA id b23-20020a05640202d700b00422da9b980esm1015481edx.22.2022.04.15.15.39.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 15:39:10 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 00:39:08 +0200
-From:   Jiri Olsa <olsajiri@gmail.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, lkml <linux-kernel@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>
-Subject: Re: [RFC bpf-next 1/4] kallsyms: Add kallsyms_lookup_names function
-Message-ID: <Yln0DCVKAf9yZicG@krava>
-References: <20220407125224.310255-1-jolsa@kernel.org>
- <20220407125224.310255-2-jolsa@kernel.org>
- <20220408231925.uc2cfeev7p6nzfww@MBP-98dd607d3435.dhcp.thefacebook.com>
- <YlXlF5ivTR1QLMfk@krava>
- <20220415094727.2880a321bb6674d94e104110@kernel.org>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=D1FL2N+vbxbnFM4V9Gp8h4r8ZEbQ6gNAmnc+BbEJA0M=;
+        b=5qshpnQ2jS+34gJ+kJRC7u5TiVvh1Jb86VK1iXyyDNtRoiG3taOLQoeHjuWPSWyOxZ
+         +aEjh1ZloS1OMmyLq6tsxyozfORvj0p0sS62p7UEiSNNKJIkKoKuzjYi1x/NFaX/dSWO
+         XFixh9mV0zA9hC0GC/7bL+8s7c6RqHucPg7qp7894bo7enBLOkViTitIRAN4C4mFSEs3
+         1itzFr1oT/dsrNq3vP+tOaN2iCxxUAZQhWg7IZ0D5svY6/DVDbxA4VhVRrtyF3ZQXA3X
+         6wp3UI59Fh+C6u1kV4B3vwTRzuJWIZCCbkrqwoGG1QPiZGhHO2U/+3fG7OamOp2nSGBW
+         YXvQ==
+X-Gm-Message-State: AOAM533eDOuk2zCtRZrRN1VmYX5sIgWMPam9B1o0GlFL/lewmVciIloO
+        X9XlQkniWGc3A7iuurxyUB42eEH7HDGDP8ujFenpzA==
+X-Google-Smtp-Source: ABdhPJy35MhSB4tYtvcOuTbUp29+uEFCnZ1T6ERCQSrsGRd9Y5mM+nyuh0bC2y9uq7UVSixNrsvJ7kZrYHNQDG0Qtjs=
+X-Received: by 2002:a05:6902:d:b0:629:213c:4937 with SMTP id
+ l13-20020a056902000d00b00629213c4937mr1204331ybh.66.1650062699443; Fri, 15
+ Apr 2022 15:44:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415094727.2880a321bb6674d94e104110@kernel.org>
+References: <20220409023628.2104952-1-dianders@chromium.org>
+ <20220408193536.RFC.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid>
+ <a9a5dfb7-819b-d3a2-2c47-d5b239d21ad3@linaro.org> <CAD=FV=WKwErpD7iCu+2jFvMutmmmgLUEhAnw8s=27wUxcpF-aQ@mail.gmail.com>
+In-Reply-To: <CAD=FV=WKwErpD7iCu+2jFvMutmmmgLUEhAnw8s=27wUxcpF-aQ@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 16 Apr 2022 01:44:48 +0300
+Message-ID: <CAA8EJppOVqaAEVeQY7p0EfCObJxfL591kbaYLYfbgOHHtmfhXw@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] drm/dp: Helpers to make it easier for drivers to
+ use DP AUX bus properly
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:47:27AM +0900, Masami Hiramatsu wrote:
-> Hi Jiri,
-> 
-> Sorry for replying later.
-> 
-> On Tue, 12 Apr 2022 22:46:15 +0200
-> Jiri Olsa <olsajiri@gmail.com> wrote:
-> 
-> > On Fri, Apr 08, 2022 at 04:19:25PM -0700, Alexei Starovoitov wrote:
-> > > On Thu, Apr 07, 2022 at 02:52:21PM +0200, Jiri Olsa wrote:
-> > > > Adding kallsyms_lookup_names function that resolves array of symbols
-> > > > with single pass over kallsyms.
-> > > > 
-> > > > The user provides array of string pointers with count and pointer to
-> > > > allocated array for resolved values.
-> > > > 
-> > > >   int kallsyms_lookup_names(const char **syms, u32 cnt,
-> > > >                             unsigned long *addrs)
-> > > > 
-> > > > Before we iterate kallsyms we sort user provided symbols by name and
-> > > > then use that in kalsyms iteration to find each kallsyms symbol in
-> > > > user provided symbols.
-> > > > 
-> > > > We also check each symbol to pass ftrace_location, because this API
-> > > > will be used for fprobe symbols resolving. This can be optional in
-> > > > future if there's a need.
-> > > > 
-> > > > Suggested-by: Andrii Nakryiko <andrii@kernel.org>
-> > > > Signed-off-by: Jiri Olsa <jolsa@kernel.org>
-> > > > ---
-> > > >  include/linux/kallsyms.h |  6 +++++
-> > > >  kernel/kallsyms.c        | 48 ++++++++++++++++++++++++++++++++++++++++
-> > > >  2 files changed, 54 insertions(+)
-> > > > 
-> > > > diff --git a/include/linux/kallsyms.h b/include/linux/kallsyms.h
-> > > > index ce1bd2fbf23e..5320a5e77f61 100644
-> > > > --- a/include/linux/kallsyms.h
-> > > > +++ b/include/linux/kallsyms.h
-> > > > @@ -72,6 +72,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, struct module *,
-> > > >  #ifdef CONFIG_KALLSYMS
-> > > >  /* Lookup the address for a symbol. Returns 0 if not found. */
-> > > >  unsigned long kallsyms_lookup_name(const char *name);
-> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs);
-> > > >  
-> > > >  extern int kallsyms_lookup_size_offset(unsigned long addr,
-> > > >  				  unsigned long *symbolsize,
-> > > > @@ -103,6 +104,11 @@ static inline unsigned long kallsyms_lookup_name(const char *name)
-> > > >  	return 0;
-> > > >  }
-> > > >  
-> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> > > > +{
-> > > > +	return -ERANGE;
-> > > > +}
-> > > > +
-> > > >  static inline int kallsyms_lookup_size_offset(unsigned long addr,
-> > > >  					      unsigned long *symbolsize,
-> > > >  					      unsigned long *offset)
-> > > > diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-> > > > index 79f2eb617a62..a3738ddf9e87 100644
-> > > > --- a/kernel/kallsyms.c
-> > > > +++ b/kernel/kallsyms.c
-> > > > @@ -29,6 +29,8 @@
-> > > >  #include <linux/compiler.h>
-> > > >  #include <linux/module.h>
-> > > >  #include <linux/kernel.h>
-> > > > +#include <linux/bsearch.h>
-> > > > +#include <linux/sort.h>
-> > > >  
-> > > >  /*
-> > > >   * These will be re-linked against their real values
-> > > > @@ -572,6 +574,52 @@ int sprint_backtrace_build_id(char *buffer, unsigned long address)
-> > > >  	return __sprint_symbol(buffer, address, -1, 1, 1);
-> > > >  }
-> > > >  
-> > > > +static int symbols_cmp(const void *a, const void *b)
-> > > > +{
-> > > > +	const char **str_a = (const char **) a;
-> > > > +	const char **str_b = (const char **) b;
-> > > > +
-> > > > +	return strcmp(*str_a, *str_b);
-> > > > +}
-> > > > +
-> > > > +struct kallsyms_data {
-> > > > +	unsigned long *addrs;
-> > > > +	const char **syms;
-> > > > +	u32 cnt;
-> > > > +	u32 found;
-> > > > +};
-> > > > +
-> > > > +static int kallsyms_callback(void *data, const char *name,
-> > > > +			     struct module *mod, unsigned long addr)
-> > > > +{
-> > > > +	struct kallsyms_data *args = data;
-> > > > +
-> > > > +	if (!bsearch(&name, args->syms, args->cnt, sizeof(*args->syms), symbols_cmp))
-> > > > +		return 0;
-> > > > +
-> > > > +	addr = ftrace_location(addr);
-> > > > +	if (!addr)
-> > > > +		return 0;
-> > > > +
-> > > > +	args->addrs[args->found++] = addr;
-> > > > +	return args->found == args->cnt ? 1 : 0;
-> > > > +}
-> > > > +
-> > > > +int kallsyms_lookup_names(const char **syms, u32 cnt, unsigned long *addrs)
-> > > > +{
-> > > > +	struct kallsyms_data args;
-> > > > +
-> > > > +	sort(syms, cnt, sizeof(*syms), symbols_cmp, NULL);
-> > > 
-> > > It's nice to share symbols_cmp for sort and bsearch,
-> > > but messing technically input argument 'syms' like this will cause
-> > > issues sooner or later.
-> > > Lets make caller do the sort.
-> > > Unordered input will cause issue with bsearch, of course,
-> > > but it's a lesser evil. imo.
-> > > 
-> > 
-> > Masami,
-> > this logic bubbles up to the register_fprobe_syms, because user
-> > provides symbols as its argument. Can we still force this assumption
-> > to the 'syms' array, like with the comment change below?
-> > 
-> > FYI the bpf side does not use register_fprobe_syms, it uses
-> > register_fprobe_ips, because it always needs ips as search
-> > base for cookie values
-> 
-> Hmm, in that case fprobe can call sort() in the register function.
-> That will be much easier and safer. The bpf case, the input array will
-> be generated by the bpftool (not by manual), so it can ensure the 
-> syms is sorted. But we don't know how fprobe user passes syms array.
-> Then register_fprobe_syms() will always requires sort(). I don't like
-> such redundant requirements.
+On Sat, 16 Apr 2022 at 00:13, Doug Anderson <dianders@chromium.org> wrote:
+>
+> Hi,
+>
+> On Thu, Apr 14, 2022 at 5:47 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On 09/04/2022 05:36, Douglas Anderson wrote:
+> > > As talked about in the kerneldoc for "struct dp_aux_ep_client" in this
+> > > patch and also in the past in commit a1e3667a9835 ("drm/bridge:
+> > > ti-sn65dsi86: Promote the AUX channel to its own sub-dev"), to use the
+> > > DP AUX bus properly we really need two "struct device"s. One "struct
+> > > device" is in charge of providing the DP AUX bus and the other is
+> > > where we'll try to get a reference to the newly probed endpoint
+> > > devices.
+> > >
+> > > In ti-sn65dsi86 this wasn't too difficult to accomplish. That driver
+> > > is already broken up into several "struct devices" anyway because it
+> > > also provides a PWM and some GPIOs. Adding one more wasn't that
+> > > difficult / ugly.
+> > >
+> > > When I tried to do the same solution in parade-ps8640, it felt like I
+> > > was copying too much boilerplate code. I made the realization that I
+> > > didn't _really_ need a separate "driver" for each person that wanted
+> > > to do the same thing. By putting all the "driver" related code in a
+> > > common place then we could save a bit of hassle. This change
+> > > effectively adds a new "ep_client" driver that can be used by
+> > > anyone. The devices instantiated by this driver will just call through
+> > > to the probe/remove/shutdown calls provided.
+> > >
+> > > At the moment, the "ep_client" driver is backed by the Linux auxiliary
+> > > bus (unfortunate naming--this has nothing to do with DP AUX). I didn't
+> > > want to expose this to clients, though, so as far as clients are
+> > > concerned they get a vanilla "struct device".
+> >
+> > I have been thinking about your approach for quite some time. I think
+> > that enforcing a use of auxilliary device is an overkill. What do we
+> > really need is the the set callbacks in the bus struct or a notifier. We
+> > have to notify the aux_bus controller side that the client has been
+> > probed successfully or that the client is going to be removed.
+>
+> It seems like these new callbacks would be nearly the same as the
+> probe/remove callbacks in my proposal except:
+>
+> * They rely on there being exactly 1 AUX device, or we make it a rule
+> that we wait for all AUX devices to probe (?)
 
-ok, I'll add it to register_fprobe_syms
+Is the backlight a separate device on an AUX bus? Judging from
+drm_panel_dp_aux_backlight(), it isn't. I assumed that aux bus is just
+a point-to-point bus, so there is always a single client.
 
-thanks,
-jirka
+>
+> * We need to come up with a system for detecting when everything
+> probes or is going to be removed, though that's probably not too hard.
+> I guess the DP AUX bus could just replace the panel's probe function
+> with its own and essentially "tail patch" it. I guess it could "head
+> patch" the remove call? ...or is there some better way you were
+> thinking of knowing when all our children probed?
+>
+> * The callback on the aux bus controller side would not be able to
+> DEFER. In other words trying to acquire a reference to the panel can
+> always be the last thing we do so we know there can be no reasons to
+> defer after. This should be doable, but at least in the ps8640 case it
+> will require changing the code a bit. I notice that today it actually
+> tries to get the panel side _before_ it gets the MIPI side and it
+> potentially can return -EPROBE_DEFER if it can't find the MIPI side. I
+> guess I have a niggling feeling that we'll find some reason in the
+> future that we can't be last, but we can probably ignore that. ;-)
+>
+> I can switch this all to normal callbacks if that's what everyone
+> wants, but it doesn't feel significantly cleaner to me and does seem
+> to have some (small) downsides.
+>
+>
+> > And this
+> > approach would make driver's life easier, since e.g. the bus code can
+> > pm_get the EP device before calling callbacks/notifiers and
+> > pm_put_autosuspend it afterwards.
+>
+> Not sure about doing the pm calls on behalf of the EP device. What's
+> the goal there?
+
+I think any driver can pm_runtime_get another device. The goal is to
+let the 'post_probe' callback to power up the panel, read the EDID,
+etc.
+
+BTW: as I'm slowly diving into DP vs eDP differences. Do we need to
+write the EDID checksum like we do for DP?
+Do you have any good summary for eDP vs DP differences?
+
+-- 
+With best wishes
+Dmitry

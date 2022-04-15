@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549A75028E4
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF145028EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352651AbiDOLgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 07:36:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56524 "EHLO
+        id S1352684AbiDOLk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 07:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240835AbiDOLgr (ORCPT
+        with ESMTP id S233670AbiDOLk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 07:36:47 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4087513D2D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UXAScB/7dXiIcZZ+SfTsfL5JTQZXS0Nu46DcE+Qd/Sg=; b=ZMLBAUGxpS298vNajAPNIIBo38
-        x9FlOEmikFX4DvHYFcI5v2+SYCw3y3IK9bV36jEd0VBTYan1pLe2TQjTJ6x2LzsmJQEX6O9m8kj0z
-        0st6BBRpHes0AiQm/DEqGNpoqPKwYesFxoJQx74ZUmjEqvlpKuXk04bN/zKIM1wrzq934aWru5oRX
-        DgtNL4+9SD+mR5/krYUOec7cZR6s1prkm/V37lzqrk2rB7am3qDlrogwAVMFnmOyrau4S3Qzq8Hon
-        Oy4I05eDnmLNrfJsiySthPFkzBOiiV3WYqEhxIEdHjQwmAifpdasx8oSz3+8NbsSuJ+uGkMAUJqz3
-        oyIYIb/A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfKD4-005MnD-3Z; Fri, 15 Apr 2022 11:33:54 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 82ADA3001AD;
-        Fri, 15 Apr 2022 13:33:53 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 381C92D206192; Fri, 15 Apr 2022 13:33:53 +0200 (CEST)
-Date:   Fri, 15 Apr 2022 13:33:53 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Tao Zhou <tao.zhou@linux.dev>, LKML <linux-kernel@vger.kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>
-Subject: Re: [PATCH V1 RESEND]: sched/fair: Revise comment about lb decision
- matrix
-Message-ID: <YllYIQXmpqHM0+Wp@hirez.programming.kicks-ass.net>
-References: <20220415022246.14902-1-tao.zhou@linux.dev>
- <CAKfTPtAbxAerbV-LBcpm_qHAphhD3uU47k0hu=DDX3k6LS-Aow@mail.gmail.com>
+        Fri, 15 Apr 2022 07:40:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2162F5DE59
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:38:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEFE62291
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:38:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A58C385AC
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:38:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650022708;
+        bh=vXUC8IDY9bUnBt/qfk3ZWqIDk/HTdhBPloKaZakPo/o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=LhNhnbeJ41CGuuGk/t2WMCa+Vocx8kFsV/OMhSXrfjnJNiTMpRSf7klAwBiWfG80m
+         03ATkfWE7BgUHVlFUa51uRWONW9q9krpd2K8t3FxW+y8agqkIoww7L4g3dWmdaAsqT
+         qDrxd/4fHdSstYFfO3bz8+TmXHExM/h7KQLbdWdpBTwkcLx/XIjHwjpSk6lL5MJzfD
+         wxSlinbSC3Pl0mxKF8sVF4uddfQayCLuLyFndV7PbuLKXs0aU1MpXA2nBCgEve1CYp
+         Ty/1SoU9u134yuw7nJt3FdTk2p3FryH1pZNrV92lE+oXAtrq12g9rlklgG11gLAVwG
+         xeE16waEt6r8w==
+Received: by mail-ot1-f41.google.com with SMTP id g17-20020a9d6191000000b005e8d8583c36so5221465otk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:38:27 -0700 (PDT)
+X-Gm-Message-State: AOAM533JiXtBt4gU3tg45572aow06Cu8JKndck6+ayt3s/QCdibV4wbP
+        WUbtQCahY5BcBnct7BIM0zdm0J5OErPcxHi7aAI=
+X-Google-Smtp-Source: ABdhPJxbdPyhecm17U5r/LhiKDrO7HSSUFwbD9WNDKBQ8yyN8DJUXRbCwqgih5HaGzzy770gbFQdEBCHF2qQOkGDAO4=
+X-Received: by 2002:a05:6830:2e7:b0:5b2:68c1:182a with SMTP id
+ r7-20020a05683002e700b005b268c1182amr2485815ote.71.1650022707025; Fri, 15 Apr
+ 2022 04:38:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAKfTPtAbxAerbV-LBcpm_qHAphhD3uU47k0hu=DDX3k6LS-Aow@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
+ <YlaOIbSA7B/G9222@arm.com> <YlkV7NtatO7KFusX@gondor.apana.org.au>
+ <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
+ <YlkkGpVx8rhcsBot@gondor.apana.org.au> <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
+ <Ylko07++4naWJ5LE@gondor.apana.org.au> <CAMj1kXH=ybJWBzmMqkrkvyF8nM3UpTchUOq+oweW=BqW2TOyRw@mail.gmail.com>
+ <YllE+wWqP6F+1nwa@gondor.apana.org.au> <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
+ <YllM24eca/uxf9y7@gondor.apana.org.au>
+In-Reply-To: <YllM24eca/uxf9y7@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 15 Apr 2022 13:38:15 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
+Message-ID: <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 10:32:09AM +0200, Vincent Guittot wrote:
-> On Fri, 15 Apr 2022 at 04:22, Tao Zhou <tao.zhou@linux.dev> wrote:
+On Fri, 15 Apr 2022 at 12:45, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, Apr 15, 2022 at 12:22:27PM +0200, Ard Biesheuvel wrote:
 > >
-> > If busiest group type is group_misfit_task, the local
-> > group type must be group_has_spare according to below
-> > code in update_sd_pick_busiest():
-> >
-> > if (sgs->group_type == group_misfit_task &&
-> >     (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
-> >      sds->local_stat.group_type != group_has_spare))
-> >          return false;
-> >
-> > group type imbalanced and overloaded and fully_busy are filtered in here.
-> > misfit and asym are filtered before in update_sg_lb_stats().
-> 
-> The behavior has changed with
-> cad68e552e77 ("sched/fair: Consider misfit tasks when load-balancing")
-> But we haven't updated the matrix
-> 
-> Reviewed-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > Subsequent objects are owned by the driver, and it is the
+> > responsibility of the driver not to modify the fields while it is also
+> > mapped for DMA (and we have had issues in the past where drivers
+> > violated this rule). So as long as ARCH_KMALLOC_ALIGN guarantees
+> > actual DMA minimum alignment for both the start and the end, we
+> > shouldn't need any explicit padding at the end.
+>
+> I don't understand why this is guaranteed.  The driver context
+> size is arbitrary so it could end in the middle of a cacheline.
+> The slab allocator could well lay it out so that the next kmalloc
+> object starts right after the end of the context, in which case
+> they would share a cache-line.
+>
 
-Thanks (I took the later version and stuck your Rb on)!
+If this is the case, things are already broken today. We never take
+ARCH_DMA_MINALIGN into account when adding the driver ctx size to the
+overall allocation size.
+
+> The next kmalloc object could be (and in fact is likely to be)
+> of the same type.
+>
+> Previously this wasn't possible because kmalloc guaranteed
+> alignment.
+>
+
+Either it does or it doesn't. If kmalloc() guarantees the actual DMA
+alignment at both ends, the situation you describe cannot occur, given
+that the driver's slice of the request/TFM structure would be padded
+up to actual DMA alignment, in spite of whether or not
+ARCH_DMA_MINALIGN exceeds that. So it would never share a cacheline in
+practice, even though they might live in the same 128 byte aligned
+region on a system that has a minimum DMA alignment that is lower than
+that.
+
+If kmalloc() does not guarantee that the end of the buffer is aligned
+to actual DMA alignment, things are already broken today.

@@ -2,89 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B17D502E80
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F104B502E84
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 20:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344942AbiDOSBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 14:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40412 "EHLO
+        id S1345106AbiDOSCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 14:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240532AbiDOSBX (ORCPT
+        with ESMTP id S1344138AbiDOSCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 14:01:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4743DB493
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:58:53 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1nfQDZ-0004Kh-JT; Fri, 15 Apr 2022 19:58:49 +0200
-Message-ID: <afd1eeb8-0291-d891-c6f4-022f243a9a72@leemhuis.info>
-Date:   Fri, 15 Apr 2022 19:58:49 +0200
+        Fri, 15 Apr 2022 14:02:18 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C995C343
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:59:48 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id p10so15021777lfa.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:from:date:message-id:subject:to:cc;
+        bh=ZACS5WHiI7gChdgJhb6L8E+uQLLjhDmU2/Qe3HsDIMI=;
+        b=XQQwxdMI0ImldHNKxqFX00q9oRU1fpELODiuK1zpOXyGiFAA6kL6FzgSrRjxqWF2kr
+         G6KnStB6LrWLi5u2nj0ZFxquM++LK7WmvUJdKQXIS7lTDBZEGVDbsWTnZ5Eiuv10FaP8
+         KaPcpZxl1ajQdG7+9VV8k/GqAQt9XWrZv48TeiU+tE4JFodOiEXjZaxeIQwzbZ2+GcH/
+         q5C5ucF+7rf3V86RvyRv0EPmB2SNHtd3QqApleeTKWdssO7BHf0iPc/wHBYrC8XZ9xeX
+         gkyEeQSLF30o5vbg9vrQgQMtu1EnI4oQll6paq473qT5ZpAMAjbvCmuVCXOpZsx/Ogzw
+         NEWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
+        bh=ZACS5WHiI7gChdgJhb6L8E+uQLLjhDmU2/Qe3HsDIMI=;
+        b=w9oLLTqCZ+UIz6KPUnEmTZK34ZWi4vln+m22rAKIVFaKjT0mX2wxPFN4/oyKXMTXv3
+         0icN06Y/3aB7WrKBa/ZQIixfZirBxk9j6nk4lOmR2YY0akoSSu19fu7JSV25Kv1Gyrez
+         QjOALUVuCtwgaWJ4fE2BvRJnb6hSyIX3NaJtucr0T1pnMj5nA8jdYQS9PoYIf+rT1y7I
+         cUGkl4bWD8VkxtgtRhKehefFxlnwnl/BzzOaQ9MxKGfpiDfll2rjbpTiDEReeWIrMYq6
+         1CzcnZb68Al3RH++5zrTLAyJ80TL04CTAs1LhR6CE4Zsyt/oti16QGjQuNxs1s7XnEra
+         crVw==
+X-Gm-Message-State: AOAM533gXsa7A6UtZOriMUSy4N5Oj+fSuPF0UTr5uieKoJVrdF3ZCU7v
+        UVNrqZBbnnaXd5GImJ8cVNfu+U81PlNJnKGUIbsHXaO5EdNlFA==
+X-Google-Smtp-Source: ABdhPJzF5rxX6OUHjiotcRapiD2RkG7bHsp2HuJ5fZGDPasXccrqlA8FxWBntopJ7Rrb4fF5JAPkvKMRINBnBQuqPTc=
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id
+ i3-20020ac25223000000b004485100e427mr111228lfl.87.1650045586873; Fri, 15 Apr
+ 2022 10:59:46 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: "dma-mapping: remove CONFIG_DMA_REMAP" causes AMD SME boot fail
- #forregzbot
-Content-Language: en-US
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-To:     regressions@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-References: <1648659326.eabkokyuym.none.ref@localhost>
- <1648659326.eabkokyuym.none@localhost>
- <9e3c47e0-6807-081d-feb7-ed7c5fe1d1f1@leemhuis.info>
-In-Reply-To: <9e3c47e0-6807-081d-feb7-ed7c5fe1d1f1@leemhuis.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1650045533;61358a03;
-X-HE-SMSGID: 1nfQDZ-0004Kh-JT
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 15 Apr 2022 10:59:35 -0700
+Message-ID: <CAKwvOd=_ihOghnaWCmGs3xx1Tyn4qaEpZ1bpXvbGJhjGJR2K-w@mail.gmail.com>
+Subject: plumbers session on drgn and GDB+poke?
+To:     osandov@fb.com, "Jose E. Marchesi" <jemarch@gnu.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TWIMC: this mail is primarily send for documentation purposes and for
-regzbot, my Linux kernel regression tracking bot. These mails usually
-contain '#forregzbot' in the subject, to make them easy to spot and filter.
+Hi Omar and Jose,
+Jose and I are currently in the planning process to put together a
+Kernel+Toolchain microconference track at Linux Plumbers Conference
+this year (Sept 12-14) in Dublin, Ireland.
 
-#regzbot fixed-by: 4fe87e818ea492ade079cc0
-
-On 31.03.22 08:51, Thorsten Leemhuis wrote:
-> [TLDR: I'm adding the regression report below to regzbot, the Linux
-> kernel regression tracking bot; all text you find below is compiled from
-> a few templates paragraphs you might have encountered already already
-> from similar mails.]
-> 
-> Hi, this is your Linux kernel regression tracker. Sending this just to
-> the lists, as it's already handled.
-> 
-> On 30.03.22 19:51, Alex Xu (Hello71) wrote:
->>
->> After a recent kernel update, booting one of my machines causes it to 
->> hang on a black screen. Pressing Lock keys on the USB keyboard does not 
->> turn on the indicators, and the machine does not appear on the Ethernet 
->> network. I don't have a serial port on this machine. I didn't try 
->> netconsole, but I suspect it won't work.
->>
->> Setting mem_encrypt=0 seems to resolve the issue. Reverting f5ff79fddf0e 
->> ("dma-mapping: remove CONFIG_DMA_REMAP") also appears to resolve the 
->> issue.
->>
->> The machine in question has an AMD Ryzen 5 1600 and ASRock B450 Pro4.
-> 
-> To be sure below issue doesn't fall through the cracks unnoticed, I'm
-> adding it to regzbot, my Linux kernel regression tracking bot:
-> 
-> #regzbot ^introduced f5ff79fddf0e
-> #regzbot title dma: "dma-mapping: remove CONFIG_DMA_REMAP" causes AMD
-> SME boot fail
-> #regzbot ignore-activity
-> 
-> If it turns out this isn't a regression, free free to remove it from the
-> tracking by sending a reply to this thread containing a paragraph like
-> "#regzbot invalid: reason why this is invalid" (without the quotes).
-> 
-> Ciao, Thorsten
+We'd be curious if you both could lead a session on kernel debugging,
+and maybe show off drgn and GNU poke GDB integration?
+-- 
+Thanks,
+~Nick Desaulniers

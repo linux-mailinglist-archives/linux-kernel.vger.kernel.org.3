@@ -2,427 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA1950318B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1D8B503143
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356249AbiDOWDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 18:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40402 "EHLO
+        id S1356301AbiDOWEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 18:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237087AbiDOWDh (ORCPT
+        with ESMTP id S231476AbiDOWEB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 18:03:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA112A278
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:01:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EBE6621FA
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:01:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 021A7C385A5;
-        Fri, 15 Apr 2022 22:01:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650060066;
-        bh=gF05qkj1BV8YRPMKFq8okTDWS2TOnvBdsgGfuKBcUNc=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=qkvRQK+cwAX5qxBIrsmll2HBQ6tdyXXOo48j7ThKlxLDK5IqB60sSNQJiU/oIq5Dl
-         20sHI1dQ7J2buTs1iZVfVzMb8qQv9kFEtF060AAgDXgp21wXhfZhVzSJ8KzHuFWHiF
-         QY5bSK01PvE2nT6D5UX8S3AqWikLAnlWrJAARbHYWADztrluf1XJyAYTGZxzsKQ0Tr
-         wxfatIV+KrZ8u0jd34nEX/EUOQbNU7F96vC/7YPuAzQdX9LjnLphr4cb2zuWXL5TAY
-         Nui0tbFH8+eF/1aF2Bl0kxcmRkFg70TWIreWjyFRo02mboDXrwpyr4MOVbnTqlS4nP
-         WClFyObLzhRLg==
-Date:   Fri, 15 Apr 2022 15:01:05 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
+        Fri, 15 Apr 2022 18:04:01 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33B62A278;
+        Fri, 15 Apr 2022 15:01:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650060091; x=1681596091;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=4jrQfGzOOz8NYN3WWxiP4ysiHxJPzuBRgwyiKBFv+oo=;
+  b=DrD8wg5aUCfBgemjiurqYSfVJ2uJzxi6AmMwDysWkH+8Olz1HSpO0RZA
+   jkLcfWxDG+3iMNlg3Qg92m+nAzca5N67Spk0EgeP8a2EjsfxDjWOuiiUS
+   GUUn9/WA3KnQvxKCXEUB3DKAlWQAxcrxA9su7ifWj4vNks5y89aR4wwZ2
+   HrgZvAFcyxwNrozPg8m5/TQR0YSSzp36COpvYP38Q5xm9RVekb6yR+S9H
+   9CONNJ4H2j3/J64cc1UipvoO+kBGCzYknYO+D9QZzUjGBAQ32QLeB+8Y+
+   EtJJl/+w2XhEtKjZtiGzLG/zeU4K8n+dQ6gjrzxSqstbftjRhKe8ue+vR
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="288303530"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="288303530"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 15:01:30 -0700
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="612949090"
+Received: from smashtou-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.212.128.210])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 15:01:29 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [RFC PATCH 2/6] virtio: add option to restrict memory access
- under Xen
-In-Reply-To: <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204151235440.915916@ubuntu-linux-20-04-desktop>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com> <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH v3 1/4] x86/tdx: Add tdx_mcall_tdreport() API support
+Date:   Fri, 15 Apr 2022 15:01:06 -0700
+Message-Id: <20220415220109.282834-2-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022, Oleksandr Tyshchenko wrote:
-> From: Juergen Gross <jgross@suse.com>
-> 
-> In order to support virtio in Xen guests add a config option enabling
-> the user to specify whether in all Xen guests virtio should be able to
-> access memory via Xen grant mappings only on the host side.
-> 
-> This applies to fully virtualized guests only, as for paravirtualized
-> guests this is mandatory.
-> 
-> This requires to switch arch_has_restricted_virtio_memory_access()
-> from a pure stub to a real function on x86 systems (Arm systems are
-> not covered by now).
-> 
-> Add the needed functionality by providing a special set of DMA ops
-> handling the needed grant operations for the I/O pages.
-> 
-> Signed-off-by: Juergen Gross <jgross@suse.com>
-> ---
->  arch/x86/mm/init.c        |  15 ++++
->  arch/x86/mm/mem_encrypt.c |   5 --
->  arch/x86/xen/Kconfig      |   9 +++
->  drivers/xen/Kconfig       |  20 ++++++
->  drivers/xen/Makefile      |   1 +
->  drivers/xen/xen-virtio.c  | 177 ++++++++++++++++++++++++++++++++++++++++++++++
->  include/xen/xen-ops.h     |   8 +++
->  7 files changed, 230 insertions(+), 5 deletions(-)
->  create mode 100644 drivers/xen/xen-virtio.c
-> 
-> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-> index d8cfce2..526a3b2 100644
-> --- a/arch/x86/mm/init.c
-> +++ b/arch/x86/mm/init.c
-> @@ -8,6 +8,8 @@
->  #include <linux/kmemleak.h>
->  #include <linux/sched/task.h>
->  
-> +#include <xen/xen.h>
-> +
->  #include <asm/set_memory.h>
->  #include <asm/e820/api.h>
->  #include <asm/init.h>
-> @@ -1065,3 +1067,16 @@ unsigned long max_swapfile_size(void)
->  	return pages;
->  }
->  #endif
-> +
-> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +int arch_has_restricted_virtio_memory_access(void)
-> +{
-> +	if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
-> +		return 1;
-> +	if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
-> +		return 1;
+In TDX guest, attestation is mainly used to verify the trustworthiness
+of a TD to the 3rd party key servers. First step in attestation process
+is to get the TDREPORT data and the generated data is further used in
+subsequent steps of the attestation process. TDREPORT data contains
+details like TDX module version information, measurement of the TD,
+along with a TD-specified nonce
 
-I think these two checks could be moved to a separate function in a Xen
-header, e.g. xen_restricted_virtio_memory_access, and here you could
-just
+Add a wrapper function (tdx_mcall_tdreport()) to get the TDREPORT from
+the TDX Module.
 
-if (xen_restricted_virtio_memory_access())
-    return 1;
+More details about the TDREPORT TDCALL can be found in TDX Guest-Host
+Communication Interface (GHCI) for Intel TDX 1.5, section titled
+"TDCALL [MR.REPORT]".
 
+Steps involved in attestation process can be found in TDX Guest-Host
+Communication Interface (GHCI) for Intel TDX 1.5, section titled
+"TD attestation"
 
+This API will be mainly used by the attestation driver. Attestation
+driver support will be added by upcoming patches.
 
-> +	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
-> +}
-> +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> +#endif
-> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
-> index 50d2099..dda020f 100644
-> --- a/arch/x86/mm/mem_encrypt.c
-> +++ b/arch/x86/mm/mem_encrypt.c
-> @@ -77,8 +77,3 @@ void __init mem_encrypt_init(void)
->  	print_mem_encrypt_feature_info();
->  }
->  
-> -int arch_has_restricted_virtio_memory_access(void)
-> -{
-> -	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
-> -}
-> -EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> diff --git a/arch/x86/xen/Kconfig b/arch/x86/xen/Kconfig
-> index 85246dd..dffdffd 100644
-> --- a/arch/x86/xen/Kconfig
-> +++ b/arch/x86/xen/Kconfig
-> @@ -92,3 +92,12 @@ config XEN_DOM0
->  	select X86_X2APIC if XEN_PVH && X86_64
->  	help
->  	  Support running as a Xen Dom0 guest.
-> +
-> +config XEN_PV_VIRTIO
-> +	bool "Xen virtio support for PV guests"
-> +	depends on XEN_VIRTIO && XEN_PV
-> +	default y
-> +	help
-> +	  Support virtio for running as a paravirtualized guest. This will
-> +	  need support on the backend side (qemu or kernel, depending on the
-> +	  virtio device types used).
-> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-> index 120d32f..fc61f7a 100644
-> --- a/drivers/xen/Kconfig
-> +++ b/drivers/xen/Kconfig
-> @@ -335,4 +335,24 @@ config XEN_UNPOPULATED_ALLOC
->  	  having to balloon out RAM regions in order to obtain physical memory
->  	  space to create such mappings.
->  
-> +config XEN_VIRTIO
-> +	bool "Xen virtio support"
-> +	default n
-> +	depends on VIRTIO && DMA_OPS
-> +	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> +	help
-> +	  Enable virtio support for running as Xen guest. Depending on the
-> +	  guest type this will require special support on the backend side
-> +	  (qemu or kernel, depending on the virtio device types used).
-> +
-> +config XEN_HVM_VIRTIO_GRANT
-> +	bool "Require virtio for fully virtualized guests to use grant mappings"
-> +	depends on XEN_VIRTIO && X86_64
-> +	default y
-> +	help
-> +	  Require virtio for fully virtualized guests to use grant mappings.
-> +	  This will avoid the need to give the backend the right to map all
-> +	  of the guest memory. This will need support on the backend side
-> +	  (qemu or kernel, depending on the virtio device types used).
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Reviewed-by: Andi Kleen <ak@linux.intel.com>
+Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+---
+ arch/x86/coco/tdx/tdx.c    | 46 ++++++++++++++++++++++++++++++++++++++
+ arch/x86/include/asm/tdx.h |  2 ++
+ 2 files changed, 48 insertions(+)
 
-I don't think we need 3 visible kconfig options for this.
+diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
+index 03deb4d6920d..3e409b618d3f 100644
+--- a/arch/x86/coco/tdx/tdx.c
++++ b/arch/x86/coco/tdx/tdx.c
+@@ -11,10 +11,12 @@
+ #include <asm/insn.h>
+ #include <asm/insn-eval.h>
+ #include <asm/pgtable.h>
++#include <asm/io.h>
+ 
+ /* TDX module Call Leaf IDs */
+ #define TDX_GET_INFO			1
+ #define TDX_GET_VEINFO			3
++#define TDX_GET_REPORT			4
+ #define TDX_ACCEPT_PAGE			6
+ 
+ /* TDX hypercall Leaf IDs */
+@@ -34,6 +36,10 @@
+ #define VE_GET_PORT_NUM(e)	((e) >> 16)
+ #define VE_IS_IO_STRING(e)	((e) & BIT(4))
+ 
++/* TDX Module call error codes */
++#define TDCALL_RETURN_CODE_MASK		0xffffffff00000000
++#define TDCALL_RETURN_CODE(a)		((a) & TDCALL_RETURN_CODE_MASK)
++
+ /*
+  * Wrapper for standard use of __tdx_hypercall with no output aside from
+  * return code.
+@@ -98,6 +104,46 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
+ 		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
+ }
+ 
++/*
++ * tdx_mcall_tdreport() - Generate TDREPORT_STRUCT using TDCALL.
++ *
++ * @data        : Address of 1024B aligned data to store
++ *                TDREPORT_STRUCT.
++ * @reportdata  : Address of 64B aligned report data
++ *
++ * return 0 on success or failure error number.
++ */
++long tdx_mcall_tdreport(void *data, void *reportdata)
++{
++	u64 ret;
++
++	/*
++	 * Check for a valid TDX guest to ensure this API is only
++	 * used by TDX guest platform. Also make sure "data" and
++	 * "reportdata" pointers are valid.
++	 */
++	if (!data || !reportdata || !cpu_feature_enabled(X86_FEATURE_TDX_GUEST))
++		return -EINVAL;
++
++	/*
++	 * Pass the physical address of user generated reportdata
++	 * and the physical address of out pointer to store the
++	 * TDREPORT data to the TDX module to generate the
++	 * TD report. Generated data contains measurements/configuration
++	 * data of the TD guest. More info about ABI can be found in TDX
++	 * Guest-Host-Communication Interface (GHCI), sec titled
++	 * "TDG.MR.REPORT".
++	 */
++	ret = __tdx_module_call(TDX_GET_REPORT, virt_to_phys(data),
++				virt_to_phys(reportdata), 0, 0, NULL);
++
++	if (ret)
++		return TDCALL_RETURN_CODE(ret);
++
++	return 0;
++}
++EXPORT_SYMBOL_GPL(tdx_mcall_tdreport);
++
+ static u64 get_cc_mask(void)
+ {
+ 	struct tdx_module_output out;
+diff --git a/arch/x86/include/asm/tdx.h b/arch/x86/include/asm/tdx.h
+index 020c81a7c729..a151f69dd6ef 100644
+--- a/arch/x86/include/asm/tdx.h
++++ b/arch/x86/include/asm/tdx.h
+@@ -67,6 +67,8 @@ void tdx_safe_halt(void);
+ 
+ bool tdx_early_handle_ve(struct pt_regs *regs);
+ 
++long tdx_mcall_tdreport(void *data, void *reportdata);
++
+ #else
+ 
+ static inline void tdx_early_init(void) { };
+-- 
+2.25.1
 
-In fact, I would only add one: XEN_VIRTIO. We can have any X86 (or ARM)
-specific dependencies in the "depends" line under XEN_VIRTIO. And I
-don't think we need XEN_HVM_VIRTIO_GRANT as a kconfig option
-necessarely. It doesn't seem like some we want as build time option. At
-most, it could be a runtime option (like a command line) or a debug
-option (like an #define at the top of the source file.)
-
-
->  endmenu
-> diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
-> index 5aae66e..767009c 100644
-> --- a/drivers/xen/Makefile
-> +++ b/drivers/xen/Makefile
-> @@ -39,3 +39,4 @@ xen-gntalloc-y				:= gntalloc.o
->  xen-privcmd-y				:= privcmd.o privcmd-buf.o
->  obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+= xen-front-pgdir-shbuf.o
->  obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+= unpopulated-alloc.o
-> +obj-$(CONFIG_XEN_VIRTIO)		+= xen-virtio.o
-> diff --git a/drivers/xen/xen-virtio.c b/drivers/xen/xen-virtio.c
-> new file mode 100644
-> index 00000000..cfd5eda
-> --- /dev/null
-> +++ b/drivers/xen/xen-virtio.c
-> @@ -0,0 +1,177 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/******************************************************************************
-> + * Xen virtio driver - enables using virtio devices in Xen guests.
-> + *
-> + * Copyright (c) 2021, Juergen Gross <jgross@suse.com>
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/dma-map-ops.h>
-> +#include <linux/pci.h>
-> +#include <linux/pfn.h>
-> +#include <linux/virtio_config.h>
-> +#include <xen/xen.h>
-> +#include <xen/grant_table.h>
-> +
-> +#define XEN_GRANT_ADDR_OFF	0x8000000000000000ULL
-
-NIT: (1ULL << 31)
-
-
-> +static inline dma_addr_t grant_to_dma(grant_ref_t grant)
-> +{
-> +	return XEN_GRANT_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
-> +}
-> +
-> +static inline grant_ref_t dma_to_grant(dma_addr_t dma)
-> +{
-> +	return (grant_ref_t)((dma & ~XEN_GRANT_ADDR_OFF) >> PAGE_SHIFT);
-> +}
-> +
-> +/*
-> + * DMA ops for Xen virtio frontends.
-> + *
-> + * Used to act as a kind of software IOMMU for Xen guests by using grants as
-> + * DMA addresses.
-> + * Such a DMA address is formed by using the grant reference as a frame
-> + * number and setting the highest address bit (this bit is for the backend
-> + * to be able to distinguish it from e.g. a mmio address).
-> + *
-> + * Note that for now we hard wire dom0 to be the backend domain. In order to
-> + * support any domain as backend we'd need to add a way to communicate the
-> + * domid of this backend, e.g. via Xenstore or via the PCI-device's config
-> + * space.
-
-I would add device tree as possible way of domid communication
-
-
-> + */
-> +static void *xen_virtio_dma_alloc(struct device *dev, size_t size,
-> +				  dma_addr_t *dma_handle, gfp_t gfp,
-> +				  unsigned long attrs)
-> +{
-> +	unsigned int n_pages = PFN_UP(size);
-> +	unsigned int i;
-> +	unsigned long pfn;
-> +	grant_ref_t grant;
-> +	void *ret;
-> +
-> +	ret = (void *)__get_free_pages(gfp, get_order(size));
-> +	if (!ret)
-> +		return NULL;
-> +
-> +	pfn = virt_to_pfn(ret);
-> +
-> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
-> +		free_pages((unsigned long)ret, get_order(size));
-> +		return NULL;
-> +	}
-> +
-> +	for (i = 0; i < n_pages; i++) {
-> +		gnttab_grant_foreign_access_ref(grant + i, 0,
-> +						pfn_to_gfn(pfn + i), 0);
-> +	}
-> +
-> +	*dma_handle = grant_to_dma(grant);
-> +
-> +	return ret;
-> +}
-> +
-> +static void xen_virtio_dma_free(struct device *dev, size_t size, void *vaddr,
-> +				dma_addr_t dma_handle, unsigned long attrs)
-> +{
-> +	unsigned int n_pages = PFN_UP(size);
-> +	unsigned int i;
-> +	grant_ref_t grant;
-> +
-> +	grant = dma_to_grant(dma_handle);
-> +
-> +	for (i = 0; i < n_pages; i++)
-> +		gnttab_end_foreign_access_ref(grant + i);
-> +
-> +	gnttab_free_grant_reference_seq(grant, n_pages);
-> +
-> +	free_pages((unsigned long)vaddr, get_order(size));
-> +}
-> +
-> +static struct page *xen_virtio_dma_alloc_pages(struct device *dev, size_t size,
-> +					       dma_addr_t *dma_handle,
-> +					       enum dma_data_direction dir,
-> +					       gfp_t gfp)
-> +{
-> +	WARN_ONCE(1, "xen_virtio_dma_alloc_pages size %ld\n", size);
-> +	return NULL;
-> +}
-> +
-> +static void xen_virtio_dma_free_pages(struct device *dev, size_t size,
-> +				      struct page *vaddr, dma_addr_t dma_handle,
-> +				      enum dma_data_direction dir)
-> +{
-> +	WARN_ONCE(1, "xen_virtio_dma_free_pages size %ld\n", size);
-> +}
-> +
-> +static dma_addr_t xen_virtio_dma_map_page(struct device *dev, struct page *page,
-> +					  unsigned long offset, size_t size,
-> +					  enum dma_data_direction dir,
-> +					  unsigned long attrs)
-> +{
-> +	grant_ref_t grant;
-> +
-> +	if (gnttab_alloc_grant_references(1, &grant))
-> +		return 0;
-> +
-> +	gnttab_grant_foreign_access_ref(grant, 0, xen_page_to_gfn(page),
-> +					dir == DMA_TO_DEVICE);
-> +	return grant_to_dma(grant) + offset;
-> +}
-> +
-> +static void xen_virtio_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
-> +				      size_t size, enum dma_data_direction dir,
-> +				      unsigned long attrs)
-> +{
-> +	grant_ref_t grant;
-> +
-> +	grant = dma_to_grant(dma_handle);
-> +
-> +	gnttab_end_foreign_access_ref(grant);
-> +
-> +	gnttab_free_grant_reference(grant);
-> +}
-> +
-> +static int xen_virtio_dma_map_sg(struct device *dev, struct scatterlist *sg,
-> +				 int nents, enum dma_data_direction dir,
-> +				 unsigned long attrs)
-> +{
-> +	WARN_ONCE(1, "xen_virtio_dma_map_sg nents %d\n", nents);
-> +	return -EINVAL;
-> +}
-> +
-> +static void xen_virtio_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
-> +				    int nents, enum dma_data_direction dir,
-> +				    unsigned long attrs)
-> +{
-> +	WARN_ONCE(1, "xen_virtio_dma_unmap_sg nents %d\n", nents);
-> +}
-
-You can implement xen_virtio_dma_map_sg and xen_virtio_dma_unmap_sg
-based on xen_virtio_dma_map_page and xen_virtio_dma_unmap_page, like we
-do in drivers/xen/swiotlb-xen.c.
-
-
-> +static int xen_virtio_dma_dma_supported(struct device *dev, u64 mask)
-> +{
-> +	return 1;
-> +}
-> +
-> +static const struct dma_map_ops xen_virtio_dma_ops = {
-> +	.alloc = xen_virtio_dma_alloc,
-> +	.free = xen_virtio_dma_free,
-> +	.alloc_pages = xen_virtio_dma_alloc_pages,
-> +	.free_pages = xen_virtio_dma_free_pages,
-> +	.mmap = dma_common_mmap,
-> +	.get_sgtable = dma_common_get_sgtable,
-> +	.map_page = xen_virtio_dma_map_page,
-> +	.unmap_page = xen_virtio_dma_unmap_page,
-> +	.map_sg = xen_virtio_dma_map_sg,
-> +	.unmap_sg = xen_virtio_dma_unmap_sg,
-> +	.dma_supported = xen_virtio_dma_dma_supported,
-> +};
-> +
-> +void xen_virtio_setup_dma_ops(struct device *dev)
-> +{
-> +	dev->dma_ops = &xen_virtio_dma_ops;
-> +}
-> +EXPORT_SYMBOL_GPL(xen_virtio_setup_dma_ops);
-> +
-> +MODULE_DESCRIPTION("Xen virtio support driver");
-> +MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
-> index a3584a3..ae3c1bc 100644
-> --- a/include/xen/xen-ops.h
-> +++ b/include/xen/xen-ops.h
-> @@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) { }
->  
->  #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
->  
-> +#ifdef CONFIG_XEN_VIRTIO
-> +void xen_virtio_setup_dma_ops(struct device *dev);
-> +#else
-> +static inline void xen_virtio_setup_dma_ops(struct device *dev)
-> +{
-> +}
-> +#endif /* CONFIG_XEN_VIRTIO */
-> +
->  #endif /* INCLUDE_XEN_OPS_H */
-> -- 
-> 2.7.4
-> 

@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A434502FB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:19:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1C0A502FB7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:19:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351793AbiDOUVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 16:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55182 "EHLO
+        id S1351994AbiDOUVp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 16:21:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351798AbiDOUUz (ORCPT
+        with ESMTP id S1351931AbiDOUVo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 16:20:55 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F6FDE932
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:18:21 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id v133so4311310vsv.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:18:21 -0700 (PDT)
+        Fri, 15 Apr 2022 16:21:44 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A440DDE92E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:19:14 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id c4so3916082vkq.9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:19:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=Cbb1YDb5NaiuUde42DTRSKAfH6XbrCM5Doeox4W/L1U=;
-        b=R+fWKSybpUALXVyi7dr5ULcwrcaXsKRmDx3orLXnDSP1dKdn6sslxaR84/Vt1idESV
-         R0gbbnc2Eo5O2hvxGNOm5+O5l7zO9r5grwhRC/H1pjlfnAengg/oNlV3PjITQ52N9xvj
-         ttmr00bahnI6zPcHkkGyVH85UyIFb3BiDQXe1wN6D7t4+4SOidckXgXl4WmZtYM9G8g/
-         aed3/o6NSjZAcWDOvNGsi7PFryJv2kBPX+cLbidK7S7FBT3z2r51EStnpXahSrD5q8Gs
-         bTdzVJmEmNuyfh9W4BKstW6XQcg/tnhQUf9CLonBDa0jnHYmD9BzjVmbUocVwfvlS2tZ
-         ESWA==
+        bh=RL4h06AiN/8w2o0+WiSAeDo+mIxH1CqmEN55coz0ZRI=;
+        b=cG7AXdVOmojd7MPJeyvdAKpKNSrCsdc+0C+jBZpP/l0cPfjWbDkpXc3uKsnXjHbZV9
+         qR7pzwGxqiqamTg07BI4QpeQJkph+ny9gAUXN6/7mo8ghhN+OIANuDNLKjziKKYdyzyJ
+         El2R76h+olnjDnbnNKUeCK0M3JWu48ALCpHFw7W/rtZut0Gl0juIqxIeEwZ9yWG+EZC3
+         TOKHl8t1j7iotttaFvZUE2R9Je9NTb/0fRabz22i0mg7OujgPkQryjsCzYOwAskzqem+
+         OHTlmpmBZVh9rADP00Nu6D0ZtshSsA0skqt2BD2DVNk9Ymqle9R1FG8+H/pL8yJzoA0r
+         f8FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=Cbb1YDb5NaiuUde42DTRSKAfH6XbrCM5Doeox4W/L1U=;
-        b=pqOavZBdCec2Q9DCwM4X/hD6LvYbvO68mPFsVoOzEc7nHrQ6Km3WVZVCeGl80A+tc2
-         k/5l74hhcdsvP392PhCEHDQykQeqOaUra2+rIWU7RMeOdrwHQFrCGreNfX8NQ+yYmMDp
-         aZlXqW5LvDUPk5HWqe0MPUEmXQBkP3AuiW5B/EX3DWui8eejmWUFxX6IhxyGzVLjiQRY
-         hPQGBZUI6Q/mlRwFUwOoZ5DNrhs26xLQeLkEb9/F6N1iyG94xNlrVnOSEZ1qf36bw6mO
-         4g39K/6aQgtL2zY8G2xp2okXJvrDAgmxwV37asT3DxeHIE7Vjivh0TYCI5QkCyiE3BGw
-         6BIQ==
-X-Gm-Message-State: AOAM531DfJcsgSjIScSuDWwPOdofVr+AFlKiR8vhSb7jahJjNElK0lr1
-        HRNbxOHp9F9aeeFGpRyl6QscxI4FrdjMGQajJ+oKpw==
-X-Google-Smtp-Source: ABdhPJwO94bILh3nEx3+nxP4ZO5hEG2ftNGY6x330YGarczURLY5R/Y+L+rCRpLt0Wpji7SMuT9MzVQDZVeugH9nIdA=
-X-Received: by 2002:a67:de17:0:b0:32a:4007:cd86 with SMTP id
- q23-20020a67de17000000b0032a4007cd86mr220678vsk.22.1650053900285; Fri, 15 Apr
- 2022 13:18:20 -0700 (PDT)
+        bh=RL4h06AiN/8w2o0+WiSAeDo+mIxH1CqmEN55coz0ZRI=;
+        b=Jcg0tWUqGeFfUyIGZ+MrkA8Re4QsQGJreHPETzEA7zgQsZQDprfaDYln4cGqTBXfdG
+         EXEL0BuCtYEBug2k6GcxjoQI2FIJez0eQeos32mVU0/t5GrwqrbuU/VL94wqKXgeHQ78
+         Hhww294MM/+XWIkG6oivbqySGJzOfTY6xae/emq+4l2LDLbenNKP7+O5CF+GLG9aQtpJ
+         nIfIhYAewBo9IVXBohhB4ka2HpIa4ZzPKiSNc8XtZXK33Vg9iJikZT7rIWq86YWIAia2
+         AEKH/ihlCdcvWOvild+4FGdg8qUhazX9BHpqKHxV/p1fiqvEPAha6ccRJZN03tsTWqjx
+         dIZg==
+X-Gm-Message-State: AOAM531h+dE1qrcIdqqgurIy1Shud9U22wDz7T6LEAiBdyXkAMyYyu4D
+        bbgxjXRXsYwu+TPnl0wCHPLc3ivgfkmMOaIJwvZW3w==
+X-Google-Smtp-Source: ABdhPJyixbc34eO6iyu54XQyh9mZgb+tRH7Zy9C+wfiLqmqg/wY+fuq9KDoFF7OSWdQsq/iJaXoxUlUwz8RQNa0Yfso=
+X-Received: by 2002:a1f:32cf:0:b0:345:cdce:5dcd with SMTP id
+ y198-20020a1f32cf000000b00345cdce5dcdmr200317vky.14.1650053953620; Fri, 15
+ Apr 2022 13:19:13 -0700 (PDT)
 MIME-Version: 1.0
 References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-7-yuzhao@google.com>
  <CAGsJ_4xqm4L4E4dW4PPHos8Ed9ej6hph28tSGy21Re3u7WiuOA@mail.gmail.com>
- <YliFs3NOHeo2LeXl@google.com> <20220414143959.0daf4534613f2511b9b27f11@linux-foundation.org>
- <CAGsJ_4ymn55eEkmSh5nBkoHcazHxuTBO6wtPJ0C+xE8WB+jqLg@mail.gmail.com>
-In-Reply-To: <CAGsJ_4ymn55eEkmSh5nBkoHcazHxuTBO6wtPJ0C+xE8WB+jqLg@mail.gmail.com>
+ <YliFs3NOHeo2LeXl@google.com> <CAGsJ_4yYP1Wv7_KqX+bo2u=YZNGAqYsLf8evekqz9Y6djbWD7Q@mail.gmail.com>
+In-Reply-To: <CAGsJ_4yYP1Wv7_KqX+bo2u=YZNGAqYsLf8evekqz9Y6djbWD7Q@mail.gmail.com>
 From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 15 Apr 2022 14:17:43 -0600
-Message-ID: <CAOUHufY5EeXAn-H_A0V0rzwJOzMs+6cbbmjpxL1Yxrp7msiJog@mail.gmail.com>
+Date:   Fri, 15 Apr 2022 14:18:37 -0600
+Message-ID: <CAOUHufbJnQGT+_Bg-bXZHH_PZ8GdZ72y=iCCguzq-waT5A0fEQ@mail.gmail.com>
 Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
 To:     Barry Song <21cnbao@gmail.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
         Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
@@ -97,36 +96,95 @@ X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 4:16 AM Barry Song <21cnbao@gmail.com> wrote:
+On Fri, Apr 15, 2022 at 4:26 AM Barry Song <21cnbao@gmail.com> wrote:
 >
-> On Fri, Apr 15, 2022 at 9:40 AM Andrew Morton <akpm@linux-foundation.org> wrote:
+> On Fri, Apr 15, 2022 at 8:36 AM Yu Zhao <yuzhao@google.com> wrote:
 > >
-> > On Thu, 14 Apr 2022 14:36:03 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> > On Thu, Apr 14, 2022 at 06:03:10PM +1200, Barry Song wrote:
+> > >
+> > > On Thu, Apr 7, 2022 at 3:16 PM Yu Zhao <yuzhao@google.com> wrote:
+> > > >
+> > > > +
+> > > > +static int isolate_folios(struct lruvec *lruvec, struct scan_control *sc, int swappiness,
+> > > > +                         int *type_scanned, struct list_head *list)
+> > > > +{
+> > > > +       int i;
+> > > > +       int type;
+> > > > +       int scanned;
+> > > > +       int tier = -1;
+> > > > +       DEFINE_MIN_SEQ(lruvec);
+> > > > +
+> > > > +       VM_BUG_ON(!seq_is_valid(lruvec));
+> > > > +
+> > > > +       /*
+> > > > +        * Try to make the obvious choice first. When anon and file are both
+> > > > +        * available from the same generation, interpret swappiness 1 as file
+> > > > +        * first and 200 as anon first.
+> > > > +        */
+> > >
+> > > Has this changed the ABI of swapiness?
 > >
-> > > > or it is only something
-> > > > meaningful for the internal code?
-> > >
-> > > This is how swappiness is interpreted.
-> > >
-> > > > if so, can we rename it to
-> > > > something else? otherwise, it is quite confusing.
-> > >
-> > > Feel free to suggest something.
+> > No.
 > >
-> > It is confusing,   swap_preference?
+> > > or it is only something
+> > > meaningful for the internal code?
+> >
+> > This is how swappiness is interpreted.
+> >
+> > > if so, can we rename it to
+> > > something else? otherwise, it is quite confusing.
+> >
+> > Feel free to suggest something.
+> >
+> > > it seems 1 is set internally as a magic number here:
+> > > +static void lru_gen_shrink_lruvec(struct lruvec *lruvec, struct
+> > > scan_control *sc)
+> > > +{
+> > > + ...
+> > > + else if (!cgroup_reclaim(sc) && get_swappiness(lruvec, sc))
+> > > + swappiness = 1;
+> > > + else
+> > > + swappiness = 0;
+> > > + }
+> > > obviously this swappiness is neither /proc/sys/vm/swappiness  nor
+> > > /sys/fs/cgroup/memory/<group>/>memory.swappiness, right?
+> >
+> > Right.
+> >
+> > > > @@ -3928,6 +4726,11 @@ static void age_active_anon(struct pglist_data *pgdat,
+> > > >         struct mem_cgroup *memcg;
+> > > >         struct lruvec *lruvec;
+> > > >
+> > > > +       if (lru_gen_enabled()) {
+> > > > +               lru_gen_age_node(pgdat, sc);
+> > > > +               return;
+> > > > +       }
+> > >
+> > > is it really a good place for  lru_gen_age_node() since the function
+> > > is named age_active_anon()
+> > > but here you are doing aging for both anon and file pages?
+> >
+> > Yes.
+> >
+> > > obviously
+> > > lru_gen_age_node() is not
 >
-> seems to be much better. might also be worth using MACRO to replace those
-> 1, 200, 0 magic numbers  to tell readers the exact meaning?
+> > > doing "age active anon".
+> >
+> ;> We can rename it if you have something in mind.
+>
+> i wonder if we can directly do:
+>
+> if (lru_gen_enabled())
+>       lru_gen_age_node(pgdat, sc);
+> else
+>      age_active_anon();
 
-How do you read "swap_preference=0"?
-
-I read it as "no (swap) preference", which means anon and file are
-equal. The real meaning though, is "don't swap"; and the "no
-preference" value is actually 100.
+This looks good to me. I've queued it for the next version. Thanks.

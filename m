@@ -2,114 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C16D502974
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:11:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DBA1502976
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:13:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353183AbiDOMNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S244115AbiDOMQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 08:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353123AbiDOMNK (ORCPT
+        with ESMTP id S236419AbiDOMQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:13:10 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7970EBF011
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:10:42 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id t25so9711453edt.9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:10:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=+YYK4vy259MFhr5syvwnMVIGmoB/m/01LjYdYR6zHbo=;
-        b=OFGsGWd+TJQk2Rg81s7SRN7EQf0lKglfkAW4B079wNdWeyzha85aIFue/NHsviVZ+J
-         6ay05JBd8VcwZ2hLEnL5YtYVvZccBRASgFbEZge7ce2xrjvrVw0uvGxuFwJgFOlos6g+
-         OZM+kvcCfM/ISazrD7xhUKazsRqdc9wHlAyqP+Dw2bJEtcs/IDH8CPHfPIgRTFb3J88s
-         50z3eg2H4ErTHA9B5wTDCLIDLYQ1tEMe8UyBY5Z2hTsLUDoU5+4JNBCy+1c7fEuTWnHE
-         r2MFv5aVzs30mI/SHsxRAJmdvdMXfclngTRfvqqVkOtI71e2USJP9RH9U3+5FtRPO4zE
-         WvhQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=+YYK4vy259MFhr5syvwnMVIGmoB/m/01LjYdYR6zHbo=;
-        b=XIRHTfw+B/nQQpCX/aXB6IFmbBtRbptw269+M+eg9y/AwhAfbVI/m5S4TP4RPICELA
-         wloPkdq1giDeAUXuGSVf4Smt2/xxATtGK9xB0VfwIVVRhWvv16GmK9OApH0jLzTyZMXf
-         IcE4wAT0KJ3gktYRlXbDmlolNgj05JjL32p+qB6p+CeBQk3R71FFCu/1bTtKlaR5IbWO
-         UL0b5wYLH/kiOBJQLmTC/DKRSZGBuQqU9+eOh5saU9GxstmK2N/AvM74O2cnWoOSWtL+
-         wz1zu8PkXVEbz24HfFFvC/3T4jNfdiHaO/RZbzg9MY56Nj07tPzUaprEnnn/Ynt56Fhb
-         +IIw==
-X-Gm-Message-State: AOAM5336T3aYlvTgyq+hSm8E17voRrGbhHvMNaqcRTj9Advy047ECKmd
-        EVb0kPPrXtk4UBuV9oYjS5E=
-X-Google-Smtp-Source: ABdhPJxcOj8Ad1mmGtO9rNI7z9DkpThgUe4k1yRqCC+CsGPDvAZVCojKnwhqdkIjc7ALYNI+f3oXNg==
-X-Received: by 2002:a05:6402:35d6:b0:41f:95b8:a945 with SMTP id z22-20020a05640235d600b0041f95b8a945mr7974772edc.40.1650024641079;
-        Fri, 15 Apr 2022 05:10:41 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abba5.dynamic.kabel-deutschland.de. [95.90.187.165])
-        by smtp.gmail.com with ESMTPSA id z22-20020a1709063ad600b006e8867caa5dsm1626114ejd.72.2022.04.15.05.10.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 05:10:40 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH v3 8/8] staging: r8188eu: check firmware header existence before access
-Date:   Fri, 15 Apr 2022 14:10:23 +0200
-Message-Id: <20220415121023.11564-9-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220415121023.11564-1-straube.linux@gmail.com>
-References: <20220415121023.11564-1-straube.linux@gmail.com>
+        Fri, 15 Apr 2022 08:16:08 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5EFBF51A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:13:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=MILgHchDw/IeKkYl1D6SOFjIDDJ9KwwN+5ggHUMxk60=; b=dmJQE2xYgRH2XkTu0C4r6F8AxH
+        1Z7Hxy59HvK5tl9PIBCpodHZcD+98LI3BvOLfHODMAt1EgHVo2ud7CZhwj4rcXpbDSvsGFMc6TfeL
+        O4Z1zYQjTUXd5ya0WVLkc7sgGjXuGKijRVqFbbZRXdn3sVwnY/6frekJrPSdC33djWWDwBmFirzkT
+        k3GyqPoC53vRYDD4gxOkwMRCsSJD9ecZ/1f+XCvGVh/e9pE2GZncirbwewZUEFkNjxr1iTd1WKtVl
+        GHr9wwAbFwSgO8cETeKLnsAy6nst9Saf8FkBpQigKSGM5/7UCuh6uN3bhS8L4PPP5DsVUEPBKeEih
+        1oGJVnwg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nfKp3-005NLJ-5p; Fri, 15 Apr 2022 12:13:09 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id CB3323001AD;
+        Fri, 15 Apr 2022 14:13:07 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 9EA2330A47E04; Fri, 15 Apr 2022 14:13:07 +0200 (CEST)
+Date:   Fri, 15 Apr 2022 14:13:07 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Donghai Qiao <dqiao@redhat.com>
+Cc:     akpm@linux-foundation.org, sfr@canb.auug.org.au, arnd@arndb.de,
+        heying24@huawei.com, andriy.shevchenko@linux.intel.com,
+        axboe@kernel.dk, rdunlap@infradead.org, tglx@linutronix.de,
+        gor@linux.ibm.com, donghai.w.qiao@gmail.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 00/11] smp: cross CPU call interface
+Message-ID: <YllhUx6g7ySAtk9k@hirez.programming.kicks-ass.net>
+References: <20220415024701.876364-1-dqiao@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415024701.876364-1-dqiao@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We should access the fields of fwhdr only if the check for firmware
-header existence is true. Move the affected code into the if block
-that checks firmware header existence.
+On Thu, Apr 14, 2022 at 10:46:50PM -0400, Donghai Qiao wrote:
+> The motivation of submitting this patch set is intended to make the
+> existing cross CPU call mechanism become a bit more formal interface
+> and more friendly to the kernel developers.
+> 
+> Basically the minimum set of functions below can satisfy any demand
+> for cross CPU call from kernel consumers. For the sack of simplicity
+> self-explanatory and less code redundancy no ambiguity, the functions
+> in this interface are renamed, simplified, or eliminated. But they
+> are still inheriting the same semantics and parameter lists from their
+> previous version.
+> 
+> int smp_xcall(int cpu, smp_call_func_t func, void *info, unsigned int flags)
+> 
+> int smp_xcall_cond(int cpu, smp_call_func_t func, void *info,
+>                    smp_cond_func_t condf, unsigned int flags)
+> 
+> void smp_xcall_mask(const struct cpumask *mask, smp_call_func_t func,
+>                     void *info, unsigned int flags)
+> 
+> void smp_xcall_mask_cond(const struct cpumask *mask, smp_call_func_t func,
+>                          void *info, smp_cond_func_t condf, unsigned int flags)
+> 
+> int smp_xcall_private(int cpu, call_single_data_t *csd, unsigned int flags)
+> 
+> int smp_xcall_any(const struct cpumask *mask, smp_call_func_t func,
+>                   void *info, unsigned int flags)
+> 
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
-v3:
-- no real changes,
-  just the pr_info() -> pr_info_once() from patch 7/8 is different
-
-v2:
-- no changes
-
- drivers/staging/r8188eu/core/rtw_fw.c | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/staging/r8188eu/core/rtw_fw.c b/drivers/staging/r8188eu/core/rtw_fw.c
-index 7ee72236c7f4..8b5c67780a7b 100644
---- a/drivers/staging/r8188eu/core/rtw_fw.c
-+++ b/drivers/staging/r8188eu/core/rtw_fw.c
-@@ -251,14 +251,13 @@ int rtl8188e_firmware_download(struct adapter *padapter)
- 	fw_data = dvobj->firmware.data;
- 	fw_size = dvobj->firmware.size;
- 
--	/*  To Check Fw header. Added by tynli. 2009.12.04. */
- 	fwhdr = (struct rt_firmware_hdr *)dvobj->firmware.data;
- 
--	pr_info_once("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
--		     DRIVER_PREFIX, le16_to_cpu(fwhdr->version), fwhdr->subversion,
--		     le16_to_cpu(fwhdr->signature));
--
- 	if (IS_FW_HEADER_EXIST(fwhdr)) {
-+		pr_info_once("%sFirmware Version %d, SubVersion %d, Signature 0x%x\n",
-+			     DRIVER_PREFIX, le16_to_cpu(fwhdr->version), fwhdr->subversion,
-+			     le16_to_cpu(fwhdr->signature));
-+
- 		fw_data = fw_data + sizeof(struct rt_firmware_hdr);
- 		fw_size = fw_size - sizeof(struct rt_firmware_hdr);
- 	}
--- 
-2.35.1
-
+Can we please remove that x? That's going to be horrible pain for a long
+time to come.

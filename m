@@ -2,123 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64A7E50200C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:15:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFFD850200A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239881AbiDOBSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 21:18:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34402 "EHLO
+        id S236128AbiDOBRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 21:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbiDOBR6 (ORCPT
+        with ESMTP id S231893AbiDOBRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:17:58 -0400
-Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F7B7CDD2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 18:15:32 -0700 (PDT)
-Received: by mail-vk1-xa2a.google.com with SMTP id r130so1758321vkr.10
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 18:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=sqQ5iSXHRChMtfKt3RIiTUV6la+/DUpLnLLVZuKBh7Q=;
-        b=oviqlwgsbsf/uMOiFPTaRFR184BPOabtCsqvs6xHtrlZpVbO4wKVB0eo7OE3eF6N/f
-         WoaWM5yeZZLbX4bTnkrRStEi99QdeKS6Z3yPjXlEJ8thMjBN2y6vtiXz9+r5waIlarMi
-         PEuJDrqRxDNGWEvZtqcjJ6wDZjHCrtXjyW8RCewvZZTM8b8ewk2aMLxst08o3jkmgvHj
-         dBaMIEPKx2pirgP/PA/oNB8wvUGcKYkBWFZi8QlKZ5MZdK/U1NzAv8EWY+L7ieWQPXio
-         KQeZRRy2WP6HjteGasYoS9ndZF9Muc0bdCZWEfz9K4vzCapbUgbZygSvSEc1A6iW2EBz
-         SL8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=sqQ5iSXHRChMtfKt3RIiTUV6la+/DUpLnLLVZuKBh7Q=;
-        b=4omK45oFptnD9PnunLjFVjeCrF99ZqKX6btY80EaS2Dtx10Lm4Qeh3IiaYtmel4gQ0
-         BaDkdlLPeIsArkJ972HpLQwDU6iAJMabsJNesIfSNe0N1lKlpAO/kt0YNZ2W9YHxH7Li
-         GCy+hL8QAQWjZ/f4EIzQvx4PHhME++gHeYn7Gxl6en+Owd41sFAkiPo582q5pUCd+DvF
-         AMjPvJHorrn1UIBMWSOtsFwrgWjQibigsGGSLisXW0fl7EtBsR+KgvcNJgszKEzAIHpC
-         WKTxLOQjFp1dcO8o9Dv8CE5DAGy/iN7iXRwU76uE5UnpKnuqHQixMDOPC3avX2Wsz93p
-         kW7Q==
-X-Gm-Message-State: AOAM5306zh7EmptQh4XohnzdhfzG8teNBted4Y7Mc1FYuV/Sn+WeZmoU
-        gJ+VWekmVTWNzctpykljErHNka+AjrFkZm8M3iMX+Q==
-X-Google-Smtp-Source: ABdhPJwvGDjSCKwPleIWn79rkQzoHHhv5ROws7qejBtcO8EAQjqcBUMU+Hjaa8vtashbeHOejWBcqwTJDS8z7VZov/8=
-X-Received: by 2002:a1f:314b:0:b0:331:fff6:a89e with SMTP id
- x72-20020a1f314b000000b00331fff6a89emr2454874vkx.26.1649985331160; Thu, 14
- Apr 2022 18:15:31 -0700 (PDT)
+        Thu, 14 Apr 2022 21:17:31 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D70941FB4;
+        Thu, 14 Apr 2022 18:15:03 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 15 Apr 2022 10:15:02 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id BBCD32058B50;
+        Fri, 15 Apr 2022 10:15:02 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Fri, 15 Apr 2022 10:15:02 +0900
+Received: from [10.212.183.90] (unknown [10.212.183.90])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 9E59EB6389;
+        Fri, 15 Apr 2022 10:15:01 +0900 (JST)
+Subject: Re: [PATCH] dt-bindings: thermal: uniphier: Use unevaluatedProperties
+ and common bindings
+To:     Rob Herring <robh@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <1649317533-21139-1-git-send-email-hayashi.kunihiko@socionext.com>
+ <YlccxAQ9adSZh22F@robh.at.kernel.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <c16ca6b1-0363-7ddc-6736-3de738d7e5a5@socionext.com>
+Date:   Fri, 15 Apr 2022 10:15:01 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
- <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
-In-Reply-To: <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 14 Apr 2022 19:14:54 -0600
-Message-ID: <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
-Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlccxAQ9adSZh22F@robh.at.kernel.org>
+Content-Type: text/plain; charset=iso-2022-jp; format=flowed; delsp=yes
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed,  6 Apr 2022 21:15:20 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > +static void update_batch_size(struct lru_gen_mm_walk *walk, struct folio *folio,
-> > +                           int old_gen, int new_gen)
-> > +{
-> > +     int type = folio_is_file_lru(folio);
-> > +     int zone = folio_zonenum(folio);
-> > +     int delta = folio_nr_pages(folio);
-> > +
-> > +     VM_BUG_ON(old_gen >= MAX_NR_GENS);
-> > +     VM_BUG_ON(new_gen >= MAX_NR_GENS);
->
-> General rule: don't add new BUG_ONs, because they crash the kenrel.
-> It's better to use WARN_ON or WARN_ON_ONCE then try to figure out a way
-> to keep the kernel limping along.  At least so the poor user can gather logs.
+Hi Rob,
 
-These are VM_BUG_ONs, which are BUILD_BUG_ONs except for (mostly MM) developers.
+On 2022/04/14 3:56, Rob Herring wrote:
+> On Thu, Apr 07, 2022 at 04:45:33PM +0900, Kunihiko Hayashi wrote:
+>> This adds common bindings thermal-sensor.yaml and this is preferred for
+>> unevaluatedProperties instead of additionalProperties.
+>>
+>> Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>> ---
+>>   .../bindings/thermal/socionext,uniphier-thermal.yaml         | 5 ++++-
+>>   1 file changed, 4 insertions(+), 1 deletion(-)
+>>
+>> diff --git
+> a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yam
+> l
+> b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yam
+> l
+>> index c5b25ce44956..537c93da1397 100644
+>> ---
+> a/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yam
+> l
+>> +++
+> b/Documentation/devicetree/bindings/thermal/socionext,uniphier-thermal.yam
+> l
+>> @@ -14,6 +14,9 @@ description: |
+>>   maintainers:
+>>     - Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+>>   
+>> +allOf:
+>> +  - $ref: "thermal-sensor.yaml#"
+> 
+> No advantage to adding this as this schema still has to define the value
+> for "#thermal-sensor-cells".
+I see. Certainly it's not time to add the common schema yet.
+I withdraw this patch.
+
+Thank you,
+
+---
+Best Regards
+Kunihiko Hayashi

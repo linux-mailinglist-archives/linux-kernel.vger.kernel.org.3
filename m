@@ -2,164 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B875033CA
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75EB35033A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356469AbiDOX1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S238931AbiDOX1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:27:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231839AbiDOX07 (ORCPT
+        with ESMTP id S1356483AbiDOX10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:26:59 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3C22708
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:24:27 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso94884137b3.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:24:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Cxt2uEcbDsT/cVcss+Oed++7USVk9BRG70PSqUV2sRA=;
-        b=o9JWs2FyVHQ7Re6QVoMehMOzM6wRTq38a1AwTqjPdmACMonccCQgZUIu3hGbqNbJGx
-         wG6Ywd7yrWJXfrT0+MC5+2bGIlqnVT5IHEfmuOTHvVf3hLqCXV4HwsD4O6rPbjnXUjRR
-         85H1+co/bpMt/xuuPrqSMl4Vq6wIMi0oV2WPxV0DWonzWkDVQwCV1gB3W7mm1pQVkmVS
-         6wLhUCv9gVewt3r87ikTO6Kik6eHhGJ8GRUds3XTucwSHGoDk4tmpVJCdHvpEF3etP0m
-         ZHTzPxj9tBWm+We0AMjhwDY/56vmdkPbHw2Us46AGziCJkmE0qntu2e9QCTthSKSy3jw
-         l8Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Cxt2uEcbDsT/cVcss+Oed++7USVk9BRG70PSqUV2sRA=;
-        b=f8cyC83T/933MGLT47NGj5TCvTnwyNerl7i8lp3S/j3NR4TfJwXWclcYZYvNAl2sgl
-         Q8EgkZcTUSlCyBJQN2BajdGg803Lbega0wDpOnnZOtUrux9JV9BJ7Xsfj3J6i5UpKftD
-         nzhwdTuRjzmhz4P5Zw9WplHqGKcCXacJfmAnrkikJXsoVyM0eyOYFC4+bcux/VHaynyD
-         SCCcQ7PPWxKGd3jz8i23DtRgz5yGoO85qVdIq+HuzS+/jcKRwe8u3+ViUWYPVCQRuxiU
-         7x427Sy5LvkM0byaMwxXz/s7MTrDWskMpLybiSrKcB4/eAGmgRkrlth/NTjP3gWeQPVh
-         R5fg==
-X-Gm-Message-State: AOAM532nZ7RBSpJKuKFgPtC7tEmRxtcYgwMJrjkkUZiel0/boxPlqwSq
-        qPPD2RsoqVOaKFx+upm7+PG/j5mcyv75MDDtIFdqIw==
-X-Google-Smtp-Source: ABdhPJymSM8rAJqKJqvQgojVsV7KVaqMaDPb49Py0OCI7oQ+4nknrXkY/Mk29hxHQ9wU+twofcB4rQhyzFE0gK9E3ow=
-X-Received: by 2002:a81:78c9:0:b0:2eb:469b:e788 with SMTP id
- t192-20020a8178c9000000b002eb469be788mr1158786ywc.34.1650065066420; Fri, 15
- Apr 2022 16:24:26 -0700 (PDT)
+        Fri, 15 Apr 2022 19:27:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FAF27B26;
+        Fri, 15 Apr 2022 16:24:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 790F6B83131;
+        Fri, 15 Apr 2022 23:24:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A869C385A9;
+        Fri, 15 Apr 2022 23:24:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650065093;
+        bh=ve8zcTJK3ne1EGkyC8vWulpuyQc5Xh6ZoQ+EsFt9Deo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f8MNQheziBEXQrO0FxkqhOwkyp/nfmv5VcI4MCAXbtxdywRrg4Ok8nWhPn7wnT4oV
+         26uaqET1A13eL0c9fwo6GD4/3E9bDIC+UNd9r0LRGbHfZFieNHO9c9Sjx8unQMLC/B
+         RJzlVMWW6Q+LMn4uXY0lXXd0xDM/7AG9fsf7NxG7MdOpr+dJmdU7s9vT67drUqHt2n
+         tKxC1kfAcoPvCBqZFnjQDPWv+L5diPtMUG0ASR2oGSCytsKVHR5Ag5fEnRR1jlcbjt
+         Dvx7A0V6tFZEtxwnuBazxUbSi2L1vVGNJ2Y1Kv91zDp7oIDOm4dv/5FAVL/u29w0Mk
+         5Pveg8OiZwA0Q==
+Received: by mail-yb1-f173.google.com with SMTP id p65so16609188ybp.9;
+        Fri, 15 Apr 2022 16:24:53 -0700 (PDT)
+X-Gm-Message-State: AOAM532C1lvTx90fXMcgZrMExT8KvNC0cqYIk6gOh66aZKuHxnAUk94u
+        KdJY3YCZbEWbI8p0AZVuohMMCDaBu7hR5AHmgQ8=
+X-Google-Smtp-Source: ABdhPJy7qY8jdimtSi+WscUV67jjwPF27xZeL7M2caaxM31nPgf3vJcWAjTfoqUC0w9w5k4HE68MfI3InHS6lHUjQn8=
+X-Received: by 2002:a05:6902:1506:b0:63e:4f1b:40ae with SMTP id
+ q6-20020a056902150600b0063e4f1b40aemr1399464ybu.322.1650065092238; Fri, 15
+ Apr 2022 16:24:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
- <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
- <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
- <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
- <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
- <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
- <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
- <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
- <CAHk-=whvkRTVBhAamt0kYyp925jk_+g7T0CyPke_FbCWGQ1VvA@mail.gmail.com>
- <CAOUHufZ4KrjFTYH8wtwMGd9AriZfZtO4GhbiK1SuNbY31VTT9w@mail.gmail.com> <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-In-Reply-To: <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-From:   Jesse Barnes <jsbarnes@google.com>
-Date:   Fri, 15 Apr 2022 16:24:14 -0700
-Message-ID: <CAJmaN=mJKAhRjDHbsLrqyK_uvuysx596jEcTwV2fwx4UOe4oow@mail.gmail.com>
-Subject: Re: [page-reclaim] Re: [PATCH v10 08/14] mm: multi-gen LRU: support
- page table walks
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Yu Zhao <yuzhao@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-3-alobakin@pm.me>
+In-Reply-To: <20220414223704.341028-3-alobakin@pm.me>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 15 Apr 2022 16:24:41 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
+Message-ID: <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 02/11] bpf: always emit struct bpf_perf_link BTF
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 4:04 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
 >
-> On Fri, Apr 15, 2022 at 3:58 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > BUG_ONs are harmful but problems that trigger them would be
-> > presummingly less penetrating to the user base; on the other hand,
-> > from my experience working with some testers (ordinary users), they
-> > ignore WARN_ON_ONCEs until the kernel crashes.
+> When building bpftool with !CONFIG_PERF_EVENTS:
 >
-> I don't understand your argument.
+> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct bpf_perf_link'
+>         perf_link = container_of(link, struct bpf_perf_link, link);
+>                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: expanded from macro 'container_of'
+>                 ((type *)(__mptr - offsetof(type, member)));    \
+>                                    ^~~~~~~~~~~~~~~~~~~~~~
+> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: expanded from macro 'offsetof'
+>  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
+>                                                   ~~~~~~~~~~~^
+> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf_link'
+>         struct bpf_perf_link *perf_link;
+>                ^
 >
-> First you say that VM_BUG_ON() is only for VM developers.
+> &bpf_perf_link is being defined and used only under the ifdef.
+> Move it out of the block and explicitly emit a BTF to fix
+> compilation.
 >
-> Then you say "some testers (ordinary users) ignore WARN_ON_ONCEs until
-> the kernel crashes".
->
-> So which is it?
->
-> VM developers, or ordinary users?
->
-> Honestly, if a VM developer is ignoring a WARN_ON_ONCE() from the VM
-> subsystem, I don't even know what to say.
->
-> And for ordinary users, a WARN_ON_ONCE() is about a million times
-> better, becasue:
->
->  - the machine will hopefully continue working, so they can report the warning
->
->  - even when they don't notice them, distros tend to have automated
-> reporting infrastructure
->
-> That's why I absolutely *DETEST* those stupid BUG_ON() cases - they
-> will often kill the machine with nasty locks held, resulting in a
-> completely undebuggable thing that never gets reported.
->
-> Yes, you can be careful and only put BUG_ON() in places where recovery
-> is possible. But even then, they have no actual _advantages_ over just
-> a WARN_ON_ONCE.
+> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 
-Generally agreed, and not to belabor this relatively small issue, but in some
-environments like cloud or managed client deployments, a crash can actually
-be preferable so we can get a dump, reboot the machine, and get things going
-again for the application or user, then debug offline.  So having the
-flexibility to
-do that in those situations is helpful.  And there, a full crash dump is better
-than just a log report with the WARN info, since debugging may be easier with
-all the kernel memory.
-
-Jesse
+Similar to v1, this fix is weird to me. I hope we have can fix it in user
+space.

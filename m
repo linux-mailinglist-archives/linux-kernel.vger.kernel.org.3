@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 665F0502621
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B81E4502632
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350984AbiDOHYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55476 "EHLO
+        id S1351050AbiDOH1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346594AbiDOHYI (ORCPT
+        with ESMTP id S1351026AbiDOH1E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:24:08 -0400
-Received: from mail.meizu.com (unknown [14.29.68.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF7972DC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:21:39 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
- (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 15 Apr
- 2022 15:21:39 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 15 Apr
- 2022 15:21:37 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V4] staging: rtl8192e: Fix signedness bug in rtllib_rx_assoc_resp()
-Date:   Fri, 15 Apr 2022 15:21:35 +0800
-Message-ID: <1650007296-31508-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20220415065810.GQ3293@kadam>
-References: <20220415065810.GQ3293@kadam>
+        Fri, 15 Apr 2022 03:27:04 -0400
+X-Greylist: delayed 68390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 00:24:33 PDT
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80370F5B;
+        Fri, 15 Apr 2022 00:24:29 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id A522840012;
+        Fri, 15 Apr 2022 07:24:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650007468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WkE50f/cylqb9wbDSyPkHo6fWi5moEO5EYl1lk9fvRg=;
+        b=Uvry18gYDkJPxtbJtJFk+TH3yaLIJHSvc/UhFGB/1uuZNZ/TbHMuBF7631vl3Hb6NDTUtl
+        SEkQYeyf+2kQjxS7Q46J3CDXQ0Ckyrm+MU9UDhsI5W+f2OBE1Qkj7jw7NrjYRbNoNLGbAM
+        0wvd7KJ4CW05bkwAwx1WQWiFBK1N6DCxMGZVnqic5nC2ZpQ8x7d9UerDCjDywIdLLM56FK
+        lswzTAFUAD1NyDiYoM29B0TeyLl9H2WCBY2yuQbDf6KVL/Joy3Yvbq8qa0zvf2ADRTRKqu
+        GegfrRPzsoy2qlbhHdYKTXdr46iba8Hoh2oLgcG2wTYxeqjTITSE6tzmWn+Hgw==
+Date:   Fri, 15 Apr 2022 09:23:00 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 02/12] net: dsa: add Renesas RZ/N1 switch tag
+ driver
+Message-ID: <20220415092300.009ef819@fixe.home>
+In-Reply-To: <YlhKkriHziPsWBCV@shell.armlinux.org.uk>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+        <20220414122250.158113-3-clement.leger@bootlin.com>
+        <20220414142242.vsvv3vxexc7i3ukm@skbuf>
+        <20220414163546.3f6c5157@fixe.home>
+        <20220414151146.a2fncklswo6utiyd@skbuf>
+        <20220414181815.5037651e@fixe.home>
+        <YlhKkriHziPsWBCV@shell.armlinux.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,MAY_BE_FORGED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtllib_rx_assoc_resp() function has a signedness bug because it's
-a declared as a u16 but it return -ENOMEM.  When you look at it more
-closely it returns a mix of error codes including 0xcafe, -ENOMEM, and
-a->status which is WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG.  This is a mess.
+Le Thu, 14 Apr 2022 17:23:46 +0100,
+"Russell King (Oracle)" <linux@armlinux.org.uk> a =C3=A9crit :
 
-Clean it up to just return standard kernel error codes.  We can print
-out the a->status before returning a regular error code.  The printks
-in the caller need to be adjusted as well.
+> On Thu, Apr 14, 2022 at 06:18:15PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Le Thu, 14 Apr 2022 18:11:46 +0300,
+> > Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+> >  =20
+> > > On Thu, Apr 14, 2022 at 04:35:46PM +0200, Cl=C3=A9ment L=C3=A9ger wro=
+te: =20
+> > > > > Please keep variable declarations sorted in decreasing order of l=
+ine
+> > > > > length (applies throughout the patch series, I won't repeat this =
+comment).   =20
+> > > >=20
+> > > > Acked, both PCS and DSA driver are ok with that rule. Missed that o=
+ne
+> > > > though.   =20
+> > >=20
+> > > Are you sure? Because a5psw_port_stp_state_set() says otherwise. =20
+> >=20
+> > Weeeeell, ok let's say I missed these two. Would be useful to have such
+> > checks in checkpatch.pl. =20
+>=20
+> Note that it's a local networking coding-style issue, rather than being
+> kernel-wide.
+>=20
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: reduce return random value; print its own error message.
-V2->V3: change commit message; change s16 -> int.
-V3->V4: add message suggested by Dan Carpenter. If you look up what 
-a->status is, it can only be WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG which 
-is not worth preserving really.
+Hi Russell, Yes I was aware of that but if I remember correctly, there
+are some netowrking checks like multi line comments without an empty
+first line in checkpatch. Anyway, I'll make sure to check that mroe
+carefully next time.
 
- drivers/staging/rtl8192e/rtllib_softmac.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 82bf05eb1cbf..38ac733c3245 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -1764,7 +1764,7 @@ static void rtllib_softmac_check_all_nets(struct rtllib_device *ieee)
- 	spin_unlock_irqrestore(&ieee->lock, flags);
- }
- 
--static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
-+static inline int auth_parse(struct net_device *dev, struct sk_buff *skb,
- 			     u8 **challenge, int *chlen)
- {
- 	struct rtllib_authentication *a;
-@@ -1773,7 +1773,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 	if (skb->len <  (sizeof(struct rtllib_authentication) -
- 	    sizeof(struct rtllib_info_element))) {
- 		netdev_dbg(dev, "invalid len in auth resp: %d\n", skb->len);
--		return 0xcafe;
-+		return -EINVAL;
- 	}
- 	*challenge = NULL;
- 	a = (struct rtllib_authentication *) skb->data;
-@@ -1787,7 +1787,13 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 				return -ENOMEM;
- 		}
- 	}
--	return le16_to_cpu(a->status);
-+
-+	if (a->status) {
-+		netdev_info(ieee->dev, "auth_parse() failed");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
- }
- 
- static int auth_rq_parse(struct net_device *dev, struct sk_buff *skb, u8 *dest)
-@@ -2282,7 +2288,7 @@ rtllib_rx_assoc_resp(struct rtllib_device *ieee, struct sk_buff *skb,
- 
- static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- {
--	u16 errcode;
-+	int errcode;
- 	u8 *challenge;
- 	int chlen = 0;
- 	bool bSupportNmode = true, bHalfSupportNmode = false;
-@@ -2292,8 +2298,7 @@ static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- 	if (errcode) {
- 		ieee->softmac_stats.rx_auth_rs_err++;
- 		netdev_info(ieee->dev,
--			    "Authentication response status code 0x%x",
--			    errcode);
-+			    "Authentication response status code %d", errcode);
- 		rtllib_associate_abort(ieee);
- 		return;
- 	}
--- 
-2.7.4
-
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

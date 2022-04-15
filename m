@@ -2,168 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705E8502566
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB62E50255B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244444AbiDOGRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S1348221AbiDOGP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240827AbiDOGRZ (ORCPT
+        with ESMTP id S234910AbiDOGP1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:17:25 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F13C492;
-        Thu, 14 Apr 2022 23:14:57 -0700 (PDT)
-X-UUID: 9f214143cbc146d49ba89343c5238ff7-20220415
-X-UUID: 9f214143cbc146d49ba89343c5238ff7-20220415
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
-        (envelope-from <alice.chao@mediatek.com>)
+        Fri, 15 Apr 2022 02:15:27 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2F7A9E9F8;
+        Thu, 14 Apr 2022 23:12:59 -0700 (PDT)
+X-UUID: ac95d6237a614672ad087c29d7a8d6ca-20220415
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:709456b6-9699-4958-a882-5a186cbd5162,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
+        ON:release,TS:0
+X-CID-META: VersionHash:faefae9,CLOUDID:039b3aa9-d103-4e36-82b9-b0e86991b3df,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
+X-UUID: ac95d6237a614672ad087c29d7a8d6ca-20220415
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
         (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1654108916; Fri, 15 Apr 2022 14:14:51 +0800
+        with ESMTP id 2078804141; Fri, 15 Apr 2022 14:12:54 +0800
 Received: from mtkcas10.mediatek.inc (172.21.101.39) by
  mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Apr 2022 14:14:50 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ Fri, 15 Apr 2022 14:12:53 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 14:14:50 +0800
-From:   Alice Chao <alice.chao@mediatek.com>
-To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <matthias.bgg@gmail.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
+ Transport; Fri, 15 Apr 2022 14:12:53 +0800
+Message-ID: <e40e760a4674dd0562c46f285c2193c26f52fb41.camel@mediatek.com>
+Subject: Re: [PATCH v2 2/2] remoteproc: mediatek: allow reading
+ firmware-name from DT
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Ohad Ben-Cohen <ohad@wizery.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        "Mathieu Poirier" <mathieu.poirier@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>
-CC:     <stanley.chu@mediatek.com>, <peter.wang@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
-        <powen.kao@mediatek.com>, <cc.chou@mediatek.com>,
-        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
-        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
-        <yanxu.wei@mediatek.com>, <wsd_upstream@mediatek.com>
-Subject: [PATCH v4 1/1] scsi: Fix racing between dev init and dev reset
-Date:   Fri, 15 Apr 2022 14:12:44 +0800
-Message-ID: <20220415061243.30229-2-alice.chao@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-MIME-Version: 1.0
+        <linux-remoteproc@vger.kernel.org>
+Date:   Fri, 15 Apr 2022 14:12:53 +0800
+In-Reply-To: <20220414122140.6114-3-allen-kh.cheng@mediatek.com>
+References: <20220414122140.6114-1-allen-kh.cheng@mediatek.com>
+         <20220414122140.6114-3-allen-kh.cheng@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Device reset thread uses kobject_uevent_env() to get kobj.parent, and it
-races with device init thread which calls device_add() to add kobj.parent
-before kobject_uevent_env().
+On Thu, 2022-04-14 at 20:21 +0800, Allen-KH Cheng wrote:
+> The SCP firmware blob differs between platforms and SoCs. We add
+> support in the SCP driver for reading the path of firmware file from
+> DT in order to allow these files to live in a generic file system
+> (or linux-firmware).
+> 
+> The firmware-name property is optional and the code falls back to the
+> old filename if the property isn't present.
+> 
+> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> 
 
-Device init call:           Device reset call:
- scsi_probe_and_add_lun()    scsi_evt_thread()
-  scsi_add_lun()             scsi_evt_emit()
-   scsi_sysfs_add_sdev()      kobject_uevent_env() //get kobj.parent
-    scsi_target_add()           kobject_get_path()
-                                 len = get_kobj_path_length () // len=1 because parent hasn't created yet
-    device_add() // add kobj.parent
-      kobject_uevent_env()
-       kobject_get_path()         path = kzalloc()
-        fill_kobj_path()           fill_kobj_path() // --length; length -= cur is a negative value
-                                    memcpy(path + length, kobject_name(parent), cur); // slab OOB!
-
-Above backtrace describes the problem, device reset thread will get wrong
-kobj.parent when device init thread didn’t add kobj.parent yet. When this
-racing happened, it triggers the a KASAN dump on the final iteration:
-
-BUG: KASAN: slab-out-of-bounds in kobject_get_path+0xf8/0x1b8
-Write of size 11 at addr ffffff80d6bb94f5 by task kworker/3:1/58
-<snip>
-Call trace:
- __kasan_report+0x124/0x1c8
- kasan_report+0x54/0x84
- kasan_check_range+0x200/0x208
- memcpy+0xb8/0xf0
- kobject_get_path+0xf8/0x1b8
- kobject_uevent_env+0x228/0xa88
- scsi_evt_thread+0x2d0/0x5b0
- process_one_work+0x570/0xf94
- worker_thread+0x7cc/0xf80
- kthread+0x2c4/0x388
-
-These two jobs are scheduled asynchronously, we can't guaranteed that
-kobj.parent will be created in device init thread before device reset
-thread calls kobject_get_path().
-
-To resolve the racing issue between device init thread and device reset
-thread, we use wait_event() in scsi_evt_emit() to wait for device_add()
-to complete the creation of kobj.parent.
-
-Device init call:                Device reset call:
-ufshcd_async_scan()              scsi_evt_thread()
- scsi_scan_host()                 scsi_evt_emit() <- add wait_event()
-  do_scsi_scan_host() <- add wake_up()
-   scsi_scan_host_selected()
-    scsi_scan_channel()
-     scsi_probe_and_add_lun()
-      scsi_target_add()
-       device_add() // add kobj.parent
-        kobject_uevent_env()
-         kobject_get_path()
-          fill_kobj_path()
-  // call wake_up() after scsi_scan_host_selected is done
-                                   kobject_uevent_env() // add kobj.parent
-                                    kobject_get_path() // get valid kobj.parent
-                                     fill_kobj_path()
-
-After we add wake_up at do_scsi_scan_host() in device init thread, we can
-ensure that device reset thread will get kobject after device init thread
-finishes adding parent.
-
-Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-
----
-
-Change in v4
--Change commit: Change call stack description.
-
-Change in v3
--Change commit: Describe the preblem first and then the solution.
--Add commit: Add KASAN error log.
-
-Change in v2
--Remove Change-Id.
-
----
- drivers/scsi/scsi_lib.c  | 1 +
- drivers/scsi/scsi_scan.c | 1 +
- 2 files changed, 2 insertions(+)
-
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index 0a70aa763a96..abf9a71ed77c 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
- 		break;
- 	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
- 		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
-+		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
- 		break;
- 	default:
- 		/* do nothing */
-diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-index f4e6c68ac99e..431f229ac435 100644
---- a/drivers/scsi/scsi_scan.c
-+++ b/drivers/scsi/scsi_scan.c
-@@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
- 	} else {
- 		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
- 				SCAN_WILD_CARD, 0);
-+		wake_up(&shost->host_wait);
- 	}
- }
- 
--- 
-2.18.0
+Reviewed-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
 

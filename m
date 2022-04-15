@@ -2,190 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667D350289D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:00:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8999502898
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:00:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352597AbiDOLDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 07:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
+        id S1352540AbiDOLCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 07:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352572AbiDOLDA (ORCPT
+        with ESMTP id S1349582AbiDOLCm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 07:03:00 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0F391341;
-        Fri, 15 Apr 2022 04:00:29 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 17so9180458lji.1;
-        Fri, 15 Apr 2022 04:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ssUQClr8jde5M1FreVdIr0gWsq0efjPJU50BRXvcIoM=;
-        b=aSV/2ebh7hy3wWulSUibASpo5ISs/8d46K8dKPc/stD4xNUPmdWfz0pHdTGvBLs7JA
-         KhK99n/oweSwr0s5t7+QZTASKWcJ/hgMgiFYig1ab4YrT/l78ojGjy8SxvbulSZE2IHp
-         FFo8OxMit+DyEgPFp+1diokpwcrUO4WZDwwPKlNJw3ga1GF4KhMIPd6GquF2i8iyVRkO
-         5iqLHcNgUp5s2j8cLJpDgVUvIYl2jW6fmHThGjrHmvmOKxYficZONo/xSBWVGpQVqGF/
-         efldWB5+FhWxLdmvD4ayJQzwaS5gM4TunXbbJ29q3/bG/QImB2/2Zy9Gd29cBQvypEug
-         W/FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ssUQClr8jde5M1FreVdIr0gWsq0efjPJU50BRXvcIoM=;
-        b=2SBA2+SWcnGAMkj5CMW2gDlWnw3GS87p/G0Q/11VC/b3Ul3yfjSir/DpSNxpFAxhVm
-         sopJn5ZReO4Mb+KJA6twcBRPylmKucnjOHQahHc0Tg4vY6OR5i10ecc77TJm2fJwkpE4
-         zDHGRbii9iVRHTZGk2bvsdbvxB3iHFiP3C1BgO9llqpXj8UrihizZA1STE6YtDm9osIO
-         6JLoIR3EHj888/XARryuXqCfBLazRbA9qDTsD2/xzfB1r+TYUJaVfdzIV9HlJ/+EbIxg
-         Q8A0Chpq0FhcDYPeHhYQ44EH4JMmaPSuQMVsrq7hfVFPU/BI8ng5NvsTKhhFizQaS7Sp
-         EQlw==
-X-Gm-Message-State: AOAM533Zs2FTl38y51MdpoykN2LP/auyY74UpQteNdCvUnF9iQxEQ+9X
-        YE033FjGfW6PKF2XDbmZVj2W/6kvFOE=
-X-Google-Smtp-Source: ABdhPJwgDo2CWcrv/a/aygSelZJ9PmM0AluIqJZlwGMD4pE1QnJxY9pXDdhJa8LNAXuAEg0G1BrLlA==
-X-Received: by 2002:a2e:6819:0:b0:244:c111:7444 with SMTP id c25-20020a2e6819000000b00244c1117444mr4134862lja.116.1650020427273;
-        Fri, 15 Apr 2022 04:00:27 -0700 (PDT)
-Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id q14-20020a0565123a8e00b0044a7b26ae1dsm292341lfu.109.2022.04.15.04.00.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 04:00:26 -0700 (PDT)
-From:   Markuss Broks <markuss.broks@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 2/4] dt-bindings: mfd: Add bindings for Silicon Mitus SM5703 MFD
-Date:   Fri, 15 Apr 2022 14:00:11 +0300
-Message-Id: <20220415110014.7384-3-markuss.broks@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220415110014.7384-1-markuss.broks@gmail.com>
-References: <20220415110014.7384-1-markuss.broks@gmail.com>
+        Fri, 15 Apr 2022 07:02:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABEF6C94F;
+        Fri, 15 Apr 2022 04:00:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AD4EB82E29;
+        Fri, 15 Apr 2022 11:00:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07A08C385A5;
+        Fri, 15 Apr 2022 11:00:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650020412;
+        bh=g48syiqForTtjSamBy3G6+NgNdihZfaWCdYQFRshKLE=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Tk8IdF/PapwRvbeRW09wY/whjAyoM/7CNSDnzspFDqdhHJtumsYHMNsjAaZvzc3M/
+         6soVnCw4T7FLiinluvyaS3NvDeVBVq7VnKzntoBxdB3FNtl23L3iFWYpjqzbBSQPlK
+         jFpxF17lnzRP7ETuydAATiip9tsSgHcnSAqXqcbueGm8JxR7SApABGmXvqpgcY156v
+         +4AZ5gX8MjtPiy+9rzQ7g2dlnKjrgIsXhw5QBR+VtRsdQofRuG6/oRwj2jhN74s2au
+         atizNxr7Bmh6e/Nq/YSqQLw4swjvYx/GVuhwuzr+7gnDUkSw9YEGDEQm3qmPEfIB2q
+         n0buJcuO96Fwg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DE9A4E8DBD4;
+        Fri, 15 Apr 2022 11:00:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 net 1/2] ip6_gre: Avoid updating tunnel->tun_hlen in
+ __gre6_xmit()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <165002041190.31119.6365175002625419813.git-patchwork-notify@kernel.org>
+Date:   Fri, 15 Apr 2022 11:00:11 +0000
+References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649967496.git.peilin.ye@bytedance.com>
+In-Reply-To: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649967496.git.peilin.ye@bytedance.com>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        kuba@kernel.org, peilin.ye@bytedance.com, u9012063@gmail.com,
+        cong.wang@bytedance.com, zhoufeng.zf@bytedance.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds device-tree bindings for the Silicon Mitus
-SM5703 MFD.
+Hello:
 
-Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
----
- .../bindings/mfd/siliconmitus,sm5703.yaml     | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+This series was applied to netdev/net.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml b/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-new file mode 100644
-index 000000000000..6665409bd541
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
-@@ -0,0 +1,96 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/siliconmitus,sm5703.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Silicon Mitus SM5703 multi-function device bindings
-+
-+maintainers:
-+  - Markuss Broks <markuss.broks@gmail.com>
-+
-+description: |
-+  Silicon Mitus SM5703 is a multi-function device, that consists of several
-+  modules, designed for a mobile phone use. It consists of
-+  LDO, Buck, USBLDO and VBUS regulators, a flash LED driver, a MUIC unit,
-+  a fuel gauge and a battery charger circuit. The MUIC and Fuel-Gauge units
-+  are separate from the main MFD, having their own i2c lines, while the
-+  LED driver, regulators and charger are sharing the main i2c bus of the MFD.
-+
-+properties:
-+  compatible:
-+    const: siliconmitus,sm5703-mfd
-+
-+  reg:
-+    description:
-+      I2C slave address.
-+    maxItems: 1
-+
-+  regulators:
-+    $ref: ../regulator/siliconmitus,sm5703-regulator.yaml
-+    description:
-+      List of child nodes that specify the regulators.
-+
-+  reset-gpio:
-+    description:
-+      GPIO which is connected to the MRSTB pin.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - regulators
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
-+
-+      mfd@49 {
-+        compatible = "siliconmitus,sm5703-mfd";
-+        reg = <0x49>;
-+
-+        reset-gpio = <&msmgpio 24 GPIO_ACTIVE_HIGH>;
-+        pinctrl-0 = <&mrstb_default>;
-+
-+        regulator {
-+          compatible = "siliconmitus,sm5703-regulator";
-+
-+          regulators {
-+            sm5703_ldo1: ldo1 {
-+              regulator-min-microvolt = <2800000>;
-+              regulator-max-microvolt = <2800000>;
-+            };
-+
-+            sm5703_ldo2: ldo2 {
-+              regulator-min-microvolt = <1500000>;
-+              regulator-max-microvolt = <3300000>;
-+            };
-+
-+            sm5703_ldo3: ldo3 {
-+              regulator-min-microvolt = <3300000>;
-+              regulator-max-microvolt = <3300000>;
-+            };
-+
-+            sm5703_usbldo1: usbldo1 {
-+              regulator-min-microvolt = <4800000>;
-+              regulator-max-microvolt = <4800000>;
-+            };
-+
-+            sm5703_usbldo2: usbldo2 {
-+              regulator-min-microvolt = <4800000>;
-+              regulator-max-microvolt = <4800000>;
-+            };
-+
-+            sm5703_vbus: vbus {
-+              regulator-min-microvolt = <5000000>;
-+              regulator-max-microvolt = <5000000>;
-+            };
-+          };
-+        };
-+      };
-+    };
-+...
+On Thu, 14 Apr 2022 13:34:26 -0700 you wrote:
+> From: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> Do not update tunnel->tun_hlen in data plane code.  Use a local variable
+> instead, just like "tunnel_hlen" in net/ipv4/ip_gre.c:gre_fb_xmit().
+> 
+> Co-developed-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Cong Wang <cong.wang@bytedance.com>
+> Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - [v2,net,1/2] ip6_gre: Avoid updating tunnel->tun_hlen in __gre6_xmit()
+    https://git.kernel.org/netdev/net/c/f40c064e933d
+  - [v2,net,2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
+    https://git.kernel.org/netdev/net/c/ab198e1d0dd8
+
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

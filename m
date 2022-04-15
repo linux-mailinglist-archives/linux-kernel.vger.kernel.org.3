@@ -2,132 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93C2502690
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0994F502693
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:14:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351343AbiDOIQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
+        id S1351352AbiDOIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbiDOIP7 (ORCPT
+        with ESMTP id S1349082AbiDOIRD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:15:59 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496E5369EA;
-        Fri, 15 Apr 2022 01:13:27 -0700 (PDT)
-X-UUID: 8abe4c720f0946c484fbce4e5ca84cf0-20220415
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:2c2c4a2e-b4d2-4e51-83d6-68e165bf66ee,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:154e3ea9-d103-4e36-82b9-b0e86991b3df,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: 8abe4c720f0946c484fbce4e5ca84cf0-20220415
-Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1508866549; Fri, 15 Apr 2022 16:13:22 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Apr 2022 16:13:20 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 16:13:20 +0800
-Message-ID: <9b6a3c4b403d15c08f5c4693549fadde50f5bca3.camel@mediatek.com>
-Subject: Re: [PATCH v18 08/10] soc: mediatek: add DDP_DOMPONENT_DITHER0 enum
- for mt8195 vdosys0
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Fri, 15 Apr 2022 04:17:03 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31CF6317;
+        Fri, 15 Apr 2022 01:14:31 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 61C37240005;
+        Fri, 15 Apr 2022 08:14:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650010469;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pKzyHpH5Bjb8iRoLHJukJctM0gcYG5sge5R4tzijau0=;
+        b=gGZxFfuwsslvH4NphybsIpHaqITUT0Q9HkNGcVr+cb12cyRUcoYsz1UQTOk+H8DNHIARCm
+        fxl1cg8HE7VG+Ok2pKSsFt6C8uY0FT7+4cKhR9S8Iar0wvP98Sve1oAHK0V0c8dsURyunV
+        V0A/JVMxlp6ZmsG/RIfY+ASsWkNe5IYCM1oZ7bElD23VR9T/lnzyAoBo5RT31+TgDdPvR9
+        SqGSnO476l9EqRPxYwVVyPsVrXydhrnIqcHR6G/1rUyDUuD40V7mfIa/iLCIi4uGvdicJb
+        UfAtW2d64HTNXSFcyBPqxfOfTYIKBln0lZoLCNUp5LkGdgnjXXj7o63ukeExwA==
+Date:   Fri, 15 Apr 2022 10:14:27 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Vignesh Raghavendra <vigneshr@ti.com>
+Cc:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-CC:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Fabien Parent <fparent@baylibre.com>,
-        CK Hu =?UTF-8?Q?=28=E8=83=A1=E4=BF=8A=E5=85=89=29?= 
-        <ck.hu@mediatek.com>,
-        "Yongqiang Niu =?UTF-8?Q?=28=E7=89=9B=E6=B0=B8=E5=BC=BA=29?=" 
-        <yongqiang.niu@mediatek.com>,
-        "hsinyi@chromium.org" <hsinyi@chromium.org>,
-        "fshao@chromium.org" <fshao@chromium.org>,
-        Moudy Ho =?UTF-8?Q?=28=E4=BD=95=E5=AE=97=E5=8E=9F=29?= 
-        <Moudy.Ho@mediatek.com>,
-        "Roy-CW Yeh =?UTF-8?Q?=28=E8=91=89=E4=B8=AD=E7=91=8B=29?=" 
-        <Roy-CW.Yeh@mediatek.com>,
-        Nancy Lin =?UTF-8?Q?=28=E6=9E=97=E6=AC=A3=E8=9E=A2=29?= 
-        <Nancy.Lin@mediatek.com>,
-        Singo Chang =?UTF-8?Q?=28=E5=BC=B5=E8=88=88=E5=9C=8B=29?= 
-        <Singo.Chang@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Fri, 15 Apr 2022 16:13:20 +0800
-In-Reply-To: <542a3946c33b4a2e7cbb160f0e3bd4479a863ddb.camel@mediatek.com>
-References: <20220412103114.19922-1-jason-jh.lin@mediatek.com>
-         <20220412103114.19922-9-jason-jh.lin@mediatek.com>
-         <542a3946c33b4a2e7cbb160f0e3bd4479a863ddb.camel@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/2] rtc: Introduce ti-k3-rtc
+Message-ID: <YlkpY4jzQVa8GokG@mail.local>
+References: <20220412073138.25027-1-nm@ti.com>
+ <20220412073138.25027-3-nm@ti.com>
+ <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rex,
-
-Thank for the reviews.
-
-On Fri, 2022-04-15 at 14:24 +0800, Rex-BC Chen wrote:
-> On Tue, 2022-04-12 at 18:31 +0800, jason-jh.lin wrote:
-> > The mmsys routing table of mt8195 vdosys0 has 2 DITHER components,
-> > so mmsys need to add DDP_COMPONENT_DITHER1 and change all usages of
-> > DITHER enum form DDP_COMPONENT_DITHER to DDP_COMPONENT_DITHER0.
-> > 
-> > But its header need to keep DDP_COMPONENT_DITHER enum
-> > until drm/mediatek also changed it.
+On 15/04/2022 13:33:14+0530, Vignesh Raghavendra wrote:
+> Hi,
 > 
-> Hello Jason,
+> On 12/04/22 1:01 pm, Nishanth Menon wrote:
+> > +/**
+> > + * k3rtc_fence  - Ensure a register sync took place between the two domains
+> > + * @priv:      pointer to priv data
+> > + *
+> > + * Return: 0 if the sync took place, else returns -ETIMEDOUT
+> > + */
+> > +static int k3rtc_fence(struct ti_k3_rtc *priv)
+> > +{
+> > +	u32 timeout = priv->sync_timeout_us;
+> > +	u32 mask = K3RTC_RD_PEND_BIT | K3RTC_WR_PEND_BIT;
+> > +	u32 val = 0;
+> > +
+> > +	while (timeout--) {
+> > +		val = k3rtc_readl(priv, REG_K3RTC_SYNCPEND);
+> > +		if (!(val & mask))
+> > +			return 0;
+> > +		usleep_range(1, 2);
+> > +	}
 > 
-> IMO, it's strange.
-> In this case , I think you sholud squash [v18,08/10] and [v18,09/10].
-> Therefore, you don't need to describe this here.
+> readl_poll_timeout() ?
+> 
+> > +
+> > +	pr_err("RTC Fence timeout: 0x%08x\n", val);
+> 
+> Can we use dev_err()?  Provides better indication of the driver throwing
+> error.
 > 
 
-As the CK reply before:
+What would the user do with this information in the kernel logs? Please
+do not add error strings that will never be used. Returning -ETIMEDOUT
+is probably enough.
 
-https://patchwork.kernel.org/project/linux-mediatek/patch/20220407030409.9664-4-jason-jh.lin@mediatek.com/#24806029
+> > +	return -ETIMEDOUT;
+> > +}
+> > +
 
-[v18,08/10] and [v18,09/10] belong to 2 different trees, so I add the
-description here.
-
-Regards,
-Jason-JH.Lin
-
-
-> BRs,
-> Rex
-> 
 -- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
-
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

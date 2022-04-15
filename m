@@ -2,119 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FD3A502B8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D67D6502B96
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354308AbiDOOPA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:15:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32840 "EHLO
+        id S1354336AbiDOORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354298AbiDOOO5 (ORCPT
+        with ESMTP id S1354356AbiDOOQy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:14:57 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A175CD325;
-        Fri, 15 Apr 2022 07:12:29 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id x200so14622208ybe.13;
-        Fri, 15 Apr 2022 07:12:29 -0700 (PDT)
+        Fri, 15 Apr 2022 10:16:54 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3214CF4AD
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id t12so7210227pll.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=W7pJ87MMKgb5DtroOsn6zX1k9Enz1UopIOm4KxB8CdU=;
+        b=cl6RaMXM2TAsZOMW89aMuGQgKEIMl7GsTFPcrv7gyNZd1WPR48gwuVCjmE3gnHj6MM
+         kx0a533ilutzRFYcLIfQtywqy5NCvd1VgNO9pK/tt5xuOHORBDeX9jKs5QGJjKGI5YO2
+         7VQURjVRDdga27AqW4x9aRdYTYzNcIQutvTEcNAjPflq22e+8XAzskHHnXwjWa6Yuzuq
+         ZCBe643HeK945voQ4oLhvyxW4gQ8gRuxCRnRv0OIN9CgPq11WfaGQSszlsHQpbwL/0An
+         lxWAIZPK0N+9PmGU/j5fXIM14NiJHnQmlUCoynlpBAMpF/ilxXatwHTfIbC6LjY0BODd
+         ZzYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=FNIfqj+FilLpI5MusateXTGV7hcgO7NoCnl8abYi8Lc=;
-        b=ORty+iZ8hGnRFb/jlvblwpHBARd5zBDkzWRYEhhDmyznyQPac6c9lyQ+t8FbwSwAJH
-         4B4PN59031qzWy2daYTwSBn78NNbj/sL4eb6xvuolRJ8+u1iRmfpknbfODg6Mdi2BKBw
-         0G+X+3vaV/Tf7ykjnSZeTKjyOfPkRl+HBoEkR8ub2BkZrBO2OL9YFlHNoV+wjk46idaU
-         KdmgxTsm0ghkPzQP6v10ewa36B0bt/75fNDXS0LJ9v0PKS6Af8VKWwYnpFCffVwWdPjI
-         0PRNRuI4UYqim6AJbo7Xtzj13P03K/+kItpWs2xOIqYOOhU/y3oF1jdqGoSch+DYx8ax
-         kQOw==
-X-Gm-Message-State: AOAM530MCV4nKkPhqtapzzMoXpztoywKABZ+iOwtZaDxS5w4b0Q1+ZfF
-        chaRgPXkveCrVmOsvZGJY3DgQE+TeG9tWFmbC70=
-X-Google-Smtp-Source: ABdhPJxUDZllKNP2WGWaTxv78JEwkLokI+kxAekGI2O+K6/T4FYQiu5n3+sYsE2W5s5+yvogSspzvVPXYTs+JmWcqtA=
-X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
- x27-20020a25ac9b000000b006413c32bee7mr5123897ybi.633.1650031948177; Fri, 15
- Apr 2022 07:12:28 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=W7pJ87MMKgb5DtroOsn6zX1k9Enz1UopIOm4KxB8CdU=;
+        b=Eg5xvU3FJKt+bFZYOOxJB72hzuqLPR1oY5qfiPu+ZtJh7fRT8ig6U6bhH7opl6EFV4
+         +e0DMkvUCH0JItXB97mtUw9XTh1AMQxWs6HmAMglQebk92TOTI3cmGoNAVNl8iBaNl9O
+         QIy6c/b36W/1/4SAsdG58qLpP7uTdELstq+WFzivHLCXOcJOehEsjS1yl1uR+RiAav2k
+         Dp/OEPiHKKuRZQutMb03klPXEQg0rkD1ICDZ+ryhnfZiGA+hdiX/dsqsYxiMpY7DP3Qu
+         0iWXo4H6+u5mvfj1JR/sf634f4us1Ud22QdM29qnFbZJAE+mYqqpERRPBA7T6QLedaKZ
+         /TtQ==
+X-Gm-Message-State: AOAM5314mQRc8GSA46TTXTu+LwIXRCmPPWRQs/aN24Pq1A6uS5JeTaMH
+        /sshxdqHaikLZTphDt+OBmY1+w==
+X-Google-Smtp-Source: ABdhPJwIMENFkDtZsLGQMuu3vxL5lc0twYuZQL+N4DXflSHdA2RL1NFxd/fLLyIOwAIcuhK3MyNKZA==
+X-Received: by 2002:a17:90b:380f:b0:1c7:4403:4e72 with SMTP id mq15-20020a17090b380f00b001c744034e72mr4462158pjb.228.1650032063329;
+        Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
+Received: from localhost.localdomain ([50.39.160.154])
+        by smtp.gmail.com with ESMTPSA id n24-20020aa79058000000b0050612d0fe01sm3012707pfo.2.2022.04.15.07.14.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 07:14:22 -0700 (PDT)
+From:   Tadeusz Struk <tadeusz.struk@linaro.org>
+To:     andrii.nakryiko@gmail.com
+Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        "Daniel Borkmann" <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        "Martin KaFai Lau" <kafai@fb.com>,
+        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
+        "John Fastabend" <john.fastabend@gmail.com>,
+        "KP Singh" <kpsingh@kernel.org>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, stable@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
+Subject: [PATCH v2] bpf: Fix KASAN use-after-free Read in compute_effective_progs
+Date:   Fri, 15 Apr 2022 07:13:55 -0700
+Message-Id: <20220415141355.4329-1-tadeusz.struk@linaro.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAEf4BzbiVeQfhxEu908w2mU4d8+5kKeMknuvhzCXuxM9pJ1jmQ@mail.gmail.com>
+References: <CAEf4BzbiVeQfhxEu908w2mU4d8+5kKeMknuvhzCXuxM9pJ1jmQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220414182252.758742-1-helgaas@kernel.org> <20220414182252.758742-3-helgaas@kernel.org>
-In-Reply-To: <20220414182252.758742-3-helgaas@kernel.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Apr 2022 16:12:17 +0200
-Message-ID: <CAJZ5v0jZBOnwr2DoyzVbtucQu0_4+SDqG949gdzX+7LR5SuFKw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] x86: Log resource clipping for E820 regions
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        =?UTF-8?Q?Benoit_Gr=C3=A9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 8:23 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> From: Bjorn Helgaas <bhelgaas@google.com>
->
-> When remove_e820_regions() clips a resource because an E820 region overlaps
-> it, log a note in dmesg to add in debugging.
->
-> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Syzbot found a Use After Free bug in compute_effective_progs().
+The reproducer creates a number of BPF links, and causes a fault
+injected alloc to fail, while calling bpf_link_detach on them.
+Link detach triggers the link to be freed by bpf_link_free(),
+which calls __cgroup_bpf_detach() and update_effective_progs().
+If the memory allocation in this function fails, the function restores
+the pointer to the bpf_cgroup_link on the cgroup list, but the memory
+gets freed just after it returns. After this, every subsequent call to
+update_effective_progs() causes this already deallocated pointer to be
+dereferenced in prog_list_length(), and triggers KASAN UAF error.
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+To fix this issue don't preserve the pointer to the prog or link in the
+list, but remove it and rearrange the effective table without
+shrinking it. The subsequent call to __cgroup_bpf_detach() or
+__cgroup_bpf_detach() will correct it.
 
-> ---
->  arch/x86/kernel/resource.c | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
-> index 8ffe68437744..30d524adb012 100644
-> --- a/arch/x86/kernel/resource.c
-> +++ b/arch/x86/kernel/resource.c
-> @@ -1,5 +1,6 @@
->  // SPDX-License-Identifier: GPL-2.0
->  #include <linux/ioport.h>
-> +#include <linux/printk.h>
->  #include <asm/e820/api.h>
->
->  static void resource_clip(struct resource *res, resource_size_t start,
-> @@ -28,6 +29,7 @@ static void remove_e820_regions(struct resource *avail)
->         int i;
->         struct e820_entry *entry;
->         u64 e820_start, e820_end;
-> +       struct resource orig = *avail;
->
->         for (i = 0; i < e820_table->nr_entries; i++) {
->                 entry = &e820_table->entries[i];
-> @@ -35,6 +37,11 @@ static void remove_e820_regions(struct resource *avail)
->                 e820_end = entry->addr + entry->size - 1;
->
->                 resource_clip(avail, e820_start, e820_end);
-> +               if (orig.start != avail->start || orig.end != avail->end) {
-> +                       pr_info("clipped %pR to %pR for e820 entry [mem %#010Lx-%#010Lx]\n",
-> +                                &orig, avail, e820_start, e820_end);
-> +                       orig = *avail;
-> +               }
->         }
->  }
->
-> --
-> 2.25.1
->
+Cc: "Alexei Starovoitov" <ast@kernel.org>
+Cc: "Daniel Borkmann" <daniel@iogearbox.net>
+Cc: "Andrii Nakryiko" <andrii@kernel.org>
+Cc: "Martin KaFai Lau" <kafai@fb.com>
+Cc: "Song Liu" <songliubraving@fb.com>
+Cc: "Yonghong Song" <yhs@fb.com>
+Cc: "John Fastabend" <john.fastabend@gmail.com>
+Cc: "KP Singh" <kpsingh@kernel.org>
+Cc: <netdev@vger.kernel.org>
+Cc: <bpf@vger.kernel.org>
+Cc: <stable@vger.kernel.org>
+Cc: <linux-kernel@vger.kernel.org>
+
+Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
+Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
+Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
+Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
+---
+v2: Add a fall back path that removes a prog from the effective progs
+    table in case detach fails to allocate memory in compute_effective_progs().
+---
+ kernel/bpf/cgroup.c | 55 +++++++++++++++++++++++++++++++++++++++------
+ 1 file changed, 48 insertions(+), 7 deletions(-)
+
+diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
+index 128028efda64..5a64cece09f3 100644
+--- a/kernel/bpf/cgroup.c
++++ b/kernel/bpf/cgroup.c
+@@ -723,10 +723,8 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	pl->link = NULL;
+ 
+ 	err = update_effective_progs(cgrp, atype);
+-	if (err)
+-		goto cleanup;
+ 
+-	/* now can actually delete it from this cgroup list */
++	/* now can delete it from this cgroup list */
+ 	list_del(&pl->node);
+ 	kfree(pl);
+ 	if (list_empty(progs))
+@@ -735,12 +733,55 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
+ 	if (old_prog)
+ 		bpf_prog_put(old_prog);
+ 	static_branch_dec(&cgroup_bpf_enabled_key[atype]);
+-	return 0;
++
++	if (!err)
++		return 0;
+ 
+ cleanup:
+-	/* restore back prog or link */
+-	pl->prog = old_prog;
+-	pl->link = link;
++	/*
++	 * If compute_effective_progs failed with -ENOMEM, i.e. alloc for
++	 * cgrp->bpf.inactive table failed, we can recover by removing
++	 * the detached prog from effective table and rearranging it.
++	 */
++	if (err == -ENOMEM) {
++		struct bpf_prog_array_item *item;
++		struct bpf_prog *prog_tmp, *prog_detach, *prog_last;
++		struct bpf_prog_array *array;
++		int index = 0, index_detach = -1;
++
++		array = cgrp->bpf.effective[atype];
++		item = &array->items[0];
++
++		if (prog)
++			prog_detach = prog;
++		else
++			prog_detach = link->link.prog;
++
++		if (!prog_detach)
++			return -EINVAL;
++
++		while ((prog_tmp = READ_ONCE(item->prog))) {
++			if (prog_tmp == prog_detach)
++				index_detach = index;
++			item++;
++			index++;
++			prog_last = prog_tmp;
++		}
++
++		/* Check if we found what's needed for removing the prog */
++		if (index_detach == -1 || index_detach == index-1)
++			return -EINVAL;
++
++		/* Remove the last program in the array */
++		if (bpf_prog_array_delete_safe_at(array, index-1))
++			return -EINVAL;
++
++		/* and update the detached with the last just removed */
++		if (bpf_prog_array_update_at(array, index_detach, prog_last))
++			return -EINVAL;
++
++		err = 0;
++	}
+ 	return err;
+ }
+ 
+-- 
+2.35.1
+

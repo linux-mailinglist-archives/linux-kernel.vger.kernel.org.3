@@ -2,311 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF32F502668
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38662502679
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:03:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351237AbiDOHyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
+        id S1351296AbiDOIGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiDOHyG (ORCPT
+        with ESMTP id S244921AbiDOIGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:54:06 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B76A972D2;
-        Fri, 15 Apr 2022 00:51:38 -0700 (PDT)
-Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfpQ143MpzgYh0;
-        Fri, 15 Apr 2022 15:49:45 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 15 Apr 2022 15:51:36 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
- (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Apr
- 2022 15:51:35 +0800
-From:   Yu Kuai <yukuai3@huawei.com>
-To:     <bvanassche@acm.org>, <hch@infradead.org>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
-Subject: [PATCH -next v2] block: update nsecs[] in part_stat_show() and diskstats_show()
-Date:   Fri, 15 Apr 2022 16:06:05 +0800
-Message-ID: <20220415080605.3178553-1-yukuai3@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Fri, 15 Apr 2022 04:06:09 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A0159A61;
+        Fri, 15 Apr 2022 01:03:40 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23F83J9P130367;
+        Fri, 15 Apr 2022 03:03:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650009799;
+        bh=NTy+10/rvDVv3oXf+hx+iRizmeAw7E8r66BdzQEdhq4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=lsgpdF1FJ4rrxua3gRmJL4ijFC0xjqwg+yoeNRIs7RAZg7aCcKfkFLO+rKrxvK3jZ
+         pCCSHj1sbaeeuTEvQbhDXS5kBoaxp+4lMVDtD5UKa0XQr1Nw22H2SVTD/98dPFF7cI
+         uZ1W7QA7Gv4Zv+e8s/Eo3mNXBigRf3xqzicj7G80=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23F83J0n002373
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 15 Apr 2022 03:03:19 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
+ Apr 2022 03:03:19 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 15 Apr 2022 03:03:19 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23F83Fn4088810;
+        Fri, 15 Apr 2022 03:03:16 -0500
+Message-ID: <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
+Date:   Fri, 15 Apr 2022 13:33:14 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 2/2] rtc: Introduce ti-k3-rtc
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+References: <20220412073138.25027-1-nm@ti.com>
+ <20220412073138.25027-3-nm@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220412073138.25027-3-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 86d7331299fd("block: update io_ticks when io hang") fixed that
-%util will be zero for iostat when io is hanged, however, avgqu-sz is
-still zero while it represents the number of io that are hunged. On the
-other hand, for some slow device, if an io is started before and done
-after diskstats is read, the avgqu-sz will be miscalculated.
+Hi,
 
-To fix the problem, update 'nsecs[]' when part_stat_show() or
-diskstats_show() is called. In order to do that, add 'stat_time' in
-struct block_device and 'rq_stat_time' in struct request to record the
-time. And during iteration, update 'nsecs[]' for each inflight request.
+On 12/04/22 1:01 pm, Nishanth Menon wrote:
+> +/**
+> + * k3rtc_fence  - Ensure a register sync took place between the two domains
+> + * @priv:      pointer to priv data
+> + *
+> + * Return: 0 if the sync took place, else returns -ETIMEDOUT
+> + */
+> +static int k3rtc_fence(struct ti_k3_rtc *priv)
+> +{
+> +	u32 timeout = priv->sync_timeout_us;
+> +	u32 mask = K3RTC_RD_PEND_BIT | K3RTC_WR_PEND_BIT;
+> +	u32 val = 0;
+> +
+> +	while (timeout--) {
+> +		val = k3rtc_readl(priv, REG_K3RTC_SYNCPEND);
+> +		if (!(val & mask))
+> +			return 0;
+> +		usleep_range(1, 2);
+> +	}
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
----
-Changes in v2:
- - remove other cleanup patches.
+readl_poll_timeout() ?
 
- block/bdev.c              |  2 ++
- block/blk-mq.c            | 62 ++++++++++++++++++++++++++++++++++++++-
- block/blk-mq.h            |  2 ++
- block/genhd.c             | 62 +++++++++++++++++++++++++--------------
- include/linux/blk-mq.h    |  2 ++
- include/linux/blk_types.h |  5 ++++
- 6 files changed, 112 insertions(+), 23 deletions(-)
+> +
+> +	pr_err("RTC Fence timeout: 0x%08x\n", val);
 
-diff --git a/block/bdev.c b/block/bdev.c
-index 7bf88e591aaf..da0471f7492d 100644
---- a/block/bdev.c
-+++ b/block/bdev.c
-@@ -487,9 +487,11 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
- 	bdev = I_BDEV(inode);
- 	mutex_init(&bdev->bd_fsfreeze_mutex);
- 	spin_lock_init(&bdev->bd_size_lock);
-+	spin_lock_init(&bdev->bd_stat_lock);
- 	bdev->bd_partno = partno;
- 	bdev->bd_inode = inode;
- 	bdev->bd_queue = disk->queue;
-+	bdev->stat_time = 0;
- 	bdev->bd_stats = alloc_percpu(struct disk_stats);
- 	if (!bdev->bd_stats) {
- 		iput(inode);
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 3fe3226aad1b..ebb4db535794 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -128,6 +128,48 @@ struct mq_inflight {
- 	unsigned int inflight[2];
- };
- 
-+static bool blk_mq_check_inflight_with_stat(struct request *rq, void *priv,
-+					    bool reserved)
-+{
-+	struct mq_inflight *mi = priv;
-+
-+	if ((!mi->part->bd_partno || rq->part == mi->part) &&
-+	    blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT) {
-+		u64 stat_time;
-+
-+		mi->inflight[rq_data_dir(rq)]++;
-+		if (!rq->part)
-+			return true;
-+
-+		stat_time = READ_ONCE(rq->stat_time_ns);
-+		/*
-+		 * This might fail if 'req->stat_time_ns' is updated in
-+		 * blk_account_io_done().
-+		 */
-+		if (likely(cmpxchg(&rq->stat_time_ns, stat_time,
-+			    rq->part->stat_time) == stat_time)) {
-+			int sgrp = op_stat_group(req_op(rq));
-+			u64 duation = stat_time ?
-+				rq->part->stat_time - stat_time :
-+				rq->part->stat_time - rq->start_time_ns;
-+
-+			part_stat_add(rq->part, nsecs[sgrp], duation);
-+		}
-+	}
-+
-+	return true;
-+}
-+
-+unsigned int blk_mq_in_flight_with_stat(struct request_queue *q,
-+					struct block_device *part)
-+{
-+	struct mq_inflight mi = { .part = part };
-+
-+	blk_mq_queue_tag_busy_iter(q, blk_mq_check_inflight_with_stat, &mi);
-+
-+	return mi.inflight[0] + mi.inflight[1];
-+}
-+
- static bool blk_mq_check_inflight(struct request *rq, void *priv,
- 				  bool reserved)
- {
-@@ -369,6 +411,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
- 		rq->start_time_ns = ktime_get_ns();
- 	else
- 		rq->start_time_ns = 0;
-+	rq->stat_time_ns = 0;
- 	rq->part = NULL;
- #ifdef CONFIG_BLK_RQ_ALLOC_TIME
- 	rq->alloc_time_ns = alloc_time_ns;
-@@ -870,7 +913,24 @@ static void __blk_account_io_done(struct request *req, u64 now)
- 	part_stat_lock();
- 	update_io_ticks(req->part, jiffies, true);
- 	part_stat_inc(req->part, ios[sgrp]);
--	part_stat_add(req->part, nsecs[sgrp], now - req->start_time_ns);
-+
-+	if (queue_is_mq(req->q)) {
-+		u64 stat_time = READ_ONCE(req->stat_time_ns);
-+
-+		/*
-+		 * This might fail if 'req->stat_time_ns' is updated during
-+		 * blk_mq_check_inflight_with_stat().
-+		 */
-+		if (likely(cmpxchg(&req->stat_time_ns, stat_time, now) ==
-+				   stat_time)) {
-+			u64 duation = stat_time ? now - stat_time :
-+						  now - req->start_time_ns;
-+
-+			part_stat_add(req->part, nsecs[sgrp], duation);
-+		}
-+	} else {
-+		part_stat_add(req->part, nsecs[sgrp], now - req->start_time_ns);
-+	}
- 	part_stat_unlock();
- }
- 
-diff --git a/block/blk-mq.h b/block/blk-mq.h
-index 9bad3057c1f3..e6c2c523c8de 100644
---- a/block/blk-mq.h
-+++ b/block/blk-mq.h
-@@ -193,6 +193,8 @@ unsigned int blk_mq_in_flight(struct request_queue *q,
- 		struct block_device *part);
- void blk_mq_in_flight_rw(struct request_queue *q, struct block_device *part,
- 		unsigned int inflight[2]);
-+unsigned int blk_mq_in_flight_with_stat(struct request_queue *q,
-+		struct block_device *part);
- 
- static inline void blk_mq_put_dispatch_budget(struct request_queue *q,
- 					      int budget_token)
-diff --git a/block/genhd.c b/block/genhd.c
-index b8b6759d670f..36144fe8872b 100644
---- a/block/genhd.c
-+++ b/block/genhd.c
-@@ -932,25 +932,52 @@ ssize_t part_size_show(struct device *dev,
- 	return sprintf(buf, "%llu\n", bdev_nr_sectors(dev_to_bdev(dev)));
- }
- 
--ssize_t part_stat_show(struct device *dev,
--		       struct device_attribute *attr, char *buf)
-+static inline void part_set_stat_time(struct block_device *part)
-+{
-+	u64 now = ktime_get_ns();
-+
-+again:
-+	part->stat_time = now;
-+
-+	if (part->bd_partno) {
-+		part = bdev_whole(part);
-+		goto again;
-+	}
-+}
-+
-+static inline void part_get_stat_info(struct block_device *bdev,
-+				      struct disk_stats *stat,
-+				      unsigned int *inflight)
- {
--	struct block_device *bdev = dev_to_bdev(dev);
- 	struct request_queue *q = bdev_get_queue(bdev);
--	struct disk_stats stat;
--	unsigned int inflight;
- 
--	if (queue_is_mq(q))
--		inflight = blk_mq_in_flight(q, bdev);
--	else
--		inflight = part_in_flight(bdev);
-+	if (queue_is_mq(q)) {
-+		part_stat_lock();
-+		spin_lock(&bdev->bd_stat_lock);
-+		part_set_stat_time(bdev);
-+		*inflight = blk_mq_in_flight_with_stat(q, bdev);
-+		spin_unlock(&bdev->bd_stat_lock);
-+		part_stat_unlock();
-+	} else {
-+		*inflight = part_in_flight(bdev);
-+	}
- 
--	if (inflight) {
-+	if (*inflight) {
- 		part_stat_lock();
- 		update_io_ticks(bdev, jiffies, true);
- 		part_stat_unlock();
- 	}
--	part_stat_read_all(bdev, &stat);
-+	part_stat_read_all(bdev, stat);
-+}
-+
-+ssize_t part_stat_show(struct device *dev,
-+		       struct device_attribute *attr, char *buf)
-+{
-+	struct block_device *bdev = dev_to_bdev(dev);
-+	struct disk_stats stat;
-+	unsigned int inflight;
-+
-+	part_get_stat_info(bdev, &stat, &inflight);
- 	return sprintf(buf,
- 		"%8lu %8lu %8llu %8u "
- 		"%8lu %8lu %8llu %8u "
-@@ -1239,17 +1266,8 @@ static int diskstats_show(struct seq_file *seqf, void *v)
- 	xa_for_each(&gp->part_tbl, idx, hd) {
- 		if (bdev_is_partition(hd) && !bdev_nr_sectors(hd))
- 			continue;
--		if (queue_is_mq(gp->queue))
--			inflight = blk_mq_in_flight(gp->queue, hd);
--		else
--			inflight = part_in_flight(hd);
--
--		if (inflight) {
--			part_stat_lock();
--			update_io_ticks(hd, jiffies, true);
--			part_stat_unlock();
--		}
--		part_stat_read_all(hd, &stat);
-+
-+		part_get_stat_info(hd, &stat, &inflight);
- 		seq_printf(seqf, "%4d %7d %pg "
- 			   "%lu %lu %lu %u "
- 			   "%lu %lu %lu %u "
-diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
-index 7aa5c54901a9..387e475fedd4 100644
---- a/include/linux/blk-mq.h
-+++ b/include/linux/blk-mq.h
-@@ -108,6 +108,8 @@ struct request {
- 	u64 start_time_ns;
- 	/* Time that I/O was submitted to the device. */
- 	u64 io_start_time_ns;
-+	/* Time that I/O was counted in part_get_stat_info(). */
-+	u64 stat_time_ns;
- 
- #ifdef CONFIG_BLK_WBT
- 	unsigned short wbt_flags;
-diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
-index 046a34c81ec4..4014b0c0ef16 100644
---- a/include/linux/blk_types.h
-+++ b/include/linux/blk_types.h
-@@ -65,6 +65,11 @@ struct block_device {
- 	struct super_block	*bd_fsfreeze_sb;
- 
- 	struct partition_meta_info *bd_meta_info;
-+
-+	/* Prevent part_get_stat_info() to be called concurrently */
-+	spinlock_t		bd_stat_lock;
-+	/* Will be set when part_get_stat_info() is called */
-+	u64			stat_time;
- #ifdef CONFIG_FAIL_MAKE_REQUEST
- 	bool			bd_make_it_fail;
- #endif
--- 
-2.31.1
+Can we use dev_err()?  Provides better indication of the driver throwing
+error.
 
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static inline int k3rtc_check_unlocked(struct ti_k3_rtc *priv)
+> +{
+> +	u32 val;
+> +
+> +	val = k3rtc_readl(priv, REG_K3RTC_GENERAL_CTL);
+> +	return (val & K3RTC_UNLOCK_BIT) ? 0 : 1;
+> +}
+> +
+> +static int k3rtc_unlock_rtc(struct ti_k3_rtc *priv)
+> +{
+> +	u32 timeout = priv->sync_timeout_us;
+> +	int ret;
+> +
+> +	ret = k3rtc_check_unlocked(priv);
+> +	if (!ret)
+> +		return ret;
+> +
+> +	k3rtc_writel(priv, REG_K3RTC_KICK0, K3RTC_KICK0_UNLOCK_VALUE);
+> +	k3rtc_writel(priv, REG_K3RTC_KICK1, K3RTC_KICK1_UNLOCK_VALUE);
+> +
+> +	/* Skip fence since we are going to check the unlock bit as fence */
+> +	while (timeout--) {
+> +		ret = k3rtc_check_unlocked(priv);
+> +		if (!ret)
+> +			return ret;
+> +		usleep_range(1, 2);
+> +	}
+
+readl_poll_timeout() ?
+
+> +
+> +	return -ETIMEDOUT;
+> +}
+> +
+> +static int k3rtc_configure(struct device *dev)
+> +{
+> +	int ret;
+> +	u32 ctl;
+> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
+> +
+> +	/*
+> +	 * HWBUG: The compare statemachine is broken if the RTC module
+> +	 * is NOT unlocked in under one second of boot - which is pretty long
+> +	 * time from the perspective of Linux driver (module load, u-boot
+> +	 * shell all can take much longer than this.
+> +	 *
+> +	 * In such occurrence, it is assumed that the RTC module is un-usable
+> +	 */
+> +	if (priv->soc->unlock_irq_erratum) {
+> +		ret = k3rtc_check_unlocked(priv);
+> +		/* If there is an error OR if we are locked, return error */
+> +		if (ret) {
+> +			dev_err(dev, HW_ERR "Erratum i2327 unlock QUIRK! Cannot operate!!\n");
+> +			return -EFAULT;
+> +		}
+> +	} else {
+> +		/* May Need to explicitly unlock first time */
+> +		ret = k3rtc_unlock_rtc(priv);
+> +		if (ret) {
+> +			dev_err(dev, "Failed to unlock(%d)!\n", ret);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	/* Enable Shadow register sync on 32k clk boundary */
+> +	ctl = k3rtc_readl(priv, REG_K3RTC_GENERAL_CTL);
+> +	ctl |= K3RTC_O32K_OSC_DEP_EN_BIT;
+> +	k3rtc_writel(priv, REG_K3RTC_GENERAL_CTL, ctl);
+> +
+> +	/*
+> +	 * Wait at least 2 clk sync time before proceeding further programming.
+> +	 * This ensures that the 32k based sync is active.
+> +	 */
+> +	usleep_range(priv->sync_timeout_us, priv->sync_timeout_us + 5);
+> +
+> +	/* We need to ensure fence here to make sure sync here */
+> +	ret = k3rtc_fence(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed fence osc_dep enable(%d) - is 32k clk working?!\n",
+> +			ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Lets just make sure we get consistent time value */
+> +	ctl &= ~K3RTC_CNT_FMODE_MASK;
+> +	/*
+> +	 * FMODE setting: Reading lower seconds will freeze value on higher
+> +	 * seconds. This also implies that we must *ALWAYS* read lower seconds
+> +	 * prior to reading higher seconds
+> +	 */
+> +	ctl |= K3RTC_CNT_FMODE_S_CNT_VALUE;
+> +	k3rtc_writel(priv, REG_K3RTC_GENERAL_CTL, ctl);
+> +
+> +	/* Clear any spurious IRQ sources if any */
+> +	k3rtc_writel(priv, REG_K3RTC_IRQSTATUS_SYS,
+> +		     K3RTC_EVENT_ON_OFF_BIT | K3RTC_EVENT_OFF_ON_BIT);
+> +	/* Disable all IRQs */
+> +	k3rtc_writel(priv, REG_K3RTC_IRQENABLE_CLR_SYS,
+> +		     K3RTC_EVENT_ON_OFF_BIT | K3RTC_EVENT_OFF_ON_BIT);
+> +
+> +	/* And.. Let us Sync the writes in */
+> +	ret = k3rtc_fence(priv);
+> +	if (ret) {
+> +		dev_err(dev, "Failed to fence(%d)!\n", ret);
+> +		return ret;
+
+nit: this can be dropped as next statement will return error code anyway
+
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+
+[...]
+
+> +
+> +static const struct ti_k3_rtc_soc_data ti_k3_am62_data = {
+> +	.unlock_irq_erratum = true,
+> +};
+> +
+> +static const struct of_device_id ti_k3_rtc_of_match_table[] = {
+> +	{.compatible = "ti,am62-rtc", .data = &ti_k3_am62_data},
+> +	{}
+> +};
+> +MODULE_DEVICE_TABLE(of, ti_k3_rtc_of_match_table);
+> +
+> +#ifdef CONFIG_PM_SLEEP
+> +static int ti_k3_rtc_suspend(struct device *dev)
+
+ __maybe_unused preferred instead of #ifdef for better compile coverage
+but upto you.
+
+> +{
+> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
+> +
+> +	if (device_may_wakeup(dev))
+> +		enable_irq_wake(priv->irq);
+> +	return 0;
+> +}
+> +
+> +static int ti_k3_rtc_resume(struct device *dev)
+> +{
+> +	struct ti_k3_rtc *priv = dev_get_drvdata(dev);
+> +
+> +	if (device_may_wakeup(dev))
+> +		disable_irq_wake(priv->irq);
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static SIMPLE_DEV_PM_OPS(ti_k3_rtc_pm_ops, ti_k3_rtc_suspend, ti_k3_rtc_resume);
+> +
+> +static struct platform_driver ti_k3_rtc_driver = {
+> +	.probe = ti_k3_rtc_probe,
+> +	.driver = {
+> +		   .name = "rtc-ti-k3",
+> +		   .of_match_table = ti_k3_rtc_of_match_table,
+> +		   .pm = &ti_k3_rtc_pm_ops,
+> +		   },
+Extra tab?
+
+> +};
+> +module_platform_driver(ti_k3_rtc_driver);
+> +
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("TI K3 RTC driver");
+> +MODULE_AUTHOR("Nishanth Menon");
+> +MODULE_ALIAS("platform:rtc-ti-k3");
+> -- 2.31.1

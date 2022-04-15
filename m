@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7673501FAC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003A6501FB2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348073AbiDOAfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59388 "EHLO
+        id S1348050AbiDOAj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348048AbiDOAfZ (ORCPT
+        with ESMTP id S240902AbiDOAj4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:35:25 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279D4B0A67
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:59 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id bg24so6510085pjb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=u5uNblHgSOrswPeO9jURL3NSLbtduvbh6ZJ+Qdg6lQI=;
-        b=FL9PZa7rqg/FQc24DKxyR99Opmvgy6c3zIdZDaBfP4n8HTZ/yB2BYuvSBSFQXOcAZd
-         uEHYiNbQmPVoRnkfuIxaz3XeEJ8J6ZPZ3z2WRzpYo7g5KAzE2lyNiu7Fr89hF9l8lZTG
-         /4B9a+qm1khvB+hDLkK+xXPYs9ZguwZPEysNw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=u5uNblHgSOrswPeO9jURL3NSLbtduvbh6ZJ+Qdg6lQI=;
-        b=3Qz58RactdaRM2QcO5BHZrAEc/NUqfNq2Q41Rt8JcuNOQ3PioAKUxax5sJI5eAJX3f
-         8jj0lNn7E2u9PPadcbBoCJpTdJG97o9NfOBlN6y+Hl3Q/JpRb/Ku4BJxk5Z/MKEn7cX5
-         SdsuLQGyT9wc+pc9q9EHSKM55FbrdwwaIjb1QDWirE9kGbwnGgj5tTydkL87wH7Z0bSe
-         3MY9uX4VkiUdC8s36Z48SYNQzV61Xa8ZiAxAMPHS0v9IuTQkMxm5r6wGOUqyW5CmoLU0
-         gz9JNwme1riSOiXnJ0VfMuq5groa4I5RTMfD4zWW7p4HJ8nfLkx/6eZ5XYHYzik0KTDS
-         CPag==
-X-Gm-Message-State: AOAM531gvpKEF+gnCFeQ2VDJ4EN0RX46M3NZK+PbW48o+r+pz30ORWvQ
-        /ocimSh5Lax2J+ry+5b0BxLFIg==
-X-Google-Smtp-Source: ABdhPJy092wIOMpHMCaiCRG/f784cDQMvZyv6Zy3Qf2VuKU9u3jvUIyk6bF/0bpYWpLFKq3UGLiVqA==
-X-Received: by 2002:a17:902:b941:b0:14d:af72:3f23 with SMTP id h1-20020a170902b94100b0014daf723f23mr50652474pls.6.1649982778661;
-        Thu, 14 Apr 2022 17:32:58 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:e3e0:734:f81a:d2c1])
-        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2830187pgf.17.2022.04.14.17.32.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 17:32:58 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Benson Leung <bleung@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Lee Jones <lee.jones@linaro.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Subject: [PATCH 3/3] power: supply: PCHG: Use cros_ec_pchg_port_count()
-Date:   Thu, 14 Apr 2022 17:32:53 -0700
-Message-Id: <20220415003253.1973106-4-swboyd@chromium.org>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-In-Reply-To: <20220415003253.1973106-1-swboyd@chromium.org>
-References: <20220415003253.1973106-1-swboyd@chromium.org>
+        Thu, 14 Apr 2022 20:39:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 770C93BBF8;
+        Thu, 14 Apr 2022 17:37:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649983050; x=1681519050;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NqIg0JIeL+aLq0L6edg0YyzM2lgFxJdLKtyUthSAtWE=;
+  b=BaRgvRQxv0PisaUB6y8yT0YtMva/5s3fPNOsAoJgXtYi0UzYRGd1HsJD
+   8nzevtt/ySmfkkqKlrrVhIIHKfqrWi8Q6WDXr0VV1X6A1M7Rcu/nux5n8
+   ci5jvTn2Wtv8Iu8MIye+5HaN9+CPOvb3J/Da4KADv0+dMAvo/CmINUMnA
+   DGyZSSK4ebP5QpgVhbbQlOBScwWUge3WA1jAlmXfLkdz3gZJA8XlcGcGu
+   gMpKNcPHuPquQl0x9JFBmn/VzIEHhoPntJyS/sencQHDqOec0cWq36AdZ
+   02jq9v7O6fMeMb8PJ+OvniSyVMqP7Bd9BlbTTRE7cfk2ROTOPWKxRaubx
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349500063"
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="349500063"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 17:37:29 -0700
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="508609395"
+Received: from aimeehax-mobl1.amr.corp.intel.com (HELO localhost) ([10.212.113.132])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 17:37:28 -0700
+Date:   Thu, 14 Apr 2022 17:37:27 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Tsuchiya Yuto <kitakar@gmail.com>,
+        Martiros Shakhzadyan <vrzh@vrzh.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH] staging: media: atomisp: Use kmap_local_page() in
+ hmm_store()
+Message-ID: <Yli+R7iLZKqO8kVP@iweiny-desk3>
+References: <20220413225531.9425-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413225531.9425-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,73 +67,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the common function cros_ec_pchg_port_count() now that we only
-register this device when there are a non-zero number of peripheral
-charger ports.
+On Thu, Apr 14, 2022 at 12:55:31AM +0200, Fabio M. De Francesco wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page()
+> where it is feasible. The same is true for kmap_atomic().
+> 
+> In file pci/hmm/hmm.c, function hmm_store() test if we are in atomic
+> context and, if so, it calls kmap_atomic(), if not, it calls kmap().
+> 
+> First of all, in_atomic() shouldn't be used in drivers. This macro
+> cannot always detect atomic context; in particular, it cannot know
+> about held spinlocks in non-preemptible kernels.
+> 
+> Notwithstanding what it is said above, this code doesn't need to care
+> whether or not it is executing in atomic context. It can simply use
+> kmap_local_page() / kunmap_local() that can instead do the mapping /
+> unmapping regardless of the context.
+> 
+> With kmap_local_page(), the mapping is per thread, CPU local and not
+> globally visible. Therefore, hmm_store()() is a function where the use
+> of kmap_local_page() in place of both kmap() and kmap_atomic() is
+> correctly suited.
+> 
+> Convert the calls of kmap() / kunmap() and kmap_atomic() /
+> kunmap_atomic() to kmap_local_page() / kunmap_local() and drop the
+> unnecessary tests which test if the code is in atomic context.
+> 
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Daisuke Nojiri <dnojiri@chromium.org>
-Cc: Benson Leung <bleung@chromium.org>
-Cc: Guenter Roeck <groeck@chromium.org>
-Cc: <chrome-platform@lists.linux.dev>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- .../power/supply/cros_peripheral_charger.c    | 29 +------------------
- 1 file changed, 1 insertion(+), 28 deletions(-)
+I've had to research this a bit myself because I've not seen this pattern
+before.
 
-diff --git a/drivers/power/supply/cros_peripheral_charger.c b/drivers/power/supply/cros_peripheral_charger.c
-index 9fe6d826148d..98cae6580eed 100644
---- a/drivers/power/supply/cros_peripheral_charger.c
-+++ b/drivers/power/supply/cros_peripheral_charger.c
-@@ -104,22 +104,6 @@ static bool cros_pchg_cmd_ver_check(const struct charger_data *charger)
- 	return !!(rsp.version_mask & BIT(pchg_cmd_version));
- }
- 
--static int cros_pchg_port_count(const struct charger_data *charger)
--{
--	struct ec_response_pchg_count rsp;
--	int ret;
--
--	ret = cros_pchg_ec_command(charger, 0, EC_CMD_PCHG_COUNT,
--				   NULL, 0, &rsp, sizeof(rsp));
--	if (ret < 0) {
--		dev_warn(charger->dev,
--			 "Unable to get number or ports (err:%d)\n", ret);
--		return ret;
--	}
--
--	return rsp.port_count;
--}
--
- static int cros_pchg_get_status(struct port_data *port)
- {
- 	struct charger_data *charger = port->charger;
-@@ -281,24 +265,13 @@ static int cros_pchg_probe(struct platform_device *pdev)
- 	charger->ec_dev = ec_dev;
- 	charger->ec_device = ec_device;
- 
--	ret = cros_pchg_port_count(charger);
--	if (ret <= 0) {
--		/*
--		 * This feature is enabled by the EC and the kernel driver is
--		 * included by default for CrOS devices. Don't need to be loud
--		 * since this error can be normal.
--		 */
--		dev_info(dev, "No peripheral charge ports (err:%d)\n", ret);
--		return -ENODEV;
--	}
--
- 	if (!cros_pchg_cmd_ver_check(charger)) {
- 		dev_err(dev, "EC_CMD_PCHG version %d isn't available.\n",
- 			pchg_cmd_version);
- 		return -EOPNOTSUPP;
- 	}
- 
--	num_ports = ret;
-+	num_ports = cros_ec_pchg_port_count(ec_dev);
- 	if (num_ports > EC_PCHG_MAX_PORTS) {
- 		dev_err(dev, "Too many peripheral charge ports (%d)\n",
- 			num_ports);
--- 
-https://chromeos.dev
+kmap_atomic() had 2 uses:
 
+	1) a situation where the operation on the page requires pagefaults
+	   and/or preemption to be disabled
+	2) in a situation where one knows the code can't sleep
+
+kmap_local_page() removes the second use case because kmap() is no longer the
+only alternative; from the kdoc for kmap_atomic():
+
+...
+ * kmap_atomic - Atomically map a page for temporary usage - Deprecated!
+...
+ * Effectively a wrapper around kmap_local_page() which disables pagefaults
+ * and preemption.
+...
+
+The deprecation is because any pagefault/preemption disabling should probably
+be done explicitly from now on but allows for existing kmap_atomic() callers to
+live on.
+
+In this case, I suspect the original driver writer wanted to use kmap() but
+hmm_store() was called from various contexts.  So they incorrectly tried to
+protect against the (potentially) sleeping kmap() call.  In reality, I think
+they could have simply called kmap_atomic() and skipped 'in_atomic()' check
+altogether.
+
+Regardless now that kmap_local_page() exists, this is correct.
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+> ---
+>  drivers/staging/media/atomisp/pci/hmm/hmm.c | 14 ++------------
+>  1 file changed, 2 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/staging/media/atomisp/pci/hmm/hmm.c b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> index 46ac082cd3f1..54188197c3dc 100644
+> --- a/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> +++ b/drivers/staging/media/atomisp/pci/hmm/hmm.c
+> @@ -482,10 +482,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+>  		idx = (virt - bo->start) >> PAGE_SHIFT;
+>  		offset = (virt - bo->start) - (idx << PAGE_SHIFT);
+>  
+> -		if (in_atomic())
+> -			des = (char *)kmap_atomic(bo->page_obj[idx].page);
+> -		else
+> -			des = (char *)kmap(bo->page_obj[idx].page);
+> +		des = (char *)kmap_local_page(bo->page_obj[idx].page);
+>  
+>  		if (!des) {
+>  			dev_err(atomisp_dev,
+> @@ -512,14 +509,7 @@ int hmm_store(ia_css_ptr virt, const void *data, unsigned int bytes)
+>  
+>  		clflush_cache_range(des, len);
+>  
+> -		if (in_atomic())
+> -			/*
+> -			 * Note: kunmap_atomic requires return addr from
+> -			 * kmap_atomic, not the page. See linux/highmem.h
+> -			 */
+> -			kunmap_atomic(des - offset);
+> -		else
+> -			kunmap(bo->page_obj[idx].page);
+> +		kunmap_local(des);
+>  	}
+>  
+>  	return 0;
+> -- 
+> 2.34.1
+> 

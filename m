@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FA16502A9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:01:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FF8502AB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344908AbiDONDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40192 "EHLO
+        id S1353952AbiDONDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347265AbiDONC4 (ORCPT
+        with ESMTP id S1353874AbiDONC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:02:56 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD83366B4;
-        Fri, 15 Apr 2022 06:00:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id g20so9838141edw.6;
-        Fri, 15 Apr 2022 06:00:27 -0700 (PDT)
+        Fri, 15 Apr 2022 09:02:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72DA366AD;
+        Fri, 15 Apr 2022 06:00:28 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id bv19so15276793ejb.6;
+        Fri, 15 Apr 2022 06:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=3Xvx5sPX8B110OzO80GAdzNt8JGNouTiqBus5fdMrDM=;
-        b=biDGPgDRmjRvL5P6qB2bXUbIMT0usHPwP7HfMBwb+CB18nb24+9XaYg6fBCCYoXSr9
-         B5Jh/ZY6DH/VZZk0G/bileKb/aMOn4aOFvk99V2aImxBmpUK1YKViYd+k6G6evAmbLij
-         BeFlPMGpPGF3PWFKpKHrGh4I0DIApyVckDgMryKEp+P8aBIjdIJCTzvV9xaE32CVmOvF
-         yWrPyC1QE7q5jWiYv+QmW09zpOouekJBJOLArWFjI0Ss2LLGb2ttRU8SYrwYUJkE/KiN
-         P1xBu0OmnGWAscnKHbuopxYxM0IwqOnk+KaN7h3KRPOwa9dDFp5oiMGiz8ZRIhFAQq8h
-         l1xQ==
+        bh=iPSxNSDHQgGlVMg1tM8lN9vUHBMFOTVS8umUM6GB8jI=;
+        b=Y0I+oiauERbDc+13+UqLwQy/56ZZqTb359ySoC1oQrP8rFjiHGEyiHeK8XW7JS/3gs
+         K0RPOnDx5/ZVsfJQevZGfL37Akf5mGabA0jTV2loWpWFHktgLJ97fa8SV8LpbVRmnDjv
+         MkqvVOUQJE9wS8J/xyXRn5+mUsH5M14hBUDTXAHXTtU4UTokoimjQCy+wJcw+PKOgWS5
+         7mvGbeL7NbZJcV5f1VIk0NAcMx+Sc0jkUKgUaWk64IY3+cstpeKLWNJNsBa+3+MEnHh4
+         6XFwryQ4hsIX44SbtffXFMyVlaY4v5h4gtxZG7CI4iHOX32ZIda3mD7g6lvstGpCQBWd
+         viMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3Xvx5sPX8B110OzO80GAdzNt8JGNouTiqBus5fdMrDM=;
-        b=gtG8jYYxnE9//GMU2yQW8QtVZGY94s4VCsCjIMUgFS6Wxm2zlHzxAw53UR6XulXwVi
-         8fWzuw6aHPw2GP+uql88Fu/AxExg8za9VzPxMTzLr0SX+mCzYBQuntZ/zIMejOPhKzlR
-         p4SuKSKAbXAl1zGBG3w4YK+PJtI3KVr23xWStkbSkCoM0mnq+F90nztUxrObFJ3aFdQn
-         eNcz/26Aw+JhISLUxlaQQ25r2YAxeoApxBIE89C48t5vXxKxyEqVB+PBf4QuVlnRtmPO
-         6Rqh2q5gwbcwNV0r0GfpLJXvPXVRHYG9sqkqj9W8peNrdUOKLVjy4IKqbMi9JZwnp4hL
-         iqgQ==
-X-Gm-Message-State: AOAM530MrrpFwMwZv1l16k6WUsT13vrJxTtmpNXW/JJ1B067pmN7QZRD
-        WhkmMcctM8p8tNGUZkz/LhHoIS8yOjOstg==
-X-Google-Smtp-Source: ABdhPJx2W+uu499IRxWM7GnjnqZ72yWwN2nbCK0M2o5Uy8DhvLlnaQJGhjkVeeu2vg3ntEYap9V6xg==
-X-Received: by 2002:a50:c00a:0:b0:418:f10f:b27c with SMTP id r10-20020a50c00a000000b00418f10fb27cmr8005693edb.204.1650027626362;
-        Fri, 15 Apr 2022 06:00:26 -0700 (PDT)
+        bh=iPSxNSDHQgGlVMg1tM8lN9vUHBMFOTVS8umUM6GB8jI=;
+        b=Qg1aQwPArsj21ESAGfOJHKdtqH0BGIaLBBsAD1vT6q8s+x9WIc7j/Y/DJ/re8DiZ1A
+         BY3+UgVgeKOb92SRAPSZ8sqdC41YPKGu3ocPOkEeWEAXLgqvKEacP/DzW8sje0mtAKsv
+         P1qlu3dVhzcjf8UJow/7OvaS6UeRfOkFbw98wtEXg7gFX+SwlLhGu58Q4R3WkH6rQBu6
+         HKA5jcmoxXPmu8jxYOTGOxfPoT80navEdBCTxFoh3ue232KHhtyPSIbZ7TAoQTt6qlz0
+         DTX+5m9qgrBPDpbkHTixEBvMvXyZfzA5vAPtTAimtU89EJhc43nqShNRR8ZSCZsngrfI
+         yPyQ==
+X-Gm-Message-State: AOAM5330kj3qYPU3IgBeYaUtltWdeveZDMFD/nSlskaaU/1KhICipmPr
+        /EXXtb3YJNea+QkHb6l38Vc=
+X-Google-Smtp-Source: ABdhPJyY8+EQJdeEK/cKRBcIFV+nz/IqYalQh3Xi4Vu8D/9/kercpjNclTLHrEZnJu7oBw1A1vKdGw==
+X-Received: by 2002:a17:907:3f18:b0:6e8:9332:542e with SMTP id hq24-20020a1709073f1800b006e89332542emr5961415ejc.633.1650027627401;
+        Fri, 15 Apr 2022 06:00:27 -0700 (PDT)
 Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
-        by smtp.gmail.com with ESMTPSA id i26-20020a50d75a000000b0041e84bb406fsm2704715edj.0.2022.04.15.06.00.25
+        by smtp.gmail.com with ESMTPSA id i26-20020a50d75a000000b0041e84bb406fsm2704715edj.0.2022.04.15.06.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 06:00:26 -0700 (PDT)
+        Fri, 15 Apr 2022 06:00:27 -0700 (PDT)
 From:   Andrea Merello <andrea.merello@gmail.com>
 To:     jic23@kernel.org, mchehab+huawei@kernel.org,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -55,9 +55,9 @@ To:     jic23@kernel.org, mchehab+huawei@kernel.org,
 Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
         matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
         jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: [v4 03/14] iio: event_monitor: add linear acceleration modifiers
-Date:   Fri, 15 Apr 2022 14:59:54 +0200
-Message-Id: <20220415130005.85879-4-andrea.merello@gmail.com>
+Subject: [v4 04/14] iio: add modifers for pitch, yaw, roll
+Date:   Fri, 15 Apr 2022 14:59:55 +0200
+Message-Id: <20220415130005.85879-5-andrea.merello@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415130005.85879-1-andrea.merello@gmail.com>
 References: <20220415130005.85879-1-andrea.merello@gmail.com>
@@ -75,25 +75,43 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Andrea Merello <andrea.merello@iit.it>
 
+This patch adds modifiers for reporting rotations as euler angles (i.e.
+yaw, pitch and roll).
+
 Signed-off-by: Andrea Merello <andrea.merello@iit.it>
 ---
- tools/iio/iio_event_monitor.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/iio/industrialio-core.c | 3 +++
+ include/uapi/linux/iio/types.h  | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
-index 2f4581658859..1fee44abb836 100644
---- a/tools/iio/iio_event_monitor.c
-+++ b/tools/iio/iio_event_monitor.c
-@@ -122,6 +122,9 @@ static const char * const iio_modifier_names[] = {
- 	[IIO_MOD_PM4] = "pm4",
- 	[IIO_MOD_PM10] = "pm10",
- 	[IIO_MOD_O2] = "o2",
-+	[IIO_MOD_LINEAR_X] = "linear_x",
-+	[IIO_MOD_LINEAR_Y] = "linear_y",
-+	[IIO_MOD_LINEAR_Z] = "linear_z",
+diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+index d087b2607cc9..aa5f98d3b334 100644
+--- a/drivers/iio/industrialio-core.c
++++ b/drivers/iio/industrialio-core.c
+@@ -137,6 +137,9 @@ static const char * const iio_modifier_names[] = {
+ 	[IIO_MOD_LINEAR_X] = "linear_x",
+ 	[IIO_MOD_LINEAR_Y] = "linear_y",
+ 	[IIO_MOD_LINEAR_Z] = "linear_z",
++	[IIO_MOD_PITCH] = "pitch",
++	[IIO_MOD_YAW] = "yaw",
++	[IIO_MOD_ROLL] = "roll",
  };
  
- static bool event_is_known(struct iio_event_data *event)
+ /* relies on pairs of these shared then separate */
+diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+index 0993f6b697fc..4853701ba70d 100644
+--- a/include/uapi/linux/iio/types.h
++++ b/include/uapi/linux/iio/types.h
+@@ -98,6 +98,9 @@ enum iio_modifier {
+ 	IIO_MOD_LINEAR_X,
+ 	IIO_MOD_LINEAR_Y,
+ 	IIO_MOD_LINEAR_Z,
++	IIO_MOD_PITCH,
++	IIO_MOD_YAW,
++	IIO_MOD_ROLL,
+ };
+ 
+ enum iio_event_type {
 -- 
 2.17.1
 

@@ -2,232 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 907E1502C53
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54631502C56
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354818AbiDOPH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
+        id S1354828AbiDOPJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354865AbiDOPHg (ORCPT
+        with ESMTP id S1348301AbiDOPJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:07:36 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74457326EE;
-        Fri, 15 Apr 2022 08:05:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=2/N+rOJE8PGxoG4dig2bE/oA6uo9oIRZf9q57tBjzQE=; b=GnBlTtZl+CTu47NOU5RTWHTUPI
-        Wu9zQs+XHNXsnVwMvkDNvzpLIWb0NykNl6158dpCd4qjS4LnU0iaxLDxa5Qr3LCHaIquJx02Bq1nW
-        ManUpHs8CCJ6fOuusMWxnR8X84jAuzCCb6xZDXq0z0aWokpwKlVkxHlzY4d/oCeemaB8=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nfNVO-00Fz2n-E6; Fri, 15 Apr 2022 17:05:02 +0200
-Date:   Fri, 15 Apr 2022 17:05:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Piyush Malgujar <pmalgujar@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cchavva@marvell.com, Damian Eppel <deppel@marvell.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH] Marvell MDIO clock related changes.
-Message-ID: <YlmJnh1OQ64Y3Fiv@lunn.ch>
-References: <20220415143026.11088-1-pmalgujar@marvell.com>
+        Fri, 15 Apr 2022 11:09:23 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D73BBD7E8;
+        Fri, 15 Apr 2022 08:06:54 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso5181843wmz.4;
+        Fri, 15 Apr 2022 08:06:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z+ZzteNL1B5uNdnnAQT3e/XkUjVBtdobVF4d1HQJH34=;
+        b=Da0m8fA8NA4Hk4Zzb+pT4m1VE6XRuDvRG5I4hMz+LbJFRS5N15e/mmdHJKT1h7tOYs
+         kQfDqSTVlWQWu9dvaZTlYZ+xbgunrhfcPa2XgnkB4hlF3I7NjSizdylpjslQuBGuTVv/
+         09IBOG89HozaoPwa7NNFBGLW1o/NhFN9/SOOF40Luk37huFuzFZ1OkPc0TR16QlXXXl4
+         n6i9iUN4PBt8xYebpGTyKk5vNm/vtgTxa0Ldgk5ivj9pm7DA4gyt0CF4x19CueBeGcV3
+         JaMZU3QhgcmsGiBzKMJ5pA9oagMQKYFZhgM2MMQQaFi9OdLjeAOIPHDt+UQz9PMuU9aP
+         Rtag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z+ZzteNL1B5uNdnnAQT3e/XkUjVBtdobVF4d1HQJH34=;
+        b=zMN02NPAzAPUgnwYDgOZOOdzfmD2pRfuDcHmR31BEFZpupfiXo4sr7fUPMUtMyTNRP
+         0Bs12At8iATVYxUYvhhByx0j2oiSAU+pOdrKyYTJqajy9xIstG/BEdHCnJUL9kClcDyl
+         6GLaV9ODwT7L/hyjJGDkPJPKSVsiXb3cCP+dwpqrB75+YKh7d+x9uIE8aR9PqCmPwTwO
+         ERVFy6v7s7hjDT7P+QTmFhEoz66jYAaF+yqSQ3WLxf2oVtd/4MODhuA4inHxQP+z8obI
+         nODNeB8O1G/ZELhgYnSXpvP9tkqfTwjtDfRViJFPabsZAzMt6AB6em1jYZbLdFhe+SUJ
+         qspw==
+X-Gm-Message-State: AOAM5321DHiofWlgozILrG9WLI6wQ7qxq48T3yWNpRAIGTkBdC3M88iZ
+        L/S1/BM+2nU36RD8WYzV9LNcUQNAk7WEjA==
+X-Google-Smtp-Source: ABdhPJz8FaMbQoRRaFwVq5H7k+alQh9LURSn6O2lnjtGsFgzXRyOrLrHypKkJorATMo+BHJd1e5U+g==
+X-Received: by 2002:a05:600c:a45:b0:346:5e67:cd54 with SMTP id c5-20020a05600c0a4500b003465e67cd54mr3755891wmq.127.1650035212870;
+        Fri, 15 Apr 2022 08:06:52 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id c186-20020a1c35c3000000b0038e6c6fc860sm5176738wma.37.2022.04.15.08.06.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 08:06:52 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <f520643c-76e6-36f3-604f-601a66d6272a@redhat.com>
+Date:   Fri, 15 Apr 2022 17:05:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415143026.11088-1-pmalgujar@marvell.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 094/104] KVM: TDX: Handle TDX PV MMIO hypercall
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <2600955a0bd445bff17eb2bb43edbb71035ae2f5.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <2600955a0bd445bff17eb2bb43edbb71035ae2f5.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 07:30:26AM -0700, Piyush Malgujar wrote:
-> This patch includes following support related to MDIO Clock:
-
-Please make you patch subject more specific. Marvell has lots of MDIO
-bus masters, those in the mvebu SoCs, there is at least one USB MDIO
-bus master, a couple in various SoHo switches, etc.
-
-git log --oneline mdio-thunder.c will give you an idea what to use.
-
-> 1) clock gating:
-> The purpose of this change is to apply clock gating for MDIO clock when there is no transaction happening.
-> This will stop the MDC clock toggling in idle scenario.
->
-> 2) Marvell MDIO clock frequency attribute change:
-> This MDIO change provides an option for user to have the bus speed set to their needs which is otherwise set
-> to default(3.125 MHz).
-
-Please read 802.3 Clause 22. The default should be 2.5MHz.
-
-Also, you are clearly doing two different things here, so there should
-be two patches.
-
-> In case someone needs to use this attribute, they have to add an extra attribute clock-freq
-> in the mdio entry in their DTS and this driver will support the rest.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
 > 
-> The changes are made in a way that the clock will set to the nearest possible value based on the clock calculation
-
-Please keep line lengths to 80. I'm surprised checkpatch did not warn
-about this.
-
-
-> and required frequency from DTS. Below are some possible values:
-> default:3.125 MHz
-> Max:16.67 MHz
+> Export kvm_io_bus_read and kvm_mmio tracepoint and wire up TDX PV MMIO
+> hypercall to the KVM backend functions.
 > 
-> These changes has been verified internally with Marvell SoCs 9x and 10x series.
+> kvm_io_bus_read/write() searches KVM device emulated in kernel of the given
+> MMIO address and emulates the MMIO.  As TDX PV MMIO also needs it, export
+> kvm_io_bus_read().  kvm_io_bus_write() is already exported.  TDX PV MMIO
+> emulates some of MMIO itself.  To add trace point consistently with x86
+> kvm, export kvm_mmio tracepoint.
 > 
-> Signed-off-by: Piyush Malgujar <pmalgujar@marvell.com>
-> Signed-off-by: Damian Eppel <deppel@marvell.com>
-
-These are in the wrong order. Since you are submitting it, your
-Signed-off-by: comes last.
-
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
 > ---
->  drivers/net/mdio/mdio-cavium.h  |  1 +
->  drivers/net/mdio/mdio-thunder.c | 65 +++++++++++++++++++++++++++++++++
->  2 files changed, 66 insertions(+)
+>   arch/x86/kvm/vmx/tdx.c | 114 +++++++++++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/x86.c     |   1 +
+>   virt/kvm/kvm_main.c    |   2 +
+>   3 files changed, 117 insertions(+)
 > 
-> diff --git a/drivers/net/mdio/mdio-cavium.h b/drivers/net/mdio/mdio-cavium.h
-> index a2245d436f5dae4d6424b7c7bfca0aa969a3b3ad..ed4c48d8a38bd80e6a169f7a6d90c1f2a0daccfc 100644
-> --- a/drivers/net/mdio/mdio-cavium.h
-> +++ b/drivers/net/mdio/mdio-cavium.h
-> @@ -92,6 +92,7 @@ struct cavium_mdiobus {
->  	struct mii_bus *mii_bus;
->  	void __iomem *register_base;
->  	enum cavium_mdiobus_mode mode;
-> +	u32 clk_freq;
->  };
->  
->  #ifdef CONFIG_CAVIUM_OCTEON_SOC
-> diff --git a/drivers/net/mdio/mdio-thunder.c b/drivers/net/mdio/mdio-thunder.c
-> index 822d2cdd2f3599025f3e79d4243337c18114c951..642d08aff3f7f849102992a891790e900b111d5c 100644
-> --- a/drivers/net/mdio/mdio-thunder.c
-> +++ b/drivers/net/mdio/mdio-thunder.c
-> @@ -19,6 +19,46 @@ struct thunder_mdiobus_nexus {
->  	struct cavium_mdiobus *buses[4];
->  };
->  
-> +#define _calc_clk_freq(_phase) (100000000U / (2 * (_phase)))
-> +#define _calc_sample(_phase) (2 * (_phase) - 3)
-
-Please avoid macros like this. Use a function.
-
-> +
-> +#define PHASE_MIN 3
-> +#define PHASE_DFLT 16
-> +#define DFLT_CLK_FREQ _calc_clk_freq(PHASE_DFLT)
-> +#define MAX_CLK_FREQ _calc_clk_freq(PHASE_MIN)
-> +
-> +static inline u32 _config_clk(u32 req_freq, u32 *phase, u32 *sample)
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index c900347d0bc7..914af5da4805 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1012,6 +1012,118 @@ static int tdx_emulate_io(struct kvm_vcpu *vcpu)
+>   	return ret;
+>   }
+>   
+> +static int tdx_complete_mmio(struct kvm_vcpu *vcpu)
 > +{
-> +	unsigned int p;
-> +	u32 freq = 0, freq_prev;
+> +	unsigned long val = 0;
+> +	gpa_t gpa;
+> +	int size;
 > +
-> +	for (p = PHASE_MIN; p < PHASE_DFLT; p++) {
-> +		freq_prev = freq;
-> +		freq = _calc_clk_freq(p);
+> +	WARN_ON(vcpu->mmio_needed != 1);
+> +	vcpu->mmio_needed = 0;
 > +
-> +		if (req_freq >= freq)
-> +			break;
+> +	if (!vcpu->mmio_is_write) {
+> +		gpa = vcpu->mmio_fragments[0].gpa;
+> +		size = vcpu->mmio_fragments[0].len;
+> +
+> +		memcpy(&val, vcpu->run->mmio.data, size);
+> +		tdvmcall_set_return_val(vcpu, val);
+> +		trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
 > +	}
-> +
-> +	if (p == PHASE_DFLT)
-> +		freq = DFLT_CLK_FREQ;
-> +
-> +	if (p == PHASE_MIN || p == PHASE_DFLT)
-> +		goto out;
-> +
-> +	/* Check which clock value from the identified range
-> +	 * is closer to the requested value
-> +	 */
-> +	if ((freq_prev - req_freq) < (req_freq - freq)) {
-> +		p = p - 1;
-> +		freq = freq_prev;
-> +	}
-> +out:
-> +	*phase = p;
-> +	*sample = _calc_sample(p);
-> +	return freq;
+> +	return 1;
 > +}
 > +
->  static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
->  				     const struct pci_device_id *ent)
->  {
-> @@ -59,6 +99,8 @@ static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
->  		struct mii_bus *mii_bus;
->  		struct cavium_mdiobus *bus;
->  		union cvmx_smix_en smi_en;
-> +		union cvmx_smix_clk smi_clk;
-> +		u32 req_clk_freq;
->  
->  		/* If it is not an OF node we cannot handle it yet, so
->  		 * exit the loop.
-> @@ -87,6 +129,29 @@ static int thunder_mdiobus_pci_probe(struct pci_dev *pdev,
->  		bus->register_base = nexus->bar0 +
->  			r.start - pci_resource_start(pdev, 0);
->  
-> +		smi_clk.u64 = oct_mdio_readq(bus->register_base + SMI_CLK);
-> +		smi_clk.s.clk_idle = 1;
+> +static inline int tdx_mmio_write(struct kvm_vcpu *vcpu, gpa_t gpa, int size,
+> +				 unsigned long val)
+> +{
+> +	if (kvm_iodevice_write(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
+> +	    kvm_io_bus_write(vcpu, KVM_MMIO_BUS, gpa, size, &val))
+> +		return -EOPNOTSUPP;
 > +
-> +		if (!of_property_read_u32(node, "clock-freq", &req_clk_freq)) {
-
-Documentation/devicetree/bindings/net/mdio.yaml
-
-says:
-
-  clock-frequency:
-    description:
-      Desired MDIO bus clock frequency in Hz. Values greater than IEEE 802.3
-      defined 2.5MHz should only be used when all devices on the bus support
-      the given clock speed.
-
-Please use this property name, and update the binding for your device
-to indicate it is valid.
-
-> +			u32 phase, sample;
+> +	trace_kvm_mmio(KVM_TRACE_MMIO_WRITE, size, gpa, &val);
+> +	return 0;
+> +}
 > +
-> +			dev_info(&pdev->dev, "requested bus clock frequency=%d\n",
-> +				 req_clk_freq);
-
-dev_dbg()
-
+> +static inline int tdx_mmio_read(struct kvm_vcpu *vcpu, gpa_t gpa, int size)
+> +{
+> +	unsigned long val;
 > +
-> +			 bus->clk_freq = _config_clk(req_clk_freq,
-> +						     &phase, &sample);
-
-There should be some sort of range checks here, and return -EINVAL, if
-asked to do lower/higher than what the hardware can support.
-
+> +	if (kvm_iodevice_read(vcpu, &vcpu->arch.apic->dev, gpa, size, &val) &&
+> +	    kvm_io_bus_read(vcpu, KVM_MMIO_BUS, gpa, size, &val))
+> +		return -EOPNOTSUPP;
 > +
-> +			 smi_clk.s.phase = phase;
-> +			 smi_clk.s.sample_hi = (sample >> 4) & 0x1f;
-> +			 smi_clk.s.sample = sample & 0xf;
-
-You indentation is messed up here. checkpatch would definitely of
-found that! Please do use checkpatch.
-
-> +		} else {
-> +			bus->clk_freq = DFLT_CLK_FREQ;
-> +		}
+> +	tdvmcall_set_return_val(vcpu, val);
+> +	trace_kvm_mmio(KVM_TRACE_MMIO_READ, size, gpa, &val);
+> +	return 0;
+> +}
 > +
-> +		oct_mdio_writeq(smi_clk.u64, bus->register_base + SMI_CLK);
-> +		dev_info(&pdev->dev, "bus clock frequency set to %d\n",
-> +			 bus->clk_freq);
+> +static int tdx_emulate_mmio(struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_memory_slot *slot;
+> +	int size, write, r;
+> +	unsigned long val;
+> +	gpa_t gpa;
+> +
+> +	WARN_ON(vcpu->mmio_needed);
+> +
+> +	size = tdvmcall_p1_read(vcpu);
+> +	write = tdvmcall_p2_read(vcpu);
+> +	gpa = tdvmcall_p3_read(vcpu);
+> +	val = write ? tdvmcall_p4_read(vcpu) : 0;
+> +
+> +	if (size != 1 && size != 2 && size != 4 && size != 8)
+> +		goto error;
+> +	if (write != 0 && write != 1)
+> +		goto error;
+> +
+> +	/* Strip the shared bit, allow MMIO with and without it set. */
+> +	gpa = kvm_gpa_unalias(vcpu->kvm, gpa);
+> +
+> +	if (size > 8u || ((gpa + size - 1) ^ gpa) & PAGE_MASK)
+> +		goto error;
+> +
+> +	slot = kvm_vcpu_gfn_to_memslot(vcpu, gpa_to_gfn(gpa));
+> +	if (slot && !(slot->flags & KVM_MEMSLOT_INVALID))
+> +		goto error;
+> +
+> +	if (!kvm_io_bus_write(vcpu, KVM_FAST_MMIO_BUS, gpa, 0, NULL)) {
+> +		trace_kvm_fast_mmio(gpa);
+> +		return 1;
+> +	}
+> +
+> +	if (write)
+> +		r = tdx_mmio_write(vcpu, gpa, size, val);
+> +	else
+> +		r = tdx_mmio_read(vcpu, gpa, size);
+> +	if (!r) {
+> +		/* Kernel completed device emulation. */
+> +		tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +		return 1;
+> +	}
+> +
+> +	/* Request the device emulation to userspace device model. */
+> +	vcpu->mmio_needed = 1;
+> +	vcpu->mmio_is_write = write;
+> +	vcpu->arch.complete_userspace_io = tdx_complete_mmio;
+> +
+> +	vcpu->run->mmio.phys_addr = gpa;
+> +	vcpu->run->mmio.len = size;
+> +	vcpu->run->mmio.is_write = write;
+> +	vcpu->run->exit_reason = KVM_EXIT_MMIO;
+> +
+> +	if (write) {
+> +		memcpy(vcpu->run->mmio.data, &val, size);
+> +	} else {
+> +		vcpu->mmio_fragments[0].gpa = gpa;
+> +		vcpu->mmio_fragments[0].len = size;
+> +		trace_kvm_mmio(KVM_TRACE_MMIO_READ_UNSATISFIED, size, gpa, NULL);
+> +	}
+> +	return 0;
+> +
+> +error:
+> +	tdvmcall_set_return_code(vcpu, TDG_VP_VMCALL_SUCCESS);
+> +	return 1;
+> +}
+> +
+>   static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> @@ -1029,6 +1141,8 @@ static int handle_tdvmcall(struct kvm_vcpu *vcpu)
+>   		return tdx_emulate_hlt(vcpu);
+>   	case EXIT_REASON_IO_INSTRUCTION:
+>   		return tdx_emulate_io(vcpu);
+> +	case EXIT_REASON_EPT_VIOLATION:
+> +		return tdx_emulate_mmio(vcpu);
+>   	default:
+>   		break;
+>   	}
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 9acb33a17445..483fa46b1be7 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -12915,6 +12915,7 @@ bool kvm_arch_dirty_log_supported(struct kvm *kvm)
+>   
+>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_entry);
+>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_exit);
+> +EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_mmio);
+>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_fast_mmio);
+>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_inj_virq);
+>   EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_page_fault);
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index d4e117f5b5b9..6db075db6098 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2259,6 +2259,7 @@ struct kvm_memory_slot *kvm_vcpu_gfn_to_memslot(struct kvm_vcpu *vcpu, gfn_t gfn
+>   
+>   	return NULL;
+>   }
+> +EXPORT_SYMBOL_GPL(kvm_vcpu_gfn_to_memslot);
+>   
+>   bool kvm_is_visible_gfn(struct kvm *kvm, gfn_t gfn)
+>   {
+> @@ -5126,6 +5127,7 @@ int kvm_io_bus_read(struct kvm_vcpu *vcpu, enum kvm_bus bus_idx, gpa_t addr,
+>   	r = __kvm_io_bus_read(vcpu, bus, &range, val);
+>   	return r < 0 ? r : 0;
+>   }
+> +EXPORT_SYMBOL_GPL(kvm_io_bus_read);
+>   
+>   /* Caller must hold slots_lock. */
+>   int kvm_io_bus_register_dev(struct kvm *kvm, enum kvm_bus bus_idx, gpa_t addr,
 
-Only use dev_info() for really important messages. We don't spam the
-kernel log for trivial things.
-
-       Andrew
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

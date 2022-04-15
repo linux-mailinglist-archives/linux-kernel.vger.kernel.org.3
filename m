@@ -2,315 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8922502F91
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:11:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 334A3502F8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351078AbiDOUKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 16:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58660 "EHLO
+        id S233033AbiDOUKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 16:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351052AbiDOUKC (ORCPT
+        with ESMTP id S243577AbiDOUKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 16:10:02 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA54BC1C8E;
-        Fri, 15 Apr 2022 13:07:32 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso75468177b3.9;
-        Fri, 15 Apr 2022 13:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=J8BTGfO/r22ZuFlmHg1BcSrVfAWsJp/p0mdMRtAW2t0=;
-        b=Gg/4A7a9HwP/ar/3uaMCgV+oFlNDZCp8R/h6URnv7Z99hP+QU4+lhIoFwppXE0g9mX
-         CbInlYjvyTwYjzPVV2DZR11oWp9F9D2mWYXB69+1wb3M35isuvpYVKK3onM7I0YcyQLX
-         YIW+cyTZhyPqeYzopC/XBnSq2nE6fgr6Snl6VDedtpkRKCuqzo+Rhy0j+cvvDtc231TV
-         wJ1eM3G+RSc162wWjleX23uGEZ013Z7iprQcfp2TMOrLQuk+twwgr6Z/mPMWN2r8NaW+
-         UXSja4DP5NFhd7Nfa/3NUx24jWJZAZzIx9kfB2FpvRr8lLUQGXD24Fv1tx/P/O/KWMdr
-         ZyZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=J8BTGfO/r22ZuFlmHg1BcSrVfAWsJp/p0mdMRtAW2t0=;
-        b=xlHcHBbjZm55k4O8JhKoELTKhxCJ8yJaCP39rT/EeZY7JDbFkS+wVWyT+0PIdcmpKY
-         huznm3Y6KX9adcxMv+OaGDmMb5W+k8BLOznbMxeQVwPpRu+rpx2XkGLW9t2Pmd27uBzB
-         jz+7kwxupGUZOOOzBTSKTQO6vLlFXBUuaLDCaQ8Djk9/LqJQpSWIEYs83dQAYGP1Yuqd
-         k06q41OF1HMtIPbIW3/QEuwgNnmnofKBL6dNIzkW6tD/uTwgtN640nGG1xL3Qa+0K565
-         tA6M7EP75so3SBqO/PyNMgtGWziHpJjg4Xcp6qGNvclyiQKraLQSlByk0PP8wU+nn8qf
-         eiuA==
-X-Gm-Message-State: AOAM533DHJAu8DXESwDH96+hg/dAl/FSiC0Dh0iyA8Lu80xChJ2SvmY9
-        PYrIMsren70bkcRcrhdnO5Oc5O7mUF03qr1DQMI=
-X-Google-Smtp-Source: ABdhPJzT8hefuHIJJPpile9NnHRWHLBmVdg8kwGrKyUMRGlQGpxYevU+ZpH2MpWWVpGIDln1FyqM22pW+gyQbLiHI+E=
-X-Received: by 2002:a81:578c:0:b0:2e6:2488:7ef8 with SMTP id
- l134-20020a81578c000000b002e624887ef8mr525532ywb.519.1650053251803; Fri, 15
- Apr 2022 13:07:31 -0700 (PDT)
+        Fri, 15 Apr 2022 16:10:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21BBAF1C1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650053289; x=1681589289;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=J+4qXxAshLlGQOpeEuCjwklGKYYZrxv9ckCwQvfPtBE=;
+  b=gjDOq7mYkj6TW0DSM4qdohTGpV9DHNNXkhd45AqfNNj6ojQ12lyuGAYk
+   kxtmOESru8xlngpSTiE2t5wPHzYfutzUiNAIx05e4HkMmAUyroBu5L/D7
+   1quWgxLFFduB8791Msd24S6gPoCNk7G78XAgHWrcCTPVkC06XCGYlPN7q
+   YQrVv5CV9cGdUKxtCGM355qFWDfqUMlpR2JaP5pYJZ8WigbMfn3Bt+bLG
+   C5QAL5IzCTDGsgN/gFv2LQWtBXxq8hKBbbwam0U7ClixN5bjJV2DrNG/Y
+   ujXBFYjcErNvVZs8/4Z/H/m6XAliMyG9svqeSdw9aqxsLL4mQocCE41nQ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262078942"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="262078942"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 13:08:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="574510682"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.209.98.156])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 13:08:09 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mcgrof@kernel.org, rafael@kernel.org, linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com, yilun.xu@intel.com,
+        hao.wu@intel.com, matthew.gerlach@intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v2 0/8] Extend FW framework for user FW uploads
+Date:   Fri, 15 Apr 2022 13:07:57 -0700
+Message-Id: <20220415200805.610339-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220413133731.242870-1-pgwipeout@gmail.com> <20220413133731.242870-3-pgwipeout@gmail.com>
- <c493261cef27714181a523545dab6d0e@kernel.org>
-In-Reply-To: <c493261cef27714181a523545dab6d0e@kernel.org>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Fri, 15 Apr 2022 16:07:18 -0400
-Message-ID: <CAMdYzYoBUMaipHK_ymwhx_y70N0MUN5noDvUFcf3mK5ngM0SmA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] PCI: dwc: rockchip: add legacy interrupt support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 4:36 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On 2022-04-13 14:37, Peter Geis wrote:
-> > The legacy interrupts on the rk356x pcie controller are handled by a
-> > single muxed interrupt. Add irq domain support to the pcie-dw-rockchip
-> > driver to support the virtual domain.
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 123 +++++++++++++++++-
-> >  1 file changed, 121 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > index c9b341e55cbb..a8b1dc03d3cc 100644
-> > --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> > @@ -10,9 +10,12 @@
-> >
-> >  #include <linux/clk.h>
-> >  #include <linux/gpio/consumer.h>
-> > +#include <linux/irqchip/chained_irq.h>
-> > +#include <linux/irqdomain.h>
-> >  #include <linux/mfd/syscon.h>
-> >  #include <linux/module.h>
-> >  #include <linux/of_device.h>
-> > +#include <linux/of_irq.h>
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/regmap.h>
-> > @@ -36,10 +39,13 @@
-> >  #define PCIE_LINKUP                  (PCIE_SMLH_LINKUP | PCIE_RDLH_LINKUP)
-> >  #define PCIE_L0S_ENTRY                       0x11
-> >  #define PCIE_CLIENT_GENERAL_CONTROL  0x0
-> > +#define PCIE_CLIENT_INTR_STATUS_LEGACY       0x8
-> > +#define PCIE_CLIENT_INTR_MASK_LEGACY 0x1c
-> >  #define PCIE_CLIENT_GENERAL_DEBUG    0x104
-> > -#define PCIE_CLIENT_HOT_RESET_CTRL      0x180
-> > +#define PCIE_CLIENT_HOT_RESET_CTRL   0x180
-> >  #define PCIE_CLIENT_LTSSM_STATUS     0x300
-> > -#define PCIE_LTSSM_ENABLE_ENHANCE       BIT(4)
-> > +#define PCIE_LEGACY_INT_ENABLE               GENMASK(3, 0)
-> > +#define PCIE_LTSSM_ENABLE_ENHANCE    BIT(4)
-> >  #define PCIE_LTSSM_STATUS_MASK               GENMASK(5, 0)
-> >
-> >  struct rockchip_pcie {
-> > @@ -51,6 +57,8 @@ struct rockchip_pcie {
-> >       struct reset_control            *rst;
-> >       struct gpio_desc                *rst_gpio;
-> >       struct regulator                *vpcie3v3;
-> > +     struct irq_domain               *irq_domain;
-> > +     raw_spinlock_t                  irq_lock;
-> >  };
-> >
-> >  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
-> > @@ -65,6 +73,105 @@ static void rockchip_pcie_writel_apb(struct
-> > rockchip_pcie *rockchip,
-> >       writel_relaxed(val, rockchip->apb_base + reg);
-> >  }
-> >
-> > +static void rockchip_pcie_legacy_int_handler(struct irq_desc *desc)
-> > +{
-> > +     struct irq_chip *chip = irq_desc_get_chip(desc);
-> > +     struct rockchip_pcie *rockchip = irq_desc_get_handler_data(desc);
-> > +     struct device *dev = rockchip->pci.dev;
-> > +     u32 reg;
-> > +     u32 hwirq;
-> > +     u32 virq;
-> > +
-> > +     chained_irq_enter(chip, desc);
-> > +
-> > +     reg = rockchip_pcie_readl_apb(rockchip,
-> > PCIE_CLIENT_INTR_STATUS_LEGACY);
-> > +
-> > +     while (reg) {
-> > +             hwirq = ffs(reg) - 1;
-> > +             reg &= ~BIT(hwirq);
->
-> The whole construct would be better served by for_each_set_bit().
+Extend the firmware loader subsystem to support a persistent sysfs
+interface that userspace may use to initiate a firmware update. For
+example, FPGA based PCIe cards automatically load firmware and FPGA images
+from local FLASH when the card boots. The images in FLASH may be updated
+with new images that are uploaded by the user.
 
-Ah, that's much nicer, thanks!
+A device driver may call firmware_upload_register() to expose persistent
+"loading" and "data" sysfs files at /sys/class/firmare/<NAME>/*. These
+files are used in the same way as the fallback sysfs "loading" and "data"
+files. However, when 0 is written to "loading" to complete the write of
+firmware data, the data is also transferred to the lower-level driver
+using pre-registered call-back functions. The data transfer is done in
+the context of a kernel worker thread.
 
->
-> > +
-> > +             virq = irq_find_mapping(rockchip->irq_domain, hwirq);
-> > +             if (virq)
-> > +                     generic_handle_irq(virq);
->
-> Please replace this with generic_handle_domain_irq().
+Additional sysfs nodes are added in the same location as "loading" and
+"data" to monitor the transfer of the image data to the device using
+callback functions provided by the lower-level device driver and to allow
+the data transfer to be cancelled.
 
-I see the bulk conversion was done after I created this patch.
-I will make this change.
+Example usage:
 
->
-> > +             else
-> > +                     dev_err(dev, "unexpected IRQ, INT%d\n", hwirq);
->
-> This hardly serves any purpose. At best, this is a debug statement.
-> At worse, this is a DoS. In any case, please remove it.
+$ pwd
+/sys/class/firmware/n3000bmc-sec-update.8
+$ ls
+cancel  device  loading  remaining_size  subsystem
+data    error   power    status          uevent
+$ echo 1 > loading
+$ cat /tmp/firmware.bin > data
+$ echo 0 > loading
+$ while :; do cat status; cat remaining_size ; sleep 3; done
+preparing
+44590080
+<--snip-->
+transferring
+44459008
+transferring
+44311552
+<--snip-->
+transferring
+173056
+<--snip-->
+programming
+0
+<--snip-->
+idle
+0
+^C
+$ cat error
 
-Done!
+The first two patches in this set make minor changes to enable the
+fw_priv data structure and the sysfs interfaces to be used multiple times
+during the existence of the device driver instance. The third patch is
+mostly a reorganization of existing code in preparation for sharing common
+code with the firmware-upload support. The fourth and fifth patches provide
+the code for user-initiated firmware uploads. The final 3 patches extend
+selftest support to test firmware-upload functionality.
 
->
-> > +     }
-> > +
-> > +     chained_irq_exit(chip, desc);
-> > +}
-> > +
-> > +static void rockchip_intx_mask(struct irq_data *data)
-> > +{
-> > +     struct rockchip_pcie *rockchip = irq_data_get_irq_chip_data(data);
-> > +     unsigned long flags;
-> > +     u32 val;
-> > +
-> > +     /* disable legacy interrupts */
-> > +     raw_spin_lock_irqsave(&rockchip->irq_lock, flags);
-> > +     val = HIWORD_UPDATE_BIT(PCIE_LEGACY_INT_ENABLE);
-> > +     val |= PCIE_LEGACY_INT_ENABLE;
-> > +     rockchip_pcie_writel_apb(rockchip, val,
-> > PCIE_CLIENT_INTR_MASK_LEGACY);
-> > +     raw_spin_unlock_irqrestore(&rockchip->irq_lock, flags);
-> > +};
-> > +
-> > +static void rockchip_intx_unmask(struct irq_data *data)
-> > +{
-> > +     struct rockchip_pcie *rockchip = irq_data_get_irq_chip_data(data);
-> > +     unsigned long flags;
-> > +     u32 val;
-> > +
-> > +     /* enable legacy interrupts */
-> > +     raw_spin_lock_irqsave(&rockchip->irq_lock, flags);
-> > +     val = HIWORD_UPDATE_BIT(PCIE_LEGACY_INT_ENABLE);
-> > +     val &= ~PCIE_LEGACY_INT_ENABLE;
-> > +     rockchip_pcie_writel_apb(rockchip, val,
-> > PCIE_CLIENT_INTR_MASK_LEGACY);
-> > +     raw_spin_unlock_irqrestore(&rockchip->irq_lock, flags);
-> > +};
-> > +
-> > +static struct irq_chip rockchip_intx_irq_chip = {
-> > +     .flags                  = IRQCHIP_SKIP_SET_WAKE | IRQCHIP_MASK_ON_SUSPEND,
-> > +     .irq_mask               = rockchip_intx_mask,
-> > +     .irq_unmask             = rockchip_intx_unmask,
-> > +     .name                   = "INTx",
->
-> For consistency, please place 'name' at the top, and 'flags' at the end.
 
-Will do.
+Changelog v1 -> v2:
+  - Rebased to 5.18-rc2.
+  - It was discovered that the new function in v1, fw_state_is_done(), is
+    equivalent to the existing fw_sysfs_done() function. Renamed
+    fw_sysfs_done() and fw_sysfs_loading() to fw_state_is_done() and
+    fw_state_is_loading() respectively, and placed them along side companion
+    functions in drivers/base/firmware_loader/firmware.h.
+  - Removed the "if !fw_sysfs_done(fw_priv))" condition in switch case 1 of
+    firmware_loading_store(). It is rendered unnecessary by other changes
+    to the function.
+  - Updated documentation Date and KernelVersion fields to July 2022
+    and 5.19.
+  - Unconditionally set fw_priv->is_paged_buf to true in
+    firmware_upload_register();
 
->
-> > +};
-> > +
-> > +static int rockchip_pcie_intx_map(struct irq_domain *domain, unsigned
-> > int irq,
-> > +                               irq_hw_number_t hwirq)
-> > +{
-> > +     irq_set_chip_and_handler(irq, &rockchip_intx_irq_chip,
-> > handle_simple_irq);
->
-> Why isn't this a *level* handler, as per the PCI spec?
+Changelog RFC -> v1:
+  - Renamed files fw_sysfs.c and fw_sysfs.h to sysfs.c and sysfs.h
+  - Moved "MODULE_IMPORT_NS(FIRMWARE_LOADER_PRIVATE);" from sysfs.c to
+    sysfs.h to address an error identified by the kernel test robot
+    <lkp@intel.com>
+  - renamed fw_upload_register() and fw_upload_unregister() to
+    firmware_upload_register() and fw_upload_unregister().
+  - Moved ifdef'd section of code out of firmware_loading_store() in sysfs.c
+    into a new function, fw_upload_start(), in sysfs_upload.c.
+  - Changed #defines to enums for error codes and progress states
+  - Added additional kernel-doc supported symbols into the documentation.
+    Some rewording in documentation as well.
+  - Added module reference counting for the parent module in the
+    firmware_upload_register() and firmware_upload_unregister() functions
+    to fix problems found when testing with test_firmware module.
+  - Removed unnecessary module reference counting for THIS_MODULE.
+  - Added a new patch to modify the test_firmware module to support
+    testing of the firmware upload mechanism.
+  - Added a new patch to modify the test_firmware module to support
+    error injection for firmware upload.
+  - Added a new patch to extend the existing firmware selftests to cover
+    firmware upload.
 
-Fixed.
+Russ Weight (8):
+  firmware_loader: Clear data and size in fw_free_paged_buf
+  firmware_loader: Check fw_state_is_done in loading_store
+  firmware_loader: Split sysfs support from fallback
+  firmware_loader: Add firmware-upload support
+  firmware_loader: Add sysfs nodes to monitor fw_upload
+  test_firmware: Add test support for firmware upload
+  test_firmware: Error injection for firmware upload
+  selftests: firmware: Add firmware upload selftests
 
->
-> > +     irq_set_chip_data(irq, domain->host_data);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static const struct irq_domain_ops intx_domain_ops = {
-> > +     .map = rockchip_pcie_intx_map,
-> > +};
-> > +
-> > +static int rockchip_pcie_init_irq_domain(struct rockchip_pcie
-> > *rockchip)
-> > +{
-> > +     struct device *dev = rockchip->pci.dev;
-> > +     struct device_node *intc;
-> > +
-> > +     raw_spin_lock_init(&rockchip->irq_lock);
-> > +
-> > +     intc = of_get_child_by_name(dev->of_node,
-> > "legacy-interrupt-controller");
-> > +     if (!intc) {
-> > +             dev_err(dev, "missing child interrupt-controller node\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     rockchip->irq_domain = irq_domain_add_linear(intc, PCI_NUM_INTX,
-> > +                                                 &intx_domain_ops, rockchip);
-> > +     of_node_put(intc);
-> > +     if (!rockchip->irq_domain) {
-> > +             dev_err(dev, "failed to get a INTx IRQ domain\n");
-> > +             return -EINVAL;
-> > +     }
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  static void rockchip_pcie_enable_ltssm(struct rockchip_pcie *rockchip)
-> >  {
-> >       rockchip_pcie_writel_apb(rockchip, PCIE_CLIENT_ENABLE_LTSSM,
-> > @@ -111,7 +218,19 @@ static int rockchip_pcie_host_init(struct
-> > pcie_port *pp)
-> >  {
-> >       struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
-> >       struct rockchip_pcie *rockchip = to_rockchip_pcie(pci);
-> > +     struct device *dev = rockchip->pci.dev;
-> >       u32 val = HIWORD_UPDATE_BIT(PCIE_LTSSM_ENABLE_ENHANCE);
-> > +     int irq, ret;
-> > +
-> > +     irq = of_irq_get_byname(dev->of_node, "legacy");
-> > +     if (irq < 0)
-> > +             return irq;
-> > +
-> > +     irq_set_chained_handler_and_data(irq,
-> > rockchip_pcie_legacy_int_handler, rockchip);
-> > +
->
-> Installing the handler before the domain is instantiated is
-> unlikely to end well if you have a pending interrupt...
+ .../ABI/testing/sysfs-class-firmware          |  77 ++++
+ .../driver-api/firmware/fw_upload.rst         | 117 +++++
+ Documentation/driver-api/firmware/index.rst   |   1 +
+ drivers/base/firmware_loader/Kconfig          |  18 +
+ drivers/base/firmware_loader/Makefile         |   2 +
+ drivers/base/firmware_loader/fallback.c       | 430 ------------------
+ drivers/base/firmware_loader/fallback.h       |  46 +-
+ drivers/base/firmware_loader/firmware.h       |  16 +
+ drivers/base/firmware_loader/main.c           |  18 +-
+ drivers/base/firmware_loader/sysfs.c          | 423 +++++++++++++++++
+ drivers/base/firmware_loader/sysfs.h          | 100 ++++
+ drivers/base/firmware_loader/sysfs_upload.c   | 397 ++++++++++++++++
+ drivers/base/firmware_loader/sysfs_upload.h   |  46 ++
+ include/linux/firmware.h                      |  82 ++++
+ lib/test_firmware.c                           | 378 +++++++++++++++
+ tools/testing/selftests/firmware/Makefile     |   2 +-
+ tools/testing/selftests/firmware/config       |   1 +
+ tools/testing/selftests/firmware/fw_lib.sh    |   7 +
+ .../selftests/firmware/fw_run_tests.sh        |   4 +
+ tools/testing/selftests/firmware/fw_upload.sh | 214 +++++++++
+ 20 files changed, 1893 insertions(+), 486 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-firmware
+ create mode 100644 Documentation/driver-api/firmware/fw_upload.rst
+ create mode 100644 drivers/base/firmware_loader/sysfs.c
+ create mode 100644 drivers/base/firmware_loader/sysfs.h
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.c
+ create mode 100644 drivers/base/firmware_loader/sysfs_upload.h
+ create mode 100755 tools/testing/selftests/firmware/fw_upload.sh
 
-While the interrupts are masked at this stage, you make a valid point,
-I'll move this a little south.
+-- 
+2.25.1
 
->
-> > +     ret = rockchip_pcie_init_irq_domain(rockchip);
-> > +     if (ret < 0)
-> > +             dev_err(dev, "failed to init irq domain\n");
-> >
-> >       /* LTSSM enable control mode */
-> >       rockchip_pcie_writel_apb(rockchip, val, PCIE_CLIENT_HOT_RESET_CTRL);
->
-> Thanks,
->
->          M.
-> --
-> Jazz is not dead. It just smells funny...
-
-Thank you for your review.

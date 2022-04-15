@@ -2,165 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CEF0502D7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:05:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A697502DE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:44:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355721AbiDOQHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
+        id S1355906AbiDOQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355698AbiDOQH1 (ORCPT
+        with ESMTP id S1355902AbiDOQqc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:07:27 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6C4522FC;
-        Fri, 15 Apr 2022 09:04:57 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id bh17so16049764ejb.8;
-        Fri, 15 Apr 2022 09:04:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=112dwm8QpeyoKYHzXDlM/vsE5hIZxIAtes3nuwV/SSo=;
-        b=q1bzqzL3lBdyltYHc9DTIT5JLPdLODWLZph8x8M5S6Lrx38YGPco66753ypyqSZHdS
-         TsBVCJ5EpLAbAmZd7rn35rz5+5MFo5cmcPhwTg2EsuyzzljP5OF0i5quSN5Bq79dJupT
-         XxChUcD2MsVarL7yLizfAjcN3B0NTqgueTBK61H9jo+fIJq2L7zfnVfyEtuLdKfBrIhL
-         iDzvx73Aqc0XvRiY1AXXQbSKFoZMT0Gp0iczLfr/jN0opuxhWCDc6rZaQadXhtc1zVzT
-         V6fOjszCUEV1CJPEyDoo3WVMYNJOQYRIdd2ngW2MNMxLobrauU5wyg1fn/2XkaL6GqdW
-         ZQzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=112dwm8QpeyoKYHzXDlM/vsE5hIZxIAtes3nuwV/SSo=;
-        b=bpzv/9rAOTway6XtxAJ9OiD2W1UsZv4UGvvj4vYu0UNxwdJuytBYcHGI4KIBuPjDIJ
-         ZULMXiur7n7ce0JTi2N5lwi0BTFT6YVt505LBxJ2/Oqi1DSCrF24fwodcjFiTr8Li9Ap
-         x5II0WE5hSak2iMnnxF4GgaH3pkvvo/I4TnfKqWzB93oLKJvB/dEuCMO6NJI1f8xn03l
-         uYJ8a/qPQgWXdJG178s6SomwXT0Xfvu7wqIzsxEgWhJ5lBMlBEzbTnzihE2/0xotCvFg
-         /MeJY4NEQEaZ7r8wG5aY/bH8V7A0l8oJRSrO+gFe0tyfjE1nvCSOzc8juCwnblXSPUNO
-         rESA==
-X-Gm-Message-State: AOAM532xIJ76AaRlsWEtlBKlsbj4HGA8wXFvk5c7OF1aLnuylpsz5RUn
-        X8zyIfeNaeRg5pYIJwRxCGI=
-X-Google-Smtp-Source: ABdhPJw48aM/ILhX7ieEo4E/2JT/l4q8QZCfn54tMQSw+A5qviAhPCWJlSaz9aHJH2xpZA3vw595cw==
-X-Received: by 2002:a17:907:6e88:b0:6da:8f01:7a8f with SMTP id sh8-20020a1709076e8800b006da8f017a8fmr6648623ejc.619.1650038696267;
-        Fri, 15 Apr 2022 09:04:56 -0700 (PDT)
-Received: from skbuf ([188.26.57.45])
-        by smtp.gmail.com with ESMTPSA id r18-20020a05640251d200b0041d1600ab09sm3036190edd.54.2022.04.15.09.04.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 09:04:55 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 19:04:52 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Jakob Koschel <jakobkoschel@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>
-Subject: Re: [PATCH net-next v4 07/18] net: dsa: Replace usage of found with
- dedicated list iterator variable
-Message-ID: <20220415160452.z4m4j3sulcteqggs@skbuf>
-References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
- <20220415122947.2754662-8-jakobkoschel@gmail.com>
+        Fri, 15 Apr 2022 12:46:32 -0400
+X-Greylist: delayed 3352 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 09:44:02 PDT
+Received: from 3.mo550.mail-out.ovh.net (3.mo550.mail-out.ovh.net [46.105.60.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261F4DB4AB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:44:01 -0700 (PDT)
+Received: from player760.ha.ovh.net (unknown [10.109.156.39])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id D8AFE24077
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:06:38 +0000 (UTC)
+Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
+        (Authenticated sender: steve@sk2.org)
+        by player760.ha.ovh.net (Postfix) with ESMTPSA id 489F02986A8B4;
+        Fri, 15 Apr 2022 16:06:34 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-101G0043b24d311-889e-4edd-ac59-8ff49a2d3389,
+                    77125C2C2681624F8512B69FC7A1C9B53E6602B4) smtp.auth=steve@sk2.org
+X-OVh-ClientIp: 82.65.25.201
+From:   Stephen Kitt <steve@sk2.org>
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
+        Stephen Kitt <steve@sk2.org>
+Subject: [PATCH v2 0/7] ASoC: remaining i2c_match_id i2c probe changes
+Date:   Fri, 15 Apr 2022 18:06:06 +0200
+Message-Id: <20220415160613.148882-1-steve@sk2.org>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415122947.2754662-8-jakobkoschel@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Ovh-Tracer-Id: 10956694945620592262
+X-VR-SPAMSTATE: OK
+X-VR-SPAMSCORE: -100
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeetgedugfelkeeikeetgeegteevfeeufeetuefgudeiiedthfehtdeffeekvdeffeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejiedtrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 02:29:36PM +0200, Jakob Koschel wrote:
-> To move the list iterator variable into the list_for_each_entry_*()
-> macro in the future it should be avoided to use the list iterator
-> variable after the loop body.
-> 
-> To *never* use the list iterator variable after the loop it was
-> concluded to use a separate iterator variable instead of a
-> found boolean [1].
-> 
-> This removes the need to use a found variable and simply checking if
-> the variable was set, can determine if the break/goto was hit.
-> 
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
-> ---
+This series covers all the remaining changes to migrate
+sound/soc/codecs i2c probes to probe_new, where the const struct
+i2c_client * argument is still used. Instead of relying on the
+parameter passed in, i2c_match_id is used instead.
 
-I absolutely hate the robotic commit message, but the change looks like
-it works, so:
+With this set of patches, all the sound/soc/codecs i2c probes use the
+new probe definition.
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+Changes since v1: two missing files were added.
 
->  net/dsa/dsa.c | 11 +++++------
->  1 file changed, 5 insertions(+), 6 deletions(-)
-> 
-> diff --git a/net/dsa/dsa.c b/net/dsa/dsa.c
-> index 89c6c86e746f..645522c4dd4a 100644
-> --- a/net/dsa/dsa.c
-> +++ b/net/dsa/dsa.c
-> @@ -112,22 +112,21 @@ const struct dsa_device_ops *dsa_find_tagger_by_name(const char *buf)
->  
->  const struct dsa_device_ops *dsa_tag_driver_get(int tag_protocol)
->  {
-> -	struct dsa_tag_driver *dsa_tag_driver;
-> +	struct dsa_tag_driver *dsa_tag_driver = NULL, *iter;
->  	const struct dsa_device_ops *ops;
-> -	bool found = false;
->  
->  	request_module("%s%d", DSA_TAG_DRIVER_ALIAS, tag_protocol);
->  
->  	mutex_lock(&dsa_tag_drivers_lock);
-> -	list_for_each_entry(dsa_tag_driver, &dsa_tag_drivers_list, list) {
-> -		ops = dsa_tag_driver->ops;
-> +	list_for_each_entry(iter, &dsa_tag_drivers_list, list) {
-> +		ops = iter->ops;
->  		if (ops->proto == tag_protocol) {
-> -			found = true;
-> +			dsa_tag_driver = iter;
->  			break;
->  		}
->  	}
->  
-> -	if (found) {
-> +	if (dsa_tag_driver) {
->  		if (!try_module_get(dsa_tag_driver->owner))
->  			ops = ERR_PTR(-ENOPROTOOPT);
->  	} else {
-> -- 
-> 2.25.1
-> 
+Stephen Kitt (7):
+  ASoC: ak*: use i2c_match_id and simple i2c probe
+  ASoC: alc56*: use i2c_match_id and simple i2c probe
+  ASoC: max980*: use i2c_match_id and simple i2c probe
+  ASoC: pcm186x: use i2c_match_id and simple i2c probe
+  ASoC: tas*: use i2c_match_id and simple i2c probe
+  ASoC: tlv320*: use i2c_match_id and simple i2c probe
+  ASoC: tpa6130: use i2c_match_id and simple i2c probe
+
+ sound/soc/codecs/ak4613.c            | 10 +++++----
+ sound/soc/codecs/ak4642.c            |  8 ++++---
+ sound/soc/codecs/alc5623.c           | 24 +++++++++++----------
+ sound/soc/codecs/alc5632.c           | 20 +++++++++--------
+ sound/soc/codecs/max98088.c          | 21 +++++++++---------
+ sound/soc/codecs/max98090.c          | 23 ++++++++++----------
+ sound/soc/codecs/max98095.c          | 19 +++++++++--------
+ sound/soc/codecs/pcm186x-i2c.c       | 24 ++++++++++-----------
+ sound/soc/codecs/tas2562.c           | 25 +++++++++++-----------
+ sound/soc/codecs/tas571x.c           | 11 ++++++----
+ sound/soc/codecs/tas5720.c           | 21 +++++++++---------
+ sound/soc/codecs/tlv320adc3xxx.c     | 21 +++++++++---------
+ sound/soc/codecs/tlv320aic31xx.c     | 32 ++++++++++++++--------------
+ sound/soc/codecs/tlv320aic32x4-i2c.c | 11 ++++++----
+ sound/soc/codecs/tlv320aic3x-i2c.c   | 25 +++++++++++-----------
+ sound/soc/codecs/tpa6130a2.c         | 19 +++++++++--------
+ 16 files changed, 168 insertions(+), 146 deletions(-)
+
+
+base-commit: 5d763a740e5b24e4a2ca04317255e7e941876338
+-- 
+2.27.0
+

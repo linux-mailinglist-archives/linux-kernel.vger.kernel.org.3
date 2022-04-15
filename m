@@ -2,134 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2905C502D86
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:11:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DB5502D91
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:15:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349975AbiDOQMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:12:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49696 "EHLO
+        id S1355766AbiDOQR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239380AbiDOQMS (ORCPT
+        with ESMTP id S1355822AbiDOQRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:12:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD0C54BC0;
-        Fri, 15 Apr 2022 09:09:49 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id bh17so16071817ejb.8;
-        Fri, 15 Apr 2022 09:09:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6JlZxxiGZmb0vqOcZsu5IsnR52qMrk0jyITxfKKhTco=;
-        b=ZC9/kPycUbLVZRiAXRkwqNrNDGebavEbbYo5zoquTTe8CUdFIuOuh7OpF0fyzjvyOv
-         IhaYsgXw09+YNa/uIJEindg/poz+JCpYHr05EqBb3dgH/+0nUyErqm/WDknhPQvW75cO
-         07g7R+Luz06xCjJlXDK9+gw77E04PzYBy01Om8qBxuFo7hzuI1XtuP5Icjkv8MXU/J98
-         bQBc47KRo+sm4EctOyweVjxV/MOcQ0NqoClrITE0Mf7rcCMsddtKBWXsatWSlsk8btjW
-         wXDonlCwRAVjC/5lGeG7OGHiyLp+//79gdxbgezb9f2FpRDykUXzlKX4WD0OIEfwmeby
-         4h+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6JlZxxiGZmb0vqOcZsu5IsnR52qMrk0jyITxfKKhTco=;
-        b=PIb5ycJC/We3rrjqXCOxunPx2uohqCjGLg+DtoPz1ColzutBAgvBJgb0uK30xXIzin
-         rC/HzXprEH5MDgxLO0CkYFZnXalTNa232+tA50oDalaWLnZoUlH3e4SAIc/heY1qOOWA
-         vL9ElYFkLw0HrGuUimCSyXkLhkZnn3ia7Kz7NsC+4y6fEILa1aLPad2fXFnUoAYCUsKs
-         ok0/r0awJ5YkaugRiu61p38qPjk2PtGA0x0KtO98OKv7nslpyh2zhJjG96/S5yaBHopM
-         VCL+ti9SUIHM0wieeauxBtk0EF66kQyNfCFasZ+UUhgwd5HtBRw2CSOsgUI8c8bcrmvJ
-         SSUg==
-X-Gm-Message-State: AOAM531fwJvL5EeUzkCyKZo3tpDUqu83Pbj/sdE9v47vCXWpdPSdLAfw
-        tQ9F9Rm1F9+BxFQFdAz4l5w=
-X-Google-Smtp-Source: ABdhPJwMtLoWL3yAxfLe9BEEngeq0PxdbYXpFZIgqysx3T6d8CKldRdbn9SfEIwN6GiN102YjKLX0g==
-X-Received: by 2002:a17:907:d90:b0:6eb:557e:91e6 with SMTP id go16-20020a1709070d9000b006eb557e91e6mr6658502ejc.376.1650038987627;
-        Fri, 15 Apr 2022 09:09:47 -0700 (PDT)
-Received: from anparri (host-79-52-64-69.retail.telecomitalia.it. [79.52.64.69])
-        by smtp.gmail.com with ESMTPSA id b5-20020a17090630c500b006e8044fa76bsm1851869ejb.143.2022.04.15.09.09.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 09:09:46 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 18:09:40 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 1/6] hv_sock: Check hv_pkt_iter_first_raw()'s return
- value
-Message-ID: <20220415160940.GA47428@anparri>
-References: <20220413204742.5539-1-parri.andrea@gmail.com>
- <20220413204742.5539-2-parri.andrea@gmail.com>
- <PH0PR21MB3025FA1943D74A31E47B7F8FD7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
- <20220415064133.GA2961@anparri>
- <PH0PR21MB3025F31739A0480F66639ACAD7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025F31739A0480F66639ACAD7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Apr 2022 12:17:45 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F41F95A35;
+        Fri, 15 Apr 2022 09:15:16 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23FEsYZs006010;
+        Fri, 15 Apr 2022 16:14:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=UWTIYmrEftbLWJ6XCjLqKzy6zE8O8MmJwK2RB40wCX0=;
+ b=GzERIESg5aYp7Igqk+Ju9n6r2wA04zssnpBGCoVdrNXJSrlPY+dFeeZzQT9Fda9dv3Pe
+ ZDi67zzS/mjO4n1moq3BrOYCN6ombcz6K7aBCJH2E8JJvl59Ho0LqYsFYt0cmdHQwso1
+ F8nfUWPLlHYyy5kO6Q81TOBZMzIUY8SdFywR3/9KH6rZozCMpuTih7R7XJo7twib5tcP
+ iW3IPinDuaSFjilyXRFo2fpiN/z9RsHSVnSzhoyz2+iJjDcHlDp1IiOM75z6WcY6zhGU
+ BhvGdY7ik+1dHYBSFuXGry31eoMyyAfL2aU/CP8O9p0C2EkpMcm/vkUy6rQ067o1mUlp 7Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fedxth8jg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 16:14:17 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23FFxgu0004430;
+        Fri, 15 Apr 2022 16:14:17 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fedxth8ht-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 16:14:17 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23FFsCiO009562;
+        Fri, 15 Apr 2022 16:14:15 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3fb1s8rnfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 16:14:14 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23FGECIP35258678
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Apr 2022 16:14:12 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A0BB24C04A;
+        Fri, 15 Apr 2022 16:14:12 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 496A44C044;
+        Fri, 15 Apr 2022 16:14:10 +0000 (GMT)
+Received: from sig-9-65-86-1.ibm.com (unknown [9.65.86.1])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Fri, 15 Apr 2022 16:14:10 +0000 (GMT)
+Message-ID: <faf4f539ca163a0f458a8b9d23f1f6d23a8fea21.camel@linux.ibm.com>
+Subject: Re: [PATCH 4/7] KEYS: Introduce a builtin root of trust key flag
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Eric Snowberg <eric.snowberg@oracle.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        "dwmw2@infradead.org" <dwmw2@infradead.org>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Lakshmi Ramasubramanian <nramas@linux.microsoft.com>,
+        "pvorel@suse.cz" <pvorel@suse.cz>, "tiwai@suse.de" <tiwai@suse.de>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>
+Date:   Fri, 15 Apr 2022 12:14:09 -0400
+In-Reply-To: <0A0B0B93-80BD-49A9-B0B3-56C6F74D2BE0@oracle.com>
+References: <20220406015337.4000739-1-eric.snowberg@oracle.com>
+         <20220406015337.4000739-5-eric.snowberg@oracle.com>
+         <4fbef0889d6f286c7fcd317db099b4857e1b2fa3.camel@linux.ibm.com>
+         <EF1544D5-54E8-4D47-82F8-F9337CA7AEA0@oracle.com>
+         <b8965652274b49ba7c6f67cad6d42965cf984b42.camel@linux.ibm.com>
+         <16DDA7F1-95BA-4279-BE4E-9F713A905B36@oracle.com>
+         <986199739ff8bd730b9aabe8882e245946d3d9e9.camel@linux.ibm.com>
+         <BFA04505-F4BC-4CF8-B813-EE81DBD90E09@oracle.com>
+         <6798c67d748ecdc92455a8be8c63fb55e243368a.camel@linux.ibm.com>
+         <B67D99B1-1DF9-4146-9147-08B2C4A72FEA@oracle.com>
+         <909b435d947070b44e66e7e8a10951972fc3da7b.camel@linux.ibm.com>
+         <0A0B0B93-80BD-49A9-B0B3-56C6F74D2BE0@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: ziH38Z-OoTUwMmE8yfdLa-pHsc1HGAo8
+X-Proofpoint-GUID: xlYX5krNaH4nMQ7dc99L2jxRQeumkgDT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-15_06,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 mlxscore=0 impostorscore=0 phishscore=0 malwarescore=0
+ adultscore=0 mlxlogscore=999 priorityscore=1501 bulkscore=0 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204150092
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 02:27:37PM +0000, Michael Kelley (LINUX) wrote:
-> From: Andrea Parri <parri.andrea@gmail.com> Sent: Thursday, April 14, 2022 11:42 PM
-> > 
-> > On Fri, Apr 15, 2022 at 03:33:23AM +0000, Michael Kelley (LINUX) wrote:
-> > > From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Wednesday, April 13,
-> > 2022 1:48 PM
-> > > >
-> > > > The function returns NULL if the ring buffer has no enough space
-> > > > available for a packet descriptor.  The ring buffer's write_index
-> > >
-> > > The first sentence wording is a bit scrambled.  I think you mean the
-> > > ring buffer doesn't contain enough readable bytes to constitute a
-> > > packet descriptor.
-> > 
-> > Indeed, replaced with your working.
-> > 
-> > 
-> > > > is in memory which is shared with the Hyper-V host, its value is
-> > > > thus subject to being changed at any time.
-> > >
-> > > This second sentence is true, but I'm not making the connection
-> > > with the code change below.   Evidently, there is some previous
-> > > check made to ensure that enough bytes are available to be
-> > > received when hvs_stream_dequeue() is called, so we assumed that
-> > > NULL could never be returned?  I looked but didn't find such a check,
-> > > so maybe I didn't look carefully enough.  But now we are assuming
-> > > that Hyper-V might have invalidated that previous check by
-> > > subsequently changing the write_index in a bogus way?  So now, NULL
-> > > could be returned when previously we assumed it couldn't.
-> > 
-> > I think you're looking for hvs_stream_has_data().  (Previous checks
-> > apart, hvs_stream_dequeue() will "dereference" the pointer so...)
+On Thu, 2022-04-14 at 21:59 +0000, Eric Snowberg wrote:
 > 
-> Agreed.  I didn't say this explicitly, but I was wondering about the risk
-> in the current code (without these hardening patches) of getting a
-> NULL pointer from hv_pkt_iter_first_raw(), and then dereferencing it.
+> > On Apr 14, 2022, at 12:09 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> > 
+> > On Thu, 2022-04-14 at 16:36 +0000, Eric Snowberg wrote:
+> >> 
+> >>> On Apr 11, 2022, at 9:30 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>> 
+> >>> On Fri, 2022-04-08 at 21:59 +0000, Eric Snowberg wrote:
+> >>>>> On Apr 8, 2022, at 12:49 PM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>>>> 
+> >>>>> On Fri, 2022-04-08 at 17:34 +0000, Eric Snowberg wrote:
+> >>>>>> 
+> >>>>>>> On Apr 8, 2022, at 10:55 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>>>>>> 
+> >>>>>>> On Fri, 2022-04-08 at 15:27 +0000, Eric Snowberg wrote:
+> >>>>>>>> 
+> >>>>>>>>> On Apr 8, 2022, at 8:40 AM, Mimi Zohar <zohar@linux.ibm.com> wrote:
+> >>>>>>>>> 
+> >>>>>>>>> On Tue, 2022-04-05 at 21:53 -0400, Eric Snowberg wrote:
+> >>>>>>>>>> 
+> >>>>>>>>>> The first type of key to use this is X.509.  When a X.509 certificate
+> >>>>>>>>>> is self signed, has the kernCertSign Key Usage set and contains the
+> >>>>>>>>>> CA bit set this new flag is set.
+> >>>>>>>>>> 
+> >>>>>>>>>> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+> >>>>>>>>>> 
+> >>>>>>>>>> diff --git a/include/linux/key.h b/include/linux/key.h
+> >>>>>>>>>> index 7febc4881363..97f6a1f86a27 100644
+> >>>>>>>>>> --- a/include/linux/key.h
+> >>>>>>>>>> +++ b/include/linux/key.h
+> >>>>>>>>>> @@ -230,6 +230,7 @@ struct key {
+> >>>>>>>>>> #define KEY_FLAG_ROOT_CAN_INVAL  7       /* set if key can be invalidated by root without permission */
+> >>>>>>>>>> #define KEY_FLAG_KEEP            8       /* set if key should not be removed */
+> >>>>>>>>>> #define KEY_FLAG_UID_KEYRING     9       /* set if key is a user or user session keyring */
+> >>>>>>>>>> +#define KEY_FLAG_BUILTIN_ROT    10      /* set if key is a builtin Root of Trust key */
+> >>>>>>>>>> 
+> >>>>>>>>>> /* the key type and key description string
+> >>>>>>>>>> * - the desc is used to match a key against search criteria
+> >>>>>>>>>> @@ -290,6 +291,7 @@ extern struct key *key_alloc(struct key_type *type,
+> >>>>>>>>>> #define KEY_ALLOC_BYPASS_RESTRICTION     0x0008  /* Override the check on restricted keyrings */
+> >>>>>>>>>> #define KEY_ALLOC_UID_KEYRING            0x0010  /* allocating a user or user session keyring */
+> >>>>>>>>>> #define KEY_ALLOC_SET_KEEP               0x0020  /* Set the KEEP flag on the key/keyring */
+> >>>>>>>>>> +#define KEY_ALLOC_BUILT_IN_ROT          0x0040  /* Add builtin root of trust key */
+> >>>>>>>>> 
+> >>>>>>>>> Since the concept of root of trust is not generic, but limited to
+> >>>>>>>>> specific keyrings, the root CA certificate signing keys on the
+> >>>>>>>>> "machine" keyring need to be identified.  Similar to the
+> >>>>>>>>> KEY_ALLOC_BUILT_IN/KEY_FLAG_BUILTIN, new flags
+> >>>>>>>>> KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE should be defined instead.
+> >>>>>>>> 
+> >>>>>>>> I’m open to renaming these, however this name change seems confusing to me.  
+> >>>>>>>> This flag gets set when the X.509 certificate contains the three CA requirements 
+> >>>>>>>> identified above.  The remaining keys in the machine keyring can be used for 
+> >>>>>>>> anything else.
+> >>>>>>> 
+> >>>>>>> Renaming the flag to KEY_ALLOC_MACHINE/KEY_FLAG_MACHINE differentiates
+> >>>>>>> between the "builtin" keys from the "machine" keys.  The trust models
+> >>>>>>> are very different.
+> >>>>>> 
+> >>>>>> Isn’t the trust model the same for machine and secondary keys?  Both are supplied by 
+> >>>>>> the end-user. That is why I’m confused by naming something _MACHINE when it applies 
+> >>>>>> to more than one keyring.
+> >>>>> 
+> >>>>> True both are supplied by the end-user, but the trust models are
+> >>>>> different.
+> >>>> 
+> >>>> I think I need more information here, I’m not seeing how they are different trust 
+> >>>> models.
+> >>> 
+> >>> In order to discuss trust models, we need to understand the different
+> >>> use-cases that are being discussed here without ever having been
+> >>> explicitly stated.  Here are a few:
+> >>> - Allow users to sign their own kernel modules.
+> >>> - Allow users to selectively authorize 3rd party certificates to verify
+> >>> kernel modules.
+> >>> - From an IMA perspective, allow users to sign files within their own
+> >>> software packages.
+> >>> 
+> >>> Each of the above use-cases needs to be independently configurable,
+> >>> thoroughly explained, and enforced.
+> >> 
+> >> I’m still confused by the request here.  All these use cases can be done 
+> >> today with insert-sys-cert.  Take the, " allow user to sign their own kernel 
+> >> modules" use case.  Using insert-sys-cert, any type of key can be added 
+> >> to the builtin trusted keyring, it doesn’t need to be self signed, there are 
+> >> no restrictions on fields in the certificate.  The same approach can be used 
+> >> to allow users to ima sign their own files. Any key can be added, it doesn’t 
+> >> need to be a CA. The same goes for 3rd party signed modules.
+> > 
+> > The difference is "where" the key is coming from.  In the builtin use-
+> > case or the post build insert-sys-cert case, the kernel image is
+> > signed, or re-signed, and the kernel image signature is verified.  The
+> > root of trust is straight forward - secure boot with a HW root of trust
+> > up to and including verifying the kernel image signature, then
+> > transition to the builtin keys.
+> > 
+> > Keys on the "machine" keyring are not part of that signature chain of
+> > trust,
+> 
+> The machine keyring contains all keys in the MokList. On x86 (and other 
+> architectures that boot with shim) all keys in the MokList are part of the signature 
+> chain of trust. Shim uses MOKList keys to validate the kernel image signature 
+> when booting with SecureBoot enabled. Secure Boot DB keys are used to
+> validate shim, but rarely used to validate the kernel.
 
-Got it.  Updated the changelog to:
+Sure, keys on the "machine" keyring can be used to verify the kexec
+kernel image signature.
 
-  "The ring buffer's write_index is in memory which is shared with the
-   Hyper-V host, an erroneous or malicious host could thus change its
-   value and overturn the result of hvs_stream_has_data()."
+As all of the above requirements is satisfied by loading a root CA, def
+ined as a KeySigning cert, without needing to load all of the MOK keys
+onto the "machine" keyring, support both trust models.  Please make
+loading all MOK keys configurable, with a thorough explanation.
 
-Hopefully this can clarify the issue (without introducing other typos).
+thanks,
 
-Thanks,
-  Andrea
+Mimi
+

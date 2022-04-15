@@ -2,128 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FD2502F8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1316502F9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351248AbiDOUMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 16:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32998 "EHLO
+        id S1352394AbiDOUOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 16:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351512AbiDOUMD (ORCPT
+        with ESMTP id S232895AbiDOUOk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 16:12:03 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C25E13D19
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:09:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650053373; x=1681589373;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=0ttQiJt1wYBwYCOZIqR6JxxJqq6DPU7ZtHlhxqY2iRE=;
-  b=looe6i9sbA/7FqETt+iBvF99Kk9LiHHh94JSOUIgcsOhlN0qYjZJGttl
-   Onem4dvJzplFGKK9Il6tOQwnTumIl1le2BkrL20J5dInd+hv0NVldZg3J
-   oZ1CIZn3Ww0CWkUjw3DCDTxPa6cLMSmp1Tv9AZwNnJDJEovP4mW6QtH0s
-   VNmrIxnDGsQ32rSISSIDAecWb13erdhIPORCceoY6TZz39O4VsBKmrN0Y
-   Xk/WKRMGKsz+qOPx4io7V6MCSOhYIPq7KqMG6q3YQ46qQQexrQJU14G0m
-   d2JgrtqfpnlIVpL4tuPc2YGb5dTHC5X5m0kjtSSZP+C29+xRcinNM003t
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262079163"
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="262079163"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 13:09:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="803626787"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Apr 2022 13:09:31 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfSG3-0002MU-9v;
-        Fri, 15 Apr 2022 20:09:31 +0000
-Date:   Sat, 16 Apr 2022 04:08:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jgunthorpe:vfio_kvm_no_group 2/11]
- arch/powerpc/kvm/../../../virt/kvm/vfio.c:356:58: error: cast to pointer
- from integer of different size
-Message-ID: <202204160410.A4xlb0e3-lkp@intel.com>
+        Fri, 15 Apr 2022 16:14:40 -0400
+Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C09DD955
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:12:10 -0700 (PDT)
+Received: by mail-vs1-xe2e.google.com with SMTP id v133so4302005vsv.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=77JRexCHO+Dta+d2jV7L61UaG98jtgCgEk5PjH0Qclw=;
+        b=bSiip5XBN84sfc8EAMqB+8gWFrwJVQUR5v12Hj7kiLzo35u6nluGLhefFhs00QbZRR
+         HT4dBU715eLd92x4QRczO0YgkhjNxz3mbNszIssovkBmykUjqSngT3NhjHLZppusWtw2
+         3VOElStHDME19hWWY/06fkmPmCkj5TnXUWGNcJQXPiJhcRrGDX5PvA5W08q9+LL7+ZMB
+         C5beDV70lv/ySj0n0+lK3jQG8IwFVL1pffbX7W9VSy4IFCCsXe/mWHDHkdzqPIAHcSfV
+         qLrxfXPGfbXfENwPzH7NDV5JMI1paK0Thm/w2BDYLElxNTp4+B8HZdGbZSMnPMcpSwlV
+         c0rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=77JRexCHO+Dta+d2jV7L61UaG98jtgCgEk5PjH0Qclw=;
+        b=g+OQIDPLt01O1K1rh1n+uVNGR/IbS7OH1dsg6ke4gHOCzwSqzx53CqfbzK+FD72kCx
+         vEYsQF50sMgk9jRrIf1PCoeBZXlWPFfHSJjvdHR4rscEVzrm3XNRG7UEPZGE4IoR2M7b
+         BXnphBwmtP8k9qPYloKPRPVjCf3Wr0Y3nqh0mmrUmHF+AAxP2BuRV/HQ4oAnjnNUUvue
+         /mIeeLjo3nJnRKlXWNoLnfMTBIgcLAi5D2rWjMkTaO4DmWpUIHe/EDzySVJ1fCVp6eM1
+         2NZ90aU6Kc+4/rk0PXtwpi9ysKmh1vqQUspJcpzlRhHaFts3UwKXc1WzB4QyoKHCE7ph
+         kiCA==
+X-Gm-Message-State: AOAM532XeXLq9i/RbOjqc/NggWswRH46houHjvlAauZ9beZcv8WPtEic
+        fVXKgIFnv4BnU2wSJr0txCYZVVrwIwyRodQ5gMdZPA==
+X-Google-Smtp-Source: ABdhPJykqcrKHyXgb08sa7ibqLGNVlW1gdYVPxs3ydRjRchU0Lalyvg1ICTkwCfmsXRhMCN3MYBNGKoe6YsDKcJnXHw=
+X-Received: by 2002:a05:6102:5cc:b0:320:9bd2:3823 with SMTP id
+ v12-20020a05610205cc00b003209bd23823mr192562vsf.81.1650053529747; Fri, 15 Apr
+ 2022 13:12:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
+ <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
+ <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
+ <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
+ <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com> <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
+In-Reply-To: <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 15 Apr 2022 14:11:32 -0600
+Message-ID: <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
+Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Justin Forbes <jforbes@fedoraproject.org>
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jgunthorpe/linux vfio_kvm_no_group
-head:   0a779a04652d97c98d71a1538a37f89145dba9ed
-commit: c068aae365aaf0ecde7abf0842298c59d7ed0d9c [2/11] kvm/vfio: Reduce the scope of PPC #ifdefs
-config: powerpc-randconfig-c003-20220414 (https://download.01.org/0day-ci/archive/20220416/202204160410.A4xlb0e3-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jgunthorpe/linux/commit/c068aae365aaf0ecde7abf0842298c59d7ed0d9c
-        git remote add jgunthorpe https://github.com/jgunthorpe/linux
-        git fetch --no-tags jgunthorpe vfio_kvm_no_group
-        git checkout c068aae365aaf0ecde7abf0842298c59d7ed0d9c
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash
+On Fri, Apr 15, 2022 at 1:15 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Fri, 15 Apr 2022 00:25:45 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > On Thu, Apr 14, 2022 at 7:57 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > >
+> > > On Thu, 14 Apr 2022 19:14:54 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> > >
+> > > > On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> > > > >
+> > > > > On Wed,  6 Apr 2022 21:15:20 -0600 Yu Zhao <yuzhao@google.com> wrote:
+> > > > >
+> > > > > > +static void update_batch_size(struct lru_gen_mm_walk *walk, struct folio *folio,
+> > > > > > +                           int old_gen, int new_gen)
+> > > > > > +{
+> > > > > > +     int type = folio_is_file_lru(folio);
+> > > > > > +     int zone = folio_zonenum(folio);
+> > > > > > +     int delta = folio_nr_pages(folio);
+> > > > > > +
+> > > > > > +     VM_BUG_ON(old_gen >= MAX_NR_GENS);
+> > > > > > +     VM_BUG_ON(new_gen >= MAX_NR_GENS);
+> > > > >
+> > > > > General rule: don't add new BUG_ONs, because they crash the kenrel.
+> > > > > It's better to use WARN_ON or WARN_ON_ONCE then try to figure out a way
+> > > > > to keep the kernel limping along.  At least so the poor user can gather logs.
+> > > >
+> > > > These are VM_BUG_ONs, which are BUILD_BUG_ONs except for (mostly MM) developers.
+> > >
+> > > I'm told that many production builds enable runtime VM_BUG_ONning.
+> >
+> > Nobody wants to debug VM in production. Some distros that offer both
+> > the latest/LTS kernels do enable CONFIG_DEBUG_VM in the former so the
+> > latter can have better test coverage when it becomes available. Do
+> > people use the former in production? Absolutely, otherwise we won't
+> > have enough test coverage. Are we supposed to avoid CONFIG_DEBUG_VM? I
+> > don't think so, because it defeats the purpose of those distros
+> > enabling it in the first place.
+> >
+> > The bottomline is that none of RHEL 8.5, SLES 15, Debian 11 enables
+> > CONFIG_DEBUG_VM.
+>
+> I grabbed
+> https://kojipkgs.fedoraproject.org//packages/kernel/5.18.0/0.rc2.23.fc37/src/kernel-5.18.0-0.rc2.23.fc37.src.rpm
+> and
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Yes, Fedora/RHEL is one concrete example of the model I mentioned
+above (experimental/stable). I added Justin, the Fedora kernel
+maintainer, and he can further clarify.
 
-All errors (new ones prefixed by >>):
+If we don't want more VM_BUG_ONs, I'll remove them. But (let me
+reiterate) it seems to me that just defeats the purpose of having
+CONFIG_DEBUG_VM.
 
-   arch/powerpc/kvm/../../../virt/kvm/vfio.c: In function 'kvm_vfio_set_group':
->> arch/powerpc/kvm/../../../virt/kvm/vfio.c:356:58: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-     356 |                 return kvm_vfio_group_set_spapr_tce(dev, (void __user *)arg);
-         |                                                          ^
-   cc1: all warnings being treated as errors
-
-
-vim +356 arch/powerpc/kvm/../../../virt/kvm/vfio.c
-
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  338  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  339  static int kvm_vfio_set_group(struct kvm_device *dev, long attr, u64 arg)
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  340  {
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  341  	int32_t __user *argp = (int32_t __user *)(unsigned long)arg;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  342  	int32_t fd;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  343  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  344  	switch (attr) {
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  345  	case KVM_DEV_VFIO_GROUP_ADD:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  346  		if (get_user(fd, argp))
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  347  			return -EFAULT;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  348  		return kvm_vfio_group_add(dev, fd);
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  349  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  350  	case KVM_DEV_VFIO_GROUP_DEL:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  351  		if (get_user(fd, argp))
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  352  			return -EFAULT;
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  353  		return kvm_vfio_group_del(dev, fd);
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  354  
-26d16e3ba7292b Jason Gunthorpe 2022-03-30  355  	case KVM_DEV_VFIO_GROUP_SET_SPAPR_TCE:
-26d16e3ba7292b Jason Gunthorpe 2022-03-30 @356  		return kvm_vfio_group_set_spapr_tce(dev, (void __user *)arg);
-ec53500fae421e Alex Williamson 2013-10-30  357  	}
-ec53500fae421e Alex Williamson 2013-10-30  358  
-ec53500fae421e Alex Williamson 2013-10-30  359  	return -ENXIO;
-ec53500fae421e Alex Williamson 2013-10-30  360  }
-ec53500fae421e Alex Williamson 2013-10-30  361  
-
-:::::: The code at line 356 was first introduced by commit
-:::::: 26d16e3ba7292b7fce26d25a2ba8f44b8c28ffe3 kvm/vfio: Move KVM_DEV_VFIO_GROUP_* ioctls into functions
-
-:::::: TO: Jason Gunthorpe <jgg@nvidia.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> hp2:/home/akpm/yy> grep "DEBUG_VM[= ]" *.config
+> kernel-aarch64-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-aarch64-debug-rhel.config:# CONFIG_DEBUG_VM is not set
+> kernel-aarch64-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-aarch64-rhel.config:# CONFIG_DEBUG_VM is not set
+> kernel-armv7hl-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-armv7hl-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-armv7hl-lpae-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-armv7hl-lpae-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-ppc64le-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-ppc64le-debug-rhel.config:CONFIG_DEBUG_VM=y
+> kernel-ppc64le-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-ppc64le-rhel.config:# CONFIG_DEBUG_VM is not set
+> kernel-s390x-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-s390x-debug-rhel.config:CONFIG_DEBUG_VM=y
+> kernel-s390x-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-s390x-rhel.config:# CONFIG_DEBUG_VM is not set
+> kernel-s390x-zfcpdump-rhel.config:# CONFIG_DEBUG_VM is not set
+> kernel-x86_64-debug-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-x86_64-debug-rhel.config:CONFIG_DEBUG_VM=y
+> kernel-x86_64-fedora.config:CONFIG_DEBUG_VM=y
+> kernel-x86_64-rhel.config:# CONFIG_DEBUG_VM is not set

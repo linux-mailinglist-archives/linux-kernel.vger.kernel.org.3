@@ -2,391 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6803B5020CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0AF5020C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349034AbiDOC7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42164 "EHLO
+        id S1348984AbiDOC6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:58:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349026AbiDOC7R (ORCPT
+        with ESMTP id S1348968AbiDOC6d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:59:17 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2083.outbound.protection.outlook.com [40.107.22.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78D9B3DDB;
-        Thu, 14 Apr 2022 19:56:49 -0700 (PDT)
+        Thu, 14 Apr 2022 22:58:33 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34FDEB1A86
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:56:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1649991367; x=1681527367;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=omKK2LuCP88QqAQmn1Zr8y/2rQOO1a+13IJ589rfBGA=;
+  b=fC9aRMlrdiCVD11/gn7pWiYk1rdNNIt/0QNyDWKmMxItz/3vThES218Z
+   y5owzqalE/howRJIIwDKCdGyewPK02C2iQIu13fxU8iY5EEjawuLxAX7V
+   df0oQyHKoyC6vYHS86F9ftyYeBdXwmoHLzodraGKrkMd8lCtrVxl4Rywy
+   1OBncFoIONo5U+isTri3rQ5EQwMTAWiFtQANzoYKbsDcfuD7njCAH8nKa
+   iXDCCQdCzQp+eLBaYLt6ErQCH82wMIXtwJSFekkLIjbssjmlqqgnR+Pmb
+   B2/NmZLD2he9ejinQhDmTvkb8CiHs89jTJIu4Xb1l4XjdN4tJpZEcOQVI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="325985478"
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="325985478"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 19:56:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="700899372"
+Received: from fmsmsx604.amr.corp.intel.com ([10.18.126.84])
+  by fmsmga001.fm.intel.com with ESMTP; 14 Apr 2022 19:56:06 -0700
+Received: from fmsmsx607.amr.corp.intel.com (10.18.126.87) by
+ fmsmsx604.amr.corp.intel.com (10.18.126.84) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Thu, 14 Apr 2022 19:56:05 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx607.amr.corp.intel.com (10.18.126.87) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Thu, 14 Apr 2022 19:56:05 -0700
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.49) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Thu, 14 Apr 2022 19:56:05 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MFSc+o6Am6jJNty26LQAlFA3HCnbjMZyHluU7sySnDcqDphLdtLffaRMxD2swxmKv/tiZKne31LkzJwvXsmg2XPbdEelxY4/4vGhpUSzqlKYeR1Jpoy9jZKsAMO1j04895VRyqx6+MdpbdhZz6pVyNLGsXLQd1E9DFWUkHXPYbJv0zFIbO9LukmR4/PS4JqNjRnCytPFQ8bP419PFEooOwvbiG5bditdXbq3G4+lYkSDKZ0fDvc2fAtcNtxI5lMDWBmijPpQ0D+23h+yyxP3N5hGomz0sA+o/kkN9C4Z6NDTTzXndMK3n7900k5iy/QBTdEhqvBcTXcmiDzqJ7nNww==
+ b=eu3KbYcAkA3CtXu4ZcSmtMQ60qFZNsWlOHREN2KfEYP72pR18N+zgz9K1w4ib95Zaq08Q8ZgHxOg6bavkRA+dUji/9Pv1LYic2+TdcNehQUT0uBV3a6el7LNDKl2GP2B7ZEL3mcfLff2kD4iPX+FkM65YrXj0thWT2wRl0R5niZWoL3ZfeIFmeXKuNVPqA1lQztPTDzUC3x3+neMTsoY/JA0aLokX9Rmw8tJ4hfByVETMSz1lgcDDFBiQk/PqfiNedHAQlyTAoqmP0OxdbBLcHn8Tuj8iobI2hqdoAJ6t0wIOt4ZFumNs8ckNoyoXMehUCnspG4UKRbZPW/uUX8c/Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sjyQIwyzdQoTjG0KUBqQr+MNQ/aqN0BIKe5tcVINOSg=;
- b=MvSxyi299ZjrxWYMS1r9pdDDdIutgJHI+LkmSSoplHcxEWv+tcfww7yhINsfg5HCCmJx1QLrtboax7lUIyPFnHKA4HBc9kco1nPuVvtkY3XyjDb35UxpCvm+aExLcampTCrxGnC8s4aGWIP4DPvJO92v5Cmu0Q5+981N4VCIoQ6WC40u6X6b6uQD5oF5Y2hzduZDyNuE/8Fcihk64ZxSuEZYoycj+nBTistmTcujLgvdvqDUPFWFhiUavzC2+GJpwHEd3dqZUp5X0M+KtVl8XTqWY2TV1rpv1tzreBOApBXvISqGOHl1VcIRj/woK1VkGweEfaRvvktx6TYpsNupGA==
+ bh=/5EGx6LNvjNBykSLRrFNBTCCc1Dj1iFyuGBCNjb9tcs=;
+ b=lHdJ6bPRiR5VDlX64/vv7eLLNPvxHgvrq4WaITWEhImtnwSlt6PIXucr/vMRFKHAu2r9IsiadmyECi1h0N/aiJdy7D88Hpyc0TDeXXix1gtSdK3Eaa1t+4K0ogNnXZ+0GlME+HgcSj5SYopEw+sGxB7VIW/yQUhjKE9HD3BWjMp1ofEGgr7TesNtinoesI556D0UIjcTWciEyFEK9SeXJbOjxOAsE6pGoYp686Kz74wokVgAH1ZeJDyQLAxX1Elrn0lDRLQjEZuxF/cUMmp2w/ZZAEnWCNINYgrJ97RwwswksGVtya8u9QtLN7jFwWdh8U4dtC5IvVah7FXXqpDneA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sjyQIwyzdQoTjG0KUBqQr+MNQ/aqN0BIKe5tcVINOSg=;
- b=EdxTdU0aTsYQoLoqS02Z+mcWlUu4U/uV5j5hFd8izRH0cUGlmxcf2d37TC4KR9Gv+Md2iPZd+hbgyC7Zlwcm/czssTaNh7SJsZ8ljZhGbQTaQxLcwE3YIJdzknIBLMzngm9gc67vKn/Z/+12+U6FcM/v0CPxojemts7XMBC03TY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VE1PR04MB6477.eurprd04.prod.outlook.com (2603:10a6:803:11e::14)
- by DB3PR0402MB3770.eurprd04.prod.outlook.com (2603:10a6:8:12::21) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com (2603:10b6:510:143::14)
+ by BY5PR11MB4134.namprd11.prod.outlook.com (2603:10b6:a03:18e::30) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.30; Fri, 15 Apr
- 2022 02:56:47 +0000
-Received: from VE1PR04MB6477.eurprd04.prod.outlook.com
- ([fe80::60ad:e5ec:cdfd:1b01]) by VE1PR04MB6477.eurprd04.prod.outlook.com
- ([fe80::60ad:e5ec:cdfd:1b01%3]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 02:56:47 +0000
-From:   Changming Huang <jerry.huang@nxp.com>
-To:     robh+dt@kernel.org, krzk+dt@kernel.org, shawnguo@kernel.org,
-        festevam@gmail.com, marcel.ziswiler@toradex.com,
-        l.stach@pengutronix.de, tharvey@gateworks.com,
-        alexander.stein@ew.tq-group.com, ariel.dalessandro@collabora.com,
-        matthias.schiffer@ew.tq-group.com, cniedermaier@dh-electronics.com,
-        sebastian.reichel@collabora.com, leoyang.li@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Changming Huang <jerry.huang@nxp.com>,
-        Alison Wang <alison.wang@nxp.com>
-Subject: [PATCH 2/2 v3] ARM: dts: Add initial LS1021A IoT board dts support
-Date:   Fri, 15 Apr 2022 10:56:00 +0800
-Message-Id: <20220415025600.2019912-2-jerry.huang@nxp.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220415025600.2019912-1-jerry.huang@nxp.com>
-References: <20220415025600.2019912-1-jerry.huang@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: AM0PR02CA0010.eurprd02.prod.outlook.com
- (2603:10a6:208:3e::23) To VE1PR04MB6477.eurprd04.prod.outlook.com
- (2603:10a6:803:11e::14)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 02:56:03 +0000
+Received: from PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::c579:f1c1:28b3:610f]) by PH0PR11MB5880.namprd11.prod.outlook.com
+ ([fe80::c579:f1c1:28b3:610f%7]) with mapi id 15.20.5144.029; Fri, 15 Apr 2022
+ 02:56:03 +0000
+From:   "Zhang, Qiang1" <qiang1.zhang@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] irq_work: Add event-tracing points for irq_work
+Thread-Topic: [PATCH] irq_work: Add event-tracing points for irq_work
+Thread-Index: AQHYT8pATG0NrCtQb021NYs63/f6NKzvJWsAgAEN6hA=
+Date:   Fri, 15 Apr 2022 02:56:03 +0000
+Message-ID: <PH0PR11MB5880057FA69287500580FEA3DAEE9@PH0PR11MB5880.namprd11.prod.outlook.com>
+References: <20220414063829.2472251-1-qiang1.zhang@intel.com>
+ <YlfqFJLau+7PlPJ3@hirez.programming.kicks-ass.net>
+In-Reply-To: <YlfqFJLau+7PlPJ3@hirez.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+dlp-product: dlpe-windows
+dlp-version: 11.6.401.20
+dlp-reaction: no-action
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 2a0a3421-d924-4fda-eab9-08da1e8b7aa4
+x-ms-traffictypediagnostic: BY5PR11MB4134:EE_
+x-microsoft-antispam-prvs: <BY5PR11MB4134D86DFD12196607548C0FDAEE9@BY5PR11MB4134.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HTnO6SdkBJzfqNi1Xv8LiRlDVGQmjmDtd5BFTQCVHzv++ibCoCewJXIbc6CfV3vAXvBeiv0G9Iro66S0f2OXocm+X4RcpxKLXaD4je5zsPsUHcyt0p5m2k5qQUHvqzro2a9Tb6qvOKU/hhAppYH1n9ozYqAESuxM5JgBprVG5HuOIWxz5K1NsvVEldW24BJtHo0kCcDjaHYorGO7vIfES2l7ftU+FfEPwFkdCYAkoFn9hVjAWan3XfC9Gvu9B6vd9lyNal2QzesQz2jp+gy12LKEOhNQiBzVkVWyMv+zf5HR/RVrrqUaTIZUr3nWGutg6sM0Mpa8ylwOna3QK3smoBf0E7DkTXVs2qXTuw0omHGZy7jBwCs8cbqGn6gXLFzc/i+l3r3knAYCZOfqEsVodCToew8pzRJPNVQv3uMqGtXRbRrnuEU6ENvs7JeGvFug24HDmWz1+jfhG8VTEhpsFmVRI3VoSXHmib3i21n8kX4cT2igZiirwnSAGqlEzeGSOHdmkUcBML1ej/0/+dTYLfb7byzq1zo0b3ub1iKAmqJkSQsH8skWfOywnHZ8CPVW+JmXc8z6Z51mK+PqLLlf0g53Yyh39t19GMPQXJHlIoRoKZKRR+Lp+tjUfznVCQKOkIeEZtsUJTkbTpXz/6+CnyLxXWCFkxAyKOCmDfP4eiqzDMIuHDWo1UT4L8HOeAhq1nUGp2JjVg5549T5Jbv13A==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB5880.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(508600001)(8676002)(4326008)(71200400001)(66446008)(66476007)(66556008)(66946007)(76116006)(64756008)(83380400001)(86362001)(2906002)(6506007)(7696005)(9686003)(52536014)(8936002)(26005)(186003)(5660300002)(33656002)(54906003)(6916009)(122000001)(82960400001)(316002)(38100700002)(55016003)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?jUVpDzjeKZkwo1AYeyBd3kJFz4BHB1YzkdabDdwh9GfPh7TWH8aqrhPfREVm?=
+ =?us-ascii?Q?CEOn6FkyTw0p3jRoxueS37rjk9hfT4yT+VhUurr9+3dSi2YBDoWkRi8xtCtA?=
+ =?us-ascii?Q?DAL3F8jXSC/oID6M57L+wV12GXN7gEHcuygVRIBLZgjbAlxx3mLnZpONGLPs?=
+ =?us-ascii?Q?16QrLVgVcElNdVlhndHgI2Vq65Mh/ez8Bf2Rg1j5jZnaV9xqKlgbqHiANcpQ?=
+ =?us-ascii?Q?fbgkMCvSSfNmnE5B5yjV6rVCaLehpqpQGuyGtI+3SC/UWFRQJR0H6okSur2l?=
+ =?us-ascii?Q?rh5oRTkX5/esvxzoPtEFPf0RmyryikSZ8cgORX6YwA9kO/myew9SPXnjqrVW?=
+ =?us-ascii?Q?EdXJgAymCrXktvdOWdPby1JCW53znH8C5ZeSkxmRe9EvxMJv1SW9F5OMwg16?=
+ =?us-ascii?Q?Dvtngf7iXcWX2DU0Tbeajh7opn5+dEJ3eU13+DGRDjRDFGvM4Up6x1yRP8bY?=
+ =?us-ascii?Q?BZRENX+TEcluSl39R3KMf6SP5vvDlSl68LtTB+RVddeK5YISveGFIQhEAA1W?=
+ =?us-ascii?Q?UB2bEVT7SGn2owLyTPIfibLz6gqgF/nld7P33Im3X2qG3lqgigFdLbCqcvDg?=
+ =?us-ascii?Q?lBpKJjNnuABcY87+bO3Nid27Ek7mFa+Fz5l6GJe9cMayXwkrLmhdwCdX6YEl?=
+ =?us-ascii?Q?lxQyCjQpQolOlZM2V2OtY1XCXyfSevNIFjxIsFs5QvN7kjWvZTxkmECLFiy1?=
+ =?us-ascii?Q?fGsYyAny1i25U4YCusxopl52vn5IHVoYFArqPho86JLxIitSGlTlSJO+75IM?=
+ =?us-ascii?Q?Sk0A6PFond5fyveI0umxds4m0oDvgnCXqLVtiLvmUXQjBojqNhCCiSRlh/FF?=
+ =?us-ascii?Q?6owoTV57aWRdJDC8hBudNiEsnDSgd8tmoyMKO3DjXooehlbOMCRWMMacxYEo?=
+ =?us-ascii?Q?JGs+9UnKiOKbxZSlC1BzkXgbmo56STF2Dz+v/PtcHqzaVau8wNyrsWKw52E9?=
+ =?us-ascii?Q?OXylbQixM4hcoig9Z7TQg6f46rneSeimntQwYTgcZuoGKW2HA/FVMkv5fKgC?=
+ =?us-ascii?Q?VJ+kQUmSTljVy42PhQQeFndKWjZVb6uq2Or6htTxXpNH7sq44Rl9jz5LlPLO?=
+ =?us-ascii?Q?nseWlMaH4MPDRcJtd3NnDOoUg/fstuzPRZDaN17TUmaXuQInpEEXctnSaCeP?=
+ =?us-ascii?Q?xaL+HCm93nN6MV18ozePVtu3JG8AbiqelYK/7rpMwaNx5a9UvhVVFgoidG6J?=
+ =?us-ascii?Q?G7SYYnkrGg4FtvjyWgulFj7eb5Lg/M8atMNBeoHvuUZU2jm43x5Nu7p2mDA3?=
+ =?us-ascii?Q?l8KNVo4dY7MrPoQBJROjp6ZqtEtJCs52U1uafHV2Id9g6tVkDXQMFxwNNBIL?=
+ =?us-ascii?Q?wUsoLySaljScqqzs3vUszh9gkDhOvcpvsWuxS7AwguOqYRlzgrUuIcDqSP/o?=
+ =?us-ascii?Q?WzLWnDiKrh49L8aiPLTVH47WwbdXV0wjSToNaifR1EjDSuw+QG4xUrVht2Ze?=
+ =?us-ascii?Q?CpbWefb7eToymRJpfV+862UIxPJD4P8DOSSvLEatKKFq49eTidfS4zGafa1B?=
+ =?us-ascii?Q?1mQSq9MWYEpW9MABpsiwz+u8DJjxjVE3yEDc7s8Mec/GFYNLXoMtU96q7xJN?=
+ =?us-ascii?Q?1s4CNucnK+3zfFnA4WFmlVdwpXQPXoUzxfeLwmOcIGlz3BOyRoiobXFai8oN?=
+ =?us-ascii?Q?jx/fn5rxdrthXp8kua6XujZW2uKHWqWRTpO4zGh/LGn/Veg4kM8VVo1VcUOK?=
+ =?us-ascii?Q?5jugYDiopAJyR4mFsNzIJPBx3mvy91yhC1vKSEQ6gZ8dW2tGGyCma+b1BYwg?=
+ =?us-ascii?Q?WaV5X/SC6g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 258b7644-d103-4df0-85e9-08da1e8b94b3
-X-MS-TrafficTypeDiagnostic: DB3PR0402MB3770:EE_
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-Microsoft-Antispam-PRVS: <DB3PR0402MB3770AE96B8BC7BCF81673C0AFEEE9@DB3PR0402MB3770.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Km5RHK4viv3qgQfPhF/RqzqqgpSUYQP061VU2UcmbxoIXxADwHJc/9z0xZyCl4UeDHt9JxgL/bR5qHEYtr1ny3sAB97XWEjSuefnWpAK/kf/BfALdkGG+tc6PFfs04y8G7xa9OqRWmL9Tg4RzO9so9xCIQysjFs0/P5umJso8qxYWACu7nhl/gkW2gGoImouNFVFvsrUbDMD1Ou+LR3TJLqtAa971bVil2QUdPXjr3Lpuoy0SW/gd31uBF4TlbJt+BRpy9AXznq7N+oVcnbKuMNpB4PaFLF1sbfm+4io/mqn/DgojfOl3alyfInymA4og9olA9SqEnx8fCy4US7doMCVVFg2is0VChuEbFgx5boNaVxf1dtu+Rz2qfKC/HhHwVdlhB6BrfEKvc4HHATjbhEAGQI5dzUCL/hYDt9ZRAki3G9Axqlr3hiz1S9pvf3wiaAVnbydnBNjHX0FAhhLj4I7dm7o6v8aJUGfGzwTumoFYQqauSgH0oGHNFObtz0lC3FLcIQt/IdiCGYSlI7evBmn2HANOq/3cc8hXWiidbyg3gJi6BpblHxrW3Jly47nOVVDxMhqMLvZ8h38jaYkodrvn6eLaUawHdac3LmySJihyDiwaoPxpvgVXvSYCKNTR953xaBu2z0tHovwy0DXWp1MHfarpAZdu78XSiHdBWCVm2RUTdr78Svh9rUclkHnOZ2MMzxi/jBC5P02GFoepsamCWt4a5cU/sV3N8hbLRI=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6477.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(8676002)(36756003)(6486002)(52116002)(5660300002)(66946007)(921005)(6666004)(2616005)(186003)(1076003)(83380400001)(66556008)(316002)(508600001)(54906003)(26005)(2906002)(6506007)(66476007)(6512007)(4326008)(38350700002)(38100700002)(86362001)(7416002)(8936002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?S2sYeoAVopb3GTC73Vscy1C7l5ksrWsxtegZdCDZtkTm3E6s0w0Gqxw/1QJi?=
- =?us-ascii?Q?p0rfvu6tJue3RUwRR9uR2sQFdnkgibXehiyMCVCqdJoiLZcP7qlHi9+tJXFa?=
- =?us-ascii?Q?XxC+smtnrsIot2z8DfZ5cthy1OlNcWZVn1waecMk1R6sYdlO9g6V7bpgV6sZ?=
- =?us-ascii?Q?ZRXtR9Nu1mCjxnb3yD6x9NTBbzeHMCqvJvABuAK/3q0LEJTk/TA/LLuGkxBG?=
- =?us-ascii?Q?TESRslQ7qxWtbM7cJWJUE398oh1bq42V8MTMzZ3tB5u6oOgMTfoO9q+K4J47?=
- =?us-ascii?Q?OiWRlcEiraABQe9bLSIOtKHm1rKKVpb0GBJlXL2DDsgz9R5CsAZcDqUZWvSw?=
- =?us-ascii?Q?4/kwHRT4QP0LZt6v5hhgsH0hTNzh8+ejedZ56+Ck/Q4hMnFta0YuGDcr26RK?=
- =?us-ascii?Q?p407oWdRLWq20cvaa1FylS2NBF5TnG8/GHNpMTDAxmMA8Gz1jnJMOsDJ4Wpg?=
- =?us-ascii?Q?T6dIItJzZJ6KhyJrIaoPonjF5xhWElmV6ekywdT+jfTe2NxuF4ZyMsnm8hGv?=
- =?us-ascii?Q?ltTuS3gUslOdb5PHZaWpAWSnb6qixrpmmuZ9NMXAb36ofxhBnyPGWz91qH9n?=
- =?us-ascii?Q?qgJBCON/Vb/2M4zGRmyvIjwrRT4SQR8zCuf1mVRBAwYVR1IRx6VEJsIjE10Z?=
- =?us-ascii?Q?yTDf8Or8STzfEAeuwTN9o1SGpesylD76RjOieJVLmDVwD1HYoiztolu5WVie?=
- =?us-ascii?Q?j+sKX7ph4Nf0EdwMwB1OWeGNceCmCd+ojVzHn5StrLJBj+nnn4Tj+Ya42GR0?=
- =?us-ascii?Q?6eC1dDZwLtSFQ+BadSW9y1myFyq638hIoQZkL0dlCcRAm/5EjgNe5whRhLg9?=
- =?us-ascii?Q?4XiZpoA/Yxst4YLKpobJoRFdEx+ETWDnyVV+X1qsZ/xWJdz/IDywnz9Etp7l?=
- =?us-ascii?Q?iCx7bRgHRmTXTSH5dA5jBopxMRgTd3dM5YC4bVGGecOWOrFvrSuNAqgGxrOg?=
- =?us-ascii?Q?1jwG/rnngPn4navbbzYNPFQMUKljTs+rT07l3pRx7GpjZMRIsjoF3QlRG0sR?=
- =?us-ascii?Q?30vlYr7ed/PUbmjnagSFbOPioRcg/FBBHMmVl66kS8DbGD1yW6T46HL+wQuZ?=
- =?us-ascii?Q?9jyxMIcqTtQ5doUAV4HjIYMr5gZE5Lh6XhuxxJ5M9M4HgPmW9lGCgxATayQf?=
- =?us-ascii?Q?WBFstjUJOtTI5efs76nHPXMDlGwUcLgqiLQPGAqy+5RSZjVh2rzzLZ5fAq7u?=
- =?us-ascii?Q?rXdezgCwN4NBL/IJ52FxELfWvw9Q/tlmpF8LCVSLFsQXDpiUk8G1SyYlvtrn?=
- =?us-ascii?Q?lf3ClvJqzJs9sHJ2zQfw8r1hm6s4iLqpcwsOLGQEyL/YD7J1BrTvhl33ALn7?=
- =?us-ascii?Q?0g0BkLMPTgW3doJVtKuq3gIDkFc0MzVbvmZZhk05Dk8ORiB18xZHA38/usQ4?=
- =?us-ascii?Q?0Dz9nbbZmpTV/4LRptKwATKUba9sG03TdAvRaofGedGBSkHFpQCUnRZUh2/v?=
- =?us-ascii?Q?sd8nDzuRY2RQ1GYsIV8jjLKmbWFcir2VhsHDABjklBSr7A8JoeGN0OyzJFzJ?=
- =?us-ascii?Q?CLZZBctq4V0/PvMMy71X0ZytbjX0Xr7syRsRDVv1b37/m9dL7ajHyy4EuJAx?=
- =?us-ascii?Q?ofrLm1BtcPpARUkRTTK9sDRRTdAAkKj5tRfq387pblSarmU9NghbDcQhNlzF?=
- =?us-ascii?Q?53Nz+bkpVPWH073NZLiqA9N35BTipkuM1CWKIRz8Vrf9/SWFMydq4HsmsSzO?=
- =?us-ascii?Q?tWBr43yULxfNy8im7P2yRWmh9r9Na7UILN1MPLy4U5d6Vzepln/s7/AQKwDq?=
- =?us-ascii?Q?yeq1EI7x/w=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 258b7644-d103-4df0-85e9-08da1e8b94b3
-X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6477.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 02:56:47.3708
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB5880.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a0a3421-d924-4fda-eab9-08da1e8b7aa4
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 02:56:03.2311
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /MPBvKR+9IU392y3Q4Tngm5aIS8R1uM09o/TNgx/lqb9T5Bx+/kg+u+I1kkT3gNBclYPt2uxXcGKAGdF2duhzg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR0402MB3770
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: LjSNx5G9MbDO4XZfCmEvMQNM1FDNjdoBiyvtcNE3Hc3DEWswLWuj233LNDwL5Tm1NbYHJ0mkqOWOnRWYH07R3A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR11MB4134
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The LS1021A-IoT gateway reference design is a purpose-built,
-small footprint hardware platform equipped with a wide array
-of both high-speed connectivity and low speed serial interfaces.
+On Thu, Apr 14, 2022 at 02:38:29PM +0800, Zqiang wrote:
+> Add irq_work_queue_on tracepoints allow tracing when and how a=20
+> irq-work is queued, irq_work_execute_start/end tracepoints allow know=20
+> when a irq-work is executed and the executed time.
 
-CC: Li Yang <leoyang.li@nxp.com>
-Signed-off-by: Changming Huang <jerry.huang@nxp.com>
-Signed-off-by: Alison Wang <alison.wang@nxp.com>
----
-changes in v3:
-  - adjust to generic node name for i2c nodes
+Yeah, but why?=09
 
- arch/arm/boot/dts/Makefile        |   1 +
- arch/arm/boot/dts/ls1021a-iot.dts | 227 ++++++++++++++++++++++++++++++
- 2 files changed, 228 insertions(+)
- create mode 100644 arch/arm/boot/dts/ls1021a-iot.dts
+Tracing stacktrace help find where a irq-work is queued, and view whether a=
+ irq-work
+be executed  in irq context or task context,  if in task context, is it bec=
+ause there are lots of
+lazy irq-works executed in irq_work rt kthreads,  cause other fair task can=
+ not get CPU,=20
+for example, there is a problem in RCU which I find in testing
+Enable RCU_STRICT_GRACE_PERIOD in preempt-rt, the system booting occur hang=
+,=20
+through add irq-work tracepoints find a lot of irq-work (rcu_preempt_deferr=
+ed_qs_handler)
+be executed in rt-fifo irq_work kthreads,  init kthreads  unable to obtain =
+CPUs, cause hang.
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index 7c16f8a2b738..e2faf913e313 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -744,6 +744,7 @@ dtb-$(CONFIG_SOC_IMX7ULP) += \
- dtb-$(CONFIG_SOC_LAN966) += \
- 	lan966x-pcb8291.dtb
- dtb-$(CONFIG_SOC_LS1021A) += \
-+	ls1021a-iot.dtb \
- 	ls1021a-moxa-uc-8410a.dtb \
- 	ls1021a-qds.dtb \
- 	ls1021a-tsn.dtb \
-diff --git a/arch/arm/boot/dts/ls1021a-iot.dts b/arch/arm/boot/dts/ls1021a-iot.dts
-new file mode 100644
-index 000000000000..9e5a41880050
---- /dev/null
-+++ b/arch/arm/boot/dts/ls1021a-iot.dts
-@@ -0,0 +1,227 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright 2021-2022 NXP
-+ *
-+ */
-+
-+/dts-v1/;
-+#include "ls1021a.dtsi"
-+
-+/ {
-+	model = "LS1021A-IOT Board";
-+	compatible = "fsl,ls1021a-iot", "fsl,ls1021a";
-+
-+	sys_mclk: clock-mclk {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <24576000>;
-+	};
-+
-+	reg_3p3v: regulator-3V3 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "3P3V";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		regulator-always-on;
-+	};
-+
-+	reg_2p5v: regulator-2V5 {
-+		compatible = "regulator-fixed";
-+		regulator-name = "2P5V";
-+		regulator-min-microvolt = <2500000>;
-+		regulator-max-microvolt = <2500000>;
-+		regulator-always-on;
-+	};
-+
-+	sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,format = "i2s";
-+		simple-audio-card,widgets =
-+			"Microphone", "Microphone Jack",
-+			"Headphone", "Headphone Jack",
-+			"Speaker", "Speaker Ext",
-+			"Line", "Line In Jack";
-+		simple-audio-card,routing =
-+			"MIC_IN", "Microphone Jack",
-+			"Microphone Jack", "Mic Bias",
-+			"LINE_IN", "Line In Jack",
-+			"Headphone Jack", "HP_OUT",
-+			"Speaker Ext", "LINE_OUT";
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&sai2>;
-+			frame-master;
-+			bitclock-master;
-+		};
-+
-+		simple-audio-card,codec {
-+			sound-dai = <&sgtl5000>;
-+			frame-master;
-+			bitclock-master;
-+		};
-+	};
-+};
-+
-+&can0{
-+	status = "disabled";
-+};
-+
-+&can1{
-+	status = "disabled";
-+};
-+
-+&can2{
-+	status = "disabled";
-+};
-+
-+&can3{
-+	status = "okay";
-+};
-+
-+&dcu {
-+	display = <&display>;
-+	status = "okay";
-+
-+	display: display@0 {
-+		bits-per-pixel = <24>;
-+
-+		display-timings {
-+			native-mode = <&timing0>;
-+
-+			timing0: mode0 {
-+				clock-frequency = <25000000>;
-+				hactive = <640>;
-+				vactive = <480>;
-+				hback-porch = <80>;
-+				hfront-porch = <80>;
-+				vback-porch = <16>;
-+				vfront-porch = <16>;
-+				hsync-len = <12>;
-+				vsync-len = <2>;
-+				hsync-active = <1>;
-+				vsync-active = <1>;
-+			};
-+		};
-+	};
-+};
-+
-+&enet0 {
-+	tbi-handle = <&tbi1>;
-+	phy-handle = <&phy1>;
-+	phy-connection-type = "sgmii";
-+	status = "okay";
-+};
-+
-+&enet1 {
-+	tbi-handle = <&tbi1>;
-+	phy-handle = <&phy3>;
-+	phy-connection-type = "sgmii";
-+	status = "okay";
-+};
-+
-+&enet2 {
-+	fixed-link = <0 1 1000 0 0>;
-+	phy-connection-type = "rgmii-id";
-+	status = "okay";
-+};
-+
-+&esdhc{
-+	status = "okay";
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	pca9555: gpio@23 {
-+		compatible = "nxp,pca9555";
-+		reg = <0x23>;
-+		gpio-controller;
-+		#gpio-cells = <2>;
-+		interrupt-controller;
-+		#interrupt-cells = <2>;
-+	};
-+
-+	sgtl5000: codec@2a {
-+		#sound-dai-cells=<0x0>;
-+		compatible = "fsl,sgtl5000";
-+		reg = <0x2a>;
-+		VDDA-supply = <&reg_3p3v>;
-+		VDDIO-supply = <&reg_2p5v>;
-+		clocks = <&sys_mclk 1>;
-+	};
-+
-+	max1239: adc@35 {
-+		compatible = "maxim,max1239";
-+		reg = <0x35>;
-+		#io-channel-cells = <1>;
-+	};
-+
-+	ina2201: core_monitor@44 {
-+		compatible = "ti,ina220";
-+		reg = <0x44>;
-+		shunt-resistor = <1000>;
-+	};
-+
-+	ina2202: current_monitor@45 {
-+		compatible = "ti,ina220";
-+		reg = <0x45>;
-+		shunt-resistor = <1000>;
-+	};
-+
-+	lm75b: thermal_monitor@48 {
-+		compatible = "national,lm75b";
-+		reg = <0x48>;
-+	};
-+};
-+
-+&lpuart0 {
-+	status = "okay";
-+};
-+
-+&mdio0 {
-+	phy0: ethernet-phy@0 {
-+		reg = <0x0>;
-+	};
-+
-+	phy1: ethernet-phy@1 {
-+		reg = <0x1>;
-+	};
-+
-+	phy2: ethernet-phy@2 {
-+		reg = <0x2>;
-+	};
-+
-+	phy3: ethernet-phy@3 {
-+		reg = <0x3>;
-+	};
-+
-+	tbi1: tbi-phy@1f {
-+		reg = <0x1f>;
-+		device_type = "tbi-phy";
-+	};
-+};
-+
-+&qspi {
-+	num-cs = <2>;
-+	status = "okay";
-+
-+	s25fl128s: flash@0 {
-+		compatible = "jedec,spi-nor";
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		spi-max-frequency = <20000000>;
-+		reg = <0>;
-+	};
-+};
-+
-+&sai2 {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&uart1 {
-+	status = "okay";
-+};
--- 
-2.25.1
+=20
+> diff --git a/kernel/irq_work.c b/kernel/irq_work.c index=20
+> 7afa40fe5cc4..edad992556d0 100644
+> --- a/kernel/irq_work.c
+> +++ b/kernel/irq_work.c
+> @@ -22,6 +22,9 @@
+>  #include <asm/processor.h>
+>  #include <linux/kasan.h>
+> =20
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/irq_work.h>
+> +
+>  static DEFINE_PER_CPU(struct llist_head, raised_list);  static=20
+> DEFINE_PER_CPU(struct llist_head, lazy_list);  static=20
+> DEFINE_PER_CPU(struct task_struct *, irq_workd); @@ -81,7 +84,9 @@=20
+> static void __irq_work_queue_local(struct irq_work *work)
+>  	bool rt_lazy_work =3D false;
+>  	bool lazy_work =3D false;
+>  	int work_flags;
+> +	int cpu =3D smp_processor_id();
+> =20
+> +	trace_irq_work_queue_on(cpu, work);
+
+That's not very nice, you made this function more expensive for no reason. =
+And you violated coding style while doing it :/
+
+You mean the trace_irq_work_queue_on() tracepoints should not be added in t=
+his place ? or
+replace this tracepoint with  trace_irq_work_queue_on(raw_smp_processor_id(=
+), work) ?
+
+Thanks,
+Zqiang
+
+>  	work_flags =3D atomic_read(&work->node.a_flags);
+>  	if (work_flags & IRQ_WORK_LAZY)
+>  		lazy_work =3D true;
+> @@ -143,7 +148,7 @@ bool irq_work_queue_on(struct irq_work *work, int cpu=
+)
+>  	if (cpu !=3D smp_processor_id()) {
+>  		/* Arch remote IPI send/receive backend aren't NMI safe */
+>  		WARN_ON_ONCE(in_nmi());
+> -
+> +		trace_irq_work_queue_on(cpu, work);
+>  		/*
+>  		 * On PREEMPT_RT the items which are not marked as
+>  		 * IRQ_WORK_HARD_IRQ are added to the lazy list and a HARD work @@=20
+> -208,7 +213,9 @@ void irq_work_single(void *arg)
+>  	smp_mb();
+> =20
+>  	lockdep_irq_work_enter(flags);
+> +	trace_irq_work_execute_start(work);
+>  	work->func(work);
+> +	trace_irq_work_execute_end(work);
+>  	lockdep_irq_work_exit(flags);
+> =20
+>  	/*
+
 

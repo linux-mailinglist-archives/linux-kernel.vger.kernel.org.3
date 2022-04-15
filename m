@@ -2,140 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC235502BDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:27:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5072A502C13
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349545AbiDOO3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        id S1354644AbiDOOpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243424AbiDOO3D (ORCPT
+        with ESMTP id S1354601AbiDOOp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:29:03 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4912662C8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:26:35 -0700 (PDT)
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com [209.85.161.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8AA9B3F1D8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1650032793;
-        bh=e3RLpJj2erPmdXlxjGIy8hlcTxe8lmbZHUTfXz0Qd8w=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=vWgmxyLmYq6DDAjwoujgT7Vy7BbAII6rCtDXFhGmRH3WFcQ7Y1tQ9EM2w2VjtMzvf
-         2ybUrr2e2BCqO6AgaCc77LwU9mALspMVxYXkc9MBVf1sbnWxRVRNkTyTlLd8U5b8P7
-         bkWTX33r1cO1ErHliDMUegNjqiASTX5nzLIj29Iqi21FCvh05guaYKIOR0rI2493gy
-         7Jk1BYcxt+FnCCyDMcb8wbk9M2WvsegH9PxyS+m4CtSKOxe0KqmM+vAR0LvVZOI4D/
-         r/g6vIWdu57gzkhUzai8Pcgg5Ffx72oCUi2I6Is2tcqBk7PUvjBsxMpopMvdRSIhkP
-         DHxdaYSN5Wp4w==
-Received: by mail-oo1-f72.google.com with SMTP id x63-20020a4a4142000000b003369bebf175so1490437ooa.1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:26:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=e3RLpJj2erPmdXlxjGIy8hlcTxe8lmbZHUTfXz0Qd8w=;
-        b=56uqN47O/2Wiop8dvTYba3scVd35ShMyMSX3hl4GtKL1b7S+G8cvMhwqjs08yPFKzW
-         4Mooz3fpFH/heNLPFNQV4sT5vBMGQ4Q8b/UzzWIk8OJ0dnZu5p4slQovjWk8rcCsHzGN
-         51YWSnfNj7gVlSe6+fkLNMhltMkjtKZYdclFfOzF0sgdfLQI2uarTXkqHZ1PTzKwkKwj
-         7VD0rYiI8rABkVegfx1Wq44X/ibNyuizy8HJXY1jur3cVZfhpjF15h+SjSXYTPtV7uPE
-         +pY3f2HeSYFLxhqbDr5VGqTpr3wT1zKoj+OEEDpwecvHCMRQ/3uLiWLR9CeD9zS26HAb
-         wdew==
-X-Gm-Message-State: AOAM533EssV5e8ueKaJyUX0OQR7QDqpEmec2JGC002ucMidafr+dCeB/
-        I9owMB8IiiycSKUr/5/ZezhrZEw21e49wY8vr4d48CZhkCg/MQd8+GWoRMTJUYJXq8ldLoJAj7h
-        SKKOziW3f+FF3kQtJBfxXF5xZMBYG5hI9hFkJX3OYusiQnxDfYQ3cNg3HQg==
-X-Received: by 2002:a05:6808:124c:b0:2f9:c7cf:146 with SMTP id o12-20020a056808124c00b002f9c7cf0146mr1655286oiv.54.1650032791025;
-        Fri, 15 Apr 2022 07:26:31 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzLRc42uKkOW9jRr8zGyO4TRYeWat9aikXqDx0Q0Pk1DISGwEXTIxuzl6vUfgU29zi70pptiplIF+LuV40c7wQ=
-X-Received: by 2002:a05:6808:124c:b0:2f9:c7cf:146 with SMTP id
- o12-20020a056808124c00b002f9c7cf0146mr1655264oiv.54.1650032790778; Fri, 15
- Apr 2022 07:26:30 -0700 (PDT)
+        Fri, 15 Apr 2022 10:45:26 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021014.outbound.protection.outlook.com [52.101.62.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6E74476A;
+        Fri, 15 Apr 2022 07:42:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dU+oGgKPed1ELr43gT2SMyTsdXS6Oo5d8BsG0szBf8ZFt4aR/uBBqqcK9LDdlQG1ScjGsm+52OasX+Uf13Pqr9RqmEk6a7G4LJ5BmB9IJO6u90tpNgCNmHPKFmA09+Sgbxp5SxPPugvA1AJZqeQMEKuLDk1mCTH9AvrsUaDGt1YtAkUV23kpopquSJdM2u+yv0YqrsXtdjbFa11ybCht/86i5bzDIBWhWwCYIcmVisfhc6SqRUVPL1ELHv7fFSw9JbTzkbmlsY2u9MsOc2A7FZaoOyHefdmQd0+jrzofkw9qJTE+jkXJaxewMqaaeqNIeszcYyDRVMOVCn4WWEiVdg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9YapCafICZL0nUoddUMofulRReXA1vYs1snepQkbvUI=;
+ b=PvsrzmDq49M0vTZ7kWti0rhs3Ao6xl/jymIR0sUTMqJfwkGwmqXuYC1hFB2O+EPiuZ8GAckgvdXVp60Bi7XkJA47BkxUZ9IbDeAYGAJfvRelC6g8OMwdUIqXooQuv/UBbdbzOC1UnUFgRbGg98rnoHt0DmpZCTnYs/i21qnWnL2EFZNYLsttNYApuzEH37VorifiIoBildCwBf4wLwctfsa5WffCmlccnmcvt/LT+Hiagc1v705Fn8pwGvnZZ6CqhEQnWaTN248eDXisCYl1ja1oJ/ziXAclLGhX2ElnYDqcnIcFEddVbBhBoNJdSlEUPQbqwzbfSBnrw9xgynAzpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9YapCafICZL0nUoddUMofulRReXA1vYs1snepQkbvUI=;
+ b=CTHsMZ/0qGJnuVqNBiwxCadEdFw1+8o+puEMfAq1MwuPDHEiShjLJlCTypAmk/ZW/X9+wjjHVcxYTk2w/dnVz4UKPBQVv5pLJC2P4Os7NjQGfF6EbOqszlnf/eFQFHVPvVsUYdyqLaP6fFbgL9Y1Ym+ibbtUIECJWJ2Y8PqlaZY=
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com (2603:10b6:510:d2::21)
+ by LV2PR21MB3350.namprd21.prod.outlook.com (2603:10b6:408:14e::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.6; Fri, 15 Apr
+ 2022 14:27:38 +0000
+Received: from PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::ac09:6e1b:de72:2b2f]) by PH0PR21MB3025.namprd21.prod.outlook.com
+ ([fe80::ac09:6e1b:de72:2b2f%9]) with mapi id 15.20.5186.010; Fri, 15 Apr 2022
+ 14:27:38 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Andrea Parri <parri.andrea@gmail.com>
+CC:     KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "virtualization@lists.linux-foundation.org" 
+        <virtualization@lists.linux-foundation.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH 1/6] hv_sock: Check hv_pkt_iter_first_raw()'s return
+ value
+Thread-Topic: [RFC PATCH 1/6] hv_sock: Check hv_pkt_iter_first_raw()'s return
+ value
+Thread-Index: AQHYT3fFI5IGSfWvX0SxiF7md4+Se6zvlcGQgADzAICAAIEKsA==
+Date:   Fri, 15 Apr 2022 14:27:37 +0000
+Message-ID: <PH0PR21MB3025F31739A0480F66639ACAD7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
+References: <20220413204742.5539-1-parri.andrea@gmail.com>
+ <20220413204742.5539-2-parri.andrea@gmail.com>
+ <PH0PR21MB3025FA1943D74A31E47B7F8FD7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
+ <20220415064133.GA2961@anparri>
+In-Reply-To: <20220415064133.GA2961@anparri>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=bb8a42da-3d9c-4fd7-af98-95b6f67f39f4;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-04-15T14:23:23Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: edb51455-e429-4035-ac72-08da1eec1765
+x-ms-traffictypediagnostic: LV2PR21MB3350:EE_
+x-ms-exchange-atpmessageproperties: SA|SL
+x-microsoft-antispam-prvs: <LV2PR21MB335073F4C56C89D1553BC15FD7EE9@LV2PR21MB3350.namprd21.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VTnEBjU1uytnZ0b9FolZjyTci1afw8BMra7BvDyDgRVxJpY2L+sBEzb1cktM5Vry7dCazSqkj3/B/y4a3ghrn2RCmOOyjxR55xGU+J/gRUDRf1yFGO6LOa/sweSiWvfof1aCO/fkwugd/5EbOEjg2WDw86tGrWjcTLBlwBr8V54cIQO6GLJ0vm2kUC8/0LjaSU+fuTotx/t2MD9UtJ20a6DHY4UUUOaqDjpNcI+GHIHM6JKPoQg3pwkXKWv4bV9RK+V67AHCLJhrdkYVzlw5tN6qyk76uW+FXwfWKvAAUTtU4tlQtbVjIC8/TDtO6GQj00NzU/sIXAuv2tBk6DhowWXR/ub2b2VjUxSsE7r4zbsfd7yMqgYih8/CVqF86QthMv2bw3e68pnvO1QeyuJRwILuvchIjn3aB9ljugcxq8Mvp+3couVBcFpAjzfpYLGn0k0npAnlDsFmblvjylxcNz1i0abHfg/kduIaC0wXAaTpt3QPb57UPYJHy/LfHlayFMJltt2mLcps3DPe6wsa9t+bI8fhgJ15f3z7rh1Rl0vOcn9e8IhZpOXwRTM9qXcE1irxp3iHnKKb0mFqZ1v+swdw3gibp6lRsvgWiD/TT1cXiU6H0zGt883kAXa4KvB8br20WzsiAFG2HaKeYyGGu85tp+gY1g2Ss1JS0XZfS6UF0/xkQ1bMNdOHwBT+8ctLBiyhVWp6eQfCDDuYJAbrKnOEcWkDPorAaQpuey5QXyIJpEGtb6YCzMZ94400frif
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR21MB3025.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(451199009)(10290500003)(86362001)(122000001)(71200400001)(6916009)(54906003)(52536014)(508600001)(316002)(8676002)(66556008)(64756008)(5660300002)(76116006)(66476007)(66446008)(66946007)(55016003)(7416002)(82960400001)(82950400001)(8936002)(4326008)(33656002)(38100700002)(186003)(9686003)(8990500004)(26005)(7696005)(6506007)(38070700005)(2906002)(83380400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?0hr/BbkbpZvBeQvpLg/yRNLALze1uZYznVHqhAfmHqt/l2Bjnoy8vuJJ+xgx?=
+ =?us-ascii?Q?SBGgb4vLwboSK0AgU9xhRmkcbEhClodufcZeZ2J2ZkoQRpNTrZyZuUt1rUlh?=
+ =?us-ascii?Q?fhJHuToq9/FB36GmOMeji3xWHg1+9GgnaP/hht6o2P8Z9mEIxK63Lm6cGFKp?=
+ =?us-ascii?Q?0MJKPW2OHOP6EswK/VsaW4xF5ZB82+jwvRGDLiI9Z/rS4yXhHJ3ZZjrFMmAl?=
+ =?us-ascii?Q?0szgPyXrCQFEVZnUBbHOzdzWDb0fWUGxe7EnfwSCljjdE+dwC2Qk5+S5l+WD?=
+ =?us-ascii?Q?nV+doX6YzKPtD0+MR3kF7X+YdhzgG9kkWD2gXgV0wfGi8zqsbiB1WvpwZYAp?=
+ =?us-ascii?Q?GngE6BgnABa01I4HdHhHLrkcvvxvj9dr1wA3p3vbKimjfFV+MFXDlsx+Zic6?=
+ =?us-ascii?Q?G4hwI/327xTU4LB/gmhkNjCN4hK2bCOplZVb6vlyur+nZXQ14oDkSQvfVcUO?=
+ =?us-ascii?Q?qPkChE+7jp8swLmcfLX23VTJJ/4RKU7YufyqieM/kbR5ibH0hRn7HPLE1EEF?=
+ =?us-ascii?Q?Ak54ocJZrU0IIFym5QZogWXfyJBywylgeBbMQ8KHy3A6GN/L/76hxYE0xIxo?=
+ =?us-ascii?Q?B4+V1/DcKR6m3AkRbkIwm9whATD9sDKV64D/qtL0xTj2W1e4VWMGbBUSOyY/?=
+ =?us-ascii?Q?j22ODF5jURmTaYIgzlp10YfeZAbuCokEVCN7AG38ZHWyADCopmIfHUkB7wYO?=
+ =?us-ascii?Q?vXEN4hZT6I0ParYeW+z0Y92wP2zBxOeBPsCU+aks2qM4rqMnytsWpIC+zmLq?=
+ =?us-ascii?Q?fiZWE2jyRpETSeU73yGmAjvZneg+7L/ezYOepMaA7oyhGoNXtmJH4wFoAv8S?=
+ =?us-ascii?Q?3IoWq94lWOS4HqUjLRWQSb1S/MUG/DYPiV2el4CVV0YZ/bcNAD3U3LAnVXU9?=
+ =?us-ascii?Q?jI9ENL8T3fd+XpUBf0tNL489YAcOkwgK2LbToSAIn7DSgpJrJMNB7RZW/PNH?=
+ =?us-ascii?Q?AChbOTRIsLCFPVQ/29LvTk7wyFShZxBIX228J4C4s34HJESAwIHO6ygO/COH?=
+ =?us-ascii?Q?j4S3Yag02AVMi+i72uYU3b3m8jxNeJ/hbreDlxQhwaQ3WiJLhXVbQ5AenlwJ?=
+ =?us-ascii?Q?GfgP5yLlcROfGapuxwBzXEPz6JwHjlykahLeB41p6BjwP6rBbX7ENd89I87y?=
+ =?us-ascii?Q?0VEikjK0riVPBcbxkwEh9/qIrv1Xw6CPyM3h67uijfHXPLuB1A78Wu/WWwDR?=
+ =?us-ascii?Q?ubWa2MIzC09NQmL+3YL3chWodIfUL/Nm/dCGJQzkeS72O5Z3FbIo/pFwU9pD?=
+ =?us-ascii?Q?vlcOzyAu69AAIv1TMr4Z/mUXyIvL9aAJPIQKiiyF1WCcYSjBPkUjRTZU/J52?=
+ =?us-ascii?Q?wKy/uBqhaZeqHv7lFQ+pkgOhfNYpnpLGSNk8wYVYUZdaQY0OzrS7NyrePW+x?=
+ =?us-ascii?Q?1nV/GZm/3/z1PENyLSs7v1QNc5RpNEBZZUb8VCXpXTC1PMaoOn2o4C4KQCPy?=
+ =?us-ascii?Q?8sJ/Nc3fDhY5Hk/leGAMfIhXLOIik5eVzzC4bKCdA8lC318eUpiyOYmdnH6U?=
+ =?us-ascii?Q?EHrLIpPWIncV2cbeQjj9AkQltYJkPVyfK9Xk3DZS1nvh9NA6xjxOTD8uR+Rs?=
+ =?us-ascii?Q?d2ZLAfq+QRef2qOdwbm4k8ucOTvfnpcgGPxEbhUHzCpKoGFE7izyIC8kVQKa?=
+ =?us-ascii?Q?Q2pC/NUSKNodc5agvFynXuDhinrbDrKNMBEzFXl4To8aJzNihkTQKqWdQTAS?=
+ =?us-ascii?Q?wHukXu57tlIAnLpZALaIQMjuIQeRH+qol1ZmOv7UNNoKajFUjWNlF8sodRQy?=
+ =?us-ascii?Q?SerDVL2yyFzwKw5AMTSf2voc/odM4uI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <CAAd53p4r1v_sN=8kv_fOx_VEb3k=4rU9iw52LfmEHO1crnms=g@mail.gmail.com>
- <20220414164134.GA751756@bhelgaas>
-In-Reply-To: <20220414164134.GA751756@bhelgaas>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 15 Apr 2022 22:26:19 +0800
-Message-ID: <CAAd53p6DX2C7KVRV=uu_mmPTTjE7=RsXfNPxjbOBLRbf-pXi5A@mail.gmail.com>
-Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for suspend/resume
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Vidya Sagar <vidyas@nvidia.com>,
-        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
-        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
-        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
-        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
-        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
-        sagupta@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
-        Ricky Wu <ricky_wu@realtek.com>,
-        Rajat Jain <rajatja@google.com>,
-        Prasad Malisetty <quic_pmaliset@quicinc.com>,
-        Victor Ding <victording@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR21MB3025.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: edb51455-e429-4035-ac72-08da1eec1765
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 14:27:37.9600
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wtL2YJ6ktdD/yNaMLdLD4hm0o85viT8yNTVsFHUawx04Q+t6vepXezadqcFDgdIvp89/XDh2Qcqs1UULx/bWgfAbUGGCnZHcJvKN4UHLOmI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR21MB3350
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:41 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Wed, Apr 13, 2022 at 08:19:26AM +0800, Kai-Heng Feng wrote:
-> > On Wed, Apr 13, 2022 at 6:50 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > > ...
->
-> > >   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
-> > >     must be configured while ASPM L1 is disabled, but I don't think we
-> > >     currently guarantee this: we restore all the upstream component
-> > >     state first, and we don't know the ASPM state of the downstream
-> > >     one.  Maybe we need to:
+From: Andrea Parri <parri.andrea@gmail.com> Sent: Thursday, April 14, 2022 =
+11:42 PM
+>=20
+> On Fri, Apr 15, 2022 at 03:33:23AM +0000, Michael Kelley (LINUX) wrote:
+> > From: Andrea Parri (Microsoft) <parri.andrea@gmail.com> Sent: Wednesday=
+, April 13,
+> 2022 1:48 PM
 > > >
-> > >       * When restoring upstream component,
-> > >           + disable its ASPM
-> > >
-> > >       * When restoring downstream component,
-> > >           + disable its ASPM
-> > >           + restore upstream component's LTR, L1SS
-> > >           + restore downstream component's LTR, L1SS
-> > >           + restore upstream component's ASPM
-> > >           + restore downstream component's ASPM
+> > > The function returns NULL if the ring buffer has no enough space
+> > > available for a packet descriptor.  The ring buffer's write_index
 > >
-> > Right now L1SS isn't reprogrammed after S3, and that causes WD NVMe
-> > starts to spew lots of AER errors.
->
-> Right now we don't fully restore L1SS-related state after S3, so maybe
-> there's some inconsistency that leads to the AER errors.
->
-> Could you collect the "lspci -vv" state before and after S3 so we can
-> compare them?
->
-> > So yes please restore L1SS upon resume. Meanwhile I am asking vendor
-> > _why_ restoring L1SS is crucial for it to work.
+> > The first sentence wording is a bit scrambled.  I think you mean the
+> > ring buffer doesn't contain enough readable bytes to constitute a
+> > packet descriptor.
+>=20
+> Indeed, replaced with your working.
+>=20
+>=20
+> > > is in memory which is shared with the Hyper-V host, its value is
+> > > thus subject to being changed at any time.
 > >
-> > I also wonder what's the purpose of pcie_aspm_pm_state_change()? Can't
-> > we just restore ASPM bits like other configs?
->
-> Good question.  What's the context?  This is in the
-> pci_raw_set_power_state() path, not the pci_restore_state() path, so
-> seems like a separate discussion.
+> > This second sentence is true, but I'm not making the connection
+> > with the code change below.   Evidently, there is some previous
+> > check made to ensure that enough bytes are available to be
+> > received when hvs_stream_dequeue() is called, so we assumed that
+> > NULL could never be returned?  I looked but didn't find such a check,
+> > so maybe I didn't look carefully enough.  But now we are assuming
+> > that Hyper-V might have invalidated that previous check by
+> > subsequently changing the write_index in a bogus way?  So now, NULL
+> > could be returned when previously we assumed it couldn't.
+>=20
+> I think you're looking for hvs_stream_has_data().  (Previous checks
+> apart, hvs_stream_dequeue() will "dereference" the pointer so...)
 
-Because this patch alone doesn't restore T_PwrOn and LTR1.2_Threshold.
+Agreed.  I didn't say this explicitly, but I was wondering about the risk
+in the current code (without these hardening patches) of getting a
+NULL pointer from hv_pkt_iter_first_raw(), and then dereferencing it.
 
-So I forced the pcie_aspm_pm_state_change() calling path to eventually
-call aspm_calc_l1ss_info() which solved the problem for me.
+Michael
 
-Let me investigate a bit further.
 
-Kai-Heng
 
->
-> Bjorn

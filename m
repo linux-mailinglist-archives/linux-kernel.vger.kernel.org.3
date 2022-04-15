@@ -2,139 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF32D502C01
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3370502C0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354567AbiDOOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S1354615AbiDOOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:43:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354522AbiDOOiV (ORCPT
+        with ESMTP id S1354712AbiDOOm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:38:21 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525034667A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:35:53 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id k29so7389651pgm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:35:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=5CJKuH7khF1y3DizoabvaS6odECAtRFkcRZfxb+4uoM=;
-        b=eVIE5dV1M83IQmQu3BKM+cGuaxyk8PaG6cAjk96I2yBD3kYCMUhK85oHRfsWEVHNuy
-         CX2nRUI6Q+D0RuUb61rnfe0/YeUKnil8pDz34ySN+2gO+D4JxGC4+3TDi1WqLQyHyRgp
-         8S2R9haf472bv/J995Ch9pE9tcdEgz1hwsPKjtNGc/l/koy4kOqnBYQH3TebTU40jLiR
-         r7rHZStdDWvNSxILsuSov8AddPbZrC/5CmEmhcDBcOIQ6HZYDNKMM+v2binSPPAgP2id
-         e4Zmn6SDnDMvbxvf5XUNnF9ib9ov21ZTT8UHyKRXFl0XwYWqwa9OzVdgq6xYqJKOHvvQ
-         4CYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=5CJKuH7khF1y3DizoabvaS6odECAtRFkcRZfxb+4uoM=;
-        b=O5RZnJrsRN26c2YrnSeK6kVKVS65ICdLpnTOafJMF/+rXTiL4JKVU1xvUEz/cc8ygp
-         UuVkX+eiwq7zjJtrzX6zAosyngx2Sq6ZZTf35dM0BSLL2y0ZIwVOBBoLvrrPMiDvBDL5
-         9iK0HOAKOXb40k9wtcekfKJawRLUPcscVmDAYTWoNlYidkhj2k9XI+zCmIcr3nIcKm2f
-         P+5krQvXU0E953wBeL7b5WCUsKMtIUUecO5rN4Hl+cowzPQMfnla0gQPId66zPhhIHGU
-         4fJC75c3SdkHtmIjBXNp3EqDukgLFVrFeGYTUUnPRIkNApOlS+OYuai3HloSV76yXCDC
-         diUg==
-X-Gm-Message-State: AOAM5319cLqWZZ6P+fbxdg9cakJtHo/HKBUWdWydx4gEsj3ZcuptBFGx
-        soSwXYAHVnwKJYyrE997t5r0Vg==
-X-Google-Smtp-Source: ABdhPJz7AGrSLCIpiI5vobjTwGztjseHVxY2LqnQac0HzghAh/fFbXTARvxvKsuq2VPwzQPY83nBAA==
-X-Received: by 2002:a65:480a:0:b0:39c:c745:6f59 with SMTP id h10-20020a65480a000000b0039cc7456f59mr6432618pgs.33.1650033352643;
-        Fri, 15 Apr 2022 07:35:52 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm5045100pjy.35.2022.04.15.07.35.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:35:51 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 14:35:48 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        "Huang, Kai" <kai.huang@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hu, Robert" <robert.hu@intel.com>,
-        "Gao, Chao" <chao.gao@intel.com>
-Subject: Re: [PATCH v7 8/8] KVM: VMX: enable IPI virtualization
-Message-ID: <YlmCxOcWvbXzaYpw@google.com>
-References: <20220304080725.18135-1-guang.zeng@intel.com>
- <20220304080725.18135-9-guang.zeng@intel.com>
- <YkZlhI7nAAqDhT0D@google.com>
- <54df6da8-ad68-cc75-48db-d18fc87430e9@intel.com>
- <YksxiAnNmdR2q65S@google.com>
- <b8f753b0-1b57-3e42-3516-27cc0359c584@intel.com>
+        Fri, 15 Apr 2022 10:42:58 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF213700F;
+        Fri, 15 Apr 2022 07:40:24 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 974ECE000B;
+        Fri, 15 Apr 2022 14:40:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650033622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zanZazVS+F6yO9Vb+0jek4QpQxEnTAcQmwRfYFhBd+k=;
+        b=XvjgWF12omvcB0S9wdZocsVRAM1fWYoHiR3MF0fsHo3P2MRQFyfstVNy00SFVoUnaYfNn5
+        DHTXUF6jawn9JnEU+1oqAbtBVncahboURiQbPA8my6MYgJfBtZa7dJYGANrQGdr2VlYBUO
+        h6jCzl9nA6Oc98wTw2G+Nthu3s1C5LycIA7OUXethKZt4aeXqiQzdpThwIS3Giy5cuXfJW
+        7fgNfwBtv3eQ3VWNQqBJe43/w+CMLSJuooTGyXCGiaStd+/42BLmNRw5wWflmuNrJUnDS7
+        IXLGtSXkRqiUo9FnvBUtdVr8XG8qvaPy51ebNxVCCOqaHDI+dbpqhktihqA2oA==
+Date:   Fri, 15 Apr 2022 16:38:53 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
+ converter
+Message-ID: <20220415163853.683c0b6d@fixe.home>
+In-Reply-To: <Yll+Tpnwo5410B9H@lunn.ch>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+        <20220414122250.158113-10-clement.leger@bootlin.com>
+        <YlismVi8y3Vf6PZ0@lunn.ch>
+        <20220415102453.1b5b3f77@fixe.home>
+        <Yll+Tpnwo5410B9H@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b8f753b0-1b57-3e42-3516-27cc0359c584@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 09, 2022, Zeng Guang wrote:
-> 
-> On 4/5/2022 1:57 AM, Sean Christopherson wrote:
-> > On Sun, Apr 03, 2022, Zeng Guang wrote:
-> > > On 4/1/2022 10:37 AM, Sean Christopherson wrote:
-> > > > > @@ -4219,14 +4226,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
-> > > > >    	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
-> > > > >    	if (cpu_has_secondary_exec_ctrls()) {
-> > > > > -		if (kvm_vcpu_apicv_active(vcpu))
-> > > > > +		if (kvm_vcpu_apicv_active(vcpu)) {
-> > > > >    			secondary_exec_controls_setbit(vmx,
-> > > > >    				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> > > > >    				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> > > > > -		else
-> > > > > +			if (enable_ipiv)
-> > > > > +				tertiary_exec_controls_setbit(vmx,
-> > > > > +						TERTIARY_EXEC_IPI_VIRT);
-> > > > > +		} else {
-> > > > >    			secondary_exec_controls_clearbit(vmx,
-> > > > >    					SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> > > > >    					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> > > > > +			if (enable_ipiv)
-> > > > > +				tertiary_exec_controls_clearbit(vmx,
-> > > > > +						TERTIARY_EXEC_IPI_VIRT);
-> > > > Oof.  The existing code is kludgy.  We should never reach this point without
-> > > > enable_apicv=true, and enable_apicv should be forced off if APICv isn't supported,
-> > > > let alone seconary exec being support.
-> > > > 
-> > > > Unless I'm missing something, throw a prep patch earlier in the series to drop
-> > > > the cpu_has_secondary_exec_ctrls() check, that will clean this code up a smidge.
-> > > cpu_has_secondary_exec_ctrls() check can avoid wrong vmcs write in case mistaken
-> > > invocation.
-> > KVM has far bigger problems on buggy invocation, and in that case the resulting
-> > printk + WARN from the failed VMWRITE is a good thing.
-> 
-> SDM doesn't define VMWRITE failure for such case.
+Le Fri, 15 Apr 2022 16:16:46 +0200,
+Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
 
-Yes it absolutely does.  cpu_has_secondary_exec_ctrls() checks if the VMCS field
-_exists_, not if it's being used by KVM (though that's a moot point since KVM
-always enables secondary controls when it's supported).  VMWRITE to non-existent
-fields cause VM-Fail.
+> On Fri, Apr 15, 2022 at 10:24:53AM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Le Fri, 15 Apr 2022 01:22:01 +0200,
+> > Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
+> >  =20
+> > > On Thu, Apr 14, 2022 at 02:22:47PM +0200, Cl=C3=A9ment L=C3=A9ger wro=
+te: =20
+> > > > Add the MII converter node which describes the MII converter that is
+> > > > present on the RZ/N1 SoC.   =20
+> > >=20
+> > > Do you have a board which actually uses this? I just noticed that
+> > > renesas,miic-cfg-mode is missing, it is a required property, but maybe
+> > > the board .dts file provides it?
+> > >=20
+> > >     Andrew =20
+> >=20
+> > Hi Andrew, yes, I have a board that defines and use that. =20
+>=20
+> Great. Do you plan to mainline it? It is always nice to see a user.
 
-  ELSIF secondary source operand does not correspond to any VMCS field
-  THEN VMfailValid(VMREAD/VMWRITE from/to unsupported VMCS component);
+Although we are working on a specific customer board, we will probably
+try to mailine this support for the RZ/N1D-DB.
+
+>=20
+> > The
+> > renesas,miic-cfg-mode actually configures the muxes that are present on
+> > the SoC. They allows to mux the various ethernet components (Sercos
+> > Controller, HSR Controller, Ethercat, GMAC1, RTOS-GMAC).
+> > All these muxes are actually controller by a single register
+> > CONVCTRL_MODE. You can actually see the muxes that are present in the
+> > manual [1] at Section 8 and the CONVCTRL_MODE possible values are listed
+> > on page 180.
+> >=20
+> > This seems to be something that is board dependent because the muxing
+> > controls the MII converter outputs which depends on the board layout. =
+=20
+>=20
+> Does it also mux the MDIO lines as well?
+
+Nope, the MDIO lines are muxed using the pinctrl driver.
+
+>=20
+> We might want to consider the name 'mux'. Linux already has the
+> concept of a mux, e.g. an MDIO mux, and i2c mux etc. These muxes have
+> one master device, which with the aid of the mux you can connect to
+> multiple busses. And at runtime you flip the mux as needed to access
+> the devices on the multiple slave busses. For MDIO you typically see
+> this when you have multiple Ethernet switch, each has its own slave
+> MDIO bus, and you use the mux to connect the single SOC MDIO bus
+> master to the various slave busses as needed to perform a bus
+> transaction. I2C is similar, you can have multiple SFPs, either with
+> there own IC2 bus, connected via a mux to a single I2C bus controller
+> on the SoC.
+>=20
+> I've not looked at the data sheet yet, but it sounds like it operates
+> in a different way, so we might want to avoid 'mux'.
+
+Indeed, Let's not refer to it as mux in the code at all. If using your
+proposal below, I guess we could avoid that.
+
+>=20
+> > I'm open to any modification for this setup which does not really fit
+> > any abstraction that I may have seen.
+> >=20
+> > [1]
+> > https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1=
+l-group-users-manual-system-introduction-multiplexing-electrical-and =20
+>=20
+> O.K, looking at figure 8.1.
+>=20
+> What the user wants to express is something like:
+>=20
+> Connect MI_CONV5 to SECOS PORTA
+> Connect MI_CONV4 to ETHCAT PORTB
+> Connect MI_CONV3 to SWITCH PORTC
+> Connect MI_CONV2 to SWITCH PORTD
+>=20
+> plus maybe
+>=20
+> Connect SWITCH PORTIN to RTOS
+
+Yes, that is correct.
+
+>=20
+> So i guess i would express the DT bindings like this, 5 values, and
+> let the driver then try to figure out the value you need to put in the
+> register, or return -EINVAL. For DT bindings we try to avoid magic
+> values which get written into registers. We prefer a higher level
+> description, and then let the driver figure out how to actually
+> implement that.
+
+Ok, looks like a more flexible way to doing it. Let's go with something
+like this:
+
+renesas,miic-port-connection =3D <PORTIN_GMAC2>, <MAC2>, <SWITCH_PORTC>,
+<SWITCH_PORTB>, <SWITCH_PORTA>;
+
+
+
+
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

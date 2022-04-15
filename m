@@ -2,65 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E01502B57
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40F38502B5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354182AbiDON5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:57:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S1354198AbiDON7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354196AbiDON5a (ORCPT
+        with ESMTP id S237509AbiDON7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:57:30 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256305581;
-        Fri, 15 Apr 2022 06:55:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650030901; x=1681566901;
-  h=to:cc:subject:references:date:mime-version:
-   content-transfer-encoding:from:message-id:in-reply-to;
-  bh=rnIvYvNkZSMlVf1curZVeeehjye1dFlSwJzy1pjQQ4A=;
-  b=LjIollzPWpojXfctNvSRs6aV5pa/IfK37H8+wQunCeuBb3S3LNhHUNys
-   Vb1V19gjb3qJuhMjht+TvRW1k+1W6ni+ozPPfv7MENW0VDTCzfOLGJ1XN
-   0c33Cgg8mp+a6baHdh+VvH8whbLybODaU0mpFRET/zXMtOks3ARkXKThp
-   ZUbJNH0z92TgI6Hvizf+h7a7DfXht2kD9kcg05bdjZjLb0SwgTR76N8jY
-   yPR8bodq0IqoX7D1dns3jcm+A/St50DMzX600LOyjAEbY5SA8X4A9EBQA
-   aEpmP/GZo2zfhZa4DZw3ZJAMfnYo6i/54KY7Tjaf3iN8PDSVZxnioLsrY
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250454121"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="250454121"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 06:55:00 -0700
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="662093589"
-Received: from fkchan-mobl1.amr.corp.intel.com (HELO hhuan26-mobl1.mshome.net) ([10.212.59.147])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-SHA; 15 Apr 2022 06:54:58 -0700
-Content-Type: text/plain; charset=iso-8859-15; format=flowed; delsp=yes
-To:     "Jarkko Sakkinen" <jarkko@kernel.org>, dave.hansen@linux.intel.com,
-        tglx@linutronix.de, bp@alien8.de, luto@kernel.org,
-        mingo@redhat.com, linux-sgx@vger.kernel.org, x86@kernel.org,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        "Reinette Chatre" <reinette.chatre@intel.com>
-Cc:     seanjc@google.com, kai.huang@intel.com, cathy.zhang@intel.com,
-        cedric.xing@intel.com, haitao.huang@intel.com,
-        mark.shanahan@intel.com, vijay.dhanraj@intel.com, hpa@zytor.com,
+        Fri, 15 Apr 2022 09:59:17 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2107.outbound.protection.outlook.com [40.107.215.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A614B3B3CF;
+        Fri, 15 Apr 2022 06:56:47 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X7T6f5alnfhZM8Cf3I81XC7xPIbfJI3jrox0XEvL8jc+Qn0/Iib1Okm/rnci0ObPtmuYgZdD1/+tv6pUO+4KF/+62PW6JQbbftTCrLTF5TtNr++EWtZkWNMuS5AxYBIesg0O3sLzN7Q8HqDPR4mk1y8JdmlHKyx6+9O4v1R2aeiDQ0EgJX2iJs9Teybl9MXMTw40I3tDi8V+KSIb8YVqT8biv0ocsynC3HGcGE7UJ5NkbeJjFqQhmYgiNkTNvJSaZzP0Hr+vZOpniKNod6JWy8AblBsuuWFYATO46JKuVS8Jrqorh5E8eqOfzLcr9TgLJIrMD5tptCLE4yMFH4iH/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bDKAql1ylDNNspwqVW4QQRDxaEihZc22yK9P5S+mxI8=;
+ b=mJDLPbZpqP6J9B+vZFCQlmC5YCS7t53wKchm3YUrm40De3PnRXqz86/OIR6gtVEATXNuDeiXz8M3fwsAoCfde27awdLDx32gxB/Z+hjBbYZ23BJapGZty0N8jZaLcjYECIgyr9zRskEMdgVtNHurCcO26fOkB4Q2OjSZaiqn8Zatrur7OCjcWV3WuM6gtxquKmehIP3p38NuMhmN8+1OUCa160IURw2bvwLH1uDWzTyPRWKOtN+c/jSbjvSX9vnsMxgbznIbx9CcKj/ZFcazD62PwkPFug2WwzfT2mLDaW3OIJGXChmu9C1gDaifoJ6XQsEtY2isrzoigawhVk2WRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bDKAql1ylDNNspwqVW4QQRDxaEihZc22yK9P5S+mxI8=;
+ b=FuGY8kka6IXz02bTo/1MJVQSPjJFA6yrrqHDqcTBpcbKUO1ewOSALaiIDTsloTa6CglVv0Wo8QarK21WhC2/YXCTNRnWX19W/zt/DEQ02ostyAeABu7IOelPgexESNY+uxOP/onmmm/Wp57k5HmqVmarEQU02azFhQtXD5rQh9E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by SG2PR06MB3015.apcprd06.prod.outlook.com (2603:1096:4:75::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5144.29; Fri, 15 Apr 2022 13:56:44 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::d4bd:64f4:e1c0:25cb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::d4bd:64f4:e1c0:25cb%4]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
+ 13:56:44 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Yihao Han <hanyihao@vivo.com>, sparclinux@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V4 14/31] x86/sgx: Support VA page allocation without
- reclaiming
-References: <cover.1649878359.git.reinette.chatre@intel.com> <0ab32196f5056b25c34fb89fcc4dc28a5d875d2e.1649878359.git.reinette.chatre@intel.com> <bf2fcc93babdbf541fffc6cc5f5756f391773a75.camel@kernel.org> <767b99c5-f28e-4b8f-5147-6e1d290ca5c6@intel.com>
-Date:   Fri, 15 Apr 2022 08:54:53 -0500
+Cc:     kernel@vivo.com
+Subject: [PATCH] sparc: kernel: Add missing put_device() calls
+Date:   Fri, 15 Apr 2022 06:55:43 -0700
+Message-Id: <20220415135609.87538-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: TYAPR01CA0063.jpnprd01.prod.outlook.com
+ (2603:1096:404:2b::27) To TYZPR06MB4173.apcprd06.prod.outlook.com
+ (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-From:   "Haitao Huang" <haitao.huang@linux.intel.com>
-Organization: Intel Corp
-Message-ID: <op.1kn59r1bwjvjmi@hhuan26-mobl1.mshome.net>
-In-Reply-To: <767b99c5-f28e-4b8f-5147-6e1d290ca5c6@intel.com>
-User-Agent: Opera Mail/1.0 (Win32)
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 9550f7a1-d644-4e60-51c3-08da1ee7c660
+X-MS-TrafficTypeDiagnostic: SG2PR06MB3015:EE_
+X-Microsoft-Antispam-PRVS: <SG2PR06MB3015EB9950C889BF3C61FC19A2EE9@SG2PR06MB3015.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: yDm8mpFUUw/D6rWVp9DvX5R3mEOrbgjGfd5Pg/Pskoq7WoycJAKg8LnUeWAJQZw5yXO5kgCUfbyzYLtjIppc0Mk0hcN5dMI8v71njs/zkaSHpX7c5xu6VXqq1sGjXQfK7OqmRBglMpYJXlIM4StuePfhiKETewme2chrP7khC7Dchl0ZY1uwQ3TlImCkvLKGi4I10Jx9BnRdLZEWPVgO4bPe78TaND3Rc7utNeF0n4S8w0IDyw0QEZzvwAhDcJfzHQqTx32SpS776wBEOXmvrSjeLQrb7Op8v8MTWTCNL0dtd3Yp8VmddeD2JKfKnRSDMjAjPIDb+ZyWUG1TyEeEaApqhjMSlMp8papaDBivfrOtziRLkUg+lUugDDcJAXOom6+Ng3WNXy61fy7q4KMScW4ZOwhlqTscSvB2JDt2e8KkQO7cnl7i2y0LWI4UJ0qk2dKK55ZWdCspx2mLxVcW7fD8eh19795VDhyycqzh+xvJ5NdvkfTRQSVt9ApivR/RawEFkBWWx1CSRLxLwoHsRt13ApMLJharqz+NGnAQou8Rmp0CxqnwZeOsaxqB15fEIAM+4++65zS09xFXcGke7aR55MFBMzGWupFwFv7bUv67inDAfWbQ7yE1UaiCMc0EJ01ijRruh/ub4z6xvQ1SuES6LLil/vlsZK3XhplCCOQyQmqBqbVMOHn4NjbhPzvhrm0LovFuY9yotiho62gpgA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66476007)(2616005)(52116002)(107886003)(316002)(36756003)(6506007)(1076003)(8936002)(5660300002)(6512007)(38350700002)(38100700002)(508600001)(6486002)(110136005)(2906002)(26005)(86362001)(83380400001)(8676002)(66556008)(4326008)(186003)(66946007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7o1SzhWAtY3lPtjrwcn3PbQIYEMp0aKKMVL63ZYQqhns/x9EejzRAjwXzZ6J?=
+ =?us-ascii?Q?Lm9iJAj1xkCTJMmPQcQkXl8iLcScnVVv/E3lMApFr1KFR9aOT+0DxFVRdEJG?=
+ =?us-ascii?Q?oft4+A+gX9hMYkHBt0lV4Cy/b1Y1Cgv55S0UCBfZwTsXm/dKWijeoNhk0UL+?=
+ =?us-ascii?Q?ICMEZLBmGa0Ne7eaO9sSEdcSb/49BSZw6GgyxjeG/9cakBEHqCCSjmwpS/9D?=
+ =?us-ascii?Q?dP4gMlSEvADk07Mt4XfSgen9vOifstXv/OJRebVjo6c0y8oAPZvMxmKAamRw?=
+ =?us-ascii?Q?Nhdw8r3GVtuOnAArFBj3E3O9rpASFS7qchpaBFjfRJ+Z+xrMJ6MsHme9E+Ld?=
+ =?us-ascii?Q?mMGTRKrjk9CDoQ6qHp8uXbnkKuTka08ZJMph+sMLNg9CtPf8TOwXG4aCDjRy?=
+ =?us-ascii?Q?frTMVq7P0+eQUcfry852PjHM5mkFX1c9QMrFcpiJPQBMn5sIjh6yVeytG6xk?=
+ =?us-ascii?Q?5pWxg0FGP5UZmS4X/15DenENS6LRuWzNKHExF4vqQDRMLbNlH3+KAr09cspI?=
+ =?us-ascii?Q?4DA13kQpYYy5KRZcTdDGyrpYwfajgAAkLDc1Az66KVyW3EW0jvZhss6ICQL8?=
+ =?us-ascii?Q?EwRq4mlYMH1tMpVge+i+g+Sr5wlPILPcFn6Ylg77jCynQtrB2lIFqtEF7Q2q?=
+ =?us-ascii?Q?0RZQb8eN1Fjxu5TVckhQA0xrjnX+V+/yB7slm5E9rq1758Qivk+v7EOAR8OC?=
+ =?us-ascii?Q?c9T0F8uwhE+hr90936IeUrIxF8qqqI71kx6wKyapNJoNQG2+MLO4Hu9XJP29?=
+ =?us-ascii?Q?WndR5mt1VcSi1MguVkgFOpMDpeFigiX3HVLQNXo7TTuZ+nbUz7XQvej8HtJ4?=
+ =?us-ascii?Q?o3KsXrCxdywQTjbq0ehBbSNKHoL+RL0xkvt8UGZFSYcKrtZovUMMWMKQrKBP?=
+ =?us-ascii?Q?m3Etr+gFpKFgJybAjLsN8QUlPJxvepJ2Gjmv+RAWkUS6N+heGTzUpZ8zNelW?=
+ =?us-ascii?Q?yR3gOauIMQP3VaFYc6xfypY49RjcFmtjVcS2etknZYUJwTpf9GNPv/tPblZr?=
+ =?us-ascii?Q?Lr5LZo651rp76BZzQuWbiQczttxFPZRYq2sCJTRfOVHkW+hATrC27/2NpJy6?=
+ =?us-ascii?Q?nNqNvEGo0joxhKOyAxW629bXHyFGpYQHWzRBw3watMku0f4hmPgyYSHuELNP?=
+ =?us-ascii?Q?ZkUx91l78gThphEJkLOjujV4EvjEnGgQhf+QllDZnyIQ4PxSnBTeXfZSD+d8?=
+ =?us-ascii?Q?gu558fVLVyfgtwQgiEa0JaugEqWKBcJPRx6BLdxJzFPAzqwv1NF+DEQs0hdG?=
+ =?us-ascii?Q?etEtyeFfwFlx8Cmzft0ovdiypStvbFfXbC2wS5CXDK2ho/WPvaE+vb+MNghd?=
+ =?us-ascii?Q?4/UbEUpmyI2aM0OcmQBHHSsS9IuiJFHMnB44jmBVCGK6nWXufay28/KQRisv?=
+ =?us-ascii?Q?8c8O/lrrBl1HKgGF7dVaSwZwnKMexEps8rNCX3nfCwIeGUrFw1OuZWubuy4P?=
+ =?us-ascii?Q?bW48C57okBx3Va/BgxjNywNMfPj39oPP5W0iHy8WWCOF6bqkiPjiCr0iuvAt?=
+ =?us-ascii?Q?oyuKLQAa7o9iXwMAqljO+6SOkS2by2KQdCNKhLeKrHxd9TkRKqTP0vSzmxSO?=
+ =?us-ascii?Q?aBGLFoyF2lQRVFDey48RT6gXoEoMRkgaBVPY4B76s0guJ9hRdD4d5DWqF8q+?=
+ =?us-ascii?Q?4TT0BT2BZqHUsAILRb3oD8fzeaLdexMcMAyzPyPvu+ivvWDywmuj0Qkqp4OH?=
+ =?us-ascii?Q?85n0g4+6E8ei0HeFagXXeB4yHDXyV/g6To3ckoh5PN8XEIkKqijSYYQ0GiRt?=
+ =?us-ascii?Q?SIko21oP2auZIe9gi8JM2+qycElcx8Q=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9550f7a1-d644-4e60-51c3-08da1ee7c660
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 13:56:44.2231
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9PEmdTWYaM2LwVDdmuJJ61Rj2y0hYG4UIfDhedFVjYHnFkmCp+eDn3wnoN18nQOl/pUVNP7vgsspB8mMSAgGHg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB3015
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,65 +114,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 11:30:34 -0500, Reinette Chatre  
-<reinette.chatre@intel.com> wrote:
+A coccicheck run provided information like the following.
 
-> Hi Jarkko,
->
-> On 4/14/2022 4:18 AM, Jarkko Sakkinen wrote:
->> On Wed, 2022-04-13 at 14:10 -0700, Reinette Chatre wrote:
->>> struct sgx_encl should be protected with the mutex
->>> sgx_encl->lock. One exception is sgx_encl->page_cnt that
->>> is incremented (in sgx_encl_grow()) when an enclave page
->>> is added to the enclave. The reason the mutex is not held
->>> is to allow the reclaimer to be called directly if there are
->>> no EPC pages (in support of a new VA page) available at the time.
->>>
->>> Incrementing sgx_encl->page_cnt without sgc_encl->lock held
->>> is currently (before SGX2) safe from concurrent updates because
->>> all paths in which sgx_encl_grow() is called occur before
->>> enclave initialization and are protected with an atomic
->>> operation on SGX_ENCL_IOCTL.
->>>
->>> SGX2 includes support for dynamically adding pages after
->>> enclave initialization where the protection of SGX_ENCL_IOCTL
->>> is not available.
->>>
->>> Make direct reclaim of EPC pages optional when new VA pages
->>> are added to the enclave. Essentially the existing "reclaim"
->>> flag used when regular EPC pages are added to an enclave
->>> becomes available to the caller when used to allocate VA pages
->>> instead of always being "true".
->>>
->>> When adding pages without invoking the reclaimer it is possible
->>> to do so with sgx_encl->lock held, gaining its protection against
->>> concurrent updates to sgx_encl->page_cnt after enclave
->>> initialization.
->>>
->>> No functional change.
->>>
->>> Reported-by: Haitao Huang <haitao.huang@intel.com>
->>> Tested-by: Haitao Huang <haitao.huang@intel.com>
->>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
->>
->> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
->
-> Thank you.
->
->>
->> Nit: I don't think tested-by is in the right patch here. Maybe
->> Haitao's tested-by should be moved into patch that actually adds
->> support for EAUG? Not something I would NAK this patch, just
->> wondering...
->
-> Yes, that is a good point. While this is the bulk of the fix where
-> the new API is introduced, the test is only applicable when this API
-> is used and that is in "x86/sgx: Support adding of pages to an
-> initialized enclave". I will move the "Tested-by" to that patch.
->
+arch/sparc/kernel/pci_sabre.c:335:2-8: ERROR: missing
+put_device; call of_find_device_by_node on line 324, but
+without a corresponding object release within this function.
+arch/sparc/kernel/pci_sabre.c:369:0-1: ERROR: missing
+put_device; call of_find_device_by_node on line 324, but
+without a corresponding object release within this function.
 
-You can also add my Tested-by for patches adding the new IOCTLs.
-Our team and I have tested EAUG on #PF,  modifying types and permissions  
-with Intel SGX SDK/PSW.
-Thanks
-Haitao
+Generated by: scripts/coccinelle/free/put_device.cocci
+
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+ arch/sparc/kernel/pci_sabre.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/arch/sparc/kernel/pci_sabre.c b/arch/sparc/kernel/pci_sabre.c
+index 3c38ca40a22b..5d0d13840ac3 100644
+--- a/arch/sparc/kernel/pci_sabre.c
++++ b/arch/sparc/kernel/pci_sabre.c
+@@ -331,8 +331,10 @@ static void sabre_register_error_handlers(struct pci_pbm_info *pbm)
+ 	 * 2: CE ERR
+ 	 * 3: POWER FAIL
+ 	 */
+-	if (op->archdata.num_irqs < 4)
++	if (op->archdata.num_irqs < 4) {
++		put_device(op);
+ 		return;
++	}
+ 
+ 	/* We clear the error bits in the appropriate AFSR before
+ 	 * registering the handler so that we don't get spurious
+@@ -366,6 +368,7 @@ static void sabre_register_error_handlers(struct pci_pbm_info *pbm)
+ 	tmp = upa_readq(base + SABRE_PCICTRL);
+ 	tmp |= SABRE_PCICTRL_ERREN;
+ 	upa_writeq(tmp, base + SABRE_PCICTRL);
++	put_device(op);
+ }
+ 
+ static void apb_init(struct pci_bus *sabre_bus)
+-- 
+2.17.1
+

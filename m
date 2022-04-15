@@ -2,500 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A9D850236B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B18D502366
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349743AbiDOFKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:10:07 -0400
+        id S244126AbiDOFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:09:34 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352078AbiDOFGd (ORCPT
+        with ESMTP id S1352179AbiDOFGk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:06:33 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C1A2CE1F;
-        Thu, 14 Apr 2022 22:00:17 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o5so6872317pjr.0;
-        Thu, 14 Apr 2022 22:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OQov0MYkTIBONoBTme4xRpWTb2zSIeTV6sGIJV2qfic=;
-        b=RzescEvZ/UzDxR72ij28BEXKLD79UpqT0JUxla6jeXPDxQPnXwLOM9bSPbP0h38+WY
-         1H9sR90tTaBobJZtc5Gvm2aDV5A6tHWdMjxqeVJzYJcKx9BX904TkcsCKLSt65kZcLjz
-         +MwAUQffr5J+V++P30I2HHEW7pBIATy971HSaOpYl1fQz3QHNUYGTgwYSEIig0PwBE5I
-         wZW/1eAAXQEsrQ/nLipoqOEg8Fx3QxXqPsHlaQdlvCc6M7EEwnLXNaxUX/TauniMt2eq
-         zSx1c7hZ1DtOMCYRL/7uDA8+fG7hCmkrUCzPnxwbBHGSISeumxV/dO1GA9u/qKkxftEy
-         9bNw==
+        Fri, 15 Apr 2022 01:06:40 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD015E14A
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:01:22 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so4264604iox.1
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:01:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=OQov0MYkTIBONoBTme4xRpWTb2zSIeTV6sGIJV2qfic=;
-        b=TPrecT2mkZpVH6BGCmPOPWSGt9zOKFa3G46z6MVv1lzJpQk6wZBzgrhmiTtQ9XSCPz
-         I1s6b306h2OgVBUVb9IfJKpChndUP/IGKO58Xd4mmtTaLOlcMZodGtzvEfMFIbG0DW5Q
-         rpqIvQiAhaNqLX78nIzu8NarjmYzvIlgncQht9CgM0lNg9d8s3pV4C38SpstX1WI2kjY
-         9j+Uu22wRcCDvgsNu/5+Q6ih/YetQ8k3WgQrF1MyEGktIdqxJR8zcDG7Y30hSvgAtr6w
-         Ldg4pn6YZMHJ+9hlk+Ibf1XlTq+KDVwFz0s+fwoZKMFyjuES5Fa0Nw75/qAE/cqvt9O6
-         vNsA==
-X-Gm-Message-State: AOAM5327fB2lEQVP6G8TWAnQuqQ1aOT6vf2kElvwXd7K1ISZrxzyjPpU
-        ffgN/yrRYUcc9kKYqwR6EeRtEeQ7owi+Aw==
-X-Google-Smtp-Source: ABdhPJxkr5FzOWuXqZyvrV/oRtoExTN/+z0MjvtxK69CNVHFOVCp7Yq6YsqFm56DuTwSa98dkYhEFw==
-X-Received: by 2002:a17:90b:2385:b0:1cb:7b13:934b with SMTP id mr5-20020a17090b238500b001cb7b13934bmr2214467pjb.121.1649998816241;
-        Thu, 14 Apr 2022 22:00:16 -0700 (PDT)
-Received: from localhost ([199.247.115.17])
-        by smtp.gmail.com with ESMTPSA id 26-20020a630f5a000000b0039d83ab8655sm3336652pgp.0.2022.04.14.22.00.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 22:00:15 -0700 (PDT)
-From:   Matt Turner <mattst88@gmail.com>
-To:     linux-perf-users@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jelle van der Waa <jvanderwaa@redhat.com>,
-        Matt Turner <mattst88@gmail.com>
-Subject: [PATCH] tools: port perf ui from GTK 2 to GTK 3
-Date:   Thu, 14 Apr 2022 22:00:03 -0700
-Message-Id: <20220415050003.3257645-1-mattst88@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=ni5AtDp+T7iui1KdKfLMn+bmCrXjxGB6n+GUU8WNh/A=;
+        b=vwleSk3PeUhLLnmHChJDLYgDzQzq8s4o2+JVyxwYMZbaPnJmhhgkGA6n3wfFLpc6XD
+         RpGj7assLtD5NxnZWWAYbEa4owP1qOnnWd9DZQG01S+TFLezyt5juGvyxruabxAsbMrI
+         lv2SA5+98aAbYjMPcD8xQqVRGkwZmULGzSCLuYSWPBOw1sV91AIGgOc0Yjqd9BGCEorV
+         86G5Iz+pXmQgZxI2+EG6pUR8MktI3xFkJRYqDcSpC41YPUkKuFNir98L52naChl9jZzd
+         UoejMfOmQDuTJN2SAcz5SE98kM84ULm/av5KKoaLabmOnwAyu4/s21zaWVraIsna8wAl
+         TJQw==
+X-Gm-Message-State: AOAM531FJqznBZSBKXSID9hF4NzsElC+nwCzLcyUNRvQ9MyPacKp/yCt
+        Te9M6EzQlRFbWy/sz1JQLYaaHQV1TifKWJHJwwEXna7VMvuq
+X-Google-Smtp-Source: ABdhPJzXyz13wQlKrcYp2dUDjnAyGWsH0ud/S2YFWKrrUSHXjVcQNgmcM0NOwMN5WvYupic0tQQOLwD9LQ+gdTjNdntXnkbLw2Z6
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:2410:0:b0:323:fb30:183c with SMTP id
+ f16-20020a022410000000b00323fb30183cmr2893332jaa.2.1649998881301; Thu, 14 Apr
+ 2022 22:01:21 -0700 (PDT)
+Date:   Thu, 14 Apr 2022 22:01:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000332b2105dcaa4d7a@google.com>
+Subject: [syzbot] general protection fault in __dentry_path (2)
+From:   syzbot <syzbot+5c550b7ec6a56f70c32d@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jelle van der Waa <jvanderwaa@redhat.com>
+Hello,
 
-GTK 2 is a legacy API and the newer version is GTK 3 which changes a few
-API functions. gtk_tree_view_set_rules_hint is no longer required since
-theme's are now responsible to handle this, gtk_vbox_new is deprecated
-and replaced by passing the orientation to gtk_box_new. Apart from these
-changes the accessing of the screen changed in GTK which requires using
-new functions for getting geometry. Lastly the GTK_STOCK_OK define is
-deprecated in GTK 3.
+syzbot found the following issue on:
 
-Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
-Signed-off-by: Matt Turner <mattst88@gmail.com>
+HEAD commit:    d12d7e1cfe38 Add linux-next specific files for 20220411
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=120d568f700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=58fcaf7d8df169a6
+dashboard link: https://syzkaller.appspot.com/bug?extid=5c550b7ec6a56f70c32d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17903a8f700000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f03688f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+5c550b7ec6a56f70c32d@syzkaller.appspotmail.com
+
+L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
+general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
+CPU: 1 PID: 3586 Comm: syz-executor395 Not tainted 5.18.0-rc1-next-20220411-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:__dentry_path+0x215/0x740 fs/d_path.c:342
+Code: be 09 31 ff 41 89 ed 41 83 e5 01 44 89 ee e8 22 fe 96 ff 45 85 ed 75 ce e8 f8 fb 96 ff 48 8b 44 24 20 89 6c 24 18 48 c1 e8 03 <42> 80 3c 30 00 0f 85 d2 04 00 00 48 8b 44 24 10 83 e5 01 89 6c 24
+RSP: 0018:ffffc9000376fc30 EFLAGS: 00010206
+RAX: 000000000000000a RBX: ffffffff8ba14680 RCX: 0000000000000000
+RDX: ffff888025001d40 RSI: ffffffff81e30a28 RDI: 0000000000000003
+RBP: 0000000000000a8c R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81e309e5 R11: 0000000000000001 R12: 0000000000000fff
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88805610cfff
+FS:  000055555682c300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000561836ba9d20 CR3: 000000001d922000 CR4: 00000000003526e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dentry_path_raw+0xc2/0x110 fs/d_path.c:367
+ kvm_uevent_notify_change.part.0+0x215/0x450 arch/x86/kvm/../../../virt/kvm/kvm_main.c:5492
+ kvm_uevent_notify_change arch/x86/kvm/../../../virt/kvm/kvm_main.c:5459 [inline]
+ kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1198 [inline]
+ kvm_put_kvm+0xf7/0xb70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1264
+ kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:4795 [inline]
+ kvm_dev_ioctl+0x85d/0x1c70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4811
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f8a6670d009
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffded420398 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8a6670d009
+RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000003
+RBP: 00007f8a666d0ff0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8a666d1080
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__dentry_path+0x215/0x740 fs/d_path.c:342
+Code: be 09 31 ff 41 89 ed 41 83 e5 01 44 89 ee e8 22 fe 96 ff 45 85 ed 75 ce e8 f8 fb 96 ff 48 8b 44 24 20 89 6c 24 18 48 c1 e8 03 <42> 80 3c 30 00 0f 85 d2 04 00 00 48 8b 44 24 10 83 e5 01 89 6c 24
+RSP: 0018:ffffc9000376fc30 EFLAGS: 00010206
+RAX: 000000000000000a RBX: ffffffff8ba14680 RCX: 0000000000000000
+RDX: ffff888025001d40 RSI: ffffffff81e30a28 RDI: 0000000000000003
+RBP: 0000000000000a8c R08: 0000000000000000 R09: 0000000000000001
+R10: ffffffff81e309e5 R11: 0000000000000001 R12: 0000000000000fff
+R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88805610cfff
+FS:  000055555682c300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000561836ba0d90 CR3: 000000001d922000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	be 09 31 ff 41       	mov    $0x41ff3109,%esi
+   5:	89 ed                	mov    %ebp,%ebp
+   7:	41 83 e5 01          	and    $0x1,%r13d
+   b:	44 89 ee             	mov    %r13d,%esi
+   e:	e8 22 fe 96 ff       	callq  0xff96fe35
+  13:	45 85 ed             	test   %r13d,%r13d
+  16:	75 ce                	jne    0xffffffe6
+  18:	e8 f8 fb 96 ff       	callq  0xff96fc15
+  1d:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
+  22:	89 6c 24 18          	mov    %ebp,0x18(%rsp)
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
+  2f:	0f 85 d2 04 00 00    	jne    0x507
+  35:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
+  3a:	83 e5 01             	and    $0x1,%ebp
+  3d:	89                   	.byte 0x89
+  3e:	6c                   	insb   (%dx),%es:(%rdi)
+  3f:	24                   	.byte 0x24
+
+
 ---
-Originally sent in 2019. I've rebased it and given it a test.
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-One problem I've noticed is that C++ symbol names are often broken.
-E.g.:
-
-(perf:3254940): Gtk-WARNING **: 21:47:46.663: Failed to set text from
-markup due to error parsing markup: Error on line 1 char 95:
-“std::char_traits<char” is not a valid name: “<”
-
-Presumably we need to call g_markup_escape_text() somewhere, but I
-struggled to find the right place.
-
-Without the patch, the GTK-2 version repeatedly segfaults, so this is an
-improvement regardless.
-
- tools/build/Makefile.feature                  |  5 +++--
- tools/build/feature/Makefile                  | 12 +++++-----
- tools/build/feature/test-all.c                | 10 +++++++++
- ...est-gtk2-infobar.c => test-gtk3-infobar.c} |  0
- .../feature/{test-gtk2.c => test-gtk3.c}      |  0
- tools/perf/Documentation/perf-report.txt      |  2 +-
- tools/perf/Makefile                           |  2 +-
- tools/perf/Makefile.config                    | 22 +++++++++----------
- tools/perf/Makefile.perf                      |  6 ++---
- tools/perf/builtin-report.c                   |  2 +-
- tools/perf/builtin-version.c                  |  1 +
- tools/perf/tests/make                         | 12 +++++-----
- tools/perf/ui/gtk/annotate.c                  |  2 +-
- tools/perf/ui/gtk/browser.c                   | 16 ++++++++------
- tools/perf/ui/gtk/hists.c                     |  6 +----
- tools/perf/ui/gtk/progress.c                  |  2 +-
- tools/perf/ui/setup.c                         |  2 +-
- 17 files changed, 56 insertions(+), 46 deletions(-)
- rename tools/build/feature/{test-gtk2-infobar.c => test-gtk3-infobar.c} (100%)
- rename tools/build/feature/{test-gtk2.c => test-gtk3.c} (100%)
-
-diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-index ae61f464043a..4ce9c514f30b 100644
---- a/tools/build/Makefile.feature
-+++ b/tools/build/Makefile.feature
-@@ -79,8 +79,8 @@ FEATURE_TESTS_EXTRA :=                  \
-          compile-32                     \
-          compile-x32                    \
-          cplus-demangle                 \
--         gtk2                           \
--         gtk2-infobar                   \
-+         gtk3                           \
-+         gtk3-infobar                   \
-          hello                          \
-          libbabeltrace                  \
-          libbfd-liberty                 \
-@@ -113,6 +113,7 @@ FEATURE_DISPLAY ?=              \
-          dwarf                  \
-          dwarf_getlocations     \
-          glibc                  \
-+         gtk3                   \
-          libbfd                 \
-          libbfd-buildid		\
-          libcap                 \
-diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
-index de66e1cc0734..82e2cc182c57 100644
---- a/tools/build/feature/Makefile
-+++ b/tools/build/feature/Makefile
-@@ -11,8 +11,8 @@ FILES=                                          \
-          test-fortify-source.bin                \
-          test-get_current_dir_name.bin          \
-          test-glibc.bin                         \
--         test-gtk2.bin                          \
--         test-gtk2-infobar.bin                  \
-+         test-gtk3.bin                          \
-+         test-gtk3-infobar.bin                  \
-          test-hello.bin                         \
-          test-libaudit.bin                      \
-          test-libbfd.bin                        \
-@@ -205,11 +205,11 @@ $(OUTPUT)test-libtracefs.bin:
- $(OUTPUT)test-libcrypto.bin:
- 	$(BUILD) -lcrypto
- 
--$(OUTPUT)test-gtk2.bin:
--	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null) -Wno-deprecated-declarations
-+$(OUTPUT)test-gtk3.bin:
-+	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
- 
--$(OUTPUT)test-gtk2-infobar.bin:
--	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null)
-+$(OUTPUT)test-gtk3-infobar.bin:
-+	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
- 
- grep-libs  = $(filter -l%,$(1))
- strip-libs = $(filter-out -l%,$(1))
-diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
-index 5ffafb967b6e..5ec093498cfc 100644
---- a/tools/build/feature/test-all.c
-+++ b/tools/build/feature/test-all.c
-@@ -70,6 +70,14 @@
- # include "test-libslang.c"
- #undef main
- 
-+#define main main_test_gtk3
-+# include "test-gtk3.c"
-+#undef main
-+
-+#define main main_test_gtk3_infobar
-+# include "test-gtk3-infobar.c"
-+#undef main
-+
- #define main main_test_libbfd
- # include "test-libbfd.c"
- #undef main
-@@ -187,6 +195,8 @@ int main(int argc, char *argv[])
- 	main_test_libelf_getshdrstrndx();
- 	main_test_libunwind();
- 	main_test_libslang();
-+	main_test_gtk3(argc, argv);
-+	main_test_gtk3_infobar(argc, argv);
- 	main_test_libbfd();
- 	main_test_libbfd_buildid();
- 	main_test_backtrace();
-diff --git a/tools/build/feature/test-gtk2-infobar.c b/tools/build/feature/test-gtk3-infobar.c
-similarity index 100%
-rename from tools/build/feature/test-gtk2-infobar.c
-rename to tools/build/feature/test-gtk3-infobar.c
-diff --git a/tools/build/feature/test-gtk2.c b/tools/build/feature/test-gtk3.c
-similarity index 100%
-rename from tools/build/feature/test-gtk2.c
-rename to tools/build/feature/test-gtk3.c
-diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
-index 24efc0583c93..e4a7c99c7853 100644
---- a/tools/perf/Documentation/perf-report.txt
-+++ b/tools/perf/Documentation/perf-report.txt
-@@ -314,7 +314,7 @@ OPTIONS
- 	requires a tty, if one is not present, as when piping to other
- 	commands, the stdio interface is used.
- 
----gtk:: Use the GTK2 interface.
-+--gtk:: Use the GTK3 interface.
- 
- -k::
- --vmlinux=<file>::
-diff --git a/tools/perf/Makefile b/tools/perf/Makefile
-index f3fe360a35c6..ea3fb4657a91 100644
---- a/tools/perf/Makefile
-+++ b/tools/perf/Makefile
-@@ -100,7 +100,7 @@ clean:
- # make -C tools/perf -f tests/make
- #
- build-test:
--	@$(MAKE) SHUF=1 -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory tarpkg make_static make_with_gtk2 out
-+	@$(MAKE) SHUF=1 -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory tarpkg make_static make_with_gtk3 out
- 
- build-test-tarball:
- 	@$(MAKE) -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory out
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index f3bf9297bcc0..3bb755fb7676 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -755,20 +755,20 @@ ifndef NO_SLANG
-   endif
- endif
- 
--ifdef GTK2
--  FLAGS_GTK2=$(CFLAGS) $(LDFLAGS) $(EXTLIBS) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null)
--  $(call feature_check,gtk2)
--  ifneq ($(feature-gtk2), 1)
--    msg := $(warning GTK2 not found, disables GTK2 support. Please install gtk2-devel or libgtk2.0-dev);
--    NO_GTK2 := 1
-+ifdef GTK3
-+  FLAGS_GTK3=$(CFLAGS) $(LDFLAGS) $(EXTLIBS) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
-+  $(call feature_check,gtk3)
-+  ifneq ($(feature-gtk3), 1)
-+    msg := $(warning GTK3 not found, disables GTK3 support. Please install gtk3-devel or libgtk3.0-dev);
-+    NO_GTK3 := 1
-   else
--    $(call feature_check,gtk2-infobar)
--    ifeq ($(feature-gtk2-infobar), 1)
-+    $(call feature_check,gtk3-infobar)
-+    ifeq ($(feature-gtk3-infobar), 1)
-       GTK_CFLAGS := -DHAVE_GTK_INFO_BAR_SUPPORT
-     endif
--    CFLAGS += -DHAVE_GTK2_SUPPORT
--    GTK_CFLAGS += $(shell $(PKG_CONFIG) --cflags gtk+-2.0 2>/dev/null)
--    GTK_LIBS := $(shell $(PKG_CONFIG) --libs gtk+-2.0 2>/dev/null)
-+    CFLAGS += -DHAVE_GTK3_SUPPORT
-+    GTK_CFLAGS += $(shell $(PKG_CONFIG) --cflags gtk+-3.0 2>/dev/null)
-+    GTK_LIBS := $(shell $(PKG_CONFIG) --libs gtk+-3.0 2>/dev/null)
-     EXTLIBS += -ldl
-   endif
- endif
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 69473a836bae..0211a20242fe 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -48,7 +48,7 @@ include ../scripts/utilities.mak
- #
- # Define NO_SLANG if you do not want TUI support.
- #
--# Define GTK2 if you want GTK+ GUI support.
-+# Define GTK3 if you want GTK+ GUI support.
- #
- # Define NO_DEMANGLE if you do not want C++ symbol demangling.
- #
-@@ -404,7 +404,7 @@ ifneq ($(OUTPUT),)
-   CFLAGS += -I$(OUTPUT)
- endif
- 
--ifdef GTK2
-+ifdef GTK3
-   ALL_PROGRAMS += $(OUTPUT)libperf-gtk.so
-   GTK_IN := $(OUTPUT)gtk-in.o
- endif
-@@ -930,7 +930,7 @@ check: $(OUTPUT)common-cmds.h
- 
- ### Installation rules
- 
--ifdef GTK2
-+ifdef GTK3
- install-gtk: $(OUTPUT)libperf-gtk.so
- 	$(call QUIET_INSTALL, 'GTK UI') \
- 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(libdir_SQ)'; \
-diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
-index 1ad75c7ba074..c3ad5e8e3098 100644
---- a/tools/perf/builtin-report.c
-+++ b/tools/perf/builtin-report.c
-@@ -1213,7 +1213,7 @@ int cmd_report(int argc, const char **argv)
- #ifdef HAVE_SLANG_SUPPORT
- 	OPT_BOOLEAN(0, "tui", &report.use_tui, "Use the TUI interface"),
- #endif
--	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK2 interface"),
-+	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK3 interface"),
- 	OPT_BOOLEAN(0, "stdio", &report.use_stdio,
- 		    "Use the stdio interface"),
- 	OPT_BOOLEAN(0, "header", &report.header, "Show data header."),
-diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
-index 9cd074a3d825..63c7e66bbc83 100644
---- a/tools/perf/builtin-version.c
-+++ b/tools/perf/builtin-version.c
-@@ -60,6 +60,7 @@ static void library_status(void)
- 	STATUS(HAVE_DWARF_SUPPORT, dwarf);
- 	STATUS(HAVE_DWARF_GETLOCATIONS_SUPPORT, dwarf_getlocations);
- 	STATUS(HAVE_GLIBC_SUPPORT, glibc);
-+	STATUS(HAVE_GTK3_SUPPORT, gtk3);
- #ifndef HAVE_SYSCALL_TABLE_SUPPORT
- 	STATUS(HAVE_LIBAUDIT_SUPPORT, libaudit);
- #endif
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index da013e90a945..cb959dccbe9d 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -72,8 +72,8 @@ make_no_libpython   := NO_LIBPYTHON=1
- make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
- make_no_newt        := NO_NEWT=1
- make_no_slang       := NO_SLANG=1
--make_no_gtk2        := NO_GTK2=1
--make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK2=1
-+make_no_gtk3        := NO_GTK3=1
-+make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK3=1
- make_no_demangle    := NO_DEMANGLE=1
- make_no_libelf      := NO_LIBELF=1
- make_no_libunwind   := NO_LIBUNWIND=1
-@@ -93,7 +93,7 @@ make_no_sdt	    := NO_SDT=1
- make_no_syscall_tbl := NO_SYSCALL_TABLE=1
- make_with_clangllvm := LIBCLANGLLVM=1
- make_with_libpfm4   := LIBPFM4=1
--make_with_gtk2      := GTK2=1
-+make_with_gtk3      := GTK3=1
- make_tags           := tags
- make_cscope         := cscope
- make_help           := help
-@@ -113,7 +113,7 @@ make_install_prefix_slash := install prefix=/tmp/krava/
- make_static         := LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1
- 
- # all the NO_* variable combined
--make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK2=1
-+make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK3=1
- make_minimal        += NO_DEMANGLE=1 NO_LIBELF=1 NO_LIBUNWIND=1 NO_BACKTRACE=1
- make_minimal        += NO_LIBNUMA=1 NO_LIBAUDIT=1 NO_LIBBIONIC=1
- make_minimal        += NO_LIBDW_DWARF_UNWIND=1 NO_AUXTRACE=1 NO_LIBBPF=1
-@@ -138,7 +138,7 @@ run += make_no_libpython
- run += make_no_scripts
- run += make_no_newt
- run += make_no_slang
--run += make_no_gtk2
-+run += make_no_gtk3
- run += make_no_ui
- run += make_no_demangle
- run += make_no_libelf
-@@ -312,7 +312,7 @@ $(run):
- 	$(call test,$@) && \
- 	rm -rf $@ $$TMP_DEST || (cat $@ ; false)
- 
--make_with_gtk2:
-+make_with_gtk3:
- 	$(call clean)
- 	@TMP_DEST=$$(mktemp -d); \
- 	cmd="cd $(PERF) && $(MAKE_F) $($@) $(PARALLEL_OPT) $(O_OPT) DESTDIR=$$TMP_DEST"; \
-diff --git a/tools/perf/ui/gtk/annotate.c b/tools/perf/ui/gtk/annotate.c
-index 0a50e962f9a3..efd380f124aa 100644
---- a/tools/perf/ui/gtk/annotate.c
-+++ b/tools/perf/ui/gtk/annotate.c
-@@ -208,7 +208,7 @@ static int symbol__gtk_annotate(struct map_symbol *ms, struct evsel *evsel,
- 		if (!pgctx)
- 			return -1;
- 
--		vbox = gtk_vbox_new(FALSE, 0);
-+		vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
- 		notebook = gtk_notebook_new();
- 		pgctx->notebook = notebook;
- 
-diff --git a/tools/perf/ui/gtk/browser.c b/tools/perf/ui/gtk/browser.c
-index 8f3e43d148a8..6fd85b5325ba 100644
---- a/tools/perf/ui/gtk/browser.c
-+++ b/tools/perf/ui/gtk/browser.c
-@@ -13,19 +13,21 @@ void perf_gtk__signal(int sig)
- 	psignal(sig, "perf");
- }
- 
--void perf_gtk__resize_window(GtkWidget *window)
-+void perf_gtk__resize_window(GtkWidget *widget)
- {
- 	GdkRectangle rect;
--	GdkScreen *screen;
--	int monitor;
-+	GdkMonitor *monitor;
-+	GdkDisplay *display;
-+	GdkWindow *window;
- 	int height;
- 	int width;
- 
--	screen = gtk_widget_get_screen(window);
-+	display = gdk_display_get_default();
-+	window = gtk_widget_get_window(widget);
- 
--	monitor = gdk_screen_get_monitor_at_window(screen, window->window);
-+	monitor = gdk_display_get_monitor_at_window(display, window);
- 
--	gdk_screen_get_monitor_geometry(screen, monitor, &rect);
-+	gdk_monitor_get_geometry(monitor, &rect);
- 
- 	width	= rect.width * 3 / 4;
- 	height	= rect.height * 3 / 4;
-@@ -58,7 +60,7 @@ GtkWidget *perf_gtk__setup_info_bar(void)
- 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_bar));
- 	gtk_container_add(GTK_CONTAINER(content_area), label);
- 
--	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), GTK_STOCK_OK,
-+	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), "_OK",
- 				GTK_RESPONSE_OK);
- 	g_signal_connect(info_bar, "response",
- 			 G_CALLBACK(gtk_widget_hide), NULL);
-diff --git a/tools/perf/ui/gtk/hists.c b/tools/perf/ui/gtk/hists.c
-index c83be2d57f7e..5aa2655c7a0a 100644
---- a/tools/perf/ui/gtk/hists.c
-+++ b/tools/perf/ui/gtk/hists.c
-@@ -395,8 +395,6 @@ static void perf_gtk__show_hists(GtkWidget *window, struct hists *hists,
- 		}
- 	}
- 
--	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(view), TRUE);
--
- 	g_signal_connect(view, "row-activated",
- 			 G_CALLBACK(on_row_activated), NULL);
- 	gtk_container_add(GTK_CONTAINER(window), view);
-@@ -583,8 +581,6 @@ static void perf_gtk__show_hierarchy(GtkWidget *window, struct hists *hists,
- 	perf_gtk__add_hierarchy_entries(hists, &hists->entries, store,
- 					NULL, &hpp, min_pcnt);
- 
--	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(view), TRUE);
--
- 	g_signal_connect(view, "row-activated",
- 			 G_CALLBACK(on_row_activated), NULL);
- 	gtk_container_add(GTK_CONTAINER(window), view);
-@@ -616,7 +612,7 @@ int evlist__gtk_browse_hists(struct evlist *evlist, const char *help,
- 	if (!pgctx)
- 		return -1;
- 
--	vbox = gtk_vbox_new(FALSE, 0);
-+	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
- 
- 	notebook = gtk_notebook_new();
- 
-diff --git a/tools/perf/ui/gtk/progress.c b/tools/perf/ui/gtk/progress.c
-index eea6fcde518a..aaa7e7f6e4aa 100644
---- a/tools/perf/ui/gtk/progress.c
-+++ b/tools/perf/ui/gtk/progress.c
-@@ -13,7 +13,7 @@ static void gtk_ui_progress__update(struct ui_progress *p)
- 	char buf[1024];
- 
- 	if (dialog == NULL) {
--		GtkWidget *vbox = gtk_vbox_new(TRUE, 5);
-+		GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
- 		GtkWidget *label = gtk_label_new(p->title);
- 
- 		dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
-index 700335cde618..1d35e3ad4576 100644
---- a/tools/perf/ui/setup.c
-+++ b/tools/perf/ui/setup.c
-@@ -14,7 +14,7 @@ int use_browser = -1;
- 
- #define PERF_GTK_DSO "libperf-gtk.so"
- 
--#ifdef HAVE_GTK2_SUPPORT
-+#ifdef HAVE_GTK3_SUPPORT
- 
- static int setup_gtk_browser(void)
- {
--- 
-2.35.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

@@ -2,180 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16EBD5028D1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:22:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984AD5028D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:23:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352661AbiDOLYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 07:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
+        id S1352673AbiDOL0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 07:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235588AbiDOLYg (ORCPT
+        with ESMTP id S243602AbiDOL0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 07:24:36 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1932A8879F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650021729; x=1681557729;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=78QoJlXrpzast5SrNWg571wkjhj0jmcjTKYzUx9L/Js=;
-  b=aOKq5FdJd0lNKzDzIvgt1F5YNnaLz6dM3vP7sSXWoW7+HNV62nGAiWOd
-   gtdwEC+tcYc1Nfma0Gwj1OEwpKUgGO9iBqA26BasHg5+CDZ8Pdc9y3Imy
-   p5XJ/TXk3TOpc6XfwMJCD2zHhVPS16fFq37Dmyl/QTULJEO7c42A29Osy
-   zxWR8u4kOJ4JJIuRhm6nQ3xu/WYBp10MrMM2hw3Q0mgxyAtvqoe+vdRp3
-   6du04jEHzSKUe2q0pKVqx1Ha5de/NrTz0YdWc1ZgPmT6CFEQZX109ZW0i
-   wF5q1YpBXyzhsHkxlpuGNKwDG7J2P6DEJofqz1hVDtCPh8x3WdAxxKeyQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262582638"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="262582638"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 04:22:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="803492864"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 15 Apr 2022 04:22:07 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfK1e-0001to-OX;
-        Fri, 15 Apr 2022 11:22:06 +0000
-Date:   Fri, 15 Apr 2022 19:21:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/core] BUILD SUCCESS
- ce8abf340e40e1126bfcb9e7679b3d6b524ae3e0
-Message-ID: <62595539.Z+Eiv866Yp2ddjNh%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 15 Apr 2022 07:26:11 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47A38AE76;
+        Fri, 15 Apr 2022 04:23:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=jjg190Yb9zONSH4JSaJBDfV6Tubxd7UZyyCcS9yfkSU=; b=R3LSsCDkRob7+KFtLD6IP7GN0q
+        iSDhWXxvo6t6+fQ58ZgvBcDfDvMHgBSkwHowqc2ym4dbyNos89L3d6pau0yUyiw6cduaH3yBOmZxr
+        YYm0syhFZ2Z2+Y1yD2qeL0yF0zYpHyc3QrGMJpKX0utEP0OTK75bmtKYPKxkMjlqAC5oJJjj+S0dM
+        jmk3f2Wi40x3CNnKVUEcA30KfFxpTfQTUzEDM37BrS2dE2ISGotWllR8sUDlw3mIpaTfhgppvUQ50
+        Jlo8m4zr6UYvNg3l6F4uVFtPYTou8t6RF+aPlLg1DcsUuAoK+WbGKR6jU1BSSfp5vzaPY0ZzrVKSn
+        0tdHXoUQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58276)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1nfK32-0005aK-Ol; Fri, 15 Apr 2022 12:23:32 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1nfK30-0005DJ-51; Fri, 15 Apr 2022 12:23:30 +0100
+Date:   Fri, 15 Apr 2022 12:23:30 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: Re: [PATCH net-next 06/12] net: dsa: rzn1-a5psw: add Renesas RZ/N1
+ advanced 5 port switch driver
+Message-ID: <YllVsiN7YhaUkvQe@shell.armlinux.org.uk>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+ <20220414122250.158113-7-clement.leger@bootlin.com>
+ <20220414144709.tpxiiaiy2hu4n7fd@skbuf>
+ <20220415113453.1a076746@fixe.home>
+ <20220415105503.ztl4zhoyua2qzelt@skbuf>
+ <YllQtjybAOF/ePfG@shell.armlinux.org.uk>
+ <20220415111419.twrlknxuto4pri63@skbuf>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Disposition: inline
+In-Reply-To: <20220415111419.twrlknxuto4pri63@skbuf>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git timers/core
-branch HEAD: ce8abf340e40e1126bfcb9e7679b3d6b524ae3e0  Merge tag 'tai-for-tracing' into timers/core
+On Fri, Apr 15, 2022 at 02:14:19PM +0300, Vladimir Oltean wrote:
+> On Fri, Apr 15, 2022 at 12:02:14PM +0100, Russell King (Oracle) wrote:
+> > On Fri, Apr 15, 2022 at 01:55:03PM +0300, Vladimir Oltean wrote:
+> > > I meant that for a DSA switch driver is mandatory to call dsa_switch_shutdown()
+> > > from your ->shutdown method, otherwise subtle things break, sorry for being unclear.
+> > > 
+> > > Please blindly copy-paste the odd pattern that all other DSA drivers use
+> > > in ->shutdown and ->remove (with the platform_set_drvdata(dev, NULL) calls),
+> > > like a normal person :)
+> > 
+> > Those platform_set_drvdata(, NULL) calls should be killed - the
+> > driver model will set the driver data to NULL after ->remove has
+> > been called - so having drivers also setting the driver data to
+> > NULL is mere duplication.
+> 
+> I can see why you say that, but the reverse is not true.
+> A driver can be removed from a device after said device has been shut
+> down, and DSA does things in dsa_unregister_switch() and in
+> dsa_switch_shutdown() that are incompatible with each other, so either
+> one or the other should be called, but not both.
 
-elapsed time: 1038m
-
-configs tested: 94
-configs skipped: 3
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc              randconfig-c003-20220414
-i386                          randconfig-c001
-sh                   secureedge5410_defconfig
-powerpc                   motionpro_defconfig
-arc                     haps_hs_smp_defconfig
-arc                          axs103_defconfig
-m68k                        stmark2_defconfig
-powerpc                         wii_defconfig
-arc                        vdk_hs38_defconfig
-mips                           jazz_defconfig
-sh                           se7724_defconfig
-arm                           imxrt_defconfig
-arm                            mps2_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220414
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-arc                                 defconfig
-h8300                            allyesconfig
-sh                               allmodconfig
-xtensa                           allyesconfig
-parisc                              defconfig
-parisc64                            defconfig
-s390                             allmodconfig
-parisc                           allyesconfig
-s390                                defconfig
-s390                             allyesconfig
-sparc                               defconfig
-sparc                            allyesconfig
-i386                             allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-powerpc                          allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                          randconfig-a005
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-riscv                randconfig-r042-20220415
-arc                  randconfig-r043-20220415
-s390                 randconfig-r044-20220415
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220414
-arm                  randconfig-c002-20220414
-i386                          randconfig-c001
-riscv                randconfig-c006-20220414
-arm                      tct_hammer_defconfig
-powerpc                     tqm5200_defconfig
-arm                        multi_v5_defconfig
-mips                           mtx1_defconfig
-arm                        spear3xx_defconfig
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a015
+How would ->remove be called after ->shutdown has been called? Aren't
+the two calls already exclusive - if ->remove has been called, the
+device is no longer bound to the driver, so ->shutdown can't be called
+for the device.  If ->shutdown has been called, the system is going
+down, and userspace is probably already dead.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

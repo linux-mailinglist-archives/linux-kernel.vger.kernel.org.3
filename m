@@ -2,122 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F9DE502FA1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C429B502F9F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:15:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351835AbiDOURl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 16:17:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S1351911AbiDOURz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 16:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351201AbiDOUR0 (ORCPT
+        with ESMTP id S1351201AbiDOURx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 16:17:26 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C931F3A727;
-        Fri, 15 Apr 2022 13:14:56 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-2ebf4b91212so92360807b3.8;
-        Fri, 15 Apr 2022 13:14:56 -0700 (PDT)
+        Fri, 15 Apr 2022 16:17:53 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2002E3A727
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:15:24 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id z15so6528937qtj.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:15:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=QfGuix9eHPmBVHieE98IkajLKskzJOMJS9YG04aHQEc=;
-        b=iGv/flgytSZZleWCwY3NfgAeABaSuaArYoDgbbyezprnLZw33y0kzKJpeR9Gx9v9j8
-         yFRmIdUedGm0HRsRtV32in/5wzKY3OEwLQz0XdDCGaSuyHnCwh72egU+U4iwYcbW9th9
-         ZKICA5oZfdknC+kjfvqFyYCN3GWi4iRmsOk63DjRkDu+7T/iy/EytvEQwti6DLvBD5EM
-         qrgBDVWoJ/xAybNrqyt7gzEuEQiprAYuNDk0mr8bIFllnk7Bs/wkqO/jKC/DCEGuEmnx
-         evxd5S5zqC0gxcUIul8XvHC2vxr4NXxCVHg+Ns2XXdM+3Mz5FuN2MbmRBzdVzZtJIrjw
-         /TSw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=AVlaJ3+JyBV6uy3xWobzUMDIswV9zZwop66b5nDrPzo=;
+        b=wSdp3PScNWgt43IiKr/hciI5s/OwStC/qks/OfNtWzDi5vqCFYT1i4FUnT/yyo45y7
+         I2QnHgsoHk/9Fon0tTmegIm+Qk1aHed2P7V1tJgFrNo+gP8syAbBrI5XUouhDZ8LkI67
+         LAzOTg08807jITxKhC2Ikja3M7B9BJd9GeGIelqA3Px1WYCFkdvhPdxPO3l2A3sdMgpR
+         gY2kU4MnkUGQLd6uiuPhOkILltUAsVyS8zuvC9tjKksHf1+t0DX7rgHNUTSbza/xKkQ+
+         mYTONn6lSMFITX2u4+9HlpWlOa3t88u1ui9j/fiiUtPhA2GtctviRH9RO0i1vweJNzyp
+         60tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=QfGuix9eHPmBVHieE98IkajLKskzJOMJS9YG04aHQEc=;
-        b=GIRTo4EgQX8BgbcW5mrGfGh2vuOLmINIeAfDavAdO7Wgfoqq0WsC68S3ghqSNq//Nh
-         W47MeCBBtiLh828MxYVzOceyq4lOtX4m3I75OLegdx0cc0/T5eQqdN8XemxEoD/8cmBC
-         9BRMkGinYVB/17z1kf2H7sIMKEfcmoBHb8JPg39BCQLUJ2Cw6zR/C33FM0ohrejj6pFx
-         SwRl4mubmCWm9Kli/3MYypTvSQj/mDy8XZKXSUcaxvNlQVk0u42b/rEkQXzBKoGfJi1W
-         ZvpKtUONyAZjOrhp8KX90ksWJSVwYCejX7Xp1KsXQewUhowEd5P3/uDBdQzLIzZIQ32T
-         L4LQ==
-X-Gm-Message-State: AOAM530M6ebdzPDSzsdJhhu8OWtORJOdRUPVbl2Mg1DZCt7lRFA5DnZ2
-        fZnwe65ETFCxpsnBKS1wAfOrs1ohbOnj/TahYRE=
-X-Google-Smtp-Source: ABdhPJzcXxbnRTmhCv9tZrtZ2aIi9BPp22b40umIvHYfXdY0pL99IaBj4TVrT7UkE5UtWBG4pMeIorfwsGjNVX/TrWw=
-X-Received: by 2002:a81:3a8f:0:b0:2e8:7e2c:95a5 with SMTP id
- h137-20020a813a8f000000b002e87e2c95a5mr589827ywa.241.1650053695984; Fri, 15
- Apr 2022 13:14:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=AVlaJ3+JyBV6uy3xWobzUMDIswV9zZwop66b5nDrPzo=;
+        b=zT8mIMwkKI1Ubz9ohdiki/aKrFdkiGRi/HhqvrVi1PoeWqjaolQaxUW/MJeehGwejD
+         ufwWkpDztqr5mLnqFXDnrGqyd8rnAp60IQbADUC8EgWYxEOJeHxgg1F9TuQhJvt5wB0P
+         uXCPUe/AyuewxQYjBBDnq89LpRB3MbCA97tquHsp6797TawasKd3kWjIVCPYvIYTnCCc
+         CLX79qEHh/p0a9+wlcEqEAaN0KDCCcQSVR/XPitfM3JQsBDgXr2PL01P/A4/aVvJ5o3P
+         T5ItubnXaov8Enhu4OXQJETs6v0ljM/8oTOzm0Ck5fuX5I1o2lI4EuUlBAFWBCYpcSKO
+         SWkg==
+X-Gm-Message-State: AOAM533oQy12MDz4biHnbK5N371LIZFwBloRsl6A+Ji8sJ6vukcsJfDK
+        uKt9KhVPgAXl0HIjYEyhG1r6Tg==
+X-Google-Smtp-Source: ABdhPJyeAw9SUhcl+oEJ0iNchLSf6F+3IxtcHl+vy/czuU6D6/1++E3JAQBfCLpeJMs+r5OYN919yg==
+X-Received: by 2002:a05:622a:1987:b0:2f1:df49:44fa with SMTP id u7-20020a05622a198700b002f1df4944famr588791qtc.125.1650053723200;
+        Fri, 15 Apr 2022 13:15:23 -0700 (PDT)
+Received: from [172.22.22.4] (c-73-185-129-58.hsd1.mn.comcast.net. [73.185.129.58])
+        by smtp.googlemail.com with ESMTPSA id y15-20020a05620a09cf00b0069c80404de6sm2168915qky.31.2022.04.15.13.15.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 13:15:22 -0700 (PDT)
+Message-ID: <d32fc9f8-65cd-a30f-cdf2-f019bbe7cd69@linaro.org>
+Date:   Fri, 15 Apr 2022 15:15:21 -0500
 MIME-Version: 1.0
-References: <20220413133731.242870-1-pgwipeout@gmail.com> <20220413133731.242870-2-pgwipeout@gmail.com>
- <Ylhfr51RME+YAjOG@robh.at.kernel.org>
-In-Reply-To: <Ylhfr51RME+YAjOG@robh.at.kernel.org>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Fri, 15 Apr 2022 16:14:43 -0400
-Message-ID: <CAMdYzYpwKE3cCPZfDehnN0Lv1k7DstUh2y4PoEv6=6e6ejAtSQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] dt-bindings: pci: remove fallback from Rockchip
- DesignWare binding
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Simon Xue <xxm@rock-chips.com>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5/2] dt-bindings: interconnect: Remove sc7180/sdx55 ipa
+ compatibles
+Content-Language: en-US
+To:     Stephen Boyd <swboyd@chromium.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        Doug Anderson <dianders@chromium.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>
+References: <20220412220033.1273607-1-swboyd@chromium.org>
+ <20220415005828.1980055-1-swboyd@chromium.org>
+ <20220415005828.1980055-3-swboyd@chromium.org>
+From:   Alex Elder <elder@linaro.org>
+In-Reply-To: <20220415005828.1980055-3-swboyd@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 1:53 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Wed, Apr 13, 2022 at 09:37:28AM -0400, Peter Geis wrote:
-> > The snps,dw-pcie binds to a standalone driver.
-> > It is not fully compatible with the Rockchip implementation and causes a
-> > hang if it binds to the device.
-> >
-> > Remove this binding as a valid fallback.
-> >
-> > Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> > index 142bbe577763..8dc11fed8a3c 100644
-> > --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> > @@ -32,7 +32,6 @@ properties:
-> >    compatible:
-> >      items:
-> >        - const: rockchip,rk3568-pcie
-> > -      - const: snps,dw-pcie
->
-> With this, you no longer need 'select' so please drop it too.
+On 4/14/22 7:58 PM, Stephen Boyd wrote:
+> These interconnects are modeled as clks, not interconnects, therefore
+> remove the compatibles from the binding as they're unused.
+> 
+> Cc: Alex Elder <elder@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Mike Tipton <quic_mdtipton@quicinc.com>
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 
-Thanks! Will do.
+What's the proper thing to do for properties that stop being
+used?  Do we delete them, like this, or deprecate them somehow?
+Old DTBs might define the values that are deleted here.
 
->
-> >
-> >    reg:
-> >      items:
-> > @@ -110,7 +109,7 @@ examples:
-> >          #size-cells = <2>;
-> >
-> >          pcie3x2: pcie@fe280000 {
-> > -            compatible = "rockchip,rk3568-pcie", "snps,dw-pcie";
-> > +            compatible = "rockchip,rk3568-pcie";
-> >              reg = <0x3 0xc0800000 0x0 0x390000>,
-> >                    <0x0 0xfe280000 0x0 0x10000>,
-> >                    <0x3 0x80000000 0x0 0x100000>;
-> > --
-> > 2.25.1
-> >
-> >
+Shouldn't devicetree@vger.kernel.org
+  be copied on this and
+the other DTS patches?
+
+					-Alex
+
+> ---
+> 
+> I don't know who should apply this. Probably whoever takes the dtsi
+> patches, Bjorn?, because otherwise dt_bindings_check will fail.
+> 
+>   Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml | 2 --
+>   1 file changed, 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> index 5a911be0c2ea..ab859150c7f7 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,rpmh.yaml
+> @@ -31,7 +31,6 @@ properties:
+>         - qcom,sc7180-config-noc
+>         - qcom,sc7180-dc-noc
+>         - qcom,sc7180-gem-noc
+> -      - qcom,sc7180-ipa-virt
+>         - qcom,sc7180-mc-virt
+>         - qcom,sc7180-mmss-noc
+>         - qcom,sc7180-npu-noc
+> @@ -68,7 +67,6 @@ properties:
+>         - qcom,sdm845-mem-noc
+>         - qcom,sdm845-mmss-noc
+>         - qcom,sdm845-system-noc
+> -      - qcom,sdx55-ipa-virt
+>         - qcom,sdx55-mc-virt
+>         - qcom,sdx55-mem-noc
+>         - qcom,sdx55-system-noc
+

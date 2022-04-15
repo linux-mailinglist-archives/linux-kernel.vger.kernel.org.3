@@ -2,159 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B18D502366
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E6D502387
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:10:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244126AbiDOFJe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:09:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
+        id S1343612AbiDOFM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352179AbiDOFGk (ORCPT
+        with ESMTP id S245379AbiDOFMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:06:40 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD015E14A
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:01:22 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so4264604iox.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:01:22 -0700 (PDT)
+        Fri, 15 Apr 2022 01:12:06 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1C95D66E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:08:06 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso582178pjj.3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:08:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8YqFMa1IXN1PKDC9UT7f6BduKQK2XEUyF5RvZFJz14s=;
+        b=mfo01goZwLmw+DZHNVBdBfx9wY1brTJW+71koawfmUZuNOgkmOLQUlJ9OdzId3C6qh
+         VfKUrdjtwwG4bE9CSqxHolDAmowpXQmXPJ57U6ms8Jys89xnlp889JCffS8tdVPhe2/J
+         nYlBqcfXMh8rATvNi3zbusmzCm5KJtwBMRnB5p1eWpkMAUJaBiXpnEFkmacJchvipZc2
+         6JlLpUMN/l+QmLOa3O8MKDJmxzU/AEmXfEX+fOtfWXGuKeNjn3SYkmX7nnL0ugUpIcaw
+         Bj+upHNQwdLcmCS7g8tsDGoVs8eew/e+WDyK/dHCTFhoJ/zLUsvwsTmCqjZFLMWBtoQ5
+         TF5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=ni5AtDp+T7iui1KdKfLMn+bmCrXjxGB6n+GUU8WNh/A=;
-        b=vwleSk3PeUhLLnmHChJDLYgDzQzq8s4o2+JVyxwYMZbaPnJmhhgkGA6n3wfFLpc6XD
-         RpGj7assLtD5NxnZWWAYbEa4owP1qOnnWd9DZQG01S+TFLezyt5juGvyxruabxAsbMrI
-         lv2SA5+98aAbYjMPcD8xQqVRGkwZmULGzSCLuYSWPBOw1sV91AIGgOc0Yjqd9BGCEorV
-         86G5Iz+pXmQgZxI2+EG6pUR8MktI3xFkJRYqDcSpC41YPUkKuFNir98L52naChl9jZzd
-         UoejMfOmQDuTJN2SAcz5SE98kM84ULm/av5KKoaLabmOnwAyu4/s21zaWVraIsna8wAl
-         TJQw==
-X-Gm-Message-State: AOAM531FJqznBZSBKXSID9hF4NzsElC+nwCzLcyUNRvQ9MyPacKp/yCt
-        Te9M6EzQlRFbWy/sz1JQLYaaHQV1TifKWJHJwwEXna7VMvuq
-X-Google-Smtp-Source: ABdhPJzXyz13wQlKrcYp2dUDjnAyGWsH0ud/S2YFWKrrUSHXjVcQNgmcM0NOwMN5WvYupic0tQQOLwD9LQ+gdTjNdntXnkbLw2Z6
+        h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
+         :mime-version:content-transfer-encoding;
+        bh=8YqFMa1IXN1PKDC9UT7f6BduKQK2XEUyF5RvZFJz14s=;
+        b=1SPZSEfSuWHzx0IGCVbHmEducO0KRLcikgkeeUCqou+XxGZSCzPmv0OyrsR8zuCNCp
+         3ZP2UJdFCPEsP9MecGBC/UVMEOOQTlMrr+hlbVwurDv+JT1rYFzHevjQNfNkgC9u6x1Q
+         cYYaH6mso4h2JQBDYy9mkkR2IiyfOmUjYG3h25IGhkaZi4LJ5C2ZC4Uy/8Nm/bFj1CiJ
+         uurKD2hcjDBqsbxetUqcsjglVU5CjGBVjk00Zr1ic4QLyzsbAoHP5k/MKP8s7X3Nxp8g
+         d39/mt102561ObRbPIiA9+pbQUt/kIB1HKqlG7Qw10wkE2uDx71ee0RXrFgxwQXbuEeZ
+         JZSQ==
+X-Gm-Message-State: AOAM533Ykm61Q9D7RXk3hp0KDjpf16I7olHz3DpezJ27BDdo5OoCMtU2
+        AGE6nCV3oYrGCSG4Kz988yq5wPXo4I4=
+X-Google-Smtp-Source: ABdhPJyIjpzyxnLP11xF7oCPJRkEhkUcJOgivp6AH7DFRBpNoHX03IRhgmYPqGpkci3e1CBRxxdG+Q==
+X-Received: by 2002:a17:902:ce85:b0:158:66cd:c370 with SMTP id f5-20020a170902ce8500b0015866cdc370mr22614912plg.111.1649999285520;
+        Thu, 14 Apr 2022 22:08:05 -0700 (PDT)
+Received: from voyager.ozlabs.ibm.com (region97.lnk.telstra.net. [110.143.27.102])
+        by smtp.gmail.com with ESMTPSA id o5-20020a17090a3d4500b001c97528521asm3531507pjf.6.2022.04.14.22.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 22:08:04 -0700 (PDT)
+Sender: "joel.stan@gmail.com" <joel.stan@gmail.com>
+From:   Joel Stanley <joel@jms.id.au>
+To:     Eddie James <eajames@linux.ibm.com>
+Cc:     linux-fsi@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] fsi: sbefifo: Add detailed debugging information
+Date:   Fri, 15 Apr 2022 14:37:57 +0930
+Message-Id: <20220415050757.281158-1-joel@jms.id.au>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:2410:0:b0:323:fb30:183c with SMTP id
- f16-20020a022410000000b00323fb30183cmr2893332jaa.2.1649998881301; Thu, 14 Apr
- 2022 22:01:21 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 22:01:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000332b2105dcaa4d7a@google.com>
-Subject: [syzbot] general protection fault in __dentry_path (2)
-From:   syzbot <syzbot+5c550b7ec6a56f70c32d@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Provide more output on the timeout status, and make some vdbg calls into
+dbg calls so they can be enabled at runtime.
 
-syzbot found the following issue on:
-
-HEAD commit:    d12d7e1cfe38 Add linux-next specific files for 20220411
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=120d568f700000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=58fcaf7d8df169a6
-dashboard link: https://syzkaller.appspot.com/bug?extid=5c550b7ec6a56f70c32d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17903a8f700000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17f03688f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5c550b7ec6a56f70c32d@syzkaller.appspotmail.com
-
-L1TF CPU bug present and SMT on, data leak possible. See CVE-2018-3646 and https://www.kernel.org/doc/html/latest/admin-guide/hw-vuln/l1tf.html for details.
-general protection fault, probably for non-canonical address 0xdffffc000000000a: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000050-0x0000000000000057]
-CPU: 1 PID: 3586 Comm: syz-executor395 Not tainted 5.18.0-rc1-next-20220411-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:__dentry_path+0x215/0x740 fs/d_path.c:342
-Code: be 09 31 ff 41 89 ed 41 83 e5 01 44 89 ee e8 22 fe 96 ff 45 85 ed 75 ce e8 f8 fb 96 ff 48 8b 44 24 20 89 6c 24 18 48 c1 e8 03 <42> 80 3c 30 00 0f 85 d2 04 00 00 48 8b 44 24 10 83 e5 01 89 6c 24
-RSP: 0018:ffffc9000376fc30 EFLAGS: 00010206
-RAX: 000000000000000a RBX: ffffffff8ba14680 RCX: 0000000000000000
-RDX: ffff888025001d40 RSI: ffffffff81e30a28 RDI: 0000000000000003
-RBP: 0000000000000a8c R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff81e309e5 R11: 0000000000000001 R12: 0000000000000fff
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88805610cfff
-FS:  000055555682c300(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561836ba9d20 CR3: 000000001d922000 CR4: 00000000003526e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dentry_path_raw+0xc2/0x110 fs/d_path.c:367
- kvm_uevent_notify_change.part.0+0x215/0x450 arch/x86/kvm/../../../virt/kvm/kvm_main.c:5492
- kvm_uevent_notify_change arch/x86/kvm/../../../virt/kvm/kvm_main.c:5459 [inline]
- kvm_destroy_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:1198 [inline]
- kvm_put_kvm+0xf7/0xb70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:1264
- kvm_dev_ioctl_create_vm arch/x86/kvm/../../../virt/kvm/kvm_main.c:4795 [inline]
- kvm_dev_ioctl+0x85d/0x1c70 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4811
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7f8a6670d009
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffded420398 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f8a6670d009
-RDX: 0000000000000000 RSI: 000000000000ae01 RDI: 0000000000000003
-RBP: 00007f8a666d0ff0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f8a666d1080
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__dentry_path+0x215/0x740 fs/d_path.c:342
-Code: be 09 31 ff 41 89 ed 41 83 e5 01 44 89 ee e8 22 fe 96 ff 45 85 ed 75 ce e8 f8 fb 96 ff 48 8b 44 24 20 89 6c 24 18 48 c1 e8 03 <42> 80 3c 30 00 0f 85 d2 04 00 00 48 8b 44 24 10 83 e5 01 89 6c 24
-RSP: 0018:ffffc9000376fc30 EFLAGS: 00010206
-RAX: 000000000000000a RBX: ffffffff8ba14680 RCX: 0000000000000000
-RDX: ffff888025001d40 RSI: ffffffff81e30a28 RDI: 0000000000000003
-RBP: 0000000000000a8c R08: 0000000000000000 R09: 0000000000000001
-R10: ffffffff81e309e5 R11: 0000000000000001 R12: 0000000000000fff
-R13: 0000000000000000 R14: dffffc0000000000 R15: ffff88805610cfff
-FS:  000055555682c300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000561836ba0d90 CR3: 000000001d922000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	be 09 31 ff 41       	mov    $0x41ff3109,%esi
-   5:	89 ed                	mov    %ebp,%ebp
-   7:	41 83 e5 01          	and    $0x1,%r13d
-   b:	44 89 ee             	mov    %r13d,%esi
-   e:	e8 22 fe 96 ff       	callq  0xff96fe35
-  13:	45 85 ed             	test   %r13d,%r13d
-  16:	75 ce                	jne    0xffffffe6
-  18:	e8 f8 fb 96 ff       	callq  0xff96fc15
-  1d:	48 8b 44 24 20       	mov    0x20(%rsp),%rax
-  22:	89 6c 24 18          	mov    %ebp,0x18(%rsp)
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	42 80 3c 30 00       	cmpb   $0x0,(%rax,%r14,1) <-- trapping instruction
-  2f:	0f 85 d2 04 00 00    	jne    0x507
-  35:	48 8b 44 24 10       	mov    0x10(%rsp),%rax
-  3a:	83 e5 01             	and    $0x1,%ebp
-  3d:	89                   	.byte 0x89
-  3e:	6c                   	insb   (%dx),%es:(%rdi)
-  3f:	24                   	.byte 0x24
-
-
+Signed-off-by: Joel Stanley <joel@jms.id.au>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v2:
+ Fix timeout jiffies traces. The driver was printing jiffies as ms, so
+ convert the timeout back to ms for the trace.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+ drivers/fsi/fsi-sbefifo.c | 15 +++++++++------
+ 1 file changed, 9 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/fsi/fsi-sbefifo.c b/drivers/fsi/fsi-sbefifo.c
+index f52a912cdf16..5f93a53846aa 100644
+--- a/drivers/fsi/fsi-sbefifo.c
++++ b/drivers/fsi/fsi-sbefifo.c
+@@ -477,7 +477,8 @@ static int sbefifo_wait(struct sbefifo *sbefifo, bool up,
+ 	if (!ready) {
+ 		sysfs_notify(&sbefifo->dev.kobj, NULL, dev_attr_timeout.attr.name);
+ 		sbefifo->timed_out = true;
+-		dev_err(dev, "%s FIFO Timeout ! status=%08x\n", up ? "UP" : "DOWN", sts);
++		dev_err(dev, "%s FIFO Timeout (%u ms)! status=%08x\n",
++			up ? "UP" : "DOWN", jiffies_to_msecs(timeout), sts);
+ 		return -ETIMEDOUT;
+ 	}
+ 	dev_vdbg(dev, "End of wait status: %08x\n", sts);
+@@ -497,8 +498,8 @@ static int sbefifo_send_command(struct sbefifo *sbefifo,
+ 	u32 status;
+ 	int rc;
+ 
+-	dev_vdbg(dev, "sending command (%zd words, cmd=%04x)\n",
+-		 cmd_len, be32_to_cpu(command[1]));
++	dev_dbg(dev, "sending command (%zd words, cmd=%04x)\n",
++		cmd_len, be32_to_cpu(command[1]));
+ 
+ 	/* As long as there's something to send */
+ 	timeout = msecs_to_jiffies(SBEFIFO_TIMEOUT_START_CMD);
+@@ -551,21 +552,23 @@ static int sbefifo_read_response(struct sbefifo *sbefifo, struct iov_iter *respo
+ 	size_t len;
+ 	int rc;
+ 
+-	dev_vdbg(dev, "reading response, buflen = %zd\n", iov_iter_count(response));
++	dev_dbg(dev, "reading response, buflen = %zd\n", iov_iter_count(response));
+ 
+ 	timeout = msecs_to_jiffies(sbefifo->timeout_start_rsp_ms);
+ 	for (;;) {
+ 		/* Grab FIFO status (this will handle parity errors) */
+ 		rc = sbefifo_wait(sbefifo, false, &status, timeout);
+-		if (rc < 0)
++		if (rc < 0) {
++			dev_dbg(dev, "timeout waiting (%u ms)\n", jiffies_to_msecs(timeout));
+ 			return rc;
++		}
+ 		timeout = msecs_to_jiffies(SBEFIFO_TIMEOUT_IN_RSP);
+ 
+ 		/* Decode status */
+ 		len = sbefifo_populated(status);
+ 		eot_set = sbefifo_eot_set(status);
+ 
+-		dev_vdbg(dev, "  chunk size %zd eot_set=0x%x\n", len, eot_set);
++		dev_dbg(dev, "  chunk size %zd eot_set=0x%x\n", len, eot_set);
+ 
+ 		/* Go through the chunk */
+ 		while(len--) {
+-- 
+2.35.1
+

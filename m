@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B72A502698
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57CB05026A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351354AbiDOIWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S1351380AbiDOI2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238683AbiDOIWR (ORCPT
+        with ESMTP id S230490AbiDOI2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:22:17 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C97B140CC;
-        Fri, 15 Apr 2022 01:19:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hi4xrZ5yZIHwLBnZX8ub/KAkLFYSwqOA4HWjNcaia5k=; b=Qa2CJf0ce3j7I87Yql9/UBsUF2
-        qJda9BAv0h4SYyh3zby8qvTvzBIQ2ZAHy6gJd+z7OG/Fzd9MyRZC4XflGybGsxFzS6Mb0feMRcJLD
-        PgklKZfP1BNqpw58r3fqkM/aFKTpmur2U3JAK9wPmtdXmY++8gIBqh5gX9uHJl8xnEWN4n5snVyZ6
-        2gvEL8mCIBWSHfIhTKo37Hv+KVUMC8Fe7WyzIaFZxyAGGnKBXgjn7OO1lKum1JZWSFIgCzUDDpPzo
-        MHqE/3orkOe9pGOQo8T7IT0av3RMAo/zYynzmTzJIlr6ad4Aut1em6HZBfbtYWOEcymtXhf+wDHkB
-        WcBk3x0A==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfHB9-00Fxui-4U; Fri, 15 Apr 2022 08:19:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 813263001AE;
-        Fri, 15 Apr 2022 10:19:41 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 56BA7202508B9; Fri, 15 Apr 2022 10:19:41 +0200 (CEST)
-Date:   Fri, 15 Apr 2022 10:19:41 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        James Clark <james.clark@arm.com>,
-        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [RFC V2 1/8] perf: Consolidate branch sample filter helpers
-Message-ID: <YlkqnfRm0E0XHTd3@hirez.programming.kicks-ass.net>
-References: <20220412115455.293119-1-anshuman.khandual@arm.com>
- <20220412115455.293119-2-anshuman.khandual@arm.com>
+        Fri, 15 Apr 2022 04:28:51 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E004AFB35;
+        Fri, 15 Apr 2022 01:26:23 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 787FB1BF211;
+        Fri, 15 Apr 2022 08:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650011181;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kKojKZULnPE/wWjIpye1ilTyE1X2MJhejc5l4csXybI=;
+        b=eyakLyHQLwnmDg3QFRsBeVWxdYLaiRMfBgkqSYNyJ8w18zYfQe/rzoYSew7hsuaxFbbh3t
+        D3ANnDwMXwuBDdry+VBoxXei0xbk2gIqOIEUt4fnRmdCMYTAc1IK9wF4ZTKGxE1SZCA3ci
+        lNoTkfyU912659amNnzGFgRAx1Tdr3oDrAE5DIG06FsVTELhC2uzNdEyN8DxYgoFabwGz9
+        fIRDG5T+ngpImU8lhDgvP0UuA42Fe/+6IiKB84vp9GsZvnuDVopyQaS3I4FYaYHVnbW9YO
+        BvjQh/R8VvNSDzKTwvGfYMzJXp0u/W8HKsLllI2HxiqBVhLE+Gxbvhzh8ui9Ag==
+Date:   Fri, 15 Apr 2022 10:24:53 +0200
+From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
+ converter
+Message-ID: <20220415102453.1b5b3f77@fixe.home>
+In-Reply-To: <YlismVi8y3Vf6PZ0@lunn.ch>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+        <20220414122250.158113-10-clement.leger@bootlin.com>
+        <YlismVi8y3Vf6PZ0@lunn.ch>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220412115455.293119-2-anshuman.khandual@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,20 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 12, 2022 at 05:24:48PM +0530, Anshuman Khandual wrote:
-> Besides the branch type filtering requests, 'event.attr.branch_sample_type'
-> also contains various flags indicating which additional information should
-> be captured, along with the base branch record. These flags help configure
-> the underlying hardware, and capture the branch records appropriately when
-> required e.g after PMU interrupt. But first, this moves an existing helper
-> perf_sample_save_hw_index() into the header before adding some more helpers
-> for other branch sample filter flags.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Le Fri, 15 Apr 2022 01:22:01 +0200,
+Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> On Thu, Apr 14, 2022 at 02:22:47PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
+> > Add the MII converter node which describes the MII converter that is
+> > present on the RZ/N1 SoC. =20
+>=20
+> Do you have a board which actually uses this? I just noticed that
+> renesas,miic-cfg-mode is missing, it is a required property, but maybe
+> the board .dts file provides it?
+>=20
+>     Andrew
+
+Hi Andrew, yes, I have a board that defines and use that. The
+renesas,miic-cfg-mode actually configures the muxes that are present on
+the SoC. They allows to mux the various ethernet components (Sercos
+Controller, HSR Controller, Ethercat, GMAC1, RTOS-GMAC).
+All these muxes are actually controller by a single register
+CONVCTRL_MODE. You can actually see the muxes that are present in the
+manual [1] at Section 8 and the CONVCTRL_MODE possible values are listed
+on page 180.
+
+This seems to be something that is board dependent because the muxing
+controls the MII converter outputs which depends on the board layout.
+
+I'm open to any modification for this setup which does not really fit
+any abstraction that I may have seen.
+
+[1]
+https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-gr=
+oup-users-manual-system-introduction-multiplexing-electrical-and
+
+--=20
+Cl=C3=A9ment L=C3=A9ger,
+Embedded Linux and Kernel engineer at Bootlin
+https://bootlin.com

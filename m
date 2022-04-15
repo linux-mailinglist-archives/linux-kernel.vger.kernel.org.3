@@ -2,220 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BF4502C12
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:42:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8586D502C17
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354622AbiDOOoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34668 "EHLO
+        id S1354631AbiDOOos (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:44:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354601AbiDOOoG (ORCPT
+        with ESMTP id S1354601AbiDOOoq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:44:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2789B13E3D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:41:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650033696;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jsmgM+RDRJDk3yHAlqd8lnGUO25Xqh02oFdvyoZSv2Q=;
-        b=hWdwSSOqvaEX3cLjciHypIpDRgOG3SH65/VznCQ2mI+NLJOgUK4ODHXtft+b28woAIw2kc
-        zQ6sj5+3aHvnQvtSn32Rxe1XYNIcR3yIq0YAECenPBlNQ6HLhib6/Xy/FUlj3TsL+Dek/Q
-        M59mRCSkauzIA5NSa8mMtVqw3mOPZvU=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-107-C4m3Wy18OqSd_1EV-NXcoQ-1; Fri, 15 Apr 2022 10:41:35 -0400
-X-MC-Unique: C4m3Wy18OqSd_1EV-NXcoQ-1
-Received: by mail-il1-f200.google.com with SMTP id f18-20020a926a12000000b002be48b02bc6so4916393ilc.17
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:41:35 -0700 (PDT)
+        Fri, 15 Apr 2022 10:44:46 -0400
+Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D0C84091B;
+        Fri, 15 Apr 2022 07:42:18 -0700 (PDT)
+Received: by mail-yb1-f179.google.com with SMTP id t67so14843280ybi.2;
+        Fri, 15 Apr 2022 07:42:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=jsmgM+RDRJDk3yHAlqd8lnGUO25Xqh02oFdvyoZSv2Q=;
-        b=lRGSLxagBSqrZsWsBIg0hsEX+MHWqbq0CyOBXUsTT6UAbzOyvdydFEW9CRLvDI9aoP
-         FCjCviNd4VcAVdyfRWJzZLv27WShBHllOtBdJA25euUC6fk1D0j75YViAeH4nI4ZYNIV
-         7wZ931zebSkMDoPZIKNVBKyiF9cP6dYvI24po62hthBCfHfAPTnnBrq/IQvLDTNKe5FL
-         1w3kP/WwOdqJIVonTjkDohieiWR6whqOJks5zvf2mCCY6GPz/JWte2fmKcbefKqfIbmK
-         p6xchdpcQFPfF2yGDrk36vuv6nyKXgP834tHwxuEfs8oRYZwqFZsN0jSHjWX3Mh1j9Ge
-         UozA==
-X-Gm-Message-State: AOAM530wftfUq6UYX26k1PwiuYJCpBHqQNUz9TsfCTCKg+1wc9vhvwS+
-        0tfQsgBgO7UVmtUsa/Oihv/nOslmd38MZV/8YKVzwUXaxC+pbXJSEeysGlIQ6euGL7gMc7wehGR
-        VoHyhaF+VfFLZw/dSVRPedLaG
-X-Received: by 2002:a5d:898b:0:b0:649:5bbb:7d95 with SMTP id m11-20020a5d898b000000b006495bbb7d95mr3390051iol.107.1650033693223;
-        Fri, 15 Apr 2022 07:41:33 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyi/ftPRXkOoOtjpmO6YbvgDrApgkxpy4yAA8CnVZCUkL/q0VApIsfENMpezvDJdpQNn/DW4A==
-X-Received: by 2002:a5d:898b:0:b0:649:5bbb:7d95 with SMTP id m11-20020a5d898b000000b006495bbb7d95mr3390030iol.107.1650033692816;
-        Fri, 15 Apr 2022 07:41:32 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id g14-20020a92dd8e000000b002ca7bbf5179sm2691142iln.53.2022.04.15.07.41.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:41:31 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 10:41:29 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jerome Glisse <jglisse@redhat.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: Re: [PATCH v8 03/23] mm: Check against orig_pte for finish_fault()
-Message-ID: <YlmEGW8/vNi4lx88@xz-m1.local>
-References: <20220405014646.13522-1-peterx@redhat.com>
- <20220405014836.14077-1-peterx@redhat.com>
- <20220415142112.GA2714323@roeck-us.net>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VQSHKKZVZ0Nt1UyzeBgM0+KthK67tcnYKJdeT0jg73Y=;
+        b=woSmk1w0v3r731HOfjLsGuCoC2uJuiiu6qrV6P45CFgQpo1T/NO6JYjp6UZDlNeIqz
+         ddRqRtzDx7ao7Tf1f4NmHT4roftQF+7aKknfCVvC7LFUoLM7+16+sC10zZ0u9bB2RGw7
+         rIx4oZWzRN6qO+c22GlPJOKTUVuujG26wC5Q62ASnRIV/wLmmk8nuHqZ0Ps7/i8XOcq4
+         7jcI3+iwzzTprxqcC9NujB9IsgG6sip3r+k9eJpSCIEyD+Z2rLzEJmwRkkxKX7JpyReM
+         wqkJO8PiOOAtDFSBx5wVi33KwSlsJbnUGX+7Khiiu85eVk4Fuqwu461OWtvYv+O+MFlM
+         7o3Q==
+X-Gm-Message-State: AOAM531e0OhLTWQTB4wPE2n12Udufywa78CA/pc8Tybbdklrl2rh2PTp
+        /TeR56wg8W+++qzDdGBApOmWNCCvHi6mXsxsiLc=
+X-Google-Smtp-Source: ABdhPJzHImZ6AlstLn7pVijrPVyShFWryTuDK7hJhgtHmoiyUY6jExoXezPsWwLknhi0wsShbmhDkbJ9zA8uv2Zpyuw=
+X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
+ j13-20020a25230d000000b00641375cb5admr5695905ybj.137.1650033737467; Fri, 15
+ Apr 2022 07:42:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220415142112.GA2714323@roeck-us.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412224348.1038613-1-tansuresh@google.com> <20220412224348.1038613-2-tansuresh@google.com>
+In-Reply-To: <20220412224348.1038613-2-tansuresh@google.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Apr 2022 16:42:06 +0200
+Message-ID: <CAJZ5v0ivNq3aYCEcxPYMosLJCAyWiAnucwOCmRBzkM=sbyPWgQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] driver core: Support asynchronous driver shutdown
+To:     Tanjore Suresh <tansuresh@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-nvme <linux-nvme@lists.infradead.org>,
+        Linux PCI <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 07:21:12AM -0700, Guenter Roeck wrote:
-> Hi,
+On Wed, Apr 13, 2022 at 12:44 AM Tanjore Suresh <tansuresh@google.com> wrote:
+>
+> This changes the bus driver interface with additional entry points
+> to enable devices to implement asynchronous shutdown. The existing
+> synchronous interface to shutdown is unmodified and retained for
+> backward compatibility.
+>
+> This changes the common device shutdown code to enable devices to
+> participate in asynchronous shutdown implementation.
+>
+> Signed-off-by: Tanjore Suresh <tansuresh@google.com>
 
-Hi, Guenter,
+Is there any specific reason why you didn't follow the design of, say,
+dpm_suspend(), where the "async" devices only need to have a flag set
+and the driver is not required to implement any new callbacks?
 
-> 
-> On Mon, Apr 04, 2022 at 09:48:36PM -0400, Peter Xu wrote:
-> > We used to check against none pte in finish_fault(), with the assumption
-> > that the orig_pte is always none pte.
-> > 
-> > This change prepares us to be able to call do_fault() on !none ptes.  For
-> > example, we should allow that to happen for pte marker so that we can restore
-> > information out of the pte markers.
-> > 
-> > Let's change the "pte_none" check into detecting changes since we fetched
-> > orig_pte.  One trivial thing to take care of here is, when pmd==NULL for
-> > the pgtable we may not initialize orig_pte at all in handle_pte_fault().
-> > 
-> > By default orig_pte will be all zeros however the problem is not all
-> > architectures are using all-zeros for a none pte.  pte_clear() will be the
-> > right thing to use here so that we'll always have a valid orig_pte value
-> > for the whole handle_pte_fault() call.
-> > 
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> 
-> This patch crashes pretty much all arm images in linux-next. Reverting it
-> fixes the problem. Sample crash log and bisect results attached.
+IMO having different driver interfaces for asynchronous suspend and
+shutdown would be quite confusing for driver developers, wouldn't it?
 
-Sorry for the issue, and thanks for reporting and bisecting.
-
-It's already reported by Marek and this problematic patch will be replaced
-by this one (already updated in -mm, but may land -next later I think):
-
-https://lore.kernel.org/all/Ylb9rXJyPm8%2Fao8f@xz-m1.local/
-
-Thanks,
-
-> 
-> Guenter
-> 
 > ---
-> [   11.232343] 8<--- cut here ---
-> [   11.232564] Unable to handle kernel paging request at virtual address 88016664
-> [   11.232735] [88016664] *pgd=41cfd811, *pte=00000000, *ppte=00000000
-> [   11.233128] Internal error: Oops: 807 [#1] ARM
-> [   11.233385] CPU: 0 PID: 1 Comm: swapper Not tainted 5.18.0-rc2-next-20220414 #1
-> [   11.233564] Hardware name: Generic DT based system
-> [   11.233695] PC is at cpu_arm926_set_pte_ext+0x2c/0x40
-> [   11.233863] LR is at handle_mm_fault+0x4b0/0x11a8
-> [   11.233963] pc : [<8010e60c>]    lr : [<802944ec>]    psr: 00000113
-> [   11.234080] sp : 88015e20  ip : 88015e7c  fp : 00000492
-> [   11.234179] r10: 00000000  r9 : 00000000  r8 : 81167e50
-> [   11.234280] r7 : 00000000  r6 : 00000081  r5 : 7efffff1  r4 : 83034690
-> [   11.234402] r3 : 00000043  r2 : 00000000  r1 : 00000000  r0 : 88016664
-> [   11.234549] Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> [   11.234691] Control: 00093177  Table: 40004000  DAC: 00000053
-> [   11.234816] Register r0 information: non-paged memory
-> [   11.235031] Register r1 information: NULL pointer
-> [   11.235127] Register r2 information: NULL pointer
-> [   11.235219] Register r3 information: non-paged memory
-> [   11.235316] Register r4 information: slab vm_area_struct start 83034688 data offset 8 pointer offset 0 allocated at vm_area_alloc+0x20/0x5c
-> [   11.235825]     kmem_cache_alloc+0x1fc/0x21c
-> [   11.235926]     vm_area_alloc+0x20/0x5c
-> [   11.236007]     alloc_bprm+0xd0/0x298
-> [   11.236082]     kernel_execve+0x34/0x194
-> [   11.236159]     kernel_init+0x6c/0x138
-> [   11.236235]     ret_from_fork+0x14/0x3c
-> [   11.236330] Register r5 information: non-paged memory
-> [   11.236432] Register r6 information: non-paged memory
-> [   11.236529] Register r7 information: NULL pointer
-> [   11.236620] Register r8 information: non-slab/vmalloc memory
-> [   11.236741] Register r9 information: NULL pointer
-> [   11.236833] Register r10 information: NULL pointer
-> [   11.236926] Register r11 information: non-paged memory
-> [   11.237023] Register r12 information: 2-page vmalloc region starting at 0x88014000 allocated at kernel_clone+0xa0/0x440
-> [   11.237253] Process swapper (pid: 1, stack limit = 0x88014000)
-> [   11.237388] Stack: (0x88015e20 to 0x88016000)
-> [   11.237518] 5e20: ffffffff fffffffe 81d29be0 00000000 a0000193 00000000 81d2a1e8 00007f7e
-> [   11.237670] 5e40: 816580a8 83034690 00000cc0 0007efff 7efff000 7efffff1 00000081 83199fb8
-> [   11.237814] 5e60: 83199fb8 00000000 00000000 00000000 00000000 00000000 00000000 0a363e34
-> [   11.237957] 5e80: 88015ea4 83034690 7efffff1 00002017 00000081 81f4dd00 00001fb8 00000000
-> [   11.238100] 5ea0: 00000492 8028d160 00000000 81d29be0 00000001 00002017 80deedcc 81d29be0
-> [   11.238241] 5ec0: 00000000 81f4dd00 7efffff1 88015f38 81f4dd60 00002017 00000000 8028d64c
-> [   11.238383] 5ee0: 88015f38 00000000 00000000 7efffff1 81f4dd00 00000000 00000001 00000000
-> [   11.238524] 5f00: 00000011 82d80800 00000001 7efffff1 81f4dd00 00000011 7efffff1 0000000b
-> [   11.238666] 5f20: 82d80800 802ca218 88015f38 00000000 00000000 000001d3 80e0b43c 0a363e34
-> [   11.238808] 5f40: 00000ffc 82d80800 81d73140 81d29be0 0000000b 802cb390 81d7315b 802ca0bc
-> [   11.238950] 5f60: 8110c940 0000000c 82d80800 81d73140 8110c8b0 8110c93c 00000000 00000000
-> [   11.239091] 5f80: 00000000 802cbf44 81107820 8110c8b0 00000000 00000000 00000000 80b05400
-> [   11.239234] 5fa0: 00000000 80b05394 00000000 801000f8 00000000 00000000 00000000 00000000
-> [   11.239376] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-> [   11.239518] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000
-> [   11.239770] Code: e31300c0 03822e55 e3130003 13a02000 (e5802000)
-> [   11.240097] ---[ end trace 0000000000000000 ]---
-> [   11.240307] Kernel panic - not syncing: Fatal exception
-> 
+>  drivers/base/core.c        | 38 +++++++++++++++++++++++++++++++++++++-
+>  include/linux/device/bus.h | 12 ++++++++++++
+>  2 files changed, 49 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index 3d6430eb0c6a..ba267ae70a22 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -4479,6 +4479,7 @@ EXPORT_SYMBOL_GPL(device_change_owner);
+>  void device_shutdown(void)
+>  {
+>         struct device *dev, *parent;
+> +       LIST_HEAD(async_shutdown_list);
+>
+>         wait_for_device_probe();
+>         device_block_probing();
+> @@ -4523,7 +4524,13 @@ void device_shutdown(void)
+>                                 dev_info(dev, "shutdown_pre\n");
+>                         dev->class->shutdown_pre(dev);
+>                 }
+> -               if (dev->bus && dev->bus->shutdown) {
+> +               if (dev->bus && dev->bus->async_shutdown_start) {
+> +                       if (initcall_debug)
+> +                               dev_info(dev, "async_shutdown_start\n");
+> +                       dev->bus->async_shutdown_start(dev);
+> +                       list_add_tail(&dev->kobj.entry,
+> +                               &async_shutdown_list);
+> +               } else if (dev->bus && dev->bus->shutdown) {
+>                         if (initcall_debug)
+>                                 dev_info(dev, "shutdown\n");
+>                         dev->bus->shutdown(dev);
+> @@ -4543,6 +4550,35 @@ void device_shutdown(void)
+>                 spin_lock(&devices_kset->list_lock);
+>         }
+>         spin_unlock(&devices_kset->list_lock);
+> +
+> +       /*
+> +        * Second pass spin for only devices, that have configured
+> +        * Asynchronous shutdown.
+> +        */
+> +       while (!list_empty(&async_shutdown_list)) {
+> +               dev = list_entry(async_shutdown_list.next, struct device,
+> +                               kobj.entry);
+> +               parent = get_device(dev->parent);
+> +               get_device(dev);
+> +               /*
+> +                * Make sure the device is off the  list
+> +                */
+> +               list_del_init(&dev->kobj.entry);
+> +               if (parent)
+> +                       device_lock(parent);
+> +               device_lock(dev);
+> +               if (dev->bus && dev->bus->async_shutdown_end) {
+> +                       if (initcall_debug)
+> +                               dev_info(dev,
+> +                               "async_shutdown_end called\n");
+> +                       dev->bus->async_shutdown_end(dev);
+> +               }
+> +               device_unlock(dev);
+> +               if (parent)
+> +                       device_unlock(parent);
+> +               put_device(dev);
+> +               put_device(parent);
+> +       }
+>  }
+>
+>  /*
+> diff --git a/include/linux/device/bus.h b/include/linux/device/bus.h
+> index a039ab809753..f582c9d21515 100644
+> --- a/include/linux/device/bus.h
+> +++ b/include/linux/device/bus.h
+> @@ -49,6 +49,16 @@ struct fwnode_handle;
+>   *             will never get called until they do.
+>   * @remove:    Called when a device removed from this bus.
+>   * @shutdown:  Called at shut-down time to quiesce the device.
+> + * @async_shutdown_start:      Called at the shutdown-time to start
+> + *                             the shutdown process on the device.
+> + *                             This entry point will be called only
+> + *                             when the bus driver has indicated it would
+> + *                             like to participate in asynchronous shutdown
+> + *                             completion.
+> + * @async_shutdown_end:        Called at shutdown-time  to complete the shutdown
+> + *                     process of the device. This entry point will be called
+> + *                     only when the bus drive has indicated it would like to
+> + *                     participate in the asynchronous shutdown completion.
+>   *
+>   * @online:    Called to put the device back online (after offlining it).
+>   * @offline:   Called to put the device offline for hot-removal. May fail.
+> @@ -93,6 +103,8 @@ struct bus_type {
+>         void (*sync_state)(struct device *dev);
+>         void (*remove)(struct device *dev);
+>         void (*shutdown)(struct device *dev);
+> +       void (*async_shutdown_start)(struct device *dev);
+> +       void (*async_shutdown_end)(struct device *dev);
+>
+>         int (*online)(struct device *dev);
+>         int (*offline)(struct device *dev);
 > --
-> # bad: [40354149f4d738dc3492d9998e45b3f02950369a] Add linux-next specific files for 20220414
-> # good: [ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e] Linux 5.18-rc2
-> git bisect start 'HEAD' 'v5.18-rc2'
-> # good: [0f52e407eccb0f7ed62fdd8907b0042f4195159e] Merge branch 'drm-next' of git://git.freedesktop.org/git/drm/drm.git
-> git bisect good 0f52e407eccb0f7ed62fdd8907b0042f4195159e
-> # good: [22b1b3a579c91a6afa945711eac72ab740b8f8e4] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/rostedt/linux-trace.git
-> git bisect good 22b1b3a579c91a6afa945711eac72ab740b8f8e4
-> # good: [cbb5c08b3182cb498f67fa547392191a1d5622dd] Merge branch 'next' of git://git.kernel.org/pub/scm/linux/kernel/git/vkoul/dmaengine.git
-> git bisect good cbb5c08b3182cb498f67fa547392191a1d5622dd
-> # good: [2acd94b759428825f0e8835fa24ad22c7b5c0e2c] Merge branch 'for-next/kspp' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-> git bisect good 2acd94b759428825f0e8835fa24ad22c7b5c0e2c
-> # bad: [d2d293faec99124d95590e88030ae3c8382fac7f] mm/shmem: persist uffd-wp bit across zapping for file-backed
-> git bisect bad d2d293faec99124d95590e88030ae3c8382fac7f
-> # good: [8cbcc910aec560e78e879cf82ed17e7e72d8a7d4] doc: update documentation for swap_activate and swap_rw
-> git bisect good 8cbcc910aec560e78e879cf82ed17e7e72d8a7d4
-> # good: [8c55a1ed1f9b95520b0307ba0ac6ff7f1aadfe9d] mm/page_alloc: simplify update of pgdat in wake_all_kswapds
-> git bisect good 8c55a1ed1f9b95520b0307ba0ac6ff7f1aadfe9d
-> # good: [3e68e467590511e2cf7f47194464a5512583f641] mm: hugetlb_vmemmap: cleanup CONFIG_HUGETLB_PAGE_FREE_VMEMMAP*
-> git bisect good 3e68e467590511e2cf7f47194464a5512583f641
-> # good: [3fb21f4e38824f4d8a183ffcccc03b357ad836d4] mm: mmap: register suitable readonly file vmas for khugepaged
-> git bisect good 3fb21f4e38824f4d8a183ffcccc03b357ad836d4
-> # bad: [fa600994916318341cf53e18769be547aa5975d2] mm: check against orig_pte for finish_fault()
-> git bisect bad fa600994916318341cf53e18769be547aa5975d2
-> # good: [1112411b72b5e9774897538260028a677d616779] fixup! mm: Introduce PTE_MARKER swap entry
-> git bisect good 1112411b72b5e9774897538260028a677d616779
-> # good: [1ae034d98f81a6cf8896b37c3dee9e099daeb3e7] mm: teach core mm about pte markers
-> git bisect good 1ae034d98f81a6cf8896b37c3dee9e099daeb3e7
-> # first bad commit: [fa600994916318341cf53e18769be547aa5975d2] mm: check against orig_pte for finish_fault()
-> 
-
--- 
-Peter Xu
-
+> 2.36.0.rc0.470.gd361397f0d-goog
+>

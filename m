@@ -2,93 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EAF4502EEE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBB1B502F0F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348146AbiDOTIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 15:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39846 "EHLO
+        id S1347102AbiDOTJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 15:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347893AbiDOTIL (ORCPT
+        with ESMTP id S243989AbiDOTJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 15:08:11 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 263C93A5F5;
-        Fri, 15 Apr 2022 12:05:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=i8u5wA5pkuMd57YgDKyeRMaeVXySpdGvOCw8eFs9SSc=; b=OBYuj+louCSRCKwtc30JWm58TX
-        pboqz1LXgwQTy6xrbf50VjTba3IocmZv3tNmG4HJYvOu5A0KHOBDQiUiRUYcn/l9yodDX6DycXbdC
-        lBGu2YoYjclbhy5rDDdTXJdq1MLrSGtYrnm/D0hYtkWYxCiogicB96P7HA0AR8ozszUhdtcoIS7rh
-        FbzLjBQ09yGZkdk6Xh3pvDIWmX/mopTEAD+pptDXcG9HYeQgy3SuWELim3D0jiU8abMuHo6QHfT58
-        z6Gi2tT79cxIqilUN80sNleD3ekeqjCrY3JjbnAo+Lmjvwq6lS/NLzRxsQUWtbBLBaR58iywF3Bs1
-        +XkwRtJQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfRGI-00B9lw-E2; Fri, 15 Apr 2022 19:05:42 +0000
-Date:   Fri, 15 Apr 2022 12:05:42 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        kernel-team@fb.com, akpm@linux-foundation.org,
-        rick.p.edgecombe@intel.com, hch@infradead.org,
-        imbrenda@linux.ibm.com
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
-References: <20220415164413.2727220-1-song@kernel.org>
+        Fri, 15 Apr 2022 15:09:43 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED7DDAFF8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 12:07:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650049634; x=1681585634;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=N5QZMTpSuxuuC/JrRfv1HnnxupDIgOPC/dOq/bciEhQ=;
+  b=bddlrUzqdecOgRVll85KwtE+/vUhqyM7/zdYckyPu/60lT18Fxmhv0Ve
+   dw9uBtt7O6sQ0Og/uzs+FMHGh9Un5uiH35hjEkTs+faCAypD2A+Wyxg9D
+   lA8ULOXcgb0G54wVdhy0dNO3k02doL5wTiqJwqrh/i2tj8MBS9GL0lye4
+   0bSZ9OVM7NVISKWd+5zuYVvFaR8Eu5WKVAqC50Pvxk7H6Uh3kO21YK5wc
+   jlSjNWn0xkFLv44C19F0+9ClP4TzRVNa/uQgMtYIdoknfCn2vdrR+ChaH
+   6pPHYvmBWtXE0mWTcqN6zSYPJD85IC3+/fXO6+vGpKTd+JWrNERvpJN+U
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262068616"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="262068616"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 12:07:14 -0700
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="553275527"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 12:07:14 -0700
+Date:   Fri, 15 Apr 2022 12:07:44 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YlnCgJ6Mc7TtQSFQ@fyu1.sc.intel.com>
+References: <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+ <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
+ <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
+ <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415164413.2727220-1-song@kernel.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 09:44:09AM -0700, Song Liu wrote:
-> Changes v3 => v4:
-> 1. Fix __weak module_alloc_huge; remove unused vmalloc_huge; rename
->    __vmalloc_huge => vmalloc_huge. (Christoph Hellwig)
-> 2. Use vzalloc (as it was before vmalloc_no_huge) and clean up comments in
->    kvm_s390_pv_alloc_vm.
-> 
-> Changes v2 => v3:
-> 1. Use __vmalloc_huge in alloc_large_system_hash.
-> 2. Use EXPORT_SYMBOL_GPL for new functions. (Christoph Hellwig)
-> 3. Add more description about the issues and changes.(Christoph Hellwig,
->    Rick Edgecombe).
-> 
-> Changes v1 => v2:
-> 1. Add vmalloc_huge(). (Christoph Hellwig)
-> 2. Add module_alloc_huge(). (Christoph Hellwig)
-> 3. Add Fixes tag and Link tag. (Thorsten Leemhuis)
-> 
-> Enabling HAVE_ARCH_HUGE_VMALLOC on x86_64 and use it for bpf_prog_pack has
-> caused some issues [1], as many users of vmalloc are not yet ready to
-> handle huge pages. To enable a more smooth transition to use huge page
-> backed vmalloc memory, this set replaces VM_NO_HUGE_VMAP flag with an new
-> opt-in flag, VM_ALLOW_HUGE_VMAP. More discussions about this topic can be
-> found at [2].
-> 
-> Patch 1 removes VM_NO_HUGE_VMAP and adds VM_ALLOW_HUGE_VMAP.
-> Patch 2 uses VM_ALLOW_HUGE_VMAP in bpf_prog_pack.
-> 
-> [1] https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
-> [2] https://lore.kernel.org/linux-mm/20220330225642.1163897-1-song@kernel.org/
+Hi, Zhangfei,
 
-Looks good except for that I think this should just wait for v5.19. The
-fixes are so large I can't see why this needs to be rushed in other than
-the first assumptions of the optimizations had some flaws addressed here.
+On Fri, Apr 15, 2022 at 07:52:03PM +0800, zhangfei.gao@foxmail.com wrote:
+> > On my X86 machine, nginx doesn't trigger the kernel sva binding function
+> > to allocate ioasid. I tried pre- nstalled nginx/openssl and also tried my built
+> > a few versions of nginx/openssl. nginx does call OPENSSL_init_ssl() but
+> > doesn't go to the binding function. Don't know if it's my configuration issue.
+> > Maybe you can give me some advice?
+> I am using openssl engine, which use crypto driver and using sva via uacce.
+> nginx -> openssl -> openssl engine -> sva related.
 
-If this goes through v5.19 expect conflicts on modules unless you use
-modules-testing.
+uacce is not used on X86. That's why I cannot test IOASID/PASID by nginx
+on X86.
 
-  Luis
+I only can test the RFC patch by other test tools via IDXD driver which uses
+PASID on X86.
+
+Thanks.
+
+-Fenghua

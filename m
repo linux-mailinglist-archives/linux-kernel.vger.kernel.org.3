@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE82502834
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFE550282D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352222AbiDOKW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:22:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50826 "EHLO
+        id S1352255AbiDOKXG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:23:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352276AbiDOKWn (ORCPT
+        with ESMTP id S1352290AbiDOKWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:22:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCE6BB090;
-        Fri, 15 Apr 2022 03:20:15 -0700 (PDT)
+        Fri, 15 Apr 2022 06:22:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B039ABB0A1;
+        Fri, 15 Apr 2022 03:20:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1AF526222B;
-        Fri, 15 Apr 2022 10:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 753ABC385AF;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 64543B82DD8;
+        Fri, 15 Apr 2022 10:20:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 82E8FC385B1;
         Fri, 15 Apr 2022 10:20:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650018014;
-        bh=kodpLuvtK8s5higBVJpvR6w9BbhTiCvnfC7n+wSImDY=;
+        bh=RUQYhCaRICWRJT4DlJUlLmc9VwesOdgLRFuWFFFWiGg=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QXDg0VzM6Idnc64pXRPJoQm5DsySFwyMl/4hlEUHGNZpz3IpW2JSLCvDB8VVTXftd
-         zhV4++KYHo3batYvMHEUCBHPhqKpvISmVwwatrSRaR9pMxFdwey5uEsjqlYgPNEYyD
-         rx9FbzgzEtoZrJbc/s8qKLkuEWzPv9eU1kFjcZK1WDHEIlH5lJ+fTAjkTPmwRoZvpT
-         AqiFuM99FFzRJrwRUIIRPsD53coQxn+LIhGMpddTw/wbPvubfA2akW5Fx4CvXo0+OO
-         1Zm4j1Xpi/lMch7okYru2Lm1i9Ov4aI5GNnwYCqOkJGur7JQ6nXDLy42y82AEKeg+z
-         vMVGdq77J7tqA==
+        b=Fahl6q0wVilxvCkP2Y1P98NhmNVNaW6hC/VFUUy66Hxoo+1+ACzWQY46oK220x9B4
+         w/BXtK6PLhNY39sKk1HxAYPmP7Ojm7MQ1UojMnkmHbCqPsyAcIpUZUpvU8N7aplY7z
+         5o5e/kG17mEQcmYPt5xTtJaRY+GJ3RWATbdDYP0A9W0uncARiTXiBIwGWITDL4+jMq
+         KTNuoxelFiTU7fDf6gqIF49hKII6UP8fPfwuvy7PqkSiCkM73gBq5SEkBy10+Mxor8
+         Or7tbMq9fKJEgdFJqvZzUvMGfbTlgbPrPfKYNEVijNBiTq7rAqCaq41tWHE+sNKf2S
+         ptkm+VKjVI3nw==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 5E4D4E6D402;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6853AEAC09B;
         Fri, 15 Apr 2022 10:20:14 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: ethernet: ti: cpsw_new: use pm_runtime_resume_and_get()
- instead of pm_runtime_get_sync()
+Subject: Re: [PATCH] net: ethernet: ti: davinci_emac: using
+ pm_runtime_resume_and_get instead of pm_runtime_get_sync
 From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <165001801438.12692.16273139621534267495.git-patchwork-notify@kernel.org>
+Message-Id: <165001801442.12692.3592089859388826010.git-patchwork-notify@kernel.org>
 Date:   Fri, 15 Apr 2022 10:20:14 +0000
-References: <20220413093529.2538378-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220413093529.2538378-1-chi.minghao@zte.com.cn>
+References: <20220414090800.2542064-1-chi.minghao@zte.com.cn>
+In-Reply-To: <20220414090800.2542064-1-chi.minghao@zte.com.cn>
 To:     CGEL <cgel.zte@gmail.com>
 Cc:     grygorii.strashko@ti.com, davem@davemloft.net, kuba@kernel.org,
         linux-omap@vger.kernel.org, netdev@vger.kernel.org,
@@ -65,11 +65,12 @@ Hello:
 This patch was applied to netdev/net-next.git (master)
 by David S. Miller <davem@davemloft.net>:
 
-On Wed, 13 Apr 2022 09:35:29 +0000 you wrote:
+On Thu, 14 Apr 2022 09:08:00 +0000 you wrote:
 > From: Minghao Chi <chi.minghao@zte.com.cn>
 > 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
+> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
+> pm_runtime_put_noidle. This change is just to simplify the code, no
+> actual functional changes.
 > 
 > Reported-by: Zeal Robot <zealci@zte.com.cn>
 > Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
@@ -77,8 +78,8 @@ On Wed, 13 Apr 2022 09:35:29 +0000 you wrote:
 > [...]
 
 Here is the summary with links:
-  - net: ethernet: ti: cpsw_new: use pm_runtime_resume_and_get() instead of pm_runtime_get_sync()
-    https://git.kernel.org/netdev/net-next/c/c557a9ae4960
+  - net: ethernet: ti: davinci_emac: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+    https://git.kernel.org/netdev/net-next/c/81669e7c6ca4
 
 You are awesome, thank you!
 -- 

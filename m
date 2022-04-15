@@ -2,183 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179F2502797
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE31950279E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348216AbiDOJtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 05:49:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46104 "EHLO
+        id S1349848AbiDOJxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 05:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233073AbiDOJti (ORCPT
+        with ESMTP id S236399AbiDOJxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 05:49:38 -0400
-Received: from mail-pf1-x443.google.com (mail-pf1-x443.google.com [IPv6:2607:f8b0:4864:20::443])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC63AFAC4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:47:10 -0700 (PDT)
-Received: by mail-pf1-x443.google.com with SMTP id f3so6956578pfe.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:47:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=r9GDWyDCDQbP8gK/rtX9xXTioe+x5z2qA2AuchM8mAw=;
-        b=JY3mZMPztCqqQuPe1aPtE9RB3QEAYQADsrKPe0tCVFEhkIT12dwrhUAZz13CMpW8ss
-         pDgg26/lhYh0mdIavRkBrTkqgPKLh2v/QP9e7/Tp0G7foutWFTWM8sjwbYdkjft7Dhpa
-         wUdm1lymR8mZ0EeSuZU18mKJypSGtgUU/tGKHebJsd8tREZNsxgSVyhtBjRpnCpPJn72
-         UCbxUkxDTfG+IEbHLcCHgdnWNQOO8079K/45evp7TzD7oAWkE9/hg0tfM1tYufE0E32e
-         zCHTPrhwP/nyO3i6eESdeC1F2BRJvxTc1E1mGQJjXlhbV/lH/alztYJfkO4dtpQA7wtl
-         DkZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=r9GDWyDCDQbP8gK/rtX9xXTioe+x5z2qA2AuchM8mAw=;
-        b=UObeBEh5QEN3y7cCN67uuWdkOiwt+PY5g2zIgrtcOBGEOidjsyiRmsC+o+Cf9UZwr/
-         YSbsBqkyuSp+GdP7CWsQ3/VXlkni/3K4iQDXKLitjbs8O3LpMjiWiMC5H44rIfAXb9rw
-         AXwdH42RyaA6uWDL4WPfr1lP/ybkWYLn5PKus6MTUPqyEtTGv7BVH3t9O09+ww0ELaDC
-         B16zo9VomX+io68dnCao8L7cuMNOvG6VxfRoy0ulTMcphbjLT/VtLC+s5+x2Q2ELLH3o
-         kOSRZNp1IVqzNObVqtB96W1pSIe7dNUElEzf3TLyO2ZVO2p5vnh9WINFNrF4Bo3oKHsY
-         iPnQ==
-X-Gm-Message-State: AOAM533p0VVx6yxmJ9fLFECy1JCtCD4cbdb3MJw7jFO0P2iW/KT9ACBG
-        yFrwVbigV7fTQZrXWoftKHc=
-X-Google-Smtp-Source: ABdhPJx91tvep5CKWCfz4Jn+VMz/Qmp8ixmWlQWXwKFaPxVujm+Yy+KiY+60mh/jdLI/s9MGwASYMA==
-X-Received: by 2002:a65:5a8e:0:b0:365:3b6:47fb with SMTP id c14-20020a655a8e000000b0036503b647fbmr5847841pgt.147.1650016030122;
-        Fri, 15 Apr 2022 02:47:10 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id s19-20020aa78d53000000b004fdaae08497sm2241832pfe.28.2022.04.15.02.47.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 02:47:09 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 17:47:05 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
-Message-ID: <20220415094705.aibh3jr4wzhddmud@ppc.localdomain>
-References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
- <20220414154215.GL3293@kadam>
+        Fri, 15 Apr 2022 05:53:10 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4248B6E6B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650016242; x=1681552242;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=k0+BB6ioS9sg4ZQkLIJuljI7na5dCngyl54RvX7fbN8=;
+  b=hvEqWuLeRQ5mjL3060IaVYT6YPp2x6jdINCBQrCyJQzBFuH0wxOBg3CN
+   9hha7IJ49RjtxnQd2AeZhPRUxZF9AnbmtImAOvuzPHQEdEEDqFbTlnMZ9
+   m+UjVL63mmdDImm3JgQAIJ1KsrXxPQ8iYgJw745aseoNfXG50/xtSSkJE
+   OuJ2pR9MqkABWOMmBALQBH1oXpjHs95E8QHuQy/coL+pcsAppkk0JvUsb
+   ram+ASwu9H8GvEZFs37zKDx+lvlMpnC4a/zc3ADdCN0OqFbX/4yzd9nue
+   4XQsmHIjqZ5XkSn/SE7dd2uLhyhuJqkKTT57YP+BPTpx6veSuR5ebpasy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262883274"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="262883274"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:50:42 -0700
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="553089696"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:50:41 -0700
+Date:   Fri, 15 Apr 2022 02:51:08 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+References: <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
+ <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
+ <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220414154215.GL3293@kadam>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dan, thx for your review.
-
-On 22/04/14 06:42PM, Dan Carpenter wrote:
-> On Thu, Apr 14, 2022 at 10:12:23PM +0800, Wang Cheng wrote:
-> > Due to the case that "requesttype == 0x01 && status <= 0"
-> > isn't handled in r8712_usbctrl_vendorreq(),
-> > "data" (drivers/staging/rtl8712/usb_ops.c:32)
-> > will be returned without initialization.
+On Thu, Apr 14, 2022 at 06:08:09PM +0800, zhangfei.gao@foxmail.com wrote:
+> 
+> On 2022/4/12 下午11:35, zhangfei.gao@foxmail.com wrote:
+> > Hi, Fenghua
 > > 
-> > When "tmpU1b" (drivers/staging/rtl8712/usb_intf.c:395)
-> > is 0, mac[6] (usb_intf.c:394) won't be initialized,
-> > which leads to accessing uninit-value on usb_intf.c:541.
-> 
-> These line numbers are sort of useless because everyone is on a
-> different git hash.
-
-I will correct this.
-
->
+> > On 2022/4/12 下午9:41, Fenghua Yu wrote:
+> > > Hi, Zhangfei,
+> > > 
+> > > On Tue, Apr 12, 2022 at 03:04:09PM +0800, zhangfei.gao@foxmail.com
+> > > wrote:
+> > > > 
+> > > > On 2022/4/11 下午10:52, Dave Hansen wrote:
+> > > > > On 4/11/22 07:44, zhangfei.gao@foxmail.com wrote:
+> > > > > > On 2022/4/11 下午10:36, Dave Hansen wrote:
+> > > > > > > On 4/11/22 07:20, zhangfei.gao@foxmail.com wrote:
+> > Agree with Dave, I think user space should not be broken.
 > > 
-> > Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-> > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
-> > ---
-> >  drivers/staging/rtl8712/usb_intf.c      |  6 +++---
-> >  drivers/staging/rtl8712/usb_ops_linux.c | 14 ++++++++------
-> >  2 files changed, 11 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-> > index ee4c61f85a07..50dcd3ecb685 100644
-> > --- a/drivers/staging/rtl8712/usb_intf.c
-> > +++ b/drivers/staging/rtl8712/usb_intf.c
-> > @@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
-> >  		} else {
-> >  			AutoloadFail = false;
-> >  		}
-> > -		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
-> > +		if ((!AutoloadFail) ||
-> > +		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
-> >  		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
-> >  		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
-> >  		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
-> >  		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
-> > -		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
-> > -		     (!AutoloadFail)) {
-> > +		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
-> >  			mac[0] = 0x00;
-> >  			mac[1] = 0xe0;
-> >  			mac[2] = 0x4c;
+> > Thanks
 > 
-> This is a separate fix from the rest of the patch.  Send it by itself.
+> Any plan about this regression?
+> Currently I need this patch to workaround the issue.
+> 
+> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> index 22ddd05bbdcd..2d74ac53d11c 100644
+> --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> @@ -4,6 +4,7 @@
+>   */
+> 
+>  #include <linux/mm.h>
+> +#include <linux/sched/mm.h>
+>  #include <linux/mmu_context.h>
+>  #include <linux/mmu_notifier.h>
+>  #include <linux/slab.h>
+> @@ -363,6 +364,7 @@ arm_smmu_sva_bind(struct device *dev, struct mm_struct
+> *mm, void *drvdata)
+> 
+>         mutex_lock(&sva_lock);
+>         handle = __arm_smmu_sva_bind(dev, mm);
+> +       mmget(mm);
+>         mutex_unlock(&sva_lock);
+>         return handle;
+>  }
+> @@ -377,6 +379,7 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+>                 arm_smmu_mmu_notifier_put(bond->smmu_mn);
+>                 kfree(bond);
+>         }
+> +       mmput(bond->mm);
+>         mutex_unlock(&sva_lock);
+>  }
 
-Ah, thought to send a patch series.
+Could you please review and/or test this patch? It's supposed to fix
+the PASID issue on both ARM and X86.
 
-> 
-> 
-> > diff --git a/drivers/staging/rtl8712/usb_ops_linux.c b/drivers/staging/rtl8712/usb_ops_linux.c
-> > index f984a5ab2c6f..e321ca4453ca 100644
-> > --- a/drivers/staging/rtl8712/usb_ops_linux.c
-> > +++ b/drivers/staging/rtl8712/usb_ops_linux.c
-> > @@ -495,12 +495,14 @@ int r8712_usbctrl_vendorreq(struct intf_priv *pintfpriv, u8 request, u16 value,
-> >  	}
-> >  	status = usb_control_msg(udev, pipe, request, reqtype, value, index,
-> >  				 pIo_buf, len, 500);
-> > -	if (status > 0) {  /* Success this control transfer. */
-> > -		if (requesttype == 0x01) {
-> > -			/* For Control read transfer, we have to copy the read
-> > -			 * data from pIo_buf to pdata.
-> > -			 */
-> > -			memcpy(pdata, pIo_buf,  status);
-> > +	/* For Control read transfer, copy the read data from pIo_buf to pdata
-> > +	 * when control transfer success; otherwise init *pdata with 0.
-> > +	 */
-> > +	if (requesttype == 0x01) {
-> > +		if (status > 0)
-> > +			memcpy(pdata, pIo_buf, status);
-> > +		else
-> > +			*(u32 *)pdata = 0;
-> >  		}
-> 
-> This isn't really correct.  In many cases status is "len" is less than 4.
-> I'm slightly surprised that nothing complains about that as an
-> uninitialized access.  But then another problem is that "status" can be
-> less than "len".
+From a6444e1e5bd8076f5e5c5e950d3192de327f0c9c Mon Sep 17 00:00:00 2001
+From: Fenghua Yu <fenghua.yu@intel.com>
+Date: Fri, 15 Apr 2022 00:51:33 -0700
+Subject: [RFC PATCH] iommu/sva: Fix PASID use-after-free issue
 
-Sorry, I should explain it clearly. If I did right, watching "status"
-with gdb while running syzkaller reproducer, "status" returns from
-usb_control_msg() is -71. In which case, *pdata won't be touched in
-r8712_usbctrl_vendorreq(). As a result, "data" in
-usb_read8()/usb_read16()/usb_read32() will be returned without
-initialization. I think that is why kmsan reports:
-Local variable data created at:
- usb_read8+0x5d/0x130 drivers/staging/rtl8712/usb_ops.c:33
- r8712_read8+0xa5/0xd0 drivers/staging/rtl8712/rtl8712_io.c:29
+A PASID might be still used even though it is freed on mm exit.
 
-> 
-> A better fix instead of setting pdata to zero would be to add error
-> checking in the callers and then change this code to use
-> usb_control_msg_send/recv().  Probably just initialize "data" in the
-> callers as well.
+process A:
+	sva_bind();
+	ioasid_alloc() = N; // Get PASID N for the mm
+	fork(): // spawn process B
+	exit();
+	ioasid_free(N);
 
-I tried something similar which also works fine, but I think this patch
-does't fix it at root.
-https://syzkaller.appspot.com/text?tag=Patch&x=15be2970f00000
+process B:
+	device uses PASID N -> failure
+	sva_unbind();
 
-> 
-> regards,
-> dan carpenter
-> 
-thanks,
--- w
+Dave Hansen suggests to take a refcount on the mm whenever binding the
+PASID to a device and drop the refcount on unbinding. The mm won't be
+dropped if the PASID is still bound to it.
+
+Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
+
+Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+Suggested-by: Dave Hansen" <dave.hansen@linux.intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 6 ++++++
+ drivers/iommu/intel/svm.c                       | 4 ++++
+ 2 files changed, 10 insertions(+)
+
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index 22ddd05bbdcd..3fcb842a0df0 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -7,6 +7,7 @@
+ #include <linux/mmu_context.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/slab.h>
++#include <linux/sched/mm.h>
+ 
+ #include "arm-smmu-v3.h"
+ #include "../../iommu-sva-lib.h"
+@@ -363,6 +364,9 @@ arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
+ 
+ 	mutex_lock(&sva_lock);
+ 	handle = __arm_smmu_sva_bind(dev, mm);
++	/* Take an mm refcount on a successful bind. */
++	if (!IS_ERR(handle))
++		mmget(mm);
+ 	mutex_unlock(&sva_lock);
+ 	return handle;
+ }
+@@ -372,6 +376,8 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+ 	struct arm_smmu_bond *bond = sva_to_bond(handle);
+ 
+ 	mutex_lock(&sva_lock);
++	/* Drop an mm refcount. */
++	mmput(bond->mm);
+ 	if (refcount_dec_and_test(&bond->refs)) {
+ 		list_del(&bond->list);
+ 		arm_smmu_mmu_notifier_put(bond->smmu_mn);
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index 23a38763c1d1..345a0d5d7922 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -403,6 +403,8 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+ 		goto free_sdev;
+ 
+ 	list_add_rcu(&sdev->list, &svm->devs);
++	/* Take an mm refcount on binding mm. */
++	mmget(mm);
+ success:
+ 	return &sdev->sva;
+ 
+@@ -465,6 +467,8 @@ static int intel_svm_unbind_mm(struct device *dev, u32 pasid)
+ 				kfree(svm);
+ 			}
+ 		}
++		/* Drop an mm reference on unbinding mm. */
++		mmput(mm);
+ 	}
+ out:
+ 	return ret;
+-- 
+2.32.0
+

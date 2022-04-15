@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74F8502556
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705E8502566
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:15:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346043AbiDOGN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
+        id S244444AbiDOGRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiDOGNx (ORCPT
+        with ESMTP id S240827AbiDOGRZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:13:53 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23C89D0C8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:11:25 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id r12so1750251iod.6
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:11:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Hth57rc9flgI5m/YWiERoaDPCoaY7k8I1BMtgGL+V+Y=;
-        b=msTzY8eSFKW/3mFmZ9lVowCymgcEumQdHKnLmPoK2AIQM5U2BaaSAmtjO2PKaxVJlz
-         2ES6raB6JnSfMCwORjUEBdMJCP/IKWm7oEkIpJi7Ccsa63N57Xk5Z7E4OYu8Sgfv605W
-         X2EpJ5uI7jXptNEMkbCMggrukuselAizifurv9hRWvp20KQQjqGEI/tiObfvLIU2zRvm
-         Yz6zO6HUX37CkAlBqIEJvy8HvscIiG16enT7d45uHZVgVelRnaPR8dEjuElmtFPTrwqb
-         BHHk0qAUzLAqSiDOfu0DgaJBrsy0J2AbneaUcCebHcM0ughM68guTlvQCenAdyULrrCn
-         hI3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Hth57rc9flgI5m/YWiERoaDPCoaY7k8I1BMtgGL+V+Y=;
-        b=OI9sGlZ1s2tD6DOETESil27AVyNPc4fxSkkOyDBi2mwF3/xc2F34HtKt6OuTUy5MXA
-         HeJyfTDHQm4bInfVICQD3Ot94wGf7/E0oIsX6uVMIG0KwA3Y0+rmxoXL4dn4Kj/bJaYG
-         UpRaSqO5TuDPpxb1oG1Pw8u0BiwdzeWZJ1e/iyelc1RVGEp3vXKvD7LdZ8wwXPrHdrst
-         zZGWAn8ldy7KmqTD2Srxr04Sn0LSLhnxjF8q/I8197HY73AUf+nEJG857OQh6j73LlYz
-         wcrb5RJExFBcqncgoZLiguGakHco6Rblc443jFxxN7w8dyRtQsR+HunNoADSc63kXMlW
-         CkJA==
-X-Gm-Message-State: AOAM531Hus1QgsHNrmYQErj58SiZR3FHF7EYOYXZzlTJZH3+HO3CZG/b
-        iuzFCSPo2NwUMZQfmK4ZOwgPo9KzDkEADJdVMULm9P8oPqo=
-X-Google-Smtp-Source: ABdhPJyZ09w41DsSsnD+yZXGRzZeRuMf7sXpcaFWmdYFro5NPh1kmpFg/dv3eWJHhL0eqh7mxqj1hftj0f6IdG4RkOs=
-X-Received: by 2002:a05:6638:2509:b0:328:5838:f080 with SMTP id
- v9-20020a056638250900b003285838f080mr281369jat.163.1650003084905; Thu, 14 Apr
- 2022 23:11:24 -0700 (PDT)
+        Fri, 15 Apr 2022 02:17:25 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B13F13C492;
+        Thu, 14 Apr 2022 23:14:57 -0700 (PDT)
+X-UUID: 9f214143cbc146d49ba89343c5238ff7-20220415
+X-UUID: 9f214143cbc146d49ba89343c5238ff7-20220415
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <alice.chao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1654108916; Fri, 15 Apr 2022 14:14:51 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 15 Apr 2022 14:14:50 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Apr 2022 14:14:50 +0800
+From:   Alice Chao <alice.chao@mediatek.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <matthias.bgg@gmail.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+CC:     <stanley.chu@mediatek.com>, <peter.wang@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <alice.chao@mediatek.com>,
+        <powen.kao@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <qilin.tan@mediatek.com>, <lin.gui@mediatek.com>,
+        <yanxu.wei@mediatek.com>, <wsd_upstream@mediatek.com>
+Subject: [PATCH v4 1/1] scsi: Fix racing between dev init and dev reset
+Date:   Fri, 15 Apr 2022 14:12:44 +0800
+Message-ID: <20220415061243.30229-2-alice.chao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
- <20220415055916.28350-15-rex-bc.chen@mediatek.com> <CACb=7PXmA_n-xAb+ZkRJdTXu=Enbf6NbyxVa3VC1zmJwsrgQ1w@mail.gmail.com>
-In-Reply-To: <CACb=7PXmA_n-xAb+ZkRJdTXu=Enbf6NbyxVa3VC1zmJwsrgQ1w@mail.gmail.com>
-From:   Hsin-Yi Wang <hsinyi@google.com>
-Date:   Fri, 15 Apr 2022 14:10:58 +0800
-Message-ID: <CACb=7PX_qNOk+XhxZUj_OrCnn1Fqw_4P-3Dc4pQLBTYQkY4qfw@mail.gmail.com>
-Subject: Re: [PATCH V3 14/15] arm64: dts: mediatek: Add MediaTek CCI node for MT8183
-To:     Rex-BC Chen <rex-bc.chen@mediatek.com>
-Cc:     rafael@kernel.org, Viresh Kumar <viresh.kumar@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, krzk+dt@kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tim Chang <jia-wei.chang@mediatek.com>, roger.lu@mediatek.com,
-        Kevin Hilman <khilman@baylibre.com>,
-        angelogioacchino.delregno@collabora.com, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,75 +57,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 2:06 PM Hsin-Yi Wang <hsinyi@google.com> wrote:
->
-> On Fri, Apr 15, 2022 at 1:59 PM Rex-BC Chen <rex-bc.chen@mediatek.com> wrote:
-> >
-> > Add MediaTek CCI devfreq node for MT8183.
-> >
-> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
-> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
-> > ---
-> >  arch/arm64/boot/dts/mediatek/mt8183-evb.dts    | 4 ++++
-> >  arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi | 4 ++++
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi       | 7 +++++++
-> >  3 files changed, 15 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > index 8953dbf84f3e..7ac9864db9de 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-evb.dts
-> > @@ -412,6 +412,10 @@
-> >
-> >  };
-> >
-> > +&cci {
-> > +       proc-supply = <&mt6358_vproc12_reg>;
-> > +};
-> > +
-> >  &cpu0 {
-> >         proc-supply = <&mt6358_vproc12_reg>;
-> >  };
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > index 0f9480f91261..4786a32ee975 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183-kukui.dtsi
-> > @@ -230,6 +230,10 @@
-> >         status = "okay";
-> >  };
-> >
-> > +&cci {
-> > +       proc-supply = <&mt6358_vproc12_reg>;
-> > +};
-> > +
-> >  &cpu0 {
-> >         proc-supply = <&mt6358_vproc12_reg>;
-> >  };
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > index 4ae3305d16d2..334728413582 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -280,6 +280,13 @@
-> >                 };
-> >         };
-> >
-> > +       cci: cci {
-> > +               compatible = "mediatek,mt8183-cci";
-> > +               clocks = <&apmixedsys CLK_APMIXED_CCIPLL>;
-> > +               clock-names = "cci_clock";
-> > +               operating-points-v2 = <&cci_opp>;
->
-> hi Rex,
->
-> cci_opp is not defined in dts.
->
-It's in the previous patch. Please ignore this comment.
+Device reset thread uses kobject_uevent_env() to get kobj.parent, and it
+races with device init thread which calls device_add() to add kobj.parent
+before kobject_uevent_env().
 
-> > +       };
-> > +
-> >         cpus {
-> >                 #address-cells = <1>;
-> >                 #size-cells = <0>;
-> > --
-> > 2.18.0
-> >
+Device init call:           Device reset call:
+ scsi_probe_and_add_lun()    scsi_evt_thread()
+  scsi_add_lun()             scsi_evt_emit()
+   scsi_sysfs_add_sdev()      kobject_uevent_env() //get kobj.parent
+    scsi_target_add()           kobject_get_path()
+                                 len = get_kobj_path_length () // len=1 because parent hasn't created yet
+    device_add() // add kobj.parent
+      kobject_uevent_env()
+       kobject_get_path()         path = kzalloc()
+        fill_kobj_path()           fill_kobj_path() // --length; length -= cur is a negative value
+                                    memcpy(path + length, kobject_name(parent), cur); // slab OOB!
+
+Above backtrace describes the problem, device reset thread will get wrong
+kobj.parent when device init thread didn’t add kobj.parent yet. When this
+racing happened, it triggers the a KASAN dump on the final iteration:
+
+BUG: KASAN: slab-out-of-bounds in kobject_get_path+0xf8/0x1b8
+Write of size 11 at addr ffffff80d6bb94f5 by task kworker/3:1/58
+<snip>
+Call trace:
+ __kasan_report+0x124/0x1c8
+ kasan_report+0x54/0x84
+ kasan_check_range+0x200/0x208
+ memcpy+0xb8/0xf0
+ kobject_get_path+0xf8/0x1b8
+ kobject_uevent_env+0x228/0xa88
+ scsi_evt_thread+0x2d0/0x5b0
+ process_one_work+0x570/0xf94
+ worker_thread+0x7cc/0xf80
+ kthread+0x2c4/0x388
+
+These two jobs are scheduled asynchronously, we can't guaranteed that
+kobj.parent will be created in device init thread before device reset
+thread calls kobject_get_path().
+
+To resolve the racing issue between device init thread and device reset
+thread, we use wait_event() in scsi_evt_emit() to wait for device_add()
+to complete the creation of kobj.parent.
+
+Device init call:                Device reset call:
+ufshcd_async_scan()              scsi_evt_thread()
+ scsi_scan_host()                 scsi_evt_emit() <- add wait_event()
+  do_scsi_scan_host() <- add wake_up()
+   scsi_scan_host_selected()
+    scsi_scan_channel()
+     scsi_probe_and_add_lun()
+      scsi_target_add()
+       device_add() // add kobj.parent
+        kobject_uevent_env()
+         kobject_get_path()
+          fill_kobj_path()
+  // call wake_up() after scsi_scan_host_selected is done
+                                   kobject_uevent_env() // add kobj.parent
+                                    kobject_get_path() // get valid kobj.parent
+                                     fill_kobj_path()
+
+After we add wake_up at do_scsi_scan_host() in device init thread, we can
+ensure that device reset thread will get kobject after device init thread
+finishes adding parent.
+
+Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+
+---
+
+Change in v4
+-Change commit: Change call stack description.
+
+Change in v3
+-Change commit: Describe the preblem first and then the solution.
+-Add commit: Add KASAN error log.
+
+Change in v2
+-Remove Change-Id.
+
+---
+ drivers/scsi/scsi_lib.c  | 1 +
+ drivers/scsi/scsi_scan.c | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+index 0a70aa763a96..abf9a71ed77c 100644
+--- a/drivers/scsi/scsi_lib.c
++++ b/drivers/scsi/scsi_lib.c
+@@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
+ 		break;
+ 	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
+ 		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
++		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
+ 		break;
+ 	default:
+ 		/* do nothing */
+diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+index f4e6c68ac99e..431f229ac435 100644
+--- a/drivers/scsi/scsi_scan.c
++++ b/drivers/scsi/scsi_scan.c
+@@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
+ 	} else {
+ 		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
+ 				SCAN_WILD_CARD, 0);
++		wake_up(&shost->host_wait);
+ 	}
+ }
+ 
+-- 
+2.18.0
+

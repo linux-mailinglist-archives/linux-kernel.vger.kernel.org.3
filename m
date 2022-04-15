@@ -2,125 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D87E25020ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD5925020F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:40:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349095AbiDODjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 23:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37464 "EHLO
+        id S1349110AbiDODmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 23:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241106AbiDODjB (ORCPT
+        with ESMTP id S241106AbiDODmN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 23:39:01 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6A475227;
-        Thu, 14 Apr 2022 20:36:34 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id bg9so6364346pgb.9;
-        Thu, 14 Apr 2022 20:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2Ro17QGxtHVWnLXeBVe0SlNl98KKA0TueGG/iwSk7MY=;
-        b=SoNomD0cPYQQFNOaKEr2DrGdxVcL1rCNw2q2SbcogDpRWoNOD71hlheS04wpKHj+TU
-         MuVD2tAz8sUeyGjquJBq3YDEC1ghetmuUJr1Ej1HYD9NfXZQqzuN9fPncVWNpH8WQM41
-         e756f7xMs1S0FFufoTX4yGlhx1Br3jf+5miO1GNgMObnsR1pywvGXoqys6uikcjMTqoQ
-         Y8vgBmYJMW2CDeTHwB0bfKYDgwrVB+yJYSa7CmHwmRUWHFGNNslcvi8Hfxso+0zcyjxT
-         0bydlTvQappxG3dTZfMXcWkTxC7dh1lnx4Z4DwgZLA+hh3FxfM+GZRv7PtRAjqIlXkos
-         ZSUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=2Ro17QGxtHVWnLXeBVe0SlNl98KKA0TueGG/iwSk7MY=;
-        b=VMukzMKsIWklv1jdCBZwAJ7GmsiWvA3btyPLzm9KIYyvGG02KTRg8mK4iilM3YZRa6
-         YGrRn5FUf5QRreCJR1jpmjy37vzvIl2e1cZRMTTzmmsv2eM/z7ZklDCEyRZuaHDL7TsL
-         Rr8sZNLPdOdQsfI+nAyLfrXg2MxVt/Xa9YBZkuct9sMoHVNFzaN6RNlFRmb7CLHaYovt
-         hJWoMnhjzUSEoMcw7CODNQjygntCydix6zAZ1oYdVLysO+qbMUytD6i/6hvyfmuzu+ka
-         MDV039ThFSC2sLOq0Bxo+Hr2KaGGQ/ySM3xYWnWfqR+SmkryhcFffZPWSEF4Fhi2ckQC
-         SdkQ==
-X-Gm-Message-State: AOAM533WW8843nOEIKIB5gFN8o2oX1wV0/PvjjXCBCk43a5Fluh5X4YT
-        ZTm/BwMbK9UkyqqxNYSfLXU=
-X-Google-Smtp-Source: ABdhPJwBh8uY0NWxqCUopeD7zL0l2WitRXJ6DQ6vCt2+LVV4O9VF2VVYF3EAxr5uSFKtBT3PqlL1zA==
-X-Received: by 2002:a63:f641:0:b0:3a2:cea2:bcf with SMTP id u1-20020a63f641000000b003a2cea20bcfmr764898pgj.506.1649993793693;
-        Thu, 14 Apr 2022 20:36:33 -0700 (PDT)
-Received: from localhost.localdomain ([2001:288:7001:2708:15e8:72d0:44ea:4d07])
-        by smtp.gmail.com with ESMTPSA id p8-20020aa78608000000b005082c3cbfd2sm1187165pfn.218.2022.04.14.20.36.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 20:36:33 -0700 (PDT)
-From:   Jui-Tse Huang <juitse.huang@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <valentin.schneider@arm.com>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        Huaixin Chang <changhuaixin@linux.alibaba.com>,
-        Beata Michalska <beata.michalska@arm.com>,
-        Chun-Hung Tseng <henrybear327@gmail.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
-        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
-Subject: [PATCH] docs/scheduler: fix unit error
-Date:   Fri, 15 Apr 2022 11:36:18 +0800
-Message-Id: <20220415033618.15655-1-juitse.huang@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 14 Apr 2022 23:42:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3FA1C108;
+        Thu, 14 Apr 2022 20:39:42 -0700 (PDT)
+Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfhqK2y9ZzgYgr;
+        Fri, 15 Apr 2022 11:37:49 +0800 (CST)
+Received: from [10.67.111.192] (10.67.111.192) by
+ kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 11:39:38 +0800
+Message-ID: <d8c4f1fb-a020-9457-44e2-dc63982a9213@huawei.com>
+Date:   Fri, 15 Apr 2022 11:39:38 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH bpf-next v2 4/6] bpf, arm64: Impelment
+ bpf_arch_text_poke() for arm64
+Content-Language: en-US
+To:     Hou Tao <houtao1@huawei.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+ <20220414162220.1985095-5-xukuohai@huawei.com>
+ <ba838451-1a96-2c83-9188-a994f45d7523@huawei.com>
+From:   Xu Kuohai <xukuohai@huawei.com>
+In-Reply-To: <ba838451-1a96-2c83-9188-a994f45d7523@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.192]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500013.china.huawei.com (7.221.188.120)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The unit mentioned in the documentation of scheduler statistics is
-outdated which may mislead the readers.
+On 4/15/2022 10:34 AM, Hou Tao wrote:
+> Hi,
+> 
+> On 4/15/2022 12:22 AM, Xu Kuohai wrote:
+>> Impelment bpf_arch_text_poke() for arm64, so bpf trampoline code can use
+>> it to replace nop with jump, or replace jump with nop.
+>>
+>> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
+>> Acked-by: Song Liu <songliubraving@fb.com>
+>> ---
+>>  arch/arm64/net/bpf_jit_comp.c | 52 +++++++++++++++++++++++++++++++++++
+>>  1 file changed, 52 insertions(+)
+>>
+>> diff --git a/arch/arm64/net/bpf_jit_comp.c b/arch/arm64/net/bpf_jit_comp.c
+>> index 8ab4035dea27..1a1c3ea75ee2 100644
+>> --- a/arch/arm64/net/bpf_jit_comp.c
+>> +++ b/arch/arm64/net/bpf_jit_comp.c
+>> @@ -9,6 +9,7 @@
+>>  
+>>  #include <linux/bitfield.h>
+>>  #include <linux/bpf.h>
+>> +#include <linux/memory.h>
+>>  #include <linux/filter.h>
+>>  #include <linux/printk.h>
+>>  #include <linux/slab.h>
+>> @@ -18,6 +19,7 @@
+>>  #include <asm/cacheflush.h>
+>>  #include <asm/debug-monitors.h>
+>>  #include <asm/insn.h>
+>> +#include <asm/patching.h>
+>>  #include <asm/set_memory.h>
+>>  
+>>  #include "bpf_jit.h"
+>> @@ -1529,3 +1531,53 @@ void bpf_jit_free_exec(void *addr)
+>>  {
+>>  	return vfree(addr);
+>>  }
+>> +
+>> +static int gen_branch_or_nop(enum aarch64_insn_branch_type type, void *ip,
+>> +			     void *addr, u32 *insn)
+>> +{
+>> +	if (!addr)
+>> +		*insn = aarch64_insn_gen_nop();
+>> +	else
+>> +		*insn = aarch64_insn_gen_branch_imm((unsigned long)ip,
+>> +						    (unsigned long)addr,
+>> +						    type);
+>> +
+>> +	return *insn != AARCH64_BREAK_FAULT ? 0 : -EFAULT;
+>> +}
+>> +
+>> +int bpf_arch_text_poke(void *ip, enum bpf_text_poke_type poke_type,
+>> +		       void *old_addr, void *new_addr)
+>> +{
+>> +	int ret;
+>> +	u32 old_insn;
+>> +	u32 new_insn;
+>> +	u32 replaced;
+>> +	enum aarch64_insn_branch_type branch_type;
+>> +
+> In bpf_arch_text_poke() of x86, it disables the poking of kernel module, can you
+> explain why it is OK to do so in arm64 ? Because there is no test cases for
+> fentry on linux kernel module, could you please add some tests for it ?
 
-The unit of statistics that is reported by /proc/schedstat is modified
-to nanosecond, and the unit of statistics that is reported by
-/proc/PID/schedstat is provided as well to make the context consistent.
+Oops, I forget to check this condition. It's not safe to patch a ko
+without ko unloading disabled.
 
-The rq_cpu_time and the rq_sched_info.run_delay of a run queue, and the
-sched_info.run_delay of a task are all updated based on the clock of the
-run queue, while the se.sum_exec_runtime of a task is updated based on
-the clock_task of the run queue of the task. Both the clock and
-clock_task are relied on the return value of the function sched_clock()
-which is in the unit of nanosecond.
+For arm64, the fentry is only patched by ftrace since the nop
+instruciton to be instrumented is not the first instruction, so
+bpf_text_poke() fails when comparing the old instruction (pointed to by
+the "old_addr") with the nop. Since the nop in fentry is reserved by
+ftrace, I dont think it's reasonable to patch the nop by another
+interface not provided by ftrace.
 
-Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
----
- Documentation/scheduler/sched-stats.rst | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Besides, for long jumps outside the range of 128MB, a single branch
+instruction is not sufficient, perhaps we could use ftrace trampoline or
+some other method to support long jumps.
 
-diff --git a/Documentation/scheduler/sched-stats.rst b/Documentation/scheduler/sched-stats.rst
-index dd9b99a025f7..03c062915998 100644
---- a/Documentation/scheduler/sched-stats.rst
-+++ b/Documentation/scheduler/sched-stats.rst
-@@ -56,9 +56,9 @@ Next two are try_to_wake_up() statistics:
- 
- Next three are statistics describing scheduling latency:
- 
--     7) sum of all time spent running by tasks on this processor (in jiffies)
-+     7) sum of all time spent running by tasks on this processor (in nanoseconds)
-      8) sum of all time spent waiting to run by tasks on this processor (in
--        jiffies)
-+        nanoseconds)
-      9) # of timeslices run on this cpu
- 
- 
-@@ -155,8 +155,8 @@ schedstats also adds a new /proc/<pid>/schedstat file to include some of
- the same information on a per-process level.  There are three fields in
- this file correlating for that process to:
- 
--     1) time spent on the cpu
--     2) time spent waiting on a runqueue
-+     1) time spent on the cpu (in nanoseconds)
-+     2) time spent waiting on a runqueue (in nanoseconds)
-      3) # of timeslices run on this cpu
- 
- A program could be easily written to make use of these extra fields to
--- 
-2.25.1
+>> +	if (poke_type == BPF_MOD_CALL)
+>> +		branch_type = AARCH64_INSN_BRANCH_LINK;
+>> +	else
+>> +		branch_type = AARCH64_INSN_BRANCH_NOLINK;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, old_addr, &old_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	if (gen_branch_or_nop(branch_type, ip, new_addr, &new_insn) < 0)
+>> +		return -EFAULT;
+>> +
+>> +	mutex_lock(&text_mutex);
+>> +	if (aarch64_insn_read(ip, &replaced)) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	if (replaced != old_insn) {
+>> +		ret = -EFAULT;
+>> +		goto out;
+>> +	}
+>> +
+>> +	ret =  aarch64_insn_patch_text_nosync((void *)ip, new_insn);
+>> +out:
+>> +	mutex_unlock(&text_mutex);
+>> +	return ret;
+>> +}
+> 
+> .
 

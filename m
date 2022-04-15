@@ -2,139 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DEF503086
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D248F503068
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:08:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356127AbiDOVpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S1355051AbiDOVrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356192AbiDOVo1 (ORCPT
+        with ESMTP id S1356183AbiDOVps (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:44:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423DC48383
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:41:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650058898; x=1681594898;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EiE7+WLdmrls3N6fRhJV8VbuBkpIj55ZCw32IOgRz78=;
-  b=Li1SooxiVGG9F34QtPUk9WF31mT3YgsQF3kWMAer73L2am3CazST4w0W
-   AEwTUlNB7v4/4fePrubg5EzM9Nu3rL305JkjJTRKZP/J3bEsoItO+Qt04
-   tVgfVbn6N1lYX/lghyaouEJIPVru/vU27PgNHnXi4nwtXU22mqF98Ta97
-   rKGckwTkNIMc7Lp6VzJFvRU5M3IYkpLnmDrNW9lL4sgkYRuVCA9QFCj4j
-   nK4RTwOBcdiiKNQYXiEG8lAxs2ZeFc1e35UDPkhkL+h1uhig+VpEN4phl
-   vEbqLpy8fYFB0olROD37CIZD6GmpB48yAo+GgDesDEIcc7tTWC/yvJst+
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263410333"
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="263410333"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:41:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="646192303"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Apr 2022 14:41:35 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfTh9-0002S5-3w;
-        Fri, 15 Apr 2022 21:41:35 +0000
-Date:   Sat, 16 Apr 2022 05:41:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in
- reference from the function binderfs_binder_device_create() to the function
- .init.text:set_reset_devices()
-Message-ID: <202204160549.K8MMhRsg-lkp@intel.com>
+        Fri, 15 Apr 2022 17:45:48 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D7549CA7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:43:18 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id v12so8015437plv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zQtVzR+qX7thidCkrKxZWal2lu7IMO3a3sTmsXDOSnA=;
+        b=EVnLlP5HvcQ7mfMWcKBySfBzKktk4RuTNYJFYZGC7GP2b6ckxKgNRBH4W6ma4vs/9d
+         5ARTSlkDusrXNDfgVpN9vPEMuSy1WevbRS4d78goN03mGRJ2DvOE+UkehyNBAEsC4qZs
+         m82DsvDgvdTXKFjUNU1v0BWZnpfCZm7ixqKm6+RehaHI3auKeorhGY77XOPvnT8q/1id
+         WbyzxnyImFI+ry+t+EGs9zqk4ZOvldQEqvOF05n0udZ8/TmSYW96FvHzC2Kz5N9vdPeh
+         a8xY42Zdv6fvx1ZIePEdVNUoNRe39dXN60QhRCX/hd7NHgUABc5qJttmp0NiRCYEMnv1
+         N4iQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zQtVzR+qX7thidCkrKxZWal2lu7IMO3a3sTmsXDOSnA=;
+        b=ubzNu6XYrCOwvbAKJHP0lqzsN+r40UnvkSQT32AxgOs+DKEzyPq7SqFgDZZG/SAmzT
+         az3uiXGyW27xyegJ0qt1tp+Ijx3tRbtJBFLDegegb0NmhD6t4o0JogVuiELYcpUhw6G7
+         FPNjfsIewmq2uNm6ju3vv880gIh/Pa7SukzQckJxySDSguk0vWOKWG1pcIll/LnsRBw2
+         pcGrCkaOCofN45sQrSk7YioK5om+1aE0ioZC7k8AqaxZJYSljPVsop0L35Lu+aFyZF7w
+         tnX589yj0bi3siOVEctOlWiKnJvYbkUPbN6bBgshPSw6Ynyn5947+a8ui1FNH99/OKvA
+         eltg==
+X-Gm-Message-State: AOAM5327fsgrrHsJdOjTvJZqUOpm5Zz25aDEoSQwYd7Cc6I9VWd2rIU7
+        kdch4/ZpqPbx6nLd3bg0B8WjdQ==
+X-Google-Smtp-Source: ABdhPJyypS0vPqvwlpeOutgmScic8LUDanAQL6k5AZV9O6DDA/v4X8rx3sJTxfjHxTTTJ81aWvL7HQ==
+X-Received: by 2002:a17:903:12c1:b0:158:ad00:60e with SMTP id io1-20020a17090312c100b00158ad00060emr940315plb.62.1650058997479;
+        Fri, 15 Apr 2022 14:43:17 -0700 (PDT)
+Received: from ?IPV6:2620:15c:2d:3:51d5:33b1:431b:be0? ([2620:15c:2d:3:51d5:33b1:431b:be0])
+        by smtp.gmail.com with ESMTPSA id s35-20020a056a001c6300b00505ff320d97sm3980753pfw.91.2022.04.15.14.43.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 14:43:17 -0700 (PDT)
+Message-ID: <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
+Date:   Fri, 15 Apr 2022 14:43:15 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
+Content-Language: en-US
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+References: <20220318021314.3225240-1-davidgow@google.com>
+ <20220318092159.6f275782@gandalf.local.home>
+ <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
+From:   Steve Muckle <smuckle@google.com>
+In-Reply-To: <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-21.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   028192fea1de083f4f12bfb1eb7c4d7beb5c8ecd
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   3 weeks ago
-config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220416/202204160549.K8MMhRsg-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On 4/4/22 13:13, Brendan Higgins wrote:
+> On Fri, Mar 18, 2022 at 9:22 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+>>
+>> On Fri, 18 Mar 2022 10:13:12 +0800
+>> David Gow <davidgow@google.com> wrote:
+>>
+>>> Does either (or both) of these features sound useful, and is this
+>>> sort-of API the right model? (Personally, I think there's a reasonable
+>>> scope for both.) Is anything obviously missing or wrong? Do the names,
+>>> descriptions etc. make any sense?
+>>
+>> Obviously I'm biased toward the ftrace solution ;-)
+> 
+> Personally, I like providing both - as long as we can keep the
+> interface the same.
+> 
+> Ftrace is less visually invasive, but it is also less flexible in
+> capabilities, and requires substantial work to support on new
+> architectures.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+The general feature looks useful to me. I'm not sure the ftrace based 
+API is worth it given it is only offering a visual improvement and has 
+some drawbacks compared to the other implementation (won't work with 
+inline functions, dependencies on other features). Livepatch is absent 
+on arm64 which mostly rules it out for my purposes (Android Generic 
+Kernel Image testing).
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
-
->> WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in reference from the function binderfs_binder_device_create() to the function .init.text:set_reset_devices()
-The function binderfs_binder_device_create() references
-the function __init set_reset_devices().
-This is often because binderfs_binder_device_create lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x178fa2e): Section mismatch in reference from the function binder_alloc_free_page() to the function .init.text:set_reset_devices()
-The function binder_alloc_free_page() references
-the function __init set_reset_devices().
-This is often because binder_alloc_free_page lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1875f90): Section mismatch in reference from the function ethnl_default_dumpit() to the function .init.text:set_reset_devices()
-The function ethnl_default_dumpit() references
-the function __init set_reset_devices().
-This is often because ethnl_default_dumpit lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x187ed7e): Section mismatch in reference from the function tsinfo_reply_size() to the function .init.text:set_reset_devices()
-The function tsinfo_reply_size() references
-the function __init set_reset_devices().
-This is often because tsinfo_reply_size lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x191d390): Section mismatch in reference from the function ieee802154_llsec_fill_key_id() to the function .init.text:set_reset_devices()
-The function ieee802154_llsec_fill_key_id() references
-the function __init set_reset_devices().
-This is often because ieee802154_llsec_fill_key_id lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x8844c8): Section mismatch in reference from the function vduse_init() to the function .init.text:set_reset_devices()
-The function vduse_init() references
-the function __init set_reset_devices().
-This is often because vduse_init lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x8850c6): Section mismatch in reference from the function vduse_create_dev() to the function .init.text:set_reset_devices()
-The function vduse_create_dev() references
-the function __init set_reset_devices().
-This is often because vduse_create_dev lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+cheers,
+Steve

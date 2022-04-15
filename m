@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D80D502888
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF074502882
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352447AbiDOK40 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:56:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44364 "EHLO
+        id S1352491AbiDOKx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350131AbiDOK4X (ORCPT
+        with ESMTP id S1352481AbiDOKxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:56:23 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83937AACA8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:53:55 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 125so7025376pgc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:53:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=v25j9pVEhbMktYwFx92BN9tsBGsH4edaYFgugzwOmUg=;
-        b=JF6Lff8ej65NV8siYjJEr1UptUhgsK9nkctiMIF6kYuiLMwCctA6LfpEnOUDjMP1k/
-         jtsvMSfv+ZNGSJobTkvFny2Yq3SrjOr1ML2JcKGhWcsIWaKTVS+7Arv6eQGw/St1Akz2
-         Qk9QtAg2a1vmCriFGXLP0AcXB2zSNXdJmllBpt5NTWbpKP6mfwxrX+yoy0evrF82WMAd
-         jmaYnZMAUO3zH/ulivIy3e4QZQpEoR/wtq0oWM2HtZVTjDiLlnQ0Es0z+I+1/BWd90/k
-         WVJFKPidBKmubDP6Yl0gjAg+cTe1lFZW89P6Ql4+bjxpAUakgfP3ZIJ8jCVSEtOXQikg
-         RIrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=v25j9pVEhbMktYwFx92BN9tsBGsH4edaYFgugzwOmUg=;
-        b=0NBLV2GyMTtgi4h5hKXswVAxF/0oWbN3O2LL9FPkGtlWkyf+A6UAhKe/h4sNb2JTok
-         JCLvxeKa1Pu5yOi9Mr2tpPTuFaFP1du0m93uXSq2Wf+GWqspDnSTO59nNTXJSwvIqUC2
-         fXNM/54pzDWkAZAkLrkBRHb4M8Mk8Qe7n/bNVtQfV53StkkKmBKgY8zWEcdmZOHtbEn5
-         dURLsphKqfZf4YdlYHCpcCbvpHvZvbvi23hNtSY5NjIkUf+T/bpu7Ju6tp1zNrfyM4fI
-         DbUPmtAHEczg1kNnjulcgj3KmOI5BDCT6UtBECEBepJzGGOVkdfxpY+82rahjQBB9Qdf
-         a1Ow==
-X-Gm-Message-State: AOAM530bmszFY+YrB514R4EB1/49Bf0mWsYai32BLw09WWAFtLJ8RQ1k
-        48GHvo2w+QYLCtaGq0xem961xg==
-X-Google-Smtp-Source: ABdhPJxWIf7LR4JpBEFnUEq+V6Xq/jXOi/zsLN03YsTXVQIlDSn8WU1ApikzlPvI8wLmMMMs86txcQ==
-X-Received: by 2002:a65:5b84:0:b0:398:fd62:6497 with SMTP id i4-20020a655b84000000b00398fd626497mr5861213pgr.179.1650020034979;
-        Fri, 15 Apr 2022 03:53:54 -0700 (PDT)
-Received: from [10.76.15.169] ([61.120.150.70])
-        by smtp.gmail.com with ESMTPSA id mq6-20020a17090b380600b001c6357f146csm9572238pjb.12.2022.04.15.03.53.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 03:53:54 -0700 (PDT)
-Message-ID: <eba72a32-aa94-0d9c-b927-a9e6b965ca44@bytedance.com>
-Date:   Fri, 15 Apr 2022 18:50:19 +0800
+        Fri, 15 Apr 2022 06:53:19 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B3D69486
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650019845; x=1681555845;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=FcSxV9zaoQXd7xmHux0rD+oliTDOyHpL0739/2mzHhw=;
+  b=f//JHa/rTGkRWG8NszTBkGgEQQcv0CVQPAw2lKqDj0tIp1f/JFNQw19b
+   mGX8I6kWP9/TlbpayYcsikWUn8MCE612K1YJ6z9DYAgjbFqcILbBf8kb0
+   /E6I58VEnKmOmiK8634TPsm8NHpgZOi/UOuL/2ZiYGcUc2wndQ6f9E9y5
+   sGuASkkdigHh6eNpVjWHKH+M2Kz3D0SH/mLe6eDsHnR5QYtTeHG/FwJk3
+   IpMjYJz6nllvHkHP2xV609fcTFY+EykIwt+tydw3AO/lq15VHT3zwVDAm
+   DMumg1BMeg/BGqDBeC0EUMMDsjmqV+IAxJPYlYwfr3g6LvSuzZPhjNF+7
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250434823"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="250434823"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:50:45 -0700
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="574306314"
+Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:50:44 -0700
+Date:   Fri, 15 Apr 2022 03:50:36 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
+References: <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+ <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Re: [PATCH 1/4] virtio-crypto: wait ctrl queue instead of busy
- polling
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     arei.gonglei@huawei.com, jasowang@redhat.com,
-        herbert@gondor.apana.org.au, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-crypto@vger.kernel.org, helei.sig11@bytedance.com,
-        davem@davemloft.net
-References: <20220415064136.304661-1-pizhenwei@bytedance.com>
- <20220415064136.304661-2-pizhenwei@bytedance.com>
- <20220415042555-mutt-send-email-mst@kernel.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20220415042555-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,154 +83,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 16:41, Michael S. Tsirkin wrote:
->> diff --git a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
->> index f3ec9420215e..bf7c1aa4be37 100644
->> --- a/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
->> +++ b/drivers/crypto/virtio/virtio_crypto_akcipher_algs.c
->> @@ -102,107 +102,100 @@ static int virtio_crypto_alg_akcipher_init_session(struct virtio_crypto_akcipher
->>   {
->>   	struct scatterlist outhdr_sg, key_sg, inhdr_sg, *sgs[3];
->>   	struct virtio_crypto *vcrypto = ctx->vcrypto;
->> +	struct virtio_crypto_ctrl_request *vc_ctrl_req = NULL;
-> 
-> this is initialized down the road, I think you can skip = NULL here.
-> 
-OK.
->>   	uint8_t *pkey;
->> -	unsigned int inlen;
->> -	int err;
->> +	int err = -ENOMEM;
-> 
-> I would assign this in the single case where this value is used.
-> 
-OK
->>   	unsigned int num_out = 0, num_in = 0;
->> +	int node = dev_to_node(&vcrypto->vdev->dev);
->>   
-> are you sure it is
-> better to allocate close to device and not to current node
-> which is the default?
->
-Also with this part:
-  /* Internal representation of a data virtqueue */
-@@ -65,11 +66,6 @@ struct virtio_crypto {
-  	/* Maximum size of per request */
-  	u64 max_size;
+Hi, Zhangfei,
 
--	/* Control VQ buffers: protected by the ctrl_lock */
--	struct virtio_crypto_op_ctrl_req ctrl;
--	struct virtio_crypto_session_input input;
--	struct virtio_crypto_inhdr ctrl_status;
--
-  	unsigned long status;
-  	atomic_t ref_count;
-
-Orignally virtio crypto driver allocates ctrl&input&ctrl_status 
-per-device, and protects this with ctrl_lock. This is the reason why the 
-control queue reaches the bottleneck of performance. I'll append this in 
-the next version in commit message.
-
-Instead of the single request buffer, declare struct 
-virtio_crypto_ctrl_request {
-         struct virtio_crypto_op_ctrl_req ctrl;
-         struct virtio_crypto_session_input input;
-         struct virtio_crypto_inhdr ctrl_status;
-	... }
-
-The motivation of this change is to allocate buffer from the same node 
-with device during control queue operations.
-
-> 
->>   	pkey = kmemdup(key, keylen, GFP_ATOMIC);
->>   	if (!pkey)
->>   		return -ENOMEM;
->>   
->> -	spin_lock(&vcrypto->ctrl_lock);
->> -	memcpy(&vcrypto->ctrl.header, header, sizeof(vcrypto->ctrl.header));
->> -	memcpy(&vcrypto->ctrl.u, para, sizeof(vcrypto->ctrl.u));
->> -	vcrypto->input.status = cpu_to_le32(VIRTIO_CRYPTO_ERR);
->> +	vc_ctrl_req = kzalloc_node(sizeof(*vc_ctrl_req), GFP_KERNEL, node);
->> +	if (!vc_ctrl_req)
->> +		goto out;
-> 
-> do you need to allocate it with kzalloc?
-> is anything wrong with just keeping it part of device?
-> even if yes this change is better split in a separate patch, would make the patch smaller.
-Because there are padding field in 
-virtio_crypto_op_ctrl_req&virtio_crypto_session_input, I suppose the 
-original version also needs to clear padding field.
-So I use kzalloc to make sure that the padding field gets cleared.
-If this is reasonable, to separate this patch is OK to me, or I append 
-this reason into commit message and comments in code.
-
->> +
->> +void virtcrypto_ctrlq_callback(struct virtqueue *vq)
->> +{
->> +	struct virtio_crypto *vcrypto = vq->vdev->priv;
->> +	struct virtio_crypto_ctrl_request *vc_ctrl_req;
->> +	unsigned long flags;
->> +	unsigned int len;
->> +
->> +	spin_lock_irqsave(&vcrypto->ctrl_lock, flags);
->> +	do {
->> +		virtqueue_disable_cb(vq);
->> +		while ((vc_ctrl_req = virtqueue_get_buf(vq, &len)) != NULL) {
+On Fri, Apr 15, 2022 at 06:14:09PM +0800, zhangfei.gao@foxmail.com wrote:
 > 
 > 
-> you really need to break out of this loop if vq is broken,
-> virtqueue_get_buf will keep returning NULL in this case.
+> On 2022/4/15 下午5:51, Fenghua Yu wrote:
+> > On Thu, Apr 14, 2022 at 06:08:09PM +0800, zhangfei.gao@foxmail.com wrote:
+> > > On 2022/4/12 下午11:35, zhangfei.gao@foxmail.com wrote:
+> > > > Hi, Fenghua
+> > > > 
+> > > > On 2022/4/12 下午9:41, Fenghua Yu wrote:
+> >  From a6444e1e5bd8076f5e5c5e950d3192de327f0c9c Mon Sep 17 00:00:00 2001
+> > From: Fenghua Yu <fenghua.yu@intel.com>
+> > Date: Fri, 15 Apr 2022 00:51:33 -0700
+> > Subject: [RFC PATCH] iommu/sva: Fix PASID use-after-free issue
+> > 
+> > A PASID might be still used even though it is freed on mm exit.
+> > 
+> > process A:
+> > 	sva_bind();
+> > 	ioasid_alloc() = N; // Get PASID N for the mm
+> > 	fork(): // spawn process B
+> > 	exit();
+> > 	ioasid_free(N);
+> > 
+> > process B:
+> > 	device uses PASID N -> failure
+> > 	sva_unbind();
+> > 
+> > Dave Hansen suggests to take a refcount on the mm whenever binding the
+> > PASID to a device and drop the refcount on unbinding. The mm won't be
+> > dropped if the PASID is still bound to it.
+> > 
+> > Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
+> > 
+> > Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
+> > Suggested-by: Dave Hansen" <dave.hansen@linux.intel.com>
+> > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+> > ---
+> >   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 6 ++++++
+> >   drivers/iommu/intel/svm.c                       | 4 ++++
+> >   2 files changed, 10 insertions(+)
+> > 
+> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> > index 22ddd05bbdcd..3fcb842a0df0 100644
+> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+> > @@ -7,6 +7,7 @@
+> >   #include <linux/mmu_context.h>
+> >   #include <linux/mmu_notifier.h>
+> >   #include <linux/slab.h>
+> > +#include <linux/sched/mm.h>
+> >   #include "arm-smmu-v3.h"
+> >   #include "../../iommu-sva-lib.h"
+> > @@ -363,6 +364,9 @@ arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
+> >   	mutex_lock(&sva_lock);
+> >   	handle = __arm_smmu_sva_bind(dev, mm);
+> > +	/* Take an mm refcount on a successful bind. */
+> > +	if (!IS_ERR(handle))
+> > +		mmget(mm);
+> >   	mutex_unlock(&sva_lock);
+> >   	return handle;
+> >   }
+> > @@ -372,6 +376,8 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
+> >   	struct arm_smmu_bond *bond = sva_to_bond(handle);
+> >   	mutex_lock(&sva_lock);
+> > +	/* Drop an mm refcount. */
+> > +	mmput(bond->mm);
+> >   	if (refcount_dec_and_test(&bond->refs)) {
+> >   		list_del(&bond->list);
+> >   		arm_smmu_mmu_notifier_put(bond->smmu_mn);
+> > diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+> > index 23a38763c1d1..345a0d5d7922 100644
+> > --- a/drivers/iommu/intel/svm.c
+> > +++ b/drivers/iommu/intel/svm.c
+> > @@ -403,6 +403,8 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
+> >   		goto free_sdev;
+> >   	list_add_rcu(&sdev->list, &svm->devs);
+> > +	/* Take an mm refcount on binding mm. */
+> > +	mmget(mm);
+> >   success:
+> >   	return &sdev->sva;
+> > @@ -465,6 +467,8 @@ static int intel_svm_unbind_mm(struct device *dev, u32 pasid)
+> >   				kfree(svm);
+> >   			}
+> >   		}
+> > +		/* Drop an mm reference on unbinding mm. */
+> > +		mmput(mm);
+> >   	}
+> >   out:
+> >   	return ret;
+> This patch can not be applied on 5.18-rc2 for intel part.
+
+What error do you see? Could you please send to me errors?
+
+I download this patch from:
+https://lore.kernel.org/lkml/YllADL6uMoLllzQo@fyu1.sc.intel.com/raw
+git am to either v5.18-rc2 or the latest upstream without any issue.
+
+> It should work for arm.
 > 
-I'm a little confused here, if virtqueue_get_buf return NULL, this loop 
-will break. Could you please give me more hints?
+> In fact I have a similar patch at hand but pending since I found an issue.
 > 
->> +			spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags);
->> +			if (vc_ctrl_req->ctrl_cb)
->> +				vc_ctrl_req->ctrl_cb(vc_ctrl_req);
->> +			spin_lock_irqsave(&vcrypto->ctrl_lock, flags);
->> +		}
->> +		if (unlikely(virtqueue_is_broken(vq)))
->> +			break;
->> +	} while (!virtqueue_enable_cb(vq));
->> +	spin_unlock_irqrestore(&vcrypto->ctrl_lock, flags);
+> I start & stop nginx via this cmd.
+> //start
+> sudo sbin/nginx                    // this alloc an ioasid=1
+> //stop
+> sudo sbin/nginx -s quit    // this does not free ioasid=1, but still alloc
+> ioasid=2.
+> So ioasid will keep allocated but not freed if continue start/stop nginx, 
+> though not impact the nginx function.
 > 
-> speaking of which existing code does not handle vq broken case
-> all that well but it looks like this patch makes it a bit worse.
-> want to try fixing? basically report an error ...
+> stop nginx with -s quit still calls
+> src/core/nginx.c
+> main -> ngx_ssl_init -> openssl engine:    bind_fn -> ... -> alloc asid
+> But openssl engine: ENGINE_free is not called
 > 
->if virtqueue is broken, I can print log.
-
->> diff --git a/drivers/crypto/virtio/virtio_crypto_core.c b/drivers/crypto/virtio/virtio_crypto_core.c
->> index c6f482db0bc0..e668d4b1bc6a 100644
->> --- a/drivers/crypto/virtio/virtio_crypto_core.c
->> +++ b/drivers/crypto/virtio/virtio_crypto_core.c
->> @@ -73,7 +73,7 @@ static int virtcrypto_find_vqs(struct virtio_crypto *vi)
->>   		goto err_names;
->>   
->>   	/* Parameters for control virtqueue */
->> -	callbacks[total_vqs - 1] = NULL;
->> +	callbacks[total_vqs - 1] = virtcrypto_ctrlq_callback;
->>   	names[total_vqs - 1] = "controlq";
->>   
->>   	/* Allocate/initialize parameters for data virtqueues */
->> diff --git a/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
->> index a618c46a52b8..b8999dab3e66 100644
->> --- a/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
->> +++ b/drivers/crypto/virtio/virtio_crypto_skcipher_algs.c
->> +	err = 0;
->> +out:
->> +	kfree_sensitive(vc_ctrl_req);
+> Still in checking nginx code.
 > 
-> it is interesting that you use kfree_sensitive here. why is that?
-> is there in fact anything sensitive here? if yes this is a security
-> improvement and might need its own patch, or at least documentation.
->
+> Or do you test with nginx?
 
-OK, kfree is good enough here, I'll fix this.
+On my X86 machine, nginx doesn't trigger the kernel sva binding function
+to allocate ioasid. I tried pre- nstalled nginx/openssl and also tried my built
+a few versions of nginx/openssl. nginx does call OPENSSL_init_ssl() but
+doesn't go to the binding function. Don't know if it's my configuration issue.
+Maybe you can give me some advice?
 
+I test the patch with a few internal test tools and observe mmget()/mmput()
+works fine in various cases.
 
-Thanks a lot!
+Thanks.
 
-
--- 
-zhenwei pi
+-Fenghua 

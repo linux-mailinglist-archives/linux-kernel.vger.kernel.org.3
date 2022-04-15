@@ -2,133 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4185501FCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 698F1501FCD
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348190AbiDOAuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41314 "EHLO
+        id S1348195AbiDOAvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbiDOAug (ORCPT
+        with ESMTP id S234201AbiDOAvi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:50:36 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65165B822C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:48:10 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id p10so11761540lfa.12
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:48:10 -0700 (PDT)
+        Thu, 14 Apr 2022 20:51:38 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B32B8989
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:49:11 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id p1-20020a62d001000000b00506396c21eeso230750pfg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:49:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=BycpfwmzoR4vzcAZR2CT84zb+01RL1PgdUJzETRbklU=;
-        b=NBQEoiYmC/899Hw9WnmJ+R+JGTM5xfbrHKBaRot/VLZdi5oUx132Hm34eKvvuzCQq4
-         wKW7E6pru0TICqR+6kebPpRT6Vcb53nbTvdPh+5Uz4BRRilxTNIguBHGly9DxV520Zhu
-         ZRc7hnUYVvPL3q5Muo7vIDSv5MrJ8J+Bgk6L1tyCvJ4P7FK6ZeNidUaxmu9v78STJr7U
-         7/cNbXOQrTXbCWDTs3iSe+ad3Err8qBiC33WZfzyagj4X3erSZrykwgp9WxLmXP4z87u
-         yjSnHSWEO37JgM+CUb6PXghGg0BXDK9u1oeb+Oq6pwVMV2jqzjMiE33pmH7YNUhZvRZi
-         wGtw==
+        d=google.com; s=20210112;
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=0dT7byw4Ro9Y3AnqDhqx7IwQWEEiDivwbCP/tbYK/Cs=;
+        b=I7fG4skyJXElZ7VIi/kGDZJx+zejyRo6g0nY+7jJcOSv6ui8JajVENIOxSYfRPw5Es
+         Jas14t09MvWbv6nBrY6obIugF5xf0hsBljfC2X+HhYEIhChQP8YvSEuOqk+iQr+8LYDp
+         QaBoECQYwoM5zceYl0K417pRAhui3ymO1Q10mb8/Ycj4Okv6qp4QBtPpsNwt3PSWVaID
+         CLKiXwXSU/mpTI5obYMWvrmkhvQmSlA61ljxJz9D4GYhWTFu5LqJXjbSd5P3OAWSSkTn
+         9d3KKQQHFWrbcO2Ujkm9CPp/vB/Bqu5TIz+bKCf6hhAcEngeMKZIN2OsUJ+BYv2kA7gq
+         sa9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=BycpfwmzoR4vzcAZR2CT84zb+01RL1PgdUJzETRbklU=;
-        b=oE9v059LJS7POroFhed9ndIU1ZZeHl7KT5v9xMXXb/WsJ3XrynpW7LiVedWMCzDPIE
-         KjWs04rRTO2NsBbfW64ZikzQNn+Og7SWeWIuvia+VadfxJcnr5qskojQyqYMXdqCxF0W
-         11xF0UvfuKFMEyCASlUHY3/m8JLJ+JOmtJqWjLlVhti6mu1pg+e9yqVVw1nPKyNIFGum
-         VJyxpuCmWwT11RZIFjEiSAuCnxM3bGJDLhSxfYIGAC3k2YDi4MfveVcaYhjmFqx4I04u
-         0hvm1eYYfvRbHvr8pVhb2pbRD3gY2qK7MK3a1J9qDWAkXkQmZcpVkSGn5VAkx3jW5ahI
-         5f6g==
-X-Gm-Message-State: AOAM530l/TDYVuWYB96BVj/8h6tQazYfUPRHfOHrdNuEA0ww1jBCfwEe
-        2dCiQUaprb6QbVF+zP5nZucT6w==
-X-Google-Smtp-Source: ABdhPJwbti2aqvzvc7DFdbELNEMXxtK8iweXhJZDxAE3gj2VfSKrWrYUMtY4ksILtWY52drF7E1T9w==
-X-Received: by 2002:ac2:4e11:0:b0:46b:a38d:686a with SMTP id e17-20020ac24e11000000b0046ba38d686amr3522985lfr.564.1649983688700;
-        Thu, 14 Apr 2022 17:48:08 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id p24-20020a2ea418000000b0024b5b76a06csm139293ljn.12.2022.04.14.17.48.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 17:48:08 -0700 (PDT)
-Message-ID: <68538a58-54e2-e82e-0789-52eb1cc6b66a@linaro.org>
-Date:   Fri, 15 Apr 2022 03:48:07 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH 3/6] drm/dp: Add is_hpd_asserted() callback to struct
- drm_dp_aux
-Content-Language: en-GB
-To:     Douglas Anderson <dianders@chromium.org>,
-        dri-devel@lists.freedesktop.org
-Cc:     Robert Foss <robert.foss@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Maxime Ripard <maxime@cerno.tech>, linux-kernel@vger.kernel.org
-References: <20220409023628.2104952-1-dianders@chromium.org>
- <20220408193536.RFC.3.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220408193536.RFC.3.Icf57bb12233a47727013c6ab69eebf803e22ebc1@changeid>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=0dT7byw4Ro9Y3AnqDhqx7IwQWEEiDivwbCP/tbYK/Cs=;
+        b=Wj8CDsnYHyN1w45Xj7XP0iG3yiHPO/PauFdwMW6ZX8MqJZ12AXWpdZoWlw1sFMpTr9
+         y3i3rG4cXhxWZtEBNq9684raFLaAEwxvi8d40VSZ/5PDvfiWgQYFTwpqkUV0Q3USoFEx
+         ApfwnzlSpEB/foGTlX+IOK5Gw2FOQdMtpLon5M7sp3NOySllPP7pkpUhqqJQMEN5Igj3
+         2KePueBNC2rO2VhJ2yt2ltHoba1rQuidyOGk6jTmjchEFV7wVVLa6gbe6NhAnoGU4cZo
+         4QQTzz0MYZ3BGakES60PNVsbJW8dDPReObpoYI1M+/RuHsokMkZbZuKWHQsIXS2dbH7D
+         DKsg==
+X-Gm-Message-State: AOAM532FnYcxbyAkIEPqW4TEqUI5UZwjztE/VBRgr6CpnTpXwVR0mfOG
+        TY7iQgBDFbkSGdGsE3p4+mPy5GbXM5A=
+X-Google-Smtp-Source: ABdhPJzlaUPVv+prZih6WUMXjdNNxlkNzroQEHeTtQbdmxjAOndq9+fAjCRz41yvJ2cXA2HyZ+ilzskLW+A=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a17:903:18a:b0:158:c459:ab48 with SMTP id
+ z10-20020a170903018a00b00158c459ab48mr3383516plg.52.1649983751271; Thu, 14
+ Apr 2022 17:49:11 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 15 Apr 2022 00:49:09 +0000
+Message-Id: <20220415004909.2216670-1-seanjc@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH] KVM: x86/mmu: Check for host MMIO exclusion from mem encrypt
+ iff necessary
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/04/2022 05:36, Douglas Anderson wrote:
-> Sometimes it's useful for users of the DP AUX bus (like panels) to be
-> able to poll HPD. Let's add a callback that allows DP AUX busses
-> drivers to provide this.
-> 
-> Suggested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+When determining whether or not a SPTE needs to have SME/SEV's memory
+encryption flag set, do the moderately expension host MMIO pfn check if
+and only if the memory encryption mask is non-zero.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Note, KVM could further optimize the host MMIO checks by making a single
+call to kvm_is_mmio_pfn(), but the tdp_enabled path (for EPT's memtype
+handling) will likely be split out to a separate flow[*].  At that point,
+a better approach would be to shove the call to kvm_is_mmio_pfn() into
+VMX code so that AMD+NPT without SME doesn't get hit with an unnecessary
+lookup.
 
-> ---
-> 
->   include/drm/dp/drm_dp_helper.h | 14 ++++++++++++++
->   1 file changed, 14 insertions(+)
-> 
-> diff --git a/include/drm/dp/drm_dp_helper.h b/include/drm/dp/drm_dp_helper.h
-> index dad1442c91df..a12951319573 100644
-> --- a/include/drm/dp/drm_dp_helper.h
-> +++ b/include/drm/dp/drm_dp_helper.h
-> @@ -2021,6 +2021,20 @@ struct drm_dp_aux {
->   	ssize_t (*transfer)(struct drm_dp_aux *aux,
->   			    struct drm_dp_aux_msg *msg);
->   
-> +	/**
-> +	 * @is_hpd_asserted: returns true if HPD is asserted
-> +	 *
-> +	 * This is mainly useful for eDP panels drivers to query whether
-> +	 * an eDP panel has finished powering on. This is an optional function.
-> +	 *
-> +	 * NOTE: this function specifically reports the state of the HPD pin
-> +	 * that's associated with the DP AUX channel. This is different from
-> +	 * the HPD concept in much of the rest of DRM which is more about
-> +	 * physical presence of a display. For eDP, for instance, a display is
-> +	 * assumed always present even if the HPD pin is deasserted.
-> +	 */
-> +	bool (*is_hpd_asserted)(struct drm_dp_aux *aux);
-> +
->   	/**
->   	 * @i2c_nack_count: Counts I2C NACKs, used for DP validation.
->   	 */
+[*] https://lkml.kernel.org/r/20220321224358.1305530-3-bgardon@google.com
 
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/mmu/spte.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+index 4739b53c9734..aab78574e03d 100644
+--- a/arch/x86/kvm/mmu/spte.c
++++ b/arch/x86/kvm/mmu/spte.c
+@@ -139,7 +139,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+ 	else
+ 		pte_access &= ~ACC_WRITE_MASK;
+ 
+-	if (!kvm_is_mmio_pfn(pfn))
++	if (shadow_me_mask && !kvm_is_mmio_pfn(pfn))
+ 		spte |= shadow_me_mask;
+ 
+ 	spte |= (u64)pfn << PAGE_SHIFT;
+
+base-commit: 150866cd0ec871c765181d145aa0912628289c8a
 -- 
-With best wishes
-Dmitry
+2.36.0.rc0.470.gd361397f0d-goog
+

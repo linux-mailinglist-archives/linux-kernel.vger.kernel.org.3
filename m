@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33CC05025E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 191745025E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350733AbiDOGxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
+        id S1350751AbiDOGyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343864AbiDOGxN (ORCPT
+        with ESMTP id S241069AbiDOGyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:53:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6FFB3DC0;
-        Thu, 14 Apr 2022 23:50:46 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id s25so8500403edi.13;
-        Thu, 14 Apr 2022 23:50:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FuI2l9kDOo4LiYnP+oGo08tHGCFvEiqQxGIgY3zlKIA=;
-        b=Dz7hxGHDeM5WnsAFMqIITeeKULRipD+St4//j1pf82am51Ed9InFiST07WqtKVMdOm
-         uBSITb/oa9bo8SGPYJEJnMK6fkDCaXrvBd933+oAb9Tyb3KearAu9DcInWJznOW442r0
-         7TZrMqJOexp8wXZLWvdqy4xZSzPfd/24xu/HiCMClXJGA0hbkjP2hoiFNoai4rYkkmP/
-         MBFXGVFB69N1yno5X6W5VJlt3zZUZ4ucvS4hbMdJ80eXVelJYVhtWnuZGgCAB3yuEaKC
-         U7ONGlWpwMlLAfI8QbVwYBpkMLLEp6PeEwAJxqIXhrDX/KIYCrOVC8sq9xuzqYYJj2Fi
-         rMlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FuI2l9kDOo4LiYnP+oGo08tHGCFvEiqQxGIgY3zlKIA=;
-        b=GlnE7m09xQRa+jvbausuOC2XjqtGSqMAazIylwCtpXT6kDz0TCmj6Wh6MaIJfT4IWR
-         CkVbkgN9iT50+n4W8t75zDl3Emn8E2VnNmQwF3Zg4AYTm9NGX9sJj62SlO2kJjGh3Sg1
-         2WHaIeccOH9FJRpKA97QuyXJK97w0n8eIriJ+aXj4Jr5cwnzSWoO5N+RVNydKfm771iw
-         0ZYp+joLRP78L9n0el9wT5x5CSNi7k6BAJs5mV7ju8On1w9O5J5vFVkG0EQo+yo0pG38
-         bsY8SI+C8aWWM1u6ek3qfjTSdpAgrakFDnnKU4qMkENud9q/1IhJByffYAaAmgPaGTyf
-         9shA==
-X-Gm-Message-State: AOAM533PNCskqw0vUAkntTX8jsDaD1xT5ezidm2vxmwtUWZmom+YuixG
-        jC+rQMdUVJeMnREP+2hAerIClz1zQXH3hE9x
-X-Google-Smtp-Source: ABdhPJyvG6erOo3dT0Ozq8rJ75PwgZ+s/hBNzb+6RwjUN21kmuAXGLK65+mJnqz24BCHAYJpl28FlA==
-X-Received: by 2002:a05:6402:1912:b0:41d:975b:9496 with SMTP id e18-20020a056402191200b0041d975b9496mr6930321edz.222.1650005445000;
-        Thu, 14 Apr 2022 23:50:45 -0700 (PDT)
-Received: from anparri (host-79-52-64-69.retail.telecomitalia.it. [79.52.64.69])
-        by smtp.gmail.com with ESMTPSA id n13-20020a170906724d00b006cedd6d7e24sm1371176ejk.119.2022.04.14.23.50.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 23:50:44 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 08:50:41 +0200
-From:   Andrea Parri <parri.andrea@gmail.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "virtualization@lists.linux-foundation.org" 
-        <virtualization@lists.linux-foundation.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH 4/6] hv_sock: Initialize send_buf in
- hvs_stream_enqueue()
-Message-ID: <20220415065041.GC2961@anparri>
-References: <20220413204742.5539-1-parri.andrea@gmail.com>
- <20220413204742.5539-5-parri.andrea@gmail.com>
- <PH0PR21MB3025F58A2536209ED3785F24D7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
+        Fri, 15 Apr 2022 02:54:18 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA9BAC041
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:51:50 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nfFng-003DBN-J4; Fri, 15 Apr 2022 16:51:26 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Fri, 15 Apr 2022 14:51:24 +0800
+Date:   Fri, 15 Apr 2022 14:51:24 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YlkV7NtatO7KFusX@gondor.apana.org.au>
+References: <Yk+rKWEcc9rO+A25@gondor.apana.org.au>
+ <Yk/6ts5sVDMDpKj3@arm.com>
+ <Yk/8QExHlggU8KgC@gondor.apana.org.au>
+ <YlVHSvkyUBXZPUr2@arm.com>
+ <YlVJKjXkcHqkwyt4@gondor.apana.org.au>
+ <YlVOTsaTVkBOxthG@arm.com>
+ <YlVSBuEqMt2S1Gi6@gondor.apana.org.au>
+ <YlVxGAHHD/j6lW3c@arm.com>
+ <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
+ <YlaOIbSA7B/G9222@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH0PR21MB3025F58A2536209ED3785F24D7EE9@PH0PR21MB3025.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <YlaOIbSA7B/G9222@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > @@ -655,7 +655,7 @@ static ssize_t hvs_stream_enqueue(struct vsock_sock *vsk,
-> > struct msghdr *msg,
-> > 
-> >  	BUILD_BUG_ON(sizeof(*send_buf) != HV_HYP_PAGE_SIZE);
-> > 
-> > -	send_buf = kmalloc(sizeof(*send_buf), GFP_KERNEL);
-> > +	send_buf = kzalloc(sizeof(*send_buf), GFP_KERNEL);
+On Wed, Apr 13, 2022 at 09:47:29AM +0100, Catalin Marinas wrote:
+>
+> With my series, there is no change to the value of CRYPTO_MINALIGN for
+> arm64 or any other architecture, so point 3 is unaffected. The series
+> does change the kmalloc() alignment and that may be smaller than
+> CRYPTO_MINALIGN but neither of points 1 or 2 above are affected since
+> (a) we still have a sufficiently large ARCH_KMALLOC_MINALIGN of 64 and
+> (b) the kmalloc'ed buffers are safe for non-coherent DMA.
 > 
-> Is this change really needed?
+> Herbert, Ard, if I missed anything please let me know but based on my
+> understanding, this series is safe for the crypto code.
 
-The idea was...
+Sorry, but you can't change CRYPTO_MINALIGN to a value greater
+than the minimum alignment returned by kmalloc.  That simply
+doesn't work.  There is no magic in the Crypto API that makes
+this work.
 
-
-> All fields are explicitly initialized, and in the data
-> array, only the populated bytes are copied to the ring buffer.  There should not
-> be any uninitialized values sent to the host.   Zeroing the memory ahead of
-> time certainly provides an extra protection (particularly against padding bytes,
-> but there can't be any since the layout of the data is part of the protocol with
-> Hyper-V).
-
-Rather than keeping checking that...
-
-
-> It is expensive protection to zero out 16K+ bytes every time we send
-> out a small message.
-
-Do this.  ;-)
-
-Will drop the patch.
-
-Thanks,
-  Andrea
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

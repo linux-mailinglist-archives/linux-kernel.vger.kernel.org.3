@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74607502175
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 06:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A4075022CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 06:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349453AbiDOEwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 00:52:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
+        id S1349694AbiDOE60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 00:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349457AbiDOEvy (ORCPT
+        with ESMTP id S1349688AbiDOE4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 00:51:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CBB6374
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:49:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649998166; x=1681534166;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=Smv4G7/hxe45KZe1IASoeVPDVyuSoVof7nj02J7fjxM=;
-  b=DvENtgGWjBMEo2j316xOh4ajo4LvSVoC8zvu3cplrCf0uL4L4Uyi2e03
-   tIXdGA+a3bkQfc6pptMA8iShqWjWGZdkcWR+HSsOdITSr0zujwXYjtvTN
-   OQ4Sj3ilaReaZbtdclgVYwwfKOIJ4kEYPx+uvPEuTlLSJp9zluEhuSnvl
-   WkGq7ikBAPgCJM7Q26UZJqXvh4L5XO2zWDR4wGoqtYUjOneQuSeB/dpjE
-   DD8ydNSBt32uxJ7olm2f30G7t842pc2QKYQ5YvQo9eFHVsaakjalaGIs0
-   UKJRNyLHSw4NRnILCL9tm/CJkwit91efHZG++adwMz6VS9bXkBZGxgvG2
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="260689016"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="260689016"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 21:49:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="508742741"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 14 Apr 2022 21:49:23 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfDtb-0001Wb-2K;
-        Fri, 15 Apr 2022 04:49:23 +0000
-Date:   Fri, 15 Apr 2022 12:49:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Robert Hancock <robert.hancock@calian.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Lunn <andrew@lunn.ch>
-Subject: [linux-stable-rc:queue/4.19 9212/9999]
- drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:9: error: 'ret'
- undeclared; did you mean 'net'?
-Message-ID: <202204151253.LLLtXr8B-lkp@intel.com>
+        Fri, 15 Apr 2022 00:56:31 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A303710F0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:53:59 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id r18so8420985ljp.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=v2IHx3Qbgo3wM3/tOigomzLjD7v6BY2hlPBqUcu4Brs=;
+        b=WA645uXAq8uzUS58O9L0qm/3eEl4U6ZixnBiBCalf+eeTjC0p1XzE35Hpdh3fSz7EP
+         kJRdvPJh3nArYX64LSaxJzsjCvanYkoy8PSp1MIdZEiv4VQy9hpg6qGP67f3bL4KIrJP
+         SmqDH5NJWUrqNQpA+cNWQBAzvl0s6I/RNCPasYC2exyDC/PQTZOVFnsMW1qO1QckF9Cr
+         eIcYPbks3kAh38ZjN5Vho//fz/T2IRS8PqXCeuafNtB9T4TZhmWc+WJvfEYA1qckvmOd
+         JH1bhDpCCoPjyMXC8Msbnys+CCm6OSoe3KMcODvaawDKtmyoRRNRzW3xEi1SsTK7O0Tk
+         e79A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=v2IHx3Qbgo3wM3/tOigomzLjD7v6BY2hlPBqUcu4Brs=;
+        b=W24sj/9oCEBeNxdibtx4kMVC7EgZgjKlVG5xy5uaDap44Cx2aZiN2LbSWziYHpO8PZ
+         Rc71dS/WnJhqf3gi3yKRxdPU8IMshVxPsswBHalyzWFCBBFHDThkBL80PEXdXii+4kNz
+         Wt64tdyN6QBgvq185CForoR+WheQ0y76H8NHgZPPaZmrZdFg8CetUHd4AhrVnkQNv9KX
+         n7pir9IeU3XXvVeiMDmpyluJJ5c3V18S65JK5iHO7ZjUZ+d6m28n3nyd8GO78Z5RlsXf
+         WSvzkGCf9R+vddRE3WFj2CphU5zof9ngj/1ZE9vKsmBUIDlr6JgO2CJzL04GPPc9+1Nf
+         ZN/Q==
+X-Gm-Message-State: AOAM531j/aPoaLE0uNYiSvsBHCZcPlekYay1yPTgCZm/PKOJpHgN5crv
+        932hALU5cnJD8gOfZ+5DrpwwO3IUsVvWJ64HmL4Z3w==
+X-Google-Smtp-Source: ABdhPJyMKLAknTpEqNiOsM8G4x8qCf78+X/p03s7TvJlmBITtJTWR0D+rx0cBX1ozLuRUjW1hvSeuesOng3qFvVZeTo=
+X-Received: by 2002:a2e:b6c3:0:b0:249:9b61:656f with SMTP id
+ m3-20020a2eb6c3000000b002499b61656fmr3441389ljo.266.1649998437283; Thu, 14
+ Apr 2022 21:53:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220412033335.1384230-1-apatel@ventanamicro.com> <4c4c7a.17284.1802b8c14cc.Coremail.panqinglin2020@iscas.ac.cn>
+In-Reply-To: <4c4c7a.17284.1802b8c14cc.Coremail.panqinglin2020@iscas.ac.cn>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Fri, 15 Apr 2022 10:23:44 +0530
+Message-ID: <CAK9=C2V0kiV1_12kMDxv6d4nsQZ81-9W5=JifLhNaiZMoHJyuQ@mail.gmail.com>
+Subject: Re: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
+To:     =?UTF-8?B?5r2Y5bqG6ZyW?= <panqinglin2020@iscas.ac.cn>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,169 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Robert,
+On Fri, Apr 15, 2022 at 10:18 AM =E6=BD=98=E5=BA=86=E9=9C=96 <panqinglin202=
+0@iscas.ac.cn> wrote:
+>
+> Hi Anup,
+>
+> &gt;
+> &gt; When Sv57 is not available the satp.MODE test in set_satp_mode() wil=
+l
+> &gt; fail and lead to pgdir re-programming for Sv48. The pgdir re-program=
+ming
+> &gt; will fail as well due to pre-existing pgdir entry used for Sv57 and =
+as
+> &gt; a result kernel fails to boot on RISC-V platform not having Sv57.
+> &gt;
+> &gt; To fix above issue, we should clear the pgdir memory in set_satp_mod=
+e()
+> &gt; before re-programming.
+> &gt;
+> &gt; Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
+> &gt; Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> &gt; Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> &gt; ---
+> &gt;  arch/riscv/mm/init.c | 1 +
+> &gt;  1 file changed, 1 insertion(+)
+> &gt;
+> &gt; diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+> &gt; index 9535bea8688c..b0793dc0c291 100644
+> &gt; --- a/arch/riscv/mm/init.c
+> &gt; +++ b/arch/riscv/mm/init.c
+> &gt; @@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
+> &gt;            if (!check_l4) {
+> &gt;                    disable_pgtable_l5();
+> &gt;                    check_l4 =3D true;
+> &gt; +                  memset(early_pg_dir, 0, PAGE_SIZE);
+> &gt;                    goto retry;
+> &gt;            }
+> &gt;            disable_pgtable_l4();
+> &gt; --
+>
+>
+> I find it that the set_satp_mode function is in .init.text section which =
+begins at 0x80800000.
+> And its pgd_index in both Sv48 and Sv57 will be 0. So it may not be neces=
+sary to clear the
+> early_pg_dir when the kernel find Sv57 is not supported? And may I get th=
+e steps of reproduction
+> from you?
 
-FYI, the error/warning still remains.
+We can't assume that it will be the same pgd_index for Sv48 and Sv57.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/4.19
-head:   e2984ffcd13c753c75399a28024253b24fd51322
-commit: 8b8ad8a7ac24905937c3975b54c4594b93b66ebb [9212/9999] net: axienet: Wait for PhyRstCmplt after core reset
-config: microblaze-randconfig-r004-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151253.LLLtXr8B-lkp@intel.com/config)
-compiler: microblaze-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=8b8ad8a7ac24905937c3975b54c4594b93b66ebb
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/4.19
-        git checkout 8b8ad8a7ac24905937c3975b54c4594b93b66ebb
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=microblaze SHELL=/bin/bash drivers/net/ethernet/xilinx/
+For example, some hypothetical SoC might have RAM starting after 1TB space.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We should ensure that early_pg_dir is cleaned entirely for detecting the ne=
+xt
+mode.
 
-All errors (new ones prefixed by >>):
+Regards,
+Anup
 
-   drivers/net/ethernet/xilinx/xilinx_axienet_main.c: In function 'axienet_dma_bd_init':
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:9: error: 'ret' undeclared (first use in this function); did you mean 'net'?
-     283 |         ret = read_poll_timeout(axienet_ior, value,
-         |         ^~~
-         |         net
-   drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:9: note: each undeclared identifier is reported only once for each function it appears in
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:15: error: implicit declaration of function 'read_poll_timeout' [-Werror=implicit-function-declaration]
-     283 |         ret = read_poll_timeout(axienet_ior, value,
-         |               ^~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/xilinx/xilinx_axienet_main.c:283:46: error: 'value' undeclared (first use in this function)
-     283 |         ret = read_poll_timeout(axienet_ior, value,
-         |                                              ^~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +283 drivers/net/ethernet/xilinx/xilinx_axienet_main.c
-
-   178	
-   179	/**
-   180	 * axienet_dma_bd_init - Setup buffer descriptor rings for Axi DMA
-   181	 * @ndev:	Pointer to the net_device structure
-   182	 *
-   183	 * Return: 0, on success -ENOMEM, on failure
-   184	 *
-   185	 * This function is called to initialize the Rx and Tx DMA descriptor
-   186	 * rings. This initializes the descriptors with required default values
-   187	 * and is called when Axi Ethernet driver reset is called.
-   188	 */
-   189	static int axienet_dma_bd_init(struct net_device *ndev)
-   190	{
-   191		u32 cr;
-   192		int i;
-   193		struct sk_buff *skb;
-   194		struct axienet_local *lp = netdev_priv(ndev);
-   195	
-   196		/* Reset the indexes which are used for accessing the BDs */
-   197		lp->tx_bd_ci = 0;
-   198		lp->tx_bd_tail = 0;
-   199		lp->rx_bd_ci = 0;
-   200	
-   201		/* Allocate the Tx and Rx buffer descriptors. */
-   202		lp->tx_bd_v = dma_zalloc_coherent(ndev->dev.parent,
-   203						  sizeof(*lp->tx_bd_v) * TX_BD_NUM,
-   204						  &lp->tx_bd_p, GFP_KERNEL);
-   205		if (!lp->tx_bd_v)
-   206			goto out;
-   207	
-   208		lp->rx_bd_v = dma_zalloc_coherent(ndev->dev.parent,
-   209						  sizeof(*lp->rx_bd_v) * RX_BD_NUM,
-   210						  &lp->rx_bd_p, GFP_KERNEL);
-   211		if (!lp->rx_bd_v)
-   212			goto out;
-   213	
-   214		for (i = 0; i < TX_BD_NUM; i++) {
-   215			lp->tx_bd_v[i].next = lp->tx_bd_p +
-   216					      sizeof(*lp->tx_bd_v) *
-   217					      ((i + 1) % TX_BD_NUM);
-   218		}
-   219	
-   220		for (i = 0; i < RX_BD_NUM; i++) {
-   221			lp->rx_bd_v[i].next = lp->rx_bd_p +
-   222					      sizeof(*lp->rx_bd_v) *
-   223					      ((i + 1) % RX_BD_NUM);
-   224	
-   225			skb = netdev_alloc_skb_ip_align(ndev, lp->max_frm_size);
-   226			if (!skb)
-   227				goto out;
-   228	
-   229			lp->rx_bd_v[i].sw_id_offset = (u32) skb;
-   230			lp->rx_bd_v[i].phys = dma_map_single(ndev->dev.parent,
-   231							     skb->data,
-   232							     lp->max_frm_size,
-   233							     DMA_FROM_DEVICE);
-   234			lp->rx_bd_v[i].cntrl = lp->max_frm_size;
-   235		}
-   236	
-   237		/* Start updating the Rx channel control register */
-   238		cr = axienet_dma_in32(lp, XAXIDMA_RX_CR_OFFSET);
-   239		/* Update the interrupt coalesce count */
-   240		cr = ((cr & ~XAXIDMA_COALESCE_MASK) |
-   241		      ((lp->coalesce_count_rx) << XAXIDMA_COALESCE_SHIFT));
-   242		/* Update the delay timer count */
-   243		cr = ((cr & ~XAXIDMA_DELAY_MASK) |
-   244		      (XAXIDMA_DFT_RX_WAITBOUND << XAXIDMA_DELAY_SHIFT));
-   245		/* Enable coalesce, delay timer and error interrupts */
-   246		cr |= XAXIDMA_IRQ_ALL_MASK;
-   247		/* Write to the Rx channel control register */
-   248		axienet_dma_out32(lp, XAXIDMA_RX_CR_OFFSET, cr);
-   249	
-   250		/* Start updating the Tx channel control register */
-   251		cr = axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET);
-   252		/* Update the interrupt coalesce count */
-   253		cr = (((cr & ~XAXIDMA_COALESCE_MASK)) |
-   254		      ((lp->coalesce_count_tx) << XAXIDMA_COALESCE_SHIFT));
-   255		/* Update the delay timer count */
-   256		cr = (((cr & ~XAXIDMA_DELAY_MASK)) |
-   257		      (XAXIDMA_DFT_TX_WAITBOUND << XAXIDMA_DELAY_SHIFT));
-   258		/* Enable coalesce, delay timer and error interrupts */
-   259		cr |= XAXIDMA_IRQ_ALL_MASK;
-   260		/* Write to the Tx channel control register */
-   261		axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET, cr);
-   262	
-   263		/* Populate the tail pointer and bring the Rx Axi DMA engine out of
-   264		 * halted state. This will make the Rx side ready for reception.
-   265		 */
-   266		axienet_dma_out32(lp, XAXIDMA_RX_CDESC_OFFSET, lp->rx_bd_p);
-   267		cr = axienet_dma_in32(lp, XAXIDMA_RX_CR_OFFSET);
-   268		axienet_dma_out32(lp, XAXIDMA_RX_CR_OFFSET,
-   269				  cr | XAXIDMA_CR_RUNSTOP_MASK);
-   270		axienet_dma_out32(lp, XAXIDMA_RX_TDESC_OFFSET, lp->rx_bd_p +
-   271				  (sizeof(*lp->rx_bd_v) * (RX_BD_NUM - 1)));
-   272	
-   273		/* Write to the RS (Run-stop) bit in the Tx channel control register.
-   274		 * Tx channel is now ready to run. But only after we write to the
-   275		 * tail pointer register that the Tx channel will start transmitting.
-   276		 */
-   277		axienet_dma_out32(lp, XAXIDMA_TX_CDESC_OFFSET, lp->tx_bd_p);
-   278		cr = axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET);
-   279		axienet_dma_out32(lp, XAXIDMA_TX_CR_OFFSET,
-   280				  cr | XAXIDMA_CR_RUNSTOP_MASK);
-   281	
-   282		/* Wait for PhyRstCmplt bit to be set, indicating the PHY reset has finished */
- > 283		ret = read_poll_timeout(axienet_ior, value,
-   284					value & XAE_INT_PHYRSTCMPLT_MASK,
-   285					DELAY_OF_ONE_MILLISEC, 50000, false, lp,
-   286					XAE_IS_OFFSET);
-   287		if (ret) {
-   288			dev_err(lp->dev, "%s: timeout waiting for PhyRstCmplt\n", __func__);
-   289			return ret;
-   290		}
-   291	
-   292		return 0;
-   293	out:
-   294		axienet_dma_bd_release(ndev);
-   295		return -ENOMEM;
-   296	}
-   297	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> Yours,
+> Qinglin
+> </apatel@ventanamicro.com></mchitale@ventanamicro.com>

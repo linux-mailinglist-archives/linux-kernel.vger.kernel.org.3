@@ -2,27 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ECE6502CF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBCCE502D5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353970AbiDOPlc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:41:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        id S1355667AbiDOP4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:56:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355314AbiDOPlU (ORCPT
+        with ESMTP id S237241AbiDOP4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:41:20 -0400
-Received: from 4.mo575.mail-out.ovh.net (4.mo575.mail-out.ovh.net [46.105.59.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA3D50464
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:38:50 -0700 (PDT)
-Received: from player788.ha.ovh.net (unknown [10.110.115.29])
-        by mo575.mail-out.ovh.net (Postfix) with ESMTP id C888A2343A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:38:48 +0000 (UTC)
+        Fri, 15 Apr 2022 11:56:40 -0400
+X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 08:54:11 PDT
+Received: from 2.mo550.mail-out.ovh.net (2.mo550.mail-out.ovh.net [178.32.119.250])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25A99A9A1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:54:11 -0700 (PDT)
+Received: from player788.ha.ovh.net (unknown [10.111.172.22])
+        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 4CE16244A5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:38:54 +0000 (UTC)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player788.ha.ovh.net (Postfix) with ESMTPSA id 3BDC829867006;
-        Fri, 15 Apr 2022 15:38:43 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003ae2f5d48-d3a3-4e50-baca-c251b8c8e9d3,
+        by player788.ha.ovh.net (Postfix) with ESMTPSA id C468929867034;
+        Fri, 15 Apr 2022 15:38:48 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R003c521644e-f40f-40d5-87c4-68faa529c824,
                     77125C2C2681624F8512B69FC7A1C9B53E6602B4) smtp.auth=steve@sk2.org
 X-OVh-ClientIp: 82.65.25.201
 From:   Stephen Kitt <steve@sk2.org>
@@ -30,20 +31,20 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
         Stephen Kitt <steve@sk2.org>
-Subject: [PATCH 3/6] ASoC: max980*: use i2c_match_id and simple i2c probe
-Date:   Fri, 15 Apr 2022 17:38:14 +0200
-Message-Id: <20220415153817.141364-4-steve@sk2.org>
+Subject: [PATCH 4/6] ASoC: pcm186x: use i2c_match_id and simple i2c probe
+Date:   Fri, 15 Apr 2022 17:38:15 +0200
+Message-Id: <20220415153817.141364-5-steve@sk2.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220415153817.141364-1-steve@sk2.org>
 References: <20220415153817.141364-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 10486631734977201798
+X-Ovh-Tracer-Id: 10488320585173665414
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
 X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,185 +57,58 @@ As part of the ongoing i2c transition to the simple probe
 driver_data for the probed device. The id parameter is thus no longer
 necessary and the simple probe can be used instead.
 
-In the context of an i2c probe, i2c_match_id with the module id table
-and the probed client never returns null, so removing the null check
-on the i2c_device_id pointer is safe.
-
-The i2c id tables are moved up before the probe function, as
-suggested by Wolfram Sang.
+The i2c id table is moved up before the probe function, as suggested
+by Wolfram Sang.
 
 Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
- sound/soc/codecs/max98088.c | 21 +++++++++++----------
- sound/soc/codecs/max98090.c | 23 ++++++++++++-----------
- sound/soc/codecs/max98095.c | 19 ++++++++++---------
- 3 files changed, 33 insertions(+), 30 deletions(-)
+ sound/soc/codecs/pcm186x-i2c.c | 24 ++++++++++++------------
+ 1 file changed, 12 insertions(+), 12 deletions(-)
 
-diff --git a/sound/soc/codecs/max98088.c b/sound/soc/codecs/max98088.c
-index 429717d4ac5a..5ef2e1279ee7 100644
---- a/sound/soc/codecs/max98088.c
-+++ b/sound/soc/codecs/max98088.c
-@@ -1737,11 +1737,18 @@ static const struct snd_soc_component_driver soc_component_dev_max98088 = {
- 	.non_legacy_dai_naming	= 1,
+diff --git a/sound/soc/codecs/pcm186x-i2c.c b/sound/soc/codecs/pcm186x-i2c.c
+index f8382b74391d..932c8d41c3ea 100644
+--- a/sound/soc/codecs/pcm186x-i2c.c
++++ b/sound/soc/codecs/pcm186x-i2c.c
+@@ -22,9 +22,18 @@ static const struct of_device_id pcm186x_of_match[] = {
  };
+ MODULE_DEVICE_TABLE(of, pcm186x_of_match);
  
--static int max98088_i2c_probe(struct i2c_client *i2c,
--			      const struct i2c_device_id *id)
-+static const struct i2c_device_id max98088_i2c_id[] = {
-+       { "max98088", MAX98088 },
-+       { "max98089", MAX98089 },
-+       { }
-+};
-+MODULE_DEVICE_TABLE(i2c, max98088_i2c_id);
-+
-+static int max98088_i2c_probe(struct i2c_client *i2c)
- {
-        struct max98088_priv *max98088;
-        int ret;
-+       const struct i2c_device_id *id;
- 
-        max98088 = devm_kzalloc(&i2c->dev, sizeof(struct max98088_priv),
- 			       GFP_KERNEL);
-@@ -1757,6 +1764,7 @@ static int max98088_i2c_probe(struct i2c_client *i2c,
- 		if (PTR_ERR(max98088->mclk) == -EPROBE_DEFER)
- 			return PTR_ERR(max98088->mclk);
- 
-+	id = i2c_match_id(max98088_i2c_id, i2c);
-        max98088->devtype = id->driver_data;
- 
-        i2c_set_clientdata(i2c, max98088);
-@@ -1767,13 +1775,6 @@ static int max98088_i2c_probe(struct i2c_client *i2c,
-        return ret;
- }
- 
--static const struct i2c_device_id max98088_i2c_id[] = {
--       { "max98088", MAX98088 },
--       { "max98089", MAX98089 },
--       { }
--};
--MODULE_DEVICE_TABLE(i2c, max98088_i2c_id);
--
- #if defined(CONFIG_OF)
- static const struct of_device_id max98088_of_match[] = {
- 	{ .compatible = "maxim,max98088" },
-@@ -1788,7 +1789,7 @@ static struct i2c_driver max98088_i2c_driver = {
- 		.name = "max98088",
- 		.of_match_table = of_match_ptr(max98088_of_match),
- 	},
--	.probe  = max98088_i2c_probe,
-+	.probe_new = max98088_i2c_probe,
- 	.id_table = max98088_i2c_id,
- };
- 
-diff --git a/sound/soc/codecs/max98090.c b/sound/soc/codecs/max98090.c
-index b45ec35cd63c..4058e147413c 100644
---- a/sound/soc/codecs/max98090.c
-+++ b/sound/soc/codecs/max98090.c
-@@ -2529,8 +2529,14 @@ static const struct regmap_config max98090_regmap = {
- 	.cache_type = REGCACHE_RBTREE,
- };
- 
--static int max98090_i2c_probe(struct i2c_client *i2c,
--				 const struct i2c_device_id *i2c_id)
-+static const struct i2c_device_id max98090_i2c_id[] = {
-+	{ "max98090", MAX98090 },
-+	{ "max98091", MAX98091 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max98090_i2c_id);
-+
-+static int max98090_i2c_probe(struct i2c_client *i2c)
- {
- 	struct max98090_priv *max98090;
- 	const struct acpi_device_id *acpi_id;
-@@ -2552,7 +2558,9 @@ static int max98090_i2c_probe(struct i2c_client *i2c,
- 			return -EINVAL;
- 		}
- 		driver_data = acpi_id->driver_data;
--	} else if (i2c_id) {
-+	} else {
-+		const struct i2c_device_id *i2c_id =
-+			i2c_match_id(max98090_i2c_id, i2c);
- 		driver_data = i2c_id->driver_data;
- 	}
- 
-@@ -2659,13 +2667,6 @@ static const struct dev_pm_ops max98090_pm = {
- 	SET_SYSTEM_SLEEP_PM_OPS(NULL, max98090_resume)
- };
- 
--static const struct i2c_device_id max98090_i2c_id[] = {
--	{ "max98090", MAX98090 },
--	{ "max98091", MAX98091 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, max98090_i2c_id);
--
- #ifdef CONFIG_OF
- static const struct of_device_id max98090_of_match[] = {
- 	{ .compatible = "maxim,max98090", },
-@@ -2690,7 +2691,7 @@ static struct i2c_driver max98090_i2c_driver = {
- 		.of_match_table = of_match_ptr(max98090_of_match),
- 		.acpi_match_table = ACPI_PTR(max98090_acpi_match),
- 	},
--	.probe  = max98090_i2c_probe,
-+	.probe_new = max98090_i2c_probe,
- 	.shutdown = max98090_i2c_shutdown,
- 	.remove = max98090_i2c_remove,
- 	.id_table = max98090_i2c_id,
-diff --git a/sound/soc/codecs/max98095.c b/sound/soc/codecs/max98095.c
-index 4977b00ddf5f..7bca99fa61b5 100644
---- a/sound/soc/codecs/max98095.c
-+++ b/sound/soc/codecs/max98095.c
-@@ -2106,11 +2106,17 @@ static const struct snd_soc_component_driver soc_component_dev_max98095 = {
- 	.non_legacy_dai_naming	= 1,
- };
- 
--static int max98095_i2c_probe(struct i2c_client *i2c,
+-static int pcm186x_i2c_probe(struct i2c_client *i2c,
 -			     const struct i2c_device_id *id)
-+static const struct i2c_device_id max98095_i2c_id[] = {
-+	{ "max98095", MAX98095 },
++static const struct i2c_device_id pcm186x_i2c_id[] = {
++	{ "pcm1862", PCM1862 },
++	{ "pcm1863", PCM1863 },
++	{ "pcm1864", PCM1864 },
++	{ "pcm1865", PCM1865 },
 +	{ }
 +};
-+MODULE_DEVICE_TABLE(i2c, max98095_i2c_id);
++MODULE_DEVICE_TABLE(i2c, pcm186x_i2c_id);
 +
-+static int max98095_i2c_probe(struct i2c_client *i2c)
++static int pcm186x_i2c_probe(struct i2c_client *i2c)
  {
- 	struct max98095_priv *max98095;
- 	int ret;
-+	const struct i2c_device_id *id;
- 
- 	max98095 = devm_kzalloc(&i2c->dev, sizeof(struct max98095_priv),
- 				GFP_KERNEL);
-@@ -2126,6 +2132,7 @@ static int max98095_i2c_probe(struct i2c_client *i2c,
- 		return ret;
- 	}
- 
-+	id = i2c_match_id(max98095_i2c_id, i2c);
- 	max98095->devtype = id->driver_data;
- 	i2c_set_clientdata(i2c, max98095);
- 	max98095->pdata = i2c->dev.platform_data;
-@@ -2136,12 +2143,6 @@ static int max98095_i2c_probe(struct i2c_client *i2c,
- 	return ret;
++	const struct i2c_device_id *id = i2c_match_id(pcm186x_i2c_id, i2c);
+ 	const enum pcm186x_type type = (enum pcm186x_type)id->driver_data;
+ 	int irq = i2c->irq;
+ 	struct regmap *regmap;
+@@ -36,17 +45,8 @@ static int pcm186x_i2c_probe(struct i2c_client *i2c,
+ 	return pcm186x_probe(&i2c->dev, type, irq, regmap);
  }
  
--static const struct i2c_device_id max98095_i2c_id[] = {
--	{ "max98095", MAX98095 },
+-static const struct i2c_device_id pcm186x_i2c_id[] = {
+-	{ "pcm1862", PCM1862 },
+-	{ "pcm1863", PCM1863 },
+-	{ "pcm1864", PCM1864 },
+-	{ "pcm1865", PCM1865 },
 -	{ }
 -};
--MODULE_DEVICE_TABLE(i2c, max98095_i2c_id);
+-MODULE_DEVICE_TABLE(i2c, pcm186x_i2c_id);
 -
- #ifdef CONFIG_OF
- static const struct of_device_id max98095_of_match[] = {
- 	{ .compatible = "maxim,max98095", },
-@@ -2155,7 +2156,7 @@ static struct i2c_driver max98095_i2c_driver = {
- 		.name = "max98095",
- 		.of_match_table = of_match_ptr(max98095_of_match),
- 	},
--	.probe  = max98095_i2c_probe,
-+	.probe_new = max98095_i2c_probe,
- 	.id_table = max98095_i2c_id,
- };
- 
+ static struct i2c_driver pcm186x_i2c_driver = {
+-	.probe		= pcm186x_i2c_probe,
++	.probe_new	= pcm186x_i2c_probe,
+ 	.id_table	= pcm186x_i2c_id,
+ 	.driver		= {
+ 		.name	= "pcm186x",
 -- 
 2.27.0
 

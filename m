@@ -2,107 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A03502F7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:06:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F070F502F92
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 22:11:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350865AbiDOUIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 16:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
+        id S1350960AbiDOUJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 16:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349803AbiDOUIv (ORCPT
+        with ESMTP id S1349803AbiDOUJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 16:08:51 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93164AF1C0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:06:22 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23FK6Gsb032405;
-        Fri, 15 Apr 2022 15:06:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650053176;
-        bh=q35Q+zTatXelDL+Cqd9qrSdJFvS6gynC+iWXI8GiVz4=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=BdSgTE/MCUQ09XOHTNoz+yJiHuAg1auEx5/Ga+PnJzqg04FVKWqCqC3S0p3f5YPro
-         txXI9tNhvWUH7ct0izn8vPjgDyEkTq3wVNlEYYxxV+ij2rfHtcSZ9EqLiSZbEgjHvt
-         DA28ElducLkdXpcj6KUCjGF3+cE5U4okqjA3KwYQ=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23FK6FCP032458
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Apr 2022 15:06:15 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
- Apr 2022 15:06:15 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 15 Apr 2022 15:06:15 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23FK6FZ5018018;
-        Fri, 15 Apr 2022 15:06:15 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     <cgel.zte@gmail.com>
-CC:     Nishanth Menon <nm@ti.com>, Zeal Robot <zealci@zte.com.cn>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>, <ssantosh@kernel.org>
-Subject: Re: [PATCH] soc: ti: knav_dma: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Fri, 15 Apr 2022 15:06:14 -0500
-Message-ID: <165005314169.9689.12736994224475831709.b4-ty@ti.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220412082923.2532649-1-chi.minghao@zte.com.cn>
-References: <20220412082923.2532649-1-chi.minghao@zte.com.cn>
+        Fri, 15 Apr 2022 16:09:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A84AF1C0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 13:07:13 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1nfSDg-0005eL-9y; Fri, 15 Apr 2022 22:07:04 +0200
+Message-ID: <7c9c093a-cfb8-c997-87f8-db769eaa2c62@pengutronix.de>
+Date:   Fri, 15 Apr 2022 22:07:01 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [EXT] [PATCH v6 3/4] crypto: caam - add in-kernel interface for
+ blob generator
+Content-Language: en-US
+To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Horia Geanta <horia.geanta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     Sumit Garg <sumit.garg@linaro.org>,
+        David Gstir <david@sigma-star.at>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        Franck Lenormand <franck.lenormand@nxp.com>,
+        Richard Weinberger <richard@nod.at>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        James Morris <jmorris@namei.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
+        James Bottomley <jejb@linux.ibm.com>,
+        "tharvey@gateworks.com" <tharvey@gateworks.com>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+References: <20220316164335.1720255-1-a.fatoum@pengutronix.de>
+ <20220316164335.1720255-4-a.fatoum@pengutronix.de>
+ <DU2PR04MB8630BDFC29AA31074C623A7B95199@DU2PR04MB8630.eurprd04.prod.outlook.com>
+ <ae941471-43c0-1aea-2567-89eed98a61a6@pengutronix.de>
+ <DU2PR04MB86306DE99EA993BF596BA729951D9@DU2PR04MB8630.eurprd04.prod.outlook.com>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <DU2PR04MB86306DE99EA993BF596BA729951D9@DU2PR04MB8630.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi cgel.zte@gmail.com,
-
-On Tue, 12 Apr 2022 08:29:23 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+On 28.03.22 11:29, Pankaj Gupta wrote:
+>>> struct keyblob_info {
+>>>         void *key;
+>>>         size_t key_len;
+>>>
+>>>         void *blob;
+>>>         size_t blob_len;
+>>>
+>>>         size_t key_mod_len;
+>>>         const void *key_mod;
+>>> };
+>>
+>> I can do that.
+>>
 > 
-> Using pm_runtime_resume_and_get is more appropriate
-> for simplifing code
+> Please do. Thanks.
+
+I went with your other suggestion instead: void *input and void *output.
+This keeps the code simple and avoids having to do:
+
+if (encap) {
+  in = info->key;
+  in_len = info->key_len;
+  out = info->blob_len;
+  out_len = info->key_len + CAAM_BLOB_OVERHEAD; 
+} else {
+  in = info->blob;
+  in_len = info->blob_len;
+  out = info->key_len;
+  out_len = info->blob_len - CAAM_BLOB_OVERHEAD; 
+}
+
+> Patch 4/4, needs to be re-worked to.
+> 
+>> Whats your opinion on the desc size computation? Comment the macro or
+>> add the static inline helper?
+>>
+> 
+> Comment the macro is fine.
+> 
+>> Cheers,
+>> Ahmad
+>>
+>> --
+>> Pengutronix e.K.                           |                             |
+>> Steuerwalder Str. 21                       |
+>> https://eur01.safelinks.protection.outlook.com/?url=http%3A%2F%2Fwww.
+>> pengutronix.de%2F&amp;data=04%7C01%7Cpankaj.gupta%40nxp.com%7C4
+>> d60f0d524a04b7cbd7b08da0d7e7d21%7C686ea1d3bc2b4c6fa92cd99c5c30163
+>> 5%7C0%7C0%7C637837134158793951%7CUnknown%7CTWFpbGZsb3d8eyJWI
+>> joiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3
+>> 000&amp;sdata=PetvZm8teusBwQ4BeZ1VLEOvBlCrZ2k2bNG3SJBEXPw%3D&
+>> amp;reserved=0  |
+>> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+>> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 > 
 > 
 
-I have applied the following to branch ti-drivers-soc-next on [1].
-Thank you!
 
-[1/1] soc: ti: knav_dma: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-      commit: d3e3116f253591a473873fab8363ecb998ddde13
-
-(Minor $subject cleanup and commit message spell fixup)
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent up the chain during
-the next merge window (or sooner if it is a relevant bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-[1] git://git.kernel.org/pub/scm/linux/kernel/git/ti/linux.git
 -- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

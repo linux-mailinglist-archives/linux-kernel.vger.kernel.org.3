@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFB605024C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A1CE5024D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350049AbiDOFtq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:49:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34200 "EHLO
+        id S1349944AbiDOFv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:51:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347361AbiDOFtm (ORCPT
+        with ESMTP id S230224AbiDOFvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:49:42 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC5A41301
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:47:14 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-2ef5380669cso58326937b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:47:14 -0700 (PDT)
+        Fri, 15 Apr 2022 01:51:23 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 180D04160A;
+        Thu, 14 Apr 2022 22:48:57 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 2so6907593pjw.2;
+        Thu, 14 Apr 2022 22:48:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atishpatra.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=H+S0ex0Gmk8XR+HZHfmZwrGjOF8Dda3fikKUL+qrwCA=;
-        b=pVBDiBdSvrangewc/J0Wo8xQrAbEWLkPPucthMJqZGiYdMCnJv5tXJgxd3Ee0mrr+d
-         VHMNA8zD2X0+0KIhrTnRAnVmSMvOniaOL7O6xtaMdXFNsIboKf3RyAjqFlK3gRQkk5DE
-         n1LzKfSRxdOMC5rGWM+nkJ5diYejlN8nnYmiM=
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=EkZ6B5iLKVXv5Srcu76r3A62V/ZZt/J9R/FB5UABxPU=;
+        b=Map6MfGcaRDiOY9nxu5tNcDFugf5a+zp33X0uSP/NLKBd5B8mizst2Hx0ZW+4ZPq4V
+         oo55U7QNalBlhk7mZNXTURgkaAlY/AGFajJj9m03US6+UpAAI21/MdvNQghCawIOpYm4
+         gMALgH16hFf9OBKy0EKnWcnqc/EzsO56OWtmOeiYJ1YiDJHlis46fH5FDMRZvIJSyCId
+         ZGauzdwIzkZuOy8tsaxtgheiDRGWB+rm7D8jo4G7C9tqCLSqlyZE35sF9yWlrNyTxTl/
+         tA2Qu3AYGGbAsSV5Ix9No36EgAyyHMcJ4TP05/4ZRuF1IJ34oIBxa2jIf7VK7ChuKjeh
+         JpnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=H+S0ex0Gmk8XR+HZHfmZwrGjOF8Dda3fikKUL+qrwCA=;
-        b=lHH/aLAerBcmoP8bXSe4BQJoIjyheU+UtSc/FjE7k6YehFgnJL2ixUoW8iSM4w/j/h
-         MIMqffBr6HFDSAy9W3oIv1Yw6DVqYR5VKJahvppDAP+aUvTCc20EoA3GA2mCE12RfCWV
-         rURpZ+ErHnQOLnNoFNZAAzfI+L4aEeMeqzGhc2GunajPp3Bfk3CVLbonPznGXfVv3Scn
-         6Zell6geMErphKUwPh5daFeGYKqR+e0Xvura+7qth5MTofzfjjVNwbu9jdYi9TgHPZEz
-         zs2kaNc7Vb38DgQfngYUnHI1vsy2XrfUypJsrjNyDLfh9uUFnFEjBGZLs9XqXcB2eOGZ
-         3+vg==
-X-Gm-Message-State: AOAM530qdwprSM1AK0AVLKfGb0ySh6+rZqJHceT9JxtEadmwTMO9esMe
-        ZfkNFwmhKINT5kqHYmsCzXPCRqIECMJ1C6OcZjc6Sxfbcw==
-X-Google-Smtp-Source: ABdhPJxvTmOAh1p5L0hp1zJBgO/cplpMgmeLO/Z++i8g7Xe/Vw/VUIitCelofGK1vcH22lkr09B6dnPpt+PN4Di+nHI=
-X-Received: by 2002:a81:ad47:0:b0:2ee:927d:ff39 with SMTP id
- l7-20020a81ad47000000b002ee927dff39mr4935600ywk.249.1650001634010; Thu, 14
- Apr 2022 22:47:14 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=EkZ6B5iLKVXv5Srcu76r3A62V/ZZt/J9R/FB5UABxPU=;
+        b=nShU1YH2EBAFHLXG07MYgmEAxOMSInxR9OySQXd7B38PpjerH82tgQnnB5GUC9VdbI
+         mlUIgHVEg6ytKEajD1EuvMP4kMOTcjiP4xOlf0yKUSiYEbw1F8NuU3OUntNXNTQAxG3U
+         ZRWRdk4qf2itxOJMNIv7GMtIQuXwPtbyA3HuJqqTfDo1NtNArtA/BbPQw9cIG9pbkSTE
+         K1zIF/Vi+J5WR9CQ0er4lSf7T0erh10MlxI9peuhRM5iUWMM4byNfPFMtdA9VlidycLs
+         /5PhjdkD/yR93uVFf7Hw+FQTrzvuMmcR7GFkJoKC+09HmLRpseGfmI3jliprFThiqA0S
+         eZFA==
+X-Gm-Message-State: AOAM531kvRtHJy4dDvBPISgAr6iqzbuZ50HrEk5AjyGc4zkaIN52eYZu
+        FzLgNAB9iXLGaKD3MbnVJJo=
+X-Google-Smtp-Source: ABdhPJzq5U/5RA7OgRGopMUXYjszuTAGLW4wdDrxEq9PCpFTXojnP+lSjb6+gqd3ElvWgE/IfSx3jQ==
+X-Received: by 2002:a17:90a:c003:b0:1cb:65a2:81ab with SMTP id p3-20020a17090ac00300b001cb65a281abmr2428373pjt.161.1650001736529;
+        Thu, 14 Apr 2022 22:48:56 -0700 (PDT)
+Received: from d3 ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
+        by smtp.gmail.com with ESMTPSA id n24-20020aa79058000000b0050612d0fe01sm1560528pfo.2.2022.04.14.22.48.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 22:48:55 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 14:48:50 +0900
+From:   Benjamin Poirier <benjamin.poirier@gmail.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Shahed Shaikh <shshaikh@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH] net: qlogic: qlcnic: simplify if-if to if-else
+Message-ID: <YlkHQkZ33rkzAwhS@d3>
+References: <20220414031111.76862-1-hanyihao@vivo.com>
 MIME-Version: 1.0
-References: <20220412033335.1384230-1-apatel@ventanamicro.com>
-In-Reply-To: <20220412033335.1384230-1-apatel@ventanamicro.com>
-From:   Atish Patra <atishp@atishpatra.org>
-Date:   Thu, 14 Apr 2022 22:47:03 -0700
-Message-ID: <CAOnJCUJUy1sE49hu6yyUzdsVwnLMXA0zOPBMzn8MTTYUdSnWtg@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414031111.76862-1-hanyihao@vivo.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 8:34 PM Anup Patel <apatel@ventanamicro.com> wrote:
->
-> When Sv57 is not available the satp.MODE test in set_satp_mode() will
-> fail and lead to pgdir re-programming for Sv48. The pgdir re-programming
-> will fail as well due to pre-existing pgdir entry used for Sv57 and as
-> a result kernel fails to boot on RISC-V platform not having Sv57.
->
-> To fix above issue, we should clear the pgdir memory in set_satp_mode()
-> before re-programming.
->
-> Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
-> Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+On 2022-04-13 20:11 -0700, Yihao Han wrote:
+> Replace `if (!pause->autoneg)` with `else` for simplification
+> and add curly brackets according to the kernel coding style:
+> 
+> "Do not unnecessarily use braces where a single statement will do."
+> 
+> ...
+> 
+> "This does not apply if only one branch of a conditional statement is
+> a single statement; in the latter case use braces in both branches"
+> 
+> Please refer to:
+> https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
+
+Seems the part of the log about curly brackets doesn't correspond with
+the actual changes.
+
+> 
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
 > ---
->  arch/riscv/mm/init.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> index 9535bea8688c..b0793dc0c291 100644
-> --- a/arch/riscv/mm/init.c
-> +++ b/arch/riscv/mm/init.c
-> @@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
->                 if (!check_l4) {
->                         disable_pgtable_l5();
->                         check_l4 = true;
-> +                       memset(early_pg_dir, 0, PAGE_SIZE);
->                         goto retry;
->                 }
->                 disable_pgtable_l4();
-> --
-> 2.25.1
->
-
-Reviewed-by: Atish Patra <atishp@rivosinc.com>
-
-
--- 
-Regards,
-Atish
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> index bd0607680329..e3842eaf1532 100644
+> --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> @@ -3752,7 +3752,7 @@ int qlcnic_83xx_set_pauseparam(struct qlcnic_adapter *adapter,
+>  	if (ahw->port_type == QLCNIC_GBE) {
+>  		if (pause->autoneg)
+>  			ahw->port_config |= QLC_83XX_ENABLE_AUTONEG;
+> -		if (!pause->autoneg)
+> +		else
+>  			ahw->port_config &= ~QLC_83XX_ENABLE_AUTONEG;
+>  	} else if ((ahw->port_type == QLCNIC_XGBE) && (pause->autoneg)) {
+>  		return -EOPNOTSUPP;
+> -- 
+> 2.17.1
+> 

@@ -2,135 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60A64502D38
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:41:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC165502D3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:44:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349281AbiDOPnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
+        id S1355489AbiDOPn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244491AbiDOPnO (ORCPT
+        with ESMTP id S1350085AbiDOPny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:43:14 -0400
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5392338;
-        Fri, 15 Apr 2022 08:40:46 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id z33so15077894ybh.5;
-        Fri, 15 Apr 2022 08:40:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=siQwI8deKdhHuH3vRXoSE7cu7PIu6L4/ZKF1nngalP8=;
-        b=lJted+6nzCX/TmPSEV27OEVQ+FB0znDWFH+ESkGqvymGUsFAlNeIsiY8r8n7/u7iTf
-         klMFOUQPp+GZaIgziXQxVBZ20AY3gwikjNLsskuhKsRIAtUFrmJKd87/AnPa3WjA9eGS
-         k+g0muoLaKKNtcffZ6rusJ0Z+E5gDGNv3qz3Tfq2aJ5LEv+Xp5TYQPKdtlgedJ1Bae+t
-         FRovKjOFdfYqmTFLviU8dvACxA4hMDjI0MIQmQHbdnjeajUXw0LyP/jtL8iQ/nrpGtlE
-         OqPvwzRkH+YTaO3AhxHA+SR73Vi/v1Rl2C6DOwcZMNUbiK+HgcNz3HjeWlmn3FZTB518
-         tC4Q==
-X-Gm-Message-State: AOAM532MJ4X+SVM6efcQapXoJ4B4fO0YO00+v2X2Uw2Tx4hP7JNtLtD2
-        ZTujW+wRu6jWrrbfHcEMmjGAy4nTn0SMs9tml8c=
-X-Google-Smtp-Source: ABdhPJxW2Py97UUCGXi4mm+J3kzUaSrm2VZ814zQbxslS3B6faAjoAZXHccBUUiOJ56uqCFyhUQzMtJDS6hFu4QYUsI=
-X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
- x27-20020a25ac9b000000b006413c32bee7mr5453873ybi.633.1650037245392; Fri, 15
- Apr 2022 08:40:45 -0700 (PDT)
+        Fri, 15 Apr 2022 11:43:54 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE29E985B5;
+        Fri, 15 Apr 2022 08:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650037286; x=1681573286;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=vQmRn16K4xA0u142eDU+ulgweLDbuAZ9x7nuLXhsVcE=;
+  b=g4FESIKGlPDqRJFAWKHIi1BcUvn/lo6thijZFmpi9wPnjR8GuhytISiP
+   WJhX/PPFnMMYRcAQqQWe2OL5mTc+tIBDpfaaMEtZ7hJRL79HBuM4thn+W
+   Cg6DI37zNu5JCSdpEVCXxTxavQpiod6Y3VsaqHzSiKngXJoPgUes5gM0c
+   c=;
+Received: from ironmsg08-lv.qualcomm.com ([10.47.202.152])
+  by alexa-out.qualcomm.com with ESMTP; 15 Apr 2022 08:41:25 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg08-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 08:41:25 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Apr 2022 08:41:24 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Apr 2022 08:41:23 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@linux.ie>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v6] drm/msm/dp: stop event kernel thread when DP unbind
+Date:   Fri, 15 Apr 2022 08:41:16 -0700
+Message-ID: <1650037276-27812-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
- <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0jnyg6n-1QRmVg1tjzu3szsG3DYqYTXAbobbKwkFhTreg@mail.gmail.com>
- <YlcUMNe5gDsEca4f@smile.fi.intel.com> <YlcVFRQ9wJIH+sjI@smile.fi.intel.com>
- <YldE6L7MbgS0NXQY@paasikivi.fi.intel.com> <YlgdGb/vKfdCXXx1@smile.fi.intel.com>
-In-Reply-To: <YlgdGb/vKfdCXXx1@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 15 Apr 2022 17:40:34 +0200
-Message-ID: <CAJZ5v0gHROpQqWXOh6fZo4k-=1_w0x9=e0fQBvU4TrShwRFiFA@mail.gmail.com>
-Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Len Brown <lenb@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:09 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Apr 14, 2022 at 12:47:20AM +0300, Sakari Ailus wrote:
-> > On Wed, Apr 13, 2022 at 09:23:17PM +0300, Andy Shevchenko wrote:
-> > > On Wed, Apr 13, 2022 at 09:19:28PM +0300, Andy Shevchenko wrote:
-> > > > On Wed, Apr 13, 2022 at 08:10:22PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Fri, Apr 8, 2022 at 8:49 PM Andy Shevchenko
-> > > > > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > > > > > -struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
-> > > > > > +struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
-> > > > > >  {
-> > > >
-> > > > > >         if (!fwnode_has_op(fwnode, get))
-> > > > > >                 return fwnode;
-> > > >
-> > > > ^^^^, so it needs a casting, but then we have to comment why is so.
-> > >
-> > > Note, it means that the fwnode parameter either invalid or has no given option.
-> > > It's not a problem to drop casting in the first case, but the second one should
-> > > be justified and Sakari wants to be sure that the initial container is not
-> > > const, which seems can't be achieved even with the original code.
-> >
-> > I wonder if I'm missing something. The fwnode argument originally was not
-> > const here.
->
-> Yes, and our discussion went to the direction of what const qualifier implies
-> here. I assume that the const means that we do not modify the fwnode object,
-> while its container is another story which we have no influence on. You, if
-> I read your messages correctly, insisting that const here implies that the
-> container object is const as well.
->
-> Reading current implementation I see now, that with children APIs we have
-> two pointers passed, while with parent APIs only a single one. In children
-> API due to above is easy to use const qualifier for the first argument.
-> Parent APIs missed that and hence have this problem that we can't constify
-> their parameters.
->
-> to_of_node() expects const parameter while returns non-const container.
-> Is it a subtle issue there? (I believe it should be consistent then)
+Current DP driver implementation, event thread is kept running
+after DP display is unbind. This patch fix this problem by disabling
+DP irq and stop event thread to exit gracefully at dp_display_unbind().
 
-This is fine AFAICS.
+Changes in v2:
+-- start event thread at dp_display_bind()
 
-The const parameter means that to_of_node() will not update the memory
-pointed to by it, which is correct.
+Changes in v3:
+-- disable all HDP interrupts at unbind
+-- replace dp_hpd_event_setup() with dp_hpd_event_thread_start()
+-- replace dp_hpd_event_stop() with dp_hpd_event_thread_stop()
+-- move init_waitqueue_head(&dp->event_q) to probe()
+-- move spin_lock_init(&dp->event_lock) to probe()
 
-The value returned by it may be used by its caller in whatever way
-they like, because the caller has no obligation to preserve the memory
-pointed to by it, unless they've also received that pointer with the
-const qualifier, but then they need to know how it is related to the
-to_of_node() return value and what to do with it.
+Changes in v4:
+-- relocate both dp_display_bind() and dp_display_unbind() to bottom of file
 
-IOW, to_of_node() has no information on its caller's obligations with
-respect to the memory pointed to by its argument, so it is OK for it
-to return a non-const result.  Moreover, if it had done otherwise, it
-might have created an obligation for the caller that didn't exist
-before.
+Changes in v5:
+-- cancel relocation of both dp_display_bind() and dp_display_unbind()
 
-> This patch and the followed one can be moved without understanding why
-> we need the non-const parameter there.
+Changes in v5:
+-- move empty event q to dp_event_thread_start()
 
-I'm not sure what you mean here, sorry.
+Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 35 ++++++++++++++++++++++++++++-------
+ 1 file changed, 28 insertions(+), 7 deletions(-)
+
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index 01453db..92c9819 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -113,6 +113,7 @@ struct dp_display_private {
+ 	u32 hpd_state;
+ 	u32 event_pndx;
+ 	u32 event_gndx;
++	struct task_struct *ev_tsk;
+ 	struct dp_event event_list[DP_EVENT_Q_MAX];
+ 	spinlock_t event_lock;
+ 
+@@ -230,6 +231,14 @@ void dp_display_signal_audio_complete(struct msm_dp *dp_display)
+ 	complete_all(&dp->audio_comp);
+ }
+ 
++static void dp_hpd_event_thread_stop(struct dp_display_private *dp_priv)
++{
++	kthread_stop(dp_priv->ev_tsk);
++
++}
++
++static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv);
++
+ static int dp_display_bind(struct device *dev, struct device *master,
+ 			   void *data)
+ {
+@@ -269,6 +278,7 @@ static int dp_display_bind(struct device *dev, struct device *master,
+ 	if (rc)
+ 		DRM_ERROR("Audio registration Dp failed\n");
+ 
++	rc = dp_hpd_event_thread_start(dp);
+ end:
+ 	return rc;
+ }
+@@ -280,6 +290,9 @@ static void dp_display_unbind(struct device *dev, struct device *master,
+ 	struct drm_device *drm = dev_get_drvdata(master);
+ 	struct msm_drm_private *priv = drm->dev_private;
+ 
++	/* disable all HPD interrupts */
++	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
++	dp_hpd_event_thread_stop(dp);
+ 	dp_power_client_deinit(dp->power);
+ 	dp_aux_unregister(dp->aux);
+ 	priv->dp[dp->id] = NULL;
+@@ -1054,7 +1067,7 @@ static int hpd_event_thread(void *data)
+ 
+ 	dp_priv = (struct dp_display_private *)data;
+ 
+-	while (1) {
++	while (!kthread_should_stop()) {
+ 		if (timeout_mode) {
+ 			wait_event_timeout(dp_priv->event_q,
+ 				(dp_priv->event_pndx == dp_priv->event_gndx),
+@@ -1132,12 +1145,19 @@ static int hpd_event_thread(void *data)
+ 	return 0;
+ }
+ 
+-static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
++static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv)
+ {
+-	init_waitqueue_head(&dp_priv->event_q);
+-	spin_lock_init(&dp_priv->event_lock);
++	/* set event q to empty */
++	dp_priv->event_gndx = 0;
++	dp_priv->event_pndx = 0;
++
++	dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
++	if (IS_ERR(dp_priv->ev_tsk)) {
++		DRM_ERROR("failed to create DP event thread\n");
++		return PTR_ERR(dp_priv->ev_tsk);
++	}
+ 
+-	kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
++	return 0;
+ }
+ 
+ static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+@@ -1266,7 +1286,10 @@ static int dp_display_probe(struct platform_device *pdev)
+ 		return -EPROBE_DEFER;
+ 	}
+ 
++	/* setup event q */
+ 	mutex_init(&dp->event_mutex);
++	init_waitqueue_head(&dp->event_q);
++	spin_lock_init(&dp->event_lock);
+ 
+ 	/* Store DP audio handle inside DP display */
+ 	dp->dp_display.dp_audio = dp->audio;
+@@ -1441,8 +1464,6 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+ 
+ 	dp = container_of(dp_display, struct dp_display_private, dp_display);
+ 
+-	dp_hpd_event_setup(dp);
+-
+ 	dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+ }
+ 
+-- 
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
+

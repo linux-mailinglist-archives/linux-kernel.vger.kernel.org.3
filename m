@@ -2,91 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78655502DCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 114EF502DE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355875AbiDOQlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
+        id S1355921AbiDOQqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:46:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235021AbiDOQlV (ORCPT
+        with ESMTP id S1355918AbiDOQqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:41:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 13F0DC6B41
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:38:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650040732;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yY1XpQLOJF8SRfLRiRImiId98yLUwf4ACq4UfHXrlTM=;
-        b=Ep+eRWJyXssOITUA3LT57x5CP/a77KNcLAJHgr0Q6fwjN1geFQAw9Em4rJ/ZSGSro/zEyX
-        ODtkLjqPkhsSTnOCkdZ/jaeBQ9UAGfpHQ29xDDSzJ6TzlxkMyBwM8wRdUjyDNOUnUMlzDX
-        BD/agJb5N1ri8C/7UhbKa4792xmrGcw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-448-nA3M0pSZOp6RRNd-FabZnw-1; Fri, 15 Apr 2022 12:38:48 -0400
-X-MC-Unique: nA3M0pSZOp6RRNd-FabZnw-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3CA6C811E7A;
-        Fri, 15 Apr 2022 16:38:48 +0000 (UTC)
-Received: from ceranb (unknown [10.40.194.169])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9D74A2167D68;
-        Fri, 15 Apr 2022 16:38:46 +0000 (UTC)
-Date:   Fri, 15 Apr 2022 18:38:45 +0200
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
-Cc:     netdev@vger.kernel.org, Fei Liu <feliu@redhat.com>,
-        "moderated list:INTEL ETHERNET DRIVERS" 
-        <intel-wired-lan@lists.osuosl.org>, mschmidt@redhat.com,
-        Brett Creeley <brett.creeley@intel.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [Intel-wired-lan] [PATCH net] ice: Protect vf_state check by
- cfg_lock in ice_vc_process_vf_msg()
-Message-ID: <20220415183845.51a326fe@ceranb>
-In-Reply-To: <YlldFriBVkKEgbBs@boxer>
-References: <20220413072259.3189386-1-ivecera@redhat.com>
-        <YlldFriBVkKEgbBs@boxer>
+        Fri, 15 Apr 2022 12:46:35 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6786DCE23;
+        Fri, 15 Apr 2022 09:44:05 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id k5so14785420lfg.9;
+        Fri, 15 Apr 2022 09:44:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBWwF27MwSuL5C7aP5ZZTL4T7IqFoYwfQe6tUlw2pWI=;
+        b=TkVr8aTJFS9IbJCuBrXCpGEPamxYbyEAMjEiJu0qXzB9gw4xbchJ8On8xUp6zkdSHX
+         WOA/TmTPa3pnldsg+uUpMzSQ4UMHROtPuaxMDZZftMNRw5B+GUNr9UGGgFlXmuRxpiqm
+         kFOB5il2AXyWD19g/EQrck/K0nQTTyytvYBNKvNXQrpJg6qClcEAmmkGdC/hzFpDKlni
+         /iv9VUDudkTEgw4vtPlsES43r2Ji7ln9dEz7i+Ad94DKFjiuM3S2Sdovq/F752kul4Sz
+         WolbRwGQwtcTdGVtBDMG7UOVU1XCgu7NXDbJIDhZdfz9I0s8v79w1PG5Smq61ivAHwMr
+         Kr/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iBWwF27MwSuL5C7aP5ZZTL4T7IqFoYwfQe6tUlw2pWI=;
+        b=mWXuli9AIaFqg7M/osNuDvH9qoxKlmU/OTiGbIvRKVXv4AtvGYDCSMaidvcfTfi1bw
+         0xLHO++2NIAKiP0PpZ+b05jPwReywFHXtKLYKw5UN8Wrgj/WENP/GSK0PKVto4PV1uxB
+         lFdSNHdPZ0qW7ooSio7i05l5wav/Odg4UEobfk6aFoq1xhJqQHG1aXLVhFo1T/E0ZoPo
+         uyBo2FGOZ0PUI8o9OhIl/nVmfGlq4eVduaoTxkEjjQ6Hl8nycrdp2nctJHiyQCm4CsAR
+         C1d05Dvamtb2144BOLa8wUTopKN0qTGCwM8x5C98yYoiBN7H/aOk+70hs9SWT7Uvn6DR
+         pHoA==
+X-Gm-Message-State: AOAM530Mx0oMU/9ykBZP7TW3NtnmR/Bv5agZ32L6cQGwngWzMWlZDFk2
+        qKPe28Uezf57cxYST1jDpNdizltLlew=
+X-Google-Smtp-Source: ABdhPJzGuwNvorSCO5VVz/QXWE6SE1/vY+Z2IZvVpYBCS+XgK0zpRShss1brS9/434H4FFsuCPrOIA==
+X-Received: by 2002:a05:6512:686:b0:46e:c9cf:7112 with SMTP id t6-20020a056512068600b0046ec9cf7112mr3065146lfe.662.1650041043829;
+        Fri, 15 Apr 2022 09:44:03 -0700 (PDT)
+Received: from nergzd-desktop.localdomain ([194.39.226.133])
+        by smtp.gmail.com with ESMTPSA id h22-20020a056512339600b0046bc4ceaeb6sm383787lfg.27.2022.04.15.09.44.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 09:44:03 -0700 (PDT)
+From:   Markuss Broks <markuss.broks@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
+Subject: [PATCH v3 0/4] Add support for Silicon Mitus SM5703 MFD
+Date:   Fri, 15 Apr 2022 19:43:51 +0300
+Message-Id: <20220415164356.25165-1-markuss.broks@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 13:55:02 +0200
-Maciej Fijalkowski <maciej.fijalkowski@intel.com> wrote:
+This series adds support for Silicon Mitus SM5703 MFD and the
+appropriate device-tree bindings. This only adds support for the
+regulator module, leaving room for other modules implemented in
+future (code for other modules is really not ready for submission
+right now). Silicon Mitus SM5703 is used on various mobile phones,
+mostly Samsung Galaxy (J5 (2015, 2016), On7, J7 (2015, 2016) ...).
 
-> On Wed, Apr 13, 2022 at 09:22:59AM +0200, Ivan Vecera wrote:
-> > Previous patch labelled "ice: Fix incorrect locking in
-> > ice_vc_process_vf_msg()"  fixed an issue with ignored messages  
-> 
-> tiny tiny nit: double space after "
-> Also, has mentioned patch landed onto some tree so that we could provide
-> SHA-1 of it? If not, then maybe squashing this one with the mentioned one
-> would make sense?
+v2:
+- mfd bindings: add "SM5703" to the title
+- mfd bindings: indent the example
+- regulators/Makefile: sort alphabetically
+v3:
+- mfd bindings: fix an error in example: there should be no 
+newline between #size-cells and #address-cells and the node
 
-Well, that commit were already tested and now it is present in Tony's queue
-but not in upstream yet. It is not problem to squash together but the first
-was about ignored VF messages and this one is about race and I didn't want
-to make single patch with huge description that cover both issues.
-But as I said, no problem to squash if needed.
+Markuss Broks (4):
+  dt-bindings: regulator: Add bindings for Silicon Mitus SM5703
+    regulators
+  dt-bindings: mfd: Add bindings for Silicon Mitus SM5703 MFD
+  mfd: sm5703: Add support for SM5703 MFD
+  regulator: sm5703-regulator: Add regulators support for SM5703 MFD
 
-Thx,
-Ivan
+ .../bindings/mfd/siliconmitus,sm5703.yaml     |  91 ++++++++++
+ .../siliconmitus,sm5703-regulator.yaml        |  48 ++++++
+ MAINTAINERS                                   |   8 +
+ drivers/mfd/Kconfig                           |  12 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/sm5703.c                          |  81 +++++++++
+ drivers/regulator/Kconfig                     |   7 +
+ drivers/regulator/Makefile                    |   1 +
+ drivers/regulator/sm5703-regulator.c          | 162 ++++++++++++++++++
+ include/linux/mfd/sm5703.h                    | 105 ++++++++++++
+ 10 files changed, 516 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+ create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
+ create mode 100644 drivers/mfd/sm5703.c
+ create mode 100644 drivers/regulator/sm5703-regulator.c
+ create mode 100644 include/linux/mfd/sm5703.h
+
+-- 
+2.35.1
 

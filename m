@@ -2,146 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF4CD502025
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:30:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2D84502026
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:30:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348435AbiDOBcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 21:32:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36662 "EHLO
+        id S1348473AbiDOBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 21:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348427AbiDOBcx (ORCPT
+        with ESMTP id S1348459AbiDOBdI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:32:53 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8254338E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 18:30:22 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso4029121ioz.8
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 18:30:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=htiLe9E3ZdtiIoT+zYEOMOvsXOFLg2/YOwYvDcOTymA=;
-        b=0X4D8ZauieBNc3v+EuN3c5Dh/mFXRL264cP+JVaMYTzwI3YJbW8AvRYhY+8+Hc1zja
-         s6CnC2YzHebvnfypJ/uwa/IelxTDPTMhUl8rRm3OXABohR4E5Zt/FSymitKQT0zUpJj2
-         +52W2ujrBCiHMsMl0Nku5xQ4PEQjzY7zUm0HRB6Qe4+7Rj9XOGkFTf5FxJYCUy3oc/t9
-         2yurik2ZkEn/2aQskzFt+UOe5s9u2PwWnVqSuOVkOeKZBy3RZI3+JxfplfPQy/Lr0mkz
-         C0jrT5+7YghKYs/GS1+SY31vxak/PiWiHx4Im3hgfJ7eigEhhr8WAJ7l9tabpYnvYnhX
-         E9Ag==
-X-Gm-Message-State: AOAM532qlhwd1GKiwyA7z0iiH7BrtfsKJTdZP99F5H3NOlxk4EEdjRX3
-        ycc0Uw2HJzReIexjp0oDeT9I9hl3S8ayNAXIPxAQ1iOVzE+K
-X-Google-Smtp-Source: ABdhPJzcWFkIT089oQ8yY6tnd49uvUWhdenPo09/el0bna8t8l85/zaiYIUV5IOLyiS5AxFCUuKlBWmvbsQC1ofC5cgJtKduJbWo
+        Thu, 14 Apr 2022 21:33:08 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B1FD434A5;
+        Thu, 14 Apr 2022 18:30:41 -0700 (PDT)
+Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Fri, 15 Apr 2022
+ 09:30:39 +0800 (GMT+08:00)
+X-Originating-IP: [112.20.108.139]
+Date:   Fri, 15 Apr 2022 09:30:39 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   =?UTF-8?B?5Y+45bu26IW+?= <siyanteng@loongson.cn>
+To:     "alexs@kernel.org" <alexs@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>
+Cc:     "siyanteng@loongson.cn" <siyanteng@loongson.cn>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        siyanteng01@gmail.com
+Subject: Re: [PATCH V3] docs/zh_CN: sync with original text
+ Documentation/vm/page_owner.rst
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
+ Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
+Content-Transfer-Encoding: base64
+X-CM-CTRLDATA: mfOwcWZvb3Rlcl90eHQ9NDA2ODo2MTI=
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-X-Received: by 2002:a92:d18b:0:b0:2c6:675:807c with SMTP id
- z11-20020a92d18b000000b002c60675807cmr2169666ilz.33.1649986222155; Thu, 14
- Apr 2022 18:30:22 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 18:30:22 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a7edb305dca75a50@google.com>
-Subject: [syzbot] kernel BUG in commit_creds
-From:   syzbot <syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, ebiederm@xmission.com,
-        io-uring@vger.kernel.org, legion@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Message-ID: <81254c7.3c4d.1802ad7fa26.Coremail.siyanteng@loongson.cn>
+X-Coremail-Locale: en_US
+X-CM-TRANSID: AQAAf9BxMM+_ylhiVMojAA--.12774W
+X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/1tbiAQAREV3QvPLlfgAAsZ
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    40354149f4d7 Add linux-next specific files for 20220414
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1778a95cf00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a44d62051576f6f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=60c52ca98513a8760a91
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1102d2e0f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e22af4f00000
-
-The issue was bisected to:
-
-commit 6bf9c47a398911e0ab920e362115153596c80432
-Author: Jens Axboe <axboe@kernel.dk>
-Date:   Tue Mar 29 16:10:08 2022 +0000
-
-    io_uring: defer file assignment
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14f6da04f00000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=16f6da04f00000
-console output: https://syzkaller.appspot.com/x/log.txt?x=12f6da04f00000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com
-Fixes: 6bf9c47a3989 ("io_uring: defer file assignment")
-
-------------[ cut here ]------------
-kernel BUG at kernel/cred.c:456!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 3596 Comm: syz-executor409 Not tainted 5.18.0-rc2-next-20220414-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-RIP: 0010:commit_creds+0xf33/0x1360 kernel/cred.c:456
-Code: 84 d2 0f 85 94 03 00 00 45 8b 74 24 2c 89 de 44 89 f7 e8 80 d8 29 00 41 39 de 0f 85 03 f8 ff ff e9 10 f8 ff ff e8 6d d5 29 00 <0f> 0b e8 66 d5 29 00 0f 0b e8 5f d5 29 00 0f 0b 48 89 cf e8 15 68
-RSP: 0018:ffffc900039dfc58 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffff8880186457c0 RSI: ffffffff81502c83 RDI: ffff888022af9700
-RBP: ffff888022af9700 R08: 0000000000000000 R09: 0000000020a96400
-R10: ffffffff83b21be5 R11: 0000000000000000 R12: ffff888022af9500
-R13: ffff8880186457c0 R14: ffff8880186457c0 R15: ffffed10030c8bfc
-FS:  00005555558b03c0(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005624d8428d20 CR3: 000000001e73f000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- install_process_keyring security/keys/process_keys.c:306 [inline]
- lookup_user_key+0x534/0x1270 security/keys/process_keys.c:653
- __do_sys_add_key+0x1d3/0x430 security/keys/keyctl.c:126
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-RIP: 0033:0x7fd586be1a69
-Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe9ed85078 EFLAGS: 00000246 ORIG_RAX: 00000000000000f8
-RAX: ffffffffffffffda RBX: 00007ffe9ed85098 RCX: 00007fd586be1a69
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00000000200000c0
-RBP: 00007ffe9ed85090 R08: 00000000ffffffff R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:commit_creds+0xf33/0x1360 kernel/cred.c:456
-Code: 84 d2 0f 85 94 03 00 00 45 8b 74 24 2c 89 de 44 89 f7 e8 80 d8 29 00 41 39 de 0f 85 03 f8 ff ff e9 10 f8 ff ff e8 6d d5 29 00 <0f> 0b e8 66 d5 29 00 0f 0b e8 5f d5 29 00 0f 0b 48 89 cf e8 15 68
-RSP: 0018:ffffc900039dfc58 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-RDX: ffff8880186457c0 RSI: ffffffff81502c83 RDI: ffff888022af9700
-RBP: ffff888022af9700 R08: 0000000000000000 R09: 0000000020a96400
-R10: ffffffff83b21be5 R11: 0000000000000000 R12: ffff888022af9500
-R13: ffff8880186457c0 R14: ffff8880186457c0 R15: ffffed10030c8bfc
-FS:  00005555558b03c0(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005624d841fd90 CR3: 000000001e73f000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+RGVhciBzaXlhbnRlbmcKCkNvdWxkIHlvdSBoZWxwIHRvIHJldmlldyBteSB0cmFuc2xhdGlvbu+8
+nwoKQ2VydGFpbmx5IQoKLS1DQyBzaXlhbnRlbmcwMUBnbWFpbC5jb20KClRoYW5rcywKWWFudGVu
+ZwoKCgoKCi0tLS0tLS0tIOWOn+Wni+mCruS7tiAtLS0tLS0tLQrlj5Hku7bkurrvvJrnmb3mtanm
+locgPGJhaWhhb3dlbkBtZWl6dS5jb20+CuaXtumXtO+8mjIwMjLlubQ05pyIMTLml6UgMTc6MjkK
+5pS25Lu25Lq677yaYWxleHNAa2VybmVsLm9yZyxjb3JiZXRAbHduLm5ldArmioTpgIHvvJpzaXlh
+bnRlbmdAbG9vbmdzb24uY24s55m95rWp5paHIDxiYWloYW93ZW5AbWVpenUuY29tPixsaW51eC1k
+b2NAdmdlci5rZXJuZWwub3JnLGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcK5Li76aKY77ya
+W1BBVENIIFYzXSBkb2NzL3poX0NOOiBzeW5jIHdpdGggb3JpZ2luYWwgdGV4dCBEb2N1bWVudGF0
+aW9uL3ZtL3BhZ2Vfb3duZXIucnN0CgpBcyB0aGUgdG9vbHMvdm0vcGFnZV9vd25lcl9zb3J0IGFk
+ZGVkIHNvbWUgZmVhdHVyZSBhbmQgb3JpZ2luYWwgdGV4dAp1cGRhdGVkLCBzeW5jIHRoZSB0cmFu
+c2xhdGlvbiBvZiB6aF9DTi4KClNpZ25lZC1vZmYtYnk6IEhhb3dlbiBCYWkgPGJhaWhhb3dlbkBt
+ZWl6dS5jb20+Ci0tLQpWMS0mZ3Q7VjI6IGZpeCB3aGl0ZXNwYWNlIHdhcm5pbmcuClYyLSZndDtW
+MzogZml4IHNvbWUgdGFiIEFsaWdubWVudCBpc3N1ZS4KCkRvY3VtZW50YXRpb24vdHJhbnNsYXRp
+b25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0IHwgNTQgKysrKysrKysrKysrKysrKysrKysrLQox
+IGZpbGUgY2hhbmdlZCwgNTMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
+dCBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0IGIv
+RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QKaW5kZXgg
+OWU5NTFmYWJiYTlkLi4wZDRmOTQwMzRkYjYgMTAwNjQ0Ci0tLSBhL0RvY3VtZW50YXRpb24vdHJh
+bnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0CisrKyBiL0RvY3VtZW50YXRpb24vdHJh
+bnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0CkBAIC0xMDMsMTQgKzEwMyw2NiBAQCBw
+YWdlIG93bmVy5Zyo6buY6K6k5oOF5Ya15LiL5piv56aB55So55qE44CC5omA5Lul77yM5aaC5p6c
+5L2g5oOz5L2/55So5a6D77yM5L2gCi1tICAgICAgICAgICAgICDmjInmgLvlhoXlrZjmjpLluo8K
+LXAgICAgICAgICAgICAgIOaMiXBpZOaOkuW6j+OAggotUCAgICAgICAgICAgICAg5oyJdGdpZOaO
+kuW6j+OAggorICAgICAgICAgICAgICAgLW4gICAgICAgICAgICAgIOaMieS7u+WKoeWQjeensOaO
+kuW6j+OAggotciAgICAgICAgICAgICAg5oyJ5YaF5a2Y6YeK5pS+5pe26Ze05o6S5bqP44CCCi1z
+ICAgICAgICAgICAgICDmjInloIbmoIjot5/ouKrmjpLluo/jgIIKLXQgICAgICAgICAgICAgIOaM
+ieaXtumXtOaOkuW6j++8iOm7mOiupO+8ieOAggorICAgICAgICAgICAgICAgLS1zb3J0IDxvcmRl
+cj4gIOaMh+WumuaOkuW6j+mhuuW6j+OAguaOkuW6j+ivreazleaYryBbK3wtXWtleVssWyt8LV1r
+ZXlbLC4uLl1dLiDku44KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgKirmoIflh4bmoLzlvI/or7TmmI7nrKYqKumDqOWIhumAieaLqeS4gOS4qumUruOAgiIr
+IiDmmK/lj6/pgInnmoTvvIzlm6DkuLrpu5jorqTmlrnlkJHmmK/lop7liqDmlbDlrZfmiJblrZfl
+hbjpobrluo/jgIIKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAg5YWB6K645re35ZCI5L2/55So57yp5YaZ6ZSu5ZKM5YWo56ew6ZSu44CCCisKKyAgICAgICAg
+ICAgICAgIEV4YW1wbGVzOgorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9v
+d25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1zb3J0PW4sK3BpZCwtdGdpZAorICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4g
+LS1zb3J0PWF0CgrlhbblroPlh73mlbA6CgpDdWxsOgotICAgICAgICAgICAgICAgLWMgICAgICAg
+ICAgICAgIOmAmui/h+avlOi+g+WghuagiOi3n+i4quiAjOS4jeaYr+aAu+Wdl+adpei/m+ihjOWJ
+lOmZpOOAggorICAgICAgICAgICAgICAgLS1jdWxsIDxydWxlcz4KKyAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICDmjIflrprnrZvpgInop4TliJnjgILnrZvpgInor63ms5XmmK8ga2V5Wyxr
+ZXlbLC4uLl1d44CC5ZyoKirmoIflh4bmoLzlvI/or7TmmI7nrKYqKumDqOWIhumAieaLqeS4gOS4
+quWkmuWtl+avjemUrgorCisgICAgICAgICAgICAgICA8cnVsZXM+IOaYr+mAl+WPt+WIhumalOWI
+l+ihqOW9ouW8j+eahOWNleS4quWPguaVsO+8jOWug+aPkOS+m+S6huS4gOenjeaMh+WumuWNleS4
+quetm+mAieinhOWImeeahOaWueazleOAguS4i+mdoueahCoq5qCH5YeG5qC85byP6K+05piOCisg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg56ymKirpg6jliIbmj4/ov7Dkuoblj6/or4bl
+iKvnmoTlhbPplK7lrZfjgII8cnVsZXM+IOWPr+S7peeUsemUriBrMSxrMiwgLi4uIOmhuuW6j+aM
+h+Wumu+8jOWmguS4i+mdoueahAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNUQU5E
+QVJEIFNPUlQgS0VZUyDpg6jliIbmiYDov7DjgILlhYHorrjmt7flkIjkvb/nlKjnvKnlhpnlvaLl
+vI/lkozlrozmlbTlvaLlvI/nmoTplK7jgIIKCisgICAgICAgICAgICAgICBFeGFtcGxlczoKKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxv
+dXRwdXQ+IC0tY3VsbD1zdGFja3RyYWNlCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+Li9wYWdlX293bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLWN1bGw9c3QscGlkLG5hbWUKKyAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxv
+dXRwdXQ+IC0tY3VsbD1uLGYKRmlsdGVyOgotZiAgICAgICAgICAgICAg6L+H5ruk5o6J5YaF5a2Y
+5bey6KKr6YeK5pS+55qE5Z2X55qE5L+h5oGv44CCCisKKyAgICAgICBTZWxlY3Q6CisgICAgICAg
+ICAgICAgICAtLXBpZCA8cGlkbGlzdD4gICAgICAgICDpgJrov4cgcGlkIOi/m+ihjOmAieaLqeOA
+gui/meWwhumAieaLqei/m+eoiyBJRCDlj7flh7rnjrDlnKggPHBpZGxpc3Q+IOS4reeahOWdl+OA
+ggorICAgICAgICAgICAgICAgLS10Z2lkIDx0Z2lkbGlzdD4gICAgICAg6YCa6L+HIHRnaWQg6L+b
+6KGM6YCJ5oup44CC6L+Z5bCG6YCJ5oup57q/56iL57uEIElEIOWPt+WHuueOsOWcqCA8dGdpZGxp
+c3Q+IOS4reeahOWdl+OAggorICAgICAgICAgICAgICAgLS1uYW1lIDxjbWRsaXN0PiAgICAgICAg
+5oyJ5Lu75Yqh5ZCN56ew6YCJ5oup44CC6L+Z5bCG6YCJ5oup5Lu75Yqh5ZCN56ew5Ye6546w5Zyo
+IDxjbWRsaXN0PiDkuK3nmoTlnZfjgIIKKworICAgICAgICAgICAgICAgPHBpZGxpc3Q+44CBPHRn
+aWRsaXN0PuOAgTxjbWRsaXN0PuaYr+mAl+WPt+WIhumalOWIl+ihqOW9ouW8j+eahOWNleWPguaV
+sO+8jOWug+aPkOS+m+S6huS4gOenjeaMh+WumuWNleS4qumAieaLqeinhOWImeeahOaWueazleOA
+ggorCisKKyAgICAgICAgICAgICAgIEV4YW1wbGVzOgorICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1waWQ9MQorICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1
+dD4gLS10Z2lkPTEsMiwzCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLi9wYWdlX293
+bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLW5hbWUgbmFtZTEsbmFtZTIKKworICAgICAgIOag
+h+WHhuagvOW8j+ivtOaYjuespgorPT09PT09PT09PT09PT09PT09PT09PT09PT0KKy0tc29ydCDp
+gInpobk6CisKKyAgICAgICDnvKnlhpnplK4gICAgICAgICAgICAg5YWo56ew6ZSuICAgICAgICAg
+ICAgIOaPj+i/sAorICAgICAgIHAgICAgICAgICAgICAgICBwaWQgICAgICAgICAgICAg6L+b56iL
+IElECisgICAgICAgdGcgICAgICAgICAgICAgIHRnaWQgICAgICAgICAgICDnur/nqIvnu4QgSUQK
+KyAgICAgICBuICAgICAgICAgICAgICAgbmFtZSAgICAgICAgICAgIOS7u+WKoeWQjeensAorICAg
+ICAgIHN0ICAgICAgICAgICAgICBzdGFja3RyYWNlICAgICAg6aG16Z2i5YiG6YWN55qE6LCD55So
+5qCICisgICAgICAgVCAgICAgICAgICAgICAgIHR4dCAgICAgICAgICAgICDlnZfnmoTlhajmlocK
+KyAgICAgICBmdCAgICAgICAgICAgICAgZnJlZV90cyAgICAgICAgIOmhtemdouiiq+mHiuaUvuea
+hOaXtumXtOaIsworICAgICAgIGF0ICAgICAgICAgICAgICBhbGxvY190cyAgICAgICAg6aG16Z2i
+5YiG6YWN55qE5pe26Ze05oizCisKKy0tY3VybCDpgInpobk6CisKKyAgICAgICDnvKnlhpnplK4g
+ICAgICAgICAgICAg5YWo56ew6ZSuICAgICAgICAgICAgIOaPj+i/sAorICAgICAgIHAgICAgICAg
+ICAgICAgICBwaWQgICAgICAgICAgICAg6L+b56iLIElECisgICAgICAgdGcgICAgICAgICAgICAg
+IHRnaWQgICAgICAgICAgICDnur/nqIvnu4QgSUQKKyAgICAgICBuICAgICAgICAgICAgICAgbmFt
+ZSAgICAgICAgICAgIOS7u+WKoeWQjeensAorICAgICAgIGYgICAgICAgICAgICAgICBmcmVlICAg
+ICAgICAgICAg6K+l6aG16Z2i5piv5ZCm5bey6KKr6YeK5pS+CisgICAgICAgc3QgICAgICAgICAg
+ICAgIHN0YWNrdHJhY2UgICAgICDpobXpnaLliIbphY3nmoTosIPnlKjmoIgKLS0gCjIuNy40CgoK
+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9jbWRsaXN0PjwvdGdpZGxpc3Q+PC9waWRsaXN0
+PjwvY21kbGlzdD48L2NtZGxpc3Q+PC90Z2lkbGlzdD48L3RnaWRsaXN0PjwvcGlkbGlzdD48L3Bp
+ZGxpc3Q+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9ydWxlcz48L3J1bGVzPjwvcnVsZXM+
+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vcmRlcj48L2JhaWhhb3dlbkBtZWl6dS5jb20+PC9iYWloYW93
+ZW5AbWVpenUuY29tPjwvYmFpaGFvd2VuQG1laXp1LmNvbT4NCg0K5pys6YKu5Lu25Y+K5YW26ZmE
+5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R
+6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq65oiW576k57uE44CC56aB5q2i5Lu7
+5L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo
+6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW2
+6ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25pys6YKu5Lu277yM6K+35oKo56uL
+5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig6Zmk5pys6YKu5Lu244CCIA0K
+VGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9y
+bWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAsIHdoaWNoIGlzIGludGVuZGVkIG9ubHkg
+Zm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBB
+bnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkgKGlu
+Y2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBvciBwYXJ0aWFsIGRpc2Nsb3N1cmUs
+IHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBieSBwZXJzb25zIG90aGVyIHRoYW4gdGhl
+IGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlz
+IGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1h
+aWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g

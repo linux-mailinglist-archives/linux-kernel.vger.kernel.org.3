@@ -2,211 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB35F5024F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B28750250B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350172AbiDOFzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S1350195AbiDOGB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242245AbiDOFzH (ORCPT
+        with ESMTP id S1347761AbiDOGBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:55:07 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6AF45041;
-        Thu, 14 Apr 2022 22:52:39 -0700 (PDT)
-X-UUID: 8a3ddbc04e6340468ea9b338613546f2-20220415
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:f486a0d4-a54c-4132-b762-4c2cd726132e,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACT
-        ION:release,TS:50
-X-CID-INFO: VERSION:1.1.4,REQID:f486a0d4-a54c-4132-b762-4c2cd726132e,OB:0,LOB:
-        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACTIO
-        N:release,TS:50
-X-CID-META: VersionHash:faefae9,CLOUDID:a02b7678-0afa-4dca-bdec-ca54c998425a,C
-        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
-        l,QS:0,BEC:nil
-X-UUID: 8a3ddbc04e6340468ea9b338613546f2-20220415
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
-        (envelope-from <miles.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 609395415; Fri, 15 Apr 2022 13:52:35 +0800
+        Fri, 15 Apr 2022 02:01:54 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0A3F25D3;
+        Thu, 14 Apr 2022 22:59:25 -0700 (PDT)
+X-UUID: ac4f6bc4d73541fd8e970f4724cef24e-20220415
+X-UUID: ac4f6bc4d73541fd8e970f4724cef24e-20220415
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 533823461; Fri, 15 Apr 2022 13:59:19 +0800
 Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Fri, 15 Apr 2022 13:52:33 +0800
+ mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Fri, 15 Apr 2022 13:59:18 +0800
 Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
  (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Fri, 15 Apr 2022 13:52:33 +0800
-From:   Miles Chen <miles.chen@mediatek.com>
-To:     <alice.chao@mediatek.com>
-CC:     <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
-        <chun-hung.wu@mediatek.com>, <jejb@linux.ibm.com>,
-        <jiajie.hao@mediatek.com>, <lin.gui@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
+ Transport; Fri, 15 Apr 2022 13:59:18 +0800
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+        <robh+dt@kernel.org>, <krzk+dt@kernel.org>,
+        <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>, <linux-scsi@vger.kernel.org>,
-        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
-        <peter.wang@mediatek.com>, <powen.kao@mediatek.com>,
-        <qilin.tan@mediatek.com>, <stanley.chu@mediatek.com>,
-        <wsd_upstream@mediatek.com>, <yanxu.wei@mediatek.com>
-Subject: Re: [PATCH v3 1/1] scsi: Fix racing between dev init and dev reset
-Date:   Fri, 15 Apr 2022 13:52:33 +0800
-Message-ID: <20220415055233.29264-1-miles.chen@mediatek.com>
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Subject: [PATCH V3 00/15] cpufreq: mediatek: Cleanup and support MT8183 and MT8186
+Date:   Fri, 15 Apr 2022 13:59:01 +0800
+Message-ID: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
 X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220415040446.26451-2-alice.chao@mediatek.com>
-References: <20220415040446.26451-2-alice.chao@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-MTK:  N
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alice,
+Cpufreq is a DVFS driver used for power saving to scale the clock frequency
+and supply the voltage for CPUs. This series do some cleanup for MediaTek
+cpufreq drivers and add support for MediaTek SVS[2] and MediaTek CCI
+devfreq[3] which are supported in MT8183 and MT8186.
 
-> Device reset thread uses kobject_uevent_env() to get kobj.parent, and it
-> aces with device init thread which calls device_add() to add kobj.parent
+Changes for V3:
+1. Rebased to linux-next-20220414.
+2. Drop accepted patches.
+3. Drop "cpufreq: mediatek: Use maximum voltage in init stage" because we
+   make sure the voltage we set is safe for both mediatek cci and cpufreq.
+4. Rename cci property to mediatek,cci.
+5. Adjust order of cleanup patches.
+6. Add new patches for cleanup, handle infinite loop and MT8183 dts.
+7. Revise drivers from reviewers' suggestion.
+8. Revise commit message of some patches to avoid confusion and misunderstand.
+9. Revise "cpufreq: mediatek: Link CCI device to CPU".
+   We do not return successful to pretend we set the target frequency done
+   when cci is not ready. Instead, we find and set a safe voltage so that we
+   can set the target cpufrequency.
 
-"aces" may be "races"?
+Changes for V2:
+1. Drop the modification of transforming cpufreq-mediatek into yaml and
+   only add the MediaTek CCI property for MediaTek cpufreq.
+2. Split the original patches into several patches.
 
-> before kobject_uevent_env().
-> 
-> Device init call:           Device reset call:
->  scsi_probe_and_add_lun()    scsi_evt_thread()
->   scsi_add_lun()             scsi_evt_emit()
->    scsi_sysfs_add_sdev()      kobject_uevent_env() //get kobj.parent
->     scsi_target_add()           kobject_get_path()
->                                  len = get_kobj_path_length () // len=1 because parent hasn't created yet
->     device_add() // add kobj.parent
->       kobject_uevent_env()
->        kobject_get_path()         path = kzalloc()
->         fill_kobj_path()           fill_kobj_path() // --length; length -= cur is a negative value
->                                     memcpy(path + length, kobject_name(parent), cur); // slab OOB!
-> 
-> Above backtrace describes the problem, device reset thread will get wrong
-> kobj.parent when device init thread didn’t add kobj.parent yet. When this
-> racing happened, it triggers the a KASAN dump on the final iteration:
-> 
-> BUG: KASAN: slab-out-of-bounds in kobject_get_path+0xf8/0x1b8
-> Write of size 11 at addr ffffff80d6bb94f5 by task kworker/3:1/58
-> <snip>
-> Call trace:
->  __kasan_report+0x124/0x1c8
->  kasan_report+0x54/0x84
->  kasan_check_range+0x200/0x208
->  memcpy+0xb8/0xf0
->  kobject_get_path+0xf8/0x1b8
->  kobject_uevent_env+0x228/0xa88
->  scsi_evt_thread+0x2d0/0x5b0
->  process_one_work+0x570/0xf94
->  worker_thread+0x7cc/0xf80
->  kthread+0x2c4/0x388
-> 
-> These two jobs are scheduled asynchronously, we can't guaranteed that
-> kobj.parent will be created in device init thread before device reset
-> thread calls kobject_get_path().
-> 
-> To resolve the racing issue between device init thread and device reset
-> thread, we use wait_event() in scsi_evt_emit() to wait for device_add()
-> to complete the creation of kobj.parent.
-> 
-> Device init call:                Device reset call:
-> ufshcd_async_scan()              scsi_evt_thread()
->  scsi_scan_host()                 scsi_evt_emit() <- add wait_event()
->   do_scsi_scan_host() <- add wake_up()
->    scsi_scan_host_selected()
->     scsi_scan_channel()
->      scsi_probe_and_add_lun()
->       scsi_target_add()
->        device_add() // add kobj.parent
->         kobject_uevent_env()
->          kobject_get_path()
->           fill_kobj_path()
->   do_scan_async() <- wake_up()     kobject_uevent_env() // add kobj.parent
+Reference series:
+[1]: V1 of this series is present by Jia-Wei Chang.
+     message-id:20220307122151.11666-1-jia-wei.chang@mediatek.com
 
-There is no do_scan_async() changes in this patch. It this a typo?
-From the patch, the flow looks like:
+[2]: The MediaTek CCI devfreq driver is introduced in another series.
+     message-id:20220408052150.22536-1-johnson.wang@mediatek.com
 
-Device init call                        Device reset call:
-do_scsi_scan_host()                     scsi_evt_thread()
- scsi_scan_host_selected()               scsi_evt_emit() <- add wait_event()
-  scsi_scan_channel()
-   scsi_probe_and_add_lun()
-    scsi_target_add()
-     device_add() // add kobj.parent
-      kobject_uevent_env()
-       kobject_get_path()
-        fill_kobj_path()
- //call wake_up() after scsi_scan_host_selected is done
-                                        kobject_uevent_env()
-                                         kobject_get_path() // get valid kobj.parent
-					 ...
-                                           fill_kobj_path()
+[3]: The MediaTek SVS driver is introduced in another series.
+     message-id:20220221063939.14969-1-roger.lu@mediatek.com
 
->                                     kobject_get_path() // get valid kobj.parent
->                                      fill_kobj_path()
-> 
-> After we add wake_up at do_scsi_scan_host() in device init thread, we can
-> ensure that device reset thread will get kobject after device init thread
-> finishes adding parent.
-> 
-> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
-> 
-> ---
-> 
-> Change since v2
-> -Change commit: Describes the preblem first and then the solution.
-> -Add commit: Add KASAN error log.
+Andrew-sh.Cheng (1):
+  cpufreq: mediatek: Add opp notification support
 
-Please keep all change history.
+Jia-Wei Chang (8):
+  dt-bindings: cpufreq: mediatek: Add MediaTek CCI property
+  cpufreq: mediatek: Record previous target vproc value
+  cpufreq: mediatek: Move voltage limits to platform data
+  cpufreq: mediatek: Add .get function
+  cpufreq: mediatek: Make sram regulator optional
+  cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()
+  cpufreq: mediatek: Link CCI device to CPU
+  cpufreq: mediatek: Add support for MT8186
 
-e.g.,
+Rex-BC Chen (6):
+  cpufreq: mediatek: Use device print to show logs
+  cpufreq: mediatek: Replace old_* with pre_*
+  cpufreq: mediatek: Add counter to prevent infinite loop when tracking voltage
+  arm64: dts: mediatek: Add opp table and clock property for MT8183 cpufreq
+  arm64: dts: mediatek: Add MediaTek CCI node for MT8183
+  arm64: dts: mediatek: Add mediatek,cci property for MT8183 cpufreq
 
-See https://lore.kernel.org/lkml/20220326022728.2969-1-jianjun.wang@mediatek.com/
-as an example
+ .../bindings/cpufreq/cpufreq-mediatek.txt     |   5 +
+ arch/arm64/boot/dts/mediatek/mt8183-evb.dts   |  36 ++
+ .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   4 +
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      | 285 ++++++++++
+ drivers/cpufreq/mediatek-cpufreq.c            | 497 ++++++++++++------
+ 5 files changed, 664 insertions(+), 163 deletions(-)
 
+-- 
+2.18.0
 
-Thanks,
-Miles
-
-> 
-> ---
->  drivers/scsi/scsi_lib.c  | 1 +
->  drivers/scsi/scsi_scan.c | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-> index 0a70aa763a96..abf9a71ed77c 100644
-> --- a/drivers/scsi/scsi_lib.c
-> +++ b/drivers/scsi/scsi_lib.c
-> @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
->  		break;
->  	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
->  		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
-> +		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
->  		break;
->  	default:
->  		/* do nothing */
-> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
-> index f4e6c68ac99e..431f229ac435 100644
-> --- a/drivers/scsi/scsi_scan.c
-> +++ b/drivers/scsi/scsi_scan.c
-> @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
->  	} else {
->  		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
->  				SCAN_WILD_CARD, 0);
-> +		wake_up(&shost->host_wait);
->  	}
->  }
->  
-> -- 
-> 2.18.0
-> 
-> 

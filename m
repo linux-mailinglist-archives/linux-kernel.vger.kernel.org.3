@@ -2,403 +2,500 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D63FC50236A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A9D850236B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiDOFKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37748 "EHLO
+        id S1349743AbiDOFKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351625AbiDOFGD (ORCPT
+        with ESMTP id S1352078AbiDOFGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:06:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6551A45783
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:58:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8537B82817
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:58:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37BFBC385A6;
-        Fri, 15 Apr 2022 04:58:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1649998721;
-        bh=/Oqj7R+G5oGbNb/CCFxRs3gQZ2weXhyjFpnl0qPspSY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mejaW1V/IQjK+sdZOKsj/FMgFWjG5WMO2sh4wiBIfZTvz0BrHdAfLWnCL2eQp2jIs
-         BZUtPD6JmNrwnmQgvzCkOqAx5fNGUuyRU4B+GNp8S2MLemxQAwPES4Ogdqf31hNS7m
-         DLamsAj0+A0MXitKjxEerWg0gSn+/AD64GXiWXpU=
-Date:   Fri, 15 Apr 2022 06:58:38 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Mahak Gupta <mahak_g@cs.iitr.ac.in>
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Subject: Re: [PATCH v3] staging: r8188eu: correct multiple misspellings
-Message-ID: <Ylj7fnu8Y2X77o9v@kroah.com>
-References: <20220414215302.3690-1-mahak_g@cs.iitr.ac.in>
+        Fri, 15 Apr 2022 01:06:33 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0C1A2CE1F;
+        Thu, 14 Apr 2022 22:00:17 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o5so6872317pjr.0;
+        Thu, 14 Apr 2022 22:00:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OQov0MYkTIBONoBTme4xRpWTb2zSIeTV6sGIJV2qfic=;
+        b=RzescEvZ/UzDxR72ij28BEXKLD79UpqT0JUxla6jeXPDxQPnXwLOM9bSPbP0h38+WY
+         1H9sR90tTaBobJZtc5Gvm2aDV5A6tHWdMjxqeVJzYJcKx9BX904TkcsCKLSt65kZcLjz
+         +MwAUQffr5J+V++P30I2HHEW7pBIATy971HSaOpYl1fQz3QHNUYGTgwYSEIig0PwBE5I
+         wZW/1eAAXQEsrQ/nLipoqOEg8Fx3QxXqPsHlaQdlvCc6M7EEwnLXNaxUX/TauniMt2eq
+         zSx1c7hZ1DtOMCYRL/7uDA8+fG7hCmkrUCzPnxwbBHGSISeumxV/dO1GA9u/qKkxftEy
+         9bNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OQov0MYkTIBONoBTme4xRpWTb2zSIeTV6sGIJV2qfic=;
+        b=TPrecT2mkZpVH6BGCmPOPWSGt9zOKFa3G46z6MVv1lzJpQk6wZBzgrhmiTtQ9XSCPz
+         I1s6b306h2OgVBUVb9IfJKpChndUP/IGKO58Xd4mmtTaLOlcMZodGtzvEfMFIbG0DW5Q
+         rpqIvQiAhaNqLX78nIzu8NarjmYzvIlgncQht9CgM0lNg9d8s3pV4C38SpstX1WI2kjY
+         9j+Uu22wRcCDvgsNu/5+Q6ih/YetQ8k3WgQrF1MyEGktIdqxJR8zcDG7Y30hSvgAtr6w
+         Ldg4pn6YZMHJ+9hlk+Ibf1XlTq+KDVwFz0s+fwoZKMFyjuES5Fa0Nw75/qAE/cqvt9O6
+         vNsA==
+X-Gm-Message-State: AOAM5327fB2lEQVP6G8TWAnQuqQ1aOT6vf2kElvwXd7K1ISZrxzyjPpU
+        ffgN/yrRYUcc9kKYqwR6EeRtEeQ7owi+Aw==
+X-Google-Smtp-Source: ABdhPJxkr5FzOWuXqZyvrV/oRtoExTN/+z0MjvtxK69CNVHFOVCp7Yq6YsqFm56DuTwSa98dkYhEFw==
+X-Received: by 2002:a17:90b:2385:b0:1cb:7b13:934b with SMTP id mr5-20020a17090b238500b001cb7b13934bmr2214467pjb.121.1649998816241;
+        Thu, 14 Apr 2022 22:00:16 -0700 (PDT)
+Received: from localhost ([199.247.115.17])
+        by smtp.gmail.com with ESMTPSA id 26-20020a630f5a000000b0039d83ab8655sm3336652pgp.0.2022.04.14.22.00.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 22:00:15 -0700 (PDT)
+From:   Matt Turner <mattst88@gmail.com>
+To:     linux-perf-users@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jelle van der Waa <jvanderwaa@redhat.com>,
+        Matt Turner <mattst88@gmail.com>
+Subject: [PATCH] tools: port perf ui from GTK 2 to GTK 3
+Date:   Thu, 14 Apr 2022 22:00:03 -0700
+Message-Id: <20220415050003.3257645-1-mattst88@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414215302.3690-1-mahak_g@cs.iitr.ac.in>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 03:23:02AM +0530, Mahak Gupta wrote:
-> Fix multiple spelling errors in comments reported by checkpatch.
-> 
-> Signed-off-by: Mahak Gupta <mahak_g@cs.iitr.ac.in>
-> ---
->  drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 +-
->  drivers/staging/r8188eu/core/rtw_mlme.c      | 10 +++---
->  drivers/staging/r8188eu/core/rtw_mlme_ext.c  | 36 ++++++++++----------
->  drivers/staging/r8188eu/core/rtw_recv.c      |  8 ++---
->  drivers/staging/r8188eu/core/rtw_xmit.c      |  8 ++---
->  5 files changed, 32 insertions(+), 32 deletions(-)
-> 
-> diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> index 4b78e42d180d..9df6fb122bc5 100644
-> --- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> +++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-> @@ -290,7 +290,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
->  
->  		if ((*pold_state == Ndis802_11Infrastructure) || (*pold_state == Ndis802_11IBSS)) {
->  			if (check_fwstate(pmlmepriv, _FW_LINKED))
-> -				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have chked whether  issue dis-assoc_cmd or not */
-> +				rtw_indicate_disconnect(padapter); /* will clr Linked_state; before this function, we must have checked whether  issue dis-assoc_cmd or not */
->  	       }
->  
->  		*pold_state = networktype;
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-> index aa39f07847c2..93f7d6e3df7f 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-> @@ -193,7 +193,7 @@ void _rtw_free_network_nolock(struct	mlme_priv *pmlmepriv, struct wlan_network *
->  /*
->  	return the wlan_network with the matching addr
->  
-> -	Shall be calle under atomic context... to avoid possible racing condition...
-> +	Shall be called under atomic context... to avoid possible racing condition...
->  */
->  struct wlan_network *_rtw_find_network(struct __queue *scanned_queue, u8 *addr)
->  {
-> @@ -329,7 +329,7 @@ void rtw_free_network_queue(struct adapter *dev, u8 isfreeall)
->  /*
->  	return the wlan_network with the matching addr
->  
-> -	Shall be calle under atomic context... to avoid possible racing condition...
-> +	Shall be called under atomic context... to avoid possible racing condition...
->  */
->  struct	wlan_network *rtw_find_network(struct __queue *scanned_queue, u8 *addr)
->  {
-> @@ -912,7 +912,7 @@ static struct sta_info *rtw_joinbss_update_stainfo(struct adapter *padapter, str
->  		}
->  		/* 	Commented by Albert 2012/07/21 */
->  		/* 	When doing the WPS, the wps_ie_len won't equal to 0 */
-> -		/* 	And the Wi-Fi driver shouldn't allow the data packet to be tramsmitted. */
-> +		/* 	And the Wi-Fi driver shouldn't allow the data packet to be transmitted. */
->  		if (padapter->securitypriv.wps_ie_len != 0) {
->  			psta->ieee8021x_blocked = true;
->  			padapter->securitypriv.wps_ie_len = 0;
-> @@ -1304,7 +1304,7 @@ void rtw_stadel_event_callback(struct adapter *adapter, u8 *pbuf)
->  }
->  
->  /*
-> -* _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
-> +* _rtw_join_timeout_handler - Timeout/failure handler for CMD JoinBss
->  * @adapter: pointer to struct adapter structure
->  */
->  void _rtw_join_timeout_handler (struct adapter *adapter)
-> @@ -1339,7 +1339,7 @@ void _rtw_join_timeout_handler (struct adapter *adapter)
->  }
->  
->  /*
-> -* rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
-> +* rtw_scan_timeout_handler - Timeout/Failure handler for CMD SiteSurvey
->  * @adapter: pointer to struct adapter structure
->  */
->  void rtw_scan_timeout_handler (struct adapter *adapter)
-> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> index 66dd06371991..10cc87a1ee5d 100644
-> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-> @@ -156,7 +156,7 @@ static struct rt_channel_plan_map	RTW_ChannelPlanMap[RT_CHANNEL_DOMAIN_MAX] = {
->  	{0x03},	/* 0x41, RT_CHANNEL_DOMAIN_GLOBAL_DOAMIN_2G */
->  };
->  
-> -static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the conbination for max channel numbers */
-> +static struct rt_channel_plan_map RTW_CHANNEL_PLAN_MAP_REALTEK_DEFINE = {0x03}; /* use the combination for max channel numbers */
->  
->  /*
->   * Search the @param channel_num in given @param channel_set
-> @@ -1733,7 +1733,7 @@ void issue_p2p_GO_request(struct adapter *padapter, u8 *raddr)
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->  
->  	/*	Commented by Albert 20110306 */
-> -	/*	According to the P2P Specification, the group negoitation request frame should contain 9 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation request frame should contain 9 P2P attributes */
->  	/*	1. P2P Capability */
->  	/*	2. Group Owner Intent */
->  	/*	3. Configuration Timeout */
-> @@ -2088,7 +2088,7 @@ static void issue_p2p_GO_response(struct adapter *padapter, u8 *raddr, u8 *frame
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->  
->  	/*	Commented by Albert 20100908 */
-> -	/*	According to the P2P Specification, the group negoitation response frame should contain 9 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation response frame should contain 9 P2P attributes */
->  	/*	1. Status */
->  	/*	2. P2P Capability */
->  	/*	3. Group Owner Intent */
-> @@ -2384,7 +2384,7 @@ static void issue_p2p_GO_confirm(struct adapter *padapter, u8 *raddr, u8 result)
->  	p2pie[p2pielen++] = 0x09;	/*	WFA P2P v1.0 */
->  
->  	/*	Commented by Albert 20110306 */
-> -	/*	According to the P2P Specification, the group negoitation request frame should contain 5 P2P attributes */
-> +	/*	According to the P2P Specification, the group negotiation request frame should contain 5 P2P attributes */
->  	/*	1. Status */
->  	/*	2. P2P Capability */
->  	/*	3. Operating Channel */
-> @@ -4009,7 +4009,7 @@ struct xmit_frame *alloc_mgtxmitframe(struct xmit_priv *pxmitpriv)
->  
->  /****************************************************************************
->  
-> -Following are some TX fuctions for WiFi MLME
-> +Following are some TX functions for WiFi MLME
->  
->  *****************************************************************************/
->  
-> @@ -4611,7 +4611,7 @@ int issue_probereq_ex(struct adapter *padapter, struct ndis_802_11_ssid *pssid,
->  	return ret;
->  }
->  
-> -/*  if psta == NULL, indiate we are station(client) now... */
-> +/*  if psta == NULL, indicate we are station(client) now... */
->  void issue_auth(struct adapter *padapter, struct sta_info *psta, unsigned short status)
->  {
->  	struct xmit_frame *pmgntframe;
-> @@ -5010,7 +5010,7 @@ void issue_assocreq(struct adapter *padapter)
->  				if (!padapter->registrypriv.wifi_spec) {
->  					/* Commented by Kurt 20110629 */
->  					/* In some older APs, WPS handshake */
-> -					/* would be fail if we append vender extensions informations to AP */
-> +					/* would be fail if we append vender extensions information to AP */
->  					if (!memcmp(pIE->data, WPS_OUI, 4))
->  						pIE->Length = 14;
->  				}
-> @@ -5165,7 +5165,7 @@ void issue_assocreq(struct adapter *padapter)
->  		kfree(pmlmepriv->assoc_req);
->  }
->  
-> -/* when wait_ack is ture, this function shoule be called at process context */
-> +/* when wait_ack is true, this function should be called at process context */
->  static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int wait_ack)
->  {
->  	int ret = _FAIL;
-> @@ -5234,7 +5234,7 @@ static int _issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned
->  	return ret;
->  }
->  
-> -/* when wait_ms > 0 , this function shoule be called at process context */
-> +/* when wait_ms > 0 , this function should be called at process context */
->  /* da == NULL for station mode */
->  int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int power_mode, int try_cnt, int wait_ms)
->  {
-> @@ -5243,7 +5243,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->  
-> -	/* da == NULL, assum it's null data for sta to ap*/
-> +	/* da == NULL, assume it's null data for sta to ap*/
->  	if (!da)
->  		da = get_my_bssid(&pmlmeinfo->network);
->  
-> @@ -5267,7 +5267,7 @@ int issue_nulldata(struct adapter *padapter, unsigned char *da, unsigned int pow
->  	return ret;
->  }
->  
-> -/* when wait_ack is ture, this function shoule be called at process context */
-> +/* when wait_ack is true, this function should be called at process context */
->  static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int wait_ack)
->  {
->  	int ret = _FAIL;
-> @@ -5340,7 +5340,7 @@ static int _issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16
->  	return ret;
->  }
->  
-> -/* when wait_ms > 0 , this function shoule be called at process context */
-> +/* when wait_ms > 0 , this function should be called at process context */
->  /* da == NULL for station mode */
->  int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int try_cnt, int wait_ms)
->  {
-> @@ -5349,7 +5349,7 @@ int issue_qos_nulldata(struct adapter *padapter, unsigned char *da, u16 tid, int
->  	struct mlme_ext_priv	*pmlmeext = &padapter->mlmeextpriv;
->  	struct mlme_ext_info	*pmlmeinfo = &pmlmeext->mlmext_info;
->  
-> -	/* da == NULL, assum it's null data for sta to ap*/
-> +	/* da == NULL, assume it's null data for sta to ap*/
->  	if (!da)
->  		da = get_my_bssid(&pmlmeinfo->network);
->  
-> @@ -5783,7 +5783,7 @@ void clear_beacon_valid_bit(struct adapter *adapter)
->  
->  /****************************************************************************
->  
-> -Following are some utitity fuctions for WiFi MLME
-> +Following are some utility functions for WiFi MLME
->  
->  *****************************************************************************/
->  
-> @@ -5895,7 +5895,7 @@ void site_survey(struct adapter *padapter)
->  		} else {
->  			/*  20100721:Interrupt scan operation here. */
->  			/*  For SW antenna diversity before link, it needs to switch to another antenna and scan again. */
-> -			/*  It compares the scan result and select beter one to do connection. */
-> +			/*  It compares the scan result and select better one to do connection. */
->  			if (AntDivBeforeLink8188E(padapter)) {
->  				pmlmeext->sitesurvey_res.bss_cnt = 0;
->  				pmlmeext->sitesurvey_res.channel_idx = -1;
-> @@ -6156,7 +6156,7 @@ void start_create_ibss(struct adapter *padapter)
->  	/* update wireless mode */
->  	update_wireless_mode(padapter);
->  
-> -	/* udpate capability */
-> +	/* update capability */
->  	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
->  	update_capinfo(padapter, caps);
->  	if (caps & cap_IBSS) {/* adhoc master */
-> @@ -6206,7 +6206,7 @@ void start_clnt_join(struct adapter *padapter)
->  	/* update wireless mode */
->  	update_wireless_mode(padapter);
->  
-> -	/* udpate capability */
-> +	/* update capability */
->  	caps = rtw_get_capability((struct wlan_bssid_ex *)pnetwork);
->  	update_capinfo(padapter, caps);
->  	if (caps & cap_ESS) {
-> @@ -6784,7 +6784,7 @@ void mlmeext_joinbss_event_callback(struct adapter *padapter, int join_res)
->  	/* BCN interval */
->  	rtw_write16(padapter, REG_BCN_INTERVAL, pmlmeinfo->bcn_interval);
->  
-> -	/* udpate capability */
-> +	/* update capability */
->  	update_capinfo(padapter, pmlmeinfo->capability);
->  
->  	/* WMM, Update EDCA param */
-> diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> index 91a6e0f035f4..a3f71697f6d7 100644
-> --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> @@ -877,7 +877,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
->  			if (psta->sleepq_len == 0) {
->  				pstapriv->tim_bitmap &= ~BIT(psta->aid);
->  
-> -				/* upate BCN for TIM IE */
-> +				/* update BCN for TIM IE */
->  				/* update_BCNTIM(padapter); */
->  				update_beacon(padapter, _TIM_IE_, NULL, false);
->  			}
-> @@ -891,7 +891,7 @@ static void validate_recv_ctrl_frame(struct adapter *padapter,
->  
->  				pstapriv->tim_bitmap &= ~BIT(psta->aid);
->  
-> -				/* upate BCN for TIM IE */
-> +				/* update BCN for TIM IE */
->  				/* update_BCNTIM(padapter); */
->  				update_beacon(padapter, _TIM_IE_, NULL, false);
->  			}
-> @@ -1810,13 +1810,13 @@ void rtw_signal_stat_timer_hdl(struct timer_list *t)
->  	} else {
->  		if (recvpriv->signal_strength_data.update_req == 0) {/*  update_req is clear, means we got rx */
->  			avg_signal_strength = recvpriv->signal_strength_data.avg_val;
-> -			/*  after avg_vals are accquired, we can re-stat the signal values */
-> +			/*  after avg_vals are acquired, we can re-stat the signal values */
->  			recvpriv->signal_strength_data.update_req = 1;
->  		}
->  
->  		if (recvpriv->signal_qual_data.update_req == 0) {/*  update_req is clear, means we got rx */
->  			avg_signal_qual = recvpriv->signal_qual_data.avg_val;
-> -			/*  after avg_vals are accquired, we can re-stat the signal values */
-> +			/*  after avg_vals are acquired, we can re-stat the signal values */
->  			recvpriv->signal_qual_data.update_req = 1;
->  		}
->  
-> diff --git a/drivers/staging/r8188eu/core/rtw_xmit.c b/drivers/staging/r8188eu/core/rtw_xmit.c
-> index 029b994e1b71..2a686b5c65b1 100644
-> --- a/drivers/staging/r8188eu/core/rtw_xmit.c
-> +++ b/drivers/staging/r8188eu/core/rtw_xmit.c
-> @@ -958,7 +958,7 @@ s32 rtw_xmitframe_coalesce(struct adapter *padapter, struct sk_buff *pkt, struct
->  		}
->  
->  		if (bmcst) {
-> -			/*  don't do fragment to broadcat/multicast packets */
-> +			/*  don't do fragment to broadcast/multicast packets */
->  			mem_sz = _rtw_pktfile_read(&pktfile, pframe, pattrib->pktlen);
->  		} else {
->  			mem_sz = _rtw_pktfile_read(&pktfile, pframe, mpdu_len);
-> @@ -1768,7 +1768,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
->  			pstapriv->tim_bitmap |= BIT(0);/*  */
->  			pstapriv->sta_dz_bitmap |= BIT(0);
->  
-> -			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after upate bcn */
-> +			update_beacon(padapter, _TIM_IE_, NULL, false);/* tx bc/mc packets after update bcn */
->  
->  			ret = true;
->  		}
-> @@ -1818,7 +1818,7 @@ int xmitframe_enqueue_for_sleeping_sta(struct adapter *padapter, struct xmit_fra
->  				pstapriv->tim_bitmap |= BIT(psta->aid);
->  
->  				if (psta->sleepq_len == 1) {
-> -					/* upate BCN for TIM IE */
-> +					/* update BCN for TIM IE */
->  					update_beacon(padapter, _TIM_IE_, NULL, false);
->  				}
->  			}
-> @@ -2087,7 +2087,7 @@ void xmit_delivery_enabled_frames(struct adapter *padapter, struct sta_info *pst
->  		if ((psta->sleepq_ac_len == 0) && (!psta->has_legacy_ac) && (wmmps_ac)) {
->  			pstapriv->tim_bitmap &= ~BIT(psta->aid);
->  
-> -			/* upate BCN for TIM IE */
-> +			/* update BCN for TIM IE */
->  			update_beacon(padapter, _TIM_IE_, NULL, false);
->  		}
->  	}
-> -- 
-> 2.17.1
-> 
-> 
+From: Jelle van der Waa <jvanderwaa@redhat.com>
 
-Hi,
+GTK 2 is a legacy API and the newer version is GTK 3 which changes a few
+API functions. gtk_tree_view_set_rules_hint is no longer required since
+theme's are now responsible to handle this, gtk_vbox_new is deprecated
+and replaced by passing the orientation to gtk_box_new. Apart from these
+changes the accessing of the screen changed in GTK which requires using
+new functions for getting geometry. Lastly the GTK_STOCK_OK define is
+deprecated in GTK 3.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
+Signed-off-by: Matt Turner <mattst88@gmail.com>
+---
+Originally sent in 2019. I've rebased it and given it a test.
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+One problem I've noticed is that C++ symbol names are often broken.
+E.g.:
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/SubmittingPatches for what needs to be done
-  here to properly describe this.
+(perf:3254940): Gtk-WARNING **: 21:47:46.663: Failed to set text from
+markup due to error parsing markup: Error on line 1 char 95:
+“std::char_traits<char” is not a valid name: “<”
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Presumably we need to call g_markup_escape_text() somewhere, but I
+struggled to find the right place.
 
-thanks,
+Without the patch, the GTK-2 version repeatedly segfaults, so this is an
+improvement regardless.
 
-greg k-h's patch email bot
+ tools/build/Makefile.feature                  |  5 +++--
+ tools/build/feature/Makefile                  | 12 +++++-----
+ tools/build/feature/test-all.c                | 10 +++++++++
+ ...est-gtk2-infobar.c => test-gtk3-infobar.c} |  0
+ .../feature/{test-gtk2.c => test-gtk3.c}      |  0
+ tools/perf/Documentation/perf-report.txt      |  2 +-
+ tools/perf/Makefile                           |  2 +-
+ tools/perf/Makefile.config                    | 22 +++++++++----------
+ tools/perf/Makefile.perf                      |  6 ++---
+ tools/perf/builtin-report.c                   |  2 +-
+ tools/perf/builtin-version.c                  |  1 +
+ tools/perf/tests/make                         | 12 +++++-----
+ tools/perf/ui/gtk/annotate.c                  |  2 +-
+ tools/perf/ui/gtk/browser.c                   | 16 ++++++++------
+ tools/perf/ui/gtk/hists.c                     |  6 +----
+ tools/perf/ui/gtk/progress.c                  |  2 +-
+ tools/perf/ui/setup.c                         |  2 +-
+ 17 files changed, 56 insertions(+), 46 deletions(-)
+ rename tools/build/feature/{test-gtk2-infobar.c => test-gtk3-infobar.c} (100%)
+ rename tools/build/feature/{test-gtk2.c => test-gtk3.c} (100%)
+
+diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
+index ae61f464043a..4ce9c514f30b 100644
+--- a/tools/build/Makefile.feature
++++ b/tools/build/Makefile.feature
+@@ -79,8 +79,8 @@ FEATURE_TESTS_EXTRA :=                  \
+          compile-32                     \
+          compile-x32                    \
+          cplus-demangle                 \
+-         gtk2                           \
+-         gtk2-infobar                   \
++         gtk3                           \
++         gtk3-infobar                   \
+          hello                          \
+          libbabeltrace                  \
+          libbfd-liberty                 \
+@@ -113,6 +113,7 @@ FEATURE_DISPLAY ?=              \
+          dwarf                  \
+          dwarf_getlocations     \
+          glibc                  \
++         gtk3                   \
+          libbfd                 \
+          libbfd-buildid		\
+          libcap                 \
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index de66e1cc0734..82e2cc182c57 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -11,8 +11,8 @@ FILES=                                          \
+          test-fortify-source.bin                \
+          test-get_current_dir_name.bin          \
+          test-glibc.bin                         \
+-         test-gtk2.bin                          \
+-         test-gtk2-infobar.bin                  \
++         test-gtk3.bin                          \
++         test-gtk3-infobar.bin                  \
+          test-hello.bin                         \
+          test-libaudit.bin                      \
+          test-libbfd.bin                        \
+@@ -205,11 +205,11 @@ $(OUTPUT)test-libtracefs.bin:
+ $(OUTPUT)test-libcrypto.bin:
+ 	$(BUILD) -lcrypto
+ 
+-$(OUTPUT)test-gtk2.bin:
+-	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null) -Wno-deprecated-declarations
++$(OUTPUT)test-gtk3.bin:
++	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
+ 
+-$(OUTPUT)test-gtk2-infobar.bin:
+-	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null)
++$(OUTPUT)test-gtk3-infobar.bin:
++	$(BUILD) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
+ 
+ grep-libs  = $(filter -l%,$(1))
+ strip-libs = $(filter-out -l%,$(1))
+diff --git a/tools/build/feature/test-all.c b/tools/build/feature/test-all.c
+index 5ffafb967b6e..5ec093498cfc 100644
+--- a/tools/build/feature/test-all.c
++++ b/tools/build/feature/test-all.c
+@@ -70,6 +70,14 @@
+ # include "test-libslang.c"
+ #undef main
+ 
++#define main main_test_gtk3
++# include "test-gtk3.c"
++#undef main
++
++#define main main_test_gtk3_infobar
++# include "test-gtk3-infobar.c"
++#undef main
++
+ #define main main_test_libbfd
+ # include "test-libbfd.c"
+ #undef main
+@@ -187,6 +195,8 @@ int main(int argc, char *argv[])
+ 	main_test_libelf_getshdrstrndx();
+ 	main_test_libunwind();
+ 	main_test_libslang();
++	main_test_gtk3(argc, argv);
++	main_test_gtk3_infobar(argc, argv);
+ 	main_test_libbfd();
+ 	main_test_libbfd_buildid();
+ 	main_test_backtrace();
+diff --git a/tools/build/feature/test-gtk2-infobar.c b/tools/build/feature/test-gtk3-infobar.c
+similarity index 100%
+rename from tools/build/feature/test-gtk2-infobar.c
+rename to tools/build/feature/test-gtk3-infobar.c
+diff --git a/tools/build/feature/test-gtk2.c b/tools/build/feature/test-gtk3.c
+similarity index 100%
+rename from tools/build/feature/test-gtk2.c
+rename to tools/build/feature/test-gtk3.c
+diff --git a/tools/perf/Documentation/perf-report.txt b/tools/perf/Documentation/perf-report.txt
+index 24efc0583c93..e4a7c99c7853 100644
+--- a/tools/perf/Documentation/perf-report.txt
++++ b/tools/perf/Documentation/perf-report.txt
+@@ -314,7 +314,7 @@ OPTIONS
+ 	requires a tty, if one is not present, as when piping to other
+ 	commands, the stdio interface is used.
+ 
+---gtk:: Use the GTK2 interface.
++--gtk:: Use the GTK3 interface.
+ 
+ -k::
+ --vmlinux=<file>::
+diff --git a/tools/perf/Makefile b/tools/perf/Makefile
+index f3fe360a35c6..ea3fb4657a91 100644
+--- a/tools/perf/Makefile
++++ b/tools/perf/Makefile
+@@ -100,7 +100,7 @@ clean:
+ # make -C tools/perf -f tests/make
+ #
+ build-test:
+-	@$(MAKE) SHUF=1 -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory tarpkg make_static make_with_gtk2 out
++	@$(MAKE) SHUF=1 -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory tarpkg make_static make_with_gtk3 out
+ 
+ build-test-tarball:
+ 	@$(MAKE) -f tests/make REUSE_FEATURES_DUMP=1 MK=Makefile SET_PARALLEL=1 --no-print-directory out
+diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+index f3bf9297bcc0..3bb755fb7676 100644
+--- a/tools/perf/Makefile.config
++++ b/tools/perf/Makefile.config
+@@ -755,20 +755,20 @@ ifndef NO_SLANG
+   endif
+ endif
+ 
+-ifdef GTK2
+-  FLAGS_GTK2=$(CFLAGS) $(LDFLAGS) $(EXTLIBS) $(shell $(PKG_CONFIG) --libs --cflags gtk+-2.0 2>/dev/null)
+-  $(call feature_check,gtk2)
+-  ifneq ($(feature-gtk2), 1)
+-    msg := $(warning GTK2 not found, disables GTK2 support. Please install gtk2-devel or libgtk2.0-dev);
+-    NO_GTK2 := 1
++ifdef GTK3
++  FLAGS_GTK3=$(CFLAGS) $(LDFLAGS) $(EXTLIBS) $(shell $(PKG_CONFIG) --libs --cflags gtk+-3.0 2>/dev/null)
++  $(call feature_check,gtk3)
++  ifneq ($(feature-gtk3), 1)
++    msg := $(warning GTK3 not found, disables GTK3 support. Please install gtk3-devel or libgtk3.0-dev);
++    NO_GTK3 := 1
+   else
+-    $(call feature_check,gtk2-infobar)
+-    ifeq ($(feature-gtk2-infobar), 1)
++    $(call feature_check,gtk3-infobar)
++    ifeq ($(feature-gtk3-infobar), 1)
+       GTK_CFLAGS := -DHAVE_GTK_INFO_BAR_SUPPORT
+     endif
+-    CFLAGS += -DHAVE_GTK2_SUPPORT
+-    GTK_CFLAGS += $(shell $(PKG_CONFIG) --cflags gtk+-2.0 2>/dev/null)
+-    GTK_LIBS := $(shell $(PKG_CONFIG) --libs gtk+-2.0 2>/dev/null)
++    CFLAGS += -DHAVE_GTK3_SUPPORT
++    GTK_CFLAGS += $(shell $(PKG_CONFIG) --cflags gtk+-3.0 2>/dev/null)
++    GTK_LIBS := $(shell $(PKG_CONFIG) --libs gtk+-3.0 2>/dev/null)
+     EXTLIBS += -ldl
+   endif
+ endif
+diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+index 69473a836bae..0211a20242fe 100644
+--- a/tools/perf/Makefile.perf
++++ b/tools/perf/Makefile.perf
+@@ -48,7 +48,7 @@ include ../scripts/utilities.mak
+ #
+ # Define NO_SLANG if you do not want TUI support.
+ #
+-# Define GTK2 if you want GTK+ GUI support.
++# Define GTK3 if you want GTK+ GUI support.
+ #
+ # Define NO_DEMANGLE if you do not want C++ symbol demangling.
+ #
+@@ -404,7 +404,7 @@ ifneq ($(OUTPUT),)
+   CFLAGS += -I$(OUTPUT)
+ endif
+ 
+-ifdef GTK2
++ifdef GTK3
+   ALL_PROGRAMS += $(OUTPUT)libperf-gtk.so
+   GTK_IN := $(OUTPUT)gtk-in.o
+ endif
+@@ -930,7 +930,7 @@ check: $(OUTPUT)common-cmds.h
+ 
+ ### Installation rules
+ 
+-ifdef GTK2
++ifdef GTK3
+ install-gtk: $(OUTPUT)libperf-gtk.so
+ 	$(call QUIET_INSTALL, 'GTK UI') \
+ 		$(INSTALL) -d -m 755 '$(DESTDIR_SQ)$(libdir_SQ)'; \
+diff --git a/tools/perf/builtin-report.c b/tools/perf/builtin-report.c
+index 1ad75c7ba074..c3ad5e8e3098 100644
+--- a/tools/perf/builtin-report.c
++++ b/tools/perf/builtin-report.c
+@@ -1213,7 +1213,7 @@ int cmd_report(int argc, const char **argv)
+ #ifdef HAVE_SLANG_SUPPORT
+ 	OPT_BOOLEAN(0, "tui", &report.use_tui, "Use the TUI interface"),
+ #endif
+-	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK2 interface"),
++	OPT_BOOLEAN(0, "gtk", &report.use_gtk, "Use the GTK3 interface"),
+ 	OPT_BOOLEAN(0, "stdio", &report.use_stdio,
+ 		    "Use the stdio interface"),
+ 	OPT_BOOLEAN(0, "header", &report.header, "Show data header."),
+diff --git a/tools/perf/builtin-version.c b/tools/perf/builtin-version.c
+index 9cd074a3d825..63c7e66bbc83 100644
+--- a/tools/perf/builtin-version.c
++++ b/tools/perf/builtin-version.c
+@@ -60,6 +60,7 @@ static void library_status(void)
+ 	STATUS(HAVE_DWARF_SUPPORT, dwarf);
+ 	STATUS(HAVE_DWARF_GETLOCATIONS_SUPPORT, dwarf_getlocations);
+ 	STATUS(HAVE_GLIBC_SUPPORT, glibc);
++	STATUS(HAVE_GTK3_SUPPORT, gtk3);
+ #ifndef HAVE_SYSCALL_TABLE_SUPPORT
+ 	STATUS(HAVE_LIBAUDIT_SUPPORT, libaudit);
+ #endif
+diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+index da013e90a945..cb959dccbe9d 100644
+--- a/tools/perf/tests/make
++++ b/tools/perf/tests/make
+@@ -72,8 +72,8 @@ make_no_libpython   := NO_LIBPYTHON=1
+ make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
+ make_no_newt        := NO_NEWT=1
+ make_no_slang       := NO_SLANG=1
+-make_no_gtk2        := NO_GTK2=1
+-make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK2=1
++make_no_gtk3        := NO_GTK3=1
++make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK3=1
+ make_no_demangle    := NO_DEMANGLE=1
+ make_no_libelf      := NO_LIBELF=1
+ make_no_libunwind   := NO_LIBUNWIND=1
+@@ -93,7 +93,7 @@ make_no_sdt	    := NO_SDT=1
+ make_no_syscall_tbl := NO_SYSCALL_TABLE=1
+ make_with_clangllvm := LIBCLANGLLVM=1
+ make_with_libpfm4   := LIBPFM4=1
+-make_with_gtk2      := GTK2=1
++make_with_gtk3      := GTK3=1
+ make_tags           := tags
+ make_cscope         := cscope
+ make_help           := help
+@@ -113,7 +113,7 @@ make_install_prefix_slash := install prefix=/tmp/krava/
+ make_static         := LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1
+ 
+ # all the NO_* variable combined
+-make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK2=1
++make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK3=1
+ make_minimal        += NO_DEMANGLE=1 NO_LIBELF=1 NO_LIBUNWIND=1 NO_BACKTRACE=1
+ make_minimal        += NO_LIBNUMA=1 NO_LIBAUDIT=1 NO_LIBBIONIC=1
+ make_minimal        += NO_LIBDW_DWARF_UNWIND=1 NO_AUXTRACE=1 NO_LIBBPF=1
+@@ -138,7 +138,7 @@ run += make_no_libpython
+ run += make_no_scripts
+ run += make_no_newt
+ run += make_no_slang
+-run += make_no_gtk2
++run += make_no_gtk3
+ run += make_no_ui
+ run += make_no_demangle
+ run += make_no_libelf
+@@ -312,7 +312,7 @@ $(run):
+ 	$(call test,$@) && \
+ 	rm -rf $@ $$TMP_DEST || (cat $@ ; false)
+ 
+-make_with_gtk2:
++make_with_gtk3:
+ 	$(call clean)
+ 	@TMP_DEST=$$(mktemp -d); \
+ 	cmd="cd $(PERF) && $(MAKE_F) $($@) $(PARALLEL_OPT) $(O_OPT) DESTDIR=$$TMP_DEST"; \
+diff --git a/tools/perf/ui/gtk/annotate.c b/tools/perf/ui/gtk/annotate.c
+index 0a50e962f9a3..efd380f124aa 100644
+--- a/tools/perf/ui/gtk/annotate.c
++++ b/tools/perf/ui/gtk/annotate.c
+@@ -208,7 +208,7 @@ static int symbol__gtk_annotate(struct map_symbol *ms, struct evsel *evsel,
+ 		if (!pgctx)
+ 			return -1;
+ 
+-		vbox = gtk_vbox_new(FALSE, 0);
++		vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+ 		notebook = gtk_notebook_new();
+ 		pgctx->notebook = notebook;
+ 
+diff --git a/tools/perf/ui/gtk/browser.c b/tools/perf/ui/gtk/browser.c
+index 8f3e43d148a8..6fd85b5325ba 100644
+--- a/tools/perf/ui/gtk/browser.c
++++ b/tools/perf/ui/gtk/browser.c
+@@ -13,19 +13,21 @@ void perf_gtk__signal(int sig)
+ 	psignal(sig, "perf");
+ }
+ 
+-void perf_gtk__resize_window(GtkWidget *window)
++void perf_gtk__resize_window(GtkWidget *widget)
+ {
+ 	GdkRectangle rect;
+-	GdkScreen *screen;
+-	int monitor;
++	GdkMonitor *monitor;
++	GdkDisplay *display;
++	GdkWindow *window;
+ 	int height;
+ 	int width;
+ 
+-	screen = gtk_widget_get_screen(window);
++	display = gdk_display_get_default();
++	window = gtk_widget_get_window(widget);
+ 
+-	monitor = gdk_screen_get_monitor_at_window(screen, window->window);
++	monitor = gdk_display_get_monitor_at_window(display, window);
+ 
+-	gdk_screen_get_monitor_geometry(screen, monitor, &rect);
++	gdk_monitor_get_geometry(monitor, &rect);
+ 
+ 	width	= rect.width * 3 / 4;
+ 	height	= rect.height * 3 / 4;
+@@ -58,7 +60,7 @@ GtkWidget *perf_gtk__setup_info_bar(void)
+ 	content_area = gtk_info_bar_get_content_area(GTK_INFO_BAR(info_bar));
+ 	gtk_container_add(GTK_CONTAINER(content_area), label);
+ 
+-	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), GTK_STOCK_OK,
++	gtk_info_bar_add_button(GTK_INFO_BAR(info_bar), "_OK",
+ 				GTK_RESPONSE_OK);
+ 	g_signal_connect(info_bar, "response",
+ 			 G_CALLBACK(gtk_widget_hide), NULL);
+diff --git a/tools/perf/ui/gtk/hists.c b/tools/perf/ui/gtk/hists.c
+index c83be2d57f7e..5aa2655c7a0a 100644
+--- a/tools/perf/ui/gtk/hists.c
++++ b/tools/perf/ui/gtk/hists.c
+@@ -395,8 +395,6 @@ static void perf_gtk__show_hists(GtkWidget *window, struct hists *hists,
+ 		}
+ 	}
+ 
+-	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(view), TRUE);
+-
+ 	g_signal_connect(view, "row-activated",
+ 			 G_CALLBACK(on_row_activated), NULL);
+ 	gtk_container_add(GTK_CONTAINER(window), view);
+@@ -583,8 +581,6 @@ static void perf_gtk__show_hierarchy(GtkWidget *window, struct hists *hists,
+ 	perf_gtk__add_hierarchy_entries(hists, &hists->entries, store,
+ 					NULL, &hpp, min_pcnt);
+ 
+-	gtk_tree_view_set_rules_hint(GTK_TREE_VIEW(view), TRUE);
+-
+ 	g_signal_connect(view, "row-activated",
+ 			 G_CALLBACK(on_row_activated), NULL);
+ 	gtk_container_add(GTK_CONTAINER(window), view);
+@@ -616,7 +612,7 @@ int evlist__gtk_browse_hists(struct evlist *evlist, const char *help,
+ 	if (!pgctx)
+ 		return -1;
+ 
+-	vbox = gtk_vbox_new(FALSE, 0);
++	vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
+ 
+ 	notebook = gtk_notebook_new();
+ 
+diff --git a/tools/perf/ui/gtk/progress.c b/tools/perf/ui/gtk/progress.c
+index eea6fcde518a..aaa7e7f6e4aa 100644
+--- a/tools/perf/ui/gtk/progress.c
++++ b/tools/perf/ui/gtk/progress.c
+@@ -13,7 +13,7 @@ static void gtk_ui_progress__update(struct ui_progress *p)
+ 	char buf[1024];
+ 
+ 	if (dialog == NULL) {
+-		GtkWidget *vbox = gtk_vbox_new(TRUE, 5);
++		GtkWidget *vbox = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
+ 		GtkWidget *label = gtk_label_new(p->title);
+ 
+ 		dialog = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+diff --git a/tools/perf/ui/setup.c b/tools/perf/ui/setup.c
+index 700335cde618..1d35e3ad4576 100644
+--- a/tools/perf/ui/setup.c
++++ b/tools/perf/ui/setup.c
+@@ -14,7 +14,7 @@ int use_browser = -1;
+ 
+ #define PERF_GTK_DSO "libperf-gtk.so"
+ 
+-#ifdef HAVE_GTK2_SUPPORT
++#ifdef HAVE_GTK3_SUPPORT
+ 
+ static int setup_gtk_browser(void)
+ {
+-- 
+2.35.1
+

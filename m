@@ -2,55 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C24502DDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F01502E0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355899AbiDOQoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S1355999AbiDOQ5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237892AbiDOQoN (ORCPT
+        with ESMTP id S1355982AbiDOQ5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:44:13 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E525DAFE0;
-        Fri, 15 Apr 2022 09:41:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6944B807E7;
-        Fri, 15 Apr 2022 16:41:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 841CDC385A5;
-        Fri, 15 Apr 2022 16:41:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650040901;
-        bh=XITfwtrWiieCoPbYwSITipPQbv166TbyJPrWPrM5rDc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=h+76pOD44SMOeceROMgajM3K40gLojwH6erAiXPhSENdIKQfCtBnuCTOPALpxzClz
-         qPTt2IUKFncH4RM2J4WJ1N0RLicBRABf6HqDTYJLTT4XZmoo1+qdiMISRXhmKykT0L
-         DbpcFDllr3mtKb4ONsdU5uhh/xcMXL1Ziwhpf0juknwX4VRpxpGJCcTm6XznENMME/
-         IUeMQ6OweLJnx//Tr3ShseTdcSCfvC/xNbH5ubuWfSRPRKlGY/9QdTue4dDlB2U+9h
-         G6wR/HmVFTlINYZIJ9rYKqHiWLnSGCD0I+v8qxIho66+aCTHEkKHVeiIvtukVlfVKu
-         K422AcxsZaPyw==
-Date:   Fri, 15 Apr 2022 17:49:38 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andrea Merello <andrea.merello@gmail.com>
-Cc:     mchehab+huawei@kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
-        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
-        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
-Subject: Re: [v4 13/14] iio: imu: add BNO055 I2C driver
-Message-ID: <20220415174938.51c81082@jic23-huawei>
-In-Reply-To: <20220415130005.85879-14-andrea.merello@gmail.com>
-References: <20220415130005.85879-1-andrea.merello@gmail.com>
-        <20220415130005.85879-14-andrea.merello@gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 15 Apr 2022 12:57:05 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23FD59FC6;
+        Fri, 15 Apr 2022 09:54:36 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 123-20020a1c1981000000b0038b3616a71aso5343041wmz.4;
+        Fri, 15 Apr 2022 09:54:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m2WR8HeVZxDMPBsJ2wi+S56OzUuDecjD2lzSbt+tO8w=;
+        b=VpDcNv+xkhUuiD56GQAFJE4kWQUHnRxn/E0B5nRoT6txv3OM8MbEsJzh/Peu7zhHA0
+         QfUmruhvzc0cgHLn9fClRghbsmuxW8Fqvr2vJYBOEZn3AfUd64WSe2pjDXocyVyXDsI+
+         jYNGSeFzUOpGbTAfmZ9CRc4EVmDM0AfKViOwctjYIVl1o3fqfhHKeZrcM18RiONa1MWg
+         Wg4H6ILuWaQA2o8VIm6hgmybNJmeJdP0tPXHAn7OvrB2wjp2Lc8sXq806kuDxwGXz+aa
+         5kWKhJIO3IzAT96eDAJYsMTJtgn8B0k6rmBB3eo4fXYxWfFE32irfxMqmFxFMIgEAN1H
+         8U3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=m2WR8HeVZxDMPBsJ2wi+S56OzUuDecjD2lzSbt+tO8w=;
+        b=rgUEZ+R35Nwl7j0R2NUHCQF7nsyXU73MWZOj0p5jrFMf+m9H6d3132i/oyxQR7BKsM
+         itCxqWRyDJKQD4pl1MTOwXmd9KTtASsNtxH4MYj2enB9/w+KbYYjSG8so3IFmgleokXX
+         YXwkxg7HgXsoCGVfLdfizrDH7kEaS7lWuJYiqKWHH4GXR1FTcE5YFaWA6iMzC/yfG+rX
+         IEpIMQN06P0+S2bWX9vjwlvWUTlrCIQCyMR0acnWN7ar/sVSW0XKZmHwGMHpydtd9rTl
+         goysFatgtH7q/4ZHBfW0fx6ntI4cN3KErIlAhmdOR7vc70TGjXQVrIo3APON6jrNduPl
+         QqjQ==
+X-Gm-Message-State: AOAM530RYDUY3Y8XpaYfRrIpjH/ikoChogQQVH95Uw7N0tX70EFRGJOn
+        kPgmOy9s9yD6b/AAdgdFXqA=
+X-Google-Smtp-Source: ABdhPJwOhR+ihYnd0JcIhDD0h1nkAp7TumgzKKg+StEsNj+Xbp7B+PvUsidGOx/u4dEqslH2IO/+5A==
+X-Received: by 2002:a05:600c:511b:b0:392:36fd:6728 with SMTP id o27-20020a05600c511b00b0039236fd6728mr1323882wms.93.1650041674598;
+        Fri, 15 Apr 2022 09:54:34 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id f7-20020a1c3807000000b0038ffac6f752sm4681294wma.45.2022.04.15.09.54.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 09:54:34 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <26d74179-55fb-b70b-8a29-67e26a032abe@redhat.com>
+Date:   Fri, 15 Apr 2022 18:54:27 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 017/104] KVM: TDX: Add helper functions to print
+ TDX SEAMCALL error
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <7d89296e776b125b75762c040879c16afa7b6da6.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <7d89296e776b125b75762c040879c16afa7b6da6.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,92 +81,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 15:00:04 +0200
-Andrea Merello <andrea.merello@gmail.com> wrote:
-
-> From: Andrea Merello <andrea.merello@iit.it>
+On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> This path adds an I2C driver for communicating to a BNO055 IMU via I2C
-> bus and it enables the BNO055 core driver to work in this scenario.
+> Add helper functions to print out errors from the TDX module in a uniform
+> manner.
 > 
-> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
-One trivial comment inline.
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/Makefile        |  2 +-
+>   arch/x86/kvm/vmx/seamcall.h  |  2 ++
+>   arch/x86/kvm/vmx/tdx_error.c | 22 ++++++++++++++++++++++
+>   3 files changed, 25 insertions(+), 1 deletion(-)
+>   create mode 100644 arch/x86/kvm/vmx/tdx_error.c
 
-...
-> diff --git a/drivers/iio/imu/bno055/Makefile b/drivers/iio/imu/bno055/Makefile
-> index 20128b1a1afc..20f911aad94b 100644
-> --- a/drivers/iio/imu/bno055/Makefile
-> +++ b/drivers/iio/imu/bno055/Makefile
-> @@ -2,5 +2,6 @@
->  
->  obj-$(CONFIG_BOSCH_BNO055_IIO) += bno055.o
->  obj-$(CONFIG_BOSCH_BNO055_SERIAL) += bno055_ser.o
-> +obj-$(CONFIG_BOSCH_BNO055_I2C) += bno055_i2c.o
->  
->  CFLAGS_bno055_ser.o := -I$(src)
-> diff --git a/drivers/iio/imu/bno055/bno055_i2c.c b/drivers/iio/imu/bno055/bno055_i2c.c
+When rebasing against tip/x86/tdx,  the new .c file needs to include 
+asm/tdx.h.
+
+Paolo
+
+> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
+> index e8f83a7d0dc3..3d6550c73fb5 100644
+> --- a/arch/x86/kvm/Makefile
+> +++ b/arch/x86/kvm/Makefile
+> @@ -24,7 +24,7 @@ kvm-$(CONFIG_KVM_XEN)	+= xen.o
+>   kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
+>   			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
+>   kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
+> -kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o vmx/seamcall.o
+> +kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o vmx/seamcall.o vmx/tdx_error.o
+>   
+>   kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
+>   
+> diff --git a/arch/x86/kvm/vmx/seamcall.h b/arch/x86/kvm/vmx/seamcall.h
+> index 604792e9a59f..5ac419cd8e27 100644
+> --- a/arch/x86/kvm/vmx/seamcall.h
+> +++ b/arch/x86/kvm/vmx/seamcall.h
+> @@ -16,6 +16,8 @@ struct tdx_module_output;
+>   u64 kvm_seamcall(u64 op, u64 rcx, u64 rdx, u64 r8, u64 r9, u64 r10,
+>   		struct tdx_module_output *out);
+>   
+> +void pr_tdx_error(u64 op, u64 error_code, const struct tdx_module_output *out);
+> +
+>   #endif /* !__ASSEMBLY__ */
+>   
+>   #endif	/* CONFIG_INTEL_TDX_HOST */
+> diff --git a/arch/x86/kvm/vmx/tdx_error.c b/arch/x86/kvm/vmx/tdx_error.c
 > new file mode 100644
-> index 000000000000..d59bb4e661be
+> index 000000000000..61ed855d1188
 > --- /dev/null
-> +++ b/drivers/iio/imu/bno055/bno055_i2c.c
-> @@ -0,0 +1,56 @@
+> +++ b/arch/x86/kvm/vmx/tdx_error.c
+> @@ -0,0 +1,22 @@
 > +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Support for I2C-interfaced Bosch BNO055 IMU.
-> + *
-> + * Copyright (C) 2021-2022 Istituto Italiano di Tecnologia
-> + * Electronic Design Laboratory
-> + * Written by Andrea Merello <andrea.merello@iit.it>
-> + */
+> +/* functions to record TDX SEAMCALL error */
 > +
-> +#include <linux/i2c.h>
-> +#include <linux/module.h>
-Please add an include of
-mod_devicetable.h for the struct of_device_id etc definitions
-
-> +#include <linux/regmap.h>
+> +#include <linux/kernel.h>
+> +#include <linux/bug.h>
 > +
-> +#include "bno055.h"
+> +#include "tdx_ops.h"
 > +
-> +#define BNO055_I2C_XFER_BURST_BREAK_THRESHOLD 3 /* FIXME */
-> +
-> +static int bno055_i2c_probe(struct i2c_client *client)
+> +void pr_tdx_error(u64 op, u64 error_code, const struct tdx_module_output *out)
 > +{
-> +	struct regmap *regmap;
+> +	if (!out) {
+> +		pr_err_ratelimited("SEAMCALL[%lld] failed: 0x%llx\n",
+> +				op, error_code);
+> +		return;
+> +	}
 > +
-> +	regmap = devm_regmap_init_i2c(client, &bno055_regmap_config);
-> +	if (IS_ERR(regmap))
-> +		return dev_err_probe(&client->dev, PTR_ERR(regmap),
-> +				     "Unable to init register map");
-> +
-> +	return bno055_probe(&client->dev, regmap,
-> +			    BNO055_I2C_XFER_BURST_BREAK_THRESHOLD, true);
+> +	pr_err_ratelimited(
+> +		"SEAMCALL[%lld] failed: 0x%llx "
+> +		"RCX 0x%llx, RDX 0x%llx, R8 0x%llx, R9 0x%llx, R10 0x%llx, R11 0x%llx\n",
+> +		op, error_code,
+> +		out->rcx, out->rdx, out->r8, out->r9, out->r10, out->r11);
 > +}
-> +
-> +static const struct i2c_device_id bno055_i2c_id[] = {
-> +	{"bno055", 0},
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, bno055_i2c_id);
-> +
-> +static const struct of_device_id __maybe_unused bno055_i2c_of_match[] = {
-> +	{ .compatible = "bosch,bno055" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, bno055_i2c_of_match);
-> +
-> +static struct i2c_driver bno055_driver = {
-> +	.driver = {
-> +		.name = "bno055-i2c",
-> +		.of_match_table = of_match_ptr(bno055_i2c_of_match),
-> +	},
-> +	.probe_new = bno055_i2c_probe,
-> +	.id_table = bno055_i2c_id,
-> +};
-> +module_i2c_driver(bno055_driver);
-> +
-> +MODULE_AUTHOR("Andrea Merello");
-> +MODULE_DESCRIPTION("Bosch BNO055 I2C interface");
-> +MODULE_IMPORT_NS(IIO_BNO055);
-> +MODULE_LICENSE("GPL");
 

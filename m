@@ -2,135 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5EDF50209D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8503E5020A0
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:43:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348747AbiDOCpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42184 "EHLO
+        id S1348751AbiDOCqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:46:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234772AbiDOCpT (ORCPT
+        with ESMTP id S234772AbiDOCqQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:45:19 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD57A0BFF
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649990572; x=1681526572;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2+Y236hBP7nkfnh2vn34A03RyhdinQO05q3FqW+lPwk=;
-  b=PujQ85iFEy6qXd9lX7cHy+KP+N51c9a73e79yGKH8IfBwhG9vnhwGCvz
-   WZN0kVCAybVYWRLRtoWwaVGJHbXrGS85z1agb26x/9ExQvOpEe2Z57J1m
-   FWlaplSkAV/PN5fVWfiYfgwp7jcd3t+ig8yKdSM4sTFgGRlDWAPilYz4m
-   Jw+3cNZA2ZZmkXr4/QFcNGuP8CKS1eopyYhlz7A37x7Da+HejFa6yq0Zn
-   VCRsAYEcgRREx5egwlTPeefVpDRFvCUYSktIBzQFq+Moned+Gv18kouUY
-   u5H7xsntsJfXQx+270oMVBXetQ9ioG6wz/97q4Dsr/SUX8WIpplYpTUz9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="323523106"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="323523106"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 19:42:38 -0700
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="527646181"
-Received: from ruiqifu-mobl.ccr.corp.intel.com ([10.254.213.123])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 19:42:34 -0700
-Message-ID: <bf23f05830db51bab3b06bac6e54d4743d37e955.camel@intel.com>
-Subject: Re: [PATCH 1/3] memory tiering: hot page selection with hint page
- fault latency
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     Jagdish Gediya <jvgediya@linux.ibm.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Michal Hocko <mhocko@suse.com>,
-        Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        Wei Xu <weixugc@google.com>, osalvador <osalvador@suse.de>,
-        Shakeel Butt <shakeelb@google.com>,
-        Zhong Jiang <zhongjiang-ali@linux.alibaba.com>
-Date:   Fri, 15 Apr 2022 10:42:31 +0800
-In-Reply-To: <YlggP5Tub19gjF4g@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-References: <20220408071222.219689-1-ying.huang@intel.com>
-         <20220408071222.219689-2-ying.huang@intel.com>
-         <YlggP5Tub19gjF4g@li-6e1fa1cc-351b-11b2-a85c-b897023bb5f3.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 14 Apr 2022 22:46:16 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70075.outbound.protection.outlook.com [40.107.7.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34B9A0BFF
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:43:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J+FF9fDl5smCUaxLHdzzerEyq0GLxSZ3kYoOHK4EUi2DpqSjfbYNsjxceHy9t0Ip5ZElRqGyVn048mgs0RrL2SzEjGkXyHDnN2AciF1RZn1+3fzH4t8KDZUYmjsasTLCzvs+m6T5JTXeyUrW4tFJSco18xSfiqGucFkkpE2VJ23ZpKGYr7Oqo0KqybOjDIOj/yF4tLmq4V8t7bdi48wpZMbzxt3OIIyBK3fIVp/XiUvN8iSFMfRCkwuBWDXf9b87Y74EyAd/GBuPK6sZ76PAjDitwEWO3yAV7rCvvs0ZOpHscjdIpSmOKNWjcCWFi1mswP+R5v5z3+bTTBG9moKaZw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hAYBAL7+SzQueKdJpb+rBSVhKrelAtUcMRB/xGxq8bM=;
+ b=jINVJsyVraUpscW3NXMnSj4Be68+9rdmNwz7sZUdt06ET6k/OGeTlcyWUsUyh9hGatA5OWHJEJ03W93f0Vf+1EQpLfIesf4MzHAUe6y6B4LcbYT/U2CICaVlMWHp3GoF4t7aO7wfNLY9KWG+05tBHbyTdKIWNWRrslVb2vr4UWjImpUw4m5UXbmdnnuRz5ToFZSXBTl8V5KA+eYvoDBfTV27wHrt1O95UNEgcCHxJuU2mOONS/U1dYIS8v8tkpv6N8lsxDP1zy/57Skzx40Luw2DhBLw0xxlJSfU4EE9rscLpu0n+C2eTo7aBxI4S+JUYwcVv2EkcZfKTD+Bf0Te2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hAYBAL7+SzQueKdJpb+rBSVhKrelAtUcMRB/xGxq8bM=;
+ b=IeTeU0xTSyu0vTEbxvpUhiaIemZFFzfrsYxk4SL0YAxuLFNCSHFFwxwTkooH0jsl1ivkKCwqA3KsPfnjnCG0isKYYxzIncgidIy228Euugq/QR2bUIAsBLiZUNpm8PQECmSPygVRAg1s/o/3tS9st/PdeDxRCk1ewCyiyx2Lssg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DB7PR04MB5450.eurprd04.prod.outlook.com (2603:10a6:10:86::11)
+ by DU2PR04MB9132.eurprd04.prod.outlook.com (2603:10a6:10:2f7::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 02:43:46 +0000
+Received: from DB7PR04MB5450.eurprd04.prod.outlook.com
+ ([fe80::7997:2892:d230:2430]) by DB7PR04MB5450.eurprd04.prod.outlook.com
+ ([fe80::7997:2892:d230:2430%7]) with mapi id 15.20.5144.030; Fri, 15 Apr 2022
+ 02:43:46 +0000
+From:   Sandor.yu@nxp.com
+To:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, hverkuil-cisco@xs4all.nl
+Cc:     Sandor.yu@nxp.com, shengjiu.wang@nxp.com, cai.huoqing@linux.dev,
+        maxime@cerno.tech, harry.wentland@amd.com
+Subject: [PATCH v3 0/4] DRM: Bridge: DW_HDMI: Add new features and bug fix
+Date:   Fri, 15 Apr 2022 10:42:46 +0800
+Message-Id: <cover.1649989179.git.Sandor.yu@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0013.APCP153.PROD.OUTLOOK.COM (2603:1096::23) To
+ DB7PR04MB5450.eurprd04.prod.outlook.com (2603:10a6:10:86::11)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 5bfffed5-94be-41da-7fdd-08da1e89c33b
+X-MS-TrafficTypeDiagnostic: DU2PR04MB9132:EE_
+X-Microsoft-Antispam-PRVS: <DU2PR04MB913211B69FF2BC55CF26FB99F4EE9@DU2PR04MB9132.eurprd04.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5aQw3iBdXRHdHtwpDV56zX+D/ou1Lmq0RMJZTiC810TMrMDta2LTklQ1UTzTPdtwBiw8oICha9jLMw/VG7rvv/86IzvQe+URamk36qjGoRIf1DnDVpqkqqmq5S4k8gr+QO8F12eJ5GsabOk9wbrCDRLxJynC00uufN4eFAFGN0nfYRuMyFC33B//Nfjq670eVeGpFNEfuJ4jnQ6hqOqTwk9fh7V6t1r6HIwJyjHfbcR+bb23pgqapHYYLGs27TqUb8pxhKCQenjMlQWG0jVZQXMxQjxKsSMgp3CowoegCaRBLqd0ImrrlRlWTY6M6BrBlHypHtKVfuxphzqI6UymZu+XepZqiW0BoXNcLmSoVJkGwMA4HI2tYZ1x0jabyH5+MC/fswXlGO4OSTyEb6EePZ/E2WDpuSUgJ1wy/ywqz/M9RfiD1EuE+TzbTZYV/hC84QmkOfg0zGxBlF0s6PsOMBXhS/i+83PJ9SfQYbYsplbpWaEOX/mimaEig7i2iNRXx9zF4UJvvY5shPJziKqnbgzE+EYsa40xXjoND6g9FkDAN0ZQk5oi3O6Zh6HgJqSRqOVJt/47uYmiXCzwpU7tjE5B7NHMIybUAyurs0tQ5a1vK8xTgM9VgU+VaGRKmKCEJ3Z02FqJLQwP803swnN96jP/iqpOfCN8nh1yUTc8g+HxuebA0uhWQhpy7aqtpNKFfKGcVuzDf/k2TqJJ+4ikWQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR04MB5450.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(83380400001)(2906002)(6512007)(26005)(2616005)(9686003)(186003)(6506007)(38100700002)(38350700002)(86362001)(66476007)(66556008)(66946007)(4326008)(7416002)(508600001)(8676002)(316002)(5660300002)(6486002)(36756003)(8936002)(52116002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JSZi9RyNK6Z0t/IQBU7DFmyGZRacb7gQRsE1DrqTRab5KxAwrlbMH0X2XHJx?=
+ =?us-ascii?Q?BrjpAsiCMqM4Q/BuG+nYjOpgs9hO4UVLOZqF3rrisPaKV5efrU6jPm5rx/Yz?=
+ =?us-ascii?Q?RPXWbJ15vD+iRzHFm0mV4CFO3KzAcMT6xA1Oc8mDI4sG49i8TWJpOt60X0Nm?=
+ =?us-ascii?Q?mS/u8k2pNWjiiScu52p93qV7D1giGSE783RjhLcIUS/XDKX/CnArZjmO1Gwd?=
+ =?us-ascii?Q?HPXqm1cpVzBeg5smZykKN+zq0lNLWWNRmDHTQoVblgOPdM3Qm11xvlu/btTM?=
+ =?us-ascii?Q?lz7wS15g2fUaKSqveHo88e+rOILD1Bab52la63XC5RrycmMrzQCrz164Tyn/?=
+ =?us-ascii?Q?vOItwUhxAyNS1hO1txiFztsVMb9Sb8cZpyiRzyJM+M4tOLyN3pTE23uKTrUR?=
+ =?us-ascii?Q?6mfxygRtw/76eHLUkbjXFHOnt2wDYKSkXxSBdObmcf/81YIVTaD6vEhxc3An?=
+ =?us-ascii?Q?/EAsmInIs+DDygGPT82ReRG9eiwO3DGIcjqQXs807a5eQJPjTygqfbFtGOS/?=
+ =?us-ascii?Q?07Ii7mqutOGYFBIAALXz19JsB9CZa14+c2/Sofh9oHLsyyQwBhnbqiaT18AB?=
+ =?us-ascii?Q?3Mm3/aNdbfY9/YTFaEtPNEBmZIxy2RmUp0F63+moY8UcxXySHkfc0YfSr9Te?=
+ =?us-ascii?Q?otDopTFr7T4bcbB1qrwNT4LCDZCl1KjAOxZfLFmG/4SXcT6tgxz80jeSgrsA?=
+ =?us-ascii?Q?zvl0YNHhy4s1SkIA7XSluCXnQZDQoELaFuL3ink7YEgtSO6DGCgIFYnndU5C?=
+ =?us-ascii?Q?TJNyhwqGPEayRhiECBCfVUYztOYgZdVi7YpVxs5sDtiR7YY3eg7sp+LPRW9P?=
+ =?us-ascii?Q?NxdNc9HbP72nHEIU2ktpmEhd6uXiu0D68UFrAmVaBmZrppG/+bxKUCWoe0+g?=
+ =?us-ascii?Q?j+P3nyv2896rrZxiTIcSEqKf4wiyTYD+tW10zfRrGhViamE9zRVM6Lqt1uGw?=
+ =?us-ascii?Q?tFm2TEKwXqgxmQ4OOKdSQRvMqZFqci6D21Y9IfaR1f6/4VAHyv4CrYdC9uqU?=
+ =?us-ascii?Q?4T3KDjmk5nax6GdgWMny8h6W6mmaxVzHxi+EhKyprUkkR7nvvGW25ER9t6xf?=
+ =?us-ascii?Q?LUCu9jxjId1ozxJf9LZmiYlatm8HWXMQ46dMckQ18jpBvKz7V3NV+alRo316?=
+ =?us-ascii?Q?BhmlNlZyt9HDSckEEHQCKcmv33svjLzYxoCsEyPVDrY6Ar04cegxinen3FmP?=
+ =?us-ascii?Q?u/VOtsAdE6GjMX0xnoAX5F27jZZKcrlY3nkTipUr+t3knHBMOSIIWvpu21MT?=
+ =?us-ascii?Q?2Xn3V2AmVXQE42vx3Gx/s07mBqvVDYf1qzS5EBfXUJbFaM2PQ/VWglKMCLa+?=
+ =?us-ascii?Q?aDcczWZjqYXF1JGKEcitIrOwskCBBH8ARUn77yCMbod/F+BLtfGXBhGiOVI/?=
+ =?us-ascii?Q?vb40U3/RYryjJ1GqUsZ/Dh/2DZTE7dFlW/41d6AwWUUk3biL4jG+2BLlNrmb?=
+ =?us-ascii?Q?NuTELK9utYx1q2Pe3vw4YhyRmFoczggEASl0tXod9vDRDv91YFwtFPd/yPM6?=
+ =?us-ascii?Q?YvlrPqRnfaAnO756rmubiMOYOrHjRsieAQHHcITq3272bY0t1QcKzYj/M17T?=
+ =?us-ascii?Q?L25DGij+GKl6kikoInyAI7sNm+PlufdqbwcsIUunUKSaRKetp+DkZ7jUi7QO?=
+ =?us-ascii?Q?HcGyiA0v/CwPSFUGO0bkS3O1dtqwa8nVOKXzyn4PVHYv20/Ypw53cHMrLifZ?=
+ =?us-ascii?Q?ye90gHGqb3iY4mVWlvZmvEvymlwWHsrcmKqlNscY8/JsiBodLpjHaM5ZTs/y?=
+ =?us-ascii?Q?v7jiwJFu2Q=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5bfffed5-94be-41da-7fdd-08da1e89c33b
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR04MB5450.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 02:43:46.3186
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: orfLpY02LBQPck1ftM2iOx/tiEv2nltiSjPv/vTyo72HGU60LZh/wKM4VoZXAtboDdx+f1XYIhVa0Juy5t9Rlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB9132
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jagdish,
+From: Sandor Yu <Sandor.yu@nxp.com>
 
-On Thu, 2022-04-14 at 18:53 +0530, Jagdish Gediya wrote:
-> On Fri, Apr 08, 2022 at 03:12:20PM +0800, Huang Ying wrote:
-[snip]
-> > +
-> > +static int numa_hint_fault_latency(struct page *page)
-> > +{
-> > +	int last_time, time;
-> > +
-> > +	time = jiffies_to_msecs(jiffies);
-> > +	last_time = xchg_page_access_time(page, time);
-> > +
-> > +	return (time - last_time) & PAGE_ACCESS_TIME_MASK;
-> 
-> This code can possibly consider cold page as hot,
-> 
-> Assume,
-> 
-> LAST_CPUPID_SHIFT = 12
-> PAGE_ACCESS_TIME_BUCKETS = 0
-> sysctl_numa_balancing_hot_threshold = 1000
-> 
-> Assume while changing pte,
-> jiffies_to_msecs(jiffies) = 0xAABB0100
-> 
-> So value saved in page->flags will be lowest 12 bits of 0xAABB0100
-> which is 0x100.
-> 
-> Assume when numa_hint_fault_latency() gets called,
-> time = jiffies_to_msecs(jiffies) = 0xAACC0100
-> 
-> So, time = 0xAACC0100, and last_time = 0x100,
-> time - last_time = 0xAACC0100 - 0x100 = 0xAACC0000
-> 0xAACC0000 & PAGE_ACCESS_TIME_MASK = 0xAACC0000 & ((1 << 12) - 1) = 0
-> 
-> so the return value of this function is 0, the code will consider it as
-> hot page but it is cold page because actual difference is
-> 0xAACC0100 - 0xAABB0100 = 110000 ms
-> 
+This is new features and bug fix patch set for DW_HDMI DRM bridge driver
+that has verified by NXP i.MX8MPlus.
+Two new feature added:
+1. Add GPA interface for DW_HDMI Audio.
+3. New API for reset PHY Gen1.
+Two bugs fixed:
+1. Enable overflow workaround for all IP versions later than v1.30a.
+2. Clear GCP_Auto bit for 24-bit color depth to pass CTS.
 
-Yes.  This is possible.
+v1->v2:
+1. Save CEC interrupt registers in struct dw_hdmi_cec
+2. Restore CEC logical address register by cec->addresses.
+3. Default enable overflow workaround for all versions later than v1.30a.
+4. Add clear_gcp_auto flag to clear gcp_auto bit for all 24-bit color.
+5. Remove i.MX8MPlus specific reference.
 
-> There may be more such scenarios. What do you think?
+v2->v3:
+1. Drop the patch of Add CEC Suspend/Resume to restore registers.
+Because it is not a general feature for other SOCs, their CEC engine are
+enabled in suspend for CEC wakeup.
+2. More detail comments for patch GCP only for Deep Color.
+3. Address coments for patch GPA driver and move enable_audio/disable_audio
+from dw_hdmi_phy_ops to dw_hdmi_plat_data.
 
-The algorithm just works statistically correct.  That is, for really hot
-pages, their hint page fault latency will be short and we can promote it
-when they are accessed.  For cold pages, it's still possible for them to
-be identified as hot pages.  But the possibility is much lower than that
-of the hot pages.
+Sandor Yu (4):
+  drm: bridge: dw_hdmi: default enable workaround to clear the overflow
+  drm: bridge: dw_hdmi: Enable GCP only for Deep Color
+  drm: bridge: dw_hdmi: add reset function for PHY GEN1
+  drm: bridge: dw_hdmi: Audio: Add General Parallel Audio (GPA) driver
 
-We can try to improve further here.  But as the first step, I want to
-keep the algorithm as simple as possible.  Then we can try improve it
-step by step and show benefit in each step to justify the further
-optimization.
+ drivers/gpu/drm/bridge/synopsys/Kconfig       |  10 +
+ drivers/gpu/drm/bridge/synopsys/Makefile      |   1 +
+ .../drm/bridge/synopsys/dw-hdmi-gp-audio.c    | 199 ++++++++++++++++++
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c     | 186 ++++++++++++++--
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.h     |  16 +-
+ drivers/gpu/drm/sun4i/sun8i_hdmi_phy.c        |   2 +-
+ include/drm/bridge/dw_hdmi.h                  |  11 +-
+ 7 files changed, 400 insertions(+), 25 deletions(-)
+ create mode 100644 drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.c
 
-> > +}
-> > +
-
-Best Regards,
-Huang, Ying
-
+-- 
+2.25.1
 

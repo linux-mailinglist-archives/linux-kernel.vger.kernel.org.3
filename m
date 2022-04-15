@@ -2,117 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF145028EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:38:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 947725028EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:46:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352684AbiDOLk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 07:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S1352711AbiDOLtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 07:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233670AbiDOLk4 (ORCPT
+        with ESMTP id S236334AbiDOLtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 07:40:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2162F5DE59
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:38:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FEFE62291
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:38:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A58C385AC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:38:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650022708;
-        bh=vXUC8IDY9bUnBt/qfk3ZWqIDk/HTdhBPloKaZakPo/o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LhNhnbeJ41CGuuGk/t2WMCa+Vocx8kFsV/OMhSXrfjnJNiTMpRSf7klAwBiWfG80m
-         03ATkfWE7BgUHVlFUa51uRWONW9q9krpd2K8t3FxW+y8agqkIoww7L4g3dWmdaAsqT
-         qDrxd/4fHdSstYFfO3bz8+TmXHExM/h7KQLbdWdpBTwkcLx/XIjHwjpSk6lL5MJzfD
-         wxSlinbSC3Pl0mxKF8sVF4uddfQayCLuLyFndV7PbuLKXs0aU1MpXA2nBCgEve1CYp
-         Ty/1SoU9u134yuw7nJt3FdTk2p3FryH1pZNrV92lE+oXAtrq12g9rlklgG11gLAVwG
-         xeE16waEt6r8w==
-Received: by mail-ot1-f41.google.com with SMTP id g17-20020a9d6191000000b005e8d8583c36so5221465otk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 04:38:27 -0700 (PDT)
-X-Gm-Message-State: AOAM533JiXtBt4gU3tg45572aow06Cu8JKndck6+ayt3s/QCdibV4wbP
-        WUbtQCahY5BcBnct7BIM0zdm0J5OErPcxHi7aAI=
-X-Google-Smtp-Source: ABdhPJxbdPyhecm17U5r/LhiKDrO7HSSUFwbD9WNDKBQ8yyN8DJUXRbCwqgih5HaGzzy770gbFQdEBCHF2qQOkGDAO4=
-X-Received: by 2002:a05:6830:2e7:b0:5b2:68c1:182a with SMTP id
- r7-20020a05683002e700b005b268c1182amr2485815ote.71.1650022707025; Fri, 15 Apr
- 2022 04:38:27 -0700 (PDT)
+        Fri, 15 Apr 2022 07:49:03 -0400
+Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8DA673D6;
+        Fri, 15 Apr 2022 04:46:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=kemnade.info; s=20180802; h=Content-Transfer-Encoding:Content-Type:
+        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kxc9T+YmUkntjESaace9DUZMT9xh/VGpJbsX4b1xNhA=; b=QpNZanhdbt2h22Yyn3PDrPmN/W
+        c7i9nWyKnjhldyXFgjcMUAVkRyHBxFUa5+6XhPO75fQ44w7VdNPw6uSGv6c8nUyv8Z/BJBctencM2
+        8b6mut/J7qmugrxIq1QbP8JyRy6i63GBLs+B6HPm3cT70PW3HjQNERTcjSZPQBMfmwlk=;
+Received: from p200300ccff0ff7001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff0f:f700:1a3d:a2ff:febf:d33a] helo=aktux)
+        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.89)
+        (envelope-from <andreas@kemnade.info>)
+        id 1nfKOf-0001qL-Om; Fri, 15 Apr 2022 13:45:54 +0200
+Date:   Fri, 15 Apr 2022 13:45:52 +0200
+From:   Andreas Kemnade <andreas@kemnade.info>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>,
+        Sandy Huang <hjc@rock-chips.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-rockchip@lists.infradead.org,
+        Alistair Francis <alistair@alistair23.me>,
+        =?UTF-8?B?T25kxZllag==?= Jirman <x@xff.cz>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Liang Chen <cl@rock-chips.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 02/16] dt-bindings: display: rockchip: Add EBC
+ binding
+Message-ID: <20220415134552.182b49a9@aktux>
+In-Reply-To: <d5bb060e-5964-db0d-ca93-5f73ee9277a3@sholland.org>
+References: <20220413221916.50995-1-samuel@sholland.org>
+        <20220413221916.50995-3-samuel@sholland.org>
+        <20220414101548.2b9c3dad@aktux>
+        <d5bb060e-5964-db0d-ca93-5f73ee9277a3@sholland.org>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <YlkV7NtatO7KFusX@gondor.apana.org.au>
- <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
- <YlkkGpVx8rhcsBot@gondor.apana.org.au> <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
- <Ylko07++4naWJ5LE@gondor.apana.org.au> <CAMj1kXH=ybJWBzmMqkrkvyF8nM3UpTchUOq+oweW=BqW2TOyRw@mail.gmail.com>
- <YllE+wWqP6F+1nwa@gondor.apana.org.au> <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
- <YllM24eca/uxf9y7@gondor.apana.org.au>
-In-Reply-To: <YllM24eca/uxf9y7@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 15 Apr 2022 13:38:15 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
-Message-ID: <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Score: -1.0 (-)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 at 12:45, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> On Fri, Apr 15, 2022 at 12:22:27PM +0200, Ard Biesheuvel wrote:
-> >
-> > Subsequent objects are owned by the driver, and it is the
-> > responsibility of the driver not to modify the fields while it is also
-> > mapped for DMA (and we have had issues in the past where drivers
-> > violated this rule). So as long as ARCH_KMALLOC_ALIGN guarantees
-> > actual DMA minimum alignment for both the start and the end, we
-> > shouldn't need any explicit padding at the end.
->
-> I don't understand why this is guaranteed.  The driver context
-> size is arbitrary so it could end in the middle of a cacheline.
-> The slab allocator could well lay it out so that the next kmalloc
-> object starts right after the end of the context, in which case
-> they would share a cache-line.
->
+On Thu, 14 Apr 2022 22:00:09 -0500
+Samuel Holland <samuel@sholland.org> wrote:
 
-If this is the case, things are already broken today. We never take
-ARCH_DMA_MINALIGN into account when adding the driver ctx size to the
-overall allocation size.
+> Hi Andreas,
+> 
+> Thanks for the comments.
+> 
+> On 4/14/22 3:15 AM, Andreas Kemnade wrote:
+> > Hi Samuel,
+> > 
+> > for comparison, here is my submission for the IMX EPDC bindings:
+> > 
+> > https://lore.kernel.org/linux-devicetree/20220206080016.796556-2-andreas@kemnade.info/
+> > 
+> > On Wed, 13 Apr 2022 17:19:02 -0500
+> > Samuel Holland <samuel@sholland.org> wrote:
+> > 
+> > [...]
+> > we have sy7636a driver in kernel which should be suitable for powering a EPD
+> > and temperature measurement. So I would expect that to be   
+> >> +  io-channels:
+> >> +    maxItems: 1
+> >> +    description: I/O channel for panel temperature measurement
+> >> +  
+> > so how would I reference the hwmon/thermal(-zone) of the sy7636a here?  
+> 
+> It seems the consensus is to use a thermal zone for panel temperature, so I will
+> need to change this.
+> 
+I am open to anything here as long as it fits together.
 
-> The next kmalloc object could be (and in fact is likely to be)
-> of the same type.
->
-> Previously this wasn't possible because kmalloc guaranteed
-> alignment.
->
+> I think it's best to reference the thermal zone by phandle, not by name, even if
+> it requires extending the thermal zone API to support this.
+> 
+maybe referencing the hwmon might be interesting, or we add a hwmon_iio
+adaptor. The other way round it is there. The thermal zone stuff is
+only needed because hwmon cannot referenced directly.
 
-Either it does or it doesn't. If kmalloc() guarantees the actual DMA
-alignment at both ends, the situation you describe cannot occur, given
-that the driver's slice of the request/TFM structure would be padded
-up to actual DMA alignment, in spite of whether or not
-ARCH_DMA_MINALIGN exceeds that. So it would never share a cacheline in
-practice, even though they might live in the same 128 byte aligned
-region on a system that has a minimum DMA alignment that is lower than
-that.
-
-If kmalloc() does not guarantee that the end of the buffer is aligned
-to actual DMA alignment, things are already broken today.
+Regards,
+Andreas

@@ -2,92 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75EB35033A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8C1503346
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238931AbiDOX1i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:27:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45654 "EHLO
+        id S1356508AbiDOXaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356483AbiDOX10 (ORCPT
+        with ESMTP id S1356483AbiDOXaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:27:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2FAF27B26;
-        Fri, 15 Apr 2022 16:24:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 790F6B83131;
-        Fri, 15 Apr 2022 23:24:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A869C385A9;
-        Fri, 15 Apr 2022 23:24:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650065093;
-        bh=ve8zcTJK3ne1EGkyC8vWulpuyQc5Xh6ZoQ+EsFt9Deo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f8MNQheziBEXQrO0FxkqhOwkyp/nfmv5VcI4MCAXbtxdywRrg4Ok8nWhPn7wnT4oV
-         26uaqET1A13eL0c9fwo6GD4/3E9bDIC+UNd9r0LRGbHfZFieNHO9c9Sjx8unQMLC/B
-         RJzlVMWW6Q+LMn4uXY0lXXd0xDM/7AG9fsf7NxG7MdOpr+dJmdU7s9vT67drUqHt2n
-         tKxC1kfAcoPvCBqZFnjQDPWv+L5diPtMUG0ASR2oGSCytsKVHR5Ag5fEnRR1jlcbjt
-         Dvx7A0V6tFZEtxwnuBazxUbSi2L1vVGNJ2Y1Kv91zDp7oIDOm4dv/5FAVL/u29w0Mk
-         5Pveg8OiZwA0Q==
-Received: by mail-yb1-f173.google.com with SMTP id p65so16609188ybp.9;
-        Fri, 15 Apr 2022 16:24:53 -0700 (PDT)
-X-Gm-Message-State: AOAM532C1lvTx90fXMcgZrMExT8KvNC0cqYIk6gOh66aZKuHxnAUk94u
-        KdJY3YCZbEWbI8p0AZVuohMMCDaBu7hR5AHmgQ8=
-X-Google-Smtp-Source: ABdhPJy7qY8jdimtSi+WscUV67jjwPF27xZeL7M2caaxM31nPgf3vJcWAjTfoqUC0w9w5k4HE68MfI3InHS6lHUjQn8=
-X-Received: by 2002:a05:6902:1506:b0:63e:4f1b:40ae with SMTP id
- q6-20020a056902150600b0063e4f1b40aemr1399464ybu.322.1650065092238; Fri, 15
- Apr 2022 16:24:52 -0700 (PDT)
+        Fri, 15 Apr 2022 19:30:18 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60156434
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:27:48 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ec05db3dfbso95194157b3.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=lw2ingGGS+gGAKFN9ab4kSIE68KwTs47CB5NmRh5IDI=;
+        b=H160swL5Hq1YmXeDhx04qtBeyRhdvbytbtb0COmyZnBSiMX7T9dIZg/9BIM9Q+Mu7P
+         vRwzQVxkSdj1fWHrJzqSNFBhylDSN+PIPrOcivA8Rs44M1JZiDffXTFefOHzlU19AoBC
+         yelGEDFnLfMWJ2y0A1Msfsv6sanPxUdpnaSf6LW+MNqKFyHVPST2JfAoViyQNKIgmzrr
+         VD5i0LD5UN9lBOz7M49OhW3VjTHWHYQOsZyFMITduTRX1vlF5W5mkBcBO+nyqF3Y3nn4
+         ruyPow/CDxcyvIeDc1fxgSrHdAgChh48JmQS4SEdqTgfEMeH+4YTnEPNi7RQbwfjIrDC
+         4BHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=lw2ingGGS+gGAKFN9ab4kSIE68KwTs47CB5NmRh5IDI=;
+        b=4p0/5Ic8jU5qbHpmPc7bLqsmIWf9/Z5S10fux0ed9OuHKvcVbZovGZImfG5uZnM5dI
+         dtNboaV2dYWUd4qulKQjHfa4OBZ/bs7yis7vQgM8SL6IKLj8lXO67jep+VLXSynOuVAW
+         oArTp2etxS7+LdYw3yvdIajhJGgefmwj8/xw17UQFkhtRyP4aDzHySDxo2ljSjy/1iBB
+         QT2qwPD9h1Alz3Cx3gJpnz9GK7TWvRbSqlBGCev13U1442UlcxmygKn81+jy2BsDOTRY
+         83EfY/ADZa4LDz7Zg3yetBMJlnjwtLRH+YS/7DvZVXuOe2dt+izbjKBtEDDLThOiySIK
+         ixIw==
+X-Gm-Message-State: AOAM531bLkLpTj3SJKWG3Sq/iqv6eCe0UoA7MVEKgtqY30kqWKgUBaaW
+        ZTxAff7WRyRGTlgGloYARXiBklZa7zSkUAjXmmla7g==
+X-Google-Smtp-Source: ABdhPJzgzZ+XLhcQBARtnDhsTaiU5NK/RDuIMe92k46YauSu6gt0ItlJUF4iIxOSzz3MagzklP74jI67icxw9csvDh8=
+X-Received: by 2002:a81:753:0:b0:2eb:ebe9:ff4f with SMTP id
+ 80-20020a810753000000b002ebebe9ff4fmr1082658ywh.255.1650065267380; Fri, 15
+ Apr 2022 16:27:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-3-alobakin@pm.me>
-In-Reply-To: <20220414223704.341028-3-alobakin@pm.me>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 15 Apr 2022 16:24:41 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
-Message-ID: <CAPhsuW42Sv2EkMzVoh2+i=2NN2yMRHOqDN8wmXGPax2-cz8ynA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 02/11] bpf: always emit struct bpf_perf_link BTF
-To:     Alexander Lobakin <alobakin@pm.me>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Chenbo Feng <fengc@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Daniel Wagner <daniel.wagner@bmw-carit.de>,
-        Thomas Graf <tgraf@suug.ch>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        llvm@lists.linux.dev
+References: <1650062064-11838-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJpopw4rh0ZkFd5F4zHVJQw6GUNq=+HKVycOx0bXd5OWizQ@mail.gmail.com> <f4bc072f-9ec6-d57e-28de-e3f7aba21cd7@quicinc.com>
+In-Reply-To: <f4bc072f-9ec6-d57e-28de-e3f7aba21cd7@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Sat, 16 Apr 2022 02:27:36 +0300
+Message-ID: <CAA8EJpr54Wrjv9+7H97n9i+2zPX6qNH3Vqf-92CRtayhQexhYQ@mail.gmail.com>
+Subject: Re: [PATCH v7] drm/msm/dp: stop event kernel thread when DP unbind
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,29 +72,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
+On Sat, 16 Apr 2022 at 02:10, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
 >
-> When building bpftool with !CONFIG_PERF_EVENTS:
 >
-> skeleton/pid_iter.bpf.c:47:14: error: incomplete definition of type 'struct bpf_perf_link'
->         perf_link = container_of(link, struct bpf_perf_link, link);
->                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:74:22: note: expanded from macro 'container_of'
->                 ((type *)(__mptr - offsetof(type, member)));    \
->                                    ^~~~~~~~~~~~~~~~~~~~~~
-> tools/bpf/bpftool/bootstrap/libbpf/include/bpf/bpf_helpers.h:68:60: note: expanded from macro 'offsetof'
->  #define offsetof(TYPE, MEMBER)  ((unsigned long)&((TYPE *)0)->MEMBER)
->                                                   ~~~~~~~~~~~^
-> skeleton/pid_iter.bpf.c:44:9: note: forward declaration of 'struct bpf_perf_link'
->         struct bpf_perf_link *perf_link;
->                ^
->
-> &bpf_perf_link is being defined and used only under the ifdef.
-> Move it out of the block and explicitly emit a BTF to fix
-> compilation.
->
-> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
-> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> On 4/15/2022 3:48 PM, Dmitry Baryshkov wrote:
+> > On Sat, 16 Apr 2022 at 01:34, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+> >> Current DP driver implementation, event thread is kept running
+> >> after DP display is unbind. This patch fix this problem by disabling
+> >> DP irq and stop event thread to exit gracefully at dp_display_unbind().
+> >>
+> >> Changes in v2:
+> >> -- start event thread at dp_display_bind()
+> >>
+> >> Changes in v3:
+> >> -- disable all HDP interrupts at unbind
+> >> -- replace dp_hpd_event_setup() with dp_hpd_event_thread_start()
+> >> -- replace dp_hpd_event_stop() with dp_hpd_event_thread_stop()
+> >> -- move init_waitqueue_head(&dp->event_q) to probe()
+> >> -- move spin_lock_init(&dp->event_lock) to probe()
+> >>
+> >> Changes in v4:
+> >> -- relocate both dp_display_bind() and dp_display_unbind() to bottom of file
+> >>
+> >> Changes in v5:
+> >> -- cancel relocation of both dp_display_bind() and dp_display_unbind()
+> >>
+> >> Changes in v6:
+> >> -- move empty event q to dp_event_thread_start()
+> >>
+> >> Changes in v7:
+> >> -- call ktheread_stop() directly instead of dp_hpd_event_thread_stop() function
+> >>
+> >> Fixes: e91e3065a806 ("drm/msm/dp: Add DP compliance tests on Snapdragon Chipsets")
+> >> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> >> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> >> Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+> >> ---
+> >>   drivers/gpu/drm/msm/dp/dp_display.c | 31 ++++++++++++++++++++++++-------
+> >>   1 file changed, 24 insertions(+), 7 deletions(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> >> index 01453db..680e500 100644
+> >> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> >> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> >> @@ -113,6 +113,7 @@ struct dp_display_private {
+> >>          u32 hpd_state;
+> >>          u32 event_pndx;
+> >>          u32 event_gndx;
+> >> +       struct task_struct *ev_tsk;
+> >>          struct dp_event event_list[DP_EVENT_Q_MAX];
+> >>          spinlock_t event_lock;
+> >>
+> >> @@ -230,6 +231,8 @@ void dp_display_signal_audio_complete(struct msm_dp *dp_display)
+> >>          complete_all(&dp->audio_comp);
+> >>   }
+> >>
+> >> +static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv);
+> >> +
+> >>   static int dp_display_bind(struct device *dev, struct device *master,
+> >>                             void *data)
+> >>   {
+> >> @@ -269,6 +272,7 @@ static int dp_display_bind(struct device *dev, struct device *master,
+> >>          if (rc)
+> >>                  DRM_ERROR("Audio registration Dp failed\n");
+> > I think I asked it in v3 and didn't get an answer:
+> > Isn't 'goto end' missing here?
+> I did follow you suggestion at v3 and made changes at
+> dp_hpd_event_thread_start()
 
-Similar to v1, this fix is weird to me. I hope we have can fix it in user
-space.
+I'm asking about this place. Should we return an immediate error if
+audio registration has failed or not?
+
+> >> +       rc = dp_hpd_event_thread_start(dp);
+> > if (rc) { DRM_ERROR(....); goto end; }
+> > return 0;
+> >
+> > Please.
+> This is at dp_display_bind(),  "end" is the next statement why goto needed?
+
+To be explicit that this is a fatal error. Compare this to my question
+regarding the audio registration failure.
+
+> >>   end:
+> >>          return rc;
+> >>   }
+> >> @@ -280,6 +284,11 @@ static void dp_display_unbind(struct device *dev, struct device *master,
+> >>          struct drm_device *drm = dev_get_drvdata(master);
+> >>          struct msm_drm_private *priv = drm->dev_private;
+> >>
+> >> +       /* disable all HPD interrupts */
+> >> +       dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
+> >> +
+> >> +       kthread_stop(dp->ev_tsk);
+> >> +
+> >>          dp_power_client_deinit(dp->power);
+> >>          dp_aux_unregister(dp->aux);
+> >>          priv->dp[dp->id] = NULL;
+> >> @@ -1054,7 +1063,7 @@ static int hpd_event_thread(void *data)
+> >>
+> >>          dp_priv = (struct dp_display_private *)data;
+> >>
+> >> -       while (1) {
+> >> +       while (!kthread_should_stop()) {
+> >>                  if (timeout_mode) {
+> >>                          wait_event_timeout(dp_priv->event_q,
+> >>                                  (dp_priv->event_pndx == dp_priv->event_gndx),
+> >> @@ -1132,12 +1141,19 @@ static int hpd_event_thread(void *data)
+> >>          return 0;
+> >>   }
+> >>
+> >> -static void dp_hpd_event_setup(struct dp_display_private *dp_priv)
+> >> +static int dp_hpd_event_thread_start(struct dp_display_private *dp_priv)
+> >>   {
+> >> -       init_waitqueue_head(&dp_priv->event_q);
+> >> -       spin_lock_init(&dp_priv->event_lock);
+> >> +       /* set event q to empty */
+> >> +       dp_priv->event_gndx = 0;
+> >> +       dp_priv->event_pndx = 0;
+> >> +
+> >> +       dp_priv->ev_tsk = kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> >> +       if (IS_ERR(dp_priv->ev_tsk)) {
+> >> +               DRM_ERROR("failed to create DP event thread\n");
+> >> +               return PTR_ERR(dp_priv->ev_tsk);
+> >> +       }
+> >>
+> >> -       kthread_run(hpd_event_thread, dp_priv, "dp_hpd_handler");
+> >> +       return 0;
+> >>   }
+> >>
+> >>   static irqreturn_t dp_display_irq_handler(int irq, void *dev_id)
+> >> @@ -1266,7 +1282,10 @@ static int dp_display_probe(struct platform_device *pdev)
+> >>                  return -EPROBE_DEFER;
+> >>          }
+> >>
+> >> +       /* setup event q */
+> >>          mutex_init(&dp->event_mutex);
+> >> +       init_waitqueue_head(&dp->event_q);
+> >> +       spin_lock_init(&dp->event_lock);
+> >>
+> >>          /* Store DP audio handle inside DP display */
+> >>          dp->dp_display.dp_audio = dp->audio;
+> >> @@ -1441,8 +1460,6 @@ void msm_dp_irq_postinstall(struct msm_dp *dp_display)
+> >>
+> >>          dp = container_of(dp_display, struct dp_display_private, dp_display);
+> >>
+> >> -       dp_hpd_event_setup(dp);
+> >> -
+> >>          dp_add_event(dp, EV_HPD_INIT_SETUP, 0, 100);
+> >>   }
+> >>
+> >> --
+> >> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> >> a Linux Foundation Collaborative Project
+> >>
+> >
+
+
+
+-- 
+With best wishes
+Dmitry

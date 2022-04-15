@@ -2,174 +2,527 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B3050211E
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C09B2502122
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349309AbiDOD7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 23:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S238096AbiDOEBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 00:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349310AbiDOD7d (ORCPT
+        with ESMTP id S232052AbiDOEBV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 23:59:33 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0134A5E9E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 20:57:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ir4D+coYxJd19VpwLd1ROzkhqMLc7MZCH9fs2mpJudwKu8J+AqtidzEhaxwBgSX4f80jj/W/3x3JOHgF20uyC+3Fttn+uhnp+hSnD+Kpx3Gw+S6R/TxGHzNR3DOiRJ1xsN5FCTmxeorDbA3vF6LKg5cD55g4EHnuTwb75bjboCf8lw1mAe9Mrv6McQnIQhJMguvTSKMy896Hu815B0AmkJle6kF+bSplO9uCH8EI2CFv364yhcW33yi3azy5QVlUelfGEpeNR7Kes+EceXJymZJTeLNJi0CJve3v/yjaxcc6yjIN9NuueDJWDHZbzcuTzvQui5AYUzRovCXZPP6M4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zb2KoPpbgyGQlfPTPRM+6ao6q5CRoeoA+R5OIzsFrO4=;
- b=EAJ6grKQ9OA2dINPl/zezdHTsiNaFRT3WoHCibfyDENP2nblWZYjByyI97y9Jz6EpL7KDdVcqsUNyXcAh2hnNfeOHADqE9P6t/Mm8vOn85CBw/m+QbkVDk6rHJi9HXI8RtJKKwmNAA6s2jiZdhMqBCyHauhQY+yT7QzwuxwLhS8uwQoiwnHf66CU699MVQSoFfDRV83QbmMnRxBPDThB/Nok563NinDq3swk1HvK28w6GoZrCctHKkpmG8Svrag2Z2l3d9vJwiE2AJA6p8S1QdP7d+nSt0zIzZQzJciysAqHvbqKIKVE+7FnSCaIbhTWluuksRWBOn7C1P8Jm4W6sQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zb2KoPpbgyGQlfPTPRM+6ao6q5CRoeoA+R5OIzsFrO4=;
- b=U8TD5osIyFHDb5Udfbi5zpt/+F7AU8FpFNee2Y6pURGQhLwc8X2TcZYZEIjt1og2/s2zIdD5TRYqSpXCDdpzSMiubnXt6hq7o9OoLkVP22aUD9bmTwuaPJJtbParsu1/Panc4k94qo6tdAtConrYb4hBZvhFDUWn0F2kQ/B6LJ8veYnOu1WA4T00ftIPcxpszFsa+Rh+F8ihz0htpSbtDHQliHmpb4NsrPuW/xbmiY0Orcg1W42+ZUgyfhHdF+CUn8sHfTgCu80cBu3O3kScZOEz92txlf/G+u5vs06/NaCyrcfODU2X3zXZtaeCQNQ4LU8QjT2Ek09E2OCMfIfokg==
-Received: from BN6PR13CA0019.namprd13.prod.outlook.com (2603:10b6:404:10a::29)
- by DM5PR12MB1659.namprd12.prod.outlook.com (2603:10b6:4:11::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5144.29; Fri, 15 Apr
- 2022 03:57:00 +0000
-Received: from BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
- (2603:10b6:404:10a:cafe::99) by BN6PR13CA0019.outlook.office365.com
- (2603:10b6:404:10a::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5186.6 via Frontend
- Transport; Fri, 15 Apr 2022 03:57:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT015.mail.protection.outlook.com (10.13.176.90) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5164.19 via Frontend Transport; Fri, 15 Apr 2022 03:56:59 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Fri, 15 Apr 2022 03:56:59 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 14 Apr 2022 20:56:59 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.182)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Thu, 14 Apr 2022 20:56:58 -0700
-Date:   Thu, 14 Apr 2022 20:56:57 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <will@kernel.org>, <joro@8bytes.org>, <thunder.leizhen@huawei.com>,
-        <jgg@ziepe.ca>, <tglx@linutronix.de>, <john.garry@huawei.com>,
-        <jean-philippe@linaro.org>, <christophe.jaillet@wanadoo.fr>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Align size in __arm_smmu_tlb_inv_range
-Message-ID: <YljtCbvaAHX2lKkF@Asurada-Nvidia>
-References: <20220413041745.35174-1-nicolinc@nvidia.com>
- <37c02fc4-d793-b003-f612-206c987a8a42@arm.com>
- <YlcwPG5RXmJ6U7YS@Asurada-Nvidia>
- <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
+        Fri, 15 Apr 2022 00:01:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 32F9CA5E9E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 20:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1649995133;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=c+Kit//VWZalpQ+uwDe/ydbGGhxqUY8FznM+y1PZ1gE=;
+        b=chxW6vU1mEoiy4VQPovSRnTg93DVQmNZpeR8mzfDFtwhV4/Rti+/0RrNRHib8sFvG0C1uN
+        8akG2bH6W3UwNVeiwaTi2iyCrY0aT4cekwyMHdy4PYIl6n+RyxG7u+1p3+5gg7gB825Iw3
+        l7s2U73JELArSW7kWFUbVpgB/zSuMVw=
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com
+ [209.85.214.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-247-cpB6zx69NXqnVZTZePPmYw-1; Thu, 14 Apr 2022 23:58:49 -0400
+X-MC-Unique: cpB6zx69NXqnVZTZePPmYw-1
+Received: by mail-pl1-f200.google.com with SMTP id l6-20020a170903120600b0014f43ba55f3so3764419plh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 20:58:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=c+Kit//VWZalpQ+uwDe/ydbGGhxqUY8FznM+y1PZ1gE=;
+        b=wsqELm95oMOTwcjNVb1biQiNqN6m31Kt+bd8VsjVeCd+rEqSOdqD5ODGGtIo0yFxBb
+         4TEMAaEB0z0xFq5B89YaAuaSLrGv4Jb3zFHCbiLpYxtf/8LmaMZBUjqcAriP/QoMyWT1
+         ipYOh1mZSJsnWGypkRvRbNLb35LGkihZ/pYKT0UrISzF2kXsz73PLDNY7hm+44qnKrKJ
+         qUeEpuGy9sIVD5kRK/tqXhWtqXOkUg8KNbO35gLxAf0mXwlQMp58QBM9ZjSfkGDVCrU/
+         BJr8Mo8ReA7wFzpAMv0PaiNCTHkaWQHt8cUk0ueB73TpVVVx5KcoYgVeDylJFcB1CKKs
+         dDOw==
+X-Gm-Message-State: AOAM533usxe9zaV9Jk2C1InotRHZm93syRIGlEXnYOR8Gg4yfa6Z36OC
+        X/+ELE+ms7ba0wwXZTFAbdEXr/iDdXda8jb7OEbuN3d2zRm10razCR6WUvHg2h7D1gQfBB6QNbK
+        6rCVjwSnJKcTp3XxgcccRrDNa
+X-Received: by 2002:a17:903:41c5:b0:158:93ab:1e72 with SMTP id u5-20020a17090341c500b0015893ab1e72mr14338818ple.118.1649995128779;
+        Thu, 14 Apr 2022 20:58:48 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzTr3lMag/7G5E2EV+lDxWlic8ipNpLdSx/UX9bapc/IQv7w07Zx+BwE62kAPwtYEFqJx5MrQ==
+X-Received: by 2002:a17:903:41c5:b0:158:93ab:1e72 with SMTP id u5-20020a17090341c500b0015893ab1e72mr14338790ple.118.1649995128372;
+        Thu, 14 Apr 2022 20:58:48 -0700 (PDT)
+Received: from [10.72.13.51] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id q9-20020a638c49000000b00398677b6f25sm3162601pgn.70.2022.04.14.20.58.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 20:58:47 -0700 (PDT)
+Message-ID: <eb381955-0a64-011f-2732-943c60541b18@redhat.com>
+Date:   Fri, 15 Apr 2022 11:58:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d7e54d91-7d75-4c56-9330-08da1e93fe40
-X-MS-TrafficTypeDiagnostic: DM5PR12MB1659:EE_
-X-Microsoft-Antispam-PRVS: <DM5PR12MB1659FD1570043FBF3C4D19A3ABEE9@DM5PR12MB1659.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9BKyqcuZfiQriq6gTJtPb570vqKJYFVhOcRT/IuENCCW4mfTQb+MHGZ9MTMO8qCuWpQXI1m9NkI3AGjuRg9PRNIhAKznL1nWEouheoQ8nbTHS5zC59ptiNQTEdhtMfd+UKDtJlO0flLTSc9ReA4jfAJiFxb9kOdV/WujTA53TLjIfDWEnbzwBlq5GPQSn8GLAAMKU6ypwjzOYd/AkuS4HRbhvt4aFBXhbqc5Utl7Ne8JzJkNs42So96f9vn4xCZZ26sFB1W+av40o9l+pig4p3+PeP7f1CnpGb2dniPophG6840C04KqT8Vi4KW92wVGLLpUE3wBIjr1UhQKgiPsu7mMvvAnPjRJf7DsY5BeWUhU5TTvKQx4uB+zX8PTyESDWM+UFl2GrSm0+wPoeoY6sJAI0WCfZYxUxYGyl1PXwpHr3MSU7LEA4vBLW2cxxSta5f8FkWYfwTH/0BCJ8wn6ShR04UBvNikaHlf57gi8fRqm6TCnbiS2rrcbeCWhb3103RsWcyT7UucQSDtPSdK/z6gOj4671/0LkHrexo+Y+fBQcRE8qU7MVvhYIKDjhj+oLLhxp0ytJ6/XoA4/mivPgK5rEWSGkZB+nDa9LPtMMKMmldOcUS6zqhvfRoAfJQNvq0XegkDcoSnXZAJMWqFJOMP32HS86wqdg7SE2Rn+wVxyblwt6iczhOiv/d5m1GsDVm6kCzWFyFTSgexeTOnbyQ==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(46966006)(40470700004)(7416002)(508600001)(53546011)(55016003)(81166007)(82310400005)(5660300002)(9686003)(40460700003)(86362001)(356005)(6916009)(54906003)(2906002)(316002)(36860700001)(186003)(26005)(47076005)(8676002)(33716001)(4326008)(70586007)(70206006)(336012)(426003)(83380400001)(8936002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 03:56:59.9454
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7e54d91-7d75-4c56-9330-08da1e93fe40
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT015.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB1659
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH 3/3] vdpa/mlx5: Add RX MAC VLAN filter support
+Content-Language: en-US
+To:     Eli Cohen <elic@nvidia.com>, mst@redhat.com
+Cc:     virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, si-wei.liu@oracle.com
+References: <20220411122942.225717-1-elic@nvidia.com>
+ <20220411122942.225717-4-elic@nvidia.com>
+From:   Jason Wang <jasowang@redhat.com>
+In-Reply-To: <20220411122942.225717-4-elic@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:32:38AM +0100, Robin Murphy wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 2022-04-13 21:19, Nicolin Chen wrote:
-> > Hi Robin,
-> > 
-> > On Wed, Apr 13, 2022 at 02:40:31PM +0100, Robin Murphy wrote:
-> > > On 2022-04-13 05:17, Nicolin Chen wrote:
-> > > > To calculate num_pages, the size should be aligned with
-> > > > "page size", determined by the tg value. Otherwise, its
-> > > > following "while (iova < end)" might become an infinite
-> > > > loop if unaligned size is slightly greater than 1 << tg.
-> > > 
-> > > Hmm, how does a non-page-aligned invalidation request get generated in
-> > > the first place?
-> > 
-> > I don't have the testing environment because it was a bug,
-> > reported by a client who uses SVA feature on top of SMMU.
-> > 
-> > But judging from the log, the non-page-aligned inv request
-> > was coming from an likely incorrect end address, e.g.
-> >       { start = 0xff10000, end = 0xff20000 }
-> > So the size turned out to be 0x10001, unaligned.
-> > 
-> > I don't have a full call trace on hand right now to see if
-> > upper callers are doing something wrong when calculate the
-> > end address, though I've asked the owner to check.
-> > 
-> > By looking at the call trace within arm_smmu_* functions:
-> >    __arm_smmu_tlb_inv_range
-> >    arm_smmu_tlb_inv_range_asid
-> >    arm_smmu_mm_invalidate_range
-> >    {from mm_notifier_* functions}
-> > 
-> > There's no address alignment check. Although I do think we
-> > should fix the source who passes down the non-page-aligned
-> > parameter, the SMMU driver shouldn't silently dead loop if
-> > a set of unaligned inputs are given, IMHO.
-> 
-> Oh, sure, I'm not saying we definitely don't need to fix anything, I'd
-> just like to get a better understanding of *what* we're fixing. I'd have
-> (naively) expected the mm layer to give us page-aligned quantities even
-> in the SVA notifier case, so if we've got a clear off-by-one somewhere
-> in that path we should fix that before just blindly over-invalidating to
-> paper over it;
 
-I see. Yea, definitely should fix the source too. I've asked
-the owner to track it down. I sent the change, thinking that
-we could do it in parallel.
+在 2022/4/11 20:29, Eli Cohen 写道:
+> Support HW offloaded filtering of MAC/VLAN packets.
+> To allow that, we add a handler to handle VLAN configurations coming
+> through the control VQ. Two operations are supported.
+>
+> 1. Adding VLAN - in this case, an entry will be added to the RX flow
+>     table that will allow the combination of the MAC/VLAN to be
+>     forwarded to the TIR.
+> 2. Removing VLAN - will remove the entry from the flow table,
+>     effectively blocking such packets from going through.
+>
+> Currently the control VQ does not propagate changes to the MAC of the
+> VLAN device so we always use the MAC of the parent device.
+>
+> Examples:
+> 1. Create vlan device:
+> $ ip link add link ens1 name ens1.8 type vlan id 8
+>
+> Signed-off-by: Eli Cohen <elic@nvidia.com>
+> ---
+>   drivers/vdpa/mlx5/net/mlx5_vnet.c | 274 +++++++++++++++++++++++-------
+>   1 file changed, 216 insertions(+), 58 deletions(-)
+>
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> index 5aa6220c7129..f81f9a213ed2 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -48,6 +48,8 @@ MODULE_LICENSE("Dual BSD/GPL");
+>   
+>   #define MLX5_FEATURE(_mvdev, _feature) (!!((_mvdev)->actual_features & BIT_ULL(_feature)))
+>   
+> +#define MLX5V_UNTAGGED 0x1000
+> +
+>   struct mlx5_vdpa_net_resources {
+>   	u32 tisn;
+>   	u32 tdn;
+> @@ -143,6 +145,8 @@ static bool is_index_valid(struct mlx5_vdpa_dev *mvdev, u16 idx)
+>   	return idx <= mvdev->max_idx;
+>   }
+>   
+> +#define MLX5V_MACVLAN_SIZE 256
+> +
+>   struct mlx5_vdpa_net {
+>   	struct mlx5_vdpa_dev mvdev;
+>   	struct mlx5_vdpa_net_resources res;
+> @@ -156,14 +160,20 @@ struct mlx5_vdpa_net {
+>   	 */
+>   	struct mutex reslock;
+>   	struct mlx5_flow_table *rxft;
+> -	struct mlx5_flow_handle *rx_rule_ucast;
+> -	struct mlx5_flow_handle *rx_rule_mcast;
+>   	bool setup;
+>   	u32 cur_num_vqs;
+>   	u32 rqt_size;
+>   	struct notifier_block nb;
+>   	struct vdpa_callback config_cb;
+>   	struct mlx5_vdpa_wq_ent cvq_ent;
+> +	struct hlist_head macvlan_hash[MLX5V_MACVLAN_SIZE];
+> +};
+> +
+> +struct macvlan_node {
+> +	struct hlist_node hlist;
+> +	struct mlx5_flow_handle *ucast_rule;
+> +	struct mlx5_flow_handle *mcast_rule;
+> +	u64 macvlan;
+>   };
+>   
+>   static void free_resources(struct mlx5_vdpa_net *ndev);
+> @@ -1346,12 +1356,17 @@ static void destroy_tir(struct mlx5_vdpa_net *ndev)
+>   	mlx5_vdpa_destroy_tir(&ndev->mvdev, ndev->res.tirn);
+>   }
+>   
+> -static int add_fwd_to_tir(struct mlx5_vdpa_net *ndev)
+> +#define MAX_STEERING_ENT 0x8000
+> +#define MAX_STEERING_GROUPS 2
+> +
+> +static int mlx5_vdpa_add_mac_vlan_rules(struct mlx5_vdpa_net *ndev, u8 *mac,
+> +					u16 vid, bool tagged,
+> +					struct mlx5_flow_handle **ucast,
+> +					struct mlx5_flow_handle **mcast)
+>   {
+>   	struct mlx5_flow_destination dest = {};
+> -	struct mlx5_flow_table_attr ft_attr = {};
+>   	struct mlx5_flow_act flow_act = {};
+> -	struct mlx5_flow_namespace *ns;
+> +	struct mlx5_flow_handle *rule;
+>   	struct mlx5_flow_spec *spec;
+>   	void *headers_c;
+>   	void *headers_v;
+> @@ -1364,74 +1379,178 @@ static int add_fwd_to_tir(struct mlx5_vdpa_net *ndev)
+>   		return -ENOMEM;
+>   
+>   	spec->match_criteria_enable = MLX5_MATCH_OUTER_HEADERS;
+> -	ft_attr.max_fte = 2;
+> -	ft_attr.autogroup.max_num_groups = 2;
+> -
+> -	ns = mlx5_get_flow_namespace(ndev->mvdev.mdev, MLX5_FLOW_NAMESPACE_BYPASS);
+> -	if (!ns) {
+> -		mlx5_vdpa_warn(&ndev->mvdev, "failed to get flow namespace\n");
+> -		err = -EOPNOTSUPP;
+> -		goto err_ns;
+> -	}
+> -
+> -	ndev->rxft = mlx5_create_auto_grouped_flow_table(ns, &ft_attr);
+> -	if (IS_ERR(ndev->rxft)) {
+> -		err = PTR_ERR(ndev->rxft);
+> -		goto err_ns;
+> -	}
+> -
+>   	headers_c = MLX5_ADDR_OF(fte_match_param, spec->match_criteria, outer_headers);
+> -	dmac_c = MLX5_ADDR_OF(fte_match_param, headers_c, outer_headers.dmac_47_16);
+> -	memset(dmac_c, 0xff, ETH_ALEN);
+>   	headers_v = MLX5_ADDR_OF(fte_match_param, spec->match_value, outer_headers);
+> +	dmac_c = MLX5_ADDR_OF(fte_match_param, headers_c, outer_headers.dmac_47_16);
+>   	dmac_v = MLX5_ADDR_OF(fte_match_param, headers_v, outer_headers.dmac_47_16);
+> -	ether_addr_copy(dmac_v, ndev->config.mac);
+> -
+> +	memset(dmac_c, 0xff, ETH_ALEN);
+> +	ether_addr_copy(dmac_v, mac);
+> +	MLX5_SET(fte_match_set_lyr_2_4, headers_c, cvlan_tag, 1);
+> +	if (tagged) {
+> +		MLX5_SET(fte_match_set_lyr_2_4, headers_v, cvlan_tag, 1);
+> +		MLX5_SET_TO_ONES(fte_match_set_lyr_2_4, headers_c, first_vid);
+> +		MLX5_SET(fte_match_set_lyr_2_4, headers_c, first_vid, vid);
+> +	}
+>   	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
+>   	dest.type = MLX5_FLOW_DESTINATION_TYPE_TIR;
+>   	dest.tir_num = ndev->res.tirn;
+> -	ndev->rx_rule_ucast = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
+> +	rule = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
+> +	if (IS_ERR(rule))
+> +		return PTR_ERR(rule);
+>   
+> -	if (IS_ERR(ndev->rx_rule_ucast)) {
+> -		err = PTR_ERR(ndev->rx_rule_ucast);
+> -		ndev->rx_rule_ucast = NULL;
+> -		goto err_rule_ucast;
+> -	}
+> +	*ucast = rule;
+>   
+>   	memset(dmac_c, 0, ETH_ALEN);
+>   	memset(dmac_v, 0, ETH_ALEN);
+>   	dmac_c[0] = 1;
+>   	dmac_v[0] = 1;
+> -	flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST;
+> -	ndev->rx_rule_mcast = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
+> -	if (IS_ERR(ndev->rx_rule_mcast)) {
+> -		err = PTR_ERR(ndev->rx_rule_mcast);
+> -		ndev->rx_rule_mcast = NULL;
+> -		goto err_rule_mcast;
+> +	rule = mlx5_add_flow_rules(ndev->rxft, spec, &flow_act, &dest, 1);
+> +	kvfree(spec);
+> +	if (IS_ERR(rule)) {
+> +		err = PTR_ERR(rule);
+> +		goto err_mcast;
+>   	}
+>   
+> -	kvfree(spec);
+> +	*mcast = rule;
+>   	return 0;
+>   
+> -err_rule_mcast:
+> -	mlx5_del_flow_rules(ndev->rx_rule_ucast);
+> -	ndev->rx_rule_ucast = NULL;
+> -err_rule_ucast:
+> -	mlx5_destroy_flow_table(ndev->rxft);
+> -err_ns:
+> -	kvfree(spec);
+> +err_mcast:
+> +	mlx5_del_flow_rules(*ucast);
+> +	return err;
+> +}
+> +
+> +static void mlx5_vdpa_del_mac_vlan_rules(struct mlx5_vdpa_net *ndev,
+> +					 struct mlx5_flow_handle *ucast,
+> +					 struct mlx5_flow_handle *mcast)
+> +{
+> +	mlx5_del_flow_rules(ucast);
+> +	mlx5_del_flow_rules(mcast);
+> +}
+> +
+> +static u64 search_val(u8 *mac, u16 vlan, bool tagged)
+> +{
+> +	u64 val;
+> +
+> +	if (!tagged)
+> +		vlan = MLX5V_UNTAGGED;
+> +
+> +	val = (u64)vlan << 48 |
+> +	      (u64)mac[0] << 40 |
+> +	      (u64)mac[1] << 32 |
+> +	      (u64)mac[2] << 24 |
+> +	      (u64)mac[3] << 16 |
+> +	      (u64)mac[4] << 8 |
+> +	      (u64)mac[5];
+> +
+> +	return val;
+> +}
+> +
+> +static struct macvlan_node *mac_vlan_lookup(struct mlx5_vdpa_net *ndev, u64 value)
+> +{
+> +	struct macvlan_node *pos;
+> +	u32 idx;
+> +
+> +	idx = hash_64(value, 8); // tbd 8
+> +	hlist_for_each_entry(pos, &ndev->macvlan_hash[idx], hlist) {
+> +		if (pos->macvlan == value)
+> +			return pos;
+> +	}
+> +	return NULL;
+> +}
+> +
+> +static int mac_vlan_add(struct mlx5_vdpa_net *ndev, u8 *mac, u16 vlan, bool tagged) // vlan -> vid
+> +{
 
-> if we still also want to be robust at the SMMU driver end
-> just in case, something like "if (WARN_ON(num_pages == 0)) num_pages =
-> 1;" might be more appropriate. However if it turns out that we *can*
-> actually end up with unsanitised input from some userspace unmap
-> interface getting this far, then a silent fixup is the best option, but
-> if so I'd still like to confirm that we're rounding in the same
-> direction as whoever touched the pagetables (since it can't have been us).
 
-I see. I'll give an update once I have the debugging result.
+I guess checkpatch may not be happy with such kind of comment.
 
-Thanks!
-Nic
+
+> +	struct macvlan_node *ptr;
+> +	u64 val;
+> +	u32 idx;
+> +	int err;
+> +
+> +	val = search_val(mac, vlan, tagged);
+> +	if (mac_vlan_lookup(ndev, val))
+> +		return -EEXIST;
+> +
+> +	ptr = kzalloc(sizeof(*ptr), GFP_KERNEL);
+> +	if (!ptr)
+> +		return -ENOMEM;
+> +
+> +	err = mlx5_vdpa_add_mac_vlan_rules(ndev, ndev->config.mac, vlan, tagged,
+> +					   &ptr->ucast_rule, &ptr->mcast_rule);
+> +	if (err)
+> +		goto err_add;
+> +
+> +	ptr->macvlan = val;
+> +	idx = hash_64(val, 8);
+> +	hlist_add_head(&ptr->hlist, &ndev->macvlan_hash[idx]);
+> +	return 0;
+> +
+> +err_add:
+> +	kfree(ptr);
+>   	return err;
+>   }
+>   
+> -static void remove_fwd_to_tir(struct mlx5_vdpa_net *ndev)
+> +static void mac_vlan_del(struct mlx5_vdpa_net *ndev, u8 *mac, u16 vlan, bool tagged)
+>   {
+> -	if (!ndev->rx_rule_ucast)
+> +	struct macvlan_node *ptr;
+> +
+> +	ptr = mac_vlan_lookup(ndev, search_val(mac, vlan, tagged));
+> +	if (!ptr)
+>   		return;
+>   
+> -	mlx5_del_flow_rules(ndev->rx_rule_mcast);
+> -	ndev->rx_rule_mcast = NULL;
+> -	mlx5_del_flow_rules(ndev->rx_rule_ucast);
+> -	ndev->rx_rule_ucast = NULL;
+> +	hlist_del(&ptr->hlist);
+> +	mlx5_vdpa_del_mac_vlan_rules(ndev, ptr->ucast_rule, ptr->mcast_rule);
+> +	kfree(ptr);
+> +}
+> +
+> +static void clear_mac_vlan_table(struct mlx5_vdpa_net *ndev)
+> +{
+> +	struct macvlan_node *pos;
+> +	struct hlist_node *n;
+> +	int i;
+> +
+> +	for (i = 0; i < MLX5V_MACVLAN_SIZE; i++) {
+> +		hlist_for_each_entry_safe(pos, n, &ndev->macvlan_hash[i], hlist) {
+> +			hlist_del(&pos->hlist);
+> +			mlx5_vdpa_del_mac_vlan_rules(ndev, pos->ucast_rule, pos->mcast_rule);
+> +			kfree(pos);
+> +		}
+> +	}
+> +}
+> +
+> +static int setup_steering(struct mlx5_vdpa_net *ndev)
+> +{
+> +	struct mlx5_flow_table_attr ft_attr = {};
+> +	struct mlx5_flow_namespace *ns;
+> +	int err;
+> +
+> +	ft_attr.max_fte = MAX_STEERING_ENT;
+> +	ft_attr.autogroup.max_num_groups = MAX_STEERING_GROUPS;
+> +
+> +	ns = mlx5_get_flow_namespace(ndev->mvdev.mdev, MLX5_FLOW_NAMESPACE_BYPASS);
+> +	if (!ns) {
+> +		mlx5_vdpa_warn(&ndev->mvdev, "failed to get flow namespace\n");
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	ndev->rxft = mlx5_create_auto_grouped_flow_table(ns, &ft_attr);
+> +	if (IS_ERR(ndev->rxft)) {
+> +		mlx5_vdpa_warn(&ndev->mvdev, "failed to create flow table\n");
+> +		return PTR_ERR(ndev->rxft);
+> +	}
+> +
+> +	err = mac_vlan_add(ndev, ndev->config.mac, 0, false);
+> +	if (err)
+> +		goto err_add;
+> +
+> +	return 0;
+> +
+> +err_add:
+> +	mlx5_destroy_flow_table(ndev->rxft);
+> +	return err;
+> +}
+> +
+> +static void teardown_steering(struct mlx5_vdpa_net *ndev)
+> +{
+> +	clear_mac_vlan_table(ndev);
+>   	mlx5_destroy_flow_table(ndev->rxft);
+>   }
+>   
+> @@ -1482,9 +1601,9 @@ static virtio_net_ctrl_ack handle_ctrl_mac(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+>   
+>   		/* Need recreate the flow table entry, so that the packet could forward back
+>   		 */
+> -		remove_fwd_to_tir(ndev);
+> +		mac_vlan_del(ndev, ndev->config.mac, 0, false);
+>   
+> -		if (add_fwd_to_tir(ndev)) {
+> +		if (mac_vlan_add(ndev, ndev->config.mac, 0, false)) {
+>   			mlx5_vdpa_warn(mvdev, "failed to insert forward rules, try to restore\n");
+>   
+>   			/* Although it hardly run here, we still need double check */
+> @@ -1508,7 +1627,7 @@ static virtio_net_ctrl_ack handle_ctrl_mac(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+>   
+>   			memcpy(ndev->config.mac, mac_back, ETH_ALEN);
+>   
+> -			if (add_fwd_to_tir(ndev))
+> +			if (mac_vlan_add(ndev, ndev->config.mac, 0, false))
+>   				mlx5_vdpa_warn(mvdev, "restore forward rules failed: insert forward rules failed\n");
+>   
+>   			break;
+> @@ -1610,6 +1729,42 @@ static virtio_net_ctrl_ack handle_ctrl_mq(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+>   	return status;
+>   }
+>   
+> +static virtio_net_ctrl_ack handle_ctrl_vlan(struct mlx5_vdpa_dev *mvdev, u8 cmd)
+> +{
+> +	struct mlx5_vdpa_net *ndev = to_mlx5_vdpa_ndev(mvdev);
+> +	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+> +	struct mlx5_control_vq *cvq = &mvdev->cvq;
+> +	struct virtio_net_ctrl_vlan vlan;
+> +	size_t read;
+> +	u16 id;
+> +
+> +	switch (cmd) {
+> +	case VIRTIO_NET_CTRL_VLAN_ADD:
+> +		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->riov, (void *)&vlan, sizeof(vlan));
+> +		if (read != sizeof(vlan))
+> +			break;
+> +
+> +		id = mlx5vdpa16_to_cpu(mvdev, vlan.id);
+> +		if (mac_vlan_add(ndev, ndev->config.mac, id, true))
+> +			break;
+
+
+This may work now but I wonder if we had the plan to support 
+VIRTIO_NET_F_CTRL_RX?
+
+if $mac is not in $mac_table
+     drop;
+if $vlan is not in $vlan_table
+     drop;
+
+With that features we probably requires the dedicated vlan filters 
+without a mac? Or do we want to a $mac * $vlans rules?
+
+If yes, maybe it's better to decouple vlan filters from mac now.
+
+Thanks
+
+
+> +
+> +		status = VIRTIO_NET_OK;
+> +		break;
+> +	case VIRTIO_NET_CTRL_VLAN_DEL:
+> +		read = vringh_iov_pull_iotlb(&cvq->vring, &cvq->riov, (void *)&vlan, sizeof(vlan));
+> +		if (read != sizeof(vlan))
+> +			break;
+> +
+> +		id = mlx5vdpa16_to_cpu(mvdev, vlan.id);
+> +		mac_vlan_del(ndev, ndev->config.mac, id, true);
+> +		break;
+> +	default:
+> +	break;
+> +}
+> +
+> +return status;
+> +}
+> +
+>   static void mlx5_cvq_kick_handler(struct work_struct *work)
+>   {
+>   	virtio_net_ctrl_ack status = VIRTIO_NET_ERR;
+> @@ -1654,7 +1809,9 @@ static void mlx5_cvq_kick_handler(struct work_struct *work)
+>   		case VIRTIO_NET_CTRL_MQ:
+>   			status = handle_ctrl_mq(mvdev, ctrl.cmd);
+>   			break;
+> -
+> +		case VIRTIO_NET_CTRL_VLAN:
+> +			status = handle_ctrl_vlan(mvdev, ctrl.cmd);
+> +			break;
+>   		default:
+>   			break;
+>   		}
+> @@ -1913,6 +2070,7 @@ static u64 get_supported_features(struct mlx5_core_dev *mdev)
+>   	mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MQ);
+>   	mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_STATUS);
+>   	mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_MTU);
+> +	mlx_vdpa_features |= BIT_ULL(VIRTIO_NET_F_CTRL_VLAN);
+>   
+>   	return mlx_vdpa_features;
+>   }
+> @@ -2198,9 +2356,9 @@ static int setup_driver(struct mlx5_vdpa_dev *mvdev)
+>   		goto err_tir;
+>   	}
+>   
+> -	err = add_fwd_to_tir(ndev);
+> +	err = setup_steering(ndev);
+>   	if (err) {
+> -		mlx5_vdpa_warn(mvdev, "add_fwd_to_tir\n");
+> +		mlx5_vdpa_warn(mvdev, "setup_steering\n");
+>   		goto err_fwd;
+>   	}
+>   	ndev->setup = true;
+> @@ -2226,7 +2384,7 @@ static void teardown_driver(struct mlx5_vdpa_net *ndev)
+>   	if (!ndev->setup)
+>   		return;
+>   
+> -	remove_fwd_to_tir(ndev);
+> +	teardown_steering(ndev);
+>   	destroy_tir(ndev);
+>   	destroy_rqt(ndev);
+>   	teardown_virtqueues(ndev);
+

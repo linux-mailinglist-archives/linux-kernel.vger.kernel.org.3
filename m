@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67E395023C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:20:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AFEF5023CC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234962AbiDOFWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S242339AbiDOFZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242913AbiDOFWg (ORCPT
+        with ESMTP id S238474AbiDOFZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:22:36 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32251E48
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:20:05 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 125so6527470pgc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:20:05 -0700 (PDT)
+        Fri, 15 Apr 2022 01:25:07 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8D0E029
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:22:40 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id t11so13629487eju.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:22:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=qRxjR8ix0vuqYl+JIAKzCjGTL7lI31+t1CslgYvhvOo=;
-        b=LlgBV7yufxnp6RGBHA9JMOgJJArOuwSk8Gkc6OVzvARE+63wJR5VjT2odFawJ/sXgq
-         owbqrgBO/HlAdelA+6G+u1q3pVP5xGD6Xp8T+Q2+DBePvAw5viHlW4KyfBqAE5Byfz7w
-         /gaKiHLiKrFVmm7wFVyIjMpBgpxN8uCpY9qV/m3FBbDyL7KpFL/91u3X64dbn+8FAQzP
-         Ovu9+3KQ8SiQWw3IrEMVExPjF5pDe+uJ4TNLzhxWcc+vEcp0W/9JTOF77yjNEaA8QNG0
-         U/Lw1j6AYpVQAN+mh8Zfx6wyyiumiakYKrTQMwaYwH6ErnR6Z2GLpEQUmI4APvKlAVwG
-         g9EA==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=2kVVWIn4+ecvL3sYl2+PczgNl0kQB4IqaH+XmO1cCTM=;
+        b=LkJ49FHDSq8yLqisCcngHd6LA8BVgBrFyzP+beFfpWfWErzakEMVHrueMnES3zpyA5
+         RZ9IqUvZrHv23ZSSiS9pOJnoMo6yJZYXT+noKo89pwmlKtWkYryEFsghwigatChoGxCE
+         3haxC4Zo+PbLew/hGx4GKMYn/mqVCcm6v6rn671/VD1obOHKsgW5oG2ieiEBRgk5F66J
+         gUBU0ZYR8rBN9LSwR4fICBUx4nuDhq4KuOn4k51UoersScuUZh3bI80mhIMWRRkGzlzh
+         24DQGVtskF8dDEUzdmHuWokRndeY851dz8DrTpx6/hojsdUmjUP89IYQRP1/Y6WkmNvv
+         /gWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=qRxjR8ix0vuqYl+JIAKzCjGTL7lI31+t1CslgYvhvOo=;
-        b=aNXmg+rELG9ua5tIA5WMEB1PrqQQv6a8BThVuhloXHl7iaLp8n0qeeNbJ+/bd6bQGX
-         eHyWt05AX2ndiEQX0rDP4Ev48i9UHfNZjcrV8TCihWkXpZEZgi4x+aUOgd6JB5OiEaHs
-         6wZmpwxx0XeQ2ARawbXnPye9VN0fcMT4G9Q1L9lChe0l2ZLl3gRvn5fDX9RqpA0XimqU
-         GakGHdPmhVdWBo5Q60uu550dg4DgTBjRW1ho0CfHFY96syROc7uMRko9fZWnltmxujs/
-         kYUBXQy7chOgQfQULJ/M7gGRkuOvpSmh/kLHXYxuKAR19ZPajdSHoahA+OcnzcGQ0+Pd
-         IUgg==
-X-Gm-Message-State: AOAM531haLOkKVmmoIi+oVQ95D7MzCRb3kWMzYEsYKMiyD4oOtP/V97w
-        DnrFl8LVaVgG3kfXKE34s4NXxw==
-X-Google-Smtp-Source: ABdhPJzw6B3I43JcoA4j2cCHTED3SaHmvYc3O0wt9aRvIAGa+jNkWcumUX6otCfAWo5ctSfAQM99DA==
-X-Received: by 2002:a63:f405:0:b0:3a2:8b3d:a5a8 with SMTP id g5-20020a63f405000000b003a28b3da5a8mr1789010pgi.204.1650000004984;
-        Thu, 14 Apr 2022 22:20:04 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id p3-20020a056a000b4300b004faee36ea56sm1503939pfo.155.2022.04.14.22.20.04
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=2kVVWIn4+ecvL3sYl2+PczgNl0kQB4IqaH+XmO1cCTM=;
+        b=lNi/es+QWYYn/TDh7BA1DkATi0ous2ka2ITpXZ3pIQruHvuma234ZgWr89DIe1ttwb
+         y1sIB6iUCbiAsL2cAEzAR/AdCMo1Cx/mAmK1YkxFOPXDppI2sFQjEO57z6NFsStvrPtX
+         H+3mzh3i6Te02Ob1RzSMJ4Z3dr9KZ4VnuRWs2DSOjAhChQTi44NavI/o/igffUL6Yequ
+         rfZJwIIk32CFlX5Mxoe2A/SG57wO7796EAYRgqyDi0urkBInR9mJMfKu+apuIZrutJu3
+         syrOQrd91gaVFk1gCp80tp1nKwiaQ7qtBGHHRPxUWZs4nWejkeencJNYyfJYqd4p3FkU
+         3ZVw==
+X-Gm-Message-State: AOAM531n83xjkbWKCUjRYbmDcxod+DYU0gSdtksGbV7wrord/X2UNHDr
+        Sl22UyxD7Gihf90KWgUYER8=
+X-Google-Smtp-Source: ABdhPJwP3dV8IYq2ZWLU3I0rvu5B/j2WfmphCivl5cktVtOZCgDduhQ3flQZo48fGOogLKNONLZx+Q==
+X-Received: by 2002:a17:906:c149:b0:6df:f047:1698 with SMTP id dp9-20020a170906c14900b006dff0471698mr5085735ejc.16.1650000159165;
+        Thu, 14 Apr 2022 22:22:39 -0700 (PDT)
+Received: from leap.localnet (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id 22-20020a17090600d600b006dfbc46efabsm1309308eji.126.2022.04.14.22.22.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 22:20:04 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 22:20:04 -0700 (PDT)
-X-Google-Original-Date: Thu, 14 Apr 2022 22:16:31 PDT (-0700)
-Subject:     Re: [PATCH v3 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
-In-Reply-To: <YljFyY7acyRDBmK7@tardis>
-CC:     Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de, guoren@kernel.org,
-        shorne@gmail.com, peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, longman@redhat.com,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, macro@orcam.me.uk,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, wangkefeng.wang@huawei.com,
-        jszhang@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     boqun.feng@gmail.com
-Message-ID: <mhng-78fec320-bd16-4774-9e24-2e5c0ce33121@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        Thu, 14 Apr 2022 22:22:38 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     gregkh@linuxfoundation.org, davem@davemloft.net,
+        dan.carpenter@oracle.com, len.baker@gmx.com, dave@stgolabs.net,
+        edumazet@google.com, Haowen Bai <baihaowen@meizu.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Haowen Bai <baihaowen@meizu.com>
+Subject: Re: [PATCH V2] staging: rtl8192e: Fix signedness bug in rtllib_rx_assoc_resp()
+Date:   Fri, 15 Apr 2022 07:22:36 +0200
+Message-ID: <8973092.rMLUfLXkoz@leap>
+In-Reply-To: <1649988571-19923-1-git-send-email-baihaowen@meizu.com>
+References: <1649988571-19923-1-git-send-email-baihaowen@meizu.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,212 +72,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 18:09:29 PDT (-0700), boqun.feng@gmail.com wrote:
-> Hi,
->
-> On Thu, Apr 14, 2022 at 03:02:08PM -0700, Palmer Dabbelt wrote:
->> From: Peter Zijlstra <peterz@infradead.org>
->> 
->> This is a simple, fair spinlock.  Specifically it doesn't have all the
->> subtle memory model dependencies that qspinlock has, which makes it more
->> suitable for simple systems as it is more likely to be correct.  It is
->> implemented entirely in terms of standard atomics and thus works fine
->> without any arch-specific code.
->> 
->> This replaces the existing asm-generic/spinlock.h, which just errored
->> out on SMP systems.
->> 
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>  include/asm-generic/spinlock.h       | 85 +++++++++++++++++++++++++---
->>  include/asm-generic/spinlock_types.h | 17 ++++++
->>  2 files changed, 94 insertions(+), 8 deletions(-)
->>  create mode 100644 include/asm-generic/spinlock_types.h
->> 
->> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
->> index adaf6acab172..ca829fcb9672 100644
->> --- a/include/asm-generic/spinlock.h
->> +++ b/include/asm-generic/spinlock.h
->> @@ -1,12 +1,81 @@
->>  /* SPDX-License-Identifier: GPL-2.0 */
->> -#ifndef __ASM_GENERIC_SPINLOCK_H
->> -#define __ASM_GENERIC_SPINLOCK_H
->> +
->>  /*
->> - * You need to implement asm/spinlock.h for SMP support. The generic
->> - * version does not handle SMP.
->> + * 'Generic' ticket-lock implementation.
->> + *
->> + * It relies on atomic_fetch_add() having well defined forward progress
->> + * guarantees under contention. If your architecture cannot provide this, stick
->> + * to a test-and-set lock.
->> + *
->> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
->> + * sub-word of the value. This is generally true for anything LL/SC although
->> + * you'd be hard pressed to find anything useful in architecture specifications
->> + * about this. If your architecture cannot do this you might be better off with
->> + * a test-and-set.
->> + *
->> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
->> + * uses atomic_fetch_add() which is SC to create an RCsc lock.
->> + *
->> + * The implementation uses smp_cond_load_acquire() to spin, so if the
->> + * architecture has WFE like instructions to sleep instead of poll for word
->> + * modifications be sure to implement that (see ARM64 for example).
->> + *
->>   */
->> -#ifdef CONFIG_SMP
->> -#error need an architecture specific asm/spinlock.h
->> -#endif
->>  
->> -#endif /* __ASM_GENERIC_SPINLOCK_H */
->> +#ifndef __ASM_GENERIC_TICKET_LOCK_H
->> +#define __ASM_GENERIC_TICKET_LOCK_H
->> +
->> +#include <linux/atomic.h>
->> +#include <asm-generic/spinlock_types.h>
->> +
->> +static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
->> +{
->> +	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
->> +	u16 ticket = val >> 16;
->> +
->> +	if (ticket == (u16)val)
->> +		return;
->> +
->> +	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
->
-> Looks like my follow comment is missing:
->
-> 	https://lore.kernel.org/lkml/YjM+P32I4fENIqGV@boqun-archlinux/
->
-> Basically, I suggested that 1) instead of "SC", use "fully-ordered" as
-> that's a complete definition in our atomic API ("RCsc" is fine), 2)
-> introduce a RCsc atomic_cond_read_acquire() or add a full barrier here
-> to make arch_spin_lock() RCsc otherwise arch_spin_lock() is RCsc on
-> fastpath but RCpc on slowpath.
+On venerd=EC 15 aprile 2022 04:09:31 CEST Haowen Bai wrote:
+> function rtllib_rx_assoc_resp () unsigned errcode receive auth_parse()'s
+> errcode -ENOMEM.
+>=20
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+> V1->V2: reduce return random value; print its own error message.
+>=20
+>  drivers/staging/rtl8192e/rtllib_softmac.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>=20
 
-Sorry about that, now that you mention it I remember seeing that comment 
-but I guess I dropped it somehow -- I've been down a bunch of other 
-RISC-V memory model rabbit holes lately, so I guess this just got lost 
-in the shuffle.
+> [snip]
 
-I'm not really a memory model person, so I'm a bit confused here, but 
-IIUC the issue is that there's only an RCpc ordering between the 
-store_release that publishes the baker's ticket and the customer's spin 
-to obtain a contested lock.  Thus we could see RCpc-legal accesses 
-before the atomic_cond_read_acquire().
+It looks like you are doing too many things and that those aren't even=20
+discussed in your commit message.
 
-That's where I get a bit lost: the atomic_fetch_add() is RCsc, so the 
-offending accesses are bounded to remain within arch_spin_lock().  I'm 
-not sure how that lines up with the LKMM requirements, which I always 
-see expressed in terms of the entire lock being RCsc (specifically with 
-unlock->lock reordering weirdness, which the fully ordered AMO seems to 
-prevent here).
+> @@ -2292,8 +2292,8 @@ static void rtllib_rx_auth_resp(struct=20
+rtllib_device *ieee, struct sk_buff *skb)
+>  	if (errcode) {
+>  		ieee->softmac_stats.rx_auth_rs_err++;
+>  		netdev_info(ieee->dev,
+> -			    "Authentication response status code=20
+0x%x",
+> -			    errcode);
+> +			    "Authentication response status code %d",
+> +			    le16_to_cpu(errcode));
 
-That's kind of just a curiosity, though, so assuming we need some 
-stronger ordering here I sort of considered this
+Why did you call le16_to_cpu(errcode)?=20
+If I'm not missing something, it looks that auth_parse() already returns=20
+native endian u16 values.
 
-    diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-    index ca829fcb9672..bf4e6050b9b2 100644
-    --- a/include/asm-generic/spinlock.h
-    +++ b/include/asm-generic/spinlock.h
-    @@ -14,7 +14,7 @@
-      * a test-and-set.
-      *
-      * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-    - * uses atomic_fetch_add() which is SC to create an RCsc lock.
-    + * uses atomic_fetch_add_rcsc() which is RCsc to create an RCsc lock.
-      *
-      * The implementation uses smp_cond_load_acquire() to spin, so if the
-      * architecture has WFE like instructions to sleep instead of poll for word
-    @@ -30,13 +30,13 @@
-    
-     static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
-     {
-    	u32 val = atomic_fetch_add(1<<16, lock);
-     	u16 ticket = val >> 16;
-    
-     	if (ticket == (u16)val)
-     		return;
-    
-    -	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
-    +	atomic_cond_read_rcsc(lock, ticket == (u16)VAL);
-     }
-    
-     static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
+Thanks,
 
-but that smells a bit awkward: it's not really that the access is RCsc, 
-it's that the whole lock is, and the RCsc->branch->RCpc is just kind of 
-screaming for arch-specific optimizations.  I think we either end up 
-with some sort of "atomic_*_for_tspinlock" or a "mb_*_for_tspinlock", 
-both of which seem very specific.
+=46abio M. De Francesco
 
-That, or we just run with the fence until someone has a concrete way to 
-do it faster.  I don't know OpenRISC or C-SKY, but IIUC the full fence 
-is free on RISC-V: our smp_cond_read_acquire() only emits read accesses, 
-ends in a "fence r,r", and is proceeded by a full smp_mb() from 
-atomic_fetch_add().  So I'd lean towards the much simpler
 
-    diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
-    index ca829fcb9672..08e3400a104f 100644
-    --- a/include/asm-generic/spinlock.h
-    +++ b/include/asm-generic/spinlock.h
-    @@ -14,7 +14,9 @@
-      * a test-and-set.
-      *
-      * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
-    - * uses atomic_fetch_add() which is SC to create an RCsc lock.
-    + * uses atomic_fetch_add() which is RCsc to create an RCsc hot path, along with
-    + * a full fence after the spin to upgrade the otherwise-RCpc
-    + * atomic_cond_read_acquire().
-      *
-      * The implementation uses smp_cond_load_acquire() to spin, so if the
-      * architecture has WFE like instructions to sleep instead of poll for word
-    @@ -30,13 +32,22 @@
-    
-     static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
-     {
-    -	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
-    +	u32 val = atomic_fetch_add(1<<16, lock);
-     	u16 ticket = val >> 16;
-    
-     	if (ticket == (u16)val)
-     		return;
-    
-    +	/*
-    +	 * atomic_cond_read_acquire() is RCpc, but rather than defining a
-    +	 * custom cond_read_rcsc() here we just emit a full fence.  We only
-    +	 * need the prior reads before subsequent writes ordering from
-    +	 * smb_mb(), but as atomic_cond_read_acquire() just emits reads and we
-    +	 * have no outstanding writes due to the atomic_fetch_add() the extra
-    +	 * orderings are free.
-    +	 */
-     	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
-    +	smp_mb();
-     }
-    
-     static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
-
-I'm also now worried about trylock, but am too far down this rabbit hole 
-to try and figure out how try maps between locks and cmpxchg.  This is 
-all way too complicated to squash in, though, so I'll definitely plan on 
-a v4.
-
-> Regards,
-> Boqun
->
->> +}
->> +
->> +static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
->> +{
->> +	u32 old = atomic_read(lock);
->> +
->> +	if ((old >> 16) != (old & 0xffff))
->> +		return false;
->> +
->> +	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
->> +}
->> +
-> [...]

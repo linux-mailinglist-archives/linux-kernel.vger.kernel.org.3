@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B572502C18
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CDE8502C1C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354656AbiDOOqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
+        id S1354670AbiDOOsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349655AbiDOOqA (ORCPT
+        with ESMTP id S1349538AbiDOOsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:46:00 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DC3A6E34
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:43:32 -0700 (PDT)
-Received: from [192.168.88.87] (unknown [36.80.217.41])
-        by gnuweeb.org (Postfix) with ESMTPSA id 561D17E39E;
-        Fri, 15 Apr 2022 14:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1650033811;
-        bh=JVo0hjyg1hSKX87XfbS3BPrkSnnFNAJbNMwabt4e32c=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AcrCB7JNhXYp/CnkBXkBWxY1+dEzyO6LSipAEl47LtHKAa5MJBHNdvLW/dHjFRx6a
-         KMDEoS94WwkbqrwTtD/5tqzMf4uKss1Fr93cq8l9mg9opUwyVCdLPoczYTIdwc1QPc
-         452lFjQ1Qx3wavC5QKmWXvRYR2XXhLVkILRJdaITwJD/dyrJmthygFmK0Nq1OZMAcB
-         yvULNjMKmaEeQNpfmUw8j+vOzaCwaG0OX8Ie9UEvgPS8ohAEeMedzvXin7MVW92lKT
-         C+RzUgJ5nOo3WofuuBD9NyZYT2fHJ1ywj61S8AFjQGGy5wMOK+vHG1NKtntugrJmRF
-         aCEC0rRC5EofA==
-Message-ID: <b6136c05-5ce8-c475-989c-083933226bca@gnuweeb.org>
-Date:   Fri, 15 Apr 2022 21:43:13 +0700
+        Fri, 15 Apr 2022 10:48:13 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11D0673041;
+        Fri, 15 Apr 2022 07:45:43 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4Kfzdy335Jz9sSM;
+        Fri, 15 Apr 2022 16:45:42 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 9mbAjV4qM4Qw; Fri, 15 Apr 2022 16:45:42 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4Kfzdp4PxQz9sSk;
+        Fri, 15 Apr 2022 16:45:34 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 848F08B778;
+        Fri, 15 Apr 2022 16:45:34 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id NgRjy0GRUqZz; Fri, 15 Apr 2022 16:45:34 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [172.25.230.108])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id 607AF8B764;
+        Fri, 15 Apr 2022 16:45:34 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 23FEjOGo1546420
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 16:45:25 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 23FEjO9Z1546418;
+        Fri, 15 Apr 2022 16:45:24 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Steve Capper <steve.capper@arm.com>,
+        Will Deacon <will.deacon@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v10] mm, hugetlbfs: Allow for "high" userspace addresses
+Date:   Fri, 15 Apr 2022 16:45:13 +0200
+Message-Id: <ab847b6edb197bffdfe189e70fb4ac76bfe79e0d.1650033747.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Linux 5.18-rc1] WARNING: CPU: 1 PID: 0 at
- kernel/sched/fair.c:3355 update_blocked_averages
-Content-Language: en-US
-To:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-References: <b86541ea-7d96-5a24-1b65-37c24c70d3ff@gnuweeb.org>
- <f71d132d-02a0-918c-ab2b-3234d0d492a4@arm.com>
- <675544de-3369-e26e-65ba-3b28fff5c126@gnuweeb.org>
- <000457c2-57af-95e3-7dff-2cbd99f0de5f@arm.com>
- <7f4b3fbf-c7c6-22cb-019b-520ad6a663aa@gnuweeb.org>
- <786190b3-b2cb-464d-9808-325d774c62a5@arm.com>
- <e1f9421d-e9dd-589c-bf88-407533e40797@gnuweeb.org>
- <457e1f88-4eb0-53c4-a750-c8930c803272@arm.com>
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-In-Reply-To: <457e1f88-4eb0-53c4-a750-c8930c803272@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1650033912; l=5323; s=20211009; h=from:subject:message-id; bh=UmgUWoLLpDMHfdawGtDAuWyrltDOfRI1GH+FVVOxo0s=; b=jc9wGSeCXlZyTKtt24uXrhkzxYCCyUB/mjZFb7pPsd9hRVA6kOZcYPdiXGEkcWMHzY02bV4KweGx 1wvlcPPJBOZsbvlhxGFm5MLjQJfBpf8vfLwUZ7pGcd6U/m9jx8bG
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,19 +68,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 4:38 PM, Dietmar Eggemann wrote:
-> Looks like you saw the same issue which got fixed here:
-> 
-> https://lkml.kernel.org/r/20220414015940.9537-1-kuyo.chang@mediatek.com
-> 
-> So nothing to do with CFS BW control. It's triggered by a task with very
-> low nice value and load_avg=1 during cfs_rq attach.
+This is a fix for commit f6795053dac8 ("mm: mmap: Allow for "high"
+userspace addresses") for hugetlb.
 
-Yeah, it looks like I hit the same SCHED_WARN_ON() with what is explained
-in that patch. As such, I assume it's fixed then. I didn't manage to
-reproduce the bug, but I am moving on from this now.
+This patch adds support for "high" userspace addresses that are
+optionally supported on the system and have to be requested via a hint
+mechanism ("high" addr parameter to mmap).
 
-Thanks for the update!
+Architectures such as powerpc and x86 achieve this by making changes to
+their architectural versions of hugetlb_get_unmapped_area() function.
+However, arm64 uses the generic version of that function.
 
+So take into account arch_get_mmap_base() and arch_get_mmap_end() in
+hugetlb_get_unmapped_area(). To allow that, move those two macros
+out of mm/mmap.c into include/linux/sched/mm.h
+
+If these macros are not defined in architectural code then they default
+to (TASK_SIZE) and (base) so should not introduce any behavioural
+changes to architectures that do not define them.
+
+For the time being, only ARM64 is affected by this change.
+
+From Catalin (ARM64):
+  We should have fixed hugetlb_get_unmapped_area() as well when we
+added support for 52-bit VA. The reason for commit f6795053dac8 was to
+prevent normal mmap() from returning addresses above 48-bit by default
+as some user-space had hard assumptions about this.
+
+It's a slight ABI change if you do this for hugetlb_get_unmapped_area()
+but I doubt anyone would notice. It's more likely that the current
+behaviour would cause issues, so I'd rather have them consistent.
+
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Steve Capper <steve.capper@arm.com>
+Cc: Will Deacon <will.deacon@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Fixes: f6795053dac8 ("mm: mmap: Allow for "high" userspace addresses")
+Cc: <stable@vger.kernel.org> # 5.0.x
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Acked-by: Andrew Morton <akpm@linux-foundation.org>
+---
+Resending the patch as standalone so that is can be merged via mm tree in 5.18 and stable.
+
+v10:
+- Moved as first patch of the series so that it can be applied
+separately as a flag and be easily applied back on stable.
+- Added text from Catalin explaining why it is a fixup.
+---
+ fs/hugetlbfs/inode.c     | 9 +++++----
+ include/linux/sched/mm.h | 8 ++++++++
+ mm/mmap.c                | 8 --------
+ 3 files changed, 13 insertions(+), 12 deletions(-)
+
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index 99c7477cee5c..dd3a088db11d 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -206,7 +206,7 @@ hugetlb_get_unmapped_area_bottomup(struct file *file, unsigned long addr,
+ 	info.flags = 0;
+ 	info.length = len;
+ 	info.low_limit = current->mm->mmap_base;
+-	info.high_limit = TASK_SIZE;
++	info.high_limit = arch_get_mmap_end(addr);
+ 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
+ 	info.align_offset = 0;
+ 	return vm_unmapped_area(&info);
+@@ -222,7 +222,7 @@ hugetlb_get_unmapped_area_topdown(struct file *file, unsigned long addr,
+ 	info.flags = VM_UNMAPPED_AREA_TOPDOWN;
+ 	info.length = len;
+ 	info.low_limit = max(PAGE_SIZE, mmap_min_addr);
+-	info.high_limit = current->mm->mmap_base;
++	info.high_limit = arch_get_mmap_base(addr, current->mm->mmap_base);
+ 	info.align_mask = PAGE_MASK & ~huge_page_mask(h);
+ 	info.align_offset = 0;
+ 	addr = vm_unmapped_area(&info);
+@@ -237,7 +237,7 @@ hugetlb_get_unmapped_area_topdown(struct file *file, unsigned long addr,
+ 		VM_BUG_ON(addr != -ENOMEM);
+ 		info.flags = 0;
+ 		info.low_limit = current->mm->mmap_base;
+-		info.high_limit = TASK_SIZE;
++		info.high_limit = arch_get_mmap_end(addr);
+ 		addr = vm_unmapped_area(&info);
+ 	}
+ 
+@@ -251,6 +251,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 	struct mm_struct *mm = current->mm;
+ 	struct vm_area_struct *vma;
+ 	struct hstate *h = hstate_file(file);
++	const unsigned long mmap_end = arch_get_mmap_end(addr);
+ 
+ 	if (len & ~huge_page_mask(h))
+ 		return -EINVAL;
+@@ -266,7 +267,7 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 	if (addr) {
+ 		addr = ALIGN(addr, huge_page_size(h));
+ 		vma = find_vma(mm, addr);
+-		if (TASK_SIZE - len >= addr &&
++		if (mmap_end - len >= addr &&
+ 		    (!vma || addr + len <= vm_start_gap(vma)))
+ 			return addr;
+ 	}
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index a80356e9dc69..1ad1f4bfa025 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -136,6 +136,14 @@ static inline void mm_update_next_owner(struct mm_struct *mm)
+ #endif /* CONFIG_MEMCG */
+ 
+ #ifdef CONFIG_MMU
++#ifndef arch_get_mmap_end
++#define arch_get_mmap_end(addr)	(TASK_SIZE)
++#endif
++
++#ifndef arch_get_mmap_base
++#define arch_get_mmap_base(addr, base) (base)
++#endif
++
+ extern void arch_pick_mmap_layout(struct mm_struct *mm,
+ 				  struct rlimit *rlim_stack);
+ extern unsigned long
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 3aa839f81e63..313b57d55a63 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2117,14 +2117,6 @@ unsigned long vm_unmapped_area(struct vm_unmapped_area_info *info)
+ 	return addr;
+ }
+ 
+-#ifndef arch_get_mmap_end
+-#define arch_get_mmap_end(addr)	(TASK_SIZE)
+-#endif
+-
+-#ifndef arch_get_mmap_base
+-#define arch_get_mmap_base(addr, base) (base)
+-#endif
+-
+ /* Get an address range which is currently unmapped.
+  * For shmat() with addr=0.
+  *
 -- 
-Ammar Faizi
+2.35.1
+

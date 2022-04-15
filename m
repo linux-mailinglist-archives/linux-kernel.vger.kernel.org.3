@@ -2,85 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 502EC5026A0
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3995A5026AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:27:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351370AbiDOI2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44112 "EHLO
+        id S1351382AbiDOI3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:29:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiDOI20 (ORCPT
+        with ESMTP id S244865AbiDOI31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:28:26 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8439AAB47;
-        Fri, 15 Apr 2022 01:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=3wN74fu5w+jCy3hi8iGGJYQXAXjvPWi0PsASSr2Y7Dc=; b=qB+tQbvLGYevQ0Oht3Gx0nbcRm
-        qdtuhUtZl9ToQzFaFI8dFYLvW4wMdTiO+uu5llhZGKwdake5TtTPjudt7yACs6bhOLM7jv+XQKPGU
-        nRwpmVKVigyKF2dgs5JKUdPHfFQGtHwD07owR+aC0YV3yOxRnfs9J8+g/IYO0P+eHL/cgexQ5gTty
-        TMtHlkrbyO00YbHKGphJQcP6RndiOaYIxd4vzwWaRx5JwzQR9vkoNdbFNVa9VDR1BZ0ia76rZoYl4
-        7IQdUjVcRsXKnaCi9tn0ijyAeCB2Lx0fhxKyascV4NxGh5zXKrVUH7v0k/xjQsnx/cf1cwJdRJPeh
-        zkVtm7Sg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfHGu-00Fy61-OS; Fri, 15 Apr 2022 08:25:40 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 008BE3002DE;
-        Fri, 15 Apr 2022 10:25:39 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 95920202508B9; Fri, 15 Apr 2022 10:25:39 +0200 (CEST)
-Date:   Fri, 15 Apr 2022 10:25:39 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Joerg Roedel <joro@8bytes.org>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Like Xu <likexu@tencent.com>
-Subject: Re: [PATCH v3 09/11] perf: x86/core: Add interface to query
- perfmon_event_map[] directly
-Message-ID: <YlksA1gR0ehoU2VP@hirez.programming.kicks-ass.net>
-References: <20220411093537.11558-1-likexu@tencent.com>
- <20220411093537.11558-10-likexu@tencent.com>
+        Fri, 15 Apr 2022 04:29:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46AB9B3DDB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:26:59 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r66so6821979pgr.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:26:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IouwgSoOU5RLyMJuBmnkWSebHjJ6FolzaVbEFNDsszU=;
+        b=gTmvcqVWKjRoSWUlP6fJYRDMffX0KIawj4PuOOu801Wi/7rfmmcSGiH/BqjX+xIriT
+         +nq2k+bskAd6ELn0+sBm+a3TTq/DF/RxNvQtcZ2ZYxGWeNbhFrH0w7Xj66Hq6YbSh7Ls
+         xOZlEe+aipJWNgpkY2ZaBifeeD0SHr6tqi9VNoi5HKwONCBjHg3nEXJ94Pvr8CeiZfBn
+         FVdPLZjKFpJfp7eoNOVHUv5vsm8OVhX1JQuC5S0MyZwPBN1KoZvjFxbSw+ejQd7RBEq2
+         MWWeqibVdA1ug9lzdH+DA4fPTlCqRibLRvhX/zBXFTI9oD4bhezridMEKHTigA98IAWc
+         B7qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IouwgSoOU5RLyMJuBmnkWSebHjJ6FolzaVbEFNDsszU=;
+        b=1CT0DD1xo7ST3a8Q8W9uzphN3LtE6IrSZueo3GHZHbqTcoZJZ8bLFpIl3zmMHhvdZf
+         UOypP9y8hSXs71G+LLTccrJW8H1XAjiD0Oh8GoR21DpgLzVEWEWyC+OJDWXU7pTssBTT
+         6kWwX9RMcHj4OMI+fEITSeUqfw8p/auAjsl8YnhrdESJU24kwogrR1hjuMNm2GW5ZiHR
+         1GM1lGystROMB2UVB6olVCtn/ALEndONhQqbzASRYo48SlXgm1HGNhxD41CenfKLzLVr
+         MDwohfuKfkIu4//ZZIpID3q5mNo4ndjshDdPTIPcj4BUnNGwPKzg+VhdIuMKWb2JaytT
+         HirA==
+X-Gm-Message-State: AOAM532iVI2jiWzO2jFezEU7GXRWhq7EgSba/FrzJrybReIOyD29lfEl
+        Que2Y/XAqsyuIvLysc2dvM+xANjOmQdvHmknNsfKAg==
+X-Google-Smtp-Source: ABdhPJwi7VZhcsJ5DGv660Mg4AHf5r56+3E7RgA5pVgaieMZjLUNyxDVauEwklWTDsyiDy13rPq5P6cpr0CplOR4IGc=
+X-Received: by 2002:a63:1557:0:b0:39d:8460:2e07 with SMTP id
+ 23-20020a631557000000b0039d84602e07mr5680484pgv.344.1650011218652; Fri, 15
+ Apr 2022 01:26:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411093537.11558-10-likexu@tencent.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220415054219.38078-1-aajith@arista.com> <4586921d-5fc4-b63f-8264-a6fd63c592b6@gmail.com>
+In-Reply-To: <4586921d-5fc4-b63f-8264-a6fd63c592b6@gmail.com>
+From:   Arun Ajith S <aajith@arista.com>
+Date:   Fri, 15 Apr 2022 13:56:46 +0530
+Message-ID: <CAOvjArSb4avVaV25925z+e5eKW89Q6k+AsPSq1yS+kroG_a=ww@mail.gmail.com>
+Subject: Re: [PATCH net-next v5] net/ipv6: Introduce accept_unsolicited_na
+ knob to implement router-side changes for RFC9131
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        dsahern@kernel.org, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwn.net, prestwoj@gmail.com,
+        gilligan@arista.com, noureddine@arista.com, gk@arista.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 05:35:35PM +0800, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Currently, we have [intel|knc|p4|p6]_perfmon_event_map on the Intel
-> platforms and amd_[f17h]_perfmon_event_map on the AMD platforms.
-> 
-> Early clumsy KVM code or other potential perf_event users may have
-> hard-coded these perfmon_maps (e.g., arch/x86/kvm/svm/pmu.c), so
-> it would not make sense to program a common hardware event based
-> on the generic "enum perf_hw_id" once the two tables do not match.
-> 
-> Let's provide an interface for callers outside the perf subsystem to get
-> the counter config based on the perfmon_event_map currently in use,
-> and it also helps to save bytes.
-> 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Like Xu <likexu@tencent.com>
+Sorry, it wasn't the mailer.
+The rst file in my patch was missing tabs.
+I have fixed it and verified the generated HTML is correct.
+I'll post v6 with the fix.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On Fri, Apr 15, 2022 at 1:09 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>
+> On 4/15/22 12:42, Arun Ajith S wrote:
+> > +accept_unsolicited_na - BOOLEAN
+> > +     Add a new neighbour cache entry in STALE state for routers on receiving an
+> > +     unsolicited neighbour advertisement with target link-layer address option
+> > +     specified. This is as per router-side behavior documented in RFC9131.
+> > +     This has lower precedence than drop_unsolicited_na.
+> > +
+> > +   ====   ======  ======  ==============================================
+> > +      drop   accept  fwding                   behaviour
+> > +      ----   ------  ------  ----------------------------------------------
+> > +         1        X       X  Drop NA packet and don't pass up the stack
+> > +         0        0       X  Pass NA packet up the stack, don't update NC
+> > +         0        1       0  Pass NA packet up the stack, don't update NC
+> > +         0        1       1  Pass NA packet up the stack, and add a STALE
+> > +                             NC entry
+> > +   ====   ======  ======  ==============================================
+> > +
+>
+> Hi,
+>
+> Building htmldocs with this patch, there are no more warnings from v4, but
+> I don't see the table above generated in the output. I guess due to
+> whitespace-mangling issues on your mailer, because the table syntax alignment
+> (the =-s) don't match the contents/cells.
+>
+> Thanks.
+>
+> --
+> An old man doll... just what I always wanted! - Clara

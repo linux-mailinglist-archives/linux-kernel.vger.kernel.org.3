@@ -2,266 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D61965029E5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 589E55029B6
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353554AbiDOMeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59710 "EHLO
+        id S237976AbiDOMb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 08:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353746AbiDOMc7 (ORCPT
+        with ESMTP id S234532AbiDOMbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:32:59 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5EC62A24A;
-        Fri, 15 Apr 2022 05:30:27 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id CB7B61BF20B;
-        Fri, 15 Apr 2022 12:30:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650025826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A1/tszHDG8Vff4skAnjSZX538JXjqq1vMLo59ef74jo=;
-        b=afzipWdjZ8lUcVOEUnYPkNYt+ZTIgSvshV8phJLgcQG13g0so4ZCFUzO2AGUhoFfizSuQB
-        mp4fQ8tpm3s3tI6aEG0Ap4/C9dRVvN08xX71QRpyBfyeZ6ue/M5KNZ8rT4VJ6qc/Wnh9Yv
-        Zb2u4EEN+tRj0h0QkaD0AAs+YlFx/X1sdOb4OWzsJemgN+h9/keFzsitnbd3JDyGIeWiDa
-        3Dooquwa5CSrp+tIRhiIHMJY9FPjCH5Uw9QLijyHjlTiINJsGcm/O+jcQSfxUOG/GI4lXb
-        OY6daObOgp64dow6NoJ6Wz5guq3NpjEL3Ethm5sCz0+hqg+L4z6UAQ3Jbg3H9Q==
-Date:   Fri, 15 Apr 2022 14:28:57 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
-        Phil Edworthy <phil.edworthy@renesas.com>
-Subject: Re: [PATCH net-next 06/12] net: dsa: rzn1-a5psw: add Renesas RZ/N1
- advanced 5 port switch driver
-Message-ID: <20220415142857.525ccd2d@fixe.home>
-In-Reply-To: <20220415105503.ztl4zhoyua2qzelt@skbuf>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-7-clement.leger@bootlin.com>
-        <20220414144709.tpxiiaiy2hu4n7fd@skbuf>
-        <20220415113453.1a076746@fixe.home>
-        <20220415105503.ztl4zhoyua2qzelt@skbuf>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Fri, 15 Apr 2022 08:31:53 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD94B1FB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:29:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650025764; x=1681561764;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+5cP0nVMRluUUW9TwVdDj5Aa+5bddYAwN4kFENnsPQA=;
+  b=Bl8MbRXzoA18ajSPScNpkvU4g/pLyrpDnNdOVvn9/1wz/nvooOwsfJvJ
+   xD6HYyiJPyjo2I/ICCGuhG+1HE/FndHx0kMT8hyvw91zjAPosiRURbShi
+   h/rs3lgRR+ajZ6o44xy2ERpKeIMJfKxrkSXC6kOXJNYSSzJTjdptWRokE
+   o2pXxw5plH7LeOLvZGdOw0zEgEGRqvmF9f3lgYZkGC8YomNleTOPkkPsV
+   NZuUqT5Hubr/NHzL47tiv0lrUrG8rHqdo2LC/SJx4PgaMduPcT+43LxY3
+   62hNYBbX9chub3MCkr4akR5IE4UbxuKIveE7Zc9pBitl4eFyqb6ittAbP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="323589413"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="323589413"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 05:29:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="527381119"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2022 05:29:22 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfL4j-0001w9-Dp;
+        Fri, 15 Apr 2022 12:29:21 +0000
+Date:   Fri, 15 Apr 2022 20:29:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Brijesh Singh <brijesh.singh@amd.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, Borislav Petkov <bp@suse.de>
+Subject: [tip:x86/sev 43/49] drivers/virt/coco/sevguest/sevguest.c:579:17:
+ sparse: sparse: incorrect type in argument 1 (different address spaces)
+Message-ID: <202204152027.aJdnJRgJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 15 Apr 2022 13:55:03 +0300,
-Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/sev
+head:   101826e02ac6c829bf4e768295e79ae9c37b4b2a
+commit: fce96cf0443083e37455eff8f78fd240c621dae3 [43/49] virt: Add SEV-SNP guest driver
+config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220415/202204152027.aJdnJRgJ-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=fce96cf0443083e37455eff8f78fd240c621dae3
+        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+        git fetch --no-tags tip x86/sev
+        git checkout fce96cf0443083e37455eff8f78fd240c621dae3
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/virt/coco/sevguest/
 
-> On Fri, Apr 15, 2022 at 11:34:53AM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Le Thu, 14 Apr 2022 17:47:09 +0300,
-> > Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit : =20
-> > > > later (vlan, etc).
-> > > >=20
-> > > > Suggested-by: Laurent Gonzales <laurent.gonzales@non.se.com>
-> > > > Suggested-by: Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>
-> > > > Suggested-by: Phil Edworthy <phil.edworthy@renesas.com>   =20
-> > >=20
-> > > Suggested? What did they suggest? "You should write a driver"?
-> > > We have a Co-developed-by: tag, maybe it's more appropriate here? =20
-> >=20
-> > This driver was written from scratch but some ideas (port isolation
-> > using pattern matcher) was inspired from a previous driver. I thought it
-> > would be nice to give them credit for that.
-> >=20
-> > [...] =20
->=20
-> Ok, in that case I don't really know how to mark sources of inspiration
-> in the commit message, maybe your approach is fine.
->=20
-> > > >  obj-y				+=3D hirschmann/
-> > > >  obj-y				+=3D microchip/
-> > > > diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5=
-psw.c
-> > > > new file mode 100644
-> > > > index 000000000000..5bee999f7050
-> > > > --- /dev/null
-> > > > +++ b/drivers/net/dsa/rzn1_a5psw.c
-> > > > @@ -0,0 +1,676 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > > +/*
-> > > > + * Copyright (C) 2022 Schneider-Electric
-> > > > + *
-> > > > + * Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > > > + */
-> > > > +
-> > > > +#include <linux/clk.h>
-> > > > +#include <linux/etherdevice.h>
-> > > > +#include <linux/kernel.h>
-> > > > +#include <linux/module.h>
-> > > > +#include <linux/of.h>
-> > > > +#include <linux/of_mdio.h>
-> > > > +#include <net/dsa.h>
-> > > > +#include <uapi/linux/if_bridge.h>   =20
-> > >=20
-> > > Why do you need to include this header? =20
-> >=20
-> > It defines BR_STATE_* but I guess linux/if_bridge.h does include it. =20
->=20
-> Yes.
->=20
-> > > > +static void a5psw_port_pattern_set(struct a5psw *a5psw, int port, =
-int pattern,
-> > > > +				   bool enable)
-> > > > +{
-> > > > +	u32 rx_match =3D 0;
-> > > > +
-> > > > +	if (enable)
-> > > > +		rx_match |=3D A5PSW_RXMATCH_CONFIG_PATTERN(pattern);
-> > > > +
-> > > > +	a5psw_reg_rmw(a5psw, A5PSW_RXMATCH_CONFIG(port),
-> > > > +		      A5PSW_RXMATCH_CONFIG_PATTERN(pattern), rx_match);
-> > > > +}
-> > > > +
-> > > > +static void a5psw_port_mgmtfwd_set(struct a5psw *a5psw, int port, =
-bool enable)   =20
-> > >=20
-> > > Some explanation on what "management forward" means/does? =20
-> >=20
-> > I'll probably rename that cpu_port_forward to match the dsa naming.
-> > It'll actually isolate the port from other ports by only forwarding the
-> > packets to the CPU port. =20
->=20
-> You could probably do without a rename by just adding a comment that
-> says that it enables forwarding only towards the management port.
->=20
-> > > Please implement .shutdown too, it's non-optional. =20
-> >=20
-> > Hum, platform_shutdown does seems to check for the .shutdown callback:
-> >=20
-> > static void platform_shutdown(struct device *_dev)
-> > {
-> > 	struct platform_device *dev =3D to_platform_device(_dev);
-> > 	struct platform_driver *drv;
-> >=20
-> > 	if (!_dev->driver)
-> > 		return;
-> >=20
-> > 	drv =3D to_platform_driver(_dev->driver);
-> > 	if (drv->shutdown)
-> > 		drv->shutdown(dev);
-> > }
-> >=20
-> > Is there some documentation specifying that this is mandatory ?
-> > If so, should I just set it to point to an empty shutdown function then
-> > ? =20
->=20
-> I meant that for a DSA switch driver is mandatory to call dsa_switch_shut=
-down()
-> from your ->shutdown method, otherwise subtle things break, sorry for bei=
-ng unclear.
->=20
-> Please blindly copy-paste the odd pattern that all other DSA drivers use
-> in ->shutdown and ->remove (with the platform_set_drvdata(dev, NULL) call=
-s),
-> like a normal person :)
->=20
-> > > > + * @reg_lock: Lock for register read-modify-write operation   =20
-> > >=20
-> > > Interesting concept. Generally we see higher-level locking schemes
-> > > (i.e. a rmw lock won't really ensure much in terms of consistency of
-> > > settings if that's the only thing that serializes concurrent thread
-> > > accesses to some register). =20
-> >=20
-> > Agreed, this does not guarantee consistency of settings but guarantees
-> > that rmw modifications are atomic between devices. I wasn't sure about
-> > the locking guarantee that I could have. After looking at other
-> > drivers, I guess I will switch to something more common such as using
-> > a global mutex for register accesses. =20
->=20
-> LOL, that isn't better...
->=20
-> Ideally locking would be done per functionality that the hardware can
-> perform independently (like lookup table access, VLAN table access,
-> forwarding domain control, PTP block, link state control, etc).
-> You don't want to artificially serialize unrelated stuff.
-> A "read-modify-write" lock would similarly artificially serialize
-> unrelated stuff for you, even if you intend it to only serialize
-> something entirely different.
->=20
-> Most things as seen by a DSA switch driver are implicitly serialized by
-> the rtnl_mutex anyway.=20
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Is there a list of the functions that are protected by the RTNL lock
-without having to deep dive in the whole stacks ? That would be really
-useful to remove useless locking from my driver. But I guess I'll have
-to look at other drivers to see that.
 
-> Some things aren't (->port_fdb_add, ->port_fdb_del).
+sparse warnings: (new ones prefixed by >>)
+>> drivers/virt/coco/sevguest/sevguest.c:579:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *addr @@     got struct snp_secrets_page_layout *[assigned] layout @@
+   drivers/virt/coco/sevguest/sevguest.c:579:17: sparse:     expected void volatile [noderef] __iomem *addr
+   drivers/virt/coco/sevguest/sevguest.c:579:17: sparse:     got struct snp_secrets_page_layout *[assigned] layout
 
-Ok, looks like for them a mutex is often used which also seems more
-appropriate in my case since the operation on the learn table can take
-some times.
+vim +579 drivers/virt/coco/sevguest/sevguest.c
 
-> There is a point to be made about adding locks for stuff that is
-> implicitly serialized by the rtnl_mutex, since you can't really test
-> their effectiveness. This makes it more difficult for the driver writer
-> to make the right decision about locking, since in some cases, the
-> serialization given by the rtnl_mutex isn't something fundamental and
-> may be removed, to reduce contention on that lock. In that case, it is
-> always a nice surprise to find a backup locking scheme in converted
-> drivers. With the mention that said backup locking scheme was never
-> really tested, so it may be that it needs further work anyway.
+   504	
+   505	static int __init snp_guest_probe(struct platform_device *pdev)
+   506	{
+   507		struct snp_secrets_page_layout *layout;
+   508		struct snp_guest_platform_data *data;
+   509		struct device *dev = &pdev->dev;
+   510		struct snp_guest_dev *snp_dev;
+   511		struct miscdevice *misc;
+   512		int ret;
+   513	
+   514		if (!dev->platform_data)
+   515			return -ENODEV;
+   516	
+   517		data = (struct snp_guest_platform_data *)dev->platform_data;
+   518		layout = (__force void *)ioremap_encrypted(data->secrets_gpa, PAGE_SIZE);
+   519		if (!layout)
+   520			return -ENODEV;
+   521	
+   522		ret = -ENOMEM;
+   523		snp_dev = devm_kzalloc(&pdev->dev, sizeof(struct snp_guest_dev), GFP_KERNEL);
+   524		if (!snp_dev)
+   525			goto e_unmap;
+   526	
+   527		ret = -EINVAL;
+   528		snp_dev->vmpck = get_vmpck(vmpck_id, layout, &snp_dev->os_area_msg_seqno);
+   529		if (!snp_dev->vmpck) {
+   530			dev_err(dev, "invalid vmpck id %d\n", vmpck_id);
+   531			goto e_unmap;
+   532		}
+   533	
+   534		/* Verify that VMPCK is not zero. */
+   535		if (is_vmpck_empty(snp_dev)) {
+   536			dev_err(dev, "vmpck id %d is null\n", vmpck_id);
+   537			goto e_unmap;
+   538		}
+   539	
+   540		platform_set_drvdata(pdev, snp_dev);
+   541		snp_dev->dev = dev;
+   542		snp_dev->layout = layout;
+   543	
+   544		/* Allocate the shared page used for the request and response message. */
+   545		snp_dev->request = alloc_shared_pages(sizeof(struct snp_guest_msg));
+   546		if (!snp_dev->request)
+   547			goto e_unmap;
+   548	
+   549		snp_dev->response = alloc_shared_pages(sizeof(struct snp_guest_msg));
+   550		if (!snp_dev->response)
+   551			goto e_free_request;
+   552	
+   553		ret = -EIO;
+   554		snp_dev->crypto = init_crypto(snp_dev, snp_dev->vmpck, VMPCK_KEY_LEN);
+   555		if (!snp_dev->crypto)
+   556			goto e_free_response;
+   557	
+   558		misc = &snp_dev->misc;
+   559		misc->minor = MISC_DYNAMIC_MINOR;
+   560		misc->name = DEVICE_NAME;
+   561		misc->fops = &snp_guest_fops;
+   562	
+   563		/* initial the input address for guest request */
+   564		snp_dev->input.req_gpa = __pa(snp_dev->request);
+   565		snp_dev->input.resp_gpa = __pa(snp_dev->response);
+   566	
+   567		ret =  misc_register(misc);
+   568		if (ret)
+   569			goto e_free_response;
+   570	
+   571		dev_info(dev, "Initialized SNP guest driver (using vmpck_id %d)\n", vmpck_id);
+   572		return 0;
+   573	
+   574	e_free_response:
+   575		free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
+   576	e_free_request:
+   577		free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
+   578	e_unmap:
+ > 579		iounmap(layout);
+   580		return ret;
+   581	}
+   582	
 
-Ok understood.
-
->=20
-> > > The selftests don't cover nearly enough, but just to make sure that t=
-hey
-> > > pass for your switch, when you use 2 switch ports as h1 and h2 (hosts=
-),
-> > > and 2 ports as swp1 and swp2? There's surprisingly little that you do=
- on
-> > > .port_bridge_join, I need to study the code more. =20
-> >=20
-> > Port isolation is handled by using a pattern matcher which is enabled
-> > for each port at setup. If set, the port packet will only be forwarded
-> > to the CPU port. When bridging is needed, the pattern matching is
-> > disabled and thus, the packets are forwarded between all the ports that
-> > are enabled in the bridge. =20
->=20
-> Is there some public documentation for this pattern matcher?
-
-Yes, the manual is public [1]. See the Advanced 5 Ports Switch section.
-
-[1]
-https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1l-gr=
-oup-users-manual-r-engine-and-ethernet-peripherals
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

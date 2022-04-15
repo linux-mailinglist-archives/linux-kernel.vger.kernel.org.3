@@ -2,122 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F51A502B7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62AAB502B7F
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354278AbiDOOKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S1354282AbiDOOKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354266AbiDOOJ7 (ORCPT
+        with ESMTP id S233185AbiDOOKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:09:59 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FFFC0566;
-        Fri, 15 Apr 2022 07:07:31 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id b19so10763137wrh.11;
-        Fri, 15 Apr 2022 07:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IHPs//C0shonchMCxgLiEnaw6JPTZ4t8j0LIPcOqzO0=;
-        b=KjSgNHZk3aMchIG8k0JgH6Zo74CGstkV+S8K2GceIDd2lepHVPJpFFH2HU2DamdTOR
-         HHEkcEu1o5I23HdlqRXMdBb7lSnYIMX1Ja3dhT5Dw0Wqe6JkARhcZMeCzGEujHr+NtAH
-         Yf6L0Ea3/dkeh3JWo9qMAscjb9ncspAOMKLg9oIZZZSObWHeXEjejZkzvwoSzY32zo90
-         ffUBQClQTztHIE7v+PuafYGtfi/b3YmbtiPdg8Si3N3zbHcs//VUc27TNYH7vVNrgcpK
-         V0Fj7YF9DxBB2bdXa1/Ue6f2L4I7DmV2Ku016ENU8YgVr6orz4gUqSGx6rPwqDG739yl
-         U7Fw==
+        Fri, 15 Apr 2022 10:10:52 -0400
+Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3881C056B;
+        Fri, 15 Apr 2022 07:08:21 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id c1so6673674qkf.13;
+        Fri, 15 Apr 2022 07:08:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=IHPs//C0shonchMCxgLiEnaw6JPTZ4t8j0LIPcOqzO0=;
-        b=A5E9NdjmuBBfS/Yx7Qo6dfHjn/zj6H5WcqU+wy9NZWVW9Xdnz3eurETgoXTS3j9e3p
-         jHLzkuOE/xAjughVkDNbX1aPCYrGPz1oLFOj8niU+LparPLEvGUJ3sbRSeeKRo1WLPtw
-         UEjlhHuIJiOud4Hc2AaQ0R1xkowheAQOQkj/AYGUowZPtcT9lqDOl9fQgbC/3H3yIt5I
-         6pjHdP3Wh0KghCxTQfZW7JihLYpYQJQBDVQjdv6tUbn1KH0sHIxULWuzquF/XYj8XW3W
-         EJrXeudLop/8EftlJyE1qjcbYqtmNk4dpSaUCTOw0a+ci/UcvhyEdcdr2ba6e3/KryLv
-         U51w==
-X-Gm-Message-State: AOAM532SLWg75T7bcs0oO9ynzkwUGQUxllpjQgTLFxP1Pv2YT0hTLnFS
-        HUIg9umBGbYJXVwhaHsi89k=
-X-Google-Smtp-Source: ABdhPJzJyvw9HvlbuXBg0TeLdFpC1BTOp+XWq05ADo2EUeZ6Mdcd7QS7qWrIm5og/sJkMqdS/nienA==
-X-Received: by 2002:adf:b51a:0:b0:20a:8180:532c with SMTP id a26-20020adfb51a000000b0020a8180532cmr1116524wrd.660.1650031649963;
-        Fri, 15 Apr 2022 07:07:29 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id l6-20020a1c2506000000b0038e6fe8e8d8sm6114568wml.5.2022.04.15.07.07.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 07:07:29 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <8bab46e6-f7d3-17a7-40cd-7a5dfabc61c0@redhat.com>
-Date:   Fri, 15 Apr 2022 16:07:27 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to:user-agent;
+        bh=uHT+rtsiU2AlOqKjuhO/N6AsKRtwVlo+UNwK//XAC5E=;
+        b=KowIXnpoCSb9fMB3hjO5fn6nGk+x0m6UrPnqXWRO8OwmyGEtOybZfGTaZVVmhZfik2
+         hhVlB108J+BdWJqaZ64wTLOvxRk3CfFMjxdTqCn61kLNOAFfKaAOsuiSbg8NWnCjuoRP
+         Y5Imkmr9/WrefITZQxIJtD9wIkfvuIA7REPejg7b/GPdXM+6irVMMJerZ918G1iCHQsO
+         ZF2x9DXOiadnGrahIbOW3dO10bIc6hpA6KXngLnAAJCBM7VgNuKyPFNNF4XxtnSA17Xk
+         122jO5jLfQJO0oqQouWe7Ar/n75CRAF/ppWjENjJC6OfhrDESjHyMU8BhLmy9XWwZlXv
+         NmJA==
+X-Gm-Message-State: AOAM532BErqszpSQd6/z3lfxafQrdiMEH3xObC6RMCwusuf1cxxo3JWH
+        mmPA50CBbBiCRGVUoKkIU8ztJvLOfNp8VA==
+X-Google-Smtp-Source: ABdhPJyQuMIVfA3EofR+pKzVdgIzoZLxbA/QPzQX7WZh1MG4ZvuwD4FbA60REwVdu7d5mrVWF/z69g==
+X-Received: by 2002:a05:620a:2946:b0:699:c582:f319 with SMTP id n6-20020a05620a294600b00699c582f319mr5622724qkp.118.1650031700522;
+        Fri, 15 Apr 2022 07:08:20 -0700 (PDT)
+Received: from dev0025.ash9.facebook.com (fwdproxy-ash-117.fbsv.net. [2a03:2880:20ff:75::face:b00c])
+        by smtp.gmail.com with ESMTPSA id i136-20020a379f8e000000b0069c7f8b69b8sm1947719qke.82.2022.04.15.07.08.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 07:08:20 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 07:08:17 -0700
+From:   David Vernet <void@manifault.com>
+To:     Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Tejun Heo <tj@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, cgroups@vger.kernel.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Shakeel Butt <shakeelb@google.com>,
+        Chris Down <chris@chrisdown.name>
+Subject: Re: [PATCH 1/4] kselftests: memcg: update the oom group leaf events
+ test
+Message-ID: <20220415140817.ljznpvacne6nchg5@dev0025.ash9.facebook.com>
+References: <20220415000133.3955987-1-roman.gushchin@linux.dev>
+ <20220415000133.3955987-2-roman.gushchin@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 070/104] KVM: TDX: complete interrupts after tdexit
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <45507ecee0a0d23229e9e7f8bb74077034a40bcd.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <45507ecee0a0d23229e9e7f8bb74077034a40bcd.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415000133.3955987-2-roman.gushchin@linux.dev>
+User-Agent: NeoMutt/20211029
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> This corresponds to VMX __vmx_complete_interrupts().  Because TDX
-> virtualize vAPIC, KVM only needs to care NMI injection.
-> 
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/vmx/tdx.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index c1366aac7d96..3cb2fbd1c12c 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -550,6 +550,14 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event)
->   	vcpu->kvm->vm_bugged = true;
->   }
->   
-> +static void tdx_complete_interrupts(struct kvm_vcpu *vcpu)
-> +{
-> +	/* Avoid costly SEAMCALL if no nmi was injected */
-> +	if (vcpu->arch.nmi_injected)
-> +		vcpu->arch.nmi_injected = td_management_read8(to_tdx(vcpu),
-> +							      TD_VCPU_PEND_NMI);
-> +}
-> +
->   struct tdx_uret_msr {
->   	u32 msr;
->   	unsigned int slot;
-> @@ -618,6 +626,8 @@ fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu)
->   	vcpu->arch.regs_avail &= ~VMX_REGS_LAZY_LOAD_SET;
->   	trace_kvm_exit(vcpu, KVM_ISA_VMX);
->   
-> +	tdx_complete_interrupts(vcpu);
-> +
->   	if (tdx->exit_reason.error || tdx->exit_reason.non_recoverable)
->   		return EXIT_FASTPATH_NONE;
->   	return EXIT_FASTPATH_NONE;
+On Thu, Apr 14, 2022 at 05:01:30PM -0700, Roman Gushchin wrote:
+> Commit 9852ae3fe529 ("mm, memcg: consider subtrees in memory.events") made
+> memory.events recursive: all events are propagated upwards by the
+> tree. It was a change in semantics.
 
-Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+In one of our offline discussions you mentioned that we may want to
+consider having the test take mount options into account. If we decide to
+go that route we should probably have this testcase take memory_localevents
+into account as well. If so, I'm happy to take care of that in a follow-on
+patch after this is merged as I already have a patch locally that reads and
+parses /proc/mounts to detect these mount options.
+
+> 
+> It broke the oom group leaf events test: it assumes that after
+> an OOM the oom_kill counter is zero on parent's level.
+> 
+> Let's adjust the test: it should have similar expectations
+> for the child and parent levels.
+> 
+> The test passes after this fix.
+> 
+> Signed-off-by: Roman Gushchin <roman.gushchin@linux.dev>
+> Cc: Chris Down <chris@chrisdown.name>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> ---
+>  tools/testing/selftests/cgroup/test_memcontrol.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+> index 36ccf2322e21..00b430e7f2a2 100644
+> --- a/tools/testing/selftests/cgroup/test_memcontrol.c
+> +++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+> @@ -1079,7 +1079,8 @@ static int test_memcg_sock(const char *root)
+>  /*
+>   * This test disables swapping and tries to allocate anonymous memory
+>   * up to OOM with memory.group.oom set. Then it checks that all
+> - * processes in the leaf (but not the parent) were killed.
+> + * processes in the leaf were killed. It also checks that oom_events
+> + * were propagated to the parent level.
+>   */
+>  static int test_memcg_oom_group_leaf_events(const char *root)
+>  {
+> @@ -1122,7 +1123,7 @@ static int test_memcg_oom_group_leaf_events(const char *root)
+>  	if (cg_read_key_long(child, "memory.events", "oom_kill ") <= 0)
+>  		goto cleanup;
+>  
+> -	if (cg_read_key_long(parent, "memory.events", "oom_kill ") != 0)
+> +	if (cg_read_key_long(parent, "memory.events", "oom_kill ") <= 0)
+>  		goto cleanup;
+>  
+>  	ret = KSFT_PASS;
+> -- 
+> 2.35.1
+> 
+
+Looks good, thanks.
+
+Reviewed-by: David Vernet <void@manifault.com>

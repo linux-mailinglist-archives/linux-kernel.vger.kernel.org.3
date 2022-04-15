@@ -2,118 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B04765024DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:51:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93B7D5024E2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:51:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350039AbiDOFxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:53:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
+        id S1350083AbiDOFxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiDOFxO (ORCPT
+        with ESMTP id S230224AbiDOFxm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:53:14 -0400
-Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B4B39BA7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:50:46 -0700 (PDT)
-Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
- (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Fri, 15 Apr
- 2022 13:50:39 +0800
-Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
- (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Fri, 15 Apr
- 2022 13:50:38 +0800
-From:   Haowen Bai <baihaowen@meizu.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Haowen Bai <baihaowen@meizu.com>, <linux-staging@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH V3] staging: rtl8192e: Fix signedness bug in rtllib_rx_assoc_resp()
-Date:   Fri, 15 Apr 2022 13:50:36 +0800
-Message-ID: <1650001836-25956-1-git-send-email-baihaowen@meizu.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <20220415053116.GN3293@kadam>
-References: <20220415053116.GN3293@kadam>
+        Fri, 15 Apr 2022 01:53:42 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480AA3A720
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:51:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650001875; x=1681537875;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=33vxnHab5WzokZ+vZHp5UAIHJKFj53j56xmXMENnAAk=;
+  b=KzKjWE7e33VeXSLaPKhEXlkt4HyvsyeZWB59OU0/ecOakatYUhL8zxhg
+   sUMn/Flvpw/zCLnPta89N3Rf9NsAisUE5DBBxlkBgdv1qLJMu/4Zo8oPe
+   sivq3Ig/Ih6gPLqk1KTiaLpcsjLDnXn5Fvw3CNy9q1pnlXHLt/0rgcjDT
+   zBaAJnFF13+k8gqoRFXqOMVMR14n5b8famyUk25dq8k0AiMJmfNVKi4VU
+   nLNNcRi004j12dinYOLhhyoT9FjZu5Dmjn2LcWg27jSQp32xo5ySkOZ6+
+   z1OG8vSmfB123etTfusNSmnwtoRb797ENUt8PH7Mq1ih8kisH0A1wVTTL
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250397711"
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="250397711"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 22:51:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
+   d="scan'208";a="527180012"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 22:51:12 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfErP-0001bm-Il;
+        Fri, 15 Apr 2022 05:51:11 +0000
+Date:   Fri, 15 Apr 2022 13:51:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dan Williams <dan.j.williams@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <ben.widawsky@intel.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [cxl:pending 20/22] drivers/cxl/core/suspend.c:8:6: warning: no
+ previous prototype for function 'cxl_mem_active'
+Message-ID: <202204151330.tjVHw5dN-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [172.16.137.70]
-X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
- IT-EXMB-1-125.meizu.com (172.16.1.125)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtllib_rx_assoc_resp() function has a signedness bug because it's
-a declared as a u16 but it return -ENOMEM.  When you look at it more
-closely it returns a mix of error codes including 0xcafe, -ENOMEM, and
-a->status which is WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG.  This is a mess.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
+head:   4f497e0dd3530981f8c897d5d47ee880b62baefb
+commit: fcf0b70f7e80f49f323cc21b8a497a24151d9c28 [20/22] PM: CXL: Disable suspend
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220415/202204151330.tjVHw5dN-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=fcf0b70f7e80f49f323cc21b8a497a24151d9c28
+        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
+        git fetch --no-tags cxl pending
+        git checkout fcf0b70f7e80f49f323cc21b8a497a24151d9c28
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/cxl/core/
 
-Clean it up to just return standard kernel error codes.  We can print
-out the a->status before returning a regular error code.  The printks
-in the caller need to be adjusted as well.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Signed-off-by: Haowen Bai <baihaowen@meizu.com>
----
-V1->V2: reduce return random value; print its own error message.
-V2->V3: change commit message; change s16 -> int.
+All warnings (new ones prefixed by >>):
 
- drivers/staging/rtl8192e/rtllib_softmac.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+>> drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for function 'cxl_mem_active' [-Wmissing-prototypes]
+   bool cxl_mem_active(void)
+        ^
+   drivers/cxl/core/suspend.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   bool cxl_mem_active(void)
+   ^
+   static 
+>> drivers/cxl/core/suspend.c:13:6: warning: no previous prototype for function 'cxl_mem_active_inc' [-Wmissing-prototypes]
+   void cxl_mem_active_inc(void)
+        ^
+   drivers/cxl/core/suspend.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cxl_mem_active_inc(void)
+   ^
+   static 
+>> drivers/cxl/core/suspend.c:19:6: warning: no previous prototype for function 'cxl_mem_active_dec' [-Wmissing-prototypes]
+   void cxl_mem_active_dec(void)
+        ^
+   drivers/cxl/core/suspend.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void cxl_mem_active_dec(void)
+   ^
+   static 
+   3 warnings generated.
 
-diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
-index 82bf05eb1cbf..4a1b9a94930f 100644
---- a/drivers/staging/rtl8192e/rtllib_softmac.c
-+++ b/drivers/staging/rtl8192e/rtllib_softmac.c
-@@ -1764,7 +1764,7 @@ static void rtllib_softmac_check_all_nets(struct rtllib_device *ieee)
- 	spin_unlock_irqrestore(&ieee->lock, flags);
- }
- 
--static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
-+static inline int auth_parse(struct net_device *dev, struct sk_buff *skb,
- 			     u8 **challenge, int *chlen)
- {
- 	struct rtllib_authentication *a;
-@@ -1773,7 +1773,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 	if (skb->len <  (sizeof(struct rtllib_authentication) -
- 	    sizeof(struct rtllib_info_element))) {
- 		netdev_dbg(dev, "invalid len in auth resp: %d\n", skb->len);
--		return 0xcafe;
-+		return -EINVAL;
- 	}
- 	*challenge = NULL;
- 	a = (struct rtllib_authentication *) skb->data;
-@@ -1787,7 +1787,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
- 				return -ENOMEM;
- 		}
- 	}
--	return le16_to_cpu(a->status);
-+	return a->status;
- }
- 
- static int auth_rq_parse(struct net_device *dev, struct sk_buff *skb, u8 *dest)
-@@ -2282,7 +2282,7 @@ rtllib_rx_assoc_resp(struct rtllib_device *ieee, struct sk_buff *skb,
- 
- static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- {
--	u16 errcode;
-+	int errcode;
- 	u8 *challenge;
- 	int chlen = 0;
- 	bool bSupportNmode = true, bHalfSupportNmode = false;
-@@ -2292,8 +2292,8 @@ static void rtllib_rx_auth_resp(struct rtllib_device *ieee, struct sk_buff *skb)
- 	if (errcode) {
- 		ieee->softmac_stats.rx_auth_rs_err++;
- 		netdev_info(ieee->dev,
--			    "Authentication response status code 0x%x",
--			    errcode);
-+			    "Authentication response status code %d",
-+			    le16_to_cpu(errcode));
- 		rtllib_associate_abort(ieee);
- 		return;
- 	}
+
+vim +/cxl_mem_active +8 drivers/cxl/core/suspend.c
+
+     7	
+   > 8	bool cxl_mem_active(void)
+     9	{
+    10		return atomic_read(&mem_active) != 0;
+    11	}
+    12	
+  > 13	void cxl_mem_active_inc(void)
+    14	{
+    15		atomic_inc(&mem_active);
+    16	}
+    17	EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, CXL);
+    18	
+  > 19	void cxl_mem_active_dec(void)
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

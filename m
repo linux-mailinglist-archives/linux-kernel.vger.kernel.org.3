@@ -2,106 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A565950259B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:31:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0115025A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350468AbiDOGeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:34:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S1350495AbiDOGeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:34:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350458AbiDOGd4 (ORCPT
+        with ESMTP id S1350478AbiDOGeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:33:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D21F45BE52;
-        Thu, 14 Apr 2022 23:31:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 81CB5B8282C;
-        Fri, 15 Apr 2022 06:31:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981C2C385A6;
-        Fri, 15 Apr 2022 06:31:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650004286;
-        bh=vNvTyZfr+G0pyUo1bitL8R5ZCYiZCbBy0L86pD4L9zg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Y95mTntUPcQegNJbDJWA4bBSmAn2sSaDxOHc56ExScPJYvpvNbZ571XWuBqUjfcXG
-         mYAl+lcETjSs9XwYcXZ+otSKnKPbP75hNLd+gLZHbQrG3zlJ1Sq4p2vpbocXxfOaiR
-         mPv7EywZ2DvLLoFjVgikn+Lmyg50EFtiOBsVJgUA=
-Date:   Fri, 15 Apr 2022 08:31:23 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "D. Starke" <daniel.starke@siemens.com>
-Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 16/20] tty: n_gsm: fix invalid command/response bit check
- for UI/UIH frames
-Message-ID: <YlkRO6fAPCuWyT1Y@kroah.com>
-References: <20220414094225.4527-1-daniel.starke@siemens.com>
- <20220414094225.4527-16-daniel.starke@siemens.com>
+        Fri, 15 Apr 2022 02:34:11 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877CA5C67C;
+        Thu, 14 Apr 2022 23:31:42 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kfmd60fpyzFpXP;
+        Fri, 15 Apr 2022 14:29:14 +0800 (CST)
+Received: from dggpemm500002.china.huawei.com (7.185.36.229) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 14:31:40 +0800
+Received: from [10.174.178.178] (10.174.178.178) by
+ dggpemm500002.china.huawei.com (7.185.36.229) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 14:31:37 +0800
+Message-ID: <9e3ca922-1448-2eb1-b056-218236e7c72f@huawei.com>
+Date:   Fri, 15 Apr 2022 14:31:37 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414094225.4527-16-daniel.starke@siemens.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.0.3
+Subject: Re: [PATCH v10 06/14] mm: multi-gen LRU: minimal implementation
+To:     Yu Zhao <yuzhao@google.com>
+CC:     Stephen Rothwell <sfr@rothwell.id.au>, <linux-mm@kvack.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Hillf Danton" <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "Matthew Wilcox" <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <page-reclaim@google.com>, <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-7-yuzhao@google.com>
+ <71af92d2-0777-c318-67fb-8f7d52c800bb@huawei.com>
+ <YliJzrfXzwwxiCId@google.com>
+ <4c416f09-5304-07fd-cb53-5c9c8c75f6fa@huawei.com>
+ <YlkBrHOFgah3vHaK@google.com>
+From:   Chen Wandun <chenwandun@huawei.com>
+In-Reply-To: <YlkBrHOFgah3vHaK@google.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.178]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500002.china.huawei.com (7.185.36.229)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:42:21AM -0700, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
-> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
-> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
-> the newer 27.010 here. Chapter 5.4.3.1 states the CR bit in UI and UIH
-> frames shall always be set 1 by the initiator and 0 by the responder.
-
-This has nothing to do with the change you made here.
 
 
-> Currently, gsm_queue() has a pre-processor gated (excluded) check which
-> treats all frames that conform to the standard as malformed frames.
-> Remove this optional code to avoid confusion and possible breaking changes
-> in case that someone includes it.
+在 2022/4/15 13:25, Yu Zhao 写道:
+> On Fri, Apr 15, 2022 at 10:23:18AM +0800, Chen Wandun wrote:
+>> 在 2022/4/15 4:53, Yu Zhao 写道:
+>>> On Thu, Apr 14, 2022 at 07:47:54PM +0800, Chen Wandun wrote:
+>>>> On 2022/4/7 11:15, Yu Zhao wrote:
+>>>>> +static void inc_min_seq(struct lruvec *lruvec)
+>>>>> +{
+>>>>> +	int type;
+>>>>> +	struct lru_gen_struct *lrugen = &lruvec->lrugen;
+>>>>> +
+>>>>> +	VM_BUG_ON(!seq_is_valid(lruvec));
+>>>>> +
+>>>>> +	for (type = 0; type < ANON_AND_FILE; type++) {
+>>>>> +		if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
+>>>>> +			continue;
+>>>> I'm confused about relation between aging and LRU list operation.
+>>>>
+>>>> In function inc_max_seq,  both min_seq and max_seq will increase，
+>>>> the lrugen->lists[] indexed by lru_gen_from_seq(max_seq + 1) may
+>>>> be non-empty?
+>>> Yes.
+>>>
+>>>> for example,
+>>>> before inc_max_seq:
+>>>> min_seq == 0, lrugen->lists[0][type][zone]
+>>>> max_seq ==3, lrugen->lists[3][type][zone]
+>>>>
+>>>> after inc_max_seq:
+>>>> min_seq ==1, lrugen->lists[1][type][zone]
+>>>> max_seq ==4, lrugen->lists[0][type][zone]
+>>>>
+>>>> If lrugen->lists[0][type][zone] is not empty before inc_max_seq and it is
+>>>> the most inactive list，however lurgen->lists[0][type][zone] will become
+>>>> the most active list after inc_max_seq.
+>>> Correct.
+>>>
+>>>> So,  in this place,
+>>>>
+>>>> if (get_nr_gens(lruvec, type) != MAX_NR_GENS)
+>>>> 	continue;
+>>>>
+>>>> should change to
+>>>>
+>>>> if (get_nr_gens(lruvec, type) == MAX_NR_GENS)
+>>>> 	continue;
+>>> No, because max/min_seq will overlap if we do so.
+>>>
+>>> lrugen->lists[max_seq+1] can only be non-empty for anon LRU, for a
+>>> couple of reasons:
+>>> 1. We can't swap at all.
+>>> 2. Swapping is constrained, e.g., swapfile is full.
+>>>
+>>> Both cases are similar to a producer (the aging) overrunning a
+>>> consumer (the eviction). We used to handle them, but I simplified the
+>>> code because I don't feel they are worth handling [1].
+>> Can lrugen->lists[max_seq+1]  also be non-empty for file LRU？
+> On reclaim path, no. But it can be forced to do so via debugfs.
+>
+>> such as in dont reclaim mapped file page case(isolation will fail).
+> You mean may_unmap=false? Pages stays in the same generation if
+> isolation fails. So lrugen->lists[min_seq] won't be empty in this
+> case.
+>
+>> If so, after aging, eviction will reclaim memory start from
+>> lrugen->lists[min_seq+1], but some oldest file page still
+>> remain in lrugen->lists[max_seq+1].
+>>
+>> sort_folio can help to put misplaced pages to the right
+>> LRU list, but in this case, it does't help, because sort_folio
+>> only sort lrugen->lists[min_seq+1].
+> On reclaim path, inc_max_seq() is only called when need_aging=true,
+> and this guarantees max_seq-min_seq[LRU_GEN_FILE]+1 < MAX_NR_GENS.
+yes, I think so, but I did't find the logical in function get_nr_evictable,
+or am I missing something
 
-Again, nothing to do with the code change.
+         if (min_seq[LRU_GEN_FILE] + MIN_NR_GENS > max_seq)
+                 *need_aging = true;
+         else if (min_seq[LRU_GEN_FILE] + MIN_NR_GENS < max_seq)
+                 *need_aging = false;
+         else if (young * MIN_NR_GENS > total)
+                 *need_aging = true;
+         else if (old * (MIN_NR_GENS + 2) < total)
+                 *need_aging = true;
+         else
+                 *need_aging = false;
 
-> 
-> Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Thanks
+> .
 
-This "fixes" nothing :(
-
-> Cc: stable@vger.kernel.org
-
-How is commenting out unused code a stable backport requirement?
-
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->  drivers/tty/n_gsm.c | 4 ----
->  1 file changed, 4 deletions(-)
-> 
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index e9a7d9483c1f..f4ec48c0d6d7 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -1896,10 +1896,6 @@ static void gsm_queue(struct gsm_mux *gsm)
->  	case UI|PF:
->  	case UIH:
->  	case UIH|PF:
-> -#if 0
-> -		if (cr)
-> -			goto invalid;
-> -#endif
-
-All you are doing is cleaning up dead code.  Not a big deal, and not
-worth all the text above to confuse people :(
-
-thanks,
-
-greg k-h

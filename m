@@ -2,197 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F062B502704
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:46:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 449A3502705
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245357AbiDOIsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S1351497AbiDOIsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351533AbiDOIrf (ORCPT
+        with ESMTP id S1351557AbiDOIrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:47:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 803F917E0B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:45:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650012306;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UbLS45MxOVAnr1j0DEMaqGL/RKjN2qTV3wn5wivIOzo=;
-        b=CI5pICF/TbWjtLgGwnXpW+TnNjBaJSfJw6DNHeu1RY5h7RZGM942rggQ1wkMuYrg+hkRA8
-        MUNjq6TBi5onrHA4v6enlfCY//orAUP79d1BXp+I51pUboEJ8Iuh610cIilYZUX9N9xwJ+
-        /Nx0bLUSqU5N823m8O1rQrJztt22ICQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-571-ncjfo2W3Ob6oRpM3uj8-BQ-1; Fri, 15 Apr 2022 04:45:05 -0400
-X-MC-Unique: ncjfo2W3Ob6oRpM3uj8-BQ-1
-Received: by mail-wm1-f69.google.com with SMTP id i184-20020a1c3bc1000000b0038e4c5968b5so5816957wma.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:45:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=UbLS45MxOVAnr1j0DEMaqGL/RKjN2qTV3wn5wivIOzo=;
-        b=Qqggi41n124e3aD404HRKipoglPRfG/i/09QQm7WLIX1ne+pQTw0zX+Vj34ytl1kBl
-         tPiyeFpL78X5nfgRGV0d5NVJW9qah2eT/GK+S/dx4Q0+xOM2m7qyiiIZmP29/FuIS3Ml
-         n+7UgOi/e1DyXUbEDOPbVH1AoJ8Ot8iJMPSpjGEo/LRn5qoPwF1AGHGyw74dbodlqOgj
-         jayQcH63RrIpro6cMt8jw9BQwulNUNS+psXKikGZ5IDFYTxkmetm+1/e3FaQAQiAg0s4
-         ARdRfsCBd5k1K3+pyV5EFDjJtxjZu5OZuyCSD38HZzbwKqjOo/Rdbh85Vck26YZjP9JB
-         8aCw==
-X-Gm-Message-State: AOAM5318PNA7/o0kc5pOD8EQga7UPWzve++pbssmhZiehcBVNl0Jh41E
-        Zy4Vq99GKWpl9UzQLUNcZB4Lw5MSGg/ZkrVbXJ8M1tf9mbG+S7KZFU6nvf50wTjMuOiZ9zVfTVm
-        UA4xdhhaoj5zJlj+5wYv2KNhq
-X-Received: by 2002:a05:600c:4f88:b0:391:e34e:ca66 with SMTP id n8-20020a05600c4f8800b00391e34eca66mr768126wmq.16.1650012303795;
-        Fri, 15 Apr 2022 01:45:03 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxtZ3CsHMRHFsioNGpLaugIquRbj8GlmtB0g6ZbYpJjZi2MjwNik9eBG9L3OBpQkHXDtDgk7g==
-X-Received: by 2002:a05:600c:4f88:b0:391:e34e:ca66 with SMTP id n8-20020a05600c4f8800b00391e34eca66mr768102wmq.16.1650012303495;
-        Fri, 15 Apr 2022 01:45:03 -0700 (PDT)
-Received: from redhat.com ([2.53.138.98])
-        by smtp.gmail.com with ESMTPSA id f8-20020a5d64c8000000b0020784359295sm5084468wri.54.2022.04.15.01.45.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 01:45:02 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 04:44:58 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
-Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        virtualization@lists.linux-foundation.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        Bertrand Marquis <bertrand.marquis@arm.com>,
-        Wei Chen <Wei.Chen@arm.com>, Henry Wang <Henry.Wang@arm.com>,
-        Kaly Xin <Kaly.Xin@arm.com>, Jiamei Xie <Jiamei.Xie@arm.com>,
-        Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>
-Subject: Re: [RFC PATCH 0/6] virtio: Solution to restrict memory access under
- Xen using xen-virtio DMA ops layer
-Message-ID: <20220415044225-mutt-send-email-mst@kernel.org>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
+        Fri, 15 Apr 2022 04:47:39 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90048.outbound.protection.outlook.com [40.107.9.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6960D1838E;
+        Fri, 15 Apr 2022 01:45:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XZ2NGPfVcV2NHcSkXNrGfUprSMMRZLt/GhktBEzhvGm3p9Ne97DGqIxqRTjGELrhS35yFaDIhjp2EAHyBZ2vV4D8Ry6NJL/td+KH6e5TeeqHyitx8biTTgCRDk6LRAdE5D9kzLzzJtC7rI0/TA/h8GoX8y+4RRsPUwJoiNgzZTd28bz1GwEME3F/aOcsAhT7sZ2R7Xl9eYed2HH811Il+YURWp7fyOaOEItrqWc6VdoiNku0pgvfPAe9PXInbsXdovBVcQuebakpKfGchNAIgglRR1oM66/4OIynY7zwKxax3b4OPpOoiW1dA+Vl+zCv6Thv6kBLkzun9j75vmw9/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SLne5as6MQWE29/ugkuF8rWCrKBvaCJkw12GcvA/hB4=;
+ b=Dh0std2nCC163feEAMturaJJ+t7EuBRfqp96bBZuuwvMCI7pX/PgZsGrv7TxboqnYKOjCWrClglq/QFmS+oDyNKYwduBE1+CLV7F4yGHBkR2sL7kddoozIKqfRV1dAWgEDZQQfmQ6N0k3so5Eg3QSb3zBs3JtXor8fwGQPHfhORMMyXAyrvezHG4+tOHD5pgQ4aCRIO6xqB9L9IXRbmL2lW2kDD7cPEpAhWSBc9gJ48QgXY2lkvhNp1udO5ryv0ZMBq6NyxCDi2WnqFjAxKVjWifoI/cp0eLI9uuhHWSc55wvAEGEY/ygqM/v7bQ4dkSGBebVugGNrMnvgoyowERQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3979.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:25a::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.19; Fri, 15 Apr
+ 2022 08:45:09 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::59c:ae33:63c1:cb1c%8]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
+ 08:45:09 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: Re: [PATCH net-next] sungem: Prepare cleanup of powerpc's asm/prom.h
+Thread-Topic: [PATCH net-next] sungem: Prepare cleanup of powerpc's asm/prom.h
+Thread-Index: AQHYRnrdmIDrva6DkkmRu6Wgc/GcSKzhyLiAgA70igA=
+Date:   Fri, 15 Apr 2022 08:45:09 +0000
+Message-ID: <5b0e7dd2-793e-35e8-f0db-e77efd46bc94@csgroup.eu>
+References: <fa778bf9c0a23df8a9e6fe2e2b20d936bd0a89af.1648833433.git.christophe.leroy@csgroup.eu>
+ <20220405132215.75f0d5ec@kernel.org>
+In-Reply-To: <20220405132215.75f0d5ec@kernel.org>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d41cba32-0997-4861-1f2f-08da1ebc3f77
+x-ms-traffictypediagnostic: PR0P264MB3979:EE_
+x-microsoft-antispam-prvs: <PR0P264MB3979DB28550AF428D05EDB07EDEE9@PR0P264MB3979.FRAP264.PROD.OUTLOOK.COM>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TuUPf+eYJuBwEvhkVbsbrF557GzfJzw1JbDVTSN6F2RIvtOI9evsIrm4cM1IU/fx5VvILG7gi06XGBMNVKc/8d8CYwghfPMC24NrV3I/wGmpJR0co0FyUNIi9/THV71COlI1GL7z+VnzZBJ2sK+Vi3oL6GLoDwqt5aMpAHLxDLXn7XYso8T8FNq9w1zKeTKuryaN+6l55yGbqu7P4yoYAXN5si/B32QeRiBU7gqZS9wC0X6AVoEmeLR29gzVGfLg4jABSBDFP8xLphGWsHCZe7KVwWGKkbA/SeUi7RLE6Wj1x+sQC9jznHCpSpWGKVoI43idTLzY4Ig3bHibQLapUOlPhw5VnbEYjQxs8eGKsJIWNmdFRAk+u0hySChRxqTZYhLPfawkrpVwpNqI158skW42dYo/oLiKKOv6sLzvSlUUR3/vU7XoFN7spEnziP63lhIYD4diQjjX6d1bnBkp6n0fZXNu4VbjOypAMwNwGN9VwG3dlrjgRcVuDPjJlxa5snXkTRnJmPzOdioz7bUUopqkkH48EVDH+VKxVDMiSr9fXyM+StnSnq5z7libC6cN5E9vchsFmJJPw+5sNKNvhQ1y4R/eVGeaKHYfAfjvftKn+6CZl0pJ8q9G52UXMhUWGlJNHJ8ZZeTYg53ZzGx5WkGx1BLyNYjGyxj01CEWP0mIT21YmJLqKEMsK8q9hVf/FSjzEzBDUYd6DbaYcqaPpPKkiOChmfrkZ4Y8n0AboG4JNJwuH12NvCyLjLRjJw4n+3d6XqUgdQwDhAaZDHuCqw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(36756003)(38070700005)(38100700002)(31696002)(91956017)(6512007)(8676002)(8936002)(64756008)(66574015)(44832011)(76116006)(122000001)(86362001)(54906003)(26005)(186003)(66556008)(83380400001)(66446008)(4744005)(6916009)(66946007)(31686004)(66476007)(5660300002)(2906002)(2616005)(6486002)(508600001)(6506007)(4326008)(71200400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aEk4NDJaaGxpQ2VYWHBqeWxoaXU1azJQb2V4UkZNN01OL0RucjVaMWszenhS?=
+ =?utf-8?B?ZWdoenBHN3kwY2ljd0RKRi83dm1EVDJxNlI1T216ckdoc0xsazA4dktUd0tv?=
+ =?utf-8?B?dEhRdUdXZ2hIdExwaU84ditSSjNWeHN3SG1rdkliTmV1S1JKTmJKOE41dW9J?=
+ =?utf-8?B?OUU1Nnh3WkVIUFIxOWNWcGp2MjVMQ2t5bFl6RG1QRUV3TDVFQy9sL1B4MVBC?=
+ =?utf-8?B?Q1Q2YVcvUDc1YXpibGJ6dHNzSWU5YTNGL0xpUk1ndUdmU2dVV1I3QjNHaHA3?=
+ =?utf-8?B?REZoWVRUZHVBemFUaXdKMXZXL1MwcnZuNXJCY3RxUjNZNVFlMzlaT2VxRmkv?=
+ =?utf-8?B?TUtZQnZhTXI3Snl3SWN0eDNPZzAwZG1qbkhyVlhRZzFRaE01VWFoNHZMKy9B?=
+ =?utf-8?B?WTQ3N0pyR3ZHbzhpSUU4bHdTOVhsRVFQazJ5cDVLK2NocmwzK21LYzNPUDZx?=
+ =?utf-8?B?KzQ4TWFrdVo0em1lYjQvNEM3N0xhUVBPRzIvV2J2TTdrenVRU0RJbllySlhD?=
+ =?utf-8?B?UWhBWG5wcENpdlRKZEU1emxIdTV6S3k3S1lWZDZZSnJTb04zaGRyMDI1UGFY?=
+ =?utf-8?B?dWw3dkFGcWRGMWRVMm9JZDluTjdCWHRncEhGOGdDb05wRFVkU1YvVUpKdlZ2?=
+ =?utf-8?B?akFFZnFaQWp0WWxXMDBGRkcyZmJLVzF6a2FkeWpOZElzTERPQXdhY3NXcTBV?=
+ =?utf-8?B?V1NGZWlwNmhnSE5zZzBYYit3djNtaWhjTkEwRk0wcVNycmpJTFhLSlgvcFo1?=
+ =?utf-8?B?TXU5Y0IrZ2pqdVRJZGpIb0d2OThYUnUrZzBpSDI0dzBFY3hpMGRqZ1pYWko2?=
+ =?utf-8?B?S2pDQ3VSUkFVT2tnbVRoNllzeGNKWUcyTFdjNFhMZWVvYzYycXA0TW5LaGhL?=
+ =?utf-8?B?cFJoamZJV2VsdnhCZ2lEb2tFMDhRa0w1VlVGMzlzc01FTklUcVpVdWNNM1Nv?=
+ =?utf-8?B?NEFOb1hoOEpoQ0k1NllSRnFsczZlY0NWUzZIbEJIb254VXVDajNCa2lLT2la?=
+ =?utf-8?B?cWNrR3RZWHg3NjB2Z2JYYnUwNndaZmhBaUtkTFdFU1ptWjQ2UENFOWtKQjNK?=
+ =?utf-8?B?RTBHS3NmcjZvTGpuY2NCSlU5ODh6MGRORkJaaFEvaWIwbUdRRTRlODJIc3Jw?=
+ =?utf-8?B?TURWWXVlNTFQT21yQWY5NnU2Q0ZESUtRalAzUXJBSllmdFJSY0RlRmMyenhY?=
+ =?utf-8?B?NS8vdU1HZGpLYWp4emRWNFdkTmRtR2RVMytQWC82OFpQcG5UNHNhZjExY0lP?=
+ =?utf-8?B?UUhPRlNBbHRlMkhaZ3dXcHBTMURFWnJENC9KQVY0Z1pzS0pwWjB6M3hOdEJz?=
+ =?utf-8?B?SC93TFJ2ekhEZTdDdXRrR2t5MTlrQmJrbFBGZWxJSklUWW1lNnY4NHl5dk55?=
+ =?utf-8?B?Q0d3TzBMbVBZUmZxRHdnK3MzRXJ4c0hFSjJYNzZja28rTmZiY28vQnBOZlRY?=
+ =?utf-8?B?WE9vbGdpYUNUZGEvdG9nOEUvWUo1eEJQdW44M2NUZ1FhaUw1L2l6cy9YZUc2?=
+ =?utf-8?B?VzdldVU0Nk5OYWowbTk1dnhDMTNHS1U0dmpDZW8yMC96TWZZNDdJWHkxQlY4?=
+ =?utf-8?B?NzI2elAzdDNOcXI0R2JKU3VjalNYN21mRlpKZkM4U2pDdWlvNzkwdUtNWnlT?=
+ =?utf-8?B?QmhYd3FGNE5jdTdiK2NUWXZici84algrdlQ1akNDN2UzN1VoWjJtR285VFRu?=
+ =?utf-8?B?NzdpZStZRy9tNkJRZWorU21qa1dCOExUWWNwem5UbTYrbEVMd3kxZElBYWlS?=
+ =?utf-8?B?R3JRbVNZRENUa3N1Y2YySGpYcFdTZ3U0V1JXMlhsUm0rdUlSa3lEbEZEUjNP?=
+ =?utf-8?B?anhMMm1HaGVUamp0cUhnUVNJZWdEaDZqVDdCVE4vbFAyaHRWMW1pTER6UGhV?=
+ =?utf-8?B?ZTBZRzlaV0NFNjMrNnZiR29WbHJ1UkQybzRieFJUQ1F1aW9TUnBYNExzd1dv?=
+ =?utf-8?B?S3lJcnFoc0dKTGxlT1VZRjRkMVU0Znl2THNnTEVDRlRHVmJJT1N3NFk5Mnlu?=
+ =?utf-8?B?dXdTdDJ2WTdBMndnRCs4TGh6YXNYY3UzQmJVZ3I3cktJVi9NdEJuU05lQWVF?=
+ =?utf-8?B?SU1QbUNtQlZYbS9OSHRVM1kvYlFhNkczUWZXNTBUYjVmWEFSQ09xYnNOZXZ4?=
+ =?utf-8?B?QVlndkdqKzF2VHJUbS9Uc3FtQU1EdHJLOHZBTERndTZkTnZuUDBlKzF1ZHRZ?=
+ =?utf-8?B?bE44bE9xKzlRRzRMU1hYbmRSak56OHd3MDRBVmZKOUl6VWp3bmlFNFBpeWh0?=
+ =?utf-8?B?Zm5ITU5sWHlGdCtSQm5Na3dFQ3VmU2ZhenpucTNYZ3VJNXc5YXVETXlsWWd3?=
+ =?utf-8?B?OUZNNExacTVjcmVSejdrWjJLWWVsTGFjMzdoQXdxSGs5WldaL3RqYXpEbDB6?=
+ =?utf-8?Q?ru37ky+kBesPGGw9Xr0ii5x7KfFO6dc1PYOgA?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A2BF163D79932E49981E6718AF7983FF@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: d41cba32-0997-4861-1f2f-08da1ebc3f77
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 08:45:09.3009
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Yd726VM8D88f6w5d9ZLD9rBDjNWmOQbQB5x4s6nvvo2r+pGuScPzgjl3ja50FbWzGYdqVCC/KDhehNt32BMgXsQ+vspm7cYxdX0QaYYdP5w=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3979
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:19:27PM +0300, Oleksandr Tyshchenko wrote:
-> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> 
-> Hello all.
-> 
-> The purpose of this RFC patch series is to add support for restricting memory access under Xen using specific
-> grant table based DMA ops layer. Patch series is based on Juergen Gross’ initial work [1] which implies using
-> grant references instead of raw guest physical addresses (GPA) for the virtio communications (some kind of
-> the software IOMMU).
-> 
-> The high level idea is to create new Xen’s grant table based DMA ops layer for the guest Linux whose main
-> purpose is to provide a special 64-bit DMA address which is formed by using the grant reference (for a page
-> to be shared with the backend) with offset and setting the highest address bit (this is for the backend to
-> be able to distinguish grant ref based DMA address from normal GPA). For this to work we need the ability
-> to allocate contiguous (consecutive) grant references for multi-page allocations. And the backend then needs
-> to offer VIRTIO_F_ACCESS_PLATFORM and VIRTIO_F_VERSION_1 feature bits (it must support virtio-mmio modern
-> transport for 64-bit addresses in the virtqueue).
-
-I'm not enough of a xen expert to review this, and I didn't get
-all patches, but I'm very happy to see that approach being
-taken. VIRTIO_F_ACCESS_PLATFORM and VIRTIO_F_VERSION_1 are
-exactly the way to declare not all of memory is accessible.
-Thanks!
-
-> Xen's grant mapping mechanism is the secure and safe solution to share pages between domains which proven
-> to work and works for years (in the context of traditional Xen PV drivers for example). So far, the foreign
-> mapping is used for the virtio backend to map and access guest memory. With the foreign mapping, the backend
-> is able to map arbitrary pages from the guest memory (or even from Dom0 memory). And as the result, the malicious
-> backend which runs in a non-trusted domain can take advantage of this. Instead, with the grant mapping
-> the backend is only allowed to map pages which were explicitly granted by the guest before and nothing else. 
-> According to the discussions in various mainline threads this solution would likely be welcome because it
-> perfectly fits in the security model Xen provides. 
-> 
-> What is more, the grant table based solution requires zero changes to the Xen hypervisor itself at least
-> with virtio-mmio and DT (in comparison, for example, with "foreign mapping + virtio-iommu" solution which would
-> require the whole new complex emulator in hypervisor in addition to new functionality/hypercall to pass IOVA
-> from the virtio backend running elsewhere to the hypervisor and translate it to the GPA before mapping into
-> P2M or denying the foreign mapping request if no corresponding IOVA-GPA mapping present in the IOMMU page table
-> for that particular device). We only need to update toolstack to insert a new "xen,dev-domid" property to
-> the virtio-mmio device node when creating a guest device-tree (this is an indicator for the guest to use grants
-> and the ID of Xen domain where the corresponding backend resides, it is used as an argument to the grant mapping
-> APIs). It worth mentioning that toolstack patch is based on non  upstreamed yet “Virtio support for toolstack
-> on Arm” series which is on review now [2].
-> 
-> Please note the following:
-> - Patch series only covers Arm and virtio-mmio (device-tree) for now. To enable the restricted memory access
->   feature on Arm the following options should be set:
->   CONFIG_XEN_VIRTIO = y
->   CONFIG_XEN_HVM_VIRTIO_GRANT = y
-> - Some callbacks in xen-virtio DMA ops layer (map_sg/unmap_sg, etc) are not implemented yet as they are not
->   needed/used in the first prototype
-> 
-> Patch series is rebased on Linux 5.18-rc2 tag and tested on Renesas Salvator-X board + H3 ES3.0 SoC (Arm64)
-> with standalone userspace (non-Qemu) virtio-mmio based virtio-disk backend running in Driver domain and Linux
-> guest running on existing virtio-blk driver (frontend). No issues were observed. Guest domain 'reboot/destroy'
-> use-cases work properly. I have also tested other use-cases such as assigning several virtio block devices
-> or a mix of virtio and Xen PV block devices to the guest. 
-> 
-> 1. Xen changes located at (last patch):
-> https://github.com/otyshchenko1/xen/commits/libxl_virtio_next
-> 2. Linux changes located at:
-> https://github.com/otyshchenko1/linux/commits/virtio_grant5
-> 3. virtio-disk changes located at:
-> https://github.com/otyshchenko1/virtio-disk/commits/virtio_grant
-> 
-> Any feedback/help would be highly appreciated.
-> 
-> [1] https://www.youtube.com/watch?v=IrlEdaIUDPk
-> [2] https://lore.kernel.org/xen-devel/1649442065-8332-1-git-send-email-olekstysh@gmail.com/
-> 
-> Juergen Gross (2):
->   xen/grants: support allocating consecutive grants
->   virtio: add option to restrict memory access under Xen
-> 
-> Oleksandr Tyshchenko (4):
->   dt-bindings: xen: Add xen,dev-domid property description for
->     xen-virtio layer
->   virtio: Various updates to xen-virtio DMA ops layer
->   arm/xen: Introduce xen_setup_dma_ops()
->   arm/xen: Assign xen-virtio DMA ops for virtio devices in Xen guests
-> 
->  .../devicetree/bindings/virtio/xen,dev-domid.yaml  |  39 +++
->  arch/arm/include/asm/xen/xen-ops.h                 |   1 +
->  arch/arm/mm/dma-mapping.c                          |   5 +-
->  arch/arm/xen/enlighten.c                           |  11 +
->  arch/arm64/include/asm/xen/xen-ops.h               |   1 +
->  arch/arm64/mm/dma-mapping.c                        |   5 +-
->  arch/x86/mm/init.c                                 |  15 +
->  arch/x86/mm/mem_encrypt.c                          |   5 -
->  arch/x86/xen/Kconfig                               |   9 +
->  drivers/xen/Kconfig                                |  20 ++
->  drivers/xen/Makefile                               |   1 +
->  drivers/xen/grant-table.c                          | 238 +++++++++++++--
->  drivers/xen/xen-virtio.c                           | 335 +++++++++++++++++++++
->  include/xen/arm/xen-ops.h                          |  20 ++
->  include/xen/grant_table.h                          |   4 +
->  include/xen/xen-ops.h                              |  13 +
->  16 files changed, 679 insertions(+), 43 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/virtio/xen,dev-domid.yaml
->  create mode 100644 arch/arm/include/asm/xen/xen-ops.h
->  create mode 100644 arch/arm64/include/asm/xen/xen-ops.h
->  create mode 100644 drivers/xen/xen-virtio.c
->  create mode 100644 include/xen/arm/xen-ops.h
-> 
-> -- 
-> 2.7.4
-
+DQoNCkxlIDA1LzA0LzIwMjIgw6AgMjI6MjIsIEpha3ViIEtpY2luc2tpIGEgw6ljcml0wqA6DQo+
+IE9uIFNhdCwgIDIgQXByIDIwMjIgMTI6MTc6MTMgKzAyMDAgQ2hyaXN0b3BoZSBMZXJveSB3cm90
+ZToNCj4+IHBvd2VycGMncyBhc20vcHJvbS5oIGJyaW5ncyBzb21lIGhlYWRlcnMgdGhhdCBpdCBk
+b2Vzbid0DQo+PiBuZWVkIGl0c2VsZi4NCj4+DQo+PiBJbiBvcmRlciB0byBjbGVhbiBpdCB1cCwg
+Zmlyc3QgYWRkIG1pc3NpbmcgaGVhZGVycyBpbg0KPj4gdXNlcnMgb2YgYXNtL3Byb20uaA0KPiAN
+Cj4gQ291bGQgeW91IHJlc2VuZCB0aGUgbmV0LW5leHQgcGF0Y2hlcyB5b3UgaGFkPw0KPiANCj4g
+VGhleSBnb3QgZHJvcHBlZCBmcm9tIHBhdGNod29yayBkdWUgdG8gbmV0LW5leHQgYmVpbmcgY2xv
+c2VkIGR1cmluZw0KPiB0aGUgbWVyZ2Ugd2luZG93Lg0KDQpPaywgSSBzZW50IHYyLCB3aXRoIGEg
+Yml0IG1vcmUgZGV0YWlsZWQgZGVzY3JpcHRpb24uDQoNClRoYW5rcw0KQ2hyaXN0b3BoZQ==

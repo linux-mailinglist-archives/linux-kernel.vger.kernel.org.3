@@ -2,72 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14702502A91
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 871BF502A99
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353813AbiDOM6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S1353840AbiDONBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238574AbiDOM6v (ORCPT
+        with ESMTP id S237609AbiDONBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:58:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF8F8CA0E9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650027383;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=uyWzLLY6zGqxInGh2+sNYAMObbPBDa6X39ZjtDI6sX0=;
-        b=gCnT0A6ejH7P3X+M6BwEv9Jk0nGFI0dLVUInEjsaFksS+zBgCVWbbnj9ekXImO1jVYhZGu
-        mmjEkLCFKjDuXqVFRNE8HuLrUBA5Du5/b95/n93hVdmo8buR1+BQVHrU36Av9dK1AkAztC
-        3Gsuhqvci/THdNuFsKqAMfoD8P57XXY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-339-Hs68ioQbM-iu0jwZ_uVSDQ-1; Fri, 15 Apr 2022 08:56:17 -0400
-X-MC-Unique: Hs68ioQbM-iu0jwZ_uVSDQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A30CC811E80;
-        Fri, 15 Apr 2022 12:56:16 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.163])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8D7412167D68;
-        Fri, 15 Apr 2022 12:56:13 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Fri, 15 Apr 2022 14:56:16 +0200 (CEST)
-Date:   Fri, 15 Apr 2022 14:56:12 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220415125611.GB15217@redhat.com>
-References: <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
- <YlleTwxqx4keRYd4@hirez.programming.kicks-ass.net>
+        Fri, 15 Apr 2022 09:01:41 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2115.outbound.protection.outlook.com [40.107.255.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6339CA0F4;
+        Fri, 15 Apr 2022 05:59:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W1mwsSWqcxMWPJ9fQAzHr/xZzgf7akY78cBjhxNlCad9J0Jk3XO/F5lZzjmsem1mFw3YBK0ggnH3w3VCeJUsm51vKqmTkYXTcqxh+yqjmXW2qwwK+VdGy9S9xUSQS21rrAWGJHdQeQnJ9YiDJNgM+Q50QrK6mL5qiYTfz83nQjORKFvFgozqtfOy74ltiz0XsENtr5p+RxgYCtatyWntoqjFZbtCLuI0yu4oC2+NIiZjODqyTUJlcYPRme2UXtNLJCjhmEduhQoCs7uWunlXrVGiuDcseamLpuaL66OM9S0JJmR2QOalwLM/p0JQZPNp5m2Hw6eQxD6dNhWf3n8z2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2XJ0+rZEpZm625Pbo1AOKnqBYmgN1k75xwNX1itQ6Ds=;
+ b=j4VvruaK8C+cm1FqByqlWx2VqNgTjhUj3K1AMOtWaOwfdUiK6s6xMCKoT8XueZZPAqNpMuYA5GxVNN3Tuqz4FjT6aX/+NvfFsRiPwzjS5RS1mvAwwp1WF637oWc6+JlYeoT5NTUz4kRbbqszGz1MYTaFl528UrurFYFlCO7a+8V9nWYHhr1BHvF3cNpFLklZuMl8LpEzYXZPoOsJx/b4KzHoqTePg1XAHn2PBDnbDZuAzSfZgzJlVpGVA7NVlo+M1tbAaEOby85aImsgMwYqr5LGQ22Axuar1lqhPHc6z5BQsT5osM7p+Ov8k8ju16VLjHuOc/h/u139wM7FdkzLYQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
+ s=selector2-vivo0-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2XJ0+rZEpZm625Pbo1AOKnqBYmgN1k75xwNX1itQ6Ds=;
+ b=UYT428jpPFXjvNnvQuGmtpdpP3ZyhVQGR1EYI4+qOs8micwikaf1WJQ7dvbKe6kXfkRcJi4VJPzwUQke6dsNllfnjzY5O1+OOOl8PC3zqy9VmI3n+cfvw47CET7Aqxg76lrMOU5o16zZ8IqMY8qrGrYwu6W5sE4EMeAa5R+Vz5o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+ by SEYPR06MB5013.apcprd06.prod.outlook.com (2603:1096:101:3e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 12:59:08 +0000
+Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::d4bd:64f4:e1c0:25cb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
+ ([fe80::d4bd:64f4:e1c0:25cb%4]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
+ 12:59:08 +0000
+From:   Yihao Han <hanyihao@vivo.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
+Subject: [PATCH v2] ath11k: simplify if-if to if-else
+Date:   Fri, 15 Apr 2022 05:58:53 -0700
+Message-Id: <20220415125853.86418-1-hanyihao@vivo.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0166.apcprd04.prod.outlook.com (2603:1096:4::28)
+ To TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlleTwxqx4keRYd4@hirez.programming.kicks-ass.net>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b2331a2b-9160-4ac5-3625-08da1edfba9a
+X-MS-TrafficTypeDiagnostic: SEYPR06MB5013:EE_
+X-Microsoft-Antispam-PRVS: <SEYPR06MB50134245105144D77972E374A2EE9@SEYPR06MB5013.apcprd06.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VxDoJwl0LEFXutK89PCBs1FYyZ8m1FjwGoIztQjAHPlkAhkukrwIujMdgW0FM4cWSvMs3KnbtROdqaQ2bxNfLLcfRe+/i8LlQPzs2dS/8xBWUZLpRo5WbKHDZsZtNmU+YcXYEa/HBISe0QohOuSXXzpBtgh3cWJKJ4ZPBcJH/aSEERnSyb0j5UEP8Hoq4hKkQCSRXf020vURumo+Ghhd11ey8pETC4DkLQPW2b7n3Zi7ZNpMlmBryXW2Z267XV7Y6g28X0MjqEx8h4I4SnzbyFaANfbGhGhj57Q53tniXXwaJJXrL0i1m4sfLpYgwoNZ3FeDxzrHBfL+cK8L1tt1xU0rg5m3dg2VzDxkL/PIq1wzXRsItZWGdYYUfnwYxScBXZQJlZe9lBnK4seALfl4IXpUVJU2TLUFft8Zjf6YlJp2Ll/G8LT+OGWV2cfJMVlkxDHVN1i5ualBSHAvTwCvfVhsMrVawqxVva1GDBPYxBXgYcNhgU5wisKYCO9hN9VzSds5/yruVemUra/MwM/1kTqK/8FiJQ043ce9Ic/dvLPQAYTkN5r6H3kBb1VbvNAAwaHpxhiX4nFrWjaOW87X8UeN8t0tLiFyhx0mdde2HXATeAfT962aq8BQLlzzu1oZiGg1yBcN/8O4cw6OMu8Ysx02+a/EBhT3zJJY9pm102DN0on5xzxGZJvqnT4obkqCzfcOfjtJUqWr26CvRMe1SbUT6tljnhqhd7BwEgxgOTeN2/d+Uybedkow4AuAtj4Ftc3a/ebKYQQfJk0z8SQmiNpUu02duwdWLgDDaGeFeAk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(38350700002)(52116002)(966005)(38100700002)(1076003)(2616005)(6512007)(6506007)(83380400001)(186003)(107886003)(6666004)(6486002)(26005)(8936002)(2906002)(5660300002)(316002)(4326008)(86362001)(66476007)(508600001)(66556008)(66946007)(8676002)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NUr2jmoAKwngzD8NOw/Cj1hCx/Rh0i8X9g237f+slc+JUC+hNNcHCCswZlb1?=
+ =?us-ascii?Q?pKQ0mxTVVurJ3nF5Nh3+nMtqihAUtU96/oFggQEjWiwAxxTwe1H76gHbxug+?=
+ =?us-ascii?Q?SiES+ftlY+egkibjKJRY+wrqE9TlwXzWRa+3P7bloyeTP3hcEMdlHRQik1Mc?=
+ =?us-ascii?Q?9g1U+sosYPKS3qEytrUMOKKYN0uwnNL5HKWCWDsOC2nrDL2ZCB+rMH8kxWcV?=
+ =?us-ascii?Q?A7c6TOUZ9tnh1U+SseCBa3Ndtgfl/yAntpvysCIL8k/3huSPBtdRGa3SsCMr?=
+ =?us-ascii?Q?G8m7EvPkaJ7eWB+LK2GqnuuVtCFvzqYFSzj6N5E9x1JUcMdS89EHgOQyMCrU?=
+ =?us-ascii?Q?R9k0rpwvvP+uQ52NP4MLOx57031T0BR8uVmtr4Pj2xR36hr6fJR2Ro6QdRtE?=
+ =?us-ascii?Q?YfbbaIR4wZoMj6Zn+UcD202MJKZ+8kuJ+lwy/gPt4uGRd3JbAnUnOYKsXxw+?=
+ =?us-ascii?Q?14dKEjooEg1Pn2My262mxOmZd9wLKUcM9ZO3GvkKSafZA0tG5aBnGUTVod9A?=
+ =?us-ascii?Q?RNu9oSUnXlcnGx93YfUrj1hsP5dTCcqxhvyYZQCOoXBYJuVahkvVNoCRv0rf?=
+ =?us-ascii?Q?0AvrB8bmx6yyELvPI3OxCCs4K+8wspgaHvxUXbIc7zFv57F4909pMrZX8eK9?=
+ =?us-ascii?Q?iBlnI8VMqKEb5OBPqIEe9HkzTQv900ujUoBZtZqDzgSMNaKiq03/W+YNwDAh?=
+ =?us-ascii?Q?unmCg4Dcinj21L1YK/ohHlEk4YbqbjLZJ747jknLzjf/NN+jK7gVIG4PACQP?=
+ =?us-ascii?Q?e+AsUwbh6YTjfFXTA0JhmWREJDX7kugRiJO24TUR0SmpktSspjKOrCe/5IdV?=
+ =?us-ascii?Q?D2DKgNH1odYerulilc9XML8bqhG/MLInP+MaS6WZXREjuz8RIVPz/BCPfgaK?=
+ =?us-ascii?Q?95OnPZeifcLyluYfWe2gnPo4dLeZQIK9WqmIWuDSuXehJBC2jbLAT8dlx1rw?=
+ =?us-ascii?Q?AfLFrIICPSfFdIn0VP0saz/Eg4cVcv452RMeWJ2LWPqeFMXhRRcGRtLd91L0?=
+ =?us-ascii?Q?WOtROJ60PyIHTCxKT38ZBRVNjq2xo3g2cmHBHDbM5G/KKKV8EAnRgxCzJ4kM?=
+ =?us-ascii?Q?o+DybHjk1ANyx+9vLR/oWZow4D2tKmoyuUhE2QicqZ3mGTQjtfYSlR2aBkmZ?=
+ =?us-ascii?Q?SWoG5flBSP56bh+nGwLpMLV8Isro1Rbj4Ub040W8HTTtFxRDiT6DmI3w/7En?=
+ =?us-ascii?Q?wpBL7uZ/xuztf/X7ZuVPlK+CGoUA5TFaP1acj6iKXy5YsrUCnUttos4w86IE?=
+ =?us-ascii?Q?1WoZtbq+lrEM733KqeVF6Izsqda5KSfZiLRnAPD+p/6IDr636LeZicWuqT8S?=
+ =?us-ascii?Q?2BRfBFRG75DK7EJTnqxXNShqJgVq6GbTgdmvv6dm3I1RmYgi9VYlVkzh4fL4?=
+ =?us-ascii?Q?y2euRyVgssUm11hKh5wOFsXMuJsjfOHTF/M9dscpLA6Tqx0DQhDYOhzRqZeH?=
+ =?us-ascii?Q?okRkUTmATdUZiH02EkBZi4kYvK85QuP1jqPpox66YAbYVlug++bbohOl/9dQ?=
+ =?us-ascii?Q?EmbjgQCeLqLHrK29TSR/tA432aMrLvFMnFCaMXnzsLbJuF8jHpZtUo9q2whA?=
+ =?us-ascii?Q?GgU5uXsfiW6EE5jBraTkCF96Nhx/KEDR1UUlRCgHd9GbaddafRniuhw3G4X1?=
+ =?us-ascii?Q?aLoVVF5MsvxDoYgNs/aB0Vl/kyA0NmxO6bms/V9GY2vPAM9hFLU2nnc0Di9V?=
+ =?us-ascii?Q?WYBuGO+439dTFT2lULPq0CoDXn2vZ+U3oELA4/tNyWzt+aGbWEpbxJ/3P5i2?=
+ =?us-ascii?Q?1C2UIyQWgQ=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b2331a2b-9160-4ac5-3625-08da1edfba9a
+X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 12:59:08.5586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 2F8ISDJfWJhnbECTeOiR4DnTpyWucw4ZIIhiDbRHee077T3kddZJGt+xODZsTCVdVmK/xPiJdyfovjp9r8vjqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5013
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,100 +117,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/15, Peter Zijlstra wrote:
->
-> On Fri, Apr 15, 2022 at 12:16:44PM +0200, Oleg Nesterov wrote:
-> >
-> > Lets forget about 3-5 which I didn't read carefully yet. So why do we
-> > need TRACED_FROZEN?
->
-> The purpose of 1/5 was to not have any unique state in __state. To at
-> all times be able to reconstruct __state from outside information (where
-> needed).
->
-> Agreed that this particular piece of state isn't needed until 5/5, but
-> the concept is independent (also 5/5 is insanely large already).
+Replace `if (!ab->is_reset)` with `else` for simplification
+according to the kernel coding style:
 
-OK, so in my opinion it would be more clean if TRACED_FROZEN comes in a
-separate (and simple) patch before 5/5.
+"Do not unnecessarily use braces where a single statement will do."
 
-I won't really argue, but to me this flag looks confusing and unnecessary
-in 1-2 (which btw look like a -stable material to me).
+...
 
-> > Can't we simply change signal_wake_up_state(),
-> >
-> > 	void signal_wake_up_state(struct task_struct *t, unsigned int state)
-> > 	{
-> > 		set_tsk_thread_flag(t, TIF_SIGPENDING);
-> > 		/*
-> > 		 * TASK_WAKEKILL also means wake it up in the stopped/traced/killable
-> > 		 * case. We don't check t->state here because there is a race with it
-> > 		 * executing another processor and just now entering stopped state.
-> > 		 * By using wake_up_state, we ensure the process will wake up and
-> > 		 * handle its death signal.
-> > 		 */
-> > 		if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
-> > 			t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-> > 		else
-> > 			kick_process(t);
-> > 	}
-> >
-> > ?
->
-> This would be broken when we so signal_wake_up_state() when state
-> doesn't match. Does that happen? I'm thikning siglock protects us from
-> the most obvious races, but still.
+"This does not apply if only one branch of a conditional statement is
+a single statement; in the latter case use braces in both branches"
 
-Yes, even set_tsk_thread_flag(TIF_SIGPENDING) is not safe without siglock.
+Please refer to:
+https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
 
-> Also, signal_wake_up_state() really can do with that
-> lockdep_assert_held() as well ;-)
+Suggested-by: Benjamin Poirier <benjamin.poirier@gmail.com>
+Signed-off-by: Yihao Han <hanyihao@vivo.com>
+---
+v2:edit commit message
+---
+ drivers/net/wireless/ath/ath11k/core.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-OK, lets add lockdep_assert_held() at the start of signal_wake_up_state ?
-
-Agreed, this probably needs a comment, but this looks much simpler and
-more understandable than 2 additional "if (resume)" checks in
-signal_wake_up() and ptrace_signal_wake_up().
-
-> > > > -	spin_lock_irq(&task->sighand->siglock);
-> > > >  	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
-> > > >  	    !__fatal_signal_pending(task)) {
-> > > >  		task->jobctl |= JOBCTL_TRACED_FROZEN;
-> > > >  		WRITE_ONCE(task->__state, __TASK_TRACED);
-> > > >  		ret = true;
-> > > >  	}
-> > >
-> > > I would feel much better if this were still a task_func_call()
-> > > validating !->on_rq && !->on_cpu.
-> >
-> > Well, but "on_rq || on_cpu" would mean that wait_task_inactive() is buggy ?
->
-> Yes, but I'm starting to feel a little paranoid here. Better safe than
-> sorry etc..
-
-OK, can we simply add
-
-	WARN_ON_ONCE(ret && (on_rq || on_cpu));
-
-after unlock_task_sighand() ? this is racy without rq_lock but should
-catch the possible problems.
-
-> > 	- do you agree we can avoid JOBCTL_TRACED_FROZEN in 1-2 ?
->
-> We can for the sake of 2 avoid TRACED_FROZEN, but as explained at the
-> start, the point of 1 was to ensure there is no unique state in __state,
-> and I think in that respect we can keep it, hmm?
-
-See above... I understand the purpose of TRACED_FROZEN (I hope ;),
-but not in 1-2, and unless I missed something the change in signal_wake_up
-above simply looks better to me, but of course this is subjective.
-
-> > 	- will you agree if I change ptrace_freeze_traced() to rely
-> > 	  on __state == TASK_TRACED rather than task_is_traced() ?
->
-> Yes.
-
-Great, thanks. I'll return tomorrow.
-
-Oleg.
+diff --git a/drivers/net/wireless/ath/ath11k/core.c b/drivers/net/wireless/ath/ath11k/core.c
+index cbac1919867f..80009482165a 100644
+--- a/drivers/net/wireless/ath/ath11k/core.c
++++ b/drivers/net/wireless/ath/ath11k/core.c
+@@ -1532,8 +1532,7 @@ static void ath11k_core_restart(struct work_struct *work)
+ 
+ 	if (ab->is_reset)
+ 		complete_all(&ab->reconfigure_complete);
+-
+-	if (!ab->is_reset)
++	else
+ 		ath11k_core_post_reconfigure_recovery(ab);
+ }
+ 
+-- 
+2.17.1
 

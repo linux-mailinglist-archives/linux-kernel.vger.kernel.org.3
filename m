@@ -2,103 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D438502BF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:34:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF32D502C01
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:36:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354475AbiDOOfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S1354567AbiDOOi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344879AbiDOOfL (ORCPT
+        with ESMTP id S1354522AbiDOOiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:35:11 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6F32E6BC;
-        Fri, 15 Apr 2022 07:32:43 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id r85so3353028oie.7;
-        Fri, 15 Apr 2022 07:32:43 -0700 (PDT)
+        Fri, 15 Apr 2022 10:38:21 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 525034667A
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:35:53 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id k29so7389651pgm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:35:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=5CJKuH7khF1y3DizoabvaS6odECAtRFkcRZfxb+4uoM=;
+        b=eVIE5dV1M83IQmQu3BKM+cGuaxyk8PaG6cAjk96I2yBD3kYCMUhK85oHRfsWEVHNuy
+         CX2nRUI6Q+D0RuUb61rnfe0/YeUKnil8pDz34ySN+2gO+D4JxGC4+3TDi1WqLQyHyRgp
+         8S2R9haf472bv/J995Ch9pE9tcdEgz1hwsPKjtNGc/l/koy4kOqnBYQH3TebTU40jLiR
+         r7rHZStdDWvNSxILsuSov8AddPbZrC/5CmEmhcDBcOIQ6HZYDNKMM+v2binSPPAgP2id
+         e4Zmn6SDnDMvbxvf5XUNnF9ib9ov21ZTT8UHyKRXFl0XwYWqwa9OzVdgq6xYqJKOHvvQ
+         4CYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=PWkFmsh5Xu4+fKnCCwdt0tVV4sCcc9ioI4xTfndA/mQ=;
-        b=uRbEX1smBihFX6vWqUoftP9cvyM7tZs1s86jC4+u2D6RKOgRY7Sg4ehNBG3yHaEr+N
-         zp+7KjP5E5NLLOSv3x4c9e9iYtHX+qRIEf8jPwK1pOup685X/kMRTnIZdOcnaM8riyN/
-         V9htAquK3GFg9Ue9Yw5A/9Xtib2IxBs9iaAHZ0u1DFOkOlp/hI9KWgqDtv0cMooDr7pD
-         7f5S1Bp6aDCdZEUsfjWvBiD2BQkFEvZ60Uk1T+lZXfvBqX/3N6OB3lTpEZlPg0wy4c4A
-         yPudZJG4vR/ZudGZguB3Ztk1x1hSez23IdkwADBagIVZyBaqUMpA2GJ7upQcV96o2YfU
-         OiUw==
-X-Gm-Message-State: AOAM533aEMldptddOKRh5+k6WfBTkcTbHjYel7D8MjXaHULSZlBdtCep
-        SgUcxIbi8kEVGbeg4S5/bw==
-X-Google-Smtp-Source: ABdhPJyIHQEfmVJhe8R8epLhEwBEi+YFfcMZyMoMZDbG+RnujEOdN/75D+3Psr7DA3LmCirjREEBtw==
-X-Received: by 2002:a05:6808:199d:b0:2fa:2f20:7212 with SMTP id bj29-20020a056808199d00b002fa2f207212mr1742895oib.251.1650033162752;
-        Fri, 15 Apr 2022 07:32:42 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id z3-20020a056830290300b005b2316db9c9sm1105553otu.30.2022.04.15.07.32.42
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=5CJKuH7khF1y3DizoabvaS6odECAtRFkcRZfxb+4uoM=;
+        b=O5RZnJrsRN26c2YrnSeK6kVKVS65ICdLpnTOafJMF/+rXTiL4JKVU1xvUEz/cc8ygp
+         UuVkX+eiwq7zjJtrzX6zAosyngx2Sq6ZZTf35dM0BSLL2y0ZIwVOBBoLvrrPMiDvBDL5
+         9iK0HOAKOXb40k9wtcekfKJawRLUPcscVmDAYTWoNlYidkhj2k9XI+zCmIcr3nIcKm2f
+         P+5krQvXU0E953wBeL7b5WCUsKMtIUUecO5rN4Hl+cowzPQMfnla0gQPId66zPhhIHGU
+         4fJC75c3SdkHtmIjBXNp3EqDukgLFVrFeGYTUUnPRIkNApOlS+OYuai3HloSV76yXCDC
+         diUg==
+X-Gm-Message-State: AOAM5319cLqWZZ6P+fbxdg9cakJtHo/HKBUWdWydx4gEsj3ZcuptBFGx
+        soSwXYAHVnwKJYyrE997t5r0Vg==
+X-Google-Smtp-Source: ABdhPJz7AGrSLCIpiI5vobjTwGztjseHVxY2LqnQac0HzghAh/fFbXTARvxvKsuq2VPwzQPY83nBAA==
+X-Received: by 2002:a65:480a:0:b0:39c:c745:6f59 with SMTP id h10-20020a65480a000000b0039cc7456f59mr6432618pgs.33.1650033352643;
+        Fri, 15 Apr 2022 07:35:52 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm5045100pjy.35.2022.04.15.07.35.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:32:42 -0700 (PDT)
-Received: (nullmailer pid 251786 invoked by uid 1000);
-        Fri, 15 Apr 2022 14:32:41 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Markuss Broks <markuss.broks@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>, phone-devel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Lee Jones <lee.jones@linaro.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
-In-Reply-To: <20220415110014.7384-3-markuss.broks@gmail.com>
-References: <20220415110014.7384-1-markuss.broks@gmail.com> <20220415110014.7384-3-markuss.broks@gmail.com>
-Subject: Re: [PATCH v2 2/4] dt-bindings: mfd: Add bindings for Silicon Mitus SM5703 MFD
-Date:   Fri, 15 Apr 2022 09:32:41 -0500
-Message-Id: <1650033161.773468.251785.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 15 Apr 2022 07:35:51 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 14:35:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Luck, Tony" <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        "Huang, Kai" <kai.huang@intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Hu, Robert" <robert.hu@intel.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+Subject: Re: [PATCH v7 8/8] KVM: VMX: enable IPI virtualization
+Message-ID: <YlmCxOcWvbXzaYpw@google.com>
+References: <20220304080725.18135-1-guang.zeng@intel.com>
+ <20220304080725.18135-9-guang.zeng@intel.com>
+ <YkZlhI7nAAqDhT0D@google.com>
+ <54df6da8-ad68-cc75-48db-d18fc87430e9@intel.com>
+ <YksxiAnNmdR2q65S@google.com>
+ <b8f753b0-1b57-3e42-3516-27cc0359c584@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b8f753b0-1b57-3e42-3516-27cc0359c584@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 14:00:11 +0300, Markuss Broks wrote:
-> This patch adds device-tree bindings for the Silicon Mitus
-> SM5703 MFD.
+On Sat, Apr 09, 2022, Zeng Guang wrote:
 > 
-> Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
-> ---
->  .../bindings/mfd/siliconmitus,sm5703.yaml     | 96 +++++++++++++++++++
->  1 file changed, 96 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+> On 4/5/2022 1:57 AM, Sean Christopherson wrote:
+> > On Sun, Apr 03, 2022, Zeng Guang wrote:
+> > > On 4/1/2022 10:37 AM, Sean Christopherson wrote:
+> > > > > @@ -4219,14 +4226,21 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+> > > > >    	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
+> > > > >    	if (cpu_has_secondary_exec_ctrls()) {
+> > > > > -		if (kvm_vcpu_apicv_active(vcpu))
+> > > > > +		if (kvm_vcpu_apicv_active(vcpu)) {
+> > > > >    			secondary_exec_controls_setbit(vmx,
+> > > > >    				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
+> > > > >    				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> > > > > -		else
+> > > > > +			if (enable_ipiv)
+> > > > > +				tertiary_exec_controls_setbit(vmx,
+> > > > > +						TERTIARY_EXEC_IPI_VIRT);
+> > > > > +		} else {
+> > > > >    			secondary_exec_controls_clearbit(vmx,
+> > > > >    					SECONDARY_EXEC_APIC_REGISTER_VIRT |
+> > > > >    					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+> > > > > +			if (enable_ipiv)
+> > > > > +				tertiary_exec_controls_clearbit(vmx,
+> > > > > +						TERTIARY_EXEC_IPI_VIRT);
+> > > > Oof.  The existing code is kludgy.  We should never reach this point without
+> > > > enable_apicv=true, and enable_apicv should be forced off if APICv isn't supported,
+> > > > let alone seconary exec being support.
+> > > > 
+> > > > Unless I'm missing something, throw a prep patch earlier in the series to drop
+> > > > the cpu_has_secondary_exec_ctrls() check, that will clean this code up a smidge.
+> > > cpu_has_secondary_exec_ctrls() check can avoid wrong vmcs write in case mistaken
+> > > invocation.
+> > KVM has far bigger problems on buggy invocation, and in that case the resulting
+> > printk + WARN from the failed VMWRITE is a good thing.
 > 
+> SDM doesn't define VMWRITE failure for such case.
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Yes it absolutely does.  cpu_has_secondary_exec_ctrls() checks if the VMCS field
+_exists_, not if it's being used by KVM (though that's a moot point since KVM
+always enables secondary controls when it's supported).  VMWRITE to non-existent
+fields cause VM-Fail.
 
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-schemas/regulator/siliconmitus,sm5703-regulator.yaml: ignoring, error parsing file
-Error: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.example.dts:28.39-40 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:364: Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+  ELSIF secondary source operand does not correspond to any VMCS field
+  THEN VMfailValid(VMREAD/VMWRITE from/to unsupported VMCS component);

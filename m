@@ -2,137 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6E85020D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E895020DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 05:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349019AbiDODK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 23:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48336 "EHLO
+        id S1349071AbiDODZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 23:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiDODKz (ORCPT
+        with ESMTP id S1349043AbiDODZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 23:10:55 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BF57AF1E2
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 20:08:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649992109; x=1681528109;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RAM36F8NkeMZBw4Ka4v8xDiTCpoZWQar458TDSkh+CI=;
-  b=b2Nj4VvIVhTwv04aNlzfJSYL3VeYkzByRK0rk1RhvcQysg6Rr2h0/sl2
-   wZpnFXgV3MpxaLp7IrU6o6dwL50LIGOOqyFGalWlqNSYJGjX+SPEKWqaN
-   w3l8UF229UpnLsdYfjkh/P3GeMDdneWRWKca7en3OOaNBzPTTqj5iPEAY
-   Vmjc3Xxpd91Wu4geYpLWzKhSjxsm39LHxw0LhIhESJmv3cS7vUI0GZ19R
-   7lXO+bEVzBxQRNqwSDL1Vo2L5gq7Hh+lUlXvviH8v3+qhr474VfR1rEig
-   WQvWr+wOHdorD8TEFH5LhPdu/RH+qgta/6n/19UgMPeHAq73zXfwJ/SqQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349517809"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="349517809"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 20:07:59 -0700
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="552974365"
-Received: from ruiqifu-mobl.ccr.corp.intel.com ([10.254.213.123])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 20:07:55 -0700
-Message-ID: <4b47e6317aca3deeabf610a7f4839563ff2b25a1.camel@intel.com>
-Subject: Re: [PATCH v2 2/9] mm/vmscan: remove unneeded can_split_huge_page
- check
-From:   "ying.huang@intel.com" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Oscar Salvador <osalvador@suse.de>
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        hch@infradead.org, willy@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>
-Date:   Fri, 15 Apr 2022 11:07:53 +0800
-In-Reply-To: <a90dc108e54e19cf3aa3fd21f6321afa8f194adc.camel@intel.com>
-References: <20220409093500.10329-1-linmiaohe@huawei.com>
-         <20220409093500.10329-3-linmiaohe@huawei.com>
-         <YlU/h0fdE1L846Bd@localhost.localdomain>
-         <7455b680-3d89-5d3e-ba0e-6e4358b114a2@huawei.com>
-         <b153b758-ce11-364a-2699-753b21250508@redhat.com>
-         <a90dc108e54e19cf3aa3fd21f6321afa8f194adc.camel@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.38.3-1 
+        Thu, 14 Apr 2022 23:25:44 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0779D4F0;
+        Thu, 14 Apr 2022 20:23:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04426;MF=dtcccc@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VA5Gud0_1649992993;
+Received: from localhost.localdomain(mailfrom:dtcccc@linux.alibaba.com fp:SMTPD_---0VA5Gud0_1649992993)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Fri, 15 Apr 2022 11:23:14 +0800
+From:   Tianchen Ding <dtcccc@linux.alibaba.com>
+To:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] scsi: ses: Fix out-of-bound write at ses_enclosure_data_process()
+Date:   Fri, 15 Apr 2022 11:23:13 +0800
+Message-Id: <20220415032313.94991-1-dtcccc@linux.alibaba.com>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-04-13 at 09:26 +0800, ying.huang@intel.com wrote:
-> On Tue, 2022-04-12 at 16:59 +0200, David Hildenbrand wrote:
-> > On 12.04.22 15:42, Miaohe Lin wrote:
-> > > On 2022/4/12 16:59, Oscar Salvador wrote:
-> > > > On Sat, Apr 09, 2022 at 05:34:53PM +0800, Miaohe Lin wrote:
-> > > > > We don't need to check can_split_folio() because folio_maybe_dma_pinned()
-> > > > > is checked before. It will avoid the long term pinned pages to be swapped
-> > > > > out. And we can live with short term pinned pages. Without can_split_folio
-> > > > > checking we can simplify the code. Also activate_locked can be changed to
-> > > > > keep_locked as it's just short term pinning.
-> > > > 
-> > > > What do you mean by "we can live with short term pinned pages"?
-> > > > Does it mean that it was not pinned when we check
-> > > > folio_maybe_dma_pinned() but now it is?
-> > > > 
-> > > > To me it looks like the pinning is fluctuating and we rely on
-> > > > split_folio_to_list() to see whether we succeed or not, and if not
-> > > > we give it another spin in the next round?
-> > > 
-> > > Yes. Short term pinned pages is relative to long term pinned pages and these pages won't be
-> > > pinned for a noticeable time. So it's expected to split the folio successfully in the next
-> > > round as the pinning is really fluctuating. Or am I miss something?
-> > > 
-> > 
-> > Just so we're on the same page. folio_maybe_dma_pinned() only capture
-> > FOLL_PIN, but not FOLL_GET. You can have long-term FOLL_GET right now
-> > via vmsplice().
-> 
-> Per my original understanding, folio_maybe_dma_pinned() can be used to
-> detect long-term pinned pages.  And it seems reasonable to skip the
-> long-term pinned pages and try short-term pinned pages during page
-> reclaiming.  But as you pointed out, vmsplice() doesn't use FOLL_PIN. 
-> So if vmsplice() is expected to pin pages for long time, and we have no
-> way to detect it, then we should keep can_split_folio() in the original
-> code.
-> 
-> Copying more people who have worked on long-term pinning for comments.
+Our modified KFENCE reported a memory corruption:
 
-Checked the discussion in the following thread,
+[   52.584914] BUG: KFENCE: memory corruption in ses_enclosure_data_process+0x24b/0x310 [ses]
 
-https://lore.kernel.org/lkml/CA+CK2bBffHBxjmb9jmSKacm0fJMinyt3Nhk8Nx6iudcQSj80_w@mail.gmail.com/
+[   52.584917] Corrupted memory at 0xffff88982de06ff0 [ 0x00 . . . . . . . . . . . . . . . ] (in kfence-#1624698):
+[   52.607212]  ses_enclosure_data_process+0x24b/0x310 [ses]
+[   52.607215]  ses_intf_add+0x444/0x542 [ses]
+[   52.621369]  class_interface_register+0x110/0x120
+[   52.621373]  ses_init+0x13/0x1000 [ses]
+[   52.621377]  do_one_initcall+0x41/0x1c0
+[   52.621380]  do_init_module+0x5c/0x260
+[   52.621382]  __do_sys_finit_module+0xb1/0x110
+[   52.621386]  do_syscall_64+0x2d/0x40
+[   52.621388]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-It seems that from the practical point of view, folio_maybe_dma_pinned()
-can identify most long-term pinned pages that may block memory hot-
-remove or CMA allocation.  Although as David pointed out, some pages may
-still be GUPed for long time (e.g. via vmsplice) even if
-!folio_maybe_dma_pinned().
+[   52.621393] kfence-#1624698 [0xffff88982de06fc0-0xffff88982de06fe0, size=33, cache=kmalloc-64] allocated by task 1033:
+[   52.670344]  ses_enclosure_data_process+0x2ae/0x310 [ses]
+[   52.670347]  ses_intf_add+0x444/0x542 [ses]
+[   52.670353]  class_interface_register+0x110/0x120
+[   52.688165]  ses_init+0x13/0x1000 [ses]
+[   52.688169]  do_one_initcall+0x41/0x1c0
+[   52.688172]  do_init_module+0x5c/0x260
+[   52.688174]  __do_sys_finit_module+0xb1/0x110
+[   52.688177]  do_syscall_64+0x2d/0x40
+[   52.688179]  entry_SYSCALL_64_after_hwframe+0x44/0xa9
 
-But from another point of view, can_split_huge_page() is cheap and THP
-swapout is expensive (swap space, disk IO, and hard to be recovered), so
-it may be better to keep can_split_huge_page() in shink_page_list().
+This is because we check desc_ptr >= buf + page7_len first but then
+write '\0' to desc_ptr[len+4], while this address may be out of bound.
 
-Best Regards,
-Huang, Ying
+Fixes: 21fab1d0595e ("[SCSI] ses: update enclosure data on hot add")
+Signed-off-by: Tianchen Ding <dtcccc@linux.alibaba.com>
+---
+ drivers/scsi/ses.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> 
-> > can_split_folio() is more precise then folio_maybe_dma_pinned(), but
-> > both are racy as long as the page is still mapped.
-> > 
-> > 
-> 
-
+diff --git a/drivers/scsi/ses.c b/drivers/scsi/ses.c
+index 0a1734f34587..06b991e27c84 100644
+--- a/drivers/scsi/ses.c
++++ b/drivers/scsi/ses.c
+@@ -559,11 +559,11 @@ static void ses_enclosure_data_process(struct enclosure_device *edev,
+ 			struct enclosure_component *ecomp;
+ 
+ 			if (desc_ptr) {
+-				if (desc_ptr >= buf + page7_len) {
++				len = (desc_ptr[2] << 8) + desc_ptr[3];
++				desc_ptr += 4;
++				if (desc_ptr + len > buf + page7_len) {
+ 					desc_ptr = NULL;
+ 				} else {
+-					len = (desc_ptr[2] << 8) + desc_ptr[3];
+-					desc_ptr += 4;
+ 					/* Add trailing zero - pushes into
+ 					 * reserved space */
+ 					desc_ptr[len] = '\0';
+-- 
+2.33.0
 

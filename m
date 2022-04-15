@@ -2,156 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758EB501FC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FA6501FC3
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:46:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348135AbiDOArP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39062 "EHLO
+        id S1343765AbiDOAsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348212AbiDOArI (ORCPT
+        with ESMTP id S237315AbiDOAsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:47:08 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C01277F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:44:22 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id t190-20020a25c3c7000000b006410799ab3dso5577369ybf.21
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:44:22 -0700 (PDT)
+        Thu, 14 Apr 2022 20:48:51 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4873FB8227
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:46:25 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d5-20020a62f805000000b0050566b4f4c0so3853205pfh.11
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:46:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
-         :cc;
-        bh=ZwQPxBd8EtPA2caIKpSSvGEb5tp2AlMs5mP2bGiGorY=;
-        b=Xh0tbPmp/XKj/ZjaKdtHHKO9340eZClseHomoI4Rj3NjZNAp8e3naM0Dva0HKuMY8N
-         iPrz+wAscbKcTJliCnwg8XPd0ShgYtMoSkSzJWdJB9LagwPopFcjH8BUp0GDrkDmudA/
-         PNoh6MX9hLlgdIWTHP8ppSyBv0w/fKPxd01F7Jw44Ss/fAcWlCjIugQ/3kjPFWcS2LQC
-         tygatotND2v+OGc2+ZdvzjhzOhEhHQvLcQxsom2H5geXUjbW2NnD3SLoa8CsDZrItXwr
-         fg+e6cTsajQGQX76fJW1GZ+BC2uWURrEgv6wsn+zmayU1+gt97zF+l/xcZpdqTHxd2W7
-         uVOg==
+        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
+        bh=71BQZu/sNQ1rStCLl5rLaYGw9VdEBlajvzPCVRYsEdY=;
+        b=YqR97q+gjjpXN+NvVA9gwzmrBsczjhgwfMXlEEQ/T8uMYwN4ozqb1OIa1YSM6TrEE7
+         9a4GOudHI50AJnDFyOtmtC5VIfoFzhc7z5oZST7LIBnUE616sn7IBW7yVlEUIh4BPNTq
+         Ph7v22KbOlFppsp3XYpnmrfi0c6ZI1a5wdqYcYkP1lrNiEU4Z6b7IYWRKdxfzkr/pbqP
+         1frRpwFM/kNTRpaE2XDHECaR82Nt+ICopiRU4uOv/ZTsExNLXc2noGsmcowgdH1YgHUA
+         Jluf+X2mKjAiu+NEEepp86jRxqKFnsO2uOHW5PN8L041iYMe05R7iK6RR7Sdc5FnNSEd
+         x80A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
-         :references:subject:from:to:cc;
-        bh=ZwQPxBd8EtPA2caIKpSSvGEb5tp2AlMs5mP2bGiGorY=;
-        b=Bk+SJh/CKDIT0gNzzddmKQtGu9H2kr32VncHr+ABlvFp50I9/5s7I1IcR67fXaaDav
-         VOJeNH1miP+mF5Xiv+7Yxvyk0pZYXfm3Lej1bayuX1gpK4dQAamWD1WRcycjTtt+qakd
-         0MOekF8LsnZyc1bpTvCrvW0f/iWgJzNUKF4HQBLeJLSOuDD4j6AX0QBiSJE/Hrwy8II9
-         995rPwFxwXUKCxGddE9s/ikWYyOdXf1lqsKXEbjKCOwL6WS9DLrCK9EZn9MIYj4B5VH5
-         lIUGI4R3SIms2LRLFQhj5o5Z/jSGnyiCpMXfwRks6FkbRtJLO5JViWhQcWkEpjhSiy5r
-         8Glg==
-X-Gm-Message-State: AOAM532i1eYuQ0libJx1c2Fae7k2zP0xUeL0sk2bGxptjkVhEGhXj1Ka
-        0JjcFEk9ea6iYZYjXuHuFTb/lXriyxhs06o=
-X-Google-Smtp-Source: ABdhPJwAoaNAXHbsHFTs0B57rlO4LQu5dHbO3LV5mhgRiZ+Jyle+N1fkTzOQJzK493osORtW4RZmkpeUiU+qcwY=
-X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:b28d:6e12:8dbb:a7a8])
- (user=saravanak job=sendgmr) by 2002:a05:690c:89:b0:2d7:fb7d:db7 with SMTP id
- be9-20020a05690c008900b002d7fb7d0db7mr4518123ywb.219.1649983461658; Thu, 14
- Apr 2022 17:44:21 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 17:44:17 -0700
-In-Reply-To: <e2bbed61-b818-c391-bf65-824ea2a2ee5a@quicinc.com>
-Message-Id: <20220415004417.1790161-1-saravanak@google.com>
+        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
+         :from:to:cc;
+        bh=71BQZu/sNQ1rStCLl5rLaYGw9VdEBlajvzPCVRYsEdY=;
+        b=sL2h1vt5HmzgA7w0opPhyr8ZDZpBtg6Vz7923LbGpZ0JCK1F4BM2MYYAE4kQdaOKYo
+         3NNpUi8V616oZWGdigijgsX9RpxsNwQ9N8vmBXDjWQ9+/j67DsFUuYBsD7dbGAK839UF
+         yKGcSRp6gnlD5n8zkXRHS8YuRH4WrveFMne9OJQDvKS/JDq40wEWxjXlZ9Uh4yvqWZxW
+         al/Cl73+LnGBvHoo/OfEj45k9QMTHTbo+zM0GvBHGmWg7gWv4e+U+sHwTUieBqSB4nqr
+         cnHxALnr2A5OWd9c2zfg9cKhWmu0zb2SUIuvXg397vMaEK1tzt1t11dQKGvQKreCdNUC
+         RvcQ==
+X-Gm-Message-State: AOAM531fxs1mpdeG3h9m6mfkK4tK8y8GFGlswlGfpi1c0S6Th8lYLDyB
+        NXfAJnedY/SuDz0w4kPL/4oC4WIl41o=
+X-Google-Smtp-Source: ABdhPJwtbePT6BMnjqeS2btxHX/za7QwUYBdgnhFqLOZDf2IDB/ZiBuLFk6ZR9svaix7w0p5xtKLq4iDN7M=
+X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:711:b0:4fa:daf1:94c1 with SMTP id
+ 17-20020a056a00071100b004fadaf194c1mr6386178pfl.52.1649983584803; Thu, 14 Apr
+ 2022 17:46:24 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 15 Apr 2022 00:46:22 +0000
+Message-Id: <20220415004622.2207751-1-seanjc@google.com>
 Mime-Version: 1.0
-References: <e2bbed61-b818-c391-bf65-824ea2a2ee5a@quicinc.com>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH v3 ] remoteproc: Use unbounded workqueue for recovery work
-From:   Saravana Kannan <saravanak@google.com>
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, mathieu.poirier@linaro.org,
-        Saravana Kannan <saravanak@google.com>, kernel-team@android.com
+Subject: [PATCH] KVM: Initialize debugfs_dentry when a VM is created to avoid
+ NULL deref
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oupton@google.com>,
+        syzbot+df6fbbd2ee39f21289ef@syzkaller.appspotmail.com,
+        Sean Christopherson <seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mukesh Ojha <quic_mojha@quicinc.com> wrote:
-> There could be a scenario where there is too much load on a core
-> (n number of tasks which is affined) or in a case when multiple
-> rproc subsystem is going for a recovery and they queued recovery
-> work to one core so even though subsystem are independent there
-> recovery will be delayed if one of the subsystem recovery work
-> is taking more time in completing.
-> 
-> If we make this queue unbounded, the recovery work could be picked
-> on any cpu. This patch try to address this.
-> 
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> ---
-> Changes in v3:
->   - Add fallback option to go back to earlier path incase recovery wq
->     creation fails.
-> 
-> Changes in v2:
->   - Removed WQ_HIGHPRI.
->   - Updated commit text.
-> 
->  drivers/remoteproc/remoteproc_core.c | 15 +++++++++++++--
->  1 file changed, 13 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-> index c510125..6446c84 100644
-> --- a/drivers/remoteproc/remoteproc_core.c
-> +++ b/drivers/remoteproc/remoteproc_core.c
-> @@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
->  
->  /* Unique indices for remoteproc devices */
->  static DEFINE_IDA(rproc_dev_index);
-> +static struct workqueue_struct *rproc_recovery_wq;
->  
->  static const char * const rproc_crash_names[] = {
->  	[RPROC_MMUFAULT]	= "mmufault",
-> @@ -2755,8 +2756,11 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
->  	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
->  		rproc->name, rproc_crash_to_string(type));
->  
-> -	/* Have a worker handle the error; ensure system is not suspended */
-> -	queue_work(system_freezable_wq, &rproc->crash_handler);
-> +	if (rproc_recovery_wq)
-> +		queue_work(rproc_recovery_wq, &rproc->crash_handler);
-> +	else
-> +		queue_work(system_freezable_wq, &rproc->crash_handler);
+Initialize debugfs_entry to its semi-magical -ENOENT value when the VM
+is created.  KVM's teardown when VM creation fails is kludgy and calls
+kvm_uevent_notify_change() and kvm_destroy_vm_debugfs() even if KVM never
+attempted kvm_create_vm_debugfs().  Because debugfs_entry is zero
+initialized, the IS_ERR() checks pass and KVM derefs a NULL pointer.
 
-This is unnecessarily complicated. If you can't create a workqueue you
-have bigger problems with the system. Just stick with the new rproc
-workqueue.
+  BUG: kernel NULL pointer dereference, address: 0000000000000018
+  #PF: supervisor read access in kernel mode
+  #PF: error_code(0x0000) - not-present page
+  PGD 1068b1067 P4D 1068b1067 PUD 1068b0067 PMD 0
+  Oops: 0000 [#1] SMP
+  CPU: 0 PID: 871 Comm: repro Not tainted 5.18.0-rc1+ #825
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  RIP: 0010:__dentry_path+0x7b/0x130
+  Call Trace:
+   <TASK>
+   dentry_path_raw+0x42/0x70
+   kvm_uevent_notify_change.part.0+0x10c/0x200 [kvm]
+   kvm_put_kvm+0x63/0x2b0 [kvm]
+   kvm_dev_ioctl+0x43a/0x920 [kvm]
+   __x64_sys_ioctl+0x83/0xb0
+   do_syscall_64+0x31/0x50
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
+  Modules linked in: kvm_intel kvm irqbypass
 
-> +
->  }
->  EXPORT_SYMBOL(rproc_report_crash);
->  
-> @@ -2805,6 +2809,11 @@ static void __exit rproc_exit_panic(void)
->  
->  static int __init remoteproc_init(void)
->  {
-> +	rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq",
-> +						WQ_UNBOUND | WQ_FREEZABLE, 0);
-> +	if (!rproc_recovery_wq)
-> +		pr_err("remoteproc: creation of rproc_recovery_wq failed\n");
+Fixes: a44a4cc1c969 ("KVM: Don't create VM debugfs files outside of the VM directory")
+Cc: stable@vger.kernel.org
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: Oliver Upton <oupton@google.com>
+Reported-by: syzbot+df6fbbd2ee39f21289ef@syzkaller.appspotmail.com
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ virt/kvm/kvm_main.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-Fail the init if you can't create a workqueue.
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index dfb7dabdbc63..d292c4397579 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -955,12 +955,6 @@ static int kvm_create_vm_debugfs(struct kvm *kvm, int fd)
+ 	int kvm_debugfs_num_entries = kvm_vm_stats_header.num_desc +
+ 				      kvm_vcpu_stats_header.num_desc;
+ 
+-	/*
+-	 * Force subsequent debugfs file creations to fail if the VM directory
+-	 * is not created.
+-	 */
+-	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
+-
+ 	if (!debugfs_initialized())
+ 		return 0;
+ 
+@@ -1081,6 +1075,12 @@ static struct kvm *kvm_create_vm(unsigned long type)
+ 
+ 	BUILD_BUG_ON(KVM_MEM_SLOTS_NUM > SHRT_MAX);
+ 
++	/*
++	 * Force subsequent debugfs file creations to fail if the VM directory
++	 * is not created (by kvm_create_vm_debugfs()).
++	 */
++	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
++
+ 	if (init_srcu_struct(&kvm->srcu))
+ 		goto out_err_no_srcu;
+ 	if (init_srcu_struct(&kvm->irq_srcu))
 
-> +
->  	rproc_init_sysfs();
->  	rproc_init_debugfs();
->  	rproc_init_cdev();
-> @@ -2821,6 +2830,8 @@ static void __exit remoteproc_exit(void)
->  	rproc_exit_panic();
->  	rproc_exit_debugfs();
->  	rproc_exit_sysfs();
-> +	if (rproc_recovery_wq)
-> +		destroy_workqueue(rproc_recovery_wq);
+base-commit: 150866cd0ec871c765181d145aa0912628289c8a
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
 
-Will need a fix here too.
-
--Saravana
-
->  }
->  module_exit(remoteproc_exit);
->  
-> -- 
-> 2.7.4

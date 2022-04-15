@@ -2,140 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09F8E502725
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32EA502729
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351627AbiDOI4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S1351637AbiDOJBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 05:01:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiDOI4O (ORCPT
+        with ESMTP id S229460AbiDOJBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:56:14 -0400
-Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4B2B82FB;
-        Fri, 15 Apr 2022 01:53:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650012827; x=1681548827;
-  h=from:to:cc:subject:date:message-id:mime-version;
-  bh=ke+Hhb1oVkncbYT9t5ezcAeuxC6v59DKASTOygIW21s=;
-  b=k1mUecggd/lpOR8yjNzq+hjQdsCCxXzunPM3q461FW36zqTfXppsOeID
-   7Im2+5Lpm+pbgmP2qhKb4OEodRZiJPym6gYQlPc06PF27/+B1CpNrU0sH
-   XAip8z3p7K8o4rPe3DJBvyMPnhhVGZbpPxZRHQSGornMDzE2EzIpvEoaK
-   U=;
-Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
-  by alexa-out-sd-01.qualcomm.com with ESMTP; 15 Apr 2022 01:53:46 -0700
-X-QCInternal: smtphost
-Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
-  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 01:53:46 -0700
-Received: from zijuhu-gv.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Apr 2022 01:53:44 -0700
-From:   Zijun Hu <quic_zijuhu@quicinc.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: [PATCH v1] Bluetooth: btusb: add support for Qualcomm WCN785x
-Date:   Fri, 15 Apr 2022 16:53:39 +0800
-Message-ID: <1650012819-14665-1-git-send-email-quic_zijuhu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 15 Apr 2022 05:01:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD4174AE3C;
+        Fri, 15 Apr 2022 01:58:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AC78B82BA2;
+        Fri, 15 Apr 2022 08:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E5BDC385A5;
+        Fri, 15 Apr 2022 08:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650013130;
+        bh=hmyUcR5B3a1JYAACRpixD+wAFOU2ad1+pzcX/kp3Lqs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hAuXqJM27oaJH9m54lnFFKdgGSLq9IWJKcXBb4RixaCPDhmKw6bcRuphlBSv8kCg9
+         5223zUp5amCyY4TTwoGsdaodb9V1M+Y04gpx40/kbtZkTM3GnINtypYtauhJfyIu8h
+         H19BDdhSnxbiksdwtxCyNqft2Hg9LG+5M1dpTmOD5NKFUpWSdoPq/jRDhNNHV2Deav
+         UWDvt3GlDdn6DPBd8SyTCX4mCL09ChpkLmW50IThW0cxDLAZHasv6wKJbkA8W2Vkhw
+         rarWgiR1EtvOP7MOApVVqifpYOwLS1G1RMaAZ0ObTc0FiTYZFgBbjewAizBcEVDq4e
+         DURbPpho/L8ZA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1nfHmx-004W4x-H4; Fri, 15 Apr 2022 09:58:47 +0100
+Date:   Fri, 15 Apr 2022 09:58:47 +0100
+Message-ID: <8735iebu48.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Raghavendra Rao Ananta <rananta@google.com>,
+        Andrew Jones <drjones@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 00/10] KVM: arm64: Add support for hypercall services selection
+In-Reply-To: <92eb2304-9259-0461-247f-d3a4e5eb4fd5@redhat.com>
+References: <20220407011605.1966778-1-rananta@google.com>
+        <92eb2304-9259-0461-247f-d3a4e5eb4fd5@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: gshan@redhat.com, rananta@google.com, drjones@redhat.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, kvm@vger.kernel.org, catalin.marinas@arm.com, pshier@google.com, linux-kernel@vger.kernel.org, pbonzini@redhat.com, will@kernel.org, kvmarm@lists.cs.columbia.edu, linux-arm-kernel@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qualcomm WCN785x has PID/VID 0cf3/e700 as shown by
-/sys/kernel/debug/usb/devices:
+On Fri, 15 Apr 2022 07:44:55 +0100,
+Gavin Shan <gshan@redhat.com> wrote:
+> 
+> Hi Raghavendra,
+> 
+> On 4/7/22 9:15 AM, Raghavendra Rao Ananta wrote:
+> > Continuing the discussion from [1], the series tries to add support
+> > for the userspace to elect the hypercall services that it wishes
+> > to expose to the guest, rather than the guest discovering them
+> > unconditionally. The idea employed by the series was taken from
+> > [1] as suggested by Marc Z.
+> > 
+> > In a broad sense, the concept is similar to the current implementation
+> > of PSCI interface- create a 'firmware psuedo-register' to handle the
+> > firmware revisions. The series extends this idea to all the other
+> > hypercalls such as TRNG (True Random Number Generator), PV_TIME
+> > (Paravirtualized Time), and PTP (Precision Time protocol).
+> > 
+> > For better categorization and future scaling, these firmware registers
+> > are categorized based on the service call owners. Also, unlike the
+> > existing firmware psuedo-registers, they hold the features supported
+> > in the form of a bitmap.
+> > 
+> > During the VM initialization, the registers holds an upper-limit of
+> > the features supported by each one of them. It's expected that the
+> > userspace discover the features provided by each register via GET_ONE_REG,
+> > and writeback the desired values using SET_ONE_REG. KVM allows this
+> > modification only until the VM has started.
+> > 
+> > Some of the standard function-ids, such as ARM_SMCCC_VERSION_FUNC_ID,
+> > need not be associated with a feature bit. For such ids, the series
+> > introduced an allowed-list, hvc_func_default_allowed_list[], that holds
+> > all such ids. As a result, the functions that are not elected by userspace,
+> > or if they are not a part of this allowed-list, will be denied for when
+> > the guests invoke them.
+> > 
+> > Older VMMs can simply ignore this interface and the hypercall services
+> > will be exposed unconditionally to the guests, thus ensuring backward
+> > compatibility.
+> > 
+> 
+> [...]
+> 
+> I rethinking about the design again and just get one question. Hopefully,
+> someone have the answer for us. The newly added 3 pseudo registers and
+> the existing ones like KVM_REG_ARM_PSCI_VERSION are all tied up with
+> vcpu, instead of VM. I don't think it's correct. I'm not sure if VM-scoped
+> pseudo registers aren't allowed by ARM architecture or the effort isn't
+> worthy to support it.
 
-T:  Bus=02 Lev=02 Prnt=02 Port=01 Cnt=02 Dev#= 22 Spd=12   MxCh= 0
-D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=0cf3 ProdID=e700 Rev= 0.01
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+We have had that discussion before (around version 2 of this series,
+if I remember well).
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
- drivers/bluetooth/btusb.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> These pseudo registers are introduced to present the available hypercalls,
+> and then they can be disabled from userspace. In the implementation, these 3
+> registers are vcpu scoped. It means that multiple vcpus can be asymmetric
+> in terms of usable hypercalls. For example, ARM_SMCCC_TRNG hypercalls
+> can be enabled on vcpu0, but disabled on vcpu1. I don't think it's expected.
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 06a854a2507e..67a6a84a6f61 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -317,6 +317,11 @@ static const struct usb_device_id blacklist_table[] = {
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
- 
-+	/* QCA WCN785x chipset */
-+	{ USB_DEVICE(0x0cf3, 0xe700), .driver_info = BTUSB_QCA_WCN6855 |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
-+
- 	/* Broadcom BCM2035 */
- 	{ USB_DEVICE(0x0a5c, 0x2009), .driver_info = BTUSB_BCM92035 },
- 	{ USB_DEVICE(0x0a5c, 0x200a), .driver_info = BTUSB_WRONG_SCO_MTU },
-@@ -3037,6 +3042,7 @@ static const struct qca_device_info qca_devices_table[] = {
- 	{ 0x00130100, 40, 4, 16 }, /* WCN6855 1.0 */
- 	{ 0x00130200, 40, 4, 16 }, /* WCN6855 2.0 */
- 	{ 0x00130201, 40, 4, 16 }, /* WCN6855 2.1 */
-+	{ 0x00190200, 40, 4, 16 }, /* WCN785x 2.0 */
- };
- 
- static int btusb_qca_send_vendor_req(struct usb_device *udev, u8 request,
-@@ -3327,11 +3333,11 @@ static int btusb_setup_qca(struct hci_dev *hdev)
- 		if (err < 0)
- 			return err;
- 
--		/* WCN6855 2.1 will reset to apply firmware downloaded here, so
-+		/* WCN6855 2.1 and later will reset to apply firmware downloaded here, so
- 		 * wait ~100ms for reset Done then go ahead, otherwise, it maybe
- 		 * cause potential enable failure.
- 		 */
--		if (info->rom_version == 0x00130201)
-+		if ((info->rom_version == 0x00130201) || (info->rom_version == 0x00190200))
- 			msleep(QCA_BT_RESET_WAIT_MS);
- 	}
- 
+No, that's not the way this is supposed to work. These hypercalls are
+of course global, even if the accessor is per-vcpu. This is similar to
+tons of other things, such as some of the PMU data, the timer virtual
+offset... the list goes on. If that's not what this code does, then it
+is a bug and it needs to be fixed.
+
+> On the other hand, the information stored in these 3 registers needs to
+> be migrated through {GET,SET}_ONE_REG by VMM (QEMU). all the information
+> stored in these 3 registers are all same on all vcpus, which is exactly
+> as we expect. In migration circumstance, we're transporting identical
+> information for all vcpus and it's unnecessary.
+
+Yes, we all understand that. My response to that was (and still is):
+
+- There is no need to invent a new userspace interface. The one we
+  have is terrible enough, and we don't need another square wheel that
+  would need to be maintained beside the existing one.
+
+- Let's say we have 1024 new pseudo-registers, 1024 vcpus, 64bit regs:
+  that's 8MB worth of extra data. This is not insignificant, but also
+  not really a problem given that such a large VM is probably attached
+  to a proportionally large amount of memory. In practice, we're
+  talking of less than 10 registers, and less than 100 vcpus. A crazy
+  8kB at most. Who cares?
+
+- If this is eventually deemed to be a *real* scalability problem, we
+  can always expose a map of registers that are global, and let
+  userspace know that it can elide the rest. Problem solved, backward
+  compatibility preserved. And I'm willing to bet that we won't need
+  it in my lifetime.
+
+Thanks,
+
+	M.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum, a Linux Foundation Collaborative Project
-
+Without deviation from the norm, progress is not possible.

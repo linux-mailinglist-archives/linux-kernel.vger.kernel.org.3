@@ -2,245 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07C5D502D43
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6C1502D52
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355587AbiDOPsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:48:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57460 "EHLO
+        id S1355624AbiDOPuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355689AbiDOPrm (ORCPT
+        with ESMTP id S236313AbiDOPuW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:47:42 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A325370B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:45:13 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id k14so7561823pga.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:45:13 -0700 (PDT)
+        Fri, 15 Apr 2022 11:50:22 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4571986F1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:47:53 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id q3so10450027wrj.7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:47:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=DJz+XdQX6UOkOE3lKu1oWsGDvtCwRAimwntgJttMBLE=;
-        b=oppB+HyCvnH3tBpbTlbZ4AMfp6ljQc4etcrFC9MRXTOahK6FFJngtCBaJ3QFhuOA3g
-         NC9S7CZLy66GfWLVkxKBdbF5lBdRWaA7/T7MGPVnBF09DXT9VVhpzs3bOc6wZAi9Q4i2
-         ulV1oszqEwkZsu3GAhjEhm3jujhxJhb4einiFxhsl3+hWMkKDwKU9qvnYEhYdrgNw/FJ
-         XELoIDRwtdJ6/DrPFdRK2VJ9g1P2x+ocJIsXdBE02eXFeg2+fjIlE1de+cxtxpUKqJjp
-         UC60Qt5zyZTvW7ObQGZA3B/ssV6wcYFTPYqLKr8fPaBWoC8pq6hglvaMP0bpcxvhnLFW
-         CpvQ==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yLsy6Cg4nTGsce8DJN5bhB9sYWSZN/u1ooAdq1shsLk=;
+        b=WofpZkYJduA5PuvzLuKjMGm5LfRHMtkKXOmASzQFM1iFhfMnjmM64iV5kvhVP2v0p2
+         EuFG3koJz7aQauCoXnUnU1KSpMWBWKxBuQ9swkkmfo5JQzGjIHnKepNFrnpy5iNkruDA
+         yHwMexMsrq5EviVYM7ETRB4tMEtOFZYaYLw6/V4xFI8oiNEwvdobkFDc9SqdYTgWQ8nC
+         g9DDbWrR00qjcSOkmDo8H6PPpwQSc/6wmZ5gVhjZ0cgs48j+UnJ7rEgMX73Rxf/cIGjS
+         X7xAfhrNezhpGwjKKQz1xGOyWAWdYNIPp+YCWKpOoJWbKCP4leN1v/cnofnhYIQrz5X6
+         B18Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=DJz+XdQX6UOkOE3lKu1oWsGDvtCwRAimwntgJttMBLE=;
-        b=BzJMvKhXuRZG1V5DAG3ummG/knO5PT0Zqh7MAOZKGoKar2alQbr02dJfb59xK3FBJE
-         5O7Zzp4MyjO/lnIUKWQyiIb5eCYq9h/5j1HISX18xnKQaObaAfW3NcbJWNoi9nVNdwS2
-         PiBAV9Qf5eQVCJowTjzHWi/hDnCU1xFz/f30lOMY7C5FZtocmxGFNPuWfhbSCcc3vQoL
-         A0oToKyjah3xiunJujh+8zVbAzJgx7A5NG9fKMGEmF8uLu52JVPxvvSTQDn1L49hpr0x
-         iLMqHg83/zu4MvvdTpZ+Dtso0qXRRU4xZ/3cvt0XEYS2RpERYNvfHNF7Yove+FPlfqI4
-         LC7Q==
-X-Gm-Message-State: AOAM533cyraUARQiQngsorrDe9HtsegpkYbbLYIPXiJhUzcJDrXHKom1
-        C79NSf6Cz0SqX333m9UnzUCjKg==
-X-Google-Smtp-Source: ABdhPJzxjtTR/DW3cLHRpWSHUd3RZNI4k3uboDnKftMkCRl1+UNhNszsPOaRWfQk0kAGrAsdRqYylA==
-X-Received: by 2002:a05:6a00:2284:b0:50a:40b8:28ff with SMTP id f4-20020a056a00228400b0050a40b828ffmr3431349pfe.17.1650037512890;
-        Fri, 15 Apr 2022 08:45:12 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id x22-20020aa784d6000000b005082b06cc58sm3113058pfn.215.2022.04.15.08.45.12
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yLsy6Cg4nTGsce8DJN5bhB9sYWSZN/u1ooAdq1shsLk=;
+        b=qpKExsnpyrDjou1h4rH3CF0H0ZPFBPiAj4puRT+0kPvJ8GjTM3UFC2c/4xE4xhMQTc
+         RX6M4LCP5as+jgiG7IWbKm5ZKSSAfqSqtl8Rt/NnBN2Z4k3Z4h+5aGIrJZTNCx/8ePMp
+         Wn3SutnXXtUFTsYLxmlhGshhDdD+WwDvGU45sn5YfImOnI+Hzjulyj65SeglfRXS1kCD
+         2MyrrECEfmFtxK87xHGuKZxuDtiA+FHZFfgmr0057PxFlZ0PCcK5IK1l5ohFzsD3y2vK
+         0RW9kV8NEXLvTSYhK9Kw/F461we5xnzpwsrsWwRBxrina7twan4Hplx7jYTvs6RrelK4
+         Le+Q==
+X-Gm-Message-State: AOAM531BGUlN50RX7wv0hh5PLFHX6q7JqZi7n/OUqDycoqvMOEFiAuK8
+        ETWJn85g1kFEaf9IEL05peX38xeGeRE=
+X-Google-Smtp-Source: ABdhPJwUnErCAHL9a4AcK17pgWqUQWIkLy2B1nkMsshWvrsNjnjDKIXrvUU7UPMMlAAUD1dZdjbHTw==
+X-Received: by 2002:a5d:64aa:0:b0:20a:7f8a:ec97 with SMTP id m10-20020a5d64aa000000b0020a7f8aec97mr2082595wrp.450.1650037672319;
+        Fri, 15 Apr 2022 08:47:52 -0700 (PDT)
+Received: from localhost.localdomain ([94.73.37.128])
+        by smtp.gmail.com with ESMTPSA id a7-20020adffb87000000b00207982c7f4dsm4349655wrr.67.2022.04.15.08.47.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 08:45:12 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 15:45:08 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Zeng Guang <guang.zeng@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
-        Gao Chao <chao.gao@intel.com>
-Subject: Re: [PATCH v8 9/9] KVM: VMX: enable IPI virtualization
-Message-ID: <YlmTBJ9KU8JxVFN2@google.com>
-References: <20220411090447.5928-1-guang.zeng@intel.com>
- <20220411090447.5928-10-guang.zeng@intel.com>
+        Fri, 15 Apr 2022 08:47:51 -0700 (PDT)
+From:   =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+To:     emma@anholt.net
+Cc:     mripard@kernel.org, laurent.pinchart@ideasonboard.com,
+        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>
+Subject: [PATCH v2 0/2] drm/vc4: hdmi: Replace drm_detect_hdmi_monitor() with drm_display_info.is_hdmi
+Date:   Fri, 15 Apr 2022 17:47:43 +0200
+Message-Id: <20220415154745.170597-1-jose.exposito89@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220411090447.5928-10-guang.zeng@intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022, Zeng Guang wrote:
-> @@ -4194,15 +4199,19 @@ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
->  	struct vcpu_vmx *vmx = to_vmx(vcpu);
->  
->  	pin_controls_set(vmx, vmx_pin_based_exec_ctrl(vmx));
-> -	if (cpu_has_secondary_exec_ctrls()) {
-> -		if (kvm_vcpu_apicv_active(vcpu))
-> -			secondary_exec_controls_setbit(vmx,
-> -				      SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> -				      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> -		else
-> -			secondary_exec_controls_clearbit(vmx,
-> -					SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> -					SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> +
-> +	if (kvm_vcpu_apicv_active(vcpu)) {
-> +		secondary_exec_controls_setbit(vmx,
-> +			      SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> +			      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
-> +		if (enable_ipiv)
-> +			tertiary_exec_controls_setbit(vmx, TERTIARY_EXEC_IPI_VIRT);
-> +	} else {
-> +		secondary_exec_controls_clearbit(vmx,
-> +			      SECONDARY_EXEC_APIC_REGISTER_VIRT |
-> +			      SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY);
+Hi everyone,
 
-Thanks for doing this, but can you move it to a separate patch?  Just in case
-we're missing something and this somehow explodes.
+These patches replace the calls to drm_detect_hdmi_monitor() with the
+more efficient drm_display_info.is_hdmi in the VC4 driver.
 
-> +		if (enable_ipiv)
-> +			tertiary_exec_controls_clearbit(vmx, TERTIARY_EXEC_IPI_VIRT);
->  	}
->  
->  	vmx_update_msr_bitmap_x2apic(vcpu);
-> @@ -4236,7 +4245,16 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
->  
->  static u64 vmx_tertiary_exec_control(struct vcpu_vmx *vmx)
->  {
-> -	return vmcs_config.cpu_based_3rd_exec_ctrl;
-> +	u64 exec_control = vmcs_config.cpu_based_3rd_exec_ctrl;
-> +
-> +	/*
-> +	 * IPI virtualization relies on APICv. Disable IPI virtualization if
-> +	 * APICv is inhibited.
-> +	 */
-> +	if (!enable_ipiv || !kvm_vcpu_apicv_active(&vmx->vcpu))
-> +		exec_control &= ~TERTIARY_EXEC_IPI_VIRT;
-> +
-> +	return exec_control;
->  }
->  
->  /*
-> @@ -4384,10 +4402,37 @@ static u32 vmx_secondary_exec_control(struct vcpu_vmx *vmx)
->  	return exec_control;
->  }
->  
-> +int vmx_get_pid_table_order(struct kvm_vmx *kvm_vmx)
-> +{
-> +	return get_order(kvm_vmx->kvm.arch.max_vcpu_ids * sizeof(*kvm_vmx->pid_table));
+As I mentioned in v1, vc4_hdmi_encoder.hdmi_monitor (removed by this
+series) is used by some code not present in the mainline kernel but
+present in the Raspberry Pi tree [1].
+Let me know if you want me to open a PR in the Raspberry Pi kernel
+project applying this series and fixing this issue.
 
-I think it's slightly less gross to take @kvm and then:
+Thanks,
+José Expósito
 
-	return get_order(kvm->arch.max_vcpu_ids * sizeof(*to_kvm_vmx(kvm)->pid_table));
+[1] https://github.com/raspberrypi/linux/blob/rpi-5.15.y/drivers/gpu/drm/vc4/vc4_firmware_kms.c#L1410
 
-> +}
-> +
-> +static int vmx_alloc_ipiv_pid_table(struct kvm *kvm)
-> +{
-> +	struct page *pages;
-> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
-> +
-> +	if (!irqchip_in_kernel(kvm) || !enable_ipiv)
-> +		return 0;
+v1: https://lore.kernel.org/dri-devel/20220406165514.6106-1-jose.exposito89@gmail.com/
 
-Newline here please.
+v2: Add the ftrace command used in the first patch
+    Remove vc4_hdmi_encoder.hdmi_monitor
+    (Thanks to Maxime for suggesting these changes)
 
-> +	if (kvm_vmx->pid_table)
+José Expósito (2):
+  drm/vc4: hdmi: Replace drm_detect_hdmi_monitor() with is_hdmi
+  drm/vc4: hdmi: Remove vc4_hdmi_encoder.hdmi_monitor
 
-Note, this check goes away if this ends up being called from a dedicated ioctl.
+ drivers/gpu/drm/vc4/vc4_hdmi.c | 17 ++++++-----------
+ drivers/gpu/drm/vc4/vc4_hdmi.h |  1 -
+ 2 files changed, 6 insertions(+), 12 deletions(-)
 
-> +		return 0;
-> +
-> +	pages = alloc_pages(GFP_KERNEL | __GFP_ZERO,
-> +			    vmx_get_pid_table_order(kvm_vmx));
-> +
+-- 
+2.25.1
 
-But no newline here please :-)
-
-> +	if (!pages)
-> +		return -ENOMEM;
-> +
-> +	kvm_vmx->pid_table = (void *)page_address(pages);
-> +	return 0;
-> +}
-> +
->  #define VMX_XSS_EXIT_BITMAP 0
->  
->  static void init_vmcs(struct vcpu_vmx *vmx)
->  {
-> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(vmx->vcpu.kvm);
-
-Might be worth doing:
-
-	struct kvm *kvm = vmx->vcpu.kvm;
-	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
-
-The kvm_vmx->kvm.arch below is kinda funky.
-
-Ah yeah, do that, then e.g. the kvm_pause_in_guest() call doesn't need to get
-'kvm' itself.
-
-> +
->  	if (nested)
->  		nested_vmx_set_vmcs_shadowing_bitmap();
->  
-> @@ -4419,6 +4464,11 @@ static void init_vmcs(struct vcpu_vmx *vmx)
->  		vmcs_write64(POSTED_INTR_DESC_ADDR, __pa((&vmx->pi_desc)));
->  	}
->  
-> +	if (vmx_can_use_ipiv(&vmx->vcpu)) {
-> +		vmcs_write64(PID_POINTER_TABLE, __pa(kvm_vmx->pid_table));
-> +		vmcs_write16(LAST_PID_POINTER_INDEX, kvm_vmx->kvm.arch.max_vcpu_ids - 1);
-> +	}
-> +
->  	if (!kvm_pause_in_guest(vmx->vcpu.kvm)) {
->  		vmcs_write32(PLE_GAP, ple_gap);
->  		vmx->ple_window = ple_window;
-> @@ -7112,6 +7162,10 @@ static int vmx_vcpu_create(struct kvm_vcpu *vcpu)
->  			goto free_vmcs;
->  	}
->  
-> +	if (vmx_can_use_ipiv(vcpu))
-> +		WRITE_ONCE(to_kvm_vmx(vcpu->kvm)->pid_table[vcpu->vcpu_id],
-> +			   __pa(&vmx->pi_desc) | PID_TABLE_ENTRY_VALID);
-> +
->  	return 0;
->  
->  free_vmcs:
-> @@ -7746,6 +7800,14 @@ static bool vmx_check_apicv_inhibit_reasons(enum kvm_apicv_inhibit reason)
->  	return supported & BIT(reason);
->  }
->  
-> +static void vmx_vm_destroy(struct kvm *kvm)
-> +{
-> +	struct kvm_vmx *kvm_vmx = to_kvm_vmx(kvm);
-> +
-> +	if (kvm_vmx->pid_table)
-> +		free_pages((unsigned long)kvm_vmx->pid_table, vmx_get_pid_table_order(kvm_vmx));
-
-free_pages() does the != 0 check, no need to handle that here.  I agree it feels
-wierd, but it's well established behavior.
-
-> +}
-> +
->  static struct kvm_x86_ops vmx_x86_ops __initdata = {
->  	.name = "kvm_intel",
->  

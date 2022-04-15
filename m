@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD53B502B93
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E792E502B90
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354318AbiDOOQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
+        id S1354322AbiDOOQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354298AbiDOOQN (ORCPT
+        with ESMTP id S1354321AbiDOOQ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:16:13 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F257CEE0B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:45 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-d6ca46da48so8161749fac.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:45 -0700 (PDT)
+        Fri, 15 Apr 2022 10:16:29 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3384CEE2D
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:59 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id w127so8479945oig.10
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Aqd3cVPWfCv4uAfqdQC3dxQYsG0PuSaL4S7UTovgqyY=;
-        b=I8AVxiJekURB8bEX7DWfqphVA8le7jh+z8Rfgw+4a8Fm577YgNItUP1SiHVal7wN2F
-         xv6Ja1Dvp45bcSoCiWb3eV27JRMI5LP3YLMz2IixEzjkB7Vza28slEJ1TI8jqP8keeKf
-         vw/KLU9ZuOf8Emfo+lcg1wMlUDTdywAwTxNThbvS6a1BnxH7B9ljMhMQMV3li6jQe7dn
-         s2wtM3uuKjESQXyCdjln5YJ3JdJmXEjQ1XUgon/uXCIueWB3J9SaJwCg3A4aB7D1upzb
-         1RmBF9YsrCFarO/XIhJt4TmL8PMfmFlMD5bYTy0PV7FENoUJWMNzVLL6TEr00vX5Oh8d
-         7kfA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Y7gbuOQcgVegOGgriZZtIkm8aICEvz3iCExryeuJnKc=;
+        b=GvaYw9m9uZIuDmPB083S//D9z0YL2IzNOcCjm1pVtXOpEFOGXRHx+X57H1kiE59Nzb
+         mP3GZU2c9czB//al48ZD4CELtIesdvPQrHTEj39DcZ3Eg7aMjW9iSZfnDzDVL/GdO0KG
+         dNEHYTdI+4FX8KZ2SHSyqFy22CNQElYK1QbyBOaDESe/WJob8lGxEtc5r8rygJKiO3dr
+         d/uKgtDagblI5ITRTB+4lac6E00qMJi9B0pOcNpzs4Lj9/hhov/MO8c0QCFVDMIOD27N
+         xg11F34GLhQ2KnTp9NsVqgLJNqBe+a1+NCL71tdl7ueYhCe4bTLsms4oiEjNLtBtDdue
+         GEFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Aqd3cVPWfCv4uAfqdQC3dxQYsG0PuSaL4S7UTovgqyY=;
-        b=K/RDlgFVJ046LLto62jvhmFnrHe5dQi5y9YungdR7upwZFVswNRXghdgEFbmGoYyLF
-         AyMLwBANUSanvUS23JQ7by7/S+7tHOMjpShrm98RnJKzHyf7NpTWVmb59XCb9h0m/QZx
-         1heXJxeIV+q21fgtzfRyEgiFiaCi7p+5waZGO9FWk0qJo+LFmIcS1pNp+qlTjA8ZLc+x
-         w1em4+VDuzgkFmkj19hhSyLP5gcVAXuxI7EaAyp1cGZw0zZOIBtIEDRYwzdJ5Otzc9gJ
-         ErW3s7iteX34Xear46pnVx9AJLPkQVkzcQFN6pd1pdNw/a3FsAbdyTbfilkAy0INZHoy
-         LOUw==
-X-Gm-Message-State: AOAM532Vb+v4XC0W0KUsuX5nnPreo3gr4G0la4vO4wWDwMQBxA21XgQ2
-        KH67FoLkgrpoWncjueRMrKw=
-X-Google-Smtp-Source: ABdhPJx7pK+v5H7Ot/XNC6LqmJEc+H87E7GWfhSQrxGFZ/vaaBYtjMcxb4At4cr9yDvTdqXtGu3LlA==
-X-Received: by 2002:a05:6870:f295:b0:e1:ea02:2001 with SMTP id u21-20020a056870f29500b000e1ea022001mr1464904oap.241.1650032024623;
-        Fri, 15 Apr 2022 07:13:44 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Y7gbuOQcgVegOGgriZZtIkm8aICEvz3iCExryeuJnKc=;
+        b=rc7fjp1ifRDHLEeUrR+aLIQSsN6DjuQuu8b3OERdSXPS+iOr/1NBdVamnsgu5fqAtd
+         A+u/kA+Zw8h+MOIRvvdJifu+u2qw4hEjPo60a9e+50nIhfu6juSg7uUSFW8+n37xR2zS
+         4q0YRZsY0kj83Y+NkgJU2+vyjZUHPyvgOrNCMGvoeamRj/Lc3+ufQRBM1zCCwPzU/6XP
+         95Q3WB59f7iNTK8V/Ir7qhC00mojtORcjaJrZHgTe3/xwx3WskygFOJ8i6Sl+gRSa6tR
+         maV+lCG2ALu1CIwwwYmKoh2j5J936syFqfHSPDQ/gjxdb5v5N4ReyvlaKnB03U/cZ9Wp
+         UVPw==
+X-Gm-Message-State: AOAM5309Ao3mFqbloemlV9TXt+FnspwxKoPxSudSZuhBUby1lsDhu1TB
+        iajVQhNo50MEUSN21cLyd6s=
+X-Google-Smtp-Source: ABdhPJzmxuaSXWI7XfG/E+TLAHkj5AZu4f7ORrcmrqNx258nm0FlTJZYTbFYr++Yr4QtStSKgW7fIQ==
+X-Received: by 2002:a05:6808:198c:b0:2f9:f118:9775 with SMTP id bj12-20020a056808198c00b002f9f1189775mr1627650oib.79.1650032038769;
+        Fri, 15 Apr 2022 07:13:58 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4c2:8a9b:dcc3:45ee:2581:b4cb])
-        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm1156189oov.3.2022.04.15.07.13.41
+        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm1156189oov.3.2022.04.15.07.13.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:13:44 -0700 (PDT)
+        Fri, 15 Apr 2022 07:13:58 -0700 (PDT)
 From:   Tales Lelo da Aparecida <tales.aparecida@gmail.com>
 To:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
         Melissa Wen <melissa.srw@gmail.com>,
@@ -57,10 +57,12 @@ To:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         andrealmeid@riseup.net
 Cc:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-Subject: [PATCH v2 0/2] drm/vkms: check plane_composer->map[0] before using it
-Date:   Fri, 15 Apr 2022 08:12:58 -0300
-Message-Id: <20220415111300.61013-1-tales.aparecida@gmail.com>
+Subject: [PATCH v2 1/2] drm/vkms: check plane_composer->map[0] before using it
+Date:   Fri, 15 Apr 2022 08:12:59 -0300
+Message-Id: <20220415111300.61013-2-tales.aparecida@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415111300.61013-1-tales.aparecida@gmail.com>
+References: <20220415111300.61013-1-tales.aparecida@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -74,20 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is a follow-up of my last patch. Thanks for the reviews!
+Fix a copypasta error. The caller of compose_plane() already checks
+primary_composer->map. In contrast, plane_composer->map is never
+verified here before handling.
 
-Changes from v1:
+Fixes: 7938f4218168 ("dma-buf-map: Rename to iosys-map")
+Reviewed-by: André Almeida <andrealmeid@riseup.net>
+Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
+---
+v2: detail the commit message with more information
 
-Edit the first commit message as suggested by Melissa and add a commit to enhance the
-error handling (André)
+ drivers/gpu/drm/vkms/vkms_composer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Tales Lelo da Aparecida (2):
-  drm/vkms: check plane_composer->map[0] before using it
-  drm/vkms: return early if compose_plane fails
-
- drivers/gpu/drm/vkms/vkms_composer.c | 32 ++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 11 deletions(-)
-
+diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
+index c6a1036bf2ea..b47ac170108c 100644
+--- a/drivers/gpu/drm/vkms/vkms_composer.c
++++ b/drivers/gpu/drm/vkms/vkms_composer.c
+@@ -157,7 +157,7 @@ static void compose_plane(struct vkms_composer *primary_composer,
+ 	void *vaddr;
+ 	void (*pixel_blend)(const u8 *p_src, u8 *p_dst);
+ 
+-	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
++	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
+ 		return;
+ 
+ 	vaddr = plane_composer->map[0].vaddr;
 -- 
 2.35.1
 

@@ -2,108 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84254502625
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADE43502622
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350999AbiDOHYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56872 "EHLO
+        id S1350966AbiDOHYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350990AbiDOHYc (ORCPT
+        with ESMTP id S1346594AbiDOHYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:24:32 -0400
-Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FF1B18B6;
-        Fri, 15 Apr 2022 00:22:02 -0700 (PDT)
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48]) (authenticated)
-        by conssluserg-06.nifty.com with ESMTP id 23F7LTtM029671;
-        Fri, 15 Apr 2022 16:21:30 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 23F7LTtM029671
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1650007290;
-        bh=wd8+cujQkK0MJ7tfckG82Kp7Cfc2ifRfBWP99JwxnIE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LpwgG5iCO1G7osKv3qk0w9Omia/Zj7pDWm2EZbDvZ2ipelKI/T4wEIGMbHRnyezIj
-         y35PYTgUtahsEhrx4UrNJZEzLmCAAVQEMVCDFKfQoFwIIrBky2b+4DXShvuZx8SgcG
-         vhxpL0c4+OeCNDyUNffbD1sV8Du8O1ZYG+sn64J10bx/QpRdxoglChCiH27wKC+7B7
-         HdA4Vf7V/Pa9vkyGwXeGaBsORaxB3hGOFuhs083T9/NAZLDxAzxNnbNt+uw3OVS7jt
-         fCnoxaAm0sjU2kZ2dD/UOeOegmdbVuiqIAk+LI+GstBD3VZI39XRvDchPUFZEpq596
-         haF0PpATj0VnQ==
-X-Nifty-SrcIP: [209.85.216.48]
-Received: by mail-pj1-f48.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso792058pjj.3;
-        Fri, 15 Apr 2022 00:21:30 -0700 (PDT)
-X-Gm-Message-State: AOAM5302b7DGeraePttIFue10OYZcxQuWBcMzO6gk9iO1Wumj4DOHcBp
-        0bseoBH5HELlLRJZqkjF0lFfZi1qoLFTiYFiwj4=
-X-Google-Smtp-Source: ABdhPJyIDPLfjh3agb8s/IMCRg2ix009jKo7OEAsiqNKg8NvXdfE+zQL7rEjxuel14k7bA7B+QQK+c7o0SpJliy1LHM=
-X-Received: by 2002:a17:902:7083:b0:158:41f2:3a83 with SMTP id
- z3-20020a170902708300b0015841f23a83mr28402621plk.99.1650007289324; Fri, 15
- Apr 2022 00:21:29 -0700 (PDT)
+        Fri, 15 Apr 2022 03:24:02 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494D8939BF;
+        Fri, 15 Apr 2022 00:21:31 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23F7LIpt034416;
+        Fri, 15 Apr 2022 02:21:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650007278;
+        bh=eDLUUFxUqpTW3MCa8U4C4VnaJ9sgEUwdiLW2sre19uk=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=mJavWI+YvxjFU0gPLbsDNMpepV1tLWkbOOfxYrsCtIDLR5NA7Vb4hKQDRQY9VyN20
+         tv0IOx5oUO6LPlyY/0BAgi3gVmzIsxenQ4HTHhaTAs0d5ED8QWiFFp3B18MZLqMePt
+         MWpu5Scuv2fhus0mC36ta07omNGxxToiwQzKy1WQ=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23F7LHsq097757
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 15 Apr 2022 02:21:17 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
+ Apr 2022 02:21:17 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 15 Apr 2022 02:21:17 -0500
+Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23F7LC42010072;
+        Fri, 15 Apr 2022 02:21:13 -0500
+Message-ID: <ed64bf63-95c6-94ae-4c4f-a206250f44a9@ti.com>
+Date:   Fri, 15 Apr 2022 12:51:12 +0530
 MIME-Version: 1.0
-References: <20220406153023.500847-1-masahiroy@kernel.org>
-In-Reply-To: <20220406153023.500847-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 15 Apr 2022 16:20:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARzPPRnnAayau3bwB_uj17_uirY+F9rAV048oMp-c-WMw@mail.gmail.com>
-Message-ID: <CAK7LNARzPPRnnAayau3bwB_uj17_uirY+F9rAV048oMp-c-WMw@mail.gmail.com>
-Subject: Re: [PATCH 0/7] kbuild: more misc cleanups
-To:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sami Tolvanen <samitolvanen@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 0/2] DSS: Add support for DisplayPort
+Content-Language: en-US
+To:     Rahul T R <r-ravikumar@ti.com>, <nm@ti.com>
+CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski@canonical.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
+References: <20220406165852.13026-1-r-ravikumar@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <20220406165852.13026-1-r-ravikumar@ti.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 7, 2022 at 12:32 AM Masahiro Yamada <masahiroy@kernel.org> wrote:
->
->
-> I sent the first batch of cleanups:
-> https://lore.kernel.org/linux-kbuild/20220405113359.2880241-1-masahiroy@kernel.org/T/#t
->
-> I took 01-06, 09-10.
-> I dropped 07, 08.
->
-> This is the second batch.
->
-
-Applied to linux-kbuild.
 
 
->
->
-> Masahiro Yamada (7):
->   kbuild: reuse suffix-search to refactor multi_depend
->   kbuild: make multi_depend work with targets in subdirectory
->   kbuild: reuse real-search to simplify cmd_mod
->   kbuild: split the second line of *.mod into *.usyms
->   kbuild: get rid of duplication in *.mod files
->   kbuild: make *.mod not depend on *.o
->   kbuild: read *.mod to get objects passed to $(LD) or $(AR)
->
->  .gitignore                  |  1 +
->  Makefile                    |  5 +++--
->  scripts/Makefile.build      | 31 ++++++++++++++-----------------
->  scripts/Makefile.lib        |  6 +++---
->  scripts/adjust_autoksyms.sh |  2 +-
->  scripts/gen_autoksyms.sh    | 18 +++++++++++-------
->  scripts/mod/sumversion.c    | 11 ++---------
->  7 files changed, 35 insertions(+), 39 deletions(-)
->
-> --
-> 2.32.0
->
+On 06/04/22 10:28 pm, Rahul T R wrote:
+> The following series of patches enables DisplayPort on
+> j721e-evm
+> 
+> Tomi Valkeinen (2):
+>   arm64: dts: ti: k3-j721e-main: add DP & DP PHY
+>   arm64: dts: ti: k3-j721e-common-proc-board: add DP to j7 evm
+> 
+> v2:
+>    - use phandle with a parameter to refer clocks insted of
+>      sub nodes in serdes_wiz node
+>    - move phy link node to board DTS file
+> 
+> v3:
+>    - Fix the regulator node name as per the DT spec
+>    - Use Macro for GPIO type
+> 
+> boot logs:
+>    https://gist.githubusercontent.com/ravi-rahul/1bdbc3f77ab381e486c8394650c2e85d/raw/f04584c30181821c4ee83aee7781a9ba143cd3f3/j7_DP_upstream.log
+> 
+> kernel patch verify report:
+>    https://gist.githubusercontent.com/ravi-rahul/a982fef3fae03ec0dbdd5cb475a4cb25/raw/c8230370746e9878daf9527c3aa9d82eed7aa33c/report-kernel-patch-verify.txt
+
+Hmm, With dtbs_check I see (on v5.18-rc1 tag)
+
++/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@0' is a required property
++/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: ports: 'port@4' is a required property
++/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phys' is a required property
++/workdir/arch/arm64/boot/dts/ti/k3-j721e-common-proc-board.dtb: dp-bridge@a000000: 'phy-names' is a required property
+
+This goes away with 2/2 although adds:
++<stdout>: Warning (graph_child_address): /bus@100000/dss@4a00000/ports: graph node has single child node 'port@0', #address-cells/#size-cells are not necessary
 
 
--- 
-Best Regards
-Masahiro Yamada
+Do we need to have empty ports node in j721e-main.dtsi for dp-bridge?   And something similar wrt phys as well?
+
+Regards
+Vignesh
+
+> 
+>  .../dts/ti/k3-j721e-common-proc-board.dts     | 78 ++++++++++++++++++-
+>  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi     | 65 ++++++++++++++++
+>  2 files changed, 139 insertions(+), 4 deletions(-)
+> 

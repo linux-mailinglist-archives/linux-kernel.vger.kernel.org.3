@@ -2,253 +2,333 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD15502DFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0DFE502DD2
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349617AbiDOQtA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:49:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
+        id S1355891AbiDOQmw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:42:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236184AbiDOQs5 (ORCPT
+        with ESMTP id S1355877AbiDOQmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:48:57 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6284396A8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id n18so7521915plg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
-        h=date:subject:in-reply-to:cc:from:to:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ItPn/AcYuP2hdhsdSFglkfktyf1iLOm6R95lIRQYTZY=;
-        b=JS96M1iHtXQEhUuFoqlaiZ2VRIlhckrTO6Ij+BqZyqgaE8i/vjuqr3iwPAM31Qe1pU
-         nVGCc2V86N2/l3lhhwmPjSe+1NSVhGrWzLgz01qOgzQpML3gf0R2zensKqD9EirmUpcE
-         keaKxzUHNn1xgI6Ls/PKoYT1oVMsK2wrQheR4OS/uc8dFCOVM6IsONgT2L0PgunTiA35
-         5DalFyKEsd6ZwfsEeVL0Cycuepa9OKvPgJQPsWST2LX9Dr2+MNc4Hb4I83m7qtMnvHiK
-         Ypti60XVTPZP+yryoYLh3SP85K+fLvWwD5h709bL4SEOMSDO1MXhHVCnYGWETmkkQaqc
-         eRRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:subject:in-reply-to:cc:from:to:message-id
-         :mime-version:content-transfer-encoding;
-        bh=ItPn/AcYuP2hdhsdSFglkfktyf1iLOm6R95lIRQYTZY=;
-        b=fRaU4FujzysbmDlDKVGqtWwQe7FA7BLSYDD+HygyWTnTUTqwKIkgpCYuIn5YZBst+f
-         I/kkfgO/TqjyvaFxyW9w6W55gyqdnjylJBG/Hg9UTa5IU6yOCW3b8afXfWSBaFMzSjV5
-         5MiRGUDD0oHdQIx6DJ26+1t6RxnMB8COJ2S7ddjUyr5zQU9A5VY6z2tVOXW6j4ydddFw
-         0jf6SxTHKfLEdOzzi6XPYoi4hSZ/F9DcTd3w3E9J82mheOIbQ4ue5NUNxu55u1Q/GF4S
-         R3ewrZvYwV9dzHLYcaOq/QMG0ZQSEYzMZF6NHk6D+dEoAxsNoH6d7ixdEeL6TxhyX9tZ
-         r1MA==
-X-Gm-Message-State: AOAM532ia+hZhyhT78Ok7lLxjErMaJN/F5FHpdUN35tREanK67VvWYJA
-        iUAGxLqBQYrgEf/VTFaThYeb4w==
-X-Google-Smtp-Source: ABdhPJyj45WdgDS2kp+bLcsEYoXnZD1J4gN7xaPkEirpU1SwtjNOLeYhYjs838zc/dCSPVG7lSSoPw==
-X-Received: by 2002:a17:90b:3882:b0:1cd:41c1:712a with SMTP id mu2-20020a17090b388200b001cd41c1712amr5110813pjb.72.1650041187144;
-        Fri, 15 Apr 2022 09:46:27 -0700 (PDT)
-Received: from localhost ([12.3.194.138])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056a00245000b004f7728a4346sm3584771pfj.79.2022.04.15.09.46.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 09:46:26 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 09:46:26 -0700 (PDT)
-X-Google-Original-Date: Fri, 15 Apr 2022 09:46:08 PDT (-0700)
-Subject:     Re: [PATCH v3 1/7] asm-generic: ticket-lock: New generic ticket-based spinlock
-In-Reply-To: <1e26726b-721e-7197-8834-8aff2b4c4bc3@redhat.com>
-CC:     Arnd Bergmann <arnd@arndb.de>, heiko@sntech.de, guoren@kernel.org,
-        shorne@gmail.com, peterz@infradead.org, mingo@redhat.com,
-        Will Deacon <will@kernel.org>, boqun.feng@gmail.com,
-        jonas@southpole.se, stefan.kristiansson@saunalahti.fi,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, macro@orcam.me.uk,
-        Greg KH <gregkh@linuxfoundation.org>,
-        sudipm.mukherjee@gmail.com, wangkefeng.wang@huawei.com,
-        jszhang@kernel.org, linux-csky@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openrisc@lists.librecores.org,
-        linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     longman@redhat.com
-Message-ID: <mhng-f4d144dd-b6ed-4f3f-bfc3-6dc29fab14e4@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Fri, 15 Apr 2022 12:42:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0204A8EB51;
+        Fri, 15 Apr 2022 09:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 87CDDB807E7;
+        Fri, 15 Apr 2022 16:40:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D84F0C385A6;
+        Fri, 15 Apr 2022 16:40:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650040812;
+        bh=ZPZH9abDj/HeoezpKxekPe1O0dK9m/nTbc77xsTr36s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=F9tS8dpRW0skkCUT7ZHsTgL+6BWLKnKEPhnsejNIFMF6a4ixDDp6cqH/s4DkSP3DJ
+         sxB4BDNSkad4g9le15hjq398vuZ83mzisfXSZlr5KMcTGuJHrS820cKAGvingDFgSO
+         b5VCmeCBqDUuM9HikzrSPaAQUINsAjQzzEeqrU1DWvmtZY9/J41Dl6uuEA4E0r8ncg
+         Ac1XNiZRo4cAOeQWg6epSYv2je6EIisZltK88yUVNAxQgeQ/1lu1PAVCbUk7ZtDJOk
+         UlZsz/zmxYEnzNoc/cSbzUNQwYSXmE0yIYO8DXAHJW8ld2CF3n+f3WVDMLf7t8FCBe
+         d+GpKl9gF2E/w==
+Date:   Fri, 15 Apr 2022 17:48:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andrea Merello <andrea.merello@gmail.com>
+Cc:     mchehab+huawei@kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
+        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
+        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
+Subject: Re: [v4 12/14] iio: imu: add BNO055 serdev driver
+Message-ID: <20220415174808.3b81baa4@jic23-huawei>
+In-Reply-To: <20220415130005.85879-13-andrea.merello@gmail.com>
+References: <20220415130005.85879-1-andrea.merello@gmail.com>
+        <20220415130005.85879-13-andrea.merello@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 18:27:12 PDT (-0700), longman@redhat.com wrote:
-> On 4/14/22 18:02, Palmer Dabbelt wrote:
->> From: Peter Zijlstra <peterz@infradead.org>
->>
->> This is a simple, fair spinlock.  Specifically it doesn't have all the
->> subtle memory model dependencies that qspinlock has, which makes it more
->> suitable for simple systems as it is more likely to be correct.  It is
->> implemented entirely in terms of standard atomics and thus works fine
->> without any arch-specific code.
->>
->> This replaces the existing asm-generic/spinlock.h, which just errored
->> out on SMP systems.
->>
->> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
->> Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
->> ---
->>   include/asm-generic/spinlock.h       | 85 +++++++++++++++++++++++++---
->>   include/asm-generic/spinlock_types.h | 17 ++++++
->>   2 files changed, 94 insertions(+), 8 deletions(-)
->>   create mode 100644 include/asm-generic/spinlock_types.h
->>
->> diff --git a/include/asm-generic/spinlock.h b/include/asm-generic/spinlock.h
->> index adaf6acab172..ca829fcb9672 100644
->> --- a/include/asm-generic/spinlock.h
->> +++ b/include/asm-generic/spinlock.h
->> @@ -1,12 +1,81 @@
->>   /* SPDX-License-Identifier: GPL-2.0 */
->> -#ifndef __ASM_GENERIC_SPINLOCK_H
->> -#define __ASM_GENERIC_SPINLOCK_H
->> +
->>   /*
->> - * You need to implement asm/spinlock.h for SMP support. The generic
->> - * version does not handle SMP.
->> + * 'Generic' ticket-lock implementation.
->> + *
->> + * It relies on atomic_fetch_add() having well defined forward progress
->> + * guarantees under contention. If your architecture cannot provide this, stick
->> + * to a test-and-set lock.
->> + *
->> + * It also relies on atomic_fetch_add() being safe vs smp_store_release() on a
->> + * sub-word of the value. This is generally true for anything LL/SC although
->> + * you'd be hard pressed to find anything useful in architecture specifications
->> + * about this. If your architecture cannot do this you might be better off with
->> + * a test-and-set.
->> + *
->> + * It further assumes atomic_*_release() + atomic_*_acquire() is RCpc and hence
->> + * uses atomic_fetch_add() which is SC to create an RCsc lock.
->> + *
->> + * The implementation uses smp_cond_load_acquire() to spin, so if the
->> + * architecture has WFE like instructions to sleep instead of poll for word
->> + * modifications be sure to implement that (see ARM64 for example).
->> + *
->>    */
->> -#ifdef CONFIG_SMP
->> -#error need an architecture specific asm/spinlock.h
->> -#endif
->>
->> -#endif /* __ASM_GENERIC_SPINLOCK_H */
->> +#ifndef __ASM_GENERIC_TICKET_LOCK_H
->> +#define __ASM_GENERIC_TICKET_LOCK_H
-> It is not conventional to use a macro name that is different from the
-> header file name.
+On Fri, 15 Apr 2022 15:00:03 +0200
+Andrea Merello <andrea.merello@gmail.com> wrote:
 
-Sorry, that was just a mistake: I renamed the header, but forgot to 
-rename the guard.  I'll likely send a v4 due to Boqun's questions, I'll 
-fix this as well.
+> From: Andrea Merello <andrea.merello@iit.it>
+> 
+> This path adds a serdev driver for communicating to a BNO055 IMU via
+> serial bus, and it enables the BNO055 core driver to work in this
+> scenario.
+> 
+> Signed-off-by: Andrea Merello <andrea.merello@iit.it>
+Hi Andrea
 
->> +
->> +#include <linux/atomic.h>
->> +#include <asm-generic/spinlock_types.h>
->> +
->> +static __always_inline void arch_spin_lock(arch_spinlock_t *lock)
->> +{
->> +	u32 val = atomic_fetch_add(1<<16, lock); /* SC, gives us RCsc */
->> +	u16 ticket = val >> 16;
->> +
->> +	if (ticket == (u16)val)
->> +		return;
->> +
->> +	atomic_cond_read_acquire(lock, ticket == (u16)VAL);
->> +}
->> +
->> +static __always_inline bool arch_spin_trylock(arch_spinlock_t *lock)
->> +{
->> +	u32 old = atomic_read(lock);
->> +
->> +	if ((old >> 16) != (old & 0xffff))
->> +		return false;
->> +
->> +	return atomic_try_cmpxchg(lock, &old, old + (1<<16)); /* SC, for RCsc */
->> +}
->> +
->> +static __always_inline void arch_spin_unlock(arch_spinlock_t *lock)
->> +{
->> +	u16 *ptr = (u16 *)lock + IS_ENABLED(CONFIG_CPU_BIG_ENDIAN);
->> +	u32 val = atomic_read(lock);
->> +
->> +	smp_store_release(ptr, (u16)val + 1);
->> +}
->> +
->> +static __always_inline int arch_spin_is_locked(arch_spinlock_t *lock)
->> +{
->> +	u32 val = atomic_read(lock);
->> +
->> +	return ((val >> 16) != (val & 0xffff));
->> +}
->> +
->> +static __always_inline int arch_spin_is_contended(arch_spinlock_t *lock)
->> +{
->> +	u32 val = atomic_read(lock);
->> +
->> +	return (s16)((val >> 16) - (val & 0xffff)) > 1;
->> +}
->> +
->> +static __always_inline int arch_spin_value_unlocked(arch_spinlock_t lock)
->> +{
->> +	return !arch_spin_is_locked(&lock);
->> +}
->> +
->> +#include <asm/qrwlock.h>
->> +
->> +#endif /* __ASM_GENERIC_TICKET_LOCK_H */
->> diff --git a/include/asm-generic/spinlock_types.h b/include/asm-generic/spinlock_types.h
->> new file mode 100644
->> index 000000000000..e56ddb84d030
->> --- /dev/null
->> +++ b/include/asm-generic/spinlock_types.h
->> @@ -0,0 +1,17 @@
->> +/* SPDX-License-Identifier: GPL-2.0 */
->> +
->> +#ifndef __ASM_GENERIC_TICKET_LOCK_TYPES_H
->> +#define __ASM_GENERIC_TICKET_LOCK_TYPES_H
->> +
->> +#include <linux/types.h>
->> +typedef atomic_t arch_spinlock_t;
->> +
->> +/*
->> + * qrwlock_types depends on arch_spinlock_t, so we must typedef that before the
->> + * include.
->> + */
->> +#include <asm/qrwlock_types.h>
->
-> I believe that if you guard the include line by
->
-> #ifdef CONFIG_QUEUED_RWLOCK
-> #include <asm/qrwlock_types.h>
-> #endif
->
-> You may not need to do the hack in patch 5.
+A few really trivial things in here from me.
 
-Yes, and we actually had it that way the first time around (specifically 
-the ARCH_USES_QUEUED_RWLOCKS, but IIUC that's the same here).  The goal 
-was to avoid adding the ifdef to the asm-generic code and instead keep 
-the oddness in arch/riscv, it's only there for that one commit (and just 
-so we can split out the spinlock conversion from the rwlock conversion, 
-in case there's a bug and these need to be bisected later).
+Jonathan
 
-I'd also considered renaming qrwlock* to rwlock*, which would avoid the 
-ifdef and make it a touch easier to override the rwlock implementation, 
-but that didn't seem useful enough to warrant the diff.  These all seem 
-a bit more coupled than I expected them to be (both 
-{spin,qrw}lock{,_types}.h and the bits in linux/), I looked into 
-cleaning that up a bit but it seemed like too much for just the one 
-patch set.
+> ---
 
-> You can also directly use the <asm-generic/qrwlock_types.h> line without
-> importing it to include/asm.
+> diff --git a/drivers/iio/imu/bno055/Makefile b/drivers/iio/imu/bno055/Makefile
+> index 56cc4de60a7e..20128b1a1afc 100644
+> --- a/drivers/iio/imu/bno055/Makefile
+> +++ b/drivers/iio/imu/bno055/Makefile
+> @@ -1,3 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  obj-$(CONFIG_BOSCH_BNO055_IIO) += bno055.o
+> +obj-$(CONFIG_BOSCH_BNO055_SERIAL) += bno055_ser.o
+> +
+> +CFLAGS_bno055_ser.o := -I$(src)
 
-Yes, along with qrwlock.h (which has some unnecessary #include shims in 
-a handful of arch dirs).  That's going to make the patch set bigger, 
-I'll include it in the v4.
+Via a bit of grepping I can see other instances of this pattern which point out
+that it's to do with allowing the tracing framework to see trace.h.
+Perhaps a similar comment here would be good (if nothing else I doubt I'll
+remember why this magic is here in a few years time!)
 
-Thanks!
+> diff --git a/drivers/iio/imu/bno055/bno055_ser.c b/drivers/iio/imu/bno055/bno055_ser.c
+> new file mode 100644
+> index 000000000000..360dfb0ee20a
+> --- /dev/null
+> +++ b/drivers/iio/imu/bno055/bno055_ser.c
+> @@ -0,0 +1,556 @@
+...
+
+> +
+> +struct bno055_ser_priv {
+> +	struct serdev_device *serdev;
+> +	struct completion cmd_complete;
+> +	enum {
+> +		CMD_NONE,
+> +		CMD_READ,
+> +		CMD_WRITE,
+> +	} expect_response;
+> +	int expected_data_len;
+> +	u8 *response_buf;
+> +
+> +	/**
+> +	 * enum cmd_status - represent the status of a command sent to the HW.
+> +	 * @STATUS_CRIT: The command failed: the serial communication failed.
+> +	 * @STATUS_OK:   The command executed successfully.
+> +	 * @STATUS_FAIL: The command failed: HW responded with an error.
+> +	 */
+> +	enum {
+> +		STATUS_CRIT = -1,
+> +		STATUS_OK = 0,
+> +		STATUS_FAIL = 1,
+> +	} cmd_status;
+
+Locks need documentation to say what scope they cover. In this case
+I think it is most but not quite all of this structure.
+See comment on completion below.
+
+> +	struct mutex lock;
+> +
+> +	/* Only accessed in RX callback context. No lock needed. */
+> +	struct {
+> +		enum {
+> +			RX_IDLE,
+> +			RX_START,
+> +			RX_DATA,
+> +		} state;
+> +		int databuf_count;
+> +		int expected_len;
+> +		int type;
+> +	} rx;
+> +
+> +	/* Never accessed in behalf of RX callback context. No lock needed */
+> +	bool cmd_stale;
+> +};
+
+
+
+
+...
+
+> +
+> +/*
+> + * Handler for received data; this is called from the reicever callback whenever
+> + * it got some packet from the serial bus. The status tell us whether the
+> + * packet is valid (i.e. header ok && received payload len consistent wrt the
+> + * header). It's now our responsability to check whether this is what we
+> + * expected, of whether we got some unexpected, yet valid, packet.
+> + */
+> +static void bno055_ser_handle_rx(struct bno055_ser_priv *priv, int status)
+> +{
+> +	mutex_lock(&priv->lock);
+> +	switch (priv->expect_response) {
+> +	case CMD_NONE:
+> +		dev_warn(&priv->serdev->dev, "received unexpected, yet valid, data from sensor");
+> +		mutex_unlock(&priv->lock);
+> +		return;
+> +
+> +	case CMD_READ:
+> +		priv->cmd_status = status;
+> +		if (status == STATUS_OK &&
+> +		    priv->rx.databuf_count != priv->expected_data_len) {
+> +			/*
+> +			 * If we got here, then the lower layer serial protocol
+> +			 * seems consistent with itself; if we got an unexpected
+> +			 * amount of data then signal it as a non critical error
+> +			 */
+> +			priv->cmd_status = STATUS_FAIL;
+> +			dev_warn(&priv->serdev->dev, "received an unexpected amount of, yet valid, data from sensor");
+
+Wrap the line after dev,
+Whilst it'll still be a very long line we can make it shorter with no loss
+of readability, whilst still not breaking the string (which would make it hard
+to grep for).
+
+> +		}
+> +		break;
+> +
+> +	case CMD_WRITE:
+> +		priv->cmd_status = status;
+> +		break;
+> +	}
+> +
+> +	priv->expect_response = CMD_NONE;
+> +	complete(&priv->cmd_complete);
+
+I argued with myself a bit on whether the complete() should be inside the lock
+or not - but then concluded it doesn't really matter and moving it out is
+probably premature optimisation... Maybe it's worth moving it out simply
+so that it's clear the lock isn't needed to protect it, or am I missing something?
+
+> +	mutex_unlock(&priv->lock);
+> +}
+> +
+> +/*
+> + * Serdev receiver FSM. This tracks the serial communication and parse the
+> + * header. It pushes packets to bno055_ser_handle_rx(), eventually communicating
+> + * failures (i.e. malformed packets).
+> + * Ideally it doesn't know anything about upper layer (i.e. if this is the
+> + * packet we were really expecting), but since we copies the payload into the
+> + * receiver buffer (that is not valid when i.e. we don't expect data), we
+> + * snoop a bit in the upper layer..
+> + * Also, we assume to RX one pkt per time (i.e. the HW doesn't send anything
+> + * unless we require to AND we don't queue more than one request per time).
+> + */
+> +static int bno055_ser_receive_buf(struct serdev_device *serdev,
+> +				  const unsigned char *buf, size_t size)
+> +{
+> +	int status;
+> +	struct bno055_ser_priv *priv = serdev_device_get_drvdata(serdev);
+> +	int remaining = size;
+> +
+> +	if (size == 0)
+> +		return 0;
+> +
+> +	trace_recv(size, buf);
+> +	switch (priv->rx.state) {
+> +	case RX_IDLE:
+> +		/*
+> +		 * New packet.
+> +		 * Check for its 1st byte, that identifies the pkt type.
+> +		 */
+> +		if (buf[0] != 0xEE && buf[0] != 0xBB) {
+> +			dev_err(&priv->serdev->dev,
+> +				"Invalid packet start %x", buf[0]);
+> +			bno055_ser_handle_rx(priv, STATUS_CRIT);
+> +			break;
+> +		}
+> +		priv->rx.type = buf[0];
+> +		priv->rx.state = RX_START;
+> +		remaining--;
+> +		buf++;
+> +		priv->rx.databuf_count = 0;
+> +		fallthrough;
+> +
+> +	case RX_START:
+> +		/*
+> +		 * Packet RX in progress, we expect either 1-byte len or 1-byte
+> +		 * status depending by the packet type.
+> +		 */
+> +		if (remaining == 0)
+> +			break;
+> +
+> +		if (priv->rx.type == 0xEE) {
+> +			if (remaining > 1) {
+> +				dev_err(&priv->serdev->dev, "EE pkt. Extra data received");
+> +				status = STATUS_CRIT;
+
+Trivial, but this blank line doesn't add anything so drop it.
+
+> +
+> +			} else {
+> +				status = (buf[0] == 1) ? STATUS_OK : STATUS_FAIL;
+> +			}
+> +			bno055_ser_handle_rx(priv, status);
+> +			priv->rx.state = RX_IDLE;
+> +			break;
+> +
+> +		} else {
+> +			/*priv->rx.type == 0xBB */
+> +			priv->rx.state = RX_DATA;
+> +			priv->rx.expected_len = buf[0];
+> +			remaining--;
+> +			buf++;
+> +		}
+> +		fallthrough;
+> +
+> +	case RX_DATA:
+> +		/* Header parsed; now receiving packet data payload */
+> +		if (remaining == 0)
+> +			break;
+> +
+> +		if (priv->rx.databuf_count + remaining > priv->rx.expected_len) {
+> +			/*
+> +			 * This is a inconsistency in serial protocol, we lost
+
+an inconsistency
+
+> +			 * sync and we don't know how to handle further data
+> +			 */
+> +			dev_err(&priv->serdev->dev, "BB pkt. Extra data received");
+> +			bno055_ser_handle_rx(priv, STATUS_CRIT);
+> +			priv->rx.state = RX_IDLE;
+> +			break;
+> +		}
+> +
+> +		mutex_lock(&priv->lock);
+> +		/*
+> +		 * NULL e.g. when read cmd is stale or when no read cmd is
+> +		 * actually pending.
+> +		 */
+> +		if (priv->response_buf &&
+> +		    /*
+> +		     * Snoop on the upper layer protocol stuff to make sure not
+> +		     * to write to an invalid memory. Apart for this, let's the
+> +		     * upper layer manage any inconsistency wrt expected data
+> +		     * len (as long as the serial protocol is consistent wrt
+> +		     * itself (i.e. response header is consistent with received
+> +		     * response len.
+> +		     */
+> +		    (priv->rx.databuf_count + remaining <= priv->expected_data_len))
+> +			memcpy(priv->response_buf + priv->rx.databuf_count,
+> +			       buf, remaining);
+> +		mutex_unlock(&priv->lock);
+> +
+> +		priv->rx.databuf_count += remaining;
+> +
+> +		/*
+> +		 * Reached expected len advertised by the IMU for the current
+> +		 * packet. Pass it to the upper layer (for us it is just valid).
+> +		 */
+> +		if (priv->rx.databuf_count == priv->rx.expected_len) {
+> +			bno055_ser_handle_rx(priv, STATUS_OK);
+> +			priv->rx.state = RX_IDLE;
+> +		}
+> +		break;
+> +	}
+> +
+> +	return size;
+> +}

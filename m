@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C617503106
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD50503160
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356132AbiDOVnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53764 "EHLO
+        id S1351968AbiDOVn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350077AbiDOVm0 (ORCPT
+        with ESMTP id S1356195AbiDOVna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:42:26 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A663B1274B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:39:54 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id h15-20020a17090a054f00b001cb7cd2b11dso9211038pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=pnnhVnGjhESFSvN5AIAUxQOTXkNGysYpxD5X0481Phs=;
-        b=Mr7FDGOCaG90Xqb9CkSUPuMLdgZLTpRANkq0G9fniO9sl7RuxMhwa4pMV7r5aAPtzr
-         WmI0puD3f3vvRKTbriacpoZCx07mwNv4Q8uGwKJ58b15UjhjHbYdIdBK34DjlTTZpRkX
-         YqcK6dt1qkBadKHIxzvtlkwWFYo49k1qxyF2M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=pnnhVnGjhESFSvN5AIAUxQOTXkNGysYpxD5X0481Phs=;
-        b=yf56q3a4slGfX5KceriFFpU73iRZDTLJJgO2a9rzvLrxWvcDA6TLBx6bVqITFAof7z
-         0w2wBlGq9XxgoU3TkUWne5UY8jPxb43EWW/AHY9Wy+3wHUpvcboWjR15DW5ZUtrd4kpK
-         /yehfnxbUpj09nJKDzR7GH1FbN7dYYs+gZkyeP34tAj6Whhh3o5DlyS/Mx9wdaty7lZ/
-         nRP/TI9rF2hRhhveY7v7Iljvw+NyTuxpkUbFuIbSrFYfinDE+EHGV0BkawepWLsom52L
-         gGzqHN9QqUABVFcAgororlq3hYuZ0wLb7Cp/NnlhJUqwUdo4jJMKbAXTw58s0CgQjujO
-         5kRw==
-X-Gm-Message-State: AOAM532eDLGXLRAQ9eYSChv5SLfubdbnnadyQlinNVtYaV39gytYvdlZ
-        0U44oxDth6KBlWMevtmY4LNwqA==
-X-Google-Smtp-Source: ABdhPJzezmjazjpZOJiGsT/T33Plq2/us4Na0I8/Us86rxlwMws1XdK7SKgVBfiOxbVNW1v+4cbJfw==
-X-Received: by 2002:a17:90b:3b8f:b0:1c7:b62e:8e87 with SMTP id pc15-20020a17090b3b8f00b001c7b62e8e87mr6192674pjb.156.1650058794221;
-        Fri, 15 Apr 2022 14:39:54 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:b27a:b3e7:2e3e:e4be])
-        by smtp.gmail.com with UTF8SMTPSA id w9-20020a056a0014c900b004fb2ca5f6d7sm3707308pfu.136.2022.04.15.14.39.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 14:39:53 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 14:39:51 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, rohitkr@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v12 5/7] pinctrl: qcom: Extract chip specific LPASS LPI
- code
-Message-ID: <YlnmJz/wjxfkZFua@google.com>
-References: <1647447426-23425-1-git-send-email-quic_srivasam@quicinc.com>
- <1647447426-23425-6-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 15 Apr 2022 17:43:30 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844FF42A3F;
+        Fri, 15 Apr 2022 14:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650058859; x=1681594859;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D+EtR25o6TgsLEAQY93ZWajgB/+OLtNNhIpII8Uyeks=;
+  b=J3NJ2Jp/yNJsDB+nyegVPy2Zfz0dGoiKYRsWIRuuk+Ts3oY/9dv/phJ8
+   m/Nw4PeAnACterylQtv7B8vTwommLSQk2jbV1nLvWA2H+9UVs8dUYzYEn
+   14/ZnoXbEwDuZH7RZiuCQEydzJtYW9zwhbOJbrzYTC6OyR2c9ZBbLEvye
+   r8SDgr0szB7b5ZQ1T/rVkeqFN2Cb0JWcdN8iI0fL+S5KoufYJT2jVD+vr
+   IE2qtvPLfYyy0tYhrN9ORxcSNhUmq7BK/29s4ysXn7uq9vjjd9sPzzwKA
+   sePgw5NLhihmufbRaXV7WNYW69ckemgt4ltgCttgCH2r32bZNMXUGuySk
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262695357"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="262695357"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:40:58 -0700
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="560709031"
+Received: from aelhiber-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.78.254])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:40:58 -0700
+Date:   Fri, 15 Apr 2022 14:40:58 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+Cc:     outreachy@lists.linux.dev, jesse.brandeburg@intel.com,
+        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] intel: igb: igb_ethtool.c: Convert kmap() to
+ kmap_local_page()
+Message-ID: <Ylnmaji5bHHp8t3p@iweiny-desk3>
+References: <20220415205307.675650-1-eng.alaamohamedsoliman.am@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1647447426-23425-6-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220415205307.675650-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 09:47:04PM +0530, Srinivasa Rao Mandadapu wrote:
-> Extract the chip specific SM8250 data from the LPASS LPI pinctrl driver
-> to allow reusing the common code in the addition of subsequent
-> platforms.
+On Fri, Apr 15, 2022 at 10:53:07PM +0200, Alaa Mohamed wrote:
+> The use of kmap() is being deprecated in favor of kmap_local_page()
+> where it is feasible.
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+> With kmap_local_page(), the mapping is per thread, CPU local and not
+> globally visible.
+> 
+> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> ---
+>  drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> index 2a5782063f4c..ba93aa4ae6a0 100644
+> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+>  
+>  	frame_size >>= 1;
+>  
+> -	data = kmap(rx_buffer->page);
+> +	data = kmap_local_page(rx_buffer->page);
+>  
+>  	if (data[3] != 0xFF ||
+>  	    data[frame_size + 10] != 0xBE ||
+>  	    data[frame_size + 12] != 0xAF)
+>  		match = false;
+>  
+> -	kunmap(rx_buffer->page);
+> +	kunmap_local(rx_buffer->page);
 
->
-> ...
->
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
-> new file mode 100644
-> index 0000000..8c95d0f
-> --- /dev/null
-> +++ b/drivers/pinctrl/qcom/pinctrl-sm8250-lpass-lpi.c
+kunmap_local() is different from kunmap().  It takes an address within the
+mapped page.  From the kdoc:
 
+/**
+ * kunmap_local - Unmap a page mapped via kmap_local_page().
+ * @__addr: An address within the page mapped
+ *
+ * @__addr can be any address within the mapped page.  Commonly it is the
+ * address return from kmap_local_page(), but it can also include offsets.
+ *
+ * Unmapping should be done in the reverse order of the mapping.  See
+ * kmap_local_page() for details.
+ */
+#define kunmap_local(__addr)                                    \
 ...
 
-> +
-> +/* sm8250 variant specific data */
 
-nit: the comment seems a bit redundant since this is now the sm8250
-pinctrl driver.
+Ira
 
-> +static const struct pinctrl_pin_desc sm8250_lpi_pins[] = {
-> +	PINCTRL_PIN(0, "gpio0"),
-> +	PINCTRL_PIN(1, "gpio1"),
-> +	PINCTRL_PIN(2, "gpio2"),
-> +	PINCTRL_PIN(3, "gpio3"),
-> +	PINCTRL_PIN(4, "gpio4"),
-> +	PINCTRL_PIN(5, "gpio5"),
-> +	PINCTRL_PIN(6, "gpio6"),
-> +	PINCTRL_PIN(7, "gpio7"),
-> +	PINCTRL_PIN(8, "gpio8"),
-> +	PINCTRL_PIN(9, "gpio9"),
-> +	PINCTRL_PIN(10, "gpio10"),
-> +	PINCTRL_PIN(11, "gpio11"),
-> +	PINCTRL_PIN(12, "gpio12"),
-> +	PINCTRL_PIN(13, "gpio13"),
-> +};
->
-> ...
-
-The nit is just a nit and otherwise this looks good to me, so:
-
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+>  
+>  	return match;
+>  }
+> -- 
+> 2.35.2
+> 

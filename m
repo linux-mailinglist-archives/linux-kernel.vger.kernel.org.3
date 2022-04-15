@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3853B501FAA
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44A4501FA9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348058AbiDOAf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:35:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59342 "EHLO
+        id S1348077AbiDOAfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348038AbiDOAfW (ORCPT
+        with ESMTP id S245029AbiDOAfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:35:22 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CA4B0A4B
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:56 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id n8so6023810plh.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:56 -0700 (PDT)
+        Thu, 14 Apr 2022 20:35:24 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F363B0A4B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:58 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q19so6147498pgm.6
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=C5t3e+cZTj4xwdAITByfx8113SkQvPNyKKAsLc7zHFM=;
-        b=Sre7yJqjWog5IzWlAJouxhJIxDudi3P7KD3fupciGkuyrvofNEAvI6ORbO60O9ZAZl
-         Ijh9lYeRczXJ1Vvrwlg9LZ0q5AjBBmPg0zqi98nw8R+2XJEJE/dy5VprhT6XO7G34/6y
-         /5tfZ9uQuwRXXUQRMhjzq7HEs4yCBtKp7QfMU=
+        bh=Jkz+K46qtkIknicoqbLXEwCJgWhY8AVoAaPBkdZve2U=;
+        b=UGyg9hR+s/RnQZqDAT16Gq3HREy8egyTdio40vc9b2DXdzEhoR+syVUHMO6ACrN4si
+         o5m2LO78SdlXKcFz2Y0unk1Rz3+ZYTNxIHyrEe7jYqw6KMm3qFBqzIGFfHfUbweV5EJK
+         gYd2QE8lr4c2DhEP5HnJxUIOQSOD9VOv1Wm0Y=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=C5t3e+cZTj4xwdAITByfx8113SkQvPNyKKAsLc7zHFM=;
-        b=btVEvqg48/jerLnpT38w0b8XnUowBnAfTHljd+8dKz4ssXuM8ZJJTWd8Ttiek5Ec13
-         gVpUWuoVRBhSYQ3rlIBtd9/0ICMg55nR84fPT8rvSLSmohCCiZy73rsa8AHkv+KxfqWP
-         33E5gF9yYfhIIImL4BxyzqjY0I3eFVmr75I2uj8Zg76XiREgQQZ6sHFZHZtNWSw5eWQg
-         O9xqyZmtY8VFeUm5rtnncRF4qDueid0F5KWk/2LWdznYhhPS2uA8YdpRYChgP9kOBeyi
-         JfUVtOfHt+PJLjMy5nhRRop3WvMP0zUVOoKkVx3KXTbZW1MuPxVBQfgI3q2+UNN7fRhE
-         jwhw==
-X-Gm-Message-State: AOAM531Dp7Mb1VhUOnadhPuSTSPgNBpv6epAjgHfAwZwJKdC+1qqrrte
-        HH/+idzr3EDd0m1gZfyftD2u6dQlAVjP9w==
-X-Google-Smtp-Source: ABdhPJyX/cNKS4BBDlZhUfNXn3R48lgEEQXevRhtV5J7S7Guj8PpbEYGPvwnRdf6ljVjJ3e+Vg2vtA==
-X-Received: by 2002:a17:902:bd06:b0:158:8973:b16b with SMTP id p6-20020a170902bd0600b001588973b16bmr15242969pls.129.1649982776334;
-        Thu, 14 Apr 2022 17:32:56 -0700 (PDT)
+        bh=Jkz+K46qtkIknicoqbLXEwCJgWhY8AVoAaPBkdZve2U=;
+        b=734Cpvpd/5hlQn3/HpOCBPQxTMjhbBrLaR4Lwx8EaE/dk5EsxTu5pncBggblVUoj2x
+         hNsdl5NFqEd/0sisxIPLgwhsvStb/Az/B1Y2Rm/OEDGtMgvw6005jJQR5ldJiPScfCsP
+         7VurY9urfU5Kch/37d7RA2U+Hd+as2An6V2/eUuInx9blww009LMmQjeE4np6HJku/Ea
+         7EBIRJAhIfQ1CYa2JEdjZf9SpinmRO4O1fvoYBYbkuLfn86RP0g9FVTDFCT7es6cftmN
+         9I9Ain6vrdIrFZT0GuOaRKI7Ls+vPcTXX5T2XhoQPZew7M2doC1WMe2Ilb37hEQ29ldH
+         PimA==
+X-Gm-Message-State: AOAM533yL+XMcBlDREDL4LwQrfZPYG2RQ03lDAbRQ0U9mURszho0aBVU
+        Q5egGkhMvapiadU8znlQmWVpMw==
+X-Google-Smtp-Source: ABdhPJxvYhjYZJVkJb/YqcuxXe04uZW1OYgYUoLiRnxUGlY1oCtRAnvQQVyvmC3kzKaWPTQk6Qd8GA==
+X-Received: by 2002:a05:6a00:cc3:b0:505:c82b:f4f8 with SMTP id b3-20020a056a000cc300b00505c82bf4f8mr6363580pfv.59.1649982777538;
+        Thu, 14 Apr 2022 17:32:57 -0700 (PDT)
 Received: from smtp.gmail.com ([2620:15c:202:201:e3e0:734:f81a:d2c1])
-        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2830187pgf.17.2022.04.14.17.32.55
+        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2830187pgf.17.2022.04.14.17.32.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 17:32:56 -0700 (PDT)
+        Thu, 14 Apr 2022 17:32:57 -0700 (PDT)
 From:   Stephen Boyd <swboyd@chromium.org>
 To:     Benson Leung <bleung@chromium.org>
 Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
         Daisuke Nojiri <dnojiri@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
         chrome-platform@lists.linux.dev
-Subject: [PATCH 1/3] platform/chrome: cros_ec_proto: Add peripheral charger count API
-Date:   Thu, 14 Apr 2022 17:32:51 -0700
-Message-Id: <20220415003253.1973106-2-swboyd@chromium.org>
+Subject: [PATCH 2/3] mfd: cros_ec_dev: Only register PCHG device if present
+Date:   Thu, 14 Apr 2022 17:32:52 -0700
+Message-Id: <20220415003253.1973106-3-swboyd@chromium.org>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 In-Reply-To: <20220415003253.1973106-1-swboyd@chromium.org>
 References: <20220415003253.1973106-1-swboyd@chromium.org>
@@ -70,9 +70,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a peripheral charger count API similar to the one implemented in the
-ChromeOS PCHG driver so we can use it to decide whether or not to
-register the PCHG device in the cros_ec MFD driver.
+Don't create a device for the peripheral charger (PCHG) if there aren't
+any peripheral charger ports. This removes a device on most ChromeOS
+systems, because the peripheral charger functionality isn't always
+present.
 
 Cc: Lee Jones <lee.jones@linaro.org>
 Cc: Daisuke Nojiri <dnojiri@chromium.org>
@@ -81,64 +82,43 @@ Cc: Guenter Roeck <groeck@chromium.org>
 Cc: <chrome-platform@lists.linux.dev>
 Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- drivers/platform/chrome/cros_ec_proto.c     | 31 +++++++++++++++++++++
- include/linux/platform_data/cros_ec_proto.h |  1 +
- 2 files changed, 32 insertions(+)
+ drivers/mfd/cros_ec_dev.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-index c4caf2e2de82..42269703ca6c 100644
---- a/drivers/platform/chrome/cros_ec_proto.c
-+++ b/drivers/platform/chrome/cros_ec_proto.c
-@@ -832,6 +832,37 @@ bool cros_ec_check_features(struct cros_ec_dev *ec, int feature)
- }
- EXPORT_SYMBOL_GPL(cros_ec_check_features);
+diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+index 546feef851ab..d2ba6a1fbc1d 100644
+--- a/drivers/mfd/cros_ec_dev.c
++++ b/drivers/mfd/cros_ec_dev.c
+@@ -114,6 +114,9 @@ static const struct mfd_cell cros_ec_platform_cells[] = {
+ 	{ .name = "cros-ec-chardev", },
+ 	{ .name = "cros-ec-debugfs", },
+ 	{ .name = "cros-ec-sysfs", },
++};
++
++static const struct mfd_cell cros_ec_pchg_cells[] = {
+ 	{ .name = "cros-ec-pchg", },
+ };
  
-+/**
-+ * cros_ec_pchg_port_count() - Return the number of peripheral charger ports.
-+ * @ec: EC device.
-+ *
-+ * Return: Number of peripheral charger ports, or 0 in case of error.
-+ */
-+unsigned int cros_ec_pchg_port_count(struct cros_ec_dev *ec)
-+{
-+	struct cros_ec_command *msg;
-+	const struct ec_response_pchg_count *rsp;
-+	struct cros_ec_device *ec_dev = ec->ec_dev;
-+	int ret, count = 0;
-+
-+	msg = kzalloc(sizeof(*msg) + sizeof(*rsp), GFP_KERNEL);
-+	if (!msg)
-+		return 0;
-+
-+	msg->command = EC_CMD_PCHG_COUNT + ec->cmd_offset;
-+	msg->insize = sizeof(*rsp);
-+
-+	ret = cros_ec_cmd_xfer_status(ec_dev, msg);
-+	if (ret >= 0) {
-+		rsp = (const struct ec_response_pchg_count *)msg->data;
-+		count = rsp->port_count;
+@@ -242,6 +245,19 @@ static int ec_device_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	/*
++	 * The PCHG device cannot be detected by sending EC_FEATURE_GET_CMD, but
++	 * it can be detected by querying the number of peripheral chargers.
++	 */
++	if (cros_ec_pchg_port_count(ec)) {
++		retval = mfd_add_hotplug_devices(ec->dev,
++					cros_ec_pchg_cells,
++					ARRAY_SIZE(cros_ec_pchg_cells));
++		if (retval)
++			dev_warn(ec->dev, "failed to add pchg: %d\n",
++				 retval);
 +	}
-+	kfree(msg);
 +
-+	return count;
-+}
-+EXPORT_SYMBOL_GPL(cros_ec_pchg_port_count);
-+
- /**
-  * cros_ec_get_sensor_count() - Return the number of MEMS sensors supported.
-  *
-diff --git a/include/linux/platform_data/cros_ec_proto.h b/include/linux/platform_data/cros_ec_proto.h
-index df3c78c92ca2..8f5781bc2d7a 100644
---- a/include/linux/platform_data/cros_ec_proto.h
-+++ b/include/linux/platform_data/cros_ec_proto.h
-@@ -230,6 +230,7 @@ u32 cros_ec_get_host_event(struct cros_ec_device *ec_dev);
- bool cros_ec_check_features(struct cros_ec_dev *ec, int feature);
- 
- int cros_ec_get_sensor_count(struct cros_ec_dev *ec);
-+unsigned int cros_ec_pchg_port_count(struct cros_ec_dev *ec);
- 
- int cros_ec_command(struct cros_ec_device *ec_dev, unsigned int version, int command, void *outdata,
- 		    int outsize, void *indata, int insize);
+ 	/*
+ 	 * The following subdevices cannot be detected by sending the
+ 	 * EC_FEATURE_GET_CMD to the Embedded Controller device.
 -- 
 https://chromeos.dev
 

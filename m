@@ -2,129 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D96B501FA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:30:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FADE501FAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348023AbiDOAc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S1348042AbiDOAfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:35:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348042AbiDOAch (ORCPT
+        with ESMTP id S245029AbiDOAfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:32:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ACAC1AC925
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:30:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649982608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VSz+7o9rzVeLYCMoLF6o14+CdRpAu25XhazHWiW1Ekw=;
-        b=GsB1M3BDkZl3pbS0mw1L8//GkKIhs3LPGRuWETRNcmNjcJnaXrnuD9os25Olkqu71+kK2b
-        5hiRDFuBFsyo+4M/RVb5AA/WM0P0RcOJVhTpUK0kESugsOZosBlaMiTG+3UDkdG5/xJK/G
-        egu1tIt73IjNr8bI9JVfIzGvt+fe5TI=
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
- [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-593-M0xSELKrP7GMio9oyoBL7w-1; Thu, 14 Apr 2022 20:30:07 -0400
-X-MC-Unique: M0xSELKrP7GMio9oyoBL7w-1
-Received: by mail-io1-f72.google.com with SMTP id g11-20020a056602072b00b00645cc0735d7so3982103iox.1
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:30:07 -0700 (PDT)
+        Thu, 14 Apr 2022 20:35:21 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAABDB0A4B
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:55 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o5so6534615pjr.0
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pbmJlQ5qR1kbE+0/nE9kjO/1skZ6I73pg5jrM6AR8pU=;
+        b=i4xp4OxhcZ40oUwcpgza1kp7fp5COsqzWZ/fhqpFqeTDyND88jjZOs+776yAiDWpKk
+         B9M3ZfUFcIjIWKLuCC2Yey72mJ6TjNlCg4V3mPRLH0UbkP1rspoq+I9fn7B+asSqDFul
+         JL9zYGoSQC/6hPIJFRLXwy0BMt+Q+fVwC1/lc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=VSz+7o9rzVeLYCMoLF6o14+CdRpAu25XhazHWiW1Ekw=;
-        b=m+CUEEqNvFY5GHtyKlHRCKORpMr0Z15g9BYm8oD/RVrsM63FGHNRnY+/UnjwhD6cwt
-         Aih6xaISTwyDv4HwFLtUxps0mPApWx8Lk+piNCUEK/mrsFkPj7/h6vbp9nDeSBgvBMHa
-         xEO4Ef4pq5sTg2sb28iOXXkDU/e9Dfq35CQ7t10H3o+pFGAqTSYLIshar2wYMwJzH3h6
-         CRtPeoArlb5O8JrPcwWtpbK7i915LM62PRqGjuoAfga6pr5/lAoSIbF9+7zmsR0MsHaC
-         gWLPLFtPnEiketPDcBzwP+hN2vbQD7fPbYPEidJEVP8mWm6wnSdH414z/Sgsaq4UJ8y/
-         k87A==
-X-Gm-Message-State: AOAM532qvgpja542LeXZ/hF5qx11NVbEsnJocekkkhDPTZIhkBXfkcaA
-        /+/VWMMMzc7qGJg6h/Np75jMzdhE8UiRNFEt4oUt8i/AsaqGRFmLD6QAQzPp8RhddG8kmgF/CeJ
-        w1f+LG8CZ/SxlIktOrGenHr6Q
-X-Received: by 2002:a05:6638:1356:b0:323:aa22:8cc9 with SMTP id u22-20020a056638135600b00323aa228cc9mr2421523jad.72.1649982606831;
-        Thu, 14 Apr 2022 17:30:06 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwNmZUtU6A/iPiMIQDhMr2fY/CjMD+funMZD15Mw8RhUBPYn1edOjFRd96NsCdDm7QzuLA0Rg==
-X-Received: by 2002:a05:6638:1356:b0:323:aa22:8cc9 with SMTP id u22-20020a056638135600b00323aa228cc9mr2421510jad.72.1649982606634;
-        Thu, 14 Apr 2022 17:30:06 -0700 (PDT)
-Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id c22-20020a5ea816000000b00649d360663asm1994437ioa.40.2022.04.14.17.30.05
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=pbmJlQ5qR1kbE+0/nE9kjO/1skZ6I73pg5jrM6AR8pU=;
+        b=t5AKVciDxpFA6sl5OB6X4cc4HryexQ9v9fHZemmjXhkBTPwH/Cj33k+Ieb5SAIz1t6
+         eB4Qo7M2Qabey4pyedcE1tqeW5W0Ci/OWIpuuIW2iNAnLOa/0p/JhKA5m/SDlfRBod8o
+         74PjI7qBELkd1An8GQxAph3GM/0IGD+F/fxUjqdc0a10XOEGhUDZtZ0xTIqINs5PV/uD
+         GJRYTUHFi7tIeCOZM78C84EBWgDwMBp1xTbyQryintVUjWwuUn9Au/tpQlFhE1205Kbw
+         3201TqaFZRp4EIecy+6KA9hDpmlew5GlLNLAXJAtcqt6ln8598lLLWqcE9j4GEkiWSrr
+         fFlw==
+X-Gm-Message-State: AOAM531vp2MToNWlaQVzCPeByEkv7iGJo+fVoqog+X7iV4BlQfxVD0a6
+        JtofG5M0KMrNQrMwbV2OdpcjrCTu53t9Og==
+X-Google-Smtp-Source: ABdhPJwpLciy5kX+80ADH/58xXbGxA3ukoZ2ddhMynp/EA/S9RnXSUcbCCLEUDTX2HYLh/N1aPdMWw==
+X-Received: by 2002:a17:902:e0c9:b0:158:9b65:aab with SMTP id e9-20020a170902e0c900b001589b650aabmr11948591pla.18.1649982775315;
+        Thu, 14 Apr 2022 17:32:55 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:e3e0:734:f81a:d2c1])
+        by smtp.gmail.com with ESMTPSA id p12-20020a63ab0c000000b00381f7577a5csm2830187pgf.17.2022.04.14.17.32.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 17:30:06 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 20:30:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Andrew Jones <drjones@redhat.com>
-Subject: Re: [PATCH] kvm: selftests: Fix cut-off of addr_gva2gpa lookup
-Message-ID: <Yli8jJWmOt9Qqjbi@xz-m1.local>
-References: <20220414010703.72683-1-peterx@redhat.com>
- <Ylgn/Jw+FMIFqqc0@google.com>
- <bf15209d-2c50-9957-af24-c4f428f213b1@redhat.com>
- <YliTdb1LjfJoIcFc@xz-m1.local>
- <CALMp9eRjNd5_VFOsAoANkoaCTkKSHp3awrABZ5LR20+VoXZuAA@mail.gmail.com>
+        Thu, 14 Apr 2022 17:32:54 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Benson Leung <bleung@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Lee Jones <lee.jones@linaro.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Subject: [PATCH 0/3] platform/chrome: Only register PCHG if present
+Date:   Thu, 14 Apr 2022 17:32:50 -0700
+Message-Id: <20220415003253.1973106-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALMp9eRjNd5_VFOsAoANkoaCTkKSHp3awrABZ5LR20+VoXZuAA@mail.gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 03:01:04PM -0700, Jim Mattson wrote:
-> On Thu, Apr 14, 2022 at 2:36 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Thu, Apr 14, 2022 at 04:14:22PM +0200, Paolo Bonzini wrote:
-> > > On 4/14/22 15:56, Sean Christopherson wrote:
-> > > > > - return (pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> > > > > + return ((vm_paddr_t)pte[index[0]].pfn * vm->page_size) + (gva & 0xfffu);
-> > > > This is but one of many paths that can get burned by pfn being 40 bits.  The
-> > > > most backport friendly fix is probably to add a pfn=>gpa helper and use that to
-> > > > place the myriad "pfn * vm->page_size" instances.
-> > > >
-> > > > For a true long term solution, my vote is to do away with the bit field struct
-> > > > and use #define'd masks and whatnot.
-> > >
-> > > Yes, bitfields larger than 32 bits are a mess.
-> >
-> > It's very interesting to know this..
-> 
-> I don't think the undefined behavior is restricted to extended
-> bit-fields. Even for regular bit-fields, the C99 spec says, "A
-> bit-field shall have a type that is a qualified or unqualified version
-> of _Bool, signed
-> int, unsigned int, or some other implementation-defined type." One
-> might assume that even the permissive final clause refers to
-> fundamental language types, but I suppose "n-bit integer" meets the
-> strict definition of a "type,"
-> for arbitrary values of n.
+I see a printk when booting on chromebooks that don't have the
+PCHG device. This series extracts the count function from the PCHG
+driver and uses it in the mfd driver to skip registration of the PCHG
+device if there aren't any charger ports. This gets rid of the message
+at boot and removes one struct device from my system.
 
-Fair enough.
+Stephen Boyd (3):
+  platform/chrome: cros_ec_proto: Add peripheral charger count API
+  mfd: cros_ec_dev: Only register PCHG device if present
+  power: supply: PCHG: Use cros_ec_pchg_port_count()
 
-I just noticed it actually make sense to have such a behavior, because in
-the case of A*B where A is the bitfield (<32 bits) and when B is an int
-(=32bits, page_size in the test case or a default constant value which will
-also be treated as int/uint).
+ drivers/mfd/cros_ec_dev.c                     | 16 ++++++++++
+ drivers/platform/chrome/cros_ec_proto.c       | 31 +++++++++++++++++++
+ .../power/supply/cros_peripheral_charger.c    | 29 +----------------
+ include/linux/platform_data/cros_ec_proto.h   |  1 +
+ 4 files changed, 49 insertions(+), 28 deletions(-)
 
-Then it's simply extending the smaller field into the same size as the
-bigger one, as 40bits*32bits goes into a 40bits output which needs some
-proper masking if calculated with RAX, while a e.g. 20bits*32bits goes into
-32bits, in which case no further masking needed.
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Daisuke Nojiri <dnojiri@chromium.org>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: <chrome-platform@lists.linux.dev>
 
-Thanks,
-
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
 -- 
-Peter Xu
+https://chromeos.dev
 

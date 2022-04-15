@@ -2,28 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBCCE502D5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:54:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9FF6502D5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355667AbiDOP4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
+        id S1355159AbiDOQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237241AbiDOP4k (ORCPT
+        with ESMTP id S1349443AbiDOQAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:56:40 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 08:54:11 PDT
-Received: from 2.mo550.mail-out.ovh.net (2.mo550.mail-out.ovh.net [178.32.119.250])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C25A99A9A1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:54:11 -0700 (PDT)
-Received: from player788.ha.ovh.net (unknown [10.111.172.22])
-        by mo550.mail-out.ovh.net (Postfix) with ESMTP id 4CE16244A5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:38:54 +0000 (UTC)
+        Fri, 15 Apr 2022 12:00:46 -0400
+Received: from 1.mo560.mail-out.ovh.net (1.mo560.mail-out.ovh.net [46.105.63.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEDB99687
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:58:16 -0700 (PDT)
+Received: from player788.ha.ovh.net (unknown [10.109.138.183])
+        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 2F3C4250FB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:39:05 +0000 (UTC)
 Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
         (Authenticated sender: steve@sk2.org)
-        by player788.ha.ovh.net (Postfix) with ESMTPSA id C468929867034;
-        Fri, 15 Apr 2022 15:38:48 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003c521644e-f40f-40d5-87c4-68faa529c824,
+        by player788.ha.ovh.net (Postfix) with ESMTPSA id D0F4E2986708D;
+        Fri, 15 Apr 2022 15:38:59 +0000 (UTC)
+Authentication-Results: garm.ovh; auth=pass (GARM-100R003353660f6-60a8-46f7-9e89-0886f7461401,
                     77125C2C2681624F8512B69FC7A1C9B53E6602B4) smtp.auth=steve@sk2.org
 X-OVh-ClientIp: 82.65.25.201
 From:   Stephen Kitt <steve@sk2.org>
@@ -31,18 +30,18 @@ To:     Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>
 Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
         Stephen Kitt <steve@sk2.org>
-Subject: [PATCH 4/6] ASoC: pcm186x: use i2c_match_id and simple i2c probe
-Date:   Fri, 15 Apr 2022 17:38:15 +0200
-Message-Id: <20220415153817.141364-5-steve@sk2.org>
+Subject: [PATCH 6/6] ASoC: tlv320*: use i2c_match_id and simple i2c probe
+Date:   Fri, 15 Apr 2022 17:38:17 +0200
+Message-Id: <20220415153817.141364-7-steve@sk2.org>
 X-Mailer: git-send-email 2.27.0
 In-Reply-To: <20220415153817.141364-1-steve@sk2.org>
 References: <20220415153817.141364-1-steve@sk2.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 10488320585173665414
+X-Ovh-Tracer-Id: 10491416809413314182
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -57,58 +56,171 @@ As part of the ongoing i2c transition to the simple probe
 driver_data for the probed device. The id parameter is thus no longer
 necessary and the simple probe can be used instead.
 
-The i2c id table is moved up before the probe function, as suggested
-by Wolfram Sang.
+In the context of an i2c probe, i2c_match_id with the module id table
+and the probed client never returns null, so removing the null check
+on the i2c_device_id pointer is safe.
+
+The i2c id tables are moved up before the probe function, as
+suggested by Wolfram Sang, except where the existing code already had
+a declaration for the of_device_id table.
 
 Signed-off-by: Stephen Kitt <steve@sk2.org>
 ---
- sound/soc/codecs/pcm186x-i2c.c | 24 ++++++++++++------------
- 1 file changed, 12 insertions(+), 12 deletions(-)
+ sound/soc/codecs/tlv320adc3xxx.c     | 21 +++++++++---------
+ sound/soc/codecs/tlv320aic31xx.c     | 32 ++++++++++++++--------------
+ sound/soc/codecs/tlv320aic32x4-i2c.c | 11 ++++++----
+ 3 files changed, 34 insertions(+), 30 deletions(-)
 
-diff --git a/sound/soc/codecs/pcm186x-i2c.c b/sound/soc/codecs/pcm186x-i2c.c
-index f8382b74391d..932c8d41c3ea 100644
---- a/sound/soc/codecs/pcm186x-i2c.c
-+++ b/sound/soc/codecs/pcm186x-i2c.c
-@@ -22,9 +22,18 @@ static const struct of_device_id pcm186x_of_match[] = {
+diff --git a/sound/soc/codecs/tlv320adc3xxx.c b/sound/soc/codecs/tlv320adc3xxx.c
+index ae18982ac310..a5e9f80cfa32 100644
+--- a/sound/soc/codecs/tlv320adc3xxx.c
++++ b/sound/soc/codecs/tlv320adc3xxx.c
+@@ -1337,11 +1337,18 @@ static const struct snd_soc_component_driver soc_component_dev_adc3xxx = {
+ 	.num_dapm_routes	= ARRAY_SIZE(adc3xxx_intercon),
  };
- MODULE_DEVICE_TABLE(of, pcm186x_of_match);
  
--static int pcm186x_i2c_probe(struct i2c_client *i2c,
+-static int adc3xxx_i2c_probe(struct i2c_client *i2c,
 -			     const struct i2c_device_id *id)
-+static const struct i2c_device_id pcm186x_i2c_id[] = {
-+	{ "pcm1862", PCM1862 },
-+	{ "pcm1863", PCM1863 },
-+	{ "pcm1864", PCM1864 },
-+	{ "pcm1865", PCM1865 },
-+	{ }
++static const struct i2c_device_id adc3xxx_i2c_id[] = {
++	{ "tlv320adc3001", ADC3001 },
++	{ "tlv320adc3101", ADC3101 },
++	{}
 +};
-+MODULE_DEVICE_TABLE(i2c, pcm186x_i2c_id);
++MODULE_DEVICE_TABLE(i2c, adc3xxx_i2c_id);
 +
-+static int pcm186x_i2c_probe(struct i2c_client *i2c)
++static int adc3xxx_i2c_probe(struct i2c_client *i2c)
  {
-+	const struct i2c_device_id *id = i2c_match_id(pcm186x_i2c_id, i2c);
- 	const enum pcm186x_type type = (enum pcm186x_type)id->driver_data;
- 	int irq = i2c->irq;
- 	struct regmap *regmap;
-@@ -36,17 +45,8 @@ static int pcm186x_i2c_probe(struct i2c_client *i2c,
- 	return pcm186x_probe(&i2c->dev, type, irq, regmap);
+ 	struct device *dev = &i2c->dev;
+ 	struct adc3xxx *adc3xxx = NULL;
++	const struct i2c_device_id *id;
+ 	int ret;
+ 
+ 	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
+@@ -1394,6 +1401,7 @@ static int adc3xxx_i2c_probe(struct i2c_client *i2c,
+ 
+ 	i2c_set_clientdata(i2c, adc3xxx);
+ 
++	id = i2c_match_id(adc3xxx_i2c_id, i2c);
+ 	adc3xxx->type = id->driver_data;
+ 
+ 	/* Reset codec chip */
+@@ -1436,19 +1444,12 @@ static const struct of_device_id tlv320adc3xxx_of_match[] = {
+ };
+ MODULE_DEVICE_TABLE(of, tlv320adc3xxx_of_match);
+ 
+-static const struct i2c_device_id adc3xxx_i2c_id[] = {
+-	{ "tlv320adc3001", ADC3001 },
+-	{ "tlv320adc3101", ADC3101 },
+-	{}
+-};
+-MODULE_DEVICE_TABLE(i2c, adc3xxx_i2c_id);
+-
+ static struct i2c_driver adc3xxx_i2c_driver = {
+ 	.driver = {
+ 		   .name = "tlv320adc3xxx-codec",
+ 		   .of_match_table = tlv320adc3xxx_of_match,
+ 		  },
+-	.probe = adc3xxx_i2c_probe,
++	.probe_new = adc3xxx_i2c_probe,
+ 	.remove = adc3xxx_i2c_remove,
+ 	.id_table = adc3xxx_i2c_id,
+ };
+diff --git a/sound/soc/codecs/tlv320aic31xx.c b/sound/soc/codecs/tlv320aic31xx.c
+index 8331dc26bcd2..b2e59581c17a 100644
+--- a/sound/soc/codecs/tlv320aic31xx.c
++++ b/sound/soc/codecs/tlv320aic31xx.c
+@@ -1628,11 +1628,24 @@ static void aic31xx_configure_ocmv(struct aic31xx_priv *priv)
+ 	}
  }
  
--static const struct i2c_device_id pcm186x_i2c_id[] = {
--	{ "pcm1862", PCM1862 },
--	{ "pcm1863", PCM1863 },
--	{ "pcm1864", PCM1864 },
--	{ "pcm1865", PCM1865 },
+-static int aic31xx_i2c_probe(struct i2c_client *i2c,
+-			     const struct i2c_device_id *id)
++static const struct i2c_device_id aic31xx_i2c_id[] = {
++	{ "tlv320aic310x", AIC3100 },
++	{ "tlv320aic311x", AIC3110 },
++	{ "tlv320aic3100", AIC3100 },
++	{ "tlv320aic3110", AIC3110 },
++	{ "tlv320aic3120", AIC3120 },
++	{ "tlv320aic3111", AIC3111 },
++	{ "tlv320dac3100", DAC3100 },
++	{ "tlv320dac3101", DAC3101 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, aic31xx_i2c_id);
++
++static int aic31xx_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct aic31xx_priv *aic31xx;
+ 	unsigned int micbias_value = MICBIAS_2_0V;
++	const struct i2c_device_id *id = i2c_match_id(aic31xx_i2c_id, i2c);
+ 	int i, ret;
+ 
+ 	dev_dbg(&i2c->dev, "## %s: %s codec_type = %d\n", __func__,
+@@ -1729,26 +1742,13 @@ static int aic31xx_i2c_probe(struct i2c_client *i2c,
+ 				ARRAY_SIZE(aic31xx_dai_driver));
+ }
+ 
+-static const struct i2c_device_id aic31xx_i2c_id[] = {
+-	{ "tlv320aic310x", AIC3100 },
+-	{ "tlv320aic311x", AIC3110 },
+-	{ "tlv320aic3100", AIC3100 },
+-	{ "tlv320aic3110", AIC3110 },
+-	{ "tlv320aic3120", AIC3120 },
+-	{ "tlv320aic3111", AIC3111 },
+-	{ "tlv320dac3100", DAC3100 },
+-	{ "tlv320dac3101", DAC3101 },
 -	{ }
 -};
--MODULE_DEVICE_TABLE(i2c, pcm186x_i2c_id);
+-MODULE_DEVICE_TABLE(i2c, aic31xx_i2c_id);
 -
- static struct i2c_driver pcm186x_i2c_driver = {
--	.probe		= pcm186x_i2c_probe,
-+	.probe_new	= pcm186x_i2c_probe,
- 	.id_table	= pcm186x_i2c_id,
- 	.driver		= {
- 		.name	= "pcm186x",
+ static struct i2c_driver aic31xx_i2c_driver = {
+ 	.driver = {
+ 		.name	= "tlv320aic31xx-codec",
+ 		.of_match_table = of_match_ptr(tlv320aic31xx_of_match),
+ 		.acpi_match_table = ACPI_PTR(aic31xx_acpi_match),
+ 	},
+-	.probe		= aic31xx_i2c_probe,
++	.probe_new	= aic31xx_i2c_probe,
+ 	.id_table	= aic31xx_i2c_id,
+ };
+ module_i2c_driver(aic31xx_i2c_driver);
+diff --git a/sound/soc/codecs/tlv320aic32x4-i2c.c b/sound/soc/codecs/tlv320aic32x4-i2c.c
+index ed70e3d9baf2..0645239901b1 100644
+--- a/sound/soc/codecs/tlv320aic32x4-i2c.c
++++ b/sound/soc/codecs/tlv320aic32x4-i2c.c
+@@ -17,9 +17,9 @@
+ #include "tlv320aic32x4.h"
+ 
+ static const struct of_device_id aic32x4_of_id[];
++static const struct i2c_device_id aic32x4_i2c_id[];
+ 
+-static int aic32x4_i2c_probe(struct i2c_client *i2c,
+-			     const struct i2c_device_id *id)
++static int aic32x4_i2c_probe(struct i2c_client *i2c)
+ {
+ 	struct regmap *regmap;
+ 	struct regmap_config config;
+@@ -35,7 +35,10 @@ static int aic32x4_i2c_probe(struct i2c_client *i2c,
+ 
+ 		oid = of_match_node(aic32x4_of_id, i2c->dev.of_node);
+ 		dev_set_drvdata(&i2c->dev, (void *)oid->data);
+-	} else if (id) {
++	} else {
++		const struct i2c_device_id *id;
++
++		id = i2c_match_id(aic32x4_i2c_id, i2c);
+ 		dev_set_drvdata(&i2c->dev, (void *)id->driver_data);
+ 	}
+ 
+@@ -70,7 +73,7 @@ static struct i2c_driver aic32x4_i2c_driver = {
+ 		.name = "tlv320aic32x4",
+ 		.of_match_table = aic32x4_of_id,
+ 	},
+-	.probe =    aic32x4_i2c_probe,
++	.probe_new = aic32x4_i2c_probe,
+ 	.remove =   aic32x4_i2c_remove,
+ 	.id_table = aic32x4_i2c_id,
+ };
 -- 
 2.27.0
 

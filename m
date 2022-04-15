@@ -2,197 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CE9B502F3F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ACA6502F49
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 21:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350179AbiDOTXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 15:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37702 "EHLO
+        id S1350932AbiDOTXp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 15:23:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349450AbiDOTWf (ORCPT
+        with ESMTP id S1350795AbiDOTXf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 15:22:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2128449CB7;
-        Fri, 15 Apr 2022 12:20:06 -0700 (PDT)
-Message-ID: <20220415161206.934040006@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650050404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=/7LOTx5hx+68ftEvKF2Kc2mzFZcFNFGa3+VDAnNipgs=;
-        b=GaUoxDIsPqmzxlXffXRK+ealpE55XymsmTSL/XJsrOjViIeYvJ37JvNgZgVlK7gv+dOIW7
-        qWQEMSwdB/NaheS/wdMHBDJpnKAjNKYw80HWKv1DcD3LrAm2npH7ZHbzd/m/wuvf/vUTjW
-        vIXCCav3r6fzk2s/JA5R9hlKbpSqV+OSfAG5PL5Bbt+Hsdf6rGtfsedPGrc6PEr+uctYLQ
-        3Bf2i0wdffu/Xn9oOzvRL+chJZUYrlZ0G8hx33AynsTSVUMGb2QyVl2tt4McIxiOHRH9Hz
-        tCABN3rlmuV9yjmzKatydBi5Oiff9Z1P/wse2hNahQu6Snj9HtLpy3KvmpBlrA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650050404;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=/7LOTx5hx+68ftEvKF2Kc2mzFZcFNFGa3+VDAnNipgs=;
-        b=dAza+VAiQGEv5S45kUuVVsNj3+xxkX4pyoGiKm1qRfoTV/b9TE6V0A9YEQK8Tm6uvfYIoT
-        AglGamnDJTRveqBA==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-pm@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [patch 10/10] x86/aperfmperf: Replace arch_freq_get_on_cpu()
-References: <20220415133356.179706384@linutronix.de>
+        Fri, 15 Apr 2022 15:23:35 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78447DE922;
+        Fri, 15 Apr 2022 12:20:54 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23FJKnKc041676;
+        Fri, 15 Apr 2022 14:20:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650050449;
+        bh=JqC+H9+Rev8gsZydzoz3H+tEXpC+wEOhrdCkvS2dOfw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=MQkcy68uuwxTKnDBByF3zwzmmj16q7syVKm2RMi73i1YlUqr7OX78YlIMqHOzxjI8
+         qTt/zRyUwlwSAvheHNjwiDkI0Zj683z66Tc3njTPEqmmZRG0BYJghApnWgIh4hkvtz
+         CbeS1mypslJwWBRCTWxmXnT16YD9xcozdcnRcmEA=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23FJKn36054167
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 15 Apr 2022 14:20:49 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
+ Apr 2022 14:20:48 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 15 Apr 2022 14:20:49 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23FJKnMX080301;
+        Fri, 15 Apr 2022 14:20:49 -0500
+Date:   Fri, 15 Apr 2022 14:20:48 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Georgi Vlaev <g-vlaev@ti.com>
+CC:     <ssantosh@kernel.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>
+Subject: Re: [PATCH v2 2/2] clk: keystone: syscon-clk: Add support for AM62
+ epwm-tbclk
+Message-ID: <20220415192048.mdkwqfs2ztz6vens@cherub>
+References: <20220415190343.6284-1-g-vlaev@ti.com>
+ <20220415190343.6284-3-g-vlaev@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 15 Apr 2022 21:20:04 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220415190343.6284-3-g-vlaev@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reading the current CPU frequency from /sys/..../scaling_cur_freq involves
-in the worst case two IPIs due to the ad hoc sampling.
+On 22:03-20220415, Georgi Vlaev wrote:
+> AM62 has 3 instances of EPWM modules. Each EPWM module has
+> an EPWM TBCLKEN module input used to individually enable or
+> disable its EPWM time-base clock. The EPWM time-base clock
+> enable input comes from the CTRLMMR_EPWM_TB_CLKEN register
+> bits 0 to 2 in CTRL_MMR0 module (6.1.1.4.1.48 [1]). This
+> is virtually the same setup as in AM64 but with 3 instead
+> of 9 clock providers on AM62.
+> 
+> Update the driver with the 3 instances of clocks associated
+> to a new compatible: "ti,am62-epwm-tbclk".
+> 
+> [1] https://www.ti.com/lit/pdf/spruiv7
+> 
+> Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
+> Tested-by: Vignesh Raghavendra <vigneshr@ti.com>
+> ---
+>  drivers/clk/keystone/syscon-clk.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/clk/keystone/syscon-clk.c b/drivers/clk/keystone/syscon-clk.c
+> index aae1a4076281..19198325b909 100644
+> --- a/drivers/clk/keystone/syscon-clk.c
+> +++ b/drivers/clk/keystone/syscon-clk.c
+> @@ -162,6 +162,13 @@ static const struct ti_syscon_gate_clk_data am64_clk_data[] = {
+>  	{ /* Sentinel */ },
+>  };
+>  
+> +static const struct ti_syscon_gate_clk_data am62_clk_data[] = {
+> +	TI_SYSCON_CLK_GATE("epwm_tbclk0", 0x0, 0),
+> +	TI_SYSCON_CLK_GATE("epwm_tbclk1", 0x0, 1),
+> +	TI_SYSCON_CLK_GATE("epwm_tbclk2", 0x0, 2),
 
-The frequency invariance infrastructure provides the APERF/MPERF samples
-already. Utilize them and consolidate this with the /proc/cpuinfo readout.
+Reviewed-by: Nishanth Menon <nm@ti.com>
 
-The sample is considered valid for 20ms. So for idle or isolated NOHZ full
-CPUs the function returns 0, which is matching the previous behaviour.
+Thanks for reordering.
 
-The resulting text size vs. the original APERF/MPERF plus the separate
-frequency invariance code:
+> +	{ /* Sentinel */ },
+> +};
+> +
+>  static const struct of_device_id ti_syscon_gate_clk_ids[] = {
+>  	{
+>  		.compatible = "ti,am654-ehrpwm-tbclk",
+> @@ -171,6 +178,10 @@ static const struct of_device_id ti_syscon_gate_clk_ids[] = {
+>  		.compatible = "ti,am64-epwm-tbclk",
+>  		.data = &am64_clk_data,
+>  	},
+> +	{
+> +		.compatible = "ti,am62-epwm-tbclk",
+> +		.data = &am62_clk_data,
+> +	},
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, ti_syscon_gate_clk_ids);
+> -- 
+> 2.30.2
+> 
 
-  text:		2411	->   723
-  init.text:	   0	->   767
-
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
----
- arch/x86/kernel/cpu/aperfmperf.c |   94 ---------------------------------------
- arch/x86/kernel/cpu/proc.c       |    2 
- 2 files changed, 2 insertions(+), 94 deletions(-)
-
---- a/arch/x86/kernel/cpu/aperfmperf.c
-+++ b/arch/x86/kernel/cpu/aperfmperf.c
-@@ -35,98 +35,6 @@ static DEFINE_PER_CPU_SHARED_ALIGNED(str
- 	.seq = SEQCNT_ZERO(cpu_samples.seq)
- };
- 
--struct aperfmperf_sample {
--	unsigned int	khz;
--	atomic_t	scfpending;
--	ktime_t	time;
--	u64	aperf;
--	u64	mperf;
--};
--
--static DEFINE_PER_CPU(struct aperfmperf_sample, samples);
--
--#define APERFMPERF_CACHE_THRESHOLD_MS	10
--#define APERFMPERF_REFRESH_DELAY_MS	10
--#define APERFMPERF_STALE_THRESHOLD_MS	1000
--
--/*
-- * aperfmperf_snapshot_khz()
-- * On the current CPU, snapshot APERF, MPERF, and jiffies
-- * unless we already did it within 10ms
-- * calculate kHz, save snapshot
-- */
--static void aperfmperf_snapshot_khz(void *dummy)
--{
--	u64 aperf, aperf_delta;
--	u64 mperf, mperf_delta;
--	struct aperfmperf_sample *s = this_cpu_ptr(&samples);
--	unsigned long flags;
--
--	local_irq_save(flags);
--	rdmsrl(MSR_IA32_APERF, aperf);
--	rdmsrl(MSR_IA32_MPERF, mperf);
--	local_irq_restore(flags);
--
--	aperf_delta = aperf - s->aperf;
--	mperf_delta = mperf - s->mperf;
--
--	/*
--	 * There is no architectural guarantee that MPERF
--	 * increments faster than we can read it.
--	 */
--	if (mperf_delta == 0)
--		return;
--
--	s->time = ktime_get();
--	s->aperf = aperf;
--	s->mperf = mperf;
--	s->khz = div64_u64((cpu_khz * aperf_delta), mperf_delta);
--	atomic_set_release(&s->scfpending, 0);
--}
--
--static bool aperfmperf_snapshot_cpu(int cpu, ktime_t now, bool wait)
--{
--	s64 time_delta = ktime_ms_delta(now, per_cpu(samples.time, cpu));
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
--	/* Don't bother re-computing within the cache threshold time. */
--	if (time_delta < APERFMPERF_CACHE_THRESHOLD_MS)
--		return true;
--
--	if (!atomic_xchg(&s->scfpending, 1) || wait)
--		smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, wait);
--
--	/* Return false if the previous iteration was too long ago. */
--	return time_delta <= APERFMPERF_STALE_THRESHOLD_MS;
--}
--
--unsigned int arch_freq_get_on_cpu(int cpu)
--{
--	struct aperfmperf_sample *s = per_cpu_ptr(&samples, cpu);
--
--	if (!cpu_khz)
--		return 0;
--
--	if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
--		return 0;
--
--	if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
--		return 0;
--
--	if (rcu_is_idle_cpu(cpu))
--		return 0;
--
--	if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
--		return per_cpu(samples.khz, cpu);
--
--	msleep(APERFMPERF_REFRESH_DELAY_MS);
--	atomic_set(&s->scfpending, 1);
--	smp_mb(); /* ->scfpending before smp_call_function_single(). */
--	smp_call_function_single(cpu, aperfmperf_snapshot_khz, NULL, 1);
--
--	return per_cpu(samples.khz, cpu);
--}
--
- static void init_counter_refs(void)
- {
- 	u64 aperf, mperf;
-@@ -493,7 +401,7 @@ void arch_scale_freq_tick(void)
-  */
- #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
- 
--unsigned int aperfmperf_get_khz(int cpu)
-+unsigned int arch_freq_get_on_cpu(int cpu)
- {
- 	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
- 	unsigned long last;
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -84,7 +84,7 @@ static int show_cpuinfo(struct seq_file
- 		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
- 
- 	if (cpu_has(c, X86_FEATURE_TSC)) {
--		unsigned int freq = aperfmperf_get_khz(cpu);
-+		unsigned int freq = arch_freq_get_on_cpu(cpu);
- 
- 		if (!freq)
- 			freq = cpufreq_quick_get(cpu);
-
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

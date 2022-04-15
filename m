@@ -2,182 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 245D9502A54
+	by mail.lfdr.de (Postfix) with ESMTP id B97F1502A56
 	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:39:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244900AbiDOMlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:41:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40354 "EHLO
+        id S1353905AbiDOMlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 08:41:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353752AbiDOMje (ORCPT
+        with ESMTP id S1353834AbiDOMjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 08:39:34 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB552C90E0;
-        Fri, 15 Apr 2022 05:36:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e01424;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0VA7VPVK_1650026208;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VA7VPVK_1650026208)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 15 Apr 2022 20:36:49 +0800
-From:   Jeffle Xu <jefflexu@linux.alibaba.com>
-To:     dhowells@redhat.com, linux-cachefs@redhat.com, xiang@kernel.org,
-        chao@kernel.org, linux-erofs@lists.ozlabs.org
-Cc:     torvalds@linux-foundation.org, gregkh@linuxfoundation.org,
-        willy@infradead.org, linux-fsdevel@vger.kernel.org,
-        joseph.qi@linux.alibaba.com, bo.liu@linux.alibaba.com,
-        tao.peng@linux.alibaba.com, gerry@linux.alibaba.com,
-        eguan@linux.alibaba.com, linux-kernel@vger.kernel.org,
-        luodaowen.backend@bytedance.com, tianzichen@kuaishou.com,
-        fannaihao@baidu.com, zhangjiachen.jaycee@bytedance.com
-Subject: [PATCH v9 21/21] erofs: add 'fsid' mount option
-Date:   Fri, 15 Apr 2022 20:36:14 +0800
-Message-Id: <20220415123614.54024-22-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220415123614.54024-1-jefflexu@linux.alibaba.com>
-References: <20220415123614.54024-1-jefflexu@linux.alibaba.com>
+        Fri, 15 Apr 2022 08:39:54 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5605C9B6B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650026230; x=1681562230;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=w+XDpmr+jFjSlmGjB+amwAH4Rfhi8cJjFE5vaPuGp/A=;
+  b=nZVRkW3Mzlz8ujnN8mdXSq/a1tM7WoT9oYtziNBR5ckhucS565lDFQpH
+   EFb1ZCZUU4Lc9q2hK9DXmf0b5+s8XJD5C1qz4kLun7AyX3qWXUb6hn6lF
+   1qh599tEFL6kqSgR06JCpxyhSX4IyO7kqRSsh30k6VIAZbu1THzaJ6AsM
+   lauOcIqQdahrFeiHWdd3TOveichah7hrLwnxhqva+uaMAfk+A6jJo402e
+   fVPpFUgAc1FsP9o1uw+lbuhXGG2wjqWXUM+A3ukbchf2RgnAYAAck+A3p
+   B3W1qR3kbWnLgCIZ3jmYtdapoD/nR+lxD4gEIhR05R3p5S3EaYu9m8PgI
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="326051050"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="326051050"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 05:37:10 -0700
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="508930396"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 05:37:09 -0700
+Date:   Fri, 15 Apr 2022 05:37:34 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YllnAPUlh3KHwjXq@fyu1.sc.intel.com>
+References: <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+ <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
+ <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
+ <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce 'fsid' mount option to enable on-demand read sementics, in
-which case, erofs will be mounted from data blobs. Users could specify
-the name of primary data blob by this mount option.
+Hi, Zhangfei,
 
-Signed-off-by: Jeffle Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/super.c | 31 ++++++++++++++++++++++++++++++-
- fs/erofs/sysfs.c |  4 ++--
- 2 files changed, 32 insertions(+), 3 deletions(-)
+On Fri, Apr 15, 2022 at 07:52:03PM +0800, zhangfei.gao@foxmail.com wrote:
+> 
+> 
+> On 2022/4/15 下午6:50, Fenghua Yu wrote:
+> > Hi, Zhangfei,
+> > 
+> > On Fri, Apr 15, 2022 at 06:14:09PM +0800, zhangfei.gao@foxmail.com wrote:
+> > I download this patch from:
+> > https://lore.kernel.org/lkml/YllADL6uMoLllzQo@fyu1.sc.intel.com/raw
+> > git am to either v5.18-rc2 or the latest upstream without any issue.
+> It is my copy paste issue.
+> 
+> I have tested, nginx woks well.
 
-diff --git a/fs/erofs/super.c b/fs/erofs/super.c
-index f68ba929100d..4a623630e1c4 100644
---- a/fs/erofs/super.c
-+++ b/fs/erofs/super.c
-@@ -371,6 +371,8 @@ static int erofs_read_superblock(struct super_block *sb)
- 
- 	if (erofs_sb_has_ztailpacking(sbi))
- 		erofs_info(sb, "EXPERIMENTAL compressed inline data feature in use. Use at your own risk!");
-+	if (erofs_is_fscache_mode(sb))
-+		erofs_info(sb, "EXPERIMENTAL fscache-based on-demand read feature in use. Use at your own risk!");
- out:
- 	erofs_put_metabuf(&buf);
- 	return ret;
-@@ -399,6 +401,7 @@ enum {
- 	Opt_dax,
- 	Opt_dax_enum,
- 	Opt_device,
-+	Opt_fsid,
- 	Opt_err
- };
- 
-@@ -423,6 +426,7 @@ static const struct fs_parameter_spec erofs_fs_parameters[] = {
- 	fsparam_flag("dax",             Opt_dax),
- 	fsparam_enum("dax",		Opt_dax_enum, erofs_dax_param_enums),
- 	fsparam_string("device",	Opt_device),
-+	fsparam_string("fsid",		Opt_fsid),
- 	{}
- };
- 
-@@ -518,6 +522,16 @@ static int erofs_fc_parse_param(struct fs_context *fc,
- 		}
- 		++ctx->devs->extra_devices;
- 		break;
-+	case Opt_fsid:
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+		kfree(ctx->opt.fsid);
-+		ctx->opt.fsid = kstrdup(param->string, GFP_KERNEL);
-+		if (!ctx->opt.fsid)
-+			return -ENOMEM;
-+#else
-+		errorfc(fc, "fsid option not supported");
-+#endif
-+		break;
- 	default:
- 		return -ENOPARAM;
- 	}
-@@ -604,6 +618,7 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- 	sb->s_fs_info = sbi;
- 	sbi->opt = ctx->opt;
-+	ctx->opt.fsid = NULL;
- 	sbi->devs = ctx->devs;
- 	ctx->devs = NULL;
- 
-@@ -690,6 +705,11 @@ static int erofs_fc_fill_super(struct super_block *sb, struct fs_context *fc)
- 
- static int erofs_fc_get_tree(struct fs_context *fc)
- {
-+	struct erofs_fs_context *ctx = fc->fs_private;
-+
-+	if (IS_ENABLED(CONFIG_EROFS_FS_ONDEMAND) && ctx->opt.fsid)
-+		return get_tree_nodev(fc, erofs_fc_fill_super);
-+
- 	return get_tree_bdev(fc, erofs_fc_fill_super);
- }
- 
-@@ -739,6 +759,7 @@ static void erofs_fc_free(struct fs_context *fc)
- 	struct erofs_fs_context *ctx = fc->fs_private;
- 
- 	erofs_free_dev_context(ctx->devs);
-+	kfree(ctx->opt.fsid);
- 	kfree(ctx);
- }
- 
-@@ -779,7 +800,10 @@ static void erofs_kill_sb(struct super_block *sb)
- 
- 	WARN_ON(sb->s_magic != EROFS_SUPER_MAGIC);
- 
--	kill_block_super(sb);
-+	if (erofs_is_fscache_mode(sb))
-+		generic_shutdown_super(sb);
-+	else
-+		kill_block_super(sb);
- 
- 	sbi = EROFS_SB(sb);
- 	if (!sbi)
-@@ -789,6 +813,7 @@ static void erofs_kill_sb(struct super_block *sb)
- 	fs_put_dax(sbi->dax_dev);
- 	erofs_fscache_unregister_cookie(&sbi->s_fscache);
- 	erofs_fscache_unregister_fs(sb);
-+	kfree(sbi->opt.fsid);
- 	kfree(sbi);
- 	sb->s_fs_info = NULL;
- }
-@@ -938,6 +963,10 @@ static int erofs_show_options(struct seq_file *seq, struct dentry *root)
- 		seq_puts(seq, ",dax=always");
- 	if (test_opt(opt, DAX_NEVER))
- 		seq_puts(seq, ",dax=never");
-+#ifdef CONFIG_EROFS_FS_ONDEMAND
-+	if (opt->fsid)
-+		seq_printf(seq, ",fsid=%s", opt->fsid);
-+#endif
- 	return 0;
- }
- 
-diff --git a/fs/erofs/sysfs.c b/fs/erofs/sysfs.c
-index f3babf1e6608..c1383e508bbe 100644
---- a/fs/erofs/sysfs.c
-+++ b/fs/erofs/sysfs.c
-@@ -205,8 +205,8 @@ int erofs_register_sysfs(struct super_block *sb)
- 
- 	sbi->s_kobj.kset = &erofs_root;
- 	init_completion(&sbi->s_kobj_unregister);
--	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL,
--				   "%s", sb->s_id);
-+	err = kobject_init_and_add(&sbi->s_kobj, &erofs_sb_ktype, NULL, "%s",
-+			erofs_is_fscache_mode(sb) ? sbi->opt.fsid : sb->s_id);
- 	if (err)
- 		goto put_sb_kobj;
- 	return 0;
--- 
-2.27.0
+Great!
 
+> 
+> Other than the following issue,
+> Each time /sbin/nginx will alloc ioasid but not free.
+> which I think it maybe nginx issue or the mis-usage, will ask there.
+
+Which nginx/openssl function is supposed to call kernel sva_unbind? I couldn't
+find the function in nginx tree.
+
+If nginx doesn't free ioasid, it will cause ioasid leak and memory leak.
+
+> 
+> Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+
+Thank you for your testing!
+
+> 
+> > 
+> > > It should work for arm.
+> > > 
+> > > In fact I have a similar patch at hand but pending since I found an issue.
+> > > 
+> > > I start & stop nginx via this cmd.
+> > > //start
+> > > sudo sbin/nginx                    // this alloc an ioasid=1
+> > > //stop
+> > > sudo sbin/nginx -s quit    // this does not free ioasid=1, but still alloc
+> > > ioasid=2.
+> > > So ioasid will keep allocated but not freed if continue start/stop nginx,
+> > > though not impact the nginx function.
+> > > 
+> > > stop nginx with -s quit still calls
+> > > src/core/nginx.c
+> > > main -> ngx_ssl_init -> openssl engine:    bind_fn -> ... -> alloc asid
+> > > But openssl engine: ENGINE_free is not called
+> > > 
+> > > Still in checking nginx code.
+> > > 
+> > > Or do you test with nginx?
+> > On my X86 machine, nginx doesn't trigger the kernel sva binding function
+> > to allocate ioasid. I tried pre- nstalled nginx/openssl and also tried my built
+> > a few versions of nginx/openssl. nginx does call OPENSSL_init_ssl() but
+> > doesn't go to the binding function. Don't know if it's my configuration issue.
+> > Maybe you can give me some advice?
+> I am using openssl engine, which use crypto driver and using sva via uacce.
+> nginx -> openssl -> openssl engine -> sva related.
+
+I'll do more nginx experiments.
+
+> 
+> > 
+> > I test the patch with a few internal test tools and observe mmget()/mmput()
+> > works fine in various cases.
+> OK, thanks
+
+Thank you very much!
+
+-Fenghua

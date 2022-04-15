@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE32C502D08
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D023502D2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355431AbiDOPju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36984 "EHLO
+        id S1355426AbiDOPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356283AbiDOPj2 (ORCPT
+        with ESMTP id S1356293AbiDOPj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:39:28 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94983C712
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id i82-20020a1c3b55000000b0038ccb70e239so3330723wma.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
+        Fri, 15 Apr 2022 11:39:29 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074B13DA46
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:37:00 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id e21so11044948wrc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:36:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=bjsrGI6b0RLOajPWZ9Roh+05A2VIae/Wu/ntaXQOjlw=;
-        b=3wSns6Qsgrs4cf7sI/QmPRIbAuQFGeQOWy+IwaG4p/9G7wFu2NT3G9NIDox8GsYa83
-         lIW5eRDkq87Z8CCCA5g4ZABFIx+PXqihPJ7jJ7jd9wDZYLFNkMXHH5HGR66XCPF+9dTG
-         yBbvNBiJWOAM9LE0PerlZPkmCWGL5Ca6Ij+gCgK4iPuD2xWi2jTf4VeR6K0hBkuKstUA
-         eKhtkY7CUj6iRNbZBGBOx99przt0jbd2VdOJuWEFD6h94LZnJNuDAkyx1bSVjSteJyCP
-         +bftqFga/mY4fsJ8lJf2VOI9bkrKtnifVoc8pP8x+0fPRnZD60jCuzijfIPp+zGjyYwG
-         GFyw==
+        bh=M8lmuusreyEB7Gud7csUtw7tpltYDp61Pfem/SE6pZk=;
+        b=Td7opDcQaMHI3JFBSWitUPOiGjC1BZcN+VXkNxXfzTacxCPZd+RlBamsom/P6pj6hg
+         EQXrRuHGXiNXFQtSrR3QL1QbiiNbjPTITd8XdGNJyB82Ht5mkqdGh5NTUY6JlXUr5pcI
+         1GhmEzwbf39+IAX+BfrK0XFv21dUff4s5Uie+EEAFN6tGnT8k7GalPtJr0bbWKkJ/t+I
+         LCf964j2RpBGLIc9wst5Vwsn1c4F+klbJrplVP42wMIlCUMJwMzI+m5JAQXDMcnvfCSy
+         EI6YeGHcj7aHLbpDBaAkPXjZMQojCrSqhAnsraX9fvf0KOLJVNgLWd+mzHnJMKoTfYCv
+         CaNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=bjsrGI6b0RLOajPWZ9Roh+05A2VIae/Wu/ntaXQOjlw=;
-        b=OSQaXhYiewQTJUdDWL/crZ2ndqer9Qstxtb2m/ogOVEBHHQCsxvajyYZPtE/Ga7F2J
-         zQId5hsdE9scVeCeNw38Ja1SM20a6dx1v/cFnImCW7yyeFiIxeL0jASkMrWva3zdOKHt
-         gxWLUL0e+ofOosjC3LMCGd/XqFDC8gEwzDrPPh+6CJ8a2WybYnABXTY1wtWxrzD12nDl
-         f22cMP8pW8uD+fTx66vFvvi+cksRZOfA1pRcyquIsxWQpaBssiB56KWBOikPWXvMRilM
-         7FGIDH+kuMlxLCpuJIqFq8kuGnvKfcnsg1HwEWfoONJF3lUM4yLbH/qCD8ibJGS9YHbf
-         +B7Q==
-X-Gm-Message-State: AOAM533AUYCx0+bE2qYPZXWTo7PuOBmcRgLD3pMI/sQY4Hhr+kpMci8z
-        gXN+BOv+vY0wLsg9s7cSrNUgeA==
-X-Google-Smtp-Source: ABdhPJys6pbLabTkeRziK+wc3YsUE7sp3OaYxjUErcU8DVV+dThnk4NTfuDDdx9muo/luGe71Ahcxg==
-X-Received: by 2002:a7b:c8cd:0:b0:38e:c2c1:5219 with SMTP id f13-20020a7bc8cd000000b0038ec2c15219mr3731923wml.151.1650037017310;
-        Fri, 15 Apr 2022 08:36:57 -0700 (PDT)
+        bh=M8lmuusreyEB7Gud7csUtw7tpltYDp61Pfem/SE6pZk=;
+        b=5z0S/5566S8yUFj6PFxY8peHfJA3CpzEfmwbN5QI8WJzL804+kWXtEe5Fd1r79q7zo
+         8EFY1MfVninO5NL7ZuLB8eQeyKY50XnuK7ByxpEdQHsDhJ7UiXRLKMT7vNyqWaqdtDk4
+         kG6dGk0nDrICFc+xXMtLimyzWxBX5epn7fxwPsa3IYdPMEBkUM6P++x0p2zBwO6pe5b/
+         tlyIHHmFtIN6AG2lST6Xqx4UBRWpWuWtngpJm061N5xFKktVITpjmNsp6tVh0L71093p
+         yPZ1PCMZlWJYyNPlaN0KPTA3YiPehgrO4zlA/Wmw/ihk1XMKOAGDWJtTFN4bXRHX10+r
+         ja/Q==
+X-Gm-Message-State: AOAM532V4FOOUa+nsh6fufLVMsmSna0MDTAbzWAIlDIPmt2Ss2tnOBwH
+        0xbcK/fu/4faZWzj9TQmjfM8Mg==
+X-Google-Smtp-Source: ABdhPJyicB0kEbhTFgNRydBA+wCxkMiQhnsXg+5hKIJU185vpb3FHT12FRvF9HoZokb6+MthOFW4HA==
+X-Received: by 2002:adf:d1e3:0:b0:20a:7841:b9b4 with SMTP id g3-20020adfd1e3000000b0020a7841b9b4mr4299001wrd.61.1650037018548;
+        Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
 Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id c24-20020a7bc018000000b0038a18068cf5sm8459292wmb.15.2022.04.15.08.36.56
+        by smtp.gmail.com with ESMTPSA id c24-20020a7bc018000000b0038a18068cf5sm8459292wmb.15.2022.04.15.08.36.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 08:36:56 -0700 (PDT)
+        Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+To:     Lee Jones <lee.jones@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, linux-input@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+Cc:     Fabien Parent <fparent@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/7] dt-bindings: input: mtk-pmic-keys: add MT6359 binding definition
-Date:   Fri, 15 Apr 2022 17:36:23 +0200
-Message-Id: <20220415153629.1817202-2-fparent@baylibre.com>
+Subject: [PATCH 2/7] mfd: add missing defines necessary for mtk-pmic-keys support
+Date:   Fri, 15 Apr 2022 17:36:24 +0200
+Message-Id: <20220415153629.1817202-3-fparent@baylibre.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415153629.1817202-1-fparent@baylibre.com>
 References: <20220415153629.1817202-1-fparent@baylibre.com>
@@ -73,25 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add binding definition for the support of the MT6359 keyboard driver.
+Add 2 missing MT6359 registers that are needed to implement
+the keyboard driver.
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- Documentation/devicetree/bindings/input/mtk-pmic-keys.txt | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/mfd/mt6359/registers.h | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt b/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-index 9d00f2a8e13a..afe9062a4dc7 100644
---- a/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-+++ b/Documentation/devicetree/bindings/input/mtk-pmic-keys.txt
-@@ -13,6 +13,7 @@ Required properties:
- 	- "mediatek,mt6397-keys"
- 	- "mediatek,mt6323-keys"
- 	- "mediatek,mt6358-keys"
-+	- "mediatek,mt6359-keys"
- - linux,keycodes: See Documentation/devicetree/bindings/input/input.yaml
+diff --git a/include/linux/mfd/mt6359/registers.h b/include/linux/mfd/mt6359/registers.h
+index 2135c9695918..2a4394a27b1c 100644
+--- a/include/linux/mfd/mt6359/registers.h
++++ b/include/linux/mfd/mt6359/registers.h
+@@ -8,6 +8,8 @@
  
- Optional Properties:
+ /* PMIC Registers */
+ #define MT6359_SWCID                         0xa
++#define MT6359_TOPSTATUS                     0x2a
++#define MT6359_TOP_RST_MISC                  0x14c
+ #define MT6359_MISC_TOP_INT_CON0             0x188
+ #define MT6359_MISC_TOP_INT_STATUS0          0x194
+ #define MT6359_TOP_INT_STATUS0               0x19e
 -- 
 2.35.2
 

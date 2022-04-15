@@ -2,134 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF865024F2
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB35F5024F5
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349332AbiDOFy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 01:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38604 "EHLO
+        id S1350172AbiDOFzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243552AbiDOFyv (ORCPT
+        with ESMTP id S242245AbiDOFzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 01:54:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ADC4553E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 22:52:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650001945; x=1681537945;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jf8KqANgd4gggg0XPljowAJmG/3j+mtyAqvVnanxg30=;
-  b=T2WxvF6i6MV1Wr4VJiPSdtPgQTNVUK2nGbWPmZv1abIvtkIzJ0rGbMgm
-   2M3nfxN6CBjMWbSQbOR/0Kc/RWzA6Ix1x89X6dI3KpWqzdf9uLyPo2bD5
-   gI9PPAgCJ1vydpWK3pJk+UI+hOVy039Hl4EqLys89CYXfKOCDyF9LWnOj
-   YqPxULYiAy1bIZyampODBuCxGM6vT9H3sEG/vNcFFb0v+wJLcIOfTE6B0
-   Nfln8IH/ZWjG/ij39Mc0SfS1iOcuSwrmHAgQ7wR0SsVVhVK6+ZCJgrYg0
-   DKUhtTu/a41ywYWPx/x0qCMLJpPTlFJtqEE3SiQJHfcZuw41Es3jJmVYn
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262852588"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="262852588"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 22:52:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="527703659"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2022 22:52:22 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfEsX-0001c8-AI;
-        Fri, 15 Apr 2022 05:52:21 +0000
-Date:   Fri, 15 Apr 2022 13:51:12 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [cxl:pending 20/22] drivers/cxl/core/suspend.c:8:6: warning: no
- previous prototype for function 'cxl_mem_active'
-Message-ID: <202204151342.h9mvfwgG-lkp@intel.com>
+        Fri, 15 Apr 2022 01:55:07 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D6AF45041;
+        Thu, 14 Apr 2022 22:52:39 -0700 (PDT)
+X-UUID: 8a3ddbc04e6340468ea9b338613546f2-20220415
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:f486a0d4-a54c-4132-b762-4c2cd726132e,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:50
+X-CID-INFO: VERSION:1.1.4,REQID:f486a0d4-a54c-4132-b762-4c2cd726132e,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:50,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:50
+X-CID-META: VersionHash:faefae9,CLOUDID:a02b7678-0afa-4dca-bdec-ca54c998425a,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 8a3ddbc04e6340468ea9b338613546f2-20220415
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 609395415; Fri, 15 Apr 2022 13:52:35 +0800
+Received: from mtkcas11.mediatek.inc (172.21.101.40) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Fri, 15 Apr 2022 13:52:33 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Fri, 15 Apr 2022 13:52:33 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <alice.chao@mediatek.com>
+CC:     <cc.chou@mediatek.com>, <chaotian.jing@mediatek.com>,
+        <chun-hung.wu@mediatek.com>, <jejb@linux.ibm.com>,
+        <jiajie.hao@mediatek.com>, <lin.gui@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-scsi@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <matthias.bgg@gmail.com>,
+        <peter.wang@mediatek.com>, <powen.kao@mediatek.com>,
+        <qilin.tan@mediatek.com>, <stanley.chu@mediatek.com>,
+        <wsd_upstream@mediatek.com>, <yanxu.wei@mediatek.com>
+Subject: Re: [PATCH v3 1/1] scsi: Fix racing between dev init and dev reset
+Date:   Fri, 15 Apr 2022 13:52:33 +0800
+Message-ID: <20220415055233.29264-1-miles.chen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
+In-Reply-To: <20220415040446.26451-2-alice.chao@mediatek.com>
+References: <20220415040446.26451-2-alice.chao@mediatek.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
-head:   4f497e0dd3530981f8c897d5d47ee880b62baefb
-commit: fcf0b70f7e80f49f323cc21b8a497a24151d9c28 [20/22] PM: CXL: Disable suspend
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20220415/202204151342.h9mvfwgG-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=fcf0b70f7e80f49f323cc21b8a497a24151d9c28
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl pending
-        git checkout fcf0b70f7e80f49f323cc21b8a497a24151d9c28
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cxl/core/
+Hi Alice,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+> Device reset thread uses kobject_uevent_env() to get kobj.parent, and it
+> aces with device init thread which calls device_add() to add kobj.parent
 
-All warnings (new ones prefixed by >>):
+"aces" may be "races"?
 
->> drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for function 'cxl_mem_active' [-Wmissing-prototypes]
-   bool cxl_mem_active(void)
-        ^
-   drivers/cxl/core/suspend.c:8:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   bool cxl_mem_active(void)
-   ^
-   static 
->> drivers/cxl/core/suspend.c:13:6: warning: no previous prototype for function 'cxl_mem_active_inc' [-Wmissing-prototypes]
-   void cxl_mem_active_inc(void)
-        ^
-   drivers/cxl/core/suspend.c:13:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cxl_mem_active_inc(void)
-   ^
-   static 
->> drivers/cxl/core/suspend.c:19:6: warning: no previous prototype for function 'cxl_mem_active_dec' [-Wmissing-prototypes]
-   void cxl_mem_active_dec(void)
-        ^
-   drivers/cxl/core/suspend.c:19:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void cxl_mem_active_dec(void)
-   ^
-   static 
-   3 warnings generated.
+> before kobject_uevent_env().
+> 
+> Device init call:           Device reset call:
+>  scsi_probe_and_add_lun()    scsi_evt_thread()
+>   scsi_add_lun()             scsi_evt_emit()
+>    scsi_sysfs_add_sdev()      kobject_uevent_env() //get kobj.parent
+>     scsi_target_add()           kobject_get_path()
+>                                  len = get_kobj_path_length () // len=1 because parent hasn't created yet
+>     device_add() // add kobj.parent
+>       kobject_uevent_env()
+>        kobject_get_path()         path = kzalloc()
+>         fill_kobj_path()           fill_kobj_path() // --length; length -= cur is a negative value
+>                                     memcpy(path + length, kobject_name(parent), cur); // slab OOB!
+> 
+> Above backtrace describes the problem, device reset thread will get wrong
+> kobj.parent when device init thread didn’t add kobj.parent yet. When this
+> racing happened, it triggers the a KASAN dump on the final iteration:
+> 
+> BUG: KASAN: slab-out-of-bounds in kobject_get_path+0xf8/0x1b8
+> Write of size 11 at addr ffffff80d6bb94f5 by task kworker/3:1/58
+> <snip>
+> Call trace:
+>  __kasan_report+0x124/0x1c8
+>  kasan_report+0x54/0x84
+>  kasan_check_range+0x200/0x208
+>  memcpy+0xb8/0xf0
+>  kobject_get_path+0xf8/0x1b8
+>  kobject_uevent_env+0x228/0xa88
+>  scsi_evt_thread+0x2d0/0x5b0
+>  process_one_work+0x570/0xf94
+>  worker_thread+0x7cc/0xf80
+>  kthread+0x2c4/0x388
+> 
+> These two jobs are scheduled asynchronously, we can't guaranteed that
+> kobj.parent will be created in device init thread before device reset
+> thread calls kobject_get_path().
+> 
+> To resolve the racing issue between device init thread and device reset
+> thread, we use wait_event() in scsi_evt_emit() to wait for device_add()
+> to complete the creation of kobj.parent.
+> 
+> Device init call:                Device reset call:
+> ufshcd_async_scan()              scsi_evt_thread()
+>  scsi_scan_host()                 scsi_evt_emit() <- add wait_event()
+>   do_scsi_scan_host() <- add wake_up()
+>    scsi_scan_host_selected()
+>     scsi_scan_channel()
+>      scsi_probe_and_add_lun()
+>       scsi_target_add()
+>        device_add() // add kobj.parent
+>         kobject_uevent_env()
+>          kobject_get_path()
+>           fill_kobj_path()
+>   do_scan_async() <- wake_up()     kobject_uevent_env() // add kobj.parent
+
+There is no do_scan_async() changes in this patch. It this a typo?
+From the patch, the flow looks like:
+
+Device init call                        Device reset call:
+do_scsi_scan_host()                     scsi_evt_thread()
+ scsi_scan_host_selected()               scsi_evt_emit() <- add wait_event()
+  scsi_scan_channel()
+   scsi_probe_and_add_lun()
+    scsi_target_add()
+     device_add() // add kobj.parent
+      kobject_uevent_env()
+       kobject_get_path()
+        fill_kobj_path()
+ //call wake_up() after scsi_scan_host_selected is done
+                                        kobject_uevent_env()
+                                         kobject_get_path() // get valid kobj.parent
+					 ...
+                                           fill_kobj_path()
+
+>                                     kobject_get_path() // get valid kobj.parent
+>                                      fill_kobj_path()
+> 
+> After we add wake_up at do_scsi_scan_host() in device init thread, we can
+> ensure that device reset thread will get kobject after device init thread
+> finishes adding parent.
+> 
+> Signed-off-by: Alice Chao <alice.chao@mediatek.com>
+> 
+> ---
+> 
+> Change since v2
+> -Change commit: Describes the preblem first and then the solution.
+> -Add commit: Add KASAN error log.
+
+Please keep all change history.
+
+e.g.,
+
+See https://lore.kernel.org/lkml/20220326022728.2969-1-jianjun.wang@mediatek.com/
+as an example
 
 
-vim +/cxl_mem_active +8 drivers/cxl/core/suspend.c
+Thanks,
+Miles
 
-     7	
-   > 8	bool cxl_mem_active(void)
-     9	{
-    10		return atomic_read(&mem_active) != 0;
-    11	}
-    12	
-  > 13	void cxl_mem_active_inc(void)
-    14	{
-    15		atomic_inc(&mem_active);
-    16	}
-    17	EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, CXL);
-    18	
-  > 19	void cxl_mem_active_dec(void)
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> ---
+>  drivers/scsi/scsi_lib.c  | 1 +
+>  drivers/scsi/scsi_scan.c | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index 0a70aa763a96..abf9a71ed77c 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -2461,6 +2461,7 @@ static void scsi_evt_emit(struct scsi_device *sdev, struct scsi_event *evt)
+>  		break;
+>  	case SDEV_EVT_POWER_ON_RESET_OCCURRED:
+>  		envp[idx++] = "SDEV_UA=POWER_ON_RESET_OCCURRED";
+> +		wait_event(sdev->host->host_wait, sdev->sdev_gendev.kobj.parent != NULL);
+>  		break;
+>  	default:
+>  		/* do nothing */
+> diff --git a/drivers/scsi/scsi_scan.c b/drivers/scsi/scsi_scan.c
+> index f4e6c68ac99e..431f229ac435 100644
+> --- a/drivers/scsi/scsi_scan.c
+> +++ b/drivers/scsi/scsi_scan.c
+> @@ -1904,6 +1904,7 @@ static void do_scsi_scan_host(struct Scsi_Host *shost)
+>  	} else {
+>  		scsi_scan_host_selected(shost, SCAN_WILD_CARD, SCAN_WILD_CARD,
+>  				SCAN_WILD_CARD, 0);
+> +		wake_up(&shost->host_wait);
+>  	}
+>  }
+>  
+> -- 
+> 2.18.0
+> 
+> 

@@ -2,153 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F1950274F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 877E6502752
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343847AbiDOJ0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 05:26:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51438 "EHLO
+        id S1351101AbiDOJ2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 05:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234597AbiDOJ0U (ORCPT
+        with ESMTP id S234597AbiDOJ2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 05:26:20 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBF81D0E8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:23:53 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id u2so6885626pgq.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=yaJKtcI79Sr5OPi0ROX2doW6FLEyXaOfN/NlVNVwJrk=;
-        b=dhjnpSZ0xDGfB4jrW8GTNHUYqTmw8gXJjsRf8ctVoFqMDUra1ZneE01RZXZkqHYsKO
-         uz2/Xl6rPhBChk5zMDNeUk4sf9ZGovLBTGnebEgHqtICREq4Az+SzgM/6Od/8oZ1RnTb
-         cq3HPy7Hjh3GPMe3DsJJwPrD8Su7QSKiKlP6A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=yaJKtcI79Sr5OPi0ROX2doW6FLEyXaOfN/NlVNVwJrk=;
-        b=dxKnfUlY+76yfYs7tDIEN60gp+6Qw5kEZtl3Mf5caCTwzDP2J20Gq/NWASLYAk5moo
-         NuoSfM7AHNUQFLGt2+xc79BSxemoWuEM6cwSaSgZi9jKNriqYJfCWiJE9cN0/K/HlgM7
-         95koJJz3O0MZyPC8j5mg3LWBXOsidcd/HCa8+cZM/lH3xjCFPwfYxf87VTBbPjq2fVeC
-         m/0ig55EM7IGxKZkHK024iRgAu1TDSH/0VkjkScT3uaf+FJIqMW7PyY23YKfsGGfCW3P
-         4/SI3jy0pl67cPibfsKteTle5HdBlszo8MKEb/PItqP4Ny7S4N/bWGG2MWnBSEhnhC55
-         xFYQ==
-X-Gm-Message-State: AOAM531bbHVHo7Wn0vJpZnqAsYKig5xbCADtDXruVwC8cfQvbfCzoj4o
-        hGRUSw1GWS3l2mCsXK8Qlhz17FcSVUBW6g==
-X-Google-Smtp-Source: ABdhPJxksBlVEoOObfJp2lC3bMnUyL2Cby7j0WZCOZ/gCpA5vO98ZFd5WabroIkjn7Sh9QShaXx5nA==
-X-Received: by 2002:a63:cf0c:0:b0:380:fb66:fa2a with SMTP id j12-20020a63cf0c000000b00380fb66fa2amr5715841pgg.273.1650014632902;
-        Fri, 15 Apr 2022 02:23:52 -0700 (PDT)
-Received: from google.com ([2401:fa00:8f:203:ff9f:dddf:d1f3:472c])
-        by smtp.gmail.com with ESMTPSA id t20-20020a63eb14000000b0039e28245722sm3946395pgh.54.2022.04.15.02.23.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 02:23:52 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 18:23:47 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Cc:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>,
-        Mark Brown <broonie@kernel.org>,
-        Ricardo Ribalda <ribalda@chromium.org>,
-        Tomasz Figa <tfiga@chromium.org>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
+        Fri, 15 Apr 2022 05:28:01 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60F8D60CF0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650014733; x=1681550733;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=f10CJHYn2bemMnWK8B/1YUsnsoS7c0zQ4Liyr9UQtDg=;
+  b=jXZVSW+EiZthW9VupLO5yoVlpzNlk5Tl47K0HnnTvQ2c7PVOsml0EhtZ
+   KAVwKvuDOqcnQwrkjHqnyFENtPTvsPgZuiQh3xsLhBER91HoAiVMZ4O8L
+   cNPbk7djVvPm2alICO7uzm2EZchXbZF/SCLSUueAiBaHqOQ+9nsy2EO25
+   Y9NxlfiN774pSyPNo4UbJ68fquKAtEkVjhV4n76NAjVp5jS2Kt4RQ6dus
+   tjIWXQ5kK9icLdCohRRuo7JewiIpCibvzn7RV0RJdQnn1kkoIl9VkLq0M
+   A/w+A5JpOIOPWYIb9GnrAVW70OIhYLGAgnEV6ULmeTIbl1werZgmRc9lu
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349561704"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="349561704"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:25:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="725711892"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 15 Apr 2022 02:25:26 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfICj-0001nZ-Oe;
+        Fri, 15 Apr 2022 09:25:25 +0000
+Date:   Fri, 15 Apr 2022 17:24:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Emil Renner Berthing <kernel@esmil.dk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Subject: out-of-bounds access in sound/soc/sof/topology.c
-Message-ID: <Ylk5o3EC/hyX5UQ0@google.com>
+Subject: [esmil:visionfive 50/54]
+ drivers/soc/sifive/sifive_l2_cache.c:148:19: warning: result of comparison
+ of constant 36507222016 with expression of type 'unsigned long' is always
+ false
+Message-ID: <202204151722.kW2xaxTy-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+tree:   https://github.com/esmil/linux visionfive
+head:   4d0bf74de3a2e2bb05b6c110d3b258d005430d7f
+commit: 44b4542801a3eef74aee528fcb2799afc57e5c82 [50/54] RISC-V: Enable SIFIVE_L2_FLUSH for StarFive SoCs
+config: riscv-randconfig-c006-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151722.kW2xaxTy-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/esmil/linux/commit/44b4542801a3eef74aee528fcb2799afc57e5c82
+        git remote add esmil https://github.com/esmil/linux
+        git fetch --no-tags esmil visionfive
+        git checkout 44b4542801a3eef74aee528fcb2799afc57e5c82
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/sifive/
 
-I'm running 5.10.111 LTS, so if this has been fixed already then we definitely
-want to cherry pick the fix for -stable.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   drivers/soc/sifive/sifive_l2_cache.c:158:3: error: implicit declaration of function 'writeq' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+                   ^
+>> drivers/soc/sifive/sifive_l2_cache.c:148:19: warning: result of comparison of constant 36507222016 with expression of type 'unsigned long' is always false [-Wtautological-constant-out-of-range-compare]
+              (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+              ~~~~~~~~~~~~~ ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 1 error generated.
 
 
-Anonymous union in this struct is of zero size
+vim +148 drivers/soc/sifive/sifive_l2_cache.c
 
-/* generic control data */
-struct sof_ipc_ctrl_data {
-        struct sof_ipc_reply rhdr;
-        uint32_t comp_id;
+a967a289f16969 arch/riscv/mm/sifive_l2_cache.c      Yash Shah          2019-05-06  126  
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  127  #ifdef CONFIG_SIFIVE_L2_FLUSH
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  128  void sifive_l2_flush64_range(unsigned long start, unsigned long len)
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  129  {
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  130  	unsigned long line;
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  131  
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  132  	if(!l2_base) {
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  133  		pr_warn("L2CACHE: base addr invalid, skipping flush\n");
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  134  		return;
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  135  	}
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  136  
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  137  	/* TODO: if (len == 0), skipping flush or going on? */
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  138  	if(!len) {
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  139  		pr_debug("L2CACHE: flush64 range @ 0x%lx(len:0)\n", start);
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  140  		return;
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  141  	}
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  142  
+170da5f236a1d7 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  143  	len = len + (start % SIFIVE_L2_FLUSH64_LINE_LEN);
+170da5f236a1d7 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  144  	start = ALIGN_DOWN(start, SIFIVE_L2_FLUSH64_LINE_LEN);
+170da5f236a1d7 drivers/soc/sifive/sifive_l2_cache.c Atish Patra        2021-06-12  145  
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  146  	/* make sure the address is in the range */
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  147  	if(start < CONFIG_SIFIVE_L2_FLUSH_START ||
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @148  	   (start + len) > (CONFIG_SIFIVE_L2_FLUSH_START +
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  149  			     CONFIG_SIFIVE_L2_FLUSH_SIZE)) {
+56e0bd5b6b12ff drivers/soc/sifive/sifive_l2_cache.c Geert Uytterhoeven 2021-05-21  150  		WARN(1, "L2CACHE: flush64 out of range: %lx(%lx), skip flush\n",
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  151  		     start, len);
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  152  		return;
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  153  	}
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  154  
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  155  	mb();	/* sync */
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  156  	for (line = start; line < start + len;
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  157  	     line += SIFIVE_L2_FLUSH64_LINE_LEN) {
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08 @158  		writeq(line, l2_base + SIFIVE_L2_FLUSH64);
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  159  		mb();
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  160  	}
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  161  }
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  162  EXPORT_SYMBOL_GPL(sifive_l2_flush64_range);
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  163  #endif
+704151e7f415c4 drivers/soc/sifive/sifive_l2_cache.c Tom                2021-01-08  164  
 
-        /* control access and data type */
-        uint32_t type;          /**< enum sof_ipc_ctrl_type */
-        uint32_t cmd;           /**< enum sof_ipc_ctrl_cmd */
-        uint32_t index;         /**< control index for comps > 1 control */
+:::::: The code at line 148 was first introduced by commit
+:::::: 704151e7f415c483a9c1854a8a0952f4f365c45d sifive/sifive_l2_cache: Add sifive_l2_flush64_range function
 
-        /* control data - can either be appended or DMAed from host */
-        struct sof_ipc_host_buffer buffer;
-        uint32_t num_elems;     /**< in array elems or bytes for data type */
-        uint32_t elems_remaining;       /**< elems remaining if sent in parts */
+:::::: TO: Tom <support@vamrs.com>
+:::::: CC: Emil Renner Berthing <kernel@esmil.dk>
 
-        uint32_t msg_index;     /**< for large messages sent in parts */
-
-        /* reserved for future use */
-        uint32_t reserved[6];
-
-        /* control data - add new types if needed */
-        union {
-                /* channel values can be used by volume type controls */
-                struct sof_ipc_ctrl_value_chan chanv[0];
-                /* component values used by routing controls like mux, mixer */
-                struct sof_ipc_ctrl_value_comp compv[0];
-                /* data can be used by binary controls */
-                struct sof_abi_hdr data[0];
-        };
-} __packed;
-
-sof_ipc_ctrl_value_chan and sof_ipc_ctrl_value_comp are of the same
-size - 8 bytes, while sof_abi_hdr is much larger - _at least_ 32 bytes
-(`__u32 data[0]` in sof_abi_hdr suggest that there should be more
-payload after header). But they all contribute 0 to sizeof(sof_ipc_ctrl_data).
-
-Now control data allocations looks as follows
-
-	scontrol->size = struct_size(scontrol->control_data, chanv,
-				     le32_to_cpu(mc->num_channels));
-	scontrol->control_data = kzalloc(scontrol->size, GFP_KERNEL);
-
-Which is sizeof(sof_ipc_ctrl_data) + mc->num_channels * sizeof(sof_ipc_ctrl_value_chan)
-
-For some reason it uses sizeof(sof_ipc_ctrl_value_chan), which is not
-the largest member of the union.
-
-And this is where the problem is: in order to make control->data.FOO loads
-and stores legal we need mc->num_channels to be of at least 4. So that
-
-   sizeof(sof_ipc_ctrl_data) + mc->num_channels * sizeof(sof_ipc_ctrl_value_chan)
-
-                92           +        4         *            8
-
-will be the same as
-
-   sizeof(sof_ipc_ctrl_data) + sizeof(sof_abi_hdr).
-
-                92           +           32
-
-Otherwise scontrol->control_data->data.FOO will access nearby/foreign
-slab object.
-
-And there is at least one such memory access. In sof_get_control_data().
-
-	wdata[i].pdata = wdata[i].control->control_data->data;
-	*size += wdata[i].pdata->size;
-
-pdata->size is at offset 8, but if, say, mc->num_channels == 1 then
-we allocate only 8 bytes for pdata, so pdata->size is 4 bytes outside
-of allocated slab object.
-
-Thoughts?
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,217 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF074502882
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:51:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B2FD502884
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352491AbiDOKx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36920 "EHLO
+        id S1344121AbiDOKy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352481AbiDOKxT (ORCPT
+        with ESMTP id S236533AbiDOKyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:53:19 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B3D69486
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650019845; x=1681555845;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=FcSxV9zaoQXd7xmHux0rD+oliTDOyHpL0739/2mzHhw=;
-  b=f//JHa/rTGkRWG8NszTBkGgEQQcv0CVQPAw2lKqDj0tIp1f/JFNQw19b
-   mGX8I6kWP9/TlbpayYcsikWUn8MCE612K1YJ6z9DYAgjbFqcILbBf8kb0
-   /E6I58VEnKmOmiK8634TPsm8NHpgZOi/UOuL/2ZiYGcUc2wndQ6f9E9y5
-   sGuASkkdigHh6eNpVjWHKH+M2Kz3D0SH/mLe6eDsHnR5QYtTeHG/FwJk3
-   IpMjYJz6nllvHkHP2xV609fcTFY+EykIwt+tydw3AO/lq15VHT3zwVDAm
-   DMumg1BMeg/BGqDBeC0EUMMDsjmqV+IAxJPYlYwfr3g6LvSuzZPhjNF+7
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="250434823"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="250434823"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:50:45 -0700
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="574306314"
-Received: from otcwcpicx3.sc.intel.com ([172.25.55.73])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:50:44 -0700
-Date:   Fri, 15 Apr 2022 03:50:36 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        jean-philippe <jean-philippe@linaro.org>,
-        Ravi V Shankar <ravi.v.shankar@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
-References: <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
- <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
- <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
- <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
- <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
- <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
- <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
- <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
- <YllADL6uMoLllzQo@fyu1.sc.intel.com>
- <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
+        Fri, 15 Apr 2022 06:54:24 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB28A5EAC
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id k62so956191pgd.2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=Qr7gFSJEZayaVAEa120nHgvdk+ECUuPJNVKWT+OnN8k=;
+        b=bpNLh2Q6/xnTIHW0l7y8jXtMPKpCM+CkbwEJZyk2N5s3GvxYRQHVz2X4KQOq0hGMuj
+         9cK5+S0gnayrnF43SF32u+ri3DK0TpvQL/K7L6vXaEfwN09yULUNL3gvm8R1Rc/H6HiV
+         OxVdZNTZPFtEBIzbqluTdh1gVc1KOuP5VPz0hr6S4G6Yku7fgOPPQXbu0EpCm04fy3LL
+         jVd1FEhsNkyIWXcE07Ce5FufZNEe2E7iqTQ1ENfpW0YgpnfKo9NaqiQa2QLMzWJT1FHm
+         hP2QjbC6cx139B/OflQ56A+Pm1qnq/SlaNMtjmgqRTENU010xW9aKxcdUuKtxEyefZjY
+         bA3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=Qr7gFSJEZayaVAEa120nHgvdk+ECUuPJNVKWT+OnN8k=;
+        b=i8Bs9slawSqeuA4yoUMVmF8c3CMpFSNAQX46GkTov2FvjYLTCQ+66lxJPAD/vhO52/
+         rfdOyzCksV9zu4mVKwlncLRY+ue3zgG0ZLo9eHZ+iBS1Fhv/D7j235aL13H0Hper1tbM
+         B2ixhgaMq/rdEfcQC2LkH9j4EXyeR7eF+VZTdTyoL/ZZnuNzO40650e0CrcUGzupyDNh
+         kkEvTGBPM1ozM+wGgBzrwFZBV197W2ZqaPR7y/TI3gKzI3gC8EyxV+PzVU1SoBlw5Ma6
+         67A/g8fVXA6dNJwiNousLR1pd2itJ5Srd1kzQYG/7E1nL/1WChE7xrFMr0j059GEmFNH
+         bFZA==
+X-Gm-Message-State: AOAM531IsS+NLFTGplvt3M4me4Ig7DAmq2v2P1wsb7G9lVheXfZ2aPcZ
+        fikEDyGfvt31doWrLtnZvuY=
+X-Google-Smtp-Source: ABdhPJyrQzfy9FttfDngmFFkBkaljihRst4amBu012N4/4OFnQUduBrYcVJfIRvHxjhKG9mXSG7M9A==
+X-Received: by 2002:a65:5286:0:b0:398:dad:c3d8 with SMTP id y6-20020a655286000000b003980dadc3d8mr5974878pgp.228.1650019916062;
+        Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
+Received: from localhost ([152.70.90.187])
+        by smtp.gmail.com with ESMTPSA id x39-20020a056a0018a700b004fa7e6ceafesm2563415pfh.169.2022.04.15.03.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 03:51:55 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 18:51:52 +0800
+From:   Wang Cheng <wanngchenng@gmail.com>
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
+Message-ID: <20220415105152.nwj4gd7pizco2kkx@ppc.localdomain>
+References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
+ <20220414154215.GL3293@kadam>
+ <20220415094705.aibh3jr4wzhddmud@ppc.localdomain>
+ <20220415095721.GR3293@kadam>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220415095721.GR3293@kadam>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Zhangfei,
-
-On Fri, Apr 15, 2022 at 06:14:09PM +0800, zhangfei.gao@foxmail.com wrote:
-> 
-> 
-> On 2022/4/15 下午5:51, Fenghua Yu wrote:
-> > On Thu, Apr 14, 2022 at 06:08:09PM +0800, zhangfei.gao@foxmail.com wrote:
-> > > On 2022/4/12 下午11:35, zhangfei.gao@foxmail.com wrote:
-> > > > Hi, Fenghua
+On 22/04/15 12:57PM, Dan Carpenter wrote:
+> On Fri, Apr 15, 2022 at 05:47:05PM +0800, Wang Cheng wrote:
+> > Hi Dan, thx for your review.
+> > 
+> > On 22/04/14 06:42PM, Dan Carpenter wrote:
+> > > On Thu, Apr 14, 2022 at 10:12:23PM +0800, Wang Cheng wrote:
+> > > > Due to the case that "requesttype == 0x01 && status <= 0"
+> > > > isn't handled in r8712_usbctrl_vendorreq(),
+> > > > "data" (drivers/staging/rtl8712/usb_ops.c:32)
+> > > > will be returned without initialization.
 > > > > 
-> > > > On 2022/4/12 下午9:41, Fenghua Yu wrote:
-> >  From a6444e1e5bd8076f5e5c5e950d3192de327f0c9c Mon Sep 17 00:00:00 2001
-> > From: Fenghua Yu <fenghua.yu@intel.com>
-> > Date: Fri, 15 Apr 2022 00:51:33 -0700
-> > Subject: [RFC PATCH] iommu/sva: Fix PASID use-after-free issue
+> > > > When "tmpU1b" (drivers/staging/rtl8712/usb_intf.c:395)
+> > > > is 0, mac[6] (usb_intf.c:394) won't be initialized,
+> > > > which leads to accessing uninit-value on usb_intf.c:541.
+> > > 
+> > > These line numbers are sort of useless because everyone is on a
+> > > different git hash.
 > > 
-> > A PASID might be still used even though it is freed on mm exit.
+> > I will correct this.
 > > 
-> > process A:
-> > 	sva_bind();
-> > 	ioasid_alloc() = N; // Get PASID N for the mm
-> > 	fork(): // spawn process B
-> > 	exit();
-> > 	ioasid_free(N);
+> > >
+> > > > 
+> > > > Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
+> > > > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+> > > > ---
+> > > >  drivers/staging/rtl8712/usb_intf.c      |  6 +++---
+> > > >  drivers/staging/rtl8712/usb_ops_linux.c | 14 ++++++++------
+> > > >  2 files changed, 11 insertions(+), 9 deletions(-)
+> > > > 
+> > > > diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
+> > > > index ee4c61f85a07..50dcd3ecb685 100644
+> > > > --- a/drivers/staging/rtl8712/usb_intf.c
+> > > > +++ b/drivers/staging/rtl8712/usb_intf.c
+> > > > @@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
+> > > >  		} else {
+> > > >  			AutoloadFail = false;
+> > > >  		}
+> > > > -		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
+> > > > +		if ((!AutoloadFail) ||
+> > > > +		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
+> > > >  		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
+> > > >  		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
+> > > >  		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
+> > > >  		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
+> > > > -		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
+> > > > -		     (!AutoloadFail)) {
+> > > > +		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
+> > > >  			mac[0] = 0x00;
+> > > >  			mac[1] = 0xe0;
+> > > >  			mac[2] = 0x4c;
+> > > 
+> > > This is a separate fix from the rest of the patch.  Send it by itself.
 > > 
-> > process B:
-> > 	device uses PASID N -> failure
-> > 	sva_unbind();
+> > Ah, thought to send a patch series.
 > > 
-> > Dave Hansen suggests to take a refcount on the mm whenever binding the
-> > PASID to a device and drop the refcount on unbinding. The mm won't be
-> > dropped if the PASID is still bound to it.
-> > 
-> > Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID allocation and free it on mm exit")
-> > 
-> > Reported-by: Zhangfei Gao <zhangfei.gao@foxmail.com>
-> > Suggested-by: Dave Hansen" <dave.hansen@linux.intel.com>
-> > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> > ---
-> >   drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 6 ++++++
-> >   drivers/iommu/intel/svm.c                       | 4 ++++
-> >   2 files changed, 10 insertions(+)
-> > 
-> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > index 22ddd05bbdcd..3fcb842a0df0 100644
-> > --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > @@ -7,6 +7,7 @@
-> >   #include <linux/mmu_context.h>
-> >   #include <linux/mmu_notifier.h>
-> >   #include <linux/slab.h>
-> > +#include <linux/sched/mm.h>
-> >   #include "arm-smmu-v3.h"
-> >   #include "../../iommu-sva-lib.h"
-> > @@ -363,6 +364,9 @@ arm_smmu_sva_bind(struct device *dev, struct mm_struct *mm, void *drvdata)
-> >   	mutex_lock(&sva_lock);
-> >   	handle = __arm_smmu_sva_bind(dev, mm);
-> > +	/* Take an mm refcount on a successful bind. */
-> > +	if (!IS_ERR(handle))
-> > +		mmget(mm);
-> >   	mutex_unlock(&sva_lock);
-> >   	return handle;
-> >   }
-> > @@ -372,6 +376,8 @@ void arm_smmu_sva_unbind(struct iommu_sva *handle)
-> >   	struct arm_smmu_bond *bond = sva_to_bond(handle);
-> >   	mutex_lock(&sva_lock);
-> > +	/* Drop an mm refcount. */
-> > +	mmput(bond->mm);
-> >   	if (refcount_dec_and_test(&bond->refs)) {
-> >   		list_del(&bond->list);
-> >   		arm_smmu_mmu_notifier_put(bond->smmu_mn);
-> > diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-> > index 23a38763c1d1..345a0d5d7922 100644
-> > --- a/drivers/iommu/intel/svm.c
-> > +++ b/drivers/iommu/intel/svm.c
-> > @@ -403,6 +403,8 @@ static struct iommu_sva *intel_svm_bind_mm(struct intel_iommu *iommu,
-> >   		goto free_sdev;
-> >   	list_add_rcu(&sdev->list, &svm->devs);
-> > +	/* Take an mm refcount on binding mm. */
-> > +	mmget(mm);
-> >   success:
-> >   	return &sdev->sva;
-> > @@ -465,6 +467,8 @@ static int intel_svm_unbind_mm(struct device *dev, u32 pasid)
-> >   				kfree(svm);
-> >   			}
-> >   		}
-> > +		/* Drop an mm reference on unbinding mm. */
-> > +		mmput(mm);
-> >   	}
-> >   out:
-> >   	return ret;
-> This patch can not be applied on 5.18-rc2 for intel part.
-
-What error do you see? Could you please send to me errors?
-
-I download this patch from:
-https://lore.kernel.org/lkml/YllADL6uMoLllzQo@fyu1.sc.intel.com/raw
-git am to either v5.18-rc2 or the latest upstream without any issue.
-
-> It should work for arm.
 > 
-> In fact I have a similar patch at hand but pending since I found an issue.
+> Yes, please.  Send two patches.
 > 
-> I start & stop nginx via this cmd.
-> //start
-> sudo sbin/nginx                    // this alloc an ioasid=1
-> //stop
-> sudo sbin/nginx -s quit    // this does not free ioasid=1, but still alloc
-> ioasid=2.
-> So ioasid will keep allocated but not freed if continue start/stop nginx, 
-> though not impact the nginx function.
+> > > 
+> > > 
+> > > > diff --git a/drivers/staging/rtl8712/usb_ops_linux.c b/drivers/staging/rtl8712/usb_ops_linux.c
+> > > > index f984a5ab2c6f..e321ca4453ca 100644
+> > > > --- a/drivers/staging/rtl8712/usb_ops_linux.c
+> > > > +++ b/drivers/staging/rtl8712/usb_ops_linux.c
+> > > > @@ -495,12 +495,14 @@ int r8712_usbctrl_vendorreq(struct intf_priv *pintfpriv, u8 request, u16 value,
+> > > >  	}
+> > > >  	status = usb_control_msg(udev, pipe, request, reqtype, value, index,
+> > > >  				 pIo_buf, len, 500);
+> > > > -	if (status > 0) {  /* Success this control transfer. */
+> > > > -		if (requesttype == 0x01) {
+> > > > -			/* For Control read transfer, we have to copy the read
+> > > > -			 * data from pIo_buf to pdata.
+> > > > -			 */
+> > > > -			memcpy(pdata, pIo_buf,  status);
+> > > > +	/* For Control read transfer, copy the read data from pIo_buf to pdata
+> > > > +	 * when control transfer success; otherwise init *pdata with 0.
+> > > > +	 */
+> > > > +	if (requesttype == 0x01) {
+> > > > +		if (status > 0)
+> > > > +			memcpy(pdata, pIo_buf, status);
+> > > > +		else
+> > > > +			*(u32 *)pdata = 0;
+> > > >  		}
+> > > 
+> > > This isn't really correct.  In many cases status is "len" is less than 4.
+> > > I'm slightly surprised that nothing complains about that as an
+> > > uninitialized access.  But then another problem is that "status" can be
+> > > less than "len".
+> > 
+> > Sorry, I should explain it clearly. If I did right, watching "status"
+> > with gdb while running syzkaller reproducer, "status" returns from
+> > usb_control_msg() is -71. In which case, *pdata won't be touched in
+> > r8712_usbctrl_vendorreq(). As a result, "data" in
+> > usb_read8()/usb_read16()/usb_read32() will be returned without
+> > initialization. I think that is why kmsan reports:
+> > Local variable data created at:
+> >  usb_read8+0x5d/0x130 drivers/staging/rtl8712/usb_ops.c:33
+> >  r8712_read8+0xa5/0xd0 drivers/staging/rtl8712/rtl8712_io.c:29
 > 
-> stop nginx with -s quit still calls
-> src/core/nginx.c
-> main -> ngx_ssl_init -> openssl engine:    bind_fn -> ... -> alloc asid
-> But openssl engine: ENGINE_free is not called
+> Yes.  I understood that.
 > 
-> Still in checking nginx code.
+> > 
+> > > 
+> > > A better fix instead of setting pdata to zero would be to add error
+> > > checking in the callers and then change this code to use
+> > > usb_control_msg_send/recv().  Probably just initialize "data" in the
+> > > callers as well.
+> > 
+> > I tried something similar which also works fine, but I think this patch
+> > does't fix it at root.
+> > https://syzkaller.appspot.com/text?tag=Patch&x=15be2970f00000
+> > 
 > 
-> Or do you test with nginx?
+> Ugh...  Sorry, I had not looked closely at usb_read8() and friends.
+> (This code is all so terrible).  Ideally they would have some way to
+> return errors.  Oh well.  Anyway, I guess do like this:
+> 
+> 	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
+> 					 &data, len, requesttype);
+> 	if (status < 0)
+> 		return 0;
+> 	return (u8)(le32_to_cpu(data) & 0x0ff);
+> 
+> But in r8712_usbctrl_vendorreq() you really need to make the other
+> changes I mentioned as well.  If you want to do it as a separate patch
+> that's fine too.
+> 
+> 	if (status < 0)
+> 		return status;
+> 	if (status != len)
+> 		return -EREMOTEIO;
+> 
+> 	if (reqtype == 0x1)
+> 		memcpy();
+> 
+> 	return 0;
 
-On my X86 machine, nginx doesn't trigger the kernel sva binding function
-to allocate ioasid. I tried pre- nstalled nginx/openssl and also tried my built
-a few versions of nginx/openssl. nginx does call OPENSSL_init_ssl() but
-doesn't go to the binding function. Don't know if it's my configuration issue.
-Maybe you can give me some advice?
+Thx for your time and advice, Dan. Yeah, the code logic looks not easy.
+I will think about these code snippets and handle them.
 
-I test the patch with a few internal test tools and observe mmget()/mmput()
-works fine in various cases.
-
-Thanks.
-
--Fenghua 
+thanks,
+-- w

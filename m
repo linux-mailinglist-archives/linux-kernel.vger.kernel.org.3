@@ -2,75 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00B5502E74
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47BBC502E65
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344246AbiDORwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 13:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49250 "EHLO
+        id S245570AbiDORqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 13:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343970AbiDORwv (ORCPT
+        with ESMTP id S245230AbiDORqk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 13:52:51 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB68E8EB4D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:50:22 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id w19so15004157lfu.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:from:date:message-id:subject:to:cc;
-        bh=bCL0/Akj8FjH1PGa3iRKAVbG0AVxF0Pe4iddMznlQ7o=;
-        b=H4migTIbNf/CvuglL1kAb+mhPJQmRYV6NeMBI8S8TVgxg6awd65Awdb9GAKRZ38DRL
-         BSetPb/T5ABrl9/71NAtmbsdz1N7yT6sb/Ekh83YDe21f6dmsjfHWJsjyIj0uBDyS1zP
-         gJHb5h/XMylMDoeObimNC4zaxRpodfSaSlD4jfpBybaw+8rTHQXzIQ5+I/PrA3hSNvpC
-         p91/jTgc93jOehFHVbYyGz6MO+CVXfmTm3ZlYhHg/dYXnktcHQkEpSyW27fjQg5GjhrM
-         MfWbzJb1rKNYlFcNO+NOJlbcrwp+CfewjfvVR16iTRtooznbIBBC4+QGR4Xp2+WL0Iq9
-         j/Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:from:date:message-id:subject:to:cc;
-        bh=bCL0/Akj8FjH1PGa3iRKAVbG0AVxF0Pe4iddMznlQ7o=;
-        b=Fl7gXVxmksPV+GeOQl4hEKJ4dbFIeTwIktOD/BdtJTDGDGaa/tKKcM4KLAPF+IiKDd
-         LFODn7AKDqCrCPBtY0lnVc7hP38Ozo+RsGbx4pq4kDCXxSfGDtWksoJlApDdb2xa6jHg
-         TyZXW/mKiSH44oiX3Rh20q/66/7Iuf//ozjcdP1XADoX33G9P6GG/jbWA3Vgp6SpCy9J
-         8q779574/Wp1tKCsZSgBW1JLXFAKgnXvEsbOpwRieiRmRqnJFjShr+bWmb8RND6aNuv5
-         daNArez0+C0raAWRnXf1uX/+YMcph+GzbvGgw+VhdzFfsrFjKHDDGnTegq/P03/i43SK
-         FCIw==
-X-Gm-Message-State: AOAM530sYgypNOpptdN7fpMQa4w6EMsC5O6+Tc53pIXeypOxiAkDHKgq
-        XU9zXtbtEy8KX9FfYtPldMxsE05ho9+Fe1rHNjh8gAHdAOFH+Q==
-X-Google-Smtp-Source: ABdhPJzyHAZAQ0lVC0btV4gtakXg5y+xrFCP0Oi0Y5+ivmFKGIyjuqrpdI1WygOPIj1htulNV0NiRkCaBxzieKwDgAo=
-X-Received: by 2002:a19:505d:0:b0:46d:167e:b9df with SMTP id
- z29-20020a19505d000000b0046d167eb9dfmr106371lfj.184.1650045020893; Fri, 15
- Apr 2022 10:50:20 -0700 (PDT)
+        Fri, 15 Apr 2022 13:46:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C832B7C4E;
+        Fri, 15 Apr 2022 10:44:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2ED3CB82E49;
+        Fri, 15 Apr 2022 17:44:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A38C4C385A4;
+        Fri, 15 Apr 2022 17:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650044648;
+        bh=lrCSsYksbzncOviQk3dUVWiQ8mHKA/HxHFi/7Dt223o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZpGtAMnFkcHPD8rEc9Bd+vacb2sQFH6p4ACXrTMQMf/DdPfkuat6OcYILEzuRnHFS
+         FDNwew7gMUoKeWkCSB92cVOwpnFekM8GcSt49FQzqDrAn/oLV3SJwS49HJo5pJeWD3
+         ud3x6vxR0LeLpAIucCD/7PyzI1flPk886i9KQpWSDUds2b9orWXfoOdNrQBHVAVehD
+         R8QqCShFgTRnqLbZfsErDDpCDiEUiARkk5UNsmAWCVyj70w2HPX+neRLoqtEI0txFx
+         f5ORQMwpjLlfHL57gLbCW378L00nYJZIcHBMyVfhjpA36jUu2eyb6apDgJrYPtxsQH
+         Uq/4OvcUIbGvQ==
+Date:   Fri, 15 Apr 2022 18:52:05 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2] iio: gp2ap020a00f: Fix signedness bug
+Message-ID: <20220415185205.26a3d352@jic23-huawei>
+In-Reply-To: <1649985637-18854-1-git-send-email-baihaowen@meizu.com>
+References: <CAHp75VfbZhMvs7dHwadvNs6maPsBVOY3Mk5wkKSwZ1RANQQHDA@mail.gmail.com>
+        <1649985637-18854-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Fri, 15 Apr 2022 10:50:09 -0700
-Message-ID: <CAKwvOdmFzNZ_r1itJJkAh-VPMCjqvCCB1DPXSUwUFeeAjoJviA@mail.gmail.com>
-Subject: plumbers session on BPF/BTF support in the GNU Toolchain
-To:     david.faust@oracle.com, "Jose E. Marchesi" <jemarch@gnu.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-Jose and I are currently in the planning process to put together a
-Kernel+Toolchain microconference track at Linux Plumbers Conference
-this year (Sept 12-14) in Dublin, Ireland.
+On Fri, 15 Apr 2022 09:20:37 +0800
+Haowen Bai <baihaowen@meizu.com> wrote:
 
-Would you and Jose be interested and able to give a presentation on
-BPF and BTF in GNU tools?  There will be an audience of kernel
-developers there, so discussions with kernel BPF folks could be
-facilitated in person.
--- 
+> function gp2ap020a00f_get_thresh_reg() is unsigned but returning -EINVAL 
+> errcode, and thresh_reg_l is unsigned but receiving -EINVAL errcode. so 
+> we have to change u8 -> int.
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+Hi,
+
+The return value is not checked in *read_event_val(), so if we actually got
+-EINVAL (in reality we can't because the switch in *_get_thresh_reg*) always
+matches) then we'd use it to index an array (after performing some maths on
+the value).  So please also add a check that the return value is not
+negative in read_event_val()
+
+Same is true or write_event_val.
+
+
+Note that the bug here is probably the fact we return -EINVAL in the
+first place. We could just stop doing that but it would be non obvious
+when looking at the code that we couldn't get a failure to match in
+the switch statement - so fixing as you have done (plus the extra
+check I'm requesting) is probably the neatest solution.
+
 Thanks,
-~Nick Desaulniers
+
+Jonathan
+
+
+> ---
+> V1->V2: s8 is not enough to hold an (arbitrary) error code. To be on the safe
+> side we need to use int
+> 
+>  drivers/iio/light/gp2ap020a00f.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/iio/light/gp2ap020a00f.c b/drivers/iio/light/gp2ap020a00f.c
+> index b820041159f7..b0e62d3c6fa0 100644
+> --- a/drivers/iio/light/gp2ap020a00f.c
+> +++ b/drivers/iio/light/gp2ap020a00f.c
+> @@ -994,7 +994,7 @@ static irqreturn_t gp2ap020a00f_trigger_handler(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> -static u8 gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
+> +static int gp2ap020a00f_get_thresh_reg(const struct iio_chan_spec *chan,
+>  					     enum iio_event_direction event_dir)
+>  {
+>  	switch (chan->type) {
+> @@ -1025,7 +1025,7 @@ static int gp2ap020a00f_write_event_val(struct iio_dev *indio_dev,
+>  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
+>  	bool event_en = false;
+>  	u8 thresh_val_id;
+> -	u8 thresh_reg_l;
+> +	int thresh_reg_l;
+>  	int err = 0;
+>  
+>  	mutex_lock(&data->lock);
+> @@ -1082,7 +1082,7 @@ static int gp2ap020a00f_read_event_val(struct iio_dev *indio_dev,
+>  				       int *val, int *val2)
+>  {
+>  	struct gp2ap020a00f_data *data = iio_priv(indio_dev);
+> -	u8 thresh_reg_l;
+> +	int thresh_reg_l;
+>  	int err = IIO_VAL_INT;
+>  
+>  	mutex_lock(&data->lock);
+

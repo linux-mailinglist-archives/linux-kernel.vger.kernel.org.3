@@ -2,108 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B41BE50264C
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC4550264E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:41:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351228AbiDOHlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S1351165AbiDOHnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:43:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351162AbiDOHlc (ORCPT
+        with ESMTP id S237208AbiDOHni (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:41:32 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B4F4B1F8;
-        Fri, 15 Apr 2022 00:39:05 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id bg9so6725703pgb.9;
-        Fri, 15 Apr 2022 00:39:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=7Z7mILpiEbIhXnxkIbIQrTgZVr/aE/tpgfsOP60J5fQ=;
-        b=Ek/ooZ8zbGOpq4ldLwkfi6X2KgZZv1HnzYWGJx53dOVtA2RnkzoFq8zSKz79lYnl9P
-         f3jNoGwOxUruO3I2wH4hFmEHqV5a0OnfwYJWFFN0lzo0RB7hL3WEPXMgABIx9K8k93Up
-         Br/YK5YtXXUAaxQdLDEp7rUVapHh4pccxlM74DotEOP7p1zeCoiTCbNxB1eV8DOvUA/D
-         C+slidK0jKPCwqw09Rn5/QoHQzWrlfQnRtQGALkEovDUZ1ZOR53/2cusntn1keEvYN6j
-         ndzUiUWPAge7IwdrArw3d0O2aaZX3deH5MGNwfz6iz0ewBrSf+1A4NgvyjK4LEtZZGJd
-         usEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=7Z7mILpiEbIhXnxkIbIQrTgZVr/aE/tpgfsOP60J5fQ=;
-        b=APtBI3OypXhmT3fxB//SXnrnqyJtVWAGpJvF4pV61sFIyObUKYfBU9/7Xq2hbPMrN0
-         GXfaja0dAVinE22jxLGifxphEdbljclvKBlhQv9gpPHB7yAvq38NDzBp28M6Ck+9+Nk0
-         hDOobMoU4DT9IdJveWlo5Ba9uBmiVHXLffATi998L5JxZDCng/4RRK7A0em5Q57r1tgs
-         NMa1tnTnHcK8eRAboT+DVQ9zQ2MG35dnBFbgK9UpbXGujEhntMqH3EXUyHDhnnqdkpm3
-         F3NBNPhvHvTsX9CO/t+rJDLmqjdJ17/BV3nCZEfmgtKGJQksAq3uDYrxpCEAnoIa/mlc
-         qdcA==
-X-Gm-Message-State: AOAM531tRCE3kMy1KXl6TMpp/ReMtHaRnyI4mK8WHNpg8lC1n7o4Ntoj
-        DBZ0qd/6vVYalh9bAATgRfU=
-X-Google-Smtp-Source: ABdhPJx/mFPNudIZ2y6RfMDEwj4GDSKSQpBB7GQigl3sdT8UsSdsiuEBHlCdzEa+tF35zyGcTAiJoA==
-X-Received: by 2002:a63:a804:0:b0:398:e7d7:29ab with SMTP id o4-20020a63a804000000b00398e7d729abmr5294823pgf.138.1650008344416;
-        Fri, 15 Apr 2022 00:39:04 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-30.three.co.id. [116.206.28.30])
-        by smtp.gmail.com with ESMTPSA id y8-20020aa78f28000000b00508225493ddsm1925680pfr.80.2022.04.15.00.39.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 00:39:03 -0700 (PDT)
-Message-ID: <4586921d-5fc4-b63f-8264-a6fd63c592b6@gmail.com>
-Date:   Fri, 15 Apr 2022 14:38:58 +0700
+        Fri, 15 Apr 2022 03:43:38 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BECC205D7
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:41:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=22/MeM8DHvIlm1VjYFivjPtNxFqsJDkoFPpSUaTCabw=; b=n7HlJ0LVCgs7INX4luwsXHE/N9
+        J+ouMADVcoFqy0MluSInQNX2dz8+EPmKs6jKSmQ9atGr4CDsIHa0hrje/Lwla+CKPPB4a3CdT8pMh
+        ED0H/CUoZeLvzlI0v5DAaudte8zghtVrvOwDg8lKTeNjBITMbWFxm/F8HqGjebxB+CdULoPUOe8aF
+        Qy34eIDQedoFtFSTeW0Ccu4Lofzb+he+3kE7h9f0YxCUMS6d1gbu1lrbO1b3OxwScilh1kvBoMJgY
+        eMtoo7opVaKeiN2CHd18xY04U4SGhUfvzhYAVygsBfukGjhh7phv2kRktkBpXeOa5x0+eCT5e9ZIc
+        Mi0Ij3bQ==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nfGZX-00FwGG-Gu; Fri, 15 Apr 2022 07:40:51 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 94F2F3001AE;
+        Fri, 15 Apr 2022 09:40:49 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 44E6E2025D913; Fri, 15 Apr 2022 09:40:49 +0200 (CEST)
+Date:   Fri, 15 Apr 2022 09:40:49 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Sami Tolvanen <samitolvanen@google.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: plumbers talk on kCFI, BTI, & IBT?
+Message-ID: <Ylkhgeyeolh1AO1y@hirez.programming.kicks-ass.net>
+References: <CAKwvOdkyMyE0ZRUU9Rh4qTxpOseD=fydo-FB9kdd7zRo7nVreg@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v5] net/ipv6: Introduce accept_unsolicited_na
- knob to implement router-side changes for RFC9131
-Content-Language: en-US
-To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
-Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, dsahern@kernel.org,
-        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com,
-        corbet@lwn.net, prestwoj@gmail.com, gilligan@arista.com,
-        noureddine@arista.com, gk@arista.com
-References: <20220415054219.38078-1-aajith@arista.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220415054219.38078-1-aajith@arista.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAKwvOdkyMyE0ZRUU9Rh4qTxpOseD=fydo-FB9kdd7zRo7nVreg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 12:42, Arun Ajith S wrote:
-> +accept_unsolicited_na - BOOLEAN
-> +	Add a new neighbour cache entry in STALE state for routers on receiving an
-> +	unsolicited neighbour advertisement with target link-layer address option
-> +	specified. This is as per router-side behavior documented in RFC9131.
-> +	This has lower precedence than drop_unsolicited_na.
-> +
-> +   ====   ======  ======  ==============================================
-> +	 drop   accept  fwding                   behaviour
-> +	 ----   ------  ------  ----------------------------------------------
-> +	    1        X       X  Drop NA packet and don't pass up the stack
-> +	    0        0       X  Pass NA packet up the stack, don't update NC
-> +	    0        1       0  Pass NA packet up the stack, don't update NC
-> +	    0        1       1  Pass NA packet up the stack, and add a STALE
-> +	                        NC entry
-> +   ====   ======  ======  ==============================================
-> +
+On Thu, Apr 14, 2022 at 02:28:08PM -0700, Nick Desaulniers wrote:
+> Hi Sami, Peter, Joao, and Mark,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.  Would you all be
+> interested in a session on Control Flow Integrity in the kernel?
+> Mitigations in hardware, software, or both might be of interest to
+> discuss more in person?
 
-Hi,
-
-Building htmldocs with this patch, there are no more warnings from v4, but
-I don't see the table above generated in the output. I guess due to
-whitespace-mangling issues on your mailer, because the table syntax alignment
-(the =-s) don't match the contents/cells. 
-
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+Yeah, I think a session on CFI in general would be good to have.

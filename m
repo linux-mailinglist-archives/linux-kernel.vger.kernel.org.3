@@ -2,91 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E59A9502C85
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB07A502C88
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354976AbiDOPXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48208 "EHLO
+        id S1354980AbiDOPY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354959AbiDOPXl (ORCPT
+        with ESMTP id S1354959AbiDOPYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:23:41 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4D75D1BF;
-        Fri, 15 Apr 2022 08:21:13 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id r13so10990250wrr.9;
-        Fri, 15 Apr 2022 08:21:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cGkDu2i2GdxYtNqqObyhG3QkfvcoNxTA99ftgz/Hirw=;
-        b=TKAmKfwSPcxzDhqhY5jxlVKOgXT5Q/2pAUGVf90F3WbdAnAtdnD7lT1vN3T9iBjKAN
-         /W+YbwTj8QkUz7L3NIzC3b6KxZa9l8VYL7QD7vfPQRsF3W6JlymoJ8iiQJg9uxO1L1YO
-         Ra4zt0WhJJ7Mp8Ue7orM5ls9PDahXI70FqAsj+JdIMvwBf86hxJNstZ7qCb0rADrGUvJ
-         n9WKxRHJP9L+y5nKfgW+bEiaizjOuJn+hOvcZlPRxQqdGe28KhjQijXOZyvReYZ7xU6h
-         NevJ4Cw5JDr+jTV7eVwGai75OmvJOxSd1+ZOOmtKBYDPc6TXiapse/CDwpKGF9TaCeNN
-         0fUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=cGkDu2i2GdxYtNqqObyhG3QkfvcoNxTA99ftgz/Hirw=;
-        b=wpjA1E9uySD4HTmIddM69RjU8ZKMb6dl80oNQN1AH6a0iMnmh9+hv5ad0/JL33JkEy
-         wY36rhdb1mQBkA/f7c4WUiN6hjc71wUulJ47aOwaSJWkgR3n5n9xJG7lFrvxoa/xGpoX
-         UoGVYvJY4ne0pL5Ns169elIHNY+E0nkIQL4LWm1EyYtgsS7PLFLSkTiMG7bTRidNMQQv
-         SznDrOQBV6LWleiksKxPp8/Iz2y5KECCv+8s2/3jxA7Z2lighMPQrnLTuW8KDA3xph8z
-         bSSWeU2cc32kxL42X/hjtr9uizwwlwTtY4GVLp2DlyCDZf4rUX5q2zlK/aUBGXwBV1tj
-         aC8Q==
-X-Gm-Message-State: AOAM531hUVCZhP25ZMHNyGeSwTU91Ar+evVM2l6pFoDfePckY+03LlWf
-        gZ/hdN8oRG+qV3rqK2mySo9Xm9LDLPnFvw==
-X-Google-Smtp-Source: ABdhPJzyRqa3FT/KLcNWej01rc5pgpcZYtYI+64/VsQnzCw14IDSWel/5ueHoNuYC1Kd2q2z3forgQ==
-X-Received: by 2002:a05:6000:15c8:b0:207:b935:e918 with SMTP id y8-20020a05600015c800b00207b935e918mr6054717wry.551.1650036071741;
-        Fri, 15 Apr 2022 08:21:11 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id r17-20020a0560001b9100b00207afaa8987sm5171744wru.27.2022.04.15.08.21.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 08:21:11 -0700 (PDT)
-Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
-Message-ID: <950d33c7-5e93-76ca-a2d8-9d69616fc98e@redhat.com>
-Date:   Fri, 15 Apr 2022 17:21:03 +0200
+        Fri, 15 Apr 2022 11:24:24 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 145B5C749A;
+        Fri, 15 Apr 2022 08:21:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id BCF89240004;
+        Fri, 15 Apr 2022 15:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650036112;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AbEiNfshC8XkhzcTbadTaZQ7SjJznCWXhRPzsy2QMbY=;
+        b=Ho2lSAybIB63tmiRXAczfB1YInTtWjXWxUZMp1IGRQ52W93iqFgRvu/RgHtEz2IFSWbInY
+        +7Zu0wD90ng2xI+CgnrktH5DkVR+t23+R6+/ya7q2SaP5qgfeDBNAY4t2abg7pZLCz0XNh
+        hLr1ejwPosID6zpAwgVY1+HuZUBYNINzVcp+FWolvNbu1+Zv0AlmdOUbwn0QU+lT9vo67c
+        HSbcdZPjT9Qbp+fptK4iyWZVBQF4SUACjD4paW9GoV7DwYDdVFgkFQxzx693qWbzd6QRML
+        ct+eIsQijjvGhRoZd4Bv/bTGKwwI0mXBFHRVL4j87VM4dNcX8Cnj1Zj4p08TWw==
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: [PATCH v4 0/8] Allwinner A31/A83T MIPI CSI-2 and A31 ISP / MIPI CSI-2 Support
+Date:   Fri, 15 Apr 2022 17:21:30 +0200
+Message-Id: <20220415152138.635525-1-paul.kocialkowski@bootlin.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v5 053/104] KVM: x86/mmu: steal software usable bit
- for EPT to represent shared page
-Content-Language: en-US
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
-        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <028675e255cb2a23186ebc7a94c06a47375c6883.1646422845.git.isaku.yamahata@intel.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <028675e255cb2a23186ebc7a94c06a47375c6883.1646422845.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
-> +/* Masks that used to track for shared GPA **/
-> +#define SPTE_PRIVATE_PROHIBIT	BIT_ULL(62)
-> +
+This new version is an offspring from the big "Allwinner A31/A83T
+MIPI CSI-2 Support and A31 ISP Support" series, which was split into
+individual series for better clarity and handling.
 
-Please rename this to SPTE_SHARED_MAPPING_MASK, or even just 
-SPTE_SHARED_MASK.
+This part only concerns the MIPI CSI-2 controllers support changes.
 
-Paolo
+Changes since v3:
+- Updated Kconfig to follow the latest media-wide changes;
+- Switched to clock-managed regmap mmio;
+- Various cosmetic cleanups;
+- Used endpoint-base instead of video-interface for "internal" endpoints
+  in device-tree schema;
+- Removed clock-lanes property in device-tree schema since lane reordering
+  is not possible;
+
+Changes since all-in-one v2:
+- Use the newly-introduced media/mipi-csi2.h header instead of local
+  definitions;
+- Introduce a use a mutex for format access serialization;
+- Make both port@0 and port@1 as well as ports required in the binding;
+- Made one of the two CSI input ports required;
+
+Paul Kocialkowski (8):
+  dt-bindings: sun6i-a31-mipi-dphy: Add optional direction property
+  phy: allwinner: phy-sun6i-mipi-dphy: Support D-PHY Rx mode for MIPI
+    CSI-2
+  dt-bindings: media: sun6i-a31-csi: Add MIPI CSI-2 input port
+  dt-bindings: media: Add Allwinner A31 MIPI CSI-2 bindings
+    documentation
+  media: sunxi: Add support for the A31 MIPI CSI-2 controller
+  MAINTAINERS: Add entry for the Allwinner A31 MIPI CSI-2 bridge driver
+  dt-bindings: media: Add Allwinner A83T MIPI CSI-2 bindings
+    documentation
+  media: sunxi: Add support for the A83T MIPI CSI-2 controller
+
+ .../media/allwinner,sun6i-a31-csi.yaml        |  72 +-
+ .../media/allwinner,sun6i-a31-mipi-csi2.yaml  | 147 ++++
+ .../media/allwinner,sun8i-a83t-mipi-csi2.yaml | 135 +++
+ .../phy/allwinner,sun6i-a31-mipi-dphy.yaml    |  12 +
+ MAINTAINERS                                   |   8 +
+ drivers/media/platform/sunxi/Kconfig          |   2 +
+ drivers/media/platform/sunxi/Makefile         |   2 +
+ .../platform/sunxi/sun6i-mipi-csi2/Kconfig    |  14 +
+ .../platform/sunxi/sun6i-mipi-csi2/Makefile   |   4 +
+ .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c   | 749 ++++++++++++++++
+ .../sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.h   |  52 ++
+ .../sun6i-mipi-csi2/sun6i_mipi_csi2_reg.h     |  76 ++
+ .../sunxi/sun8i-a83t-mipi-csi2/Kconfig        |  12 +
+ .../sunxi/sun8i-a83t-mipi-csi2/Makefile       |   4 +
+ .../sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.c    |  72 ++
+ .../sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.h    |  39 +
+ .../sun8i_a83t_mipi_csi2.c                    | 815 ++++++++++++++++++
+ .../sun8i_a83t_mipi_csi2.h                    |  55 ++
+ .../sun8i_a83t_mipi_csi2_reg.h                | 151 ++++
+ drivers/phy/allwinner/phy-sun6i-mipi-dphy.c   | 166 +++-
+ 20 files changed, 2569 insertions(+), 18 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-mipi-csi2.yaml
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun8i-a83t-mipi-csi2.yaml
+ create mode 100644 drivers/media/platform/sunxi/sun6i-mipi-csi2/Kconfig
+ create mode 100644 drivers/media/platform/sunxi/sun6i-mipi-csi2/Makefile
+ create mode 100644 drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.c
+ create mode 100644 drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2.h
+ create mode 100644 drivers/media/platform/sunxi/sun6i-mipi-csi2/sun6i_mipi_csi2_reg.h
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Kconfig
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/Makefile
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.c
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_dphy.h
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.h
+ create mode 100644 drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2_reg.h
+
+-- 
+2.35.2
+

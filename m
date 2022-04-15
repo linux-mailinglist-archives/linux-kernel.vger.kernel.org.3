@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374A3502E1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:00:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18A5D502E1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356055AbiDORCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 13:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
+        id S1356062AbiDORC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 13:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356047AbiDORCq (ORCPT
+        with ESMTP id S1356056AbiDORC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 13:02:46 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A2053E31
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so5382045wms.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:00:15 -0700 (PDT)
+        Fri, 15 Apr 2022 13:02:57 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8339B546BC
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:00:28 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id i20so11251275wrb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:00:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gq0WGrwCFa0DH2fCvNOkSonNeptkGtqY34LwdIN3LF0=;
-        b=I6rFcA21cGHuPTs2RY2P37BAl0LZBd8+WMQzCzxJXVFUKbRMy7ncw42qJXS2bQCxdF
-         bdbFwVu6n2Ns6/wkqblBtVEFUZYKzjtiWgSz1T2aSBvGRBa96d5jm/Y7koIUgKqWToxL
-         TBMwIYiv+x7PSkmSlR8ytbDsY5mzC7pY6WIB8KBSBoSXUeS6VhNScGDognj48gg+Fjjz
-         qwRoeYMejvdOMD+q8hJsaDowApxmZhenSTfcTNe2dUKxEkOlbiHJ6SCl+IX0520CVuq9
-         rfNRCedszqfnhFyvKRVyFN1ab4/c1B9YXO8W7uWH6Y7WpQw3NsLcf6zIW+/vur77qZiX
-         6xEw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=+DtrWZQmLbh6BgPYAsMpSHPxDFToRkqobGkqBOET+Pc=;
+        b=xWkLOaddSO4SKchm0277aiMkAwx1ZOGp2XXeXJPSksUvO3GmJz5BK80b5J3dEBY6EN
+         wnhgzaisOm6LgOJeZz4wWQqDiZtCEiYb4OTacJJhH/O8QMp4a+YKmFVmyfCCNm+IhkUD
+         Ufwd1uH5BIH8fK/LnX4C7Qlz5BgYuDifZGO3cC2VJsCnM2tqVC0x4M8cGPsRRzsW6Bbk
+         XAKP5wmNFTST8DJsrASlC6AmOYIOo77PiEYCi+g/ctpZ77Tm7Ybq2uamx7aCKJSwP/dw
+         c+UJ31dqtfTz1LQa1GpLWxscDkanxRdBLlLaambeawWsJdFNuFqzWJecW7iSoGUVR3DI
+         r9dg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=gq0WGrwCFa0DH2fCvNOkSonNeptkGtqY34LwdIN3LF0=;
-        b=mH0rWJVme9KCEWJn+0DQlBbPQDHxigPCGcSZ5XHemY8GNh+pRR9vWBblA1Rfn/r4o1
-         zFD6eulTlubiKugPkvZqGdq/YVu+st4bkKCmyx06TpmTcyi26bCoN1YsnJWYtW7q/bup
-         E2CiImaSbEF7R4Yt6tY/duhb1aBSFvKInH83bBngNFERpYf6rmq6rwVG1hbsqiKewOlD
-         rpX3HwEz0fFxZoZdt00FNPyOlGArEtbKvQLfAOY5NMUPwKNTfZaqoTUgH9hqmmBvJrm6
-         F84nohyiN6nZ0aJl1zlQqkLqJeBrRj8ddjt0BRO+nkP9wQCQcaJixrUtPSMNYGpipjvO
-         iV3g==
-X-Gm-Message-State: AOAM53342I5J2K0z31iypUG7pR+4JelJ3CYE75zJ7IXYKITTc8lAuNs1
-        0rg9s0EjWO5aFc0gZUVfMoeFGg==
-X-Google-Smtp-Source: ABdhPJzV1ptXy802vFVzTiBT0RWKqMJu7qvTmAbOiw85HDwqnMbN4MS0LF3Eo41Npj8bE5cEzpbRZg==
-X-Received: by 2002:a05:600c:1548:b0:38c:ef05:4cdd with SMTP id f8-20020a05600c154800b0038cef054cddmr4090179wmg.71.1650042014517;
-        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=+DtrWZQmLbh6BgPYAsMpSHPxDFToRkqobGkqBOET+Pc=;
+        b=St63GPOt8WWOq2F58wL73vkQStT09LX8euaP7ofF54s9NwbEUUx0+f8OPUIVFi7r18
+         Dbnb/HcnHieDPM6pgCAE9oONVduUn0WzxEaKcGDY0OlaCg5x08A/Ld7l2Ha2/ETxUllZ
+         O+Bo1RUjQhH8WFP5bpfAs+h9lE82gXXL8Npq+WOGaibPeOVh81uiQ9CnnKJMkKrgs0pA
+         +LYZt9T8ohB7WEXWiKRhCx3mPl2D+7JRLF0kNWWvt4cDtt/fZcaX9d6z92XG441DicOp
+         cjDydT8H5fpkiGeUHgZpQtf1j2f5Cjtlzab/e9qpzly5pYBejmg3j9eK2+nqiW3emmE1
+         CBAQ==
+X-Gm-Message-State: AOAM533pm/SnKQ3wo4MJ5Icx7gfh+yah7MYdBs0vP+7Oqu5lIeCpS3yL
+        NvT7HuUeIJ3n7SdZyamCbSDwSA==
+X-Google-Smtp-Source: ABdhPJyvWQj30Y6+u8XT8aJ4AK2kwz8H/ZsRhCjD+JCTOfHK6pVtnfj5JXf8eLkK9T8Dh119HuzfcA==
+X-Received: by 2002:a5d:48ca:0:b0:207:b62b:7483 with SMTP id p10-20020a5d48ca000000b00207b62b7483mr81653wrs.349.1650042027083;
+        Fri, 15 Apr 2022 10:00:27 -0700 (PDT)
 Received: from radium.lan ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id i127-20020a1c3b85000000b00391a363f5adsm2119704wma.36.2022.04.15.10.00.13
+        by smtp.gmail.com with ESMTPSA id i127-20020a1c3b85000000b00391a363f5adsm2119704wma.36.2022.04.15.10.00.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 10:00:14 -0700 (PDT)
+        Fri, 15 Apr 2022 10:00:26 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
-To:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Stanley Chu <stanley.chu@mediatek.com>
-Cc:     Fabien Parent <fparent@baylibre.com>, linux-scsi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Fabien Parent <fparent@baylibre.com>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH 1/2] dt-bindings: ufs: mediatek,ufs: add compatible for MT8195 SoC
-Date:   Fri, 15 Apr 2022 18:59:38 +0200
-Message-Id: <20220415165939.1861470-1-fparent@baylibre.com>
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 2/2] arm64: dts: mediatek: mt8195: add UFS HCI node
+Date:   Fri, 15 Apr 2022 18:59:39 +0200
+Message-Id: <20220415165939.1861470-2-fparent@baylibre.com>
 X-Mailer: git-send-email 2.35.2
+In-Reply-To: <20220415165939.1861470-1-fparent@baylibre.com>
+References: <20220415165939.1861470-1-fparent@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,58 +73,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings for the MT8195 UFS support.
-
-The MT8195 SoC requires more clocks to be enabled compared to MT8183 and
-MT8192. Document the clocks required for MT8195.
+Add the node for the UFS HCI controller for the MediaTek MT8195 SoC.
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- .../devicetree/bindings/ufs/mediatek,ufs.yaml | 27 ++++++++++++++-----
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-index 32fd535a514a..5ed36e95e933 100644
---- a/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/mediatek,ufs.yaml
-@@ -14,16 +14,31 @@ allOf:
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index b57e620c2c72..2255e19cc3b2 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -619,6 +619,30 @@ mmc2: mmc@11250000 {
+ 			status = "disabled";
+ 		};
  
- properties:
-   compatible:
--    enum:
--      - mediatek,mt8183-ufshci
--      - mediatek,mt8192-ufshci
-+    oneOf:
-+      - enum:
-+          - mediatek,mt8183-ufshci
-+          - mediatek,mt8192-ufshci
-+      - items:
-+          - const: mediatek,mt8195-ufshci
-+          - const: mediatek,mt8183-ufshci
- 
-   clocks:
--    maxItems: 1
-+    minItems: 1
-+    maxItems: 8
- 
-   clock-names:
--    items:
--      - const: ufs
-+    oneOf:
-+      - items:
-+          - const: ufs
-+      - items:
-+          - const: ufs
-+          - const: ufs_aes
-+          - const: ufs_tick
-+          - const: unipro_sysclk
-+          - const: unipro_tick
-+          - const: unipro_mp_bclk
-+          - const: ufs_tx_symbol
-+          - const: ufs_mem_sub
- 
-   phys:
-     maxItems: 1
++		ufshci: ufshci@11270000 {
++			compatible = "mediatek,mt8195-ufshci",
++				     "mediatek,mt8183-ufshci";
++			reg = <0 0x11270000 0 0x2300>;
++			interrupts = <GIC_SPI 137 IRQ_TYPE_LEVEL_HIGH 0>;
++			phys = <&ufsphy>;
++			clocks = <&infracfg_ao CLK_INFRA_AO_AES_UFSFDE>,
++				 <&infracfg_ao CLK_INFRA_AO_AES>,
++				 <&infracfg_ao CLK_INFRA_AO_UFS_TICK>,
++				 <&infracfg_ao CLK_INFRA_AO_UNIPRO_SYS>,
++				 <&infracfg_ao CLK_INFRA_AO_UNIPRO_TICK>,
++				 <&infracfg_ao CLK_INFRA_AO_UFS_MP_SAP_B>,
++				 <&infracfg_ao CLK_INFRA_AO_UFS_TX_SYMBOL>,
++				 <&infracfg_ao CLK_INFRA_AO_PERI_UFS_MEM_SUB>;
++			clock-names = "ufs", "ufs_aes", "ufs_tick",
++				      "unipro_sysclk", "unipro_tick",
++				      "unipro_mp_bclk", "ufs_tx_symbol",
++				      "ufs_mem_sub";
++			freq-table-hz = <0 0>, <0 0>, <0 0>,
++					<0 0>, <0 0>, <0 0>,
++					<0 0>, <0 0>;
++			status = "disabled";
++		};
++
+ 		xhci1: usb@11290000 {
+ 			compatible = "mediatek,mt8195-xhci",
+ 				     "mediatek,mtk-xhci";
 -- 
 2.35.2
 

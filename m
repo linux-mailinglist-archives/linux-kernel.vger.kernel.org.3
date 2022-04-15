@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B735030CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC065030AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355930AbiDOVrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S1356133AbiDOVrQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:47:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355331AbiDOVqy (ORCPT
+        with ESMTP id S1356139AbiDOVq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:46:54 -0400
-Received: from sonic313-15.consmr.mail.ne1.yahoo.com (sonic313-15.consmr.mail.ne1.yahoo.com [66.163.185.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E6B1BC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:44:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650059060; bh=C90cKiUyo6RDIWVc0BJk+iAViLhgoMcefmkDp8cELM0=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=FEOEC1d8gm77GPM8jhtLAXOQ0tKqe1pvDBYIWWdN6SdhshHpGGG5hZq+QjfbGd+loXalBgoDh6YPlQ1xs5/eT/bbTQQXtSyEeYP4LX1YcfzW8DLk9hqg1jOeHTVgGhv0Y7IJsKUtiZUTSocVw2YWju1IjpWTrCeETw+sE5miVqbmLIyb1aepfrZk2GGwp+uLUSRXbk/naTYjpWkLEkG0qG0PeE1bjvmwl2y3vCkF+yvmqcb8OhqXdIfLysyc9tLRplRrCnGiUCpNgnCcmvaT6SJ+t1WdG8EHZnmqdgAwvGKKHodsdt5oFcuWvi0fOXSKx1/c/bXxLMYX7cNXfVY4bA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650059060; bh=9HzbnsH3+0Ye+7rrFyf7m7JBfJc0JDc/ekrSGqZ4lEA=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=WvU0g4p+HTy3w+MF0WDLGo8LHUDfYur/5HHdlQFK6gZOy0Hm/XAwxEXp8fxfOu904kAgON5pZVwmGfj53R7skY3kSqMo33CrWwb51q00aOlRNeUG/9QDi9klrVx+gnnRtHclY7ZSLA91wfZmAs38ja7llvKIChRp80GyiZC42GN5/enWp4c9J/1zUL3N9Ci3+BSpm2XHsZ+hjRHEESV1GfTeg8/aLI1VAOkr6zAvmxFBVyL+rUUhExcuW/4OpIA9oEVsJ2PtmmwxSx+PmTVoCPqsjEkNEMKuF8Sc9PXVIZpRXIM0SUt5+YOYT9rzxksMioqE0bk3eAOrMDsUEvZbgA==
-X-YMail-OSG: SwMfnsMVM1k2gf_1wGaMvMhBRki1VeLlDnO9Ah0VQfj9sWoMDjW9A.JqreSg_7B
- v6g_O0ujs3I4KTfpCBXEPdbB56mpjrHd0y0l7M6v_k5a7a5jWqiZ7zVEelst7JYfMiG_jRYo59TR
- sELt31PmcjAwjEoAW5yD.b.jS5DxOS6NXBD4nEqev33En.N.vzIa4I1h9iFB1a16O7b9wHF49aDz
- Srk43tguU3Inh0PJjMdHFfzEdL39NW25vTw_lZoCNC9xKfkuDXNV0aX5viGkA4AtpVZAF5EPYLXB
- hVgDedSNkVkQXE_1.X7FRi7f1E6rB4LK5WJXH6XPFTaK8TqEyeh7qJCbdcGeW7U0kS9t5dgYnC8V
- 6JgJOvGVWKM3jLUCgw3YDBJYmOCRdMNUi0QzTQViqH9aGjrBXUGc9FawMb5QAHAC.rVO29JMlNFY
- _CuwidHra0vIZUNrFLKo9oT8Pz92.SoaSXoqUwBHU83bf8j1RJuwcNhsvhnP.ygGrApr3ZkgCSIc
- fwji38Yr3iUnXwZUONmsilCkywyeQ6ZFF2kOBttaBiT8MxkiLCU.2oiSWfbWxAhR3KIDbDIIB6sX
- yg5aMTX_gDneGyjZ10MzkR66zTQJH9R9_LvIzogsvXOQZi5t22ids3_YL06dVdfVAswwOBW1tGN5
- JA1MruVylbMrkONNZZebIF7pXvXx3VXjqj7XFDCdiSBZYSoll_2wO_l58SSY6EydcCGfukeVng79
- jETgNqA_J9MlTPaoM9G00HD_pWjddJlYuN8V_6uvvln5WDzGfbnFX_910pvLVo5WjYUljiPWuLzt
- fdtIz0nPoljjhniUr2GSDZIOwFsjvdzU6Vi8A6SVBUGAByle8_hJPCqtWQPhCMCGmMgHlBxr01TC
- x9cBYipm3Xljit93G0lboydOxRx7wsrUWDdX8.D5GaSGn0ZCuV9Gm7hzr687QU8TUrSVRlO0nNcx
- P.Iin0pGKc_lh.TXQXB2CbRh86edgDufPw6f0T8GV2IoSoSS4vsK1q.0_lo1FDBC.w_GX5BogPBN
- K1lldrRt0O8g6AYOaVHU1TGiY9wVM.wjnuZG.QZ_mUapqxO6b_2N8eLRd9O47QVhbfI3toslR7Wh
- rRp34ytY9L_QdwcS_jKBsNyjHKCroMx50n2cwTjEQ0fkCQWox30kXo9FnMqlUzR7U5sV1F8AqrYd
- v4heFec6mnaSpW3TqR7CLzxbJfYWLeYCtTKAIJR14pmAItzpHi1lrWlaP1KLFUFrcU8ygTGYiEWU
- KlbyVqh0vlOwNJxJNIZvu.SiLk2Gz._6cuekO87h0ut6oEULZs1g4Exl1ufZVAJaY5fhrqj7j9BT
- zXKqR_6rbBppjx2Gdr5_r_Nj8WEMKGpYTJMU6DG2jRRu3oi4ayUflfQwQvl4RL8LTuibvRhsus7s
- D18VMEbFcrY0nrhgNskU5Gj4kFfLCRsaNe4M6f4oAm88P2Ofyl7EbrbbeYeRTC31cJov4JMS7IBl
- SxjVZJQ1B45EuLqYcU7cyVsCBYmtLZ2xORKeARr_dqREfaVIFZooEhb0ExeEWgM.ZnTT0ikfVbwG
- 0Bj2ho8c0rs14leMlrupcUem09ni4XUtarKJwoaWa0YWXJUyX0D2CFK.ByFEH9Eevhlj5VJ6qxzS
- YtAA1d0rc1IFT_uwfuybMLfEsmVXr9h2gFU2gnJXimM10xclqDXSlp9LeXRMo.OQuvRiC0sAlfgw
- bu_MNfI3bb29GJ3JH8Gryg3UdX31TVQrEOAe2bVS10j_M2srYLYMCe3q1xZMPSGzTwwrf1wH6Ahd
- A544Jq5rRbqelvg5DsRmvQbAFQDGvKHlH.EEYajal4qUYSP__hAhjQkpWsOcwC8Obr_qB1ry_JEU
- Lx0PRsjHIZvqjXMgN9sRD1elvf7qy1dQJLC_7Sv86htBGdAQTD1Ftv6CdyNGGObXGqvVBfHpnrcY
- hQKGvaEluxYcJDuBhtHABHnbaB2YvW.jwwOzWENX9BDWimNvswizJ1tVO4YhhdP609jT1DFBw9Fq
- w2obc9S.lWecJmohW9f294xVr2zs4.QudrnNTfUktNpMQUFdPwbzHjommZS24gWit6H0EqRft6c_
- 4UYAZKr3MHaAzzlUCYZrQpuAUkLX7sreNtIStYj7NangYyGQ8bfR3QB4lSq03dEmoQu1QU227wEJ
- J9QEtU3AR5iUJXxwd.KhLmyruPYYVSxQGzoNPb.QESu3MrtXSXvx64mLak8QaNxinAu4_4yThjif
- EsUsziR1Q8tBVcs5BeuJxk.j0VZjSUUG1DtubzV_eAlSh8XuX9mKAU7Guazy15I1YjhQK
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.ne1.yahoo.com with HTTP; Fri, 15 Apr 2022 21:44:20 +0000
-Received: by hermes--canary-production-bf1-5f49dbcd6-xjccz (VZM Hermes SMTP Server) with ESMTPA ID e7b41937d610f8e9a7a8a415c19edb07;
-          Fri, 15 Apr 2022 21:44:18 +0000 (UTC)
-Message-ID: <6558813d-e66e-688c-d664-68e00faf034e@schaufler-ca.com>
-Date:   Fri, 15 Apr 2022 14:44:15 -0700
+        Fri, 15 Apr 2022 17:46:59 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1359E12091
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:44:30 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id s14so8002495plk.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:44:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=Gk+7fgGBPOWKPaXdAN9G57GRLaAX6Nk2DK6Zn7gSK5k=;
+        b=tIGkFJJuPZDSGI4it8k7JxuUjCNwZAbl/3s9Hgz3l1DMc0D59fzyeNgGgyKdivVctr
+         M9Hjj+77f01PG5h6DIsywnwVXxQWkjtn0PkLMozT/xR0PZMkdLzFoBMN9TnmMvzVyD4O
+         qBWsk+oYXwhaG7/asWuHpGUBwjrBNNKZoWT+Msxzs7slq8829FUh4FCXZDTG4yx1SZSI
+         6SFhM4pY3ynCQBIwGLR5KSvinvTtvbPKptteJQcYFCX6aITkybSGgOQfAnRuRs5LNVde
+         /e1Gr7+0c5echJqyynG9oifs646cTpxqAXreGSFDVcjwiYdxFrb49wGUjR1OHp4bFY1U
+         F6Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=Gk+7fgGBPOWKPaXdAN9G57GRLaAX6Nk2DK6Zn7gSK5k=;
+        b=KWnu1rrX8kS+u1WJdKnfyJrbvjzy8dR2xKparG2/YhgPAPB4zcLl9+215OgHb5pUr2
+         UYNI7l+eSY0DZkAoCS/8VEr1Fw8CDHKKW989YLG7NY3e0T4XfM/jH/Oc87TB/mK+L/ri
+         bjDPv6ru8mOQN8wgwzoBIr9pyUNJqA0LWoO/OL6Icmq9xEMt7zO536XnJTYnzL4mpHvb
+         p7XY6TplifXATR8R51CoYpRPD583N7ZL7+EquPpRHRrtzDHGXBfUpRvhHaeArjjtsuhv
+         gngcmP8OuI4AJ9WykcMxTL0Nrxm+FuwDSzU6nPFxrCN1lFCvqVBRVoZsKIfxVW9FFMpL
+         Ke1g==
+X-Gm-Message-State: AOAM533P4qNsV7Yrs3V5cUtIJk3bum+bpDJf8AUTX2sZUT1OLhP2xeOV
+        0Q198N+QSWdMqFnDr+swBP9eiA==
+X-Google-Smtp-Source: ABdhPJyWM5pz48kb/gf6V0OQcpljp6SwfU3pPBli48/v5anhU19PFACJaNco1IfCGjtuixSSvMEtKg==
+X-Received: by 2002:a17:90a:6c64:b0:1cb:93b2:b6a9 with SMTP id x91-20020a17090a6c6400b001cb93b2b6a9mr6322512pjj.144.1650059069323;
+        Fri, 15 Apr 2022 14:44:29 -0700 (PDT)
+Received: from ?IPV6:2620:15c:2d:3:51d5:33b1:431b:be0? ([2620:15c:2d:3:51d5:33b1:431b:be0])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm4003287pfl.15.2022.04.15.14.44.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 14:44:28 -0700 (PDT)
+Message-ID: <f496b0c6-ad94-1837-1edd-3f6f9c00b927@google.com>
+Date:   Fri, 15 Apr 2022 14:44:27 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v34 00/29] LSM: Module stacking for AppArmor
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 0/2] kunit: Support redirecting function calls
 Content-Language: en-US
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     linux-audit@redhat.com, keescook@chromium.org,
-        john.johansen@canonical.com, penguin-kernel@i-love.sakura.ne.jp,
-        paul@paul-moore.com, stephen.smalley.work@gmail.com,
-        linux-kernel@vger.kernel.org
-References: <20220415211801.12667-1-casey.ref@schaufler-ca.com>
- <20220415211801.12667-1-casey@schaufler-ca.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20220415211801.12667-1-casey@schaufler-ca.com>
+From:   Steve Muckle <smuckle@google.com>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>
+Cc:     Daniel Latypov <dlatypov@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Joe Fradley <joefradley@google.com>
+References: <20220318021314.3225240-1-davidgow@google.com>
+ <20220318092159.6f275782@gandalf.local.home>
+ <CAFd5g461Poh37o=3m6EXppdX7oS0D5vZxvFAEtzJMwtBD1VJEw@mail.gmail.com>
+ <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
+In-Reply-To: <f65c2381-1e9c-5945-7672-848d1826532d@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20048 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-21.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/2022 2:17 PM, Casey Schaufler wrote:
-> This patchset provides the changes required for
-> the AppArmor security module to stack safely with any other.
++Joe Fradley who is also looking at KUnit with Android.
 
-Apologies for the inadvertent resend of this version.
-V35 coming soon.
-
+On 4/15/22 14:43, Steve Muckle wrote:
+> On 4/4/22 13:13, Brendan Higgins wrote:
+>> On Fri, Mar 18, 2022 at 9:22 AM Steven Rostedt <rostedt@goodmis.org> 
+>> wrote:
+>>>
+>>> On Fri, 18 Mar 2022 10:13:12 +0800
+>>> David Gow <davidgow@google.com> wrote:
+>>>
+>>>> Does either (or both) of these features sound useful, and is this
+>>>> sort-of API the right model? (Personally, I think there's a reasonable
+>>>> scope for both.) Is anything obviously missing or wrong? Do the names,
+>>>> descriptions etc. make any sense?
+>>>
+>>> Obviously I'm biased toward the ftrace solution ;-)
+>>
+>> Personally, I like providing both - as long as we can keep the
+>> interface the same.
+>>
+>> Ftrace is less visually invasive, but it is also less flexible in
+>> capabilities, and requires substantial work to support on new
+>> architectures.
+> 
+> The general feature looks useful to me. I'm not sure the ftrace based 
+> API is worth it given it is only offering a visual improvement and has 
+> some drawbacks compared to the other implementation (won't work with 
+> inline functions, dependencies on other features). Livepatch is absent 
+> on arm64 which mostly rules it out for my purposes (Android Generic 
+> Kernel Image testing).
+> 
+> cheers,
+> Steve

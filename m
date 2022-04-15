@@ -2,54 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0994F502693
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B72A502698
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351352AbiDOIRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49436 "EHLO
+        id S1351354AbiDOIWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349082AbiDOIRD (ORCPT
+        with ESMTP id S238683AbiDOIWR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:17:03 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E31CF6317;
-        Fri, 15 Apr 2022 01:14:31 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 61C37240005;
-        Fri, 15 Apr 2022 08:14:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650010469;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pKzyHpH5Bjb8iRoLHJukJctM0gcYG5sge5R4tzijau0=;
-        b=gGZxFfuwsslvH4NphybsIpHaqITUT0Q9HkNGcVr+cb12cyRUcoYsz1UQTOk+H8DNHIARCm
-        fxl1cg8HE7VG+Ok2pKSsFt6C8uY0FT7+4cKhR9S8Iar0wvP98Sve1oAHK0V0c8dsURyunV
-        V0A/JVMxlp6ZmsG/RIfY+ASsWkNe5IYCM1oZ7bElD23VR9T/lnzyAoBo5RT31+TgDdPvR9
-        SqGSnO476l9EqRPxYwVVyPsVrXydhrnIqcHR6G/1rUyDUuD40V7mfIa/iLCIi4uGvdicJb
-        UfAtW2d64HTNXSFcyBPqxfOfTYIKBln0lZoLCNUp5LkGdgnjXXj7o63ukeExwA==
-Date:   Fri, 15 Apr 2022 10:14:27 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Vignesh Raghavendra <vigneshr@ti.com>
-Cc:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-rtc@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] rtc: Introduce ti-k3-rtc
-Message-ID: <YlkpY4jzQVa8GokG@mail.local>
-References: <20220412073138.25027-1-nm@ti.com>
- <20220412073138.25027-3-nm@ti.com>
- <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
+        Fri, 15 Apr 2022 04:22:17 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C97B140CC;
+        Fri, 15 Apr 2022 01:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Hi4xrZ5yZIHwLBnZX8ub/KAkLFYSwqOA4HWjNcaia5k=; b=Qa2CJf0ce3j7I87Yql9/UBsUF2
+        qJda9BAv0h4SYyh3zby8qvTvzBIQ2ZAHy6gJd+z7OG/Fzd9MyRZC4XflGybGsxFzS6Mb0feMRcJLD
+        PgklKZfP1BNqpw58r3fqkM/aFKTpmur2U3JAK9wPmtdXmY++8gIBqh5gX9uHJl8xnEWN4n5snVyZ6
+        2gvEL8mCIBWSHfIhTKo37Hv+KVUMC8Fe7WyzIaFZxyAGGnKBXgjn7OO1lKum1JZWSFIgCzUDDpPzo
+        MHqE/3orkOe9pGOQo8T7IT0av3RMAo/zYynzmTzJIlr6ad4Aut1em6HZBfbtYWOEcymtXhf+wDHkB
+        WcBk3x0A==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nfHB9-00Fxui-4U; Fri, 15 Apr 2022 08:19:43 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 813263001AE;
+        Fri, 15 Apr 2022 10:19:41 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 56BA7202508B9; Fri, 15 Apr 2022 10:19:41 +0200 (CEST)
+Date:   Fri, 15 Apr 2022 10:19:41 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Rob Herring <robh@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [RFC V2 1/8] perf: Consolidate branch sample filter helpers
+Message-ID: <YlkqnfRm0E0XHTd3@hirez.programming.kicks-ass.net>
+References: <20220412115455.293119-1-anshuman.khandual@arm.com>
+ <20220412115455.293119-2-anshuman.khandual@arm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b0ae635f-461f-be80-ebff-a548c9dd66af@ti.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220412115455.293119-2-anshuman.khandual@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,47 +66,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 13:33:14+0530, Vignesh Raghavendra wrote:
-> Hi,
+On Tue, Apr 12, 2022 at 05:24:48PM +0530, Anshuman Khandual wrote:
+> Besides the branch type filtering requests, 'event.attr.branch_sample_type'
+> also contains various flags indicating which additional information should
+> be captured, along with the base branch record. These flags help configure
+> the underlying hardware, and capture the branch records appropriately when
+> required e.g after PMU interrupt. But first, this moves an existing helper
+> perf_sample_save_hw_index() into the header before adding some more helpers
+> for other branch sample filter flags.
 > 
-> On 12/04/22 1:01 pm, Nishanth Menon wrote:
-> > +/**
-> > + * k3rtc_fence  - Ensure a register sync took place between the two domains
-> > + * @priv:      pointer to priv data
-> > + *
-> > + * Return: 0 if the sync took place, else returns -ETIMEDOUT
-> > + */
-> > +static int k3rtc_fence(struct ti_k3_rtc *priv)
-> > +{
-> > +	u32 timeout = priv->sync_timeout_us;
-> > +	u32 mask = K3RTC_RD_PEND_BIT | K3RTC_WR_PEND_BIT;
-> > +	u32 val = 0;
-> > +
-> > +	while (timeout--) {
-> > +		val = k3rtc_readl(priv, REG_K3RTC_SYNCPEND);
-> > +		if (!(val & mask))
-> > +			return 0;
-> > +		usleep_range(1, 2);
-> > +	}
-> 
-> readl_poll_timeout() ?
-> 
-> > +
-> > +	pr_err("RTC Fence timeout: 0x%08x\n", val);
-> 
-> Can we use dev_err()?  Provides better indication of the driver throwing
-> error.
-> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Ingo Molnar <mingo@redhat.com>
+> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+> Cc: linux-perf-users@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-What would the user do with this information in the kernel logs? Please
-do not add error strings that will never be used. Returning -ETIMEDOUT
-is probably enough.
-
-> > +	return -ETIMEDOUT;
-> > +}
-> > +
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>

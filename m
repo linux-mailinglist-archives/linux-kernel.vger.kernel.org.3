@@ -2,282 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4346A502580
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69D3D502582
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350402AbiDOGVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:21:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S1350415AbiDOGXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiDOGVn (ORCPT
+        with ESMTP id S1350486AbiDOGWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:21:43 -0400
-Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01olkn2099.outbound.protection.outlook.com [40.92.103.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0A9AFAD6;
-        Thu, 14 Apr 2022 23:19:14 -0700 (PDT)
+        Fri, 15 Apr 2022 02:22:48 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3E8F2A2
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:20:20 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23F4WABO014133;
+        Fri, 15 Apr 2022 06:20:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2021-07-09;
+ bh=7ZQhDaIR3R0YZZaHHHecl913ppyOcCHzvdGJIvGMMY0=;
+ b=xtDwhYcfjSz4FcUn+DYiZWLib8fX05VlgaGyaOVrJbkmRqyWpSSWJw9fKzZ+WL51pX0E
+ nPqcJNmiW8Gp2qRtJP18k+MH7aSGJvW6Gf51fx+Tvu8NMmaQQjqKBLBDOYXZ6EHt90l7
+ MLCHG5XfmrhYw73/H/6aENuq/KA1kl1/VE2bflq2lR+ie3GG6tnP0v29SqNr4xwy3TyR
+ ExyOvUqy/cRljUfIGv3wUENYfNLNdLus+LU5LO2fy8qVO5p63QnPhn0NdurtyKunSbAp
+ Xrv2GgXCpgXEwFttn++YHz3UKDayB1myjnXzCzgVuMtOyMUH2bHNELso1XyXp501rUGC kQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com with ESMTP id 3fb2pu6tnh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Apr 2022 06:20:14 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23F6BWfu030084;
+        Fri, 15 Apr 2022 06:20:13 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com with ESMTP id 3fb0k64smq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Apr 2022 06:20:13 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZEbb/OOXVF5m4C5A2JHI6/KCUZcFgqksEYy88exOhs7544DGxn0P9+RqOMOjeNnfDMmS0zTTyM+hP5lZxzkiiWBacfEGLINv64K0aT3Q4F7KY/5+9f0GJXPOzCrkw/LPWQnEIxDyuN8lB8W/2o/4aLr+tX71Z0kB11fUEa11w/XMUBWz9/EUfBmW2eaZ7HXfx9jq5P+fyXQ9oOYlctr0O2grsrdK561RsvHcQ8s1irOe5xJ6stZKRW5Rvq6ENsJ8nmCm77hIt0V04LGsuhrg9eo1gZOdv5jkEImFShfOVAKwibO+1IgdI9uCwaUtp8B+AVEer27nXK+9Xl/3F3Rqcw==
+ b=bEpPvvNWO9NjobHBIH/kDCqj4it7KXNy8mL96+4Kh6pF7OQMjL2Xb8+qJWGiMPsBm0AInhl/1IVcpLQbAclssEeTBwvWn7uKpdjkp6thMhdbZe6obRE2cSPvgqQ08x6Zxh3ddETyQ1UGgWh0YYsLz+riE97LO9yJqm74Hb5o6PEFPoccBSUL5wGgMWVc3JahsQeAy2iJGRm0S43ObGAMUYX5jefmKgXQZcJqY4k8M9xlbP/j96u3ybU4LzJ4T4kTnpbqvmg6LwW9eUV0cIVivXC3Tg6zMjAYdjFNC6rHNjzeqkO9cJpHcmgZjHMofHJHSOmtI/gaRXHker6gYyOQdQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fxrm0t9ycSYf3jFUUrgP5LCtQp/zF9nS1HwpQkHOExo=;
- b=WjNIcnzEKaLzPsa7SoB0YHQo3He9/LUBnb4RNtqGGbuAhXFb9LJq2yVd1Q3ALrsfHttnlb9VZGVrsUZ9OlYE4dv/FyiF3JwDM4RzV0jhIUb0Vz7KkH/+9DaHnuik8nt1ailSO2TUPWzJ4a1WVg8bAaS971htAxKnXyyD2xhbqySlGPQpiq3lw9zJXwzQOvnNApvpSH1HpwlulhUD+7W0/4JWW4SB14uiai/DOBf5UAMX8KnR1aHlY/TOmm977vLdQKxSLIScNomc2pxgfXyTYvvlv3mDS0hjhmumYQ8OaYtI0CJYxiIpXL5lTsHxAxspbSGunUFYOb3qMXCmnFmbQg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=live.com; s=selector1;
+ bh=7ZQhDaIR3R0YZZaHHHecl913ppyOcCHzvdGJIvGMMY0=;
+ b=N+sjPxL2wNermn/7OcFbqB++gZwvqqMJu8QvFSMIuGQC39LhkNQl2i48UPckUpycPSxznvogIieBTuCIAlUoG5pk+Ekg3JNIZJd0Pewx+BwwjwoMHMEI0ygAYnWlQhMe0JXL2FN5EBVW8pL2vhPwABFQaJmqladQmUD9IyAJczyHLh8r2AnQrvfQD9Z0oQdViFNawIidbXKwZ2XI7ExJoh7N5IbDK6yjL1gRKrsaiXBrO2VKDQEd2oo124DdZQCSk900eCJzvdXkzArw4NtgMlscG5VAYyUxWmpiblBoWf61edlraTRRe01jQwhlNc3yXyZVw9fPVx/fdNV+u4ikaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fxrm0t9ycSYf3jFUUrgP5LCtQp/zF9nS1HwpQkHOExo=;
- b=qCeZnRCxWnz29tENe/jSiFuMc7YZkox/bIgR0kbJbMJbEZzDn710UcSBqW1y1o39mt7zAv6lvy/7p0EDsQZ8C9L4SX4PxFysB6AMIAO+rEtUiPOkcsZtlS0Xr6qCCATM3VdNZeFj02lUNLQythRCRX89zOg3T2OrG0pQJC1uuRb3vjqAaPTiL6fWihys7GqyyWQk6c1AU5J1rxXAUZGt6WRimvoVwk+vhyExj2QFzqvKSt40UTCYNOH8WZC8aaT0wcGWL5u6zWfkIfTDXg/Vecy63vRpesENxDGEIaesAkiwIBhe9ut2RJvYSU5T+k2XkO9CF0ua+ibSL9G3Gz+4Vg==
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:1b::13)
- by BM1PR0101MB1891.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b00:26::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18; Fri, 15 Apr
- 2022 06:19:06 +0000
-Received: from PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::dc4b:b757:214c:22cd]) by PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
- ([fe80::dc4b:b757:214c:22cd%7]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 06:19:06 +0000
-From:   Aditya Garg <gargaditya08@live.com>
-To:     "jarkko@kernel.org" <jarkko@kernel.org>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "kafai@fb.com" <kafai@fb.com>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>
-CC:     "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>,
-        "admin@kodeit.net" <admin@kodeit.net>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: [PATCH v6] efi: Do not import certificates from UEFI Secure Boot for
- T2 Macs
-Thread-Topic: [PATCH v6] efi: Do not import certificates from UEFI Secure Boot
- for T2 Macs
-Thread-Index: AQHYUJC2WWhNZ/FatEqYGX/Q2UQCpg==
-Date:   Fri, 15 Apr 2022 06:19:06 +0000
-Message-ID: <02125722-91FC-43D3-B63C-1B789C2DA8C3@live.com>
-References: <652C3E9E-CB97-4C70-A961-74AF8AEF9E39@live.com>
- <94DD0D83-8FDE-4A61-AAF0-09A0175A0D0D@live.com>
- <590ED76A-EE91-4ED1-B524-BC23419C051E@live.com>
- <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
-In-Reply-To: <E9C28706-2546-40BF-B32C-66A047BE9EFB@live.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-tmn:  [JfD55Eogwt4Di91lH5YFIDHhWeaMwBpGTB6qrLLgptvYv+sjD1+TBRkv3xlrHuF9Eb7+5RVJ3hs=]
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 933e9721-f406-48cd-5134-08da1ea7d899
-x-ms-traffictypediagnostic: BM1PR0101MB1891:EE_
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: s2DsoWbZ7ZibrvkqmICsPNVQZAUajLdZ+sDLYDaG9/UEhVUNqYZhqA2Jaj//AigSHIfUcoQdjI8IOF8x/CElQ1k8ym73TFCOMPNSK/SjIJ5YgQzFHa2Knv/7mTS315bTmd6wO5YTwAn0c5ZfjaXoUPE6bi8ujVpP/uQZb5YtEFKdhKIyxUFIabVh/qOLuBaYZn0/u6RbKAtIhOgXkWNzZgx+tu8oozlDK94WpaTDPfTTFUMOad/Q7lfLUewcWv2pQZz/cbQ7HgVd6/fE2BhB/NkahXHGrHDs4eBRObubDN6CnI2lxCxraDk6AEK50GrNzbrb1gmXky7iOUHt+w4NoE+3G4nHla6+mJPmIklVkDo1m77UCcefissIUlmZVye4Ke3ufEoZlosGtDEmmVHbG6oBVIXENrX2goJdlLylDwQxu3H0OXMQvsxJIxcL3c1ie9B+lBLAWb2Mjr0i6l7nWuGftjxwIMI/tTc5ZDNb8Oc0YdroFSCyJVer4qG49ODkfqKPq9oyALuRRI7OS7md9E1gESPfPXcKVDUiPx/g+krx34/ZPl2bO27tTPa+wUTRbC3Ape1nIybSTlNUj4mziA==
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?W7GtNrdsoUXfATiE38SUxHsQvgUEjl8hzBEpVXdnslvJCl2GM+5L18mEqIlk?=
- =?us-ascii?Q?MNJXOurAuZfqJod3uxT4NNh9AVM5bhKpZtDXbhfpVmNCiyjL29yi/0gHke2c?=
- =?us-ascii?Q?HUBBsgkzfcHqh46c5tgHR/zTlScbJb1m4d0XA9dKbTshuShz9uSKjFmTMVUO?=
- =?us-ascii?Q?4CwxC6V/RM9i/wpsueQ0P4sELAI7yjCoGl1rQw03bx3XVfebim6qzLeKP6vd?=
- =?us-ascii?Q?SkYYjpH/LlYW7qmH93tF9oB2mFF/hlPWotKIrU2tqNzyhqDmXaekKHzeSQ8o?=
- =?us-ascii?Q?SeL7DAkgg8QYk/bfUgYRxMtcJ99TYX1J2/rivJs4JLWnhbuFsWBLIzBOV+OM?=
- =?us-ascii?Q?oY3CX5kJ3bmzRbnkW5V9Q2E3JR4skv6wwlIymbxOEKrpFWkmBzlkvphlNlDo?=
- =?us-ascii?Q?Ai29jc4EQeeD+MVHbHZP3pxSYxw5TyU13WiPYt3lixDfOXR9mHvRPocxv9J/?=
- =?us-ascii?Q?11h9WfwnLnOrVHGV+EfF0Kf60WWqP+/AKlsjwAdkWF2c+W2tKTrOIBpYLNAO?=
- =?us-ascii?Q?iPGaqTKnhiAjQIp3syNkDHQL0KMQPoObwloiYKDb+k3ylRLeJaB5zufI/sgV?=
- =?us-ascii?Q?iGoNUyhFdYGkFgDlgvHdyihEEMq3UA/C1umrV7n4nqTNm0hY0FUZ6uv833LQ?=
- =?us-ascii?Q?pTuf2MYF2taDYOcAgDvcqJXC7A3qUd6M20I684uENCWDseKExAkIbR5qwcqT?=
- =?us-ascii?Q?rkhhZiAZ4lRtuqewXxwCQPCNMBA2f9LG0Y9GRUWmCB6D1mbefL+EcspnJG8q?=
- =?us-ascii?Q?TRGdWTlPUMT/QV61c4fVwnWDCrpVZj9gUwtX6SyyTTMUB1rhRzUisc5IZzT0?=
- =?us-ascii?Q?rXN0KkqjfqKwOF+aNbYvAADBMzucR0904NgRLUZSnPlvRA7vHNw+3qE2SrgS?=
- =?us-ascii?Q?gP6XJJu25yvKiOUlyIr/YiCHEeQpxOodBU13w5qurC0snEPdMFqxOsq0eFW1?=
- =?us-ascii?Q?OWZA3hRY4ww/oWzTE0A2NYSZ/lF394SSPu0o3O+F73XBPKkl5VufCTDRDPE0?=
- =?us-ascii?Q?RmgPU0/JwxcaJvqkJXbOteVLeRuXxBo5qbigURrMRYVKkY3dfrreMgAxfhl7?=
- =?us-ascii?Q?FXax4HYQG5VJdAeua7FzuwdhUAJSjOsjKag1837lHXA6iW7P/lTcxl06XaWs?=
- =?us-ascii?Q?9toFiLHaeuyLC0GY7E/ndjTtXIjHmu36CYdtiJiadfwV1byZXxeeZuafZY0U?=
- =?us-ascii?Q?t8gYcz/Hxg/KNe3N56OtfDiYAK7B5bCFwhm2o9dmdoMzZM6HcOtuFBn/14B9?=
- =?us-ascii?Q?P0VL6v40HxgQdkZTDBi52YXHx6sE0d5u7931buM+X6YKSLZjuXq6JQH0Y8dp?=
- =?us-ascii?Q?wcI4m0GMHqq5Z0pHyJ4WV3U3C3UlLGQwdOyGiRHrY49qE16BPhtCrZNsekA1?=
- =?us-ascii?Q?FWc3onNkOmb192hfXn9Du2BF7ADjLPnrYtMNeBDPeuRIUkMa+69inUrxYJb1?=
- =?us-ascii?Q?A2SGG1EeBbdP01gNqjCU6Bd/LfGZ36lCZd/uOexzpjtC8VpL5utL2sVvlt2T?=
- =?us-ascii?Q?xcC1Wt+BgxPE7Z8r16dGziSbLPQAbG0iYKh1?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <AE6E2EF6AE7B674F834A6C2D19B817C6@INDPRD01.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: quoted-printable
+ bh=7ZQhDaIR3R0YZZaHHHecl913ppyOcCHzvdGJIvGMMY0=;
+ b=gBzKMBwZA4Qa0RNZO3aQB4gxGWKzBhh4UrQjNhoeqDicl4H4iXs5h+YlAJVPKdpuXeLxS6juOlZo6QpWohMdX6wPlkUMu/xEtBTPnWE3CdBzIVGqjzUvQzLiqNKzdjXnBS32dvnCOyC/CpEUKvKbkYKdKR5l6lM7dLhEebRm5dg=
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28) by DS7PR10MB4896.namprd10.prod.outlook.com
+ (2603:10b6:5:3a0::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 06:20:11 +0000
+Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87]) by MWHPR1001MB2365.namprd10.prod.outlook.com
+ ([fe80::b5d5:7b39:ca2d:1b87%5]) with mapi id 15.20.5144.022; Fri, 15 Apr 2022
+ 06:20:11 +0000
+Date:   Fri, 15 Apr 2022 09:20:01 +0300
+From:   Dan Carpenter <dan.carpenter@oracle.com>
+To:     Haowen Bai <baihaowen@meizu.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V4] staging: rtl8192e: Fix signedness bug in
+ rtllib_rx_assoc_resp()
+Message-ID: <20220415062000.GP3293@kadam>
+References: <4370787.8F6SAcFxjW@leap>
+ <1650003325-26568-1-git-send-email-baihaowen@meizu.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650003325-26568-1-git-send-email-baihaowen@meizu.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-ClientProxiedBy: MR2P264CA0150.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:501:1::13) To MWHPR1001MB2365.namprd10.prod.outlook.com
+ (2603:10b6:301:2d::28)
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-42ed3.templateTenant
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 6fb031ac-3721-48c5-440f-08da1ea7fef4
+X-MS-TrafficTypeDiagnostic: DS7PR10MB4896:EE_
+X-Microsoft-Antispam-PRVS: <DS7PR10MB4896F3517866A66C0A4E10128EEE9@DS7PR10MB4896.namprd10.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6Zack5/cUt6Hn3ExWm4JHYB3GasUuDtqThpZ6a/+RH5ed7fZa50Y5QxXJhpt+TNKt9lnNdQxFTIUZ436mUR9DVDifYdMWZXbhfZGo+Axr7AKRis20GH+VNBmnPAQm9KxFCq8jnoA1Dpj56r+KsKkvAl5BEONdGQCoDqQAHDpKPj4Zg+07ha+zGMmBygIRvNYEyg/w8/TRZ4Pm/kGCHCblDXP4SQ8fJzy+HXzBJEslSe36J4DK3giJ0hwheVSI7/RDR8R3PWgZGCHnhCpALOwr4E9jxzYXza/yxI0Qrkx3crvcsLC0Uo+Ky1fw3syhIgAuDsQsQRxlxpXX/3xVNo7a1R9jgbUHgrg9g5TxeMgTkrowDJsQWR7iSuoIe5Nem8N+7SX3z5eq986gOIogY8WWXJ6FxeWgkLrO5fNSneR4+bJ3GXsIFngh4F/98a6ESn742LmBs3oCqv798WWw4sXgPeNo4/Dda4NeKRVcgjDjK4kzW6zDF920d3l5jm9jr9FMELRyV8AbkMEV7CsvUXdEib9G0YoMiVB1+N2kKkzlcqLt+HWzKvAn2fXaV4gwix1Qk7E3FHORpyC4TWm/53cSwCbVUhe8OHSNv8sh0wnSp64NSgGmKF7x/EJ9rhto8NcQeVmtvKSbJkZMT5sLsio8mtM9ixvhxKfosRlfBzM8P/zhtozOGPIaOtLoQn1Pw84K/c1pPfvRrzWD3TjeSRacg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(7916004)(366004)(2906002)(52116002)(1076003)(6666004)(186003)(44832011)(8676002)(4326008)(66946007)(66476007)(66556008)(9686003)(26005)(6486002)(86362001)(5660300002)(508600001)(6512007)(6506007)(33656002)(8936002)(33716001)(38100700002)(6916009)(316002)(83380400001)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jjfbv8s9jmsirQNxO5wHwRrjwGccq8ns13juOF6BBBydFkHTUYWq4kAAMvus?=
+ =?us-ascii?Q?F5Ga/DEEPZZGjqlWliE1BdLLKK7eYmIXdH68bPHI2aMWgwB3jLxF761TYOAo?=
+ =?us-ascii?Q?+xTVQHoOYqMYD5xWP2hdLk1UuBFJV5kbwyx8RDuWQgXhjHuYATEAozog439y?=
+ =?us-ascii?Q?c/fyEnQS0d5bhZ8VRgV75jvEUEZZFkiGHNXGiw8htdMqlbEpfQ/XmWkdenAi?=
+ =?us-ascii?Q?FoTjLV07uj6HWHgrqt+niv6coF+Q1aUTeCEDgixQ84yr6QhXlZppNz6+dWMb?=
+ =?us-ascii?Q?Rx8f8XjiPG7bT5wTGRvGdZ3by5pV+riCRM+/PB8Gq0je+lT7yH/qW+sWBybo?=
+ =?us-ascii?Q?Kz88zlvJPOtY7PqvMzH4Mz0c9S7JXdXku2mxUrVizPt1rwJt4xLCyba9IoF/?=
+ =?us-ascii?Q?CtNoTEE9vfM9aq8VXfyGkTqAppV9HYzJ65pOkwwbEDxMOBkymd/iQzdRbzS6?=
+ =?us-ascii?Q?Pc4PT2wdpQL362wqVk6Nl/WNSxWd8BizLDPJOyX820FZxUM5WQzkv2o+FDVz?=
+ =?us-ascii?Q?Z9QzCCjna6Xbi3G1F5EPv9Y2ObctGop0BhedMiV30VEVjTg0k0n5OnfZLQ+t?=
+ =?us-ascii?Q?fmIh0TS+aZlEfOi5OgyI1OvIj2aGdW+PQCEgf3eyYNl0hBCtmySqZTfQ6/9S?=
+ =?us-ascii?Q?Y8H7rRi3pr3XCDfpbTB/Jwl/j+/MFBVHmv2ePWRcVove6ZJj3PIitQpsgfm8?=
+ =?us-ascii?Q?jeoS9XFPGOPIJ6+9JyXo1dULrYy4WvUx9z0+5zs/D157uDmge6Fv1QglAjtq?=
+ =?us-ascii?Q?IGKVSC51R67FqvIBEN8OVi6GsYnBFbE7d0wjUe+jLHQTp/OBRoWOarsSPhoG?=
+ =?us-ascii?Q?xd9jx0I9tC6gTitvHYswutT19auBMWeqYvRt/ex+SR6QciLdyDdAZp98coQs?=
+ =?us-ascii?Q?QFMWDUbQxBi3loR7tOQh9Ko1Rz8xMjGCYziEz5CLCqiZ15DBVxTJ3jTjDq23?=
+ =?us-ascii?Q?zq0SjgEpnysjbsoMEaXPKXs/bjzlEfqDMF69JPmXFMyuUYafV9SeEQdFXLlA?=
+ =?us-ascii?Q?yQ7I7a3AIlpYvMF7ayVupYF4JK8xOGQwhHMvGIMjQvebepexdAhbnCX89ch1?=
+ =?us-ascii?Q?K+383EWyejbU2xc4EhOp8X/1OEJ7cNk3CtAD9PD77/n/6VE5+KAerjk8NHNM?=
+ =?us-ascii?Q?E4j7NrbdoeXRRPlWjsDlhaws0BhPaZD0GWbb+Ke2gu4RK6V63nuoqgx91WvZ?=
+ =?us-ascii?Q?BvXHTcHnBUg1eH70Lr5pvwEdERBVY4PCUSw8hB1lazEZ1TG5aKzuXibUOsDH?=
+ =?us-ascii?Q?I5UvB6AkDV9YDbjOQ8Msn/I/nEIgi4DWhAPGCo1VHME6QpGCerZM4Jp3SCIn?=
+ =?us-ascii?Q?81Q9i7CowyZy5A122z8P4X9izeku5o5lTtGaXAaJR5KRQop2X5EofO1Sx6LG?=
+ =?us-ascii?Q?lH+BO3bSNhziO8Hq7F3xTHzTtBcx8AxfraPwqnXqy8WrUycg5kkYuXzmlGrO?=
+ =?us-ascii?Q?dZtOiPQKPhZE7uEtfA6FDswBlVkzIJHRPpkbdW2HNhNNuliB4e5yNEgoub4P?=
+ =?us-ascii?Q?AmOALRAjyTmjUXg8Qqk32S8eiY/d63UfyTaMGTuuNXq1SLp7gFlHrQf1yQWN?=
+ =?us-ascii?Q?pLrylfA2DkfZPNSK0i1ASNG0jST3CBN03ko85rCNlUOBNyty0Dq+F7jp/xMf?=
+ =?us-ascii?Q?BTmpBVdz5OMu8fyuww1vVnFDzMwVM2vL9CMhYPF1oWWvWMLcBgw9QSnMhSg5?=
+ =?us-ascii?Q?8cblKxAaz7aXaEWGkK+RWuCcqsAIJ7Mh3WTDJBGVHO4Xhv2CHllKDygPYjOr?=
+ =?us-ascii?Q?byxa8wfMz8tTuJ9X5gedky/nXNwtGcs=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6fb031ac-3721-48c5-440f-08da1ea7fef4
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PNZPR01MB4415.INDPRD01.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 933e9721-f406-48cd-5134-08da1ea7d899
-X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 06:19:06.8175
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 06:20:11.6357
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BM1PR0101MB1891
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HwyKXnQMSUXuVfnlYB4gQZVPVnhbgx3zUGGTj2Qzdd3yv4DZBWQNqRhPsJjz1tPsji73DKLBS/iE0LGu1qmfF+Auqsk8QxzeldIZhcHPIQs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB4896
+X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
+ definitions=2022-04-15_01:2022-04-14,2022-04-15 signatures=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=999 spamscore=0 adultscore=0 phishscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204150038
+X-Proofpoint-ORIG-GUID: 7I8NavlYDlK5bb58BjEAqaK_8MaVVWAc
+X-Proofpoint-GUID: 7I8NavlYDlK5bb58BjEAqaK_8MaVVWAc
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aditya Garg <gargaditya08@live.com>
+On Fri, Apr 15, 2022 at 02:15:25PM +0800, Haowen Bai wrote:
+> This commit message suggested by Dan Carpenter as below:
+> 
+> The rtllib_rx_assoc_resp() function has a signedness bug because it's
+> a declared as a u16 but it return -ENOMEM.  When you look at it more
+> closely it returns a mix of error codes including 0xcafe, -ENOMEM, and
+> a->status which is WLAN_STATUS_NOT_SUPPORTED_AUTH_ALG.  This is a mess.
+> 
+> Clean it up to just return standard kernel error codes.  We can print
+> out the a->status before returning a regular error code.  The printks
+> in the caller need to be adjusted as well.
+> 
+> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+> ---
+> V1->V2: reduce return random value; print its own error message.
+> V2->V3: change commit message; change s16 -> int.
+> V3->V4: add message suggested by in title.
+> 
+>  drivers/staging/rtl8192e/rtllib_softmac.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+> index 82bf05eb1cbf..4a1b9a94930f 100644
+> --- a/drivers/staging/rtl8192e/rtllib_softmac.c
+> +++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+> @@ -1764,7 +1764,7 @@ static void rtllib_softmac_check_all_nets(struct rtllib_device *ieee)
+>  	spin_unlock_irqrestore(&ieee->lock, flags);
+>  }
+>  
+> -static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
+> +static inline int auth_parse(struct net_device *dev, struct sk_buff *skb,
+>  			     u8 **challenge, int *chlen)
+>  {
+>  	struct rtllib_authentication *a;
+> @@ -1773,7 +1773,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
+>  	if (skb->len <  (sizeof(struct rtllib_authentication) -
+>  	    sizeof(struct rtllib_info_element))) {
+>  		netdev_dbg(dev, "invalid len in auth resp: %d\n", skb->len);
+> -		return 0xcafe;
+> +		return -EINVAL;
+>  	}
+>  	*challenge = NULL;
+>  	a = (struct rtllib_authentication *) skb->data;
+> @@ -1787,7 +1787,7 @@ static inline u16 auth_parse(struct net_device *dev, struct sk_buff *skb,
+>  				return -ENOMEM;
+>  		}
+>  	}
+> -	return le16_to_cpu(a->status);
+> +	return a->status;
 
-On Apple T2 Macs, when Linux attempts to read the db and dbx efi variables
-at early boot to load UEFI Secure Boot certificates, a page fault occurs
-in Apple firmware code and EFI runtime services are disabled with the
-following logs:
+See previous responses.
 
-[Firmware Bug]: Page fault caused by firmware at PA: 0xffffb1edc0068000
-WARNING: CPU: 3 PID: 104 at arch/x86/platform/efi/quirks.c:735 efi_crash_gr=
-acefully_on_page_fault+0x50/0xf0
-(Removed some logs from here)
-Call Trace:
- <TASK>
- page_fault_oops+0x4f/0x2c0
- ? search_bpf_extables+0x6b/0x80
- ? search_module_extables+0x50/0x80
- ? search_exception_tables+0x5b/0x60
- kernelmode_fixup_or_oops+0x9e/0x110
- __bad_area_nosemaphore+0x155/0x190
- bad_area_nosemaphore+0x16/0x20
- do_kern_addr_fault+0x8c/0xa0
- exc_page_fault+0xd8/0x180
- asm_exc_page_fault+0x1e/0x30
-(Removed some logs from here)
- ? __efi_call+0x28/0x30
- ? switch_mm+0x20/0x30
- ? efi_call_rts+0x19a/0x8e0
- ? process_one_work+0x222/0x3f0
- ? worker_thread+0x4a/0x3d0
- ? kthread+0x17a/0x1a0
- ? process_one_work+0x3f0/0x3f0
- ? set_kthread_struct+0x40/0x40
- ? ret_from_fork+0x22/0x30
- </TASK>
----[ end trace 1f82023595a5927f ]---
-efi: Froze efi_rts_wq and disabled EFI Runtime Services
-integrity: Couldn't get size: 0x8000000000000015
-integrity: MODSIGN: Couldn't get UEFI db list
-efi: EFI Runtime Services are disabled!
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get UEFI dbx list
-integrity: Couldn't get size: 0x8000000000000015
-integrity: Couldn't get mokx list
-integrity: Couldn't get size: 0x80000000
-
-This patch skips reading these UEFI variables and thus prevents the crash.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: Aditya Garg <gargaditya08@live.com>
----
-v2 :- Reduce code size of the table.
-v3 :- Close the brackets which were left open by mistake.
-v4 :- Fix comment style issues, remove blank spaces and limit use of dmi_fi=
-rst_match()
-v4 RESEND :- Add stable to cc
-v5 :- Rewrite the description
-v6 :- Make description more clear
- .../platform_certs/keyring_handler.h          |  8 +++++
- security/integrity/platform_certs/load_uefi.c | 33 +++++++++++++++++++
- 2 files changed, 41 insertions(+)
-
-diff --git a/security/integrity/platform_certs/keyring_handler.h b/security=
-/integrity/platform_certs/keyring_handler.h
-index 284558f30..212d894a8 100644
---- a/security/integrity/platform_certs/keyring_handler.h
-+++ b/security/integrity/platform_certs/keyring_handler.h
-@@ -35,3 +35,11 @@ efi_element_handler_t get_handler_for_mok(const efi_guid=
-_t *sig_type);
- efi_element_handler_t get_handler_for_dbx(const efi_guid_t *sig_type);
-=20
- #endif
-+
-+#ifndef UEFI_QUIRK_SKIP_CERT
-+#define UEFI_QUIRK_SKIP_CERT(vendor, product) \
-+		 .matches =3D { \
-+			DMI_MATCH(DMI_BOARD_VENDOR, vendor), \
-+			DMI_MATCH(DMI_PRODUCT_NAME, product), \
-+		},
-+#endif
-diff --git a/security/integrity/platform_certs/load_uefi.c b/security/integ=
-rity/platform_certs/load_uefi.c
-index 5f45c3c07..1a7e7d597 100644
---- a/security/integrity/platform_certs/load_uefi.c
-+++ b/security/integrity/platform_certs/load_uefi.c
-@@ -3,6 +3,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/cred.h>
-+#include <linux/dmi.h>
- #include <linux/err.h>
- #include <linux/efi.h>
- #include <linux/slab.h>
-@@ -12,6 +13,31 @@
- #include "../integrity.h"
- #include "keyring_handler.h"
-=20
-+/*
-+ * On T2 Macs reading the reading the db and dbx efi variables to load UEF=
-I
-+ * Secure Boot certificates causes occurrence of a page fault in Apple's
-+ * firmware and a crash disabling EFI runtime services. The following quir=
-k
-+ * skips reading these variables.
-+ */
-+static const struct dmi_system_id uefi_skip_cert[] =3D {
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,3") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro15,4") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,3") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookPro16,4") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir8,2") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacBookAir9,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacMini8,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "MacPro7,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,1") },
-+	{ UEFI_QUIRK_SKIP_CERT("Apple Inc.", "iMac20,2") },
-+	{ }
-+};
-+
- /*
-  * Look to see if a UEFI variable called MokIgnoreDB exists and return tru=
-e if
-  * it does.
-@@ -138,6 +164,13 @@ static int __init load_uefi_certs(void)
- 	unsigned long dbsize =3D 0, dbxsize =3D 0, mokxsize =3D 0;
- 	efi_status_t status;
- 	int rc =3D 0;
-+	const struct dmi_system_id *dmi_id;
-+
-+	dmi_id =3D dmi_first_match(uefi_skip_cert);
-+	if (dmi_id) {
-+		pr_err("Getting UEFI Secure Boot Certs is not supported on T2 Macs.\n");
-+		return false;
-+	}
-=20
- 	if (!efi_rt_services_supported(EFI_RT_SUPPORTED_GET_VARIABLE))
- 		return false;
---=20
-2.25.1
-
+regards,
+dan carpenter
 

@@ -2,105 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63667502DAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16F1502DAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355812AbiDOQXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58454 "EHLO
+        id S1355815AbiDOQ1w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:27:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354079AbiDOQXX (ORCPT
+        with ESMTP id S1355856AbiDOQ1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:23:23 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659B39E9E9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:20:54 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id p10so14666401lfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:20:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rBexj3eQsZ3wqG1HL5nZa5jhi+e1ylFf5sIYb7x7L1I=;
-        b=lyJP4p0/jTYul0L7lAjkhp1x44jUqCwvtCr08WvTa6Wqh6aKOdBE87Mfec1WJaP2uE
-         4Dq4pu8IkavHpAxUT6GKabeIGzkQqgVuAIlfyToWC7pWqLSXwj2hE888qZJJu1Q3DAjN
-         drPpFeFdvPi+4WmjvdD1BhjcgY+QaPsGSWhbIY1E+55M10pBPjDuH3w/p6j4/4X5wbeo
-         G2u3zFHxaL/HxCuWzoiatweF31uhkMLF0xo2JrwPEPmdMiyIC6iB8C9jmBwRyoXaRB1H
-         yoQR8IpsNm7npG5MUVn0g/jn9UhMb2yhQF6shscDSV0nKbJF/GnJQbk4bUOFo234pkR0
-         wcgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rBexj3eQsZ3wqG1HL5nZa5jhi+e1ylFf5sIYb7x7L1I=;
-        b=Osd54YDw67ToQU9UXD2Qnp4+uDN7B7BOtMnu6PGzFCkF3wy9mPkuGbjUGIuNWkKvbh
-         ubvxvg4CllW3IkgsVXFsCABZTmVgatRKjdZVPZelKKbJSAmwAEWl/JaSSnhPXzD8ki8R
-         q93kk/Hsqvb9D7h8l/SklP+WuBVK2IHZMqkHw7WjK7UAzdkiQ3M6bU+zTJ5T/vkVAJJP
-         hSDu2SvTUlcxGY/p3OrLA1g71KB+zC4EjL8R6taomlcdnC1HSYnJo6qZeP58ohcA0MFp
-         kl+jr3pe93NcHS7FZrA/y0RJ/7CM088HfAt17l+cS/KcZfcP4afZxvFL5HMMsk+1oqGQ
-         zjpg==
-X-Gm-Message-State: AOAM531oHZhLxMd+1xqXkp0ykT3kJLtIP8OODNyrvcp7iHnahxQl3/ce
-        NLEMR4ku7Nf1Tj7XtaKIDOfAuSJ9Gx6ERlmwMGYzyg==
-X-Google-Smtp-Source: ABdhPJyrpFklWSsc8st0wbc04Hdn0wEal7J3pt97tatylqke3ynq/jSAqqktjaRPn62ybtQahD24pOa4QhxwQAYgQw8=
-X-Received: by 2002:a05:6512:687:b0:46b:8d08:36da with SMTP id
- t7-20020a056512068700b0046b8d0836damr5435405lfe.402.1650039652290; Fri, 15
- Apr 2022 09:20:52 -0700 (PDT)
+        Fri, 15 Apr 2022 12:27:40 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FCB4419B8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650039911; x=1681575911;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=B36/RaVcjkCRny+oxQ/PTFetPsrjjelekUyEPUIGMKk=;
+  b=GKywbCRQEQ7MrGuRII131L462RsGaaYOjqQMifmWTirq5jZfk3kwcIju
+   BYL/bd79PymFn77qzBoeVAYHqbrZqx8LmeOP6xeqSJzBXS2E9Bo3D3ipd
+   3irfwJlAFJDjjUQIknn/PsoGUeRac1tQDNvAEpdFN/Te4nKODHuI2agn1
+   06H63Mg79tjoF2FQtWTNcHnj2OESfwp3jRajX8Xqzp2L1XuE0NBpIOt1i
+   rJv3ogdq6EzzXbIoE6oM9AIPr8S9bLPRsbIHgU74SuyolWaQFvT2X7m0K
+   0lUY5kNw/Urg8oTEqtrfXIjPyQDyjIfGDZy7za0ALHVfLS5CicFKIKvLF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262934888"
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="262934888"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 09:23:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
+   d="scan'208";a="508985464"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 15 Apr 2022 09:23:21 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfOjA-000297-Ma;
+        Fri, 15 Apr 2022 16:23:20 +0000
+Date:   Sat, 16 Apr 2022 00:22:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [jpoimboe:objtool-run 19/35] vmlinux.o: warning: objtool:
+ exit_to_user_mode+0x10: call to static_key_count.constprop.0() leaves
+ .noinstr.text section
+Message-ID: <202204160031.TT2073NX-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220414162325.1830014-1-jackyli@google.com> <fe209f25-6119-cc26-2608-8aaccf11ac36@amd.com>
-In-Reply-To: <fe209f25-6119-cc26-2608-8aaccf11ac36@amd.com>
-From:   Peter Gonda <pgonda@google.com>
-Date:   Fri, 15 Apr 2022 10:20:40 -0600
-Message-ID: <CAMkAt6pyDQaqLCRzJWow6hgtyMrAtarPri9yUWBgMPPuucm77A@mail.gmail.com>
-Subject: Re: [PATCH v2] crypto: ccp - Fix the INIT_EX data file open failure
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     Jacky Li <jackyli@google.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Marc Orr <marcorr@google.com>, Alper Gun <alpergun@google.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 7:49 AM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 4/14/22 11:23, Jacky Li wrote:
-> > There are 2 common cases when INIT_EX data file might not be
-> > opened successfully and fail the sev initialization:
-> >
-> > 1. In user namespaces, normal user tasks (e.g. VMM) can change their
-> >     current->fs->root to point to arbitrary directories. While
-> >     init_ex_path is provided as a module param related to root file
-> >     system. Solution: use the root directory of init_task to avoid
-> >     accessing the wrong file.
-> >
-> > 2. Normal user tasks (e.g. VMM) don't have the privilege to access
-> >     the INIT_EX data file. Solution: open the file as root and
-> >     restore permissions immediately.
-> >
-> > Fixes: 3d725965f836 ("crypto: ccp - Add SEV_INIT_EX support")
-> > Signed-off-by: Jacky Li <jackyli@google.com>
-> > Reviewed-by: Peter Gonda <pgonda@google.com>
->
-> Looks good, just a quick question. Should there be any type of access
-> checks before switching credentials? Should we check access to /dev/sev or
-> such? Or is the capability to load the module enough?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
+head:   b8646d8664875281b48db7752d3dc7880b7561e1
+commit: f2bec70312f62ef4f1ea21c134d9def627182ad3 [19/35] objtool: Don't print parentheses in function addresses
+config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220416/202204160031.TT2073NX-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=f2bec70312f62ef4f1ea21c134d9def627182ad3
+        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
+        git fetch --no-tags jpoimboe objtool-run
+        git checkout f2bec70312f62ef4f1ea21c134d9def627182ad3
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-I thought this was fine because regardless of if an admin sets
-psp_init_on_probe=true or false, their intention is that people who
-have rw access to /dev/sev can use the commands which require the PSP
-to be init. In the case of psp_init_on_probe=false only rw users can
-cause the file to be created. The case of psp_init_on_probe=true seems
-a little less clear to me but if a user can modprobe ccp that seems
-like sufficient privilege to create the file. What do you think, Tom?
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   vmlinux.o: warning: objtool: __do_fast_syscall_32+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_syscall_64+0xc: call to static_key_count.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: do_int80_syscall_32+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: enter_from_user_mode+0x18: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode+0x1d: call to __kcsan_check_access() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare+0x18: call to __kcsan_check_access() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: exit_to_user_mode+0x10: call to static_key_count.constprop.0() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: syscall_exit_to_user_mode+0x29: call to static_key_count.constprop.0() leaves .noinstr.text section
+   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode+0x18: call to __kcsan_check_access() leaves .noinstr.text section
+>> vmlinux.o: warning: objtool: irqentry_exit_to_user_mode+0x17: call to static_key_count.constprop.0() leaves .noinstr.text section
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

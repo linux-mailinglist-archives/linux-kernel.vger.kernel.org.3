@@ -2,183 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3370502C0F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:41:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A65FF502C10
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354615AbiDOOnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33332 "EHLO
+        id S1354599AbiDOOnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354712AbiDOOm6 (ORCPT
+        with ESMTP id S1349869AbiDOOmY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:42:58 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF213700F;
-        Fri, 15 Apr 2022 07:40:24 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 974ECE000B;
-        Fri, 15 Apr 2022 14:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650033622;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zanZazVS+F6yO9Vb+0jek4QpQxEnTAcQmwRfYFhBd+k=;
-        b=XvjgWF12omvcB0S9wdZocsVRAM1fWYoHiR3MF0fsHo3P2MRQFyfstVNy00SFVoUnaYfNn5
-        DHTXUF6jawn9JnEU+1oqAbtBVncahboURiQbPA8my6MYgJfBtZa7dJYGANrQGdr2VlYBUO
-        h6jCzl9nA6Oc98wTw2G+Nthu3s1C5LycIA7OUXethKZt4aeXqiQzdpThwIS3Giy5cuXfJW
-        7fgNfwBtv3eQ3VWNQqBJe43/w+CMLSJuooTGyXCGiaStd+/42BLmNRw5wWflmuNrJUnDS7
-        IXLGtSXkRqiUo9FnvBUtdVr8XG8qvaPy51ebNxVCCOqaHDI+dbpqhktihqA2oA==
-Date:   Fri, 15 Apr 2022 16:38:53 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
- converter
-Message-ID: <20220415163853.683c0b6d@fixe.home>
-In-Reply-To: <Yll+Tpnwo5410B9H@lunn.ch>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-10-clement.leger@bootlin.com>
-        <YlismVi8y3Vf6PZ0@lunn.ch>
-        <20220415102453.1b5b3f77@fixe.home>
-        <Yll+Tpnwo5410B9H@lunn.ch>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Fri, 15 Apr 2022 10:42:24 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB121A393
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:39:53 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id n18so7272808plg.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1MnvIUTCnDUhW/MEcdcS6a3sJGad6CD8T1rW5EsHJho=;
+        b=ERP9pfWyY6alNYGhD48Zx2tVKN4LFJdrCOxLl3DgrkY8Uoebc+mqvBHsJ0wNr0H91I
+         iJlOikU9SuosDX3fezHVHtW/9TaCkdUJFWtppyap9e4ThipVFTS1UYRIF1XL63AJQ6+b
+         N5kAbODQQoSrY0Igts9Vv2ptmwOLZ/rHvl13UotTUsYZoRv9hrSOSlg8l8CjvbdPj6Hk
+         wzuOPlYgSwylW5rt+oE4SaY0RAhCm/vIuZKUTC90h3m1Wcg9a9tatSQwi3gEFM83zBr5
+         oU1XixgbbeyUZH0/n//qIs8FGfjWlgqM3+cFfQ037bArt8Wct10TDXW2gRoAlx/opM55
+         PLrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1MnvIUTCnDUhW/MEcdcS6a3sJGad6CD8T1rW5EsHJho=;
+        b=mu8VKendGb8U+yH3TVpU2jYeNFk0YX5P6uHJ5f9nr5LG7Rqkpr7FaIubKYzZvrKR16
+         lfgRjFi+8WDUVXUHEGc6rs2lt44Bnjm+WXgYu4HBWMBJINREJUwJpe5vpGIs3U61M7gQ
+         /8z8DcMTSv6GluH9a+NEmpiKYuL6NjLGXDyofqfRdw3IkBxUH6m0ww+TRPoqGqZS13Jm
+         zpMBdzVBooSXRZ2Ozo/pc2mbgF2ylR9RqewjC1/IhOZGvZBxknFsQdyFcXm9oYNnMrRR
+         hwmG//I4fNLrlImQtNCwG/RL7m6s3p8g6DTtCayyFJTQKKewb81vTVUlQ2Sqv0fIVRSm
+         bLdA==
+X-Gm-Message-State: AOAM531flvusoEaOEMQZh0s+IUBAtFuD8Ap+M7eehFXGtqepugZ7hWYX
+        S58vV2HqBwI8IggS+2/ifMFd3A==
+X-Google-Smtp-Source: ABdhPJxiWSn2FG95SA76dSXfh63IIlA1JbMOT4SlEzlrg7n8lbIUkNG860vEUcouEZ8VKy45Cf5TOQ==
+X-Received: by 2002:a17:90a:6501:b0:1ca:a7df:695c with SMTP id i1-20020a17090a650100b001caa7df695cmr4587060pjj.152.1650033592553;
+        Fri, 15 Apr 2022 07:39:52 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id k4-20020a17090a3e8400b001cd37f6c0b7sm4868835pjc.46.2022.04.15.07.39.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 07:39:51 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 14:39:48 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+Subject: Re: [PATCH v8 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+Message-ID: <YlmDtC73u/AouMsu@google.com>
+References: <20220411090447.5928-1-guang.zeng@intel.com>
+ <20220411090447.5928-7-guang.zeng@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220411090447.5928-7-guang.zeng@intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Fri, 15 Apr 2022 16:16:46 +0200,
-Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
+On Mon, Apr 11, 2022, Zeng Guang wrote:
+> From: Maxim Levitsky <mlevitsk@redhat.com>
+> 
+> No normal guest has any reason to change physical APIC IDs, and
+> allowing this introduces bugs into APIC acceleration code.
+> 
+> And Intel recent hardware just ignores writes to APIC_ID in
+> xAPIC mode. More background can be found at:
+> https://lore.kernel.org/lkml/Yfw5ddGNOnDqxMLs@google.com/
+> 
+> Looks there is no much value to support writable xAPIC ID in
+> guest except supporting some old and crazy use cases which
+> probably would fail on real hardware. So, make xAPIC ID
+> read-only for KVM guests.
 
-> On Fri, Apr 15, 2022 at 10:24:53AM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Le Fri, 15 Apr 2022 01:22:01 +0200,
-> > Andrew Lunn <andrew@lunn.ch> a =C3=A9crit :
-> >  =20
-> > > On Thu, Apr 14, 2022 at 02:22:47PM +0200, Cl=C3=A9ment L=C3=A9ger wro=
-te: =20
-> > > > Add the MII converter node which describes the MII converter that is
-> > > > present on the RZ/N1 SoC.   =20
-> > >=20
-> > > Do you have a board which actually uses this? I just noticed that
-> > > renesas,miic-cfg-mode is missing, it is a required property, but maybe
-> > > the board .dts file provides it?
-> > >=20
-> > >     Andrew =20
-> >=20
-> > Hi Andrew, yes, I have a board that defines and use that. =20
->=20
-> Great. Do you plan to mainline it? It is always nice to see a user.
+AFAIK, the plan is to add a capability to let userspace opt-in to a fully read-only
+APIC ID[*], but I haven't seen patches...
 
-Although we are working on a specific customer board, we will probably
-try to mailine this support for the RZ/N1D-DB.
+Maxim?
 
->=20
-> > The
-> > renesas,miic-cfg-mode actually configures the muxes that are present on
-> > the SoC. They allows to mux the various ethernet components (Sercos
-> > Controller, HSR Controller, Ethercat, GMAC1, RTOS-GMAC).
-> > All these muxes are actually controller by a single register
-> > CONVCTRL_MODE. You can actually see the muxes that are present in the
-> > manual [1] at Section 8 and the CONVCTRL_MODE possible values are listed
-> > on page 180.
-> >=20
-> > This seems to be something that is board dependent because the muxing
-> > controls the MII converter outputs which depends on the board layout. =
-=20
->=20
-> Does it also mux the MDIO lines as well?
-
-Nope, the MDIO lines are muxed using the pinctrl driver.
-
->=20
-> We might want to consider the name 'mux'. Linux already has the
-> concept of a mux, e.g. an MDIO mux, and i2c mux etc. These muxes have
-> one master device, which with the aid of the mux you can connect to
-> multiple busses. And at runtime you flip the mux as needed to access
-> the devices on the multiple slave busses. For MDIO you typically see
-> this when you have multiple Ethernet switch, each has its own slave
-> MDIO bus, and you use the mux to connect the single SOC MDIO bus
-> master to the various slave busses as needed to perform a bus
-> transaction. I2C is similar, you can have multiple SFPs, either with
-> there own IC2 bus, connected via a mux to a single I2C bus controller
-> on the SoC.
->=20
-> I've not looked at the data sheet yet, but it sounds like it operates
-> in a different way, so we might want to avoid 'mux'.
-
-Indeed, Let's not refer to it as mux in the code at all. If using your
-proposal below, I guess we could avoid that.
-
->=20
-> > I'm open to any modification for this setup which does not really fit
-> > any abstraction that I may have seen.
-> >=20
-> > [1]
-> > https://www.renesas.com/us/en/document/mah/rzn1d-group-rzn1s-group-rzn1=
-l-group-users-manual-system-introduction-multiplexing-electrical-and =20
->=20
-> O.K, looking at figure 8.1.
->=20
-> What the user wants to express is something like:
->=20
-> Connect MI_CONV5 to SECOS PORTA
-> Connect MI_CONV4 to ETHCAT PORTB
-> Connect MI_CONV3 to SWITCH PORTC
-> Connect MI_CONV2 to SWITCH PORTD
->=20
-> plus maybe
->=20
-> Connect SWITCH PORTIN to RTOS
-
-Yes, that is correct.
-
->=20
-> So i guess i would express the DT bindings like this, 5 values, and
-> let the driver then try to figure out the value you need to put in the
-> register, or return -EINVAL. For DT bindings we try to avoid magic
-> values which get written into registers. We prefer a higher level
-> description, and then let the driver figure out how to actually
-> implement that.
-
-Ok, looks like a more flexible way to doing it. Let's go with something
-like this:
-
-renesas,miic-port-connection =3D <PORTIN_GMAC2>, <MAC2>, <SWITCH_PORTC>,
-<SWITCH_PORTB>, <SWITCH_PORTA>;
-
-
-
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+[*] https://lore.kernel.org/all/c903e82ed2a1e98f66910c35b5aabdcf56e08e72.camel@redhat.com

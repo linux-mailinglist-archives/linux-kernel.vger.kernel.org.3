@@ -2,97 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FCE502E4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:13:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8249B502E4C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 19:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344045AbiDORPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 13:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59624 "EHLO
+        id S239398AbiDORUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 13:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235654AbiDORPM (ORCPT
+        with ESMTP id S235083AbiDORU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 13:15:12 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A4519BAC5;
-        Fri, 15 Apr 2022 10:12:43 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id c125so1585518iof.9;
-        Fri, 15 Apr 2022 10:12:43 -0700 (PDT)
+        Fri, 15 Apr 2022 13:20:29 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3634F9C1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:18:00 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id u19so14933574lff.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 10:18:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WrjUGuM6rsjd8l4kfiI/+ZvHzPP7KdnaSgcThC3AV8o=;
-        b=kKdXm1SFgaU0iXA2vligFziQ2tI3e4EIcf2e7gI9zKaVVjoJhwqa6nil1gW6QuZQcX
-         yTfkNxFYkQabvpe3wRuWqWHLTF6CpllydvcNWtRCILfdfOR5A63e2ts7V2n6xzxOsJpG
-         Y4aq1E0Z23FtIuzyB8xUYBJg6qyRNu5J43LfRlXIp49m7Rq7gUl0mfxkV0kqxxxk8fly
-         eQRSN0sUhANtHFudZbLuk4Nw/mGjSIBoVboWUuwBJUTqF8wImuscttw8qag/vC/gBaCA
-         v8WKOJzooa3wSHSmQfhzNL7BHJXQum0JWnLtwlIVyivtFiBpBZKILiGPhpyH2fOmH/zr
-         etug==
+         :cc:content-transfer-encoding;
+        bh=iS0+HG7ppU7CKCESRGpHVtK2c0Z1R6B4jgH5kiji7QQ=;
+        b=F+sP503RIL9KnXQKFdw8jFLgM3dZlF/04PJ2kbfhxrIPN8Yhalc4DyWAUkxYtxEMrJ
+         6bpDPGxbX5lWWQY+UrqYLwmhf4TOMq1HomOXo6Ise88EsvgtWPbA16ZQC5HToYsBVvWj
+         xFKWWY4dyZoFOYnAM8yJ1ZJzApEuz8pBi7ayyQMZh5S5B7pvlsPanNXiYsiNEAsfqjIP
+         T/hVCQxrw1DsiAOoppGY6NEe7Qb46C55TTHnI5LshCw1Da65ed//UKa4Y1AKT6SqAeoz
+         SYTVrEua5tfScXJxSK9v/ctW6IVtJ3NMaVZGxyunlygcB1GB4POJvBW4pwdkfEFLruJp
+         Vm5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WrjUGuM6rsjd8l4kfiI/+ZvHzPP7KdnaSgcThC3AV8o=;
-        b=NCTZQOpJh6WRWa2wP2fsV+xVT11hFBauk334ATqklZ2TVQz8UyHUEppn1l6HRNW6Ww
-         oD6ddO8AbFu3M8QurbD2nJNGungnK4fcVNCVwBgA9y0OuG0vs+Ql18jRehDmTyVSlxtp
-         o1JtIPphPD/uz6F9lKZYFqsGhD1UOa+8M9+inigJ+WiITc3h7vJi7Oo6j1h5b5FwCX/h
-         RKQDYS1ftaxOrA2qJU7JAXW0V/qKesfB0NJZgJwiHWJg8iyVt92Ya22BnNnCZWB8Xn2B
-         KWekKMnUY+Uh1lT4Vq9yxpAey2nmO6UFnueLDDmAQgPQcdZTDreTvV+zlvzQUzmtiFhl
-         rxbg==
-X-Gm-Message-State: AOAM5321lRDISJNOIL54u5BC9qF63xma6aBQv3t7KGjuALyCFehOqEhu
-        vNqnWtTUWvOjmzV4wk0KDElmhEIie7KEWdYimI8=
-X-Google-Smtp-Source: ABdhPJzxTm55bqpj9D4DAFEW2P37c3B5S+N0gPMJy7zffSpWPkEiz3q0FQyy5x0p9Pr8mdpZ/LMosfy/lWxTiQuG6ZA=
-X-Received: by 2002:a05:6602:185a:b0:645:d914:35e9 with SMTP id
- d26-20020a056602185a00b00645d91435e9mr3603490ioi.154.1650042762884; Fri, 15
- Apr 2022 10:12:42 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=iS0+HG7ppU7CKCESRGpHVtK2c0Z1R6B4jgH5kiji7QQ=;
+        b=p3QYj6Y+odbKOg788IDJm2JanSDd0Oksry0KqTRnIqfPzksOr8eknXz9nn0tHZ2zq+
+         CUP6ZRn6cGLrJx+wf3vOIcMggkpRJi/sTdCWsrvIKHTmBE/CmAeRi1EXlUBDSfuPZglh
+         XbKxVZD9sFFM+sZ3uC152QrOq1bNIQZi5xfkUoSeirNurimAYEjX/De6aQ4Z6CN06uMa
+         8OBJxN8GuiUWSi1kMMy8qt6A5Xacjn95xK48+vtbkpByMc2PcOF3es1S+IPbhbzItzMg
+         R5cFGaY1PyBtoYI1Em57uuCMrwNX7kNP8L694ciiC6D1+i/Y/10+69HGF4yIXMN26msS
+         x6fA==
+X-Gm-Message-State: AOAM531m0U6z5yqALUeJi9bFZspXS/VXRBzG4EFsEvvXp7gb/iU92cs0
+        EQoKt5lt/YRBPKHblwQxNWLgSZg4os5JwqsKxBXX7w==
+X-Google-Smtp-Source: ABdhPJz5of4FOiZi7NmycxKw8mSHActvr8uPwHDxx+aTPMtO/jpqtfkfOuFpJ3bGjiebmm/zAydSQ6u1oJBop708IOQ=
+X-Received: by 2002:ac2:5313:0:b0:46d:ef7:c2db with SMTP id
+ c19-20020ac25313000000b0046d0ef7c2dbmr28258lfh.392.1650043078292; Fri, 15 Apr
+ 2022 10:17:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220414162220.1985095-1-xukuohai@huawei.com> <20220414162220.1985095-6-xukuohai@huawei.com>
-In-Reply-To: <20220414162220.1985095-6-xukuohai@huawei.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Fri, 15 Apr 2022 10:12:31 -0700
-Message-ID: <CAEf4Bzb_R56wAuD-Wgg7B5brT-dcsa+5sYynY+_CFzRwg+N5AA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/6] bpf, arm64: bpf trampoline for arm64
-To:     Xu Kuohai <xukuohai@huawei.com>
-Cc:     bpf <bpf@vger.kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Networking <netdev@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        X86 ML <x86@kernel.org>, hpa@zytor.com,
-        Shuah Khan <shuah@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Peter Collingbourne <pcc@google.com>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Delyan Kratunov <delyank@fb.com>
+References: <CAKwvOdniB-+F37ygZhRytBGVFjwnukyOpmoiJTCeusMdb=6_=g@mail.gmail.com>
+ <3DE35A81-1FC6-4EC7-8F3A-B395B576644D@oracle.com>
+In-Reply-To: <3DE35A81-1FC6-4EC7-8F3A-B395B576644D@oracle.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 15 Apr 2022 10:17:46 -0700
+Message-ID: <CAKwvOd=CqOfd=zprWQPYoddgnGPJMb_sdk2Eut9DZNJq_fFJ-w@mail.gmail.com>
+Subject: Re: toolchain mitigations plumbers session
+To:     Qing Zhao <qing.zhao@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Bill Wendling <morbo@google.com>,
+        "Moreira, Joao" <joao.moreira@intel.com>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Jose E. Marchesi" <jemarch@gnu.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,43 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 9:10 AM Xu Kuohai <xukuohai@huawei.com> wrote:
+On Fri, Apr 15, 2022 at 7:50 AM Qing Zhao <qing.zhao@oracle.com> wrote:
 >
-> Add bpf trampoline support for arm64. Most of the logic is the same as
-> x86.
+> Hi, Nick,
 >
-> fentry before bpf trampoline hooked:
->  mov x9, x30
->  nop
+> > On Apr 14, 2022, at 4:30 PM, Nick Desaulniers <ndesaulniers@google.com>=
+ wrote:
+> >
+> > Hi Qing, Kees, and Bill,
+> > Jose and I are currently in the planning process to put together a
+> > Kernel+Toolchain microconference track at Linux Plumbers Conference
+> > this year (Sept 12-14) in Dublin, Ireland.
+> >
+> > Would you all be interested in leading another session on
+> > kernel+toolchain collaboration for mitigations? Do you plan to attend
+> > plumbers this year which will be in person?
 >
-> fentry after bpf trampoline hooked:
->  mov x9, x30
->  bl  <bpf_trampoline>
->
-> Tested on qemu, result:
->  #55 fentry_fexit:OK
->  #56 fentry_test:OK
->  #58 fexit_sleep:OK
->  #59 fexit_stress:OK
->  #60 fexit_test:OK
->  #67 get_func_args_test:OK
->  #68 get_func_ip_test:OK
->  #101 modify_return:OK
->
-> Signed-off-by: Xu Kuohai <xukuohai@huawei.com>
-> Acked-by: Song Liu <songliubraving@fb.com>
-> ---
+> I=E2=80=99d love to attend  plumbers this year to meet people in person!
+> But not sure whether there will be enough new, big stuff to report this y=
+ear since mostly bunch of bug fixes and minor
+> Improvements to the previous work.
 
-Can you please also take a look at [0], which is an ongoing work to
-add support for BPF cookie to BPF trampoline-based BPF programs. It's
-very close to being done, so it would be good if you can implement
-that at the same time.
-
-  [0] https://patchwork.kernel.org/project/netdevbpf/patch/20220412165555.4146407-4-kuifeng@fb.com/
-
->  arch/arm64/net/bpf_jit.h      |  14 +-
->  arch/arm64/net/bpf_jit_comp.c | 338 +++++++++++++++++++++++++++++++++-
->  2 files changed, 348 insertions(+), 4 deletions(-)
->
-
-[...]
+No worries; it doesn't need to be a presentation, or just one person
+presenting.  I think a quick review of newly developed features from
+various authors, then a discussion with consumers (kernel developers)
+would be beneficial.
+--=20
+Thanks,
+~Nick Desaulniers

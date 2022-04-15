@@ -2,164 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BFF0502B91
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3182502B6B
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:02:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354326AbiDOOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
+        id S1354241AbiDOOFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236542AbiDOOQe (ORCPT
+        with ESMTP id S1354233AbiDOOFE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:16:34 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B43CEE1B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id z8so8510524oix.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
+        Fri, 15 Apr 2022 10:05:04 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B039DBA306;
+        Fri, 15 Apr 2022 07:02:35 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id v15so9990069edb.12;
+        Fri, 15 Apr 2022 07:02:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Ne77m8cZZW0R7+jQl5DIOLbM38uI8W7ZFAvs8zlnbN8=;
-        b=h1AEH94ksvbHDBFe3x+a7vmDgmwHtOTnxwprQwUj4X1Nmdvg1vWefYUVfwtkHjfOhv
-         HDBUNoMaooGxk+7pisSLbT50fMO43493JfXXGe1JkBL4xDXrK1H5O0Xq3Z0rI1Np2Gum
-         tGFZ+dFeiSq6PxqPTbRbrbbUyryHeeNaxHgPuJCF+jV80j6YnZG9lidImPuqYc4Fk1CU
-         b8X7OOSzA5dXiqW6pqu7vLlfMTGvQ3i/W/m7avQlpXvChMg8bwMZR+5/+kybThxsGnTj
-         HXopgsjM58efO1m+fJxy9vuEj+l0L6fRrn0ExSVCs/8UWenBQaE1wJhhUlcfW/LB9FL1
-         QD2A==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B4NLxiEMn45fm7ZP4Wwd+hPT7xASfT/B5aQNlTl+H7A=;
+        b=ZiW/IZTB1xy4IkU2FwMIBsjW5AF48i2mw5+IHYG/77iBzkTE5vqG5zni7CYEqfzG9g
+         UMrQSFDdOoFhPt/MUXqcvlT6H1B1HFk3rGNRgmlNZmXl3ovUjAXebcZjBB8BRvyWJ5Sj
+         K53U/szymK7RpOmSw65Hav9uieSfYOs+P+63y+3OLIlQry7tXbploGVcOAiPHChc28SZ
+         U92wwEGAr4OmB7GhXAnBtrkTav1XnAaGyhLWlNZuVeXhjq/49ruabgW/gzUcGpfZawVm
+         kRo9Ck90YF2T+ZGBtLNIjRNAP+GQTe/MiOlwzw5Dn5x4iCZZpnctzYAZsDJ4qENm+p+5
+         lhKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Ne77m8cZZW0R7+jQl5DIOLbM38uI8W7ZFAvs8zlnbN8=;
-        b=aH4B4qBfG6YWxfbC0cDun944mg7EHdmCHXqD8RjeGzlRHFT617Cuz2Po92GFVAppUl
-         0H0EdWH3AETn9P1/rlH8Htrrx0HuQwv7TPOfTTQXenwswHqDLfSJHvVzhYK5egAdJIZn
-         49m4VD6gunmMtUQM3qgbS2FpvQ94Xqjv08bRZLaQdE8ymMyykyC1sy0V72bVuw16VBA9
-         u4pxR9knLZBWBI0HyZb5Z5nDn9Qc6jc4g6yGG3ebQfr/Y4CILz7NBM/tXSyv2zR9YpN9
-         z1iDuVwfrte1f19bSwFrkvpk15lZg+2OpqC+frobLKx9ukIyVPDZUDXriXIbbuhAze1d
-         rm9g==
-X-Gm-Message-State: AOAM5328FpGCmM1h3BN8YUlhUmBBVm1+SzNMzilAGnWuzD+1cAbqyoNy
-        zR5BlcGQp1vakzTISQ2Q2Qo=
-X-Google-Smtp-Source: ABdhPJzmIliimBoMo5RTzw1NZHdZ598Yqfbe2K4rgL5RQgz1CujBydm9kLuTJhT4SOwwYRnQKEfqmA==
-X-Received: by 2002:a05:6808:d4c:b0:2f8:d0d2:d06c with SMTP id w12-20020a0568080d4c00b002f8d0d2d06cmr1672959oik.285.1650032043019;
-        Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
-Received: from localhost.localdomain ([2804:14c:4c2:8a9b:dcc3:45ee:2581:b4cb])
-        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm1156189oov.3.2022.04.15.07.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:14:02 -0700 (PDT)
-From:   Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-To:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        andrealmeid@riseup.net
-Cc:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-Subject: [PATCH v2 2/2] drm/vkms: return early if compose_plane fails
-Date:   Fri, 15 Apr 2022 08:13:00 -0300
-Message-Id: <20220415111300.61013-3-tales.aparecida@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220415111300.61013-1-tales.aparecida@gmail.com>
-References: <20220415111300.61013-1-tales.aparecida@gmail.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=B4NLxiEMn45fm7ZP4Wwd+hPT7xASfT/B5aQNlTl+H7A=;
+        b=DC9MNHdWhbRCUTwvpLw/EWaeys2iE/DO1fafFoc0KnIVyPWT5cNJNc+Jnso2z77BK1
+         Fn/OYevvPHeUvmNI7JXKmB3l0Ng3f7eopK6rGglk2U4oOZ8MLzDmX2lQQvjm/GrEckvw
+         Ta13e9OgconyhOxfzYSRPq0mPmxmiMf5I5Zu1V8xpECQ5vEXvQ7th8dFdRKGbRojn/cu
+         sCD8ba1jwszRmp5r735viuI0QXMwQ+69CUDDijlnU2YB2GcmvbRMYC/kv6TCqoCLK3JC
+         PjDB0zfytW+wzj1CQ1IQfFBfTUxJx7wQEB6QteNnuT+oTQSR91kKe78FSlawgj+0/VGp
+         5QyA==
+X-Gm-Message-State: AOAM533Z/HhRAjDQhdJ7VQe08/JDeHHMIlV/nVkAuk/sTDqqpnOVTPZW
+        1mzHBCD6mM7Xq7mY0bBSgtw=
+X-Google-Smtp-Source: ABdhPJyfOJPcLez5/oODtByHWW20dnzZY19n9GVD3PszbXFfK9sYlpav3gVzNtkzqezlSG+tQd/TIw==
+X-Received: by 2002:a05:6402:50d0:b0:419:7df9:55c8 with SMTP id h16-20020a05640250d000b004197df955c8mr8245720edb.79.1650031354111;
+        Fri, 15 Apr 2022 07:02:34 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id dn7-20020a17090794c700b006e8b176143bsm1715171ejc.155.2022.04.15.07.02.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 07:02:33 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <42931581-24f3-d995-4971-5cdf3041d53f@redhat.com>
+Date:   Fri, 15 Apr 2022 16:02:31 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 067/104] KVM: x86: Allow to update cached values in
+ kvm_user_return_msrs w/o wrmsr
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <07b46b34aa86658fe8409926c3b8474dd6ff0d8c.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <07b46b34aa86658fe8409926c3b8474dd6ff0d8c.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do not exit quietly from compose_plane. If any plane has an invalid
-map, propagate the error value upwards. While here, add log messages
-for the invalid index.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Chao Gao <chao.gao@intel.com>
+> 
+> Several MSRs are constant and only used in userspace(ring 3).  But VMs may
+> have different values.  KVM uses kvm_set_user_return_msr() to switch to
+> guest's values and leverages user return notifier to restore them when the
+> kernel is to return to userspace.  To eliminate unnecessary wrmsr, KVM also
+> caches the value it wrote to an MSR last time.
+> 
+> TDX module unconditionally resets some of these MSRs to architectural INIT
+> state on TD exit.  It makes the cached values in kvm_user_return_msrs are
+> inconsistent with values in hardware.  This inconsistency needs to be
+> fixed.  Otherwise, it may mislead kvm_on_user_return() to skip restoring
+> some MSRs to the host's values.  kvm_set_user_return_msr() can help correct
+> this case, but it is not optimal as it always does a wrmsr.  So, introduce
+> a variation of kvm_set_user_return_msr() to update cached values and skip
+> that wrmsr.
+> 
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/include/asm/kvm_host.h |  1 +
+>   arch/x86/kvm/x86.c              | 25 ++++++++++++++++++++-----
+>   2 files changed, 21 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 8406f8b5ab74..b6396d11139e 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1894,6 +1894,7 @@ int kvm_pv_send_ipi(struct kvm *kvm, unsigned long ipi_bitmap_low,
+>   int kvm_add_user_return_msr(u32 msr);
+>   int kvm_find_user_return_msr(u32 msr);
+>   int kvm_set_user_return_msr(unsigned index, u64 val, u64 mask);
+> +void kvm_user_return_update_cache(unsigned int index, u64 val);
+>   
+>   static inline bool kvm_is_supported_user_return_msr(u32 msr)
+>   {
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index 66400810d54f..45e8a02e99bf 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -427,6 +427,15 @@ static void kvm_user_return_msr_cpu_online(void)
+>   	}
+>   }
+>   
+> +static void kvm_user_return_register_notifier(struct kvm_user_return_msrs *msrs)
+> +{
+> +	if (!msrs->registered) {
+> +		msrs->urn.on_user_return = kvm_on_user_return;
+> +		user_return_notifier_register(&msrs->urn);
+> +		msrs->registered = true;
+> +	}
+> +}
+> +
+>   int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
+>   {
+>   	unsigned int cpu = smp_processor_id();
+> @@ -441,15 +450,21 @@ int kvm_set_user_return_msr(unsigned slot, u64 value, u64 mask)
+>   		return 1;
+>   
+>   	msrs->values[slot].curr = value;
+> -	if (!msrs->registered) {
+> -		msrs->urn.on_user_return = kvm_on_user_return;
+> -		user_return_notifier_register(&msrs->urn);
+> -		msrs->registered = true;
+> -	}
+> +	kvm_user_return_register_notifier(msrs);
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL_GPL(kvm_set_user_return_msr);
+>   
+> +/* Update the cache, "curr", and register the notifier */
+> +void kvm_user_return_update_cache(unsigned int slot, u64 value)
+> +{
+> +	struct kvm_user_return_msrs *msrs = this_cpu_ptr(user_return_msrs);
+> +
+> +	msrs->values[slot].curr = value;
+> +	kvm_user_return_register_notifier(msrs);
+> +}
+> +EXPORT_SYMBOL_GPL(kvm_user_return_update_cache);
+> +
+>   static void drop_user_return_notifiers(void)
+>   {
+>   	unsigned int cpu = smp_processor_id();
 
-Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
----
- drivers/gpu/drm/vkms/vkms_composer.c | 30 ++++++++++++++++++----------
- 1 file changed, 20 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
-index b47ac170108c..c0a3b53cd155 100644
---- a/drivers/gpu/drm/vkms/vkms_composer.c
-+++ b/drivers/gpu/drm/vkms/vkms_composer.c
-@@ -149,16 +149,16 @@ static void blend(void *vaddr_dst, void *vaddr_src,
- 	}
- }
- 
--static void compose_plane(struct vkms_composer *primary_composer,
--			  struct vkms_composer *plane_composer,
--			  void *vaddr_out)
-+static int compose_plane(struct vkms_composer *primary_composer,
-+			 struct vkms_composer *plane_composer,
-+			 void *vaddr_out)
- {
- 	struct drm_framebuffer *fb = &plane_composer->fb;
- 	void *vaddr;
- 	void (*pixel_blend)(const u8 *p_src, u8 *p_dst);
- 
- 	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
--		return;
-+		return -EINVAL;
- 
- 	vaddr = plane_composer->map[0].vaddr;
- 
-@@ -168,6 +168,8 @@ static void compose_plane(struct vkms_composer *primary_composer,
- 		pixel_blend = &x_blend;
- 
- 	blend(vaddr_out, vaddr, primary_composer, plane_composer, pixel_blend);
-+
-+	return 0;
- }
- 
- static int compose_active_planes(void **vaddr_out,
-@@ -177,7 +179,7 @@ static int compose_active_planes(void **vaddr_out,
- 	struct drm_framebuffer *fb = &primary_composer->fb;
- 	struct drm_gem_object *gem_obj = drm_gem_fb_get_obj(fb, 0);
- 	const void *vaddr;
--	int i;
-+	int i, ret;
- 
- 	if (!*vaddr_out) {
- 		*vaddr_out = kzalloc(gem_obj->size, GFP_KERNEL);
-@@ -187,8 +189,10 @@ static int compose_active_planes(void **vaddr_out,
- 		}
- 	}
- 
--	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
-+	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0]))) {
-+		DRM_DEBUG_DRIVER("Failed to compose. Invalid map in the primary plane.");
- 		return -EINVAL;
-+	}
- 
- 	vaddr = primary_composer->map[0].vaddr;
- 
-@@ -198,10 +202,16 @@ static int compose_active_planes(void **vaddr_out,
- 	 * planes should be in z-order and compose them associatively:
- 	 * ((primary <- overlay) <- cursor)
- 	 */
--	for (i = 1; i < crtc_state->num_active_planes; i++)
--		compose_plane(primary_composer,
--			      crtc_state->active_planes[i]->composer,
--			      *vaddr_out);
-+	for (i = 1; i < crtc_state->num_active_planes; i++) {
-+		ret = compose_plane(primary_composer,
-+				    crtc_state->active_planes[i]->composer,
-+				    *vaddr_out);
-+		if (ret) {
-+			DRM_DEBUG_DRIVER("Failed to compose. Invalid map in the active_planes[%d].",
-+					 i);
-+			return ret;
-+		}
-+	}
- 
- 	return 0;
- }
--- 
-2.35.1
-
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>

@@ -2,67 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A3E502D66
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:02:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DAA5502D69
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:03:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350745AbiDOQFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43592 "EHLO
+        id S1355696AbiDOQFy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:05:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355691AbiDOQFE (ORCPT
+        with ESMTP id S1355239AbiDOQFv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:05:04 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814E89D4CB
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:02:35 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id a10so6714047qvm.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+DljWZKXAubVXqG1Ro0omqGdweveuV0cYgdZ65EqJ9s=;
-        b=w/T5XzJUgWoGLquTxc3I8nvLvpbyCUQti/1pvnZJaqrBJghV4AuwUl1UM2MqzhauZm
-         35gJC1bZ0ZbQcrJ4wSvSUoYUt2xjKnv6RQ6CbDkltUmFo36Jg0fArEv07L0Dvz8aT5Gb
-         lPL+2udLzxV+RB6W714RhFqkMqsMLwSSirWD4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=+DljWZKXAubVXqG1Ro0omqGdweveuV0cYgdZ65EqJ9s=;
-        b=zD4qARYgJURqtn/mNBrTEG5mvFpECFa/Xdtt/ts5TM82qdKDFBHZE/wLz4BphbDehz
-         PSR8emb7eJpKJFMSeZIcNC70Jj8oUNBGURFeRaIZ0HTeTbCY1XzDFrb62TtCS//kBTy2
-         +kjpBRE+UWNXTsEGP1zgLEaz8YDI5jB+XlhEx7BHbT7aV/5OziW0IFdz3ey4n0mmSaIT
-         1ZbXuUVxcD0+4KC5RPtW6fnRgTUEbiYDKAL2CJRF//pxxhnZXdGuZyCgc45qCo5fF7lq
-         XTAvc0VniFoChWGtTq1Sfwh3v2Yuvyrh54opt4zonVGWtgThE443UQRQ05GAnCAo8bhb
-         qX8w==
-X-Gm-Message-State: AOAM532Y0/l8YGNEA1utSp/04lBEZNLJ7ODTdorjls2E1AsCH2PSgwZX
-        cp5w8mf3358poo63Z1xdqKlmwefblnBc6w==
-X-Google-Smtp-Source: ABdhPJwAzENcYv4aGYA8ZMIaha5k+ZD1mGr5UPM81CPNKLxpqywnC9WqLy4bR8wR5pAcj+CpJgOeLA==
-X-Received: by 2002:a05:6214:d62:b0:446:2e4a:1f30 with SMTP id 2-20020a0562140d6200b004462e4a1f30mr5910873qvs.74.1650038554384;
-        Fri, 15 Apr 2022 09:02:34 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id bl22-20020a05620a1a9600b00680da570a5dsm2699890qkb.61.2022.04.15.09.02.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 09:02:33 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
-Subject: [PATCH v3] rcu/nocb: Add an option to offload all CPUs on boot
-Date:   Fri, 15 Apr 2022 16:02:24 +0000
-Message-Id: <20220415160224.1904505-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+        Fri, 15 Apr 2022 12:05:51 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913A29D0F1;
+        Fri, 15 Apr 2022 09:03:22 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: nfraprado)
+        with ESMTPSA id F26961F481A1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650038601;
+        bh=TK4L1RQq13E/GZlJ/Wh/rvinGwy2B3DcB8KhtlOOT6Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B/4QrexfPaGQ8b07q0ZSgcRXvYeIkYLZoSwNOIZxsjI5Rijc86hx7BhFJhWVERae9
+         GPjnlcBOlm5VdmyC0TLuOSw96VI2XRy4fHsy3+6CBVKifWarDzb1wdNsizbt4r+agS
+         OOWmb69cWxD+5NuB021KwD+hFLwlwnqHHWKfG3eb3+BY/+G057ej2P7geBcVWse2w8
+         3vzY6oq0TJgPU/JwluNyZVqHIJrNeoliFc6R3bJc7mpo9Rc8QpMHxQxwF28xsfTf0B
+         B6PItKjk18ro3nA0tPhiF1eIJEMS0X8RaFI4zN6S3pTIEK5NY0ODfL7feDREw9jAyc
+         rk+eXeYYt4wsg==
+Date:   Fri, 15 Apr 2022 12:03:14 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Hui-Liu Liu <hui.liu@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, srv_heupstream@mediatek.com,
+        zhiyong.tao@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        yuchen.huang@mediatek.com, wen.su@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 1/1] arm64: dts: mt6359: add PMIC MT6359 nodes
+Message-ID: <20220415160314.fxdvwl2jx7u7vhgj@notapiano>
+References: <20220328103729.25102-1-hui.liu@mediatek.com>
+ <20220328103729.25102-2-hui.liu@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220328103729.25102-2-hui.liu@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,101 +63,334 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joel Fernandes <joel@joelfernandes.org>
+On Mon, Mar 28, 2022 at 06:37:29PM +0800, Hui-Liu Liu wrote:
+> From: Hui Liu <hui.liu@mediatek.com>
+> 
+> MT6359 is the primary PMIC for MT8192.
+> Add PMIC MT6359 related node which is used for MT8192 platform.
+> 
+> Signed-off-by: Hui Liu <hui.liu@mediatek.com>
 
-On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-which ends up not offloading any CPU. This patch removes a dependency
-from the bootloader having to know about RCU, about how many CPUs the
-system has, and about how to provide the mask.
+Hi Hui,
 
-With the new option enabled, all CPUs will be offloaded on boot.
+as the pwrap node on mt8192.dtsi has now been merged [1], please add an include
+for this mt6359.dtsi in mt8192-evb.dtsi in the next version of this patch.
 
-Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
----
-v2 was forcing the option to override no_cbs=
-v3 is back to v1 but with a config option defaulting to 'n'.
+Thanks,
+Nícolas
 
- Documentation/admin-guide/kernel-parameters.txt |  3 +++
- kernel/rcu/Kconfig                              | 13 +++++++++++++
- kernel/rcu/tree_nocb.h                          | 16 ++++++++++++++--
- 3 files changed, 30 insertions(+), 2 deletions(-)
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/matthias.bgg/linux.git/commit/?h=v5.18-next/dts64&id=261691b40128e6b76bb94d562457d8a5236cc7fa
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index f5a27f067db9..7648a7dd335e 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -4398,6 +4398,9 @@
- 			no-callback mode from boot but the mode may be
- 			toggled at runtime via cpusets.
- 
-+			Note that this argument takes precedence over
-+			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
-+
- 	rcu_nocb_poll	[KNL]
- 			Rather than requiring that offloaded CPUs
- 			(specified by rcu_nocbs= above) explicitly
-diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-index bf8e341e75b4..2f8bd694ed85 100644
---- a/kernel/rcu/Kconfig
-+++ b/kernel/rcu/Kconfig
-@@ -223,6 +223,19 @@ config RCU_NOCB_CPU
- 	  Say Y here if you need reduced OS jitter, despite added overhead.
- 	  Say N here if you are unsure.
- 
-+config RCU_NOCB_CPU_DEFAULT_ALL
-+	bool "Offload RCU callback processing from all CPUs by default"
-+	depends on RCU_NOCB_CPU
-+	default n
-+	help
-+	  Use this option to offload callback processing from all CPUs
-+	  by default, in the absence of the rcu_nocbs boot parameter.
-+	  This also avoids the need to use any boot parameters to achieve
-+	  the effect of offloading all CPUs on boot.
-+
-+	  Say Y here if you want offload all CPUs by default on boot.
-+	  Say N here if you are unsure.
-+
- config TASKS_TRACE_RCU_READ_MB
- 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
- 	depends on RCU_EXPERT
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index eeafb546a7a0..673fa0d1f801 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1165,12 +1165,21 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
- void __init rcu_init_nohz(void)
- {
- 	int cpu;
--	bool need_rcu_nocb_mask = false;
-+	bool need_rcu_nocb_mask = false, offload_all = false;
- 	struct rcu_data *rdp;
- 
-+#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-+	if (!rcu_nocb_is_setup) {
-+		need_rcu_nocb_mask = true;
-+		offload_all = true;
-+	}
-+#endif
-+
- #if defined(CONFIG_NO_HZ_FULL)
--	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
-+	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
- 		need_rcu_nocb_mask = true;
-+		offload_all = false; /* NO_HZ_FULL has its own mask. */
-+	}
- #endif /* #if defined(CONFIG_NO_HZ_FULL) */
- 
- 	if (need_rcu_nocb_mask) {
-@@ -1191,6 +1200,9 @@ void __init rcu_init_nohz(void)
- 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
- #endif /* #if defined(CONFIG_NO_HZ_FULL) */
- 
-+	if (offload_all)
-+		cpumask_setall(rcu_nocb_mask);
-+
- 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
- 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
- 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
--- 
-2.36.0.rc0.470.gd361397f0d-goog
-
+> ---
+>  arch/arm64/boot/dts/mediatek/mt6359.dtsi | 298 +++++++++++++++++++++++
+>  1 file changed, 298 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> new file mode 100644
+> index 000000000000..df3e822232d3
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+> @@ -0,0 +1,298 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (C) 2022 MediaTek Inc.
+> + */
+> +
+> +&pwrap {
+> +	pmic: pmic {
+> +		compatible = "mediatek,mt6359";
+> +		interrupt-controller;
+> +		#interrupt-cells = <2>;
+> +
+> +		mt6359codec: mt6359codec {
+> +		};
+> +
+> +		regulators {
+> +			mt6359_vs1_buck_reg: buck_vs1 {
+> +				regulator-name = "vs1";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <2200000>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vgpu11_buck_reg: buck_vgpu11 {
+> +				regulator-name = "vgpu11";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vmodem_buck_reg: buck_vmodem {
+> +				regulator-name = "vmodem";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1100000>;
+> +				regulator-ramp-delay = <10760>;
+> +				regulator-enable-ramp-delay = <200>;
+> +			};
+> +			mt6359_vpu_buck_reg: buck_vpu {
+> +				regulator-name = "vpu";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vcore_buck_reg: buck_vcore {
+> +				regulator-name = "vcore";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1300000>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vs2_buck_reg: buck_vs2 {
+> +				regulator-name = "vs2";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1600000>;
+> +				regulator-enable-ramp-delay = <0>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vpa_buck_reg: buck_vpa {
+> +				regulator-name = "vpa";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <3650000>;
+> +				regulator-enable-ramp-delay = <300>;
+> +			};
+> +			mt6359_vproc2_buck_reg: buck_vproc2 {
+> +				regulator-name = "vproc2";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vproc1_buck_reg: buck_vproc1 {
+> +				regulator-name = "vproc1";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <200>;
+> +				regulator-allowed-modes = <0 1 2>;
+> +			};
+> +			mt6359_vcore_sshub_buck_reg: buck_vcore_sshub {
+> +				regulator-name = "vcore_sshub";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +			};
+> +			mt6359_vgpu11_sshub_buck_reg: buck_vgpu11_sshub {
+> +				regulator-name = "vgpu11_sshub";
+> +				regulator-min-microvolt = <400000>;
+> +				regulator-max-microvolt = <1193750>;
+> +			};
+> +			mt6359_vaud18_ldo_reg: ldo_vaud18 {
+> +				regulator-name = "vaud18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vsim1_ldo_reg: ldo_vsim1 {
+> +				regulator-name = "vsim1";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +			};
+> +			mt6359_vibr_ldo_reg: ldo_vibr {
+> +				regulator-name = "vibr";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vrf12_ldo_reg: ldo_vrf12 {
+> +				regulator-name = "vrf12";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1300000>;
+> +			};
+> +			mt6359_vusb_ldo_reg: ldo_vusb {
+> +				regulator-name = "vusb";
+> +				regulator-min-microvolt = <3000000>;
+> +				regulator-max-microvolt = <3000000>;
+> +				regulator-enable-ramp-delay = <960>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsram_proc2_ldo_reg: ldo_vsram_proc2 {
+> +				regulator-name = "vsram_proc2";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vio18_ldo_reg: ldo_vio18 {
+> +				regulator-name = "vio18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +				regulator-enable-ramp-delay = <960>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vcamio_ldo_reg: ldo_vcamio {
+> +				regulator-name = "vcamio";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +			};
+> +			mt6359_vcn18_ldo_reg: ldo_vcn18 {
+> +				regulator-name = "vcn18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vfe28_ldo_reg: ldo_vfe28 {
+> +				regulator-name = "vfe28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-enable-ramp-delay = <120>;
+> +			};
+> +			mt6359_vcn13_ldo_reg: ldo_vcn13 {
+> +				regulator-name = "vcn13";
+> +				regulator-min-microvolt = <900000>;
+> +				regulator-max-microvolt = <1300000>;
+> +			};
+> +			mt6359_vcn33_1_bt_ldo_reg: ldo_vcn33_1_bt {
+> +				regulator-name = "vcn33_1_bt";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vcn33_1_wifi_ldo_reg: ldo_vcn33_1_wifi {
+> +				regulator-name = "vcn33_1_wifi";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vaux18_ldo_reg: ldo_vaux18 {
+> +				regulator-name = "vaux18";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsram_others_ldo_reg: ldo_vsram_others {
+> +				regulator-name = "vsram_others";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <5000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vefuse_ldo_reg: ldo_vefuse {
+> +				regulator-name = "vefuse";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <2000000>;
+> +			};
+> +			mt6359_vxo22_ldo_reg: ldo_vxo22 {
+> +				regulator-name = "vxo22";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <2200000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vrfck_ldo_reg: ldo_vrfck {
+> +				regulator-name = "vrfck";
+> +				regulator-min-microvolt = <1500000>;
+> +				regulator-max-microvolt = <1700000>;
+> +			};
+> +			mt6359_vrfck_1_ldo_reg: ldo_vrfck_1 {
+> +				regulator-name = "vrfck";
+> +				regulator-min-microvolt = <1240000>;
+> +				regulator-max-microvolt = <1600000>;
+> +			};
+> +			mt6359_vbif28_ldo_reg: ldo_vbif28 {
+> +				regulator-name = "vbif28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <2800000>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vio28_ldo_reg: ldo_vio28 {
+> +				regulator-name = "vio28";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vemc_ldo_reg: ldo_vemc {
+> +				regulator-name = "vemc";
+> +				regulator-min-microvolt = <2900000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vemc_1_ldo_reg: ldo_vemc_1 {
+> +				regulator-name = "vemc";
+> +				regulator-min-microvolt = <2500000>;
+> +				regulator-max-microvolt = <3300000>;
+> +			};
+> +			mt6359_vcn33_2_bt_ldo_reg: ldo_vcn33_2_bt {
+> +				regulator-name = "vcn33_2_bt";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_vcn33_2_wifi_ldo_reg: ldo_vcn33_2_wifi {
+> +				regulator-name = "vcn33_2_wifi";
+> +				regulator-min-microvolt = <2800000>;
+> +				regulator-max-microvolt = <3500000>;
+> +			};
+> +			mt6359_va12_ldo_reg: ldo_va12 {
+> +				regulator-name = "va12";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1300000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_va09_ldo_reg: ldo_va09 {
+> +				regulator-name = "va09";
+> +				regulator-min-microvolt = <800000>;
+> +				regulator-max-microvolt = <1200000>;
+> +			};
+> +			mt6359_vrf18_ldo_reg: ldo_vrf18 {
+> +				regulator-name = "vrf18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1810000>;
+> +			};
+> +			mt6359_vsram_md_ldo_reg: ldo_vsram_md {
+> +				regulator-name = "vsram_md";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <10760>;
+> +				regulator-enable-ramp-delay = <240>;
+> +			};
+> +			mt6359_vufs_ldo_reg: ldo_vufs {
+> +				regulator-name = "vufs";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +			};
+> +			mt6359_vm18_ldo_reg: ldo_vm18 {
+> +				regulator-name = "vm18";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <1900000>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vbbck_ldo_reg: ldo_vbbck {
+> +				regulator-name = "vbbck";
+> +				regulator-min-microvolt = <1100000>;
+> +				regulator-max-microvolt = <1200000>;
+> +			};
+> +			mt6359_vsram_proc1_ldo_reg: ldo_vsram_proc1 {
+> +				regulator-name = "vsram_proc1";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +				regulator-ramp-delay = <7500>;
+> +				regulator-enable-ramp-delay = <240>;
+> +				regulator-always-on;
+> +			};
+> +			mt6359_vsim2_ldo_reg: ldo_vsim2 {
+> +				regulator-name = "vsim2";
+> +				regulator-min-microvolt = <1700000>;
+> +				regulator-max-microvolt = <3100000>;
+> +			};
+> +			mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
+> +				regulator-name = "vsram_others_sshub";
+> +				regulator-min-microvolt = <500000>;
+> +				regulator-max-microvolt = <1293750>;
+> +			};
+> +		};
+> +
+> +		mt6359rtc: mt6359rtc {
+> +			compatible = "mediatek,mt6358-rtc";
+> +		};
+> +	};
+> +};
+> -- 
+> 2.25.1
+> 
+> 

@@ -2,176 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9563D502674
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF32F502668
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:51:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351280AbiDOIDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41592 "EHLO
+        id S1351237AbiDOHyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiDOIDk (ORCPT
+        with ESMTP id S232094AbiDOHyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:03:40 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E691BE92
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650009672; x=1681545672;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=a8cON1p7+imR+9puTkrCUQtOlIXRgTjtDJOaCsdMXzc=;
-  b=dVd+SD3SPsIiyB8JMuel0IUuwHtyiGWlwqrCn5Ddbg88U/4K0W5v62wT
-   L6WgKeb/BrhJ8a31YcXx2HL6W3fVOB2Xh/fCMJbBbjRaRrFmZ8nGhQ146
-   YRQ93SABjVCPLYb6qwb+xjwSAE2hj0aLVHAYyg40Z72h98fZ9D2TGQt/1
-   MZIMq3bCuDNLutk73Bh+pCy25s5RdPL38KM2+n1e6LMKmhwKPQaonIdog
-   Yp7JrO9RSRBIOClcBBfYu73Py6Whxkibd+rX2yiwGYcJJ23FaMVXV0FGE
-   JHPZ0Qzq40bwjvVw7Z7kqJYfB1rxFgOtJgEi1PPRc2cSQZZxsL254PXjp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="262869485"
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="262869485"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 01:01:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
-   d="scan'208";a="527211445"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 15 Apr 2022 01:01:11 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfGtC-0001kj-9F;
-        Fri, 15 Apr 2022 08:01:10 +0000
-Date:   Fri, 15 Apr 2022 16:01:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/sev] BUILD SUCCESS
- 101826e02ac6c829bf4e768295e79ae9c37b4b2a
-Message-ID: <62592640.+7339l2dzFnrl80g%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 15 Apr 2022 03:54:06 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B76A972D2;
+        Fri, 15 Apr 2022 00:51:38 -0700 (PDT)
+Received: from kwepemi100016.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KfpQ143MpzgYh0;
+        Fri, 15 Apr 2022 15:49:45 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100016.china.huawei.com (7.221.188.123) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 15:51:36 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Apr
+ 2022 15:51:35 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <bvanassche@acm.org>, <hch@infradead.org>, <axboe@kernel.dk>
+CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>, <yi.zhang@huawei.com>
+Subject: [PATCH -next v2] block: update nsecs[] in part_stat_show() and diskstats_show()
+Date:   Fri, 15 Apr 2022 16:06:05 +0800
+Message-ID: <20220415080605.3178553-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git x86/sev
-branch HEAD: 101826e02ac6c829bf4e768295e79ae9c37b4b2a  virt: sevguest: Fix bool function returning negative value
+commit 86d7331299fd("block: update io_ticks when io hang") fixed that
+%util will be zero for iostat when io is hanged, however, avgqu-sz is
+still zero while it represents the number of io that are hunged. On the
+other hand, for some slow device, if an io is started before and done
+after diskstats is read, the avgqu-sz will be miscalculated.
 
-elapsed time: 837m
+To fix the problem, update 'nsecs[]' when part_stat_show() or
+diskstats_show() is called. In order to do that, add 'stat_time' in
+struct block_device and 'rq_stat_time' in struct request to record the
+time. And during iteration, update 'nsecs[]' for each inflight request.
 
-configs tested: 92
-configs skipped: 3
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+---
+Changes in v2:
+ - remove other cleanup patches.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+ block/bdev.c              |  2 ++
+ block/blk-mq.c            | 62 ++++++++++++++++++++++++++++++++++++++-
+ block/blk-mq.h            |  2 ++
+ block/genhd.c             | 62 +++++++++++++++++++++++++--------------
+ include/linux/blk-mq.h    |  2 ++
+ include/linux/blk_types.h |  5 ++++
+ 6 files changed, 112 insertions(+), 23 deletions(-)
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-sparc                       sparc64_defconfig
-sh                          rsk7264_defconfig
-mips                           xway_defconfig
-xtensa                       common_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220414
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-alpha                               defconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                            allyesconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-mips                             allmodconfig
-mips                             allyesconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-x86_64                        randconfig-a011
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arc                  randconfig-r043-20220415
-s390                 randconfig-r044-20220415
-riscv                randconfig-r042-20220415
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
-
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220414
-arm                  randconfig-c002-20220414
-i386                          randconfig-c001
-powerpc                 mpc8313_rdb_defconfig
-powerpc                      acadia_defconfig
-powerpc                      obs600_defconfig
-arm                      tct_hammer_defconfig
-powerpc                     tqm5200_defconfig
-arm                        multi_v5_defconfig
-mips                           mtx1_defconfig
-arm                        spear3xx_defconfig
-arm                        vexpress_defconfig
-arm                          collie_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-hexagon              randconfig-r045-20220415
-hexagon              randconfig-r041-20220415
-hexagon              randconfig-r041-20220414
-hexagon              randconfig-r045-20220414
-
+diff --git a/block/bdev.c b/block/bdev.c
+index 7bf88e591aaf..da0471f7492d 100644
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@ -487,9 +487,11 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
+ 	bdev = I_BDEV(inode);
+ 	mutex_init(&bdev->bd_fsfreeze_mutex);
+ 	spin_lock_init(&bdev->bd_size_lock);
++	spin_lock_init(&bdev->bd_stat_lock);
+ 	bdev->bd_partno = partno;
+ 	bdev->bd_inode = inode;
+ 	bdev->bd_queue = disk->queue;
++	bdev->stat_time = 0;
+ 	bdev->bd_stats = alloc_percpu(struct disk_stats);
+ 	if (!bdev->bd_stats) {
+ 		iput(inode);
+diff --git a/block/blk-mq.c b/block/blk-mq.c
+index 3fe3226aad1b..ebb4db535794 100644
+--- a/block/blk-mq.c
++++ b/block/blk-mq.c
+@@ -128,6 +128,48 @@ struct mq_inflight {
+ 	unsigned int inflight[2];
+ };
+ 
++static bool blk_mq_check_inflight_with_stat(struct request *rq, void *priv,
++					    bool reserved)
++{
++	struct mq_inflight *mi = priv;
++
++	if ((!mi->part->bd_partno || rq->part == mi->part) &&
++	    blk_mq_rq_state(rq) == MQ_RQ_IN_FLIGHT) {
++		u64 stat_time;
++
++		mi->inflight[rq_data_dir(rq)]++;
++		if (!rq->part)
++			return true;
++
++		stat_time = READ_ONCE(rq->stat_time_ns);
++		/*
++		 * This might fail if 'req->stat_time_ns' is updated in
++		 * blk_account_io_done().
++		 */
++		if (likely(cmpxchg(&rq->stat_time_ns, stat_time,
++			    rq->part->stat_time) == stat_time)) {
++			int sgrp = op_stat_group(req_op(rq));
++			u64 duation = stat_time ?
++				rq->part->stat_time - stat_time :
++				rq->part->stat_time - rq->start_time_ns;
++
++			part_stat_add(rq->part, nsecs[sgrp], duation);
++		}
++	}
++
++	return true;
++}
++
++unsigned int blk_mq_in_flight_with_stat(struct request_queue *q,
++					struct block_device *part)
++{
++	struct mq_inflight mi = { .part = part };
++
++	blk_mq_queue_tag_busy_iter(q, blk_mq_check_inflight_with_stat, &mi);
++
++	return mi.inflight[0] + mi.inflight[1];
++}
++
+ static bool blk_mq_check_inflight(struct request *rq, void *priv,
+ 				  bool reserved)
+ {
+@@ -369,6 +411,7 @@ static struct request *blk_mq_rq_ctx_init(struct blk_mq_alloc_data *data,
+ 		rq->start_time_ns = ktime_get_ns();
+ 	else
+ 		rq->start_time_ns = 0;
++	rq->stat_time_ns = 0;
+ 	rq->part = NULL;
+ #ifdef CONFIG_BLK_RQ_ALLOC_TIME
+ 	rq->alloc_time_ns = alloc_time_ns;
+@@ -870,7 +913,24 @@ static void __blk_account_io_done(struct request *req, u64 now)
+ 	part_stat_lock();
+ 	update_io_ticks(req->part, jiffies, true);
+ 	part_stat_inc(req->part, ios[sgrp]);
+-	part_stat_add(req->part, nsecs[sgrp], now - req->start_time_ns);
++
++	if (queue_is_mq(req->q)) {
++		u64 stat_time = READ_ONCE(req->stat_time_ns);
++
++		/*
++		 * This might fail if 'req->stat_time_ns' is updated during
++		 * blk_mq_check_inflight_with_stat().
++		 */
++		if (likely(cmpxchg(&req->stat_time_ns, stat_time, now) ==
++				   stat_time)) {
++			u64 duation = stat_time ? now - stat_time :
++						  now - req->start_time_ns;
++
++			part_stat_add(req->part, nsecs[sgrp], duation);
++		}
++	} else {
++		part_stat_add(req->part, nsecs[sgrp], now - req->start_time_ns);
++	}
+ 	part_stat_unlock();
+ }
+ 
+diff --git a/block/blk-mq.h b/block/blk-mq.h
+index 9bad3057c1f3..e6c2c523c8de 100644
+--- a/block/blk-mq.h
++++ b/block/blk-mq.h
+@@ -193,6 +193,8 @@ unsigned int blk_mq_in_flight(struct request_queue *q,
+ 		struct block_device *part);
+ void blk_mq_in_flight_rw(struct request_queue *q, struct block_device *part,
+ 		unsigned int inflight[2]);
++unsigned int blk_mq_in_flight_with_stat(struct request_queue *q,
++		struct block_device *part);
+ 
+ static inline void blk_mq_put_dispatch_budget(struct request_queue *q,
+ 					      int budget_token)
+diff --git a/block/genhd.c b/block/genhd.c
+index b8b6759d670f..36144fe8872b 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -932,25 +932,52 @@ ssize_t part_size_show(struct device *dev,
+ 	return sprintf(buf, "%llu\n", bdev_nr_sectors(dev_to_bdev(dev)));
+ }
+ 
+-ssize_t part_stat_show(struct device *dev,
+-		       struct device_attribute *attr, char *buf)
++static inline void part_set_stat_time(struct block_device *part)
++{
++	u64 now = ktime_get_ns();
++
++again:
++	part->stat_time = now;
++
++	if (part->bd_partno) {
++		part = bdev_whole(part);
++		goto again;
++	}
++}
++
++static inline void part_get_stat_info(struct block_device *bdev,
++				      struct disk_stats *stat,
++				      unsigned int *inflight)
+ {
+-	struct block_device *bdev = dev_to_bdev(dev);
+ 	struct request_queue *q = bdev_get_queue(bdev);
+-	struct disk_stats stat;
+-	unsigned int inflight;
+ 
+-	if (queue_is_mq(q))
+-		inflight = blk_mq_in_flight(q, bdev);
+-	else
+-		inflight = part_in_flight(bdev);
++	if (queue_is_mq(q)) {
++		part_stat_lock();
++		spin_lock(&bdev->bd_stat_lock);
++		part_set_stat_time(bdev);
++		*inflight = blk_mq_in_flight_with_stat(q, bdev);
++		spin_unlock(&bdev->bd_stat_lock);
++		part_stat_unlock();
++	} else {
++		*inflight = part_in_flight(bdev);
++	}
+ 
+-	if (inflight) {
++	if (*inflight) {
+ 		part_stat_lock();
+ 		update_io_ticks(bdev, jiffies, true);
+ 		part_stat_unlock();
+ 	}
+-	part_stat_read_all(bdev, &stat);
++	part_stat_read_all(bdev, stat);
++}
++
++ssize_t part_stat_show(struct device *dev,
++		       struct device_attribute *attr, char *buf)
++{
++	struct block_device *bdev = dev_to_bdev(dev);
++	struct disk_stats stat;
++	unsigned int inflight;
++
++	part_get_stat_info(bdev, &stat, &inflight);
+ 	return sprintf(buf,
+ 		"%8lu %8lu %8llu %8u "
+ 		"%8lu %8lu %8llu %8u "
+@@ -1239,17 +1266,8 @@ static int diskstats_show(struct seq_file *seqf, void *v)
+ 	xa_for_each(&gp->part_tbl, idx, hd) {
+ 		if (bdev_is_partition(hd) && !bdev_nr_sectors(hd))
+ 			continue;
+-		if (queue_is_mq(gp->queue))
+-			inflight = blk_mq_in_flight(gp->queue, hd);
+-		else
+-			inflight = part_in_flight(hd);
+-
+-		if (inflight) {
+-			part_stat_lock();
+-			update_io_ticks(hd, jiffies, true);
+-			part_stat_unlock();
+-		}
+-		part_stat_read_all(hd, &stat);
++
++		part_get_stat_info(hd, &stat, &inflight);
+ 		seq_printf(seqf, "%4d %7d %pg "
+ 			   "%lu %lu %lu %u "
+ 			   "%lu %lu %lu %u "
+diff --git a/include/linux/blk-mq.h b/include/linux/blk-mq.h
+index 7aa5c54901a9..387e475fedd4 100644
+--- a/include/linux/blk-mq.h
++++ b/include/linux/blk-mq.h
+@@ -108,6 +108,8 @@ struct request {
+ 	u64 start_time_ns;
+ 	/* Time that I/O was submitted to the device. */
+ 	u64 io_start_time_ns;
++	/* Time that I/O was counted in part_get_stat_info(). */
++	u64 stat_time_ns;
+ 
+ #ifdef CONFIG_BLK_WBT
+ 	unsigned short wbt_flags;
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index 046a34c81ec4..4014b0c0ef16 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -65,6 +65,11 @@ struct block_device {
+ 	struct super_block	*bd_fsfreeze_sb;
+ 
+ 	struct partition_meta_info *bd_meta_info;
++
++	/* Prevent part_get_stat_info() to be called concurrently */
++	spinlock_t		bd_stat_lock;
++	/* Will be set when part_get_stat_info() is called */
++	u64			stat_time;
+ #ifdef CONFIG_FAIL_MAKE_REQUEST
+ 	bool			bd_make_it_fail;
+ #endif
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.31.1
+

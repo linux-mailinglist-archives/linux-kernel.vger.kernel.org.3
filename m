@@ -2,123 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 334D05025B9
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727585025CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 08:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350559AbiDOGoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 02:44:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57588 "EHLO
+        id S1350678AbiDOGrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 02:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243518AbiDOGoA (ORCPT
+        with ESMTP id S1350731AbiDOGrm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 02:44:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59D8AFADD;
-        Thu, 14 Apr 2022 23:41:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8867AB82BF0;
-        Fri, 15 Apr 2022 06:41:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA977C385A5;
-        Fri, 15 Apr 2022 06:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650004890;
-        bh=+L/HFWzltw7KDYz0FALc3guFX9clLm9cFM07Zin4qws=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U2xoJV98ppVR4dwd0IrPUHQTzHUazzXZ+C+DgBpQQR75KPLW4WYFNd6JDZEL6JCBc
-         w2nWV1/4a5WEGt99YbBCAtfxzoyk6NScThAh/KJNUtF5wp7GUw4Xa/uFGbluJTO1IG
-         Xsxs6pLSdShzdF+FyDC66IJsu1Ft7gBf1C/pPWGo=
-Date:   Fri, 15 Apr 2022 08:41:27 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Kartik <kkartik@nvidia.com>
-Cc:     ldewangan@nvidia.com, jirislaby@kernel.org,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] serial: tegra: Correct error handling sequence
-Message-ID: <YlkTl/hyNDr9Nlwj@kroah.com>
-References: <1648112644-16950-1-git-send-email-kkartik@nvidia.com>
+        Fri, 15 Apr 2022 02:47:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28EF4B0A53
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:45:14 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id v12so6492037plv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 23:45:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ldV1uCjsScyMqnX29S2Mnzm56eDt6Wx9wkmuB11hEfM=;
+        b=rDb8Gh4XiSJ5bCNnQ/GtnJIzx5ChDSHZ4lV22jBcV+F9GyJoIkOE+UWgey1kEpy0gI
+         MTKaFOriP4KbyNke3RHlowF7AzZ8vUNcqA+TwvlHlayovLLg57TbgJXaNYd9fpE64GSZ
+         ABXn/A0Tx029H5JDtT1XMYUFDzq0jEaK9jWxYNCherEopNOslLePPx/F+lrjS9pBVK/A
+         9dpWjF77ljcGRCaQK7cvGyxJE/KLO5/lQq2+8MwZm4Q9PnjS1vEyAdD7UlP5UuCfx7RW
+         f+X1YiQzmVoG1vIaEQcymb5C98hqfNYIoFZUyzS8Jq2XoPr8jS+wGPmsTLuYAXyggK+m
+         Ji1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ldV1uCjsScyMqnX29S2Mnzm56eDt6Wx9wkmuB11hEfM=;
+        b=n8QBkQbJofYfq+8+AqitDvco/LFRKQnkOXImLSczfOO7rTFeKAJ789hd+nR8+6p2YK
+         G8ccrkBEHAtpnwnuCAPiFVjpSs96dxA+cZA5xmpaSv2I0IOgnyBe05oglV7PIT76BdIQ
+         8wz2a+ObqKzx4SC4HK7IR7s1mvKXYRyms+DuKv/wTCg9Veouozuw08JH7KLV8CTyHIoL
+         8V9KQopQo1fuVEXMypF+jEBqKVMKiZj+EHMPKUth7JW//ve+E7B7Q4FYGLwam2Zi7N66
+         zFd5isRVGDsBWZRinweBhjukHuFZETwLpDMtHL0JQMOrCb+xBgLotRU2Jl3gLMYTh+wY
+         G1BA==
+X-Gm-Message-State: AOAM533AhmjSDaCfdTS4kQfTtkGZJBYP5CJ+C1upLU+bEZJdg9JvcDkT
+        CRbcIG8oQunsJvtMEllXw3sLew==
+X-Google-Smtp-Source: ABdhPJyBEsq9NBxcUGHmvrk5wwfGZRmZAh1nf0tDGbK7Ic0lp5x83dUfzjLylmDxDhgTYThkApUAEw==
+X-Received: by 2002:a17:902:9309:b0:156:983d:2193 with SMTP id bc9-20020a170902930900b00156983d2193mr49846482plb.158.1650005113570;
+        Thu, 14 Apr 2022 23:45:13 -0700 (PDT)
+Received: from always-x1.bytedance.net ([61.120.150.70])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm1867385pfl.15.2022.04.14.23.45.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 23:45:12 -0700 (PDT)
+From:   zhenwei pi <pizhenwei@bytedance.com>
+To:     arei.gonglei@huawei.com, mst@redhat.com
+Cc:     jasowang@redhat.com, herbert@gondor.apana.org.au,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-crypto@vger.kernel.org, helei.sig11@bytedance.com,
+        davem@davemloft.net, zhenwei pi <pizhenwei@bytedance.com>
+Subject: [PATCH 0/4] virtio-crypto: Improve performance
+Date:   Fri, 15 Apr 2022 14:41:32 +0800
+Message-Id: <20220415064136.304661-1-pizhenwei@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1648112644-16950-1-git-send-email-kkartik@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 24, 2022 at 02:34:04PM +0530, Kartik wrote:
-> From: kartik <kkartik@nvidia.com>
-> 
-> In the current error handling sequence the driver checks for break
-> error at the end.
-> 
-> By handling the break error first, we can avoid a situation where the
-> driver keeps processing the errors which can be caused by an unhandled
-> break error.
-> 
-> Signed-off-by: kartik <kkartik@nvidia.com>
+Hi,
 
-I need a full, legal name that you use to sign documents with.  Is that
-this name?
+The main point of this series is to improve the performance for
+virtio crypto:
+- Use wait mechanism instead of busy polling for ctrl queue, this
+  reduces CPU and lock racing, it's possiable to create/destroy session
+  parallelly, QPS increases from ~40K/s to ~200K/s.
+- Enable retry on crypto engine to improve performance for data queue,
+  this allows the larger depth instead of 1.
+- Fix dst data length in akcipher service.
+- Other style fix.
 
-> ---
->  drivers/tty/serial/serial-tegra.c | 26 +++++++++++++-------------
->  1 file changed, 13 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-> index b6223fa..ba78a02 100644
-> --- a/drivers/tty/serial/serial-tegra.c
-> +++ b/drivers/tty/serial/serial-tegra.c
-> @@ -440,7 +440,19 @@ static char tegra_uart_decode_rx_error(struct tegra_uart_port *tup,
->  	char flag = TTY_NORMAL;
->  
->  	if (unlikely(lsr & TEGRA_UART_LSR_ANY)) {
-> -		if (lsr & UART_LSR_OE) {
-> +		if (lsr & UART_LSR_BI) {
-> +			/*
-> +			 * Break error
-> +			 * If FIFO read error without any data, reset Rx FIFO
-> +			 */
-> +			if (!(lsr & UART_LSR_DR) && (lsr & UART_LSR_FIFOE))
-> +				tegra_uart_fifo_reset(tup, UART_FCR_CLEAR_RCVR);
-> +			if (tup->uport.ignore_status_mask & UART_LSR_BI)
-> +				return TTY_BREAK;
-> +			flag = TTY_BREAK;
-> +			tup->uport.icount.brk++;
-> +			dev_dbg(tup->uport.dev, "Got Break\n");
-> +		} else if (lsr & UART_LSR_OE) {
->  			/* Overrrun error */
->  			flag = TTY_OVERRUN;
->  			tup->uport.icount.overrun++;
-> @@ -454,18 +466,6 @@ static char tegra_uart_decode_rx_error(struct tegra_uart_port *tup,
->  			flag = TTY_FRAME;
->  			tup->uport.icount.frame++;
->  			dev_dbg(tup->uport.dev, "Got frame errors\n");
-> -		} else if (lsr & UART_LSR_BI) {
-> -			/*
-> -			 * Break error
-> -			 * If FIFO read error without any data, reset Rx FIFO
-> -			 */
-> -			if (!(lsr & UART_LSR_DR) && (lsr & UART_LSR_FIFOE))
-> -				tegra_uart_fifo_reset(tup, UART_FCR_CLEAR_RCVR);
-> -			if (tup->uport.ignore_status_mask & UART_LSR_BI)
-> -				return TTY_BREAK;
-> -			flag = TTY_BREAK;
-> -			tup->uport.icount.brk++;
-> -			dev_dbg(tup->uport.dev, "Got Break\n");
->  		}
->  		uart_insert_char(&tup->uport, lsr, UART_LSR_OE, 0, flag);
->  	}
+lei he (2):
+  virtio-crypto: adjust dst_len at ops callback
+  virtio-crypto: enable retry for virtio-crypto-dev
 
-What commit does this fix?
+zhenwei pi (2):
+  virtio-crypto: wait ctrl queue instead of busy polling
+  virtio-crypto: move helpers into virtio_crypto_common.c
 
-thanks,
+ drivers/crypto/virtio/Makefile                |   1 +
+ .../virtio/virtio_crypto_akcipher_algs.c      |  92 ++++++------
+ drivers/crypto/virtio/virtio_crypto_common.c  |  92 ++++++++++++
+ drivers/crypto/virtio/virtio_crypto_common.h  |  25 +++-
+ drivers/crypto/virtio/virtio_crypto_core.c    |  37 +----
+ .../virtio/virtio_crypto_skcipher_algs.c      | 134 ++++++++----------
+ 6 files changed, 222 insertions(+), 159 deletions(-)
+ create mode 100644 drivers/crypto/virtio/virtio_crypto_common.c
 
-greg k-h
+-- 
+2.20.1
+

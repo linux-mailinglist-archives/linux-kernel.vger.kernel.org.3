@@ -2,121 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88990502137
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 06:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9687E502136
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 06:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349394AbiDOEVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 00:21:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46914 "EHLO
+        id S1349383AbiDOEV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 00:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236647AbiDOEVt (ORCPT
+        with ESMTP id S236647AbiDOEVZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 00:21:49 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E26E237
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649996361; x=1681532361;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vPpXIcfyh/mU0Fbs0W1R/5/8eNPVnQlfmhfymOXQLD0=;
-  b=TIGhIH+rnZbAZLVAXmgWAmVUnaEpsFJ/RnuOuSuLY8HMvnJ07ZydFYPw
-   0uRchU5nBXf766iMG1vhFAUAfbvXHUtkZ9ljegelAJqHu3+JTwlrTGluy
-   fstEQh4y4IgFKyNzdNym3nv8cHADHLWiaohPi1PZbOKfaskBmMeVLkcdC
-   29R5N00OgNMHFt9vncJFjsF4HE5dxVx9+gYimmshrmxzFIN03DTKQItEA
-   mjE4rdU291PuKjt6Vbgq+pNvFUOUrB3tP6wU0D/iP1n1ero+5S6A5mTxJ
-   wnqjPnGczLHH77i6ZBN8WClmau/TcDBWUResNnO7RRtpHJ4qnsgYBDq10
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="349525636"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="349525636"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 21:19:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="527161406"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 14 Apr 2022 21:19:18 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfDQU-0001Vn-41;
-        Fri, 15 Apr 2022 04:19:18 +0000
-Date:   Fri, 15 Apr 2022 12:18:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dan Williams <dan.j.williams@intel.com>
-Cc:     kbuild-all@lists.01.org,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <ben.widawsky@intel.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Subject: [cxl:pending 20/22] drivers/cxl/core/suspend.c:8:6: warning: no
- previous prototype for 'cxl_mem_active'
-Message-ID: <202204151219.KoL7lvcZ-lkp@intel.com>
+        Fri, 15 Apr 2022 00:21:25 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50107ADD7E
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:18:57 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 13:18:48 +0900
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649996335;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rl3sJ0XRlQIg8Gg43fwrBWpDvE8dJjHgrOhVyk/MSC8=;
+        b=aM+/T+HofxzaGmEWiEGC3Ssm5s2AGIukaI8iWQrdo4qauFuK+eJtUA/3zxmLBsKx+Lvnws
+        sW8O7sprEvwrfP5JOXbu07F1kIFPN7M8akoerStcHSwtLlOaiFvDsHeuaqVt25M5eXS4em
+        mC02Pw/6Q//DWiO06W7ilUoSVQ6hA8M=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Naoya Horiguchi <naoya.horiguchi@linux.dev>
+To:     Miaohe Lin <linmiaohe@huawei.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Yang Shi <shy828301@gmail.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        naoya.horiguchi@nec.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [PATCH 4/3] mm, hugetlb, hwpoison: separate branch for free and
+ in-use hugepage
+Message-ID: <20220415041848.GA3034499@ik1-406-35019.vs.sakura.ne.jp>
+References: <20220408135323.1559401-1-naoya.horiguchi@linux.dev>
+ <20220408135323.1559401-2-naoya.horiguchi@linux.dev>
+ <5b665bcd-57f8-85ae-b0c4-c055875dbfff@oracle.com>
+ <20e677e5-01aa-f8c0-0ce1-bf33da58b7ec@huawei.com>
+ <20220415021233.GA3357039@hori.linux.bs1.fc.nec.co.jp>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220415021233.GA3357039@hori.linux.bs1.fc.nec.co.jp>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git pending
-head:   4f497e0dd3530981f8c897d5d47ee880b62baefb
-commit: fcf0b70f7e80f49f323cc21b8a497a24151d9c28 [20/22] PM: CXL: Disable suspend
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220415/202204151219.KoL7lvcZ-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git/commit/?id=fcf0b70f7e80f49f323cc21b8a497a24151d9c28
-        git remote add cxl https://git.kernel.org/pub/scm/linux/kernel/git/cxl/cxl.git
-        git fetch --no-tags cxl pending
-        git checkout fcf0b70f7e80f49f323cc21b8a497a24151d9c28
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips SHELL=/bin/bash drivers/cxl/core/
+From: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+We know that HPageFreed pages should have page refcount 0, so
+get_page_unless_zero() always fails and returns 0.  So explicitly separate
+the branch based on page state for minor optimization and better readability.
 
-All warnings (new ones prefixed by >>):
+Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+Suggested-by: Miaohe Lin <linmiaohe@huawei.com>
+Signed-off-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
+---
+ mm/hugetlb.c        | 4 +++-
+ mm/memory-failure.c | 4 +++-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
->> drivers/cxl/core/suspend.c:8:6: warning: no previous prototype for 'cxl_mem_active' [-Wmissing-prototypes]
-       8 | bool cxl_mem_active(void)
-         |      ^~~~~~~~~~~~~~
->> drivers/cxl/core/suspend.c:13:6: warning: no previous prototype for 'cxl_mem_active_inc' [-Wmissing-prototypes]
-      13 | void cxl_mem_active_inc(void)
-         |      ^~~~~~~~~~~~~~~~~~
->> drivers/cxl/core/suspend.c:19:6: warning: no previous prototype for 'cxl_mem_active_dec' [-Wmissing-prototypes]
-      19 | void cxl_mem_active_dec(void)
-         |      ^~~~~~~~~~~~~~~~~~
-
-
-vim +/cxl_mem_active +8 drivers/cxl/core/suspend.c
-
-     7	
-   > 8	bool cxl_mem_active(void)
-     9	{
-    10		return atomic_read(&mem_active) != 0;
-    11	}
-    12	
-  > 13	void cxl_mem_active_inc(void)
-    14	{
-    15		atomic_inc(&mem_active);
-    16	}
-    17	EXPORT_SYMBOL_NS_GPL(cxl_mem_active_inc, CXL);
-    18	
-  > 19	void cxl_mem_active_dec(void)
-
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index e38cbfdf3e61..3638f166e554 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -6786,7 +6786,9 @@ int get_hwpoison_huge_page(struct page *page, bool *hugetlb)
+ 	spin_lock_irq(&hugetlb_lock);
+ 	if (PageHeadHuge(page)) {
+ 		*hugetlb = true;
+-		if (HPageFreed(page) || HPageMigratable(page))
++		if (HPageFreed(page))
++			ret = 0;
++		else if (HPageMigratable(page))
+ 			ret = get_page_unless_zero(page);
+ 		else
+ 			ret = -EBUSY;
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 5e3ad640f5bb..661079a37f29 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -1517,7 +1517,9 @@ int __get_huge_page_for_hwpoison(unsigned long pfn, int flags)
+ 	if (flags & MF_COUNT_INCREASED) {
+ 		ret = 1;
+ 		count_increased = true;
+-	} else if (HPageFreed(head) || HPageMigratable(head)) {
++	} else if (HPageFreed(head)) {
++		ret = 0;
++	} else if (HPageMigratable(head)) {
+ 		ret = get_page_unless_zero(head);
+ 		if (ret)
+ 			count_increased = true;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.23.0
+

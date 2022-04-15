@@ -2,103 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B5450207D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 054E0502086
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:31:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344734AbiDOCb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:31:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S1348677AbiDOCdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233911AbiDOCby (ORCPT
+        with ESMTP id S233911AbiDOCdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:31:54 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D584DDE8F
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id be5so6119649plb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=QuJCosJ75hrvgLG8GUZo7EAhJssF6Kh6uJP8UrR80aM=;
-        b=k8qlTK22bUJ+zG5n6SJ1kN9f/vU/hzntumXd/F9Awv/63C55bNuUZaZjeRk4A/pukj
-         ktQh4KPddsUnRe8pCCvgVNYDy5pF1F4GQyxUNpdtsZIIYA5/CBlZ8ZzswdGYvQWxXfdO
-         w/C1fxRu/PiCXnhQ1PPCp4NpEjo0lPrmkjRQApD7f70Ws595aVk8+0LIxlVfRHKN1CbB
-         9Iau8KewiwLn/Diu8DQkEgyW96LDGBjkhdKQdwL41W7pkn5va8QCUBhQ4iwRwLBkuiUw
-         V65oKt8VUiv6eMIC71gatvhDu86N5Q2TnGw8FLGRW8kqtje56cyqUZ5c8l8WNJRFtcnW
-         646Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=QuJCosJ75hrvgLG8GUZo7EAhJssF6Kh6uJP8UrR80aM=;
-        b=ypuRVZzFk8ZhS3LXuckvnNngko9987V0icMGbmHchWxJEMgkHA3bTqLJg77ELxu4Bg
-         AkWGy4X7u8KHBHH354OPVsM3UMb43okXq33ofUF2OKtv99zYHaYGLMVdj0LvzrpabC1z
-         +1Xja+Rj+GGXTy5p0JBtUVBIkHSomV9p72wGbl3nwMBKQr1h+OJipjw670m8yca1FCAp
-         zVmkA0QOrRmbTi5O+XIYn8nKjDN/aFpkQzFc70ngJQzOdxm5fnlMuCLTpyOWViPTLOLM
-         /vkRJmLxl606vNj53z1t6CkpFC06E//VVuYuFyFMIXB4ka8PxY3nWPb66FoHT7mqJ+QQ
-         qrOw==
-X-Gm-Message-State: AOAM530IYaYWrPoAI0XJAsgMFBYPVzm41I/YRwyIogA+KFDM+fg0Bh4F
-        ych8+UaG80a1nsWtfWalpRUrnA==
-X-Google-Smtp-Source: ABdhPJyo6TDFw+/KNXBjSD+rB74L2YUcblRUPk2lwyji0ZFmVGeNLCD5ummE9IKYojEv1G9BJ+alUg==
-X-Received: by 2002:a17:90a:c302:b0:1bd:14ff:15 with SMTP id g2-20020a17090ac30200b001bd14ff0015mr1709389pjt.19.1649989766312;
-        Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
-Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
-        by smtp.gmail.com with ESMTPSA id w187-20020a6230c4000000b00505cde77826sm1106805pfw.159.2022.04.14.19.29.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Apr 2022 19:29:25 -0700 (PDT)
-Message-ID: <c122ba3e-ef7b-0f70-1972-1bae0ddff651@kernel.dk>
-Date:   Thu, 14 Apr 2022 20:29:24 -0600
+        Thu, 14 Apr 2022 22:33:37 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C982C109
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:31:11 -0700 (PDT)
+Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23F02vpN006615;
+        Fri, 15 Apr 2022 02:31:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-type : content-transfer-encoding :
+ mime-version; s=pp1; bh=BTVLfpS91OirTYAOYzIAt9vxE2todQVU1COH8xR5O98=;
+ b=S4DlMbboEz9B8oNrMOy2trrT+A4WgYlPwLU6MDJ/2GPMDRSfPIPLelbgqzs/IwDZwX+U
+ /FM8p1e0YUNIlm93qmb7qsLzVWqivCiS6xX5odmOiJt6KiWm+u+Rj33HSNhFVhmvFw5m
+ KZNpfRuANBJhBnr1ltih5t6XA56j4gkHapTL/WdqA61nr88Ad/5Y8+HoFFOsmFLOWvwy
+ +Hgt3XB0BRlHnSVjN4kN9m+vYbYxQsZLrkHz9+uFRMgXf+Jv/k5YwKsPBhMklZN4PoSe
+ 23900oAVeZjzraSVIN84ckep9ppsM5wf8/Xuoh5GHWMpn4oeKev4tg9PHVKhd2QOUmMy 6A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefh5khdj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 02:31:09 +0000
+Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23F2DG70017060;
+        Fri, 15 Apr 2022 02:31:08 GMT
+Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fefh5khd0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 02:31:08 +0000
+Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
+        by ppma01wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23F2HKr5011055;
+        Fri, 15 Apr 2022 02:31:07 GMT
+Received: from b01cxnp22036.gho.pok.ibm.com (b01cxnp22036.gho.pok.ibm.com [9.57.198.26])
+        by ppma01wdc.us.ibm.com with ESMTP id 3fb1s9k6hu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 02:31:07 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp22036.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23F2V64L7603048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 15 Apr 2022 02:31:06 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AEA81AC065;
+        Fri, 15 Apr 2022 02:31:06 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 37BC2AC066;
+        Fri, 15 Apr 2022 02:31:06 +0000 (GMT)
+Received: from localhost (unknown [9.160.168.34])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTPS;
+        Fri, 15 Apr 2022 02:31:06 +0000 (GMT)
+From:   Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+To:     mst@redhat.com
+Cc:     jasowang@redhat.com, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, mopsfelder@gmail.com,
+        Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+Subject: [PATCH] virtio-pci: Remove wrong address verification in vp_del_vqs()
+Date:   Thu, 14 Apr 2022 23:30:02 -0300
+Message-Id: <20220415023002.49805-1-muriloo@linux.ibm.com>
+X-Mailer: git-send-email 2.35.1
+Content-Type: text/plain; charset="utf-8"
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: i7D--CHoAlxlyPvxrRP4niCQF1_Y5ckp
+X-Proofpoint-ORIG-GUID: BVrEAblPwSmqC0-6Y1Q2V8AopluEdRV5
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [syzbot] kernel BUG in commit_creds
-Content-Language: en-US
-To:     syzbot <syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, ebiederm@xmission.com,
-        io-uring@vger.kernel.org, legion@kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000a7edb305dca75a50@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000a7edb305dca75a50@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-14_07,2022-04-14_02,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 bulkscore=0 spamscore=0
+ clxscore=1011 lowpriorityscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=948 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204150011
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/22 7:30 PM, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    40354149f4d7 Add linux-next specific files for 20220414
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1778a95cf00000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a44d62051576f6f5
-> dashboard link: https://syzkaller.appspot.com/bug?extid=60c52ca98513a8760a91
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1102d2e0f00000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e22af4f00000
-> 
-> The issue was bisected to:
-> 
-> commit 6bf9c47a398911e0ab920e362115153596c80432
-> Author: Jens Axboe <axboe@kernel.dk>
-> Date:   Tue Mar 29 16:10:08 2022 +0000
-> 
->     io_uring: defer file assignment
+GCC 12 enhanced -Waddress when comparing array address to null [0],
+which warns:
 
-#syz test: git://git.kernel.dk/linux-block io_uring-5.18
+    drivers/virtio/virtio_pci_common.c: In function ‘vp_del_vqs’:
+    drivers/virtio/virtio_pci_common.c:257:29: warning: the comparison will always evaluate as ‘true’ for the pointer operand in ‘vp_dev->msix_affinity_masks + (sizetype)((long unsigned int)i * 256)’ must not be NULL [-Waddress]
+      257 |                         if (vp_dev->msix_affinity_masks[i])
+          |                             ^~~~~~
 
+In fact, the verification is comparing the result of a pointer
+arithmetic, the address "msix_affinity_masks + i", which will always
+evaluate to true.
+
+Under the hood, free_cpumask_var() calls kfree(), which is safe to pass
+NULL, not requiring non-null verification.  So remove the verification
+to make compiler happy (happy compiler, happy life).
+
+[0] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102103
+
+Signed-off-by: Murilo Opsfelder Araujo <muriloo@linux.ibm.com>
+---
+ drivers/virtio/virtio_pci_common.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci_common.c
+index d724f676608b..5046efcffb4c 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -254,8 +254,7 @@ void vp_del_vqs(struct virtio_device *vdev)
+ 
+ 	if (vp_dev->msix_affinity_masks) {
+ 		for (i = 0; i < vp_dev->msix_vectors; i++)
+-			if (vp_dev->msix_affinity_masks[i])
+-				free_cpumask_var(vp_dev->msix_affinity_masks[i]);
++			free_cpumask_var(vp_dev->msix_affinity_masks[i]);
+ 	}
+ 
+ 	if (vp_dev->msix_enabled) {
 -- 
-Jens Axboe
+2.35.1
 

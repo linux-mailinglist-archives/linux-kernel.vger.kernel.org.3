@@ -2,97 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44739502095
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F51502098
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:37:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348725AbiDOCjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59058 "EHLO
+        id S1348743AbiDOCjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240097AbiDOCjo (ORCPT
+        with ESMTP id S240097AbiDOCjs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:39:44 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1594C4CD6E
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:37:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1649990238; x=1681526238;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=thBFcQ0G/vME42tjSQQVYRK2sX437g+HH5IioFUXTKg=;
-  b=D59t6ldojvB4M1ASk7xxhDN9PyZxvicQLH2VOCki2MUs9owtSqDU1Bbv
-   SKxMplT4jjUVLF+20cbNT+if9Pd8smweCSp04Z8/SI2vaGAu0VtoenUCH
-   R5TnUrOCgVG1JiRAVv6obimgXj07Ad6ksJB0EQxMkghDU7TDNXcobyKjP
-   Mg1bUfsjUXvzk7wOuZI1Od3LBrOLbAT/1uJ7Hf6CRjqxBYkwNpaAKT/ri
-   3myz5RiPLx0Qev17hUXyHMPqoRe9ntCPLTMBBB/K8xPrTREfJ1oMIjzJi
-   es/Viq4tOFx5srbQJrXa5amwOmVOkV6CQvBuGAizuaCk+odnDPOhInYEc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243663974"
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="243663974"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Apr 2022 19:37:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,261,1643702400"; 
-   d="scan'208";a="527644854"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 14 Apr 2022 19:37:15 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfBpj-0001RZ-9P;
-        Fri, 15 Apr 2022 02:37:15 +0000
-Date:   Fri, 15 Apr 2022 10:37:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpoimboe:objtool-run 14/29] vmlinux.o: warning: objtool:
- exit_to_user_mode()+0x10: .noinstr.text+0x3425: call to
- static_key_count.constprop.0() leaves .noinstr.text section
-Message-ID: <202204151047.7ZlroG22-lkp@intel.com>
+        Thu, 14 Apr 2022 22:39:48 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE8C94BB9B;
+        Thu, 14 Apr 2022 19:37:21 -0700 (PDT)
+Received: from dggpeml500025.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KfgRN509VzQj6r;
+        Fri, 15 Apr 2022 10:35:28 +0800 (CST)
+Received: from [10.174.176.117] (10.174.176.117) by
+ dggpeml500025.china.huawei.com (7.185.36.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 10:37:18 +0800
+Subject: Re: [PATCH bpf-next v2 0/6] bpf trampoline for arm64
+To:     Xu Kuohai <xukuohai@huawei.com>, <bpf@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Zi Shen Lim <zlim.lnx@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Peter Collingbourne <pcc@google.com>,
+        Daniel Kiss <daniel.kiss@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Steven Price <steven.price@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Delyan Kratunov <delyank@fb.com>
+References: <20220414162220.1985095-1-xukuohai@huawei.com>
+From:   Hou Tao <houtao1@huawei.com>
+Message-ID: <b9d38c43-a2a7-ae6d-79e1-51507103ef88@huawei.com>
+Date:   Fri, 15 Apr 2022 10:37:18 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220414162220.1985095-1-xukuohai@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-Originating-IP: [10.174.176.117]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500025.china.huawei.com (7.185.36.35)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git objtool-run
-head:   47d3f4f7a72524799c1f646713e2377e3c4e239f
-commit: f27083b059ff86b9c4c7a64c7afa46fd9249b6c3 [14/29] objtool: Add sec+offset to warnings
-config: x86_64-randconfig-a006 (https://download.01.org/0day-ci/archive/20220415/202204151047.7ZlroG22-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git/commit/?id=f27083b059ff86b9c4c7a64c7afa46fd9249b6c3
-        git remote add jpoimboe https://git.kernel.org/pub/scm/linux/kernel/git/jpoimboe/linux.git
-        git fetch --no-tags jpoimboe objtool-run
-        git checkout f27083b059ff86b9c4c7a64c7afa46fd9249b6c3
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+Hi,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On 4/15/2022 12:22 AM, Xu Kuohai wrote:
+> Add bpf trampoline support for arm64. Most of the logic is the same as
+> x86.
+>
+> Tested on qemu, result:
+>  #55 fentry_fexit:OK
+>  #56 fentry_test:OK
+>  #58 fexit_sleep:OK
+>  #59 fexit_stress:OK
+>  #60 fexit_test:OK
+>  #67 get_func_args_test:OK
+>  #68 get_func_ip_test:OK
+>  #101 modify_return:OK
+bpf_struct_ops also depends on bpf trampoline, could you please also add the
+test results for bpf_struct_ops related tests case ?
+>
+> v2:
+> - Add Song's ACK
+> - Change the multi-line comment in is_valid_bpf_tramp_flags() into net
+>   style (patch 3)
+> - Fix a deadloop issue in ftrace selftest (patch 2)
+> - Replace pt_regs->x0 with pt_regs->orig_x0 in patch 1 commit message 
+> - Replace "bpf trampoline" with "custom trampoline" in patch 1, as
+>   ftrace direct call is not only used by bpf trampoline.
+>
+> v1: https://lore.kernel.org/bpf/20220413054959.1053668-1-xukuohai@huawei.com/
+>
+> Xu Kuohai (6):
+>   arm64: ftrace: Add ftrace direct call support
+>   ftrace: Fix deadloop caused by direct call in ftrace selftest
+>   bpf: Move is_valid_bpf_tramp_flags() to the public trampoline code
+>   bpf, arm64: Impelment bpf_arch_text_poke() for arm64
+>   bpf, arm64: bpf trampoline for arm64
+>   selftests/bpf: Fix trivial typo in fentry_fexit.c
+>
+>  arch/arm64/Kconfig                            |   2 +
+>  arch/arm64/include/asm/ftrace.h               |  10 +
+>  arch/arm64/kernel/asm-offsets.c               |   1 +
+>  arch/arm64/kernel/entry-ftrace.S              |  28 +-
+>  arch/arm64/net/bpf_jit.h                      |  14 +-
+>  arch/arm64/net/bpf_jit_comp.c                 | 390 +++++++++++++++++-
+>  arch/x86/net/bpf_jit_comp.c                   |  20 -
+>  include/linux/bpf.h                           |   5 +
+>  kernel/bpf/bpf_struct_ops.c                   |   4 +-
+>  kernel/bpf/trampoline.c                       |  35 +-
+>  kernel/trace/trace_selftest.c                 |   4 +-
+>  .../selftests/bpf/prog_tests/fentry_fexit.c   |   4 +-
+>  12 files changed, 482 insertions(+), 35 deletions(-)
+>
 
-All warnings (new ones prefixed by >>):
-
-   vmlinux.o: warning: objtool: __do_fast_syscall_32()+0x1b: .noinstr.text+0x1b: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_syscall_64()+0xc: .noinstr.text+0xf6: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: do_int80_syscall_32()+0x1b: .noinstr.text+0x18e: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: enter_from_user_mode()+0x18: .noinstr.text+0x30b8: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode()+0x1d: .noinstr.text+0x31d2: call to __kcsan_check_access() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: syscall_enter_from_user_mode_prepare()+0x18: .noinstr.text+0x3313: call to __kcsan_check_access() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: exit_to_user_mode()+0x10: .noinstr.text+0x3425: call to static_key_count.constprop.0() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: syscall_exit_to_user_mode()+0x29: .noinstr.text+0x346a: call to static_key_count.constprop.0() leaves .noinstr.text section
-   vmlinux.o: warning: objtool: irqentry_enter_from_user_mode()+0x18: .noinstr.text+0x349e: call to __kcsan_check_access() leaves .noinstr.text section
->> vmlinux.o: warning: objtool: irqentry_exit_to_user_mode()+0x17: .noinstr.text+0x35fb: call to static_key_count.constprop.0() leaves .noinstr.text section
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

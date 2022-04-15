@@ -2,63 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AA9A5031CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AAE950316A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354188AbiDOVI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S1354297AbiDOVJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353834AbiDOVIY (ORCPT
+        with ESMTP id S1354199AbiDOVI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:08:24 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE936583F;
-        Fri, 15 Apr 2022 14:05:55 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 12so9319644oix.12;
-        Fri, 15 Apr 2022 14:05:55 -0700 (PDT)
+        Fri, 15 Apr 2022 17:08:58 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E319716D4;
+        Fri, 15 Apr 2022 14:06:28 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id c1so7179235qvl.3;
+        Fri, 15 Apr 2022 14:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=c+jRzeRaOtb5M7J5uF0lBdN76Vm6jmRXpE23TnVclyI=;
-        b=Kf51MzpPbFNnuYynK3VGAw2zwks2ichcsDV2fcpBa83qFzY0+tzTVsmChDWOh+ZdO+
-         yP5TDCYcIOsXZftHJrE3y4qtTKJy4lZp5jxDu/piSKCC3669DzNGpchHtW1LK71xYBYu
-         EUfsKlM5wrUDSigLT8i1ixKtABNIOkjTGXiXn6f9QtsLwYzQ7QTk+MDjO9N7urL1N9JX
-         66tm7Zpw0QE4l8/EiyBnIjK+LMvtlFYFMQBwool0nhH7MGoQ4E9sfaj9yQ275tsPPV+d
-         JS+BV78DV8BptUgyh48ehiOPHeUxbJ/tVSdiaF3JZpGKOsVatCkJqq2aWOlT+HcYh+E4
-         ZbPQ==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=UMYeeN0iZUy6EfrHqDAGGWFWHi99PGIp7rnql4YH69k=;
+        b=jVy4wLQXJ5Xiw1bj4CpGcPN5pnCX6r59sOQO66Jz2Vvt9y4Tzwih3hlFcvyeCRD4Hr
+         LG25pmwmM7+PyhWhkrHsXBYgNA8egqCTX/GQpcuiu6Z3xr6hQaQ674okap8z7lUy6jWH
+         cI/MZpMTQQiQEtnnhPPF3nS2ALkqeJB3ADFpyVw3h1HJRB32It3hjvY5e+/WxOe6LS9p
+         ZArv72BnSZ4UFPQCo6s86Gyg39ezv/dxU+L7EUHvsIKugHNqdCRkYJ+3Ut1aZ4aXxcsg
+         YsXNTagZdOsdTXEW82dZ0JfC00y5Xlc3ZGqxfiowc/pXWOgMcQN9oy4bonSI9KD2lUHy
+         eLhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=c+jRzeRaOtb5M7J5uF0lBdN76Vm6jmRXpE23TnVclyI=;
-        b=vCYWNjSxlvfuwrfDkfuJQXHOamfDyC0i21IMRGhCos43n5WDnwJD0kIYcp2lravo59
-         Vx9enR+DFdabn48jiQGHjtWiXn6n+5XgimG6mevo2owFe9LivygMjdseA09st7/Jzta5
-         cuQ/nunQji1U2lIuShc6tFxqF4nY4kdJg+0tdHNYJ3Wsza6DDiyold94UZjgdk1WzaB8
-         vaq9we3mvRj6XKpB9EkUnx97ei5qFJpEwtEHSFEc7NBsvEGaws5q7tfWgGF6fySypW4L
-         pT9HIH7yFR0dtArpG29o+q1MtWevh6MKj8DwX1M/Mfa013kBYOsQHIXpeAN9MLko+dAq
-         o3hg==
-X-Gm-Message-State: AOAM532L2Rf++cn7twMae8VRTyecVqlobR9E5b2C292CaJ/unqM1/2P9
-        tJBAXhGScW6LE/tcc38PMAY=
-X-Google-Smtp-Source: ABdhPJw4UQPzzMTfzaIdqFrRq5KfZCX15V+2ATQdVLWJtVZsRPxurqsi+SOddaG27IU/KaErUYP7vQ==
-X-Received: by 2002:a05:6808:178d:b0:2fa:6573:d78 with SMTP id bg13-20020a056808178d00b002fa65730d78mr330810oib.241.1650056754737;
-        Fri, 15 Apr 2022 14:05:54 -0700 (PDT)
-Received: from toe.qscaudio.com ([65.113.122.35])
-        by smtp.gmail.com with ESMTPSA id bh20-20020a056808181400b002fa6ea63b7asm1528222oib.20.2022.04.15.14.05.54
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=UMYeeN0iZUy6EfrHqDAGGWFWHi99PGIp7rnql4YH69k=;
+        b=RcPyowM++aUzcItkjHClM99r3cz5ZHL7xWaSpH9m2whrBoYaolL32YEaXva+2zfxdS
+         Su+9j7+zgaCyjTmOeGCcBjO/nFeiZUlJs3/j1xPxwSlAghDKvdHpgMze1tT/7kiPzav7
+         3zyI/A/T61m3yuE0fgFNYhdO4Rf459sSAipWVSz71OgSUOP4K5ADQYCkyQut2TZTGIOI
+         3tEffpKr9xy+L/zoO/IQm7l3MAnwYq1MbDCL28sz3KQ4gy4DFmjwq/NAuoT1HEgC6kxW
+         zlThGO3LAopczSNdFyHTMdBokvZKAScDUNMqRql1GDTWhfXtkoGG9P62pUZLRzKD8CPw
+         fIxQ==
+X-Gm-Message-State: AOAM530IzjX+0BvzMNeNiuTWOmLIH6ZgIc+e6EeYnfVSk6r3NMAA++kw
+        b8nShnyrRe9CDIqCit6jTJvXaueLnaDEz6Gs
+X-Google-Smtp-Source: ABdhPJxbrMCYX9pst0yUUj30dL5YGetX2lKuySfQVgVFm/cqlONSsHjg0w3yNcEDpoX2+Hn5wU7qSw==
+X-Received: by 2002:a05:6214:2aa5:b0:446:3a3d:bdf with SMTP id js5-20020a0562142aa500b004463a3d0bdfmr499333qvb.55.1650056787492;
+        Fri, 15 Apr 2022 14:06:27 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id w8-20020a05620a148800b0069c4884c990sm2838664qkj.108.2022.04.15.14.06.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 14:05:54 -0700 (PDT)
-From:   Jeff Evanson <jeff.evanson@gmail.com>
-X-Google-Original-From: Jeff Evanson <jeff.evanson@qsc.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        Fri, 15 Apr 2022 14:06:27 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Simon Xue <xxm@rock-chips.com>
+Cc:     linux-rockchip@lists.infradead.org,
+        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Cc:     jeff.evanson@qsc.com, jeff.evanson@gmail.com
-Subject: [PATCH 2/2] Trigger proper interrupts in igc_xsk_wakeup
-Date:   Fri, 15 Apr 2022 15:05:46 -0600
-Message-Id: <20220415210546.11294-1-jeff.evanson@qsc.com>
-X-Mailer: git-send-email 2.17.1
+Subject: [PATCH v3 1/4] dt-bindings: pci: remove fallback from Rockchip DesignWare binding
+Date:   Fri, 15 Apr 2022 17:06:18 -0400
+Message-Id: <20220415210621.538109-2-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220415210621.538109-1-pgwipeout@gmail.com>
+References: <20220415210621.538109-1-pgwipeout@gmail.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,71 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-in igc_xsk_wakeup, trigger the proper interrupt based on whether flags
-contains XDP_WAKEUP_RX and/or XDP_WAKEUP_TX
+The snps,dw-pcie binds to a standalone driver.
+It is not fully compatible with the Rockchip implementation and causes a
+hang if it binds to the device.
 
-Signed-off-by: Jeff Evanson <jeff.evanson@qsc.com>
+Remove this binding as a valid fallback.
+
+Signed-off-by: Peter Geis <pgwipeout@gmail.com>
 ---
- drivers/net/ethernet/intel/igc/igc_main.c | 36 +++++++++++++++++------
- 1 file changed, 27 insertions(+), 9 deletions(-)
+ .../devicetree/bindings/pci/rockchip-dw-pcie.yaml    | 12 +-----------
+ 1 file changed, 1 insertion(+), 11 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
-index a36a18c84aeb..d706de95dc06 100644
---- a/drivers/net/ethernet/intel/igc/igc_main.c
-+++ b/drivers/net/ethernet/intel/igc/igc_main.c
-@@ -6073,7 +6073,7 @@ static void igc_trigger_rxtxq_interrupt(struct igc_adapter *adapter,
- int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
- {
- 	struct igc_adapter *adapter = netdev_priv(dev);
--	struct igc_q_vector *q_vector;
-+	struct igc_q_vector *txq_vector = 0, *rxq_vector = 0;
- 	struct igc_ring *ring;
+diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+index 142bbe577763..bc0a9d1db750 100644
+--- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
++++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+@@ -19,20 +19,10 @@ description: |+
+ allOf:
+   - $ref: /schemas/pci/pci-bus.yaml#
  
- 	if (test_bit(__IGC_DOWN, &adapter->state))
-@@ -6082,17 +6082,35 @@ int igc_xsk_wakeup(struct net_device *dev, u32 queue_id, u32 flags)
- 	if (!igc_xdp_is_enabled(adapter))
- 		return -ENXIO;
+-# We need a select here so we don't match all nodes with 'snps,dw-pcie'
+-select:
+-  properties:
+-    compatible:
+-      contains:
+-        const: rockchip,rk3568-pcie
+-  required:
+-    - compatible
+-
+ properties:
+   compatible:
+     items:
+       - const: rockchip,rk3568-pcie
+-      - const: snps,dw-pcie
  
--	if (queue_id >= adapter->num_rx_queues)
--		return -EINVAL;
-+	if (flags & XDP_WAKEUP_RX) {
-+		if (queue_id >= adapter->num_rx_queues)
-+			return -EINVAL;
+   reg:
+     items:
+@@ -110,7 +100,7 @@ examples:
+         #size-cells = <2>;
  
--	ring = adapter->rx_ring[queue_id];
-+		ring = adapter->rx_ring[queue_id];
-+		if (!ring->xsk_pool)
-+			return -ENXIO;
- 
--	if (!ring->xsk_pool)
--		return -ENXIO;
-+		rxq_vector = ring->q_vector;
-+	}
-+
-+	if (flags & XDP_WAKEUP_TX) {
-+		if (queue_id >= adapter->num_tx_queues)
-+			return -EINVAL;
-+
-+		ring = adapter->tx_ring[queue_id];
-+		if (!ring->xsk_pool)
-+			return -ENXIO;
-+
-+		txq_vector = ring->q_vector;
-+	}
-+
-+	if (rxq_vector &&
-+	    !napi_if_scheduled_mark_missed(&rxq_vector->napi))
-+		igc_trigger_rxtxq_interrupt(adapter, rxq_vector);
- 
--	q_vector = adapter->q_vector[queue_id];
--	if (!napi_if_scheduled_mark_missed(&q_vector->napi))
--		igc_trigger_rxtxq_interrupt(adapter, q_vector);
-+	if (txq_vector && txq_vector != rxq_vector &&
-+	    !napi_if_scheduled_mark_missed(&txq_vector->napi))
-+		igc_trigger_rxtxq_interrupt(adapter, txq_vector);
- 
- 	return 0;
- }
+         pcie3x2: pcie@fe280000 {
+-            compatible = "rockchip,rk3568-pcie", "snps,dw-pcie";
++            compatible = "rockchip,rk3568-pcie";
+             reg = <0x3 0xc0800000 0x0 0x390000>,
+                   <0x0 0xfe280000 0x0 0x10000>,
+                   <0x3 0x80000000 0x0 0x100000>;
 -- 
-2.17.1
+2.25.1
 

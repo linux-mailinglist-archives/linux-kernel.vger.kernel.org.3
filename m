@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE19850278A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CF23502784
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351834AbiDOJo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 05:44:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
+        id S1351858AbiDOJpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 05:45:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351815AbiDOJow (ORCPT
+        with ESMTP id S1351817AbiDOJow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 15 Apr 2022 05:44:52 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA62AC042;
-        Fri, 15 Apr 2022 02:42:23 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 09:42:21 -0000
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D214AC046;
+        Fri, 15 Apr 2022 02:42:24 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 09:42:22 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650015742;
+        s=2020; t=1650015743;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OaWHcjI5jzSN+btLdV7n53XabIHh5QmAWpRah4D530Q=;
-        b=TYCS/5tQUUepLaVDvKZBUm5an8Vfd7DOBIfbCHVTotatqJMg/qiE4SfQ+nluZbeTaZnqKx
-        guOyhfUSEZj6UJTJCcIIwRZI6q+dV0dAK0j5NsdtdmzKn5XAtin6vC0+nNJ3UMZDLthgbd
-        pel0OPj3i/hpG21NicDED6/IfMuKLHjthk749Vk6qrozwN/+jVkTs26BueMtS9HJw+kJOx
-        J+fD/oIg+pZ48W+TEtunpY/aeWeVU1+OwsmmIq3v4I+GKBE5Cq/wlinE3MpTuBwX4LREa8
-        XnjTW7m+8RFC1CUTcMErO9dCwGxzpuQZ2hSBO0RKKzzXIabOCZWAL9kPAVxtNg==
+        bh=Q9+MlWfHo9/S6kJXuWo/hH/+hng49XBvdtfu0dGm548=;
+        b=iphcZZckLezsEvEUUDub36z0aAdZ/OO0SYHKMPMIrkGlabbXmPYmQiWkcAN0Q6/YETic77
+        nwHsAdaT9oyFPQhIcm+nyo4H/CEAHIcXj6gMkCfA5ow200DMFdTVrmzYa/V0y9Ovl0zA/M
+        5tBljdsO2rXMts3xpG0bty2K2tb8zKjWpBxtqEeGwSGSc5iBYxzefEFGeCDYvdP18SFqzp
+        QLl3F0tifaAEB2L93o1wLj2HGfXz+cwzD+OTr3dPAuZMmLZhyeIJh/fl/LSfjbXZvBgku/
+        hM2/9uCP931bxx1HhCOiGM8LYyp3oGx0simpOX0KGQT2cZvlciO5Bk38DqkrTg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650015742;
+        s=2020e; t=1650015743;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=OaWHcjI5jzSN+btLdV7n53XabIHh5QmAWpRah4D530Q=;
-        b=kgJ7GxorN7KCcZ8OppF3/DUR/xqUGeZAN/MJe1Qrt2rgA/SoxLHrPgOX/Kq7kJsSh6DSFo
-        8yuDEywmtT0htnCw==
+        bh=Q9+MlWfHo9/S6kJXuWo/hH/+hng49XBvdtfu0dGm548=;
+        b=mlTwPucv0yOMmeK33XfjAKyCS/l2nCJdaodErlgk5VtS25wHRxqwBGgbZBmxvwXUb4x+4o
+        O0W6GG8i9sAWH4DQ==
 From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] ELF: Remove elf_core_copy_kernel_regs()
+Subject: [tip: x86/core] x86/32: Simplify ELF_CORE_COPY_REGS
 Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>, x86@kernel.org,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220325153953.162643-3-brgerst@gmail.com>
-References: <20220325153953.162643-3-brgerst@gmail.com>
+In-Reply-To: <20220325153953.162643-2-brgerst@gmail.com>
+References: <20220325153953.162643-2-brgerst@gmail.com>
 MIME-Version: 1.0
-Message-ID: <165001574130.4207.13922320216714992747.tip-bot2@tip-bot2>
+Message-ID: <165001574217.4207.12557873929669073141.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,87 +68,64 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     9554e908fb5d02e48a681d1eca180225bf109e83
-Gitweb:        https://git.kernel.org/tip/9554e908fb5d02e48a681d1eca180225bf109e83
+Commit-ID:     f5d9283ecb33329073033029fe427155aa0abfb1
+Gitweb:        https://git.kernel.org/tip/f5d9283ecb33329073033029fe427155aa0abfb1
 Author:        Brian Gerst <brgerst@gmail.com>
-AuthorDate:    Fri, 25 Mar 2022 11:39:51 -04:00
+AuthorDate:    Fri, 25 Mar 2022 11:39:50 -04:00
 Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Thu, 14 Apr 2022 14:08:26 +02:00
+CommitterDate: Tue, 12 Apr 2022 15:42:59 +02:00
 
-ELF: Remove elf_core_copy_kernel_regs()
+x86/32: Simplify ELF_CORE_COPY_REGS
 
-x86-32 was the last architecture that implemented separate user and
-kernel registers.
+GS is now always a user segment, so there is no difference between user
+and kernel registers.
 
 Signed-off-by: Brian Gerst <brgerst@gmail.com>
 Signed-off-by: Borislav Petkov <bp@suse.de>
 Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 Acked-by: Andy Lutomirski <luto@kernel.org>
-Acked-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220325153953.162643-3-brgerst@gmail.com
+Link: https://lore.kernel.org/r/20220325153953.162643-2-brgerst@gmail.com
 ---
- arch/powerpc/kernel/fadump.c               |  2 +-
- arch/powerpc/platforms/powernv/opal-core.c |  2 +-
- include/linux/elfcore.h                    |  9 ---------
- kernel/kexec_core.c                        |  2 +-
- 4 files changed, 3 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/elf.h | 15 ++-------------
+ 1 file changed, 2 insertions(+), 13 deletions(-)
 
-diff --git a/arch/powerpc/kernel/fadump.c b/arch/powerpc/kernel/fadump.c
-index 65562c4..4c09c66 100644
---- a/arch/powerpc/kernel/fadump.c
-+++ b/arch/powerpc/kernel/fadump.c
-@@ -752,7 +752,7 @@ u32 *__init fadump_regs_to_elf_notes(u32 *buf, struct pt_regs *regs)
- 	 * FIXME: How do i get PID? Do I really need it?
- 	 * prstatus.pr_pid = ????
- 	 */
--	elf_core_copy_kernel_regs(&prstatus.pr_reg, regs);
-+	elf_core_copy_regs(&prstatus.pr_reg, regs);
- 	buf = append_elf_note(buf, CRASH_CORE_NOTE_NAME, NT_PRSTATUS,
- 			      &prstatus, sizeof(prstatus));
- 	return buf;
-diff --git a/arch/powerpc/platforms/powernv/opal-core.c b/arch/powerpc/platforms/powernv/opal-core.c
-index b97bc17..adcb1a1 100644
---- a/arch/powerpc/platforms/powernv/opal-core.c
-+++ b/arch/powerpc/platforms/powernv/opal-core.c
-@@ -112,7 +112,7 @@ static void __init fill_prstatus(struct elf_prstatus *prstatus, int pir,
- 			  struct pt_regs *regs)
- {
- 	memset(prstatus, 0, sizeof(struct elf_prstatus));
--	elf_core_copy_kernel_regs(&(prstatus->pr_reg), regs);
-+	elf_core_copy_regs(&(prstatus->pr_reg), regs);
+diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
+index 29fea18..cb0ff10 100644
+--- a/arch/x86/include/asm/elf.h
++++ b/arch/x86/include/asm/elf.h
+@@ -116,7 +116,7 @@ extern unsigned int vdso32_enabled;
+  * now struct_user_regs, they are different)
+  */
  
- 	/*
- 	 * Overload PID with PIR value.
-diff --git a/include/linux/elfcore.h b/include/linux/elfcore.h
-index f8e206e..346a8b5 100644
---- a/include/linux/elfcore.h
-+++ b/include/linux/elfcore.h
-@@ -84,15 +84,6 @@ static inline void elf_core_copy_regs(elf_gregset_t *elfregs, struct pt_regs *re
- #endif
- }
+-#define ELF_CORE_COPY_REGS_COMMON(pr_reg, regs)	\
++#define ELF_CORE_COPY_REGS(pr_reg, regs)	\
+ do {						\
+ 	pr_reg[0] = regs->bx;			\
+ 	pr_reg[1] = regs->cx;			\
+@@ -128,6 +128,7 @@ do {						\
+ 	pr_reg[7] = regs->ds;			\
+ 	pr_reg[8] = regs->es;			\
+ 	pr_reg[9] = regs->fs;			\
++	savesegment(gs, pr_reg[10]);		\
+ 	pr_reg[11] = regs->orig_ax;		\
+ 	pr_reg[12] = regs->ip;			\
+ 	pr_reg[13] = regs->cs;			\
+@@ -136,18 +137,6 @@ do {						\
+ 	pr_reg[16] = regs->ss;			\
+ } while (0);
  
--static inline void elf_core_copy_kernel_regs(elf_gregset_t *elfregs, struct pt_regs *regs)
--{
--#ifdef ELF_CORE_COPY_KERNEL_REGS
--	ELF_CORE_COPY_KERNEL_REGS((*elfregs), regs);
--#else
--	elf_core_copy_regs(elfregs, regs);
--#endif
--}
+-#define ELF_CORE_COPY_REGS(pr_reg, regs)	\
+-do {						\
+-	ELF_CORE_COPY_REGS_COMMON(pr_reg, regs);\
+-	pr_reg[10] = get_user_gs(regs);		\
+-} while (0);
 -
- static inline int elf_core_copy_task_regs(struct task_struct *t, elf_gregset_t* elfregs)
- {
- #if defined (ELF_CORE_COPY_TASK_REGS)
-diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
-index 68480f7..be4b54c 100644
---- a/kernel/kexec_core.c
-+++ b/kernel/kexec_core.c
-@@ -1078,7 +1078,7 @@ void crash_save_cpu(struct pt_regs *regs, int cpu)
- 		return;
- 	memset(&prstatus, 0, sizeof(prstatus));
- 	prstatus.common.pr_pid = current->pid;
--	elf_core_copy_kernel_regs(&prstatus.pr_reg, regs);
-+	elf_core_copy_regs(&prstatus.pr_reg, regs);
- 	buf = append_elf_note(buf, KEXEC_CORE_NOTE_NAME, NT_PRSTATUS,
- 			      &prstatus, sizeof(prstatus));
- 	final_note(buf);
+-#define ELF_CORE_COPY_KERNEL_REGS(pr_reg, regs)	\
+-do {						\
+-	ELF_CORE_COPY_REGS_COMMON(pr_reg, regs);\
+-	savesegment(gs, pr_reg[10]);		\
+-} while (0);
+-
+ #define ELF_PLATFORM	(utsname()->machine)
+ #define set_personality_64bit()	do { } while (0)
+ 

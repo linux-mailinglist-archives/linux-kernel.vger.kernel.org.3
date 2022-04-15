@@ -2,59 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F676502DC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:35:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D09B9502DCB
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355855AbiDOQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54246 "EHLO
+        id S1355864AbiDOQkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:40:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239143AbiDOQhQ (ORCPT
+        with ESMTP id S1355858AbiDOQke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:37:16 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20C3B4160A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:34:47 -0700 (PDT)
+        Fri, 15 Apr 2022 12:40:34 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08691C681D;
+        Fri, 15 Apr 2022 09:38:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650040487; x=1681576487;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=ac21St1oPxMtwuoNWfuYK5P7xLN+aSJg+1pI74ooCqI=;
-  b=eh1V80WdfbUUEtBhakCs7cElVz89YpFTX8kft+Ogj4262+9N3AvWgoPV
-   aASn8ygc9DQ0qUxZuloT2/YL4cyk+UustGyhtDjpmCZ5pWz+ef44Ly7gn
-   f3kD67GLufxZTHXKKOdQ5QnWBC+MCsA9xwGU3JYj8xzetTATTyCwuRTxF
-   gqzqMoHqE59bI7fHJuu8dTr0SGuwuUbeToKFFkCKbnbIFeewkprZm/MSe
-   aJwnjsXmLTSqfpgJImJznkYHytnyN1PMVHd5E9cIo48clA5Ka+4V2n+sj
-   hzZdTpEt1RbSm0CGdJkY2JgdW0Xy4tZU3b/pkthN8b/pRsBmO3Icyu0Od
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="323626033"
+  t=1650040685; x=1681576685;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XpehSo+Yn1FEBq+S4w2h8XLNT3XV05KHiZHdNjCxEY4=;
+  b=c3Nmr33FdPxbk2KlvxU5eN50ApentVJYcf404rE0zFgcIhu/+jk1lAty
+   eoQd9QnVNCXcmXAW2YeNrGtWbXUoalYm1Za9ha9Z4OevaMqBbQc35+Wcc
+   zFbNXsHX9zS3Cre+HoaPLt8aJEp/D1kcH80N81eUnW4dCNhoHaJhdMR/f
+   JUenNG3GkM42z333FrftWrq4GHTUcVku17lyk0oGb9+uHIFTiDoYSC184
+   9o0DVuIqO2qBxiVUj7uPfQBewz/tTSxm5MMpeo26RQjaVibr/8IxDBPIG
+   yqRGfeTUkQKiFO7O0I5+GVXNgZmb7wnOGEXPUbdcw/JZiX78L4HD2aQkz
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243768343"
 X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="323626033"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 09:34:23 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="243768343"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 09:38:05 -0700
 X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="701104911"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Apr 2022 09:34:21 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfOtp-00029g-3F;
-        Fri, 15 Apr 2022 16:34:21 +0000
-Date:   Sat, 16 Apr 2022 00:33:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:master] BUILD SUCCESS
- 6a01118827476d242c55886e0f4809b99d821762
-Message-ID: <62599e76.Bqr9Rmq1FR3cOrsf%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="646108786"
+Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 09:37:59 -0700
+Date:   Fri, 15 Apr 2022 09:37:57 -0700
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Yazen Ghannam <yazen.ghannam@amd.com>
+Cc:     bp@alien8.de,
+        Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, hpa@zytor.com,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: Re: [PATCH v5 2/2] x86/mce: Add support for Extended Physical
+ Address MCA changes
+Message-ID: <YlmfZU2Bg5cRk07J@agluck-desk3.sc.intel.com>
+References: <20220412154038.261750-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20220412154038.261750-3-Smita.KoralahalliChannabasappa@amd.com>
+ <YlakNe012hhErszh@zn.tnic>
+ <YlbZ1k1cT1FVJj4W@yaz-ubuntu>
+ <YlbkCK9LU2KdXZUG@zn.tnic>
+ <YlbzbZO6AvxOqQb/@agluck-desk3.sc.intel.com>
+ <Ylb3/4oi6KAjdsJW@zn.tnic>
+ <YlcnN2q9ducdvsUZ@yaz-ubuntu>
+ <YlflJfyQR/j/eRkn@zn.tnic>
+ <YlmHtlKABn9W0pu5@yaz-ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Disposition: inline
+In-Reply-To: <YlmHtlKABn9W0pu5@yaz-ubuntu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,151 +72,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git master
-branch HEAD: 6a01118827476d242c55886e0f4809b99d821762  Merge branch into tip/master: 'x86/platform'
+On Fri, Apr 15, 2022 at 02:56:54PM +0000, Yazen Ghannam wrote:
+> 3) OS, or optionally BIOS, polls MCA banks and logs any valid errors.
+>    a) Since MCi_CTL, etc. are cleared due to reset, any errors detected are
+>       from before the reset.
 
-elapsed time: 1741m
+On Intel not quite any error. H/w can still log to a bank but MCi_STATUS.EN bit
+will be zero. We've also had some BIOS code that did things that logged errors
+and then left them for the OS to find during boot.
 
-configs tested: 125
-configs skipped: 3
+But this sequence does give more confidence that errors found in banks duing
+boot are "old".
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> I agree. The Intel SDM and AMD APM have the following procedure, in summary.
+> 
+> 1) Set MCG_CTL
+> 2) Set MCi_CTL for all banks
+> 3) Read MCi_STATUS and log valid errors.
+> 4) Clear MCi_STATUS
+> 5) Set CR4.MCE
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-m68k                        stmark2_defconfig
-arc                     haps_hs_smp_defconfig
-arc                          axs103_defconfig
-sh                   secureedge5410_defconfig
-powerpc                   motionpro_defconfig
-arm                       aspeed_g5_defconfig
-sh                           se7705_defconfig
-arm                           stm32_defconfig
-arm                          pxa910_defconfig
-microblaze                          defconfig
-mips                     loongson1b_defconfig
-powerpc                      bamboo_defconfig
-powerpc64                           defconfig
-powerpc                         wii_defconfig
-arc                        vdk_hs38_defconfig
-mips                           jazz_defconfig
-sh                           se7724_defconfig
-arm                           imxrt_defconfig
-arm                            mps2_defconfig
-sh                           se7343_defconfig
-sh                          rsk7269_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220414
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-alpha                            allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-i386                   debian-10.3-kselftests
-i386                              debian-10.3
-i386                                defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-sparc                               defconfig
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                           allnoconfig
-powerpc                          allyesconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                        randconfig-a015
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arc                  randconfig-r043-20220414
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                    rhel-8.3-kselftests
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                              defconfig
-x86_64                           allyesconfig
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+Yes. That's what the pseudo-code in Intel SDM Example 15-1 says :-(
+> 
+> I don't know of a reason why STATUS needs to be cleared after MCi_CTL is set.
+> The only thing I can think of is that enabling MCi_CTL may cause spurious info
+> logged in MCi_STATUS, and that needs to be cleared out. I'm asking AMD folks
+> about it.
+> 
+> Of course, this contradicts the flow I outlined above, and also the flow given
+> in the AMD Processor Programming Reference (PPR). I wonder if the
+> architectural documents have gotten stale compared to current guidelines. I'm
+> asking about this too.
 
-clang tested configs:
-x86_64                        randconfig-c007
-powerpc              randconfig-c003-20220414
-arm                  randconfig-c002-20220414
-i386                          randconfig-c001
-powerpc                          allyesconfig
-arm                         lpc32xx_defconfig
-x86_64                           allyesconfig
-mips                           ip28_defconfig
-riscv                             allnoconfig
-powerpc                     kmeter1_defconfig
-powerpc                      acadia_defconfig
-arm                       mainstone_defconfig
-mips                       rbtx49xx_defconfig
-arm                      tct_hammer_defconfig
-powerpc                     tqm5200_defconfig
-arm                        multi_v5_defconfig
-mips                           mtx1_defconfig
-arm                        spear3xx_defconfig
-arm                        vexpress_defconfig
-arm                          collie_defconfig
-mips                          rm200_defconfig
-mips                     loongson2k_defconfig
-powerpc                          g5_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a006
-i386                          randconfig-a004
-x86_64                        randconfig-a014
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a011
-i386                          randconfig-a015
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-x86_64                        randconfig-a005
-hexagon              randconfig-r041-20220414
-hexagon              randconfig-r045-20220414
-riscv                randconfig-r042-20220414
-s390                 randconfig-r044-20220414
+I will ask architects about this sequence too.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+-Tony

@@ -2,70 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE386503112
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2B35030B8
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356414AbiDOXB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33308 "EHLO
+        id S1356406AbiDOXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245219AbiDOXBz (ORCPT
+        with ESMTP id S231347AbiDOXF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:01:55 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C0CFD1D;
-        Fri, 15 Apr 2022 15:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=QVpztKrzvaJ0Phl+vGlDJV/C+V3vgG+1jHY+BXaoZsQ=; b=hRRfcbE65oGCATGrJa0r7QWloK
-        zZetMAn/NoLnc5DwT0ypGGapxqTz3GdJqcIKiygZh0wGIYeeUb6yEJxDVWrf9jRLulVvfiPwNjSP4
-        XKr2+dsHSFSCMJhA0yRrs/M8jNJ+XdUhufWaTNaVwiS6h4YxnfpR0io3sK6MG75qnsrS29vfe62Wn
-        d957s2RjcmfHk7e0CwrIZHwDVvRol7XJPekvYdP2Vb63jrAexS3NxmxtkvSTKSo/jqcnQCJCup2ge
-        r1wYV2Xw7eMnSbQlPPJT3dzBaxqQKP8JAXFY9oIN8R//JF9CBZ9ou6TWu9XXSGW3EoDSsQKAMqxGP
-        Ws15WifA==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfUu9-00BdBq-SI; Fri, 15 Apr 2022 22:59:05 +0000
-Date:   Fri, 15 Apr 2022 15:59:05 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     yingelin <yingelin@huawei.com>, ebiederm@xmission.com,
-        keescook@chromium.org, yzaikin@google.com,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, zengweilin@huawei.com,
-        chenjianguo3@huawei.com, nixiaoming@huawei.com,
-        qiuguorui1@huawei.com, young.liuyang@huawei.com
-Subject: Re: [PATCH sysctl-next] kernel/kexec_core: move kexec_core sysctls
- into its own file
-Message-ID: <Yln4uQCYWw/k0vR3@bombadil.infradead.org>
-References: <20220223030318.213093-1-yingelin@huawei.com>
- <YhXwkTCwt3a4Dn9T@MiWiFi-R3L-srv>
- <c60419f8-422b-660d-8254-291182a06cbe@huawei.com>
- <Yhbu6UxoYXFtDyFk@fedora>
- <YhqLnIjopfoBEBcV@bombadil.infradead.org>
- <b07af605-ab74-a313-f8e4-da794dcde111@huawei.com>
- <20220228031801.GB150756@MiWiFi-R3L-srv>
+        Fri, 15 Apr 2022 19:05:29 -0400
+Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A02167D3B;
+        Fri, 15 Apr 2022 16:02:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650063780; x=1681599780;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=SXwXBdQqg3w0Na7l4QbphKGJc3ZMWJFk1TEWGHJVyNM=;
+  b=IRieHLE8uz5anchfW4gaXjIx87uxIGJy3MOhaaBPIZWmUDdIwFUYe6oI
+   WYbz/9xS3blV0v6LV85CRSB8EAbSJyIG9Q8+N7ovjIQqX9sksUnXrBGCD
+   lV3eGWgjCo/v4wPaDPNb5K/4ecLbrUeX26oFQzHCqzoZZBGEkdh0NNqCC
+   s=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-02.qualcomm.com with ESMTP; 15 Apr 2022 16:02:59 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 16:02:59 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Apr 2022 16:02:59 -0700
+Received: from [10.110.103.65] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Apr
+ 2022 16:02:58 -0700
+Message-ID: <ca2944bd-e80e-e0ff-0804-c8439f54b28a@quicinc.com>
+Date:   Fri, 15 Apr 2022 16:02:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228031801.GB150756@MiWiFi-R3L-srv>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] ath11k: simplify if-if to if-else
+Content-Language: en-US
+To:     Yihao Han <hanyihao@vivo.com>, Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <ath11k@lists.infradead.org>,
+        <linux-wireless@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <kernel@vivo.com>
+References: <20220415125853.86418-1-hanyihao@vivo.com>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220415125853.86418-1-hanyihao@vivo.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 11:18:01AM +0800, Baoquan He wrote:
-> That's OK, look forward to seeing the v2.
+On 4/15/2022 5:58 AM, Yihao Han wrote:
+> Replace `if (!ab->is_reset)` with `else` for simplification
+> according to the kernel coding style:
+> 
+> "Do not unnecessarily use braces where a single statement will do."
+> 
+> ...
+> 
+> "This does not apply if only one branch of a conditional statement is
+> a single statement; in the latter case use braces in both branches"
+> 
+> Please refer to:
+> https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
 
-yingelin, do you plan to post a v2? If splease base it on sysctl-testing [0]
+why are you referring to braces when your patch has nothing to do with 
+braces?
 
-[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-testing
+changing if (foo) X;if (!foo) Y; to if (foo) X else Y; is not a design 
+pattern referenced in the coding style
 
-  Luis
+> 
+> Suggested-by: Benjamin Poirier <benjamin.poirier@gmail.com>
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+> v2:edit commit message
+> ---
+>   drivers/net/wireless/ath/ath11k/core.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/ath/ath11k/core.c b/drivers/net/wireless/ath/ath11k/core.c
+> index cbac1919867f..80009482165a 100644
+> --- a/drivers/net/wireless/ath/ath11k/core.c
+> +++ b/drivers/net/wireless/ath/ath11k/core.c
+> @@ -1532,8 +1532,7 @@ static void ath11k_core_restart(struct work_struct *work)
+>   
+>   	if (ab->is_reset)
+>   		complete_all(&ab->reconfigure_complete);
+> -
+> -	if (!ab->is_reset)
+> +	else
+>   		ath11k_core_post_reconfigure_recovery(ab);
+>   }
+>   
+

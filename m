@@ -2,126 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9E6D5030B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6FE503118
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353562AbiDOVPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53720 "EHLO
+        id S1353598AbiDOVPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244735AbiDOVPE (ORCPT
+        with ESMTP id S244735AbiDOVPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:15:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB2071BE92;
-        Fri, 15 Apr 2022 14:12:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 85FBB620BE;
-        Fri, 15 Apr 2022 21:12:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 270F7C385A5;
-        Fri, 15 Apr 2022 21:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650057153;
-        bh=S1eI5dmq775LCayHMx3N/pfPBenUwajWdt1s32ub72A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=K1VZwuH7MkPb3eAokvmvG8/+fCa6eSxfTr8BBnOGXaCwICqPt8YBNxrkm3ssSXwPi
-         GKQVr6OXxjWF2aEYUUk+XDwU2fguct5d7LOF4E74oEyc/P8lxF7qIdrLy4FV5VDQ5e
-         VbL6/AYJmLSTib8bYYxzlQfRLhEz+0z6QN5D559XZ7+TEZKbfh/5Ax27hA8dkF7Qko
-         4t3KA/uqSMJvCOoSZnc2geB2qK7n25wWoaGmz3Fiy474jtdnMbqsWNcomnEXwOaggc
-         QT7g9uKlozIB0Jz1J0mSS6sWMINxMCAWNVZg4ponL+V05da4eo4H5CJ+cwcKiM+QC9
-         YrmFs/7YOnS/Q==
-Date:   Fri, 15 Apr 2022 23:12:28 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>
-Cc:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jean Delvare <khali@linux-fr.org>,
-        Olof Johansson <olof@lixom.net>,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Janne Grunau <j@jannau.net>
-Subject: Re: [PATCH] i2c: pasemi: Wait for write xfers to finish
-Message-ID: <YlnfvJDyluEDfu39@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jean Delvare <khali@linux-fr.org>, Olof Johansson <olof@lixom.net>,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Janne Grunau <j@jannau.net>
-References: <20220329183817.21656-1-povik+lin@cutebit.org>
+        Fri, 15 Apr 2022 17:15:51 -0400
+Received: from mail-ej1-x643.google.com (mail-ej1-x643.google.com [IPv6:2a00:1450:4864:20::643])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F85DDEB98
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:13:21 -0700 (PDT)
+Received: by mail-ej1-x643.google.com with SMTP id ks6so17172567ejb.1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:13:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=difZoTs3fizyF97rw8HbvX7weZ7x4PWWMkxfgOaZlYs=;
+        b=Tpwq/EjVcuEvXK/fee2skALLMAOp1mL5FMbMNqXPTvClywQDtncZ78ZfZ6H6q9m/QY
+         lOIu0EXSvexsZUOWHp2Os8EvOY/2Ve2PXNejVC5VGYCqtw6L1itBpLwvIZH9m33gesdI
+         qum/ECx3fjJUF+MV40PAVZIjzPSHmIo8MTCaU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=difZoTs3fizyF97rw8HbvX7weZ7x4PWWMkxfgOaZlYs=;
+        b=nP2EnnDW9yIXU4a4KLl8w/apKWj5mEQ7/m98aMD/3bwP2LO6q2VanfbjTvbWY3yTVr
+         yddoX+XCXYNS4gLkbceoq0LTM+W1rl/5wvf9gA6IBPT0d3/zryrVPqH8fL5Ntby4qOyT
+         T9ARVHYRLz64+OHcXi2jQwjTjd3SRc/RKxFbDGQrlWwILxLAYNl121Oev+22Uqn/SYu2
+         eQOSd+kP4+GO14zFxl3IJ25db+mfLiwK3CWWik9tbXYV5i8Z37rqTw+paxf2OfkidkXD
+         HhNrbp6JOssjktmH+laoQunDC4otGai0iRDWGg6d9RzMAfpJWA+UfKQIJKC2LBhdlij8
+         ODDQ==
+X-Gm-Message-State: AOAM53069oJGE40e479lOulZTRT6Eobmx45D0kCK60fB7UezuN7aU4Pe
+        XTbXfckCDjrD0VDiD/LaI5zWT5RwZqbS6A==
+X-Google-Smtp-Source: ABdhPJyZk2uMog+CK1HqOP084y54FYEu4cr6a3fqDNLmXlNGt1YwU7/xqT8QcfiQeJmLVBAkun1HhA==
+X-Received: by 2002:a17:907:9708:b0:6e8:d95e:273b with SMTP id jg8-20020a170907970800b006e8d95e273bmr657341ejc.421.1650057199626;
+        Fri, 15 Apr 2022 14:13:19 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id u19-20020a17090617d300b006cea86ca384sm2015879eje.40.2022.04.15.14.13.19
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 14:13:19 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id e21so11865643wrc.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:13:19 -0700 (PDT)
+X-Received: by 2002:a5d:4d0e:0:b0:207:a329:24fa with SMTP id
+ z14-20020a5d4d0e000000b00207a32924famr583305wrt.342.1650057198545; Fri, 15
+ Apr 2022 14:13:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="h21sbJa9/A5zZIHK"
-Content-Disposition: inline
-In-Reply-To: <20220329183817.21656-1-povik+lin@cutebit.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220409023628.2104952-1-dianders@chromium.org>
+ <20220408193536.RFC.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid> <CAE-0n53vDRdndb7=ShovrJV0P1CvV0JgV6JTNQNMr-KWtyg8Jg@mail.gmail.com>
+In-Reply-To: <CAE-0n53vDRdndb7=ShovrJV0P1CvV0JgV6JTNQNMr-KWtyg8Jg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 15 Apr 2022 14:13:05 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=V3bQGy1ho_WJZ1oOVwJhADvTPJ8uUyOG63_LzWcd7Scg@mail.gmail.com>
+Message-ID: <CAD=FV=V3bQGy1ho_WJZ1oOVwJhADvTPJ8uUyOG63_LzWcd7Scg@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/6] drm/dp: Helpers to make it easier for drivers to
+ use DP AUX bus properly
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Lyude Paul <lyude@redhat.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
---h21sbJa9/A5zZIHK
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Apr 14, 2022 at 4:52 PM Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Douglas Anderson (2022-04-08 19:36:23)
+> > As talked about in the kerneldoc for "struct dp_aux_ep_client" in this
+> > patch and also in the past in commit a1e3667a9835 ("drm/bridge:
+> > ti-sn65dsi86: Promote the AUX channel to its own sub-dev"), to use the
+> > DP AUX bus properly we really need two "struct device"s. One "struct
+> > device" is in charge of providing the DP AUX bus and the other is
+> > where we'll try to get a reference to the newly probed endpoint
+> > devices.
+> >
+> > In ti-sn65dsi86 this wasn't too difficult to accomplish. That driver
+> > is already broken up into several "struct devices" anyway because it
+> > also provides a PWM and some GPIOs. Adding one more wasn't that
+> > difficult / ugly.
+> >
+> > When I tried to do the same solution in parade-ps8640, it felt like I
+> > was copying too much boilerplate code. I made the realization that I
+> > didn't _really_ need a separate "driver" for each person that wanted
+> > to do the same thing. By putting all the "driver" related code in a
+> > common place then we could save a bit of hassle. This change
+> > effectively adds a new "ep_client" driver that can be used by
+> > anyone. The devices instantiated by this driver will just call through
+> > to the probe/remove/shutdown calls provided.
+> >
+> > At the moment, the "ep_client" driver is backed by the Linux auxiliary
+> > bus (unfortunate naming--this has nothing to do with DP AUX). I didn't
+> > want to expose this to clients, though, so as far as clients are
+> > concerned they get a vanilla "struct device".
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+>
+> Is it correct that the struct dp_aux_ep_client is largely equivalent to
+> a struct dp_aux_ep_device? What's the difference? I think it is a fully
+> probed dp_aux_ep_device? Or a way to tell the driver that calls
+> of_dp_aux_populate_ep_devices() that the endpoint has probed now?
 
-On Tue, Mar 29, 2022 at 08:38:17PM +0200, Martin Povi=C5=A1er wrote:
-> Wait for completion of write transfers before returning from the driver.
-> At first sight it may seem advantageous to leave write transfers queued
-> for the controller to carry out on its own time, but there's a couple of
-> issues with it:
->=20
->  * Driver doesn't check for FIFO space.
->=20
->  * The queued writes can complete while the driver is in its I2C read
->    transfer path which means it will get confused by the raising of
->    XEN (the 'transaction ended' signal). This can cause a spurious
->    ENODATA error due to premature reading of the MRXFIFO register.
->=20
-> Adding the wait fixes some unreliability issues with the driver. There's
-> some efficiency cost to it (especially with pasemi_smb_waitready doing
-> its polling), but that will be alleviated once the driver receives
-> interrupt support.
->=20
-> Fixes: beb58aa39e6e ("i2c: PA Semi SMBus driver")
-> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+They're not the same. The "DP AUX Endpoint Device" is essentially the
+panel, though at one point in time someone argued that conceivably one
+could put other devices on it even though this might be a really bad
+idea. At some point in the discussion someone mentioned the concept of
+a touchscreen running over DP Aux had been discussed and, indeed, "dp
+aux touchscreen" gets hits if you search for it. The idea that it
+could be something different is one reason why I refrained from
+calling it a panel in all the function names and always tried to call
+it a "DP AUX Endpoint".
 
-Applied to for-current, thanks!
+The "DP AUX Endpoint Device Client" is the client of the panel, or the
+code that needs to get a reference to the panel. Logically, I guess
+this is the part of the eDP controller that's responsible for shoving
+bits to the panel. Essentially the drm_bridge. Most importantly, it's
+_not_ the part of the eDP controller providing the AUX bus.
 
 
---h21sbJa9/A5zZIHK
-Content-Type: application/pgp-signature; name="signature.asc"
+> I read the commit text but it didn't click until I read the next patch
+> that this is solving a probe ordering/loop problem. The driver that
+> creates the 'struct drm_dp_aux' and populates devices on the DP aux bus
+> with of_dp_aux_populate_ep_devices() wants to be sure that the
+> drm_bridge made by the 'struct dp_aux_ep_driver' probe routine in
+> edp-panel is going to be there before calling drm_of_get_bridge().
+>
+>         of_dp_aux_populate_ep_devices();
+>         [No idea if the bridge is registered yet]
+>         drm_of_get_bridge();
+>
+> The solution is to retry the drm_of_get_bridge() until 'struct
+> dp_aux_ep_driver' probes and registers the next bridge. It looks like a
+> wait_for_completion() on top of drm_of_get_bridge() implemented through
+> driver probe and -EPROBE_DEFER; no disrespect!
 
------BEGIN PGP SIGNATURE-----
+Yes, that's exactly what it is.
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ37wACgkQFA3kzBSg
-KbZQYBAAiTUhdwY7QAuznZSfhNwuVynUucrnWrVKfFiiZWjtxraHqVHG0lN0Mz0I
-v56ZVw9aBFtCcK/FaipcGLOm/7JPnIJEovhp7Gjq73BImwBQ/ox/SZ0YQ2uGgt7v
-JxGzwpUrInswF6+DL9XpoHBcAEr35BXZ2ZGIb6GbuV/Jalj7BldDCWxHB1O4gsUL
-yhDhnj1bmNVG+zzHAHG6nr/ZX8QJk6dm1JvV9W4MlvmRugDRciBLACsNqf4Ffw48
-eTdKxGBbDmjPNnYtUplgVV2SZw1uo7lrQLhVHvkcJhE3F9G8InygwWYrmKAMx3ye
-TdYI96LNyvTu5C8NQe/+qQCijogwVNm7ZpyXSZ42nciBqdq/1WkiS615cLW5GkVX
-x27uKGhldwMUfcr2b4PB8R6rh7OxM9Y/cp3P4+R40fHnrR0y4Ip06BaOhKhn8R6O
-kLu/ZuqZ3PhgIelJTE7rnY04FAWcrHHv8PrIClmKgzhWee1WhWmyDfZ2lWJ4UJLs
-E/zHma87dnykwAJtUmBIobXle/SZqfUYyrUq0BfGFYlIwQwPxwUVkxrIdS9P9wYg
-LG/gy4fD757d3BOQTcYhfzhx/BO7IeCkJEO8GXrHkiUZ92ymy372FUZH+2SHoIyy
-HhVFfV6BjTS4A+CAEKVZZ94+S/J1U+kKPUE3R300kMh2FONXNcw=
-=47X8
------END PGP SIGNATURE-----
 
---h21sbJa9/A5zZIHK--
+> Is there another problem here that the driver that creates the 'struct
+> drm_dp_aux' and populates devices on the DP aux bus with
+> of_dp_aux_populate_ep_devices() wants to use that same 'struct
+> drm_dp_aux' directly to poke at some 'struct dp_aux_ep_device' that was
+> populated? And the 'struct dp_aux_ep_device' may either not be probed
+> and bound to a 'struct dp_aux_ep_driver' or it may not be powered on
+> because it went to runtime PM suspend?
+>
+> Put another way, I worry that the owner of 'struct drm_dp_aux' wants to
+> use some function in include/drm/dp/drm_dp_helper.h that takes the
+> 'struct drm_dp_aux' directly without considering the device model state
+> of the endpoint device (the 'struct dp_aux_ep_device'). That would be a
+> similar problem as waiting for the endpoint to be powered on and probed.
+> Solving that through a sub-driver feels awkward.
+>
+> What if we had some function like drm_dp_get_aux_ep() that took a
+> 'struct drm_dp_aux' and looked for the endpoint device (there can only
+> be one?),
+
+The code is designed to handle the fact that there could be more than
+one AUX endpoint device. I don't know if this will ever happen but it
+is plausible. The "touchscreen over DP AUX", if that ever became a
+thing supported in Linux, could be an example. In some sense, I guess
+we could have modeled the AUX backlight for homestar this way as a
+second "DP AUX Endpoint", though we didn't...
+
+
+> waited for it to be probed,
+
+The $1M question: where should it be doing the waiting? Are you
+imagining this straight in my probe? AKA:
+
+def ps8640_probe(...):
+  ...
+  devm_of_dp_aux_populate_ep_devices(...);
+  do_the_wait(...);
+  bridge = devm_drm_of_get_bridge(...);
+  if (bridge == -EPROBE_DEFER)
+    return -EPROBE_DEFER;
+  ...
+
+Essentially, if the panel is probing asynchronously then this would
+wait for it. If the panel instead needs some resources then it should
+be fine for us to just pass the -EPROBE_DEFER up and we'll both try
+probing again later. That definitely feels simpler to me and matches
+how I would wish things to work.
+
+There are two problems:
+
+1. I'm not sure how to wait. Early in ps8640 support I had Philip try
+wait_for_device_probe(). That wasn't so happy. I suppose I could try
+to come up with some solution if this is indeed the way we want to go.
+
+2. The way probing currently works, if we end up in the -EPROBE_DEFER
+case then we end up with an infinite loop. :( As I understand it, the
+basic rule is that if your probe causes any additional devices to be
+created (like by calling devm_of_dp_aux_populate_ep_devices()) then
+your probe isn't allowed to return -EPROBE_DEFER after the call. This
+is the same problem that the main msm used to have (Dmitry says it's
+fixed now). I think this is just a fundamental design issue with
+deferred probing. Anytime a device probes then it causes
+driver_deferred_probe_trigger() to run again. So we basically have:
+
+a) ps8640 probe returns -EPROBE_DEFER for whatever reason.
+b) some device in the system probes and all deferred probes are retriggered.
+c) ps8640 gets pulled off the list by the worker
+d) ps8640 probe gets called
+e) ps8640 creates a sub device for the panel, which triggers deferred probing
+f) ps8640 returns and gets put on the deferred list
+g) goto step c)
+
+On first instinct, you might think this is easy to solve. Maybe
+somehow you could make it so the "trigger" doesn't re-trigger the
+ps8640 since it hasn't actually _returned_ from probing yet. The
+problem is that I believe there'd be a race in the async probe case.
+See the description for driver_deferred_probe_trigger() for some
+details.
+
+
+What we _could_ do is that we could re-create deferred probing
+ourselves. :-P So instead of creating a sub-device, I could kick off
+some type of asynchronous task that would periodically run and look to
+see if the panel has shown up. Then, once the panel shows up then I
+could create the bridge. I'm not really convinced that this is better,
+though.
+
+
+> and then powered it up via some
+> pm_runtime_get_sync()? My understanding is that with edp-panel we have
+> two power "domains" of importance, the panel power domain and the DP/eDP
+> power domain. Access to the AUX bus via 'struct drm_dp_aux' needs both
+> power domains to be powered on. If the 'struct dp_aux_ep_device' is in
+> hand, then both power domains can be powered on by making sure the power
+> state of the 'struct dp_aux_ep_device::dev' is enabled. If only the
+> 'struct drm_dp_aux' is in hand then we'll need to do something more like
+> find the child device and power it on.
+
+So right now it doesn't work that way. The whole thing is structured
+more like an i2c bus. The i2c bus doesn't power its devices on. The
+devices are in charge of powering themselves on. If the i2c bus itself
+has a low power state that it can be in when the devices don't need to
+communicate then that's fine. It can power itself on whenever the
+devices need to communicate. If this is a high-cost thing then the bus
+can use pm_runtime. Following this model is what leads us to the panel
+being in charge of reading the EDID.
+
+
+> Could the 'struct drm_dp_aux' functions in drm_dp_helper.h do this
+> automatically somehow? Maybe we can drop a variable in 'struct
+> drm_dp_aux' when of_dp_aux_populate_ep_devices() is called that the
+> other side may not be powered up. Then if something tries to transfer on
+> that aux channel it powers on all children of 'struct drm_dp_aux::dev'
+> that are on the 'dp_aux_bus_type' or bails out if those devices haven't
+> probed yet or can't be powered on.
+
+We can have more discussions about powering and who's in charge of
+powering who if we need to, but it's not really what this series is
+about. Here we're worried about making sure that we acquire all of our
+resources before we create the drm_bridge. Said another way: we're
+trying to acquire a handle to the panel before we add the bridge
+because once we add the bridge we're asserting that we're all ready to
+go and start using things, right? So we basically just want to make
+sure that the panel is present and able to acquire all of _its_
+resources.
+
+
+
+-Doug

@@ -2,156 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 871BF502A99
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:59:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EEA502AB9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 15:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353840AbiDONBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 09:01:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S1353869AbiDONC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 09:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237609AbiDONBl (ORCPT
+        with ESMTP id S237609AbiDONCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 09:01:41 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2115.outbound.protection.outlook.com [40.107.255.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6339CA0F4;
-        Fri, 15 Apr 2022 05:59:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W1mwsSWqcxMWPJ9fQAzHr/xZzgf7akY78cBjhxNlCad9J0Jk3XO/F5lZzjmsem1mFw3YBK0ggnH3w3VCeJUsm51vKqmTkYXTcqxh+yqjmXW2qwwK+VdGy9S9xUSQS21rrAWGJHdQeQnJ9YiDJNgM+Q50QrK6mL5qiYTfz83nQjORKFvFgozqtfOy74ltiz0XsENtr5p+RxgYCtatyWntoqjFZbtCLuI0yu4oC2+NIiZjODqyTUJlcYPRme2UXtNLJCjhmEduhQoCs7uWunlXrVGiuDcseamLpuaL66OM9S0JJmR2QOalwLM/p0JQZPNp5m2Hw6eQxD6dNhWf3n8z2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2XJ0+rZEpZm625Pbo1AOKnqBYmgN1k75xwNX1itQ6Ds=;
- b=j4VvruaK8C+cm1FqByqlWx2VqNgTjhUj3K1AMOtWaOwfdUiK6s6xMCKoT8XueZZPAqNpMuYA5GxVNN3Tuqz4FjT6aX/+NvfFsRiPwzjS5RS1mvAwwp1WF637oWc6+JlYeoT5NTUz4kRbbqszGz1MYTaFl528UrurFYFlCO7a+8V9nWYHhr1BHvF3cNpFLklZuMl8LpEzYXZPoOsJx/b4KzHoqTePg1XAHn2PBDnbDZuAzSfZgzJlVpGVA7NVlo+M1tbAaEOby85aImsgMwYqr5LGQ22Axuar1lqhPHc6z5BQsT5osM7p+Ov8k8ju16VLjHuOc/h/u139wM7FdkzLYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo0.onmicrosoft.com;
- s=selector2-vivo0-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2XJ0+rZEpZm625Pbo1AOKnqBYmgN1k75xwNX1itQ6Ds=;
- b=UYT428jpPFXjvNnvQuGmtpdpP3ZyhVQGR1EYI4+qOs8micwikaf1WJQ7dvbKe6kXfkRcJi4VJPzwUQke6dsNllfnjzY5O1+OOOl8PC3zqy9VmI3n+cfvw47CET7Aqxg76lrMOU5o16zZ8IqMY8qrGrYwu6W5sE4EMeAa5R+Vz5o=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
- by SEYPR06MB5013.apcprd06.prod.outlook.com (2603:1096:101:3e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
- 2022 12:59:08 +0000
-Received: from TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb]) by TYZPR06MB4173.apcprd06.prod.outlook.com
- ([fe80::d4bd:64f4:e1c0:25cb%4]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
- 12:59:08 +0000
-From:   Yihao Han <hanyihao@vivo.com>
-To:     Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@vivo.com, Yihao Han <hanyihao@vivo.com>
-Subject: [PATCH v2] ath11k: simplify if-if to if-else
-Date:   Fri, 15 Apr 2022 05:58:53 -0700
-Message-Id: <20220415125853.86418-1-hanyihao@vivo.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0166.apcprd04.prod.outlook.com (2603:1096:4::28)
- To TYZPR06MB4173.apcprd06.prod.outlook.com (2603:1096:400:26::14)
+        Fri, 15 Apr 2022 09:02:53 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0D0366B4;
+        Fri, 15 Apr 2022 06:00:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id u15so15207422ejf.11;
+        Fri, 15 Apr 2022 06:00:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hh8aUORptuQqZGj8/5dvM/IwZQS9vQck/p7Lq6tz0Lk=;
+        b=dTGFAGmnt3rMrb5qdHGUDcklsvKcTlrNP1GTGMvG5Tu4qMjpXfIVZByMq7FmYhV1p+
+         PcwRmhOOPScEIC/MvZRMWc7K8CroM1hG1p04cxqMfnk6FIZvQwXZjQG1msZHYQs+w+9n
+         xBVTuej+6C4bnVMKC3FXmLHboAIiy7LOLqFk8MN921fWCd+jbdA1jDDxTpsXxSgUbfXu
+         YpOP2f5o3SdICnjY14qS+dqq/rbY7SzZgKflyZxO2K2MkOdqNHqHKbPaUueqNLSyfXXe
+         EDOCzlbh5i74gyqvGO/bsDBqLcukJzm/cebKG9SQJ+FeE+S515l4arUMpvxRAvdZlUCg
+         UKgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Hh8aUORptuQqZGj8/5dvM/IwZQS9vQck/p7Lq6tz0Lk=;
+        b=u6CS8FpA86rwt8RotMcZfoHsd4gzB0aDPYZPl17bT2q9+rbLRhi6aHBzlzyQ3BOZO7
+         6aqVaaQRmFY2SFSdmGzAVPo8Hp4+wAAaHGls1Su1RagvEN10YIViVykBN2XIU6RK1loS
+         WcwXnGoWgw0SqDOvMH17ufKps8yOYiPDB8F+P3KWfQdCxS/a3UP5Jlu3qCK/IvSSe7+d
+         eVLdGANa2MFyTCGfq5Sd1ppUsLByHrz6XPPeOH+83ntD2dhnXyh/Wi8iSQduG9W463e2
+         gdgISZsu4dhbMZr1CSk2qSIs9VlRRBXBzqNflbayVOWMxVjui6y2u8JCO8yWek6z4LHy
+         bqHQ==
+X-Gm-Message-State: AOAM533wnHa3lnaJoTXkSP1L67tpS3jE3o7VmMbPD99hPBb/0r7hokAJ
+        Lm4jACibg14j6QKnl1im0XU=
+X-Google-Smtp-Source: ABdhPJztOR7Z1Axp41mIvCP08KkVO4e4Zai0v8x5ZZxxbSeLDMxlDB+pmQPrQIXBS9kxu7exEjso6g==
+X-Received: by 2002:a17:907:6088:b0:6e8:cbcb:9a0b with SMTP id ht8-20020a170907608800b006e8cbcb9a0bmr6135514ejc.671.1650027623159;
+        Fri, 15 Apr 2022 06:00:23 -0700 (PDT)
+Received: from poker.lan (static.2-229-210-222.ip198.fastwebnet.it. [2.229.210.222])
+        by smtp.gmail.com with ESMTPSA id i26-20020a50d75a000000b0041e84bb406fsm2704715edj.0.2022.04.15.06.00.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 06:00:22 -0700 (PDT)
+From:   Andrea Merello <andrea.merello@gmail.com>
+To:     jic23@kernel.org, mchehab+huawei@kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     lars@metafoo.de, robh+dt@kernel.org, andy.shevchenko@gmail.com,
+        matt.ranostay@konsulko.com, ardeleanalex@gmail.com,
+        jacopo@jmondi.org, Andrea Merello <andrea.merello@iit.it>
+Subject: [v4 00/14] Add support for Bosch BNO055 IMU
+Date:   Fri, 15 Apr 2022 14:59:51 +0200
+Message-Id: <20220415130005.85879-1-andrea.merello@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b2331a2b-9160-4ac5-3625-08da1edfba9a
-X-MS-TrafficTypeDiagnostic: SEYPR06MB5013:EE_
-X-Microsoft-Antispam-PRVS: <SEYPR06MB50134245105144D77972E374A2EE9@SEYPR06MB5013.apcprd06.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: VxDoJwl0LEFXutK89PCBs1FYyZ8m1FjwGoIztQjAHPlkAhkukrwIujMdgW0FM4cWSvMs3KnbtROdqaQ2bxNfLLcfRe+/i8LlQPzs2dS/8xBWUZLpRo5WbKHDZsZtNmU+YcXYEa/HBISe0QohOuSXXzpBtgh3cWJKJ4ZPBcJH/aSEERnSyb0j5UEP8Hoq4hKkQCSRXf020vURumo+Ghhd11ey8pETC4DkLQPW2b7n3Zi7ZNpMlmBryXW2Z267XV7Y6g28X0MjqEx8h4I4SnzbyFaANfbGhGhj57Q53tniXXwaJJXrL0i1m4sfLpYgwoNZ3FeDxzrHBfL+cK8L1tt1xU0rg5m3dg2VzDxkL/PIq1wzXRsItZWGdYYUfnwYxScBXZQJlZe9lBnK4seALfl4IXpUVJU2TLUFft8Zjf6YlJp2Ll/G8LT+OGWV2cfJMVlkxDHVN1i5ualBSHAvTwCvfVhsMrVawqxVva1GDBPYxBXgYcNhgU5wisKYCO9hN9VzSds5/yruVemUra/MwM/1kTqK/8FiJQ043ce9Ic/dvLPQAYTkN5r6H3kBb1VbvNAAwaHpxhiX4nFrWjaOW87X8UeN8t0tLiFyhx0mdde2HXATeAfT962aq8BQLlzzu1oZiGg1yBcN/8O4cw6OMu8Ysx02+a/EBhT3zJJY9pm102DN0on5xzxGZJvqnT4obkqCzfcOfjtJUqWr26CvRMe1SbUT6tljnhqhd7BwEgxgOTeN2/d+Uybedkow4AuAtj4Ftc3a/ebKYQQfJk0z8SQmiNpUu02duwdWLgDDaGeFeAk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYZPR06MB4173.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(110136005)(38350700002)(52116002)(966005)(38100700002)(1076003)(2616005)(6512007)(6506007)(83380400001)(186003)(107886003)(6666004)(6486002)(26005)(8936002)(2906002)(5660300002)(316002)(4326008)(86362001)(66476007)(508600001)(66556008)(66946007)(8676002)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NUr2jmoAKwngzD8NOw/Cj1hCx/Rh0i8X9g237f+slc+JUC+hNNcHCCswZlb1?=
- =?us-ascii?Q?pKQ0mxTVVurJ3nF5Nh3+nMtqihAUtU96/oFggQEjWiwAxxTwe1H76gHbxug+?=
- =?us-ascii?Q?SiES+ftlY+egkibjKJRY+wrqE9TlwXzWRa+3P7bloyeTP3hcEMdlHRQik1Mc?=
- =?us-ascii?Q?9g1U+sosYPKS3qEytrUMOKKYN0uwnNL5HKWCWDsOC2nrDL2ZCB+rMH8kxWcV?=
- =?us-ascii?Q?A7c6TOUZ9tnh1U+SseCBa3Ndtgfl/yAntpvysCIL8k/3huSPBtdRGa3SsCMr?=
- =?us-ascii?Q?G8m7EvPkaJ7eWB+LK2GqnuuVtCFvzqYFSzj6N5E9x1JUcMdS89EHgOQyMCrU?=
- =?us-ascii?Q?R9k0rpwvvP+uQ52NP4MLOx57031T0BR8uVmtr4Pj2xR36hr6fJR2Ro6QdRtE?=
- =?us-ascii?Q?YfbbaIR4wZoMj6Zn+UcD202MJKZ+8kuJ+lwy/gPt4uGRd3JbAnUnOYKsXxw+?=
- =?us-ascii?Q?14dKEjooEg1Pn2My262mxOmZd9wLKUcM9ZO3GvkKSafZA0tG5aBnGUTVod9A?=
- =?us-ascii?Q?RNu9oSUnXlcnGx93YfUrj1hsP5dTCcqxhvyYZQCOoXBYJuVahkvVNoCRv0rf?=
- =?us-ascii?Q?0AvrB8bmx6yyELvPI3OxCCs4K+8wspgaHvxUXbIc7zFv57F4909pMrZX8eK9?=
- =?us-ascii?Q?iBlnI8VMqKEb5OBPqIEe9HkzTQv900ujUoBZtZqDzgSMNaKiq03/W+YNwDAh?=
- =?us-ascii?Q?unmCg4Dcinj21L1YK/ohHlEk4YbqbjLZJ747jknLzjf/NN+jK7gVIG4PACQP?=
- =?us-ascii?Q?e+AsUwbh6YTjfFXTA0JhmWREJDX7kugRiJO24TUR0SmpktSspjKOrCe/5IdV?=
- =?us-ascii?Q?D2DKgNH1odYerulilc9XML8bqhG/MLInP+MaS6WZXREjuz8RIVPz/BCPfgaK?=
- =?us-ascii?Q?95OnPZeifcLyluYfWe2gnPo4dLeZQIK9WqmIWuDSuXehJBC2jbLAT8dlx1rw?=
- =?us-ascii?Q?AfLFrIICPSfFdIn0VP0saz/Eg4cVcv452RMeWJ2LWPqeFMXhRRcGRtLd91L0?=
- =?us-ascii?Q?WOtROJ60PyIHTCxKT38ZBRVNjq2xo3g2cmHBHDbM5G/KKKV8EAnRgxCzJ4kM?=
- =?us-ascii?Q?o+DybHjk1ANyx+9vLR/oWZow4D2tKmoyuUhE2QicqZ3mGTQjtfYSlR2aBkmZ?=
- =?us-ascii?Q?SWoG5flBSP56bh+nGwLpMLV8Isro1Rbj4Ub040W8HTTtFxRDiT6DmI3w/7En?=
- =?us-ascii?Q?wpBL7uZ/xuztf/X7ZuVPlK+CGoUA5TFaP1acj6iKXy5YsrUCnUttos4w86IE?=
- =?us-ascii?Q?1WoZtbq+lrEM733KqeVF6Izsqda5KSfZiLRnAPD+p/6IDr636LeZicWuqT8S?=
- =?us-ascii?Q?2BRfBFRG75DK7EJTnqxXNShqJgVq6GbTgdmvv6dm3I1RmYgi9VYlVkzh4fL4?=
- =?us-ascii?Q?y2euRyVgssUm11hKh5wOFsXMuJsjfOHTF/M9dscpLA6Tqx0DQhDYOhzRqZeH?=
- =?us-ascii?Q?okRkUTmATdUZiH02EkBZi4kYvK85QuP1jqPpox66YAbYVlug++bbohOl/9dQ?=
- =?us-ascii?Q?EmbjgQCeLqLHrK29TSR/tA432aMrLvFMnFCaMXnzsLbJuF8jHpZtUo9q2whA?=
- =?us-ascii?Q?GgU5uXsfiW6EE5jBraTkCF96Nhx/KEDR1UUlRCgHd9GbaddafRniuhw3G4X1?=
- =?us-ascii?Q?aLoVVF5MsvxDoYgNs/aB0Vl/kyA0NmxO6bms/V9GY2vPAM9hFLU2nnc0Di9V?=
- =?us-ascii?Q?WYBuGO+439dTFT2lULPq0CoDXn2vZ+U3oELA4/tNyWzt+aGbWEpbxJ/3P5i2?=
- =?us-ascii?Q?1C2UIyQWgQ=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2331a2b-9160-4ac5-3625-08da1edfba9a
-X-MS-Exchange-CrossTenant-AuthSource: TYZPR06MB4173.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Apr 2022 12:59:08.5586
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2F8ISDJfWJhnbECTeOiR4DnTpyWucw4ZIIhiDbRHee077T3kddZJGt+xODZsTCVdVmK/xPiJdyfovjp9r8vjqg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5013
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace `if (!ab->is_reset)` with `else` for simplification
-according to the kernel coding style:
+From: Andrea Merello <andrea.merello@iit.it>
 
-"Do not unnecessarily use braces where a single statement will do."
+This series (tries to) add support for Bosch BNO055 IMU to Linux IIO
+subsystem. It is made up several patches:
 
-...
+  1/13 to 7/12: add some IIO modifiers, and their documentation, to the IIO
+                core layer, in order to being able to expose the linear
+                acceleration and Euler angles among standard attributes.
+                Also update the IIO event monitor tool
 
-"This does not apply if only one branch of a conditional statement is
-a single statement; in the latter case use braces in both branches"
+  7/13: fix binary attributes didn't work with IIO
 
-Please refer to:
-https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
+  8/13 to 11/13: add the core IIO BNO055 driver and documentation for sysfs
+                 attributes and DT bindings
 
-Suggested-by: Benjamin Poirier <benjamin.poirier@gmail.com>
-Signed-off-by: Yihao Han <hanyihao@vivo.com>
----
-v2:edit commit message
----
- drivers/net/wireless/ath/ath11k/core.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+  12/13: adds serdev BNO055 driver to actually use the IMU via serial line
 
-diff --git a/drivers/net/wireless/ath/ath11k/core.c b/drivers/net/wireless/ath/ath11k/core.c
-index cbac1919867f..80009482165a 100644
---- a/drivers/net/wireless/ath/ath11k/core.c
-+++ b/drivers/net/wireless/ath/ath11k/core.c
-@@ -1532,8 +1532,7 @@ static void ath11k_core_restart(struct work_struct *work)
- 
- 	if (ab->is_reset)
- 		complete_all(&ab->reconfigure_complete);
--
--	if (!ab->is_reset)
-+	else
- 		ath11k_core_post_reconfigure_recovery(ab);
- }
- 
--- 
+  13/13: adds I2C BNO055 driver to actually use the IMU via I2C wiring
+
+  14/13: add a documentation file that describe the bno055 driver and
+         specifically the calibration
+
+Differences wrt v3:
+
+- use binary attribute for calibration data
+- introduce trace events (instead of dev_dbg()) for bno055 serial driver
+- changed serial driver name bno055_sl -> bno055_ser
+- fix quaternion unit
+- make the driver return error, instead of reading zeroes, when trying to
+  access fusion data, but fusion is disabled
+- make serial driver code more readable and use more kernel helpers when
+  possible
+- address issues found by 0day
+- fix accel range unit in doc
+- fix debugfs directory was not ever removed
+- add of_device_id table in I2C driver
+- use probe_new() instead of probe in I2C driver
+- some other trivial improvements and fixes
+
+Differences wrt other BNO055 drivers:
+
+  Previously at least another driver for the very same chip has been posted
+  to the Linux ML [0], but it has been never merged, and it seems no one
+  cared of it since quite a long time.
+
+  This driver differs from the above driver on the following aspects:
+
+  - This driver supports also serial access (to be reliable, reset pin is
+    required to be wired)
+
+  - The above driver tried to support all IMU HW modes by allowing to
+    choose one in the DT, and adapting IIO attributes accordingly. This
+    driver does not rely on DT for this, instead settings are done via
+    sysfs attributes.  All IIO attributes are always exposed; more on this
+    later on. This driver however supports only a subset of the
+    HW-supported modes.
+
+  - This driver has some support for managing the IMU calibration
+
+Supported operation modes:
+
+  - AMG (accelerometer, magnetometer and gyroscope) mode, which provides
+    raw (uncalibrated) measurements from the said sensors, and allows for
+    setting some parameters about them (e.g. filter cut-off frequency, max
+    sensor ranges, etc).
+
+  - Fusion mode, which still provides AMG measures, while it also provides
+    other data calculated by the IMU (e.g. rotation angles, linear
+    acceleration, etc). In this mode user has no freedom to set any sensor
+    parameter, since the HW locks them. Autocalibration and correction is
+    performed by the IMU.
+
+  IIO attributes exposing sensors parameters are always present, but in
+  fusion modes the available values are constrained to just the one used by
+  the HW. This is reflected in the '*_available' IIO attributes.
+
+  Trying to set a not-supported value always falls back to the closest
+  supported one, which in this case is just the one in use by the HW.
+
+  IIO attributes for unavailable measurements (e.g. Euler angles in AMG
+  mode) can't be read (return -EBUSY, or refuse to enable buffer).
+
+IMU calibration:
+
+  The IMU supports for two sets of calibration parameters:
+
+  - SIC matrix. user-provided; this driver doesn't currently support it
+
+  - Offset and radius parameters. The IMU automatically finds out them when
+    it is running in fusion mode; supported by this driver.
+
+  The driver provides access to autocalibration flags (i.e. you can known
+  if the IMU has successfully autocalibrated) and to calibration data blob.
+  The user can save this blob in a "firmware" file (i.e. in /lib/firmware)
+  that the driver looks for at probe time. If found, then the IMU is
+  initialized with this calibration data. This saves the user from
+  performing the calibration procedure every time (which consist of moving
+  the IMU in various way).
+
+  The driver looks for calibration data file using two different names:
+  first a file whose name is suffixed with the IMU unique ID is searched
+  for; this is useful when there is more than one IMU instance. If this
+  file is not found, then a "generic" calibration file is searched for
+  (which can be used when only one IMU is present, without struggling with
+  fancy names, that changes on each device).
+
+  In AMG mode the IIO 'offset' attributes provide access to the offsets
+  from calibration data (if any), so that the user can apply them to the
+  accel, angvel and magn IIO attributes. In fusion mode they are not needed
+  and read as zero.
+
+
+Access protocols and serdev module:
+
+  The serial protocol is quite simple, but there are tricks to make it
+  really works. Those tricks and workarounds are documented in the driver
+  source file.
+
+  The core BNO055 driver tries to group readings in burst when appropriate,
+  in order to optimize triggered buffer operation. The threshold for
+  splitting a burst (i.e. max number of unused bytes in the middle of a
+  burst that will be throw away) is provided to the core driver by the
+  lowlevel access driver (either serdev or I2C) at probe time.
+
+[0] https://www.spinics.net/lists/linux-iio/msg25508.html
+
+Andrea Merello (14):
+  iio: add modifiers for linear acceleration
+  iio: document linear acceleration modifiers
+  iio: event_monitor: add linear acceleration modifiers
+  iio: add modifers for pitch, yaw, roll
+  iio: document pitch, yaw, roll modifiers
+  iio: event_monitor: add pitch, yaw and roll modifiers
+  iio: add support for binary attributes
+  iio: imu: add Bosch Sensortec BNO055 core driver
+  iio: document bno055 private sysfs attributes
+  iio: document "serial_number" sysfs attribute
+  dt-bindings: iio: imu: add documentation for Bosch BNO055 bindings
+  iio: imu: add BNO055 serdev driver
+  iio: imu: add BNO055 I2C driver
+  docs: iio: add documentation for BNO055 driver
+
+ Documentation/ABI/testing/sysfs-bus-iio       |   25 +
+ .../ABI/testing/sysfs-bus-iio-bno055          |   81 +
+ .../bindings/iio/imu/bosch,bno055.yaml        |   59 +
+ Documentation/iio/bno055.rst                  |   50 +
+ Documentation/iio/index.rst                   |    2 +
+ drivers/iio/imu/Kconfig                       |    1 +
+ drivers/iio/imu/Makefile                      |    1 +
+ drivers/iio/imu/bno055/Kconfig                |   31 +
+ drivers/iio/imu/bno055/Makefile               |    7 +
+ drivers/iio/imu/bno055/bno055.c               | 1715 +++++++++++++++++
+ drivers/iio/imu/bno055/bno055.h               |   12 +
+ drivers/iio/imu/bno055/bno055_i2c.c           |   56 +
+ drivers/iio/imu/bno055/bno055_ser.c           |  556 ++++++
+ drivers/iio/imu/bno055/bno055_ser_trace.h     |  114 ++
+ drivers/iio/industrialio-core.c               |   10 +-
+ include/uapi/linux/iio/types.h                |    7 +-
+ tools/iio/iio_event_monitor.c                 |    6 +
+ 17 files changed, 2731 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-bno055
+ create mode 100644 Documentation/devicetree/bindings/iio/imu/bosch,bno055.yaml
+ create mode 100644 Documentation/iio/bno055.rst
+ create mode 100644 drivers/iio/imu/bno055/Kconfig
+ create mode 100644 drivers/iio/imu/bno055/Makefile
+ create mode 100644 drivers/iio/imu/bno055/bno055.c
+ create mode 100644 drivers/iio/imu/bno055/bno055.h
+ create mode 100644 drivers/iio/imu/bno055/bno055_i2c.c
+ create mode 100644 drivers/iio/imu/bno055/bno055_ser.c
+ create mode 100644 drivers/iio/imu/bno055/bno055_ser_trace.h
+
+--
 2.17.1
-

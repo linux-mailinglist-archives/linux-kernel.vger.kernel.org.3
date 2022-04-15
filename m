@@ -2,115 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BB1503113
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CE0E503110
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355668AbiDOV3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43340 "EHLO
+        id S1355005AbiDOV3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355123AbiDOV2q (ORCPT
+        with ESMTP id S1355472AbiDOV25 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:28:46 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D121536E37;
-        Fri, 15 Apr 2022 14:24:52 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id c15so10661198ljr.9;
-        Fri, 15 Apr 2022 14:24:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xC9M13pgoSaGOx2W/G3KE41A3zFS9etpgImmns7Xikk=;
-        b=pIdhc9wMHvSmTKuY9sOqz6OLGHA39eskxFYT4khQXG2MrgvqsPIFG/Fg5ImrYqoVrL
-         KH7395K4HTuXqFoJp5QZXMo/TBAzwIPdBpzQmJzSMdbFFveL8TRP03YqlEOPSX0nmA3a
-         Liuv+r9Q19hx81bFI0s4EC+UMXBu20YnQkO9qRuth7vQzKJKxxQPSctKqUx6+nGmmhKS
-         igVf55975B5+pi9h4J5wp5Kjm7jMxVVOquK9zoCVO41ZHZG769+hi086vpAeOkQ7TxuH
-         jsjzx06EhkhHHRoc6yDpRbHU6rBFTUVh6DKFhbxX/uL64fZzjJMexEhrczSesqY+ExuS
-         n05w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=xC9M13pgoSaGOx2W/G3KE41A3zFS9etpgImmns7Xikk=;
-        b=FfneGfA+0Bs8QewToUYQhOAv4ieGNAzGq+maKbxnenJ1oBBLcoQwGEE9iJmPoJ/rM+
-         +gbBXpteXaTkyYLuS8iGtdU3qy9EIDSWVaenzD52Ay3IoQILLvURFEWPggh6h4jBNBPt
-         kN3zuyxsFiO+e0L8xw0xe4Y1JICOwyDtZhe24Qr/N2ZbL8/koykvL9KS4ngvQ5FALo0g
-         uQHjGVPoeK+ndKxU5YZBr7RjQQBwmTrNJC+0uXxpxnl+ZCQTMfQM4v0nQ0X1iBYW7z2h
-         bhNZJuqF+0UzG27rJjCUCVYE9RROVbryrkyVWhbveAoJjuO+hWNz83Rr6i9jkMp+TTW7
-         pB3g==
-X-Gm-Message-State: AOAM531LpdqagjvSvd1Y6x2Tdq4Xw9xgiQgtmZaM56kE27rlcBqYHGCA
-        yHMKDI/62gtpN9PJ2weDQDY=
-X-Google-Smtp-Source: ABdhPJxU9VJCryFGYRMhBONyWo+rg81k3Gmt2hMdXkjcHuqAepjCBIbyQqPXy0yhiDmn7Kg8bHjhSw==
-X-Received: by 2002:a2e:b8c2:0:b0:24b:6b07:fafd with SMTP id s2-20020a2eb8c2000000b0024b6b07fafdmr534896ljp.207.1650057890790;
-        Fri, 15 Apr 2022 14:24:50 -0700 (PDT)
-Received: from localhost.localdomain ([94.103.225.17])
-        by smtp.gmail.com with ESMTPSA id m20-20020a194354000000b0046f8c68f965sm217432lfj.166.2022.04.15.14.24.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 14:24:50 -0700 (PDT)
-From:   Pavel Skripkin <paskripkin@gmail.com>
-To:     isely@pobox.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-Subject: [PATCH] media: pvrusb2: fix array-index-out-of-bounds in pvr2_i2c_core_init
-Date:   Sat, 16 Apr 2022 00:24:48 +0300
-Message-Id: <20220415212448.7290-1-paskripkin@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Fri, 15 Apr 2022 17:28:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E4E7DAFDE;
+        Fri, 15 Apr 2022 14:25:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB6AD620BE;
+        Fri, 15 Apr 2022 21:25:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D654EC385A4;
+        Fri, 15 Apr 2022 21:25:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650057935;
+        bh=vwSHnKHKO3IOmpaR8ZgMY3Rm4mueE+R5d078hf6Pu6A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=UPgphip03sbzXT0W362vRLwvBo87HGwgbf+Qs4PKqK+EUiZbVUXITL8h1+XZbUSM4
+         ucR+/iiXoUS1KdvQAmWHEE8IQPcG7NY+THUUKWzttQN1N8bYZfr0d6+WkSNdc/GY6D
+         e/BFs090rGQF6n+AXTBmV7xqdt9/T5F2A0FmlJ9ImQcuDkjp17Z2r+658ZaM8D6EaV
+         lQC45eOilvVFEYJ43XPRriG9Q5jxJW3RWex7H/cORwMAle213xWPxsIPlo/5oiYe3p
+         pKL4ubLHIsk5l9DX/VAF169crMRvqrGHSHv8io/gtKCB9wthiCwRlO/X6ZcfV6iNUx
+         qr+JP2DvJcXxQ==
+Date:   Fri, 15 Apr 2022 16:25:33 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Vidya Sagar <vidyas@nvidia.com>,
+        "Kenneth R. Crudup" <kenny@panix.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com, hkallweit1@gmail.com,
+        wangxiongfeng2@huawei.com, mika.westerberg@linux.intel.com,
+        chris.packham@alliedtelesis.co.nz, yangyicong@hisilicon.com,
+        treding@nvidia.com, jonathanh@nvidia.com, abhsahu@nvidia.com,
+        sagupta@nvidia.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kthota@nvidia.com,
+        mmaddireddy@nvidia.com, sagar.tv@gmail.com,
+        Ricky Wu <ricky_wu@realtek.com>,
+        Rajat Jain <rajatja@google.com>,
+        Prasad Malisetty <quic_pmaliset@quicinc.com>,
+        Victor Ding <victording@google.com>
+Subject: Re: [PATCH V1] PCI/ASPM: Save/restore L1SS Capability for
+ suspend/resume
+Message-ID: <20220415212533.GA844147@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAd53p6DX2C7KVRV=uu_mmPTTjE7=RsXfNPxjbOBLRbf-pXi5A@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported that -1 is used as array index. The problem was in
-missing validation check.
+On Fri, Apr 15, 2022 at 10:26:19PM +0800, Kai-Heng Feng wrote:
+> On Fri, Apr 15, 2022 at 12:41 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > On Wed, Apr 13, 2022 at 08:19:26AM +0800, Kai-Heng Feng wrote:
+> > > On Wed, Apr 13, 2022 at 6:50 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+> > > > ...
+> >
+> > > >   - For L1 PM Substates configuration, sec 5.5.4 says that both ports
+> > > >     must be configured while ASPM L1 is disabled, but I don't think we
+> > > >     currently guarantee this: we restore all the upstream component
+> > > >     state first, and we don't know the ASPM state of the downstream
+> > > >     one.  Maybe we need to:
+> > > >
+> > > >       * When restoring upstream component,
+> > > >           + disable its ASPM
+> > > >
+> > > >       * When restoring downstream component,
+> > > >           + disable its ASPM
+> > > >           + restore upstream component's LTR, L1SS
+> > > >           + restore downstream component's LTR, L1SS
+> > > >           + restore upstream component's ASPM
+> > > >           + restore downstream component's ASPM
+> > >
+> > > Right now L1SS isn't reprogrammed after S3, and that causes WD NVMe
+> > > starts to spew lots of AER errors.
+> >
+> > Right now we don't fully restore L1SS-related state after S3, so maybe
+> > there's some inconsistency that leads to the AER errors.
 
-hdw->unit_number is initialized with -1 and then if init table walk fails
-this value remains unchanged. Since code blindly uses this member for
-array indexing adding sanity check is the easiest fix for that.
+> > Could you collect the "lspci -vv" state before and after S3 so we can
+> > compare them?
+> >
+> > > So yes please restore L1SS upon resume. Meanwhile I am asking vendor
+> > > _why_ restoring L1SS is crucial for it to work.
+> > >
+> > > I also wonder what's the purpose of pcie_aspm_pm_state_change()? Can't
+> > > we just restore ASPM bits like other configs?
+> >
+> > Good question.  What's the context?  This is in the
+> > pci_raw_set_power_state() path, not the pci_restore_state() path, so
+> > seems like a separate discussion.
+> 
+> Because this patch alone doesn't restore T_PwrOn and LTR1.2_Threshold.
 
-hdw->workpoll initialization moved upper to prevent warning in
-__flush_work.
+I assume the post-S3 path is basically this:
 
-Fixes: d855497edbfb ("V4L/DVB (4228a): pvrusb2 to kernel 2.6.18")
-Reported-and-tested-by: syzbot+1a247e36149ffd709a9b@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
----
- drivers/media/usb/pvrusb2/pvrusb2-hdw.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+  pci_pm_resume_noirq
+    pci_pm_default_resume_early
+      pci_power_up
+        pci_raw_set_power_state(D0)
+          pcie_aspm_pm_state_change
+            pcie_config_aspm_path
+              pcie_config_aspm_link
+                pcie_config_aspm_l1ss
+                  clear PCI_EXP_LNKCTL_ASPM_L1 etc
+                  set PCI_L1SS_CTL1_ASPM_L1_1 etc
+                pcie_config_aspm_dev
+                  set PCI_EXP_LNKCTL_ASPM_L1 etc
+      pci_restore_state
+        pci_restore_ltr_state
+        pci_restore_aspm_l1ss_state     # after this patch
+        pci_restore_pcie_state
 
-diff --git a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-index cd7b118d5929..a9666373af6b 100644
---- a/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-+++ b/drivers/media/usb/pvrusb2/pvrusb2-hdw.c
-@@ -2569,6 +2569,11 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	} while (0);
- 	mutex_unlock(&pvr2_unit_mtx);
- 
-+	INIT_WORK(&hdw->workpoll, pvr2_hdw_worker_poll);
-+
-+	if (hdw->unit_number == -1)
-+		goto fail;
-+
- 	cnt1 = 0;
- 	cnt2 = scnprintf(hdw->name+cnt1,sizeof(hdw->name)-cnt1,"pvrusb2");
- 	cnt1 += cnt2;
-@@ -2580,8 +2585,6 @@ struct pvr2_hdw *pvr2_hdw_create(struct usb_interface *intf,
- 	if (cnt1 >= sizeof(hdw->name)) cnt1 = sizeof(hdw->name)-1;
- 	hdw->name[cnt1] = 0;
- 
--	INIT_WORK(&hdw->workpoll,pvr2_hdw_worker_poll);
--
- 	pvr2_trace(PVR2_TRACE_INIT,"Driver unit number is %d, name is %s",
- 		   hdw->unit_number,hdw->name);
- 
--- 
-2.35.1
+Hmm...  I think I see what you're saying.  pcie_aspm_pm_state_change()
+fiddles with ASPM and L1SS enable bits.  It likely disables L1,
+enables L1SS, enables L1, but never restores the LTR capability or the
+T_PwrOn and LTR1.2_Threshold bits you mention.
 
+Then we turn around and overwrite all that stuff (and the LTR cap) in
+pci_restore_state().  That all seems fairly broken, and I agree, I
+don't know why pcie_aspm_pm_state_change() exists.
+
+> So I forced the pcie_aspm_pm_state_change() calling path to eventually
+> call aspm_calc_l1ss_info() which solved the problem for me.
+
+This would update T_PwrOn and LTR1.2_Threshold, so I guess it makes
+sense that this would help.  But I think we need to figure out the
+reason why pcie_aspm_pm_state_change() exists and get rid of it or at
+least better integrate it with pci_restore_state().
+
+If we call pcie_aspm_pm_state_change() after D3cold or reset, things
+still aren't going to work because the LTR cap isn't restored or
+programmed.

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA84650289B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E60850289C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 13:00:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352546AbiDOLCz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 07:02:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60092 "EHLO
+        id S1352570AbiDOLC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 07:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352554AbiDOLCw (ORCPT
+        with ESMTP id S1352543AbiDOLCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 07:02:52 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD347939F8;
-        Fri, 15 Apr 2022 04:00:22 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id f5so1595378ljp.8;
-        Fri, 15 Apr 2022 04:00:22 -0700 (PDT)
+        Fri, 15 Apr 2022 07:02:55 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1FC191341;
+        Fri, 15 Apr 2022 04:00:26 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bi26so13540822lfb.2;
+        Fri, 15 Apr 2022 04:00:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUc60b57AhT9SFx2Mlbuf+JCyo5Rl/gcGLN6jImms98=;
-        b=oT2vaK8vkcD9aZoHG1fs5rnbpk6gWuSygwsymd8jXQgJwSLD3/fK7gH8izABVNnsXk
-         yEZ4qlCulBFQf7x9NVAQhugIHliBw6KZiLIxzacZ7gHXx+bZAd6Mi2EktVuccdj2QNe6
-         hlUlEUKWXjFSPswfLQ0AU48y4RxdOYGYd9HSNBRr032uzLH8dAOAiDLOXx1mXYFtEUAV
-         j2GP5yNU81yfV6o+odOPUf0ouWkJRLr4gEJaaUFXjRh+PXNzw9SEuGWPk73+E0fjhea7
-         IYezGIoQ1xVid4S+8HFUhk6PrG2v8KlTmJnMtYcA4RNxdxZLkhJFYASTPUT8q/HIkm4d
-         PpSg==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=/92dgGLUolkAH3AU+1is8vSs4x9gInGUtOx7kaljC1s=;
+        b=PJPPb5ZuC8V3lOmHXIx64Vu5AmRc/Jp/EignkCeVcb9Ei9gdeesylm8kWLTE2yVj9F
+         9UIB0oUm2Lv7M+NB73NnSFEVRowcsCN+xyomxKD36poYdvv6a5FMknqJaBA6bO07i7P1
+         ILTh1279oStf73WDp7uUxVTdIlvq0k32UwL6kX1KmmPVH3Ztxet06LDgaLQhfhHEHMp0
+         vCZaG2vPII3erfc6nDnaa5JyM70eUkvvSYKjDaIk/NRMhJDJVa04z/p58jF+OBaQWLIp
+         w9uMGPSmTRetT038ZWmgvCimc6aCh3dlxHG/a/tE1YqP3mjisR1RU/jbIiBFuv2yIGgC
+         Y3bg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jUc60b57AhT9SFx2Mlbuf+JCyo5Rl/gcGLN6jImms98=;
-        b=vnTYD5rwMfBd9uyQKpqB9P7LrKoBvamMbnRUC43VQDT+KAT6LDVID+ZJlfOd2q+UF/
-         zqni02ddMI61f2VI6JJyMCyhCMKFTfrI4jBI2Y3R7jNqmaknS8C4oOVDFuKLA5JpL1on
-         4Z0lcnmYeSmlcY+aCbeUHYkrnQkx/GPFvwj7ST4Z9qSy0yZ/Jim3vetM0AUxBhNMBk+2
-         UdilDuUXDII9rrGD3NnjBmi5CdvKOe5U+i2cU5Bcv4ypQt73DgdLp5fW8UyXnHHzevgz
-         hQu+lKGb3Wxv+hILTJF+LXjDRc6r5fq5rb0aZllj5fHaCuEYCDuFqOa9O1k7hZK2pino
-         etGQ==
-X-Gm-Message-State: AOAM532ZeO/WmjOtl5TpfC0XYsITZJhRb1MQVi9caAfDPjg1e5OfRsxG
-        KgUylk3hBEfRosru+CK5a/49bc3fQPc=
-X-Google-Smtp-Source: ABdhPJxO6Q98HyjaAAm8jmNlSeKD0VRsxNyr2G9+Vrh3iG/UbM3jKzHl4mnBGHAqWvjj4u77sEU2wA==
-X-Received: by 2002:a2e:a548:0:b0:24d:626e:f382 with SMTP id e8-20020a2ea548000000b0024d626ef382mr4094220ljn.93.1650020420697;
-        Fri, 15 Apr 2022 04:00:20 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=/92dgGLUolkAH3AU+1is8vSs4x9gInGUtOx7kaljC1s=;
+        b=MHwDjsBdnf6PM/nObueFtjUV8ikKm0zYjbWDjmV8I62hX8/NJEdMP4S5te8CMYooyk
+         v3z5ik3VoV3d262cnqFpWve+LqT4bWlIgy7NxctAajL7gMNkTpl6YVR8ZsJVZqHFmLF2
+         2TiKvDGlWj+VK7XMLN/oJHIJJPpV/gXaOfCJPrpL9EKdnge6aOFbOA+roT9eXmBc5CTg
+         AT8aIpis/LaXEc+IfDagPzGX9Ug4on3J2pMJaSKGCLi68kKKxT7pN1kcHZzH6Uk071TL
+         FfD75CWNwYINWxAX8SV8wLJC/dXrIS4/Yn+9sW++CLt8AGU9AcXR0s6ZtCmqcW/+eDPU
+         tNPg==
+X-Gm-Message-State: AOAM532rOQ2DmaKU00ndEQeSPKaxJktvCk2R+QVj6wWsO9589Tm7RGlX
+        UEKP3viGfTGbfLJq3WgAtHsNf5zH2KY=
+X-Google-Smtp-Source: ABdhPJxXbhv9aIrRqoXY27+EgsCEXZzkjxj3rSJZ8gmlX6W403cjBG96eoG/q518yYQ3QntC1knwvA==
+X-Received: by 2002:ac2:4e70:0:b0:44a:866e:605f with SMTP id y16-20020ac24e70000000b0044a866e605fmr4774279lfs.678.1650020424732;
+        Fri, 15 Apr 2022 04:00:24 -0700 (PDT)
 Received: from nergzd-desktop.localdomain ([194.39.226.133])
-        by smtp.gmail.com with ESMTPSA id q14-20020a0565123a8e00b0044a7b26ae1dsm292341lfu.109.2022.04.15.04.00.19
+        by smtp.gmail.com with ESMTPSA id q14-20020a0565123a8e00b0044a7b26ae1dsm292341lfu.109.2022.04.15.04.00.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 04:00:19 -0700 (PDT)
+        Fri, 15 Apr 2022 04:00:24 -0700 (PDT)
 From:   Markuss Broks <markuss.broks@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
@@ -57,10 +57,12 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>, devicetree@vger.kernel.org
-Subject: [PATCH v2 0/4] Add support for Silicon Mitus SM5703 MFD
-Date:   Fri, 15 Apr 2022 14:00:09 +0300
-Message-Id: <20220415110014.7384-1-markuss.broks@gmail.com>
+Subject: [PATCH v2 1/4] dt-bindings: regulator: Add bindings for Silicon Mitus SM5703 regulators
+Date:   Fri, 15 Apr 2022 14:00:10 +0300
+Message-Id: <20220415110014.7384-2-markuss.broks@gmail.com>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415110014.7384-1-markuss.broks@gmail.com>
+References: <20220415110014.7384-1-markuss.broks@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,37 +75,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for Silicon Mitus SM5703 MFD and the
-appropriate device-tree bindings. This only adds support for the
-regulator module, leaving room for other modules implemented in
-future (code for other modules is really not ready for submission
-right now). Silicon Mitus SM5703 is used on various mobile phones,
-mostly Samsung Galaxy (J5 (2015, 2016), On7, J7 (2015, 2016) ...).
+This patch adds device-tree bindings for regulators on Silicon Mitus
+SM5703 MFD.
 
-Markuss Broks (4):
-  dt-bindings: regulator: Add bindings for Silicon Mitus SM5703
-    regulators
-  dt-bindings: mfd: Add bindings for Silicon Mitus SM5703 MFD
-  mfd: sm5703: Add support for SM5703 MFD
-  regulator: sm5703-regulator: Add regulators support for SM5703 MFD
-
- .../bindings/mfd/siliconmitus,sm5703.yaml     |  91 ++++++++++
- .../siliconmitus,sm5703-regulator.yaml        |  48 ++++++
- MAINTAINERS                                   |   8 +
- drivers/mfd/Kconfig                           |  12 ++
- drivers/mfd/Makefile                          |   1 +
- drivers/mfd/sm5703.c                          |  81 +++++++++
- drivers/regulator/Kconfig                     |   7 +
- drivers/regulator/Makefile                    |   1 +
- drivers/regulator/sm5703-regulator.c          | 162 ++++++++++++++++++
- include/linux/mfd/sm5703.h                    | 105 ++++++++++++
- 10 files changed, 516 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
+Signed-off-by: Markuss Broks <markuss.broks@gmail.com>
+---
+ .../siliconmitus,sm5703-regulator.yaml        | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
- create mode 100644 drivers/mfd/sm5703.c
- create mode 100644 drivers/regulator/sm5703-regulator.c
- create mode 100644 include/linux/mfd/sm5703.h
 
+diff --git a/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml b/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
+new file mode 100644
+index 000000000000..560df4c020ca
+--- /dev/null
++++ b/Documentation/devicetree/bindings/regulator/siliconmitus,sm5703-regulator.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/regulator/siliconmitus,sm5703-regulator.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Silicon Mitus SM5703 multi function device regulators
++
++maintainers:
++  - Markuss Broks <markuss.broks@gmail.com>
++
++description: |
++  SM5703 regulators node should be a sub node of the SM5703 MFD node. See SM5703 MFD
++  bindings at Documentation/devicetree/bindings/mfd/siliconmitus,sm5703.yaml
++  Regulator nodes should be named as USBLDO_<number>, BUCK, VBUS, LDO_<number>.
++  The definition for each of these nodes is defined using the standard
++  binding for regulators at Documentation/devicetree/bindings/regulator/regulator.txt.
++
++properties:
++  compatible:
++    const: siliconmitus,sm5703-regulator
++
++  buck:
++    type: object
++    $ref: regulator.yaml#
++    description:
++      Properties for the BUCK regulator.
++
++  vbus:
++    type: object
++    $ref: regulator.yaml#
++    description:
++      Properties for the VBUS regulator.
++
++patternProperties:
++  "^ldo[1-3]$":
++    type: object
++    $ref: regulator.yaml#
++    description:
++      Properties for single LDO regulator.
++
++  "^usbldo[1-2]$":
++    type: object
++    $ref: regulator.yaml#
++    description:
++      Properties for a single USBLDO regulator.
++
++additionalProperties: false
 -- 
 2.35.1
 

@@ -2,72 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3834450338B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E8B50330B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356653AbiDOXqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S1353274AbiDOXrM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:47:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356651AbiDOXqg (ORCPT
+        with ESMTP id S231481AbiDOXrH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:46:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF95FB6D3E
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:44:06 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id s14so8151717plk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:44:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=w2QrILTyqQ+Pt7TX+dc/u5nUBhPOOUFyhDJl0/uG8KA=;
-        b=WQYEUw+TfPdba4M0qoV3YoYNx0EokWXTwcm94AT/cqahCQWwwjBWEbOZD4bvmT0NFb
-         Xcx5ODn0k7YRALA13OhixgkDU8uYYogteOunDDY5goCtmJyK/qUBiMez/8Ex2AWPKxfs
-         zWYTFOtjGivIKkh9dDxV5C6NheZrsC87+NjXM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=w2QrILTyqQ+Pt7TX+dc/u5nUBhPOOUFyhDJl0/uG8KA=;
-        b=uY+k+EhwEn1uUTLNQDnDyiCXfruxtu6RjXrLXevpw7gA0LPX0uUESaW4X2YWjsfAmU
-         hkoXy51k2iftX5f2uAORp3vtQOKJ6F8COnSwmvRTI2gCdThnG+RBbn1qXfySs1YHm6Vl
-         GMprNDFOc2TBgHSyqxQ7uzimgu1s+X1zmfLfUrc7bkjsvvdfJ7NBccYHqONH3opir8ns
-         ZHXWknG8YP4s1xbiD58bAM9wknfnMWppEJ1uAZzliHbioX5D4LLdtHpf5hVuHU8mkCRE
-         4qlcEw86XPeI6M19KTSRoRa1fgms3ntaU79O6lEOyGpTx1JDqFzvjBLoW3o6kyhGVl90
-         bZUQ==
-X-Gm-Message-State: AOAM530FHitzv/U9CK3y0FrBlmXf6QAtl3cOUbIZNy5C0XyOJA1tN93G
-        24bhWv3am8I4hZ/1AZclMWyDMQ==
-X-Google-Smtp-Source: ABdhPJx5DUqDtUFoTZutT3tV3A+5mldSPzpeVrsrxCdXDbVcaqBeXAPd4TrSNpEqM3FQkJq1z1ovDg==
-X-Received: by 2002:a17:90b:1b44:b0:1cd:49b8:42b8 with SMTP id nv4-20020a17090b1b4400b001cd49b842b8mr1313605pjb.102.1650066246324;
-        Fri, 15 Apr 2022 16:44:06 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:b27a:b3e7:2e3e:e4be])
-        by smtp.gmail.com with UTF8SMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm3938967pfc.78.2022.04.15.16.44.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 16:44:05 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 16:44:03 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@codeaurora.org, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, rohitkr@codeaurora.org,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v12 7/7] pinctrl: qcom: Update clock voting as optional
-Message-ID: <YloDQ7V7JTNYkjWu@google.com>
-References: <1647447426-23425-1-git-send-email-quic_srivasam@quicinc.com>
- <1647447426-23425-8-git-send-email-quic_srivasam@quicinc.com>
+        Fri, 15 Apr 2022 19:47:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B4B1DA76;
+        Fri, 15 Apr 2022 16:44:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 11D5CB831BA;
+        Fri, 15 Apr 2022 23:44:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEC07C385B5;
+        Fri, 15 Apr 2022 23:44:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650066273;
+        bh=BJ4yI4e3T5R6YlCYcwG8kMVsAMKr7M9Y5rWC/P9WuUE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=mJ1RlEvMAjER3ZFVI3HSyIhLCsQ35tUuVOBeDnMIZ0DlAI3v6ypwthCCrooCwmpXe
+         EATUHvvfNPth3qDMEZMcKFJPxPpCI4gHo4b0nkisuE+3UJiCIn42qkXfarwjvQav/p
+         33Nb+rGdJ/K47qK9VdaLqurM2SJMXw0j39A5jFzu+4J3O1PFEYBA6UttDD+dthQc0A
+         oQJH6WrnURgeLXt+ef+BnkPJ6kptXn6Wuxs308U91k29Ahii3KPD5rINAqpU9CnCmc
+         ghZOo2SoU9t8I0Pdw9sZIxK0P3xk1Lok9+YaNS1Bu+nHEVbUkM1upWawXHfKmOvqxL
+         y7JlQNp5fi1YQ==
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2ec42eae76bso95397767b3.10;
+        Fri, 15 Apr 2022 16:44:33 -0700 (PDT)
+X-Gm-Message-State: AOAM531TBasWG6PwFIGpd2/731feNo+rMVckWchXyajWxVMj2dUcoIXV
+        87lfdxdGMhqscm41+tvE2eWD5CF82+Px5eZIYIQ=
+X-Google-Smtp-Source: ABdhPJw9968jTzOt6gz9W4g0aOTltkD6p3FL8bzMBCVOFNwz4HrVPX4+c4iPXHNR2KMviPIXoPxm7E95Zzzie3H5GUk=
+X-Received: by 2002:a81:5087:0:b0:2ef:33c1:fccd with SMTP id
+ e129-20020a815087000000b002ef33c1fccdmr1182835ywb.73.1650066272767; Fri, 15
+ Apr 2022 16:44:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <1647447426-23425-8-git-send-email-quic_srivasam@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-6-alobakin@pm.me>
+ <20220415133839.y6tjf3ymbvbrntx4@apollo.legion>
+In-Reply-To: <20220415133839.y6tjf3ymbvbrntx4@apollo.legion>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 15 Apr 2022 16:44:21 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6SJ=Gyh89tmJEtsnPqgsE3csDAmkzFky5=yCRuO1JVTQ@mail.gmail.com>
+Message-ID: <CAPhsuW6SJ=Gyh89tmJEtsnPqgsE3csDAmkzFky5=yCRuO1JVTQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 05/11] samples: bpf: use host bpftool to generate
+ vmlinux.h, not target
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     Alexander Lobakin <alobakin@pm.me>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,13 +97,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 16, 2022 at 09:47:06PM +0530, Srinivasa Rao Mandadapu wrote:
-> Update bulk clock voting to optional voting as ADSP bypass platform doesn't
-> need macro and decodec clocks, as these macro and dcodec GDSC switches are
-> maintained as power domains and operated from lpass clock drivers.
-> 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
+On Fri, Apr 15, 2022 at 6:38 AM Kumar Kartikeya Dwivedi
+<memxor@gmail.com> wrote:
+>
+> On Fri, Apr 15, 2022 at 04:15:50AM IST, Alexander Lobakin wrote:
+> > Use the host build of bpftool (bootstrap) instead of the target one
+> > to generate vmlinux.h/skeletons for the BPF samples. Otherwise, when
+> > host != target, samples compilation fails with:
+> >
+> > /bin/sh: line 1: samples/bpf/bpftool/bpftool: failed to exec: Exec
+> > format error
+> >
+> > Fixes: 384b6b3bbf0d ("samples: bpf: Add vmlinux.h generation support")
+> > Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> > ---
+>
+> Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Acked-by: Song Liu <songliubraving@fb.com>
+
+>
+> >  samples/bpf/Makefile | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
+> > index 97203c0de252..02f999a8ef84 100644
+> > --- a/samples/bpf/Makefile
+> > +++ b/samples/bpf/Makefile
+> > @@ -291,12 +291,13 @@ $(LIBBPF): $(wildcard $(LIBBPF_SRC)/*.[ch] $(LIBBPF_SRC)/Makefile) | $(LIBBPF_OU
+> >
+> >  BPFTOOLDIR := $(TOOLS_PATH)/bpf/bpftool
+> >  BPFTOOL_OUTPUT := $(abspath $(BPF_SAMPLES_PATH))/bpftool
+> > -BPFTOOL := $(BPFTOOL_OUTPUT)/bpftool
+> > +BPFTOOL := $(BPFTOOL_OUTPUT)/bootstrap/bpftool
+> >  $(BPFTOOL): $(LIBBPF) $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) | $(BPFTOOL_OUTPUT)
+> >           $(MAKE) -C $(BPFTOOLDIR) srctree=$(BPF_SAMPLES_PATH)/../../ \
+> >               OUTPUT=$(BPFTOOL_OUTPUT)/ \
+> >               LIBBPF_OUTPUT=$(LIBBPF_OUTPUT)/ \
+> > -             LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/
+> > +             LIBBPF_DESTDIR=$(LIBBPF_DESTDIR)/ \
+> > +             bootstrap
+> >
+> >  $(LIBBPF_OUTPUT) $(BPFTOOL_OUTPUT):
+> >       $(call msg,MKDIR,$@)
+> > --
+> > 2.35.2
+> >
+> >
+>
+> --
+> Kartikeya

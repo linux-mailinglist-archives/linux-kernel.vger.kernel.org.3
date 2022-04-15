@@ -2,183 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0336C50308D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DA215030DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354750AbiDOV4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:56:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34172 "EHLO
+        id S1356223AbiDOV56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbiDOV4t (ORCPT
+        with ESMTP id S1356195AbiDOV5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:56:49 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57D137ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=ha38xYsfejbNBgKN9o0wUY9R1DO01ebDOCHytWPPevo=; b=GjZl1h1L1iVuWJIbmNFwpHu0Zu
-        UQ8E8pgyj8GGMiBLALRDt9I2MhQ5xumTAS9ZA/7UATWuMTYQKqRPtyWYT7yYepz18wN9DIGLvnypv
-        uDo/QYN0jQhKnm8rJ/DCotbg1H1xYcC6xxVfd4fsQZmrTV8Cd88TV0e4hhwyxQMSZXxvTWD5Wld9t
-        ayB/2YXkeK1hu2B+C7H2nDz0IEexHPXYhn//c1XyUHdPlCdsIkt1GLloA67v0vPrQHoZ68A5UNAUa
-        6Rj1k1i6lRuzwyKClPrsqiI/ri/of/Lo6xvPsLgrdYk+xD382Esvu32HnPeu+iRmYiVTi2hCDKR2x
-        4tcpV6VQ==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfTtE-00BRMI-5P; Fri, 15 Apr 2022 21:54:04 +0000
-Date:   Fri, 15 Apr 2022 14:54:04 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     YueHaibing <yuehaibing@huawei.com>, mingo@redhat.com,
-        xiaowei66@huawei.com, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH sysctl-next] ftrace: fix building with SYSCTL=n but
- DYNAMIC_FTRACE=y
-Message-ID: <YlnpfHuZGC8H0iNZ@bombadil.infradead.org>
+        Fri, 15 Apr 2022 17:57:52 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDBB338B1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:55:23 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id d19-20020a0566022bf300b00645eba5c992so5449213ioy.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:55:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=O/xeVfd2f1I1IgGwEz7f3eVMwFcu7BEtTzoITl6hbMY=;
+        b=0ry9isvwjsPhdpb4gwi9bp+O5TFDvWg0s5qCaba3oj7T2JOPshks1vp88AxMHbZuiC
+         LsZEA/fjkIbAsw0d6eXvcjkEKfNslCtmZ6sl7nx6nnHVK0Van542IqzeAmbyMki80sKL
+         0i2INkUSEhiJq8nsy6jSfhVybDUeur7b6VjejPnGxi/sslmPkLVLjPiMkMBJL+BNpOYA
+         K34E+JLtiX3OYpWzgCmq5vJKBGt5WXDQ18DXnBcOtW/Ar3GZtyBhNwkTt8nSPwBEEbj+
+         EO/Pcl+yhPlgrrGEqBoD+F5xnwOTEURuk4jPLHMEQCWngyXWqYz80ua7QISWrRjjLsnF
+         hJNw==
+X-Gm-Message-State: AOAM5324LRrtlMpu6M26wnZ5dKUiO6TUAUhzXQseb7wCHmEL2Tz/5y4d
+        kUCQEJUYUn6Q01A8XvP6cWR866V0auqAY8jWSCYBSMlkSCyL
+X-Google-Smtp-Source: ABdhPJw4Gl0ghdwhE3obk3Z+DVgDyRqoCs+sALjlpXy1jA5TwjhXCn4TNMa9OgAxEmPkW926JVtTZQ9OsFTdfWjCCPcsVRbQI1H+
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:cb4f:0:b0:2cb:fde0:b5c2 with SMTP id
+ f15-20020a92cb4f000000b002cbfde0b5c2mr291007ilq.274.1650059722464; Fri, 15
+ Apr 2022 14:55:22 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 14:55:22 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009da4c705dcb87735@google.com>
+Subject: [syzbot] WARNING in check_map_prog_compatibility
+From:   syzbot <syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com>
+To:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, hawk@kernel.org,
+        john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        netdev@vger.kernel.org, songliubraving@fb.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, yhs@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One can enable dyanmic tracing but disable sysctls.
-When this is doen we get the compile kernel warning:
+Hello,
 
-  CC      kernel/trace/ftrace.o
-kernel/trace/ftrace.c:3086:13: warning: ‘ftrace_shutdown_sysctl’ defined
-but not used [-Wunused-function]
- 3086 | static void ftrace_shutdown_sysctl(void)
-      |             ^~~~~~~~~~~~~~~~~~~~~~
-kernel/trace/ftrace.c:3068:13: warning: ‘ftrace_startup_sysctl’ defined
-but not used [-Wunused-function]
- 3068 | static void ftrace_startup_sysctl(void)
+syzbot found the following issue on:
 
-When CONFIG_DYNAMIC_FTRACE=n the ftrace_startup_sysctl() and
-routines ftrace_shutdown_sysctl() still compiles, so these
-are actually more just used for when SYSCTL=y.
+HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=15c55ab7700000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9ac56d6828346c4e
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3f8d4df1e1981a97abb
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14960370f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1412ff0f700000
 
-Fix this then by just moving these routines to when sysctls
-are enabled.
+Bisection is inconclusive: the issue happens on the oldest tested release.
 
-Fixes: 7cde53da38a3 ("ftrace: move sysctl_ftrace_enabled to ftrace.c")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12ef7940f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=11ef7940f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ef7940f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e3f8d4df1e1981a97abb@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+trace type BPF program uses run-time allocation
+WARNING: CPU: 0 PID: 3596 at kernel/bpf/verifier.c:11998 check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
+Modules linked in:
+CPU: 0 PID: 3596 Comm: syz-executor252 Not tainted 5.18.0-rc2-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+RIP: 0010:check_map_prog_compatibility+0x76b/0x920 kernel/bpf/verifier.c:11998
+Code: c7 fc ff ff e8 86 4f ee ff 31 db e9 bb fc ff ff e8 7a 4f ee ff c6 05 b2 40 35 0c 01 48 c7 c7 a0 3b 74 8a 31 c0 e8 85 e4 b7 ff <0f> 0b e9 23 fb ff ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c c0 f8 ff
+RSP: 0018:ffffc90003aaf1e8 EFLAGS: 00010246
+RAX: c7d869b5def1f000 RBX: 0000000000000001 RCX: ffff88801d293a00
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffff88801f6ea030 R08: ffffffff816acc92 R09: ffffed1017384f24
+R10: ffffed1017384f24 R11: 1ffff11017384f23 R12: ffff88801f6ea000
+R13: dffffc0000000000 R14: ffff88807c438000 R15: 0000000000000011
+FS:  00005555566d0300(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000056023649dd90 CR3: 0000000024387000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ resolve_pseudo_ldimm64+0x67f/0x1270 kernel/bpf/verifier.c:12171
+ bpf_check+0x2606/0x13ab0 kernel/bpf/verifier.c:14462
+ bpf_prog_load+0x1288/0x1b80 kernel/bpf/syscall.c:2351
+ __sys_bpf+0x373/0x660 kernel/bpf/syscall.c:4663
+ __do_sys_bpf kernel/bpf/syscall.c:4767 [inline]
+ __se_sys_bpf kernel/bpf/syscall.c:4765 [inline]
+ __x64_sys_bpf+0x78/0x90 kernel/bpf/syscall.c:4765
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f86914c6239
+Code: 28 c3 e8 2a 14 00 00 66 2e 0f 1f 84 00 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffcd0a865f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000141
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f86914c6239
+RDX: 0000000000000080 RSI: 00000000200004c0 RDI: 0000000000000005
+RBP: 00007f869148a220 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000072 R11: 0000000000000246 R12: 00007f869148a2b0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Steven,
-
-As with the other fixes I can take this in through sysctl-next if you
-are OK with that, please let me know.
-
- kernel/trace/ftrace.c | 71 +++++++++++++++++++++----------------------
- 1 file changed, 34 insertions(+), 37 deletions(-)
-
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index db8d553728b6..d9424fd9a183 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -3065,40 +3065,6 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
- 	return 0;
- }
- 
--static void ftrace_startup_sysctl(void)
--{
--	int command;
--
--	if (unlikely(ftrace_disabled))
--		return;
--
--	/* Force update next time */
--	saved_ftrace_func = NULL;
--	/* ftrace_start_up is true if we want ftrace running */
--	if (ftrace_start_up) {
--		command = FTRACE_UPDATE_CALLS;
--		if (ftrace_graph_active)
--			command |= FTRACE_START_FUNC_RET;
--		ftrace_startup_enable(command);
--	}
--}
--
--static void ftrace_shutdown_sysctl(void)
--{
--	int command;
--
--	if (unlikely(ftrace_disabled))
--		return;
--
--	/* ftrace_start_up is true if ftrace is running */
--	if (ftrace_start_up) {
--		command = FTRACE_DISABLE_CALLS;
--		if (ftrace_graph_active)
--			command |= FTRACE_STOP_FUNC_RET;
--		ftrace_run_update_code(command);
--	}
--}
--
- static u64		ftrace_update_time;
- unsigned long		ftrace_update_tot_cnt;
- unsigned long		ftrace_number_of_pages;
-@@ -7267,9 +7233,6 @@ core_initcall(ftrace_nodyn_init);
- static inline int ftrace_init_dyn_tracefs(struct dentry *d_tracer) { return 0; }
- static inline void ftrace_startup_all(int command) { }
- 
--# define ftrace_startup_sysctl()	do { } while (0)
--# define ftrace_shutdown_sysctl()	do { } while (0)
--
- static void ftrace_update_trampoline(struct ftrace_ops *ops)
- {
- }
-@@ -7910,6 +7873,40 @@ int unregister_ftrace_function(struct ftrace_ops *ops)
- EXPORT_SYMBOL_GPL(unregister_ftrace_function);
- 
- #ifdef CONFIG_SYSCTL
-+static void ftrace_startup_sysctl(void)
-+{
-+	int command;
-+
-+	if (unlikely(ftrace_disabled))
-+		return;
-+
-+	/* Force update next time */
-+	saved_ftrace_func = NULL;
-+	/* ftrace_start_up is true if we want ftrace running */
-+	if (ftrace_start_up) {
-+		command = FTRACE_UPDATE_CALLS;
-+		if (ftrace_graph_active)
-+			command |= FTRACE_START_FUNC_RET;
-+		ftrace_startup_enable(command);
-+	}
-+}
-+
-+static void ftrace_shutdown_sysctl(void)
-+{
-+	int command;
-+
-+	if (unlikely(ftrace_disabled))
-+		return;
-+
-+	/* ftrace_start_up is true if ftrace is running */
-+	if (ftrace_start_up) {
-+		command = FTRACE_DISABLE_CALLS;
-+		if (ftrace_graph_active)
-+			command |= FTRACE_STOP_FUNC_RET;
-+		ftrace_run_update_code(command);
-+	}
-+}
-+
- static bool is_permanent_ops_registered(void)
- {
- 	struct ftrace_ops *op;
--- 
-2.30.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

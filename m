@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423A2502DB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:26:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE6A7502DB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355833AbiDOQ2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:28:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38026 "EHLO
+        id S1355821AbiDOQ2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353415AbiDOQ2a (ORCPT
+        with ESMTP id S242633AbiDOQ23 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:28:30 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C476C976
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:26:01 -0700 (PDT)
+        Fri, 15 Apr 2022 12:28:29 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.17.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E885568339
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:26:00 -0700 (PDT)
 Received: from localhost.localdomain ([37.4.249.94]) by
  mrelayeu.kundenserver.de (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis)
- id 1N7hw4-1o1ti31ybK-014oAX; Fri, 15 Apr 2022 18:25:49 +0200
+ id 1N5W4y-1nzgmd3Vda-01715x; Fri, 15 Apr 2022 18:25:49 +0200
 From:   Stefan Wahren <stefan.wahren@i2se.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
         Sam Ravnborg <sam@ravnborg.org>,
@@ -27,33 +27,33 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
 Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         Dave Stevenson <dave.stevenson@raspberrypi.com>,
         Stefan Wahren <stefan.wahren@i2se.com>
-Subject: [PATCH 1/2] drm/panel/raspberrypi-touchscreen: Avoid NULL deref if not initialised
-Date:   Fri, 15 Apr 2022 18:25:12 +0200
-Message-Id: <20220415162513.42190-2-stefan.wahren@i2se.com>
+Subject: [PATCH 2/2] drm/panel/raspberrypi-touchscreen: Initialise the bridge in prepare
+Date:   Fri, 15 Apr 2022 18:25:13 +0200
+Message-Id: <20220415162513.42190-3-stefan.wahren@i2se.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220415162513.42190-1-stefan.wahren@i2se.com>
 References: <20220415162513.42190-1-stefan.wahren@i2se.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:EYMVcLrb9H+Ys80yT6gFs2ZIdoUSwACQps7CMLFV5G87zLTOyFG
- hfnoSvzEpyVFuJd3Cf3Zs7Y2ETgFBhX8MQdZjyF5J5NWGdOHetgiX1P2+ExWo6/GBx+7faq
- kSFqs7g89+lXEpU0084yfRzecLjzSRRqW0dhCH+yHYabTHMqd6rijzPa/7c1TWhiofiPqHK
- l4vKPHl6yR6G8wpPCo0Kg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:gzkemWTVne4=:2D2sOLPTpBkviaDJLnda9M
- /ePyFTbB0C9ekj87YF7SXhtjWVuz9Hl+Svo4d5zDSCaZ84zwbaQbJ+b4Dc+Q+Ny7hcfev5Y6Z
- 7QGBZn/OgskqUe+9AqWIjlj1g3CFaROyOVsOSYVzCmjz5ulngu1tvGzDp7gFwGPdCb1E+ljkI
- 4dPf68qRfJ+AAFAGxb+YuAlEn6IUPqfPaZ+mbfPbZHI8f5U3uK1Y/r2LEkJZ4KGnZiiR/kGHo
- 6mSj4BUolweS6guUBWKDLC74fkWuXQBJ0M1tCtbiV1jKpxuy/YBYBaahZLXjM0bH+okFsgQTB
- E4iIPg+OOVleoybd1LkUfa9iiIYZgh9zHx67YYQrBvivXWd8u2MCtuaLgATjdmilrnWdMLUK4
- Rsq0lEHntAKWZQ6H0roQPLByzS1Co9JtT4yftUiF5rj2IOeHO3Oltc2crh6oPa9F2IboCeGzZ
- /74Lvhqls/KaMOJwAjXuzS+Ny8mX4va/lFG58q7ntMTfm9PIJkG555GwV/IYZRXctlfjkWUWw
- Ya+kZ8bN9KE1G1r7FTJD1FAT/HENxyuT8U9cJOteIF0dzE7wAUJ3pykkVQVlCOGs1PzarZFJG
- 5qMmWl8ghyTA8/zmKWE61m1zEElR+8esB5J6UCBtyhR4nS9HZWoFarlQei1oYnhKkgu9bPBlY
- PBP1FFX7WktoErhpnHTDm4QNCUSKeLHSaOIEkooqAJXY5P3zoSX9GjTT+pPqx2CxfzkkNyDKU
- gyNgBvyd3aLO7jVJ
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:mKSLJHmAOiI+EmXgsdiCyuseqCHBZtLatfo/N7D6PmccbTLK4ti
+ Ba7N26Tk7cBKRSQPbQrnqkyX9sByH3UV9FgLrl+L8YJ7QsKBQvAx9HJQloPXrZsgOmYTDF8
+ dF6xye4+mMOpV0UGTkwpyT8rGOgb0s/09HeP3yUiftLApNa9crzWn3UJqbD+uoOSUj2780n
+ 7V2Zy55TEFyU/UocePIig==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:xUBDiT9w8cw=:HCyXnQJeqGcKF6G9DjUnjZ
+ puX20Htbf7204KArWKbAoFx/HcC5UPx+FBalFYJiEK8pTuto7NdgY4/knjK3l9bZ6qwXrXCj1
+ BQIAREi7obMoWI4CEYflM82gDjQMOJvKuWglQEcde+l3cmZs5wAjvpcR3D7WINy4+LqcW0hYC
+ CZLUl9eQwldHTrhRw6Z0SbmObaYTrOPQ7/AYpS520pzlNN8iufzfREJEFO+7ItkFAMiXC9UMN
+ hzOeXRdzWP42TYAiWNV4uP/1Gs36IT8sPeVVFSrkHpVWmzlZsKv3DQiaTPPi7G5mXHhCwoHMX
+ PftdrCbEDbfhC96psisWdGJY5LOFdfh1Sbqjp7DIeYJvXTNBKOQIzlt9yCM+sQHfkByzLw/Ol
+ 7XMtuiK5T/keHJHQyeB6ukhljuky8155WO9ZEQ5KQ4g8olxtfSNnO/UJjyiOzqSnUljHjbqVY
+ rNXbudlCJvb5IziKP9Dlsu0sbiF//IXmS1nDB2BDfstqtx6syKQeVpgTJ4JxUzlkjfdTkwqiR
+ ihmROGi7faeOUl2up5HCsRi5KKkMP/AmCMW1SzuZIRK7gRqpeW9hlEFpam5xADFjaqkci9wze
+ b0iS2g8fmytzcNwLaGMzoQNUDac2vTMqZN/cxkczSa8g5tqFT1VTpbZ9eTgnGItHTUKbtJEAu
+ 17ZXKRM9cPtV+LAOhJoI5AQXXpufq1l0vC7uVaCShimBXGxcFHI5xnJOsf4AdyPT13k0afyag
+ ghG6Z9xbC6vkkRye
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,33 +62,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dave Stevenson <dave.stevenson@raspberrypi.com>
 
-If a call to rpi_touchscreen_i2c_write from rpi_touchscreen_probe
-fails before mipi_dsi_device_register_full is called, then
-in trying to log the error message if uses ts->dsi->dev when
-it is still NULL.
-
-Use ts->i2c->dev instead, which is initialised earlier in probe.
+The panel has a prepare call which is before video starts, and an
+enable call which is after.
+The Toshiba bridge should be configured before video, so move
+the relevant power and initialisation calls to prepare.
 
 Fixes: 2f733d6194bd ("drm/panel: Add support for the Raspberry Pi 7" Touchscreen.")
 Signed-off-by: Dave Stevenson <dave.stevenson@raspberrypi.com>
 Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 ---
- drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-index 46029c5610c8..1f805eb8fdb5 100644
+index 1f805eb8fdb5..145047e19394 100644
 --- a/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
 +++ b/drivers/gpu/drm/panel/panel-raspberrypi-touchscreen.c
-@@ -229,7 +229,7 @@ static void rpi_touchscreen_i2c_write(struct rpi_touchscreen *ts,
- 
- 	ret = i2c_smbus_write_byte_data(ts->i2c, reg, val);
- 	if (ret)
--		dev_err(&ts->dsi->dev, "I2C write failed: %d\n", ret);
-+		dev_err(&ts->i2c->dev, "I2C write failed: %d\n", ret);
+@@ -265,7 +265,7 @@ static int rpi_touchscreen_noop(struct drm_panel *panel)
+ 	return 0;
  }
  
- static int rpi_touchscreen_write(struct rpi_touchscreen *ts, u16 reg, u32 val)
+-static int rpi_touchscreen_enable(struct drm_panel *panel)
++static int rpi_touchscreen_prepare(struct drm_panel *panel)
+ {
+ 	struct rpi_touchscreen *ts = panel_to_ts(panel);
+ 	int i;
+@@ -295,6 +295,13 @@ static int rpi_touchscreen_enable(struct drm_panel *panel)
+ 	rpi_touchscreen_write(ts, DSI_STARTDSI, 0x01);
+ 	msleep(100);
+ 
++	return 0;
++}
++
++static int rpi_touchscreen_enable(struct drm_panel *panel)
++{
++	struct rpi_touchscreen *ts = panel_to_ts(panel);
++
+ 	/* Turn on the backlight. */
+ 	rpi_touchscreen_i2c_write(ts, REG_PWM, 255);
+ 
+@@ -349,7 +356,7 @@ static int rpi_touchscreen_get_modes(struct drm_panel *panel,
+ static const struct drm_panel_funcs rpi_touchscreen_funcs = {
+ 	.disable = rpi_touchscreen_disable,
+ 	.unprepare = rpi_touchscreen_noop,
+-	.prepare = rpi_touchscreen_noop,
++	.prepare = rpi_touchscreen_prepare,
+ 	.enable = rpi_touchscreen_enable,
+ 	.get_modes = rpi_touchscreen_get_modes,
+ };
 -- 
 2.25.1
 

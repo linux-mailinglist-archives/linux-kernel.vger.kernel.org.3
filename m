@@ -2,486 +2,1248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E19502C7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D91C7502C7E
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354952AbiDOPXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47544 "EHLO
+        id S1354969AbiDOPXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242475AbiDOPX3 (ORCPT
+        with ESMTP id S1354955AbiDOPXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:23:29 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827DB5C64F
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:20:59 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id o16so9840441ljp.3
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:20:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=tKPtQz+15frjCFqtKqOJi6EaMDFvouH7Zhy6D7XdcRQ=;
-        b=iMQhO3UyThOnnoJuPW45l59saUXzOpnn2SSyXXhV0SO20SvDU4ozWdMEcvNk1cYhWE
-         JJXUs8s8k7ddksgmfTzy0juYSOz3O2OPfA/xQuaDAUHQhtvtvvioZHE121kzLCXYCEIv
-         w9OBPAWtl/2kxVdgDLFK+taJvIEqzadWKar7xfr1RhPp8OuuaOgsOIkCDBbQIf1tnNzI
-         Okk3WO387jSJMT0Td/g756NWcFrxa+x/6s2PQEwj5758Q0xEaz3xa9LEh1SQwRoS2ucm
-         CP0l4F/nBniNW/TODw0pTAKBtMyWrpUfJVf6RyIIXfI87N7xjLF9okkr/lJTtAiF1w7n
-         VPxQ==
+        Fri, 15 Apr 2022 11:23:39 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9E55C64F;
+        Fri, 15 Apr 2022 08:21:09 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id q19so14977971ybd.6;
+        Fri, 15 Apr 2022 08:21:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=tKPtQz+15frjCFqtKqOJi6EaMDFvouH7Zhy6D7XdcRQ=;
-        b=0kZ44srqxGLwFSU9gAPovxmzmHRHiiyM19zlAVgrxTyrtwt6zI1yCJRDpIEB/E+TwQ
-         G+f+dzOyU4B1d962zOJbs8GoetclM/SNHHBNWsgkd+zpqdBjyWKab5DbztDyVImrUzuy
-         XvQy2HnRtxb8jaJAX4jthd1U3Lib1Rl8WkJh5f9jZGmA6iBzbf7nGE8a+RL/hFXs1Pzw
-         mpJ0TRKOmr1rTN696jFnDgmeCtaHu8b+j6Y965XYVlGXGn/8oucRi3sCLKEAsDnAdrfi
-         L9ugmL+RXLf0mWh5IHNg7aDn6f3egLJQx7Iy+hcwmQYa+nBwlWv6grPi1G6ulCokvL5E
-         VNvQ==
-X-Gm-Message-State: AOAM532jS6crZCfRYzQQzQ8mLGcY2MJPdKpYw8GbDbBhPQaHgbx+Svyh
-        S86WaI1fWEj0HJDI4KVO0mg=
-X-Google-Smtp-Source: ABdhPJziuyJyQYEu7x8SHebulqTxg+V1vpGA+dmLswY7ea4Efi9mFESgm9VTDaGLQC3z9xTvYuj0bg==
-X-Received: by 2002:a2e:a553:0:b0:24b:2081:2bbf with SMTP id e19-20020a2ea553000000b0024b20812bbfmr4632775ljn.414.1650036057479;
-        Fri, 15 Apr 2022 08:20:57 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id p25-20020a056512313900b0046f4f252ebfsm175823lfd.226.2022.04.15.08.20.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 08:20:56 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/6] virtio: add option to restrict memory access
- under Xen
-To:     "H. Peter Anvin" <hpa@zytor.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
- <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
- <5A795507-715D-494B-B56B-B12E5BE348A4@zytor.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <6b3ceb42-5848-4a1b-61d7-f37c4a18d725@gmail.com>
-Date:   Fri, 15 Apr 2022 18:20:55 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Rtw8Z43kFa+6ToIFj6zfI2fn5qW89C8jOpaEk7w7foE=;
+        b=nprb8njSdRv8AR6tmcU9rIyyBddGKBEAn35l0dY3yKaRlQkQJ+AjsZgfJe0oUQ/JHt
+         2f/biYaBdstmG7YC4FrVY+SDBmDZqPicIS0dS/6zZUusXcffwbJLHAeT6Ii3I2AsPbUe
+         V4+gtgO6D3QszwqH9aI97i7ZM/JGuLWZf9ImzfzJNXsvYZKVcuCnPdxVupoX82oMH+wX
+         /RWA9+sBXLwc7YMiFTNC0Asg39EyHlHGESXsHaqNvW7e2aQOsw0DUTPpZl7gTnsOcSe+
+         rLWBUSTbM5sW7UzUMw6jy9IIg9wElVaHcdJD9E3bw//YxFR1IpUurs0W04NPntJTrub1
+         OyeA==
+X-Gm-Message-State: AOAM532rlEIf5f7Fhyk4i4C4kyGEJhXYy/ySY2/cFUZghleac/ehbIdl
+        DvlTArGX3t2s6wG/X2Hdq7IUj00AWxC1Scn++AYAlJDw
+X-Google-Smtp-Source: ABdhPJxA/NhDdi2mHvJSu1aPMCWT3h/ogrB5trM1q419+fO2dWlKwX2J33i42hCr6miCCmVwF4TwqK6lpuQf95Ayilg=
+X-Received: by 2002:a05:6902:352:b0:63e:94c:883c with SMTP id
+ e18-20020a056902035200b0063e094c883cmr5504084ybs.365.1650036068139; Fri, 15
+ Apr 2022 08:21:08 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <5A795507-715D-494B-B56B-B12E5BE348A4@zytor.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Ylf6XWF5G6hUFqSe@debian-BULLSEYE-live-builder-AMD64>
+In-Reply-To: <Ylf6XWF5G6hUFqSe@debian-BULLSEYE-live-builder-AMD64>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Apr 2022 17:20:56 +0200
+Message-ID: <CAJZ5v0h_v_Y8rMkaHzQG=hyCNGW2Bc565JZKLpva4titS0gOUA@mail.gmail.com>
+Subject: Re: [PATCH v7] platform: x86: Add ChromeOS ACPI device driver
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Dmitry Torokhov <dtor@chromium.org>,
+        Gwendal Grignou <gwendal@chromium.org>, vbendeb@chromium.org,
+        Andy Shevchenko <andy@infradead.org>,
+        Ayman Bagabas <ayman.bagabas@gmail.com>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        =?UTF-8?Q?Bla=C5=BE_Hrastnik?= <blaz@mxxn.io>,
+        Darren Hart <dvhart@infradead.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jeremy Soller <jeremy@system76.com>,
+        Mattias Jacobsson <2pi@mok.nu>,
+        Mauro Carvalho Chehab <mchehab+samsung@kernel.org>,
+        Rajat Jain <rajatja@google.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Enric Balletbo i Serra <eballetbo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Apr 14, 2022 at 12:41 PM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> From: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+>
+> The x86 Chromebooks have ChromeOS ACPI device. This driver attaches to
+> the ChromeOS ACPI device and exports the values reported by ACPI in a
+> sysfs directory. This data isn't present in ACPI tables when read
+> through ACPI tools, hence a driver is needed to do it. The driver gets
+> data from firmware using ACPI component of the kernel. The ACPI values
+> are presented in string form (numbers as decimal values) or binary
+> blobs, and can be accessed as the contents of the appropriate read only
+> files in the standard ACPI device's sysfs directory tree. This data is
+> consumed by the ChromeOS user space.
+>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Signed-off-by: Enric Balletbo i Serra <enric.balletbo@collabora.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+> Changes in v7:
+> - Rename acpi_chromeos Kconfig option to chromeos_acpi
+> - Change this acpi driver to platform driver
+> - Minor cosmetic changes
+>
+> There were the following concerns on v4 which have been delt with in
+> v5/v6:
+> - Remove BINF.{0,1,4} from sysfs as they are reserved and not used
+>   anymore
+> - Reword the description of MECK
+> - Change function name from chromeos_acpi_alloc_name() to
+>   chromeos_acpi_gen_file_name()
+> - Remove local variable obj in chromeos_acpi_add_method()
+> - Replace usage of dev_info() to dev_dbg()
+> - Improve the description of the patch
+> - Add the firmware interface document which serves as primary
+>   documentation and garantees that this interface will not change
+> - GGL0001 is valid PNP ID of the Google. PNP ID can be used with the
+>   ACPI devices. Consensus was developed on it in discussion of v4.
+>
+> Changes in v6:
+> - Correct authorship and path email's From
+> - Add changelog between v4 and v5 in detail
+> - Add copywrite year 2022
+> - Improve the description and add concerns from V4 which have been fixed
+>
+> Changes in v5:
+> - Improve the description of the patch
+> - Document firmware interface
+> - Update sysfs interface documentation
+> - Remove binf{0,1,4} as they have been deprecated
+> - Update some cleanup logic in case of error
+>   - Remove freeing of chromeos_acpi.root explicitely in
+>     chromeos_acpi_device_remove() as it'll be automatically freed by
+>     chromeos_acpi_remove_groups()
+>   - If sysfs_create_groups() fails in chromeos_acpi_process_mlst(),
+>     cleanup all groups
+> - Cosmetic changes
+>
+> Changes in v4:
+> https://lore.kernel.org/lkml/20200413134611.478441-1-enric.balletbo@collabora.com/t/
+> - Add COMPILE_TEST to increase build coverage.
+> - Add sysfs ABI documentation.
+> - Rebased on top of 5.7-rc1 and solve conflicts.
+> - Cc ACPI maintainers.
+>
+> Changes in v3:
+> - Use attribute groups instead of adding files "by hand".
+> - Do not use "raw" kobject to create directories.
+> - Do not abuse of the platform_device interface. Remove it.
+>
+> Changes in v2:
+> - Note that this version is a total rework, with those major changes:
+> - Use lists to track dinamically allocated attributes and groups.
+> - Use sysfs binary attributes to store the ACPI contents.
+> - Remove all the functionalities except the one that creates the sysfs files.
+> ---
+>  .../ABI/testing/sysfs-driver-chromeos-acpi    | 126 +++++
+>  .../acpi/chromeos-acpi-device.rst             | 363 +++++++++++++
+>  Documentation/firmware-guide/acpi/index.rst   |   1 +
+>  drivers/platform/x86/Kconfig                  |  11 +
+>  drivers/platform/x86/Makefile                 |   3 +
+>  drivers/platform/x86/chromeos_acpi.c          | 513 ++++++++++++++++++
+>  6 files changed, 1017 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-driver-chromeos-acpi
+>  create mode 100644 Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
+>  create mode 100644 drivers/platform/x86/chromeos_acpi.c
+>
+> diff --git a/Documentation/ABI/testing/sysfs-driver-chromeos-acpi b/Documentation/ABI/testing/sysfs-driver-chromeos-acpi
+> new file mode 100644
+> index 0000000000000..b74fbca62f4c3
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-driver-chromeos-acpi
+> @@ -0,0 +1,126 @@
+> +What:          /sys/bus/platform/devices/GGL0001:00/BINF.2
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows information about the current boot of
+> +               the active EC firmware.
+> +                 * 0 - Read only (recovery) firmware.
+> +                 * 1 - Rewritable firmware.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/BINF.3
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows information about the current boot of
+> +               the active main firmware type.
+> +                 * 0 - Recovery.
+> +                 * 1 - Normal.
+> +                 * 2 - Developer.
+> +                 * 3 - Netboot (factory installation only).
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/CHSW
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the switch position for the Chrome OS specific
+> +               hardware switches.
+> +                 * 0   - No changes.
+> +                 * 2   - Recovery button was pressed when firmware booted.
+> +                 * 4   - Recovery button was pressed when EC firmware booted.
+> +                 * 32  - Developer switch was enabled when firmware booted.
+> +                 * 512 - Firmware write protect was disabled when firmware
+> +                         booted.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/FMAP
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the physical memory address of the start of
+> +               the main processor firmware flashmap.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/FRID
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the firmware version for the read-only portion
+> +               of the main processor firmware.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/FWID
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the firmware version for the rewritable portion
+> +               of the main processor firmware.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/GPIO.X/GPIO.0
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the type of the GPIO signal for the Chrome OS
+> +               specific GPIO assignments.
+> +                 * 1   - Recovery button.
+> +                 * 2   - Developer mode switch.
+> +                 * 3   - Firmware write protect switch.
+> +                 * 256 to 511 - Debug header GPIO 0 to GPIO 255.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/GPIO.X/GPIO.1
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the signal attributes of the GPIO signal.
+> +                 * 0 - Signal is active low.
+> +                 * 1 - Signal is active high.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/GPIO.X/GPIO.2
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the GPIO number on the specified GPIO
+> +               controller.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/GPIO.X/GPIO.3
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the name of the GPIO controller.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/HWID
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the hardware ID for the Chromebook.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/MECK
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This binary file returns the SHA-1 or SHA-256 hash that is
+> +               read out of the Management Engine extend registers during
+> +               boot. The hash is exported vi ACPI so the OS can verify that
+> +               the Management Engine firmware has not changed. If Management
+> +               Engine is not present, or if the firmware was unable to read the
+> +               extend registers, this buffer size can be zero.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/VBNV.0
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the offset in CMOS bank 0 of the verified boot
+> +               non-volatile storage block, counting from the first writable
+> +               CMOS byte (that is, 'offset = 0' is the byte following the 14
+> +               bytes of clock data).
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/VBNV.1
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This file shows the size in bytes of the verified boot
+> +               non-volatile storage block.
+> +
+> +What:          /sys/bus/platform/devices/GGL0001:00/VDAT
+> +Date:          April 2022
+> +KernelVersion: 5.19
+> +Description:
+> +               This binary file returns the verified boot data block shared
+> +               between the firmware verification step and the kernel
+> +               verification step.
+> diff --git a/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst b/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
+> new file mode 100644
+> index 0000000000000..ef3cc980bad54
+> --- /dev/null
+> +++ b/Documentation/firmware-guide/acpi/chromeos-acpi-device.rst
+> @@ -0,0 +1,363 @@
+> +.. SPDX-License-Identifier: GPL-2.0
+> +
+> +=====================
+> +Chrome OS ACPI Device
+> +=====================
+> +
+> +Hardware functionality specific to Chrome OS is exposed through a Chrome OS ACPI device.
+> +The plug and play ID of a Chrome OS ACPI device is GGL0001. GGL is valid PNP ID of Google.
+> +PNP ID can be used with the ACPI devices accourding to the guidelines. The following ACPI
+> +objects are supported:
+> +
+> +.. flat-table:: Supported ACPI Objects
+> +   :widths: 1 2
+> +   :header-rows: 1
+> +
+> +   * - Object
+> +     - Description
+> +
+> +   * - CHSW
+> +     - Chrome OS switch positions
+> +
+> +   * - HWID
+> +     - Chrome OS hardware ID
+> +
+> +   * - FWID
+> +     - Chrome OS firmware version
+> +
+> +   * - FRID
+> +     - Chrome OS read-only firmware version
+> +
+> +   * - BINF
+> +     - Chrome OS boot information
+> +
+> +   * - GPIO
+> +     - Chrome OS GPIO assignments
+> +
+> +   * - VBNV
+> +     - Chrome OS NVRAM locations
+> +
+> +   * - VDTA
+> +     - Chrome OS verified boot data
+> +
+> +   * - FMAP
+> +     - Chrome OS flashmap base address
+> +
+> +   * - MLST
+> +     - Chrome OS method list
+> +
+> +CHSW (Chrome OS switch positions)
+> +=================================
+> +This control method returns the switch positions for Chrome OS specific hardware switches.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +An integer containing the switch positions as bitfields:
+> +
+> +.. flat-table::
+> +   :widths: 1 2
+> +
+> +   * - 0x00000002
+> +     - Recovery button was pressed when x86 firmware booted.
+> +
+> +   * - 0x00000004
+> +     - Recovery button was pressed when EC firmware booted. (required if EC EEPROM is
+> +       rewritable; otherwise optional)
+> +
+> +   * - 0x00000020
+> +     - Developer switch was enabled when x86 firmware booted.
+> +
+> +   * - 0x00000200
+> +     - Firmware write protect was disabled when x86 firmware booted. (required if
+> +       firmware write protect is controlled through x86 BIOS; otherwise optional)
+> +
+> +All other bits are reserved and should be set to 0.
+> +
+> +HWID (Chrome OS hardware ID)
+> +============================
+> +This control method returns the hardware ID for the Chromebook.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A null-terminated ASCII string containing the hardware ID from the Model-Specific Data area of
+> +EEPROM.
+> +
+> +Note that the hardware ID can be up to 256 characters long, including the terminating null.
+> +
+> +FWID (Chrome OS firmware version)
+> +=================================
+> +This control method returns the firmware version for the rewritable portion of the main
+> +processor firmware.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A null-terminated ASCII string containing the complete firmware version for the rewritable
+> +portion of the main processor firmware.
+> +
+> +FRID (Chrome OS read-only firmware version)
+> +===========================================
+> +This control method returns the firmware version for the read-only portion of the main
+> +processor firmware.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A null-terminated ASCII string containing the complete firmware version for the read-only
+> +(bootstrap + recovery ) portion of the main processor firmware.
+> +
+> +BINF (Chrome OS boot information)
+> +=================================
+> +This control method returns information about the current boot.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +
+> +.. code-block::
+> +
+> +   Package {
+> +           Reserved1
+> +           Reserved2
+> +           Active EC Firmware
+> +           Active Main Firmware Type
+> +           Reserved5
+> +   }
+> +
+> +.. flat-table::
+> +   :widths: 1 1 2
+> +   :header-rows: 1
+> +
+> +   * - Field
+> +     - Format
+> +     - Description
+> +
+> +   * - Reserved1
+> +     - DWORD
+> +     - Set to 256 (0x100). This indicates this field is no longer used.
+> +
+> +   * - Reserved2
+> +     - DWORD
+> +     - Set to 256 (0x100). This indicates this field is no longer used.
+> +
+> +   * - Active EC firmware
+> +     - DWORD
+> +     - The EC firmware which was used during boot.
+> +
+> +       - 0 - Read-only (recovery) firmware
+> +       - 1 - Rewritable firmware.
+> +
+> +       Set to 0 if EC firmware is always read-only.
+> +
+> +   * - Active Main Firmware Type
+> +     - DWORD
+> +     - The main firmware type which was used during boot.
+> +
+> +       - 0 - Recovery
+> +       - 1 - Normal
+> +       - 2 - Developer
+> +       - 3 - netboot (factory installation only)
+> +
+> +       Other values are reserved.
+> +
+> +   * - Reserved5
+> +     - DWORD
+> +     - Set to 256 (0x100). This indicates this field is no longer used.
+> +
+> +GPIO (Chrome OS GPIO assignments)
+> +=================================
+> +This control method returns information about Chrome OS specific GPIO assignments for
+> +Chrome OS hardware, so the kernel can directly control that hardware.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +.. code-block::
+> +
+> +        Package {
+> +                Package {
+> +                        // First GPIO assignment
+> +                        Signal Type        //DWORD
+> +                        Attributes         //DWORD
+> +                        Controller Offset  //DWORD
+> +                        Controller Name    //ASCIIZ
+> +                },
+> +                ...
+> +                Package {
+> +                        // Last GPIO assignment
+> +                        Signal Type        //DWORD
+> +                        Attributes         //DWORD
+> +                        Controller Offset  //DWORD
+> +                        Controller Name    //ASCIIZ
+> +                }
+> +        }
+> +
+> +Where ASCIIZ means a null-terminated ASCII string.
+> +
+> +.. flat-table::
+> +   :widths: 1 1 2
+> +   :header-rows: 1
+> +
+> +   * - Field
+> +     - Format
+> +     - Description
+> +
+> +   * - Signal Type
+> +     - DWORD
+> +     - Type of GPIO signal
+> +
+> +       - 0x00000001 - Recovery button
+> +       - 0x00000002 - Developer mode switch
+> +       - 0x00000003 - Firmware write protect switch
+> +       - 0x00000100 - Debug header GPIO 0
+> +       - ...
+> +       - 0x000001FF - Debug header GPIO 255
+> +
+> +       Other values are reserved.
+> +
+> +   * - Attributes
+> +     - DWORD
+> +     - Signal attributes as bitfields:
+> +
+> +       - 0x00000001 - Signal is active-high (for button, a GPIO value
+> +         of 1 means the button is pressed; for switches, a GPIO value
+> +         of 1 means the switch is enabled). If this bit is 0, the signal
+> +         is active low. Set to 0 for debug header GPIOs.
+> +
+> +   * - Controller Offset
+> +     - DWORD
+> +     - GPIO number on the specified controller.
+> +
+> +   * - Controller Name
+> +     - ASCIIZ
+> +     - Name of the controller for the GPIO.
+> +       Currently supported names:
+> +       "NM10" - Intel NM10 chip
+> +
+> +VBNV (Chrome OS NVRAM locations)
+> +================================
+> +This control method returns information about the NVRAM (CMOS) locations used to
+> +communicate with the BIOS.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +.. code-block::
+> +
+> +        Package {
+> +                NV Storage Block Offset  //DWORD
+> +                NV Storage Block Size    //DWORD
+> +        }
+> +
+> +.. flat-table::
+> +   :widths: 1 1 2
+> +   :header-rows: 1
+> +
+> +   * - Field
+> +     - Format
+> +     - Description
+> +
+> +   * - NV Storage Block Offset
+> +     - DWORD
+> +     - Offset in CMOS bank 0 of the verified boot non-volatile storage block, counting from
+> +       the first writable CMOS byte (that is, offset=0 is the byte following the 14 bytes of
+> +       clock data).
+> +
+> +   * - NV Storage Block Size
+> +     - DWORD
+> +     - Size in bytes of the verified boot non-volatile storage block.
+> +
+> +FMAP (Chrome OS flashmap address)
+> +=================================
+> +This control method returns the physical memory address of the start of the main processor
+> +firmware flashmap.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +NoneResult code:
+> +----------------
+> +A DWORD containing the physical memory address of the start of the main processor firmware
+> +flashmap.
+> +
+> +VDTA (Chrome OS verified boot data)
+> +===================================
+> +This control method returns the verified boot data block shared between the firmware
+> +verification step and the kernel verification step.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A buffer containing the verified boot data block.
+> +
+> +MECK (Management Engine Checksum)
+> +=================================
+> +This control method returns the SHA-1 or SHA-256 hash that is read out of the Management
+> +Engine extend registers during boot. The hash is exported via ACPI so the OS can verify that
+> +the ME firmware has not changed. If Management Engine is not present, or if the firmware was
+> +unable to read the extend registers, this buffer can be zero.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A buffer containing the ME hash.
+> +
+> +MLST (Chrome OS method list)
+> +============================
+> +This control method returns a list of the other control methods supported by the Chrome OS
+> +hardware device.
+> +
+> +Arguments:
+> +----------
+> +None
+> +
+> +Result code:
+> +------------
+> +A package containing a list of null-terminated ASCII strings, one for each control method
+> +supported by the Chrome OS hardware device, not including the MLST method itself.
+> +For this version of the specification, the result is:
+> +
+> +.. code-block::
+> +
+> +        Package {
+> +                "CHSW",
+> +                "FWID",
+> +                "HWID",
+> +                "FRID",
+> +                "BINF",
+> +                "GPIO",
+> +                "VBNV",
+> +                "FMAP",
+> +                "VDTA",
+> +                "MECK"
+> +        }
+> diff --git a/Documentation/firmware-guide/acpi/index.rst b/Documentation/firmware-guide/acpi/index.rst
+> index b053b0c3d6969..b6a42f4ffe032 100644
+> --- a/Documentation/firmware-guide/acpi/index.rst
+> +++ b/Documentation/firmware-guide/acpi/index.rst
+> @@ -29,3 +29,4 @@ ACPI Support
+>     non-d0-probe
+>     extcon-intel-int3496
+>     intel-pmc-mux
+> +   chromeos-acpi-device
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 5d9dd70e4e0f5..53ddfe6f99b06 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -322,6 +322,17 @@ config ASUS_NB_WMI
+>           If you have an ACPI-WMI compatible Asus Notebook, say Y or M
+>           here.
+>
+> +config CHROMEOS_ACPI
+> +       tristate "ChromeOS specific ACPI extensions"
+> +       depends on ACPI || COMPILE_TEST
+> +       help
+> +         This driver provides the firmware interface for the services
+> +         exported through the ChromeOS interfaces when using ChromeOS
+> +         ACPI firmware.
+> +
+> +         If you have an ACPI-compatible Chromebook, say Y or M
+> +         here.
+> +
+>  config ASUS_TF103C_DOCK
+>         tristate "Asus TF103C 2-in-1 keyboard dock"
+>         depends on ACPI
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefile
+> index fe4d4c8970efa..ae68f4fa9a6c4 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -44,6 +44,9 @@ obj-$(CONFIG_EEEPC_WMI)               += eeepc-wmi.o
+>  # Cisco/Meraki
+>  obj-$(CONFIG_MERAKI_MX100)     += meraki-mx100.o
+>
+> +# Chrome
+> +obj-$(CONFIG_CHROMEOS_ACPI)    += chromeos_acpi.o
+> +
+>  # Dell
+>  obj-$(CONFIG_X86_PLATFORM_DRIVERS_DELL)                += dell/
+>
+> diff --git a/drivers/platform/x86/chromeos_acpi.c b/drivers/platform/x86/chromeos_acpi.c
+> new file mode 100644
+> index 0000000000000..def759570df8a
+> --- /dev/null
+> +++ b/drivers/platform/x86/chromeos_acpi.c
+> @@ -0,0 +1,513 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * ChromeOS specific ACPI extensions
+> + *
+> + * Copyright 2011 Google, Inc.
+> + * Copyright 2020-2022 Google LLC
+> + *
+> + * This file is a rework and part of the code is ported from chromeos-3.18
+> + * kernel and was originally written by Vadim Bendebury <vbendeb@chromium.org>.
+> + *
+> + * This driver attaches to the ChromeOS ACPI device and then exports the
+> + * values reported by the ACPI in a sysfs directory. All values are
+> + * presented in the string form (numbers as decimal values) and can be
+> + * accessed as the contents of the appropriate read only files in the
+> + * sysfs directory tree.
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/kernel.h>
+> +#include <linux/list.h>
+> +#include <linux/module.h>
+> +
+> +/*
+> + * ACPI method name for MLST; the response for this method is a package of
+> + * strings listing the methods which should be reflected in sysfs.
+> + */
+> +#define MLST "MLST"
+> +
+> +/*
+> + * The default list of methods the ChromeOS ACPI device is supposed to export,
+> + * if the MLST method is not present or is poorly formed.  The MLST method
+> + * itself is included, to aid in debugging.
+> + */
+> +static char *chromeos_acpi_default_methods[] = {
+> +       "CHSW", "HWID", "BINF", "GPIO", "CHNV", "FWID", "FRID", MLST
+> +};
+> +
+> +/*
+> + * Representation of a single sysfs attribute. In addition to the standard
+> + * bin_attribute structure has a list of these structures (to keep track for
+> + * de-allocation when removing the driver) and a pointer to the actual
+> + * attribute name and value, reported when accessing the appropriate sysfs
+> + * file.
+> + */
+> +struct chromeos_acpi_attribute {
+> +       struct bin_attribute bin_attr;
+> +       struct list_head list;
+> +       char *name;
+> +       char *data;
+> +};
+> +
+> +/*
+> + * Representation of a sysfs attribute group (a sub directory in the device's
+> + * sysfs directory). In addition to the standard structure has lists to allow
+> + * to keep track of the allocated structures.
+> + */
+> +struct chromeos_acpi_attribute_group {
+> +       struct attribute_group group;
+> +       struct list_head attribs;
+> +       struct list_head list;
+> +       char *name;
+> +};
+> +
+> +/*
+> + * This is the main structure, we use it to store data and adds links pointing
+> + * at lists of allocated attributes and attribute groups.
+> + */
+> +struct chromeos_acpi_dev {
+> +       struct chromeos_acpi_attribute_group *root;
+> +       const struct attribute_group **dev_groups;
+> +       struct list_head groups;
+> +       unsigned int num_groups;
+> +       unsigned int num_attrs;
+> +};
+> +
+> +static struct chromeos_acpi_dev chromeos_acpi;
+> +
+> +static ssize_t chromeos_acpi_read_bin_attribute(struct file *filp,
+> +                                               struct kobject *kobj,
+> +                                               struct bin_attribute *bin_attr,
+> +                                               char *buffer, loff_t pos,
+> +                                               size_t count)
+> +{
+> +       struct chromeos_acpi_attribute *info = bin_attr->private;
+> +
+> +       return memory_read_from_buffer(buffer, count, &pos, info->data,
+> +                                      info->bin_attr.size);
+> +}
+> +
+> +static char *chromeos_acpi_gen_file_name(char *name, int count, int index)
+> +{
+> +       char *str;
+> +
+> +       if (count == 1)
+> +               str = kstrdup(name, GFP_KERNEL);
+> +       else
+> +               str = kasprintf(GFP_KERNEL, "%s.%d", name, index);
+> +
+> +       return str;
+> +}
+> +
+> +static int
+> +chromeos_acpi_add_attr(struct chromeos_acpi_attribute_group *aag,
+> +                      union acpi_object *element, char *name,
+> +                      int count, int index)
+> +{
+> +       struct chromeos_acpi_attribute *info;
+> +       char buffer[24]; /* enough to store a u64 and null character */
+> +       int length;
+> +       int ret;
+> +
+> +       /* Files BINF.{0,1,4} are historical and no longer used. */
+> +       if (!strcmp(name, "BINF") && (index == 0 || index == 1 || index == 4))
+> +               return 0;
+> +
+> +       info = kzalloc(sizeof(*info), GFP_KERNEL);
+> +       if (!info)
+> +               return -ENOMEM;
+> +
+> +       info->name = chromeos_acpi_gen_file_name(name, count, index);
+> +       if (!info->name) {
+> +               ret = -ENOMEM;
+> +               goto free_attribute;
+> +       }
+> +       sysfs_bin_attr_init(&info->bin_attr);
+> +       info->bin_attr.attr.name = info->name;
+> +       info->bin_attr.attr.mode = 0444;
+> +
+> +       switch (element->type) {
+> +       case ACPI_TYPE_BUFFER:
+> +               length = element->buffer.length;
+> +               info->data = kmemdup(element->buffer.pointer,
+> +                                    length, GFP_KERNEL);
+> +               break;
+> +       case ACPI_TYPE_INTEGER:
+> +               length = snprintf(buffer, sizeof(buffer), "%d",
+> +                                 (int)element->integer.value);
+> +               info->data = kmemdup(buffer, length, GFP_KERNEL);
+> +               break;
+> +       case ACPI_TYPE_STRING:
+> +               length = element->string.length + 1;
+> +               info->data = kstrdup(element->string.pointer, GFP_KERNEL);
+> +               break;
+> +       default:
+> +               ret = -EINVAL;
+> +               goto free_attr_name;
+> +       }
+> +
+> +       if (!info->data) {
+> +               ret = -ENOMEM;
+> +               goto free_attr_name;
+> +       }
+> +
+> +       info->bin_attr.size = length;
+> +       info->bin_attr.read = chromeos_acpi_read_bin_attribute;
+> +       info->bin_attr.private = info;
+> +
+> +       INIT_LIST_HEAD(&info->list);
+> +
+> +       list_add(&info->list, &aag->attribs);
+> +       return 0;
+> +
+> +free_attr_name:
+> +       kfree(info->name);
+> +free_attribute:
+> +       kfree(info);
+> +       return ret;
+> +}
+> +
+> +static void
+> +chromeos_acpi_remove_attribs(struct chromeos_acpi_attribute_group *aag)
+> +{
+> +       struct chromeos_acpi_attribute *attr, *tmp_attr;
+> +
+> +       list_for_each_entry_safe(attr, tmp_attr, &aag->attribs, list) {
+> +               kfree(attr->name);
+> +               kfree(attr->data);
+> +               kfree(attr);
+> +       }
+> +}
+> +
+> +static int
+> +chromeos_acpi_add_attribs_to_group(struct chromeos_acpi_attribute_group *aag,
+> +                                  unsigned int num_attrs)
+> +{
+> +       struct chromeos_acpi_attribute *attr;
+> +       int count = 0;
+> +
+> +       aag->group.bin_attrs = kcalloc(num_attrs + 1,
+> +                                      sizeof(*aag->group.bin_attrs),
+> +                                      GFP_KERNEL);
+> +       if (!aag->group.bin_attrs)
+> +               return -ENOMEM;
+> +
+> +       list_for_each_entry(attr, &aag->attribs, list) {
+> +               aag->group.bin_attrs[count] = &attr->bin_attr;
+> +               count++;
+> +       }
+> +
+> +       chromeos_acpi.num_groups++;
+> +       list_add(&aag->list, &chromeos_acpi.groups);
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * chromeos_acpi_add_group() - Create a sysfs group including attributes
+> + *                            representing a nested ACPI package
+> + *
+> + * @obj: Package contents as returned by ACPI
+> + * @name: Name of the group
+> + * @num_attrs: Number of attributes of this package
+> + * @index: Index number of this particular group
+> + *
+> + * The created group is called @name in case there is a single instance, or
+> + * @name.@index otherwise.
+> + *
+> + * All group and attribute storage allocations are included in the lists for
+> + * tracking of allocated memory.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +static int chromeos_acpi_add_group(union acpi_object *obj, char *name,
+> +                                  int num_attrs, int index)
+> +{
+> +       struct chromeos_acpi_attribute_group *aag;
+> +       union acpi_object *element;
+> +       int i, count, ret;
+> +
+> +       aag = kzalloc(sizeof(*aag), GFP_KERNEL);
+> +       if (!aag)
+> +               return -ENOMEM;
+> +       aag->name = chromeos_acpi_gen_file_name(name, num_attrs, index);
+> +       if (!aag->name) {
+> +               ret = -ENOMEM;
+> +               goto free_group;
+> +       }
+> +
+> +       INIT_LIST_HEAD(&aag->attribs);
+> +       INIT_LIST_HEAD(&aag->list);
+> +
+> +       count = obj->package.count;
+> +       element = obj->package.elements;
+> +       for (i = 0; i < count; i++, element++) {
+> +               ret = chromeos_acpi_add_attr(aag, element, name, count, i);
+> +               if (ret)
+> +                       goto free_group_attr;
+> +       }
+> +
+> +       aag->group.name = aag->name;
+> +
+> +       ret = chromeos_acpi_add_attribs_to_group(aag, count);
+> +       if (ret)
+> +               goto free_group_attr;
+> +
+> +       return 0;
+> +
+> +free_group_attr:
+> +       chromeos_acpi_remove_attribs(aag);
+> +       kfree(aag->name);
+> +free_group:
+> +       kfree(aag);
+> +       return ret;
+> +}
+> +
+> +static void chromeos_acpi_remove_groups(void)
+> +{
+> +       struct chromeos_acpi_attribute_group *aag, *tmp_aag;
+> +
+> +       list_for_each_entry_safe(aag, tmp_aag, &chromeos_acpi.groups, list) {
+> +               chromeos_acpi_remove_attribs(aag);
+> +               kfree(aag->group.bin_attrs);
+> +               kfree(aag->name);
+> +               kfree(aag);
+> +       }
+> +}
+> +
+> +/**
+> + * chromeos_acpi_handle_package() - Create sysfs group including attributes
+> + *                                 representing an ACPI package
+> + *
+> + * @pdev: Platform device
+> + * @obj: Package contents as returned by ACPI
+> + * @name: Name of the group
+> + *
+> + * Scalar objects included in the package get sysfs attributes created for
+> + * them. Nested packages are passed to a function creating a sysfs group per
+> + * package.
+> + *
+> + * Return: 0 on success, negative errno on failure.
+> + */
+> +static int chromeos_acpi_handle_package(struct platform_device *pdev,
+> +                                       union acpi_object *obj, char *name)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       int count = obj->package.count;
+> +       union acpi_object *element;
+> +       int i, ret;
+> +
+> +       element = obj->package.elements;
+> +       for (i = 0; i < count; i++, element++) {
+> +               if (element->type == ACPI_TYPE_BUFFER ||
+> +                   element->type == ACPI_TYPE_STRING ||
+> +                   element->type == ACPI_TYPE_INTEGER) {
+> +                       /* Create a single attribute in the root directory */
+> +                       ret = chromeos_acpi_add_attr(chromeos_acpi.root,
+> +                                                    element, name,
+> +                                                    count, i);
+> +                       if (ret) {
+> +                               dev_err(dev, "error adding attributes (%d)\n",
+> +                                       ret);
+> +                               return ret;
+> +                       }
+> +                       chromeos_acpi.num_attrs++;
+> +               } else if (element->type == ACPI_TYPE_PACKAGE) {
+> +                       /* Create a group of attributes */
+> +                       ret = chromeos_acpi_add_group(element, name, count, i);
+> +                       if (ret) {
+> +                               dev_err(dev, "error adding a group (%d)\n",
+> +                                       ret);
+> +                               return ret;
+> +                       }
+> +               } else {
+> +                       if (ret) {
+> +                               dev_err(dev, "error on element type (%d)\n",
+> +                                       ret);
+> +                               return -EINVAL;
+> +                       }
+> +               }
+> +       }
+> +
+> +       return 0;
+> +}
+> +
+> +/**
+> + * chromeos_acpi_add_method() - Evaluate an ACPI method and create sysfs
+> + *                             attributes
+> + *
+> + * @pdev: Platform device
+> + * @name: Name of the method to evaluate
+> + *
+> + * Return: 0 on success, non-zero on failure
+> + */
+> +static int chromeos_acpi_add_method(struct platform_device *pdev, char *name)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +       struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +       acpi_status status;
+> +       int ret = 0;
+> +
+> +       status = acpi_evaluate_object(ACPI_COMPANION(&pdev->dev)->handle, name, NULL, &output);
+> +       if (ACPI_FAILURE(status)) {
+> +               dev_err(dev, "failed to retrieve %s (%d)\n", name, status);
+> +               return status;
+> +       }
+> +
+> +       if (((union acpi_object *)output.pointer)->type == ACPI_TYPE_PACKAGE)
+> +               ret = chromeos_acpi_handle_package(pdev, output.pointer, name);
+> +
+> +       kfree(output.pointer);
+> +       return ret;
+> +}
+> +
+> +/**
+> + * chromeos_acpi_process_mlst() - Evaluate the MLST method and add methods
+> + *                               listed in the response
+> + *
+> + * @pdev: Platform device
+> + *
+> + * Returns: 0 if successful, non-zero if error.
+> + */
+> +static int chromeos_acpi_process_mlst(struct platform_device *pdev)
+> +{
+> +       struct chromeos_acpi_attribute_group *aag;
+> +       char name[ACPI_NAMESEG_SIZE + 1];
+> +       union acpi_object *element, *obj;
+> +       struct device *dev = &pdev->dev;
+> +       struct acpi_buffer output = { ACPI_ALLOCATE_BUFFER, NULL };
+> +       acpi_status status;
+> +       int ret = 0;
+> +       int size;
+> +       int i;
+> +
+> +       status = acpi_evaluate_object(ACPI_COMPANION(&pdev->dev)->handle, MLST, NULL,
+> +                                     &output);
+> +       if (ACPI_FAILURE(status))
+> +               return status;
+> +
+> +       obj = output.pointer;
+> +       if (obj->type != ACPI_TYPE_PACKAGE) {
+> +               ret = -EINVAL;
+> +               goto free_acpi_buffer;
+> +       }
+> +
+> +       element = obj->package.elements;
+> +       for (i = 0; i < obj->package.count; i++, element++) {
+> +               if (element->type == ACPI_TYPE_STRING) {
+> +                       size = min(element->string.length + 1,
+> +                                  (u32)ACPI_NAMESEG_SIZE + 1);
+> +                       strscpy(name, element->string.pointer, size);
+> +                       ret = chromeos_acpi_add_method(pdev, name);
+> +                       if (ret) {
+> +                               chromeos_acpi_remove_groups();
+> +                               break;
+> +                       }
+> +               }
+> +       }
+> +
+> +       /* Add root attributes to the main group */
+> +       ret = chromeos_acpi_add_attribs_to_group(chromeos_acpi.root,
+> +                                                chromeos_acpi.num_attrs);
+> +       if (ret)
+> +               goto free_acpi_buffer;
+> +
+> +       chromeos_acpi.dev_groups = kcalloc(chromeos_acpi.num_groups + 1,
+> +                                          sizeof(struct attribute_group),
+> +                                          GFP_KERNEL);
+> +
+> +       i = 0;
+> +       list_for_each_entry(aag, &chromeos_acpi.groups, list) {
+> +               chromeos_acpi.dev_groups[i] = &aag->group;
+> +               i++;
+> +       }
+> +
+> +       ret = sysfs_create_groups(&dev->kobj, chromeos_acpi.dev_groups);
+> +       if (ret) {
+> +               kfree(chromeos_acpi.dev_groups);
+> +
+> +               /* Remove allocated chromeos acpi groups and attributes */
+> +               chromeos_acpi_remove_groups();
+> +       }
+> +
+> +free_acpi_buffer:
+> +       kfree(output.pointer);
+> +       return ret;
+> +}
+> +
+> +static int chromeos_acpi_device_probe(struct platform_device *pdev)
+> +{
+> +       struct chromeos_acpi_attribute_group *aag;
+> +       struct device *dev = &pdev->dev;
+> +       int i, ret;
+> +
+> +       aag = kzalloc(sizeof(*aag), GFP_KERNEL);
+> +       if (!aag)
+> +               return -ENOMEM;
+> +
+> +       INIT_LIST_HEAD(&aag->attribs);
+> +       INIT_LIST_HEAD(&aag->list);
+> +       INIT_LIST_HEAD(&chromeos_acpi.groups);
+> +
+> +       chromeos_acpi.root = aag;
+> +
+> +       /*
+> +        * Attempt to add methods by querying the device's MLST method
+> +        * for the list of methods.
+> +        */
+> +       if (!chromeos_acpi_process_mlst(pdev))
+> +               return 0;
+> +
+> +       dev_dbg(dev, "falling back to default list of methods\n");
+> +
+> +       for (i = 0; i < ARRAY_SIZE(chromeos_acpi_default_methods); i++) {
+> +               ret = chromeos_acpi_add_method(pdev,
+> +                                              chromeos_acpi_default_methods[i]);
+> +               if (ret) {
+> +                       dev_err(dev, "failed to add default methods (%d)\n",
+> +                               ret);
+> +                       goto free_group_root;
+> +               }
+> +       }
+> +
+> +       return 0;
+> +
+> +free_group_root:
+> +       kfree(chromeos_acpi.root);
+> +       return ret;
+> +}
+> +
+> +static int chromeos_acpi_device_remove(struct platform_device *pdev)
+> +{
+> +       /* Remove sysfs groups */
+> +       sysfs_remove_groups(&pdev->dev.kobj, chromeos_acpi.dev_groups);
+> +       kfree(chromeos_acpi.dev_groups);
+> +
+> +       /* Remove allocated chromeos acpi groups and attributes */
+> +       chromeos_acpi_remove_groups();
+> +
+> +       return 0;
+> +}
+> +
+> +/* GGL is valid PNP ID of Google. PNP ID can be used with the ACPI devices. */
+> +static const struct acpi_device_id chromeos_device_ids[] = {
+> +       { "GGL0001", 0 },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, chromeos_device_ids);
+> +
+> +static struct platform_driver chromeos_acpi_driver = {
 
-On 14.04.22 22:43, H. Peter Anvin wrote:
+I would call this chromeos_acpi_device_driver, because the device in
+question is referred to as the "Chrome OS ACPI Device".
 
-Hello Peter
+Otherwise, the patch looks good to me now, so with the above
+addressed, please feel free to add
 
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-> On April 14, 2022 12:19:29 PM PDT, Oleksandr Tyshchenko <olekstysh@gmail.com> wrote:
->> From: Juergen Gross <jgross@suse.com>
->>
->> In order to support virtio in Xen guests add a config option enabling
->> the user to specify whether in all Xen guests virtio should be able to
->> access memory via Xen grant mappings only on the host side.
->>
->> This applies to fully virtualized guests only, as for paravirtualized
->> guests this is mandatory.
->>
->> This requires to switch arch_has_restricted_virtio_memory_access()
-> >from a pure stub to a real function on x86 systems (Arm systems are
->> not covered by now).
->>
->> Add the needed functionality by providing a special set of DMA ops
->> handling the needed grant operations for the I/O pages.
->>
->> Signed-off-by: Juergen Gross <jgross@suse.com>
->> ---
->> arch/x86/mm/init.c        |  15 ++++
->> arch/x86/mm/mem_encrypt.c |   5 --
->> arch/x86/xen/Kconfig      |   9 +++
->> drivers/xen/Kconfig       |  20 ++++++
->> drivers/xen/Makefile      |   1 +
->> drivers/xen/xen-virtio.c  | 177 ++++++++++++++++++++++++++++++++++++++++++++++
->> include/xen/xen-ops.h     |   8 +++
->> 7 files changed, 230 insertions(+), 5 deletions(-)
->> create mode 100644 drivers/xen/xen-virtio.c
->>
->> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
->> index d8cfce2..526a3b2 100644
->> --- a/arch/x86/mm/init.c
->> +++ b/arch/x86/mm/init.c
->> @@ -8,6 +8,8 @@
->> #include <linux/kmemleak.h>
->> #include <linux/sched/task.h>
->>
->> +#include <xen/xen.h>
->> +
->> #include <asm/set_memory.h>
->> #include <asm/e820/api.h>
->> #include <asm/init.h>
->> @@ -1065,3 +1067,16 @@ unsigned long max_swapfile_size(void)
->> 	return pages;
->> }
->> #endif
->> +
->> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->> +int arch_has_restricted_virtio_memory_access(void)
->> +{
->> +	if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
->> +		return 1;
->> +	if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
->> +		return 1;
->> +
->> +	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->> +}
->> +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->> +#endif
->> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
->> index 50d2099..dda020f 100644
->> --- a/arch/x86/mm/mem_encrypt.c
->> +++ b/arch/x86/mm/mem_encrypt.c
->> @@ -77,8 +77,3 @@ void __init mem_encrypt_init(void)
->> 	print_mem_encrypt_feature_info();
->> }
->>
->> -int arch_has_restricted_virtio_memory_access(void)
->> -{
->> -	return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->> -}
->> -EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->> diff --git a/arch/x86/xen/Kconfig b/arch/x86/xen/Kconfig
->> index 85246dd..dffdffd 100644
->> --- a/arch/x86/xen/Kconfig
->> +++ b/arch/x86/xen/Kconfig
->> @@ -92,3 +92,12 @@ config XEN_DOM0
->> 	select X86_X2APIC if XEN_PVH && X86_64
->> 	help
->> 	  Support running as a Xen Dom0 guest.
->> +
->> +config XEN_PV_VIRTIO
->> +	bool "Xen virtio support for PV guests"
->> +	depends on XEN_VIRTIO && XEN_PV
->> +	default y
->> +	help
->> +	  Support virtio for running as a paravirtualized guest. This will
->> +	  need support on the backend side (qemu or kernel, depending on the
->> +	  virtio device types used).
->> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
->> index 120d32f..fc61f7a 100644
->> --- a/drivers/xen/Kconfig
->> +++ b/drivers/xen/Kconfig
->> @@ -335,4 +335,24 @@ config XEN_UNPOPULATED_ALLOC
->> 	  having to balloon out RAM regions in order to obtain physical memory
->> 	  space to create such mappings.
->>
->> +config XEN_VIRTIO
->> +	bool "Xen virtio support"
->> +	default n
->> +	depends on VIRTIO && DMA_OPS
->> +	select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->> +	help
->> +	  Enable virtio support for running as Xen guest. Depending on the
->> +	  guest type this will require special support on the backend side
->> +	  (qemu or kernel, depending on the virtio device types used).
->> +
->> +config XEN_HVM_VIRTIO_GRANT
->> +	bool "Require virtio for fully virtualized guests to use grant mappings"
->> +	depends on XEN_VIRTIO && X86_64
->> +	default y
->> +	help
->> +	  Require virtio for fully virtualized guests to use grant mappings.
->> +	  This will avoid the need to give the backend the right to map all
->> +	  of the guest memory. This will need support on the backend side
->> +	  (qemu or kernel, depending on the virtio device types used).
->> +
->> endmenu
->> diff --git a/drivers/xen/Makefile b/drivers/xen/Makefile
->> index 5aae66e..767009c 100644
->> --- a/drivers/xen/Makefile
->> +++ b/drivers/xen/Makefile
->> @@ -39,3 +39,4 @@ xen-gntalloc-y				:= gntalloc.o
->> xen-privcmd-y				:= privcmd.o privcmd-buf.o
->> obj-$(CONFIG_XEN_FRONT_PGDIR_SHBUF)	+= xen-front-pgdir-shbuf.o
->> obj-$(CONFIG_XEN_UNPOPULATED_ALLOC)	+= unpopulated-alloc.o
->> +obj-$(CONFIG_XEN_VIRTIO)		+= xen-virtio.o
->> diff --git a/drivers/xen/xen-virtio.c b/drivers/xen/xen-virtio.c
->> new file mode 100644
->> index 00000000..cfd5eda
->> --- /dev/null
->> +++ b/drivers/xen/xen-virtio.c
->> @@ -0,0 +1,177 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/******************************************************************************
->> + * Xen virtio driver - enables using virtio devices in Xen guests.
->> + *
->> + * Copyright (c) 2021, Juergen Gross <jgross@suse.com>
->> + */
->> +
->> +#include <linux/module.h>
->> +#include <linux/dma-map-ops.h>
->> +#include <linux/pci.h>
->> +#include <linux/pfn.h>
->> +#include <linux/virtio_config.h>
->> +#include <xen/xen.h>
->> +#include <xen/grant_table.h>
->> +
->> +#define XEN_GRANT_ADDR_OFF	0x8000000000000000ULL
->> +
->> +static inline dma_addr_t grant_to_dma(grant_ref_t grant)
->> +{
->> +	return XEN_GRANT_ADDR_OFF | ((dma_addr_t)grant << PAGE_SHIFT);
->> +}
->> +
->> +static inline grant_ref_t dma_to_grant(dma_addr_t dma)
->> +{
->> +	return (grant_ref_t)((dma & ~XEN_GRANT_ADDR_OFF) >> PAGE_SHIFT);
->> +}
->> +
->> +/*
->> + * DMA ops for Xen virtio frontends.
->> + *
->> + * Used to act as a kind of software IOMMU for Xen guests by using grants as
->> + * DMA addresses.
->> + * Such a DMA address is formed by using the grant reference as a frame
->> + * number and setting the highest address bit (this bit is for the backend
->> + * to be able to distinguish it from e.g. a mmio address).
->> + *
->> + * Note that for now we hard wire dom0 to be the backend domain. In order to
->> + * support any domain as backend we'd need to add a way to communicate the
->> + * domid of this backend, e.g. via Xenstore or via the PCI-device's config
->> + * space.
->> + */
->> +static void *xen_virtio_dma_alloc(struct device *dev, size_t size,
->> +				  dma_addr_t *dma_handle, gfp_t gfp,
->> +				  unsigned long attrs)
->> +{
->> +	unsigned int n_pages = PFN_UP(size);
->> +	unsigned int i;
->> +	unsigned long pfn;
->> +	grant_ref_t grant;
->> +	void *ret;
->> +
->> +	ret = (void *)__get_free_pages(gfp, get_order(size));
->> +	if (!ret)
->> +		return NULL;
->> +
->> +	pfn = virt_to_pfn(ret);
->> +
->> +	if (gnttab_alloc_grant_reference_seq(n_pages, &grant)) {
->> +		free_pages((unsigned long)ret, get_order(size));
->> +		return NULL;
->> +	}
->> +
->> +	for (i = 0; i < n_pages; i++) {
->> +		gnttab_grant_foreign_access_ref(grant + i, 0,
->> +						pfn_to_gfn(pfn + i), 0);
->> +	}
->> +
->> +	*dma_handle = grant_to_dma(grant);
->> +
->> +	return ret;
->> +}
->> +
->> +static void xen_virtio_dma_free(struct device *dev, size_t size, void *vaddr,
->> +				dma_addr_t dma_handle, unsigned long attrs)
->> +{
->> +	unsigned int n_pages = PFN_UP(size);
->> +	unsigned int i;
->> +	grant_ref_t grant;
->> +
->> +	grant = dma_to_grant(dma_handle);
->> +
->> +	for (i = 0; i < n_pages; i++)
->> +		gnttab_end_foreign_access_ref(grant + i);
->> +
->> +	gnttab_free_grant_reference_seq(grant, n_pages);
->> +
->> +	free_pages((unsigned long)vaddr, get_order(size));
->> +}
->> +
->> +static struct page *xen_virtio_dma_alloc_pages(struct device *dev, size_t size,
->> +					       dma_addr_t *dma_handle,
->> +					       enum dma_data_direction dir,
->> +					       gfp_t gfp)
->> +{
->> +	WARN_ONCE(1, "xen_virtio_dma_alloc_pages size %ld\n", size);
->> +	return NULL;
->> +}
->> +
->> +static void xen_virtio_dma_free_pages(struct device *dev, size_t size,
->> +				      struct page *vaddr, dma_addr_t dma_handle,
->> +				      enum dma_data_direction dir)
->> +{
->> +	WARN_ONCE(1, "xen_virtio_dma_free_pages size %ld\n", size);
->> +}
->> +
->> +static dma_addr_t xen_virtio_dma_map_page(struct device *dev, struct page *page,
->> +					  unsigned long offset, size_t size,
->> +					  enum dma_data_direction dir,
->> +					  unsigned long attrs)
->> +{
->> +	grant_ref_t grant;
->> +
->> +	if (gnttab_alloc_grant_references(1, &grant))
->> +		return 0;
->> +
->> +	gnttab_grant_foreign_access_ref(grant, 0, xen_page_to_gfn(page),
->> +					dir == DMA_TO_DEVICE);
->> +
->> +	return grant_to_dma(grant) + offset;
->> +}
->> +
->> +static void xen_virtio_dma_unmap_page(struct device *dev, dma_addr_t dma_handle,
->> +				      size_t size, enum dma_data_direction dir,
->> +				      unsigned long attrs)
->> +{
->> +	grant_ref_t grant;
->> +
->> +	grant = dma_to_grant(dma_handle);
->> +
->> +	gnttab_end_foreign_access_ref(grant);
->> +
->> +	gnttab_free_grant_reference(grant);
->> +}
->> +
->> +static int xen_virtio_dma_map_sg(struct device *dev, struct scatterlist *sg,
->> +				 int nents, enum dma_data_direction dir,
->> +				 unsigned long attrs)
->> +{
->> +	WARN_ONCE(1, "xen_virtio_dma_map_sg nents %d\n", nents);
->> +	return -EINVAL;
->> +}
->> +
->> +static void xen_virtio_dma_unmap_sg(struct device *dev, struct scatterlist *sg,
->> +				    int nents, enum dma_data_direction dir,
->> +				    unsigned long attrs)
->> +{
->> +	WARN_ONCE(1, "xen_virtio_dma_unmap_sg nents %d\n", nents);
->> +}
->> +
->> +static int xen_virtio_dma_dma_supported(struct device *dev, u64 mask)
->> +{
->> +	return 1;
->> +}
->> +
->> +static const struct dma_map_ops xen_virtio_dma_ops = {
->> +	.alloc = xen_virtio_dma_alloc,
->> +	.free = xen_virtio_dma_free,
->> +	.alloc_pages = xen_virtio_dma_alloc_pages,
->> +	.free_pages = xen_virtio_dma_free_pages,
->> +	.mmap = dma_common_mmap,
->> +	.get_sgtable = dma_common_get_sgtable,
->> +	.map_page = xen_virtio_dma_map_page,
->> +	.unmap_page = xen_virtio_dma_unmap_page,
->> +	.map_sg = xen_virtio_dma_map_sg,
->> +	.unmap_sg = xen_virtio_dma_unmap_sg,
->> +	.dma_supported = xen_virtio_dma_dma_supported,
->> +};
->> +
->> +void xen_virtio_setup_dma_ops(struct device *dev)
->> +{
->> +	dev->dma_ops = &xen_virtio_dma_ops;
->> +}
->> +EXPORT_SYMBOL_GPL(xen_virtio_setup_dma_ops);
->> +
->> +MODULE_DESCRIPTION("Xen virtio support driver");
->> +MODULE_AUTHOR("Juergen Gross <jgross@suse.com>");
->> +MODULE_LICENSE("GPL");
->> diff --git a/include/xen/xen-ops.h b/include/xen/xen-ops.h
->> index a3584a3..ae3c1bc 100644
->> --- a/include/xen/xen-ops.h
->> +++ b/include/xen/xen-ops.h
->> @@ -221,4 +221,12 @@ static inline void xen_preemptible_hcall_end(void) { }
->>
->> #endif /* CONFIG_XEN_PV && !CONFIG_PREEMPTION */
->>
->> +#ifdef CONFIG_XEN_VIRTIO
->> +void xen_virtio_setup_dma_ops(struct device *dev);
->> +#else
->> +static inline void xen_virtio_setup_dma_ops(struct device *dev)
->> +{
->> +}
->> +#endif /* CONFIG_XEN_VIRTIO */
->> +
->> #endif /* INCLUDE_XEN_OPS_H */
-> Can you please encapsulate the Xen part of the test in some Xen-specific file?
+to the patch.
 
-I assume your question is about changes to common arch/x86/mm/init.c?
-
-
-#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-int arch_has_restricted_virtio_memory_access(void)
-{
-     if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
-         return 1;
-     if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
-         return 1;
-
-     return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
-}
-EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-
-
-If we are speaking about the whole function, then I am not sure, 
-unfortunately. I think, if this was a purely Xen specific function 
-(which was used by Xen guests only) I would move it somewhere to 
-arch/x86/xen/...   (probably to arch/x86/xen/enlighten.c).
-
-As I understand (please bear in mind I am not too familiar with x86 
-code), so far this function was only used by SEV guests, but with 
-current changes it is going to be used by both Xen and SEV guests, so it 
-should be available even if Xen support is compiled out. Could you 
-please suggest a better place to keep this stuff?
-
-
-If we are speaking about only Xen specific bits in that function, then 
-definitely yes, for example, in this way:
-
-1. arch/x86/mm/init.c or other common (non-Xen specific) location:
-
-#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-int arch_has_restricted_virtio_memory_access(void)
-{
-     return (xen_has_restricted_virtio_memory_access() ||
-             cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
-}
-EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-#endif
-
-2.  include/xen/xen.h or other Xen specific location:
-
-static inline int xen_has_restricted_virtio_memory_access(void)
-{
-     if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
-         return 1;
-     if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
-         return 1;
-
-     return 0;
-}
-
-Or I misunderstood your question?
-
--- 
-Regards,
-
-Oleksandr Tyshchenko
-
+> +       .probe = chromeos_acpi_device_probe,
+> +       .remove = chromeos_acpi_device_remove,
+> +       .driver = {
+> +               .name   = "chromeos-acpi",
+> +               .acpi_match_table = ACPI_PTR(chromeos_device_ids)
+> +       }
+> +};
+> +
+> +module_platform_driver(chromeos_acpi_driver);
+> +
+> +MODULE_AUTHOR("Enric Balletbo i Serra <enric.balletbo@collabora.com>");
+> +MODULE_LICENSE("GPL");
+> +MODULE_DESCRIPTION("ChromeOS specific ACPI extensions");
+> --
+> 2.30.2
+>

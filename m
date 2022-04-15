@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698F1501FCD
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63821501FCF
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 02:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348195AbiDOAvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 20:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S1348197AbiDOAxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 20:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234201AbiDOAvi (ORCPT
+        with ESMTP id S1348305AbiDOAwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 20:51:38 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B32B8989
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:49:11 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id p1-20020a62d001000000b00506396c21eeso230750pfg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 17:49:11 -0700 (PDT)
+        Thu, 14 Apr 2022 20:52:55 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C8E59D07B;
+        Thu, 14 Apr 2022 17:50:29 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id e8-20020a17090a118800b001cb13402ea2so7229552pja.0;
+        Thu, 14 Apr 2022 17:50:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:message-id:mime-version:subject:from:to:cc;
-        bh=0dT7byw4Ro9Y3AnqDhqx7IwQWEEiDivwbCP/tbYK/Cs=;
-        b=I7fG4skyJXElZ7VIi/kGDZJx+zejyRo6g0nY+7jJcOSv6ui8JajVENIOxSYfRPw5Es
-         Jas14t09MvWbv6nBrY6obIugF5xf0hsBljfC2X+HhYEIhChQP8YvSEuOqk+iQr+8LYDp
-         QaBoECQYwoM5zceYl0K417pRAhui3ymO1Q10mb8/Ycj4Okv6qp4QBtPpsNwt3PSWVaID
-         CLKiXwXSU/mpTI5obYMWvrmkhvQmSlA61ljxJz9D4GYhWTFu5LqJXjbSd5P3OAWSSkTn
-         9d3KKQQHFWrbcO2Ujkm9CPp/vB/Bqu5TIz+bKCf6hhAcEngeMKZIN2OsUJ+BYv2kA7gq
-         sa9g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M7qFU3NnrdLY0FuN4koKNS9V3uA2/Asco9ivOOjqnBs=;
+        b=EG5/gJNR4vY4Ttvbs73oI5gwZIFdQ12qIYnhQJPGDSfo9F0xiaN7hr7YPe9Sk3VOvf
+         AIJOM3DK2prO/8A+DbgVj8l3HdwXWKEigZACGaNLBkzNZ3kKJyfplhhhYuRYjHEJ0xsJ
+         gLweAiE3tPly0putKtMBVMwRizHeyFDNuv4aADnqp0ZSxAwXV0YT5qcmKjJGonTDMJqu
+         DjHl/rBxB+ICAI47MBPlQ9RBx1V1l0cPJhCz5Po5bIqffFqPYFceH+bwywp3dxAavlpB
+         OPsKBA78GBzowORKtastHvjCRmb2nyNXelCkNte9T05Z+xlLhmuxw/J5iEJjmdUap5ba
+         Yc7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:message-id:mime-version:subject
-         :from:to:cc;
-        bh=0dT7byw4Ro9Y3AnqDhqx7IwQWEEiDivwbCP/tbYK/Cs=;
-        b=Wj8CDsnYHyN1w45Xj7XP0iG3yiHPO/PauFdwMW6ZX8MqJZ12AXWpdZoWlw1sFMpTr9
-         y3i3rG4cXhxWZtEBNq9684raFLaAEwxvi8d40VSZ/5PDvfiWgQYFTwpqkUV0Q3USoFEx
-         ApfwnzlSpEB/foGTlX+IOK5Gw2FOQdMtpLon5M7sp3NOySllPP7pkpUhqqJQMEN5Igj3
-         2KePueBNC2rO2VhJ2yt2ltHoba1rQuidyOGk6jTmjchEFV7wVVLa6gbe6NhAnoGU4cZo
-         4QQTzz0MYZ3BGakES60PNVsbJW8dDPReObpoYI1M+/RuHsokMkZbZuKWHQsIXS2dbH7D
-         DKsg==
-X-Gm-Message-State: AOAM532FnYcxbyAkIEPqW4TEqUI5UZwjztE/VBRgr6CpnTpXwVR0mfOG
-        TY7iQgBDFbkSGdGsE3p4+mPy5GbXM5A=
-X-Google-Smtp-Source: ABdhPJzlaUPVv+prZih6WUMXjdNNxlkNzroQEHeTtQbdmxjAOndq9+fAjCRz41yvJ2cXA2HyZ+ilzskLW+A=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:903:18a:b0:158:c459:ab48 with SMTP id
- z10-20020a170903018a00b00158c459ab48mr3383516plg.52.1649983751271; Thu, 14
- Apr 2022 17:49:11 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 15 Apr 2022 00:49:09 +0000
-Message-Id: <20220415004909.2216670-1-seanjc@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH] KVM: x86/mmu: Check for host MMIO exclusion from mem encrypt
- iff necessary
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=M7qFU3NnrdLY0FuN4koKNS9V3uA2/Asco9ivOOjqnBs=;
+        b=KhUNIa2FTbRNfdj2aEfUAOtsWzCHpC9lNE3A0wWJYT0OI+nHUceI4pc9Si4Sk2SkKg
+         6T7K7xovx8sV3ZRN5Gwd/MAApxNY2oXIyKRo82/kVSXQ80qVvBNnrUZIWY89u3efOeTe
+         cBrutz6zFNVBgT4rxYMcysMFqYnBu3h+F8s5m3a5EiMugj54+PsTMt0amf6Jo/7eFG/K
+         uhnIApAhj4isYg/qBNRzZAVArBI2X4G8UKv4QSDEfrTB3izG2rUwGDkekLA8bfZQXigP
+         WDn2ouSt4XAT0D6oC+QWnqIssom6GBMksYi7QZCBFLfB7tNKr0m5X4KyJtzPmy4/T3is
+         N4cQ==
+X-Gm-Message-State: AOAM533eqU8pVZUXqGKq3Z+lQjQEGFwAMz8TgDKAZJMSgYUXbM7QINi9
+        nC09+2Pqu8jdXp4wEDvJfgslabWF7qc=
+X-Google-Smtp-Source: ABdhPJxHP4H8iPrjozDQ5gCufQPEuxWsnLf1+yxohn0fa/ZGsGvocxAH8MK4xIvCtRr8RdqR2vQvEw==
+X-Received: by 2002:a17:90b:1e44:b0:1cd:c300:8ff8 with SMTP id pi4-20020a17090b1e4400b001cdc3008ff8mr1318294pjb.221.1649983828527;
+        Thu, 14 Apr 2022 17:50:28 -0700 (PDT)
+Received: from laptop.hsd1.wa.comcast.net ([2601:600:8500:5f14:bd71:fea:c430:7b0a])
+        by smtp.gmail.com with ESMTPSA id g1-20020a17090adac100b001c67cedd84esm2921779pjx.42.2022.04.14.17.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 17:50:28 -0700 (PDT)
+From:   Andrei Vagin <avagin@gmail.com>
+To:     linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
+        stable@kernel.org
+Subject: [PATCH] fs: sendfile handles O_NONBLOCK of out_fd
+Date:   Thu, 14 Apr 2022 17:50:15 -0700
+Message-Id: <20220415005015.525191-1-avagin@gmail.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,39 +69,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When determining whether or not a SPTE needs to have SME/SEV's memory
-encryption flag set, do the moderately expension host MMIO pfn check if
-and only if the memory encryption mask is non-zero.
+sendfile has to return EAGAIN if out_fd is nonblocking and the write
+into it would block.
 
-Note, KVM could further optimize the host MMIO checks by making a single
-call to kvm_is_mmio_pfn(), but the tdp_enabled path (for EPT's memtype
-handling) will likely be split out to a separate flow[*].  At that point,
-a better approach would be to shove the call to kvm_is_mmio_pfn() into
-VMX code so that AMD+NPT without SME doesn't get hit with an unnecessary
-lookup.
-
-[*] https://lkml.kernel.org/r/20220321224358.1305530-3-bgardon@google.com
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Cc: Al Viro <viro@zeniv.linux.org.uk>
+Cc: stable@kernel.org
+Fixes: b964bf53e540 ("teach sendfile(2) to handle send-to-pipe directly")
+Signed-off-by: Andrei Vagin <avagin@gmail.com>
 ---
- arch/x86/kvm/mmu/spte.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/read_write.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index 4739b53c9734..aab78574e03d 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -139,7 +139,7 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
- 	else
- 		pte_access &= ~ACC_WRITE_MASK;
+diff --git a/fs/read_write.c b/fs/read_write.c
+index e643aec2b0ef..ee59419cbf0f 100644
+--- a/fs/read_write.c
++++ b/fs/read_write.c
+@@ -1247,6 +1247,9 @@ static ssize_t do_sendfile(int out_fd, int in_fd, loff_t *ppos,
+ 					  count, fl);
+ 		file_end_write(out.file);
+ 	} else {
++		if (out.file->f_flags & O_NONBLOCK)
++			fl |= SPLICE_F_NONBLOCK;
++
+ 		retval = splice_file_to_pipe(in.file, opipe, &pos, count, fl);
+ 	}
  
--	if (!kvm_is_mmio_pfn(pfn))
-+	if (shadow_me_mask && !kvm_is_mmio_pfn(pfn))
- 		spte |= shadow_me_mask;
- 
- 	spte |= (u64)pfn << PAGE_SHIFT;
-
-base-commit: 150866cd0ec871c765181d145aa0912628289c8a
 -- 
-2.36.0.rc0.470.gd361397f0d-goog
+2.35.1
 

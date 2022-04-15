@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DFE502783
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:43:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292E0502786
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351809AbiDOJob (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 05:44:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S1351823AbiDOJox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 05:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245712AbiDOJo1 (ORCPT
+        with ESMTP id S233838AbiDOJov (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 05:44:27 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DB8AC040;
-        Fri, 15 Apr 2022 02:41:59 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso11438554pju.1;
-        Fri, 15 Apr 2022 02:41:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id;
-        bh=Lt5Azs8UE62t7hvUqRmpYoBuvvMq0qHOp5jSW71Q4WI=;
-        b=it9+AZgUreEGNbOCqj3mjB3EWh1Pv2by2M4d4we2/EWRVJsB18V3G3SWiaPRj/+IPZ
-         9Pswfro3J0nLvxN2vTrSLTQSDb6HJ4Iqna9DljB1Thpw4CN6nmH7ClgiL/SlK7hDljqs
-         D0KZRdVEi/8ssbEVZyPx42ntrWNTBLwfg8skrLztkgyoDUS9OmtryIcnVDmkUklSr7qh
-         2y3CWXID/mY5ccp5nZa5uccv813RMJEiL5fUTTUBvvgtNB9MJn2KNsuke0GJxa9a3jb6
-         X9kYWf04GUHRfxfkZejDcn5fvpfNRZvRMBjD7S9ANYKHEwRP2B4lT7BRcB9a/MuoUq3X
-         MlLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id;
-        bh=Lt5Azs8UE62t7hvUqRmpYoBuvvMq0qHOp5jSW71Q4WI=;
-        b=7IGjnyq6s0t7VnBqSHtlp5pIS5HmhfVZpVJBjKM6eYlTbUoc+wwgoEhevXAY47UCxw
-         nzWNClztV/gly5V1o8zOGGrOjGm8NXH5EC4qcRYyVcLL6EM1Y7zNsC/idElQWZo4se2G
-         6LhUuDmYVn1cVP5uGoE2B/BjYG6/ea2mRwXgOaJwtzA/QUlyX8JZAoJPKww7EfaRazII
-         VvLd2av7gemWzkNXPJFkciyxIA/F2y9Bc397SS2Qg77WCsK8LDFypi1/HhInP/F7INrM
-         Y2JW+afm02KXO5jmPVPsJ5V9PVZ3rXCh63ATXJs7kTjiEf57s1mS8v/AQre5PSjQlV7E
-         nUug==
-X-Gm-Message-State: AOAM530GWBhI/feGm/LGtzNyavY2OdhsYJ6OsNUAWreIl+poExCZGpRi
-        14GE5/miGlHllUvIJqF0SfY=
-X-Google-Smtp-Source: ABdhPJzIMuvlYSnmyMEevTCPhzSlyTu/WcAj1C9nr9Vs4FS75fbUHZGIYT3pGgEEf3pteAr1Qf5u8g==
-X-Received: by 2002:a17:902:b70c:b0:156:16f0:cbfe with SMTP id d12-20020a170902b70c00b0015616f0cbfemr50796482pls.152.1650015719087;
-        Fri, 15 Apr 2022 02:41:59 -0700 (PDT)
-Received: from scdiu3.sunplus.com ([113.196.136.192])
-        by smtp.googlemail.com with ESMTPSA id m13-20020a62a20d000000b004fe0ce6d7a1sm2278502pff.193.2022.04.15.02.41.57
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Apr 2022 02:41:58 -0700 (PDT)
-From:   Wells Lu <wellslutw@gmail.com>
-To:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        Fri, 15 Apr 2022 05:44:51 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A019BAC056;
+        Fri, 15 Apr 2022 02:42:22 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 09:42:19 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1650015741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TzfZgH2CpYL1WXpv7y3pqSWAMrDt8KsmWhxyBSsv7e4=;
+        b=4fZMWsd7dScKZvzIA0nuWdtRbT8Rm4HssOnMjP83EH5ikwxFoX1+/HUex/U2mgp3aOp09b
+        NzA2StEX4rDrsCSQjDb1W43+rLkf+Go3OwYQ2y3i65vjoe6/SSBeBAZ66LLoS85ASmi3Vf
+        gMp9i2SyI3rxJRuu5NCmWQ17kbHSRJXit46BO5mKCrWMwsSqWlpVC1dEzhSI3fZSG+pdGg
+        3ObYL/Sl8IAM+oVwRoVHRqd2FXp1jtxr6OyBOQDAPvGiIP4iQNiVYAy8iKY8P3LkkJTqzo
+        qIry9OcuFZfMijENYK9KZZJPoCO4d1MwjAjDM4S/yAE7Dkmv2l/6AkvrbM2kbw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1650015741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TzfZgH2CpYL1WXpv7y3pqSWAMrDt8KsmWhxyBSsv7e4=;
+        b=Oh9Fatgm2Hn4SMAKGmFveiqA78ZEZ5ZU8AFCdHu+YZajhHjw/I/+uYvc/4JA3gu5JRlrhN
+        eBWQqvMkiN+fybAw==
+From:   "tip-bot2 for Brian Gerst" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/asm: Merge load_gs_index()
+Cc:     Brian Gerst <brgerst@gmail.com>, Borislav Petkov <bp@suse.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Andy Lutomirski <luto@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     wells.lu@sunplus.com, Wells Lu <wellslutw@gmail.com>
-Subject: [PATCH] pinctrl: Fix an error in pin-function table of SP7021
-Date:   Fri, 15 Apr 2022 17:41:28 +0800
-Message-Id: <1650015688-19774-1-git-send-email-wellslutw@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220325153953.162643-5-brgerst@gmail.com>
+References: <20220325153953.162643-5-brgerst@gmail.com>
+MIME-Version: 1.0
+Message-ID: <165001573943.4207.9341858824402363883.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first valid item of pin-function table should
-start from the third item. The first two items,
-due to historical and compatible reasons, should
-be dummy items.
+The following commit has been merged into the x86/core branch of tip:
 
-The two dummy items were removed accidentally in
-initial submission. This fix adds them back.
+Commit-ID:     203d8919a9eda5d1bc68ac3cd7637588334c9dc1
+Gitweb:        https://git.kernel.org/tip/203d8919a9eda5d1bc68ac3cd7637588334c9dc1
+Author:        Brian Gerst <brgerst@gmail.com>
+AuthorDate:    Fri, 25 Mar 2022 11:39:53 -04:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Thu, 14 Apr 2022 14:15:54 +02:00
 
-Signed-off-by: Wells Lu <wellslutw@gmail.com>
+x86/asm: Merge load_gs_index()
+
+Merge the 32- and 64-bit implementations of load_gs_index().
+
+Signed-off-by: Brian Gerst <brgerst@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Acked-by: Andy Lutomirski <luto@kernel.org>
+Link: https://lore.kernel.org/r/20220325153953.162643-5-brgerst@gmail.com
 ---
- drivers/pinctrl/sunplus/sppctl_sp7021.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/x86/include/asm/segment.h       | 7 -------
+ arch/x86/include/asm/special_insns.h | 7 ++++---
+ 2 files changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/pinctrl/sunplus/sppctl_sp7021.c b/drivers/pinctrl/sunplus/sppctl_sp7021.c
-index 9748345..cd65776 100644
---- a/drivers/pinctrl/sunplus/sppctl_sp7021.c
-+++ b/drivers/pinctrl/sunplus/sppctl_sp7021.c
-@@ -419,7 +419,15 @@ static const struct sppctl_grp sp7021grps_prbp[] = {
- 	EGRP("PROBE_PORT2", 2, pins_prp2),
- };
+diff --git a/arch/x86/include/asm/segment.h b/arch/x86/include/asm/segment.h
+index 617b366..2e7890d 100644
+--- a/arch/x86/include/asm/segment.h
++++ b/arch/x86/include/asm/segment.h
+@@ -350,13 +350,6 @@ static inline void __loadsegment_fs(unsigned short value)
+ #define savesegment(seg, value)				\
+ 	asm("mov %%" #seg ",%0":"=r" (value) : : "memory")
  
-+/*
-+ * Due to compatible reason, the first valid item should start at the third
-+ * position of the array. Please keep the first two items of the table
-+ * no use (dummy).
-+ */
- const struct sppctl_func sppctl_list_funcs[] = {
-+	FNCN("", pinmux_type_fpmx, 0x00, 0, 0),
-+	FNCN("", pinmux_type_fpmx, 0x00, 0, 0),
-+
- 	FNCN("L2SW_CLK_OUT",        pinmux_type_fpmx, 0x00, 0, 7),
- 	FNCN("L2SW_MAC_SMI_MDC",    pinmux_type_fpmx, 0x00, 8, 7),
- 	FNCN("L2SW_LED_FLASH0",     pinmux_type_fpmx, 0x01, 0, 7),
--- 
-2.7.4
-
+-/*
+- * x86-32 user GS accessors.  This is ugly and could do with some cleaning up.
+- */
+-#ifdef CONFIG_X86_32
+-# define load_gs_index(v)		loadsegment(gs, (v))
+-#endif	/* X86_32 */
+-
+ #endif /* !__ASSEMBLY__ */
+ #endif /* __KERNEL__ */
+ 
+diff --git a/arch/x86/include/asm/special_insns.h b/arch/x86/include/asm/special_insns.h
+index 68c257a..45b18eb 100644
+--- a/arch/x86/include/asm/special_insns.h
++++ b/arch/x86/include/asm/special_insns.h
+@@ -184,14 +184,15 @@ static inline void wbinvd(void)
+ 	native_wbinvd();
+ }
+ 
+-#ifdef CONFIG_X86_64
+ 
+ static inline void load_gs_index(unsigned int selector)
+ {
++#ifdef CONFIG_X86_64
+ 	native_load_gs_index(selector);
+-}
+-
++#else
++	loadsegment(gs, selector);
+ #endif
++}
+ 
+ #endif /* CONFIG_PARAVIRT_XXL */
+ 

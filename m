@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E792E502B90
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BFF0502B91
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354322AbiDOOQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34002 "EHLO
+        id S1354326AbiDOOQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:16:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354321AbiDOOQ3 (ORCPT
+        with ESMTP id S236542AbiDOOQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:16:29 -0400
+        Fri, 15 Apr 2022 10:16:34 -0400
 Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3384CEE2D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:59 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id w127so8479945oig.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:13:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B43CEE1B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id z8so8510524oix.3
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Y7gbuOQcgVegOGgriZZtIkm8aICEvz3iCExryeuJnKc=;
-        b=GvaYw9m9uZIuDmPB083S//D9z0YL2IzNOcCjm1pVtXOpEFOGXRHx+X57H1kiE59Nzb
-         mP3GZU2c9czB//al48ZD4CELtIesdvPQrHTEj39DcZ3Eg7aMjW9iSZfnDzDVL/GdO0KG
-         dNEHYTdI+4FX8KZ2SHSyqFy22CNQElYK1QbyBOaDESe/WJob8lGxEtc5r8rygJKiO3dr
-         d/uKgtDagblI5ITRTB+4lac6E00qMJi9B0pOcNpzs4Lj9/hhov/MO8c0QCFVDMIOD27N
-         xg11F34GLhQ2KnTp9NsVqgLJNqBe+a1+NCL71tdl7ueYhCe4bTLsms4oiEjNLtBtDdue
-         GEFA==
+        bh=Ne77m8cZZW0R7+jQl5DIOLbM38uI8W7ZFAvs8zlnbN8=;
+        b=h1AEH94ksvbHDBFe3x+a7vmDgmwHtOTnxwprQwUj4X1Nmdvg1vWefYUVfwtkHjfOhv
+         HDBUNoMaooGxk+7pisSLbT50fMO43493JfXXGe1JkBL4xDXrK1H5O0Xq3Z0rI1Np2Gum
+         tGFZ+dFeiSq6PxqPTbRbrbbUyryHeeNaxHgPuJCF+jV80j6YnZG9lidImPuqYc4Fk1CU
+         b8X7OOSzA5dXiqW6pqu7vLlfMTGvQ3i/W/m7avQlpXvChMg8bwMZR+5/+kybThxsGnTj
+         HXopgsjM58efO1m+fJxy9vuEj+l0L6fRrn0ExSVCs/8UWenBQaE1wJhhUlcfW/LB9FL1
+         QD2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Y7gbuOQcgVegOGgriZZtIkm8aICEvz3iCExryeuJnKc=;
-        b=rc7fjp1ifRDHLEeUrR+aLIQSsN6DjuQuu8b3OERdSXPS+iOr/1NBdVamnsgu5fqAtd
-         A+u/kA+Zw8h+MOIRvvdJifu+u2qw4hEjPo60a9e+50nIhfu6juSg7uUSFW8+n37xR2zS
-         4q0YRZsY0kj83Y+NkgJU2+vyjZUHPyvgOrNCMGvoeamRj/Lc3+ufQRBM1zCCwPzU/6XP
-         95Q3WB59f7iNTK8V/Ir7qhC00mojtORcjaJrZHgTe3/xwx3WskygFOJ8i6Sl+gRSa6tR
-         maV+lCG2ALu1CIwwwYmKoh2j5J936syFqfHSPDQ/gjxdb5v5N4ReyvlaKnB03U/cZ9Wp
-         UVPw==
-X-Gm-Message-State: AOAM5309Ao3mFqbloemlV9TXt+FnspwxKoPxSudSZuhBUby1lsDhu1TB
-        iajVQhNo50MEUSN21cLyd6s=
-X-Google-Smtp-Source: ABdhPJzmxuaSXWI7XfG/E+TLAHkj5AZu4f7ORrcmrqNx258nm0FlTJZYTbFYr++Yr4QtStSKgW7fIQ==
-X-Received: by 2002:a05:6808:198c:b0:2f9:f118:9775 with SMTP id bj12-20020a056808198c00b002f9f1189775mr1627650oib.79.1650032038769;
-        Fri, 15 Apr 2022 07:13:58 -0700 (PDT)
+        bh=Ne77m8cZZW0R7+jQl5DIOLbM38uI8W7ZFAvs8zlnbN8=;
+        b=aH4B4qBfG6YWxfbC0cDun944mg7EHdmCHXqD8RjeGzlRHFT617Cuz2Po92GFVAppUl
+         0H0EdWH3AETn9P1/rlH8Htrrx0HuQwv7TPOfTTQXenwswHqDLfSJHvVzhYK5egAdJIZn
+         49m4VD6gunmMtUQM3qgbS2FpvQ94Xqjv08bRZLaQdE8ymMyykyC1sy0V72bVuw16VBA9
+         u4pxR9knLZBWBI0HyZb5Z5nDn9Qc6jc4g6yGG3ebQfr/Y4CILz7NBM/tXSyv2zR9YpN9
+         z1iDuVwfrte1f19bSwFrkvpk15lZg+2OpqC+frobLKx9ukIyVPDZUDXriXIbbuhAze1d
+         rm9g==
+X-Gm-Message-State: AOAM5328FpGCmM1h3BN8YUlhUmBBVm1+SzNMzilAGnWuzD+1cAbqyoNy
+        zR5BlcGQp1vakzTISQ2Q2Qo=
+X-Google-Smtp-Source: ABdhPJzmIliimBoMo5RTzw1NZHdZ598Yqfbe2K4rgL5RQgz1CujBydm9kLuTJhT4SOwwYRnQKEfqmA==
+X-Received: by 2002:a05:6808:d4c:b0:2f8:d0d2:d06c with SMTP id w12-20020a0568080d4c00b002f8d0d2d06cmr1672959oik.285.1650032043019;
+        Fri, 15 Apr 2022 07:14:03 -0700 (PDT)
 Received: from localhost.localdomain ([2804:14c:4c2:8a9b:dcc3:45ee:2581:b4cb])
-        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm1156189oov.3.2022.04.15.07.13.56
+        by smtp.gmail.com with ESMTPSA id x1-20020a4ae781000000b00320d5d238efsm1156189oov.3.2022.04.15.07.14.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:13:58 -0700 (PDT)
+        Fri, 15 Apr 2022 07:14:02 -0700 (PDT)
 From:   Tales Lelo da Aparecida <tales.aparecida@gmail.com>
 To:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
         Melissa Wen <melissa.srw@gmail.com>,
@@ -57,14 +57,13 @@ To:     Rodrigo Siqueira <rodrigosiqueiramelo@gmail.com>,
         dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         andrealmeid@riseup.net
 Cc:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>
-Subject: [PATCH v2 1/2] drm/vkms: check plane_composer->map[0] before using it
-Date:   Fri, 15 Apr 2022 08:12:59 -0300
-Message-Id: <20220415111300.61013-2-tales.aparecida@gmail.com>
+Subject: [PATCH v2 2/2] drm/vkms: return early if compose_plane fails
+Date:   Fri, 15 Apr 2022 08:13:00 -0300
+Message-Id: <20220415111300.61013-3-tales.aparecida@gmail.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220415111300.61013-1-tales.aparecida@gmail.com>
 References: <20220415111300.61013-1-tales.aparecida@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -76,32 +75,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a copypasta error. The caller of compose_plane() already checks
-primary_composer->map. In contrast, plane_composer->map is never
-verified here before handling.
+Do not exit quietly from compose_plane. If any plane has an invalid
+map, propagate the error value upwards. While here, add log messages
+for the invalid index.
 
-Fixes: 7938f4218168 ("dma-buf-map: Rename to iosys-map")
-Reviewed-by: André Almeida <andrealmeid@riseup.net>
 Signed-off-by: Tales Lelo da Aparecida <tales.aparecida@gmail.com>
 ---
-v2: detail the commit message with more information
-
- drivers/gpu/drm/vkms/vkms_composer.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/vkms/vkms_composer.c | 30 ++++++++++++++++++----------
+ 1 file changed, 20 insertions(+), 10 deletions(-)
 
 diff --git a/drivers/gpu/drm/vkms/vkms_composer.c b/drivers/gpu/drm/vkms/vkms_composer.c
-index c6a1036bf2ea..b47ac170108c 100644
+index b47ac170108c..c0a3b53cd155 100644
 --- a/drivers/gpu/drm/vkms/vkms_composer.c
 +++ b/drivers/gpu/drm/vkms/vkms_composer.c
-@@ -157,7 +157,7 @@ static void compose_plane(struct vkms_composer *primary_composer,
+@@ -149,16 +149,16 @@ static void blend(void *vaddr_dst, void *vaddr_src,
+ 	}
+ }
+ 
+-static void compose_plane(struct vkms_composer *primary_composer,
+-			  struct vkms_composer *plane_composer,
+-			  void *vaddr_out)
++static int compose_plane(struct vkms_composer *primary_composer,
++			 struct vkms_composer *plane_composer,
++			 void *vaddr_out)
+ {
+ 	struct drm_framebuffer *fb = &plane_composer->fb;
  	void *vaddr;
  	void (*pixel_blend)(const u8 *p_src, u8 *p_dst);
  
--	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
-+	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
- 		return;
+ 	if (WARN_ON(iosys_map_is_null(&plane_composer->map[0])))
+-		return;
++		return -EINVAL;
  
  	vaddr = plane_composer->map[0].vaddr;
+ 
+@@ -168,6 +168,8 @@ static void compose_plane(struct vkms_composer *primary_composer,
+ 		pixel_blend = &x_blend;
+ 
+ 	blend(vaddr_out, vaddr, primary_composer, plane_composer, pixel_blend);
++
++	return 0;
+ }
+ 
+ static int compose_active_planes(void **vaddr_out,
+@@ -177,7 +179,7 @@ static int compose_active_planes(void **vaddr_out,
+ 	struct drm_framebuffer *fb = &primary_composer->fb;
+ 	struct drm_gem_object *gem_obj = drm_gem_fb_get_obj(fb, 0);
+ 	const void *vaddr;
+-	int i;
++	int i, ret;
+ 
+ 	if (!*vaddr_out) {
+ 		*vaddr_out = kzalloc(gem_obj->size, GFP_KERNEL);
+@@ -187,8 +189,10 @@ static int compose_active_planes(void **vaddr_out,
+ 		}
+ 	}
+ 
+-	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0])))
++	if (WARN_ON(iosys_map_is_null(&primary_composer->map[0]))) {
++		DRM_DEBUG_DRIVER("Failed to compose. Invalid map in the primary plane.");
+ 		return -EINVAL;
++	}
+ 
+ 	vaddr = primary_composer->map[0].vaddr;
+ 
+@@ -198,10 +202,16 @@ static int compose_active_planes(void **vaddr_out,
+ 	 * planes should be in z-order and compose them associatively:
+ 	 * ((primary <- overlay) <- cursor)
+ 	 */
+-	for (i = 1; i < crtc_state->num_active_planes; i++)
+-		compose_plane(primary_composer,
+-			      crtc_state->active_planes[i]->composer,
+-			      *vaddr_out);
++	for (i = 1; i < crtc_state->num_active_planes; i++) {
++		ret = compose_plane(primary_composer,
++				    crtc_state->active_planes[i]->composer,
++				    *vaddr_out);
++		if (ret) {
++			DRM_DEBUG_DRIVER("Failed to compose. Invalid map in the active_planes[%d].",
++					 i);
++			return ret;
++		}
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.35.1
 

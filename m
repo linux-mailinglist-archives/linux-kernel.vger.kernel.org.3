@@ -2,115 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B81E4502632
+	by mail.lfdr.de (Postfix) with ESMTP id 264D8502630
 	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351050AbiDOH1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S1351037AbiDOH0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351026AbiDOH1E (ORCPT
+        with ESMTP id S1351026AbiDOH0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:27:04 -0400
-X-Greylist: delayed 68390 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 15 Apr 2022 00:24:33 PDT
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80370F5B;
-        Fri, 15 Apr 2022 00:24:29 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A522840012;
-        Fri, 15 Apr 2022 07:24:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650007468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WkE50f/cylqb9wbDSyPkHo6fWi5moEO5EYl1lk9fvRg=;
-        b=Uvry18gYDkJPxtbJtJFk+TH3yaLIJHSvc/UhFGB/1uuZNZ/TbHMuBF7631vl3Hb6NDTUtl
-        SEkQYeyf+2kQjxS7Q46J3CDXQ0Ckyrm+MU9UDhsI5W+f2OBE1Qkj7jw7NrjYRbNoNLGbAM
-        0wvd7KJ4CW05bkwAwx1WQWiFBK1N6DCxMGZVnqic5nC2ZpQ8x7d9UerDCjDywIdLLM56FK
-        lswzTAFUAD1NyDiYoM29B0TeyLl9H2WCBY2yuQbDf6KVL/Joy3Yvbq8qa0zvf2ADRTRKqu
-        GegfrRPzsoy2qlbhHdYKTXdr46iba8Hoh2oLgcG2wTYxeqjTITSE6tzmWn+Hgw==
-Date:   Fri, 15 Apr 2022 09:23:00 +0200
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?B?TWlxdcOobA==?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 02/12] net: dsa: add Renesas RZ/N1 switch tag
- driver
-Message-ID: <20220415092300.009ef819@fixe.home>
-In-Reply-To: <YlhKkriHziPsWBCV@shell.armlinux.org.uk>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
-        <20220414122250.158113-3-clement.leger@bootlin.com>
-        <20220414142242.vsvv3vxexc7i3ukm@skbuf>
-        <20220414163546.3f6c5157@fixe.home>
-        <20220414151146.a2fncklswo6utiyd@skbuf>
-        <20220414181815.5037651e@fixe.home>
-        <YlhKkriHziPsWBCV@shell.armlinux.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-pc-linux-gnu)
+        Fri, 15 Apr 2022 03:26:45 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD596B7C68
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:24:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650007457; x=1681543457;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jUmVIyeDXIAjcJLpIyHmb4mUDJwYOguDMN52Q5YyxdY=;
+  b=ROuVlcSWDNEgKO4bSKcgxu0YskTixUqOqlkepxjtFnibUJ5YrnYdfKiK
+   QycAe+uPc/9ady00r8Xq4s83QawrQneReJdsqD9dZUaK1ihukXauGbgod
+   457kzUriN3mggB1DKEsOEtSsa+NE+ymzGCRCISZ2Hniygtrl11XCUtmTy
+   dEAOIAGtqAE6Is7uGCMiiYT6jECLVq+yrsDVlYGAoHBFeg0si7uhEnjmB
+   OEtZmw/38G+TMxaVQtjdIbOrZf9ugQrgnbIclOcbFtYmyqnretcDQ0G1W
+   ouwD09ymhv7JYqz7Yp+ftOJbKHs0ZV+f9hL/C9blrypXfFw+J/MhNcohA
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243042832"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="243042832"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 00:24:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="560485295"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 15 Apr 2022 00:24:08 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfGJL-0001he-KW;
+        Fri, 15 Apr 2022 07:24:07 +0000
+Date:   Fri, 15 Apr 2022 15:23:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:smp/core] BUILD SUCCESS
+ d308077e5e4dc8c93f97f5ebc70274e7c7a92d49
+Message-ID: <62591d5e.UXk1rCYGUqSAsX9O%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Thu, 14 Apr 2022 17:23:46 +0100,
-"Russell King (Oracle)" <linux@armlinux.org.uk> a =C3=A9crit :
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git smp/core
+branch HEAD: d308077e5e4dc8c93f97f5ebc70274e7c7a92d49  cpu/hotplug: Initialise all cpuhp_cpu_state structs earlier
 
-> On Thu, Apr 14, 2022 at 06:18:15PM +0200, Cl=C3=A9ment L=C3=A9ger wrote:
-> > Le Thu, 14 Apr 2022 18:11:46 +0300,
-> > Vladimir Oltean <olteanv@gmail.com> a =C3=A9crit :
-> >  =20
-> > > On Thu, Apr 14, 2022 at 04:35:46PM +0200, Cl=C3=A9ment L=C3=A9ger wro=
-te: =20
-> > > > > Please keep variable declarations sorted in decreasing order of l=
-ine
-> > > > > length (applies throughout the patch series, I won't repeat this =
-comment).   =20
-> > > >=20
-> > > > Acked, both PCS and DSA driver are ok with that rule. Missed that o=
-ne
-> > > > though.   =20
-> > >=20
-> > > Are you sure? Because a5psw_port_stp_state_set() says otherwise. =20
-> >=20
-> > Weeeeell, ok let's say I missed these two. Would be useful to have such
-> > checks in checkpatch.pl. =20
->=20
-> Note that it's a local networking coding-style issue, rather than being
-> kernel-wide.
->=20
+elapsed time: 2112m
 
-Hi Russell, Yes I was aware of that but if I remember correctly, there
-are some netowrking checks like multi line comments without an empty
-first line in checkpatch. Anyway, I'll make sure to check that mroe
-carefully next time.
+configs tested: 132
+configs skipped: 3
 
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+arc                        vdk_hs38_defconfig
+mips                  decstation_64_defconfig
+openrisc                  or1klitex_defconfig
+mips                      maltasmvp_defconfig
+sparc                       sparc64_defconfig
+sh                          rsk7264_defconfig
+mips                           xway_defconfig
+xtensa                       common_defconfig
+xtensa                         virt_defconfig
+m68k                       m5475evb_defconfig
+arm                        shmobile_defconfig
+arm                        oxnas_v6_defconfig
+arm                        keystone_defconfig
+arm                             rpc_defconfig
+mips                         mpc30x_defconfig
+powerpc                     pq2fads_defconfig
+ia64                          tiger_defconfig
+parisc64                            defconfig
+powerpc                     taishan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+arm                         assabet_defconfig
+parisc                generic-64bit_defconfig
+x86_64                           alldefconfig
+sh                             sh03_defconfig
+arm                           sunxi_defconfig
+xtensa                           alldefconfig
+x86_64                              defconfig
+arm                           u8500_defconfig
+arm                        spear6xx_defconfig
+arm                            mps2_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220413
+arm                  randconfig-c002-20220414
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+parisc                              defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+arc                  randconfig-r043-20220413
+s390                 randconfig-r044-20220413
+riscv                randconfig-r042-20220413
+arc                  randconfig-r043-20220414
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                               defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
+
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220414
+arm                  randconfig-c002-20220414
+i386                          randconfig-c001
+powerpc                 mpc8313_rdb_defconfig
+powerpc                      acadia_defconfig
+powerpc                      obs600_defconfig
+arm                      tct_hammer_defconfig
+powerpc                     tqm5200_defconfig
+arm                        multi_v5_defconfig
+mips                           mtx1_defconfig
+arm                        spear3xx_defconfig
+arm                        vexpress_defconfig
+arm                          collie_defconfig
+arm                       mainstone_defconfig
+arm                       netwinder_defconfig
+mips                        workpad_defconfig
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20220414
+hexagon              randconfig-r045-20220414
+hexagon              randconfig-r041-20220413
+hexagon              randconfig-r045-20220413
+riscv                randconfig-r042-20220414
+s390                 randconfig-r044-20220414
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

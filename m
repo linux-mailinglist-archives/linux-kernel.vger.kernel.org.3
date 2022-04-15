@@ -2,158 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D84502026
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:30:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3DC502019
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:23:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348473AbiDOBdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 21:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S1348409AbiDOBZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 21:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348459AbiDOBdI (ORCPT
+        with ESMTP id S1343588AbiDOBZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:33:08 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B1FD434A5;
-        Thu, 14 Apr 2022 18:30:41 -0700 (PDT)
-Received: by ajax-webmail-mail.loongson.cn (Coremail) ; Fri, 15 Apr 2022
- 09:30:39 +0800 (GMT+08:00)
-X-Originating-IP: [112.20.108.139]
-Date:   Fri, 15 Apr 2022 09:30:39 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5Y+45bu26IW+?= <siyanteng@loongson.cn>
-To:     "alexs@kernel.org" <alexs@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>
-Cc:     "siyanteng@loongson.cn" <siyanteng@loongson.cn>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        siyanteng01@gmail.com
-Subject: Re: [PATCH V3] docs/zh_CN: sync with original text
- Documentation/vm/page_owner.rst
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.10a build 20191018(4c4f6d15)
- Copyright (c) 2002-2022 www.mailtech.cn .loongson.cn
-Content-Transfer-Encoding: base64
-X-CM-CTRLDATA: mfOwcWZvb3Rlcl90eHQ9NDA2ODo2MTI=
-Content-Type: text/plain; charset=UTF-8
+        Thu, 14 Apr 2022 21:25:37 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1600A66C96;
+        Thu, 14 Apr 2022 18:23:11 -0700 (PDT)
+Received: from kwepemi100012.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Kfdkx3d7PzCqw6;
+        Fri, 15 Apr 2022 09:18:49 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi100012.china.huawei.com (7.221.188.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 15 Apr 2022 09:23:09 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
+ (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Fri, 15 Apr
+ 2022 09:23:08 +0800
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+To:     <viro@zeniv.linux.org.uk>, <torvalds@linux-foundation.org>,
+        <hch@lst.de>
+CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
+Subject: [PATCH] fs-writeback: Flush plug before next iteration in wb_writeback()
+Date:   Fri, 15 Apr 2022 09:37:35 +0800
+Message-ID: <20220415013735.1610091-1-chengzhihao1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Message-ID: <81254c7.3c4d.1802ad7fa26.Coremail.siyanteng@loongson.cn>
-X-Coremail-Locale: en_US
-X-CM-TRANSID: AQAAf9BxMM+_ylhiVMojAA--.12774W
-X-CM-SenderInfo: pvl1t0pwhqwqxorr0wxvrqhubq/1tbiAQAREV3QvPLlfgAAsZ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RGVhciBzaXlhbnRlbmcKCkNvdWxkIHlvdSBoZWxwIHRvIHJldmlldyBteSB0cmFuc2xhdGlvbu+8
-nwoKQ2VydGFpbmx5IQoKLS1DQyBzaXlhbnRlbmcwMUBnbWFpbC5jb20KClRoYW5rcywKWWFudGVu
-ZwoKCgoKCi0tLS0tLS0tIOWOn+Wni+mCruS7tiAtLS0tLS0tLQrlj5Hku7bkurrvvJrnmb3mtanm
-locgPGJhaWhhb3dlbkBtZWl6dS5jb20+CuaXtumXtO+8mjIwMjLlubQ05pyIMTLml6UgMTc6MjkK
-5pS25Lu25Lq677yaYWxleHNAa2VybmVsLm9yZyxjb3JiZXRAbHduLm5ldArmioTpgIHvvJpzaXlh
-bnRlbmdAbG9vbmdzb24uY24s55m95rWp5paHIDxiYWloYW93ZW5AbWVpenUuY29tPixsaW51eC1k
-b2NAdmdlci5rZXJuZWwub3JnLGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcK5Li76aKY77ya
-W1BBVENIIFYzXSBkb2NzL3poX0NOOiBzeW5jIHdpdGggb3JpZ2luYWwgdGV4dCBEb2N1bWVudGF0
-aW9uL3ZtL3BhZ2Vfb3duZXIucnN0CgpBcyB0aGUgdG9vbHMvdm0vcGFnZV9vd25lcl9zb3J0IGFk
-ZGVkIHNvbWUgZmVhdHVyZSBhbmQgb3JpZ2luYWwgdGV4dAp1cGRhdGVkLCBzeW5jIHRoZSB0cmFu
-c2xhdGlvbiBvZiB6aF9DTi4KClNpZ25lZC1vZmYtYnk6IEhhb3dlbiBCYWkgPGJhaWhhb3dlbkBt
-ZWl6dS5jb20+Ci0tLQpWMS0mZ3Q7VjI6IGZpeCB3aGl0ZXNwYWNlIHdhcm5pbmcuClYyLSZndDtW
-MzogZml4IHNvbWUgdGFiIEFsaWdubWVudCBpc3N1ZS4KCkRvY3VtZW50YXRpb24vdHJhbnNsYXRp
-b25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0IHwgNTQgKysrKysrKysrKysrKysrKysrKysrLQox
-IGZpbGUgY2hhbmdlZCwgNTMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoKZGlmZiAtLWdp
-dCBhL0RvY3VtZW50YXRpb24vdHJhbnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0IGIv
-RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QKaW5kZXgg
-OWU5NTFmYWJiYTlkLi4wZDRmOTQwMzRkYjYgMTAwNjQ0Ci0tLSBhL0RvY3VtZW50YXRpb24vdHJh
-bnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0CisrKyBiL0RvY3VtZW50YXRpb24vdHJh
-bnNsYXRpb25zL3poX0NOL3ZtL3BhZ2Vfb3duZXIucnN0CkBAIC0xMDMsMTQgKzEwMyw2NiBAQCBw
-YWdlIG93bmVy5Zyo6buY6K6k5oOF5Ya15LiL5piv56aB55So55qE44CC5omA5Lul77yM5aaC5p6c
-5L2g5oOz5L2/55So5a6D77yM5L2gCi1tICAgICAgICAgICAgICDmjInmgLvlhoXlrZjmjpLluo8K
-LXAgICAgICAgICAgICAgIOaMiXBpZOaOkuW6j+OAggotUCAgICAgICAgICAgICAg5oyJdGdpZOaO
-kuW6j+OAggorICAgICAgICAgICAgICAgLW4gICAgICAgICAgICAgIOaMieS7u+WKoeWQjeensOaO
-kuW6j+OAggotciAgICAgICAgICAgICAg5oyJ5YaF5a2Y6YeK5pS+5pe26Ze05o6S5bqP44CCCi1z
-ICAgICAgICAgICAgICDmjInloIbmoIjot5/ouKrmjpLluo/jgIIKLXQgICAgICAgICAgICAgIOaM
-ieaXtumXtOaOkuW6j++8iOm7mOiupO+8ieOAggorICAgICAgICAgICAgICAgLS1zb3J0IDxvcmRl
-cj4gIOaMh+WumuaOkuW6j+mhuuW6j+OAguaOkuW6j+ivreazleaYryBbK3wtXWtleVssWyt8LV1r
-ZXlbLC4uLl1dLiDku44KKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgKirmoIflh4bmoLzlvI/or7TmmI7nrKYqKumDqOWIhumAieaLqeS4gOS4qumUruOAgiIr
-IiDmmK/lj6/pgInnmoTvvIzlm6DkuLrpu5jorqTmlrnlkJHmmK/lop7liqDmlbDlrZfmiJblrZfl
-hbjpobrluo/jgIIKKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICAg5YWB6K645re35ZCI5L2/55So57yp5YaZ6ZSu5ZKM5YWo56ew6ZSu44CCCisKKyAgICAgICAg
-ICAgICAgIEV4YW1wbGVzOgorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9v
-d25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1zb3J0PW4sK3BpZCwtdGdpZAorICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4g
-LS1zb3J0PWF0CgrlhbblroPlh73mlbA6CgpDdWxsOgotICAgICAgICAgICAgICAgLWMgICAgICAg
-ICAgICAgIOmAmui/h+avlOi+g+WghuagiOi3n+i4quiAjOS4jeaYr+aAu+Wdl+adpei/m+ihjOWJ
-lOmZpOOAggorICAgICAgICAgICAgICAgLS1jdWxsIDxydWxlcz4KKyAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICDmjIflrprnrZvpgInop4TliJnjgILnrZvpgInor63ms5XmmK8ga2V5Wyxr
-ZXlbLC4uLl1d44CC5ZyoKirmoIflh4bmoLzlvI/or7TmmI7nrKYqKumDqOWIhumAieaLqeS4gOS4
-quWkmuWtl+avjemUrgorCisgICAgICAgICAgICAgICA8cnVsZXM+IOaYr+mAl+WPt+WIhumalOWI
-l+ihqOW9ouW8j+eahOWNleS4quWPguaVsO+8jOWug+aPkOS+m+S6huS4gOenjeaMh+WumuWNleS4
-quetm+mAieinhOWImeeahOaWueazleOAguS4i+mdoueahCoq5qCH5YeG5qC85byP6K+05piOCisg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg56ymKirpg6jliIbmj4/ov7Dkuoblj6/or4bl
-iKvnmoTlhbPplK7lrZfjgII8cnVsZXM+IOWPr+S7peeUsemUriBrMSxrMiwgLi4uIOmhuuW6j+aM
-h+Wumu+8jOWmguS4i+mdoueahAorICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIFNUQU5E
-QVJEIFNPUlQgS0VZUyDpg6jliIbmiYDov7DjgILlhYHorrjmt7flkIjkvb/nlKjnvKnlhpnlvaLl
-vI/lkozlrozmlbTlvaLlvI/nmoTplK7jgIIKCisgICAgICAgICAgICAgICBFeGFtcGxlczoKKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxv
-dXRwdXQ+IC0tY3VsbD1zdGFja3RyYWNlCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-Li9wYWdlX293bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLWN1bGw9c3QscGlkLG5hbWUKKyAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxv
-dXRwdXQ+IC0tY3VsbD1uLGYKRmlsdGVyOgotZiAgICAgICAgICAgICAg6L+H5ruk5o6J5YaF5a2Y
-5bey6KKr6YeK5pS+55qE5Z2X55qE5L+h5oGv44CCCisKKyAgICAgICBTZWxlY3Q6CisgICAgICAg
-ICAgICAgICAtLXBpZCA8cGlkbGlzdD4gICAgICAgICDpgJrov4cgcGlkIOi/m+ihjOmAieaLqeOA
-gui/meWwhumAieaLqei/m+eoiyBJRCDlj7flh7rnjrDlnKggPHBpZGxpc3Q+IOS4reeahOWdl+OA
-ggorICAgICAgICAgICAgICAgLS10Z2lkIDx0Z2lkbGlzdD4gICAgICAg6YCa6L+HIHRnaWQg6L+b
-6KGM6YCJ5oup44CC6L+Z5bCG6YCJ5oup57q/56iL57uEIElEIOWPt+WHuueOsOWcqCA8dGdpZGxp
-c3Q+IOS4reeahOWdl+OAggorICAgICAgICAgICAgICAgLS1uYW1lIDxjbWRsaXN0PiAgICAgICAg
-5oyJ5Lu75Yqh5ZCN56ew6YCJ5oup44CC6L+Z5bCG6YCJ5oup5Lu75Yqh5ZCN56ew5Ye6546w5Zyo
-IDxjbWRsaXN0PiDkuK3nmoTlnZfjgIIKKworICAgICAgICAgICAgICAgPHBpZGxpc3Q+44CBPHRn
-aWRsaXN0PuOAgTxjbWRsaXN0PuaYr+mAl+WPt+WIhumalOWIl+ihqOW9ouW8j+eahOWNleWPguaV
-sO+8jOWug+aPkOS+m+S6huS4gOenjeaMh+WumuWNleS4qumAieaLqeinhOWImeeahOaWueazleOA
-ggorCisKKyAgICAgICAgICAgICAgIEV4YW1wbGVzOgorICAgICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1waWQ9MQorICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1
-dD4gLS10Z2lkPTEsMiwzCisgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLi9wYWdlX293
-bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLW5hbWUgbmFtZTEsbmFtZTIKKworICAgICAgIOag
-h+WHhuagvOW8j+ivtOaYjuespgorPT09PT09PT09PT09PT09PT09PT09PT09PT0KKy0tc29ydCDp
-gInpobk6CisKKyAgICAgICDnvKnlhpnplK4gICAgICAgICAgICAg5YWo56ew6ZSuICAgICAgICAg
-ICAgIOaPj+i/sAorICAgICAgIHAgICAgICAgICAgICAgICBwaWQgICAgICAgICAgICAg6L+b56iL
-IElECisgICAgICAgdGcgICAgICAgICAgICAgIHRnaWQgICAgICAgICAgICDnur/nqIvnu4QgSUQK
-KyAgICAgICBuICAgICAgICAgICAgICAgbmFtZSAgICAgICAgICAgIOS7u+WKoeWQjeensAorICAg
-ICAgIHN0ICAgICAgICAgICAgICBzdGFja3RyYWNlICAgICAg6aG16Z2i5YiG6YWN55qE6LCD55So
-5qCICisgICAgICAgVCAgICAgICAgICAgICAgIHR4dCAgICAgICAgICAgICDlnZfnmoTlhajmlocK
-KyAgICAgICBmdCAgICAgICAgICAgICAgZnJlZV90cyAgICAgICAgIOmhtemdouiiq+mHiuaUvuea
-hOaXtumXtOaIsworICAgICAgIGF0ICAgICAgICAgICAgICBhbGxvY190cyAgICAgICAg6aG16Z2i
-5YiG6YWN55qE5pe26Ze05oizCisKKy0tY3VybCDpgInpobk6CisKKyAgICAgICDnvKnlhpnplK4g
-ICAgICAgICAgICAg5YWo56ew6ZSuICAgICAgICAgICAgIOaPj+i/sAorICAgICAgIHAgICAgICAg
-ICAgICAgICBwaWQgICAgICAgICAgICAg6L+b56iLIElECisgICAgICAgdGcgICAgICAgICAgICAg
-IHRnaWQgICAgICAgICAgICDnur/nqIvnu4QgSUQKKyAgICAgICBuICAgICAgICAgICAgICAgbmFt
-ZSAgICAgICAgICAgIOS7u+WKoeWQjeensAorICAgICAgIGYgICAgICAgICAgICAgICBmcmVlICAg
-ICAgICAgICAg6K+l6aG16Z2i5piv5ZCm5bey6KKr6YeK5pS+CisgICAgICAgc3QgICAgICAgICAg
-ICAgIHN0YWNrdHJhY2UgICAgICDpobXpnaLliIbphY3nmoTosIPnlKjmoIgKLS0gCjIuNy40CgoK
-PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9jbWRsaXN0PjwvdGdpZGxpc3Q+PC9waWRsaXN0
-PjwvY21kbGlzdD48L2NtZGxpc3Q+PC90Z2lkbGlzdD48L3RnaWRsaXN0PjwvcGlkbGlzdD48L3Bp
-ZGxpc3Q+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vdXRwdXQ+PC9ydWxlcz48L3J1bGVzPjwvcnVsZXM+
-PC9vdXRwdXQ+PC9vdXRwdXQ+PC9vcmRlcj48L2JhaWhhb3dlbkBtZWl6dS5jb20+PC9iYWloYW93
-ZW5AbWVpenUuY29tPjwvYmFpaGFvd2VuQG1laXp1LmNvbT4NCg0K5pys6YKu5Lu25Y+K5YW26ZmE
-5Lu25ZCr5pyJ6b6Z6Iqv5Lit56eR55qE5ZWG5Lia56eY5a+G5L+h5oGv77yM5LuF6ZmQ5LqO5Y+R
-6YCB57uZ5LiK6Z2i5Zyw5Z2A5Lit5YiX5Ye655qE5Liq5Lq65oiW576k57uE44CC56aB5q2i5Lu7
-5L2V5YW25LuW5Lq65Lul5Lu75L2V5b2i5byP5L2/55So77yI5YyF5ous5L2G5LiN6ZmQ5LqO5YWo
-6YOo5oiW6YOo5YiG5Zyw5rOE6Zyy44CB5aSN5Yi25oiW5pWj5Y+R77yJ5pys6YKu5Lu25Y+K5YW2
-6ZmE5Lu25Lit55qE5L+h5oGv44CC5aaC5p6c5oKo6ZSZ5pS25pys6YKu5Lu277yM6K+35oKo56uL
-5Y2z55S16K+d5oiW6YKu5Lu26YCa55+l5Y+R5Lu25Lq65bm25Yig6Zmk5pys6YKu5Lu244CCIA0K
-VGhpcyBlbWFpbCBhbmQgaXRzIGF0dGFjaG1lbnRzIGNvbnRhaW4gY29uZmlkZW50aWFsIGluZm9y
-bWF0aW9uIGZyb20gTG9vbmdzb24gVGVjaG5vbG9neSAsIHdoaWNoIGlzIGludGVuZGVkIG9ubHkg
-Zm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHdob3NlIGFkZHJlc3MgaXMgbGlzdGVkIGFib3ZlLiBB
-bnkgdXNlIG9mIHRoZSBpbmZvcm1hdGlvbiBjb250YWluZWQgaGVyZWluIGluIGFueSB3YXkgKGlu
-Y2x1ZGluZywgYnV0IG5vdCBsaW1pdGVkIHRvLCB0b3RhbCBvciBwYXJ0aWFsIGRpc2Nsb3N1cmUs
-IHJlcHJvZHVjdGlvbiBvciBkaXNzZW1pbmF0aW9uKSBieSBwZXJzb25zIG90aGVyIHRoYW4gdGhl
-IGludGVuZGVkIHJlY2lwaWVudChzKSBpcyBwcm9oaWJpdGVkLiBJZiB5b3UgcmVjZWl2ZSB0aGlz
-IGVtYWlsIGluIGVycm9yLCBwbGVhc2Ugbm90aWZ5IHRoZSBzZW5kZXIgYnkgcGhvbmUgb3IgZW1h
-aWwgaW1tZWRpYXRlbHkgYW5kIGRlbGV0ZSBpdC4g
+Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
+writeback_inodes_wb()") has us holding a plug during wb_writeback, which
+may cause a potential ABBA dead lock:
+
+    wb_writeback		fat_file_fsync
+blk_start_plug(&plug)
+for (;;) {
+  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
+  iter i:
+    progress = __writeback_inodes_wb(wb, work)
+    . writeback_sb_inodes // fat's bdev
+    .   __writeback_single_inode
+    .   . generic_writepages
+    .   .   __block_write_full_page
+    .   .   . . 	    __generic_file_fsync
+    .   .   . . 	      sync_inode_metadata
+    .   .   . . 	        writeback_single_inode
+    .   .   . . 		  __writeback_single_inode
+    .   .   . . 		    fat_write_inode
+    .   .   . . 		      __fat_write_inode
+    .   .   . . 		        sync_dirty_buffer	// fat's bdev
+    .   .   . . 			  lock_buffer(bh)	// LOCK B
+    .   .   . . 			    submit_bh
+    .   .   . . 			      blk_mq_get_tag	// LOCK A
+    .   .   . trylock_buffer(bh)  // LOCK B
+    .   .   .   redirty_page_for_writepage
+    .   .   .     wbc->pages_skipped++
+    .   .   --wbc->nr_to_write
+    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
+    .   requeue_inode
+    .     redirty_tail_locked
+    if (progress)    // progress > 0
+      continue;
+  iter i+1:
+      queue_io
+      // similar process with iter i, infinite for-loop !
+}
+blk_finish_plug(&plug)   // flush plug won't be called
+
+Above process triggers a hungtask like:
+[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
+[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
+[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
+2426 flags:0x00004000
+[  399.051556] Call Trace:
+[  399.051570]  __schedule+0x480/0x1050
+[  399.051592]  schedule+0x92/0x1a0
+[  399.051602]  io_schedule+0x22/0x50
+[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
+[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
+[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
+[  399.051674]  __submit_bio+0x1b5/0x2d0
+[  399.051708]  submit_bio_noacct+0x34e/0x720
+[  399.051718]  submit_bio+0x3b/0x150
+[  399.051725]  submit_bh_wbc+0x161/0x230
+[  399.051734]  __sync_dirty_buffer+0xd1/0x420
+[  399.051744]  sync_dirty_buffer+0x17/0x20
+[  399.051750]  __fat_write_inode+0x289/0x310
+[  399.051766]  fat_write_inode+0x2a/0xa0
+[  399.051783]  __writeback_single_inode+0x53c/0x6f0
+[  399.051795]  writeback_single_inode+0x145/0x200
+[  399.051803]  sync_inode_metadata+0x45/0x70
+[  399.051856]  __generic_file_fsync+0xa3/0x150
+[  399.051880]  fat_file_fsync+0x1d/0x80
+[  399.051895]  vfs_fsync_range+0x40/0xb0
+[  399.051929]  __x64_sys_fsync+0x18/0x30
+
+In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
+unplug before cond_resched in writeback_sb_inodes") in function
+'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
+from write_cache_pages().
+
+Fix it by flush plug before next iteration in wb_writeback().
+
+Goto Link to find a reproducer.
+
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
+Cc: stable@vger.kernel.org # v4.3
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+---
+ fs/fs-writeback.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
+index 591fe9cf1659..e524c0a1749c 100644
+--- a/fs/fs-writeback.c
++++ b/fs/fs-writeback.c
+@@ -2036,8 +2036,21 @@ static long wb_writeback(struct bdi_writeback *wb,
+ 		 * mean the overall work is done. So we keep looping as long
+ 		 * as made some progress on cleaning pages or inodes.
+ 		 */
+-		if (progress)
++		if (progress) {
++			/*
++			 * The progress may be false postive in page redirty
++			 * case (which is caused by failing to get buffer head
++			 * lock), which will requeue dirty inodes and start
++			 * next writeback iteration, and other tasks maybe
++			 * stuck for getting tags for new requests. So, flush
++			 * plug to schedule requests holding tags.
++			 *
++			 * The code can be removed after buffer head
++			 * disappering from linux.
++			 */
++			blk_flush_plug(current->plug, false);
+ 			continue;
++		}
+ 		/*
+ 		 * No more inodes for IO, bail
+ 		 */
+-- 
+2.31.1
+

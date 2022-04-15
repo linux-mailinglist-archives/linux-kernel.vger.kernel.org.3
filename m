@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB57502665
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:50:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5D9502669
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351227AbiDOHv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:51:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S1351247AbiDOHy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:54:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232094AbiDOHv5 (ORCPT
+        with ESMTP id S232094AbiDOHyY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:51:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFEF13F6D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:49:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10279B82BA2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B08B9C385AB
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650008965;
-        bh=eUOjRVyTAm6jKWk8U3u/0yQXmGiR3R5Y9bZ0+t0UrtQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Tgeo6+Clc418620BErs3GyqutJjfjRqL0t9r6nifTXUraL7SJSk7tYwedEMXDuXI4
-         zOKU2Ffi7IRo2g6XNcZJl1ZkATSIY3khnW00JjuEGnZmJla4EXIRb3Qq509B2eN+HV
-         VHnD0FN50CVIDCfxCEx+L7uW8JQ2DxpEJZXYKSJT1HLLh43qPdd1kFkmN3b1JOEiIk
-         +yIubk07HJ/u9JqFEznxezUiGrKuOmQ+bvXNjuOXRM3Cw37wz6qHqqTtNzCTOPsIcb
-         XejXR8iBGPbPTEy9IRTFC87D8/ZGKhE3VRhLWfhV2aTfosu9pk/idNlqUhYU59l24d
-         074EhqW0Uq71w==
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-deb9295679so7501751fac.6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:49:25 -0700 (PDT)
-X-Gm-Message-State: AOAM530ONzeWbaRI8ZBArLRq6sWFXnKQz+g27SFFZ1z3jyXlC8qZvIwO
-        m8hDW6ghWxXLNNpvhfgiam4Y/TkL6d6P2uYDLHQ=
-X-Google-Smtp-Source: ABdhPJx0lEA3e7WZ7cSEpjFA0JVG8HISWN9TfswZhcy4XaorGyyF3eX+1q+lZphMFO5POQFTd5DpcRU8cQKweCLTWxI=
-X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
- s37-20020a056870eaa500b000da0b3f2b45mr982816oap.228.1650008964845; Fri, 15
- Apr 2022 00:49:24 -0700 (PDT)
+        Fri, 15 Apr 2022 03:54:24 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E333F972D2
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:51:56 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id f17so13342742ybj.10
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:51:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=vjeWsXtASX/pNdd1ytDVNPBBDW64/hMWWfZY9eBg7LI=;
+        b=xoDv3eqs+rVNnZOMFDMatQSlOO+Oh2JidainIPEyXj7/VxIkfWsCvMx47tlEEQ4cPd
+         wwe05acalMrHzk17kOQKWglkeuawgCZX2z+7XIdvW3nvud7Z7KdOxGJXn2cYw49Fg9Z2
+         1P6AXdSVXzYsFvrJPGTayFqxXdpYLuvu8erf9L4OrIaLv+XXNapVnLYPOy74ayWHpACB
+         jRZxZvNA4/xrXxKK0+trJt8tpZ/rW8gl9Xp9kihrn+05MJ8ZdBEIhO/wCOxejkHL5njL
+         gwkdiSZ/59TUysp7LT7YOqybcyDEepPMrc2ejk0rdyDcmQp6TkFqV3wdgbJB7iPijVlN
+         5a3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=vjeWsXtASX/pNdd1ytDVNPBBDW64/hMWWfZY9eBg7LI=;
+        b=ccRrBnuhY3plhC5U8zBNPd5IE+PMFx91C4lWiuRE0Ee+Fq3x796v3ZK/7hirpWqELg
+         z7yp6h9Azew9jsYeTmJ5fwHYoSsWl38CKUFh5aEHOJUuhDBEdfuRRwyNbCe0Cqngr5Fh
+         N2S+oQKXENNM0f5p5+6dUu7rbVL6hkUX1BOLHuBv7En1JpPDbLV+UuCUx0+wEqhCVyQD
+         KXjObGmTHDfPa7aKNzAi938gcUBquQa1V4sM/bHiTL/GSriF6rsHXHqatawzMWRMSy/9
+         y7AvoKiwLQjh+iz4rMOTFeDNJZyXl147UZ2/r8L903hd4ByJwBynZMFexTb+ZL0bc+li
+         FC5A==
+X-Gm-Message-State: AOAM531VD1Au2PU6EZyydJpX5HvI8ZmRdYmCGf8XqhBHDA39+hOaQ3pc
+        h9tIYv3m35SvK/RhaASP1QbgyEEjmbts2YAS9Ezhzw==
+X-Google-Smtp-Source: ABdhPJwu6CpPPMo6+Thi32FKkTi3JSvcjedkwLD2X/1tKpILNAtz5S5HDkNGACs1TaTeyx0s6MCzJNY8nDCpgBhYNdU=
+X-Received: by 2002:a25:32c3:0:b0:641:4d40:3065 with SMTP id
+ y186-20020a2532c3000000b006414d403065mr4412521yby.403.1650009115424; Fri, 15
+ Apr 2022 00:51:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <Yk+rKWEcc9rO+A25@gondor.apana.org.au> <Yk/6ts5sVDMDpKj3@arm.com>
- <Yk/8QExHlggU8KgC@gondor.apana.org.au> <YlVHSvkyUBXZPUr2@arm.com>
- <YlVJKjXkcHqkwyt4@gondor.apana.org.au> <YlVOTsaTVkBOxthG@arm.com>
- <YlVSBuEqMt2S1Gi6@gondor.apana.org.au> <YlVxGAHHD/j6lW3c@arm.com>
- <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
- <YlaOIbSA7B/G9222@arm.com> <YlkV7NtatO7KFusX@gondor.apana.org.au>
-In-Reply-To: <YlkV7NtatO7KFusX@gondor.apana.org.au>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 15 Apr 2022 09:49:12 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
-Message-ID: <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
+References: <20220413041627.41521-1-zhouchengming@bytedance.com>
+ <xm26h76wvql9.fsf@bsegall-linux.svl.corp.google.com> <14737e0f-3d33-125b-57cc-966de00430be@bytedance.com>
+In-Reply-To: <14737e0f-3d33-125b-57cc-966de00430be@bytedance.com>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Fri, 15 Apr 2022 09:51:44 +0200
+Message-ID: <CAKfTPtBWXyamX0jFSvgP3VnZacd5SNb_Yg9jAq1y0koHwr7DxQ@mail.gmail.com>
+Subject: Re: [External] Re: [PATCH] sched/fair: update tg->load_avg and
+ se->load in throttle_cfs_rq()
+To:     Chengming Zhou <zhouchengming@bytedance.com>
+Cc:     Benjamin Segall <bsegall@google.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
+        bristot@redhat.com, linux-kernel@vger.kernel.org,
+        duanxiongchun@bytedance.com, songmuchun@bytedance.com,
+        zhengqi.arch@bytedance.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,37 +72,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 at 08:51, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+On Fri, 15 Apr 2022 at 07:42, Chengming Zhou
+<zhouchengming@bytedance.com> wrote:
 >
-> On Wed, Apr 13, 2022 at 09:47:29AM +0100, Catalin Marinas wrote:
+> On 2022/4/14 01:30, Benjamin Segall wrote:
+> > Chengming Zhou <zhouchengming@bytedance.com> writes:
 > >
-> > With my series, there is no change to the value of CRYPTO_MINALIGN for
-> > arm64 or any other architecture, so point 3 is unaffected. The series
-> > does change the kmalloc() alignment and that may be smaller than
-> > CRYPTO_MINALIGN but neither of points 1 or 2 above are affected since
-> > (a) we still have a sufficiently large ARCH_KMALLOC_MINALIGN of 64 and
-> > (b) the kmalloc'ed buffers are safe for non-coherent DMA.
+> >> We use update_load_avg(cfs_rq, se, 0) in throttle_cfs_rq(), so the
+> >> cfs_rq->tg_load_avg_contrib and task_group->load_avg won't be updated
+> >> even when the cfs_rq's load_avg has changed.
+> >>
+> >> And we also don't call update_cfs_group(se), so the se->load won't
+> >> be updated too.
+> >>
+> >> Change to use update_load_avg(cfs_rq, se, UPDATE_TG) and add
+> >> update_cfs_group(se) in throttle_cfs_rq(), like we do in
+> >> dequeue_task_fair().
 > >
-> > Herbert, Ard, if I missed anything please let me know but based on my
-> > understanding, this series is safe for the crypto code.
->
-> Sorry, but you can't change CRYPTO_MINALIGN to a value greater
-> than the minimum alignment returned by kmalloc.  That simply
-> doesn't work.  There is no magic in the Crypto API that makes
-> this work.
->
+> > Hmm, this does look more correct; Vincent, was having this not do
+> > UPDATE_TG deliberate, or an accident that we all missed when checking?
 
-I'm not sure I understand what would go wrong if that assumption no
-longer holds, but if CRYPTO_MINALIGN needs to remain equal to
-ARCH_KMALLOC_MINALIGN, let's at least decouple it from
-ARCH_DMA_MINALIGN, as I do in my series. As I pointed out before,
-ARCH_DMA_MINALIGN has nothing to do with DMA addressing capabilities
-of individual masters, it is simply a worst case cacheline size that
-needs to be taken into account to avoid corruption when doing cache
-invalidation for non-cache coherent inbound DMA.
+The cost of UPDATE_TG/update_tg_load_avg() is not free and the parent
+cfs->load_avg should not change because of the throttling but only the
+cfs->weight so I don't see a real benefit of UPDATE_TG.
 
-I'll rename the flag I proposed from CRYPTO_ALG_NEED_DMA_ALIGNMENT to
-CRYPTO_ALG_NEED_DMA_PADDING to make this clearer, and given that only
-a few drivers should be relying on DMA to write into request/TFM
-context structures, hopefully we can fix those to stop doing that, and
-get rid of this flag again entirely.
+Chengming,
+have you faced an issue or this change is based on code review ?
+
+> >
+> > It looks like the unthrottle_cfs_rq side got UPDATE_TG added later in
+> > the two-loops pass, but not the throttle_cfs_rq side.
+>
+> Yes, UPDATE_TG was added in unthrottle_cfs_rq() in commit 39f23ce07b93
+> ("sched/fair: Fix unthrottle_cfs_rq() for leaf_cfs_rq list").
+>
+> >
+> > Also unthrottle_cfs_rq I'm guessing could still use update_cfs_group(se)
+>
+> It looks like we should also add update_cfs_group(se) in unthrottle_cfs_rq().
+>
+> Thanks.
+>
+> >
+> >
+> >>
+> >> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> >> ---
+> >>  kernel/sched/fair.c | 3 ++-
+> >>  1 file changed, 2 insertions(+), 1 deletion(-)
+> >>
+> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> >> index d4bd299d67ab..b37dc1db7be7 100644
+> >> --- a/kernel/sched/fair.c
+> >> +++ b/kernel/sched/fair.c
+> >> @@ -4936,8 +4936,9 @@ static bool throttle_cfs_rq(struct cfs_rq *cfs_rq)
+> >>              if (!se->on_rq)
+> >>                      goto done;
+> >>
+> >> -            update_load_avg(qcfs_rq, se, 0);
+> >> +            update_load_avg(qcfs_rq, se, UPDATE_TG);
+> >>              se_update_runnable(se);
+> >> +            update_cfs_group(se);
+> >>
+> >>              if (cfs_rq_is_idle(group_cfs_rq(se)))
+> >>                      idle_task_delta = cfs_rq->h_nr_running;

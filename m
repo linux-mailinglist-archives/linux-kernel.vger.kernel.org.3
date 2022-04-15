@@ -2,225 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9FF6502D5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:58:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60A64502D38
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:41:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355159AbiDOQAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39484 "EHLO
+        id S1349281AbiDOPnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349443AbiDOQAq (ORCPT
+        with ESMTP id S244491AbiDOPnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:00:46 -0400
-Received: from 1.mo560.mail-out.ovh.net (1.mo560.mail-out.ovh.net [46.105.63.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEDB99687
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:58:16 -0700 (PDT)
-Received: from player788.ha.ovh.net (unknown [10.109.138.183])
-        by mo560.mail-out.ovh.net (Postfix) with ESMTP id 2F3C4250FB
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 15:39:05 +0000 (UTC)
-Received: from sk2.org (82-65-25-201.subs.proxad.net [82.65.25.201])
-        (Authenticated sender: steve@sk2.org)
-        by player788.ha.ovh.net (Postfix) with ESMTPSA id D0F4E2986708D;
-        Fri, 15 Apr 2022 15:38:59 +0000 (UTC)
-Authentication-Results: garm.ovh; auth=pass (GARM-100R003353660f6-60a8-46f7-9e89-0886f7461401,
-                    77125C2C2681624F8512B69FC7A1C9B53E6602B4) smtp.auth=steve@sk2.org
-X-OVh-ClientIp: 82.65.25.201
-From:   Stephen Kitt <steve@sk2.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Cc:     Wolfram Sang <wsa@kernel.org>, linux-kernel@vger.kernel.org,
-        Stephen Kitt <steve@sk2.org>
-Subject: [PATCH 6/6] ASoC: tlv320*: use i2c_match_id and simple i2c probe
-Date:   Fri, 15 Apr 2022 17:38:17 +0200
-Message-Id: <20220415153817.141364-7-steve@sk2.org>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220415153817.141364-1-steve@sk2.org>
-References: <20220415153817.141364-1-steve@sk2.org>
+        Fri, 15 Apr 2022 11:43:14 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B5392338;
+        Fri, 15 Apr 2022 08:40:46 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id z33so15077894ybh.5;
+        Fri, 15 Apr 2022 08:40:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=siQwI8deKdhHuH3vRXoSE7cu7PIu6L4/ZKF1nngalP8=;
+        b=lJted+6nzCX/TmPSEV27OEVQ+FB0znDWFH+ESkGqvymGUsFAlNeIsiY8r8n7/u7iTf
+         klMFOUQPp+GZaIgziXQxVBZ20AY3gwikjNLsskuhKsRIAtUFrmJKd87/AnPa3WjA9eGS
+         k+g0muoLaKKNtcffZ6rusJ0Z+E5gDGNv3qz3Tfq2aJ5LEv+Xp5TYQPKdtlgedJ1Bae+t
+         FRovKjOFdfYqmTFLviU8dvACxA4hMDjI0MIQmQHbdnjeajUXw0LyP/jtL8iQ/nrpGtlE
+         OqPvwzRkH+YTaO3AhxHA+SR73Vi/v1Rl2C6DOwcZMNUbiK+HgcNz3HjeWlmn3FZTB518
+         tC4Q==
+X-Gm-Message-State: AOAM532MJ4X+SVM6efcQapXoJ4B4fO0YO00+v2X2Uw2Tx4hP7JNtLtD2
+        ZTujW+wRu6jWrrbfHcEMmjGAy4nTn0SMs9tml8c=
+X-Google-Smtp-Source: ABdhPJxW2Py97UUCGXi4mm+J3kzUaSrm2VZ814zQbxslS3B6faAjoAZXHccBUUiOJ56uqCFyhUQzMtJDS6hFu4QYUsI=
+X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
+ x27-20020a25ac9b000000b006413c32bee7mr5453873ybi.633.1650037245392; Fri, 15
+ Apr 2022 08:40:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 10491416809413314182
-X-VR-SPAMSTATE: OK
-X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvvddrudelhedgleefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefuthgvphhhvghnucfmihhtthcuoehsthgvvhgvsehskhdvrdhorhhgqeenucggtffrrghtthgvrhhnpeejleelvdefieeiuddtfeevkeegueehkeekvdffgedvhedugeekgfejjeekgfeugeenucfkpheptddrtddrtddrtddpkedvrdeihedrvdehrddvtddunecuvehluhhsthgvrhfuihiivgepvdenucfrrghrrghmpehmohguvgepshhmthhpohhuthdphhgvlhhopehplhgrhigvrhejkeekrdhhrgdrohhvhhdrnhgvthdpihhnvghtpedtrddtrddtrddtpdhmrghilhhfrhhomhepshhtvghvvgesshhkvddrohhrghdpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220408184844.22829-1-andriy.shevchenko@linux.intel.com>
+ <20220408184844.22829-4-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0jnyg6n-1QRmVg1tjzu3szsG3DYqYTXAbobbKwkFhTreg@mail.gmail.com>
+ <YlcUMNe5gDsEca4f@smile.fi.intel.com> <YlcVFRQ9wJIH+sjI@smile.fi.intel.com>
+ <YldE6L7MbgS0NXQY@paasikivi.fi.intel.com> <YlgdGb/vKfdCXXx1@smile.fi.intel.com>
+In-Reply-To: <YlgdGb/vKfdCXXx1@smile.fi.intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 15 Apr 2022 17:40:34 +0200
+Message-ID: <CAJZ5v0gHROpQqWXOh6fZo4k-=1_w0x9=e0fQBvU4TrShwRFiFA@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] device property: Constify fwnode_handle_get()
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Sakari Ailus <sakari.ailus@linux.intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Len Brown <lenb@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As part of the ongoing i2c transition to the simple probe
-("probe_new"), this patch uses i2c_match_id to retrieve the
-driver_data for the probed device. The id parameter is thus no longer
-necessary and the simple probe can be used instead.
+On Thu, Apr 14, 2022 at 3:09 PM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Thu, Apr 14, 2022 at 12:47:20AM +0300, Sakari Ailus wrote:
+> > On Wed, Apr 13, 2022 at 09:23:17PM +0300, Andy Shevchenko wrote:
+> > > On Wed, Apr 13, 2022 at 09:19:28PM +0300, Andy Shevchenko wrote:
+> > > > On Wed, Apr 13, 2022 at 08:10:22PM +0200, Rafael J. Wysocki wrote:
+> > > > > On Fri, Apr 8, 2022 at 8:49 PM Andy Shevchenko
+> > > > > <andriy.shevchenko@linux.intel.com> wrote:
+>
+> ...
+>
+> > > > > > -struct fwnode_handle *fwnode_handle_get(struct fwnode_handle *fwnode)
+> > > > > > +struct fwnode_handle *fwnode_handle_get(const struct fwnode_handle *fwnode)
+> > > > > >  {
+> > > >
+> > > > > >         if (!fwnode_has_op(fwnode, get))
+> > > > > >                 return fwnode;
+> > > >
+> > > > ^^^^, so it needs a casting, but then we have to comment why is so.
+> > >
+> > > Note, it means that the fwnode parameter either invalid or has no given option.
+> > > It's not a problem to drop casting in the first case, but the second one should
+> > > be justified and Sakari wants to be sure that the initial container is not
+> > > const, which seems can't be achieved even with the original code.
+> >
+> > I wonder if I'm missing something. The fwnode argument originally was not
+> > const here.
+>
+> Yes, and our discussion went to the direction of what const qualifier implies
+> here. I assume that the const means that we do not modify the fwnode object,
+> while its container is another story which we have no influence on. You, if
+> I read your messages correctly, insisting that const here implies that the
+> container object is const as well.
+>
+> Reading current implementation I see now, that with children APIs we have
+> two pointers passed, while with parent APIs only a single one. In children
+> API due to above is easy to use const qualifier for the first argument.
+> Parent APIs missed that and hence have this problem that we can't constify
+> their parameters.
+>
+> to_of_node() expects const parameter while returns non-const container.
+> Is it a subtle issue there? (I believe it should be consistent then)
 
-In the context of an i2c probe, i2c_match_id with the module id table
-and the probed client never returns null, so removing the null check
-on the i2c_device_id pointer is safe.
+This is fine AFAICS.
 
-The i2c id tables are moved up before the probe function, as
-suggested by Wolfram Sang, except where the existing code already had
-a declaration for the of_device_id table.
+The const parameter means that to_of_node() will not update the memory
+pointed to by it, which is correct.
 
-Signed-off-by: Stephen Kitt <steve@sk2.org>
----
- sound/soc/codecs/tlv320adc3xxx.c     | 21 +++++++++---------
- sound/soc/codecs/tlv320aic31xx.c     | 32 ++++++++++++++--------------
- sound/soc/codecs/tlv320aic32x4-i2c.c | 11 ++++++----
- 3 files changed, 34 insertions(+), 30 deletions(-)
+The value returned by it may be used by its caller in whatever way
+they like, because the caller has no obligation to preserve the memory
+pointed to by it, unless they've also received that pointer with the
+const qualifier, but then they need to know how it is related to the
+to_of_node() return value and what to do with it.
 
-diff --git a/sound/soc/codecs/tlv320adc3xxx.c b/sound/soc/codecs/tlv320adc3xxx.c
-index ae18982ac310..a5e9f80cfa32 100644
---- a/sound/soc/codecs/tlv320adc3xxx.c
-+++ b/sound/soc/codecs/tlv320adc3xxx.c
-@@ -1337,11 +1337,18 @@ static const struct snd_soc_component_driver soc_component_dev_adc3xxx = {
- 	.num_dapm_routes	= ARRAY_SIZE(adc3xxx_intercon),
- };
- 
--static int adc3xxx_i2c_probe(struct i2c_client *i2c,
--			     const struct i2c_device_id *id)
-+static const struct i2c_device_id adc3xxx_i2c_id[] = {
-+	{ "tlv320adc3001", ADC3001 },
-+	{ "tlv320adc3101", ADC3101 },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(i2c, adc3xxx_i2c_id);
-+
-+static int adc3xxx_i2c_probe(struct i2c_client *i2c)
- {
- 	struct device *dev = &i2c->dev;
- 	struct adc3xxx *adc3xxx = NULL;
-+	const struct i2c_device_id *id;
- 	int ret;
- 
- 	adc3xxx = devm_kzalloc(dev, sizeof(struct adc3xxx), GFP_KERNEL);
-@@ -1394,6 +1401,7 @@ static int adc3xxx_i2c_probe(struct i2c_client *i2c,
- 
- 	i2c_set_clientdata(i2c, adc3xxx);
- 
-+	id = i2c_match_id(adc3xxx_i2c_id, i2c);
- 	adc3xxx->type = id->driver_data;
- 
- 	/* Reset codec chip */
-@@ -1436,19 +1444,12 @@ static const struct of_device_id tlv320adc3xxx_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, tlv320adc3xxx_of_match);
- 
--static const struct i2c_device_id adc3xxx_i2c_id[] = {
--	{ "tlv320adc3001", ADC3001 },
--	{ "tlv320adc3101", ADC3101 },
--	{}
--};
--MODULE_DEVICE_TABLE(i2c, adc3xxx_i2c_id);
--
- static struct i2c_driver adc3xxx_i2c_driver = {
- 	.driver = {
- 		   .name = "tlv320adc3xxx-codec",
- 		   .of_match_table = tlv320adc3xxx_of_match,
- 		  },
--	.probe = adc3xxx_i2c_probe,
-+	.probe_new = adc3xxx_i2c_probe,
- 	.remove = adc3xxx_i2c_remove,
- 	.id_table = adc3xxx_i2c_id,
- };
-diff --git a/sound/soc/codecs/tlv320aic31xx.c b/sound/soc/codecs/tlv320aic31xx.c
-index 8331dc26bcd2..b2e59581c17a 100644
---- a/sound/soc/codecs/tlv320aic31xx.c
-+++ b/sound/soc/codecs/tlv320aic31xx.c
-@@ -1628,11 +1628,24 @@ static void aic31xx_configure_ocmv(struct aic31xx_priv *priv)
- 	}
- }
- 
--static int aic31xx_i2c_probe(struct i2c_client *i2c,
--			     const struct i2c_device_id *id)
-+static const struct i2c_device_id aic31xx_i2c_id[] = {
-+	{ "tlv320aic310x", AIC3100 },
-+	{ "tlv320aic311x", AIC3110 },
-+	{ "tlv320aic3100", AIC3100 },
-+	{ "tlv320aic3110", AIC3110 },
-+	{ "tlv320aic3120", AIC3120 },
-+	{ "tlv320aic3111", AIC3111 },
-+	{ "tlv320dac3100", DAC3100 },
-+	{ "tlv320dac3101", DAC3101 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, aic31xx_i2c_id);
-+
-+static int aic31xx_i2c_probe(struct i2c_client *i2c)
- {
- 	struct aic31xx_priv *aic31xx;
- 	unsigned int micbias_value = MICBIAS_2_0V;
-+	const struct i2c_device_id *id = i2c_match_id(aic31xx_i2c_id, i2c);
- 	int i, ret;
- 
- 	dev_dbg(&i2c->dev, "## %s: %s codec_type = %d\n", __func__,
-@@ -1729,26 +1742,13 @@ static int aic31xx_i2c_probe(struct i2c_client *i2c,
- 				ARRAY_SIZE(aic31xx_dai_driver));
- }
- 
--static const struct i2c_device_id aic31xx_i2c_id[] = {
--	{ "tlv320aic310x", AIC3100 },
--	{ "tlv320aic311x", AIC3110 },
--	{ "tlv320aic3100", AIC3100 },
--	{ "tlv320aic3110", AIC3110 },
--	{ "tlv320aic3120", AIC3120 },
--	{ "tlv320aic3111", AIC3111 },
--	{ "tlv320dac3100", DAC3100 },
--	{ "tlv320dac3101", DAC3101 },
--	{ }
--};
--MODULE_DEVICE_TABLE(i2c, aic31xx_i2c_id);
--
- static struct i2c_driver aic31xx_i2c_driver = {
- 	.driver = {
- 		.name	= "tlv320aic31xx-codec",
- 		.of_match_table = of_match_ptr(tlv320aic31xx_of_match),
- 		.acpi_match_table = ACPI_PTR(aic31xx_acpi_match),
- 	},
--	.probe		= aic31xx_i2c_probe,
-+	.probe_new	= aic31xx_i2c_probe,
- 	.id_table	= aic31xx_i2c_id,
- };
- module_i2c_driver(aic31xx_i2c_driver);
-diff --git a/sound/soc/codecs/tlv320aic32x4-i2c.c b/sound/soc/codecs/tlv320aic32x4-i2c.c
-index ed70e3d9baf2..0645239901b1 100644
---- a/sound/soc/codecs/tlv320aic32x4-i2c.c
-+++ b/sound/soc/codecs/tlv320aic32x4-i2c.c
-@@ -17,9 +17,9 @@
- #include "tlv320aic32x4.h"
- 
- static const struct of_device_id aic32x4_of_id[];
-+static const struct i2c_device_id aic32x4_i2c_id[];
- 
--static int aic32x4_i2c_probe(struct i2c_client *i2c,
--			     const struct i2c_device_id *id)
-+static int aic32x4_i2c_probe(struct i2c_client *i2c)
- {
- 	struct regmap *regmap;
- 	struct regmap_config config;
-@@ -35,7 +35,10 @@ static int aic32x4_i2c_probe(struct i2c_client *i2c,
- 
- 		oid = of_match_node(aic32x4_of_id, i2c->dev.of_node);
- 		dev_set_drvdata(&i2c->dev, (void *)oid->data);
--	} else if (id) {
-+	} else {
-+		const struct i2c_device_id *id;
-+
-+		id = i2c_match_id(aic32x4_i2c_id, i2c);
- 		dev_set_drvdata(&i2c->dev, (void *)id->driver_data);
- 	}
- 
-@@ -70,7 +73,7 @@ static struct i2c_driver aic32x4_i2c_driver = {
- 		.name = "tlv320aic32x4",
- 		.of_match_table = aic32x4_of_id,
- 	},
--	.probe =    aic32x4_i2c_probe,
-+	.probe_new = aic32x4_i2c_probe,
- 	.remove =   aic32x4_i2c_remove,
- 	.id_table = aic32x4_i2c_id,
- };
--- 
-2.27.0
+IOW, to_of_node() has no information on its caller's obligations with
+respect to the memory pointed to by its argument, so it is OK for it
+to return a non-const result.  Moreover, if it had done otherwise, it
+might have created an obligation for the caller that didn't exist
+before.
 
+> This patch and the followed one can be moved without understanding why
+> we need the non-const parameter there.
+
+I'm not sure what you mean here, sorry.

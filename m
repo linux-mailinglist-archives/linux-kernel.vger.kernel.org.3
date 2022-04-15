@@ -2,154 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D489502860
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83027502868
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:36:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352354AbiDOKgE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:36:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58552 "EHLO
+        id S1352362AbiDOKjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234985AbiDOKgB (ORCPT
+        with ESMTP id S238551AbiDOKjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:36:01 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF7FBB937;
-        Fri, 15 Apr 2022 03:33:33 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id s14-20020a17090a880e00b001caaf6d3dd1so11504891pjn.3;
-        Fri, 15 Apr 2022 03:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ezEtL5bvt05tXHZVD12zoN40Q/XitW4u7m2uAKoV0Ig=;
-        b=kvV03nNeNBLEM4a3thFBKByQD9lbBfbWEyTVDGlvZOMz7uMRhjBsRIkwDjkRNg7y3s
-         ulov+dkpcFkGZSz/HuMmvHhjyUzCDtORt38gazYmllRIaB4KtHL0uGfhv6D4RTxZAdB6
-         gf9Bj3KS5BndKxExKiIVM8d6h4n5mWfiO10ES2x3QWvqY4YOKTX8o/UwAg3edGlusvWW
-         UezduJdO7Sqyj7GWIQbF2aUrO6fIlBEuwQiDkUWWxOAB3vFroagnSzxB7vM3fGZgpslF
-         ypD7XLafhFhQkuaY56YlVkEjndLWx01xxr1D3UdSvA68HauIIVs3QOB1HVgSSlNJhDDd
-         iS/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ezEtL5bvt05tXHZVD12zoN40Q/XitW4u7m2uAKoV0Ig=;
-        b=u2/VWpQiHxh35B6YcUEGkZGFifb2JFpVXlICvQTFQpS+8C12Jpw+xzwTs/Xw6n3spZ
-         BLgW72biznW4uMk6oTiEMWn3PO4P6mSBy++OcDHqL8pe02NRPxPYbDwqJWrsCbn+5SQn
-         bHJNuk1zVIVBPwkGIAnrCG0H/thxv615QQQbLkinQj/5fIGIeK3QyxOIxUe2zAxER5mz
-         MiCryVnZXFZzSh3E6GpTyyHkrUny6D4Sq0BKNxlLcFpAp9MVOzoc3r+mWAnzCplJEEYj
-         Gb+FEAzagkCew6XTwzm5wDY7ipz3BPTPg8MdyrGbyM57YJcZvVp5X+0HxFFfbKl5N+OU
-         kHkg==
-X-Gm-Message-State: AOAM532wNEvauahmRnijSOz3K60HhLAwMOk6VadKEkGgEV/FapnqS2oc
-        byUbYg489PcwmCBCBrWEYtty7dyu7ic=
-X-Google-Smtp-Source: ABdhPJzpdX+fbMCDNeOmyjII2ZtBj+iOKzhgPwEeJIcOpajiZN8hwIjofXqoV0EydOlumprf19F1bA==
-X-Received: by 2002:a17:90a:9109:b0:1cb:a814:8947 with SMTP id k9-20020a17090a910900b001cba8148947mr3442090pjo.52.1650018813248;
-        Fri, 15 Apr 2022 03:33:33 -0700 (PDT)
-Received: from localhost ([47.251.4.198])
-        by smtp.gmail.com with ESMTPSA id pi2-20020a17090b1e4200b001c7b15928e0sm8759334pjb.23.2022.04.15.03.33.32
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Fri, 15 Apr 2022 03:33:32 -0700 (PDT)
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Avi Kivity <avi@redhat.com>, kvm@vger.kernel.org
-Subject: [PATCH] kvm: x86/svm/nested: Cache PDPTEs for nested NPT in PAE paging mode
-Date:   Fri, 15 Apr 2022 18:34:14 +0800
-Message-Id: <20220415103414.86555-1-jiangshanlai@gmail.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Fri, 15 Apr 2022 06:39:07 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861566BDCF
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650018999; x=1681554999;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=pTU6WGQxA5wtymtGv3FJfm0xuishAo5Rj/AK64c1ahs=;
+  b=ecQIujYogBazBeafXe62YDjIgP9YH+/4tS9EcbJUPtI9VhTj/Ph43H/U
+   3/f9uS0YVNFVs0/wqQtQR8agnajdGZ9Rl9p7l6d/Dxjo/d5hajjbidswv
+   JTaKJr4USUWhgOAUa1IWNiAlUieAGeuSz3v8/SchKo2J157vGz3f6nQc2
+   DKQYgzzRj+GPtRNrN+vX9mXFbqyz8W8V3o82gXOfFvV6Z3jDW7Dws8YZb
+   ZP+pEjWrHSuzda8YnsjEoFi3CMLV8IMc+3RB4O9z70gJORnINMn1HDj3b
+   bUwW2T4GimTBQmHpWkFelHd8LELhmeIChSRAfJ/XZM09qymRoNaQZh1tJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="326038699"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="326038699"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 03:36:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="591595964"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Apr 2022 03:36:36 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfJJc-0001rF-87;
+        Fri, 15 Apr 2022 10:36:36 +0000
+Date:   Fri, 15 Apr 2022 18:36:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guo Ren <guoren@linux.alibaba.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [ammarfaizi2-block:palmer/linux/riscv-compat 20/20]
+ arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for
+ function 'compat_setup_rt_frame'
+Message-ID: <202204151803.TXKhZhma-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lai Jiangshan <jiangshan.ljs@antgroup.com>
+tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/riscv-compat
+head:   d84810b12dce65023c222aea22d30e2b22e3016a
+commit: d84810b12dce65023c222aea22d30e2b22e3016a [20/20] riscv: compat: Add COMPAT Kbuild skeletal support
+config: riscv-randconfig-r015-20220414 (https://download.01.org/0day-ci/archive/20220415/202204151803.TXKhZhma-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 6b7e6ea489f6dd45a9b0da9ac20871560917b9b0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/d84810b12dce65023c222aea22d30e2b22e3016a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block palmer/linux/riscv-compat
+        git checkout d84810b12dce65023c222aea22d30e2b22e3016a
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/
 
-When NPT enabled L1 is PAE paging, vcpu->arch.mmu->get_pdptrs() which
-is nested_svm_get_tdp_pdptr() reads the guest NPT's PDPTE from memroy
-unconditionally for each call.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-The guest PAE root page is not write-protected.
+All warnings (new ones prefixed by >>):
 
-The mmu->get_pdptrs() in FNAME(walk_addr_generic) might get different
-values every time or it is different from the return value of
-mmu->get_pdptrs() in mmu_alloc_shadow_roots().
+>> arch/riscv/kernel/compat_signal.c:198:5: warning: no previous prototype for function 'compat_setup_rt_frame' [-Wmissing-prototypes]
+   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+       ^
+   arch/riscv/kernel/compat_signal.c:198:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+   ^
+   static 
+   1 warning generated.
 
-And it will cause FNAME(fetch) installs the spte in a wrong sp
-or links a sp to a wrong parent since FNAME(gpte_changed) can't
-check these kind of changes.
 
-Cache the PDPTEs and the problem is resolved.  The guest is responsible
-to info the host if its PAE root page is updated which will cause
-nested vmexit and the host updates the cache when next nested run.
+vim +/compat_setup_rt_frame +198 arch/riscv/kernel/compat_signal.c
 
-The commit e4e517b4be01 ("KVM: MMU: Do not unconditionally read PDPTE
-from guest memory") fixs the same problem for non-nested case.
+7b07d6662e1218 Guo Ren 2022-04-05  197  
+7b07d6662e1218 Guo Ren 2022-04-05 @198  int compat_setup_rt_frame(struct ksignal *ksig, sigset_t *set,
+7b07d6662e1218 Guo Ren 2022-04-05  199  	struct pt_regs *regs)
+7b07d6662e1218 Guo Ren 2022-04-05  200  {
+7b07d6662e1218 Guo Ren 2022-04-05  201  	struct compat_rt_sigframe __user *frame;
+7b07d6662e1218 Guo Ren 2022-04-05  202  	long err = 0;
+7b07d6662e1218 Guo Ren 2022-04-05  203  
+7b07d6662e1218 Guo Ren 2022-04-05  204  	frame = compat_get_sigframe(ksig, regs, sizeof(*frame));
+7b07d6662e1218 Guo Ren 2022-04-05  205  	if (!access_ok(frame, sizeof(*frame)))
+7b07d6662e1218 Guo Ren 2022-04-05  206  		return -EFAULT;
+7b07d6662e1218 Guo Ren 2022-04-05  207  
+7b07d6662e1218 Guo Ren 2022-04-05  208  	err |= copy_siginfo_to_user32(&frame->info, &ksig->info);
+7b07d6662e1218 Guo Ren 2022-04-05  209  
+7b07d6662e1218 Guo Ren 2022-04-05  210  	/* Create the ucontext. */
+7b07d6662e1218 Guo Ren 2022-04-05  211  	err |= __put_user(0, &frame->uc.uc_flags);
+7b07d6662e1218 Guo Ren 2022-04-05  212  	err |= __put_user(NULL, &frame->uc.uc_link);
+7b07d6662e1218 Guo Ren 2022-04-05  213  	err |= __compat_save_altstack(&frame->uc.uc_stack, regs->sp);
+7b07d6662e1218 Guo Ren 2022-04-05  214  	err |= compat_setup_sigcontext(frame, regs);
+7b07d6662e1218 Guo Ren 2022-04-05  215  	err |= __copy_to_user(&frame->uc.uc_sigmask, set, sizeof(*set));
+7b07d6662e1218 Guo Ren 2022-04-05  216  	if (err)
+7b07d6662e1218 Guo Ren 2022-04-05  217  		return -EFAULT;
+7b07d6662e1218 Guo Ren 2022-04-05  218  
+7b07d6662e1218 Guo Ren 2022-04-05  219  	regs->ra = (unsigned long)COMPAT_VDSO_SYMBOL(
+7b07d6662e1218 Guo Ren 2022-04-05  220  			current->mm->context.vdso, rt_sigreturn);
+7b07d6662e1218 Guo Ren 2022-04-05  221  
+7b07d6662e1218 Guo Ren 2022-04-05  222  	/*
+7b07d6662e1218 Guo Ren 2022-04-05  223  	 * Set up registers for signal handler.
+7b07d6662e1218 Guo Ren 2022-04-05  224  	 * Registers that we don't modify keep the value they had from
+7b07d6662e1218 Guo Ren 2022-04-05  225  	 * user-space at the time we took the signal.
+7b07d6662e1218 Guo Ren 2022-04-05  226  	 * We always pass siginfo and mcontext, regardless of SA_SIGINFO,
+7b07d6662e1218 Guo Ren 2022-04-05  227  	 * since some things rely on this (e.g. glibc's debug/segfault.c).
+7b07d6662e1218 Guo Ren 2022-04-05  228  	 */
+7b07d6662e1218 Guo Ren 2022-04-05  229  	regs->epc = (unsigned long)ksig->ka.sa.sa_handler;
+7b07d6662e1218 Guo Ren 2022-04-05  230  	regs->sp = (unsigned long)frame;
+7b07d6662e1218 Guo Ren 2022-04-05  231  	regs->a0 = ksig->sig;                     /* a0: signal number */
+7b07d6662e1218 Guo Ren 2022-04-05  232  	regs->a1 = (unsigned long)(&frame->info); /* a1: siginfo pointer */
+7b07d6662e1218 Guo Ren 2022-04-05  233  	regs->a2 = (unsigned long)(&frame->uc);   /* a2: ucontext pointer */
+7b07d6662e1218 Guo Ren 2022-04-05  234  
 
-Fixes: e4e517b4be01 ("KVM: MMU: Do not unconditionally read PDPTE from guest memory")
-Signed-off-by: Lai Jiangshan <jiangshan.ljs@antgroup.com>
----
- arch/x86/kvm/svm/nested.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+:::::: The code at line 198 was first introduced by commit
+:::::: 7b07d6662e1218841c2b618ab9a9255440ccee85 riscv: compat: signal: Add rt_frame implementation
 
-diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
-index d736ec6514ca..a34983d2dc07 100644
---- a/arch/x86/kvm/svm/nested.c
-+++ b/arch/x86/kvm/svm/nested.c
-@@ -72,18 +72,22 @@ static void svm_inject_page_fault_nested(struct kvm_vcpu *vcpu, struct x86_excep
-        }
- }
- 
--static u64 nested_svm_get_tdp_pdptr(struct kvm_vcpu *vcpu, int index)
-+static void nested_svm_cache_tdp_pdptrs(struct kvm_vcpu *vcpu)
- {
- 	struct vcpu_svm *svm = to_svm(vcpu);
- 	u64 cr3 = svm->nested.ctl.nested_cr3;
--	u64 pdpte;
-+	u64 *pdptrs = vcpu->arch.mmu->pdptrs;
- 	int ret;
- 
--	ret = kvm_vcpu_read_guest_page(vcpu, gpa_to_gfn(cr3), &pdpte,
--				       offset_in_page(cr3) + index * 8, 8);
-+	ret = kvm_vcpu_read_guest_page(vcpu, gpa_to_gfn(cr3), pdptrs,
-+				       offset_in_page(cr3), 8 * 4);
- 	if (ret)
--		return 0;
--	return pdpte;
-+		memset(pdptrs, 0, 8 * 4);
-+}
-+
-+static u64 nested_svm_get_tdp_pdptr(struct kvm_vcpu *vcpu, int index)
-+{
-+	return vcpu->arch.mmu->pdptrs[index];
- }
- 
- static unsigned long nested_svm_get_tdp_cr3(struct kvm_vcpu *vcpu)
-@@ -109,6 +113,8 @@ static void nested_svm_init_mmu_context(struct kvm_vcpu *vcpu)
- 	kvm_init_shadow_npt_mmu(vcpu, X86_CR0_PG, svm->vmcb01.ptr->save.cr4,
- 				svm->vmcb01.ptr->save.efer,
- 				svm->nested.ctl.nested_cr3);
-+	if (vcpu->arch.mmu->root_level == PT32E_ROOT_LEVEL)
-+		nested_svm_cache_tdp_pdptrs(vcpu);
- 	vcpu->arch.mmu->get_guest_pgd     = nested_svm_get_tdp_cr3;
- 	vcpu->arch.mmu->get_pdptr         = nested_svm_get_tdp_pdptr;
- 	vcpu->arch.mmu->inject_page_fault = nested_svm_inject_npf_exit;
+:::::: TO: Guo Ren <guoren@linux.alibaba.com>
+:::::: CC: Palmer Dabbelt <palmer@rivosinc.com>
+
 -- 
-2.19.1.6.gb485710b
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

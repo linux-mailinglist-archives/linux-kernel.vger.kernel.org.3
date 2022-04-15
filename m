@@ -2,93 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116F6502C65
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B42502C69
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354887AbiDOPPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
+        id S1354901AbiDOPPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354869AbiDOPPD (ORCPT
+        with ESMTP id S233750AbiDOPPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 11:15:03 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828FCA94D8;
-        Fri, 15 Apr 2022 08:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=G5odVXCmYv7IxL9XjE1lXTsoDOBab8u1hsAiewC6LXU=; b=r2J75mQ8F4AQGg9k+MGpoR0I3D
-        KNYWPoy8LxUbv6rpa5ytd0edhJ/QxThFo8R39jvwhgFP1bMa0C+qUJFPnDfELV8jLJx3UWx3nu5t9
-        UjKFfvScRgHwdig2CbsECNwAjO+ymRCaPbPFLfNFAwzUDlYnxebj49epjmNzF9aofNXk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1nfNcY-00Fz5H-67; Fri, 15 Apr 2022 17:12:26 +0200
-Date:   Fri, 15 Apr 2022 17:12:26 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
- converter
-Message-ID: <YlmLWv4Hsm2uk8pa@lunn.ch>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
- <20220414122250.158113-10-clement.leger@bootlin.com>
- <YlismVi8y3Vf6PZ0@lunn.ch>
- <20220415102453.1b5b3f77@fixe.home>
- <Yll+Tpnwo5410B9H@lunn.ch>
- <20220415163853.683c0b6d@fixe.home>
+        Fri, 15 Apr 2022 11:15:35 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D4E7D110F;
+        Fri, 15 Apr 2022 08:13:07 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id m15-20020a7bca4f000000b0038fdc1394b1so4403247wml.2;
+        Fri, 15 Apr 2022 08:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wzKRJmonvHo0HefAKYqm3SlJuD5FpHDtBNiS1uoGF98=;
+        b=f4PqHt/qqb8cXY75v9eN9mmAf3VeS1rvzxN5xNELUqhhU67folOPqCzA7UuzVnyARJ
+         MF20XshoL9gIhm0HbHjSl1Ecfhex8eiVukrqa7CJMY4K9JgxURYQheFyM80c5zq5AP2P
+         pOjm8tiffxccI/wrYzCXu0nl/u9RrpY1WMUpeVgcub5eUsZVQLn3u9q9GCnmM7I6rECa
+         erCpg0Ak74kM1L6m/PWHuvtKBWS/6pagkWtCQIgTV0CI0EERUBqgHUmXCtJ0+DbqSZxR
+         kEgB4mRHIk0Gw4GcrudD5Nb4Di1qm7RhQUeljTopEzg+q8TAS0jcMk4cVIhg+k5NO+Ut
+         R5XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=wzKRJmonvHo0HefAKYqm3SlJuD5FpHDtBNiS1uoGF98=;
+        b=p1zsnch5vRdgnz9nppr+a0eNcgQYgLewsdTCFoMDv9BfSep6FVEzWLOmoVFUpX2v7R
+         CdGZJFu7YX9HmlzL1V7uH6vewabfC6PAs45L7WFGnV7EP1+r5QfdfUDhSPiJUe4gcO4j
+         1kP0IBnxF2/D6VKmbW8mIg/Yl/HzdkALPhFgz/bfYJGVQwUQJQuvvWCjHIff5rUnGdVN
+         Gnd4yU6tsleBu3GhonmCi3GhiLGM8d9RjAE3fky8JllthpBSPxNNJwRyMkZoTHkhCYlS
+         ORgB8QsbLEbQxenBkftm1mbrx0IYowLT5vz+On9MX3KFS6uhZVTF9a+lRuCcYJdqqV1+
+         Zl4g==
+X-Gm-Message-State: AOAM533/6N4kDZFdTO+V+k5oxYNr9fRlGqUJKwkaX3Q030QvB2XnZQBG
+        3dCoOuu+a+ivJOhvispL7kdkCGRt2shZBg==
+X-Google-Smtp-Source: ABdhPJzYKbTFNbuIUSpN2NK5Mypk30gJoQP7G5liU6aWcR4qfYGxe5ZP0x48SZzGYAFX6eVqJEnaMw==
+X-Received: by 2002:a7b:ce04:0:b0:38c:6c34:9aac with SMTP id m4-20020a7bce04000000b0038c6c349aacmr3692893wmc.142.1650035586068;
+        Fri, 15 Apr 2022 08:13:06 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id k11-20020a5d6d4b000000b0020599079f68sm4228167wri.106.2022.04.15.08.13.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 08:13:05 -0700 (PDT)
+Sender: Paolo Bonzini <paolo.bonzini@gmail.com>
+Message-ID: <051a7d3d-4c0e-dc29-937f-be4fcc2f5eec@redhat.com>
+Date:   Fri, 15 Apr 2022 17:13:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415163853.683c0b6d@fixe.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 098/104] KVM: TDX: Handle TDX PV report fatal error
+ hypercall
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <d1bc7a6123b9b2c233518a5f234df99c3c6f458d.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <d1bc7a6123b9b2c233518a5f234df99c3c6f458d.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Ok, looks like a more flexible way to doing it. Let's go with something
-> like this:
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
 > 
-> renesas,miic-port-connection = <PORTIN_GMAC2>, <MAC2>, <SWITCH_PORTC>,
-> <SWITCH_PORTB>, <SWITCH_PORTA>;
+> Wire up TDX PV report fatal error hypercall to KVM_SYSTEM_EVENT_CRASH KVM
+> exit event.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/tdx.c | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 123d4322da99..4d668a6c7dc9 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -1157,6 +1157,15 @@ static int tdx_emulate_wrmsr(struct kvm_vcpu *vcpu)
+>   	return 1;
+>   }
+>   
+> +static int tdx_report_fatal_error(struct kvm_vcpu *vcpu)
+> +{
+> +	/* Exit to userspace device model for teardown. */
+> +	vcpu->run->exit_reason = KVM_EXIT_SYSTEM_EVENT;
+> +	vcpu->run->system_event.type = KVM_SYSTEM_EVENT_CRASH;
+> +	vcpu->run->system_event.flags = tdvmcall_p1_read(vcpu);
+> +	return 0;
+> +}
 
-Not all combinations are possible. In fact, there is a limited choice
-for each value. So consider getting the yaml tools to help you by
-listing what is valid for each setting. You might need a different
-format than. Also, this format it is not clear what each value refers
-to.
+With the latest SEV changes we have a data[] member.  Please set type 
+instead to KVM_SYSTEM_EVENT_CRASH|KVM_SYSTEM_EVENT_NDATA_VALID and ndata 
+to 1, so that the value of p1 (which will be a0 in the next series) can 
+go in data[0].
 
-renesas,miic-port-connection-mii-conv1 = <PORTIN_GMAC2>;
-renesas,miic-port-connection-mii-conv2 = <MAC2>;
-renesas,miic-port-connection-mii-conv3 = <SWITCH_PORTC>;
-renesas,miic-port-connection-mii-conv4 = <SWITCH_PORTB>;
-renesas,miic-port-connection-mii-conv5 = <SWITCH_PORTA>;
-
-is more sense documenting, and i suspect easier to make the validator
-work for you.
-
-	Andrew
+Paolo

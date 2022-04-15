@@ -2,105 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED805032D1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B875033CA
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356460AbiDOXYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
+        id S1356469AbiDOX1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiDOXYM (ORCPT
+        with ESMTP id S231839AbiDOX07 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:24:12 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E193EAA9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:21:42 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id g34so16685648ybj.1
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:21:42 -0700 (PDT)
+        Fri, 15 Apr 2022 19:26:59 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3C22708
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:24:27 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso94884137b3.11
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:24:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=nuo7iHZ1RNifX3JTO2eCwX7T0jOUxZ1qwp7LLcocIVI=;
-        b=XEBSZwb2Tz6Zmz6ducvRkE4UvXRTLcZOtZX2rRoWnKxpWRJf6ljXu8Vc3NyRkjEjrS
-         VBK0GW3CUTODz59QZq9Oj64X9t8amPvFT8P64/JUpfWeYWRl/kfpPl+//vs4HoW22Bd1
-         TlIg+kPVUfMDJV4qLOHQtkmwBcP0g2B+j6YK5NESXMEfcRMp2Nfd1bjSNL1Ly5wL4oj8
-         8ipcgdXXQ+Q/v67AIaS5Te/hACSNHlJQwMGnaABI2ol2K5et7tKpr44M/7YrS9cdGQxV
-         3OgLqHBHy3PaCa1i4Qa0Y4e3mP27DqaD0rIZK2McBbpKrAY/AIS5qugVGrSd7aVHFK0P
-         jPOw==
+        bh=Cxt2uEcbDsT/cVcss+Oed++7USVk9BRG70PSqUV2sRA=;
+        b=o9JWs2FyVHQ7Re6QVoMehMOzM6wRTq38a1AwTqjPdmACMonccCQgZUIu3hGbqNbJGx
+         wG6Ywd7yrWJXfrT0+MC5+2bGIlqnVT5IHEfmuOTHvVf3hLqCXV4HwsD4O6rPbjnXUjRR
+         85H1+co/bpMt/xuuPrqSMl4Vq6wIMi0oV2WPxV0DWonzWkDVQwCV1gB3W7mm1pQVkmVS
+         6wLhUCv9gVewt3r87ikTO6Kik6eHhGJ8GRUds3XTucwSHGoDk4tmpVJCdHvpEF3etP0m
+         ZHTzPxj9tBWm+We0AMjhwDY/56vmdkPbHw2Us46AGziCJkmE0qntu2e9QCTthSKSy3jw
+         l8Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=nuo7iHZ1RNifX3JTO2eCwX7T0jOUxZ1qwp7LLcocIVI=;
-        b=ziNyD/dLTbrhXRi/3va+0hQAGORJ5hyvJZlhc78NfKfhVOuWTvRvdX2XbqOOJoZwsd
-         9p2tGi1VcGZozUkn9BwkLZwjeADvN+tTGA5JP85R5sa0yHTsdZiSw5xBjmKxQVUWHUho
-         VyZvG26vO7K2qeWHCTesFbPN15ax3V32LtdXyft60Yqu3QZxRPIaL6pOzI5xvs5KeHgU
-         3lQxaR3yv+x01k8X/onAuYR3XYZT9cvKdhbkBmhoZANhIyqNmLNaqB+UzFPtHJ3wNXr4
-         zLUvTraQB6mokiyvFh26+D29KcgobklULisBbY5BWV/VmLA4vgyEdmKpTTNiEKxOsa85
-         LxMA==
-X-Gm-Message-State: AOAM5325Oskjviq5863y0aZiLnq6V/tFdcvIpzJEFwwfrz4yfJtOl0Jg
-        hbrpVl6ds12voa74aZZah+fF+dviK2Awcdi60pEOQg==
-X-Google-Smtp-Source: ABdhPJxjBW3mXMuVLFyhRvmnClhk4vp3fKUtEpPFDSc1AuAHVIn6BHStkQ4Jww+esZZnyxTN+zvadMzQnK6p0Ebp5kM=
-X-Received: by 2002:a05:6902:154b:b0:644:b5e4:aa34 with SMTP id
- r11-20020a056902154b00b00644b5e4aa34mr1414126ybu.126.1650064901749; Fri, 15
- Apr 2022 16:21:41 -0700 (PDT)
+        bh=Cxt2uEcbDsT/cVcss+Oed++7USVk9BRG70PSqUV2sRA=;
+        b=f8cyC83T/933MGLT47NGj5TCvTnwyNerl7i8lp3S/j3NR4TfJwXWclcYZYvNAl2sgl
+         Q8EgkZcTUSlCyBJQN2BajdGg803Lbega0wDpOnnZOtUrux9JV9BJ7Xsfj3J6i5UpKftD
+         nzhwdTuRjzmhz4P5Zw9WplHqGKcCXacJfmAnrkikJXsoVyM0eyOYFC4+bcux/VHaynyD
+         SCCcQ7PPWxKGd3jz8i23DtRgz5yGoO85qVdIq+HuzS+/jcKRwe8u3+ViUWYPVCQRuxiU
+         7x427Sy5LvkM0byaMwxXz/s7MTrDWskMpLybiSrKcB4/eAGmgRkrlth/NTjP3gWeQPVh
+         R5fg==
+X-Gm-Message-State: AOAM532nZ7RBSpJKuKFgPtC7tEmRxtcYgwMJrjkkUZiel0/boxPlqwSq
+        qPPD2RsoqVOaKFx+upm7+PG/j5mcyv75MDDtIFdqIw==
+X-Google-Smtp-Source: ABdhPJymSM8rAJqKJqvQgojVsV7KVaqMaDPb49Py0OCI7oQ+4nknrXkY/Mk29hxHQ9wU+twofcB4rQhyzFE0gK9E3ow=
+X-Received: by 2002:a81:78c9:0:b0:2eb:469b:e788 with SMTP id
+ t192-20020a8178c9000000b002eb469be788mr1158786ywc.34.1650065066420; Fri, 15
+ Apr 2022 16:24:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220409135104.3733193-1-wuyun.abel@bytedance.com>
- <20220409135104.3733193-2-wuyun.abel@bytedance.com> <CABk29NtBL2WovUVcxXW8cF7Nk+UM_AeEJaX_JbQ4Wue-qMvz_w@mail.gmail.com>
- <56ded56d-f7ad-a49f-c19c-8aa40fb33a29@bytedance.com> <CABk29Nu+6vh825SqyNmSJoWBQmEBgCsk6mcEtWLmXCq_T0xUjg@mail.gmail.com>
- <45fdb9f1-ac3e-2b92-9bd9-0f5e5886e2c9@bytedance.com>
-In-Reply-To: <45fdb9f1-ac3e-2b92-9bd9-0f5e5886e2c9@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Fri, 15 Apr 2022 16:21:30 -0700
-Message-ID: <CABk29NtifQV7+kgg_8yLqGHraMAS48BJjmU9WfkJihu-C4c8hw@mail.gmail.com>
-Subject: Re: [RFC v2 1/2] sched/fair: filter out overloaded cpus in SIS
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
+References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
+ <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
+ <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
+ <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
+ <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
+ <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
+ <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
+ <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
+ <CAHk-=whvkRTVBhAamt0kYyp925jk_+g7T0CyPke_FbCWGQ1VvA@mail.gmail.com>
+ <CAOUHufZ4KrjFTYH8wtwMGd9AriZfZtO4GhbiK1SuNbY31VTT9w@mail.gmail.com> <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
+In-Reply-To: <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
+From:   Jesse Barnes <jsbarnes@google.com>
+Date:   Fri, 15 Apr 2022 16:24:14 -0700
+Message-ID: <CAJmaN=mJKAhRjDHbsLrqyK_uvuysx596jEcTwV2fwx4UOe4oow@mail.gmail.com>
+Subject: Re: [page-reclaim] Re: [PATCH v10 08/14] mm: multi-gen LRU: support
+ page table walks
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Justin Forbes <jforbes@fedoraproject.org>,
+        Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Matthew Wilcox <willy@infradead.org>,
         Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Does this check help that much? Given that you added the filter below
-> > to cut out searching overloaded cpus, I would think that the below is
-> > sufficient.
+On Fri, Apr 15, 2022 at 4:04 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> I see a ~10% performance drop in the higher load part of the hackbench
-> and tbench without this check, in which cases system is quite overloaded
-> and idle cpus can hardly exist.
->
+> On Fri, Apr 15, 2022 at 3:58 PM Yu Zhao <yuzhao@google.com> wrote:
 > >
-> > Another use case that would break with the above:
-> >
-> > A few cpus are reserved for a job, so that it always has a couple cpus
-> > dedicated to it. It can run across the entire machine though (no
-> > affinity restriction). If the rest of the machine is very busy, we'd
-> > still want to be able to search for and find the idle reserved cpus
-> > for the job.
+> > BUG_ONs are harmful but problems that trigger them would be
+> > presummingly less penetrating to the user base; on the other hand,
+> > from my experience working with some testers (ordinary users), they
+> > ignore WARN_ON_ONCEs until the kernel crashes.
 >
-> Yes, this could be true if very few cpus are reserved for the job. Along
-> with the previous affinity case, I think the following might help both:
+> I don't understand your argument.
 >
-> static inline bool
-> sched_domain_overloaded(struct sched_domain *sd, int nr_overloaded)
-> {
->         return nr_overloaded == sd->span_weight;
-> }
+> First you say that VM_BUG_ON() is only for VM developers.
 >
-> Besides, I think sched_idle_balance() will work well on this case.
+> Then you say "some testers (ordinary users) ignore WARN_ON_ONCEs until
+> the kernel crashes".
+>
+> So which is it?
+>
+> VM developers, or ordinary users?
+>
+> Honestly, if a VM developer is ignoring a WARN_ON_ONCE() from the VM
+> subsystem, I don't even know what to say.
+>
+> And for ordinary users, a WARN_ON_ONCE() is about a million times
+> better, becasue:
+>
+>  - the machine will hopefully continue working, so they can report the warning
+>
+>  - even when they don't notice them, distros tend to have automated
+> reporting infrastructure
+>
+> That's why I absolutely *DETEST* those stupid BUG_ON() cases - they
+> will often kill the machine with nasty locks held, resulting in a
+> completely undebuggable thing that never gets reported.
+>
+> Yes, you can be careful and only put BUG_ON() in places where recovery
+> is possible. But even then, they have no actual _advantages_ over just
+> a WARN_ON_ONCE.
 
-The change to sched_domain_overloaded SGTM. But note that an async
-load balancing operation such as sched_idle_balance() can't be relied
-on for keeping wakeup latency low if we fail to find an idle cpu to
-wake on (and one exists).
+Generally agreed, and not to belabor this relatively small issue, but in some
+environments like cloud or managed client deployments, a crash can actually
+be preferable so we can get a dump, reboot the machine, and get things going
+again for the application or user, then debug offline.  So having the
+flexibility to
+do that in those situations is helpful.  And there, a full crash dump is better
+than just a log report with the WARN info, since debugging may be easier with
+all the kernel memory.
+
+Jesse

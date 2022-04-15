@@ -2,98 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 539CD502070
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:25:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88B5450207D
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348722AbiDOC2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34212 "EHLO
+        id S1344734AbiDOCb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344697AbiDOC2M (ORCPT
+        with ESMTP id S233911AbiDOCby (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:28:12 -0400
-Received: from out199-1.us.a.mail.aliyun.com (out199-1.us.a.mail.aliyun.com [47.90.199.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35B8685967;
-        Thu, 14 Apr 2022 19:25:44 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=18;SR=0;TI=SMTPD_---0VA5Fc8T_1649989538;
-Received: from 30.240.101.97(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0VA5Fc8T_1649989538)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Fri, 15 Apr 2022 10:25:40 +0800
-Message-ID: <e7a0d0d4-b6ca-6fec-df33-929961f0d43e@linux.alibaba.com>
-Date:   Fri, 15 Apr 2022 10:25:33 +0800
+        Thu, 14 Apr 2022 22:31:54 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D584DDE8F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id be5so6119649plb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=QuJCosJ75hrvgLG8GUZo7EAhJssF6Kh6uJP8UrR80aM=;
+        b=k8qlTK22bUJ+zG5n6SJ1kN9f/vU/hzntumXd/F9Awv/63C55bNuUZaZjeRk4A/pukj
+         ktQh4KPddsUnRe8pCCvgVNYDy5pF1F4GQyxUNpdtsZIIYA5/CBlZ8ZzswdGYvQWxXfdO
+         w/C1fxRu/PiCXnhQ1PPCp4NpEjo0lPrmkjRQApD7f70Ws595aVk8+0LIxlVfRHKN1CbB
+         9Iau8KewiwLn/Diu8DQkEgyW96LDGBjkhdKQdwL41W7pkn5va8QCUBhQ4iwRwLBkuiUw
+         V65oKt8VUiv6eMIC71gatvhDu86N5Q2TnGw8FLGRW8kqtje56cyqUZ5c8l8WNJRFtcnW
+         646Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=QuJCosJ75hrvgLG8GUZo7EAhJssF6Kh6uJP8UrR80aM=;
+        b=ypuRVZzFk8ZhS3LXuckvnNngko9987V0icMGbmHchWxJEMgkHA3bTqLJg77ELxu4Bg
+         AkWGy4X7u8KHBHH354OPVsM3UMb43okXq33ofUF2OKtv99zYHaYGLMVdj0LvzrpabC1z
+         +1Xja+Rj+GGXTy5p0JBtUVBIkHSomV9p72wGbl3nwMBKQr1h+OJipjw670m8yca1FCAp
+         zVmkA0QOrRmbTi5O+XIYn8nKjDN/aFpkQzFc70ngJQzOdxm5fnlMuCLTpyOWViPTLOLM
+         /vkRJmLxl606vNj53z1t6CkpFC06E//VVuYuFyFMIXB4ka8PxY3nWPb66FoHT7mqJ+QQ
+         qrOw==
+X-Gm-Message-State: AOAM530IYaYWrPoAI0XJAsgMFBYPVzm41I/YRwyIogA+KFDM+fg0Bh4F
+        ych8+UaG80a1nsWtfWalpRUrnA==
+X-Google-Smtp-Source: ABdhPJyo6TDFw+/KNXBjSD+rB74L2YUcblRUPk2lwyji0ZFmVGeNLCD5ummE9IKYojEv1G9BJ+alUg==
+X-Received: by 2002:a17:90a:c302:b0:1bd:14ff:15 with SMTP id g2-20020a17090ac30200b001bd14ff0015mr1709389pjt.19.1649989766312;
+        Thu, 14 Apr 2022 19:29:26 -0700 (PDT)
+Received: from [192.168.4.166] (cpe-72-132-29-68.dc.res.rr.com. [72.132.29.68])
+        by smtp.gmail.com with ESMTPSA id w187-20020a6230c4000000b00505cde77826sm1106805pfw.159.2022.04.14.19.29.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Apr 2022 19:29:25 -0700 (PDT)
+Message-ID: <c122ba3e-ef7b-0f70-1972-1bae0ddff651@kernel.dk>
+Date:   Thu, 14 Apr 2022 20:29:24 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.7.0
-Subject: Re: [PATCH] arm64/sme: Add hwcap for Scalable Matrix Extension
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [syzbot] kernel BUG in commit_creds
 Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>,
-        Vincenzo Frascino <Vincenzo.Frascino@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Fuad Tabba <tabba@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Vladimir Murzin <vladimir.murzin@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220414115544.36204-1-tianjia.zhang@linux.alibaba.com>
- <YlgNW0/ji6KlkyZo@sirena.org.uk>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <YlgNW0/ji6KlkyZo@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     syzbot <syzbot+60c52ca98513a8760a91@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, ebiederm@xmission.com,
+        io-uring@vger.kernel.org, legion@kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000a7edb305dca75a50@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000a7edb305dca75a50@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-12.4 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
-
-On 4/14/22 8:02 PM, Mark Brown wrote:
-> On Thu, Apr 14, 2022 at 07:55:44PM +0800, Tianjia Zhang wrote:
+On 4/14/22 7:30 PM, syzbot wrote:
+> Hello,
 > 
->> Allow userspace to detect support for SME (Scalable Matrix Extension)
->> by providing a hwcap for it, using the official feature name FEAT_SME,
->> declared in ARM DDI 0487H.a specification.
+> syzbot found the following issue on:
 > 
-> There's already a hwcap for the core feature and all the subfeatures
-> added as part of the series I've been posting for SME:
+> HEAD commit:    40354149f4d7 Add linux-next specific files for 20220414
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1778a95cf00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a44d62051576f6f5
+> dashboard link: https://syzkaller.appspot.com/bug?extid=60c52ca98513a8760a91
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1102d2e0f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15e22af4f00000
 > 
->     https://lore.kernel.org/linux-arm-kernel/20220408114328.1401034-1-broonie@kernel.org/
+> The issue was bisected to:
 > 
-> Why add something independently, especially given that there is no way
-> for userspace to do anything constructive with the feature without the
-> rest of the kernel support?  Any attempt to use SME instructions without
-> kernel support will trap and generate a SIGILL even if the feature is
-> present in hardware.
-
-Great job, I encountered the issue of invalid REVD (requires FEAT_SME)
-instruction when developing SVE2 programs, so I plan to gradually
-support SME in the kernel, thanks for your contribution, you can ignore
-my patch.
-
-In addition, I would like to ask a question, whether there is an
-alternative SVE2 instruction for the REVD instruction that can complete
-this operation, if the machine does not support SME.
-
+> commit 6bf9c47a398911e0ab920e362115153596c80432
+> Author: Jens Axboe <axboe@kernel.dk>
+> Date:   Tue Mar 29 16:10:08 2022 +0000
 > 
-> Do you have a system with SME that you're trying to use?  Review/testing
-> on the current series would be appreciated.
+>     io_uring: defer file assignment
 
-Unfortunately, the value currently read by my machine ID_AA64PFR1_EL1
-register is 0x121. It seems that the hardware does not support SME. Is
-there any other help I can provide?
+#syz test: git://git.kernel.dk/linux-block io_uring-5.18
 
-Kind regards,
-Tianjia
+-- 
+Jens Axboe
+

@@ -2,110 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33E135027C8
+	by mail.lfdr.de (Postfix) with ESMTP id E78DC5027CA
 	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 11:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345561AbiDOKAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S1346189AbiDOKB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236725AbiDOKAN (ORCPT
+        with ESMTP id S234932AbiDOKBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:00:13 -0400
-Received: from mail-pj1-x1043.google.com (mail-pj1-x1043.google.com [IPv6:2607:f8b0:4864:20::1043])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6093BA312
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:57:45 -0700 (PDT)
-Received: by mail-pj1-x1043.google.com with SMTP id md4so7263332pjb.4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:57:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=vlikIKO1333lX4AaZjgRA1Bg7ja7XLdznCnk4eQrE/k=;
-        b=mIf9inq8z2WTIztP1CLWeY+QoHPGbssx1rEGaCCx07CXZSOHwnLE5XlMN59SISjIPn
-         pGFJ4eeRoxGQNXpvCHFqOQ1lA0lVuadJArdxjjGNRhvP+ql/lvMMfllTyqkLqn9vPBa5
-         weFgHlGEVzACcFIEqFb4MPXNvjIYNUHo+xsyhD3TuIu4LRy26bEifE3QSVnLBFErCUZz
-         AWEORTZTEUQLoHTXAEJqBr+XfmoewROp0dFvIcmMItDJHpcyEZEHFvRsVydO/Cz4ZGiA
-         NRvpLVrgX4tNXQjTlqIHrByFZ9/ScO91tRjZibnD2W+IeA19Pgre/e60S/pGE/2DZYmc
-         om4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=vlikIKO1333lX4AaZjgRA1Bg7ja7XLdznCnk4eQrE/k=;
-        b=wnvJx0Wb7P+KyG//RFr03+Zk2rNFGPxgNrLl1jRrGnuHJnw+xDvmMOfw7EqioosU9V
-         kTxAjTi2sTrSwqliTcggjThK6b9JrEKm/JJbOEAnihxwyQ1M4Fuz7Mi+Yd0Owv2/CgoE
-         WR9fOMixhnn1DWvbKN9+IkQMKIitwRBgxXMJ3EBE5ZgPfq+/4ewZ9ZBQfKW5VZ2mT6R3
-         ElSMOurGa3iimOTIS4cN3zxDF8/pCya+5WmCbvJAvWDSK0DtkuZc5mWiP4ZN6tQBDmK4
-         LCFLhcPfBhVDLsRsSBTRJdw5y+GMAbg8kyol1lzApayYO8YSMRZzCWAj2qAo6Po/FxiI
-         r8lA==
-X-Gm-Message-State: AOAM5319VQ0r9XkA7GPPYHu0UiK67sTmLvDH68H9dloaLiw8RjEynRU2
-        LOn8xCCgrlcVGwUFrPyebxE=
-X-Google-Smtp-Source: ABdhPJziYAtFIOUcFZRB6U96Epf/tqOVNQNnP4DsB3SGkpbIqoqzS3GsYtZM9pXtP8KDuP3cPrzyKQ==
-X-Received: by 2002:a17:902:b597:b0:158:1aee:1b59 with SMTP id a23-20020a170902b59700b001581aee1b59mr35202651pls.33.1650016665532;
-        Fri, 15 Apr 2022 02:57:45 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id r6-20020a17090b050600b001d08a7d568bsm1614485pjz.7.2022.04.15.02.57.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 02:57:45 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 17:57:41 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
-Message-ID: <20220415095741.3zfuztivtgidvpqc@ppc.localdomain>
-References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
- <68484555-f763-bc42-eb4c-9cea2ee8dadb@gmail.com>
+        Fri, 15 Apr 2022 06:01:24 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E5DBAB84
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 02:58:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650016736; x=1681552736;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=CuY8lQWVqoDyp5M/6RY1Ni6Xf6rVDsquQgEJnRIkY8k=;
+  b=VCizJMMSv3YSjZLSSE1pHQABelIsM/0Cn5hIj03X9TmU9FxVHB5Pqb1A
+   s7+CDAcwn0DlxZ7uRm3Sy2uu4D0XYudmycr8+esTfnT6A3KW8rygtzFuv
+   TZCOaDQSaPj9hUlp/Gb4+iYebvYb5cDXXgVR2JV72WUnpRdNIcbjMVzZQ
+   CBSHLDBteqpCI8uh3O4xSzkBeBiWxYk7HrRTc9g9f01IwI7RoxXM96GjW
+   sQc1iYPirZpKSrX4EZ3PmyOGsuxf893/8J8z/+Gje2jyQgxa0Azd/25YY
+   XgeN8dtVrxv+czrJ8QQY/iJL8XCxV6uIHENMs+qWL+Qygj1SE2h6vuRTW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10317"; a="243062798"
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="243062798"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:58:56 -0700
+X-IronPort-AV: E=Sophos;i="5.90,262,1643702400"; 
+   d="scan'208";a="527811351"
+Received: from fyu1.sc.intel.com ([172.25.103.126])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 02:58:56 -0700
+Date:   Fri, 15 Apr 2022 02:59:32 -0700
+From:   Fenghua Yu <fenghua.yu@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+Message-ID: <YllCBJ3nyHMrUW5v@fyu1.sc.intel.com>
+References: <Ygt4h0PgYzKOiB38@8bytes.org>
+ <tencent_F6830A1196DB4C6A904D7C691F0D961D1108@qq.com>
+ <56ed509d-a7cf-1fde-676c-a28eb204989b@intel.com>
+ <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
+ <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
+ <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <2cd3132b-2c24-610e-1a96-591f2803404c@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <68484555-f763-bc42-eb4c-9cea2ee8dadb@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2cd3132b-2c24-610e-1a96-591f2803404c@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/14 11:12PM, Pavel Skripkin wrote:
-> Hi Wang,
-> 
-> On 4/14/22 17:12, Wang Cheng wrote:
-> > Due to the case that "requesttype == 0x01 && status <= 0"
-> > isn't handled in r8712_usbctrl_vendorreq(),
-> > "data" (drivers/staging/rtl8712/usb_ops.c:32)
-> > will be returned without initialization.
+Hi, Dave,
+
+On Tue, Apr 12, 2022 at 07:39:10AM -0700, Dave Hansen wrote:
+> On 4/12/22 06:41, Fenghua Yu wrote:
+> >> master process quit, mmput ->  mm_pasid_drop->ioasid_free
+> >> But this ignore driver's iommu_sva_unbind_device function,
+> >> iommu_sva_bind_device and iommu_sva_unbind_device are not pair,  So driver
+> >> does not know ioasid is freed.
+> >>
+> >> Any suggestion?
+> > ioasid is per process or per mm. A daemon process shouldn't share the same 
+> > ioasid with any other process with even its parent process. Its parent gets
+> > an ioasid and frees it on exit. The ioasid is gone and shouldn't be used
+> > by its child process.
 > > 
-> > When "tmpU1b" (drivers/staging/rtl8712/usb_intf.c:395)
-> > is 0, mac[6] (usb_intf.c:394) won't be initialized,
-> > which leads to accessing uninit-value on usb_intf.c:541.
+> > Each daemon process should call driver -> iommu_sva_bind_device -> ioasid_alloc
+> > to get its own ioasid/PASID. On daemon quit, the ioasid is freed.
 > > 
-> > Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-> > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
+> > That means nqnix needs to be changed.
 > 
-> This patch will just hide the problematic API in that driver. Correct fix is
-> changing usb_control_msg to usb_control_msg_{recv,send}.
+> Fenghua, please step back for a second and look at what you are saying.
+>  Your patch caused userspace to break.  Now, you're telling someone that
+> they need to go change that userspace to work around something that your
+> patch.  How, exactly, are you suggesting that nginx could change to fix
+> this?  What, specifically, was it doing with *fork()* that was wrong?
 > 
-> IIRC this driver does not want read various length requests, so it should be
-> fine
+> It sounds to me like you're saying that it's OK to break userspace.
 
-Hi Pavel, thx for your review.
+You are right. The patch should not break userspace. I follow your
+suggestion to fix the issue by mmget() in binding and mmput() in unbinding.
+The RFC patch was sent out in another thread. Please review it.
 
-Sorry, this patch is just confined to fixing uninit-values with
-modifying the original code as less as possible. It sounds good to
-refactor r8712_usbctrl_vendorreq() with better API.
+Thank you very much for your advice.
 
-thanks,
--- w
-
-> 
-> 
-> 
-> 
-> With regards,
-> Pavel Skripkin
+-Fenghua

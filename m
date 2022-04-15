@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD50503160
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DEF503086
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351968AbiDOVn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:43:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54090 "EHLO
+        id S1356127AbiDOVpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356195AbiDOVna (ORCPT
+        with ESMTP id S1356192AbiDOVo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:43:30 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844FF42A3F;
-        Fri, 15 Apr 2022 14:40:59 -0700 (PDT)
+        Fri, 15 Apr 2022 17:44:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423DC48383
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 14:41:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650058859; x=1681594859;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=D+EtR25o6TgsLEAQY93ZWajgB/+OLtNNhIpII8Uyeks=;
-  b=J3NJ2Jp/yNJsDB+nyegVPy2Zfz0dGoiKYRsWIRuuk+Ts3oY/9dv/phJ8
-   m/Nw4PeAnACterylQtv7B8vTwommLSQk2jbV1nLvWA2H+9UVs8dUYzYEn
-   14/ZnoXbEwDuZH7RZiuCQEydzJtYW9zwhbOJbrzYTC6OyR2c9ZBbLEvye
-   r8SDgr0szB7b5ZQ1T/rVkeqFN2Cb0JWcdN8iI0fL+S5KoufYJT2jVD+vr
-   IE2qtvPLfYyy0tYhrN9ORxcSNhUmq7BK/29s4ysXn7uq9vjjd9sPzzwKA
-   sePgw5NLhihmufbRaXV7WNYW69ckemgt4ltgCttgCH2r32bZNMXUGuySk
+  t=1650058898; x=1681594898;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=EiE7+WLdmrls3N6fRhJV8VbuBkpIj55ZCw32IOgRz78=;
+  b=Li1SooxiVGG9F34QtPUk9WF31mT3YgsQF3kWMAer73L2am3CazST4w0W
+   AEwTUlNB7v4/4fePrubg5EzM9Nu3rL305JkjJTRKZP/J3bEsoItO+Qt04
+   tVgfVbn6N1lYX/lghyaouEJIPVru/vU27PgNHnXi4nwtXU22mqF98Ta97
+   rKGckwTkNIMc7Lp6VzJFvRU5M3IYkpLnmDrNW9lL4sgkYRuVCA9QFCj4j
+   nK4RTwOBcdiiKNQYXiEG8lAxs2ZeFc1e35UDPkhkL+h1uhig+VpEN4phl
+   vEbqLpy8fYFB0olROD37CIZD6GmpB48yAo+GgDesDEIcc7tTWC/yvJst+
    g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262695357"
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263410333"
 X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="262695357"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:40:58 -0700
+   d="scan'208";a="263410333"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:41:38 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,263,1643702400"; 
-   d="scan'208";a="560709031"
-Received: from aelhiber-mobl2.amr.corp.intel.com (HELO localhost) ([10.212.78.254])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 14:40:58 -0700
-Date:   Fri, 15 Apr 2022 14:40:58 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-Cc:     outreachy@lists.linux.dev, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] intel: igb: igb_ethtool.c: Convert kmap() to
- kmap_local_page()
-Message-ID: <Ylnmaji5bHHp8t3p@iweiny-desk3>
-References: <20220415205307.675650-1-eng.alaamohamedsoliman.am@gmail.com>
+   d="scan'208";a="646192303"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 Apr 2022 14:41:35 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfTh9-0002S5-3w;
+        Fri, 15 Apr 2022 21:41:35 +0000
+Date:   Sat, 16 Apr 2022 05:41:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in
+ reference from the function binderfs_binder_device_create() to the function
+ .init.text:set_reset_devices()
+Message-ID: <202204160549.K8MMhRsg-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415205307.675650-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 10:53:07PM +0200, Alaa Mohamed wrote:
-> The use of kmap() is being deprecated in favor of kmap_local_page()
-> where it is feasible.
-> 
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible.
-> 
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> ---
->  drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> index 2a5782063f4c..ba93aa4ae6a0 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
->  
->  	frame_size >>= 1;
->  
-> -	data = kmap(rx_buffer->page);
-> +	data = kmap_local_page(rx_buffer->page);
->  
->  	if (data[3] != 0xFF ||
->  	    data[frame_size + 10] != 0xBE ||
->  	    data[frame_size + 12] != 0xAF)
->  		match = false;
->  
-> -	kunmap(rx_buffer->page);
-> +	kunmap_local(rx_buffer->page);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   028192fea1de083f4f12bfb1eb7c4d7beb5c8ecd
+commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+date:   3 weeks ago
+config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220416/202204160549.K8MMhRsg-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f9b3cd24578401e7a392974b3353277286e49cee
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-kunmap_local() is different from kunmap().  It takes an address within the
-mapped page.  From the kdoc:
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-/**
- * kunmap_local - Unmap a page mapped via kmap_local_page().
- * @__addr: An address within the page mapped
- *
- * @__addr can be any address within the mapped page.  Commonly it is the
- * address return from kmap_local_page(), but it can also include offsets.
- *
- * Unmapping should be done in the reverse order of the mapping.  See
- * kmap_local_page() for details.
- */
-#define kunmap_local(__addr)                                    \
-...
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
+>> WARNING: modpost: vmlinux.o(.text+0x1778608): Section mismatch in reference from the function binderfs_binder_device_create() to the function .init.text:set_reset_devices()
+The function binderfs_binder_device_create() references
+the function __init set_reset_devices().
+This is often because binderfs_binder_device_create lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x178fa2e): Section mismatch in reference from the function binder_alloc_free_page() to the function .init.text:set_reset_devices()
+The function binder_alloc_free_page() references
+the function __init set_reset_devices().
+This is often because binder_alloc_free_page lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1875f90): Section mismatch in reference from the function ethnl_default_dumpit() to the function .init.text:set_reset_devices()
+The function ethnl_default_dumpit() references
+the function __init set_reset_devices().
+This is often because ethnl_default_dumpit lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x187ed7e): Section mismatch in reference from the function tsinfo_reply_size() to the function .init.text:set_reset_devices()
+The function tsinfo_reply_size() references
+the function __init set_reset_devices().
+This is often because tsinfo_reply_size lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x191d390): Section mismatch in reference from the function ieee802154_llsec_fill_key_id() to the function .init.text:set_reset_devices()
+The function ieee802154_llsec_fill_key_id() references
+the function __init set_reset_devices().
+This is often because ieee802154_llsec_fill_key_id lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x8844c8): Section mismatch in reference from the function vduse_init() to the function .init.text:set_reset_devices()
+The function vduse_init() references
+the function __init set_reset_devices().
+This is often because vduse_init lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x8850c6): Section mismatch in reference from the function vduse_create_dev() to the function .init.text:set_reset_devices()
+The function vduse_create_dev() references
+the function __init set_reset_devices().
+This is often because vduse_create_dev lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
 
-Ira
-
->  
->  	return match;
->  }
-> -- 
-> 2.35.2
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

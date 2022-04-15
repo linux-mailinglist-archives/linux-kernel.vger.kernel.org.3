@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A5B502EDB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 20:56:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60CB5502EDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 20:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347457AbiDOS4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 14:56:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41564 "EHLO
+        id S1347545AbiDOS5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 14:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344439AbiDOS4N (ORCPT
+        with ESMTP id S244409AbiDOS5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 14:56:13 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06835AF1C0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:53:44 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id k10so9133402oia.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 11:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Fu1lGl7KUsvDaTbuVWYLbekm8YyPZlc63692CIkIOQ4=;
-        b=kqvea8iiRG8zzVfBOX5D9/92tO/jUsNRwm8NhE4XILL2h++pMU788D91v8CUG5ab3L
-         nQui74RKeviFn6UtUTJmy1XTkDdPkjsQAAKpkc8mZfqj9wYM6ieI2ezHfMc3zxd+UEfI
-         fjMvAA9s4ZCIEwFISUBRqPx+JXwyiI4Jzkd3AUcoirDfKqi8A8TkX0mkXsAWbykJWhYW
-         YvWh53jZM/kHtsVMCxt/0ay45rl8NFummy1hFReLcJwDUGuOEeH9M6vJPxkKGUqfFzZQ
-         LbwwcxR3kw6evTwT0B/E92PD7EuFE+0PiEJPA98/2M+XdrpITfQtwNytGrQDpy2E+gru
-         16aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :subject:content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=Fu1lGl7KUsvDaTbuVWYLbekm8YyPZlc63692CIkIOQ4=;
-        b=Welw2f8WP0VIJisvNHG+QHhAqSnh5kMdHQGOkD5qRFYGyqU0Y9AMSi4k7Pzngv3gNv
-         iivt9g2a40TN5f512VjAXSbpiVvR5o6mv0pUUS/LpV38XuC723yvBb4arAiwMGEe9SqS
-         itTvapC5lMjSoneH6VUdn9h1HXxKP4bPdv9gu1qtgOIeaOxe266vhEZcATTR3kIYvEI+
-         cE/IeljBVsTHFd+uaNxIiJwlDn75j0njG+vMlXH5EBaDPn2bv1Pf72p4sg+hsbQh0+NH
-         sKiIkMqFAXp7ssJGrlpm1obPT4rGFYLcdDU4zL0ZxCm2wJ+n5/uUNtqrEqrnamBfGjME
-         rA/Q==
-X-Gm-Message-State: AOAM532pnZJupCJvQO1J8zY375q42EJICzkpVTUGFL90qab59hx96219
-        IeAoC8TbpmuD3Sl7JtlSbLk=
-X-Google-Smtp-Source: ABdhPJznuDVyropBxNhH5yTKZPNKWm7Cidno3n2BjA4yf3avgq+kAyHoURBEJ50hEZGRJwJRbj5FAA==
-X-Received: by 2002:a05:6808:2023:b0:2da:5b6a:a526 with SMTP id q35-20020a056808202300b002da5b6aa526mr181185oiw.264.1650048823338;
-        Fri, 15 Apr 2022 11:53:43 -0700 (PDT)
-Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
-        by smtp.gmail.com with ESMTPSA id m5-20020a056870194500b000d9a0818925sm1828218oak.25.2022.04.15.11.53.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 11:53:42 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Message-ID: <dc1e02b4-1cb6-5f7c-b612-7d2dd21cbda6@lwfinger.net>
-Date:   Fri, 15 Apr 2022 13:53:41 -0500
+        Fri, 15 Apr 2022 14:57:19 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9753CA5D;
+        Fri, 15 Apr 2022 11:54:49 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23FIsdiX051787;
+        Fri, 15 Apr 2022 13:54:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650048879;
+        bh=6xkbBt5ip2ZwFzYyGlPOJoIc4fZz7zhzoq3TQoYrtHw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=qv3uhnzE+W0A6wrAqOAK2M8iJtPy/CPWf1PCgJ5TPHLExqaoDp4yasFrot88+q1E2
+         CRcj4zXsgwd6hHNqgWl5biq9nFAOUmG38y9vEQVWeUAK8J8FsaWETNGHG3Sg/11mYb
+         FrAdFNg2sljUzX1hsikoje1SUkV8vsS/fQwSLiyQ=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23FIsdpP109716
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Fri, 15 Apr 2022 13:54:39 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
+ Apr 2022 13:54:39 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Fri, 15 Apr 2022 13:54:39 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23FIsdKL090370;
+        Fri, 15 Apr 2022 13:54:39 -0500
+Date:   Fri, 15 Apr 2022 13:54:39 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+CC:     Santosh Shilimkar <ssantosh@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] ARM: dts: keystone: fix case in SPI NOR node
+ compatible
+Message-ID: <20220415185439.4hsfnllhplfcpwvk@encrypt>
+References: <20220407143140.295092-1-krzysztof.kozlowski@linaro.org>
+ <20220407143140.295092-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 3/8] staging: r8188eu: clean up comments in struct
- rt_firmware_hdr
-Content-Language: en-US
-To:     Michael Straube <straube.linux@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20220415121023.11564-1-straube.linux@gmail.com>
- <20220415121023.11564-4-straube.linux@gmail.com>
- <f4f8d381-9ee1-c504-c41c-97a9332066c9@lwfinger.net>
- <bd1b3310-3867-5b3c-cce1-cdb374b3d819@gmail.com>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <bd1b3310-3867-5b3c-cce1-cdb374b3d819@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220407143140.295092-2-krzysztof.kozlowski@linaro.org>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,111 +69,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 13:05, Michael Straube wrote:
-> On 4/15/22 17:44, Larry Finger wrote:
->> On 4/15/22 07:10, Michael Straube wrote:
->>> The comments in struct rt_firmware_hdr are not needed.
->>> Remove them.
->>>
->>> Signed-off-by: Michael Straube <straube.linux@gmail.com>
->>> ---
->>> v3:
->>> - no changes
->>>
->>> v2:
->>> - no changes
->>>
->>>   drivers/staging/r8188eu/core/rtw_fw.c | 37 ++++++++-------------------
->>>   1 file changed, 11 insertions(+), 26 deletions(-)
->>>
->>> diff --git a/drivers/staging/r8188eu/core/rtw_fw.c 
->>> b/drivers/staging/r8188eu/core/rtw_fw.c
->>> index 7cd08268f3b9..323e0c634c4e 100644
->>> --- a/drivers/staging/r8188eu/core/rtw_fw.c
->>> +++ b/drivers/staging/r8188eu/core/rtw_fw.c
->>> @@ -14,37 +14,22 @@
->>>       (le16_to_cpu(_fwhdr->Signature) & 0xFFF0) == 0x2300 ||    \
->>>       (le16_to_cpu(_fwhdr->Signature) & 0xFFF0) == 0x88E0)
->>> -/*  This structure must be careful with byte-ordering */
->>> -
->>>   struct rt_firmware_hdr {
->>> -    /*  8-byte alinment required */
->>> -    /*  LONG WORD 0 ---- */
->>> -    __le16        Signature;    /* 92C0: test chip; 92C,
->>> -                     * 88C0: test chip; 88C1: MP A-cut;
->>> -                     * 92C1: MP A-cut */
->>> -    u8        Category;    /*  AP/NIC and USB/PCI */
->>> -    u8        Function;    /*  Reserved for different FW function
->>> -                     *  indcation, for further use when
->>> -                     *  driver needs to download different
->>> -                     *  FW for different conditions */
->>> -    __le16        Version;    /*  FW Version */
->>> -    u8        Subversion;    /*  FW Subversion, default 0x00 */
->>> +    __le16        Signature;
->>> +    u8        Category;
->>> +    u8        Function;
->>> +    __le16        Version;
->>> +    u8        Subversion;
->>>       u8        Rsvd1;
->>> -
->>> -    /*  LONG WORD 1 ---- */
->>> -    u8        Month;    /*  Release time Month field */
->>> -    u8        Date;    /*  Release time Date field */
->>> -    u8        Hour;    /*  Release time Hour field */
->>> -    u8        Minute;    /*  Release time Minute field */
->>> -    __le16        RamCodeSize;    /*  The size of RAM code */
->>> +    u8        Month;
->>> +    u8        Date;
->>> +    u8        Hour;
->>> +    u8        Minute;
->>> +    __le16        RamCodeSize;
->>>       u8        Foundry;
->>>       u8        Rsvd2;
->>> -
->>> -    /*  LONG WORD 2 ---- */
->>> -    __le32        SvnIdx;    /*  The SVN entry index */
->>> +    __le32        SvnIdx;
->>>       __le32        Rsvd3;
->>> -
->>> -    /*  LONG WORD 3 ---- */
->>>       __le32        Rsvd4;
->>>       __le32        Rsvd5;
->>>   };
->>
->> The comments "LONG WORD" are useless, but the comments describing the fields 
->> are still useful. I do not like this patch.
->>
+On 16:31-20220407, Krzysztof Kozlowski wrote:
+> Vendor prefix in compatible should be lower-case.
 > 
-> Hi Larry,
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  arch/arm/boot/dts/keystone-k2e-evm.dts  | 2 +-
+>  arch/arm/boot/dts/keystone-k2hk-evm.dts | 2 +-
+>  arch/arm/boot/dts/keystone-k2l-evm.dts  | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> You are right the in-line comments are useful. I'll send v4 keeping
-> them.
-> 
-> You only mentioned the in-line comments, just to get it right this
-> time:
-> 
-> What about the "8-byte alignment required" comment? You said in another
-> thread that the __le16 references need alignment 4. Should I make the
-> struct __aligned(8) or at least __aligned(4)?
+> diff --git a/arch/arm/boot/dts/keystone-k2e-evm.dts b/arch/arm/boot/dts/keystone-k2e-evm.dts
+> index 8f49883a675e..9e507293a8d7 100644
+> --- a/arch/arm/boot/dts/keystone-k2e-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2e-evm.dts
+> @@ -140,7 +140,7 @@ &spi0 {
+>  	nor_flash: flash@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+> -		compatible = "Micron,n25q128a11";
+> +		compatible = "micron,n25q128a11";
+>  		spi-max-frequency = <54000000>;
+>  		m25p,fast-read;
+>  		reg = <0>;
+> diff --git a/arch/arm/boot/dts/keystone-k2hk-evm.dts b/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> index f968af0bfad3..1a1a49c19a19 100644
+> --- a/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2hk-evm.dts
+> @@ -164,7 +164,7 @@ &spi0 {
+>  	nor_flash: flash@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+> -		compatible = "Micron,n25q128a11";
+> +		compatible = "micron,n25q128a11";
+>  		spi-max-frequency = <54000000>;
+>  		m25p,fast-read;
+>  		reg = <0>;
+> diff --git a/arch/arm/boot/dts/keystone-k2l-evm.dts b/arch/arm/boot/dts/keystone-k2l-evm.dts
+> index 32619b3c5804..06d55b89170d 100644
+> --- a/arch/arm/boot/dts/keystone-k2l-evm.dts
+> +++ b/arch/arm/boot/dts/keystone-k2l-evm.dts
+> @@ -113,7 +113,7 @@ &spi0 {
+>  	nor_flash: flash@0 {
+>  		#address-cells = <1>;
+>  		#size-cells = <1>;
+> -		compatible = "Micron,n25q128a11";
+> +		compatible = "micron,n25q128a11";
+>  		spi-max-frequency = <54000000>;
+>  		m25p,fast-read;
+>  		reg = <0>;
 
-Routines cpu_to_le16() and le16_to_cpu() require two-byte alignment. Similarly, 
-the 32-bit versions need 4-byte alignment. The layout of the struct will ensure 
-that as long as the entire struct has 4-byte alignment.
 
-This struct is only used in rtl8188e_firmware_download() where it is created on 
-the stack. That means it will be 8-byte aligned for x86_64 and 4-byle aligned on 
-32-bit systems. I'm sure that Dan or GregKH will correct me if I got this wrong, 
-but that should be sufficient. Making it __aligned(8) could waste 4 bytes on the 
-stack for 32-bit systems. Using __aligned(4) would have no effect on any system.
+I have no idea how this works. There is no documentation for the
+compatible, So I am guessing adding it to Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml 
+is appropriate prior to replacing  with "micron,n25q128a11", "jedec,spi-nor";
 
-I say remove the comment.
-
-> 
-> And about "/*  This structure must be careful with byte-ordering */" ?
-> I think it's obvious because of the __le16 and __le32 fields and can be
-> removed. Do you agree on that?
-
-Using the __leNN implies little-endian, thus that comment is useless. Yes, I agree.
+$ git grep micron,n25q128a11 .
+arch/arm/boot/dts/imx6qdl-aristainetos.dtsi:            compatible = "micron,n25q128a11", "jedec,spi-nor";
+arch/arm/boot/dts/imx6qdl-aristainetos2.dtsi:           compatible = "micron,n25q128a11", "jedec,spi-nor";
+arch/arm/boot/dts/keystone-k2e-evm.dts:         compatible = "micron,n25q128a11";
+arch/arm/boot/dts/keystone-k2hk-evm.dts:                compatible = "micron,n25q128a11";
+arch/arm/boot/dts/keystone-k2l-evm.dts:         compatible = "micron,n25q128a11";
+arch/powerpc/boot/dts/fsl/t1024qds.dts:                         compatible = "micron,n25q128a11", "jedec,spi-nor";  /* 16MB */
+arch/powerpc/boot/dts/fsl/t104xqds.dtsi:                                compatible = "micron,n25q128a11", "jedec,spi-nor";
+arch/powerpc/boot/dts/fsl/t208xqds.dtsi:                                compatible = "micron,n25q128a11", "jedec,spi-nor"; /* 16MB */
 
 
-Larry
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D

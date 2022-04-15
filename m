@@ -2,50 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6312502EC3
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 20:39:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9E0F502EC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 20:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346761AbiDOSls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 14:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S1346926AbiDOSr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 14:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243945AbiDOSlq (ORCPT
+        with ESMTP id S1346845AbiDOSrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 14:41:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CC13A5C9;
-        Fri, 15 Apr 2022 11:39:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17E89B82E24;
-        Fri, 15 Apr 2022 18:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97DD3C385A4;
-        Fri, 15 Apr 2022 18:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650047954;
-        bh=7T0xS++I3tvwGRoViLxJskdG1aYYZ190NPkHiUOxuIs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=R19Mh2fNbJ+hxXWciTrvlzQQlrOeN+BffGYx5ogsVo4b4MOiTpJz9ZCX7w9BwtW6Y
-         smXjx5h6Gg3q+/QwuugnSjHrAYt17nlasBaUCopLmJShQjsaXt+5A4k4r36TrQEq4k
-         d6bwMZJtfRu5/X4wUTClaoT0f8DgcmptdeykwWC+r4iH7CsxCfxGl75O5NYibZ3M+D
-         XgqiuWZWs22JFfTLTZ3bM3Tpd0uwonXbWvacxrklaXy+poHFYR8hWqqLclcdzVhcS/
-         TBjLIH2uUY+je7PIL69F8Cj3o1srT5dyspPhymBNsv1sT3r/V7XWjTb2A6ZkmOf62A
-         UZvmyoKB2Glog==
-Date:   Fri, 15 Apr 2022 13:39:12 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] PCI: Avoid handing out address 0 to devices
-Message-ID: <20220415183912.GA824311@bhelgaas>
+        Fri, 15 Apr 2022 14:47:24 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38AA027FCA;
+        Fri, 15 Apr 2022 11:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650048294; x=1681584294;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Y+DhyXYe7xzr+Dy/hh989lOaL8GjUsKaTM+O+hQ/8vY=;
+  b=Hqarrxtyhj5uhgwrZSrk6K8I+lcuwNQF9niAXNlOO/2t90oTF0/YO2Ao
+   Nych7fFfKkxXLlrJv+hNrl4kezg+EqasAVOK5aCoyZMLbnTLk1aPfc8JA
+   PAjDKiSctqvpOKwP2calDRzk8SfuRpv/5qpD+Aj8sne+ZKVPVhf8ZHg4e
+   Q=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 15 Apr 2022 11:44:53 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 11:44:53 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Fri, 15 Apr 2022 11:44:12 -0700
+Received: from [10.110.117.103] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 15 Apr
+ 2022 11:44:11 -0700
+Message-ID: <89483178-2b8b-e583-7f4f-572076c95141@quicinc.com>
+Date:   Fri, 15 Apr 2022 11:44:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2204150118240.9383@angie.orcam.me.uk>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.5.0
+Subject: Re: [PATCH v5 1/5] dt-bindings: power: reset: qcom-pon: update "reg"
+ property details
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+CC:     <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <sre@kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <collinsd@codeaurora.org>,
+        <bjorn.andersson@linaro.org>, <swboyd@chromium.org>,
+        <skakit@codeaurora.org>, <linux-doc@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        David Collins <quic_collinsd@quicinc.com>
+References: <20220411200506.22891-1-quic_amelende@quicinc.com>
+ <20220411200506.22891-2-quic_amelende@quicinc.com>
+ <Ylg+7MVRS4sKbOFb@robh.at.kernel.org>
+From:   Anjelique Melendez <quic_amelende@quicinc.com>
+In-Reply-To: <Ylg+7MVRS4sKbOFb@robh.at.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,100 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 01:27:17PM +0100, Maciej W. Rozycki wrote:
-> On Thu, 14 Apr 2022, Bjorn Helgaas wrote:
+
+
+On 4/14/2022 8:34 AM, Rob Herring wrote:
+> On Mon, Apr 11, 2022 at 01:05:03PM -0700, Anjelique Melendez wrote:
+>> From: David Collins <quic_collinsd@quicinc.com>
+>>
+>> Update the description of "reg" property to add the PON_PBS base
+>> address along with PON_HLOS base address.  Also add "reg-names"
+>> property description.
+>>
+>> Signed-off-by: David Collins <quic_collinsd@quicinc.com>
+>> Signed-off-by: Anjelique Melendez <quic_amelende@quicinc.com>
+>> ---
+>>  .../bindings/power/reset/qcom,pon.yaml | 20 +++++++++++++++++++-
+>>  1 file changed, 19 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml b/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> index 353f155d..542200b2 100644
+>> --- a/Documentation/devicetree/bindings/power/reset/qcom,pon.yaml
+>> +++ b/Documentation/bindings/power/reset/qcom,pon.yaml
+>> @@ -26,7 +26,25 @@ properties:
+>>        - qcom,pm8998-pon
+>>  
+>>    reg:
+>> -    maxItems: 1
+>> +    description: |
+>> +      Specifies the SPMI base address for the PON (power-on) peripheral.  For
+>> +      PMICs that have the PON peripheral (GEN3) split into PON_HLOS and PON_PBS
+>> +      (e.g. PMK8350), this can hold addresses of both PON_HLOS and PON_PBS
+>> +      peripherals.  In that case, the PON_PBS address needs to be specified to
+>> +      facilitate software debouncing on some PMICs.
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +
+>> +  reg-names:
+>> +    description: |
+>> +      For PON GEN1 and GEN2, it should be "pon".  For PON GEN3 it should include
+>> +      "pon_hlos" and optionally "pon_pbs".
+>> +    minItems: 1
+>> +    maxItems: 2
+>> +    items:
+>> +      - const: pon_hlos
+>> +      - const: pon_pbs
+>> +      - const: pon
 > 
-> > > > > > > Address 0 is treated specially however in many places, for
-> > > > > > > example in `pci_iomap_range' and `pci_iomap_wc_range' we
-> > > > > > > require that the start address is non-zero, and even if we
-> > > > > > > let such an address through, then individual device drivers
-> > > > > > > could reject a request to handle a device at such an
-> > > > > > > address, such as in `uart_configure_port'.  Consequently
-> > > > > > > given devices configured as shown above only one is actually
-> > > > > > > usable:
-> > > > > > 
-> > > > > > pci_iomap_range() tests the resource start, i.e., the CPU
-> > > > > > address.  I guess the implication is that on RISC-V, the
-> > > > > > CPU-side port address is the same as the PCI bus port address?
-> > > > > 
-> > > > >  Umm, for all systems I came across except x86, which have
-> > > > >  native port I/O access machine instructions, a port I/O
-> > > > >  resource records PCI bus addresses of the device rather than
-> > > > >  its CPU addresses, which encode the location of an MMIO window
-> > > > >  the PCI port I/O space is accessed through.
-> > > > 
-> > > > My point is only that it is not necessary for the PCI bus address
-> > > > and the struct resource address, i.e., the argument to inb(), to
-> > > > be the same.
-> > > 
-> > >  Sure, but I have yet to see a system where it is the case.
-> > > 
-> > >  Also in principle peer PCI buses could have their own port I/O
-> > >  address spaces each mapped via distinct MMIO windows in the CPU
-> > >  address space, but I haven't heard of such a system.  That of
-> > >  course doesn't mean there's no such system in existence.
-> > 
-> > They do exist, but are probably rare.  Even on x86 where multiple host
-> > bridges are now fairly common, and the hardware probably supports a
-> > separate 64K port space for each, the ones I've seen split up a single
-> > 64K I/O port space so each bridge only gets a fraction of it.  I'm not
-> > sure Linux would even support multiple spaces.  I do know ia64
-> > supports multiple port spaces (see __ia64_mk_io_addr()), so we could
-> > have something like this:
-> > 
-> >   pci_bus 0000:00: root bus resource [io  0x0000-0xffff]
-> >   pci_bus 0001:00: root bus resource [io  0x10000-0x1ffff] (bus address [0x0000-0xffff])
+> This says there are 3 entries, but you limited to 2. The schema also 
+> doesn't match what the description says. Entries should be extended by 
+> adding new entries to the end and keeping optional entries last. So like 
+> this:
 > 
->  Yeah, I guess if anything, it *had* to be IA64!
-
-:)
-
->  Conversely Alpha systems decode the full 32-bit address range for port 
-> I/O and happily assign I/O bars beyond 64K in their firmware, however as 
-> a uniform address space even across several peer PCI buses.
+> minItems: 1
+> items:
+>   - const: pon
+>   - const: pon_hlos
+>   - const: pon_pbs
 > 
->  As to x86 systems as I mentioned they have native port I/O access machine
-> instructions and they only support 16-bit addressing, so I wouldn't expect 
-> more than one 64K of port I/O space implemented with them.  There is no 
-> problem at the CPU bus level of course with presenting port I/O addresses 
-> beyond 64K and as a matter of interest the original 80386 CPU did make use 
-> of them internally for communicating with the 80387 FPU, just because they 
-> cannot be produced with machine code and therefore a programmer could not 
-> interfere with the CPU-to-FPU communication protocol.  Port I/O locations
-> 0x800000f8 through 0x800000ff were actually used in that protocol[1][2].
-
-> > I guess the question is whether we want to reserve port 0 and MMIO
-> > address 0 as being "invalid".  That makes the first space smaller than
-> > the others, but it's not *much* smaller and it's an unlikely
-> > configuration to begin with.
-> 
->  Unfortunately just as IRQ 0 is considered special and barring the 8254 
-> special exception for PC-style legacy junk it means "no IRQ", similarly 
-> I/O port or MMIO address 0 is considered "no device" in several places.  
-> One I have identified as noted above is `uart_configure_port':
-> 
-> 	/*
-> 	 * If there isn't a port here, don't do anything further.
-> 	 */
-> 	if (!port->iobase && !port->mapbase && !port->membase)
-> 		return;
-> 
-> So even if we let address 0 through it will be rejected downstream here 
-> and there and the device won't work.
-
-This is a driver question, which I think is secondary.  If necessary,
-we can fix drivers after figuring out what the PCI core should do.
-
-> > We do have the IORESOURCE_UNSET flag bit that could possibly be used
-> > in pci_iomap_range() instead of testing for "!start".  Or maybe
-> > there's a way to allocate address 0 instead of special-casing the
-> > allocator?  Just thinking out loud here.
-
-Another possibility is PCIBIOS_MIN_IO.  It's also kind of an ugly
-special case, but at least it already exists.  Most arches define it
-to be non-zero, which should avoid this issue.
-
-Defining PCIBIOS_MIN_IO would be simple; what would we lose compared
-to adding code in pci_bus_alloc_from_region()?
-
-Bjorn
+> RobWill update in next patch. Thanks

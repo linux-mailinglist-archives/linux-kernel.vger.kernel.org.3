@@ -2,258 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CBCC502951
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10A7F502948
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 14:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352906AbiDOMDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 08:03:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34388 "EHLO
+        id S1348619AbiDOMDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 08:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353096AbiDOMDP (ORCPT
+        with ESMTP id S1352946AbiDOMDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 15 Apr 2022 08:03:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A296619B;
-        Fri, 15 Apr 2022 05:00:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=SG977EC0hrWla+V9GLRCJtr95Qc5uycAYkjvc3GtVYs=; b=gW/LXUM8Ny1EC6oNtDEzBmL55S
-        gGHe0yVse6JJ59P9/H7xY8pEAxWN68bpbu0aVMvxc7CjhyCG8HCSZFh1NV7dpKPVrScW0Hc9qKeA8
-        kJUAL3c/0A5RFb9KFednTzji0K+zyDDcno546KlaD8kTA0+W1bTCf5ZnOIjNJ6lu9BmgtXBFEKllr
-        vlrhKIV5Y8cM4YqPzAKMtrZI/7/6HDYpbmhVcTSmd2cuH68N3BGLpiHErEh4tg3xLpqYQu9pXa47l
-        k1Ec7teTLrRnC42t27Nzj3nYLGA2SFipB5oAX0ZeSY5eFk5l3MT5XtXPLlMDJ0Mn0c7XoSt26bIWI
-        +HhGxnzg==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfKcb-005NB7-Ae; Fri, 15 Apr 2022 12:00:17 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 3EA5E3001AD;
-        Fri, 15 Apr 2022 14:00:15 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 2185A30A47DFC; Fri, 15 Apr 2022 14:00:15 +0200 (CEST)
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 079805F66
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:00:31 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id bh17so15021799ejb.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 05:00:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=6kqH16YGChi7cR6OY4DfJvP5AINYxh9jadunKUmdgXA=;
+        b=hEZzrZjAwZ0SU9iznl61RWIYbckAE1eQqIlkGEAsNrkkxIIXWieoPaa1PDiQdKTbRR
+         gshASQy/9AH9EIx7yROdkgfbd9aj3l4ecpOVamHcdpBkf0x6IzBF6FXf62rAeIAgXj+3
+         7rmd3Isp+E4MM7AW7aJ2uql3D6+OEnOaiiBJmDYt+GHq49X70Wl2S7Hr0C3YIMBg0wxc
+         fhkM3wQptEy8vxVWHaI0d2poguBk0svGMPnXD2idXfP7oadHN4F9sMpoEY08xEjqyZx4
+         Pqzo69dt9sTU2VfOElMNEHdURZ7k4ag5LzmOaYg6Z5IYnfYdHlGi67xmiicIIT+8JLQe
+         Ct+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=6kqH16YGChi7cR6OY4DfJvP5AINYxh9jadunKUmdgXA=;
+        b=oo/PoAZF37sp/KBr3RS8GN2GOtjke8KJsemCvZnRLF6cpdfwGaIg6WreyVq2iSbeaU
+         vhgYjJWxqucKHTNRmTyTM3VpEd9K5ESPTf6G4424PsRwimueSyOHzBPIpknyGIcaXOZm
+         ZibzfYRPa4AzmJzlx9hsJlpyxdYnJsp40okNFfF+CbZyDFg9pNTmKGpNVuFSRjKDSCL4
+         fWAMK7cXClbfyE9Cf/XhjRPqjfXcDJujtaK9MAkciY2wOn2UR1R8+/+agUjiUinQTn77
+         Oa72uQnl5fmWyiPZrpWQ6kX5/kduqaVtGf6ar+IQpePW4474QHmnkaPduIgZlcXGDzbh
+         SxfA==
+X-Gm-Message-State: AOAM533rXfWd6AOQv82awHOsTDuZrE0dzPYUQnClqoe8zbw8y1t6HCzf
+        TVeD4VHtMgVBiljmTW1cm4k=
+X-Google-Smtp-Source: ABdhPJxUFly3iyIA/Nc6nu5ywm0GWFxZlnp3H+TcVrbcwIA0QrvFVUiticir27LzkdriJtKowS+SOw==
+X-Received: by 2002:a17:907:72c3:b0:6e8:b602:9793 with SMTP id du3-20020a17090772c300b006e8b6029793mr5911358ejc.704.1650024029571;
+        Fri, 15 Apr 2022 05:00:29 -0700 (PDT)
+Received: from zero.. (host-79-54-81-151.retail.telecomitalia.it. [79.54.81.151])
+        by smtp.gmail.com with ESMTPSA id dn7-20020a17090794c700b006e8b176143bsm1621164ejc.155.2022.04.15.05.00.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 05:00:29 -0700 (PDT)
+From:   Alessandro Astone <ales.astone@gmail.com>
+To:     tkjos@android.com, gregkh@linuxfoundation.org, brauner@kernel.org,
+        arve@android.com, linux-kernel@vger.kernel.org, maco@android.com
+Cc:     Alessandro Astone <ales.astone@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Subject: [PATCH v2 1/2] binder: Address corner cases in deferred copy and fixup
 Date:   Fri, 15 Apr 2022 14:00:15 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Oleg Nesterov <oleg@redhat.com>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <YlleTwxqx4keRYd4@hirez.programming.kicks-ass.net>
-References: <20220412114853.842942162@infradead.org>
- <20220413132451.GA27281@redhat.com>
- <20220413185704.GA30360@redhat.com>
- <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
+Message-Id: <20220415120015.52684-2-ales.astone@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220415120015.52684-1-ales.astone@gmail.com>
+References: <20220415120015.52684-1-ales.astone@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415101644.GA10421@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:16:44PM +0200, Oleg Nesterov wrote:
-> On 04/15, Peter Zijlstra wrote:
-> >
-> > On Thu, Apr 14, 2022 at 08:34:33PM +0200, Oleg Nesterov wrote:
-> >
-> > > If it can work, then 1/5 needs some changes, I think. In particular,
-> > > it should not introduce JOBCTL_TRACED_FROZEN until 5/5, and perhaps
-> >
-> > That TRACED_FROZEN was to distinguish the TASK_TRACED and __TASK_TRACED
-> > state, and isn't related to the freezer.
-> 
-> Lets forget about 3-5 which I didn't read carefully yet. So why do we
-> need TRACED_FROZEN?
+When handling BINDER_TYPE_FDA object we are pushing a parent fixup
+with a certain skip_size but no scatter-gather copy object, since
+the copy is handled standalone.
+If BINDER_TYPE_FDA is the last children the scatter-gather copy
+loop will never stop to skip it, thus we are left with an item in
+the parent fixup list. This will trigger the BUG_ON().
 
-The purpose of 1/5 was to not have any unique state in __state. To at
-all times be able to reconstruct __state from outside information (where
-needed).
+This is reproducible in android when playing a video.
+We receive a transaction that looks like this:
+    obj[0] BINDER_TYPE_PTR, parent
+    obj[1] BINDER_TYPE_PTR, child
+    obj[2] BINDER_TYPE_PTR, child
+    obj[3] BINDER_TYPE_FDA, child
 
-Agreed that this particular piece of state isn't needed until 5/5, but
-the concept is independent (also 5/5 is insanely large already).
+Fixes: 09184ae9b575 ("binder: defer copies of pre-patched txn data")
+Signed-off-by: Alessandro Astone <ales.astone@gmail.com>
+---
+ drivers/android/binder.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-> From 1/5:
-> 
-> 	 static inline void signal_wake_up(struct task_struct *t, bool resume)
-> 	 {
-> 	+	lockdep_assert_held(&t->sighand->siglock);
-> 	+
-> 	+	if (resume && !(t->jobctl & JOBCTL_TRACED_FROZEN))
-> 	+		t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-> 	+
-> 		signal_wake_up_state(t, resume ? TASK_WAKEKILL : 0);
-> 	 }
-> 	+
-> 	 static inline void ptrace_signal_wake_up(struct task_struct *t, bool resume)
-> 	 {
-> 	+	lockdep_assert_held(&t->sighand->siglock);
-> 	+
-> 	+	if (resume)
-> 	+		t->jobctl &= ~JOBCTL_TRACED;
-> 	+
-> 		signal_wake_up_state(t, resume ? __TASK_TRACED : 0);
-> 	 }
-> 
-> Can't we simply change signal_wake_up_state(),
-> 
-> 	void signal_wake_up_state(struct task_struct *t, unsigned int state)
-> 	{
-> 		set_tsk_thread_flag(t, TIF_SIGPENDING);
-> 		/*
-> 		 * TASK_WAKEKILL also means wake it up in the stopped/traced/killable
-> 		 * case. We don't check t->state here because there is a race with it
-> 		 * executing another processor and just now entering stopped state.
-> 		 * By using wake_up_state, we ensure the process will wake up and
-> 		 * handle its death signal.
-> 		 */
-> 		if (wake_up_state(t, state | TASK_INTERRUPTIBLE))
-> 			t->jobctl &= ~(JOBCTL_STOPPED | JOBCTL_TRACED);
-> 		else
-> 			kick_process(t);
-> 	}
-> 
-> ?
+diff --git a/drivers/android/binder.c b/drivers/android/binder.c
+index 8351c5638880..31176edb1069 100644
+--- a/drivers/android/binder.c
++++ b/drivers/android/binder.c
+@@ -2295,6 +2295,7 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+ {
+ 	int ret = 0;
+ 	struct binder_sg_copy *sgc, *tmpsgc;
++	struct binder_ptr_fixup *tmppf;
+ 	struct binder_ptr_fixup *pf =
+ 		list_first_entry_or_null(pf_head, struct binder_ptr_fixup,
+ 					 node);
+@@ -2349,7 +2350,11 @@ static int binder_do_deferred_txn_copies(struct binder_alloc *alloc,
+ 		list_del(&sgc->node);
+ 		kfree(sgc);
+ 	}
+-	BUG_ON(!list_empty(pf_head));
++	list_for_each_entry_safe(pf, tmppf, pf_head, node) {
++		BUG_ON(pf->skip_size == 0);
++		list_del(&pf->node);
++		kfree(pf);
++	}
+ 	BUG_ON(!list_empty(sgc_head));
+ 
+ 	return ret > 0 ? -EINVAL : ret;
+-- 
+2.35.1
 
-This would be broken when we so signal_wake_up_state() when state
-doesn't match. Does that happen? I'm thikning siglock protects us from
-the most obvious races, but still.
-
-If not broken, then it needs at least a comment explaining why not etc..
-I'm sure to not remember many of these details.
-
-Also, signal_wake_up_state() really can do with that
-lockdep_assert_held() as well ;-)
-
-> > > 		/*
-> > > 		 * We take the read lock around doing both checks to close a
-> > > 		 * possible race where someone else attaches or detaches our
-> > > 		 * natural child.
-> > > 		 */
-> > > 		read_lock(&tasklist_lock);
-> > > 		traced = child->ptrace && child->parent == current;
-> > > 		read_unlock(&tasklist_lock);
-> > >
-> > > 		if (!traced)
-> > > 			return -ESRCH;
-> >
-> > The thing being, that if it is our ptrace child, it won't be going away
-> > since we're running this code and not ptrace_detach().  Right?
-> 
-> Yes. and nobody else can detach it.
-> 
-> Another tracer can't attach until child->ptrace is cleared, but this can
-> only happen if a) this child is killed and b) another thread does wait()
-> and reaps it; but after that attach() is obviously impossible.
-> 
-> But since this child can go away, the patch changes ptrace_freeze_traced()
-> to use lock_task_sighand().
-
-Right.
-
-> > > 		for (;;) {
-> > > 			if (fatal_signal_pending(current))
-> > > 				return -EINTR;
-> >
-> > What if signal_wake_up(.resume=true) happens here? In that case we miss
-> > the fatal pending, and task state isn't changed yet so we'll happily go
-> > sleep.
-> 
-> No, it won't sleep, see the signal_pending_state() check in schedule().
-
-Urgh, forgot about that one ;-)
-
-> > > 			set_current_state(TASK_KILLABLE);
-> 
-> And let me explain TASK_KILLABLE just in case... We could just use
-> TASK_UNINTERRUPTIBLE and avoid the signal_pending() check, but KILLABLE
-> looks "safer" to me. If the tracer hangs because of some bug, at least
-> it can be killed from userspace.
-
-Agreed.
-
-> 
-> > > 			if (!(READ_ONCE(child->jobctl) & JOBCTL_TRACED)) {
-> >
-> >   TRACED_XXX ?
-> 
-> oops ;)
-> 
-> > > -	spin_lock_irq(&task->sighand->siglock);
-> > >  	if (task_is_traced(task) && !looks_like_a_spurious_pid(task) &&
-> > >  	    !__fatal_signal_pending(task)) {
-> > >  		task->jobctl |= JOBCTL_TRACED_FROZEN;
-> > >  		WRITE_ONCE(task->__state, __TASK_TRACED);
-> > >  		ret = true;
-> > >  	}
-> >
-> > I would feel much better if this were still a task_func_call()
-> > validating !->on_rq && !->on_cpu.
-> 
-> Well, but "on_rq || on_cpu" would mean that wait_task_inactive() is buggy ?
-
-Yes, but I'm starting to feel a little paranoid here. Better safe than
-sorry etc..
-
-> But! I forgot to make anothet change in this code. I do not think it should
-> rely on task_is_traced(). We are going to abuse task->__state, so I think
-> it should check task->__state == TASK_TRACED directly. Say,
-> 
-> 	if (READ_ONCE(task->__state) == TASK_TRACED && ...) {
-> 		WRITE_ONCE(task->__state, __TASK_TRACED);
-> 		WARN_ON_ONCE(!task_is_traced(task));
-> 		ret = true;
-> 	}
-> 
-> looks more clean to me. What do you think?
-
-Agreed on this.
-
-> > > @@ -2307,13 +2313,14 @@ static int ptrace_stop(int exit_code, int why, int clear_code,
-> > >  		 */
-> > >  		if (gstop_done)
-> > >  			do_notify_parent_cldstop(current, false, why);
-> > > +		clear_traced_xxx();
-> > > +		read_unlock(&tasklist_lock);
-> > >
-> > > -		/* tasklist protects us from ptrace_freeze_traced() */
-> > > +		/* JOBCTL_TRACED_XXX protects us from ptrace_freeze_traced() */
-> >
-> > But... TRACED_XXX has just been cleared ?!
-> 
-> Cough ;) OK, I'll move __set_current_state() back under tasklist.
-> 
-> And in this case we do not need wake_up(parent), so we can shift it from
-> clear_traced_xxx() into another branch.
-> 
-> OK, so far it seems that this patch needs a couple of simple fixes you
-> pointed out, but before I send V2:
-> 
-> 	- do you agree we can avoid JOBCTL_TRACED_FROZEN in 1-2 ?
-
-We can for the sake of 2 avoid TRACED_FROZEN, but as explained at the
-start, the point of 1 was to ensure there is no unique state in __state,
-and I think in that respect we can keep it, hmm?
-
-> 	- will you agree if I change ptrace_freeze_traced() to rely
-> 	  on __state == TASK_TRACED rather than task_is_traced() ?
-
-Yes.

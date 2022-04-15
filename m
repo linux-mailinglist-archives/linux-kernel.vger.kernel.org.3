@@ -2,106 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24EF350205F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC39502061
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 04:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348628AbiDOCV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 22:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S1348638AbiDOCZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:25:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239639AbiDOCV1 (ORCPT
+        with ESMTP id S239639AbiDOCZK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 22:21:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CB61B0A6C
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:19:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1649989139;
+        Thu, 14 Apr 2022 22:25:10 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC85A4091F
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:22:43 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1649989360;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UZ3R/LPgwuNF2ES1WoiEgSoPV3wZKDu+wRahlf5rASE=;
-        b=hLtaCD/o2Sz/tEQvTQgtctR3NwM0f9lzCgdRR5GGxHUSXoznXQWXy2F5W1e5K0H83ODAs7
-        6D2XEl/WsSMo3HnrNnmibG94ddh33b5gB1486/05xp9w+dBCivkZjbsqBKnpLX2/43wEny
-        +ledwE7MNhh04Cwe+AgDe2po6EDSTmM=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-32-wYva__1VOdOdEarm5rJ-CQ-1; Thu, 14 Apr 2022 22:18:58 -0400
-X-MC-Unique: wYva__1VOdOdEarm5rJ-CQ-1
-Received: by mail-qt1-f200.google.com with SMTP id o17-20020ac872d1000000b002edcca4ce06so4461738qtp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 19:18:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=UZ3R/LPgwuNF2ES1WoiEgSoPV3wZKDu+wRahlf5rASE=;
-        b=kgBg4js+LXncjzdZxM6RgO34yK8OrD3stPYzUs6PvXwTleJi2GDBKI66WSpU9dghCZ
-         FT2ANyaHTvZ5iFrsN9GW37PSTZHUe/N551ZQbP3BmpzkH05bydJgKXkC6paXOe53EEM4
-         RM7GX8mqzm0rKH65OUhXHOpKcidm5T4gDjwPSVgI+XTMMbUK249BUWCTlV8C1xGoyx/M
-         2uPB/BE82FfuNOhzykpaxf3vo+XmcfZJZC0yni8EKuVPzEgVaPA1nZrzK+n1zKxxcXdE
-         eLOdWyhRVVR5GvWfXuLjj3pfCm4bpbD/gnnxcAswOt1OQAj9f+vt3qC+ghsQzcMcF9cP
-         PF3A==
-X-Gm-Message-State: AOAM5310TOixIt+e+jHSCd2t6x1I95uDy8vQxPbWT5O7JgJ8ao1y5nrV
-        dpq8st8Lg1SrUBuYw5IYAJBBk60XQesLkU9MXZAinXR2Z2gLWxjrOWjpspIpevK0dw1EUS/UvZ9
-        7V1wFzEkHpeFsPcUwCD3HIso2
-X-Received: by 2002:a05:622a:1055:b0:2e1:fe6b:3781 with SMTP id f21-20020a05622a105500b002e1fe6b3781mr4026544qte.441.1649989137599;
-        Thu, 14 Apr 2022 19:18:57 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzrUaBCQoVG/jq122688UnhsiG9jjWGL3qxYkbXZGZ0vwWMP8jj+0NBXd0C/JX8w/VdkFUIKA==
-X-Received: by 2002:a05:622a:1055:b0:2e1:fe6b:3781 with SMTP id f21-20020a05622a105500b002e1fe6b3781mr4026536qte.441.1649989137372;
-        Thu, 14 Apr 2022 19:18:57 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id y15-20020a05620a09cf00b0069c80404de6sm1169334qky.31.2022.04.14.19.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Apr 2022 19:18:56 -0700 (PDT)
-Date:   Thu, 14 Apr 2022 19:18:53 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Miroslav Benes <mbenes@suse.cz>
-Subject: Re: [PATCH 17/18] objtool: Remove --lto and --vmlinux
-Message-ID: <20220415021853.vnavjq6u6ibgva2l@treble>
-References: <cover.1649891421.git.jpoimboe@redhat.com>
- <b64b57896eaedf69f53d54c7d9ea373834aef069.1649891421.git.jpoimboe@redhat.com>
- <YlfXvlvNmCYFIq0w@hirez.programming.kicks-ass.net>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6agPn/uOZaGtcLyCxoffejAHcyBt7tyZhpc93AjirHc=;
+        b=p+sebDUYWKWgOOM1UWGUwgUfvVkxT+WLYRAQd6zFy9hkt7PDx1jCLkqb2pk4QHo0LO4YAh
+        gKkQwrq/A9Z5+7AnwOdNjB3e508qJpxRaJvUR1IAoc1VaaNlOptd266V1LCSv2iy28D0E1
+        tbB2Ep3mGUM6OhyDYuSfnAgtCCB6Qds=
+From:   Tao Zhou <tao.zhou@linux.dev>
+To:     LKML <linux-kernel@vger.kernel.org>, Tao Zhou <tao.zhou@linux.dev>
+Cc:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>
+Subject: [PATCH V1 RESEND]: sched/fair: Revise comment about lb decision matrix
+Date:   Fri, 15 Apr 2022 10:22:46 +0800
+Message-Id: <20220415022246.14902-1-tao.zhou@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YlfXvlvNmCYFIq0w@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,TO_EQ_FM_DIRECT_MX,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:13:50AM +0200, Peter Zijlstra wrote:
-> On Wed, Apr 13, 2022 at 04:19:52PM -0700, Josh Poimboeuf wrote:
-> 
-> > @@ -131,6 +131,12 @@ static inline u32 reloc_hash(struct reloc *reloc)
-> >  	return sec_offset_hash(reloc->sec, reloc->offset);
-> >  }
-> >  
-> > +/* is it a whole archive (vmlinux.o or module)? */
-> > +static inline bool is_linked_object(struct elf *elf)
-> > +{
-> > +	return elf->num_files > 1;
-> > +}
-> > +
-> >  struct elf *elf_open_read(const char *name, int flags);
-> >  struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
-> 
-> Ooh, nice... yes, that was the entire point of --lto.
+If busiest group type is group_misfit_task, the local
+group type must be group_has_spare according to below
+code in update_sd_pick_busiest():
 
-Urgh, some kernel modules only have a single source file, which
-obviously breaks this.
+if (sgs->group_type == group_misfit_task &&
+    (!capacity_greater(capacity_of(env->dst_cpu), sg->sgc->max_capacity) ||
+     sds->local_stat.group_type != group_has_spare))
+         return false;
 
-We might need an explicit --link option after all.  But with different
-semantics from --lto.  It would just mean "is a linked object".
+group type imbalanced and overloaded and fully_busy are filtered in here.
+misfit and asym are filtered before in update_sg_lb_stats().
+So, change the decision matrix to:
 
+busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
+has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
+fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
+misfit_task      force     N/A        N/A    N/A  *N/A*      *N/A*
+asym_packing     force     force      N/A    N/A  force      force
+imbalanced       force     force      N/A    N/A  force      force
+overloaded       force     force      N/A    N/A  force      avg_load
+
+Fixes: 0b0695f2b34a ("sched/fair: Rework load_balance()")
+Reviewed-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Signed-off-by: Tao Zhou <tao.zhou@linux.dev>
+---
+
+v1 changelog:
+(1) Send to MAINTAINERS/REVIEWS get from `./scripts/get_maintainer.pl`
+    suggested by Dietmar Eggemann.
+(2) Based on v5.18-rc2
+
+
+ kernel/sched/fair.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index d4bd299d67ab..b8c67e7c8cf3 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -9495,7 +9495,7 @@ static inline void calculate_imbalance(struct lb_env *env, struct sd_lb_stats *s
+  * busiest \ local has_spare fully_busy misfit asym imbalanced overloaded
+  * has_spare        nr_idle   balanced   N/A    N/A  balanced   balanced
+  * fully_busy       nr_idle   nr_idle    N/A    N/A  balanced   balanced
+- * misfit_task      force     N/A        N/A    N/A  force      force
++ * misfit_task      force     N/A        N/A    N/A  N/A        N/A
+  * asym_packing     force     force      N/A    N/A  force      force
+  * imbalanced       force     force      N/A    N/A  force      force
+  * overloaded       force     force      N/A    N/A  force      avg_load
 -- 
-Josh
+2.35.2
 

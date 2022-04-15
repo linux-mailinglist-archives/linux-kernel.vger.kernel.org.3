@@ -2,156 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632805031A7
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FC6C50317A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356417AbiDOXG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35104 "EHLO
+        id S1350150AbiDOXKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiDOXG0 (ORCPT
+        with ESMTP id S229560AbiDOXKn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:06:26 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF5367D3E
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:03:56 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 11so6314901edw.0
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=mmeqzLMQT+kSYtEORk1VQwlIZb6II2FKZzIIoMsERjA=;
-        b=DFSvW1LWVTiymV77lsnzL39NC77zBC5b3vG2LyDRFg75tX7jB/+k2JToy5gqlw7HJs
-         IIT2qvLXLio9Tcg1LD3U9WtQ7/udodG+XgSQ9MMnDsc+T31mCAh5A6DsEpeeX15WWL3B
-         ZuLUndHdgC4QOguxf+eu7BTSPyStUlOobqGVI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=mmeqzLMQT+kSYtEORk1VQwlIZb6II2FKZzIIoMsERjA=;
-        b=qAVKxLRsro40eyI5WyIogZIUau7Btq9sf3bKjxnPBm6wJhLQHJbPBRtFb0LRGI+gVh
-         kc3GnLTksr/iPcxO9gZiO0vJ71HEYlyBEwtaKZYitTTR97U4jINTIDKj8KFH0bs3TCGN
-         FZJFuHfnUd3e4PaLMAF+HD6rk8k44kFWbDW0+ow4nb5xfB0keCKATswwwmkTycR3vkHH
-         DtePK7VCQqZDRYDQuchhPdGOWvYbJggsAH1rJdDYhXHUACCtMiE6mPKZh86v3Ap4GIRt
-         AHOZnJRj4u/W27eYA1R2+pFIlNxJcX7Mto/MA+OB3sbrOxBLiAYnbbtTMZYHNtdLHVxF
-         OV2A==
-X-Gm-Message-State: AOAM531HU045wzhzIOuZwJGvF4CbiQuD4KnpCsGHCH2v+js2zGTodtBU
-        o6wXne+zQfyPR0p1+VF/F1PoNF5FSjjJQFfERRY=
-X-Google-Smtp-Source: ABdhPJzbYnmnM3/OIzH3e6BXpANuHIzER9X86nsUqcSAqBaAXoQ/bW6vqReqnqA5e7tKyYA/4C9Rhg==
-X-Received: by 2002:a05:6402:354d:b0:41d:dfe:6a8c with SMTP id f13-20020a056402354d00b0041d0dfe6a8cmr1325067edd.286.1650063835212;
-        Fri, 15 Apr 2022 16:03:55 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm2074353eja.217.2022.04.15.16.03.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 16:03:55 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id g18so17438561ejc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:03:54 -0700 (PDT)
-X-Received: by 2002:a2e:b8d6:0:b0:24b:6b40:a96a with SMTP id
- s22-20020a2eb8d6000000b0024b6b40a96amr711923ljp.176.1650063824686; Fri, 15
- Apr 2022 16:03:44 -0700 (PDT)
+        Fri, 15 Apr 2022 19:10:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60006183BE;
+        Fri, 15 Apr 2022 16:08:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0D3B831BB;
+        Fri, 15 Apr 2022 23:08:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D519C385AF;
+        Fri, 15 Apr 2022 23:08:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650064090;
+        bh=bun1UW6dQN+eeylN7K4W70rNw5ZTuBxbCaji7Cqa870=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Kx2EbsKWUajlN+9EYTClzJvSsIYSC0HMbpGZJ+ViEb6kodJh4fqPQAafSm+RNgDyY
+         UD5s7AzJmqA4r/G5RGaG6yMqa+SBGNxlSotO8THxVSeIeEXnnf0ZuynU28sa3oicyC
+         IGc/GOGHFZe05gBPClMuGve0nkZ00NXKVv1beymT0WVvzlnXjIkCObGjHkboA+UfRL
+         j5UZsaRvZM1eY02Vv7aE+eaLwlkg30VQ2hybLCDwIDQTPH58qWHccOtOXCFTXbAyG9
+         JPBwM0TPIzODSx3pqPfRF7LEm6xYOSCceYrjHY/ZpDYJoOogFqwOTd4GCDI5eNOLfS
+         bEo9m5ZHCFNWw==
+Received: by mail-yb1-f173.google.com with SMTP id t67so16608290ybi.2;
+        Fri, 15 Apr 2022 16:08:10 -0700 (PDT)
+X-Gm-Message-State: AOAM530y8pse7f21Iqhf5l9O4k5JLtanBK0CPOKKp15Y1z9uw6DCGsvA
+        HUN+5VnOloum4YqU/Xq4BZmfDZLht1GBIV/dPqU=
+X-Google-Smtp-Source: ABdhPJzfao0cbhuAT+evsmpeKuZ23Th3dopsUfXigTn3uQNgTDcD+/N0ixKG3h8vTUKKSo+9oYfu8IiLwQdS0yiXQk8=
+X-Received: by 2002:a05:6902:1506:b0:63e:4f1b:40ae with SMTP id
+ q6-20020a056902150600b0063e4f1b40aemr1355690ybu.322.1650064089602; Fri, 15
+ Apr 2022 16:08:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
- <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
- <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
- <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
- <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
- <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
- <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
- <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
- <CAHk-=whvkRTVBhAamt0kYyp925jk_+g7T0CyPke_FbCWGQ1VvA@mail.gmail.com> <CAOUHufZ4KrjFTYH8wtwMGd9AriZfZtO4GhbiK1SuNbY31VTT9w@mail.gmail.com>
-In-Reply-To: <CAOUHufZ4KrjFTYH8wtwMGd9AriZfZtO4GhbiK1SuNbY31VTT9w@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 15 Apr 2022 16:03:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-Message-ID: <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-2-alobakin@pm.me>
+In-Reply-To: <20220414223704.341028-2-alobakin@pm.me>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 15 Apr 2022 16:07:58 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7qrH6Fc-MSJSJzS0r_vDzTfHyaaRDGhrTjo9vijQwpWg@mail.gmail.com>
+Message-ID: <CAPhsuW7qrH6Fc-MSJSJzS0r_vDzTfHyaaRDGhrTjo9vijQwpWg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 01/11] bpf, perf: fix bpftool compilation with !CONFIG_PERF_EVENTS
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 3:58 PM Yu Zhao <yuzhao@google.com> wrote:
+On Thu, Apr 14, 2022 at 3:45 PM Alexander Lobakin <alobakin@pm.me> wrote:
 >
-> BUG_ONs are harmful but problems that trigger them would be
-> presummingly less penetrating to the user base; on the other hand,
-> from my experience working with some testers (ordinary users), they
-> ignore WARN_ON_ONCEs until the kernel crashes.
+> When CONFIG_PERF_EVENTS is not set, struct perf_event remains empty.
+> However, the structure is being used by bpftool indirectly via BTF.
+> This leads to:
+>
+> skeleton/pid_iter.bpf.c:49:30: error: no member named 'bpf_cookie' in 'struct perf_event'
+>         return BPF_CORE_READ(event, bpf_cookie);
+>                ~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~
+>
+> ...
+>
+> skeleton/pid_iter.bpf.c:49:9: error: returning 'void' from a function with incompatible result type '__u64' (aka 'unsigned long long')
+>         return BPF_CORE_READ(event, bpf_cookie);
+>                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Tools and samples can't use any CONFIG_ definitions, so the fields
+> used there should always be present.
+> Move CONFIG_BPF_SYSCALL block out of the CONFIG_PERF_EVENTS block
+> to make it available unconditionally.
+>
+> Fixes: cbdaf71f7e65 ("bpftool: Add bpf_cookie to link output")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
 
-I don't understand your argument.
+While I can't think of a real failure with this approach, it does feel
+weird to me. Can we fix this with bpf_core_field_exists()?
 
-First you say that VM_BUG_ON() is only for VM developers.
+Thanks,
+Song
 
-Then you say "some testers (ordinary users) ignore WARN_ON_ONCEs until
-the kernel crashes".
 
-So which is it?
-
-VM developers, or ordinary users?
-
-Honestly, if a VM developer is ignoring a WARN_ON_ONCE() from the VM
-subsystem, I don't even know what to say.
-
-And for ordinary users, a WARN_ON_ONCE() is about a million times
-better, becasue:
-
- - the machine will hopefully continue working, so they can report the warning
-
- - even when they don't notice them, distros tend to have automated
-reporting infrastructure
-
-That's why I absolutely *DETEST* those stupid BUG_ON() cases - they
-will often kill the machine with nasty locks held, resulting in a
-completely undebuggable thing that never gets reported.
-
-Yes, you can be careful and only put BUG_ON() in places where recovery
-is possible. But even then, they have no actual _advantages_ over just
-a WARN_ON_ONCE.
-
-                  Linus
+> ---
+>  include/linux/perf_event.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+> index af97dd427501..b1d5715b8b34 100644
+> --- a/include/linux/perf_event.h
+> +++ b/include/linux/perf_event.h
+> @@ -762,12 +762,14 @@ struct perf_event {
+>         u64                             (*clock)(void);
+>         perf_overflow_handler_t         overflow_handler;
+>         void                            *overflow_handler_context;
+> +#endif /* CONFIG_PERF_EVENTS */
+>  #ifdef CONFIG_BPF_SYSCALL
+>         perf_overflow_handler_t         orig_overflow_handler;
+>         struct bpf_prog                 *prog;
+>         u64                             bpf_cookie;
+>  #endif
+>
+> +#ifdef CONFIG_PERF_EVENTS
+>  #ifdef CONFIG_EVENT_TRACING
+>         struct trace_event_call         *tp_event;
+>         struct event_filter             *filter;
+> --
+> 2.35.2
+>
+>

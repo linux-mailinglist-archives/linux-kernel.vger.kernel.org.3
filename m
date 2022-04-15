@@ -2,92 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91CF35031A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED4A050316E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 01:10:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354902AbiDOVe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 17:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47676 "EHLO
+        id S1356116AbiDOVgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 17:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230476AbiDOVez (ORCPT
+        with ESMTP id S1356108AbiDOVgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 17:34:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B7FAAC8B;
-        Fri, 15 Apr 2022 14:32:24 -0700 (PDT)
+        Fri, 15 Apr 2022 17:36:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60FD1C748B;
+        Fri, 15 Apr 2022 14:33:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AB7062185;
-        Fri, 15 Apr 2022 21:32:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ADA9C385A4;
-        Fri, 15 Apr 2022 21:32:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650058343;
-        bh=3UWUcyacMiJlx7p1411HKtWv5JjN8giHOd5i3EG0zSU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JrZnPatO9LRi5eqCzk79CipiGJo5Y/fO7qwH9Qd+NPfbU1e/C3vo7TPs8SeoPNNBn
-         QBs9tMWzjWV+goiaCOE99AzqZXatzAUIhtMAy03dOsjf4od9MMdhDi8q6b4cPyAcf4
-         KHcD5FHBDK5ACrThpIUEFXS/39sgtHveD+V3oKUk=
-Date:   Fri, 15 Apr 2022 14:32:20 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Justin Forbes <jforbes@fedoraproject.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?ISO-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
-Message-Id: <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
-In-Reply-To: <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
-        <20220407031525.2368067-9-yuzhao@google.com>
-        <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
-        <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
-        <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
-        <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
-        <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
-        <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12F38B83021;
+        Fri, 15 Apr 2022 21:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C426C385A5;
+        Fri, 15 Apr 2022 21:33:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650058423;
+        bh=dmfD8gJvfQz8+xpzJY079QIq69bv692mUtRVsFose0g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VuPlpI79krHgJhXKyBIRRYgKnTSHtUFLZQ714eenLXVKtw8kGDxbUwQclDwhmA/wV
+         BNtwhKqP7E95OMz7fTLaYvJQnZ72K87DAPNXeG/JRZEhKYL8ShVk3VlmBb79kNKA15
+         X/SRDd6JQzEY7k75+E2J4V7BDY2hxAkFuLWhw2CeSRPGo2/Tl0W58mn5f9KjhtdMWg
+         W/7SYttSs9+ISx5qXvquYKxre9rDkUi+GUw3o8kT6uqsXyVxmC0otUCUZA2vQ8+Snc
+         KsKJNZGOul0mrgUfmnzajrNiI23Yy/614QQpy8LGKEgisfQCAP1ZrLkaDfA0eDz2Hn
+         y8Ss/P53FOoRg==
+Date:   Fri, 15 Apr 2022 23:33:40 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 2/2] i2c: dev: Force case user pointers in
+ compat_i2cdev_ioctl()
+Message-ID: <YlnktBB0uT3kmzo0@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jakub Kicinski <kuba@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220411180752.36920-1-andriy.shevchenko@linux.intel.com>
+ <20220411180752.36920-2-andriy.shevchenko@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6CxANf8x6srDia+u"
+Content-Disposition: inline
+In-Reply-To: <20220411180752.36920-2-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -96,44 +61,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 14:11:32 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-> >
-> > I grabbed
-> > https://kojipkgs.fedoraproject.org//packages/kernel/5.18.0/0.rc2.23.fc37/src/kernel-5.18.0-0.rc2.23.fc37.src.rpm
-> > and
-> 
-> Yes, Fedora/RHEL is one concrete example of the model I mentioned
-> above (experimental/stable). I added Justin, the Fedora kernel
-> maintainer, and he can further clarify.
-> 
-> If we don't want more VM_BUG_ONs, I'll remove them. But (let me
-> reiterate) it seems to me that just defeats the purpose of having
-> CONFIG_DEBUG_VM.
-> 
+--6CxANf8x6srDia+u
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Well, I feel your pain.  It was never expected that VM_BUG_ON() would
-get subverted in this fashion.
+On Mon, Apr 11, 2022 at 09:07:52PM +0300, Andy Shevchenko wrote:
+> Sparse has warned us about wrong address space for user pointers:
+>=20
+>   i2c-dev.c:561:50: warning: incorrect type in initializer (different add=
+ress spaces)
+>   i2c-dev.c:561:50:    expected unsigned char [usertype] *buf
+>   i2c-dev.c:561:50:    got void [noderef] __user *
+>=20
+> Force cast the pointer to (__u8 *) that is used by I=C2=B2C core code.
+>=20
+> Note, this is an additional fix to the previously addressed similar issue
+> in the I2C_RDWR case in the same function.
+>=20
+> Fixes: 3265a7e6b41b ("i2c: dev: Add __user annotation")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-We could create a new MM-developer-only assertion.  Might even call it
-MM_BUG_ON().  With compile-time enablement but perhaps not a runtime
-switch.
-
-With nice simple semantics, please.  Like "it returns void" and "if you
-pass an expression with side-effects then you lose".  And "if you send
-a patch which produces warnings when CONFIG_MM_BUG_ON=n then you get to
-switch to windows95 for a month".
-
-Let's leave the mglru assertions in place for now and let's think about
-creating something more suitable, with a view to switching mglru over
-to that at a later time.
+Applied to for-current, thanks!
 
 
+--6CxANf8x6srDia+u
+Content-Type: application/pgp-signature; name="signature.asc"
 
-But really, none of this addresses the core problem: *_BUG_ON() often
-kills the kernel.  So guess what we just did?  We killed the user's
-kernel at the exact time when we least wished to do so: when they have
-a bug to report to us.  So the thing is self-defeating.
+-----BEGIN PGP SIGNATURE-----
 
-It's much much better to WARN and to attempt to continue.  This makes
-it much more likely that we'll get to hear about the kernel flaw.
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJZ5LQACgkQFA3kzBSg
+KbYNOA//bjCJp6EkFMXNUP17edlc97VgHgbxAEKWstAWfaUZoryKMkHsOttvSZc/
+eTP2GxMtlgIlYJCQUqrDhaNKS/yXk3hblT+Xxh5MvU95UyKRI3ieBpwzTGHhXyGS
+qnqTZCeq1oLgqDnj5ufQd248Xer+c6zqG+dro+fOTxA4zgsDGyuH/UeTdNV03UAD
+4C4ZRciX3kSbgXpS1R1Lki5WXKfnSmMP0m2DXAc4c2DFyT/+mIV3AS+XzfHcfmzl
+3LvvobjjLfahBy5rOfMWmhFgCJFb8BA+LUbkSQjWz1QGoIbLHPbpuIRmRu5VQRzI
+cFRnfU+wUdb3/m3aVV+QEI5TJu1/esfk5CTSM1bBDae/sssfI7q/EYiC2K1Nd2HI
+zahKIEouL7DHh9PsInWCOUKgcvNpc0i+Zj86onkiBzmawN+Y/cZwlUD4m7q8LHoX
+OQ4VKsFi7l1ara5TVqbVqVjQKqQTl1nss/pYbUivosNAftL/2XpgeEWt/pirLKLo
+aRM4L1mSQqw8bynwtc+nq0RvA3KYUgozNSeT794yOc6mGjaTlRr9ImuqTiRk2Y4w
+qbvqfejSKwbiYDZPmW70UlnknT7QW2ICF9Cx5Veli1FPoPICqqpkdElq4+t6Dldr
+YNSZZiR4LzY/zUFvP72dg0L/9WIncppcNkP7Z9tJFmmskVGxyaI=
+=VHna
+-----END PGP SIGNATURE-----
+
+--6CxANf8x6srDia+u--

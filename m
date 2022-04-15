@@ -2,312 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5BD502E0F
+	by mail.lfdr.de (Postfix) with ESMTP id E3A9C502E10
 	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 18:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356021AbiDOQ7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 12:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
+        id S1356028AbiDOQ7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 12:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233533AbiDOQ7K (ORCPT
+        with ESMTP id S233533AbiDOQ7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 12:59:10 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F69972BC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:56:40 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id x17so14831007lfa.10
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 09:56:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wDM8aPSumnwjf3y+rSjrnyxzZzdf4YOPhM2nvogHDFM=;
-        b=phFRLux9w6gd7+Qm56VNb+Ds1zvFMOIKuSWPYmWTLe+W3ELkqYoOat0/mrlly3We6c
-         W2Fxz9DwQGds5QeXJdLca1vt4qd+o+zLQctYW+9KobwnYreFohImBUQfbD/wr0gP7TIy
-         +yAPUWGIJG/fv0nHYfzF801W+M2xXtf8M3lhuIG+jViBq5Dl7qBQNg5BdarEnqWc44Oh
-         G1IC2wjuuj5/ZedwtiKK+qDcI7Hj1OYDn19P4wWQqWoA+ho6r1sVac7EwS3JHdhFP6dR
-         0t23EY4W9egI4BE8GsbsyerC8NoQQDjerPySZRai0wdAE3UvAxbdi6pNBbH47rTcSYXd
-         AZMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wDM8aPSumnwjf3y+rSjrnyxzZzdf4YOPhM2nvogHDFM=;
-        b=ei6D5BAwFHUisDfdEk+ZQ3PtMARQlMJ3JKR5wpQKwSOIG9/IZIUNYLoQPv9tfs5gGM
-         F0wr+P9hdJcptXAoTd4V2+W/FvIT+99Kyz0TP4BrT/2TRzYepiqP4A+Q/YEVH3zu19EG
-         9Wd8HwELxYUBYrcMEVSCIBvY5Cahrwf1wkAq4boGYTb6I7xCKVc+5P+IKyq20oLMx+jQ
-         EmsCl3P8/34/2pLKf93i+FvGucdRB5bxluenIs2s3DegYZzark5WO2IEr+q4It44+veg
-         kUBskVxFNqYd4pkohIHUavEyDooovFwSvUmTBdkDj9Qb1bIAZRSb81aRQcdTTRKYFLUp
-         qS7w==
-X-Gm-Message-State: AOAM532wPvy/VUpY8hi6k3/AXkhcpRidrGAWvt7Nq6XLI4K0Gh052+bI
-        UWTK73R3CAuoWC+livZTir/zyRZS8Ea73YvKqBFoNQx7XONGhQ==
-X-Google-Smtp-Source: ABdhPJxze0H7R4DK/DpIeqQLVKpcVE7+c33dX+6jQjfkUyzvhBwZV3fXPat+F/klxy4aoExISsnNV/0k6Zc2JMGMaVk=
-X-Received: by 2002:ac2:484c:0:b0:46d:28f:cc03 with SMTP id
- 12-20020ac2484c000000b0046d028fcc03mr5675002lfy.235.1650041798426; Fri, 15
- Apr 2022 09:56:38 -0700 (PDT)
+        Fri, 15 Apr 2022 12:59:35 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2631D673CC;
+        Fri, 15 Apr 2022 09:57:06 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23ENtfij014529;
+        Fri, 15 Apr 2022 09:57:05 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=+Id3fg7K6No6KzWi+SP2czJhyQuQFmJ+5rihwF1Jn1Q=;
+ b=Vmj4pnfwr9AG3D/3cW52zUHObfpl0mrUZjLDMXJyFAUpyw7mGN0wadHDUoPU+snSyao9
+ DnkKcwQMNR3dK2qPExAzl5b5cajldrN6WyGvChT9iR9kNJ7XypgoHjTnCgNyrp/2qKkS
+ OMwZiY3iRMwZY9rbNvm4irGfZTXVYMK9C7M= 
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2040.outbound.protection.outlook.com [104.47.56.40])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3fewgtkxu5-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 15 Apr 2022 09:57:05 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=O0BFU70FUupkQ0xAFamns1N5DBtilY356CAEjLgOwS8+lSjQgIN+m9bnIopTihiT4FQ6jQvNKAqVu5tODVdF2bNvrXLQF+kCfLdk0Y/J/Wt6Pvf5LKhz5Gu7PxVt66qzT1He4eL1TNKx6h/yQ8lxktWt8FHWsgy0+x3bY49vT3Nd5yM4M/fDZhaxNNnhfZKbvQV3zsEn8s13mLGBScNI5fI5x6V4bj/+UEM2+s9iN2vMH6Vf5W+nwifM/DAgeZNWXGEGBz0S/ox8p9wCV+1lN1F7EgFP36oZKZh7MPrP9ZMSsisuL6i04DmkC2B1XgP5Hm5Rdr6fpzy37+iF2GWE/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+Id3fg7K6No6KzWi+SP2czJhyQuQFmJ+5rihwF1Jn1Q=;
+ b=oPCO4J3XFbzFmInKizv/bP7+zGLGpktJfi96N+waHX7ao1rH2oHSDpD1YgRu/7TZ6q9FK6qMeg9t/i1dAvqWI1Abt3V6ZMNIHFzxNnEg1FNvzzDScHDs+7aGwQhzDmY12arzY7ojchbSmvQSMxQA0s4M3JPaHkTLP1r6T2Toe6q5OcVYeE6LT2ZQHK7u8B3rRQIaHuNonsd9hoxZ5VWaeGVHWhHZE3qYcqNzpz0oxFRtFlw8BbYBqaQaiqwVY0O7fG/YtRQ/zqXGw/oEQ24wB2Zto+CNHBGiy2mcVl6nAUS7WXfSA6mghJQzPQX/P67qQ2oo8nDgR/jaEmSuZ1onuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by BN8PR15MB2611.namprd15.prod.outlook.com (2603:10b6:408:d0::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Fri, 15 Apr
+ 2022 16:57:01 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::20d2:26a2:6cb1:3c4b]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::20d2:26a2:6cb1:3c4b%6]) with mapi id 15.20.5164.020; Fri, 15 Apr 2022
+ 16:57:01 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Christoph Hellwig <hch@infradead.org>
+CC:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "rick.p.edgecombe@intel.com" <rick.p.edgecombe@intel.com>,
+        "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>
+Subject: Re: [PATCH v3 bpf RESEND 2/4] page_alloc: use __vmalloc_huge for
+ large system hash
+Thread-Topic: [PATCH v3 bpf RESEND 2/4] page_alloc: use __vmalloc_huge for
+ large system hash
+Thread-Index: AQHYUDrlxYc30IXNyUOaichBN4uohazwhJOAgACunYA=
+Date:   Fri, 15 Apr 2022 16:57:01 +0000
+Message-ID: <030EA68F-EAA1-41C8-B7FA-0675B118F0D8@fb.com>
+References: <20220414195914.1648345-1-song@kernel.org>
+ <20220414195914.1648345-3-song@kernel.org> <YlkRY8QfAdNk+Oso@infradead.org>
+In-Reply-To: <YlkRY8QfAdNk+Oso@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.80.82.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9d3f1e62-c637-4391-2cab-08da1f00f641
+x-ms-traffictypediagnostic: BN8PR15MB2611:EE_
+x-microsoft-antispam-prvs: <BN8PR15MB2611EFA275886FD44F0B65E9B3EE9@BN8PR15MB2611.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hUqdJFsJH9bSIo1gwrI9vDdYwcgeJYVN7iZdAw/iA+3Phf48v3g71yQinQFfqeVG33Ef9SQqKXcAt/4ufSOctNPndgsQqoMVpgbkk7lLISFg15pmIrjdRrq2JgTNxu+jsWHtW8MZDUy9FkqcyKRLrqsg8F1paWK4Pps1BK205brbIp6D8TCZ/Z6JSUiR10nCP32XW3ya3at0ljd3Gj5p8i5/aTXLfhpi/DwP8jHcIX53b86bcJEeYL0jKbm4PbGUKCAfOs+NDpe3yhAJEa9mKGG8He7ybJd/eEVAxUylIoZBmMGcbgopKnyMvbddWamPe0g37Mb7htFfWLt6xjj1PN24GfwCmlbpioksUHeMJACfWtsLN5e3YD7XIDmcjgRbzUyHS5jMekwYCv6tKG+JQuSIE/e95hbL781G0DSlpHAf9w8T/6go6hqvsED8AdYWMrD390zLTYxjRMoaADekhV55oBFYjnCQLuCrtU6IJF3wPSrzKXBUP8iIoyXO7Wp98ddyUzC9DIr+VQ6OyE2mm+PNUUTJLdp8LBIXys1fVIAEzwqrM7J2rGIJtAy0JlMNcCVXv/q5chD/vtvveB5smAwN6X0Nj43SmWTPQBIZ4jx42HhxmWgwnelm1bc49e2sFQ6BdC2Pu9RrQMwyYWRFDfmQjMIIcWafinvA5PdbA5NZNEp7AxxdpQxW/ZDRe2HMgUACqyVEIw96AfV0CnzB7wiG9JXTjzhmyvEBDq6f8LPQSPTGMZXyYd+ORz280PHTGsMyKx+vxzsNF+nQj+2KJg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(8676002)(66556008)(66476007)(66946007)(38100700002)(66446008)(64756008)(5660300002)(8936002)(4326008)(6512007)(86362001)(2616005)(38070700005)(508600001)(122000001)(6486002)(7416002)(6506007)(186003)(76116006)(4744005)(33656002)(2906002)(36756003)(6916009)(316002)(54906003)(91956017)(71200400001)(53546011)(14583001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?UJJHjxaG7VWIYrUrXesGe0cZgFz6xwHBLcKd2mZOqwUNHfogCwgN/g812Ftb?=
+ =?us-ascii?Q?mBbv+v6DyLUoYX6PVhB3hsmvR5yruotilM+6dHpDr4pRfNauxRg5Akp01pQi?=
+ =?us-ascii?Q?7v9U3QEecSXiDwctf3UiUtCWO4fZRxuP6ZQFerRj/EM9HYfyugUAvtvdo2EU?=
+ =?us-ascii?Q?aw6fsHmuJoBy+Qeb0Eesk/MSQeOApjGRl//ZdATNGO0oQc6Ab9GhAh3aFNtu?=
+ =?us-ascii?Q?yoaJ3Gs0uIosWFYnq/IcS8/7tpQjzKnXHN10lAghrCzCmJk9gyeMQGvvJ/gl?=
+ =?us-ascii?Q?NmWML9Au4E8NrV5QQgBZ/HRowjlGv/9pMp5v5uN1klLF1OQ0K7rxmwY4j8ss?=
+ =?us-ascii?Q?KYJ52Ulp64fkrU17aSHHjq6hEah6vwYwR1F4NzS38S5CXtxnQ+YqWo9MSXFs?=
+ =?us-ascii?Q?IMfblKO6mKPgRz1W1wc+Dau5jpJiKjUPHzGsOsOGXl6okTnKe0ekaz/S6TUu?=
+ =?us-ascii?Q?i+pX0wRR8XgZb/WCMm4rrugpHUkj8iV7gkoVjUCId2/szA5FjcfJcKpFiB7M?=
+ =?us-ascii?Q?DRo5zVqwLudgk4FjU+AcOJppEEhx2t5AhRWlR3AFcZw7PFnbuC7eR1nz7y+O?=
+ =?us-ascii?Q?J4hxUPljayJYMhH28VUXvw76L9ry/66IsMBnX8I7h9CjT5I95FJBvzKQmphy?=
+ =?us-ascii?Q?yzyI1lQhLnT7WMgPl3SShJ5riJ2yjPap+Rd89ZFIaYCBj1tEi8Z4yZOi9wzF?=
+ =?us-ascii?Q?03ccL+wbruH0Sdbsyzw1hgT45P7FoG+qd++PC/KgEihZhFTpruBryTQZmA44?=
+ =?us-ascii?Q?2eRqKmK001qb4nMiDgC5RQ6tqbSDyVQCtSFhisbWk9YlHqm9HCfWEZ3Pl3wE?=
+ =?us-ascii?Q?LzzLXZZAHEk+Dp1Fk6Q84iMVdrM8JSb50phJyTzrdQkR4UcgUhc4wgEqwK8V?=
+ =?us-ascii?Q?bUIOfxKSCUElxkNLVhvUZwAl4+SlCEhdKhqyGkVdfNPk9y0FTgalN8ejzpSR?=
+ =?us-ascii?Q?IdULXJelPjcJ+B0Z0CqHOEXEQHyXfQnTENugUWAVfYOH/UO6szFMmsNkrk9W?=
+ =?us-ascii?Q?+FsD+MjQGUBUzagRc1MdR52s6IDfYMN8hInt+yAxm+nTFivAhKQKgKmBPwd2?=
+ =?us-ascii?Q?qz8f0XF1VrgavV4p8J7ppDIr6zb3cXCZ91Hlho22JzsvjDEnki25h7M+Qluj?=
+ =?us-ascii?Q?LrvtPf5pts5hFG8Ql1okwhCIOzzaJl9wyRisecNZhoj2mwT4Ka/RQ7G1aC/l?=
+ =?us-ascii?Q?xZEZbpiTTdAIvMODi0Trw5pBw34bA87NP+kwInqdySugdbvELzRuNwTBbceN?=
+ =?us-ascii?Q?SBZx8zD0URFj6At4fK/eyM7ALLwguSwLVeZO4B34snlVvWy66qhdxqwqQuWm?=
+ =?us-ascii?Q?5w0jX82AlODtxRoFHAtwuBF3ji6d4vtLBPe1hj9Sc4x2XMR3DYb9e8F7xgxo?=
+ =?us-ascii?Q?dhAFIRSBXwIfVjxDf0hjloiJ4JRM9D5XdLjcGAm42/+Ic3X0GAjem83vtPx6?=
+ =?us-ascii?Q?SeoGfZ/6h+r0t1r4n5qHKR9BB8m4whxpup0qQB+P8VUwkIiw8W/rqwYyB6Z0?=
+ =?us-ascii?Q?kZBjH3JPMquunvolW9HyWGmvurfqFzfZTjZlkJvZO4HxK+RVogOIElg+AAqE?=
+ =?us-ascii?Q?1q3KmUim7PhvSTwaAa4uzCxyMTXT/dN+CJzkwDAm1lkOOqXs4ci8YkOpoXMi?=
+ =?us-ascii?Q?0uRu8WBx1ViraY/YCdqTtv3c3jm8ji3gxnf7kIcQZDySFwInAmIfMEBe1LzF?=
+ =?us-ascii?Q?JVURYvavSkii1vKTX5epmP47ReHdKyCIT4z0UujqkhMXUn3YCcmfz3JKPB10?=
+ =?us-ascii?Q?N5lJAkJy7u5PZOcrvfNt8+1tVu8wLOOe0pmxh3rpJGRTJ/zKmlCA?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <6B74B831D96FE44BB9A6024A80D9483E@namprd15.prod.outlook.com>
 MIME-Version: 1.0
-References: <20220415005107.2221672-1-seanjc@google.com>
-In-Reply-To: <20220415005107.2221672-1-seanjc@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 15 Apr 2022 09:56:11 -0700
-Message-ID: <CALzav=errSO8+EpeXE3F1CVbmttDqBigzJRGWc2UBU9=NLvtjw@mail.gmail.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Add RET_PF_CONTINUE to eliminate bool+int* "returns"
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm list <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Chao Peng <chao.p.peng@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9d3f1e62-c637-4391-2cab-08da1f00f641
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Apr 2022 16:57:01.7649
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: kD3eXzK7rsNd3zudgOugM0iF5EdeQ/dLCoeF79PSe99xQ4lEcArGTCbe8I5jKQprOu6+ylZFHMNbmCQCA1f1aA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB2611
+X-Proofpoint-GUID: nEhi7f5CrCqmMpzFh4X15AP13MDF91hM
+X-Proofpoint-ORIG-GUID: nEhi7f5CrCqmMpzFh4X15AP13MDF91hM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-15_06,2022-04-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 5:51 PM Sean Christopherson <seanjc@google.com> wrote:
->
-> Add RET_PF_CONTINUE and use it in handle_abnormal_pfn() and
-> kvm_faultin_pfn() to signal that the page fault handler should continue
-> doing its thing.  Aside from being gross and inefficient, using a boolean
-> return to signal continue vs. stop makes it extremely difficult to add
-> more helpers and/or move existing code to a helper.
->
-> E.g. hypothetically, if nested MMUs were to gain a separate page fault
-> handler in the future, everything up to the "is self-modifying PTE" check
-> can be shared by all shadow MMUs, but communicating up the stack whether
-> to continue on or stop becomes a nightmare.
->
-> More concretely, proposed support for private guest memory ran into a
-> similar issue, where it'll be forced to forego a helper in order to yield
-> sane code: https://lore.kernel.org/all/YkJbxiL%2FAz7olWlq@google.com.
->
-> No functional change intended.
->
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Chao Peng <chao.p.peng@linux.intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c          | 51 ++++++++++++++-------------------
->  arch/x86/kvm/mmu/mmu_internal.h |  9 +++++-
->  arch/x86/kvm/mmu/paging_tmpl.h  |  6 ++--
->  3 files changed, 34 insertions(+), 32 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 69a30d6d1e2b..cb2982c6b513 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2972,14 +2972,12 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
->         return -EFAULT;
->  }
->
-> -static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> -                               unsigned int access, int *ret_val)
-> +static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> +                              unsigned int access)
->  {
->         /* The pfn is invalid, report the error! */
-> -       if (unlikely(is_error_pfn(fault->pfn))) {
-> -               *ret_val = kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
-> -               return true;
-> -       }
-> +       if (unlikely(is_error_pfn(fault->pfn)))
-> +               return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
->
->         if (unlikely(!fault->slot)) {
->                 gva_t gva = fault->is_tdp ? 0 : fault->addr;
-> @@ -2991,13 +2989,11 @@ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fa
->                  * touching the shadow page tables as attempting to install an
->                  * MMIO SPTE will just be an expensive nop.
->                  */
-> -               if (unlikely(!shadow_mmio_value)) {
-> -                       *ret_val = RET_PF_EMULATE;
-> -                       return true;
-> -               }
-> +               if (unlikely(!shadow_mmio_value))
-> +                       return RET_PF_EMULATE;
->         }
->
-> -       return false;
-> +       return RET_PF_CONTINUE;
->  }
->
->  static bool page_fault_can_be_fast(struct kvm_page_fault *fault)
-> @@ -3888,7 +3884,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->                                   kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
->  }
->
-> -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
-> +static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->         struct kvm_memory_slot *slot = fault->slot;
->         bool async;
-> @@ -3899,7 +3895,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->          * be zapped before KVM inserts a new MMIO SPTE for the gfn.
->          */
->         if (slot && (slot->flags & KVM_MEMSLOT_INVALID))
-> -               goto out_retry;
-> +               return RET_PF_RETRY;
->
->         if (!kvm_is_visible_memslot(slot)) {
->                 /* Don't expose private memslots to L2. */
-> @@ -3907,7 +3903,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->                         fault->slot = NULL;
->                         fault->pfn = KVM_PFN_NOSLOT;
->                         fault->map_writable = false;
-> -                       return false;
-> +                       return RET_PF_CONTINUE;
->                 }
->                 /*
->                  * If the APIC access page exists but is disabled, go directly
-> @@ -3916,10 +3912,8 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->                  * when the AVIC is re-enabled.
->                  */
->                 if (slot && slot->id == APIC_ACCESS_PAGE_PRIVATE_MEMSLOT &&
-> -                   !kvm_apicv_activated(vcpu->kvm)) {
-> -                       *r = RET_PF_EMULATE;
-> -                       return true;
-> -               }
-> +                   !kvm_apicv_activated(vcpu->kvm))
-> +                       return RET_PF_EMULATE;
->         }
->
->         async = false;
-> @@ -3927,26 +3921,23 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->                                           fault->write, &fault->map_writable,
->                                           &fault->hva);
->         if (!async)
-> -               return false; /* *pfn has correct page already */
-> +               return RET_PF_CONTINUE; /* *pfn has correct page already */
->
->         if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
->                 trace_kvm_try_async_get_page(fault->addr, fault->gfn);
->                 if (kvm_find_async_pf_gfn(vcpu, fault->gfn)) {
->                         trace_kvm_async_pf_doublefault(fault->addr, fault->gfn);
->                         kvm_make_request(KVM_REQ_APF_HALT, vcpu);
-> -                       goto out_retry;
-> -               } else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn))
-> -                       goto out_retry;
-> +                       return RET_PF_RETRY;
-> +               } else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn)) {
-> +                       return RET_PF_RETRY;
-> +               }
->         }
->
->         fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
->                                           fault->write, &fault->map_writable,
->                                           &fault->hva);
-> -       return false;
-> -
-> -out_retry:
-> -       *r = RET_PF_RETRY;
-> -       return true;
-> +       return RET_PF_CONTINUE;
->  }
->
->  /*
-> @@ -4001,10 +3992,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->         mmu_seq = vcpu->kvm->mmu_notifier_seq;
->         smp_rmb();
->
-> -       if (kvm_faultin_pfn(vcpu, fault, &r))
-> +       r = kvm_faultin_pfn(vcpu, fault);
-> +       if (r != RET_PF_CONTINUE)
->                 return r;
->
-> -       if (handle_abnormal_pfn(vcpu, fault, ACC_ALL, &r))
-> +       r = handle_abnormal_pfn(vcpu, fault, ACC_ALL);
-> +       if (r != RET_PF_CONTINUE)
->                 return r;
->
->         r = RET_PF_RETRY;
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 1bff453f7cbe..c0e502b17ef7 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -143,6 +143,7 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->  /*
->   * Return values of handle_mmio_page_fault, mmu.page_fault, and fast_page_fault().
->   *
-> + * RET_PF_CONTINUE: So far, so good, keep handling the page fault.
->   * RET_PF_RETRY: let CPU fault again on the address.
->   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
->   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
+Hi Christoph, 
 
-RET_PF_CONTINUE and RET_PF_INVALID are pretty similar, they both
-indicate to the PF handler that it should keep going. What do you
-think about taking this a step further and removing RET_PF_INVALID and
-RET_PF_CONTINUE and using 0 instead? That way we can replace:
+> On Apr 14, 2022, at 11:32 PM, Christoph Hellwig <hch@infradead.org> wrote:
+> 
+> On Thu, Apr 14, 2022 at 12:59:12PM -0700, Song Liu wrote:
+>> Use __vmalloc_huge() in alloc_large_system_hash() so that large system
+>> hash (>= PMD_SIZE) could benefit from huge pages. Note that __vmalloc_huge
+>> only allocates huge pages for systems with HAVE_ARCH_HUGE_VMALLOC.
+> 
+> Looks good (modulo the possible naming chane suggested in patch 1):
+> 
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
 
-  if (ret != RET_PF_CONTINUE)
-          return r;
+Thanks for your kind review!
 
-and
+Could you please share your thoughts on shipping the set with 5.18 (or 
+whether we should postpone it)? 
 
-  if (ret != RET_PF_INVALID)
-          return r;
+AFAICT, the only changed behavior is to allow alloc_large_system_hash
+return huge pages for size > PMD_SIZE on x86_64. I think this is 
+relatively safe, as this is only for large hash and we are at rc2. 
 
-with
+Thanks,
+Song
 
-  if (r)
-          return r;
-
-?
-
-> @@ -151,9 +152,15 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->   *
->   * Any names added to this enum should be exported to userspace for use in
->   * tracepoints via TRACE_DEFINE_ENUM() in mmutrace.h
-
-Please add RET_PF_CONTINUE to mmutrace.h, e.g.
-
-  TRACE_DEFINE_ENUM(RET_PF_CONTINUE);
-
-It doesn't matter in practice (yet) since the trace enums are only
-used for trace_fast_page_fault, which does not return RET_PF_CONTINUE.
-But it would be good to keep it up to date.
-
-> + *
-> + * Note, all values must be greater than or equal to zero so as not to encroach
-> + * on -errno return values.  Somewhat arbitrarily use '0' for CONTINUE, which
-> + * will allow for efficient machine code when checking for CONTINUE, e.g.
-> + * "TEST %rax, %rax, JNZ", as all "stop!" values are non-zero.
->   */
->  enum {
-> -       RET_PF_RETRY = 0,
-> +       RET_PF_CONTINUE = 0,
-> +       RET_PF_RETRY,
->         RET_PF_EMULATE,
->         RET_PF_INVALID,
->         RET_PF_FIXED,
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 66f1acf153c4..7038273d04ab 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -838,10 +838,12 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->         mmu_seq = vcpu->kvm->mmu_notifier_seq;
->         smp_rmb();
->
-> -       if (kvm_faultin_pfn(vcpu, fault, &r))
-> +       r = kvm_faultin_pfn(vcpu, fault);
-> +       if (r != RET_PF_CONTINUE)
->                 return r;
->
-> -       if (handle_abnormal_pfn(vcpu, fault, walker.pte_access, &r))
-> +       r = handle_abnormal_pfn(vcpu, fault, walker.pte_access);
-> +       if (r != RET_PF_CONTINUE)
->                 return r;
->
->         /*
->
-> base-commit: 150866cd0ec871c765181d145aa0912628289c8a
-> --
-> 2.36.0.rc0.470.gd361397f0d-goog
->

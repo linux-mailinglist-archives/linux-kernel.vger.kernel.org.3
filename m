@@ -2,195 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DC9502636
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:28:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26227502639
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 09:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344505AbiDOHaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 03:30:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40646 "EHLO
+        id S1351089AbiDOHbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 03:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbiDOHaV (ORCPT
+        with ESMTP id S229580AbiDOHbh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 03:30:21 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C85B820D;
-        Fri, 15 Apr 2022 00:27:53 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23F7RcJ2084228;
-        Fri, 15 Apr 2022 02:27:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650007658;
-        bh=1pt76OqGQ1KESH8qfZrkyPQA2fls5pZ2tmqcFMhpEw4=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=inC9EeyeGlHt63x/U4RRoW6p33oq8qLFmNROXqoRfudSRLu9Q3L/duDLP6EWh0XTZ
-         62kYkXYJ2X7uyqOl9s01Hl26jqAoRHJCTJSOs3xyyO/XV1Xmab6OoV3W8vmIjfeKss
-         D4R1K21tWZO4wX6YZgUtXbEL/1ByIE2E2XvUi5KE=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23F7Rcjo103431
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 15 Apr 2022 02:27:38 -0500
-Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Fri, 15
- Apr 2022 02:27:37 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Fri, 15 Apr 2022 02:27:37 -0500
-Received: from [10.250.235.115] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23F7RX8i124667;
-        Fri, 15 Apr 2022 02:27:34 -0500
-Message-ID: <758ce7b9-a164-51b7-a64e-fb8df9f7d282@ti.com>
-Date:   Fri, 15 Apr 2022 12:57:33 +0530
+        Fri, 15 Apr 2022 03:31:37 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBC0B821B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:29:09 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id w127so7728448oig.10
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 00:29:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=sbIMr271cmn6ZzuRI3nbnuj6zILsFRiHoTF1eSBmRpw=;
+        b=elnI+MJOSQ5Wt24HDoGCPEMZBOHoUtiIh10WHeUIbcFcUFKnrkRfMcEZbwaF/MSdX1
+         SxhO2zN79ttE0loQ0LadOaXj0AZxzBSJk69gwex8gOVAPEtYTgQuCvYO8uDN3Hze0SS7
+         UeolHwVgMH9YghMWrHVYWXm28KZ9h9jt9MGh1jezZYKUEIIWsrnKFedrOtWj07XJrS2L
+         79tsLPePCIRqMqBPmx9Bb/eJUF8BBghPfgp0clU5Z0BG6kBsDqvVGLX+SAw6Xq7uE/Oy
+         HjrHkgzTSd3Q9gIyKJWrXKkgiYnL5Z/uqoZ72UuHvkW5n7GUEggJgd7BxJgThfuHyR0M
+         UQMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=sbIMr271cmn6ZzuRI3nbnuj6zILsFRiHoTF1eSBmRpw=;
+        b=eKtcf26HT+0gEOugBvMIG8x9KipRdUu1E3xE1lQm/fpsPiokM0/U6eNBgP24V26ePa
+         nGUv/K95XOSq7V3IGbGVRqUZTu3llYcGoWVtRysD0BLXGmZO0OAgIzaDYJKwRnV9LH+X
+         +UwuKuSPcho2u5LDBZNGU+xxrpsHxANQOeYAC6XGfJLqHh1CF606eKr443fDat5Uck4H
+         69Fh3qNmCqtoTIK7+SJL7j3J/uxqv2z5NsxZqZdUROLTJg9r7UW+pGCOKpHGaGvh1Rir
+         reswrSeVH++uV9UjqF55vNdDUtEGqeBJYPjcBzxUO1X9Ly/risQ6jYSHD9QA2jOq6DvR
+         S7Mw==
+X-Gm-Message-State: AOAM532kAdcwNx4xAPzjaQsyg1FxP5QOV+Rqh/ZOp83PJKnGmiWkelRw
+        +17MCRb6BptoWrM6ZPHtBR9ldNgEDsA/YcZNXPc=
+X-Google-Smtp-Source: ABdhPJyDql2TgAh6NQrOzqQCNI9XwI3L2UDtGcp6OXunw6CeCHJ4ZwFCHWXsK5cHYTcJiZzal6Zl9nsxwJjkmSJuA9c=
+X-Received: by 2002:a05:6808:10d4:b0:322:2f79:bd2c with SMTP id
+ s20-20020a05680810d400b003222f79bd2cmr1085461ois.53.1650007749099; Fri, 15
+ Apr 2022 00:29:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v3 1/2] arm64: dts: ti: k3-j721e-main: add DP & DP PHY
-Content-Language: en-US
-To:     Rahul T R <r-ravikumar@ti.com>, <nm@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski@canonical.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <tomi.valkeinen@ideasonboard.com>,
-        <laurent.pinchart@ideasonboard.com>, <kishon@ti.com>
-References: <20220406165852.13026-1-r-ravikumar@ti.com>
- <20220406165852.13026-2-r-ravikumar@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220406165852.13026-2-r-ravikumar@ti.com>
+References: <20220415034844.1024538-1-gch981213@gmail.com> <20220415034844.1024538-3-gch981213@gmail.com>
+ <20220415090058.5044ae17@collabora.com>
+In-Reply-To: <20220415090058.5044ae17@collabora.com>
+From:   Chuanhong Guo <gch981213@gmail.com>
+Date:   Fri, 15 Apr 2022 15:28:57 +0800
+Message-ID: <CAJsYDVKbm+X8ARkgH6z9T0JaZ=cYkG+_3m-dtsbgAwWCrZeO8A@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] mtd: spinand: add support for detection with param page
+To:     Boris Brezillon <boris.brezillon@collabora.com>
+Cc:     linux-mtd@lists.infradead.org,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Christophe Kerello <christophe.kerello@foss.st.com>,
+        Mark Brown <broonie@kernel.org>,
+        Daniel Palmer <daniel@0x0f.com>,
+        open list <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-8.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi!
 
+On Fri, Apr 15, 2022 at 3:01 PM Boris Brezillon
+<boris.brezillon@collabora.com> wrote:
+> +#define SPINAND_IDR_EN BIT(6)
 
-On 06/04/22 10:28 pm, Rahul T R wrote:
-> From: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> 
-> Add DT nodes for DisplayPort and DisplayPort PHY. The DP is Cadence MHDP
-> 8546 and the PHY is a Cadence Torrent PHY with TI WIZ wrapper.
-> 
-> A slight irregularity in the bindings is the DPTX PHY register block,
-> which is in the MHDP IP, but is needed and mapped by the PHY.
-> 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 65 +++++++++++++++++++++++
->  1 file changed, 65 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> index db0669985e42..11426c25a09d 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-> @@ -5,6 +5,7 @@
->   * Copyright (C) 2016-2020 Texas Instruments Incorporated - https://www.ti.com/
->   */
->  #include <dt-bindings/phy/phy.h>
-> +#include <dt-bindings/phy/phy-ti.h>
->  #include <dt-bindings/mux/mux.h>
->  #include <dt-bindings/mux/ti-serdes.h>
->  
-> @@ -789,6 +790,47 @@
->  		#size-cells = <2>;
->  	};
->  
-> +	serdes_wiz4: wiz@5050000 {
-> +		compatible = "ti,am64-wiz-10g";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		power-domains = <&k3_pds 297 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 297 1>, <&k3_clks 297 9>, <&cmn_refclk>;
-> +		clock-names = "fck", "core_ref_clk", "ext_ref_clk";
-> +		assigned-clocks = <&k3_clks 297 9>;
-> +		assigned-clock-parents = <&k3_clks 297 10>;
-> +		assigned-clock-rates = <19200000>;
-> +		num-lanes = <4>;
-> +		#reset-cells = <1>;
-> +		#clock-cells = <1>;
-> +		ranges = <0x5050000 0x0 0x5050000 0x10000>,
-> +			<0xa030a00 0x0 0xa030a00 0x40>;
+Looks like you're redefining CFG_OTP_ENABLE, why not use that
+definition directly?
 
-Add leading 0s to align to 8 digit value like rest of the file:
+Oh. I didn't know that was available. I'll use it.
+(IDR_EN comes from a toshiba datasheet if I remember correctly.)
 
-		ranges = <0x05050000 0x00 0x05050000 0x10000>,
-			<0x0a030a00 0x00 0x0a030a00 0x40>;
+>
+> On Fri, 15 Apr 2022 11:48:43 +0800
+> Chuanhong Guo <gch981213@gmail.com> wrote:
+>
+> > +
+> > +static const struct spinand_manufacturer *spinand_onfi_manufacturers[] = {};
+>
+> Do we really need a separate manufacturer array? Looks like we could
+> re-use the one we have in core.c and do the matching against it (we
+> just need an extra NULL sentinel to detect the end of this array).
 
+I'll do it.
+I'll also add a onfi_nchips to spinand_manufacturer to share the same
+manufacturer entry between two types of ID list.
 
-> +
-> +		serdes4: serdes@5050000 {
-> +			/*
-> +			 * Note: we also map DPTX PHY registers as the Torrent
-> +			 * needs to manage those.
-> +			 */
-> +			compatible = "ti,j721e-serdes-10g";
-> +			reg = <0x5050000 0x10000>,
-> +			      <0xa030a00 0x40>; /* DPTX PHY */
+>
+> > +
+> > +static const struct spinand_onfi_info *
+> > +spinand_onfi_chip_match(struct nand_onfi_params *p,
+> > +                     const struct spinand_manufacturer *m)
+> > +{
+> > +     size_t i, j;
+> > +
+> > +     for (i = 0; i < m->nchips; i++)
+> > +             for (j = 0; m->onfi_chips[i].models[j]; j++)
+> > +                     if (!strcasecmp(m->onfi_chips[i].models[j], p->model))
+> > +                             return &m->onfi_chips[i];
+> > +     return NULL;
+> > +}
+>
+> > +/**
+> > + * struct spinand_onfi_info - Structure used to describe SPI NAND with ONFI
+> > + *                         parameter page
+> > + * @models: Model name array. Null terminated.
+> > + * @flags: OR-ing of the SPINAND_XXX flags
+> > + * @eccinfo: on-die ECC info
+> > + * @op_variants: operations variants
+> > + * @op_variants.read_cache: variants of the read-cache operation
+> > + * @op_variants.write_cache: variants of the write-cache operation
+> > + * @op_variants.update_cache: variants of the update-cache operation
+> > + * @select_target: function used to select a target/die. Required only for
+> > + *              multi-die chips
+> > + *
+> > + * Each SPI NAND manufacturer driver should have a spinand_onfi_info table
+> > + * describing all the chips supported by the driver.
+> > + */
+> > +struct spinand_onfi_info {
+> > +     const char **const models;
+> > +     u32 flags;
+> > +     struct spinand_ecc_info eccinfo;
+> > +     struct {
+> > +             const struct spinand_op_variants *read_cache;
+> > +             const struct spinand_op_variants *write_cache;
+> > +             const struct spinand_op_variants *update_cache;
+> > +     } op_variants;
+> > +     int (*select_target)(struct spinand_device *spinand,
+> > +                          unsigned int target);
+> > +};
+>
+> Can't we just extend spinand_info instead of defining a new struct.
 
-Same here.
+Yeah, that's better. I'll do it.
 
-> +			reg-names = "torrent_phy", "dptx_phy";
-> +
-> +			resets = <&serdes_wiz4 0>;
-> +			reset-names = "torrent_reset";
-> +			clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>;
-> +			clock-names = "refclk";
-> +			assigned-clocks = <&serdes_wiz4 TI_WIZ_PLL0_REFCLK>,
-> +					  <&serdes_wiz4 TI_WIZ_PLL1_REFCLK>,
-> +					  <&serdes_wiz4 TI_WIZ_REFCLK_DIG>;
-> +			assigned-clock-parents = <&k3_clks 297 9>,
-> +						 <&k3_clks 297 9>,
-> +						 <&k3_clks 297 9>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
->  	main_uart0: serial@2800000 {
->  		compatible = "ti,j721e-uart", "ti,am654-uart";
->  		reg = <0x00 0x02800000 0x00 0x100>;
-> @@ -1267,6 +1309,29 @@
->  		};
->  	};
->  
-> +	mhdp: dp-bridge@a000000 {
-> +		compatible = "ti,j721e-mhdp8546";
-> +		/*
-> +		 * Note: we do not map DPTX PHY area, as that is handled by
-> +		 * the PHY driver.
-> +		 */
-> +		reg = <0x0 0xa000000 0x0 0x30a00>, /* DSS_EDP0_V2A_CORE_VP_REGS_APB */
-> +		      <0x0 0x4f40000 0x0 0x20>;    /* DSS_EDP0_INTG_CFG_VP */
+> AFAICT, the only difference is that model is replaced by a model array,
+> and devid is dropped, and I think we can rework the existing ID-based
+> matching logic to return ->models[0] instead of ->model.
 
-Please use 0x00 as rest of the file like:
+In fact we don't even use this model string anywhere at the moment.
 
-	 reg = <0x00 0x0a000000 0x00 0x30a00>,
-		<0x00 0x04f40000 0x00 0x20>;
-
-> +		reg-names = "mhdptx", "j721e-intg";
-> +
-> +		clocks = <&k3_clks 151 36>;
-> +
-> +		interrupt-parent = <&gic500>;
-> +		interrupts = <GIC_SPI 614 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +		power-domains = <&k3_pds 151 TI_SCI_PD_EXCLUSIVE>;
-> +
-> +		dp0_ports: ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
->  	dss: dss@4a00000 {
->  		compatible = "ti,j721e-dss";
->  		reg =
+-- 
+Regards,
+Chuanhong Guo

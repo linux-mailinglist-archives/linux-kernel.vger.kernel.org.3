@@ -2,138 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4075022CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 06:57:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B848D502375
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 07:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349694AbiDOE60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 00:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
+        id S1349805AbiDOFJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 01:09:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349688AbiDOE4b (ORCPT
+        with ESMTP id S1351395AbiDOFFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 00:56:31 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A303710F0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:53:59 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id r18so8420985ljp.0
-        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:53:58 -0700 (PDT)
+        Fri, 15 Apr 2022 01:05:45 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1596DC12D3
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:57:56 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id i27so13595495ejd.9
+        for <linux-kernel@vger.kernel.org>; Thu, 14 Apr 2022 21:57:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=v2IHx3Qbgo3wM3/tOigomzLjD7v6BY2hlPBqUcu4Brs=;
-        b=WA645uXAq8uzUS58O9L0qm/3eEl4U6ZixnBiBCalf+eeTjC0p1XzE35Hpdh3fSz7EP
-         kJRdvPJh3nArYX64LSaxJzsjCvanYkoy8PSp1MIdZEiv4VQy9hpg6qGP67f3bL4KIrJP
-         SmqDH5NJWUrqNQpA+cNWQBAzvl0s6I/RNCPasYC2exyDC/PQTZOVFnsMW1qO1QckF9Cr
-         eIcYPbks3kAh38ZjN5Vho//fz/T2IRS8PqXCeuafNtB9T4TZhmWc+WJvfEYA1qckvmOd
-         JH1bhDpCCoPjyMXC8Msbnys+CCm6OSoe3KMcODvaawDKtmyoRRNRzW3xEi1SsTK7O0Tk
-         e79A==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=Deay7jAmMyRkDMzIjU7u06qBsjafRlssFVmGBUZbhvw=;
+        b=YQ6/ULXIqpRb6u2jK1rgfGvE2zKp6qNt/qMH3C4USife7fpyw4LLsmAcimJDnKOe4t
+         Mknnm8W7b4si5hzaJWBPPgdNQeJy2y9pZpGRXyU03ZJ9UWdf87vYVI9++NpwSPER2iO4
+         d/flzGZ/3HQGZaf9+YLJepv64IEmekwR29w82r0+umht7DvATM5oSoEtRlkQ/1xszB/G
+         IBBs+tok9EgAEcCNkzZGBuOMttHK6F3H7pFcHIOBBsYxD0LcGL7XYYXRoASiXGzV/JUG
+         UqL3mzraRklxEXvdVLpBTN/iPApA586HvYoDhXKdokmtrnrxrJw61Gsy87S2n3YgR40Q
+         6axw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=v2IHx3Qbgo3wM3/tOigomzLjD7v6BY2hlPBqUcu4Brs=;
-        b=W24sj/9oCEBeNxdibtx4kMVC7EgZgjKlVG5xy5uaDap44Cx2aZiN2LbSWziYHpO8PZ
-         Rc71dS/WnJhqf3gi3yKRxdPU8IMshVxPsswBHalyzWFCBBFHDThkBL80PEXdXii+4kNz
-         Wt64tdyN6QBgvq185CForoR+WheQ0y76H8NHgZPPaZmrZdFg8CetUHd4AhrVnkQNv9KX
-         n7pir9IeU3XXvVeiMDmpyluJJ5c3V18S65JK5iHO7ZjUZ+d6m28n3nyd8GO78Z5RlsXf
-         WSvzkGCf9R+vddRE3WFj2CphU5zof9ngj/1ZE9vKsmBUIDlr6JgO2CJzL04GPPc9+1Nf
-         ZN/Q==
-X-Gm-Message-State: AOAM531j/aPoaLE0uNYiSvsBHCZcPlekYay1yPTgCZm/PKOJpHgN5crv
-        932hALU5cnJD8gOfZ+5DrpwwO3IUsVvWJ64HmL4Z3w==
-X-Google-Smtp-Source: ABdhPJyMKLAknTpEqNiOsM8G4x8qCf78+X/p03s7TvJlmBITtJTWR0D+rx0cBX1ozLuRUjW1hvSeuesOng3qFvVZeTo=
-X-Received: by 2002:a2e:b6c3:0:b0:249:9b61:656f with SMTP id
- m3-20020a2eb6c3000000b002499b61656fmr3441389ljo.266.1649998437283; Thu, 14
- Apr 2022 21:53:57 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=Deay7jAmMyRkDMzIjU7u06qBsjafRlssFVmGBUZbhvw=;
+        b=vI+4NcQnhPUR9XLe9y7K7jTkhbcgO33itmRevLMGFg2Zz5LB6VAdE0DKX0m+Ze96RV
+         ihdM9VgJmfgyrYv1GE0ZlMEz1LyfZ8kyWpOypDsqRrDxwN86DA8g0A46yOt3GubmSJig
+         GaBGbko1jgsMFUdY/3bg4wmosWxDPjvVRWsSWHN9ffrEg78JbwfE1iPjZ+N5J61kpI0V
+         z00HM3/XmnJwvSyM+wf6JU1JaE+ZT6ZFfdAHqm+wgOMwfHOOy9XUTsoXxz0k9yFiQn7Z
+         SZMZQdHjxn5dcy8cdfNjAjzVgR96ipJvI5oGk7aoLbZJfxXG2a9JealzDTDFzx1w3oTi
+         84Fg==
+X-Gm-Message-State: AOAM533qimdA4KAKonqRwciSjrAaH8izGO+A/Eo0EtJ02yWQ9PHSfK8A
+        h0z0eSKQVI7d5sTiAuhQ96qnd5+WvQw=
+X-Google-Smtp-Source: ABdhPJxT+h0/uUni34qZRuQ/eKcZmKWVus9qXtZAnF8iOUd5G35juUA2O0IghxZcuE5B4CBxO9GVZQ==
+X-Received: by 2002:a17:907:724c:b0:6e8:59c1:914c with SMTP id ds12-20020a170907724c00b006e859c1914cmr5180940ejc.172.1649998675372;
+        Thu, 14 Apr 2022 21:57:55 -0700 (PDT)
+Received: from leap.localnet (host-79-43-11-75.retail.telecomitalia.it. [79.43.11.75])
+        by smtp.gmail.com with ESMTPSA id p14-20020aa7cc8e000000b0040f13865fa9sm2017964edt.3.2022.04.14.21.57.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Apr 2022 21:57:54 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Larry.Finger@lwfinger.net, Jaehee Park <jhpark1013@gmail.com>
+Cc:     phil@philpotter.co.uk, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev, jhpark1013@gmail.com
+Subject: Re: [PATCH v2 4/6] staging: r8188eu: place constants on the right side of tests
+Date:   Fri, 15 Apr 2022 06:57:52 +0200
+Message-ID: <2300552.NG923GbCHz@leap>
+In-Reply-To: <baa4d5259e2eb48da1dd71e1863b62a086312a7e.1649990500.git.jhpark1013@gmail.com>
+References: <cover.1649990500.git.jhpark1013@gmail.com> <baa4d5259e2eb48da1dd71e1863b62a086312a7e.1649990500.git.jhpark1013@gmail.com>
 MIME-Version: 1.0
-References: <20220412033335.1384230-1-apatel@ventanamicro.com> <4c4c7a.17284.1802b8c14cc.Coremail.panqinglin2020@iscas.ac.cn>
-In-Reply-To: <4c4c7a.17284.1802b8c14cc.Coremail.panqinglin2020@iscas.ac.cn>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Fri, 15 Apr 2022 10:23:44 +0530
-Message-ID: <CAK9=C2V0kiV1_12kMDxv6d4nsQZ81-9W5=JifLhNaiZMoHJyuQ@mail.gmail.com>
-Subject: Re: [PATCH] RISC-V: mm: Fix set_satp_mode() for platform not having Sv57
-To:     =?UTF-8?B?5r2Y5bqG6ZyW?= <panqinglin2020@iscas.ac.cn>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 10:18 AM =E6=BD=98=E5=BA=86=E9=9C=96 <panqinglin202=
-0@iscas.ac.cn> wrote:
->
-> Hi Anup,
->
-> &gt;
-> &gt; When Sv57 is not available the satp.MODE test in set_satp_mode() wil=
-l
-> &gt; fail and lead to pgdir re-programming for Sv48. The pgdir re-program=
-ming
-> &gt; will fail as well due to pre-existing pgdir entry used for Sv57 and =
-as
-> &gt; a result kernel fails to boot on RISC-V platform not having Sv57.
-> &gt;
-> &gt; To fix above issue, we should clear the pgdir memory in set_satp_mod=
-e()
-> &gt; before re-programming.
-> &gt;
-> &gt; Fixes: 011f09d12052 ("riscv: mm: Set sv57 on defaultly")
-> &gt; Reported-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> &gt; Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> &gt; ---
-> &gt;  arch/riscv/mm/init.c | 1 +
-> &gt;  1 file changed, 1 insertion(+)
-> &gt;
-> &gt; diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-> &gt; index 9535bea8688c..b0793dc0c291 100644
-> &gt; --- a/arch/riscv/mm/init.c
-> &gt; +++ b/arch/riscv/mm/init.c
-> &gt; @@ -718,6 +718,7 @@ static __init void set_satp_mode(void)
-> &gt;            if (!check_l4) {
-> &gt;                    disable_pgtable_l5();
-> &gt;                    check_l4 =3D true;
-> &gt; +                  memset(early_pg_dir, 0, PAGE_SIZE);
-> &gt;                    goto retry;
-> &gt;            }
-> &gt;            disable_pgtable_l4();
-> &gt; --
->
->
-> I find it that the set_satp_mode function is in .init.text section which =
-begins at 0x80800000.
-> And its pgd_index in both Sv48 and Sv57 will be 0. So it may not be neces=
-sary to clear the
-> early_pg_dir when the kernel find Sv57 is not supported? And may I get th=
-e steps of reproduction
-> from you?
+On venerd=EC 15 aprile 2022 04:48:35 CEST Jaehee Park wrote:
+> To comply with the linux coding style, place constants on the right
+> side of the test in comparisons. Issue found with checkpatch.
+> WARNING: Comparisons should place the constant on the right side of
+> the test.
+>=20
+> Signed-off-by: Jaehee Park <jhpark1013@gmail.com>
+> ---
+>  drivers/staging/r8188eu/core/rtw_mlme.c | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/
+r8188eu/core/rtw_mlme.c
+> index bb9d595a90b9..d57f2ffa069e 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme.c
+> @@ -715,7 +715,7 @@ void rtw_surveydone_event_callback(struct adapter=09
+*adapter, u8 *pbuf)
+>  			set_fwstate(pmlmepriv, _FW_UNDER_LINKING);
+>  			pmlmepriv->to_join =3D false;
+>  			s_ret =3D=20
+rtw_select_and_join_from_scanned_queue(pmlmepriv);
+> -			if (_SUCCESS =3D=3D s_ret) {
+> +			if (s_ret =3D=3D _SUCCESS) {
+>  			     _set_timer(&pmlmepriv->assoc_timer,=20
+MAX_JOIN_TIMEOUT);
+>  			} else if (s_ret =3D=3D 2) { /* there is no need=20
+to wait for join */
+>  				_clr_fwstate_(pmlmepriv,=20
+_FW_UNDER_LINKING);
 
-We can't assume that it will be the same pgd_index for Sv48 and Sv57.
+As Pavel pointed out, "s_ret" can not ever be equal to '2'; this could have=
+=20
+been an opportunity to remove a couple of lines of dead code and add one=20
+more patch to your series.
 
-For example, some hypothetical SoC might have RAM starting after 1TB space.
+Thanks,
 
-We should ensure that early_pg_dir is cleaned entirely for detecting the ne=
-xt
-mode.
+=46abio
 
-Regards,
-Anup
 
->
-> Yours,
-> Qinglin
-> </apatel@ventanamicro.com></mchitale@ventanamicro.com>
+
+

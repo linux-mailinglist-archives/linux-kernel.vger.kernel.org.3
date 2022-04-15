@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D023502D2B
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF158502D0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 17:40:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355426AbiDOPjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 11:39:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S1355468AbiDOPjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 11:39:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356293AbiDOPj3 (ORCPT
+        with ESMTP id S1356299AbiDOPj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 15 Apr 2022 11:39:29 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 074B13DA46
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:37:00 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id e21so11044948wrc.8
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:36:59 -0700 (PDT)
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 728963DDD9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:37:01 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id t1so11061985wra.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=baylibre-com.20210112.gappssmtp.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=M8lmuusreyEB7Gud7csUtw7tpltYDp61Pfem/SE6pZk=;
-        b=Td7opDcQaMHI3JFBSWitUPOiGjC1BZcN+VXkNxXfzTacxCPZd+RlBamsom/P6pj6hg
-         EQXrRuHGXiNXFQtSrR3QL1QbiiNbjPTITd8XdGNJyB82Ht5mkqdGh5NTUY6JlXUr5pcI
-         1GhmEzwbf39+IAX+BfrK0XFv21dUff4s5Uie+EEAFN6tGnT8k7GalPtJr0bbWKkJ/t+I
-         LCf964j2RpBGLIc9wst5Vwsn1c4F+klbJrplVP42wMIlCUMJwMzI+m5JAQXDMcnvfCSy
-         EI6YeGHcj7aHLbpDBaAkPXjZMQojCrSqhAnsraX9fvf0KOLJVNgLWd+mzHnJMKoTfYCv
-         CaNA==
+        bh=xf7zHgQF0LLYfyyhuEnZersihES6pOQgkISOqNV5ZRE=;
+        b=xivuA2t3IqjLqIoQ9DSn1tMrItfP5C3kkoXLWvVqH9w2x08/1vOWwiFUeLyckHqQK7
+         vANKxFbdrzik52hMtA8dmDDfP8zN7cEsf9psBAV4fFw2IJW5Kvi4WRQ2n/bblCJuagqX
+         Fx2zCKxwYqijw8U0R9G7lFq7pqV1zofoFDnhFiXRcsiY7ce9odvnfWaF+Xl/pC+ND3BI
+         94009nqeRJk3aFoGdIfdNXKhsJVSntrjRHiXylMsry0pwSVWdSSy1imAEcESzwkERfWP
+         /NTB7H2oOoKDjiZnSwpJOA1R4z6V80qfUkxCKmYlepQLh57UdDOVMVKPzzPnAfsys7fJ
+         kb8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=M8lmuusreyEB7Gud7csUtw7tpltYDp61Pfem/SE6pZk=;
-        b=5z0S/5566S8yUFj6PFxY8peHfJA3CpzEfmwbN5QI8WJzL804+kWXtEe5Fd1r79q7zo
-         8EFY1MfVninO5NL7ZuLB8eQeyKY50XnuK7ByxpEdQHsDhJ7UiXRLKMT7vNyqWaqdtDk4
-         kG6dGk0nDrICFc+xXMtLimyzWxBX5epn7fxwPsa3IYdPMEBkUM6P++x0p2zBwO6pe5b/
-         tlyIHHmFtIN6AG2lST6Xqx4UBRWpWuWtngpJm061N5xFKktVITpjmNsp6tVh0L71093p
-         yPZ1PCMZlWJYyNPlaN0KPTA3YiPehgrO4zlA/Wmw/ihk1XMKOAGDWJtTFN4bXRHX10+r
-         ja/Q==
-X-Gm-Message-State: AOAM532V4FOOUa+nsh6fufLVMsmSna0MDTAbzWAIlDIPmt2Ss2tnOBwH
-        0xbcK/fu/4faZWzj9TQmjfM8Mg==
-X-Google-Smtp-Source: ABdhPJyicB0kEbhTFgNRydBA+wCxkMiQhnsXg+5hKIJU185vpb3FHT12FRvF9HoZokb6+MthOFW4HA==
-X-Received: by 2002:adf:d1e3:0:b0:20a:7841:b9b4 with SMTP id g3-20020adfd1e3000000b0020a7841b9b4mr4299001wrd.61.1650037018548;
-        Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
+        bh=xf7zHgQF0LLYfyyhuEnZersihES6pOQgkISOqNV5ZRE=;
+        b=vQjzbPVX9NgH19YFZyHO7ui4/sgK6ybWXmtn3JKuMefM7iKcjovVCWaTBb3XuoB8je
+         itb/IJFYFcN5thIvApI5w9nu+1xXUG18S4pgppNoDy6uTsanUVeiPyGuruLRImqAUVhy
+         Vpsrsnd7ZmXq6Ce4lfE4SD+cp+12d8oZwxGF3cNSQgIU4mi0elXDHAqm+V1DHmvWjkJT
+         5Nb5rva6gksHXhb5pJV2vlKxq/mutP6u4LpcnsISiuLdfwijLDW+T5oeg5VSXbeuZtAQ
+         Qh/3wqz75SVVaLzOLcJWDk83sJhH/Li1u9aFmFwvjNIlmWv6TUt/QNJ5BNzvv1NNzVjB
+         PEKA==
+X-Gm-Message-State: AOAM533Qsc+eGEUALpqGc2K/cInQl3aIq7j61fEJXv2EqjCld0sf2h95
+        d3V1BXadZE56Z7lh4CYe/eZAJg==
+X-Google-Smtp-Source: ABdhPJxQk5vHua4beVYxWbc+1z+j8NCqUCbLO9KGJcNxCFujTtigBhehGKkQbFGNgxlKqJVhVZebFA==
+X-Received: by 2002:a05:6000:1684:b0:209:7fda:e3a with SMTP id y4-20020a056000168400b002097fda0e3amr5705338wrd.709.1650037020002;
+        Fri, 15 Apr 2022 08:37:00 -0700 (PDT)
 Received: from localhost.localdomain ([88.160.162.107])
-        by smtp.gmail.com with ESMTPSA id c24-20020a7bc018000000b0038a18068cf5sm8459292wmb.15.2022.04.15.08.36.57
+        by smtp.gmail.com with ESMTPSA id c24-20020a7bc018000000b0038a18068cf5sm8459292wmb.15.2022.04.15.08.36.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 08:36:58 -0700 (PDT)
+        Fri, 15 Apr 2022 08:36:59 -0700 (PDT)
 From:   Fabien Parent <fparent@baylibre.com>
 To:     Lee Jones <lee.jones@linaro.org>,
         Matthias Brugger <matthias.bgg@gmail.com>
 Cc:     Fabien Parent <fparent@baylibre.com>,
         linux-arm-kernel@lists.infradead.org,
         linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] mfd: add missing defines necessary for mtk-pmic-keys support
-Date:   Fri, 15 Apr 2022 17:36:24 +0200
-Message-Id: <20220415153629.1817202-3-fparent@baylibre.com>
+Subject: [PATCH 3/7] mfd: mt6397-core: add resources for PMIC keys for MT6359
+Date:   Fri, 15 Apr 2022 17:36:25 +0200
+Message-Id: <20220415153629.1817202-4-fparent@baylibre.com>
 X-Mailer: git-send-email 2.35.2
 In-Reply-To: <20220415153629.1817202-1-fparent@baylibre.com>
 References: <20220415153629.1817202-1-fparent@baylibre.com>
@@ -71,27 +71,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add 2 missing MT6359 registers that are needed to implement
-the keyboard driver.
+Add the MFD resources in order to be able to probe and use the keyboard
+driver for the MT6359 PMIC.
 
 Signed-off-by: Fabien Parent <fparent@baylibre.com>
 ---
- include/linux/mfd/mt6359/registers.h | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/mfd/mt6397-core.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/include/linux/mfd/mt6359/registers.h b/include/linux/mfd/mt6359/registers.h
-index 2135c9695918..2a4394a27b1c 100644
---- a/include/linux/mfd/mt6359/registers.h
-+++ b/include/linux/mfd/mt6359/registers.h
-@@ -8,6 +8,8 @@
+diff --git a/drivers/mfd/mt6397-core.c b/drivers/mfd/mt6397-core.c
+index bddb40054b9e..1a368ad08f58 100644
+--- a/drivers/mfd/mt6397-core.c
++++ b/drivers/mfd/mt6397-core.c
+@@ -54,6 +54,13 @@ static const struct resource mt6358_keys_resources[] = {
+ 	DEFINE_RES_IRQ_NAMED(MT6358_IRQ_HOMEKEY_R, "homekey_r"),
+ };
  
- /* PMIC Registers */
- #define MT6359_SWCID                         0xa
-+#define MT6359_TOPSTATUS                     0x2a
-+#define MT6359_TOP_RST_MISC                  0x14c
- #define MT6359_MISC_TOP_INT_CON0             0x188
- #define MT6359_MISC_TOP_INT_STATUS0          0x194
- #define MT6359_TOP_INT_STATUS0               0x19e
++static const struct resource mt6359_keys_resources[] = {
++	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_PWRKEY, "powerkey"),
++	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_HOMEKEY, "homekey"),
++	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_PWRKEY_R, "powerkey_r"),
++	DEFINE_RES_IRQ_NAMED(MT6359_IRQ_HOMEKEY_R, "homekey_r"),
++};
++
+ static const struct resource mt6323_keys_resources[] = {
+ 	DEFINE_RES_IRQ_NAMED(MT6323_IRQ_STATUS_PWRKEY, "powerkey"),
+ 	DEFINE_RES_IRQ_NAMED(MT6323_IRQ_STATUS_FCHRKEY, "homekey"),
+@@ -122,6 +129,12 @@ static const struct mfd_cell mt6359_devs[] = {
+ 		.of_compatible = "mediatek,mt6358-rtc",
+ 	},
+ 	{ .name = "mt6359-sound", },
++	{
++		.name = "mtk-pmic-keys",
++		.num_resources = ARRAY_SIZE(mt6359_keys_resources),
++		.resources = mt6359_keys_resources,
++		.of_compatible = "mediatek,mt6359-keys"
++	},
+ };
+ 
+ static const struct mfd_cell mt6397_devs[] = {
 -- 
 2.35.2
 

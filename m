@@ -2,68 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2FD502884
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:53:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C179750288C
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 12:55:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344121AbiDOKy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 06:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S1352459AbiDOK6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 06:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236533AbiDOKyY (ORCPT
+        with ESMTP id S1352460AbiDOK5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 06:54:24 -0400
-Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB28A5EAC
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
-Received: by mail-pg1-x544.google.com with SMTP id k62so956191pgd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
+        Fri, 15 Apr 2022 06:57:35 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6289A997E;
+        Fri, 15 Apr 2022 03:55:07 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id t25so9531311edt.9;
+        Fri, 15 Apr 2022 03:55:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Qr7gFSJEZayaVAEa120nHgvdk+ECUuPJNVKWT+OnN8k=;
-        b=bpNLh2Q6/xnTIHW0l7y8jXtMPKpCM+CkbwEJZyk2N5s3GvxYRQHVz2X4KQOq0hGMuj
-         9cK5+S0gnayrnF43SF32u+ri3DK0TpvQL/K7L6vXaEfwN09yULUNL3gvm8R1Rc/H6HiV
-         OxVdZNTZPFtEBIzbqluTdh1gVc1KOuP5VPz0hr6S4G6Yku7fgOPPQXbu0EpCm04fy3LL
-         jVd1FEhsNkyIWXcE07Ce5FufZNEe2E7iqTQ1ENfpW0YgpnfKo9NaqiQa2QLMzWJT1FHm
-         hP2QjbC6cx139B/OflQ56A+Pm1qnq/SlaNMtjmgqRTENU010xW9aKxcdUuKtxEyefZjY
-         bA3g==
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=UUtTcqZyJwTdSzX5eM/u3FCZPLdu3PueAl2mLvqky+A=;
+        b=Hk/dooej2THMRuDz/XHpl8tN3a/98thg7292OnwN82tYBrC8bdky2FS5hKAQV41EJ+
+         KGndc61G7SYNGPTqBevzKlMEClgCFI2BE15kNy//uDDY/FR6SyTA7X42CIc6bWznde4c
+         mSCarlFDSDzdgiX52bjRG9P5S71USb2K816HKEKNnOpzahJ556qoiuBDBfShKpQi+fQs
+         iya+wdKsMWO6l3928C6lR33eLtoZDAEbzbzv3Bklh3Sy2tBXw6hStyKjxTO6dSQrkNiv
+         T/KiF7W3UnaV6c/wJhCH6zNTzf3O0IDedbCVLosCpRZzIzTmOn17OtF+X9Sb7V2rh8Z9
+         on0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Qr7gFSJEZayaVAEa120nHgvdk+ECUuPJNVKWT+OnN8k=;
-        b=i8Bs9slawSqeuA4yoUMVmF8c3CMpFSNAQX46GkTov2FvjYLTCQ+66lxJPAD/vhO52/
-         rfdOyzCksV9zu4mVKwlncLRY+ue3zgG0ZLo9eHZ+iBS1Fhv/D7j235aL13H0Hper1tbM
-         B2ixhgaMq/rdEfcQC2LkH9j4EXyeR7eF+VZTdTyoL/ZZnuNzO40650e0CrcUGzupyDNh
-         kkEvTGBPM1ozM+wGgBzrwFZBV197W2ZqaPR7y/TI3gKzI3gC8EyxV+PzVU1SoBlw5Ma6
-         67A/g8fVXA6dNJwiNousLR1pd2itJ5Srd1kzQYG/7E1nL/1WChE7xrFMr0j059GEmFNH
-         bFZA==
-X-Gm-Message-State: AOAM531IsS+NLFTGplvt3M4me4Ig7DAmq2v2P1wsb7G9lVheXfZ2aPcZ
-        fikEDyGfvt31doWrLtnZvuY=
-X-Google-Smtp-Source: ABdhPJyrQzfy9FttfDngmFFkBkaljihRst4amBu012N4/4OFnQUduBrYcVJfIRvHxjhKG9mXSG7M9A==
-X-Received: by 2002:a65:5286:0:b0:398:dad:c3d8 with SMTP id y6-20020a655286000000b003980dadc3d8mr5974878pgp.228.1650019916062;
-        Fri, 15 Apr 2022 03:51:56 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id x39-20020a056a0018a700b004fa7e6ceafesm2563415pfh.169.2022.04.15.03.51.54
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=UUtTcqZyJwTdSzX5eM/u3FCZPLdu3PueAl2mLvqky+A=;
+        b=GmfXnfVXkHwE9SzHyV6i0aUEdYMXGrPeY7dNIB3ZD78uunZC/HRf83B2NwZe6p3Ghe
+         jHQJ62M9vBBEb+S9VV5HSFXkBA/0NadG2qozX3mNCALwWCEXiNzWOOLLiWt7PmcTqPC+
+         wyMHcf1+QjvEpxt53u9+GFEwSma/jZfydOUqVGSSiImh1kWhYLMkoobZ0cFLepbBsVcL
+         9BRNe5s/gtfSUFu66PlqTg7R8RjeJ7SEMuXHCtcPOWvIyyq0Je3EmyfgW6s/TuaLSC39
+         urTAhXh0jq+/+s++o6Pt8I0ExTscuGQIaD+JskovlPploI9E3DwfnMgVrJq54Eq6yIfK
+         QNSw==
+X-Gm-Message-State: AOAM531sn/JeguaMDvlgaNOsRztrKHCR0ggnAXN87VTui/mECVs6RhMg
+        QXdfdHFaRMVElYlg8Lcsx3g=
+X-Google-Smtp-Source: ABdhPJyMhX3xvAA8R6o3gdopJREKWoYcIV0cEbauhIguwnYIOMDzmL4cEzVs6yJp290IVHYkTw4D/Q==
+X-Received: by 2002:a05:6402:2881:b0:41d:8c32:917 with SMTP id eg1-20020a056402288100b0041d8c320917mr7718756edb.328.1650020106098;
+        Fri, 15 Apr 2022 03:55:06 -0700 (PDT)
+Received: from skbuf ([188.26.57.45])
+        by smtp.gmail.com with ESMTPSA id i22-20020a1709063c5600b006e8a8a48baesm1591913ejg.99.2022.04.15.03.55.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 03:51:55 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 18:51:52 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
-Message-ID: <20220415105152.nwj4gd7pizco2kkx@ppc.localdomain>
-References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
- <20220414154215.GL3293@kadam>
- <20220415094705.aibh3jr4wzhddmud@ppc.localdomain>
- <20220415095721.GR3293@kadam>
+        Fri, 15 Apr 2022 03:55:05 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 13:55:03 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>,
+        Phil Edworthy <phil.edworthy@renesas.com>
+Subject: Re: [PATCH net-next 06/12] net: dsa: rzn1-a5psw: add Renesas RZ/N1
+ advanced 5 port switch driver
+Message-ID: <20220415105503.ztl4zhoyua2qzelt@skbuf>
+References: <20220414122250.158113-1-clement.leger@bootlin.com>
+ <20220414122250.158113-7-clement.leger@bootlin.com>
+ <20220414144709.tpxiiaiy2hu4n7fd@skbuf>
+ <20220415113453.1a076746@fixe.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220415095721.GR3293@kadam>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220415113453.1a076746@fixe.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,145 +95,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/15 12:57PM, Dan Carpenter wrote:
-> On Fri, Apr 15, 2022 at 05:47:05PM +0800, Wang Cheng wrote:
-> > Hi Dan, thx for your review.
-> > 
-> > On 22/04/14 06:42PM, Dan Carpenter wrote:
-> > > On Thu, Apr 14, 2022 at 10:12:23PM +0800, Wang Cheng wrote:
-> > > > Due to the case that "requesttype == 0x01 && status <= 0"
-> > > > isn't handled in r8712_usbctrl_vendorreq(),
-> > > > "data" (drivers/staging/rtl8712/usb_ops.c:32)
-> > > > will be returned without initialization.
-> > > > 
-> > > > When "tmpU1b" (drivers/staging/rtl8712/usb_intf.c:395)
-> > > > is 0, mac[6] (usb_intf.c:394) won't be initialized,
-> > > > which leads to accessing uninit-value on usb_intf.c:541.
+On Fri, Apr 15, 2022 at 11:34:53AM +0200, Clément Léger wrote:
+> Le Thu, 14 Apr 2022 17:47:09 +0300,
+> Vladimir Oltean <olteanv@gmail.com> a écrit :
+> > > later (vlan, etc).
 > > > 
-> > > These line numbers are sort of useless because everyone is on a
-> > > different git hash.
+> > > Suggested-by: Laurent Gonzales <laurent.gonzales@non.se.com>
+> > > Suggested-by: Jean-Pierre Geslin <jean-pierre.geslin@non.se.com>
+> > > Suggested-by: Phil Edworthy <phil.edworthy@renesas.com>  
 > > 
-> > I will correct this.
-> > 
-> > >
-> > > > 
-> > > > Reported-and-tested-by: syzbot+6f5ecd144854c0d8580b@syzkaller.appspotmail.com
-> > > > Signed-off-by: Wang Cheng <wanngchenng@gmail.com>
-> > > > ---
-> > > >  drivers/staging/rtl8712/usb_intf.c      |  6 +++---
-> > > >  drivers/staging/rtl8712/usb_ops_linux.c | 14 ++++++++------
-> > > >  2 files changed, 11 insertions(+), 9 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/staging/rtl8712/usb_intf.c b/drivers/staging/rtl8712/usb_intf.c
-> > > > index ee4c61f85a07..50dcd3ecb685 100644
-> > > > --- a/drivers/staging/rtl8712/usb_intf.c
-> > > > +++ b/drivers/staging/rtl8712/usb_intf.c
-> > > > @@ -538,13 +538,13 @@ static int r871xu_drv_init(struct usb_interface *pusb_intf,
-> > > >  		} else {
-> > > >  			AutoloadFail = false;
-> > > >  		}
-> > > > -		if (((mac[0] == 0xff) && (mac[1] == 0xff) &&
-> > > > +		if ((!AutoloadFail) ||
-> > > > +		    ((mac[0] == 0xff) && (mac[1] == 0xff) &&
-> > > >  		     (mac[2] == 0xff) && (mac[3] == 0xff) &&
-> > > >  		     (mac[4] == 0xff) && (mac[5] == 0xff)) ||
-> > > >  		    ((mac[0] == 0x00) && (mac[1] == 0x00) &&
-> > > >  		     (mac[2] == 0x00) && (mac[3] == 0x00) &&
-> > > > -		     (mac[4] == 0x00) && (mac[5] == 0x00)) ||
-> > > > -		     (!AutoloadFail)) {
-> > > > +		     (mac[4] == 0x00) && (mac[5] == 0x00))) {
-> > > >  			mac[0] = 0x00;
-> > > >  			mac[1] = 0xe0;
-> > > >  			mac[2] = 0x4c;
-> > > 
-> > > This is a separate fix from the rest of the patch.  Send it by itself.
-> > 
-> > Ah, thought to send a patch series.
-> > 
+> > Suggested? What did they suggest? "You should write a driver"?
+> > We have a Co-developed-by: tag, maybe it's more appropriate here?
 > 
-> Yes, please.  Send two patches.
+> This driver was written from scratch but some ideas (port isolation
+> using pattern matcher) was inspired from a previous driver. I thought it
+> would be nice to give them credit for that.
 > 
-> > > 
-> > > 
-> > > > diff --git a/drivers/staging/rtl8712/usb_ops_linux.c b/drivers/staging/rtl8712/usb_ops_linux.c
-> > > > index f984a5ab2c6f..e321ca4453ca 100644
-> > > > --- a/drivers/staging/rtl8712/usb_ops_linux.c
-> > > > +++ b/drivers/staging/rtl8712/usb_ops_linux.c
-> > > > @@ -495,12 +495,14 @@ int r8712_usbctrl_vendorreq(struct intf_priv *pintfpriv, u8 request, u16 value,
-> > > >  	}
-> > > >  	status = usb_control_msg(udev, pipe, request, reqtype, value, index,
-> > > >  				 pIo_buf, len, 500);
-> > > > -	if (status > 0) {  /* Success this control transfer. */
-> > > > -		if (requesttype == 0x01) {
-> > > > -			/* For Control read transfer, we have to copy the read
-> > > > -			 * data from pIo_buf to pdata.
-> > > > -			 */
-> > > > -			memcpy(pdata, pIo_buf,  status);
-> > > > +	/* For Control read transfer, copy the read data from pIo_buf to pdata
-> > > > +	 * when control transfer success; otherwise init *pdata with 0.
-> > > > +	 */
-> > > > +	if (requesttype == 0x01) {
-> > > > +		if (status > 0)
-> > > > +			memcpy(pdata, pIo_buf, status);
-> > > > +		else
-> > > > +			*(u32 *)pdata = 0;
-> > > >  		}
-> > > 
-> > > This isn't really correct.  In many cases status is "len" is less than 4.
-> > > I'm slightly surprised that nothing complains about that as an
-> > > uninitialized access.  But then another problem is that "status" can be
-> > > less than "len".
-> > 
-> > Sorry, I should explain it clearly. If I did right, watching "status"
-> > with gdb while running syzkaller reproducer, "status" returns from
-> > usb_control_msg() is -71. In which case, *pdata won't be touched in
-> > r8712_usbctrl_vendorreq(). As a result, "data" in
-> > usb_read8()/usb_read16()/usb_read32() will be returned without
-> > initialization. I think that is why kmsan reports:
-> > Local variable data created at:
-> >  usb_read8+0x5d/0x130 drivers/staging/rtl8712/usb_ops.c:33
-> >  r8712_read8+0xa5/0xd0 drivers/staging/rtl8712/rtl8712_io.c:29
-> 
-> Yes.  I understood that.
-> 
-> > 
-> > > 
-> > > A better fix instead of setting pdata to zero would be to add error
-> > > checking in the callers and then change this code to use
-> > > usb_control_msg_send/recv().  Probably just initialize "data" in the
-> > > callers as well.
-> > 
-> > I tried something similar which also works fine, but I think this patch
-> > does't fix it at root.
-> > https://syzkaller.appspot.com/text?tag=Patch&x=15be2970f00000
-> > 
-> 
-> Ugh...  Sorry, I had not looked closely at usb_read8() and friends.
-> (This code is all so terrible).  Ideally they would have some way to
-> return errors.  Oh well.  Anyway, I guess do like this:
-> 
-> 	status = r8712_usbctrl_vendorreq(intfpriv, request, wvalue, index,
-> 					 &data, len, requesttype);
-> 	if (status < 0)
-> 		return 0;
-> 	return (u8)(le32_to_cpu(data) & 0x0ff);
-> 
-> But in r8712_usbctrl_vendorreq() you really need to make the other
-> changes I mentioned as well.  If you want to do it as a separate patch
-> that's fine too.
-> 
-> 	if (status < 0)
-> 		return status;
-> 	if (status != len)
-> 		return -EREMOTEIO;
-> 
-> 	if (reqtype == 0x1)
-> 		memcpy();
-> 
-> 	return 0;
+> [...]
 
-Thx for your time and advice, Dan. Yeah, the code logic looks not easy.
-I will think about these code snippets and handle them.
+Ok, in that case I don't really know how to mark sources of inspiration
+in the commit message, maybe your approach is fine.
 
-thanks,
--- w
+> > >  obj-y				+= hirschmann/
+> > >  obj-y				+= microchip/
+> > > diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
+> > > new file mode 100644
+> > > index 000000000000..5bee999f7050
+> > > --- /dev/null
+> > > +++ b/drivers/net/dsa/rzn1_a5psw.c
+> > > @@ -0,0 +1,676 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/*
+> > > + * Copyright (C) 2022 Schneider-Electric
+> > > + *
+> > > + * Clément Léger <clement.leger@bootlin.com>
+> > > + */
+> > > +
+> > > +#include <linux/clk.h>
+> > > +#include <linux/etherdevice.h>
+> > > +#include <linux/kernel.h>
+> > > +#include <linux/module.h>
+> > > +#include <linux/of.h>
+> > > +#include <linux/of_mdio.h>
+> > > +#include <net/dsa.h>
+> > > +#include <uapi/linux/if_bridge.h>  
+> > 
+> > Why do you need to include this header?
+> 
+> It defines BR_STATE_* but I guess linux/if_bridge.h does include it.
+
+Yes.
+
+> > > +static void a5psw_port_pattern_set(struct a5psw *a5psw, int port, int pattern,
+> > > +				   bool enable)
+> > > +{
+> > > +	u32 rx_match = 0;
+> > > +
+> > > +	if (enable)
+> > > +		rx_match |= A5PSW_RXMATCH_CONFIG_PATTERN(pattern);
+> > > +
+> > > +	a5psw_reg_rmw(a5psw, A5PSW_RXMATCH_CONFIG(port),
+> > > +		      A5PSW_RXMATCH_CONFIG_PATTERN(pattern), rx_match);
+> > > +}
+> > > +
+> > > +static void a5psw_port_mgmtfwd_set(struct a5psw *a5psw, int port, bool enable)  
+> > 
+> > Some explanation on what "management forward" means/does?
+> 
+> I'll probably rename that cpu_port_forward to match the dsa naming.
+> It'll actually isolate the port from other ports by only forwarding the
+> packets to the CPU port.
+
+You could probably do without a rename by just adding a comment that
+says that it enables forwarding only towards the management port.
+
+> > Please implement .shutdown too, it's non-optional.
+> 
+> Hum, platform_shutdown does seems to check for the .shutdown callback:
+> 
+> static void platform_shutdown(struct device *_dev)
+> {
+> 	struct platform_device *dev = to_platform_device(_dev);
+> 	struct platform_driver *drv;
+> 
+> 	if (!_dev->driver)
+> 		return;
+> 
+> 	drv = to_platform_driver(_dev->driver);
+> 	if (drv->shutdown)
+> 		drv->shutdown(dev);
+> }
+> 
+> Is there some documentation specifying that this is mandatory ?
+> If so, should I just set it to point to an empty shutdown function then
+> ?
+
+I meant that for a DSA switch driver is mandatory to call dsa_switch_shutdown()
+from your ->shutdown method, otherwise subtle things break, sorry for being unclear.
+
+Please blindly copy-paste the odd pattern that all other DSA drivers use
+in ->shutdown and ->remove (with the platform_set_drvdata(dev, NULL) calls),
+like a normal person :)
+
+> > > + * @reg_lock: Lock for register read-modify-write operation  
+> > 
+> > Interesting concept. Generally we see higher-level locking schemes
+> > (i.e. a rmw lock won't really ensure much in terms of consistency of
+> > settings if that's the only thing that serializes concurrent thread
+> > accesses to some register).
+> 
+> Agreed, this does not guarantee consistency of settings but guarantees
+> that rmw modifications are atomic between devices. I wasn't sure about
+> the locking guarantee that I could have. After looking at other
+> drivers, I guess I will switch to something more common such as using
+> a global mutex for register accesses.
+
+LOL, that isn't better...
+
+Ideally locking would be done per functionality that the hardware can
+perform independently (like lookup table access, VLAN table access,
+forwarding domain control, PTP block, link state control, etc).
+You don't want to artificially serialize unrelated stuff.
+A "read-modify-write" lock would similarly artificially serialize
+unrelated stuff for you, even if you intend it to only serialize
+something entirely different.
+
+Most things as seen by a DSA switch driver are implicitly serialized by
+the rtnl_mutex anyway. Some things aren't (->port_fdb_add, ->port_fdb_del).
+There is a point to be made about adding locks for stuff that is
+implicitly serialized by the rtnl_mutex, since you can't really test
+their effectiveness. This makes it more difficult for the driver writer
+to make the right decision about locking, since in some cases, the
+serialization given by the rtnl_mutex isn't something fundamental and
+may be removed, to reduce contention on that lock. In that case, it is
+always a nice surprise to find a backup locking scheme in converted
+drivers. With the mention that said backup locking scheme was never
+really tested, so it may be that it needs further work anyway.
+
+> > The selftests don't cover nearly enough, but just to make sure that they
+> > pass for your switch, when you use 2 switch ports as h1 and h2 (hosts),
+> > and 2 ports as swp1 and swp2? There's surprisingly little that you do on
+> > .port_bridge_join, I need to study the code more.
+> 
+> Port isolation is handled by using a pattern matcher which is enabled
+> for each port at setup. If set, the port packet will only be forwarded
+> to the CPU port. When bridging is needed, the pattern matching is
+> disabled and thus, the packets are forwarded between all the ports that
+> are enabled in the bridge.
+
+Is there some public documentation for this pattern matcher?

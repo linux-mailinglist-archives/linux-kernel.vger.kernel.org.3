@@ -2,160 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE70C5033D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C712503311
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233089AbiDOXwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 19:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43464 "EHLO
+        id S229877AbiDOXzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 19:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiDOXwS (ORCPT
+        with ESMTP id S229645AbiDOXy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 19:52:18 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE42BB14
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:49:47 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id i186so8127810vsc.9
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 16:49:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=Qr6XNF1bK3PdePl03u0gY6aVL4clB778VuHLiEk7Bus=;
-        b=lf2+gHgcE6Sjq8PQbV9FP6YTAFbqNAhZzALie/K0UJSwp8Oa59xE5fwxN11DNM1jzF
-         F3nCS/VDmcRfjfl+JURbhT1QwWlvTf6TMOvYedmPUuhYHZoZ3FWE5qDqrpcgiKwp2M5b
-         jIKbKuIKL6O8SCdu+Nkg0t7A2o9CszAGzTa03ecBG4fd70UaiXXatm8yPzcBm+xkUc0w
-         OlyD+/B7EBheiPusiGgfwCmbaSrnOrKXiajcUq9uILobC5vaoL8BOyYShHP5yPjJ3eKX
-         +ZcE5PfQI7fVU5JbPATy7K69qjCUTJycQkXpbAtC/uy29svtVfrMRlXv8Zkh0xmeSuTJ
-         tKrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=Qr6XNF1bK3PdePl03u0gY6aVL4clB778VuHLiEk7Bus=;
-        b=ZjULt1cRQCvHJHE2uo7Jnyfyaaz3pBbQJ+oEDBHSXjQ/IcIPvwKE/P+v+tAKhJovYr
-         QA1z9iZkvIC308AHC+CkVo6d5lVvQD/uCn0uWPSbT3oWUxom2vVeIrs8Pjk9+XprA6sl
-         f7nASaCCjiwXUgoNfsf7sZAwp/pnjSWvzuEsnjCPxLcpKFGP5tZ0iKy98b5CPI6cCeGz
-         1W858d9rPjEmqau/11HI+ME+8oYfjeJgT7X2syWvpQ+WNHY2EdwGdbOPwhFXz29N+qVY
-         nNIeQUZyrQ9gZftX8gulpthughPI3xUkTMgqgIZLUWomyeQ2i3OFsJ7gYESh+CB1TOw3
-         Qghw==
-X-Gm-Message-State: AOAM53372MmkHefMtXg0t/2PdroC2OVpzXMW3hB5BMDmkvijPT4dY2Nz
-        tOG/dGQWKOtEZgfU6zfyiv05tXGZChuc5mH8jxrR4g==
-X-Google-Smtp-Source: ABdhPJyW7+XQXBJpdsz4McEx26yYkMLlsqpGPfU1l0p0386BmKCCX+y/uTbiRr+7GHVmV1rMDNlghHYJg9Cw/My3+7o=
-X-Received: by 2002:a05:6102:3753:b0:325:c20e:4b1c with SMTP id
- u19-20020a056102375300b00325c20e4b1cmr361726vst.84.1650066586474; Fri, 15 Apr
- 2022 16:49:46 -0700 (PDT)
+        Fri, 15 Apr 2022 19:54:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750A4954B6;
+        Fri, 15 Apr 2022 16:52:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1B8D7B831BC;
+        Fri, 15 Apr 2022 23:52:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B715AC385B0;
+        Fri, 15 Apr 2022 23:52:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650066745;
+        bh=errT7JCib6AzTkVoGPltwDcZINvMpoIAWe1b0AzmVjQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qNxv7R7kwGBplr4pFmyq+iyauWnfSUOQxiEV1D253Qu6QckwiUPoV8kS8B7hDvkIF
+         8r/h9C9qoQH1xiKBFuj/MwKoZ2yrwUVOzdx0QQqGQdu6eIJ91rZ6zdZ3AFGmkUJLMx
+         QeEhdcIHd+4kyqWYYERVkKlTGUBe8Tt33vmkE34mBM0rlflT0tTIeqCHkAPYy2m/Yi
+         XL8JHpBzufzAHD7Lh80CX6Zg+a/JNDywq9F5odVU9gXMoiEOWmSle+Uqx/Gq0yrHeM
+         Rzwu6FWkxKLl9ptrE4BaqBMNgBwR02nEefskx1y9zRueUrC/vgsuzK78JSe9f3Tzpm
+         GAMzI5xhgbiwA==
+Received: by mail-yb1-f181.google.com with SMTP id p65so16676882ybp.9;
+        Fri, 15 Apr 2022 16:52:25 -0700 (PDT)
+X-Gm-Message-State: AOAM531dF0jGOBsvuwFNiY8RNx9TS51fVO9REBpJg3c7yXIo+Nw4U4Mj
+        gxt0cn8ndAp3aRtIEYKnrCsk2QLkQrbQ1XhSgFo=
+X-Google-Smtp-Source: ABdhPJx72bmk61XUaqJvL+i1XHxlM70OjJc/9IRT4lbbDvxH0qPpB5kgaRzVhtGK/RofPmCZoqlatSkJeo/Au/tdM30=
+X-Received: by 2002:a25:8b81:0:b0:629:17d5:68c1 with SMTP id
+ j1-20020a258b81000000b0062917d568c1mr1296810ybl.449.1650066744755; Fri, 15
+ Apr 2022 16:52:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-9-yuzhao@google.com>
- <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
- <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
- <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
- <CAOUHufYy6yQS9ARN9C5+ODkopR+ez4TH3hZNZo4HtNHBExS1mA@mail.gmail.com>
- <20220415121521.764a88dda55ae8c676ad26b0@linux-foundation.org>
- <CAOUHufYsjwMGMFCfYoh79rFZqwqS1jDihcBS9sHd-gBxEAD3Ug@mail.gmail.com>
- <20220415143220.cc37b0b0a368ed2bf2a821f8@linux-foundation.org>
- <CAHk-=whvkRTVBhAamt0kYyp925jk_+g7T0CyPke_FbCWGQ1VvA@mail.gmail.com>
- <CAOUHufZ4KrjFTYH8wtwMGd9AriZfZtO4GhbiK1SuNbY31VTT9w@mail.gmail.com> <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-In-Reply-To: <CAHk-=whneDk3Jde3J+O-fD32VjaK+fDf9+P6jgDtr2qyo0iu2w@mail.gmail.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 15 Apr 2022 17:49:09 -0600
-Message-ID: <CAOUHufbc9oZ03CcOmQ=4KWzh_cof26Avag+WVkfOGR3+W8-OaA@mail.gmail.com>
-Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Justin Forbes <jforbes@fedoraproject.org>,
-        Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220414223704.341028-1-alobakin@pm.me> <20220414223704.341028-8-alobakin@pm.me>
+In-Reply-To: <20220414223704.341028-8-alobakin@pm.me>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 15 Apr 2022 16:52:13 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
+Message-ID: <CAPhsuW7FuAKX0fJ1XPfFWWwRS+wTW0qA49V-iQVzxv4jOb47MA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 07/11] samples: bpf: fix uin64_t format literals
+To:     Alexander Lobakin <alobakin@pm.me>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Chenbo Feng <fengc@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Daniel Wagner <daniel.wagner@bmw-carit.de>,
+        Thomas Graf <tgraf@suug.ch>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Networking <netdev@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        llvm@lists.linux.dev
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 5:03 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
+On Thu, Apr 14, 2022 at 3:46 PM Alexander Lobakin <alobakin@pm.me> wrote:
 >
-> On Fri, Apr 15, 2022 at 3:58 PM Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > BUG_ONs are harmful but problems that trigger them would be
-> > presummingly less penetrating to the user base; on the other hand,
-> > from my experience working with some testers (ordinary users), they
-> > ignore WARN_ON_ONCEs until the kernel crashes.
->
-> I don't understand your argument.
->
-> First you say that VM_BUG_ON() is only for VM developers.
+> There's a couple places where uin64_t is being passed as an %ld
+> format argument, which is incorrect (should be %lld). Fix them.
 
-I did? Probably I implied CONFIG_DEBUG_VM=y is meant for MM developers.
+This will cause some warning on some 64-bit compiler, no?
 
-> Then you say "some testers (ordinary users) ignore WARN_ON_ONCEs until
-> the kernel crashes".
->
-> So which is it?
->
-> VM developers, or ordinary users?
+Song
 
-Ordinary users.
-
-> Honestly, if a VM developer is ignoring a WARN_ON_ONCE() from the VM
-> subsystem, I don't even know what to say.
-
-Same here. I wasn't worried about kernel developers ignoring any warnings.
-
-> And for ordinary users, a WARN_ON_ONCE() is about a million times
-> better, becasue:
 >
->  - the machine will hopefully continue working, so they can report the warning
+> Fixes: 51570a5ab2b7 ("A Sample of using socket cookie and uid for traffic monitoring")
+> Fixes: 00f660eaf378 ("Sample program using SO_COOKIE")
+> Signed-off-by: Alexander Lobakin <alobakin@pm.me>
+> ---
+>  samples/bpf/cookie_uid_helper_example.c | 12 ++++++------
+>  samples/bpf/lwt_len_hist_user.c         |  4 ++--
+>  2 files changed, 8 insertions(+), 8 deletions(-)
 >
->  - even when they don't notice them, distros tend to have automated
-> reporting infrastructure
+> diff --git a/samples/bpf/cookie_uid_helper_example.c b/samples/bpf/cookie_uid_helper_example.c
+> index f0df3dda4b1f..1b98debb6019 100644
+> --- a/samples/bpf/cookie_uid_helper_example.c
+> +++ b/samples/bpf/cookie_uid_helper_example.c
+> @@ -207,9 +207,9 @@ static void print_table(void)
+>                         error(1, errno, "fail to get entry value of Key: %u\n",
+>                                 curN);
+>                 } else {
+> -                       printf("cookie: %u, uid: 0x%x, Packet Count: %lu,"
+> -                               " Bytes Count: %lu\n", curN, curEntry.uid,
+> -                               curEntry.packets, curEntry.bytes);
+> +                       printf("cookie: %u, uid: 0x%x, Packet Count: %llu, Bytes Count: %llu\n",
+> +                              curN, curEntry.uid, curEntry.packets,
+> +                              curEntry.bytes);
+>                 }
+>         }
+>  }
+> @@ -265,9 +265,9 @@ static void udp_client(void)
+>                 if (res < 0)
+>                         error(1, errno, "lookup sk stat failed, cookie: %lu\n",
+>                               cookie);
+> -               printf("cookie: %lu, uid: 0x%x, Packet Count: %lu,"
+> -                       " Bytes Count: %lu\n\n", cookie, dataEntry.uid,
+> -                       dataEntry.packets, dataEntry.bytes);
+> +               printf("cookie: %llu, uid: 0x%x, Packet Count: %llu, Bytes Count: %llu\n\n",
+> +                      cookie, dataEntry.uid, dataEntry.packets,
+> +                      dataEntry.bytes);
+>         }
+>         close(s_send);
+>         close(s_rcv);
+> diff --git a/samples/bpf/lwt_len_hist_user.c b/samples/bpf/lwt_len_hist_user.c
+> index 430a4b7e353e..4ef22571aa67 100644
+> --- a/samples/bpf/lwt_len_hist_user.c
+> +++ b/samples/bpf/lwt_len_hist_user.c
+> @@ -44,7 +44,7 @@ int main(int argc, char **argv)
 >
-> That's why I absolutely *DETEST* those stupid BUG_ON() cases - they
-> will often kill the machine with nasty locks held, resulting in a
-> completely undebuggable thing that never gets reported.
+>         while (bpf_map_get_next_key(map_fd, &key, &next_key) == 0) {
+>                 if (next_key >= MAX_INDEX) {
+> -                       fprintf(stderr, "Key %lu out of bounds\n", next_key);
+> +                       fprintf(stderr, "Key %llu out of bounds\n", next_key);
+>                         continue;
+>                 }
 >
-> Yes, you can be careful and only put BUG_ON() in places where recovery
-> is possible. But even then, they have no actual _advantages_ over just
-> a WARN_ON_ONCE.
-
-I hear you, and I wasn't arguing about anything, just sharing my two cents.
+> @@ -66,7 +66,7 @@ int main(int argc, char **argv)
+>
+>         for (i = 1; i <= max_key + 1; i++) {
+>                 stars(starstr, data[i - 1], max_value, MAX_STARS);
+> -               printf("%8ld -> %-8ld : %-8ld |%-*s|\n",
+> +               printf("%8ld -> %-8ld : %-8lld |%-*s|\n",
+>                        (1l << i) >> 1, (1l << i) - 1, data[i - 1],
+>                        MAX_STARS, starstr);
+>         }
+> --
+> 2.35.2
+>
+>

@@ -2,114 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46F8650267D
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06872502682
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 10:05:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351309AbiDOIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 04:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42820 "EHLO
+        id S1351310AbiDOIID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 04:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351298AbiDOIGg (ORCPT
+        with ESMTP id S235858AbiDOIIB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 04:06:36 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 590DDA2046
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:04:09 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id lc2so14135294ejb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:04:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=wRw/pC6iJAbq8IgOgAwHeaA7kFsJWyDEzT/CDMq/3c0=;
-        b=DyPzs60VOqjaquhFCmTIU1huFGvTpFS2Q3D8ea17oC6cXKiIq9dnCvyq5soefWSwGO
-         SMq1Yf6sIYKoQEPi59fEdu5nQsTR16XNV4vcLAu9WVg4Am9H7w9dSYyEDFw2tA1q/wok
-         BzdDb7/zJhi3Goum3Zkv7ZYoFQA4Z7L/IiaQ/VOryKHwS7Z9VxoHfoZ1Ob1dmztlo01o
-         8I+vIeqTz6emCxQ8Cgf73kRNtvqaD1DcEe+Hni03k/DlHD3S1MBlHqqsKUcJA2yrQsf6
-         1adGXAnL5VAtweeyBVtw5Oo+mTmVCovnG/bJ99kYQhc1OR0Lgl13jLEH5bs9beH02HTD
-         bSoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=wRw/pC6iJAbq8IgOgAwHeaA7kFsJWyDEzT/CDMq/3c0=;
-        b=cfrGtocqh+Vam02HaUpPHjev8+c9QGjDxfUcBiaiZbNkL1RX5NGDZp4sZvzIU1cMMi
-         VqdCON+kvjcTyehhQYK8Bym9HD4UvdasR04u9sYBeYPmiWKTWT+QrZ2ZcdV7wUO+DNAw
-         NpQjtn6+rhWDxsajx45LGWSgHN6aQ+A2lKsdOdeHfrlHepxhTn8vVCiXEWPFF0+G7baT
-         dWQ+vgO+kolTZ12UVy1UFfmSETI02HpVsy/ihVLr+t/eP8s3PWTfrSagz7B4Sd0nsve2
-         kg+a8Uu60gEPcQRGMzPAHIbNOwL6eY0wvwO41feiaJzJYdd5p6We5pp8eOQkPF/ItcKp
-         cBcw==
-X-Gm-Message-State: AOAM530VrXyDa0ydTSMN9325v5gYW5wtNLfEdXh5gAvrjvzYw9muOQ+2
-        mJZlI7kjLBXdo1QMJcBSNT7vud+uBaE=
-X-Google-Smtp-Source: ABdhPJwNIcoC4r4J7MSintYlBjxhytSXAjiatuIfoyyRuCFmh+rjzGV+vqz1XLARpUQAcbUS5Me7jQ==
-X-Received: by 2002:a17:907:7204:b0:6e8:c19e:93da with SMTP id dr4-20020a170907720400b006e8c19e93damr5276877ejc.695.1650009847891;
-        Fri, 15 Apr 2022 01:04:07 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1252:fb60:1dce:acd2:1722:e6e8? ([2a02:908:1252:fb60:1dce:acd2:1722:e6e8])
-        by smtp.gmail.com with ESMTPSA id y13-20020a50eb8d000000b0041f112a63c4sm2313487edr.52.2022.04.15.01.04.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 01:04:07 -0700 (PDT)
-Message-ID: <675a2d33-b286-d1d0-e4e7-05d6516026c0@gmail.com>
-Date:   Fri, 15 Apr 2022 10:04:06 +0200
+        Fri, 15 Apr 2022 04:08:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57A6A2046
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:05:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 68FCA61F95
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:05:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1757C385AD
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 08:05:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650009932;
+        bh=riuuKXnoQlBRBV7zO25zHcF/JWwq7zfPNr5mu3m9+jI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=tXi9Jj5fnDgYEJrim5xfcMUIa9y+5BF6p9ZqnM7Q/aJgxGpwJRTGeSeibe2Y5Ezn1
+         teTDfS5nnAyKMU/ta+74JyWSeLIP6b0vZEqt5zWkyIVFKM3+0swjJv18a2cSQWQWqq
+         IymLFV+D2iufYzMlVa94ag1HVsBOPhqflDvp4s7q4EBATTYae/zHKm9I0qr5DQXhq+
+         O3gLobRWXRaenBCExS0LOcP8DoW7qndV8GXQIUI6o8VBWak5jLP/LfgiimF9nZx3dj
+         ieTcO471WheCh1GtnDnM5PCMP6nnZ1RBHzqfHMvWEGdMx24LHCdlY8kPryIqMxlDej
+         +TVsRzXWf2zbQ==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-e2442907a1so7524265fac.8
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 01:05:32 -0700 (PDT)
+X-Gm-Message-State: AOAM531C1pblVILATDEk+G1sy99aYEELZCX7N6XZ7gOco/tTypkCSZYQ
+        lQv1ZgG7MKr9YcTAtlf8k2eLHZOl6beqm4S6+Ok=
+X-Google-Smtp-Source: ABdhPJwa5+CpOCKoPK7GU76i17Qy9CqHOdE4RymA/6S6MbMw45+zBMAYYJTH6M4NHw/fG0dhmipO+89okOHPFS+WrVU=
+X-Received: by 2002:a05:6870:eaa5:b0:da:b3f:2b45 with SMTP id
+ s37-20020a056870eaa500b000da0b3f2b45mr1000528oap.228.1650009931924; Fri, 15
+ Apr 2022 01:05:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [Bug][5.18-rc0] Between commits ed4643521e6a and 34af78c4e616,
- appears warning "WARNING: CPU: 31 PID: 51848 at
- drivers/dma-buf/dma-fence-array.c:191 dma_fence_array_create+0x101/0x120" and
- some games stopped working.
-Content-Language: en-US
-To:     Mikhail Gavrilov <mikhail.v.gavrilov@gmail.com>
-Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        thomas.hellstrom@linux.intel.com,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Linux List Kernel Mailing <linux-kernel@vger.kernel.org>,
-        amd-gfx list <amd-gfx@lists.freedesktop.org>,
-        "Deucher, Alexander" <alexander.deucher@amd.com>, Ken.Xue@amd.com
-References: <CABXGCsNVp=R5zC9B3PXWJ5nddtt3gkRzDsAsRKvhXq7exGjSAg@mail.gmail.com>
- <f3bc34e1-0eaf-84ef-486e-b7759e60b792@amd.com>
- <CABXGCsOD+tDdFcM37NP_1nS9eLym7qC=jUQy3iqYkc1m2iQgxw@mail.gmail.com>
- <0d5f66d8-9852-b6a9-0e27-9eb9e736d698@amd.com>
- <CABXGCsPi68Lyvg+6UjTK2aJm6PVBs83YJuP6x68mcrzAQgpuZg@mail.gmail.com>
- <eef04fc4-741d-606c-c2c6-f054e4e3fffd@amd.com>
- <CABXGCsNNwEjo_dvWJL7GLULBPy+RmwsC9ObpowR_M1nQ3fKt3g@mail.gmail.com>
- <4d0cbb79-4955-a3ed-4aa2-7f6cdaa00481@gmail.com>
- <CABXGCsP19VFRgTx5yGn68iCK3NxPxi_b9MTq=AmHtFPv9xR5sA@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <CABXGCsP19VFRgTx5yGn68iCK3NxPxi_b9MTq=AmHtFPv9xR5sA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Yk/8QExHlggU8KgC@gondor.apana.org.au> <YlVHSvkyUBXZPUr2@arm.com>
+ <YlVJKjXkcHqkwyt4@gondor.apana.org.au> <YlVOTsaTVkBOxthG@arm.com>
+ <YlVSBuEqMt2S1Gi6@gondor.apana.org.au> <YlVxGAHHD/j6lW3c@arm.com>
+ <CAMj1kXGCR833rqKOetj8ykQ8XtDCWbszJYVtVKvLpDLWnM=B5w@mail.gmail.com>
+ <YlaOIbSA7B/G9222@arm.com> <YlkV7NtatO7KFusX@gondor.apana.org.au>
+ <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com> <YlkkGpVx8rhcsBot@gondor.apana.org.au>
+In-Reply-To: <YlkkGpVx8rhcsBot@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 15 Apr 2022 10:05:21 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
+Message-ID: <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of ARCH_KMALLOC_MINALIGN
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.04.22 um 07:38 schrieb Mikhail Gavrilov:
-> On Sat, Apr 9, 2022 at 7:27 PM Christian König
-> <ckoenig.leichtzumerken@gmail.com> wrote:
->> That's unfortunately not the end of the story.
->>
->> This is fixing your problem, but reintroducing the original problem that
->> we call the syncobj with a lock held which can crash badly as well.
->>
->> Going to take a closer look on Monday. I hope you can test a few more
->> patches to help narrow down what's actually going wrong here.
->>
->> Thanks,
->> Christian.
->>
-> Hi Christian.
-> I'm sorry to trouble you.
-> Have you forgotten about this issue?
+On Fri, 15 Apr 2022 at 09:52, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, Apr 15, 2022 at 09:49:12AM +0200, Ard Biesheuvel wrote:
+> >
+> > I'm not sure I understand what would go wrong if that assumption no
+> > longer holds.
+>
+> It's very simple, we don't do anything to the pointer returned
+> by kmalloc before returning it as a tfm or other object with
+> an alignment of CRYPTO_MINALIGN.  IOW if kmalloc starts returning
+> pointers that are not aligned to CRYPTO_MINALIGN then we'd be
+> lying to the compiler.
 >
 
-No, I just couldn't find time during all that bug fixing :)
+I guess that should be fixable. GIven that this is about padding
+rather than alignment, we could do something like
 
-Sorry for the delay, going to take a look after the eastern holiday here.
+struct crypto_request {
+  union {
+      struct {
+        ... fields ...
+      };
+      u8 __padding[ARCH_DMA_MINALIGN];
+   };
+    void __ctx[]  __align(CRYPTO_MINALIGN);
+};
 
-Christian.
+And then hopefully, we can get rid of the padding once we fix drivers
+doing non-cache coherent inbound DMA into those structures.

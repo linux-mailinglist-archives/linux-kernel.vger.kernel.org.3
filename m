@@ -2,115 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDE2950203F
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:57:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A5A4502043
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 03:58:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348539AbiDOB72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 14 Apr 2022 21:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S1348550AbiDOCAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 14 Apr 2022 22:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345417AbiDOB71 (ORCPT
+        with ESMTP id S243450AbiDOCAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 14 Apr 2022 21:59:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE02B0D27;
-        Thu, 14 Apr 2022 18:57:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EA5B5B82BE8;
-        Fri, 15 Apr 2022 01:56:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EED4CC385A5;
-        Fri, 15 Apr 2022 01:56:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1649987817;
-        bh=ysnJvJIjZnyxWKZuaQD4LsgYeCMzMSJq6bj2UggluuM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KScx2dLZArE6eYk81pk/lFBIfXKqb0xej5bLwVJZ2U1ypZzz63FJtTcE1PViKwtlI
-         bn5liD8s3f5BQWa/2LQSwPj5cwH8Izf7z+YmG+S0KhA13IPHRld2oDbVjovhfIbvD9
-         YL8p0jxgE4cK1JbgeRGlbwvxLsGMbTvCXG9UNhz8=
-Date:   Thu, 14 Apr 2022 18:56:54 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        Holger =?ISO-8859-1?Q?Hoffst=E4tte?= 
-        <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Subject: Re: [PATCH v10 08/14] mm: multi-gen LRU: support page table walks
-Message-Id: <20220414185654.e7150bcbe859e0dd4b9c61af@linux-foundation.org>
-In-Reply-To: <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
-References: <20220407031525.2368067-1-yuzhao@google.com>
-        <20220407031525.2368067-9-yuzhao@google.com>
-        <20220411191621.0378467ad99ebc822d5ad005@linux-foundation.org>
-        <CAOUHufYeC=Kuu59BPL_48sM67CqACxH2wWy-SYGXpadgMDmY3w@mail.gmail.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 14 Apr 2022 22:00:48 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED03BB18A0;
+        Thu, 14 Apr 2022 18:58:20 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:45858.1005876200
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-123.150.8.42 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id D152B100213;
+        Fri, 15 Apr 2022 09:58:18 +0800 (CST)
+Received: from  ([123.150.8.42])
+        by gateway-153622-dep-749df8664c-mvcg4 with ESMTP id 8d21f9a5c5c543a7be347287fe62d021 for daniel@iogearbox.net;
+        Fri, 15 Apr 2022 09:58:19 CST
+X-Transaction-ID: 8d21f9a5c5c543a7be347287fe62d021
+X-Real-From: chensong_2000@189.cn
+X-Receive-IP: 123.150.8.42
+X-MEDUSA-Status: 0
+Sender: chensong_2000@189.cn
+Message-ID: <7b6e0e08-4440-f1aa-8e94-068e2e129aac@189.cn>
+Date:   Fri, 15 Apr 2022 09:58:18 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 0/1] sample: bpf: introduce irqlat
+Content-Language: en-US
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     ast@kernel.org, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, brendan.d.gregg@gmail.com
+References: <1649927240-18991-1-git-send-email-chensong_2000@189.cn>
+ <2e6ee265-903c-2b5c-aefd-ec24f930c999@iogearbox.net>
+ <ac371d36-2624-cdd8-0c15-62ccf53bed81@189.cn>
+ <f4267d24-28ca-bd99-100e-6fa4ee84cc50@iogearbox.net>
+From:   Song Chen <chensong_2000@189.cn>
+In-Reply-To: <f4267d24-28ca-bd99-100e-6fa4ee84cc50@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 14 Apr 2022 19:14:54 -0600 Yu Zhao <yuzhao@google.com> wrote:
+bcc and bpftrace should be able to match my requirement, I will look 
+into them, many thanks.
 
-> On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-> >
-> > On Wed,  6 Apr 2022 21:15:20 -0600 Yu Zhao <yuzhao@google.com> wrote:
-> >
-> > > +static void update_batch_size(struct lru_gen_mm_walk *walk, struct folio *folio,
-> > > +                           int old_gen, int new_gen)
-> > > +{
-> > > +     int type = folio_is_file_lru(folio);
-> > > +     int zone = folio_zonenum(folio);
-> > > +     int delta = folio_nr_pages(folio);
-> > > +
-> > > +     VM_BUG_ON(old_gen >= MAX_NR_GENS);
-> > > +     VM_BUG_ON(new_gen >= MAX_NR_GENS);
-> >
-> > General rule: don't add new BUG_ONs, because they crash the kenrel.
-> > It's better to use WARN_ON or WARN_ON_ONCE then try to figure out a way
-> > to keep the kernel limping along.  At least so the poor user can gather logs.
+BR
+
+Song
+
+在 2022/4/14 23:32, Daniel Borkmann 写道:
+> Hi Song,
 > 
-> These are VM_BUG_ONs, which are BUILD_BUG_ONs except for (mostly MM) developers.
-
-I'm told that many production builds enable runtime VM_BUG_ONning.
+> On 4/14/22 1:25 PM, Song Chen wrote:
+>> hi Daniel,
+>>
+>> Thanks for liking the idea.
+>>
+>> My target is embedded devices, that's why i get started from ebpf 
+>> C.bcc and bpftrace is a good idea, but i prefer taking one thing at a 
+>> time, what's more, i'm not familiar with python, it might take longer.
+>>
+>> Once C code is accepted, i will move myself to bcc and bpftrace. Is it 
+>> ok for you?
+> 
+> The libbpf-based tools from the mentioned link in BCC are all C, not 
+> Python. Also bpftrace
+> has guidelines for building it more portably that would be suitable for 
+> embedded devices [2].
+> I'd presume these should still match your requirements?
+> 
+> Right now samples/bpf/ is a bit of a dumping ground of random things, 
+> some BPF samples better
+> maintained than others, but generally samples/bpf/ is a bit of a mess. 
+> BPF has a huge ecosystem
+> outside of kernel in its various areas it covers, so it has outgrown the 
+> few samples in there
+> long ago, and you'll find many resources on how to get started in the wild.
+> 
+> Adding this as a samples/bpf/ will have little value to others, since 
+> people may not be aware
+> of them, and if they are they need to manually build/ship it, etc. If 
+> you upstream and can improve
+> the tools in bpftrace/bcc as pointed out, then a lot more people will be 
+> able to consume them
+> and benefit from it, and you get the shipping via distros for free.
+> 
+>    [2] 
+> https://github.com/iovisor/bpftrace/blob/master/docs/embedded_builds.md
+> 
+> Thanks again,
+> Daniel
+> 
+>> BR
+>>
+>> Song
+>>
+>>
+>> 在 2022/4/14 17:47, Daniel Borkmann 写道:
+>>> On 4/14/22 11:07 AM, Song Chen wrote:
+>>>> I'm planning to implement a couple of ebpf tools for preempt rt,
+>>>> including irq latency, preempt latency and so on, how does it sound
+>>>> to you?
+>>>
+>>> Sounds great, thanks! Please add these tools for upstream inclusion 
+>>> either to bpftrace [0] or
+>>> bcc [1], then a wider range of users would be able to benefit from 
+>>> them as well as they are
+>>> also shipped as distro packages and generally more widely used 
+>>> compared to kernel samples.
+>>>
+>>> Thanks Song!
+>>>
+>>>    [0] https://github.com/iovisor/bpftrace/tree/master/tools
+>>>    [1] https://github.com/iovisor/bcc/tree/master/libbpf-tools
+>>>
+>>>> Song Chen (1):
+>>>>    sample: bpf: introduce irqlat
+>>>>
+>>>>   samples/bpf/.gitignore    |   1 +
+>>>>   samples/bpf/Makefile      |   5 ++
+>>>>   samples/bpf/irqlat_kern.c |  81 ++++++++++++++++++++++++++++++
+>>>>   samples/bpf/irqlat_user.c | 100 
+>>>> ++++++++++++++++++++++++++++++++++++++
+>>>>   4 files changed, 187 insertions(+)
+>>>>   create mode 100644 samples/bpf/irqlat_kern.c
+>>>>   create mode 100644 samples/bpf/irqlat_user.c
+>>>>
+>>>
+>>>
+> 
+> 

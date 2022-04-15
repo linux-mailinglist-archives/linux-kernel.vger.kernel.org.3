@@ -2,199 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D67D6502B96
-	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38E3F502B98
+	for <lists+linux-kernel@lfdr.de>; Fri, 15 Apr 2022 16:15:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354336AbiDOORA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 10:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34508 "EHLO
+        id S1354361AbiDOORa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 10:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354356AbiDOOQy (ORCPT
+        with ESMTP id S1354362AbiDOORW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 10:16:54 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3214CF4AD
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id t12so7210227pll.7
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=W7pJ87MMKgb5DtroOsn6zX1k9Enz1UopIOm4KxB8CdU=;
-        b=cl6RaMXM2TAsZOMW89aMuGQgKEIMl7GsTFPcrv7gyNZd1WPR48gwuVCjmE3gnHj6MM
-         kx0a533ilutzRFYcLIfQtywqy5NCvd1VgNO9pK/tt5xuOHORBDeX9jKs5QGJjKGI5YO2
-         7VQURjVRDdga27AqW4x9aRdYTYzNcIQutvTEcNAjPflq22e+8XAzskHHnXwjWa6Yuzuq
-         ZCBe643HeK945voQ4oLhvyxW4gQ8gRuxCRnRv0OIN9CgPq11WfaGQSszlsHQpbwL/0An
-         lxWAIZPK0N+9PmGU/j5fXIM14NiJHnQmlUCoynlpBAMpF/ilxXatwHTfIbC6LjY0BODd
-         ZzYg==
+        Fri, 15 Apr 2022 10:17:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 14F4A1BE84
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650032091;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NDzhabKGf8eK/udzJEHxzD5ALoVxgv4JOTpWaJ3vp2o=;
+        b=V8gcCEuITQPUxUhJFxKh5e2k1uSVkOmHStSxunZ/BzehvXavoGEOy1sm1WnuX3UhXQXTmZ
+        wylmo2RbBDGwOM+JmYE5tz9zMi4ONPxvwyXTDadxUzIHp6LB+L+KCJ3zHMOS4xKGhW6sjc
+        hRsJWvxvss9QuKwXjoh9P1w9js37W/4=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-LClct3OsOJK9vESrRFiJ9w-1; Fri, 15 Apr 2022 10:14:47 -0400
+X-MC-Unique: LClct3OsOJK9vESrRFiJ9w-1
+Received: by mail-ed1-f72.google.com with SMTP id ee36-20020a056402292400b0041d836b664cso4899910edb.6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 07:14:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=W7pJ87MMKgb5DtroOsn6zX1k9Enz1UopIOm4KxB8CdU=;
-        b=Eg5xvU3FJKt+bFZYOOxJB72hzuqLPR1oY5qfiPu+ZtJh7fRT8ig6U6bhH7opl6EFV4
-         +e0DMkvUCH0JItXB97mtUw9XTh1AMQxWs6HmAMglQebk92TOTI3cmGoNAVNl8iBaNl9O
-         QIy6c/b36W/1/4SAsdG58qLpP7uTdELstq+WFzivHLCXOcJOehEsjS1yl1uR+RiAav2k
-         Dp/OEPiHKKuRZQutMb03klPXEQg0rkD1ICDZ+ryhnfZiGA+hdiX/dsqsYxiMpY7DP3Qu
-         0iWXo4H6+u5mvfj1JR/sf634f4us1Ud22QdM29qnFbZJAE+mYqqpERRPBA7T6QLedaKZ
-         /TtQ==
-X-Gm-Message-State: AOAM5314mQRc8GSA46TTXTu+LwIXRCmPPWRQs/aN24Pq1A6uS5JeTaMH
-        /sshxdqHaikLZTphDt+OBmY1+w==
-X-Google-Smtp-Source: ABdhPJwIMENFkDtZsLGQMuu3vxL5lc0twYuZQL+N4DXflSHdA2RL1NFxd/fLLyIOwAIcuhK3MyNKZA==
-X-Received: by 2002:a17:90b:380f:b0:1c7:4403:4e72 with SMTP id mq15-20020a17090b380f00b001c744034e72mr4462158pjb.228.1650032063329;
-        Fri, 15 Apr 2022 07:14:23 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id n24-20020aa79058000000b0050612d0fe01sm3012707pfo.2.2022.04.15.07.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 07:14:22 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     andrii.nakryiko@gmail.com
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Martin KaFai Lau" <kafai@fb.com>,
-        "Song Liu" <songliubraving@fb.com>, "Yonghong Song" <yhs@fb.com>,
-        "John Fastabend" <john.fastabend@gmail.com>,
-        "KP Singh" <kpsingh@kernel.org>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com
-Subject: [PATCH v2] bpf: Fix KASAN use-after-free Read in compute_effective_progs
-Date:   Fri, 15 Apr 2022 07:13:55 -0700
-Message-Id: <20220415141355.4329-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <CAEf4BzbiVeQfhxEu908w2mU4d8+5kKeMknuvhzCXuxM9pJ1jmQ@mail.gmail.com>
-References: <CAEf4BzbiVeQfhxEu908w2mU4d8+5kKeMknuvhzCXuxM9pJ1jmQ@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=NDzhabKGf8eK/udzJEHxzD5ALoVxgv4JOTpWaJ3vp2o=;
+        b=39Q2P/MqXiHcsF26iTuA/Uc2uxp4J+d2YumgjWX1J0jghNWKTUG7DfPyUdIKl/3yJz
+         UMBtco5j1R6mFBz6L/YeG/0C/UV2EfHbCXxTLg160qbRNBhGmLS53/J7GBHQczdTqId/
+         pHtpDsn72tpSSOreXoIDYLka5ozu4UWwxv0Lu9wjrGkKPDiQzakhz++J6FNnYvDjzT1e
+         Yisb0j+J8FO3JftN6bj0dUjA0yiRL5+h3O+N+1VR/vkyzG00tYZoRAKnZsq46sE+f6OM
+         x13MOaNmcO2KdOh3I0kefiaoCTTaUT0FS6fhDYXKK5DyA4DWIOvz6uumiAOkLDp0n3qv
+         id1w==
+X-Gm-Message-State: AOAM532NrNdyqbrKPkoY93GmdlEek5qdOLNxhP5uvs3qiGkPjrp0Wrn+
+        N/sraz5SlkKhYcMjfdH2M/cF8mNhBr2soShy8XlsBSDstuwNLoOTHcvhGN7dT1gyVEE4P9dF6fs
+        /aBcneXbteIJvpu368qJjYuFg
+X-Received: by 2002:a17:907:3397:b0:6e8:d608:bdab with SMTP id zj23-20020a170907339700b006e8d608bdabmr6518843ejb.556.1650032085680;
+        Fri, 15 Apr 2022 07:14:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJx0jn0chNTS4vN4sFhLHUj58m3uk4gy4F/TUvtQ/jbqK6aFxDFwC9KPYU5Ed2wXiTJtk09/0Q==
+X-Received: by 2002:a17:907:3397:b0:6e8:d608:bdab with SMTP id zj23-20020a170907339700b006e8d608bdabmr6518632ejb.556.1650032082465;
+        Fri, 15 Apr 2022 07:14:42 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id c13-20020a17090654cd00b006e0db351d01sm1730182ejp.124.2022.04.15.07.14.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 15 Apr 2022 07:14:41 -0700 (PDT)
+Message-ID: <3846c1be-73cd-17d6-5e2a-9f7edde2ef9c@redhat.com>
+Date:   Fri, 15 Apr 2022 16:14:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v5 072/104] KVM: TDX: handle vcpu migration over
+ logical processor
+Content-Language: en-US
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Jim Mattson <jmattson@google.com>,
+        erdemaktas@google.com, Connor Kuehl <ckuehl@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+References: <cover.1646422845.git.isaku.yamahata@intel.com>
+ <3dd2729b27d1db696c61c7f7acf5a2c8ecaa1502.1646422845.git.isaku.yamahata@intel.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <3dd2729b27d1db696c61c7f7acf5a2c8ecaa1502.1646422845.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot found a Use After Free bug in compute_effective_progs().
-The reproducer creates a number of BPF links, and causes a fault
-injected alloc to fail, while calling bpf_link_detach on them.
-Link detach triggers the link to be freed by bpf_link_free(),
-which calls __cgroup_bpf_detach() and update_effective_progs().
-If the memory allocation in this function fails, the function restores
-the pointer to the bpf_cgroup_link on the cgroup list, but the memory
-gets freed just after it returns. After this, every subsequent call to
-update_effective_progs() causes this already deallocated pointer to be
-dereferenced in prog_list_length(), and triggers KASAN UAF error.
+On 3/4/22 20:49, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+> 
+> For vcpu migration, in the case of VMX, VCMS is flushed on the source pcpu,
+> and load it on the target pcpu.  There are corresponding TDX SEAMCALL APIs,
+> call them on vcpu migration.  The logic is mostly same as VMX except the
+> TDX SEAMCALLs are used.
+> 
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> ---
+>   arch/x86/kvm/vmx/main.c    | 20 +++++++++++++--
+>   arch/x86/kvm/vmx/tdx.c     | 51 ++++++++++++++++++++++++++++++++++++++
+>   arch/x86/kvm/vmx/x86_ops.h |  2 ++
+>   3 files changed, 71 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
+> index f9d43f2de145..2cd5ba0e8788 100644
+> --- a/arch/x86/kvm/vmx/main.c
+> +++ b/arch/x86/kvm/vmx/main.c
+> @@ -121,6 +121,14 @@ static fastpath_t vt_vcpu_run(struct kvm_vcpu *vcpu)
+>   	return vmx_vcpu_run(vcpu);
+>   }
+>   
+> +static void vt_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return tdx_vcpu_load(vcpu, cpu);
+> +
+> +	return vmx_vcpu_load(vcpu, cpu);
+> +}
+> +
+>   static void vt_flush_tlb_all(struct kvm_vcpu *vcpu)
+>   {
+>   	if (is_td_vcpu(vcpu))
+> @@ -162,6 +170,14 @@ static void vt_load_mmu_pgd(struct kvm_vcpu *vcpu, hpa_t root_hpa,
+>   	vmx_load_mmu_pgd(vcpu, root_hpa, pgd_level);
+>   }
+>   
+> +static void vt_sched_in(struct kvm_vcpu *vcpu, int cpu)
+> +{
+> +	if (is_td_vcpu(vcpu))
+> +		return;
+> +
+> +	vmx_sched_in(vcpu, cpu);
+> +}
+> +
+>   static int vt_mem_enc_op(struct kvm *kvm, void __user *argp)
+>   {
+>   	if (!is_td(kvm))
+> @@ -199,7 +215,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>   	.vcpu_reset = vt_vcpu_reset,
+>   
+>   	.prepare_guest_switch = vt_prepare_switch_to_guest,
+> -	.vcpu_load = vmx_vcpu_load,
+> +	.vcpu_load = vt_vcpu_load,
+>   	.vcpu_put = vt_vcpu_put,
+>   
+>   	.update_exception_bitmap = vmx_update_exception_bitmap,
+> @@ -285,7 +301,7 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
+>   
+>   	.request_immediate_exit = vmx_request_immediate_exit,
+>   
+> -	.sched_in = vmx_sched_in,
+> +	.sched_in = vt_sched_in,
+>   
+>   	.cpu_dirty_log_size = PML_ENTITY_NUM,
+>   	.update_cpu_dirty_logging = vmx_update_cpu_dirty_logging,
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 37cf7d43435d..a6b1a8ce888d 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -85,6 +85,18 @@ static inline bool is_td_finalized(struct kvm_tdx *kvm_tdx)
+>   	return kvm_tdx->finalized;
+>   }
+>   
+> +static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
+> +{
+> +	/*
+> +	 * Ensure tdx->cpu_list is updated is before setting vcpu->cpu to -1,
+> +	 * otherwise, a different CPU can see vcpu->cpu = -1 and add the vCPU
+> +	 * to its list before its deleted from this CPUs list.
+> +	 */
+> +	smp_wmb();
+> +
+> +	vcpu->cpu = -1;
+> +}
+> +
+>   static void tdx_clear_page(unsigned long page)
+>   {
+>   	const void *zero_page = (const void *) __va(page_to_phys(ZERO_PAGE(0)));
+> @@ -155,6 +167,39 @@ static void tdx_reclaim_td_page(struct tdx_td_page *page)
+>   	free_page(page->va);
+>   }
+>   
+> +static void tdx_flush_vp(void *arg)
+> +{
+> +	struct kvm_vcpu *vcpu = arg;
+> +	u64 err;
+> +
+> +	/* Task migration can race with CPU offlining. */
+> +	if (vcpu->cpu != raw_smp_processor_id())
+> +		return;
+> +
+> +	/*
+> +	 * No need to do TDH_VP_FLUSH if the vCPU hasn't been initialized.  The
+> +	 * list tracking still needs to be updated so that it's correct if/when
+> +	 * the vCPU does get initialized.
+> +	 */
+> +	if (is_td_vcpu_created(to_tdx(vcpu))) {
+> +		err = tdh_vp_flush(to_tdx(vcpu)->tdvpr.pa);
+> +		if (unlikely(err && err != TDX_VCPU_NOT_ASSOCIATED)) {
+> +			if (WARN_ON_ONCE(err))
+> +				pr_tdx_error(TDH_VP_FLUSH, err, NULL);
+> +		}
+> +	}
+> +
+> +	tdx_disassociate_vp(vcpu);
+> +}
+> +
+> +static void tdx_flush_vp_on_cpu(struct kvm_vcpu *vcpu)
+> +{
+> +	if (unlikely(vcpu->cpu == -1))
+> +		return;
+> +
+> +	smp_call_function_single(vcpu->cpu, tdx_flush_vp, vcpu, 1);
+> +}
+> +
+>   static int tdx_do_tdh_phymem_cache_wb(void *param)
+>   {
+>   	u64 err = 0;
+> @@ -425,6 +470,12 @@ int tdx_vcpu_create(struct kvm_vcpu *vcpu)
+>   	return ret;
+>   }
+>   
+> +void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+> +{
+> +	if (vcpu->cpu != cpu)
+> +		tdx_flush_vp_on_cpu(vcpu);
+> +}
+> +
+>   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu)
+>   {
+>   	struct vcpu_tdx *tdx = to_tdx(vcpu);
+> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
+> index 8b871c5f52cf..ceafd6e18f4e 100644
+> --- a/arch/x86/kvm/vmx/x86_ops.h
+> +++ b/arch/x86/kvm/vmx/x86_ops.h
+> @@ -143,6 +143,7 @@ void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event);
+>   fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu);
+>   void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu);
+>   void tdx_vcpu_put(struct kvm_vcpu *vcpu);
+> +void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu);
+>   
+>   int tdx_vm_ioctl(struct kvm *kvm, void __user *argp);
+>   int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp);
+> @@ -166,6 +167,7 @@ static inline void tdx_vcpu_reset(struct kvm_vcpu *vcpu, bool init_event) {}
+>   static inline fastpath_t tdx_vcpu_run(struct kvm_vcpu *vcpu) { return EXIT_FASTPATH_NONE; }
+>   static inline void tdx_prepare_switch_to_guest(struct kvm_vcpu *vcpu) {}
+>   static inline void tdx_vcpu_put(struct kvm_vcpu *vcpu) {}
+> +static inline void tdx_vcpu_load(struct kvm_vcpu *vcpu, int cpu) {}
+>   
+>   static inline int tdx_vm_ioctl(struct kvm *kvm, void __user *argp) { return -EOPNOTSUPP; }
+>   static inline int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp) { return -EOPNOTSUPP; }
 
-To fix this issue don't preserve the pointer to the prog or link in the
-list, but remove it and rearrange the effective table without
-shrinking it. The subsequent call to __cgroup_bpf_detach() or
-__cgroup_bpf_detach() will correct it.
+This patch and the next one might even be squashed together.
 
-Cc: "Alexei Starovoitov" <ast@kernel.org>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>
-Cc: "Martin KaFai Lau" <kafai@fb.com>
-Cc: "Song Liu" <songliubraving@fb.com>
-Cc: "Yonghong Song" <yhs@fb.com>
-Cc: "John Fastabend" <john.fastabend@gmail.com>
-Cc: "KP Singh" <kpsingh@kernel.org>
-Cc: <netdev@vger.kernel.org>
-Cc: <bpf@vger.kernel.org>
-Cc: <stable@vger.kernel.org>
-Cc: <linux-kernel@vger.kernel.org>
+Otherwise
 
-Link: https://syzkaller.appspot.com/bug?id=8ebf179a95c2a2670f7cf1ba62429ec044369db4
-Fixes: af6eea57437a ("bpf: Implement bpf_link-based cgroup BPF program attachment")
-Reported-by: <syzbot+f264bffdfbd5614f3bb2@syzkaller.appspotmail.com>
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
-v2: Add a fall back path that removes a prog from the effective progs
-    table in case detach fails to allocate memory in compute_effective_progs().
----
- kernel/bpf/cgroup.c | 55 +++++++++++++++++++++++++++++++++++++++------
- 1 file changed, 48 insertions(+), 7 deletions(-)
-
-diff --git a/kernel/bpf/cgroup.c b/kernel/bpf/cgroup.c
-index 128028efda64..5a64cece09f3 100644
---- a/kernel/bpf/cgroup.c
-+++ b/kernel/bpf/cgroup.c
-@@ -723,10 +723,8 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 	pl->link = NULL;
- 
- 	err = update_effective_progs(cgrp, atype);
--	if (err)
--		goto cleanup;
- 
--	/* now can actually delete it from this cgroup list */
-+	/* now can delete it from this cgroup list */
- 	list_del(&pl->node);
- 	kfree(pl);
- 	if (list_empty(progs))
-@@ -735,12 +733,55 @@ static int __cgroup_bpf_detach(struct cgroup *cgrp, struct bpf_prog *prog,
- 	if (old_prog)
- 		bpf_prog_put(old_prog);
- 	static_branch_dec(&cgroup_bpf_enabled_key[atype]);
--	return 0;
-+
-+	if (!err)
-+		return 0;
- 
- cleanup:
--	/* restore back prog or link */
--	pl->prog = old_prog;
--	pl->link = link;
-+	/*
-+	 * If compute_effective_progs failed with -ENOMEM, i.e. alloc for
-+	 * cgrp->bpf.inactive table failed, we can recover by removing
-+	 * the detached prog from effective table and rearranging it.
-+	 */
-+	if (err == -ENOMEM) {
-+		struct bpf_prog_array_item *item;
-+		struct bpf_prog *prog_tmp, *prog_detach, *prog_last;
-+		struct bpf_prog_array *array;
-+		int index = 0, index_detach = -1;
-+
-+		array = cgrp->bpf.effective[atype];
-+		item = &array->items[0];
-+
-+		if (prog)
-+			prog_detach = prog;
-+		else
-+			prog_detach = link->link.prog;
-+
-+		if (!prog_detach)
-+			return -EINVAL;
-+
-+		while ((prog_tmp = READ_ONCE(item->prog))) {
-+			if (prog_tmp == prog_detach)
-+				index_detach = index;
-+			item++;
-+			index++;
-+			prog_last = prog_tmp;
-+		}
-+
-+		/* Check if we found what's needed for removing the prog */
-+		if (index_detach == -1 || index_detach == index-1)
-+			return -EINVAL;
-+
-+		/* Remove the last program in the array */
-+		if (bpf_prog_array_delete_safe_at(array, index-1))
-+			return -EINVAL;
-+
-+		/* and update the detached with the last just removed */
-+		if (bpf_prog_array_update_at(array, index_detach, prog_last))
-+			return -EINVAL;
-+
-+		err = 0;
-+	}
- 	return err;
- }
- 
--- 
-2.35.1
+Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
 

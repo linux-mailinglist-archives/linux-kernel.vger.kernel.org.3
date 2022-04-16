@@ -2,81 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B305036AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F0E35036B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232006AbiDPNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 09:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
+        id S232017AbiDPNRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 09:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiDPNCw (ORCPT
+        with ESMTP id S230299AbiDPNRx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 09:02:52 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DE3FBC2;
-        Sat, 16 Apr 2022 06:00:19 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso9172088wml.1;
-        Sat, 16 Apr 2022 06:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=XHVUz1b0D0ZF/noy7ANM+++7WGGRFc9oyw89kqgSdjE=;
-        b=pahgvwHqu3mBCsoZTQUS0VrZeezjhxSrULviFF4Z6DP/WkzUOnWNVRxqVi49Wc/F5p
-         n7aC1tvuXpoca3MQXAjK3yl29Y7zOoqTT8FZ+tdJvdedJiVqgeJ1fUcJtvnrSav3DXXn
-         cMYZWSr5tCMYvbvI04uvOjYVBNfkToIX3Y35A7e0h01yRwjoygL4Kt5ZSkF6vWkDJtqq
-         a/2ak1+iF10XYZXOlE+E7GMPc1nvxtWJ1nz43JAcpSrqerTOlEr1tV2wFJJddaWLHNX2
-         PpAHmCs1sXGDYJsZki7EJGSir4SqZHeMm5q76Ck/Bg5ZmggfB98v/nMXSpnKaaGF/uET
-         R+Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=XHVUz1b0D0ZF/noy7ANM+++7WGGRFc9oyw89kqgSdjE=;
-        b=fLvoCnWI92GSaVsxJ/U//qhymPZQ2Z9U3MzIDZiZONbzSIxVj8EKERJ1iGo0/MjXo+
-         b8zwJAfVcZi9fLvzomIZZdWa4Yo50v1VnWVcqpeGplYlV2sSR/YTHv3RhaKeCiLws/FV
-         3TohQBZWJWVfqjgihdH9DHEa4wcijWd0Hoj7gILxseVaUi/05tXubSKHN1jgR51LvBbM
-         daMZlTlBBkMYslfNTrmsTQuXdE2LyVXdVQm5KgtrpeJFS7QHWK7D+m14GF2KTJKpd7hO
-         ZijwovUld7GpasOdmZ69KrIbl1OjyNs1kfLZmlh+KXQNeNhv6XIEvxMYHkbOPQu1tRXw
-         wBKA==
-X-Gm-Message-State: AOAM531iTFS7FSABAucBlHvuq/5hBxGboeWbqleaw7OROXcIecHuUUn0
-        s7JEpESVLl0eaKt4qjAcxIc=
-X-Google-Smtp-Source: ABdhPJx16Vt/FPuRxbRMNnFY/Wy6fGUSb4KuPuwz+aSvi4c9sLSD/2bBrV6IuJzISUMX0bRgFRijXw==
-X-Received: by 2002:a1c:f70e:0:b0:38c:6ca9:2f8f with SMTP id v14-20020a1cf70e000000b0038c6ca92f8fmr3153245wmh.162.1650114017834;
-        Sat, 16 Apr 2022 06:00:17 -0700 (PDT)
-Received: from ?IPV6:2a02:908:1252:fb60:dd4a:a17a:5566:43bc? ([2a02:908:1252:fb60:dd4a:a17a:5566:43bc])
-        by smtp.gmail.com with ESMTPSA id a11-20020a056000188b00b00204109f7826sm6981250wri.28.2022.04.16.06.00.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 06:00:17 -0700 (PDT)
-Message-ID: <0d065fd6-3fa5-c9cb-3248-6f29b2bdcb71@gmail.com>
-Date:   Sat, 16 Apr 2022 15:00:16 +0200
+        Sat, 16 Apr 2022 09:17:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4590721816
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 06:15:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E5A64B80687
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:15:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FD0EC385A1;
+        Sat, 16 Apr 2022 13:15:18 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aynd3gVJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650114916;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eMdzqQZDddHB/OEg4b6bfSG+6AFrNXMzb0GZKmbygIE=;
+        b=aynd3gVJkKkLkZpAbOBhVV5uXyrvFzdIim9JWwrXk0D0jOyQuUEFrTxEVYj5LH2TZ7iASr
+        u02ovu1JZLYlovYrkciAC12d4lt8PYEB4o6zeul7+TsMbnMmMM/CmOW8JYGYwHLRYnoYql
+        0FZwTHTs04HkUR4V6IdEKSm8zP4BBUg=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 19f3db18 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Sat, 16 Apr 2022 13:15:16 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [GIT PULL] random number generator fixes for 5.18-rc3
+Date:   Sat, 16 Apr 2022 15:13:18 +0200
+Message-Id: <20220416131318.80278-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/2] Update AMDGPU glossary and MAINTAINERS
-Content-Language: en-US
-To:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andrealmeid@riseup.net
-References: <20220415195027.305019-1-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <20220415195027.305019-1-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,22 +53,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 15.04.22 um 21:50 schrieb Tales Lelo da Aparecida:
-> I was handling the request from [0] and then I noticed that some AMD
-> developers were missing from get_maintainers output due to the lack of a
-> reference to their documentation in the MAINTAINERS file.
+Hi Linus,
 
-Acked-by: Christian König <christian.koenig@amd.com>
+Please pull the following three fixes to the RNG for 5.18-rc3:
 
->
-> [0] https://gitlab.freedesktop.org/drm/amd/-/issues/1939#note_1309737
->
-> Tales Lelo da Aparecida (2):
->    Documentation/gpu: Add entries to amdgpu glossary
->    MAINTAINERS: add docs entry to AMDGPU
->
->   Documentation/gpu/amdgpu/amdgpu-glossary.rst | 13 +++++++++++++
->   MAINTAINERS                                  |  1 +
->   2 files changed, 14 insertions(+)
->
+- Per your suggestion, random reads now won't fail if there's a page fault
+  after some non-zero amount of data has been read, which makes the behavior
+  consistent with all other reads in the kernel.
 
+- Rather than an inconsistent mix of random_get_entropy() returning an
+  unsigned long or a cycles_t, now it just returns an unsigned long.
+
+- A memcpy() was replaced with an memmove(), because the addresses are
+  sometimes overlapping. In practice the destination is always before the
+  source, so not really an issue, but better to be correct than not.
+
+Thanks,
+Jason
+
+The following changes since commit a19944809fe9942e6a96292490717904d0690c21:
+
+  Merge tag 'hardening-v5.18-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux (2022-04-12 14:29:40 -1000)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/crng/random.git tags/random-5.18-rc3-for-linus
+
+for you to fetch changes up to 35a33ff3807d3adb9daaf937f5bca002ffa9f84e:
+
+  random: use memmove instead of memcpy for remaining 32 bytes (2022-04-16 12:53:31 +0200)
+
+----------------------------------------------------------------
+Random number generator fixes for Linux 5.18-rc3.
+----------------------------------------------------------------
+
+Jason A. Donenfeld (3):
+      random: allow partial reads if later user copies fail
+      random: make random_get_entropy() return an unsigned long
+      random: use memmove instead of memcpy for remaining 32 bytes
+
+ drivers/char/random.c | 44 ++++++++++++++++++++------------------------
+ include/linux/timex.h |  2 +-
+ 2 files changed, 21 insertions(+), 25 deletions(-)

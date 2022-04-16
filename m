@@ -2,109 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D40C503702
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54361503707
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232235AbiDPOJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 10:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
+        id S232246AbiDPOMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 10:12:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiDPOJG (ORCPT
+        with ESMTP id S232233AbiDPOMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 10:09:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725FE1BE9B
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 07:06:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B4A5B81D08
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 14:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF118C385A1;
-        Sat, 16 Apr 2022 14:06:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650117991;
-        bh=NBki7mRtf9UFQc10+FewhE0a/KpNtdwZJZ4uucd1VX0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BHFYxQHuL6O6roK1z8yYzua5jpwcSYr+GAYeFawfMEJNIjActkGzPXRtBUjgH6eeY
-         r1dW8ld5O0hJHUk2XVkKPGllK4aI6/bG7QsnygbA2GphxcwRMfE2Cnc7kkGgT/Ja/Z
-         HWYYF/ykN3s2hiZER7Ahik941fns6wytUUbNX4b6GGfXyEI4AQnVen81wB87Enj+bu
-         C/7hQohjk3Rz51mUu5bOxRx/MgRujaQsviFLD3u4GsA7aZ4CNZ5hU1l+9cCq1tZ85q
-         LIifJlPHMsEExB7KSiCR17r5SHbi5XvNRs3AyRKdca7f1pR656aEizmd367IEmE/aG
-         /3uAMboN4ksLQ==
-Date:   Sat, 16 Apr 2022 23:06:28 +0900
-From:   Masami Hiramatsu <mhiramat@kernel.org>
-To:     Adam Zabrocki <pi3@pi3.com.pl>
-Cc:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Solar Designer <solar@openwall.com>
-Subject: Re: [PATCH] x86/kprobes: Fix KRETPROBES when
- CONFIG_KRETPROBE_ON_RETHOOK is set
-Message-Id: <20220416230628.40d09e2742cda9777e2e180e@kernel.org>
-In-Reply-To: <20220415181006.GA14021@pi3.com.pl>
-References: <20220415180723.GA13921@pi3.com.pl>
-        <20220415181006.GA14021@pi3.com.pl>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 16 Apr 2022 10:12:33 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD234BC15;
+        Sat, 16 Apr 2022 07:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=QXg79ITIMb+c/YfTxTorJco9Mt6LYRevJ11/hq3FBHM=;
+  b=fmJwVTpLkxQYJ84reDMPtf2kdPCy1MxrwZogdslFhrQhcidTftQca1zB
+   VDQQHeuEtFCSO4nHYtOSPVwEae3uCetGHZTbhmQlZ770ZtDBtQjqUDskl
+   Uvs9Xz7l5HY7zTbYbVLzjJRxg/3NQdnvRz3VJaSidouSlW2874zxBStNj
+   4=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,264,1643670000"; 
+   d="scan'208";a="32016200"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 16:09:58 +0200
+Date:   Sat, 16 Apr 2022 16:09:58 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com
+Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
+ kmap_local_page()
+In-Reply-To: <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204161608230.3501@hadrien>
+References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com> <alpine.DEB.2.22.394.2204161331080.3501@hadrien> <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-848588355-1650118198=:3501"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022 20:10:06 +0200
-Adam Zabrocki <pi3@pi3.com.pl> wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> [PATCH] x86/kprobes: Fix KRETPROBES when CONFIG_KRETPROBE_ON_RETHOOK is set
-> 
-> The recent kernel change "kprobes: Use rethook for kretprobe if possible",
-> introduced a potential NULL pointer dereference bug in the KRETPROBE
-> mechanism. The official Kprobes documentation defines that "Any or all
-> handlers can be NULL". Unfortunately, there is a missing return handler
-> verification to fulfill these requirements and can result in a NULL pointer
-> dereference bug.
-> 
-> This patch adds such verification in kretprobe_rethook_handler() function.
-> 
-
-Good catch! I forgot that user can register kretprobe without handler...
-
-Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
-
-Thank you!
-
-> Fixes: 73f9b911faa7 ("kprobes: Use rethook for kretprobe if possible")
-> Signed-off-by: Adam Zabrocki <pi3@pi3.com.pl>
-> ---
->  kernel/kprobes.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/kprobes.c b/kernel/kprobes.c
-> index dbe57df2e199..dd58c0be9ce2 100644
-> --- a/kernel/kprobes.c
-> +++ b/kernel/kprobes.c
-> @@ -2126,7 +2126,7 @@ static void kretprobe_rethook_handler(struct rethook_node *rh, void *data,
->  	struct kprobe_ctlblk *kcb;
->  
->  	/* The data must NOT be null. This means rethook data structure is broken. */
-> -	if (WARN_ON_ONCE(!data))
-> +	if (WARN_ON_ONCE(!data) || !rp->handler)
->  		return;
->  
->  	__this_cpu_write(current_kprobe, &rp->kp);
-> 
-> -- 
-> pi3 (pi3ki31ny) - pi3 (at) itsec pl
-> http://pi3.com.pl
-> 
+--8323329-848588355-1650118198=:3501
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
 
--- 
-Masami Hiramatsu <mhiramat@kernel.org>
+
+On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+
+>
+> On ١٦/٤/٢٠٢٢ ١٣:٣١, Julia Lawall wrote:
+> >
+> > On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+> >
+> > > Convert kmap() to kmap_local_page()
+> > >
+> > > With kmap_local_page(), the mapping is per thread, CPU local and not
+> > > globally visible.
+> > It's not clearer.
+> I mean this " fix kunmap_local path value to take address of the mapped page"
+> be more clearer
+> > This is a general statement about the function.  You
+> > need to explain why it is appropriate to use it here.  Unless it is the
+> > case that all calls to kmap should be converted to call kmap_local_page.
+> It's required to convert all calls kmap to kmap_local_page. So, I don't what
+> should the commit message be?
+
+If all calls should be changed then you can also say that.
+
+I thought that a previous commit on the outreachy list made some arguments
+about how the affacted value was just allocated and thus could not yet be
+shared.
+
+julia
+
+>
+> Is this will be good :
+>
+> "kmap_local_page() was recently developed as a replacement for kmap().  The
+> kmap_local_page() creates a mapping which is restricted to local use by a
+> single thread of execution. "
+> >
+> > julia
+> >
+> > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+> > > ---
+> > > changes in V2:
+> > > 	fix kunmap_local path value to take address of the mapped page.
+> > > ---
+> > > changes in V3:
+> > > 	edit commit message to be clearer
+> > > ---
+> > >   drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+> > >   1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> > > b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> > > index 2a5782063f4c..c14fc871dd41 100644
+> > > --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> > > +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+> > > @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct
+> > > igb_rx_buffer *rx_buffer,
+> > >
+> > >   	frame_size >>= 1;
+> > >
+> > > -	data = kmap(rx_buffer->page);
+> > > +	data = kmap_local_page(rx_buffer->page);
+> > >
+> > >   	if (data[3] != 0xFF ||
+> > >   	    data[frame_size + 10] != 0xBE ||
+> > >   	    data[frame_size + 12] != 0xAF)
+> > >   		match = false;
+> > >
+> > > -	kunmap(rx_buffer->page);
+> > > +	kunmap_local(data);
+> > >
+> > >   	return match;
+> > >   }
+> > > --
+> > > 2.35.2
+> > >
+> > >
+> > >
+>
+--8323329-848588355-1650118198=:3501--

@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2503503465
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14546503466
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229584AbiDPGLt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 02:11:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50536 "EHLO
+        id S229606AbiDPGNr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 02:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiDPGLp (ORCPT
+        with ESMTP id S229379AbiDPGNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:11:45 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E90665404;
-        Fri, 15 Apr 2022 23:09:14 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KgN6l1hywzfYmy;
-        Sat, 16 Apr 2022 14:08:31 +0800 (CST)
-Received: from [10.174.176.103] (10.174.176.103) by
- kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 14:09:10 +0800
-Message-ID: <da58534e-aa43-b163-4c05-190e1e20c0ab@huawei.com>
-Date:   Sat, 16 Apr 2022 14:09:09 +0800
+        Sat, 16 Apr 2022 02:13:44 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BDC3B285
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:11:14 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id g12-20020a17090a640c00b001cb59d7a57cso8735350pjj.1
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:11:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bcOfBPL4OuuAG640SlARJZ6hb/FVaA7pZLG+NuBAIqI=;
+        b=Nr9bl2Lz08LmMiCuXk2WBYjQ3ZmKPTXuZQS2+uFJ1CoadNQabr40ys3p22cNkg5BVK
+         1YThbJeevQDiujyTY5YVNqtAHT3QCkw8t8GqlDOPZncNJOwVv6YZASYqUOgZKLdCZrBk
+         9uPzDp1xjIrM3BjF1GsOjQjEOBi9oVUyqDErGdsYMM1O7hcf4dQWeuAQXk9IJHMBI0Sc
+         V5cM2SGK1bWWxG67Si3NMEFkZDJTU9PFGhrRMJkRVqgHwCtkOKJSIdo1PvQgJuPoVTJH
+         m0cTAELczTDhfJZKRRlon7bckFWhPdp0Qg9syoOVaLdTXxEHxyp/4D2B8Pg/okgVQhCV
+         gFPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=bcOfBPL4OuuAG640SlARJZ6hb/FVaA7pZLG+NuBAIqI=;
+        b=dvvgcJWdEBWTTVzCZ7sh2VreseDzNUt2nMJo8UFewxsVnyLMRbSfM+24zcCP80obVz
+         VMKy+AHfmPFe0icA0ZYidQkvW5VbFVuR+yLk1dNKf7JCa8rex6QSu0UKv3dyGgj0I+8/
+         okQRhaPRgu/fMWHydllfmx7Wh9X39Ifk7tk583JUH21HJmcsonOZCrQfLsYhJKRD5Fil
+         vU7FT9AFmdOjs16Wy+l5fpwQhNvyPrfxjFcxjRSOA4qKEQh3TypActbmpD0gcC9ZXGCo
+         73Sr2bhgR8IWr/UaRDPZGORit+HUO/z347Rtg4JaDkKKRYgVzhX7TSkStuS0knNWKpX7
+         wGJg==
+X-Gm-Message-State: AOAM533HWLb+fZQlqABn1o9jJ38ea0sy2qr9HAPk7fqRY0twwW8MSvzX
+        C5kHe+wGbZTx+TOW/y1C2JM=
+X-Google-Smtp-Source: ABdhPJwepZdppnnzYaQcm1cA/smdaAO5t6Oc4XxNF8dETGCwvJW/qEmZficFIgsPqhVBdyUuKHNRHA==
+X-Received: by 2002:a17:90b:1642:b0:1c6:c6d0:fbfa with SMTP id il2-20020a17090b164200b001c6c6d0fbfamr2466474pjb.218.1650089473414;
+        Fri, 15 Apr 2022 23:11:13 -0700 (PDT)
+Received: from localhost.localdomain ([125.131.156.123])
+        by smtp.gmail.com with ESMTPSA id n12-20020a17090a670c00b001cbb7fdb9e4sm10428029pjj.53.2022.04.15.23.11.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 23:11:12 -0700 (PDT)
+From:   Wonhyuk Yang <vvghjk1234@gmail.com>
+To:     vvghjk1234@gmail.com, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm/slub: Remove repeated action in calculate_order()
+Date:   Sat, 16 Apr 2022 15:11:04 +0900
+Message-Id: <20220416061104.481674-1-vvghjk1234@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: [PATCH -next v2] nbd: fix possible overflow on 'first_minor' in
- nbd_dev_add()
-From:   "zhangwensheng (E)" <zhangwensheng5@huawei.com>
-To:     <josef@toxicpanda.com>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <nbd@other.debian.org>
-References: <20220407032505.3797948-1-zhangwensheng5@huawei.com>
-In-Reply-To: <20220407032505.3797948-1-zhangwensheng5@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.176.103]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500016.china.huawei.com (7.221.188.220)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-friendly ping...
+To calculate order, calc_slab_order() is called repeatly
+changing the fract_leftover. Thus, the branch which is not dependent
+on fract_leftover is executed repeatly. So make it run only once.
 
-在 2022/4/7 11:25, Zhang Wensheng 写道:
-> When 'index' is a big numbers, it may become negative which forced
-> to 'int'. then 'index << part_shift' might overflow to a positive
-> value that is not greater than '0xfffff', then sysfs might complains
-> about duplicate creation. Because of this, move the 'index' judgment
-> to the front will fix it and be better.
->
-> Fixes: b0d9111a2d53 ("nbd: use an idr to keep track of nbd devices")
-> Fixes: 940c264984fd ("nbd: fix possible overflow for 'first_minor' in nbd_dev_add()")
-> Signed-off-by: Zhang Wensheng <zhangwensheng5@huawei.com>
-> ---
-> v1->v2:
-> - add the line "disk->first_minor = index << part_shift;" which has
-> been deleted by mistake in v1.
->
->   drivers/block/nbd.c | 23 ++++++++++++-----------
->   1 file changed, 12 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-> index 5a1f98494ddd..9448aacbcf0f 100644
-> --- a/drivers/block/nbd.c
-> +++ b/drivers/block/nbd.c
-> @@ -1800,17 +1800,7 @@ static struct nbd_device *nbd_dev_add(int index, unsigned int refs)
->   	refcount_set(&nbd->refs, 0);
->   	INIT_LIST_HEAD(&nbd->list);
->   	disk->major = NBD_MAJOR;
-> -
-> -	/* Too big first_minor can cause duplicate creation of
-> -	 * sysfs files/links, since index << part_shift might overflow, or
-> -	 * MKDEV() expect that the max bits of first_minor is 20.
-> -	 */
->   	disk->first_minor = index << part_shift;
-> -	if (disk->first_minor < index || disk->first_minor > MINORMASK) {
-> -		err = -EINVAL;
-> -		goto out_free_work;
-> -	}
-> -
->   	disk->minors = 1 << part_shift;
->   	disk->fops = &nbd_fops;
->   	disk->private_data = nbd;
-> @@ -1915,8 +1905,19 @@ static int nbd_genl_connect(struct sk_buff *skb, struct genl_info *info)
->   	if (!netlink_capable(skb, CAP_SYS_ADMIN))
->   		return -EPERM;
->   
-> -	if (info->attrs[NBD_ATTR_INDEX])
-> +	if (info->attrs[NBD_ATTR_INDEX]) {
->   		index = nla_get_u32(info->attrs[NBD_ATTR_INDEX]);
-> +
-> +		/*
-> +		 * Too big first_minor can cause duplicate creation of
-> +		 * sysfs files/links, since index << part_shift might overflow, or
-> +		 * MKDEV() expect that the max bits of first_minor is 20.
-> +		 */
-> +		if (index < 0 || index > MINORMASK >> part_shift) {
-> +			printk(KERN_ERR "nbd: illegal input index %d\n", index);
-> +			return -EINVAL;
-> +		}
-> +	}
->   	if (!info->attrs[NBD_ATTR_SOCKETS]) {
->   		printk(KERN_ERR "nbd: must specify at least one socket\n");
->   		return -EINVAL;
+Plus, when min_object reached to 0, we set fract_leftover to 1.
+In this case, we can calculate order by max(slub_min_order,
+get_order(size) instead of calling calc_slab_order().
+
+No functional impact expectd.
+
+Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
+---
+ mm/slub.c | 18 +++++++-----------
+ 1 file changed, 7 insertions(+), 11 deletions(-)
+
+diff --git a/mm/slub.c b/mm/slub.c
+index ed5c2c03a47a..e7a394d7b75a 100644
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3795,9 +3795,6 @@ static inline unsigned int calc_slab_order(unsigned int size,
+ 	unsigned int min_order = slub_min_order;
+ 	unsigned int order;
+ 
+-	if (order_objects(min_order, size) > MAX_OBJS_PER_PAGE)
+-		return get_order(size * MAX_OBJS_PER_PAGE) - 1;
+-
+ 	for (order = max(min_order, (unsigned int)get_order(min_objects * size));
+ 			order <= max_order; order++) {
+ 
+@@ -3820,6 +3817,11 @@ static inline int calculate_order(unsigned int size)
+ 	unsigned int max_objects;
+ 	unsigned int nr_cpus;
+ 
++	if (unlikely(order_objects(slub_min_order, size) > MAX_OBJS_PER_PAGE)) {
++		order = get_order(size * MAX_OBJS_PER_PAGE) - 1;
++		goto out;
++	}
++
+ 	/*
+ 	 * Attempt to find best configuration for a slab. This
+ 	 * works by first attempting to generate a layout with
+@@ -3865,14 +3867,8 @@ static inline int calculate_order(unsigned int size)
+ 	 * We were unable to place multiple objects in a slab. Now
+ 	 * lets see if we can place a single object there.
+ 	 */
+-	order = calc_slab_order(size, 1, slub_max_order, 1);
+-	if (order <= slub_max_order)
+-		return order;
+-
+-	/*
+-	 * Doh this slab cannot be placed using slub_max_order.
+-	 */
+-	order = calc_slab_order(size, 1, MAX_ORDER, 1);
++	order = max_t(unsigned int, slub_min_order, (unsigned int)get_order(size));
++out:
+ 	if (order < MAX_ORDER)
+ 		return order;
+ 	return -ENOSYS;
+-- 
+2.30.2
+

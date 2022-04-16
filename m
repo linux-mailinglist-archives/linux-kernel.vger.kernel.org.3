@@ -2,315 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED7A35036C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:35:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226695036CB
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbiDPNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 09:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43116 "EHLO
+        id S232077AbiDPNkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 09:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbiDPNhT (ORCPT
+        with ESMTP id S230237AbiDPNkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 09:37:19 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A6FBC02
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 06:34:46 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-2ebf4b91212so104793827b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 06:34:46 -0700 (PDT)
+        Sat, 16 Apr 2022 09:40:05 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7A7D3735;
+        Sat, 16 Apr 2022 06:37:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nXwNafpwgr3f1XLhHSsrqIE8ISFhponspqqPm6YgL6AuKzWhlqAxYuvc+u5TUo2hnvsqZBu6B01riV89ZZmEuCC5szT1aUHOH6tndt7WUW4tk6GpunpiOcadl2siMN9b/KqScHgvku7tuDmZpok1c4e4/8UHXQLplGyRtHrlUncBuraNWSFSYkZ7pkimqJjtnZ62siB4ZiBu2GfNVN1890JcCT6+NtWEqbc8cR7s7EVPDJAaG+oJsnVKQGYYjsqjPZTNNlAZ7jxWvVBo6LxPb006jRhQMk6mYYYX9g/0ur5KWVzoD50xsyc19uNTEqGDXMcDHjmHfS4P64H1aRU2OA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DbapbAQPuliRD55azOWxfe/ylN5XHHBIl884snZizfE=;
+ b=Opo7viTu7/NvrOYHZfKE1TDw2V7oCpI0ByX/OkR6xfjLxZHn2y+5PxIeHtXvacCuUJmq36y7L1vr5WKKIw6OrRZkZIdiYltF05QpWg/Dvm7xViLBbo4+AWz/fnYq11jL0XkECc0efR/uHgg+Dq7RoAB6IBOFPp4PLf9Di89CeYpjzqPyo99u+2OROgL/XqjtwM9dpmspWB4Iu1upukjF3k0UoHYBMm4WweFsA+nkZP0Jm+nQbHzuaFLGjcngcQh9Ivxo7jgk0gnBmQwn5K1m2YlYOFTgCCjZrD3jChx3FAmfF+LkWC2cPvEYji1VCHHYdkpQs3ZFO+jkuo0qtXl1QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=uv6pt73Wfv4Wu/TjtLN9aQeY0zKh2XHc3uKe7btwcBY=;
-        b=dH0kmiHhIxWO2EQhuk1QISZQCAGVrI0ki4AkdmQ9e0rozofH0ZqyQc0IcGIh9wgpzp
-         K1od8yzLUW8f7ye0MiGWEZ0SYIJ3Cwcrb/r6sSjRhIk0L05t25P5IGzEtROW7nQ1j2q0
-         tUX0kJbpSBF8AJx5JWJf7UF4t/qe3QbNkiSBLIw6IVvSR73wVrlDvcdPBBkjgjbAVqLf
-         Fc5jslLOj1STQ7GvRs4zi2fPgLmyanW8uPlGXi9zwES6jR4UBS1L1YWuG4clg92u5oJi
-         3B1RAj+81xXemHJmKTHbnwanLLr89kSKmrDzvobVHy6LAfBw9EDYcbuxb5SYRPm8Y6AI
-         e+ZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=uv6pt73Wfv4Wu/TjtLN9aQeY0zKh2XHc3uKe7btwcBY=;
-        b=lEc+UAyMqobwuBCHgEe6aRxT/hxJFkcm/UX+vy0xscP95rekPvprY4amEffAF26wyZ
-         tb2/g3T0t+uCjuUXAajkE6SBmJNHib9Zq9syRu3iTvAmWhSK5l58m2J6Ch+qu07/1Z9z
-         Qj72uauzPHiROKvgXfQ6raSFjfjDihdxj5tfb0y1TpYxx+EbSCiTDsstP+Zb9msvMvkJ
-         HCEJ5jdPmTYU8s/OUn9DDuQlcoIYcDAcx88ok2w16L9G1CaLpXXNSKMxhaV5L9O98oqI
-         9mOVWeJrVs7f/6zHn48iRBe6moGaWFaJz0b7loPLWqap8qCjTERGuk1W7bCNNl2AG5HV
-         FHkg==
-X-Gm-Message-State: AOAM532FeGYap0L0wfLMnZeKsLCOFR0rS0f34f1GlFVXdRjHNYrPbOWl
-        eeVDyAFEbxfVaqcnfeWs3hPxlYE8z7kgiHOwQfc=
-X-Google-Smtp-Source: ABdhPJx2MkuHbp7bJ8Xq+n/e2zGt+43GmDoujvvKbtxFuS+NkKTRgfOhO44kD0XxnxbhNjlQpiCG4lHQdpRTYE2AsbU=
-X-Received: by 2002:a81:4914:0:b0:2ec:85a:6714 with SMTP id
- w20-20020a814914000000b002ec085a6714mr3188741ywa.88.1650116086154; Sat, 16
- Apr 2022 06:34:46 -0700 (PDT)
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DbapbAQPuliRD55azOWxfe/ylN5XHHBIl884snZizfE=;
+ b=WVasc076yHEXz4UwJpJ3lCIFrUb872zD4NPUQkaf3yHwZUXyj7CSNROdhQYtZREbIaXZ0pHwVc9MgRVyCqLmUFzuVKpvDIif/V+8hwmFN5yrXrP8vFnQ+b6F1yV5+uyiSkPcB9MYEMlo35ZUe7Vl/+pWoZnqmaUlBbdIUN8CxNs=
+Received: from BN8PR15CA0057.namprd15.prod.outlook.com (2603:10b6:408:80::34)
+ by DM6PR02MB5370.namprd02.prod.outlook.com (2603:10b6:5:51::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Sat, 16 Apr
+ 2022 13:37:29 +0000
+Received: from BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:408:80:cafe::be) by BN8PR15CA0057.outlook.office365.com
+ (2603:10b6:408:80::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
+ Transport; Sat, 16 Apr 2022 13:37:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com;
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ BN1NAM02FT064.mail.protection.outlook.com (10.13.2.170) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5164.19 via Frontend Transport; Sat, 16 Apr 2022 13:37:29 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2176.14; Sat, 16 Apr 2022 06:37:25 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2176.14 via Frontend Transport; Sat, 16 Apr 2022 06:37:25 -0700
+Envelope-to: git@xilinx.com,
+ mdf@kernel.org,
+ hao.wu@intel.com,
+ yilun.xu@intel.com,
+ trix@redhat.com,
+ linux-fpga@vger.kernel.org,
+ linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org
+Received: from [10.140.6.60] (port=32988 helo=xhdnavam40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <nava.manne@xilinx.com>)
+        id 1nfic9-00088I-C7; Sat, 16 Apr 2022 06:37:25 -0700
+From:   Nava kishore Manne <nava.manne@xilinx.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@xilinx.com>,
+        <linux-fpga@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <git@xilinx.com>
+CC:     Nava kishore Manne <nava.manne@xilinx.com>
+Subject: [PATCH v4 0/5]fpga: fix for coding style and kernel-doc issues
+Date:   Sat, 16 Apr 2022 19:07:14 +0530
+Message-ID: <20220416133719.3382895-1-nava.manne@xilinx.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220416123930.5956-1-dthex5d@gmail.com>
-In-Reply-To: <20220416123930.5956-1-dthex5d@gmail.com>
-From:   dthex5d <dthex5d@gmail.com>
-Date:   Sat, 16 Apr 2022 22:34:35 +0900
-Message-ID: <CAFk61EGgQ7hjRiL+QPnZena-AzEgP+azQTo44S=WiJqxmX9OYw@mail.gmail.com>
-Subject: Re: [PATCH] mm/mmzone: Introduce a new macro for_each_node_zonelist()
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
-        JaeSang Yoo <jsyoo5b@gmail.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Jiyoup Kim <lakroforce@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a0a5797d-9d1e-4258-66c6-08da1fae4068
+X-MS-TrafficTypeDiagnostic: DM6PR02MB5370:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR02MB5370EEA66423A9766B5C9001C2F19@DM6PR02MB5370.namprd02.prod.outlook.com>
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZJbO8GraJgkwiG7MXHQk1Z94F8nzn/ZdhOetsboVLTVjK+hgNYXkvUimNxGyIseIAgTQjUpNJ36qU8ddemVOxAL1LuiODvqhIUIyPiXc2GC/WqtchZVJ3HOtIlKhKyWxn42QbX7D4A/tSRCFWAQir6uEYNFgbCE2Zj6e1eblxxQpdAjukALkeK8Rymaim64y4z2JsJMfoAUuW13uiJamOzc8HormGRq7Jp5KZ7fW0cmNU0Sb3dErA9rCarVXskpYHeIptqfdvr1B6G63GuF0d+0ZQ26n5b57G6AAj2ioTYgmvgcyGnpnmqvVAvTSIU1OxcXFewQTNuEYXZLPIC82KrJ7zr6y7TPpiPZhSc5fPohmKfXu+n2LPKMEeT3YUpBp05ObnYUkJ8U4VCZzapYu0oTNji55t6Xp0PlwLy+pd66LBdE5RNqQWAe06xtF4dxs6LVkUmWFmhU43mC5JXB57rnIGuMvj8vsCNqoascCVJorv2gEQJPyOkgi/MisEY8yEqUxd9yozNH8YNhSq0qhAvwMdAk+GodiMplXIcNY0YwJPr70s1CDC+X4ZJT3LiEo+xG6sonehtQtXtvpnZqTzd++vqEoYU2Ee0giyIjkvIZX26QDCqP/uPiMQgHjBD0JNDyJp757bulfqhE6+f1BOC3RRy42T3q9jNYBLLmgzci9KU+btJkQ7S/kUmNMFvvVkiIyBYQqmA6p0BS4VyLJ8wpAHSDow4rxFhQ7144yBaI=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230001)(4636009)(46966006)(36840700001)(40470700004)(110136005)(6636002)(6666004)(82310400005)(4744005)(7696005)(2906002)(5660300002)(8676002)(70586007)(70206006)(316002)(4326008)(8936002)(9786002)(336012)(36860700001)(508600001)(40460700003)(36756003)(356005)(7636003)(107886003)(2616005)(1076003)(186003)(47076005)(26005)(426003)(83380400001)(102446001)(2101003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2022 13:37:29.0451
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0a5797d-9d1e-4258-66c6-08da1fae4068
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN1NAM02FT064.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR02MB5370
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There was a compiler error that I missed.
-Sorry for bothering you guys.
- I just sent a v2 for this patch.
+This patch series fixes the coding style and kernel-doc issues
+exists in the fpga framework, zynq and ZynqMP drivers.
 
+Nava kishore Manne (5):
+  fpga: zynq: Fix incorrect variable type
+  fpga: fix for coding style issues
+  fpga: fpga-mgr: fix kernel-doc warnings
+  fpga: Use tab instead of space indentation
+  fpga: fpga-region: fix kernel-doc formatting issues
 
-On Sat, Apr 16, 2022 at 9:39 PM Donghyeok Kim <dthex5d@gmail.com> wrote:
->
-> There are some codes using for_each_zone_zonelist() even when only
-> iterating each node is needed. This commit introduces a new macro
-> for_each_node_zonelist() which iterates through valid nodes in the
-> zonelist.
->
-> By using this new macro, code can be written in a much simpler form.
-> Also, slab/slub can now skip trying to allocate from the node which was
-> previously tried and failed.
->
-> Co-developed-by: Ohhoon Kwon <ohkwon1043@gmail.com>
-> Signed-off-by: Ohhoon Kwon <ohkwon1043@gmail.com>
-> Signed-off-by: Donghyeok Kim <dthex5d@gmail.com>
-> ---
->  include/linux/mmzone.h | 36 ++++++++++++++++++++++++++++++++++++
->  mm/hugetlb.c           | 17 +++++++----------
->  mm/mmzone.c            | 17 +++++++++++++++++
->  mm/slab.c              |  7 ++-----
->  mm/slub.c              |  8 ++++----
->  mm/vmscan.c            | 15 ++++++---------
->  6 files changed, 72 insertions(+), 28 deletions(-)
->
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index 9aaa04ac862f..cb2ddd0b4c95 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -1464,6 +1464,42 @@ static inline struct zoneref *first_zones_zonelist(struct zonelist *zonelist,
->  #define for_each_zone_zonelist(zone, z, zlist, highidx) \
->         for_each_zone_zonelist_nodemask(zone, z, zlist, highidx, NULL)
->
-> +
-> +struct zoneref *next_node_zones_zonelist(struct zoneref *z,
-> +                                       int prev_nid,
-> +                                       enum zone_type highest_zoneidx,
-> +                                       nodemask_t *nodes);
-> +
-> +/**
-> + * for_each_node_zonelist_nodemask - helper macro to iterate over valid nodes in a zonelist which have at least one zone at or below a given zone index and within a nodemask
-> + * @node: The current node in the iterator
-> + * @z: First matched zoneref within current node
-> + * @zlist: The zonelist being iterated
-> + * @highidx: The zone index of the highest zone in the node
-> + * @nodemask: Nodemask allowed by the allocator
-> + *
-> + * This iterator iterates through all nodes which have at least one zone at or below a given zone index and
-> + * within a given nodemask
-> + */
-> +#define for_each_node_zonelist_nodemask(node, z, zlist, highidx, nodemask)             \
-> +       for (z = first_zones_zonelist(zlist, highidx, nodemask),                        \
-> +                       node = zonelist_zone(z) ? zonelist_node_idx(z) : NUMA_NO_NODE;  \
-> +               zonelist_zone(z);                                                       \
-> +               z = next_node_zones_zonelist(++z, node, highidx, nodemask),             \
-> +                       node = zonelist_zone(z) ? zonelist_node_idx(z) : NUMA_NO_NODE)
-> +
-> +/**
-> + * for_each_node_zonelist - helper macro to iterate over nodes in a zonelist which have at least one zone at or below a given zone index
-> + * @node: The current node in the iterator
-> + * @z: First matched zoneref within current node
-> + * @zlist: The zonelist being iterated
-> + * @highidx: The zone index of the highest zone in the node
-> + *
-> + * This iterator iterates through all nodes which have at least one zone at or below a given zone index.
-> + */
-> +#define for_each_node_zonelist(node, z, zlist, highidx) \
-> +       for_each_node_zonelist_nodemask(node, z, zlist, highidx, NULL)
-> +
->  /* Whether the 'nodes' are all movable nodes */
->  static inline bool movable_only_nodes(nodemask_t *nodes)
->  {
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index daa4bdd6c26c..283f28f1aca8 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1157,7 +1157,6 @@ static struct page *dequeue_huge_page_nodemask(struct hstate *h, gfp_t gfp_mask,
->  {
->         unsigned int cpuset_mems_cookie;
->         struct zonelist *zonelist;
-> -       struct zone *zone;
->         struct zoneref *z;
->         int node = NUMA_NO_NODE;
->
-> @@ -1165,18 +1164,16 @@ static struct page *dequeue_huge_page_nodemask(struct hstate *h, gfp_t gfp_mask,
->
->  retry_cpuset:
->         cpuset_mems_cookie = read_mems_allowed_begin();
-> -       for_each_zone_zonelist_nodemask(zone, z, zonelist, gfp_zone(gfp_mask), nmask) {
-> +
-> +       /*
-> +        * no need to ask again on the same node. Pool is node rather than
-> +        * zone aware
-> +        */
-> +       for_each_node_zonelist_nodemask(node, z, zonelist, gfp_zone(gfp_mask), nmask) {
->                 struct page *page;
->
-> -               if (!cpuset_zone_allowed(zone, gfp_mask))
-> -                       continue;
-> -               /*
-> -                * no need to ask again on the same node. Pool is node rather than
-> -                * zone aware
-> -                */
-> -               if (zone_to_nid(zone) == node)
-> +               if (!cpuset_node_allowed(node, gfp_mask))
->                         continue;
-> -               node = zone_to_nid(zone);
->
->                 page = dequeue_huge_page_node_exact(h, node);
->                 if (page)
-> diff --git a/mm/mmzone.c b/mm/mmzone.c
-> index 68e1511be12d..8b7d6286056e 100644
-> --- a/mm/mmzone.c
-> +++ b/mm/mmzone.c
-> @@ -72,6 +72,23 @@ struct zoneref *__next_zones_zonelist(struct zoneref *z,
->         return z;
->  }
->
-> +/* Returns the zone in the next node and at or below highest_zoneidx in a zonelist */
-> +struct zoneref *next_node_zones_zonelist(struct zoneref *z,
-> +                                       int prev_nid,
-> +                                       enum zone_type highest_zoneidx,
-> +                                       nodemask_t *nodes)
-> +{
-> +       if (likely(nodes == NULL))
-> +               while (z->zone && (zonelist_node_idx(z) == prev_nid || zonelist_zone_idx(z) > highest_zoneidx))
-> +                       z++;
-> +       else
-> +               while (z->zone && (zonelist_node_idx(z) == prev_nid || zonelist_zone_idx(z) > highest_zoneidx ||
-> +                               !zref_in_nodemask(z, nodes)))
-> +                       z++;
-> +
-> +       return z;
-> +}
-> +
->  void lruvec_init(struct lruvec *lruvec)
->  {
->         enum lru_list lru;
-> diff --git a/mm/slab.c b/mm/slab.c
-> index a301f266efd1..b374fb88f80e 100644
-> --- a/mm/slab.c
-> +++ b/mm/slab.c
-> @@ -3077,7 +3077,6 @@ static void *fallback_alloc(struct kmem_cache *cache, gfp_t flags)
->  {
->         struct zonelist *zonelist;
->         struct zoneref *z;
-> -       struct zone *zone;
->         enum zone_type highest_zoneidx = gfp_zone(flags);
->         void *obj = NULL;
->         struct slab *slab;
-> @@ -3096,10 +3095,8 @@ static void *fallback_alloc(struct kmem_cache *cache, gfp_t flags)
->          * Look through allowed nodes for objects available
->          * from existing per node queues.
->          */
-> -       for_each_zone_zonelist(zone, z, zonelist, highest_zoneidx) {
-> -               nid = zone_to_nid(zone);
-> -
-> -               if (cpuset_zone_allowed(zone, flags) &&
-> +       for_each_node_zonelist(nid, z, zonelist, highest_zoneidx) {
-> +               if (cpuset_node_allowed(nid, flags) &&
->                         get_node(cache, nid) &&
->                         get_node(cache, nid)->free_objects) {
->                                 obj = ____cache_alloc_node(cache,
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 6dc703488d30..3e8b4aa98b84 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -2192,7 +2192,7 @@ static void *get_any_partial(struct kmem_cache *s, gfp_t flags,
->  #ifdef CONFIG_NUMA
->         struct zonelist *zonelist;
->         struct zoneref *z;
-> -       struct zone *zone;
-> +       int nid;
->         enum zone_type highest_zoneidx = gfp_zone(flags);
->         void *object;
->         unsigned int cpuset_mems_cookie;
-> @@ -2222,12 +2222,12 @@ static void *get_any_partial(struct kmem_cache *s, gfp_t flags,
->         do {
->                 cpuset_mems_cookie = read_mems_allowed_begin();
->                 zonelist = node_zonelist(mempolicy_slab_node(), flags);
-> -               for_each_zone_zonelist(zone, z, zonelist, highest_zoneidx) {
-> +               for_each_node_zonelist(nid, z, zonelist, highest_zoneidx) {
->                         struct kmem_cache_node *n;
->
-> -                       n = get_node(s, zone_to_nid(zone));
-> +                       n = get_node(s, nid);
->
-> -                       if (n && cpuset_zone_allowed(zone, flags) &&
-> +                       if (n && cpuset_node_allowed(nid, flags) &&
->                                         n->nr_partial > s->min_partial) {
->                                 object = get_partial_node(s, n, ret_slab, flags);
->                                 if (object) {
-> diff --git a/mm/vmscan.c b/mm/vmscan.c
-> index d4a7d2bd276d..f25b71bf8f61 100644
-> --- a/mm/vmscan.c
-> +++ b/mm/vmscan.c
-> @@ -6176,9 +6176,9 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
->                                           struct scan_control *sc)
->  {
->         int initial_priority = sc->priority;
-> -       pg_data_t *last_pgdat;
-> +       pg_data_t *pgdat;
->         struct zoneref *z;
-> -       struct zone *zone;
-> +       int nid;
->  retry:
->         delayacct_freepages_start();
->
-> @@ -6206,19 +6206,16 @@ static unsigned long do_try_to_free_pages(struct zonelist *zonelist,
->         } while (--sc->priority >= 0);
->
->         last_pgdat = NULL;
-> -       for_each_zone_zonelist_nodemask(zone, z, zonelist, sc->reclaim_idx,
-> +       for_each_node_zonelist_nodemask(nid, z, zonelist, sc->reclaim_idx,
->                                         sc->nodemask) {
-> -               if (zone->zone_pgdat == last_pgdat)
-> -                       continue;
-> -               last_pgdat = zone->zone_pgdat;
-> +               pgdat = NODE_DATA(nid);
->
-> -               snapshot_refaults(sc->target_mem_cgroup, zone->zone_pgdat);
-> +               snapshot_refaults(sc->target_mem_cgroup, pgdat);
->
->                 if (cgroup_reclaim(sc)) {
->                         struct lruvec *lruvec;
->
-> -                       lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup,
-> -                                                  zone->zone_pgdat);
-> +                       lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat);
->                         clear_bit(LRUVEC_CONGESTED, &lruvec->flags);
->                 }
->         }
-> --
-> 2.17.1
->
+ drivers/fpga/Makefile         |  6 +++---
+ drivers/fpga/fpga-mgr.c       |  8 ++++++--
+ drivers/fpga/fpga-region.c    |  7 ++++---
+ drivers/fpga/of-fpga-region.c | 16 +++++++++-------
+ drivers/fpga/zynq-fpga.c      |  8 ++++----
+ 5 files changed, 26 insertions(+), 19 deletions(-)
+
+-- 
+2.25.1
+

@@ -2,150 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95A4C5037F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 21:32:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00E45037F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 21:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232838AbiDPTfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 15:35:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40060 "EHLO
+        id S232844AbiDPTgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 15:36:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232768AbiDPTe7 (ORCPT
+        with ESMTP id S230100AbiDPTgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 15:34:59 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1BF9968B;
-        Sat, 16 Apr 2022 12:32:24 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k22so14237384wrd.2;
-        Sat, 16 Apr 2022 12:32:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=zKq3t9+WVckk287gJXVdTxBsvDIgk8B6FZnSS1BTPL4=;
-        b=hFNxStPk6ljDQwSVsjzOkbywBaCgUHFTMhRf8KLzWQKkAK634TFpEv/iqqflmNmc+4
-         H5nPQkWkiCU5YeKVCZyn9zW2a0IzF5fciuEckFnKEkxcMmv/IliYbvr7PY0OQC8wO1J7
-         D5duSREpTHMOB/N5dyAEucbZIv8PnD3VrVhYI1hMKM8jNKMBLBmrtXkpuLAJsMzQUJHx
-         kpO7aJeENbJYmrwewNwsbiwZirIGezWs9INOqa0rj/PUxb3hridsT8SLJtx94UvJ+/Ps
-         B7zYWz90bX9w/cGmPrCiyYRos0wXG13wi8iUXmqdoaEhqNEpJqz/StjpZHP4ZnK7rHKI
-         p4Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=zKq3t9+WVckk287gJXVdTxBsvDIgk8B6FZnSS1BTPL4=;
-        b=d5Q+sD3DPL1gQTx8UXgShR1zYprNz1vamwRSmcgwfqJaor1CQRK9kpyaYYn2/GS3rS
-         oMelwH9QdwQokm1zAB/yL1GIDnLY8LKSBkV9h0UJnjhouV3ez+AfCVTJCcpCbW38D6hL
-         YGpnPFIEzxNf+TVD1Kmvb9i+x+v7tpX38FbkLlorV5yinMA2FilDTJYhae0H7vBEFnwP
-         HbtAyXcp0fZd9UsTF+W4s0SyKvF78XZ6wEK1cRjv7knfqnyogowmw1ZU00pluxADx5jV
-         BSIOhD4IUHCO9K3/OH13wnLz7Y2fo/R1pZT2y1Wkc1UFgZRqvPccKysL6MYkBc8M3JNB
-         5nsQ==
-X-Gm-Message-State: AOAM531W+hoBHzOZKKX/jj2J84NI5yVbaveTnI7PCpzg2BQFxCHZX2ek
-        tgVe8SASd8Dri27lD6DlOa8=
-X-Google-Smtp-Source: ABdhPJwXXdg4aIH03y8wvyozMGxucmhHV8S1YG4lSMDVE8AYMR7NHA91JGYnlXTGTd4gigMfa1nlvQ==
-X-Received: by 2002:a05:6000:1568:b0:1f0:250a:d3ef with SMTP id 8-20020a056000156800b001f0250ad3efmr3322201wrz.402.1650137543384;
-        Sat, 16 Apr 2022 12:32:23 -0700 (PDT)
-Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
-        by smtp.googlemail.com with ESMTPSA id p18-20020adfba92000000b001e4ae791663sm6798423wrg.62.2022.04.16.12.32.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 12:32:22 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 21:32:21 +0200
-From:   Corentin Labbe <clabbe.montjoie@gmail.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, wefu@redhat.com, guoren@kernel.org,
-        atishp@atishpatra.org, anup@brainfault.org, mick@ics.forth.gr,
-        cmuellner@linux.com, philipp.tomsich@vrull.eu,
-        herbert@gondor.apana.org.au, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 0/2] riscv: implement Zicbom-based CMO instructions + the
- t-head variant
-Message-ID: <YlsZxVjgt3ZNQ7Ub@Red>
-References: <20220307224620.1933061-1-heiko@sntech.de>
- <YllWTN+15CoskNBt@Red>
- <70da24dd-2d03-fc49-151d-daabb315a5f6@sholland.org>
- <YlpxsYREWv/LQ+HY@Red>
- <849a3728-7e84-4f26-0c73-4d68eae9ae01@sholland.org>
+        Sat, 16 Apr 2022 15:36:51 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C001DCA6E7
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 12:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650137658; x=1681673658;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=DLw5sMk/8YLgsSma+9RI2UiByFzUvoda3xHj9azaK8A=;
+  b=EF+2Zac7lKbHE9Qx/aJmvlqPSFGGbbdJ1n8HAmMVAwtGseG1EA9Ny3vQ
+   T1vqSAMJusNml4rtJydiMeG9fca028xBy4u3F5KMy8GVxN2sLsqRImECq
+   J6Qn2XY1e4T+yPK8R1WqGj+KTuOjZuvdzBwDxg0k1De49BdOw9iNHxGc4
+   jtzxhJhtAx5VfpHzYQfZjJpkxXC9vfL5u262+Lv5F9uSTqoJvCr5zmYBZ
+   LeY7q//Gtoy6RZtRTZ6r2fhpFajvqj72prBGYKYT7Pvp1zS2wiVwqP2Gy
+   kjopOIP/w9fpsrYrF8N9Rq7DTnC3pJRugYlUT9M8YvxIYrC3643OCK7y2
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243917957"
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="243917957"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 12:34:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="591975633"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 16 Apr 2022 12:34:16 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfoBU-0003Rt-5L;
+        Sat, 16 Apr 2022 19:34:16 +0000
+Date:   Sun, 17 Apr 2022 03:33:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>
+Subject: kernel/time/hrtimer.c:276:20: warning: unused function
+ 'is_migration_base'
+Message-ID: <202204170303.xbPwzQpB-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <849a3728-7e84-4f26-0c73-4d68eae9ae01@sholland.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Sat, Apr 16, 2022 at 12:47:29PM -0500, Samuel Holland a écrit :
-> On 4/16/22 2:35 AM, Corentin Labbe wrote:
-> > Le Fri, Apr 15, 2022 at 09:19:23PM -0500, Samuel Holland a écrit :
-> >> On 4/15/22 6:26 AM, Corentin Labbe wrote:
-> >>> Le Mon, Mar 07, 2022 at 11:46:18PM +0100, Heiko Stuebner a écrit :
-> >>>> This series is based on the alternatives changes done in my svpbmt series
-> >>>> and thus also depends on Atish's isa-extension parsing series.
-> >>>>
-> >>>> It implements using the cache-management instructions from the  Zicbom-
-> >>>> extension to handle cache flush, etc actions on platforms needing them.
-> >>>>
-> >>>> SoCs using cpu cores from T-Head like the Allwinne D1 implement a
-> >>>> different set of cache instructions. But while they are different,
-> >>>> instructions they provide the same functionality, so a variant can
-> >>>> easly hook into the existing alternatives mechanism on those.
-> >>>>
-> >>>>
-> >>>
-> >>> Hello
-> >>>
-> >>> I am testing https://github.com/smaeul/linux.git branch:origin/riscv/d1-wip which contain this serie.
-> >>>
-> >>> I am hitting a buffer corruption problem with DMA.
-> >>> The sun8i-ce crypto driver fail self tests due to "device overran destination buffer".
-> >>> In fact the buffer is not overran by device but by dma_map_single() operation.
-> >>>
-> >>> The following small code show the problem:
-> >>>
-> >>> dma_addr_t dma;
-> >>> u8 *buf;
-> >>> #define BSIZE 2048
-> >>> #define DMASIZE 16
-> >>>
-> >>> buf = kmalloc(BSIZE, GFP_KERNEL | GFP_DMA);
-> >>> for (i = 0; i < BSIZE; i++)
-> >>>     buf[i] = 0xFE;
-> >>> print_hex_dump(KERN_INFO, "DMATEST1:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
-> >>> dma = dma_map_single(ce->dev, buf, DMASIZE, DMA_FROM_DEVICE);
-> >>
-> >> This function (through dma_direct_map_page()) ends up calling
-> >> arch_sync_dma_for_device(..., ..., DMA_FROM_DEVICE), which invalidates the CPU's
-> >> cache. This is the same thing other architectures do (at least arm, arm64,
-> >> openrisc, and powerpc). So this appears to be working as intended.
-> > 
-> > This behavour is not present at least on ARM and ARM64.
-> > The sample code I provided does not corrupt the buffer on them.
-> 
-> That can be explained by the 0xFE bytes having been flushed to DRAM already in
-> your ARM/ARM64 tests, whereas in your riscv64 case, the 0xFE bytes were still in
-> a dirty cache line. The cache topology and implementation is totally different
-> across the SoCs, so this is not too surprising.
-> 
-> Semantically, dma_map_single(..., DMA_FROM_DEVICE) means you are doing a
-> unidirectional DMA transfer from the device into that buffer. So the contents of
-> the buffer are "undefined" until the DMA transfer completes. If you are also
-> writing data into the buffer from the CPU side, then you need DMA_BIDIRECTIONAL.
-> 
-> Regards,
-> Samuel
+Hi Marcelo,
 
-+CC crypto mailing list + maintainer
+FYI, the error/warning still remains.
 
-My problem is that crypto selftest, for each buffer where I need to do a cipher operation,
-concat a poison buffer to check that device does write beyond buffer.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
+commit: 81d741d3460ca422843ce0ec8351083f259c6166 hrtimer: Avoid unnecessary SMP function calls in clock_was_set()
+date:   8 months ago
+config: mips-randconfig-c004-20220417 (https://download.01.org/0day-ci/archive/20220417/202204170303.xbPwzQpB-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=81d741d3460ca422843ce0ec8351083f259c6166
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 81d741d3460ca422843ce0ec8351083f259c6166
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash fs/ext4/ kernel/time/
 
-But the dma_map_sg(FROM_DEVICE) corrupts this poison buffer and crypto selftests fails thinking my device did a buffer overrun.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-So you mean that on SoC D1, this crypto API check strategy is impossible ?
+All warnings (new ones prefixed by >>):
+
+   kernel/time/hrtimer.c:120:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_REALTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:121:22: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_MONOTONIC,
+   ^~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:122:21: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_BOOTTIME,
+   ^~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:123:17: warning: initializer overrides prior initialization of this subobject
+   = HRTIMER_BASE_TAI,
+   ^~~~~~~~~~~~~~~~
+   kernel/time/hrtimer.c:118:27: note: previous initialization is here
+   [0 ... MAX_CLOCKS - 1] = HRTIMER_MAX_CLOCK_BASES,
+   ^~~~~~~~~~~~~~~~~~~~~~~
+>> kernel/time/hrtimer.c:276:20: warning: unused function 'is_migration_base'
+   static inline bool is_migration_base(struct hrtimer_clock_base
+   ^
+>> kernel/time/hrtimer.c:1816:20: warning: unused function '__hrtimer_peek_ahead_timers'
+   static inline void __hrtimer_peek_ahead_timers(void)
+   ^
+   fatal error: error in backend: Nested variants found in inline asm string: ' .set push
+   .set mips64r2
+   .if ( 0x00 ) != -1)) 0x00 ) != -1)) : ($( static struct ftrace_branch_data __attribute__((__aligned__(4))) __attribute__((__section__("_ftrace_branch"))) __if_trace = $( .func = __func__, .file = "arch/mips/include/asm/bitops.h", .line = 105, $); 0x00 ) != -1)) : $))) ) && ( 0 ); .set push; .set mips64r2; .rept 1; sync 0x00; .endr; .set pop; .else; ; .endif
+   1: ll $0, $1
+   or $0, $2
+   sc $0, $1
+   beqz $0, 1b
+   .set pop
+   '
+   clang-15: error: clang frontend command failed with exit code 70 (use -v to see invocation)
+   clang version 15.0.0 (git://gitmirror/llvm_project 64c045e25b8471bbb572bd29159c294a82a86a25)
+   Target: mipsel-unknown-linux
+   Thread model: posix
+   InstalledDir: /opt/cross/clang-64c045e25b/bin
+   clang-15: note: diagnostic msg:
+   Makefile arch fs include kernel mm nr_bisected scripts source usr
+
+
+vim +/is_migration_base +276 kernel/time/hrtimer.c
+
+c0a3132963db68 kernel/hrtimer.c      Thomas Gleixner           2006-01-09  275  
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04 @276  static inline bool is_migration_base(struct hrtimer_clock_base *base)
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  277  {
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  278  	return false;
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  279  }
+5d2295f3a93b04 kernel/time/hrtimer.c Sebastian Andrzej Siewior 2019-09-04  280  
+
+:::::: The code at line 276 was first introduced by commit
+:::::: 5d2295f3a93b04986d069ebeaf5b07725f9096c1 hrtimer: Add a missing bracket and hide `migration_base' on !SMP
+
+:::::: TO: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+:::::: CC: Thomas Gleixner <tglx@linutronix.de>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

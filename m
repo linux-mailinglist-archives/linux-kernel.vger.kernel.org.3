@@ -2,108 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A1D50380C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 21:40:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6E76503817
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 21:56:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232902AbiDPTms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 15:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S232918AbiDPT5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 15:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232908AbiDPTmh (ORCPT
+        with ESMTP id S232911AbiDPT5j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 15:42:37 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF53033342;
-        Sat, 16 Apr 2022 12:40:04 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id t12so9538305pll.7;
-        Sat, 16 Apr 2022 12:40:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=5Xp410sF+GGnn+k64Aem0Bq20nF9FpJBZpOgxpPYfOM=;
-        b=M84mj+tp2XRkS5+g1JBD/J8nfprjEP9Xx2ytgoZNWcMBTTP42X6ZRSpXcO7hFe9/Oo
-         02aTUR9pmaftVGumtn+BD0zsgzRHDeeUYHwEZC46IvXiynXEGk8BVJKSu95AVDXsZt/p
-         t4JHw/IOVAdlggDWBqPfnE7MIrjLrPcArBrvKK0bI1L4x2vd1vZfodtEunrv9+5jLivM
-         RzhLPK+IwE7X9yHdqZHpyQL945co1l+I2H3dg4bprjOYNxzRhsDn2KREvTF9IHC/cj2R
-         tr0HjN9UjNAV+ZBbsyTRaWC4SvKM2xUt/7A9G6LwnqiPikL7XXqAcKH2zVuvh1Mt9ONg
-         hC9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=5Xp410sF+GGnn+k64Aem0Bq20nF9FpJBZpOgxpPYfOM=;
-        b=k7ctjhvL4hv/DpSOY9p9YX6kXZ7v993j3568MvNOrjhCY+DZf4ufiCZh73U6CpXZ55
-         DmX+PLO1Ij0U9x2ZDV0e7PKQxV1kmNelvsIODGw6A+J6YVySxlKEJsZOK1axW8NqaJjT
-         wWLfdvy0tbKvMFkDi9uFu1xOo87oN5g5YlTP/B8DLJJCqty8zu9Oh2azfyV4yLR3NQQn
-         /6DerDpVrZbcJbqulCfoTPu5zbcB8IBHp8aZgYpDrmSAI7ka7dC5ri92UeQAfVA9DKF+
-         fFZ85dbyuxnnwEDUYYmddmAaSau60CrtjOajXDe4sFHKxBkKcy9bYnDCDnzbZJGLJkgm
-         1a3w==
-X-Gm-Message-State: AOAM533uDczH6vdbQrk84eT3ThaCY0Yj1yxruf4iDFHVglrDMJB5iv9v
-        tjVOu8YnYlpATJpe0SzJivI=
-X-Google-Smtp-Source: ABdhPJwnTW8KqhnPwjGmeCpgHceRrEhsRLl5L0AQzXm3+Da3tFcNkHwGjE0Bz7pgd1D+I0xXP4IsAg==
-X-Received: by 2002:a17:902:ea0d:b0:158:5910:d683 with SMTP id s13-20020a170902ea0d00b001585910d683mr4720898plg.95.1650138004440;
-        Sat, 16 Apr 2022 12:40:04 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id a19-20020a17090aa51300b001cde7228b61sm8322237pjq.47.2022.04.16.12.40.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 12:40:03 -0700 (PDT)
-Message-ID: <725e814d-da65-b77d-1a6e-a029d594944f@gmail.com>
-Date:   Sat, 16 Apr 2022 12:40:00 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH net-next v4 02/18] net: dsa: sja1105: remove use of
- iterator after list_for_each_entry() loop
-Content-Language: en-US
-To:     Jakob Koschel <jakobkoschel@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        UNGLinuxDriver@microchip.com, Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        Edward Cree <ecree.xilinx@gmail.com>,
-        Martin Habets <habetsm.xilinx@gmail.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Jiri Pirko <jiri@resnulli.us>,
+        Sat, 16 Apr 2022 15:57:39 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620BF17A9B;
+        Sat, 16 Apr 2022 12:55:03 -0700 (PDT)
+Received: from pps.filterd (m0148460.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.16.1.2/8.16.1.2) with ESMTP id 23GCM3sX022228;
+        Sat, 16 Apr 2022 12:55:02 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=from : to : cc : subject
+ : date : message-id : references : in-reply-to : content-type : content-id
+ : mime-version; s=facebook;
+ bh=S+ayeODOQIxJVkWtaHHAwrI1XJG7O8QZJWMpqYXJ7zk=;
+ b=lQ4xUrqflpHwDMhbkAQszhwmiPG+Rp4s6sEbi5S6IdksQChyPxmYMY7NTmKETzcgTJr7
+ NWhYkUAFdRstggl26tCKb2HCzjaA0KO6lOk7fFrADCa+QkdYcy9vEF0TDkrUHykKsJX7
+ GAIJ+RnGX+/AxRE/1AE9NNiumSe80IXKF4A= 
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2169.outbound.protection.outlook.com [104.47.55.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ffuax1kbv-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 16 Apr 2022 12:55:02 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=j0jEghyczfQf+n+TdiKI7IavZVd7SmMoFFu9w7GH9G/J5B+R4LJLuIUZAdXdfnAiiULmIH2A+a2+7cW96krPVlCd5vf+aCt3QggSejvS/cK1f/nVvjAAdBKqOWzvBtkavRxOdHfF+J3D2nBdz1PVi1ysOvMgRPLFgqmCWiuzCHYv8fonV6A4n92LGq60g7AhreVXK/BtJZujMB0uGbrV0VWgWNWnF/zRR4eKe4USzUZtg//YXQNyFaqg5K300YW3oOZCaCJmFNW40e7yk91OYIF5tHiWOFaWG+ccIfjZsguD+aFA4t7//jvA+pQOKSgGYVyWgKCurvFtIUVOYqskzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S+ayeODOQIxJVkWtaHHAwrI1XJG7O8QZJWMpqYXJ7zk=;
+ b=UWyDR67w4mFxKWhOH1a8InKfS0uK1f6+xWFXvGvMJsVCud/bUq5wBch0QwezVYDGGvIvIAun1+1/cAOyJzgPB3YxYIZoyZrtg6bJcg9m8+Om15B8j2DUVghQP8fdd8LKRS3sXG0RwQuSy2dzUwVzxG2G8s3G/VeI/iL+cYMPiB2KgxgEg/CqOumsB0erniuCHBAccx27lvW1eC8L41llV3YEMcFd5DEdVb9zuRPCndG5E9crEJHmYCXyGSM8SmOS8fYocorXG3qjBDh1kLM5aynriBVUl4rKt2CN4uZQLFZyitrQ27W4hzEiuyVEzrffs8EtZMuw26NmC/vEr78J8w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
+ header.d=fb.com; arc=none
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
+ by BN8PR15MB2882.namprd15.prod.outlook.com (2603:10b6:408:8b::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.25; Sat, 16 Apr
+ 2022 19:55:00 +0000
+Received: from SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::20d2:26a2:6cb1:3c4b]) by SA1PR15MB5109.namprd15.prod.outlook.com
+ ([fe80::20d2:26a2:6cb1:3c4b%6]) with mapi id 15.20.5164.020; Sat, 16 Apr 2022
+ 19:55:00 +0000
+From:   Song Liu <songliubraving@fb.com>
+To:     Christoph Hellwig <hch@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+CC:     Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
         Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Casper Andersson <casper.casan@gmail.com>,
-        Bjarni Jonasson <bjarni.jonasson@microchip.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Colin Ian King <colin.king@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Xu Wang <vulab@iscas.ac.cn>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, bpf@vger.kernel.org,
-        Mike Rapoport <rppt@kernel.org>,
-        Brian Johannesmeyer <bjohannesmeyer@gmail.com>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-References: <20220415122947.2754662-1-jakobkoschel@gmail.com>
- <20220415122947.2754662-3-jakobkoschel@gmail.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220415122947.2754662-3-jakobkoschel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Kernel Team <Kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+Thread-Topic: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+Thread-Index: AQHYUOjRr/eYt5HVI0ucQZg4JV/u/6zxVckAgACoe4CAAPedAA==
+Date:   Sat, 16 Apr 2022 19:55:00 +0000
+Message-ID: <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+References: <20220415164413.2727220-1-song@kernel.org>
+ <YlnCBqNWxSm3M3xB@bombadil.infradead.org> <YlpPW9SdCbZnLVog@infradead.org>
+In-Reply-To: <YlpPW9SdCbZnLVog@infradead.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.80.82.1.1)
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 63155dae-8eda-49b7-477e-08da1fe2fd99
+x-ms-traffictypediagnostic: BN8PR15MB2882:EE_
+x-microsoft-antispam-prvs: <BN8PR15MB28824EAC4CFF931E0556551BB3F19@BN8PR15MB2882.namprd15.prod.outlook.com>
+x-fb-source: Internal
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Ac7W6anENq4Nl81j7X74QR9vHXlb5cnd0RHF1WhiILvTAju4BK2A6T2SKAkrzVgvl+aiuVl9Uk4+MYUVcePHTnJ9SEs0v7qC2yUJoX+/quU4/bRyAdP+M/f2z+CP8b2UF1EtztD3a8xbDopUh+RShksUVQBfoz1EgaTVUYNglwUOg9NF58DSO7iKga84owekVFHlj08ydOR+u6UZT9Vjn63vNUbTh7vmtzt5LBXGDUu7J9YdAPtTdPkzXR3y1c05hGzASuSRCFOrnX8d8qpQoFlFIMIZ3Wt3xzjyYbfNRoOVRuVk6AaWyuyk9fa65zEq81N5lT8Gk3sLnQewD7tPOXXrhgucbkMftB2mvBUs1TFPJN3xCsc3afvVU5mDBhN59jGQjH4r2g2eOUC5uHuvyADtGL6JXG5e9mm69RCgP67yrI3ggj3h3YLTjIj5LJxxEJXbv7xi3UJGWHzGqxLF9VIQU3JRvhINgMRixhufg1xn2USoSNB+cTO0a19H5RBT28Ap6QsD2a8yYmhTvk0/LmFTKy8gTGSDfmKOzayzObNIMnPoGwhm6XO+MIgHhZhgZDxfE1x8bQg287i7ki47kc6WR5yULNBETllJMzAYHFjLD17ajoaWIiUqsx3MpcwwnuNz+Hg/ALdEo8/xN1LqoExMqGXwutJ6wXAv2R71RqLlUxzA4fhHM/dJmNlR9fn8CHa/2K1qw7KLUyXI3ZPVYHWdb74piCa4T47KnMx5d92cvwc5cLLwy0tC08Ueenaw7O9wQ0QbORzlDrsaKYtAJ5UhNlNZVYRgPnUbh1j4U/MN7gaSbwnGR/z7jDCnp203l0PMIiBN6cFPst4S32leW4ZFAOSG27mtG2ttyiCDmOY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(66476007)(66446008)(8936002)(64756008)(8676002)(4326008)(91956017)(66556008)(66946007)(38070700005)(76116006)(7416002)(122000001)(86362001)(5660300002)(54906003)(33656002)(110136005)(316002)(36756003)(2906002)(6486002)(6512007)(6506007)(53546011)(966005)(38100700002)(508600001)(71200400001)(186003)(26005)(2616005)(14583001)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?LB2lqU+e9hw9MosFMILJASzzJAF1/OVe+FriN+OfuuIIDC0DLxc/+A/W2+tK?=
+ =?us-ascii?Q?ca9Kn33QWRhtyg01E5GJCL9wT7gf2zUOcFTvP/pJi6j6FN2JkRuOIRl6jud0?=
+ =?us-ascii?Q?r52KRA06JlQwBkwLGm0FwG3q2QEqBd+6IxTVFe0FB6oXFIx4FSX0HOzNIInt?=
+ =?us-ascii?Q?wg1kopzBMpvXRPJj6FG3Z/iWCh2LmUmtGcL61+1/TK5wpH43bridh/5v902A?=
+ =?us-ascii?Q?S4i7J4gEjoICSpXXGvAF2J45hQe6NBnd/jqUDLS8SjhrTvRRnT8BpETQzDFh?=
+ =?us-ascii?Q?tsKxSMh/LADolbek3j23XkDuVVxCF/sGolvapGQZPGqTVesBlPNmn9FLZ9IR?=
+ =?us-ascii?Q?R84i3/YXFEW7nrs3IenwhY3ArKeMngFdYwDDBa3iiu2EPtAJmbr5CRpNkA06?=
+ =?us-ascii?Q?45UmRredXjJwkOZy3G83hVLCfqtzWFxzw3hnniPzzACM+1W7x5OhB0gRC5T+?=
+ =?us-ascii?Q?YBXHa9tfrvTZMyzNOSo76q9eE91/MJrnaVQ98rWf4pcZ8BSDgeQJL4pnkRRZ?=
+ =?us-ascii?Q?+9HpdsBDDkBTPaUPfbvmlGJJOeSxNCh0eoNvgW/zsNr38Le5NniSuzvdKBGN?=
+ =?us-ascii?Q?SjO2pHIdvRm1X8oVI2ydC93sNh8XL2vgubCnKVbOfs0M3qLt9GFeDS8g+wsd?=
+ =?us-ascii?Q?wJTrvQlycMX0oipvZMcx7WEpOQHS6jN7woKHOZJ6hjp8c5bcRji7Lqj+BlB4?=
+ =?us-ascii?Q?O4A5d+CygcPQfcRE6gHD5XmL8vo2I1zcYw35BVD4n8daLXqy1YvXZO+ybYSU?=
+ =?us-ascii?Q?xSkvseFI/V9ZQ9pJ0fbmZTAxEnpauERbz/JfOagFUScPS+1et3gToMu+NPjt?=
+ =?us-ascii?Q?A9J3uKJvaaBVWcuU7zoPCZVQ9TmwmDvXSDElSat17qbHi1rMmnGmT+g93UAL?=
+ =?us-ascii?Q?g8vmH5qW5ElKaJu69cqYWf6HULQ03Q3ciVYzd0Gpzepi2AZDx/bJzHbK6fnZ?=
+ =?us-ascii?Q?SYN34Q5u3gfAjIyBvG+rzbt0BatNFjjOSX0VSMFzLjFwX5rz0Ir7Z5BvOM8s?=
+ =?us-ascii?Q?rt3XhMOFh2VUHYY6B/EnfT1DRlMP5MNRwgKwpsgOC0Q2CQwPG6WrAH+92pz9?=
+ =?us-ascii?Q?vaPsvfhIM7ikSCnRDjtuVrZ8yMOGa3/1AaKpE+nSpKtdbzRDve5oxW/+sErc?=
+ =?us-ascii?Q?5GP63+1QpJSe0uosI27AcMWQvDzl/H1hwm54fCGm0zqJ+En5DgYBFkwBRJ3G?=
+ =?us-ascii?Q?9QZoQuR3yFf5t7Bus8uwUI7te7JNyyNL8ekB4ApoczbwGQCTpQnvowslbMcR?=
+ =?us-ascii?Q?bXVDD8Ul43wp2GaJN2IfRMjIL74zOQRWsHR9YoipZDiLR4IjIT6VhMJVkuLo?=
+ =?us-ascii?Q?sdxKl8eKIQosBxGcwJRt8zZGPB8lUMofdld0mAkcXV63VfdKawLfXbWlQH9O?=
+ =?us-ascii?Q?EZ1oJsc0McMtFYKKmr4solw/bjyeU6bgrvYyHee+/V+tQEREeOftsVqn4+o/?=
+ =?us-ascii?Q?LL33G1RpehY1/cCnMq6ejpsk8RAehjml9A0TwZj+6olIO5x/Jjn2tcGfhanr?=
+ =?us-ascii?Q?mfMjEy9hG3fvg4+NxVk5WeS8UWVVCYlr+uHu9wM5ytywZPnJj5p52BkveSqG?=
+ =?us-ascii?Q?UxxqSJWVy0rxQItQErBYr9s+Vy29KTp4VDIqm1NPWzNvE2bfgYDCgRbbnUNy?=
+ =?us-ascii?Q?sF32Mu4LXmRGx6gKUwg5lGvtuNFqvHai+15VkwrUeuls5YHl5hhWJyu9KOT1?=
+ =?us-ascii?Q?4QzqSJ+lqnjoqNwv+fNeHOXHUuriMer/nrR5UmxrwRptggM7/pmD5kp8PqiX?=
+ =?us-ascii?Q?uiliuJHIHPEPZJm6sPideqJv2MO1uy4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <BAD8ABAD9E1DFB4F8BF7E00F388E316C@namprd15.prod.outlook.com>
+X-OriginatorOrg: fb.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63155dae-8eda-49b7-477e-08da1fe2fd99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2022 19:55:00.3471
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 27RHXNNGuJwC25N0VC251Jf1HxFwLcXd6K+jfsyyFfxRVi5tVrFVPvVA+pbHH4r5TEjmpRB0Cu3t3B37LQxydA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR15MB2882
+X-Proofpoint-GUID: bJxexOqTTyc8jVwJJsSQTGpDj6NRE0P1
+X-Proofpoint-ORIG-GUID: bJxexOqTTyc8jVwJJsSQTGpDj6NRE0P1
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-16_08,2022-04-15_01,2022-02-23_01
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -112,33 +147,69 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 4/15/2022 5:29 AM, Jakob Koschel wrote:
-> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> On Apr 15, 2022, at 10:08 PM, Christoph Hellwig <hch@infradead.org> wrote:
 > 
-> The link below explains that there is a desire to syntactically change
-> list_for_each_entry() and list_for_each() such that it becomes
-> impossible to use the iterator variable outside the scope of the loop.
+> On Fri, Apr 15, 2022 at 12:05:42PM -0700, Luis Chamberlain wrote:
+>> Looks good except for that I think this should just wait for v5.19. The
+>> fixes are so large I can't see why this needs to be rushed in other than
+>> the first assumptions of the optimizations had some flaws addressed here.
 > 
-> Although sja1105_insert_gate_entry() makes legitimate use of the
-> iterator pointer when it breaks out, the pattern it uses may become
-> illegal, so it needs to change.
-> 
-> It is deemed acceptable to use a copy of the loop iterator, and
-> sja1105_insert_gate_entry() only needs to know the list_head element
-> before which the list insertion should be made. So let's profit from the
-> occasion and refactor the list iteration to a dedicated function.
-> 
-> An additional benefit is given by the fact that with the helper function
-> in place, we no longer need to special-case the empty list, since it is
-> equivalent to not having found any gating entry larger than the
-> specified interval in the list. We just need to insert at the tail of
-> that list (list_add vs list_add_tail on an empty list does the same
-> thing).
-> 
-> Link: https://patchwork.kernel.org/project/netdevbpf/patch/20220407102900.3086255-3-jakobkoschel@gmail.com/#24810127
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> Signed-off-by: Jakob Koschel <jakobkoschel@gmail.com>
+> Patches 1 and 2 are bug fixes for regressions caused by using huge page
+> backed vmalloc by default.  So I think we do need it for 5.18.  The
+> other two do look like candidates for 5.19, though.
 
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Thanks Luis and Christoph for your kind inputs on the set. 
+
+Here are my analysis after thinking about it overnight. 
+
+We can discuss the users of vmalloc in 4 categories: module_alloc, BPF 
+programs, alloc_large_system_hash, and others; and there are two archs
+involved here: x86_64 and powerpc. 
+
+With whole set, the behavior is like:
+
+              |           x86_64            |       powerpc
+--------------------------------------------+----------------------
+module_alloc  |                        use small pages 
+--------------------------------------------+----------------------
+BPF programs  |      use 2MB pages          |  use small changes
+--------------------------------------------+----------------------
+large hash    |           use huge pages when size > PMD_SIZE
+--------------------------------------------+----------------------
+other-vmalloc |                      use small pages 
+
+
+Patch 1/4 fixes the behavior of module_alloc and other-vmalloc. 
+Without 1/4, both these users may get huge pages for size > PMD_SIZE 
+allocations, which may be troublesome([3] for example). 
+
+Patch 3/4 and 4/4, together with 1/1, allows BPF programs use 2MB 
+pages. This is the same behavior as before 5.18-rc1, which has been 
+tested in bpf-next and linux-next. Therefore, I don't think we need
+to hold them until 5.19. 
+
+Patch 2/4 enables huge pages for large hash. Large hash has been 
+using huge pages on powerpc since 5.15. But this is new for x86_64. 
+If we ship 2/4, this is a performance improvement for x86_64, but
+it is less tested on x86_64 (didn't go through linux-next). If we 
+ship 1/4 but not 2/4 with 5.18, we will see a small performance 
+regression for powerpc. 
+
+Based on this analysis, I think we should either 
+  1) ship the whole set with 5.18; or
+  2) ship 1/4, 3/4, and 4/4 with 5.18, and 2/4 with 5.19. 
+
+With option 1), we enables huge pages for large hash on x86_64 
+without going through linux-next. With option 2), we take a small
+performance regression with 5.18 on powerpc. 
+
+Of course, we can ship a hybrid solution by gating 2/4 for powerpc 
+only in 5.18, and enabling it for x86_64 in 5.19. 
+
+Does this make sense? Please let me know you comments and 
+suggestions on this. 
+
+Thanks,
+Song
+
+[3] https://lore.kernel.org/lkml/14444103-d51b-0fb3-ee63-c3f182f0b546@molgen.mpg.de/

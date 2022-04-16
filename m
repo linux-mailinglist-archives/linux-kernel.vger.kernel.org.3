@@ -2,98 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A67B750363D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:10:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83766503640
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:10:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbiDPLMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 07:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S231684AbiDPLMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 07:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiDPLMW (ORCPT
+        with ESMTP id S231701AbiDPLMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 07:12:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C0213E39;
-        Sat, 16 Apr 2022 04:09:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 23DBFB81CF6;
-        Sat, 16 Apr 2022 11:09:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D0CFC385A1;
-        Sat, 16 Apr 2022 11:09:44 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="USvjSmaf"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650107378;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BWpDj5fGUy3iYp41L7HbRmBg65jO9i+zxCcxvQs/HHk=;
-        b=USvjSmaf62xWI4Mu+SjeA+l/EdDg6mkMGtOkrJ5IuGMc8Ak4z74cOnCaVNUG4iuc/5T5ri
-        EYyJCvrxgHowkyOAZITSJXGOJjpMyM7Xzd5IWCIL6tDicEpJGjOn3PmZsj56+RDfHRoa7a
-        MBB8v+5KJQeVMnoJRIWq/D/sjWbXTT4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id e09da8c6 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Sat, 16 Apr 2022 11:09:38 +0000 (UTC)
-Received: by mail-yb1-f172.google.com with SMTP id h8so18152485ybj.11;
-        Sat, 16 Apr 2022 04:09:37 -0700 (PDT)
-X-Gm-Message-State: AOAM53210w7fHEMYiI9J/AfuVVnbCCngkl8/AkMcSUM5lLJFc9aZuaBR
-        wpV6a9x9sqRi15Y0XGCgn2I/JVJ5b7eaAX8wOeQ=
-X-Google-Smtp-Source: ABdhPJyAY5xi4OGR681ypI25l7Liwu41MbRbYQFXrT4jbAkvhI1v7BitiVeDW4TLYpgWqNVatNZXdBjODAZ+DfSqjbM=
-X-Received: by 2002:a5b:782:0:b0:634:683f:310e with SMTP id
- b2-20020a5b0782000000b00634683f310emr2707608ybq.398.1650107375189; Sat, 16
- Apr 2022 04:09:35 -0700 (PDT)
+        Sat, 16 Apr 2022 07:12:40 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB0D4AD133;
+        Sat, 16 Apr 2022 04:10:05 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id k5so17459324lfg.9;
+        Sat, 16 Apr 2022 04:10:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to;
+        bh=WB4+/QFKrNI2ywCG/GzNlM3DCuj5PqjLAYqkAja7LNQ=;
+        b=eQFEvZGK1REM/iYJ7t3YApZEf9rPnXCuY8ghxes2VWwUXBKzydLKBWFFPpJuYndvYr
+         +e8EhVXML4xiOCJ/wPAIiBa+yKAj8zcLO3hxFcYL/Z4FDl4KQ6uLs8l5v+tAxja33uXS
+         APHwJLopceBqaGRLnzuuY9JtoEtrgnkdAxOpRAWB5r1sm0oLkDt2TbHXed5Zm89cekU7
+         V9vcj24cw6AsGhsbdjTaPOiSjJi/lLBfzWWhqCNNK6OHm9e3Y2NLunNqDS9xgpyEc0LD
+         kEwAKxlwkBIa9sDlgLXW7h9O750B5sy97cm+YRCjQt4fc61vFhcQAX6XNv5jKoDDgo9y
+         3sDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to;
+        bh=WB4+/QFKrNI2ywCG/GzNlM3DCuj5PqjLAYqkAja7LNQ=;
+        b=NMQy74sKvRcKCj2LxHjg+ffm4GUgMwDwmtGBKtct+tNhgoCoqdWe0DSrwG3s6hxGbt
+         kBADxOQyh+bDzdfgOaI9VwKeU5QilqdNPBIJ+g+dBKe5ZjQrBUqvB0yxszSQF6sDaq3K
+         bUtw0HU0Z7seA3wOSYFNCrhMLVNBi9pAWLnnbs/XM0JN3Q9lmzGohGhC7CF7R/g7AfaM
+         CzLV/Z/UlJzEdyYd7mFnogKEIE6rYMlNV0nia16uWKWwaNLwmyAmIj/Wh88fPeWEdZ5e
+         6Fd0hCIto2UnxcYr4fmiorZUd9AxogOifdcbtokIkG3mHq4FajRI6Sqfj2yqUj1ZXWKa
+         fJag==
+X-Gm-Message-State: AOAM532fWAJRQE0+avBgINWLh+C4doI0EesYQj8uuLwkgPgKdPJLMTvG
+        JcKZt8QiouX6GNQ8UjtBbNk=
+X-Google-Smtp-Source: ABdhPJzay9IdzNfAP4GnLTie2+6uI6ofL7xWiBnDDXbJfZbV05tiRSwdVw4hAl2ShXJQIk7NPz/NbA==
+X-Received: by 2002:ac2:5223:0:b0:448:5100:e427 with SMTP id i3-20020ac25223000000b004485100e427mr2150728lfl.87.1650107403960;
+        Sat, 16 Apr 2022 04:10:03 -0700 (PDT)
+Received: from [192.168.1.11] ([94.103.225.17])
+        by smtp.gmail.com with ESMTPSA id x22-20020a2e9c96000000b0024da6072587sm433287lji.80.2022.04.16.04.10.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 04:10:03 -0700 (PDT)
+Message-ID: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+Date:   Sat, 16 Apr 2022 14:10:02 +0300
 MIME-Version: 1.0
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com>
- <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk>
- <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
- <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk> <YlfoeGRM6w2O+eXA@zx2c4.com>
- <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Sat, 16 Apr 2022 13:09:24 +0200
-X-Gmail-Original-Message-ID: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Message-ID: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
+ errors
+Content-Language: en-US
+To:     David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
+Cc:     syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
+        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com,
+        arnd@arndb.de, dan.carpenter@oracle.com
+References: <20220416074817.571160-1-k.kahurani@gmail.com>
+From:   Pavel Skripkin <paskripkin@gmail.com>
+In-Reply-To: <20220416074817.571160-1-k.kahurani@gmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------x70JgzBdQ5jV31EERnjUlnC7"
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -101,63 +78,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maciej,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------x70JgzBdQ5jV31EERnjUlnC7
+Content-Type: multipart/mixed; boundary="------------1qnCSQxy3NKX4amAmcXuvQ5M";
+ protected-headers="v1"
+From: Pavel Skripkin <paskripkin@gmail.com>
+To: David Kahurani <k.kahurani@gmail.com>, netdev@vger.kernel.org
+Cc: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com,
+ davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ phil@philpotter.co.uk, syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+ dan.carpenter@oracle.com
+Message-ID: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read
+ errors
+References: <20220416074817.571160-1-k.kahurani@gmail.com>
+In-Reply-To: <20220416074817.571160-1-k.kahurani@gmail.com>
 
-On Fri, Apr 15, 2022 at 2:26 PM Maciej W. Rozycki <macro@orcam.me.uk> wrote=
-:
->     return (random_get_entropy_fallback() << 14) | ((1<<14) - read_c0_ran=
-dom());
->
-> of course, as bit 13 is still one of the active ones in the R3k CP0 Rando=
-m
-> register.
+--------------1qnCSQxy3NKX4amAmcXuvQ5M
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-Ah, thanks, will do that.
+SGkgRGF2aWQsDQoNCm9uZSBtb3JlIHNtYWxsIGNvbW1lbnQNCg0KT24gNC8xNi8yMiAxMDo0
+OCwgRGF2aWQgS2FodXJhbmkgd3JvdGU6DQo+IFJlYWRzIHRoYXQgYXJlIGxlc3NlciB0aGFu
+IHRoZSByZXF1ZXN0ZWQgc2l6ZSBsZWFkIHRvIHVuaW5pdC12YWx1ZSBidWdzLg0KPiBJbiB0
+aGlzIHBhcnRpY3VsYXIgY2FzZSBhIHZhcmlhYmxlIHdoaWNoIHdhcyBzdXBwb3NlZCB0byBi
+ZSBpbml0aWFsaXplZA0KPiBhZnRlciBhIHJlYWQgaXMgbGVmdCB1bmluaXRpYWxpemVkIGFm
+dGVyIGEgcGFydGlhbCByZWFkLg0KPiANCj4gUXVhbGlmeSBzdWNoIHJlYWRzIGFzIGVycm9y
+cyBhbmQgaGFuZGxlIHRoZW0gY29ycmVjdGx5IGFuZCB3aGlsZSBhdCBpdA0KPiBjb252ZXJ0
+IHRoZSByZWFkZXIgZnVuY3Rpb25zIHRvIHJldHVybiB6ZXJvIG9uIHN1Y2Nlc3MgZm9yIGVh
+c2llciBlcnJvcg0KPiBoYW5kbGluZy4NCj4gDQo+IEZpeGVzOiBlMmNhOTBjMjc2ZTEgKCJh
+eDg4MTc5XzE3OGE6IEFTSVggQVg4ODE3OV8xNzhBIFVTQiAzLjAvMi4wIHRvDQo+IGdpZ2Fi
+aXQgZXRoZXJuZXQgYWRhcHRlciBkcml2ZXIiKQ0KPiBTaWduZWQtb2ZmLWJ5OiBEYXZpZCBL
+YWh1cmFuaSA8ay5rYWh1cmFuaUBnbWFpbC5jb20+DQo+IFJlcG9ydGVkLWFuZC10ZXN0ZWQt
+Ynk6IHN5emJvdCtkM2RiZGYzMWZiZTlkOGY1ZjMxMUBzeXprYWxsZXIuYXBwc3BvdG1haWwu
+Y29tDQo+IC0tLQ0KDQpbY29kZSBzbmlwXQ0KDQo+IEBAIC0xMjk1LDYgKzE0MzksNyBAQCBz
+dGF0aWMgaW50IGF4ODgxNzlfbGVkX3NldHRpbmcoc3RydWN0IHVzYm5ldCAqZGV2KQ0KPiAg
+IHN0YXRpYyB2b2lkIGF4ODgxNzlfZ2V0X21hY19hZGRyKHN0cnVjdCB1c2JuZXQgKmRldikN
+Cj4gICB7DQo+ICAgCXU4IG1hY1tFVEhfQUxFTl07DQo+ICsJaW50IHJldDsNCj4gICANCj4g
+ICAJbWVtc2V0KG1hYywgMCwgc2l6ZW9mKG1hYykpOw0KPiAgIA0KPiBAQCAtMTMwMyw4ICsx
+NDQ4LDEyIEBAIHN0YXRpYyB2b2lkIGF4ODgxNzlfZ2V0X21hY19hZGRyKHN0cnVjdCB1c2Ju
+ZXQgKmRldikNCj4gICAJCW5ldGlmX2RiZyhkZXYsIGlmdXAsIGRldi0+bmV0LA0KPiAgIAkJ
+CSAgIk1BQyBhZGRyZXNzIHJlYWQgZnJvbSBkZXZpY2UgdHJlZSIpOw0KPiAgIAl9IGVsc2Ug
+ew0KPiAtCQlheDg4MTc5X3JlYWRfY21kKGRldiwgQVhfQUNDRVNTX01BQywgQVhfTk9ERV9J
+RCwgRVRIX0FMRU4sDQo+IC0JCQkJIEVUSF9BTEVOLCBtYWMpOw0KPiArCQlyZXQgPSBheDg4
+MTc5X3JlYWRfY21kKGRldiwgQVhfQUNDRVNTX01BQywgQVhfTk9ERV9JRCwgRVRIX0FMRU4s
+DQo+ICsJCQkJICAgICAgIEVUSF9BTEVOLCBtYWMpOw0KPiArDQo+ICsJCWlmIChyZXQpDQo+
+ICsJCQluZXRkZXZfZGJnKGRldi0+bmV0LCAiRmFpbGVkIHRvIHJlYWQgTk9ERV9JRDogJWQi
+LCByZXQpOw0KPiArDQo+ICAgCQluZXRpZl9kYmcoZGV2LCBpZnVwLCBkZXYtPm5ldCwNCj4g
+ICAJCQkgICJNQUMgYWRkcmVzcyByZWFkIGZyb20gQVNJWCBjaGlwIik7DQo+ICAgCX0NCg0K
+DQpUaGlzIG1lc3NhZ2Ugc2VxdWVuY2UgaXMgY29uZnVzaW5nLg0KDQpJbiBjYXNlIG9mIGF4
+ODgxNzlfcmVhZF9jbWQoKSBmYWlsdXJlIG1hYyByZWFkIGZyb20gZGV2aWNlIGFjdHVhbGx5
+IA0KZmFpbGVkLCBidXQgbWVzc2FnZSBzYXlzLCB0aGF0IGl0IHdhcyBzdWNjZXNzZnVsbHkg
+ZmluaXNoZWQuDQoNCg0KDQoNCg0KV2l0aCByZWdhcmRzLA0KUGF2ZWwgU2tyaXBraW4NCg==
 
->  There are two variants only of the CP0 Random register that we can ever
-> encounter, as it's been de-facto standardised in early 1990s already and
-> then written down in the MIPSr1 architecture specification ~2000.  So I
-> think it may make sense to actually handle them both explictitly with
-> individual calculations, possibly conditionalised on a CONFIG setting or
-> `cpu_has_3kex', because kernels that support the two variants of the MMU
-> architecture are mutually incompatible.
 
-Okay, I can give this a shot, but this certainly isn't my fort=C3=A9. It
-may ultimately wind up being simpler for you to just send some code of
-what you envision for this, but if I understand your idea correctly,
-what you're saying is something like:
+--------------1qnCSQxy3NKX4amAmcXuvQ5M--
 
-static inline unsigned long random_get_entropy(void)
-{
-        unsigned int prid =3D read_c0_prid();
-        unsigned int imp =3D prid & PRID_IMP_MASK;
-        unsigned int c0_random;
+--------------x70JgzBdQ5jV31EERnjUlnC7
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-        if (can_use_mips_counter(prid))
-                return read_c0_count();
+-----BEGIN PGP SIGNATURE-----
 
-        if (cpu_has_3kex)
-                c0_random =3D (read_c0_random() >> 8) & 0x3f;
-        else
-                c0_random =3D read_c0_random() & 0x3f;
-        return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
-}
+wsF5BAABCAAjFiEER3XL3TplLQE8Qi40bk1w61LbBA0FAmJapAoFAwAAAAAACgkQbk1w61LbBA2d
+NQ/+LRLQ+4EWTwl4i14awbRI8pi8zuwIgTzqbsdj2ihlIVPcSLl0cOf/3zZUpgMKWgUsl5JUJolj
++W5JVmpZ5QBmAOUEN46P5waH1wnYOI+cab8hkNGPRNEPbO6tj5kKRAnjBkHEtqyHJaLs9UVEiwp4
+RYZV3Zl6I3S8XL3NAMGt/mXwhEUeHHE7RYD0eSxjRnEI3UieSRni6XxrduEguxURLQZCJPTyHkji
+ZXinqDnpsF/3zKamcpV9X9AJaVGR71xZP9/6cUh4AguzTC4eOppcb600/vKajzmV4jnS2S/UYIXH
+NfLpVkp5uS9RYttqQYz6u1fmMi7Add4Kp554qj603TWyUCBQUwVnYEkMXXWJdByIeAVSDamvPFDg
+C/5WumweoSOiRhBsqJ3pA3wKar5C5C+PE8/C3qUfydczCZ0o6K5pUzgaFqz1m85xv9v7k/+iWYyc
+9l/CcwdIqnkaGed0DtwOtfQlvmzqW+bTS8Qa6asftjTJ8HC55wj2lQIeWJ9lMBZGwvugtyrJ5vMu
+45KVO4CKafRkSYwratiIFgYu8LzEmIzco1Eyj94+KSV1vKvGNew8h4d4uVYriWnTY6F0UjgTbo0A
+YzC8IwgCFgpIphdzJIUTvVEs6p+9CSR8+Fg8wbyNVCWSaOTTYRgDE8n/NXSqZv31/xwX+2mf2X5N
+TxA=
+=bUPz
+-----END PGP SIGNATURE-----
 
-What do you think of that? Some tweak I'm missing?
-
->  Isn't it going to be an issue for an entropy source that the distributio=
-n
-> of values obtained from the CP0 Random bit-field is not even, that is som=
-e
-> values from the 6-bit range will never appear?
-
-It's the same situation without inverting the order: instead of some
-bits on the top never happening, some bits on the bottom never happen
-instead. In general, counters don't form uniform distributions anyway,
-since the lower bits change faster, and neither are they independent,
-since one sample in large part depends on the previous. This is just
-sort of the nature of the beast, and the code that calls
-random_get_entropy() deals with this appropriately (by, at the moment,
-just hashing all the bits).
-
-Jason
+--------------x70JgzBdQ5jV31EERnjUlnC7--

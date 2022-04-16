@@ -2,127 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84E49503438
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02F79503354
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356694AbiDPAG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 20:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59178 "EHLO
+        id S1356703AbiDPAHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 20:07:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356686AbiDPAGX (ORCPT
+        with ESMTP id S230350AbiDPAHS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 20:06:23 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF343391
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:03:54 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id r1so8146217vsi.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:03:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=ztOn9qTNjZOdib9wu9VtT2ux2AzPcxh/m+7PKVCw6iQ=;
-        b=R5JSg0OZdet4qAUAD70eGrmGlbnfq6SE/UKMx9mVP3XjOuHnA4bSF78m1q8xItuGE9
-         vjqnxSxQ4spxqIw4T67UAoX/WAcpVdYRh0Do8X6bcppYXWpUgrN8T6JkIEu/GY1wQYyh
-         A68dT7GLg+KlcZh58eo3TpGvYK6OsZzyfMZQDrLE0MQ6uR9X86jvNVceMpuK6ksQ1AGF
-         vNgu+/XSqK9byqpg3ekX51zXiD0AKThWb3YM076hxyjIsBkx1tLG5G2nPZKahaiU1EQ/
-         FUnVlc5HTy63gEsQMroqaIki707KQUKD83kXincChwkr/HdyaaFWnemn3Dfdf9e2bpd8
-         6Bgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=ztOn9qTNjZOdib9wu9VtT2ux2AzPcxh/m+7PKVCw6iQ=;
-        b=lp0q3JYHByeNNn0NTHEqFwUhgVOwDUKrG1FsI8d9OFuVxp2ktuYSRZbBOPwmfltxfF
-         te7x8f+wOh+SU4is1RTnC0HbS5DcuN7M3QXmh7evWvLoInj6LLTfsGiQaI7r+2oXgpDz
-         /XEHtyw3m3oBD5VoZxfqsBbxiP2yqKyJTiBW4fignJBF+BznateL1wHyc3n2w4NC/94c
-         TrvVszDtNe891LjMTA00A7fiMC+PVuozYHzV/Lgf8onVURD3KA2aswU7vEX27hunvjTg
-         yaxK1s+m4eBw/RmZEdaxsU+uyK2cnC7OfKaiO3AXnMVg4sDapHRJIPTq9LZgIdhr2WDb
-         p5ig==
-X-Gm-Message-State: AOAM531vX+tKikTAOKagjOzADSP/aG38QV64wP4kzTznqCRxOHtVWe1C
-        6DK1j+KDNEvMarky62rShcEqzdwjPVLLbZGfDTLxQA==
-X-Google-Smtp-Source: ABdhPJw2ERJ54VhqBYtjNfKf1yIUSVFp1Wz9yRWf2I17eE6bxYiU0nBVH1Y+brrNjKX5bhrMgcp/2etChjEHOe5V/60=
-X-Received: by 2002:a05:6102:3753:b0:325:c20e:4b1c with SMTP id
- u19-20020a056102375300b00325c20e4b1cmr371331vst.84.1650067433140; Fri, 15 Apr
- 2022 17:03:53 -0700 (PDT)
+        Fri, 15 Apr 2022 20:07:18 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDC931E3FE
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650067488; x=1681603488;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ORZu87hIYWf3otFQvn50x69LdK/rm8I6UEhGlMpo+9U=;
+  b=jclw5Fp1mvvq0PwQ2mrqa5EDI2qYrn7rF976e4ISAGrIeKfe0vEq+Cll
+   wRzl9QKgOReSgMJT+MOHnsQK7J6eQxDo+wf3Q0CQnjTfbhcUza6ey1uC+
+   CfYWB52dBEWGw36VyYBxw4+3LziRU2MJM+F7rk0XeC0eeID//SzyUmLf+
+   Vxz3mwbvjTXDIB6X3qf/beEWVkfb5qxAyr5+KtMQGBKWYVRdTrx2b8GJC
+   F5vrBPqXpybxCHEN9eOFc9BcTXjZ1MHKmEF1PjIUAPWicLjViU57KsAX2
+   J2qtjMjAsqWGK6fFkIaLOo4xLXLOeszUQEzGcsffvPZJfz+q6v4rQ5vTx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263007084"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="263007084"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 17:04:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="574590902"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.212.123]) ([10.254.212.123])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 17:04:44 -0700
+Message-ID: <d838c7f8-2d31-2327-9b4d-c05b06a516bb@linux.intel.com>
+Date:   Sat, 16 Apr 2022 08:04:42 +0800
 MIME-Version: 1.0
-References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-13-yuzhao@google.com>
- <20220411191634.674554d3de2ba37b3db40ca2@linux-foundation.org>
-In-Reply-To: <20220411191634.674554d3de2ba37b3db40ca2@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Fri, 15 Apr 2022 18:03:16 -0600
-Message-ID: <CAOUHufYhhCPFqoRbtn+=OFxZxNWS9yxW9Re_s-2TYGqCEaMXVw@mail.gmail.com>
-Subject: Re: [PATCH v10 12/14] mm: multi-gen LRU: debugfs interface
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
-        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Barry Song <21cnbao@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Jesse Barnes <jsbarnes@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        Ying Huang <ying.huang@intel.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Kernel Page Reclaim v2 <page-reclaim@google.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com, iommu@lists.linux-foundation.org,
+        sven@svenpeter.dev, robdclark@gmail.com, m.szyprowski@samsung.com,
+        yong.wu@mediatek.com, mjrosato@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, zhang.lyra@gmail.com,
+        thierry.reding@gmail.com, vdumpa@nvidia.com,
+        jean-philippe@linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 02/13] iommu: Move bus setup to IOMMU device registration
+Content-Language: en-US
+To:     Robin Murphy <robin.murphy@arm.com>, joro@8bytes.org,
+        will@kernel.org
+References: <cover.1649935679.git.robin.murphy@arm.com>
+ <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+In-Reply-To: <e607a32be8e84c56d65160902f4bd3fb434ee9d3.1649935679.git.robin.murphy@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Wed,  6 Apr 2022 21:15:24 -0600 Yu Zhao <yuzhao@google.com> wrote:
->
-> > Add /sys/kernel/debug/lru_gen for working set estimation and proactive
-> > reclaim. These features are required to optimize job scheduling (bin
-> > packing) in data centers [1][2].
->
-> debugfs is for ephemeral temp stuf which can and will change or
-> disappear at any time.  Anything which is "required" by userspace
-> should not be in debufgs.
+On 2022/4/14 20:42, Robin Murphy wrote:
+> @@ -1883,27 +1900,12 @@ static int iommu_bus_init(struct bus_type *bus)
+>    */
+>   int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops)
+>   {
+> -	int err;
+> -
+> -	if (ops == NULL) {
+> -		bus->iommu_ops = NULL;
+> -		return 0;
+> -	}
+> -
+> -	if (bus->iommu_ops != NULL)
+> +	if (bus->iommu_ops && ops && bus->iommu_ops != ops)
+>   		return -EBUSY;
+>   
+>   	bus->iommu_ops = ops;
 
-Right. "required" is probably a poor choice of words. "These
-techniques are commonly used to optimize job scheduling" would sound
-better.
+Do we still need to keep above lines in bus_set_iommu()?
 
-> Presumably sysfs is the place.  Fully documented and with usage
-> examples in the changelog so we can carefully review the proposed
-> extensions to Linux's ABI.  Extensions which must be maintained
-> unchanged for all time.
-
-Eventually, yes. There still is a long way to go. Rest assured, this
-is something Google will keep investing resources on.
+Best regards,
+baolu

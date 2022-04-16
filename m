@@ -2,114 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2534850351E
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F83503519
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiDPIRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 04:17:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51142 "EHLO
+        id S230242AbiDPIQX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 04:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiDPIRa (ORCPT
+        with ESMTP id S229436AbiDPIQW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 04:17:30 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DCD818E3C
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 01:14:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650096898; x=1681632898;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=jxT27LaRFB+VIouMNBnne8LOHkM4l4qELkyspOGsRPc=;
-  b=EjEbDJik8Mp4llrk/i+Ga2AhBlTcFCKU62RPMmTg6RabMFmqIo/Qzzqd
-   bs+bStrPartSgAr3qtb9KEYaqEJBnuiggPjewiFcLt4YCgszl7QkIm02B
-   dFtw090AlZf48enP0jeHcJKrt1kouOFFSsJytrIV0ev/P/y8QgMaIrOiY
-   WT1fHmw0rcOT/ZhTGWiEYbHGgqj/LlUulId+ZfRT4t+nrIJMxDOZ/uvHF
-   ar7IMcbjpa2qIW8qk3XzVdbEm/U66gYtOimCVHCrG/FZcR89IvZinJGAB
-   89bfwLIrhAVDAoxxO2BBndfz6K8tVYD/AwK9NSSJo704U24y4TnHmIXW3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="326179914"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="326179914"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 01:14:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="613053503"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 16 Apr 2022 01:14:55 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfda2-0002wL-TA;
-        Sat, 16 Apr 2022 08:14:54 +0000
-Date:   Sat, 16 Apr 2022 16:14:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.a.wang@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        zhenyu.z.wang@intel.com, terrence.xu@intel.com,
-        intel-gvt-dev@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: [intel-gvt:topic/for-christoph 1/37]
- drivers/gpu/drm/i915/intel_gvt.h:69:5: error: no previous prototype for
- function 'intel_gvt_iterate_mmio_table'
-Message-ID: <202204161634.p6DDJoeT-lkp@intel.com>
+        Sat, 16 Apr 2022 04:16:22 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E533D49F2F
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 01:13:50 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KgQvH1KjMzXxvH;
+        Sat, 16 Apr 2022 16:13:47 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 16 Apr
+ 2022 16:13:48 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <minchan@kernel.org>, <hannes@cmpxchg.org>, <mhocko@suse.com>,
+        <hughd@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH] mm/madvise: fix potential pte_unmap_unlock pte error
+Date:   Sat, 16 Apr 2022 16:14:16 +0800
+Message-ID: <20220416081416.23304-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/gvt-linux.git topic/for-christoph
-head:   fd6f410fe5eced449a4d6467a4f4789a8eb10382
-commit: 07de96038f7d8a179287ae178dfcad8f085abb9e [1/37] i915/gvt: Separate the MMIO tracking table from GVT-g
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220416/202204161634.p6DDJoeT-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/gvt-linux/commit/07de96038f7d8a179287ae178dfcad8f085abb9e
-        git remote add intel-gvt https://github.com/intel/gvt-linux.git
-        git fetch --no-tags intel-gvt topic/for-christoph
-        git checkout 07de96038f7d8a179287ae178dfcad8f085abb9e
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/
+We can't assume pte_offset_map_lock will return same orig_pte value. So
+it's necessary to reacquire the orig_pte or pte_unmap_unlock will unmap
+the stale pte.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 9c276cc65a58 ("mm: introduce MADV_COLD")
+Fixes: 854e9ed09ded ("mm: support madvise(MADV_FREE)")
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+---
+ mm/madvise.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-All errors (new ones prefixed by >>):
-
-   In file included from <built-in>:4:
-   In file included from drivers/gpu/drm/i915/gvt/gvt.h:39:
->> drivers/gpu/drm/i915/intel_gvt.h:69:5: error: no previous prototype for function 'intel_gvt_iterate_mmio_table' [-Werror,-Wmissing-prototypes]
-   int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-       ^
-   drivers/gpu/drm/i915/intel_gvt.h:69:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-   ^
-   static 
-   1 error generated.
-
-
-vim +/intel_gvt_iterate_mmio_table +69 drivers/gpu/drm/i915/intel_gvt.h
-
-    68	
-  > 69	int intel_gvt_iterate_mmio_table(struct intel_gvt_mmio_table_iter *iter)
-    70	{
-    71		return 0;
-    72	}
-    73	#endif
-    74	
-
+diff --git a/mm/madvise.c b/mm/madvise.c
+index ec03a76244b7..4d6592488b51 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -437,12 +437,12 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+ 			if (split_huge_page(page)) {
+ 				unlock_page(page);
+ 				put_page(page);
+-				pte_offset_map_lock(mm, pmd, addr, &ptl);
++				orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+ 				break;
+ 			}
+ 			unlock_page(page);
+ 			put_page(page);
+-			pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++			orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+ 			pte--;
+ 			addr -= PAGE_SIZE;
+ 			continue;
+@@ -653,12 +653,12 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 			if (split_huge_page(page)) {
+ 				unlock_page(page);
+ 				put_page(page);
+-				pte_offset_map_lock(mm, pmd, addr, &ptl);
++				orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+ 				goto out;
+ 			}
+ 			unlock_page(page);
+ 			put_page(page);
+-			pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++			orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+ 			pte--;
+ 			addr -= PAGE_SIZE;
+ 			continue;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.23.0
+

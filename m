@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73BD75032EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61BA850336D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233385AbiDPAMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 20:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S240896AbiDPANr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 20:13:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiDPAML (ORCPT
+        with ESMTP id S237328AbiDPANj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 20:12:11 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C01862FE7B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:09:38 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id c64so11490925edf.11
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:09:38 -0700 (PDT)
+        Fri, 15 Apr 2022 20:13:39 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C6740A2C
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:11:09 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id md4so8658991pjb.4
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:11:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=wfViRToI8NMog1EM1oALflDw/OnzHe0DaB3vq2lgics=;
-        b=bc3YxIO3zkRIOWcBG93hUCPQs0IAyazH7fKA5MBGEIo7I3mjAUaNc7aDYCeWC2mtSL
-         14upvMBFsbvtztLOxz6j92GxU20NrPp8HL2qbOdKj6pQDMp1cS8u+ulThNl+1csuXUu+
-         LrENTv0pYu65R0BfmQSwMvcpqWv4hGPTAaRGc=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W9A2UwyUMqwygyoJjKT656y509wusEP5iGkP41Torw0=;
+        b=BHjxNl04owpqw3Xc5tPjdyKb0CiRc9Zd9G5BUfSQoIep76U39rYqMnZtGsjNHN0UO1
+         7X71aaw06/vmCfyHdTxIWimQ+nbafYYMFGQMH9E3TqH5HRTU9N6gqaHXDA+EQvuZRCmA
+         fWY3FEvdKu7zMHrCs/Aai53MuX/OnWAT1dT9U=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=wfViRToI8NMog1EM1oALflDw/OnzHe0DaB3vq2lgics=;
-        b=k333NQa0evCJ39qTVwnGUnYeJSy1yAon2YFwhgZaqbbbJXBpd2QYoJAyghVKyyXSZz
-         IKt7WRn5l3mTmZJnCs0Wu47hUpibj0smBpE6Ig7XA8wCO1f9zdi5cUt0/ih8Gase2yIr
-         dSnIqMzszTmnj2DaJvOg1xgqN48ZNjmsJz+TQiVh0QE2uVk4mmf5Sd42OGnWgfslpXda
-         l+mNsBnHPjdOpfkieyaMm/Kgzo4D7ruq/fD4ga5/gs5nh+HlGeD2Zd3sl+c0JDgbJtYC
-         lkXNNhBoD3zIFi9/uSrndK4oqfVpxBHy0I9DtaWG8brMNFlkyOk7T6jMXyTNt+B69v4D
-         rH2A==
-X-Gm-Message-State: AOAM532ASWXWHFPs/WNjlNDUOq+535PG4k9VhqI7tc2/Q1vd502DRg2p
-        yrcgeoCr1wLXsBDXvrDg4bJBQ5xem4jWRg==
-X-Google-Smtp-Source: ABdhPJyjOS2rBR2/dBCK88hVn7q7xmxOxxc067iRVqcphEu3oPj3qAbCDGdutIKsCR9uUu6IJfmrYw==
-X-Received: by 2002:a05:6402:294e:b0:41c:c191:64bc with SMTP id ed14-20020a056402294e00b0041cc19164bcmr1557019edb.166.1650067776744;
-        Fri, 15 Apr 2022 17:09:36 -0700 (PDT)
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com. [209.85.221.47])
-        by smtp.gmail.com with ESMTPSA id eg12-20020a056402288c00b0041fb0f2e155sm3359223edb.20.2022.04.15.17.09.35
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 17:09:35 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id i20so12175709wrb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:09:35 -0700 (PDT)
-X-Received: by 2002:a5d:4d0e:0:b0:207:a329:24fa with SMTP id
- z14-20020a5d4d0e000000b00207a32924famr859316wrt.342.1650067774465; Fri, 15
- Apr 2022 17:09:34 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=W9A2UwyUMqwygyoJjKT656y509wusEP5iGkP41Torw0=;
+        b=XiRHkDZSC79/AQA/eRhSwjkzzg2qYddU1g1BF3qZOPGf98f5B82cbaD9gzu7SAFB67
+         xu2B6Qc88vCtwqH8Z1aPEZZHG6rwkv2sGtoJrVRxCoWXEHQ5Iy1ztzGpSEzekiMBcSfT
+         Ypqr65q8kX4c9vOEJa+mj2YyzOkVGf+gVVnmfefxaTODva+IwBe15vby07nCLmPr8+RY
+         I0Zy0PrypY6MPBIFmM5zOMZbhSMsR42ArsO17t1Nxq2PU7yC2Q+xFmpJEdRmijO1qg6N
+         ELGuVtWusQzb9RyhERZhty5PMQY1fZ6qBBo/3Tb/GSsxlOI/iiTRjh3Wj+DsLjVtqY7f
+         cIrg==
+X-Gm-Message-State: AOAM530XFSP4/gffXRHi2GpL0xUgMRPE4BnP/Xc3RVN4ULyy+Lpj4mb7
+        NRBMQ8Ya2vPhz0w6xDoDRDZMfhvCpJCOgg==
+X-Google-Smtp-Source: ABdhPJztfkKbbYOzHuV4ywguTXh8JrEOGpO4bADO/zbJZZp6+kOAThSrng4JJnpRwq1eMOQlzY+9DA==
+X-Received: by 2002:a17:90a:b890:b0:1cb:7ef2:8577 with SMTP id o16-20020a17090ab89000b001cb7ef28577mr1391403pjr.45.1650067868693;
+        Fri, 15 Apr 2022 17:11:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 8-20020a056a00070800b004e14ae3e8d7sm3758104pfl.164.2022.04.15.17.11.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 17:11:08 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida@linux.alibaba.com>
+Cc:     Kees Cook <keescook@chromium.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Date:   Fri, 15 Apr 2022 17:11:03 -0700
+Message-Id: <20220416001103.1524653-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-References: <20220409023628.2104952-1-dianders@chromium.org>
- <20220408193536.RFC.1.I4182ae27e00792842cb86f1433990a0ef9c0a073@changeid>
- <a9a5dfb7-819b-d3a2-2c47-d5b239d21ad3@linaro.org> <CAD=FV=WKwErpD7iCu+2jFvMutmmmgLUEhAnw8s=27wUxcpF-aQ@mail.gmail.com>
- <CAA8EJppOVqaAEVeQY7p0EfCObJxfL591kbaYLYfbgOHHtmfhXw@mail.gmail.com>
-In-Reply-To: <CAA8EJppOVqaAEVeQY7p0EfCObJxfL591kbaYLYfbgOHHtmfhXw@mail.gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 15 Apr 2022 17:09:21 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=UmXzPyVOa-Y0gpY0qcukqW3ge5DBPx6ak88ydEqTsBiQ@mail.gmail.com>
-Message-ID: <CAD=FV=UmXzPyVOa-Y0gpY0qcukqW3ge5DBPx6ak88ydEqTsBiQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/6] drm/dp: Helpers to make it easier for drivers to
- use DP AUX bus properly
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Lyude Paul <lyude@redhat.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7371; h=from:subject; bh=P0lromEbkrJsMuNXkOggmhDWxld/MDuTK/Fe3Sv+Cr0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBiWgmX+W6aixof+zlRev5a6rwcYR8x7Jptuscn8CSd wva6j6eJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYloJlwAKCRCJcvTf3G3AJlRMD/ sFgNYH6PPPEC/1y0stBteH3Jjul9osWbO0vHLgIUCFI95t1jCMdc9g+vX1QGNuGFbwEY5yz6HRu4U+ Pl3bVcsJG3wawcd0NQrClaKPQu/trhiQogvxPJOUThNnobxMVw9OEkkZ2hdt8oM/eKzH0uQ50fUEA4 xvKNFimHtZ1t4WjhwF2n+AIactjClcgnVkHUdMk8t6SMTAxnsCJPnlBfr7J+3QR/9lHmmpZPBbjk60 C5dyXcfsH+6tmQCntn4hQWibuQPK5NjXIGgTgyEYwayIyPbH9kW2JX0HF/9KDI2gOIFtiJlRBbyQct ahx4CQ09SVZRKUVwhyZPCFZKR1SSexx7Izvit6UxyzPynH15vpDD0tIqQVIlMMTRyFkHbUKclt4wyM YP+C/q9V6S043ZtvwSi73giG8EOsrKTmvtqDKeXo9gWs/yK96qFEDY5BD/OaP5uhTAla8Sd5O650Lb xvna40gkXwOW/pSSbXotgssRRKUyPfnRShxrw9ClNx89KHOrny0/CKCxCFHFmBeIn7AhKdSDRf82F2 8spPk4oF2g2Ms04xcn5omkHtlzlFLGVNE7kxjVnGfWBTHhZbyjzaiQiN8E3mrkbDiCXtdW5wC2E0xh SrVOF34rhTT7XZDIFxctbMSim3Po5MNfQLnao4xMt1EVJ/ED61J2FQGIcXeQ==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -88,252 +68,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+In order to test various backward-edge control flow integrity methods,
+add a test that manipulates the return address on the stack. Currently
+only arm64 Pointer Authentication and Shadow Call Stack is supported.
 
-On Fri, Apr 15, 2022 at 3:45 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Sat, 16 Apr 2022 at 00:13, Doug Anderson <dianders@chromium.org> wrote:
-> >
-> > Hi,
-> >
-> > On Thu, Apr 14, 2022 at 5:47 PM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On 09/04/2022 05:36, Douglas Anderson wrote:
-> > > > As talked about in the kerneldoc for "struct dp_aux_ep_client" in this
-> > > > patch and also in the past in commit a1e3667a9835 ("drm/bridge:
-> > > > ti-sn65dsi86: Promote the AUX channel to its own sub-dev"), to use the
-> > > > DP AUX bus properly we really need two "struct device"s. One "struct
-> > > > device" is in charge of providing the DP AUX bus and the other is
-> > > > where we'll try to get a reference to the newly probed endpoint
-> > > > devices.
-> > > >
-> > > > In ti-sn65dsi86 this wasn't too difficult to accomplish. That driver
-> > > > is already broken up into several "struct devices" anyway because it
-> > > > also provides a PWM and some GPIOs. Adding one more wasn't that
-> > > > difficult / ugly.
-> > > >
-> > > > When I tried to do the same solution in parade-ps8640, it felt like I
-> > > > was copying too much boilerplate code. I made the realization that I
-> > > > didn't _really_ need a separate "driver" for each person that wanted
-> > > > to do the same thing. By putting all the "driver" related code in a
-> > > > common place then we could save a bit of hassle. This change
-> > > > effectively adds a new "ep_client" driver that can be used by
-> > > > anyone. The devices instantiated by this driver will just call through
-> > > > to the probe/remove/shutdown calls provided.
-> > > >
-> > > > At the moment, the "ep_client" driver is backed by the Linux auxiliary
-> > > > bus (unfortunate naming--this has nothing to do with DP AUX). I didn't
-> > > > want to expose this to clients, though, so as far as clients are
-> > > > concerned they get a vanilla "struct device".
-> > >
-> > > I have been thinking about your approach for quite some time. I think
-> > > that enforcing a use of auxilliary device is an overkill. What do we
-> > > really need is the the set callbacks in the bus struct or a notifier. We
-> > > have to notify the aux_bus controller side that the client has been
-> > > probed successfully or that the client is going to be removed.
-> >
-> > It seems like these new callbacks would be nearly the same as the
-> > probe/remove callbacks in my proposal except:
-> >
-> > * They rely on there being exactly 1 AUX device, or we make it a rule
-> > that we wait for all AUX devices to probe (?)
->
-> Is the backlight a separate device on an AUX bus? Judging from
-> drm_panel_dp_aux_backlight(), it isn't. I assumed that aux bus is just
-> a point-to-point bus, so there is always a single client.
+ $ echo CFI_BACKWARD | cat >/sys/kernel/debug/provoke-crash/DIRECT
 
-Define "device". ;-)
+Under SCS, successful test of the mitigation is reported as:
 
-It's a seperate "struct device" from a Linux point of view since it's
-a backlight class device. Certainly it's highly correlated to the
-display, but one can conceptually think of them as different devices,
-sorta. ;-)
+ lkdtm: Performing direct entry CFI_BACKWARD
+ lkdtm: Attempting unchecked stack return address redirection ...
+ lkdtm: ok: redirected stack return address.
+ lkdtm: Attempting checked stack return address redirection ...
+ lkdtm: ok: control flow unchanged.
 
-I actually dug a tiny bit more into the whole "touchscreen over aux".
-I guess DP 1.2 has a standard of "USB over DP AUX". No idea how that
-would be modeled, of course.
+Under PAC, successful test of the mitigation is reported by the PAC
+exception handler:
 
-I guess the summary is that I'm OK w/ changing it to assume one device
-for now, but I'm still not sure it's compelling to move to normal
-callbacks. The API for callbacks is pretty much the same as the one I
-proposed and IMO leaving it the way it is (with an extra struct
-device) doesn't really add much complexity and has a few (small) nice
-benefits.
+ lkdtm: Performing direct entry CFI_BACKWARD
+ lkdtm: Attempting unchecked stack return address redirection ...
+ lkdtm: ok: redirected stack return address.
+ lkdtm: Attempting checked stack return address redirection ...
+ Unable to handle kernel paging request at virtual address bfffffc0088d0514
+ Mem abort info:
+   ESR = 0x86000004
+   EC = 0x21: IABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x04: level 0 translation fault
+ [bfffffc0088d0514] address between user and kernel address ranges
+ ...
 
+If the CONFIGs are missing (or the mitigation isn't working), failure
+is reported as:
 
-> > * We need to come up with a system for detecting when everything
-> > probes or is going to be removed, though that's probably not too hard.
-> > I guess the DP AUX bus could just replace the panel's probe function
-> > with its own and essentially "tail patch" it. I guess it could "head
-> > patch" the remove call? ...or is there some better way you were
-> > thinking of knowing when all our children probed?
-> >
-> > * The callback on the aux bus controller side would not be able to
-> > DEFER. In other words trying to acquire a reference to the panel can
-> > always be the last thing we do so we know there can be no reasons to
-> > defer after. This should be doable, but at least in the ps8640 case it
-> > will require changing the code a bit. I notice that today it actually
-> > tries to get the panel side _before_ it gets the MIPI side and it
-> > potentially can return -EPROBE_DEFER if it can't find the MIPI side. I
-> > guess I have a niggling feeling that we'll find some reason in the
-> > future that we can't be last, but we can probably ignore that. ;-)
-> >
-> > I can switch this all to normal callbacks if that's what everyone
-> > wants, but it doesn't feel significantly cleaner to me and does seem
-> > to have some (small) downsides.
-> >
-> >
-> > > And this
-> > > approach would make driver's life easier, since e.g. the bus code can
-> > > pm_get the EP device before calling callbacks/notifiers and
-> > > pm_put_autosuspend it afterwards.
-> >
-> > Not sure about doing the pm calls on behalf of the EP device. What's
-> > the goal there?
->
-> I think any driver can pm_runtime_get another device. The goal is to
-> let the 'post_probe' callback to power up the panel, read the EDID,
-> etc.
+ lkdtm: Performing direct entry CFI_BACKWARD
+ lkdtm: Attempting unchecked stack return address redirection ...
+ lkdtm: ok: redirected stack return address.
+ lkdtm: Attempting checked stack return address redirection ...
+ lkdtm: FAIL: stack return address was redirected!
+ lkdtm: This is probably expected, since this kernel was built *without* CONFIG_ARM64_PTR_AUTH_KERNEL=y nor CONFIG_SHADOW_CALL_STACK=y
 
-Right. I was hoping to keep this as a separate discussion since I
-think it's largely unrelated to the probe ordering issue, but we can
-talk about it here if you want.
+Co-developed-by: Dan Li <ashimida@linux.alibaba.com>
+Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+Cc: Arnd Bergmann <arnd@arndb.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v1: https://lore.kernel.org/lkml/20220413213917.711770-1-keescook@chromium.org
+v2:
+ - add PAGE_OFFSET setting for PAC bits (Dan Li)
+---
+ drivers/misc/lkdtm/cfi.c                | 134 ++++++++++++++++++++++++
+ tools/testing/selftests/lkdtm/tests.txt |   1 +
+ 2 files changed, 135 insertions(+)
 
-There are a lot of open questions here and it's definitely hard to
-wrap your head around all of it. Maybe I'll just spam some thoughts
-and see if they all make sense together...
+diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+index e88f778be0d5..804965a480b7 100644
+--- a/drivers/misc/lkdtm/cfi.c
++++ b/drivers/misc/lkdtm/cfi.c
+@@ -3,6 +3,7 @@
+  * This is for all the tests relating directly to Control Flow Integrity.
+  */
+ #include "lkdtm.h"
++#include <asm/page.h>
+ 
+ static int called_count;
+ 
+@@ -42,8 +43,141 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+ 	pr_expected_config(CONFIG_CFI_CLANG);
+ }
+ 
++/*
++ * This can stay local to LKDTM, as there should not be a production reason
++ * to disable PAC && SCS.
++ */
++#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
++# ifdef CONFIG_ARM64_BTI_KERNEL
++#  define __no_pac             "branch-protection=bti"
++# else
++#  define __no_pac             "branch-protection=none"
++# endif
++# define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
++#else
++# define __no_ret_protection   __noscs
++#endif
++
++#define no_pac_addr(addr)      \
++	((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
++
++/* The ultimate ROP gadget. */
++static noinline __no_ret_protection
++void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
++{
++	/* Use of volatile is to make sure final write isn't seen as a dead store. */
++	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
++
++	/* Make sure we've found the right place on the stack before writing it. */
++	if (no_pac_addr(*ret_addr) == expected)
++		*ret_addr = (addr);
++	else
++		/* Check architecture, stack layout, or compiler behavior... */
++		pr_warn("Eek: return address mismatch! %px != %px\n",
++			*ret_addr, addr);
++}
++
++static noinline
++void set_return_addr(unsigned long *expected, unsigned long *addr)
++{
++	/* Use of volatile is to make sure final write isn't seen as a dead store. */
++	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
++
++	/* Make sure we've found the right place on the stack before writing it. */
++	if (no_pac_addr(*ret_addr) == expected)
++		*ret_addr = (addr);
++	else
++		/* Check architecture, stack layout, or compiler behavior... */
++		pr_warn("Eek: return address mismatch! %px != %px\n",
++			*ret_addr, addr);
++}
++
++static volatile int force_check;
++
++static void lkdtm_CFI_BACKWARD(void)
++{
++	/* Use calculated gotos to keep labels addressable. */
++	void *labels[] = {0, &&normal, &&redirected, &&check_normal, &&check_redirected};
++
++	pr_info("Attempting unchecked stack return address redirection ...\n");
++
++	/* Always false */
++	if (force_check) {
++		/*
++		 * Prepare to call with NULLs to avoid parameters being treated as
++		 * constants in -02.
++		 */
++		set_return_addr_unchecked(NULL, NULL);
++		set_return_addr(NULL, NULL);
++		if (force_check)
++			goto *labels[1];
++		if (force_check)
++			goto *labels[2];
++		if (force_check)
++			goto *labels[3];
++		if (force_check)
++			goto *labels[4];
++		return;
++	}
++
++	/*
++	 * Use fallthrough switch case to keep basic block ordering between
++	 * set_return_addr*() and the label after it.
++	 */
++	switch (force_check) {
++	case 0:
++		set_return_addr_unchecked(&&normal, &&redirected);
++		fallthrough;
++	case 1:
++normal:
++		/* Always true */
++		if (!force_check) {
++			pr_err("FAIL: stack return address manipulation failed!\n");
++			/* If we can't redirect "normally", we can't test mitigations. */
++			return;
++		}
++		break;
++	default:
++redirected:
++		pr_info("ok: redirected stack return address.\n");
++		break;
++	}
++
++	pr_info("Attempting checked stack return address redirection ...\n");
++
++	switch (force_check) {
++	case 0:
++		set_return_addr(&&check_normal, &&check_redirected);
++		fallthrough;
++	case 1:
++check_normal:
++		/* Always true */
++		if (!force_check) {
++			pr_info("ok: control flow unchanged.\n");
++			return;
++		}
++
++check_redirected:
++		pr_err("FAIL: stack return address was redirected!\n");
++		break;
++	}
++
++	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)) {
++		pr_expected_config(CONFIG_ARM64_PTR_AUTH_KERNEL);
++		return;
++	}
++	if (IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
++		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
++		return;
++	}
++	pr_warn("This is probably expected, since this %s was built *without* %s=y nor %s=y\n",
++		lkdtm_kernel_info,
++		"CONFIG_ARM64_PTR_AUTH_KERNEL", "CONFIG_SHADOW_CALL_STACK");
++}
++
+ static struct crashtype crashtypes[] = {
+ 	CRASHTYPE(CFI_FORWARD_PROTO),
++	CRASHTYPE(CFI_BACKWARD),
+ };
+ 
+ struct crashtype_category cfi_crashtypes = {
+diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+index 243c781f0780..9dace01dbf15 100644
+--- a/tools/testing/selftests/lkdtm/tests.txt
++++ b/tools/testing/selftests/lkdtm/tests.txt
+@@ -74,6 +74,7 @@ USERCOPY_STACK_BEYOND
+ USERCOPY_KERNEL
+ STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+ CFI_FORWARD_PROTO
++CFI_BACKWARD call trace:|ok: control flow unchanged
+ FORTIFIED_STRSCPY
+ FORTIFIED_OBJECT
+ FORTIFIED_SUBOBJECT
+-- 
+2.32.0
 
-1. At the moment, there's no guarantee that a DP AUX Endpoint (AKA
-panel) will use pm_runtime() to power itself up enough to do an AUX
-transfer. At the moment the two eDP panels drivers I'm aware of use
-pm_runtime, but that's actually a fairly new behavior. I guess we'd
-have to codify it as "required" if we were going to rely on it.
-
-2. In general, panels have powered themselves enough to read the EDID
-in their prepare() stage, which is equivalent to the bridge's
-pre_enable(). During some of my early patches to try to support EDID
-reading in ti-sn65dsi86 I actually relied upon it. It was like that in
-v3 [1]. Personally I see this as the "official" interface to power on
-the panel from the DP controller. As such I'm not sure we need to add
-pm_runtime() as an equivalent option.
-
-3. In the cover letter of v4 of my ti-sn65dsi86 EDID patch series I
-talked about why I switched to having EDID reading driven by the panel
-instead of powering on the panel (via pre_enable) and reading the EDID
-in the controller. One reason talked about there is that the "generic"
-eDP panel driver actually needs the EDID, or at least enough of it to
-get the panel ID, so that it can adjust its power sequence timings. If
-the EDID reading is completely handled by the DP driver and the panel
-can't do it then we'd need to figure out how to communicate it back.
-
-4. In general, panels can be pretty persnickety about their power
-sequencing. As far as I've been able to tell, the official spec
-provides two things you can do:
-
-4a) You can power the panel up enough to do AUX transfers and then
-power it back off.
-
-4b) You can power the panel up enough to do AUX transfers, then finish
-powering it all the way up (turn on screen, backlight, etc). When you
-turn the screen off, if you follow the spec strictly, you're also
-_required_ to fully power the panel off. In other words, remove _all_
-power from the display including any power that would be needed to do
-AUX transfers.
-
-Now the generic eDP panel code doesn't currently follow the
-"strict"ness of the spec and I'm not actually sure if that's how the
-spec is intended to be interpreted anyway. There are two timing
-diagrams, though. One for "aux transfer only" and the other for
-"normal system operation". In the "normal system operation" the
-diagram doesn't allow for the backlight to ever go off and on again.
-
-Now, despite the fact that the generic eDP panel code doesn't follow
-the "strict"ness I just described, the _other_ DP panel I worked on
-recently (samsung-atna33xc20) does. In testing we found that this
-panel would sometimes (like 1 in 20 times?) crash if you ever stopped
-outputting data to the display and then started again. You absolutely
-needed to fully power cycle the display each time. I tried to document
-this to the best of my ability in atana33xc20_unprepare(). There's
-also a WARN_ON() in atana33xc20_enable() trying to detect if someone
-is doing something the panel driver doesn't expect. I've also been
-trying to keep my eyes out to see if we need to do the same thing in
-generic eDP panel code, either for everyone or via some type of
-per-panel quirk. There's definitely a good reason to avoid the extra
-cycling if possible since powering panels off and on again often
-requires hundreds of milliseconds of delay in order to meet timing
-diagrams. ...and we do this if we ever change panel "modes".
-
-...OK, so why does this all matter? I guess my point here is I worry a
-little bit about saying that the DP controller code can willy nilly
-request the panel to be powered whenever it wants. If the DP
-controller was trying to hold the panel powered and then we _needed_
-to power the panel off then that would be bad. It doesn't mean we
-can't be careful about it, of course...
-
-Said another way, in my mental model these three sequences are allowed:
-
-s1) prepare, unprepare
-s2) prepare, enable, disable, unprepare
-s3) prepare, enable, disable, unprepare, prepare, enable, disable, unprepare
-
-...and this sequence is _not_ allowed:
-
-s4) prepare, enable, disable, enable, disable, unprepare
-
-...and, in my mind, it's up to the panel driver to know whether in
-sequence s3) it has to _force_ power off between the unprepare and a
-prepare.
-
-If pm_runtime() officially replaces prepare/unprepare then it's less
-obvious (in my mind) that we have to coordinate with enable().
-
-5. In general I've been asserting that it should be up to the panel to
-power things on and drive all AUX transactions. ...but clearly my
-model isn't reality. We certainly do AUX transactions from the DP
-driver because the DP driver needs to know things about the connected
-device, like the number of lanes it has, the version of eDP it
-supports, and the available bit rates to name a few. Those things all
-work today by relying on the fact that pre-enable powers the panel on.
-It's pretty easy to say that reading the EDID (and I guess AUX
-backlight) is the odd one out. So right now I guess my model is:
-
-5a) If the panel code wants to access the AUX bus it can do so by
-powering itself on and then just doing an AUX transaction and assuming
-that the provider of the AUX bus can power itself on as needed.
-
-5b) If the DP code wants to access the AUX bus it should make sure
-that the next bridge's pre_enable() has been called. It can then
-assume that the device is powered on until the next bridge's
-post_disable() has been called.
-
-So I guess tl;dr: I'm not really a huge fan of the DP driver powering
-the panel on by doing a pm_runtime_get() on it. I'd prefer to keep
-with the interface that we have to pre_enable() the panel to turn it
-on.
-
-
-[1] https://lore.kernel.org/r/20210402152701.v3.8.Ied721dc895156046ac523baa55a71da241cd09c7@changeid/
-[2] https://lore.kernel.org/r/20210416223950.3586967-1-dianders@chromium.org/
-
-
-> BTW: as I'm slowly diving into DP vs eDP differences. Do we need to
-> write the EDID checksum like we do for DP?
-
-Write the EDID checksum? I don't know what that means. You mean
-dp_panel_get_edid_checksum()? I'm not 100% sure, a quick glance seems
-to make me feel it has to do with DP compliance testing? I can dig
-more if need be. The generic EDID reading code already calculates the
-checksum, so unless you're doing some funny business you shouldn't
-need to check it again...
-
-
-> Do you have any good summary for eDP vs DP differences?
-
-I don't. :( Mostly stuff here is me trying to grok bits out of what
-existing drivers were doing and trying to cross reference it with the
-eDP spec that I have (which I don't believe I can share,
-unfortunately).
-
--Doug

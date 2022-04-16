@@ -2,70 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6596350342B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 784EC50332A
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbiDPCHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
+        id S229513AbiDPCJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229625AbiDPCGE (ORCPT
+        with ESMTP id S229727AbiDPCGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:06:04 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C0F1E94
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:55:32 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id r8so9764766oib.5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:55:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uqKd1Orxl/LGzBg+7rmnNDHUMWN7s9B1LCDOy65IlQA=;
-        b=N364O5BnRkqe8gLCY6+6Riw2dvoQSe+pV8jWLMWkyKwDJRiXRodeWCF6dOX1MO0Y4x
-         l5vzEFdxw764IXFw5pt2I5BaJ+tiXzVWOV0DHxMes3hgEwxVqH25T3a+HXfXVKNmujhX
-         hMQBDzRqJbeKLwx5z5Dohu9PQwC4xp2QffevxBiof/Ljud8I/BkLx1YhGNh15rnHV943
-         d3fweG1MjzrT+eHTNW/Vt4UAwMp0KpdTnPm+n/SjiieMqWl+NZC15j/By41/vK3ysxGi
-         Fmv3PXICjX+HefHAu07XpbCXz3A+PWe8enneamXLGhzN05xmtj+7sxMQyENtpcQY3+mV
-         3ZaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uqKd1Orxl/LGzBg+7rmnNDHUMWN7s9B1LCDOy65IlQA=;
-        b=pBl1Shv4Os86/3/nNEPdG7jo1l0dFDCBorSSBrqYxPRWPQWqFmCeXWSrVQDrsCEOWK
-         HtBY7KihBcEP2LfFhgy8bR3MCNwF/kW+UsFxETTitwLNn1CbEy5kPh9Pb7o/mY1RuvpE
-         MimY2Fewzj2ftP7fKuZdyxNTDtynge41PQi/BZejOCuMGApxL3TnrzW5x6r6lDMgt2hl
-         9rKGSpr2Ky0sVjt7WnmfkGCvjgdzxTf0V6/kKelzB8YjjG/CyqrQ/Jf7rur8M5GNaQg7
-         bw+LUzZY49Giv/KfEB2OOLsLf+B+rQRfkRMd0xwNIxzDqhl8M5W7fxQD6YWJg/sX1Nug
-         HP6Q==
-X-Gm-Message-State: AOAM533PX+wAiVJcdNQIOB5gJX6EzzvbSxOeQV2X0+1W94fsGfGFYV1k
-        WAz+sWf3GKnUGRh7yIBxHkL8Va2ahqOj9ILbRJnGPA==
-X-Google-Smtp-Source: ABdhPJzO4dFfJiTJAfRiEarg+WpfXqOs2uIeFBF1W0TiWPqIMzBObZpTJ1JBTD1oZF/evYqedyW8yQ==
-X-Received: by 2002:a17:90b:4d01:b0:1d0:f39f:6073 with SMTP id mw1-20020a17090b4d0100b001d0f39f6073mr1618465pjb.175.1650072405373;
-        Fri, 15 Apr 2022 18:26:45 -0700 (PDT)
-Received: from localhost.localdomain ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm3313260pfn.204.2022.04.15.18.26.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 18:26:44 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH] interconnect: qcom: msm8939: Use icc_sync_state
-Date:   Sat, 16 Apr 2022 09:26:34 +0800
-Message-Id: <20220416012634.479617-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Fri, 15 Apr 2022 22:06:32 -0400
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51335183BF
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:02:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1650074523;
+        bh=MRhdO0cz7cxp9uoazzUTQIFzQSvjWuvNyJYajb1r9is=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To;
+        b=W5uB/Ds1oVQ4J6kkjBT+5KY45ZBuZ9PLGTWIzX7ao8DXahUAzzmTvIInMDLBecTAC
+         dlW+fR0NsnuDVTqQn38BzDYrHT5jta+RSw+bH6Hv41St8TAxJ5aERW4C/uezRHHRLa
+         cFL+RwQzbzkNdqGWrPh6fttb4g1Xm4BtsZeRsvSw=
+Received: from [IPv6:240e:362:47d:9500:6527:51dc:8ce2:179e] ([240e:362:47d:9500:6527:51dc:8ce2:179e])
+        by newxmesmtplogicsvrsza8.qq.com (NewEsmtp) with SMTP
+        id 798346B3; Sat, 16 Apr 2022 09:30:24 +0800
+X-QQ-mid: xmsmtpt1650072624trb9mmb58
+Message-ID: <tencent_C8A588B7ED0135E6A6CB349F06AE0EB44107@qq.com>
+X-QQ-XMAILINFO: M/NR0wiIuy70QpzxApsWPM1NiJ2tyeChvdwskY/HojDIOHIeQ0wZc6DtJaB77C
+         qxEIDkoQ3uTCgYYP6ee+dDWikpW+roqtweBaIiIoWtjSq4FYdXqgyKlh1W+X3La4Fm52vtXAHZtN
+         QGTtG1RGhbFN1Beh1Gvvwb/4/bNgqE7dUd/HtnmAl9miMe8o0PhKi2Td8y0g6KCLZI2/pJuICMXz
+         dnjGjTzPdhORuURiOksZgiPHNP9JAUHDWW1r+OPS9QwFIP54qQr0+UHN8aGidXfVRritM8e7PP1N
+         R5LyQCRyan35JxttaPmLvptA0qyw5yPWFu32XQJ35apnA6zefnmaTG+WdQKcX+axk8bx65Ova19j
+         4sGwFsa2d8a87btvtEfkwuWh5Y+0+s2aItiBGm2i8aO/oqKMTJPHnJX9UKV2VlhkRc4gTY9Vm88c
+         9hA7KOMDjnU27aGpB1MDlb9xsXyi0R1mzsFVefiNbo+YvY/QSf8tIPPiTv3HgR4teG6SPboOKetE
+         LDXtHUOUAun46pBGkPuCIQkcZei51Ddm7yNS+DaTxhjuZOhyZi63OUzymAIWJzRAScAeLyh3kIwM
+         fsNthC9bD73kiUx22wxEvi4Q1z5/PjwDK5ksK9mzgONMdD7kQmd6UGcxLuFGrzc9gyeW2XCX4yuB
+         ojC/oAmxC3vBwQ1hyA6eYW9FIA8gJLqtIKftoStNYDup+MHOeESwgJpEjllVnj9GeF0Rafxawzyg
+         GY3RRyJ+/h2Bb49MZ1M4v1OtyvfDCZ385DVdO8Giy0MtsJfx/Myd19ZKXJOV2CLjCd3C+X9PkF9j
+         dtbMCzek2zsz+UuQje9bwlDnHjfXsNP4CWz4KdJVeJTTCZ/gIIEFQ/nLuEY5B5a6TiIRw2GSgKb1
+         IuK2uEJ7zCVPN4ZY0MJqwYJvHqlA7dG61k1q1cZNAVu2p6grqa1NAy2ZP/VkteQ6TsjM/1i1neey
+         1w/VaxJUdXnxVCxYyFJBB4i25C04vT
+Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
+ allocation and free it on mm exit
+To:     Fenghua Yu <fenghua.yu@intel.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Ravi V Shankar <ravi.v.shankar@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        x86 <x86@kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        iommu <iommu@lists.linux-foundation.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
+ <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
+ <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
+ <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
+ <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
+ <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
+ <YllADL6uMoLllzQo@fyu1.sc.intel.com>
+ <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
+ <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
+ <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
+ <YllnAPUlh3KHwjXq@fyu1.sc.intel.com>
+From:   "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>
+X-OQ-MSGID: <06436154-03dc-96c3-4e75-b7d982832d8a@foxmail.com>
+Date:   Sat, 16 Apr 2022 09:30:21 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
+In-Reply-To: <YllnAPUlh3KHwjXq@fyu1.sc.intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Language: en-US
+X-Spam-Status: No, score=-0.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,HELO_DYNAMIC_IPADDR,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,29 +91,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's fashion to use the icc_sync_state callback to notify the framework
-when all consumers are probed, so that the bandwidth request doesn't
-need to stay on maximum value.
 
-Do the same thing for msm8939 driver.
 
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
----
- drivers/interconnect/qcom/msm8939.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2022/4/15 下午8:37, Fenghua Yu wrote:
+> Hi, Zhangfei,
+>
+> On Fri, Apr 15, 2022 at 07:52:03PM +0800, zhangfei.gao@foxmail.com wrote:
+>>
+>> On 2022/4/15 下午6:50, Fenghua Yu wrote:
+>>> Hi, Zhangfei,
+>>>
+>>> On Fri, Apr 15, 2022 at 06:14:09PM +0800, zhangfei.gao@foxmail.com wrote:
+>>> I download this patch from:
+>>> https://lore.kernel.org/lkml/YllADL6uMoLllzQo@fyu1.sc.intel.com/raw
+>>> git am to either v5.18-rc2 or the latest upstream without any issue.
+>> It is my copy paste issue.
+>>
+>> I have tested, nginx woks well.
+> Great!
+>
+>> Other than the following issue,
+>> Each time /sbin/nginx will alloc ioasid but not free.
+>> which I think it maybe nginx issue or the mis-usage, will ask there.
+> Which nginx/openssl function is supposed to call kernel sva_unbind? I couldn't
+> find the function in nginx tree.
+>
+> If nginx doesn't free ioasid, it will cause ioasid leak and memory leak.
+Yes
 
-diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
-index f9c2d7d3100d..ca5f611d33b0 100644
---- a/drivers/interconnect/qcom/msm8939.c
-+++ b/drivers/interconnect/qcom/msm8939.c
-@@ -1423,6 +1423,7 @@ static struct platform_driver msm8939_noc_driver = {
- 	.driver = {
- 		.name = "qnoc-msm8939",
- 		.of_match_table = msm8939_noc_of_match,
-+		.sync_state = icc_sync_state,
- 	},
- };
- module_platform_driver(msm8939_noc_driver);
--- 
-2.25.1
+In my case, sva_bind/unbind is from openssl_engine, bind_fn, not in 
+nginx itself
+nginx will use openssl -> openssl engine.
+
+nginx:
+src/core/nginx.c
+main
+ngx_ssl_init(log);
+
+OPENSSL_init_ssl(OPENSSL_INIT_LOAD_CONFIG, NULL)
+
+
+openssl_engine
+IMPLEMENT_DYNAMIC_BIND_FN(bind_fn)
+bind_fn
+sva_bind
+
+destroy
+sva_unbind
+
+But destroy seems not called in sbin/nginx -s quit.
+
+
+Thanks
+
 

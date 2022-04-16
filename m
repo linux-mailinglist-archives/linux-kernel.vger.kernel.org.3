@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1FC250344B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB9B503344
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbiDPCWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33448 "EHLO
+        id S229543AbiDPCFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbiDPCWd (ORCPT
+        with ESMTP id S229477AbiDPCEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:22:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0F6F259A5C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650075602;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WHdkIGOQ4zsXGJMmIQm5BnGhIzeJfdILazCRmHTjv9o=;
-        b=Itj6UmryGVlGsZCDpuFP5eolcQGeqHyYiUUM18a7ivRvEukXJkUp0SBnk/5naAKMxfDfdg
-        3ZWiQYH77kSK8g6pIYAH+1pUsK1pISesH4uKeeW74/EJyEz9uU8AVqWAwux4vV1jRuZQwH
-        xTETAPU/WxXdsx3s5RqFL//QMGRP5Dc=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-241-5ZrlfmDYOhG_DXlc3WHTKQ-1; Fri, 15 Apr 2022 21:07:55 -0400
-X-MC-Unique: 5ZrlfmDYOhG_DXlc3WHTKQ-1
-Received: by mail-qt1-f197.google.com with SMTP id u29-20020a05622a199d00b002e06ae2f56cso6118328qtc.12
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:07:55 -0700 (PDT)
+        Fri, 15 Apr 2022 22:04:42 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711DD137B27;
+        Fri, 15 Apr 2022 18:54:08 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u18so11727039eda.3;
+        Fri, 15 Apr 2022 18:54:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Bf9ok3qqr2tkNhXNTndNo5u+WE3bYamPKOf2o8UuHw=;
+        b=XjCVFe5nIUhZlq4sKzILLAUdIcxaTYQDznCGjtGrbpXRwwYQ3M8wUeCXPgk46XJoD3
+         7XUMZmoK8UrtKecT8Y4P1PpUGnksBn1GcIkLrYuB5duFNp4tu+okUQL5HFRmNCfKaXgi
+         AROzOsRZwhOvzwFhvzB5+VEakpDbJgKQpIyqZBU/mdmOVForkW8DJxB77ZwkUU6mLgTV
+         xNMz+I9FdONbz1R7D9cLrbg1hjv1pyfrumrlSK/pq9FtBDXN0GuLtcFYw5uhO4X8xWWL
+         baktCX0XpEarzZNDA0oFU7Z6Y3n6t38iYUYym5XOLmYW1oRVzJN8q5QFZI9sHQ+FGdXm
+         1cvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WHdkIGOQ4zsXGJMmIQm5BnGhIzeJfdILazCRmHTjv9o=;
-        b=k5xFtcnJwv/Yxm+V8qwY3KgZPiziITKdkRqMdPnRJ602vFbB5N2BeIPLJFAT/WQsoX
-         UkJF+xTDaw6aPwSTd8uzbnf0RQzvsPqXyluuauBWYPEVFuBQrOxLLzvQBvItKGh310ht
-         KGhgwQp7KBJlMwGUM2F3ms44L8XmyizTGX+P8WpSX00M2xt5joEpiTUMKTavnIG6aCn9
-         Qd7xDl2EoueSCqQoyBHGCMUM0OSAB5bXFp8GTH+ucOQ53VAkh737l4+WKH0IiMeer9xj
-         xkljNlmUnZEYMOOJkOBcSOg3ip1D7PX6Iy0oaprKDLCqKGUwsucQfEc31xgUvcFGP9/M
-         qgMw==
-X-Gm-Message-State: AOAM530c1wWD3dw9fZ+SNFg58YWx7ySzxQGvz1+EyqNqQVaxyXakUBO/
-        la66PZLf5uGUZrCJIaFZRPuY9S4ya66tep71f8DEhKCoss2DWzfVlBZTF+fS5K9y/n+PHbwVuzJ
-        mOXgjN0w42OYZYZNQLiWi9lOA
-X-Received: by 2002:a05:622a:52:b0:2e2:3248:c8 with SMTP id y18-20020a05622a005200b002e2324800c8mr1114942qtw.519.1650071274681;
-        Fri, 15 Apr 2022 18:07:54 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzj92WtHRvw4w/rYZujE+e7lZkDtI6tiDDmPcrT25yaw625DfNGxLnrtxheCc/JrQKWUfZT+w==
-X-Received: by 2002:a05:622a:52:b0:2e2:3248:c8 with SMTP id y18-20020a05622a005200b002e2324800c8mr1114931qtw.519.1650071274442;
-        Fri, 15 Apr 2022 18:07:54 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::45])
-        by smtp.gmail.com with ESMTPSA id k66-20020a37ba45000000b0069c5adb2f2fsm3321870qkf.6.2022.04.15.18.07.52
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=2Bf9ok3qqr2tkNhXNTndNo5u+WE3bYamPKOf2o8UuHw=;
+        b=FHS/PIQDOKCgzj3NyhOVkTZB+gFmcUJLhMBheywsFt5npsFNzGrhlQP/lVeLcdqnfv
+         WEG1Zy3lNKj5owIFU/ze06AfUeP9sEk0VbiDOGx4AZ87DIkmAHW8PxwghKr6KxEMbprC
+         7fvbcQulxtk6uN/u5APMBBHPLxoAAQB+fa+mNnii0P1hKrww0no1pERRum1ZDH4ndTpG
+         eTE21D055VFpIPuHOeVi5WvvMOBABE/xdad0URsb5cflszbxkeDiWS6lv0JVW8Qz86t2
+         57Qty+SQHLde7Fi7mgG7wcqYoJWNRfxYM37q0e8G5ReZPzKQtNaYLZdTgAXM06jDNpkQ
+         +SBw==
+X-Gm-Message-State: AOAM531V2QHH+spQiyqjHhmfORBHhn94ihRcoARS8gGz1gM500HnJhwR
+        ElQR2sObC8MNKJnykihLA3Ept/zwjptvfw==
+X-Google-Smtp-Source: ABdhPJzVIQW3hTUxtbFojN9M9UGqtaIuMj0zU3SmMQ6W/p3T3CkqpwCpZtc9yxr9eRL4LR0bx7nWAA==
+X-Received: by 2002:a5d:48d0:0:b0:207:a861:dcc9 with SMTP id p16-20020a5d48d0000000b00207a861dcc9mr1022300wrs.490.1650071963568;
+        Fri, 15 Apr 2022 18:19:23 -0700 (PDT)
+Received: from alaa-emad ([197.57.90.163])
+        by smtp.gmail.com with ESMTPSA id x3-20020a5d6b43000000b001e317fb86ecsm4998374wrw.57.2022.04.15.18.19.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 18:07:53 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 18:07:50 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>
-Cc:     mark.rutland@arm.com, broonie@kernel.org, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Message-ID: <20220416010750.cuf7tf5dgd434kac@treble>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
- <20220408002147.pk7clzruj6sawj7z@treble>
- <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
+        Fri, 15 Apr 2022 18:19:23 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH v2] intel: igb: igb_ethtool.c: Convert kmap() to kmap_local_page()
+Date:   Sat, 16 Apr 2022 03:19:20 +0200
+Message-Id: <20220416011920.5380-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 12:18:13PM -0500, Madhavan T. Venkataraman wrote:
-> > There are actually several similarities between your new format and ORC,
-> > which is also an objtool-created DWARF alternative.  It would be
-> > interesting to see if they could be combined somehow.
-> > 
-> 
-> I will certainly look into it. So, if I decide to merge the two, I might want
-> to make a minor change to the ORC structure. Would that be OK with you?
+The use of kmap() is being deprecated in favor of kmap_local_page()
+where it is feasible.
 
-Yes, in fact I would expect it, since ORC is quite x86-specific at the
-moment.  So it would need some abstractions to make it more multi-arch
-friendly.
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible.
 
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+changes in V2:
+	fix kunmap_local path value to be address
+---
+ drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+index 2a5782063f4c..c14fc871dd41 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
++++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+@@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page);
++	data = kmap_local_page(rx_buffer->page);
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
++	kunmap_local(data);
+ 
+ 	return match;
+ }
 -- 
-Josh
+2.35.2
 

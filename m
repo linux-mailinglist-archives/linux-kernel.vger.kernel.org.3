@@ -2,87 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A708E503669
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5400F50367E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 14:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231818AbiDPLv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 07:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S231842AbiDPLwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 07:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbiDPLv2 (ORCPT
+        with ESMTP id S231835AbiDPLwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 07:51:28 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D8781118;
-        Sat, 16 Apr 2022 04:48:54 -0700 (PDT)
-Received: from localhost.localdomain (unknown [113.200.148.30])
-        by mail.loongson.cn (Coremail) with SMTP id AQAAf9Dxv9cgrVpiHp0lAA--.17905S3;
-        Sat, 16 Apr 2022 19:48:50 +0800 (CST)
-From:   Ze Zhang <zhangze@loongson.cn>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Qing Zhang <zhangqing@loongson.cn>,
-        Ze Zhang <zhangze@loongson.cn>
-Subject: [PATCH 2/2] selftests/ftrace: add mips support for kprobe args syntax tests
-Date:   Sat, 16 Apr 2022 19:48:48 +0800
-Message-Id: <20220416114848.25288-2-zhangze@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20220416114848.25288-1-zhangze@loongson.cn>
-References: <20220416114848.25288-1-zhangze@loongson.cn>
+        Sat, 16 Apr 2022 07:52:21 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3B563C3;
+        Sat, 16 Apr 2022 04:49:49 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id i186so8894634vsc.9;
+        Sat, 16 Apr 2022 04:49:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/pFssxoLZmPuWgKi5vncIMSo1DCdax1EcoWBNQif+HM=;
+        b=D+xkEg1a6hjF1V3UTFFTmAqCKPMeLHkneGOn8hpsmi57kTSwyip+IMCZrj+bER4Duk
+         7v4NA8FQMiEUz6XzVEOxu+E8Lj9Dauk/WdZI52PlGVbMNo8QArXOZoJQRVcaug2ySAq7
+         DnBrKrjR5D3dtThLWaHXkpg/aCaur5J7NdvtsHEizAs4AOkTeygAgYIuq/Ww0Ovh+zzs
+         uHuYtYF0W8DrUNDC1Pj3cYALQF0w9AGPkBuFBfBpow1WomPdiJsKmw6BUnqiIgYPMe2W
+         r4JxsTdMAV5dbdj2VnLno8e3cMna5cgyt3XIk3V/QxUdFB8KoUa9W1KkDKzacrMCCogA
+         kHBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/pFssxoLZmPuWgKi5vncIMSo1DCdax1EcoWBNQif+HM=;
+        b=LaLqS9ABqkDC80eKzcyj69ohKFcVhF58E2ZzW9qTBOwUykszinhXk//+QCyFe4B8fD
+         tuvgRtWbSdBUDskdbXMEmPFMztlQXwMfWC91pOurZyZAbVhG5l3kQ4dRK7C7Mx/AKnKf
+         a1UxwGV4gdEhSTReHAoaru4l01TteMdGrAFY1ad+GOX6k8vpU7+0h50M5WrjPwkI+42g
+         8bsJt3ysnda6L+nQZsr88zA4Fe9OWVeKqofRlpD3yCRmjfrNgmWV8pPGhm4oClv9ReoL
+         knueG6ghplpWruDP02h8YUOs64yV0AsGxXrCkxe5g7ti+tFykjluJtTrtcxswET00WVA
+         vXeQ==
+X-Gm-Message-State: AOAM533FnDfx7HR5+l7UbmUnfYskWKg4qu+Zq/hL6nGktJ6KoBk3ia3i
+        IpWWb14Ksk8dSmdK1d9pb+rNBa0ViT/plEoSg90=
+X-Google-Smtp-Source: ABdhPJzV0vJqdRlkVn0eXLetCb0I4Oj/t7WT0wQIPKQWRfA8TMOAoDvltO8LyX0LPgc4HoeBZl/BvARKr7B62um/xHU=
+X-Received: by 2002:a67:2d51:0:b0:32a:c2b:78c4 with SMTP id
+ t78-20020a672d51000000b0032a0c2b78c4mr758801vst.36.1650109788662; Sat, 16 Apr
+ 2022 04:49:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf9Dxv9cgrVpiHp0lAA--.17905S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1kJw1UGryDKrWktF4xWFg_yoW3KFXE9a
-        4Iy3s7CrWUZFyqqr48tr15Crs5G39rWr1xtrWDXryrtryUXw45tayDCFykGF4fWa93XFy2
-        yanrZr4Svw4jgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb6xFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGwA2048vs2IY02
-        0Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS
-        0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
-        IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
-        Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j
-        6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64
-        vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0x
-        vEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUsqXdUUUUU=
-X-CM-SenderInfo: x2kd0wt2h6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220416074817.571160-1-k.kahurani@gmail.com> <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+In-Reply-To: <65c52645-26e8-ff2b-86dc-b5dd697317f9@gmail.com>
+From:   David Kahurani <k.kahurani@gmail.com>
+Date:   Sat, 16 Apr 2022 14:49:37 +0300
+Message-ID: <CAAZOf27Q-QQ51pGO1gFETNR0ASg6zmxF4HUFUVn77oL3Cs7LEg@mail.gmail.com>
+Subject: Re: [PATCH] net: ax88179: add proper error handling of usb read errors
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     netdev@vger.kernel.org,
+        syzbot <syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com>,
+        davem@davemloft.net, jgg@ziepe.ca, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Phillip Potter <phil@philpotter.co.uk>,
+        syzkaller-bugs@googlegroups.com, arnd@arndb.de,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the mips variant of commit <3990b5baf225> ("selftests/ftrace:
-Add s390 support for kprobe args tests").
+On Sat, Apr 16, 2022 at 2:10 PM Pavel Skripkin <paskripkin@gmail.com> wrote:
+>
+> Hi David,
 
-Signed-off-by: Ze Zhang <zhangze@loongson.cn>
----
- .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc      | 4 ++++
- 1 file changed, 4 insertions(+)
+Hi Pavel.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-index 47d84b5cb6ca..d4662c8cf407 100644
---- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-+++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc
-@@ -36,6 +36,10 @@ s390*)
-   GOODREG=%r2
-   BADREG=%s2
- ;;
-+mips*)
-+  GOODREG=%r4
-+  BADREG=%r12
-+;;
- *)
-   echo "Please implement other architecture here"
-   exit_untested
--- 
-2.20.1
+>
+> one more small comment
+>
+> On 4/16/22 10:48, David Kahurani wrote:
+> > Reads that are lesser than the requested size lead to uninit-value bugs.
+> > In this particular case a variable which was supposed to be initialized
+> > after a read is left uninitialized after a partial read.
+> >
+> > Qualify such reads as errors and handle them correctly and while at it
+> > convert the reader functions to return zero on success for easier error
+> > handling.
+> >
+> > Fixes: e2ca90c276e1 ("ax88179_178a: ASIX AX88179_178A USB 3.0/2.0 to
+> > gigabit ethernet adapter driver")
+> > Signed-off-by: David Kahurani <k.kahurani@gmail.com>
+> > Reported-and-tested-by: syzbot+d3dbdf31fbe9d8f5f311@syzkaller.appspotmail.com
+> > ---
+>
+> [code snip]
+>
+> > @@ -1295,6 +1439,7 @@ static int ax88179_led_setting(struct usbnet *dev)
+> >   static void ax88179_get_mac_addr(struct usbnet *dev)
+> >   {
+> >       u8 mac[ETH_ALEN];
+> > +     int ret;
+> >
+> >       memset(mac, 0, sizeof(mac));
+> >
+> > @@ -1303,8 +1448,12 @@ static void ax88179_get_mac_addr(struct usbnet *dev)
+> >               netif_dbg(dev, ifup, dev->net,
+> >                         "MAC address read from device tree");
+> >       } else {
+> > -             ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
+> > -                              ETH_ALEN, mac);
+> > +             ret = ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
+> > +                                    ETH_ALEN, mac);
+> > +
+> > +             if (ret)
+> > +                     netdev_dbg(dev->net, "Failed to read NODE_ID: %d", ret);
+> > +
+> >               netif_dbg(dev, ifup, dev->net,
+> >                         "MAC address read from ASIX chip");
+> >       }
+>
+>
+> This message sequence is confusing.
+>
+> In case of ax88179_read_cmd() failure mac read from device actually
+> failed, but message says, that it was successfully finished.
 
+I suppose the code should return in case of an error that way the next
+message does not get executed.
+
+Thanks for the review! Will fix it and the other issue in the next version.
+
+>
+>
+>
+>
+>
+> With regards,
+> Pavel Skripkin

@@ -2,131 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86550503735
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C1F503742
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 17:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232348AbiDPO5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 10:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34502 "EHLO
+        id S232400AbiDPPGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 11:06:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231615AbiDPO46 (ORCPT
+        with ESMTP id S231328AbiDPPGN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 10:56:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A7CF65D7;
-        Sat, 16 Apr 2022 07:54:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0C0B60F54;
-        Sat, 16 Apr 2022 14:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1A79C385A3;
-        Sat, 16 Apr 2022 14:54:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650120865;
-        bh=Kfk0kOIGY6+UE7statVAbsazZExO99gSHyvkgaaYaE0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=C6FM+SFLqI1f6phrqG6fizT9LvlYzD9RpX8fODD7AIlcNSnJsP2RelBM3kT40NvXk
-         MZDBZOTU6Hq3pHsHMeRwLY6MMbcj9FQH1bg9k48fXvI3W5eFwMBWjcUCZf5WdrR3P1
-         EZhrNG97K8LWBJuVdFggSmiyURbYp6UqeXsUmTLbp4GaFUzgt5A8wi+qPTMVQ8E26f
-         qJTMC5LjYLGhjORKttDkJd6X/qk6QeUXrIbB6LZklE/CqX+3kXuH88WFbEwnR4FKbP
-         zF8AyvIF6ws2R2Pd8rwKLh39e6HkcSk2MyLCQR0grY5R4FCrrglMDAIDI+WqsWYgQ4
-         JwfVzXviH62OQ==
-Date:   Sat, 16 Apr 2022 16:02:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-iio@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: Re: [PATCH v1 2/3] iio: ABI: adc: ad4130: document
- filter_mode{,_available}
-Message-ID: <20220416160222.23e1a6db@jic23-huawei>
-In-Reply-To: <20220413094011.185269-2-cosmin.tanislav@analog.com>
-References: <20220413094011.185269-1-cosmin.tanislav@analog.com>
-        <20220413094011.185269-2-cosmin.tanislav@analog.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 16 Apr 2022 11:06:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7AFF2BD7
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 08:03:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650121419;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZvPiHkSsybJKbaICRFimMUslIagGag6L8MG9t53Sk5c=;
+        b=B7MFi3I1u0L+F+GHzyK6gEdp3RuC6cU9LcktZRcs3vfUmND9PFD8OSHbB3jhviylXeeYL8
+        RobXuCruU9qEfrRD64c92kWpwUxYtb+3cxnuTz40iWj0tIDpEQnGp7HDkOmpreeZwlado+
+        BuHoD4Chj0Z8jUyY+zGNkZ8nKHIYUMc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-614-mgMR-a0oNI6QjHK3UQtzeA-1; Sat, 16 Apr 2022 11:03:38 -0400
+X-MC-Unique: mgMR-a0oNI6QjHK3UQtzeA-1
+Received: by mail-qk1-f200.google.com with SMTP id bp31-20020a05620a459f00b00699fabcc554so7326890qkb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 08:03:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ZvPiHkSsybJKbaICRFimMUslIagGag6L8MG9t53Sk5c=;
+        b=ddmVSU82rmdKwpardmPVNpaa8KdGPHha/1zpJ5ooRBZvBIayFZQO3IoSPbbvOlq3DX
+         1HoLIIQHAbFrPRDIspTYo1OXsKKYM+/1fbfq+K7ROd6nq475G9zLOqzPx+q2zsdAqdZF
+         BlOoBQ56V2I+WOZZPcxscOI7b0CdlDZijc7r1N8l+vyYndYeWQmPcKSD6U4aBt89Xc0g
+         P2BS/475z/xXCru/zTz+EdRUOJOrR9fD6Z1mSo/p2SP08MAeXU5B53pWzFCuDB/FhDGi
+         iUnG8Wfr6ZA5dyR1GRjDtRvjzGZKGgxbsPkE/a5PhsH2+RSAgQEMcxTNsozDKUbH1ifW
+         e5mQ==
+X-Gm-Message-State: AOAM531gpmapLbvmeNNbgGXmMHsvzF7h57CYbjTGJ+ql2icEOPJHHlUj
+        bf6aD1U+IhAeqlcePerW/NUWaXiJjHkOd9Bm5gB1djpZey6NFLduimdG+0s+wtOkCMfJJlTEu0l
+        BxQI7xY/Up9zUkefZ0sOEFQJQ
+X-Received: by 2002:a37:96c7:0:b0:69e:6e80:c6e0 with SMTP id y190-20020a3796c7000000b0069e6e80c6e0mr2071109qkd.231.1650121417624;
+        Sat, 16 Apr 2022 08:03:37 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxJ7ud81zt0HcXyrzMQSRd3pdTbe4rmk0vT7vW7uSmkoSngybtu2CHbkKFUx/9v5XnmVKQ6KQ==
+X-Received: by 2002:a37:96c7:0:b0:69e:6e80:c6e0 with SMTP id y190-20020a3796c7000000b0069e6e80c6e0mr2071070qkd.231.1650121417042;
+        Sat, 16 Apr 2022 08:03:37 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::45])
+        by smtp.gmail.com with ESMTPSA id p13-20020a05622a048d00b002e1ce0c627csm4826920qtx.58.2022.04.16.08.03.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 08:03:36 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 08:03:33 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     Joe Perches <joe@perches.com>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] MAINTAINERS: Add x86 unwinders entry
+Message-ID: <20220416150333.57xbzdbxe74v5hku@treble>
+References: <7b9eb43c029d20676d9173ec5b2c675b43e2a99c.1650068519.git.jpoimboe@redhat.com>
+ <5ee2984b7c0130df1ddbe8b8fc72b66331b214b0.camel@perches.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <5ee2984b7c0130df1ddbe8b8fc72b66331b214b0.camel@perches.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 12:40:10 +0300
-Cosmin Tanislav <demonsingur@gmail.com> wrote:
-
-> AD4130-8 is an ultra-low power, high precision,
-> measurement solution for low bandwidth battery
-> operated applications.
+On Fri, Apr 15, 2022 at 06:46:33PM -0700, Joe Perches wrote:
+> On Fri, 2022-04-15 at 17:22 -0700, Josh Poimboeuf wrote:
+> > Create a new section for x86 unwinder maintenance.
+> > 
+> > Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> []
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> []
+> > @@ -21434,6 +21434,15 @@ F:	arch/x86/include/asm/uv/
+> >  F:	arch/x86/kernel/apic/x2apic_uv_x.c
+> >  F:	arch/x86/platform/uv/
+> >  
+> > +X86 UNWINDERS
+> > +M:	Josh Poimboeuf <jpoimboe@redhat.com>
+> > +M:	Peter Zijlstra <peterz@infradead.org>
+> > +S:	Supported
+> > +F:	arch/x86/include/asm/unwind*.h
+> > +F:	arch/x86/kernel/dumpstack.c
+> > +F:	arch/x86/kernel/stacktrace.c
+> > +F:	arch/x86/kernel/unwind_*,c
 > 
-> The fully integrated AFE (Analog Front-End)
-> includes a multiplexer for up to 16 single-ended
-> or 8 differential inputs, PGA (Programmable Gain
-> Amplifier), 24-bit Sigma-Delta ADC, on-chip
-> reference and oscillator, selectable filter
-> options, smart sequencer, sensor biasing and
-> excitation options, diagnostics, and a FIFO
-> buffer.
+> Should be a period not a comma.
 > 
-> Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
-> ---
->  .../ABI/testing/sysfs-bus-iio-adc-ad4130      | 36 +++++++++++++++++++
->  1 file changed, 36 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
-> 
-> diff --git a/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130 b/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
-> new file mode 100644
-> index 000000000000..942150991e75
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-iio-adc-ad4130
-> @@ -0,0 +1,36 @@
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltage-voltage_filter_mode_available
-> +KernelVersion:
+> F:	arch/x86/kernel/unwind_*.c
 
-Make a guess at the kernel version (hopefully this cycle!)
-We never remember to fill these in later so better to have it slightly wrong
-than not present at all.
+Argh, sorry.
 
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Reading returns a list with the possible filter modes.
-> +		"sinc4"       - Sinc 4. Excellent noise performance. Long 1st
-> +				conversion time. No natural 50/60Hz rejection.
-> +		"sinc4+sinc1" - Sinc4 + averaging by 8. Low 1st conversion time.
-> +		"sinc3"	      - Sinc3. Moderate 1st conversion time. Good noise
-> +				performance.
-> +		"sinc3+rej60" - Sinc3 + 60Hz rejection. At a sampling frequency
-> +				of 50Hz, achieves simultaneous 50Hz and 60Hz
-> +				rejection.
-> +		"sinc3+sinc1" - Sinc3 + averaging by 8. Low 1st conversion time.
-> +				Best used with a sampling frequency of at least
-> +				216.19Hz.
-> +		"sinc3+pf1"   - Sinc3 + Post Filter 1.
-> +				53dB rejection @ 50Hz, 58dB rejection @ 60Hz.
-> +		"sinc3+pf2"   - Sinc3 + Post Filter 2.
-> +				70dB rejection @ 50Hz, 70dB rejection @ 60Hz.
-> +		"sinc3+pf3"   - Sinc3 + Post Filter 3.
-> +				99dB rejection @ 50Hz, 103dB rejection @ 60Hz.
-> +		"sinc3+pf4"   - Sinc3 + Post Filter 4.
-> +				103dB rejection @ 50Hz, 109dB rejection @ 60Hz.
-> +
-> +What:		/sys/bus/iio/devices/iio:deviceX/in_voltageY-voltageZ_filter_mode
-> +KernelVersion:
-> +Contact:	linux-iio@vger.kernel.org
-> +Description:
-> +		Set the filter mode of the differential channel. When the filter
-> +		mode changes, the in_voltageY-voltageZ_sampling_frequency and
-> +		in_voltageY-voltageZ_sampling_frequency_available attributes
-> +		might also change to accomodate the new filter mode.
-> +		If the current sampling frequency is out of range for the new
-> +		filter mode, the sampling frequency will be changed to the
-> +		closest valid one.
+-- 
+Josh
 

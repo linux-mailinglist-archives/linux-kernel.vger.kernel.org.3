@@ -2,115 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D635037AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 19:00:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD93F50379E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232666AbiDPRDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 13:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
+        id S232608AbiDPQuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 12:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232651AbiDPRDK (ORCPT
+        with ESMTP id S230215AbiDPQuN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 13:03:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1D264719;
-        Sat, 16 Apr 2022 10:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650128436; x=1681664436;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=c41hGLHaAehdnBiHkOfPD2fC/yD5IiZ95Pu4yRuFNdQ=;
-  b=lCr/dbNB89qGPJt8IL6ZjkNpEVK26XQ67133LX25i9vNkP8RuRbjjMaB
-   gfe361BgLrm+krMkh+5wi7nbiEq9DGFHAcqGQOAKX7yHKWVW/KWtMuXI1
-   rkP366puqnkTW7j+2vFS6ecG8bNG6VGCF84G4rYiiURMX3/nvk+Z+G1GT
-   wT65BZd3XYGGrjdMFur2VwWqBXWpwJR4FIxxWmFK/Kl4Mj4ekRVrMkP3c
-   oN+OQFfhoenPxdGOXzjOSJfz6POzZJuWl9oYslLbaqAx8kK4LRhEwkxzo
-   oOjkcjQ5OHzlPWYMhSGHk7rD6MZYyuvmoJUl2NXMukMZjkW8CRL+P9EgN
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262767296"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="262767296"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 10:00:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="701369843"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by fmsmga001.fm.intel.com with ESMTP; 16 Apr 2022 10:00:33 -0700
-Date:   Sun, 17 Apr 2022 00:53:01 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@xilinx.com
-Subject: Re: [PATCH v4 3/5] fpga: fpga-mgr: fix kernel-doc warnings
-Message-ID: <20220416165301.GG301222@yilunxu-OptiPlex-7050>
-References: <20220416133719.3382895-1-nava.manne@xilinx.com>
- <20220416133719.3382895-4-nava.manne@xilinx.com>
+        Sat, 16 Apr 2022 12:50:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1E23EBBA;
+        Sat, 16 Apr 2022 09:47:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1352260FA5;
+        Sat, 16 Apr 2022 16:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E915AC385A1;
+        Sat, 16 Apr 2022 16:47:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650127659;
+        bh=I9SQ/1M0IlqjNpmio88+EWzDa36Hz8NSAa4kUa1McH8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e6a0B6zROXH6GbntRfooeLrPhB+t9AwCtQj7BMv5V/qsvOMg0XhKWL1ZPz/BySuSa
+         fmYNZrF+S5wPt7XurnaN8oXd5gfTXdu6kl/KdPj75iOUbdhT3WoaqI9RVrVzSzicZN
+         lfzw9D9s7kMaR6PijT3ez5CL0KoD0+cRcvlVL0N8FrLShhp926OHqGX4jxDvj2IZOG
+         JHB2sJrpb/2FPPZgZM3ASF1oh91WBJQAF/IjdaZM203uSsMMQaterG+Y51PAskc/9m
+         EAE4ssbYyNj5TqdsAi7DYyFmo0vQH2+/gJ1D32A5D2PQxEQ7jOW1DdSJHWp08TpaLF
+         Q7yAnPofnqTYg==
+Date:   Sat, 16 Apr 2022 17:55:37 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Jagath Jog J <jagathjog1996@gmail.com>
+Cc:     dan@dlrobertson.com, andy.shevchenko@gmail.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 9/9] iio: accel: bma400: Add support for activity and
+ inactivity events
+Message-ID: <20220416175537.193cfc10@jic23-huawei>
+In-Reply-To: <20220411203133.19929-10-jagathjog1996@gmail.com>
+References: <20220411203133.19929-1-jagathjog1996@gmail.com>
+        <20220411203133.19929-10-jagathjog1996@gmail.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416133719.3382895-4-nava.manne@xilinx.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 07:07:17PM +0530, Nava kishore Manne wrote:
-> warnings: No description found for return value of 'xxx'
+On Tue, 12 Apr 2022 02:01:33 +0530
+Jagath Jog J <jagathjog1996@gmail.com> wrote:
+
+> Add support for activity and inactivity events for all axis based on the
+> threshold, duration and hysteresis value set from the userspace. INT1 pin
+> is used to interrupt and event is pushed to userspace.
 > 
-> In-order to fix the above kernel-doc warnings added the
-> 'Return' description for 'devm_fpga_mgr_register_full()'
-> and 'devm_fpga_mgr_register()' API's.
-
-                                 APIs.
-
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-
-With the minor fix, please add my Acked-by.
-
-Acked-by: Xu Yilun <yilun.xu@intel.com>
-
+> Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
 > ---
-> Changes for v2:
->                 -Replaced s/@return:/Return:/
-> Changes for v3:
->                -Updated commit description.
-> Changes for v4:
->                -Updated commit description.
+>  drivers/iio/accel/bma400.h      |  11 ++
+>  drivers/iio/accel/bma400_core.c | 229 ++++++++++++++++++++++++++++++++
+>  2 files changed, 240 insertions(+)
 > 
->  drivers/fpga/fpga-mgr.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
-> index a699cc8e2fa6..0f2b28538f17 100644
-> --- a/drivers/fpga/fpga-mgr.c
-> +++ b/drivers/fpga/fpga-mgr.c
-> @@ -730,6 +730,8 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
->   * @parent:	fpga manager device from pdev
->   * @info:	parameters for fpga manager
->   *
-> + * Return:  fpga manager pointer on success, negative error code otherwise.
-> + *
->   * This is the devres variant of fpga_mgr_register_full() for which the unregister
->   * function will be called automatically when the managing device is detached.
->   */
-> @@ -763,6 +765,8 @@ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
->   * @mops:	pointer to structure of fpga manager ops
->   * @priv:	fpga manager private data
->   *
-> + * Return:  fpga manager pointer on success, negative error code otherwise.
-> + *
->   * This is the devres variant of fpga_mgr_register() for which the
->   * unregister function will be called automatically when the managing
->   * device is detached.
-> -- 
-> 2.25.1
+> diff --git a/drivers/iio/accel/bma400.h b/drivers/iio/accel/bma400.h
+> index bc4641279be3..cbf8035c817e 100644
+> --- a/drivers/iio/accel/bma400.h
+> +++ b/drivers/iio/accel/bma400.h
+> @@ -93,6 +93,17 @@
+>  #define BMA400_ACC_ODR_MIN_WHOLE_HZ 25
+>  #define BMA400_ACC_ODR_MIN_HZ       12
+>  
+> +/* Generic interrupts register */
+> +#define BMA400_GEN1INT_CONFIG0      0x3f
+> +#define BMA400_GEN2INT_CONFIG0      0x4A
+> +#define BMA400_GEN_CONFIG1_OFF      0x01
+> +#define BMA400_GEN_CONFIG2_OFF      0x02
+> +#define BMA400_GEN_CONFIG3_OFF      0x03
+> +#define BMA400_GEN_CONFIG31_OFF     0x04
+> +#define BMA400_INT_GEN1_MSK         BIT(2)
+> +#define BMA400_INT_GEN2_MSK         BIT(3)
+> +#define BMA400_GEN_HYST_MSK         GENMASK(1, 0)
+> +
+>  /*
+>   * BMA400_SCALE_MIN macro value represents m/s^2 for 1 LSB before
+>   * converting to micro values for +-2g range.
+> diff --git a/drivers/iio/accel/bma400_core.c b/drivers/iio/accel/bma400_core.c
+> index b6c79cfabaa4..226a5f63d1a6 100644
+> --- a/drivers/iio/accel/bma400_core.c
+> +++ b/drivers/iio/accel/bma400_core.c
+> @@ -79,6 +79,7 @@ struct bma400_data {
+>  	int steps_enabled;
+>  	bool step_event_en;
+>  	bool activity_event_en;
+> +	u8 generic_event_en;
+>  	/* Correct time stamp alignment */
+>  	struct {
+>  		__le16 buff[3];
+> @@ -188,6 +189,25 @@ static const struct iio_event_spec bma400_activity_event = {
+>  	.mask_shared_by_type = BIT(IIO_EV_INFO_ENABLE),
+>  };
+>  
+> +static const struct iio_event_spec bma400_accel_event[] = {
+> +	{
+> +		.type = IIO_EV_TYPE_MAG,
+> +		.dir = IIO_EV_DIR_FALLING,
+> +		.mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
+> +				       BIT(IIO_EV_INFO_PERIOD) |
+> +				       BIT(IIO_EV_INFO_HYSTERESIS) |
+> +				       BIT(IIO_EV_INFO_ENABLE),
+> +	},
+> +	{
+> +		.type = IIO_EV_TYPE_MAG,
+> +		.dir = IIO_EV_DIR_RISING,
+> +		.mask_shared_by_type = BIT(IIO_EV_INFO_VALUE) |
+> +				       BIT(IIO_EV_INFO_PERIOD) |
+> +				       BIT(IIO_EV_INFO_HYSTERESIS) |
+> +				       BIT(IIO_EV_INFO_ENABLE),
+> +	},
+> +};
+> +
+>  #define BMA400_ACC_CHANNEL(_index, _axis) { \
+>  	.type = IIO_ACCEL, \
+>  	.modified = 1, \
+> @@ -207,6 +227,8 @@ static const struct iio_event_spec bma400_activity_event = {
+>  		.storagebits = 16,	\
+>  		.endianness = IIO_LE,	\
+>  	},				\
+> +	.event_spec = bma400_accel_event,			\
+> +	.num_event_specs = ARRAY_SIZE(bma400_accel_event)	\
+>  }
+>  
+>  #define BMA400_ACTIVITY_CHANNEL(_chan2) {	\
+> @@ -954,6 +976,17 @@ static int bma400_read_event_config(struct iio_dev *indio_dev,
+>  	struct bma400_data *data = iio_priv(indio_dev);
+>  
+>  	switch (chan->type) {
+> +	case IIO_ACCEL:
+> +		switch (dir) {
+> +		case IIO_EV_DIR_RISING:
+> +			return FIELD_GET(BMA400_INT_GEN1_MSK,
+> +					 data->generic_event_en);
+> +		case IIO_EV_DIR_FALLING:
+> +			return FIELD_GET(BMA400_INT_GEN2_MSK,
+> +					 data->generic_event_en);
+> +		default:
+> +			return -EINVAL;
+> +		}
+>  	case IIO_STEPS:
+>  		return data->step_event_en;
+>  	case IIO_ACTIVITY:
+> @@ -970,8 +1003,74 @@ static int bma400_write_event_config(struct iio_dev *indio_dev,
+>  {
+>  	int ret;
+>  	struct bma400_data *data = iio_priv(indio_dev);
+> +	int reg, msk, value, field_value;
+>  
+>  	switch (chan->type) {
+> +	case IIO_ACCEL:
+> +		switch (dir) {
+> +		case IIO_EV_DIR_RISING:
+> +			reg = BMA400_GEN1INT_CONFIG0;
+> +			msk = BMA400_INT_GEN1_MSK;
+> +			value = 2;
+> +			field_value = FIELD_PREP(BMA400_INT_GEN1_MSK, state);
+
+Hopefully you can use msk in here and the compiler can tell it's constant...
+
+> +			break;
+> +		case IIO_EV_DIR_FALLING:
+> +			reg = BMA400_GEN2INT_CONFIG0;
+> +			msk = BMA400_INT_GEN2_MSK;
+> +			value = 0;
+> +			field_value = FIELD_PREP(BMA400_INT_GEN2_MSK, state);
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +
+> +		mutex_lock(&data->mutex);
+> +		/* Enabling all axis for interrupt evaluation */
+> +		ret = regmap_write(data->regmap, reg, 0xF8);
+> +		if (ret) {
+> +			mutex_unlock(&data->mutex);
+> +			return ret;
+> +		}
+> +
+> +		/* OR combination of all axis for interrupt evaluation */
+> +		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG1_OFF,
+> +				   value);
+> +		if (ret) {
+> +			mutex_unlock(&data->mutex);
+> +			return ret;
+> +		}
+> +
+> +		/* Initial value to avoid interrupts while enabling*/
+> +		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF,
+> +				   0x0A);
+> +		if (ret) {
+> +			mutex_unlock(&data->mutex);
+> +			return ret;
+> +		}
+> +
+> +		/* Initial duration value to avoid interrupts while enabling*/
+> +		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG31_OFF,
+> +				   0x0F);
+> +		if (ret) {
+> +			mutex_unlock(&data->mutex);
+> +			return ret;
+> +		}
+> +
+> +		ret = regmap_update_bits(data->regmap, BMA400_INT1_MAP_REG,
+> +					 msk, field_value);
+> +		if (ret) {
+> +			mutex_unlock(&data->mutex);
+> +			return ret;
+> +		}
+> +
+> +		ret = regmap_update_bits(data->regmap, BMA400_INT_CONFIG0_REG,
+> +					 msk, field_value);
+> +		mutex_unlock(&data->mutex);
+> +		if (ret)
+> +			return ret;
+
+This whole stack or mutex_unlock() error handling is a good hint that you should
+just factor out this case as a separate function then you can use a goto to
+deal with the unlock cleanly.
+
+> +
+> +		set_mask_bits(&data->generic_event_en, msk, field_value);
+> +		return 0;
+>  	case IIO_STEPS:
+>  		mutex_lock(&data->mutex);
+>  		if (!data->steps_enabled) {
+> @@ -1028,6 +1127,118 @@ static int bma400_write_event_config(struct iio_dev *indio_dev,
+>  	}
+>  }
+>  
+> +static int get_gen_config_reg(enum iio_event_direction dir)
+> +{
+> +	switch (dir) {
+> +	case IIO_EV_DIR_FALLING:
+> +		return BMA400_GEN2INT_CONFIG0;
+> +	case IIO_EV_DIR_RISING:
+> +		return BMA400_GEN1INT_CONFIG0;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int bma400_read_event_value(struct iio_dev *indio_dev,
+> +				   const struct iio_chan_spec *chan,
+> +				   enum iio_event_type type,
+> +				   enum iio_event_direction dir,
+> +				   enum iio_event_info info,
+> +				   int *val, int *val2)
+> +{
+> +	struct bma400_data *data = iio_priv(indio_dev);
+> +	int ret;
+> +	u8 reg, duration[2];
+> +
+> +	reg = get_gen_config_reg(dir);
+> +	if (reg < 0)
+> +		return -EINVAL;
+> +
+> +	*val2 = 0;
+> +	switch (info) {
+> +	case IIO_EV_INFO_VALUE:
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_read(data->regmap, reg + BMA400_GEN_CONFIG2_OFF,
+> +				  val);
+> +		mutex_unlock(&data->mutex);
+> +		if (ret)
+> +			return ret;
+> +		return IIO_VAL_INT;
+> +	case IIO_EV_INFO_PERIOD:
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_bulk_read(data->regmap,
+> +				       reg + BMA400_GEN_CONFIG3_OFF,
+> +				       duration, sizeof(duration));
+> +		mutex_unlock(&data->mutex);
+> +		if (ret)
+> +			return ret;
+> +		*val = get_unaligned_be16(duration);
+
+As well as dma safety question, you could just have used a __be16 for
+duration then you can use be16_to_cpu() as you know it is aligned.
+
+> +		return IIO_VAL_INT;
+> +	case IIO_EV_INFO_HYSTERESIS:
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_read(data->regmap, reg, val);
+> +		mutex_unlock(&data->mutex);
+> +		if (ret)
+> +			return ret;
+> +		*val = FIELD_GET(BMA400_GEN_HYST_MSK, *val);
+> +		return IIO_VAL_INT;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+> +static int bma400_write_event_value(struct iio_dev *indio_dev,
+> +				    const struct iio_chan_spec *chan,
+> +				    enum iio_event_type type,
+> +				    enum iio_event_direction dir,
+> +				    enum iio_event_info info,
+> +				    int val, int val2)
+> +{
+> +	struct bma400_data *data = iio_priv(indio_dev);
+> +	int ret;
+> +	u8 reg, duration[2];
+> +
+> +	reg = get_gen_config_reg(dir);
+> +	if (reg < 0)
+> +		return -EINVAL;
+> +
+> +	switch (info) {
+> +	case IIO_EV_INFO_VALUE:
+> +		if (val < 1 || val > 255)
+> +			return -EINVAL;
+> +
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_write(data->regmap, reg + BMA400_GEN_CONFIG2_OFF,
+> +				   val);
+> +		mutex_unlock(&data->mutex);
+> +		return ret;
+> +	case IIO_EV_INFO_PERIOD:
+> +		if (val < 1 || val > 65535)
+> +			return -EINVAL;
+> +
+> +		put_unaligned_be16(val, duration);
+> +
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_bulk_write(data->regmap,
+> +					reg + BMA400_GEN_CONFIG3_OFF,
+> +					duration, sizeof(duration));
+
+I can't remember if we are safe or not with bulk_writes but at least
+in theory we might not be and should be using a dma safe buffer.
+
+Also locking not necessary in various places in here.
+
+> +		mutex_unlock(&data->mutex);
+> +		return ret;
+> +	case IIO_EV_INFO_HYSTERESIS:
+> +		if (val < 0 || val > 3)
+> +			return -EINVAL;
+> +
+> +		mutex_lock(&data->mutex);
+> +		ret = regmap_update_bits(data->regmap, reg,
+> +					 BMA400_GEN_HYST_MSK,
+> +					 FIELD_PREP(BMA400_GEN_HYST_MSK, val));
+> +		mutex_unlock(&data->mutex);
+> +		return ret;
+> +	default:
+> +		return -EINVAL;
+> +	}
+> +}
+> +
+

@@ -2,119 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D16503649
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56C31503653
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiDPLSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 07:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38514 "EHLO
+        id S231752AbiDPL3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 07:29:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbiDPLR5 (ORCPT
+        with ESMTP id S231191AbiDPL2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 07:17:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9A6377FD;
-        Sat, 16 Apr 2022 04:15:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BA4B60E99;
-        Sat, 16 Apr 2022 11:15:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A895DC385A5;
-        Sat, 16 Apr 2022 11:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650107724;
-        bh=nqtzCAVG0UydeJj9805KTNz5rLFTdeSKGY2+Q6Dlv4k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=K+2dJ9pFOvsCgPHvg2S0S3x366hrjxBuSmjcsqUiS9p72g3EW0juNGCqpdL86ne4T
-         MjOu7YszoKpmLWSUOMXdSfzXKBX594H9cwF4evc/r9gSO6xo3+JGt2/0l8g1HWIk4F
-         n0n1QlN4xII1Yao19ZLH7czyqaFwIhgOdwwVRrv8BUQgMQlFUg0jImftfoVuBKMqeE
-         q3LdFkVbxgXu3/S5T7WPHZfpksGMxZ5KldpcQq+JPqXTX1E3uQ1rmgrroMZClUGoP9
-         iVWbwtWMYgHtQim1ovjFVL3d9OVlDDhRcfmRh5F0W47w6JMFBNuXHOeSSzxAVasYt/
-         Ey49IWzqDZNeQ==
-Date:   Sat, 16 Apr 2022 12:23:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] iio: adc: Kconfig: Make RZG2L_ADC depend on ARCH_RZG2L
-Message-ID: <20220416122322.7aa14706@jic23-huawei>
-In-Reply-To: <CAMuHMdViXg2ZpKG+fJJyMjA_uY-7Tu2E1WwWed97OX5LOMq4tQ@mail.gmail.com>
-References: <20220406070315.13862-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-        <20220410174713.1a4e013f@jic23-huawei>
-        <CAMuHMdViXg2ZpKG+fJJyMjA_uY-7Tu2E1WwWed97OX5LOMq4tQ@mail.gmail.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 16 Apr 2022 07:28:54 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C6E33E0DF
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 04:26:22 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id t12so8928078pll.7
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 04:26:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:sender:from:date:message-id:subject:to
+         :content-transfer-encoding;
+        bh=6vYx3JbvVsiL3zhGAbJQC+kPjCGgnDC5DdXmocu9kt0=;
+        b=dH4aJFzB9ro6Cl+9XwLsCtQxoV3IQGnT0s82AN75oFdl9SN5zOB69/ZIheBuZHMEv5
+         oihfoeNKTmB2QwEJZ/Q2Kos+4cLgsq6WMAA4uS/F4SKazM9iAnVYqOSnxEiI9NgdMLfN
+         3yjdYDBxDUsAwhWrOa4qRsAuV/X8gLH7wcazohZgvhy7hjzcdSoxPLvaZmuUmjJqAxH3
+         YmZmt1hiNULim1yBjRmaK7m7EOnxvTlnl6rVog5FJ0G3Lup4LeT+nDC+OhOZ3EwRMHs1
+         dp+lUxY01BsOwj+/8x7TNYcTMTNuW9PUdX+y/2mi92acDyuqAr83XtZnaazUmEDYv227
+         eBJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
+         :to:content-transfer-encoding;
+        bh=6vYx3JbvVsiL3zhGAbJQC+kPjCGgnDC5DdXmocu9kt0=;
+        b=eliN9MUQKZ1dLn+pzDhBIH4Y2KOMzfVo0gYCYMKJiFHqVYuv9UWMhsnMM7KEVyMzV0
+         C00hCIe52pzD1LVd5EAkZgDvaBd/PAWigCg9jJ77idYhgktxoaCJqqUSP0wlTNoFsuxk
+         HeNu4mQn5nIHMehpGG8/vL5dghGbRsZaH6yyzbEmwM5mHgh254+ULfgdjDGLDBCwV9vh
+         1nISLe3Y8MFRIWDfJ8SLK0G9pcMfenLsq9KBaSLKH7bHM4Z/Hod4wioUbpD43fzmCH0+
+         drZzS85Jtrt+2ibaB0oNaaaH8FBqMSeIwF4yp/8hNbpdhf0IKDImWEkM9FeI7nS9rZXE
+         j64Q==
+X-Gm-Message-State: AOAM533ktaEspfqzK1QHnLFONWvz2c7J/highwaXAe2F+X+FnfUoKU3P
+        Bx24mJ8DUrVDKlKepnndVQSWQp5W07kL+Jh5pjg=
+X-Google-Smtp-Source: ABdhPJwYG9iEgrQ+chAVcPtD6ht7kr0qDjIBHCIa/Bq8gZXZbKTieiJnfB3Wp/yu61FpXLUxQyPtjJHgs+V2qliXzT4=
+X-Received: by 2002:a17:902:f64c:b0:156:4349:7e9b with SMTP id
+ m12-20020a170902f64c00b0015643497e9bmr3062845plg.139.1650108382228; Sat, 16
+ Apr 2022 04:26:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Sender: barrlucasnubueke2@gmail.com
+Received: by 2002:a05:6a10:43d5:0:0:0:0 with HTTP; Sat, 16 Apr 2022 04:26:21
+ -0700 (PDT)
+From:   "MR. EDWARD" <edward.esqchambers@gmail.com>
+Date:   Sat, 16 Apr 2022 12:26:21 +0100
+X-Google-Sender-Auth: ZksK-Fp7LqK_0dWs1Xz5mlo2yN0
+Message-ID: <CAHcyid_2Jm6-tzUFMcqhtRzEB=bD3xN701Lh3Jasy8nEicNx6g@mail.gmail.com>
+Subject: =?UTF-8?B?VsOhxb5lbsO9IHDFmcOtamVtY2kh?=
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=2.1 required=5.0 tests=BAYES_40,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 11 Apr 2022 16:40:20 +0200
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Zdrav=C3=ADm V=C3=A1s, kone=C4=8Dn=C4=9B z=C3=ADsk=C3=A1m d=C4=9Bdick=C3=BD=
+ fond s pomoc=C3=AD nov=C3=A9ho partnera.
+Mezit=C3=ADm nemohu zapomenout na va=C5=A1e minul=C3=A9 =C3=BAsil=C3=AD, ab=
+yste mi pomohli
+z=C3=ADskat fond, a=C4=8Dkoli jsme v minulosti neusp=C4=9Bli kv=C5=AFli ned=
+ostatku d=C5=AFv=C4=9Bry
+mezi n=C3=A1mi. Nyn=C3=AD chci, abyste nal=C3=A9hav=C4=9B kontaktoval m=C3=
+=A9ho ctihodn=C3=A9ho otce
+Solomona na jeho e-mailov=C3=A9 adrese ( rev.christlovesolomon@gmail.com )
+Nechal jsem mu v p=C3=A9=C4=8Di o v=C3=A1s =C4=8D=C3=A1stku 800 000 $, tak=
+=C5=BEe ho kontaktujte a
+dejte mu pokyn, aby v=C3=A1m p=C5=99evedl celou =C4=8D=C3=A1stku.
 
-> Hi Jonathan,
-> 
-> On Sun, Apr 10, 2022 at 7:52 PM Jonathan Cameron <jic23@kernel.org> wrote:
-> > On Wed,  6 Apr 2022 08:03:15 +0100
-> > Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> >  
-> > > ADC block is common on Renesas RZ/G2L and RZ/V2L SoC's, so instead of
-> > > adding dependency for each SoC's add dependency on ARCH_RZG2L. The
-> > > ARCH_RZG2L config option is already selected by ARCH_R9A07G044 and
-> > > ARCH_R9A07G054.
-> > >
-> > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>  
-> 
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-Applied. Thanks,
-
-Jonathan
-
-> 
-> > Sounds like a fix?
-> >
-> > If so, please supply a Fixes tag.
-> > no need to resend, just reply with one to this email.  
-> 
-> This is not really a fix, as the original dependency was correct at
-> that time.
-> This is a change to add support for the RZ/V2L (r9a07g054) SoC, and
-> avoiding the need to update the dependencies when support is added
-> for more SoCs of the RZ/G2L family later.
-> 
-> > > --- a/drivers/iio/adc/Kconfig
-> > > +++ b/drivers/iio/adc/Kconfig
-> > > @@ -910,7 +910,7 @@ config ROCKCHIP_SARADC
-> > >
-> > >  config RZG2L_ADC
-> > >       tristate "Renesas RZ/G2L ADC driver"
-> > > -     depends on ARCH_R9A07G044 || COMPILE_TEST
-> > > +     depends on ARCH_RZG2L || COMPILE_TEST
-> > >       help
-> > >         Say yes here to build support for the ADC found in Renesas
-> > >         RZ/G2L family.  
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-
+Pane Edwarde

@@ -2,159 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA8A503511
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EC5550351B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:14:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbiDPID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 04:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42398 "EHLO
+        id S230285AbiDPIQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 04:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230305AbiDPIDs (ORCPT
+        with ESMTP id S230258AbiDPIQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 04:03:48 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A1B100E29;
-        Sat, 16 Apr 2022 01:01:15 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id k5so17041743lfg.9;
-        Sat, 16 Apr 2022 01:01:15 -0700 (PDT)
+        Sat, 16 Apr 2022 04:16:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A8A24B1DC
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 01:14:10 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id v12so8722465plv.4
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 01:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=MXlAdpQLGQGUUo4/nFrsdLnsJFw/wYKXZIo/9dWMKPs=;
-        b=GlWDVh4mGOslT9x+9Cf/M39/Uru7iSzMMGf0MsIHsJOECxtBIQEKSiOhQ6d5pbdf4j
-         0Q4ZSqwrihtygT0jrukCM2I5zVYNwWIr+kQ9Vt/kp3uXZwNjlTgFSu1injKGGeDyIW7w
-         l1qnOjTfmeatmweRiq24gZCi7q6JE9tLgmNi0SvW/Up+I0yjZLEIR58qIBBomdv5S+On
-         o6HQSqmfwHSo2KYKzD3onll3iGoNhgFDBt+GBdRV0h5xCFZ7DjwqXq/3/TE9n4v7T1+2
-         1jE2ZhXcJvn5NewsRez8HY/igateUo1vk+AZ087w895RzKsn83MZsPgSNi2LQnx9IZo6
-         xO2w==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q0bDlxsxRT7vU+fHQb3K3oqWDHlvOU9rQoKkjc4MdmI=;
+        b=Rlap9suIxJ5pg8SxUIUWqby4Zk0PwZcTw0rnmzDiRNfw7DDfFBMql9bN4mo61iQR7O
+         oB09GqjlZ1IhjjewjddzHXyUOBkc0ytZdIBwn7bIVCyo/lqnmw4anwSEN3ExsFWKc6z0
+         qjCJAIEAEXYk9ae9n6s+fIYpAXW6aMEbMz0Igo7Roc7nup3pACEgQVy8aXOW3pmRhnoy
+         +pz6IcqdVab3mCwFVQpPDAykEl1Zfx+u7uXegHVsO/TY50n/Vo15FeyBKcIql+F/Xrrl
+         5DFXw/VqfnUfMR+GDJ+Qs+vRmf2QPQlman7kb5Bgs/1FwAFjvnydIfDV4hj8mrNokwEK
+         VUXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=MXlAdpQLGQGUUo4/nFrsdLnsJFw/wYKXZIo/9dWMKPs=;
-        b=3AjgWXLADfJDv+on13NN3zfZ47SZfUsp17pNBe7w//lEtWWxzNUgzz0VddMAXpb0HE
-         T0EK+G3fhpD9yZ+xYN8dOK1JWd3PubTEmmp0L3LypROMNIzFpck8EX4M8+K/fDxrGP6t
-         K1xJGRcHocCafbGOBNNjWS/fE5KFELlr1KqgozvnwQSkbpQf92G/FB5PsTATTLvYJpo5
-         /afb3mHAvEFGhAQW2I2gLEeR9m3Cf93yXZ2VRxSJNPuwCVmbybfYctNZPB44ukVfJOFo
-         ZLJQ+/WRQHsukEZ7nzMevMFXsuY8OhpYfxNE1pwq3Gls16C5tzScV9Bp9gjHtt0RQ/wk
-         sYyQ==
-X-Gm-Message-State: AOAM533FHeMdhLJw31EoD4cX2ivBL1srpuBbDxO8YuM2EJTLggq1LB2J
-        5Pq7JXUFwCBbNcbtKPSpNdgt99RgsR6fdA==
-X-Google-Smtp-Source: ABdhPJz6CVXoHDhAV9Gyik5pPZg9sjhX0loL8jq9bIV8r8fjCmT8MZhcpEDiC1lO6R2UIgUS5k4BJQ==
-X-Received: by 2002:a05:6512:3c87:b0:46c:fde0:5d2e with SMTP id h7-20020a0565123c8700b0046cfde05d2emr1683544lfv.525.1650096073460;
-        Sat, 16 Apr 2022 01:01:13 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id t25-20020a19dc19000000b0044a16b068c7sm593375lfg.117.2022.04.16.01.01.10
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Q0bDlxsxRT7vU+fHQb3K3oqWDHlvOU9rQoKkjc4MdmI=;
+        b=onWMYSfpy98WIGssdEjGZjDmZChxqW2xI1LyeS9/LVhUBEiOGhFtf1hCJcdXrPqq4X
+         vrlwtgBtXuoroGfzC5fMOJX1tp8j9BKoYi7bJ9aHmaYuQEmp+iE14QkPxTFaXfT8mQkq
+         0trRGpWliMRwqUlawqUQxSjHPZxJu4cXFFatF76Hfwgo4MkCsWKiI7D6oSrhwQ52pkJS
+         hJA3ilPpbU2fkXYNSW46W/7v4l2XzIDMk8XiLa8Qumw4/nJoHW40lPy/0gQyReEv59xC
+         QInkeduXcB2WbHmr/raGbL7N3d6xPtcW+uwzW4GDk0IPcY1ZYO8NdlnGNkTu6mwH67FI
+         1bsA==
+X-Gm-Message-State: AOAM530OsN/sJb34jIjScHhBYojpXW3r1IMKHRIUQ/97+0/pAyVhf+yH
+        DoHv2efYQ6HwAY5QlBbopJE=
+X-Google-Smtp-Source: ABdhPJw8riN/Ffc8z7/sPSIKVbYqeRiW6Dfye8+HFmTkixcO+ut+MjIHsd+lzvV6bYTske1bkH+0iQ==
+X-Received: by 2002:a17:90a:1c08:b0:1cd:474a:a4f8 with SMTP id s8-20020a17090a1c0800b001cd474aa4f8mr2810056pjs.82.1650096850114;
+        Sat, 16 Apr 2022 01:14:10 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:9b6:6aad:72f6:6e16])
+        by smtp.gmail.com with ESMTPSA id oa16-20020a17090b1bd000b001c72b632222sm11527623pjb.32.2022.04.16.01.14.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 01:01:11 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 11:01:09 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Joe Perches <joe@perches.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 03/16] PCI: dwc: Add more verbose link-up message
-Message-ID: <20220416080109.pqnuojor6lewltr3@mobilestation>
-References: <20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru>
- <20220324013734.18234-4-Sergey.Semin@baikalelectronics.ru>
- <8569d431ce4e1d64ae271f0498c7a0395d2c5c7e.camel@perches.com>
+        Sat, 16 Apr 2022 01:14:09 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com,
+        Max Filippov <jcmvbkbc@gmail.com>
+Subject: [PATCH] xtensa: enable KCSAN
+Date:   Sat, 16 Apr 2022 01:13:55 -0700
+Message-Id: <20220416081355.2155050-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8569d431ce4e1d64ae271f0498c7a0395d2c5c7e.camel@perches.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 28, 2022 at 04:31:53PM -0700, Joe Perches wrote:
-> On Thu, 2022-03-24 at 04:37 +0300, Serge Semin wrote:
-> > Printing just "link up" isn't that much informative especially when it
-> > comes to working with the PCI Express bus. Even if the link is up, due to
-> > multiple reasons the bus performance can degrade to slower speeds or to
-> > narrower width than both Root Port and its partner is capable of. In that
-> > case it would be handy to know the link specifications as early as
-> > possible. So let's add a more verbose message to the busy-wait link-state
-> > method, which will contain the link speed generation and the PCIe bus
-> > width in case if the link up state is discovered. Otherwise an error will
-> > be printed to the system log.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware.c | 22 +++++++++++++++-----
-> >  1 file changed, 17 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> []
-> > @@ -528,14 +528,26 @@ int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> >  
-> >  	/* Check if the link is up or not */
-> >  	for (retries = 0; retries < LINK_WAIT_MAX_RETRIES; retries++) {
-> > -		if (dw_pcie_link_up(pci)) {
-> > -			dev_info(pci->dev, "Link up\n");
-> > -			return 0;
-> > -		}
-> > +		if (dw_pcie_link_up(pci))
-> > +			break;
-> > +
-> >  		usleep_range(LINK_WAIT_USLEEP_MIN, LINK_WAIT_USLEEP_MAX);
-> >  	}
-> >  
-> > -	dev_info(pci->dev, "Phy link never came up\n");
-> > +	if (retries < LINK_WAIT_MAX_RETRIES) {
-> > +		u32 offset, val;
-> > +
-> > +		offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-> > +		val = dw_pcie_readw_dbi(pci, offset + PCI_EXP_LNKSTA);
-> > +
-> > +		dev_info(pci->dev, "PCIe Gen.%u x%u link up\n",
-> > +			 FIELD_GET(PCI_EXP_LNKSTA_CLS, val),
-> > +			 FIELD_GET(PCI_EXP_LNKSTA_NLW, val));
-> > +
-> > +		return 0;
-> > +	}
-> > +
-> > +	dev_err(pci->dev, "Phy link never came up\n");
-> >  
-> >  	return -ETIMEDOUT;
-> >  }
-> 
+Prefix arch-specific barrier macros with '__' to make use of instrumented
+generic macros.
+Prefix arch-specific bitops with 'arch_' to make use of instrumented
+generic functions.
+Provide stubs for 64-bit atomics when building with KCSAN.
+Disable KCSAN instrumentation in arch/xtensa/boot.
 
-> IMO: it's generally bette to test the error condition and unindent
-> the typical return.
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/Kconfig               |  1 +
+ arch/xtensa/boot/lib/Makefile     |  1 +
+ arch/xtensa/include/asm/barrier.h |  6 ++--
+ arch/xtensa/include/asm/bitops.h  | 10 +++---
+ arch/xtensa/lib/Makefile          |  2 ++
+ arch/xtensa/lib/kcsan-stubs.c     | 54 +++++++++++++++++++++++++++++++
+ 6 files changed, 67 insertions(+), 7 deletions(-)
+ create mode 100644 arch/xtensa/lib/kcsan-stubs.c
 
-Absolutely right. Thanks for noticing that. No idea why I haven't done
-the way you said 'cause it seems neater, more maintainable than what I
-suggested here.
+diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
+index 797355c142b3..c87f5ab493d9 100644
+--- a/arch/xtensa/Kconfig
++++ b/arch/xtensa/Kconfig
+@@ -29,6 +29,7 @@ config XTENSA
+ 	select HAVE_ARCH_AUDITSYSCALL
+ 	select HAVE_ARCH_JUMP_LABEL if !XIP_KERNEL
+ 	select HAVE_ARCH_KASAN if MMU && !XIP_KERNEL
++	select HAVE_ARCH_KCSAN
+ 	select HAVE_ARCH_SECCOMP_FILTER
+ 	select HAVE_ARCH_TRACEHOOK
+ 	select HAVE_CONTEXT_TRACKING
+diff --git a/arch/xtensa/boot/lib/Makefile b/arch/xtensa/boot/lib/Makefile
+index e3d717c7bfa1..162d10af36f3 100644
+--- a/arch/xtensa/boot/lib/Makefile
++++ b/arch/xtensa/boot/lib/Makefile
+@@ -16,6 +16,7 @@ CFLAGS_REMOVE_inffast.o = -pg
+ endif
+ 
+ KASAN_SANITIZE := n
++KCSAN_SANITIZE := n
+ 
+ CFLAGS_REMOVE_inflate.o += -fstack-protector -fstack-protector-strong
+ CFLAGS_REMOVE_zmem.o += -fstack-protector -fstack-protector-strong
+diff --git a/arch/xtensa/include/asm/barrier.h b/arch/xtensa/include/asm/barrier.h
+index d6f8d4ddc2bc..a22d4bb08159 100644
+--- a/arch/xtensa/include/asm/barrier.h
++++ b/arch/xtensa/include/asm/barrier.h
+@@ -11,9 +11,9 @@
+ 
+ #include <asm/core.h>
+ 
+-#define mb()  ({ __asm__ __volatile__("memw" : : : "memory"); })
+-#define rmb() barrier()
+-#define wmb() mb()
++#define __mb()  ({ __asm__ __volatile__("memw" : : : "memory"); })
++#define __rmb() barrier()
++#define __wmb() mb()
+ 
+ #if XCHAL_HAVE_S32C1I
+ #define __smp_mb__before_atomic()		barrier()
+diff --git a/arch/xtensa/include/asm/bitops.h b/arch/xtensa/include/asm/bitops.h
+index cd225896c40f..e02ec5833389 100644
+--- a/arch/xtensa/include/asm/bitops.h
++++ b/arch/xtensa/include/asm/bitops.h
+@@ -99,7 +99,7 @@ static inline unsigned long __fls(unsigned long word)
+ #if XCHAL_HAVE_EXCLUSIVE
+ 
+ #define BIT_OP(op, insn, inv)						\
+-static inline void op##_bit(unsigned int bit, volatile unsigned long *p)\
++static inline void arch_##op##_bit(unsigned int bit, volatile unsigned long *p)\
+ {									\
+ 	unsigned long tmp;						\
+ 	unsigned long mask = 1UL << (bit & 31);				\
+@@ -119,7 +119,7 @@ static inline void op##_bit(unsigned int bit, volatile unsigned long *p)\
+ 
+ #define TEST_AND_BIT_OP(op, insn, inv)					\
+ static inline int							\
+-test_and_##op##_bit(unsigned int bit, volatile unsigned long *p)	\
++arch_test_and_##op##_bit(unsigned int bit, volatile unsigned long *p)	\
+ {									\
+ 	unsigned long tmp, value;					\
+ 	unsigned long mask = 1UL << (bit & 31);				\
+@@ -142,7 +142,7 @@ test_and_##op##_bit(unsigned int bit, volatile unsigned long *p)	\
+ #elif XCHAL_HAVE_S32C1I
+ 
+ #define BIT_OP(op, insn, inv)						\
+-static inline void op##_bit(unsigned int bit, volatile unsigned long *p)\
++static inline void arch_##op##_bit(unsigned int bit, volatile unsigned long *p)\
+ {									\
+ 	unsigned long tmp, value;					\
+ 	unsigned long mask = 1UL << (bit & 31);				\
+@@ -163,7 +163,7 @@ static inline void op##_bit(unsigned int bit, volatile unsigned long *p)\
+ 
+ #define TEST_AND_BIT_OP(op, insn, inv)					\
+ static inline int							\
+-test_and_##op##_bit(unsigned int bit, volatile unsigned long *p)	\
++arch_test_and_##op##_bit(unsigned int bit, volatile unsigned long *p)	\
+ {									\
+ 	unsigned long tmp, value;					\
+ 	unsigned long mask = 1UL << (bit & 31);				\
+@@ -205,6 +205,8 @@ BIT_OPS(change, "xor", )
+ #undef BIT_OP
+ #undef TEST_AND_BIT_OP
+ 
++#include <asm-generic/bitops/instrumented-atomic.h>
++
+ #include <asm-generic/bitops/le.h>
+ 
+ #include <asm-generic/bitops/ext2-atomic-setbit.h>
+diff --git a/arch/xtensa/lib/Makefile b/arch/xtensa/lib/Makefile
+index 5848c133f7ea..d4e9c397e3fd 100644
+--- a/arch/xtensa/lib/Makefile
++++ b/arch/xtensa/lib/Makefile
+@@ -8,3 +8,5 @@ lib-y	+= memcopy.o memset.o checksum.o \
+ 	   divsi3.o udivsi3.o modsi3.o umodsi3.o mulsi3.o \
+ 	   usercopy.o strncpy_user.o strnlen_user.o
+ lib-$(CONFIG_PCI) += pci-auto.o
++lib-$(CONFIG_KCSAN) += kcsan-stubs.o
++KCSAN_SANITIZE_kcsan-stubs.o := n
+diff --git a/arch/xtensa/lib/kcsan-stubs.c b/arch/xtensa/lib/kcsan-stubs.c
+new file mode 100644
+index 000000000000..2b08faa62b86
+--- /dev/null
++++ b/arch/xtensa/lib/kcsan-stubs.c
+@@ -0,0 +1,54 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bug.h>
++#include <linux/types.h>
++
++void __atomic_store_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_load_8(const volatile void *p, int i)
++{
++	BUG();
++}
++
++u64 __atomic_exchange_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++bool __atomic_compare_exchange_8(volatile void *p1, void *p2, u64 v, bool b, int i1, int i2)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_add_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_sub_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_and_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_or_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_xor_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
++
++u64 __atomic_fetch_nand_8(volatile void *p, u64 v, int i)
++{
++	BUG();
++}
+-- 
+2.30.2
 
--Sergey
-
-> 
-> 	if (retries >= LINK_WAIT_MAX_RETRIES) {
-> 		dev_err(pci->dev, "Phy link never came up\n");
-> 		return -ETIMEDOUT;
-> 	}
-> 
-> 	offset = ...
-> 	val = ...
-> 	dev_info(...)
-> 
-> 	return 0;
-> }
-> 

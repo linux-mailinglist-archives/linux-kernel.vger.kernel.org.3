@@ -2,110 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AEDD50352A
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E168350352E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiDPIYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 04:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
+        id S230343AbiDPI3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 04:29:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiDPIY3 (ORCPT
+        with ESMTP id S229671AbiDPI3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 04:24:29 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC014186D6
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 01:21:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=zo2kez9Tmm6A4y3mcmFjr5uk6/P/xlgMUWSYGBYBkEE=; b=RBsoPUaTWVZ/aw+h4s2eUIX4Di
-        +6ArJacLiSudfTSWv7rJbxmw5NeEW7DyPbS7Lb4EBz/5SYhteQXabFxq2ejFmOkznXP9w4bbwfBHO
-        OxXa03Ko3lXRAdpNVVnUX38KEprpAdQNco5ogEeyjh/6oK/0ChmK/AbF0fFLtPwA8ZBLX1+hp4PN2
-        kmpaEw9sbTRafDx8TEndmzG33tjmdFBMqGcMf1U9sRY+7ak3eIUuL8de2g2agmpovEYeXR8owsybZ
-        /Xva4hxa0Msxq9QusegW9GMjj5DPwHRRYekgHF3Qpebo0vmYZHJOkLgxYXFdTgDHKVLOUxtrIjmjb
-        m/NBE2Ag==;
-Received: from [2a01:799:961:d200:9146:d5a0:be36:3d08] (port=62077)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1nfdgp-0005St-Tm; Sat, 16 Apr 2022 10:21:55 +0200
-Message-ID: <e62b4d4f-ab99-9e8d-51b6-2fda0432e923@tronnes.org>
-Date:   Sat, 16 Apr 2022 10:21:54 +0200
+        Sat, 16 Apr 2022 04:29:01 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4FC33A08;
+        Sat, 16 Apr 2022 01:26:30 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id u18so12283489eda.3;
+        Sat, 16 Apr 2022 01:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=ixYukh5lcPmdBMweBnkornJe58aw5tIVg5x4oR/k4ic=;
+        b=ANDTUvdhwV/3lpttLPtcVsHcQWoIW8nCVC5TRHMRKdXkkgco2TZ/R7Yg5INFF7GGAQ
+         EmnmPhwi0d9VGCsB9njNzDiX5ybwd2P7j91Vm8w7kBksYh+pKKboA2njsKUS/2xA1fix
+         AebYfNvyIC3t5EfMrOAKAYmKrwN3ji0jcpH81Dj5JA2QdUyWFAFXrwoAaa4LgdUzTNmX
+         XCk0/9EtWGkRrLGK9Ly3dUwpmH4GQEjvrnzDkrNExHZMw5bNb8qR6k4WbDbUade4SyeY
+         9oIgHR7vIfx6s2b/kc23s+gl/Sw+cTZ1+oyn3OxpBQ4rx5SRItRcZwEOnO5+3/uIHSlN
+         G5/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=ixYukh5lcPmdBMweBnkornJe58aw5tIVg5x4oR/k4ic=;
+        b=W5KvYBDH8/kbT58mCxdf4gMdOKJHPDI4ZO3HbOSJQ2nb7fOGsyaNvJif6OvK3ZDCcC
+         pFTYjtBj9TO6cdgjf9YYCuyk7WAfqQR9M9M5o/39JM2K12jHmXHKsYLabQd2JoB4MsQ0
+         75Atfsp6Jo8Yl9Ej59/CgmrIaXKoKQa2jm+ryVOpjVkjDpjjlaWQz3kxqcR9Rqd0rYLq
+         J2o8jOJjIIZfjEszZTwx+LGPZ+wbYGUqEZkWTaUMYWFJuBfhvvnpejDoTuNgLSV60zxX
+         PvheQwSleKwvK/zHm88PzzivOcJ2v3uGn9Es2cmfq+CZhI0YrrKetNBY6GbakDzLhSMz
+         ot4Q==
+X-Gm-Message-State: AOAM531bQ8tEH7RP4mr4ha3s4PCuLMlwfDKIOnOYiNKtQJTNt/Lcz6K1
+        /E8YCaRN5IIIDo34sxVeOsEKIDBI1WWU8NvhrsQ=
+X-Google-Smtp-Source: ABdhPJwdg54Fb4NlQ50SlhCchCw49y9IEn5kqQsD5RZVVgFK2JAIE+SusdeKLGFWtmQchPfhPs2WikuitqYfQEwfeq4=
+X-Received: by 2002:a05:6402:d7:b0:413:673:ba2f with SMTP id
+ i23-20020a05640200d700b004130673ba2fmr2820550edu.29.1650097588767; Sat, 16
+ Apr 2022 01:26:28 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] drm/mipi-dbi: Fix max_chunk calculation in spi_transfer
-To:     Yunhao Tian <t123yh.xyz@gmail.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220308015611.3007395-1-t123yh.xyz@gmail.com>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220308015611.3007395-1-t123yh.xyz@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220415070710.220785-1-andrei.lalaev@emlid.com>
+In-Reply-To: <20220415070710.220785-1-andrei.lalaev@emlid.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sat, 16 Apr 2022 11:25:52 +0300
+Message-ID: <CAHp75VdzVj12K=iGY78tdyULyZAL4=fKAX9rBuCyfNXdUeg3MQ@mail.gmail.com>
+Subject: Re: [PATCH v2] gpiolib: of: fix bounds check for 'gpio-reserved-ranges'
+To:     Andrei Lalaev <andrei.lalaev@emlid.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Apr 15, 2022 at 10:09 AM Andrei Lalaev <andrei.lalaev@emlid.com> wrote:
+>
+> Gpiolib interprets the elements of "gpio-reserved-ranges" as "start,size"
+> because it clears "size" bits starting from the "start" bit in the according
+> bitmap. So it has to use "greater" instead of "greater or equal" when performs
+> bounds check to make sure that GPIOs are in the available range.
+> Previous implementation skipped ranges that include the last GPIO in
+> the range.
 
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-Den 08.03.2022 02.56, skrev Yunhao Tian:
-> In __spi_validate, there's a validation that no partial transfers
-> are accepted (xfer->len % w_size must be zero). When
-> max_chunk is not a multiple of bpw (e.g.max_chunk = 65535,
-> bpw = 16), the transfer will be rejected.
-> 
-> This patch clamps max_chunk to the word size, preventing
-
-I think align is a better word here than clamp.
-
-> the transfer from being rejected.
-> 
-> Signed-off-by: Yunhao Tian <t123yh.xyz@gmail.com>
+> Fixes: 726cb3ba4969 ("gpiolib: Support 'gpio-reserved-ranges' property")
+> Signed-off-by: Andrei Lalaev <andrei.lalaev@emlid.com>
 > ---
->  drivers/gpu/drm/drm_mipi_dbi.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/drm_mipi_dbi.c b/drivers/gpu/drm/drm_mipi_dbi.c
-> index 71b646c4131f..440dc9fec6cc 100644
-> --- a/drivers/gpu/drm/drm_mipi_dbi.c
-> +++ b/drivers/gpu/drm/drm_mipi_dbi.c
-> @@ -1182,6 +1182,15 @@ int mipi_dbi_spi_transfer(struct spi_device *spi, u32 speed_hz,
->  	struct spi_message m;
->  	size_t chunk;
->  	int ret;
-> +	int w_size;
-> +
-> +	if (bpw <= 8)
-> +		w_size = 1;
-> +	else if (bpw <= 16)
-> +		w_size = 2;
-> +	else
-> +		w_size = 4;
-> +	max_chunk -= (max_chunk % w_size);
+> I wrote the mail to the maintainers
+> (https://lore.kernel.org/linux-gpio/20220412115554.159435-1-andrei.lalaev@emlid.com/T/#u)
+> of the questioned DTSes (because I couldn't understand how the maintainers
+> interpreted this property), but I haven't received a response.
+> Since the questioned DTSes use "gpio-reserved-ranges = <0 4>"
+> (i.e., the beginning of the range), this patch doesn't affect these DTSes at all.
+> TBH this patch doesn't break any existing DTSes because none of them
+> reserve gpios at the end of range.
+> ---
+>  drivers/gpio/gpiolib-of.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpio/gpiolib-of.c b/drivers/gpio/gpiolib-of.c
+> index ae1ce319cd78..7e5e51d49d09 100644
+> --- a/drivers/gpio/gpiolib-of.c
+> +++ b/drivers/gpio/gpiolib-of.c
+> @@ -910,7 +910,7 @@ static void of_gpiochip_init_valid_mask(struct gpio_chip *chip)
+>                                            i, &start);
+>                 of_property_read_u32_index(np, "gpio-reserved-ranges",
+>                                            i + 1, &count);
+> -               if (start >= chip->ngpio || start + count >= chip->ngpio)
+> +               if (start >= chip->ngpio || start + count > chip->ngpio)
+>                         continue;
+>
+>                 bitmap_clear(chip->valid_mask, start, count);
+> --
+> 2.25.1
+>
 
-mipi_dbi_spi_transfer() is only called with bpw= 8 or 16, so I think
-this can be simplified to: max_chunk = ALIGN_DOWN(max_chunk, 2);
-We might shorten the max transfer by one byte when bpw=8, but that
-doesn't matter. A short comment explaining why we need this would be nice.
 
-Please add a fixes tag so the patch is backported to the stable kernels:
-
-Fixes: d23d4d4dac01 ("drm/tinydrm: Move tinydrm_spi_transfer()")
-
-Noralf.
-
->  
->  	spi_message_init_with_transfers(&m, &tr, 1);
->  
+-- 
+With Best Regards,
+Andy Shevchenko

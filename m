@@ -2,144 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54361503707
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:10:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AE750370E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:20:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232246AbiDPOMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 10:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42546 "EHLO
+        id S232273AbiDPOXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 10:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232233AbiDPOMd (ORCPT
+        with ESMTP id S232263AbiDPOXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 10:12:33 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD234BC15;
-        Sat, 16 Apr 2022 07:09:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=QXg79ITIMb+c/YfTxTorJco9Mt6LYRevJ11/hq3FBHM=;
-  b=fmJwVTpLkxQYJ84reDMPtf2kdPCy1MxrwZogdslFhrQhcidTftQca1zB
-   VDQQHeuEtFCSO4nHYtOSPVwEae3uCetGHZTbhmQlZ770ZtDBtQjqUDskl
-   Uvs9Xz7l5HY7zTbYbVLzjJRxg/3NQdnvRz3VJaSidouSlW2874zxBStNj
-   4=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,264,1643670000"; 
-   d="scan'208";a="32016200"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 16:09:58 +0200
-Date:   Sat, 16 Apr 2022 16:09:58 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ira.weiny@intel.com
-Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
- kmap_local_page()
-In-Reply-To: <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204161608230.3501@hadrien>
-References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com> <alpine.DEB.2.22.394.2204161331080.3501@hadrien> <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 16 Apr 2022 10:23:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9B82C137;
+        Sat, 16 Apr 2022 07:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3553160F50;
+        Sat, 16 Apr 2022 14:20:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B553C385A3;
+        Sat, 16 Apr 2022 14:20:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650118847;
+        bh=cWFwLZ0gsVucA5Es4p84LruYFLWbrqoMEwSN0TuIkzU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=XDzfBSksXEI8qGNWOHFtln3WMB9rNV8dHxdESNVd28Tycyp8gxI14j+GAueK0vdoo
+         x52nmuvKOi1hSqYc4FyW+ZiFl8k9MsO6fSGIxXICkqa6xj2UgMJf5g8fpAvC7hc3Qm
+         6rf3JtbNezGuA1rUkmYwsSVbkciLwK3jKixYXM7M3VFWOjiTTOM7OJuwHxIGmN6cKe
+         7SmTLyrYHEoJrDm01TEbyaZQsSC4a+KXjSLcnqqvQOz2juxXRUqxltuzwlYBj2pg7S
+         jFrMzs+50pBrPEHMhJYcpE1TjyCDemN3Sd0etL4BxaocQo/aNlKeyMr6pZhU2jH7Rr
+         TxBv3XBppqQgA==
+Received: by mail-ed1-f51.google.com with SMTP id b15so12878302edn.4;
+        Sat, 16 Apr 2022 07:20:47 -0700 (PDT)
+X-Gm-Message-State: AOAM533szeMmJ8UzTxnuAh1mNffiQMnXPTMHY67baiGTF2b+7EVaUpk0
+        UlfHq2WtEN5yI9cgHXCeabBLCLnDfmVs7SmzJw==
+X-Google-Smtp-Source: ABdhPJwQkbTe35To395M3KGFQV4l935J7hGJqs1dYrMx9rEk+J0ELzSpWfOjk+VIW7myhFOyzkXfRd5cnptK29wlYcI=
+X-Received: by 2002:a05:6402:350d:b0:419:547f:134a with SMTP id
+ b13-20020a056402350d00b00419547f134amr3964452edd.405.1650118845815; Sat, 16
+ Apr 2022 07:20:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-848588355-1650118198=:3501"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220411035843.19847-1-rex-bc.chen@mediatek.com>
+ <20220411035843.19847-2-rex-bc.chen@mediatek.com> <YldWhNA6SwNBGXa8@robh.at.kernel.org>
+In-Reply-To: <YldWhNA6SwNBGXa8@robh.at.kernel.org>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Sat, 16 Apr 2022 22:20:38 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_8L1EVvAOvD757o3kTq=AKf20yAsDGbuHFQ_mdkfoKwOg@mail.gmail.com>
+Message-ID: <CAAOTY_8L1EVvAOvD757o3kTq=AKf20yAsDGbuHFQ_mdkfoKwOg@mail.gmail.com>
+Subject: Re: [PATCH V2 1/3] dt-bindings: display: mediatek: Update disp_aal
+ binding for MT8183
+To:     Rob Herring <robh@kernel.org>
+Cc:     Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        allen-kh.cheng@mediatek.com,
+        linux-kernel <linux-kernel@vger.kernel.org>, krzk+dt@kernel.org,
+        David Airlie <airlied@linux.ie>,
+        DTML <devicetree@vger.kernel.org>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Project_Global_Chrome_Upstream_Group 
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jason-JH Lin <jason-jh.lin@mediatek.com>,
+        "moderated list:ARM/Mediatek SoC support" 
+        <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-848588355-1650118198=:3501
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Sat, 16 Apr 2022, Alaa Mohamed wrote:
-
+Rob Herring <robh@kernel.org> =E6=96=BC 2022=E5=B9=B44=E6=9C=8814=E6=97=A5 =
+=E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=887:02=E5=AF=AB=E9=81=93=EF=BC=9A
 >
-> On ١٦/٤/٢٠٢٢ ١٣:٣١, Julia Lawall wrote:
+> On Mon, 11 Apr 2022 11:58:41 +0800, Rex-BC Chen wrote:
+> > The driver data of MT8183 and MT8173 are different.
 > >
-> > On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+> > For MT8173, the gamma module is inside disp_aal. When we need to adjust
+> > gamma value, we need to use "has_gamma" to control gamma function
+> > inside disp_aal to adjust the gamma value.
 > >
-> > > Convert kmap() to kmap_local_page()
-> > >
-> > > With kmap_local_page(), the mapping is per thread, CPU local and not
-> > > globally visible.
-> > It's not clearer.
-> I mean this " fix kunmap_local path value to take address of the mapped page"
-> be more clearer
-> > This is a general statement about the function.  You
-> > need to explain why it is appropriate to use it here.  Unless it is the
-> > case that all calls to kmap should be converted to call kmap_local_page.
-> It's required to convert all calls kmap to kmap_local_page. So, I don't what
-> should the commit message be?
-
-If all calls should be changed then you can also say that.
-
-I thought that a previous commit on the outreachy list made some arguments
-about how the affacted value was just allocated and thus could not yet be
-shared.
-
-julia
-
+> > For successors like MT8183, disp_gamma is separated from disp_aal. We
+> > just need to control disp_gamma directly and don't need to control gamm=
+a
+> > function inside disp_aal.
+> >
+> > With this modification, the driver doesn't require any functional chang=
+es.
+> > We only update the dt-binding and DTS node to make it clear.
+> >
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
+abora.com>
+> > ---
+> >  .../devicetree/bindings/display/mediatek/mediatek,aal.yaml  | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
 >
-> Is this will be good :
->
-> "kmap_local_page() was recently developed as a replacement for kmap().  The
-> kmap_local_page() creates a mapping which is restricted to local use by a
-> single thread of execution. "
-> >
-> > julia
-> >
-> > > Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> > > ---
-> > > changes in V2:
-> > > 	fix kunmap_local path value to take address of the mapped page.
-> > > ---
-> > > changes in V3:
-> > > 	edit commit message to be clearer
-> > > ---
-> > >   drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
-> > >   1 file changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> > > b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> > > index 2a5782063f4c..c14fc871dd41 100644
-> > > --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> > > +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> > > @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct
-> > > igb_rx_buffer *rx_buffer,
-> > >
-> > >   	frame_size >>= 1;
-> > >
-> > > -	data = kmap(rx_buffer->page);
-> > > +	data = kmap_local_page(rx_buffer->page);
-> > >
-> > >   	if (data[3] != 0xFF ||
-> > >   	    data[frame_size + 10] != 0xBE ||
-> > >   	    data[frame_size + 12] != 0xAF)
-> > >   		match = false;
-> > >
-> > > -	kunmap(rx_buffer->page);
-> > > +	kunmap_local(data);
-> > >
-> > >   	return match;
-> > >   }
-> > > --
-> > > 2.35.2
-> > >
-> > >
-> > >
->
---8323329-848588355-1650118198=:3501--
+> Acked-by: Rob Herring <robh@kernel.org>
+
+Applied to mediatek-drm-next [1], thanks.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+Regards,
+Chun-Kuang.

@@ -2,59 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C15750335E
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC91503428
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbiDPEe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 00:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S229969AbiDPEoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 00:44:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230024AbiDPEeU (ORCPT
+        with ESMTP id S229840AbiDPEoO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 00:34:20 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F6F5F54
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 21:31:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650083510; x=1681619510;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xX/oOsAAWB0bR76btmtu7h3T848IFJe2Mj+NKJjjZRg=;
-  b=mgD/pm20hvSEDpJ7WaF4Ot2eZ6ezstClmA1vUgJEerT+aMEk8znFS3wW
-   kZNDXCABg5FETXR+ZaIcM3d6gcEDO92F5T59rqblymr7UPYVvFslbEEEN
-   UYYB2FSiVQ5HccvMbM5etGiGoVHrqH+77Lgn0Ur8hITGI/PXCH0M6K5bU
-   2laVyILqE2gQf2alCpqCU4v6HFneduasIt33B2Bbx2HzEEvguJQmQdYvq
-   Jf+4nZcZBCGHT31A3of63unOefHm2BSOaBAaixORk8rU74aIftDGh/kry
-   wmAResT5buEwq1vVtAkLorJauKlRuckO17LXb6oNT4MMKAgS730QRb2pG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349717866"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="349717866"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 21:31:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="528170939"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 15 Apr 2022 21:31:48 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfa67-0002lx-R7;
-        Sat, 16 Apr 2022 04:31:47 +0000
-Date:   Sat, 16 Apr 2022 12:30:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mcgrof:sysctl-testing 21/24] kernel/trace/ftrace.c:7884:9: error:
- 'saved_ftrace_func' undeclared
-Message-ID: <202204161203.6dSlgKJX-lkp@intel.com>
+        Sat, 16 Apr 2022 00:44:14 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5D1532E9
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 21:41:42 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nfaFg-00067r-Or; Sat, 16 Apr 2022 06:41:40 +0200
+Message-ID: <81830a33-5539-378e-af03-f681dbc4656c@leemhuis.info>
+Date:   Sat, 16 Apr 2022 06:41:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: Bug 215720 - brk() regression on AArch64 on static-pie binary --
+ issue with ASLR and a guard page? #forregzbot
+Content-Language: en-US
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+To:     "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info>
+ <d79869b9-f50c-2f72-d277-7e98c5c9873f@leemhuis.info>
+In-Reply-To: <d79869b9-f50c-2f72-d277-7e98c5c9873f@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650084102;09d56527;
+X-HE-SMSGID: 1nfaFg-00067r-Or
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,102 +45,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git sysctl-testing
-head:   f219482651c5469dd3a6fab22c7be9fb763c26ef
-commit: ae3e836e7177c547d2ae3f51d20208462e623c57 [21/24] ftrace: fix building with SYSCTL=n but DYNAMIC_FTRACE=y
-config: xtensa-allyesconfig (https://download.01.org/0day-ci/archive/20220416/202204161203.6dSlgKJX-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/commit/?id=ae3e836e7177c547d2ae3f51d20208462e623c57
-        git remote add mcgrof https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git
-        git fetch --no-tags mcgrof sysctl-testing
-        git checkout ae3e836e7177c547d2ae3f51d20208462e623c57
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+#regzbot fixed-by: aeb7923733d100
 
-All errors (new ones prefixed by >>):
-
-   kernel/trace/ftrace.c: In function 'ftrace_startup_sysctl':
->> kernel/trace/ftrace.c:7884:9: error: 'saved_ftrace_func' undeclared (first use in this function)
-    7884 |         saved_ftrace_func = NULL;
-         |         ^~~~~~~~~~~~~~~~~
-   kernel/trace/ftrace.c:7884:9: note: each undeclared identifier is reported only once for each function it appears in
->> kernel/trace/ftrace.c:7886:13: error: 'ftrace_start_up' undeclared (first use in this function); did you mean 'ftrace_startup'?
-    7886 |         if (ftrace_start_up) {
-         |             ^~~~~~~~~~~~~~~
-         |             ftrace_startup
->> kernel/trace/ftrace.c:7887:27: error: 'FTRACE_UPDATE_CALLS' undeclared (first use in this function)
-    7887 |                 command = FTRACE_UPDATE_CALLS;
-         |                           ^~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:7889:36: error: 'FTRACE_START_FUNC_RET' undeclared (first use in this function)
-    7889 |                         command |= FTRACE_START_FUNC_RET;
-         |                                    ^~~~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:7890:17: error: implicit declaration of function 'ftrace_startup_enable'; did you mean 'ftrace_startup_all'? [-Werror=implicit-function-declaration]
-    7890 |                 ftrace_startup_enable(command);
-         |                 ^~~~~~~~~~~~~~~~~~~~~
-         |                 ftrace_startup_all
-   kernel/trace/ftrace.c: In function 'ftrace_shutdown_sysctl':
-   kernel/trace/ftrace.c:7902:13: error: 'ftrace_start_up' undeclared (first use in this function); did you mean 'ftrace_startup'?
-    7902 |         if (ftrace_start_up) {
-         |             ^~~~~~~~~~~~~~~
-         |             ftrace_startup
->> kernel/trace/ftrace.c:7903:27: error: 'FTRACE_DISABLE_CALLS' undeclared (first use in this function)
-    7903 |                 command = FTRACE_DISABLE_CALLS;
-         |                           ^~~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:7905:36: error: 'FTRACE_STOP_FUNC_RET' undeclared (first use in this function)
-    7905 |                         command |= FTRACE_STOP_FUNC_RET;
-         |                                    ^~~~~~~~~~~~~~~~~~~~
->> kernel/trace/ftrace.c:7906:17: error: implicit declaration of function 'ftrace_run_update_code' [-Werror=implicit-function-declaration]
-    7906 |                 ftrace_run_update_code(command);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/saved_ftrace_func +7884 kernel/trace/ftrace.c
-
-  7874	
-  7875	#ifdef CONFIG_SYSCTL
-  7876	static void ftrace_startup_sysctl(void)
-  7877	{
-  7878		int command;
-  7879	
-  7880		if (unlikely(ftrace_disabled))
-  7881			return;
-  7882	
-  7883		/* Force update next time */
-> 7884		saved_ftrace_func = NULL;
-  7885		/* ftrace_start_up is true if we want ftrace running */
-> 7886		if (ftrace_start_up) {
-> 7887			command = FTRACE_UPDATE_CALLS;
-  7888			if (ftrace_graph_active)
-> 7889				command |= FTRACE_START_FUNC_RET;
-> 7890			ftrace_startup_enable(command);
-  7891		}
-  7892	}
-  7893	
-  7894	static void ftrace_shutdown_sysctl(void)
-  7895	{
-  7896		int command;
-  7897	
-  7898		if (unlikely(ftrace_disabled))
-  7899			return;
-  7900	
-  7901		/* ftrace_start_up is true if ftrace is running */
-> 7902		if (ftrace_start_up) {
-> 7903			command = FTRACE_DISABLE_CALLS;
-  7904			if (ftrace_graph_active)
-> 7905				command |= FTRACE_STOP_FUNC_RET;
-> 7906			ftrace_run_update_code(command);
-  7907		}
-  7908	}
-  7909	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 09.04.22 13:49, Thorsten Leemhuis wrote:
+> Hi, this is your Linux kernel regression tracker. Top-posting for once,
+> to make this easily accessible to everyone.
+> 
+> Hey, what's up here? Or was this regressions fixed already?
+> 
+> H.J. Lu: reminder, this is caused by a patch of yours.
+> 
+> Mike, if you have a minute: '925346c129da' ("fs/binfmt_elf: fix PT_LOAD
+> p_align values for loaders") in 'next' contains a 'Fixes:' tag for the
+> culprit of this regression, but I assume it fixes a different issue?
+> 
+> Ciao, Thorsten
+> 
+> #regzbot poke
+> 
+> On 28.03.22 15:21, Thorsten Leemhuis wrote:
+>> Hi, this is your Linux kernel regression tracker.
+>>
+>> I noticed a regression report in bugzilla.kernel.org that afaics nobody
+>> acted upon since it was reported about a week ago, that's why I decided
+>> to forward it to the lists and the author of the culprit. To quote from
+>> https://bugzilla.kernel.org/show_bug.cgi?id=215720:
+>>
+>>>  Victor Stinner 2022-03-22 02:24:57 UTC
+>>>
+>>> Created attachment 300597 [details]
+>>> empty.c reproducer
+>>>
+>>> I found a brk() syscall regression of Linux kernel 5.17 on AArch64.
+>>>
+>>> A git bisect found the change "fs/binfmt_elf: use PT_LOAD p_align values for static PIE": commit 9630f0d60fec5fbcaa4435a66f75df1dc9704b66, changed related to the bz#215275.
+>>>
+>>> Program to reproduce the bug, empty.c (attached to the issue):
+>>> ---
+>>> _Thread_local int var1 = 0;
+>>> int main() {
+>>>     volatile int x = 1;
+>>>     var1 = x;
+>>>     return 0;
+>>> }
+>>> ---
+>>>
+>>> Build the program as a static PIE program:
+>>>
+>>>     gcc -std=c11 -static-pie -g empty.c -o empty -O2
+>>>
+>>> The program fails randomly, it takes 100 to 6000 runs to reproduce the crash.
+>>>
+>>> Short shell loop to reproduce the crash:
+>>> ---
+>>> $ i=0; while true; do ./empty; rc=$?; i=$(($i + 1)); echo "$i:
+>>> $(date): $rc"; if [ $rc -ne 0 ]; then break; fi; done
+>>> (...)
+>>> 159: Tue Mar 22 01:54:22 CET 2022: 0
+>>> 160: Tue Mar 22 01:54:22 CET 2022: 0
+>>> Segmentation fault (core dumped)
+>>> 161: Tue Mar 22 01:54:22 CET 2022: 139
+>>> ---
+>>>
+>>> Disabling ASLR (write 0 to /proc/sys/kernel/randomize_va_space) works
+>>> around the bug.
+>>>
+>>> Rather than using "empty.c" program, the "ldconfig -V > /dev/null" command can be used: standard static-pie program.
+>>>
+>>> strace when the program works:
+>>> ---
+>>> brk(NULL)                               = 0xaaaac3961000
+>>> brk(0xaaaac3961b78)                     = 0xaaaac3961b78
+>>> ---
+>>>
+>>> strace when the bug occurs:
+>>> ---
+>>> brk(NULL)                               = 0xaaaabf3c3000
+>>> brk(0xaaaabf3c3b78)                     = 0xaaaabf3c3000
+>>> ---
+>>>
+>>> The following test of the brk() syscall fails when the bug occurs:
+>>> ---
+>>> 	/* Check against existing mmap mappings. */
+>>> 	next = find_vma(mm, oldbrk);
+>>> 	if (next && newbrk + PAGE_SIZE > vm_start_gap(next))
+>>> 		goto out;
+>>> ---
+>>>
+>>> Note: When the bug occurs, the program crash with SIGSEGV: the glibc __libc_setup_tls() function calls sbrk(2936) to allocate TLS variables, but it doesn't handle the memory allocation failure.
+>>>
+>>> Note: At the beginning, I discovered this kernel regression while checking for Python
+>>> buildbot failures on our Fedora Rawhide AArch64 machine.
+>>>
+>>> * Fedora downstream issue: https://bugzilla.redhat.com/show_bug.cgi?id=2066147
+>>> * Python issue: https://bugs.python.org/issue47078
+>>>
+>>> [reply] [−] Comment 1 Victor Stinner 2022-03-22 02:41:00 UTC
+>>>
+>>> See also the binutils issue: "p_align in ELF program headers should not exceed section alignment"
+>>> https://sourceware.org/bugzilla/show_bug.cgi?id=28689
+>>>
+>>> See also this old (kernel 4.18) fixed x86-64 kernel bug: "kernel: brk can grow the heap into the area reserved for the stack"
+>>> https://bugzilla.redhat.com/show_bug.cgi?id=1749633
+>>
+>>
+>> Could somebody take a look into this? Or was this discussed somewhere
+>> else already? Or even fixed?
+>>
+>> Anyway, to get this tracked:
+>>
+>> #regzbot introduced: 9630f0d60fec5fbcaa4435a66f75df1dc9704b66
+>> #regzbot from: Victor Stinner <vstinner@redhat.com>
+>> #regzbot title: brk() regression on AArch64 on static-pie binary
+>> #regzbot link: https://bugzilla.kernel.org/show_bug.cgi?id=215720
+>>
+>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>
+>> P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+>> reports on my table. I can only look briefly into most of them and lack
+>> knowledge about most of the areas they concern. I thus unfortunately
+>> will sometimes get things wrong or miss something important. I hope
+>> that's not the case here; if you think it is, don't hesitate to tell me
+>> in a public reply, it's in everyone's interest to set the public record
+>> straight.
+>>

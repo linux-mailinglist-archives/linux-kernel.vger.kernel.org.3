@@ -2,116 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5442503832
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:31:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2FB503839
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233010AbiDPUdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 16:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
+        id S233035AbiDPUpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 16:45:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232999AbiDPUdm (ORCPT
+        with ESMTP id S233019AbiDPUpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 16:33:42 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E605BD33
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:08 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u19so18883668lff.4
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=YLjXXGPCeZFoo0LSeAoNTeYQmnNJj43S9GqF3x/ym20=;
-        b=SrSlzeiaQpCm4wc0MQ0m37QHAqoK9FT8MbEl9SPGH8rdWqMQedT7lTTS7GcsoBzJnC
-         mwh/ajg/m0eG9+H3NUwn9OLJNGOLmtA5Tot2AAfRENjeYsH57sN9QT0cCZ6etY+bAiY8
-         POMTsc8VPFSI9b1QmVcOmHGCjJIie+BnfYtvE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=YLjXXGPCeZFoo0LSeAoNTeYQmnNJj43S9GqF3x/ym20=;
-        b=BwlDmq/TNEy3IXceUH/aSyqPUw3czZB+lvoM/ZcR5wvyZ0OO2kMr9Z1V99UJij43I9
-         9FxOm4BSPpWSInE2xdvD0Y96Et5uAhKmkWQ8qtI4/ywdfutgXiixTCgti6W5k8dNfAHt
-         R8VRWJ7wnFKzrABRGokVkcvILZZU0p7WB+0GDjukzvWGZCZK1hU0etycqUjTflyvQKJY
-         NY4eqPTaKIt+HalIbMNj8Hiu7GGHHeiOUPsCSl011c22oEM5bKQfebpN7IzFlJNMgAzK
-         lcf761Yml240j5ADhItQhQ+C0/1iTYakVaH3codakjdyk1titg1FFy0E4u0k/ODT7LAP
-         hqqg==
-X-Gm-Message-State: AOAM5324lNeWptkLUSsItSJpoLTWIm4rb4+PRpzXJBJXum12Guq0kQd6
-        ovnWUY3W8xhKbVQxbwQ3mB+/3HHMGFEk6x0o28s=
-X-Google-Smtp-Source: ABdhPJzD9HwNLlcYCx5Y5bPP7o79l7BxtnCqfgWsVtOTjx6ZrzSe3VUw1hHPejnzsmdc/kYdLS48ow==
-X-Received: by 2002:a05:6512:945:b0:44a:f03f:e8c9 with SMTP id u5-20020a056512094500b0044af03fe8c9mr3264466lft.163.1650141066390;
-        Sat, 16 Apr 2022 13:31:06 -0700 (PDT)
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
-        by smtp.gmail.com with ESMTPSA id g3-20020a2e9e43000000b00244c60deb14sm664533ljk.15.2022.04.16.13.31.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 13:31:03 -0700 (PDT)
-Received: by mail-lf1-f48.google.com with SMTP id o2so18815542lfu.13
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:03 -0700 (PDT)
-X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
- y3-20020ac24203000000b004488053d402mr3175652lfh.687.1650141063333; Sat, 16
- Apr 2022 13:31:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220415164413.2727220-1-song@kernel.org> <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
-In-Reply-To: <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 16 Apr 2022 13:30:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
-Message-ID: <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Sat, 16 Apr 2022 16:45:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5ADBBF03D;
+        Sat, 16 Apr 2022 13:42:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4BCEC60FED;
+        Sat, 16 Apr 2022 20:42:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AA5F0C385A9;
+        Sat, 16 Apr 2022 20:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650141777;
+        bh=SGsEuW+QJiVoYo/YwITEbIz5a+BKHuij2pWyk7nT9o8=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=W+FB1ozddhv8I2dpkrQ/xMGYs9uisMtaHrVrf7owaqSDhNqG3qetyO+E0Cn8djX8c
+         +ZlMr85zaAJIk2qkIP/1q45lD/1iwSzFB7hgU7es8hw8TcoAqoFveHHjTIFuDIF4xM
+         +y7tpnAD1OSey8SaDBnjb+2jL4kWMDEbJDfpJ+0wz7xEdqsyKpfKXCYVAB3x5jKyhZ
+         OyYO6bK5J9XKuVmhbiqDxHIafCeYkDnQuNMzF8karaWq/Nlca6tRRb8IbH3HtWx2V1
+         SUAWCkcZFpfv+CnqS7VvILUzcUg53zETSL8nSw7qcQXOwxp0uUYVrvb55qxXin9jLf
+         PcHP8WD36xqew==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 92E60E8DD67;
+        Sat, 16 Apr 2022 20:42:57 +0000 (UTC)
+Subject: Re: [GIT PULL] SCSI fixes for 5.18-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <de511417b27da4a438e60af851d5bf2c4210a969.camel@HansenPartnership.com>
+References: <de511417b27da4a438e60af851d5bf2c4210a969.camel@HansenPartnership.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <de511417b27da4a438e60af851d5bf2c4210a969.camel@HansenPartnership.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+X-PR-Tracked-Commit-Id: 70a3baeec4e89736be932a60d682d7ae27556f5c
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 90ea17a9e27b5778ec517efb1ce0b81d36905654
+Message-Id: <165014177759.10681.4916690426551865381.pr-tracker-bot@kernel.org>
+Date:   Sat, 16 Apr 2022 20:42:57 +0000
+To:     James Bottomley <James.Bottomley@HansenPartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 12:55 PM Song Liu <songliubraving@fb.com> wrote:
->
-> Based on this analysis, I think we should either
->   1) ship the whole set with 5.18; or
->   2) ship 1/4, 3/4, and 4/4 with 5.18, and 2/4 with 5.19.
+The pull request you sent on Sat, 16 Apr 2022 16:06:01 -0400:
 
-Honestly, I think the proper thing to do is
+> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
 
- - apply #1, because yes, that "use huge pages" should be an opt-in.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/90ea17a9e27b5778ec517efb1ce0b81d36905654
 
- - but just disable hugepages for now.
+Thank you!
 
-I think those games with set_memory_nx() and friends just show how
-rough this all is right now.
-
-In fact, I personally think that the whole bpf 'prog_pack' stuff
-should probably be disabled. It looks incredible broken to me right
-now.
-
-Unless I mis-read it, it does a "module_alloc()" to allocate the vmap
-area, and then just marks it executable without having even
-initialized the pages. Am I missing something? So now we have random
-kernel memory that is marked executable.
-
-Sure, it's also marked RO, but who cares? It's random data that is now
-executable.
-
-Maybe I am missing something, but I really don't think this is ready
-for prime-time. We should effectively disable it all, and have people
-think through it a lot more.
-
-                   Linus
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

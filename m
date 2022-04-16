@@ -2,88 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF92B5035F9
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF2AA50360C
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbiDPKkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 06:40:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
+        id S231531AbiDPKyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 06:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231454AbiDPKjz (ORCPT
+        with ESMTP id S231504AbiDPKyR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 06:39:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59ACC22516;
-        Sat, 16 Apr 2022 03:37:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F111560E97;
-        Sat, 16 Apr 2022 10:37:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1958C385A3;
-        Sat, 16 Apr 2022 10:37:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650105442;
-        bh=wwQ2KXLmqbrL8x9yOhEPgpWxlE6/ANc23oINIAYBWFM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i9VenvH+J3jal44BpmmzyaoKF6o14szrhFaM3uLaTzK/8zM6T+FZTzu91yqBa/3YF
-         9gRGufeeB1J0Acf4JRzUO/iMfE/c2cbJoIEjkoCEhj3lO/92oHAT/gT08qX4KxoBVp
-         bjY1bA4SRJa5sl8qRmx6nM2gUANMfxNgvi6xZWmcqIDnIEAK1boQpgkmuraDGB8mNK
-         EToSJ8mxFrMD28uLMd+so1ok/qphy4py9p5DEZmPBN+DZOgkwAFR4xtccES6W7V4ux
-         RL3Kj4ahOh5iu7VP0J1oMriNKni5C0tgCz0r9uJUAGxQzl25/m59ZJT+OiT9jJwppq
-         u64TH94mHgzLw==
-Date:   Sat, 16 Apr 2022 11:45:19 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v1 1/1] iio: accel: dmard06: Drop dependency on OF
-Message-ID: <20220416114519.4745b04f@jic23-huawei>
-In-Reply-To: <20220413190327.30054-1-andriy.shevchenko@linux.intel.com>
-References: <20220413190327.30054-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Sat, 16 Apr 2022 06:54:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C093A5CF;
+        Sat, 16 Apr 2022 03:51:45 -0700 (PDT)
+Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KgVJV3RRMzCr5w;
+        Sat, 16 Apr 2022 18:47:22 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 18:51:43 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 18:51:43 +0800
+From:   Weili Qian <qianweili@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
+        Weili Qian <qianweili@huawei.com>
+Subject: [PATCH 0/4] crypto: hisilicon/qm - misc fixes
+Date:   Sat, 16 Apr 2022 18:45:55 +0800
+Message-ID: <20220416104559.10826-1-qianweili@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 13 Apr 2022 22:03:27 +0300
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+This patchset removes some unused functions and sets the unused outside
+qm.c functons to static.
 
-> Nothing in this driver depends on OF firmware so drop the dependency
-> and update the headers to remove the false impression such a dependency
-> exists.
-Applied. Note I amended the patch descriptions where relevant to drop
-reference to headers when they weren't touched in a given patch.
-Hopefully I caught all the cases of that.
+Weili Qian (4):
+  crypto: hisilicon/qm - remove unused function declaration
+  crypto: hisilicon/qm - set function with static
+  crypto: hisilicon/qm - replace hisi_qm_release_qp() with
+    hisi_qm_free_qps()
+  crypto: hisilicon/qm - remove hisi_qm_get_free_qp_num()
 
-Jonathan
+ drivers/crypto/hisilicon/qm.c             | 37 ++++++++---------------
+ drivers/crypto/hisilicon/zip/zip_crypto.c |  2 +-
+ include/linux/hisi_acc_qm.h               |  5 ---
+ 3 files changed, 13 insertions(+), 31 deletions(-)
 
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/iio/accel/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/iio/accel/Kconfig b/drivers/iio/accel/Kconfig
-> index eac3f02662ae..b53f010f3e40 100644
-> --- a/drivers/iio/accel/Kconfig
-> +++ b/drivers/iio/accel/Kconfig
-> @@ -290,7 +290,6 @@ config DA311
->  
->  config DMARD06
->  	tristate "Domintech DMARD06 Digital Accelerometer Driver"
-> -	depends on OF || COMPILE_TEST
->  	depends on I2C
->  	help
->  	  Say yes here to build support for the Domintech low-g tri-axial
+-- 
+2.33.0
 

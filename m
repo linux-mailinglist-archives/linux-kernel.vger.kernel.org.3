@@ -2,41 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FCF50345B
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:55:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3689503461
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:06:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiDPF6G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 01:58:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43716 "EHLO
+        id S229531AbiDPGIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 02:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiDPF56 (ORCPT
+        with ESMTP id S229379AbiDPGIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 01:57:58 -0400
+        Sat, 16 Apr 2022 02:08:07 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396172E095
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:55:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D817865404
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:05:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Type:MIME-Version:Message-ID:
-        Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=kMcem6muCtTXNqsopWLyZ9KtYeViiCS3WXyDPoUdWSs=; b=UKlTIjTIyzTCh5gDYG05jRSGgn
-        nGNuUohCebuE+1FjaDUL3PE86I81XGyqL4uIQX+0zxNDAwNdzbMk9zcW4dz22UbApaF1uQEBvdQ8+
-        XfHA+IOamd3OnsAFjqn5womNmuyT2PqmRkJs+F6aSJkEm5Ml+Ef12PONPH8N1hJOejCbcJRGHo2TC
-        jKWbZyQ6HEcqn5A8SPABExyHuPhCw/pOy4rs4iQs/g63gs2gAxojoCa533N/cuIRyoJqNaWZIU9d8
-        xxAolr+BVIwMA+4ac7B4unGQZInjnUB3/QUWn8ECY0aEXbBXAtZ/0bca4S0Fi7dTmm3ZbJnytUUob
-        Ne760+PA==;
-Received: from [2a02:1205:504b:4280:f5dd:42a4:896c:d877] (helo=localhost)
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfbP0-00CJWX-FV; Sat, 16 Apr 2022 05:55:22 +0000
-Date:   Sat, 16 Apr 2022 07:55:18 +0200
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+t0Bu8KSg3jBujgghxzlFf0uKoDQfWljvnbuJuxey94=; b=NADL9qThPsf2tQw9wSHR9J87h6
+        TY536TR9jkne0wei9WY4j7IwwHfhpH1iteQfDtfp4OZtWhkNUzwPVqifBfszMOendhZl2f4xZ2u+y
+        TYC00bS1du/ddF5g5gu8CKTOXCDS5Guevew6Pjc26q9dR7Z9M0Tzye5DzR1ltSKBqF7cgb7+GOLnS
+        ZH9JNk7WKDNl5rub16At6nBeAgYi3wqX2ljSIa64BwQEYdkcsrW4z1OpISFIXlqvsgSU2MCZUI/+1
+        dK+0Mrtad1Cvt7l6kF+NqECSoae/PgeDBD+5SorOBUGeEhESw974b1TzM4gfXqvz3hnfnTZbcEEfi
+        YwNHI30A==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1nfbYm-00CJyx-V4; Sat, 16 Apr 2022 06:05:28 +0000
+Date:   Fri, 15 Apr 2022 23:05:28 -0700
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
-Subject: [GIT PULL] dma-mapping fixes for Linux 5.18
-Message-ID: <YlpaRgHee1NPl2XB@infradead.org>
+To:     Oleksandr Tyshchenko <olekstysh@gmail.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>
+Subject: Re: [RFC PATCH 4/6] virtio: Various updates to xen-virtio DMA ops
+ layer
+Message-ID: <YlpcqOUK59yExXlq@infradead.org>
+References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
+ <1649963973-22879-5-git-send-email-olekstysh@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <1649963973-22879-5-git-send-email-olekstysh@gmail.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -48,26 +57,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 4fe87e818ea492ade079cc01a31d088e445f8539:
+On Thu, Apr 14, 2022 at 10:19:31PM +0300, Oleksandr Tyshchenko wrote:
+> From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
 
-  dma-mapping: move pgprot_decrypted out of dma_pgprot (2022-04-01 06:46:51 +0200)
-
-are available in the Git repository at:
-
-  git://git.infradead.org/users/hch/dma-mapping.git tags/dma-mapping-5.18-2
-
-for you to fetch changes up to 9e02977bfad006af328add9434c8bffa40e053bb:
-
-  dma-direct: avoid redundant memory sync for swiotlb (2022-04-14 06:30:39 +0200)
-
-----------------------------------------------------------------
-dma-mapping fixes for Linux 5.18
-
- - avoid a double memory copy for swiotlb (Chao Gao)
-
-----------------------------------------------------------------
-Chao Gao (1):
-      dma-direct: avoid redundant memory sync for swiotlb
-
- kernel/dma/direct.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Various updates is a big indicator that the patch should be split
+further.  Please do one change at a time, and fold updates to the
+previous patches in the series into those patches instead of fixing
+them up later.

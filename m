@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 121595032E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C72FC503359
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229679AbiDPCH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
+        id S230098AbiDPCo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbiDPCGH (ORCPT
+        with ESMTP id S230044AbiDPCo1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:06:07 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D23403D7;
-        Fri, 15 Apr 2022 18:55:56 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id v15so6785684vsm.5;
-        Fri, 15 Apr 2022 18:55:55 -0700 (PDT)
+        Fri, 15 Apr 2022 22:44:27 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1496417E32;
+        Fri, 15 Apr 2022 19:41:58 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-e2442907a1so9461232fac.8;
+        Fri, 15 Apr 2022 19:41:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=sender:from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=C/yp2SiPCDYhZ9QJZ/VkI3pUZmOOKH2y3TvYwr4r/ZY=;
-        b=KaItwtfz20xnWMtNTiOqG2T72TphlDwszWNLq4pqt1Jy2NZGmz4xPEv7EjGhIFMi2E
-         F9OgIDcC54Zx2zt/Hc+cI8xZuyo5DfmMAdWKoggxKdi7cqSaPSSOvQeZo4IkNe6FZqjW
-         766dPYHxy1CDcGyaM/Z80nLgd+sTo05wF5k6mWrg8+8FRzyf7bZpXhpKU1TmqG2iAc+T
-         trXclf97t/OX+AuOY1U0xx/4aO1cfsSbMRR8jpD1VLLVDXr57cYQeftuyZwU7l5NQ2uC
-         mmuQdoTbb24IrxRsmtippfaiePCKwvbxgOuSPIEYDge1N3I/qm3TPyMI9RYvYE1jdoL9
-         d4Yg==
+        bh=8cYq+2F/bEonU/DO+vgP5ahGjGGTEVFinNWKQ+3P1dA=;
+        b=e3t0LJ31dAW3tgBgLwggCET7d3nYF4ZzincvzXr3nWxyy+4KLgHG7ii18LvvBdrW3h
+         7Nv9+WpNMYiq27uI2efgeWtX/mNDml9C6ydY4XrIYZIRxQKwLn3RJjKFHnbJ3Q0xu9Lr
+         /i+2ykLemDcaG1DUJMCnqEflD141djoRj+dEk0JXnfcWLvPEVRkLxjDARi850BB7qZ4u
+         wU4BqWCf7XAuksnTJPWW7hzYOaBPVd1pDStLHpadiiVzmaEW2On4cIEoWH7ML4MneeNw
+         XnzIAynLdhza93C9Pm9LsOusWj8jFiYYDNLIk2xT7xQuDt+UlN8OKltDM62qN3KJ2kzn
+         /aWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:sender:from:to:cc:subject:date:message-id
          :in-reply-to:references:mime-version:content-transfer-encoding;
-        bh=C/yp2SiPCDYhZ9QJZ/VkI3pUZmOOKH2y3TvYwr4r/ZY=;
-        b=XMiXR3yNWGb8vqEqR+UFh4CrCQmBPAoy7n14Vx2KhSDBxB/Mr5lB/DtVd7g+MCG3B+
-         9Inv6fPOlpIKJdL9xwJfaoTHBCPt8XYh4MJwHDtPwT+olngQ6Nx+0/9Greptv0r67szn
-         3HCAltkmnCyeqQwfFss/9NhNDxmAHzGMAa9dzcM+IcIsd1bHmBX0FGjxX+08JlVrS7ET
-         FC6zF8R9yOKhfCwGUJJSJFOTGth0IlLf2qs720ptaLAbDBHSAxRWrT8vjQgZ5sNLGTYV
-         1ClpbzKeeJo6M/BShg4fscz21KCdKhXfGSc/gG4YAli+YZrYK6r0khO5dDaWicNRY9EQ
-         ei4w==
-X-Gm-Message-State: AOAM530aZlJi2+6QTqL6b09AvP0jyCB8jbEzwbtgwaePocnFyjz7OjvF
-        LtPK758f0NO6B9Ty/lrR5OHOABcSvaA=
-X-Google-Smtp-Source: ABdhPJzsACZqcMn+IVHVYYnMsaYkZAQYl/1YN2wyFMIwCE7NodBJ76t90Djj26qvoMib2GCP1YQ1Lg==
-X-Received: by 2002:a17:902:7884:b0:158:b5b6:572c with SMTP id q4-20020a170902788400b00158b5b6572cmr1452146pll.144.1650069656404;
-        Fri, 15 Apr 2022 17:40:56 -0700 (PDT)
+        bh=8cYq+2F/bEonU/DO+vgP5ahGjGGTEVFinNWKQ+3P1dA=;
+        b=5wGGBIq9dzlBWb8y0QKNfyCzG2GZ1moVAHS51VAHoqUQuIFkkIiooUClAVkbAsVMf6
+         0Q4Vh26ov1mWRcwe2oZ3kj7JpTWrnFyA3YfIeF50JVVoyjxGYzcGSl4wHoishO4MryD+
+         Hi7Si30ksc8/q4A0P0MekWjwkt+k9/PUhEC7KdW7LE6ITJRuhd5gmrXGdB43igOqtClZ
+         sBFa44sm4aQpi8+HhIyATTBjNvSQodpFVfP6THWwptOamyw/WODch+5mJIUzUJA+EyIE
+         31HY58cO7+3v/7QZiO+byTNWgS/BkZRVGiZ4mWDJ+rM0bMBIPlLskZCAWUK4uF1W1Q1V
+         e0UA==
+X-Gm-Message-State: AOAM532xARm4WVVBdINc1wumEK/Xz0gw2rBB0DutfyGgE7kipJv3qgz/
+        Tvke2KfdxWkEWq7FSYp21PqIsRv52Z0=
+X-Google-Smtp-Source: ABdhPJzxX5yhHHrTm7NAJCXbKqHI5E6hvIAvMJcX5k+3LzscvqDrkPHyuj0MwnZd8nFQZVC6TYtuVw==
+X-Received: by 2002:a17:90a:4405:b0:1cd:5fe6:dd99 with SMTP id s5-20020a17090a440500b001cd5fe6dd99mr1491754pjg.210.1650069659895;
+        Fri, 15 Apr 2022 17:40:59 -0700 (PDT)
 Received: from balhae.roam.corp.google.com ([2607:fb90:461:36d2:dba1:7530:2cda:19b1])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056a00130900b004f73df40914sm3913537pfu.82.2022.04.15.17.40.53
+        by smtp.gmail.com with ESMTPSA id j9-20020a056a00130900b004f73df40914sm3913537pfu.82.2022.04.15.17.40.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 17:40:55 -0700 (PDT)
+        Fri, 15 Apr 2022 17:40:59 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -67,9 +67,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         LKML <linux-kernel@vger.kernel.org>,
         linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
         linux-s390@vger.kernel.org
-Subject: [PATCH 1/3] perf symbol: Pass is_kallsyms to symbols__fixup_end()
-Date:   Fri, 15 Apr 2022 17:40:46 -0700
-Message-Id: <20220416004048.1514900-2-namhyung@kernel.org>
+Subject: [PATCH 2/3] perf symbol: Update symbols__fixup_end()
+Date:   Fri, 15 Apr 2022 17:40:47 -0700
+Message-Id: <20220416004048.1514900-3-namhyung@kernel.org>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 In-Reply-To: <20220416004048.1514900-1-namhyung@kernel.org>
 References: <20220416004048.1514900-1-namhyung@kernel.org>
@@ -86,82 +86,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The symbol fixup is necessary for symbols in kallsyms since they don't
-have size info.  So we use the next symbol's address to calculate the
-size.  Now it's also used for user binaries because sometimes they
-miss size for hand-written asm functions.
-
-There's a arch-specific function to handle kallsyms differently but
-currently it cannot distinguish kallsyms from others.  Pass this
-information explicitly to handle it properly.  Note that those arch
-functions will be moved to the generic function so I didn't added it
-to the arch-functions.
+Now arch-specific functions all do the same thing.  When it fixes the
+symbol address it needs to check the boundary between the kernel image
+and modules.  For the last symbol in the previous region, it cannot
+know the exact size as it's discarded already.  Thus it just uses a
+small page size (4096) and rounds it up like the last symbol.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/symbol-elf.c | 2 +-
- tools/perf/util/symbol.c     | 7 ++++---
- tools/perf/util/symbol.h     | 2 +-
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ tools/perf/util/symbol.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
 
-diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-index 31cd59a2b66e..ecd377938eea 100644
---- a/tools/perf/util/symbol-elf.c
-+++ b/tools/perf/util/symbol-elf.c
-@@ -1290,7 +1290,7 @@ dso__load_sym_internal(struct dso *dso, struct map *map, struct symsrc *syms_ss,
- 	 * For misannotated, zeroed, ASM function sizes.
- 	 */
- 	if (nr > 0) {
--		symbols__fixup_end(&dso->symbols);
-+		symbols__fixup_end(&dso->symbols, false);
- 		symbols__fixup_duplicate(&dso->symbols);
- 		if (kmap) {
- 			/*
 diff --git a/tools/perf/util/symbol.c b/tools/perf/util/symbol.c
-index dea0fc495185..1b85cc1422a9 100644
+index 1b85cc1422a9..623094e866fd 100644
 --- a/tools/perf/util/symbol.c
 +++ b/tools/perf/util/symbol.c
-@@ -217,7 +217,8 @@ void symbols__fixup_duplicate(struct rb_root_cached *symbols)
+@@ -217,8 +217,8 @@ void symbols__fixup_duplicate(struct rb_root_cached *symbols)
  	}
  }
  
--void symbols__fixup_end(struct rb_root_cached *symbols)
-+void symbols__fixup_end(struct rb_root_cached *symbols,
-+			bool is_kallsyms __maybe_unused)
+-void symbols__fixup_end(struct rb_root_cached *symbols,
+-			bool is_kallsyms __maybe_unused)
++/* Update zero-sized symbols using the address of the next symbol */
++void symbols__fixup_end(struct rb_root_cached *symbols, bool is_kallsyms)
  {
  	struct rb_node *nd, *prevnd = rb_first_cached(symbols);
  	struct symbol *curr, *prev;
-@@ -1467,7 +1468,7 @@ int __dso__load_kallsyms(struct dso *dso, const char *filename,
- 	if (kallsyms__delta(kmap, filename, &delta))
- 		return -1;
+@@ -232,8 +232,29 @@ void symbols__fixup_end(struct rb_root_cached *symbols,
+ 		prev = curr;
+ 		curr = rb_entry(nd, struct symbol, rb_node);
  
--	symbols__fixup_end(&dso->symbols);
-+	symbols__fixup_end(&dso->symbols, true);
- 	symbols__fixup_duplicate(&dso->symbols);
+-		if (prev->end == prev->start || prev->end != curr->start)
+-			arch__symbols__fixup_end(prev, curr);
++		/*
++		 * On some architecture kernel text segment start is located at
++		 * some low memory address, while modules are located at high
++		 * memory addresses (or vice versa).  The gap between end of
++		 * kernel text segment and beginning of first module's text
++		 * segment is very big.  Therefore do not fill this gap and do
++		 * not assign it to the kernel dso map (kallsyms).
++		 *
++		 * In kallsyms, it determines module symbols using '[' character
++		 * like in:
++		 *   ffffffffc1937000 T hdmi_driver_init  [snd_hda_codec_hdmi]
++		 */
++		if (prev->end == prev->start) {
++			/* Last kernel/module symbol mapped to end of page */
++			if (is_kallsyms && (!strchr(prev->name, '[') !=
++					    !strchr(curr->name, '[')))
++				prev->end = roundup(prev->end + 4096, 4096);
++			else
++				prev->end = curr->start;
++
++			pr_debug4("%s sym:%s end:%#" PRIx64 "\n",
++				  __func__, prev->name, prev->end);
++		}
+ 	}
  
- 	if (dso->kernel == DSO_SPACE__KERNEL_GUEST)
-@@ -1659,7 +1660,7 @@ int dso__load_bfd_symbols(struct dso *dso, const char *debugfile)
- #undef bfd_asymbol_section
- #endif
- 
--	symbols__fixup_end(&dso->symbols);
-+	symbols__fixup_end(&dso->symbols, false);
- 	symbols__fixup_duplicate(&dso->symbols);
- 	dso->adjust_symbols = 1;
- 
-diff --git a/tools/perf/util/symbol.h b/tools/perf/util/symbol.h
-index fbf866d82dcc..5fcdd1f94c56 100644
---- a/tools/perf/util/symbol.h
-+++ b/tools/perf/util/symbol.h
-@@ -203,7 +203,7 @@ void __symbols__insert(struct rb_root_cached *symbols, struct symbol *sym,
- 		       bool kernel);
- void symbols__insert(struct rb_root_cached *symbols, struct symbol *sym);
- void symbols__fixup_duplicate(struct rb_root_cached *symbols);
--void symbols__fixup_end(struct rb_root_cached *symbols);
-+void symbols__fixup_end(struct rb_root_cached *symbols, bool is_kallsyms);
- void maps__fixup_end(struct maps *maps);
- 
- typedef int (*mapfn_t)(u64 start, u64 len, u64 pgoff, void *data);
+ 	/* Last entry */
 -- 
 2.36.0.rc0.470.gd361397f0d-goog
 

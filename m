@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 604D55032FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B06525033C6
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiDPFl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 01:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
+        id S229745AbiDPFmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 01:42:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiDPFln (ORCPT
+        with ESMTP id S229539AbiDPFlo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 01:41:43 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AD3FCBC6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:39:12 -0700 (PDT)
+        Sat, 16 Apr 2022 01:41:44 -0400
+Received: from camel.birch.relay.mailchannels.net (camel.birch.relay.mailchannels.net [23.83.209.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 687CAFCBED
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:39:13 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id ADBC98E0819;
-        Sat, 16 Apr 2022 05:39:11 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id A92A15A0812;
+        Sat, 16 Apr 2022 05:39:12 +0000 (UTC)
 Received: from pdx1-sub0-mail-a254.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id F3BE78E06B6;
-        Sat, 16 Apr 2022 05:39:10 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650087551; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 0E0E75A041F;
+        Sat, 16 Apr 2022 05:39:12 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650087552; a=rsa-sha256;
         cv=none;
-        b=7ELyfl2/zsWIsKl8MdBfcyCbEYf4HNqnvfgIVRy+9TgA9J7diXiVf/TjMLe6fJKlnfzu1D
-        eCLKLZHgo3v1J0H/NGPajmXRDvPS3dfcy9UTLzDHqewMi8LGh3GW+7+M74jYckdqnoCNCT
-        L/fcZ/zBRVgRO1ya+4OkGlCZPSGr8kWwKuO1hf17c6JaRiZeF5Ux1evJFezRpddA4vCmai
-        tPRY9CffGFWfiFl/ePHu7ecoGDVeZg/y2WxgnNpIu/eY4KfFL2K+7b2KmWcfGNHTsZ4rTR
-        CxeSUKmDfjOtQwK11+8JSDgutG3K/OOjHT+iJE1dssMn4SMpAACsOYAO1IKTsA==
+        b=4SXZxwS7usFcejGdUgETrT2yCbFZZB0lsfZtsUDgM99sdQkJ9YgUA2s3BBm8c6WoxSuV/Z
+        gZ6O/5ICyUsAyggYyaKZ8JLnAq0bMVlYSZSSrS5qn6Inh9Z5RhQmf99U6KJswX0uf9Nb70
+        HtLZe6NMlIiouQqGeMKXhG/DjiyqlHDvfZtPd3k+cZX/A6wocnmKbGBWv8FkDiau8NqKNy
+        /HJpa5Cu8U9tS4y3UzLPNExuJ7kUXMuYu3N5ToJ1mkso20vHZ4Drzvs1CIzkMnkme6kPsQ
+        PQmcbACRGX4/zWLy+zuOTF3FytavqfLVxamQyBqJ1hnc6hXGW4DIkiW1KoruJQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1650087551;
+        s=arc-2022; t=1650087552;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=1GcA1EQLKr6cDmztZQrBKDqx1z4dpZsZKzsdXEMRVzY=;
-        b=YBmqxd4qGkYBUlYDZck0Aj6Bmr2e+O3nepNecQR9p+2EDE5JvllEthms9t1MHJWalgBD3c
-        hwPjqPKVmJO7QiJNvdFahzAkIeOtUvUcmLs67t2xb9LsLV5mV3kUyczC49GY3lcwlQOiTQ
-        vvlfli9cXPnvsg0ID4RheL0jWCcc+xNu+COAQn8IOrrAX0VMiTyzEQaBH7ZSssF2aHZdGt
-        eRdK844Kd2qxuCmxvh/YBfQnmayWsTJCtM8wEmFbEbzAYGJdK+pCaMpHPemuQX6XNjUHEA
-        +Fwx1VCnQmVk7m77cCl6+uB8OBL/IBUdmvYBF+KYszOdnzb16YhlPWLSowlijQ==
+        bh=MINJwd5OLO59JndE14sJrRNnUCPFbYse28/G1Tm6ZUg=;
+        b=sTaubIZYnrvhNGLF8wetyW7Esi2m5P0VyBx2gFW/fqOkLhzuWQoH/Atm6p8XdbgY2HN72e
+        c2HdGJeOrgt4LHzf2izQQS4fvpSbcq7mrYxEzKIih6nZFBc/solCM22B6RkP5/bXjWYR+Y
+        aRdLjd0SDYwsXOVNn+CSUPkc5xlAqDP1HQx1KmWM9YmEcKqDGhVI18R24NC8gELhGM3QZT
+        tSRbYOq7/aUgXFFpg+CtCsUpj51on6UOMcTdt1/upqcJwPmTTv2JOt0kJG+05Gf4cddVZL
+        q44Z6qhxQtSCYl7xUcZYMn2lJ0B5P5IFvdlx/oczXqEV0QHXz/W8tjVzPTqI1g==
 ARC-Authentication-Results: i=1;
-        rspamd-b69d6888c-bbjgq;
+        rspamd-b69d6888c-g7hrr;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from pdx1-sub0-mail-a254.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.116.106.98 (trex/6.7.1);
-        Sat, 16 Apr 2022 05:39:11 +0000
+        by 100.106.158.161 (trex/6.7.1);
+        Sat, 16 Apr 2022 05:39:12 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Squirrel-Reign: 2b63278d331c9d71_1650087551437_1108755106
-X-MC-Loop-Signature: 1650087551437:2424071474
-X-MC-Ingress-Time: 1650087551437
+X-Illustrious-White: 551691287601fc33_1650087552488_1211284300
+X-MC-Loop-Signature: 1650087552488:2168839710
+X-MC-Ingress-Time: 1650087552488
 Received: from localhost.localdomain (unknown [104.36.29.107])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4KgMSs4Rm1z2x;
-        Fri, 15 Apr 2022 22:39:09 -0700 (PDT)
+        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4KgMSt6gZhz1M5;
+        Fri, 15 Apr 2022 22:39:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1650087550;
-        bh=1GcA1EQLKr6cDmztZQrBKDqx1z4dpZsZKzsdXEMRVzY=;
+        s=dreamhost; t=1650087551;
+        bh=MINJwd5OLO59JndE14sJrRNnUCPFbYse28/G1Tm6ZUg=;
         h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=O6EVUGnYZCCOAL10auVg4KYPQEL5CcCMIqG67RDrj2Yfq0ehUw5IHLfaf/xeFrV6C
-         Aazy55ckqril50OFjab3d0r5RpDPw6Dm3BY8FKdU0zeo22iZpxM0sivWmkLQkHtXiS
-         y3Lmo1ZKB+9X0CUDCeDo0+b8dlqikjoQkpTVPWmtiKp5dMzvWAJJ+2tYNa1FaSK7DT
-         U7gQZ4715IYXfWw9epgv0ydXQg1EI5qLHC9qVMXbK22aQ7yK8BomZDb2lxAWPLcQLN
-         /XN8vu+DoWAadOkW+YDEjWPTLFRCy1meDR70ryGIaGDZB7Dei9Yyyza3hBsFU2/7ac
-         bIofukKT3MClw==
+        b=ig+ufRQSyfnVLcYiog8z/3ADVGHTPhIJPTs3FGEh28sxNpFrfhhsNi87iTDg7XSWv
+         wKVBlG4mxXB/m0sQXdaYLFnWehjtrB4NmRIz2W7bgFwCZvLxA1Z8OwRBg4Ze4yFZfG
+         p5SwVjsN75gVF8rGfeQQlTrr4kkR9Nljh4k2by+dyBiFHI9dB4WChA2otUEwishpPc
+         RUtrYSIMA3op2xuk8kz3KoOQWVTukWn2iFqB45tcsqgLTqa2QN2J6eBTmmnb7wvnPD
+         JX9LIq3yFzt33jJuNbzXekqsgcj2v5J4CzKAc1r+TO90eEbFBuDMaYdXEhWftI0JGO
+         A/nmlgDZaeyHA==
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     linux-mm@kvack.org
 Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -84,9 +84,9 @@ Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
         a.manzanares@samsung.com, heekwon.p@samsung.com,
         gim.jongmin@samsung.com, dave@stgolabs.net,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] mm: introduce per-node proactive reclaim interface
-Date:   Fri, 15 Apr 2022 22:39:00 -0700
-Message-Id: <20220416053902.68517-5-dave@stgolabs.net>
+Subject: [PATCH 5/6] mm/migration: export demotion_path of a node via sysfs
+Date:   Fri, 15 Apr 2022 22:39:01 -0700
+Message-Id: <20220416053902.68517-6-dave@stgolabs.net>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220416053902.68517-1-dave@stgolabs.net>
 References: <20220416053902.68517-1-dave@stgolabs.net>
@@ -102,164 +102,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces a mechanism to trigger memory reclaim
-as a per-node sysfs interface, inspired by compaction's
-equivalent; ie:
-
-	 echo 1G > /sys/devices/system/node/nodeX/reclaim
-
-It is based on the discussions from David's thread[1] as
-well as the current upstreaming of the memcg[2] interface
-(which has nice explanations for the benefits of userspace
-reclaim overall). In both cases conclusions were that either
-way of inducing proactive reclaim should be KISS, and can be
-later extended. So this patch does not allow the user much
-fine tuning beyond the size of the reclaim, such as anon/file
-or whether or semantics of demotion.
-
-[1] https://lore.kernel.org/all/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
-[2] https://lore.kernel.org/all/20220408045743.1432968-1-yosryahmed@google.com/
+Add a /sys/devices/system/node/nodeX/demotion_path file
+to export the possible target(s) in node_demotion[node].
 
 Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- Documentation/ABI/stable/sysfs-devices-node | 10 ++++
- drivers/base/node.c                         |  2 +
- include/linux/swap.h                        | 16 ++++++
- mm/vmscan.c                                 | 59 +++++++++++++++++++++
- 4 files changed, 87 insertions(+)
+ Documentation/ABI/stable/sysfs-devices-node |  6 ++++
+ drivers/base/node.c                         | 39 +++++++++++++++++++++
+ include/linux/migrate.h                     | 15 ++++++++
+ mm/migrate.c                                | 15 +-------
+ 4 files changed, 61 insertions(+), 14 deletions(-)
 
 diff --git a/Documentation/ABI/stable/sysfs-devices-node b/Documentation/ABI/stable/sysfs-devices-node
-index 8db67aa472f1..3c935e1334f7 100644
+index 3c935e1334f7..f620c6ae013c 100644
 --- a/Documentation/ABI/stable/sysfs-devices-node
 +++ b/Documentation/ABI/stable/sysfs-devices-node
-@@ -182,3 +182,13 @@ Date:		November 2021
- Contact:	Jarkko Sakkinen <jarkko@kernel.org>
- Description:
- 		The total amount of SGX physical memory in bytes.
+@@ -192,3 +192,9 @@ Description:
+ 		When it completes successfully, the specified amount or more memory
+ 		will have been reclaimed, and -EAGAIN if less bytes are reclaimed
+ 		than the specified amount.
 +
-+What:		/sys/devices/system/node/nodeX/reclaim
++What:		/sys/devices/system/node/nodeX/demotion_path
 +Date:		April 2022
 +Contact:	Davidlohr Bueso <dave@stgolabs.net>
 +Description:
-+		Write the amount of bytes to induce memory reclaim in this node.
-+		This file accepts a single key, the number of bytes to reclaim.
-+		When it completes successfully, the specified amount or more memory
-+		will have been reclaimed, and -EAGAIN if less bytes are reclaimed
-+		than the specified amount.
++		Shows nodes within the next tier of slower memory below this node.
 diff --git a/drivers/base/node.c b/drivers/base/node.c
-index 6cdf25fd26c3..d80c478e2a6e 100644
+index d80c478e2a6e..ab4bae777535 100644
 --- a/drivers/base/node.c
 +++ b/drivers/base/node.c
-@@ -670,6 +670,7 @@ static int register_node(struct node *node, int num)
- 
- 	hugetlb_register_node(node);
- 	compaction_register_node(node);
-+	reclaim_register_node(node);
- 	return 0;
+@@ -17,6 +17,7 @@
+ #include <linux/nodemask.h>
+ #include <linux/cpu.h>
+ #include <linux/device.h>
++#include <linux/migrate.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/swap.h>
+ #include <linux/slab.h>
+@@ -560,11 +561,49 @@ static ssize_t node_read_distance(struct device *dev,
  }
+ static DEVICE_ATTR(distance, 0444, node_read_distance, NULL);
  
-@@ -685,6 +686,7 @@ void unregister_node(struct node *node)
- 	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
- 	node_remove_accesses(node);
- 	node_remove_caches(node);
-+	reclaim_unregister_node(node);
- 	device_unregister(&node->dev);
- }
- 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 27093b477c5f..cca43ae6d770 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -398,6 +398,22 @@ extern unsigned long shrink_all_memory(unsigned long nr_pages);
- extern int vm_swappiness;
- long remove_mapping(struct address_space *mapping, struct folio *folio);
- 
-+#if defined(CONFIG_SYSFS) && defined(CONFIG_NUMA)
-+extern int reclaim_register_node(struct node *node);
-+extern void reclaim_unregister_node(struct node *node);
-+
-+#else
-+
-+static inline int reclaim_register_node(struct node *node)
++static ssize_t node_read_demotion_path(struct device *dev,
++				       struct device_attribute *attr, char *buf)
 +{
-+	return 0;
-+}
++	int nid = dev->id;
++	int len = 0;
++	int i;
++	struct demotion_nodes *nd;
 +
-+static inline void reclaim_unregister_node(struct node *node)
-+{
-+}
-+#endif /* CONFIG_SYSFS && CONFIG_NUMA */
++	/*
++	 * buf is currently PAGE_SIZE in length and each node needs 4 chars
++	 * at the most (target + space or newline).
++	 */
++	BUILD_BUG_ON(MAX_NUMNODES * 4 > PAGE_SIZE);
 +
- extern unsigned long reclaim_pages(struct list_head *page_list);
- #ifdef CONFIG_NUMA
- extern int node_reclaim_mode;
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index 1735c302831c..3539f8a0f0ea 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4819,3 +4819,62 @@ void check_move_unevictable_pages(struct pagevec *pvec)
- 	}
- }
- EXPORT_SYMBOL_GPL(check_move_unevictable_pages);
-+
-+#if defined(CONFIG_SYSFS) && defined(CONFIG_NUMA)
-+static ssize_t reclaim_store(struct device *dev,
-+			     struct device_attribute *attr,
-+			     const char *buf, size_t count)
-+{
-+	int err, nid = dev->id;
-+	gfp_t gfp_mask = GFP_KERNEL;
-+	struct pglist_data *pgdat = NODE_DATA(nid);
-+	unsigned long nr_to_reclaim, nr_reclaimed = 0;
-+	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
-+	struct scan_control sc = {
-+		.gfp_mask = current_gfp_context(gfp_mask),
-+		.reclaim_idx = gfp_zone(gfp_mask),
-+		.priority = NODE_RECLAIM_PRIORITY,
-+		.may_writepage = !laptop_mode,
-+		.may_unmap = 1,
-+		.may_swap = 1,
-+	};
-+
-+	buf = strstrip((char *)buf);
-+	err = page_counter_memparse(buf, "", &nr_to_reclaim);
-+	if (err)
-+		return err;
-+
-+	sc.nr_to_reclaim = max(nr_to_reclaim, SWAP_CLUSTER_MAX);
-+
-+	while (nr_reclaimed < nr_to_reclaim) {
-+		unsigned long reclaimed;
-+
-+		if (test_and_set_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags))
-+			return -EAGAIN;
-+
-+		/* does cond_resched() */
-+		reclaimed = __node_reclaim(pgdat, gfp_mask,
-+					   nr_to_reclaim - nr_reclaimed, &sc);
-+
-+		clear_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags);
-+
-+		if (!reclaimed && !nr_retries--)
-+			break;
-+
-+		nr_reclaimed += reclaimed;
++	if (!node_demotion) {
++		len += sysfs_emit_at(buf, len, "%d", NUMA_NO_NODE);
++		goto done;
 +	}
 +
-+	return nr_reclaimed < nr_to_reclaim ? -EAGAIN : count;
-+}
++	nd = &node_demotion[nid];
 +
-+static DEVICE_ATTR_WO(reclaim);
-+int reclaim_register_node(struct node *node)
-+{
-+	return device_create_file(&node->dev, &dev_attr_reclaim);
++	rcu_read_lock();
++	if (nd->nr == 0)
++		len += sysfs_emit_at(buf, len, "%d", NUMA_NO_NODE);
++	else {
++		for (i = 0; i < nd->nr; i++) {
++			len += sysfs_emit_at(buf, len, "%s%d",
++					     i ? " " : "", nd->nodes[i]);
++		}
++	}
++	rcu_read_unlock();
++done:
++	len += sysfs_emit_at(buf, len, "\n");
++	return len;
 +}
++static DEVICE_ATTR(demotion_path, 0444, node_read_demotion_path, NULL);
 +
-+void reclaim_unregister_node(struct node *node)
-+{
-+	return device_remove_file(&node->dev, &dev_attr_reclaim);
-+}
+ static struct attribute *node_dev_attrs[] = {
+ 	&dev_attr_meminfo.attr,
+ 	&dev_attr_numastat.attr,
+ 	&dev_attr_distance.attr,
+ 	&dev_attr_vmstat.attr,
++	&dev_attr_demotion_path.attr,
+ 	NULL
+ };
+ 
+diff --git a/include/linux/migrate.h b/include/linux/migrate.h
+index 90e75d5a54d6..b0ac6a717e44 100644
+--- a/include/linux/migrate.h
++++ b/include/linux/migrate.h
+@@ -111,6 +111,21 @@ static inline int migrate_misplaced_page(struct page *page,
+ }
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++#define DEFAULT_DEMOTION_TARGET_NODES 15
++
++#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
++#define DEMOTION_TARGET_NODES	(MAX_NUMNODES - 1)
++#else
++#define DEMOTION_TARGET_NODES	DEFAULT_DEMOTION_TARGET_NODES
 +#endif
++
++struct demotion_nodes {
++	unsigned short nr;
++	short nodes[DEMOTION_TARGET_NODES];
++};
++
++extern struct demotion_nodes *node_demotion __read_mostly;
++
+ #ifdef CONFIG_MIGRATION
+ 
+ /*
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 6c31ee1e1c9b..e47ea25fcfe8 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -2172,20 +2172,7 @@ int migrate_misplaced_page(struct page *page, struct vm_area_struct *vma,
+  * must be held over all reads to ensure that no cycles are
+  * observed.
+  */
+-#define DEFAULT_DEMOTION_TARGET_NODES 15
+-
+-#if MAX_NUMNODES < DEFAULT_DEMOTION_TARGET_NODES
+-#define DEMOTION_TARGET_NODES	(MAX_NUMNODES - 1)
+-#else
+-#define DEMOTION_TARGET_NODES	DEFAULT_DEMOTION_TARGET_NODES
+-#endif
+-
+-struct demotion_nodes {
+-	unsigned short nr;
+-	short nodes[DEMOTION_TARGET_NODES];
+-};
+-
+-static struct demotion_nodes *node_demotion __read_mostly;
++struct demotion_nodes *node_demotion __read_mostly;
+ 
+ /**
+  * next_demotion_node() - Get the next node in the demotion path
 -- 
 2.26.2
 

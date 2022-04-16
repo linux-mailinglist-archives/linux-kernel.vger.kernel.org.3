@@ -2,112 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EAF6503829
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:17:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5442503832
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:31:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232992AbiDPUUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 16:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
+        id S233010AbiDPUdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 16:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiDPUUJ (ORCPT
+        with ESMTP id S232999AbiDPUdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 16:20:09 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8517F3BA4E
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:17:35 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id k22so14313303wrd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:17:35 -0700 (PDT)
+        Sat, 16 Apr 2022 16:33:42 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54E605BD33
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:08 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id u19so18883668lff.4
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z66QlPMe1E4mhpzdiUDc+KempZ+cZum6Johy/Wm+dz8=;
-        b=F7CFMw281hzymPBtjrss84+JsX6BAJqkSr527Ok5eqTlHOxvIZuzxNA+xtHzmkGFWJ
-         7ne6uqMSH6gpzqitEcqZRFb/RtjC0Dbn12wxWxY6y0p1VDR7Sh0/SlfWX5WUpsRKf0zl
-         NYQbQ6ZvwBLkokDJ7LPfALXNvwR79Wvf3F8oQV4kXnlikRnVMOeoutxcJMVs3KcTykEP
-         W5SR1ECuk4/EN9Z9ar3flbf3enCkVTzvDfEU8RpW5K5eEmeDhqdTDO33pUHq0QtV/LML
-         vCPORAV249HLHJSiMCfk+db2iX7Oc2u7yRw0Cy9Xnrz65OTHGgW7DxyKP+jJYX0qMxc9
-         XWxg==
+        d=linux-foundation.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=YLjXXGPCeZFoo0LSeAoNTeYQmnNJj43S9GqF3x/ym20=;
+        b=SrSlzeiaQpCm4wc0MQ0m37QHAqoK9FT8MbEl9SPGH8rdWqMQedT7lTTS7GcsoBzJnC
+         mwh/ajg/m0eG9+H3NUwn9OLJNGOLmtA5Tot2AAfRENjeYsH57sN9QT0cCZ6etY+bAiY8
+         POMTsc8VPFSI9b1QmVcOmHGCjJIie+BnfYtvE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Z66QlPMe1E4mhpzdiUDc+KempZ+cZum6Johy/Wm+dz8=;
-        b=Sv6vbfq5aUyacQbBvARpcjijspbndp5J6X7rEiC2pxE5lh5Nk9ICv3uCfYeH/JmMdi
-         3JR9XR3oRa0OQFdAzMkoinSAeKFX+o+Ve5ma8RjWLCbJpd6vbSBgP3gt6qJzSZy27/SU
-         9foOfv1h8nUMEoq+FTsEwkqja6bVT7iqby1X2yVpY55IPzucF75ofZt3VvP6Q39msFG9
-         EGQ6EuuXr3srX38rkkylFHlokGGyFn6zUTCCxdf0/wjWUCMtdUCihxBsjBwuN9oXKtlq
-         Bs8+5dMjnXVBSfBjxjBODwqw+AODXS4QS0WRUOV7jpTZCnCNITEJzN0II5HvcMd5tCQ2
-         YLmQ==
-X-Gm-Message-State: AOAM532UKexgVyv+bB1AF4DCSjBeVsaTaJ+i1zqhfChb/4KERRONgB3z
-        LdVtcNgl1X+/aFAmLD3IHznWPQ==
-X-Google-Smtp-Source: ABdhPJwamGE2+m2jdo/YzkPiZgqG+C3MGgsJKmH8dGNvySsvShgjB7taz2I++EjQ109pl63YINS/Bw==
-X-Received: by 2002:a5d:595f:0:b0:20a:88cf:c047 with SMTP id e31-20020a5d595f000000b0020a88cfc047mr2502977wri.63.1650140254112;
-        Sat, 16 Apr 2022 13:17:34 -0700 (PDT)
-Received: from brgl-uxlite.. (199.153.205.77.rev.sfr.net. [77.205.153.199])
-        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b0038e75fda4edsm7859968wmb.47.2022.04.16.13.17.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 13:17:33 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [GIT PULL] gpio: fixes for v5.18-rc3
-Date:   Sat, 16 Apr 2022 22:17:27 +0200
-Message-Id: <20220416201727.3017-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.32.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=YLjXXGPCeZFoo0LSeAoNTeYQmnNJj43S9GqF3x/ym20=;
+        b=BwlDmq/TNEy3IXceUH/aSyqPUw3czZB+lvoM/ZcR5wvyZ0OO2kMr9Z1V99UJij43I9
+         9FxOm4BSPpWSInE2xdvD0Y96Et5uAhKmkWQ8qtI4/ywdfutgXiixTCgti6W5k8dNfAHt
+         R8VRWJ7wnFKzrABRGokVkcvILZZU0p7WB+0GDjukzvWGZCZK1hU0etycqUjTflyvQKJY
+         NY4eqPTaKIt+HalIbMNj8Hiu7GGHHeiOUPsCSl011c22oEM5bKQfebpN7IzFlJNMgAzK
+         lcf761Yml240j5ADhItQhQ+C0/1iTYakVaH3codakjdyk1titg1FFy0E4u0k/ODT7LAP
+         hqqg==
+X-Gm-Message-State: AOAM5324lNeWptkLUSsItSJpoLTWIm4rb4+PRpzXJBJXum12Guq0kQd6
+        ovnWUY3W8xhKbVQxbwQ3mB+/3HHMGFEk6x0o28s=
+X-Google-Smtp-Source: ABdhPJzD9HwNLlcYCx5Y5bPP7o79l7BxtnCqfgWsVtOTjx6ZrzSe3VUw1hHPejnzsmdc/kYdLS48ow==
+X-Received: by 2002:a05:6512:945:b0:44a:f03f:e8c9 with SMTP id u5-20020a056512094500b0044af03fe8c9mr3264466lft.163.1650141066390;
+        Sat, 16 Apr 2022 13:31:06 -0700 (PDT)
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com. [209.85.167.48])
+        by smtp.gmail.com with ESMTPSA id g3-20020a2e9e43000000b00244c60deb14sm664533ljk.15.2022.04.16.13.31.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 13:31:03 -0700 (PDT)
+Received: by mail-lf1-f48.google.com with SMTP id o2so18815542lfu.13
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:31:03 -0700 (PDT)
+X-Received: by 2002:ac2:4203:0:b0:448:8053:d402 with SMTP id
+ y3-20020ac24203000000b004488053d402mr3175652lfh.687.1650141063333; Sat, 16
+ Apr 2022 13:31:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220415164413.2727220-1-song@kernel.org> <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
+ <YlpPW9SdCbZnLVog@infradead.org> <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+In-Reply-To: <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 16 Apr 2022 13:30:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
+Message-ID: <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
+Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
+To:     Song Liu <songliubraving@fb.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Kernel Team <Kernel-team@fb.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Sat, Apr 16, 2022 at 12:55 PM Song Liu <songliubraving@fb.com> wrote:
+>
+> Based on this analysis, I think we should either
+>   1) ship the whole set with 5.18; or
+>   2) ship 1/4, 3/4, and 4/4 with 5.18, and 2/4 with 5.19.
 
-Please pull the following set of fixes for the next rc. There's a single fix
-for gpio-sim and two patches for GPIO ACPI pulled from Andy.
+Honestly, I think the proper thing to do is
 
-Thanks!
-Bart
+ - apply #1, because yes, that "use huge pages" should be an opt-in.
 
-The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
+ - but just disable hugepages for now.
 
-  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
+I think those games with set_memory_nx() and friends just show how
+rough this all is right now.
 
-are available in the Git repository at:
+In fact, I personally think that the whole bpf 'prog_pack' stuff
+should probably be disabled. It looks incredible broken to me right
+now.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.18-rc3
+Unless I mis-read it, it does a "module_alloc()" to allocate the vmap
+area, and then just marks it executable without having even
+initialized the pages. Am I missing something? So now we have random
+kernel memory that is marked executable.
 
-for you to fetch changes up to 0ebb4fbe31343a42370a2897ea9424fe78f3a88f:
+Sure, it's also marked RO, but who cares? It's random data that is now
+executable.
 
-  Merge tag 'intel-gpio-v5.18-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current (2022-04-16 21:57:00 +0200)
+Maybe I am missing something, but I really don't think this is ready
+for prime-time. We should effectively disable it all, and have people
+think through it a lot more.
 
-----------------------------------------------------------------
-gpio fixes for v5.18-rc3
-
-- fix the set/get_multiple() callbacks in gpio-sim
-- use correct format characters in gpiolib-acpi
-- use an unsigned type for pins in gpiolib-acpi
-
-----------------------------------------------------------------
-Andy Shevchenko (1):
-      gpiolib: acpi: Convert type for pin to be unsigned
-
-Bartosz Golaszewski (2):
-      gpio: sim: fix setting and getting multiple lines
-      Merge tag 'intel-gpio-v5.18-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current
-
-Linus Torvalds (1):
-      gpiolib: acpi: use correct format characters
-
- drivers/gpio/gpio-sim.c       |  4 ++--
- drivers/gpio/gpiolib-acpi.c   | 22 ++++++++++++----------
- include/linux/gpio/consumer.h |  8 +++++++-
- 3 files changed, 21 insertions(+), 13 deletions(-)
+                   Linus

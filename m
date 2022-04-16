@@ -2,60 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5525045C3
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 01:30:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB3B5045C6
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 01:30:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232251AbiDPXaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 19:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
+        id S233046AbiDPXd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 19:33:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbiDPX36 (ORCPT
+        with ESMTP id S229898AbiDPXdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 19:29:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70ED81DF
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 16:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650151645; x=1681687645;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=JxMqWf/KQpqO9i4AJkYitosT7mAUrEoZbX3zEv00y+M=;
-  b=mCFxAW+kqq92pxU6EIz7xpy1hfnEuhsyAf1CpEsWVsp6ybnrIjwuQxdr
-   A5uOYNkjP8HjFs+WAlTWh+CYrj42qS8dmRj/BBVaM0PnwqkFPnVgUJH4w
-   XSKLWagkRTqBAkVTqT1UXCB0Nt+c6pcgRqlfZdHr7kT3S4fbwis/his1f
-   p4gMHzwZPYLPauucifdnFl0x2J4SWaxxBq3rRnuIXS1DNMnIcYOuc1nUf
-   3A7oYUToaMEBtrbvKFH3z7SgDlL5FsTV74q/39Kjw6b3h6REHx6nNNxYT
-   W4cIsZUYfF8w3jJdjmTbfKlmOIVjjjveDjT8WH3aCPTOtI4V3R+P9q14L
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349795087"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="349795087"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 16:27:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="663653512"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 16 Apr 2022 16:27:21 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfrp2-0003Yt-Ud;
-        Sat, 16 Apr 2022 23:27:20 +0000
-Date:   Sun, 17 Apr 2022 07:26:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Dan Li <ashimida@linux.alibaba.com>
-Subject: [kees:for-next/lkdtm 6/6] drivers/misc/lkdtm/cfi.c:62:37: warning:
- cast from pointer to integer of different size
-Message-ID: <202204170710.LwCV5Ec0-lkp@intel.com>
+        Sat, 16 Apr 2022 19:33:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72722C105;
+        Sat, 16 Apr 2022 16:30:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89FC1B80A0B;
+        Sat, 16 Apr 2022 23:30:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E860DC385A3;
+        Sat, 16 Apr 2022 23:30:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650151849;
+        bh=nd58mF27wY5dwLAgcNLOqzjElU7YpZR3Sqgx6KMTHsQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=CxkZ57ZY0YSf0tqM3LLSzmXfOTlRCIFafAFh8ewm7kECNWlAsOQD0hn8/YaEa8D4/
+         AkZ/SBqlDh/2qX0SyhIKeKoPhP+u06oXkDlw+w57iVvLuG0o8JcwQxqr56MtjN7s2D
+         IgFYIjIrJmvRY7bWhgVfaXR8KWnPWhMheaW8ePLY1tbfBcEokJrVf9lZ4DhFvdihXV
+         9BFdl8PU4cWHxHRFiit2boF1OrYIEUFhWXF53ey1CcV3B+LYW2EbAsx68TkMTvO3f3
+         6osWFM2d7qpf4Z4laoiC86U+Wsm194awp7BmnnCYBtVPaiKVzgrtjDs/FWrBW2Ipe6
+         /Iu4b2l2XBuEg==
+Date:   Sat, 16 Apr 2022 18:30:47 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Wunderlich <linux@fw-web.de>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     linux-rockchip@lists.infradead.org,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [RFC/RFT 4/6] PCI: rockchip-dwc: add pcie bifurcation
+Message-ID: <20220416233047.GA938296@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220416135458.104048-5-linux@fw-web.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,62 +68,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/lkdtm
-head:   2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
-commit: 2e53b877dc1258d4ac3de98f496bb88ec3bf5e25 [6/6] lkdtm: Add CFI_BACKWARD to test ROP mitigations
-config: sparc-randconfig-r026-20220417 (https://download.01.org/0day-ci/archive/20220417/202204170710.LwCV5Ec0-lkp@intel.com/config)
-compiler: sparc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
-        git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
-        git fetch --no-tags kees for-next/lkdtm
-        git checkout 2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/misc/lkdtm/
+On Sat, Apr 16, 2022 at 03:54:56PM +0200, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
+> 
+> PCIe Lanes can be split to 2 slots with bifurcation.
+> Add support for this in existing pcie driver.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Please s/pcie/PCIe/ in subject and above to be consistent.  You also
+have kind of a random usage in other patches.
 
-All warnings (new ones prefixed by >>):
+Mention the DT property used for this in the commit log.
 
-   drivers/misc/lkdtm/cfi.c: In function 'set_return_addr_unchecked':
->> drivers/misc/lkdtm/cfi.c:62:37: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-      62 |         ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-         |                                     ^
-   drivers/misc/lkdtm/cfi.c:72:13: note: in expansion of macro 'no_pac_addr'
-      72 |         if (no_pac_addr(*ret_addr) == expected)
-         |             ^~~~~~~~~~~
->> drivers/misc/lkdtm/cfi.c:62:10: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-      62 |         ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-         |          ^
-   drivers/misc/lkdtm/cfi.c:72:13: note: in expansion of macro 'no_pac_addr'
-      72 |         if (no_pac_addr(*ret_addr) == expected)
-         |             ^~~~~~~~~~~
-   drivers/misc/lkdtm/cfi.c: In function 'set_return_addr':
->> drivers/misc/lkdtm/cfi.c:62:37: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-      62 |         ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-         |                                     ^
-   drivers/misc/lkdtm/cfi.c:87:13: note: in expansion of macro 'no_pac_addr'
-      87 |         if (no_pac_addr(*ret_addr) == expected)
-         |             ^~~~~~~~~~~
->> drivers/misc/lkdtm/cfi.c:62:10: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-      62 |         ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-         |          ^
-   drivers/misc/lkdtm/cfi.c:87:13: note: in expansion of macro 'no_pac_addr'
-      87 |         if (no_pac_addr(*ret_addr) == expected)
-         |             ^~~~~~~~~~~
+Is the "rockchip,bifurcation" DT property something that should be
+generalized so it's not rockchip-specific?  Other controllers are
+likely to support similar functionality.
 
-
-vim +62 drivers/misc/lkdtm/cfi.c
-
-    60	
-    61	#define no_pac_addr(addr)      \
-  > 62		((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
-    63	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Co-developed-by: Peter Geis <pgwipeout@gmail.com>
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> index 863374604fb1..1b0c2115b32e 100644
+> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
+> @@ -20,6 +20,7 @@
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+>  #include <linux/reset.h>
+> +#include <linux/phy/pcie.h>
+>  
+>  #include "pcie-designware.h"
+>  
+> @@ -59,6 +60,7 @@ struct rockchip_pcie {
+>  	struct regulator                *vpcie3v3;
+>  	struct irq_domain		*irq_domain;
+>  	raw_spinlock_t			irq_lock;
+> +	bool				bifurcation;
+>  };
+>  
+>  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
+> @@ -273,6 +275,12 @@ static int rockchip_pcie_phy_init(struct rockchip_pcie *rockchip)
+>  		return dev_err_probe(dev, PTR_ERR(rockchip->phy),
+>  				     "missing PHY\n");
+>  
+> +	if (rockchip->bifurcation) {
+> +		ret = phy_set_mode_ext(rockchip->phy, PHY_MODE_PCIE, PHY_MODE_PCIE_BIFURCATION);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>  	ret = phy_init(rockchip->phy);
+>  	if (ret < 0)
+>  		return ret;
+> @@ -345,6 +353,9 @@ static int rockchip_pcie_probe(struct platform_device *pdev)
+>  		}
+>  	}
+>  
+> +	if (device_property_read_bool(dev, "rockchip,bifurcation"))
+> +		rockchip->bifurcation = true;
+> +
+>  	ret = rockchip_pcie_phy_init(rockchip);
+>  	if (ret)
+>  		goto disable_regulator;
+> -- 
+> 2.25.1
+> 
+> 
+> -- 
+> linux-phy mailing list
+> linux-phy@lists.infradead.org
+> https://lists.infradead.org/mailman/listinfo/linux-phy

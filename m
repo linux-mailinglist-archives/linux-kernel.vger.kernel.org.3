@@ -2,143 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A18B75045AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 00:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C66C5045B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 00:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232169AbiDPW3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 18:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S232690AbiDPWgs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 18:36:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiDPW3K (ORCPT
+        with ESMTP id S231652AbiDPWgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 18:29:10 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6551EAD5;
-        Sat, 16 Apr 2022 15:26:37 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-df02f7e2c9so11025459fac.10;
-        Sat, 16 Apr 2022 15:26:37 -0700 (PDT)
+        Sat, 16 Apr 2022 18:36:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 975D9265B
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 15:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650148452;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4ouuJnJQp4IGN8I0+Gam0bFswWMP7CzxEr+ECX/m5CA=;
+        b=cwGVA1SMn+xEPspXABh7/2QFfCMk6k3u3nRLUKscEoJEr63y0Zqy8oDw3UyCWgYD5DFNhn
+        yTFVqIhMuFieY1x25XfWCSAC91YRUxGAX4RTN0Fdvaxsi1tt/k2jnPyJx5B78jlsDhD78O
+        MPly9qgzB3mMVAQZzRT+mnVDdVMP2hY=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-631-iDNWV6zHMlWhlkTtc009YQ-1; Sat, 16 Apr 2022 18:34:09 -0400
+X-MC-Unique: iDNWV6zHMlWhlkTtc009YQ-1
+Received: by mail-qk1-f197.google.com with SMTP id h8-20020a05620a244800b00699fb28d5e4so7711880qkn.22
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 15:34:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=hvCxCwUFHQkLQBr7J+w+QCRRJE2MrOWyjavx4Ay8QBM=;
-        b=mTvMciFX4PLTzgBdWTBt+DJ4YdwIkipOTVq53aedV1bWIVafyPyQCAcSDqGQpYx66y
-         HsAEestO6oxfJjYB46hnoVxFTKZ/vNxAqcohBe27PyfQA/Xnek7T+FyTKURY38qs2a0u
-         8244jSQ9t9Bm1D6qJrjoVf1Ht0g9gUGRA4YsSgJzASV9NfTmBWp+jOKHtMB9u4070iPo
-         An5rO/hf9YDjl2yBX+oASAhzu8d2FG6CaE0ZG6eFAb27rLqLkPK1ol7yGKsvuKGnwnes
-         8O+IA4CGw7H5uor1s8DJdLQ27zRsAXzm4EVphuSGhhpnk3zKgxnRnara0Ra/gF6ULAC8
-         04EA==
-X-Gm-Message-State: AOAM530WocB+p3/GXwP3vSL3vQwuA7+BVTpDbl+iuRPuSnBgiTTvRQuz
-        EmBhW1Zy1OFg3LbWsj5bqw==
-X-Google-Smtp-Source: ABdhPJwAU+czzeOWm0Hjm+2PAnXqqQ5eDd7fmD0UgJ0du/QHi33EB6DpQFfnsgngMtOCoGpqeirsxg==
-X-Received: by 2002:a05:6870:d1c9:b0:e5:9f16:c94f with SMTP id b9-20020a056870d1c900b000e59f16c94fmr1885553oac.273.1650147996776;
-        Sat, 16 Apr 2022 15:26:36 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id hq6-20020a0568709b0600b000e59102e1bbsm1894823oab.22.2022.04.16.15.26.36
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4ouuJnJQp4IGN8I0+Gam0bFswWMP7CzxEr+ECX/m5CA=;
+        b=Qmg+46NXXJ6m83e7CinzUTOsFUzPItjC2Lqv/lbskYX7UJvkjw01V2cKuACofQo0gF
+         VjxpaAcjI5NKfnP7e5yjWlXcwhVGPNn85dWXMf1hYDWqOrj99UcN5CR+IbVohEuWTEmh
+         mlsCRsyB86hcq1Aargcgjro3n84+bNUuMty5NjfD9M0omn+P6Pe+1Dq8bA0BuD/RIGsb
+         TZ9fRJCbZRlWVCtv+0N+64DwwryW9Bd5ULSOMAVzhQMENsyMti7/yXGFE2ZAWddF+ILC
+         tBWAhwbsizhFGNl8rqqXAZthQwt6T0OYu5bWQXSNFaLycrVqkM6Z1OH9F3TOyS3mT0EJ
+         Vz0A==
+X-Gm-Message-State: AOAM531BniA3A9Tmj9Me/vmsKilyFlGOuKfwFvzzijbo5aNOLQO5WaFV
+        YyNqmew18rpooQ8+4t2pFTuZ6/nK1WNx9FIpJTZrdWvgzISRS+ZL9jjMKq4YUSN52Fe7duyeo+q
+        8/Q+RKhFRpOTMrGCa9mWtsbQ+
+X-Received: by 2002:a05:620a:cf2:b0:69c:4dc4:8944 with SMTP id c18-20020a05620a0cf200b0069c4dc48944mr2940663qkj.553.1650148449025;
+        Sat, 16 Apr 2022 15:34:09 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJyCgSH8or87FJu0ZT9dvXV57n7uWYJZDIsex3cv5/l1u5s9UMBP5GIBcNqRLvUrEyps6t5lOQ==
+X-Received: by 2002:a05:620a:cf2:b0:69c:4dc4:8944 with SMTP id c18-20020a05620a0cf200b0069c4dc48944mr2940650qkj.553.1650148448824;
+        Sat, 16 Apr 2022 15:34:08 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id f11-20020a05620a12eb00b0069c88d15b6asm3422412qkl.68.2022.04.16.15.34.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 15:26:36 -0700 (PDT)
-Received: (nullmailer pid 3557472 invoked by uid 1000);
-        Sat, 16 Apr 2022 22:26:35 -0000
-Date:   Sat, 16 Apr 2022 17:26:35 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v5.18, take 2
-Message-ID: <YltCm/NZ+tnI6dzn@robh.at.kernel.org>
+        Sat, 16 Apr 2022 15:34:08 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH v2] drm/i915: change node clearing from memset to initialization
+Date:   Sat, 16 Apr 2022 18:34:01 -0400
+Message-Id: <20220416223401.1720193-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+In insert_mappable_node(), the parameter node is
+cleared late in node's use with memset.
+insert_mappable_node() is a singleton, called only
+from i915_gem_gtt_prepare() which itself is only
+called by i915_gem_gtt_pread() and
+i915_gem_gtt_pwrite_fast() where the definition of
+node originates.
 
-Please pull a few more DT fixes.
+Instead of using memset, initialize node to 0 at its
+definitions.
 
-Rob
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+v2: restore clearing of flags
 
+ drivers/gpu/drm/i915/i915_gem.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+diff --git a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
+index 2e10187cd0a0..268b1f66b873 100644
+--- a/drivers/gpu/drm/i915/i915_gem.c
++++ b/drivers/gpu/drm/i915/i915_gem.c
+@@ -69,7 +69,6 @@ insert_mappable_node(struct i915_ggtt *ggtt, struct drm_mm_node *node, u32 size)
+ 	if (err)
+ 		return err;
+ 
+-	memset(node, 0, sizeof(*node));
+ 	err = drm_mm_insert_node_in_range(&ggtt->vm.mm, node,
+ 					  size, 0, I915_COLOR_UNEVICTABLE,
+ 					  0, ggtt->mappable_end,
+@@ -381,7 +380,7 @@ i915_gem_gtt_pread(struct drm_i915_gem_object *obj,
+ 	struct drm_i915_private *i915 = to_i915(obj->base.dev);
+ 	struct i915_ggtt *ggtt = to_gt(i915)->ggtt;
+ 	intel_wakeref_t wakeref;
+-	struct drm_mm_node node;
++	struct drm_mm_node node = {};
+ 	void __user *user_data;
+ 	struct i915_vma *vma;
+ 	u64 remain, offset;
+@@ -538,7 +537,7 @@ i915_gem_gtt_pwrite_fast(struct drm_i915_gem_object *obj,
+ 	struct i915_ggtt *ggtt = to_gt(i915)->ggtt;
+ 	struct intel_runtime_pm *rpm = &i915->runtime_pm;
+ 	intel_wakeref_t wakeref;
+-	struct drm_mm_node node;
++	struct drm_mm_node node = {};
+ 	struct i915_vma *vma;
+ 	u64 remain, offset;
+ 	void __user *user_data;
+-- 
+2.27.0
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git tags/devicetree-fixes-for-5.18-2
-
-for you to fetch changes up to 652980b1541c5a02e6410647c7daf840c06d724a:
-
-  dt-bindings: display: panel-timing: Define a single type for properties (2022-04-14 16:04:52 -0500)
-
-----------------------------------------------------------------
-Devicetree fixes for v5.18, part 2:
-
-- Fix scalar property schemas with array constraints
-
-- Fix 'enum' lists with duplicate entries
-
-- Fix incomplete if/then/else schemas
-
-- Add Renesas RZ/V2L SoC support to Mali Bifrost binding
-
-- Maintainers update for Marvell irqchip
-
-----------------------------------------------------------------
-Dongjin Yang (1):
-      dt-bindings: net: snps: remove duplicate name
-
-Geert Uytterhoeven (1):
-      dt-bindings: power: renesas,apmu: Fix cpus property limits
-
-Krzysztof Kozlowski (2):
-      dt-bindings: extcon: maxim,max77843: fix ports type
-      dt-bindings: irqchip: mrvl,intc: refresh maintainers
-
-Lad Prabhakar (1):
-      dt-bindings: gpu: mali-bifrost: Document RZ/V2L SoC
-
-Rob Herring (4):
-      dt-bindings: Fix incomplete if/then/else schemas
-      dt-bindings: Fix 'enum' lists with duplicate entries
-      dt-bindings: Fix array constraints on scalar properties
-      dt-bindings: display: panel-timing: Define a single type for properties
-
- .../bindings/arm/tegra/nvidia,tegra20-pmc.yaml     |  1 -
- Documentation/devicetree/bindings/bus/ti-sysc.yaml |  1 -
- .../bindings/display/panel/panel-timing.yaml       | 42 +++++------
- .../devicetree/bindings/extcon/maxim,max77843.yaml |  2 +-
- .../devicetree/bindings/gpu/arm,mali-bifrost.yaml  |  5 +-
- .../devicetree/bindings/hwmon/ti,tmp464.yaml       |  5 +-
- .../devicetree/bindings/iio/adc/adi,ad7476.yaml    |  1 +
- .../bindings/iio/adc/st,stm32-dfsdm-adc.yaml       | 12 ++--
- .../devicetree/bindings/iio/dac/adi,ad5360.yaml    |  6 +-
- .../devicetree/bindings/interconnect/qcom,rpm.yaml | 84 +++++++++++-----------
- .../bindings/interrupt-controller/mrvl,intc.yaml   |  6 +-
- Documentation/devicetree/bindings/media/coda.yaml  |  1 -
- .../bindings/media/mediatek,vcodec-decoder.yaml    |  2 -
- .../bindings/media/mediatek,vcodec-encoder.yaml    |  3 -
- .../media/mediatek,vcodec-subdev-decoder.yaml      |  1 -
- .../bindings/mmc/nvidia,tegra20-sdhci.yaml         |  2 +
- .../devicetree/bindings/net/snps,dwmac.yaml        |  6 +-
- .../devicetree/bindings/net/ti,davinci-mdio.yaml   |  1 +
- .../bindings/phy/nvidia,tegra20-usb-phy.yaml       | 20 +++---
- .../devicetree/bindings/phy/qcom,usb-hs-phy.yaml   | 32 +++++----
- .../devicetree/bindings/pinctrl/cirrus,madera.yaml | 11 ++-
- .../devicetree/bindings/power/renesas,apmu.yaml    |  3 +-
- .../devicetree/bindings/power/supply/bq2415x.yaml  |  1 -
- .../bindings/regulator/fixed-regulator.yaml        | 34 ++++-----
- .../bindings/remoteproc/qcom,sc7280-wpss-pil.yaml  |  4 +-
- .../devicetree/bindings/sound/st,stm32-sai.yaml    |  6 +-
- .../devicetree/bindings/spi/renesas,sh-msiof.yaml  |  2 -
- Documentation/devicetree/bindings/sram/sram.yaml   | 16 ++---
- 28 files changed, 145 insertions(+), 165 deletions(-)

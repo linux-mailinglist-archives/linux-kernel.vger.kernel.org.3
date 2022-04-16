@@ -2,130 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02A3F50360E
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:52:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 931995035FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbiDPKye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 06:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
+        id S231475AbiDPKmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 06:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiDPKyW (ORCPT
+        with ESMTP id S231470AbiDPKmj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 06:54:22 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FCD3AA72;
-        Sat, 16 Apr 2022 03:51:50 -0700 (PDT)
-Received: from kwepemi100006.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KgVPb1LDvzgYsg;
-        Sat, 16 Apr 2022 18:51:47 +0800 (CST)
-Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100006.china.huawei.com (7.221.188.165) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 18:51:49 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 18:51:48 +0800
-From:   Weili Qian <qianweili@huawei.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
-        Weili Qian <qianweili@huawei.com>
-Subject: [PATCH 4/4] crypto: hisilicon/qm - remove hisi_qm_get_free_qp_num()
-Date:   Sat, 16 Apr 2022 18:45:59 +0800
-Message-ID: <20220416104559.10826-5-qianweili@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220416104559.10826-1-qianweili@huawei.com>
-References: <20220416104559.10826-1-qianweili@huawei.com>
+        Sat, 16 Apr 2022 06:42:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 268F014002;
+        Sat, 16 Apr 2022 03:40:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D41E5B81D17;
+        Sat, 16 Apr 2022 10:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEBA6C385A3;
+        Sat, 16 Apr 2022 10:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650105604;
+        bh=Oos9yoNwh3SAMIWdcwpd3Xw5BoBg+r+ad8P3SM2AUEc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Wu8fNiou8nfeGGtUNnSnv4UUdrbM4GFT123skfFr+xm4M7digTpwJTZrL9325fKil
+         hB/xTx9yvDQgYjSHv7l3bQYup3RsbXyqeostsyGNYKZpIfoVRxuOJJuPyW4gvysNM2
+         uWm7j8PNyDUrhU6XHdqK7OWR7ICq1sRkY1BjO4ihP8KKbWETplnIhikxPH/pnmkpFb
+         GL/e/qx/CtcIUu5j+O6x5wYw6azRsjVCa9s2csisqZb3X1LusRcfXP+KPoaenAQDP8
+         nczplE/l0J7dQgcJ/o8ZS5u4MTgCUse2EFEMCc908LF1dw+j4FIb8va5b4OZLj87oW
+         /8Au3mIdpZ1iw==
+Date:   Sat, 16 Apr 2022 11:48:01 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Navin Sankar Velliangiri <navin@linumiz.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: temperature: max31865: Make use of device
+ properties
+Message-ID: <20220416114801.0865fcba@jic23-huawei>
+In-Reply-To: <20220413185335.21743-1-andriy.shevchenko@linux.intel.com>
+References: <20220413185335.21743-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600009.china.huawei.com (7.193.23.164)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hisi_qm_get_free_qp_num() is to get the free queue number on the function.
-It is a simple function and is only called by
-hisi_qm_get_available_instances().
+On Wed, 13 Apr 2022 21:53:35 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-This patch modifies to get the free queue directly in
-hisi_qm_get_available_instances(), and remove hisi_qm_get_free_qp_num().
+> Convert the module to be property provider agnostic and allow
+> it to be used on non-OF platforms.
 
-Signed-off-by: Weili Qian <qianweili@huawei.com>
----
- drivers/crypto/hisilicon/qm.c | 28 +++++++++-------------------
- include/linux/hisi_acc_qm.h   |  1 -
- 2 files changed, 9 insertions(+), 20 deletions(-)
+This one should call out the addition of missing mod_devicetable.h
+If nothing else comes up I can add that whilst applying.
+Looks fine to me but I'd like to give a little time for
+Navin to comment if they wish.
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index f708a632a2f5..cd4c146340dd 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -3051,9 +3051,17 @@ static void qm_qp_event_notifier(struct hisi_qp *qp)
- 	wake_up_interruptible(&qp->uacce_q->wait);
- }
- 
-+ /* This function returns free number of qp in qm. */
- static int hisi_qm_get_available_instances(struct uacce_device *uacce)
- {
--	return hisi_qm_get_free_qp_num(uacce->priv);
-+	struct hisi_qm *qm = uacce->priv;
-+	int ret;
-+
-+	down_read(&qm->qps_lock);
-+	ret = qm->qp_num - qm->qp_in_used;
-+	up_read(&qm->qps_lock);
-+
-+	return ret;
- }
- 
- static void hisi_qm_set_hw_reset(struct hisi_qm *qm, int offset)
-@@ -3365,24 +3373,6 @@ void hisi_qm_wait_task_finish(struct hisi_qm *qm, struct hisi_qm_list *qm_list)
- }
- EXPORT_SYMBOL_GPL(hisi_qm_wait_task_finish);
- 
--/**
-- * hisi_qm_get_free_qp_num() - Get free number of qp in qm.
-- * @qm: The qm which want to get free qp.
-- *
-- * This function return free number of qp in qm.
-- */
--int hisi_qm_get_free_qp_num(struct hisi_qm *qm)
--{
--	int ret;
--
--	down_read(&qm->qps_lock);
--	ret = qm->qp_num - qm->qp_in_used;
--	up_read(&qm->qps_lock);
--
--	return ret;
--}
--EXPORT_SYMBOL_GPL(hisi_qm_get_free_qp_num);
--
- static void hisi_qp_memory_uninit(struct hisi_qm *qm, int num)
- {
- 	struct device *dev = &qm->pdev->dev;
-diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
-index 46974d641af1..545f58432412 100644
---- a/include/linux/hisi_acc_qm.h
-+++ b/include/linux/hisi_acc_qm.h
-@@ -436,7 +436,6 @@ int hisi_qm_stop(struct hisi_qm *qm, enum qm_stop_reason r);
- int hisi_qm_start_qp(struct hisi_qp *qp, unsigned long arg);
- int hisi_qm_stop_qp(struct hisi_qp *qp);
- int hisi_qp_send(struct hisi_qp *qp, const void *msg);
--int hisi_qm_get_free_qp_num(struct hisi_qm *qm);
- void hisi_qm_debug_init(struct hisi_qm *qm);
- void hisi_qm_debug_regs_clear(struct hisi_qm *qm);
- int hisi_qm_sriov_enable(struct pci_dev *pdev, int max_vfs);
--- 
-2.33.0
+Jonathan
+
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/iio/temperature/max31865.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iio/temperature/max31865.c b/drivers/iio/temperature/max31865.c
+> index 86c3f3509a26..e3bb78184c6e 100644
+> --- a/drivers/iio/temperature/max31865.c
+> +++ b/drivers/iio/temperature/max31865.c
+> @@ -12,9 +12,11 @@
+>  #include <linux/delay.h>
+>  #include <linux/err.h>
+>  #include <linux/init.h>
+> +#include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/sysfs.h>
+> +#include <linux/property.h>
+>  #include <linux/spi/spi.h>
+>  #include <asm/unaligned.h>
+>  
+> @@ -305,7 +307,7 @@ static int max31865_probe(struct spi_device *spi)
+>  	indio_dev->channels = max31865_channels;
+>  	indio_dev->num_channels = ARRAY_SIZE(max31865_channels);
+>  
+> -	if (of_property_read_bool(spi->dev.of_node, "maxim,3-wire")) {
+> +	if (device_property_read_bool(&spi->dev, "maxim,3-wire")) {
+>  		/* select 3 wire */
+>  		data->three_wire = 1;
+>  	} else {
 

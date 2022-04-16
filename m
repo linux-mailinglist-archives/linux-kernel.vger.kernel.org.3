@@ -2,169 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 807005033BF
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3BC503396
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229718AbiDPDB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 23:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
+        id S229907AbiDPDH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 23:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiDPDBn (ORCPT
+        with ESMTP id S229822AbiDPDH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 23:01:43 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0213EFA23F;
-        Fri, 15 Apr 2022 19:59:13 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id ks6so18207263ejb.1;
-        Fri, 15 Apr 2022 19:59:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=6kCehNo5ngnv+AR/8Crw7G8bbbsFA1kQKSA748Q4B5I=;
-        b=kqHylPCidoznaIHTWZKtutc7vYQy7agr+P/t43ywdDhc1YOPaXfslUSYWb6QI0cGlE
-         dpAdde4bqExFOSf2c1JXDNMq//7GFBgiMPRYmALM4HYPzLFWscDKhWZwo5ftWGEQkyEe
-         Wh6I04zQknzWcK19+tGjvo1UXEgrcU3IDxJrVF5WGgBrs+xu5qDHlhcQqVeCHFHLggAq
-         1DuTkwtZLuHrCqAnDVP8/Xc9PegZfvLSoQY6hFVp91JlWPCCLDwQf0jXrGG64uzxm1YO
-         t0y4durJxLr+YUo9zd7/tRCfVqMM9z6cBX4Bgei7VobL+GbFsGxjcKfmhMA1qIIkZDUG
-         a36w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=6kCehNo5ngnv+AR/8Crw7G8bbbsFA1kQKSA748Q4B5I=;
-        b=kicPTzIt/bsKC8v4w0H012i8n5iZD/WWZ7eC+29yZFF9bFQu6iFkBHqTkpgU4ehBp3
-         VADqNhSrymnqpcortEMewHeVZB4BF4WV4A+rq6F+JKmNd8QehNYW7BOQVLJXxFu9ccpk
-         1MABDB+UWpZ8Spxtf3oAUQLOadGG1uEa8R1UFAU8NeTsfiBTaLn31wCXJQTknq9dAe9c
-         POMdfQYdHrD8ZcmmUcvfKhkFY1aVE+6m7muCyuvGhMTkxpbAT8EtyeiyTNZDLnU9kjGR
-         A6L7Y4mxzrPN5B1j6+l3rYn1bQDSVXqoxqZ/Fbf1vOz7/eltxZPMfFb2++gSGOf2eRia
-         +AZg==
-X-Gm-Message-State: AOAM533M9pNUW4JVLM8iKFt0CtaMEX2UjRjBS5p4+Hhq5ik86M9JZn+P
-        eOCw9HQ5MJVeM1+1J6dQA8E=
-X-Google-Smtp-Source: ABdhPJwHHJ1fnnyDCZwsM8RO7I0Dnd4veOx5hIB19ACG2nH8GUAQcIde8QHE6NvnM+nhX3NHP+1pwA==
-X-Received: by 2002:a17:907:97c8:b0:6ef:6a79:6285 with SMTP id js8-20020a17090797c800b006ef6a796285mr1370190ejc.231.1650077951595;
-        Fri, 15 Apr 2022 19:59:11 -0700 (PDT)
-Received: from localhost.localdomain ([138.199.7.159])
-        by smtp.gmail.com with ESMTPSA id oz20-20020a170906cd1400b006e872188edbsm2200915ejb.104.2022.04.15.19.59.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 19:59:11 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org,
-        Yassine Oudjana <y.oudjana@protonmail.com>
-Subject: [PATCH RESEND v2 9/9] arm64: dts: qcom: msm8996-xiaomi-scorpio: Use MSM8996 Pro
-Date:   Sat, 16 Apr 2022 06:56:37 +0400
-Message-Id: <20220416025637.83484-10-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220416025637.83484-1-y.oudjana@protonmail.com>
-References: <20220416025637.83484-1-y.oudjana@protonmail.com>
+        Fri, 15 Apr 2022 23:07:57 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127CE11435B
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:05:24 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KgJ3M2xCMzgY88;
+        Sat, 16 Apr 2022 11:05:19 +0800 (CST)
+Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
+ (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 16 Apr
+ 2022 11:05:20 +0800
+From:   Miaohe Lin <linmiaohe@huawei.com>
+To:     <akpm@linux-foundation.org>
+CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <david@redhat.com>, <apopple@nvidia.com>,
+        <surenb@google.com>, <minchan@kernel.org>, <peterx@redhat.com>,
+        <sfr@canb.auug.org.au>, <rcampbell@nvidia.com>,
+        <naoya.horiguchi@nec.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
+Subject: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap read fails
+Date:   Sat, 16 Apr 2022 11:05:49 +0800
+Message-ID: <20220416030549.60559-1-linmiaohe@huawei.com>
+X-Mailer: git-send-email 2.23.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.124.27]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Xiaomi Mi Note 2 has the MSM8996 Pro SoC. Rename the dts
-to match, include msm8996pro.dtsi, and add the qcom,msm8996pro
-compatible. To do that, the msm8996.dtsi include in msm8996-xiaomi-common
-has to be moved to msm8996-xiaomi-gemini, the only device that needs it
-included after this change. The msm-id is also removed as it is now defined
-in msm8996pro.dtsi.
+There is a bug in unuse_pte(): when swap page happens to be unreadable,
+page filled with random data is mapped into user address space. In case
+of error, a special swap entry indicating swap read fails is set to the
+page table. So the swapcache page can be freed and the user won't end up
+with a permanently mounted swap because a sector is bad. And if the page
+is accessed later, the user process will be killed so that corrupted data
+is never consumed. On the other hand, if the page is never accessed, the
+user won't even notice it.
 
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- arch/arm64/boot/dts/qcom/Makefile                             | 2 +-
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi           | 3 ---
- arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts            | 1 +
- ...m8996-xiaomi-scorpio.dts => msm8996pro-xiaomi-scorpio.dts} | 4 ++--
- 4 files changed, 4 insertions(+), 6 deletions(-)
- rename arch/arm64/boot/dts/qcom/{msm8996-xiaomi-scorpio.dts => msm8996pro-xiaomi-scorpio.dts} (99%)
+v2:
+  use special swap entry to avoid permanently mounted swap
+  free the bad page in swapcache
+---
+ include/linux/swap.h    |  7 ++++++-
+ include/linux/swapops.h | 10 ++++++++++
+ mm/memory.c             |  5 ++++-
+ mm/swapfile.c           | 11 +++++++++++
+ 4 files changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index f9e6343acd03..72b8fcdd9074 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -37,7 +37,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-dora.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-kagura.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-sony-xperia-tone-keyaki.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-gemini.dtb
--dtb-$(CONFIG_ARCH_QCOM)	+= msm8996-xiaomi-scorpio.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= msm8996pro-xiaomi-scorpio.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-asus-novago-tp370ql.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-fxtec-pro1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8998-hp-envy-x2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-index 7a9fcbe9bb31..1bdd3f09f536 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-common.dtsi
-@@ -3,9 +3,6 @@
-  * Copyright (c) 2020, Yassine Oudjana <y.oudjana@protonmail.com>
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index d112434f85df..03c576111737 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
+  * actions on faults.
   */
  
--/dts-v1/;
--
--#include "msm8996.dtsi"
- #include "pm8994.dtsi"
- #include "pmi8994.dtsi"
- #include <dt-bindings/input/input.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-index 34f82e06ef53..e360187109a2 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996-xiaomi-gemini.dts
-@@ -5,6 +5,7 @@
++#define SWAP_READ_ERROR_NUM 1
++#define SWAP_READ_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
++			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
++			     SWP_PTE_MARKER_NUM)
+ /*
+  * PTE markers are used to persist information onto PTEs that are mapped with
+  * file-backed memories.  As its name "PTE" hints, it should only be applied to
+@@ -120,7 +124,8 @@ static inline int current_is_kswapd(void)
  
- /dts-v1/;
+ #define MAX_SWAPFILES \
+ 	((1 << MAX_SWAPFILES_SHIFT) - SWP_DEVICE_NUM - \
+-	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM - SWP_PTE_MARKER_NUM)
++	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM - \
++	SWP_PTE_MARKER_NUM - SWAP_READ_ERROR_NUM)
  
-+#include "msm8996.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
- #include <dt-bindings/sound/qcom,q6asm.h>
-diff --git a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-similarity index 99%
-rename from arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-rename to arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-index 27a45ddbb5bd..2028325e1c0f 100644
---- a/arch/arm64/boot/dts/qcom/msm8996-xiaomi-scorpio.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8996pro-xiaomi-scorpio.dts
-@@ -5,6 +5,7 @@
+ /*
+  * Magic header for a swap area. The first part of the union is
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index fffbba0036f6..d1093384de9f 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -108,6 +108,16 @@ static inline void *swp_to_radix_entry(swp_entry_t entry)
+ 	return xa_mk_value(entry.val);
+ }
  
- /dts-v1/;
++static inline swp_entry_t make_swapin_error_entry(struct page *page)
++{
++	return swp_entry(SWAP_READ_ERROR, page_to_pfn(page));
++}
++
++static inline int is_swapin_error_entry(swp_entry_t entry)
++{
++	return swp_type(entry) == SWAP_READ_ERROR;
++}
++
+ #if IS_ENABLED(CONFIG_DEVICE_PRIVATE)
+ static inline swp_entry_t make_readable_device_private_entry(pgoff_t offset)
+ {
+diff --git a/mm/memory.c b/mm/memory.c
+index e6434b824009..34d1d66a05bd 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -1476,7 +1476,8 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
+ 			/* Only drop the uffd-wp marker if explicitly requested */
+ 			if (!zap_drop_file_uffd_wp(details))
+ 				continue;
+-		} else if (is_hwpoison_entry(entry)) {
++		} else if (is_hwpoison_entry(entry) ||
++			   is_swapin_error_entry(entry)) {
+ 			if (!should_zap_cows(details))
+ 				continue;
+ 		} else {
+@@ -3724,6 +3725,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 			ret = vmf->page->pgmap->ops->migrate_to_ram(vmf);
+ 		} else if (is_hwpoison_entry(entry)) {
+ 			ret = VM_FAULT_HWPOISON;
++		} else if (is_swapin_error_entry(entry)) {
++			ret = VM_FAULT_SIGBUS;
+ 		} else if (is_pte_marker_entry(entry)) {
+ 			ret = handle_pte_marker(vmf);
+ 		} else {
+diff --git a/mm/swapfile.c b/mm/swapfile.c
+index 9398e915b36b..95b63f69f388 100644
+--- a/mm/swapfile.c
++++ b/mm/swapfile.c
+@@ -1797,6 +1797,17 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
+ 		goto out;
+ 	}
  
-+#include "msm8996pro.dtsi"
- #include "msm8996-xiaomi-common.dtsi"
- #include "pmi8996.dtsi"
- #include <dt-bindings/sound/qcom,q6afe.h>
-@@ -12,9 +13,8 @@
- 
- / {
- 	model = "Xiaomi Mi Note 2";
--	compatible = "xiaomi,scorpio", "qcom,msm8996";
-+	compatible = "xiaomi,scorpio", "qcom,msm8996pro", "qcom,msm8996";
- 	chassis-type = "handset";
--	qcom,msm-id = <305 0x10000>;
- 	qcom,board-id = <34 0>;
- 
- 	chosen {
++	if (unlikely(!PageUptodate(page))) {
++		pte_t pteval;
++
++		dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
++		pteval = swp_entry_to_pte(make_swapin_error_entry(page));
++		set_pte_at(vma->vm_mm, addr, pte, pteval);
++		swap_free(entry);
++		ret = 0;
++		goto out;
++	}
++
+ 	/* See do_swap_page() */
+ 	BUG_ON(!PageAnon(page) && PageMappedToDisk(page));
+ 	BUG_ON(PageAnon(page) && PageAnonExclusive(page));
 -- 
-2.35.1
+2.23.0
 

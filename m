@@ -2,73 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6367503494
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9436503496
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:58:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbiDPG7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 02:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
+        id S229883AbiDPHAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 03:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDPG7I (ORCPT
+        with ESMTP id S229445AbiDPHAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:59:08 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183B715FC5;
-        Fri, 15 Apr 2022 23:56:38 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id e10so7960933qka.6;
-        Fri, 15 Apr 2022 23:56:38 -0700 (PDT)
+        Sat, 16 Apr 2022 03:00:30 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3288F4D268;
+        Fri, 15 Apr 2022 23:57:59 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id ay11-20020a05600c1e0b00b0038eb92fa965so8835993wmb.4;
+        Fri, 15 Apr 2022 23:57:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=punmqzR82m/ivhuuKbOeeSpij9rdVwj6dBLRCcjDN2k=;
-        b=i9cqRmdeTs/dXZI7D8kVcvX7nKhAwVdRcsrrwV0udpeEz8u7vILSkXeM6Y4ILBwLw8
-         8vo5kZ1OpuvzjvqTf1HFeDTKoIjZ3dPKmhQboel8qI974hmxHwWLFUgsJNBUVEjw+Tc6
-         kL2AsD9EAsTN+etwV5KUcpvxVUXCVNLj7No/z6ySWd/UQPvsJXld/Ne2ur4Qh5dZkDMs
-         NVMTGlHHChISbR5xF6QAxi1kd9sFXWZxFSvDrV+fzbtmH4ROgYXbxibN+7iaiBKKMlo7
-         csRB5we2ap8f6joUB0iF3pPQT1DiNQCDPjN73JxXkn/llWZ2F5PBI5wzgrcfeC3Jkjmb
-         uaqg==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17zTEE8XFfFm+/ScXpzV4xIgy2dAstkdBPVwcZZY8rQ=;
+        b=bwBNhFrQSrmvc1CtKbZ4sqWEuSbDshJHlQMQLnYIya2Pa6hBoPjlcvZXjhD16Te5/M
+         VYvkeS8B53NtEDZGScwOS2LmZSVGv0XBChFMUdlNthg8RdtOgS8JG89eKomSaJsp7tz5
+         P8LtIuYX7iIJIVgdjdF4C7y4cCT/ha1vI6j7ch4blTL1X8okXedJKXLFyToPH8TtWfSb
+         13pQxwAtJZP9M4a0K4boas/+yILr8jWIhRAA3fxQSZ2dpWoZGnmiuk5v24rPok0w4D6p
+         aGipaoPK1V/YFRNMZ7t+DWgkW4xpXN6PyazbugdjdYn2gNgxmOXCg4jnxhV/CVzRQus4
+         Z9yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=punmqzR82m/ivhuuKbOeeSpij9rdVwj6dBLRCcjDN2k=;
-        b=d9YExKATJmhUa09dPHJ6Zmh2X3Dg+7fJZ4rHiZNQMVK++ND8lNUV91qrN7+RJSjat5
-         AMeM6xFXjyuvTwUJupKy8iO71JvPrahGF0S1kKV5WpK08H+UPVS1jD1V3eAy4OwNDUVC
-         OyF949SW77fTndSDnBNfhvyyqH0CfvSSTnD+RCGMAAIB8VBAJ0tF2JOL2u03YCWr2Hem
-         KsPyDVfG90k+g1Jf3DP5YUblO3sGiwQgIEXOQvRsA0aXGix54qMROc26sPUi/w9EUA7a
-         oFUmPl3PTRdm4pMNxAed6lrAuaUE7A/qxhRxpJenevJUrCNy6ESKnG8IdFGN1VtDOscV
-         oNlw==
-X-Gm-Message-State: AOAM532Udbm/PoQV6QYLG3oULQK7xiscRQNbniZpbnPH/e6s/AUkCk6t
-        RxaX/RRC6uTmwXE3If8gDQ==
-X-Google-Smtp-Source: ABdhPJze666BWXOZ7v9o1b6NG80dduEFjgHheOq3DDDAfADinL6HdmzmCwEKN6ASVTQtu2Maih3mqA==
-X-Received: by 2002:a05:620a:bd4:b0:47b:4c75:894e with SMTP id s20-20020a05620a0bd400b0047b4c75894emr1303721qki.425.1650092197189;
-        Fri, 15 Apr 2022 23:56:37 -0700 (PDT)
-Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
-        by smtp.gmail.com with ESMTPSA id d8-20020ac85d88000000b002f18ecfd221sm4087252qtx.82.2022.04.15.23.56.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=17zTEE8XFfFm+/ScXpzV4xIgy2dAstkdBPVwcZZY8rQ=;
+        b=ALKR4xceT4b63L0l1h6mmOEHfpiy+lnosSV9z5fbvz64ZvelOpayYc/qvwouuQ63LH
+         MutW1bdC1ZMNFktWp7oEXmlpbs0RjAgaVh4dMUHw3o+rC/9fbZMBPwCRLhcBQJOHN7ee
+         DZp1tqVn3P7A1SE9O3jFcH7mvssA+JPcxqdNWqMhZCg4Zg5xLubBF8oQX7ChxEtLyM+v
+         EArbSp9OJntLvAyZ0dfLfJ3OgfkFNUj/jw1yCP7CN0jasZndve2nTrLS7E8WbYd+0swt
+         R4EWrfW10WtKI+Uu4NiGhQXOcyy55691IAuubwgA2UEsetT4d7lkKCVtFjCSGLf6q5C/
+         xLzg==
+X-Gm-Message-State: AOAM533kksL7xZaER8bjJ7XDlG7jzw4WQn/tFdFZFTqHitr8M9AdYSnm
+        anZCBKM4n/bolkUOFDXq0Mg=
+X-Google-Smtp-Source: ABdhPJwWvH+6ikfkTS5jdiE4pjuOGynlgRgn79e7LCayb9QYNxXGZHAF5dWXj3uDfBRVkZEdzyBgww==
+X-Received: by 2002:a1c:f315:0:b0:381:1f6d:6ca6 with SMTP id q21-20020a1cf315000000b003811f6d6ca6mr6235188wmq.25.1650092277720;
+        Fri, 15 Apr 2022 23:57:57 -0700 (PDT)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id o11-20020a05600002cb00b0020a88c4ecb5sm579350wry.3.2022.04.15.23.57.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Apr 2022 23:56:36 -0700 (PDT)
-Date:   Fri, 15 Apr 2022 23:56:33 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Cong Wang <cong.wang@bytedance.com>,
-        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
+        Fri, 15 Apr 2022 23:57:57 -0700 (PDT)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
-Message-ID: <20220416065633.GA10882@bytedance>
-References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
- <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
- <20220414131424.744aa842@kernel.org>
- <20220414200854.GA2729@bytedance>
- <20220415191133.0597a79a@kernel.org>
+Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Subject: [PATCH] media: i2c: tw9906: Use ARRAY_SIZE instead of manual checking
+Date:   Sat, 16 Apr 2022 08:56:54 +0200
+Message-Id: <20220416065654.56712-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415191133.0597a79a@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -79,57 +68,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 07:11:33PM +0200, Jakub Kicinski wrote:
-> On Thu, 14 Apr 2022 13:08:54 -0700 Peilin Ye wrote:
-> > > We should also reject using SEQ with collect_md, but that's a separate
-> > > issue.  
-> > 
-> > Could you explain this a bit more?  It seems that commit 77a5196a804e
-> > ("gre: add sequence number for collect md mode.") added this
-> > intentionally.
-> 
-> Interesting. Maybe a better way of dealing with the problem would be
-> rejecting SEQ if it's not set on the device itself.
+this driver currently uses a terminator(0x00, 0x00) to end the list
+of reg-vals, instead a struct array with ARRAY_SIZE macro from
+linux/kernel.h can be used to obtain the length of the array.
 
-According to ip-link(8), the 'external' option is mutually exclusive
-with the '[o]seq' option.  In other words, a collect_md mode IP6GRETAP
-device should always have the TUNNEL_SEQ flag off in its
-'tunnel->parms.o_flags'.
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+---
+ drivers/media/i2c/tw9906.c | 110 ++++++++++++++++++++-----------------
+ 1 file changed, 60 insertions(+), 50 deletions(-)
 
-(However, I just tried:
-
-  $ ip link add dev ip6gretap11 type ip6gretap oseq external
-					       ^^^^ ^^^^^^^^
- ...and my 'ip' executed it with no error.  I will take a closer look at
- iproute2 later; maybe it's undefined behavior...)
-
-How about:
-
-1. If 'external', then 'oseq' means "always turn off NETIF_F_LLTX, so
-it's okay to set TUNNEL_SEQ in e.g. eBPF";
-
-2. Otherwise, if 'external' but NOT 'oseq', then whenever we see a
-TUNNEL_SEQ in skb's tunnel info, we do something like WARN_ONCE() then
-return -EINVAL.
-
-?
-
-> When the device is set up without the SEQ bit enabled it disables Tx
-> locking (look for LLTX). This means that multiple CPUs can try to do
-> the tunnel->o_seqno++ in parallel. Not catastrophic but racy for sure.
-
-Thanks for the explanation!  At first glance, I was wondering why don't
-we make 'o_seqno' atomic until I found commit b790e01aee74 ("ip_gre:
-lockless xmit").  I quote:
-
-"""
-Even using an atomic_t o_seq, we would increase chance for packets being
-out of order at receiver.
-"""
-
-I don't fully understand this out-of-order yet, but it seems that making
-'o_seqno' atomic is not an option?
-
-Thanks,
-Peilin Ye
+diff --git a/drivers/media/i2c/tw9906.c b/drivers/media/i2c/tw9906.c
+index c528eb01fed0..318f87ae63f2 100644
+--- a/drivers/media/i2c/tw9906.c
++++ b/drivers/media/i2c/tw9906.c
+@@ -6,6 +6,7 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/i2c.h>
++#include <linux/kernel.h>
+ #include <linux/videodev2.h>
+ #include <linux/ioctl.h>
+ #include <linux/slab.h>
+@@ -26,36 +27,40 @@ static inline struct tw9906 *to_state(struct v4l2_subdev *sd)
+ 	return container_of(sd, struct tw9906, sd);
+ }
+ 
+-static const u8 initial_registers[] = {
+-	0x02, 0x40, /* input 0, composite */
+-	0x03, 0xa2, /* correct digital format */
+-	0x05, 0x81, /* or 0x01 for PAL */
+-	0x07, 0x02, /* window */
+-	0x08, 0x14, /* window */
+-	0x09, 0xf0, /* window */
+-	0x0a, 0x10, /* window */
+-	0x0b, 0xd0, /* window */
+-	0x0d, 0x00, /* scaling */
+-	0x0e, 0x11, /* scaling */
+-	0x0f, 0x00, /* scaling */
+-	0x10, 0x00, /* brightness */
+-	0x11, 0x60, /* contrast */
+-	0x12, 0x11, /* sharpness */
+-	0x13, 0x7e, /* U gain */
+-	0x14, 0x7e, /* V gain */
+-	0x15, 0x00, /* hue */
+-	0x19, 0x57, /* vbi */
+-	0x1a, 0x0f,
+-	0x1b, 0x40,
+-	0x29, 0x03,
+-	0x55, 0x00,
+-	0x6b, 0x26,
+-	0x6c, 0x36,
+-	0x6d, 0xf0,
+-	0x6e, 0x41,
+-	0x6f, 0x13,
+-	0xad, 0x70,
+-	0x00, 0x00, /* Terminator (reg 0x00 is read-only) */
++struct reg_val {
++	u8 reg;
++	u8 val;
++};
++
++static const struct reg_val init_regs[] = {
++	{0x02, 0x40}, /* input 0, composite */
++	{0x03, 0xa2}, /* correct digital format */
++	{0x05, 0x81}, /* or 0x01 for PAL */
++	{0x07, 0x02}, /* window */
++	{0x08, 0x14}, /* window */
++	{0x09, 0xf0}, /* window */
++	{0x0a, 0x10}, /* window */
++	{0x0b, 0xd0}, /* window */
++	{0x0d, 0x00}, /* scaling */
++	{0x0e, 0x11}, /* scaling */
++	{0x0f, 0x00}, /* scaling */
++	{0x10, 0x00}, /* brightness */
++	{0x11, 0x60}, /* contrast */
++	{0x12, 0x11}, /* sharpness */
++	{0x13, 0x7e}, /* U gain */
++	{0x14, 0x7e}, /* V gain */
++	{0x15, 0x00}, /* hue */
++	{0x19, 0x57}, /* vbi */
++	{0x1a, 0x0f},
++	{0x1b, 0x40},
++	{0x29, 0x03},
++	{0x55, 0x00},
++	{0x6b, 0x26},
++	{0x6c, 0x36},
++	{0x6d, 0xf0},
++	{0x6e, 0x41},
++	{0x6f, 0x13},
++	{0xad, 0x70},
+ };
+ 
+ static int write_reg(struct v4l2_subdev *sd, u8 reg, u8 value)
+@@ -65,13 +70,14 @@ static int write_reg(struct v4l2_subdev *sd, u8 reg, u8 value)
+ 	return i2c_smbus_write_byte_data(client, reg, value);
+ }
+ 
+-static int write_regs(struct v4l2_subdev *sd, const u8 *regs)
++static int write_regs(struct v4l2_subdev *sd,
++		      const struct reg_val *rv, int len)
+ {
+-	int i;
+-
+-	for (i = 0; regs[i] != 0x00; i += 2)
+-		if (write_reg(sd, regs[i], regs[i + 1]) < 0)
++	while (--len >= 0) {
++		if (write_reg(sd, rv->reg, rv->val) < 0)
+ 			return -1;
++		rv++;
++	}
+ 	return 0;
+ }
+ 
+@@ -86,24 +92,28 @@ static int tw9906_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
+ {
+ 	struct tw9906 *dec = to_state(sd);
+ 	bool is_60hz = norm & V4L2_STD_525_60;
+-	static const u8 config_60hz[] = {
+-		0x05, 0x81,
+-		0x07, 0x02,
+-		0x08, 0x14,
+-		0x09, 0xf0,
+-		0,    0,
++	int ret;
++
++	static const struct reg_val config_60hz[] = {
++		{0x05, 0x81},
++		{0x07, 0x02},
++		{0x08, 0x14},
++		{0x09, 0xf0},
+ 	};
+-	static const u8 config_50hz[] = {
+-		0x05, 0x01,
+-		0x07, 0x12,
+-		0x08, 0x18,
+-		0x09, 0x20,
+-		0,    0,
++	static const struct reg_val config_50hz[] = {
++		{0x05, 0x01},
++		{0x07, 0x12},
++		{0x08, 0x18},
++		{0x09, 0x20},
+ 	};
+ 
+-	write_regs(sd, is_60hz ? config_60hz : config_50hz);
++	if (is_60hz)
++		ret = write_regs(sd, config_60hz, ARRAY_SIZE(config_60hz));
++	else
++		ret = write_regs(sd, config_50hz, ARRAY_SIZE(config_50hz));
++
+ 	dec->norm = norm;
+-	return 0;
++	return ret;
+ }
+ 
+ static int tw9906_s_ctrl(struct v4l2_ctrl *ctrl)
+@@ -195,7 +205,7 @@ static int tw9906_probe(struct i2c_client *client,
+ 	/* Initialize tw9906 */
+ 	dec->norm = V4L2_STD_NTSC;
+ 
+-	if (write_regs(sd, initial_registers) < 0) {
++	if (write_regs(sd, init_regs, ARRAY_SIZE(init_regs)) < 0) {
+ 		v4l2_err(client, "error initializing TW9906\n");
+ 		return -EINVAL;
+ 	}
+-- 
+2.30.2
 

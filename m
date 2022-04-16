@@ -2,248 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056B5503481
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:43:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A7D503486
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiDPGpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 02:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S229821AbiDPGut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 02:50:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiDPGp1 (ORCPT
+        with ESMTP id S229551AbiDPGuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:45:27 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F41710E57D
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:42:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650091375; x=1681627375;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9KKV/seif6yxgWWTpqghmLPpe+H3mHR2P7xtXXdbMOc=;
-  b=LyFJmxicyx1JYpu4jEp6p0+C1H9l3NP+xDTRaWOlOMB8F1DTWU8USP5j
-   F4yQ157peCoshH4Oo3rv58KmujsHDlS4D7aglxu2tchiXDHUSUx4rlmgA
-   Iv5puTZIsRp2fB/8wk7k5vlFI0VQl/MB/KPxhErENqUCF5G4/Maij5tg6
-   rO9rGcOTtP77QXMyfdhQvwAemj1Jc5EcMM0vLxI5I25KhwLmrXTl/9bKv
-   ZULdwPt6zLTmH0TCo8HyMKTB6q/irbW+wURdlWFalrb+YtcGMODi5OqDA
-   lMPhWZCwTdhMcq1rFMGkXAsn7oGvUacNa1mTTYxormdNBDm344aKcZa8P
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="326175395"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="326175395"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 23:42:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="662696699"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 23:42:53 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfc8y-0002s9-BA;
-        Sat, 16 Apr 2022 06:42:52 +0000
-Date:   Sat, 16 Apr 2022 14:42:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Palmer Dabbelt <palmer@rivosinc.com>
-Cc:     kbuild-all@lists.01.org,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:palmer/linux/tspinlock-v3 5/9]
- kernel/signal.c:887:9: sparse: sparse: incorrect type in argument 1
- (different address spaces)
-Message-ID: <202204161458.EiPLtOUS-lkp@intel.com>
+        Sat, 16 Apr 2022 02:50:46 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DBCFA221;
+        Fri, 15 Apr 2022 23:48:14 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KgNzm6KRZzfYnt;
+        Sat, 16 Apr 2022 14:47:32 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 14:48:10 +0800
+Subject: Re: [PATCH v10 03/14] mm/vmscan.c: refactor shrink_node()
+To:     Yu Zhao <yuzhao@google.com>, Stephen Rothwell <sfr@rothwell.id.au>,
+        <linux-mm@kvack.org>
+CC:     Andi Kleen <ak@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <page-reclaim@google.com>, <x86@kernel.org>,
+        Barry Song <baohua@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+References: <20220407031525.2368067-1-yuzhao@google.com>
+ <20220407031525.2368067-4-yuzhao@google.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <195d4677-e033-e124-144c-9ede270b4f70@huawei.com>
+Date:   Sat, 16 Apr 2022 14:48:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220407031525.2368067-4-yuzhao@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block palmer/linux/tspinlock-v3
-head:   fc2d79f0558a2de8cdf896d84f507bf51f90cd0c
-commit: 9d7cdf43225edaf8bef5c716927eb6a6c5a0f69b [5/9] RISC-V: Move to generic spinlocks
-config: riscv-randconfig-s031-20220414 (https://download.01.org/0day-ci/archive/20220416/202204161458.EiPLtOUS-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 11.2.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-dirty
-        # https://github.com/ammarfaizi2/linux-block/commit/9d7cdf43225edaf8bef5c716927eb6a6c5a0f69b
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block palmer/linux/tspinlock-v3
-        git checkout 9d7cdf43225edaf8bef5c716927eb6a6c5a0f69b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash
+On 2022/4/7 11:15, Yu Zhao wrote:
+> This patch refactors shrink_node() to improve readability for the
+> upcoming changes to mm/vmscan.c.
+> 
+> Signed-off-by: Yu Zhao <yuzhao@google.com>
+> Reviewed-by: Barry Song <baohua@kernel.org>
+> Acked-by: Brian Geffon <bgeffon@google.com>
+> Acked-by: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+> Acked-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Acked-by: Steven Barrett <steven@liquorix.net>
+> Acked-by: Suleiman Souhlal <suleiman@google.com>
+> Tested-by: Daniel Byrne <djbyrne@mtu.edu>
+> Tested-by: Donald Carr <d@chaos-reins.com>
+> Tested-by: Holger Hoffstätte <holger@applied-asynchrony.com>
+> Tested-by: Konstantin Kharlamov <Hi-Angel@yandex.ru>
+> Tested-by: Shuang Zhai <szhai2@cs.rochester.edu>
+> Tested-by: Sofia Trinh <sofia.trinh@edi.works>
+> Tested-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+> ---
+>  mm/vmscan.c | 198 +++++++++++++++++++++++++++-------------------------
+>  1 file changed, 104 insertions(+), 94 deletions(-)
+> 
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Looks good to me. Thanks!
 
+Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
 
-sparse warnings: (new ones prefixed by >>)
-   kernel/signal.c: note: in included file (through include/uapi/asm-generic/signal.h, include/asm-generic/signal.h, arch/riscv/include/generated/uapi/asm/signal.h, ...):
-   include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
-   kernel/signal.c:195:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:195:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:195:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:198:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:198:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:198:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:480:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:480:9: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:480:9: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:484:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:484:34: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:484:34: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:542:53: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct k_sigaction *ka @@     got struct k_sigaction [noderef] __rcu * @@
-   kernel/signal.c:542:53: sparse:     expected struct k_sigaction *ka
-   kernel/signal.c:542:53: sparse:     got struct k_sigaction [noderef] __rcu *
-   include/uapi/asm-generic/signal-defs.h:83:29: sparse: sparse: multiple address spaces given
->> kernel/signal.c:887:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t [usertype] *lock @@     got struct atomic_t [noderef] __rcu * @@
-   kernel/signal.c:887:9: sparse:     expected struct atomic_t [usertype] *lock
-   kernel/signal.c:887:9: sparse:     got struct atomic_t [noderef] __rcu *
-   kernel/signal.c:1082:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct atomic_t [usertype] *lock @@     got struct atomic_t [noderef] __rcu * @@
-   kernel/signal.c:1082:9: sparse:     expected struct atomic_t [usertype] *lock
-   kernel/signal.c:1082:9: sparse:     got struct atomic_t [noderef] __rcu *
-   kernel/signal.c:1330:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:1330:9: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:1330:9: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:1331:16: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct k_sigaction *action @@     got struct k_sigaction [noderef] __rcu * @@
-   kernel/signal.c:1331:16: sparse:     expected struct k_sigaction *action
-   kernel/signal.c:1331:16: sparse:     got struct k_sigaction [noderef] __rcu *
-   kernel/signal.c:1351:34: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:1351:34: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:1351:34: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:1929:36: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:1929:36: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:1929:36: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2039:44: sparse: sparse: cast removes address space '__rcu' of expression
-   kernel/signal.c:2058:65: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *tsk @@     got struct task_struct [noderef] __rcu *parent @@
-   kernel/signal.c:2058:65: sparse:     expected struct task_struct *tsk
-   kernel/signal.c:2058:65: sparse:     got struct task_struct [noderef] __rcu *parent
-   kernel/signal.c:2059:40: sparse: sparse: cast removes address space '__rcu' of expression
-   kernel/signal.c:2077:14: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sighand_struct *psig @@     got struct sighand_struct [noderef] __rcu *[noderef] __rcu sighand @@
-   kernel/signal.c:2077:14: sparse:     expected struct sighand_struct *psig
-   kernel/signal.c:2077:14: sparse:     got struct sighand_struct [noderef] __rcu *[noderef] __rcu sighand
-   kernel/signal.c:2106:46: sparse: sparse: incorrect type in argument 3 (different address spaces) @@     expected struct task_struct *t @@     got struct task_struct [noderef] __rcu *parent @@
-   kernel/signal.c:2106:46: sparse:     expected struct task_struct *t
-   kernel/signal.c:2106:46: sparse:     got struct task_struct [noderef] __rcu *parent
-   kernel/signal.c:2107:34: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *parent @@
-   kernel/signal.c:2107:34: sparse:     expected struct task_struct *parent
-   kernel/signal.c:2107:34: sparse:     got struct task_struct [noderef] __rcu *parent
-   kernel/signal.c:2136:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *parent @@
-   kernel/signal.c:2136:24: sparse:     expected struct task_struct *parent
-   kernel/signal.c:2136:24: sparse:     got struct task_struct [noderef] __rcu *parent
-   kernel/signal.c:2139:24: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *real_parent @@
-   kernel/signal.c:2139:24: sparse:     expected struct task_struct *parent
-   kernel/signal.c:2139:24: sparse:     got struct task_struct [noderef] __rcu *real_parent
-   kernel/signal.c:2172:17: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   kernel/signal.c:2172:17: sparse:     expected struct sighand_struct *sighand
-   kernel/signal.c:2172:17: sparse:     got struct sighand_struct [noderef] __rcu *sighand
-   kernel/signal.c:2213:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2213:41: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2213:41: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2215:39: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2215:39: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2215:39: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2266:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2266:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2266:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2322:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2322:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2322:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2363:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2363:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2363:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2365:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2365:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2365:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2464:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2464:41: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2464:41: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2548:41: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2548:41: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2548:41: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2560:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2560:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2560:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2595:52: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *tsk @@     got struct task_struct [noderef] __rcu *parent @@
-   kernel/signal.c:2595:52: sparse:     expected struct task_struct *tsk
-   kernel/signal.c:2595:52: sparse:     got struct task_struct [noderef] __rcu *parent
-   kernel/signal.c:2597:49: sparse: sparse: cast removes address space '__rcu' of expression
-   kernel/signal.c:2635:49: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *sighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   kernel/signal.c:2635:49: sparse:     expected struct sighand_struct *sighand
-   kernel/signal.c:2635:49: sparse:     got struct sighand_struct [noderef] __rcu *sighand
-   kernel/signal.c:2964:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2964:27: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2964:27: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:2984:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:2984:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:2984:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3051:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3051:27: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3051:27: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3053:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3053:29: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3053:29: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3204:31: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3204:31: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3204:31: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3207:33: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3207:33: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3207:33: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3594:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3594:27: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3594:27: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3606:37: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3606:37: sparse:     expected struct spinlock [usertype] *lock
-   kernel/signal.c:3606:37: sparse:     got struct spinlock [noderef] __rcu *
-   kernel/signal.c:3611:35: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   kernel/signal.c:3611:35: sparse:     expected struct spinlock [usertype] *lock
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index 1678802e03e7..2232cb55af41 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2644,6 +2644,109 @@ enum scan_balance {
+>  	SCAN_FILE,
+>  };
+>  
+> +static void prepare_scan_count(pg_data_t *pgdat, struct scan_control *sc)
+> +{
+> +	unsigned long file;
+> +	struct lruvec *target_lruvec;
+> +
+> +	target_lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat);
+> +
+> +	/*
+> +	 * Flush the memory cgroup stats, so that we read accurate per-memcg
+> +	 * lruvec stats for heuristics.
+> +	 */
+> +	mem_cgroup_flush_stats();
+> +
+> +	/*
+> +	 * Determine the scan balance between anon and file LRUs.
+> +	 */
+> +	spin_lock_irq(&target_lruvec->lru_lock);
+> +	sc->anon_cost = target_lruvec->anon_cost;
+> +	sc->file_cost = target_lruvec->file_cost;
+> +	spin_unlock_irq(&target_lruvec->lru_lock);
+> +
+> +	/*
+> +	 * Target desirable inactive:active list ratios for the anon
+> +	 * and file LRU lists.
+> +	 */
+> +	if (!sc->force_deactivate) {
+> +		unsigned long refaults;
+> +
+> +		refaults = lruvec_page_state(target_lruvec,
+> +				WORKINGSET_ACTIVATE_ANON);
+> +		if (refaults != target_lruvec->refaults[0] ||
+> +			inactive_is_low(target_lruvec, LRU_INACTIVE_ANON))
+> +			sc->may_deactivate |= DEACTIVATE_ANON;
+> +		else
+> +			sc->may_deactivate &= ~DEACTIVATE_ANON;
+> +
+> +		/*
+> +		 * When refaults are being observed, it means a new
+> +		 * workingset is being established. Deactivate to get
+> +		 * rid of any stale active pages quickly.
+> +		 */
+> +		refaults = lruvec_page_state(target_lruvec,
+> +				WORKINGSET_ACTIVATE_FILE);
+> +		if (refaults != target_lruvec->refaults[1] ||
+> +		    inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
+> +			sc->may_deactivate |= DEACTIVATE_FILE;
+> +		else
+> +			sc->may_deactivate &= ~DEACTIVATE_FILE;
+> +	} else
+> +		sc->may_deactivate = DEACTIVATE_ANON | DEACTIVATE_FILE;
+> +
+> +	/*
+> +	 * If we have plenty of inactive file pages that aren't
+> +	 * thrashing, try to reclaim those first before touching
+> +	 * anonymous pages.
+> +	 */
+> +	file = lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
+> +	if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FILE))
+> +		sc->cache_trim_mode = 1;
+> +	else
+> +		sc->cache_trim_mode = 0;
+> +
+> +	/*
+> +	 * Prevent the reclaimer from falling into the cache trap: as
+> +	 * cache pages start out inactive, every cache fault will tip
+> +	 * the scan balance towards the file LRU.  And as the file LRU
+> +	 * shrinks, so does the window for rotation from references.
+> +	 * This means we have a runaway feedback loop where a tiny
+> +	 * thrashing file LRU becomes infinitely more attractive than
+> +	 * anon pages.  Try to detect this based on file LRU size.
+> +	 */
+> +	if (!cgroup_reclaim(sc)) {
+> +		unsigned long total_high_wmark = 0;
+> +		unsigned long free, anon;
+> +		int z;
+> +
+> +		free = sum_zone_node_page_state(pgdat->node_id, NR_FREE_PAGES);
+> +		file = node_page_state(pgdat, NR_ACTIVE_FILE) +
+> +			   node_page_state(pgdat, NR_INACTIVE_FILE);
+> +
+> +		for (z = 0; z < MAX_NR_ZONES; z++) {
+> +			struct zone *zone = &pgdat->node_zones[z];
+> +
+> +			if (!managed_zone(zone))
+> +				continue;
+> +
+> +			total_high_wmark += high_wmark_pages(zone);
+> +		}
+> +
+> +		/*
+> +		 * Consider anon: if that's low too, this isn't a
+> +		 * runaway file reclaim problem, but rather just
+> +		 * extreme pressure. Reclaim as per usual then.
+> +		 */
+> +		anon = node_page_state(pgdat, NR_INACTIVE_ANON);
+> +
+> +		sc->file_is_tiny =
+> +			file + free <= total_high_wmark &&
+> +			!(sc->may_deactivate & DEACTIVATE_ANON) &&
+> +			anon >> sc->priority;
+> +	}
+> +}
+> +
+>  /*
+>   * Determine how aggressively the anon and file LRU lists should be
+>   * scanned.  The relative value of each set of LRU lists is determined
+> @@ -3114,109 +3217,16 @@ static void shrink_node(pg_data_t *pgdat, struct scan_control *sc)
+>  	unsigned long nr_reclaimed, nr_scanned;
+>  	struct lruvec *target_lruvec;
+>  	bool reclaimable = false;
+> -	unsigned long file;
+>  
+>  	target_lruvec = mem_cgroup_lruvec(sc->target_mem_cgroup, pgdat);
+>  
+>  again:
+> -	/*
+> -	 * Flush the memory cgroup stats, so that we read accurate per-memcg
+> -	 * lruvec stats for heuristics.
+> -	 */
+> -	mem_cgroup_flush_stats();
+> -
+>  	memset(&sc->nr, 0, sizeof(sc->nr));
+>  
+>  	nr_reclaimed = sc->nr_reclaimed;
+>  	nr_scanned = sc->nr_scanned;
+>  
+> -	/*
+> -	 * Determine the scan balance between anon and file LRUs.
+> -	 */
+> -	spin_lock_irq(&target_lruvec->lru_lock);
+> -	sc->anon_cost = target_lruvec->anon_cost;
+> -	sc->file_cost = target_lruvec->file_cost;
+> -	spin_unlock_irq(&target_lruvec->lru_lock);
+> -
+> -	/*
+> -	 * Target desirable inactive:active list ratios for the anon
+> -	 * and file LRU lists.
+> -	 */
+> -	if (!sc->force_deactivate) {
+> -		unsigned long refaults;
+> -
+> -		refaults = lruvec_page_state(target_lruvec,
+> -				WORKINGSET_ACTIVATE_ANON);
+> -		if (refaults != target_lruvec->refaults[0] ||
+> -			inactive_is_low(target_lruvec, LRU_INACTIVE_ANON))
+> -			sc->may_deactivate |= DEACTIVATE_ANON;
+> -		else
+> -			sc->may_deactivate &= ~DEACTIVATE_ANON;
+> -
+> -		/*
+> -		 * When refaults are being observed, it means a new
+> -		 * workingset is being established. Deactivate to get
+> -		 * rid of any stale active pages quickly.
+> -		 */
+> -		refaults = lruvec_page_state(target_lruvec,
+> -				WORKINGSET_ACTIVATE_FILE);
+> -		if (refaults != target_lruvec->refaults[1] ||
+> -		    inactive_is_low(target_lruvec, LRU_INACTIVE_FILE))
+> -			sc->may_deactivate |= DEACTIVATE_FILE;
+> -		else
+> -			sc->may_deactivate &= ~DEACTIVATE_FILE;
+> -	} else
+> -		sc->may_deactivate = DEACTIVATE_ANON | DEACTIVATE_FILE;
+> -
+> -	/*
+> -	 * If we have plenty of inactive file pages that aren't
+> -	 * thrashing, try to reclaim those first before touching
+> -	 * anonymous pages.
+> -	 */
+> -	file = lruvec_page_state(target_lruvec, NR_INACTIVE_FILE);
+> -	if (file >> sc->priority && !(sc->may_deactivate & DEACTIVATE_FILE))
+> -		sc->cache_trim_mode = 1;
+> -	else
+> -		sc->cache_trim_mode = 0;
+> -
+> -	/*
+> -	 * Prevent the reclaimer from falling into the cache trap: as
+> -	 * cache pages start out inactive, every cache fault will tip
+> -	 * the scan balance towards the file LRU.  And as the file LRU
+> -	 * shrinks, so does the window for rotation from references.
+> -	 * This means we have a runaway feedback loop where a tiny
+> -	 * thrashing file LRU becomes infinitely more attractive than
+> -	 * anon pages.  Try to detect this based on file LRU size.
+> -	 */
+> -	if (!cgroup_reclaim(sc)) {
+> -		unsigned long total_high_wmark = 0;
+> -		unsigned long free, anon;
+> -		int z;
+> -
+> -		free = sum_zone_node_page_state(pgdat->node_id, NR_FREE_PAGES);
+> -		file = node_page_state(pgdat, NR_ACTIVE_FILE) +
+> -			   node_page_state(pgdat, NR_INACTIVE_FILE);
+> -
+> -		for (z = 0; z < MAX_NR_ZONES; z++) {
+> -			struct zone *zone = &pgdat->node_zones[z];
+> -			if (!managed_zone(zone))
+> -				continue;
+> -
+> -			total_high_wmark += high_wmark_pages(zone);
+> -		}
+> -
+> -		/*
+> -		 * Consider anon: if that's low too, this isn't a
+> -		 * runaway file reclaim problem, but rather just
+> -		 * extreme pressure. Reclaim as per usual then.
+> -		 */
+> -		anon = node_page_state(pgdat, NR_INACTIVE_ANON);
+> -
+> -		sc->file_is_tiny =
+> -			file + free <= total_high_wmark &&
+> -			!(sc->may_deactivate & DEACTIVATE_ANON) &&
+> -			anon >> sc->priority;
+> -	}
+> +	prepare_scan_count(pgdat, sc);
+>  
+>  	shrink_node_memcgs(pgdat, sc);
+>  
+> 
 
-vim +887 kernel/signal.c
-
-^1da177e4c3f41 Linus Torvalds 2005-04-16  866  
-fb1d910c178ba0 Tejun Heo      2011-06-14  867  /**
-fb1d910c178ba0 Tejun Heo      2011-06-14  868   * ptrace_trap_notify - schedule trap to notify ptracer
-fb1d910c178ba0 Tejun Heo      2011-06-14  869   * @t: tracee wanting to notify tracer
-fb1d910c178ba0 Tejun Heo      2011-06-14  870   *
-fb1d910c178ba0 Tejun Heo      2011-06-14  871   * This function schedules sticky ptrace trap which is cleared on the next
-fb1d910c178ba0 Tejun Heo      2011-06-14  872   * TRAP_STOP to notify ptracer of an event.  @t must have been seized by
-fb1d910c178ba0 Tejun Heo      2011-06-14  873   * ptracer.
-fb1d910c178ba0 Tejun Heo      2011-06-14  874   *
-544b2c91a9f14f Tejun Heo      2011-06-14  875   * If @t is running, STOP trap will be taken.  If trapped for STOP and
-544b2c91a9f14f Tejun Heo      2011-06-14  876   * ptracer is listening for events, tracee is woken up so that it can
-544b2c91a9f14f Tejun Heo      2011-06-14  877   * re-trap for the new event.  If trapped otherwise, STOP trap will be
-544b2c91a9f14f Tejun Heo      2011-06-14  878   * eventually taken without returning to userland after the existing traps
-544b2c91a9f14f Tejun Heo      2011-06-14  879   * are finished by PTRACE_CONT.
-fb1d910c178ba0 Tejun Heo      2011-06-14  880   *
-fb1d910c178ba0 Tejun Heo      2011-06-14  881   * CONTEXT:
-fb1d910c178ba0 Tejun Heo      2011-06-14  882   * Must be called with @task->sighand->siglock held.
-fb1d910c178ba0 Tejun Heo      2011-06-14  883   */
-fb1d910c178ba0 Tejun Heo      2011-06-14  884  static void ptrace_trap_notify(struct task_struct *t)
-fb1d910c178ba0 Tejun Heo      2011-06-14  885  {
-fb1d910c178ba0 Tejun Heo      2011-06-14  886  	WARN_ON_ONCE(!(t->ptrace & PT_SEIZED));
-fb1d910c178ba0 Tejun Heo      2011-06-14 @887  	assert_spin_locked(&t->sighand->siglock);
-fb1d910c178ba0 Tejun Heo      2011-06-14  888  
-fb1d910c178ba0 Tejun Heo      2011-06-14  889  	task_set_jobctl_pending(t, JOBCTL_TRAP_NOTIFY);
-910ffdb18a6408 Oleg Nesterov  2013-01-21  890  	ptrace_signal_wake_up(t, t->jobctl & JOBCTL_LISTENING);
-fb1d910c178ba0 Tejun Heo      2011-06-14  891  }
-fb1d910c178ba0 Tejun Heo      2011-06-14  892  
-
-:::::: The code at line 887 was first introduced by commit
-:::::: fb1d910c178ba0c5bc32d3e5a9e82e05b7aad3cd ptrace: implement TRAP_NOTIFY and use it for group stop events
-
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Oleg Nesterov <oleg@redhat.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

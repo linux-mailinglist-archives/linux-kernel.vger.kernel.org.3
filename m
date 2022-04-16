@@ -2,203 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F82503421
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA73F5033B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229701AbiDPCJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37240 "EHLO
+        id S229756AbiDPCWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:22:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiDPCG4 (ORCPT
+        with ESMTP id S229780AbiDPCV6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:06:56 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2057.outbound.protection.outlook.com [40.107.220.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B2C3A1A4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:03:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cF5YY/US4cAVsn3mQj1DSvzVhEi3/rZTUs5dyEZfVZ9L4WVYJKxqpLMw/ipNC2jh5Ii4kgnFLBOdcHA1mhFOK3hEo9IeXxBDppiBDE76G1vqXgHpuBDHOlgYsHHF3KtnZh7mQ14MThx1r5VoxS+2K0oqtVM0qxT172XeIBAfrRdGIf8wj+DeJAHDD4aXcqPykmGLsp+8EqHD161pTlkDxKCJPI5ql8zySyCZsB57DC5OjCm7MiSXvBnb3rpqa8pdV876Vk0DLSFczWgwjeFn0PZ+DMpPiIu1/t5C2Nm6hIT7YLYvp+MRJqIpZr2DscTN+8ojzObfzcE9UmknM5sRTw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=WDjmvJd8OtWnfc/ieSJhNhvznp/MO2Q6a0IHyo0ZCUE=;
- b=JRRhBTfEYsIYOgUiOJxOZr1VFjDoPbkD7LWvpQyRyD/4p0X2lWbD58PCm8mXux3fHCORlPv6FzPSn4+zv9+mrC9gdweXCZT7XRG2E68VcaLWxE5x50Uvma6PRqa64xER6hL7Lsu1RngtDOa1xqwIOVwNLdW8TneDXCxoCwZ5V/iOfANTiI8kdMWyBJ/A4sJ+WzNqi3ouQMsgnlTDqaph0GuvyHm7lR64ngRipZOahw5wOgaNklYifUFdJhly6vUSlQ7h/n7lmd2zM2Z1zJDeXTJKTwVYMlGdCOkM1UFtFFNkCgLJ0ZeWRLwVoZ2YTqrLxXW6y44naonVIKD/Ifqe6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=WDjmvJd8OtWnfc/ieSJhNhvznp/MO2Q6a0IHyo0ZCUE=;
- b=ivQnM+aH0msvvN7nFCJ+K+/rmZGHFsH7XH3wz9IelomW7wz+2dygb6WzmzWrv9Q9cLo07knM50NVmCrFSDPNrxxWQu16wS3YyPGX5Cvz5Nx3qOEjtVhlLWgKjg5yeruTMRd/pAG/kDEjyvqx6dQT/pszdXM4lNJ39YYG/MmYPqbuSgGyN4Mk6Huxw8B+z8aQuqYmhB55SGx+26zzV/ycqxKInPfdlukEdAM6PwQM9QaCc/hrWyf7GgalWdXlhv6LEgqUbnQZVBJviyacJCeNPYXkH8I7cMU4B8HGkBPr5rZKgJoFfio/V2r/wW7paN5ZF3/bfVX4YtCcM8elfIbweg==
-Received: from BN6PR11CA0001.namprd11.prod.outlook.com (2603:10b6:405:2::11)
- by BN6PR12MB1491.namprd12.prod.outlook.com (2603:10b6:405:5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Sat, 16 Apr
- 2022 02:03:23 +0000
-Received: from BN8NAM11FT044.eop-nam11.prod.protection.outlook.com
- (2603:10b6:405:2:cafe::8f) by BN6PR11CA0001.outlook.office365.com
- (2603:10b6:405:2::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.18 via Frontend
- Transport; Sat, 16 Apr 2022 02:03:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT044.mail.protection.outlook.com (10.13.177.219) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5164.19 via Frontend Transport; Sat, 16 Apr 2022 02:03:23 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- DRHQMAIL109.nvidia.com (10.27.9.19) with Microsoft SMTP Server (TLS) id
- 15.0.1497.32; Sat, 16 Apr 2022 02:03:22 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 15 Apr 2022 19:03:22 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Fri, 15 Apr 2022 19:03:21 -0700
-Date:   Fri, 15 Apr 2022 19:03:20 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <will@kernel.org>, <joro@8bytes.org>, <thunder.leizhen@huawei.com>,
-        <jgg@ziepe.ca>, <tglx@linutronix.de>, <john.garry@huawei.com>,
-        <jean-philippe@linaro.org>, <christophe.jaillet@wanadoo.fr>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Align size in __arm_smmu_tlb_inv_range
-Message-ID: <Yloj6GM+yykImKvp@Asurada-Nvidia>
-References: <20220413041745.35174-1-nicolinc@nvidia.com>
- <37c02fc4-d793-b003-f612-206c987a8a42@arm.com>
- <YlcwPG5RXmJ6U7YS@Asurada-Nvidia>
- <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
+        Fri, 15 Apr 2022 22:21:58 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156C43CA78
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:19:28 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 4DAE23202175;
+        Fri, 15 Apr 2022 22:19:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 15 Apr 2022 22:19:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650075565; x=
+        1650161965; bh=uR0sd88BLmMrf7MsnBeqOtT78ti+J0aJP6bHQT/zSLE=; b=E
+        glxmXf+SI4CDdpXMXB7wN8WI0nFOSI23u7ZE/NmHcY9fcYGe5lROyBIcXGYYigE0
+        ThIPTBbNiL8GaKnb58hGC3jCNtT4y8XeKMFhye1oE2meRNObKP9M+tBkCkiD8FMW
+        XrjpIEV11wbY5nEL+zBy7noJuVyeIMxnXQGCIvmPQ5wr3G8ynoKqd9tt/x9LTUro
+        WaJ7+oSzZWRh4LG6rzB/ngcmEH+wLjsgXd+jmsoTkSSxQ+drzoHjOlL0VikdsGLb
+        Krw3Cseicac7j+KqGDTeeqGTj9nydcJ/rSIYGxMmuYdvPAhjUPXo+d3M3fm1JIRT
+        zBxC4Sv+n+GInvJEEaUhw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1650075565; x=1650161965; bh=uR0sd88BLmMrf
+        7MsnBeqOtT78ti+J0aJP6bHQT/zSLE=; b=Gt8Zt2lEArqf2/mO0KiViDbQJwwy5
+        7c+w+8bceIV1BuacYNqOx9IXV7IqXnZK367s+nyObbpceND2jFQw6TJXgl3/LZAC
+        cBKHDkiQ0+WUYDmy1enCRpXDS3c9z89hAlSzeSaJPX/9NY5iKdnhMr0STOPifX/J
+        V7tPQ5EeCTJ/fUh731G9K56SdkrzZJyjn4M1SjNLJCgCbB/rw90ZcRdNuXZv28s5
+        tRHTdCIWP8HPL8Ld2kBvkzvsCddXaNx8rxxYWC4fNy8DNdbxSN0rPXzv1A64bLHd
+        a1gWNHRU23X1+pNkzYEglYUjC7Hr/WjAOPoVYleybNJldiebeVAU5v6UQ==
+X-ME-Sender: <xms:rSdaYpQF3FHxxFJdLWe3j1gDZh8kZQoHZ_LkqpAvSV3V4U3n1GRoaw>
+    <xme:rSdaYix0F0wSy7kbb5KSp939cAV2wSJ48fKFocqw2E2NxnJMPPGKnIM_mn7dRMiPo
+    NcN91x9mmc-l_OquQ>
+X-ME-Received: <xmr:rSdaYu1WTLDnreKBpf_s2hxCYV6N16iX-S-zJPg4QbVHzjYvaRiw7lWJ40uKboB3zZK0j2TLAtAwVHRe21bcf4qUCkXSC7uzfHr0IxBrXaggc4IrgkNXkVry5A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeliedghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepuddvleffkeejhfduieelheejteehleefieeikefgteeugefhtdev
+    keefvefgheeinecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
+    nhgurdhorhhg
+X-ME-Proxy: <xmx:rSdaYhBd-ZNa7gitLBsclKr6QZWZ2V3UbqPAuTNMlYzS0_HdYVoNNg>
+    <xmx:rSdaYijEzPHMR23ne-4-5q70_FDxXZgyRtY17ZyG4ziRssMGLNvFkA>
+    <xmx:rSdaYloRMvK_8NrirfsYODhuSAHB-uMLHfo7QqHECIZZ2K2r3f0xaA>
+    <xmx:rSdaYpouN75HsdXz_4oKjYy2bBVDVZIPbxIqvnxa2fKvNdxEr4e95Q>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 15 Apr 2022 22:19:24 -0400 (EDT)
+Subject: Re: [PATCH 0/2] riscv: implement Zicbom-based CMO instructions + the
+ t-head variant
+To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, atishp@atishpatra.org,
+        anup@brainfault.org, mick@ics.forth.gr, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu
+References: <20220307224620.1933061-1-heiko@sntech.de> <YllWTN+15CoskNBt@Red>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <70da24dd-2d03-fc49-151d-daabb315a5f6@sholland.org>
+Date:   Fri, 15 Apr 2022 21:19:23 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1da85917-889f-4a6d-f83a-08da1f4d499f
-X-MS-TrafficTypeDiagnostic: BN6PR12MB1491:EE_
-X-Microsoft-Antispam-PRVS: <BN6PR12MB1491356C8A4F0D71C5719BE6ABF19@BN6PR12MB1491.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GvowyuE0LMkjGVW576gIltPPvo6Afb/HglzM/cHlX8ELW6SgegWkX1wPD3otiQq5Lp/KqOVmag5eEBuoTT88Lryl3IEfGGryQYlxOeDmlyS+oX2OfaJERlw7kh2RHuiyOkR8O5madXjkWOIcl86xYDwT8VfQ/XsOYeVLVEiYGfKye+Xkmh7Es06FMQhkvQdFJN121nUbO81Vq2pq1Q59m5o566M2fIWYCXqLzvo73Hq+9QZlSUmGpFneJSkQTcCCpoJpkfAFtwgqsbrpq02MP4UAsk/LXHLy+v6CHv+tFAEGZNSegmoh53daxPbgI8yNNEF85EEOoCa6oli330Yi/O40s+DoJvNiefm63Ol7aK05/oUXbVIBAOquWFpHmnlJdL5+p0NWS7urtm4/NYZcqhRBGuA+d3RNCVk4bt3SnwTzqB2Q4auaxJsQYDRLPIlZ/iEjotu7VwHPkIbm7qIaJ7rW61eyuPpc69o3r9a4aAQR8d5z/lF8DX9DPQcokT2ClbpkeNoiP7ZvdKCOwAbfDpIMnKtvq2X87v5oGHBDFbDrayWKVyfx4E5yB7DDFLmPUrN5oe3NkpT98EFxSmzAm2OhBn8VGb836Bz9pZMF2ltNXQlkaqkIWyqyuMyIsMek2HqFTKoM5gtcGjGtGgpkkwj4vNmxnV3MQ8YY5jYH8zu1IlcxgABiyp07HwSzS26o2ADdhCqC1pzXdQbUN9/dZB0AfQWp7tE3cvGqlevxwo0=
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(36840700001)(40470700004)(46966006)(54906003)(356005)(6916009)(81166007)(7416002)(55016003)(33716001)(8936002)(36860700001)(83380400001)(47076005)(316002)(426003)(336012)(82310400005)(8676002)(4326008)(70586007)(2906002)(70206006)(186003)(45080400002)(5660300002)(508600001)(86362001)(26005)(9686003)(40460700003)(67856001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Apr 2022 02:03:23.2947
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1da85917-889f-4a6d-f83a-08da1f4d499f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT044.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1491
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <YllWTN+15CoskNBt@Red>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:32:38AM +0100, Robin Murphy wrote:
-> > By looking at the call trace within arm_smmu_* functions:
-> >    __arm_smmu_tlb_inv_range
-> >    arm_smmu_tlb_inv_range_asid
-> >    arm_smmu_mm_invalidate_range
-> >    {from mm_notifier_* functions}
-> > 
-> > There's no address alignment check. Although I do think we
-> > should fix the source who passes down the non-page-aligned
-> > parameter, the SMMU driver shouldn't silently dead loop if
-> > a set of unaligned inputs are given, IMHO.
+On 4/15/22 6:26 AM, Corentin Labbe wrote:
+> Le Mon, Mar 07, 2022 at 11:46:18PM +0100, Heiko Stuebner a écrit :
+>> This series is based on the alternatives changes done in my svpbmt series
+>> and thus also depends on Atish's isa-extension parsing series.
+>>
+>> It implements using the cache-management instructions from the  Zicbom-
+>> extension to handle cache flush, etc actions on platforms needing them.
+>>
+>> SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+>> different set of cache instructions. But while they are different,
+>> instructions they provide the same functionality, so a variant can
+>> easly hook into the existing alternatives mechanism on those.
+>>
+>>
 > 
-> Oh, sure, I'm not saying we definitely don't need to fix anything, I'd
-> just like to get a better understanding of *what* we're fixing. I'd have
-> (naively) expected the mm layer to give us page-aligned quantities even
-> in the SVA notifier case, so if we've got a clear off-by-one somewhere
-> in that path we should fix that before just blindly over-invalidating to
-> paper over it; if we still also want to be robust at the SMMU driver end
-> just in case, something like "if (WARN_ON(num_pages == 0)) num_pages =
-> 1;" might be more appropriate. However if it turns out that we *can*
-> actually end up with unsanitised input from some userspace unmap
-> interface getting this far, then a silent fixup is the best option, but
-> if so I'd still like to confirm that we're rounding in the same
-> direction as whoever touched the pagetables (since it can't have been us).
+> Hello
+> 
+> I am testing https://github.com/smaeul/linux.git branch:origin/riscv/d1-wip which contain this serie.
+> 
+> I am hitting a buffer corruption problem with DMA.
+> The sun8i-ce crypto driver fail self tests due to "device overran destination buffer".
+> In fact the buffer is not overran by device but by dma_map_single() operation.
+> 
+> The following small code show the problem:
+> 
+> dma_addr_t dma;
+> u8 *buf;
+> #define BSIZE 2048
+> #define DMASIZE 16
+> 
+> buf = kmalloc(BSIZE, GFP_KERNEL | GFP_DMA);
+> for (i = 0; i < BSIZE; i++)
+>     buf[i] = 0xFE;
+> print_hex_dump(KERN_INFO, "DMATEST1:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
+> dma = dma_map_single(ce->dev, buf, DMASIZE, DMA_FROM_DEVICE);
 
-I got some details:
+This function (through dma_direct_map_page()) ends up calling
+arch_sync_dma_for_device(..., ..., DMA_FROM_DEVICE), which invalidates the CPU's
+cache. This is the same thing other architectures do (at least arm, arm64,
+openrisc, and powerpc). So this appears to be working as intended.
 
-[ 1008.868735] mmap: -------__do_munmap: range [ffffa4fd0000, ffffa4fe0000] len 10000
-[ 1008.869183] -------arm_smmu_mm_invalidate_range: range [ffffa4fd0000, ffffa4fe0000] len 10001
-[ 1009.056127] ------------[ cut here ]------------
-[ 1009.345791] WARNING: CPU: 0 PID: 131 at drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c:189 arm_smmu_mm_invalidate_range+0x4c/0xa8
-[ 1009.605439] Modules linked in: nvidia(O)
-[ 1009.692799] CPU: 0 PID: 131 Comm: dmaTest Tainted: G        W  O      5.15.0-tegra #30
-[ 1009.865535] Hardware name: QEMU KVM Virtual Machine, BIOS 0.0.0 02/06/2015
-[ 1010.015871] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[ 1010.168191] pc : arm_smmu_mm_invalidate_range+0x4c/0xa8
-[ 1010.283136] lr : arm_smmu_mm_invalidate_range+0x48/0xa8
-[ 1010.397119] sp : ffff80001436fa60
-[ 1010.469568] x29: ffff80001436fa60 x28: ffff00001840be80 x27: ffff000007b3fff0
-[ 1010.629631] x26: 00e80000589f0f43 x25: ffff00001aa20288 x24: 0000000000000000
-[ 1010.786432] x23: ffff0000138c1000 x22: ffff00001783aa00 x21: ffff00001c021380
-[ 1010.944448] x20: 0000ffffa4fd0000 x19: 0000000000010001 x18: 0000000000000000
-[ 1011.101568] x17: ffff80000e4b0000 x16: ffff800010010000 x15: 000081a13a744e89
-[ 1011.259839] x14: 00000000000000ce x13: 00000000000000ce x12: 0000000000000000
-[ 1011.415616] x11: 0000000000000010 x10: 00000000000009c0 x9 : ffff80001436f7f0
-[ 1011.575552] x8 : ffff000013563420 x7 : ffff00001feb9180 x6 : 00000000000035aa
-[ 1011.731775] x5 : 0000000000000000 x4 : ffff00001feb29e0 x3 : ffff00001feb5a78
-[ 1011.887615] x2 : 66f9034381513000 x1 : 0000000000000000 x0 : 0000000000000051
-[ 1012.042944] Call trace:
-[ 1012.097919]  arm_smmu_mm_invalidate_range+0x4c/0xa8
-[ 1012.204480]  __mmu_notifier_invalidate_range+0x68/0xb0
-[ 1012.318208]  unmap_page_range+0x730/0x740
-[ 1012.405951]  unmap_single_vma+0x4c/0xb0
-[ 1012.521920]  unmap_vmas+0x70/0xf0
-[ 1012.633727]  unmap_region+0xb0/0x110
-[ 1012.753856]  __do_munmap+0x36c/0x460
-[ 1012.855168]  __vm_munmap+0x70/0xd0
-[ 1012.929791]  __arm64_sys_munmap+0x34/0x50
-[ 1013.018944]  invoke_syscall.constprop.0+0x4c/0xe0
-[ 1013.122047]  do_el0_svc+0x50/0x150
-[ 1013.196415]  el0_svc+0x28/0xc0
-[ 1013.262848]  el0t_64_sync_handler+0xb0/0xc0
-[ 1013.355584]  el0t_64_sync+0x1a0/0x1a4
-[ 1013.435903] ---[ end trace c95eb7dc909f29ba ]---
+Regards,
+Samuel
 
-We can see from call trace and logs that the invalidation range
-comes from __do_munmap() with end address = 0xffffa4fe0000.
+> dma_unmap_single(ce->dev, dma, DMASIZE, DMA_FROM_DEVICE);
+> print_hex_dump(KERN_INFO, "DMATEST3:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
+> 
+> Will lead to:
+> [    2.960040] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.965354] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.970709] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.976069] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.981440] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.986814] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.992188] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    2.997560] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.002934] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.008307] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.013680] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.019054] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.024427] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.029802] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.035175] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.040546] DMATEST1:fefefefe fefefefe fefefefe fefefefe
+> [    3.401647] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
+> [    3.406982] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
+> [    3.412350] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
+> [    3.417720] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
+> [    3.423094] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.428468] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.433841] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.439213] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.444588] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.449962] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.455334] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.460707] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.466081] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.471454] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.476828] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> [    3.482200] DMATEST3:fefefefe fefefefe fefefefe fefefefe
+> 
+> Even with no DMA action, the buffer is corrupted.
+> 
+> Regards
+> 
 
-The problem seems to be the difference between how mm and iommu
-cores express their end addresses: mm core calculates end using
-start + size, while iommu core subtracts 1 from that. So that
-end address 0xffffa4fe0000 should be 0xffffa4fdffff in iommu's
-way.
-
-Perhaps we should simply do something like the following?
-
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index d816759a6bcf..e280568bb513 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -183,7 +183,7 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
- {
-        struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
-        struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
--       size_t size = end - start + 1;
-+       size_t size = end - start;
-
-        if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_BTM))
-                arm_smmu_tlb_inv_range_asid(start, size, smmu_mn->cd->asid,
-
-Thanks
-Nic

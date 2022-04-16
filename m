@@ -2,179 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA73F5033B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96A46503306
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiDPCWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S229767AbiDPC0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiDPCV6 (ORCPT
+        with ESMTP id S229479AbiDPCZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:21:58 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156C43CA78
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:19:28 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 4DAE23202175;
-        Fri, 15 Apr 2022 22:19:26 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Fri, 15 Apr 2022 22:19:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1650075565; x=
-        1650161965; bh=uR0sd88BLmMrf7MsnBeqOtT78ti+J0aJP6bHQT/zSLE=; b=E
-        glxmXf+SI4CDdpXMXB7wN8WI0nFOSI23u7ZE/NmHcY9fcYGe5lROyBIcXGYYigE0
-        ThIPTBbNiL8GaKnb58hGC3jCNtT4y8XeKMFhye1oE2meRNObKP9M+tBkCkiD8FMW
-        XrjpIEV11wbY5nEL+zBy7noJuVyeIMxnXQGCIvmPQ5wr3G8ynoKqd9tt/x9LTUro
-        WaJ7+oSzZWRh4LG6rzB/ngcmEH+wLjsgXd+jmsoTkSSxQ+drzoHjOlL0VikdsGLb
-        Krw3Cseicac7j+KqGDTeeqGTj9nydcJ/rSIYGxMmuYdvPAhjUPXo+d3M3fm1JIRT
-        zBxC4Sv+n+GInvJEEaUhw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1650075565; x=1650161965; bh=uR0sd88BLmMrf
-        7MsnBeqOtT78ti+J0aJP6bHQT/zSLE=; b=Gt8Zt2lEArqf2/mO0KiViDbQJwwy5
-        7c+w+8bceIV1BuacYNqOx9IXV7IqXnZK367s+nyObbpceND2jFQw6TJXgl3/LZAC
-        cBKHDkiQ0+WUYDmy1enCRpXDS3c9z89hAlSzeSaJPX/9NY5iKdnhMr0STOPifX/J
-        V7tPQ5EeCTJ/fUh731G9K56SdkrzZJyjn4M1SjNLJCgCbB/rw90ZcRdNuXZv28s5
-        tRHTdCIWP8HPL8Ld2kBvkzvsCddXaNx8rxxYWC4fNy8DNdbxSN0rPXzv1A64bLHd
-        a1gWNHRU23X1+pNkzYEglYUjC7Hr/WjAOPoVYleybNJldiebeVAU5v6UQ==
-X-ME-Sender: <xms:rSdaYpQF3FHxxFJdLWe3j1gDZh8kZQoHZ_LkqpAvSV3V4U3n1GRoaw>
-    <xme:rSdaYix0F0wSy7kbb5KSp939cAV2wSJ48fKFocqw2E2NxnJMPPGKnIM_mn7dRMiPo
-    NcN91x9mmc-l_OquQ>
-X-ME-Received: <xmr:rSdaYu1WTLDnreKBpf_s2hxCYV6N16iX-S-zJPg4QbVHzjYvaRiw7lWJ40uKboB3zZK0j2TLAtAwVHRe21bcf4qUCkXSC7uzfHr0IxBrXaggc4IrgkNXkVry5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudeliedghedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvfhfhkffffgggjggtgfesthekredttdefjeenucfhrhhomhepufgrmhhu
-    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
-    ftrfgrthhtvghrnhepuddvleffkeejhfduieelheejteehleefieeikefgteeugefhtdev
-    keefvefgheeinecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsrghmuhgvlhesshhhohhllhgr
-    nhgurdhorhhg
-X-ME-Proxy: <xmx:rSdaYhBd-ZNa7gitLBsclKr6QZWZ2V3UbqPAuTNMlYzS0_HdYVoNNg>
-    <xmx:rSdaYijEzPHMR23ne-4-5q70_FDxXZgyRtY17ZyG4ziRssMGLNvFkA>
-    <xmx:rSdaYloRMvK_8NrirfsYODhuSAHB-uMLHfo7QqHECIZZ2K2r3f0xaA>
-    <xmx:rSdaYpouN75HsdXz_4oKjYy2bBVDVZIPbxIqvnxa2fKvNdxEr4e95Q>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 15 Apr 2022 22:19:24 -0400 (EDT)
-Subject: Re: [PATCH 0/2] riscv: implement Zicbom-based CMO instructions + the
- t-head variant
-To:     Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        wefu@redhat.com, guoren@kernel.org, atishp@atishpatra.org,
-        anup@brainfault.org, mick@ics.forth.gr, cmuellner@linux.com,
-        philipp.tomsich@vrull.eu
-References: <20220307224620.1933061-1-heiko@sntech.de> <YllWTN+15CoskNBt@Red>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <70da24dd-2d03-fc49-151d-daabb315a5f6@sholland.org>
-Date:   Fri, 15 Apr 2022 21:19:23 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Fri, 15 Apr 2022 22:25:52 -0400
+Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 630B048388
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:23:20 -0700 (PDT)
+Received: by mail-vs1-xe2b.google.com with SMTP id z139so2884684vsz.0
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:23:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=wQoyQFv+DR+j7fh3LRsGpz2vueHCeVQWzUanchbUatQ=;
+        b=YfZhReGfuSfjixzN1iUSULLfspq+EGZIgRMn8VXbc68flA1D/N7dwBKQfs/xC0p5yg
+         BgGmeJmziqzKEfW2f1qWhonkGaD4X++4IDEbom7B23DXnAGvBARF+Hx0L+xcXhRHLRUQ
+         E6VC2+zFnZz9n1JvcpvskO2IDJMJD8shaQWPMhW8VnmThGBVZAo1yNVFeDPkiqGVqiHQ
+         tNa96/gupiv5vdSM+D15htH5OWPQEmvn0NPsCokDJTlI+27gB3/z8nc1SMaLpgGODnhN
+         VkY4dGw5Y1CR15/Z2dpvvseYqGD2OtOCAFGP1+oF3mAmZWSjWmZAlhNrNJJ4KBegHTbq
+         AumQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=wQoyQFv+DR+j7fh3LRsGpz2vueHCeVQWzUanchbUatQ=;
+        b=T+zqxSJtUqnA3GB4Vqyt2vBrJS5US1xDKMkovVvQTeGLLeDO8/uPk+OlD++zUqHMu5
+         W6A6/+lq/TNu3z5uiq1bTljebPvgeELXqXlm07Cm+3SOrR5uz/Ocvburw9gTp2OXoS9F
+         CsjmpDOmGlhndChJT47H9pwgTjZILQDZj94O2wy8Rcf+Herbpry6RAQprqSSq4ASDgYT
+         K45mN9nR6lchsnXrskK0jhXhqpNqFhI3cRN36o2Yf5FuFclLJXpCEbRnj6xXNCWUNBy8
+         Fl0o4PTMKWs6Z6iga/3X89Pvst5Mkp2I4yZJhmBWkSh4cTTTYI6HG5pIlzCelTJAGUUY
+         13Xg==
+X-Gm-Message-State: AOAM5303FsnT8qCg/8p5LDbN2o4oxXKVYFCvisS6jBWur023VYrNlumE
+        dmMRb5IyAmYJ0qYQgQssRahE2Ft15WLeADKXLf/Mcg==
+X-Google-Smtp-Source: ABdhPJz2RupV69wuUiP6W5/87we/n4sQFTTip7chnuEWLhQ2xLI53Oru7ERzQVELUJpxwreO5H3ZWGtU1Fh+7xHkjc4=
+X-Received: by 2002:a67:de17:0:b0:32a:4007:cd86 with SMTP id
+ q23-20020a67de17000000b0032a4007cd86mr479002vsk.22.1650075799347; Fri, 15 Apr
+ 2022 19:23:19 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <YllWTN+15CoskNBt@Red>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220407031525.2368067-1-yuzhao@google.com> <20220407031525.2368067-14-yuzhao@google.com>
+ <20220411191639.52c62959489a6c27cb7d251e@linux-foundation.org>
+In-Reply-To: <20220411191639.52c62959489a6c27cb7d251e@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Fri, 15 Apr 2022 20:22:42 -0600
+Message-ID: <CAOUHufacnY6zMzkMvgHD9_DAwDcnpq7a9YdYT3SKUV8dAi=Fmw@mail.gmail.com>
+Subject: Re: [PATCH v10 13/14] mm: multi-gen LRU: admin guide
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Stephen Rothwell <sfr@rothwell.id.au>,
+        Linux-MM <linux-mm@kvack.org>, Andi Kleen <ak@linux.intel.com>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Barry Song <21cnbao@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
+        Jesse Barnes <jsbarnes@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Michael Larabel <Michael@michaellarabel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Will Deacon <will@kernel.org>,
+        Ying Huang <ying.huang@intel.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Kernel Page Reclaim v2 <page-reclaim@google.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        Brian Geffon <bgeffon@google.com>,
+        Jan Alexander Steffens <heftig@archlinux.org>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Steven Barrett <steven@liquorix.net>,
+        Suleiman Souhlal <suleiman@google.com>,
+        Daniel Byrne <djbyrne@mtu.edu>,
+        Donald Carr <d@chaos-reins.com>,
+        =?UTF-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
+        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
+        Shuang Zhai <szhai2@cs.rochester.edu>,
+        Sofia Trinh <sofia.trinh@edi.works>,
+        Vaibhav Jain <vaibhav@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/15/22 6:26 AM, Corentin Labbe wrote:
-> Le Mon, Mar 07, 2022 at 11:46:18PM +0100, Heiko Stuebner a écrit :
->> This series is based on the alternatives changes done in my svpbmt series
->> and thus also depends on Atish's isa-extension parsing series.
->>
->> It implements using the cache-management instructions from the  Zicbom-
->> extension to handle cache flush, etc actions on platforms needing them.
->>
->> SoCs using cpu cores from T-Head like the Allwinne D1 implement a
->> different set of cache instructions. But while they are different,
->> instructions they provide the same functionality, so a variant can
->> easly hook into the existing alternatives mechanism on those.
->>
->>
-> 
-> Hello
-> 
-> I am testing https://github.com/smaeul/linux.git branch:origin/riscv/d1-wip which contain this serie.
-> 
-> I am hitting a buffer corruption problem with DMA.
-> The sun8i-ce crypto driver fail self tests due to "device overran destination buffer".
-> In fact the buffer is not overran by device but by dma_map_single() operation.
-> 
-> The following small code show the problem:
-> 
-> dma_addr_t dma;
-> u8 *buf;
-> #define BSIZE 2048
-> #define DMASIZE 16
-> 
-> buf = kmalloc(BSIZE, GFP_KERNEL | GFP_DMA);
-> for (i = 0; i < BSIZE; i++)
->     buf[i] = 0xFE;
-> print_hex_dump(KERN_INFO, "DMATEST1:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
-> dma = dma_map_single(ce->dev, buf, DMASIZE, DMA_FROM_DEVICE);
+On Mon, Apr 11, 2022 at 8:16 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+>
+> On Wed,  6 Apr 2022 21:15:25 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > +Kill switch
+> > +-----------
+> > +``enable`` accepts different values to enable or disable the following
+>
+> It's actually called "enabled".
 
-This function (through dma_direct_map_page()) ends up calling
-arch_sync_dma_for_device(..., ..., DMA_FROM_DEVICE), which invalidates the CPU's
-cache. This is the same thing other architectures do (at least arm, arm64,
-openrisc, and powerpc). So this appears to be working as intended.
+Good catch. Thanks!
 
-Regards,
-Samuel
+> And I suggest that the file name be
+> included right there in the title.  ie.
+>
+> "enabled": Kill Switch
+> ======================
 
-> dma_unmap_single(ce->dev, dma, DMASIZE, DMA_FROM_DEVICE);
-> print_hex_dump(KERN_INFO, "DMATEST3:", DUMP_PREFIX_NONE, 16, 4, buf, 256, false);
-> 
-> Will lead to:
-> [    2.960040] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.965354] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.970709] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.976069] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.981440] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.986814] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.992188] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    2.997560] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.002934] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.008307] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.013680] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.019054] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.024427] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.029802] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.035175] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.040546] DMATEST1:fefefefe fefefefe fefefefe fefefefe
-> [    3.401647] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
-> [    3.406982] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
-> [    3.412350] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
-> [    3.417720] DMATEST3:a9c3a9c3 a9c3a9c3 a9c3a9c3 a9c3a9c3
-> [    3.423094] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.428468] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.433841] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.439213] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.444588] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.449962] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.455334] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.460707] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.466081] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.471454] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.476828] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> [    3.482200] DMATEST3:fefefefe fefefefe fefefefe fefefefe
-> 
-> Even with no DMA action, the buffer is corrupted.
-> 
-> Regards
-> 
+Will do.
 
+> > +Experimental features
+> > +=====================
+> > +``/sys/kernel/debug/lru_gen`` accepts commands described in the
+> > +following subsections. Multiple command lines are supported, so does
+> > +concatenation with delimiters ``,`` and ``;``.
+> > +
+> > +``/sys/kernel/debug/lru_gen_full`` provides additional stats for
+> > +debugging. ``CONFIG_LRU_GEN_STATS=y`` keeps historical stats from
+> > +evicted generations in this file.
+> > +
+> > +Working set estimation
+> > +----------------------
+> > +Working set estimation measures how much memory an application
+> > +requires in a given time interval, and it is usually done with little
+> > +impact on the performance of the application. E.g., data centers want
+> > +to optimize job scheduling (bin packing) to improve memory
+> > +utilizations. When a new job comes in, the job scheduler needs to find
+> > +out whether each server it manages can allocate a certain amount of
+> > +memory for this new job before it can pick a candidate. To do so, this
+> > +job scheduler needs to estimate the working sets of the existing jobs.
+>
+> These various sysfs interfaces are a big deal.  Because they are so
+> hard to change once released.
+
+Debugfs, not sysfs. The title is "Experimental features" :)
+
+> btw, what is this "job scheduler" of which you speak?
+
+Basically it's part of cluster management software. Many jobs
+(programs + data) can run concurrently in the same cluster and the job
+scheduler of this cluster does the bin packing. To improve resource
+utilization, the job scheduler needs to know the (memory) size of each
+job it packs, hence the working set estimation (how much memory a job
+uses within a given time interval). The job scheduler also takes
+memory from some jobs so that those jobs can better fit into a single
+machine (proactive reclaim).
+
+> Is there an open
+> source implementation upon which we hope the world will converge?
+
+There are many [1], e.g., Kubernetes (k8s). Personally, I don't think
+they'll ever converge.
+
+At the moment, all open source implementations I know of rely on users
+manually specifying the size of each job (job spec), e.g., [2]. Users
+overprovision memory to avoid OOM kills. The average memory
+utilization generally is surprisingly low. What we can hope for is
+that eventually some of the open source implementations will use the
+working set estimation and proactive reclaim features provided here.
+
+[1] https://en.wikipedia.org/wiki/List_of_cluster_management_software
+[2] https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
+> > +Proactive reclaim
+> > +-----------------
+> > +Proactive reclaim induces memory reclaim when there is no memory
+> > +pressure and usually targets cold memory only. E.g., when a new job
+> > +comes in, the job scheduler wants to proactively reclaim memory on the
+> > +server it has selected to improve the chance of successfully landing
+> > +this new job.
+> > +
+> > +Users can write ``- memcg_id node_id min_gen_nr [swappiness
+> > +[nr_to_reclaim]]`` to ``lru_gen`` to evict generations less than or
+> > +equal to ``min_gen_nr``. Note that ``min_gen_nr`` should be less than
+> > +``max_gen_nr-1`` as ``max_gen_nr`` and ``max_gen_nr-1`` are not fully
+> > +aged and therefore cannot be evicted. ``swappiness`` overrides the
+> > +default value in ``/proc/sys/vm/swappiness``. ``nr_to_reclaim`` limits
+> > +the number of pages to evict.
+> > +
+> > +A typical use case is that a job scheduler writes to ``lru_gen``
+> > +before it tries to land a new job on a server, and if it fails to
+> > +materialize the cold memory without impacting the existing jobs on
+> > +this server, it retries on the next server according to the ranking
+> > +result obtained from the working set estimation step described
+> > +earlier.
+>
+> It sounds to me that these interfaces were developed in response to
+> ongoing development and use of a particular job scheduler.
+
+I did borrow some of my previous experience with Google's data
+centers. But I'm a Chrome OS developer now, so I designed them to be
+job scheduler agnostic :)
+
+> This is a very good thing, but has thought been given to the potential
+> needs of other job schedulers?
+
+Yes, basically I'm trying to help everybody replicate the success
+stories at Google and Meta [3][4].
+
+[3] https://dl.acm.org/doi/10.1145/3297858.3304053
+[4] https://dl.acm.org/doi/10.1145/3503222.3507731

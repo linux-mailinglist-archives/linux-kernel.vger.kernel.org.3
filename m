@@ -2,164 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24066503841
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E263D503845
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 23:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233067AbiDPU6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 16:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S233062AbiDPVHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 17:07:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbiDPU5z (ORCPT
+        with ESMTP id S230373AbiDPVHB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 16:57:55 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74781CB20
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650142521; x=1681678521;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YqggBscwBR8kECPE8sV7GZRQg0PKKtnXg81Oh6vwzgQ=;
-  b=DN2GVcCkTuh4O95lmxlJnBVUf6SWMVtsaUlNOYd2SAODmqjYfcUrSE/s
-   Zs74pEzXKnSCf0J6p/6JI3khhkGxl5sckyQs6eEvNHGbkutSuQVWyd498
-   yhPYrbZTmBIV0IqL+J1Sk3KJvS6W1Kig7vGjnY00NhtVoM5CKxU42aLx6
-   d3pXjQQFKtw0pzQS7MVRBU7ax9tYRgNfXgd4KrBOsOc0sv78eRGpO20U4
-   J9ScJwnVWQYrCDzxYWhugn0B2Mc2BQjKE/jn35vGOpBnQZEOjgoT+hix/
-   AgYn9SsNYEs1RwOXxcuI8bUBqZ0HCSj0gAsdPR1ykMXR4oFvf8oZgQ3SL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349788711"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="349788711"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 13:55:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="646434100"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 16 Apr 2022 13:55:18 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfpRt-0003UF-NH;
-        Sat, 16 Apr 2022 20:55:17 +0000
-Date:   Sun, 17 Apr 2022 04:54:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in
- reference from the function bmi160_i2c_probe() to the function
- .init.text:set_reset_devices()
-Message-ID: <202204170429.sEZb8tjA-lkp@intel.com>
+        Sat, 16 Apr 2022 17:07:01 -0400
+Received: from relay.hostedemail.com (relay.hostedemail.com [64.99.140.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32319C1F
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 14:04:28 -0700 (PDT)
+Received: from omf16.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay07.hostedemail.com (Postfix) with ESMTP id 14C2D21AC0;
+        Sat, 16 Apr 2022 21:04:27 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf16.hostedemail.com (Postfix) with ESMTPA id 5191A2000E;
+        Sat, 16 Apr 2022 21:04:25 +0000 (UTC)
+Message-ID: <715d6dbd696a9dad2690772d175d2ab497e0c316.camel@perches.com>
+Subject: Re: [PATCH] drm/i915: change node clearing from memset to
+ initialization
+From:   Joe Perches <joe@perches.com>
+To:     Tom Rix <trix@redhat.com>, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, airlied@linux.ie, daniel@ffwll.ch
+Cc:     intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Date:   Sat, 16 Apr 2022 14:04:24 -0700
+In-Reply-To: <7973fecf-4e51-3ec8-b626-2581e3ad2f26@redhat.com>
+References: <20220416172325.1039795-1-trix@redhat.com>
+         <26839195c315eebcd1148d2a3de6a0df9e42dd1c.camel@perches.com>
+         <7973fecf-4e51-3ec8-b626-2581e3ad2f26@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+User-Agent: Evolution 3.40.4-1ubuntu2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
+X-Stat-Signature: d1ip915ek7ad4trurnsy49gyhe3qn7gk
+X-Rspamd-Server: rspamout02
+X-Rspamd-Queue-Id: 5191A2000E
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+iXEBsnqu9abpi2agJzgCvnjJ4MPp3y7k=
+X-HE-Tag: 1650143065-583731
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   3 weeks ago
-config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220417/202204170429.sEZb8tjA-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+On Sat, 2022-04-16 at 13:48 -0700, Tom Rix wrote:
+> On 4/16/22 11:33 AM, Joe Perches wrote:
+> > On Sat, 2022-04-16 at 13:23 -0400, Tom Rix wrote:
+> > > In insert_mappable_node(), the parameter node is
+> > > cleared late in node's use with memset.
+> > > insert_mappable_node() is a singleton, called only
+> > > from i915_gem_gtt_prepare() which itself is only
+> > > called by i915_gem_gtt_pread() and
+> > > i915_gem_gtt_pwrite_fast() where the definition of
+> > > node originates.
+> > > 
+> > > Instead of using memset, initialize node to 0 at it's
+> > > definitions.
+> > trivia: /it's/its/
+> > 
+> > Only reason _not_ to do this is memset is guaranteed to
+> > zero any padding that might go to userspace.
+> > 
+> > But it doesn't seem there is any padding anyway nor is
+> > the struct available to userspace.
+> > 
+> > So this seems fine though it might increase overall code
+> > size a tiny bit.
+> > 
+> > I do have a caveat: see below:
+> > 
+> > > diff --git a/drivers/gpu/drm/i915/i915_gem.c b/drivers/gpu/drm/i915/i915_gem.c
+> > []
+> > > @@ -328,7 +327,6 @@ static struct i915_vma *i915_gem_gtt_prepare(struct drm_i915_gem_object *obj,
+> > >   		goto err_ww;
+> > >   	} else if (!IS_ERR(vma)) {
+> > >   		node->start = i915_ggtt_offset(vma);
+> > > -		node->flags = 0;
+> > Why is this unneeded?
+> 
+> node = {} initializes all of node's elements to 0, including this one.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+true, but could the call to insert_mappable_node combined with the
+retry goto in i915_gem_gtt_prepare set this to non-zero?
 
-All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
->> WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in reference from the function bmi160_i2c_probe() to the function .init.text:set_reset_devices()
-The function bmi160_i2c_probe() references
-the function __init set_reset_devices().
-This is often because bmi160_i2c_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x172619c): Section mismatch in reference from the function st_lsm6dsx_probe() to the function .init.text:set_reset_devices()
-The function st_lsm6dsx_probe() references
-the function __init set_reset_devices().
-This is often because st_lsm6dsx_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x175c62e): Section mismatch in reference from the function mb1232_probe() to the function .init.text:set_reset_devices()
-The function mb1232_probe() references
-the function __init set_reset_devices().
-This is often because mb1232_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179066c): Section mismatch in reference from the function binder_update_page_range() to the function .init.text:set_reset_devices()
-The function binder_update_page_range() references
-the function __init set_reset_devices().
-This is often because binder_update_page_range lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179c6b4): Section mismatch in reference from the function altera_cvp_probe() to the function .init.text:set_reset_devices()
-The function altera_cvp_probe() references
-the function __init set_reset_devices().
-This is often because altera_cvp_probe lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x179c8e2): Section mismatch in reference from the function altera_cvp_remove() to the function .init.text:set_reset_devices()
-The function altera_cvp_remove() references
-the function __init set_reset_devices().
-This is often because altera_cvp_remove lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x18738e8): Section mismatch in reference from the function ethtool_rxnfc_copy_from_user() to the function .init.text:set_reset_devices()
-The function ethtool_rxnfc_copy_from_user() references
-the function __init set_reset_devices().
-This is often because ethtool_rxnfc_copy_from_user lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1873c7c): Section mismatch in reference from the function ethtool_copy_validate_indir() to the function .init.text:set_reset_devices()
-The function ethtool_copy_validate_indir() references
-the function __init set_reset_devices().
-This is often because ethtool_copy_validate_indir lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x1879d9a): Section mismatch in reference from the function ethnl_set_linkmodes() to the function .init.text:set_reset_devices()
-The function ethnl_set_linkmodes() references
-the function __init set_reset_devices().
-This is often because ethnl_set_linkmodes lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x187ebf6): Section mismatch in reference from the function tsinfo_prepare_data() to the function .init.text:set_reset_devices()
-The function tsinfo_prepare_data() references
-the function __init set_reset_devices().
-This is often because tsinfo_prepare_data lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
---
->> WARNING: modpost: vmlinux.o(.text+0x191c146): Section mismatch in reference from the function ieee802154_start_req() to the function .init.text:set_reset_devices()
-The function ieee802154_start_req() references
-the function __init set_reset_devices().
-This is often because ieee802154_start_req lacks a __init
-annotation or the annotation of set_reset_devices is wrong.
-..
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

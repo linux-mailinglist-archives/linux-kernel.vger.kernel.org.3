@@ -2,50 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12A22503694
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 14:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F69850368E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 14:20:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231950AbiDPMYX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 08:24:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50566 "EHLO
+        id S231935AbiDPMXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 08:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiDPMYW (ORCPT
+        with ESMTP id S231888AbiDPMXH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 08:24:22 -0400
-Received: from out28-145.mail.aliyun.com (out28-145.mail.aliyun.com [115.124.28.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CBBD7602;
-        Sat, 16 Apr 2022 05:21:48 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07487685|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_regular_dialog|0.233801-0.00141502-0.764784;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047206;MF=zhouyanjie@wanyeetech.com;NM=1;PH=DS;RN=18;RT=18;SR=0;TI=SMTPD_---.NRqD5fz_1650111394;
-Received: from 192.168.30.128(mailfrom:zhouyanjie@wanyeetech.com fp:SMTPD_---.NRqD5fz_1650111394)
-          by smtp.aliyun-inc.com(33.45.69.145);
-          Sat, 16 Apr 2022 20:16:36 +0800
-Subject: Re: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver
- changes.
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
-        robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
-        linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        dragancecavac@yahoo.com, hns@goldelico.com,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
- <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
-From:   Zhou Yanjie <zhouyanjie@wanyeetech.com>
-Message-ID: <16eb34cf-508b-b387-b255-4b0a778bf53f@wanyeetech.com>
-Date:   Sat, 16 Apr 2022 20:16:33 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.9.0
+        Sat, 16 Apr 2022 08:23:07 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00806CF4BE
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 05:20:34 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p10so8990241plf.9
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 05:20:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=10g5PeA+XaJ6h4fM6nvbGbNybYbukOrQjkFvmHObJsc=;
+        b=CgebbriGoAmkr1Rg5xVdZLvCCa309ajlKcDJD/JIiowCsjIx+cXkj7m8JGGVBfcW9r
+         wFzsYqQPaVFnDYbPKT+BdF2oE5TLzMdhyWQagqh1hTk55/3Kg1whLMV0OlsDBVPGEa08
+         XaVkOARq89nr1JApNWywxLqHflj7ZafQSGntDGnOnXwiH+0pKLKfEmuINxEWWLr2gBmd
+         CYdRtYch1N9wCOy/JfpTRLv9Ri4+tnR09/lcaWyPt2ZXYZoXBuKzOhI5XwZAdCEvvtL+
+         hDCOGwAfnk+mdI6Br0zfqKb3F5w7TuwFLISTguDvdAY+8JgZCJvJ+c+81e855UBlZlvi
+         smIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=10g5PeA+XaJ6h4fM6nvbGbNybYbukOrQjkFvmHObJsc=;
+        b=KzQaRZaQVvRutAoECneFNmH3MvcCxC6X8/3q4YZz9WaC4RqtwiJ58C0/u9iSlJha9m
+         /SC2oLgXM77B3peYB3mRtzspzNkem+qSySa9wdiCnytHPIM8bZCtaY/kAVBUe1/1u5e1
+         +Btql6QK/3DjMGYcp1rL7nz3FnvkxaJik1Y0p0Wf1zNRQbU418//jg4KNABGwa5P0gyv
+         PvN9yONvhXKajuNFo1XbW7kkZ9wWciuELpIHISgQWfpXxATRPICRU9DPciCGe4b5glCG
+         B6tHZ6srciPXfa0HcV1DBbP1rPoZzYZy0rrN1Y6B4R5DAdJnH/DJzl7PmsIi4AzdS6MP
+         SMxQ==
+X-Gm-Message-State: AOAM5328I8w8q1UcGoO0eQs4vFO8SljqFfpXHa+cjlCJxsSXmApwECoq
+        tZ+SpT+mgawprkRcP3W0VPjlNd5T2Ivah1os6zG8rMoHHdeh9Q==
+X-Google-Smtp-Source: ABdhPJyEwRorxFq6OT7m+o6QC9Ai2tfvWEY9TKOl8S83xNzbiirkOnUcAtuBGD2k9i6Sa/2MBVAssWO1MK9O/UnsI08=
+X-Received: by 2002:a17:903:285:b0:158:d693:c52c with SMTP id
+ j5-20020a170903028500b00158d693c52cmr3348830plr.36.1650111634362; Sat, 16 Apr
+ 2022 05:20:34 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+References: <20220415083402.39080-1-aajith@arista.com> <642672cb-8b11-c78f-8975-f287ece9e89e@gmail.com>
+In-Reply-To: <642672cb-8b11-c78f-8975-f287ece9e89e@gmail.com>
+From:   Arun Ajith S <aajith@arista.com>
+Date:   Sat, 16 Apr 2022 17:50:22 +0530
+Message-ID: <CAOvjArRX_CXbUdAbfnta9sBad30aV0Q7HSA6rNPTKPbENRsnqQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v6] net/ipv6: Introduce accept_unsolicited_na
+ knob to implement router-side changes for RFC9131
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>, yoshfuji@linux-ipv6.org,
+        kuba@kernel.org, pabeni@redhat.com, corbet@lwn.net,
+        prestwoj@gmail.com, Bob Gilligan <gilligan@arista.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Gautam Kachroo <gk@arista.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,94 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
-
-On 2022/4/15 下午11:07, Paul Cercueil wrote:
-> Hi Zhou,
+On Sat, Apr 16, 2022 at 11:13 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
 >
+> On 4/15/22 15:34, Arun Ajith S wrote:
+> > +accept_unsolicited_na - BOOLEAN
+> > +     Add a new neighbour cache entry in STALE state for routers on receiving an
+> > +     unsolicited neighbour advertisement with target link-layer address option
+> > +     specified. This is as per router-side behavior documented in RFC9131.
+> > +     This has lower precedence than drop_unsolicited_na.
+> > +
+> > +      ====   ======  ======  ==============================================
+> > +      drop   accept  fwding                   behaviour
+> > +      ----   ------  ------  ----------------------------------------------
+> > +         1        X       X  Drop NA packet and don't pass up the stack
+> > +         0        0       X  Pass NA packet up the stack, don't update NC
+> > +         0        1       0  Pass NA packet up the stack, don't update NC
+> > +         0        1       1  Pass NA packet up the stack, and add a STALE
+> > +                             NC entry
+> > +      ====   ======  ======  ==============================================
+> > +
+> > +     This will optimize the return path for the initial off-link communication
+> > +     that is initiated by a directly connected host, by ensuring that
+> > +     the first-hop router which turns on this setting doesn't have to
+> > +     buffer the initial return packets to do neighbour-solicitation.
+> > +     The prerequisite is that the host is configured to send
+> > +     unsolicited neighbour advertisements on interface bringup.
+> > +     This setting should be used in conjunction with the ndisc_notify setting
+> > +     on the host to satisfy this prerequisite.
+> > +
+> > +     By default this is turned off.
+> > +
 >
-> Le ven., avril 15 2022 at 03:25:37 +0800, 周琰杰 (Zhou Yanjie) 
-> <zhouyanjie@wanyeetech.com> a écrit :
->> Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi files.
->>
->> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
->> ---
->>
->> Notes:
->>     v3:
->>     New patch.
->>
->>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
->>  arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
->>  arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
->>  3 files changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi 
->> b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->> index b998301..c182a65 100644
->> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
->> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
->> @@ -577,7 +577,7 @@
->>      };
->>
->>      otg: usb@13500000 {
->> -        compatible = "ingenic,jz4780-otg", "snps,dwc2";
->> +        compatible = "ingenic,jz4780-otg";
+> Looks good. htmldocs builds successfully and the table displayed properly.
 >
-> Could you refresh my memory - why are the "snps,dwc2" fallback strings 
-> removed?
+> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
 >
-> To me it seems like they should be here, since the OTG IP in Ingenic 
-> SoCs is derived from the DWC2 IP.
-
-
-The reason is that Nikolaus found that the current jz4780.dtsi will cause
-dtbscheck to complain. After discussion, Nikolaus concluded three feasible
-solutions, see here:
-https://lkml.org/lkml/2022/4/13/1097
-
-And it seems that Krzysztof prefers the c) option.
-
-
-Thanks and best regards!
-
-
+> However, I remind you the following:
 >
-> Cheers,
-> -Paul
+> - The patch changelogs should be put between the dashes (---) and diffstat.
+>   I don't see the changelogs when I hit reply-all because you put them as
+>   message signature (at very bottom of patch message).
+> - DON'T DO top-posting, DO configure your MUA to make reply text below
+>   the quoted text instead.
 >
->>          reg = <0x13500000 0x40000>;
->>
->>          interrupt-parent = <&intc>;
->> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi 
->> b/arch/mips/boot/dts/ingenic/x1000.dtsi
->> index 8bd27ede..343818a2 100644
->> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
->> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
->> @@ -366,7 +366,7 @@
->>      };
->>
->>      otg: usb@13500000 {
->> -        compatible = "ingenic,x1000-otg", "snps,dwc2";
->> +        compatible = "ingenic,x1000-otg";
->>          reg = <0x13500000 0x40000>;
->>
->>          interrupt-parent = <&intc>;
->> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi 
->> b/arch/mips/boot/dts/ingenic/x1830.dtsi
->> index 2595df8..6aff19f 100644
->> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
->> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
->> @@ -355,7 +355,7 @@
->>      };
->>
->>      otg: usb@13500000 {
->> -        compatible = "ingenic,x1830-otg", "snps,dwc2";
->> +        compatible = "ingenic,x1830-otg";
->>          reg = <0x13500000 0x40000>;
->>
->>          interrupt-parent = <&intc>;
->> -- 
->> 2.7.4
->>
->
+> --
+> An old man doll... just what I always wanted! - Clara
+Thank you.
+I will keep the tips for the Changelog in my mind for my next patch.

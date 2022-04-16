@@ -2,120 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C28450351F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5164D503523
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:17:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiDPISZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 04:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S230323AbiDPITb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 04:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiDPISU (ORCPT
+        with ESMTP id S230161AbiDPIT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 04:18:20 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44F2A5F83;
-        Sat, 16 Apr 2022 01:15:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso8692431pjv.0;
-        Sat, 16 Apr 2022 01:15:48 -0700 (PDT)
+        Sat, 16 Apr 2022 04:19:27 -0400
+Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0395A15A3C;
+        Sat, 16 Apr 2022 01:16:57 -0700 (PDT)
+Received: by mail-qv1-xf2a.google.com with SMTP id kl29so7808553qvb.2;
+        Sat, 16 Apr 2022 01:16:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iVfFJCMkrWLbyYUJOBj2PVHo9GdUj3rw5BmoGxMpBoo=;
-        b=iYCJ6Wum2Xv3OfVJqUjKKcIs4chqAe85/Ts0gdvaAhPlZcypz00oeX4nApt4uQ/IQM
-         Z/kGU5mHBZSb9cwIXqhlKJgLGbDSgyzXjte2f83Epit+PxLjJ4EZ5nvq6K/cvze/KLpV
-         WP3hiWF5BvZLNM0yjBJ/gYWOXc/A3aPeK9627J6poVefhVN+uUJNUq7nPJwXA0/05YWl
-         6XVvVYcQfJX6r08lZlHmq288j5fEPiyaUFTsEW6T8NT8d4Tgc14I/GLjt7eOXxgoSJ4L
-         tTv4KdfEoFhcmfbHm0XMaGw71L4uoZs/A6XJWQxKMgIKzxkvnRWiZwFoKy3LIzcvIXLR
-         ITDQ==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uZHCzWAZCF54H9l8o4Fov+TpziM3IgLdlvWuOde2Hlw=;
+        b=Gn//A44OZ9VIhXCSQRhhD9YlLcsIXv+T7gjBpJ5gl01mdcddI/NTjwmOo+HLm5/xRA
+         W4ei2Z+/2BnN7cF9EOdNGXaQsrCzayzpkhkIImtSdmD2Z6dWxWSkqZqh5e5VVBYrEWce
+         HuOhgn8GiolvPs6YngcUESziI8keS7+4SL6Z1a6isSqPqMWjQwIhH5K9BngBT3UnKg7W
+         /pgFmpbtWGw5SOjTibKuzLvYpnLnxBUN1EwZ5dzxteSP5AnUhb2QyjRYipMUYBJFUAGe
+         3Y8mSvOppqBfRnGO41CXZm2sE1X0b4sonx12cxVXODY0JR8t0Lhd9qZw76RRChPNXITM
+         wn8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=iVfFJCMkrWLbyYUJOBj2PVHo9GdUj3rw5BmoGxMpBoo=;
-        b=xbT9YwH5mWims7iMY3SYveY/qhJFslcBt88dCfSZVaaeendUpEemHgBvFUjQodJ4p8
-         tVPZxK+vPgxl86tZLqbewuPluW3H4u/eqrE+IxOJ1zkwm5J63zV/Bdr/wuPtlopy8IEa
-         6GbzuqDu+a2fl2l1bAv91Ygrgv7AydazcvqBRFwIdYxENBDp6nwErHWikqM3Wlmt0BW2
-         VTROZrcaeMoESZCwr+jvHEC9qB2zbufZz+suZMeB7L5fSYtAqULnnMa0cxQ0FN/7G/oH
-         1tPIW9iZ5dmmGsqItpg4KZTbZLntlRwt6xOIjktup6TH1JYOT6loySTjGnyYZdxteoOd
-         wZhw==
-X-Gm-Message-State: AOAM532vcfNYmk0MbkBVCe6xAWN1qyl9Q7TMuSx+8wqcFQPSeeauoB9k
-        PSx/Tbnd2G1n2n0R100Avkophv1Tv7tcKocu
-X-Google-Smtp-Source: ABdhPJyMPbjlWbRSvxRImteK8nhcFkaxavzpAmXI8Nda6nL/B2Mb6fHzJYwRgmR8/Qxj1XUqk4txSw==
-X-Received: by 2002:a17:90b:3889:b0:1c6:408b:6b0f with SMTP id mu9-20020a17090b388900b001c6408b6b0fmr2814842pjb.43.1650096947494;
-        Sat, 16 Apr 2022 01:15:47 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-93.three.co.id. [180.214.232.93])
-        by smtp.gmail.com with ESMTPSA id z6-20020a056a00240600b004e17ab23340sm5513328pfh.177.2022.04.16.01.15.43
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=uZHCzWAZCF54H9l8o4Fov+TpziM3IgLdlvWuOde2Hlw=;
+        b=zNuk04i265preBDJokwARTY2OGDPwJNYpxGQcT0t/932y4gGFg16/J3dMEy4Enqku5
+         YtyyeIYlmR5Wrt+9UKENQz5vFoq017g2X7J1au+rEBuAvMeh11llgY4COB1TvDWbciU2
+         zjrtLpWAXxSFu4P2B5gUR2QAzLAme2Wl0lcRqDcQ7U8EXivcK5qp2Fq+3fGhYKdbE0+Y
+         x1BERnkisi50qbKkxeLjbAXSi0aQXwaxzQRqUJqPmIvcfCbXhZJL3JN624taiVEJqU4O
+         nz+KbX03l5q7Bcz4i8MfyNoev0USvkyuBAXS0cLLpEoXynfO1nh7AYxQ2XmTyQOP38M7
+         2hMQ==
+X-Gm-Message-State: AOAM5313EyOzS7gacLLjykCXIQgvOc4q/irHO2lJWJnxN1Qg+rLGYKOv
+        aAihMraG2USS39oAmELFJcf0N0HuJg==
+X-Google-Smtp-Source: ABdhPJwXlUfOf0YOaRQOksXz/q++G39mW3V1vbRT/E4O/CBmdB+2j6fwCz3hhVCtaK2sqkj0pTxO1Q==
+X-Received: by 2002:a05:6214:1ccd:b0:443:652e:69d with SMTP id g13-20020a0562141ccd00b00443652e069dmr1933166qvd.114.1650097016083;
+        Sat, 16 Apr 2022 01:16:56 -0700 (PDT)
+Received: from bytedance (ec2-13-57-97-131.us-west-1.compute.amazonaws.com. [13.57.97.131])
+        by smtp.gmail.com with ESMTPSA id o3-20020a05622a008300b002ef3ba485c0sm4354786qtw.6.2022.04.16.01.16.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 01:15:46 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        kernel test robot <lkp@intel.com>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, Schspa Shi <schspa@gmail.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] btrfs: zstd: add missing function name in zstd_reclaim_timer_fn() comment
-Date:   Sat, 16 Apr 2022 15:15:34 +0700
-Message-Id: <20220416081534.28729-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Sat, 16 Apr 2022 01:16:55 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 01:16:52 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Cong Wang <cong.wang@bytedance.com>,
+        Feng Zhou <zhoufeng.zf@bytedance.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 2/2] ip6_gre: Fix skb_under_panic in __gre6_xmit()
+Message-ID: <20220416081652.GA11007@bytedance>
+References: <c5b7dc6020c93a1e7b40bc472fcdb6429999473e.1649715555.git.peilin.ye@bytedance.com>
+ <9cd9ca4ac2c19be288cb8734a86eb30e4d9e2050.1649715555.git.peilin.ye@bytedance.com>
+ <20220414131424.744aa842@kernel.org>
+ <20220414200854.GA2729@bytedance>
+ <20220415191133.0597a79a@kernel.org>
+ <20220416065633.GA10882@bytedance>
+ <20220416093320.13f4ba1d@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220416093320.13f4ba1d@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot reports kernel-doc warning:
+On Sat, Apr 16, 2022 at 09:33:20AM +0200, Jakub Kicinski wrote:
+> On Fri, 15 Apr 2022 23:56:33 -0700 Peilin Ye wrote:
+> > On Fri, Apr 15, 2022 at 07:11:33PM +0200, Jakub Kicinski wrote:
+> > > > Could you explain this a bit more?  It seems that commit 77a5196a804e
+> > > > ("gre: add sequence number for collect md mode.") added this
+> > > > intentionally.  
+> > > 
+> > > Interesting. Maybe a better way of dealing with the problem would be
+> > > rejecting SEQ if it's not set on the device itself.  
+> > 
+> > According to ip-link(8), the 'external' option is mutually exclusive
+> > with the '[o]seq' option.  In other words, a collect_md mode IP6GRETAP
+> > device should always have the TUNNEL_SEQ flag off in its
+> > 'tunnel->parms.o_flags'.
+> > 
+> > (However, I just tried:
+> > 
+> >   $ ip link add dev ip6gretap11 type ip6gretap oseq external
+> > 					       ^^^^ ^^^^^^^^
+> >  ...and my 'ip' executed it with no error.  I will take a closer look at
+> >  iproute2 later; maybe it's undefined behavior...)
+> > 
+> > How about:
+> > 
+> > 1. If 'external', then 'oseq' means "always turn off NETIF_F_LLTX, so
+> > it's okay to set TUNNEL_SEQ in e.g. eBPF";
+> > 
+> > 2. Otherwise, if 'external' but NOT 'oseq', then whenever we see a
+> > TUNNEL_SEQ in skb's tunnel info, we do something like WARN_ONCE() then
+> > return -EINVAL.
+> 
+> Maybe pr_warn_once(), no need for a stacktrace.
 
->> fs/btrfs/zstd.c:98: warning: This comment starts with '/**', but
-isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+Ah, thanks, coffee needed...
 
-The warning is caused by missing function name (in this case
-zstd_reclaim_timer_fn) in the comment.
+> > > When the device is set up without the SEQ bit enabled it disables Tx
+> > > locking (look for LLTX). This means that multiple CPUs can try to do
+> > > the tunnel->o_seqno++ in parallel. Not catastrophic but racy for sure.  
+> > 
+> > Thanks for the explanation!  At first glance, I was wondering why don't
+> > we make 'o_seqno' atomic until I found commit b790e01aee74 ("ip_gre:
+> > lockless xmit").  I quote:
+> > 
+> > """
+> > Even using an atomic_t o_seq, we would increase chance for packets being
+> > out of order at receiver.
+> > """
+> > 
+> > I don't fully understand this out-of-order yet, but it seems that making
+> > 'o_seqno' atomic is not an option?
+> 
+> atomic_t would also work (if it has enough bits). Whatever is simplest
+> TBH. It's just about correctness, I don't think seq is widely used.
 
-Add the function name.
+I see, I will work on this, thanks!
 
-Link: https://lore.kernel.org/linux-doc/202204151934.CkKcnvuJ-lkp@intel.com/
-Fixes: b672526e2ee935 (btrfs: use non-bh spin_lock in zstd timer callback)
-Reported-by: kernel test robot <lkp@intel.com>
-Cc: Chris Mason <clm@fb.com>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: David Sterba <dsterba@suse.com>
-Cc: Nick Terrell <terrelln@fb.com>
-Cc: Schspa Shi <schspa@gmail.com>
-Cc: linux-btrfs@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- This patch is applied on top of btrfs-devel/misc-next [1] tree.
-
- [1]: https://github.com/kdave/btrfs-devel.git
-
- fs/btrfs/zstd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/btrfs/zstd.c b/fs/btrfs/zstd.c
-index 0fe31a6f6e68f0..b2740358e94819 100644
---- a/fs/btrfs/zstd.c
-+++ b/fs/btrfs/zstd.c
-@@ -95,7 +95,7 @@ void zstd_free_workspace(struct list_head *ws);
- struct list_head *zstd_alloc_workspace(unsigned int level);
- 
- /**
-- * Timer callback to free unused workspaces.
-+ * zstd_reclaim_timer_fn() - Timer callback to free unused workspaces.
-  *
-  * @t: timer
-  *
-
-base-commit: 550a34e972578538fd0826916ae4fc407b62bb68
--- 
-An old man doll... just what I always wanted! - Clara
+Peilin Ye
 

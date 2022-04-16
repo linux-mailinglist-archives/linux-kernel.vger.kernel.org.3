@@ -2,106 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D1C3503362
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D78EE5032E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230199AbiDPDpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 23:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S230225AbiDPDqr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 23:46:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiDPDpc (ORCPT
+        with ESMTP id S230202AbiDPDql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 23:45:32 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745765716B
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:43:02 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id z5-20020a170902ccc500b0015716eaec65so5296976ple.14
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:43:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=reply-to:date:in-reply-to:message-id:mime-version:references
-         :subject:from:to:cc;
-        bh=SmCJkdJ/vwMUfGmNWazGZsDfEc6XkQHjevkhSXAb2Yk=;
-        b=juavA14gxeDUNMBVNDFwrkIewI106flYCwM8f2DzoPuJXlSo9m/7dyuwNeKSJMVzOS
-         ddxnzaXXP8NCtBJCESS6h1KWx0qRdJ7SBopKU0G8uJ6pskNvPqPkTdr8ZDuEjcgjYQ6O
-         vw0jraBFoCDIp+jzX3mrtG0AoFKFq+QY0k5PJcuz6uPwWX/nHnG/aIP493gffDska3VE
-         w4woJJschfQTOpgiNwHlb+jndJnMdU8kjyGd+x0kOgLm74fmqF6sAuLsry7T0aXdhxrK
-         BfivIU3Mmz+ggBito4Ec+NNP5+ohaKNPcNm0+VZLSZXjbDhfKmiVtmxHBdD1I6cAnqkE
-         6F8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:reply-to:date:in-reply-to:message-id
-         :mime-version:references:subject:from:to:cc;
-        bh=SmCJkdJ/vwMUfGmNWazGZsDfEc6XkQHjevkhSXAb2Yk=;
-        b=L27OVHsxBteT6qNBWVz3wATFoPXWWcjFAnMNQnDXVtUC+xMlaor/oJGnqPbg2H0MNx
-         rM82QmYItXo30ugXdINmq3PF2BUUliYlz1TjM7CJku4si4z1APYDAXlvkvNl7+GRFfM4
-         +TmZe8pDnnMvX6iF4JDy26gtdLaKUfiZIuzTBXtP7RpqqlHli3AlMcjbx0gxFhby8v3o
-         3aCCRzHH7W8uk/LnU59/h5U9XdVEVX/2ocQuh05v6GRAyVqjWzHCSwUe2uBZYaGJcpBV
-         D9KhicNlZri3p3LcngnJiZMrKsHETh6KAjXRtFJHQYJizmruTd/mKrxXqvtqgqAn7zpb
-         Dlpg==
-X-Gm-Message-State: AOAM530siQCi4GUr9OTh5jwTjV8SYHhwKs73LyRENXqHpwceir0RNcyC
-        eeO8iOkq+Ok1SjNRg1N529QNlzZzAzM=
-X-Google-Smtp-Source: ABdhPJwp9G55Zfsk1+YnrNMGhIGmdzfZoZ2wR/fGJroCgp1Cvrv38rD0KsQLZIcG0uOnn2j0WI7n9Zqeoik=
-X-Received: from seanjc.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:3e5])
- (user=seanjc job=sendgmr) by 2002:a17:902:9b87:b0:156:bf3e:9ab5 with SMTP id
- y7-20020a1709029b8700b00156bf3e9ab5mr1733337plp.119.1650080581878; Fri, 15
- Apr 2022 20:43:01 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Sat, 16 Apr 2022 03:42:49 +0000
-In-Reply-To: <20220416034249.2609491-1-seanjc@google.com>
-Message-Id: <20220416034249.2609491-5-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220416034249.2609491-1-seanjc@google.com>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH 4/4] KVM: x86: Skip KVM_GUESTDBG_BLOCKIRQ APICv update if
- APICv is disabled
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Gaoning Pan <pgn@zju.edu.cn>,
-        Yongkang Jia <kangel@zju.edu.cn>,
-        Maxim Levitsky <mlevitsk@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 15 Apr 2022 23:46:41 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2ED7B1AA5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650080649; x=1681616649;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k584vKKiP9rD6Rub7r/+a7TUTKHJARYTn4kDakiB38M=;
+  b=Vcic4Q4R+WoIwN9NGBpT8Ut14P4kzmNnwMxNmA6SLa3XQUilVvXA7koG
+   3ezQlpvUqcudIvs2b+w5ZmU3ylnq+cBRNPpfFFpLyUveJygXhhO0n70g/
+   XGPt4kNIjpAPmdZijO+m1AT3k8qdOBIATsIyd1jCpbNHkO4b+GmPpaixK
+   hxEuZhFDcsP5qCAY9pWcVe1NaQld/eNRNA4eDE09ekyysvomUp4naJjDF
+   RyqoerOG7+OIWpLMTqnyC+Gu1QjF5HtIX+QA8u/b2ybufWtylLglsuEN5
+   kcuYlRH8Nc+T5Vwvewhm54IE6780MIYSLKxjgsZ8B6zSJt+IC7h6QDWmc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="326167372"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="326167372"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 20:44:09 -0700
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="528160721"
+Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 20:44:09 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Andy Whitcroft <apw@canonical.com>, Joe Perches <joe@perches.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Subject: [PATCH v1] checkpatch: Skip "From" tag from 75 character limit enforcement
+Date:   Sat, 16 Apr 2022 03:43:50 +0000
+Message-Id: <db07b0f2a4ff86723b9631d4a2c5a10829a716d5.1650080239.git.sathyanarayanan.kuppuswamy@intel.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Skip the APICv inhibit update for KVM_GUESTDBG_BLOCKIRQ if APICv is
-disabled at the module level to avoid having to acquire the mutex and
-potentially process all vCPUs. The DISABLE inhibit will (barring bugs)
-never be lifted, so piling on more inhibits is unnecessary.
+From: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@intel.com>
 
-Fixes: cae72dcc3b21 ("KVM: x86: inhibit APICv when KVM_GUESTDBG_BLOCKIRQ active")
-Cc: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Currently, checkpatch script skips tags like "Fixes", "Link" and
+"$signature_tags" when enforcing the 75 character limit in the commit
+log. But it is missing the "From" tag in the skip list. So if a commit
+log includes a "From:" tag with a long name or email, it reports a
+false warning message.
+
+To avoid this issue, include the "From" tag in the 75 character limit
+enforcement skip list.
+
+Reported-by: Dave Hansen <dave.hansen@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@intel.com>
 ---
- arch/x86/kvm/x86.c | 3 +++
- 1 file changed, 3 insertions(+)
+ scripts/checkpatch.pl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 09a270cc1c8f..16c5fa7d165d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -11048,6 +11048,9 @@ static void kvm_arch_vcpu_guestdbg_update_apicv_inhibit(struct kvm *kvm)
- 	struct kvm_vcpu *vcpu;
- 	unsigned long i;
- 
-+	if (!enable_apicv)
-+		return;
-+
- 	down_write(&kvm->arch.apicv_update_lock);
- 
- 	kvm_for_each_vcpu(i, vcpu, kvm) {
+diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+index 577e02998701..c8cbc216f098 100755
+--- a/scripts/checkpatch.pl
++++ b/scripts/checkpatch.pl
+@@ -3174,7 +3174,7 @@ sub process {
+ 					# file delta changes
+ 		      $line =~ /^\s*(?:[\w\.\-\+]*\/)++[\w\.\-\+]+:/ ||
+ 					# filename then :
+-		      $line =~ /^\s*(?:Fixes:|Link:|$signature_tags)/i ||
++		      $line =~ /^\s*(?:From:|Fixes:|Link:|$signature_tags)/i ||
+ 					# A Fixes: or Link: line or signature tag line
+ 		      $commit_log_possible_stack_dump)) {
+ 			WARN("COMMIT_LOG_LONG_LINE",
 -- 
-2.36.0.rc0.470.gd361397f0d-goog
+2.25.1
 

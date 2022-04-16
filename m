@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EF75045BE
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 01:06:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1A995045C0
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 01:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbiDPXIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 19:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44906 "EHLO
+        id S233112AbiDPXJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 19:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231293AbiDPXIi (ORCPT
+        with ESMTP id S233106AbiDPXI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 19:08:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C6FD2A730;
-        Sat, 16 Apr 2022 16:06:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9731BB8068A;
-        Sat, 16 Apr 2022 23:06:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF475C385A1;
-        Sat, 16 Apr 2022 23:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650150359;
-        bh=HpJTWn8rxtUvc2Uu9L51I1bEMCgj7T0IW46gNpnpj7I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IdOc9VUw2V0PUM/e7qmNJi+t1Xi/1kWnT5NM9AglczIaO/xqg31+Vfljl4TQCpPTu
-         SkxOfizLJ27x+afCUtRE66UBenFyFwIf7oA8B5Bl51ngB9i3gTTQauqxvxT0tU7Llj
-         zAlZ63LrjIfgz0rVGZx01ZsjmDFL+bjODaAHpwcz65qB6BOEk0kMkqoFbb9kI3SfaH
-         ChW9U5o4UCSID+Sykc4JI0W3tj+ZNkM2PlSQqRW50Ntx0X3eqEhNfRRESngMKJyLyr
-         i9EQieKUV34lhbCaFICG9CfAPPKGsqBfbWJuT3h9Qti/ul9XV9a2V5K+IJdmo97360
-         jd+SDSgkiCsLQ==
-Date:   Sat, 16 Apr 2022 16:05:57 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Tom Rix <trix@redhat.com>
-Cc:     broonie@kernel.org, ndesaulniers@google.com,
-        paul.kocialkowski@bootlin.com, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] spi: initialize status to success
-Message-ID: <YltL1RXdeO82s/bR@dev-arch.thelio-3990X>
-References: <20220416205132.295779-1-trix@redhat.com>
+        Sat, 16 Apr 2022 19:08:56 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3CF2C131
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 16:06:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650150383; x=1681686383;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wELl+SyaLPB/ly7xW2SzJaUB89/IRsuP9PxBJjpL30Y=;
+  b=TUFNkBqNi5Mn81CWUtiYaqxKKyiYhHcsYda/S07viXufvVRJxIZuLQ6h
+   hreA8G7n/jVxIF/4j1Z37FINnBLY3lbU4vHh3i6DoZ8oM0ofh3lXoxqKG
+   h/fme30DGR12H39WbmDJQYeXyBNdX2ncFBudpfykIwIDYbBuvfd5a+IsQ
+   jVEfMTSQNO6HfnAIFlOpb4ZifK9IMvAiQo4KM9/RyMce0fkZ9+xn2Ywt9
+   m75BiFTrFhJOTilsDihkdygbiJSY2HR435TOIV7J9ElGGe/qFgjUmJE8L
+   ueKnNoIDzmua0ckCygh+Qg0dbQa0p5jS1TYlSrCSWvRSmPAzX4IY8NdtE
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="323787433"
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="323787433"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 16:06:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="509341458"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 16 Apr 2022 16:06:21 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfrUi-0003YH-L6;
+        Sat, 16 Apr 2022 23:06:20 +0000
+Date:   Sun, 17 Apr 2022 07:06:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [lunn:v5.18-rc1-net-next-c45 38/44]
+ drivers/net/dsa/sja1105/sja1105_mdio.c:190:9: warning: variable 'tmp' is
+ uninitialized when used here
+Message-ID: <202204170750.Ftg38eOr-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220416205132.295779-1-trix@redhat.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,53 +64,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 04:51:32PM -0400, Tom Rix wrote:
-> Clang static analysis reports this issue
-> spi.c:3583:2: warning: 2nd function call argument
->   is an uninitialized value
->   trace_spi_setup(spi, status);
->   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> It is possible that status is never set because
-> its function level setting was removed by the
-> commit listed in the Fixes: tag.
-> 
-> Assume that setting 8 bits-per-word is ok and
-> initialize the status to 0.
-> 
-> Fixes: b3fe2e516741 ("spi: core: Only check bits_per_word validity when explicitly provided")
-> Signed-off-by: Tom Rix <trix@redhat.com>
+tree:   https://github.com/lunn/linux.git v5.18-rc1-net-next-c45
+head:   a6ca6875280b5cf6ee1d8466840b71bf6ffb7bfd
+commit: 47aade045321c64f7486052fb1cee153d0f6cbdc [38/44] net: dsa: sja1105: Separate C22 and C45 transactions for T1 MDIO bus
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220417/202204170750.Ftg38eOr-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/lunn/linux/commit/47aade045321c64f7486052fb1cee153d0f6cbdc
+        git remote add lunn https://github.com/lunn/linux.git
+        git fetch --no-tags lunn v5.18-rc1-net-next-c45
+        git checkout 47aade045321c64f7486052fb1cee153d0f6cbdc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/
 
-I am very surprised that -Wsometimes-uninitialized does not trigger
-here, as this instance does not require interprocedural analysis, right?
-status is not passed by reference as far as I can tell and it is only
-initialized in if statements now but it is unconditionally used at the
-end of the function. Maybe it does not matter too much, given that
-auto-initialization is turned on by default when supported.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regardless, this fix looks fine. I do not really like initializing
-variables at the top of the function as it can hide error codes but it
-is always a maintainer preference anyways so:
+All warnings (new ones prefixed by >>):
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+>> drivers/net/dsa/sja1105/sja1105_mdio.c:190:9: warning: variable 'tmp' is uninitialized when used here [-Wuninitialized]
+           return tmp & 0xffff;
+                  ^~~
+   drivers/net/dsa/sja1105/sja1105_mdio.c:175:9: note: initialize the variable 'tmp' to silence this warning
+           u32 tmp;
+                  ^
+                   = 0
+   1 warning generated.
 
-> ---
->  drivers/spi/spi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-> index 563a56ce34a0..890ff46c784a 100644
-> --- a/drivers/spi/spi.c
-> +++ b/drivers/spi/spi.c
-> @@ -3475,7 +3475,7 @@ static int __spi_validate_bits_per_word(struct spi_controller *ctlr,
->  int spi_setup(struct spi_device *spi)
->  {
->  	unsigned	bad_bits, ugly_bits;
-> -	int		status;
-> +	int		status = 0;
->  
->  	/*
->  	 * Check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
-> -- 
-> 2.27.0
-> 
+
+vim +/tmp +190 drivers/net/dsa/sja1105/sja1105_mdio.c
+
+5a8f09748ee79f Vladimir Oltean 2021-06-08  168  
+47aade045321c6 Andrew Lunn     2022-04-01  169  static int sja1105_base_t1_mdio_read_c45(struct mii_bus *bus, int phy,
+47aade045321c6 Andrew Lunn     2022-04-01  170  					 int mmd, int reg)
+47aade045321c6 Andrew Lunn     2022-04-01  171  {
+47aade045321c6 Andrew Lunn     2022-04-01  172  	struct sja1105_mdio_private *mdio_priv = bus->priv;
+47aade045321c6 Andrew Lunn     2022-04-01  173  	struct sja1105_private *priv = mdio_priv->priv;
+47aade045321c6 Andrew Lunn     2022-04-01  174  	u64 addr;
+47aade045321c6 Andrew Lunn     2022-04-01  175  	u32 tmp;
+47aade045321c6 Andrew Lunn     2022-04-01  176  	int rc;
+5a8f09748ee79f Vladimir Oltean 2021-06-08  177  
+47aade045321c6 Andrew Lunn     2022-04-01  178  	addr = sja1105_base_t1_encode_addr(priv, phy, SJA1105_C45_ADDR, mmd);
+47aade045321c6 Andrew Lunn     2022-04-01  179  
+47aade045321c6 Andrew Lunn     2022-04-01  180  	rc = sja1105_xfer_u32(priv, SPI_WRITE, addr, &reg, NULL);
+47aade045321c6 Andrew Lunn     2022-04-01  181  	if (rc < 0)
+47aade045321c6 Andrew Lunn     2022-04-01  182  		return rc;
+47aade045321c6 Andrew Lunn     2022-04-01  183  
+47aade045321c6 Andrew Lunn     2022-04-01  184  	addr = sja1105_base_t1_encode_addr(priv, phy, SJA1105_C45_DATA, mmd);
+47aade045321c6 Andrew Lunn     2022-04-01  185  
+47aade045321c6 Andrew Lunn     2022-04-01  186  	rc = sja1105_xfer_u32(priv, SPI_READ, addr, &reg, NULL);
+5a8f09748ee79f Vladimir Oltean 2021-06-08  187  	if (rc < 0)
+5a8f09748ee79f Vladimir Oltean 2021-06-08  188  		return rc;
+5a8f09748ee79f Vladimir Oltean 2021-06-08  189  
+5a8f09748ee79f Vladimir Oltean 2021-06-08 @190  	return tmp & 0xffff;
+5a8f09748ee79f Vladimir Oltean 2021-06-08  191  }
+5a8f09748ee79f Vladimir Oltean 2021-06-08  192  
+
+:::::: The code at line 190 was first introduced by commit
+:::::: 5a8f09748ee79f2ef28e560bd095587a0e204b3d net: dsa: sja1105: register the MDIO buses for 100base-T1 and 100base-TX
+
+:::::: TO: Vladimir Oltean <vladimir.oltean@nxp.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

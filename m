@@ -2,69 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F270D503727
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC79B503737
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 16:55:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232324AbiDPOrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 10:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S232354AbiDPO6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 10:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232287AbiDPOr2 (ORCPT
+        with ESMTP id S232363AbiDPO57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 10:47:28 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6E1516598;
-        Sat, 16 Apr 2022 07:44:55 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id EDBF792009E; Sat, 16 Apr 2022 16:44:53 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id E02D092009C;
-        Sat, 16 Apr 2022 15:44:53 +0100 (BST)
-Date:   Sat, 16 Apr 2022 15:44:53 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>, Theodore Ts'o <tytso@mit.edu>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        John Stultz <john.stultz@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
-        linux-m68k <linux-m68k@lists.linux-m68k.org>,
-        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        sparclinux <sparclinux@vger.kernel.org>,
-        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
-        linux-xtensa@linux-xtensa.org
-Subject: Re: [PATCH v4 04/11] mips: use fallback for random_get_entropy()
- instead of zero
-In-Reply-To: <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2204161533420.9383@angie.orcam.me.uk>
-References: <20220413115411.21489-1-Jason@zx2c4.com> <20220413115411.21489-5-Jason@zx2c4.com> <20220413122546.GA11860@alpha.franken.de> <alpine.DEB.2.21.2204131331450.9383@angie.orcam.me.uk> <CAHmME9pQ4xdeTUDxAdrOu=S9NRTonYzJVk50fa0Zfz4knZt5WA@mail.gmail.com>
- <alpine.DEB.2.21.2204140014580.9383@angie.orcam.me.uk> <YlfoeGRM6w2O+eXA@zx2c4.com> <alpine.DEB.2.21.2204142349180.9383@angie.orcam.me.uk> <CAHmME9qzkZqkGntLn--XfMKzyR=tYiCaZu1uFpoQBzAzCipZ-A@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sat, 16 Apr 2022 10:57:59 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E1565A2;
+        Sat, 16 Apr 2022 07:55:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650120927; x=1681656927;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6moqOpRJJ723BsXosSP1zdZ3z05mUbEX035K/K5GSBs=;
+  b=gl0EuehdspkhCnxwRVuHnsmgL/rK8NbXsHTQuqNOL8JSepa04EVRyj0r
+   Dz4/9QZdEP6rmvAHLpoWcDhG9H/ClbHp4Sb2xMfiv4yMXGyB0vHcQJuQ4
+   7a6eR2KQ0BTkLlOOALLZtGcpNOKYc25L+WR6TOOEoQwjA7/oX2+0bv7Uv
+   /qqZJuytXsftPSvXCM+bTALwBlQERQairLDUJmcW0Ok/3Z175XQv19xV+
+   fmSZmEKsaUALYFWb+XjnDUjrzSm3d9f2ZlEwRaHlKeKYb9K2iDp4aBrc7
+   5g5fUmRb7yKiF323d3EEj/IxfrN9jaJByJpIwe1B9Bp187LzcajT0gNB5
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="245185209"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="245185209"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 07:55:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="553573287"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by orsmga007.jf.intel.com with ESMTP; 16 Apr 2022 07:55:23 -0700
+Date:   Sat, 16 Apr 2022 22:47:52 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Tianfei Zhang <tianfei.zhang@intel.com>
+Cc:     hao.wu@intel.com, trix@redhat.com, mdf@kernel.org,
+        linux-fpga@vger.kernel.org, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org,
+        Matthew Gerlach <matthew.gerlach@linux.intel.com>
+Subject: Re: [PATCH v2] uio: dfl: add HSSI feature id
+Message-ID: <20220416144752.GA301222@yilunxu-OptiPlex-7050>
+References: <20220412062353.53984-1-tianfei.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412062353.53984-1-tianfei.zhang@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,59 +62,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jason,
-
-> >  There are two variants only of the CP0 Random register that we can ever
-> > encounter, as it's been de-facto standardised in early 1990s already and
-> > then written down in the MIPSr1 architecture specification ~2000.  So I
-> > think it may make sense to actually handle them both explictitly with
-> > individual calculations, possibly conditionalised on a CONFIG setting or
-> > `cpu_has_3kex', because kernels that support the two variants of the MMU
-> > architecture are mutually incompatible.
+On Tue, Apr 12, 2022 at 02:23:53AM -0400, Tianfei Zhang wrote:
+> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 > 
-> Okay, I can give this a shot, but this certainly isn't my forté. It
-> may ultimately wind up being simpler for you to just send some code of
-> what you envision for this, but if I understand your idea correctly,
-> what you're saying is something like:
+> Add the feature id of the OFS HSSI (High Speed Serial Interface)
+> subsystem to table of ids supported by the uio_dfl driver. HSSI
+> subsystem consists of harden/soft Ethernet MAC to support various
+> ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
 > 
-> static inline unsigned long random_get_entropy(void)
-> {
->         unsigned int prid = read_c0_prid();
->         unsigned int imp = prid & PRID_IMP_MASK;
->         unsigned int c0_random;
+> We leverage the uio_dfl driver to access the HSSI subsystem on user space,
+> because the HSSI subsystem was designed for specific purposes and does
+
+Could you explain what's the main difference between this MAC and other
+MACs, which prevents it from fitting into net kernel subsystem?
+
+For FME_FEATURE_ID_ETH_GROUP, it is not designed as the full functional
+ethernet controller. It is specially developed for the Intel N3000 NIC.
+Since it is an FPGA based card, it is designed for the users to runtime
+reload part of the MAC layer logic developed by themselves, while the ETH
+GROUP is another part of the MAC which is not expected to be reloaded by
+customers, but it provides some configurations for software to work with
+the user logic.
+
+And what's the difference for the FME_FEATURE_ID_OFS_HSSI?
+
+Thanks,
+Yilun
+
+> not fit into the standard MAC and net kernel subsystems.
 > 
->         if (can_use_mips_counter(prid))
->                 return read_c0_count();
+> The Feature ID table of DFL can be found:
+> https://github.com/OPAE/dfl-feature-id
 > 
->         if (cpu_has_3kex)
->                 c0_random = (read_c0_random() >> 8) & 0x3f;
->         else
->                 c0_random = read_c0_random() & 0x3f;
->         return (random_get_entropy_fallback() << 6) | (0x3f - c0_random);
-> }
+> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+> Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
+> ---
+> v2: add HSSI introduction and the git repo of Feature ID table.
+> ---
+>  drivers/uio/uio_dfl.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> What do you think of that? Some tweak I'm missing?
-
- It certainly looks good to me.  Do you have a way I could verify how this 
-function performs?  If so, then I could put it through my systems as I can 
-cover all the cases handled here.
-
- Any improvements I previously discussed can then be made locally in the 
-MIPS port as follow-up changes.
-
-> >  Isn't it going to be an issue for an entropy source that the distribution
-> > of values obtained from the CP0 Random bit-field is not even, that is some
-> > values from the 6-bit range will never appear?
-> 
-> It's the same situation without inverting the order: instead of some
-> bits on the top never happening, some bits on the bottom never happen
-> instead. In general, counters don't form uniform distributions anyway,
-> since the lower bits change faster, and neither are they independent,
-> since one sample in large part depends on the previous. This is just
-> sort of the nature of the beast, and the code that calls
-> random_get_entropy() deals with this appropriately (by, at the moment,
-> just hashing all the bits).
-
- OK then, thanks for your clarification.
-
-  Maciej
+> diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+> index 89c0fc7b0cbc..660e1d0bf6b9 100644
+> --- a/drivers/uio/uio_dfl.c
+> +++ b/drivers/uio/uio_dfl.c
+> @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+>  }
+>  
+>  #define FME_FEATURE_ID_ETH_GROUP	0x10
+> +#define FME_FEATURE_ID_OFS_HSSI		0x15
+>  
+>  static const struct dfl_device_id uio_dfl_ids[] = {
+>  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+> +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+> -- 
+> 2.26.2

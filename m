@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F06450334F
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 100C7503417
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229884AbiDPCWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S229462AbiDPCEi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbiDPCWT (ORCPT
+        with ESMTP id S229379AbiDPCEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:22:19 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:e::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1439C58E75;
-        Fri, 15 Apr 2022 19:19:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ZM3lfs/b3lAESP5zz9nLnOwj5qAuBZLAI/rah4e2ykc=; b=H4gURL8nIMUmE4/AHGNEwndQpZ
-        NhOsASQcw8Lf8fWI3xWKAh8K2mecRE3TlV41+ua+9MCy+wgYxN0tBPBaP5mFbUl+UGiUZ3hTYz6xK
-        4gmxUjA11Pv2NOoPAsxowiJPNXRwP9nxJKbOXAkMTazILTit3v9CrWfn/AV7oPdsoEWijZJcm9++0
-        BG56SlV78tDkfVdhZXD84QVKIcljHBv25fYECsMMmuKd6vL0/y0T+lZ/UWkTtf4PmDiWRAPZK1Cv5
-        F4rUu6rEHY8ctjs6b4JGjDj7IT5+nGd9R8UwgdPbhBGXRAJyCtMB29Cp4kVRV5SVvauy6NNLBGlGc
-        ll1zE/Gg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1nfXSu-00BuX1-Sd; Sat, 16 Apr 2022 01:43:09 +0000
-Date:   Fri, 15 Apr 2022 18:43:08 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Song Liu <song@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     bpf <bpf@vger.kernel.org>, Linux-MM <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Christoph Hellwig <hch@infradead.org>, imbrenda@linux.ibm.com
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <YlofLKtItUgYfRpX@bombadil.infradead.org>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <CAPhsuW6LY8g6SZpW0CBOe22FUd2e3oSq4RW1GDxZoPmHYBqwvw@mail.gmail.com>
- <YlofA8u760BE8e0B@bombadil.infradead.org>
+        Fri, 15 Apr 2022 22:04:37 -0400
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717C31342DF;
+        Fri, 15 Apr 2022 18:54:01 -0700 (PDT)
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-dacc470e03so9414001fac.5;
+        Fri, 15 Apr 2022 18:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=JSSksXfSHT8J5RaVPGQ9iInEYYQkEPPrA2/YVmqRfXs=;
+        b=OU2Yqq+f86YpQJByLea2+P16BM8pxSSyWmk1uKVQm9hHeePVtZyDivMG10YhUTbIbw
+         r+Lg4uSnR7ZRcHD0wUaQVXk7g72nWv1DcdTSBMpdx/8GtKC46hUtiKnHIYly4HbNYgG3
+         3zZebYK2ItjOkSEAgK3SMa26KNQi3yvUXaNjwgxJpDW1K2lHXiNtUNmZl+bvvDvTGn99
+         WxBcq29+4inQvCgIUQbE5uowI1ykjtiwxpvSaHxU9AnAB+COJy4VQKeV9xHHuRYUbNl1
+         g2xuJEHq7422mYxkUjWKlBEeYl+vQp/FoxDHTTJpSzayNIsrn97+RnuOznmIx9PzbeUA
+         0SAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=JSSksXfSHT8J5RaVPGQ9iInEYYQkEPPrA2/YVmqRfXs=;
+        b=Q0JfEQvsxc73HI8dA6GmBZpv9onAcdLcNezPV3aw7NgRqs/nTaqyV1wVqiI44b6SIB
+         hquFtnIlPAyFpDYsQn/N7wjYtwhS/66BwDnJ/xlHPOkX9R/bGmcxJ6Rt+5x5X1iHhOyj
+         hDizvy3qB+cJ5B6t81sdIceUOjrkIbp6NDHOFnEqAQNDeUJIk2DKkYeO60t+Oad8Np3c
+         0s/QxVgmoLQfxeDtoRpGkHDxwiGmStTtxlXxcUJTcHD5RkKLX+pLVRcgbeEBkkRPE8Ow
+         IvKZIlNCLWc7RcLi0Bkb1rSCKJ0bDVcAIFJcwkr2v1JnfReV7m06cQgqbsk1r2+dJZx7
+         Jw8A==
+X-Gm-Message-State: AOAM532Fl+tYP1oYBLsVZ5yJQKCmfScZ28rr+mEDJaDZNQDGWE8HWhOQ
+        7g/UEyWgzt1Ti1a6ekIUrjAyr99i+EG6iw==
+X-Google-Smtp-Source: ABdhPJw/Jj+ggFXWVzYqOMrwoGySpFgbznD2nqtFZEejK9A/D8nCrw3gYkqXuSkkRptU7a06zbilcw==
+X-Received: by 2002:a17:90b:1c8f:b0:1b8:c6dc:ca61 with SMTP id oo15-20020a17090b1c8f00b001b8c6dcca61mr1702855pjb.13.1650073476694;
+        Fri, 15 Apr 2022 18:44:36 -0700 (PDT)
+Received: from d3 ([2405:6580:97e0:3100:ae94:2ee7:59a:4846])
+        by smtp.gmail.com with ESMTPSA id q91-20020a17090a1b6400b001d0dcaf7920sm2917613pjq.6.2022.04.15.18.44.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 18:44:36 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 10:44:30 +0900
+From:   Benjamin Poirier <benjamin.poirier@gmail.com>
+To:     Yihao Han <hanyihao@vivo.com>
+Cc:     Shahed Shaikh <shshaikh@marvell.com>,
+        Manish Chopra <manishc@marvell.com>,
+        GR-Linux-NIC-Dev@marvell.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@vivo.com
+Subject: Re: [PATCH v2] net: qlogic: qlcnic: simplify if-if to if-else
+Message-ID: <Yloffi2Og9bS2fds@d3>
+References: <20220415120949.86169-1-hanyihao@vivo.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YlofA8u760BE8e0B@bombadil.infradead.org>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220415120949.86169-1-hanyihao@vivo.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 06:42:27PM -0700, Luis Chamberlain wrote:
-> On Fri, Apr 15, 2022 at 06:34:16PM -0700, Song Liu wrote:
-> > On Fri, Apr 15, 2022 at 12:05 PM Luis Chamberlain <mcgrof@kernel.org> wrote:
-> > >
-> > > On Fri, Apr 15, 2022 at 09:44:09AM -0700, Song Liu wrote:
-> > > > Changes v3 => v4:
-> > > > 1. Fix __weak module_alloc_huge; remove unused vmalloc_huge; rename
-> > > >    __vmalloc_huge => vmalloc_huge. (Christoph Hellwig)
-> > > > 2. Use vzalloc (as it was before vmalloc_no_huge) and clean up comments in
-> > > >    kvm_s390_pv_alloc_vm.
-> > > >
-> > > > Changes v2 => v3:
-> > > > 1. Use __vmalloc_huge in alloc_large_system_hash.
-> > > > 2. Use EXPORT_SYMBOL_GPL for new functions. (Christoph Hellwig)
-> > > > 3. Add more description about the issues and changes.(Christoph Hellwig,
-> > > >    Rick Edgecombe).
-> > > >
-> > > > Changes v1 => v2:
-> > > > 1. Add vmalloc_huge(). (Christoph Hellwig)
-> > > > 2. Add module_alloc_huge(). (Christoph Hellwig)
-> > > > 3. Add Fixes tag and Link tag. (Thorsten Leemhuis)
-> > > >
-> > > > Enabling HAVE_ARCH_HUGE_VMALLOC on x86_64 and use it for bpf_prog_pack has
-> > > > caused some issues [1], as many users of vmalloc are not yet ready to
-> > > > handle huge pages. To enable a more smooth transition to use huge page
-> > > > backed vmalloc memory, this set replaces VM_NO_HUGE_VMAP flag with an new
-> > > > opt-in flag, VM_ALLOW_HUGE_VMAP. More discussions about this topic can be
-> > > > found at [2].
-> > > >
-> > > > Patch 1 removes VM_NO_HUGE_VMAP and adds VM_ALLOW_HUGE_VMAP.
-> > > > Patch 2 uses VM_ALLOW_HUGE_VMAP in bpf_prog_pack.
-> > > >
-> > > > [1] https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
-> > > > [2] https://lore.kernel.org/linux-mm/20220330225642.1163897-1-song@kernel.org/
-> > >
-> > > Looks good except for that I think this should just wait for v5.19. The
-> > > fixes are so large I can't see why this needs to be rushed in other than
-> > > the first assumptions of the optimizations had some flaws addressed here.
-> > 
-> > We need these changes to fix issues like [3]. Note that there might
-> > still be some
-> > undiscovered issues with huge page backed vmalloc memory on powerpc, which
-> > had HAVE_ARCH_HUGE_VMALLOC enabled since the 5.15 kernel. As we
-> > agreed, the new opt-in flag is a safer approach here. We probably should have
-> > 1/4 and 2/4 back ported to stable. Therefore, I think shipping this
-> > set now would
-> > give us a more reliable 5.18 release.
-> > 
-> > Does this make sense?
+On 2022-04-15 05:09 -0700, Yihao Han wrote:
+> Replace `if (!pause->autoneg)` with `else` for simplification
+> according to the kernel coding style:
 > 
-> Yes absolutely, but that sounds like that optimization should just be
-> reverted completely from v5.18 isntead then no? Or if one can skip the
-> optimizations for v5.18 with a small patch, and then enable for v5.19.
+> "Do not unnecessarily use braces where a single statement will do."
+> 
+> ...
+> 
+> "This does not apply if only one branch of a conditional statement is
+> a single statement; in the latter case use braces in both branches"
+> 
+> Please refer to:
+> https://www.kernel.org/doc/html/v5.17-rc8/process/coding-style.html
 
-In any case it is up to Linus, I already chimed in with my opinion.
+This commit log is even more confusing than v1. Only the first line is
+correct.
 
-  Luis
+> 
+> Suggested-by: Benjamin Poirier <benjamin.poirier@gmail.com>
+
+I did not suggest this change. Please remove the tag.
+
+> Signed-off-by: Yihao Han <hanyihao@vivo.com>
+> ---
+> v2:edit commit message
+> ---
+>  drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> index bd0607680329..e3842eaf1532 100644
+> --- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> +++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_83xx_hw.c
+> @@ -3752,7 +3752,7 @@ int qlcnic_83xx_set_pauseparam(struct qlcnic_adapter *adapter,
+>  	if (ahw->port_type == QLCNIC_GBE) {
+>  		if (pause->autoneg)
+>  			ahw->port_config |= QLC_83XX_ENABLE_AUTONEG;
+> -		if (!pause->autoneg)
+> +		else
+>  			ahw->port_config &= ~QLC_83XX_ENABLE_AUTONEG;
+>  	} else if ((ahw->port_type == QLCNIC_XGBE) && (pause->autoneg)) {
+>  		return -EOPNOTSUPP;
+> -- 
+> 2.17.1
+> 

@@ -2,86 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E2D50334D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D16C05033BB
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiDPARV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 20:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
+        id S230003AbiDPAXB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 20:23:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiDPARQ (ORCPT
+        with ESMTP id S229657AbiDPAW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 20:17:16 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB496540A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:14:45 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id u19so16128886lff.4
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 17:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=kmCIJYxkSl8+6zNO2ByY5420J4KgV40/Bvhc8LMZxPI=;
-        b=xRIu3WmBpfnJtJjdS7zJ1TIJrDKXfG8JAcQGM2+IEJHQwoZKjMRqpbQShS/cPzXpT2
-         ba/PDkRnwdfFgMpFSfStxu/5UWGb6E8a+sJbttoSGNijs0Z/0j9zhaSUI11qaJi8vyow
-         +zK1rfLD9DF2smFkWIGjKtZrH3Fa3DKoO6e3eHt+/fNk0Okgc5ecC/HsQwmlVoqcGiag
-         +vU4Dku2plqC5iFifskXKkg6wy3Bg6sJIUTMPirMElfmjv5mjT/Kq+wVVFS9Qje4RxGU
-         bKdGiUC0qzFD6Hn71dFCgfr5AkEEuqALx3pdXK0RgnsaSmxAsm/gyLuxQH3zxY7XZWnh
-         sr9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=kmCIJYxkSl8+6zNO2ByY5420J4KgV40/Bvhc8LMZxPI=;
-        b=F6xcQgFs6vNBSun79DP/Tvc85MwgygoPE08Dp0CFp6kIlZfIa57gOnXIdlfIM6Jedu
-         CJrlv1pXc3jXZMDmo9FU37HGnDjL3vAiRUY7Q117cwgutkaPhbj8hBdKReqgyrXXGNen
-         7jwST39M7Skpo/m3/FmsHZKPy7kOrgbbF3NZDtWFJxE7mp3Me/edpK4b4yAXHyrwWVLl
-         KN1isvx/VlGDasV9yGRma6hoIaVv1vPzb+vVyxxqMS80mO1OnAoOMnD05igKRrYkArsE
-         4roQVRQ60c7Zwy7OOB8SBy4efHAVv67SK8wEU4uKq1ijm3LgNaL0nQeIhG+J7lF0f2pQ
-         8nJQ==
-X-Gm-Message-State: AOAM531I9GzW8heyBs5kL/0zkZtfODhyAw2gxPE+laNOYGV3FeRXFQEr
-        ZbF/L8t7icDOkl43sMj5it4Clmhm42GYohSN9Co=
-X-Google-Smtp-Source: ABdhPJx0kWRhaLh0iMY4qb8BBiz3Hflaw3HkGMBad1UIqlpVfGfYLt5MpAl221/DZHfNaOI/cFYG1Q==
-X-Received: by 2002:a05:6512:1688:b0:464:f53f:850f with SMTP id bu8-20020a056512168800b00464f53f850fmr851968lfb.637.1650068083386;
-        Fri, 15 Apr 2022 17:14:43 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id t25-20020a19dc19000000b0044a16b068c7sm494947lfg.117.2022.04.15.17.14.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 15 Apr 2022 17:14:42 -0700 (PDT)
-Message-ID: <835fa3cd-0777-1dea-972f-3e24d5aeda3a@linaro.org>
-Date:   Sat, 16 Apr 2022 03:14:42 +0300
+        Fri, 15 Apr 2022 20:22:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E545C625B;
+        Fri, 15 Apr 2022 17:20:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEDECB831C0;
+        Sat, 16 Apr 2022 00:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B04AC385A4;
+        Sat, 16 Apr 2022 00:20:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650068425;
+        bh=MGY5sOKWDHr0IONFBvmLrFAAGBvZRGoXCHHFVj2f5cM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pXKAZlVv2VqcV6lZKS7kWAq5SwTg6zAWtK8XHhqlW6Bdy8tyJuYalqlXCRzCv9kGS
+         dHtZvaS2eD81u0mLll/ID9c7UkP3ccNhbqmmjuJKcrUwh6vzf61LdfFb05axrpqX0+
+         7TCuYbZAeqZcZLCcIHBnRmqDpafZv7kg4vmy14gxH168ZaSxq91TckLg64sz+iQqDQ
+         /MnYGsDtpT9XfKViCrDiMtAfJs/cedVGpASOWy10jyB4K7qkcy5RptRCtiXwM9P/WG
+         v6JkZQ0CtK4eSppjXuT3PiFgjiuRiiZbnDHLjim4FSg9U66dpdLBEr4eMNcOyaKTTx
+         mGL+ze3FyOPdw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0F1355C30D2; Fri, 15 Apr 2022 17:20:25 -0700 (PDT)
+Date:   Fri, 15 Apr 2022 17:20:25 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Zqiang <qiang1.zhang@intel.com>
+Cc:     frederic@kernel.org, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] rcu: Dump all rcuc kthreads status for CPUs that not
+ report quiescent state
+Message-ID: <20220416002025.GO4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220413074411.2369623-1-qiang1.zhang@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH 4/6] drm/panel-edp: Take advantage of
- is_hpd_asserted() in struct drm_dp_aux
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>
-References: <20220409023628.2104952-1-dianders@chromium.org>
- <20220408193536.RFC.4.Icea616f57331fbaa3d48c529f300c9a8ebd37fb5@changeid>
- <027b3ca1-fbd3-7bce-1ca0-ec92a5f23fee@linaro.org>
- <CAD=FV=Xu7b=t1C4JHF4U9BsD9wFy_x_GseJFNytHdCKvnS9DoA@mail.gmail.com>
- <CAA8EJppyBTDeFVztS2rTihAwEjJdmJf1Md-Qa3x3MijVvbzSUQ@mail.gmail.com>
- <CAD=FV=XbCggB6kVwE8jj3DO3GWXj=_LeXatST3S9h91kh32nEw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=XbCggB6kVwE8jj3DO3GWXj=_LeXatST3S9h91kh32nEw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220413074411.2369623-1-qiang1.zhang@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,104 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2022 03:12, Doug Anderson wrote:
-> Hi,
+On Wed, Apr 13, 2022 at 03:44:11PM +0800, Zqiang wrote:
+> If the rcutree.use_softirq is configured, when RCU Stall event
+> happened, dump status of all rcuc kthreads who due to starvation
+> prevented grace period ends on CPUs that not report quiescent
+> state.
 > 
-> On Fri, Apr 15, 2022 at 3:12 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On Sat, 16 Apr 2022 at 00:17, Doug Anderson <dianders@chromium.org> wrote:
->>>
->>> Hi,
->>>
->>> On Thu, Apr 14, 2022 at 5:51 PM Dmitry Baryshkov
->>> <dmitry.baryshkov@linaro.org> wrote:
->>>>
->>>> On 09/04/2022 05:36, Douglas Anderson wrote:
->>>>> Let's add support for being able to read the HPD pin even if it's
->>>>> hooked directly to the controller. This will allow us to get more
->>>>> accurate delays also lets us take away the waiting in the AUX transfer
->>>>> functions of the eDP controller drivers.
->>>>>
->>>>> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->>>>> ---
->>>>>
->>>>>    drivers/gpu/drm/panel/panel-edp.c | 37 ++++++++++++++++++++++++++-----
->>>>>    1 file changed, 31 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
->>>>> index 1732b4f56e38..4a143eb9544b 100644
->>>>> --- a/drivers/gpu/drm/panel/panel-edp.c
->>>>> +++ b/drivers/gpu/drm/panel/panel-edp.c
->>>>> @@ -417,6 +417,19 @@ static int panel_edp_get_hpd_gpio(struct device *dev, struct panel_edp *p)
->>>>>        return 0;
->>>>>    }
->>>>>
->>>>> +static bool panel_edp_can_read_hpd(struct panel_edp *p)
->>>>> +{
->>>>> +     return !p->no_hpd && (p->hpd_gpio || (p->aux && p->aux->is_hpd_asserted));
->>>>> +}
->>>>> +
->>>>> +static bool panel_edp_read_hpd(struct panel_edp *p)
->>>>> +{
->>>>> +     if (p->hpd_gpio)
->>>>> +             return gpiod_get_value_cansleep(p->hpd_gpio);
->>>>> +
->>>>> +     return p->aux->is_hpd_asserted(p->aux);
->>>>> +}
->>>>> +
->>>>>    static int panel_edp_prepare_once(struct panel_edp *p)
->>>>>    {
->>>>>        struct device *dev = p->base.dev;
->>>>> @@ -441,13 +454,21 @@ static int panel_edp_prepare_once(struct panel_edp *p)
->>>>>        if (delay)
->>>>>                msleep(delay);
->>>>>
->>>>> -     if (p->hpd_gpio) {
->>>>> +     if (panel_edp_can_read_hpd(p)) {
->>>>>                if (p->desc->delay.hpd_absent)
->>>>>                        hpd_wait_us = p->desc->delay.hpd_absent * 1000UL;
->>>>>                else
->>>>>                        hpd_wait_us = 2000000;
->>>>>
->>>>> -             err = readx_poll_timeout(gpiod_get_value_cansleep, p->hpd_gpio,
->>>>> +             /*
->>>>> +              * Extra max delay, mostly to account for ps8640. ps8640
->>>>> +              * is crazy and the bridge chip driver itself has over 200 ms
->>>>> +              * of delay if it needs to do the pm_runtime resume of the
->>>>> +              * bridge chip to read the HPD.
->>>>> +              */
->>>>> +             hpd_wait_us += 3000000;
->>>>
->>>> I think this should come in a separate commit and ideally this should be
->>>> configurable somehow. Other hosts wouldn't need such 'additional' delay.
->>>>
->>>> With this change removed:
->>>>
->>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>
->>> What would you think about changing the API slightly? Instead of
->>> is_hpd_asserted(), we change it to wait_hpd_asserted() and it takes a
->>> timeout in microseconds. If you pass 0 for the timeout the function is
->>> defined to behave the same as is_hpd_asserted() today--AKA a single
->>> poll of the line.
->>
->> This might work. Can you check it, please?
-> 
-> Cool. I'll spin with this. Hopefully early next week unless my inbox
-> blows up. ...or my main PC's SSD like happened this week. ;-)
-> 
-> 
->> BTW: are these changes dependent on the first part of the patchset? It
->> might be worth splitting the patchset into two parts.
-> 
-> Definitely not. As per the cover letter, this is two series jammed
-> into one. I'm happy to split them up. The 2nd half seems much less
-> controversial.
+> Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 
-Great, let's get it in then. As you have time.
+This could be a good improvement!  But a few questions and comments below.
 
+							Thanx, Paul
 
--- 
-With best wishes
-Dmitry
+> ---
+>  kernel/rcu/tree_stall.h | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
+> index d7956c03edbd..e6ecc32cfe23 100644
+> --- a/kernel/rcu/tree_stall.h
+> +++ b/kernel/rcu/tree_stall.h
+> @@ -348,6 +348,7 @@ static int rcu_print_task_stall(struct rcu_node *rnp, unsigned long flags)
+>  }
+>  #endif /* #else #ifdef CONFIG_PREEMPT_RCU */
+>  
+> +static void rcuc_kthread_dump(struct rcu_data *rdp);
+>  /*
+>   * Dump stacks of all tasks running on stalled CPUs.  First try using
+>   * NMIs, but fall back to manual remote stack tracing on architectures
+> @@ -368,6 +369,7 @@ static void rcu_dump_cpu_stacks(void)
+>  					pr_err("Offline CPU %d blocking current GP.\n", cpu);
+>  				else if (!trigger_single_cpu_backtrace(cpu))
+>  					dump_cpu_task(cpu);
+> +				rcuc_kthread_dump(per_cpu_ptr(&rcu_data, cpu));
+
+Was this addition inspired by the chasing of a bug?  If so, please let me
+know exactly what information was (or would have been) the most helpful.
+
+For example, the starvation information might be more compactly
+represented in the information printed by print_cpu_stall_info().
+Unless the stack trace was quite valuable, it might be best to omit it.
+After all, RCU CPU stall warnings are already infamously heavy on the
+text output.
+
+>  			}
+>  		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+>  	}
+> @@ -471,6 +473,9 @@ static void rcuc_kthread_dump(struct rcu_data *rdp)
+>  	unsigned long j;
+>  	struct task_struct *rcuc;
+>  
+> +	if (use_softirq)
+> +		return;
+> +
+>  	rcuc = rdp->rcu_cpu_kthread_task;
+>  	if (!rcuc)
+
+The checks for use_softirq on the one hand and the checks for non-NULL
+rdp->rcu_cpu_kthread_task are a bit "interesting".  Not your fault or
+problem, of course!
+
+>  		return;
+> @@ -659,9 +664,6 @@ static void print_cpu_stall(unsigned long gps)
+>  	rcu_check_gp_kthread_expired_fqs_timer();
+>  	rcu_check_gp_kthread_starvation();
+>  
+> -	if (!use_softirq)
+
+In particular, I am wondering if this "if" is redundant.
+
+> -		rcuc_kthread_dump(rdp);
+> -
+>  	rcu_dump_cpu_stacks();
+>  
+>  	raw_spin_lock_irqsave_rcu_node(rnp, flags);
+> -- 
+> 2.25.1
+> 

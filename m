@@ -2,203 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FAF5045B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 00:39:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 549035045B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 00:39:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbiDPWi7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 18:38:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33150 "EHLO
+        id S233045AbiDPWmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 18:42:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiDPWiz (ORCPT
+        with ESMTP id S230377AbiDPWmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 18:38:55 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727D437031
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 15:36:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650148582; x=1681684582;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=EvB/DZ5vH4mKbhMj8E9XI5tRXkv/uBKrhCIDsrfx7cs=;
-  b=nMOs9907KCn5GlPNm83sw+f5UQ8kNGDLZmlEaMqCqw/5+pxwBrAjIsLl
-   1x+Kg2ckmAbmkia0Zj/ziWxkoXH2U56OJMVxIr5Qbs8C5eOJ/VC3CYq3f
-   i0rsBv+AIGFmFyQtHbmc+Kmb+S4hefFpGKQxpoc3G1g8d+OB7Q9H6OPOM
-   8YOzcuK0hFS+JjydLjAUmg6mzEVjrxsCQXJzbVy4hp6eDqqJs739PN8l7
-   L6uAV2yy1dRJYqy1UBL6Hq5RzJiD/bD9JD5QyIen8bLuxVNyupxsp0JIS
-   si5d3exTX79/HJ9Zqb1GYmMC8MKSbGDOdVHXAuPszigsu/U9oE+4KQyYz
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="326244991"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="326244991"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 15:36:22 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="726196454"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2022 15:36:20 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfr1f-0003XR-T8;
-        Sat, 16 Apr 2022 22:36:19 +0000
-Date:   Sun, 17 Apr 2022 06:35:39 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [lunn:v5.18-rc1-net-next-c45 30/44]
- drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting
- prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for
- ixgbe_mii_bus_read_generic_c45() instead
-Message-ID: <202204170653.yXcEwhTK-lkp@intel.com>
+        Sat, 16 Apr 2022 18:42:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4D86637A29
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 15:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650148770;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=BpOVvGdiVmOkFc6Vxt31zxMLOJ/JVW56iU3zr83wB70=;
+        b=XXk60STq4xjlj1hVLCb4QLtjcveCQzcuPj4r+aWCyn168yrli2GSPAnl79MkbEtkvnFVEo
+        nSsi4LNt2ucNgEvxVV+2fSrHw2qvhHKMUShG4Z3ujD455enY69Ce8QNSN0n6GTyu1V7Frv
+        nXSj0PgWGnmiZGEEjYIs6Y904RSX2wk=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-494-4m2TPBcTMEmijyAAiCpr3w-1; Sat, 16 Apr 2022 18:39:28 -0400
+X-MC-Unique: 4m2TPBcTMEmijyAAiCpr3w-1
+Received: by mail-qk1-f198.google.com with SMTP id l20-20020a05620a28d400b0069c63137970so6872198qkp.10
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 15:39:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BpOVvGdiVmOkFc6Vxt31zxMLOJ/JVW56iU3zr83wB70=;
+        b=ajlbOsb24Aklqo68lv2OyVn6AbFt7VBI5US6vrS8xto4RnIqp0kxAEVlYErXZIfVoW
+         J5h0UkMhcNQwxYSFedMvCEo5e/EOIHyPB2Tvz89wgF2X/0CMAYZ0MA3yEtAWVOIjhfcJ
+         thfPPAagRP3Jr7bWmR6eDiArO9o6EM+owgfzmSou5AFI8QK03SVQtu9QW0U7FxAVlnDy
+         k8sHGTrrHbUSez9qZLUhlCCElB1N1cfqV3nzzB4FBiHzXWc5+08bZFZ0AOB5Cf1twEhQ
+         Rs7ksBrJi0wgZAnBy7Tnwum+02UpBTOvxJLbGWfdGxX7xRi/9y6o5UaOAfTuROH4CfTE
+         NRQw==
+X-Gm-Message-State: AOAM533IIRHKF7/BBg9aoGgRb8uUkUsak9z1NxI1otkxoQtXGMuS7T76
+        h8pr+m3gE3j7sGMOSo3x0y0MsGM1AmEkrMbogT423ChVK7hVDy35O0nODS0rdbmExVcDpRkI6Zg
+        M5PnVXlwwABvNw1WetR+z9qV8
+X-Received: by 2002:ae9:eb87:0:b0:69e:75b3:6527 with SMTP id b129-20020ae9eb87000000b0069e75b36527mr2243515qkg.386.1650148768198;
+        Sat, 16 Apr 2022 15:39:28 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzDR9RLRp+qTWzVkbCtfQ9U7EuTs1Feo7WIWOwOFw1MB385IjzG7j183dip8VZh/DlKz9M7Wg==
+X-Received: by 2002:ae9:eb87:0:b0:69e:75b3:6527 with SMTP id b129-20020ae9eb87000000b0069e75b36527mr2243503qkg.386.1650148767997;
+        Sat, 16 Apr 2022 15:39:27 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 8-20020ac85948000000b002e1cd3fa142sm5346012qtz.92.2022.04.16.15.39.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 15:39:27 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     balbi@kernel.org, gregkh@linuxfoundation.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com, waynec@nvidia.com,
+        rikard.falkeborn@gmail.com, zhangqilong3@huawei.com,
+        jakobkoschel@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: tegra-xudc: clean up comments
+Date:   Sat, 16 Apr 2022 18:39:21 -0400
+Message-Id: <20220416223921.2881719-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/lunn/linux.git v5.18-rc1-net-next-c45
-head:   a6ca6875280b5cf6ee1d8466840b71bf6ffb7bfd
-commit: 3667548ba293c93e5a8ca7be2778b460c40ade4f [30/44] net: ethernet: intel: ixgdb: Separate C22 and C45 transactions for xgmac
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220417/202204170653.yXcEwhTK-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 64c045e25b8471bbb572bd29159c294a82a86a25)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/lunn/linux/commit/3667548ba293c93e5a8ca7be2778b460c40ade4f
-        git remote add lunn https://github.com/lunn/linux.git
-        git fetch --no-tags lunn v5.18-rc1-net-next-c45
-        git checkout 3667548ba293c93e5a8ca7be2778b460c40ade4f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/dsa/sja1105/ drivers/net/ethernet/intel/ixgbe/
+Spelling replacements
+cancelled to canceled
+endpiont to endpoint
+Compliance to Compliance
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/gadget/udc/tegra-xudc.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:725: warning: expecting prototype for ixgbe_mii_bus_read_generic_45(). Prototype was for ixgbe_mii_bus_read_generic_c45() instead
->> drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c:795: warning: expecting prototype for ixgbe_mii_bus_write_generic_45(). Prototype was for ixgbe_mii_bus_write_generic_c45() instead
-
-
-vim +725 drivers/net/ethernet/intel/ixgbe/ixgbe_phy.c
-
-   714	
-   715	/**
-   716	 *  ixgbe_mii_bus_read_generic_45 - Read a clause 45 register with gssr flags
-   717	 *  @hw: pointer to hardware structure
-   718	 *  @addr: address
-   719	 *  @devad: device address to read
-   720	 *  @regnum: register number
-   721	 *  @gssr: semaphore flags to acquire
-   722	 **/
-   723	static s32 ixgbe_mii_bus_read_generic_c45(struct ixgbe_hw *hw, int addr,
-   724						  int devad, int regnum, u32 gssr)
- > 725	{
-   726		u32 hwaddr, cmd;
-   727		s32 data;
-   728	
-   729		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   730			return -EBUSY;
-   731	
-   732		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   733		hwaddr |= devad << 16 | regnum;
-   734		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
-   735	
-   736		data = ixgbe_msca_cmd(hw, cmd);
-   737		if (data < 0)
-   738			goto mii_bus_read_done;
-   739	
-   740		cmd = hwaddr | IXGBE_MSCA_READ | IXGBE_MSCA_MDI_COMMAND;
-   741		data = ixgbe_msca_cmd(hw, cmd);
-   742		if (data < 0)
-   743			goto mii_bus_read_done;
-   744	
-   745		data = IXGBE_READ_REG(hw, IXGBE_MSRWD);
-   746		data = (data >> IXGBE_MSRWD_READ_DATA_SHIFT) & GENMASK(16, 0);
-   747	
-   748	mii_bus_read_done:
-   749		hw->mac.ops.release_swfw_sync(hw, gssr);
-   750		return data;
-   751	}
-   752	
-   753	/**
-   754	 *  ixgbe_mii_bus_write_generic_c22 - Write a clause 22 register with gssr flags
-   755	 *  @hw: pointer to hardware structure
-   756	 *  @addr: address
-   757	 *  @regnum: register number
-   758	 *  @val: value to write
-   759	 *  @gssr: semaphore flags to acquire
-   760	 **/
-   761	static s32 ixgbe_mii_bus_write_generic_c22(struct ixgbe_hw *hw, int addr,
-   762						   int regnum, u16 val, u32 gssr)
-   763	{
-   764		u32 hwaddr, cmd;
-   765		s32 err;
-   766	
-   767		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   768			return -EBUSY;
-   769	
-   770		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
-   771	
-   772		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   773		hwaddr |= (regnum & GENMASK(5, 0)) << IXGBE_MSCA_DEV_TYPE_SHIFT;
-   774		cmd = hwaddr | IXGBE_MSCA_OLD_PROTOCOL | IXGBE_MSCA_WRITE |
-   775			IXGBE_MSCA_MDI_COMMAND;
-   776	
-   777		err = ixgbe_msca_cmd(hw, cmd);
-   778	
-   779		hw->mac.ops.release_swfw_sync(hw, gssr);
-   780		return err;
-   781	}
-   782	
-   783	/**
-   784	 *  ixgbe_mii_bus_write_generic_45 - Write a clause 45 register with gssr flags
-   785	 *  @hw: pointer to hardware structure
-   786	 *  @addr: address
-   787	 *  @devad: device address to read
-   788	 *  @regnum: register number
-   789	 *  @val: value to write
-   790	 *  @gssr: semaphore flags to acquire
-   791	 **/
-   792	static s32 ixgbe_mii_bus_write_generic_c45(struct ixgbe_hw *hw, int addr,
-   793						   int devad, int regnum, u16 val,
-   794						   u32 gssr)
- > 795	{
-   796		u32 hwaddr, cmd;
-   797		s32 err;
-   798	
-   799		if (hw->mac.ops.acquire_swfw_sync(hw, gssr))
-   800			return -EBUSY;
-   801	
-   802		IXGBE_WRITE_REG(hw, IXGBE_MSRWD, (u32)val);
-   803	
-   804		hwaddr = addr << IXGBE_MSCA_PHY_ADDR_SHIFT;
-   805		hwaddr |= devad << 16 | regnum;
-   806		cmd = hwaddr | IXGBE_MSCA_ADDR_CYCLE | IXGBE_MSCA_MDI_COMMAND;
-   807	
-   808		err = ixgbe_msca_cmd(hw, cmd);
-   809		if (err < 0)
-   810			goto mii_bus_write_done;
-   811	
-   812		cmd = hwaddr | IXGBE_MSCA_WRITE | IXGBE_MSCA_MDI_COMMAND;
-   813		err = ixgbe_msca_cmd(hw, cmd);
-   814	
-   815	mii_bus_write_done:
-   816		hw->mac.ops.release_swfw_sync(hw, gssr);
-   817		return err;
-   818	}
-   819	
-
+diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
+index d9c406bdb680..0aaf01e1551f 100644
+--- a/drivers/usb/gadget/udc/tegra-xudc.c
++++ b/drivers/usb/gadget/udc/tegra-xudc.c
+@@ -1330,7 +1330,7 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
+ 	bool pcs;
+ 
+ 	/*
+-	 * Clear out all the TRBs part of or after the cancelled request,
++	 * Clear out all the TRBs part of or after the canceled request,
+ 	 * and must correct trb cycle bit to the last un-enqueued state.
+ 	 */
+ 	while (trb != &ep->transfer_ring[ep->enq_ptr]) {
+@@ -1343,11 +1343,11 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
+ 			trb = ep->transfer_ring;
+ 	}
+ 
+-	/* Requests will be re-queued at the start of the cancelled request. */
++	/* Requests will be re-queued at the start of the canceled request. */
+ 	ep->enq_ptr = req->first_trb - ep->transfer_ring;
+ 	/*
+ 	 * Retrieve the correct cycle bit state from the first trb of
+-	 * the cancelled request.
++	 * the canceled request.
+ 	 */
+ 	ep->pcs = pcs_enq;
+ 	ep->ring_full = false;
+@@ -1434,7 +1434,7 @@ __tegra_xudc_ep_dequeue(struct tegra_xudc_ep *ep,
+ 		return 0;
+ 	}
+ 
+-	/* Halt DMA for this endpiont. */
++	/* Halt DMA for this endpoint. */
+ 	if (ep_ctx_read_state(ep->context) == EP_STATE_RUNNING) {
+ 		ep_pause(xudc, ep->index);
+ 		ep_wait_for_inactive(xudc, ep->index);
+@@ -3423,7 +3423,7 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
+ 	}
+ 
+ 	/*
+-	 * Compliacne suite appears to be violating polling LFPS tBurst max
++	 * Compliance suite appears to be violating polling LFPS tBurst max
+ 	 * of 1.4us.  Send 1.45us instead.
+ 	 */
+ 	val = xudc_readl(xudc, SSPX_CORE_CNT32);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

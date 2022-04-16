@@ -2,137 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD73503395
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499EC50342E
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiDPCgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
+        id S230047AbiDPClS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229948AbiDPCgh (ORCPT
+        with ESMTP id S229948AbiDPClQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:36:37 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C064BC6
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:34:05 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KgHJS5QV8zFprd;
-        Sat, 16 Apr 2022 10:31:36 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 10:34:03 +0800
-Subject: Re: [PATCH v2 2/9] mm/vmscan: remove unneeded can_split_huge_page
- check
-To:     "ying.huang@intel.com" <ying.huang@intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>
-CC:     <akpm@linux-foundation.org>, <songmuchun@bytedance.com>,
-        <hch@infradead.org>, <willy@infradead.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>
-References: <20220409093500.10329-1-linmiaohe@huawei.com>
- <20220409093500.10329-3-linmiaohe@huawei.com>
- <YlU/h0fdE1L846Bd@localhost.localdomain>
- <7455b680-3d89-5d3e-ba0e-6e4358b114a2@huawei.com>
- <b153b758-ce11-364a-2699-753b21250508@redhat.com>
- <a90dc108e54e19cf3aa3fd21f6321afa8f194adc.camel@intel.com>
- <4b47e6317aca3deeabf610a7f4839563ff2b25a1.camel@intel.com>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <70b64476-6efc-c8ad-9cf3-b101c3b92db1@huawei.com>
-Date:   Sat, 16 Apr 2022 10:34:02 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Fri, 15 Apr 2022 22:41:16 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BECF5FAB
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:38:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650076726; x=1681612726;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=GKVEggq5ZRJNyTM5MZu33LkwSh12SsTFfmrQhoZ5KhM=;
+  b=d5mkVu1SouReb1u9t48tLHALjw7q/0AiZcXCllLnZPE7+omjWKpUY2bR
+   rL4RGDF3a+6QTrcDszDKOHJJtvZ9jAYCEyxnvib7sqgxvAQ89WTGp8r2K
+   r4YYoOhcQSuSq4enBV+HWS/EtGaibqBS8jVipO7VmPgGorVxcuh/MCA6+
+   VYm3IzppqngJe/anX01xBGLs7Sg6hK/ja/8l94TPc37b/dkW15ZIfBdei
+   ght8lUX7xPSPxNHKY/Cqtvl60ebSfgqmqnW2S8L94zlLWzH1fYCIIrGrp
+   nsFgvg5/u1qYXtnVviH+BRUANKdXrKhktrN/608dNYfYhWE7CX8xAg2HT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="260859900"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="260859900"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 19:38:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="591819248"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 15 Apr 2022 19:38:44 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfYKh-0002gL-OI;
+        Sat, 16 Apr 2022 02:38:43 +0000
+Date:   Sat, 16 Apr 2022 10:38:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [avpatel:riscv_ipi_imp_v6 22/25] arch/riscv/kernel/smp.c:166:50:
+ sparse: sparse: incorrect type in argument 4 (different address spaces)
+Message-ID: <202204161023.uhBiZbYE-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <4b47e6317aca3deeabf610a7f4839563ff2b25a1.camel@intel.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/15 11:07, ying.huang@intel.com wrote:
-> On Wed, 2022-04-13 at 09:26 +0800, ying.huang@intel.com wrote:
->> On Tue, 2022-04-12 at 16:59 +0200, David Hildenbrand wrote:
->>> On 12.04.22 15:42, Miaohe Lin wrote:
->>>> On 2022/4/12 16:59, Oscar Salvador wrote:
->>>>> On Sat, Apr 09, 2022 at 05:34:53PM +0800, Miaohe Lin wrote:
->>>>>> We don't need to check can_split_folio() because folio_maybe_dma_pinned()
->>>>>> is checked before. It will avoid the long term pinned pages to be swapped
->>>>>> out. And we can live with short term pinned pages. Without can_split_folio
->>>>>> checking we can simplify the code. Also activate_locked can be changed to
->>>>>> keep_locked as it's just short term pinning.
->>>>>
->>>>> What do you mean by "we can live with short term pinned pages"?
->>>>> Does it mean that it was not pinned when we check
->>>>> folio_maybe_dma_pinned() but now it is?
->>>>>
->>>>> To me it looks like the pinning is fluctuating and we rely on
->>>>> split_folio_to_list() to see whether we succeed or not, and if not
->>>>> we give it another spin in the next round?
->>>>
->>>> Yes. Short term pinned pages is relative to long term pinned pages and these pages won't be
->>>> pinned for a noticeable time. So it's expected to split the folio successfully in the next
->>>> round as the pinning is really fluctuating. Or am I miss something?
->>>>
->>>
->>> Just so we're on the same page. folio_maybe_dma_pinned() only capture
->>> FOLL_PIN, but not FOLL_GET. You can have long-term FOLL_GET right now
->>> via vmsplice().
->>
->> Per my original understanding, folio_maybe_dma_pinned() can be used to
->> detect long-term pinned pages.  And it seems reasonable to skip the
->> long-term pinned pages and try short-term pinned pages during page
->> reclaiming.  But as you pointed out, vmsplice() doesn't use FOLL_PIN. 
->> So if vmsplice() is expected to pin pages for long time, and we have no
->> way to detect it, then we should keep can_split_folio() in the original
->> code.
->>
->> Copying more people who have worked on long-term pinning for comments.
-> 
-> Checked the discussion in the following thread,
-> 
-> https://lore.kernel.org/lkml/CA+CK2bBffHBxjmb9jmSKacm0fJMinyt3Nhk8Nx6iudcQSj80_w@mail.gmail.com/
-> 
-> It seems that from the practical point of view, folio_maybe_dma_pinned()
-> can identify most long-term pinned pages that may block memory hot-
-> remove or CMA allocation.  Although as David pointed out, some pages may
-> still be GUPed for long time (e.g. via vmsplice) even if
-> !folio_maybe_dma_pinned().
-> 
-> But from another point of view, can_split_huge_page() is cheap and THP
-> swapout is expensive (swap space, disk IO, and hard to be recovered), so
-> it may be better to keep can_split_huge_page() in shink_page_list().
+tree:   https://github.com/avpatel/linux.git riscv_ipi_imp_v6
+head:   e487c9bc7306965b9292bbf33f2803873c8469df
+commit: 4036f0abdcb31af010a56029747a02a7b21874d2 [22/25] RISC-V: Treat IPIs as normal Linux IRQs
+config: riscv-randconfig-s031-20220414 (https://download.01.org/0day-ci/archive/20220416/202204161023.uhBiZbYE-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 11.2.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-dirty
+        # https://github.com/avpatel/linux/commit/4036f0abdcb31af010a56029747a02a7b21874d2
+        git remote add avpatel https://github.com/avpatel/linux.git
+        git fetch --no-tags avpatel riscv_ipi_imp_v6
+        git checkout 4036f0abdcb31af010a56029747a02a7b21874d2
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/kernel/ kernel/
 
-Many thanks for your explanation. Looks convincing for me. Is it worth a comment about the above
-stuff? Anyway, will drop this patch. Thanks!
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> Best Regards,
-> Huang, Ying
-> 
->>
->>> can_split_folio() is more precise then folio_maybe_dma_pinned(), but
->>> both are racy as long as the page is still mapped.
->>>
->>>
->>
-> 
-> 
-> .
-> 
 
+sparse warnings: (new ones prefixed by >>)
+>> arch/riscv/kernel/smp.c:166:50: sparse: sparse: incorrect type in argument 4 (different address spaces) @@     expected void [noderef] __percpu *percpu_dev_id @@     got int * @@
+   arch/riscv/kernel/smp.c:166:50: sparse:     expected void [noderef] __percpu *percpu_dev_id
+   arch/riscv/kernel/smp.c:166:50: sparse:     got int *
+
+vim +166 arch/riscv/kernel/smp.c
+
+   151	
+   152	void riscv_ipi_set_virq_range(int virq, int nr)
+   153	{
+   154		int i, err;
+   155	
+   156		if (WARN_ON(ipi_virq_base))
+   157			return;
+   158	
+   159		WARN_ON(nr < IPI_MAX);
+   160		nr_ipi = min(nr, IPI_MAX);
+   161		ipi_virq_base = virq;
+   162	
+   163		/* Request IPIs */
+   164		for (i = 0; i < nr_ipi; i++) {
+   165			err = request_percpu_irq(ipi_virq_base + i, handle_IPI,
+ > 166						 "IPI", &ipi_virq_base);
+   167			WARN_ON(err);
+   168	
+   169			ipi_desc[i] = irq_to_desc(ipi_virq_base + i);
+   170			irq_set_status_flags(ipi_virq_base + i, IRQ_HIDDEN);
+   171		}
+   172	
+   173		/* Enabled IPIs for boot CPU immediately */
+   174		riscv_ipi_enable();
+   175	}
+   176	EXPORT_SYMBOL_GPL(riscv_ipi_set_virq_range);
+   177	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

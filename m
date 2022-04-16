@@ -2,257 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40F1C503824
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EAF6503829
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:17:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232983AbiDPUKy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 16:10:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
+        id S232992AbiDPUUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 16:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiDPUKv (ORCPT
+        with ESMTP id S232069AbiDPUUJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 16:10:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E42DE22516
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650139698; x=1681675698;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3xWfx4xHNYYJT/0sTPAsuia1zvQaYFMC0rrluaO4bpY=;
-  b=gpPPjNhkxGFNd6n1OL8Mn1RMar+uLOinPVz9b4rHS/8u3Z5qitYWGUZb
-   YEp2gfYY00V5VIq7Fy9KiED4bohN4o5JD7bXp26bzZzUPGAMc3FQ0rK5o
-   Bd6gD4OT/uZbo8pCWknLNrb7kYwX4PvRNPQOBLAE3x9xIy/K1xdvmoorc
-   1aoda7N3JLKawMiHezzBqnDrRtUdPjhFIFDClkzZDkrgF7Sf2LVyf8edg
-   Ex85VXPf2DVKGmnKW36HqV1ug1qQXRFXA5hFz8DtDTc/YmID298BXZYUM
-   Bx0qjzdRVM+HZLCe6ab/okYRGPnqziCRGxCqZG/3gF6kZ4UGkiixaU4Ui
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349786448"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="349786448"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 13:08:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="528360972"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 16 Apr 2022 13:08:17 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfoiO-0003SX-O9;
-        Sat, 16 Apr 2022 20:08:16 +0000
-Date:   Sun, 17 Apr 2022 04:07:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
- 0f91855d69b1fe9bcb868a599039c6b3cba0c0e8
-Message-ID: <625b21fd.Qqm71eWHZcohoJhF%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Sat, 16 Apr 2022 16:20:09 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8517F3BA4E
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:17:35 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id k22so14313303wrd.2
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:17:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z66QlPMe1E4mhpzdiUDc+KempZ+cZum6Johy/Wm+dz8=;
+        b=F7CFMw281hzymPBtjrss84+JsX6BAJqkSr527Ok5eqTlHOxvIZuzxNA+xtHzmkGFWJ
+         7ne6uqMSH6gpzqitEcqZRFb/RtjC0Dbn12wxWxY6y0p1VDR7Sh0/SlfWX5WUpsRKf0zl
+         NYQbQ6ZvwBLkokDJ7LPfALXNvwR79Wvf3F8oQV4kXnlikRnVMOeoutxcJMVs3KcTykEP
+         W5SR1ECuk4/EN9Z9ar3flbf3enCkVTzvDfEU8RpW5K5eEmeDhqdTDO33pUHq0QtV/LML
+         vCPORAV249HLHJSiMCfk+db2iX7Oc2u7yRw0Cy9Xnrz65OTHGgW7DxyKP+jJYX0qMxc9
+         XWxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=Z66QlPMe1E4mhpzdiUDc+KempZ+cZum6Johy/Wm+dz8=;
+        b=Sv6vbfq5aUyacQbBvARpcjijspbndp5J6X7rEiC2pxE5lh5Nk9ICv3uCfYeH/JmMdi
+         3JR9XR3oRa0OQFdAzMkoinSAeKFX+o+Ve5ma8RjWLCbJpd6vbSBgP3gt6qJzSZy27/SU
+         9foOfv1h8nUMEoq+FTsEwkqja6bVT7iqby1X2yVpY55IPzucF75ofZt3VvP6Q39msFG9
+         EGQ6EuuXr3srX38rkkylFHlokGGyFn6zUTCCxdf0/wjWUCMtdUCihxBsjBwuN9oXKtlq
+         Bs8+5dMjnXVBSfBjxjBODwqw+AODXS4QS0WRUOV7jpTZCnCNITEJzN0II5HvcMd5tCQ2
+         YLmQ==
+X-Gm-Message-State: AOAM532UKexgVyv+bB1AF4DCSjBeVsaTaJ+i1zqhfChb/4KERRONgB3z
+        LdVtcNgl1X+/aFAmLD3IHznWPQ==
+X-Google-Smtp-Source: ABdhPJwamGE2+m2jdo/YzkPiZgqG+C3MGgsJKmH8dGNvySsvShgjB7taz2I++EjQ109pl63YINS/Bw==
+X-Received: by 2002:a5d:595f:0:b0:20a:88cf:c047 with SMTP id e31-20020a5d595f000000b0020a88cfc047mr2502977wri.63.1650140254112;
+        Sat, 16 Apr 2022 13:17:34 -0700 (PDT)
+Received: from brgl-uxlite.. (199.153.205.77.rev.sfr.net. [77.205.153.199])
+        by smtp.gmail.com with ESMTPSA id ay41-20020a05600c1e2900b0038e75fda4edsm7859968wmb.47.2022.04.16.13.17.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 13:17:33 -0700 (PDT)
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [GIT PULL] gpio: fixes for v5.18-rc3
+Date:   Sat, 16 Apr 2022 22:17:27 +0200
+Message-Id: <20220416201727.3017-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
-branch HEAD: 0f91855d69b1fe9bcb868a599039c6b3cba0c0e8  rcutorture: Test polled expedited grace-period primitives
+Linus,
 
-elapsed time: 1452m
+Please pull the following set of fixes for the next rc. There's a single fix
+for gpio-sim and two patches for GPIO ACPI pulled from Andy.
 
-configs tested: 172
-configs skipped: 3
+Thanks!
+Bart
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-gcc tested configs:
-arm64                               defconfig
-arm64                            allyesconfig
-arm                              allmodconfig
-arm                                 defconfig
-arm                              allyesconfig
-i386                          randconfig-c001
-powerpc              randconfig-c003-20220414
-powerpc                      ep88xc_defconfig
-um                           x86_64_defconfig
-h8300                       h8s-sim_defconfig
-um                             i386_defconfig
-powerpc                     taishan_defconfig
-arc                           tb10x_defconfig
-m68k                           sun3_defconfig
-arm                       imx_v6_v7_defconfig
-sh                               j2_defconfig
-h8300                    h8300h-sim_defconfig
-arc                          axs103_defconfig
-sh                   rts7751r2dplus_defconfig
-arm                        cerfcube_defconfig
-mips                     loongson1b_defconfig
-powerpc                         wii_defconfig
-powerpc                 linkstation_defconfig
-powerpc                       eiger_defconfig
-arm                       multi_v4t_defconfig
-powerpc                     mpc83xx_defconfig
-sh                        sh7757lcr_defconfig
-mips                      maltasmvp_defconfig
-sh                          r7780mp_defconfig
-sh                        edosk7760_defconfig
-arm                       aspeed_g5_defconfig
-openrisc                            defconfig
-sh                           se7724_defconfig
-sh                                  defconfig
-alpha                            allyesconfig
-mips                            gpr_defconfig
-sh                         ecovec24_defconfig
-powerpc                    amigaone_defconfig
-sh                          rsk7203_defconfig
-m68k                          amiga_defconfig
-m68k                       m5249evb_defconfig
-arm                     eseries_pxa_defconfig
-arm                          gemini_defconfig
-sh                           se7712_defconfig
-i386                             alldefconfig
-powerpc                      ppc6xx_defconfig
-powerpc                   motionpro_defconfig
-powerpc                      cm5200_defconfig
-arm                            mps2_defconfig
-sh                   secureedge5410_defconfig
-sh                            shmin_defconfig
-sh                          landisk_defconfig
-powerpc                 mpc837x_mds_defconfig
-sh                           se7722_defconfig
-arm                            pleb_defconfig
-x86_64                              defconfig
-arc                     haps_hs_smp_defconfig
-um                                  defconfig
-powerpc                     tqm8555_defconfig
-x86_64                        randconfig-c001
-arm                  randconfig-c002-20220414
-arm                  randconfig-c002-20220417
-ia64                             allmodconfig
-ia64                             allyesconfig
-ia64                                defconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-m68k                                defconfig
-nios2                               defconfig
-arc                              allyesconfig
-csky                                defconfig
-nios2                            allyesconfig
-alpha                               defconfig
-h8300                            allyesconfig
-xtensa                           allyesconfig
-arc                                 defconfig
-sh                               allmodconfig
-s390                                defconfig
-s390                             allmodconfig
-parisc                              defconfig
-parisc64                            defconfig
-parisc                           allyesconfig
-s390                             allyesconfig
-sparc                               defconfig
-i386                             allyesconfig
-sparc                            allyesconfig
-i386                                defconfig
-i386                              debian-10.3
-i386                   debian-10.3-kselftests
-mips                             allyesconfig
-mips                             allmodconfig
-powerpc                          allyesconfig
-powerpc                           allnoconfig
-powerpc                          allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-x86_64                        randconfig-a013
-x86_64                        randconfig-a015
-x86_64                        randconfig-a011
-i386                          randconfig-a012
-i386                          randconfig-a014
-i386                          randconfig-a016
-x86_64                        randconfig-a006
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-arc                  randconfig-r043-20220414
-arc                  randconfig-r043-20220416
-riscv                randconfig-r042-20220417
-s390                 randconfig-r044-20220417
-arc                  randconfig-r043-20220417
-riscv                               defconfig
-riscv                    nommu_virt_defconfig
-riscv                          rv32_defconfig
-riscv                    nommu_k210_defconfig
-riscv                             allnoconfig
-riscv                            allmodconfig
-riscv                            allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                                  kexec
-x86_64                           allyesconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                         rhel-8.3-kunit
-x86_64                               rhel-8.3
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
 
-clang tested configs:
-mips                         tb0287_defconfig
-i386                             allyesconfig
-arm                            mmp2_defconfig
-powerpc                     akebono_defconfig
-powerpc                          g5_defconfig
-arm                           omap1_defconfig
-mips                   sb1250_swarm_defconfig
-arm                         bcm2835_defconfig
-arm                        neponset_defconfig
-powerpc                        icon_defconfig
-riscv                          rv32_defconfig
-arm                       aspeed_g4_defconfig
-powerpc                     tqm5200_defconfig
-powerpc                     powernv_defconfig
-mips                            e55_defconfig
-powerpc                  mpc866_ads_defconfig
-arm                     davinci_all_defconfig
-powerpc                 mpc8560_ads_defconfig
-mips                      maltaaprp_defconfig
-powerpc                     kilauea_defconfig
-arm                       versatile_defconfig
-mips                        bcm63xx_defconfig
-arm                        vexpress_defconfig
-powerpc                          allyesconfig
-arm                             mxs_defconfig
-arm                  colibri_pxa300_defconfig
-arm                       imx_v4_v5_defconfig
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-x86_64                        randconfig-a012
-x86_64                        randconfig-a014
-x86_64                        randconfig-a016
-i386                          randconfig-a013
-i386                          randconfig-a015
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-x86_64                        randconfig-a003
-x86_64                        randconfig-a001
-hexagon              randconfig-r041-20220414
-riscv                randconfig-r042-20220414
-s390                 randconfig-r044-20220414
-hexagon              randconfig-r045-20220414
-s390                 randconfig-r044-20220416
-riscv                randconfig-r042-20220416
-hexagon              randconfig-r041-20220415
-hexagon              randconfig-r041-20220416
-hexagon              randconfig-r045-20220415
-hexagon              randconfig-r045-20220416
-hexagon              randconfig-r045-20220417
-hexagon              randconfig-r041-20220417
+are available in the Git repository at:
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/gpio-fixes-for-v5.18-rc3
+
+for you to fetch changes up to 0ebb4fbe31343a42370a2897ea9424fe78f3a88f:
+
+  Merge tag 'intel-gpio-v5.18-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current (2022-04-16 21:57:00 +0200)
+
+----------------------------------------------------------------
+gpio fixes for v5.18-rc3
+
+- fix the set/get_multiple() callbacks in gpio-sim
+- use correct format characters in gpiolib-acpi
+- use an unsigned type for pins in gpiolib-acpi
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      gpiolib: acpi: Convert type for pin to be unsigned
+
+Bartosz Golaszewski (2):
+      gpio: sim: fix setting and getting multiple lines
+      Merge tag 'intel-gpio-v5.18-2' of gitolite.kernel.org:pub/scm/linux/kernel/git/andy/linux-gpio-intel into gpio/for-current
+
+Linus Torvalds (1):
+      gpiolib: acpi: use correct format characters
+
+ drivers/gpio/gpio-sim.c       |  4 ++--
+ drivers/gpio/gpiolib-acpi.c   | 22 ++++++++++++----------
+ include/linux/gpio/consumer.h |  8 +++++++-
+ 3 files changed, 21 insertions(+), 13 deletions(-)

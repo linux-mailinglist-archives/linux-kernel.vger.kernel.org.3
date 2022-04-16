@@ -2,176 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4D350350C
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 09:55:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4476A50350D
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 09:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230364AbiDPH6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 03:58:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33080 "EHLO
+        id S230082AbiDPH7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 03:59:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiDPH56 (ORCPT
+        with ESMTP id S229792AbiDPH7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 03:57:58 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD8665CD
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:55:23 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id k22so12926341wrd.2
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0Z/W81aibCi7sL0/StQ7Jt11jrZjdA1d8v+1Q33ahWI=;
-        b=X1awk6DHUaoooLVFABP0ldTMOEPsD2YHIGSk6gDRxFgvhONqyBosWnnkfRL91EZ0K3
-         8s8l4atfe1UGhlscpBFIZMUHxp4dWns53SgtvzNMxs2poN9KzS//dYJKi2nDhjeNAw2H
-         MFqDhZ65oQH1cn74nPyErsr0u8Rmkxo0uzlnzPPlo2Ctts4liVIURSEjHcTc+MwmR2j6
-         y9I9K9FkOrnQBu2aiw10lWGRHuwSsZsXIrhqztViKe8OztcY09tJJyB3O3cqVudLchTG
-         UVQZS2SXcorYKlqNg3Gbs4QT4cjLTpq3G+ulZblPxZSllu67bE1rnV2p7Z/uSnWPU/dZ
-         up3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0Z/W81aibCi7sL0/StQ7Jt11jrZjdA1d8v+1Q33ahWI=;
-        b=MeQgvswFo8FT3lIdLoKa0NLxKTJ7CQZBZbC/DBE0Pjjy/t90H95blg8FOp4At8ieqB
-         sIVz6twSh/oygKPhqqnF0YMtFUkY1rq0jhNwM88CCaFGpw4yCwQ4qYGuyN8E5/hWkmp4
-         Tj/Cs2xKEGFzZUNtx3kLRH0I/B+d15OFD+wHmNVgMEwE/wMbpP1b9dO/tlhgJN6vKk1l
-         L9LRGnojBqjPkmGNfagDfrkEFBw5HMNW0R4fbQdnO/DeaI/p241Hey+qoDV0X1wl4az5
-         U6r9Fhol1ODRKTX9zpid+kJwuAP0LLEnew+jMiF+xehaMSGCWdQ8/PqSl1g96OoYt3NO
-         fKHA==
-X-Gm-Message-State: AOAM531W7uAS+WdVsRPCBX0vZdd03GgXlXgj+2Sjf/9LjZUZ9qkc2V36
-        VYdOR8cJssFSsmqZvXZjHx2w06x7idPpYA==
-X-Google-Smtp-Source: ABdhPJwB+cZviGHllZV9G2s8X+fYEb1nevgdh5ALPNUcbDAriRZ/2fj5T/hzd7ARt3+v4IyzJqX6Tw==
-X-Received: by 2002:adf:efc1:0:b0:207:8436:20ab with SMTP id i1-20020adfefc1000000b00207843620abmr1771660wrp.622.1650095721626;
-        Sat, 16 Apr 2022 00:55:21 -0700 (PDT)
-Received: from [192.168.0.46] (sju31-1-78-210-255-2.fbx.proxad.net. [78.210.255.2])
-        by smtp.googlemail.com with ESMTPSA id x16-20020a5d4450000000b00207a459ca80sm6402035wrr.99.2022.04.16.00.55.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 00:55:20 -0700 (PDT)
-Message-ID: <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
-Date:   Sat, 16 Apr 2022 09:55:19 +0200
+        Sat, 16 Apr 2022 03:59:30 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF213AFB21
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650095816; x=1681631816;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=+q9eRv8zwzO28E+SHSLY9Fn0O2fd9WA0w8ORcr2+xFc=;
+  b=UckDTjMPIEyITUZ4p6ftWtpmrvIZ6GlW7cKXXmi/KiImJKs+WNtkuJFy
+   Y/VzUZQj7aHn6Gnfz91N94ySr1d+yPPAtAMRXxgVH8GDKcDZ+HZOKtMAC
+   uf2eKudDHqfird0exN0Dz7kuTXCqCZ3Vi9Dposv8eCKbwXSMtDsmc66Eq
+   u997HsJ7y46TFIKmWjmQt8fIZOAUa+Ch1l9uK9TbxWzv7tWOjiNtb0gfV
+   wbKNjoXGJKZ1tLyI3toym4riRcF+jfSOXfzMRExZ7dBx1b4yXrQbvX/4u
+   Grak1MXvLe3qFp21dCKF8kjBGG2ZN1qGS9Uk6JYMzeW15U8jwAO4KXMnT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243859154"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="243859154"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 00:56:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="528215564"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 16 Apr 2022 00:56:55 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfdIc-0002vJ-Cs;
+        Sat, 16 Apr 2022 07:56:54 +0000
+Date:   Sat, 16 Apr 2022 15:56:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:dev.2022.04.13a] BUILD SUCCESS
+ 7d393433888c80c7ed77bfe088fc4aafbcb16496
+Message-ID: <625a769c.go+Jw8JjFP5myyPq%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
- <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
- <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
- <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
- <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
- <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
- <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2022.04.13a
+branch HEAD: 7d393433888c80c7ed77bfe088fc4aafbcb16496  squash! rcutorture: Verify that polled GP API sees synchronous grace periods
 
-Hi Srinivas,
+elapsed time: 1712m
 
+configs tested: 141
+configs skipped: 3
 
-On 16/04/2022 05:50, srinivas pandruvada wrote:
-> On Wed, 2022-04-13 at 10:21 -0700, srinivas pandruvada wrote:
->> On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
->>> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
->>> daniel.lezcano@linaro.org> wrote:
->>>>
->>>> On 06/04/2022 16:28, srinivas pandruvada wrote:
->>>>> Hi Daniel,
->>>>>
->>>>> On Wed, 2022-04-06 at 10:00 +0200, Daniel Lezcano wrote:
->>>>>>
->>>>>> Hi,
->>>>>>
->>>>>> if there is no comment for the series, shall I pick it so we
->>>>>> can go
->>>>>> forward ?
->>>>> Didn't get time to check yet. It will still be for the next merge
->>>>> window, correct?
->>>>
->>>> Right, but I would like to continue adding more features, scripts
->>>> and
->>>> tests. Iteratively.
->>>
->>> Srinivas, if you can give this a go, please, it will help.
->>>
->>> Otherwise, I think that all of your comments so far have been
->>> addressed, or have I missed anything?
->>>
->> I will provide by the end of this week.
-> 
-> 1. Some warnings in applying patch
-> 
-> Applying: tools/lib/thermal: Add a thermal library
-> Applying: tools/thermal: Add util library
-> Applying: tools/thermal: A temperature capture tool
-> .git/rebase-apply/patch:795: space before tab in indent.
-> 	      	polling = 100; }
-> .git/rebase-apply/patch:90: new blank line at EOF.
-> +
-> .git/rebase-apply/patch:221: new blank line at EOF.
-> +
-> warning: 3 lines add whitespace errors.
-> Applying: tools/thermal: Add thermal daemon skeleton
-> .git/rebase-apply/patch:86: new blank line at EOF.
-> +
-> warning: 1 line adds whitespace errors.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Strange, I did not have those but I'll try to reproduce
+gcc tested configs:
+arm64                               defconfig
+arm64                            allyesconfig
+arm                              allmodconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                          randconfig-c001
+s390                          debug_defconfig
+powerpc                     taishan_defconfig
+arc                           tb10x_defconfig
+m68k                           sun3_defconfig
+arm                       imx_v6_v7_defconfig
+sh                               j2_defconfig
+arm                         lubbock_defconfig
+arm                           tegra_defconfig
+arc                     haps_hs_smp_defconfig
+arm                        trizeps4_defconfig
+mips                         db1xxx_defconfig
+mips                      fuloong2e_defconfig
+powerpc                       eiger_defconfig
+powerpc                 linkstation_defconfig
+powerpc                    amigaone_defconfig
+m68k                             allyesconfig
+sh                        dreamcast_defconfig
+powerpc                        warp_defconfig
+sparc                       sparc64_defconfig
+i386                                defconfig
+h8300                       h8s-sim_defconfig
+arm                       multi_v4t_defconfig
+powerpc                     mpc83xx_defconfig
+sh                        sh7757lcr_defconfig
+mips                      maltasmvp_defconfig
+sh                          r7780mp_defconfig
+sh                        edosk7760_defconfig
+arm                       aspeed_g5_defconfig
+openrisc                            defconfig
+sh                           se7724_defconfig
+sh                                  defconfig
+alpha                            allyesconfig
+mips                            gpr_defconfig
+powerpc64                        alldefconfig
+arm                     eseries_pxa_defconfig
+sh                   sh7724_generic_defconfig
+powerpc                 mpc85xx_cds_defconfig
+sh                           se7722_defconfig
+i386                             alldefconfig
+powerpc                      ppc6xx_defconfig
+powerpc                   motionpro_defconfig
+powerpc                      cm5200_defconfig
+arm                            mps2_defconfig
+powerpc                     ep8248e_defconfig
+arc                        nsim_700_defconfig
+xtensa                  cadence_csp_defconfig
+xtensa                  nommu_kc705_defconfig
+sh                         microdev_defconfig
+um                                  defconfig
+x86_64                              defconfig
+powerpc                     tqm8555_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220414
+arm                  randconfig-c002-20220415
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                             allmodconfig
+m68k                                defconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a011
+x86_64                        randconfig-a013
+x86_64                        randconfig-a015
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+riscv                randconfig-r042-20220415
+arc                  randconfig-r043-20220415
+s390                 randconfig-r044-20220415
+arc                  randconfig-r043-20220414
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                          rhel-8.3-func
+x86_64                                  kexec
+x86_64                           allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                               rhel-8.3
 
-> 2. Thermometer is fine
-> 
-> 3. segfault for thermal-engine
-> 
-> LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH ./thermal-
-> engine
-> Segmentation fault (core dumped)
-> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
-> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
-> ./thermal-engine --help
-> thermal-engine : A thermal monitoring engine based on notifications
-> Usage: thermal-engine [options]
-> 	-h, --help		this help
-> 	-d, --daemonize	capture duration
-> 	-l <level>, --loglevel <level>	log level: DEBUG, INFO,
-> NOTICE, WARN, ERROR
-> 	-s, --syslog		output to syslog
-> 
-> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
-> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
-> ./thermal-engine -l DEBUG
-> Segmentation fault (core dumped)
-> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
-> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
-> ./thermal-engine --loglevel DEBUG
-> Segmentation fault (core dumped)
-> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
-> engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
-> ./thermal-engine -s
-> Segmentation fault (core dumped)
-
-Is CONFIG_THERMAL_NETLINK set ?
-
-
+clang tested configs:
+x86_64                        randconfig-c007
+powerpc              randconfig-c003-20220414
+arm                  randconfig-c002-20220414
+i386                          randconfig-c001
+powerpc                     kmeter1_defconfig
+powerpc                        icon_defconfig
+arm                        neponset_defconfig
+powerpc                      ppc64e_defconfig
+mips                     cu1000-neo_defconfig
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+riscv                randconfig-r042-20220414
+hexagon              randconfig-r041-20220414
+hexagon              randconfig-r045-20220414
+s390                 randconfig-r044-20220414
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+0-DAY CI Kernel Test Service
+https://01.org/lkp

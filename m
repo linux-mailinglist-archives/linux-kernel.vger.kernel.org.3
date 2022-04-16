@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0D95032DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6596350342B
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229587AbiDPCIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S229783AbiDPCHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229683AbiDPCGO (ORCPT
+        with ESMTP id S229625AbiDPCGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:06:14 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39451F3A
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:00:44 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KgFl70tV3zfYpJ;
-        Sat, 16 Apr 2022 09:21:07 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 09:21:46 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 09:21:45 +0800
-Message-ID: <1407c3bb-89c4-ae11-7b09-d42115ab693e@huawei.com>
-Date:   Sat, 16 Apr 2022 09:21:45 +0800
+        Fri, 15 Apr 2022 22:06:04 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C0F1E94
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:55:32 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id r8so9764766oib.5
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uqKd1Orxl/LGzBg+7rmnNDHUMWN7s9B1LCDOy65IlQA=;
+        b=N364O5BnRkqe8gLCY6+6Riw2dvoQSe+pV8jWLMWkyKwDJRiXRodeWCF6dOX1MO0Y4x
+         l5vzEFdxw764IXFw5pt2I5BaJ+tiXzVWOV0DHxMes3hgEwxVqH25T3a+HXfXVKNmujhX
+         hMQBDzRqJbeKLwx5z5Dohu9PQwC4xp2QffevxBiof/Ljud8I/BkLx1YhGNh15rnHV943
+         d3fweG1MjzrT+eHTNW/Vt4UAwMp0KpdTnPm+n/SjiieMqWl+NZC15j/By41/vK3ysxGi
+         Fmv3PXICjX+HefHAu07XpbCXz3A+PWe8enneamXLGhzN05xmtj+7sxMQyENtpcQY3+mV
+         3ZaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=uqKd1Orxl/LGzBg+7rmnNDHUMWN7s9B1LCDOy65IlQA=;
+        b=pBl1Shv4Os86/3/nNEPdG7jo1l0dFDCBorSSBrqYxPRWPQWqFmCeXWSrVQDrsCEOWK
+         HtBY7KihBcEP2LfFhgy8bR3MCNwF/kW+UsFxETTitwLNn1CbEy5kPh9Pb7o/mY1RuvpE
+         MimY2Fewzj2ftP7fKuZdyxNTDtynge41PQi/BZejOCuMGApxL3TnrzW5x6r6lDMgt2hl
+         9rKGSpr2Ky0sVjt7WnmfkGCvjgdzxTf0V6/kKelzB8YjjG/CyqrQ/Jf7rur8M5GNaQg7
+         bw+LUzZY49Giv/KfEB2OOLsLf+B+rQRfkRMd0xwNIxzDqhl8M5W7fxQD6YWJg/sX1Nug
+         HP6Q==
+X-Gm-Message-State: AOAM533PX+wAiVJcdNQIOB5gJX6EzzvbSxOeQV2X0+1W94fsGfGFYV1k
+        WAz+sWf3GKnUGRh7yIBxHkL8Va2ahqOj9ILbRJnGPA==
+X-Google-Smtp-Source: ABdhPJzO4dFfJiTJAfRiEarg+WpfXqOs2uIeFBF1W0TiWPqIMzBObZpTJ1JBTD1oZF/evYqedyW8yQ==
+X-Received: by 2002:a17:90b:4d01:b0:1d0:f39f:6073 with SMTP id mw1-20020a17090b4d0100b001d0f39f6073mr1618465pjb.175.1650072405373;
+        Fri, 15 Apr 2022 18:26:45 -0700 (PDT)
+Received: from localhost.localdomain ([134.195.101.46])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm3313260pfn.204.2022.04.15.18.26.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 18:26:44 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH] interconnect: qcom: msm8939: Use icc_sync_state
+Date:   Sat, 16 Apr 2022 09:26:34 +0800
+Message-Id: <20220416012634.479617-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 1/4] hugetlb: Fix wrong use of nr_online_nodes
-Content-Language: en-US
-To:     Peng Liu <liupeng256@huawei.com>, <mike.kravetz@oracle.com>,
-        <david@redhat.com>, <akpm@linux-foundation.org>,
-        <yaozhenguo1@gmail.com>, <baolin.wang@linux.alibaba.com>,
-        <songmuchun@bytedance.com>, <liuyuntao10@huawei.com>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220413032915.251254-1-liupeng256@huawei.com>
- <20220413032915.251254-2-liupeng256@huawei.com>
- <20220415020927.x7ylevbd5uaevfyt@offworld>
- <08896d0c-8821-000e-4cc2-9e64beda167f@huawei.com>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <08896d0c-8821-000e-4cc2-9e64beda167f@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It's fashion to use the icc_sync_state callback to notify the framework
+when all consumers are probed, so that the bandwidth request doesn't
+need to stay on maximum value.
 
-On 2022/4/15 13:41, Kefeng Wang wrote:
->
-> On 2022/4/15 10:09, Davidlohr Bueso wrote:
->> On Wed, 13 Apr 2022, Peng Liu wrote:
->>
->>> Certain systems are designed to have sparse/discontiguous nodes. In
->>> this case, nr_online_nodes can not be used to walk through numa node.
->>> Also, a valid node may be greater than nr_online_nodes.
->>>
->>> However, in hugetlb, it is assumed that nodes are contiguous. Recheck
->>> all the places that use nr_online_nodes, and repair them one by one.
->>>
->>> Suggested-by: David Hildenbrand <david@redhat.com>
->>> Fixes: 4178158ef8ca ("hugetlbfs: fix issue of preallocation of 
->>> gigantic pages can't work")
->>> Fixes: b5389086ad7b ("hugetlbfs: extend the definition of hugepages 
->>> parameter to support node allocation")
->>> Fixes: e79ce9832316 ("hugetlbfs: fix a truncation issue in hugepages 
->>> parameter")
->>> Fixes: f9317f77a6e0 ("hugetlb: clean up potential spectre issue 
->>> warnings")
->>> Signed-off-by: Peng Liu <liupeng256@huawei.com>
->>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
->>
->> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
->>
->> ... but
->>
->>> ---
->>> mm/hugetlb.c | 12 ++++++------
->>> 1 file changed, 6 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>> index b34f50156f7e..5b5a2a5a742f 100644
->>> --- a/mm/hugetlb.c
->>> +++ b/mm/hugetlb.c
->>> @@ -2979,7 +2979,7 @@ int __alloc_bootmem_huge_page(struct hstate 
->>> *h, int nid)
->>>     struct huge_bootmem_page *m = NULL; /* initialize for clang */
->>>     int nr_nodes, node;
->>>
->>> -    if (nid != NUMA_NO_NODE && nid >= nr_online_nodes)
->>> +    if (nid != NUMA_NO_NODE && !node_online(nid))
->>
->> afaict null_blk could also use this, actually the whole thing wants a
->> helper - node_valid()?
->>
-> This one should be unnecessary, and this patch looks has a bug,
->
-> if a very nid passed to node_online(), it may crash,  could you 
-> re-check it,
->
-> see my changes below,
->
-> 1) add tmp check against MAX_NUMNODES before node_online() check,
->
->     and move it after get tmp in hugepages_setup() , this could cover 
-> both per-node alloc and normal alloc
+Do the same thing for msm8939 driver.
 
-sorry，for normal alloc, tmp is the number of huge pages, we don't  need 
-the movement,   only add tmp >= MAX_NUMNODES is ok
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
+---
+ drivers/interconnect/qcom/msm8939.c | 1 +
+ 1 file changed, 1 insertion(+)
 
->
-> 2) due to for_each_online_node() usage, we can drop additional check 
-> of nid in __alloc_bootmem_huge_page()
->
+diff --git a/drivers/interconnect/qcom/msm8939.c b/drivers/interconnect/qcom/msm8939.c
+index f9c2d7d3100d..ca5f611d33b0 100644
+--- a/drivers/interconnect/qcom/msm8939.c
++++ b/drivers/interconnect/qcom/msm8939.c
+@@ -1423,6 +1423,7 @@ static struct platform_driver msm8939_noc_driver = {
+ 	.driver = {
+ 		.name = "qnoc-msm8939",
+ 		.of_match_table = msm8939_noc_of_match,
++		.sync_state = icc_sync_state,
+ 	},
+ };
+ module_platform_driver(msm8939_noc_driver);
+-- 
+2.25.1
+

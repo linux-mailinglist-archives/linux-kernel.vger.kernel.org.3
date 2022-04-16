@@ -2,111 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2072B503840
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24066503841
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 22:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233055AbiDPUyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 16:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35786 "EHLO
+        id S233067AbiDPU6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 16:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233052AbiDPUyR (ORCPT
+        with ESMTP id S233052AbiDPU5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 16:54:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9BF3732ED9
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:51:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650142303;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MCs9sayLGT9Brlcum9GwaQ0BqXD9O9q7oXRvk2xKu30=;
-        b=Qc1Tj5ly84t4M6/6aziK2YgM2v82aPPxMskQ+GjUO6tLhUQdkQC2G5h+PaaUrdPIfdKOxW
-        7npMF9OJ1TQ9tcJFyIn/xdo6yWKVY55SXIm5GUP0Aztz00UWuLmUbh2qK0oEAiKVCUAZkm
-        5+4zwkh4LHwnzKDhH54i6W70LYrYThY=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-462-uw_5I6H3Nbuca5ko7h5f-w-1; Sat, 16 Apr 2022 16:51:42 -0400
-X-MC-Unique: uw_5I6H3Nbuca5ko7h5f-w-1
-Received: by mail-qv1-f71.google.com with SMTP id f18-20020ad442d2000000b0044642dd1d7eso2059918qvr.3
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:51:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=MCs9sayLGT9Brlcum9GwaQ0BqXD9O9q7oXRvk2xKu30=;
-        b=pUtuDEHvefbp6HZsSDdIOFrnIOSBn5F/8Mf5tiPnHkPGkQ/rTTtb6ipxeKwGH+xa5b
-         JnRL3acHMR84hGlnT5wf5ge1SGluFFiqPY/vNYGr5bMJm6Ka/g92x0PDSW/IQK9eZQCV
-         CsP3frwqjiE+WRLWB5zOYLwOFlRe5sPKBXmCRrhosod0mJDzRugZYLrRa8cOyZKkkG0p
-         RkV+rO8p69cw+APeQQ9J4dTP7is0IOYkREoW9F+5lOLRsEAHuCygdbcWDu8rYTKn4Pb3
-         zi0aqvCvShq9zcbxHiSgeZp+/OHnRNNYwatR5prlWjPEIPY6+pqEJPlnWGk3IpMDqfdj
-         NsSA==
-X-Gm-Message-State: AOAM531vDfE7crQFYEmlJzKj9ZvBJUswN3275RECXMiFPoU1rhIGmJvN
-        cNC4bdt8NpbfJdT+NSIKbJ7LKIu7xQHPe7651HlgpF7P+0fDjoKpTD4wTOQ86pTYquMUBy44BgE
-        jZSA8eOY7R4ec0fVRfK7rDuMn
-X-Received: by 2002:a05:6214:1c4b:b0:446:3f7e:a35f with SMTP id if11-20020a0562141c4b00b004463f7ea35fmr3645560qvb.122.1650142301786;
-        Sat, 16 Apr 2022 13:51:41 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyTuW3w9sGv8eepPDQ4d/FajXjVBd+8BPaPmfU4U9Pg98GQ/3Wfo5Tqv35AdG630N6byhpPMQ==
-X-Received: by 2002:a05:6214:1c4b:b0:446:3f7e:a35f with SMTP id if11-20020a0562141c4b00b004463f7ea35fmr3645551qvb.122.1650142301616;
-        Sat, 16 Apr 2022 13:51:41 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id bj12-20020a05620a190c00b0069c7df40747sm4079774qkb.133.2022.04.16.13.51.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 13:51:41 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     broonie@kernel.org, nathan@kernel.org, ndesaulniers@google.com,
-        paul.kocialkowski@bootlin.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Tom Rix <trix@redhat.com>
-Subject: [PATCH] spi: initialize status to success
-Date:   Sat, 16 Apr 2022 16:51:32 -0400
-Message-Id: <20220416205132.295779-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sat, 16 Apr 2022 16:57:55 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74781CB20
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 13:55:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650142521; x=1681678521;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YqggBscwBR8kECPE8sV7GZRQg0PKKtnXg81Oh6vwzgQ=;
+  b=DN2GVcCkTuh4O95lmxlJnBVUf6SWMVtsaUlNOYd2SAODmqjYfcUrSE/s
+   Zs74pEzXKnSCf0J6p/6JI3khhkGxl5sckyQs6eEvNHGbkutSuQVWyd498
+   yhPYrbZTmBIV0IqL+J1Sk3KJvS6W1Kig7vGjnY00NhtVoM5CKxU42aLx6
+   d3pXjQQFKtw0pzQS7MVRBU7ax9tYRgNfXgd4KrBOsOc0sv78eRGpO20U4
+   J9ScJwnVWQYrCDzxYWhugn0B2Mc2BQjKE/jn35vGOpBnQZEOjgoT+hix/
+   AgYn9SsNYEs1RwOXxcuI8bUBqZ0HCSj0gAsdPR1ykMXR4oFvf8oZgQ3SL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349788711"
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="349788711"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 13:55:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="646434100"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 16 Apr 2022 13:55:18 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nfpRt-0003UF-NH;
+        Sat, 16 Apr 2022 20:55:17 +0000
+Date:   Sun, 17 Apr 2022 04:54:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in
+ reference from the function bmi160_i2c_probe() to the function
+ .init.text:set_reset_devices()
+Message-ID: <202204170429.sEZb8tjA-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clang static analysis reports this issue
-spi.c:3583:2: warning: 2nd function call argument
-  is an uninitialized value
-  trace_spi_setup(spi, status);
-  ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
+commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+date:   3 weeks ago
+config: riscv-randconfig-r004-20220408 (https://download.01.org/0day-ci/archive/20220417/202204170429.sEZb8tjA-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project c29a51b3a257908aebc01cd7c4655665db317d66)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f9b3cd24578401e7a392974b3353277286e49cee
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
 
-It is possible that status is never set because
-its function level setting was removed by the
-commit listed in the Fixes: tag.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Assume that setting 8 bits-per-word is ok and
-initialize the status to 0.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-Fixes: b3fe2e516741 ("spi: core: Only check bits_per_word validity when explicitly provided")
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/spi/spi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+>> WARNING: modpost: vmlinux.o(.text+0x1718cce): Section mismatch in reference from the function bmi160_i2c_probe() to the function .init.text:set_reset_devices()
+The function bmi160_i2c_probe() references
+the function __init set_reset_devices().
+This is often because bmi160_i2c_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x172619c): Section mismatch in reference from the function st_lsm6dsx_probe() to the function .init.text:set_reset_devices()
+The function st_lsm6dsx_probe() references
+the function __init set_reset_devices().
+This is often because st_lsm6dsx_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x175c62e): Section mismatch in reference from the function mb1232_probe() to the function .init.text:set_reset_devices()
+The function mb1232_probe() references
+the function __init set_reset_devices().
+This is often because mb1232_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x179066c): Section mismatch in reference from the function binder_update_page_range() to the function .init.text:set_reset_devices()
+The function binder_update_page_range() references
+the function __init set_reset_devices().
+This is often because binder_update_page_range lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x179c6b4): Section mismatch in reference from the function altera_cvp_probe() to the function .init.text:set_reset_devices()
+The function altera_cvp_probe() references
+the function __init set_reset_devices().
+This is often because altera_cvp_probe lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x179c8e2): Section mismatch in reference from the function altera_cvp_remove() to the function .init.text:set_reset_devices()
+The function altera_cvp_remove() references
+the function __init set_reset_devices().
+This is often because altera_cvp_remove lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x18738e8): Section mismatch in reference from the function ethtool_rxnfc_copy_from_user() to the function .init.text:set_reset_devices()
+The function ethtool_rxnfc_copy_from_user() references
+the function __init set_reset_devices().
+This is often because ethtool_rxnfc_copy_from_user lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1873c7c): Section mismatch in reference from the function ethtool_copy_validate_indir() to the function .init.text:set_reset_devices()
+The function ethtool_copy_validate_indir() references
+the function __init set_reset_devices().
+This is often because ethtool_copy_validate_indir lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x1879d9a): Section mismatch in reference from the function ethnl_set_linkmodes() to the function .init.text:set_reset_devices()
+The function ethnl_set_linkmodes() references
+the function __init set_reset_devices().
+This is often because ethnl_set_linkmodes lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x187ebf6): Section mismatch in reference from the function tsinfo_prepare_data() to the function .init.text:set_reset_devices()
+The function tsinfo_prepare_data() references
+the function __init set_reset_devices().
+This is often because tsinfo_prepare_data lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+--
+>> WARNING: modpost: vmlinux.o(.text+0x191c146): Section mismatch in reference from the function ieee802154_start_req() to the function .init.text:set_reset_devices()
+The function ieee802154_start_req() references
+the function __init set_reset_devices().
+This is often because ieee802154_start_req lacks a __init
+annotation or the annotation of set_reset_devices is wrong.
+..
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 563a56ce34a0..890ff46c784a 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -3475,7 +3475,7 @@ static int __spi_validate_bits_per_word(struct spi_controller *ctlr,
- int spi_setup(struct spi_device *spi)
- {
- 	unsigned	bad_bits, ugly_bits;
--	int		status;
-+	int		status = 0;
- 
- 	/*
- 	 * Check mode to prevent that any two of DUAL, QUAD and NO_MOSI/MISO
 -- 
-2.27.0
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

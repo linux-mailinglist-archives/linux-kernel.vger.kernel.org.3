@@ -2,88 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 725175033AD
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD73503395
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbiDPCcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S229980AbiDPCgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:36:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiDPCcP (ORCPT
+        with ESMTP id S229948AbiDPCgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:32:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F87556742
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:29:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC12B831D5
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 02:29:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 232A0C385A7;
-        Sat, 16 Apr 2022 02:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650076182;
-        bh=uUd/Mmr+LuhyFMq1LsPUx9KBDlPY2jN3/XYmm96PzHc=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kKdejRF7VlO3kQkyjktX96UX47hHrzVNgIL/LXmp3ngoBfXC3HxgotFjJNnHqgmlZ
-         k3nLSsdniN2ACPKyFWFUKOwE24IU3fKN8aM/W06LHPWiMY1lmCIECJgskTqB9RwUOU
-         j//fH5jUbQGTnfJpGJUw7mmdKJdgcFHKIOAkojp0ZupHywV23GEAOqbtG5bgxy7TQk
-         AKgTXrcmaVPaTnXflmZnPtOjisMy4eYqdTfAgpE3TZKrqN7A+LK2QE6U/K9MXGAjUP
-         j0chy/yNhQAMH/evjg4zu2KapVcm/MeNXTMPyexv4vOsAq3z8xRKIhAlXp6aooZlFB
-         D5L5L9pmdOyLQ==
-Message-ID: <ec26e65f-5e5d-3c99-d631-148717333cf5@kernel.org>
-Date:   Sat, 16 Apr 2022 10:29:39 +0800
+        Fri, 15 Apr 2022 22:36:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 378C064BC6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 19:34:05 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KgHJS5QV8zFprd;
+        Sat, 16 Apr 2022 10:31:36 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 10:34:03 +0800
+Subject: Re: [PATCH v2 2/9] mm/vmscan: remove unneeded can_split_huge_page
+ check
+To:     "ying.huang@intel.com" <ying.huang@intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>
+CC:     <akpm@linux-foundation.org>, <songmuchun@bytedance.com>,
+        <hch@infradead.org>, <willy@infradead.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Pavel Tatashin <pasha.tatashin@soleen.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>, Yu Zhao <yuzhao@google.com>
+References: <20220409093500.10329-1-linmiaohe@huawei.com>
+ <20220409093500.10329-3-linmiaohe@huawei.com>
+ <YlU/h0fdE1L846Bd@localhost.localdomain>
+ <7455b680-3d89-5d3e-ba0e-6e4358b114a2@huawei.com>
+ <b153b758-ce11-364a-2699-753b21250508@redhat.com>
+ <a90dc108e54e19cf3aa3fd21f6321afa8f194adc.camel@intel.com>
+ <4b47e6317aca3deeabf610a7f4839563ff2b25a1.camel@intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <70b64476-6efc-c8ad-9cf3-b101c3b92db1@huawei.com>
+Date:   Sat, 16 Apr 2022 10:34:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2] fs: f2fs: remove WARN_ON in f2fs_is_valid_blkaddr
+In-Reply-To: <4b47e6317aca3deeabf610a7f4839563ff2b25a1.camel@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Dongliang Mu <dzm91@hust.edu.cn>, Jaegeuk Kim <jaegeuk@kernel.org>
-Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
-        syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-References: <20220415131902.55028-1-dzm91@hust.edu.cn>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220415131902.55028-1-dzm91@hust.edu.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/4/15 21:19, Dongliang Mu wrote:
-> From: Dongliang Mu <mudongliangabcd@gmail.com>
+On 2022/4/15 11:07, ying.huang@intel.com wrote:
+> On Wed, 2022-04-13 at 09:26 +0800, ying.huang@intel.com wrote:
+>> On Tue, 2022-04-12 at 16:59 +0200, David Hildenbrand wrote:
+>>> On 12.04.22 15:42, Miaohe Lin wrote:
+>>>> On 2022/4/12 16:59, Oscar Salvador wrote:
+>>>>> On Sat, Apr 09, 2022 at 05:34:53PM +0800, Miaohe Lin wrote:
+>>>>>> We don't need to check can_split_folio() because folio_maybe_dma_pinned()
+>>>>>> is checked before. It will avoid the long term pinned pages to be swapped
+>>>>>> out. And we can live with short term pinned pages. Without can_split_folio
+>>>>>> checking we can simplify the code. Also activate_locked can be changed to
+>>>>>> keep_locked as it's just short term pinning.
+>>>>>
+>>>>> What do you mean by "we can live with short term pinned pages"?
+>>>>> Does it mean that it was not pinned when we check
+>>>>> folio_maybe_dma_pinned() but now it is?
+>>>>>
+>>>>> To me it looks like the pinning is fluctuating and we rely on
+>>>>> split_folio_to_list() to see whether we succeed or not, and if not
+>>>>> we give it another spin in the next round?
+>>>>
+>>>> Yes. Short term pinned pages is relative to long term pinned pages and these pages won't be
+>>>> pinned for a noticeable time. So it's expected to split the folio successfully in the next
+>>>> round as the pinning is really fluctuating. Or am I miss something?
+>>>>
+>>>
+>>> Just so we're on the same page. folio_maybe_dma_pinned() only capture
+>>> FOLL_PIN, but not FOLL_GET. You can have long-term FOLL_GET right now
+>>> via vmsplice().
+>>
+>> Per my original understanding, folio_maybe_dma_pinned() can be used to
+>> detect long-term pinned pages.  And it seems reasonable to skip the
+>> long-term pinned pages and try short-term pinned pages during page
+>> reclaiming.  But as you pointed out, vmsplice() doesn't use FOLL_PIN. 
+>> So if vmsplice() is expected to pin pages for long time, and we have no
+>> way to detect it, then we should keep can_split_folio() in the original
+>> code.
+>>
+>> Copying more people who have worked on long-term pinning for comments.
 > 
-> Syzbot triggers two WARNs in f2fs_is_valid_blkaddr and
-> __is_bitmap_valid. For example, in f2fs_is_valid_blkaddr,
-> if type is DATA_GENERIC_ENHANCE or DATA_GENERIC_ENHANCE_READ,
-> it invokes WARN_ON if blkaddr is not in the right range.
-> The call trace is as follows:
+> Checked the discussion in the following thread,
 > 
->   f2fs_get_node_info+0x45f/0x1070
->   read_node_page+0x577/0x1190
->   __get_node_page.part.0+0x9e/0x10e0
->   __get_node_page
->   f2fs_get_node_page+0x109/0x180
->   do_read_inode
->   f2fs_iget+0x2a5/0x58b0
->   f2fs_fill_super+0x3b39/0x7ca0
+> https://lore.kernel.org/lkml/CA+CK2bBffHBxjmb9jmSKacm0fJMinyt3Nhk8Nx6iudcQSj80_w@mail.gmail.com/
 > 
-> Fix these two WARNs by replacing WARN_ON with dump_stack.
+> It seems that from the practical point of view, folio_maybe_dma_pinned()
+> can identify most long-term pinned pages that may block memory hot-
+> remove or CMA allocation.  Although as David pointed out, some pages may
+> still be GUPed for long time (e.g. via vmsplice) even if
+> !folio_maybe_dma_pinned().
 > 
-> Reported-by: syzbot+763ae12a2ede1d99d4dc@syzkaller.appspotmail.com
-> Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> But from another point of view, can_split_huge_page() is cheap and THP
+> swapout is expensive (swap space, disk IO, and hard to be recovered), so
+> it may be better to keep can_split_huge_page() in shink_page_list().
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Many thanks for your explanation. Looks convincing for me. Is it worth a comment about the above
+stuff? Anyway, will drop this patch. Thanks!
 
-Thanks,
+> 
+> Best Regards,
+> Huang, Ying
+> 
+>>
+>>> can_split_folio() is more precise then folio_maybe_dma_pinned(), but
+>>> both are racy as long as the page is still mapped.
+>>>
+>>>
+>>
+> 
+> 
+> .
+> 
+

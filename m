@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66A7F503478
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C047750347F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229762AbiDPGf3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 02:35:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S229787AbiDPGlU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 02:41:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiDPGfY (ORCPT
+        with ESMTP id S229775AbiDPGlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:35:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3819AFCBDE
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:32:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650090774; x=1681626774;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ocjQ3/eXentpzqQ+97CV2S3KCa4NtUBOQ49mGpfDFnM=;
-  b=gyo+czqz2ur1j/FseD5r+KX85bDtpWOLTYcCCmh4BV1mtC4SbPs8c+rn
-   4qivy8wx3jTwc0fXTMYKOZTu3MHJWGqH0yF55pAYCZjJHTSd/cKxyG1+2
-   qb/aVBcwHRHTb67lVqYtrKMwXZjJqJyY/WOUnghvgyYvJpBMFEzSbw6tE
-   pD6oTDbSvuh5ZqTK8xPpnvD406/hO4A87L76H068t+KIpxy2cQuUHIzt0
-   wli9fzt0kMYW4P6KT1AC29Jo856nkD5hE6pncj9ErnuMKVoZEQILaTCoZ
-   l141VlM7tKSv7Kf642K/2GSfDBAvvdxOwfZD2R4GCiTSUEGeavUxPmTl5
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="243854941"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="243854941"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 23:32:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="646292565"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 15 Apr 2022 23:32:52 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfbzI-0002rV-1F;
-        Sat, 16 Apr 2022 06:32:52 +0000
-Date:   Sat, 16 Apr 2022 14:32:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [bvanassche:scsi-gap-zone 8/8] ERROR: modpost: "__aeabi_uldivmod"
- [drivers/scsi/scsi_debug.ko] undefined!
-Message-ID: <202204161429.sPIXKI3Z-lkp@intel.com>
+        Sat, 16 Apr 2022 02:41:15 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99137100E0E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:38:44 -0700 (PDT)
+Received: from kwepemi100019.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KgNmp6FmVz1HC0n;
+        Sat, 16 Apr 2022 14:38:02 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ kwepemi100019.china.huawei.com (7.221.188.189) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 14:38:42 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 14:38:41 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <nathan@kernel.org>, <ndesaulniers@google.com>, <trix@redhat.com>,
+        <acme@redhat.com>, <irogers@google.com>, <f.fainelli@gmail.com>,
+        <mpetlan@redhat.com>, <leo.yan@linaro.org>, <john@metanate.com>,
+        <linux-kernel@vger.kernel.org>, <llvm@lists.linux.dev>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH] perf llvm: fix check feature libclang faled to cope with latest llvm
+Date:   Sat, 16 Apr 2022 14:37:43 +0800
+Message-ID: <20220416063743.254755-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux scsi-gap-zone
-head:   5531f96720bc0e475e669eb56b7094401c53f928
-commit: 5531f96720bc0e475e669eb56b7094401c53f928 [8/8] scsi_debug: Add gap zone support
-config: arm-randconfig-r035-20220414 (https://download.01.org/0day-ci/archive/20220416/202204161429.sPIXKI3Z-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/bvanassche/linux/commit/5531f96720bc0e475e669eb56b7094401c53f928
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-gap-zone
-        git checkout 5531f96720bc0e475e669eb56b7094401c53f928
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+For llvm13, perf build check libclang failed even if llmv libraries have been
+installed in the system. The output file is as follows:
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+  # cat ./build/feature/test-clang.make.output
+  /usr/local/lib/libLLVMSupport.a(Path.cpp.o): In function `llvm::sys::fs::expandTildeExpr(llvm::SmallVectorImpl<char>&)':
+  Path.cpp:(.text._ZN4llvm3sys2fsL15expandTildeExprERNS_15SmallVectorImplIcEE+0x13b): warning: Using 'getpwnam' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+  /usr/local/lib/libLLVMSupport.a(Path.cpp.o): In function `llvm::sys::path::home_directory(llvm::SmallVectorImpl<char>&) [clone .localalias.6]':
+  Path.cpp:(.text._ZN4llvm3sys4path14home_directoryERNS_15SmallVectorImplIcEE+0x88): warning: Using 'getpwuid' in statically linked applications requires at runtime the shared libraries from the glibc version used for linking
+  /usr/local/lib/libclangDriver.a(Darwin.cpp.o): In function `clang::driver::toolchains::Darwin::addProfileRTLibs(llvm::opt::ArgList const&, llvm::SmallVector<char const*, 16u>&) const':
+  Darwin.cpp:(.text._ZNK5clang6driver10toolchains6Darwin16addProfileRTLibsERKN4llvm3opt7ArgListERNS3_11SmallVectorIPKcLj16EEE+0x217): undefined reference to `llvm::getInstrProfSectionName[abi:cxx11](llvm::InstrProfSectKind, llvm::Triple::ObjectFormatType, bool)'
+  collect2: error: ld returned 1 exit status
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+Because relevant link library is missing. For llvm13, getInstrProfSectionName
+interface is in libLLVMInstrumentation, which is part of BPF component library.
 
->> ERROR: modpost: "__aeabi_uldivmod" [drivers/scsi/scsi_debug.ko] undefined!
+The solution has been verified in the llvm13 environment, as following:
 
+  # make OUTPUT= CC=gcc CXX=g++ CFLAGS=  CXXFLAGS=  \
+    LDFLAGS="-static -Wl,-z,noexecstack"  \
+    -C /home/aa/linux/tools/build/feature test-clang.bin V=1
+  make: Entering directory '/home/aa/linux/tools/build/feature'
+  g++  -MD -Wall -Werror -o test-clang.bin test-clang.cpp -static -Wl,-z,noexecstack > test-clang.make.output 2>&1 -std=gnu++14                                   \
+          -I/usr/local/include            \
+          -L/usr/local/lib                \
+          -Wl,--start-group -lclangBasic -lclangDriver    \
+            -lclangFrontend -lclangEdit -lclangLex        \
+            -lclangAST -Wl,--end-group                    \
+          -lLLVMBPFDisassembler -lLLVMMCDisassembler -lLLVMBPFAsmParser -lLLVMBPFCodeGen -lLLVMSelectionDAG -lLLVMipo -lLLVMInstrumentation -lLLVMVectorize -lLLVMLinker -lLLVMIRReader -lLLVMAsmParser -lLLVMFrontendOpenMP -lLLVMBPFDesc -lLLVMBPFInfo -lLLVMAsmPrinter -lLLVMDebugInfoMSF -lLLVMDebugInfoDWARF -lLLVMCodeGen -lLLVMTarget -lLLVMScalarOpts -lLLVMInstCombine -lLLVMAggressiveInstCombine -lLLVMTransformUtils -lLLVMBitWriter -lLLVMAnalysis -lLLVMProfileData -lLLVMObject -lLLVMTextAPI -lLLVMMCParser -lLLVMMC -lLLVMDebugInfoCodeView -lLLVMBitReader -lLLVMOption -lLLVMCore -lLLVMRemarks -lLLVMBitstreamReader -lLLVMBinaryFormat -lLLVMSupport -lLLVMDemangle    \
+          -lrt -ldl -lpthread -lm -lz -ltinfo -lxml2              \
+          > test-clang.make.output 2>&1
+  make: Leaving directory '/home/aa/linux/tools/build/feature'
+
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+ tools/build/feature/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/build/feature/Makefile b/tools/build/feature/Makefile
+index de66e1cc0734..af667972cb88 100644
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -322,7 +322,7 @@ $(OUTPUT)test-clang.bin:
+ 		-Wl,--start-group -lclangBasic -lclangDriver	\
+ 		  -lclangFrontend -lclangEdit -lclangLex	\
+ 		  -lclangAST -Wl,--end-group 			\
+-		$(shell $(LLVM_CONFIG) --libs Core option)	\
++		$(shell $(LLVM_CONFIG) --libs Core option BPF)	\
+ 		$(shell $(LLVM_CONFIG) --system-libs)		\
+ 		> $(@:.bin=.make.output) 2>&1
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.GIT
+

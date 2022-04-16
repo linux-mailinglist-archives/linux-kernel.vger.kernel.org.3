@@ -2,112 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E35E6503648
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:15:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E851503639
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231726AbiDPLRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 07:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S231657AbiDPLLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 07:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231740AbiDPLRf (ORCPT
+        with ESMTP id S230149AbiDPLLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 07:17:35 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119861C93A;
-        Sat, 16 Apr 2022 04:15:02 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so6286580wmn.1;
-        Sat, 16 Apr 2022 04:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uEhSMDHJtiuwdrj4dJJyu97KIVJOOD+nk/JiQfVUpZY=;
-        b=dAvG/VUOiUi0sXwkQHoF+5NVAuiQMfKZcP1vqgjbrBMkds32W4S/eU8nfu9IqtPPMh
-         RAk15ZLBRCzkyRWKkGVGJpTDzaSReBgjw+tB0S7YEMHgWwyGmXlgdNTTvue7wzattbWH
-         6/vvwJXkAwZvshn54gexQbZcinhpcI4xzvXg3WLmsxJL7y0INjgfbhPUZKVTWaVHWPZs
-         hUMyU6iVTLqHlA8iSHqeZj8/wn8dBw8KYI6VkbA5YMmL7AkLk5GoX42GmWcNeitGY8lq
-         2LT9Kqd1NhYAjJYGdAgPh9rKu9HOKoKFVzLMflSZnl+3U1TQg8kn1sKUX7Tgj0kUP149
-         66lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uEhSMDHJtiuwdrj4dJJyu97KIVJOOD+nk/JiQfVUpZY=;
-        b=qh+bPghtsryiXw4+hE19bCotLpBxtz2JaRNrlFiuKhuGQ+eq0uORnrneCqtN20KkA0
-         pxrhSD8aGp77LsVBoFU5FcVnc3cjhlkyBMZbdjiFYBD5uJz2xzdOwnT0FTn64qvyKgVh
-         Z3bp3Nam2+/FOOJAE4EGz8/MSAsTjrzRQNbncRP3lu37Yhac7qKqFHWJuo1jSwwT4bVC
-         ucX4eUIo0NlhqDm2YXguct9Z1+f6gqtc89c7mcbWuyPORjQ7g1ktHGFuRnGnzyWBHJ7a
-         fO2/P39f+qsND0zvbx+GFTWUmEKz5+XAB0o6AusS8GcYbq5MAEjMG8zy1P6JIhM5yXnE
-         K9Mw==
-X-Gm-Message-State: AOAM5315ULPVazWXMF/BwNha9rWcYZgaR8sKZuLUMfCRm0DFDK1VDBSJ
-        K3OcSC1Xk5cXUdsYR9l3q4k=
-X-Google-Smtp-Source: ABdhPJxpvZFQaoNKdlYwE8qfxCxznE1bYGAnUYXCQP5HCgyf90I8tzuMZa59kHFBG+rR05HyfPdo7A==
-X-Received: by 2002:a05:600c:1e8a:b0:38e:d57d:a3fe with SMTP id be10-20020a05600c1e8a00b0038ed57da3femr7027147wmb.59.1650107700553;
-        Sat, 16 Apr 2022 04:15:00 -0700 (PDT)
-Received: from alaa-emad ([197.57.90.163])
-        by smtp.gmail.com with ESMTPSA id 2-20020a1c1902000000b00380d3873d6asm7344196wmz.43.2022.04.16.04.15.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 04:15:00 -0700 (PDT)
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
-        eng.alaamohamedsoliman.am@gmail.com
-Subject: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to kmap_local_page()
-Date:   Sat, 16 Apr 2022 13:14:57 +0200
-Message-Id: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
-X-Mailer: git-send-email 2.35.2
+        Sat, 16 Apr 2022 07:11:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD954A94F0;
+        Sat, 16 Apr 2022 04:09:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6855560E73;
+        Sat, 16 Apr 2022 11:09:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2194BC385A1;
+        Sat, 16 Apr 2022 11:09:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650107350;
+        bh=kh5r9cbB7fwoB+X+RIjkMvT5RGWxR4kbshMlqan9fhc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eEq3+wV6ZmtU1ECpF0H34v3j6A5kWRBtjOivkYZityg9O95Bf/gFIvPVCXM7M1sHN
+         64adcwBsroZiT5uD4Yjr0EE8W1/Xwr7mxQlvRgJANHlf3gbfiju3SjqlyPlTwCRWTA
+         Vf+ldD7LL6s8nR0lpazmBhblR70biCs6j5PONRJDJYyw3WFjnCI2xtZ/061qdzODAI
+         10yfTS9j6P1oeC81nrCl8yDWgJ710bVrLj+FqZwAhAwN7V5lqZCdNQIiOCWx6fZZjz
+         vHyV/fqKxIl/pJmuu5nkog0G21SN+AcR9wSKLxIe04tehBPOcHopy018K3Xp7ScS8l
+         RQRtPzVo8iX5w==
+Date:   Sat, 16 Apr 2022 12:17:08 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lars-Peter Clausen <lars@metafoo.de>
+Subject: Re: [PATCH v1 1/1] iio: core: Convert to use firmware node handle
+ instead of OF node
+Message-ID: <20220416121708.37018ce9@jic23-huawei>
+In-Reply-To: <20220413180202.19220-1-andriy.shevchenko@linux.intel.com>
+References: <20220413180202.19220-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert kmap() to kmap_local_page()
+On Wed, 13 Apr 2022 21:02:02 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-With kmap_local_page(), the mapping is per thread, CPU local and not
-globally visible.
+> Switch the IIO core to use firmware node handle instead of OF node.
+> This will allow to get label from firmware on non-OF systems.
+> 
+> Note, this doesn't change of_iio_*() APIs for now.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Applied to the togreg branch of iio.git and pushed out as testing for
+0-day to poke at this and see if we missed anything.
 
-Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
----
-changes in V2:
-	fix kunmap_local path value to take address of the mapped page.
----
-changes in V3:
-	edit commit message to be clearer
----
- drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks,
 
-diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-index 2a5782063f4c..c14fc871dd41 100644
---- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-+++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-@@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
- 
- 	frame_size >>= 1;
- 
--	data = kmap(rx_buffer->page);
-+	data = kmap_local_page(rx_buffer->page);
- 
- 	if (data[3] != 0xFF ||
- 	    data[frame_size + 10] != 0xBE ||
- 	    data[frame_size + 12] != 0xAF)
- 		match = false;
- 
--	kunmap(rx_buffer->page);
-+	kunmap_local(data);
- 
- 	return match;
- }
--- 
-2.35.2
+Jonathan
+
+> ---
+>  drivers/iio/industrialio-core.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/iio/industrialio-core.c b/drivers/iio/industrialio-core.c
+> index 2f48e9a97274..ffbe76806e07 100644
+> --- a/drivers/iio/industrialio-core.c
+> +++ b/drivers/iio/industrialio-core.c
+> @@ -1893,20 +1893,22 @@ static const struct iio_buffer_setup_ops noop_ring_setup_ops;
+>  int __iio_device_register(struct iio_dev *indio_dev, struct module *this_mod)
+>  {
+>  	struct iio_dev_opaque *iio_dev_opaque = to_iio_dev_opaque(indio_dev);
+> -	const char *label;
+> +	struct fwnode_handle *fwnode;
+>  	int ret;
+>  
+>  	if (!indio_dev->info)
+>  		return -EINVAL;
+>  
+>  	iio_dev_opaque->driver_module = this_mod;
+> -	/* If the calling driver did not initialize of_node, do it here */
+> -	if (!indio_dev->dev.of_node && indio_dev->dev.parent)
+> -		indio_dev->dev.of_node = indio_dev->dev.parent->of_node;
+>  
+> -	label = of_get_property(indio_dev->dev.of_node, "label", NULL);
+> -	if (label)
+> -		indio_dev->label = label;
+> +	/* If the calling driver did not initialize firmware node, do it here */
+> +	if (dev_fwnode(&indio_dev->dev))
+> +		fwnode = dev_fwnode(&indio_dev->dev);
+> +	else
+> +		fwnode = dev_fwnode(indio_dev->dev.parent);
+> +	device_set_node(&indio_dev->dev, fwnode);
+> +
+> +	fwnode_property_read_string(fwnode, "label", &indio_dev->label);
+>  
+>  	ret = iio_check_unique_scan_index(indio_dev);
+>  	if (ret < 0)
 

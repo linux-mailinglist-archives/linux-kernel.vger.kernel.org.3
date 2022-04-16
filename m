@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13CBF503333
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68B7C503318
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbiDPCGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 22:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
+        id S229644AbiDPCHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 22:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiDPCFl (ORCPT
+        with ESMTP id S229661AbiDPCGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 22:05:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE974137F7C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 18:54:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650074087; x=1681610087;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=tnWW8RHrYAEi7ZmsFv26NaD1X/SNeXSnVLg9q3uTZX0=;
-  b=jG4m61zRmBUbrSmWSxX5gFoRGorGu2DOC5SOmdAMOOMTNODputQXnXUM
-   A2sccxmKf+dGYu4yauFH9hp5XDiZlCSrbuk8/20yFuyomPwssB4CpzlXJ
-   Pi3tpjPbs16bg4SpxnR6vH9YyjxBgpYGHDXBui3RX1axYvBViyLZGzh6z
-   Tk51smowqeR4HldiqMIfDtdGwZquu/C57xomiYVFmgGQQFJo2AW4c1Erp
-   ezTp18hSO9Ky5AYVOpAUDqJzeAGoHdBBiEuruR0KEakNBxPz1kk37+eY4
-   W+q5QqqVw8Lsrqvp653KyT5u7LEc8WVfOzfuNIZxMYjZ2QM6x8oKF1J/T
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="260856691"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="260856691"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 18:47:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="701239795"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 15 Apr 2022 18:47:43 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfXXK-0002e6-Mh;
-        Sat, 16 Apr 2022 01:47:42 +0000
-Date:   Sat, 16 Apr 2022 09:47:16 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Subject: [bvanassche:scsi-gap-zone 8/8] ERROR: modpost: "__umoddi3"
- [drivers/scsi/scsi_debug.ko] undefined!
-Message-ID: <202204160900.KLzxt1Xe-lkp@intel.com>
+        Fri, 15 Apr 2022 22:06:09 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CD54E17;
+        Fri, 15 Apr 2022 19:00:05 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id q12so9258914pgj.13;
+        Fri, 15 Apr 2022 19:00:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8XEJp2R4K25ZYHNS7d51S7Y7FdMSq6LIaDwY2H8Jjr4=;
+        b=kQsKyrkT1DWICrd0ptnoiBSDY/8mwSomsBEmcNT+vOSVEupMSVa7wDQ1ZaII+k1i0h
+         gm0IbwRP6+tleoe51hK5sIbdaPDAvC6YyKupthbkj5YlKMp7iLJEREukF38JQEVPtmgb
+         C7LBkXRLChz/Lo40XLkQVfN/GPl7gjcg+tqcnhe0PNVNjcJTViHuHG1iqkTaL8LY/JNZ
+         LOlnRzh+lrxGvmYBtLiA5YbebU0JlWjJjiVqaI1Fax6atGQ6v5FmA/0xqUzOpbyU/oYG
+         royS+qDvPJc0ctoWHF4tpf+bBkuVUh4d197rd+TrfLvMug16FupxYFIgCH3cQHx3+O/R
+         ulJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=8XEJp2R4K25ZYHNS7d51S7Y7FdMSq6LIaDwY2H8Jjr4=;
+        b=m8olP9Z1sSkblglZMrxi9rF4/y7hxozHpE15stoiJyBGZpZgjV6WgXnRAauopnTPiq
+         sELcnO6nSNUc2xv670dw5I9DlwoP+RiFRLzACcAddBRgy2+632XHIiY9ILkQ+w2+WLFY
+         u065JcG9Z+Tt8AOwfhE14FGAeNW39BK51FzvqSRnha7ypAE1gTsn6ld0nq/NgLcnXcZP
+         YRyLIuzdX3cD1QVzcWTfNnLUWePEb+t3Uvn0y2alf+W3dOoiKIqJh8PetyHvuMHnKbU8
+         4htlwKLdzCfL022ZFJFET4L2A+VfFaOiqldkyq/H+bBFcwYj8JZpy82LHHRsDxkmUWa5
+         tT9A==
+X-Gm-Message-State: AOAM533qVpxTEN0zBtdz6BI+CQ5OM+TnwwV8+zYTJotzYRSTTt3+TmvV
+        Axu5jntQbwU2gepH5PsQWs1DO5NcjWc=
+X-Google-Smtp-Source: ABdhPJx+ex28/CxkmPcqU/qGwXQmffQRsGXU8jOdNzZxx9XrSJz0QB9hKwR+mpiU5ton0cWn7TdfxQ==
+X-Received: by 2002:a17:903:11cc:b0:151:71e4:dadc with SMTP id q12-20020a17090311cc00b0015171e4dadcmr1428533plh.78.1650073831037;
+        Fri, 15 Apr 2022 18:50:31 -0700 (PDT)
+Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:9b6:6aad:72f6:6e16])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056a00198800b004fab740dbe6sm4325957pfl.15.2022.04.15.18.50.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 18:50:30 -0700 (PDT)
+From:   Max Filippov <jcmvbkbc@gmail.com>
+To:     linux-xtensa@linux-xtensa.org
+Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
+        Max Filippov <jcmvbkbc@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH] xtensa: fix a7 clobbering in coprocessor context load/store
+Date:   Fri, 15 Apr 2022 18:50:18 -0700
+Message-Id: <20220416015018.2025282-1-jcmvbkbc@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,31 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux scsi-gap-zone
-head:   5531f96720bc0e475e669eb56b7094401c53f928
-commit: 5531f96720bc0e475e669eb56b7094401c53f928 [8/8] scsi_debug: Add gap zone support
-config: riscv-randconfig-r042-20220414 (https://download.01.org/0day-ci/archive/20220416/202204160900.KLzxt1Xe-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/bvanassche/linux/commit/5531f96720bc0e475e669eb56b7094401c53f928
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-gap-zone
-        git checkout 5531f96720bc0e475e669eb56b7094401c53f928
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash
+Fast coprocessor exception handler saves a3..a6, but coprocessor context
+load/store code uses a4..a7 as temporaries, potentially clobbering a7.
+'Potentially' because coprocessor state load/store macros may not use
+all four temporary registers (and neither FPU nor HiFi macros do).
+Use a3..a6 as intended.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Cc: stable@vger.kernel.org
+Fixes: c658eac628aa ("[XTENSA] Add support for configurable registers and coprocessors")
+Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
+---
+ arch/xtensa/kernel/coprocessor.S | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "__umoddi3" [drivers/scsi/scsi_debug.ko] undefined!
-
+diff --git a/arch/xtensa/kernel/coprocessor.S b/arch/xtensa/kernel/coprocessor.S
+index 45cc0ae0af6f..c7b9f12896f2 100644
+--- a/arch/xtensa/kernel/coprocessor.S
++++ b/arch/xtensa/kernel/coprocessor.S
+@@ -29,7 +29,7 @@
+ 	.if XTENSA_HAVE_COPROCESSOR(x);					\
+ 		.align 4;						\
+ 	.Lsave_cp_regs_cp##x:						\
+-		xchal_cp##x##_store a2 a4 a5 a6 a7;			\
++		xchal_cp##x##_store a2 a3 a4 a5 a6;			\
+ 		jx	a0;						\
+ 	.endif
+ 
+@@ -46,7 +46,7 @@
+ 	.if XTENSA_HAVE_COPROCESSOR(x);					\
+ 		.align 4;						\
+ 	.Lload_cp_regs_cp##x:						\
+-		xchal_cp##x##_load a2 a4 a5 a6 a7;			\
++		xchal_cp##x##_load a2 a3 a4 a5 a6;			\
+ 		jx	a0;						\
+ 	.endif
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

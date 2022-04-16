@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7D6050376E
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 17:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 030DB503771
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 17:52:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbiDPPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 11:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37764 "EHLO
+        id S232493AbiDPPy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 11:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230108AbiDPPvx (ORCPT
+        with ESMTP id S230108AbiDPPy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 11:51:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0FC095D1AE
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 08:49:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650124161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T6tJt5xi4j/95RjrkCYGghk3+Qa3IFPUrOmUFpGR2eM=;
-        b=C9U/rRLF7tusDSlakjk71gA64LIbz0o6oD3bnzYp1GJHnP2hKzdfoRrSIzzp7zzEyDiw61
-        oyvo77BlGb+ORow/T4OXj+o0uQ7c5amqNlBiDjnTiO/fb+drgVrimQJjMoUddn02CldyoN
-        F3ZN7vv/9CYkfl+ISScPqJNBx6uEUMc=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-413-PaGu8qmuP4SFaYgHHFWftQ-1; Sat, 16 Apr 2022 11:49:17 -0400
-X-MC-Unique: PaGu8qmuP4SFaYgHHFWftQ-1
-Received: by mail-qk1-f198.google.com with SMTP id m23-20020a05620a221700b006809e1fa4fdso7372972qkh.6
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 08:49:17 -0700 (PDT)
+        Sat, 16 Apr 2022 11:54:57 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B05972DF;
+        Sat, 16 Apr 2022 08:52:25 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id p15so20085703ejc.7;
+        Sat, 16 Apr 2022 08:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=WB0OkA4npUVlTHKxP5L/zecMJKXRJHu4yHb6ykPI+d0=;
+        b=p1PdgWeV4/8OWZSYyJ2Gtl7Sb29XmosvPG966HCgE+yOaNpBXl37cLieNQh1YhCimK
+         cfjREeBGHHB7QtLvlG2M7NPMi038s27WDZ0PyHroXUbzv8mgsj8Qhdb/F8TEqVYIKDvg
+         tN2I6HQfvs2KlGV6UrdM8caLjg8HNpylVyGPM+5YIoS2WwN63G32fgwrsxy2k66zCBgy
+         Bri21J62bTzs2JnbGPL282vrgIBnHBLUgIuY3xW1qVAqJTdBaTnOL018zIF1KpddLUp4
+         4Ah+hh5gs2LzYujyxZoo+L3hfQCXXhiJI0eiTbhDXRppsWwKweBe2G3/IYbK4AkHMquQ
+         LBYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=T6tJt5xi4j/95RjrkCYGghk3+Qa3IFPUrOmUFpGR2eM=;
-        b=7UfFnlqw+00hG1Xs41wLmMZC80IEvFy5RmWpVx9v4FzIC33LokmSkTq3rBW2XVcJ9E
-         RuZnKOi5xAY0VRK0sx+/raOt8IeOqW2HMj29rJgofkLknxhYPqjWbNdSgVwKViZoIlZL
-         Jwq9KGzF3WSXF00OSk9PlyVEdOT9bvPnMsDzh2FdncfMc2KGHUw4sqZSRY6yNc9N7l9Y
-         iaHiio7CJD62bMTBMtWwiBdTlTJgjHE6fUKZc5ANebwSLHvvWehYZjJvuaRNygs8DQYX
-         gDSBGZ9EeVVMgOB0BHKHU9cZ5j/h1sRGahI2jvL5F0egoMtIi2yL5ZaY+sZZ/wcW1nDp
-         aIGQ==
-X-Gm-Message-State: AOAM531tPZl1tBJ5Y3Wd5j7RV0fHf/Ihxui+AMTo1dnQH32xvl53n9W9
-        DAvOgWypOqxO0pUDtLsZChgerSrUy9GT7KYTyQe6D/+vbFIwksAylO9b0tPtGuWAVlbIyvWyJvl
-        wjY+xNToqmB2lCFLM9CUeggcD
-X-Received: by 2002:a37:510:0:b0:69e:8868:c691 with SMTP id 16-20020a370510000000b0069e8868c691mr231640qkf.731.1650124157113;
-        Sat, 16 Apr 2022 08:49:17 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJx7eBSX9BoYG86DDTIzi+DQA4SCrsjCtidPwA9Fiv/mUYye57Js4SZZMzHh5S5PV6hbXJnvKQ==
-X-Received: by 2002:a37:510:0:b0:69e:8868:c691 with SMTP id 16-20020a370510000000b0069e8868c691mr231634qkf.731.1650124156904;
-        Sat, 16 Apr 2022 08:49:16 -0700 (PDT)
-Received: from localhost.localdomain (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id i62-20020a37b841000000b0069c10d27571sm3935699qkf.70.2022.04.16.08.49.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 08:49:16 -0700 (PDT)
-Subject: Re: [PATCH] spi: remove spin_lock_irq in the irq procress
-To:     =?UTF-8?B?6YOt5Yqb6LGq?= <lhjeff911@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?5ZGC6Iqz6aiwTHVXZWxscw==?= <wells.lu@sunplus.com>,
-        "lh.kuo" <lh.kuo@sunplus.com>, nathan@kernel.org
-References: <9e12d806c5554b4ed18c644f71f6662fcf0d0516.1649813822.git.lhjeff911@gmail.com>
- <fdb1e0a6-62f9-c0a3-c1db-8857087701a1@redhat.com>
- <CAGcXWkzZex-XTEoq8H5mc+3Y2BH=cphdpH-815Y+TAq812K=8g@mail.gmail.com>
-From:   Tom Rix <trix@redhat.com>
-Message-ID: <d8cddce3-c353-e8e9-9221-84eed6d28b69@redhat.com>
-Date:   Sat, 16 Apr 2022 08:49:13 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WB0OkA4npUVlTHKxP5L/zecMJKXRJHu4yHb6ykPI+d0=;
+        b=zCHfYnx1NdJIES1q10RBv/MMXLajx02hori8VkCJLMYkYR/cHZ70GcLPy1/ZKzhvQi
+         Ssxxda4luersiExY1NWaRyBhpC+UllSgeeElTXFF686Ux0evZfDxDGm+jIPz23/JTZW8
+         YIYRufDh4NYMQHoYf75XZ46dTvqdC9kp84nAg93lbmO9YnISfF98yBBU0Ocg675x36/4
+         AeL+rEfo/MHLkBPa17hHp9o5nFvxbtrN3WNta8BVWj+pJSg3vaE7XBWiojy0Aab5YFXv
+         krM1t0vBifH9SIblhgwsjsVcZiRDmuFLrH/qvweZJXdc2jD75K+33dnYZw+TZpxKRDIF
+         fi2w==
+X-Gm-Message-State: AOAM5300oOcJudEWkUXc4SG8jd6pVyGRQHvltbyGDT7wBptandvdzxWp
+        AaqfR+dZbzg31TcZLFUCofT9r9y8+yE=
+X-Google-Smtp-Source: ABdhPJwxtNuBtqOCmrmCxvK+GvsLdC4aeyXb2uo3u3eVpeTvHsXFV6Kh5xcnPCNk6rHSsh2eMiP5cg==
+X-Received: by 2002:a17:906:dc8b:b0:6ef:86e8:777 with SMTP id cs11-20020a170906dc8b00b006ef86e80777mr1451459ejc.326.1650124343944;
+        Sat, 16 Apr 2022 08:52:23 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id fy11-20020a1709069f0b00b006e8b68c92d8sm2752978ejc.162.2022.04.16.08.52.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 08:52:22 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>,
+        Julia Lawall <julia.lawall@inria.fr>
+Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com
+Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to kmap_local_page()
+Date:   Sat, 16 Apr 2022 17:52:20 +0200
+Message-ID: <1897617.PYKUYFuaPT@leap>
+In-Reply-To: <alpine.DEB.2.22.394.2204161608230.3501@hadrien>
+References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com> <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com> <alpine.DEB.2.22.394.2204161608230.3501@hadrien>
 MIME-Version: 1.0
-In-Reply-To: <CAGcXWkzZex-XTEoq8H5mc+3Y2BH=cphdpH-815Y+TAq812K=8g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="ISO-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,61 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On sabato 16 aprile 2022 16:09:58 CEST Julia Lawall wrote:
+>=20
+> On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+>=20
+> >
+> > On =D9=A1=D9=A6/=D9=A4/=D9=A2=D9 =D9=A2=D9=A2 =D9=A1=D9=A3:=D9=A3=D9=A1=
+, Julia Lawall wrote:
+> > >
+> > > On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+> > >
+> > > > Convert kmap() to kmap_local_page()
+> > > >
+> > > > With kmap_local_page(), the mapping is per thread, CPU local and=20
+not
+> > > > globally visible.
+> > > It's not clearer.
+> > I mean this " fix kunmap_local path value to take address of the mapped=
+=20
+page"
+> > be more clearer
+> > > This is a general statement about the function.  You
+> > > need to explain why it is appropriate to use it here.  Unless it is=20
+the
+> > > case that all calls to kmap should be converted to call=20
+kmap_local_page.
+> > It's required to convert all calls kmap to kmap_local_page. So, I don't=
+=20
+what
+> > should the commit message be?
+>=20
+> If all calls should be changed then you can also say that.
 
-On 4/14/22 6:16 AM, 郭力豪 wrote:
-> Hi Tom :
->
->      This SPI driver only handles one transfer at a time.
-> That's why locks are not needed.
+If all calls should be changed with no regards to the surrounding contexts=
+=20
+and special situations, we can just make an automated s/kmap()/
+kmap_local_page()/ or something else similar :)
 
-Please add this statement to the commit log.
+Thanks,
 
-In a commit log, not only do I look for what was changed but also why 
-the change was made.
+=46abio M. De Francesco
 
-Tom
+>=20
+> I thought that a previous commit on the outreachy list made some=20
+arguments
+> about how the affacted value was just allocated and thus could not yet be
+> shared.
+>=20
+> julia
 
->
->
-> Li-hao Kuo
->
-> Tom Rix <trix@redhat.com> 於 2022年4月13日 週三 下午7:45寫道：
->>
->> On 4/12/22 6:38 PM, Li-hao Kuo wrote:
->>> - remove spin_lock_irq and spin_unlock_irq in the irq funciton
->> function
->>
->> I was expecting a statement on why is the lock is not needed.
->>
->> Could you add one ?
->>
->> Tom
->>
->>> Signed-off-by: Li-hao Kuo <lhjeff911@gmail.com>
->>> ---
->>>    drivers/spi/spi-sunplus-sp7021.c | 4 +---
->>>    1 file changed, 1 insertion(+), 3 deletions(-)
->>>
->>> diff --git a/drivers/spi/spi-sunplus-sp7021.c b/drivers/spi/spi-sunplus-sp7021.c
->>> index f989f7b..120623c 100644
->>> --- a/drivers/spi/spi-sunplus-sp7021.c
->>> +++ b/drivers/spi/spi-sunplus-sp7021.c
->>> @@ -199,8 +199,6 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
->>>        if (tx_len == 0 && total_len == 0)
->>>                return IRQ_NONE;
->>>
->>> -     spin_lock_irq(&pspim->lock);
->>> -
->>>        rx_cnt = FIELD_GET(SP7021_RX_CNT_MASK, fd_status);
->>>        if (fd_status & SP7021_RX_FULL_FLAG)
->>>                rx_cnt = pspim->data_unit;
->>> @@ -239,7 +237,7 @@ static irqreturn_t sp7021_spi_master_irq(int irq, void *dev)
->>>
->>>        if (isrdone)
->>>                complete(&pspim->isr_done);
->>> -     spin_unlock_irq(&pspim->lock);
->>> +
->>>        return IRQ_HANDLED;
->>>    }
->>>
+
 

@@ -2,163 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663CB5037A1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04D635037AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 19:00:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232622AbiDPQwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 12:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34292 "EHLO
+        id S232666AbiDPRDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 13:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232626AbiDPQwc (ORCPT
+        with ESMTP id S232651AbiDPRDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 12:52:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886EE2DA92;
-        Sat, 16 Apr 2022 09:49:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 32F6CB8068A;
-        Sat, 16 Apr 2022 16:49:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E72A1C385AE;
-        Sat, 16 Apr 2022 16:49:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650127796;
-        bh=qmUgUDofYI1jD2rLu9hnpnW6IkiX3GQmx1xSkVNgS3w=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=hyzfAeUwY+XIxJY5TXKlmUfb1LddqrE1CWOExDZ4k/u4Km7jCOzQGL+5eKyRUSHLL
-         qdVuT8DUIiznLBzVkMSCdi9b1QkLnq4BcA4gelELChGLbl5ZBVDr4DVvvP58MdyZ2w
-         pAod1nOAXuEdfDThbO+6LwNZS0mvBJOX4dTWfaC80vKoAhtZGyUXL9QKDpCWKXXGNq
-         2SlPOHTs9VepSoe07bcpRyrti5Cua7hqYlzCwdxQJg4rGgNLHG/wcwOdyPB6DfcbrI
-         ZTJW+qkkNRvqVSjDazlkn3yQoHFHWJ4KvWrcy+/iC9qdR9iiix4o3Lj+JoElAHOSZA
-         EiKFldU2Leysw==
-Received: by mail-vs1-f47.google.com with SMTP id i34so8373917vsv.6;
-        Sat, 16 Apr 2022 09:49:56 -0700 (PDT)
-X-Gm-Message-State: AOAM530542UotODzB76lRDPjHnwOPc4GP5eBxb7ftf9yWX7NZ7bu/6kg
-        wu0Kw3NzR96sNW9zVGjPhaW6IrZzVKnRFYIStJc=
-X-Google-Smtp-Source: ABdhPJwipWUHJGVYg3G9YqlCYWyULpwS8q2oCbq6rdTlaCM+02oXS/mNA7AoQvfY8ATUS0Y3Fps/fH6ZLKhSWSYgb9Y=
-X-Received: by 2002:a67:ec04:0:b0:32a:4a53:172f with SMTP id
- d4-20020a67ec04000000b0032a4a53172fmr463677vso.59.1650127795835; Sat, 16 Apr
- 2022 09:49:55 -0700 (PDT)
+        Sat, 16 Apr 2022 13:03:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC1D264719;
+        Sat, 16 Apr 2022 10:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650128436; x=1681664436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=c41hGLHaAehdnBiHkOfPD2fC/yD5IiZ95Pu4yRuFNdQ=;
+  b=lCr/dbNB89qGPJt8IL6ZjkNpEVK26XQ67133LX25i9vNkP8RuRbjjMaB
+   gfe361BgLrm+krMkh+5wi7nbiEq9DGFHAcqGQOAKX7yHKWVW/KWtMuXI1
+   rkP366puqnkTW7j+2vFS6ecG8bNG6VGCF84G4rYiiURMX3/nvk+Z+G1GT
+   wT65BZd3XYGGrjdMFur2VwWqBXWpwJR4FIxxWmFK/Kl4Mj4ekRVrMkP3c
+   oN+OQFfhoenPxdGOXzjOSJfz6POzZJuWl9oYslLbaqAx8kK4LRhEwkxzo
+   oOjkcjQ5OHzlPWYMhSGHk7rD6MZYyuvmoJUl2NXMukMZjkW8CRL+P9EgN
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262767296"
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="262767296"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 10:00:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
+   d="scan'208";a="701369843"
+Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Apr 2022 10:00:33 -0700
+Date:   Sun, 17 Apr 2022 00:53:01 +0800
+From:   Xu Yilun <yilun.xu@intel.com>
+To:     Nava kishore Manne <nava.manne@xilinx.com>
+Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
+        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        git@xilinx.com
+Subject: Re: [PATCH v4 3/5] fpga: fpga-mgr: fix kernel-doc warnings
+Message-ID: <20220416165301.GG301222@yilunxu-OptiPlex-7050>
+References: <20220416133719.3382895-1-nava.manne@xilinx.com>
+ <20220416133719.3382895-4-nava.manne@xilinx.com>
 MIME-Version: 1.0
-References: <20220412034957.1481088-1-guoren@kernel.org> <YlbwOG46mCR8Q5tJ@tardis>
-In-Reply-To: <YlbwOG46mCR8Q5tJ@tardis>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 17 Apr 2022 00:49:44 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
-Message-ID: <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
-Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
-To:     Boqun Feng <boqun.feng@gmail.com>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Palmer Dabbelt <palmer@dabbelt.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220416133719.3382895-4-nava.manne@xilinx.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Boqun,
+On Sat, Apr 16, 2022 at 07:07:17PM +0530, Nava kishore Manne wrote:
+> warnings: No description found for return value of 'xxx'
+> 
+> In-order to fix the above kernel-doc warnings added the
+> 'Return' description for 'devm_fpga_mgr_register_full()'
+> and 'devm_fpga_mgr_register()' API's.
 
-On Wed, Apr 13, 2022 at 11:46 PM Boqun Feng <boqun.feng@gmail.com> wrote:
->
-> [Cc Andrea]
->
-> On Tue, Apr 12, 2022 at 11:49:54AM +0800, guoren@kernel.org wrote:
-> > From: Guo Ren <guoren@linux.alibaba.com>
-> >
-> > These patch series contain one cleanup and some optimizations for
-> > atomic operations.
-> >
->
-> Seems to me that you are basically reverting 5ce6c1f3535f
-> ("riscv/atomic: Strengthen implementations with fences"). That commit
-> fixed an memory ordering issue, could you explain why the issue no
-> longer needs a fix?
+                                 APIs.
 
-I'm not reverting the prior patch, just optimizing it.
+> 
+> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
 
-In RISC-V =E2=80=9CA=E2=80=9D Standard Extension for Atomic Instructions sp=
-ec, it said:
-If only the aq bit is set, the atomic memory operation is treated as
-an acquire access, i.e., no following memory operations on this RISC-V
-hart can be observed to take place before the acquire memory
-operation.
--                       "       amoswap.w %0, %2, %1\n"                 \
--                       RISCV_ACQUIRE_BARRIER                           \
-+                       "       amoswap.w.aq %0, %2, %1\n"              \
-So RISCV_ACQUIRE_BARRIER is "fence r, rw" and "fence r" is over
-constraints to protect amoswap.w. Here using amoswap.w.aq is more
-proper.
+With the minor fix, please add my Acked-by.
 
-If only the rl bit is set, the atomic memory operation is treated as a
-release access, i.e., the release memory operation cannot be observed
-to take place before any earlier memory operations on this RISC-V
-hart.
--                       RISCV_RELEASE_BARRIER                           \
--                       "       amoswap.w %0, %2, %1\n"                 \
-+                       "       amoswap.w.rl %0, %2, %1\n"              \
-So RISCV_RELEASE_BARRIER is "fence rw, w" and "fence ,w" is over
-constraints to protect amoswap.w. Here using amoswap.w.rl is more
-proper.
+Acked-by: Xu Yilun <yilun.xu@intel.com>
 
-If both the aq and rl bits are set, the atomic memory operation is
-sequentially consistent and cannot be observed to happen before any
-earlier memory operations or after any later memory operations in the
-same RISC-V hart and to the same address domain.
-                "0:     lr.w     %[p],  %[c]\n"
-                "       sub      %[rc], %[p], %[o]\n"
-                "       bltz     %[rc], 1f\n".
--               "       sc.w.rl  %[rc], %[rc], %[c]\n"
-+               "       sc.w.aqrl %[rc], %[rc], %[c]\n"
-                "       bnez     %[rc], 0b\n"
--               "       fence    rw, rw\n"
-                "1:\n"
-So .rl + fence rw, rw is over constraints, only using sc.w.aqrl is more pro=
-per.
-
->
-> Regards,
-> Boqun
->
-> > Changes in V2:
-> >  - Fixup LR/SC memory barrier semantic problems which pointed by
-> >    Rutland
-> >  - Combine patches into one patchset series
-> >  - Separate AMO optimization & LRSC optimization for convenience
-> >    patch review
-> >
-> > Guo Ren (3):
-> >   riscv: atomic: Cleanup unnecessary definition
-> >   riscv: atomic: Optimize acquire and release for AMO operations
-> >   riscv: atomic: Optimize memory barrier semantics of LRSC-pairs
-> >
-> >  arch/riscv/include/asm/atomic.h  | 70 ++++++++++++++++++++++++++++++--
-> >  arch/riscv/include/asm/cmpxchg.h | 42 +++++--------------
-> >  2 files changed, 76 insertions(+), 36 deletions(-)
-> >
-> > --
-> > 2.25.1
-> >
-
-
-
---
-Best Regards
- Guo Ren
-
-ML: https://lore.kernel.org/linux-csky/
+> ---
+> Changes for v2:
+>                 -Replaced s/@return:/Return:/
+> Changes for v3:
+>                -Updated commit description.
+> Changes for v4:
+>                -Updated commit description.
+> 
+>  drivers/fpga/fpga-mgr.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/fpga/fpga-mgr.c b/drivers/fpga/fpga-mgr.c
+> index a699cc8e2fa6..0f2b28538f17 100644
+> --- a/drivers/fpga/fpga-mgr.c
+> +++ b/drivers/fpga/fpga-mgr.c
+> @@ -730,6 +730,8 @@ static void devm_fpga_mgr_unregister(struct device *dev, void *res)
+>   * @parent:	fpga manager device from pdev
+>   * @info:	parameters for fpga manager
+>   *
+> + * Return:  fpga manager pointer on success, negative error code otherwise.
+> + *
+>   * This is the devres variant of fpga_mgr_register_full() for which the unregister
+>   * function will be called automatically when the managing device is detached.
+>   */
+> @@ -763,6 +765,8 @@ EXPORT_SYMBOL_GPL(devm_fpga_mgr_register_full);
+>   * @mops:	pointer to structure of fpga manager ops
+>   * @priv:	fpga manager private data
+>   *
+> + * Return:  fpga manager pointer on success, negative error code otherwise.
+> + *
+>   * This is the devres variant of fpga_mgr_register() for which the
+>   * unregister function will be called automatically when the managing
+>   * device is detached.
+> -- 
+> 2.25.1

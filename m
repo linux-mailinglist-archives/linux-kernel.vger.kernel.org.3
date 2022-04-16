@@ -2,110 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61A050365D
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14189503662
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 13:38:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231795AbiDPLec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 07:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50788 "EHLO
+        id S231807AbiDPLlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 07:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231786AbiDPLeb (ORCPT
+        with ESMTP id S229575AbiDPLlK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 07:34:31 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F2840A3E;
-        Sat, 16 Apr 2022 04:31:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=z9A4gkqrnB2OxeVyXP/QAPVgh7qVm2HOgeHFVAA094w=;
-  b=EtwyZYsyeWT0eBa/S5Z0d8LtdEbsVCfwjtKMIRvCu6lScgMV94c3RkSR
-   26n/GJ1ZI1NquP9Pbilvv2vFFtY4aZh8Porxi6383xy6oQAHKawiyJ39j
-   Y9ujjtHPSd8sMrWt9d5itN2mcUE++kFGD5xtQnHAXLMUHUAMmIwRIZ+/l
-   M=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,264,1643670000"; 
-   d="scan'208";a="11697161"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 13:31:56 +0200
-Date:   Sat, 16 Apr 2022 13:31:56 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-cc:     outreachy@lists.linux.dev, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ira.weiny@intel.com
-Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
- kmap_local_page()
-In-Reply-To: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204161331080.3501@hadrien>
-References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 16 Apr 2022 07:41:10 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3DD73F327;
+        Sat, 16 Apr 2022 04:38:38 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:6624:6d8d:f790:d5c]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1nfgl9-0000mk-RE; Sat, 16 Apr 2022 13:38:35 +0200
+Message-ID: <c6b80014-846d-cd90-7e67-d72959ffabe1@leemhuis.info>
+Date:   Sat, 16 Apr 2022 13:38:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: fscache corruption in Linux 5.17?
+Content-Language: en-US
+To:     Max Kellermann <mk@cm4all.com>, dhowells@redhat.com
+Cc:     linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+References: <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+In-Reply-To: <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1650109118;7865a6ba;
+X-HE-SMSGID: 1nfgl9-0000mk-RE
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+[TLDR: I'm adding the regression report below to regzbot, the Linux
+kernel regression tracking bot; all text you find below is compiled from
+a few templates paragraphs you might have encountered already already
+from similar mails.]
 
+Hi, this is your Linux kernel regression tracker. CCing the regression
+mailing list, as it should be in the loop for all regressions, as
+explained here:
+https://www.kernel.org/doc/html/latest/admin-guide/reporting-issues.html
 
-On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+On 12.04.22 17:10, Max Kellermann wrote:
+> Hi David,
+> 
+> two weeks ago, I updated a cluster of web servers to Linux kernel
+> 5.17.1 (5.16.x previously) which includes your rewrite of the fscache
+> code.
+> 
+> In the last few days, there were numerous complaints about broken
+> WordPress installations after WordPress was updated.  There were
+> PHP syntax errors everywhere.
+> 
+> Indeed there were broken PHP files, but the interesting part is: those
+> corruptions were only on one of the web servers; the others were fine,
+> the file contents were only broken on one of the servers.
+> 
+> File size and time stamp and everyhing in "stat" is identical, just
+> the file contents are corrupted; it looks like a mix of old and new
+> contents.  The corruptions always started at multiples of 4096 bytes.
+> 
+> An example diff:
+> 
+>  --- ok/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
+>  +++ broken/wp-includes/media.php    2022-04-06 05:51:50.000000000 +0200
+>  @@ -5348,7 +5348,7 @@
+>                  /**
+>                   * Filters the threshold for how many of the first content media elements to not lazy-load.
+>                   *
+>  -                * For these first content media elements, the `loading` attribute will be omitted. By default, this is the case
+>  +                * For these first content media elements, the `loading` efault, this is the case
+>                   * for only the very first content media element.
+>                   *
+>                   * @since 5.9.0
+>  @@ -5377,3 +5377,4 @@
+>   
+>          return $content_media_count;
+>   }
+>  +^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@^@
+> 
+> The corruption can be explained by WordPress commit
+> https://github.com/WordPress/WordPress/commit/07855db0ee8d5cff2 which
+> makes the file 31 bytes longer (185055 -> 185086).  The "broken" web
+> server sees the new contents until offset 184320 (= 45 * 4096), but
+> sees the old contents from there on; followed by 31 null bytes
+> (because the kernel reads past the end of the cache?).
+> 
+> All web servers mount a storage via NFSv3 with fscache.
+> 
+> My suspicion is that this is caused by a fscache regression in Linux
+> 5.17.  What do you think?
+> 
+> What can I do to debug this further, is there any information you
+> need?  I don't know much about how fscache works internally and how to
+> obtain information.
 
-> Convert kmap() to kmap_local_page()
->
-> With kmap_local_page(), the mapping is per thread, CPU local and not
-> globally visible.
+Thx for the report. Maybe a bisection is what's needed here, but lets
+see what David says, maybe he has a idea already.
 
-It's not clearer.  This is a general statement about the function.  You
-need to explain why it is appropriate to use it here.  Unless it is the
-case that all calls to kmap should be converted to call kmap_local_page.
+To be sure below issue doesn't fall through the cracks unnoticed, I'm
+adding it to regzbot, my Linux kernel regression tracking bot:
 
-julia
+#regzbot ^introduced v5.16..v5.17
+#regzbot title fscache: file contents are corrupted
+#regzbot ignore-activity
 
->
-> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-> ---
-> changes in V2:
-> 	fix kunmap_local path value to take address of the mapped page.
-> ---
-> changes in V3:
-> 	edit commit message to be clearer
-> ---
->  drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> index 2a5782063f4c..c14fc871dd41 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
-> @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
->
->  	frame_size >>= 1;
->
-> -	data = kmap(rx_buffer->page);
-> +	data = kmap_local_page(rx_buffer->page);
->
->  	if (data[3] != 0xFF ||
->  	    data[frame_size + 10] != 0xBE ||
->  	    data[frame_size + 12] != 0xAF)
->  		match = false;
->
-> -	kunmap(rx_buffer->page);
-> +	kunmap_local(data);
->
->  	return match;
->  }
-> --
-> 2.35.2
->
->
->
+If it turns out this isn't a regression, free free to remove it from the
+tracking by sending a reply to this thread containing a paragraph like
+"#regzbot invalid: reason why this is invalid" (without the quotes).
+
+Reminder for developers: when fixing the issue, please add a 'Link:'
+tags pointing to the report (the mail quoted above) using
+lore.kernel.org/r/, as explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'. Regzbot needs them to
+automatically connect reports with fixes, but they are useful in
+general, too.
+
+I'm sending this to everyone that got the initial report, to make
+everyone aware of the tracking. I also hope that messages like this
+motivate people to directly get at least the regression mailing list and
+ideally even regzbot involved when dealing with regressions, as messages
+like this wouldn't be needed then. And don't worry, if I need to send
+other mails regarding this regression only relevant for regzbot I'll
+send them to the regressions lists only (with a tag in the subject so
+people can filter them away). With a bit of luck no such messages will
+be needed anyway.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+
+P.S.: As the Linux kernel's regression tracker I'm getting a lot of
+reports on my table. I can only look briefly into most of them and lack
+knowledge about most of the areas they concern. I thus unfortunately
+will sometimes get things wrong or miss something important. I hope
+that's not the case here; if you think it is, don't hesitate to tell me
+in a public reply, it's in everyone's interest to set the public record
+straight.
+
+-- 
+Additional information about regzbot:
+
+If you want to know more about regzbot, check out its web-interface, the
+getting start guide, and the references documentation:
+
+https://linux-regtracking.leemhuis.info/regzbot/
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The last two documents will explain how you can interact with regzbot
+yourself if your want to.
+
+Hint for reporters: when reporting a regression it's in your interest to
+CC the regression list and tell regzbot about the issue, as that ensures
+the regression makes it onto the radar of the Linux kernel's regression
+tracker -- that's in your interest, as it ensures your report won't fall
+through the cracks unnoticed.
+
+Hint for developers: you normally don't need to care about regzbot once
+it's involved. Fix the issue as you normally would, just remember to
+include 'Link:' tag in the patch descriptions pointing to all reports
+about the issue. This has been expected from developers even before
+regzbot showed up for reasons explained in
+'Documentation/process/submitting-patches.rst' and
+'Documentation/process/5.Posting.rst'.

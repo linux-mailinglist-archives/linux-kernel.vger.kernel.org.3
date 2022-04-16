@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA2C503785
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:32:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0292550377F
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:19:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232535AbiDPQdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S232520AbiDPQVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 12:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232533AbiDPQdn (ORCPT
+        with ESMTP id S230108AbiDPQV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 12:33:43 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF26E3B3E5;
-        Sat, 16 Apr 2022 09:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650126669; x=1681662669;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZYQl1xcsGRkBXqpNo+f5+Kf+37WBSRVnXdfWEXD1MKI=;
-  b=RSPAlKGBBZlyFfTAzwnLyemryftyIa7hYb779vzQgaeCC+g3NwI0vFaU
-   f4Ltu+1Y6MqjFKd3TvW9CUoC7y9nfUbbbigOu2gT+MFwMi1f5SgQg8w5L
-   ICR/6i8d8/zpTM4+jjJjV6LIsGFmnD2alKnvc1/n+NUBGChCa29+yGu9r
-   TSrxmeVtEUzHtIwYV1ZPLzUCHI6lFatX/vL7aR1y0xB++/cjhBkfYrNgP
-   /uEP0d24Kwxvx5ddprjgZHHugcw4ccyb2237UUZUQfpy93kkq5iAcdXHj
-   wdg/2Bo87fmbvCMQn1ncczB8BXATQ76pcB5onOVckkRCRlLVuQZSDPx+y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263479615"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="263479615"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 09:30:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="574873330"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.135])
-  by orsmga008.jf.intel.com with ESMTP; 16 Apr 2022 09:30:56 -0700
-Date:   Sun, 17 Apr 2022 00:23:24 +0800
-From:   Xu Yilun <yilun.xu@intel.com>
-To:     Nava kishore Manne <nava.manne@xilinx.com>
-Cc:     mdf@kernel.org, hao.wu@intel.com, trix@redhat.com,
-        michal.simek@xilinx.com, linux-fpga@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        git@xilinx.com
-Subject: Re: [PATCH v4 1/5] fpga: zynq: Fix incorrect variable type
-Message-ID: <20220416162324.GD301222@yilunxu-OptiPlex-7050>
-References: <20220416133719.3382895-1-nava.manne@xilinx.com>
- <20220416133719.3382895-2-nava.manne@xilinx.com>
+        Sat, 16 Apr 2022 12:21:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C4CEE0E8;
+        Sat, 16 Apr 2022 09:18:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 37639B80022;
+        Sat, 16 Apr 2022 16:18:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6965C385A1;
+        Sat, 16 Apr 2022 16:18:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650125933;
+        bh=hZUjVSzOWisnpzTgPjHtWLSekh5zsdbQd0T6QOdJffo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=WAk6vBqJ+IMN/mIW+qtY3a2YI+Jdzd81m45+obkp8eFOqYzz5784yvCNrXnO6dThs
+         EADnRuea8IXYABZz6MplD8jLADUvHj92oS6UfMxy3xKy4BA3foB6Rnr1Gh6tkd8cPQ
+         U70RfmP3kmJZEw/M1wYH+XRQayq8aEwQdV6CMtWedih64YYMJICKb2csOMg4aJiXUi
+         JgIIskKrYKGoowAmV/HArcuUnCNTgpu0MNZ1yOTl2Cd6V3vfs6ml1xv67wpp5US4/p
+         XXCOvZC8d6DL2S1afTn2x3aw3f/FkETK1xj48liZYY5XPSKSsG7Lr6BZJWIEh0AGuT
+         S9R6W5nJEmQjg==
+Date:   Sat, 16 Apr 2022 17:26:51 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 2/2] iio: stk3310: Export near level property for
+ proximity sensor
+Message-ID: <20220416172651.695d4439@jic23-huawei>
+In-Reply-To: <20220415085018.35063-3-arnaud.ferraris@collabora.com>
+References: <20220415085018.35063-1-arnaud.ferraris@collabora.com>
+        <20220415085018.35063-3-arnaud.ferraris@collabora.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416133719.3382895-2-nava.manne@xilinx.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +60,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 07:07:15PM +0530, Nava kishore Manne wrote:
-> zynq_fpga_has_sync () API is expecting "u8 *" but the
-> formal parameter that was passed is of type "const char *".
-> fixes this issue by changing the buf type to "const char *"
-> 
-> This patch will also update zynq_fpga_has_sync () API description
-> to align with API functionality.
-> 
-> Signed-off-by: Nava kishore Manne <nava.manne@xilinx.com>
-> ---
-> Changes for v2:
->                 -None.
-> Changes for v3:
->                - Changed arg buf type to "const char *" as suggested by Tom.
->                - update zynq_fpga_has_sync () API description to align with API
->                  functionality.
-> Changes for v4:
->                - None.
+On Fri, 15 Apr 2022 10:50:18 +0200
+Arnaud Ferraris <arnaud.ferraris@collabora.com> wrote:
 
-There are some minor comments in v3, please check it.
+> This makes the value from which an object should be considered "near"
+> available to userspace. This hardware-dependent value should be set
+> in the device-tree.
+> 
+> Signed-off-by: Arnaud Ferraris <arnaud.ferraris@collabora.com>
+Hi Arnaud,
+
+Minor request to slightly modify how you do this inline.
+Otherwise looks good to me.
 
 Thanks,
-Yilun
 
+Jonathan
+
+> ---
+>  drivers/iio/light/stk3310.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
 > 
->  drivers/fpga/zynq-fpga.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-> index 426aa34c6a0d..ada07eea64bc 100644
-> --- a/drivers/fpga/zynq-fpga.c
-> +++ b/drivers/fpga/zynq-fpga.c
-> @@ -235,11 +235,11 @@ static irqreturn_t zynq_fpga_isr(int irq, void *data)
->  	return IRQ_HANDLED;
->  }
+> diff --git a/drivers/iio/light/stk3310.c b/drivers/iio/light/stk3310.c
+> index 1d02dfbc29d1..7792456323ef 100644
+> --- a/drivers/iio/light/stk3310.c
+> +++ b/drivers/iio/light/stk3310.c
+> @@ -106,6 +106,7 @@ struct stk3310_data {
+>  	struct mutex lock;
+>  	bool als_enabled;
+>  	bool ps_enabled;
+> +	uint32_t ps_near_level;
+>  	u64 timestamp;
+>  	struct regmap *regmap;
+>  	struct regmap_field *reg_state;
+> @@ -135,6 +136,25 @@ static const struct iio_event_spec stk3310_events[] = {
+>  	},
+>  };
 >  
-> -/* Sanity check the proposed bitstream. It must start with the sync word in
-> - * the correct byte order, and be dword aligned. The input is a Xilinx .bin
-> - * file with every 32 bit quantity swapped.
-> +/* Sanity check the proposed bitstream. The sync word must be found in the
-> + * correct byte order and it should be dword aligned. The input is a
-> + * Xilinx.bin file with every 32 bit quantity swapped.
->   */
-> -static bool zynq_fpga_has_sync(const u8 *buf, size_t count)
-> +static bool zynq_fpga_has_sync(const char *buf, size_t count)
->  {
->  	for (; count >= 4; buf += 4, count -= 4)
->  		if (buf[0] == 0x66 && buf[1] == 0x55 && buf[2] == 0x99 &&
-> -- 
-> 2.25.1
+> +static ssize_t stk3310_read_near_level(struct iio_dev *indio_dev,
+> +				       uintptr_t priv,
+> +				       const struct iio_chan_spec *chan,
+> +				       char *buf)
+> +{
+> +	struct stk3310_data *data = iio_priv(indio_dev);
+> +
+> +	return sprintf(buf, "%u\n", data->ps_near_level);
+> +}
+> +
+> +static const struct iio_chan_spec_ext_info stk3310_ext_info[] = {
+> +	{
+> +		.name = "nearlevel",
+> +		.shared = IIO_SEPARATE,
+> +		.read = stk3310_read_near_level,
+> +	},
+> +	{ /* sentinel */ }
+> +};
+> +
+>  static const struct iio_chan_spec stk3310_channels[] = {
+>  	{
+>  		.type = IIO_LIGHT,
+> @@ -151,6 +171,7 @@ static const struct iio_chan_spec stk3310_channels[] = {
+>  			BIT(IIO_CHAN_INFO_INT_TIME),
+>  		.event_spec = stk3310_events,
+>  		.num_event_specs = ARRAY_SIZE(stk3310_events),
+> +		.ext_info = stk3310_ext_info,
+>  	}
+>  };
+>  
+> @@ -581,6 +602,11 @@ static int stk3310_probe(struct i2c_client *client,
+>  	data = iio_priv(indio_dev);
+>  	data->client = client;
+>  	i2c_set_clientdata(client, indio_dev);
+> +
+> +	if (device_property_read_u32(&client->dev, "proximity-near-level",
+> +				     &data->ps_near_level))
+> +		data->ps_near_level = 0;
+
+Prefer this pattern.
+
+	data->ps_near_level = 0;
+	device_property_read_u32(&client->dev, "proximity-near-level",
+				 &data->ps_near_level);
+taking advantage of the fact that the output won't be set unless
+the property read succeeds.
+
+> +
+>  	mutex_init(&data->lock);
+>  
+>  	ret = stk3310_regmap_init(data);
+

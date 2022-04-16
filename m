@@ -2,34 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9AD50378E
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44AF3503791
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 18:35:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232558AbiDPQhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 12:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
+        id S232576AbiDPQhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 12:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbiDPQhR (ORCPT
+        with ESMTP id S232562AbiDPQhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 12:37:17 -0400
+        Sat, 16 Apr 2022 12:37:40 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A5DF0A;
-        Sat, 16 Apr 2022 09:34:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928B4186C4;
+        Sat, 16 Apr 2022 09:35:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1650126882; h=from:from:sender:reply-to:subject:subject:date:date:
+        s=mail; t=1650126906; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=w9/FAC8Z5gAmmI9gbu3oEtXUZTvFVNJbIuuy5fMe1ds=;
-        b=Q87IUL2WHqAgSNCHIRolTQ15nDpeBxyLuTY4MpL0/tMalB7nYJiiPJ0dWOHZeBGy/YEgId
-        f70Cj1on4xPfg/xT6mn3X+B83cxSp1ZJpnbdB+QGy3KauXGTj/NfEG3qREOQwiisoIgoxW
-        ollpzdJyBI460j1Fssn0R6QMsv9m0b8=
-Date:   Sat, 16 Apr 2022 17:34:31 +0100
+        bh=0ou3hBQuM/JxpcQtVbQxk8U/5Tg2lj4pFWqPeSDNeGc=;
+        b=M+xkmqPR9SGdenNCjls7+77JYR/Fbx6FvtQv3eHERK67ruY9c3WVIDnIYiX8wFHfXc1t5s
+        nqIrFqdi1HoLhWQq+Cr/La74a6ldsLy9GPVQ2dKIU7RWP133zkPz4/Zi9gads31KDcpot1
+        nGRBfYqQcsyhFZVoP7NIknNxbCTCjSU=
+Date:   Sat, 16 Apr 2022 17:34:55 +0100
 From:   Paul Cercueil <paul@crapouillou.net>
-Subject: Re: [PATCH v3 1/3] dt-bindings: dwc2: Add bindings for new Ingenic
- SoCs.
-To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Subject: Re: [PATCH v3 3/3] MIPS: Ingenic: Refresh USB nodes to match driver
+ changes.
+To:     Zhou Yanjie <zhouyanjie@wanyeetech.com>
 Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
         robh+dt@kernel.org, krzk+dt@kernel.org, tsbogend@alpha.franken.de,
         linux-usb@vger.kernel.org, linux-mips@vger.kernel.org,
@@ -38,10 +38,12 @@ Cc:     gregkh@linuxfoundation.org, hminas@synopsys.com,
         dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
         rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
         zhenwenjin@gmail.com, reimu@sudomaker.com
-Message-Id: <J1YFAR.2881WOMSYUZM2@crapouillou.net>
-In-Reply-To: <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
+Message-Id: <72YFAR.2F64W3SYY7912@crapouillou.net>
+In-Reply-To: <16eb34cf-508b-b387-b255-4b0a778bf53f@wanyeetech.com>
 References: <1649964337-114337-1-git-send-email-zhouyanjie@wanyeetech.com>
-        <1649964337-114337-2-git-send-email-zhouyanjie@wanyeetech.com>
+        <1649964337-114337-4-git-send-email-zhouyanjie@wanyeetech.com>
+        <WBZDAR.1ZU7BOCJE9S11@crapouillou.net>
+        <16eb34cf-508b-b387-b255-4b0a778bf53f@wanyeetech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
@@ -56,60 +58,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Zhou,
 
-Le ven., avril 15 2022 at 03:25:35 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
- Yanjie)=20
+Le sam., avril 16 2022 at 20:16:33 +0800, Zhou Yanjie=20
 <zhouyanjie@wanyeetech.com> a =C3=A9crit :
-> Add the dwc2 bindings for the JZ4775 SoC, the JZ4780 SoC, the X1000
-> SoC, the X1600 SoC, the X1700 SoC, the X1830 SoC, and the X2000 SoC
-> from Ingenic.
+> Hi Paul,
 >=20
-> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
-eetech.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
+> On 2022/4/15 =E4=B8=8B=E5=8D=8811:07, Paul Cercueil wrote:
+>> Hi Zhou,
+>>=20
+>>=20
+>> Le ven., avril 15 2022 at 03:25:37 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Z=
+hou Yanjie)=20
+>> =7F<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+>>> Refresh USB nodes in the jz4780.dtsi, x1000.dtsi, and x1830.dtsi=20
+>>> files.
+>>>=20
+>>> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wa=
+nyeetech.com>
+>>> ---
+>>>=20
+>>> Notes:
+>>>     v3:
+>>>     New patch.
+>>>=20
+>>>  arch/mips/boot/dts/ingenic/jz4780.dtsi | 2 +-
+>>>  arch/mips/boot/dts/ingenic/x1000.dtsi  | 2 +-
+>>>  arch/mips/boot/dts/ingenic/x1830.dtsi  | 2 +-
+>>>  3 files changed, 3 insertions(+), 3 deletions(-)
+>>>=20
+>>> diff --git a/arch/mips/boot/dts/ingenic/jz4780.dtsi=20
+>>> =7F=7Fb/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> index b998301..c182a65 100644
+>>> --- a/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/jz4780.dtsi
+>>> @@ -577,7 +577,7 @@
+>>>      };
+>>>=20
+>>>      otg: usb@13500000 {
+>>> -        compatible =3D "ingenic,jz4780-otg", "snps,dwc2";
+>>> +        compatible =3D "ingenic,jz4780-otg";
+>>=20
+>> Could you refresh my memory - why are the "snps,dwc2" fallback=20
+>> strings =7Fremoved?
+>>=20
+>> To me it seems like they should be here, since the OTG IP in Ingenic=20
+>> =7FSoCs is derived from the DWC2 IP.
 >=20
-> Notes:
->     v1->v2:
->     Add Rob Herring's Acked-by.
 >=20
->     v2->v3:
->     No change.
+> The reason is that Nikolaus found that the current jz4780.dtsi will=20
+> cause
+> dtbscheck to complain. After discussion, Nikolaus concluded three=20
+> feasible
+> solutions, see here:
+> https://lkml.org/lkml/2022/4/13/1097
 >=20
->  Documentation/devicetree/bindings/usb/dwc2.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml=20
-> b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> index 4cebce6..c6e8c0b 100644
-> --- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-> +++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-> @@ -17,6 +17,13 @@ properties:
->      oneOf:
->        - const: brcm,bcm2835-usb
->        - const: hisilicon,hi6220-usb
-> +      - const: ingenic,jz4775-otg
-> +      - const: ingenic,jz4780-otg
-> +      - const: ingenic,x1000-otg
+> And it seems that Krzysztof prefers the c) option.
 
-The driver handles the JZ4775, JZ4780 and X1000 the exact same way.=20
-Maybe the latter two should use the JZ4775 string as the fallback? Do=20
-you know if the IP cores are any different?
+Understood.
 
-> +      - const: ingenic,x1600-otg
-> +      - const: ingenic,x1700-otg
-> +      - const: ingenic,x1830-otg
-
-Same here (and btw, first time I hear about the X1600 and X1700 ;))
-
-Cheers,
 -Paul
 
-> +      - const: ingenic,x2000-otg
->        - items:
->            - const: rockchip,rk3066-usb
->            - const: snps,dwc2
-> --
-> 2.7.4
 >=20
+> Thanks and best regards!
+>=20
+>=20
+>>=20
+>> Cheers,
+>> -Paul
+>>=20
+>>>          reg =3D <0x13500000 0x40000>;
+>>>=20
+>>>          interrupt-parent =3D <&intc>;
+>>> diff --git a/arch/mips/boot/dts/ingenic/x1000.dtsi=20
+>>> =7F=7Fb/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> index 8bd27ede..343818a2 100644
+>>> --- a/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/x1000.dtsi
+>>> @@ -366,7 +366,7 @@
+>>>      };
+>>>=20
+>>>      otg: usb@13500000 {
+>>> -        compatible =3D "ingenic,x1000-otg", "snps,dwc2";
+>>> +        compatible =3D "ingenic,x1000-otg";
+>>>          reg =3D <0x13500000 0x40000>;
+>>>=20
+>>>          interrupt-parent =3D <&intc>;
+>>> diff --git a/arch/mips/boot/dts/ingenic/x1830.dtsi=20
+>>> =7F=7Fb/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> index 2595df8..6aff19f 100644
+>>> --- a/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> +++ b/arch/mips/boot/dts/ingenic/x1830.dtsi
+>>> @@ -355,7 +355,7 @@
+>>>      };
+>>>=20
+>>>      otg: usb@13500000 {
+>>> -        compatible =3D "ingenic,x1830-otg", "snps,dwc2";
+>>> +        compatible =3D "ingenic,x1830-otg";
+>>>          reg =3D <0x13500000 0x40000>;
+>>>=20
+>>>          interrupt-parent =3D <&intc>;
+>>> --
+>>> 2.7.4
+>>>=20
+>>=20
 
 

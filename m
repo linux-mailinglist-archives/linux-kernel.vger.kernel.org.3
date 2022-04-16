@@ -2,143 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB9245036B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:35:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61555036BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232026AbiDPNU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 09:20:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35192 "EHLO
+        id S232035AbiDPNVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 09:21:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiDPNUt (ORCPT
+        with ESMTP id S230299AbiDPNVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 09:20:49 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C6348338;
-        Sat, 16 Apr 2022 06:18:17 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id t1so13536751wra.4;
-        Sat, 16 Apr 2022 06:18:17 -0700 (PDT)
+        Sat, 16 Apr 2022 09:21:34 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2082.outbound.protection.outlook.com [40.107.244.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A061548390;
+        Sat, 16 Apr 2022 06:19:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SoQzQkfF6jAdtiH1Ra3dWRE4FTGsDnLANjD7QJ1DkpDDzA7kCkJPvycG+YBFOjmEx7DbA8kwyCYprVlpEZrRbrftaVFAWAzIjoIM0qfFMDzs+7FOgkQH7R6/JTNE+FDhH1IZxMKSMbhRG6S1En9AkCD8GsKd6YafBgxI/IGdM1eFYGHiyeoRryKNsOIINV/m0cokTOJeTAJl8w2nx31z49m/nTOVDWrFoXQt1AMvP/DWkTuCfRKhVwG2px5kYILszTlmbKB0PXUfeIIp60fR7hlJl/qv9FdvZT4a+hc7d+mLIeuRJuYi/36/SCduNyOEd19JnMe5OLEq4odbcsyGMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Omw3v7vglyreO+AQJzrFKP9yt2w2kGc0djbA8Nw7k7E=;
+ b=AW9ZFsu2BGL94WDRIEYRbcIOCbeviVnGHE52d8fD0nNjdbRXjldljdCkzb3/k9MpCL7okBJEsFKAiva5x8oO2SVuh6/ddiHFHmZg8Xn4uy+mkKPoRTaY10JOhoa91oe8ZGiKBjoT/DCj/H32kXCTgf5XJ9qAXYeD1Y9J6x1dS3zIJ/ZzOm2XuEDsAjPS6If2cM3wbGjqvPT7Wy63X/3K2UX1n8lgP9L5O71xeT5Dep0DsiUCTMyC1hBPdimwEythelrd4pBrArIQDVC9VGZ8Gxs27EdhIN4OhdqB3dtKDwBISyz8X41kQkAqUJT1YPQDj2VVXMZRSE6mUx+NO1RBxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=xilinx.com; dmarc=pass action=none header.from=xilinx.com;
+ dkim=pass header.d=xilinx.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=UXVIgoFYs8vsH8vpoCLGmkcmYfTHRALX33Ntdgh3h50=;
-        b=i5R7voAqMw3IkNbZ205uB3jZh7KrTyvi4z2SN5EULNf3WJEl+edvTXfn1zC8FtiiUn
-         YFVTnzqbWUhfpHsqfdd+9z+6UD9inu0TRL7ftH81gbunCkZdwg0BAH6vgjxCQTsaH9Th
-         85/PeFeeuxShAatHYiomslhvUrbFX0jXYwRdZGiNR742qG4umdSm5berad8Gf+YB7S1S
-         flXaZetPTQrIWrqLCsAFv+AoGXDZmx6KvkPSDj3lgMPKhM4zXGMdjqmLB4J0/QjuH/3A
-         R/MI66r9eNm0leJG0C4U40tXX+WdnjDsj693/hnLnEXhuF4jsGOOmVTdB3s5XQzCpJSX
-         qQ6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=UXVIgoFYs8vsH8vpoCLGmkcmYfTHRALX33Ntdgh3h50=;
-        b=va2FLJRdKrvLrBpPAPJCobHD37dFj+k3NbIHZpaH0rs7kMIiIycoh5YLTsCk/fExp7
-         11bmL4gQ8kf13Vq81s56nvKsl4umZRSiLbthoHOaR1qWBvHEmftKQX7TaeVoxO4KPvnr
-         nTM5LWs20JZ+aZwwlIgkwUA80SXBQExh6F9ET2NZUgUd9Th1Y0bWKnYuQpg3r3v1xQi7
-         p5oeGBhWmDszsywkZnqXvFu2HYnsxcaWr6HvtWt27JMgWI1VyS8AfueFOpCkjPW334OC
-         IhZraTqgy02vvM+n3hyF3edHb5YW8TH0PtC5TTSvHG1mZw3c0MJDoiXGHzYCjlBGIugi
-         3ySA==
-X-Gm-Message-State: AOAM533dYIOeFCt/utB4jkjzV9Io0OWV/jQqB4XmEPcI/kXlbgHClkgQ
-        p0Y5oKgsxB7dl4smg1WT2Ds=
-X-Google-Smtp-Source: ABdhPJyJ06sKHsPB4+wIBhVC0HslxWUz7QAdEMKT8yyqPoyR/rswgpyfI3awyjFXTK+20cmJdmZsTQ==
-X-Received: by 2002:a05:6000:1684:b0:209:7fda:e3a with SMTP id y4-20020a056000168400b002097fda0e3amr2454676wrd.709.1650115095860;
-        Sat, 16 Apr 2022 06:18:15 -0700 (PDT)
-Received: from [192.168.1.5] ([197.57.90.163])
-        by smtp.gmail.com with ESMTPSA id d6-20020a5d5386000000b0020a79c74bedsm4451623wrv.79.2022.04.16.06.18.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 06:18:15 -0700 (PDT)
-Message-ID: <857a2d22-5d0f-99d6-6686-98d50e4491d5@gmail.com>
-Date:   Sat, 16 Apr 2022 15:18:13 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
- kmap_local_page()
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Omw3v7vglyreO+AQJzrFKP9yt2w2kGc0djbA8Nw7k7E=;
+ b=X17QdSJmlcep+/3pM8yeGJyF5AqzFxhMAjsgO+w6nJkb1eD8+K0x7Sh5yY1kJmOylkAA92MViq+21y51zA8/CYF/zpwkehX0rfThDHfS5mGUVMzwOdoXhdxwT0oMJIR/djDj2kufZ/IyhrFalqASusdSfDP6WnJgoIhmT682nis=
+Received: from SN6PR02MB4576.namprd02.prod.outlook.com (2603:10b6:805:af::17)
+ by BN8PR02MB5827.namprd02.prod.outlook.com (2603:10b6:408:b5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Sat, 16 Apr
+ 2022 13:18:59 +0000
+Received: from SN6PR02MB4576.namprd02.prod.outlook.com
+ ([fe80::f1c0:bdc3:9a56:d6d0]) by SN6PR02MB4576.namprd02.prod.outlook.com
+ ([fe80::f1c0:bdc3:9a56:d6d0%7]) with mapi id 15.20.5164.020; Sat, 16 Apr 2022
+ 13:18:58 +0000
+From:   Nava kishore Manne <navam@xilinx.com>
+To:     Xu Yilun <yilun.xu@intel.com>
+CC:     "mdf@kernel.org" <mdf@kernel.org>,
+        "hao.wu@intel.com" <hao.wu@intel.com>,
+        "trix@redhat.com" <trix@redhat.com>,
+        Michal Simek <michals@xilinx.com>,
+        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, git <git@xilinx.com>
+Subject: RE: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
+  description
+Thread-Topic: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
+  description
+Thread-Index: AQHYSkx76o6yFpDLxk2LqWU+DOT2lazylAGw
+Date:   Sat, 16 Apr 2022 13:18:58 +0000
+Message-ID: <SN6PR02MB45764FB70123E63048963C73C2F19@SN6PR02MB4576.namprd02.prod.outlook.com>
+References: <20220403051641.3867610-1-nava.manne@xilinx.com>
+ <20220403051641.3867610-6-nava.manne@xilinx.com>
+ <20220405053547.GA249845@yilunxu-OptiPlex-7050>
+ <SN6PR02MB45766BEFCA6532873271099FC2E69@SN6PR02MB4576.namprd02.prod.outlook.com>
+ <20220407064807.GA256966@yilunxu-OptiPlex-7050>
+In-Reply-To: <20220407064807.GA256966@yilunxu-OptiPlex-7050>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ira.weiny@intel.com
-References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
- <alpine.DEB.2.22.394.2204161331080.3501@hadrien>
-From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-In-Reply-To: <alpine.DEB.2.22.394.2204161331080.3501@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=xilinx.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 369e6d31-cbdd-40c4-0142-08da1fabaa96
+x-ms-traffictypediagnostic: BN8PR02MB5827:EE_
+x-ld-processed: 657af505-d5df-48d0-8300-c31994686c5c,ExtAddr
+x-microsoft-antispam-prvs: <BN8PR02MB5827FDB3B43B68B6366A7687C2F19@BN8PR02MB5827.namprd02.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: K4eFudrEVymXWPliImrZWsqmJ0kkKTWAgNqlAX7VZAVDePFXV9IOEWal/+BxxNkDs/ybvy+V3hcgzJyvuT+uvcB7ZR46D6OH8odx5BJfyhJBsi1hM2zHJJX3/F3iUzO4fq7QnSxqLOC5wfx3yi4qBwlQ7esBlW9UoRUL052Azvz2NRJR9qvrYO05hYmzjC9REO27fswI8xBw/vHdXNK0n846bfOtx5SFagOQ0ALMNvFkjbMnko6pCikDsBk4oT8+lillEf0rIWdzZecYFzip67g026PYJtqktoGM7DosiTuN72l3M+KYvOradB/FfGa0DPCr3B7ErHRBe/GDFpqiVn5LgonqgHCxyLgXePNG03FG4jYTDpkQQcdBdSMbHzGvK2vZPsQYTnboC7UmNN/9/PT1WNGdUXwaPneH1ca+Fcx4nf6/JzL0za1+Ea35GbLhkc1hQhpaE8KibYQlw3SLlg0Jsa1xJO8Zxxl+9WA0bKnzAtFhSMrUEc5fz/4QXcSw4sUGzL3H8zOyW2JCZcwXRLfUIy0MYpuCl8hVAddaI6l6tbbmHMI62oWE6gC/hTtfph/RhXioD5NNa7X6BDqsCqGbMSlVGgOluI719waWDiOyqBewa7JvhTK7OCooxxaacRhgISdGhQK77YaKAKFNN+5Fu/HVbK3Jt8hvFon8WoVD76z6fSiRXyMo4XXJDczme9Cp5q6TANJudSwpd/kzbhxTw80j9kj0xBByPakL8ks=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR02MB4576.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(71200400001)(26005)(186003)(2906002)(86362001)(54906003)(107886003)(6916009)(316002)(7696005)(9686003)(66946007)(76116006)(55016003)(38100700002)(83380400001)(8676002)(66556008)(66446008)(66476007)(64756008)(33656002)(53546011)(4326008)(38070700005)(508600001)(6506007)(5660300002)(122000001)(52536014)(8936002)(21314003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?IEQvucnTHPTIbHUoaS98Tj91Jyz+TfsiBaMj6ZgkE+bkPqsM+bqpy5IP22gD?=
+ =?us-ascii?Q?t/no/GpeC0qp4/kCCXBwc2bdBr2DJfkgRWsyZeViV+JgsqsldBAXLZmdApJ2?=
+ =?us-ascii?Q?tIm+3O9hzcmUr2AlOU5swpZ7mbsgQoK2qNnKVVNR6T75vqR9opjZdo4kzrzJ?=
+ =?us-ascii?Q?skYzK7mmdrQstvplR4ttGAoaTZaIkUDM273fOaCZiwirKf9N6nmucI37kNqr?=
+ =?us-ascii?Q?qombTKsiVuxUImvkRfik/xY55PwvxbXEYhm03eV7e6HmH0M9g2g5EJw2Aawg?=
+ =?us-ascii?Q?HYwi/CJpLo1u+q+tDcelrVp7Cg5euf2xKy3vx3gvyvRfZmFIqeVy9i2fNUcQ?=
+ =?us-ascii?Q?ptFuXqUo+5ki/uNZgv9Z4044E1lidcX94WvlE14ZW2B8IvRqRlB/F/5LH+7D?=
+ =?us-ascii?Q?0evk1SULkHoXZNCPiIlkqEeJIkAG+lgduB2SBjsenNxf80q2CwVnZe85/mtU?=
+ =?us-ascii?Q?TdMOOTYAQ9xuzBYCeEUgQlPIl3I6NzrUnhoH9nDrN6e+2dXPZDe38lU0SKi7?=
+ =?us-ascii?Q?c3RPBypq5rKbcc5aLcYu4XPnirUyKmlKq3jM8yDL3CVZdMMWmPOSDKoL5MK4?=
+ =?us-ascii?Q?GRwqMiGJeHkePxqaKBvMzHZVamiZMBTrzDd0UB5siscPCqJpeswPU5FB3Hrf?=
+ =?us-ascii?Q?sR3eeku+sKgAwtf0MGGgkd2MjeKcrnmMDDuC1eMt7Fxv4tLWlBIlzfjP9dqf?=
+ =?us-ascii?Q?2QMk8RdXmZMXtX6ioznhNPZ6JuC36h6vpgPfjP1+iaeIza2oSn2Uea8ldnl/?=
+ =?us-ascii?Q?js/T7qCBMNyFTvxc1ynjLyg0rE96qN07kVhZWAQ9n0V5N5qnNpv0fHZoXNOp?=
+ =?us-ascii?Q?Zz4gA/1z7oY5Oh0yFn83h0bJx5p2nM7s9fIHmIDu25xrLBtJvVFmX/reGZ8i?=
+ =?us-ascii?Q?UPWqvFZyRRmdvIuLG2qdotARCfvdoOVizkApq0a1Vy8K4lrcmSjQ3vMX1riU?=
+ =?us-ascii?Q?o1nZ16QPWBdnW+sJCSa7as7FGI5Db7pi/eMFGsZSy9WrXpYOGAAlFFYpPBNH?=
+ =?us-ascii?Q?RTLYLV/EkY6vZYDsJpU9O9+6QS68+a2ZLhqjGUIhn2NHWzTVHrMRh0X6XuU2?=
+ =?us-ascii?Q?eNn/pv9rQrGoAuLmRehuDyYmaR6gZzCdyKHeYTlfVTUQbxNocEqEWExb/f2y?=
+ =?us-ascii?Q?TO6SR10oN4UUORHs3bJetpg1JqedV4FlvIy8tHVwJlm8pdhjn77e6Ek1HbNt?=
+ =?us-ascii?Q?dBuApXvTCICDkuj256BRYqtv1LfF9EsbLEPc9GC/sjKtwOjn2Fpp+JLqY9Uc?=
+ =?us-ascii?Q?NFfJvTdq6g6pb4odHMF7gq21Clg17QtNQEpJMLOo+5smMSx9uVvk1MUTmIgF?=
+ =?us-ascii?Q?bLGJUShxmAtBm1twyDyg8hY+SAz23/zLEi6sFKg0MawqpMCr5kMEzZZuoqnN?=
+ =?us-ascii?Q?iV/i7q/fxok7zlx9zdFSSlzRDPmopgakDEZGKOMtgFgq+dCZYWxBK00z94j5?=
+ =?us-ascii?Q?CTM3K+EqvVmTuIEZLLEipWrSHlTsCyAbWY8cAaO8xox1pUeT2Ue4HpfIzPR1?=
+ =?us-ascii?Q?sENYhRbQ7Ord1hwRpw3utILh5e8njKzaIMND2p2jf1ZEIdlC7/ZHeVd8JlKW?=
+ =?us-ascii?Q?+/zFoCuWeVyTcMXRNJaUdnJYHJIW+b7Xu/nvvcqSsChF+/l459Vqf5XQuHbW?=
+ =?us-ascii?Q?HPYQ6W++zgp/9cM910uxlJCXnlIxDolhl/UhTWjEPSRMyMln45qZVmLTo9Sf?=
+ =?us-ascii?Q?S13kEOHY2qAJ32jEPVB9JwMZkYsV8Qve8KhqFXiIkhNS2Rvp41otLfEI+koS?=
+ =?us-ascii?Q?BDlUT3VR7g=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR02MB4576.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 369e6d31-cbdd-40c4-0142-08da1fabaa96
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Apr 2022 13:18:58.7078
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 4Bbm568arXSOSz+/+dRAriOm6DsoX0oH4CbGlvaj/V77P5fNzQkAoCih1lUjCiFOGkX6LKLe7PXNjs89snDEhA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR02MB5827
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Yilun,
 
-On ١٦‏/٤‏/٢٠٢٢ ١٣:٣١, Julia Lawall wrote:
->
-> On Sat, 16 Apr 2022, Alaa Mohamed wrote:
->
->> Convert kmap() to kmap_local_page()
->>
->> With kmap_local_page(), the mapping is per thread, CPU local and not
->> globally visible.
-> It's not clearer.
-I mean this " fix kunmap_local path value to take address of the mapped 
-page" be more clearer
-> This is a general statement about the function.  You
-> need to explain why it is appropriate to use it here.  Unless it is the
-> case that all calls to kmap should be converted to call kmap_local_page.
-It's required to convert all calls kmap to kmap_local_page. So, I don't 
-what should the commit message be?
+> -----Original Message-----
+> From: Xu Yilun <yilun.xu@intel.com>
+> Sent: Thursday, April 7, 2022 12:18 PM
+> To: Nava kishore Manne <navam@xilinx.com>
+> Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
+> <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
+> kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
+> <git@xilinx.com>
+> Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing kernel-doc
+> description
+>=20
+> On Thu, Apr 07, 2022 at 05:31:39AM +0000, Nava kishore Manne wrote:
+> > Hi Yilun,
+> >
+> > 	Thanks for providing the review comments.
+> > Please find my response inline.
+> >
+> > > -----Original Message-----
+> > > From: Xu Yilun <yilun.xu@intel.com>
+> > > Sent: Tuesday, April 5, 2022 11:06 AM
+> > > To: Nava kishore Manne <navam@xilinx.com>
+> > > Cc: mdf@kernel.org; hao.wu@intel.com; trix@redhat.com; Michal Simek
+> > > <michals@xilinx.com>; linux-fpga@vger.kernel.org; linux-
+> > > kernel@vger.kernel.org; linux-arm-kernel@lists.infradead.org; git
+> > > <git@xilinx.com>
+> > > Subject: Re: [PATCH v3 5/5] fpga: fpga-region: Add missing
+> > > kernel-doc description
+> > >
+> > > On Sun, Apr 03, 2022 at 10:46:41AM +0530, Nava kishore Manne wrote:
+> > > > Fixed the warnings: No description found for return value of 'xxx'
+> > >
+> > > The commit message is not clear. There are descriptions for some
+> > > functions, but not in right format.
+> > >
+> > I agree for some functions has description but not in the right format.
+> > The "Description Not exits" and  "Description not in the right format" =
+in
+> both cases the tool will report the same warning ie; " warnings: No
+> description found for return value of 'xxx'"
+>=20
+> Thanks for the info. It would be better we describe the root cause in com=
+mit
+> message along with the robot reports.
+>=20
+> And also change the subject please.
+>=20
+Will fix
+> > This patch address the above warning. So to make it relevant I have add=
+ed
+> the same in the commit msg.
+>=20
+> Adding the same commit message may not be a good way, for this case you
+> could just combine them into one commit.
+>=20
+Will fix.
 
-Is this will be good :
+Regards,
+Navakishore.
 
-"kmap_local_page() was recently developed as a replacement for kmap().  The
-kmap_local_page() creates a mapping which is restricted to local use by a
-single thread of execution. "
->
-> julia
->
->> Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->> ---
->> changes in V2:
->> 	fix kunmap_local path value to take address of the mapped page.
->> ---
->> changes in V3:
->> 	edit commit message to be clearer
->> ---
->>   drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> index 2a5782063f4c..c14fc871dd41 100644
->> --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->> @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
->>
->>   	frame_size >>= 1;
->>
->> -	data = kmap(rx_buffer->page);
->> +	data = kmap_local_page(rx_buffer->page);
->>
->>   	if (data[3] != 0xFF ||
->>   	    data[frame_size + 10] != 0xBE ||
->>   	    data[frame_size + 12] != 0xAF)
->>   		match = false;
->>
->> -	kunmap(rx_buffer->page);
->> +	kunmap_local(data);
->>
->>   	return match;
->>   }
->> --
->> 2.35.2
->>
->>
->>

@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 929C55035AB
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 11:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6CAE5035BD
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 11:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231233AbiDPJWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 05:22:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S230407AbiDPJ0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 05:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiDPJWB (ORCPT
+        with ESMTP id S229507AbiDPJZ6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 05:22:01 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A1F749F2D;
-        Sat, 16 Apr 2022 02:19:30 -0700 (PDT)
-Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KgSLJ72yCz1HBtM;
-        Sat, 16 Apr 2022 17:18:48 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- kwepemi500014.china.huawei.com (7.221.188.232) with Microsoft SMTP Server
+        Sat, 16 Apr 2022 05:25:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BB11031;
+        Sat, 16 Apr 2022 02:23:27 -0700 (PDT)
+Received: from kwepemi100024.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KgSNp34w6zFpcL;
+        Sat, 16 Apr 2022 17:20:58 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi100024.china.huawei.com (7.221.188.87) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 17:19:28 +0800
-Received: from localhost.localdomain (10.67.165.24) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 17:19:28 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <huangguangbin2@huawei.com>,
-        <chenhao288@hisilicon.com>
-Subject: [PATCH net-next 9/9] net: hns3: remove unnecessary line wrap for hns3_set_tunable
-Date:   Sat, 16 Apr 2022 17:13:43 +0800
-Message-ID: <20220416091343.35817-10-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220416091343.35817-1-huangguangbin2@huawei.com>
-References: <20220416091343.35817-1-huangguangbin2@huawei.com>
+ 15.1.2375.24; Sat, 16 Apr 2022 17:23:25 +0800
+Received: from huawei.com (10.175.127.227) by kwepemm600009.china.huawei.com
+ (7.193.23.164) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 16 Apr
+ 2022 17:23:24 +0800
+From:   Yu Kuai <yukuai3@huawei.com>
+To:     <jack@suse.cz>, <paolo.valente@linaro.org>, <axboe@kernel.dk>,
+        <tj@kernel.org>
+CC:     <linux-block@vger.kernel.org>, <cgroups@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yukuai3@huawei.com>,
+        <yi.zhang@huawei.com>
+Subject: [PATCH -next v2 0/5] support concurrent sync io for bfq on a specail occasion
+Date:   Sat, 16 Apr 2022 17:37:48 +0800
+Message-ID: <20220416093753.3054696-1-yukuai3@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.165.24]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600016.china.huawei.com (7.193.23.20)
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
@@ -53,47 +52,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hao Chen <chenhao288@hisilicon.com>
+Changes in v2:
+ - Use a different aporch to count root group, which is much simple.
 
-Remove unnecessary line wrap for hns3_set_tunable to improve
-function readability.
+Currently, bfq can't handle sync io concurrently as long as they
+are not issued from root group. This is because
+'bfqd->num_groups_with_pending_reqs > 0' is always true in
+bfq_asymmetric_scenario().
 
-Signed-off-by: Hao Chen <chenhao288@hisilicon.com>
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+The way that bfqg is counted to 'num_groups_with_pending_reqs':
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index 51ee8adab6a3..1e641083bd60 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -1172,8 +1172,7 @@ static int hns3_set_ringparam(struct net_device *ndev,
- 
- 	tmp_rings = hns3_backup_ringparam(priv);
- 	if (!tmp_rings) {
--		netdev_err(ndev,
--			   "backup ring param failed by allocating memory fail\n");
-+		netdev_err(ndev, "backup ring param failed by allocating memory fail\n");
- 		return -ENOMEM;
- 	}
- 
-@@ -1875,13 +1874,11 @@ static int hns3_set_tunable(struct net_device *netdev,
- 		    (!priv->ring->tx_spare && new_tx_spare_buf_size != 0)) {
- 			int ret1;
- 
--			netdev_warn(netdev,
--				    "change tx spare buf size fail, revert to old value\n");
-+			netdev_warn(netdev, "change tx spare buf size fail, revert to old value\n");
- 			ret1 = hns3_set_tx_spare_buf_size(netdev,
- 							  old_tx_spare_buf_size);
- 			if (ret1) {
--				netdev_err(netdev,
--					   "revert to old tx spare buf size fail\n");
-+				netdev_err(netdev, "revert to old tx spare buf size fail\n");
- 				return ret1;
- 			}
- 
+Before this patchset:
+ 1) root group will never be counted.
+ 2) Count if bfqg or it's child bfqgs have pending requests.
+ 3) Don't count if bfqg and it's child bfqgs complete all the requests.
+
+After this patchset:
+ 1) root group is counted.
+ 2) Count if bfqg have pending requests.
+This is because, for example:
+if sync ios are issued from cgroup /root/c1/c2, root, c1 and c2 will all
+be counted into 'num_groups_with_pending_reqs', which makes it impossible
+to handle sync ios concurrently.
+
+ 3) Don't count if bfqg complete all the requests.
+This is because, for example:
+t1 issue sync io on root group, t2 and t3 issue sync io on the same child
+group. num_groups_with_pending_reqs is 2 now. After t1 stopped,
+num_groups_with_pending_reqs is still 2. sync io from t2 and t3 still can't
+be handled concurrently.
+
+fio test script: startdelay is used to avoid queue merging
+[global]
+filename=/dev/nvme0n1
+allow_mounted_write=0
+ioengine=psync
+direct=1
+ioscheduler=bfq
+offset_increment=10g
+group_reporting
+rw=randwrite
+bs=4k
+
+[test1]
+numjobs=1
+
+[test2]
+startdelay=1
+numjobs=1
+
+[test3]
+startdelay=2
+numjobs=1
+
+[test4]
+startdelay=3
+numjobs=1
+
+[test5]
+startdelay=4
+numjobs=1
+
+[test6]
+startdelay=5
+numjobs=1
+
+[test7]
+startdelay=6
+numjobs=1
+
+[test8]
+startdelay=7
+numjobs=1
+
+test result:
+running fio on root cgroup
+v5.18-rc1:	   550 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+running fio on non-root cgroup
+v5.18-rc1:	   349 Mib/s
+v5.18-rc1-patched: 550 Mib/s
+
+Yu Kuai (5):
+  block, bfq: cleanup bfq_weights_tree add/remove apis
+  block, bfq: add fake weight_counter for weight-raised queue
+  bfq, block: record how many queues have pending requests in bfq_group
+  block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+  block, bfq: do not idle if only one cgroup is activated
+
+ block/bfq-cgroup.c  |  1 +
+ block/bfq-iosched.c | 90 +++++++++++++++++++--------------------------
+ block/bfq-iosched.h | 26 ++++++-------
+ block/bfq-wf2q.c    | 30 +++------------
+ 4 files changed, 56 insertions(+), 91 deletions(-)
+
 -- 
-2.33.0
+2.31.1
 

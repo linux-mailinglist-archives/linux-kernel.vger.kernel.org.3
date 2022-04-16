@@ -2,39 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2AA50360C
+	by mail.lfdr.de (Postfix) with ESMTP id 0750B503609
 	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:51:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231531AbiDPKyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 06:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S231545AbiDPKyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 06:54:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231504AbiDPKyR (ORCPT
+        with ESMTP id S231519AbiDPKyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 06:54:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C093A5CF;
-        Sat, 16 Apr 2022 03:51:45 -0700 (PDT)
-Received: from kwepemi100008.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KgVJV3RRMzCr5w;
-        Sat, 16 Apr 2022 18:47:22 +0800 (CST)
+        Sat, 16 Apr 2022 06:54:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8753A73F;
+        Sat, 16 Apr 2022 03:51:46 -0700 (PDT)
+Received: from kwepemi500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KgVPW0B02zgY9w;
+        Sat, 16 Apr 2022 18:51:43 +0800 (CST)
 Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
- kwepemi100008.china.huawei.com (7.221.188.57) with Microsoft SMTP Server
+ kwepemi500001.china.huawei.com (7.221.188.114) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 18:51:43 +0800
+ 15.1.2375.24; Sat, 16 Apr 2022 18:51:45 +0800
 Received: from localhost.localdomain (10.67.165.24) by
  kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 16 Apr 2022 18:51:43 +0800
+ 15.1.2375.24; Sat, 16 Apr 2022 18:51:44 +0800
 From:   Weili Qian <qianweili@huawei.com>
 To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
 CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
         <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>,
         Weili Qian <qianweili@huawei.com>
-Subject: [PATCH 0/4] crypto: hisilicon/qm - misc fixes
-Date:   Sat, 16 Apr 2022 18:45:55 +0800
-Message-ID: <20220416104559.10826-1-qianweili@huawei.com>
+Subject: [PATCH 1/4] crypto: hisilicon/qm - remove unused function declaration
+Date:   Sat, 16 Apr 2022 18:45:56 +0800
+Message-ID: <20220416104559.10826-2-qianweili@huawei.com>
 X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20220416104559.10826-1-qianweili@huawei.com>
+References: <20220416104559.10826-1-qianweili@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -51,21 +53,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset removes some unused functions and sets the unused outside
-qm.c functons to static.
+The 'hisi_qm_get_hw_version' function is unused, so remove the function
+declaration.
 
-Weili Qian (4):
-  crypto: hisilicon/qm - remove unused function declaration
-  crypto: hisilicon/qm - set function with static
-  crypto: hisilicon/qm - replace hisi_qm_release_qp() with
-    hisi_qm_free_qps()
-  crypto: hisilicon/qm - remove hisi_qm_get_free_qp_num()
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+---
+ include/linux/hisi_acc_qm.h | 1 -
+ 1 file changed, 1 deletion(-)
 
- drivers/crypto/hisilicon/qm.c             | 37 ++++++++---------------
- drivers/crypto/hisilicon/zip/zip_crypto.c |  2 +-
- include/linux/hisi_acc_qm.h               |  5 ---
- 3 files changed, 13 insertions(+), 31 deletions(-)
-
+diff --git a/include/linux/hisi_acc_qm.h b/include/linux/hisi_acc_qm.h
+index 177f7b7cd414..0b1585bc37f9 100644
+--- a/include/linux/hisi_acc_qm.h
++++ b/include/linux/hisi_acc_qm.h
+@@ -441,7 +441,6 @@ int hisi_qp_send(struct hisi_qp *qp, const void *msg);
+ int hisi_qm_get_free_qp_num(struct hisi_qm *qm);
+ int hisi_qm_get_vft(struct hisi_qm *qm, u32 *base, u32 *number);
+ void hisi_qm_debug_init(struct hisi_qm *qm);
+-enum qm_hw_ver hisi_qm_get_hw_version(struct pci_dev *pdev);
+ void hisi_qm_debug_regs_clear(struct hisi_qm *qm);
+ int hisi_qm_sriov_enable(struct pci_dev *pdev, int max_vfs);
+ int hisi_qm_sriov_disable(struct pci_dev *pdev, bool is_frozen);
 -- 
 2.33.0
 

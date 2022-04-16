@@ -2,107 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15E44503490
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B27503492
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 08:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiDPG42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 02:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S229862AbiDPG5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 02:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiDPG40 (ORCPT
+        with ESMTP id S229445AbiDPG5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 02:56:26 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0923A10EC44
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 23:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650092036; x=1681628036;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fAE2xMjKJTAYYfojBwucYXlSRxc0bm4fLjTRmufZB7M=;
-  b=Z5fgMA8KewDZd6KXhxI6LOfAe5LxrsXDi8UdIu6Ka1dooKzFP/9bW0L5
-   XsIo1aWgmt+AkNWmh4ccvOYMSc5RBRBt7DfId9cIkpLtAxx1pe5OUegZv
-   v8DN+ngIDe2VlhvPASlw16R2xy1FNZ5lAirf5ykewvI370aDA5lbvTZ95
-   2F7HqaygwMvPcJAcaDy/02kkuDlkWdqQMqeoMBXdriVVfMLEDhTzIy/ax
-   IJwG1Qxo1dj20ChATlyfZfQmTnE2dnQkHFQ1iS5gwtAiIgmRwaZp1eZvq
-   AqQACb8H9McKcU8ofHBRzwHl07NpD3G+ZC1KBRf3M4tfbPM5pgNsIXI2h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="326175880"
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="326175880"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 23:53:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="662698366"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 15 Apr 2022 23:53:53 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfcJc-0002sf-MQ;
-        Sat, 16 Apr 2022 06:53:52 +0000
-Date:   Sat, 16 Apr 2022 14:52:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhi Wang <zhi.a.wang@intel.com>
-Cc:     kbuild-all@lists.01.org, zhenyu.z.wang@intel.com,
-        terrence.xu@intel.com, intel-gvt-dev@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>
-Subject: [intel-gvt:topic/for-christoph 1/37]
- drivers/gpu/drm/i915/intel_gvt_mmio_table.c:7:10: fatal error:
- display/intel_dmc_regs.h: No such file or directory
-Message-ID: <202204161401.AtiDTPRF-lkp@intel.com>
+        Sat, 16 Apr 2022 02:57:14 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6FCECFE;
+        Fri, 15 Apr 2022 23:54:41 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id p189so5987668wmp.3;
+        Fri, 15 Apr 2022 23:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3npAyY8rPKuk01RaNVhM66JpVvQwy4LZnWG1HHtuULM=;
+        b=l+qq+pUkbiKZujFSSt+Ncg5HZStZ4JJmMmqMrH171roijPFpIPtetbfeBuiKuTZd4W
+         ARA24OygzRc/gt0jA23RHZS2kchudqXAsuO3j0yD+BW2BVT+kzFatKk6b+XUQlRsMQRd
+         +3X0Cnu7KD6DhxmT4ayAHbxk+5GOsvpv67LH2Qm6r84PtwgGItRkXNscyZO6VReqKajG
+         SZZfr7ELqwCYS4ff47QKi+48FW90pkAGtNRaYgDo5TvYzN+oOOgQtTznTVE/p8UYjDEP
+         ZIcXGFtJ0VN4rZUWicLdpKjdpKR37q/AioPyqRkvZdZHisEs6Pw42QzGiOEjzsNjmix9
+         wt3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=3npAyY8rPKuk01RaNVhM66JpVvQwy4LZnWG1HHtuULM=;
+        b=A9ir8YqHvTLs+I0ReX1gepliDkF4o2C6Zac++oFzOWqc65mz2o6dVbTKAmCzeKND4X
+         r5BYSEDfi0l91o0iAutStncFdA3H7V3kvBb3EeEYCtVoeZjvDKhYOWazptGGdvHPVEc+
+         ybEjyBcW9swlpwWBxl0OUqTc4mx3GoL3XSq1i3a02f/1wvHbFBA1HcxuMkrj3x2xaIJs
+         wb4JawcBjkXLNGrWUatJqyAnFOtqdCycKR9Qgftm3Jopxj3jjSfL7gFQUyiyHIdqNZbY
+         mxzc5fQeY1t9y21ai3AZxdd8wOb8h/euwmcJ4m9LQFTyzuYbrJhOmLZudehUUP4+nasN
+         4Cig==
+X-Gm-Message-State: AOAM531qcPHJmvuXu23epvLZNC4JDCejPCKLFaT7L4ZWT+ta+G7YGrM3
+        hD6Pbe4rQ7OYxq9NAYzE8PhdADoi9Xc=
+X-Google-Smtp-Source: ABdhPJyfvl/EftwSDRU3mfUDJs6u5VlxlNIWRQDkNLOBnlWw7xuLg1zlplaXkWy2SaiiNPwp21NyNg==
+X-Received: by 2002:a05:600c:3b25:b0:38e:c5f9:8f01 with SMTP id m37-20020a05600c3b2500b0038ec5f98f01mr6231429wms.175.1650092080368;
+        Fri, 15 Apr 2022 23:54:40 -0700 (PDT)
+Received: from localhost.localdomain ([141.72.243.13])
+        by smtp.gmail.com with ESMTPSA id f189-20020a1c38c6000000b0038ff83b9792sm6091294wma.43.2022.04.15.23.54.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Apr 2022 23:54:39 -0700 (PDT)
+From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+To:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+Subject: [PATCH] media: i2c: tw9903: Use ARRAY_SIZE instead of manual checking
+Date:   Sat, 16 Apr 2022 08:53:58 +0200
+Message-Id: <20220416065358.56537-1-mosescb.dev@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/gvt-linux.git topic/for-christoph
-head:   fd6f410fe5eced449a4d6467a4f4789a8eb10382
-commit: 07de96038f7d8a179287ae178dfcad8f085abb9e [1/37] i915/gvt: Separate the MMIO tracking table from GVT-g
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20220416/202204161401.AtiDTPRF-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/gvt-linux/commit/07de96038f7d8a179287ae178dfcad8f085abb9e
-        git remote add intel-gvt https://github.com/intel/gvt-linux.git
-        git fetch --no-tags intel-gvt topic/for-christoph
-        git checkout 07de96038f7d8a179287ae178dfcad8f085abb9e
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+this driver currently uses a terminator(0x00, 0x00) to end the list
+of reg-vals instead, a struct array with ARRAY_SIZE macro can be used
+to obtain the length of the array.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
+---
+ drivers/media/i2c/tw9903.c | 150 ++++++++++++++++++++-----------------
+ 1 file changed, 80 insertions(+), 70 deletions(-)
 
-All errors (new ones prefixed by >>):
-
->> drivers/gpu/drm/i915/intel_gvt_mmio_table.c:7:10: fatal error: display/intel_dmc_regs.h: No such file or directory
-       7 | #include "display/intel_dmc_regs.h"
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-
-
-vim +7 drivers/gpu/drm/i915/intel_gvt_mmio_table.c
-
-   > 7	#include "display/intel_dmc_regs.h"
-     8	#include "gt/intel_gt_regs.h"
-     9	#include "gvt/gvt.h"
-    10	#include "i915_drv.h"
-    11	#include "i915_pvinfo.h"
-    12	#include "i915_reg.h"
-    13	#include "intel_gvt.h"
-    14	#include "intel_mchbar_regs.h"
-    15	
-
+diff --git a/drivers/media/i2c/tw9903.c b/drivers/media/i2c/tw9903.c
+index f8e3ab4909d8..b8f8240d20c1 100644
+--- a/drivers/media/i2c/tw9903.c
++++ b/drivers/media/i2c/tw9903.c
+@@ -6,6 +6,7 @@
+ #include <linux/module.h>
+ #include <linux/init.h>
+ #include <linux/i2c.h>
++#include <linux/kernel.h>
+ #include <linux/videodev2.h>
+ #include <linux/ioctl.h>
+ #include <media/v4l2-device.h>
+@@ -35,56 +36,60 @@ static inline struct tw9903 *to_state(struct v4l2_subdev *sd)
+ 	return container_of(sd, struct tw9903, sd);
+ }
+ 
+-static const u8 initial_registers[] = {
+-	0x02, 0x44, /* input 1, composite */
+-	0x03, 0x92, /* correct digital format */
+-	0x04, 0x00,
+-	0x05, 0x80, /* or 0x00 for PAL */
+-	0x06, 0x40, /* second internal current reference */
+-	0x07, 0x02, /* window */
+-	0x08, 0x14, /* window */
+-	0x09, 0xf0, /* window */
+-	0x0a, 0x81, /* window */
+-	0x0b, 0xd0, /* window */
+-	0x0c, 0x8c,
+-	0x0d, 0x00, /* scaling */
+-	0x0e, 0x11, /* scaling */
+-	0x0f, 0x00, /* scaling */
+-	0x10, 0x00, /* brightness */
+-	0x11, 0x60, /* contrast */
+-	0x12, 0x01, /* sharpness */
+-	0x13, 0x7f, /* U gain */
+-	0x14, 0x5a, /* V gain */
+-	0x15, 0x00, /* hue */
+-	0x16, 0xc3, /* sharpness */
+-	0x18, 0x00,
+-	0x19, 0x58, /* vbi */
+-	0x1a, 0x80,
+-	0x1c, 0x0f, /* video norm */
+-	0x1d, 0x7f, /* video norm */
+-	0x20, 0xa0, /* clamping gain (working 0x50) */
+-	0x21, 0x22,
+-	0x22, 0xf0,
+-	0x23, 0xfe,
+-	0x24, 0x3c,
+-	0x25, 0x38,
+-	0x26, 0x44,
+-	0x27, 0x20,
+-	0x28, 0x00,
+-	0x29, 0x15,
+-	0x2a, 0xa0,
+-	0x2b, 0x44,
+-	0x2c, 0x37,
+-	0x2d, 0x00,
+-	0x2e, 0xa5, /* burst PLL control (working: a9) */
+-	0x2f, 0xe0, /* 0xea is blue test frame -- 0xe0 for normal */
+-	0x31, 0x00,
+-	0x33, 0x22,
+-	0x34, 0x11,
+-	0x35, 0x35,
+-	0x3b, 0x05,
+-	0x06, 0xc0, /* reset device */
+-	0x00, 0x00, /* Terminator (reg 0x00 is read-only) */
++struct reg_val {
++	u8 reg;
++	u8 val;
++};
++
++static const struct reg_val init_regs[] = {
++	{0x02, 0x44}, /* input 1, composite */
++	{0x03, 0x92}, /* correct digital format */
++	{0x04, 0x00},
++	{0x05, 0x80}, /* or 0x00 for PAL */
++	{0x06, 0x40}, /* second internal current reference */
++	{0x07, 0x02}, /* window */
++	{0x08, 0x14}, /* window */
++	{0x09, 0xf0}, /* window */
++	{0x0a, 0x81}, /* window */
++	{0x0b, 0xd0}, /* window */
++	{0x0c, 0x8c},
++	{0x0d, 0x00}, /* scaling */
++	{0x0e, 0x11}, /* scaling */
++	{0x0f, 0x00}, /* scaling */
++	{0x10, 0x00}, /* brightness */
++	{0x11, 0x60}, /* contrast */
++	{0x12, 0x01}, /* sharpness */
++	{0x13, 0x7f}, /* U gain */
++	{0x14, 0x5a}, /* V gain */
++	{0x15, 0x00}, /* hue */
++	{0x16, 0xc3}, /* sharpness */
++	{0x18, 0x00},
++	{0x19, 0x58}, /* vbi */
++	{0x1a, 0x80},
++	{0x1c, 0x0f}, /* video norm */
++	{0x1d, 0x7f}, /* video norm */
++	{0x20, 0xa0}, /* clamping gain (working 0x50) */
++	{0x21, 0x22},
++	{0x22, 0xf0},
++	{0x23, 0xfe},
++	{0x24, 0x3c},
++	{0x25, 0x38},
++	{0x26, 0x44},
++	{0x27, 0x20},
++	{0x28, 0x00},
++	{0x29, 0x15},
++	{0x2a, 0xa0},
++	{0x2b, 0x44},
++	{0x2c, 0x37},
++	{0x2d, 0x00},
++	{0x2e, 0xa5}, /* burst PLL control (working: a9) */
++	{0x2f, 0xe0}, /* 0xea is blue test frame -- 0xe0 for normal */
++	{0x31, 0x00},
++	{0x33, 0x22},
++	{0x34, 0x11},
++	{0x35, 0x35},
++	{0x3b, 0x05},
++	{0x06, 0xc0}, /* reset device */
+ };
+ 
+ static int write_reg(struct v4l2_subdev *sd, u8 reg, u8 value)
+@@ -94,13 +99,14 @@ static int write_reg(struct v4l2_subdev *sd, u8 reg, u8 value)
+ 	return i2c_smbus_write_byte_data(client, reg, value);
+ }
+ 
+-static int write_regs(struct v4l2_subdev *sd, const u8 *regs)
++static int write_regs(struct v4l2_subdev *sd,
++		      const struct reg_val *rv, int len)
+ {
+-	int i;
+-
+-	for (i = 0; regs[i] != 0x00; i += 2)
+-		if (write_reg(sd, regs[i], regs[i + 1]) < 0)
++	while (--len >= 0) {
++		if (write_reg(sd, rv->reg, rv->val) < 0)
+ 			return -1;
++		rv++;
++	}
+ 	return 0;
+ }
+ 
+@@ -115,24 +121,28 @@ static int tw9903_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
+ {
+ 	struct tw9903 *dec = to_state(sd);
+ 	bool is_60hz = norm & V4L2_STD_525_60;
+-	static const u8 config_60hz[] = {
+-		0x05, 0x80,
+-		0x07, 0x02,
+-		0x08, 0x14,
+-		0x09, 0xf0,
+-		0,    0,
++	int ret;
++
++	static const struct reg_val config_60hz[] = {
++		{0x05, 0x80},
++		{0x07, 0x02},
++		{0x08, 0x14},
++		{0x09, 0xf0},
+ 	};
+-	static const u8 config_50hz[] = {
+-		0x05, 0x00,
+-		0x07, 0x12,
+-		0x08, 0x18,
+-		0x09, 0x20,
+-		0,    0,
++	static const struct reg_val config_50hz[] = {
++		{0x05, 0x00},
++		{0x07, 0x12},
++		{0x08, 0x18},
++		{0x09, 0x20},
+ 	};
+ 
+-	write_regs(sd, is_60hz ? config_60hz : config_50hz);
++	if (is_60hz)
++		ret = write_regs(sd, config_60hz, ARRAY_SIZE(config_60hz));
++	else
++		ret = write_regs(sd, config_50hz, ARRAY_SIZE(config_50hz));
++
+ 	dec->norm = norm;
+-	return 0;
++	return ret;
+ }
+ 
+ 
+@@ -227,7 +237,7 @@ static int tw9903_probe(struct i2c_client *client,
+ 	/* Initialize tw9903 */
+ 	dec->norm = V4L2_STD_NTSC;
+ 
+-	if (write_regs(sd, initial_registers) < 0) {
++	if (write_regs(sd, init_regs, ARRAY_SIZE(init_regs)) < 0) {
+ 		v4l2_err(client, "error initializing TW9903\n");
+ 		return -EINVAL;
+ 	}
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

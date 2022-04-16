@@ -2,79 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D217A503353
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 604D55032FE
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229619AbiDPFly (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 01:41:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S229726AbiDPFl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 01:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbiDPFlm (ORCPT
+        with ESMTP id S229534AbiDPFln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 01:41:42 -0400
-Received: from eastern.birch.relay.mailchannels.net (eastern.birch.relay.mailchannels.net [23.83.209.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DF2FCBC5
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:39:10 -0700 (PDT)
+        Sat, 16 Apr 2022 01:41:43 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AD3FCBC6
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 22:39:12 -0700 (PDT)
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 66FAC6C0905;
-        Sat, 16 Apr 2022 05:39:10 +0000 (UTC)
+        by relay.mailchannels.net (Postfix) with ESMTP id ADBC98E0819;
+        Sat, 16 Apr 2022 05:39:11 +0000 (UTC)
 Received: from pdx1-sub0-mail-a254.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 9EEF46C08CD;
-        Sat, 16 Apr 2022 05:39:09 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650087549; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id F3BE78E06B6;
+        Sat, 16 Apr 2022 05:39:10 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650087551; a=rsa-sha256;
         cv=none;
-        b=sbosIBhnEqP1T17IyQBJiEtU/uS2lfZdVvZLa55sLUW8R4P293rXEojZ+eQa0BehrjjNyS
-        GtbXbXvnkOCLORoeOGORl+gNG0jhT//wPSmlr26FG/6BWGWCly2hS35xRXuAWiBFq3bDjK
-        MmQHFCeXiMN4F8k7Kw7sOgDl3K8/BEsuHKfPKD9toH//v3isBfOAXTm+/tL37V8VgbpUJP
-        W0MwlBKCDJSO5h2mJf4B1dcdBxA+4kka5Dr6V6zn7NjzPcrohNpcwsUy8ozJvfFrVBmmYm
-        k3VjkoJj/HineqBmq804b71J2QLN1JjcwVXwuQ6ESVCqLnSXoTB2kgEcDKUsJQ==
+        b=7ELyfl2/zsWIsKl8MdBfcyCbEYf4HNqnvfgIVRy+9TgA9J7diXiVf/TjMLe6fJKlnfzu1D
+        eCLKLZHgo3v1J0H/NGPajmXRDvPS3dfcy9UTLzDHqewMi8LGh3GW+7+M74jYckdqnoCNCT
+        L/fcZ/zBRVgRO1ya+4OkGlCZPSGr8kWwKuO1hf17c6JaRiZeF5Ux1evJFezRpddA4vCmai
+        tPRY9CffGFWfiFl/ePHu7ecoGDVeZg/y2WxgnNpIu/eY4KfFL2K+7b2KmWcfGNHTsZ4rTR
+        CxeSUKmDfjOtQwK11+8JSDgutG3K/OOjHT+iJE1dssMn4SMpAACsOYAO1IKTsA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1650087549;
+        s=arc-2022; t=1650087551;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=f59htISnwsqoH/jBojWcG/OX8Gw18WwWDAuC1GWBkrc=;
-        b=LjAwIScXaues8ODld+ikp2DoRT/kH0s1tZQi5XHiJLc0Bu+oyXhKLJZ/DHZ+WK2Xnreq23
-        hZnseiZIpCGZDL2v/6IJpDWfxED8U58PGpQIz8pNkU6hJR1U8UApt0nHM57rdMJ0Y0152t
-        dyTMFCmo/ev9KwQoEVaVkOYbXPKSaD2LyNBYcqauV5X57ZJ85yiKcMlOcCrEXh3lz3d5NT
-        7QumbFtCwI3nZZ/5YirWHxXs3AsAWxEW+z3upjESwvGhxjxn5cbrqFrSvrtqfGUYkoEJj1
-        +SL7rso6Xpfrd9s979otP32YURrMYnF0iFcd0Fwf6jrRnRmRyaLgdRwKkDB0fA==
+        bh=1GcA1EQLKr6cDmztZQrBKDqx1z4dpZsZKzsdXEMRVzY=;
+        b=YBmqxd4qGkYBUlYDZck0Aj6Bmr2e+O3nepNecQR9p+2EDE5JvllEthms9t1MHJWalgBD3c
+        hwPjqPKVmJO7QiJNvdFahzAkIeOtUvUcmLs67t2xb9LsLV5mV3kUyczC49GY3lcwlQOiTQ
+        vvlfli9cXPnvsg0ID4RheL0jWCcc+xNu+COAQn8IOrrAX0VMiTyzEQaBH7ZSssF2aHZdGt
+        eRdK844Kd2qxuCmxvh/YBfQnmayWsTJCtM8wEmFbEbzAYGJdK+pCaMpHPemuQX6XNjUHEA
+        +Fwx1VCnQmVk7m77cCl6+uB8OBL/IBUdmvYBF+KYszOdnzb16YhlPWLSowlijQ==
 ARC-Authentication-Results: i=1;
-        rspamd-b69d6888c-zhs78;
+        rspamd-b69d6888c-bbjgq;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
 X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
 Received: from pdx1-sub0-mail-a254.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.106.158.161 (trex/6.7.1);
-        Sat, 16 Apr 2022 05:39:10 +0000
+        by 100.116.106.98 (trex/6.7.1);
+        Sat, 16 Apr 2022 05:39:11 +0000
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
 X-MailChannels-Auth-Id: dreamhost
-X-Glossy-Minister: 2239f3141878fde9_1650087550201_4208480808
-X-MC-Loop-Signature: 1650087550201:4069922302
-X-MC-Ingress-Time: 1650087550201
+X-Squirrel-Reign: 2b63278d331c9d71_1650087551437_1108755106
+X-MC-Loop-Signature: 1650087551437:2424071474
+X-MC-Ingress-Time: 1650087551437
 Received: from localhost.localdomain (unknown [104.36.29.107])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4KgMSr2zjXz1M5;
-        Fri, 15 Apr 2022 22:39:08 -0700 (PDT)
+        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4KgMSs4Rm1z2x;
+        Fri, 15 Apr 2022 22:39:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1650087549;
-        bh=f59htISnwsqoH/jBojWcG/OX8Gw18WwWDAuC1GWBkrc=;
+        s=dreamhost; t=1650087550;
+        bh=1GcA1EQLKr6cDmztZQrBKDqx1z4dpZsZKzsdXEMRVzY=;
         h=From:To:Cc:Subject:Date:Content-Transfer-Encoding;
-        b=nFPvhSglVmtuufEmK6rGA668yDzj4PT0wtwCTlI3Pa5k5AFfKRgEbHOx/iMxJyzTr
-         MW3dLOtFRYgV/T8I598HUMMjY6i9ZXcUOzZGTcceQi8gV7j6pxIOSDpGmUuo/pRmOE
-         7PpemJMP4k5fWMZPf7nEj1EMXi90TV674KMZAuCrlR10bFLrgU4ftCjsYtlMSfiJHy
-         EMC1pNwgnqnnxCxADAbhVsAGMGCCSZkofbuXuU4hACZhipSKgp20heJcztRdQmQmAf
-         yn0g952C7zaU7xYYoLC88WhRVnYr0lFDDMBPWDwj4xyQlUAxH0iesIha60bqEBDxHA
-         l5K3VkL1TaPgg==
+        b=O6EVUGnYZCCOAL10auVg4KYPQEL5CcCMIqG67RDrj2Yfq0ehUw5IHLfaf/xeFrV6C
+         Aazy55ckqril50OFjab3d0r5RpDPw6Dm3BY8FKdU0zeo22iZpxM0sivWmkLQkHtXiS
+         y3Lmo1ZKB+9X0CUDCeDo0+b8dlqikjoQkpTVPWmtiKp5dMzvWAJJ+2tYNa1FaSK7DT
+         U7gQZ4715IYXfWw9epgv0ydXQg1EI5qLHC9qVMXbK22aQ7yK8BomZDb2lxAWPLcQLN
+         /XN8vu+DoWAadOkW+YDEjWPTLFRCy1meDR70ryGIaGDZB7Dei9Yyyza3hBsFU2/7ac
+         bIofukKT3MClw==
 From:   Davidlohr Bueso <dave@stgolabs.net>
 To:     linux-mm@kvack.org
 Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
@@ -84,9 +84,9 @@ Cc:     mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
         a.manzanares@samsung.com, heekwon.p@samsung.com,
         gim.jongmin@samsung.com, dave@stgolabs.net,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] mm: make __node_reclaim() more flexible
-Date:   Fri, 15 Apr 2022 22:38:59 -0700
-Message-Id: <20220416053902.68517-4-dave@stgolabs.net>
+Subject: [PATCH 4/6] mm: introduce per-node proactive reclaim interface
+Date:   Fri, 15 Apr 2022 22:39:00 -0700
+Message-Id: <20220416053902.68517-5-dave@stgolabs.net>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20220416053902.68517-1-dave@stgolabs.net>
 References: <20220416053902.68517-1-dave@stgolabs.net>
@@ -94,165 +94,172 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently __node_reclaim() is tailored to the allocator paths. With
-proactive per-node reclaim it requires a bit more flexibly:
+This patch introduces a mechanism to trigger memory reclaim
+as a per-node sysfs interface, inspired by compaction's
+equivalent; ie:
 
- - Deal in terms of nr_pages instead of order. Similarly this also
-   applies to the respective tracing.
- - Make the caller pass an already armed scan control.
- - Return number of reclaimed pages. The caller can trivially check
-   against this explicitly instead.
+	 echo 1G > /sys/devices/system/node/nodeX/reclaim
 
-The current node_reclaim() interface remains the same.
+It is based on the discussions from David's thread[1] as
+well as the current upstreaming of the memcg[2] interface
+(which has nice explanations for the benefits of userspace
+reclaim overall). In both cases conclusions were that either
+way of inducing proactive reclaim should be KISS, and can be
+later extended. So this patch does not allow the user much
+fine tuning beyond the size of the reclaim, such as anon/file
+or whether or semantics of demotion.
+
+[1] https://lore.kernel.org/all/5df21376-7dd1-bf81-8414-32a73cea45dd@google.com/
+[2] https://lore.kernel.org/all/20220408045743.1432968-1-yosryahmed@google.com/
 
 Signed-off-by: Davidlohr Bueso <dave@stgolabs.net>
 ---
- include/trace/events/vmscan.h | 12 ++++-----
- mm/vmscan.c                   | 47 +++++++++++++++++++----------------
- 2 files changed, 31 insertions(+), 28 deletions(-)
+ Documentation/ABI/stable/sysfs-devices-node | 10 ++++
+ drivers/base/node.c                         |  2 +
+ include/linux/swap.h                        | 16 ++++++
+ mm/vmscan.c                                 | 59 +++++++++++++++++++++
+ 4 files changed, 87 insertions(+)
 
-diff --git a/include/trace/events/vmscan.h b/include/trace/events/vmscan.h
-index de136dbd623a..ab6ce8d8770b 100644
---- a/include/trace/events/vmscan.h
-+++ b/include/trace/events/vmscan.h
-@@ -439,25 +439,25 @@ TRACE_EVENT(mm_vmscan_lru_shrink_active,
+diff --git a/Documentation/ABI/stable/sysfs-devices-node b/Documentation/ABI/stable/sysfs-devices-node
+index 8db67aa472f1..3c935e1334f7 100644
+--- a/Documentation/ABI/stable/sysfs-devices-node
++++ b/Documentation/ABI/stable/sysfs-devices-node
+@@ -182,3 +182,13 @@ Date:		November 2021
+ Contact:	Jarkko Sakkinen <jarkko@kernel.org>
+ Description:
+ 		The total amount of SGX physical memory in bytes.
++
++What:		/sys/devices/system/node/nodeX/reclaim
++Date:		April 2022
++Contact:	Davidlohr Bueso <dave@stgolabs.net>
++Description:
++		Write the amount of bytes to induce memory reclaim in this node.
++		This file accepts a single key, the number of bytes to reclaim.
++		When it completes successfully, the specified amount or more memory
++		will have been reclaimed, and -EAGAIN if less bytes are reclaimed
++		than the specified amount.
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index 6cdf25fd26c3..d80c478e2a6e 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -670,6 +670,7 @@ static int register_node(struct node *node, int num)
  
- TRACE_EVENT(mm_vmscan_node_reclaim_begin,
- 
--	TP_PROTO(int nid, int order, gfp_t gfp_flags),
-+	TP_PROTO(int nid, unsigned long nr_pages, gfp_t gfp_flags),
- 
--	TP_ARGS(nid, order, gfp_flags),
-+	TP_ARGS(nid, nr_pages, gfp_flags),
- 
- 	TP_STRUCT__entry(
- 		__field(int, nid)
--		__field(int, order)
-+		__field(int, nr_pages)
- 		__field(gfp_t, gfp_flags)
- 	),
- 
- 	TP_fast_assign(
- 		__entry->nid = nid;
--		__entry->order = order;
-+		__entry->nr_pages = nr_pages;
- 		__entry->gfp_flags = gfp_flags;
- 	),
- 
--	TP_printk("nid=%d order=%d gfp_flags=%s",
-+	TP_printk("nid=%d nr_pages=%d gfp_flags=%s",
- 		__entry->nid,
--		__entry->order,
-+		__entry->nr_pages,
- 		show_gfp_flags(__entry->gfp_flags))
- );
- 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index cb583fcbf5bf..1735c302831c 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -4668,36 +4668,28 @@ static unsigned long node_pagecache_reclaimable(struct pglist_data *pgdat)
- 
- /*
-  * Try to free up some pages from this node through reclaim.
-+ * Returns the number of reclaimed pages.
-  */
--static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned int order)
-+static unsigned long __node_reclaim(struct pglist_data *pgdat,
-+				    gfp_t gfp_mask, unsigned long nr_pages,
-+				    struct scan_control *sc)
- {
- 	/* Minimum pages needed in order to stay on node */
--	const unsigned long nr_pages = 1 << order;
- 	struct task_struct *p = current;
- 	unsigned int noreclaim_flag;
--	struct scan_control sc = {
--		.nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
--		.gfp_mask = current_gfp_context(gfp_mask),
--		.order = order,
--		.priority = NODE_RECLAIM_PRIORITY,
--		.may_writepage = !!(node_reclaim_mode & RECLAIM_WRITE),
--		.may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
--		.may_swap = 1,
--		.reclaim_idx = gfp_zone(gfp_mask),
--	};
- 	unsigned long pflags;
- 
--	trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, order,
--					   sc.gfp_mask);
-+	trace_mm_vmscan_node_reclaim_begin(pgdat->node_id, nr_pages,
-+					   sc->gfp_mask);
- 
- 	cond_resched();
- 	psi_memstall_enter(&pflags);
--	fs_reclaim_acquire(sc.gfp_mask);
-+	fs_reclaim_acquire(sc->gfp_mask);
- 	/*
- 	 * We need to be able to allocate from the reserves for RECLAIM_UNMAP
- 	 */
- 	noreclaim_flag = memalloc_noreclaim_save();
--	set_task_reclaim_state(p, &sc.reclaim_state);
-+	set_task_reclaim_state(p, &sc->reclaim_state);
- 
- 	if (node_pagecache_reclaimable(pgdat) > pgdat->min_unmapped_pages) {
- 		/*
-@@ -4705,23 +4697,34 @@ static int __node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned in
- 		 * priorities until we have enough memory freed.
- 		 */
- 		do {
--			shrink_node(pgdat, &sc);
--		} while (sc.nr_reclaimed < nr_pages && --sc.priority >= 0);
-+			shrink_node(pgdat, sc);
-+		} while (sc->nr_reclaimed < nr_pages && --sc->priority >= 0);
- 	}
- 
- 	set_task_reclaim_state(p, NULL);
- 	memalloc_noreclaim_restore(noreclaim_flag);
--	fs_reclaim_release(sc.gfp_mask);
-+	fs_reclaim_release(sc->gfp_mask);
- 	psi_memstall_leave(&pflags);
- 
--	trace_mm_vmscan_node_reclaim_end(sc.nr_reclaimed);
-+	trace_mm_vmscan_node_reclaim_end(sc->nr_reclaimed);
- 
--	return sc.nr_reclaimed >= nr_pages;
-+	return sc->nr_reclaimed;
+ 	hugetlb_register_node(node);
+ 	compaction_register_node(node);
++	reclaim_register_node(node);
+ 	return 0;
  }
  
- int node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned int order)
- {
- 	int ret;
-+	const unsigned long nr_pages = 1 << order;
+@@ -685,6 +686,7 @@ void unregister_node(struct node *node)
+ 	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
+ 	node_remove_accesses(node);
+ 	node_remove_caches(node);
++	reclaim_unregister_node(node);
+ 	device_unregister(&node->dev);
+ }
+ 
+diff --git a/include/linux/swap.h b/include/linux/swap.h
+index 27093b477c5f..cca43ae6d770 100644
+--- a/include/linux/swap.h
++++ b/include/linux/swap.h
+@@ -398,6 +398,22 @@ extern unsigned long shrink_all_memory(unsigned long nr_pages);
+ extern int vm_swappiness;
+ long remove_mapping(struct address_space *mapping, struct folio *folio);
+ 
++#if defined(CONFIG_SYSFS) && defined(CONFIG_NUMA)
++extern int reclaim_register_node(struct node *node);
++extern void reclaim_unregister_node(struct node *node);
++
++#else
++
++static inline int reclaim_register_node(struct node *node)
++{
++	return 0;
++}
++
++static inline void reclaim_unregister_node(struct node *node)
++{
++}
++#endif /* CONFIG_SYSFS && CONFIG_NUMA */
++
+ extern unsigned long reclaim_pages(struct list_head *page_list);
+ #ifdef CONFIG_NUMA
+ extern int node_reclaim_mode;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 1735c302831c..3539f8a0f0ea 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -4819,3 +4819,62 @@ void check_move_unevictable_pages(struct pagevec *pvec)
+ 	}
+ }
+ EXPORT_SYMBOL_GPL(check_move_unevictable_pages);
++
++#if defined(CONFIG_SYSFS) && defined(CONFIG_NUMA)
++static ssize_t reclaim_store(struct device *dev,
++			     struct device_attribute *attr,
++			     const char *buf, size_t count)
++{
++	int err, nid = dev->id;
++	gfp_t gfp_mask = GFP_KERNEL;
++	struct pglist_data *pgdat = NODE_DATA(nid);
++	unsigned long nr_to_reclaim, nr_reclaimed = 0;
++	unsigned int nr_retries = MAX_RECLAIM_RETRIES;
 +	struct scan_control sc = {
-+		.nr_to_reclaim = max(nr_pages, SWAP_CLUSTER_MAX),
 +		.gfp_mask = current_gfp_context(gfp_mask),
-+		.order = order,
-+		.priority = NODE_RECLAIM_PRIORITY,
-+		.may_writepage = !!(node_reclaim_mode & RECLAIM_WRITE),
-+		.may_unmap = !!(node_reclaim_mode & RECLAIM_UNMAP),
-+		.may_swap = 1,
 +		.reclaim_idx = gfp_zone(gfp_mask),
++		.priority = NODE_RECLAIM_PRIORITY,
++		.may_writepage = !laptop_mode,
++		.may_unmap = 1,
++		.may_swap = 1,
 +	};
- 
- 	/*
- 	 * Node reclaim reclaims unmapped file backed pages and
-@@ -4756,7 +4759,7 @@ int node_reclaim(struct pglist_data *pgdat, gfp_t gfp_mask, unsigned int order)
- 	if (test_and_set_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags))
- 		return NODE_RECLAIM_NOSCAN;
- 
--	ret = __node_reclaim(pgdat, gfp_mask, order);
-+	ret = __node_reclaim(pgdat, gfp_mask, nr_pages, &sc) >= nr_pages;
- 	clear_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags);
- 
- 	if (!ret)
++
++	buf = strstrip((char *)buf);
++	err = page_counter_memparse(buf, "", &nr_to_reclaim);
++	if (err)
++		return err;
++
++	sc.nr_to_reclaim = max(nr_to_reclaim, SWAP_CLUSTER_MAX);
++
++	while (nr_reclaimed < nr_to_reclaim) {
++		unsigned long reclaimed;
++
++		if (test_and_set_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags))
++			return -EAGAIN;
++
++		/* does cond_resched() */
++		reclaimed = __node_reclaim(pgdat, gfp_mask,
++					   nr_to_reclaim - nr_reclaimed, &sc);
++
++		clear_bit(PGDAT_RECLAIM_LOCKED, &pgdat->flags);
++
++		if (!reclaimed && !nr_retries--)
++			break;
++
++		nr_reclaimed += reclaimed;
++	}
++
++	return nr_reclaimed < nr_to_reclaim ? -EAGAIN : count;
++}
++
++static DEVICE_ATTR_WO(reclaim);
++int reclaim_register_node(struct node *node)
++{
++	return device_create_file(&node->dev, &dev_attr_reclaim);
++}
++
++void reclaim_unregister_node(struct node *node)
++{
++	return device_remove_file(&node->dev, &dev_attr_reclaim);
++}
++#endif
 -- 
 2.26.2
 

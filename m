@@ -2,185 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D215036A9
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 14:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B305036AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 15:00:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232001AbiDPM5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 08:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47902 "EHLO
+        id S232006AbiDPNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 09:02:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiDPM50 (ORCPT
+        with ESMTP id S232002AbiDPNCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 08:57:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D62CFD;
-        Sat, 16 Apr 2022 05:54:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6E5D9B82414;
-        Sat, 16 Apr 2022 12:54:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1004AC385A9;
-        Sat, 16 Apr 2022 12:54:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650113690;
-        bh=xCuTqUs63ZsLODIiKALgWLXL62HgRn4l8lLnL2RaPR4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=qrjMf1G9zv/dwRXRnAOje45QlIhPHl9czj0eEdjD8YGB4T22bS8hxO5b/J+AACPgx
-         YNmog9tgZFajduve6W6wB2DqT3Q7C+86QH7b8DJeeA0C1Wkw6cOB12YK3w1U8PMspb
-         opuD6O+lGB6puqJedic806LtCnznMpmdTT330EcWjRU/8UEbKq1BBC61T8TsIvNlvZ
-         a0v3Q+D/X9GvgDwrObgXMY2c8BHoKY/f368EonoHmPvVLKTeKNxe0To9ihg041xQXq
-         UKeg/hgOt6W6QAhw+nBrUorKi8ij/EMizTWoTLyNgeC9kUJdTA2XNFzS/KK3W2fSqI
-         z0E/rjui8juCA==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <maz@kernel.org>)
-        id 1nfhwt-004kNm-Ql; Sat, 16 Apr 2022 13:54:49 +0100
+        Sat, 16 Apr 2022 09:02:52 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 552DE3FBC2;
+        Sat, 16 Apr 2022 06:00:19 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id u17-20020a05600c211100b0038eaf4cdaaeso9172088wml.1;
+        Sat, 16 Apr 2022 06:00:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=XHVUz1b0D0ZF/noy7ANM+++7WGGRFc9oyw89kqgSdjE=;
+        b=pahgvwHqu3mBCsoZTQUS0VrZeezjhxSrULviFF4Z6DP/WkzUOnWNVRxqVi49Wc/F5p
+         n7aC1tvuXpoca3MQXAjK3yl29Y7zOoqTT8FZ+tdJvdedJiVqgeJ1fUcJtvnrSav3DXXn
+         cMYZWSr5tCMYvbvI04uvOjYVBNfkToIX3Y35A7e0h01yRwjoygL4Kt5ZSkF6vWkDJtqq
+         a/2ak1+iF10XYZXOlE+E7GMPc1nvxtWJ1nz43JAcpSrqerTOlEr1tV2wFJJddaWLHNX2
+         PpAHmCs1sXGDYJsZki7EJGSir4SqZHeMm5q76Ck/Bg5ZmggfB98v/nMXSpnKaaGF/uET
+         R+Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=XHVUz1b0D0ZF/noy7ANM+++7WGGRFc9oyw89kqgSdjE=;
+        b=fLvoCnWI92GSaVsxJ/U//qhymPZQ2Z9U3MzIDZiZONbzSIxVj8EKERJ1iGo0/MjXo+
+         b8zwJAfVcZi9fLvzomIZZdWa4Yo50v1VnWVcqpeGplYlV2sSR/YTHv3RhaKeCiLws/FV
+         3TohQBZWJWVfqjgihdH9DHEa4wcijWd0Hoj7gILxseVaUi/05tXubSKHN1jgR51LvBbM
+         daMZlTlBBkMYslfNTrmsTQuXdE2LyVXdVQm5KgtrpeJFS7QHWK7D+m14GF2KTJKpd7hO
+         ZijwovUld7GpasOdmZ69KrIbl1OjyNs1kfLZmlh+KXQNeNhv6XIEvxMYHkbOPQu1tRXw
+         wBKA==
+X-Gm-Message-State: AOAM531iTFS7FSABAucBlHvuq/5hBxGboeWbqleaw7OROXcIecHuUUn0
+        s7JEpESVLl0eaKt4qjAcxIc=
+X-Google-Smtp-Source: ABdhPJx16Vt/FPuRxbRMNnFY/Wy6fGUSb4KuPuwz+aSvi4c9sLSD/2bBrV6IuJzISUMX0bRgFRijXw==
+X-Received: by 2002:a1c:f70e:0:b0:38c:6ca9:2f8f with SMTP id v14-20020a1cf70e000000b0038c6ca92f8fmr3153245wmh.162.1650114017834;
+        Sat, 16 Apr 2022 06:00:17 -0700 (PDT)
+Received: from ?IPV6:2a02:908:1252:fb60:dd4a:a17a:5566:43bc? ([2a02:908:1252:fb60:dd4a:a17a:5566:43bc])
+        by smtp.gmail.com with ESMTPSA id a11-20020a056000188b00b00204109f7826sm6981250wri.28.2022.04.16.06.00.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 06:00:17 -0700 (PDT)
+Message-ID: <0d065fd6-3fa5-c9cb-3248-6f29b2bdcb71@gmail.com>
+Date:   Sat, 16 Apr 2022 15:00:16 +0200
 MIME-Version: 1.0
-Date:   Sat, 16 Apr 2022 13:54:49 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 2/4] PCI: dwc: rockchip: add legacy interrupt support
-In-Reply-To: <20220416110507.642398-3-pgwipeout@gmail.com>
-References: <20220416110507.642398-1-pgwipeout@gmail.com>
- <20220416110507.642398-3-pgwipeout@gmail.com>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <308e9c47197d4f7ae5a31cfcb5a10886@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 0/2] Update AMDGPU glossary and MAINTAINERS
+Content-Language: en-US
+To:     Tales Lelo da Aparecida <tales.aparecida@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        andrealmeid@riseup.net
+References: <20220415195027.305019-1-tales.aparecida@gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <20220415195027.305019-1-tales.aparecida@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter,
+Am 15.04.22 um 21:50 schrieb Tales Lelo da Aparecida:
+> I was handling the request from [0] and then I noticed that some AMD
+> developers were missing from get_maintainers output due to the lack of a
+> reference to their documentation in the MAINTAINERS file.
 
-May I suggest that you slow down on the number of versions you send?
-This is the 7th in 5 days, the 3rd today.
+Acked-by: Christian König <christian.koenig@amd.com>
 
-At this stage, this is entirely counterproductive.
+>
+> [0] https://gitlab.freedesktop.org/drm/amd/-/issues/1939#note_1309737
+>
+> Tales Lelo da Aparecida (2):
+>    Documentation/gpu: Add entries to amdgpu glossary
+>    MAINTAINERS: add docs entry to AMDGPU
+>
+>   Documentation/gpu/amdgpu/amdgpu-glossary.rst | 13 +++++++++++++
+>   MAINTAINERS                                  |  1 +
+>   2 files changed, 14 insertions(+)
+>
 
-On 2022-04-16 12:05, Peter Geis wrote:
-> The legacy interrupts on the rk356x pcie controller are handled by a
-> single muxed interrupt. Add irq domain support to the pcie-dw-rockchip
-> driver to support the virtual domain.
-> 
-> Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-> ---
->  drivers/pci/controller/dwc/pcie-dw-rockchip.c | 112 +++++++++++++++++-
->  1 file changed, 110 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> index c9b341e55cbb..863374604fb1 100644
-> --- a/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> +++ b/drivers/pci/controller/dwc/pcie-dw-rockchip.c
-> @@ -10,9 +10,12 @@
-> 
->  #include <linux/clk.h>
->  #include <linux/gpio/consumer.h>
-> +#include <linux/irqchip/chained_irq.h>
-> +#include <linux/irqdomain.h>
->  #include <linux/mfd/syscon.h>
->  #include <linux/module.h>
->  #include <linux/of_device.h>
-> +#include <linux/of_irq.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> @@ -36,10 +39,13 @@
->  #define PCIE_LINKUP			(PCIE_SMLH_LINKUP | PCIE_RDLH_LINKUP)
->  #define PCIE_L0S_ENTRY			0x11
->  #define PCIE_CLIENT_GENERAL_CONTROL	0x0
-> +#define PCIE_CLIENT_INTR_STATUS_LEGACY	0x8
-> +#define PCIE_CLIENT_INTR_MASK_LEGACY	0x1c
->  #define PCIE_CLIENT_GENERAL_DEBUG	0x104
-> -#define PCIE_CLIENT_HOT_RESET_CTRL      0x180
-> +#define PCIE_CLIENT_HOT_RESET_CTRL	0x180
->  #define PCIE_CLIENT_LTSSM_STATUS	0x300
-> -#define PCIE_LTSSM_ENABLE_ENHANCE       BIT(4)
-> +#define PCIE_LEGACY_INT_ENABLE		GENMASK(3, 0)
-> +#define PCIE_LTSSM_ENABLE_ENHANCE	BIT(4)
->  #define PCIE_LTSSM_STATUS_MASK		GENMASK(5, 0)
-> 
->  struct rockchip_pcie {
-> @@ -51,6 +57,8 @@ struct rockchip_pcie {
->  	struct reset_control		*rst;
->  	struct gpio_desc		*rst_gpio;
->  	struct regulator                *vpcie3v3;
-> +	struct irq_domain		*irq_domain;
-> +	raw_spinlock_t			irq_lock;
->  };
-> 
->  static int rockchip_pcie_readl_apb(struct rockchip_pcie *rockchip,
-> @@ -65,6 +73,94 @@ static void rockchip_pcie_writel_apb(struct
-> rockchip_pcie *rockchip,
->  	writel_relaxed(val, rockchip->apb_base + reg);
->  }
-> 
-> +static void rockchip_pcie_legacy_int_handler(struct irq_desc *desc)
-> +{
-> +	struct irq_chip *chip = irq_desc_get_chip(desc);
-> +	struct rockchip_pcie *rockchip = irq_desc_get_handler_data(desc);
-> +	unsigned long reg, hwirq;
-> +
-> +	chained_irq_enter(chip, desc);
-> +
-> +	reg = rockchip_pcie_readl_apb(rockchip, 
-> PCIE_CLIENT_INTR_STATUS_LEGACY);
-> +
-> +	for_each_set_bit(hwirq, &reg, 8)
-
-8? And yet:
-
-#define PCI_NUM_INTX        4
-
-So whatever bits are set above bit 3, you are feeding garbage
-to the irqdomain code.
-
-> +		generic_handle_domain_irq(rockchip->irq_domain, hwirq);
-> +
-> +	chained_irq_exit(chip, desc);
-> +}
-> +
-> +static void rockchip_intx_mask(struct irq_data *data)
-> +{
-> +	struct rockchip_pcie *rockchip = irq_data_get_irq_chip_data(data);
-> +	unsigned long flags;
-> +	u32 val;
-> +
-> +	/* disable legacy interrupts */
-> +	raw_spin_lock_irqsave(&rockchip->irq_lock, flags);
-> +	val = HIWORD_UPDATE_BIT(PCIE_LEGACY_INT_ENABLE);
-> +	val |= PCIE_LEGACY_INT_ENABLE;
-> +	rockchip_pcie_writel_apb(rockchip, val, 
-> PCIE_CLIENT_INTR_MASK_LEGACY);
-> +	raw_spin_unlock_irqrestore(&rockchip->irq_lock, flags);
-
-This is completely busted. INTx lines must be controlled individually.
-If I disable one device's INTx output, I don't want to see the
-interrupt firing because another one has had its own enabled.
-
-         M.
--- 
-Jazz is not dead. It just smells funny...

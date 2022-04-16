@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A469503555
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:45:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89945503559
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 10:48:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiDPIsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 04:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
+        id S230445AbiDPIu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 04:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiDPIsN (ORCPT
+        with ESMTP id S229871AbiDPIuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 04:48:13 -0400
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 357E823BDD;
-        Sat, 16 Apr 2022 01:45:39 -0700 (PDT)
+        Sat, 16 Apr 2022 04:50:54 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00549D9E8B;
+        Sat, 16 Apr 2022 01:48:21 -0700 (PDT)
 Received: from localhost (mdns.lwn.net [45.79.72.68])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 279B22CC;
-        Sat, 16 Apr 2022 08:45:37 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 279B22CC
+        by ms.lwn.net (Postfix) with ESMTPSA id 2B92A2CC;
+        Sat, 16 Apr 2022 08:48:20 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 2B92A2CC
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1650098738; bh=ENJSYMNf3R0D/LLZ5AvtM8tT6U99mZRIuRjbo2M0EVc=;
+        t=1650098901; bh=wL3NkiIKFRdID28VPA7Y7koeQlHQ1FfnpEFD9gBGabE=;
         h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=dhDnWaIeATH9cXpa9MHTxjOiD1Kdc4exgWg4YL3NQJPgtcFsBBJHxSzJ5Br9kB9FD
-         ScNwWV8eCnbaQI/t4EgApK+jgNeZ3sUOZqdNemFxBYCMKsC0cqQ86OoQByESmpO8HU
-         quSrJywsOGVmY/cUtz+zvI1jx/0aluQnl/QOyVx/unL5/OGx5S4vis20Pcirqlp5y1
-         xN8YSeTJbIiCe4+ZfZBJC+N4aY1CrLrdpH7EXtNZ7+8YN/GYgjsxY3Hxg4mV4bt0Sw
-         NrTMg8z0j5J9Q0oHemvhmMzqfR1gY7QpZGcTnXLtwgC2s+HrzO7F+Mihhm9c9OX5qm
-         6TZ/p5haoTBkQ==
+        b=IuQQnXtH7YOY0hKaNn75/nwtHB8ScUrzlWYrQ9//YLDGKrwYtXAmDDHbkZqbF2dtJ
+         VxyHvnRSWGdKgiQKkkriH1W5clEMFgmn05MHwn3NxfkC+C2jEW8CsI2jQdAr4LowxB
+         PHaa/sxgo1jH0YXwNBH+xV1sMuPaxBEYgnmP69BWWqFHb2qeEpLRvosQ060MJEY2Ri
+         1Fypoean6uBLsIgIkv+hiEmxvJWF9I3F+3aiOmbbx46Ur4z8ROaBrGBeFBZTEdwrcl
+         iM4hxInGzLf8q9fNgBkK/8DT9FgGi16RJJpUSzkzBlRz6TPEQWfS587+y8zJE5tJsV
+         x9N5q+hAG8CGw==
 From:   Jonathan Corbet <corbet@lwn.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: arch_pgtable_helpers: demote pgtable
- list headings
-In-Reply-To: <20220407045830.181514-1-bagasdotme@gmail.com>
-References: <20220407045830.181514-1-bagasdotme@gmail.com>
-Date:   Sat, 16 Apr 2022 02:45:34 -0600
-Message-ID: <874k2t4dsh.fsf@meer.lwn.net>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Akihiko Odaki <akihiko.odaki@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-efi@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>
+Subject: Re: [PATCH] x86/efi: Remove references of EFI earlyprintk from
+ documentation
+In-Reply-To: <CAMj1kXGHQm7yy2QPCEVRiXBzb8HWOHzKMCuoS+mbnBKujEXQnA@mail.gmail.com>
+References: <20220321045853.3324-1-akihiko.odaki@gmail.com>
+ <87bkxfebsu.fsf@meer.lwn.net>
+ <CAMj1kXGHQm7yy2QPCEVRiXBzb8HWOHzKMCuoS+mbnBKujEXQnA@mail.gmail.com>
+Date:   Sat, 16 Apr 2022 02:48:17 -0600
+Message-ID: <87v8v92z3i.fsf@meer.lwn.net>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bagas Sanjaya <bagasdotme@gmail.com> writes:
+Ard Biesheuvel <ardb@kernel.org> writes:
 
-> All page title headings in arch_pgtable_helpers.txt except
-> "Architecture Page Table Helpers" should have been subheadings instead.
+> On Tue, 5 Apr 2022 at 18:26, Jonathan Corbet <corbet@lwn.net> wrote:
+>>
+>> Akihiko Odaki <akihiko.odaki@gmail.com> writes:
+>>
+>> > x86 EFI earlyprink was removed with commit 69c1f396f25b ("efi/x86:
+>> > Convert x86 EFI earlyprintk into generic earlycon implementation").
+>>
+>> So I will confess that I don't know this area well enough to know
+>> whether this patch makes sense or not.  To help with that, it would have
+>> been good to CC Ard, who is the author of the patch you cite above.
+>> Adding him now.
+>>
+>> Ard, do you agree with this change (preserved below)?
+>>
 >
-> Demote them to chapter headings.
+> Yes, it looks fine to me.
 >
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jens Axboe <axboe@kernel.dk>
-> Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-> Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Cc: linux-mm@kvack.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  Changes since v1 [1]: 
->    - Rebased on v5.18-rc1
->    - Describe why the patch do the job
->
->  [1]: https://lore.kernel.org/linux-doc/20220326131313.691027-1-bagasdotme@gmail.com/
->  Documentation/vm/arch_pgtable_helpers.rst | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
+> Reviewed-by: Ard Biesheuvel <ardb@kernel.org>
 
-Applied, thanks.
+Great.  Applied, thanks.
 
 jon

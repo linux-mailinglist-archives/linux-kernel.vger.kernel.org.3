@@ -2,129 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 055585035D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 11:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09A125035DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 12:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiDPJ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 05:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44742 "EHLO
+        id S231354AbiDPKHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 06:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiDPJ5V (ORCPT
+        with ESMTP id S229705AbiDPKHh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 05:57:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C367F6590
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 02:54:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 732FFB81D0A
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 09:54:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11875C385A3;
-        Sat, 16 Apr 2022 09:54:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650102887;
-        bh=75R1UEWugAKgPowTPgnhtbX6VQG5h2cX089a+YURiW0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=quZSnKZVkLtXwXwETZFSIhf4J0rdmTRUIKssNt7xjoj5sN0AFweRpLak+xhRVU8bN
-         USFxXVHXNWMMSBaWVHFLHjY/yYSt93Yx3Nw8JIomYwAWjVC8Y+f4vcvtHA1rNPCypk
-         2D8sjl7ijL0Qwcd9DQtOXu5mQiAfKP4wPpX7hZxfcha7QvFsunNUtDXW2Tak24AGtK
-         iEKBvWZ57C133dG2b5ne90IQM+7+tngMLJq0Mes0XGvN81V0LIwhFYgotVRmf4dMJw
-         Di1bDxJEtDyrsYYArUCzd7w4PyRA6JnjDrlkP9If91yGUgX+chxhZYpfOC/In92rOp
-         6H4+K+0PJIG8g==
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Subject: [RESEND PATCH] soc: mediatek: cmdq: Use mailbox rx_callback instead of cmdq_task_cb
-Date:   Sat, 16 Apr 2022 17:54:28 +0800
-Message-Id: <1650102868-26219-1-git-send-email-chunkuang.hu@kernel.org>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 16 Apr 2022 06:07:37 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916E92559A;
+        Sat, 16 Apr 2022 03:05:05 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id hu11so7881681qvb.7;
+        Sat, 16 Apr 2022 03:05:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9inUHyr7AVny3gVU/R/BmEEniU0IUQKkRf4Taim41vo=;
+        b=oz8yhF/l7j1i3yf68XRg4ud62SqOkn8htE+H9ziSk1rAhv5GyTKVc8pFmf4VYjx/AX
+         Ji1o//6Rf/NldsfRT1M3o5Qmtpq0tLG3TOeNNKcvIj2kcm0ZRMcb1a+klWpJS3oAfs5c
+         wRg/gTQorlnqoHo4u3eOgaFo6xmRJeqzxnYa4B+dD8Trsl8aL+fEoX/0Wq4Ie9CAvNxt
+         8awKgxKKxc3aGknhg5V8UTdwwnqF8K+eu2BeWY8BYB8A2jGQ0YRfyvPgO936DPbAm8/s
+         3y2VAfXIVtwfu2i3VmRsQSDvsW7EK+rVnHPK4N61ySy9I5+IqOFZwYCoudHUr7Mp1cGI
+         hV3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9inUHyr7AVny3gVU/R/BmEEniU0IUQKkRf4Taim41vo=;
+        b=BuisHIDWLFA1lTCZNT7LfRuZsANVifiv7dASUSvTnVLax3N5mJqW7+ZHZuCaRlgxyz
+         Txfn2xH26x6qDdmbxd+ufqMrspyt7jW+3x9aU8HnrF1ryLQwPcMKDlxDe5a3BpJOGdV+
+         1XYbQUxyqRlCeZ03VHu2K7hVsBHDI76W3jEErlXL50DwqdW3KlrOMqMjxXRq9tyFJBeU
+         hnef9GK68/zBW3JWvijtkTqP5lMvLSv2iou4W7JGKKNy/RQ2ruBM7zG8J0yy36AK5dpD
+         dQNROiLqmXMADUJHl1y+v87wviVjGsP9iebuUHZJAnU4zqIfSj+HEHqTzc8ySGTryGEv
+         8hCw==
+X-Gm-Message-State: AOAM53368b/BKHhmkwaTipjS+4WmSIXusEyWoyvu6BD8CRyGdc739QeW
+        HXDCgwSgWrwD3p4gKK1lNoZ27Zur6+bOAiQ8
+X-Google-Smtp-Source: ABdhPJxyGGm3YWc8XeHJDwE2KHJ9f7JmSVfLYhpJc6jV3R5ze4PEDKB6ReplabXTD6qTJCjdkBfYgg==
+X-Received: by 2002:ad4:5caa:0:b0:446:e39:a117 with SMTP id q10-20020ad45caa000000b004460e39a117mr2154748qvh.1.1650103504465;
+        Sat, 16 Apr 2022 03:05:04 -0700 (PDT)
+Received: from master-x64.sparksnet ([2601:153:980:85b1::10])
+        by smtp.gmail.com with ESMTPSA id n22-20020ac85b56000000b002f1d7a2867dsm4263188qtw.67.2022.04.16.03.05.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 03:05:04 -0700 (PDT)
+From:   Peter Geis <pgwipeout@gmail.com>
+Cc:     linux-rockchip@lists.infradead.org, heiko@sntech.de,
+        Peter Geis <pgwipeout@gmail.com>, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/4] Enable rk356x PCIe controller
+Date:   Sat, 16 Apr 2022 06:04:58 -0400
+Message-Id: <20220416100502.627289-1-pgwipeout@gmail.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-rx_callback is a standard mailbox callback mechanism and could cover the
-function of proprietary cmdq_task_cb, so use the standard one instead of
-the proprietary one. Client has changed to use the standard callback
-machanism and sync dma buffer in client driver, so remove the proprietary
-callback in cmdq helper.
+This series enables the DesignWare based PCIe controller on the rk356x
+series of chips.
+We drop the fallback to the core driver due to compatibility issues.
+We add support for legacy interrupts for cards that lack MSI support
+(which is partially broken currently).
+We then add the device tree nodes to enable PCIe on the Quartz64 Model
+A.
 
-Signed-off-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
----
- drivers/soc/mediatek/mtk-cmdq-helper.c | 25 +------------------------
- include/linux/soc/mediatek/mtk-cmdq.h  |  5 +----
- 2 files changed, 2 insertions(+), 28 deletions(-)
+Patch 1 drops the snps,dw,pcie fallback from the dt-binding
+Patch 2 adds legacy interrupt support to the driver
+Patch 3 adds the device tree binding to the rk356x.dtsi
+Patch 4 enables the PCIe controller on the Quartz64-A
 
-diff --git a/drivers/soc/mediatek/mtk-cmdq-helper.c b/drivers/soc/mediatek/mtk-cmdq-helper.c
-index 3c8e421..c1837a4 100644
---- a/drivers/soc/mediatek/mtk-cmdq-helper.c
-+++ b/drivers/soc/mediatek/mtk-cmdq-helper.c
-@@ -425,34 +425,11 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt)
- }
- EXPORT_SYMBOL(cmdq_pkt_finalize);
- 
--static void cmdq_pkt_flush_async_cb(struct cmdq_cb_data data)
--{
--	struct cmdq_pkt *pkt = (struct cmdq_pkt *)data.data;
--	struct cmdq_task_cb *cb = &pkt->cb;
--	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
--
--	dma_sync_single_for_cpu(client->chan->mbox->dev, pkt->pa_base,
--				pkt->cmd_buf_size, DMA_TO_DEVICE);
--	if (cb->cb) {
--		data.data = cb->data;
--		cb->cb(data);
--	}
--}
--
--int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
--			 void *data)
-+int cmdq_pkt_flush_async(struct cmdq_pkt *pkt)
- {
- 	int err;
- 	struct cmdq_client *client = (struct cmdq_client *)pkt->cl;
- 
--	pkt->cb.cb = cb;
--	pkt->cb.data = data;
--	pkt->async_cb.cb = cmdq_pkt_flush_async_cb;
--	pkt->async_cb.data = pkt;
--
--	dma_sync_single_for_device(client->chan->mbox->dev, pkt->pa_base,
--				   pkt->cmd_buf_size, DMA_TO_DEVICE);
--
- 	err = mbox_send_message(client->chan, pkt);
- 	if (err < 0)
- 		return err;
-diff --git a/include/linux/soc/mediatek/mtk-cmdq.h b/include/linux/soc/mediatek/mtk-cmdq.h
-index ac6b5f3..2b498f4 100644
---- a/include/linux/soc/mediatek/mtk-cmdq.h
-+++ b/include/linux/soc/mediatek/mtk-cmdq.h
-@@ -268,8 +268,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
-  * cmdq_pkt_flush_async() - trigger CMDQ to asynchronously execute the CMDQ
-  *                          packet and call back at the end of done packet
-  * @pkt:	the CMDQ packet
-- * @cb:		called at the end of done packet
-- * @data:	this data will pass back to cb
-  *
-  * Return: 0 for success; else the error code is returned
-  *
-@@ -277,7 +275,6 @@ int cmdq_pkt_finalize(struct cmdq_pkt *pkt);
-  * at the end of done packet. Note that this is an ASYNC function. When the
-  * function returned, it may or may not be finished.
-  */
--int cmdq_pkt_flush_async(struct cmdq_pkt *pkt, cmdq_async_flush_cb cb,
--			 void *data);
-+int cmdq_pkt_flush_async(struct cmdq_pkt *pkt);
- 
- #endif	/* __MTK_CMDQ_H__ */
+Changelog:
+v6:
+- fix a ranges issue
+- point to gic instead of its
+
+v5:
+- fix incorrect series (apologies for the v4 spam)
+
+v4:
+- drop the ITS modification, poor compatibility is better than
+  completely broken
+
+v3:
+- drop select node from dt-binding
+- convert to for_each_set_bit
+- convert to generic_handle_domain_irq
+- drop unncessary dev_err
+- reorder irq_chip items
+- change to level_irq
+- install the handler after initializing the domain
+
+v2:
+- Define PCIE_CLIENT_INTR_STATUS_LEGACY
+- Fix PCIE_LEGACY_INT_ENABLE to only enable the RC interrupts
+- Add legacy interrupt enable/disable support
+
+Peter Geis (4):
+  dt-bindings: pci: remove fallback from Rockchip DesignWare binding
+  PCI: dwc: rockchip: add legacy interrupt support
+  arm64: dts: rockchip: add rk3568 pcie2x1 controller
+  arm64: dts: rockchip: enable pcie controller on quartz64-a
+
+ .../bindings/pci/rockchip-dw-pcie.yaml        |  12 +-
+ .../boot/dts/rockchip/rk3566-quartz64-a.dts   |  34 ++++++
+ arch/arm64/boot/dts/rockchip/rk356x.dtsi      |  55 +++++++++
+ drivers/pci/controller/dwc/pcie-dw-rockchip.c | 112 +++++++++++++++++-
+ 4 files changed, 200 insertions(+), 13 deletions(-)
+
 -- 
-2.7.4
+2.25.1
 

@@ -2,142 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B575034B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 09:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE7155034AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 09:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiDPHoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 03:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50414 "EHLO
+        id S229729AbiDPHns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 03:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230059AbiDPHoH (ORCPT
+        with ESMTP id S230032AbiDPHnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 03:44:07 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49F71F8EEC
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:41:36 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id t4so10083194pgc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YTmNGfrC+3pxkSIDNGI4Pu99E1WgWPC8IWfV/O/1jPo=;
-        b=BuaJUevtcqJmCeqT9gjYj5JDfFjXqxpdLmSEYY3wyml2Ixmo/t7AumlMXEtfwsYnLz
-         QT5QXdDnuywbvgo0TwQN9kjAZOnElhfXKh1CfYKSZpk2/hkTsJSJJyK2aS/mVm6T+dyP
-         srFde8KDdu3+trIBgOq2ZPMXjYjG2aPkbEpDLe+tEQw1+ZnaU0NYCDEkPLvNn+qrN/vn
-         DD3sp6tYHmSfb8HeauRdIoX3NYLHU5WCp65UVnrSxrf/p8clRN61C/5yg7Avdkobte1R
-         Erf8GEEmFjF7N9IO+vB7BeHMAQ4mwTQqghPKnANEa5Nn3zaVbbGa15QqQ86t5Wz7yRxp
-         Ob1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=YTmNGfrC+3pxkSIDNGI4Pu99E1WgWPC8IWfV/O/1jPo=;
-        b=Vadt6R3uZe7fZbT01R+7Y2RlPFSITUs8BuoMfcGQRWRzWwWNNM/qvccgwQd4vc9DUo
-         979chF+NwbV2wJViA43HEtAM4Sv/d6fhwgV+bmzX71G2vIIyd/WJIWe9EaVSnM3g9NTR
-         AKbs2Ox9VGa6AkF30iRMk5n3x49FppU/Ezn9bSHP0xLWXBjquZykHkdAFtwaqgcGQ5yy
-         fpG7SdNFli4fqckexRwINzn4O/Wbs2QJCExzaE2Aev6LiFBIinY0VGP3kP70cjum/a7v
-         KTX6KG3Sxx1/DJrIqlsthctdIxtbBd/7aqSsivDKIgGLIt+t+LLk4KAAXxVYewehdS97
-         Uphw==
-X-Gm-Message-State: AOAM533AM8hAIBc+yiBGhhjPcylDDXCOuUUn4musk5aX72ERVmAdO8sl
-        w9N6qZmvcmPVS6fJRtcG6iw=
-X-Google-Smtp-Source: ABdhPJx2jNKo3m5uktJcIeP3hTP5PFlKUvfSL5GX+AWVcLyenjLIBkBQzJADzIwtVmRfGoLRG8RyOg==
-X-Received: by 2002:a63:ad0c:0:b0:374:50b4:c955 with SMTP id g12-20020a63ad0c000000b0037450b4c955mr2037578pgf.530.1650094895773;
-        Sat, 16 Apr 2022 00:41:35 -0700 (PDT)
-Received: from localhost.localdomain ([125.131.156.123])
-        by smtp.gmail.com with ESMTPSA id e6-20020a056a001a8600b004fac74c8382sm5078720pfv.47.2022.04.16.00.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Apr 2022 00:41:35 -0700 (PDT)
-From:   Wonhyuk Yang <vvghjk1234@gmail.com>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Ohhoon Kwon <ohkwon1043@gmail.com>,
-        JaeSang Yoo <jsyoo5b@gmail.com>,
-        Wonhyuk Yang <vvghjk1234@gmail.com>,
-        Jiyoup Kim <lakroforce@gmail.com>,
-        Donghyeok Kim <dthex5d@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] mm/slub: Remove repeated action in calculate_order()
-Date:   Sat, 16 Apr 2022 16:40:59 +0900
-Message-Id: <20220416074059.526970-1-vvghjk1234@gmail.com>
-X-Mailer: git-send-email 2.30.2
+        Sat, 16 Apr 2022 03:43:47 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449A6F8EEC
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 00:41:13 -0700 (PDT)
+Received: from kwepemi100011.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KgQ8w0Gnyz1HBsJ;
+        Sat, 16 Apr 2022 15:40:32 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100011.china.huawei.com (7.221.188.134) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 15:41:11 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 16 Apr 2022 15:41:10 +0800
+Message-ID: <6252f076-b74a-8dc8-9bc9-93aa70e844c5@huawei.com>
+Date:   Sat, 16 Apr 2022 15:41:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [RFC PATCH -next V3 4/6] arm64: add copy_{to, from}_user to
+ machine check safe
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        James Morse <james.morse@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>, <x86@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Xie XiuQi <xiexiuqi@huawei.com>
+References: <20220412072552.2526871-1-tongtiangen@huawei.com>
+ <20220412072552.2526871-5-tongtiangen@huawei.com>
+ <38c6d4b5-a3db-5c3e-02e7-39875edb3476@arm.com>
+ <306b1b09-487a-9ccd-4a63-8c78889492c6@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <306b1b09-487a-9ccd-4a63-8c78889492c6@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To calculate order, calc_slab_order() is called repeatly changing the
-fract_leftover. Thus, the branch which is not dependent on
-fract_leftover is executed repeatly. So make it run only once.
 
-Plus, when min_object reached to 0, we set fract_leftover to 1. In
-this case, we can calculate order by max(slub_min_order,
-get_order(size)) instead of calling calc_slab_order().
 
-No functional impact expected.
+在 2022/4/13 1:17, Robin Murphy 写道:
+> On 12/04/2022 6:08 pm, Robin Murphy wrote:
+> [...]
+>>> @@ -62,7 +63,11 @@ SYM_FUNC_START(__arch_copy_from_user)
+>>>       ret
+>>>       // Exception fixups
+>>> -9997:    cmp    dst, dstin
+>>> +9997:    mrs esr, esr_el1            // Check exception first
+>>> +    and esr, esr, #ESR_ELx_FSC
+>>> +    cmp esr, #ESR_ELx_FSC_EXTABT
+>>
+>> Should we be checking EC to make sure it's a data abort - and thus FSC 
+>> is valid - in the first place? I'm a little fuzzy on all the possible 
+>> paths into fixup_exception(), and it's not entirely obvious whether 
+>> this is actually safe or not.
+> 
+> In fact, thinking some more about that, I don't think there should be 
+> any need for this sort of logic in these handlers at all. The 
+> fixup_exception() machinery should already know enough about the 
+> exception that's happened and the extable entry to figure this out and 
+> not bother calling the handler at all.
+> 
+> Thanks,
+> Robin.
+> .
 
-Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
----
-V1 -> V2: Fix typo miss in a commit message
+Hi Robin:
+As you said, it seems that it's not good to judge esr here, how about 
+using the following method, i need your suggestion :)
 
- mm/slub.c | 18 +++++++-----------
- 1 file changed, 7 insertions(+), 11 deletions(-)
++#define FIXUP_TYPE_NORMAL	0
++#define FIXUP_TYPE_MC		1
 
-diff --git a/mm/slub.c b/mm/slub.c
-index ed5c2c03a47a..e7a394d7b75a 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3795,9 +3795,6 @@ static inline unsigned int calc_slab_order(unsigned int size,
- 	unsigned int min_order = slub_min_order;
- 	unsigned int order;
- 
--	if (order_objects(min_order, size) > MAX_OBJS_PER_PAGE)
--		return get_order(size * MAX_OBJS_PER_PAGE) - 1;
--
- 	for (order = max(min_order, (unsigned int)get_order(min_objects * size));
- 			order <= max_order; order++) {
- 
-@@ -3820,6 +3817,11 @@ static inline int calculate_order(unsigned int size)
- 	unsigned int max_objects;
- 	unsigned int nr_cpus;
- 
-+	if (unlikely(order_objects(slub_min_order, size) > MAX_OBJS_PER_PAGE)) {
-+		order = get_order(size * MAX_OBJS_PER_PAGE) - 1;
-+		goto out;
-+	}
-+
- 	/*
- 	 * Attempt to find best configuration for a slab. This
- 	 * works by first attempting to generate a layout with
-@@ -3865,14 +3867,8 @@ static inline int calculate_order(unsigned int size)
- 	 * We were unable to place multiple objects in a slab. Now
- 	 * lets see if we can place a single object there.
- 	 */
--	order = calc_slab_order(size, 1, slub_max_order, 1);
--	if (order <= slub_max_order)
--		return order;
--
--	/*
--	 * Doh this slab cannot be placed using slub_max_order.
--	 */
--	order = calc_slab_order(size, 1, MAX_ORDER, 1);
-+	order = max_t(unsigned int, slub_min_order, (unsigned int)get_order(size));
-+out:
- 	if (order < MAX_ORDER)
- 		return order;
- 	return -ENOSYS;
--- 
-2.30.2
+arch/arm64/mm/extable.c
+static bool ex_handler_fixup(const struct exception_table_entry *ex,
+-	struct pt_regs *regs)
++	struct pt_regs *regs, int fixuptype)
+{
++	regs->regs[16] = fixuptype;
+	[...]
+}
 
+bool fixup_exception(struct pt_regs *regs)
+{
+	[...]
+	switch(ex->type) {
+	case EX_TYPE_UACCESS_MC:
+-		return ex_handler_fixup(ex, regs)
++		return ex_handler_fixup(ex, regs, FIXUP_TYPE_NORMAL)
+	break;
+	}
+	[...]
+}
+
+bool fixup_exception_mc(struct pt_regs *regs)
+{
+	[...]
+	switch(ex->type) {
+	case EX_TYPE_UACCESS_MC:
+-		return ex_handler_fixup(ex, regs)
++		return ex_handler_fixup(ex, regs, FIXUP_TYPE_MC)
+	break;
+	}
+	[...]
+}
+
+arch/arm64/lib/copy_from_user.S
+arch/arm64/lib/copy_to_user.S
+
++fixup_type      .req    x16
+
+// Exception fixups
+//x16: fixup type written by ex_handler_fixup
+-9997:  cmp     dst, dstin
++9997:	cmp fixup_type, #FIXUP_TYPE_MC
++	b.eq 9998f
++ 	cmp     dst, dstin
+  	b.ne    9998f
+
+Thanks,
+Tong.

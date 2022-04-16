@@ -2,56 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B07A05033FA
-	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E04503426
+	for <lists+linux-kernel@lfdr.de>; Sat, 16 Apr 2022 07:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiDPDMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 15 Apr 2022 23:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
+        id S229958AbiDPDM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 15 Apr 2022 23:12:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbiDPDMT (ORCPT
+        with ESMTP id S229935AbiDPDMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 15 Apr 2022 23:12:19 -0400
+        Fri, 15 Apr 2022 23:12:21 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC193764C
-        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:09:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF77BC1E
+        for <linux-kernel@vger.kernel.org>; Fri, 15 Apr 2022 20:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650078587; x=1681614587;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UUoJcqyYiWhYQN62MwyHHkJmUVLEUbhIzcU4ghIAFrY=;
-  b=cPLz8LQIt6aCwa37OVqoOmne1Nl9q+tdxvxDXWoAkqFVEkDijZaYpcgi
-   GgT/OOXGAV7eMCK7grFoSQmF7pZ/vdtPJvZEj0J1raIYQaw0U1JRpZmTw
-   B0Vpx5txqYyyFYXc/Flgy9mi3zQE9YLds46aHOyjkYfjsII2gm00fw6qd
-   2a3oV+zp87m9XF6grWvTBaLwr837UT/jW09aLusGolqfxRVNwbEckdlYk
-   Mp11jLD2SIWLfWT55IpLjrQVj2whQiUMDG743ZkatByEDnpU9pMEqoQsI
-   1la7nwAXs2YOZTGEes8z6gOyR7JllNDjxRhgUBtLD7omcFoNPgNFH6Y2r
+  t=1650078589; x=1681614589;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2oqCy262BIHrBhZkbyDWcQ+h+NCRtgXxKKOmXYXh2fs=;
+  b=chuD9e5ryW1UfW5y1D0M32pmX/IojKwwaS3P6ACUXHMI8DtE8sboxwbu
+   5KJ2uxSGZ+ib3t1ERrxQNhfDNXaWAPFsh3ORTMWRaNSqL3b2uWMcMBPLY
+   byay/Zai94rbHmNACVuCOCeAWYs/G9c8FRxBpzIj5NtILt5svLah9uJQj
+   XOzb5b2RDQX4r6nPs0kIaYAY332GLV+WejIEXsnT1a7mHbQx3tsw08IPR
+   QqSucIBdu5gTGUrY2jBB3gTFQVkI9bd/qaGKSxhm7EQLCm22jIc0pyJXU
+   PdBmR9pVsF1syVIXKn5YdfTHpdf2qFRFTC/ukauLB3TBnTkmJO1au53+i
    w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="245149670"
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="245149671"
 X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="245149670"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
+   d="scan'208";a="245149671"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Apr 2022 20:09:46 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,264,1643702400"; 
-   d="scan'208";a="553416853"
+   d="scan'208";a="624722956"
 Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 15 Apr 2022 20:09:45 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 15 Apr 2022 20:09:45 -0700
 Received: from kbuild by 3abc53900bec with local (Exim 4.95)
         (envelope-from <lkp@intel.com>)
-        id 1nfYoi-0002ht-Hu;
+        id 1nfYoi-0002hq-HI;
         Sat, 16 Apr 2022 03:09:44 +0000
-Date:   Sat, 16 Apr 2022 11:09:12 +0800
+Date:   Sat, 16 Apr 2022 11:09:17 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <anup.patel@wdc.com>
+To:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-Subject: drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies
- type 'long' but the argument has type 'int'
-Message-ID: <202204161152.YXsVu0jD-lkp@intel.com>
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org,
+        Daniel Borkmann <daniel@iogearbox.net>
+Subject: [ammarfaizi2-block:bpf/bpf-next/master 10/17]
+ drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c:147:3: error: fallthrough
+ annotation does not directly precede switch label
+Message-ID: <202204161130.bjMDOgRJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 User-Agent: Mutt/1.10.1 (2018-07-13)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
@@ -63,148 +68,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
-
-FYI, the error/warning still remains.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
-commit: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
-date:   5 weeks ago
-config: riscv-randconfig-r026-20220416 (https://download.01.org/0day-ci/archive/20220416/202204161152.YXsVu0jD-lkp@intel.com/config)
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf-next/master
+head:   0fb53aabc5fcdf848ec7adc777baff25a1c6c335
+commit: c7dd09fd46283029a41615b2b7034aea26b22ee0 [10/17] ixgbe, xsk: Terminate Rx side of NAPI when XSK Rx queue gets full
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220416/202204161130.bjMDOgRJ-lkp@intel.com/config)
 compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
+        # https://github.com/ammarfaizi2/linux-block/commit/c7dd09fd46283029a41615b2b7034aea26b22ee0
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf-next/master
+        git checkout c7dd09fd46283029a41615b2b7034aea26b22ee0
         # save the config file to linux build tree
         mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag as appropriate
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                            cpuid_to_hartid_map(cpu));
-                            ^
->> drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                            cpuid_to_hartid_map(cpu));
-                            ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                          cpuid_to_hartid_map(cpu));
-                          ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:359:10: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                          cpuid_to_hartid_map(cpu));
-                          ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:489:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: error: implicit declaration of function 'cpuid_to_hartid_map' [-Werror,-Wimplicit-function-declaration]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^
-   drivers/cpuidle/cpuidle-riscv-sbi.c:567:6: warning: format specifies type 'long' but the argument has type 'int' [-Wformat]
-                                    cpuid_to_hartid_map(cpu));
-                                    ^~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:576:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:132:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:446:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:418:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   3 warnings and 3 errors generated.
+>> drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c:147:3: error: fallthrough annotation does not directly precede switch label
+                   fallthrough; /* handle aborts by dropping packet */
+                   ^
+   include/linux/compiler_attributes.h:222:41: note: expanded from macro 'fallthrough'
+   # define fallthrough                    __attribute__((__fallthrough__))
+                                           ^
+   1 error generated.
 
 
-vim +350 drivers/cpuidle/cpuidle-riscv-sbi.c
+vim +147 drivers/net/ethernet/intel/ixgbe/ixgbe_xsk.c
 
-   317	
-   318	static int sbi_cpuidle_init_cpu(struct device *dev, int cpu)
-   319	{
-   320		struct cpuidle_driver *drv;
-   321		unsigned int state_count = 0;
-   322		int ret = 0;
-   323	
-   324		drv = devm_kzalloc(dev, sizeof(*drv), GFP_KERNEL);
-   325		if (!drv)
-   326			return -ENOMEM;
-   327	
-   328		drv->name = "sbi_cpuidle";
-   329		drv->owner = THIS_MODULE;
-   330		drv->cpumask = (struct cpumask *)cpumask_of(cpu);
-   331	
-   332		/* RISC-V architectural WFI to be represented as state index 0. */
-   333		drv->states[0].enter = sbi_cpuidle_enter_state;
-   334		drv->states[0].exit_latency = 1;
-   335		drv->states[0].target_residency = 1;
-   336		drv->states[0].power_usage = UINT_MAX;
-   337		strcpy(drv->states[0].name, "WFI");
-   338		strcpy(drv->states[0].desc, "RISC-V WFI");
-   339	
-   340		/*
-   341		 * If no DT idle states are detected (ret == 0) let the driver
-   342		 * initialization fail accordingly since there is no reason to
-   343		 * initialize the idle driver if only wfi is supported, the
-   344		 * default archictectural back-end already executes wfi
-   345		 * on idle entry.
-   346		 */
-   347		ret = dt_init_idle_driver(drv, sbi_cpuidle_state_match, 1);
-   348		if (ret <= 0) {
-   349			pr_debug("HART%ld: failed to parse DT idle states\n",
- > 350				 cpuid_to_hartid_map(cpu));
-   351			return ret ? : -ENODEV;
-   352		}
-   353		state_count = ret + 1; /* Include WFI state as well */
-   354	
-   355		/* Initialize idle states from DT. */
-   356		ret = sbi_cpuidle_dt_init_states(dev, drv, cpu, state_count);
-   357		if (ret) {
-   358			pr_err("HART%ld: failed to init idle states\n",
-   359			       cpuid_to_hartid_map(cpu));
-   360			return ret;
-   361		}
-   362	
-   363		ret = cpuidle_register(drv, NULL);
-   364		if (ret)
-   365			goto deinit;
-   366	
-   367		cpuidle_cooling_register(drv);
-   368	
-   369		return 0;
-   370	deinit:
-   371		sbi_cpuidle_deinit_cpu(cpu);
-   372		return ret;
-   373	}
-   374	
+d0bcacd0a130974 Björn Töpel        2018-10-02   96  
+d0bcacd0a130974 Björn Töpel        2018-10-02   97  static int ixgbe_run_xdp_zc(struct ixgbe_adapter *adapter,
+d0bcacd0a130974 Björn Töpel        2018-10-02   98  			    struct ixgbe_ring *rx_ring,
+d0bcacd0a130974 Björn Töpel        2018-10-02   99  			    struct xdp_buff *xdp)
+d0bcacd0a130974 Björn Töpel        2018-10-02  100  {
+d0bcacd0a130974 Björn Töpel        2018-10-02  101  	int err, result = IXGBE_XDP_PASS;
+d0bcacd0a130974 Björn Töpel        2018-10-02  102  	struct bpf_prog *xdp_prog;
+4fe815850bdc8d4 Jason Xing         2021-09-29  103  	struct ixgbe_ring *ring;
+d0bcacd0a130974 Björn Töpel        2018-10-02  104  	struct xdp_frame *xdpf;
+d0bcacd0a130974 Björn Töpel        2018-10-02  105  	u32 act;
+d0bcacd0a130974 Björn Töpel        2018-10-02  106  
+d0bcacd0a130974 Björn Töpel        2018-10-02  107  	xdp_prog = READ_ONCE(rx_ring->xdp_prog);
+d0bcacd0a130974 Björn Töpel        2018-10-02  108  	act = bpf_prog_run_xdp(xdp_prog, xdp);
+d8c3061e5edd3b1 Kevin Laatz        2019-08-27  109  
+7d52fe2eaddfa3d Magnus Karlsson    2020-12-02  110  	if (likely(act == XDP_REDIRECT)) {
+7d52fe2eaddfa3d Magnus Karlsson    2020-12-02  111  		err = xdp_do_redirect(rx_ring->netdev, xdp, xdp_prog);
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  112  		if (!err)
+8281356b1cab1cc Magnus Karlsson    2021-05-10  113  			return IXGBE_XDP_REDIR;
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  114  		if (xsk_uses_need_wakeup(rx_ring->xsk_pool) && err == -ENOBUFS)
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  115  			result = IXGBE_XDP_EXIT;
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  116  		else
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  117  			result = IXGBE_XDP_CONSUMED;
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  118  		goto out_failure;
+7d52fe2eaddfa3d Magnus Karlsson    2020-12-02  119  	}
+7d52fe2eaddfa3d Magnus Karlsson    2020-12-02  120  
+d0bcacd0a130974 Björn Töpel        2018-10-02  121  	switch (act) {
+d0bcacd0a130974 Björn Töpel        2018-10-02  122  	case XDP_PASS:
+d0bcacd0a130974 Björn Töpel        2018-10-02  123  		break;
+d0bcacd0a130974 Björn Töpel        2018-10-02  124  	case XDP_TX:
+1b698fa5d8ef958 Lorenzo Bianconi   2020-05-28  125  		xdpf = xdp_convert_buff_to_frame(xdp);
+8281356b1cab1cc Magnus Karlsson    2021-05-10  126  		if (unlikely(!xdpf))
+8281356b1cab1cc Magnus Karlsson    2021-05-10  127  			goto out_failure;
+4fe815850bdc8d4 Jason Xing         2021-09-29  128  		ring = ixgbe_determine_xdp_ring(adapter);
+4fe815850bdc8d4 Jason Xing         2021-09-29  129  		if (static_branch_unlikely(&ixgbe_xdp_locking_key))
+4fe815850bdc8d4 Jason Xing         2021-09-29  130  			spin_lock(&ring->tx_lock);
+4fe815850bdc8d4 Jason Xing         2021-09-29  131  		result = ixgbe_xmit_xdp_ring(ring, xdpf);
+4fe815850bdc8d4 Jason Xing         2021-09-29  132  		if (static_branch_unlikely(&ixgbe_xdp_locking_key))
+4fe815850bdc8d4 Jason Xing         2021-09-29  133  			spin_unlock(&ring->tx_lock);
+8281356b1cab1cc Magnus Karlsson    2021-05-10  134  		if (result == IXGBE_XDP_CONSUMED)
+8281356b1cab1cc Magnus Karlsson    2021-05-10  135  			goto out_failure;
+d0bcacd0a130974 Björn Töpel        2018-10-02  136  		break;
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  137  	case XDP_DROP:
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  138  		result = IXGBE_XDP_CONSUMED;
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  139  		break;
+d0bcacd0a130974 Björn Töpel        2018-10-02  140  	default:
+c8064e5b4adac5e Paolo Abeni        2021-11-30  141  		bpf_warn_invalid_xdp_action(rx_ring->netdev, xdp_prog, act);
+5463fce643e8d04 Jeff Kirsher       2020-06-03  142  		fallthrough;
+d0bcacd0a130974 Björn Töpel        2018-10-02  143  	case XDP_ABORTED:
+c7dd09fd4628302 Maciej Fijalkowski 2022-04-13  144  		result = IXGBE_XDP_CONSUMED;
+8281356b1cab1cc Magnus Karlsson    2021-05-10  145  out_failure:
+d0bcacd0a130974 Björn Töpel        2018-10-02  146  		trace_xdp_exception(rx_ring->netdev, xdp_prog, act);
+5463fce643e8d04 Jeff Kirsher       2020-06-03 @147  		fallthrough; /* handle aborts by dropping packet */
+d0bcacd0a130974 Björn Töpel        2018-10-02  148  	}
+d0bcacd0a130974 Björn Töpel        2018-10-02  149  	return result;
+d0bcacd0a130974 Björn Töpel        2018-10-02  150  }
+d0bcacd0a130974 Björn Töpel        2018-10-02  151  
+
+:::::: The code at line 147 was first introduced by commit
+:::::: 5463fce643e8d041f54378b28b35940fd5e5a5a4 ethernet/intel: Convert fallthrough code comments
+
+:::::: TO: Jeff Kirsher <jeffrey.t.kirsher@intel.com>
+:::::: CC: Tony Nguyen <anthony.l.nguyen@intel.com>
 
 -- 
 0-DAY CI Kernel Test Service

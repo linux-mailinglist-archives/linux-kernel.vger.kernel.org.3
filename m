@@ -2,112 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C504B504851
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 18:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C39D0504854
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 18:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiDQQcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 12:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S234392AbiDQQdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 12:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234358AbiDQQcR (ORCPT
+        with ESMTP id S234358AbiDQQdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 12:32:17 -0400
+        Sun, 17 Apr 2022 12:33:11 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1542ED40;
-        Sun, 17 Apr 2022 09:29:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627CEA199
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 09:30:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16A1CB80B52;
-        Sun, 17 Apr 2022 16:29:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CA0C385A4;
-        Sun, 17 Apr 2022 16:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650212979;
-        bh=jNaiYWXoDSpUF7xdbp7ZhbnJyOJIfm1Fz4slt4TBZFQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=RZsACDGUZ0W01+9fbWQQ4Ajf1OQzkHmIv4U33cKUXvB1nF137fr7apvdpbdZt7w+2
-         dm8WRWaJJW7z2sna0NvU3VP24I2T0Y2aSin1XUFGVpLhk2rUyiq2J7ix8o2rCjT0Gr
-         d5efBxPOd0iyv5bjD/3/RLzY8jwUl/qF011sRF5i9fVYgfvBCOHahGCqg9VUXibMHM
-         IXX0yAWw8DzeMwXua8jYdTgu99SjQxrHGhjma3ik+0TGhjnsCy0euqfxlI8s8EA1mb
-         x72tnDZEXoED3ZBhFrvrKB0Ecx3E+His4qNN0/PkpRLEFPwpcb+wXm9VFXL/vvk8fM
-         ROWg9GqIC8krA==
-Received: by earth.universe (Postfix, from userid 1000)
-        id DAD2A3C0CBC; Sun, 17 Apr 2022 18:29:36 +0200 (CEST)
-Date:   Sun, 17 Apr 2022 18:29:36 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 5.18-rc
-Message-ID: <20220417162936.zqxxjmfpdut34qjb@earth.universe>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0EF8DB80CBF
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 16:30:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B171CC385A4;
+        Sun, 17 Apr 2022 16:30:30 +0000 (UTC)
+Date:   Sun, 17 Apr 2022 17:30:27 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YlxAo5BAy+ARlvqj@arm.com>
+References: <CAMj1kXH=ybJWBzmMqkrkvyF8nM3UpTchUOq+oweW=BqW2TOyRw@mail.gmail.com>
+ <YllE+wWqP6F+1nwa@gondor.apana.org.au>
+ <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
+ <YllM24eca/uxf9y7@gondor.apana.org.au>
+ <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
+ <YlvK9iefUECy361O@gondor.apana.org.au>
+ <YlvQTci7RP5evtTy@arm.com>
+ <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
+ <YlvU6ou14okbAbgW@arm.com>
+ <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gxgqls4pt2jpholf"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, Apr 17, 2022 at 04:58:29PM +0800, Herbert Xu wrote:
+> On Sun, Apr 17, 2022 at 09:50:50AM +0100, Catalin Marinas wrote:
+> >
+> > Right, if that's what you prefer. Something like:
+> > 
+> > diff --git a/include/linux/crypto.h b/include/linux/crypto.h
+> > index 2324ab6f1846..bb645b2f2718 100644
+> > --- a/include/linux/crypto.h
+> > +++ b/include/linux/crypto.h
+> > @@ -645,7 +645,7 @@ struct crypto_tfm {
+> >  	
+> >  	struct crypto_alg *__crt_alg;
+> >  
+> > -	void *__crt_ctx[] CRYPTO_MINALIGN_ATTR;
+> > +	void *__crt_ctx[] __aligned(ARCH_DMA_MINALIGN);
+> >  };
+> > 
+> > But once we do that, are there any other CRYPTO_MINALIGN left around?
+> 
+> This is still implying the whole structure is aligned to the given
+> value, which it is not.
+> 
+> Please just add the padding as needed.
 
---gxgqls4pt2jpholf
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Do you mean as per Ard's proposal here:
 
-Hi Linus,
+https://lore.kernel.org/r/CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com
 
-The following changes since commit 3123109284176b1532874591f7c81f3837bbdc17:
+struct crypto_request {
+	union {
+		struct {
+			... fields ...
+		};
+		u8 __padding[ARCH_DMA_MINALIGN];
+	};
+	void __ctx[]  __aligned(CRYPTO_MINALIGN);
+};
 
-  Linux 5.18-rc1 (2022-04-03 14:08:21 -0700)
+If CRYPTO_MINALIGN is lowered to, say, 8 (to be the same as lowest
+ARCH_KMALLOC_MINALIGN), the __alignof__(req->__ctx) would be 8.
+Functions like crypto_tfm_ctx_alignment() will return 8 when what you
+need is 128. We can change those functions to return ARCH_DMA_MINALIGN
+instead or always bump cra_alignmask to ARCH_DMA_MINALIGN-1.
 
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v5.18-rc
-
-for you to fetch changes up to 581045ed5cfa42ed7f5364d6ccbcb6fcc077ffcf:
-
-  power: supply: Reset err after not finding static battery (2022-04-13 12:05:22 +0200)
-
-----------------------------------------------------------------
-Power Supply Fixes for 5.18 cycle
-
-Regression fix for the 5.18 cycle:
-* Fix a regression with battery data failing to load from DT
-
-----------------------------------------------------------------
-Linus Walleij (1):
-      power: supply: samsung-sdi-battery: Add missing charge restart voltages
-
-Yassine Oudjana (1):
-      power: supply: Reset err after not finding static battery
-
- drivers/power/supply/power_supply_core.c   | 6 ++++++
- drivers/power/supply/samsung-sdi-battery.c | 2 ++
- 2 files changed, 8 insertions(+)
-
---gxgqls4pt2jpholf
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmJcQG0ACgkQ2O7X88g7
-+pr3ExAAlAjqE1l5FAHX8D4My6duJFaxuwOW8IpM/CsPsbD6jebC63TNbsiZ8gQe
-kk6kslly2T0jD5N76wmNz8Nj5u2yVZbBen0kbyUJT33kgE0ccqwkeG5NPhTFX2km
-powIK94uEPkhm0C4yQmN21S4mMc7w2fey3rWR3if7una5HUJMlds0S69G4WL0iBJ
-3gn3DVDUTsPAPHKkH4hIagwfKqNMRkGgBHrxbbvKGV+xcETA2aU2GlBc+j1JqD1s
-GqprtulnVb64u+azd4DXSC0lDhv/Rw0EaoMcpph81xVJhLq+HLtUWqgINlSkK8Ga
-svpM2RK/ZEEOo1Zl8PchOv+ysaTEJLxicV3yIbgjrUjgBtkgZpX76DkiADi2QWp3
-QvfDagZM+JaW810x9n/Mtf1bTKObxyUg02lNrhRw4Nc/WM/+h1rfh7EDZbOtIJcJ
-vNyT0qk7D4wMpJXEdhCUeTEO8resSJzGhMKaJcoxCJzFksUiDxJAxuQNlOfEkNg9
-+8hZ/zmcYbt2rEs9b46FzFcUB01Xvm5JIcUPj9EUdmMdmF8xMvKNzCcAPLNUsf9P
-faxRC7zCXYEYE8GJM1hlU2KKaJeETKmsFyg7V/RkPCP22YepQAZzCyFZHEaIrobe
-hmlNJRZkwxRDS4+YcgSoaTuGg5Q8OB7hCEa+5/n6HIlcyK6w770=
-=PvvY
------END PGP SIGNATURE-----
-
---gxgqls4pt2jpholf--
+-- 
+Catalin

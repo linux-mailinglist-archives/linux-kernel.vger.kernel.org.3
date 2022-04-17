@@ -2,75 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B2B5049F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 01:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A093504A00
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 01:10:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233147AbiDQXFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 19:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S235032AbiDQXNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 19:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiDQXFo (ORCPT
+        with ESMTP id S233184AbiDQXNP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 19:05:44 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9963918B14;
-        Sun, 17 Apr 2022 16:03:01 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id 04C069200B3; Mon, 18 Apr 2022 01:03:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id F40D492009C;
-        Mon, 18 Apr 2022 00:03:00 +0100 (BST)
-Date:   Mon, 18 Apr 2022 00:03:00 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RESEND][PATCH v3 1/2] serial: 8250: Fold EndRun device support
- into OxSemi Tornado code
-In-Reply-To: <Ylk3Q6HyaN/5+97/@kroah.com>
-Message-ID: <alpine.DEB.2.21.2204172341250.9383@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2203310114210.44113@angie.orcam.me.uk> <alpine.DEB.2.21.2203310121211.44113@angie.orcam.me.uk> <Ylk3Q6HyaN/5+97/@kroah.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Sun, 17 Apr 2022 19:13:15 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 367BCDE93
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 16:10:38 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id t67so23103288ybi.2
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 16:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=Le4jl5XF0VLBlxt8HjmHELE2HKvDu0JU7mx1Xs8yGvg=;
+        b=c0jdZ45L3REZF64lrO2C0QNLmZ4h/XmxmZ1szaQf2AJXBW6kXX39y7vvEfXAB6c01I
+         uq4zgYIcGBUQPj3iAf7uv2H+UeOrhxpmSbedIkCjIOGsCP4jc1VCVWYGDUQ4uCrnd+NO
+         04x/7CopQyhxNn9Q0HkQ+QrzJXe1hKdgLtlJVU8n9YOOY6++Igp5UPQDqlfPcuLXrGXc
+         +HfAqgAAQNZ3Z46HwEBwECGGAq0wQ5MkH4ARRZp7aRDgxVgNmYbvVHwsJRFVyJR7kz27
+         u5mdbZxNFIT4iXD7KMcjcokvX6yj8Kb5zearY2lf6O5faVBu61jHAU4C8xTr7jMgMBBa
+         F0VA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=Le4jl5XF0VLBlxt8HjmHELE2HKvDu0JU7mx1Xs8yGvg=;
+        b=F71yWvDcjPQ5tTCJRlAvqSXYeLEu7rXZhJ+nqZySW3FktsGoFTpNWGzQdn7uzcaw5d
+         iIVwf7cfDteXiHKyGwKLUJPsfc+Ok2+dgAcaVgW3GotITFTYqVXAaHWNNasCOL+p1FP9
+         i12iw9EfIrMAd0eadvIkW7a9BblbX6VC4rC9zKlLVdmtCktpMGQfC/AhFiIBK0Z3P0E8
+         2orLDPKVCdbS8diGW796g8akEYGsYK4gmvYT/18h3E/+H+ohVjGrqolc2XbvQu5GZ5Wb
+         545zLsG6Bc4rIKJP5ZHMlXZ0qtuF7wZBsbqqhsd2+PSPlNfq2RSRqm/IhDG8iTPPXUSF
+         sYAg==
+X-Gm-Message-State: AOAM5316gdrycG4Nl5utP6XhSG8Lp3jzwXkx7j8CEbum3KmLmQ3bur9Z
+        hQHnRC/uvQZV3eooZFeJBmTSh7OElt69/jYb1xPHhg==
+X-Google-Smtp-Source: ABdhPJzKqeZN1SkN6+VZNQkz9459jTIakrP6+pv28l0cbdbwmcXV78MirwRmfGtmkDgp8il6CCdx4xYxepIf9b8JUVk=
+X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
+ t5-20020a5b0dc5000000b00624f16d7069mr7860104ybr.295.1650237037490; Sun, 17
+ Apr 2022 16:10:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220226184028.111566-1-bhupesh.sharma@linaro.org> <20220226184028.111566-2-bhupesh.sharma@linaro.org>
+In-Reply-To: <20220226184028.111566-2-bhupesh.sharma@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 18 Apr 2022 01:10:26 +0200
+Message-ID: <CACRpkdZ97KkVqTfYVvSrBWZd=KK7x15Ppb3Pw0yJ_Sekg=i4OQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] dt-bindings: qcom,pdc: Add compatible for SM8150
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, maz@kernel.org,
+        quic_mkshah@quicinc.com, linux-gpio@vger.kernel.org,
+        robh+dt@kernel.org, Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 15 Apr 2022, Greg Kroah-Hartman wrote:
+On Sat, Feb 26, 2022 at 7:40 PM Bhupesh Sharma
+<bhupesh.sharma@linaro.org> wrote:
 
-> > Remove redundant code then and factor out OxSemi Tornado device
-> > detection.  Also correct the baud base like with commit 6cbe45d8ac93
-> > ("serial: 8250: Correct the clock for OxSemi PCIe devices") for the
-> > value of 3906250 rather than 4000000, obtained by dividing the 62.5MHz
-> > clock input by the default oversampling rate of 16.  Finally move the
-> > EndRun vendor:device ID to <linux/pci_ids.h>.
-> 
-> That's a lot of different things happening all the same commit.  Please
-> break this out into one-patch-per-logical-change as is required.
+> Add the compatible string for SM8150 SoC from Qualcomm.
+>
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Cc: Vinod Koul <vkoul@kernel.org>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 
- The baud base fix is completely swallowed by the next change for EndRun 
-devices, but I guess someone may want to backport it on its own, however 
-unlikely.
+Patch applied!
 
- I have posted v4 then with this change split off (and the other removed) 
-as per your request.  I have also reconsidered the changes made in 2/2 and 
-split it into three, so that drivers/tty/serial/8250/8250_port.c updates 
-are separate and self-contained.
-
- In the course of the respin, I have realised exporting the ICR access
-helpers caused a code generation regression, so I have removed the inline 
-function specifier so as to let the compiler choose whether to inline the 
-functions or not.  I have also realised that the change to the console 
-restorer is actually a fix for a preexisting bug in handling of the AFE 
-bit, so I have annotated the change accordingly.
-
- Thank you for your review.
-
-  Maciej
+Yours,
+Linus Walleij

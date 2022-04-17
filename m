@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872885047A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 13:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A202F5047A4
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 13:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233968AbiDQLMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 07:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56990 "EHLO
+        id S233966AbiDQLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 07:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233959AbiDQLMh (ORCPT
+        with ESMTP id S230299AbiDQLTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 07:12:37 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDAEBBAB;
-        Sun, 17 Apr 2022 04:10:01 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id b15so14728074edn.4;
-        Sun, 17 Apr 2022 04:10:01 -0700 (PDT)
+        Sun, 17 Apr 2022 07:19:13 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBEDFE;
+        Sun, 17 Apr 2022 04:16:38 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id y10so5171119ejw.8;
+        Sun, 17 Apr 2022 04:16:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=scbjRhQc3dC9uDF//ZfZgBhT9QtztPDwfTGJnmb4ISg=;
-        b=h3IZfSoIP7/Hmyn5pnGsTIEOlEKL3fP+UsSqfFr0aSQw8vhp8VaGclKalQIB66fy63
-         kAJRkXG6a5SvBFtm63pDQgbnbwmaM2Y7XuddtkOptmLMWcGVqm/7wAexHdtyFTYTxktd
-         sAddoDsaQKjensJ0AAawyBpATA3OLnhHyPtZAnb9Znh/V8k2eqtgtQp6F7juNKE2kJfJ
-         yM9EZKb4uz14iFQOta+xH/JeES95w+UbrS3l6NRMu6PGRjdetxrR6nit8uzE/Ves+4lm
-         tr/IxTnEr6b2O703juMYKflvQOdbCxXrFHNG2wxJqhv3RaSe6xfox9RFRzn6KbU2DdGP
-         rDuA==
+        bh=CfrGP66WrBzG96HgL3U6ijgtUczQ+IlvOu7P8DwUlvM=;
+        b=ZB83+qeHedQQtzaBLhpm3L6S6LIsC9/o4/molKhfmELh8L1G/bEFe9WwSEzMw+OqvT
+         qFlhIW199EenZhCv1I/EFS4KU42rrmKnCkir7bWaYKnLwRCelRhAfGsfNcuGrDWMa20W
+         sbi4Yp5/maKStJepbAVLyg+BOebWK+XgdakdOXPO60vJXuxtsOhfH9NhBS76I3pjc7Ns
+         ottuJiGdepNkj34SlF1MZxg9QFBYARk6i0h6rc9zx9qnwllF28LPTvv441fErJq1woLH
+         NsX1izlLDIJsznX2FQa1uZa5ANfFKmpbloaGZ0s+9bgxnSpsn+UOzYqwqS+4Zn/c+4MC
+         a1Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=scbjRhQc3dC9uDF//ZfZgBhT9QtztPDwfTGJnmb4ISg=;
-        b=MnTliuDmAbfPdG7AP/V+/6WNIYtm8ndGyBLcspGOA+wZAxtCNLLMQLUORwnQ1kRYPv
-         K601nANfxlUQxvRn9qE3uuygXJgkJAQjNusFQ4T5wmu5SHp9lJ7DBM/eVH41MAykIwPr
-         2cvVEbUJyOZzmzJmjknlZyrMaVeT2qXSz94a8QBdADiAXGk0rcsbIfSdYfgSJ4hyjoQa
-         BoRgu84m0CL6Z/jvgv0Zusy85nhEaYGEUohrzB3OOSOnim8JxmOxy7eS16unErwUw39B
-         0jNDfuINGB8U+rAaR3AZFa5GnzZfWzAMh9kKSicR2Vtl9P38s+beO3IIEz2p37OyW43m
-         L+EQ==
-X-Gm-Message-State: AOAM530jxNw5n3BGFPjBZawsmq8EI0qZzWatTLhIV5PXm5Gcu0Itzn4E
-        h66eivzdjUSsB+hUYz6ViCQ=
-X-Google-Smtp-Source: ABdhPJwbNM8JKHydXAk5G7aF0sEd/dSgHhBYR4n2/QrIrj5J3nFjFKBveurtwJ5VzQ0ex/QQJt0djg==
-X-Received: by 2002:a05:6402:1d55:b0:423:e3a9:d455 with SMTP id dz21-20020a0564021d5500b00423e3a9d455mr1505245edb.340.1650193800248;
-        Sun, 17 Apr 2022 04:10:00 -0700 (PDT)
+        bh=CfrGP66WrBzG96HgL3U6ijgtUczQ+IlvOu7P8DwUlvM=;
+        b=Fpk81Ov36+Lc5L320JbsAD3/i2sIDShdycz/GJx3ykmis3OCqIJ06D/Qjzp5K4RMmM
+         KgJzUOVP7SqLn+5yhuqQbuhrKhkwaxbSQxkbY0A+HZLZdrgn/YOEsX6XUmMSZbVJq89U
+         nH8RICUmgmhP7FTB3cRYdPhaZfaJYUD31irFjP8Gr/IeUg4eQPfYex0x70HQOYDRHPhe
+         Yk22K0oawujGbST7xY9vMAtBZO6c/oqdLQ99haTJvozTpAffQVYwXr0s1OQ5Yeg9sb+y
+         b/MjO0K2rzx+HfTTr+jheBr8dmViDz7RWf/W3u1ttXOPeiH58NaWXevCvDAeHvUmM86O
+         5VzQ==
+X-Gm-Message-State: AOAM533NssDJf97D+Ck1fIt3Z8YlDThfUEFRhdfCYoCgcLxrnyHrGvd+
+        x9HiS7MWyo5B1VeHehDOlHA=
+X-Google-Smtp-Source: ABdhPJw8HRXHjTVCpDQTfZ9mTOXxcxmnwKmFv6EWI+KoSU4WmVrMgCHSOyJFEYXJVR7yOIhU05dV7w==
+X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr5416606ejw.184.1650194196556;
+        Sun, 17 Apr 2022 04:16:36 -0700 (PDT)
 Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id j2-20020a056402238200b0041f351a8b83sm5382386eda.43.2022.04.17.04.09.59
+        by smtp.gmail.com with ESMTPSA id i3-20020a056402054300b00423133147cesm2948781edx.38.2022.04.17.04.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 04:09:59 -0700 (PDT)
+        Sun, 17 Apr 2022 04:16:36 -0700 (PDT)
 From:   Bean Huo <huobean@gmail.com>
 To:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
         jakob.rossler@nokia.com, Avri.Altman@wdc.com
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Bean Huo <beanhuo@micron.com>
-Subject: [PATCH v2] mmc-utils: Add General command CMD56 read support
-Date:   Sun, 17 Apr 2022 13:09:34 +0200
-Message-Id: <20220417110934.621035-1-huobean@gmail.com>
+Subject: [PATCH v2 RESENT] mmc-utils: Add General command CMD56 read support
+Date:   Sun, 17 Apr 2022 13:16:22 +0200
+Message-Id: <20220417111622.621650-1-huobean@gmail.com>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -91,6 +91,10 @@ I didn't add data parsing, just print the raw data as it is vendor-specific.
 Signed-off-by: Bean Huo <beanhuo@micron.com>
 Acked-by: Avri Altman <Avri.Altman@wdc.com>
 Tested-by: Rossler Jakob (Nokia - DE/Ulm) <jakob.rossler@nokia.com>
+---
+V2:
+ 1. Fix coding type issue
+ 2. Add CMD56 argument default value 0x01 support, make [arg] optional
 ---
  mmc.c      |  8 ++++++++
  mmc.h      |  2 ++

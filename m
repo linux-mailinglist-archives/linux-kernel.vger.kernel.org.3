@@ -2,52 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A6250473D
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 10:37:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D4C504743
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 10:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbiDQIiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 04:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59204 "EHLO
+        id S233715AbiDQIrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 04:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiDQIiu (ORCPT
+        with ESMTP id S233429AbiDQIr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 04:38:50 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E2763F5
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 01:36:16 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1ng0Nx-003jSQ-Oq; Sun, 17 Apr 2022 18:35:59 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sun, 17 Apr 2022 16:35:58 +0800
-Date:   Sun, 17 Apr 2022 16:35:58 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
-References: <YlkkGpVx8rhcsBot@gondor.apana.org.au>
- <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
- <Ylko07++4naWJ5LE@gondor.apana.org.au>
- <CAMj1kXH=ybJWBzmMqkrkvyF8nM3UpTchUOq+oweW=BqW2TOyRw@mail.gmail.com>
- <YllE+wWqP6F+1nwa@gondor.apana.org.au>
- <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
- <YllM24eca/uxf9y7@gondor.apana.org.au>
- <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
- <YlvK9iefUECy361O@gondor.apana.org.au>
- <YlvQTci7RP5evtTy@arm.com>
+        Sun, 17 Apr 2022 04:47:29 -0400
+X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Apr 2022 01:44:50 PDT
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D46F1C72
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 01:44:50 -0700 (PDT)
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:105:465:1:1:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4Kh3Nh2DcQz9sPr;
+        Sun, 17 Apr 2022 10:37:56 +0200 (CEST)
+Date:   Sun, 17 Apr 2022 10:37:51 +0200
+From:   Andreas-Christian Hagau <ach@hagau.se>
+To:     Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] Documentation: kunit: change complete_and_exit to
+ kthread_complete_and_exit
+Message-ID: <20220417102807.10b91497ed@19d04f311a0a9de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YlvQTci7RP5evtTy@arm.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -57,21 +43,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 09:31:09AM +0100, Catalin Marinas wrote:
->
-> Not with my series, the non-sharing of cache lines is preserved.
-> kmalloc() still returns objects aligned to a cache-line.
-> ARCH_DMA_MINALIGN was chosen as the cover-all value for all SoCs
-> supported but I want to reduce the kmalloc() alignment to a cache line
-> size if a platform has a cache line smaller than ARCH_DMA_MINALIGN (most
-> arm64 SoCs have a cache line of 64 bytes rather than 128).
+Commit cead18552660 ("exit: Rename complete_and_exit to
+kthread_complete_and_exit") renamed complete_and_exit to
+kthread_complete_and_exit.
 
-OK, but then you don't need to play with CRYPTO_MINALIGN at all,
-right? All you need to do is add the padding between the Crypto
-API fields and the context structure, right?
+Signed-off-by: Andreas-Christian Hagau <ach@hagau.se>
+---
+ Documentation/dev-tools/kunit/architecture.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Cheers,
+diff --git a/Documentation/dev-tools/kunit/architecture.rst b/Documentation/dev-tools/kunit/architecture.rst
+index ff9c85a0bff21..cf9e6e3eeae4c 100644
+--- a/Documentation/dev-tools/kunit/architecture.rst
++++ b/Documentation/dev-tools/kunit/architecture.rst
+@@ -125,7 +125,7 @@ All expectations/assertions are formatted as:
+ 		  ``void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch)``.
+ 
+ 		- ``kunit_try_catch_throw`` calls function:
+-		  ``void complete_and_exit(struct completion *, long) __noreturn;``
++		  ``void kthread_complete_and_exit(struct completion *, long) __noreturn;``
+ 		  and terminates the special thread context.
+ 
+ - ``<op>`` denotes a check with options: ``TRUE`` (supplied property
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+2.35.1
+

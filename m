@@ -2,123 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EAB650462D
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 04:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CB3504630
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 05:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbiDQCxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 22:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S233380AbiDQDD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 23:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232452AbiDQCxA (ORCPT
+        with ESMTP id S233373AbiDQDDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 22:53:00 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 908FD1EC61
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 19:50:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650163826; x=1681699826;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=cYgEV3JP0tS1O9t+CQVI5564PNedtCa8/r4wgBo4RVo=;
-  b=iUjdq59PQJc/NrCkvO51ZkIgXlkSM5FgQ7LMknAUxdNuVaTj2BuYN2Pu
-   8bE23eY0hwLuYiPSsh0eYFb/OnNG0wRM3a3KITW1dXROjqsv2sUufa8+N
-   Eez2h16j8WPwFj7hyjWXOquosF05pyQ3BnT2qSoP0OCdkSVgZQx2Ppu8F
-   zb4jnDnsFKlaqN6yeX6ySViLX39TlCKAL1+4ermcGlnvlxrkGtZ2yPtVm
-   W8mX1kOqEOp/GdlizAcrCley3Ft9SbL+yFlhaKgr3lcfCbF8QbFE44xun
-   NH4DEPxVZsu7ie86MH4Z8L5gu4ttMZtKhGXVn5IWSzLQBdAQpDEMrd51U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="349805713"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="349805713"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 19:50:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="726235780"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 16 Apr 2022 19:50:25 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfuzY-0003en-DP;
-        Sun, 17 Apr 2022 02:50:24 +0000
-Date:   Sun, 17 Apr 2022 10:49:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: arch/xtensa/boot/boot-elf/bootstrap.S:58: Error: invalid register
- 'atomctl' for 'wsr' instruction
-Message-ID: <202204171040.e6q398Ly-lkp@intel.com>
+        Sat, 16 Apr 2022 23:03:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B66A8222A2;
+        Sat, 16 Apr 2022 20:01:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DB62FB80835;
+        Sun, 17 Apr 2022 03:01:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB9DEC385A1;
+        Sun, 17 Apr 2022 03:01:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650164465;
+        bh=lUFkJLDBY6NZ/dlERmsGK/M1rsZz04lLDTPMRsMyWsc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WoCQ7IoBa8yT0C13PQp3NBcP/9GQAt9xpZX5RPB8GJHMSmXgjCFhKttxf3ESdd/v2
+         pQwvb8dCuPjBaqvtz+3PLxW2CktBvOeOqGu8rp0O0rI/0qTC7niCdkKQwieWkGiuNu
+         uBbel5pkRISyVV4b56dFQ/ye51RC7yl+r7nuKDwPSqrfhuKuRtlBGAY/ICcNZsakpY
+         1pgdY+olO14wN9Ubj/Qjs0IHA3H8jQhf0cXzKzPTtTdVSzxTlnY74rX4VdbmsSzcXM
+         aL8lTKWH+ePVwjILzbj/NMcKYJn/P9AgBs1E1+VjW8B2D0UI30eH8wJS2/CfAiSSMP
+         QKPHVZ+nJ3jCg==
+Date:   Sun, 17 Apr 2022 05:01:02 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c for v5.18
+Message-ID: <YluC7rAj5syHOYWi@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="K1b8b/K9oM98zgqc"
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
 
-First bad commit (maybe != root cause):
+--K1b8b/K9oM98zgqc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   a2c29ccd9477861b16ddc02c411a6c9665250558
-commit: da0a4e5c8fbcce3d1afebf9f2a967083bb19634d xtensa: only build windowed register support code when needed
-date:   6 months ago
-config: xtensa-randconfig-r031-20220417 (https://download.01.org/0day-ci/archive/20220417/202204171040.e6q398Ly-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=da0a4e5c8fbcce3d1afebf9f2a967083bb19634d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout da0a4e5c8fbcce3d1afebf9f2a967083bb19634d
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
+Linus,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I2C has a quite regular set of fixes for drivers and the dev-interface.
 
-All errors (new ones prefixed by >>):
+Please pull.
 
-   arch/xtensa/boot/boot-elf/bootstrap.S: Assembler messages:
->> arch/xtensa/boot/boot-elf/bootstrap.S:58: Error: invalid register 'atomctl' for 'wsr' instruction
-   arch/xtensa/boot/boot-elf/bootstrap.S:68: Warning: value 0x1a0003000 truncated to 0xa0003000
+Thanks,
+
+   Wolfram
 
 
-vim +58 arch/xtensa/boot/boot-elf/bootstrap.S
+The following changes since commit ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e:
 
-e85e335f8ff615 Max Filippov 2012-12-03  42  
-e85e335f8ff615 Max Filippov 2012-12-03  43  	.align  4
-e85e335f8ff615 Max Filippov 2012-12-03  44  _SetupMMU:
-09af39f649dac6 Max Filippov 2021-07-26  45  #if XCHAL_HAVE_WINDOWED
-e85e335f8ff615 Max Filippov 2012-12-03  46  	movi	a0, 0
-e85e335f8ff615 Max Filippov 2012-12-03  47  	wsr	a0, windowbase
-e85e335f8ff615 Max Filippov 2012-12-03  48  	rsync
-e85e335f8ff615 Max Filippov 2012-12-03  49  	movi	a0, 1
-e85e335f8ff615 Max Filippov 2012-12-03  50  	wsr	a0, windowstart
-e85e335f8ff615 Max Filippov 2012-12-03  51  	rsync
-09af39f649dac6 Max Filippov 2021-07-26  52  #endif
-e85e335f8ff615 Max Filippov 2012-12-03  53  	movi	a0, 0x1F
-e85e335f8ff615 Max Filippov 2012-12-03  54  	wsr	a0, ps
-e85e335f8ff615 Max Filippov 2012-12-03  55  	rsync
-e85e335f8ff615 Max Filippov 2012-12-03  56  
-e85e335f8ff615 Max Filippov 2012-12-03  57  #ifndef CONFIG_INITIALIZE_XTENSA_MMU_INSIDE_VMLINUX
-e85e335f8ff615 Max Filippov 2012-12-03 @58  	initialize_mmu
+  Linux 5.18-rc2 (2022-04-10 14:21:36 -1000)
 
-:::::: The code at line 58 was first introduced by commit
-:::::: e85e335f8ff615f74e29e09cc2599f095600114b xtensa: add MMU v3 support
+are available in the Git repository at:
 
-:::::: TO: Max Filippov <jcmvbkbc@gmail.com>
-:::::: CC: Chris Zankel <chris@zankel.net>
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git i2c/for-curre=
+nt
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+for you to fetch changes up to e35c93695c742b88f5fe32063674551440c63d08:
+
+  i2c: ismt: Fix undefined behavior due to shift overflowing the constant (=
+2022-04-15 23:49:02 +0200)
+
+----------------------------------------------------------------
+Andy Shevchenko (2):
+      i2c: dev: check return value when calling dev_set_name()
+      i2c: dev: Force case user pointers in compat_i2cdev_ioctl()
+
+Bjorn Andersson (1):
+      i2c: qcom-geni: Use dev_err_probe() for GPI DMA error
+
+Borislav Petkov (1):
+      i2c: ismt: Fix undefined behavior due to shift overflowing the consta=
+nt
+
+Marek Vasut (1):
+      i2c: imx: Implement errata ERR007805 or e7805 bus frequency limit
+
+Martin Povi=C5=A1er (1):
+      i2c: pasemi: Wait for write xfers to finish
+
+
+with much appreciated quality assurance from
+----------------------------------------------------------------
+Seth Heasley (1):
+      (Rev.) i2c: ismt: Fix undefined behavior due to shift overflowing the=
+ constant
+
+Sven Peter (1):
+      (Rev.) i2c: pasemi: Wait for write xfers to finish
+
+Vinod Koul (1):
+      (Rev.) i2c: qcom-geni: Use dev_err_probe() for GPI DMA error
+
+ drivers/i2c/busses/i2c-imx.c         | 33 +++++++++++++++++++++++++++++++++
+ drivers/i2c/busses/i2c-ismt.c        |  4 ++--
+ drivers/i2c/busses/i2c-pasemi-core.c |  6 ++++++
+ drivers/i2c/busses/i2c-qcom-geni.c   |  6 ++----
+ drivers/i2c/i2c-dev.c                | 17 +++++++++++------
+ 5 files changed, 54 insertions(+), 12 deletions(-)
+
+--K1b8b/K9oM98zgqc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmJbgukACgkQFA3kzBSg
+KbZbqhAArzYscKt3nDsd5QT1v+szQtV9azuSIK1drUDpAf7A51PduRbik6HQjHhQ
+CcmLRZwyORMJzoIUoxq47FaZSgW0rPbb0h5yIlpre3amiBAx55gtCasTwV9WTBNS
+Scrn7cQixr8CKlSOyuCcrRTC5s0uQwGrzxuKZfNrIexhnhppJy0h4W2zhjS1GnES
+VB9AIvAQlCgNq5Bjg/GgF7CbsFSD1OU0ieGW/kVl0ygjpj6/tdq0bNqT8udPYPX6
+8vd86qL1OicyQQvNkTwM5rysbP10qeLyU6Fv4123HKFbcKFfxEpDLs3z2PHWjdY8
+ib+uHsNakYzeAq10QXLIR0cO7tqdWF1nNdaAJTJPJgyQvmtRvARygTYJuvkr+QA0
+Gi6Pyb2PZvkI+mcPhHqAeKsU/OwYDZm3IPSh72QwPla9Abahn1SlwIMrvXq7rWmh
+WbQBDfpvsEJYcveLs47CbHA91dwBdJPmtgxKKLLwGb4scxly2Uj2DXYdxaNmtXLj
+aGRlutTmE52qYTEUP2psziTjEYoRjKR4Re7+oGUm5wDRG9rJFQIDVZ5pqnvsKjDM
+dOfAUqCin8VKcPNliuep6v8fgd0dY8yPx1C5kZAoeXn0TjORaPLHcwnSWL/yVJ81
+2PVlg5a0OtD/JiClGmbZvpjp3BxdsW107YRFxeujocgo7eE99W4=
+=Zqhk
+-----END PGP SIGNATURE-----
+
+--K1b8b/K9oM98zgqc--

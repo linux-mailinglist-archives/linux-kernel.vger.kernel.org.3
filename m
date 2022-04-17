@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D15745047C9
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 14:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB01E5047CC
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 14:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234091AbiDQM6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 08:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39058 "EHLO
+        id S234099AbiDQM7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 08:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231315AbiDQM6P (ORCPT
+        with ESMTP id S232144AbiDQM7B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 08:58:15 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A7A6624D;
-        Sun, 17 Apr 2022 05:55:37 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [10.15.192.164])
-        by mail-app2 (Coremail) with SMTP id by_KCgDnXhY4DlxiFY_vAQ--.19586S2;
-        Sun, 17 Apr 2022 20:55:25 +0800 (CST)
-From:   Duoming Zhou <duoming@zju.edu.cn>
-To:     linux-kernel@vger.kernel.org, jes@trained-monkey.org
-Cc:     netdev@vger.kernel.org, linux-hippi@sunsite.dk, pabeni@redhat.com,
-        kuba@kernel.org, davem@davemloft.net,
-        Duoming Zhou <duoming@zju.edu.cn>
-Subject: [PATCH] drivers: net: hippi: Fix deadlock in rr_close()
-Date:   Sun, 17 Apr 2022 20:55:19 +0800
-Message-Id: <20220417125519.82618-1-duoming@zju.edu.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: by_KCgDnXhY4DlxiFY_vAQ--.19586S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrtF45CF13JFWfKFykZFW7XFb_yoW8Jry7pa
-        1UGrWSyF10vr4jq3WkJa1kXFn8uwsrGrWUGFy3Wws5Zwn5Z3WYqFn5KFWYvF4UtFsFvFZx
-        KF4UZryfCFs8Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUka1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
-        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
-        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
-        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
-        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
-X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgoDAVZdtZOq7gADsg
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        Sun, 17 Apr 2022 08:59:01 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC9A024959
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 05:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2CJdp
+        WYp1Jwg5xWMnBstOcpyeej46BkVdxvxaprz1DA=; b=PPhC6zU1c4GjGLPH+RA32
+        WEW+loKPbMM04b3BO/yk/IJUHlQycc24DQtM7sCHG+03JvhEXCeuxau9VvdieKd8
+        O0LuzjUP9F5b4yY9yn1NMhzTqLeCu8Io2LCPzirA+U9V+TPCIF1EkIJUrjYSEy1q
+        U1KF71c1d9WbXbaDqbR00A=
+Received: from localhost (unknown [223.74.153.137])
+        by smtp10 (Coremail) with SMTP id DsCowAC3B2NoDlxiFQrHBg--.13975S2;
+        Sun, 17 Apr 2022 20:56:10 +0800 (CST)
+From:   Junwen Wu <wudaemon@163.com>
+To:     rafael@kernel.org, daniel.lezcano@linaro.org, amitk@kernel.org,
+        rui.zhang@intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        Junwen Wu <wudaemon@163.com>
+Subject: [PATCH v1] thermal/core: change mm alloc method to avoid kernel warning
+Date:   Sun, 17 Apr 2022 12:56:01 +0000
+Message-Id: <20220417125601.18535-1-wudaemon@163.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowAC3B2NoDlxiFQrHBg--.13975S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw4rKr45CFyfZrW5Xr4xJFb_yoW8Ww4Dpa
+        15W3W5AFZ8XF4UGayUAr48WrZ0y3Z8ta47uFyIkas8ua13JrW3JFyDAry7XrWkGrW8CFW3
+        AF1qqr1F9rs8ArJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pioUDdUUUUU=
+X-Originating-IP: [223.74.153.137]
+X-CM-SenderInfo: 5zxgtvxprqqiywtou0bp/1tbiLArlbVspdouOVAAAs7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,44 +53,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a deadlock in rr_close(), which is shown below:
+Very high cooling device max state value makes cooling device stats
+buffer allocation fails,like below.Using kzvalloc instead of kzalloc
+can avoid this issue.
 
-   (Thread 1)                |      (Thread 2)
-                             | rr_open()
-rr_close()                   |  add_timer()
- spin_lock_irqsave() //(1)   |  (wait a time)
- ...                         | rr_timer()
- del_timer_sync()            |  spin_lock_irqsave() //(2)
- (wait timer to stop)        |  ...
+[    7.392644]WARNING: CPU: 7 PID: 1747 at mm/page_alloc.c:5090 __alloc_pages_nodemask+0x1c0/0x3dc
+[    7.392989]Call trace:
+[    7.392992]__alloc_pages_nodemask+0x1c0/0x3dc
+[    7.392995]kmalloc_order+0x54/0x358
+[    7.392997]kmalloc_order_trace+0x34/0x1bc
+[    7.393001]__kmalloc+0x5cc/0x9c8
+[    7.393005]thermal_cooling_device_setup_sysfs+0x90/0x218
+[    7.393008]__thermal_cooling_device_register+0x160/0x7a4
+[    7.393012]thermal_of_cooling_device_register+0x14/0x24
+[    7.393140]backlight_cdev_register+0x88/0x100 [msm_drm]
 
-We hold rrpriv->lock in position (1) of thread 1 and
-use del_timer_sync() to wait timer to stop, but timer handler
-also need rrpriv->lock in position (2) of thread 2.
-As a result, rr_close() will block forever.
-
-This patch extracts del_timer_sync() from the protection of
-spin_lock_irqsave(), which could let timer handler to obtain
-the needed lock.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Junwen Wu <wudaemon@163.com>
 ---
- drivers/net/hippi/rrunner.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/thermal/thermal_sysfs.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/hippi/rrunner.c b/drivers/net/hippi/rrunner.c
-index 16105292b14..74e845fa2e0 100644
---- a/drivers/net/hippi/rrunner.c
-+++ b/drivers/net/hippi/rrunner.c
-@@ -1355,7 +1355,9 @@ static int rr_close(struct net_device *dev)
+diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
+index f154bada2906..361e0d0c241b 100644
+--- a/drivers/thermal/thermal_sysfs.c
++++ b/drivers/thermal/thermal_sysfs.c
+@@ -829,7 +829,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
+ 	var += sizeof(*stats->time_in_state) * states;
+ 	var += sizeof(*stats->trans_table) * states * states;
  
- 	rrpriv->fw_running = 0;
+-	stats = kzalloc(var, GFP_KERNEL);
++	stats = kvzalloc(var, GFP_KERNEL);
+ 	if (!stats)
+ 		return;
  
-+	spin_unlock_irqrestore(&rrpriv->lock, flags);
- 	del_timer_sync(&rrpriv->timer);
-+	spin_lock_irqsave(&rrpriv->lock, flags);
+@@ -848,7 +848,7 @@ static void cooling_device_stats_setup(struct thermal_cooling_device *cdev)
  
- 	writel(0, &regs->TxPi);
- 	writel(0, &regs->IpRxPi);
+ static void cooling_device_stats_destroy(struct thermal_cooling_device *cdev)
+ {
+-	kfree(cdev->stats);
++	kvfree(cdev->stats);
+ 	cdev->stats = NULL;
+ }
+ 
 -- 
-2.17.1
+2.25.1
 

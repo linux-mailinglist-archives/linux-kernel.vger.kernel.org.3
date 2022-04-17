@@ -2,728 +2,388 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FF2E504964
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 22:08:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0424504968
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 22:14:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234957AbiDQULM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 16:11:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53844 "EHLO
+        id S234967AbiDQUQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 16:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231502AbiDQULK (ORCPT
+        with ESMTP id S232949AbiDQUQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 16:11:10 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62C0FCFC;
-        Sun, 17 Apr 2022 13:08:32 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 17so14924932lji.1;
-        Sun, 17 Apr 2022 13:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Dril2/s0OpSqxhkClsZ/XlpkAvJevxfYXd46BKy6e1g=;
-        b=ZJ5PeBH+0QeLAcI8Atc65URjsKLXEHQZSkTXZNlhujiYs6b62xufTQvCk0C7XbilAA
-         YSwJEQDV8dLQHcRW8Cjwo1cr3cvx2oz64c0tMHyQYNcoLIkZl3Mp6eWDuMNALvQ8SlTo
-         TXQCJjrxEGoVkfW5/AoDKE0t3Mesz5J1suMh7Oa6jXNuOHMp0bLcE8Rn0GcBJCRqpmlx
-         rI0zGrlWVv9Ue3NcfkBrjmYNkXUjM46nwf0zCe/3neKHwWq6WgIMsrblKGLlskNZvqfr
-         53WsKLdjuPIwdn965MAoL6PxddTk8p7RuzsqQL1XHQzo4MaVpNIZPM7HXzG7xQ/pt1AA
-         vo5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Dril2/s0OpSqxhkClsZ/XlpkAvJevxfYXd46BKy6e1g=;
-        b=uhnWtVhSSy3mWrgAfroQL9RlYjT+7prpFwVvZWKGIgHuubatPGT9fLpaBlujF2Ve/h
-         BWJaLqbz0xr/tMClJlEeSsfhmUJei6QW7pUfpoFz17hav2ktpmtkCuWgDAgYIwr5dIA0
-         fEwN0JpkJFGvLUyuxBe97vRxikcEsS5bq5AjIs7DZU1owb/NAlDAFKDm6aABVq4Z5rGq
-         W+b378vkOcumA+yjPFv6u/lShNQLGs7kFwIinxaHv2fljxta0FzWCPFLBSs717ZJS5Zr
-         7VNf63DCaWBthYdiWnlWrgKqD9dSwqrtPej/NyeBBmrMtoHWY4bRWo8QsfO5BmLanCIs
-         1L5g==
-X-Gm-Message-State: AOAM532vwuetg4epWSEyrnYYNzfzRhT5l2nG9jXaFQZtSUNYwcQECpxY
-        Uzy14jfalYKbRopFAcZf3kg=
-X-Google-Smtp-Source: ABdhPJyoQKcTCUvLV4fqiTBspdAwPZw63BgUkyVZsHDvEj2dm8DP3liNZJZrQGxQkl4/QpzBu+V1Wg==
-X-Received: by 2002:a05:651c:556:b0:24d:b7ba:bd6b with SMTP id q22-20020a05651c055600b0024db7babd6bmr2661496ljp.223.1650226110147;
-        Sun, 17 Apr 2022 13:08:30 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id q20-20020a2eb4b4000000b0024da4507c59sm920904ljm.20.2022.04.17.13.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 13:08:29 -0700 (PDT)
-Date:   Sun, 17 Apr 2022 23:08:26 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 09/16] PCI: dwc: Simplify in/outbound iATU setup methods
-Message-ID: <20220417200826.auhzzcuzmvbxvqft@mobilestation>
-References: <20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru>
- <20220324013734.18234-10-Sergey.Semin@baikalelectronics.ru>
- <YkMluF9uEdoRyeH0@robh.at.kernel.org>
+        Sun, 17 Apr 2022 16:16:39 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC739B88
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 13:14:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650226441; x=1681762441;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/SglWYBChF3uZ+Yoq9n0UEiX0pBrlRmZpfn53+hkw2Y=;
+  b=Nr+UmSyRYGU+9ELTTYvSU8T4GNIqjVDfni3K9yJZJQwmE7DXVnG0wEPU
+   h85DOWNMsx6wr9lpOWPrmhyX65rIu/v4N1DPompakyB9yzpzwuBflbIVE
+   +PXlc0Ogj8cY4zxtESe5OlvE6xpyEkTQr+Bn7BkaNDIRx4Y4jGmsjAm0l
+   XdiSHwDMuTZwf0jJMwXi0Kiss9sOMzPqAOeOeTF4WqeQu7uMsexbcJC3l
+   E6BDRdHOqJa9fCUOFnq5e5zR1GJgyPEC/3uOOVSBY6seVekzyB+otQ7dz
+   MZDEm0vRHT4E9KtzJeNrmvV7GuRWnsHtex2IJhFz0FY8yHcgzWtWjh04/
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="349861777"
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="349861777"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 13:14:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="859556944"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 17 Apr 2022 13:13:57 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngBHR-00047k-1Z;
+        Sun, 17 Apr 2022 20:13:57 +0000
+Date:   Mon, 18 Apr 2022 04:13:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: drivers/net/ethernet/cirrus/cs89x0.c:897:41: error: implicit
+ declaration of function 'isa_virt_to_bus'; did you mean 'virt_to_bus'?
+Message-ID: <202204180400.hwy1ETsQ-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YkMluF9uEdoRyeH0@robh.at.kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 10:28:56AM -0500, Rob Herring wrote:
-> On Thu, Mar 24, 2022 at 04:37:27AM +0300, Serge Semin wrote:
-> > From maintainability and scalability points of view it has been wrong to
-> > use different iATU inbound and outbound regions accessors for the viewport
-> > and unrolled versions of the iATU CSRs mapping. Seeing the particular iATU
-> > region-wise registers layout is almost fully compatible for different
-> > IP-core versions, there were no much points in splitting the code up that
-> > way since it was possible to implement a common windows setup methods for
-> > both viewport and unrolled iATU CSRs spaces. While what we can observe in
-> > the current driver implementation of these methods, is a lot of code
-> > duplication, which consequently worsen the code readability,
-> > maintainability and scalability. Note the current implementation is a bit
-> > more performant than the one suggested in this commit since it implies
-> > having less MMIO accesses. But the gain just doesn't worth having the
-> > denoted difficulties especially seeing the iATU setup methods are mainly
-> > called on the DW PCIe controller and peripheral devices initialization
-> > stage.
-> > 
-> > Here we suggest to move the iATU viewport and unrolled CSR access
-> > specifics in the dw_pcie_readl_atu() and dw_pcie_writel_atu() method, and
-> > convert the dw_pcie_prog_outbound_atu() and
-> > dw_pcie_prog_{ep_}inbound_atu() functions to being generic instead of
-> > having a different methods for each viewport and unrolled types of iATU
-> > CSRs mapping. Nothing complex really. First of all the dw_pcie_readl_atu()
-> > and dw_pcie_writel_atu() are converted to accept relative iATU CSRs
-> > address together with the iATU region direction (inbound or outbound) and
-> > region index. If DW PCIe controller doesn't have the unrolled iATU CSRs
-> > space, then the accessors will need to activate a iATU viewport based on
-> > the specified direction and index, otherwise a base address for the
-> > corresponding region CSRs will be calculated by means of the
-> > PCIE_ATU_UNROLL_BASE() macro. The CSRs macro have been modified in
-> > accordance with that logic in the pcie-designware.h header file.
-> > 
-> > The rest of the changes in this commit just concern converting the iATU
-> > in-/out-bound setup methods and iATU regions detection procedure to be
-> > compatible with the new accessors semantics. As a result we've dropped the
-> > no more required dw_pcie_prog_outbound_atu_unroll(),
-> > dw_pcie_prog_inbound_atu_unroll() and dw_pcie_iatu_detect_regions_unroll()
-> > methods.
-> > 
-> > Note aside with the denoted code improvements, there is an additional
-> > positive side effect of this change. If at some point an atomic iATU
-> > configs setup procedure is required, it will be possible to be done with
-> > no much effort just by adding the synchronization into the
-> > dw_pcie_readl_atu() and dw_pcie_writel_atu() accessors.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware.c | 301 ++++++-------------
-> >  drivers/pci/controller/dwc/pcie-designware.h |  50 ++-
-> >  2 files changed, 112 insertions(+), 239 deletions(-)
-> 
+Hi Arnd,
 
-> Nice diffstat. I didn't really like how this was implemented either.
+FYI, the error/warning still remains.
 
-Yeah, the change has turned to be a bit bulky. I wouldn't really
-bother with it if I didn't need to add the "dma-ranges" support.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a1901b464e7e3e28956ae7423db2847dbbfb5be8
+commit: 47fd22f2b84765a2f7e3f150282497b902624547 cs89x0: rework driver configuration
+date:   9 months ago
+config: m68k-randconfig-c004-20220418 (https://download.01.org/0day-ci/archive/20220418/202204180400.hwy1ETsQ-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=47fd22f2b84765a2f7e3f150282497b902624547
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 47fd22f2b84765a2f7e3f150282497b902624547
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash drivers/net/ethernet/cirrus/
 
-> 
-> I'm guessing you tested the unrolled case only? IIRC, QEMU has the older 
-> interface. I can also throw this at kernel-ci if needed. There's a few 
-> platforms with DWC that get tested.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-In fact I tested the series on DW PCIe Host v4.60a with the legacy
-iATU/eDMA registers mapping (viewport-based). So testing on the modern
-controllers with the unrolled iATU/eDMA region would be very welcome.
+All errors (new ones prefixed by >>):
 
-> 
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> > index b983128584ff..f1aa6e2e85fe 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.c
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> > @@ -205,48 +205,67 @@ void dw_pcie_write_dbi2(struct dw_pcie *pci, u32 reg, size_t size, u32 val)
-> >  		dev_err(pci->dev, "write DBI address failed\n");
-> >  }
-> >  
-> > -static u32 dw_pcie_readl_atu(struct dw_pcie *pci, u32 reg)
-> > +static u32 dw_pcie_readl_atu(struct dw_pcie *pci, u32 dir, u32 region, u32 reg)
-> >  {
-> > +	void __iomem *base;
-> >  	int ret;
-> >  	u32 val;
-> >  
-> > +	if (pci->iatu_unroll_enabled) {
-> > +		base = pci->atu_base;
-> > +		reg = reg + PCIE_ATU_UNROLL_BASE(dir, region);
-> > +	} else {
-> > +		base = pci->dbi_base;
-> > +		reg = reg + PCIE_ATU_VIEWPORT_BASE;
-> > +
-> > +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, dir | region);
-> > +	}
-> > +
-> >  	if (pci->ops && pci->ops->read_dbi)
-> > -		return pci->ops->read_dbi(pci, pci->atu_base, reg, 4);
-> > +		return pci->ops->read_dbi(pci, base, reg, 4);
-> >  
-> > -	ret = dw_pcie_read(pci->atu_base + reg, 4, &val);
-> > +	ret = dw_pcie_read(base + reg, 4, &val);
-> >  	if (ret)
-> >  		dev_err(pci->dev, "Read ATU address failed\n");
-> >  
-> >  	return val;
-> >  }
-> >  
-> > -static void dw_pcie_writel_atu(struct dw_pcie *pci, u32 reg, u32 val)
-> > +static void dw_pcie_writel_atu(struct dw_pcie *pci, u32 dir, u32 region,
-> > +			       u32 reg, u32 val)
-> >  {
-> > +	void __iomem *base;
-> >  	int ret;
-> >  
-> > +	if (pci->iatu_unroll_enabled) {
-> > +		base = pci->atu_base;
-> > +		reg = reg + PCIE_ATU_UNROLL_BASE(dir, region);
-> > +	} else {
-> > +		base = pci->dbi_base;
-> > +		reg = reg + PCIE_ATU_VIEWPORT_BASE;
-> > +
-> > +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, dir | region);
-> > +	}
-> 
+   In file included from include/linux/printk.h:456,
+                    from include/linux/kernel.h:19,
+                    from include/linux/list.h:9,
+                    from include/linux/module.h:12,
+                    from drivers/net/ethernet/cirrus/cs89x0.c:51:
+   drivers/net/ethernet/cirrus/cs89x0.c: In function 'net_open':
+>> drivers/net/ethernet/cirrus/cs89x0.c:897:41: error: implicit declaration of function 'isa_virt_to_bus'; did you mean 'virt_to_bus'? [-Werror=implicit-function-declaration]
+     897 |                          (unsigned long)isa_virt_to_bus(lp->dma_buff));
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/dynamic_debug.h:134:29: note: in definition of macro '__dynamic_func_call'
+     134 |                 func(&id, ##__VA_ARGS__);               \
+         |                             ^~~~~~~~~~~
+   include/linux/dynamic_debug.h:162:9: note: in expansion of macro '_dynamic_func_call'
+     162 |         _dynamic_func_call(fmt, __dynamic_pr_debug,             \
+         |         ^~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:471:9: note: in expansion of macro 'dynamic_pr_debug'
+     471 |         dynamic_pr_debug(fmt, ##__VA_ARGS__)
+         |         ^~~~~~~~~~~~~~~~
+   drivers/net/ethernet/cirrus/cs89x0.c:86:17: note: in expansion of macro 'pr_debug'
+      86 |                 pr_##level(fmt, ##__VA_ARGS__);                 \
+         |                 ^~~
+   drivers/net/ethernet/cirrus/cs89x0.c:894:17: note: in expansion of macro 'cs89_dbg'
+     894 |                 cs89_dbg(1, debug, "%s: dma %lx %lx\n",
+         |                 ^~~~~~~~
+   cc1: some warnings being treated as errors
 
-> You have this same sequence twice. Make it a helper function.
 
-Ok. I'll move this code into a helper function - dw_pcie_select_atu().
+vim +897 drivers/net/ethernet/cirrus/cs89x0.c
 
-> 
-> > +
-> >  	if (pci->ops && pci->ops->write_dbi) {
-> > -		pci->ops->write_dbi(pci, pci->atu_base, reg, 4, val);
-> > +		pci->ops->write_dbi(pci, base, reg, 4, val);
-> >  		return;
-> >  	}
-> >  
-> > -	ret = dw_pcie_write(pci->atu_base + reg, 4, val);
-> > +	ret = dw_pcie_write(base + reg, 4, val);
-> >  	if (ret)
-> >  		dev_err(pci->dev, "Write ATU address failed\n");
-> >  }
-> >  
-> > -static u32 dw_pcie_readl_ob_unroll(struct dw_pcie *pci, u32 index, u32 reg)
-> > +static inline u32 dw_pcie_readl_atu_ob(struct dw_pcie *pci, u32 region, u32 reg)
-> >  {
-> > -	u32 offset = PCIE_GET_ATU_OUTB_UNR_REG_OFFSET(index);
-> > -
-> > -	return dw_pcie_readl_atu(pci, offset + reg);
-> > +	return dw_pcie_readl_atu(pci, PCIE_ATU_REGION_DIR_OB, region, reg);
-> >  }
-> >  
-> > -static void dw_pcie_writel_ob_unroll(struct dw_pcie *pci, u32 index, u32 reg,
-> > -				     u32 val)
-> > +static inline void dw_pcie_writel_atu_ob(struct dw_pcie *pci, u32 region, u32 reg,
-> > +					 u32 val)
-> >  {
-> > -	u32 offset = PCIE_GET_ATU_OUTB_UNR_REG_OFFSET(index);
-> > -
-> > -	dw_pcie_writel_atu(pci, offset + reg, val);
-> > +	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_OB, region, reg, val);
-> >  }
-> >  
-> >  static inline u32 dw_pcie_enable_ecrc(u32 val)
-> > @@ -290,50 +309,6 @@ static inline u32 dw_pcie_enable_ecrc(u32 val)
-> >  	return val | PCIE_ATU_TD;
-> >  }
-> >  
-> > -static void dw_pcie_prog_outbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
-> > -					     int index, int type,
-> > -					     u64 cpu_addr, u64 pci_addr,
-> > -					     u64 size)
-> > -{
-> > -	u32 retries, val;
-> > -	u64 limit_addr = cpu_addr + size - 1;
-> > -
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_LOWER_BASE,
-> > -				 lower_32_bits(cpu_addr));
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_UPPER_BASE,
-> > -				 upper_32_bits(cpu_addr));
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_LOWER_LIMIT,
-> > -				 lower_32_bits(limit_addr));
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_UPPER_LIMIT,
-> > -				 upper_32_bits(limit_addr));
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_LOWER_TARGET,
-> > -				 lower_32_bits(pci_addr));
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_UPPER_TARGET,
-> > -				 upper_32_bits(pci_addr));
-> > -	val = type | PCIE_ATU_FUNC_NUM(func_no);
-> > -	if (upper_32_bits(limit_addr) > upper_32_bits(cpu_addr))
-> > -		val |= PCIE_ATU_INCREASE_REGION_SIZE;
-> > -	if (dw_pcie_ver_is(pci, 490A))
-> > -		val = dw_pcie_enable_ecrc(val);
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL1, val);
-> > -	dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> > -				 PCIE_ATU_ENABLE);
-> > -
-> > -	/*
-> > -	 * Make sure ATU enable takes effect before any subsequent config
-> > -	 * and I/O accesses.
-> > -	 */
-> > -	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> > -		val = dw_pcie_readl_ob_unroll(pci, index,
-> > -					      PCIE_ATU_UNR_REGION_CTRL2);
-> > -		if (val & PCIE_ATU_ENABLE)
-> > -			return;
-> > -
-> > -		mdelay(LINK_WAIT_IATU);
-> > -	}
-> > -	dev_err(pci->dev, "Outbound iATU is not being enabled\n");
-> > -}
-> > -
-> >  static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
-> >  					int index, int type, u64 cpu_addr,
-> >  					u64 pci_addr, u64 size)
-> > @@ -344,49 +319,46 @@ static void __dw_pcie_prog_outbound_atu(struct dw_pcie *pci, u8 func_no,
-> >  	if (pci->ops && pci->ops->cpu_addr_fixup)
-> >  		cpu_addr = pci->ops->cpu_addr_fixup(pci, cpu_addr);
-> >  
-> > -	if (pci->iatu_unroll_enabled) {
-> > -		dw_pcie_prog_outbound_atu_unroll(pci, func_no, index, type,
-> > -						 cpu_addr, pci_addr, size);
-> > -		return;
-> > -	}
-> > -
-> >  	limit_addr = cpu_addr + size - 1;
-> >  
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT,
-> > -			   PCIE_ATU_REGION_OUTBOUND | index);
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_BASE,
-> > -			   lower_32_bits(cpu_addr));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_BASE,
-> > -			   upper_32_bits(cpu_addr));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_LIMIT,
-> > -			   lower_32_bits(limit_addr));
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_LOWER_BASE,
-> > +			      lower_32_bits(cpu_addr));
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_UPPER_BASE,
-> > +			      upper_32_bits(cpu_addr));
-> > +
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_LIMIT,
-> > +			      lower_32_bits(limit_addr));
-> >  	if (dw_pcie_ver_is_ge(pci, 460A))
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_LIMIT,
-> > -				   upper_32_bits(limit_addr));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET,
-> > -			   lower_32_bits(pci_addr));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_TARGET,
-> > -			   upper_32_bits(pci_addr));
-> > +		dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_UPPER_LIMIT,
-> > +				      upper_32_bits(limit_addr));
-> > +
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_LOWER_TARGET,
-> > +			      lower_32_bits(pci_addr));
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_UPPER_TARGET,
-> > +			      upper_32_bits(pci_addr));
-> > +
-> >  	val = type | PCIE_ATU_FUNC_NUM(func_no);
-> >  	if (upper_32_bits(limit_addr) > upper_32_bits(cpu_addr) &&
-> >  	    dw_pcie_ver_is_ge(pci, 460A))
-> >  		val |= PCIE_ATU_INCREASE_REGION_SIZE;
-> >  	if (dw_pcie_ver_is(pci, 490A))
-> >  		val = dw_pcie_enable_ecrc(val);
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR1, val);
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, PCIE_ATU_ENABLE);
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_REGION_CTRL1, val);
-> > +
-> > +	dw_pcie_writel_atu_ob(pci, index, PCIE_ATU_REGION_CTRL2, PCIE_ATU_ENABLE);
-> >  
-> >  	/*
-> >  	 * Make sure ATU enable takes effect before any subsequent config
-> >  	 * and I/O accesses.
-> >  	 */
-> >  	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> > -		val = dw_pcie_readl_dbi(pci, PCIE_ATU_CR2);
-> > +		val = dw_pcie_readl_atu_ob(pci, index, PCIE_ATU_REGION_CTRL2);
-> >  		if (val & PCIE_ATU_ENABLE)
-> >  			return;
-> >  
-> >  		mdelay(LINK_WAIT_IATU);
-> >  	}
-> > +
-> >  	dev_err(pci->dev, "Outbound iATU is not being enabled\n");
-> >  }
-> >  
-> > @@ -405,54 +377,15 @@ void dw_pcie_prog_ep_outbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> >  				    cpu_addr, pci_addr, size);
-> >  }
-> >  
-> > -static u32 dw_pcie_readl_ib_unroll(struct dw_pcie *pci, u32 index, u32 reg)
-> > -{
-> > -	u32 offset = PCIE_GET_ATU_INB_UNR_REG_OFFSET(index);
-> > -
-> > -	return dw_pcie_readl_atu(pci, offset + reg);
-> > -}
-> > -
-> > -static void dw_pcie_writel_ib_unroll(struct dw_pcie *pci, u32 index, u32 reg,
-> > -				     u32 val)
-> > +static inline u32 dw_pcie_readl_atu_ib(struct dw_pcie *pci, u32 region, u32 reg)
-> >  {
-> > -	u32 offset = PCIE_GET_ATU_INB_UNR_REG_OFFSET(index);
-> > -
-> > -	dw_pcie_writel_atu(pci, offset + reg, val);
-> > +	return dw_pcie_readl_atu(pci, PCIE_ATU_REGION_DIR_IB, region, reg);
-> >  }
-> >  
-> > -static int dw_pcie_prog_inbound_atu_unroll(struct dw_pcie *pci, u8 func_no,
-> > -					   int index, int type,
-> > -					   u64 cpu_addr, u8 bar)
-> > +static inline void dw_pcie_writel_atu_ib(struct dw_pcie *pci, u32 region, u32 reg,
-> > +					 u32 val)
-> >  {
-> > -	u32 retries, val;
-> > -
-> > -	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_LOWER_TARGET,
-> > -				 lower_32_bits(cpu_addr));
-> > -	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_UPPER_TARGET,
-> > -				 upper_32_bits(cpu_addr));
-> > -
-> > -	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL1, type |
-> > -				 PCIE_ATU_FUNC_NUM(func_no));
-> > -	dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> > -				 PCIE_ATU_FUNC_NUM_MATCH_EN |
-> > -				 PCIE_ATU_ENABLE |
-> > -				 PCIE_ATU_BAR_MODE_ENABLE | (bar << 8));
-> > -
-> > -	/*
-> > -	 * Make sure ATU enable takes effect before any subsequent config
-> > -	 * and I/O accesses.
-> > -	 */
-> > -	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> > -		val = dw_pcie_readl_ib_unroll(pci, index,
-> > -					      PCIE_ATU_UNR_REGION_CTRL2);
-> > -		if (val & PCIE_ATU_ENABLE)
-> > -			return 0;
-> > -
-> > -		mdelay(LINK_WAIT_IATU);
-> > -	}
-> > -	dev_err(pci->dev, "Inbound iATU is not being enabled\n");
-> > -
-> > -	return -EBUSY;
-> > +	dw_pcie_writel_atu(pci, PCIE_ATU_REGION_DIR_IB, region, reg, val);
-> >  }
-> >  
-> >  int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> > @@ -460,65 +393,51 @@ int dw_pcie_prog_inbound_atu(struct dw_pcie *pci, u8 func_no, int index,
-> >  {
-> >  	u32 retries, val;
-> >  
-> > -	if (pci->iatu_unroll_enabled)
-> > -		return dw_pcie_prog_inbound_atu_unroll(pci, func_no, index, type,
-> > -						       cpu_addr, bar);
-> > -
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, PCIE_ATU_REGION_INBOUND |
-> > -			   index);
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET, lower_32_bits(cpu_addr));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_UPPER_TARGET, upper_32_bits(cpu_addr));
-> > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_LOWER_TARGET,
-> > +			      lower_32_bits(cpu_addr));
-> > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_UPPER_TARGET,
-> > +			      upper_32_bits(cpu_addr));
-> >  
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR1, type |
-> > -			   PCIE_ATU_FUNC_NUM(func_no));
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, PCIE_ATU_ENABLE |
-> > -			   PCIE_ATU_FUNC_NUM_MATCH_EN |
-> > -			   PCIE_ATU_BAR_MODE_ENABLE | (bar << 8));
-> > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL1, type |
-> > +			      PCIE_ATU_FUNC_NUM(func_no));
-> > +	dw_pcie_writel_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2,
-> > +			      PCIE_ATU_ENABLE | PCIE_ATU_FUNC_NUM_MATCH_EN |
-> > +			      PCIE_ATU_BAR_MODE_ENABLE | (bar << 8));
-> >  
-> >  	/*
-> >  	 * Make sure ATU enable takes effect before any subsequent config
-> >  	 * and I/O accesses.
-> >  	 */
-> >  	for (retries = 0; retries < LINK_WAIT_MAX_IATU_RETRIES; retries++) {
-> > -		val = dw_pcie_readl_dbi(pci, PCIE_ATU_CR2);
-> > +		val = dw_pcie_readl_atu_ib(pci, index, PCIE_ATU_REGION_CTRL2);
-> >  		if (val & PCIE_ATU_ENABLE)
-> >  			return 0;
-> >  
-> >  		mdelay(LINK_WAIT_IATU);
-> >  	}
-> > +
-> >  	dev_err(pci->dev, "Inbound iATU is not being enabled\n");
-> >  
-> > -	return -EBUSY;
-> > +	return -ETIMEDOUT;
-> >  }
-> >  
-> >  void dw_pcie_disable_atu(struct dw_pcie *pci, int index,
-> >  			 enum dw_pcie_region_type type)
-> >  {
-> > -	int region;
-> > +	u32 dir;
-> >  
-> >  	switch (type) {
-> >  	case DW_PCIE_REGION_INBOUND:
-> > -		region = PCIE_ATU_REGION_INBOUND;
-> > +		dir = PCIE_ATU_REGION_DIR_IB;
-> 
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   825  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   826  static int
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   827  net_open(struct net_device *dev)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   828  {
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   829  	struct net_local *lp = netdev_priv(dev);
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   830  	int result = 0;
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   831  	int i;
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   832  	int ret;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   833  
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   834  	if (dev->irq < 2) {
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   835  		/* Allow interrupts to be generated by the chip */
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   836  /* Cirrus' release had this: */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   837  #if 0
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   838  		writereg(dev, PP_BusCTL, readreg(dev, PP_BusCTL) | ENABLE_IRQ);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   839  #endif
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   840  /* And 2.3.47 had this: */
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   841  		writereg(dev, PP_BusCTL, ENABLE_IRQ | MEMORY_ON);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   842  
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   843  		for (i = 2; i < CS8920_NO_INTS; i++) {
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   844  			if ((1 << i) & lp->irq_map) {
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   845  				if (request_irq(i, net_interrupt, 0, dev->name,
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   846  						dev) == 0) {
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   847  					dev->irq = i;
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   848  					write_irq(dev, lp->chip_type, i);
+6fba180ee8b1c8 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   849  					/* writereg(dev, PP_BufCFG, GENERATE_SW_INTERRUPT); */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   850  					break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   851  				}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   852  			}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   853  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   854  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   855  		if (i >= CS8920_NO_INTS) {
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   856  			writereg(dev, PP_BusCTL, 0);	/* disable interrupts. */
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   857  			pr_err("can't get an interrupt\n");
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   858  			ret = -EAGAIN;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   859  			goto bad_out;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   860  		}
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   861  	} else {
+47fd22f2b84765 drivers/net/ethernet/cirrus/cs89x0.c Arnd Bergmann  2021-08-03   862  #if IS_ENABLED(CONFIG_CS89x0_ISA)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   863  		if (((1 << dev->irq) & lp->irq_map) == 0) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   864  			pr_err("%s: IRQ %d is not in our map of allowable IRQs, which is %x\n",
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   865  			       dev->name, dev->irq, lp->irq_map);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   866  			ret = -EAGAIN;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   867  			goto bad_out;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   868  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   869  #endif
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   870  /* FIXME: Cirrus' release had this: */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   871  		writereg(dev, PP_BusCTL, readreg(dev, PP_BusCTL)|ENABLE_IRQ);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   872  /* And 2.3.47 had this: */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   873  #if 0
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   874  		writereg(dev, PP_BusCTL, ENABLE_IRQ | MEMORY_ON);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   875  #endif
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   876  		write_irq(dev, lp->chip_type, dev->irq);
+a0607fd3a25ba1 drivers/net/cs89x0.c                 Joe Perches    2009-11-18   877  		ret = request_irq(dev->irq, net_interrupt, 0, dev->name, dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   878  		if (ret) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   879  			pr_err("request_irq(%d) failed\n", dev->irq);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   880  			goto bad_out;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   881  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   882  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   883  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   884  #if ALLOW_DMA
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   885  	if (lp->use_dma && (lp->isa_config & ANY_ISA_DMA)) {
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   886  		unsigned long flags;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   887  		lp->dma_buff = (unsigned char *)__get_dma_pages(GFP_KERNEL,
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   888  								get_order(lp->dmasize * 1024));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   889  		if (!lp->dma_buff) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   890  			pr_err("%s: cannot get %dK memory for DMA\n",
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   891  			       dev->name, lp->dmasize);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   892  			goto release_irq;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   893  		}
+808e9a77358995 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   894  		cs89_dbg(1, debug, "%s: dma %lx %lx\n",
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   895  			 dev->name,
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   896  			 (unsigned long)lp->dma_buff,
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  @897  			 (unsigned long)isa_virt_to_bus(lp->dma_buff));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   898  		if ((unsigned long)lp->dma_buff >= MAX_DMA_ADDRESS ||
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   899  		    !dma_page_eq(lp->dma_buff,
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   900  				 lp->dma_buff + lp->dmasize * 1024 - 1)) {
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   901  			pr_err("%s: not usable as DMA buffer\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   902  			goto release_irq;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   903  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   904  		memset(lp->dma_buff, 0, lp->dmasize * 1024);	/* Why? */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   905  		if (request_dma(dev->dma, dev->name)) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   906  			pr_err("%s: cannot get dma channel %d\n",
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   907  			       dev->name, dev->dma);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   908  			goto release_irq;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   909  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   910  		write_dma(dev, lp->chip_type, dev->dma);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   911  		lp->rx_dma_ptr = lp->dma_buff;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   912  		lp->end_dma_buff = lp->dma_buff + lp->dmasize * 1024;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   913  		spin_lock_irqsave(&lp->lock, flags);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   914  		disable_dma(dev->dma);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   915  		clear_dma_ff(dev->dma);
+ef0657c49e0f93 drivers/net/cs89x0.c                 Julia Lawall   2009-07-06   916  		set_dma_mode(dev->dma, DMA_RX_MODE); /* auto_init as well */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   917  		set_dma_addr(dev->dma, isa_virt_to_bus(lp->dma_buff));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   918  		set_dma_count(dev->dma, lp->dmasize * 1024);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   919  		enable_dma(dev->dma);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   920  		spin_unlock_irqrestore(&lp->lock, flags);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   921  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   922  #endif	/* ALLOW_DMA */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   923  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   924  	/* set the Ethernet address */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   925  	for (i = 0; i < ETH_ALEN / 2; i++)
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   926  		writereg(dev, PP_IA + i * 2,
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   927  			 (dev->dev_addr[i * 2] |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   928  			  (dev->dev_addr[i * 2 + 1] << 8)));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   929  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   930  	/* while we're testing the interface, leave interrupts disabled */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   931  	writereg(dev, PP_BusCTL, MEMORY_ON);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   932  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   933  	/* Set the LineCTL quintuplet based on adapter configuration read from EEPROM */
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   934  	if ((lp->adapter_cnf & A_CNF_EXTND_10B_2) &&
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   935  	    (lp->adapter_cnf & A_CNF_LOW_RX_SQUELCH))
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   936  		lp->linectl = LOW_RX_SQUELCH;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   937  	else
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   938  		lp->linectl = 0;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   939  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   940  	/* check to make sure that they have the "right" hardware available */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   941  	switch (lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   942  	case A_CNF_MEDIA_10B_T:
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   943  		result = lp->adapter_cnf & A_CNF_10B_T;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   944  		break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   945  	case A_CNF_MEDIA_AUI:
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   946  		result = lp->adapter_cnf & A_CNF_AUI;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   947  		break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   948  	case A_CNF_MEDIA_10B_2:
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   949  		result = lp->adapter_cnf & A_CNF_10B_2;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   950  		break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   951  	default:
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   952  		result = lp->adapter_cnf & (A_CNF_10B_T |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   953  					    A_CNF_AUI |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   954  					    A_CNF_10B_2);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   955  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   956  	if (!result) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   957  		pr_err("%s: EEPROM is configured for unavailable media\n",
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   958  		       dev->name);
+17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   959  release_dma:
+17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   960  #if ALLOW_DMA
+17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30   961  		free_dma(dev->dma);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   962  release_irq:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   963  		release_dma_buff(lp);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   964  #endif
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   965  		writereg(dev, PP_LineCTL,
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   966  			 readreg(dev, PP_LineCTL) & ~(SERIAL_TX_ON | SERIAL_RX_ON));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   967  		free_irq(dev->irq, dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   968  		ret = -EAGAIN;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   969  		goto bad_out;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   970  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   971  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   972  	/* set the hardware to the configured choice */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   973  	switch (lp->adapter_cnf & A_CNF_MEDIA_TYPE) {
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   974  	case A_CNF_MEDIA_10B_T:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   975  		result = detect_tp(dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   976  		if (result == DETECTED_NONE) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   977  			pr_warn("%s: 10Base-T (RJ-45) has no cable\n",
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   978  				dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   979  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   980  				result = DETECTED_RJ45H; /* Yes! I don't care if I see a link pulse */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   981  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   982  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   983  	case A_CNF_MEDIA_AUI:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   984  		result = detect_aui(dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   985  		if (result == DETECTED_NONE) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   986  			pr_warn("%s: 10Base-5 (AUI) has no cable\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   987  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   988  				result = DETECTED_AUI; /* Yes! I don't care if I see a carrrier */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   989  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   990  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   991  	case A_CNF_MEDIA_10B_2:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   992  		result = detect_bnc(dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   993  		if (result == DETECTED_NONE) {
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18   994  			pr_warn("%s: 10Base-2 (BNC) has no cable\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   995  			if (lp->auto_neg_cnf & IMM_BIT) /* check "ignore missing media" bit */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   996  				result = DETECTED_BNC; /* Yes! I don't care if I can xmit a packet */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   997  		}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   998  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16   999  	case A_CNF_MEDIA_AUTO:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1000  		writereg(dev, PP_LineCTL, lp->linectl | AUTO_AUI_10BASET);
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1001  		if (lp->adapter_cnf & A_CNF_10B_T) {
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1002  			result = detect_tp(dev);
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1003  			if (result != DETECTED_NONE)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1004  				break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1005  		}
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1006  		if (lp->adapter_cnf & A_CNF_AUI) {
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1007  			result = detect_aui(dev);
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1008  			if (result != DETECTED_NONE)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1009  				break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1010  		}
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1011  		if (lp->adapter_cnf & A_CNF_10B_2) {
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1012  			result = detect_bnc(dev);
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1013  			if (result != DETECTED_NONE)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1014  				break;
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1015  		}
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1016  		pr_err("%s: no media detected\n", dev->name);
+17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30  1017  		goto release_dma;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1018  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1019  	switch (result) {
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1020  	case DETECTED_NONE:
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1021  		pr_err("%s: no network cable attached to configured media\n",
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1022  		       dev->name);
+17a9440f7deb78 drivers/net/cs89x0.c                 Wang Chen      2008-05-30  1023  		goto release_dma;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1024  	case DETECTED_RJ45H:
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1025  		pr_info("%s: using half-duplex 10Base-T (RJ-45)\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1026  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1027  	case DETECTED_RJ45F:
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1028  		pr_info("%s: using full-duplex 10Base-T (RJ-45)\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1029  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1030  	case DETECTED_AUI:
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1031  		pr_info("%s: using 10Base-5 (AUI)\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1032  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1033  	case DETECTED_BNC:
+dd92b9ade43907 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1034  		pr_info("%s: using 10Base-2 (BNC)\n", dev->name);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1035  		break;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1036  	}
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1037  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1038  	/* Turn on both receive and transmit operations */
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1039  	writereg(dev, PP_LineCTL,
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1040  		 readreg(dev, PP_LineCTL) | SERIAL_RX_ON | SERIAL_TX_ON);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1041  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1042  	/* Receive only error free packets addressed to this card */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1043  	lp->rx_mode = 0;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1044  	writereg(dev, PP_RxCTL, DEF_RX_ACCEPT);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1045  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1046  	lp->curr_rx_cfg = RX_OK_ENBL | RX_CRC_ERROR_ENBL;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1047  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1048  	if (lp->isa_config & STREAM_TRANSFER)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1049  		lp->curr_rx_cfg |= RX_STREAM_ENBL;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1050  #if ALLOW_DMA
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1051  	set_dma_cfg(dev);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1052  #endif
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1053  	writereg(dev, PP_RxCFG, lp->curr_rx_cfg);
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1054  
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1055  	writereg(dev, PP_TxCFG, (TX_LOST_CRS_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1056  				 TX_SQE_ERROR_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1057  				 TX_OK_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1058  				 TX_LATE_COL_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1059  				 TX_JBR_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1060  				 TX_ANY_COL_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1061  				 TX_16_COL_ENBL));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1062  
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1063  	writereg(dev, PP_BufCFG, (READY_FOR_TX_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1064  				  RX_MISS_COUNT_OVRFLOW_ENBL |
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1065  #if ALLOW_DMA
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1066  				  dma_bufcfg(dev) |
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1067  #endif
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1068  				  TX_COL_COUNT_OVRFLOW_ENBL |
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1069  				  TX_UNDERRUN_ENBL));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1070  
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1071  	/* now that we've got our act together, enable everything */
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1072  	writereg(dev, PP_BusCTL, (ENABLE_IRQ
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1073  				  | (dev->mem_start ? MEMORY_ON : 0) /* turn memory on */
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1074  #if ALLOW_DMA
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1075  				  | dma_busctl(dev)
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1076  #endif
+ca034bcdb1786b drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1077  			 ));
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1078  	netif_start_queue(dev);
+808e9a77358995 drivers/net/ethernet/cirrus/cs89x0.c Joe Perches    2012-05-18  1079  	cs89_dbg(1, debug, "net_open() succeeded\n");
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1080  	return 0;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1081  bad_out:
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1082  	return ret;
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1083  }
+^1da177e4c3f41 drivers/net/cs89x0.c                 Linus Torvalds 2005-04-16  1084  
 
-> Is this the same double definition with the enum?
+:::::: The code at line 897 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-Absolutely right. I'll drop it in the next patch of this series. I'll
-also move that patch to being applied before this one so to prevent
-this question from araising and to simplify this patch a bit.
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-> 
-> >  		break;
-> >  	case DW_PCIE_REGION_OUTBOUND:
-> > -		region = PCIE_ATU_REGION_OUTBOUND;
-> > +		dir = PCIE_ATU_REGION_DIR_OB;
-> >  		break;
-> >  	default:
-> >  		return;
-> >  	}
-> >  
-> > -	if (pci->iatu_unroll_enabled) {
-> > -		if (region == PCIE_ATU_REGION_INBOUND) {
-> > -			dw_pcie_writel_ib_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> > -						 ~(u32)PCIE_ATU_ENABLE);
-> > -		} else {
-> > -			dw_pcie_writel_ob_unroll(pci, index, PCIE_ATU_UNR_REGION_CTRL2,
-> > -						 ~(u32)PCIE_ATU_ENABLE);
-> > -		}
-> > -	} else {
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, region | index);
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_CR2, ~(u32)PCIE_ATU_ENABLE);
-> > -	}
-> > +	dw_pcie_writel_atu(pci, dir, index, PCIE_ATU_REGION_CTRL2, 0);
-> >  }
-> >  
-> >  int dw_pcie_wait_for_link(struct dw_pcie *pci)
-> > @@ -622,63 +541,29 @@ static bool dw_pcie_iatu_unroll_enabled(struct dw_pcie *pci)
-> >  	return false;
-> >  }
-> >  
-> > -static void dw_pcie_iatu_detect_regions_unroll(struct dw_pcie *pci)
-> > -{
-> > -	int max_region, i, ob = 0, ib = 0;
-> > -	u32 val;
-> > -
-> > -	max_region = min((int)pci->atu_size / 512, 256);
-> > -
-> > -	for (i = 0; i < max_region; i++) {
-> > -		dw_pcie_writel_ob_unroll(pci, i, PCIE_ATU_UNR_LOWER_TARGET,
-> > -					0x11110000);
-> > -
-> > -		val = dw_pcie_readl_ob_unroll(pci, i, PCIE_ATU_UNR_LOWER_TARGET);
-> > -		if (val == 0x11110000)
-> > -			ob++;
-> > -		else
-> > -			break;
-> > -	}
-> > -
-> > -	for (i = 0; i < max_region; i++) {
-> > -		dw_pcie_writel_ib_unroll(pci, i, PCIE_ATU_UNR_LOWER_TARGET,
-> > -					0x11110000);
-> > -
-> > -		val = dw_pcie_readl_ib_unroll(pci, i, PCIE_ATU_UNR_LOWER_TARGET);
-> > -		if (val == 0x11110000)
-> > -			ib++;
-> > -		else
-> > -			break;
-> > -	}
-> > -	pci->num_ib_windows = ib;
-> > -	pci->num_ob_windows = ob;
-> > -}
-> > -
-> >  static void dw_pcie_iatu_detect_regions(struct dw_pcie *pci)
-> >  {
-> > -	int max_region, i, ob = 0, ib = 0;
-> > +	int max_region, ob, ib;
-> >  	u32 val;
-> >  
-> > -	dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, 0xFF);
-> > -	max_region = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT) + 1;
-> > +	if (pci->iatu_unroll_enabled) {
-> > +		max_region = min((int)pci->atu_size / 512, 256);
-> > +	} else {
-> > +		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, 0xFF);
-> > +		max_region = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT) + 1;
-> > +	}
-> >  
-> > -	for (i = 0; i < max_region; i++) {
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, PCIE_ATU_REGION_OUTBOUND | i);
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET, 0x11110000);
-> > -		val = dw_pcie_readl_dbi(pci, PCIE_ATU_LOWER_TARGET);
-> > -		if (val == 0x11110000)
-> > -			ob++;
-> > -		else
-> > +	for (ob = 0; ob < max_region; ob++) {
-> > +		dw_pcie_writel_atu_ob(pci, ob, PCIE_ATU_LOWER_TARGET, 0x11110000);
-> > +		val = dw_pcie_readl_atu_ob(pci, ob, PCIE_ATU_LOWER_TARGET);
-> > +		if (val != 0x11110000)
-> >  			break;
-> >  	}
-> >  
-> > -	for (i = 0; i < max_region; i++) {
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_VIEWPORT, PCIE_ATU_REGION_INBOUND | i);
-> > -		dw_pcie_writel_dbi(pci, PCIE_ATU_LOWER_TARGET, 0x11110000);
-> > -		val = dw_pcie_readl_dbi(pci, PCIE_ATU_LOWER_TARGET);
-> > -		if (val == 0x11110000)
-> > -			ib++;
-> > -		else
-> > +	for (ib = 0; ib < max_region; ib++) {
-> > +		dw_pcie_writel_atu_ib(pci, ib, PCIE_ATU_LOWER_TARGET, 0x11110000);
-> > +		val = dw_pcie_readl_atu_ib(pci, ib, PCIE_ATU_LOWER_TARGET);
-> > +		if (val != 0x11110000)
-> >  			break;
-> >  	}
-> >  
-> > @@ -707,12 +592,10 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
-> >  		if (!pci->atu_size)
-> >  			/* Pick a minimal default, enough for 8 in and 8 out windows */
-> >  			pci->atu_size = SZ_4K;
-> > -
-> > -		dw_pcie_iatu_detect_regions_unroll(pci);
-> > -	} else {
-> > -		dw_pcie_iatu_detect_regions(pci);
-> >  	}
-> >  
-> > +	dw_pcie_iatu_detect_regions(pci);
-> > +
-> >  	dev_info(pci->dev, "iATU unroll: %s\n", pci->iatu_unroll_enabled ?
-> >  		"enabled" : "disabled");
-> >  
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> > index 449c5ad92edc..6adf0c957c3b 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.h
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> > @@ -103,10 +103,20 @@
-> >  #define PCIE_VERSION_NUMBER		0x8F8
-> >  #define PCIE_VERSION_TYPE		0x8FC
-> >  
-
-> > +/*
-> > + * iATU inbound and outbound windows CSRs. Before the IP-core v4.80a each
-> > + * iATU region CSRs had been indirectly accessible by means of the dedicated
-> > + * viewport selector. The iATU/eDMA CSRs space was re-designed in DWC PCIe
-> > + * v4.80a in a way so the viewport was unrolled into the directly accessible
-> > + * iATU/eDMA CSRs space.
-> 
-> IIRC, I think it is configurable in later versions. There was some 
-> discussion when I did the detection.
-
-There are two internal IP-core parameters which indicate whether the
-unrolled eDMA/iATU CSRs mapping is enabled:
-CC_UNROLL_EN = (CC_DMA_ENABLE || CX_INTERNAL_ATU_ENABLE) && !AHB_POPULATED
-and
-CC_UNROLL_ENABLE = ((CC_UNROLL_EN ==0) ? 0: 1)
-Normally these parameters shouldn't be manually changed since they
-aren't advertised in the list of the configurable IP-core parameters.
-But there is a note in the databook (v4.90a, v5.20a, v5.40a) which
-suggests to contact the Synopsys support if it's required to enable
-the legacy mapping on the later IP-core versions. So basically you are
-right. It is configurable, but not in the normal circumstances.
-Practically I don't think there is any modern DW PCIe controller
-implemented with the legacy eDMA/iATU CSRs mapping since the modern
-CPUs/SoC-Interconnects mainly have enough unused IO space for
-the unrolled access.
-
--Sergey
-
-> 
-> > + */
-> >  #define PCIE_ATU_VIEWPORT		0x900
-> > -#define PCIE_ATU_REGION_INBOUND		BIT(31)
-> > -#define PCIE_ATU_REGION_OUTBOUND	0
-> > -#define PCIE_ATU_CR1			0x904
-> > +#define PCIE_ATU_REGION_DIR_IB		BIT(31)
-> > +#define PCIE_ATU_REGION_DIR_OB		0
-> > +#define PCIE_ATU_VIEWPORT_BASE		0x904
-> > +#define PCIE_ATU_UNROLL_BASE(dir, region) \
-> > +	(((region) << 9) | ((dir == PCIE_ATU_REGION_DIR_IB) ? BIT(8) : 0))
-> > +#define PCIE_ATU_REGION_CTRL1		0x000
-> >  #define PCIE_ATU_INCREASE_REGION_SIZE	BIT(13)
-> >  #define PCIE_ATU_TYPE_MEM		0x0
-> >  #define PCIE_ATU_TYPE_IO		0x2
-> > @@ -114,19 +124,19 @@
-> >  #define PCIE_ATU_TYPE_CFG1		0x5
-> >  #define PCIE_ATU_TD			BIT(8)
-> >  #define PCIE_ATU_FUNC_NUM(pf)           ((pf) << 20)
-> > -#define PCIE_ATU_CR2			0x908
-> > +#define PCIE_ATU_REGION_CTRL2		0x004
-> >  #define PCIE_ATU_ENABLE			BIT(31)
-> >  #define PCIE_ATU_BAR_MODE_ENABLE	BIT(30)
-> >  #define PCIE_ATU_FUNC_NUM_MATCH_EN      BIT(19)
-> > -#define PCIE_ATU_LOWER_BASE		0x90C
-> > -#define PCIE_ATU_UPPER_BASE		0x910
-> > -#define PCIE_ATU_LIMIT			0x914
-> > -#define PCIE_ATU_LOWER_TARGET		0x918
-> > +#define PCIE_ATU_LOWER_BASE		0x008
-> > +#define PCIE_ATU_UPPER_BASE		0x00C
-> > +#define PCIE_ATU_LIMIT			0x010
-> > +#define PCIE_ATU_LOWER_TARGET		0x014
-> >  #define PCIE_ATU_BUS(x)			FIELD_PREP(GENMASK(31, 24), x)
-> >  #define PCIE_ATU_DEV(x)			FIELD_PREP(GENMASK(23, 19), x)
-> >  #define PCIE_ATU_FUNC(x)		FIELD_PREP(GENMASK(18, 16), x)
-> > -#define PCIE_ATU_UPPER_TARGET		0x91C
-> > -#define PCIE_ATU_UPPER_LIMIT		0x924
-> > +#define PCIE_ATU_UPPER_TARGET		0x018
-> > +#define PCIE_ATU_UPPER_LIMIT		0x020
-> >  
-> >  #define PCIE_MISC_CONTROL_1_OFF		0x8BC
-> >  #define PCIE_DBI_RO_WR_EN		BIT(0)
-> > @@ -143,19 +153,6 @@
-> >  
-> >  #define PCIE_PL_CHK_REG_ERR_ADDR			0xB28
-> >  
-> > -/*
-> > - * iATU Unroll-specific register definitions
-> > - * From 4.80 core version the address translation will be made by unroll
-> > - */
-> > -#define PCIE_ATU_UNR_REGION_CTRL1	0x00
-> > -#define PCIE_ATU_UNR_REGION_CTRL2	0x04
-> > -#define PCIE_ATU_UNR_LOWER_BASE		0x08
-> > -#define PCIE_ATU_UNR_UPPER_BASE		0x0C
-> > -#define PCIE_ATU_UNR_LOWER_LIMIT	0x10
-> > -#define PCIE_ATU_UNR_LOWER_TARGET	0x14
-> > -#define PCIE_ATU_UNR_UPPER_TARGET	0x18
-> > -#define PCIE_ATU_UNR_UPPER_LIMIT	0x20
-> > -
-> >  /*
-> >   * The default address offset between dbi_base and atu_base. Root controller
-> >   * drivers are not required to initialize atu_base if the offset matches this
-> > @@ -164,13 +161,6 @@
-> >   */
-> >  #define DEFAULT_DBI_ATU_OFFSET (0x3 << 20)
-> >  
-> > -/* Register address builder */
-> > -#define PCIE_GET_ATU_OUTB_UNR_REG_OFFSET(region) \
-> > -		((region) << 9)
-> > -
-> > -#define PCIE_GET_ATU_INB_UNR_REG_OFFSET(region) \
-> > -		(((region) << 9) | BIT(8))
-> > -
-> >  #define MAX_MSI_IRQS			256
-> >  #define MAX_MSI_IRQS_PER_CTRL		32
-> >  #define MAX_MSI_CTRLS			(MAX_MSI_IRQS / MAX_MSI_IRQS_PER_CTRL)
-> > -- 
-> > 2.35.1
-> > 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2795049CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 00:48:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 782B85049D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 00:48:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235199AbiDQWkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 18:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36806 "EHLO
+        id S235209AbiDQWkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 18:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbiDQWkK (ORCPT
+        with ESMTP id S235167AbiDQWkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 18:40:10 -0400
+        Sun, 17 Apr 2022 18:40:13 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2712A17053
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 15:37:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F2517053
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 15:37:35 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 6D5E21F40EAE
+        with ESMTPSA id 3F5C31F40E94
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650235053;
-        bh=isO7PTUeJcDVmAZaS1b0iVVGgXGziCi18eZsBem42Os=;
+        s=mail; t=1650235054;
+        bh=CWqvGLqMByoxyOodrX4VDvjOrVtokLSbI2qbVKtiRlE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RCU0g4/e8IIBgm39Cna0t75waPeHxN5xPVxsFDXz8lk8cqLB1fOgTM9j+MVuyXbVG
-         +XZzwYUUP9XGxUqodAUBMzmfKeVk3FRhTJtnnHRGDXxDeI23i+ogWSu6fo8R1UH3Iq
-         OpAPJ5+h8PXjtHCsOIvnC6Dj6RZcaCwPWFR0ElLf0InNmGChOA8245jPAgvBIonUt7
-         U5GM3VlDpXHtqr+vRwjU7cgwI1upzmPOjFtwsBxVb0P0xPQtXysbuU0KfWWDitRvfB
-         XcOaH7M/rCOOzPxbnx9KIjpuwmrHT9iciWkgUzIUPZ+yRcYkoQaNS9PA4B64bdZ4QP
-         v9RtjeOacepmA==
+        b=lcJvf3E+hxnU0Nq1w3WdBJlZftcbVMiok7e+eg7Hwqv0mO18WUBg4OTVgQMjBxM7x
+         yZ46LkEOyVClN6kZkvDbrxWcRUO5wd/C+d8UideAEz+At/GNknqup3auWK2DJtpzaf
+         iHVksoQqaEGub4RsoCuzWViFzLG0D4Plb5w5uSB1sdFGWYlDIW2JQRbfq04+ydhnly
+         rvW7DplggN8WFLcg0Ih8MyEf3KOVM9+ptSPcQ2BWOc8jRLDZQsT1vgV4RrGp0sevIL
+         go3ntFW1H9oXdkcuTJkpLu7GmrdLg+0+xU6KbdIzshQNQFjUBVCDMCjrjJH2n0oMuO
+         AMDsaMYO5BY2g==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
 To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
         Gurchetan Singh <gurchetansingh@chromium.org>,
@@ -50,9 +50,9 @@ Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         Dmitry Osipenko <digetx@gmail.com>,
         Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Subject: [PATCH v4 03/15] drm/virtio: Unlock GEM reservations on virtio_gpu_object_shmem_init() error
-Date:   Mon, 18 Apr 2022 01:36:55 +0300
-Message-Id: <20220417223707.157113-4-dmitry.osipenko@collabora.com>
+Subject: [PATCH v4 04/15] drm/virtio: Unlock reservations on dma_resv_reserve_fences() error
+Date:   Mon, 18 Apr 2022 01:36:56 +0300
+Message-Id: <20220417223707.157113-5-dmitry.osipenko@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
 References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
@@ -68,30 +68,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unlock reservations in the error code path of virtio_gpu_object_create()
-to silence debug warning splat produced by ww_mutex_destroy(&obj->lock)
-when GEM is released with the held lock.
+Unlock reservations on dma_resv_reserve_fences() error to fix recursive
+locking of the reservations when this error happens.
 
 Cc: stable@vger.kernel.org
-Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
 Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 ---
- drivers/gpu/drm/virtio/virtgpu_object.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/virtio/virtgpu_gem.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/virtio/virtgpu_object.c b/drivers/gpu/drm/virtio/virtgpu_object.c
-index 3d0c8d4d1c20..21c19cdedce0 100644
---- a/drivers/gpu/drm/virtio/virtgpu_object.c
-+++ b/drivers/gpu/drm/virtio/virtgpu_object.c
-@@ -250,6 +250,8 @@ int virtio_gpu_object_create(struct virtio_gpu_device *vgdev,
+diff --git a/drivers/gpu/drm/virtio/virtgpu_gem.c b/drivers/gpu/drm/virtio/virtgpu_gem.c
+index 580a78809836..7db48d17ee3a 100644
+--- a/drivers/gpu/drm/virtio/virtgpu_gem.c
++++ b/drivers/gpu/drm/virtio/virtgpu_gem.c
+@@ -228,8 +228,10 @@ int virtio_gpu_array_lock_resv(struct virtio_gpu_object_array *objs)
  
- 	ret = virtio_gpu_object_shmem_init(vgdev, bo, &ents, &nents);
- 	if (ret != 0) {
-+		if (fence)
+ 	for (i = 0; i < objs->nents; ++i) {
+ 		ret = dma_resv_reserve_fences(objs->objs[i]->resv, 1);
+-		if (ret)
++		if (ret) {
 +			virtio_gpu_array_unlock_resv(objs);
- 		virtio_gpu_array_put_free(objs);
- 		virtio_gpu_free_object(&shmem_obj->base);
- 		return ret;
+ 			return ret;
++		}
+ 	}
+ 	return ret;
+ }
 -- 
 2.35.1
 

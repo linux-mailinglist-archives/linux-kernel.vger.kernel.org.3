@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB7A3504919
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58C2F50491A
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234885AbiDQS7l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 14:59:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
+        id S234900AbiDQS7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 14:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234876AbiDQS7i (ORCPT
+        with ESMTP id S234898AbiDQS7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 14:59:38 -0400
+        Sun, 17 Apr 2022 14:59:46 -0400
 Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D635877;
-        Sun, 17 Apr 2022 11:57:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BE135875;
+        Sun, 17 Apr 2022 11:57:10 -0700 (PDT)
 Received: from integral2.. (unknown [36.80.217.41])
-        by gnuweeb.org (Postfix) with ESMTPSA id CD9D17E3BA;
-        Sun, 17 Apr 2022 18:56:58 +0000 (UTC)
+        by gnuweeb.org (Postfix) with ESMTPSA id 171F87E3C6;
+        Sun, 17 Apr 2022 18:57:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1650221821;
-        bh=RFtg7BoSogQqJ3qbQ59LPrzum9EvKnWpLcNv0rGtvq4=;
+        s=default; t=1650221828;
+        bh=W/B15O4/x8QrATxnTZ+KI9F1A5LySUR4+bRcaz8u5yU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cqHbTrLAEbwlpZUNB52HM3REYAh3Vg6BVvtWRrGWcCn3b/+Rdd1582v5khnfX3+D6
-         RTgo/tCZ8fVu7ezeYhY/seTU28SSIHYjJYvVEPUEZ4Um68TCUYcKR9hBmU3jSqwqlV
-         om+uCh1u/EkwJyxzMCKg0l5Zvcr8XvwnSr3QuzdsQfR+z4chfFWvqsyfUzpfOZ97jD
-         KonQKsW9nojWeqZ+OZwMftBynbjx2d1FmTkgD/96nQa8tKruNz8wlCw0GIYugmxO7w
-         9O2R9lj79n5kmE8qHAFdh9/Ychv3JoUI4Uq4eP4IR626zmMN87Xfvm6mBZZlqpoPj/
-         qKKHTPTUR/3Gg==
+        b=bD/Bkb+G2IASp7bWPXJrLygzl5789e2fKMjlZQ51xEkJf5CkaBuiPexp/8F+ryICY
+         N2/V8108wtl81Ua+jdQmISkTthsoEJ9asSVqIZiiP71xuEbjdkMxDA6IXDaX3fd2DX
+         j4yKYFxJrxg/v0fXyRqtuy0k//sHc8QKMFJCCFbq66v08qL3uxQpQaoc3Ysjsm78Uu
+         TBbvgFt4SvYV8Lhzt9U2T4tRSff9rABXIDU+mkbrNLHlyhufyqxk6XY+YToyvRg60W
+         +OSCJbdQQbte/NQ03RL1rhLGRb1VM7M9xgCU/LJ77PZaIkZhM6NA2vspgxFtzzDZXQ
+         nWQ3BfcLDeCqQ==
 From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
 To:     Steven Rostedt <rostedt@goodmis.org>,
         Ingo Molnar <mingo@redhat.com>
@@ -36,9 +36,9 @@ Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
         Linux Trace Devel Mailing List 
         <linux-trace-devel@vger.kernel.org>
-Subject: [RESEND PATCH 1/2] tracing: Return -EINVAL if WARN_ON(!glob) triggered in event_hist_trigger_parse()
-Date:   Mon, 18 Apr 2022 01:56:29 +0700
-Message-Id: <20220417185630.199062-2-ammarfaizi2@gnuweeb.org>
+Subject: [RESEND PATCH 2/2] tracing: Change `if (strlen(glob))` to `if (glob[0])`
+Date:   Mon, 18 Apr 2022 01:56:30 +0700
+Message-Id: <20220417185630.199062-3-ammarfaizi2@gnuweeb.org>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220417185630.199062-1-ammarfaizi2@gnuweeb.org>
 References: <20220417185630.199062-1-ammarfaizi2@gnuweeb.org>
@@ -53,31 +53,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If `WARN_ON(!glob)` is ever triggered, we will still continue executing
-the next lines. This will trigger the more serious problem, a NULL
-pointer dereference bug.
-
-Just return -EINVAL if @glob is NULL.
+No need to traverse to the end of string. If the first byte is not a NUL
+char, it's guaranteed `if (strlen(glob))` is true.
 
 Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- kernel/trace/trace_events_hist.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/trace/trace_events_hist.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/kernel/trace/trace_events_hist.c b/kernel/trace/trace_events_hist.c
-index 44db5ba9cabb..0b99ad68e3fa 100644
+index 0b99ad68e3fa..1968e497ef44 100644
 --- a/kernel/trace/trace_events_hist.c
 +++ b/kernel/trace/trace_events_hist.c
-@@ -6186,7 +6186,8 @@ static int event_hist_trigger_parse(struct event_command *cmd_ops,
+@@ -6189,7 +6189,7 @@ static int event_hist_trigger_parse(struct event_command *cmd_ops,
+ 	if (WARN_ON(!glob))
+ 		return -EINVAL;
  
- 	lockdep_assert_held(&event_mutex);
- 
--	WARN_ON(!glob);
-+	if (WARN_ON(!glob))
-+		return -EINVAL;
- 
- 	if (strlen(glob)) {
+-	if (strlen(glob)) {
++	if (glob[0]) {
  		hist_err_clear();
+ 		last_cmd_set(file, param);
+ 	}
 -- 
 Ammar Faizi
 

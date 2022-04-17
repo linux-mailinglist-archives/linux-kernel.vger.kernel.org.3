@@ -2,51 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CC650479E
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 12:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE7BB5047AF
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 14:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbiDQK61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 06:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S234015AbiDQMGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 08:06:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiDQK6W (ORCPT
+        with ESMTP id S232401AbiDQMGD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 06:58:22 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA971010;
-        Sun, 17 Apr 2022 03:55:44 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kh6Nn1xYyzFpXF;
-        Sun, 17 Apr 2022 18:53:13 +0800 (CST)
-Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sun, 17 Apr 2022 18:55:41 +0800
-Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
- (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 17 Apr
- 2022 18:55:40 +0800
-From:   Wenchao Hao <haowenchao@huawei.com>
-To:     Mike Christie <michael.christie@oracle.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
-Subject: [PATCH v2] scsi: iscsi: Fix multiple iscsi session unbind event sent to userspace
-Date:   Sun, 17 Apr 2022 20:06:28 -0400
-Message-ID: <20220418000627.474784-1-haowenchao@huawei.com>
-X-Mailer: git-send-email 2.32.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500017.china.huawei.com (7.185.36.178)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        Sun, 17 Apr 2022 08:06:03 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA7CC23BC7;
+        Sun, 17 Apr 2022 05:03:26 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgB3pMT6AVxihfvuAQ--.19863S2;
+        Sun, 17 Apr 2022 20:03:12 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, davem@davemloft.net,
+        alexander.deucher@amd.com, akpm@linux-foundation.org,
+        broonie@kernel.org, linux-usb@vger.kernel.org,
+        Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH] drivers: usb: host: Fix deadlock in oxu_bus_suspend()
+Date:   Sun, 17 Apr 2022 20:03:05 +0800
+Message-Id: <20220417120305.64577-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgB3pMT6AVxihfvuAQ--.19863S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Gr1ftr4xWw1DXw43ArW5ZFb_yoW8JrW7pr
+        4qgryayr1Utr42gFyUCa1DZa4rGa1DW3yUCrW7G39xZ3W8XF45GF1vyrWFgF4aqFsrJwnI
+        vF1Fq3y3CF4DCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW0oVCq3wA2z4x0Y4vEx4A2
+        jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52
+        x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWU
+        GwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI4
+        8JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv
+        6cx26r4fKr1UJr1l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGw
+        C20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48J
+        MIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMI
+        IF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E
+        87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwDAVZdtZOglAAOsb
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,110 +54,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
-for multiple times which should be fixed.
+There is a deadlock in oxu_bus_suspend(), which is shown below:
 
-This patch introduce target_unbound in iscsi_cls_session to make
-sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
+   (Thread 1)              |      (Thread 2)
+                           | timer_action()
+oxu_bus_suspend()          |  mod_timer()
+ spin_lock_irq() //(1)     |  (wait a time)
+ ...                       | oxu_watchdog()
+ del_timer_sync()          |  spin_lock_irq() //(2)
+ (wait timer to stop)      |  ...
 
-But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
-Report unbind session event when the target has been removed"). The issue
-is iscsid died for any reason after it send unbind session to kernel, once
-iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
+We hold oxu->lock in position (1) of thread 1, and use
+del_timer_sync() to wait timer to stop, but timer handler
+also need oxu->lock in position (2) of thread 2. As a result,
+oxu_bus_suspend() will block forever.
 
-Now kernel think iscsi_cls_session has already sent an
-ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
-would cause userspace unable to logout. Actually the session is in
-invalid state(it's target_id is INVALID), iscsid should not sync this
-session in it's restart.
+This patch extracts del_timer_sync() from the protection of
+spin_lock_irq(), which could let timer handler to obtain
+the needed lock.
 
-So we need to check session's target unbound state during iscsid restart,
-if session is in unbound state, do not sync this session and perform
-session teardown. It's reasonable because once a session is unbound, we
-can not recover it any more(mainly because it's target id is INVALID)
-
-Changes from V1:
-- Using target_unbound rather than state to indicate session has been
-  unbound
-
-Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 21 +++++++++++++++++++++
- include/scsi/scsi_transport_iscsi.h |  1 +
- 2 files changed, 22 insertions(+)
+ drivers/usb/host/oxu210hp-hcd.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 2c0dd64159b0..43ba31e595b4 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -1958,6 +1958,14 @@ static void __iscsi_unbind_session(struct work_struct *work)
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index b741670525e..ee403df3309 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -3909,8 +3909,10 @@ static int oxu_bus_suspend(struct usb_hcd *hcd)
+ 		}
+ 	}
  
- 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
++	spin_unlock_irq(&oxu->lock);
+ 	/* turn off now-idle HC */
+ 	del_timer_sync(&oxu->watchdog);
++	spin_lock_irq(&oxu->lock);
+ 	ehci_halt(oxu);
+ 	hcd->state = HC_STATE_SUSPENDED;
  
-+	spin_lock_irqsave(&session->lock, flags);
-+	if (session->target_unbound) {
-+		spin_unlock_irqrestore(&session->lock, flags);
-+		return;
-+	}
-+	session->target_unbound = 1;
-+	spin_unlock_irqrestore(&session->lock, flags);
-+
- 	/* Prevent new scans and make sure scanning is not in progress */
- 	mutex_lock(&ihost->mutex);
- 	spin_lock_irqsave(&session->lock, flags);
-@@ -2058,6 +2066,7 @@ int iscsi_add_session(struct iscsi_cls_session *session, unsigned int target_id)
- 		session->target_id = target_id;
- 
- 	dev_set_name(&session->dev, "session%u", session->sid);
-+	session->target_unbound = 0;
- 	err = device_add(&session->dev);
- 	if (err) {
- 		iscsi_cls_session_printk(KERN_ERR, session,
-@@ -4319,6 +4328,15 @@ iscsi_session_attr(def_taskmgmt_tmo, ISCSI_PARAM_DEF_TASKMGMT_TMO, 0);
- iscsi_session_attr(discovery_parent_idx, ISCSI_PARAM_DISCOVERY_PARENT_IDX, 0);
- iscsi_session_attr(discovery_parent_type, ISCSI_PARAM_DISCOVERY_PARENT_TYPE, 0);
- 
-+static ssize_t
-+show_priv_session_target_unbound(struct device *dev, struct device_attribute *attr,
-+			char *buf)
-+{
-+	struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
-+	return sysfs_emit(buf, "%d\n", session->target_unbound);
-+}
-+static ISCSI_CLASS_ATTR(priv_sess, target_unbound, S_IRUGO,
-+			show_priv_session_target_unbound, NULL);
- static ssize_t
- show_priv_session_state(struct device *dev, struct device_attribute *attr,
- 			char *buf)
-@@ -4422,6 +4440,7 @@ static struct attribute *iscsi_session_attrs[] = {
- 	&dev_attr_priv_sess_recovery_tmo.attr,
- 	&dev_attr_priv_sess_state.attr,
- 	&dev_attr_priv_sess_creator.attr,
-+	&dev_attr_priv_sess_target_unbound.attr,
- 	&dev_attr_sess_chap_out_idx.attr,
- 	&dev_attr_sess_chap_in_idx.attr,
- 	&dev_attr_priv_sess_target_id.attr,
-@@ -4534,6 +4553,8 @@ static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
- 		return S_IRUGO | S_IWUSR;
- 	else if (attr == &dev_attr_priv_sess_state.attr)
- 		return S_IRUGO;
-+	else if (attr == &dev_attr_priv_sess_target_unbound.attr)
-+		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_creator.attr)
- 		return S_IRUGO;
- 	else if (attr == &dev_attr_priv_sess_target_id.attr)
-diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-index 9acb8422f680..877632c25e56 100644
---- a/include/scsi/scsi_transport_iscsi.h
-+++ b/include/scsi/scsi_transport_iscsi.h
-@@ -256,6 +256,7 @@ struct iscsi_cls_session {
- 	struct workqueue_struct *workq;
- 
- 	unsigned int target_id;
-+	int target_unbound;   /* make sure unbind session only once */
- 	bool ida_used;
- 
- 	/*
 -- 
-2.32.0
+2.17.1
 

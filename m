@@ -2,60 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BBA5049B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 00:23:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036625049D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 00:48:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235143AbiDQW0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 18:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S235158AbiDQWkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 18:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiDQW0K (ORCPT
+        with ESMTP id S229449AbiDQWkH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 18:26:10 -0400
+        Sun, 17 Apr 2022 18:40:07 -0400
 Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E318812AA1;
-        Sun, 17 Apr 2022 15:23:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CD717053
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 15:37:28 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: dmitry.osipenko)
-        with ESMTPSA id 297C91F4437C
+        with ESMTPSA id 05E621F40E94
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650234211;
-        bh=CcJUP4Ei7n9o+q3O09iFOiRFDYRHYPSFpc7uzXTjwqw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=O+CzWC3I4DC8z3XM2IQbYer0jnYm0GvhGcfZaI0iAs8RYuy8ZZKxmNZRNJlkQw+tR
-         mLrSXxk9//8YTKlDK0Uo1hu6/lKZNXJ/9TWeAO2WgI4+CaO55Poz7f7DFpMYm+KMx0
-         iqJoffXxpZ3U1RVWadGzX6M9vOvKus1Q6ULwn5UWqV6/pe62H4vuozPJG7rKQIwGcU
-         O4k78HU2VqbQkbJuiVVb0IokIf85KaY9RgvVisIDOJJdo9my+Sw5qA4eEj9hOL7rdf
-         sPUbEPtEYALhknm3kH+W5YF9V5AUAdlvnu/x5gynv7rGXgyyCNhbzr/ApLUBPX1UYg
-         SDJtEV7s2Hl6w==
-Message-ID: <a8bb3ef6-8f37-709f-adfe-3608e5c1e11f@collabora.com>
-Date:   Mon, 18 Apr 2022 01:23:28 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v6 3/4] arm64: dts: rockchip: add rk3568 pcie2x1
- controller
-Content-Language: en-US
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220416100502.627289-1-pgwipeout@gmail.com>
- <20220416100502.627289-4-pgwipeout@gmail.com>
- <eadc4422-15bb-0b46-8235-db6e160e8d32@collabora.com>
- <CAMdYzYq=nQhwY_4+Y=PM9do_Dcrg1pD-jeD=q36D48ks=WDVgw@mail.gmail.com>
+        s=mail; t=1650235047;
+        bh=hAGjefZKaPXHsu+qrKk3h+jzYc7jsvBkLXWAH3QcJL4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CzhDq/NT3AF60qFP7q35kiskKsuyxpCYxljm1ujUVQpum8NHTm1u2m79iTzcxRZBj
+         puT09Sdp1w+WSrqhW9AqlWqxvQDOm5bLUqccCbW2TEtV6EE/ubz5+kzqdKt6K/yVVb
+         PZ1nGNerwSkODeXylMfiCi3MvBONbtR6v8mOZMZn/9cPZtKLPWFhCAVcPRQ48H15pD
+         eRUse7uvxYYK6TjTmDk6q0dUcQqP4Qwz93+SiQ7FyKGIINxzwVdSEd0za163Vs0ZsB
+         Iwi48Hwx5ncM/TgdzNZp7/5FWC5FWZvlvuqxzKoyLvqmvXkocjCjUnHFxqNO9mnn0H
+         QvdKzz0Y6/Qbg==
 From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <CAMdYzYq=nQhwY_4+Y=PM9do_Dcrg1pD-jeD=q36D48ks=WDVgw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Subject: [PATCH v4 00/15] Add generic memory shrinker to VirtIO-GPU and Panfrost DRM drivers
+Date:   Mon, 18 Apr 2022 01:36:52 +0300
+Message-Id: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,27 +66,163 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/16/22 13:17, Peter Geis wrote:
-> On Sat, Apr 16, 2022 at 6:08 AM Dmitry Osipenko
-> <dmitry.osipenko@collabora.com> wrote:
->>
->> Hi Peter,
->>
->> On 4/16/22 13:05, Peter Geis wrote:
->>> +     pcie2x1: pcie@fe260000 {
->>> +             compatible = "rockchip,rk3568-pcie";
->>> +             #address-cells = <3>;
->>> +             #size-cells = <2>;
->>> +             bus-range = <0x0 0xf>;
->>> +             assigned-clocks = <&cru ACLK_PCIE20_MST>, <&cru ACLK_PCIE20_SLV>,
->>> +                      <&cru ACLK_PCIE20_DBI>, <&cru PCLK_PCIE20>,
->>> +                      <&cru CLK_PCIE20_AUX_NDFT>;
->>
->> Why these assigned-clocks are needed? I don't see anything assigned in
->> this patchset.
-> 
-> Ah, those are remnants of early bringup when performance wasn't good
-> and I was manually setting clock rates.
+Hello,
 
-If it's not needed, should it be removed then? Otherwise it looks like
-something is missing in the DT in regards to the assigned clocks.
+This patchset introduces memory shrinker for the VirtIO-GPU DRM driver.
+During OOM, the shrinker will release BOs that are marked as "not needed"
+by userspace using the new madvise IOCTL, it will also evict idling BOs
+to SWAP. The userspace in this case is the Mesa VirGL driver, it will mark
+the cached BOs as "not needed", allowing kernel driver to release memory
+of the cached shmem BOs on lowmem situations, preventing OOM kills.
+
+This patchset adds memory purging and eviction support to VirtIO-GPU driver.
+
+The Panfrost driver is switched to use generic memory shrinker. Eviction
+support will come later on, after resolving the blocker bug in Panfrost.
+
+This patchset also includes couple improvements and fixes for various
+minor things that I found while was working on the shrinker.
+
+The Mesa and IGT patches will be kept on hold until this kernel series
+will be approved and merged.
+
+This patchset was tested using Qemu and crosvm, including both cases of
+IOMMU off/on.
+
+Mesa: https://gitlab.freedesktop.org/digetx/mesa/-/commits/virgl-madvise
+IGT:  https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/virtio-madvise
+      https://gitlab.freedesktop.org/digetx/igt-gpu-tools/-/commits/panfrost-madvise
+
+Changelog:
+
+v4: - Corrected minor W=1 warnings reported by kernel test robot for v3.
+
+    - Renamed DRM_GEM_SHMEM_PAGES_STATE_ACTIVE/INACTIVE to PINNED/UNPINNED,
+      for more clarity.
+
+v3: - Hardened shrinker's count() with usage of READ_ONCE() since we don't
+      use atomic type for counting and technically compiler is free to
+      re-fetch counter's variable.
+
+    - "Correct drm_gem_shmem_get_sg_table() error handling" now uses
+      PTR_ERR_OR_ZERO(), fixing typo that was made in v2.
+
+    - Removed obsoleted shrinker from the Panfrost driver, which I missed to
+      do in v2 by accident and Alyssa Rosenzweig managed to notice it.
+
+    - CCed stable kernels in all patches that make fixes, even the minor ones,
+      like was suggested by Emil Velikov and added his r-b to the patches.
+
+    - Added t-b from Steven Price to the Panfrost's shrinker patch.
+
+    - Corrected doc-comment of drm_gem_shmem_object.madv, like was suggested
+      by Steven Price. Comment now says that madv=1 means "object is purged"
+      instead of saying that value is unused.
+
+    - Added more doc-comments to the new shmem shrinker API.
+
+    - The "Improve DMA API usage for shmem BOs" patch got more improvements
+      by removing the obsoleted drm_dev_set_unique() quirk and its comment.
+
+    - Added patch that makes Virtio-GPU driver to use common dev_is_pci()
+      helper, which was suggested by Robin Murphy.
+
+    - Added new "drm/shmem-helper: Take GEM reservation lock instead of
+      drm_gem_shmem locks" patch, which was suggested by Daniel Vetter.
+
+    - Added new "drm/virtio: Simplify error handling of
+      virtio_gpu_object_create()" patch.
+
+    - Improved "Correct doc-comment of drm_gem_shmem_get_sg_table()" patch,
+      like was suggested by Daniel Vetter, by saying that function returns
+      ERR_PTR() and not errno.
+
+    - virtio_gpu_purge_object() is fenced properly now, turned out
+      virtio_gpu_notify() doesn't do fencing as I was supposing before.
+      Stress testing of memory eviction revealed that.
+
+    - Added new patch that corrects virtio_gpu_plane_cleanup_fb() to use
+      appropriate atomic plane state.
+
+    - SHMEM shrinker got eviction support.
+
+    - VirtIO-GPU driver now supports memory eviction. It's enabled for a
+      non-blob GEMs only, i.e. for VirGL. The blobs don't support dynamic
+      attaching/detaching of guest's memory, so it's not trivial to enable
+      them.
+
+    - Added patch that removes obsoleted drm_gem_shmem_purge()
+
+    - Added patch that makes drm_gem_shmem_get_pages() private.
+
+    - Added patch that fixes lockup on dma_resv_reserve_fences() error.
+
+v2: - Improved shrinker by using a more fine-grained locking to reduce
+      contention during scan of objects and dropped locking from the
+      'counting' callback by tracking count of shrinkable pages. This
+      was suggested by Rob Clark in the comment to v1.
+
+    - Factored out common shrinker code into drm_gem_shmem_helper.c
+      and switched Panfrost driver to use the new common memory shrinker.
+      This was proposed by Thomas Zimmermann in his prototype series that
+      he shared with us in the comment to v1. Note that I only compile-tested
+      the Panfrost driver.
+
+    - Shrinker now takes object_name_lock during scan to prevent racing
+      with dma-buf exporting.
+
+    - Shrinker now takes vmap_lock during scan to prevent racing with shmem
+      vmap/unmap code.
+
+    - Added "Correct doc-comment of drm_gem_shmem_get_sg_table()" patch,
+      which I sent out previously as a standalone change, since the
+      drm_gem_shmem_helper.c is now touched by this patchset anyways and
+      it doesn't hurt to group all the patches together.
+
+Dmitry Osipenko (15):
+  drm/virtio: Correct drm_gem_shmem_get_sg_table() error handling
+  drm/virtio: Check whether transferred 2D BO is shmem
+  drm/virtio: Unlock GEM reservations on virtio_gpu_object_shmem_init()
+    error
+  drm/virtio: Unlock reservations on dma_resv_reserve_fences() error
+  drm/virtio: Use appropriate atomic state in
+    virtio_gpu_plane_cleanup_fb()
+  drm/virtio: Simplify error handling of virtio_gpu_object_create()
+  drm/virtio: Improve DMA API usage for shmem BOs
+  drm/virtio: Use dev_is_pci()
+  drm/shmem-helper: Correct doc-comment of drm_gem_shmem_get_sg_table()
+  drm/shmem-helper: Take reservation lock instead of drm_gem_shmem locks
+  drm/shmem-helper: Add generic memory shrinker
+  drm/virtio: Support memory shrinking
+  drm/panfrost: Switch to generic memory shrinker
+  drm/shmem-helper: Make drm_gem_shmem_get_pages() private
+  drm/shmem-helper: Remove drm_gem_shmem_purge()
+
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 814 ++++++++++++++++--
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/panfrost/Makefile             |   1 -
+ drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |  19 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.c       |  30 +-
+ drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 -
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 122 ---
+ drivers/gpu/drm/panfrost/panfrost_job.c       |  18 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  15 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.c          |  53 +-
+ drivers/gpu/drm/virtio/virtgpu_drv.h          |  20 +-
+ drivers/gpu/drm/virtio/virtgpu_gem.c          |  50 +-
+ drivers/gpu/drm/virtio/virtgpu_ioctl.c        |  37 +
+ drivers/gpu/drm/virtio/virtgpu_kms.c          |  16 +-
+ drivers/gpu/drm/virtio/virtgpu_object.c       | 204 +++--
+ drivers/gpu/drm/virtio/virtgpu_plane.c        |  23 +-
+ drivers/gpu/drm/virtio/virtgpu_vq.c           |  55 +-
+ include/drm/drm_device.h                      |   4 +
+ include/drm/drm_gem.h                         |  35 +
+ include/drm/drm_gem_shmem_helper.h            | 114 ++-
+ include/uapi/drm/virtgpu_drm.h                |  14 +
+ 22 files changed, 1277 insertions(+), 388 deletions(-)
+ delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
+
+-- 
+2.35.1
+

@@ -2,120 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E51E504751
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 11:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439A350475A
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 11:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233775AbiDQJLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 05:11:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55538 "EHLO
+        id S233786AbiDQJSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 05:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233750AbiDQJLR (ORCPT
+        with ESMTP id S233283AbiDQJSW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 05:11:17 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0A627CF3;
-        Sun, 17 Apr 2022 02:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650186483;
-        bh=HiCerFGpE/ayU2rNlzN03bfcN/5dOTZBCfCNgKlWJ0o=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=RF5LsLbH2pRh+HPMUdHXYyIBKr+lyPFri3MbyzolzXymfWSog757kCMGuw2EDSBPj
-         gcp95NvBQcqc6iX/vCYQOvzo5AcGGQ6Hq0QeisYuj5/ex09d4/68Hob4Uk2OIVc3qi
-         VDJacmm5WsMHG5GPWztGJXgqTW50DwwsiYJQAZ7k=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [217.61.151.209] ([217.61.151.209]) by web-mail.gmx.net
- (3c-app-gmx-bs58.server.lan [172.19.170.142]) (via HTTP); Sun, 17 Apr 2022
- 11:08:02 +0200
+        Sun, 17 Apr 2022 05:18:22 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DD22A277;
+        Sun, 17 Apr 2022 02:15:46 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04395;MF=ashimida@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VAELPyY_1650186943;
+Received: from 192.168.193.180(mailfrom:ashimida@linux.alibaba.com fp:SMTPD_---0VAELPyY_1650186943)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 17 Apr 2022 17:15:43 +0800
+Message-ID: <e1563d18-36d7-08b2-762c-def7021d1382@linux.alibaba.com>
+Date:   Sun, 17 Apr 2022 02:15:43 -0700
 MIME-Version: 1.0
-Message-ID: <trinity-a220fd81-2ee9-474d-bd65-505b9ed904b2-1650186482865@3c-app-gmx-bs58>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Aw: Re: [RFC/RFT 4/6] PCI: rockchip-dwc: add pcie bifurcation
-Content-Type: text/plain; charset=UTF-8
-Date:   Sun, 17 Apr 2022 11:08:02 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <20220416233047.GA938296@bhelgaas>
-References: <20220416135458.104048-5-linux@fw-web.de>
- <20220416233047.GA938296@bhelgaas>
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:2bpGmb0SGB/uw7Zt7eXuN4pld6iukRT7tzTTsFyOx4YULzjSB9kfUHZXHXv87BGPUG1fF
- Ea0IN1aJksF6SwZFzKGn4eBJIt3IH8e8T1HeghhbpvbIzv8UkKCIIfhdLOdPxJWBdK4fC8S5/ceS
- F8/4MRTjwu2r6Hj3MTb7GJJktcfcSXWinWqfZHoHhSCxqWiyf9nTJQ/nN7ADw+m5s3R68WLA30qN
- WVdjwONHPS4oTdl/p/ar5oVZO5LO5c3Vn3r/xfaicL03CI3/JTzMGZJvUOodWCpp2+/iwlnT16Tf
- Zc=
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ZfuaCt4JPa4=:SvXYLMCMbDSlLrN7ezprt4
- om6bbWzv0yCV8/obOHIlm947NpThP8O54jmXsFPHcKL2NvznDfiM3GQhRGnJqIbb+DYf1P9pY
- UXLLKrWgrDEltMyrscIJO45o0UEgsA2v/s4VZhazYCVyoIVP1YtKwNUsD93MTCxOIgZsGw43A
- YVHzaE8EGaxXz6aG8LnmT5UWt3P9mOX6gBImUxbJvXMNESiW5w2rxseRIiKF8G1Ceb6xMx1sn
- RyhmRCA5+OcitHzHP3Ca4ySaRJkc6XQ3GuRbjsTlnOLpYXOzFM2N+xrQxxMWaq7Ej2FsuV56l
- i+vkfx+ecru+OP+ehU3+gKL2u2WWYWSCz6CViszAkU7Y2k8hD/L5OFLdJw5amTPD7hD6uYIIh
- CJ2Bhh8WeLtkWClvfVbDE7cgam5OBXrk0Aigg1IW0v3I1oMyn2Irg4RMJuu0d+ZIrkHMBugsK
- DqvVQwA3zzpECG+VksAFMasJn6aeZWzbA8BX7UiwvVrEOdSRq88w+VX6p8AimzTWyFOsLPA/N
- dPxW2JVnWp+nytRvRqaGm1bHG+t7oqWj7iuakk2M9AclYnAdh9gmNj7fUChOs6ZNQn5K16QjJ
- 7rKsQeoFdW6pXJAOcn/V3hJuMVab5ONJOTxDfrfLDx3nzfggTeNMBIZWn1KqRtchmtqd062gs
- bNO1e6zHL/qIoovsuucAEKsd/6gPad5g+Lwd044BN05SRFUZvSv/lP1wvFYHoEgaNMF7MlTVO
- EzoOcTUrYdFi4moapEwgKPHby5l5b4lKrjxM0W5TbFjqvAWLie5e3zTzj758vCxZK91wAjGIX
- 9Ennnk3
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220416001103.1524653-1-keescook@chromium.org>
+From:   Dan Li <ashimida@linux.alibaba.com>
+In-Reply-To: <20220416001103.1524653-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-> Gesendet: Sonntag, 17. April 2022 um 01:30 Uhr
-> Von: "Bjorn Helgaas" <helgaas@kernel.org>
 
-thanks for first review
+On 4/15/22 17:11, Kees Cook wrote:
+> In order to test various backward-edge control flow integrity methods,
+> add a test that manipulates the return address on the stack. Currently
+> only arm64 Pointer Authentication and Shadow Call Stack is supported.
+> 
+>   $ echo CFI_BACKWARD | cat >/sys/kernel/debug/provoke-crash/DIRECT
+> 
+> Under SCS, successful test of the mitigation is reported as:
+> 
+>   lkdtm: Performing direct entry CFI_BACKWARD
+>   lkdtm: Attempting unchecked stack return address redirection ...
+>   lkdtm: ok: redirected stack return address.
+>   lkdtm: Attempting checked stack return address redirection ...
+>   lkdtm: ok: control flow unchanged.
+> 
+> Under PAC, successful test of the mitigation is reported by the PAC
+> exception handler:
+> 
+>   lkdtm: Performing direct entry CFI_BACKWARD
+>   lkdtm: Attempting unchecked stack return address redirection ...
+>   lkdtm: ok: redirected stack return address.
+>   lkdtm: Attempting checked stack return address redirection ...
+>   Unable to handle kernel paging request at virtual address bfffffc0088d0514
+>   Mem abort info:
+>     ESR = 0x86000004
+>     EC = 0x21: IABT (current EL), IL = 32 bits
+>     SET = 0, FnV = 0
+>     EA = 0, S1PTW = 0
+>     FSC = 0x04: level 0 translation fault
+>   [bfffffc0088d0514] address between user and kernel address ranges
+>   ...
+> 
+> If the CONFIGs are missing (or the mitigation isn't working), failure
+> is reported as:
+> 
+>   lkdtm: Performing direct entry CFI_BACKWARD
+>   lkdtm: Attempting unchecked stack return address redirection ...
+>   lkdtm: ok: redirected stack return address.
+>   lkdtm: Attempting checked stack return address redirection ...
+>   lkdtm: FAIL: stack return address was redirected!
+>   lkdtm: This is probably expected, since this kernel was built *without* CONFIG_ARM64_PTR_AUTH_KERNEL=y nor CONFIG_SHADOW_CALL_STACK=y
+> 
+> Co-developed-by: Dan Li <ashimida@linux.alibaba.com>
+> Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v1: https://lore.kernel.org/lkml/20220413213917.711770-1-keescook@chromium.org
+> v2:
+>   - add PAGE_OFFSET setting for PAC bits (Dan Li)
+> ---
+>   drivers/misc/lkdtm/cfi.c                | 134 ++++++++++++++++++++++++
+>   tools/testing/selftests/lkdtm/tests.txt |   1 +
+>   2 files changed, 135 insertions(+)
+> 
+> diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> index e88f778be0d5..804965a480b7 100644
+> --- a/drivers/misc/lkdtm/cfi.c
+> +++ b/drivers/misc/lkdtm/cfi.c
+> @@ -3,6 +3,7 @@
+>    * This is for all the tests relating directly to Control Flow Integrity.
+>    */
+>   #include "lkdtm.h"
+> +#include <asm/page.h>
+>   
+>   static int called_count;
+>   
+> @@ -42,8 +43,141 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+>   	pr_expected_config(CONFIG_CFI_CLANG);
+>   }
+>   
+> +/*
+> + * This can stay local to LKDTM, as there should not be a production reason
+> + * to disable PAC && SCS.
+> + */
+> +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> +# ifdef CONFIG_ARM64_BTI_KERNEL
+> +#  define __no_pac             "branch-protection=bti"
+> +# else
+> +#  define __no_pac             "branch-protection=none"
+> +# endif
+> +# define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
+> +#else
+> +# define __no_ret_protection   __noscs
+> +#endif
+> +
+> +#define no_pac_addr(addr)      \
+> +	((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
+> +
+> +/* The ultimate ROP gadget. */
+> +static noinline __no_ret_protection
+> +void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (no_pac_addr(*ret_addr) == expected)
+> +		*ret_addr = (addr);
+> +	else
+> +		/* Check architecture, stack layout, or compiler behavior... */
+> +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> +			*ret_addr, addr);
+> +}
+> +
+> +static noinline
+> +void set_return_addr(unsigned long *expected, unsigned long *addr)
+> +{
+> +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> +
+> +	/* Make sure we've found the right place on the stack before writing it. */
+> +	if (no_pac_addr(*ret_addr) == expected)
+> +		*ret_addr = (addr);
+> +	else
+> +		/* Check architecture, stack layout, or compiler behavior... */
+> +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> +			*ret_addr, addr);
+> +}
+> +
+> +static volatile int force_check;
+> +
+> +static void lkdtm_CFI_BACKWARD(void)
+> +{
+> +	/* Use calculated gotos to keep labels addressable. */
+> +	void *labels[] = {0, &&normal, &&redirected, &&check_normal, &&check_redirected};
+> +
+> +	pr_info("Attempting unchecked stack return address redirection ...\n");
+> +
+> +	/* Always false */
+> +	if (force_check) {
+> +		/*
+> +		 * Prepare to call with NULLs to avoid parameters being treated as
+> +		 * constants in -02.
+> +		 */
+> +		set_return_addr_unchecked(NULL, NULL);
+> +		set_return_addr(NULL, NULL);
+> +		if (force_check)
+> +			goto *labels[1];
+> +		if (force_check)
+> +			goto *labels[2];
+> +		if (force_check)
+> +			goto *labels[3];
+> +		if (force_check)
+> +			goto *labels[4];
+> +		return;
+> +	}
+> +
+> +	/*
+> +	 * Use fallthrough switch case to keep basic block ordering between
+> +	 * set_return_addr*() and the label after it.
+> +	 */
+> +	switch (force_check) {
+> +	case 0:
+> +		set_return_addr_unchecked(&&normal, &&redirected);
+> +		fallthrough;
+> +	case 1:
+> +normal:
+> +		/* Always true */
+> +		if (!force_check) {
+> +			pr_err("FAIL: stack return address manipulation failed!\n");
+> +			/* If we can't redirect "normally", we can't test mitigations. */
+> +			return;
+> +		}
+> +		break;
+> +	default:
+> +redirected:
+> +		pr_info("ok: redirected stack return address.\n");
+> +		break;
+> +	}
+> +
+> +	pr_info("Attempting checked stack return address redirection ...\n");
+> +
+> +	switch (force_check) {
+> +	case 0:
+> +		set_return_addr(&&check_normal, &&check_redirected);
+> +		fallthrough;
+> +	case 1:
+> +check_normal:
+> +		/* Always true */
+> +		if (!force_check) {
+> +			pr_info("ok: control flow unchanged.\n");
+> +			return;
+> +		}
+> +
+> +check_redirected:
+> +		pr_err("FAIL: stack return address was redirected!\n");
+> +		break;
+> +	}
+> +
+> +	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)) {
+> +		pr_expected_config(CONFIG_ARM64_PTR_AUTH_KERNEL);
+> +		return;
+> +	}
+> +	if (IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+> +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> +		return;
+> +	}
+> +	pr_warn("This is probably expected, since this %s was built *without* %s=y nor %s=y\n",
+> +		lkdtm_kernel_info,
+> +		"CONFIG_ARM64_PTR_AUTH_KERNEL", "CONFIG_SHADOW_CALL_STACK");
+> +}
+> +
+>   static struct crashtype crashtypes[] = {
+>   	CRASHTYPE(CFI_FORWARD_PROTO),
+> +	CRASHTYPE(CFI_BACKWARD),
+>   };
+>   
+>   struct crashtype_category cfi_crashtypes = {
+> diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+> index 243c781f0780..9dace01dbf15 100644
+> --- a/tools/testing/selftests/lkdtm/tests.txt
+> +++ b/tools/testing/selftests/lkdtm/tests.txt
+> @@ -74,6 +74,7 @@ USERCOPY_STACK_BEYOND
+>   USERCOPY_KERNEL
+>   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+>   CFI_FORWARD_PROTO
+> +CFI_BACKWARD call trace:|ok: control flow unchanged
+>   FORTIFIED_STRSCPY
+>   FORTIFIED_OBJECT
+>   FORTIFIED_SUBOBJECT
 
-> On Sat, Apr 16, 2022 at 03:54:56PM +0200, Frank Wunderlich wrote:
-> > From: Frank Wunderlich <frank-w@public-files.de>
-> >
-> > PCIe Lanes can be split to 2 slots with bifurcation.
-> > Add support for this in existing pcie driver.
->
-> Please s/pcie/PCIe/ in subject and above to be consistent.  You also
-> have kind of a random usage in other patches.
 
-will do
-
-> Mention the DT property used for this in the commit log.
-
-good point
-
-noticed that i forgot to add it to pcie-bindings  (rockchip-dw-pcie.yaml).
-
-> Is the "rockchip,bifurcation" DT property something that should be
-> generalized so it's not rockchip-specific?  Other controllers are
-> likely to support similar functionality.
-
-I do not know if other controllers support similar functionality, but i ac=
-k a property without vendor prefix is better. Should i use "bifurcation" a=
-s name or do you think about a different name which is more generic?
-
-regards Frank
+Compiling with gcc/llvm 12 on aarch64 platform with scs/pac enabled
+respectively, all four cases work fine for me :)

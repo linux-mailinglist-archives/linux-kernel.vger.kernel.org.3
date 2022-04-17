@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FEA4504875
+	by mail.lfdr.de (Postfix) with ESMTP id D1A09504877
 	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 18:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234536AbiDQQ4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 12:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42928 "EHLO
+        id S234532AbiDQQ4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 12:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234496AbiDQQ4f (ORCPT
+        with ESMTP id S234529AbiDQQ4m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 12:56:35 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A87133EA0;
-        Sun, 17 Apr 2022 09:53:59 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id b5so7420209ile.0;
-        Sun, 17 Apr 2022 09:53:59 -0700 (PDT)
+        Sun, 17 Apr 2022 12:56:42 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39358366A3;
+        Sun, 17 Apr 2022 09:54:06 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id g21so12384482iom.13;
+        Sun, 17 Apr 2022 09:54:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=vWYbhtE+mjLPNJexKnCqZt1IMsrit1m6da/niohR7jg=;
-        b=jwzY2MNX+HYAV5LH+1v2heLZePU+fg4zLW2K5LhCgQRhWujNtxz2P8ltPJGtLyQ81U
-         bwasm6BxbMRSEPQ6RhAVl59IWLz7p5uMyO6BR67WeVpQpmsfmjri3Gb8T2GZy4IT/MGf
-         sksJ5kZ/YL8rMynIvGn4AZBxv4cl5leM+Evcb8f9tfxZk5YgQa90Gopp9osFiNhqy1en
-         W7pT9wRkjapBE/kOqzS3qRhSNt2meycT0w4uwrer4jFcrIm3xEKFJehTYuDDZegZBJEv
-         aT8i1Xdx+dzSiISWW9hvWp7sp/7VzNHMKnR/TPmKj0UiFbvh8yJ5hQTTuDI2nmOrjEZQ
-         x5Vw==
+        bh=ZeoPF/5s/8FefeZEMvEU3kXPz31OKiUJe25SyiRvD6Q=;
+        b=T6skccgysjxKrWbkjDXiulPTulgnjRiPioFAu8/vJ7QZ2Z5IaaKQB/RZ4O+k7Wln8f
+         /wSMzF1ekNINHn1weakHHyA6+TONEJlwnwPRvRq+o8HfCruG/6PELBHD6lEvLasbzxS2
+         pAxqvBZ5rdOcjgGbi4lWfjIJ5BYNVH2Bj3KdNGsYZi1mrZckI95uOPtxzTMwLff2CjjV
+         aEtT6UTPNOcfppcfUVqioEe36Y1PR47WANj0udnVE5UHuVRmiqmzatQzhlWpzzb27yKd
+         myXZxhtzKAsicPbhKenTYKG8yNBGmZdoMo+06vuYK9deyd9jXrmwbIWX0BcUQWMKLkwM
+         iIMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=vWYbhtE+mjLPNJexKnCqZt1IMsrit1m6da/niohR7jg=;
-        b=lGjhCI4DB9OnwKhhQ9dD51Rfs+z48ZgkXhLG9r0739TTccgrPfrvQLOOpDONXj1+gi
-         8q/lHhtnm9XzFmSuz1+rbZYpPyN/bVEeD4Gigc9rA34OPDfdj71t44wzZhWYNXMzLv6u
-         Xjdk7HcR4mH3N+WCc16Maqb+LuuICLeQss6Sz6IqAC7pbUx8SZHFZdQW/JiTcXNC8H9Y
-         YFaEDo1fJBFn8dQCHhUm1YV3+nvGaipgsLHxrvcLURqk8hRoflPQEBr6MGOKb98F5qg8
-         WOhjwsab276q6JJMSclb4ATQMHIWo/MVibwoDexdCDmDCYQ2YKOs1FasdRomodkEe5wG
-         HraQ==
-X-Gm-Message-State: AOAM530q1AbK0J/Kj4cnp3NonFj4iJjFy6Xz2JoKFB6wlXr/vLz0jDLc
-        uVp+JGCboRbkyPx2rcnYI5g=
-X-Google-Smtp-Source: ABdhPJyiij1CYANAcBUqdhdYy+CwFQJSrpat7DgvBsoR7BU10ao1kzewsYKMDbpRIvp9+pR3Q+XC0Q==
-X-Received: by 2002:a92:ca0b:0:b0:2ca:53a1:69b0 with SMTP id j11-20020a92ca0b000000b002ca53a169b0mr3085280ils.110.1650214439018;
-        Sun, 17 Apr 2022 09:53:59 -0700 (PDT)
+        bh=ZeoPF/5s/8FefeZEMvEU3kXPz31OKiUJe25SyiRvD6Q=;
+        b=4DV1e0uh8F8/YOFDCxCrN+mDHSMzaohAK9uRMcbIUaGNmnpzYmqPrMnSNG1AEP6hmg
+         ISiZzbNd2VP6uU/D+pLTKZp6q4VQLkXYeMIa9ge+iZDUzz7PVOLAx4Fdma2w0kb0qpT6
+         HtZZS8CIr0jOGWg4TVW9Y6tcSbRBSU2tQ/WKc7OYaNtfwtbcSK+32FPneEocV3cPn9T3
+         ljGVUanjYwjtT7jiUUOKeBzrgbHdllWAu3R1yb4aqcPicCMRWWEfCvwDkpHbK9G+xTpj
+         CsdJelZiDvHdGObG5AvsKJmksJ9t73fJfMhyNlfNyaME+TXXX6P8Y7ZqUvUSWqZZLZM+
+         AONw==
+X-Gm-Message-State: AOAM531uEvHgB7/M0Z6nl6qvS/STB4JKB8UdgjAqQpfPyP3c4d3Kq5GD
+        +Af2in1cilNmZGAiA2hFsDw=
+X-Google-Smtp-Source: ABdhPJyR8KhzPCxF4rkMPJPQnV2k6aCKS9RbpGHxF/VNtsR5BydtgXayWDVRtFWaRIp/DveMws7m/A==
+X-Received: by 2002:a02:9429:0:b0:326:6774:5ba0 with SMTP id a38-20020a029429000000b0032667745ba0mr3272012jai.213.1650214445540;
+        Sun, 17 Apr 2022 09:54:05 -0700 (PDT)
 Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id e14-20020a92de4e000000b002cabd3731ddsm6076398ilr.7.2022.04.17.09.53.55
+        by smtp.gmail.com with UTF8SMTPSA id p15-20020a92da4f000000b002caa4481d07sm5965239ilq.23.2022.04.17.09.54.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 09:53:58 -0700 (PDT)
+        Sun, 17 Apr 2022 09:54:05 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     andy.shevchenko@gmail.com
 Cc:     brgl@bgdev.pl, f.fainelli@gmail.com, fancer.lancer@gmail.com,
         hoan@os.amperecomputing.com, linus.walleij@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, opendmb@gmail.com, schspa@gmail.com
-Subject: [PATCH v2 11/15] gpio: grgpio: use raw lock for bgpio_lock
-Date:   Mon, 18 Apr 2022 00:52:04 +0800
-Message-Id: <20220417165208.39754-11-schspa@gmail.com>
+Subject: [PATCH v2 12/15] gpio: dwapb: use raw lock for bgpio_lock
+Date:   Mon, 18 Apr 2022 00:52:05 +0800
+Message-Id: <20220417165208.39754-12-schspa@gmail.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20220417165208.39754-1-schspa@gmail.com>
 References: <CAHp75Veo30c0BWb4Fykgvd-czSnEXsyA8wyMTeKQdS49=e5-nw@mail.gmail.com>
@@ -77,132 +77,151 @@ bgpio_lock is changed to raw lock, fellow the header change
 
 Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
- drivers/gpio/gpio-grgpio.c | 30 +++++++++++++++---------------
- 1 file changed, 15 insertions(+), 15 deletions(-)
+ drivers/gpio/gpio-dwapb.c | 36 ++++++++++++++++++------------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
-diff --git a/drivers/gpio/gpio-grgpio.c b/drivers/gpio/gpio-grgpio.c
-index 23d447e17a67..df563616f943 100644
---- a/drivers/gpio/gpio-grgpio.c
-+++ b/drivers/gpio/gpio-grgpio.c
-@@ -145,7 +145,7 @@ static int grgpio_irq_set_type(struct irq_data *d, unsigned int type)
- 		return -EINVAL;
- 	}
+diff --git a/drivers/gpio/gpio-dwapb.c b/drivers/gpio/gpio-dwapb.c
+index b0f3aca61974..7130195da48d 100644
+--- a/drivers/gpio/gpio-dwapb.c
++++ b/drivers/gpio/gpio-dwapb.c
+@@ -243,9 +243,9 @@ static void dwapb_irq_ack(struct irq_data *d)
+ 	u32 val = BIT(irqd_to_hwirq(d));
+ 	unsigned long flags;
  
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	dwapb_write(gpio, GPIO_PORTA_EOI, val);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
  
- 	ipol = priv->gc.read_reg(priv->regs + GRGPIO_IPOL) & ~mask;
- 	iedge = priv->gc.read_reg(priv->regs + GRGPIO_IEDGE) & ~mask;
-@@ -153,7 +153,7 @@ static int grgpio_irq_set_type(struct irq_data *d, unsigned int type)
- 	priv->gc.write_reg(priv->regs + GRGPIO_IPOL, ipol | pol);
- 	priv->gc.write_reg(priv->regs + GRGPIO_IEDGE, iedge | edge);
+ static void dwapb_irq_mask(struct irq_data *d)
+@@ -255,10 +255,10 @@ static void dwapb_irq_mask(struct irq_data *d)
+ 	unsigned long flags;
+ 	u32 val;
  
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	val = dwapb_read(gpio, GPIO_INTMASK) | BIT(irqd_to_hwirq(d));
+ 	dwapb_write(gpio, GPIO_INTMASK, val);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
+ 
+ static void dwapb_irq_unmask(struct irq_data *d)
+@@ -268,10 +268,10 @@ static void dwapb_irq_unmask(struct irq_data *d)
+ 	unsigned long flags;
+ 	u32 val;
+ 
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	val = dwapb_read(gpio, GPIO_INTMASK) & ~BIT(irqd_to_hwirq(d));
+ 	dwapb_write(gpio, GPIO_INTMASK, val);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
+ 
+ static void dwapb_irq_enable(struct irq_data *d)
+@@ -281,11 +281,11 @@ static void dwapb_irq_enable(struct irq_data *d)
+ 	unsigned long flags;
+ 	u32 val;
+ 
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	val = dwapb_read(gpio, GPIO_INTEN);
+ 	val |= BIT(irqd_to_hwirq(d));
+ 	dwapb_write(gpio, GPIO_INTEN, val);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
+ 
+ static void dwapb_irq_disable(struct irq_data *d)
+@@ -295,11 +295,11 @@ static void dwapb_irq_disable(struct irq_data *d)
+ 	unsigned long flags;
+ 	u32 val;
+ 
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	val = dwapb_read(gpio, GPIO_INTEN);
+ 	val &= ~BIT(irqd_to_hwirq(d));
+ 	dwapb_write(gpio, GPIO_INTEN, val);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ }
+ 
+ static int dwapb_irq_set_type(struct irq_data *d, u32 type)
+@@ -309,7 +309,7 @@ static int dwapb_irq_set_type(struct irq_data *d, u32 type)
+ 	irq_hw_number_t bit = irqd_to_hwirq(d);
+ 	unsigned long level, polarity, flags;
+ 
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	level = dwapb_read(gpio, GPIO_INTTYPE_LEVEL);
+ 	polarity = dwapb_read(gpio, GPIO_INT_POLARITY);
+ 
+@@ -344,7 +344,7 @@ static int dwapb_irq_set_type(struct irq_data *d, u32 type)
+ 	dwapb_write(gpio, GPIO_INTTYPE_LEVEL, level);
+ 	if (type != IRQ_TYPE_EDGE_BOTH)
+ 		dwapb_write(gpio, GPIO_INT_POLARITY, polarity);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
  
  	return 0;
  }
-@@ -164,11 +164,11 @@ static void grgpio_irq_mask(struct irq_data *d)
- 	int offset = d->hwirq;
- 	unsigned long flags;
+@@ -374,7 +374,7 @@ static int dwapb_gpio_set_debounce(struct gpio_chip *gc,
+ 	unsigned long flags, val_deb;
+ 	unsigned long mask = BIT(offset);
  
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
  
- 	grgpio_set_imask(priv, offset, 0);
+ 	val_deb = dwapb_read(gpio, GPIO_PORTA_DEBOUNCE);
+ 	if (debounce)
+@@ -383,7 +383,7 @@ static int dwapb_gpio_set_debounce(struct gpio_chip *gc,
+ 		val_deb &= ~mask;
+ 	dwapb_write(gpio, GPIO_PORTA_DEBOUNCE, val_deb);
  
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ 
+ 	return 0;
  }
- 
- static void grgpio_irq_unmask(struct irq_data *d)
-@@ -177,11 +177,11 @@ static void grgpio_irq_unmask(struct irq_data *d)
- 	int offset = d->hwirq;
+@@ -738,7 +738,7 @@ static int dwapb_gpio_suspend(struct device *dev)
  	unsigned long flags;
- 
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
- 
- 	grgpio_set_imask(priv, offset, 1);
- 
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
- }
- 
- static struct irq_chip grgpio_irq_chip = {
-@@ -199,7 +199,7 @@ static irqreturn_t grgpio_irq_handler(int irq, void *dev)
  	int i;
- 	int match = 0;
  
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
- 
- 	/*
- 	 * For each gpio line, call its interrupt handler if it its underlying
-@@ -215,7 +215,7 @@ static irqreturn_t grgpio_irq_handler(int irq, void *dev)
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	for (i = 0; i < gpio->nr_ports; i++) {
+ 		unsigned int offset;
+ 		unsigned int idx = gpio->ports[i].idx;
+@@ -765,7 +765,7 @@ static int dwapb_gpio_suspend(struct device *dev)
+ 			dwapb_write(gpio, GPIO_INTMASK, ~ctx->wake_en);
  		}
  	}
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
  
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
+ 	clk_bulk_disable_unprepare(DWAPB_NR_CLOCKS, gpio->clks);
  
- 	if (!match)
- 		dev_warn(priv->dev, "No gpio line matched irq %d\n", irq);
-@@ -247,13 +247,13 @@ static int grgpio_irq_map(struct irq_domain *d, unsigned int irq,
- 	dev_dbg(priv->dev, "Mapping irq %d for gpio line %d\n",
- 		irq, offset);
- 
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
- 
- 	/* Request underlying irq if not already requested */
- 	lirq->irq = irq;
- 	uirq = &priv->uirqs[lirq->index];
- 	if (uirq->refcnt == 0) {
--		spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+		raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
- 		ret = request_irq(uirq->uirq, grgpio_irq_handler, 0,
- 				  dev_name(priv->dev), priv);
- 		if (ret) {
-@@ -262,11 +262,11 @@ static int grgpio_irq_map(struct irq_domain *d, unsigned int irq,
- 				uirq->uirq);
- 			return ret;
- 		}
--		spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+		raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
- 	}
- 	uirq->refcnt++;
- 
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
- 
- 	/* Setup irq  */
- 	irq_set_chip_data(irq, priv);
-@@ -290,7 +290,7 @@ static void grgpio_irq_unmap(struct irq_domain *d, unsigned int irq)
- 	irq_set_chip_and_handler(irq, NULL, NULL);
- 	irq_set_chip_data(irq, NULL);
- 
--	spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&priv->gc.bgpio_lock, flags);
- 
- 	/* Free underlying irq if last user unmapped */
- 	index = -1;
-@@ -309,13 +309,13 @@ static void grgpio_irq_unmap(struct irq_domain *d, unsigned int irq)
- 		uirq = &priv->uirqs[lirq->index];
- 		uirq->refcnt--;
- 		if (uirq->refcnt == 0) {
--			spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+			raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
- 			free_irq(uirq->uirq, priv);
- 			return;
- 		}
+@@ -785,7 +785,7 @@ static int dwapb_gpio_resume(struct device *dev)
+ 		return err;
  	}
  
--	spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&priv->gc.bgpio_lock, flags);
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 	for (i = 0; i < gpio->nr_ports; i++) {
+ 		unsigned int offset;
+ 		unsigned int idx = gpio->ports[i].idx;
+@@ -812,7 +812,7 @@ static int dwapb_gpio_resume(struct device *dev)
+ 			dwapb_write(gpio, GPIO_PORTA_EOI, 0xffffffff);
+ 		}
+ 	}
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ 
+ 	return 0;
  }
- 
- static const struct irq_domain_ops grgpio_irq_domain_ops = {
 -- 
 2.24.3 (Apple Git-128)
 

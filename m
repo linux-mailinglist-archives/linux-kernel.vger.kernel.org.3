@@ -2,54 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 558805049E6
+	by mail.lfdr.de (Postfix) with ESMTP id C2FC25049E7
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 01:02:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235264AbiDQXFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 19:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
+        id S235277AbiDQXFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 19:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiDQXE5 (ORCPT
+        with ESMTP id S235262AbiDQXFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 19:04:57 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 900B5186DF;
-        Sun, 17 Apr 2022 16:02:20 -0700 (PDT)
+        Sun, 17 Apr 2022 19:05:01 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1395186DF;
+        Sun, 17 Apr 2022 16:02:24 -0700 (PDT)
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id C1F8C92009E; Mon, 18 Apr 2022 01:02:17 +0200 (CEST)
+        id 95DA49200B3; Mon, 18 Apr 2022 01:02:23 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id B41BC92009C;
-        Mon, 18 Apr 2022 00:02:17 +0100 (BST)
-Date:   Mon, 18 Apr 2022 00:02:17 +0100 (BST)
+        by angie.orcam.me.uk (Postfix) with ESMTP id 876BB92009C;
+        Mon, 18 Apr 2022 00:02:23 +0100 (BST)
+Date:   Mon, 18 Apr 2022 00:02:23 +0100 (BST)
 From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
 cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/5] serial: 8250: Fixes for Oxford Semiconductor 950
- UARTs
-Message-ID: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk>
+Subject: [PATCH v4 1/5] serial: 8250: Correct the clock for EndRun PTP/1588
+ PCIe device
+In-Reply-To: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2204162123320.9383@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,HDRS_LCASE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The EndRun PTP/1588 dual serial port device is based on the Oxford 
+Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set 
+for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock 
+input derived from the 100MHz PCI Express clock.  The clock rate is 
+divided by the oversampling rate of 16 as it is supplied to the baud 
+rate generator, yielding the baud base of 3906250.
 
- Here's v4 of the outstanding fixes for Oxford Semiconductor 950 UARTs.  
+Replace the incorrect baud base of 4000000 with the right value of 
+3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct 
+the clock for OxSemi PCIe devices").
 
- In this update I have factored out base baud rate correction for EndRun 
-devices as well as changes made to drivers/tty/serial/8250/8250_port.c 
-required for the OxSemi update.  Please see individual change logs and 
-change descriptions for details.
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
+---
+New change in v4, factored out from 2/5.
+---
+ drivers/tty/serial/8250/8250_pci.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
- Please apply.
-
-  Maciej
+linux-serial-8250-endrun-pcie-clock.diff
+Index: linux-macro/drivers/tty/serial/8250/8250_pci.c
+===================================================================
+--- linux-macro.orig/drivers/tty/serial/8250/8250_pci.c
++++ linux-macro/drivers/tty/serial/8250/8250_pci.c
+@@ -2667,7 +2667,7 @@ enum pci_board_num_t {
+ 	pbn_panacom2,
+ 	pbn_panacom4,
+ 	pbn_plx_romulus,
+-	pbn_endrun_2_4000000,
++	pbn_endrun_2_3906250,
+ 	pbn_oxsemi,
+ 	pbn_oxsemi_1_3906250,
+ 	pbn_oxsemi_2_3906250,
+@@ -3195,10 +3195,10 @@ static struct pciserial_board pci_boards
+ 	* signal now many ports are available
+ 	* 2 port 952 Uart support
+ 	*/
+-	[pbn_endrun_2_4000000] = {
++	[pbn_endrun_2_3906250] = {
+ 		.flags		= FL_BASE0,
+ 		.num_ports	= 2,
+-		.base_baud	= 4000000,
++		.base_baud	= 3906250,
+ 		.uart_offset	= 0x200,
+ 		.first_offset	= 0x1000,
+ 	},
+@@ -4128,7 +4128,7 @@ static const struct pci_device_id serial
+ 	*/
+ 	{	PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
+ 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
+-		pbn_endrun_2_4000000 },
++		pbn_endrun_2_3906250 },
+ 	/*
+ 	 * Quatech cards. These actually have configurable clocks but for
+ 	 * now we just use the default.

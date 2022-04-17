@@ -2,182 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 066C750483B
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 17:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8EB50483E
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 17:53:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234340AbiDQPsL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 11:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59040 "EHLO
+        id S234345AbiDQPz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 11:55:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234334AbiDQPsH (ORCPT
+        with ESMTP id S230246AbiDQPzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 11:48:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1921813F8C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 08:45:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650210326;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uypO0xGq2R7G7rwhp3xAy+f7w5+Cm6Mvqy0TJPHONMI=;
-        b=VLoldAU0RkPDlMGc2eR6n5J0HMi1w36nymHwZb275arukbTvkffv3yCEWtmO3xd/fUGrVh
-        +LwwzsJB2xuThdhgLzD4yr2hW3m4n+vLUxZbCIoMqZxU8l/jz1K2/F63oBemxpufTqWsYK
-        IHAAeRqC1WnrjmjnflRUah6ydEvmAgQ=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-596-CToSz7NJOSWM-fljCufPQQ-1; Sun, 17 Apr 2022 11:45:25 -0400
-X-MC-Unique: CToSz7NJOSWM-fljCufPQQ-1
-Received: by mail-wm1-f72.google.com with SMTP id p31-20020a05600c1d9f00b0038ed0964a90so5852981wms.4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 08:45:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=uypO0xGq2R7G7rwhp3xAy+f7w5+Cm6Mvqy0TJPHONMI=;
-        b=4bH6vyWKzFucGd9ShWrv1rnsVOAcKRAjyNOGoe25BroLQgvs9hkMX+7IXDOsO+bpuT
-         p4c/0YEAXsu5BAStJMBYjKH6t6R+WpSV6K6blOqJNEx8zoJsZ0JL3ed1KUIoFSuZjdD0
-         sAAbzyhW35t0h/yAxsuZ53fNpL01XiynIhooRnnGeGO2sBq/xeTIsAtU3xaDlMl0Pq1Z
-         UwCgcufkiT44t4Yz4W0xwQh+Uxg2BqCAlB8bwOsooWHB9NOfeq7+cYbrOLys1Uwr0Sn2
-         qe0LzGNwZPHiye+670hf4ZJtA+QLitC5BNFw79OF46qvrrHGfP29/0lpkOEl34Uvw04M
-         TGRA==
-X-Gm-Message-State: AOAM531qwvEdfeNyfaNF54u1ALgHoQR7mhQRlat2qw0/d1X9QqPE4Zn9
-        tmlbARrpKT6/a67V2S5AF0ZRqh/lPEHPmuf2lxu1S+F+SnEXYuZOPEIijjLC06PnBHMWFNmappb
-        5PDYtma24aVgnue29pWuFYAxVQ3FbP1PHunLgg6tvRujVR3oJbd41QRzmA386tfXf7sPguf9UpW
-        g=
-X-Received: by 2002:a05:6000:510:b0:203:e469:f0a3 with SMTP id a16-20020a056000051000b00203e469f0a3mr5746862wrf.710.1650210324168;
-        Sun, 17 Apr 2022 08:45:24 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwluSaBfP+cDeg500TYp/r+b8CxJggQPGEGAC6GHMUeRr/2454YadMD0qyybbeUsLz88QkIXw==
-X-Received: by 2002:a05:6000:510:b0:203:e469:f0a3 with SMTP id a16-20020a056000051000b00203e469f0a3mr5746832wrf.710.1650210323746;
-        Sun, 17 Apr 2022 08:45:23 -0700 (PDT)
-Received: from minerva.home ([92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id h10-20020a05600c414a00b0038ebb6884d8sm17878144wmm.0.2022.04.17.08.45.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 08:45:23 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Pekka Paalanen <pekka.paalanen@collabora.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org
-Subject: [PATCH v2] drm/doc: Add in introduction sections about tiny drivers and external refs
-Date:   Sun, 17 Apr 2022 17:45:11 +0200
-Message-Id: <20220417154511.94202-1-javierm@redhat.com>
-X-Mailer: git-send-email 2.35.1
+        Sun, 17 Apr 2022 11:55:24 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD69BBF41
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 08:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=R2Xc6IsXJOaCLPhfJTDhaB1kmhsuBGq5W8QH4gGbQhQ=; b=OXRIEoC7ocBq6Cjdn/TbQPxDcf
+        KcXOZy3URWB6FLiCrSAyVbbjJq8K4m52yp8qWBdZYMK9LKjhnMmRcC4DpkFJT5jSmPIxSAuo1eAN6
+        tL9Nd6ch5N7bLOYcEX4vKnKA34g4gfCZwoFID9nEuoQNM6pDoR4nmrepVAd+RD+CrvzkBRnZK0vhV
+        B0o6Amp5RNoftyko0KZ6lRj4ljNlUNB0qG15DdIHNZEIue3WT+oJHCbBE+p7Wzz6ELiFeNMN2Oydt
+        zKAWR194H6pzIsMrSz7b3Hfw2PhEpE18gEtwFLLAODZVcgZehKYKzUVvrr/25/86OdX5x+lkHluEr
+        cxTEKvKg==;
+Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ng7C4-006C0j-Ow; Sun, 17 Apr 2022 15:52:09 +0000
+Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 070B09861C1; Sun, 17 Apr 2022 17:52:06 +0200 (CEST)
+Date:   Sun, 17 Apr 2022 17:52:05 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Christophe de Dinechin <dinechin@redhat.com>, trivial@kernel.org,
+        Ben Segall <bsegall@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, Mel Gorman <mgorman@suse.de>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Juri Lelli <juri.lelli@redhat.com>
+Subject: Re: [PATCH 1/3] sched/headers: Fix compilation error with GCC 12
+Message-ID: <20220417155205.GI2731@worktop.programming.kicks-ass.net>
+References: <20220414150855.2407137-1-dinechin@redhat.com>
+ <20220414150855.2407137-2-dinechin@redhat.com>
+ <Ylg73c83AJGwz9UN@hirez.programming.kicks-ass.net>
+ <20220414133050.b820fa45d42de4cfc24db82b@linux-foundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414133050.b820fa45d42de4cfc24db82b@linux-foundation.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Learning about the DRM subsystem could be quite overwhelming for newcomers
-but there are lots of useful talks, slides and articles available that can
-help to understand the needed concepts and ease the learning curve.
+On Thu, Apr 14, 2022 at 01:30:50PM -0700, Andrew Morton wrote:
+> On Thu, 14 Apr 2022 17:21:01 +0200 Peter Zijlstra <peterz@infradead.org> wrote:
+> 
+> > > +/* The + 1 below places the pointers within the range of their array */
+> > >  #define for_class_range(class, _from, _to) \
+> > > -	for (class = (_from); class != (_to); class--)
+> > > +	for (class = (_from); class + 1 != (_to) + 1; class--)
+> > 
+> > Urgh, so now we get less readable code, just because GCC is being
+> > stupid?
+> > 
+> > What's wrong with negative array indexes? memory is memory, stuff works.
+> 
+> What's more, C is C.  Glorified assembly language in which people do odd
+> stuff.
+> 
+> But this is presumably a released gcc version and we need to do
+> something.  And presumably, we need to do a backportable something, so
+> people can compile older kernels with gcc-12.
+> 
+> Is it possible to suppress just this warning with a gcc option?  And if
+> so, are we confident that this warning will never be useful in other
+> places in the kernel?
+> 
+> If no||no then we'll need to add workarounds such as these?
 
-There are also simple DRM drivers that can be used as example about how a
-DRM driver should look like.
+-Wno-array-bounds
 
-Add sections to the introduction page, that contains references to these.
-
-Suggested-by: Daniel Vetter <daniel.vetter@ffwll.ch>
-Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Acked-by: Pekka Paalanen <pekka.paalanen@collabora.com>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
----
-
-Changes in v2:
-- Remove paragraph that gave wrong impression that DRM is complex (Pekka Paalanen).
-- Add Thomas Zimmermann's and Pekka Paalanen's Acked-by tags.
-- Replace "Learning material" title with "External References" (Thomas Zimmermann).
-- Add a section about tiny DRM drivers being a good first example (Daniel Vetter).
-- Add some more external references that I found interesting since v1 was posted.
-
- Documentation/gpu/introduction.rst | 60 ++++++++++++++++++++++++++++++
- 1 file changed, 60 insertions(+)
-
-diff --git a/Documentation/gpu/introduction.rst b/Documentation/gpu/introduction.rst
-index 25a56e9c0cfd..574f478c3674 100644
---- a/Documentation/gpu/introduction.rst
-+++ b/Documentation/gpu/introduction.rst
-@@ -112,3 +112,63 @@ Please conduct yourself in a respectful and civilised manner when
- interacting with community members on mailing lists, IRC, or bug
- trackers. The community represents the project as a whole, and abusive
- or bullying behaviour is not tolerated by the project.
-+
-+Simple DRM drivers to use as examples
-+=====================================
-+
-+The DRM subsystem contains a lot of helper functions to ease writing drivers for
-+simple graphic devices. For example, the `drivers/gpu/drm/tiny/` directory has a
-+set of DRM drivers that are simple enough to be implemented in a single file.
-+
-+These drivers make use of the `struct drm_simple_display_pipe_funcs`, that hides
-+any complexity of the DRM subsystem and just requires drivers to implement a few
-+functions needed to operate the device. This could be used for devices that just
-+need a display pipeline with one full-screen scanout buffer feeding one output.
-+
-+The tiny DRM drivers are good examples to understand how DRM drivers should look
-+like since are written as a few hundreds line of code contained in a single file.
-+
-+External References
-+===================
-+
-+Delving into a Linux kernel subsystem for the first time can be an overwhelming
-+experience, one need to get familiar with all the needed concepts and learn the
-+subsystem's internals.
-+
-+To shallow the learning curve, this section contains a list of presentations
-+and documents that can be used to learn about DRM/KMS and graphics in general.
-+
-+There are different reasons why someone might want to get into DRM: porting an
-+existing fbdev driver, write a DRM driver for a new hardware, fixing bugs that
-+may face when working on the graphics user-space stack, etc. For this reason,
-+the learning material covers many aspects of the Linux graphics stack. From an
-+overview of the kernel and user-space stacks to very specific topics.
-+
-+The list is sorted in reverse chronological order, to keep the most up-to-date
-+material at the top. But all of them contain useful information, and it can be
-+valuable to go through older material to understand the rationale and context
-+in which the recent changes to the DRM subsystem were made.
-+
-+Conference talks
-+----------------
-+
-+* `An Overview of the Linux and Userspace Graphics Stack <https://www.youtube.com/watch?v=wjAJmqwg47k>`_ - Paul Kocialkowski (2020)
-+* `Getting pixels on screen on Linux: introduction to Kernel Mode Setting <https://www.youtube.com/watch?v=haes4_Xnc5Q>`_ - Simon Ser (2020)
-+* `Everything Great about Upstream Graphics <https://www.youtube.com/watch?v=kVzHOgt6WGE>`_ - Daniel Vetter (2019)
-+* `An introduction to the Linux DRM subsystem <https://www.youtube.com/watch?v=LbDOCJcDRoo>`_ - Maxime Ripard (2017)
-+* `Embrace the Atomic (Display) Age <https://www.youtube.com/watch?v=LjiB_JeDn2M>`_ - Daniel Vetter (2016)
-+* `Anatomy of an Atomic KMS Driver <https://www.youtube.com/watch?v=lihqR9sENpc>`_ - Laurent Pinchart (2015)
-+* `Atomic Modesetting for Drivers <https://www.youtube.com/watch?v=kl9suFgbTc8>`_ - Daniel Vetter (2015)
-+* `Anatomy of an Embedded KMS Driver <https://www.youtube.com/watch?v=Ja8fM7rTae4>`_ - Laurent Pinchart (2013)
-+
-+Slides and articles
-+-------------------
-+
-+* `Understanding the Linux Graphics Stack <https://bootlin.com/doc/training/graphics/graphics-slides.pdf>`_ - Bootlin (2022)
-+* `DRM KMS overview <https://wiki.st.com/stm32mpu/wiki/DRM_KMS_overview>`_ - STMicroelectronics (2021)
-+* `Linux graphic stack <https://studiopixl.com/2017-05-13/linux-graphic-stack-an-overview>`_ - Nathan Gauër (2017)
-+* `Atomic mode setting design overview, part 1 <https://lwn.net/Articles/653071/>`_ - Daniel Vetter (2015)
-+* `Atomic mode setting design overview, part 2 <https://lwn.net/Articles/653466/>`_ - Daniel Vetter (2015)
-+* `The DRM/KMS subsystem from a newbie’s point of view <https://bootlin.com/pub/conferences/2014/elce/brezillon-drm-kms/brezillon-drm-kms.pdf>`_ - Boris Brezillon (2014)
-+* `A brief introduction to the Linux graphics stack <https://blogs.igalia.com/itoral/2014/07/29/a-brief-introduction-to-the-linux-graphics-stack/>`_ - Iago Toral (2014)
-+* `The Linux Graphics Stack <https://blog.mecheye.net/2012/06/the-linux-graphics-stack/>`_ - Jasper St. Pierre (2012)
--- 
-2.35.1
-
+Is the obvious fix-all cure. The thing is, I want to hear if this new
+warning has any actual use or is just crack induced madness like many of
+the warnings we turn off.

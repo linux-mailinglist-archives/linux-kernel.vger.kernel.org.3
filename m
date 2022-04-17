@@ -2,189 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F83A504643
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 06:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA87504647
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 06:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233407AbiDQETg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 00:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
+        id S233416AbiDQEZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 00:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiDQETd (ORCPT
+        with ESMTP id S231489AbiDQEZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 00:19:33 -0400
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9489E186ED;
-        Sat, 16 Apr 2022 21:16:59 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id b21so19758727lfb.5;
-        Sat, 16 Apr 2022 21:16:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=CW3A/aitUHfF5G3ViJWNE+t6LZ1tgXv7FWh03lEBllU=;
-        b=EQXcsvxXAG4iJs6iTM60JTinlujWtHTw+eqvF4hVZrtz4Z62YMPkVoNOfuHy7YjJIq
-         f00emz4csdwohzpEeEnQIQHmNHrauE1GkIgZh90dNf/EnCLgEbkMuevM+vNOVnatGoOD
-         9dDLnOia36yWrc1UzFEZDelO2gocfp1NXrxD2QYEfeErLkURsMljYAtlTN5buKsDNEUa
-         adbFk8vZxaT4MdxZE8DZ90U7YdDQK98Vd6F/eXxcT07ZTagPgpm1HEfEsXyvEGQz19Jb
-         Mygf1UJFDO3d+3v8mo/jhEsnXsYZIw2RrAnec6yZI36LMeXOHxsXsQZeYWaJqejynm2v
-         QAgA==
-X-Gm-Message-State: AOAM530rt40W6grZnCnCwLsL9GB2k2Q2CL5PTj2+nNtVT7Aew5089wdl
-        Q4nqc/yb+4ES4ptW/WDZmMJ6WCsI51dZO2ZG25iHiRJr
-X-Google-Smtp-Source: ABdhPJyH2jlIt83huHMF+Z98TjJC15Gu6bL8/bkTHT7SCzAXDfJaeQOrjInn07SGUs+kqL2FLxp1LYJZRAG72OFw214=
-X-Received: by 2002:a05:6512:1688:b0:464:f53f:850f with SMTP id
- bu8-20020a056512168800b00464f53f850fmr4121402lfb.637.1650169017848; Sat, 16
- Apr 2022 21:16:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20190701134255.25959-1-stephend@silicom-usa.com>
-In-Reply-To: <20190701134255.25959-1-stephend@silicom-usa.com>
-From:   Len Brown <lenb@kernel.org>
-Date:   Sun, 17 Apr 2022 00:16:46 -0400
-Message-ID: <CAJvTdKn9MEQ9rTXyqxV-t-3FzY-YbL7RL+s1wvc9uyKbg3f5FA@mail.gmail.com>
-Subject: Re: [PATCH] intel_idle: prevent SKX boot failure when C6 & SERIRQ enabled
-To:     Stephen Douthit <stephend@silicom-usa.com>
-Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+        Sun, 17 Apr 2022 00:25:51 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4581319C10;
+        Sat, 16 Apr 2022 21:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650169397; x=1681705397;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=IGknIamWu77T6Ipn26rG79IrhNzIvpjNecPm/RNCOfo=;
+  b=HNDtszgqFI3585o05BjNwogTpv6+CqNTpfCI4+3+V37Pwz47aOJnP7kV
+   76tKYa41YwJdi0dz5c0SxNbgBI0f+GqDD5Ct9fxdRec810vXIhqb1LVOB
+   8OKs2Sbygcv3rjSU2NHyrPm1RL+d21p0ZZPi2NfifwiyJmdnaGciGJqOY
+   cAzOuFkCrcefpQQcsE7yVGJczq5JvITX+gPVHxDO7ETmjIBNa5+N/VTLg
+   b7zAyc36PMSsgIVqCaQiw4TOmKqZf3HxVZcHFSFrtNJFjNRRj8GxSlnSv
+   nPptu82BWS2LFOzXg3Bh34UFcBiTGzZyCCBGMnqMaE8VYKM95EUfMP3bn
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="262820037"
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="262820037"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 21:23:16 -0700
+X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
+   d="scan'208";a="575063588"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.8])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 21:23:16 -0700
+Message-ID: <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
+Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>
+Date:   Sat, 16 Apr 2022 21:23:16 -0700
+In-Reply-To: <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
+References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
+         <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
+         <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
+         <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
+         <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
+         <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
+         <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
+         <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.38.4 (3.38.4-1.fc33) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+Hi Daniel,
 
-I noticed this patch languishing in patchwork.
-I don't see any discussion on it, and it never went upstream.
+On Sat, 2022-04-16 at 09:55 +0200, Daniel Lezcano wrote:
+> 
+> Hi Srinivas,
+> 
+> 
+> On 16/04/2022 05:50, srinivas pandruvada wrote:
+> > On Wed, 2022-04-13 at 10:21 -0700, srinivas pandruvada wrote:
+> > > On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
+> > > > On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
+> > > > daniel.lezcano@linaro.org> wrote:
+> > > > > 
+> > 
 
-Was this problem addressed in another way?
+[...]
 
-If no, and somebody is using this patch, I'm curious if it is really
-CC6 that you want to disable, or perhaps disabling PC6 is sufficient?
+> > root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> > engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> > ./thermal-engine -l DEBUG
+> > Segmentation fault (core dumped)
+> > root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> > engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> > ./thermal-engine --loglevel DEBUG
+> > Segmentation fault (core dumped)
+> > root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/thermal-
+> > engine# LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
+> > ./thermal-engine -s
+> > Segmentation fault (core dumped)
+> 
+> Is CONFIG_THERMAL_NETLINK set ?
 
-thanks,
--Len
+Yes, Thermometer program works fine. Just thermal-engine fails.
+CONFIG_THERMAL=y
+CONFIG_THERMAL_NETLINK=y
+CONFIG_THERMAL_STATISTICS=y
+CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=0
+CONFIG_THERMAL_HWMON=y
+CONFIG_THERMAL_WRITABLE_TRIPS=y
+CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
+# CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
+# CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
+CONFIG_THERMAL_GOV_FAIR_SHARE=y
+CONFIG_THERMAL_GOV_STEP_WISE=y
+CONFIG_THERMAL_GOV_BANG_BANG=y
+CONFIG_THERMAL_GOV_USER_SPACE=y
+CONFIG_DEVFREQ_THERMAL=y
+CONFIG_THERMAL_EMULATION=y
 
-On Mon, Jul 1, 2019 at 9:43 AM Stephen Douthit <stephend@silicom-usa.com> wrote:
->
-> Interrupts are getting misrouted and/or dropped on SKLYLAKE_X based D-2100s
-> when C6 and SERIRQ are enabled.  I've only seen this issue on systems
-> using SERIRQs (in my case for a LPC based UART providing the serial
-> console for a headless server).
->
-> One failure mode is "do_IRQ: 8.33 No irq handler for vector" getting
-> printed in the kernel logs. The core getting the unhandled irq is typically
-> the one handling the UART SERIRQ.  I've seen it on other cores, but I
-> haven't confirmed if that's because the UART irq handler was moved to
-> another core at some point.  The vector varies from 33-36, but it's most
-> often 33.
->
-> The other failure mode is the system hanging.  Sometimes forcing some non
-> SERIRQ interrupt to fire (by plugging/unplugging a network/USB cable) can
-> get the system out of this state.  Generating more SERIRQs via the UART
-> will not unstick the system.
->
-> Both failures seemed to occur when transition to a low load state, which
-> is why I started playing around with power management options and found
-> that booting with "intel_idle.max_cstate=2" fixed the issue.
->
-> This patch only disables C6 if it's able to determine that SERIRQs are
-> enabled by checking the enable bit in the LPC controllers PCI config space.
->
-> Signed-off-by: Stephen Douthit <stephend@silicom-usa.com>
-> ---
->  drivers/idle/intel_idle.c | 35 ++++++++++++++++++++++++++++++++++-
->  include/linux/pci_ids.h   |  1 +
->  2 files changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
-> index b8647b5c3d4d..353f6a9b1818 100644
-> --- a/drivers/idle/intel_idle.c
-> +++ b/drivers/idle/intel_idle.c
-> @@ -61,12 +61,13 @@
->  #include <linux/notifier.h>
->  #include <linux/cpu.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/pci.h>
->  #include <asm/cpu_device_id.h>
->  #include <asm/intel-family.h>
->  #include <asm/mwait.h>
->  #include <asm/msr.h>
->
-> -#define INTEL_IDLE_VERSION "0.4.1"
-> +#define INTEL_IDLE_VERSION "0.4.2"
->
->  static struct cpuidle_driver intel_idle_driver = {
->         .name = "intel_idle",
-> @@ -1306,6 +1307,35 @@ static void sklh_idle_state_table_update(void)
->         skl_cstates[5].disabled = 1;    /* C8-SKL */
->         skl_cstates[6].disabled = 1;    /* C9-SKL */
->  }
-> +/*
-> + * skx_idle_state_table_update()
-> + *
-> + * On SKX (model 0x55) SoCs disable C6 if SERIRQ is enabled
-> + */
-> +static void skx_idle_state_table_update(void)
-> +{
-> +#define SCNT_OFF 0x64
-> +#define SCNT_EN (1 << 7)
-> +       struct pci_dev *pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
-> +                                             PCI_DEVICE_ID_INTEL_SKX_LPC,
-> +                                             NULL);
-> +       u8 reg;
-> +
-> +       /*
-> +        * Check bit 7 of the Serial IRQ Control (SCNT) register (0x64) in the
-> +        * LPC controller.  If it's set serial IRQs are enabled, and we need to
-> +        * disable C6 to prevent hangs.
-> +        */
-> +       if (!pdev)
-> +               return;
-> +       if (pci_read_config_byte(pdev, SCNT_OFF, &reg))
-> +               return;
-> +       if (!(reg & SCNT_EN))
-> +               return;
-> +
-> +       pr_debug("SERIRQ enabled on SKX, disabling C6 to avoid hangs\n");
-> +       skx_cstates[2].disabled = 1;    /* C6-SKX */
-> +}
->  /*
->   * intel_idle_state_table_update()
->   *
-> @@ -1326,6 +1356,9 @@ static void intel_idle_state_table_update(void)
->         case INTEL_FAM6_SKYLAKE_DESKTOP:
->                 sklh_idle_state_table_update();
->                 break;
-> +       case INTEL_FAM6_SKYLAKE_X:
-> +               skx_idle_state_table_update();
-> +               break;
->         }
->  }
->
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index 70e86148cb1e..02bac8de03fd 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2997,6 +2997,7 @@
->  #define PCI_DEVICE_ID_INTEL_84460GX    0x84ea
->  #define PCI_DEVICE_ID_INTEL_IXP4XX     0x8500
->  #define PCI_DEVICE_ID_INTEL_IXP2800    0x9004
-> +#define PCI_DEVICE_ID_INTEL_SKX_LPC    0xa1c8
->  #define PCI_DEVICE_ID_INTEL_S21152BB   0xb152
->
->  #define PCI_VENDOR_ID_SCALEMP          0x8686
-> --
-> 2.21.0
->
+This may help
+
+#gdb ./thermal-engine 
+GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1
+Copyright (C) 2018 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later
+<http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type "show
+copying"
+and "show warranty" for details.
+This GDB was configured as "x86_64-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+<http://www.gnu.org/software/gdb/documentation/>.
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from ./thermal-engine...(no debugging symbols
+found)...done.
+(gdb) run
+Starting program:
+/home/labuser/development/linux/tools/thermal/thermal-engine/thermal-
+engine 
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-
+gnu/libthread_db.so.1".
+
+Program received signal SIGSEGV, Segmentation fault.
+0x00007ffff7402036 in parse_tz_get_trip (info=0x7fffffffdf60,
+tz=0x555555607898) at commands.c:143
+143		__tt[size].id = -1;
+(gdb) backtrace 
+#0  0x00007ffff7402036 in parse_tz_get_trip (info=0x7fffffffdf60,
+tz=0x555555607898) at commands.c:143
+#1  0x00007ffff7402233 in handle_netlink (unused=0x0,
+cmd=0x7ffff76052f8 <thermal_cmds+120>, info=0x7fffffffdf60,
+arg=0x555555607898) at commands.c:206
+#2  0x00007ffff7003435 in ?? () from /lib/x86_64-linux-gnu/libnl-genl-
+3.so.200
+#3  0x00007ffff6810c1c in nl_recvmsgs_report () from /lib/x86_64-linux-
+gnu/libnl-3.so.200
+#4  0x00007ffff6811049 in nl_recvmsgs () from /lib/x86_64-linux-
+gnu/libnl-3.so.200
+#5  0x00007ffff7402eaf in nl_send_msg (sock=0x555555606040,
+cb=0x5555556065d0, msg=0x555555606110, rx_handler=0x7ffff70036f0
+<genl_handle_msg>, data=0x555555607898) at thermal_nl.c:70
+#6  0x00007ffff7402327 in thermal_genl_auto (th=0x5555556048a0, id=1,
+cmd=2, flags=0, arg=0x555555607898) at commands.c:282
+#7  0x00007ffff74023e0 in thermal_cmd_get_trip (th=0x5555556048a0,
+tz=0x555555607898) at commands.c:304
+#8  0x00007ffff74039db in __thermal_zone_discover (tz=0x555555607898,
+th=0x5555556048a0) at thermal.c:71
+#9  0x00007ffff7403842 in for_each_thermal_zone (tz=0x555555607860,
+cb=0x7ffff74039b8 <__thermal_zone_discover>, arg=0x5555556048a0) at
+thermal.c:33
+#10 0x00007ffff7403a5b in thermal_zone_discover (th=0x5555556048a0) at
+thermal.c:87
+#11 0x00005555554019bd in main ()
+
+Thanks,
+Srinivas
+
+> 
 
 
--- 
-Len Brown, Intel Open Source Technology Center

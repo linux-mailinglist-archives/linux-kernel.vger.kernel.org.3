@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8995045D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 02:36:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15FDA5045EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 03:27:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232560AbiDQAjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 20:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58868 "EHLO
+        id S232628AbiDQB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 21:29:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231964AbiDQAi6 (ORCPT
+        with ESMTP id S232329AbiDQB34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 20:38:58 -0400
-Received: from relay4.hostedemail.com (relay4.hostedemail.com [64.99.140.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A310A329BA;
-        Sat, 16 Apr 2022 17:36:22 -0700 (PDT)
-Received: from omf11.hostedemail.com (a10.router.float.18 [10.200.18.1])
-        by unirelay09.hostedemail.com (Postfix) with ESMTP id BC1D923E29;
-        Sun, 17 Apr 2022 00:36:20 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf11.hostedemail.com (Postfix) with ESMTPA id 951B12002D;
-        Sun, 17 Apr 2022 00:36:18 +0000 (UTC)
-Message-ID: <817a2890f5483e9a4b51ff6cc3eaab966e4f0537.camel@perches.com>
-Subject: Re: [PATCH] usb: gadget: tegra-xudc: clean up comments
-From:   Joe Perches <joe@perches.com>
-To:     Tom Rix <trix@redhat.com>, balbi@kernel.org,
-        gregkh@linuxfoundation.org, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, waynec@nvidia.com,
-        rikard.falkeborn@gmail.com, zhangqilong3@huawei.com,
-        jakobkoschel@gmail.com
-Cc:     linux-usb@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Sat, 16 Apr 2022 17:36:17 -0700
-In-Reply-To: <20220416223921.2881719-1-trix@redhat.com>
-References: <20220416223921.2881719-1-trix@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-User-Agent: Evolution 3.40.4-1ubuntu2 
+        Sat, 16 Apr 2022 21:29:56 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F5D13E8B
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:27:22 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso7362898ioz.8
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:27:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=dX21WvP5WL6W9owr96JSchJVohGsQJ+V9E+b7RK7lfU=;
+        b=vUa2WtbJZgcD+bReCtzXe9mrI1J65JWiHjSbbbg0V9aJ2etgOasfVfbljNoiLkJqLX
+         VGvrNdBZrNRDOKZIi33xz3moj9AxF7FlV7W6KxuB0VcbtQGgfMZo1LuKv+8uQSX0fG2+
+         /sEmSIJkkZ7gst84NFda/FluMF8znPA0L63gq/pV5lGYPYJla5Lp+9o/Ja5YDIoXjjIC
+         3t7IEgjKu2DfxAVs9HKz2wk6x9rb5qoV1VcbrKycErkaBOJdZZViwr+jXLd91oEQLxYZ
+         A4NmmfHse8K2/hc0lJS8JZk/SjkxsegZIwW+pLcL4MzMy1gJ15GwWoDC2pZHecsDZgGs
+         X1nQ==
+X-Gm-Message-State: AOAM530nML/S0RnWFApgwuMY7esoBHb0P34NLBtehqeyVsyPmdgvYoJd
+        B6I+nYORBqmz3XLdZZ3mqOYKOuN0Auq0M0f9dX6lhSro0oLv
+X-Google-Smtp-Source: ABdhPJzkL+XYzFShzAdASAobQRAtg4p6t+z5aPETnpWwLk7qJJu9UMeLxIw6gMyE2Ro8GULzfItdK9A3JEtzX/C9FvddherKgOZC
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+X-Received: by 2002:a05:6638:380a:b0:326:3710:8ffe with SMTP id
+ i10-20020a056638380a00b0032637108ffemr2433923jav.47.1650158841697; Sat, 16
+ Apr 2022 18:27:21 -0700 (PDT)
+Date:   Sat, 16 Apr 2022 18:27:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000951a1505dccf8b73@google.com>
+Subject: [syzbot] memory leak in iovec_from_user
+From:   syzbot <syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
-X-Stat-Signature: wuornyiqc99zd7iwgpzr4a7oge57cej1
-X-Rspamd-Server: rspamout03
-X-Rspamd-Queue-Id: 951B12002D
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX18BKswQqLwj8nM6sM5bfVkhWxaiS5zBNx0=
-X-HE-Tag: 1650155778-741580
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-04-16 at 18:39 -0400, Tom Rix wrote:
-> Spelling replacements
-> cancelled to canceled
+Hello,
 
-cancelled is a generally accepted variant.
+syzbot found the following issue on:
 
-https://www.dictionary.com/browse/cancelled
+HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14225724f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f1a3425e05af27
+dashboard link: https://syzkaller.appspot.com/bug?extid=96b43810dfe9c3bb95ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c45d88f00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b428af700000
 
-> endpiont to endpoint
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com
 
-ok.
+executing program
+BUG: memory leak
+unreferenced object 0xffff88810d698300 (size 192):
+  comm "syz-executor156", pid 3595, jiffies 4294944234 (age 12.580s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
+    [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
+    [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
+    [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
+    [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
+    [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
+    [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
+    [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
+    [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
+    [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
+    [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
+    [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
+    [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
+    [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-> Compliance to Compliance
-
-huh?  a == a
-
-
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/usb/gadget/udc/tegra-xudc.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/udc/tegra-xudc.c b/drivers/usb/gadget/udc/tegra-xudc.c
-> index d9c406bdb680..0aaf01e1551f 100644
-> --- a/drivers/usb/gadget/udc/tegra-xudc.c
-> +++ b/drivers/usb/gadget/udc/tegra-xudc.c
-> @@ -1330,7 +1330,7 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
->  	bool pcs;
->  
->  	/*
-> -	 * Clear out all the TRBs part of or after the cancelled request,
-> +	 * Clear out all the TRBs part of or after the canceled request,
->  	 * and must correct trb cycle bit to the last un-enqueued state.
->  	 */
->  	while (trb != &ep->transfer_ring[ep->enq_ptr]) {
-> @@ -1343,11 +1343,11 @@ static void squeeze_transfer_ring(struct tegra_xudc_ep *ep,
->  			trb = ep->transfer_ring;
->  	}
->  
-> -	/* Requests will be re-queued at the start of the cancelled request. */
-> +	/* Requests will be re-queued at the start of the canceled request. */
->  	ep->enq_ptr = req->first_trb - ep->transfer_ring;
->  	/*
->  	 * Retrieve the correct cycle bit state from the first trb of
-> -	 * the cancelled request.
-> +	 * the canceled request.
->  	 */
->  	ep->pcs = pcs_enq;
->  	ep->ring_full = false;
-> @@ -1434,7 +1434,7 @@ __tegra_xudc_ep_dequeue(struct tegra_xudc_ep *ep,
->  		return 0;
->  	}
->  
-> -	/* Halt DMA for this endpiont. */
-> +	/* Halt DMA for this endpoint. */
->  	if (ep_ctx_read_state(ep->context) == EP_STATE_RUNNING) {
->  		ep_pause(xudc, ep->index);
->  		ep_wait_for_inactive(xudc, ep->index);
-> @@ -3423,7 +3423,7 @@ static void tegra_xudc_device_params_init(struct tegra_xudc *xudc)
->  	}
->  
->  	/*
-> -	 * Compliacne suite appears to be violating polling LFPS tBurst max
-> +	 * Compliance suite appears to be violating polling LFPS tBurst max
->  	 * of 1.4us.  Send 1.45us instead.
->  	 */
->  	val = xudc_readl(xudc, SSPX_CORE_CNT32);
+BUG: memory leak
+unreferenced object 0xffff88810d6983c0 (size 192):
+  comm "syz-executor156", pid 3603, jiffies 4294944759 (age 7.330s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
+    [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
+    [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
+    [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
+    [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
+    [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
+    [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
+    [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
+    [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
+    [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
+    [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
+    [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
+    [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
+    [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+    [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
 
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

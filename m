@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8083E5048A7
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 19:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61ECA5048B1
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 19:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234656AbiDQRzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 13:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54158 "EHLO
+        id S234675AbiDQR5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 13:57:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231895AbiDQRy6 (ORCPT
+        with ESMTP id S231895AbiDQR5Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 13:54:58 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D2201A7;
-        Sun, 17 Apr 2022 10:52:22 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id n17so9769718ljc.11;
-        Sun, 17 Apr 2022 10:52:22 -0700 (PDT)
+        Sun, 17 Apr 2022 13:57:25 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1242C28
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 10:54:48 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v15so15311617edb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 10:54:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=IZcS1862k/wOZXv/1MDZH2jzk4RBMFR/rIwyADVF1tM=;
-        b=c5wBxrs+myyz+cehvr7adR+iHhrVPmrSAcQyhSuI0tCfIFBHr+kQonM7ZapnzMu6hK
-         VTepduyqYRCgvQKVn4wBxhxqzSaF85Q5pP0FwjV5d7pGN0ALfpOrkLIwu5uFfcDb/P6F
-         2ec/AuOPy4bIQmp+9lLXtGHfUVig5HzpLTsbg3ZrSTwi0Gye0Ccc640hT4YQZM3RSg5s
-         T5AZJvPH8lXNcP77vH/DQS5FfZdPDkMTXPWvAwJKdut1xLeddN67TMHbCkk7sZMBpLui
-         XA8i6tvGiFeCOZiPcMWz36iRsim34kNW7g1mQTf32htOwDsORlFu/OurBu3fZ8yG4OCg
-         ht9Q==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OILYgrcMHgfS0MAxmoEH1VbxpcKZui0oVM3USNBv13c=;
+        b=P5JmW2KvKOzg8qOf35NH2HDiMtRbk+FunpBhn4lw3vrTLmTtwn+zfCxWydq2GbZqDD
+         pv+pniNDd2S/dD7GxQkyq73AAJJMRC3xnzIBhA/5JPwOYbYL/WTEEVEnfvM9qeYANwUV
+         EQsvajbm7ra+t55FY2WbCC10lvtFqiJ4vrvGRogBav8w81z9ZHgb7VA6vi57p0fgUxC3
+         nwKUSibDC1N+eyAhY1tj/8cLwp30FSiF+hxlXaR3loHhAw/qS5RTbQeymMNwZBlWcpvB
+         0KOybdRncJsJqu7B+H8Fntd4y1iFNknSdkmOZ4x17GwBJ2KYCcbJZa7HWXJmHkJCFO91
+         Y8qw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=IZcS1862k/wOZXv/1MDZH2jzk4RBMFR/rIwyADVF1tM=;
-        b=w9C5lX4sFWWzy+8yyEeMBEORDdOqy6vhuBu/Rpgx3rNUR+zluJJMrYZWRGe53WYJS1
-         1QuPbZcjKvC/bN+yvEaAPZwIwK9z8zNwQwEpjbQIW+SPTAhbipyv5WQQK96HtnujZVGo
-         TGqw2+JKwdYfr2h0V2HImL+U1y38FHWKe7f6Ls0e2P3WCX5gV3KuDHjVZNjN5DdSgFeJ
-         krTvKiYFI6CGD4NutYh9h14E1kwJkpfPHlKuwMIJkL5Cz7FokFHrU3KLIlPwOUfbc6DU
-         qs6tQdq3Lz25AAMFlu+uy+hrpqouTtUpVp5bwRh8v9pZRVpAMsLkr+ueO+ZFvEdFFOHm
-         F2Uw==
-X-Gm-Message-State: AOAM530r9VdelNmH+ixA5GzYsVbWAZuV8HbtcHBsyvtQSTa6O+aB6gHq
-        QnKUuCv1Sfk0/6oHDrZhYSo=
-X-Google-Smtp-Source: ABdhPJwl+zeVHdLsYsIQO9j/HfEbk61S41aUMvo2tIXvVDXpxCbV5pZ2B4dJP/52nbkfTRVemrlkNg==
-X-Received: by 2002:a05:651c:b29:b0:24b:6aaf:f200 with SMTP id b41-20020a05651c0b2900b0024b6aaff200mr5226345ljr.168.1650217940142;
-        Sun, 17 Apr 2022 10:52:20 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id v4-20020a2e7a04000000b0024db637f51bsm330973ljc.84.2022.04.17.10.52.18
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=OILYgrcMHgfS0MAxmoEH1VbxpcKZui0oVM3USNBv13c=;
+        b=UAsEfXX9NIFaUKBwEqabnB99Lmn7T/f9MYcT0JtT+QvYUR1UYTZ/xrVuyzIn4VAZVg
+         CMA//hIeJSR7rxLDML87xWtP+XvuOTbHyW7L65FYPEhksDlMLSuxtD7h3K81GTwb/Q00
+         L/+wZRA7UesdOfR9sF+TsRJBHlIx2V2m/GWZW1ROlhzpXDDhojA9xY1pRJ9dCIRGBs24
+         /hCZ79Z4cg/fdUv/c942lEQEDc99j8R3DdqsqlbABj/s+0gZdTdHwcKIJs6p5QrEOZ/P
+         qqqttogT0dURnHqRkiOApwWzHt7C1cRDle2t+FD57ii7vnV+SYA88DqUCw2FZwK2FMiI
+         2G3w==
+X-Gm-Message-State: AOAM531uxljhUcBvnXvd5kENZtqKUneIOOTv3dewiP0K8tXb392ZNyxG
+        kycLthzpRldunbG8WwAztXXr91eK/Io=
+X-Google-Smtp-Source: ABdhPJwqZKjheh+2KqPTKOUweCixJfif8kv973dXy3667xA5l9SqWcbZHJ5+FUDWF3oeidpQTGO5Xw==
+X-Received: by 2002:aa7:ce05:0:b0:41d:6857:549e with SMTP id d5-20020aa7ce05000000b0041d6857549emr8844788edv.251.1650218087587;
+        Sun, 17 Apr 2022 10:54:47 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abba5.dynamic.kabel-deutschland.de. [95.90.187.165])
+        by smtp.gmail.com with ESMTPSA id jw12-20020a17090776ac00b006e87137194esm3719409ejc.150.2022.04.17.10.54.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 10:52:19 -0700 (PDT)
-Date:   Sun, 17 Apr 2022 20:52:17 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 10/16] PCI: dwc: Drop iATU regions enumeration -
- dw_pcie_region_type
-Message-ID: <20220417175217.zho6vzovfkoypo7q@mobilestation>
-References: <20220324013734.18234-1-Sergey.Semin@baikalelectronics.ru>
- <20220324013734.18234-11-Sergey.Semin@baikalelectronics.ru>
- <YkMmRrF0e7WyvKsO@robh.at.kernel.org>
+        Sun, 17 Apr 2022 10:54:47 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH v4 0/8] staging: r8188eu: fix and clean up some firmware code
+Date:   Sun, 17 Apr 2022 19:54:33 +0200
+Message-Id: <20220417175441.13830-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YkMmRrF0e7WyvKsO@robh.at.kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -83,46 +69,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 29, 2022 at 10:31:18AM -0500, Rob Herring wrote:
-> On Thu, Mar 24, 2022 at 04:37:28AM +0300, Serge Semin wrote:
-> > There is no point in having the dw_pcie_region_type enumeration for almost
-> > the same reasons as it was stated for dw_pcie_as_type. First of all it's
-> > redundant since the driver already has a set of macro declared which
-> > describe the possible inbound and outbound iATU regions. Having an
-> > addition abstraction just needlessly complicates the code. Secondly
-> > checking the region index passed to the dw_pcie_disable_atu() method for
-> > validity is pointless since the erroneous situation will be just
-> > ignored in the current code implementation. So to speak let's drop the
-> > redundant dw_pcie_region_type enumeration replacing it with the direct
-> > iATU direction macro usage.
-> > 
-> > While at it we suggest to convert the dw_pcie_disable_atu() method to
-> > being more consistent with the dw_pcie_readl_atu{_ib}() and
-> > dw_pcie_readl_atu{_ob}() functions by having the direction parameter
-> > specified ahead of the region index. Thus the code will be a little bit
-> > more pleasant to read.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware-ep.c  |  4 ++--
-> >  .../pci/controller/dwc/pcie-designware-host.c    |  2 +-
-> >  drivers/pci/controller/dwc/pcie-designware.c     | 16 +---------------
-> >  drivers/pci/controller/dwc/pcie-designware.h     |  9 +--------
-> >  4 files changed, 5 insertions(+), 26 deletions(-)
-> 
+This series fixes wrong size of struct rt_firmware_hdr in the first
+patch and does some cleanups in rtl8188e_firmware_download() in the
+other patches.
 
-> This answers my question. I would have expected this to come before the 
-> previous patch, but if it's easier to do it this way it's fine.
-> 
-> Reviewed-by: Rob Herring <robh@kernel.org>
+Tested on x86_64 with Inter-Tech DMG-02.
 
-I thought about placing this patch before the previous one, but it
-turned a bit easier for me to split the changes in the reverse order.
-It has made this patch a bit smaller and more coherent. But seeing you
-weren't happy with too many changes in the previous patch I'll do as
-you suggest and change the patches order. Since the patch content will
-be changed I won't add your reviewed-by tag there on v2. So please
-consider re-reviewing it one more time.
+v4:
+- Keep the in-line comments of struct rt_firmware_hdr.
 
--Sergey
+v3:
+- Splitted the first patch into two separate patches.
+- Added back logging the firmware version only once.
+- Included the compile time check for size of rt_firmware_hdr from
+  patch 8/8 of v2 in the patch that replaces the hardcoded size.
+
+v2:
+- Added a patch to check size of struct rt_firmware_hdr at compile time.
+
+Michael Straube (8):
+  staging: r8188eu: fix struct rt_firmware_hdr
+  staging: r8188eu: convert u32 fields of rt_firmware_hdr to __le32
+  staging: r8188eu: clean up comments in struct rt_firmware_hdr
+  staging: r8188eu: rename fields of struct rt_firmware_hdr
+  staging: r8188eu: use sizeof instead of hardcoded firmware header size
+  staging: r8188eu: remove variables from rtl8188e_firmware_download()
+  staging: r8188eu: use pr_info_once() to log the firmware version
+  staging: r8188eu: check firmware header existence before access
+
+ drivers/staging/r8188eu/core/rtw_fw.c | 84 +++++++++++----------------
+ 1 file changed, 34 insertions(+), 50 deletions(-)
+
+-- 
+2.35.1
 

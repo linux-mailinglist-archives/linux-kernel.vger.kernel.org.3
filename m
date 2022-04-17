@@ -2,95 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29CE7504997
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:13:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97F6504998
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiDQVP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 17:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54884 "EHLO
+        id S233741AbiDQVQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 17:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiDQVP1 (ORCPT
+        with ESMTP id S233153AbiDQVQi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 17:15:27 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0EADF87
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:12:50 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id a11so9030736qtb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:12:50 -0700 (PDT)
+        Sun, 17 Apr 2022 17:16:38 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A87ADF87
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:14:02 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id r13so23983713ejd.5
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:14:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:mime-version:content-disposition;
-        bh=qlWQU1wc+ycXAXdYl+UTLFvX0C5kqftRvoDnhhithWo=;
-        b=d1mMRZPX8GYKQTsf8xBxnjSR8g5cFMdSrjJol/kB5oVPEo27LhL/fa/pxEW4fKRaqn
-         UyGWgJryPFb2VXyx/g3YL7wF1TdlymX7g0OD17EZiQLf0ELCbsQtWGPwefByVUheSRvP
-         JUhdiMnQBQAJ1VOqeAGsghLp3Q6tjeBVjrLWdF0YzDFuyH2Xz7KitGP15rdVdetMoowh
-         y1ouTExAEku9xynmpWGKep6+OPPWXUkFH86G4LgrnRNOwoxdnMWAAhRj9cvZ/WU6k+/1
-         dx/+13kdIhulIwrXMOAz0SXSiTMrot6vA+vWDvllvuffzE3tqiI5PFU9p0gXsho0Z55P
-         N2kA==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=kOJ6r5szSl5hkLX0n7vAIA8roZcCn9TLBxnUP06wZtQ=;
+        b=It/o+QoA+oxBdSsLMAe3xm+uoil6gVs1TnMslbWSI9qDf8Su7tTlJ+YUuMUKobdzm+
+         coUe9LQjIBjKPuzos8Xwr7Ai1Rsf8fVRJlD3Jcjf+KaOBUHFaRe+HXi08Mk3EzWeXtS/
+         otVtI5YnMU0d+R0FPKCo3rt7/RU3sIfJGl7zwCcz4Ves5gD39UOwhiFoMj59B5PByJYF
+         v5Pm1FLcQCjr5s1thdAvfo5KyWGDQ3nXYlbWt2qLeqXJ4aLut92+NqDyoKGYVFdLPfKG
+         M9h7rVGRvjcJN4UJ60dWZ7Txgjq5osJ1KyqPE2/x2kuoLARxFsh0Zn0NSGcZ5VAZjl/p
+         mWkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:mime-version
-         :content-disposition;
-        bh=qlWQU1wc+ycXAXdYl+UTLFvX0C5kqftRvoDnhhithWo=;
-        b=wrOvApXbfYmpmTsKRf6m1VtmAFVDfAGh7j0r9yyY8sRRmEB4k68lXMNuPa0qImUBGo
-         eKfBvn3g678ZLJl+JdCrDwkZzSYHJoGbDMWy8NLq/tXC/YBYHxvuDm8dwB4rrSabg/Ml
-         lLe2yN5zc0mL199y/d0T1t678LdjJBrowRT4++llo/RniU9riYx0QJ4PlX6Qxjq90sXW
-         Ul1u3i8E4JUm5zZRcQaaGDBNWLe4zRwMZvyrLik0vRSN+b9m5BWIIakmvbwtIbNq2xmT
-         XN26iSGK2Z+q0YSz3HKabmq/AmHYr6X6sbB4FKaQ7y3OzwRsV5ZMyB28aaHKflNsgID0
-         JUMA==
-X-Gm-Message-State: AOAM533jHdAde4BUS7YpWQsmXo2wCrpbWdtC7kbEdfeCCjPCeiLEMGMp
-        AK3jaZl1Zg8x3o1hVm7sWeI=
-X-Google-Smtp-Source: ABdhPJwrUCgB4TlyCGqXuaupK+xSLcATAOe8OTzPmzFdBtVTU8mv/a6/sgbU5GcKwYpAxYZ+5IOdtQ==
-X-Received: by 2002:ac8:4e46:0:b0:2e1:b933:ec06 with SMTP id e6-20020ac84e46000000b002e1b933ec06mr5423936qtw.684.1650229969685;
-        Sun, 17 Apr 2022 14:12:49 -0700 (PDT)
-Received: from localhost ([98.242.64.156])
-        by smtp.gmail.com with ESMTPSA id y85-20020a376458000000b0069e64801b7dsm3363187qkb.62.2022.04.17.14.12.48
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=kOJ6r5szSl5hkLX0n7vAIA8roZcCn9TLBxnUP06wZtQ=;
+        b=pf/0E+xC5oCTe0JBjolciZIo1dgcMsTZOUtRejYZfYvdFBrtTsadXnN8fX224IDkPV
+         7ieJhKlbPyovZoczvGeavgWjHUeqvWbi6lDXcKDyFohBZuDGAAWFRzlW2Ze+noY31nZf
+         CQsahguO+BWb6kjpt47yjzGAOyJqDJQDMsi6UAes1fPJOT/g7+QwqqI9CKeTNXVQYd6G
+         wWBZ+r2dD0j6a5sGu6jkSD5zY02sEqz452+tq0IFp5l/G7ooOB8Xa8uRtP3a2DeRWIYv
+         wJN6YgtGWpXQ91UsC/fOWSh3CwIAOFiDsiPgsmxTRHtc+ffxd9MgIyBwyKWZCVuFildw
+         Wy0A==
+X-Gm-Message-State: AOAM530lmgVJ+EkwJ6/Hk1r/2zJv+lUe+XA95MICMriLjC94PWNIh8kz
+        OZ/QbLytRIVm8y1LcfQxh5o=
+X-Google-Smtp-Source: ABdhPJy/UDWFTTOqBrPTnleiR3Z+mIpy1hUK//Bf5wY4Q4r4oBwf1R1+8ODWJpR9EDfh4dJc8t6oRw==
+X-Received: by 2002:a17:907:720d:b0:6e8:9f19:7520 with SMTP id dr13-20020a170907720d00b006e89f197520mr6753180ejc.552.1650230040605;
+        Sun, 17 Apr 2022 14:14:00 -0700 (PDT)
+Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id c13-20020a056402100d00b0042294fdbcf9sm4125011edu.14.2022.04.17.14.13.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 14:12:49 -0700 (PDT)
-Date:   Sun, 17 Apr 2022 14:12:47 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Alexey Klimov <aklimov@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        David Laight <David.Laight@aculab.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Joe Perches <joe@perches.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Maxim Kuvyrkov <maxim.kuvyrkov@linaro.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <mirq-linux@rere.qmqm.pl>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Subject: Pull request for bitmap branch
-Message-ID: <YlyCz0Hu+aiycuIp@yury-laptop>
+        Sun, 17 Apr 2022 14:13:59 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>,
+        Jaehee Park <jhpark1013@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2 1/6] staging: r8188eu: remove unused member free_bss_buf
+Date:   Sun, 17 Apr 2022 23:13:50 +0200
+Message-ID: <3164900.aeNJFYEL58@leap>
+In-Reply-To: <20220417204200.GA236965@jaehee-ThinkPad-X1-Extreme>
+References: <cover.1649990500.git.jhpark1013@gmail.com> <a28f445f-f088-620e-6baf-4cad3e1a8146@gmail.com> <20220417204200.GA236965@jaehee-ThinkPad-X1-Extreme>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephen,
+On domenica 17 aprile 2022 22:42:00 CEST Jaehee Park wrote:
+> On Sun, Apr 17, 2022 at 11:16:38PM +0300, Pavel Skripkin wrote:
+> > Hi Jaehee,
+> > 
+> > On 4/17/22 23:14, Jaehee Park wrote:
+> > > My understanding of Pavel's response is the free_bss_buf member of 
+the
+> > > pmlmepriv structure wasn't being used anywhere and that the
+> > > rtw_free_mlme_riv_ie_data function frees the memory of the pmlmepriv
+> > > structure so the second check is redundant.
+> > > 
+> > > However, as Fabio said, the free_bss_buf member is being used and 
+pbuf
+> > > memory is not being freed.
+> > > So I'll revert the patch as it was originally (which was just 
+removing
+> > > the {} around the single if statement).
 
-Please pull the bitmap branch for the next tree. This branch is based on top
-of 5.18-rc2. Tested by 0-day and TCWG. By myself, built for arm64, x86_64,
-mips, ss90, sparc, arm and sh; boot-tested for arm64 and x86_64.
+No, Jaehee. This is not what I said :)
 
-Repo: https://github.com/norov/linux.git
-Branch: bitmap-for-next
+> > > 
+> > 
+> > Why just `pbuf` allocation can't be removed? This memory is just 
+unused,
+> > isn't it?
+
+What Pavel said is what I said, but using a different argumentation.
+
+> > 
+> > 
+> > With regards,
+> > Pavel Skripkin
+> 
+> 
+> The free_bss_buf member is unused.
+
+Correct.
+
+> So it can just be removed right?
+
+No.
+
+
+> I guess I'm confused by what Pablo is saying about causing a memory 
+> leak
+
+A memory leak is caused when you allocate some memory and then you lose any 
+reference to its address so that it cannot be freed. Right?
+
+> by getting rid of the pointer to the memory allocated by pbuf.
+
+No.
+ 
+> Sorry if I misunderstood. 
+
+No problem. Let's rewind...
+
+"pbuf" is assigned with the address of some memory allocated with a call to 
+vzalloc(). Since "pbuf" is a local variable, you see that the above-
+mentioned address is stored in free_bss_buf using the line "pmlmepriv-
+>free_bss_buf = pbuf". Is it clear?
+
+Well, you decided to delete the line that calls vfree(pmlmepriv-
+>free_bss_buf). At this point you have that memory leak.
+
+Pavel noted that pmlmepriv->free_bss_buf is unused, but it contains the 
+address of a region of memory that was allocated for no purpose.
+
+Therefore, a correct patch should also remove the allocation that was made 
+using kzalloc(). If you merely remove the line with vfree() you cause a 
+memory leak.
+
+Please don't revert your patch. Just fix it with a new version that also 
+delete the line where "pbuf" is assigned with the value returned by 
+kzalloc().
+
+I hope that now I've been clearer.
 
 Thanks,
-Yury
+
+Fabio
+
+> Thanks,
+> Jaehee
+> 
+
+
+
+

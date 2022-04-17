@@ -2,71 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AFD5046F5
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 09:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A9FF504702
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 09:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233561AbiDQHft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 03:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41978 "EHLO
+        id S233576AbiDQHyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 03:54:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232845AbiDQHfr (ORCPT
+        with ESMTP id S233571AbiDQHx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 03:35:47 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FAA1A055
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 00:33:11 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id g19so6216647lfv.2
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 00:33:11 -0700 (PDT)
+        Sun, 17 Apr 2022 03:53:59 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD991403A;
+        Sun, 17 Apr 2022 00:51:25 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id q12so13724803pgj.13;
+        Sun, 17 Apr 2022 00:51:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:reply-to:sender:from:date:message-id:subject:to
+        h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=2mFfvhV8B5IdF4RB4U1HjfvBu8xUEg0C0d2xtLCo9T0=;
-        b=eTXWKuTHsTpqjyUXM6kCdGJYGEyKlqBkeU4/IxD/R3gJ/Rm8icJimIr2rFxsrJbGRc
-         GFBRct+fTQxyDUNBzB+JVavIesfvUjzQ0Nj1SDGxwSaBwAryXtiqpJX8yG/XgGSQC/wa
-         HT2Ue5Me9sRfpuOBp3EoAtOHy6y+7v1T7xcNV4Ss+4r2Wo6lOKm/ARndC2fB60gh/nd6
-         QyHnmJ1peF6Q4GnXqNvGedDRB+iKA7xVsPabnLB1saCLr/vvqXv08dv40Iz44IUPTkc8
-         w4+35qV0ER73HdPxw3rdXtyBsHtqiVSlk8ljwVQe06jG5ajV+OQ9lwtMn5Amm+4wtBi1
-         pDTw==
+        bh=DjQdA2HXpcP/GF59oEry3wEf5qflLMtjXUNEoLakT2g=;
+        b=IMT+AQWjTbf83qC7ACGL5TT369tCmX2xF+To4fRFGMOyKte9ShatFtrYYkqvvcw7M5
+         zROLrNNDsYrd1+DdRkpGH7QII/IGjixAOXhfb61SG9gI6xdJms340CaxwYFaDyg2bNlz
+         aCyVsXKeJfjjR8U/A7uxlpJTINN0mCOWZNUjy6eKAAY4Q5tN8HJJqZCZ9D+1XbAbynrd
+         A/4OW6OeiWB/0T5HzY+E3tuZYlCCXAu2hN0haxWgYA6jnc2yBBHBIJJ86qXTouN1YnN+
+         30oA11Ob7au02iotBDiXswARGzfJFqeZ2HiDMhoO0QPLD7AliSe1iOYFLT9bTtHkbHx1
+         dC5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:sender:from:date
-         :message-id:subject:to:content-transfer-encoding;
-        bh=2mFfvhV8B5IdF4RB4U1HjfvBu8xUEg0C0d2xtLCo9T0=;
-        b=ClA6NKfoOPrZnhF50gWknnvrNagbShBX1kZgWi6gUhFm6SPL8wH3o6PsDsvV1Xzm+o
-         81wFz4IrFgjxJMlv/gf4gSTOLBpHn4dUNXKVb7gTJUbvpg+yq6tCO+myCTFsWSRdLi00
-         GI629vAwrbYpiaDmMpx0EA8jNHCIAOFrCUaHSi2UHisaWar4pD0l6oJGPU7E+rEB6y2j
-         e3JAkuZvhYfje9ljRT3TRyGDP0u3fUTwAblOD4YfxJNbL5dvMtr71A/+rZBd0JPqoEPb
-         a1VWp8d8QLo2hlwRcTEtmtELKzlA7EYo1EZB4AJIgBbvetPjCMq0/dl9f5fKvsF9JNbO
-         fGbA==
-X-Gm-Message-State: AOAM532ob7ypKOSmoeuRV4pZQos8hIjnuUgtAmQZlbpMxgfxELCvChVM
-        Yhq0ll2sAr7Tt+0YdV60b96e8tDtjK8VDABzGIg=
-X-Google-Smtp-Source: ABdhPJxprDYx3bPAIaIGLkbZLTo+Z+qEhAO9TeXZqC6zieCsiZjy/6h6QDugqycWyGrV9wEJNuRvUvchGwE8uPDiByw=
-X-Received: by 2002:a05:6512:4006:b0:44a:7434:9829 with SMTP id
- br6-20020a056512400600b0044a74349829mr4429714lfb.661.1650180790329; Sun, 17
- Apr 2022 00:33:10 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=DjQdA2HXpcP/GF59oEry3wEf5qflLMtjXUNEoLakT2g=;
+        b=t6x3Ok9l5ZwiJ8GNpKm45+EPCLULTHb6yP2AY4pZ4N13Mpb9JOX6W1Tnnjex6B594M
+         tnDWRE16tYuJ7g6yfIwWgBUdDQe5wUdvTF23WExJVgAjvAsIrR9jwC/SQZxlBvn3n02R
+         2sLw9Te9r22TYM7O9rBhOs3lTBB2gO5zELBW8sadGmxAMgc5rFrV8nIEB47cSXTx6g/h
+         gcJllzh8Vul+ximwYhwvS1WGl4IFUJ/B/SjVIbgLpuqzRzC2CcMpTByOUM5vd5th6Wdr
+         PA37c7o3ZdeRdVpImMq4hzH1vcKqvomvns0MnibOMPzs3jf8dwrIzKqJmFny4+Ixo55i
+         IebQ==
+X-Gm-Message-State: AOAM5320M7o+kMkvGz2J/OJ4ZtwpESG7fZKddICaj8C05TlqGkjJF9if
+        0pPbD7GXsQEJ+9Krqflfpy3uPUR3idi45Q==
+X-Google-Smtp-Source: ABdhPJwPAFLA8pCiHsessflPULLDG061FXnfrs+GXPKcgNv5c1HNKj3/lMEUrf207B0rQc3m9fKBSg==
+X-Received: by 2002:a63:f217:0:b0:39d:a9ed:2160 with SMTP id v23-20020a63f217000000b0039da9ed2160mr5639291pgh.111.1650181884906;
+        Sun, 17 Apr 2022 00:51:24 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-74.three.co.id. [180.214.232.74])
+        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm13558356pjl.39.2022.04.17.00.51.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Apr 2022 00:51:24 -0700 (PDT)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     linux-doc@vger.kernel.org
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Eric Biggers <ebiggers@google.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND 0/2] Documentation: siphash: formatting fixes
+Date:   Sun, 17 Apr 2022 14:50:56 +0700
+Message-Id: <20220417075057.127865-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: sgtkaylamanthey32@gmail.com
-Received: by 2002:a05:6520:4281:b0:18f:1b94:87b8 with HTTP; Sun, 17 Apr 2022
- 00:33:09 -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Sun, 17 Apr 2022 07:33:09 +0000
-X-Google-Sender-Auth: FYNtHz7alSvywAyzfA5hVPPc5a0
-Message-ID: <CALsSCytuJb9-eue0=RKjqXTcOrx5r0QVFc6GkL52iWoq7XFbKA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cze=C5=9B=C4=87, dosta=C5=82e=C5=9B moje dwie wiadomo=C5=9Bci? prosz=C4=99 =
-sprawd=C5=BA i odpowiedz mi
+Formatting fixes for Documentation/security/siphash.rst. The shortlog
+should be self-explanatory. Resend of [1].
+
+[1]: https://lore.kernel.org/linux-doc/20220329042952.10100-1-bagasdotme@gmail.com/
+
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Eric Biggers <ebiggers@google.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+
+Bagas Sanjaya (2):
+  Documentation: siphash: convert danger note to warning for HalfSipHash
+  Documentation: siphash: enclose HalfSipHash usage example in the
+    literal block
+
+ Documentation/security/siphash.rst | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+
+base-commit: f443e374ae131c168a065ea1748feac6b2e76613
+-- 
+An old man doll... just what I always wanted! - Clara
+

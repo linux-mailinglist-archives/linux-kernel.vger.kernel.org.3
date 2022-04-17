@@ -2,113 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997CA504973
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 22:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B133B504978
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 22:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235013AbiDQUcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 16:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43104 "EHLO
+        id S235016AbiDQUom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 16:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229779AbiDQUcA (ORCPT
+        with ESMTP id S229569AbiDQUol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 16:32:00 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3036E0A;
-        Sun, 17 Apr 2022 13:29:23 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so913924pji.4;
-        Sun, 17 Apr 2022 13:29:23 -0700 (PDT)
+        Sun, 17 Apr 2022 16:44:41 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A856429
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 13:42:04 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id o18so9020587qtk.7
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 13:42:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=jJh/I41oC1sPYyv29N/Oqp9ZK6umpr2JJwjxPWBjuug=;
-        b=IgvFyg7sqUe4mAc1souN04YLHOSpdGF50CS2XgotrbQfGU9qIlpFjPLRJDiYWgRUsX
-         fxjE4ao0J5zsWeZGCYpUYH7HmvuFJzljgNLN6+wYGXEExCaxSRD163L1vX+7pwcxCpdH
-         3Z7/9BkOlTbk3xzOa8qmVFvrUbZabTvF8ivwm5gkOyEUan72xo16lPPfMtYQBIeOPMOc
-         cIgHTcjSf/Jl2ir6hozC5FdXuvkTiv+VqisqZe2DgSK0cZqUm9v9tjisO4zR6ZCrVAjp
-         JubD6cx9st/PQI4mbVCTOxI7ZohSV9rB71DRZ+YaPOSeT4HJBkND2JIyef1GIpesWRF+
-         eCsA==
+        bh=siAKpMcN2i6Q5zwPWMFzdjMytkBZWIwEIG4ky16AcDE=;
+        b=POT4kupDxVMVYxPM9uQ91fxJF+fbbvfcfAK6+sd4/52H+jBSq/EHv+JVS201vbVhTI
+         58Ziu9h2KBrJMhG90YOixxlX5mFL3miqMxgkP+CWBQmQKAYw7uP7dvh/SlG/B4A6LQE5
+         4hYureZf3iXY1B2JOyjwnaECwkaY4YxS/y/iy6ffD4rXUv9jjcZDklQfkTs9VCQwltIl
+         17ZqlOOG+da029OX07OoI8PFbmvzBVo1L5bINDSoU6FvtCBbTAsJeEUYO8jr25hs0tE3
+         IJk4sYY2cm5icEDjZ9MGfZa/Sbe9xyCgf7w44s50LieRSLt1SzdelfYd4SSCWylHAear
+         YhjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=jJh/I41oC1sPYyv29N/Oqp9ZK6umpr2JJwjxPWBjuug=;
-        b=A8WwrO5jOR0Sia0LCjksHXT8dMSXMAsiCANd8qAJHGGe58rbopG2FIMkXaRoVlr88c
-         6T0FmlhLpx/Qh1lMex7Dl7ZXWg/iEAjMKBYneBf7s5dcFiDl8JXDxtbQMedzi/5njyXP
-         3wHipTkvhVGJ/e2zbjMuGMQrhEOMkAyUwk+CWuiqeNjjEVA3TnvvAWjxCZH9PYcpOcwy
-         QgYEZeGL/regxsYBVylVej6qIaVSd6C0vSftjYf2/+5XiYAoomihD9VOYtSUc0YRU4re
-         b8eMTU3ohmikejRixyRy12g28CC5LdoA8zmMw9IUKhAJME/kF5jNfFCjDGV0FjU5EAXe
-         PIGA==
-X-Gm-Message-State: AOAM532q5o0s0e3zi/ONFxrMU6XHN208MksXhrmJB+gHhaZJaXikahEf
-        Vwf7zzHMKOginUjy+oS14SY=
-X-Google-Smtp-Source: ABdhPJyRj1C6d8NmhymU/Uz462KMfFXui1ULPma/+ozW3GYTjdrhQmssroTQIlP8U8WblyWNeNH/7Q==
-X-Received: by 2002:a17:902:ab58:b0:158:f2e1:8c4c with SMTP id ij24-20020a170902ab5800b00158f2e18c4cmr5478286plb.154.1650227363274;
-        Sun, 17 Apr 2022 13:29:23 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:1752:34a6:ebd3:cc40])
-        by smtp.gmail.com with ESMTPSA id j13-20020a056a00130d00b004f1025a4361sm10213054pfu.202.2022.04.17.13.29.21
+        bh=siAKpMcN2i6Q5zwPWMFzdjMytkBZWIwEIG4ky16AcDE=;
+        b=JRvw0TQUD4Li/xNiFVq8AzyzaRlhOwEyVjoTVydFMRSQYSsrWmoePs+W4x8TsjuI0n
+         2vM9ZDlF6+R3ug6otY1/U/RGAzj6ATGKWzyoIf+WpzKU/IR+7kdSS6CQYbn6tyDX6xkW
+         61mXEmpADaWtcaPEtiWFXEb00M02SfEXwaWnxBPSCVcE7G0YV/j/+CQf7Nqe4dedtffC
+         3CMFLf8rihBmvS9m91ZyOGYK9Zl6h1n1zYbZFebyO6RLD7L9Y6DQPTeCga1AQLUMVoM9
+         tESNHj+rhd53JRmmWwObKZGJHigxV4d3IIkd4JWYPWEVvzzQmKmiul3//ymc0HYqfPyl
+         N6eA==
+X-Gm-Message-State: AOAM532i/mP2wyQObZRi2mkjBq6MxF8DhPLMuVF6Q9/XKsfePrGAz7AC
+        lORcBRQ5un1cofhrbF+DkAw=
+X-Google-Smtp-Source: ABdhPJx0kCkCJfgKcw+kUzw+Q6cJHzf27oLCO+xIYKc13wBBsro0rB/QZNqK5Xbf9vslD4NrwrOWAg==
+X-Received: by 2002:a05:622a:1109:b0:2f1:f7e9:1b3 with SMTP id e9-20020a05622a110900b002f1f7e901b3mr3868301qty.671.1650228123726;
+        Sun, 17 Apr 2022 13:42:03 -0700 (PDT)
+Received: from jaehee-ThinkPad-X1-Extreme ([2607:fb90:50e6:61ed:4df2:ed9f:52ea:476e])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05622a121400b002eefd7bf5basm6706502qtx.63.2022.04.17.13.42.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 13:29:22 -0700 (PDT)
-Date:   Sun, 17 Apr 2022 13:29:19 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Julian Schulte <schu.ju@gmx.net>,
-        Hans de Goede <hdegoede@redhat.com>
-Cc:     hadess@hadess.net, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fix Touchscreen X Axis inversion on Trekstor Surftab W1
-Message-ID: <Ylx4n/hqBhD+PAxX@google.com>
-References: <20210626065417.8818-1-schu.ju@gmx.net>
- <Ylx3vduFGFlCEY0F@google.com>
+        Sun, 17 Apr 2022 13:42:02 -0700 (PDT)
+Date:   Sun, 17 Apr 2022 16:42:00 -0400
+From:   Jaehee Park <jhpark1013@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH v2 1/6] staging: r8188eu: remove unused member
+ free_bss_buf
+Message-ID: <20220417204200.GA236965@jaehee-ThinkPad-X1-Extreme>
+References: <cover.1649990500.git.jhpark1013@gmail.com>
+ <e41e0d3b62395d04f41d6934074074c431e7aacc.1649990500.git.jhpark1013@gmail.com>
+ <3608313.MHq7AAxBmi@leap>
+ <20220417201415.GA233554@jaehee-ThinkPad-X1-Extreme>
+ <a28f445f-f088-620e-6baf-4cad3e1a8146@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Ylx3vduFGFlCEY0F@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <a28f445f-f088-620e-6baf-4cad3e1a8146@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 01:25:33PM -0700, Dmitry Torokhov wrote:
-> On Sat, Jun 26, 2021 at 08:54:17AM +0200, Julian Schulte wrote:
+On Sun, Apr 17, 2022 at 11:16:38PM +0300, Pavel Skripkin wrote:
+> Hi Jaehee,
 > 
-> Just found it in my inbox. Adding Hans...
-
-For real this time...
-
-> 
-> > Signed-off-by: Julian Schulte <schu.ju@gmx.net>
-> > ---
-> >  drivers/input/touchscreen/goodix.c | 7 +++++++
-> >  1 file changed, 7 insertions(+)
+> On 4/17/22 23:14, Jaehee Park wrote:
+> > My understanding of Pavel's response is the free_bss_buf member of the
+> > pmlmepriv structure wasn't being used anywhere and that the
+> > rtw_free_mlme_riv_ie_data function frees the memory of the pmlmepriv
+> > structure so the second check is redundant.
 > > 
-> > diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-> > index c682b028f..cec5f7bdc 100644
-> > --- a/drivers/input/touchscreen/goodix.c
-> > +++ b/drivers/input/touchscreen/goodix.c
-> > @@ -248,6 +248,13 @@ static const struct dmi_system_id inverted_x_screen[] = {
-> >  			DMI_MATCH(DMI_PRODUCT_NAME, "I15-TC")
-> >  		},
-> >  	},
-> > +	{
-> > +		.ident = "TrekStor SurfTab duo W1 10.1 (VT4)",
-> > +		.matches = {
-> > +			DMI_MATCH(DMI_SYS_VENDOR, "TrekStor"),
-> > +			DMI_MATCH(DMI_PRODUCT_NAME, "SurfTab duo W1 10.1 (VT4)")
-> > +		},
-> > +	},
-> >  #endif
-> >  	{}
-> >  };
-> > --
-> > 2.30.2
+> > However, as Fabio said, the free_bss_buf member is being used and pbuf
+> > memory is not being freed.
+> > So I'll revert the patch as it was originally (which was just removing
+> > the {} around the single if statement).
 > > 
 > 
-> -- 
-> Dmitry
+> Why just `pbuf` allocation can't be removed? This memory is just unused,
+> isn't it?
+> 
+> 
+> 
+> 
+> With regards,
+> Pavel Skripkin
 
--- 
-Dmitry
+
+The free_bss_buf member is unused. So it can just be removed right? 
+I guess I'm confused by what Pablo is saying about causing a memory 
+leak by getting rid of the pointer to the memory allocated by pbuf. 
+Sorry if I misunderstood. 
+
+Thanks,
+Jaehee

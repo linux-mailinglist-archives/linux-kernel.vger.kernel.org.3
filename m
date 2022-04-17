@@ -2,90 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496225049A6
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F13ED5049A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235093AbiDQVjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 17:39:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49568 "EHLO
+        id S235106AbiDQVsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 17:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232635AbiDQVi6 (ORCPT
+        with ESMTP id S232635AbiDQVsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 17:38:58 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E211A1901C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=rPTmCZvcSQL+3vYCd36QLzQTiYFQAiItxsUtQqNbrEc=; b=KcZ3HYLTJjS2uVK13+NOtjb1q2
-        eMKZ5VEyktIvfZtYTgtZ+RnCIt+0mgLvHpx+ff1g0GXgtMTBBYqjk87qiN86Hl4mQhhlIRQhaB7ib
-        5eKR22v288mt9EIRYRmZFojqsWjcsmFDMJS+AxdvTXZdzwbSahS7jhCdXMZr04/ld5Mg19TXvlrQ8
-        JTgRYjVb0KizzOTLUPddaDBFGV4AHVl5Bwj1bMzwu+F0m6911+77jEgsaORKVZyW1sJ0Ys8lQOVxP
-        oXz+F7tgHZE1UCtqi5l0apg+BVMhFTbpHenlngFsrln1IDfUAMBREnLPx7aG0uIN96+HD8wnoJA0K
-        ITzirYEA==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ngCZ0-001bKq-2c; Sun, 17 Apr 2022 21:36:10 +0000
-Message-ID: <b5223400-c27e-166a-54a7-f01516dbf68b@infradead.org>
-Date:   Sun, 17 Apr 2022 14:36:06 -0700
+        Sun, 17 Apr 2022 17:48:43 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992E5E009
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:46:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650231963; x=1681767963;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=QDTc3+JLDhEMbDbF/sCTQeHWPHzpAQmkGJ4SIB8+viM=;
+  b=Rw/JYho4nxgI94QQj+I3t0Zw6/497N0HBfkegehL9Fh+JhH0/M84TTYG
+   bVntNGOjAcbolp+ArNF6gpIZjCfgp4aUHICxh6ZRsr9k/ZsZBI2FpKi6f
+   lMW21feqvTu0YUGehd5gET2GhPQKZkhrLyWQxnaZ2cdBoG7RP+NNAJXjD
+   lN3/C5lGjRBX4+zQys/EzTUJwBS3PuWYJg0xFP73yj1RAwTeM5DqUL3vw
+   0npLferLwCJWk0oi3d0Q7AoJOTFe2fBGBQQsimEm3iYUrDXVGcWKZzfs8
+   naZ+IZz5LaT2C5mP6NdAbg+IMOhbqsPOdCz5DEq0EXYqFYaJ72ocRGSbY
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="263173726"
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="263173726"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 14:46:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
+   d="scan'208";a="528640863"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 17 Apr 2022 14:46:02 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngCiX-0004Ad-Bo;
+        Sun, 17 Apr 2022 21:46:01 +0000
+Date:   Mon, 18 Apr 2022 05:45:36 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/x86/kernel/traps.c:248:17: error: implicit declaration of
+ function '__warn'; did you mean 'pr_warn'?
+Message-ID: <202204180524.7PXohDtU-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: drivers/cpuidle/cpuidle-riscv-sbi.c:350:5: warning: format
- specifies type 'long' but the argument has type 'int'
-Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Anup Patel <anup.patel@wdc.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
-References: <202204161152.YXsVu0jD-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202204161152.YXsVu0jD-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   a1901b464e7e3e28956ae7423db2847dbbfb5be8
+commit: 991625f3dd2cbc4b787deb0213e2bcf8fa264b21 x86/ibt: Add IBT feature, MSR and #CP handling
+date:   5 weeks ago
+config: x86_64-buildonly-randconfig-r006-20220418 (https://download.01.org/0day-ci/archive/20220418/202204180524.7PXohDtU-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=991625f3dd2cbc4b787deb0213e2bcf8fa264b21
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 991625f3dd2cbc4b787deb0213e2bcf8fa264b21
+        # save the config file to linux build tree
+        mkdir build_dir
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/x86/kernel/traps.c: In function '__exc_control_protection':
+>> arch/x86/kernel/traps.c:248:17: error: implicit declaration of function '__warn'; did you mean 'pr_warn'? [-Werror=implicit-function-declaration]
+     248 |                 __warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
+         |                 ^~~~~~
+         |                 pr_warn
+   cc1: some warnings being treated as errors
 
 
-On 4/15/22 20:09, kernel test robot wrote:
-> Hi Anup,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   59250f8a7f3a60a2661b84cbafc1e0eb5d05ec9b
-> commit: 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b cpuidle: Add RISC-V SBI CPU idle driver
-> date:   5 weeks ago
-> config: riscv-randconfig-r026-20220416 (https://download.01.org/0day-ci/archive/20220416/202204161152.YXsVu0jD-lkp@intel.com/config)
-> compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 8e43cbab33765c476337571e5ed11b005199dd0d)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install riscv cross compiling tool for clang build
->         # apt-get install binutils-riscv64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 6abf32f1d9c5009dcccded2c1e7ca899a4ab587b
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/cpuidle/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+vim +248 arch/x86/kernel/traps.c
 
-Fixed here:
-
-https://lore.kernel.org/linux-riscv/20220403031355.20894-1-rdunlap@infradead.org/
+   229	
+   230	DEFINE_IDTENTRY_ERRORCODE(exc_control_protection)
+   231	{
+   232		if (!cpu_feature_enabled(X86_FEATURE_IBT)) {
+   233			pr_err("Unexpected #CP\n");
+   234			BUG();
+   235		}
+   236	
+   237		if (WARN_ON_ONCE(user_mode(regs) || (error_code & CP_EC) != CP_ENDBR))
+   238			return;
+   239	
+   240		if (unlikely(regs->ip == (unsigned long)&ibt_selftest_ip)) {
+   241			regs->ax = 0;
+   242			return;
+   243		}
+   244	
+   245		pr_err("Missing ENDBR: %pS\n", (void *)instruction_pointer(regs));
+   246		if (!ibt_fatal) {
+   247			printk(KERN_DEFAULT CUT_HERE);
+ > 248			__warn(__FILE__, __LINE__, (void *)regs->ip, TAINT_WARN, regs, NULL);
+   249			return;
+   250		}
+   251		BUG();
+   252	}
+   253	
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://01.org/lkp

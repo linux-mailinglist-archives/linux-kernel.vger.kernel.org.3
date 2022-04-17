@@ -2,407 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 925E450482B
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 17:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E5E750482C
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 17:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234298AbiDQPIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 11:08:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S234303AbiDQPJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 11:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiDQPIQ (ORCPT
+        with ESMTP id S229496AbiDQPJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 11:08:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE4AEBA;
-        Sun, 17 Apr 2022 08:05:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 765716122A;
-        Sun, 17 Apr 2022 15:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58033C385A7;
-        Sun, 17 Apr 2022 15:05:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650207934;
-        bh=TCEyh3gyXRnZ90K4gJfzgIbuDBywNlbZ2X/YTY7EWds=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=vJjQVh9/cnR4yymb1LjBhXhoIw0pYfMbOeY1gn3uSvU9VydPRBdO35sIimj9rsakq
-         6jkPV3DyMwZck+8d43DTLrbJMJVSJtm+X7bBnLAFqjA03Bb0Y2x1n8eDbVpiv56OXx
-         Kuu/gZ3b4t5eRiSLBOd6y06RCvOm4Qqm80qh8UkSatyKKaTu6suGei7chJ0YVeYGmC
-         B+wB/t0VZ7coxtI9FHVqCAAiUpe1dhX39jPvuYfNQvhV/4glP5LdP7xp1IFJVUPa6z
-         QpOZ9GWL2NW3o0MOUFOEOkNUhDYyJL8ORp0JdDkKdu2odeJBCUaeZAr6smXOdoM3S2
-         Ukewjhj+5ZIEg==
-Message-ID: <45b00778d60cdef80f89041e5c9597d78c0d8ae7.camel@kernel.org>
-Subject: Re: [PATCH v7 4/6] KEYS: trusted: Introduce support for NXP
- CAAM-based trusted keys
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        David Howells <dhowells@redhat.com>,
-        James Bottomley <jejb@linux.ibm.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     kernel@pengutronix.de, David Gstir <david@sigma-star.at>,
-        Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Tim Harvey <tharvey@gateworks.com>,
-        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Horia =?UTF-8?Q?Geant=C4=83?= <horia.geanta@nxp.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Jan Luebbe <j.luebbe@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>,
-        Franck LENORMAND <franck.lenormand@nxp.com>,
-        Sumit Garg <sumit.garg@linaro.org>, keyrings@vger.kernel.org,
-        linux-crypto@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Sun, 17 Apr 2022 18:04:24 +0300
-In-Reply-To: <20220415205647.46056-5-a.fatoum@pengutronix.de>
-References: <20220415205647.46056-1-a.fatoum@pengutronix.de>
-         <20220415205647.46056-5-a.fatoum@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 
+        Sun, 17 Apr 2022 11:09:30 -0400
+Received: from out199-13.us.a.mail.aliyun.com (out199-13.us.a.mail.aliyun.com [47.90.199.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7632611C;
+        Sun, 17 Apr 2022 08:06:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04394;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VAF90KU_1650208004;
+Received: from 30.39.112.164(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0VAF90KU_1650208004)
+          by smtp.aliyun-inc.com(127.0.0.1);
+          Sun, 17 Apr 2022 23:06:46 +0800
+Message-ID: <e50c5307-8b2d-9338-0acc-9375b76c211d@linux.alibaba.com>
+Date:   Sun, 17 Apr 2022 23:06:44 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.7.0
+Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
+ avoid unnecessary pmu_stop/start
+From:   Wen Yang <wenyang@linux.alibaba.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Stephane Eranian <eranian@google.com>
+Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        mark rutland <mark.rutland@arm.com>,
+        jiri olsa <jolsa@redhat.com>,
+        namhyung kim <namhyung@kernel.org>,
+        borislav petkov <bp@alien8.de>, x86@kernel.org,
+        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
+ <20220304110351.47731-2-simon.wy@alibaba-inc.com>
+ <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
+ <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
+ <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
+ <271bc186-7ffb-33c8-4934-cda2beb94816@linux.alibaba.com>
+ <Yi8fELo+k9gmkJIa@hirez.programming.kicks-ass.net>
+ <05861b8c-2c7c-ae89-613a-41fcace6a174@linux.alibaba.com>
+In-Reply-To: <05861b8c-2c7c-ae89-613a-41fcace6a174@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-15 at 22:56 +0200, Ahmad Fatoum wrote:
-> The Cryptographic Acceleration and Assurance Module (CAAM) is an IP core
-> built into many newer i.MX and QorIQ SoCs by NXP.
->=20
-> The CAAM does crypto acceleration, hardware number generation and
-> has a blob mechanism for encapsulation/decapsulation of sensitive materia=
-l.
->=20
-> This blob mechanism depends on a device specific random 256-bit One Time
-> Programmable Master Key that is fused in each SoC at manufacturing
-> time. This key is unreadable and can only be used by the CAAM for AES
-> encryption/decryption of user data.
->=20
-> This makes it a suitable backend (source) for kernel trusted keys.
->=20
-> Previous commits generalized trusted keys to support multiple backends
-> and added an API to access the CAAM blob mechanism. Based on these,
-> provide the necessary glue to use the CAAM for trusted keys.
->=20
-> Reviewed-by: David Gstir <david@sigma-star.at>
-> Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Tested-by: Tim Harvey <tharvey@gateworks.com>
-> Tested-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> Tested-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
-> v6 -> v7:
-> =C2=A0 - Split off MAINTAINERS and documentation chanes into separate pat=
-ches
-> =C2=A0=C2=A0=C2=A0 (Jarkko)
-> =C2=A0 - Use new struct caam_blob_info API (Pankaj)
-> v5 -> v6:
-> =C2=A0 - Rename caam_trusted_key_ops to trusted_key_caam_ops for symmetry
-> =C2=A0=C2=A0=C2=A0 with other trust sources (Pankaj)
-> =C2=A0 - Collected Pankaj's Reviewed-by
-> v4 -> v5:
-> =C2=A0 - Collected Reviewed-by's and Tested-by's
-> =C2=A0 - Changed modifier to SECURE_KEY for compatibility with linux-imx
-> =C2=A0=C2=A0=C2=A0 (Matthias)
-> v3 -> v4:
-> =C2=A0 - Collected Acked-by's, Reviewed-by's and Tested-by
-> v2 -> v3:
-> =C2=A0- add MAINTAINERS entry
-> v1 -> v2:
-> =C2=A0- Extend trusted keys documentation for CAAM
->=20
-> To: David Howells <dhowells@redhat.com>
-> To: Jarkko Sakkinen <jarkko@kernel.org>
-> To: James Bottomley <jejb@linux.ibm.com>
-> To: Mimi Zohar <zohar@linux.ibm.com>
-> To: Jonathan Corbet <corbet@lwn.net>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: "Horia Geant=C4=83" <horia.geanta@nxp.com>
-> Cc: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Cc: Herbert Xu <herbert@gondor.apana.org.au>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Biggers <ebiggers@kernel.org>
-> Cc: Jan Luebbe <j.luebbe@pengutronix.de>
-> Cc: David Gstir <david@sigma-star.at>
-> Cc: Richard Weinberger <richard@nod.at>
-> Cc: Franck LENORMAND <franck.lenormand@nxp.com>
-> Cc: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-> Cc: Sumit Garg <sumit.garg@linaro.org>
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-crypto@vger.kernel.org
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-integrity@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> ---
-> =C2=A0.../admin-guide/kernel-parameters.txt=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
-> =C2=A0include/keys/trusted_caam.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 11 =
-+++
-> =C2=A0security/keys/trusted-keys/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 11 ++-
-> =C2=A0security/keys/trusted-keys/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +
-> =C2=A0security/keys/trusted-keys/trusted_caam.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
- 82 +++++++++++++++++++
-> =C2=A0security/keys/trusted-keys/trusted_core.c=C2=A0=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 6 +-
-> =C2=A06 files changed, 111 insertions(+), 2 deletions(-)
-> =C2=A0create mode 100644 include/keys/trusted_caam.h
-> =C2=A0create mode 100644 security/keys/trusted-keys/trusted_caam.c
->=20
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentat=
-ion/admin-guide/kernel-parameters.txt
-> index 4deed1908a75..9afb7046ce97 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -5958,6 +5958,7 @@
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0sou=
-rces:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- "=
-tpm"
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- "=
-tee"
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0- "caam"
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0If =
-not specified then it defaults to iterating through
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0the=
- trust source list starting with TPM and assigns the
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0fir=
-st trust source as a backend which is initialized
-> diff --git a/include/keys/trusted_caam.h b/include/keys/trusted_caam.h
-> new file mode 100644
-> index 000000000000..73fe2f32f65e
-> --- /dev/null
-> +++ b/include/keys/trusted_caam.h
-> @@ -0,0 +1,11 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
-> + */
-> +
-> +#ifndef __CAAM_TRUSTED_KEY_H
-> +#define __CAAM_TRUSTED_KEY_H
-> +
-> +extern struct trusted_key_ops trusted_key_caam_ops;
-> +
-> +#endif
-> diff --git a/security/keys/trusted-keys/Kconfig b/security/keys/trusted-k=
-eys/Kconfig
-> index fc4abd581abb..dbfdd8536468 100644
-> --- a/security/keys/trusted-keys/Kconfig
-> +++ b/security/keys/trusted-keys/Kconfig
-> @@ -24,6 +24,15 @@ config TRUSTED_KEYS_TEE
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable use of the =
-Trusted Execution Environment (TEE) as trusted
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 key backend.
-> =C2=A0
-> -if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE
-> +config TRUSTED_KEYS_CAAM
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "CAAM-based trusted keys"
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0depends on CRYPTO_DEV_FSL_CAAM=
-_JR >=3D TRUSTED_KEYS
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0select CRYPTO_DEV_FSL_CAAM_BLO=
-B_GEN
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Enable use of NXP's Cry=
-ptographic Accelerator and Assurance Module
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 (CAAM) as trusted key b=
-ackend.
-> +
-> +if !TRUSTED_KEYS_TPM && !TRUSTED_KEYS_TEE && !TRUSTED_KEYS_CAAM
-> =C2=A0comment "No trust source selected!"
-> =C2=A0endif
-> diff --git a/security/keys/trusted-keys/Makefile b/security/keys/trusted-=
-keys/Makefile
-> index 2e2371eae4d5..735aa0bc08ef 100644
-> --- a/security/keys/trusted-keys/Makefile
-> +++ b/security/keys/trusted-keys/Makefile
-> @@ -12,3 +12,5 @@ trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D trusted_tpm2.o
-> =C2=A0trusted-$(CONFIG_TRUSTED_KEYS_TPM) +=3D tpm2key.asn1.o
-> =C2=A0
-> =C2=A0trusted-$(CONFIG_TRUSTED_KEYS_TEE) +=3D trusted_tee.o
-> +
-> +trusted-$(CONFIG_TRUSTED_KEYS_CAAM) +=3D trusted_caam.o
-> diff --git a/security/keys/trusted-keys/trusted_caam.c b/security/keys/tr=
-usted-keys/trusted_caam.c
-> new file mode 100644
-> index 000000000000..46cb2484ec36
-> --- /dev/null
-> +++ b/security/keys/trusted-keys/trusted_caam.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (C) 2021 Pengutronix, Ahmad Fatoum <kernel@pengutronix.de>
-> + */
-> +
-> +#include <keys/trusted_caam.h>
-> +#include <keys/trusted-type.h>
-> +#include <linux/build_bug.h>
-> +#include <linux/key-type.h>
-> +#include <soc/fsl/caam-blob.h>
-> +
-> +static struct caam_blob_priv *blobifier;
-> +
-> +#define KEYMOD "SECURE_KEY"
-> +
-> +static_assert(MAX_KEY_SIZE + CAAM_BLOB_OVERHEAD <=3D CAAM_BLOB_MAX_LEN);
-> +static_assert(MAX_BLOB_SIZE <=3D CAAM_BLOB_MAX_LEN);
-> +
-> +static int trusted_caam_seal(struct trusted_key_payload *p, char *databl=
-ob)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct caam_blob_info info =3D=
- {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.input=C2=A0 =3D p->key,=C2=A0 .input_len=C2=A0=C2=A0 =3D=
- p->key_len,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.output =3D p->blob, .output_len=C2=A0 =3D MAX_BLOB_SIZE,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.key_mod =3D KEYMOD, .key_mod_len =3D sizeof(KEYMOD) - 1,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D caam_encap_blob(blobif=
-ier, &info);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return ret;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0p->blob_len =3D info.output_le=
-n;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> +}
-> +
-> +static int trusted_caam_unseal(struct trusted_key_payload *p, char *data=
-blob)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct caam_blob_info info =3D=
- {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.input=C2=A0=C2=A0 =3D p->blob,=C2=A0 .input_len=C2=A0 =
-=3D p->blob_len,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.output=C2=A0 =3D p->key,=C2=A0=C2=A0 .output_len =3D MAX=
-_KEY_SIZE,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0.key_mod =3D KEYMOD,=C2=A0 .key_mod_len =3D sizeof(KEYMOD=
-) - 1,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0};
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D caam_decap_blob(blobif=
-ier, &info);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return ret;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0p->key_len =3D info.output_len=
-;
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> +}
-> +
-> +static int trusted_caam_init(void)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0blobifier =3D caam_blob_gen_in=
-it();
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (IS_ERR(blobifier)) {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0pr_err("Job Ring Device allocation for transform failed\n=
-");
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return PTR_ERR(blobifier);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D register_key_type(&key=
-_type_trusted);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0caam_blob_gen_exit(blobifier);
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret;
-> +}
-> +
-> +static void trusted_caam_exit(void)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unregister_key_type(&key_type_=
-trusted);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0caam_blob_gen_exit(blobifier);
-> +}
-> +
-> +struct trusted_key_ops trusted_key_caam_ops =3D {
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.migratable =3D 0, /* non-migr=
-atable */
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.init =3D trusted_caam_init,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.seal =3D trusted_caam_seal,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.unseal =3D trusted_caam_unsea=
-l,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.exit =3D trusted_caam_exit,
-> +};
-> diff --git a/security/keys/trusted-keys/trusted_core.c b/security/keys/tr=
-usted-keys/trusted_core.c
-> index 9235fb7d0ec9..c6fc50d67214 100644
-> --- a/security/keys/trusted-keys/trusted_core.c
-> +++ b/security/keys/trusted-keys/trusted_core.c
-> @@ -9,6 +9,7 @@
-> =C2=A0#include <keys/user-type.h>
-> =C2=A0#include <keys/trusted-type.h>
-> =C2=A0#include <keys/trusted_tee.h>
-> +#include <keys/trusted_caam.h>
-> =C2=A0#include <keys/trusted_tpm.h>
-> =C2=A0#include <linux/capability.h>
-> =C2=A0#include <linux/err.h>
-> @@ -29,7 +30,7 @@ MODULE_PARM_DESC(rng, "Select trusted key RNG");
-> =C2=A0
-> =C2=A0static char *trusted_key_source;
-> =C2=A0module_param_named(source, trusted_key_source, charp, 0);
-> -MODULE_PARM_DESC(source, "Select trusted keys source (tpm or tee)");
-> +MODULE_PARM_DESC(source, "Select trusted keys source (tpm, tee or caam)"=
-);
-> =C2=A0
-> =C2=A0static const struct trusted_key_source trusted_key_sources[] =3D {
-> =C2=A0#if defined(CONFIG_TRUSTED_KEYS_TPM)
-> @@ -38,6 +39,9 @@ static const struct trusted_key_source trusted_key_sour=
-ces[] =3D {
-> =C2=A0#if defined(CONFIG_TRUSTED_KEYS_TEE)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ "tee", &trusted_key_tee=
-_ops },
-> =C2=A0#endif
-> +#if defined(CONFIG_TRUSTED_KEYS_CAAM)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0{ "caam", &trusted_key_caam_op=
-s },
-> +#endif
-> =C2=A0};
-> =C2=A0
-> =C2=A0DEFINE_STATIC_CALL_NULL(trusted_key_init, *trusted_key_sources[0].o=
-ps->init);
 
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+在 2022/3/18 上午1:54, Wen Yang 写道:
+> 
+> 
+> 在 2022/3/14 下午6:55, Peter Zijlstra 写道:
+>> On Thu, Mar 10, 2022 at 11:50:33AM +0800, Wen Yang wrote:
+>>
+>>> As you pointed out, some non-compliant rdpmc can cause problems. But you
+>>> also know that linux is the foundation of cloud servers, and many
+>>> third-party programs run on it (we don't have any code for it), and 
+>>> we can
+>>> only observe that the monitoring data will jitter abnormally (the
+>>> probability of this issue is not high, about dozens of tens of 
+>>> thousands of
+>>> machines).
+>>
+>> This might be a novel insight, but I *really* don't give a crap about
+>> any of that. If they're not using it right, they get to keep the pieces.
+>>
+>> I'd almost make it reschedule more to force them to fix their stuff.
+>>
+> 
+> 
+> Thank you for your guidance.
+> 
+> We also found a case in thousands of servers where the PMU counter is no 
+> longer updated due to frequent x86_pmu_stop/x86_pmu_start.
+> 
+> We added logs in the kernel and found that a third-party program would 
+> cause the PMU counter to start/stop several times in just a few seconds, 
+> as follows:
+> 
+> 
+> [8993460.537776] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=3, hw.prev_count=0x802a877ef302, 
+> hw.period_left=0x7fd578810cfe, event.count=0x14db802a877ecab4, 
+> event.prev_count=0x14db802a877ecab4
+> [8993460.915873] XXX x86_pmu_start line=1312 [cpu1] 
+> active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=3, 
+> hw.prev_count=0xffff802a9cf6a166, hw.period_left=0x7fd563095e9a, 
+> event.count=0x14db802a9cf67918, event.prev_count=0x14db802a9cf67918
+> [8993461.104643] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=3, hw.prev_count=0xffff802a9cf6a166, 
+> hw.period_left=0x7fd563095e9a, event.count=0x14db802a9cf67918, 
+> event.prev_count=0x14db802a9cf67918
+> [8993461.442508] XXX x86_pmu_start line=1312 [cpu1] 
+> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=2, 
+> hw.prev_count=0xffff802a9cf8492e, hw.period_left=0x7fd56307b6d2, 
+> event.count=0x14db802a9cf820e0, event.prev_count=0x14db802a9cf820e0
+> [8993461.736927] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=2, hw.prev_count=0xffff802a9cf8492e, 
+> hw.period_left=0x7fd56307b6d2, event.count=0x14db802a9cf820e0, 
+> event.prev_count=0x14db802a9cf820e0
+> [8993461.983135] XXX x86_pmu_start line=1312 [cpu1] 
+> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=2, 
+> hw.prev_count=0xffff802a9cfc29ed, hw.period_left=0x7fd56303d613, 
+> event.count=0x14db802a9cfc019f, event.prev_count=0x14db802a9cfc019f
+> [8993462.274599] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=2, hw.prev_count=0x802a9d24040e, 
+> hw.period_left=0x7fd562dbfbf2, event.count=0x14db802a9d23dbc0, 
+> event.prev_count=0x14db802a9d23dbc0
+> [8993462.519488] XXX x86_pmu_start line=1312 [cpu1] 
+> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=2, 
+> hw.prev_count=0xffff802ab0bb4719, hw.period_left=0x7fd54f44b8e7, 
+> event.count=0x14db802ab0bb1ecb, event.prev_count=0x14db802ab0bb1ecb
+> [8993462.726929] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000003 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=2, hw.prev_count=0xffff802ab0bb4719, 
+> hw.period_left=0x7fd54f44b8e7, event.count=0x14db802ab0bb1ecb, 
+> event.prev_count=0x14db802ab0bb1ecb
+> [8993463.035674] XXX x86_pmu_start line=1312 [cpu1] 
+> active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=3, 
+> hw.prev_count=0xffff802ab0bcd328, hw.period_left=0x7fd54f432cd8, 
+> event.count=0x14db802ab0bcaada, event.prev_count=0x14db802ab0bcaada
+> 
+> 
+> Then, the PMU counter will not be updated：
+> 
+> [8993463.333622] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802abea31354
+> [8993463.359905] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802abea31354, hw.period_left=0x7fd5415cecac, 
+> event.count=0x14db802abea2eb06,
+> [8993463.504783] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802ad8760160
+> [8993463.521138] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802ad8760160, hw.period_left=0x7fd52789fea0, 
+> event.count=0x14db802ad875d912,
+> [8993463.638337] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993463.654441] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> [8993463.837321] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993463.861625] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> [8993464.012398] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993464.012402] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> [8993464.013676] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993464.013678] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> [8993464.016123] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993464.016125] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> [8993464.016196] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aecb4747b
+> [8993464.016199] x86_perf_event_update [cpu1] active_mask=30000000f 
+> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
+> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d,
+> 
+> ......
+> 
+> 
+> Until 6 seconds later, the counter is stopped/started again：
+> 
+> 
+> [8993470.243959] XXX x86_pmu_stop line=1388 [cpu1] active_mask=100000001 
+> event=ffff880a53411000, state=1, attr.type=0, attr.config=0x0, 
+> attr.pinned=1, hw.idx=3, hw.prev_count=0x802aecb4747b, 
+> hw.period_left=0x7fd5134b8b85, event.count=0x14db802aecb44c2d, 
+> event.prev_count=0x14db802aecb44c2d
+> [8993470.243998] XXX x86_pmu_start line=1305 [cpu1] 
+> active_mask=200000000 event=ffff880a53411000, state=1, attr.type=0, 
+> attr.config=0x0, attr.pinned=1, hw.idx=3, 
+> hw.prev_count=0xffff802aecb4747b, hw.period_left=0x7fd5134b8b85, 
+> event.count=0x14db802aecb44c2d, event.prev_count=0x14db802aecb44c2d
+> 
+> [8993470.245285] x86_perf_event_update, event=ffff880a53411000, 
+> new_raw_count=802aece1e6f6
+> 
+> ...
+> 
+> Such problems can be solved by avoiding unnecessary x86_pmu_{stop|start}.
+> 
+> Please have a look again. Thanks.
+> 
 
-BR, Jarkko
+We recently tracked this issue again found that it may be related to the 
+behavior of the third GP of  the Intel(R) Xeon(R) Platinum 8163 CPU:
+
+
+[54511836.022997] CPU#1: ctrl:       000000070000000f
+[54511836.022997] CPU#1: status:     0000000000000000
+[54511836.022998] CPU#1: overflow:   0000000000000000
+[54511836.022998] CPU#1: fixed:      00000000000000bb
+[54511836.022998] CPU#1: pebs:       0000000000000000
+[54511836.022999] CPU#1: debugctl:   0000000000000000
+[54511836.022999] CPU#1: active:     000000030000000f
+[54511836.023000] CPU#1:   gen-PMC0 ctrl:  000000000053412e
+[54511836.023000] CPU#1:   gen-PMC0 count: 0000985b7d1a15e7
+[54511836.023000] CPU#1:   gen-PMC0 left:  000067a483643939
+[54511836.023001] CPU#1:   gen-PMC1 ctrl:  00000000005310d1
+[54511836.023002] CPU#1:   gen-PMC1 count: 000080000016448e
+[54511836.023002] CPU#1:   gen-PMC1 left:  00007ffffffffd37
+[54511836.023003] CPU#1:   gen-PMC2 ctrl:  00000000005301d1
+[54511836.023003] CPU#1:   gen-PMC2 count: 00008000e615b9ab
+[54511836.023004] CPU#1:   gen-PMC2 left:  00007fffffffffff
+[54511836.023005] CPU#1:   gen-PMC3 ctrl:  000000000053003c
+[54511836.023005] CPU#1:   gen-PMC3 count: 0000801f6139b1e1
+[54511836.023005] CPU#1:   gen-PMC3 left:  00007fe2a2dc14b7
+[54511836.023006] CPU#1: fixed-PMC0 count: 00008e0fa307b34e
+[54511836.023006] CPU#1: fixed-PMC1 count: 0000ffff3d01adb8
+[54511836.023007] CPU#1: fixed-PMC2 count: 0000cf10d01b651e
+
+
+The Gen-pmc3 Ctrl will be changed suddenly:
+
+[54511836.023085] CPU#1: ctrl:       000000070000000f
+[54511836.023085] CPU#1: status:     0000000000000000
+[54511836.023085] CPU#1: overflow:   0000000000000000
+[54511836.023086] CPU#1: fixed:      00000000000000bb
+[54511836.023086] CPU#1: pebs:       0000000000000000
+[54511836.023086] CPU#1: debugctl:   0000000000000000
+[54511836.023087] CPU#1: active:     000000030000000f
+[54511836.023087] CPU#1:   gen-PMC0 ctrl:  000000000053412e
+[54511836.023088] CPU#1:   gen-PMC0 count: 0000985b7d1a183b
+[54511836.023088] CPU#1:   gen-PMC0 left:  000067a483643939
+[54511836.023089] CPU#1:   gen-PMC1 ctrl:  00000000005310d1
+[54511836.023089] CPU#1:   gen-PMC1 count: 0000800000164ca8
+[54511836.023090] CPU#1:   gen-PMC1 left:  00007ffffffffd37
+[54511836.023091] CPU#1:   gen-PMC2 ctrl:  00000000005301d1
+[54511836.023091] CPU#1:   gen-PMC2 count: 00008000e61634fd
+[54511836.023092] CPU#1:   gen-PMC2 left:  00007fffffffffff
+[54511836.023092] CPU#1:   gen-PMC3 ctrl:  000000010043003c
+[54511836.023093] CPU#1:   gen-PMC3 count: 0000801f613b87d0
+[54511836.023093] CPU#1:   gen-PMC3 left:  00007fe2a2dc14b7
+[54511836.023094] CPU#1: fixed-PMC0 count: 00008e0fa309e091
+[54511836.023095] CPU#1: fixed-PMC1 count: 0000ffff3d050901
+[54511836.023095] CPU#1: fixed-PMC2 count: 0000cf10d01b651e
+
+
+The gen-PMC3 ctrl changed,
+000000000053003c -> 000000010043003c
+
+After that, the gen-PMC3 count remains 0000801f613b87d0 and will not be 
+updated. A series of subsequent issues, such as abnormal CPI data, are 
+generated.
+
+However, the special value (000000010043003c) of the gen-pmc3 Ctrl is 
+not actively set by the application. It is suspected that some special 
+operation has caused the GP3 Ctrl to be changed, and it is still under 
+discussion with Intel’s FAE.
+We are also looking at the following code:
+https://github.com/torvalds/linux/blob/94710cac0ef4ee177a63b5227664b38c95bbf703/arch/x86/events/intel/core.c#L1931 
+
+
+At present, only the above phenomenon has been observed, but the exact 
+cause has not yet been found.
+
+However, this patch attempts to avoid the switching of the pmu counters 
+in various perf_events, so the special behavior of a single pmu counter 
+will not be propagated to other events.
+
+--
+Best wishes,
+Wen
 

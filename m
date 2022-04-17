@@ -2,67 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 902C55046D8
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 08:36:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D27A5046DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 08:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233500AbiDQGjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 02:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52830 "EHLO
+        id S233502AbiDQGmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 02:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiDQGjT (ORCPT
+        with ESMTP id S231481AbiDQGmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 02:39:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D607712AE0
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 23:36:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 718CC61143
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32987C385A7;
-        Sun, 17 Apr 2022 06:36:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650177403;
-        bh=aKPWGRM5VxIJbLEEY2sSyVOljL1D5DvxjWI3i4feUsk=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=Y9fEW42431wvmXRjjiq7WeGPbtOVd8lv8BFB02h74F55FlGG+csvnrG2rbnOczo29
-         ziuGmuxxr/HU7Ips5wNEACwVS9PsKRBK4tx/MVenRg9QUCfJBtJlXW60OP9eOluB7v
-         8t6h705R7PwnYEDS30wX3QT9z2s6FACqWXwFtkgZaKg3KYicZuuRaM0YDpJUvtP6pX
-         31FKC1tMmJD9i2p2A9S8gDzFOGEbSfMLpGhhpdEMaDi8IkcmuOj14JFbeF/aXQkobF
-         1qVoPe3UljXDSuCJtIM/pYOejshS5JuKRHcMs+uLT4eYNbhxmzeEAqakO943Ztfyuj
-         q/Sqc43FnChmw==
-Message-ID: <38535431-906e-a61d-4feb-156df9585bdf@kernel.org>
-Date:   Sun, 17 Apr 2022 14:36:41 +0800
+        Sun, 17 Apr 2022 02:42:15 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 062AA2B24D
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 23:39:41 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id bq30so20002193lfb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 23:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvz-org.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=bT5KP076LNXAkBuT6bxsWqWs6Rnf/a89eLMuVK8//BE=;
+        b=ncW0cuAMb8hBdKsyH8A3kwzpFlf5AjHuKNEWWaWOGkn5vtR0OwYflZ/UOyblXqRhoX
+         kbsctJzKaEA9bWHOVkTV9KuCRQcRcOgvcUf41KIzu3vHK2W9CC4bp4s9AHaibfLLOQjS
+         bT1e05vF0QYw5pL8iOoteYlboX9TqJwxMFp/G4XDGLWUN1+Kmy6fQdP8Kl/4NuFsySkn
+         HzOuRVfYzz0kv3CUSF1d0XcVL91nMfwKTE/4x0Inr2clsZHHMcHM8uhguc3zAzvEA9cl
+         WWfK9ozD2CGno/6VT0O3Ng+LCRT/WPIh/FlwpOJ46w4aohgfKTn2GFxLEpSzV5i7vrat
+         rK0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=bT5KP076LNXAkBuT6bxsWqWs6Rnf/a89eLMuVK8//BE=;
+        b=pdzvKYqdazTDKtuh92FA0ixRFd0BO8lAgJFYJYWhGn9hbxzsQXDhV5xZzyqCiNrWcF
+         RVx/vkSqr/Za/ydadK0RftNyd3VH9YlkXDLHA2j+N7KPAeEs0zjgH+BfMWeABJ6cnBBd
+         WnZbTQ37NvnMEO2rXswMX0115CrIB9PbSC2G6gk41Ak0SKdUSQvL8nW8lq655gd3JpHS
+         fLbQqGtqkGhs9LtzTVzm6+PUzzMEt2r7CDWLPRiGn2UnMOhbP9KiPgz4F2WstJBcKxk8
+         B94dUMPJaGHIU6f7u1inrqGJDSoo/6J0L1Cor90FLDeVX9Wpa9qxJrMT3n941t+t8+6J
+         Vvtw==
+X-Gm-Message-State: AOAM5322AdH8bicX80enP7tGqDfEmhJN9X8dozh5faLyf9MMo+cVKARN
+        FIuzqV3UjAj3wcAkMccA9XzgQg==
+X-Google-Smtp-Source: ABdhPJyDayD1yzsslV7LgR6+8/ExlagCq2BG2TF0dic2T/PuIDSyOXUYXztnIZD0s2fB6srWdeqxNQ==
+X-Received: by 2002:a05:6512:1326:b0:45a:3a4:f25a with SMTP id x38-20020a056512132600b0045a03a4f25amr4319176lfu.575.1650177579195;
+        Sat, 16 Apr 2022 23:39:39 -0700 (PDT)
+Received: from [192.168.1.65] ([46.188.121.177])
+        by smtp.gmail.com with ESMTPSA id x40-20020a056512132800b004489691436esm872040lfu.146.2022.04.16.23.39.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 23:39:38 -0700 (PDT)
+Message-ID: <55605876-d05a-8be3-a6ae-ec26de9ee178@openvz.org>
+Date:   Sun, 17 Apr 2022 09:39:37 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [f2fs-dev] [PATCH 1/2] f2fs: fix wrong condition check when
- failing metapage read
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Vasily Averin <vvs@openvz.org>
+Subject: [PATCH memcg RFC] net: set proper memcg for net_init hooks
+ allocations
+To:     Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>
+Cc:     kernel@openvz.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, cgroups@vger.kernel.org,
+        Shakeel Butt <shakeelb@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+References: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
 Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220411212141.1775589-1-jaegeuk@kernel.org>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <20220411212141.1775589-1-jaegeuk@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <46c1c59e-1368-620d-e57a-f35c2c82084d@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/12 5:21, Jaegeuk Kim wrote:
-> This patch fixes wrong initialization.
-> 
-> Fixes: 50c63009f6ab ("f2fs: avoid an infinite loop in f2fs_sync_dirty_inodes")
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+__register_pernet_operations() executes init hook of registered
+pernet_operation structure in all existing net namespaces.
 
-Reviewed-by: Chao Yu <chao@kernel.org>
+Typically, these hooks are called by a process associated with
+the specified net namespace, and all __GFP_ACCOUNTING marked
+allocation are accounted for corresponding container/memcg.
 
-Thanks,
+However __register_pernet_operations() calls the hooks in the same
+context, and as a result all marked allocations are accounted
+to one memcg for all processed net namespaces.
+
+This patch adjusts active memcg for each net namespace and helps
+to account memory allocated inside ops_init() into the proper memcg.
+
+Signed-off-by: Vasily Averin <vvs@openvz.org>
+---
+Dear Vlastimil, Roman,
+I'm not sure that memcg is used correctly here, 
+is it perhaps some additional locking required?
+---
+ net/core/net_namespace.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/net/core/net_namespace.c b/net/core/net_namespace.c
+index a5b5bb99c644..171c6e0b2337 100644
+--- a/net/core/net_namespace.c
++++ b/net/core/net_namespace.c
+@@ -26,6 +26,7 @@
+ #include <net/net_namespace.h>
+ #include <net/netns/generic.h>
+ 
++#include <linux/sched/mm.h>
+ /*
+  *	Our network namespace constructor/destructor lists
+  */
+@@ -1147,7 +1148,13 @@ static int __register_pernet_operations(struct list_head *list,
+ 		 * setup_net() and cleanup_net() are not possible.
+ 		 */
+ 		for_each_net(net) {
++			struct mem_cgroup *old, *memcg = NULL;
++#ifdef CONFIG_MEMCG
++			memcg = (net == &init_net) ? root_mem_cgroup : mem_cgroup_from_obj(net);
++#endif
++			old = set_active_memcg(memcg);
+ 			error = ops_init(ops, net);
++			set_active_memcg(old);
+ 			if (error)
+ 				goto out_undo;
+ 			list_add_tail(&net->exit_list, &net_exit_list);
+-- 
+2.31.1
+

@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 955355047EA
+	by mail.lfdr.de (Postfix) with ESMTP id 4D9285047E9
 	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:37:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234174AbiDQNaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 09:30:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S234176AbiDQNcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 09:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234165AbiDQNaB (ORCPT
+        with ESMTP id S229496AbiDQNcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 09:30:01 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F063FD45
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:27:24 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id q3so10506452plg.3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:27:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :references:from:in-reply-to:content-transfer-encoding;
-        bh=2lsv0ntY4n+MI/Hd3e+PEhNvyJ29+Oq+Iyeq2UXcg+Q=;
-        b=yELFNctQNh8f9kq818ppMkx1U+LhZFvvzoNJBrgFCYj8wM16rEoGsJERr95ZJLzq67
-         1ppvMprwsyYqIMq88GVAAKx+l9cXpeWFkYNrgJACHo738WLr9MvgBrqaMXoAtKaHVAv/
-         IIyG/vuxcQOAdSnKZoCqCyU4HC/+W9exGvPxAg4/zv1MuxwWTzbuvFoC27VrsGqbz4io
-         LWmnXaHFVLtxgb10txwAhlwxqQ2vbbG62p8UDzHtDUyM2Ib21uY7g/BJaTbY4AC3ilSW
-         RoSvsasdkeYR0KwSisIFoIz2a1/yPOF9Vd20W6/9YgWyaABfpGDhr5mCu/lBrZfcPkpv
-         gwQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=2lsv0ntY4n+MI/Hd3e+PEhNvyJ29+Oq+Iyeq2UXcg+Q=;
-        b=3gXJDcEOObCnOqpsIUlE9PXdOwmj29C6C/ezYzwrG5VsPM5dBe6QoKOzJurD8JzvBG
-         Ufa/LT6cKN/Mj3v4NmzmzHm0ismq1wlFa5nCJZYCs5vmNuy/OMIjCyGsIt4sIkthMPBu
-         2ZKAQpf4UOGatBMiIak7RMDqDRe8lDB9vebbOI6DdmFHOLveHtB/5CNPnzQnOtB4hqRq
-         MuEJBhvYVU1pklxxfMwPzS4o+gvqDA7L66VGqGr79ps85WaP0ooJIDdJLNWSoBafvobe
-         Bacd35yvJAnNx6KGwNxbUF3TR0+7mfGUYn5c/wUaXF5S8O5G3bHRWP5eSRvPxCDlUiQm
-         UVXA==
-X-Gm-Message-State: AOAM531wRhapLB9bHI7HA8xZktd0YmpDMZh+UgoB8jTXJeYLDLUnJQjT
-        6K1tuoOR6TnTFJrMOoPzy68XhagkzhC1ecru
-X-Google-Smtp-Source: ABdhPJw1y3DOoUi6NRe3MQxj9rsC0yTa3f5ata6PXmG6W714zzk2jMCcR08ZklwR9kHaadkF/2yXWQ==
-X-Received: by 2002:a17:902:8698:b0:158:99d4:6256 with SMTP id g24-20020a170902869800b0015899d46256mr7144705plo.104.1650202044452;
-        Sun, 17 Apr 2022 06:27:24 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id s35-20020a17090a2f2600b001cd67e544e4sm10193811pjd.2.2022.04.17.06.27.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 06:27:23 -0700 (PDT)
-Message-ID: <6ab618f8-f88b-0771-a739-04cd9cdc1a3c@kernel.dk>
-Date:   Sun, 17 Apr 2022 07:27:22 -0600
+        Sun, 17 Apr 2022 09:32:22 -0400
+Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15E7A2B2
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:29:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8xdy1
+        otSXW1cwfTIsLN61K8o+NtLtYS2/7RspgGPkFc=; b=WaktQzaNvApyYYQ3HqeLE
+        oJrH0VHDXzUSk9eqn4Sweu6M+/U73QAridWyhEm6N/T0iXbkI+sUQ8QSllnR4GQg
+        E/Jeajtx7eTWfW2a870TFPqO9WUEvL11ILiolkVp6FO2c3OotRVKDIyffplOIUZg
+        YGuspDxGJxTDLZyj84pgak=
+Received: from carlis (unknown [120.229.91.35])
+        by smtp9 (Coremail) with SMTP id DcCowABHu14vFlxikyJyBw--.4076S2;
+        Sun, 17 Apr 2022 21:29:20 +0800 (CST)
+From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+To:     liviu.dudau@arm.com, brian.starkey@arm.com, airlied@linux.ie,
+        daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+Subject: [PATCH] drm/malidp: convert sysfs snprintf to sysfs_emit
+Date:   Sun, 17 Apr 2022 13:29:18 +0000
+Message-Id: <20220417132918.135795-1-zhangxuezhi1@coolpad.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [syzbot] memory leak in iovec_from_user
-Content-Language: en-US
-To:     syzbot <syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com>,
-        asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <000000000000951a1505dccf8b73@google.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <000000000000951a1505dccf8b73@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DcCowABHu14vFlxikyJyBw--.4076S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWfXF1UWrWfGr1xZw1kZrb_yoWfWFb_CF
+        10qrsrZrs2yF97uw1xCF4fZryIkayF9FZ5XrW8ta4fZrsFvrsrZ3s29ryvqryUJF47AF9r
+        Aa1kuF15J3ZrCjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnpWlPUUUUU==
+X-Originating-IP: [120.229.91.35]
+Sender: llyz108@163.com
+X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiQwjlhVc7Yte1mgABsc
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-#syz test: git://git.kernel.dk/linux-block io_uring-5.18
+Fix the following coccicheck warning:
+drivers/gpu/drm/arm/malidp_drv.c:658:8-16:
+WARNING: use scnprintf or sprintf
 
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+ drivers/gpu/drm/arm/malidp_drv.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
+index d5aef21426cf..b1ffd5ba27d9 100644
+--- a/drivers/gpu/drm/arm/malidp_drv.c
++++ b/drivers/gpu/drm/arm/malidp_drv.c
+@@ -655,7 +655,7 @@ static ssize_t core_id_show(struct device *dev, struct device_attribute *attr,
+ 	struct drm_device *drm = dev_get_drvdata(dev);
+ 	struct malidp_drm *malidp = drm->dev_private;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%08x\n", malidp->core_id);
++	return sysfs_emit(buf, "%08x\n", malidp->core_id);
+ }
+ 
+ static DEVICE_ATTR_RO(core_id);
 -- 
-Jens Axboe
+2.25.1
 

@@ -2,130 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15FDA5045EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 03:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6B95045ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 03:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbiDQB35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 21:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33834 "EHLO
+        id S232996AbiDQBcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 21:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiDQB34 (ORCPT
+        with ESMTP id S233175AbiDQBcc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 21:29:56 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F5D13E8B
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:27:22 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id h14-20020a05660208ce00b00645c339411bso7362898ioz.8
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:27:22 -0700 (PDT)
+        Sat, 16 Apr 2022 21:32:32 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DF4413F84
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:29:58 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id o18so8143770qtk.7
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 18:29:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=bZjpwB+wNCLwsZCSnLxqmC4sXR2mJpModolDDWKFE0Y=;
+        b=Icuk2Vd6k53Z24VEYSyEpoaAiwagDY+AVVu+JSk/zoXV95kkmaqyvV887SeWYEGbMM
+         4Zo26HVXRXPjvrBfOQhI745rcWX2ebR1vv1ifaNY4fjJ4NCh9HoXRBKIG4BhwqXM+vKU
+         gLKDwAZofe5OX4I8uM67/ybu9FR3eJyLDNYkcvOnUaic/vCxJgpN1khzcZLiT5pl//A/
+         nUMdoNF94m3Bl/U2B/z79WEJZmpVvY7bC8tJG2t+WTajynlUtHmOmY5gPK9WTCH9+Nzt
+         Hox+/T61Bn5iQVXqBvzodMuxS1LqeGsMmTgMhnIm0Et+Se44VRw7oRut6Oe1dKlmy1Lm
+         sX+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=dX21WvP5WL6W9owr96JSchJVohGsQJ+V9E+b7RK7lfU=;
-        b=vUa2WtbJZgcD+bReCtzXe9mrI1J65JWiHjSbbbg0V9aJ2etgOasfVfbljNoiLkJqLX
-         VGvrNdBZrNRDOKZIi33xz3moj9AxF7FlV7W6KxuB0VcbtQGgfMZo1LuKv+8uQSX0fG2+
-         /sEmSIJkkZ7gst84NFda/FluMF8znPA0L63gq/pV5lGYPYJla5Lp+9o/Ja5YDIoXjjIC
-         3t7IEgjKu2DfxAVs9HKz2wk6x9rb5qoV1VcbrKycErkaBOJdZZViwr+jXLd91oEQLxYZ
-         A4NmmfHse8K2/hc0lJS8JZk/SjkxsegZIwW+pLcL4MzMy1gJ15GwWoDC2pZHecsDZgGs
-         X1nQ==
-X-Gm-Message-State: AOAM530nML/S0RnWFApgwuMY7esoBHb0P34NLBtehqeyVsyPmdgvYoJd
-        B6I+nYORBqmz3XLdZZ3mqOYKOuN0Auq0M0f9dX6lhSro0oLv
-X-Google-Smtp-Source: ABdhPJzkL+XYzFShzAdASAobQRAtg4p6t+z5aPETnpWwLk7qJJu9UMeLxIw6gMyE2Ro8GULzfItdK9A3JEtzX/C9FvddherKgOZC
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=bZjpwB+wNCLwsZCSnLxqmC4sXR2mJpModolDDWKFE0Y=;
+        b=o9PUv0TBB++51+txvjnwtCOQqmRmG+VDve+F23x0gF9Xcxa043knl6osDodnPlzRuz
+         CkYBhl5sR5lpwbx+RV9SiCTyfuWfttFN7/7OeoRXy3VvjLHRWng0S42vPorOAATEUzps
+         nEPd1u8u/+w9MVfzvzcRfm5dTWQYvOKcnqbtxCRnhWakEKPlykagASCi6ujrNRnjI7j+
+         LsnQY5dF6mzvWhX1ENbz92NS2ewv/rZRZ1InBry4vOVu110QDpl1SMcVP5laxGeGjK2K
+         e9MguPUg2JGDOuw+vep1vtuJklAwmnHIibM3W+Y7vF42idiyveaVZ7lGfJB4LilvnKwE
+         xTIg==
+X-Gm-Message-State: AOAM532JuO4ihne6c0GQ7Lnzn830v5kuiFUV38Oho3FN4/Owbxvl4j8F
+        r7A4RqDITAzMLL0nMJRqisMgoeEM2so7QDS4tI8=
+X-Google-Smtp-Source: ABdhPJyfp6p4kPtqTYhuIjfdYY0ldHRt9/gHuq0LEDAreJsCUN9NVxgVrxUtXplZe3HUtZNCI/yyKEs/LDuURP/B5LI=
+X-Received: by 2002:a05:622a:4083:b0:2ec:e9e3:1656 with SMTP id
+ cg3-20020a05622a408300b002ece9e31656mr3477260qtb.529.1650158997347; Sat, 16
+ Apr 2022 18:29:57 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:380a:b0:326:3710:8ffe with SMTP id
- i10-20020a056638380a00b0032637108ffemr2433923jav.47.1650158841697; Sat, 16
- Apr 2022 18:27:21 -0700 (PDT)
-Date:   Sat, 16 Apr 2022 18:27:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000951a1505dccf8b73@google.com>
-Subject: [syzbot] memory leak in iovec_from_user
-From:   syzbot <syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com>
-To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Received: by 2002:ad4:484e:0:0:0:0:0 with HTTP; Sat, 16 Apr 2022 18:29:56
+ -0700 (PDT)
+Reply-To: wijh555@gmail.com
+From:   "Mr. Jibri loubda" <gjibriloubda@gmail.com>
+Date:   Sat, 16 Apr 2022 18:29:56 -0700
+Message-ID: <CAO=FyH+Yx=awFZKs60ssVaDWMhEibqKLqtcLEZp-S1hZHvVwnw@mail.gmail.com>
+Subject: Good Day,
+To:     undisclosed-recipients:;
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: Yes, score=6.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_FM_MR_MRS,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:82a listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4853]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [wijh555[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [gjibriloubda[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  1.1 HK_NAME_FM_MR_MRS No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+-- 
+Greetings,
+I'm Mr. Jibri loubda, how are you doing hope you are in good health,
+the Board irector
+try to reach you on phone several times Meanwhile, your number was not
+connecting. before he ask me to send you an email to hear from you if
+you are fine. hope to hear you are in good Health.
 
-syzbot found the following issue on:
+Thanks,
+Mr. Jibri loubda.
 
-HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14225724f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f1a3425e05af27
-dashboard link: https://syzkaller.appspot.com/bug?extid=96b43810dfe9c3bb95ed
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c45d88f00000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b428af700000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com
-
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810d698300 (size 192):
-  comm "syz-executor156", pid 3595, jiffies 4294944234 (age 12.580s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
-    [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
-    [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
-    [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
-    [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
-    [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
-    [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
-    [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
-    [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
-    [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
-    [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
-    [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
-    [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
-    [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-BUG: memory leak
-unreferenced object 0xffff88810d6983c0 (size 192):
-  comm "syz-executor156", pid 3603, jiffies 4294944759 (age 7.330s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
-    [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
-    [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
-    [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
-    [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
-    [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
-    [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
-    [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
-    [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
-    [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
-    [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
-    [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
-    [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
-    [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Sincerely,
+Dr. Irene Lam.

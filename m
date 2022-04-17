@@ -2,105 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C01C5047F2
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 842F85047F5
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:53:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234209AbiDQNzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 09:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
+        id S234217AbiDQN4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 09:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiDQNzh (ORCPT
+        with ESMTP id S229496AbiDQN4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 09:55:37 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539D31EC77;
-        Sun, 17 Apr 2022 06:52:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=PcP8dW0ioRzK0xPAKsYs093XS1ccwWxt22yQcI8gb10=; b=UWKQqpDU3c4xffoQchHhHqWtTF
-        AXEk2xZp4BYO03KZEIoakG2oH9LcFksrrtvo5mbOSpkTWvoMCs5t/1G05OFZ45P7BqjydMR4cYhCC
-        zN3SN8pe2rSsuGhMsiDHjJYv1/XrcKY24JgXuxd6jaglkBHWFybMIz+L2401kVVI10xW//dLag9eR
-        jmgfJzCceE51uVsXGGW0usZGkUTbbcYgdpzrumtA+T8w+V1TLC8cYsvgl8PDd3XpBZe6c8xFrk0Nl
-        2TV88rnxIMNzYLhRd3210SF2S21iWvoXPiwEotk9g7GHoXmvuaVCBrpR7C7mwX3cMUBkl+1nJB/4/
-        gHIImD9PpNYzq5Hdfu0N7+BtSqbUhDzB2jgQaADaRupzo/m8HnOoP/hXViKBhZOguXEzU62MVkiiX
-        9gcIGr+RkgSOR5KHhu4kk0OsDpBSuxqxrRxWnlKDRoAeLqIWussDZWLy/aTa7LPT9RrKmpBffKhTo
-        +hBbZ02RmAjsVbTteL0SMzl5egXD1ObNErtMI2kBcyi8OR7KNHZVcyv9DIF8raE2C9LgZSqc0GWRb
-        I4wqMu+OwMUqiONlMkvZTVys3X3V7gPj8t01J8KPH0Y/lBOnHcNaahlsV4xL8zNM+CSfCWQ+JfGfX
-        AAdigAYdjiUeO5OtDSSLx4x3Q97c1cYevUPjJxrC0=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     asmadeus@codewreck.org
-Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
-        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        lucho@ionkov.net, netdev@vger.kernel.org,
-        v9fs-developer@lists.sourceforge.net,
-        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
-Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected)
-Date:   Sun, 17 Apr 2022 15:52:43 +0200
-Message-ID: <8420857.9FB56xACZ5@silver>
-In-Reply-To: <YlwOdqVCBZKFTIfC@codewreck.org>
-References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
- <2551609.RCmPuZc3Qn@silver> <YlwOdqVCBZKFTIfC@codewreck.org>
+        Sun, 17 Apr 2022 09:56:04 -0400
+Received: from mail-m17657.qiye.163.com (mail-m17657.qiye.163.com [59.111.176.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327481EEC4;
+        Sun, 17 Apr 2022 06:53:27 -0700 (PDT)
+Received: from [192.168.3.48] (unknown [58.22.0.235])
+        by mail-m17657.qiye.163.com (Hmail) with ESMTPA id EBE122800B9;
+        Sun, 17 Apr 2022 21:53:23 +0800 (CST)
+Message-ID: <5f13aa47-92cd-6c71-66f5-c5513a36b277@rock-chips.com>
+Date:   Sun, 17 Apr 2022 21:53:23 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH] dmaengine: pl330: Fix unbalanced runtime PM
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Huibin Hong <huibin.hong@rock-chips.com>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1648296988-45745-1-git-send-email-sugar.zhang@rock-chips.com>
+ <YlQxy0e/39M4xTdL@matsya>
+From:   sugar zhang <sugar.zhang@rock-chips.com>
+In-Reply-To: <YlQxy0e/39M4xTdL@matsya>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZCBgUCR5ZQVlLVUtZV1
+        kWDxoPAgseWUFZKDYvK1lXWShZQUhPN1dZLVlBSVdZDwkaFQgSH1lBWRkfQ0xWTxoZTU9LGENOTU
+        5NVRMBExYaEhckFA4PWVdZFhoPEhUdFFlBWU9LSFVKSktISkxVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MC46GSo5ND0wLjcyPCkBSSwR
+        HhMKCRlVSlVKTU5LSUtITUtPSEpDVTMWGhIXVQgOHBoJVQETGhUcOwkUGBBWGBMSCwhVGBQWRVlX
+        WRILWUFZTkNVSUlVS1VJSE5ZV1kIAVlBT0xPSDcG
+X-HM-Tid: 0a8037ccb48bda03kuwsebe122800b9
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sonntag, 17. April 2022 14:56:22 CEST asmadeus@codewreck.org wrote:
-> Christian Schoenebeck wrote on Thu, Apr 14, 2022 at 02:44:53PM +0200:
-> > > Yes, I'm not sure why I can't reproduce... All my computers are pretty
-> > > slow but the conditions should be met.
-> > > I'll try again with a command line closer to what you just gave here.
-> > 
-> > I'm not surprised that you could not reproduce the EBADF errors yet. To
-> > make this more clear, as for the git client errors: I have like 200+ git
-> > repositories checked out on that test VM, and only about 5 of them
-> > trigger EBADF errors on 'git pull'. But those few repositories reproduce
-> > the EBADF errors reliably here.
-> > 
-> > In other words: these EBADF errors only seem to trigger under certain
-> > circumstances, so it requires quite a bunch of test material to get a
-> > reproducer.
-> > 
-> > Like I said though, with the Bullseye installation I immediately get EBADF
-> > errors already when booting, whereas with a Buster VM it boots without
-> > errors.
-> Okay, I had missed that!
-> 
-> I've managed to reproduce with git:
-> https://gaia.codewreck.org/local/tmp/c.tar.zst
-> 
-> This archive (~300KB) when decompressed is a ~150MB repo where git reset
-> produces EBADF reliably for me.
+Hi Vinod,
 
-I'm glad you were able to reproduce these EBADF errors!
+在 2022/4/11 21:48, Vinod Koul 写道:
+> On 26-03-22, 20:16, Sugar Zhang wrote:
+>> This driver use runtime PM autosuspend mechanism to manager clk.
+>>
+>>    pm_runtime_use_autosuspend(&adev->dev);
+>>    pm_runtime_set_autosuspend_delay(&adev->dev, PL330_AUTOSUSPEND_DELAY);
+>>
+>> So, after ref count reached to zero, it will enter suspend
+>> after the delay time elapsed.
+>>
+>> The unbalanced PM:
+>>
+>> * May cause dmac the next start failed.
+>> * May cause dmac read unexpected state.
+>> * May cause dmac stall if power down happen at the middle of the transfer.
+>>    e.g. may lose ack from AXI bus and stall.
+>>
+>> Considering the following situation:
+>>
+>>        DMA TERMINATE               TASKLET ROUTINE
+>>              |                            |
+>>              |                       issue_pending
+>>              |                            |
+>>              |                     pch->active = true
+>>              |                       pm_runtime_get
+>>    pm_runtime_put(if active)              |
+>>      pch->active = false                  |
+>>              |                      work_list empty
+>>              |                            |
+>>              |                     pm_runtime_put(force)
+> maybe unconditional is a better word than force here?
+okay, will do in v2.
+>
+>>              |                            |
+>>
+>> At this point, it's unbalanced(1 get / 2 put).
+>>
+>> After this patch:
+>>
+>>        DMA TERMINATE               TASKLET ROUTINE
+>>              |                            |
+>>              |                       issue_pending
+>>              |                            |
+>>              |                     pch->active = true
+>>              |                       pm_runtime_get
+>>    pm_runtime_put(if active)              |
+>>      pch->active = false                  |
+>>              |                      work_list empty
+>>              |                            |
+>>              |                   pm_runtime_put(if active)
+>>              |                            |
+>>
+>> Now, it's balanced(1 get / 1 put).
+>>
+>> Fixes:
+>> commit 5c9e6c2b2ba3 ("dmaengine: pl330: Fix runtime PM support for terminated transfers")
+>> commit ae43b3289186 ("ARM: 8202/1: dmaengine: pl330: Add runtime Power Management support v12")
+> That is not the right way for Fixes tag
 
-> From the looks of it, write fails in v9fs_write_begin, which itself
-> fails because it tries to read first on a file that was open with
-> O_WRONLY|O_CREAT|O_APPEND.
-> Since this is an append the read is necessary to populate the local page
-> cache when writing, and we're careful that the writeback fid is open in
-> write, but not about read...
-> 
-> Will have to think how we might want to handle this; perhaps just giving
-> the writeback fid read rights all the time as well...
-> Ran out of time for tonight, but hopefully we can sort it out soonish now!
+like this?
 
-I fear that would just trade symptoms: There are use cases for write-only 
-permissions, which would then fail after such kind of simple change.
+Fixes: 5c9e6c2b2ba3 ("dmaengine: pl330: Fix runtime PM support for terminated transfers")
+Fixes: ae43b3289186 ("ARM: 8202/1: dmaengine: pl330: Add runtime Power Management support v12")
 
-Independent of this EBADF issue, it would be good to know why 9p performance 
-got so slow with cache=loose by the netfs changes. Maybe David has an idea?
+>> Signed-off-by: Huibin Hong <huibin.hong@rock-chips.com>
+>> Signed-off-by: Sugar Zhang <sugar.zhang@rock-chips.com>
+>> ---
+>>
+>>   drivers/dma/pl330.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
+>> index 858400e..ccd430e 100644
+>> --- a/drivers/dma/pl330.c
+>> +++ b/drivers/dma/pl330.c
+>> @@ -2084,7 +2084,7 @@ static void pl330_tasklet(struct tasklet_struct *t)
+>>   		spin_lock(&pch->thread->dmac->lock);
+>>   		_stop(pch->thread);
+>>   		spin_unlock(&pch->thread->dmac->lock);
+>> -		power_down = true;
+>> +		power_down = pch->active;
+>>   		pch->active = false;
+>>   	} else {
+>>   		/* Make sure the PL330 Channel thread is active */
+>> -- 
+>> 2.7.4
 
-Best regards,
-Christian Schoenebeck
-
+-- 
+Best Regards!
+张学广/Sugar
+瑞芯微电子股份有限公司
+Rockchip Electronics Co., Ltd.
 

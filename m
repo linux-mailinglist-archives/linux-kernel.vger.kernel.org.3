@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C96550487C
+	by mail.lfdr.de (Postfix) with ESMTP id B3B0E50487D
 	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 18:55:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234515AbiDQQ5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 12:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
+        id S233169AbiDQQ5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 12:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234498AbiDQQ44 (ORCPT
+        with ESMTP id S234519AbiDQQ5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 12:56:56 -0400
-Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09ED2369D6;
-        Sun, 17 Apr 2022 09:54:21 -0700 (PDT)
-Received: by mail-il1-x12b.google.com with SMTP id k12so455020ilv.3;
-        Sun, 17 Apr 2022 09:54:20 -0700 (PDT)
+        Sun, 17 Apr 2022 12:57:09 -0400
+Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143CF27146;
+        Sun, 17 Apr 2022 09:54:33 -0700 (PDT)
+Received: by mail-io1-xd31.google.com with SMTP id y85so2788086iof.3;
+        Sun, 17 Apr 2022 09:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=52T4ey2PAbrZ4woSDAdfzc4UGJubZTXGCe7mp+PSSTY=;
-        b=dsVqKrGYg7rYsBJvl0PxSGFLitm+Wgs65VY0cWMxGp1+oCiyljTNjOqHFmnKovHZZu
-         8SqUB0JoIMn6539HglLoQWw1KDUY/oIWL5AF+4XT9ptiYbJ9LaPohHwNfBQJoDEwYEff
-         RfgPlBEf7he92/yDn+CBKkQcTHTBpY3YbjRnCYKRKMI9BOnrzZOCRqYbgdp2QdSqrEJz
-         czorHrphAxArbQDpfMCW9C9+YDoAffCmX4GUgxanpzYh6CVK2sNtVUNPb5fz6y9HQx6o
-         ScZIr9LX6y+WvG3dCDV0RPgYamutLiRM9wigPhgxNLWWHe/ZESxb90JD2pbjUhu2og1z
-         7WIw==
+        bh=F0+uIW7FbNHXgejqXfaEwe+NSEamiwjwIvCj5cOI+QI=;
+        b=DRI/2Qyei+WVTwSLZ3vEvl6cnKMWwO54YzAbUubaClLBH6VbbDShMmkjKOlYmcXCC6
+         ORxG1wU/Fi9MXw0aJXyQarrMFpRaYM+ZOrMN6asGvU2A7XCH5MRutYUKJIbzlW+mTxR7
+         bHA/0xULU3dRsfOw/52etSNkTS0aTRv3r939wbjPOBdaB42Bl/Do4WkimX7LvVXRtx0S
+         qK/P0e8f7tpdj9o/WrlNXa5i/JPDrhSLterxF7VoNoWnVKTDawVUNA+Pm5mXgSpq5WE9
+         KDOzpOubhQXeMZ4ywkh57qPb+xt807RbCDHafY6GIh92lq2j/9pzTruM34xYagkfgi0h
+         Y0sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=52T4ey2PAbrZ4woSDAdfzc4UGJubZTXGCe7mp+PSSTY=;
-        b=LK5FZKmn4hKfkqAON9UuCR2Prrdi11fq8f0r4vt33OZBwIp9N3RgfRp04KtlKnLIah
-         JnRuIfRiHtK6rQsxHzJ6mVhstsYoMGzUekXtNJOcvNkdvhFF18hdZKJmaVq58FbzSxLy
-         zqHmw/rkp8DDCYyRy4FIU7mrit15k//hk303xBpZM4zDAJfb/Hz8fwQe0mLOrNyHtcR0
-         gV5XMa3Pb/ySfTmGffVmnvXqAjWW1kT5dzPGmaH5GApJoGd433Cksdn0CWa8Z48a9U61
-         heHnrxbR1htQoEtEbjHVM26wIJc8CCgpwPlrAPD8zF060raTTZQguFM9soMWH/6ihPVB
-         ciJg==
-X-Gm-Message-State: AOAM5317Pr3PWSdxU0N/isiNQqtyekUvf/7VQzcZ8zm3oT6MCv96sbpZ
-        76Jn/aEU3QDp8/2IkF3yM2E=
-X-Google-Smtp-Source: ABdhPJyHETgZLwVB/532u/+Od1IHuL7PgKnaZ4fBFtKdxboN2h7V5+dmOoChDkiJ8dVzyCAgu0ZzRQ==
-X-Received: by 2002:a92:c54e:0:b0:2c9:aa07:71b2 with SMTP id a14-20020a92c54e000000b002c9aa0771b2mr3079086ilj.257.1650214460469;
-        Sun, 17 Apr 2022 09:54:20 -0700 (PDT)
+        bh=F0+uIW7FbNHXgejqXfaEwe+NSEamiwjwIvCj5cOI+QI=;
+        b=huHt+87U95Wnvv2T+K0tfeC25jDNzYRTrYgJX24rQqkYszalEa0q4LX8LpCtAeT5ox
+         tnuRDiZEbHAn9PxGJSbUDpb/bDzNdNFDP/dQMdh8fo8BtRYRuoohKZ4btibER9/AE6RN
+         qyqQb0egJO3CkpopcgY29nFFIbxWIQuqr+NxIGRLHCz1kBv9bh22fbilsjg1BjIaBqeG
+         zQBPZUAQi31fQz5YrwJq21W1HiVAHbbz/FjPxOKU5juTvNzAVS/mj8em7m9TC/EC/HJG
+         7g3ztakfsqXWKmN2c+uUUyY0AiR5T6/i1K3uGMNvRbDox4rgCJCq8XTSJOLKUnpdpQr6
+         jn7A==
+X-Gm-Message-State: AOAM532KWSRG8SMkR7wRskpKzqe47Qud+ScXQI+aiRDBWbOdtFjMp6kS
+        hGe4Y0Q+Cx9H9Lpq7GSSMWF/ivR7c7cE5g==
+X-Google-Smtp-Source: ABdhPJwZe1EqihYk67eZkXbIsb65BX3uCy7lLc1xnydlVvcfBAAsmB5eox1UKzdcdch9GHrc3w9rqw==
+X-Received: by 2002:a05:6602:150f:b0:64c:6878:1ec8 with SMTP id g15-20020a056602150f00b0064c68781ec8mr2985277iow.143.1650214472543;
+        Sun, 17 Apr 2022 09:54:32 -0700 (PDT)
 Received: from localhost (ec2-13-59-0-164.us-east-2.compute.amazonaws.com. [13.59.0.164])
-        by smtp.gmail.com with UTF8SMTPSA id r9-20020a6b6009000000b006412abddbbbsm6554619iog.24.2022.04.17.09.54.16
+        by smtp.gmail.com with UTF8SMTPSA id i81-20020a6bb854000000b00649c1b67a6csm6732443iof.28.2022.04.17.09.54.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 09:54:20 -0700 (PDT)
+        Sun, 17 Apr 2022 09:54:32 -0700 (PDT)
 From:   Schspa Shi <schspa@gmail.com>
 To:     andy.shevchenko@gmail.com
 Cc:     brgl@bgdev.pl, f.fainelli@gmail.com, fancer.lancer@gmail.com,
         hoan@os.amperecomputing.com, linus.walleij@linaro.org,
         linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
         linux-kernel@vger.kernel.org, opendmb@gmail.com, schspa@gmail.com
-Subject: [PATCH v2 14/15] gpio: brcmstb: use raw lock for bgpio_lock
-Date:   Mon, 18 Apr 2022 00:52:07 +0800
-Message-Id: <20220417165208.39754-14-schspa@gmail.com>
+Subject: [PATCH v2 15/15] gpio: amdpt: use raw lock for bgpio_lock
+Date:   Mon, 18 Apr 2022 00:52:08 +0800
+Message-Id: <20220417165208.39754-15-schspa@gmail.com>
 X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 In-Reply-To: <20220417165208.39754-1-schspa@gmail.com>
 References: <CAHp75Veo30c0BWb4Fykgvd-czSnEXsyA8wyMTeKQdS49=e5-nw@mail.gmail.com>
@@ -77,60 +77,52 @@ bgpio_lock is changed to raw lock, fellow the header change
 
 Signed-off-by: Schspa Shi <schspa@gmail.com>
 ---
- drivers/gpio/gpio-brcmstb.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/gpio/gpio-amdpt.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpio/gpio-brcmstb.c b/drivers/gpio/gpio-brcmstb.c
-index 74ef89248867..6b7439b44690 100644
---- a/drivers/gpio/gpio-brcmstb.c
-+++ b/drivers/gpio/gpio-brcmstb.c
-@@ -92,9 +92,9 @@ brcmstb_gpio_get_active_irqs(struct brcmstb_gpio_bank *bank)
- 	unsigned long status;
- 	unsigned long flags;
+diff --git a/drivers/gpio/gpio-amdpt.c b/drivers/gpio/gpio-amdpt.c
+index 8cfb353c3abb..07c6d090058d 100644
+--- a/drivers/gpio/gpio-amdpt.c
++++ b/drivers/gpio/gpio-amdpt.c
+@@ -36,19 +36,19 @@ static int pt_gpio_request(struct gpio_chip *gc, unsigned offset)
  
--	spin_lock_irqsave(&bank->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&bank->gc.bgpio_lock, flags);
- 	status = __brcmstb_gpio_get_active_irqs(bank);
--	spin_unlock_irqrestore(&bank->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&bank->gc.bgpio_lock, flags);
- 
- 	return status;
- }
-@@ -114,14 +114,14 @@ static void brcmstb_gpio_set_imask(struct brcmstb_gpio_bank *bank,
- 	u32 imask;
- 	unsigned long flags;
+ 	dev_dbg(gc->parent, "pt_gpio_request offset=%x\n", offset);
  
 -	spin_lock_irqsave(&gc->bgpio_lock, flags);
 +	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
- 	imask = gc->read_reg(priv->reg_base + GIO_MASK(bank->id));
- 	if (enable)
- 		imask |= mask;
- 	else
- 		imask &= ~mask;
- 	gc->write_reg(priv->reg_base + GIO_MASK(bank->id), imask);
--	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
- }
  
- static int brcmstb_gpio_to_irq(struct gpio_chip *gc, unsigned offset)
-@@ -204,7 +204,7 @@ static int brcmstb_gpio_irq_set_type(struct irq_data *d, unsigned int type)
+ 	using_pins = readl(pt_gpio->reg_base + PT_SYNC_REG);
+ 	if (using_pins & BIT(offset)) {
+ 		dev_warn(gc->parent, "PT GPIO pin %x reconfigured\n",
+ 			 offset);
+-		spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++		raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
  		return -EINVAL;
  	}
  
--	spin_lock_irqsave(&bank->gc.bgpio_lock, flags);
-+	raw_spin_lock_irqsave(&bank->gc.bgpio_lock, flags);
+ 	writel(using_pins | BIT(offset), pt_gpio->reg_base + PT_SYNC_REG);
  
- 	iedge_config = bank->gc.read_reg(priv->reg_base +
- 			GIO_EC(bank->id)) & ~mask;
-@@ -220,7 +220,7 @@ static int brcmstb_gpio_irq_set_type(struct irq_data *d, unsigned int type)
- 	bank->gc.write_reg(priv->reg_base + GIO_LEVEL(bank->id),
- 			ilevel | level);
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
  
--	spin_unlock_irqrestore(&bank->gc.bgpio_lock, flags);
-+	raw_spin_unlock_irqrestore(&bank->gc.bgpio_lock, flags);
  	return 0;
  }
+@@ -59,13 +59,13 @@ static void pt_gpio_free(struct gpio_chip *gc, unsigned offset)
+ 	unsigned long flags;
+ 	u32 using_pins;
  
+-	spin_lock_irqsave(&gc->bgpio_lock, flags);
++	raw_spin_lock_irqsave(&gc->bgpio_lock, flags);
+ 
+ 	using_pins = readl(pt_gpio->reg_base + PT_SYNC_REG);
+ 	using_pins &= ~BIT(offset);
+ 	writel(using_pins, pt_gpio->reg_base + PT_SYNC_REG);
+ 
+-	spin_unlock_irqrestore(&gc->bgpio_lock, flags);
++	raw_spin_unlock_irqrestore(&gc->bgpio_lock, flags);
+ 
+ 	dev_dbg(gc->parent, "pt_gpio_free offset=%x\n", offset);
+ }
 -- 
 2.24.3 (Apple Git-128)
 

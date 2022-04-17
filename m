@@ -2,97 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E36875046BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 07:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A5C5046C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 07:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbiDQFRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 01:17:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
+        id S233454AbiDQFxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 01:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233425AbiDQFRj (ORCPT
+        with ESMTP id S233425AbiDQFxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 01:17:39 -0400
+        Sun, 17 Apr 2022 01:53:14 -0400
 Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3684EE0D0;
-        Sat, 16 Apr 2022 22:15:05 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id r66so13474953pgr.3;
-        Sat, 16 Apr 2022 22:15:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE843C4AE;
+        Sat, 16 Apr 2022 22:50:39 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id k29so13503421pgm.12;
+        Sat, 16 Apr 2022 22:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=bj6euzA7DWSefgUbpzS1LfvhC/KobqXjsuL9e8GbpVs=;
-        b=byKFwQgnQiFHv/Stsp9HRyqovOxd4jd0VbbwXYhnzTqV5D6LBZdmxJy+aqYNuJUwNH
-         e8xstuw5vE53dh94yS4o9yRT/C57FXVs5l1iGsY4F+x9k4I5IULf0CQ4+df67hAw5yUd
-         UAzsU4zKgSuc02i5G+/O7ljgjQyzemEW59vXNq9a0FyGYqS03x+cFdLKLsXSRGK4XDL6
-         FqAcUQr9CUTL43EsokSSA3Q2Xfldo14Vya8vhql9L/jXt+66VXwZW4pd56waxUeCac3U
-         moWFb8VAP3gBmO+puiu3/PCmsrJvq0TiQTcBIgkOl5b7J45frrtnWzCpXrmCmj6LvMeg
-         cppA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ANBS//8WVUkFdZYNute605O0D9+yj3/Rsd4Oj818tJU=;
+        b=Ysyrw934fpEnn74orPBZkTjJ2in0m6jwsT8YQ+IM4DB1g0I6UKcUSqgGfjwtMyOo8C
+         3wjwgVQbOE7Y9BDY4CkpMRpY1EyUPwjqP70OsP3hXxjuyAfYlNp+lM78wI1tla35giui
+         z+QkloIkraBycKldvAszRE4YgU/kfWs0vHVaVevLI/PAETnujTg+p/vHLsi3ienzziNS
+         nMZH8BUTpEcEl3S7W37jT4HfUVuvo4TsdeU7ZpaAieP4kxtV80rRJ9+Ld+J6DE8Hf6p8
+         O+PT4QXBGyHb+LdQusbODkP8Ycn6bg/ACKO5/g59aiivMttwsZDafrq4vIw+Ml1zN4U3
+         8XXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=bj6euzA7DWSefgUbpzS1LfvhC/KobqXjsuL9e8GbpVs=;
-        b=CXfrIDvIXa4XBc84ncfcQTJgKZJWeG+/sehRM9rM++vmSK9XSnJxdXfbL4TT7Gejhq
-         1legGLBnPeNkPnsNRVDCVqUgdVB+TeZm/gCJT2mhq6oYUQd2JqNNTA1LfKcfUifWSWk9
-         EFPKt9j0G9OKttzNHYf20c687QUkLWVCgk8hyRLa8okTpwrrYOtNdUc12jh3EBM7O8hd
-         HO6p8pWPihseTONJ8ryyK1to6k2oq0ZVacKEh33oxnrVis6aAn6bdtxnK16k85kLV5f4
-         JOhQ8UOv2xmgEdfbJFE5++0S7InJ4tlhmqbHemkzn//7MFQlw1L7J0wKxAZDF/3mnI6c
-         ylRQ==
-X-Gm-Message-State: AOAM5321w0KcCKq09MO+lE4f/kVDrnAW9HI8F4JC+/ItWZ0TgJUB6+TF
-        27t2CR/eZsqieKgImsjvkpk=
-X-Google-Smtp-Source: ABdhPJxbYDPCVeRb6S1Zxw8PcQ1E/8iBjW6mF5pmQWDZ/KgNK1nlAGTtRLh+3Z4VSVbFn3FQ9O/YuA==
-X-Received: by 2002:a63:f743:0:b0:3a6:6786:30b1 with SMTP id f3-20020a63f743000000b003a6678630b1mr3813576pgk.243.1650172504522;
-        Sat, 16 Apr 2022 22:15:04 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-9.three.co.id. [180.214.233.9])
-        by smtp.gmail.com with ESMTPSA id p8-20020aa78608000000b005082c3cbfd2sm7477399pfn.218.2022.04.16.22.15.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 16 Apr 2022 22:15:03 -0700 (PDT)
-Message-ID: <8a0524b2-dc76-ff96-4304-b1f8ae574e9b@gmail.com>
-Date:   Sun, 17 Apr 2022 12:14:59 +0700
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ANBS//8WVUkFdZYNute605O0D9+yj3/Rsd4Oj818tJU=;
+        b=AYbveZpdC+oiIOCoMvPJQ/czf3k0WmFPd1+mpfERpuDBjM0yIor+zllF3AvMvBaCKK
+         zYAANwArz0n9jdVnd7oGowLTR72PWffPZnYq2L292jjN2SPv3fN852Dlc+GuJ9vG0R3E
+         KmRG3Exq+JHeQusPyd4mYjPSwv+x2wnFA8rllUrJioLZc/7yOgccGyDhRWXcVVl32H1A
+         oeuk6TlkIdiq3FIG7WLaiw+Dx6EddYWh5CfQVDui3NtebIV41Z/jU/FJ6xZYBtYHZga2
+         ugQL+BaaRIqvnX1j/eFcZMbaXkjcV1HohbPrD7zii9i4LgeGPqA+WOk0aBt/90TnvaWG
+         VMpQ==
+X-Gm-Message-State: AOAM532tvAcPGsLvqtvEkqZhpoiizuv5ftoH2uUN+iGdrK95EFY1/yK0
+        dFmCT+epUcf98d52wS07AR4=
+X-Google-Smtp-Source: ABdhPJy/HQgzkjVGMVXmDl9i86lUl7iEjxJtfywNUTFL96YCm2o7Xftcs4DPRzmkBb3WW5K78zeL7Q==
+X-Received: by 2002:a05:6a00:1701:b0:505:c49b:d2ed with SMTP id h1-20020a056a00170100b00505c49bd2edmr6330373pfc.56.1650174639180;
+        Sat, 16 Apr 2022 22:50:39 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id g14-20020a63200e000000b0039d9816238fsm8877784pgg.81.2022.04.16.22.50.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Apr 2022 22:50:38 -0700 (PDT)
+Date:   Sun, 17 Apr 2022 11:20:32 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA
+ binding to json format
+Message-ID: <20220417055032.GA41948@9a2d8922b8f1>
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+ <14ecb746-56f0-2d3b-2f93-1af9407de4b7@linaro.org>
+ <20220411105810.GB33220@9a2d8922b8f1>
+ <50defa36-3d91-80ea-e303-abaade1c1f7e@linaro.org>
+ <20220412061953.GA95928@9a2d8922b8f1>
+ <8ff07720-3c52-99e6-8046-501f4ae28518@linaro.org>
+ <20220412180159.GA29479@9a2d8922b8f1>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] btrfs: zstd: add missing function name in
- zstd_reclaim_timer_fn() comment
-Content-Language: en-US
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     linux-doc@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Nick Terrell <terrelln@fb.com>, Schspa Shi <schspa@gmail.com>,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220416081534.28729-1-bagasdotme@gmail.com>
- <YluGmERvtQY9ju7Y@casper.infradead.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <YluGmERvtQY9ju7Y@casper.infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220412180159.GA29479@9a2d8922b8f1>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/22 10:16, Matthew Wilcox wrote:
-> On Sat, Apr 16, 2022 at 03:15:34PM +0700, Bagas Sanjaya wrote:
->> kernel test robot reports kernel-doc warning:
->>
->>>> fs/btrfs/zstd.c:98: warning: This comment starts with '/**', but
->> isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
-> 
-> This is the wrong fix.  Static functions should not have kernel-doc
-> comments.  Just delete the second '*' at the head of the comment.
-> 
-> Also, btrfs developers should be testing with W=1.  That will catch
-> these problems before the code is integrated.
+> > You can though try to look at original (vendor) sources:
+> > https://git.codelinaro.org/clo/la/kernel/msm-4.19 (sdm845)
+> > https://git.codelinaro.org/clo/la/kernel/msm-3.18 (msm8996)
 
-Oops, thanks for reminding me.
+I gave a look at this and couldn't find much info related to these
+platforms. And waited for sometime to get reply from Srinivas and other
+co.
 
--- 
-An old man doll... just what I always wanted! - Clara
+I don't think it's viable to wait just for this particular thing and
+also doesn't make much sense either. I will send next version as per
+your current comments. Thanks!

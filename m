@@ -2,50 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF8015048E2
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C5C5048E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:25:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiDQS0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 14:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
+        id S234775AbiDQS1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 14:27:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiDQS02 (ORCPT
+        with ESMTP id S234767AbiDQS1J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 14:26:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEAFE03D
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 11:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description;
-        bh=0rCece5Zi0kVB8NQ4umr5QXBugEtNp6vklpk2kdKUYs=; b=bJL4Q7yMwJLAg7oTxX9taJEKI+
-        kBHBAyeaS5p3p3KcV8MiKc13XJDfucGvXsACJC9LWkeUNGQIAl0u8+8V9YP6Nkv+AcN9ClF8rJ3Sz
-        mKAGPA6u2Rwnv85RaEWGkBJMFmJ6nzk2n+IWvv6t0sxrGJCcL5ajbXBPJJ0gDCbZz6WKXaEvms47Z
-        /UuhlP2Z2V51aKaGziSklDL5x/ehFqw+a70C4bT+dDfA8bJpBTg4kBgLwFtuL5bVObF8U93HEkFnj
-        HKG4lOLyiQcapXCUfCp/qe7wu4NrE2gSjHILZ7RADNq7vVGdGLHtF2923qn3E3WDbTI6Ik6ax+Kh0
-        60Y4Qvrg==;
-Received: from [2601:1c0:6280:3f0::aa0b]
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ng9Yj-001W3O-Lj; Sun, 17 Apr 2022 18:23:41 +0000
-Message-ID: <e8c4d0ca-e770-662b-6f2b-7469232536fa@infradead.org>
-Date:   Sun, 17 Apr 2022 11:23:35 -0700
+        Sun, 17 Apr 2022 14:27:09 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD8F13D12
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 11:24:33 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id r14-20020a9d750e000000b00605446d683eso2309913otk.10
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 11:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6B8K9hOSItoReJE/oEpye49sP623Gy4KHdMI2dEK/o=;
+        b=XTIDgrLuHfJw+v4YqpMsiKjUGQgAsaGcY9sTeU5OMWIM8iuTHs8MaxmoqCl1dr57/5
+         Z4uoCvPCTGo7w80vBVVcG9RuGJ6NBb2fjulczKsQJrjBsk6U6UCci+7yhAaDzHmYEqJD
+         wup4qhQwIa2qekzdbYc0FgDr4Gu5qs16WL6hbihYgkddoVOOJthoUCpt0uL0eas7BCzn
+         pwMcWzilBFMI/tMpdYz6m8uHdiMl2kYTXEYuRIVtIKNERwPMQOL6zrtednXUbD9ETGEE
+         YFV5QoKZeiGSMdHWr9YmMXKuD1dvGT18wT+7JZsJEBrLa/BEbp5ryfdwH2KSJqACX0so
+         6E9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Z6B8K9hOSItoReJE/oEpye49sP623Gy4KHdMI2dEK/o=;
+        b=IUTJz1QpoNs3WmGAiC8U3uEAl9tgy2IvioNeU6oGSk5C/lhS/7klG0m6C4TpDk1dQh
+         hnQTkdkwGFlb4PqPTPPtLj/PxNQb7Bv2l0SuM5cjWe+yhekQqBhvItCDEwhRfXrlpTP3
+         qGw3RjcOVn2uZ8N6ndeEljNpfPLk63Moqly3rrOg4EyMH0e3rOC5kOeRMsE/LQ70jJPq
+         gHayTBEHEkMadujnbOvUMAkg2bTBOPgijNkXBY+fL0X1SCrB75RKo7OiyKtKCZ1pm6hF
+         /OEhSUAluZYXAnofPD2wfOLh9mOvR8TZLZs2mY/hTF2CHoUiFc+Z/OJds96xJKCC5Iu/
+         UaPw==
+X-Gm-Message-State: AOAM533dtAsRIFQncaphREBV/WQsRngl+OTAtAcGvHakPiLS0yJH/sHW
+        ihQ9v8Ax8x6yMvqZXCFd0FLOpOTYhVBRDQ==
+X-Google-Smtp-Source: ABdhPJy9acbYLr2W1JIQ8B141EOKx0BplVd5ADTQLstr61Lua/KAwX7BsKbQiHiwK95JKz9D3chPPg==
+X-Received: by 2002:a9d:6303:0:b0:5e8:eef2:1963 with SMTP id q3-20020a9d6303000000b005e8eef21963mr2717735otk.169.1650219872938;
+        Sun, 17 Apr 2022 11:24:32 -0700 (PDT)
+Received: from ?IPV6:2603:8090:2005:39b3::100e? (2603-8090-2005-39b3-0000-0000-0000-100e.res6.spectrum.com. [2603:8090:2005:39b3::100e])
+        by smtp.gmail.com with ESMTPSA id w11-20020a056830144b00b006054888b7a3sm1109687otp.1.2022.04.17.11.24.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Apr 2022 11:24:32 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <e30cf945-61d4-acb7-757f-0ffcd3035901@lwfinger.net>
+Date:   Sun, 17 Apr 2022 13:24:31 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit
- declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'?
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 0/8] staging: r8188eu: fix and clean up some firmware
+ code
 Content-Language: en-US
-To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-References: <202204171002.8cMn0vn6-lkp@intel.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <202204171002.8cMn0vn6-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <20220417175441.13830-1-straube.linux@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <20220417175441.13830-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,51 +79,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/16/22 19:19, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   a2c29ccd9477861b16ddc02c411a6c9665250558
-> commit: 8e70aaae32b72d3088d18a3447b67112b3f5979a ASoC: zl38060: Remove spurious gpiolib select
-> date:   10 weeks ago
-> config: s390-randconfig-r026-20220417 (https://download.01.org/0day-ci/archive/20220417/202204171002.8cMn0vn6-lkp@intel.com/config)
-> compiler: s390-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8e70aaae32b72d3088d18a3447b67112b3f5979a
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 8e70aaae32b72d3088d18a3447b67112b3f5979a
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 SHELL=/bin/bash sound/soc/codecs/
+On 4/17/22 12:54, Michael Straube wrote:
+> This series fixes wrong size of struct rt_firmware_hdr in the first
+> patch and does some cleanups in rtl8188e_firmware_download() in the
+> other patches.
 > 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
+> Tested on x86_64 with Inter-Tech DMG-02.
 > 
-> All errors (new ones prefixed by >>):
+> v4:
+> - Keep the in-line comments of struct rt_firmware_hdr.
 > 
->    sound/soc/codecs/tlv320adc3xxx.c: In function 'adc3xxx_i2c_probe':
->>> sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
->     1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
->          |                            ^~~~~~~~~~~~~~
->          |                            devm_gpio_free
->>> sound/soc/codecs/tlv320adc3xxx.c:1209:57: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
->     1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
->          |                                                         ^~~~~~~~~~~~~
->          |                                                         GPIOF_INIT_LOW
->    sound/soc/codecs/tlv320adc3xxx.c:1209:57: note: each undeclared identifier is reported only once for each function it appears in
->>> sound/soc/codecs/tlv320adc3xxx.c:1257:9: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
->     1257 |         gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
->          |         ^~~~~~~~~~~~~~~~~~~~~~~~
->          |         gpio_set_value_cansleep
->    cc1: some warnings being treated as errors
+> v3:
+> - Splitted the first patch into two separate patches.
+> - Added back logging the firmware version only once.
+> - Included the compile time check for size of rt_firmware_hdr from
+>    patch 8/8 of v2 in the patch that replaces the hardcoded size.
 > 
+> v2:
+> - Added a patch to check size of struct rt_firmware_hdr at compile time.
+> 
+> Michael Straube (8):
+>    staging: r8188eu: fix struct rt_firmware_hdr
+>    staging: r8188eu: convert u32 fields of rt_firmware_hdr to __le32
+>    staging: r8188eu: clean up comments in struct rt_firmware_hdr
+>    staging: r8188eu: rename fields of struct rt_firmware_hdr
+>    staging: r8188eu: use sizeof instead of hardcoded firmware header size
+>    staging: r8188eu: remove variables from rtl8188e_firmware_download()
+>    staging: r8188eu: use pr_info_once() to log the firmware version
+>    staging: r8188eu: check firmware header existence before access
+> 
+>   drivers/staging/r8188eu/core/rtw_fw.c | 84 +++++++++++----------------
+>   1 file changed, 34 insertions(+), 50 deletions(-)
 
-Patch is here:
-  https://lore.kernel.org/lkml/20220409052120.3780-1-rdunlap@infradead.org/
+It has been a bit of effort, but I have no comments on this version.
 
+Acked-by: Larry Finger <Larry.Finger@lwfinger.net>
 
--- 
-~Randy
+Big improvement,
+
+Larry
+

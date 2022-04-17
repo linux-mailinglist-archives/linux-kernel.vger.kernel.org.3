@@ -2,81 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BED9504993
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF680504996
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:09:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235096AbiDQVIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 17:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
+        id S235126AbiDQVKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 17:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235113AbiDQVIM (ORCPT
+        with ESMTP id S233192AbiDQVKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 17:08:12 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A81E0D9
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:05:12 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id a8so14739200ljq.5
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:05:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=3+nbTY+84mWqEaxVh9si/y236NGTkkPaVHQEn9FFNrQ=;
-        b=SqsQaN3fYS853QyFaqhKfWVcI1U/A4Juzvi+EN0SFJi1ZQ2FiQxlnlVvOkN8wT92pg
-         gYeEGqE2PFZCSAUQjDQ8XlgcTPj/J2mPfqkKTxv9+bvDqHwu4L+OrW2E048B79hejG7J
-         YGS5pVsV5N+uPco8nKvkzcIXjk8rBoBeWtXYgbHek3YWtvLnCgvIMLLeFD1jBuQmmrJf
-         ZQgFJnXSrmh9mMXyBlk6yc2g6dV6Eq6VoeNeRcFrMFJVpIdAoMg92fyYoEGZ/Al0blfo
-         epqj6ufkNBRCTbF7UfmPszNHZrkig+Ad6MAtecdlZJnWfmFOMAluLmNo7zX3yOPkSVAx
-         9dBg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=3+nbTY+84mWqEaxVh9si/y236NGTkkPaVHQEn9FFNrQ=;
-        b=hWjtxUTKQS6XQsvUZBo3jOQKI1Bid09upOqNZq7zUmey41xgs15UOLfYBptrK5l26e
-         3Q5Ka7FhPEEPT46gyUEBQ+86vgbwATAH/I/2upcLmPN4nLTfGReoOKPMnReEx/baMMGx
-         JoXgiWg40mbiuC1funneOqaou3rPR5Vf5kVBPyqkdjs7TBEXwyYueBpRvZfsqM/MAQNZ
-         T0uFJneDKqrp74gDauze8HoP/l/Nff7SQ6wZWwvmYSC7zv80N+keb16BSwpcQxClD//z
-         Is32vCi/aoSi1td9SKz666kLIp5+C18iia9wfdiwJhf9YdPBANqfpuYO5Ndcha/dg5Ty
-         MPMg==
-X-Gm-Message-State: AOAM533XlKag6DQHQ0YPeg43gy7htbicdvcEMyCouTopr/A8YO6sy36/
-        El2ZhEON/hrl5EGnLlwjU+Q=
-X-Google-Smtp-Source: ABdhPJwA45/8xaDYUsCh46Vd5PLnnCYBZYvMyLLmDl7WHF9eI0ftD1WkdGwRVKQNKCGBZhzlQf9Pyg==
-X-Received: by 2002:a2e:b8c7:0:b0:24d:a697:cbf3 with SMTP id s7-20020a2eb8c7000000b0024da697cbf3mr5387864ljp.448.1650229510204;
-        Sun, 17 Apr 2022 14:05:10 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id p9-20020a2e93c9000000b0024b3c2ecc18sm979821ljh.115.2022.04.17.14.05.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 14:05:09 -0700 (PDT)
-Subject: Re: [RFC PATCH 6/6] arm/xen: Assign xen-virtio DMA ops for virtio
- devices in Xen guests
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
- <1649963973-22879-7-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2204151305050.915916@ubuntu-linux-20-04-desktop>
- <YlpdBHKT1bYzZe2e@infradead.org>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <f879622e-5656-deb1-1930-f0cd180a4ab1@gmail.com>
-Date:   Mon, 18 Apr 2022 00:05:08 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Sun, 17 Apr 2022 17:10:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6E1140BD
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 14:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description;
+        bh=yWikpt6ZaDbOTYkBAxtE+6/i5DElWQGx+qhwMCDAFvE=; b=k7bsbBaeJz7I2FVS7ok9ve6DGW
+        hAK4xQQ02ENXSkW4qX44qqvr1mNfCZIWrI6v5UYMhwY19ffyc94p3cLRVCKx1ZuplauitDksLpCAA
+        KqXfG5z2G8Puchq0GAttV5L9bGKCkBs6EOO7aE+O5bJWmnE7AS3cIGw71s/3zdCPu+SmO1daN3a+c
+        gW29X3sku3I9AqZReTitSP7+Hfl3IYfyzZbrygBPM7OQCQTDDwA81NT3afNI3V2hZfd/C/AkD/T71
+        boYwkIaX22Qv1tmtLkvNNPtu4JOFjYX1xL+rsZchAURHhrQ2bQGhkHG7OpjB0eVnWJUY5KAtHkAjc
+        iQrRfEVA==;
+Received: from [2601:1c0:6280:3f0::aa0b]
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1ngC6G-001afi-3A; Sun, 17 Apr 2022 21:06:28 +0000
+Message-ID: <05df5b18-3cae-9f43-4209-81264c0225af@infradead.org>
+Date:   Sun, 17 Apr 2022 14:06:24 -0700
 MIME-Version: 1.0
-In-Reply-To: <YlpdBHKT1bYzZe2e@infradead.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit
+ declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'?
 Content-Language: en-US
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     kernel test robot <lkp@intel.com>, Mark Brown <broonie@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Ricard Wanderlof <ricardw@axis.com>
+References: <202204180359.PbjuGlvd-lkp@intel.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <202204180359.PbjuGlvd-lkp@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,67 +55,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 16.04.22 09:07, Christoph Hellwig wrote:
 
-Hello Christoph
+On 4/17/22 12:53, kernel test robot wrote:
+> Hi Mark,
+> 
+> FYI, the error/warning still remains.
+> 
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   a2c29ccd9477861b16ddc02c411a6c9665250558
+> commit: 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f ASoC: simple-amplifier: Remove spurious gpiolib select
+> date:   10 weeks ago
+> config: m68k-randconfig-c023-20220418 (https://download.01.org/0day-ci/archive/20220418/202204180359.PbjuGlvd-lkp@intel.com/config)
+> compiler: m68k-linux-gcc (GCC) 11.2.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout 44bd27c42a1c9a00f1fbcb58301a7f3e6f5cdd0f
+>         # save the config file to linux build tree
+>         mkdir build_dir
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=m68k SHELL=/bin/bash sound/soc/codecs/
+> 
+> If you fix the issue, kindly add following tag as appropriate
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>    sound/soc/codecs/tlv320adc3xxx.c: In function 'adc3xxx_i2c_probe':
+>>> sound/soc/codecs/tlv320adc3xxx.c:1209:28: error: implicit declaration of function 'devm_gpiod_get'; did you mean 'devm_gpio_free'? [-Werror=implicit-function-declaration]
+>     1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+>          |                            ^~~~~~~~~~~~~~
+>          |                            devm_gpio_free
+>>> sound/soc/codecs/tlv320adc3xxx.c:1209:57: error: 'GPIOD_OUT_LOW' undeclared (first use in this function); did you mean 'GPIOF_INIT_LOW'?
+>     1209 |         adc3xxx->rst_pin = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
+>          |                                                         ^~~~~~~~~~~~~
+>          |                                                         GPIOF_INIT_LOW
+>    sound/soc/codecs/tlv320adc3xxx.c:1209:57: note: each undeclared identifier is reported only once for each function it appears in
+>>> sound/soc/codecs/tlv320adc3xxx.c:1257:9: error: implicit declaration of function 'gpiod_set_value_cansleep'; did you mean 'gpio_set_value_cansleep'? [-Werror=implicit-function-declaration]
+>     1257 |         gpiod_set_value_cansleep(adc3xxx->rst_pin, 1);
+>          |         ^~~~~~~~~~~~~~~~~~~~~~~~
+>          |         gpio_set_value_cansleep
+>    cc1: some warnings being treated as errors
+> 
 
-> On Fri, Apr 15, 2022 at 03:02:45PM -0700, Stefano Stabellini wrote:
->> This makes sense overall. Considering that the swiotlb-xen case and the
->> virtio case are mutually exclusive, I would write it like this:
-> Curious question:  Why can't the same grant scheme also be used for
-> non-virtio devices?  I really hate having virtio hooks in the arch
-> dma code.  Why can't Xen just say in DT/ACPI that grants can be used
-> for a given device?
+Fix is here:
 
-
-In Xen system:
-- the grants are not used for "non-virtualized" devices at all (platform 
-devices for the passthrough).
-- the grants are widely used for "virtualized, but non-virtio" devices 
-(traditional Xen PV devices), but grants for these Xen PV devices
-are used in a different way and *not* at the DMA ops level like in 
-current approach
-
-Or I misunderstood your question?
-
-This patch series tries to make things work with "virtio" devices in Xen 
-system without introducing any modifications to code under drivers/virtio.
-We could avoid having virtio hooks in the arch DMA code, but we need to 
-trigger setting xen-virtio DMA ops for the virtio device from some other 
-place.
-For example, the following code would also work, but requires altering 
-virtio_mmio_probe():
-
-diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
-index 56128b9..8f48491 100644
---- a/drivers/virtio/virtio_mmio.c
-+++ b/drivers/virtio/virtio_mmio.c
-@@ -615,6 +615,9 @@ static int virtio_mmio_probe(struct platform_device 
-*pdev)
-                                               DMA_BIT_MASK(32 + 
-PAGE_SHIFT));
-         } else {
-                 rc = dma_set_mask_and_coherent(&pdev->dev, 
-DMA_BIT_MASK(64));
-+
-+               if (arch_has_restricted_virtio_memory_access())
-+ xen_virtio_setup_dma_ops(&pdev->dev);
-         }
-         if (rc)
-                 rc = dma_set_mask_and_coherent(&pdev->dev, 
-DMA_BIT_MASK(32));
-
-
-Another possible option could be to introduce local init function in 
-drivers/xen/xen-virtio.c to scan the device tree and set xen-virtio DMA 
-ops for all devices with the
-"xen,dev-domid" property.
-
-
-What do you think?
+https://lore.kernel.org/lkml/20220409052120.3780-1-rdunlap@infradead.org/
 
 -- 
-Regards,
-
-Oleksandr Tyshchenko
-
+~Randy

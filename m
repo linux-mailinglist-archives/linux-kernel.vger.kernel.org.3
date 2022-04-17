@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46C5504994
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A00504995
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 23:06:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235098AbiDQVHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 17:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S233771AbiDQVH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 17:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235030AbiDQVHg (ORCPT
+        with ESMTP id S235109AbiDQVHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 17:07:36 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6920421A9;
-        Sun, 17 Apr 2022 14:04:59 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id q19so15480013pgm.6;
-        Sun, 17 Apr 2022 14:04:59 -0700 (PDT)
+        Sun, 17 Apr 2022 17:07:47 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A857653;
+        Sun, 17 Apr 2022 14:05:03 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r66so15484990pgr.3;
+        Sun, 17 Apr 2022 14:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Q5jlF+guEA4R11q6WYIvaSFVMwN+QiHnqDtm7tCAsoM=;
-        b=CfDkfZ2VKuvb4epu2/7nn7W4mz86EHtxLnpmaNZ0nP8R7QcaDCMrnABz+xT4lEN2Dh
-         QQ6dwf0RQwCYsjhD25TGTJp29byThyskv0MSmZVsmoB9DkdBfDDp2BZU8ooE2PxuvX0T
-         XlP7qJxXWfIj1yLgtA/qckTjTWBuBzggPOc2h/JmHuH+dcKFEhXFHyYGw6Pi5cr6V7eD
-         4KEznjEjsxv+Z1ZIIb2ID9SbJurMsqLcjjaFCxMPta8sGd6a+N9DCyGBr88MhaIJptCn
-         Sin3cUvWdt//ENIlpOr86qy+1sxebK9sRc8AYDf9H1iRduX+h/Q/o6ya0Pn8guiEpzI1
-         Uexg==
+        bh=x9kWFTq3CIJUv8wX3+465yt0Y7IgXQrtQnbzACvQaUs=;
+        b=piQvr9H55AJ8vqV3cy0mQZGrxYbX/nKAAmY9n7ED0n4vNlxwANQWY7MUlYj5jt1pPY
+         9Q+z2feA+UIk+9xe1jq3azikObb2ZyAxPTbiaMfMGDe/Cu8iJwjlJEJRUMo9EUOC4ynH
+         4TLgsMWGgPVY8tH+9q7PbwYh5qCckkQFTkCYP5s9BFQD6KZ/L4WCUCHZpYzTs5lB3a8Q
+         /lR1OQLf4nDlEWf2hBHk6qLU8jFUNxcEkvYIDGnF+V0u22ZdWIVwwPM0rwJEw2ssSKhb
+         ZDeWNNna1ksqqEcs9P/CFanEijk74ucMF6Ql0qXOv/SM6RHNO+cD76tTNNAFVAFx+bRP
+         wpcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Q5jlF+guEA4R11q6WYIvaSFVMwN+QiHnqDtm7tCAsoM=;
-        b=YVbj2YAIsKs8kQYAcZEMjd7zBFXPnF8Hha/3keanxq0medhyOn0mPzXbbbqPmA1Ngd
-         IyboC6g6BxI0YODa7S8hd+AJwq3072/hiOQqoqYalQJN8YQIPlBxLNOiISxz9Ofaw5ME
-         FatdSYE0fPnWNHq3nZf/9YFL0DJB74DoLNkS3VU2cg9G1rZmmw9012aEoZMN3JNyDLvc
-         Mumd88Yq3xDjxJ4GCmzmmxCHfe6JxHbFX72QAukwbKPZnnbN3uzlCGW852vs4LeCCo3y
-         ZGfz/1pvyRfk+su0EtAKEtZd7VEtS89lQmf9y1KkUx+ZE8qU1hkHvfRieXJQ5ISXg59m
-         R0HQ==
-X-Gm-Message-State: AOAM5309fwEiaTe6gdtiyZrju740LK4RvRlA/OTntRh+BQSUtlOGoD1V
-        K4QhUMDVccGiCab32xx9V3o=
-X-Google-Smtp-Source: ABdhPJwPo3iVsNY1nZ6CU0wWMU3vlIupS0Y09BFFRPK8n+GdNLCiiwZ8ZnOZr6LgfFnwNhrYCjkRwQ==
-X-Received: by 2002:a05:6a00:c8f:b0:50a:77a3:e7b with SMTP id a15-20020a056a000c8f00b0050a77a30e7bmr1080986pfv.41.1650229498893;
-        Sun, 17 Apr 2022 14:04:58 -0700 (PDT)
+        bh=x9kWFTq3CIJUv8wX3+465yt0Y7IgXQrtQnbzACvQaUs=;
+        b=FpzDMTEoeaedtu07qD3LqJPuLNKyCUTOf06p3+Apoo05qE57dgpNQTwrnjI4HLxIkX
+         EYz6eB0YDTvIOXsqJ3c2foYosleka7kYmzWIeuq07XwAw7NBlE5ZBce/zA5jKQBwBMVh
+         TzQ7hzVCjbwf5kvvJJ6eQk3A4uzG6vf7iUk+LCJkGiRxo8LCuSz0PSWhQ6HR5Ns6/r0t
+         T1JxlyycI7LWNuCwiz20V3StkakSoiL+8lwnBiWeBpcTWdeZ2PnVC2dfms5yH9ZB6Tda
+         PPfuRMx77CSHqIomB0a3xOlyjqwg7Q/zDf2/ENAsxu60uhDHUcLy5lTkeuYz1MS/YHzh
+         3q2g==
+X-Gm-Message-State: AOAM532OFkaEiWDTj4qzBWpZ8g89Mi1+WnYsbhz5qTYGLoIMNLuZofH8
+        VRkz99+j8sD06J/1Mx2e9TM09S/IDII=
+X-Google-Smtp-Source: ABdhPJz4dzxf/w7ytI/n40YuIx3v5mKi7RAAzSU1wMhOaYOGSw2vzVpK7kHpp0OpBdUzQx487gKSBw==
+X-Received: by 2002:a63:4613:0:b0:39c:ef73:1080 with SMTP id t19-20020a634613000000b0039cef731080mr7468320pga.446.1650229502495;
+        Sun, 17 Apr 2022 14:05:02 -0700 (PDT)
 Received: from localhost.localdomain ([122.161.51.18])
-        by smtp.gmail.com with ESMTPSA id 137-20020a63078f000000b0039d9c13cd39sm10547711pgh.67.2022.04.17.14.04.56
+        by smtp.gmail.com with ESMTPSA id 137-20020a63078f000000b0039d9c13cd39sm10547711pgh.67.2022.04.17.14.04.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 14:04:58 -0700 (PDT)
+        Sun, 17 Apr 2022 14:05:02 -0700 (PDT)
 From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v3 5/6] ARM: dts: qcom: ipq8064: User generic node name for DMA
-Date:   Mon, 18 Apr 2022 02:34:35 +0530
-Message-Id: <20220417210436.6203-6-singh.kuldeep87k@gmail.com>
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org
+Subject: [PATCH v3 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding to json format
+Date:   Mon, 18 Apr 2022 02:34:36 +0530
+Message-Id: <20220417210436.6203-7-singh.kuldeep87k@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220417210436.6203-1-singh.kuldeep87k@gmail.com>
 References: <20220417210436.6203-1-singh.kuldeep87k@gmail.com>
@@ -74,41 +74,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Qcom BAM DT spec expects generic DMA controller node name as
-"dma-controller" to enable validations.
+Convert Qualcomm BAM DMA controller binding to DT schema format using
+json schema.
 
 Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
-v3: Add Krzysztof R-b tag
+v3:
+- Address Krzysztof Comments
+- qcom,ee as required property
+- Use boolean type instead of flag
+- Add min/max to qcom,ee
+- skip clocks, as it's users are not fixed
 ---
-v2: No change
+v2:
+- Use dma-cells
+- Set additionalProperties to false
 ---
- arch/arm/boot/dts/qcom-ipq8064.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 97 +++++++++++++++++++
+ .../devicetree/bindings/dma/qcom_bam_dma.txt  | 52 ----------
+ 2 files changed, 97 insertions(+), 52 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
 
-diff --git a/arch/arm/boot/dts/qcom-ipq8064.dtsi b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-index 8cb04aa8ed2f..7e68d4b1527f 100644
---- a/arch/arm/boot/dts/qcom-ipq8064.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq8064.dtsi
-@@ -1155,7 +1155,7 @@ vsdcc_fixed: vsdcc-regulator {
- 			regulator-always-on;
- 		};
- 
--		sdcc1bam: dma@12402000 {
-+		sdcc1bam: dma-controller@12402000 {
- 			compatible = "qcom,bam-v1.3.0";
- 			reg = <0x12402000 0x8000>;
- 			interrupts = <GIC_SPI 98 IRQ_TYPE_LEVEL_HIGH>;
-@@ -1165,7 +1165,7 @@ sdcc1bam: dma@12402000 {
- 			qcom,ee = <0>;
- 		};
- 
--		sdcc3bam: dma@12182000 {
-+		sdcc3bam: dma-controller@12182000 {
- 			compatible = "qcom,bam-v1.3.0";
- 			reg = <0x12182000 0x8000>;
- 			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+new file mode 100644
+index 000000000000..02393ec2eedd
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+@@ -0,0 +1,97 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dma/qcom,bam-dma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Qualcomm Technologies Inc BAM DMA controller
++
++maintainers:
++  - Andy Gross <agross@kernel.org>
++  - Bjorn Andersson <bjorn.andersson@linaro.org>
++
++allOf:
++  - $ref: "dma-controller.yaml#"
++
++properties:
++  compatible:
++    enum:
++      - qcom,bam-v1.3.0
++      - qcom,bam-v1.4.0
++      - qcom,bam-v1.7.0
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: bam_clk
++
++  "#dma-cells":
++    const: 1
++
++  interrupts:
++    maxItems: 1
++
++  iommus:
++    minItems: 1
++    maxItems: 4
++
++  num-channels:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Indicates supported number of DMA channels in a remotely controlled bam.
++
++  qcom,controlled-remotely:
++    type: boolean
++    description:
++      Indicates that the bam is controlled by remote proccessor i.e. execution
++      environment.
++
++  qcom,ee:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 0
++    maximum: 7
++    description:
++      Indicates the active Execution Environment identifier (0-7) used in the
++      secure world.
++
++  qcom,num-ees:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Indicates supported number of Execution Environments in a remotely
++      controlled bam.
++
++  qcom,powered-remotely:
++    type: boolean
++    description:
++      Indicates that the bam is powered up by a remote processor but must be
++      initialized by the local processor.
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - "#dma-cells"
++  - interrupts
++  - qcom,ee
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/clock/qcom,gcc-msm8974.h>
++
++    dma-controller@f9944000 {
++        compatible = "qcom,bam-v1.4.0";
++        reg = <0xf9944000 0x15000>;
++        interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
++        clocks = <&gcc GCC_BLSP2_AHB_CLK>;
++        clock-names = "bam_clk";
++        #dma-cells = <1>;
++        qcom,ee = <0>;
++    };
++...
+diff --git a/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt b/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
+deleted file mode 100644
+index 6e9a5497b3f2..000000000000
+--- a/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
++++ /dev/null
+@@ -1,52 +0,0 @@
+-QCOM BAM DMA controller
+-
+-Required properties:
+-- compatible: must be one of the following:
+- * "qcom,bam-v1.4.0" for MSM8974, APQ8074 and APQ8084
+- * "qcom,bam-v1.3.0" for APQ8064, IPQ8064 and MSM8960
+- * "qcom,bam-v1.7.0" for MSM8916
+-- reg: Address range for DMA registers
+-- interrupts: Should contain the one interrupt shared by all channels
+-- #dma-cells: must be <1>, the cell in the dmas property of the client device
+-  represents the channel number
+-- clocks: required clock
+-- clock-names: must contain "bam_clk" entry
+-- qcom,ee : indicates the active Execution Environment identifier (0-7) used in
+-  the secure world.
+-- qcom,controlled-remotely : optional, indicates that the bam is controlled by
+-  remote proccessor i.e. execution environment.
+-- qcom,powered-remotely : optional, indicates that the bam is powered up by
+-  a remote processor but must be initialized by the local processor.
+-- num-channels : optional, indicates supported number of DMA channels in a
+-  remotely controlled bam.
+-- qcom,num-ees : optional, indicates supported number of Execution Environments
+-  in a remotely controlled bam.
+-
+-Example:
+-
+-	uart-bam: dma@f9984000 = {
+-		compatible = "qcom,bam-v1.4.0";
+-		reg = <0xf9984000 0x15000>;
+-		interrupts = <0 94 0>;
+-		clocks = <&gcc GCC_BAM_DMA_AHB_CLK>;
+-		clock-names = "bam_clk";
+-		#dma-cells = <1>;
+-		qcom,ee = <0>;
+-	};
+-
+-DMA clients must use the format described in the dma.txt file, using a two cell
+-specifier for each channel.
+-
+-Example:
+-	serial@f991e000 {
+-		compatible = "qcom,msm-uart";
+-		reg = <0xf991e000 0x1000>
+-			<0xf9944000 0x19000>;
+-		interrupts = <0 108 0>;
+-		clocks = <&gcc GCC_BLSP1_UART2_APPS_CLK>,
+-			<&gcc GCC_BLSP1_AHB_CLK>;
+-		clock-names = "core", "iface";
+-
+-		dmas = <&uart-bam 0>, <&uart-bam 1>;
+-		dma-names = "rx", "tx";
+-	};
 -- 
 2.25.1
 

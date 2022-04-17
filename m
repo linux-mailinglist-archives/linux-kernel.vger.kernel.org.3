@@ -2,109 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08E42504703
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 09:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82BCD504708
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 10:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233601AbiDQHyN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 03:54:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52714 "EHLO
+        id S233564AbiDQIL3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 04:11:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233570AbiDQHyF (ORCPT
+        with ESMTP id S230085AbiDQIL0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 03:54:05 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC24140D1;
-        Sun, 17 Apr 2022 00:51:31 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso4685360pjj.3;
-        Sun, 17 Apr 2022 00:51:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=MoKiGu5hYYcfsxqQHX2Q84Bhs0fRLBU9UCfGUfeAlqU=;
-        b=HF8LwImncW0D1JtKhI+cq2dt3nB//pzEAk7tRBQrnEySTSmm/MDQHQzvYorITSuz2R
-         ouw1Rc5wdNnwbFRCPngNRvpHKiu9zaTrOd6uEyTlEOFYu8K4KPYz/qKG42oH0Bhei64r
-         cK3DbzifnAzF9qLWZjOqlIpLIQHD00Gdm5sSqa/l5S4wayRpk1WbOodvI+dZ1UCWLMf6
-         h66uACfhaB7miPIAk93SiGO9Cu6mIPpqIri0cO6b6dWEHn+gHAusvvkXDgCMe64ETQly
-         hXaAntqSLcogJFrGDB20RVST/rRd0/5svij5jXynnfvwKSOkAGaLpcTwVXYzYIWNu15A
-         W6iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=MoKiGu5hYYcfsxqQHX2Q84Bhs0fRLBU9UCfGUfeAlqU=;
-        b=nC4OoyspbMMdKBHAlWcCu00aSZfZyN2xohwc1dfQ99ItLzegpchuUL18TUKpKW0SsM
-         Qt0gOWrw7oMuBuMHP2h2Etk+PAoQ1E8ynOlXQffQ0SeHElQfIA4Dh5oELYB2UyONyaIX
-         222dMFBs3sOK0fosew64Il8WlT4EA2kg7G4punCT9DNluwdTg7VojEv3PJolWia4dLYi
-         mkLukur0AgoOxTV9Ey484TOISrzkrRrVvX6mHgbBu40HfVk/PM94v1/Ga/2YpPrwIh3y
-         srPH4lroBjHGsiZam1fCOltn2nwhRGJGlsn7kax6KEOJvQmP4n13ysk1C1WsjVVwmWnK
-         z2wg==
-X-Gm-Message-State: AOAM532/WhW0tSkm4w0v45/S6UAuqCGid09t+Rzvu8mNv+Ah+Mzzb8bM
-        cQt387secxq+Ur70LPhXjBNYgu4tzjrkww==
-X-Google-Smtp-Source: ABdhPJwEM8DJm74QIZFhmFv4M6dyT8c3GvHa7PUfPI7/TCab213391jBRaPDx72DZH0VxJVBYSaRVg==
-X-Received: by 2002:a17:902:cf05:b0:156:9d:ca01 with SMTP id i5-20020a170902cf0500b00156009dca01mr6264769plg.111.1650181890860;
-        Sun, 17 Apr 2022 00:51:30 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-74.three.co.id. [180.214.232.74])
-        by smtp.gmail.com with ESMTPSA id m21-20020a17090a7f9500b001c97c6bcaf4sm13558356pjl.39.2022.04.17.00.51.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 00:51:30 -0700 (PDT)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     linux-doc@vger.kernel.org
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Eric Biggers <ebiggers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND 2/2] Documentation: siphash: enclose HalfSipHash usage example in the literal block
-Date:   Sun, 17 Apr 2022 14:50:58 +0700
-Message-Id: <20220417075057.127865-3-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220417075057.127865-1-bagasdotme@gmail.com>
-References: <20220417075057.127865-1-bagasdotme@gmail.com>
+        Sun, 17 Apr 2022 04:11:26 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 436433337F
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 01:08:50 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1nfzxG-003jAv-JV; Sun, 17 Apr 2022 18:08:24 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Sun, 17 Apr 2022 16:08:22 +0800
+Date:   Sun, 17 Apr 2022 16:08:22 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
+ ARCH_KMALLOC_MINALIGN
+Message-ID: <YlvK9iefUECy361O@gondor.apana.org.au>
+References: <YlkV7NtatO7KFusX@gondor.apana.org.au>
+ <CAMj1kXFW_zC-U5Ox9_=4gKCwWOmkR7wPNb6UQhiz8viNWTRU-w@mail.gmail.com>
+ <YlkkGpVx8rhcsBot@gondor.apana.org.au>
+ <CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com>
+ <Ylko07++4naWJ5LE@gondor.apana.org.au>
+ <CAMj1kXH=ybJWBzmMqkrkvyF8nM3UpTchUOq+oweW=BqW2TOyRw@mail.gmail.com>
+ <YllE+wWqP6F+1nwa@gondor.apana.org.au>
+ <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
+ <YllM24eca/uxf9y7@gondor.apana.org.au>
+ <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Render usage example of HalfSipHash function as code block by using
-literal block syntax.
+On Fri, Apr 15, 2022 at 01:38:15PM +0200, Ard Biesheuvel wrote:
+>
+> If this is the case, things are already broken today. We never take
+> ARCH_DMA_MINALIGN into account when adding the driver ctx size to the
+> overall allocation size.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Eric Biggers <ebiggers@google.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/security/siphash.rst | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+No it's not broken because kmalloc guarantees alignment.  For
+example, if ARCH_DMA_MINALIGN is 128 bytes, then kmalloc will
+always return a pointer that's 128-byte aligned.  That guarantees
+this object and the next object are on different cache-lines.
 
-diff --git a/Documentation/security/siphash.rst b/Documentation/security/siphash.rst
-index 42794a7e052f1e..06d793e680869c 100644
---- a/Documentation/security/siphash.rst
-+++ b/Documentation/security/siphash.rst
-@@ -132,10 +132,10 @@ Generating a HalfSipHash key
- ============================
- 
- Keys should always be generated from a cryptographically secure source of
--random numbers, either using get_random_bytes or get_random_once:
-+random numbers, either using get_random_bytes or get_random_once::
- 
--hsiphash_key_t key;
--get_random_bytes(&key, sizeof(key));
-+        hsiphash_key_t key;
-+        get_random_bytes(&key, sizeof(key));
- 
- If you're not deriving your key from here, you're doing it wrong.
- 
+If you reduce the kmalloc minimum alignment to 64 bytes, then
+the two neighbouring objects can share cache-lines, even if
+each object is bigger than 128 bytes (e.g., if they were 192
+bytes each).
+
+Cheers,
 -- 
-An old man doll... just what I always wanted! - Clara
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

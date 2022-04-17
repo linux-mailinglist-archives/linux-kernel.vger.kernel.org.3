@@ -2,219 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7E35046DF
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 08:42:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01B25046E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 08:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233518AbiDQGof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 02:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55054 "EHLO
+        id S233520AbiDQGsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 02:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231481AbiDQGod (ORCPT
+        with ESMTP id S231197AbiDQGsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 02:44:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085681839F
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 23:41:59 -0700 (PDT)
+        Sun, 17 Apr 2022 02:48:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F722E9C1;
+        Sat, 16 Apr 2022 23:46:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A14D6114C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:41:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D6F1C385A7;
-        Sun, 17 Apr 2022 06:41:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 22162B808C5;
+        Sun, 17 Apr 2022 06:46:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCD53C385AE;
+        Sun, 17 Apr 2022 06:46:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650177717;
-        bh=mYmF9fQB39PB7wD2m8YVDgKopxt1nEx/PGkPkAA44DM=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=MkcMF+JDLeCM/KSUIJThnRk4twIjI24+ffYlgu9RwlCuRjcNUImasCaDQVd+2deIM
-         igjTUSkZKpbBKV8U+bSv8YhJppBS9Nx0Y1EqW5xS04YOg2pwT8jXVwvIyBl06qthAF
-         hzx/+wa6AqeIEMpIIfI2LniPPvdxn4JB0we3TXe1rsyYloV/R4Jc8AxxVgBtpR+9ae
-         AwZvANFSpdvEpN5pxDPGikti3p3ZGK6GSYLH+k3N38pHBVSRBbSFkhQ60Uv7Zgsy6f
-         BVqsvdp5YN9QxdgyBLL6Ho16k9xvMvRrJcPiAwc0pHmpHLjW0/UYR64ExbKN9cK2tg
-         UY/Qjzvz6vzzw==
-Message-ID: <d6d5f865-a7da-cd4c-1390-a22374f387c7@kernel.org>
-Date:   Sun, 17 Apr 2022 14:41:51 +0800
+        s=k20201202; t=1650177961;
+        bh=u1JZibw2SpzwrnUWA+7a2n40zCJA2T7hl2y+CHc8Bys=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Enrqywv5QK/rGP/TSzPz7EDiCfzO7oUFM+gV9hISYF3o8MX9TaNn4p+MrZmvNIgRr
+         XBS6dL+niNqG52aeWt9BUhxB10PekY0NMcIlgQpQ3M5N0tQCpsJB62aRIXVuRZc6rh
+         mhf8AEkP6Zxcd3RP2nFG5UDWv9/Y84mtErwGvua8VW3ltd4kvOKW6hMpK3dHqxD1QH
+         ADudjR29kpmss52VawYFmRlwfC7C0INAyjz9WDjKgtMwRmkw5QLN1ytjr97v9SbpD1
+         IMGcoYQuIXPI3jUJLS/C/SMHtac1j7LieFoN1ByLO9JDU3K4PaCmP5zGLkKB6pSRLA
+         I53hTqmnqaSPQ==
+Received: by mail-vs1-f52.google.com with SMTP id 190so4384440vse.8;
+        Sat, 16 Apr 2022 23:46:01 -0700 (PDT)
+X-Gm-Message-State: AOAM5318EBHCZcJd/u8e/PWTeRxcU8vm7VfeiumuqrJu8S4HcN6uBqSd
+        R/qeGsGQD3T4oCo1WRQe21TTsuMG3z0wSIsn/AY=
+X-Google-Smtp-Source: ABdhPJz/1b5SsJdYKN3GAsgGRqoX5UpyKRVV4cX9w9xRdQtt+NvH5Ejr5oS1GHvNtweZlab8vqZ3fbLTSj4TtJFlgjk=
+X-Received: by 2002:a05:6102:dd1:b0:325:80a9:b5d7 with SMTP id
+ e17-20020a0561020dd100b0032580a9b5d7mr1421799vst.51.1650177960581; Sat, 16
+ Apr 2022 23:46:00 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [f2fs-dev] [PATCH 2/2 v2] f2fs: avoid infinite loop to flush node
- pages
-Content-Language: en-US
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-References: <20220411212141.1775589-1-jaegeuk@kernel.org>
- <20220411212141.1775589-2-jaegeuk@kernel.org> <Ylif523qTzL9eq1C@google.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <Ylif523qTzL9eq1C@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220412034957.1481088-1-guoren@kernel.org> <YlbwOG46mCR8Q5tJ@tardis>
+ <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
+ <Ylt6zqPgimmKpJzg@tardis> <CAJF2gTTZnBh_z31VK81cYiBrTt5NRVpSahoPh35Zo4Ns5hCv7A@mail.gmail.com>
+ <Ylu0GqNmYmCnpv9Z@tardis>
+In-Reply-To: <Ylu0GqNmYmCnpv9Z@tardis>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Sun, 17 Apr 2022 14:45:49 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTSp1+gvyPM481_KS58icqwqwkehQUXMMfRNboOrNdWHxg@mail.gmail.com>
+Message-ID: <CAJF2gTSp1+gvyPM481_KS58icqwqwkehQUXMMfRNboOrNdWHxg@mail.gmail.com>
+Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Andrea Parri <parri.andrea@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/15 6:27, Jaegeuk Kim wrote:
-> xfstests/generic/475 can give EIO all the time which give an infinite loop
-> to flush node page like below. Let's avoid it.
-> 
-> [16418.518551] Call Trace:
-> [16418.518553]  ? dm_submit_bio+0x48/0x400
-> [16418.518574]  ? submit_bio_checks+0x1ac/0x5a0
-> [16418.525207]  __submit_bio+0x1a9/0x230
-> [16418.525210]  ? kmem_cache_alloc+0x29e/0x3c0
-> [16418.525223]  submit_bio_noacct+0xa8/0x2b0
-> [16418.525226]  submit_bio+0x4d/0x130
-> [16418.525238]  __submit_bio+0x49/0x310 [f2fs]
-> [16418.525339]  ? bio_add_page+0x6a/0x90
-> [16418.525344]  f2fs_submit_page_bio+0x134/0x1f0 [f2fs]
-> [16418.525365]  read_node_page+0x125/0x1b0 [f2fs]
-> [16418.525388]  __get_node_page.part.0+0x58/0x3f0 [f2fs]
-> [16418.525409]  __get_node_page+0x2f/0x60 [f2fs]
-> [16418.525431]  f2fs_get_dnode_of_data+0x423/0x860 [f2fs]
-> [16418.525452]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [16418.525458]  ? __mod_memcg_state.part.0+0x2a/0x30
-> [16418.525465]  ? __mod_memcg_lruvec_state+0x27/0x40
-> [16418.525467]  ? __xa_set_mark+0x57/0x70
-> [16418.525472]  f2fs_do_write_data_page+0x10e/0x7b0 [f2fs]
-> [16418.525493]  f2fs_write_single_data_page+0x555/0x830 [f2fs]
-> [16418.525514]  ? sysvec_apic_timer_interrupt+0x4e/0x90
-> [16418.525518]  ? asm_sysvec_apic_timer_interrupt+0x12/0x20
-> [16418.525523]  f2fs_write_cache_pages+0x303/0x880 [f2fs]
-> [16418.525545]  ? blk_flush_plug_list+0x47/0x100
-> [16418.525548]  f2fs_write_data_pages+0xfd/0x320 [f2fs]
-> [16418.525569]  do_writepages+0xd5/0x210
-> [16418.525648]  filemap_fdatawrite_wbc+0x7d/0xc0
-> [16418.525655]  filemap_fdatawrite+0x50/0x70
-> [16418.525658]  f2fs_sync_dirty_inodes+0xa4/0x230 [f2fs]
-> [16418.525679]  f2fs_write_checkpoint+0x16d/0x1720 [f2fs]
-> [16418.525699]  ? ttwu_do_wakeup+0x1c/0x160
-> [16418.525709]  ? ttwu_do_activate+0x6d/0xd0
-> [16418.525711]  ? __wait_for_common+0x11d/0x150
-> [16418.525715]  kill_f2fs_super+0xca/0x100 [f2fs]
-> [16418.525733]  deactivate_locked_super+0x3b/0xb0
-> [16418.525739]  deactivate_super+0x40/0x50
-> [16418.525741]  cleanup_mnt+0x139/0x190
-> [16418.525747]  __cleanup_mnt+0x12/0x20
-> [16418.525749]  task_work_run+0x6d/0xa0
-> [16418.525765]  exit_to_user_mode_prepare+0x1ad/0x1b0
-> [16418.525771]  syscall_exit_to_user_mode+0x27/0x50
-> [16418.525774]  do_syscall_64+0x48/0xc0
-> [16418.525776]  entry_SYSCALL_64_after_hwframe+0x44/0xae
-> 
-> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
-> ---
-> 
-> Change log from v1:
->   - cover one more error case
-> 
->   fs/f2fs/checkpoint.c |  8 +-------
->   fs/f2fs/f2fs.h       | 20 ++++++++++++++++----
->   fs/f2fs/node.c       |  2 ++
->   3 files changed, 19 insertions(+), 11 deletions(-)
-> 
-> diff --git a/fs/f2fs/checkpoint.c b/fs/f2fs/checkpoint.c
-> index 909085a78f9c..319903c2b34f 100644
-> --- a/fs/f2fs/checkpoint.c
-> +++ b/fs/f2fs/checkpoint.c
-> @@ -98,13 +98,7 @@ static struct page *__get_meta_page(struct f2fs_sb_info *sbi, pgoff_t index,
->   	}
->   
->   	if (unlikely(!PageUptodate(page))) {
-> -		if (page->index == sbi->metapage_eio_ofs) {
-> -			if (sbi->metapage_eio_cnt++ == MAX_RETRY_META_PAGE_EIO)
-> -				set_ckpt_flags(sbi, CP_ERROR_FLAG);
-> -		} else {
-> -			sbi->metapage_eio_ofs = page->index;
-> -			sbi->metapage_eio_cnt = 0;
-> -		}
-> +		f2fs_handle_page_eio(sbi, page->index, META);
->   		f2fs_put_page(page, 1);
->   		return ERR_PTR(-EIO);
->   	}
-> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-> index cd1e65bcf0b0..977826a22568 100644
-> --- a/fs/f2fs/f2fs.h
-> +++ b/fs/f2fs/f2fs.h
-> @@ -579,8 +579,8 @@ enum {
->   /* maximum retry quota flush count */
->   #define DEFAULT_RETRY_QUOTA_FLUSH_COUNT		8
->   
-> -/* maximum retry of EIO'ed meta page */
-> -#define MAX_RETRY_META_PAGE_EIO			100
-> +/* maximum retry of EIO'ed page */
-> +#define MAX_RETRY_PAGE_EIO			100
->   
->   #define F2FS_LINK_MAX	0xffffffff	/* maximum link count per file */
->   
-> @@ -1621,8 +1621,8 @@ struct f2fs_sb_info {
->   	/* keep migration IO order for LFS mode */
->   	struct f2fs_rwsem io_order_lock;
->   	mempool_t *write_io_dummy;		/* Dummy pages */
-> -	pgoff_t metapage_eio_ofs;		/* EIO page offset */
-> -	int metapage_eio_cnt;			/* EIO count */
-> +	pgoff_t page_eio_ofs[NR_PAGE_TYPE];	/* EIO page offset */
-> +	int page_eio_cnt[NR_PAGE_TYPE];		/* EIO count */
->   
->   	/* for checkpoint */
->   	struct f2fs_checkpoint *ckpt;		/* raw checkpoint pointer */
-> @@ -4543,6 +4543,18 @@ static inline void f2fs_io_schedule_timeout(long timeout)
->   	io_schedule_timeout(timeout);
->   }
->   
-> +static inline void f2fs_handle_page_eio(struct f2fs_sb_info *sbi, pgoff_t ofs,
-> +					enum page_type type)
-> +{
+On Sun, Apr 17, 2022 at 2:31 PM Boqun Feng <boqun.feng@gmail.com> wrote:
+>
+> On Sun, Apr 17, 2022 at 12:51:38PM +0800, Guo Ren wrote:
+> > Hi Boqun & Andrea,
+> >
+> > On Sun, Apr 17, 2022 at 10:26 AM Boqun Feng <boqun.feng@gmail.com> wrote:
+> > >
+> > > On Sun, Apr 17, 2022 at 12:49:44AM +0800, Guo Ren wrote:
+> > > [...]
+> > > >
+> > > > If both the aq and rl bits are set, the atomic memory operation is
+> > > > sequentially consistent and cannot be observed to happen before any
+> > > > earlier memory operations or after any later memory operations in the
+> > > > same RISC-V hart and to the same address domain.
+> > > >                 "0:     lr.w     %[p],  %[c]\n"
+> > > >                 "       sub      %[rc], %[p], %[o]\n"
+> > > >                 "       bltz     %[rc], 1f\n".
+> > > > -               "       sc.w.rl  %[rc], %[rc], %[c]\n"
+> > > > +               "       sc.w.aqrl %[rc], %[rc], %[c]\n"
+> > > >                 "       bnez     %[rc], 0b\n"
+> > > > -               "       fence    rw, rw\n"
+> > > >                 "1:\n"
+> > > > So .rl + fence rw, rw is over constraints, only using sc.w.aqrl is more proper.
+> > > >
+> > >
+> > > Can .aqrl order memory accesses before and after it (not against itself,
+> > > against each other), i.e. act as a full memory barrier? For example, can
+> > From the RVWMO spec description, the .aqrl annotation appends the same
+> > effect with "fence rw, rw" to the AMO instruction, so it's RCsc.
+> >
+>
+> Thanks for the confirmation, btw, where can I find the RVWMO spec?
+RVWMO section:
+https://five-embeddev.com/riscv-isa-manual/latest/rvwmo.html#ch:memorymodel
 
-If we have already set cp_error, it doesn't need to process below logic
-redundantly?
+ATOMIC instructions:
+https://five-embeddev.com/riscv-isa-manual/latest/a.html#atomics
 
-if (f2fs_cp_error())
-	return;
+>
+> > Not only .aqrl, and I think the below also could be an RCsc when
+> > sc.w.aq is executed:
+> > A: Pre-Access
+> > B: lr.w.rl ADDR-0
+> > ...
+> > C: sc.w.aq ADDR-0
+> > D: Post-Acess
+> > Because sc.w.aq has overlap address & data dependency on lr.w.rl, the
+> > global memory order should be A->B->C->D when sc.w.aq is executed. For
+> > the amoswap
+> >
+> > The purpose of the whole patchset is to reduce the usage of
+> > independent fence rw, rw instructions, and maximize the usage of the
+> > .aq/.rl/.aqrl aonntation of RISC-V.
+> >
+> >                 __asm__ __volatile__ (                                  \
+> >                         "0:     lr.w %0, %2\n"                          \
+> >                         "       bne  %0, %z3, 1f\n"                     \
+> >                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >                         "       bnez %1, 0b\n"                          \
+> >                         "       fence rw, rw\n"                         \
+> >                         "1:\n"                                          \
+> >
+> > > we end up with u == 1, v == 1, r1 on P0 is 0 and r1 on P1 is 0, for the
+> > > following litmus test?
+> > >
+> > >     C lr-sc-aqrl-pair-vs-full-barrier
+> > >
+> > >     {}
+> > >
+> > >     P0(int *x, int *y, atomic_t *u)
+> > >     {
+> > >             int r0;
+> > >             int r1;
+> > >
+> > >             WRITE_ONCE(*x, 1);
+> > >             r0 = atomic_cmpxchg(u, 0, 1);
+> > >             r1 = READ_ONCE(*y);
+> > >     }
+> > >
+> > >     P1(int *x, int *y, atomic_t *v)
+> > >     {
+> > >             int r0;
+> > >             int r1;
+> > >
+> > >             WRITE_ONCE(*y, 1);
+> > >             r0 = atomic_cmpxchg(v, 0, 1);
+> > >             r1 = READ_ONCE(*x);
+> > >     }
+> > >
+> > >     exists (u=1 /\ v=1 /\ 0:r1=0 /\ 1:r1=0)
+> > I think my patchset won't affect the above sequence guarantee. Current
+> > RISC-V implementation only gives RCsc when the original value is the
+> > same at least once. So I prefer RISC-V cmpxchg should be:
+> >
+> >
+> > -                       "0:     lr.w %0, %2\n"                          \
+> > +                      "0:     lr.w.rl %0, %2\n"                          \
+> >                         "       bne  %0, %z3, 1f\n"                     \
+> >                         "       sc.w.rl %1, %z4, %2\n"                  \
+> >                         "       bnez %1, 0b\n"                          \
+> > -                       "       fence rw, rw\n"                         \
+> >                         "1:\n"                                          \
+> > +                        "       fence w, rw\n"                    \
+> >
+> > To give an unconditional RSsc for atomic_cmpxchg.
+> >
+>
+> Note that Linux kernel doesn't require cmpxchg() to provide any order if
+> cmpxchg() fails to update the memory location. So you won't need to
+> strengthen the atomic_cmpxchg().
+Thx for the clarification.
 
-> +	if (ofs == sbi->page_eio_ofs[type]) {
-> +		if (sbi->page_eio_cnt[type]++ == MAX_RETRY_PAGE_EIO)
-> +			set_ckpt_flags(sbi, CP_ERROR_FLAG);
-> +	} else {
-> +		sbi->page_eio_ofs[type] = ofs;
-> +		sbi->page_eio_cnt[type] = 0;
-> +	}
-> +}
-> +
->   #define EFSBADCRC	EBADMSG		/* Bad CRC detected */
->   #define EFSCORRUPTED	EUCLEAN		/* Filesystem is corrupted */
->   
-> diff --git a/fs/f2fs/node.c b/fs/f2fs/node.c
-> index c45d341dcf6e..c280f482c741 100644
-> --- a/fs/f2fs/node.c
-> +++ b/fs/f2fs/node.c
-> @@ -1416,6 +1416,7 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
->   
->   	err = read_node_page(page, 0);
->   	if (err < 0) {
-> +		f2fs_handle_page_eio(sbi, page->index, NODE);
+>
+> Regards,
+> Boqun
+>
+> > >
+> > > Regards,
+> > > Boqun
+> >
+> >
+> >
+> > --
+> > Best Regards
+> >  Guo Ren
+> >
+> > ML: https://lore.kernel.org/linux-csky/
 
-How about:
 
-goto out_put;
 
->   		f2fs_put_page(page, 1);
->   		return ERR_PTR(err);
->   	} else if (err == LOCKED_PAGE) {
-> @@ -1452,6 +1453,7 @@ static struct page *__get_node_page(struct f2fs_sb_info *sbi, pgoff_t nid,
->   		err = -EINVAL;
->   out_err:
->   		ClearPageUptodate(page);
+-- 
+Best Regards
+ Guo Ren
 
-out_put:
-
-Thanks,
-
-> +		f2fs_handle_page_eio(sbi, page->index, NODE);
->   		f2fs_put_page(page, 1);
->   		return ERR_PTR(err);
->   	}
+ML: https://lore.kernel.org/linux-csky/

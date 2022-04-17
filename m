@@ -2,131 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BEE50460F
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 04:17:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D22F9504613
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 04:17:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiDQCTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 16 Apr 2022 22:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S233317AbiDQCTs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 16 Apr 2022 22:19:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233288AbiDQCTP (ORCPT
+        with ESMTP id S233393AbiDQCTm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 16 Apr 2022 22:19:15 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928873669D;
-        Sat, 16 Apr 2022 19:16:41 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 0318A5C014B;
-        Sat, 16 Apr 2022 22:16:41 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 16 Apr 2022 22:16:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1650161800; x=1650248200; bh=sw
-        3vwnFAjqEPs+Y+Agbrwdr11Ajfm0FpDuzkylhvBe0=; b=FSFonIAEHL45Uxi01S
-        UwRpCzE1/MA89qxKqi382jOqGn3eVEveuLm3pDMz/EPvWIZKW6EBbqcKpv4RfgwS
-        ETaTZsRqeC2H8PTACH5dwvM+9AXdL1Zmve1etKFcIv42pCwx5MyDDCmL4/QsAnHL
-        5/FDpQOJ3StHdYB8uBxjQFfoNbibM6bbH5gDwYvKShLl+wlrcGTL69gwsX+69PEI
-        E3SfqvII3q/BFIfPMqPtL0+8dfzXny55Zw1EvY+TRvlQRyiApiVtQ+g+Pa4rjnOs
-        1FQ0yEEyxroJUDnLfSwAziaNjuKUr8gSCqqK81PBGRZWtbKDRxahInPcjKnetLib
-        uLvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1650161800; x=1650248200; bh=sw3vwnFAjqEPs+Y+Agbrwdr11Ajfm0FpDuz
-        kylhvBe0=; b=wAR1dzEW8+5KTff30V4ycp6v+RTV3AYL/pKs0LH1TPYj89dPYDv
-        uL0bnwqFRkVY3qhx9nsWJxcCXHOQJeUT6MI0iKtowxiQBnTv3lEfG8aGkR+R36Yn
-        6TDH9HeSVDP/rFoEQnrwMdZvQAkHdnfKV+gVMQUDtCkJkyyOvwna6/VshtFEdoHM
-        LyEEdN7QXsaxYv/dW0eMR3Hz2iPxPyBU74d4VTYPUB4YYCcxXwdQzV1uyYLy0iMj
-        Eq3j/5qJnh0Tuon02QdKKpaYmkS3FApotHL5Vj5f202rSyK9eYxy6sCMXCsptp55
-        cndE9El5sEwUuhh3SsUmGaBa1FqQ/nCzcfw==
-X-ME-Sender: <xms:iHhbYuC1WUL8na1wtGUeqUmYRvodtcRgywuvT_P9afETJCbl_e9QRA>
-    <xme:iHhbYojMDwzOxX2wgQ9VSfLlkM72fOyUv9l5smndNBhJK2qBXXcbRyFe2No_vBnsO
-    Qs4B_0uZTQMTg8bUw>
-X-ME-Received: <xmr:iHhbYhmePMmjlhiVuF5mg6QoTjr3HOvRQkjeTBVPilKKlR4_ldY_617s2s0ANtvxTPDUVHOOPGkmbEd3IuCowWfzXamf3LtZPNrfPqK0VDDNgtjbSpsjgeMdEk6s369B8odA4A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrudelkedgheelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
-    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
-    frrghtthgvrhhnpeduhfejfedvhffgfeehtefghfeiiefgfeehgfdvvdevfeegjeehjedv
-    gfejheeuieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:iHhbYswyydbick2i_2vJwbO74bGoXhjEMf9UynPpoTHlgeCPVJzXog>
-    <xmx:iHhbYjStoS_kqNdqoOOd6NuJSpboHjm-h6dny6YvBEif5S66pjiKnw>
-    <xmx:iHhbYnYTSs7aHeIIj-yVSZxX6uKEZo1XyBtBtJZxjaiXg7Lr38QE9Q>
-    <xmx:iHhbYiFTIKGVa8qPcCJwC5cyEMZrPifrenUtphRclvtN8jnraRa50A>
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 16 Apr 2022 22:16:40 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org
-Cc:     devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, Ondrej Jirman <x@xff.cz>,
-        linux-kernel@vger.kernel.org, Samuel Holland <samuel@sholland.org>
-Subject: [PATCH v2 4/4] [DO NOT MERGE] arm64: dts: allwinner: pinephone: Add keyboard
-Date:   Sat, 16 Apr 2022 21:16:32 -0500
-Message-Id: <20220417021633.56127-5-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220417021633.56127-1-samuel@sholland.org>
-References: <20220417021633.56127-1-samuel@sholland.org>
+        Sat, 16 Apr 2022 22:19:42 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4186396B0
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 19:17:04 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id p10so9932580plf.9
+        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 19:17:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :references:from:in-reply-to:content-transfer-encoding;
+        bh=e7rLfnATy9xIaXgzkFV4mffpoCy71ONwr7sohfESaIY=;
+        b=7qcwe/J2quyhBkiT1FkypRPoDAmxgA9ao4ZiV44u03GptMWq5TwB4FFsmFdy5crMzL
+         qVPEkR6RAWYbSu4tYuCdJGWqw61piz+8xqmWk72RQ/RfRtg5S+mIpTpWyly4jPxI+EWd
+         siF5qVaOQLRqdXwQwvk7GpxMkF92ZWz+DOdLD/dM03oOKhBqzIriGNexBb2nqahcg99N
+         0uvFsXl26vwTMPuMTEPhaHSw7d8cgeIO/Hd1td8X7K8O2eQnsfqc61t9MzDoGxi3Dqik
+         cupmLeWjraNoIOx6TSMNeEgmg/7F5tVLaYYIinDYhkjupYPKUJChJmFio4+2jL89OIRE
+         QZzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=e7rLfnATy9xIaXgzkFV4mffpoCy71ONwr7sohfESaIY=;
+        b=sz2nLgfagt+Pr83idC4RYDqpxr1Sa7O3F4jY3dgFhqDUa4qHgw4wiGpq9BCyl3npJL
+         lA5Jbsb7oCoOWS9xSXEjWF34IqMHw8aS8ktPBywSyFtSFLt8ZuTxTvuRhC8UGCdSm3u8
+         kAiX6/dz/pgpJySA6CEtAH4XptEZesOwFFeZEchpSm6oKbKqe8oTA5pOlgxXeb7m3QVM
+         H9eY30LFgbWzfUFSbSuk49A0Fh6QQTNtfgdn/qp/P3c44H7V8wsDOdxkKRImJfFB6zeU
+         3rl4RAuaDb7RMJ+lZLoLcyOyB+sPd+0mwivfq8Houc/x6MIQfHnFr3/PJYnwgK80dLMj
+         Xvqw==
+X-Gm-Message-State: AOAM532L18Fis5KWNW3MDXx0T77QfxxCMn56Lp2RhW8Yz1yMK4ST7dXV
+        VQptSxUFeZ3VewH2uPiLtUnHGg==
+X-Google-Smtp-Source: ABdhPJzKXcenvjYvmMIHs12Jif1rLfrVgxDO6pGpkbXeBumGRDv95Ovv/D6P0fFuY9l28sg+szyOyA==
+X-Received: by 2002:a17:90a:558a:b0:1ca:a819:d2d1 with SMTP id c10-20020a17090a558a00b001caa819d2d1mr11693111pji.126.1650161824181;
+        Sat, 16 Apr 2022 19:17:04 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id k187-20020a636fc4000000b003983a01b896sm8393327pgc.90.2022.04.16.19.17.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Apr 2022 19:17:03 -0700 (PDT)
+Message-ID: <004e2f64-cf4e-2490-ed2c-29c073f76704@kernel.dk>
+Date:   Sat, 16 Apr 2022 20:17:02 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [syzbot] memory leak in iovec_from_user
+Content-Language: en-US
+To:     syzbot <syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com>,
+        asml.silence@gmail.com, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <000000000000951a1505dccf8b73@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <000000000000951a1505dccf8b73@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The official PinePhone keyboard accessory connects to the phone's POGO
-pins for I2C and interrupts. It has an Injoinic IP5209 power bank IC
-connected to the keyboard's internal I2C bus.
+On 4/16/22 7:27 PM, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    ce522ba9ef7e Linux 5.18-rc2
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14225724f00000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f1a3425e05af27
+> dashboard link: https://syzkaller.appspot.com/bug?extid=96b43810dfe9c3bb95ed
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13c45d88f00000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17b428af700000
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com
+> 
+> executing program
+> BUG: memory leak
+> unreferenced object 0xffff88810d698300 (size 192):
+>   comm "syz-executor156", pid 3595, jiffies 4294944234 (age 12.580s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
+>     [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
+>     [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
+>     [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
+>     [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
+>     [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
+>     [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
+>     [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
+>     [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
+>     [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
+>     [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
+>     [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
+>     [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
+>     [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
+> 
+> BUG: memory leak
+> unreferenced object 0xffff88810d6983c0 (size 192):
+>   comm "syz-executor156", pid 3603, jiffies 4294944759 (age 7.330s)
+>   hex dump (first 32 bytes):
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff823357be>] kmalloc_array include/linux/slab.h:621 [inline]
+>     [<ffffffff823357be>] iovec_from_user lib/iov_iter.c:1922 [inline]
+>     [<ffffffff823357be>] iovec_from_user+0x13e/0x280 lib/iov_iter.c:1905
+>     [<ffffffff82335945>] __import_iovec+0x45/0x250 lib/iov_iter.c:1948
+>     [<ffffffff81668c8e>] __io_import_iovec+0xfe/0x800 fs/io_uring.c:3497
+>     [<ffffffff8166d92f>] io_import_iovec fs/io_uring.c:3508 [inline]
+>     [<ffffffff8166d92f>] io_read+0x59f/0x880 fs/io_uring.c:3803
+>     [<ffffffff816727b4>] io_issue_sqe+0x364/0x3270 fs/io_uring.c:7122
+>     [<ffffffff816761c3>] __io_queue_sqe fs/io_uring.c:7489 [inline]
+>     [<ffffffff816761c3>] io_queue_sqe fs/io_uring.c:7531 [inline]
+>     [<ffffffff816761c3>] io_submit_sqe fs/io_uring.c:7736 [inline]
+>     [<ffffffff816761c3>] io_submit_sqes+0x553/0x3030 fs/io_uring.c:7842
+>     [<ffffffff81679390>] __do_sys_io_uring_enter+0x6f0/0x1100 fs/io_uring.c:10780
+>     [<ffffffff8451ca25>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>     [<ffffffff8451ca25>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>     [<ffffffff84600068>] entry_SYSCALL_64_after_hwframe+0x44/0xae
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
 
-(no changes since v1)
-
- .../dts/allwinner/sun50i-a64-pinephone.dtsi    | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-index 87847116ab6d..2fa1bdf8aa63 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64-pinephone.dtsi
-@@ -208,6 +208,24 @@ accelerometer@68 {
- /* Connected to pogo pins (external spring based pinheader for user addons) */
- &i2c2 {
- 	status = "okay";
-+
-+	keyboard@15 {
-+		compatible = "pine64,pinephone-keyboard";
-+		reg = <0x15>;
-+		interrupt-parent = <&r_pio>;
-+		interrupts = <0 12 IRQ_TYPE_EDGE_FALLING>; /* PL12 */
-+		wakeup-source;
-+
-+		i2c-bus {
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			charger@75 {
-+				compatible = "injoinic,ip5209";
-+				reg = <0x75>;
-+			};
-+		};
-+	};
- };
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 659f8ecba5b7..d4feb5ca63ba 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -3825,8 +3825,10 @@ static int io_read(struct io_kiocb *req, unsigned int issue_flags)
+ 		iovec = NULL;
+ 	}
+ 	ret = io_rw_init_file(req, FMODE_READ);
+-	if (unlikely(ret))
++	if (unlikely(ret)) {
++		kfree(iovec);
+ 		return ret;
++	}
+ 	req->result = iov_iter_count(&s->iter);
  
- &lradc {
+ 	if (force_nonblock) {
+@@ -3951,8 +3953,10 @@ static int io_write(struct io_kiocb *req, unsigned int issue_flags)
+ 		iovec = NULL;
+ 	}
+ 	ret = io_rw_init_file(req, FMODE_WRITE);
+-	if (unlikely(ret))
++	if (unlikely(ret)) {
++		kfree(iovec);
+ 		return ret;
++	}
+ 	req->result = iov_iter_count(&s->iter);
+ 
+ 	if (force_nonblock) {
+
 -- 
-2.35.1
+Jens Axboe
 

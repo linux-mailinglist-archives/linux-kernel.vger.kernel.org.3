@@ -2,84 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351235047F0
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:52:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C01C5047F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:53:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbiDQNyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 09:54:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
+        id S234209AbiDQNzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 09:55:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiDQNyf (ORCPT
+        with ESMTP id S229496AbiDQNzh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 09:54:35 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24BE1EC76
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:51:58 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id j2so21902903ybu.0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=j1YC+4qj0ofm4fZxd2lXKtVJb4PrA/5HBQxOtfDvFQA=;
-        b=Pp2oHE+bhzP6O3Nv9ESmCrnqps2DiHpABagwyPuFmmbjq6zboHplyf9uiBC2eBXj7e
-         DWiBx9atRc52M1nWs5TMi8TeP0X7EBMeHog31TxViiJME0JB10iGMtKOYP61Aq1eVI3s
-         hJJweHM8tvt6t2KI8Sq3ITxRROWX8DM0ZzAtaTDse+ksFe1dYCT7rUWB02AtUHY2ItMB
-         laBNFrcQYa55P2p8kFLHT/1As8FXVz/Ob69vATD2Gm+KllA+uPKQ6WhSLNg2qibSeEzf
-         eaqpUYlG3rHKb4r9zy+jZLeDn1+ZiJTHRD+1yQKZ5+zdYg0ajCY6HkN/RaOXK2ks6jYm
-         5kig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=j1YC+4qj0ofm4fZxd2lXKtVJb4PrA/5HBQxOtfDvFQA=;
-        b=m6HGrNSm7SrX2oXy5rJsclB2Yzstj0gWRjEpcjUO9bz2zTrYaj7hl8M/A9ohm+EOvI
-         MpGOrV91BPpHK/t+fvJ2Xt0+dx3k4uFxpo0P34LQP3pPXF6yjTSmcN4pjCRLJ0XTk+gY
-         UmsXIm0Sdpcw7Asl+CBgUd3TCKScaqAsm/d6TrNTi7OWY+2BIK3cd6NNl2/7KnIMuWUn
-         NnwSUY/ZN9+ogGcsOXgDeFqN8sHDn3wMstubXtQOjT07YH70NHrHN5iJQXqw9vYNlamR
-         7gQK8ntcqrHj5eIKy4zd/LCYTuLT03e3T+WHyoGKAFK9HxNjQdze28ierbI+0Ngu8Dbl
-         qH/w==
-X-Gm-Message-State: AOAM531nFT4GIxxjkjEnGmOHmW6gOIAjBzBz325IfN0QLKdAB5LTYUfg
-        BewIMIVhG/NX/6nRwj15gDJeiUX52eD9ekvEgw8/zhSigqQ=
-X-Google-Smtp-Source: ABdhPJzbb8iFPWriy129wK1T8jTk7tlK1sM0GemG9BO8OC56F+CZqre4jbAYLbbCjnwyLaH826YjGdVi0Rz4CNSfcO8=
-X-Received: by 2002:a5b:dc5:0:b0:624:f16d:7069 with SMTP id
- t5-20020a5b0dc5000000b00624f16d7069mr6401060ybr.295.1650203518028; Sun, 17
- Apr 2022 06:51:58 -0700 (PDT)
+        Sun, 17 Apr 2022 09:55:37 -0400
+Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 539D31EC77;
+        Sun, 17 Apr 2022 06:52:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
+        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
+        Content-ID:Content-Description;
+        bh=PcP8dW0ioRzK0xPAKsYs093XS1ccwWxt22yQcI8gb10=; b=UWKQqpDU3c4xffoQchHhHqWtTF
+        AXEk2xZp4BYO03KZEIoakG2oH9LcFksrrtvo5mbOSpkTWvoMCs5t/1G05OFZ45P7BqjydMR4cYhCC
+        zN3SN8pe2rSsuGhMsiDHjJYv1/XrcKY24JgXuxd6jaglkBHWFybMIz+L2401kVVI10xW//dLag9eR
+        jmgfJzCceE51uVsXGGW0usZGkUTbbcYgdpzrumtA+T8w+V1TLC8cYsvgl8PDd3XpBZe6c8xFrk0Nl
+        2TV88rnxIMNzYLhRd3210SF2S21iWvoXPiwEotk9g7GHoXmvuaVCBrpR7C7mwX3cMUBkl+1nJB/4/
+        gHIImD9PpNYzq5Hdfu0N7+BtSqbUhDzB2jgQaADaRupzo/m8HnOoP/hXViKBhZOguXEzU62MVkiiX
+        9gcIGr+RkgSOR5KHhu4kk0OsDpBSuxqxrRxWnlKDRoAeLqIWussDZWLy/aTa7LPT9RrKmpBffKhTo
+        +hBbZ02RmAjsVbTteL0SMzl5egXD1ObNErtMI2kBcyi8OR7KNHZVcyv9DIF8raE2C9LgZSqc0GWRb
+        I4wqMu+OwMUqiONlMkvZTVys3X3V7gPj8t01J8KPH0Y/lBOnHcNaahlsV4xL8zNM+CSfCWQ+JfGfX
+        AAdigAYdjiUeO5OtDSSLx4x3Q97c1cYevUPjJxrC0=;
+From:   Christian Schoenebeck <linux_oss@crudebyte.com>
+To:     asmadeus@codewreck.org
+Cc:     David Kahurani <k.kahurani@gmail.com>, davem@davemloft.net,
+        ericvh@gmail.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        lucho@ionkov.net, netdev@vger.kernel.org,
+        v9fs-developer@lists.sourceforge.net,
+        David Howells <dhowells@redhat.com>, Greg Kurz <groug@kaod.org>
+Subject: Re: 9p fs-cache tests/benchmark (was: 9p fscache Duplicate cookie detected)
+Date:   Sun, 17 Apr 2022 15:52:43 +0200
+Message-ID: <8420857.9FB56xACZ5@silver>
+In-Reply-To: <YlwOdqVCBZKFTIfC@codewreck.org>
+References: <CAAZOf26g-L2nSV-Siw6mwWQv1nv6on8c0fWqB4bKmX73QAFzow@mail.gmail.com>
+ <2551609.RCmPuZc3Qn@silver> <YlwOdqVCBZKFTIfC@codewreck.org>
 MIME-Version: 1.0
-References: <20220413163004.84789-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20220413163004.84789-1-andriy.shevchenko@linux.intel.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sun, 17 Apr 2022 15:51:46 +0200
-Message-ID: <CACRpkdaiwa4uC2qW38gwauBXmXhCwHxcHn-9nNbP=NSyd0OrTA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] iio: gyro: mpu3050: Make use of device properties
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:30 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
+On Sonntag, 17. April 2022 14:56:22 CEST asmadeus@codewreck.org wrote:
+> Christian Schoenebeck wrote on Thu, Apr 14, 2022 at 02:44:53PM +0200:
+> > > Yes, I'm not sure why I can't reproduce... All my computers are pretty
+> > > slow but the conditions should be met.
+> > > I'll try again with a command line closer to what you just gave here.
+> > 
+> > I'm not surprised that you could not reproduce the EBADF errors yet. To
+> > make this more clear, as for the git client errors: I have like 200+ git
+> > repositories checked out on that test VM, and only about 5 of them
+> > trigger EBADF errors on 'git pull'. But those few repositories reproduce
+> > the EBADF errors reliably here.
+> > 
+> > In other words: these EBADF errors only seem to trigger under certain
+> > circumstances, so it requires quite a bunch of test material to get a
+> > reproducer.
+> > 
+> > Like I said though, with the Bullseye installation I immediately get EBADF
+> > errors already when booting, whereas with a Buster VM it boots without
+> > errors.
+> Okay, I had missed that!
+> 
+> I've managed to reproduce with git:
+> https://gaia.codewreck.org/local/tmp/c.tar.zst
+> 
+> This archive (~300KB) when decompressed is a ~150MB repo where git reset
+> produces EBADF reliably for me.
 
-> Convert the module to be property provider agnostic and allow
-> it to be used on non-OF platforms.
->
-> While at it, reuse temporary device pointer in the same function.
->
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+I'm glad you were able to reproduce these EBADF errors!
 
-Too late because Jonathan is trigger happy (which is good!) but FWIW:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> From the looks of it, write fails in v9fs_write_begin, which itself
+> fails because it tries to read first on a file that was open with
+> O_WRONLY|O_CREAT|O_APPEND.
+> Since this is an append the read is necessary to populate the local page
+> cache when writing, and we're careful that the writeback fid is open in
+> write, but not about read...
+> 
+> Will have to think how we might want to handle this; perhaps just giving
+> the writeback fid read rights all the time as well...
+> Ran out of time for tonight, but hopefully we can sort it out soonish now!
 
-Yours,
-Linus Walleij
+I fear that would just trade symptoms: There are use cases for write-only 
+permissions, which would then fail after such kind of simple change.
+
+Independent of this EBADF issue, it would be good to know why 9p performance 
+got so slow with cache=loose by the netfs changes. Maybe David has an idea?
+
+Best regards,
+Christian Schoenebeck
+
+

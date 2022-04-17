@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE370504903
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84E50504908
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 20:48:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234824AbiDQSua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 14:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39894 "EHLO
+        id S234832AbiDQSus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 14:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233151AbiDQSu2 (ORCPT
+        with ESMTP id S234829AbiDQSuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 14:50:28 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Apr 2022 11:47:52 PDT
-Received: from alln-iport-7.cisco.com (alln-iport-7.cisco.com [173.37.142.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29362DD50
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 11:47:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=cisco.com; i=@cisco.com; l=1240; q=dns/txt; s=iport;
-  t=1650221272; x=1651430872;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+BCSFgpwz16cUwJFvXpZTH9edfgHzKDaLBpIEMjSMEU=;
-  b=eoTYQrpWmM5zmhycbomNSN219faboxZVDV6sjNLlh0V480O2ZgJe7idB
-   9DVwILjZGpzYMT5QfmHeKyAPrK6vWWwRCJm5UOl1seJt0gfPKHKTI/Slb
-   bvB6e4XXdNOhkPdbdLAzkMkOMj3pPE/Tw7XNyZLCXeS23M5UkWnxyCM7e
-   A=;
-X-IronPort-AV: E=Sophos;i="5.90,267,1643673600"; 
-   d="scan'208";a="841891360"
-Received: from alln-core-2.cisco.com ([173.36.13.135])
-  by alln-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 17 Apr 2022 18:46:50 +0000
-Received: from sjc-ads-3421.cisco.com (sjc-ads-3421.cisco.com [171.68.249.119])
-        by alln-core-2.cisco.com (8.15.2/8.15.2) with ESMTP id 23HIkn0t008765;
-        Sun, 17 Apr 2022 18:46:49 GMT
-From:   Oleksandr Ocheretnyi <oocheret@cisco.com>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     oocheret@cisco.com
-Subject: [PATCH] mtd: fix 'part' field data corruption in mtd_info
-Date:   Sun, 17 Apr 2022 11:46:47 -0700
-Message-Id: <20220417184649.449289-1-oocheret@cisco.com>
-X-Mailer: git-send-email 2.26.2.Cisco
+        Sun, 17 Apr 2022 14:50:37 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F7C62DD51
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 11:47:56 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1ng9vd-0007dZ-Pm; Sun, 17 Apr 2022 20:47:21 +0200
+Message-ID: <4989d998-6ce3-139a-32b5-482234a11b68@pengutronix.de>
+Date:   Sun, 17 Apr 2022 20:47:13 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v7 3/6] crypto: caam - add in-kernel interface for blob
+ generator
+Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     kernel@pengutronix.de, David Gstir <david@sigma-star.at>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        James Bottomley <jejb@linux.ibm.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        James Morris <jmorris@namei.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Jan Luebbe <j.luebbe@pengutronix.de>,
+        Richard Weinberger <richard@nod.at>,
+        Franck LENORMAND <franck.lenormand@nxp.com>,
+        Sumit Garg <sumit.garg@linaro.org>,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+References: <20220415205647.46056-1-a.fatoum@pengutronix.de>
+ <20220415205647.46056-4-a.fatoum@pengutronix.de>
+ <8a5166497604c721583eeafaef49c734ecac623c.camel@kernel.org>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <8a5166497604c721583eeafaef49c734ecac623c.camel@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Outbound-SMTP-Client: 171.68.249.119, sjc-ads-3421.cisco.com
-X-Outbound-Node: alln-core-2.cisco.com
-X-Spam-Status: No, score=-13.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 46b5889cc2c5 ("mtd: implement proper partition handling")
-started using "mtd_get_master_ofs()" in mtd callbacks to determine
-memory offsets by means of 'part' field from mtd_info, what previously
-was smashed accessing 'master' field in the mtd_set_dev_defaults() method.
-That provides wrong offset what causes hardware access errors.
+Hello Jarkko,
 
-Just make 'part', 'master' as separate fields, rather than using
-union type to avoid 'part' data corruption when mtd_set_dev_defaults()
-is called.
+On 17.04.22 17:02, Jarkko Sakkinen wrote:
+> On Fri, 2022-04-15 at 22:56 +0200, Ahmad Fatoum wrote:
+>> +int caam_process_blob(struct caam_blob_priv *priv,
+>> +                     struct caam_blob_info *info, bool encap)
+> 
+> Documentation missing (it's exported).
 
-Fixes: 46b5889cc2c5 ("mtd: implement proper partition handling")
-Signed-off-by: Oleksandr Ocheretnyi <oocheret@cisco.com>
----
- include/linux/mtd/mtd.h | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+It's documented in the header.
 
-diff --git a/include/linux/mtd/mtd.h b/include/linux/mtd/mtd.h
-index 88227044fc86..8a2c60235ebb 100644
---- a/include/linux/mtd/mtd.h
-+++ b/include/linux/mtd/mtd.h
-@@ -394,10 +394,8 @@ struct mtd_info {
- 	/* List of partitions attached to this MTD device */
- 	struct list_head partitions;
+>> +/** struct caam_blob_info - information for CAAM blobbing
+>> + *
+> 
+> You can remove this extra line, applies to some functions in the patch
+> too.
+
+You mean the blank line? Ye, that looks like it doesn't matter.
+I just ran scripts/kernel-doc and apparently I need a space before
+the struct caam_blob_info part, so it's even registered as a kernel doc.
+
+Will fix for v8.
  
--	union {
--		struct mtd_part part;
--		struct mtd_master master;
--	};
-+	struct mtd_part part;
-+	struct mtd_master master;
- };
- 
- static inline struct mtd_info *mtd_get_master(struct mtd_info *mtd)
+> BR, Jarkko
+
+Thanks for the review.
+
+Cheers,
+Ahmad
+
+
 -- 
-2.26.2.Cisco
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

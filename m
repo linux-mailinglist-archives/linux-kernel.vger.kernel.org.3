@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6645150463A
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 06:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F83A504643
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 06:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbiDQEOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 00:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46116 "EHLO
+        id S233407AbiDQETg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 00:19:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbiDQEOC (ORCPT
+        with ESMTP id S231489AbiDQETd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 00:14:02 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900E024940
-        for <linux-kernel@vger.kernel.org>; Sat, 16 Apr 2022 21:11:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650168687; x=1681704687;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=R6snIBSE0Ns1xWc1TQprKBkaUYfOcyOiQu7IMY2eMr0=;
-  b=MAmU1Q5aPO7hODd+bFXNhgepBAVtq88u6tnzV6yM2Re8Vi2lOf/fodY5
-   xFZewI0OkvdhlHoXshLxIizBMpfHVOpYooKFJsevFMO+eiK+fC32wZ8Ay
-   geK7wgWkZf8Zt88P1SwxlTUKzzaSKVAv0uT4XKadzpJs6Ouuz+Eh5cAv/
-   3M+dh0V/+wpH757D5PyV+s1ORuIqMs/1feOPhha2ya33mmUWP+gec1y9G
-   w54s9P+yY04/seoOoGrMgqcPElx6D2WqdHnnQmtmjE9z73Wjw6ZpU7pze
-   PZrleakJ77XrMIKAjVnCymoHC/Q19VDhWjw0D3kxpuFvnmTWgurpCsv00
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10318"; a="263533781"
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="263533781"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2022 21:11:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,266,1643702400"; 
-   d="scan'208";a="624944467"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 16 Apr 2022 21:11:25 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1nfwFx-0003gV-8j;
-        Sun, 17 Apr 2022 04:11:25 +0000
-Date:   Sun, 17 Apr 2022 12:11:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mark:arm64/stacktrace/speedups 9/9]
- arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr'
- undeclared
-Message-ID: <202204171236.O3pFdS1J-lkp@intel.com>
+        Sun, 17 Apr 2022 00:19:33 -0400
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9489E186ED;
+        Sat, 16 Apr 2022 21:16:59 -0700 (PDT)
+Received: by mail-lf1-f52.google.com with SMTP id b21so19758727lfb.5;
+        Sat, 16 Apr 2022 21:16:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=CW3A/aitUHfF5G3ViJWNE+t6LZ1tgXv7FWh03lEBllU=;
+        b=EQXcsvxXAG4iJs6iTM60JTinlujWtHTw+eqvF4hVZrtz4Z62YMPkVoNOfuHy7YjJIq
+         f00emz4csdwohzpEeEnQIQHmNHrauE1GkIgZh90dNf/EnCLgEbkMuevM+vNOVnatGoOD
+         9dDLnOia36yWrc1UzFEZDelO2gocfp1NXrxD2QYEfeErLkURsMljYAtlTN5buKsDNEUa
+         adbFk8vZxaT4MdxZE8DZ90U7YdDQK98Vd6F/eXxcT07ZTagPgpm1HEfEsXyvEGQz19Jb
+         Mygf1UJFDO3d+3v8mo/jhEsnXsYZIw2RrAnec6yZI36LMeXOHxsXsQZeYWaJqejynm2v
+         QAgA==
+X-Gm-Message-State: AOAM530rt40W6grZnCnCwLsL9GB2k2Q2CL5PTj2+nNtVT7Aew5089wdl
+        Q4nqc/yb+4ES4ptW/WDZmMJ6WCsI51dZO2ZG25iHiRJr
+X-Google-Smtp-Source: ABdhPJyH2jlIt83huHMF+Z98TjJC15Gu6bL8/bkTHT7SCzAXDfJaeQOrjInn07SGUs+kqL2FLxp1LYJZRAG72OFw214=
+X-Received: by 2002:a05:6512:1688:b0:464:f53f:850f with SMTP id
+ bu8-20020a056512168800b00464f53f850fmr4121402lfb.637.1650169017848; Sat, 16
+ Apr 2022 21:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20190701134255.25959-1-stephend@silicom-usa.com>
+In-Reply-To: <20190701134255.25959-1-stephend@silicom-usa.com>
+From:   Len Brown <lenb@kernel.org>
+Date:   Sun, 17 Apr 2022 00:16:46 -0400
+Message-ID: <CAJvTdKn9MEQ9rTXyqxV-t-3FzY-YbL7RL+s1wvc9uyKbg3f5FA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: prevent SKX boot failure when C6 & SERIRQ enabled
+To:     Stephen Douthit <stephend@silicom-usa.com>
+Cc:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,375 +59,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git arm64/stacktrace/speedups
-head:   481959ff932d344c5dc29591d2be4108adf0403b
-commit: 481959ff932d344c5dc29591d2be4108adf0403b [9/9] WIP: arm64: move SDEI stack bits into stacktrace.h
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220417/202204171236.O3pFdS1J-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/commit/?id=481959ff932d344c5dc29591d2be4108adf0403b
-        git remote add mark https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git
-        git fetch --no-tags mark arm64/stacktrace/speedups
-        git checkout 481959ff932d344c5dc29591d2be4108adf0403b
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arm64 SHELL=/bin/bash
+Hi Stephen,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+I noticed this patch languishing in patchwork.
+I don't see any discussion on it, and it never went upstream.
 
-All errors (new ones prefixed by >>):
+Was this problem addressed in another way?
 
-   In file included from include/asm-generic/percpu.h:7,
-                    from arch/arm64/include/asm/percpu.h:248,
-                    from arch/arm64/include/asm/smp.h:28,
-                    from include/linux/smp.h:113,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/mutex.h:17,
-                    from include/linux/kernfs.h:11,
-                    from include/linux/sysfs.h:16,
-                    from include/linux/kobject.h:20,
-                    from include/linux/of.h:17,
-                    from include/linux/irqdomain.h:35,
-                    from include/linux/acpi.h:13,
-                    from include/acpi/apei.h:9,
-                    from include/acpi/ghes.h:5,
-                    from include/linux/arm_sdei.h:8,
-                    from arch/arm64/kernel/sdei.c:6:
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_normal_stack':
->> arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr' undeclared (first use in this function)
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:57: note: each undeclared identifier is reported only once for each function it appears in
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_critical_stack':
->> arch/arm64/include/asm/stacktrace.h:111:57: error: 'sdei_stack_critical_ptr' undeclared (first use in this function)
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:111:44: note: in expansion of macro 'raw_cpu_read'
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                            ^~~~~~~~~~~~
---
-   In file included from include/asm-generic/percpu.h:7,
-                    from arch/arm64/include/asm/percpu.h:248,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/rcupdate.h:26,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/audit.h:12,
-                    from arch/arm64/kernel/ptrace.c:11:
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_normal_stack':
->> arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr' undeclared (first use in this function)
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:57: note: each undeclared identifier is reported only once for each function it appears in
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_critical_stack':
->> arch/arm64/include/asm/stacktrace.h:111:57: error: 'sdei_stack_critical_ptr' undeclared (first use in this function)
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:111:44: note: in expansion of macro 'raw_cpu_read'
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/kernel/ptrace.c: At top level:
-   arch/arm64/kernel/ptrace.c:1838:5: warning: no previous prototype for 'syscall_trace_enter' [-Wmissing-prototypes]
-    1838 | int syscall_trace_enter(struct pt_regs *regs)
-         |     ^~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/ptrace.c:1861:6: warning: no previous prototype for 'syscall_trace_exit' [-Wmissing-prototypes]
-    1861 | void syscall_trace_exit(struct pt_regs *regs)
-         |      ^~~~~~~~~~~~~~~~~~
---
-   In file included from include/asm-generic/percpu.h:7,
-                    from arch/arm64/include/asm/percpu.h:248,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/rcupdate.h:26,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/context_tracking.h:5,
-                    from arch/arm64/kernel/traps.c:10:
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_normal_stack':
->> arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr' undeclared (first use in this function)
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:57: note: each undeclared identifier is reported only once for each function it appears in
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_critical_stack':
->> arch/arm64/include/asm/stacktrace.h:111:57: error: 'sdei_stack_critical_ptr' undeclared (first use in this function)
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:111:44: note: in expansion of macro 'raw_cpu_read'
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/kernel/traps.c: At top level:
-   arch/arm64/kernel/traps.c:802:43: warning: initialized field overwritten [-Woverride-init]
-     802 |         [ESR_ELx_EC_UNKNOWN]            = "Unknown/Uncategorized",
-         |                                           ^~~~~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:802:43: note: (near initialization for 'esr_class_str[0]')
-   arch/arm64/kernel/traps.c:803:43: warning: initialized field overwritten [-Woverride-init]
-     803 |         [ESR_ELx_EC_WFx]                = "WFI/WFE",
-         |                                           ^~~~~~~~~
-   arch/arm64/kernel/traps.c:803:43: note: (near initialization for 'esr_class_str[1]')
-   arch/arm64/kernel/traps.c:804:43: warning: initialized field overwritten [-Woverride-init]
-     804 |         [ESR_ELx_EC_CP15_32]            = "CP15 MCR/MRC",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:804:43: note: (near initialization for 'esr_class_str[3]')
-   arch/arm64/kernel/traps.c:805:43: warning: initialized field overwritten [-Woverride-init]
-     805 |         [ESR_ELx_EC_CP15_64]            = "CP15 MCRR/MRRC",
-         |                                           ^~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:805:43: note: (near initialization for 'esr_class_str[4]')
-   arch/arm64/kernel/traps.c:806:43: warning: initialized field overwritten [-Woverride-init]
-     806 |         [ESR_ELx_EC_CP14_MR]            = "CP14 MCR/MRC",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:806:43: note: (near initialization for 'esr_class_str[5]')
-   arch/arm64/kernel/traps.c:807:43: warning: initialized field overwritten [-Woverride-init]
-     807 |         [ESR_ELx_EC_CP14_LS]            = "CP14 LDC/STC",
-         |                                           ^~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:807:43: note: (near initialization for 'esr_class_str[6]')
-   arch/arm64/kernel/traps.c:808:43: warning: initialized field overwritten [-Woverride-init]
-     808 |         [ESR_ELx_EC_FP_ASIMD]           = "ASIMD",
-         |                                           ^~~~~~~
-   arch/arm64/kernel/traps.c:808:43: note: (near initialization for 'esr_class_str[7]')
-   arch/arm64/kernel/traps.c:809:43: warning: initialized field overwritten [-Woverride-init]
-     809 |         [ESR_ELx_EC_CP10_ID]            = "CP10 MRC/VMRS",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:809:43: note: (near initialization for 'esr_class_str[8]')
-   arch/arm64/kernel/traps.c:810:43: warning: initialized field overwritten [-Woverride-init]
-     810 |         [ESR_ELx_EC_PAC]                = "PAC",
-         |                                           ^~~~~
-   arch/arm64/kernel/traps.c:810:43: note: (near initialization for 'esr_class_str[9]')
-   arch/arm64/kernel/traps.c:811:43: warning: initialized field overwritten [-Woverride-init]
-     811 |         [ESR_ELx_EC_CP14_64]            = "CP14 MCRR/MRRC",
-         |                                           ^~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:811:43: note: (near initialization for 'esr_class_str[12]')
-   arch/arm64/kernel/traps.c:812:43: warning: initialized field overwritten [-Woverride-init]
-     812 |         [ESR_ELx_EC_BTI]                = "BTI",
-         |                                           ^~~~~
-   arch/arm64/kernel/traps.c:812:43: note: (near initialization for 'esr_class_str[13]')
-   arch/arm64/kernel/traps.c:813:43: warning: initialized field overwritten [-Woverride-init]
-     813 |         [ESR_ELx_EC_ILL]                = "PSTATE.IL",
-         |                                           ^~~~~~~~~~~
-   arch/arm64/kernel/traps.c:813:43: note: (near initialization for 'esr_class_str[14]')
-   arch/arm64/kernel/traps.c:814:43: warning: initialized field overwritten [-Woverride-init]
-     814 |         [ESR_ELx_EC_SVC32]              = "SVC (AArch32)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:814:43: note: (near initialization for 'esr_class_str[17]')
-   arch/arm64/kernel/traps.c:815:43: warning: initialized field overwritten [-Woverride-init]
-     815 |         [ESR_ELx_EC_HVC32]              = "HVC (AArch32)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:815:43: note: (near initialization for 'esr_class_str[18]')
-   arch/arm64/kernel/traps.c:816:43: warning: initialized field overwritten [-Woverride-init]
-     816 |         [ESR_ELx_EC_SMC32]              = "SMC (AArch32)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:816:43: note: (near initialization for 'esr_class_str[19]')
-   arch/arm64/kernel/traps.c:817:43: warning: initialized field overwritten [-Woverride-init]
-     817 |         [ESR_ELx_EC_SVC64]              = "SVC (AArch64)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:817:43: note: (near initialization for 'esr_class_str[21]')
-   arch/arm64/kernel/traps.c:818:43: warning: initialized field overwritten [-Woverride-init]
-     818 |         [ESR_ELx_EC_HVC64]              = "HVC (AArch64)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:818:43: note: (near initialization for 'esr_class_str[22]')
-   arch/arm64/kernel/traps.c:819:43: warning: initialized field overwritten [-Woverride-init]
-     819 |         [ESR_ELx_EC_SMC64]              = "SMC (AArch64)",
-         |                                           ^~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:819:43: note: (near initialization for 'esr_class_str[23]')
-   arch/arm64/kernel/traps.c:820:43: warning: initialized field overwritten [-Woverride-init]
-     820 |         [ESR_ELx_EC_SYS64]              = "MSR/MRS (AArch64)",
-         |                                           ^~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:820:43: note: (near initialization for 'esr_class_str[24]')
-   arch/arm64/kernel/traps.c:821:43: warning: initialized field overwritten [-Woverride-init]
-     821 |         [ESR_ELx_EC_SVE]                = "SVE",
-         |                                           ^~~~~
-   arch/arm64/kernel/traps.c:821:43: note: (near initialization for 'esr_class_str[25]')
-   arch/arm64/kernel/traps.c:822:43: warning: initialized field overwritten [-Woverride-init]
-     822 |         [ESR_ELx_EC_ERET]               = "ERET/ERETAA/ERETAB",
-         |                                           ^~~~~~~~~~~~~~~~~~~~
-   arch/arm64/kernel/traps.c:822:43: note: (near initialization for 'esr_class_str[26]')
-   arch/arm64/kernel/traps.c:823:43: warning: initialized field overwritten [-Woverride-init]
-     823 |         [ESR_ELx_EC_FPAC]               = "FPAC",
-         |                                           ^~~~~~
-   arch/arm64/kernel/traps.c:823:43: note: (near initialization for 'esr_class_str[28]')
-   arch/arm64/kernel/traps.c:824:43: warning: initialized field overwritten [-Woverride-init]
-     824 |         [ESR_ELx_EC_IMP_DEF]            = "EL3 IMP DEF",
-         |                                           ^~~~~~~~~~~~~
---
-   In file included from include/asm-generic/percpu.h:7,
-                    from arch/arm64/include/asm/percpu.h:248,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/spinlock.h:58,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/slab.h:15,
-                    from kernel/fork.c:16:
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_normal_stack':
->> arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr' undeclared (first use in this function)
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:57: note: each undeclared identifier is reported only once for each function it appears in
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_critical_stack':
->> arch/arm64/include/asm/stacktrace.h:111:57: error: 'sdei_stack_critical_ptr' undeclared (first use in this function)
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:111:44: note: in expansion of macro 'raw_cpu_read'
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                            ^~~~~~~~~~~~
-   kernel/fork.c: At top level:
-   kernel/fork.c:853:20: warning: no previous prototype for 'arch_task_cache_init' [-Wmissing-prototypes]
-     853 | void __init __weak arch_task_cache_init(void) { }
-         |                    ^~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/asm-generic/percpu.h:7,
-                    from arch/arm64/include/asm/percpu.h:248,
-                    from include/linux/irqflags.h:17,
-                    from include/linux/rcupdate.h:26,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/stackleak.h:5,
-                    from kernel/stackleak.c:13:
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_normal_stack':
->> arch/arm64/include/asm/stacktrace.h:102:57: error: 'sdei_stack_normal_ptr' undeclared (first use in this function)
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:57: note: each undeclared identifier is reported only once for each function it appears in
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:102:44: note: in expansion of macro 'raw_cpu_read'
-     102 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-         |                                            ^~~~~~~~~~~~
-   arch/arm64/include/asm/stacktrace.h: In function 'on_sdei_critical_stack':
->> arch/arm64/include/asm/stacktrace.h:111:57: error: 'sdei_stack_critical_ptr' undeclared (first use in this function)
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/percpu-defs.h:318:16: note: in definition of macro '__pcpu_size_call_return'
-     318 |         typeof(variable) pscr_ret__;                                    \
-         |                ^~~~~~~~
-   arch/arm64/include/asm/stacktrace.h:111:44: note: in expansion of macro 'raw_cpu_read'
-     111 |         unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-         |                                            ^~~~~~~~~~~~
-   kernel/stackleak.c: At top level:
-   kernel/stackleak.c:73:25: warning: no previous prototype for 'stackleak_erase' [-Wmissing-prototypes]
-      73 | asmlinkage void noinstr stackleak_erase(void)
-         |                         ^~~~~~~~~~~~~~~
-   kernel/stackleak.c: In function 'stackleak_erase':
-   kernel/stackleak.c:117:26: warning: assignment to 'long unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-     117 |                 boundary = current_top_of_stack();
-         |                          ^
-   kernel/stackleak.c:125:31: warning: assignment to 'long unsigned int' from 'void *' makes integer from pointer without a cast [-Wint-conversion]
-     125 |         current->lowest_stack = current_top_of_stack() - THREAD_SIZE/64;
-         |                               ^
-   kernel/stackleak.c: At top level:
-   kernel/stackleak.c:128:49: warning: no previous prototype for 'stackleak_track_stack' [-Wmissing-prototypes]
-     128 | void __used __no_caller_saved_registers noinstr stackleak_track_stack(void)
-         |                                                 ^~~~~~~~~~~~~~~~~~~~~
+If no, and somebody is using this patch, I'm curious if it is really
+CC6 that you want to disable, or perhaps disabling PC6 is sufficient?
 
+thanks,
+-Len
 
-vim +/sdei_stack_normal_ptr +102 arch/arm64/include/asm/stacktrace.h
+On Mon, Jul 1, 2019 at 9:43 AM Stephen Douthit <stephend@silicom-usa.com> wrote:
+>
+> Interrupts are getting misrouted and/or dropped on SKLYLAKE_X based D-2100s
+> when C6 and SERIRQ are enabled.  I've only seen this issue on systems
+> using SERIRQs (in my case for a LPC based UART providing the serial
+> console for a headless server).
+>
+> One failure mode is "do_IRQ: 8.33 No irq handler for vector" getting
+> printed in the kernel logs. The core getting the unhandled irq is typically
+> the one handling the UART SERIRQ.  I've seen it on other cores, but I
+> haven't confirmed if that's because the UART irq handler was moved to
+> another core at some point.  The vector varies from 33-36, but it's most
+> often 33.
+>
+> The other failure mode is the system hanging.  Sometimes forcing some non
+> SERIRQ interrupt to fire (by plugging/unplugging a network/USB cable) can
+> get the system out of this state.  Generating more SERIRQs via the UART
+> will not unstick the system.
+>
+> Both failures seemed to occur when transition to a low load state, which
+> is why I started playing around with power management options and found
+> that booting with "intel_idle.max_cstate=2" fixed the issue.
+>
+> This patch only disables C6 if it's able to determine that SERIRQs are
+> enabled by checking the enable bit in the LPC controllers PCI config space.
+>
+> Signed-off-by: Stephen Douthit <stephend@silicom-usa.com>
+> ---
+>  drivers/idle/intel_idle.c | 35 ++++++++++++++++++++++++++++++++++-
+>  include/linux/pci_ids.h   |  1 +
+>  2 files changed, 35 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index b8647b5c3d4d..353f6a9b1818 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -61,12 +61,13 @@
+>  #include <linux/notifier.h>
+>  #include <linux/cpu.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/pci.h>
+>  #include <asm/cpu_device_id.h>
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/msr.h>
+>
+> -#define INTEL_IDLE_VERSION "0.4.1"
+> +#define INTEL_IDLE_VERSION "0.4.2"
+>
+>  static struct cpuidle_driver intel_idle_driver = {
+>         .name = "intel_idle",
+> @@ -1306,6 +1307,35 @@ static void sklh_idle_state_table_update(void)
+>         skl_cstates[5].disabled = 1;    /* C8-SKL */
+>         skl_cstates[6].disabled = 1;    /* C9-SKL */
+>  }
+> +/*
+> + * skx_idle_state_table_update()
+> + *
+> + * On SKX (model 0x55) SoCs disable C6 if SERIRQ is enabled
+> + */
+> +static void skx_idle_state_table_update(void)
+> +{
+> +#define SCNT_OFF 0x64
+> +#define SCNT_EN (1 << 7)
+> +       struct pci_dev *pdev = pci_get_device(PCI_VENDOR_ID_INTEL,
+> +                                             PCI_DEVICE_ID_INTEL_SKX_LPC,
+> +                                             NULL);
+> +       u8 reg;
+> +
+> +       /*
+> +        * Check bit 7 of the Serial IRQ Control (SCNT) register (0x64) in the
+> +        * LPC controller.  If it's set serial IRQs are enabled, and we need to
+> +        * disable C6 to prevent hangs.
+> +        */
+> +       if (!pdev)
+> +               return;
+> +       if (pci_read_config_byte(pdev, SCNT_OFF, &reg))
+> +               return;
+> +       if (!(reg & SCNT_EN))
+> +               return;
+> +
+> +       pr_debug("SERIRQ enabled on SKX, disabling C6 to avoid hangs\n");
+> +       skx_cstates[2].disabled = 1;    /* C6-SKX */
+> +}
+>  /*
+>   * intel_idle_state_table_update()
+>   *
+> @@ -1326,6 +1356,9 @@ static void intel_idle_state_table_update(void)
+>         case INTEL_FAM6_SKYLAKE_DESKTOP:
+>                 sklh_idle_state_table_update();
+>                 break;
+> +       case INTEL_FAM6_SKYLAKE_X:
+> +               skx_idle_state_table_update();
+> +               break;
+>         }
+>  }
+>
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index 70e86148cb1e..02bac8de03fd 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -2997,6 +2997,7 @@
+>  #define PCI_DEVICE_ID_INTEL_84460GX    0x84ea
+>  #define PCI_DEVICE_ID_INTEL_IXP4XX     0x8500
+>  #define PCI_DEVICE_ID_INTEL_IXP2800    0x9004
+> +#define PCI_DEVICE_ID_INTEL_SKX_LPC    0xa1c8
+>  #define PCI_DEVICE_ID_INTEL_S21152BB   0xb152
+>
+>  #define PCI_VENDOR_ID_SCALEMP          0x8686
+> --
+> 2.21.0
+>
 
-    98	
-    99	static inline bool on_sdei_normal_stack(unsigned long sp, unsigned long size,
-   100						struct stack_info *info)
-   101	{
- > 102		unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_normal_ptr);
-   103		unsigned long high = low + SDEI_STACK_SIZE;
-   104	
-   105		return on_stack(sp, size, low, high, STACK_TYPE_SDEI_NORMAL, info);
-   106	}
-   107	
-   108	static inline bool on_sdei_critical_stack(unsigned long sp, unsigned long size,
-   109						  struct stack_info *info)
-   110	{
- > 111		unsigned long low = (unsigned long)raw_cpu_read(sdei_stack_critical_ptr);
-   112		unsigned long high = low + SDEI_STACK_SIZE;
-   113	
-   114		return on_stack(sp, size, low, high, STACK_TYPE_SDEI_CRITICAL, info);
-   115	}
-   116	#else
-   117	static inline bool on_sdei_normal_stack(unsigned long sp, unsigned long size,
-   118						struct stack_info *info)
-   119	{
-   120		return false;
-   121	}
-   122	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Len Brown, Intel Open Source Technology Center

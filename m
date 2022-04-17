@@ -2,212 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A202F5047A4
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 13:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC105047A7
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 13:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233966AbiDQLTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 07:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33674 "EHLO
+        id S233983AbiDQLTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 07:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbiDQLTN (ORCPT
+        with ESMTP id S233970AbiDQLTU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 07:19:13 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FBEDFE;
-        Sun, 17 Apr 2022 04:16:38 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id y10so5171119ejw.8;
-        Sun, 17 Apr 2022 04:16:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CfrGP66WrBzG96HgL3U6ijgtUczQ+IlvOu7P8DwUlvM=;
-        b=ZB83+qeHedQQtzaBLhpm3L6S6LIsC9/o4/molKhfmELh8L1G/bEFe9WwSEzMw+OqvT
-         qFlhIW199EenZhCv1I/EFS4KU42rrmKnCkir7bWaYKnLwRCelRhAfGsfNcuGrDWMa20W
-         sbi4Yp5/maKStJepbAVLyg+BOebWK+XgdakdOXPO60vJXuxtsOhfH9NhBS76I3pjc7Ns
-         ottuJiGdepNkj34SlF1MZxg9QFBYARk6i0h6rc9zx9qnwllF28LPTvv441fErJq1woLH
-         NsX1izlLDIJsznX2FQa1uZa5ANfFKmpbloaGZ0s+9bgxnSpsn+UOzYqwqS+4Zn/c+4MC
-         a1Fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=CfrGP66WrBzG96HgL3U6ijgtUczQ+IlvOu7P8DwUlvM=;
-        b=Fpk81Ov36+Lc5L320JbsAD3/i2sIDShdycz/GJx3ykmis3OCqIJ06D/Qjzp5K4RMmM
-         KgJzUOVP7SqLn+5yhuqQbuhrKhkwaxbSQxkbY0A+HZLZdrgn/YOEsX6XUmMSZbVJq89U
-         nH8RICUmgmhP7FTB3cRYdPhaZfaJYUD31irFjP8Gr/IeUg4eQPfYex0x70HQOYDRHPhe
-         Yk22K0oawujGbST7xY9vMAtBZO6c/oqdLQ99haTJvozTpAffQVYwXr0s1OQ5Yeg9sb+y
-         b/MjO0K2rzx+HfTTr+jheBr8dmViDz7RWf/W3u1ttXOPeiH58NaWXevCvDAeHvUmM86O
-         5VzQ==
-X-Gm-Message-State: AOAM533NssDJf97D+Ck1fIt3Z8YlDThfUEFRhdfCYoCgcLxrnyHrGvd+
-        x9HiS7MWyo5B1VeHehDOlHA=
-X-Google-Smtp-Source: ABdhPJw8HRXHjTVCpDQTfZ9mTOXxcxmnwKmFv6EWI+KoSU4WmVrMgCHSOyJFEYXJVR7yOIhU05dV7w==
-X-Received: by 2002:a17:906:4fc7:b0:6da:92b2:f572 with SMTP id i7-20020a1709064fc700b006da92b2f572mr5416606ejw.184.1650194196556;
-        Sun, 17 Apr 2022 04:16:36 -0700 (PDT)
-Received: from linux.. (p5dd1ed70.dip0.t-ipconnect.de. [93.209.237.112])
-        by smtp.gmail.com with ESMTPSA id i3-20020a056402054300b00423133147cesm2948781edx.38.2022.04.17.04.16.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 04:16:36 -0700 (PDT)
-From:   Bean Huo <huobean@gmail.com>
-To:     ulf.hansson@linaro.org, adrian.hunter@intel.com,
-        jakob.rossler@nokia.com, Avri.Altman@wdc.com
-Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bean Huo <beanhuo@micron.com>
-Subject: [PATCH v2 RESENT] mmc-utils: Add General command CMD56 read support
-Date:   Sun, 17 Apr 2022 13:16:22 +0200
-Message-Id: <20220417111622.621650-1-huobean@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 17 Apr 2022 07:19:20 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F0490FE;
+        Sun, 17 Apr 2022 04:16:43 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app2 (Coremail) with SMTP id by_KCgCXDhYL91ti04XuAQ--.18940S2;
+        Sun, 17 Apr 2022 19:16:37 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        gregkh@linuxfoundation.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V2] drivers: tty: serial: Fix deadlock in sa1100_set_termios()
+Date:   Sun, 17 Apr 2022 19:16:26 +0800
+Message-Id: <20220417111626.7802-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: by_KCgCXDhYL91ti04XuAQ--.18940S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uFy3AFW3Jr17Jr17ZFy8uFg_yoW8WF15pF
+        4qyr9xtFWkZr4293WDtw4DZF4rWanrCrW7CrWxG39Y9Fn5XFyqqFn7K3s0vFW2vFsrJr9F
+        qF1Fq3y3AF48A3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk21xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxF
+        aVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr
+        4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxG
+        rwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8Jw
+        CI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2
+        z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgwDAVZdtZOglAALse
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bean Huo <beanhuo@micron.com>
+There is a deadlock in sa1100_set_termios(), which is shown
+below:
 
-We can use GEN_CMD (CMD56) to read a  data block with vendor-specific
-format and meaning, which is very helpful and useful for customers to
-analyze device health. This patch is to add support for this command.
+   (Thread 1)              |      (Thread 2)
+                           | sa1100_enable_ms()
+sa1100_set_termios()       |  mod_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | sa1100_timeout()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-At the same time, in order to make CMD56 universal, let more users of
-mmc-utils can benefit from this. We will allow the user to enter [arg]
-for special commands. Because some eMMC vendors provide an additional
-set of commands beyond the GEN_CMD (CMD56) definition in the JEDEC
-specification. These additional commands are implemented using generic
-CMD56 commands, and they return a wealth of useful information about the
-state of the NAND device. For these special purposes, the [31:1]stuff
-bits in the CMD56 argument are used. You can refer to  Micron eMMC
-"TN-FC-32: e·MMC Device Health Report" as an example.
+We hold sport->port.lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need sport->port.lock in position (2) of thread 2. As a result,
+sa1100_set_termios() will block forever.
 
-I didn't add data parsing, just print the raw data as it is vendor-specific.
+This patch moves del_timer_sync() before spin_lock_irqsave()
+in order to prevent the deadlock.
 
-Signed-off-by: Bean Huo <beanhuo@micron.com>
-Acked-by: Avri Altman <Avri.Altman@wdc.com>
-Tested-by: Rossler Jakob (Nokia - DE/Ulm) <jakob.rossler@nokia.com>
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
 ---
-V2:
- 1. Fix coding type issue
- 2. Add CMD56 argument default value 0x01 support, make [arg] optional
----
- mmc.c      |  8 ++++++++
- mmc.h      |  2 ++
- mmc_cmds.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
- mmc_cmds.h |  1 +
- 4 files changed, 68 insertions(+)
+Changes in V2:
+  - Move del_timer_sync() before spin_lock_irqsave().
 
-diff --git a/mmc.c b/mmc.c
-index eb2638b12271..6c563879cf1a 100644
---- a/mmc.c
-+++ b/mmc.c
-@@ -237,6 +237,14 @@ static struct Command commands[] = {
- 		"secure-trim1 | secure-trim2 | trim \n",
- 	NULL
- 	},
-+	{ do_general_cmd_read, -1,
-+	"gen_cmd read", "<device> [arg]\n"
-+		"Send GEN_CMD (CMD56) to read vendor-specific format/meaning data from <device>\n\n"
-+		"NOTE!: [arg] is optional and defaults to 0x1. If [arg] is specified, then [arg]\n"
-+		"must be a 32-bit hexadecimal number, prefixed with 0x/0X. And bit0 in [arg] must\n"
-+		"be 1.",
-+	NULL
-+	},
- 	{ 0, 0, 0, 0 }
- };
+ drivers/tty/serial/sa1100.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/tty/serial/sa1100.c b/drivers/tty/serial/sa1100.c
+index 5fe6cccfc1a..e64e42a19d1 100644
+--- a/drivers/tty/serial/sa1100.c
++++ b/drivers/tty/serial/sa1100.c
+@@ -446,6 +446,8 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	baud = uart_get_baud_rate(port, termios, old, 0, port->uartclk/16); 
+ 	quot = uart_get_divisor(port, baud);
  
-diff --git a/mmc.h b/mmc.h
-index 25d6864ac76f..b621374a1ed1 100644
---- a/mmc.h
-+++ b/mmc.h
-@@ -41,6 +41,8 @@
- 					      [1] Discard Enable
- 					      [0] Identify Write Blocks for
- 					      Erase (or TRIM Enable)  R1b */
-+#define MMC_GEN_CMD		56   /* adtc  [31:1] stuff bits.
-+					      [0]: RD/WR1 R1 */
++	del_timer_sync(&sport->timer);
++
+ 	spin_lock_irqsave(&sport->port.lock, flags);
  
- #define R1_OUT_OF_RANGE         (1 << 31)       /* er, c */
- #define R1_ADDRESS_ERROR        (1 << 30)       /* erx, c */
-diff --git a/mmc_cmds.c b/mmc_cmds.c
-index 49d3e324d266..bb0f0226bf23 100644
---- a/mmc_cmds.c
-+++ b/mmc_cmds.c
-@@ -2981,3 +2981,60 @@ out:
- 	return ret;
- #endif
- }
-+
-+int do_general_cmd_read(int nargs, char **argv)
-+{
-+	int dev_fd;
-+	char *device;
-+	char *endptr;
-+	__u8 buf[512];
-+	__u32 arg = 0x01;
-+	int ret = -EINVAL, i;
-+	struct mmc_ioc_cmd idata;
-+
-+	if (nargs != 2 && nargs != 3) {
-+		fprintf(stderr, "Usage: gen_cmd read </path/to/mmcblkX> [arg]\n");
-+		exit(1);
-+	}
-+
-+	device = argv[1];
-+	dev_fd = open(device, O_RDWR);
-+	if (dev_fd < 0) {
-+		perror("device open failed");
-+		exit(1);
-+	}
-+
-+	/* arg is specified */
-+	if (nargs == 3) {
-+		arg = strtol(argv[2], &endptr, 16);
-+		if (errno != 0 || *endptr != '\0' || !(arg & 0x1)) {
-+			fprintf(stderr, "Wrong ARG, it should be Hex number and bit0 must be 1\n");
-+			goto out;
-+		}
-+	}
-+
-+	memset(&idata, 0, sizeof(idata));
-+	idata.write_flag = 0;
-+	idata.opcode = MMC_GEN_CMD;
-+	idata.arg = arg;
-+	idata.flags = MMC_RSP_SPI_R1 | MMC_RSP_R1 | MMC_CMD_ADTC;
-+	idata.blksz = 512;
-+	idata.blocks = 1;
-+	mmc_ioc_cmd_set_data(idata, buf);
-+
-+	ret = ioctl(dev_fd, MMC_IOC_CMD, &idata);
-+	if (ret) {
-+		perror("ioctl");
-+		goto out;
-+	}
-+
-+	printf("Data:\n");
-+	for (i = 0; i < 512; i++) {
-+		printf("%2x ", buf[i]);
-+		if ((i + 1) % 16 == 0)
-+			printf("\n");
-+	}
-+out:
-+	close(dev_fd);
-+	return ret;
-+}
-diff --git a/mmc_cmds.h b/mmc_cmds.h
-index 8331ab2373fd..0f7c0041f753 100644
---- a/mmc_cmds.h
-+++ b/mmc_cmds.h
-@@ -46,3 +46,4 @@ int do_read_scr(int argc, char **argv);
- int do_read_cid(int argc, char **argv);
- int do_read_csd(int argc, char **argv);
- int do_erase(int nargs, char **argv);
-+int do_general_cmd_read(int nargs, char **argv);
+ 	sport->port.read_status_mask &= UTSR0_TO_SM(UTSR0_TFS);
+@@ -476,8 +478,6 @@ sa1100_set_termios(struct uart_port *port, struct ktermios *termios,
+ 				UTSR1_TO_SM(UTSR1_ROR);
+ 	}
+ 
+-	del_timer_sync(&sport->timer);
+-
+ 	/*
+ 	 * Update the per-port timeout.
+ 	 */
 -- 
-2.34.1
+2.17.1
 

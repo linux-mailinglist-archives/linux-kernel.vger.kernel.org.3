@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9285047E9
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:37:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B8F85047EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 15:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234176AbiDQNcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 09:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33894 "EHLO
+        id S234188AbiDQNjt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 09:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiDQNcW (ORCPT
+        with ESMTP id S229496AbiDQNjr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 09:32:22 -0400
-Received: from m12-13.163.com (m12-13.163.com [220.181.12.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15E7A2B2
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:29:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8xdy1
-        otSXW1cwfTIsLN61K8o+NtLtYS2/7RspgGPkFc=; b=WaktQzaNvApyYYQ3HqeLE
-        oJrH0VHDXzUSk9eqn4Sweu6M+/U73QAridWyhEm6N/T0iXbkI+sUQ8QSllnR4GQg
-        E/Jeajtx7eTWfW2a870TFPqO9WUEvL11ILiolkVp6FO2c3OotRVKDIyffplOIUZg
-        YGuspDxGJxTDLZyj84pgak=
-Received: from carlis (unknown [120.229.91.35])
-        by smtp9 (Coremail) with SMTP id DcCowABHu14vFlxikyJyBw--.4076S2;
-        Sun, 17 Apr 2022 21:29:20 +0800 (CST)
-From:   Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-To:     liviu.dudau@arm.com, brian.starkey@arm.com, airlied@linux.ie,
-        daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Subject: [PATCH] drm/malidp: convert sysfs snprintf to sysfs_emit
-Date:   Sun, 17 Apr 2022 13:29:18 +0000
-Message-Id: <20220417132918.135795-1-zhangxuezhi1@coolpad.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 17 Apr 2022 09:39:47 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778B96475
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:37:11 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id d19-20020a0566022d5300b0065499cd4a73so412935iow.14
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 06:37:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
+         :from:to;
+        bh=wA0FmzGAcRTrX+FnNeAVQOC1kod7R+OPRg+GRTVqKh8=;
+        b=uUpV6i3ugvMY+QoTvuqfZ80b19rd3TWH6a1Zr4qMgB94aozR94JNQIdFcOUCUo3Svf
+         5uvh3rgxNF8FnmadUTKKDRDGdxSde8IR0whSZI94NLlhP0rZaWlmYzwfcob7dTNPVkQM
+         6PrK4VeaRUwbaq3qQ4+T8m8iZsrStJxfg8RrZ6DwVYctrRsNdIBur81kZdKm5NOukdeX
+         5wlXCMGn3bjhjtt+Fo7+Lu5asaUrBwxn5YiJEWjIsGUEa21MfQkZv+vJbXoiwW2Nlx9H
+         FSQnnyviE3J8tyFPGlBgMMzHl13QC7o+iArRaAk4B0A8cwJ5QikkGv8cSh29yR3qOvjd
+         eEEQ==
+X-Gm-Message-State: AOAM532KcIhxZvSYXWH7iqXb6UsKrc/pQMpN3fBExHUzBVoePhL4J36F
+        tSPPSFmzLRCTcFPY+4MwfCCkiqlhsHHMQx/I/inzRLhc+ds+
+X-Google-Smtp-Source: ABdhPJzu8m14N1MFCoEmHDFz6ieSul9y+/6ERhmpPdxdOihDx3wppwzmzdQYIcOP91/UdZmPr8NDfGWK1J1CtfWUls48flDEJ4tM
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: DcCowABHu14vFlxikyJyBw--.4076S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GrWfXF1UWrWfGr1xZw1kZrb_yoWfWFb_CF
-        10qrsrZrs2yF97uw1xCF4fZryIkayF9FZ5XrW8ta4fZrsFvrsrZ3s29ryvqryUJF47AF9r
-        Aa1kuF15J3ZrCjkaLaAFLSUrUUUU1b8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUnpWlPUUUUU==
-X-Originating-IP: [120.229.91.35]
-Sender: llyz108@163.com
-X-CM-SenderInfo: xoo16iiqy6il2tof0z/1tbiQwjlhVc7Yte1mgABsc
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:214b:b0:2cc:1c95:8198 with SMTP id
+ d11-20020a056e02214b00b002cc1c958198mr1316033ilv.231.1650202630786; Sun, 17
+ Apr 2022 06:37:10 -0700 (PDT)
+Date:   Sun, 17 Apr 2022 06:37:10 -0700
+In-Reply-To: <6ab618f8-f88b-0771-a739-04cd9cdc1a3c@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009d92dd05dcd9bd1c@google.com>
+Subject: Re: [syzbot] memory leak in iovec_from_user
+From:   syzbot <syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
-drivers/gpu/drm/arm/malidp_drv.c:658:8-16:
-WARNING: use scnprintf or sprintf
+Hello,
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
- drivers/gpu/drm/arm/malidp_drv.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-diff --git a/drivers/gpu/drm/arm/malidp_drv.c b/drivers/gpu/drm/arm/malidp_drv.c
-index d5aef21426cf..b1ffd5ba27d9 100644
---- a/drivers/gpu/drm/arm/malidp_drv.c
-+++ b/drivers/gpu/drm/arm/malidp_drv.c
-@@ -655,7 +655,7 @@ static ssize_t core_id_show(struct device *dev, struct device_attribute *attr,
- 	struct drm_device *drm = dev_get_drvdata(dev);
- 	struct malidp_drm *malidp = drm->dev_private;
- 
--	return snprintf(buf, PAGE_SIZE, "%08x\n", malidp->core_id);
-+	return sysfs_emit(buf, "%08x\n", malidp->core_id);
- }
- 
- static DEVICE_ATTR_RO(core_id);
--- 
-2.25.1
+Reported-and-tested-by: syzbot+96b43810dfe9c3bb95ed@syzkaller.appspotmail.com
 
+Tested on:
+
+commit:         c0713540 io_uring: fix leaks on IOPOLL and CQE_SKIP
+git tree:       git://git.kernel.dk/linux-block io_uring-5.18
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b8f1a3425e05af27
+dashboard link: https://syzkaller.appspot.com/bug?extid=96b43810dfe9c3bb95ed
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.
+Note: testing is done by a robot and is best-effort only.

@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336DA5056C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD518505069
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243889AbiDRNi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54534 "EHLO
+        id S238530AbiDRMZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:25:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243948AbiDRNKi (ORCPT
+        with ESMTP id S238970AbiDRMXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:10:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD503917F;
-        Mon, 18 Apr 2022 05:50:12 -0700 (PDT)
+        Mon, 18 Apr 2022 08:23:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A504D1FA4C;
+        Mon, 18 Apr 2022 05:18:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3C73B80E4B;
-        Mon, 18 Apr 2022 12:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29AFAC385A7;
-        Mon, 18 Apr 2022 12:50:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4371460F0C;
+        Mon, 18 Apr 2022 12:18:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3583DC385A1;
+        Mon, 18 Apr 2022 12:18:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286201;
-        bh=YTVxqVxYQM8WIfXeWtG3qYntEBSl/XW6V02J/yT4i6I=;
+        s=korg; t=1650284318;
+        bh=dpSSTSPDfm32UkoTk+/PGGGWBTktO6DCFMgsrabB63E=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EfpRxqR1vnXPryg/f2mqNCPUdbMKGZbTHPTX+BTLXC3d0XXmGR0rBpLdZ94XGiTZR
-         4g0lTf3z3yCdzYQTIHnLhcrGFzksmnFWgwcNXW8J3/9+NYitP4EzDdmuiSly6+ec4V
-         08yJKl6cytWkPog5lgMW09vzfu1mJ97CRxETid50=
+        b=ndjk5KfH2m79n4f1ZOri/iYcXm1VcYsaPq/gUj5gZZvBuTV5Pk4dMmKSC+ETZPnr4
+         srTHcRk6SuecxsnMsXCyMcP9rIBPgbqjLJXELP0zNEvREInGIc8ip8oVwWso0CNKn2
+         m2XcwBd7TLDRF9JoFylSXOJjCLmT8lM0oEjTjmHU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org,
+        Mateusz Palczewski <mateusz.palczewski@intel.com>,
+        Konrad Jankowski <konrad0.jankowski@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 060/284] PM: hibernate: fix __setup handler error handling
-Date:   Mon, 18 Apr 2022 14:10:41 +0200
-Message-Id: <20220418121212.398792645@linuxfoundation.org>
+Subject: [PATCH 5.17 073/219] Revert "iavf: Fix deadlock occurrence during resetting VF interface"
+Date:   Mon, 18 Apr 2022 14:10:42 +0200
+Message-Id: <20220418121207.980484389@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Mateusz Palczewski <mateusz.palczewski@intel.com>
 
-[ Upstream commit ba7ffcd4c4da374b0f64666354eeeda7d3827131 ]
+[ Upstream commit 7d59706dbef8de83b3662026766507bc494223d7 ]
 
-If an invalid value is used in "resumedelay=<seconds>", it is
-silently ignored. Add a warning message and then let the __setup
-handler return 1 to indicate that the kernel command line option
-has been handled.
+This change caused a regression with resetting while changing network
+namespaces. By clearing the IFF_UP flag, the kernel now thinks it has
+fully closed the device.
 
-Fixes: 317cf7e5e85e3 ("PM / hibernate: convert simple_strtoul to kstrtoul")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This reverts commit 0cc318d2e8408bc0ffb4662a0c3e5e57005ac6ff.
+
+Fixes: 0cc318d2e840 ("iavf: Fix deadlock occurrence during resetting VF interface")
+Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
+Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
+Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/power/hibernate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/intel/iavf/iavf_main.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index e68b1c20ad3d..f4ecb23c9194 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -1186,7 +1186,7 @@ static int __init resumedelay_setup(char *str)
- 	int rc = kstrtouint(str, 0, &resume_delay);
+diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
+index d10e9a8e8011..f55ecb672768 100644
+--- a/drivers/net/ethernet/intel/iavf/iavf_main.c
++++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
+@@ -2817,7 +2817,6 @@ static void iavf_reset_task(struct work_struct *work)
+ 	running = adapter->state == __IAVF_RUNNING;
  
- 	if (rc)
--		return rc;
-+		pr_warn("resumedelay: bad option string '%s'\n", str);
- 	return 1;
+ 	if (running) {
+-		netdev->flags &= ~IFF_UP;
+ 		netif_carrier_off(netdev);
+ 		netif_tx_stop_all_queues(netdev);
+ 		adapter->link_up = false;
+@@ -2934,7 +2933,7 @@ static void iavf_reset_task(struct work_struct *work)
+ 		 * to __IAVF_RUNNING
+ 		 */
+ 		iavf_up_complete(adapter);
+-		netdev->flags |= IFF_UP;
++
+ 		iavf_irq_enable(adapter, true);
+ 	} else {
+ 		iavf_change_state(adapter, __IAVF_DOWN);
+@@ -2950,10 +2949,8 @@ static void iavf_reset_task(struct work_struct *work)
+ reset_err:
+ 	mutex_unlock(&adapter->client_lock);
+ 	mutex_unlock(&adapter->crit_lock);
+-	if (running) {
++	if (running)
+ 		iavf_change_state(adapter, __IAVF_RUNNING);
+-		netdev->flags |= IFF_UP;
+-	}
+ 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
+ 	iavf_close(netdev);
  }
- 
 -- 
-2.34.1
+2.35.1
 
 
 

@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F9315058A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4965058C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344138AbiDROJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:09:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S1344177AbiDROJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343657AbiDRNyN (ORCPT
+        with ESMTP id S1343696AbiDRNyQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:54:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 922E047ADF;
-        Mon, 18 Apr 2022 06:03:24 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F4047AFE;
+        Mon, 18 Apr 2022 06:03:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB44D609EE;
-        Mon, 18 Apr 2022 13:03:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D29EBC385A1;
-        Mon, 18 Apr 2022 13:03:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 306CF60B35;
+        Mon, 18 Apr 2022 13:03:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27106C385A1;
+        Mon, 18 Apr 2022 13:03:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287003;
-        bh=i7d4IMjg68LsHEXJVgI+Q2DYKMuVrFSB7ixi9ScfLgg=;
+        s=korg; t=1650287006;
+        bh=BG6+ol7tstZEZfMzxUu8U5+g5hiNZCpTOjP+NXtT7/A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lznvGKm7N+PbdpruS5S8IqbfptTYHfTp+I8ATTu5oM7kid+2K9O0QEZavsqJsGqPl
-         0LG7qCc04DhyhN63CjrLaV7yDMdBgceeR2WTzMvTfNuEyJZWohlO7k/orlWkwBciZ3
-         wTG9Dd8hpLLNE0rTXRSxw1pSBjlVE2PZgEVb79hQ=
+        b=lR9Q0Fg8xRfAp+JHVAK+kicxpuLIPD6d6ZmWacx9xFxXOFe/q5qGgjeecEHSa7n7p
+         YFBbO6x6gPdoi3zBNlp1wT8mR+VeCBljKsFD+NBJYwmIP56s56ZgT5ZctMu8Qan0dq
+         LKw1lFxMm75vCcX488qFmhisF4g0YfGTHc8cJE7E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michael Schmitz <schmitzmic@gmail.com>,
-        Helge Deller <deller@gmx.de>
-Subject: [PATCH 4.9 028/218] video: fbdev: atari: Atari 2 bpp (STe) palette bugfix
-Date:   Mon, 18 Apr 2022 14:11:34 +0200
-Message-Id: <20220418121200.144995671@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH 4.9 029/218] ARM: dts: exynos: fix UART3 pins configuration in Exynos5250
+Date:   Mon, 18 Apr 2022 14:11:35 +0200
+Message-Id: <20220418121200.188287849@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,62 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Schmitz <schmitzmic@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit c8be5edbd36ceed2ff3d6b8f8e40643c3f396ea3 upstream.
+commit 372d7027fed43c8570018e124cf78b89523a1f8e upstream.
 
-The code to set the shifter STe palette registers has a long
-standing operator precedence bug, manifesting as colors set
-on a 2 bits per pixel frame buffer coming up with a distinctive
-blue tint.
+The gpa1-4 pin was put twice in UART3 pin configuration of Exynos5250,
+instead of proper pin gpa1-5.
 
-Add parentheses around the calculation of the per-color palette
-data before shifting those into their respective bit field position.
-
-This bug goes back a long way (2.4 days at the very least) so there
-won't be a Fixes: tag.
-
-Tested on ARAnyM as well on Falcon030 hardware.
-
-Cc: stable@vger.kernel.org
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Link: https://lore.kernel.org/all/CAMuHMdU3ievhXxKR_xi_v3aumnYW7UNUO6qMdhgfyWTyVSsCkQ@mail.gmail.com
-Tested-by: Michael Schmitz <schmitzmic@gmail.com>
-Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Signed-off-by: Michael Schmitz <schmitzmic@gmail.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: f8bfe2b050f3 ("ARM: dts: add pin state information in client nodes for Exynos5 platforms")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Link: https://lore.kernel.org/r/20211230195325.328220-1-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/video/fbdev/atafb.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ arch/arm/boot/dts/exynos5250-pinctrl.dtsi |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/video/fbdev/atafb.c
-+++ b/drivers/video/fbdev/atafb.c
-@@ -1713,9 +1713,9 @@ static int falcon_setcolreg(unsigned int
- 			   ((blue & 0xfc00) >> 8));
- 	if (regno < 16) {
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe000) >> 13) | ((red & 0x1000) >> 12) << 8) |
--			(((green & 0xe000) >> 13) | ((green & 0x1000) >> 12) << 4) |
--			((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
-+			((((red & 0xe000) >> 13)   | ((red & 0x1000) >> 12)) << 8)   |
-+			((((green & 0xe000) >> 13) | ((green & 0x1000) >> 12)) << 4) |
-+			   ((blue & 0xe000) >> 13) | ((blue & 0x1000) >> 12);
- 		((u32 *)info->pseudo_palette)[regno] = ((red & 0xf800) |
- 						       ((green & 0xfc00) >> 5) |
- 						       ((blue & 0xf800) >> 11));
-@@ -2001,9 +2001,9 @@ static int stste_setcolreg(unsigned int
- 	green >>= 12;
- 	if (ATARIHW_PRESENT(EXTD_SHIFTER))
- 		shifter_tt.color_reg[regno] =
--			(((red & 0xe) >> 1) | ((red & 1) << 3) << 8) |
--			(((green & 0xe) >> 1) | ((green & 1) << 3) << 4) |
--			((blue & 0xe) >> 1) | ((blue & 1) << 3);
-+			((((red & 0xe)   >> 1) | ((red & 1)   << 3)) << 8) |
-+			((((green & 0xe) >> 1) | ((green & 1) << 3)) << 4) |
-+			  ((blue & 0xe)  >> 1) | ((blue & 1)  << 3);
- 	else
- 		shifter_tt.color_reg[regno] =
- 			((red & 0xe) << 7) |
+--- a/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
++++ b/arch/arm/boot/dts/exynos5250-pinctrl.dtsi
+@@ -257,7 +257,7 @@
+ 	};
+ 
+ 	uart3_data: uart3-data {
+-		samsung,pins = "gpa1-4", "gpa1-4";
++		samsung,pins = "gpa1-4", "gpa1-5";
+ 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
+ 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+ 		samsung,pin-drv = <EXYNOS4_PIN_DRV_LV1>;
 
 

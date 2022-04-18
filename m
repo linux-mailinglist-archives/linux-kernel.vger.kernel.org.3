@@ -2,96 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 106DE505027
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:19:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF9C504FBA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238370AbiDRMVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:21:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S238005AbiDRMM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238133AbiDRMVK (ORCPT
+        with ESMTP id S236281AbiDRMMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:21:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73B881B798;
-        Mon, 18 Apr 2022 05:17:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E13D860F0C;
-        Mon, 18 Apr 2022 12:17:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D80C385A1;
-        Mon, 18 Apr 2022 12:17:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284235;
-        bh=5JbYmoZdz9OPv01seDCLPt6a9WZgN2UOJzLnWfa3bRo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0zgsmz60WqL6tg7nH47U08R3ghAafQparK030Os59HTgr0i4TLLvzQkFHsYqMXomc
-         J6YlPIaCGMZ1HQDd53zkP77fFH8y5JrpJ4sKGli6OYhFCOlV8nS7Jme0FQ+yaWTbsB
-         xKNrJZ6H/14Bx4Lw7hB6JBaroAEDG3Aq0Hmh7zkU=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Alvin=20=C5=A0ipraga?= <alsi@bang-olufsen.dk>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.17 007/219] net: dsa: realtek: make interface drivers depend on OF
-Date:   Mon, 18 Apr 2022 14:09:36 +0200
-Message-Id: <20220418121203.680735597@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 18 Apr 2022 08:12:20 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EFC1A803
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:09:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=mr7U61Lv/iEwOWf4m7Y5C1lRiJrpx9ObNmLADe2a/u8=;
+  b=ajsDAonmjyfq5jaJ2PpIgIMHc/OVqaQDouZOSs2mDr75YPBq7oIKB5X4
+   BLjgr5Yh9/vtd8YxiHzVSouOBebsbCJj+FF8sh5qP9g6/KEGkOf/sGl4X
+   HAVwaZGfYv3XEb8tbqpeJdWv8qfCnYLZHr5HuEOiZhwG3fT6Tq1q34aSL
+   M=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,269,1643670000"; 
+   d="scan'208";a="11791691"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:09:37 +0200
+Date:   Mon, 18 Apr 2022 14:09:37 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Aliya Rahmani <aliyarahmani786@gmail.com>
+cc:     clabbe@baylibre.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, outreachy@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] staging: media: zoran: avoid macro argument precedence
+ issues
+In-Reply-To: <20220418115948.5456-4-aliyarahmani786@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204181408230.11986@hadrien>
+References: <20220418115948.5456-1-aliyarahmani786@gmail.com> <20220418115948.5456-4-aliyarahmani786@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alvin Šipraga <alsi@bang-olufsen.dk>
-
-commit 109d899452ba17996eccec7ae8249fb1f8900a16 upstream.
-
-The kernel test robot reported build warnings with a randconfig that
-built realtek-{smi,mdio} without CONFIG_OF set. Since both interface
-drivers are using OF and will not probe without, add the corresponding
-dependency to Kconfig.
-
-Link: https://lore.kernel.org/all/202203231233.Xx73Y40o-lkp@intel.com/
-Link: https://lore.kernel.org/all/202203231439.ycl0jg50-lkp@intel.com/
-Fixes: aac94001067d ("net: dsa: realtek: add new mdio interface for drivers")
-Fixes: 765c39a4fafe ("net: dsa: realtek: convert subdrivers into modules")
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Acked-by: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Link: https://lore.kernel.org/r/20220323124225.91763-1-alvin@pqrs.dk
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-[alsi: backport to 5.16: remove mdio part]
-Cc: stable@vger.kernel.org # v5.16+
-Signed-off-by: Alvin Šipraga <alsi@bang-olufsen.dk>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/net/dsa/realtek/Kconfig |    1 +
- 1 file changed, 1 insertion(+)
-
---- a/drivers/net/dsa/realtek/Kconfig
-+++ b/drivers/net/dsa/realtek/Kconfig
-@@ -14,6 +14,7 @@ menuconfig NET_DSA_REALTEK
- config NET_DSA_REALTEK_SMI
- 	tristate "Realtek SMI connected switch driver"
- 	depends on NET_DSA_REALTEK
-+	depends on OF
- 	default y
- 	help
- 	  Select to enable support for registering switches connected
 
 
+On Mon, 18 Apr 2022, Aliya Rahmani wrote:
+
+> This patch fixes checkpatch warnings of precedence issues. Added parentheses
+> around macro argument 'num'.
+
+You should use the imperative.  This "Add" rather than "Added".
+
+The subject line would be better as "add parentheses on macro parameter".
+That describes what you did, rather than what you avoided (avoided how?).
+
+julia
+
+>
+> Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
+> ---
+>  drivers/staging/media/zoran/videocodec.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
+> index 19732a47c8bd..925f90fd5885 100644
+> --- a/drivers/staging/media/zoran/videocodec.c
+> +++ b/drivers/staging/media/zoran/videocodec.c
+> @@ -22,7 +22,7 @@ MODULE_PARM_DESC(videocodec_debug, "Debug level (0-4)");
+>
+>  #define dprintk(num, format, args...) \
+>  	do { \
+> -		if (videocodec_debug >= num) \
+> +		if (videocodec_debug >= (num)) \
+>  			printk(format, ##args); \
+>  	} while (0)
+>
+> --
+> 2.25.1
+>
+>
+>

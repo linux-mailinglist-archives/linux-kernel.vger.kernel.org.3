@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE015505ABE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:14:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6A4505AB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241396AbiDRPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S1344096AbiDRPQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243492AbiDRPPn (ORCPT
+        with ESMTP id S244009AbiDRPPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:15:43 -0400
+        Mon, 18 Apr 2022 11:15:44 -0400
 Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEAC3B919C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:12:32 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KhplS13JczfYy1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D30C381A9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:12:33 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KhplS4TlnzfYy5;
         Mon, 18 Apr 2022 22:11:48 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <vbabka@suse.cz>, <pintu@codeaurora.org>,
         <charante@codeaurora.org>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 08/12] mm: compaction: clean up comment about async compaction in isolate_migratepages
-Date:   Mon, 18 Apr 2022 22:12:49 +0800
-Message-ID: <20220418141253.24298-9-linmiaohe@huawei.com>
+Subject: [PATCH 09/12] mm: compaction: avoid possible NULL pointer dereference in kcompactd_cpu_online
+Date:   Mon, 18 Apr 2022 22:12:50 +0800
+Message-ID: <20220418141253.24298-10-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220418141253.24298-1-linmiaohe@huawei.com>
 References: <20220418141253.24298-1-linmiaohe@huawei.com>
@@ -49,38 +49,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since commit 282722b0d258 ("mm, compaction: restrict async compaction to
-pageblocks of same migratetype"), async direct compaction is restricted to
-scan the pageblocks of same migratetype. Correct the comment accordingly.
+It's possible that kcompactd_run could fail to run kcompactd for a hot
+added node and leave pgdat->kcompactd as NULL. So pgdat->kcompactd should
+be checked here to avoid possible NULL pointer dereference.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/compaction.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ mm/compaction.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/mm/compaction.c b/mm/compaction.c
-index 55013a2af817..562f274b2c51 100644
+index 562f274b2c51..82c54d70a978 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -1941,12 +1941,12 @@ static isolate_migrate_t isolate_migratepages(struct compact_control *cc)
- 			continue;
+@@ -3052,7 +3052,8 @@ static int kcompactd_cpu_online(unsigned int cpu)
  
- 		/*
--		 * For async compaction, also only scan in MOVABLE blocks
--		 * without huge pages. Async compaction is optimistic to see
--		 * if the minimum amount of work satisfies the allocation.
--		 * The cached PFN is updated as it's possible that all
--		 * remaining blocks between source and target are unsuitable
--		 * and the compaction scanners fail to meet.
-+		 * For async direct compaction, only scan the pageblocks of the
-+		 * same migratetype without huge pages. Async direct compaction
-+		 * is optimistic to see if the minimum amount of work satisfies
-+		 * the allocation. The cached PFN is updated as it's possible
-+		 * that all remaining blocks between source and target are
-+		 * unsuitable and the compaction scanners fail to meet.
- 		 */
- 		if (!suitable_migration_source(cc, page)) {
- 			update_cached_migrate(cc, block_end_pfn);
+ 		if (cpumask_any_and(cpu_online_mask, mask) < nr_cpu_ids)
+ 			/* One of our CPUs online: restore mask */
+-			set_cpus_allowed_ptr(pgdat->kcompactd, mask);
++			if (pgdat->kcompactd)
++				set_cpus_allowed_ptr(pgdat->kcompactd, mask);
+ 	}
+ 	return 0;
+ }
 -- 
 2.23.0
 

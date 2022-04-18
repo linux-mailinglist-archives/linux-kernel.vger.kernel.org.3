@@ -2,121 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29272505F41
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C7CA505F42
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:21:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiDRVXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58270 "EHLO
+        id S232432AbiDRVYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiDRVXc (ORCPT
+        with ESMTP id S230084AbiDRVX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:23:32 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D4F29CAB
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:20:52 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-2ec06f77db8so129284587b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:20:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=J6/W309fFUN0SbAEN8sj6wkMmgTBWzu7Yd5xYN0Qrgs=;
-        b=behSZFCaXwvZj7YO3q2pjl4Sc/hvkvJyMNVT7Iqu504nf4jXrSDgNlsEHQB8O8wzws
-         ljJ12rw31TuJinkVGZlla6M1UTjD+Yo5/W39mMd6F6up4i6GeRVxFXDfwhxYzNC+gxPI
-         UKwzJ6nnem/HrNcbOJenwcXf3tU61ItA2pJtpUHa1QCoEF5/mSmpncKvSztxL/NUQFKe
-         16tOh8E4gc6v4D7RI4azEt5Th7ocZz7x15YSlOSlJNjvZdE0RPXdij/Pt4CRveU3/HCh
-         fDMle+t4f+Nne86D2Ftu2WszamGodT1SS518Nvodw2xen4ipGp+gLduyEr36LxwJpHC3
-         un9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=J6/W309fFUN0SbAEN8sj6wkMmgTBWzu7Yd5xYN0Qrgs=;
-        b=WQPwrecvrVXoJbUP55yf36nuZ59AZEwIadsnOghn85oPM2eBBvHSCo36RmgwJyQkBm
-         /UfvV4qm5yAD4pl497iPZEKBpVMfvrYneCKuPL9+B6BLIPC0JH7K4mYJA8pFpYAJJXOl
-         TE6viyjBgulqe9M5yA5jCy7S+/BInGoWyPH7H7xCn6skmocTVF25sqYWCo/qyzBbKxkX
-         OHO7PKf7vN4W3L7FRFhRsf94HOkwgsHEelDvvuZOml/z5oFZNC7gPep9e2UeqyHxGkPs
-         rVX9I7ooaaXDIrMdR1+0Du9WBcpc8/V2iBfU2/uigEamnFi+7eGwO74WvLlvobmciUUu
-         BTxw==
-X-Gm-Message-State: AOAM5304BH40uP8UdHFrWOW3okvS6E1qQHn0Bbp1AyRJpR9aMbYOngrg
-        XN6U0HxDN9zydh50JtRSo+nxV6aWfqJq2AwF+NNoBPhcYuHQA5loguo3CqMHpehDhaXLklEEePQ
-        C6jxOBvk2q8CeHAmGr2C3G0s18O1tenbSKKS0IireZghHvWti5fEm7/5j2PCUbIN2UniJdpc=
-X-Google-Smtp-Source: ABdhPJyyvQau85VvzjTCPWMc0o9mnc206oPHRIdkl5aVolXd+JNgpfcUmjNIB2hvEaTpaqHcrxejr3dno6jS
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a25:3003:0:b0:63d:8b32:2241 with SMTP id
- w3-20020a253003000000b0063d8b322241mr11586817ybw.65.1650316851173; Mon, 18
- Apr 2022 14:20:51 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 21:20:16 +0000
-Message-Id: <20220418212016.2669086-1-jstultz@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH] MAINTAINERS: Update email address for John Stultz
-From:   John Stultz <jstultz@google.com>
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Xinliang Liu <xinliang.liu@linaro.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>
+        Mon, 18 Apr 2022 17:23:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906529CAD
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:21:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD58160FEA
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28742C385AB
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650316876;
+        bh=KAav+VCFSYr91LEhdYGTPh0+hHoGFkG2lJeNL06UyDs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=qeqbaJuAD+RFOY8cE/lIYy/P4cy7ZmPjKqgvDxKSiajfesnctZFuC99HiJ8TUqLF7
+         cwaTqCxi5qNdoLluehUu9gPAFFWUUoSn+NWOmhsyhr0bbxwH26MWYKM0wfq/nX9oWZ
+         dvjfxuOKeYJhK/wd9UrIwes34158zGoN4V+7DsNtsSiDtWxxnT/vNGemhHMFOnm8M9
+         bpeyfhDMzr2GNr6CQRT6b1UIl3ArxUuAgPR4yq9a/2b3Wg4v82UrWAIOeZ/0Zu0zDl
+         RYvDD69q6w7VUlXtzoVwoR7MCMhTfUi4fhTgqEtC2gaWC1NpYeAPF6fZbY8CrtCuL7
+         5PCtNSXapgeoQ==
+Received: by mail-wr1-f42.google.com with SMTP id e21so19942932wrc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:21:16 -0700 (PDT)
+X-Gm-Message-State: AOAM531uEPlFiEQPnt/jzpKAybfcW9wvqbQvp0TkpgXDtOo3uKO3s6Q2
+        6CpyQfzs3CMlXkNMUBt7/P3yU6WJwPVReuYf0NM=
+X-Google-Smtp-Source: ABdhPJxkncmo4ORlw7zomxpWYmpYkP0uGqq0sLEjKNrhhFTmoEv/ShhDQl+AGPgqziemJBJ2yBx/M531Aq661utXpH8=
+X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
+ m3-20020a5d64a3000000b0020a79315b84mr9825822wrp.407.1650316874305; Mon, 18
+ Apr 2022 14:21:14 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
+From:   Arnd Bergmann <arnd@kernel.org>
+Date:   Mon, 18 Apr 2022 23:20:58 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
+Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
+Subject: Re: kernel.org binaries and sysroots
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Saleem Abdulrasool <compnerd@compnerd.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I've switched jobs, so update my email address in MAINTAINERS
+On Thu, Apr 14, 2022 at 11:44 PM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> Hi Arnd,
+> Jose and I are currently in the planning process to put together a
+> Kernel+Toolchain microconference track at Linux Plumbers Conference
+> this year (Sept 12-14) in Dublin, Ireland.
+>
+> I was curious if you (or others) would find it worthwhile to carve out
+> time to discuss further kernel.org binaries (and potentially even
+> sysroots) at such a Kernel+Toolchain MC?
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Xinliang Liu <xinliang.liu@linaro.org>
-Cc: Sumit Semwal <sumit.semwal@linaro.org>
-Signed-off-by: John Stultz <jstultz@google.com>
----
- MAINTAINERS | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I'm still undecided about attending Plumbers myself. If that topic ends up
+on the list and I'm in Dublin, I would obviously attend, but there might not
+actually be that much to discuss other than who would do the work.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 61d9f114c37f..adb35fee2294 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5913,7 +5913,7 @@ R:	Benjamin Gaignard <benjamin.gaignard@collabora.com>
- R:	Liam Mark <lmark@codeaurora.org>
- R:	Laura Abbott <labbott@redhat.com>
- R:	Brian Starkey <Brian.Starkey@arm.com>
--R:	John Stultz <john.stultz@linaro.org>
-+R:	John Stultz <jstultz@google.com>
- L:	linux-media@vger.kernel.org
- L:	dri-devel@lists.freedesktop.org
- L:	linaro-mm-sig@lists.linaro.org (moderated for non-subscribers)
-@@ -6583,7 +6583,7 @@ F:	drivers/gpu/drm/gma500/
- DRM DRIVERS FOR HISILICON
- M:	Xinliang Liu <xinliang.liu@linaro.org>
- M:	Tian Tao  <tiantao6@hisilicon.com>
--R:	John Stultz <john.stultz@linaro.org>
-+R:	John Stultz <jstultz@google.com>
- R:	Xinwei Kong <kong.kongxinwei@hisilicon.com>
- R:	Chen Feng <puck.chen@hisilicon.com>
- L:	dri-devel@lists.freedesktop.org
-@@ -8844,7 +8844,7 @@ F:	Documentation/devicetree/bindings/net/hisilicon*.txt
- F:	drivers/net/ethernet/hisilicon/
- 
- HIKEY960 ONBOARD USB GPIO HUB DRIVER
--M:	John Stultz <john.stultz@linaro.org>
-+M:	John Stultz <jstultz@google.com>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
- F:	drivers/misc/hisi_hikey_usb.c
-@@ -19782,7 +19782,7 @@ F:	drivers/net/wireless/ti/
- F:	include/linux/wl12xx.h
- 
- TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER
--M:	John Stultz <john.stultz@linaro.org>
-+M:	John Stultz <jstultz@google.com>
- M:	Thomas Gleixner <tglx@linutronix.de>
- R:	Stephen Boyd <sboyd@kernel.org>
- L:	linux-kernel@vger.kernel.org
--- 
-2.36.0.rc0.470.gd361397f0d-goog
+I inherited the scripts from Tony Breeds who did it before. If you or someone
+else wants to add clang binaries, I can help you get it onto the kernel.org
+server as well, same for building more complete toolchains.
 
+My build environment at the moment is on my old workstation running
+an older Ubuntu 16.04 chroot, to allow building binaries for a large variety
+of distros. As I'm moving to working purely on an arm64 workstation that
+doesn't have this yet, I will likely have to revisit the way I'm building these
+anyway for future releases.
+
+      Arnd

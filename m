@@ -2,41 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F570505637
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB3850562F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242271AbiDRNcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48744 "EHLO
+        id S242208AbiDRNch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240259AbiDRNGG (ORCPT
+        with ESMTP id S240912AbiDRNGH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:06:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFB12A243;
-        Mon, 18 Apr 2022 05:46:47 -0700 (PDT)
+        Mon, 18 Apr 2022 09:06:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DDE52A244;
+        Mon, 18 Apr 2022 05:46:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD06F6101A;
-        Mon, 18 Apr 2022 12:46:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C22A4C385A1;
-        Mon, 18 Apr 2022 12:46:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C77660FB6;
+        Mon, 18 Apr 2022 12:46:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EF99C385A7;
+        Mon, 18 Apr 2022 12:46:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286006;
-        bh=ObuRGH4U8Y0QJAW/k3Ut0SeeASlOCKV0F3wi0/hb/es=;
+        s=korg; t=1650286009;
+        bh=dJzCn9cIQspghMBiSeA+o7H9D+g3/toGnQtHulXDBOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YhbZlUwAgy/XwnrkV/25nDGG4tCqUq/TTRl+qzuHyUfQHsZLCvF6ZS3l8z69uSkCB
-         cQ+WZPiMlRMV03sWyr8GS5L7iei9YT6X8kOz1Ww/DKROC3Yrp3oTN49N5y19XgWFAp
-         VlPvCMKWf68DUphM5x+bf/+syJ/61anekOX/V/Xo=
+        b=a269XnCEG8+AfGXXqi+3wHkyY2hUsb7hlUxHN5RD6dSp8KoCQ53l2houBKq7SUyUp
+         C9egdPvUP96a6cr6hMxf7HYjFbWYXWcNvAt8YxiVnSvlYg5p3R1HCcjFiXICHvELCI
+         HhFI3LV8k97gGkWrt/HLS6iPexfKpNEWgqxYMxUQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 4.19 25/32] KVM: Dont create VM debugfs files outside of the VM directory
-Date:   Mon, 18 Apr 2022 14:14:05 +0200
-Message-Id: <20220418121127.860908139@linuxfoundation.org>
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 4.19 26/32] gcc-plugins: latent_entropy: use /dev/urandom
+Date:   Mon, 18 Apr 2022 14:14:06 +0200
+Message-Id: <20220418121127.888590983@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
 References: <20220418121127.127656835@linuxfoundation.org>
@@ -54,59 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Upton <oupton@google.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
+commit c40160f2998c897231f8454bf797558d30a20375 upstream.
 
-Unfortunately, there is no guarantee that KVM was able to instantiate a
-debugfs directory for a particular VM. To that end, KVM shouldn't even
-attempt to create new debugfs files in this case. If the specified
-parent dentry is NULL, debugfs_create_file() will instantiate files at
-the root of debugfs.
+While the latent entropy plugin mostly doesn't derive entropy from
+get_random_const() for measuring the call graph, when __latent_entropy is
+applied to a constant, then it's initialized statically to output from
+get_random_const(). In that case, this data is derived from a 64-bit
+seed, which means a buffer of 512 bits doesn't really have that amount
+of compile-time entropy.
 
-For arm64, it is possible to create the vgic-state file outside of a
-VM directory, the file is not cleaned up when a VM is destroyed.
-Nonetheless, the corresponding struct kvm is freed when the VM is
-destroyed.
+This patch fixes that shortcoming by just buffering chunks of
+/dev/urandom output and doling it out as requested.
 
-Nip the problem in the bud for all possible errant debugfs file
-creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
-debugfs_create_file() will fail instead of creating the file in the root
-directory.
+At the same time, it's important that we don't break the use of
+-frandom-seed, for people who want the runtime benefits of the latent
+entropy plugin, while still having compile-time determinism. In that
+case, we detect whether gcc's set_random_seed() has been called by
+making a call to get_random_seed(noinit=true) in the plugin init
+function, which is called after set_random_seed() is called but before
+anything that calls get_random_seed(noinit=false), and seeing if it's
+zero or not. If it's not zero, we're in deterministic mode, and so we
+just generate numbers with a basic xorshift prng.
 
-Cc: stable@kernel.org
-Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
-Signed-off-by: Oliver Upton <oupton@google.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
+Note that we don't detect if -frandom-seed is being used using the
+documented local_tick variable, because it's assigned via:
+   local_tick = (unsigned) tv.tv_sec * 1000 + tv.tv_usec / 1000;
+which may well overflow and become -1 on its own, and so isn't
+reliable: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105171
+
+[kees: The 256 byte rnd_buf size was chosen based on average (250),
+ median (64), and std deviation (575) bytes of used entropy for a
+ defconfig x86_64 build]
+
+Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
+Cc: stable@vger.kernel.org
+Cc: PaX Team <pageexec@freemail.hu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220405222815.21155-1-Jason@zx2c4.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- virt/kvm/kvm_main.c |    8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+ scripts/gcc-plugins/latent_entropy_plugin.c |   44 +++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -610,7 +610,7 @@ static void kvm_destroy_vm_debugfs(struc
- {
- 	int i;
+--- a/scripts/gcc-plugins/latent_entropy_plugin.c
++++ b/scripts/gcc-plugins/latent_entropy_plugin.c
+@@ -86,25 +86,31 @@ static struct plugin_info latent_entropy
+ 	.help		= "disable\tturn off latent entropy instrumentation\n",
+ };
  
--	if (!kvm->debugfs_dentry)
-+	if (IS_ERR(kvm->debugfs_dentry))
+-static unsigned HOST_WIDE_INT seed;
+-/*
+- * get_random_seed() (this is a GCC function) generates the seed.
+- * This is a simple random generator without any cryptographic security because
+- * the entropy doesn't come from here.
+- */
++static unsigned HOST_WIDE_INT deterministic_seed;
++static unsigned HOST_WIDE_INT rnd_buf[32];
++static size_t rnd_idx = ARRAY_SIZE(rnd_buf);
++static int urandom_fd = -1;
++
+ static unsigned HOST_WIDE_INT get_random_const(void)
+ {
+-	unsigned int i;
+-	unsigned HOST_WIDE_INT ret = 0;
+-
+-	for (i = 0; i < 8 * sizeof(ret); i++) {
+-		ret = (ret << 1) | (seed & 1);
+-		seed >>= 1;
+-		if (ret & 1)
+-			seed ^= 0xD800000000000000ULL;
++	if (deterministic_seed) {
++		unsigned HOST_WIDE_INT w = deterministic_seed;
++		w ^= w << 13;
++		w ^= w >> 7;
++		w ^= w << 17;
++		deterministic_seed = w;
++		return deterministic_seed;
+ 	}
+ 
+-	return ret;
++	if (urandom_fd < 0) {
++		urandom_fd = open("/dev/urandom", O_RDONLY);
++		gcc_assert(urandom_fd >= 0);
++	}
++	if (rnd_idx >= ARRAY_SIZE(rnd_buf)) {
++		gcc_assert(read(urandom_fd, rnd_buf, sizeof(rnd_buf)) == sizeof(rnd_buf));
++		rnd_idx = 0;
++	}
++	return rnd_buf[rnd_idx++];
+ }
+ 
+ static tree tree_get_random_const(tree type)
+@@ -549,8 +555,6 @@ static void latent_entropy_start_unit(vo
+ 	tree type, id;
+ 	int quals;
+ 
+-	seed = get_random_seed(false);
+-
+ 	if (in_lto_p)
  		return;
  
- 	debugfs_remove_recursive(kvm->debugfs_dentry);
-@@ -628,6 +628,12 @@ static int kvm_create_vm_debugfs(struct
- 	struct kvm_stat_data *stat_data;
- 	struct kvm_stats_debugfs_item *p;
+@@ -585,6 +589,12 @@ __visible int plugin_init(struct plugin_
+ 	const struct plugin_argument * const argv = plugin_info->argv;
+ 	int i;
  
 +	/*
-+	 * Force subsequent debugfs file creations to fail if the VM directory
-+	 * is not created.
++	 * Call get_random_seed() with noinit=true, so that this returns
++	 * 0 in the case where no seed has been passed via -frandom-seed.
 +	 */
-+	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
++	deterministic_seed = get_random_seed(true);
 +
- 	if (!debugfs_initialized())
- 		return 0;
- 
+ 	static const struct ggc_root_tab gt_ggc_r_gt_latent_entropy[] = {
+ 		{
+ 			.base = &latent_entropy_decl,
 
 

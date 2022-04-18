@@ -2,189 +2,468 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A19504B18
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 04:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E24E1504B1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 04:56:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbiDRC46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 22:56:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
+        id S235915AbiDRC5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 22:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235897AbiDRC44 (ORCPT
+        with ESMTP id S235907AbiDRC5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 22:56:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EAF7517E3A
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 19:54:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650250458;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SAA55/OcVLuGltaWPBBCrOhinXHqpswrBBNXxyLN+Rc=;
-        b=NkJ+9YSYBxdDFPeY82j3pnk+9NFI6LsCmCA4DPMZN5vYsYHV1ZihYo63DVaOi2MDKmGa6u
-        FDO4rxwfUBvSMgN3m2B98c6lXMeysvmSkr/yiha6PPwXNMrinqhPxZU33p+GdUkFfXENfp
-        gpzaMB9kYz9KFKQcUEjiFYmtklZc0u8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-Qwn9yRcYNxGw18zXIgXPpA-1; Sun, 17 Apr 2022 22:54:12 -0400
-X-MC-Unique: Qwn9yRcYNxGw18zXIgXPpA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4BB45101AA42;
-        Mon, 18 Apr 2022 02:54:11 +0000 (UTC)
-Received: from [10.72.13.171] (ovpn-13-171.pek2.redhat.com [10.72.13.171])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 3608B40F4961;
-        Mon, 18 Apr 2022 02:54:03 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v5 00/10] KVM: arm64: Add support for hypercall services
- selection
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Raghavendra Rao Ananta <rananta@google.com>,
-        Andrew Jones <drjones@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        kvm@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Peter Shier <pshier@google.com>, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Will Deacon <will@kernel.org>, kvmarm@lists.cs.columbia.edu,
-        linux-arm-kernel@lists.infradead.org
-References: <20220407011605.1966778-1-rananta@google.com>
- <92eb2304-9259-0461-247f-d3a4e5eb4fd5@redhat.com>
- <8735iebu48.wl-maz@kernel.org>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <8d257221-e3bf-b5fc-5cf4-01f9fff53eca@redhat.com>
-Date:   Mon, 18 Apr 2022 10:53:59 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Sun, 17 Apr 2022 22:57:23 -0400
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98973186CC
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 19:54:45 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 02:54:35 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
+        s=protonmail2; t=1650250482;
+        bh=4/xV+oXMzNlRtmKo/7a61rwcC2Rh4bcYE2JkSFnFgKo=;
+        h=Date:To:From:Reply-To:Subject:Message-ID:From:To:Cc:Date:Subject:
+         Reply-To:Feedback-ID:Message-ID;
+        b=Ovh6ZNTyhr+bn0Bj8TE/BnyXSNxkN4CYny/UFb9Y8AcZ1YO30B9Q0idBaFUhKh2k3
+         /AZS7fzo/bC6o6pX3keysnUAPGkJ2QtlHLzNJpJ96iaqA+ozHpSZJWjYk95e/A5c/W
+         tVg0CeXQDo5M4Swc3IHupOtgeH90WDZXJ+fNXZrlrUWZhCOKgoQKJ/zAvG3yQzY9Kp
+         Owa37Rwi4zhCYf8cP8/BekL4hgJ4fNUxcFKTciZEd7m3Kq6GWuGISy+Wh6cemE3mDA
+         D/KL7AdD1RgghQWuCRxLmiozTMqeG5m8/HXvWHoNl/IX6z7afD/GdbBYE9GQlRgIrD
+         RsZ52uZfYtx8A==
+To:     mst@redhat.com, jasowang@redhat.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+From:   Solomon Tan <solomonbstoner@protonmail.ch>
+Reply-To: Solomon Tan <solomonbstoner@protonmail.ch>
+Subject: [PATCH 1/2] virtio: Replace unsigned with unsigned int
+Message-ID: <YlzS49Wo8JMDhKOt@ArchDesktop>
 MIME-Version: 1.0
-In-Reply-To: <8735iebu48.wl-maz@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marc,
+This patch addresses the checkpatch.pl warning where unsigned int is
+preferred over unsigned.
 
-On 4/15/22 4:58 PM, Marc Zyngier wrote:
-> On Fri, 15 Apr 2022 07:44:55 +0100,
-> Gavin Shan <gshan@redhat.com> wrote:
->> On 4/7/22 9:15 AM, Raghavendra Rao Ananta wrote:
->>> Continuing the discussion from [1], the series tries to add support
->>> for the userspace to elect the hypercall services that it wishes
->>> to expose to the guest, rather than the guest discovering them
->>> unconditionally. The idea employed by the series was taken from
->>> [1] as suggested by Marc Z.
->>>
->>> In a broad sense, the concept is similar to the current implementation
->>> of PSCI interface- create a 'firmware psuedo-register' to handle the
->>> firmware revisions. The series extends this idea to all the other
->>> hypercalls such as TRNG (True Random Number Generator), PV_TIME
->>> (Paravirtualized Time), and PTP (Precision Time protocol).
->>>
->>> For better categorization and future scaling, these firmware registers
->>> are categorized based on the service call owners. Also, unlike the
->>> existing firmware psuedo-registers, they hold the features supported
->>> in the form of a bitmap.
->>>
->>> During the VM initialization, the registers holds an upper-limit of
->>> the features supported by each one of them. It's expected that the
->>> userspace discover the features provided by each register via GET_ONE_REG,
->>> and writeback the desired values using SET_ONE_REG. KVM allows this
->>> modification only until the VM has started.
->>>
->>> Some of the standard function-ids, such as ARM_SMCCC_VERSION_FUNC_ID,
->>> need not be associated with a feature bit. For such ids, the series
->>> introduced an allowed-list, hvc_func_default_allowed_list[], that holds
->>> all such ids. As a result, the functions that are not elected by userspace,
->>> or if they are not a part of this allowed-list, will be denied for when
->>> the guests invoke them.
->>>
->>> Older VMMs can simply ignore this interface and the hypercall services
->>> will be exposed unconditionally to the guests, thus ensuring backward
->>> compatibility.
->>>
->>
->> [...]
->>
->> I rethinking about the design again and just get one question. Hopefully,
->> someone have the answer for us. The newly added 3 pseudo registers and
->> the existing ones like KVM_REG_ARM_PSCI_VERSION are all tied up with
->> vcpu, instead of VM. I don't think it's correct. I'm not sure if VM-scoped
->> pseudo registers aren't allowed by ARM architecture or the effort isn't
->> worthy to support it.
-> 
-> We have had that discussion before (around version 2 of this series,
-> if I remember well).
-> 
+Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
+---
+ drivers/virtio/virtio.c            |  2 +-
+ drivers/virtio/virtio_balloon.c    | 12 ++++++------
+ drivers/virtio/virtio_mmio.c       | 12 ++++++------
+ drivers/virtio/virtio_pci_common.c | 12 ++++++------
+ drivers/virtio/virtio_pci_common.h | 10 +++++-----
+ drivers/virtio/virtio_pci_legacy.c | 10 +++++-----
+ drivers/virtio/virtio_pci_modern.c | 12 ++++++------
+ drivers/virtio/virtio_ring.c       | 12 ++++++------
+ drivers/virtio/virtio_vdpa.c       | 10 +++++-----
+ 9 files changed, 46 insertions(+), 46 deletions(-)
 
-Yeah, I'm chime-in this series lately. There must be some discussions,
-including this topic, I missed :)
+diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
+index 22f15f444f75..ce424c16997d 100644
+--- a/drivers/virtio/virtio.c
++++ b/drivers/virtio/virtio.c
+@@ -169,7 +169,7 @@ EXPORT_SYMBOL_GPL(virtio_add_status);
+ /* Do some validation, then set FEATURES_OK */
+ static int virtio_features_ok(struct virtio_device *dev)
+ {
+-=09unsigned status;
++=09unsigned int status;
+ =09int ret;
 
->>
->> These pseudo registers are introduced to present the available hypercalls,
->> and then they can be disabled from userspace. In the implementation, these 3
->> registers are vcpu scoped. It means that multiple vcpus can be asymmetric
->> in terms of usable hypercalls. For example, ARM_SMCCC_TRNG hypercalls
->> can be enabled on vcpu0, but disabled on vcpu1. I don't think it's expected.
-> 
-> No, that's not the way this is supposed to work. These hypercalls are
-> of course global, even if the accessor is per-vcpu. This is similar to
-> tons of other things, such as some of the PMU data, the timer virtual
-> offset... the list goes on. If that's not what this code does, then it
-> is a bug and it needs to be fixed.
-> 
+ =09might_sleep();
+diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloo=
+n.c
+index f4c34a2a6b8e..b9737da6c4dd 100644
+--- a/drivers/virtio/virtio_balloon.c
++++ b/drivers/virtio/virtio_balloon.c
+@@ -27,7 +27,7 @@
+  * multiple balloon pages.  All memory counters in this driver are in ball=
+oon
+  * page units.
+  */
+-#define VIRTIO_BALLOON_PAGES_PER_PAGE (unsigned)(PAGE_SIZE >> VIRTIO_BALLO=
+ON_PFN_SHIFT)
++#define VIRTIO_BALLOON_PAGES_PER_PAGE (unsigned int)(PAGE_SIZE >> VIRTIO_B=
+ALLOON_PFN_SHIFT)
+ #define VIRTIO_BALLOON_ARRAY_PFNS_MAX 256
+ /* Maximum number of (4k) pages to deflate on OOM notifications. */
+ #define VIRTIO_BALLOON_OOM_NR_PAGES 256
+@@ -208,10 +208,10 @@ static void set_page_pfns(struct virtio_balloon *vb,
+ =09=09=09=09=09  page_to_balloon_pfn(page) + i);
+ }
 
-Ok.
+-static unsigned fill_balloon(struct virtio_balloon *vb, size_t num)
++static unsigned int fill_balloon(struct virtio_balloon *vb, size_t num)
+ {
+-=09unsigned num_allocated_pages;
+-=09unsigned num_pfns;
++=09unsigned int num_allocated_pages;
++=09unsigned int num_pfns;
+ =09struct page *page;
+ =09LIST_HEAD(pages);
 
->> On the other hand, the information stored in these 3 registers needs to
->> be migrated through {GET,SET}_ONE_REG by VMM (QEMU). all the information
->> stored in these 3 registers are all same on all vcpus, which is exactly
->> as we expect. In migration circumstance, we're transporting identical
->> information for all vcpus and it's unnecessary.
-> 
-> Yes, we all understand that. My response to that was (and still is):
-> 
-> - There is no need to invent a new userspace interface. The one we
->    have is terrible enough, and we don't need another square wheel that
->    would need to be maintained beside the existing one.
-> 
-> - Let's say we have 1024 new pseudo-registers, 1024 vcpus, 64bit regs:
->    that's 8MB worth of extra data. This is not insignificant, but also
->    not really a problem given that such a large VM is probably attached
->    to a proportionally large amount of memory. In practice, we're
->    talking of less than 10 registers, and less than 100 vcpus. A crazy
->    8kB at most. Who cares?
-> 
-> - If this is eventually deemed to be a *real* scalability problem, we
->    can always expose a map of registers that are global, and let
->    userspace know that it can elide the rest. Problem solved, backward
->    compatibility preserved. And I'm willing to bet that we won't need
->    it in my lifetime.
-> 
+@@ -272,9 +272,9 @@ static void release_pages_balloon(struct virtio_balloon=
+ *vb,
+ =09}
+ }
 
-The reason why I raised question is just to check if it's a missed
-point in the design. As I said, I obviously missed the previous
-discussions and glad that this has been discussed through.
+-static unsigned leak_balloon(struct virtio_balloon *vb, size_t num)
++static unsigned int leak_balloon(struct virtio_balloon *vb, size_t num)
+ {
+-=09unsigned num_freed_pages;
++=09unsigned int num_freed_pages;
+ =09struct page *page;
+ =09struct balloon_dev_info *vb_dev_info =3D &vb->vb_dev_info;
+ =09LIST_HEAD(pages);
+diff --git a/drivers/virtio/virtio_mmio.c b/drivers/virtio/virtio_mmio.c
+index 56128b9c46eb..b717302dc4ac 100644
+--- a/drivers/virtio/virtio_mmio.c
++++ b/drivers/virtio/virtio_mmio.c
+@@ -144,8 +144,8 @@ static int vm_finalize_features(struct virtio_device *v=
+dev)
+ =09return 0;
+ }
 
-Thanks for the details. Yes, it's totally fine to migrate 8KB data.
-Besides, VMM (QEMU) can choose to do migration on one single vcpu,
-instead of all of them, as you said.
+-static void vm_get(struct virtio_device *vdev, unsigned offset,
+-=09=09   void *buf, unsigned len)
++static void vm_get(struct virtio_device *vdev, unsigned int offset,
++=09=09   void *buf, unsigned int len)
+ {
+ =09struct virtio_mmio_device *vm_dev =3D to_virtio_mmio_device(vdev);
+ =09void __iomem *base =3D vm_dev->base + VIRTIO_MMIO_CONFIG;
+@@ -186,8 +186,8 @@ static void vm_get(struct virtio_device *vdev, unsigned=
+ offset,
+ =09}
+ }
 
-Thanks,
-Gavin
+-static void vm_set(struct virtio_device *vdev, unsigned offset,
+-=09=09   const void *buf, unsigned len)
++static void vm_set(struct virtio_device *vdev, unsigned int offset,
++=09=09   const void *buf, unsigned int len)
+ {
+ =09struct virtio_mmio_device *vm_dev =3D to_virtio_mmio_device(vdev);
+ =09void __iomem *base =3D vm_dev->base + VIRTIO_MMIO_CONFIG;
+@@ -345,7 +345,7 @@ static void vm_del_vqs(struct virtio_device *vdev)
+ =09free_irq(platform_get_irq(vm_dev->pdev, 0), vm_dev);
+ }
+
+-static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned =
+index,
++static struct virtqueue *vm_setup_vq(struct virtio_device *vdev, unsigned =
+int index,
+ =09=09=09=09  void (*callback)(struct virtqueue *vq),
+ =09=09=09=09  const char *name, bool ctx)
+ {
+@@ -455,7 +455,7 @@ static struct virtqueue *vm_setup_vq(struct virtio_devi=
+ce *vdev, unsigned index,
+ =09return ERR_PTR(err);
+ }
+
+-static int vm_find_vqs(struct virtio_device *vdev, unsigned nvqs,
++static int vm_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ =09=09       struct virtqueue *vqs[],
+ =09=09       vq_callback_t *callbacks[],
+ =09=09       const char * const names[],
+diff --git a/drivers/virtio/virtio_pci_common.c b/drivers/virtio/virtio_pci=
+_common.c
+index d724f676608b..ed985b421740 100644
+--- a/drivers/virtio/virtio_pci_common.c
++++ b/drivers/virtio/virtio_pci_common.c
+@@ -104,8 +104,8 @@ static int vp_request_msix_vectors(struct virtio_device=
+ *vdev, int nvectors,
+ {
+ =09struct virtio_pci_device *vp_dev =3D to_vp_device(vdev);
+ =09const char *name =3D dev_name(&vp_dev->vdev.dev);
+-=09unsigned flags =3D PCI_IRQ_MSIX;
+-=09unsigned i, v;
++=09unsigned int flags =3D PCI_IRQ_MSIX;
++=09unsigned int i, v;
+ =09int err =3D -ENOMEM;
+
+ =09vp_dev->msix_vectors =3D nvectors;
+@@ -171,7 +171,7 @@ static int vp_request_msix_vectors(struct virtio_device=
+ *vdev, int nvectors,
+ =09return err;
+ }
+
+-static struct virtqueue *vp_setup_vq(struct virtio_device *vdev, unsigned =
+index,
++static struct virtqueue *vp_setup_vq(struct virtio_device *vdev, unsigned =
+int index,
+ =09=09=09=09     void (*callback)(struct virtqueue *vq),
+ =09=09=09=09     const char *name,
+ =09=09=09=09     bool ctx,
+@@ -276,7 +276,7 @@ void vp_del_vqs(struct virtio_device *vdev)
+ =09vp_dev->vqs =3D NULL;
+ }
+
+-static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned nvqs,
++static int vp_find_vqs_msix(struct virtio_device *vdev, unsigned int nvqs,
+ =09=09struct virtqueue *vqs[], vq_callback_t *callbacks[],
+ =09=09const char * const names[], bool per_vq_vectors,
+ =09=09const bool *ctx,
+@@ -350,7 +350,7 @@ static int vp_find_vqs_msix(struct virtio_device *vdev,=
+ unsigned nvqs,
+ =09return err;
+ }
+
+-static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned nvqs,
++static int vp_find_vqs_intx(struct virtio_device *vdev, unsigned int nvqs,
+ =09=09struct virtqueue *vqs[], vq_callback_t *callbacks[],
+ =09=09const char * const names[], const bool *ctx)
+ {
+@@ -389,7 +389,7 @@ static int vp_find_vqs_intx(struct virtio_device *vdev,=
+ unsigned nvqs,
+ }
+
+ /* the config->find_vqs() implementation */
+-int vp_find_vqs(struct virtio_device *vdev, unsigned nvqs,
++int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ =09=09struct virtqueue *vqs[], vq_callback_t *callbacks[],
+ =09=09const char * const names[], const bool *ctx,
+ =09=09struct irq_affinity *desc)
+diff --git a/drivers/virtio/virtio_pci_common.h b/drivers/virtio/virtio_pci=
+_common.h
+index eb17a29fc7ef..23112d84218f 100644
+--- a/drivers/virtio/virtio_pci_common.h
++++ b/drivers/virtio/virtio_pci_common.h
+@@ -38,7 +38,7 @@ struct virtio_pci_vq_info {
+ =09struct list_head node;
+
+ =09/* MSI-X vector (or none) */
+-=09unsigned msix_vector;
++=09unsigned int msix_vector;
+ };
+
+ /* Our device structure */
+@@ -68,16 +68,16 @@ struct virtio_pci_device {
+ =09 * and I'm too lazy to allocate each name separately. */
+ =09char (*msix_names)[256];
+ =09/* Number of available vectors */
+-=09unsigned msix_vectors;
++=09unsigned int msix_vectors;
+ =09/* Vectors allocated, excluding per-vq vectors if any */
+-=09unsigned msix_used_vectors;
++=09unsigned int msix_used_vectors;
+
+ =09/* Whether we have vector per vq */
+ =09bool per_vq_vectors;
+
+ =09struct virtqueue *(*setup_vq)(struct virtio_pci_device *vp_dev,
+ =09=09=09=09      struct virtio_pci_vq_info *info,
+-=09=09=09=09      unsigned idx,
++=09=09=09=09      unsigned int idx,
+ =09=09=09=09      void (*callback)(struct virtqueue *vq),
+ =09=09=09=09      const char *name,
+ =09=09=09=09      bool ctx,
+@@ -108,7 +108,7 @@ bool vp_notify(struct virtqueue *vq);
+ /* the config->del_vqs() implementation */
+ void vp_del_vqs(struct virtio_device *vdev);
+ /* the config->find_vqs() implementation */
+-int vp_find_vqs(struct virtio_device *vdev, unsigned nvqs,
++int vp_find_vqs(struct virtio_device *vdev, unsigned int nvqs,
+ =09=09struct virtqueue *vqs[], vq_callback_t *callbacks[],
+ =09=09const char * const names[], const bool *ctx,
+ =09=09struct irq_affinity *desc);
+diff --git a/drivers/virtio/virtio_pci_legacy.c b/drivers/virtio/virtio_pci=
+_legacy.c
+index 6f4e34ce96b8..7fe4caa4b519 100644
+--- a/drivers/virtio/virtio_pci_legacy.c
++++ b/drivers/virtio/virtio_pci_legacy.c
+@@ -45,8 +45,8 @@ static int vp_finalize_features(struct virtio_device *vde=
+v)
+ }
+
+ /* virtio config->get() implementation */
+-static void vp_get(struct virtio_device *vdev, unsigned offset,
+-=09=09   void *buf, unsigned len)
++static void vp_get(struct virtio_device *vdev, unsigned int offset,
++=09=09   void *buf, unsigned int len)
+ {
+ =09struct virtio_pci_device *vp_dev =3D to_vp_device(vdev);
+ =09void __iomem *ioaddr =3D vp_dev->ldev.ioaddr +
+@@ -61,8 +61,8 @@ static void vp_get(struct virtio_device *vdev, unsigned o=
+ffset,
+
+ /* the config->set() implementation.  it's symmetric to the config->get()
+  * implementation */
+-static void vp_set(struct virtio_device *vdev, unsigned offset,
+-=09=09   const void *buf, unsigned len)
++static void vp_set(struct virtio_device *vdev, unsigned int offset,
++=09=09   const void *buf, unsigned int len)
+ {
+ =09struct virtio_pci_device *vp_dev =3D to_vp_device(vdev);
+ =09void __iomem *ioaddr =3D vp_dev->ldev.ioaddr +
+@@ -109,7 +109,7 @@ static u16 vp_config_vector(struct virtio_pci_device *v=
+p_dev, u16 vector)
+
+ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ =09=09=09=09  struct virtio_pci_vq_info *info,
+-=09=09=09=09  unsigned index,
++=09=09=09=09  unsigned int index,
+ =09=09=09=09  void (*callback)(struct virtqueue *vq),
+ =09=09=09=09  const char *name,
+ =09=09=09=09  bool ctx,
+diff --git a/drivers/virtio/virtio_pci_modern.c b/drivers/virtio/virtio_pci=
+_modern.c
+index a2671a20ef77..4acb34409f0b 100644
+--- a/drivers/virtio/virtio_pci_modern.c
++++ b/drivers/virtio/virtio_pci_modern.c
+@@ -60,8 +60,8 @@ static int vp_finalize_features(struct virtio_device *vde=
+v)
+ }
+
+ /* virtio config->get() implementation */
+-static void vp_get(struct virtio_device *vdev, unsigned offset,
+-=09=09   void *buf, unsigned len)
++static void vp_get(struct virtio_device *vdev, unsigned int offset,
++=09=09   void *buf, unsigned int len)
+ {
+ =09struct virtio_pci_device *vp_dev =3D to_vp_device(vdev);
+ =09struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
+@@ -98,8 +98,8 @@ static void vp_get(struct virtio_device *vdev, unsigned o=
+ffset,
+
+ /* the config->set() implementation.  it's symmetric to the config->get()
+  * implementation */
+-static void vp_set(struct virtio_device *vdev, unsigned offset,
+-=09=09   const void *buf, unsigned len)
++static void vp_set(struct virtio_device *vdev, unsigned int offset,
++=09=09   const void *buf, unsigned int len)
+ {
+ =09struct virtio_pci_device *vp_dev =3D to_vp_device(vdev);
+ =09struct virtio_pci_modern_device *mdev =3D &vp_dev->mdev;
+@@ -183,7 +183,7 @@ static u16 vp_config_vector(struct virtio_pci_device *v=
+p_dev, u16 vector)
+
+ static struct virtqueue *setup_vq(struct virtio_pci_device *vp_dev,
+ =09=09=09=09  struct virtio_pci_vq_info *info,
+-=09=09=09=09  unsigned index,
++=09=09=09=09  unsigned int index,
+ =09=09=09=09  void (*callback)(struct virtqueue *vq),
+ =09=09=09=09  const char *name,
+ =09=09=09=09  bool ctx,
+@@ -248,7 +248,7 @@ static struct virtqueue *setup_vq(struct virtio_pci_dev=
+ice *vp_dev,
+ =09return ERR_PTR(err);
+ }
+
+-static int vp_modern_find_vqs(struct virtio_device *vdev, unsigned nvqs,
++static int vp_modern_find_vqs(struct virtio_device *vdev, unsigned int nvq=
+s,
+ =09=09=09      struct virtqueue *vqs[],
+ =09=09=09      vq_callback_t *callbacks[],
+ =09=09=09      const char * const names[], const bool *ctx,
+diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+index cfb028ca238e..131b3576e2cc 100644
+--- a/drivers/virtio/virtio_ring.c
++++ b/drivers/virtio/virtio_ring.c
+@@ -811,7 +811,7 @@ static void virtqueue_disable_cb_split(struct virtqueue=
+ *_vq)
+ =09}
+ }
+
+-static unsigned virtqueue_enable_cb_prepare_split(struct virtqueue *_vq)
++static unsigned int virtqueue_enable_cb_prepare_split(struct virtqueue *_v=
+q)
+ {
+ =09struct vring_virtqueue *vq =3D to_vvq(_vq);
+ =09u16 last_used_idx;
+@@ -836,7 +836,7 @@ static unsigned virtqueue_enable_cb_prepare_split(struc=
+t virtqueue *_vq)
+ =09return last_used_idx;
+ }
+
+-static bool virtqueue_poll_split(struct virtqueue *_vq, unsigned last_used=
+_idx)
++static bool virtqueue_poll_split(struct virtqueue *_vq, unsigned int last_=
+used_idx)
+ {
+ =09struct vring_virtqueue *vq =3D to_vvq(_vq);
+
+@@ -1488,7 +1488,7 @@ static void virtqueue_disable_cb_packed(struct virtqu=
+eue *_vq)
+ =09}
+ }
+
+-static unsigned virtqueue_enable_cb_prepare_packed(struct virtqueue *_vq)
++static unsigned int virtqueue_enable_cb_prepare_packed(struct virtqueue *_=
+vq)
+ {
+ =09struct vring_virtqueue *vq =3D to_vvq(_vq);
+
+@@ -2027,7 +2027,7 @@ EXPORT_SYMBOL_GPL(virtqueue_disable_cb);
+  * Caller must ensure we don't call this with other virtqueue
+  * operations at the same time (except where noted).
+  */
+-unsigned virtqueue_enable_cb_prepare(struct virtqueue *_vq)
++unsigned int virtqueue_enable_cb_prepare(struct virtqueue *_vq)
+ {
+ =09struct vring_virtqueue *vq =3D to_vvq(_vq);
+
+@@ -2048,7 +2048,7 @@ EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+  *
+  * This does not need to be serialized.
+  */
+-bool virtqueue_poll(struct virtqueue *_vq, unsigned last_used_idx)
++bool virtqueue_poll(struct virtqueue *_vq, unsigned int last_used_idx)
+ {
+ =09struct vring_virtqueue *vq =3D to_vvq(_vq);
+
+@@ -2074,7 +2074,7 @@ EXPORT_SYMBOL_GPL(virtqueue_poll);
+  */
+ bool virtqueue_enable_cb(struct virtqueue *_vq)
+ {
+-=09unsigned last_used_idx =3D virtqueue_enable_cb_prepare(_vq);
++=09unsigned int last_used_idx =3D virtqueue_enable_cb_prepare(_vq);
+
+ =09return !virtqueue_poll(_vq, last_used_idx);
+ }
+diff --git a/drivers/virtio/virtio_vdpa.c b/drivers/virtio/virtio_vdpa.c
+index 76504559bc25..8f992e417483 100644
+--- a/drivers/virtio/virtio_vdpa.c
++++ b/drivers/virtio/virtio_vdpa.c
+@@ -53,16 +53,16 @@ static struct vdpa_device *vd_get_vdpa(struct virtio_de=
+vice *vdev)
+ =09return to_virtio_vdpa_device(vdev)->vdpa;
+ }
+
+-static void virtio_vdpa_get(struct virtio_device *vdev, unsigned offset,
+-=09=09=09    void *buf, unsigned len)
++static void virtio_vdpa_get(struct virtio_device *vdev, unsigned int offse=
+t,
++=09=09=09    void *buf, unsigned int len)
+ {
+ =09struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
+
+ =09vdpa_get_config(vdpa, offset, buf, len);
+ }
+
+-static void virtio_vdpa_set(struct virtio_device *vdev, unsigned offset,
+-=09=09=09    const void *buf, unsigned len)
++static void virtio_vdpa_set(struct virtio_device *vdev, unsigned int offse=
+t,
++=09=09=09    const void *buf, unsigned int len)
+ {
+ =09struct vdpa_device *vdpa =3D vd_get_vdpa(vdev);
+
+@@ -263,7 +263,7 @@ static void virtio_vdpa_del_vqs(struct virtio_device *v=
+dev)
+ =09=09virtio_vdpa_del_vq(vq);
+ }
+
+-static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned nvqs,
++static int virtio_vdpa_find_vqs(struct virtio_device *vdev, unsigned int n=
+vqs,
+ =09=09=09=09struct virtqueue *vqs[],
+ =09=09=09=09vq_callback_t *callbacks[],
+ =09=09=09=09const char * const names[],
+--
+2.35.3
+
 

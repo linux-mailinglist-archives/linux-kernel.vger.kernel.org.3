@@ -2,174 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB35D50530D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8994D505280
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238172AbiDRMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
+        id S239569AbiDRMqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:46:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239705AbiDRMiB (ORCPT
+        with ESMTP id S239825AbiDRMiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:38:01 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DE23BC6;
-        Mon, 18 Apr 2022 05:28:28 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ck12so5042071ejb.4;
-        Mon, 18 Apr 2022 05:28:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9MS8QH1JXt2RhAQ2nGDbUJJM4tymM2sb4H79H+9Zs7o=;
-        b=Yzni4FFWrRedQOL11Hx+zfIAG/ric0LHy/+WxlfHcHH60ux0zaWfFTw5B/jGogWNJE
-         GgT5AWhJdDPqBf+XvKwVWz7X4B8ti5jlMGRDCs/aDoPEeeoQ1kfwEeyiWQMYL2TmQmOI
-         3Mr/1dVMAqTglwkd/81ZVpqHrgRlZsHNwYgUp6UQj1jwvplqTE3Z1REPe6LGz8GqbWjJ
-         A3yk4bGTAaV42ssnYuzFurtvmO7RYe/8hNXyUCESdofgCqAPuQfJ1/W56ReqEJvG8LTt
-         Zc6kyTXeVIuZdtdRD+l0M/7tDXnC6tBgK4tKEVtjhHJwd7i6NJxrzdMnHk+2Y48KQVoo
-         sldw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9MS8QH1JXt2RhAQ2nGDbUJJM4tymM2sb4H79H+9Zs7o=;
-        b=IrjVFTYPHhGgGkV5vDB6F3bgOCUY7cbX9H02lIKB7iSqNKaLUzKwFgMklBrdh+15ML
-         5GU7URgVHFPVe8p6kBJrjX75fH18ygsGO81WAktzqzgVDqIu1EEfCnocGRDEnXMWQelm
-         4vsov3KsOdxKpIQr1RiVh6fZOZa7kTQMVEhvuA6+ciqjPjrtZ1jejVm4Y4bN3439nm8O
-         XRYOtlYU8kkA+PXyk/YRe/WpVuWme6qPpnfETBQ7RDfCKXFWIWJq1KVhspYbZmCrFDz1
-         vGuTVvipY3/FME/HZkAWYUALmzVukiPTjg9o3wuorgPcaCxR3vS0YE9sI4x77ciivpxp
-         XRJw==
-X-Gm-Message-State: AOAM532XLtWXebONCuHFPSIDDG2qQ9oD1I4sG4nrru/QMHIMkeAwD51V
-        FMTJyCsURjEMJUBXzNAurrF9Qm3kZtcDcb9G/68=
-X-Google-Smtp-Source: ABdhPJwNx7Bp/x1FQBaUjl/jZ8pw6C55FHSm8z3w5fMkShl/CiMC0Pnn8EnH+wbT0XbNQSwCEF0uSLppoqh0yuPvJOk=
-X-Received: by 2002:a17:906:3799:b0:6ec:d25:3afe with SMTP id
- n25-20020a170906379900b006ec0d253afemr9098925ejc.44.1650284907498; Mon, 18
- Apr 2022 05:28:27 -0700 (PDT)
+        Mon, 18 Apr 2022 08:38:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A72409F;
+        Mon, 18 Apr 2022 05:28:42 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KhmSM06LKzhXYf;
+        Mon, 18 Apr 2022 20:28:35 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 20:28:36 +0800
+Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 18 Apr
+ 2022 20:28:36 +0800
+Message-ID: <0abfa1af-81ec-9048-6f95-cf5dda295139@huawei.com>
+Date:   Mon, 18 Apr 2022 20:28:33 +0800
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162141010.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204162141010.9383@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:27:51 +0300
-Message-ID: <CAHp75Vc6n+86jhhK2JRSZ=f6ZBV46Kz=Ayq=dWTHFbB-Hr+C7A@mail.gmail.com>
-Subject: Re: [PATCH v4 5/5] serial: 8250: Add proper clock handling for OxSemi
- PCIe devices
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
+ Information for frame pointer validation
+Content-Language: en-US
+To:     Josh Poimboeuf <jpoimboe@redhat.com>
+CC:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        <mark.rutland@arm.com>, <broonie@kernel.org>, <ardb@kernel.org>,
+        <nobuta.keiya@fujitsu.com>, <sjitindarsingh@gmail.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>, <jmorris@namei.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
+ <20220407202518.19780-1-madvenka@linux.microsoft.com>
+ <20220408002147.pk7clzruj6sawj7z@treble>
+ <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
+ <35c99466-9024-a7fd-9632-5d21b3e558f7@huawei.com>
+ <20220416005609.3znhltjlhpg475ff@treble>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20220416005609.3znhltjlhpg475ff@treble>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Oxford Semiconductor PCIe (Tornado) 950 serial port devices are driven
-> by a fixed 62.5MHz clock input derived from the 100MHz PCI Express clock.
->
-> We currently drive the device using its default oversampling rate of 16
-> and the clock prescaler disabled, consequently yielding the baud base of
-> 3906250.  This base is inadequate for some of the high-speed baud rates
-> such as 460800bps, for which the closest rate possible can be obtained
-> by dividing the baud base by 8, yielding the baud rate of 488281.25bps,
-> which is off by 5.9638%.  This is enough for data communication to break
-> with the remote end talking actual 460800bps where missed stop bits have
+Hi Josh,
 
-', where'
+IIUC, ORC on x86 can make reliable stack unwind for this scenario
+because objtool validates BP state.
 
-> been observed.
->
-> We can do better however, by taking advantage of a reduced oversampling
-> rate, which can be set to any integer value from 4 to 16 inclusive by
-> programming the TCR register, and by using the clock prescaler, which
-> can be set to any value from 1 to 63.875 in increments of 0.125 in the
-> CPR/CPR2 register pair.  The prescaler has to be explicitly enabled
-> though by setting bit 7 in the MCR or otherwise it is bypassed (in the
-> enhanced mode that we enable) as if the value of 1 was used.
->
-> Make use of these features then as follows:
->
-> - Set the baud base to 15625000, reflecting the minimum oversampling
->   rate of 4 with the clock prescaler and divisor both set to 1.
->
-> - Override the `set_mctrl' and set the MCR shadow there so as to have
->   MCR[7] always set and have the 8250 core propagate this settings.
+I'm thinking that on arm64 there's no guarantee that LR will be pushed
+onto stack. When we meet similar scenario on arm64, we should recover
+(LR, FP) on pt_regs and continue to unwind the stack. And this is
+reliable only after we validate (LR, FP).
 
-these
+So should we track LR on arm64 additionally as track BP on x86? Or can
+we just treat (LR, FP) as a pair? because as I know they are always set
+up together.
 
-> - Override the `get_divisor' handler and determine a good combination of
->   parameters by using a lookup table with predetermined value pairs of
->   the oversampling rate and the clock prescaler and finding a pair that
->   divides the input clock such that the quotient, when rounded to the
->   nearest integer, deviates the least from the exact result.  Calculate
->   the clock divisor accordingly.
->
->   Scale the resulting oversampling rate (only by powers of two) if
->   possible so as to maximise it, reducing the divisor accordingly, and
->   avoid a divisor overflow for very low baud rates by scaling the
->   oversampling rate and/or the prescaler even if that causes some
->   accuracy loss.
->
->   Also handle the historic spd_cust feature so as to allow one to set
->   all the three parameters manually to arbitrary values, by keeping the
->   low 16 bits for the divisor and then putting TCR in bits 19:16 and
->   CPR/CPR2 in bits 28:20, sanitising the bit pattern supplied such as
->   to clamp CPR/CPR2 values between 0.000 and 0.875 inclusive to 33.875.
->   This preserves compatibility with any existing setups, that is where
->   requesting a custom divisor that only has any bits set among the low
->   16 the oversampling rate of 16 and the clock prescaler of 33.875 will
->   be used as with the original 8250.
->
->   Finally abuse the `frac' argument to store the determined bit patterns
->   for the TCR, CPR and CPR2 registers.
->
-> - Override the `set_divisor' handler so as to set the TCR, CPR and CPR2
->   registers from the `frac' value supplied.  Set the divisor as usually.
+On 2022/4/16 8:56, Josh Poimboeuf wrote:
+> On Tue, Apr 12, 2022 at 04:32:22PM +0800, Chen Zhongjin wrote:
+>> By the way, I was thinking about a corner case, because arm64 CALL
+>> instruction won't push LR onto stack atomically as x86. Before push LR, FP
+>> to save frame there still can be some instructions such as bti, paciasp. If
+>> an irq happens here, the stack frame is not constructed so the FP unwinder
+>> will omit this function and provides a wrong stack trace to livepatch.
+>>
+>> It's just a guess and I have not built the test case. But I think it's a
+>> defect on arm64 that FP unwinder can't work properly on prologue and
+>> epilogue. Do you have any idea about this?
+> 
+> x86 has similar issues with frame pointers, if for example preemption or
+> page fault exception occurs in a leaf function, or in a function
+> prologue or epilogue, before or after the frame pointer setup.
+> 
+> This issue is solved by the "reliable" unwinder which detects
+> irqs/exceptions on the stack and reports the stack as unreliable.
+> 
 
-usual
-
-> With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
-> limitation imposed by `serial8250_get_baud_rate' standard baud rates
-> below 300bps become unavailable in the regular way, e.g. the rate of
-> 200bps requires the baud base to be divided by 78125 and that is beyond
-> the unsigned 16-bit range.  The historic spd_cust feature can still be
-> used to obtain such rates if so required.
->
-> See Documentation/tty/device_drivers/oxsemi-tornado.rst for more details.
-
-I'm not sure I understand how this change can have the 8250_port
-changes which were done in the previous patches. What did I miss?
-Also, looking at the below if the two *_icr_*() functions were moved
-from 8250_port, how they have been used before? Dead code?
-
-...
-
-> +       /* Old custom speed handling.  */
-> +       if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
-
-This part is not needed.  We have a BOTHER mechanism in the kernel
-that works for each driver that supports it in the generic way, hence
-the user space tool wouldn't be patched to support this exact card
-separately. Using SPD_CUST is a step back.
-
-> +               unsigned int cust_div = port->custom_divisor;
-> +
-> +               quot = cust_div & UART_DIV_MAX;
-> +               tcr = (cust_div >> 16) & OXSEMI_TORNADO_TCR_MASK;
-> +               cpr = (cust_div >> 20) & OXSEMI_TORNADO_CPR_MASK;
-> +               if (cpr < OXSEMI_TORNADO_CPR_MIN)
-> +                       cpr = OXSEMI_TORNADO_CPR_DEF;
-> +       } else {
-
-> +       }
-
--- 
-With Best Regards,
-Andy Shevchenko

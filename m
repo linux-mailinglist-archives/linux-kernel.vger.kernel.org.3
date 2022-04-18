@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E11505300
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2E5D5056C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbiDRMys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38014 "EHLO
+        id S242523AbiDRNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239909AbiDRMiP (ORCPT
+        with ESMTP id S243707AbiDRNKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:38:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76CC724966;
-        Mon, 18 Apr 2022 05:28:56 -0700 (PDT)
+        Mon, 18 Apr 2022 09:10:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07DD26DE;
+        Mon, 18 Apr 2022 05:49:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED59460F0A;
-        Mon, 18 Apr 2022 12:28:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0925AC385A1;
-        Mon, 18 Apr 2022 12:28:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 613F7B80EE1;
+        Mon, 18 Apr 2022 12:49:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C81C385A8;
+        Mon, 18 Apr 2022 12:49:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284935;
-        bh=KOUe/lAFuhPOql6scBSqAJ2DZMesDB+VOq8XWsiv5FM=;
+        s=korg; t=1650286176;
+        bh=jSmZMcvSkSe1LBly2aT57pfhxF45RhCNh/KbiUBO+tw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=biCEnO6+D187VHvZno3AaXoo3f2frAmGZVaS3C+JFhtblRgMwEip7a6UueCYv1349
-         ePtOz7iL5OWVCKv1vWrS/Kv8MdeKEW0Dxa63bloTYu7Ox3G0gETss6OJTgxwi3h6PL
-         t9Pd4SBCT+F8M6LF+OjUKNc3fvCqgncSQKXKjNFs=
+        b=Vy4bwrnYISuvWwKwfO7p1TLc1gv9M7OKAucsHyrWPjdwURYO6bFkd0ny7TU8tv6L8
+         Fq9YmyYWaJIm6PVUvtmNwahaUbHIJh0XNKOr8bpTNvyvBK5jUeoVqQb8ag/U7pPRYK
+         NOumCVJUKIeR9vZm+HI8zZhT1yjTEHI/xY9Sdyyo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alex Elder <elder@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH 5.15 013/189] dt-bindings: net: qcom,ipa: add optional qcom,qmp property
-Date:   Mon, 18 Apr 2022 14:10:33 +0200
-Message-Id: <20220418121200.875703142@linuxfoundation.org>
+        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 053/284] crypto: authenc - Fix sleep in atomic context in decrypt_tail
+Date:   Mon, 18 Apr 2022 14:10:34 +0200
+Message-Id: <20220418121212.204177542@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alex Elder <elder@linaro.org>
+From: Herbert Xu <herbert@gondor.apana.org.au>
 
-commit ac62a0174d62ae0f4447c0c8cf35a8e5d793df56 upstream.
+[ Upstream commit 66eae850333d639fc278d6f915c6fc01499ea893 ]
 
-For some systems, the IPA driver must make a request to ensure that
-its registers are retained across power collapse of the IPA hardware.
-On such systems, we'll use the existence of the "qcom,qmp" property
-as a signal that this request is required.
+The function crypto_authenc_decrypt_tail discards its flags
+argument and always relies on the flags from the original request
+when starting its sub-request.
 
-Signed-off-by: Alex Elder <elder@linaro.org>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This is clearly wrong as it may cause the SLEEPABLE flag to be
+set when it shouldn't.
+
+Fixes: 92d95ba91772 ("crypto: authenc - Convert to new AEAD interface")
+Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- Documentation/devicetree/bindings/net/qcom,ipa.yaml |    6 ++++++
- 1 file changed, 6 insertions(+)
+ crypto/authenc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-+++ b/Documentation/devicetree/bindings/net/qcom,ipa.yaml
-@@ -106,6 +106,10 @@ properties:
-           - const: imem
-           - const: config
+diff --git a/crypto/authenc.c b/crypto/authenc.c
+index 053287dfad65..533e811a0899 100644
+--- a/crypto/authenc.c
++++ b/crypto/authenc.c
+@@ -268,7 +268,7 @@ static int crypto_authenc_decrypt_tail(struct aead_request *req,
+ 		dst = scatterwalk_ffwd(areq_ctx->dst, req->dst, req->assoclen);
  
-+  qcom,qmp:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description: phandle to the AOSS side-channel message RAM
-+
-   qcom,smem-states:
-     $ref: /schemas/types.yaml#/definitions/phandle-array
-     description: State bits used in by the AP to signal the modem.
-@@ -221,6 +225,8 @@ examples:
-                                      "imem",
-                                      "config";
- 
-+                qcom,qmp = <&aoss_qmp>;
-+
-                 qcom,smem-states = <&ipa_smp2p_out 0>,
-                                    <&ipa_smp2p_out 1>;
-                 qcom,smem-state-names = "ipa-clock-enabled-valid",
+ 	skcipher_request_set_tfm(skreq, ctx->enc);
+-	skcipher_request_set_callback(skreq, aead_request_flags(req),
++	skcipher_request_set_callback(skreq, flags,
+ 				      req->base.complete, req->base.data);
+ 	skcipher_request_set_crypt(skreq, src, dst,
+ 				   req->cryptlen - authsize, req->iv);
+-- 
+2.34.1
+
 
 

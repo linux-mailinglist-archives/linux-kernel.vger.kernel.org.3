@@ -2,94 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4577F5051F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB35D50530D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239857AbiDRMnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
+        id S238172AbiDRMzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:55:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239822AbiDRMda (ORCPT
+        with ESMTP id S239705AbiDRMiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:30 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18EA81BE99
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:26:50 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id s18so26659273ejr.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:26:49 -0700 (PDT)
+        Mon, 18 Apr 2022 08:38:01 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 605DE23BC6;
+        Mon, 18 Apr 2022 05:28:28 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id ck12so5042071ejb.4;
+        Mon, 18 Apr 2022 05:28:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=O6i40JuKQXOyvwtn8Dy33ZqEQOG5EHZzXGoOpqZzNZ9ieOhuYgUKLhfzpGxvbXiAfC
-         Vwf80nHGzunG0NFoscB2CnQZ0JQu4sPahErZnIz5NgO6On1mSrWR8+eqgUYGkK04Z/cm
-         am6eYB6HIbNfNKmvh6CfzcqdjEqDMZklnqPh2wvAj+hoM7Z/WC2jzgm+/aKNM463g1jw
-         g7uQ/8uHdj6HIoospz4Bv4O6YviYZPMRyTqevmkLEkrfzf/jDuJ6B+t56CgXYgzMzeUH
-         zqzjkk8aXXXyzV9RR8CD0OyiQVQF/FlvxcK4hkfLOu+q4NO8TFovZ3kQgN5AmwmO6rfZ
-         2wEg==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=9MS8QH1JXt2RhAQ2nGDbUJJM4tymM2sb4H79H+9Zs7o=;
+        b=Yzni4FFWrRedQOL11Hx+zfIAG/ric0LHy/+WxlfHcHH60ux0zaWfFTw5B/jGogWNJE
+         GgT5AWhJdDPqBf+XvKwVWz7X4B8ti5jlMGRDCs/aDoPEeeoQ1kfwEeyiWQMYL2TmQmOI
+         3Mr/1dVMAqTglwkd/81ZVpqHrgRlZsHNwYgUp6UQj1jwvplqTE3Z1REPe6LGz8GqbWjJ
+         A3yk4bGTAaV42ssnYuzFurtvmO7RYe/8hNXyUCESdofgCqAPuQfJ1/W56ReqEJvG8LTt
+         Zc6kyTXeVIuZdtdRD+l0M/7tDXnC6tBgK4tKEVtjhHJwd7i6NJxrzdMnHk+2Y48KQVoo
+         sldw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=I3d5udvKIjqAWucjjIKmuyn7gYiBA99VwyV2DIv8hOs=;
-        b=t6emigtQ6rN0RTEcgMAjFja5IfKjwdcQgm98A9aIwqXYBmHyMcsqrXArf6/miDjRK1
-         aWC+xUH/RZUuW4SGFcQrvX1s+tC610WwgA6zIB/A76A93s3V3KlxMTnJ2i7+1dmGD37f
-         nmPdWNqlPvkbvQAKiANxDuzgAmY7lbRNH5hYNrcMZZiwqMJUsaPB0OdPuKwkTaR/I+hW
-         K1lYlldN51oQRW56nSceHv6nSLpDPRbaHULOE6Q/jgrORZx1SVcNWnZ6AkCPfqKpNl+J
-         PfeOciOfQ6rFBYT8ftioerf8GmP0Z7EJbpl21qHp7cNTSgLje2ggntkC1KlUX/knQ9wf
-         228w==
-X-Gm-Message-State: AOAM532LHw3WOlaOuDdzsmnv9O1Jdv3Zi1i9sX+/qjDvQYdLPwrtBE7k
-        gR29n9Y4/df32YWWgglxD617RB0yVbP6hA==
-X-Google-Smtp-Source: ABdhPJw1EAebv52D0fGCecrKQNHXpvA1WtVaDZlB3PXnrtrkiLQTkMClotu0rgBrzw31XDzOlJMw2A==
-X-Received: by 2002:a17:906:7a51:b0:6e8:8e6c:f182 with SMTP id i17-20020a1709067a5100b006e88e6cf182mr8740413ejo.506.1650284808614;
-        Mon, 18 Apr 2022 05:26:48 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gj3-20020a170906e10300b006e8ac161bcfsm4539377ejb.203.2022.04.18.05.26.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:26:47 -0700 (PDT)
-Message-ID: <a81e72f0-f01f-723e-fb0e-7667b2d3ff3f@linaro.org>
-Date:   Mon, 18 Apr 2022 14:26:46 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=9MS8QH1JXt2RhAQ2nGDbUJJM4tymM2sb4H79H+9Zs7o=;
+        b=IrjVFTYPHhGgGkV5vDB6F3bgOCUY7cbX9H02lIKB7iSqNKaLUzKwFgMklBrdh+15ML
+         5GU7URgVHFPVe8p6kBJrjX75fH18ygsGO81WAktzqzgVDqIu1EEfCnocGRDEnXMWQelm
+         4vsov3KsOdxKpIQr1RiVh6fZOZa7kTQMVEhvuA6+ciqjPjrtZ1jejVm4Y4bN3439nm8O
+         XRYOtlYU8kkA+PXyk/YRe/WpVuWme6qPpnfETBQ7RDfCKXFWIWJq1KVhspYbZmCrFDz1
+         vGuTVvipY3/FME/HZkAWYUALmzVukiPTjg9o3wuorgPcaCxR3vS0YE9sI4x77ciivpxp
+         XRJw==
+X-Gm-Message-State: AOAM532XLtWXebONCuHFPSIDDG2qQ9oD1I4sG4nrru/QMHIMkeAwD51V
+        FMTJyCsURjEMJUBXzNAurrF9Qm3kZtcDcb9G/68=
+X-Google-Smtp-Source: ABdhPJwNx7Bp/x1FQBaUjl/jZ8pw6C55FHSm8z3w5fMkShl/CiMC0Pnn8EnH+wbT0XbNQSwCEF0uSLppoqh0yuPvJOk=
+X-Received: by 2002:a17:906:3799:b0:6ec:d25:3afe with SMTP id
+ n25-20020a170906379900b006ec0d253afemr9098925ejc.44.1650284907498; Mon, 18
+ Apr 2022 05:28:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 2/3] dt-bindings: SPI: Add bindings for new Ingenic SoCs.
-Content-Language: en-US
-To:     =?UTF-8?B?5ZGo55Cw5p2wIChaaG91IFlhbmppZSk=?= 
-        <zhouyanjie@wanyeetech.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzk+dt@kernel.org
-Cc:     linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        paul@crapouillou.net, contact@artur-rojek.eu,
-        dongsheng.qiu@ingenic.com, aric.pzqi@ingenic.com,
-        rick.tyliu@ingenic.com, sernia.zhou@foxmail.com,
-        zhenwenjin@gmail.com, reimu@sudomaker.com
-References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
- <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1650032528-118220-3-git-send-email-zhouyanjie@wanyeetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162141010.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204162141010.9383@angie.orcam.me.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 Apr 2022 15:27:51 +0300
+Message-ID: <CAHp75Vc6n+86jhhK2JRSZ=f6ZBV46Kz=Ayq=dWTHFbB-Hr+C7A@mail.gmail.com>
+Subject: Re: [PATCH v4 5/5] serial: 8250: Add proper clock handling for OxSemi
+ PCIe devices
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 16:22, 周琰杰 (Zhou Yanjie) wrote:
-> Add the SPI bindings for the JZ4775 SoC, the X1000 SoC,
-> and the X2000 SoC from Ingenic.
-> 
-> Signed-off-by: 周琰杰 (Zhou Yanjie) <zhouyanjie@wanyeetech.com>
+On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> Oxford Semiconductor PCIe (Tornado) 950 serial port devices are driven
+> by a fixed 62.5MHz clock input derived from the 100MHz PCI Express clock.
+>
+> We currently drive the device using its default oversampling rate of 16
+> and the clock prescaler disabled, consequently yielding the baud base of
+> 3906250.  This base is inadequate for some of the high-speed baud rates
+> such as 460800bps, for which the closest rate possible can be obtained
+> by dividing the baud base by 8, yielding the baud rate of 488281.25bps,
+> which is off by 5.9638%.  This is enough for data communication to break
+> with the remote end talking actual 460800bps where missed stop bits have
 
+', where'
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> been observed.
+>
+> We can do better however, by taking advantage of a reduced oversampling
+> rate, which can be set to any integer value from 4 to 16 inclusive by
+> programming the TCR register, and by using the clock prescaler, which
+> can be set to any value from 1 to 63.875 in increments of 0.125 in the
+> CPR/CPR2 register pair.  The prescaler has to be explicitly enabled
+> though by setting bit 7 in the MCR or otherwise it is bypassed (in the
+> enhanced mode that we enable) as if the value of 1 was used.
+>
+> Make use of these features then as follows:
+>
+> - Set the baud base to 15625000, reflecting the minimum oversampling
+>   rate of 4 with the clock prescaler and divisor both set to 1.
+>
+> - Override the `set_mctrl' and set the MCR shadow there so as to have
+>   MCR[7] always set and have the 8250 core propagate this settings.
 
+these
 
-Best regards,
-Krzysztof
+> - Override the `get_divisor' handler and determine a good combination of
+>   parameters by using a lookup table with predetermined value pairs of
+>   the oversampling rate and the clock prescaler and finding a pair that
+>   divides the input clock such that the quotient, when rounded to the
+>   nearest integer, deviates the least from the exact result.  Calculate
+>   the clock divisor accordingly.
+>
+>   Scale the resulting oversampling rate (only by powers of two) if
+>   possible so as to maximise it, reducing the divisor accordingly, and
+>   avoid a divisor overflow for very low baud rates by scaling the
+>   oversampling rate and/or the prescaler even if that causes some
+>   accuracy loss.
+>
+>   Also handle the historic spd_cust feature so as to allow one to set
+>   all the three parameters manually to arbitrary values, by keeping the
+>   low 16 bits for the divisor and then putting TCR in bits 19:16 and
+>   CPR/CPR2 in bits 28:20, sanitising the bit pattern supplied such as
+>   to clamp CPR/CPR2 values between 0.000 and 0.875 inclusive to 33.875.
+>   This preserves compatibility with any existing setups, that is where
+>   requesting a custom divisor that only has any bits set among the low
+>   16 the oversampling rate of 16 and the clock prescaler of 33.875 will
+>   be used as with the original 8250.
+>
+>   Finally abuse the `frac' argument to store the determined bit patterns
+>   for the TCR, CPR and CPR2 registers.
+>
+> - Override the `set_divisor' handler so as to set the TCR, CPR and CPR2
+>   registers from the `frac' value supplied.  Set the divisor as usually.
+
+usual
+
+> With the baud base set to 15625000 and the unsigned 16-bit UART_DIV_MAX
+> limitation imposed by `serial8250_get_baud_rate' standard baud rates
+> below 300bps become unavailable in the regular way, e.g. the rate of
+> 200bps requires the baud base to be divided by 78125 and that is beyond
+> the unsigned 16-bit range.  The historic spd_cust feature can still be
+> used to obtain such rates if so required.
+>
+> See Documentation/tty/device_drivers/oxsemi-tornado.rst for more details.
+
+I'm not sure I understand how this change can have the 8250_port
+changes which were done in the previous patches. What did I miss?
+Also, looking at the below if the two *_icr_*() functions were moved
+from 8250_port, how they have been used before? Dead code?
+
+...
+
+> +       /* Old custom speed handling.  */
+> +       if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
+
+This part is not needed.  We have a BOTHER mechanism in the kernel
+that works for each driver that supports it in the generic way, hence
+the user space tool wouldn't be patched to support this exact card
+separately. Using SPD_CUST is a step back.
+
+> +               unsigned int cust_div = port->custom_divisor;
+> +
+> +               quot = cust_div & UART_DIV_MAX;
+> +               tcr = (cust_div >> 16) & OXSEMI_TORNADO_TCR_MASK;
+> +               cpr = (cust_div >> 20) & OXSEMI_TORNADO_CPR_MASK;
+> +               if (cpr < OXSEMI_TORNADO_CPR_MIN)
+> +                       cpr = OXSEMI_TORNADO_CPR_DEF;
+> +       } else {
+
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

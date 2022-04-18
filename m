@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088D050552E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D66E50518D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242564AbiDRNJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50900 "EHLO
+        id S238930AbiDRMfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240680AbiDRM5m (ORCPT
+        with ESMTP id S239921AbiDRM3I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:57:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8861EACF;
-        Mon, 18 Apr 2022 05:38:06 -0700 (PDT)
+        Mon, 18 Apr 2022 08:29:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E4622BE5;
+        Mon, 18 Apr 2022 05:22:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 683AB60FB6;
-        Mon, 18 Apr 2022 12:38:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C17C385A7;
-        Mon, 18 Apr 2022 12:38:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8B443B80EDC;
+        Mon, 18 Apr 2022 12:22:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0633C385A7;
+        Mon, 18 Apr 2022 12:22:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285484;
-        bh=umetmjBoZN3k5LTEYhounpHhZT/+4J5l6xef5aPbhLE=;
+        s=korg; t=1650284571;
+        bh=9WpKRmzPIMz90Vitck4aKghxMNPz4j5Xq4Pusf3jXaU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IKev81Q//bLR1SaxmtPHGyuLgAOtXfy/InAKu6BvpZ6Fi+ybwRoAF90Hu84ggMffF
-         Z/y2dkOZJhmu7GrV2jGHuUBskP3j/4jJohzXi9AUGRZsM4IdiSekXFdaHdAEVMgCmK
-         SukoE9U4zYSYrW9229ohme0IKRuBr1OhEYoWRDk4=
+        b=mQflNXoYbWjM0WVmtL5zk0U3GzgYDXe1ltxdvMiDPtOALYF86WAa6qJU4RWW/91u9
+         0t5xuil+KlWA91/iUfgFlvghY4ipbtYltjKzFzdookuliJORgQTuP0QBVNJB3Ef1XS
+         uwfJ7/fvy5Jj2AegJ7MKH4DU9Opxe3s9574BCv60=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.10 005/105] ACPI: processor idle: Check for architectural support for LPI
+        stable@vger.kernel.org, Boqun Feng <boqun.feng@gmail.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 158/219] Drivers: hv: balloon: Disable balloon and hot-add accordingly
 Date:   Mon, 18 Apr 2022 14:12:07 +0200
-Message-Id: <20220418121145.500350849@linuxfoundation.org>
+Message-Id: <20220418121211.307137631@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,68 +55,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Boqun Feng <boqun.feng@gmail.com>
 
-commit eb087f305919ee8169ad65665610313e74260463 upstream.
+[ Upstream commit be5802795cf8d0b881745fa9ba7790293b382280 ]
 
-When `osc_pc_lpi_support_confirmed` is set through `_OSC` and `_LPI` is
-populated then the cpuidle driver assumes that LPI is fully functional.
+Currently there are known potential issues for balloon and hot-add on
+ARM64:
 
-However currently the kernel only provides architectural support for LPI
-on ARM.  This leads to high power consumption on X86 platforms that
-otherwise try to enable LPI.
+*	Unballoon requests from Hyper-V should only unballoon ranges
+	that are guest page size aligned, otherwise guests cannot handle
+	because it's impossible to partially free a page. This is a
+	problem when guest page size > 4096 bytes.
 
-So probe whether or not LPI support is implemented before enabling LPI in
-the kernel.  This is done by overloading `acpi_processor_ffh_lpi_probe` to
-check whether it returns `-EOPNOTSUPP`. It also means that all future
-implementations of `acpi_processor_ffh_lpi_probe` will need to follow
-these semantics as well.
+*	Memory hot-add requests from Hyper-V should provide the NUMA
+	node id of the added ranges or ARM64 should have a functional
+	memory_add_physaddr_to_nid(), otherwise the node id is missing
+	for add_memory().
 
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+These issues require discussions on design and implementation. In the
+meanwhile, post_status() is working and essential to guest monitoring.
+Therefore instead of disabling the entire hv_balloon driver, the
+ballooning (when page size > 4096 bytes) and hot-add are disabled
+accordingly for now. Once the issues are fixed, they can be re-enable in
+these cases.
+
+Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
+Reviewed-by: Michael Kelley <mikelley@microsoft.com>
+Link: https://lore.kernel.org/r/20220325023212.1570049-3-boqun.feng@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/processor_idle.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/hv/hv_balloon.c | 36 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 34 insertions(+), 2 deletions(-)
 
---- a/drivers/acpi/processor_idle.c
-+++ b/drivers/acpi/processor_idle.c
-@@ -1080,6 +1080,11 @@ static int flatten_lpi_states(struct acp
- 	return 0;
+diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
+index 439f99b8b5de..3cf334c46c31 100644
+--- a/drivers/hv/hv_balloon.c
++++ b/drivers/hv/hv_balloon.c
+@@ -1653,6 +1653,38 @@ static void disable_page_reporting(void)
+ 	}
  }
  
-+int __weak acpi_processor_ffh_lpi_probe(unsigned int cpu)
++static int ballooning_enabled(void)
 +{
-+	return -EOPNOTSUPP;
++	/*
++	 * Disable ballooning if the page size is not 4k (HV_HYP_PAGE_SIZE),
++	 * since currently it's unclear to us whether an unballoon request can
++	 * make sure all page ranges are guest page size aligned.
++	 */
++	if (PAGE_SIZE != HV_HYP_PAGE_SIZE) {
++		pr_info("Ballooning disabled because page size is not 4096 bytes\n");
++		return 0;
++	}
++
++	return 1;
 +}
 +
- static int acpi_processor_get_lpi_info(struct acpi_processor *pr)
- {
- 	int ret, i;
-@@ -1088,6 +1093,11 @@ static int acpi_processor_get_lpi_info(s
- 	struct acpi_device *d = NULL;
- 	struct acpi_lpi_states_array info[2], *tmp, *prev, *curr;
- 
-+	/* make sure our architecture has support */
-+	ret = acpi_processor_ffh_lpi_probe(pr->id);
-+	if (ret == -EOPNOTSUPP)
-+		return ret;
++static int hot_add_enabled(void)
++{
++	/*
++	 * Disable hot add on ARM64, because we currently rely on
++	 * memory_add_physaddr_to_nid() to get a node id of a hot add range,
++	 * however ARM64's memory_add_physaddr_to_nid() always return 0 and
++	 * DM_MEM_HOT_ADD_REQUEST doesn't have the NUMA node information for
++	 * add_memory().
++	 */
++	if (IS_ENABLED(CONFIG_ARM64)) {
++		pr_info("Memory hot add disabled on ARM64\n");
++		return 0;
++	}
 +
- 	if (!osc_pc_lpi_support_confirmed)
- 		return -EOPNOTSUPP;
- 
-@@ -1139,11 +1149,6 @@ static int acpi_processor_get_lpi_info(s
- 	return 0;
- }
- 
--int __weak acpi_processor_ffh_lpi_probe(unsigned int cpu)
--{
--	return -ENODEV;
--}
--
- int __weak acpi_processor_ffh_lpi_enter(struct acpi_lpi_state *lpi)
++	return 1;
++}
++
+ static int balloon_connect_vsp(struct hv_device *dev)
  {
- 	return -ENODEV;
+ 	struct dm_version_request version_req;
+@@ -1724,8 +1756,8 @@ static int balloon_connect_vsp(struct hv_device *dev)
+ 	 * currently still requires the bits to be set, so we have to add code
+ 	 * to fail the host's hot-add and balloon up/down requests, if any.
+ 	 */
+-	cap_msg.caps.cap_bits.balloon = 1;
+-	cap_msg.caps.cap_bits.hot_add = 1;
++	cap_msg.caps.cap_bits.balloon = ballooning_enabled();
++	cap_msg.caps.cap_bits.hot_add = hot_add_enabled();
+ 
+ 	/*
+ 	 * Specify our alignment requirements as it relates
+-- 
+2.35.1
+
 
 

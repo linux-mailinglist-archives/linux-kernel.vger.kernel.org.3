@@ -2,80 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BC350537A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32805053FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240361AbiDRNAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
+        id S238925AbiDRNBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:01:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239795AbiDRMro (ORCPT
+        with ESMTP id S240645AbiDRMtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:47:44 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3768E2A263
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:33:18 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i27so26576948ejd.9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:33:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=9HCxKtGYnrYzRWcKvwUpWOME3pq91zTtzI7mYRWUSFk=;
-        b=omx+m7v2RoJtfSG2aBLdGa7HxZ7GfNpOCDmVlxW4PKxzVm+w1oFeS8L9arLKLYcJzv
-         RMWOd/zQBkle+usHZmChfJtCBv8azcEwloUbGAH+KoQrcSvqN+lI3h/c5RGmSYGpaOR0
-         GYEEnaUljNV5D0jBjC6fDBOkm77MBEHlezkgNINExr594gl09vf249YnLxV2fwa4YGR8
-         MkmUxSHxuEF8guisk3KJ3SXsWc2RX8N5BZsaapUsrsTLSYJwhWTxVoKkqoTmMXRf3WSP
-         m8eNnbMvQ1XYQ8Lif8H8RBk2yImxaPrH/tlSLOhUybUgsqAx059etvXaxcpEhaNINH5+
-         IGXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=9HCxKtGYnrYzRWcKvwUpWOME3pq91zTtzI7mYRWUSFk=;
-        b=6KewlSP69/Rd9l4c6nXqm95ObThaHdsH4jKxvA03295Xn4q+R98VlocVlQFUDNK+UF
-         0YIi+xoQMh1nVj3nbS/CcomwNPLo7HpPRI4UhS6VPoIY1sxUhWflL8LKQzdl0E9uJx1h
-         SwnZ6AYGJU/v/GAef4qsh2b5Mbphu1EZkrewMleGWoFTQvmdnRz69MA+47GHx0dJZcRP
-         prtuHY1wUiDRWDwoJ5hrPVWyKjwMBwShXegzFoc9ZF+DFzVsqOenKpaI1Yzebna6oF3F
-         akp2TS2rCdTLY1I/Kgq4Z4fy283mk5HVzo5UTrCtq0+7o97lquNlDEZh3m85DmKq11Bg
-         q78A==
-X-Gm-Message-State: AOAM532+xkD0AA3OejmjVUm9P13YmU5V72u4Oed8cmWtFx5L8K50jp+R
-        7un5elfCPveWANazZGZ5ZUd+7Q==
-X-Google-Smtp-Source: ABdhPJySfcNdNNLWRKDZXDnSJYYxL3w0tDnKnsqG//kUAd5ueSM6aLRRtj+zFxoAvXaGXWkDSeWGFg==
-X-Received: by 2002:a17:907:86a8:b0:6e8:d649:5e2e with SMTP id qa40-20020a17090786a800b006e8d6495e2emr8989506ejc.276.1650285196630;
-        Mon, 18 Apr 2022 05:33:16 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id i1-20020a1709064ec100b006e89dfff2d6sm4596844ejv.141.2022.04.18.05.33.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:33:16 -0700 (PDT)
-Message-ID: <8c880b7a-ddb8-dea1-40c1-892247c6439d@linaro.org>
-Date:   Mon, 18 Apr 2022 14:33:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 02/23] ARM: dts: qcom-msm8974: Remove properties that are
- always overriden
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220415115633.575010-1-konrad.dybcio@somainline.org>
- <20220415115633.575010-3-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220415115633.575010-3-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Mon, 18 Apr 2022 08:49:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4612C65C;
+        Mon, 18 Apr 2022 05:34:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 38FE2610F4;
+        Mon, 18 Apr 2022 12:34:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0766C385A1;
+        Mon, 18 Apr 2022 12:34:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650285243;
+        bh=L5R/v4sHI6rV04SHHUZi5wOoFWpDnT4xqKF6/3cKyl4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u9bOvlRUZMy7+ggYsfFYV/4ulLBPFYISduMjTDTx0mtTvKrvcRIwf6iz5gWfzCMD/
+         Px6Q+BoHmUtcnNA0N18/6gGzqvAkP4FsWBvRMBnwiCJ8/kRKDsqF3EgWNmRDK8Tior
+         jRx1WLtN6tBQHGGnmk0rSK+hyIg9VDNluecSBtwaSWIV0Wi6AwkQzzNgU/zjJxHj+9
+         nCfu3t4xKSJrz3XbV/KsNCoBZkJQB+m5nW5YoZe0mJ2MWeXVRL03qXSjyo6kWq3O4K
+         81V92uuN6sxiVVhYe6LkBFhbD2Vph5+XJo+T4CvX7pH2EvNbxRJgfDHs67nlyALgOk
+         hz1vwedtdYVGw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ngQZt-0050pH-7a; Mon, 18 Apr 2022 13:34:01 +0100
+Date:   Mon, 18 Apr 2022 13:34:00 +0100
+Message-ID: <87sfqaa7uv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/4] PCI: dwc: rockchip: add legacy interrupt support
+In-Reply-To: <CAMdYzYo_+7rakc=GCTueEZvH_F4Co6+=eKAUztJaafiDXSKKXQ@mail.gmail.com>
+References: <20220416110507.642398-1-pgwipeout@gmail.com>
+        <20220416110507.642398-3-pgwipeout@gmail.com>
+        <308e9c47197d4f7ae5a31cfcb5a10886@kernel.org>
+        <CAMdYzYo+YeAgT92baMOoWpra230wro_WynRcajL-__9RNkeE9Q@mail.gmail.com>
+        <87zgkk9gtc.wl-maz@kernel.org>
+        <CAMdYzYo_+7rakc=GCTueEZvH_F4Co6+=eKAUztJaafiDXSKKXQ@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,28 +78,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 13:56, Konrad Dybcio wrote:
-> Model and compatible are set per-device, so having them in the SoC DTSI is
-> superfluous. Remove them.
+On Mon, 18 Apr 2022 12:37:00 +0100,
+Peter Geis <pgwipeout@gmail.com> wrote:
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  arch/arm/boot/dts/qcom-msm8974.dtsi | 2 --
->  1 file changed, 2 deletions(-)
+> On Sun, Apr 17, 2022 at 5:53 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Sat, 16 Apr 2022 14:24:26 +0100,
+> > Peter Geis <pgwipeout@gmail.com> wrote:
+> > >
+> > > Okay, that makes sense. I'm hitting the entire block when it should be
+> > > the individual IRQ.
+> > > I also notice some drivers protect this with a spinlock while others
+> > > do not, how should this be handled?
+> >
+> > It obviously depends on how the HW. works. If this is a shared
+> > register using a RMW sequence, then you need some form of mutual
+> > exclusion in order to preserve the atomicity of the update.
+> >
+> > If the HW supports updating the masks using a set of hot bits (with
+> > separate clear/set registers), than there is no need for locking.  In
+> > your case PCIE_CLIENT_INTR_MASK_LEGACY seems to support this odd
+> > "write-enable" feature which can probably be used to implement a
+> > lockless access, something like:
+> >
+> >         void mask(struct irq_data *d)
+> >         {
+> >                 u32 val = BIT(d->hwirq + 16) | BIT(d->hwirq);
 > 
-> diff --git a/arch/arm/boot/dts/qcom-msm8974.dtsi b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> index 412d94736c35..e216630a1d02 100644
-> --- a/arch/arm/boot/dts/qcom-msm8974.dtsi
-> +++ b/arch/arm/boot/dts/qcom-msm8974.dtsi
-> @@ -12,8 +12,6 @@
->  / {
->  	#address-cells = <1>;
->  	#size-cells = <1>;
-> -	model = "Qualcomm MSM8974";
-> -	compatible = "qcom,msm8974";
+> This is what HIWORD_UPDATE_BIT does, it's rather common in Rockchip code.
+> I believe I can safely drop the spinlock when enabling/disabling
+> individual interrupts.
 
-The compatible by convention is in the DTSI, even if it is not actually
-used, it gives clear information what is the expected fallback.
+Yes.
 
-Best regards,
-Krzysztof
+> 
+> >                 writel_relaxed(val, ...);
+> >         }
+> >
+> >         void mask(struct irq_data *d)
+> >         {
+> >                 u32 val = BIT(d->hwirq + 16);
+> >                 writel_relaxed(val, ...);
+> >         }
+> >
+> > Another thing is that it is completely unclear to me what initialises
+> > these interrupts the first place (INTR_MASK_LEGACY, INTR_EN_LEGACY).
+> > Are you relying on the firmware to do that for you?
+> 
+> There is no dedicated mask or enable/disable for the legacy interrupt
+> line (unless it's undocumented).
+
+I'm talking about the INTR_MASK_LEGACY and INTR_EN_LEGACY registers,
+which control the INTx (although the latter seems to default to some
+reserved values). I don't see where you initialise them to a state
+where they are enabled and masked, which should be the initial state
+once this driver has probed. The output interrupt itself is obviously
+controlled by the GIC driver.
+
+> It appears to be enabled via an "or" function with the emulated interrupts.
+> As far as I can tell this is common for dw-pcie, looking at the other drivers.
+
+I think we're talking past each other. I'm solely concerned with the
+initialisation of the input control registers, for which I see no code
+in this patch.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857185052E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35BDC505156
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239943AbiDRMve (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:51:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S239241AbiDRMcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240835AbiDRMjk (ORCPT
+        with ESMTP id S239710AbiDRM2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E24BD21BE;
-        Mon, 18 Apr 2022 05:31:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:28:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D09201A9;
+        Mon, 18 Apr 2022 05:22:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59F0060F0A;
-        Mon, 18 Apr 2022 12:31:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62CD1C385A1;
-        Mon, 18 Apr 2022 12:31:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C998EB80EC4;
+        Mon, 18 Apr 2022 12:22:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A730C385A1;
+        Mon, 18 Apr 2022 12:22:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285076;
-        bh=iZBhekhUh7LMaNsWnbgQLwxjvvfc6NEOh4EKVHUUbho=;
+        s=korg; t=1650284542;
+        bh=+Xd3EYsE54NRnjPktOTOQq1qGWDsUlebxiZdA2bq+tQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qfxBxxpjy5vjezTmfGg5Kn6VUloSR2lsHukZlsxB48NxqH80DSigUUIMvDMTtyy/3
-         DHQ1vCcNPe2grpYN0D/iA66EWQZReOhcN1wJcSE8AL4gaDHn3cI+EIh+CB0PftGeWa
-         GYnRwvSyTa7fAuDg6JCeC9ZWbH3djLHXVBobJuZE=
+        b=SbMdng3lnVxpi7LIxW93Q5OhOjXPZ9dFrIjTf3ULagwDH8BCWQggGvdkhnXjYU4tv
+         ZTm1ElMEujdZFoEM2VQrgCENUH1AQYTP+UP5TcAQP/ZmYuGbHSopf7O2/suJxrBtek
+         3XBGRAIJp6P5Ldl7Hr7XVKhxrIka1cfEpq3jdWeM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Martin Willi <martin@strongswan.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, Tyrel Datwyler <tyreld@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 097/189] macvlan: Fix leaking skb in source mode with nodst option
-Date:   Mon, 18 Apr 2022 14:11:57 +0200
-Message-Id: <20220418121203.257306150@linuxfoundation.org>
+Subject: [PATCH 5.17 149/219] scsi: ibmvscsis: Increase INITIAL_SRP_LIMIT to 1024
+Date:   Mon, 18 Apr 2022 14:11:58 +0200
+Message-Id: <20220418121211.058527039@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Willi <martin@strongswan.org>
+From: Tyrel Datwyler <tyreld@linux.ibm.com>
 
-[ Upstream commit e16b859872b87650bb55b12cca5a5fcdc49c1442 ]
+[ Upstream commit 0bade8e53279157c7cc9dd95d573b7e82223d78a ]
 
-The MACVLAN receive handler clones skbs to all matching source MACVLAN
-interfaces, before it passes the packet along to match on destination
-based MACVLANs.
+The adapter request_limit is hardcoded to be INITIAL_SRP_LIMIT which is
+currently an arbitrary value of 800. Increase this value to 1024 which
+better matches the characteristics of the typical IBMi Initiator that
+supports 32 LUNs and a queue depth of 32.
 
-When using the MACVLAN nodst mode, passing the packet to destination based
-MACVLANs is omitted and the handler returns with RX_HANDLER_CONSUMED.
-However, the passed skb is not freed, leaking for any packet processed
-with the nodst option.
+This change also has the secondary benefit of being a power of two as
+required by the kfifo API. Since, Commit ab9bb6318b09 ("Partially revert
+"kfifo: fix kfifo_alloc() and kfifo_init()"") the size of IU pool for each
+target has been rounded down to 512 when attempting to kfifo_init() those
+pools with the current request_limit size of 800.
 
-Properly free the skb when consuming packets to fix that leak.
-
-Fixes: 427f0c8c194b ("macvlan: Add nodst option to macvlan type source")
-Signed-off-by: Martin Willi <martin@strongswan.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Link: https://lore.kernel.org/r/20220322194443.678433-1-tyreld@linux.ibm.com
+Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/macvlan.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/macvlan.c b/drivers/net/macvlan.c
-index 35f46ad040b0..a9a515cf5a46 100644
---- a/drivers/net/macvlan.c
-+++ b/drivers/net/macvlan.c
-@@ -460,8 +460,10 @@ static rx_handler_result_t macvlan_handle_frame(struct sk_buff **pskb)
- 			return RX_HANDLER_CONSUMED;
- 		*pskb = skb;
- 		eth = eth_hdr(skb);
--		if (macvlan_forward_source(skb, port, eth->h_source))
-+		if (macvlan_forward_source(skb, port, eth->h_source)) {
-+			kfree_skb(skb);
- 			return RX_HANDLER_CONSUMED;
-+		}
- 		src = macvlan_hash_lookup(port, eth->h_source);
- 		if (src && src->mode != MACVLAN_MODE_VEPA &&
- 		    src->mode != MACVLAN_MODE_BRIDGE) {
-@@ -480,8 +482,10 @@ static rx_handler_result_t macvlan_handle_frame(struct sk_buff **pskb)
- 		return RX_HANDLER_PASS;
- 	}
+diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+index 61f06f6885a5..89b9fbce7488 100644
+--- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
++++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
+@@ -36,7 +36,7 @@
  
--	if (macvlan_forward_source(skb, port, eth->h_source))
-+	if (macvlan_forward_source(skb, port, eth->h_source)) {
-+		kfree_skb(skb);
- 		return RX_HANDLER_CONSUMED;
-+	}
- 	if (macvlan_passthru(port))
- 		vlan = list_first_or_null_rcu(&port->vlans,
- 					      struct macvlan_dev, list);
+ #define IBMVSCSIS_VERSION	"v0.2"
+ 
+-#define	INITIAL_SRP_LIMIT	800
++#define	INITIAL_SRP_LIMIT	1024
+ #define	DEFAULT_MAX_SECTORS	256
+ #define MAX_TXU			1024 * 1024
+ 
 -- 
 2.35.1
 

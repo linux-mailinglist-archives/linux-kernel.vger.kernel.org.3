@@ -2,291 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D4F505A3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AABE505A42
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344478AbiDROte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
+        id S1345167AbiDROta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345314AbiDROtA (ORCPT
+        with ESMTP id S1345367AbiDROtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 10:49:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C997527B37;
-        Mon, 18 Apr 2022 06:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650288981; x=1681824981;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=8ULkbQDoXZKawL2vxp2JE0iQIBCqxX/7hJVpdFisWAg=;
-  b=KG/ybS6eFdrA+d1pIxY87H4QpVueaJ2K+FxBZjluAEklhDOE8X+NVzCQ
-   iGLJD+YOo4Yyn98FBdxWJ18mH65JaP0FcqKit8W3TiWboxY6m3zWLifMz
-   DT0O4l0f5NT6huEcuTEJ/8BADHgaNLpyv67Wnk0PhwX1YZ0+xi9sHEdfa
-   vpt9nvG6PvVc1sfX2jhe0N6IEOkA8NARciQHtB+kfKD++Vf8ElixquzqU
-   6jQjxZr9PmJ0Yq3xWTTU8RmIHbGXwMRtPr2YrdJ54BUWSuUKQSXhWGEuB
-   jR6L4jxUcEZmGFbfplRVBo0wrflBRBYAqpefBBXcFXIVkYRHMid8QQmyy
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="323960696"
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="323960696"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 06:36:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="726643966"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
-  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 06:36:19 -0700
-Date:   Mon, 18 Apr 2022 21:36:09 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
-Subject: Re: [PATCH] KVM: x86/mmu: Add RET_PF_CONTINUE to eliminate bool+int*
- "returns"
-Message-ID: <20220418133609.GA31671@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220415005107.2221672-1-seanjc@google.com>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FF92654E;
+        Mon, 18 Apr 2022 06:36:18 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id g19so10337999lfv.2;
+        Mon, 18 Apr 2022 06:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=ctahVpxYVe7pa97C6ZwRQ8zFh/8uy2grZsYwheAauuE=;
+        b=NxMyNxmv7McG7vfliC1sRp0myrwa6Wv7BfcUYKikzQmk5Mt510X3E+12/xtEyYLMfe
+         GNuYAaVLux+ypQXaJJzRunyq+wC5RbMjsyTrCqfGs+c2oWrVJzmWqZRSpz11s9ix67hK
+         u7cE+aTPuABrOJuDDLPbZAlpW17f4t1G6wDveD93J3bBsLVnE3Hjkgd0IR7hjog2ExRz
+         Tx9s7Q6kk5FDd80+FIeyAGQA2tOgLViV1EGqlt+dV0SSLKv2+Izl9pbBq+xVxkqgRfTy
+         nNJIPGlQ5DlotePRLQQLkox40caEv55Slmb+wQuQWdyMnnN6M7pRkLmEVPd7ePXhOCTn
+         Jf+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=ctahVpxYVe7pa97C6ZwRQ8zFh/8uy2grZsYwheAauuE=;
+        b=4QydTPEl6l70aCX4yi09fLCIQ5lVvjm/vKlsuCOdIbBtQlvdQXoQ3x1+AenjeAtsSW
+         n7IPa6Up/aeIu2zpse3Ahmbj/L6G84KCtZe5dpeMB9WS1ggEA4Ahtf3tO7ouRI3l4vEs
+         DFbd4URriLcErmFblqs8Px5oRC6r3J+Hb0hUSKXrW3BNZI8vvGyZZ/rWvwRqGOyvEQMP
+         ktudUaZyvjLvefuX1z9/NHTbf5PWDQmulQw/5R5e4CTpiG9qO39nlRGZ4O2vx28GcUmp
+         dNEYI+7w7olijtjEIIj7EC0AtiL5XsIstbRa2QSnq6WzzMfIuOkYKHe4BHwlH2lb27YK
+         JWRA==
+X-Gm-Message-State: AOAM531v1/lEDuXVd3aBRbc/nj5RS1W7ZR2f2846tVCRAucm2aFRBytA
+        Yo4eQmLZXRqex0yO0AdeGNIn8vs+azv0GQ==
+X-Google-Smtp-Source: ABdhPJxqojB+379Aoz4aRU9p0SqnQukj3Oda4tTeABagBaaNG6KqN67puNwm0y9Ptz+xYXNKnB7few==
+X-Received: by 2002:a19:6046:0:b0:46e:e5c5:12c2 with SMTP id p6-20020a196046000000b0046ee5c512c2mr7826936lfk.625.1650288976716;
+        Mon, 18 Apr 2022 06:36:16 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id m17-20020a197111000000b0046d0f737777sm1221369lfc.178.2022.04.18.06.36.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 06:36:16 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 16:36:14 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 23/25] dmaengine: dw-edma: Bypass dma-ranges mapping for
+ the local setup
+Message-ID: <20220418133614.atbndfymcn45i3id@mobilestation>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-24-Sergey.Semin@baikalelectronics.ru>
+ <20220325181042.GA12218@thinkpad>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220415005107.2221672-1-seanjc@google.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220325181042.GA12218@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 12:51:07AM +0000, Sean Christopherson wrote:
-> Add RET_PF_CONTINUE and use it in handle_abnormal_pfn() and
-> kvm_faultin_pfn() to signal that the page fault handler should continue
-> doing its thing.  Aside from being gross and inefficient, using a boolean
-> return to signal continue vs. stop makes it extremely difficult to add
-> more helpers and/or move existing code to a helper.
+On Fri, Mar 25, 2022 at 11:40:42PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:48:34AM +0300, Serge Semin wrote:
+> > DW eDMA doesn't perform any translation of the traffic generated on the
+> > CPU/Application side. It just generates read/write AXI-bus requests with
+> > the specified addresses. But in case if the dma-ranges DT-property is
+> > specified for a platform device node, Linux will use it to map the CPU
+> > memory regions into the DMAable bus ranges. This isn't what we want for
+> > the eDMA embedded into the locally accessed DW PCIe Root Port and
+> > End-point. In order to work that around let's set the chan_dma_dev flag
+> > for each DW eDMA channel thus forcing the client drivers to getting a
+> > custom dma-ranges-less parental device for the mappings.
+> > 
+> > Note it will only work for the client drivers using the
+> > dmaengine_get_dma_device() method to get the parental DMA device.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  drivers/dma/dw-edma/dw-edma-core.c | 15 +++++++++++++++
+> >  1 file changed, 15 insertions(+)
+> > 
+> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> > index 72a51970bfba..ca5cd7c99571 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-core.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> > @@ -716,6 +716,21 @@ static int dw_edma_alloc_chan_resources(struct dma_chan *dchan)
+> >  	if (chan->status != EDMA_ST_IDLE)
+> >  		return -EBUSY;
+> >  
+> > +	/* Bypass the dma-ranges based memory regions mapping since the
+> > +	 * inbound iATU only affects the traffic incoming from the
+> > +	 * PCIe bus.
+> > +	 */
 > 
-> E.g. hypothetically, if nested MMUs were to gain a separate page fault
-> handler in the future, everything up to the "is self-modifying PTE" check
-> can be shared by all shadow MMUs, but communicating up the stack whether
-> to continue on or stop becomes a nightmare.
-> 
-> More concretely, proposed support for private guest memory ran into a
-> similar issue, where it'll be forced to forego a helper in order to yield
-> sane code: https://lore.kernel.org/all/YkJbxiL%2FAz7olWlq@google.com.
 
-Thanks for cooking this patch, it makes private memory patch much
-easier.
+> Bypass the dma-ranges based memory regions mapping since eDMA doesn't do any
+> address translation for the CPU address?
+
+Seems reasonable. I'll fix the comment to being clearer.
+
+BTW since we omit setting the DMA_BYPASS flag of the outbound iATU
+windows, the DMA address is actually affected by the DW PCIe
+controller but in a bit of a sophisticated way. AFAIU if no DMA_BYPASS
+flag specified and the resultant TLP address falls into any outbound
+iATU window, the address will be translated in accordance with that
+window translation rule. So happen the chains like this:
++ DMA write:
+CPU memory <-,-> eDMA LLi:SAR(CPU address, data) -> eDMA LLi:DAR(DMA address, data) ->
+Outbound iATU TLP MWr(PCIe address, data) -> PCIe memory.
++ DMA read:
+eDMA SAR(DMA address, ?) -> Outbound iATU TLP MRd(PCIe address, ?) ->
+PCIe memory -> Outbound iATU TLP MRd(PCIe address, data) -> eDMA
+SAR(DMA address, data) -> eDMA DAR(CPU address, data) -> CPU memory
+
+Due to that handy feature we don't need to search for the PCIe bus
+memory range matching the passed source and destination DMA addresses
+of the SG-lists. It is done by the Outbound iATU engine automatically.
+If the DMA_BYPASS flag was set, all the Outbound iATU-related stages
+would have been omitted from the diagram above and the DMA<->PCIe
+translations would have needed to be performed in the eDMA driver
+code.
+
+-Sergey
 
 > 
-> No functional change intended.
+> Other than this,
 > 
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Chao Peng <chao.p.peng@linux.intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/mmu/mmu.c          | 51 ++++++++++++++-------------------
->  arch/x86/kvm/mmu/mmu_internal.h |  9 +++++-
->  arch/x86/kvm/mmu/paging_tmpl.h  |  6 ++--
->  3 files changed, 34 insertions(+), 32 deletions(-)
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > 
-> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-> index 69a30d6d1e2b..cb2982c6b513 100644
-> --- a/arch/x86/kvm/mmu/mmu.c
-> +++ b/arch/x86/kvm/mmu/mmu.c
-> @@ -2972,14 +2972,12 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
->  	return -EFAULT;
->  }
->  
-> -static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> -				unsigned int access, int *ret_val)
-> +static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
-> +			       unsigned int access)
->  {
->  	/* The pfn is invalid, report the error! */
-> -	if (unlikely(is_error_pfn(fault->pfn))) {
-> -		*ret_val = kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
-> -		return true;
-> -	}
-> +	if (unlikely(is_error_pfn(fault->pfn)))
-> +		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
->  
->  	if (unlikely(!fault->slot)) {
->  		gva_t gva = fault->is_tdp ? 0 : fault->addr;
-> @@ -2991,13 +2989,11 @@ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fa
->  		 * touching the shadow page tables as attempting to install an
->  		 * MMIO SPTE will just be an expensive nop.
->  		 */
-> -		if (unlikely(!shadow_mmio_value)) {
-> -			*ret_val = RET_PF_EMULATE;
-> -			return true;
-> -		}
-> +		if (unlikely(!shadow_mmio_value))
-> +			return RET_PF_EMULATE;
->  	}
->  
-> -	return false;
-> +	return RET_PF_CONTINUE;
->  }
->  
->  static bool page_fault_can_be_fast(struct kvm_page_fault *fault)
-> @@ -3888,7 +3884,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
->  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
->  }
->  
-> -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
-> +static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->  	struct kvm_memory_slot *slot = fault->slot;
->  	bool async;
-> @@ -3899,7 +3895,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  	 * be zapped before KVM inserts a new MMIO SPTE for the gfn.
->  	 */
->  	if (slot && (slot->flags & KVM_MEMSLOT_INVALID))
-> -		goto out_retry;
-> +		return RET_PF_RETRY;
->  
->  	if (!kvm_is_visible_memslot(slot)) {
->  		/* Don't expose private memslots to L2. */
-> @@ -3907,7 +3903,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  			fault->slot = NULL;
->  			fault->pfn = KVM_PFN_NOSLOT;
->  			fault->map_writable = false;
-> -			return false;
-> +			return RET_PF_CONTINUE;
->  		}
->  		/*
->  		 * If the APIC access page exists but is disabled, go directly
-> @@ -3916,10 +3912,8 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  		 * when the AVIC is re-enabled.
->  		 */
->  		if (slot && slot->id == APIC_ACCESS_PAGE_PRIVATE_MEMSLOT &&
-> -		    !kvm_apicv_activated(vcpu->kvm)) {
-> -			*r = RET_PF_EMULATE;
-> -			return true;
-> -		}
-> +		    !kvm_apicv_activated(vcpu->kvm))
-> +			return RET_PF_EMULATE;
->  	}
->  
->  	async = false;
-> @@ -3927,26 +3921,23 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
->  					  fault->write, &fault->map_writable,
->  					  &fault->hva);
->  	if (!async)
-> -		return false; /* *pfn has correct page already */
-> +		return RET_PF_CONTINUE; /* *pfn has correct page already */
->  
->  	if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
->  		trace_kvm_try_async_get_page(fault->addr, fault->gfn);
->  		if (kvm_find_async_pf_gfn(vcpu, fault->gfn)) {
->  			trace_kvm_async_pf_doublefault(fault->addr, fault->gfn);
->  			kvm_make_request(KVM_REQ_APF_HALT, vcpu);
-> -			goto out_retry;
-> -		} else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn))
-> -			goto out_retry;
-> +			return RET_PF_RETRY;
-> +		} else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn)) {
-> +			return RET_PF_RETRY;
-> +		}
->  	}
->  
->  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
->  					  fault->write, &fault->map_writable,
->  					  &fault->hva);
-> -	return false;
-> -
-> -out_retry:
-> -	*r = RET_PF_RETRY;
-> -	return true;
-> +	return RET_PF_CONTINUE;
->  }
->  
->  /*
-> @@ -4001,10 +3992,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
->  	smp_rmb();
->  
-> -	if (kvm_faultin_pfn(vcpu, fault, &r))
-> +	r = kvm_faultin_pfn(vcpu, fault);
-> +	if (r != RET_PF_CONTINUE)
->  		return r;
->  
-> -	if (handle_abnormal_pfn(vcpu, fault, ACC_ALL, &r))
-> +	r = handle_abnormal_pfn(vcpu, fault, ACC_ALL);
-> +	if (r != RET_PF_CONTINUE)
->  		return r;
->  
->  	r = RET_PF_RETRY;
-> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
-> index 1bff453f7cbe..c0e502b17ef7 100644
-> --- a/arch/x86/kvm/mmu/mmu_internal.h
-> +++ b/arch/x86/kvm/mmu/mmu_internal.h
-> @@ -143,6 +143,7 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->  /*
->   * Return values of handle_mmio_page_fault, mmu.page_fault, and fast_page_fault().
->   *
-> + * RET_PF_CONTINUE: So far, so good, keep handling the page fault.
->   * RET_PF_RETRY: let CPU fault again on the address.
->   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
->   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
-> @@ -151,9 +152,15 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
->   *
->   * Any names added to this enum should be exported to userspace for use in
->   * tracepoints via TRACE_DEFINE_ENUM() in mmutrace.h
-> + *
-> + * Note, all values must be greater than or equal to zero so as not to encroach
-> + * on -errno return values.  Somewhat arbitrarily use '0' for CONTINUE, which
-> + * will allow for efficient machine code when checking for CONTINUE, e.g.
-> + * "TEST %rax, %rax, JNZ", as all "stop!" values are non-zero.
->   */
->  enum {
-> -	RET_PF_RETRY = 0,
-> +	RET_PF_CONTINUE = 0,
-> +	RET_PF_RETRY,
->  	RET_PF_EMULATE,
->  	RET_PF_INVALID,
->  	RET_PF_FIXED,
-
-Unrelated to this patch but related to private memory patch, when
-implicit conversion happens, I'm thinking which return value I should
-use. Current -1 does not make much sense since it causes KVM_RUN
-returns an error while it's expected to be 0. None of the above
-including RET_PF_CONTINUE seems appropriate. Maybe we should go further
-to introduce another RET_PF_USER indicating we should exit to
-userspace for handling with a return value of 0 instead of -error in
-kvm_mmu_page_fault().
-
-Thanks,
-Chao
-> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
-> index 66f1acf153c4..7038273d04ab 100644
-> --- a/arch/x86/kvm/mmu/paging_tmpl.h
-> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
-> @@ -838,10 +838,12 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
->  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
->  	smp_rmb();
->  
-> -	if (kvm_faultin_pfn(vcpu, fault, &r))
-> +	r = kvm_faultin_pfn(vcpu, fault);
-> +	if (r != RET_PF_CONTINUE)
->  		return r;
->  
-> -	if (handle_abnormal_pfn(vcpu, fault, walker.pte_access, &r))
-> +	r = handle_abnormal_pfn(vcpu, fault, walker.pte_access);
-> +	if (r != RET_PF_CONTINUE)
->  		return r;
->  
->  	/*
+> Thanks,
+> Mani
 > 
-> base-commit: 150866cd0ec871c765181d145aa0912628289c8a
-> -- 
-> 2.36.0.rc0.470.gd361397f0d-goog
+> > +	if (chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> > +		dchan->dev->chan_dma_dev = true;
+> > +
+> > +		dchan->dev->device.dma_coherent = chan->dw->chip->dev->dma_coherent;
+> > +		dma_coerce_mask_and_coherent(&dchan->dev->device,
+> > +					     dma_get_mask(chan->dw->chip->dev));
+> > +		dchan->dev->device.dma_parms = chan->dw->chip->dev->dma_parms;
+> > +	} else {
+> > +		dchan->dev->chan_dma_dev = false;
+> > +	}
+> > +
+> >  	pm_runtime_get(chan->dw->chip->dev);
+> >  
+> >  	return 0;
+> > -- 
+> > 2.35.1
+> > 

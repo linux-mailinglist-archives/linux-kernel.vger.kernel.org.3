@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0ADBA506051
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71CCD506054
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235622AbiDRXmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 19:42:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54776 "EHLO
+        id S235745AbiDRXod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 19:44:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235517AbiDRXmV (ORCPT
+        with ESMTP id S229666AbiDRXo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 19:42:21 -0400
-Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
-        by lindbergh.monkeyblade.net (Postfix) with UTF8SMTPS id 43FF8286ED
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:39:40 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev; q=dns/txt;
- s=smtp; t=1650325180; h=In-Reply-To: Content-Type: MIME-Version:
- References: Message-ID: Subject: Subject: To: To: From: From: Date:
- Sender: Sender; bh=fksJxHBbasPH0E1HIDrtxhBCh0tAufSksTmpcRK4Loo=; b=Kyde/Sz5u2Zw4jYWMg8Il8UnFCuI7RIMP4SCvQ0YqgwDtY2/iZIX/StltHd402DxR6eL9T7D
- Ptob3WCirMeMyjlBzIdGhMSDrlhmn88XCMTiR8yl3xHgmP1o6c4pvFf49IxtzbXo0HaMnRz1
- hSl4Eab2GinbjSWl8Sn3kQg5NcexE2/qq1VOoquksqWvg7bxeRSppv6L3Q+RY4S46AiyzSEP
- ZI5OdPhBnUxGwV18uaSc0ouOzX65Ix+8vaFoqQFYA2ZMbi8gj6+rrXBHyFhNDs67pSqewcFJ
- cAmUXOnW576FEq0MCp40YG2CQ55N+Y/yT8KLUuucTDpT1YPLbYmjqA==
-X-Mailgun-Sending-Ip: 159.135.228.62
-X-Mailgun-Sid: WyJkNDU4NiIsICJsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnIiwgImJlOWM2ZCJd
-Received: from AN5Bruno (186-250-90-1.mhnet.com.br [186.250.90.1]) by
- smtp-out-n05.prod.us-east-1.postgun.com with SMTP id
- 625df6bb225c469082e88b1a (version=TLS1.3, cipher=TLS_AES_128_GCM_SHA256);
- Mon, 18 Apr 2022 23:39:39 GMT
-Sender: codeagain@codeagain.dev
-Date:   Mon, 18 Apr 2022 20:39:29 -0300
-From:   Bruno Moreira-Guedes <codeagain@codeagain.dev>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Martyn Welch <martyn@welchs.me.uk>,
-        Manohar Vanga <manohar.vanga@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Bruno's Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH v2 2/3] staging: vme: Add VME_BUS dependency to Kconfig
-Message-ID: <20220418233929.zz32dil4u6hbwtqv@AN5Bruno>
-References: <cover.1650321310.git.codeagain@codeagain.dev>
- <00de5644d7c2f8c8878eccf86b761e0602732080.1650321310.git.codeagain@codeagain.dev>
+        Mon, 18 Apr 2022 19:44:28 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8B101BEB4;
+        Mon, 18 Apr 2022 16:41:47 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id u15so29551931ejf.11;
+        Mon, 18 Apr 2022 16:41:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=oMbj/ngB4Xh3u5slAt5+IUuTIHe0QYck6hgIDhGGZyI=;
+        b=Lw0HPpmEilJ7jamzGeotijctF5AHV80XNoUo8pNNvFpfqAW9qsRPm/r+bOi2tkAhr5
+         1PPUiSSvi4JLJnb9CzZWaBxulsm8Sf5AnLlXUK54WZ1QIKpqyoLBl5i3HtqNle0zAKCs
+         PNZvloGV6FslYHe8ECOL+8639jNU4zYpipxNpzmepXt8UtaovU3gsMifDRRnI3Z/1TuS
+         f5p9a2xttlhYAVQQwRKk2KNF/TfO5BZ0qAIRJICKYXfuYmqphH3CzycrqYKxf8tSFDzG
+         UPAHPqRub1d99fqAz2wFuB2Tf7s+HgWh/KGq2VGpMF8bcCgBhK1bmbrjyaya8b/kdHqU
+         wgaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=oMbj/ngB4Xh3u5slAt5+IUuTIHe0QYck6hgIDhGGZyI=;
+        b=PKPk+JvVjaudtRZVNlLVw8YMPDIu9SfanzzaegG2A51j99U0Xg2WHhKNc5hYv450/S
+         lqtEbyNwkw8/pnnuKM6+UP/lKEbRVs2q86nQOZ91UvLlzi4VUSQ8dnsi0PVjh4b77Ap/
+         W2G6Js3EiAcG2ogMQZl3J5czG+l4VCfhIpapX+9CByJZtODtCBdmNr8jEzzEiemoW4yK
+         R0F8jsnVrzUyibLmH3I/k+iHUlUMHl1bzViyiojbPDGEWmbP6x0O42gPB6viJO5HvVO3
+         3LgkI3kQSvKh+FES3Kj8cf1f/A2mane9XmYHkQGpc1mrFc87T2hJa9+RJn53JJfCrhli
+         befQ==
+X-Gm-Message-State: AOAM5308rzPgTcZVXOAVQpW1G+WmNSDddCdLUH3fu5XEGZ4UuI36pfdQ
+        F86OLcyUqwqsFvs7rkkwVWx7MwibRFQo1w==
+X-Google-Smtp-Source: ABdhPJzskXbKBYI3v3yN/vt7djM1RFhBYN1rxNho2kAMhgGvPFd+6Xbx3xvzUB2PB+xvJucZdZvvcQ==
+X-Received: by 2002:a17:906:1194:b0:6ec:8197:e892 with SMTP id n20-20020a170906119400b006ec8197e892mr10660456eja.84.1650325306122;
+        Mon, 18 Apr 2022 16:41:46 -0700 (PDT)
+Received: from anparri (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
+        by smtp.gmail.com with ESMTPSA id fq6-20020a1709069d8600b006e891c0b7e0sm4979497ejc.129.2022.04.18.16.41.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 16:41:45 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 01:41:37 +0200
+From:   Andrea Parri <parri.andrea@gmail.com>
+To:     Guo Ren <guoren@kernel.org>
+Cc:     Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Lustig <dlustig@nvidia.com>,
+        "Paul E. McKenney" <paulmck@linux.vnet.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-arch <linux-arch@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH V2 0/3] riscv: atomic: Optimize AMO instructions usage
+Message-ID: <20220418234137.GA444607@anparri>
+References: <20220412034957.1481088-1-guoren@kernel.org>
+ <YlbwOG46mCR8Q5tJ@tardis>
+ <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="asozunj7lfs2jxfg"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <00de5644d7c2f8c8878eccf86b761e0602732080.1650321310.git.codeagain@codeagain.dev>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJF2gTRws6RqKmJHBdKsycWSkFgYna_MocJ+qp3Z9r1v7mQzsg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> > Seems to me that you are basically reverting 5ce6c1f3535f
+> > ("riscv/atomic: Strengthen implementations with fences"). That commit
+> > fixed an memory ordering issue, could you explain why the issue no
+> > longer needs a fix?
+> 
+> I'm not reverting the prior patch, just optimizing it.
+> 
+> In RISC-V “A” Standard Extension for Atomic Instructions spec, it said:
 
---asozunj7lfs2jxfg
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+With reference to the RISC-V herd specification at:
 
-Please, disregard the following message as there's a typo in the prefix.
+  https://github.com/riscv/riscv-isa-manual.git
 
-On Mon, Apr 18, 2022 at 08:31:09PM -0300, Bruno Moreira-Guedes wrote:
-> The KConfig file for VME_USER ('drivers/staging/vme/devices/Kconfig')
-> sourced at "drivers/vme/boards/KConfig" misses a `depends on` line for
-> VME_BUS, which is unnoticeable for menuconfig users who aren't be able
-> to select it through this interface without setting the CONFIG_VME_BUS
-> option because it's nested on VME_BUS menu entry.
-=2E..
->  	  VME windows in a manner at least semi-compatible with the interface
-> --=20
-> 2.35.3
->=20
+the issue, better, lr-sc-aqrl-pair-vs-full-barrier seems to _no longer_
+need a fix since commit:
 
-It's already sent a new copy with the proper version number. Nothing's
-changed except for the message ID and the v2 typo.
+  03a5e722fc0f ("Updates to the memory consistency model spec")
 
---asozunj7lfs2jxfg
-Content-Type: application/pgp-signature; name="signature.asc"
+(here a template, to double check:
 
------BEGIN PGP SIGNATURE-----
+  https://github.com/litmus-tests/litmus-tests-riscv/blob/master/tests/non-mixed-size/HAND/LR-SC-NOT-FENCE.litmus )
 
-iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCYl32sQAKCRAZtd3tyEY2
-kiJSAP0WSPiSATXPmE8k1yuJdqmHmM4YrWW22tlqO0FAJedghQD+KLK9QB4+YbN3
-tRPhg1KTwKnyxRsi5+O+2Q4GN/DyOQQ=
-=QUOj
------END PGP SIGNATURE-----
+I defer to Daniel/others for a "bi-section" of the prose specification.
+;-)
 
---asozunj7lfs2jxfg--
+  Andrea

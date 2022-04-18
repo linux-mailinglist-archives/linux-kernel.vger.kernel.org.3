@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26B625052C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398965056F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239917AbiDRMva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38008 "EHLO
+        id S244782AbiDRNsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240836AbiDRMjk (ORCPT
+        with ESMTP id S243963AbiDRN3a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:40 -0400
+        Mon, 18 Apr 2022 09:29:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3E8CCF;
-        Mon, 18 Apr 2022 05:31:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A361640916;
+        Mon, 18 Apr 2022 05:54:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95323B80EC1;
-        Mon, 18 Apr 2022 12:31:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B42BEC385A1;
-        Mon, 18 Apr 2022 12:31:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2104FB80E59;
+        Mon, 18 Apr 2022 12:54:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87CD8C385A1;
+        Mon, 18 Apr 2022 12:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285068;
-        bh=SZJF1zbsC4uu0BF6I10onqFwthdm5Qnyw+4Kau8Mzbc=;
+        s=korg; t=1650286439;
+        bh=PXwuxQls4lcpJ+LCeJY72pFN8FlRKeiT6Ogjd2vT3l4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EU9YeyogDHm8iBHNbYAhmBbpvplA/Yqi5YWYlRKnQaXBfIzZlMR4vunCPZ0OUdSjm
-         QncAiAn7tzazyXUc7D5b4qN4bXZdQL0aNDLTEQcckj3HcO3bMtTJ0brslmukaFe7eW
-         hTy162NH3iUGiatVce7nJQ4l2GE0/ZwwSbNg8sWU=
+        b=NyWHBUmW3WSbi857N9pp9pS8mHWDQfyjkKcc/tGs5PcOyPS0Sk4ILf9xTgFKrlT3+
+         yUB2NNwJoHykyzGdhIW5sORlyO6oof9CQ691FfVfeVzZP8gTiEVWYrY+T6tukN7rw9
+         UHYu53k1Uf6IX0zV0uHm8euHpmD+eHhoi2fQJflU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 096/189] perf tools: Fix misleading add event PMU debug message
-Date:   Mon, 18 Apr 2022 14:11:56 +0200
-Message-Id: <20220418121203.229108584@linuxfoundation.org>
+Subject: [PATCH 4.14 136/284] remoteproc: qcom_wcnss: Add missing of_node_put() in wcnss_alloc_memory_region
+Date:   Mon, 18 Apr 2022 14:11:57 +0200
+Message-Id: <20220418121215.258707966@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit f034fc50d3c7d9385c20d505ab4cf56b8fd18ac7 ]
+[ Upstream commit 8f90161a66bc3d6b9fe8dde4d9028d20eae1b62a ]
 
-Fix incorrect debug message:
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-   Attempting to add event pmu 'intel_pt' with '' that may result in
-   non-fatal errors
-
-which always appears with perf record -vv and intel_pt e.g.
-
-    perf record -vv -e intel_pt//u uname
-
-The message is incorrect because there will never be non-fatal errors.
-
-Suppress the message if the PMU is 'selectable' i.e. meant to be
-selected directly as an event.
-
-Fixes: 4ac22b484d4c79e8 ("perf parse-events: Make add PMU verbose output clearer")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Link: http://lore.kernel.org/lkml/20220411061758.2458417-1-adrian.hunter@intel.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
+Fixes: aed361adca9f ("remoteproc: qcom: Introduce WCNSS peripheral image loader")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220308063102.10049-1-linmq006@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/perf/util/parse-events.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/remoteproc/qcom_wcnss.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 51a2219df601..3bfe099d8643 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -1529,7 +1529,9 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 	bool use_uncore_alias;
- 	LIST_HEAD(config_terms);
- 
--	if (verbose > 1) {
-+	pmu = parse_state->fake_pmu ?: perf_pmu__find(name);
-+
-+	if (verbose > 1 && !(pmu && pmu->selectable)) {
- 		fprintf(stderr, "Attempting to add event pmu '%s' with '",
- 			name);
- 		if (head_config) {
-@@ -1542,7 +1544,6 @@ int parse_events_add_pmu(struct parse_events_state *parse_state,
- 		fprintf(stderr, "' that may result in non-fatal errors\n");
+diff --git a/drivers/remoteproc/qcom_wcnss.c b/drivers/remoteproc/qcom_wcnss.c
+index c7686393d505..bc399fb29592 100644
+--- a/drivers/remoteproc/qcom_wcnss.c
++++ b/drivers/remoteproc/qcom_wcnss.c
+@@ -451,6 +451,7 @@ static int wcnss_alloc_memory_region(struct qcom_wcnss *wcnss)
  	}
  
--	pmu = parse_state->fake_pmu ?: perf_pmu__find(name);
- 	if (!pmu) {
- 		char *err_str;
+ 	ret = of_address_to_resource(node, 0, &r);
++	of_node_put(node);
+ 	if (ret)
+ 		return ret;
  
 -- 
-2.35.1
+2.34.1
 
 
 

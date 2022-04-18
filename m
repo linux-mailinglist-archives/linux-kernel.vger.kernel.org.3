@@ -2,45 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936AA5058BE
+	by mail.lfdr.de (Postfix) with ESMTP id DB08F5058BF
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344068AbiDROI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
+        id S1344091AbiDROJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343508AbiDRNyC (ORCPT
+        with ESMTP id S1343515AbiDRNyD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:54:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B584739D;
-        Mon, 18 Apr 2022 06:03:13 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B21473AD;
+        Mon, 18 Apr 2022 06:03:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DE5B8B80D9C;
-        Mon, 18 Apr 2022 13:03:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41852C385A7;
-        Mon, 18 Apr 2022 13:03:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3E19060B73;
+        Mon, 18 Apr 2022 13:03:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434C3C385A1;
+        Mon, 18 Apr 2022 13:03:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286990;
-        bh=jBMyn2i7pYWv70T0Hw+HO5NaUB2lR2dmLPcZMm+pnfc=;
+        s=korg; t=1650286993;
+        bh=9/c8yyTcOFyYLYaDkX0YZziuJm6ja6eJMCAFydHxggM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=DhjCvHr7pFnVdhdKZRkJnprkjEkspKMqlOZ95wHmmN+ZD2SKx+Ze6ztfLDEzhTUOf
-         TQTIkst040jVsXfCTy7bKDLBFQ5aVmgaV5WNKJOLMWn/eNDkaCF340eV+LBgGrGclE
-         2hu8aq6O5ckfbGs7vqxTsG5V/StzkVEvLorpu5ZA=
+        b=KnM3GFovo2Uir9ztU96GG5nMHrL8Nf/6PvJyK65EkHxCsHlmI5xD4hkzIEEIIJtC3
+         EWN1OPwjLwoYgJxymGtG52BM7Td2neEajo20lZLiGLXEQlnCK+464FRjmvUWeYktot
+         GlGZ/wInO5NW6bnmROCV4lUiEVX/sgbrYLxHblbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Peter Hutterer <peter.hutterer@who-t.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: [PATCH 4.9 024/218] Revert "Input: clear BTN_RIGHT/MIDDLE on buttonpads"
-Date:   Mon, 18 Apr 2022 14:11:30 +0200
-Message-Id: <20220418121159.949497174@linuxfoundation.org>
+        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 4.9 025/218] ALSA: cs4236: fix an incorrect NULL check on list iterator
+Date:   Mon, 18 Apr 2022 14:11:31 +0200
+Message-Id: <20220418121159.997757362@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -58,59 +54,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: José Expósito <jose.exposito89@gmail.com>
+From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
 
-commit 8b188fba75195745026e11d408e4a7e94e01d701 upstream.
+commit 0112f822f8a6d8039c94e0bc9b264d7ffc5d4704 upstream.
 
-This reverts commit 37ef4c19b4c659926ce65a7ac709ceaefb211c40.
+The bug is here:
+	err = snd_card_cs423x_pnp(dev, card->private_data, pdev, cdev);
 
-The touchpad present in the Dell Precision 7550 and 7750 laptops
-reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
-the device is not a clickpad, it is a touchpad with physical buttons.
+The list iterator value 'cdev' will *always* be set and non-NULL
+by list_for_each_entry(), so it is incorrect to assume that the
+iterator value will be NULL if the list is empty or no element
+is found.
 
-In order to fix this issue, a quirk for the device was introduced in
-libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
+To fix the bug, use a new variable 'iter' as the list iterator,
+while use the original variable 'cdev' as a dedicated pointer
+to point to the found element. And snd_card_cs423x_pnp() itself
+has NULL check for cdev.
 
-	[Precision 7x50 Touchpad]
-	MatchBus=i2c
-	MatchUdevType=touchpad
-	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
-	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
-
-However, because of the change introduced in 37ef4c19b4 ("Input: clear
-BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
-anymore breaking the device right click button and making impossible to
-workaround it in user space.
-
-In order to avoid breakage on other present or future devices, revert
-the patch causing the issue.
-
-Signed-off-by: José Expósito <jose.exposito89@gmail.com>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
-Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220321184404.20025-1-jose.exposito89@gmail.com
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Fixes: c2b73d1458014 ("ALSA: cs4236: cs4232 and cs4236 driver merge to solve PnP BIOS detection")
+Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+Link: https://lore.kernel.org/r/20220327060822.4735-1-xiam0nd.tong@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/input/input.c |    6 ------
- 1 file changed, 6 deletions(-)
+ sound/isa/cs423x/cs4236.c |    8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
---- a/drivers/input/input.c
-+++ b/drivers/input/input.c
-@@ -2112,12 +2112,6 @@ int input_register_device(struct input_d
- 	/* KEY_RESERVED is not supposed to be transmitted to userspace. */
- 	__clear_bit(KEY_RESERVED, dev->keybit);
+--- a/sound/isa/cs423x/cs4236.c
++++ b/sound/isa/cs423x/cs4236.c
+@@ -557,7 +557,7 @@ static int snd_cs423x_pnpbios_detect(str
+ 	static int dev;
+ 	int err;
+ 	struct snd_card *card;
+-	struct pnp_dev *cdev;
++	struct pnp_dev *cdev, *iter;
+ 	char cid[PNP_ID_LEN];
  
--	/* Buttonpads should not map BTN_RIGHT and/or BTN_MIDDLE. */
--	if (test_bit(INPUT_PROP_BUTTONPAD, dev->propbit)) {
--		__clear_bit(BTN_RIGHT, dev->keybit);
--		__clear_bit(BTN_MIDDLE, dev->keybit);
--	}
--
- 	/* Make sure that bitmasks not mentioned in dev->evbit are clean. */
- 	input_cleanse_bitmasks(dev);
- 
+ 	if (pnp_device_is_isapnp(pdev))
+@@ -573,9 +573,11 @@ static int snd_cs423x_pnpbios_detect(str
+ 	strcpy(cid, pdev->id[0].id);
+ 	cid[5] = '1';
+ 	cdev = NULL;
+-	list_for_each_entry(cdev, &(pdev->protocol->devices), protocol_list) {
+-		if (!strcmp(cdev->id[0].id, cid))
++	list_for_each_entry(iter, &(pdev->protocol->devices), protocol_list) {
++		if (!strcmp(iter->id[0].id, cid)) {
++			cdev = iter;
+ 			break;
++		}
+ 	}
+ 	err = snd_cs423x_card_new(&pdev->dev, dev, &card);
+ 	if (err < 0)
 
 

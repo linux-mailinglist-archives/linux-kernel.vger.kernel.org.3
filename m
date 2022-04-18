@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01815505246
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4D525056E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240700AbiDRMjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
+        id S244097AbiDRNnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:43:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239813AbiDRMda (ORCPT
+        with ESMTP id S241596AbiDRNQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF32E1B7BC;
-        Mon, 18 Apr 2022 05:26:36 -0700 (PDT)
+        Mon, 18 Apr 2022 09:16:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFF53AA45;
+        Mon, 18 Apr 2022 05:51:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9B2BBB80EC4;
-        Mon, 18 Apr 2022 12:26:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF383C385A7;
-        Mon, 18 Apr 2022 12:26:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7168EB80E44;
+        Mon, 18 Apr 2022 12:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3CB9C385A8;
+        Mon, 18 Apr 2022 12:51:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284794;
-        bh=fQz95VQGj/snvgUQr1orr2rTIm2nhPy3+TCq+9h2NW4=;
+        s=korg; t=1650286277;
+        bh=BJBLKKozBQ3LMK27fkuFAL4FdufGjxSsOVDfTpbzpKw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=qXjZ+NXCqpc2grWSxQIzAoxaVW9MEjfaBc/Kj7UWImEghyAGzbOd+m+NsNMmdHA1p
-         lVp75A5/p94E/0E/Kxp4jqzukudlyhxsXv9YluWIDDyp96ZTmb0flnUBqt9uNJNYyN
-         O1u76IUoXKQT73C+nP4he883VO4cdueazgEgOJsY=
+        b=gOY6nguIzLgwGWD7TZ2uDltEcacQaWy1kpkDiu5ohpqNs7KxxFxZeFBFEkUDFJsLp
+         j1XssXSAXAmQ+0wt153S/XwrbgF/02xIeI3jv7VKhyL+opZtx2mEHNbQgmtQVIQRTy
+         0v5W5BuqMjCkQddrP2DOoTf0Rr4CYF4Yfs/ISDgU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lin Ma <linma@zju.edu.cn>,
-        "David S. Miller" <davem@davemloft.net>,
-        Xu Jia <xujia39@huawei.com>
-Subject: [PATCH 5.15 003/189] hamradio: defer 6pack kfree after unregister_netdev
-Date:   Mon, 18 Apr 2022 14:10:23 +0200
-Message-Id: <20220418121200.464640857@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>
+Subject: [PATCH 4.14 043/284] ARM: dts: exynos: add missing HDMI supplies on SMDK5250
+Date:   Mon, 18 Apr 2022 14:10:24 +0200
+Message-Id: <20220418121211.919491128@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,51 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lin Ma <linma@zju.edu.cn>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
 
-commit 0b9111922b1f399aba6ed1e1b8f2079c3da1aed8 upstream.
+commit 60a9914cb2061ba612a3f14f6ad329912b486360 upstream.
 
-There is a possible race condition (use-after-free) like below
+Add required VDD supplies to HDMI block on SMDK5250.  Without them, the
+HDMI driver won't probe.  Because of lack of schematics, use same
+supplies as on Arndale 5250 board (voltage matches).
 
- (USE)                       |  (FREE)
-  dev_queue_xmit             |
-   __dev_queue_xmit          |
-    __dev_xmit_skb           |
-     sch_direct_xmit         | ...
-      xmit_one               |
-       netdev_start_xmit     | tty_ldisc_kill
-        __netdev_start_xmit  |  6pack_close
-         sp_xmit             |   kfree
-          sp_encaps          |
-                             |
-
-According to the patch "defer ax25 kfree after unregister_netdev", this
-patch reorder the kfree after the unregister_netdev to avoid the possible
-UAF as the unregister_netdev() is well synchronized and won't return if
-there is a running routine.
-
-Signed-off-by: Lin Ma <linma@zju.edu.cn>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Xu Jia <xujia39@huawei.com>
+Cc: <stable@vger.kernel.org> # v3.15+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Reviewed-by: Alim Akhtar <alim.akhtar@samsung.com>
+Link: https://lore.kernel.org/r/20220208171823.226211-2-krzysztof.kozlowski@canonical.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/hamradio/6pack.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm/boot/dts/exynos5250-smdk5250.dts |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/net/hamradio/6pack.c
-+++ b/drivers/net/hamradio/6pack.c
-@@ -674,9 +674,11 @@ static void sixpack_close(struct tty_str
- 	del_timer_sync(&sp->tx_t);
- 	del_timer_sync(&sp->resync_t);
+--- a/arch/arm/boot/dts/exynos5250-smdk5250.dts
++++ b/arch/arm/boot/dts/exynos5250-smdk5250.dts
+@@ -117,6 +117,9 @@
  
--	/* Free all 6pack frame buffers. */
-+	/* Free all 6pack frame buffers after unreg. */
- 	kfree(sp->rbuff);
- 	kfree(sp->xbuff);
-+
-+	free_netdev(sp->dev);
- }
+ &hdmi {
+ 	hpd-gpios = <&gpx3 7 GPIO_ACTIVE_HIGH>;
++	vdd-supply = <&ldo8_reg>;
++	vdd_osc-supply = <&ldo10_reg>;
++	vdd_pll-supply = <&ldo8_reg>;
+ };
  
- /* Perform I/O control on an active 6pack channel. */
+ &i2c_0 {
 
 

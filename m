@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED6245053AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:58:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429485054A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240589AbiDRNA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60782 "EHLO
+        id S241612AbiDRNPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:15:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240440AbiDRMth (ORCPT
+        with ESMTP id S241167AbiDRM60 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:49:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9556A2B250;
-        Mon, 18 Apr 2022 05:33:48 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6591824F38;
+        Mon, 18 Apr 2022 05:38:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EC18D61033;
-        Mon, 18 Apr 2022 12:33:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDDD8C385A1;
-        Mon, 18 Apr 2022 12:33:46 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFCBBB80EDE;
+        Mon, 18 Apr 2022 12:38:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F886C385A7;
+        Mon, 18 Apr 2022 12:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285227;
-        bh=0w5fkYWRq9t9bwKn/65Gjp/8xhsgA6n0+Ym3YnpIS4k=;
+        s=korg; t=1650285521;
+        bh=tGzXzQhqgL+alx1Q6zWeqj7q4zL1AuwH2it+jAec/5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h26+t1xMD4P7Vjjb+Myez97KCvk+NPqzlb+DpvCRh4xaQ08aFT3/lCwpc4tPysMyd
-         OEY3m7v0VzvNdityKg4dz2sOhrECOAcbqQNpeUBD091HsTpVDXV1oV5VQ2kC6xUGML
-         rOEqS8rRZrQmnLFK+oOQX4sYdzjx0RVRG7oXT19Q=
+        b=t4FlZjJbZgcFdBn2/PUQwNgCwdnn2lScEjyzvfs3ZPUGf6noUFNz5R2rO+1RT3IAw
+         BPFqsN7XVo8cAl3JKbXU3xlwHvoCJiYIPkch7bkrMWXVX0OXbXWZqOZ4QwtnFpkOTd
+         MPgDye1cPpdagF81JjSFJLrha8imZ/6mEsYG4CWA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
-        Frank Li <Frank.li@nxp.com>, Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-arm-kernel@lists.infradead.org,
+        stable@vger.kernel.org,
+        Aurabindo Pillai <aurabindo.pillai@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 143/189] perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
-Date:   Mon, 18 Apr 2022 14:12:43 +0200
-Message-Id: <20220418121205.660191822@linuxfoundation.org>
+Subject: [PATCH 5.10 042/105] drm/amd: Add USBC connector ID
+Date:   Mon, 18 Apr 2022 14:12:44 +0200
+Message-Id: <20220418121147.673400790@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,54 +56,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Borislav Petkov <bp@suse.de>
+From: Aurabindo Pillai <aurabindo.pillai@amd.com>
 
-[ Upstream commit d02b4dd84e1a90f7f1444d027c0289bf355b0d5a ]
+[ Upstream commit c5c948aa894a831f96fccd025e47186b1ee41615 ]
 
-Fix:
+[Why&How] Add a dedicated AMDGPU specific ID for use with
+newer ASICs that support USB-C output
 
-  In file included from <command-line>:0:0:
-  In function ‘ddr_perf_counter_enable’,
-      inlined from ‘ddr_perf_irq_handler’ at drivers/perf/fsl_imx8_ddr_perf.c:651:2:
-  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_729’ \
-	declared with attribute error: FIELD_PREP: mask is not constant
-    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-...
-
-See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
-details as to why it triggers with older gccs only.
-
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: Frank Li <Frank.li@nxp.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Acked-by: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220405151517.29753-10-bp@alien8.de
-Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/perf/fsl_imx8_ddr_perf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/ObjectID.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
-index 94ebc1ecace7..b1b2a55de77f 100644
---- a/drivers/perf/fsl_imx8_ddr_perf.c
-+++ b/drivers/perf/fsl_imx8_ddr_perf.c
-@@ -29,7 +29,7 @@
- #define CNTL_OVER_MASK		0xFFFFFFFE
+diff --git a/drivers/gpu/drm/amd/amdgpu/ObjectID.h b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+index 5b393622f592..a0f0a17e224f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/ObjectID.h
++++ b/drivers/gpu/drm/amd/amdgpu/ObjectID.h
+@@ -119,6 +119,7 @@
+ #define CONNECTOR_OBJECT_ID_eDP                   0x14
+ #define CONNECTOR_OBJECT_ID_MXM                   0x15
+ #define CONNECTOR_OBJECT_ID_LVDS_eDP              0x16
++#define CONNECTOR_OBJECT_ID_USBC                  0x17
  
- #define CNTL_CSV_SHIFT		24
--#define CNTL_CSV_MASK		(0xFF << CNTL_CSV_SHIFT)
-+#define CNTL_CSV_MASK		(0xFFU << CNTL_CSV_SHIFT)
+ /* deleted */
  
- #define EVENT_CYCLES_ID		0
- #define EVENT_CYCLES_COUNTER	0
 -- 
 2.35.1
 

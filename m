@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C36AC504E05
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DE78504E10
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237344AbiDRIz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:55:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S237349AbiDRJA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 05:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231857AbiDRIzy (ORCPT
+        with ESMTP id S231260AbiDRJAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:55:54 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1B91836A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:53:16 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y10so8325651ejw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:53:16 -0700 (PDT)
+        Mon, 18 Apr 2022 05:00:54 -0400
+Received: from mail-pg1-x544.google.com (mail-pg1-x544.google.com [IPv6:2607:f8b0:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D26112AAF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:58:16 -0700 (PDT)
+Received: by mail-pg1-x544.google.com with SMTP id t13so17770144pgn.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:58:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=zE0sCiZVTtSMdgP1a/N9nihFSo+cH8EmVh/82cgACw0=;
-        b=V1Wfx+v3TjmoBwTZ8PT3jZpp7wNmAElaXjBPKdiZGewaOtlJk9B3EAVRHxJ6t3zIAd
-         sDHQbEHCJQuOngStauVR1Jlc5jn9UC7Shk4Gv9WjXla8jl4avWcdBWfFZJ+P7m7bPagl
-         RlfRnabJiT8hJiQJFNJVFdoPBFeuL+KfEh4PQlY+H1UjSW57ih/FEwx70IO7GUzEMNaq
-         ShZbaa7Gz3V40ipqCLiNoGufGxt8J7yUB+G8FeWld02/vDV4MOYTpX41PYvg8Q9OHY8G
-         f5d2FV304tKL1CXYTULGbL+DjQLpvvXb+aOHWkUFNEctwS0/9orRBSj75YZyfsv+x5zt
-         LO2A==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4bgQnFmcjl9+IwN+gQlxLVi8ouAKrKmz8WNF5PV3MyU=;
+        b=ASbWLxm5SrXl6FJEnCnY7ypSb9qbPSfASDR0vvPiA9At237Dcenk6TB/pzgGPPOcl8
+         GnJBP7IjWVS+x1pu5WJTda8BBdKW2qsgL/oJZJ5EdHNO6a5mCg5y2JhkIV9yD4tOJkQS
+         A7xUWcNqrT6XrUT2XvapYZdsP8Mx/Sgp4SfVOZQd6iw/LM0PABTV8QxIWbU723o9QCow
+         7WfP7O1uqRH4DBQtHnfm93EITaBucDW0vo5ZsMaMmzJnUjTlM1HTNPGMllj85ZWQ8AN2
+         70IbsHguG8RlUgW3ngGirYEDXmpD2h52lGy7s5bXx03itOEws56sz8nSEmaPSSAK216q
+         wg8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=zE0sCiZVTtSMdgP1a/N9nihFSo+cH8EmVh/82cgACw0=;
-        b=FQC/p9te9kATDMh0mzarXaWVz093PbVVyVsBSH/m1EwQG44yuPD49/sRNfeasE91Ko
-         +AlODwRe5Y+Zux9ioilM7LZ4dt9eAhjx/q/Kf2Lh6y0GbiB1Di5GsDFQnLmHcH8LQ0cT
-         MlHodojCdip/ERYBPZdd1vtwn1CdCGpXi60HqiyN1q/v5U8cuSlIZJmEwEvNicZk5P+T
-         EzUmAdhzpe01eyF0tkdx1iBtfRROfvjA3e08f5O14kvlQNFTzlA+SdbOL1woUEnkHcrX
-         6rH5kS8Pr7iK0FOvT17cm8e7Ee1k1v+z8swzt7kBhUpgEMz3Q9yzp25svptVZaVHCg+a
-         JUGg==
-X-Gm-Message-State: AOAM533nsaCo/lv12z3XEwYsuyrhmkDzL37+2YB57zDWzHRvejSSM+PU
-        mCb2GZ0bLihFL2dvGWsEH8Sx9uMX7QJl8GIFxbE=
-X-Google-Smtp-Source: ABdhPJzA8PsW/F/rNN6VT3O+zAC3fKPA9J8KOlhZUV98FApGsxgqz8KPI0oRHrFixo+h8h0qdVOS9j4cO3DT2BmmpQ8=
-X-Received: by 2002:a17:907:c13:b0:6e8:c1be:3979 with SMTP id
- ga19-20020a1709070c1300b006e8c1be3979mr8148934ejc.266.1650271994937; Mon, 18
- Apr 2022 01:53:14 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=4bgQnFmcjl9+IwN+gQlxLVi8ouAKrKmz8WNF5PV3MyU=;
+        b=I0lbYXmyRc5L+AW4aaAskUqpHwx5/ry9X/Vl+1nG4P34ft2T39yM046TApFOAF4aeJ
+         9EmKjimGbD/6Gvowfq2YbNSktUPGz6at+9Iyhy7zxpi915zJps/tAj12CVEUFQ7tuj+t
+         q50Xly+tr71KVz9wPY4Vc4g4ZbSVlOrvO1eltUxPETX/cWM3szgyAZRvDnoGby+rMf+5
+         nllUn6olbneNxwiZECiIZOTXTIzNLUA8krqMiUu/kNwSeQ/oAYKU2j/NH71la58IDR4p
+         /6WjxyIXI/KasnxJTJISgWUwqmC4BuFnc87WDZuvHntjKgtn0pgXMuTXEC8Cc5yCf2sQ
+         0D3A==
+X-Gm-Message-State: AOAM532YII9pw8tIXFuWbRQOjUEql27z+oKOMgjZbKUK52Oxd9gLlpSE
+        H+aEzCc5/yCMHRDYxogoZzI=
+X-Google-Smtp-Source: ABdhPJyByd0/9Szc/ZHoK0EFbvgxrGROm82aX2DRv5sN8jN6OTmTBcOt/v1wrdF5DDX9RY3E4fscfw==
+X-Received: by 2002:a05:6a00:2181:b0:4f6:f1b1:1ba7 with SMTP id h1-20020a056a00218100b004f6f1b11ba7mr11227274pfi.73.1650272295573;
+        Mon, 18 Apr 2022 01:58:15 -0700 (PDT)
+Received: from localhost.localdomain ([103.84.139.165])
+        by smtp.gmail.com with ESMTPSA id c15-20020a63350f000000b003992202f95fsm12209697pga.38.2022.04.18.01.58.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 01:58:15 -0700 (PDT)
+From:   Hangyu Hua <hbh25y@gmail.com>
+To:     fbarrat@linux.ibm.com, ajd@linux.ibm.com, arnd@arndb.de,
+        gregkh@linuxfoundation.org, mpe@ellerman.id.au,
+        alastair@d-silva.org
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Hangyu Hua <hbh25y@gmail.com>
+Subject: [PATCH] misc: ocxl: fix possible double free in ocxl_file_register_afu
+Date:   Mon, 18 Apr 2022 16:57:58 +0800
+Message-Id: <20220418085758.38145-1-hbh25y@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220409100016.9337-1-paul@crapouillou.net> <Yl0ON+E7bYluGIYG@ravnborg.org>
-In-Reply-To: <Yl0ON+E7bYluGIYG@ravnborg.org>
-From:   Dave Airlie <airlied@gmail.com>
-Date:   Mon, 18 Apr 2022 18:53:03 +1000
-Message-ID: <CAPM=9twqpY33r0RpZcekwEtCDwJp1ohFRHxE6-dq8ySE=OinYA@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: newvision-nv3052c: Fix build
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        kbuild-all <kbuild-all@lists.01.org>,
-        kernel test robot <lkp@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Christophe Branchereau <cbranchereau@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,23 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 17:07, Sam Ravnborg <sam@ravnborg.org> wrote:
->
-> On Sat, Apr 09, 2022 at 11:00:16AM +0100, Paul Cercueil wrote:
-> > The driver was compile-tested then rebased on drm-misc-next, and not
-> > compile-tested after the rebase; unfortunately the driver didn't compile
-> > anymore when it hit drm-misc-next.
-> >
-> > Fixes: 49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C based LCDs")
-> > Cc: Christophe Branchereau <cbranchereau@gmail.com>
-> > Cc: kbuild-all <kbuild-all@lists.01.org>
-> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
-> > ---
+info_release() will be called in device_unregister() when info->dev's
+reference count is 0. So there is no need to call ocxl_afu_put() and
+kfree() again.
 
-Backmerge drm-next. I fixed this up when I merged this driver in the
-merge commit.
+Fix this by adding free_minor() and return to err_unregister error path.
 
-Dave.
+Fixes: 75ca758adbaf ("ocxl: Create a clear delineation between ocxl backend & frontend")
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+---
+ drivers/misc/ocxl/file.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
+index d881f5e40ad9..6777c419a8da 100644
+--- a/drivers/misc/ocxl/file.c
++++ b/drivers/misc/ocxl/file.c
+@@ -556,7 +556,9 @@ int ocxl_file_register_afu(struct ocxl_afu *afu)
+ 
+ err_unregister:
+ 	ocxl_sysfs_unregister_afu(info); // safe to call even if register failed
++	free_minor(info);
+ 	device_unregister(&info->dev);
++	return rc;
+ err_put:
+ 	ocxl_afu_put(afu);
+ 	free_minor(info);
+-- 
+2.25.1
+

@@ -2,201 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D10D505DC4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465B8505DC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:56:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346150AbiDRR5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S1347162AbiDRR73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345630AbiDRR5L (ORCPT
+        with ESMTP id S241697AbiDRR70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:57:11 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B8934BB4;
-        Mon, 18 Apr 2022 10:54:29 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id B88D21C0B77; Mon, 18 Apr 2022 19:54:27 +0200 (CEST)
-Date:   Mon, 18 Apr 2022 19:54:27 +0200
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/32] 4.19.239-rc1 review
-Message-ID: <20220418175427.GA20121@duo.ucw.cz>
-References: <20220418121127.127656835@linuxfoundation.org>
+        Mon, 18 Apr 2022 13:59:26 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5918D3466D
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:56:47 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id c64so18257812edf.11
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:56:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v1E7Ts386sKVAH7+jIanD8UQPmSLGesSvaWCqD54Wgw=;
+        b=WwbM0f8zF5Y8W0wt7jEc0r3fvsBMhaGs1CVLq/a/i+HPsEJMaB/La8Yh4AARtI7qpL
+         XOuUOpP+qZPTsZr9kRRcIUVbm/VgIg/VCNQPhu0bNbDh66o88434UHiXflLE3k16vNfi
+         +QVCa/0K2JXyqb/65Ol6vJ66T4YhFJpOfMijv48PEk1i3TQjJXafB1yoY+bTVxQ8SRej
+         1W/DPsrA3pHUK3SKhPHyTGekrIk6/k7GFn1NHcTBhdemplWpw1lLC+ExXlwsc4NxyyH/
+         GA/2Iahx5BqDNnV6iBWkgN9JcBQ4NT10jfscB6dj66Q8/mpVAFPyyzicylWrVKdLohjQ
+         IItw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=v1E7Ts386sKVAH7+jIanD8UQPmSLGesSvaWCqD54Wgw=;
+        b=TBLwvDOj+wCZ2dYcIvFuBjYDg8WHcSf7HGi5QF+ss3JPzYVygMmYON95xsESnb0hWU
+         KTd+L4viz4MNCc1UB0WtZ2dAu57age8rnJjp2Z8176wTyxeGmjwF+rxnpswpz/7P9y7H
+         1o28tmaxaAY2GxAU/3HWKm0ISsZ31kZcSyI8lHc47KiEHX+P3l30Q9HghK/pDVgRcxhg
+         rOAMX39+AhEl50tmUOxnPulzubEGRPrSBr/eAgPamDM8pRrZTm4BQt1Bril2vMSyChH5
+         U6hySyhT0ePtj2LKQe0+kmVXrui2nUceOSYXKhbixKJF8wTV1Q2rwwJbhkZzFEZzhd/E
+         U8xQ==
+X-Gm-Message-State: AOAM5315qpujnQaOpk8DAnaMVfwlDSzkRuX1O1Eh9Bnn24zSfoA3dFsZ
+        g+TuGppm5BSg9HZX/69ggU8=
+X-Google-Smtp-Source: ABdhPJwy5yL7UaRad6BVYWw8wXFOviOlGpuvjAgU1trs9KwsdyqlpDrmgRppquaqLOHq0ZNdLa5gSw==
+X-Received: by 2002:a05:6402:1b07:b0:41d:7abf:8337 with SMTP id by7-20020a0564021b0700b0041d7abf8337mr13170834edb.185.1650304605813;
+        Mon, 18 Apr 2022 10:56:45 -0700 (PDT)
+Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090622ce00b006e898c912e5sm4776154eja.217.2022.04.18.10.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 10:56:44 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Ira Weiny <ira.weiny@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Subject: [PATCH v2] mm/highmem: Fix kernel-doc warnings in highmem*.h
+Date:   Mon, 18 Apr 2022 19:56:38 +0200
+Message-Id: <20220418175638.30018-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="9jxsPFA5p3P2qPhR"
-Content-Disposition: inline
-In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+`scripts/kernel-doc -none include/linux/highmem*` reports the following
+warnings:
 
---9jxsPFA5p3P2qPhR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+include/linux/highmem.h:160: warning: expecting prototype for kunmap_atomic(). Prototype was for nr_free_highpages() instead
+include/linux/highmem-internal.h:256: warning: Function parameter or member '__addr' not described in 'kunmap_atomic'
+include/linux/highmem-internal.h:256: warning: Excess function parameter 'addr' description in 'kunmap_atomic'
 
-Hi!
+Fix these warnings by (1) move the kernel-doc comments from highmem.h to
+highmem-internal.h (which is the file were the kunmap_atomic() macro is
+actually defined), (2) merge it with the comment which already was in
+highmem-internal.h, and (3) use correct parameter names.
 
-> This is the start of the stable review cycle for the 4.19.239 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->=20
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
+Acked-by: Mike Rapoport <rppt@linux.ibm.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
 
-We have some problems with testing, but it seems there are real
-failures there, too.
+v1->v2: Re-word the last sentence of the commit message and add a missing
+	number to the second entry in the fixes list. Add Mike Rapoport's
+	"Acked-by:" tag (thanks!).
 
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/pipelines/5=
-18905412
+ include/linux/highmem-internal.h | 14 +++++++++++---
+ include/linux/highmem.h          | 13 +------------
+ 2 files changed, 12 insertions(+), 15 deletions(-)
 
-We seem to have ethernet failure on siemends-de0-nano:
+diff --git a/include/linux/highmem-internal.h b/include/linux/highmem-internal.h
+index a77be5630209..7307de391288 100644
+--- a/include/linux/highmem-internal.h
++++ b/include/linux/highmem-internal.h
+@@ -236,9 +236,17 @@ static inline unsigned long totalhigh_pages(void) { return 0UL; }
+ 
+ #endif /* CONFIG_HIGHMEM */
+ 
+-/*
+- * Prevent people trying to call kunmap_atomic() as if it were kunmap()
+- * kunmap_atomic() should get the return value of kmap_atomic, not the page.
++/**
++ * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
++ * @__addr:       Virtual address to be unmapped
++ *
++ * Counterpart to kmap_atomic().
++ *
++ * Effectively a wrapper around kunmap_local() which additionally undoes
++ * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
++ * preemption. Prevent people trying to call kunmap_atomic() as if it
++ * were kunmap() because kunmap_atomic() should get the return value of
++ * kmap_atomic(), not its argument which is a pointer to struct page.
+  */
+ #define kunmap_atomic(__addr)					\
+ do {								\
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 39bb9b47fa9c..0a7a89721e5d 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -37,7 +37,7 @@ static inline void *kmap(struct page *page);
+ 
+ /**
+  * kunmap - Unmap the virtual address mapped by kmap()
+- * @addr:	Virtual address to be unmapped
++ * @page:	Virtual address to be unmapped
+  *
+  * Counterpart to kmap(). A NOOP for CONFIG_HIGHMEM=n and for mappings of
+  * pages in the low memory area.
+@@ -145,17 +145,6 @@ static inline void *kmap_local_folio(struct folio *folio, size_t offset);
+  */
+ static inline void *kmap_atomic(struct page *page);
+ 
+-/**
+- * kunmap_atomic - Unmap the virtual address mapped by kmap_atomic()
+- * @addr:	Virtual address to be unmapped
+- *
+- * Counterpart to kmap_atomic().
+- *
+- * Effectively a wrapper around kunmap_local() which additionally undoes
+- * the side effects of kmap_atomic(), i.e. reenabling pagefaults and
+- * preemption.
+- */
+-
+ /* Highmem related interfaces for management code */
+ static inline unsigned int nr_free_highpages(void);
+ static inline unsigned long totalhigh_pages(void);
+-- 
+2.34.1
 
-https://lava.ciplatform.org/scheduler/job/664854
-
-[    0.000000] Linux version 4.19.239-rc1-g6124afa49867 (root@runner-vacchx=
-9n-project-14394223-concurrent-1f2btv) (gcc version 8.3.0 (Debian 8.3.0-2))=
- #1 SMP Mon Apr 18 14:05:18 UTC 2022
-[    0.000000] CPU: ARMv7 Processor [413fc090] revision 0 (ARMv7), cr=3D10c=
-5387d
-=2E..
-[    1.210887] mmc0: new high speed SDHC card at address 59b4
-[    1.217318] mmcblk0: mmc0:59b4 SD    3.75 GiB=20
-[    1.223255]  mmcblk0: p1 p2
-[    1.279623] Micrel KSZ9031 Gigabit PHY stmmac-0:01: attached PHY driver =
-[Micrel KSZ9031 Gigabit PHY] (mii_bus:phy_addr=3Dstmmac-0:01, irq=3DPOLL)
-[    1.303607] socfpga-dwmac ff702000.ethernet eth0: No Safety Features sup=
-port found
-[    1.311339] socfpga-dwmac ff702000.ethernet eth0: registered PTP clock
-[    1.318187] IPv6: ADDRCONF(NETDEV_UP): eth0: link is not ready
-[    4.484377] Unable to handle kernel NULL pointer dereference at virtual =
-address 00000000
-[    4.492433] pgd =3D (ptrval)
-[    4.495145] [00000000] *pgd=3D00000000
-[    4.498714] Internal error: Oops: 805 [#1] SMP ARM
-[    4.503483] Modules linked in:
-[    4.506531] CPU: 1 PID: 266 Comm: kworker/1:1 Not tainted 4.19.239-rc1-g=
-6124afa49867 #1
-[    4.514496] Hardware name: Altera SOCFPGA
-[    4.518500] Workqueue: events_power_efficient phy_state_machine
-[    4.524400] PC is at socfpga_dwmac_fix_mac_speed+0x3c/0xbc
-[    4.529864] LR is at arm_heavy_mb+0x2c/0x48
-[    4.534028] pc : [<c05d992c>]    lr : [<c01182e8>]    psr: 60000013
-[    4.540265] sp : ee9c5e58  ip : ee9c5e48  fp : ee9c5e7c
-[    4.545465] r10: 00000001  r9 : ef243800  r8 : 00000000
-[    4.550665] r7 : 00000000  r6 : 000003e8  r5 : eebec000  r4 : eeb0f880
-[    4.557163] r3 : 00000001  r2 : 00000730  r1 : 00000000  r0 : eeb0f880
-[    4.563660] Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment=
- none
-[    4.570762] Control: 10c5387d  Table: 0000404a  DAC: 00000051
-[    4.576482] Process kworker/1:1 (pid: 266, stack limit =3D 0x(ptrval))
-[    4.582807] Stack: (0xee9c5e58 to 0xee9c6000)
-[    4.587146] 5e40:                                                       =
-ef243800 eebec000
-[    4.595288] 5e60: eebed000 eebec538 00610c8c eebec500 ee9c5eb4 ee9c5e80 =
-c05ccf84 c05d98fc
-[    4.603430] 5e80: c0705800 c018fabc eebec000 ef243800 eebec000 ef243a90 =
-00000000 00000000
-[    4.611572] 5ea0: c0c77830 00000000 ee9c5ecc ee9c5eb8 c05bae3c c05ccdf0 =
-ef243a64 ef243800
-[    4.619715] 5ec0: ee9c5ef4 ee9c5ed0 c05b911c c05bae08 ef243a64 ef182200 =
-ef7e1fc0 ef7e5500
-[    4.627857] 5ee0: 00000000 c0c77830 ee9c5f34 ee9c5ef8 c013e18c c05b8de0 =
-ef7e1fc0 ef7e1fc0
-[    4.635998] 5f00: 00000008 ef7e1fd8 c0c02d00 ef182200 ef182214 ef7e1fc0 =
-00000008 ef7e1fd8
-[    4.644141] 5f20: c0c02d00 ef7e1fc0 ee9c5f74 ee9c5f38 c013f178 c013df74 =
-c013f118 c09e2128
-[    4.652283] 5f40: c0c77250 ffffe000 ee9c5f74 ef188400 ef1885c0 00000000 =
-ee9c4000 ef182200
-[    4.660425] 5f60: c013f118 ef14be74 ee9c5fac ee9c5f78 c0144ac8 c013f124 =
-ef18841c ef18841c
-[    4.668567] 5f80: ee9c5fac ef1885c0 c014495c 00000000 00000000 00000000 =
-00000000 00000000
-[    4.676709] 5fa0: 00000000 ee9c5fb0 c01010e8 c0144968 00000000 00000000 =
-00000000 00000000
-[    4.684850] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    4.692991] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000 =
-00000000 00000000
-[    4.701128] Backtrace:=20
-[    4.703578] [<c05d98f0>] (socfpga_dwmac_fix_mac_speed) from [<c05ccf84>]=
- (stmmac_adjust_link+0x1a0/0x21c)
-[    4.713104]  r9:eebec500 r8:00610c8c r7:eebec538 r6:eebed000 r5:eebec000=
- r4:ef243800
-[    4.720818] [<c05ccde4>] (stmmac_adjust_link) from [<c05bae3c>] (phy_lin=
-k_change+0x40/0x4c)
-[    4.729133]  r10:00000000 r9:c0c77830 r8:00000000 r7:00000000 r6:ef243a9=
-0 r5:eebec000
-[    4.736925]  r4:ef243800
-[    4.739452] [<c05badfc>] (phy_link_change) from [<c05b911c>] (phy_state_=
-machine+0x348/0x580)
-[    4.747850]  r5:ef243800 r4:ef243a64
-[    4.751418] [<c05b8dd4>] (phy_state_machine) from [<c013e18c>] (process_=
-one_work+0x224/0x518)
-[    4.759905]  r9:c0c77830 r8:00000000 r7:ef7e5500 r6:ef7e1fc0 r5:ef182200=
- r4:ef243a64
-[    4.767619] [<c013df68>] (process_one_work) from [<c013f178>] (worker_th=
-read+0x60/0x5ac)
-[    4.775674]  r10:ef7e1fc0 r9:c0c02d00 r8:ef7e1fd8 r7:00000008 r6:ef7e1fc=
-0 r5:ef182214
-[    4.783466]  r4:ef182200
-[    4.785994] [<c013f118>] (worker_thread) from [<c0144ac8>] (kthread+0x16=
-c/0x174)
-[    4.793358]  r10:ef14be74 r9:c013f118 r8:ef182200 r7:ee9c4000 r6:0000000=
-0 r5:ef1885c0
-[    4.801149]  r4:ef188400
-[    4.803675] [<c014495c>] (kthread) from [<c01010e8>] (ret_from_fork+0x14=
-/0x2c)
-[    4.810863] Exception stack(0xee9c5fb0 to 0xee9c5ff8)
-[    4.815892] 5fa0:                                     00000000 00000000 =
-00000000 00000000
-[    4.824033] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 =
-00000000 00000000
-[    4.832172] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
-[    4.838759]  r10:00000000 r9:00000000 r8:00000000 r7:00000000 r6:0000000=
-0 r5:c014495c
-[    4.846550]  r4:ef1885c0
-[    4.849075] Code: e59394b8 f57ff04e ebecfa64 e3a03001 (e1c830b0)=20
-[    4.855171] ---[ end trace d50de8fdda236faf ]---
-[    4.859852] IPv6: ADDRCONF(NETDEV_CHANGE): eth0: link becomes ready
-Matched prompt #3: Stack:\s+(.*\s+-+\[ end trace (\w*) \]-+)
-login-action: trace
-[login-action] Waiting for messages, (timeout 00:09:06)
-[    4.883589] Sending DHCP requests ...... timed out!
-[  205.043594] random: fast init done
-[  418.243624] random: crng init done
-
-Best regards,
-								Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---9jxsPFA5p3P2qPhR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYl2l0wAKCRAw5/Bqldv6
-8lhgAJ96wISX1/ZXo8pF/pczRjvoEPHMaACdG4rDKJVHj/cIboZB+Zb156i88dM=
-=0Bfx
------END PGP SIGNATURE-----
-
---9jxsPFA5p3P2qPhR--

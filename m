@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0328505A98
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBADB505A90
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:06:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241132AbiDRPJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34624 "EHLO
+        id S244073AbiDRPI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243238AbiDRPAk (ORCPT
+        with ESMTP id S236212AbiDRPAv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:00:40 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD07D44749;
-        Mon, 18 Apr 2022 06:48:37 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id bq30so24251581lfb.3;
-        Mon, 18 Apr 2022 06:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6s0/7WUuExY5QvSFDhYR/dpHqslKqd7vt8L+xMDv2JE=;
-        b=TL1IYGp2O8w+kYDDIMZDkAEKiFssAm31h+fR00bd5XoL+N4k4crVR4UTGh4zQ++O4M
-         GwOj7tgCREXNZzdTKIAoMXtC93wsHnKBvwfydzvnCMu7Gd/fZ48ZOvl59CDCZ2OwKyWz
-         OWWzDyylTI5mFQENEr23TIkjholwEhJoW8l0jaezwPuMaBYi+OECdFxzziH+SaeQDWlP
-         03FDYHvfAnqLsZNuIzmCFb0kpbLPghZ9y26gL2wqZtIOrBVvB9LP+TsZZwjeiqHERcCN
-         Ya0Qj2Hr07Q5adp5WCFIyIA18SlS+Znl/YYTcSH+vwwJjCUssDFbJ2c6xdooGSU0xSEQ
-         D+Hg==
+        Mon, 18 Apr 2022 11:00:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB59378070
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650289727;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=tbhR6AfcnCx9wqk3Kzu5GujenphZ3L6As870SyTIgjc=;
+        b=axnsdQYRgObLT70YUso47lEJaj1fk09HK1a/PIe9iBIsCUFTPI4+2xMmgWB7gtuT84uiBv
+        E+yN85awKyYShrSF9Voq5XeT9S1qz2QN+Ph6F4KjGTZP6LVJ6GN4U+NMn6cG8kUDmbjzLE
+        N4fZM9iIqq9JkrnAmd1AxkSuhkFKPSA=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-549-JH2YUNucNXqmSF-E84OT6Q-1; Mon, 18 Apr 2022 09:48:46 -0400
+X-MC-Unique: JH2YUNucNXqmSF-E84OT6Q-1
+Received: by mail-qt1-f197.google.com with SMTP id w18-20020ac857d2000000b002f1fa23a40eso1802301qta.14
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:48:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6s0/7WUuExY5QvSFDhYR/dpHqslKqd7vt8L+xMDv2JE=;
-        b=knj8smyO/iJAX4JhKQFb6QYZyJ2j08oYEDiJSDI+qpZ4x9XoFiVYJQLtXW5AKYygqk
-         I4YvnJ7Mg7ya42GMs9jqWsBzggreoRICciNdS7keURqG3RtEWiFHevOxeNVshG93mk/S
-         UD9LfQHNJlPkWnmA0p+uX/EiYSbDiNyTL6yp4I7z95Oo4j4nE3gpeFIwz9CQmAf8ekV8
-         UZLA9qI7gbO3nYpH7xKrh/hk2TStrehTzlxjyk4ll7H5+k1fxnVpo7itisLQlWybXKPQ
-         U72y0sqE+pP1K6eOwf0rwPFu5fZ5t+9n8dCHvngFTEIK+GR/XXgmRG7xGJnmGjjDOssx
-         HQDA==
-X-Gm-Message-State: AOAM5335ROnbKnfY/x9lkam9nkjp4fpDQSUr6cVRg2FPi275SVFOdRYj
-        IYsov7DUFnOZQN0Vf6CRrdk=
-X-Google-Smtp-Source: ABdhPJzXZq+JgJ1TYtSuJip4RD7L1lnwXQ/RuA+GOhavTrB4JiUxKTBEVI10LhyQeITFJbOJLZOdTg==
-X-Received: by 2002:ac2:4e0f:0:b0:471:308f:1b9e with SMTP id e15-20020ac24e0f000000b00471308f1b9emr6079570lfr.514.1650289715822;
-        Mon, 18 Apr 2022 06:48:35 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id t15-20020a2e9d0f000000b0024ad0cf21a5sm1182968lji.137.2022.04.18.06.48.34
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tbhR6AfcnCx9wqk3Kzu5GujenphZ3L6As870SyTIgjc=;
+        b=zccmzdC1STKEF0gZcNs+ikftWMi36Icye+suuyO2vJCPOGe/2oeFBSDKLK8KdYC739
+         VOREq6QW/Um3Mazq7VXg7xas6F6P/B+OlASAS7zi43Dk9c8FemhA/pHdFsBFw9cAsS+E
+         BA+B+f3R2J/uUuRJXxtpT2pCLCfJN+I+zCjpMsQrsWQpoQmigOlgkEfzULsE9E0YpZXY
+         6czeG1P4gbQzHjoyRUI+ooHEjzprzMmsnzOpUU0jGhC5o0I2Sg1kPVwRURpODtuCFTcu
+         +6U5b0+wLvUWSB4NpJHOvEIPE7h1IexxioCtKiU5pb00rMUU41SMB0tFwnPZds4XHsgH
+         8Tvg==
+X-Gm-Message-State: AOAM530PqFT/KQyoi3L/x1uSYNETlYSAgBDlT8RlqsM9V9bos/YG0nQ6
+        Y7NRPa9Vkb/fhQGvsQlRwLADIKV6sIZllawUjYjPK8VFOW9NexXjZDdEfOoMvlj7CAMrO1W/6Ax
+        dnVubaA/V0lr34oF4Z/N8PJcB
+X-Received: by 2002:a05:6214:caa:b0:441:2e8f:f398 with SMTP id s10-20020a0562140caa00b004412e8ff398mr8038940qvs.61.1650289725826;
+        Mon, 18 Apr 2022 06:48:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJzj3pRTnuFOdkq/AHZ/+E5RDqX2djhn1Iw2byebM/R10ayUX37I/AG+/4Ru96jninNhWG8FkQ==
+X-Received: by 2002:a05:6214:caa:b0:441:2e8f:f398 with SMTP id s10-20020a0562140caa00b004412e8ff398mr8038923qvs.61.1650289725618;
+        Mon, 18 Apr 2022 06:48:45 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id 22-20020ac85756000000b002e1cabad999sm7854020qtx.89.2022.04.18.06.48.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 06:48:35 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 16:48:33 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 24/25] dmaengine: dw-edma: Skip cleanup procedure if no
- private data found
-Message-ID: <20220418134833.awogzzfq745mc5dm@mobilestation>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-25-Sergey.Semin@baikalelectronics.ru>
- <20220325181503.GB12218@thinkpad>
+        Mon, 18 Apr 2022 06:48:45 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     daniel@zonque.org, haojian.zhuang@gmail.com,
+        robert.jarzmik@free.fr, balbi@kernel.org,
+        gregkh@linuxfoundation.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] usb: gadget: pxa27x_udc: clean up comment
+Date:   Mon, 18 Apr 2022 09:48:38 -0400
+Message-Id: <20220418134838.1236023-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325181503.GB12218@thinkpad>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 11:45:03PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:48:35AM +0300, Serge Semin wrote:
-> > DW eDMA driver private data is preserved in the passed DW eDMA chip info
-> > structure. If either probe procedure failed or for some reason the passed
-> > info object doesn't have private data pointer initialized we need to halt
-> > the DMA device cleanup procedure in order to prevent possible system
-> > crashes.
-> > 
-> 
+Spelling replacement
+endpoitn to endpoint
 
-> How come remove() could happen when probe() failed? If you hit this issue then
-> something else is utterly going wrong.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/usb/gadget/udc/pxa27x_udc.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-It fully depends on the DW eDMA client driver implementation, which
-can't and in general shouldn't be guessed. But what must be done in
-the DW eDMA driver is a protection against the invalid data being
-passed to the exported API methods. That wrong situation must be
-detected and handled in the API user code. It's much easier to do by
-having an error code returned from the dw_edma_remove() method than
-catching random system crashes.
+diff --git a/drivers/usb/gadget/udc/pxa27x_udc.h b/drivers/usb/gadget/udc/pxa27x_udc.h
+index 0a6bc18a1264..31bf79ce931c 100644
+--- a/drivers/usb/gadget/udc/pxa27x_udc.h
++++ b/drivers/usb/gadget/udc/pxa27x_udc.h
+@@ -326,7 +326,7 @@ struct udc_usb_ep {
+  * @addr: usb endpoint number
+  * @config: configuration in which this endpoint is active
+  * @interface: interface in which this endpoint is active
+- * @alternate: altsetting in which this endpoitn is active
++ * @alternate: altsetting in which this endpoint is active
+  * @fifo_size: max packet size in the endpoint fifo
+  * @type: endpoint type (bulk, iso, int, ...)
+  * @udccsr_value: save register of UDCCSR0 for suspend/resume
+-- 
+2.27.0
 
--Sergey
-
-> 
-> Thanks,
-> Mani
-> 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/dma/dw-edma/dw-edma-core.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> > index ca5cd7c99571..b932682a8ba8 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> > @@ -1030,6 +1030,10 @@ int dw_edma_remove(struct dw_edma_chip *chip)
-> >  	struct dw_edma *dw = chip->dw;
-> >  	int i;
-> >  
-> > +	/* Skip removal if no private data found */
-> > +	if (!dw)
-> > +		return -ENODEV;
-> > +
-> >  	/* Disable eDMA */
-> >  	dw_edma_v0_core_off(dw);
-> >  
-> > -- 
-> > 2.35.1
-> > 

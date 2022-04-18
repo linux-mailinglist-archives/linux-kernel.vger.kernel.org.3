@@ -2,117 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE0CD504F7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492CC504F7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236471AbiDRLo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S236719AbiDRLp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236388AbiDRLoZ (ORCPT
+        with ESMTP id S229671AbiDRLpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:44:25 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814ED12608
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:41:45 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id z99so17167860ede.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:41:45 -0700 (PDT)
+        Mon, 18 Apr 2022 07:45:55 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08D512AF6;
+        Mon, 18 Apr 2022 04:43:14 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id z99so17171399ede.5;
+        Mon, 18 Apr 2022 04:43:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=fmqrWEaMLzdzM6tlfO27gc/5ZjxaVbLantgCWtrzxek=;
-        b=euLeyub8VKd1us4OwhWIZzr3XV+POZ9D4tQLxC59vh85fmzN0/EVt8PiyZEOcOThP2
-         SGipuK3/fFUQh4OIEj/tUPjKfgC4U1Vs1JR44X8fEktdAUef0FmXFVAl9yS7wlBCamz4
-         1FNGh7HdJJdtqnUyE/EwU5nAlurUZzRIx+/YyEtGXFLtc7RrKS8kr6hBSnkxpVmQLGTB
-         quVtKz+eAR+F22D8M88AXByTb73Ytb3RUid038sU3fozUZAFcsUs0QcL+n4RZla9hT+7
-         br9Rd0/8aWonrhkRGsDF/ng25tJ4WSiZn7AJbj6hxM4rzWzfFznwcs1jpby8AxAizWLl
-         9K8w==
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=IUai0Spi7zlbWJJauW/yyVhMilMhUGODlc/UhrPP73s=;
+        b=MLUEUAtt3AfKYiQOFi6osshzmcX/h9UaxBkiqDbRIZ2E9diYz7HqYszGdcBGDLDjr5
+         CkCzqpCmvXkDzMzQO2qdfKKJBQJIr1zYL1LI/OSkk+RarOHskqvlWDfDo4pvxjUUyV5l
+         1t9KFR2zXhTSmglAakGCE+SR5iXdwRdaX07dQwVicw5Gz7rSi+pDJzDoxoWR/jAz0QTs
+         rtrTSQL/uibOT8MB0pt2aoJPkjYMmvY7Iv1J/IRhVTwN/n/q6wDwb3JYjH+0aRWnYhmZ
+         OEFrxmBzGV9DP48VFjTuGDa15kMW++4sVmojyPPLvRh2T4UZK/bsyadojSRT79kRcr7I
+         bkJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=fmqrWEaMLzdzM6tlfO27gc/5ZjxaVbLantgCWtrzxek=;
-        b=eS/CSm3CSUHj1Ij0IX+wrxBN9EfUCoT0/3nN2Y6elzcASQhMhH5FuPiQdM1v2Gro/a
-         ZWvVBX61s3ZjqBRFi/DqLovjCEvtLer0tszw+ioquGB0nKHVAjSZ2prcnqn4wjMm7BkI
-         L8WFUDNdkwQKeea14diZTlN/jTg/0uRgbVIQ/trWcc8FiH6M3BDtmygWRB43BnVJigm/
-         /MuYTD1beXcfHcBHvgcNT2DvuV38xaOGytizM6IalZcONLQ8vR9smJ9jOung9AY2/pbX
-         NKM/4v/14mgddWZhSlv5vLaTKqHuxpI9bZHxgSKqjihd9hiE1G3002CLKOyytao4Hhhg
-         I9yg==
-X-Gm-Message-State: AOAM530Nwf0HyHvHJDCs7UY4JVF46nIDhMTiJFw+lWejS5WdFcHC+fEQ
-        OUAwgYoNLDrYSqNhD8DgNpkCWQ==
-X-Google-Smtp-Source: ABdhPJy5kGTGP7Apl58/+o1/q/TVZVuRIYgAiCuDaaJBGKYub7vpPI4igucgaDqIEtBRy96pV5HUgQ==
-X-Received: by 2002:aa7:c68d:0:b0:41d:7b1c:7da0 with SMTP id n13-20020aa7c68d000000b0041d7b1c7da0mr11742036edq.175.1650282104090;
-        Mon, 18 Apr 2022 04:41:44 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id u25-20020a170906b11900b006e08588afedsm4506051ejy.132.2022.04.18.04.41.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 04:41:43 -0700 (PDT)
-Message-ID: <09df1d1f-71cf-a24f-2908-8e1630d9c536@linaro.org>
-Date:   Mon, 18 Apr 2022 13:41:42 +0200
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=IUai0Spi7zlbWJJauW/yyVhMilMhUGODlc/UhrPP73s=;
+        b=cYuOSnTjVOk76JB0rdE2xqcwQVVDZxG2XaOLuPTy2P5US6XnS2yBPJhn3gOk/m+2wz
+         zOs1QuUPp1MJB39cfRZgtClV6C52zvcO/gyJae7/QTzFHRbUWiCHwaaHv4ruWzIUwC9p
+         O8X+S4hBDNvYR46wNqwbIt2XJFqILnEYyeI+g9qeBi4p82fkVTTVWmH4HDb+JnWQUHBH
+         0yePwt7pJG2eRlCFdscUJgQf2nzlZBzeIaXPvRyHWx0ojulNYtz7+e7CVbYz9EkGr/SX
+         JF+EtlzsbvZpyioRIVjSS7MQYuasbAYZ2B2U1LB/SaMX6wn37wJvki4EJ6fhd47ebraI
+         gxNA==
+X-Gm-Message-State: AOAM533cAsFvFa5nKFQbOiD4dXFxO6zB0ZQEbJi1Kg5yT6quaMRjhDEK
+        hfPXoHeTBPhGCNghHFEP2zQuZTCP8ZGFtZg8ank=
+X-Google-Smtp-Source: ABdhPJx3GZXSvcnDNz3un3VYBHitDF2IaMsMedvCofVFjPjXQ7ShUZ/rNCAfd47CLlg+dpp6abttta0gJTrBSZqEsr8=
+X-Received: by 2002:a50:cc9e:0:b0:41d:7123:d3ba with SMTP id
+ q30-20020a50cc9e000000b0041d7123d3bamr11800621edi.296.1650282193247; Mon, 18
+ Apr 2022 04:43:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 3/4] dt-bindings: mmc: convert orion-sdio to JSON schema
-Content-Language: en-US
-To:     Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andrew@lunn.ch, gregory.clement@bootlin.com,
-        sebastian.hesselbarth@gmail.com
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220414230603.567049-1-chris.packham@alliedtelesis.co.nz>
- <20220414230603.567049-4-chris.packham@alliedtelesis.co.nz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220414230603.567049-4-chris.packham@alliedtelesis.co.nz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220414025705.598-1-mario.limonciello@amd.com>
+ <20966c6b-9045-9f8b-ba35-bf44091ce380@gmail.com> <67df4178-5943-69d8-0d61-f533671a1248@amd.com>
+In-Reply-To: <67df4178-5943-69d8-0d61-f533671a1248@amd.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 Apr 2022 14:42:37 +0300
+Message-ID: <CAHp75VceVwAq68s_hnpXt8VvLBHVUMxFTJR+_Tnph_mvpxGVPw@mail.gmail.com>
+Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     firew4lker <firew4lker@gmail.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Richard.Gong@amd.com, Stable <stable@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 01:06, Chris Packham wrote:
-> Convert the orion-sdio binding to JSON schema.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  .../bindings/mmc/marvell,orion-sdio.yaml      | 43 +++++++++++++++++++
->  .../devicetree/bindings/mmc/orion-sdio.txt    | 16 -------
->  2 files changed, 43 insertions(+), 16 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/mmc/marvell,orion-sdio.yaml
->  delete mode 100644 Documentation/devicetree/bindings/mmc/orion-sdio.txt
-> 
-> diff --git a/Documentation/devicetree/bindings/mmc/marvell,orion-sdio.yaml b/Documentation/devicetree/bindings/mmc/marvell,orion-sdio.yaml
-> new file mode 100644
-> index 000000000000..4fef53fc78ed
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/mmc/marvell,orion-sdio.yaml
-> @@ -0,0 +1,43 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/mmc/marvell,orion-sdio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Marvell orion-sdio controller
-> +
-> +maintainers:
-> +  - Ulf Hansson <ulf.hansson@linaro.org>
+On Mon, Apr 18, 2022 at 7:34 AM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+> On 4/17/22 07:24, firew4lker wrote:
 
-This should be someone having taking care about this hardware, not
-subsystem maintainer. If there is no dedicated person for Marvell MMC,
-then maybe SoC maintainers?
+...
 
+> Linus Walleij,
+>
+> As this is backported to 5.15.y, 5.16.y, 5.17.y and those all had point
+> releases a bunch of people are hitting it now.  If you choose to adopt
+> this patch instead of revert the broken one, you can add to the commit
+> message too:
+>
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I prefer to explicitly tell that this is a link to a bug report, hence BugLink:.
+But this is just my 2 cents.
 
-
-Best regards,
-Krzysztof
+-- 
+With Best Regards,
+Andy Shevchenko

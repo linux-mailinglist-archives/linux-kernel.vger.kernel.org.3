@@ -2,94 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3D41504CED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06A80504CEF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236890AbiDRHDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 03:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S236900AbiDRHDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 03:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiDRHDc (ORCPT
+        with ESMTP id S236892AbiDRHDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 03:03:32 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C032727
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:00:54 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I6na4X016120;
-        Mon, 18 Apr 2022 07:00:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=cP8ktWUiSMOX5bCqRReCUKp7w8Y59KEtO2XxRz/iZsw=;
- b=qh2PeW62BJHJcpj0GhJUk4LxJOzegfswg06qf8Vz2lBl9bCvcu7w2jXQ2mwdD0ZIufGb
- ZsAx1g9AGLqJTonTHBtHoavBgKCSzu6FdbHN+DYalWdLmWO8RGgNCKamA0p0iJ8E9pXZ
- AVoogJOsD5ZyZeyLx3PBvSQGR5hsj7NMdTppBavZneI3WXCnPKbnzxETbj7UxidgCJnd
- d4svm9SS5l1z4Xw6IyyrgpNY59ZbQUv6k9jOYk4OdXS7f1bcvDlzVCwHn184ffWL/138
- 84xXXybnQQ5D93xScCKx9t0j+Jy2Ut24Jk3QL5bqKrczYeU7+5oQPrwmjp448X1okZS5 8g== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7d6e3md-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:00:17 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23I6vJRK005836;
-        Mon, 18 Apr 2022 07:00:17 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7d6e3ka-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:00:17 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I6wqWV007691;
-        Mon, 18 Apr 2022 07:00:14 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma03fra.de.ibm.com with ESMTP id 3ffne91vnt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:00:14 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I70C8L45875484
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Apr 2022 07:00:12 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 299EA4C040;
-        Mon, 18 Apr 2022 07:00:12 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A24034C05A;
-        Mon, 18 Apr 2022 07:00:11 +0000 (GMT)
-Received: from localhost (unknown [9.43.2.186])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 18 Apr 2022 07:00:11 +0000 (GMT)
-Date:   Mon, 18 Apr 2022 12:30:09 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v1 10/22] powerpc/ftrace: Use CONFIG_FUNCTION_TRACER
- instead of CONFIG_DYNAMIC_FTRACE
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
-        <72070995f96acaa9a387963e3848bd24a436a847.1648131740.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <72070995f96acaa9a387963e3848bd24a436a847.1648131740.git.christophe.leroy@csgroup.eu>
-MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1650264297.v44gkh54rc.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+        Mon, 18 Apr 2022 03:03:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB1F038BE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650265260; x=1681801260;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=aEAp8kfntAzEx/isoyNK0QO+EOy9RlvHzxV0B46Jn9E=;
+  b=TBp8Cs2LhC0Il2V6UlmgB4b+NPwtK+yefjKMWzNqRhyLrc2xYJpksrSX
+   hQXNBhMZsn4lNq3uFD4ahJ+PBoHkFQ7HIRcLMypN2hyzf/HYGg7nifkzs
+   dS5gLJLqFMLmcVzCzl6vPdMpBERx9LdkLLQQ1W31MWrL7BADxZt12Bd4V
+   ghbAexJxAIBzhhu/fykGXqeyAlT2Msz9S9PyOFJOV08qJW0y45rT5g08u
+   rBUyj3y20zO6jw8zW443CPIIPAJ9JS5QXKvlFAGW2BoPwVDpM7bLnDTBe
+   VPnhsAV5xrxadkZcd78uPyQkMPmWtFyAKqDopl5SshoI9Fqvp8UUsOdvP
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262324488"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="262324488"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 00:00:32 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="657155513"
+Received: from fmsmsx606.amr.corp.intel.com ([10.18.126.86])
+  by fmsmga002.fm.intel.com with ESMTP; 18 Apr 2022 00:00:32 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx606.amr.corp.intel.com (10.18.126.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Mon, 18 Apr 2022 00:00:31 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Mon, 18 Apr 2022 00:00:31 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Mon, 18 Apr 2022 00:00:31 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UkwLvOY0pldbhKhwL3MCsxSYxi6B45pDMiWEStfkWAFbdy5JtaUwT4uoGQCv6wXKIGXimtzwxloO9w6tmuHxSF1FYdu42ZJwQZoBlSq7n6iZV2rKwC/+VvA1fV92tfB7o2tx7+4wZMV9CU6HlPo/+SpkUAn1aYEtZzMUtDxyoM/maZRFSdoXdIRU7W6kuaTUcIQMZL6RC47BJ2gRyFlgqEOS4Lng91/yHi7xlIa3LjXusx68gD6ejvB7HqX37lYH5gMzJ7CyN4DBfNpC8tqHsL34zsUsHwsKSla+Gq6hi8lPeDEGU2ctw6yWIgL314xz1ZrhzxYNQfsN5n0cQVhANQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FqUJHGJgbZPyJpi8DgM5XMZrvkBb7Zv+M6OIgQZ7OP8=;
+ b=crEEp88uhuTo+zcBHSAYix7HUjyEC2vlWdVMpj/V7ODSeWX4k/yL03oG/XGcHuaAEJ3QTHyE3URpi7iKJhgWn8qHOic+jd0CnlYJq1btUjY5NEGP465JnBzbVU7vS3geay/3+szh+3CXcjyszbkl9RCIKZCgrIFoDXqj8/S6cq71lKROJ+xdRsaGi+HLl4MFdG9ZK1ZLU4wUmu5TPyPNqdPQAExUvy7N1UhJvaKrrXiDxjpduDdpWR9zKXxrZMm+Nbod4uTyJwLaFUdPrGwr2JGRXIzu7VgbEWLEsmc/N2TXogOOHn9faD7pi2NrMecMe/JYyEdMKr4bSB1ctHtiRg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MWHPR1101MB2127.namprd11.prod.outlook.com (2603:10b6:301:58::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Mon, 18 Apr
+ 2022 07:00:29 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c4ea:a404:b70b:e54e]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c4ea:a404:b70b:e54e%8]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
+ 07:00:29 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 3/3] iommu/vt-d: Size Page Request Queue to avoid overflow
+ condition
+Thread-Topic: [PATCH 3/3] iommu/vt-d: Size Page Request Queue to avoid
+ overflow condition
+Thread-Index: AQHYUY422toPVQ3zkUqA6Ie6xPKyzaz1QE7w
+Date:   Mon, 18 Apr 2022 07:00:29 +0000
+Message-ID: <BN9PR11MB5276BC4D5F9B133C84630CBA8CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220416123049.879969-1-baolu.lu@linux.intel.com>
+ <20220416123049.879969-4-baolu.lu@linux.intel.com>
+In-Reply-To: <20220416123049.879969-4-baolu.lu@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 8da863b4-4cb9-49d6-39dd-08da21091f7d
+x-ms-traffictypediagnostic: MWHPR1101MB2127:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <MWHPR1101MB21276686C0920D6AD85D05388CF39@MWHPR1101MB2127.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: exS8dGazZxTWBb6CaZHyMw0ZIbuotThcmxmicD0iHD6vp9dnQ9hLBja6ZmV3788SbiWR8BsTifv1/Blr7x/Be4JO9QIdJi0Xa5kRYrgRrCU6ZwJvQZ/qZomoJMRYraBIvrV0VfZnDRC2xd7XWHJP6WnWxd6zVV/hUDvoA0wzXYGxyaydAEnoPDVMq1/iKwV4WDMjqD26/LI8ENpMjZFAdp9cGMFRfBZHR0FhIQsiPznyul6nO6FkwejwtgYlFFC7yg7F1larvK7cfyNVuB21Q894sl3krvGVSdZUGC3/zlXI2QZzQmDfF3lcncHXIKAY/v9kwP0PdSqOitNY5WTAXYNUobYmdlFFpsHVcvLkyRUyaxdHpRXPYkoTTNRqGIAUHXa6BjmCYntbZ2Rvhrk5Pw/RqaHSy5roBo0RpkpuyCp60nusAbr18PdzjumDw9UL3lUheehr2UBC1OxdcbRf6SKEA47dNynVLbBVIzUJGklmvBgO0pkLy+VdS8wMUyzZLcE1JOGp25B+2Cyqpo5lLsNvFHFYZXVAW8RMwkawHhqarWm35itVtBOO3WkhTToxIKHT3wAdOAoMXfpwnD9Z3EM1TovqgnMQN4bwCvI5BVf9WJaSdiJ5kASaxQcZI69X7YWI9ORiacvLMPqIp0OzT9T6dEoX0EB1lb6KNNiYAaJCt7e5Jn44JhVwlIiuz0cYERJzG94vdMu4dmAYV87ESw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(76116006)(71200400001)(64756008)(26005)(508600001)(8676002)(4326008)(55016003)(66446008)(110136005)(54906003)(86362001)(33656002)(6506007)(7696005)(9686003)(6636002)(316002)(186003)(83380400001)(2906002)(66476007)(82960400001)(122000001)(52536014)(5660300002)(66556008)(66946007)(8936002)(38100700002)(38070700005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?5wm+qgcb43Nc7w0nCLqXeyhWJE4sgiwvOrYBHJ+vdDqXB6aNAe4ioAVcG128?=
+ =?us-ascii?Q?nxpaDDmhW8Sgtz9If1DoKvyWM7ZLXxqOxmjp8kS9s/HnTMv/ybVK/E/o34f4?=
+ =?us-ascii?Q?6h7ZH+j7V0cZ/2J+pKUwYPmH4TyQqn+pGQXIuO0i8o8wltL2KJ9XAb6nniJO?=
+ =?us-ascii?Q?YHxyDB8r5R9sanJkM8PNfvceEKPRxGybfpT5kRCJXcnXjRRWRoZ8Ni83y34r?=
+ =?us-ascii?Q?sEygjpYRG0YkvN+Iw7oaqabmFH9WDw6kpfPtb5vOv0G79MNvrFOyDF89Qz9B?=
+ =?us-ascii?Q?1oOon0Edy1Ok7JvQjKtfRaaMaf1s3H7aGWWatWOZugSNX0X3OmLns5wsF1nf?=
+ =?us-ascii?Q?LbXnktEQPLJoDqiqikOvWzxKcNoVTcmutCDBY5CYjNJsv+NwF0pR0f818PQ6?=
+ =?us-ascii?Q?E8xEb052qOwaIIwAZZbYVmHTycnaCHD0NyPgL6ZN3h8/CKS4Dp8RKj2/TuWI?=
+ =?us-ascii?Q?KjPw0x51LvnHUlICLCwyFjkoWIRoT/syFAclBD+0ar2/uYakRihM65+XOV5q?=
+ =?us-ascii?Q?gRujYp+XjOra+1wUwTaSWnaZF++I/zWdYWhqJ1V3TcoptA2VSP1VTs3fBqN1?=
+ =?us-ascii?Q?XQB7M3INZiB0xRASoT3fNN+aO8LHRx+hU9sx8ZvcqlNLZUWSHpQrYM6e+4ga?=
+ =?us-ascii?Q?Yv2+7E+0w74sD3/Cy27VaO+m0AIi6zIb3YAg/1yJS8q7a14qoWjWWIDPiC7n?=
+ =?us-ascii?Q?TCXTtA5V6adQ72xWzPA9N9oPaWJJdEL+RTc8URgam5Z0LK+ZqBVuFppAXYRe?=
+ =?us-ascii?Q?UFRN17hl/b8hT1ZoYjbKQLpXXmYcgdcJEw/eM5/wKIVFclAhpNd41saO7yLR?=
+ =?us-ascii?Q?juM0JC5MlNG5GEmO+ivDKyVyuEyFJnUFXeOZktT5mJzxou74OBVpy5OfXHbC?=
+ =?us-ascii?Q?e+WC+/z45c8vUfXMsk8VIjjsoKuu593mFk+PbzvXdvBT3hjnhc6OVMJWH8Mj?=
+ =?us-ascii?Q?RkFqdCc/Ky9PwIEs09ZOI4IgeFVXeqTT7/4qcp1LSF3PMp14ssJafshcSv85?=
+ =?us-ascii?Q?UtbnvbgkyJSyn2V6yYL98uZSTfJAgnDFmLp/qsMqIbIdjYL4QDE/x5RTFOrR?=
+ =?us-ascii?Q?oYHSRST6FnqaPFEFJXvq24IgbWh6EWSyRE8hXZM0SbxHR3eKj/0tbvG9uS5u?=
+ =?us-ascii?Q?5dixAy/9EsbXYjG/SCscZhNOTamFgiO1ShYOi4kRzRy6zPsPVhsL3RwVlyP8?=
+ =?us-ascii?Q?QEvwQ0f1tZh5NyYq0SlwltOoBZuLpFoHUT6N9ZPEmUfbrRshn/287dJKmUQ3?=
+ =?us-ascii?Q?Pa3oERRpKrxhfEmOL2rYzbXVZ8ML3VKd/UquNylX9B6N5j3+dyS5fL4QyuYa?=
+ =?us-ascii?Q?XCJIiI2OqDKMwQzTdwgsrS27FCbG6bW+pbGmufeQUnskzsM6SBPZOr2hzm7y?=
+ =?us-ascii?Q?kQ5JbHBjxRZZ1x0oC5GgOWnLXjJ6ZUrBgbQbLWQ/3iLqM899EKb16NRrX+IM?=
+ =?us-ascii?Q?NImicZon56ZGNUjpDoWq12gYwgkJzrrbnjKywwJ2zX7A27DflsNSw/k///R8?=
+ =?us-ascii?Q?TrXrK6CHoRvHFn9BW7s+6wA7z6Gmiydf15DSCv+5B0CkSnjSuAFZT6l85Wtr?=
+ =?us-ascii?Q?eocXJH75NdsDuSR96mRupm5tyTueO/8HIlYPCVcQqTzC1puVdp1Bs7OSoPFQ?=
+ =?us-ascii?Q?ORGhge92tMEbE4CLCpR2XpgqrSKHOhXJEwlwvRQDHilxaDgtco87j1Vbzzl4?=
+ =?us-ascii?Q?1/BloSOt8O3KVSenGaU5PaPelGu1vpqNzIWhm+8l67WBP3YWTuXqfipvlmz0?=
+ =?us-ascii?Q?c42l+FWy9A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: _5XR_0XfT75SWFghW64a5qO1XVdhpDMh
-X-Proofpoint-GUID: ifTOizibZPfKHRGfAcybksYbdXDRkK2P
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- lowpriorityscore=0 impostorscore=0 mlxlogscore=999 phishscore=0
- clxscore=1015 spamscore=0 malwarescore=0 priorityscore=1501 mlxscore=0
- adultscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2202240000 definitions=main-2204180037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8da863b4-4cb9-49d6-39dd-08da21091f7d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 07:00:29.2444
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: q+3IHQqDCSnhZmakW2ioi7fSv75qF4Afxr0x7N2f2raTyHLNhvquwjJnNzo/CsfVRCMxBzgghxAP0OZTLe32zA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2127
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -98,215 +157,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Since commit 0c0c52306f47 ("powerpc: Only support DYNAMIC_FTRACE not
-> static"), CONFIG_DYNAMIC_FTRACE is always selected when
-> CONFIG_FUNCTION_TRACER is selected.
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Sent: Saturday, April 16, 2022 8:31 PM
 >=20
-> To avoid confusion and have the reader wonder what's happen when
-> CONFIG_FUNCTION_TRACER is selected and CONFIG_DYNAMIC_FTRACE is not,
-> use CONFIG_FUNCTION_TRACER in ifdefs instead of CONFIG_DYNAMIC_FTRACE.
+> PRQ overflow may cause I/O throughput congestion, resulting in unnecessar=
+y
+> degradation of IO performance. Appropriately increasing the length of PRQ
+> can greatly reduce the occurrence of PRQ overflow. The count of maximum
+> page requests that can be generated in parallel by a PCIe device is
+> statically defined in the Outstanding Page Request Capacity field of the
+> PCIe ATS configure space.
 >=20
-> As CONFIG_FUNCTION_GRAPH_TRACER depends on CONFIG_FUNCTION_TRACER,
-> ftrace.o doesn't need to appear for both symbols in Makefile.
->=20
-> Then as ftrace.o is built only when CONFIG_FUNCTION_TRACER is selected
+> The new lenght of PRQ is calculated by summing up the value of Outstandin=
+g
+> Page Request Capacity register across all devices where Page Requests are
+> supported on the real PR-capable platfrom (Intel Sapphire Rapids). The
+> result is round to the nearest higher power of 2.
 
-and since it implies CONFIG_DYNAMIC_FTRACE, CONFIG_DYNAMIC_FTRACE is not=20
-needed in ftrace.c
+The actual requirement is usage and platform specific. What about
+doubling the default size and also provide an option for admin to
+tune?
 
-> ifdef CONFIG_FUNCTION_TRACER is not needed in ftrace.c
 >=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> The PRQ length is also double sized as the VT-d IOMMU driver only updates
+> the Page Request Queue Head Register (PQH_REG) after processing the
+> entire
+> queue.
+>=20
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 > ---
->  arch/powerpc/include/asm/book3s/32/pgtable.h | 2 +-
->  arch/powerpc/include/asm/book3s/64/pgtable.h | 2 +-
->  arch/powerpc/include/asm/module.h            | 4 ++--
->  arch/powerpc/include/asm/nohash/pgtable.h    | 2 +-
->  arch/powerpc/kernel/module_32.c              | 4 ++--
->  arch/powerpc/kernel/module_64.c              | 6 +++---
->  arch/powerpc/kernel/trace/Makefile           | 4 +---
->  arch/powerpc/kernel/trace/ftrace.c           | 4 ----
->  8 files changed, 11 insertions(+), 17 deletions(-)
+>  include/linux/intel-svm.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> diff --git a/arch/powerpc/include/asm/book3s/32/pgtable.h b/arch/powerpc/=
-include/asm/book3s/32/pgtable.h
-> index 772e00dc4ef1..992aed626eb4 100644
-> --- a/arch/powerpc/include/asm/book3s/32/pgtable.h
-> +++ b/arch/powerpc/include/asm/book3s/32/pgtable.h
-> @@ -124,7 +124,7 @@ static inline bool pte_user(pte_t pte)
->   * on platforms where such control is possible.
->   */
->  #if defined(CONFIG_KGDB) || defined(CONFIG_XMON) || defined(CONFIG_BDI_S=
-WITCH) ||\
-> -	defined(CONFIG_KPROBES) || defined(CONFIG_DYNAMIC_FTRACE)
-> +	defined(CONFIG_KPROBES) || defined(CONFIG_FUNCTION_TRACER)
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_X
->  #else
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_ROX
-> diff --git a/arch/powerpc/include/asm/book3s/64/pgtable.h b/arch/powerpc/=
-include/asm/book3s/64/pgtable.h
-> index 875730d5af40..cf01b609572f 100644
-> --- a/arch/powerpc/include/asm/book3s/64/pgtable.h
-> +++ b/arch/powerpc/include/asm/book3s/64/pgtable.h
-> @@ -169,7 +169,7 @@
->   * on platforms where such control is possible.
->   */
->  #if defined(CONFIG_KGDB) || defined(CONFIG_XMON) || defined(CONFIG_BDI_S=
-WITCH) || \
-> -	defined(CONFIG_KPROBES) || defined(CONFIG_DYNAMIC_FTRACE)
-> +	defined(CONFIG_KPROBES) || defined(CONFIG_FUNCTION_TRACER)
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_X
->  #else
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_ROX
-> diff --git a/arch/powerpc/include/asm/module.h b/arch/powerpc/include/asm=
-/module.h
-> index 857d9ff24295..e6f5963fd96e 100644
-> --- a/arch/powerpc/include/asm/module.h
-> +++ b/arch/powerpc/include/asm/module.h
-> @@ -39,7 +39,7 @@ struct mod_arch_specific {
->  	unsigned int init_plt_section;
->  #endif /* powerpc64 */
+> diff --git a/include/linux/intel-svm.h b/include/linux/intel-svm.h
+> index b3b125b332aa..207ef06ba3e1 100644
+> --- a/include/linux/intel-svm.h
+> +++ b/include/linux/intel-svm.h
+> @@ -9,7 +9,7 @@
+>  #define __INTEL_SVM_H__
 >=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  	unsigned long tramp;
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->  	unsigned long tramp_regs;
-> @@ -68,7 +68,7 @@ struct mod_arch_specific {
->  #    endif	/* MODULE */
->  #endif
+>  /* Page Request Queue depth */
+> -#define PRQ_ORDER	2
+> +#define PRQ_ORDER	4
+>  #define PRQ_RING_MASK	((0x1000 << PRQ_ORDER) - 0x20)
+>  #define PRQ_DEPTH	((0x1000 << PRQ_ORDER) >> 5)
 >=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  #    ifdef MODULE
->  	asm(".section .ftrace.tramp,\"ax\",@nobits; .align 3; .previous");
->  #    endif	/* MODULE */
-> diff --git a/arch/powerpc/include/asm/nohash/pgtable.h b/arch/powerpc/inc=
-lude/asm/nohash/pgtable.h
-> index ac75f4ab0dba..2e8cf217a191 100644
-> --- a/arch/powerpc/include/asm/nohash/pgtable.h
-> +++ b/arch/powerpc/include/asm/nohash/pgtable.h
-> @@ -23,7 +23,7 @@
->   * on platforms where such control is possible.
->   */
->  #if defined(CONFIG_KGDB) || defined(CONFIG_XMON) || defined(CONFIG_BDI_S=
-WITCH) ||\
-> -	defined(CONFIG_KPROBES) || defined(CONFIG_DYNAMIC_FTRACE)
-> +	defined(CONFIG_KPROBES) || defined(CONFIG_FUNCTION_TRACER)
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_X
->  #else
->  #define PAGE_KERNEL_TEXT	PAGE_KERNEL_ROX
-> diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module=
-_32.c
-> index a0432ef46967..2aa368ce21c9 100644
-> --- a/arch/powerpc/kernel/module_32.c
-> +++ b/arch/powerpc/kernel/module_32.c
-> @@ -39,7 +39,7 @@ static unsigned int count_relocs(const Elf32_Rela *rela=
-, unsigned int num)
->  			r_addend =3D rela[i].r_addend;
->  		}
->=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  	_count_relocs++;	/* add one for ftrace_caller */
->  #endif
->  	return _count_relocs;
-> @@ -288,7 +288,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
->  	return 0;
->  }
->=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  int module_trampoline_target(struct module *mod, unsigned long addr,
->  			     unsigned long *target)
->  {
-> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module=
-_64.c
-> index 794720530442..b13a72665eee 100644
-> --- a/arch/powerpc/kernel/module_64.c
-> +++ b/arch/powerpc/kernel/module_64.c
-> @@ -207,7 +207,7 @@ static unsigned long get_stubs_size(const Elf64_Ehdr =
-*hdr,
->  		}
->  	}
->=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  	/* make the trampoline to the ftrace_caller */
->  	relocs++;
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> @@ -372,7 +372,7 @@ static bool is_mprofile_ftrace_call(const char *name)
->  {
->  	if (!strcmp("_mcount", name))
->  		return true;
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  	if (!strcmp("ftrace_caller", name))
->  		return true;
->  #ifdef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-> @@ -740,7 +740,7 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
->  	return 0;
->  }
->=20
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> +#ifdef CONFIG_FUNCTION_TRACER
->  int module_trampoline_target(struct module *mod, unsigned long addr,
->  			     unsigned long *target)
->  {
+> --
+> 2.25.1
 
-The below two changes to trace/Makefile and trace/ftrace.c make=20
-sense, but I'm not sure the above changes are necessary.
-
-For generic code (outside arch/powerpc/kernel/trace), I think it is good=20
-to retain the actual dependency which is DYNAMIC_FTRACE. In my view,=20
-gating some of the above code on FUNCTION_TRACER is also confusing. The=20
-primary implication of always selecting DYNAMIC_FTRACE is within the=20
-powerpc trace code, and it is good to keep it that way.
-
-> diff --git a/arch/powerpc/kernel/trace/Makefile b/arch/powerpc/kernel/tra=
-ce/Makefile
-> index fc32ec30b297..af8527538fe4 100644
-> --- a/arch/powerpc/kernel/trace/Makefile
-> +++ b/arch/powerpc/kernel/trace/Makefile
-> @@ -14,9 +14,7 @@ obj64-$(CONFIG_FUNCTION_TRACER)		+=3D ftrace_mprofile.o
->  else
->  obj64-$(CONFIG_FUNCTION_TRACER)		+=3D ftrace_64_pg.o
->  endif
-> -obj-$(CONFIG_FUNCTION_TRACER)		+=3D ftrace_low.o
-> -obj-$(CONFIG_DYNAMIC_FTRACE)		+=3D ftrace.o
-> -obj-$(CONFIG_FUNCTION_GRAPH_TRACER)	+=3D ftrace.o
-> +obj-$(CONFIG_FUNCTION_TRACER)		+=3D ftrace_low.o ftrace.o
->  obj-$(CONFIG_TRACING)			+=3D trace_clock.o
->=20
->  obj-$(CONFIG_PPC64)			+=3D $(obj64-y)
-> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/tra=
-ce/ftrace.c
-> index 2c7e42e439bb..188f59f4ee4a 100644
-> --- a/arch/powerpc/kernel/trace/ftrace.c
-> +++ b/arch/powerpc/kernel/trace/ftrace.c
-> @@ -28,9 +28,6 @@
->  #include <asm/syscall.h>
->  #include <asm/inst.h>
->=20
-> -
-> -#ifdef CONFIG_DYNAMIC_FTRACE
-> -
->  /*
->   * We generally only have a single long_branch tramp and at most 2 or 3 =
-plt
->   * tramps generated. But, we don't use the plt tramps currently. We also=
- allot
-> @@ -783,7 +780,6 @@ int __init ftrace_dyn_arch_init(void)
->  	return 0;
->  }
->  #endif
-> -#endif /* CONFIG_DYNAMIC_FTRACE */
->=20
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->=20
-> --=20
-> 2.35.1
->=20
-
-- Naveen

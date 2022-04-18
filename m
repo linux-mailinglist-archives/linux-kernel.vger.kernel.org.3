@@ -2,112 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C60C505FEA
+	by mail.lfdr.de (Postfix) with ESMTP id 344D8505FE9
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232846AbiDRWw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S232848AbiDRWxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbiDRWww (ORCPT
+        with ESMTP id S232745AbiDRWxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:52:52 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AB1DF07
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:12 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso817644pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:12 -0700 (PDT)
+        Mon, 18 Apr 2022 18:53:11 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B31CFDC
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id s137so21482802pgs.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=chromium.org; s=google;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=qzBPeq4Z1Lm/THhXP/p+Guvp3S0k6RUjKQr12jgDsss=;
-        b=hLZrBdUqWLV/GYiIngWtZXbHDACKG/z6epibpsJFq1BaIhs2Z2KJfmWYmL7JO8Vs5k
-         4swMjagpii7pBDxG9mRqPPeS6+cXe1apDmO4ek/Qv/mUAJpFaHx9fhZDvMXAl0AlShoJ
-         XYxbWbjmNfZ32PLyYRZM4m4EXp55UekXWcwtBstrxxz6hHxw7520F0RQzIFyToh8VP+D
-         Ffs8JDKtdWvIpEbxcRKUFlIVYZe53XaVIxtRxrDLAJS9WEBVF5gJL1ic/B5qPNae79ZJ
-         yjrkV6x3IGT0C7jaHqXpaQxE41HZ84QaMG7W4wvJaomQFPKmNNzqNhQelaGrVlO38sDw
-         jFTQ==
+        bh=hlb2EMJVRbxJY9nryaoQfoqqjbD8gDeVs4kmOgbzyns=;
+        b=Y15WH8ufHsPs909Ri+VdtpONn/6MTLfKFOuqPK6lFVv9bFYOcpty6TXA38L6B5zZiD
+         xbqvGKqaIV+AH7Wh1U/QUc8OAc++oDlVkdkt+gmVTI4WHkFETQWBHhNUHoR7xiksgJcw
+         3uSpRIu431vi6O3ctqpj6DAJ38jcLpLMI48xE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=qzBPeq4Z1Lm/THhXP/p+Guvp3S0k6RUjKQr12jgDsss=;
-        b=nrRDgJH7MkXXlxKtJa/1/lifk9BYU1S2WaZBzwcXJq+oGfNM7AjcnKjdtoGARJitkq
-         GfIXsdJQgGonKwNl3oyM0iF4flia1WXd7ylTGzMM0G9Y3wIwYYAWD5uHjBzQJBgxVDRs
-         xgQlDFC9n2feoXb9GVFAbnTu2jOvIl4+C0Ce+ITSxL6o6zzlPcEZuBLWUbl62NWax6Cb
-         zB5eVJx0FutT+ugmDT2uem2Y1sZXJ4nKtEZ3lsbqQLejvSc5v+N28bi0u0jbF32XYDC4
-         Q5uYypwHcD4JhCoUS9Fjae49rUjxN3niIAW8JcY+YenvZ/MNWjt9uRoRP5B18G+8CcVD
-         t5wg==
-X-Gm-Message-State: AOAM5317YMfuxTZ77nNN3duE/XCf+26cM6guHcHLJDZcgUSsCP4U5kcR
-        SHZE1BI0g13t5Yra41ujGBbSKw==
-X-Google-Smtp-Source: ABdhPJw+yaMkUZUnbOjaOzUM4WWyFmXWGGeEaX9APFm/5xhK/PVs2+8n3UnfCm5Ue6KnHOXHo1K/8w==
-X-Received: by 2002:a17:902:7404:b0:158:bff8:aa13 with SMTP id g4-20020a170902740400b00158bff8aa13mr12845518pll.133.1650322211428;
-        Mon, 18 Apr 2022 15:50:11 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id bt21-20020a056a00439500b0050a4dfb7c44sm10012680pfb.155.2022.04.18.15.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 15:50:10 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 22:50:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, pbonzini@redhat.com, dave.hansen@intel.com,
-        len.brown@intel.com, tony.luck@intel.com,
-        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
-        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
-        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
-Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
-Message-ID: <Yl3rHxI6M/+7nzNq@google.com>
-References: <cover.1649219184.git.kai.huang@intel.com>
- <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
- <8e2269a7-3e71-5030-8d04-1e8e3fc4323f@linux.intel.com>
+        bh=hlb2EMJVRbxJY9nryaoQfoqqjbD8gDeVs4kmOgbzyns=;
+        b=YoNcqX6nASjsIb+7Vu9ubh5Zd58/jTgY6g9ZW5D3It4T7ov8LVzd/uM8rl0zSuF8Zr
+         k4dX5Wb6oQPus+QhEbCvNXsHXO3PPI0KXJ1o5/t68WDKUkj+sWFRzuurt+FAid2RBd+V
+         D2aGGQupqbYLANRNUoVr351SD7MpfzR1shDsJzLuOar40Xi2/nGexe6OADUgzp75KNuq
+         GUg6rYcfGSohDLP9UagLxM8JY3Vr9WqHhBNJr4K3EybLeBwUHNtx5gywf81z7v/bWvzb
+         OzpqlJ0tA4dltzTy0Udise7fJF9qTX82crozJUvSbhc7IuVPevn1Xgaq8yWqMnebCFtT
+         j98A==
+X-Gm-Message-State: AOAM531Heu376KSqhdYJNezw80ecNh7XmLO79c/6jznCDl8juz4ZBuXm
+        q2KWtgXXuObAxoWSmCp7AQNzng==
+X-Google-Smtp-Source: ABdhPJxWqTDnAXR28mJKj5rBjV8r/WVs4S8ffaGYUrQssCg0Z7LQVgkmftgrfj3M5qP+BZGGofOiFA==
+X-Received: by 2002:a05:6a00:b4d:b0:509:1ed1:570e with SMTP id p13-20020a056a000b4d00b005091ed1570emr14728356pfo.19.1650322231039;
+        Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6b32:a0a5:ec32:c287])
+        by smtp.gmail.com with UTF8SMTPSA id p17-20020a056a0026d100b00505ff62176asm13415099pfw.180.2022.04.18.15.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 15:50:30 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 15:50:29 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] regulator: core: Sleep (not delay) in set_voltage()
+Message-ID: <Yl3rNeaYTz0CPjmL@google.com>
+References: <20220418141158.1.If0fc61a894f537b052ca41572aff098cf8e7e673@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <8e2269a7-3e71-5030-8d04-1e8e3fc4323f@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20220418141158.1.If0fc61a894f537b052ca41572aff098cf8e7e673@changeid>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022, Sathyanarayanan Kuppuswamy wrote:
-> > +static void detect_seam_ap(struct cpuinfo_x86 *c)
-> > +{
-> > +	u64 base, mask;
-> > +
-> > +	/*
-> > +	 * Don't bother to detect this AP if SEAMRR is not
-> > +	 * enabled after earlier detections.
-> > +	 */
-> > +	if (!__seamrr_enabled())
-> > +		return;
-> > +
-> > +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
-> > +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
-> > +
-> > +	if (base == seamrr_base && mask == seamrr_mask)
-> > +		return;
-> > +
-> > +	pr_err("Inconsistent SEAMRR configuration by BIOS\n");
+On Mon, Apr 18, 2022 at 02:12:39PM -0700, Brian Norris wrote:
+> These delays can be relatively large (e.g., hundreds of microseconds on
+> RK3399 Gru systems). Per Documentation/timers/timers-howto.rst, that
+> should usually use a sleeping delay. Let's use fsleep() to handle both
+> large and small delays appropriately. This avoids burning a bunch of CPU
+> time and hurting scheduling latencies when hitting regulators a lot
+> (e.g., during cpufreq).
 > 
-> Do we need to panic for SEAM config issue (for security)?
+> The sleep vs. delay issue choice has been made differently over time --
+> early versions of RK3399 Gru PWM-regulator support used usleep_range()
+> in pwm-regulator.c. More of this got moved into the regulator core,
+> in commits like:
+> 
+> 73e705bf81ce regulator: core: Add set_voltage_time op
+> 
+> At the same time, the sleep turned into a delay.
+> 
+> It's OK to sleep here, as we aren't in an atomic contexts. (All our
+> callers grab various mutexes already.)
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-No, clearing seamrr_mask will effectively prevent the kernel from attempting to
-use TDX or any other feature that might depend on SEAM.  Panicking because the
-user's BIOS is crappy would be to kicking them while they're down. 
-
-As for security, it's the TDX Module's responsibility to validate the security
-properties of the system, the kernel only cares about not dying/crashing.
-
-> > +	/* Mark SEAMRR as disabled. */
-> > +	seamrr_base = 0;
-> > +	seamrr_mask = 0
-> > +}
+Reviewed-by: Matthias Kaehlcke <mka@chromium.org>

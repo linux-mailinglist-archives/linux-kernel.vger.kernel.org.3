@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 618A9505278
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0C65056B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239526AbiDRMpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S242362AbiDRNgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239492AbiDRMhs (ORCPT
+        with ESMTP id S243221AbiDRNJ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:37:48 -0400
+        Mon, 18 Apr 2022 09:09:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0F7222B4;
-        Mon, 18 Apr 2022 05:27:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839E37A0A;
+        Mon, 18 Apr 2022 05:49:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C94160F09;
-        Mon, 18 Apr 2022 12:27:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 480C3C385A7;
-        Mon, 18 Apr 2022 12:27:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6BA66124D;
+        Mon, 18 Apr 2022 12:49:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D401FC385A1;
+        Mon, 18 Apr 2022 12:49:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284877;
-        bh=vlaw6vwwaPe+wJ4yYOqIhyCmsIl8eTc+i2THFYJ9aBs=;
+        s=korg; t=1650286163;
+        bh=5Z78gfGHfHm7csyWYfRHlrzotpJOLnNIrOIF5IitPrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=azkIr0Wbx6xxEGG7kpYfj0gvDNsWFb0UM1LbIzmhBLK7RXn6rkPow7BX3qebFuFfF
-         2WgyLb5DfTjXYUL6Zr+NkHQ3EEwy/Yh0Nz1etslvh/N4inLOENotOXCwZzf4/TfjE3
-         WKaKdk0/srIFoNvjpZvrQ85pjVWTIy20xxRdS3Yw=
+        b=PIDphFe7g2FBmLJ7HzBZrxzYsVEYrL1+TFB95cJXbvXWbD44JaZvT7iZyGXy1m7QX
+         T7ZqghQ2JFW+ZIijOoJFqkZMCRH1IQcC+FbxCxWD2SHvjCw4J2/JdyNzSeNX0BvMRJ
+         ZXvoQKP0dDyjnul7Al/x4/fcZZg0rHy7P/8mEEeY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 5.15 009/189] btrfs: remove unused parameter nr_pages in add_ra_bio_pages()
-Date:   Mon, 18 Apr 2022 14:10:29 +0200
-Message-Id: <20220418121200.727778911@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Lad@vger.kernel.org
+Subject: [PATCH 4.14 049/284] media: davinci: vpif: fix unbalanced runtime PM get
+Date:   Mon, 18 Apr 2022 14:10:30 +0200
+Message-Id: <20220418121212.091259923@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +58,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Wenruo <wqu@suse.com>
+From: Johan Hovold <johan@kernel.org>
 
-commit cd9255be6980012ad54f2d4fd3941bc2586e43e5 upstream.
+commit 4a321de239213300a714fa0353a5f1272d381a44 upstream.
 
-Variable @nr_pages only gets increased but never used.  Remove it.
+Make sure to balance the runtime PM usage counter on driver unbind.
 
-Signed-off-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
-Cc: Nathan Chancellor <nathan@kernel.org>
+Fixes: 407ccc65bfd2 ("[media] davinci: vpif: add pm_runtime support")
+Cc: stable@vger.kernel.org      # 3.9
+Cc: Lad, Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+Reviewed-by: Lad Prabhakar <prabhakar.csengg@gmail.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/compression.c |    2 --
- 1 file changed, 2 deletions(-)
+ drivers/media/platform/davinci/vpif.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/fs/btrfs/compression.c
-+++ b/fs/btrfs/compression.c
-@@ -550,7 +550,6 @@ static noinline int add_ra_bio_pages(str
- 	u64 isize = i_size_read(inode);
- 	int ret;
- 	struct page *page;
--	unsigned long nr_pages = 0;
- 	struct extent_map *em;
- 	struct address_space *mapping = inode->i_mapping;
- 	struct extent_map_tree *em_tree;
-@@ -646,7 +645,6 @@ static noinline int add_ra_bio_pages(str
- 				   PAGE_SIZE, 0);
+--- a/drivers/media/platform/davinci/vpif.c
++++ b/drivers/media/platform/davinci/vpif.c
+@@ -495,6 +495,7 @@ static int vpif_probe(struct platform_de
  
- 		if (ret == PAGE_SIZE) {
--			nr_pages++;
- 			put_page(page);
- 		} else {
- 			unlock_extent(tree, last_offset, end);
+ static int vpif_remove(struct platform_device *pdev)
+ {
++	pm_runtime_put(&pdev->dev);
+ 	pm_runtime_disable(&pdev->dev);
+ 	return 0;
+ }
 
 

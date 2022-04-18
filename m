@@ -2,100 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E0C8505FAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:16:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DB7505FAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:18:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiDRWTY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:19:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
+        id S231462AbiDRWUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiDRWTU (ORCPT
+        with ESMTP id S231379AbiDRWUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:19:20 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA2029CAA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:16:39 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id g21so15716876iom.13
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:16:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=iRLvii3wRAA3vQqjW9pHEytsLQcX5vHIJz2bIP/mpx4=;
-        b=l6QEevJfwQF14gPbgXrbOj0DmBzybU00tiIMo0wMBNpJ+H/iRLzKkLka/OWxBkrYgP
-         jFXty4kByQJE7YEw+QyAAXhwje7LxvzaYzrJgtIywhL5R4TzsPTf7ZPsfjydy2/wC9GZ
-         2QtkecKsAm9gQaSrCYsu76ShmelvchXR13qLsXehL7MnXy7cab7Aq7lXUu9cx6qDOZJs
-         jBzyi/MGOtDHy4WojVI5IDZQRenbCs3vX4OQ9lx931wLS3dG1FE0PZ1WP0NYBeOuMfDe
-         2uIifMXWh4CLqpUfeTlSsuebHidMGk6LM7gBaGRg4MhQizsJXQXlf5b5neKLTTja+2uY
-         r9vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=iRLvii3wRAA3vQqjW9pHEytsLQcX5vHIJz2bIP/mpx4=;
-        b=GmMcOslmasb/fMTdbKUiCvjqnqtqwYMrg1dnjcbRsmcR8DBqKG6nup+Ed289HGF1NN
-         x3TCqM5vVmm2hiU9N4EyDDCU2l4JfuNHJgUKmukE9BXy4OyJ76lcJyOPZ3xCehRSqbex
-         +ASo+Q9/8bTTq1+BgL1ZKs+q7EQWP52DyEKH/SrPyJD70o249VYDz1Ye/fyy87Ite9Jh
-         nvmeSw5XlEXa8hZ+bl3ZzvsKLYrJXLRgZbmfsY04sgtu6AMVkoHi7UgB9OyPBY8tICC9
-         Zf7o2D2k3uln29Xf6SvcoaQ1TtIYVN2ud9qoDkg/xlv1dso6/0+XSop2ibZsH4zKRwo8
-         rO9Q==
-X-Gm-Message-State: AOAM5325emmX/vVsBpNFIp4iQOrADlY9X1+adspufec7QUGID3uF8jLr
-        F4plantwnUbAVmCJQJgD+gj+rt17CQz+VCUx2xcUiQ==
-X-Google-Smtp-Source: ABdhPJxsJdCxOAMl+kcTMlllD0Q7WmZl5V5sQ2KLaucRT2Yn25NMbujljxWpzrlbsSukgVjL6caYOrhYQz1SG9lH/3k=
-X-Received: by 2002:a05:6602:168b:b0:646:3bbb:7db4 with SMTP id
- s11-20020a056602168b00b006463bbb7db4mr5564505iow.134.1650320198599; Mon, 18
- Apr 2022 15:16:38 -0700 (PDT)
+        Mon, 18 Apr 2022 18:20:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1639029C9C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:18:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650320283; x=1681856283;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nMzasb8liBNL5TYqOzbr+LjFUaTnQKAnhmr+g+jeSLM=;
+  b=RHfVB3g8u13cmQrcs3BVMpGDuzG8b5L8vbaRx2F/OEdHU+bOcnFQqF+g
+   Ap8HuZ9j4s0VPM67uLRycogVh0up//KtpIHzTr1fClYxzkYL7yw0aHMlo
+   abxSUY6eL4hnkPqyQSWGiwsn2E5xs3Kwf2H2JQTDNMhQzzzsYJHHOlDD6
+   Xre6cHysGkfLHjikyR9hYLLkYn7azslkhap3RVueV+XrncSqK7x1jyiCC
+   gBLHG26/ThcqgY2ZE4vW8Yb/Y3xowIt4T8x4M6FZNC+XcTAW1cHtiB35F
+   IdE3p/mDtmcBKTz3HHoP3h95/m7krIc7OwlhSApa+Bkgn3Y5bF3V0t5CY
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="288714949"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="288714949"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:18:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="509900700"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 15:18:01 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngZh2-00052a-HW;
+        Mon, 18 Apr 2022 22:18:00 +0000
+Date:   Tue, 19 Apr 2022 06:17:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 2012/2356]
+ arch/s390/include/asm/smp.h:19:31: error: expected '=', ',', ';', 'asm' or
+ '__attribute__' before 'boot_cpu_vector_save_area'
+Message-ID: <202204190648.4rGFxl5m-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220412202942.386981-1-axelrasmussen@google.com>
- <20220412202942.386981-2-axelrasmussen@google.com> <20220412134159.f0a1d0d77f5b01638007bf4b@linux-foundation.org>
-In-Reply-To: <20220412134159.f0a1d0d77f5b01638007bf4b@linux-foundation.org>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Mon, 18 Apr 2022 15:16:02 -0700
-Message-ID: <CAJHvVcj=pL8y_b_urq8QvtDvRRMmjgGkquQM6xhxWwiajNrhKQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] userfaultfd: selftests: modify selftest to use /dev/userfaultfd
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        "Dmitry V . Levin" <ldv@altlinux.org>,
-        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for looking Andrew. And, fair criticism.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   af93551cf39027d176f30b9beafc60a4c130998a
+commit: 73e8295a34e49141903dc467f10daf2d31e2a411 [2012/2356] headers/deps: locking/lockdep: Split <linux/lockep.h> into <linux/lockep_types.h> and <linux/lockep_api.h>
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20220419/202204190648.4rGFxl5m-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=73e8295a34e49141903dc467f10daf2d31e2a411
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 73e8295a34e49141903dc467f10daf2d31e2a411
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=s390 prepare
 
-In keeping with the status quo, I'm thinking of just adding a new
-command-line argument which toggles between the two modes.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-But, if I'm honest, it's starting to feel like the test has way too
-many arguments... I'm tempted to refactor the test to use the
-kselftest framework [1], get rid of all these command line arguments,
-and just always test everything. But, this seems like a big and
-perhaps controversial refactor, so I may take it up after this
-series...
+All errors (new ones prefixed by >>):
 
-[1]: https://www.kernel.org/doc/html/latest/dev-tools/kselftest.html
+   In file included from include/linux/smp_api.h:15,
+                    from include/linux/lockdep_api.h:27,
+                    from include/linux/rcupdate.h:23,
+                    from include/linux/rculist.h:11,
+                    from include/linux/hashtable_api.h:16,
+                    from include/linux/kvm_host.h:7,
+                    from arch/s390/kernel/asm-offsets.c:11:
+>> arch/s390/include/asm/smp.h:19:31: error: expected '=', ',', ';', 'asm' or '__attribute__' before 'boot_cpu_vector_save_area'
+      19 | extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+         |                               ^~~~~~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/rcupdate.h:35,
+                    from include/linux/rculist.h:11,
+                    from include/linux/hashtable_api.h:16,
+                    from include/linux/kvm_host.h:7,
+                    from arch/s390/kernel/asm-offsets.c:11:
+   include/linux/sched/per_task.h:48:11: fatal error: generated/asm-offsets.h: No such file or directory
+      48 | # include <generated/asm-offsets.h>
+         |           ^~~~~~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+   make[2]: *** [scripts/Makefile.build:120: arch/s390/kernel/asm-offsets.s] Error 1
+   make[2]: Target '__build' not remade because of errors.
+   make[1]: *** [Makefile:1194: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-On Tue, Apr 12, 2022 at 1:42 PM Andrew Morton <akpm@linux-foundation.org> wrote:
->
-> On Tue, 12 Apr 2022 13:29:42 -0700 Axel Rasmussen <axelrasmussen@google.com> wrote:
->
-> > Prefer this new interface, but if using it fails for any reason just
-> > fall back to using userfaultfd(2) as before.
->
-> This seems a poor idea - the old interface will henceforth be untested.
->
-> Why not tweak the code to test both interfaces?
+
+vim +19 arch/s390/include/asm/smp.h
+
+^1da177e4c3f41 include/asm-s390/smp.h      Linus Torvalds     2005-04-16  15  
+dbd70fb499952d include/asm-s390/smp.h      Heiko Carstens     2008-04-17  16  extern struct mutex smp_cpu_state_mutex;
+10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  17  extern unsigned int smp_cpu_mt_shift;
+10ad34bc76dfbc arch/s390/include/asm/smp.h Martin Schwidefsky 2015-01-14  18  extern unsigned int smp_cpu_mtid;
+1a36a39e225d35 arch/s390/include/asm/smp.h Martin Schwidefsky 2015-10-29 @19  extern __vector128 __initdata boot_cpu_vector_save_area[__NUM_VXRS];
+a052096bdd6809 arch/s390/include/asm/smp.h Sven Schnelle      2021-08-27  20  extern cpumask_t cpu_setup_mask;
+8b646bd759086f arch/s390/include/asm/smp.h Martin Schwidefsky 2012-03-11  21  
+
+:::::: The code at line 19 was first introduced by commit
+:::::: 1a36a39e225d3558fb3776a3d3d7736cf1ec9f60 s390/dump: rework CPU register dump code
+
+:::::: TO: Martin Schwidefsky <schwidefsky@de.ibm.com>
+:::::: CC: Martin Schwidefsky <schwidefsky@de.ibm.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

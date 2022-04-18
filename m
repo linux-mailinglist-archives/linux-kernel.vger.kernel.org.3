@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5B4550519E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11DDF505575
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239118AbiDRMfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
+        id S243030AbiDRNJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239979AbiDRM3L (ORCPT
+        with ESMTP id S241118AbiDRM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFCC201BE;
-        Mon, 18 Apr 2022 05:23:00 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6654F25285;
+        Mon, 18 Apr 2022 05:38:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECF33B80EC1;
-        Mon, 18 Apr 2022 12:22:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487A8C385A7;
-        Mon, 18 Apr 2022 12:22:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A52AD611C3;
+        Mon, 18 Apr 2022 12:38:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB011C385A1;
+        Mon, 18 Apr 2022 12:38:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284577;
-        bh=Bcm/L4B9jJWb+jV5TvnT5U/PTAjme2W/RGdOOBuZDt8=;
+        s=korg; t=1650285518;
+        bh=alNNadNIHsJMErRxsjJ7H63TWrf8fkGrhjMUjwNjWTE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y3smYUyhasuUWXbEhS+aDzjeD+LDNRozqty4rPrqrzOqsUXvBpWet0iKKBn0g+WtY
-         xMGA7MLYEFlMoQwpDs22RdH8znNuMVHOvDZch/do/cf226Zyy2pcINcW9D1SpBZm20
-         ncingRStMIvohrdnfPaVwhjAONjQIZ0s0eF+MPw8=
+        b=mqewHlt2FJr4CImUyVA4lmeyFQMsi1v4oT8ea5IYLHVL+XPiJsiaE+LjngXjV8rtz
+         fO9ecQPHGicuYN2+ILMYEhmeAdiKRtSFdkaKePAJdWL55gr/AI0ZYfWDz/4ujKYjJW
+         SCGLdn4W42jM3cjr2amhEUOGJKscA2apzVAxWf48=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Marcin Kozlowski <marcinguy@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 159/219] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 006/105] btrfs: remove unused variable in btrfs_{start,write}_dirty_block_groups()
 Date:   Mon, 18 Apr 2022 14:12:08 +0200
-Message-Id: <20220418121211.334656665@linuxfoundation.org>
+Message-Id: <20220418121145.565055032@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcin Kozlowski <marcinguy@gmail.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit afb8e246527536848b9b4025b40e613edf776a9d ]
+commit 6d4a6b515c39f1f8763093e0f828959b2fbc2f45 upstream.
 
-aqc111_rx_fixup() contains several out-of-bounds accesses that can be
-triggered by a malicious (or defective) USB device, in particular:
+Clang's version of -Wunused-but-set-variable recently gained support for
+unary operations, which reveals two unused variables:
 
- - The metadata array (desc_offset..desc_offset+2*pkt_count) can be out of bounds,
-   causing OOB reads and (on big-endian systems) OOB endianness flips.
- - A packet can overlap the metadata array, causing a later OOB
-   endianness flip to corrupt data used by a cloned SKB that has already
-   been handed off into the network stack.
- - A packet SKB can be constructed whose tail is far beyond its end,
-   causing out-of-bounds heap data to be considered part of the SKB's
-   data.
+  fs/btrfs/block-group.c:2949:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+          int num_started = 0;
+              ^
+  fs/btrfs/block-group.c:3116:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+          int num_started = 0;
+              ^
+  2 errors generated.
 
-Found doing variant analysis. Tested it with another driver (ax88179_178a), since
-I don't have a aqc111 device to test it, but the code looks very similar.
+These variables appear to be unused from their introduction, so just
+remove them to silence the warnings.
 
-Signed-off-by: Marcin Kozlowski <marcinguy@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: c9dc4c657850 ("Btrfs: two stage dirty block group writeout")
+Fixes: 1bbc621ef284 ("Btrfs: allow block group cache writeout outside critical section in commit")
+CC: stable@vger.kernel.org # 5.4+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1614
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/usb/aqc111.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ fs/btrfs/block-group.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
-index ea06d10e1c21..ca409d450a29 100644
---- a/drivers/net/usb/aqc111.c
-+++ b/drivers/net/usb/aqc111.c
-@@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 	if (start_of_descs != desc_offset)
- 		goto err;
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -2570,7 +2570,6 @@ int btrfs_start_dirty_block_groups(struc
+ 	struct btrfs_path *path = NULL;
+ 	LIST_HEAD(dirty);
+ 	struct list_head *io = &cur_trans->io_bgs;
+-	int num_started = 0;
+ 	int loops = 0;
  
--	/* self check desc_offset from header*/
--	if (desc_offset >= skb_len)
-+	/* self check desc_offset from header and make sure that the
-+	 * bounds of the metadata array are inside the SKB
-+	 */
-+	if (pkt_count * 2 + desc_offset >= skb_len)
- 		goto err;
+ 	spin_lock(&cur_trans->dirty_bgs_lock);
+@@ -2636,7 +2635,6 @@ again:
+ 			cache->io_ctl.inode = NULL;
+ 			ret = btrfs_write_out_cache(trans, cache, path);
+ 			if (ret == 0 && cache->io_ctl.inode) {
+-				num_started++;
+ 				should_put = 0;
  
-+	/* Packets must not overlap the metadata array */
-+	skb_trim(skb, desc_offset);
-+
- 	if (pkt_count == 0)
- 		goto err;
+ 				/*
+@@ -2737,7 +2735,6 @@ int btrfs_write_dirty_block_groups(struc
+ 	int should_put;
+ 	struct btrfs_path *path;
+ 	struct list_head *io = &cur_trans->io_bgs;
+-	int num_started = 0;
  
--- 
-2.35.1
-
+ 	path = btrfs_alloc_path();
+ 	if (!path)
+@@ -2795,7 +2792,6 @@ int btrfs_write_dirty_block_groups(struc
+ 			cache->io_ctl.inode = NULL;
+ 			ret = btrfs_write_out_cache(trans, cache, path);
+ 			if (ret == 0 && cache->io_ctl.inode) {
+-				num_started++;
+ 				should_put = 0;
+ 				list_add_tail(&cache->io_list, io);
+ 			} else {
 
 

@@ -2,138 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399EC505E4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8BCD505E56
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347607AbiDRTRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 15:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S1347616AbiDRTVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 15:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238177AbiDRTRd (ORCPT
+        with ESMTP id S235049AbiDRTVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 15:17:33 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D133725EF
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:14:53 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id u18so18535215eda.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=2wJl9MwQ1iwXUwlUKVjn/2v+VbFi/d32jDuFxBZydIA=;
-        b=oaMGNTgNTYTte0WwnxDAxybd0+9NRJApwPP/xLLhagaQDKHILGzTwu5/3Q6kkOng1O
-         RaLbru6KwjjKdXY7qnXxipyfyvTlwsiuigHzJekTOHkCxvbBl0Pa6yHt81NN98zupO8v
-         B4UukqK8PTZbK8VczuypF9GQ1wgycYo6KmfEwwv0TTFm2PJBYH64hcIXdAImbx6LETO9
-         q5CPUmyuY9nYTUPeaCKht7VJVJsM6jrP+YcX1nS0v4nh9Dqsa3Wa+jYuPk1z3LK0wj06
-         Oz5hgbzsoYMoGKPh3BrBkAzHTXsX506PdW6Bbj0or46RkAcATjaIbRj66MRPtQIoHAez
-         BeFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2wJl9MwQ1iwXUwlUKVjn/2v+VbFi/d32jDuFxBZydIA=;
-        b=g31dd7kfrB0FM3RW5w0+baKNTvrD6bOwI/6UlFLHK8z/Q6wa2ekqb3ZC1vtclMqdk8
-         lKCTp0sVZ3L2GY0Akc3R/LIjR3yjLbCNvXxnYOciY59iWH+2hshDbK0Ww/0Pa8FIgXr9
-         35dBMv8L122AU0q0RjS9UBDwdtWi3IgHAkoQ7J8jDQ5wVAYon1MllW/FuDTYYA6fRYfg
-         pWt2lb/oFazBd/vUOUKPmL8v2A7jnG8U8tsJtK4oWT8WjHFVVM2xWJknwLLI7fAwCXWi
-         zh9XkiR/QB5wSx3IGWjvSnZTJinxUztYjFUOJVOHSQjQwvAM/nOze0JWLqyxcTqbHPpp
-         wkWg==
-X-Gm-Message-State: AOAM532daO1mRRs9JVHZIlPbf7d/GINwuWgs1nn2RiyJ9oA02luwrKkN
-        9hdlY5kUHCM1gFbzYnrA1m7i0ZN8DdwwkfdC16kL5A==
-X-Google-Smtp-Source: ABdhPJzIie1IH6j6emtV00wu9g83/0WPVcwoV+9YzMibw8EFiICQI5hrlnlpadwsxtxTSPcRil+455iEnwuFowQhXpM=
-X-Received: by 2002:a05:6402:128f:b0:41d:7e85:8421 with SMTP id
- w15-20020a056402128f00b0041d7e858421mr13403766edv.352.1650309292439; Mon, 18
- Apr 2022 12:14:52 -0700 (PDT)
+        Mon, 18 Apr 2022 15:21:41 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B1535249
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:19:01 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id B74B31F41A11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650309539;
+        bh=DXTjFJyNxSnZP5FQNeR7bC9ax46RsLCVkvpOvafrTvE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KnzK+b+LOu7t6pWuGFQqM8/EObJ8aHas6adce9N9mYR0CprHRljlJX/7Lkti6Jt1v
+         /Cnm+z4+hgv/D+vM5fSmAJ6iM8Vh7272dpA+yP6XZyWOJIaMn3a96/1/IOXCW3+9oG
+         S0b/staCNv/fpDFqTX9zZsTP9eWeSLuM78170x9fl5wI/0iZoWAvzD2zzKcLmIj44n
+         TGpO7ABTXnUO+GV+CgrV23IP8G+tGRaZcL6uh9mX9Ahp24GqBLsrpLnYHuWr9hjagF
+         Jo+SwCHjolDXqzj92B3iUUYyFnf6A6lhbujtaQV7V0xNro5YxQhgsu/ZXJc/H0J5bx
+         G1l4hXXTZaloA==
+Message-ID: <d9e7bec1-fffb-e0c4-8659-ef3ce2c31280@collabora.com>
+Date:   Mon, 18 Apr 2022 22:18:54 +0300
 MIME-Version: 1.0
-References: <20220414090727.2542000-1-chi.minghao@zte.com.cn>
-In-Reply-To: <20220414090727.2542000-1-chi.minghao@zte.com.cn>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 18 Apr 2022 21:14:41 +0200
-Message-ID: <CAMRc=Mc+GKiy2vv4AJp5uR3Vx-VhfuswRjTpV+53yjgWFW6Fcg@mail.gmail.com>
-Subject: Re: [PATCH] i2c: i2c-davinci: using pm_runtime_resume_and_get instead
- of pm_runtime_get_sync
-To:     cgel.zte@gmail.com
-Cc:     Sekhar Nori <nsekhar@ti.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-i2c <linux-i2c@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 10/15] drm/shmem-helper: Take reservation lock instead
+ of drm_gem_shmem locks
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     Dmitry Osipenko <digetx@gmail.com>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        virtualization@lists.linux-foundation.org
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-11-dmitry.osipenko@collabora.com>
+ <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <248083d2-b8f2-a4d7-099d-70a7e7859c11@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:07 AM <cgel.zte@gmail.com> wrote:
->
-> From: Minghao Chi <chi.minghao@zte.com.cn>
->
-> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-> pm_runtime_put_noidle. This change is just to simplify the code, no
-> actual functional changes.
+Hello,
 
-I would love it if people started adding some notes on how
-pm_runtime_and_get() can replace the other two in the commit messages
-for these patches. Anyway FWIW:
+On 4/18/22 21:38, Thomas Zimmermann wrote:
+> Hi
+> 
+> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
+>> Replace drm_gem_shmem locks with the reservation lock to make GEM
+>> lockings more consistent.
+>>
+>> Previously drm_gem_shmem_vmap() and drm_gem_shmem_get_pages() were
+>> protected by separate locks, now it's the same lock, but it doesn't
+>> make any difference for the current GEM SHMEM users. Only Panfrost
+>> and Lima drivers use vmap() and they do it in the slow code paths,
+>> hence there was no practical justification for the usage of separate
+>> lock in the vmap().
+>>
+>> Suggested-by: Daniel Vetter <daniel@ffwll.ch>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>> ---
+...
+>>   @@ -310,7 +306,7 @@ static int drm_gem_shmem_vmap_locked(struct
+>> drm_gem_shmem_object *shmem,
+>>       } else {
+>>           pgprot_t prot = PAGE_KERNEL;
+>>   -        ret = drm_gem_shmem_get_pages(shmem);
+>> +        ret = drm_gem_shmem_get_pages_locked(shmem);
+>>           if (ret)
+>>               goto err_zero_use;
+>>   @@ -360,11 +356,11 @@ int drm_gem_shmem_vmap(struct
+>> drm_gem_shmem_object *shmem,
+>>   {
+>>       int ret;
+>>   -    ret = mutex_lock_interruptible(&shmem->vmap_lock);
+>> +    ret = dma_resv_lock_interruptible(shmem->base.resv, NULL);
+>>       if (ret)
+>>           return ret;
+>>       ret = drm_gem_shmem_vmap_locked(shmem, map);
+> 
+> Within drm_gem_shmem_vmap_locked(), there's a call to dma_buf_vmap() for
+> imported pages. If the exporter side also holds/acquires the same
+> reservation lock as our object, the whole thing can deadlock. We cannot
+> move dma_buf_vmap() out of the CS, because we still need to increment
+> the reference counter. I honestly don't know how to easily fix this
+> problem. There's a TODO item about replacing these locks at [1]. As
+> Daniel suggested this patch, we should talk to him about the issue.
+> 
+> Best regards
+> Thomas
+> 
+> [1]
+> https://www.kernel.org/doc/html/latest/gpu/todo.html#move-buffer-object-locking-to-dma-resv-lock
 
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-> ---
->  drivers/i2c/busses/i2c-davinci.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
->
-> diff --git a/drivers/i2c/busses/i2c-davinci.c b/drivers/i2c/busses/i2c-davinci.c
-> index e9d07323c604..9e09db31a937 100644
-> --- a/drivers/i2c/busses/i2c-davinci.c
-> +++ b/drivers/i2c/busses/i2c-davinci.c
-> @@ -539,10 +539,9 @@ i2c_davinci_xfer(struct i2c_adapter *adap, struct i2c_msg msgs[], int num)
->
->         dev_dbg(dev->dev, "%s: msgs: %d\n", __func__, num);
->
-> -       ret = pm_runtime_get_sync(dev->dev);
-> +       ret = pm_runtime_resume_and_get(dev->dev);
->         if (ret < 0) {
->                 dev_err(dev->dev, "Failed to runtime_get device: %d\n", ret);
-> -               pm_runtime_put_noidle(dev->dev);
->                 return ret;
->         }
->
-> @@ -821,10 +820,9 @@ static int davinci_i2c_probe(struct platform_device *pdev)
->
->         pm_runtime_enable(dev->dev);
->
-> -       r = pm_runtime_get_sync(dev->dev);
-> +       r = pm_runtime_resume_and_get(dev->dev);
->         if (r < 0) {
->                 dev_err(dev->dev, "failed to runtime_get device: %d\n", r);
-> -               pm_runtime_put_noidle(dev->dev);
->                 return r;
->         }
->
-> @@ -898,11 +896,9 @@ static int davinci_i2c_remove(struct platform_device *pdev)
->
->         i2c_del_adapter(&dev->adapter);
->
-> -       ret = pm_runtime_get_sync(&pdev->dev);
-> -       if (ret < 0) {
-> -               pm_runtime_put_noidle(&pdev->dev);
-> +       ret = pm_runtime_resume_and_get(&pdev->dev);
-> +       if (ret < 0)
->                 return ret;
-> -       }
->
->         davinci_i2c_write_reg(dev, DAVINCI_I2C_MDR_REG, 0);
->
-> --
-> 2.25.1
->
->
+Indeed, good catch! Perhaps we could simply use a separate lock for the
+vmapping of the *imported* GEMs? The vmap_use_count is used only by
+vmap/vunmap, so it doesn't matter which lock is used by these functions
+in the case of imported GEMs since we only need to protect the
+vmap_use_count.

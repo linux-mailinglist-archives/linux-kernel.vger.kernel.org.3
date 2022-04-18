@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62F98505931
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60667505914
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343966AbiDROQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
+        id S1343798AbiDROQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244599AbiDRN4y (ORCPT
+        with ESMTP id S244606AbiDRN4y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:56:54 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A10F82A730;
-        Mon, 18 Apr 2022 06:05:33 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 493DF2A734;
+        Mon, 18 Apr 2022 06:05:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CFFBB80D9C;
-        Mon, 18 Apr 2022 13:05:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 995CAC385A1;
-        Mon, 18 Apr 2022 13:05:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB71060B42;
+        Mon, 18 Apr 2022 13:05:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC88FC385A7;
+        Mon, 18 Apr 2022 13:05:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287131;
-        bh=vOOsJo93FkEYpmSm6/By/1b6mEZ3aMtbD47aI9vupFE=;
+        s=korg; t=1650287134;
+        bh=3CgcAMqJTWG/rh9tZWq/btmcwy2kL2QhkhYPfFqd/YQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wvF0PL8TfbNPQtLxt1/y+gDa3UNzz6V3+g8Prb1KeDKAK9VK59XxEHDYtT8q0wbMC
-         rMeT63NRMrdoX7oun14kIgrYjtf2vA+SqO4tHY+yaC0AF12o1RuRcmRqK53NgEkVw0
-         9R539RjLTHaAV7ZWgLhC89o34+3z5uuTEedU+V9M=
+        b=wbfIvT80L1tqFq1qJ1l4FatscWm4vlvmYjICSgdZB2r+NIkR3vNdf67nyVStSfK3E
+         BqpFg0eWisayuPTbVXYo6I97EOyYPv8FeoD8NRzsLGWtZq3AHOgtsikUeLerl9Akuh
+         5jxiRsDp3tHcvP8dFsuuYKninq29xRM+wtyS2/Ao=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
         Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 065/218] ASoC: mxs-saif: Handle errors for clk_enable
-Date:   Mon, 18 Apr 2022 14:12:11 +0200
-Message-Id: <20220418121201.472212913@linuxfoundation.org>
+Subject: [PATCH 4.9 066/218] ASoC: atmel_ssc_dai: Handle errors for clk_enable
+Date:   Mon, 18 Apr 2022 14:12:12 +0200
+Message-Id: <20220418121201.500077886@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -57,36 +57,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-[ Upstream commit 2ecf362d220317debf5da376e0390e9f7a3f7b29 ]
+[ Upstream commit f9e2ca0640e59d19af0ff285ee5591ed39069b09 ]
 
 As the potential failure of the clk_enable(),
-it should be better to check it, like mxs_saif_trigger().
+it should be better to check it and return error if fals.
 
-Fixes: d0ba4c014934 ("ASoC: mxs-saif: set a base clock rate for EXTMASTER mode work")
+Fixes: cbaadf0f90d6 ("ASoC: atmel_ssc_dai: refactor the startup and shutdown")
 Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301081717.3727190-1-jiasheng@iscas.ac.cn
+Link: https://lore.kernel.org/r/20220301090637.3776558-1-jiasheng@iscas.ac.cn
 Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 5 ++++-
+ sound/soc/atmel/atmel_ssc_dai.c | 5 ++++-
  1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index 13631003cb7c..5977a2011d9e 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -442,7 +442,10 @@ static int mxs_saif_hw_params(struct snd_pcm_substream *substream,
- 		* basic clock which should be fast enough for the internal
- 		* logic.
- 		*/
--		clk_enable(saif->clk);
-+		ret = clk_enable(saif->clk);
-+		if (ret)
-+			return ret;
+diff --git a/sound/soc/atmel/atmel_ssc_dai.c b/sound/soc/atmel/atmel_ssc_dai.c
+index 16e459aedffe..5958aafac8eb 100644
+--- a/sound/soc/atmel/atmel_ssc_dai.c
++++ b/sound/soc/atmel/atmel_ssc_dai.c
+@@ -296,7 +296,10 @@ static int atmel_ssc_startup(struct snd_pcm_substream *substream,
+ 
+ 	/* Enable PMC peripheral clock for this SSC */
+ 	pr_debug("atmel_ssc_dai: Starting clock\n");
+-	clk_enable(ssc_p->ssc->clk);
++	ret = clk_enable(ssc_p->ssc->clk);
++	if (ret)
++		return ret;
 +
- 		ret = clk_set_rate(saif->clk, 24000000);
- 		clk_disable(saif->clk);
- 		if (ret)
+ 	ssc_p->mck_rate = clk_get_rate(ssc_p->ssc->clk);
+ 
+ 	/* Reset the SSC unless initialized to keep it in a clean state */
 -- 
 2.34.1
 

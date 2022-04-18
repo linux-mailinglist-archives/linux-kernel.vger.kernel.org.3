@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9035D50591D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA8375058E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343764AbiDROPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:15:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S1344538AbiDROKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244631AbiDRN5J (ORCPT
+        with ESMTP id S1344004AbiDRNyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718352AC69;
-        Mon, 18 Apr 2022 06:06:33 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA454926A;
+        Mon, 18 Apr 2022 06:04:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C89560EF6;
-        Mon, 18 Apr 2022 13:06:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30CFC385A1;
-        Mon, 18 Apr 2022 13:06:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E7ABB80EDF;
+        Mon, 18 Apr 2022 13:04:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57151C385A7;
+        Mon, 18 Apr 2022 13:04:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287192;
-        bh=LMlQNGlYN3hy8CPToMdfFBPok9Av3xw6NjdEtCImleg=;
+        s=korg; t=1650287049;
+        bh=3SzeC/Gz/Ac+TTZClLIUog0e21eiXA/HtE2IFS8FnkE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JYicHKyMTS8RqkCJ1mznjUKwmx2ImTK2DFqvkLJ5gNfqwrn5VRe0FBC/xyyFl7Vao
-         l2RLhmhjeoV0/zdDAekugJhlYpWLBY9ohL79ofllIznvdVq26o05D2OjslC/XcP0Vc
-         5i8l8RCZUn6XHqeZRuvBOY8nLdzNoNmknSDhf8lI=
+        b=RTo/m5Ss9NOqA0N9ZqRyywkaqUaPUbn2LZpps7jxZpoeOwu/4hK0qAoD1Ad2cuvtx
+         wWIZPdvnatBoA8Jqe01TABgI2r1ueuUHgkuvF0I4c8WbzPhINB7Q2qrthprRnyd5ED
+         AkRlKsLM/IRh3wdxui1xCVTEQgF0GYAqCMebNe5M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, Song Liu <song@kernel.org>
-Subject: [PATCH 4.9 034/218] lib/raid6/test: fix multiple definition linking error
-Date:   Mon, 18 Apr 2022 14:11:40 +0200
-Message-Id: <20220418121200.417020033@linuxfoundation.org>
+        stable@vger.kernel.org, Jan-Benedict Glaw <jbglaw@lug-owl.de>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [PATCH 4.9 035/218] DEC: Limit PMAX memory probing to R3k systems
+Date:   Mon, 18 Apr 2022 14:11:41 +0200
+Message-Id: <20220418121200.461817767@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,38 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dirk Müller <dmueller@suse.de>
+From: Maciej W. Rozycki <macro@orcam.me.uk>
 
-commit a5359ddd052860bacf957e65fe819c63e974b3a6 upstream.
+commit 244eae91a94c6dab82b3232967d10eeb9dfa21c6 upstream.
 
-GCC 10+ defaults to -fno-common, which enforces proper declaration of
-external references using "extern". without this change a link would
-fail with:
+Recent tightening of the opcode table in binutils so as to consistently
+disallow the assembly or disassembly of CP0 instructions not supported
+by the processor architecture chosen has caused a regression like below:
 
-  lib/raid6/test/algos.c:28: multiple definition of `raid6_call';
-  lib/raid6/test/test.c:22: first defined here
+arch/mips/dec/prom/locore.S: Assembler messages:
+arch/mips/dec/prom/locore.S:29: Error: opcode not supported on this processor: r4600 (mips3) `rfe'
 
-the pq.h header that is included already includes an extern declaration
-so we can just remove the redundant one here.
+in a piece of code used to probe for memory with PMAX DECstation models,
+which have non-REX firmware.  Those computers always have an R2000 CPU
+and consequently the exception handler used in memory probing uses the
+RFE instruction, which those processors use.
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Dirk Müller <dmueller@suse.de>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-Signed-off-by: Song Liu <song@kernel.org>
+While adding 64-bit support this code was correctly excluded for 64-bit
+configurations, however it should have also been excluded for irrelevant
+32-bit configurations.  Do this now then, and only enable PMAX memory
+probing for R3k systems.
+
+Reported-by: Jan-Benedict Glaw <jbglaw@lug-owl.de>
+Reported-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org # v2.6.12+
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- lib/raid6/test/test.c |    1 -
- 1 file changed, 1 deletion(-)
+ arch/mips/dec/prom/Makefile      |    2 +-
+ arch/mips/include/asm/dec/prom.h |   15 +++++----------
+ 2 files changed, 6 insertions(+), 11 deletions(-)
 
---- a/lib/raid6/test/test.c
-+++ b/lib/raid6/test/test.c
-@@ -22,7 +22,6 @@
- #define NDISKS		16	/* Including P and Q */
+--- a/arch/mips/dec/prom/Makefile
++++ b/arch/mips/dec/prom/Makefile
+@@ -5,4 +5,4 @@
  
- const char raid6_empty_zero_page[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
--struct raid6_calls raid6_call;
+ lib-y			+= init.o memory.o cmdline.o identify.o console.o
  
- char *dataptrs[NDISKS];
- char data[NDISKS][PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
+-lib-$(CONFIG_32BIT)	+= locore.o
++lib-$(CONFIG_CPU_R3000)	+= locore.o
+--- a/arch/mips/include/asm/dec/prom.h
++++ b/arch/mips/include/asm/dec/prom.h
+@@ -47,16 +47,11 @@
+  */
+ #define REX_PROM_MAGIC		0x30464354
+ 
+-#ifdef CONFIG_64BIT
+-
+-#define prom_is_rex(magic)	1	/* KN04 and KN05 are REX PROMs.  */
+-
+-#else /* !CONFIG_64BIT */
+-
+-#define prom_is_rex(magic)	((magic) == REX_PROM_MAGIC)
+-
+-#endif /* !CONFIG_64BIT */
+-
++/* KN04 and KN05 are REX PROMs, so only do the check for R3k systems.  */
++static inline bool prom_is_rex(u32 magic)
++{
++	return !IS_ENABLED(CONFIG_CPU_R3000) || magic == REX_PROM_MAGIC;
++}
+ 
+ /*
+  * 3MIN/MAXINE PROM entry points for DS5000/1xx's, DS5000/xx's and
 
 

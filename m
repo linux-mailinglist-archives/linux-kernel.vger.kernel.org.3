@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273A8505C7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DD83505C6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346401AbiDRQey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:34:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35686 "EHLO
+        id S1346137AbiDRQaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234709AbiDRQeW (ORCPT
+        with ESMTP id S234285AbiDRQad (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:34:22 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00F965F50
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:31:42 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id t13so19764416pgn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:31:42 -0700 (PDT)
+        Mon, 18 Apr 2022 12:30:33 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00E792FE74;
+        Mon, 18 Apr 2022 09:27:53 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id e15-20020a9d63cf000000b006054e65aaecso1560930otl.0;
+        Mon, 18 Apr 2022 09:27:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=J5XRVN0rYoKShdUkWHsZOX7pTFc2v1hH6PY/aOGhz2o=;
-        b=opDlbbLXpfliyT0hxegO0lHHNJUhKN18viHaTHcXInOVtr00j2D8OJFj2gl2cJlr82
-         f29Iyvsxr7+Q9zFvxuyMO9eQsR30Xr7MVxSFP6w3KA9acvyoS+j3brCpMYzkTI2x1lKQ
-         VtEloOT+ljzj32WU7UF+mVHgUTggpIEl9WhX6gBQqLyTCBW5PFTKDwJv53+zsuWPc9Ot
-         Wl2fCmF04oy43KKL6oGBP0xwv7LM1xKPJmKHDrWnNsXnyC4WSeWN3+WMBmUJc+HyV9s6
-         wqtDbUp6BzP6OG0jFXWUEjZa/mgfOw7FBLEeSj0PoaqgIKC38IOmzaIR8fzRjP7v8Vbl
-         cSCA==
+        h=sender:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ugT6u+C0I3KSL6RCIIwvLGw6SDuB9e9N5NTAuy1X0MU=;
+        b=ZQuoJlv9hb47u9ZXWciB1viIiCqQpcr68faG+EpcdNbTqusJAXVYoHLEaOOQLnlHfU
+         X8fLpDJEhTjtySM6iJo3Qi4XlTd1yqwqlXgCChTWeYr6wFIM0CM3nPjxdN1S3FZwtO1u
+         NVvASt4hSEpCKxO/T0l7NCzC6iAcKJTfQouOSK75MDo7VgoqHBILwXvI/x6Z/oEtFFXK
+         ectdzs9lHFkK7iYREBMywmPdoq8GASpWvBqh1JDOB9LeK1ClxKF6GAM8LzoLrSiMm8OV
+         MhT8Dnvm/+1k3yQaGNXR2iim5IdEvFa1Uf+Df3ynvUxYJxY+ZM+FeebdPQNtF5cbJH6B
+         oHIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=J5XRVN0rYoKShdUkWHsZOX7pTFc2v1hH6PY/aOGhz2o=;
-        b=TDKBw+G9w2hHsf2l/JjC6lMXkko1gB5a2jojpxublO58cNgr/j99w2IfB5PzUrAehO
-         laQexBOkYQBeObvp/OzYoHJuL/NL4FGhwfSNJEg/1QhrLVe+Qv/e5GDP5VfzrV3Ae6X7
-         RfStZs7aG0LEBsKqB7UZcF14nomo5PLllVWES5rllOkbYb7uBBKpO56LxbrwaYa8Gcv5
-         lAHtcYoeydCcARjZmL2JCiE4sWJ+V2JbN4TOaHQoRkQU6DXwXzNxJF9KGue+8ovgAeyx
-         ttHR/VTK3+7GM+rZqM07SovDqNkKHTIrhZoAE30E05HJ7oqKO0jDTVzMiVMiVLPSrZVT
-         u6Lg==
-X-Gm-Message-State: AOAM531PSo7YxyLNODWbeuxTLdS456rCT1XsJGsRN9HcrMYaWJYErIoq
-        0R2c7FaKzbRDbGZAJIfanoI=
-X-Google-Smtp-Source: ABdhPJxpEjB37dv3sT9B386rQBREHhLwteTv4M1Ps9RbqbppqC2G/I/1zlBh9L5z4QcXHZeRHi4kWA==
-X-Received: by 2002:a65:4c4e:0:b0:39d:21c4:2381 with SMTP id l14-20020a654c4e000000b0039d21c42381mr10912664pgr.566.1650299502320;
-        Mon, 18 Apr 2022 09:31:42 -0700 (PDT)
-Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
-        by smtp.gmail.com with ESMTPSA id h18-20020a63c012000000b0039cc3c323f7sm13295602pgg.33.2022.04.18.09.31.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:31:41 -0700 (PDT)
-From:   Aliya Rahmani <aliyarahmani786@gmail.com>
-To:     clabbe@baylibre.com
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Aliya Rahmani <aliyarahmani786@gmail.com>
-Subject: [PATCH v2 3/3] staging: media: zoran: add parentheses on macro parameter
-Date:   Mon, 18 Apr 2022 21:52:50 +0530
-Message-Id: <20220418162244.15346-4-aliyarahmani786@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220418162244.15346-1-aliyarahmani786@gmail.com>
-References: <20220418162244.15346-1-aliyarahmani786@gmail.com>
+        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
+         :subject:content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ugT6u+C0I3KSL6RCIIwvLGw6SDuB9e9N5NTAuy1X0MU=;
+        b=VMK1k0b7XpRwqGg++hPVqiPUT7xx2dMA8w3w8RiMdmznTJd1KSd8syNBb3pj2el9bL
+         zyhsqTj5RuKK6HgvvPXEBO4oUDf1fUtLNNTNnnZbdw+hkXVJq5jLyXABCjSwdWHVodbc
+         BgdOpSy6bMMYZEN9g3Q565bOgB0uhg8cbc4Clgo65CVkyKS6C75rUdYpMUjTOfpUXqOS
+         cEwIUu1S9rxHG+VKbxpszwoVT2emPtwYkVFC8TQuJ4o9jqD56IZmiLIU1nCnw43w0RyJ
+         9qjSo2PI1WQkXTstDZh4HoNtJfrUSPDSjz301z4k48NrRY8nqkLb70FW1KC24R2GA7cO
+         2yPw==
+X-Gm-Message-State: AOAM532N068PRqTjqNL9WEdGtS/xSNXg4+7x5hrjphsbc8GsbMp8TBPt
+        sf1VI8BaJxtx1aGe+xRj2MI=
+X-Google-Smtp-Source: ABdhPJyHUlDx2nQA/FG4o8wwOtrW0dJqteowz3ZOiJfzrMUcd2O16hTJSzEQE0I7ohzaoiycKAdnBA==
+X-Received: by 2002:a05:6830:19d4:b0:605:4c22:cc82 with SMTP id p20-20020a05683019d400b006054c22cc82mr2281768otp.134.1650299273280;
+        Mon, 18 Apr 2022 09:27:53 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id l14-20020a4ac60e000000b0032993003287sm4395101ooq.38.2022.04.18.09.27.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 09:27:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <8d09a73f-acbd-82dc-77f0-540d106b6e67@roeck-us.net>
+Date:   Mon, 18 Apr 2022 09:27:49 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc1 review
+Content-Language: en-US
+To:     =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
+References: <20220418121200.312988959@linuxfoundation.org>
+ <ec6408b7-14f4-fc97-3371-3f6cd9a46d24@applied-asynchrony.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ec6408b7-14f4-fc97-3371-3f6cd9a46d24@applied-asynchrony.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,27 +84,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes checkpatch warnings of precedence issues. Add parentheses
-around macro argument 'num'.
+On 4/18/22 07:07, Holger Hoffstätte wrote:
+> On 2022-04-18 14:10, Greg Kroah-Hartman wrote:
+>> This is the start of the stable review cycle for the 5.15.35 release.
+>> There are 189 patches in this series, all will be posted as a response
+>> to this one.  If anyone has any issues with these being applied, please
+>> let me know.
+> 
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c: In function hubbub31_verify_allow_pstate_change_high':
+> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:994:17: error: implicit declaration of function 'udelay' [-Werror=implicit-function-declaration]
+>    994 |                 udelay(1);
+>        |                 ^~~~~~
+> 
+> Caused by "drm-amd-display-add-pstate-verification-and-recovery-for-dcn31.patch".
+> Explicitly includng <linux/delay.h> in dcn31_hubbub.c fixes it.
+> 
+> Current mainline version of dcn31_hubbub.c does not explicitly include
+> <linux/delay.h>, so there seems to be some general inconsistency wrt.
+> which dcn module includes what.
+> 
+> CC'ing Nicholas Kazlauskas.
+> 
+Should add: The problem is only seen with 32-bit (i386) builds.
 
-Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
----
- drivers/staging/media/zoran/videocodec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-index 19732a47c8bd..925f90fd5885 100644
---- a/drivers/staging/media/zoran/videocodec.c
-+++ b/drivers/staging/media/zoran/videocodec.c
-@@ -22,7 +22,7 @@ MODULE_PARM_DESC(videocodec_debug, "Debug level (0-4)");
- 
- #define dprintk(num, format, args...) \
- 	do { \
--		if (videocodec_debug >= num) \
-+		if (videocodec_debug >= (num)) \
- 			printk(format, ##args); \
- 	} while (0)
- 
--- 
-2.25.1
-
+Guenter

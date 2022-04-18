@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 038FF505C4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01757505C4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239191AbiDRQOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46548 "EHLO
+        id S1346036AbiDRQRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231682AbiDRQOb (ORCPT
+        with ESMTP id S239171AbiDRQR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:14:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6B9A27172
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:11:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650298310;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=kc5lp6HIebTiS6SD8VstSYY5zjx55zGLVR2F4cO28oE=;
-        b=YPnOxQAvvDAaq0UqJTBseqQaEXA7iQjtCeRIvPOMoWPkrPaj8ghas2UHvE2HO5fWW8T3Tu
-        cljcg5Le8EFGGefxDmT3qgCMc+m2kRnAtPlho7SmU9FUYb9Z3YVqBqTDy6DgRM7emS8un4
-        sEHhAffuP+XVcgsOq7BEm/gYh1aPlj4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-451-9ImO3YPVPWuWQG4tqwwlcQ-1; Mon, 18 Apr 2022 12:11:50 -0400
-X-MC-Unique: 9ImO3YPVPWuWQG4tqwwlcQ-1
-Received: by mail-qv1-f70.google.com with SMTP id m16-20020ad45050000000b00446393a7a9fso6716934qvq.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:11:49 -0700 (PDT)
+        Mon, 18 Apr 2022 12:17:26 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A8627162
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:14:43 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id r13so27700506ejd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:14:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=zAbDaa3Fzu9udWXpswwoBO6ZRwmj5/ZIXRUmVima/oE=;
+        b=uQ10tyQ9nN6m9mdOspDehNtUVfIpJfsiM3KKZDqVH5Iis/qjfN1f99uKoVsjMiIdAV
+         eUXQ0XQ1+hlvzs0EB1UZj1T2eDYsX6rYMl40bNn/Q2W5ipoDmqbwF+7XqOcIPSBhciby
+         yHqNwH6U2qnvmRCe86ujlXfKb8H5f70frnuTEaCwByXAQE2LmcKcRrgeUnopvjhMy0SC
+         VDXM2izKAQoAVdqLBjmvqP1CmtFSUfibAQC/AJ6ZbQHwA5FFW1qPD/6lmD54QIyzEvDG
+         +Wju7hf9MEcn9mImA9u3zAl9cxR41KUFjbQJwfs1/zWz0hVqKJVLreRUD3ToCg5HdszK
+         9kOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kc5lp6HIebTiS6SD8VstSYY5zjx55zGLVR2F4cO28oE=;
-        b=eWpl1jM5V1mrv8ZwkcJqyLwZyI9U+VueLadCYKGA7IejJLeOlV09cQnbzpaDVZQnXX
-         t/1nKpjg1/frDyXhXzZIRSV3M/Vta8BZCzTFthnqkMMhuY6uGB9Llp1mjtJ7uBYrZes9
-         E1v+ZaV6U7a0j1M02oMVOym+utvwsEZwClQpFbDuL1TmDpWXhVydGHyrlOuJYXCPLOun
-         lbhr2PsAD3uNb2YYoDZYbnUmWHuf8OjCGIUfszk5y2R7Y4vqCU6us67KbL6tl9R0N1Lv
-         q+IA0RyJszTG0Cyxe3rjYi3lawoDujQPco1YYXfnE79bXPuxG82cD1awhf2I/D/0Ron+
-         M43g==
-X-Gm-Message-State: AOAM532YZxmKMItCv83AAWnIB4I7glfAn2iucamlDE4OiiKfCVh79MJs
-        XqKnMat9whfMWJL1Sw1F0WMdTnqXWmshES8U15kVhs+YgyB4GWmaeL8bA7+vqTukOF4WFanXD36
-        BjVr1QEb5vhLkHfHhXzHzPuX/
-X-Received: by 2002:a05:622a:1c0d:b0:2ed:1335:97ba with SMTP id bq13-20020a05622a1c0d00b002ed133597bamr7409399qtb.485.1650298309245;
-        Mon, 18 Apr 2022 09:11:49 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxpxyZFBVbqcMwvi9NQe9+Q4Yv/Ps3/MmukjEwG1VNQ8GX8Sud2aR+UhEWRMYin6uluXw4eWA==
-X-Received: by 2002:a05:622a:1c0d:b0:2ed:1335:97ba with SMTP id bq13-20020a05622a1c0d00b002ed133597bamr7409371qtb.485.1650298308929;
-        Mon, 18 Apr 2022 09:11:48 -0700 (PDT)
-Received: from treble ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id w14-20020ac857ce000000b002f1ccd62225sm8537050qta.79.2022.04.18.09.11.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:11:48 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 09:11:45 -0700
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        mark.rutland@arm.com, broonie@kernel.org, ardb@kernel.org,
-        nobuta.keiya@fujitsu.com, sjitindarsingh@gmail.com,
-        catalin.marinas@arm.com, will@kernel.org, jmorris@namei.org,
-        linux-arm-kernel@lists.infradead.org,
-        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Message-ID: <20220418161145.hj3ahxqjdgqd3qn2@treble>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
- <20220408002147.pk7clzruj6sawj7z@treble>
- <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
- <35c99466-9024-a7fd-9632-5d21b3e558f7@huawei.com>
- <20220416005609.3znhltjlhpg475ff@treble>
- <0abfa1af-81ec-9048-6f95-cf5dda295139@huawei.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=zAbDaa3Fzu9udWXpswwoBO6ZRwmj5/ZIXRUmVima/oE=;
+        b=h3HlYxkHnfJSTQ9UCOyPQsxU4e/BfOveZxSov/4swu6mZ7L6GoW51OkAzNfvgkF6mQ
+         H5bj/17VsNp5fvs6Z9ufxzHyq4OGlNv5ib7f6G5FikiScN9lg2eyM4uo2FO0swDFbF7A
+         L+6p4RH1t7XMgX2hs7u/WSQy1sHIsiCx6AJpRmZQwYG/9lQXAreODarDIQTxIOn45O8h
+         y7KW1s43O/9/SZnhgz7plTG5AwM2yY1G8dobHDx3lQ4J3JTLKx1LUVVOekM8T5vsMi2e
+         lYZzLH60Ux+CpCf3LfUoGT11k1XZyl5bBskpaCfNdDTBQG+dzCoHGwFnR9Fh5dPX2V3/
+         dg7A==
+X-Gm-Message-State: AOAM532O7JAeM1n1S0/YniXICnsyGqy9G0rvyN2y6ghRzrCiRI16HB4v
+        hdel1I4LJbXqmsOvucOsYk8IKw==
+X-Google-Smtp-Source: ABdhPJxmQV6eL13LYTzh1dUddKu2BYtaTh62Jqj75DXsClvOz7hbK4WIbDGZIWagL3ln8AWtFG6DJQ==
+X-Received: by 2002:a17:906:5fc6:b0:6e8:86bd:64ab with SMTP id k6-20020a1709065fc600b006e886bd64abmr9483259ejv.538.1650298482132;
+        Mon, 18 Apr 2022 09:14:42 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id q8-20020a056402040800b004227b347ee3sm5411760edv.56.2022.04.18.09.14.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 09:14:41 -0700 (PDT)
+Message-ID: <2af6f2b3-9a75-c4a7-8c8f-31d94e0001e7@linaro.org>
+Date:   Mon, 18 Apr 2022 18:14:40 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0abfa1af-81ec-9048-6f95-cf5dda295139@huawei.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH V3 2/3] clk: sprd: Add dt-bindings include file for UMS512
+Content-Language: en-US
+To:     Cixi Geng <gengcixi@gmail.com>, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220418125630.2342538-1-gengcixi@gmail.com>
+ <20220418125630.2342538-3-gengcixi@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220418125630.2342538-3-gengcixi@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 08:28:33PM +0800, Chen Zhongjin wrote:
-> Hi Josh,
+On 18/04/2022 14:56, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
 > 
-> IIUC, ORC on x86 can make reliable stack unwind for this scenario
-> because objtool validates BP state.
+> This file defines all UMS512 clock indexes, it should be included in the
+> device tree in which there's device using the clocks.
 > 
-> I'm thinking that on arm64 there's no guarantee that LR will be pushed
-> onto stack. When we meet similar scenario on arm64, we should recover
-> (LR, FP) on pt_regs and continue to unwind the stack. And this is
-> reliable only after we validate (LR, FP).
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>  include/dt-bindings/clock/sprd,ums512-clk.h | 397 ++++++++++++++++++++
+>  1 file changed, 397 insertions(+)
+>  create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
 > 
-> So should we track LR on arm64 additionally as track BP on x86? Or can
-> we just treat (LR, FP) as a pair? because as I know they are always set
-> up together.
 
-Does the arm64 unwinder have a way to detect kernel pt_regs on the
-stack?  If so, the simplest solution is to mark all stacks with kernel
-regs as unreliable.  That's what the x86 FP unwinder does.
 
--- 
-Josh
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+
+Best regards,
+Krzysztof

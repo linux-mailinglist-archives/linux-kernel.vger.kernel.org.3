@@ -2,29 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3345E504DC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3F6504DD0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237252AbiDRIa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
+        id S233997AbiDRIal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiDRIa0 (ORCPT
+        with ESMTP id S237251AbiDRIa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:30:26 -0400
+        Mon, 18 Apr 2022 04:30:28 -0400
 Received: from maillog.nuvoton.com (maillog.nuvoton.com [202.39.227.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7D9A193DA;
-        Mon, 18 Apr 2022 01:27:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9AD5C193CF;
+        Mon, 18 Apr 2022 01:27:49 -0700 (PDT)
 Received: from NTHCCAS01.nuvoton.com (NTHCCAS01.nuvoton.com [10.1.8.28])
-        by maillog.nuvoton.com (Postfix) with ESMTP id 632761C8128E;
-        Mon, 18 Apr 2022 16:27:46 +0800 (CST)
-Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCCAS01.nuvoton.com
+        by maillog.nuvoton.com (Postfix) with ESMTP id 5A8781C8128F;
+        Mon, 18 Apr 2022 16:27:48 +0800 (CST)
+Received: from NTHCML01B.nuvoton.com (10.1.8.178) by NTHCCAS01.nuvoton.com
  (10.1.8.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2375.7; Mon, 18 Apr
- 2022 16:27:46 +0800
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.7; Mon, 18 Apr
+ 2022 16:27:48 +0800
+Received: from NTHCCAS04.nuvoton.com (10.1.8.29) by NTHCML01B.nuvoton.com
+ (10.1.8.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2176.2; Mon, 18 Apr
+ 2022 16:27:47 +0800
 Received: from localhost.localdomain (172.19.1.47) by NTHCCAS04.nuvoton.com
  (10.1.12.25) with Microsoft SMTP Server id 15.1.2176.2 via Frontend
- Transport; Mon, 18 Apr 2022 16:27:45 +0800
+ Transport; Mon, 18 Apr 2022 16:27:47 +0800
 From:   Jacky Huang <ychuang3@nuvoton.com>
 To:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-clk@vger.kernel.org>,
@@ -33,9 +37,9 @@ CC:     <robh+dt@kernel.org>, <sboyd@kernel.org>, <krzk+dt@kernel.org>,
         <arnd@arndb.de>, <olof@lixom.net>, <will@kernel.org>,
         <soc@kernel.org>, <cfli0@nuvoton.com>,
         Jacky Huang <ychuang3@nuvoton.com>
-Subject: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock controller bindings
-Date:   Mon, 18 Apr 2022 16:27:35 +0800
-Message-ID: <20220418082738.11301-3-ychuang3@nuvoton.com>
+Subject: [PATCH v3 3/5] arm64: dts: nuvoton: Add initial support for MA35D1
+Date:   Mon, 18 Apr 2022 16:27:36 +0800
+Message-ID: <20220418082738.11301-4-ychuang3@nuvoton.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220418082738.11301-1-ychuang3@nuvoton.com>
 References: <20220418082738.11301-1-ychuang3@nuvoton.com>
@@ -50,83 +54,186 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+Add the initial device tree files for Nuvoton MA35D1 Soc.
 
 Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 ---
- .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 63 +++++++++++++++++++
- 1 file changed, 63 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+ arch/arm64/boot/dts/Makefile               |   1 +
+ arch/arm64/boot/dts/nuvoton/Makefile       |   2 +
+ arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts |  24 +++++
+ arch/arm64/boot/dts/nuvoton/ma35d1.dtsi    | 111 +++++++++++++++++++++
+ 4 files changed, 138 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/nuvoton/Makefile
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+ create mode 100644 arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
 
-diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+diff --git a/arch/arm64/boot/dts/Makefile b/arch/arm64/boot/dts/Makefile
+index 1ba04e31a438..7b107fa7414b 100644
+--- a/arch/arm64/boot/dts/Makefile
++++ b/arch/arm64/boot/dts/Makefile
+@@ -19,6 +19,7 @@ subdir-y += lg
+ subdir-y += marvell
+ subdir-y += mediatek
+ subdir-y += microchip
++subdir-y += nuvoton
+ subdir-y += nvidia
+ subdir-y += qcom
+ subdir-y += realtek
+diff --git a/arch/arm64/boot/dts/nuvoton/Makefile b/arch/arm64/boot/dts/nuvoton/Makefile
 new file mode 100644
-index 000000000000..d0d37c5e84af
+index 000000000000..e1e0c466bf5e
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
-@@ -0,0 +1,63 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/arch/arm64/boot/dts/nuvoton/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_NUVOTON) += ma35d1-evb.dtb
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+new file mode 100644
+index 000000000000..95f0facb0476
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1-evb.dts
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/*
++ * Device Tree Source for MA35D1 Evaluation Board (EVB)
++ *
++ * Copyright (C) 2022 Nuvoton Technology Corp.
++ */
 +
-+title: Nuvoton MA35D1 Clock Control Module Binding
++/dts-v1/;
++#include "ma35d1.dtsi"
 +
-+maintainers:
-+  - Chi-Fang Li <cfli0@nuvoton.com>
-+  - Jacky Huang <ychuang3@nuvoton.com>
++/ {
++	model = "Nuvoton MA35D1-EVB";
++	compatible = "nuvoton,ma35d1-evb", "nuvoton,ma35d1";
 +
-+description: |
-+  The MA35D1 clock controller generates clocks for the whole chip,
-+  including system clocks and all peripheral clocks.
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
 +
-+  See also:
-+    include/dt-bindings/clock/ma35d1-clk.h
++	memory@80000000 {
++		device_type = "memory";
++		reg = <0x0 0x80000000 0x0 0x10000000>;
++	};
++};
 +
-+properties:
-+  compatible:
-+    const: nuvoton,ma35d1-clk
+diff --git a/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+new file mode 100644
+index 000000000000..98a9ed1f6816
+--- /dev/null
++++ b/arch/arm64/boot/dts/nuvoton/ma35d1.dtsi
+@@ -0,0 +1,111 @@
++// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++/*
++ * Copyright (c) 2022 Nuvoton Technology Corp.
++ */
 +
-+  reg:
-+    maxItems: 1
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/input/input.h>
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
 +
-+  "#clock-cells":
-+    const: 1
++/ {
++	compatible = "nuvoton,ma35d1";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
 +
-+  assigned-clocks:
-+    minItems: 5
-+    maxItems: 5
++	cpus {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		cpu-map {
++			cluster0 {
++				core0 {
++					cpu = <&cpu0>;
++				};
++				core1 {
++					cpu = <&cpu1>;
++				};
++			};
++		};
 +
-+  assigned-clock-rates:
-+    minItems: 5
-+    maxItems: 5
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0>;
++			enable-method = "psci";
++			next-level-cache = <&L2_0>;
++		};
 +
-+  nuvoton,clk-pll-mode:
-+    A list of PLL operation mode corresponding to DDRPLL, APLL, EPLL,
-+    and VPLL in sequential.
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    minItems: 5
-+    maxItems: 5
-+    items:
-+      enum: [ 0, 1, 2 ]
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x1>;
++			enable-method = "psci";
++			next-level-cache = <&L2_0>;
++		};
 +
-+required:
-+  - compatible
-+  - reg
-+  - "#clock-cells"
++		L2_0: l2-cache0 {
++			compatible = "cache";
++			cache-level = <2>;
++		};
++	};
 +
-+additionalProperties: false
++	psci {
++		compatible = "arm,psci-0.2";
++		method = "smc";
++	};
 +
-+examples:
-+  - |
-+    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) |
++					  IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) |
++					  IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) |
++					  IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) |
++					  IRQ_TYPE_LEVEL_LOW)>;
++		clock-frequency = <12000000>;
++	};
 +
-+    clk: clock-controller@40460200 {
-+        compatible = "nuvoton,ma35d1-clk";
-+        reg = <0x0 0x40460200 0x0 0x100>;
-+        #clock-cells = <1>;
-+    };
-+...
++	sys: system-controller@40460000 {
++		compatible = "nuvoton,ma35d1-sys", "syscon", "simple-mfd";
++		reg = <0x0 0x40460000 0x0 0x400>;
++	};
++
++	reset: reset-controller {
++		compatible = "nuvoton,ma35d1-reset";
++		nuvoton,ma35d1-sys = <&sys>;
++		#reset-cells = <1>;
++	};
++
++	clk: clock-controller@40460200 {
++		compatible = "nuvoton,ma35d1-clk";
++		reg = <0x0 0x40460200 0x0 0x100>;
++		#clock-cells = <1>;
++		assigned-clocks = <&clk CAPLL>,
++				  <&clk DDRPLL>,
++				  <&clk APLL>,
++				  <&clk EPLL>,
++				  <&clk VPLL>;
++		assigned-clock-rates = <1000000000>,
++				       <266000000>,
++				       <180000000>,
++				       <500000000>,
++				       <102000000>;
++		nuvoton,clk-pll-mode = <0 1 0 0 0>;
++	};
++
++	gic: interrupt-controller@50800000 {
++		compatible = "arm,gic-400";
++		#interrupt-cells = <3>;
++		interrupt-parent = <&gic>;
++		interrupt-controller;
++		reg = <0x0 0x50801000 0x0 0x1000>,
++		      <0x0 0x50802000 0x0 0x2000>,
++		      <0x0 0x50804000 0x0 0x2000>,
++		      <0x0 0x50806000 0x0 0x2000>;
++		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
++			      IRQ_TYPE_LEVEL_HIGH)>;
++	};
++};
 -- 
 2.17.1
 

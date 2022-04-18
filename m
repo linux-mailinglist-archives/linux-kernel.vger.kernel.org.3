@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E5D5056C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F3BB505055
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242523AbiDRNhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:37:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54616 "EHLO
+        id S238418AbiDRMYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:24:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243707AbiDRNKY (ORCPT
+        with ESMTP id S238753AbiDRMWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:10:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07DD26DE;
-        Mon, 18 Apr 2022 05:49:53 -0700 (PDT)
+        Mon, 18 Apr 2022 08:22:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F791CB11;
+        Mon, 18 Apr 2022 05:18:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 613F7B80EE1;
-        Mon, 18 Apr 2022 12:49:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C81C385A8;
-        Mon, 18 Apr 2022 12:49:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80B6FB80ED6;
+        Mon, 18 Apr 2022 12:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D824DC385A7;
+        Mon, 18 Apr 2022 12:18:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286176;
-        bh=jSmZMcvSkSe1LBly2aT57pfhxF45RhCNh/KbiUBO+tw=;
+        s=korg; t=1650284291;
+        bh=VDtuTGtW9TG1KsudYMu8TsB/oEOwXA+9S2Gy2KFrkQw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Vy4bwrnYISuvWwKwfO7p1TLc1gv9M7OKAucsHyrWPjdwURYO6bFkd0ny7TU8tv6L8
-         Fq9YmyYWaJIm6PVUvtmNwahaUbHIJh0XNKOr8bpTNvyvBK5jUeoVqQb8ag/U7pPRYK
-         NOumCVJUKIeR9vZm+HI8zZhT1yjTEHI/xY9Sdyyo=
+        b=jNshYoBd8tjwsxCg4soX1d+6icsJuPme5IYeXZnFTPGZxDr8NYbkznqe65IfNS0G0
+         ejhRO+h9itQcK/77sYOHZ/0fPhDNHU5XGf6mqn3vrM0gFG8BMF/KIuGRnC5mMJ3Gnb
+         on+tvQ1YPKWEEa0uHyv0a+hwXGFv/yw+lwH2/YLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oupton@google.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 053/284] crypto: authenc - Fix sleep in atomic context in decrypt_tail
+Subject: [PATCH 5.17 065/219] KVM: arm64: Generalise VM features into a set of flags
 Date:   Mon, 18 Apr 2022 14:10:34 +0200
-Message-Id: <20220418121212.204177542@linuxfoundation.org>
+Message-Id: <20220418121207.461356165@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,42 +55,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Marc Zyngier <maz@kernel.org>
 
-[ Upstream commit 66eae850333d639fc278d6f915c6fc01499ea893 ]
+[ Upstream commit 06394531b425794dc56f3d525b7994d25b8072f7 ]
 
-The function crypto_authenc_decrypt_tail discards its flags
-argument and always relies on the flags from the original request
-when starting its sub-request.
+We currently deal with a set of booleans for VM features,
+while they could be better represented as set of flags
+contained in an unsigned long, similarily to what we are
+doing on the CPU side.
 
-This is clearly wrong as it may cause the SLEEPABLE flag to be
-set when it shouldn't.
-
-Fixes: 92d95ba91772 ("crypto: authenc - Convert to new AEAD interface")
-Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+[Oliver: Flag-ify the 'ran_once' boolean]
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220311174001.605719-2-oupton@google.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/authenc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/arm64/include/asm/kvm_host.h | 15 +++++++++------
+ arch/arm64/kvm/arm.c              |  7 ++++---
+ arch/arm64/kvm/mmio.c             |  3 ++-
+ arch/arm64/kvm/pmu-emul.c         |  2 +-
+ 4 files changed, 16 insertions(+), 11 deletions(-)
 
-diff --git a/crypto/authenc.c b/crypto/authenc.c
-index 053287dfad65..533e811a0899 100644
---- a/crypto/authenc.c
-+++ b/crypto/authenc.c
-@@ -268,7 +268,7 @@ static int crypto_authenc_decrypt_tail(struct aead_request *req,
- 		dst = scatterwalk_ffwd(areq_ctx->dst, req->dst, req->assoclen);
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 8234626a945a..2619fda42ca2 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -122,7 +122,12 @@ struct kvm_arch {
+ 	 * should) opt in to this feature if KVM_CAP_ARM_NISV_TO_USER is
+ 	 * supported.
+ 	 */
+-	bool return_nisv_io_abort_to_user;
++#define KVM_ARCH_FLAG_RETURN_NISV_IO_ABORT_TO_USER	0
++	/* Memory Tagging Extension enabled for the guest */
++#define KVM_ARCH_FLAG_MTE_ENABLED			1
++	/* At least one vCPU has ran in the VM */
++#define KVM_ARCH_FLAG_HAS_RAN_ONCE			2
++	unsigned long flags;
  
- 	skcipher_request_set_tfm(skreq, ctx->enc);
--	skcipher_request_set_callback(skreq, aead_request_flags(req),
-+	skcipher_request_set_callback(skreq, flags,
- 				      req->base.complete, req->base.data);
- 	skcipher_request_set_crypt(skreq, src, dst,
- 				   req->cryptlen - authsize, req->iv);
+ 	/*
+ 	 * VM-wide PMU filter, implemented as a bitmap and big enough for
+@@ -133,10 +138,6 @@ struct kvm_arch {
+ 
+ 	u8 pfr0_csv2;
+ 	u8 pfr0_csv3;
+-
+-	/* Memory Tagging Extension enabled for the guest */
+-	bool mte_enabled;
+-	bool ran_once;
+ };
+ 
+ struct kvm_vcpu_fault_info {
+@@ -792,7 +793,9 @@ bool kvm_arm_vcpu_is_finalized(struct kvm_vcpu *vcpu);
+ #define kvm_arm_vcpu_sve_finalized(vcpu) \
+ 	((vcpu)->arch.flags & KVM_ARM64_VCPU_SVE_FINALIZED)
+ 
+-#define kvm_has_mte(kvm) (system_supports_mte() && (kvm)->arch.mte_enabled)
++#define kvm_has_mte(kvm)					\
++	(system_supports_mte() &&				\
++	 test_bit(KVM_ARCH_FLAG_MTE_ENABLED, &(kvm)->arch.flags))
+ #define kvm_vcpu_has_pmu(vcpu)					\
+ 	(test_bit(KVM_ARM_VCPU_PMU_V3, (vcpu)->arch.features))
+ 
+diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+index 85a2a75f4498..25d8aff273a1 100644
+--- a/arch/arm64/kvm/arm.c
++++ b/arch/arm64/kvm/arm.c
+@@ -89,7 +89,8 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 	switch (cap->cap) {
+ 	case KVM_CAP_ARM_NISV_TO_USER:
+ 		r = 0;
+-		kvm->arch.return_nisv_io_abort_to_user = true;
++		set_bit(KVM_ARCH_FLAG_RETURN_NISV_IO_ABORT_TO_USER,
++			&kvm->arch.flags);
+ 		break;
+ 	case KVM_CAP_ARM_MTE:
+ 		mutex_lock(&kvm->lock);
+@@ -97,7 +98,7 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm,
+ 			r = -EINVAL;
+ 		} else {
+ 			r = 0;
+-			kvm->arch.mte_enabled = true;
++			set_bit(KVM_ARCH_FLAG_MTE_ENABLED, &kvm->arch.flags);
+ 		}
+ 		mutex_unlock(&kvm->lock);
+ 		break;
+@@ -635,7 +636,7 @@ int kvm_arch_vcpu_run_pid_change(struct kvm_vcpu *vcpu)
+ 		kvm_call_hyp_nvhe(__pkvm_vcpu_init_traps, vcpu);
+ 
+ 	mutex_lock(&kvm->lock);
+-	kvm->arch.ran_once = true;
++	set_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags);
+ 	mutex_unlock(&kvm->lock);
+ 
+ 	return ret;
+diff --git a/arch/arm64/kvm/mmio.c b/arch/arm64/kvm/mmio.c
+index 3e2d8ba11a02..3dd38a151d2a 100644
+--- a/arch/arm64/kvm/mmio.c
++++ b/arch/arm64/kvm/mmio.c
+@@ -135,7 +135,8 @@ int io_mem_abort(struct kvm_vcpu *vcpu, phys_addr_t fault_ipa)
+ 	 * volunteered to do so, and bail out otherwise.
+ 	 */
+ 	if (!kvm_vcpu_dabt_isvalid(vcpu)) {
+-		if (vcpu->kvm->arch.return_nisv_io_abort_to_user) {
++		if (test_bit(KVM_ARCH_FLAG_RETURN_NISV_IO_ABORT_TO_USER,
++			     &vcpu->kvm->arch.flags)) {
+ 			run->exit_reason = KVM_EXIT_ARM_NISV;
+ 			run->arm_nisv.esr_iss = kvm_vcpu_dabt_iss_nisv_sanitized(vcpu);
+ 			run->arm_nisv.fault_ipa = fault_ipa;
+diff --git a/arch/arm64/kvm/pmu-emul.c b/arch/arm64/kvm/pmu-emul.c
+index bc771bc1a041..fc6ee6f02fec 100644
+--- a/arch/arm64/kvm/pmu-emul.c
++++ b/arch/arm64/kvm/pmu-emul.c
+@@ -982,7 +982,7 @@ int kvm_arm_pmu_v3_set_attr(struct kvm_vcpu *vcpu, struct kvm_device_attr *attr)
+ 
+ 		mutex_lock(&kvm->lock);
+ 
+-		if (kvm->arch.ran_once) {
++		if (test_bit(KVM_ARCH_FLAG_HAS_RAN_ONCE, &kvm->arch.flags)) {
+ 			mutex_unlock(&kvm->lock);
+ 			return -EBUSY;
+ 		}
 -- 
-2.34.1
+2.35.1
 
 
 

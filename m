@@ -2,154 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D1A505134
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBAB505034
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:20:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238970AbiDRMd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S238404AbiDRMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240043AbiDRM3P (ORCPT
+        with ESMTP id S237370AbiDRMVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:15 -0400
-X-Greylist: delayed 344 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Apr 2022 05:23:07 PDT
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CECDA20BD2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:23:07 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id A1393240028
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:17:20 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.de; s=2017;
-        t=1650284240; bh=m06zaNElDOLmrPptGcaA5mPzK3FeCBh7vUpbw9C7Aao=;
-        h=From:To:Cc:Subject:Date:From;
-        b=PFZZxCFbQ17Ssq3wyEkcGBdFPYCwMHyIDbKvhPleIr85vIie4UqvbQNKhnVmGidS0
-         3oU9t1NILe0vMOF30091NH+BeUPu+PEm6ZuvG6HdK7rdchWEEyWiy4Wf3XwMoqtnFc
-         R6ctNhP1N695Oj6YnZtJPhevczhrWq/ongOFWK2JOFbwNtC28h44oHWe34rhabck+G
-         13IIdpX7tWN1x7++8HtODTfYkmg0X4QT3zfpkp/Dy5C6aiqAkGuoJVOQ+o1X7bv5DC
-         neFJ7hxsfWoqU6LHzVzCzYxHPFWzA4Tt46LGSVMEaApbPw0M8CVYzQESfDHr4DvUpM
-         x95yMcyYs1BGA==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4KhmC30fQpz6trV;
-        Mon, 18 Apr 2022 14:17:03 +0200 (CEST)
-From:   Manuel Ullmann <labre@posteo.de>
-To:     Igor Russkikh <irusskikh@marvell.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        regressions@lists.linux.dev
-Subject: [PATCH] net: atlantic: invert deep par in pm functions, preventing
- null derefs
-Date:   Mon, 18 Apr 2022 12:17:02 +0000
-Message-ID: <87sfqaa8n5.fsf@posteo.de>
+        Mon, 18 Apr 2022 08:21:31 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591E1D0DB;
+        Mon, 18 Apr 2022 05:17:32 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id bj36so10709323ljb.13;
+        Mon, 18 Apr 2022 05:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=kHnbLPTYEwVnYoF1eArZeQYH5Pj76/3G5SiYikVll9w=;
+        b=jbpqdZoqwR4D4r4fMKzxzhrBt/Wqgr2sbvztY0dWatowOIRCrjg9R3NdU/WmdFuziD
+         EPV8lzAk1E91kiXFQSwW4A/8TaarCt2a7rLv3RRjIQNIjCZRxx0pLMpiRPQ49PYad7Ft
+         vdrzmozuDZNDm4wzbIudn/1Fv//fsqBxwSUezyrXVHyRRtwkT/Jdd7L4ZBqphvkQTFXk
+         qHGfsfnj9nfgqICnTlQwSg0LpVjTnLSciMjKxjOEhARZvQnps2FuOy6Wx91cL07D0sMy
+         lCYDkrLxsSzt4g3tvr8cHW2sATtwaGZYxCtByDEc8vAD0tCq79JWPLgOmeNhJXAks+j1
+         meHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=kHnbLPTYEwVnYoF1eArZeQYH5Pj76/3G5SiYikVll9w=;
+        b=KJW8k1QWdgjsq6wwtlon2V+Fhi/yzjdQvRgP+a7YYDrVAnbYq/7bvV+JhbxJW2SeKD
+         lB2ycLi3xPdj4s0SwSwMsAumcswESL7zHBGL3wVv6+dA4I78/XtogQ5OkHXQR5cJfp/1
+         KGOcH6XtmcP5QdC73eSCPAHRJUZaWPKCkYmKKNNKTMO8M+9WrOkMok6neuV4QjhKHsRB
+         42ec0iB1WHBpcnV10+Zh5kju7zR29ChMMVty2+eq2wrL9IG0WfTN1OkaRMBKFp6/IHzR
+         wOZXQdOAu3kbbtYMFigCMz9q2/MgkaheSP9zm+EUu2i7kIs16PgCbpO6AZQ0Hfc5c2Bb
+         d4Hw==
+X-Gm-Message-State: AOAM533W/AcQzeB2lFwyAkINPNza8LJ4Mrenj90RlZo6MggXb6P0j2j9
+        xaFLYvOkhdHG0vIzGt7d9Lk=
+X-Google-Smtp-Source: ABdhPJwFqvtH3vF5qgEO8VCRMK6W6mZpdiK3/Fns3+bt9EuI/0T5o4DWUcvmcWh5lCU6fMV6W8YuIw==
+X-Received: by 2002:a2e:302:0:b0:24a:c997:d34c with SMTP id 2-20020a2e0302000000b0024ac997d34cmr7107060ljd.445.1650284250575;
+        Mon, 18 Apr 2022 05:17:30 -0700 (PDT)
+Received: from mobilestation ([95.79.134.149])
+        by smtp.gmail.com with ESMTPSA id u19-20020a197913000000b00448a1f20261sm1199338lfc.34.2022.04.18.05.17.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 05:17:29 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 15:17:27 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 22/25] dmaengine: dw-edma: Replace chip ID number with
+ device name
+Message-ID: <20220418121727.ct6pyx6jdq46uvq7@mobilestation>
+References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
+ <20220324014836.19149-23-Sergey.Semin@baikalelectronics.ru>
+ <20220325100204.GJ4675@thinkpad>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220325100204.GJ4675@thinkpad>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Manuel Ullmann <labre@posteo.de>
-From 6c4cd8210835489da84bf4ee5049945dc0f2c986 Mon Sep 17 00:00:00 2001
-Date: Mon, 18 Apr 2022 00:20:01 +0200
+On Fri, Mar 25, 2022 at 03:32:04PM +0530, Manivannan Sadhasivam wrote:
+> On Thu, Mar 24, 2022 at 04:48:33AM +0300, Serge Semin wrote:
+> > Using some abstract number as the DW eDMA chip identifier isn't really
+> > practical. First of all there can be more than one DW eDMA controller on
+> > the platform some of them can be detected as the PCIe end-points, some of
+> > them can be embedded into the DW PCIe Root Port/End-point controllers.
+> > Seeing some abstract number in for instance IRQ handlers list doesn't give
+> > a notion regarding their reference to the particular DMA controller.
+> > Secondly current DW eDMA chip id implementation doesn't provide the
+> > multi-eDMA platforms support for same reason of possibly having eDMA
+> > detected on different system buses. At the same time re-implementing
+> > something ida-based won't give much benefits especially seeing the DW eDMA
+> > chip ID is only used in the IRQ request procedure. So to speak in order to
+> > preserve the code simplicity and get to have the multi-eDMA platforms
+> > support let's just use the parental device name to create the DW eDMA
+> > controller name.
+> > 
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > ---
+> >  drivers/dma/dw-edma/dw-edma-core.c | 3 ++-
+> >  drivers/dma/dw-edma/dw-edma-core.h | 2 +-
+> >  drivers/dma/dw-edma/dw-edma-pcie.c | 1 -
+> >  include/linux/dma/edma.h           | 1 -
+> >  4 files changed, 3 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> > index dbe1119fd1d2..72a51970bfba 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-core.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> > @@ -970,7 +970,8 @@ int dw_edma_probe(struct dw_edma_chip *chip)
+> >  	if (!dw->chan)
+> >  		return -ENOMEM;
+> >  
+> > -	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%d", chip->id);
+> > +	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%s",
+> > +		 dev_name(chip->dev));
+> >  
+> >  	/* Disable eDMA, only to establish the ideal initial conditions */
+> >  	dw_edma_v0_core_off(dw);
+> > diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
+> > index 980adb079182..dc25798d4ba9 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-core.h
+> > +++ b/drivers/dma/dw-edma/dw-edma-core.h
+> > @@ -96,7 +96,7 @@ struct dw_edma_irq {
+> >  };
+> >  
+> >  struct dw_edma {
+> > -	char				name[20];
+> > +	char				name[30];
+> 
 
-This will reset deeply on freeze and thaw instead of suspend and
-resume and prevent null pointer dereferences of the uninitialized ring
-0 buffer while thawing.
+> I'm not sure if this length is sufficient. Other than this,
+> 
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-The impact is an indefinitely hanging kernel. You can't switch
-consoles after this and the only possible user interaction is SysRq.
+My calculations were based on the prefix+pci-device-name length. For
+instance, for the case of the remote eDMA the name length would be
+strlen("dw-edma-core:0000:00:00.0") = 25 + 1 (for '\0'). There's even
+some room left. Seeing the prefix is always used in the string there
+will be at most 16 chars for the unique part of the name. If you
+predict it to be greater than that I'll extend the length as you say.
 
-BUG: kernel NULL pointer dereference
-RIP: 0010:aq_ring_rx_fill+0xcf/0x210 [atlantic]
-aq_vec_init+0x85/0xe0 [atlantic]
-aq_nic_init+0xf7/0x1d0 [atlantic]
-atl_resume_common+0x4f/0x100 [atlantic]
-pci_pm_thaw+0x42/0xa0
+-Sergey
 
-resolves in aq_ring.o to
-
-```
-0000000000000ae0 <aq_ring_rx_fill>:
-{
-/* ... */
- baf:	48 8b 43 08          	mov    0x8(%rbx),%rax
- 		buff->flags = 0U; /* buff is NULL */
-```
-
-The bug has been present since the introduction of the new pm code in
-8aaa112a57c1 ("net: atlantic: refactoring pm logic") and was hidden
-until 8ce84271697a ("net: atlantic: changes for multi-TC support"),
-which refactored the aq_vec_{free,alloc} functions into
-aq_vec_{,ring}_{free,alloc}, but is technically not wrong. The
-original functions just always reinitialized the buffers on S3/S4. If
-the interface is down before freezing, the bug does not occur. It does
-not matter, whether the initrd contains and loads the module before
-thawing.
-
-So the fix is to invert the boolean parameter deep in all pm function
-calls, which was clearly intended to be set like that.
-
-First report was on Github [1], which you have to guess from the
-resume logs in the posted dmesg snippet. Recently I posted one on
-Bugzilla [2], since I did not have an AQC device so far.
-
-#regzbot introduced: 8ce84271697a
-#regzbot from: koo5 <kolman.jindrich@gmail.com>
-#regzbot monitor: https://github.com/Aquantia/AQtion/issues/32
-
-Fixes: 8aaa112a57c1 ("net: atlantic: refactoring pm logic")
-Link: https://github.com/Aquantia/AQtion/issues/32 [1]
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215798 [2]
-Cc: stable@vger.kernel.org
-Reported-by: koo5 <kolman.jindrich@gmail.com>
-Signed-off-by: Manuel Ullmann <labre@posteo.de>
----
-Once in mainline, this should be backported to 5.10 and newer
-supported stable branches. Although 5.4 includes the bug, it is not
-affected (see above).
-
-As a side effect, this might increase suspend/resume performance,
-although I did no measurements.
- 
- drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-index 797a95142d1f..3a529ee8c834 100644
---- a/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-+++ b/drivers/net/ethernet/aquantia/atlantic/aq_pci_func.c
-@@ -444,22 +444,22 @@ static int atl_resume_common(struct device *dev, bool deep)
- 
- static int aq_pm_freeze(struct device *dev)
- {
--	return aq_suspend_common(dev, false);
-+	return aq_suspend_common(dev, true);
- }
- 
- static int aq_pm_suspend_poweroff(struct device *dev)
- {
--	return aq_suspend_common(dev, true);
-+	return aq_suspend_common(dev, false);
- }
- 
- static int aq_pm_thaw(struct device *dev)
- {
--	return atl_resume_common(dev, false);
-+	return atl_resume_common(dev, true);
- }
- 
- static int aq_pm_resume_restore(struct device *dev)
- {
--	return atl_resume_common(dev, true);
-+	return atl_resume_common(dev, false);
- }
- 
- static const struct dev_pm_ops aq_pm_ops = {
-
-base-commit: ce522ba9ef7e2d9fb22a39eb3371c0c64e2a433e
--- 
-2.35.1
+> 
+> Thanks,
+> Mani
+> 
+> >  
+> >  	struct dma_device		dma;
+> >  
+> > diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > index f530bacfd716..3f9dadc73854 100644
+> > --- a/drivers/dma/dw-edma/dw-edma-pcie.c
+> > +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
+> > @@ -222,7 +222,6 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
+> >  
+> >  	/* Data structure initialization */
+> >  	chip->dev = dev;
+> > -	chip->id = pdev->devfn;
+> >  
+> >  	chip->mf = vsec_data.mf;
+> >  	chip->nr_irqs = nr_irqs;
+> > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> > index 5cc87cfdd685..241c5a97ddf4 100644
+> > --- a/include/linux/dma/edma.h
+> > +++ b/include/linux/dma/edma.h
+> > @@ -73,7 +73,6 @@ enum dw_edma_map_format {
+> >   */
+> >  struct dw_edma_chip {
+> >  	struct device		*dev;
+> > -	int			id;
+> >  	int			nr_irqs;
+> >  	const struct dw_edma_core_ops   *ops;
+> >  	u32			flags;
+> > -- 
+> > 2.35.1
+> > 

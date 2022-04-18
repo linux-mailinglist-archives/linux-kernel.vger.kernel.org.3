@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BECD65050C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC59450527C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239083AbiDRM1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
+        id S237147AbiDRMpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238781AbiDRM0O (ORCPT
+        with ESMTP id S239549AbiDRMhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:26:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A86E089;
-        Mon, 18 Apr 2022 05:20:11 -0700 (PDT)
+        Mon, 18 Apr 2022 08:37:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1E8722B3F;
+        Mon, 18 Apr 2022 05:28:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83D0E60F0C;
-        Mon, 18 Apr 2022 12:20:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9400AC385A7;
-        Mon, 18 Apr 2022 12:20:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6440160F09;
+        Mon, 18 Apr 2022 12:28:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D920C385A7;
+        Mon, 18 Apr 2022 12:28:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284410;
-        bh=G++U9rtoxfQSlDamiCXkUBLmwjBH2Lkb15OC1vNC2oE=;
+        s=korg; t=1650284886;
+        bh=z6MbFqnabeze3fEj6gTnUhOY3a+2jguxHUnTG0QNRxY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CeuRRLWBSVLYllrUnpR27u/pllWMc0yLo5FpXFCIw/da3O/OX4RLrq8/XrOYoWgQN
-         rCtoyOzoZZoX50UVPEOnunHlz9w4gdsXgrNciv6b4UWqcxJcG/x/oKSSDOLlGCSnJC
-         M1d/JolXB7hLiwEtpWFbj0EJjqLs7GVJ47SW0u6A=
+        b=sBtGQVWMitQEI0ir1FZAhx76UEv9qf0Q3ZTJJEfPaxyiMhgo9QOrzmeiWEd7QcVqd
+         N/2H55QUlIeyqbeL4fvqRzL7ZdYiKjllwwv/590HuUZPbrpYFJsf0crJIykEaIiT+u
+         hswwYceV3MRDke27JRyJOIaQuydYdXWHFWLODYus=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Topi Miettinen <toiwoton@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 089/219] netfilter: nft_socket: make cgroup match work in input too
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 038/189] ALSA: hdspm: Fix the missing snd_card_free() call at probe error
 Date:   Mon, 18 Apr 2022 14:10:58 +0200
-Message-Id: <20220418121209.039001224@linuxfoundation.org>
+Message-Id: <20220418121201.595925150@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +53,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 05ae2fba821c4d122ab4ba3e52144e21586c4010 ]
+commit eab521aebcdeb1c801009503e3a7f8989e3c6b36 upstream.
 
-cgroupv2 helper function ignores the already-looked up sk
-and uses skb->sk instead.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Just pass sk from the calling function instead; this will
-make cgroup matching work for udp and tcp in input even when
-edemux did not set skb->sk already.
+This patch fixes it by calling snd_card_free() manually on the error
+from the probe callback.
 
-Fixes: e0bb96db96f8 ("netfilter: nft_socket: add support for cgroupsv2")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Tested-by: Topi Miettinen <toiwoton@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 0195ca5fd1f4 ("ALSA: hdspm: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-37-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nft_socket.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ sound/pci/rme9652/hdspm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nft_socket.c b/net/netfilter/nft_socket.c
-index d601974c9d2e..b8f011145765 100644
---- a/net/netfilter/nft_socket.c
-+++ b/net/netfilter/nft_socket.c
-@@ -36,12 +36,11 @@ static void nft_socket_wildcard(const struct nft_pktinfo *pkt,
+diff --git a/sound/pci/rme9652/hdspm.c b/sound/pci/rme9652/hdspm.c
+index ff06ee82607c..fa1812e7a49d 100644
+--- a/sound/pci/rme9652/hdspm.c
++++ b/sound/pci/rme9652/hdspm.c
+@@ -6895,7 +6895,7 @@ static int snd_hdspm_probe(struct pci_dev *pci,
  
- #ifdef CONFIG_SOCK_CGROUP_DATA
- static noinline bool
--nft_sock_get_eval_cgroupv2(u32 *dest, const struct nft_pktinfo *pkt, u32 level)
-+nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo *pkt, u32 level)
- {
--	struct sock *sk = skb_to_full_sk(pkt->skb);
- 	struct cgroup *cgrp;
+ 	err = snd_hdspm_create(card, hdspm);
+ 	if (err < 0)
+-		return err;
++		goto error;
  
--	if (!sk || !sk_fullsock(sk) || !net_eq(nft_net(pkt), sock_net(sk)))
-+	if (!sk_fullsock(sk))
- 		return false;
+ 	if (hdspm->io_type != MADIface) {
+ 		snprintf(card->shortname, sizeof(card->shortname), "%s_%x",
+@@ -6914,12 +6914,16 @@ static int snd_hdspm_probe(struct pci_dev *pci,
  
- 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-@@ -108,7 +107,7 @@ static void nft_socket_eval(const struct nft_expr *expr,
- 		break;
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case NFT_SOCKET_CGROUPV2:
--		if (!nft_sock_get_eval_cgroupv2(dest, pkt, priv->level)) {
-+		if (!nft_sock_get_eval_cgroupv2(dest, sk, pkt, priv->level)) {
- 			regs->verdict.code = NFT_BREAK;
- 			return;
- 		}
+ 	err = snd_card_register(card);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	pci_set_drvdata(pci, card);
+ 
+ 	dev++;
+ 	return 0;
++
++ error:
++	snd_card_free(card);
++	return err;
+ }
+ 
+ static struct pci_driver hdspm_driver = {
 -- 
-2.35.1
+2.35.2
 
 
 

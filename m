@@ -2,85 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A6D505A22
+	by mail.lfdr.de (Postfix) with ESMTP id C9C5A505A24
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241648AbiDROkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
+        id S241271AbiDROlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345581AbiDROim (ORCPT
+        with ESMTP id S1345993AbiDROjc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:38:42 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F4857176
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:24:18 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id ck12so5295449ejb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:24:18 -0700 (PDT)
+        Mon, 18 Apr 2022 10:39:32 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD61426C0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:24:45 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id t12so12324212pll.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:sender:from:date:message-id:subject:to;
-        bh=Zxho+exJKKOKB65wNhmIfElbVOfiLStLlJhCjJN3tgU=;
-        b=i2Xxq2kKTqhF+ZuRmpzKZeiWNPvsnKiswZgWoiKK0SoedqjJwj/7TEbbDBeQWJDDEt
-         gUvoL6JJRT/0JLGPxJOp1VbQB+jZMjpL+YJ3+GusiJVDcOxAJQKEouEn+myWgK0HVQIh
-         rJ+zeF7Huu4bAPrh9fJNDgeGd96sRjEj7pjK/5Sw3Cf/CeJsRZJoZlYB9q51wr1bNAN3
-         tSCBEGg0BpTM4PCdmKnExgioS7Y5FBKkwFD/GKoiegRNYcrYwJYphFQQtQXEHyF5PnHT
-         FuND+3ieFEI5L/w4Uek35CRP+6fJi8qRyimOmkjc87Mm1zFtvRFDOK2g2HfpmB5T59X2
-         CHKQ==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=I3Okq40SlFfO9yXRZG5Ce7bYgQKjZc2Ftg4cYgYx4m8=;
+        b=6PO6V6vFnFgC58QWshF35FjkEk9Z7u+n4zuiRR3KmuUZpt5fZEAfLbphuF1/nf7f2/
+         HXwngU80rWrVWSpTH2vYWztb1pm40kGAZ17W/ncsZxlM6ATosxJNNXoPG3TEK/gngKse
+         rN6ya9uF/YE13/CJVQl+n+sveLUb0w4PGL2mETeEkkCRHpAh8vWhlg904J6jZ7SVcKdK
+         nTU/9M1W5zhVdV8toTXMIzv9HOYU1+6V5OUOUpYH9S8F+ba+b6TTm7hAHWIHTyeFcqnC
+         FPbE40/XOnFgiFdT8VYkuuMnwPRg+GWjQBbRszbZJFtgYgoT0KK7zrSdPn3IghUTpt8L
+         InGQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:sender:from:date:message-id:subject
-         :to;
-        bh=Zxho+exJKKOKB65wNhmIfElbVOfiLStLlJhCjJN3tgU=;
-        b=zSTYZRE7DRVZKibdN5NVLJA6rcspHPRnRpUQmF2siRfGurWgTMmcFvI/JzSJon6oqV
-         EmHgCKO2iWufzCs1sQdZSdiEpfrSKHAgn33w84GTzFUL9mPSxVh53AJFnxOxWyejQwt1
-         aYFgINKWh9OWe3XYQ/DTlybFEkCVY0vB5Dd/8+olhGw/bca7cWotmANQd86+xtg8Uy6V
-         y6x20OV1Y+4RgyoNJ/C4bWpMSULiuMqhLZ62NL27I6oFwAJolIf8dczlPrjBOfUZcRPR
-         kp6cTqu6EKQUvkrewljl86U+0qP75oaiNTeDDHUL5UNv8jcmMQpuUOPBM258Bbj9nTSn
-         9rXQ==
-X-Gm-Message-State: AOAM531oDZ4uOvpTiZhPk2coOKr+fYrYCm7n990c9YLhk366rUiVRKJv
-        IzngkmFOkwq0XFf9lYUIMbt1nPD8pgQkd+y0lLw=
-X-Google-Smtp-Source: ABdhPJyfFLYQ1nNwUCtzPRKUDabieLr1JWzM39/Su02t9YXBpuIcrDnuAJGuaxAZ7Z+SiRKJGbuiELx6vbe2cQIWhK0=
-X-Received: by 2002:a17:907:dab:b0:6df:e51a:b990 with SMTP id
- go43-20020a1709070dab00b006dfe51ab990mr8756832ejc.573.1650288255102; Mon, 18
- Apr 2022 06:24:15 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=I3Okq40SlFfO9yXRZG5Ce7bYgQKjZc2Ftg4cYgYx4m8=;
+        b=CUN3ZWAeQXDGHTXWma1NWeRTUv7OqxKZPSnGfOCzfYR1Jt1awn1IYj0bX8OfPMqu82
+         XKv1Jl9QM80vc1qhScC9ISym6r74y2XCKYHruOBwmEM5KNYnk4wU7Hm9+5i/nB0eLElN
+         Kg0pM07Unggd2v9nTG/nr9jhVn/xAM/B+54kYRdQEGVmKxcowHzAa3uFWjl/adYLFwOo
+         DPAqZekd5AnUXvSVmdt4LZmGElz8FcFURAaYsjvUmOb6nrMRsUHuMuZMvxm6yP632wgt
+         YybDKHr7mxVF/KUugIyHBJDFUCdi4vETVenRtSKVoqcVkEzU9AGS+uV6nQeIz5Sd+h6i
+         mqgA==
+X-Gm-Message-State: AOAM53038v9Tyu/MfzNH+pm7yHN675sudAWWPux2T2Y83x6jlgq84XWq
+        gsdCvnM7hK1WnJ/+f9pkxSjOvA==
+X-Google-Smtp-Source: ABdhPJwW7DdXoMh6QPVdDXx+iurahKR62ysJSxnGzbplHlB7A1OGIOBp+Svbhry8OD53s/ru47JIsQ==
+X-Received: by 2002:a17:90b:3a90:b0:1d2:80bf:d968 with SMTP id om16-20020a17090b3a9000b001d280bfd968mr8382241pjb.16.1650288284557;
+        Mon, 18 Apr 2022 06:24:44 -0700 (PDT)
+Received: from [10.254.152.226] ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id d139-20020a621d91000000b00505aa0d10desm12768842pfd.0.2022.04.18.06.24.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 06:24:44 -0700 (PDT)
+Message-ID: <a5c66655-7e05-7bec-dcf4-0c9fe8a63061@bytedance.com>
+Date:   Mon, 18 Apr 2022 21:24:36 +0800
 MIME-Version: 1.0
-Sender: lila.lucass112@gmail.com
-Received: by 2002:a17:907:6d96:0:0:0:0 with HTTP; Mon, 18 Apr 2022 06:24:13
- -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Mon, 18 Apr 2022 15:24:13 +0200
-X-Google-Sender-Auth: wUsgmFtuqxDgPaZwhFTbp5J2Lsg
-Message-ID: <CAPvtrUeAnepKjptjT-H8G8nXpFJe=cW4zDaTnOp5m8GYdO9VQg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_FROM,LOTS_OF_MONEY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_MONEY_PERCENT,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v4 1/2] ftrace: cleanup ftrace_graph_caller enable and
+ disable
+Content-Language: en-US
+To:     rostedt@goodmis.org, mingo@redhat.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        broonie@kernel.org, mark.rutland@arm.com, ardb@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, duanxiongchun@bytedance.com,
+        songmuchun@bytedance.com
+References: <20220409153554.14470-1-zhouchengming@bytedance.com>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <20220409153554.14470-1-zhouchengming@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello ,
+Hello, friendly ping :-)
 
-It is my pleasure to communicate with you, I know that this message
-will be a surprise to you my name is Mrs. Sophia Erick, I am diagnosed
-with ovarian cancer which my doctor have confirmed that I have only
-some weeks to live so I have decided you handover the sum of(Eleven
-Million Dollars) through I decided handover the money in my account to
-you for help of the orphanage homes and the needy once
 
-Please   kindly reply me here as soon as possible to enable me give
-you more information but before handing over my details to you please
-assure me that you will only take 30%  of the money and share the rest
-to the poor orphanage home and the needy once, thank you am waiting to
-hear from you
-
-Mrs Sophia Erick.
+On 2022/4/9 23:35, Chengming Zhou wrote:
+> The ftrace_[enable,disable]_ftrace_graph_caller() are used to do
+> special hooks for graph tracer, which are not needed on some ARCHs
+> that use graph_ops:func function to install return_hooker.
+> 
+> So introduce the weak version in ftrace core code to cleanup
+> in x86.
+> 
+> Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+> ---
+> v4:
+>  - put weak ftrace_enable,disable_ftrace_graph_caller() in
+>    fgraph.c instead of ftrace.c as suggested by Steve.
+> 
+> v3:
+>  - consolidate two #if into a single #if, suggested by Steve. Thanks.
+> ---
+>  arch/x86/kernel/ftrace.c | 17 ++---------------
+>  kernel/trace/fgraph.c    | 18 ++++++++++++++++++
+>  2 files changed, 20 insertions(+), 15 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/ftrace.c b/arch/x86/kernel/ftrace.c
+> index 1e31c7d21597..b09d73c2ba89 100644
+> --- a/arch/x86/kernel/ftrace.c
+> +++ b/arch/x86/kernel/ftrace.c
+> @@ -579,9 +579,7 @@ void arch_ftrace_trampoline_free(struct ftrace_ops *ops)
+>  
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  
+> -#ifdef CONFIG_DYNAMIC_FTRACE
+> -
+> -#ifndef CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS
+> +#if defined(CONFIG_DYNAMIC_FTRACE) && !defined(CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS)
+>  extern void ftrace_graph_call(void);
+>  static const char *ftrace_jmp_replace(unsigned long ip, unsigned long addr)
+>  {
+> @@ -610,18 +608,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+>  
+>  	return ftrace_mod_jmp(ip, &ftrace_stub);
+>  }
+> -#else /* !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -int ftrace_enable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -
+> -int ftrace_disable_ftrace_graph_caller(void)
+> -{
+> -	return 0;
+> -}
+> -#endif /* CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+> -#endif /* !CONFIG_DYNAMIC_FTRACE */
+> +#endif /* CONFIG_DYNAMIC_FTRACE && !CONFIG_HAVE_DYNAMIC_FTRACE_WITH_ARGS */
+>  
+>  /*
+>   * Hook the return address and push it in the stack of return addrs
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 8f4fb328133a..289311680c29 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -30,6 +30,24 @@ int ftrace_graph_active;
+>  /* Both enabled by default (can be cleared by function_graph tracer flags */
+>  static bool fgraph_sleep_time = true;
+>  
+> +/*
+> + * archs can override this function if they must do something
+> + * to enable hook for graph tracer.
+> + */
+> +int __weak ftrace_enable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
+> +
+> +/*
+> + * archs can override this function if they must do something
+> + * to disable hook for graph tracer.
+> + */
+> +int __weak ftrace_disable_ftrace_graph_caller(void)
+> +{
+> +	return 0;
+> +}
+> +
+>  /**
+>   * ftrace_graph_stop - set to permanently disable function graph tracing
+>   *

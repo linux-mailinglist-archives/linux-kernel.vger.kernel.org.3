@@ -2,49 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2468650548E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D839D5053EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243687AbiDRNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
+        id S241636AbiDRNDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:03:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241683AbiDRM66 (ORCPT
+        with ESMTP id S240240AbiDRMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:58 -0400
+        Mon, 18 Apr 2022 08:54:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327162E686;
-        Mon, 18 Apr 2022 05:39:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF18B12ABA;
+        Mon, 18 Apr 2022 05:34:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4D716611AD;
-        Mon, 18 Apr 2022 12:39:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E088C385A7;
-        Mon, 18 Apr 2022 12:39:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF0D0611A9;
+        Mon, 18 Apr 2022 12:34:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7F49C385A7;
+        Mon, 18 Apr 2022 12:34:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285567;
-        bh=FxXsQ/0pA/79CvGYTRmab7Da+yVjb4SEgBgD6c/awrc=;
+        s=korg; t=1650285298;
+        bh=pJfrW3zZPhq6NUsLDJ0MlaigPRNzH9Yv9ppEgEo0WAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=n23plHYSzx2wu8vW+1Wig0D3BG93EanN7HG1uw7+FzddDGzqS0Uts3v663yQvTqkA
-         TvIWoNbmxeGQx0tA8T82n+Ro6XjKS2T9r8OL5lFxLN1tBnAp61rs3Ey+veHlLsz0dP
-         +z+ZmigWpZvRaF+45n7396Yz2CVtS07HFxKGe3gA=
+        b=NQ7L2K/UhbGLjQlOxZDALj9E2dTGI0X9yTKq2F2wjsXf15EAv0BkJN4WIlj1DxojG
+         ndLjPqQOY3od9rD8680Ncxawm6EEdkIiOOtthJmeMb7CLOmNplQMC/ntsU9LIiYEZ9
+         OSyni5upGGqozEL+P/hVdlkBUVp5/Lonuwen/VVU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steve Capper <steve.capper@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 060/105] tlb: hugetlb: Add more sizes to tlb_remove_huge_tlb_entry
-Date:   Mon, 18 Apr 2022 14:13:02 +0200
-Message-Id: <20220418121148.191339785@linuxfoundation.org>
+        stable@vger.kernel.org, Melissa Wen <mwen@igalia.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.15 163/189] drm/amd/display: dont ignore alpha property on pre-multiplied mode
+Date:   Mon, 18 Apr 2022 14:13:03 +0200
+Message-Id: <20220418121207.012373130@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,66 +57,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Steve Capper <steve.capper@arm.com>
+From: Melissa Wen <mwen@igalia.com>
 
-[ Upstream commit 697a1d44af8ba0477ee729e632f4ade37999249a ]
+commit e4f1541caf60fcbe5a59e9d25805c0b5865e546a upstream.
 
-tlb_remove_huge_tlb_entry only considers PMD_SIZE and PUD_SIZE when
-updating the mmu_gather structure.
+"Pre-multiplied" is the default pixel blend mode for KMS/DRM, as
+documented in supported_modes of drm_plane_create_blend_mode_property():
+https://cgit.freedesktop.org/drm/drm-misc/tree/drivers/gpu/drm/drm_blend.c
 
-Unfortunately on arm64 there are two additional huge page sizes that
-need to be covered: CONT_PTE_SIZE and CONT_PMD_SIZE. Where an end-user
-attempts to employ contiguous huge pages, a VM_BUG_ON can be experienced
-due to the fact that the tlb structure hasn't been correctly updated by
-the relevant tlb_flush_p.._range() call from tlb_remove_huge_tlb_entry.
+In this mode, both 'pixel alpha' and 'plane alpha' participate in the
+calculation, as described by the pixel blend mode formula in KMS/DRM
+documentation:
 
-This patch adds inequality logic to the generic implementation of
-tlb_remove_huge_tlb_entry s.t. CONT_PTE_SIZE and CONT_PMD_SIZE are
-effectively covered on arm64. Also, as well as ptes, pmds and puds;
-p4ds are now considered too.
+out.rgb = plane_alpha * fg.rgb +
+          (1 - (plane_alpha * fg.alpha)) * bg.rgb
 
-Reported-by: David Hildenbrand <david@redhat.com>
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/linux-mm/811c5c8e-b3a2-85d2-049c-717f17c3a03a@redhat.com/
-Signed-off-by: Steve Capper <steve.capper@arm.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220330112543.863-1-steve.capper@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Considering the blend config mechanisms we have in the driver so far,
+the alpha mode that better fits this blend mode is the
+_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN, where the value for global_gain
+is the plane alpha (global_alpha).
+
+With this change, alpha property stops to be ignored. It also addresses
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1734
+
+v2:
+ * keep the 8-bit value for global_alpha_value (Nicholas)
+ * correct the logical ordering for combined global gain (Nicholas)
+ * apply to dcn10 too (Nicholas)
+
+Signed-off-by: Melissa Wen <mwen@igalia.com>
+Tested-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Tested-by: Simon Ser <contact@emersion.fr>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/asm-generic/tlb.h | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c |   14 +++++++++-----
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c        |   14 +++++++++-----
+ 2 files changed, 18 insertions(+), 10 deletions(-)
 
-diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-index 6661ee1cff47..a0c4b99d2899 100644
---- a/include/asm-generic/tlb.h
-+++ b/include/asm-generic/tlb.h
-@@ -563,10 +563,14 @@ static inline void tlb_flush_p4d_range(struct mmu_gather *tlb,
- #define tlb_remove_huge_tlb_entry(h, tlb, ptep, address)	\
- 	do {							\
- 		unsigned long _sz = huge_page_size(h);		\
--		if (_sz == PMD_SIZE)				\
--			tlb_flush_pmd_range(tlb, address, _sz);	\
--		else if (_sz == PUD_SIZE)			\
-+		if (_sz >= P4D_SIZE)				\
-+			tlb_flush_p4d_range(tlb, address, _sz);	\
-+		else if (_sz >= PUD_SIZE)			\
- 			tlb_flush_pud_range(tlb, address, _sz);	\
-+		else if (_sz >= PMD_SIZE)			\
-+			tlb_flush_pmd_range(tlb, address, _sz);	\
-+		else						\
-+			tlb_flush_pte_range(tlb, address, _sz);	\
- 		__tlb_remove_tlb_entry(tlb, ptep, address);	\
- 	} while (0)
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+@@ -2460,14 +2460,18 @@ void dcn10_update_mpcc(struct dc *dc, st
+ 	struct mpc *mpc = dc->res_pool->mpc;
+ 	struct mpc_tree *mpc_tree_params = &(pipe_ctx->stream_res.opp->mpc_tree_params);
  
--- 
-2.35.1
-
+-	if (per_pixel_alpha)
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
+-	else
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
+-
+ 	blnd_cfg.overlap_only = false;
+ 	blnd_cfg.global_gain = 0xff;
+ 
++	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
++		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
++	} else if (per_pixel_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
++	} else {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
++	}
++
+ 	if (pipe_ctx->plane_state->global_alpha)
+ 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
+ 	else
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
+@@ -2297,14 +2297,18 @@ void dcn20_update_mpcc(struct dc *dc, st
+ 	struct mpc *mpc = dc->res_pool->mpc;
+ 	struct mpc_tree *mpc_tree_params = &(pipe_ctx->stream_res.opp->mpc_tree_params);
+ 
+-	if (per_pixel_alpha)
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
+-	else
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
+-
+ 	blnd_cfg.overlap_only = false;
+ 	blnd_cfg.global_gain = 0xff;
+ 
++	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
++		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
++	} else if (per_pixel_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
++	} else {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
++	}
++
+ 	if (pipe_ctx->plane_state->global_alpha)
+ 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
+ 	else
 
 

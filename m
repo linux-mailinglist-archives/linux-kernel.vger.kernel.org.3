@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E42505D77
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46402505D7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346983AbiDRRYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S1346436AbiDRR0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242820AbiDRRYe (ORCPT
+        with ESMTP id S236088AbiDRR00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:24:34 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8516731539
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:21:55 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id bg24so13528574pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:21:55 -0700 (PDT)
+        Mon, 18 Apr 2022 13:26:26 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3757833A1C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:23:46 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id c12so12867822plr.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=Fogjq+0iPdBZBMK4jYk682UP+pZNG32fCLfhwIfhhXE=;
-        b=eNsdqSr4O0QCRIf4YJ6R7gSwH2ItG46kuqFE3YxpMmutZ5ERKfeckih7AFfsT7fdCL
-         CFAE+T+u5I+MrrH1+y7jkDyWp7pkiPj0FfQISV3uD6Zm6uG06OvHNLmOfKtPT1HPKnVm
-         xGK92DPetlM3mJFlh8cRBNSlHxiRnu2sWgKzniZSLjAx40SS+sbb/5zpAEyVzZkBIYlO
-         LoEcYR5DhSxXg9cwd+lOtsnfAhDou4odz+CsP/CjzG7jps3uU6zBMSjXvdcOFKvoyMBv
-         i+1u13PZQi8MB9klWrGMnkLy5fOhJy7dULdJkVuGuhFDsIbfaLv3+9DDSSy2CWJDmqGL
-         CAZg==
+        bh=w84A5bSnfH8JPWuHmpfwhtHQL8kzzjVsgikmw3NAGNg=;
+        b=fRhwSkr30I2GH+odEqNIwtcw6Mkc0hs533hCNGNu6B733isTMyN7mgdaKJgnWGDzEl
+         uhuORa20O7wxLI2fE+KLlFcOaSk6ihk0xdw+Se0E4RwpcwCBNNsm470hU/synopNyK6a
+         pws6E8OuSufQCw6xr+gShLZC0yxbf6DEZRQGxhBlFl/uT9ybPy4/2v200xJVgdS9V3aZ
+         7JF4lfZ2lbZm6vMLIZBGdhDP7mUpgcMb0QdGJgRz7QVUotehsgBRObxX9Wusw548AHgq
+         q373jx7YHbzuvYTNCUJC6fW8z7kiHgN04Y6B1/+jto9xSuqRl/jrBAc/XVwzbTAd04Sn
+         0pgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=Fogjq+0iPdBZBMK4jYk682UP+pZNG32fCLfhwIfhhXE=;
-        b=XnUn9Q58TgZ2GpLxMel2BFCy+yOHRniJNOGwjvw/9R7mkPwiXuvfrvAZolLoeNLOZ8
-         kQsjLCL5gO3SCNxAl4H+X3YnL8Wg78A5NLOdO0C88UafFn1ishHFOJ+IoEP7O6Z8NDJc
-         O+dk+928jxrJ1f+x7IqsehjnXUGSGhrX/HZu2wJ0lQALHfbh+w84Ir7XJCLLS2OA7Hh7
-         kDHJeLVEJIAq4jsFncC2dYTsgTNtOj8i1uDhgZwr719ZtDKWZ0aL7WXLmr3raa3ICjoM
-         K6y83qWm5SyzZjMiDJidHXIdOppx/zRe83XNT8NIFt1rW5W/owTIuGa86dfG4dBRhIl+
-         lPzA==
-X-Gm-Message-State: AOAM5305eZ+3gRofko9twtODGuHvhHtfw61PEcIS9yvuSLs3fZCDACE0
-        YwTBTxEDouqDzXrWwngEdAQ=
-X-Google-Smtp-Source: ABdhPJwDJ0uJVfx2QrwbcFNBAgeqo9mTsjaUibpHBycw03Lj63qCZLrmvZN41QlydRogKqV/3XUqQA==
-X-Received: by 2002:a17:90b:1a8a:b0:1c7:c60b:f12 with SMTP id ng10-20020a17090b1a8a00b001c7c60b0f12mr13992859pjb.139.1650302514956;
-        Mon, 18 Apr 2022 10:21:54 -0700 (PDT)
+        bh=w84A5bSnfH8JPWuHmpfwhtHQL8kzzjVsgikmw3NAGNg=;
+        b=5bkCD32dSJG9mjyPyEui0GL5EKX+ep0Oln9oEB6FHeFipwpgDda0Lxb4eY60kp1Ink
+         lQKP9Z6WSEH0CEkkZ5hvM9iHVfFl5A7UJLHUBr+E+KE16yBiSZi7vPgiqekvIhxOtmmv
+         9SyZFHkO1VVsBGzEWBd/C+Le5FPZZ+JlBayo/A4ojpeq8l/T8QSbkF9O1RE6lX+0akYx
+         GI2cCqMbnPppWiCtsxxaSqss9BkkffgfPG50nmwDyHSVo70PwbrcDKGnpKT4O8koT8Sm
+         vXGzmvosYWbia6QwqHfH6Ray7gu36Ol/0WYV1wTZOyQgNuG8BPTiX0YtY/y3jrIv8s7Y
+         PL2w==
+X-Gm-Message-State: AOAM533O6bqGEWaMLvk7V8qehYbcNXQYDJCDa62azAvS0qq1dr5rIx5i
+        2jIVkmyCpmxxJUU6gs9wAOwp5hx4cTWNPA==
+X-Google-Smtp-Source: ABdhPJzAQUrr9wPWIp/IDtWYEjrW8r1+3GdG/Kl5eQZZhBJXkcJeST2nsFkYH/qrtsTT3vQplbAPOA==
+X-Received: by 2002:a17:90b:201:b0:1cb:a159:65ce with SMTP id fy1-20020a17090b020100b001cba15965cemr19878149pjb.104.1650302625656;
+        Mon, 18 Apr 2022 10:23:45 -0700 (PDT)
 Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
-        by smtp.gmail.com with ESMTPSA id y9-20020aa78f29000000b005098201d2f5sm13041394pfr.205.2022.04.18.10.21.52
+        by smtp.gmail.com with ESMTPSA id y9-20020aa78f29000000b005098201d2f5sm13041394pfr.205.2022.04.18.10.23.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:21:54 -0700 (PDT)
+        Mon, 18 Apr 2022 10:23:45 -0700 (PDT)
 From:   Aliya Rahmani <aliyarahmani786@gmail.com>
 To:     clabbe@baylibre.com
 Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
         Aliya Rahmani <aliyarahmani786@gmail.com>
-Subject: [PATCH v3 1/3] staging: media: zoran: use seq_puts() instead of seq_printf()
-Date:   Mon, 18 Apr 2022 22:44:52 +0530
-Message-Id: <20220418171453.16971-2-aliyarahmani786@gmail.com>
+Subject: [PATCH v3 2/3] staging: media: zoran: else is not generally useful after a break or return
+Date:   Mon, 18 Apr 2022 22:44:54 +0530
+Message-Id: <20220418171453.16971-3-aliyarahmani786@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220418171453.16971-1-aliyarahmani786@gmail.com>
 References: <20220418171453.16971-1-aliyarahmani786@gmail.com>
@@ -71,29 +71,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace seq_printf() with seq_puts() for a constant format without
-additional arguments, reported by checkpatch.
+Remove the else without affecting the logic. 
+Fixes the following checkpatch warning:
+ else is not generally useful after a break or return
 
 Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
 ---
- drivers/staging/media/zoran/videocodec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+changes since v2: Rework commit description and subject
+---
+
+ drivers/staging/media/zoran/videocodec.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-index 3af7d02bd910..16a1f23a7f19 100644
+index 16a1f23a7f19..19732a47c8bd 100644
 --- a/drivers/staging/media/zoran/videocodec.c
 +++ b/drivers/staging/media/zoran/videocodec.c
-@@ -250,8 +250,8 @@ int videocodec_debugfs_show(struct seq_file *m)
- 	struct codec_list *h = codeclist_top;
- 	struct attached_list *a;
+@@ -98,9 +98,8 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
  
--	seq_printf(m, "<S>lave or attached <M>aster name  type flags    magic    ");
--	seq_printf(m, "(connected as)\n");
-+	seq_puts(m, "<S>lave or attached <M>aster name  type flags    magic    ");
-+	seq_puts(m, "(connected as)\n");
-
-
-
+ 				h->attached += 1;
+ 				return codec;
+-			} else {
+-				kfree(codec);
+ 			}
++			kfree(codec);
+ 		}
+ 		h = h->next;
+ 	}
 -- 
 2.25.1
 

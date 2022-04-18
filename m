@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72B55057EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 726215055C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244946AbiDRN6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S241631AbiDRNZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:25:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244923AbiDRNbB (ORCPT
+        with ESMTP id S241182AbiDRNCx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:31:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5CBDF66;
-        Mon, 18 Apr 2022 05:57:36 -0700 (PDT)
+        Mon, 18 Apr 2022 09:02:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9039F205FE;
+        Mon, 18 Apr 2022 05:42:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E9F4360FD9;
-        Mon, 18 Apr 2022 12:57:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCFF8C385A1;
-        Mon, 18 Apr 2022 12:57:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 48BE3B80E59;
+        Mon, 18 Apr 2022 12:42:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37FAC385AB;
+        Mon, 18 Apr 2022 12:42:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286655;
-        bh=hiYEUHsjVTfyC/Qj6abe6K8KOS/q552yo4+BC+2Uqcc=;
+        s=korg; t=1650285775;
+        bh=/pmbGVed1QynH04LNNFMYKg9d+inH3YumC2wrFxBQ2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tAPZ3SwD60OS7eMd03Snybt3DnmmyaPT0sB8qD9Rx//VaD6PZ1DuXd5Gr8ThgYkoR
-         Myo3RETJ1Y0HkIzyl+LoV6ABiOO988Bi6WLmeASTyPpFdVzXCiV9XlKBJirYTTh45n
-         N3LPAAtQVGgExQcVJkKtY6fuXxIMNaJewkv31uY0=
+        b=uQyZLB6G8Z9xhEhSTrPA1CfSxJ4noaMPBAXeorEHWkOjDgaCSuvSKW2EU+9lT3Gbd
+         cBAU0NstDcT1M1kJOZ1fiZ+Wc2QsXXEh82Sz67NkbBvCJKfBrdSUOi+Tt/TLQt54Ch
+         xJulfzDJAPs3QEOxu0uw27VnQRZiuEZVamFvUAqM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [PATCH 4.14 202/284] KVM: x86: Forbid VMM to set SYNIC/STIMER MSRs when SynIC wasnt activated
+        stable@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 06/63] net/sched: fix initialization order when updating chain 0 head
 Date:   Mon, 18 Apr 2022 14:13:03 +0200
-Message-Id: <20220418121217.469428260@linuxfoundation.org>
+Message-Id: <20220418121134.570518425@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,65 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
+From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-commit b1e34d325397a33d97d845e312d7cf2a8b646b44 upstream.
+[ Upstream commit e65812fd22eba32f11abe28cb377cbd64cfb1ba0 ]
 
-Setting non-zero values to SYNIC/STIMER MSRs activates certain features,
-this should not happen when KVM_CAP_HYPERV_SYNIC{,2} was not activated.
+Currently, when inserting a new filter that needs to sit at the head
+of chain 0, it will first update the heads pointer on all devices using
+the (shared) block, and only then complete the initialization of the new
+element so that it has a "next" element.
 
-Note, it would've been better to forbid writing anything to SYNIC/STIMER
-MSRs, including zeroes, however, at least QEMU tries clearing
-HV_X64_MSR_STIMER0_CONFIG without SynIC. HV_X64_MSR_EOM MSR is somewhat
-'special' as writing zero there triggers an action, this also should not
-happen when SynIC wasn't activated.
+This can lead to a situation that the chain 0 head is propagated to
+another CPU before the "next" initialization is done. When this race
+condition is triggered, packets being matched on that CPU will simply
+miss all other filters, and will flow through the stack as if there were
+no other filters installed. If the system is using OVS + TC, such
+packets will get handled by vswitchd via upcall, which results in much
+higher latency and reordering. For other applications it may result in
+packet drops.
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Message-Id: <20220325132140.25650-4-vkuznets@redhat.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+This is reproducible with a tc only setup, but it varies from system to
+system. It could be reproduced with a shared block amongst 10 veth
+tunnels, and an ingress filter mirroring packets to another veth.
+That's because using the last added veth tunnel to the shared block to
+do the actual traffic, it makes the race window bigger and easier to
+trigger.
+
+The fix is rather simple, to just initialize the next pointer of the new
+filter instance (tp) before propagating the head change.
+
+The fixes tag is pointing to the original code though this issue should
+only be observed when using it unlocked.
+
+Fixes: 2190d1d0944f ("net: sched: introduce helpers to work with filter chains")
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Davide Caratti <dcaratti@redhat.com>
+Link: https://lore.kernel.org/r/b97d5f4eaffeeb9d058155bcab63347527261abf.1649341369.git.marcelo.leitner@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/hyperv.c |   15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ net/sched/cls_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/x86/kvm/hyperv.c
-+++ b/arch/x86/kvm/hyperv.c
-@@ -260,6 +260,9 @@ static int synic_set_msr(struct kvm_vcpu
- 	case HV_X64_MSR_EOM: {
- 		int i;
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 80205b138d11..919c7fa5f02d 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -1639,10 +1639,10 @@ static int tcf_chain_tp_insert(struct tcf_chain *chain,
+ 	if (chain->flushing)
+ 		return -EAGAIN;
  
-+		if (!synic->active)
-+			break;
-+
- 		for (i = 0; i < ARRAY_SIZE(synic->sint); i++)
- 			kvm_hv_notify_acked_sint(vcpu, i);
- 		break;
-@@ -520,6 +523,12 @@ static int stimer_start(struct kvm_vcpu_
- static int stimer_set_config(struct kvm_vcpu_hv_stimer *stimer, u64 config,
- 			     bool host)
- {
-+	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
-+	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
-+
-+	if (!synic->active && (!host || config))
-+		return 1;
-+
- 	trace_kvm_hv_stimer_set_config(stimer_to_vcpu(stimer)->vcpu_id,
- 				       stimer->index, config, host);
++	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
+ 	if (*chain_info->pprev == chain->filter_chain)
+ 		tcf_chain0_head_change(chain, tp);
+ 	tcf_proto_get(tp);
+-	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
+ 	rcu_assign_pointer(*chain_info->pprev, tp);
  
-@@ -534,6 +543,12 @@ static int stimer_set_config(struct kvm_
- static int stimer_set_count(struct kvm_vcpu_hv_stimer *stimer, u64 count,
- 			    bool host)
- {
-+	struct kvm_vcpu *vcpu = stimer_to_vcpu(stimer);
-+	struct kvm_vcpu_hv_synic *synic = vcpu_to_synic(vcpu);
-+
-+	if (!synic->active && (!host || count))
-+		return 1;
-+
- 	trace_kvm_hv_stimer_set_count(stimer_to_vcpu(stimer)->vcpu_id,
- 				      stimer->index, count, host);
- 
+ 	return 0;
+-- 
+2.35.1
+
 
 

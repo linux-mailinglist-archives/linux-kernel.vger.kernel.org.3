@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5340550591A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A418505904
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343805AbiDROPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S244863AbiDRONu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244625AbiDRN5J (ORCPT
+        with ESMTP id S243732AbiDRN5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:57:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE7E2AC5F;
-        Mon, 18 Apr 2022 06:06:21 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247762AC60;
+        Mon, 18 Apr 2022 06:06:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6393EB80EC0;
-        Mon, 18 Apr 2022 13:06:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFC9C385A8;
-        Mon, 18 Apr 2022 13:06:18 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B44CA60B35;
+        Mon, 18 Apr 2022 13:06:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B41A1C385A7;
+        Mon, 18 Apr 2022 13:06:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287179;
-        bh=ciq4+saILnSmTUYpZqah/8kv/Mj2SHY40js+mmtBP7k=;
+        s=korg; t=1650287182;
+        bh=uGCONhTq/DOD+1iKmj+qYyJ/U/vVNI+NlNONED7N7jM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VqxtJeQIvh/nvL89TNhPSnYtf380aaf7J6HDtBCkUBI745tFuzSSwdIRS8zv3CXbG
-         SuyB3uzN4RsJMESLM9VoX7NFKSDs2sACmiF3oKdawAzfIQ4RdhF7IgBecfr6qgz4Kv
-         jCCccGr5Zz2dd1PCO+ZptRW1ywDjCCDjDWAIoOtA=
+        b=hAEnE4v2G3Y9UpPNp7ZqACwEqFsn7gPyUKq30p9UzAIKZNzkJic3m7KXjVXvh0QPL
+         ZqYrjCqSe5vWF8PXu5U5gEbeBl1UNeH7UG7gBqykjmfP282bscrE6vCQlghXxYUtf6
+         Cd05Uy3Aahqixai3vCcEfII8sm9U1YsCBp3Qrlj0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Corentin Labbe <clabbe.montjoie@gmail.com>,
+        stable@vger.kernel.org, Tomas Paukrt <tomaspaukrt@email.cz>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 040/218] crypto: authenc - Fix sleep in atomic context in decrypt_tail
-Date:   Mon, 18 Apr 2022 14:11:46 +0200
-Message-Id: <20220418121200.681096033@linuxfoundation.org>
+Subject: [PATCH 4.9 041/218] crypto: mxs-dcp - Fix scatterlist processing
+Date:   Mon, 18 Apr 2022 14:11:47 +0200
+Message-Id: <20220418121200.727069178@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,40 +55,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Herbert Xu <herbert@gondor.apana.org.au>
+From: Tomas Paukrt <tomaspaukrt@email.cz>
 
-[ Upstream commit 66eae850333d639fc278d6f915c6fc01499ea893 ]
+[ Upstream commit 28e9b6d8199a3f124682b143800c2dacdc3d70dd ]
 
-The function crypto_authenc_decrypt_tail discards its flags
-argument and always relies on the flags from the original request
-when starting its sub-request.
+This patch fixes a bug in scatterlist processing that may cause incorrect AES block encryption/decryption.
 
-This is clearly wrong as it may cause the SLEEPABLE flag to be
-set when it shouldn't.
-
-Fixes: 92d95ba91772 ("crypto: authenc - Convert to new AEAD interface")
-Reported-by: Corentin Labbe <clabbe.montjoie@gmail.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Tested-by: Corentin Labbe <clabbe.montjoie@gmail.com>
+Fixes: 2e6d793e1bf0 ("crypto: mxs-dcp - Use sg_mapping_iter to copy data")
+Signed-off-by: Tomas Paukrt <tomaspaukrt@email.cz>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- crypto/authenc.c | 2 +-
+ drivers/crypto/mxs-dcp.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/crypto/authenc.c b/crypto/authenc.c
-index 6bfec690ca5b..f9ab04aa6dd5 100644
---- a/crypto/authenc.c
-+++ b/crypto/authenc.c
-@@ -268,7 +268,7 @@ static int crypto_authenc_decrypt_tail(struct aead_request *req,
- 		dst = scatterwalk_ffwd(areq_ctx->dst, req->dst, req->assoclen);
+diff --git a/drivers/crypto/mxs-dcp.c b/drivers/crypto/mxs-dcp.c
+index 0e14a6642de4..ad714798f5d8 100644
+--- a/drivers/crypto/mxs-dcp.c
++++ b/drivers/crypto/mxs-dcp.c
+@@ -328,7 +328,7 @@ static int mxs_dcp_aes_block_crypt(struct crypto_async_request *arq)
+ 		memset(key + AES_KEYSIZE_128, 0, AES_KEYSIZE_128);
+ 	}
  
- 	skcipher_request_set_tfm(skreq, ctx->enc);
--	skcipher_request_set_callback(skreq, aead_request_flags(req),
-+	skcipher_request_set_callback(skreq, flags,
- 				      req->base.complete, req->base.data);
- 	skcipher_request_set_crypt(skreq, src, dst,
- 				   req->cryptlen - authsize, req->iv);
+-	for_each_sg(req->src, src, sg_nents(src), i) {
++	for_each_sg(req->src, src, sg_nents(req->src), i) {
+ 		src_buf = sg_virt(src);
+ 		len = sg_dma_len(src);
+ 		tlen += len;
 -- 
 2.34.1
 

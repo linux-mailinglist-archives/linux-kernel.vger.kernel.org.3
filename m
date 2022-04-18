@@ -2,107 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0418504F81
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE57A504F83
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:45:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236826AbiDRLqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49650 "EHLO
+        id S236845AbiDRLr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236769AbiDRLqM (ORCPT
+        with ESMTP id S233053AbiDRLr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:46:12 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EAA15A02
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:43:32 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id y10so8966760ejw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:43:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=K5VFTkItBhPN90YMdU8CWhA6XeIV4gqA7vd7xl6JZvs=;
-        b=IIOonIr6w+EOL7nEdJx1+v5w8AjbfrzABOsF2hgt/cGhEcnJUSN1e7xq2gGEZnJRpW
-         y/sTz/qBzkUN7FijyoN0QMG/NjifiR3aRXMsCgq2HnNun+hqblYT/GfZIyOejR2SySPv
-         0gKrAJsMYx8DvIVpfOi/ljQ8VAer9qZscUS1A002a1k1hMeUbBFWXQZSI2I3yd/AfZSd
-         ncKVOqbDgSrWdtoAw4r1KS32CbIkLYr1iwwYV3EBDdpYsMQHN2ew5iBzf+3c0JiRqLJD
-         ZCuCbLWUKYK+XvP2o7BqGAsngxT56uxWCvuYaj5FdJym5G3yyXNLTTlZVLR4c0YwOAip
-         jo0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=K5VFTkItBhPN90YMdU8CWhA6XeIV4gqA7vd7xl6JZvs=;
-        b=0bjHbZpsAx4p+avuLvUrv9Txj85ansHEStK1mVR2ve21i1ScS7/JB1LZ93rlx3Uq1t
-         9iEiPAIcRpvT+awJgIatMQok0AufPsf9dFeU4bjoDUsJ6M4v6HtJlAMlxL+Cdq8CTs67
-         FNLoC7AH2tAyfqz03Hgjwx3Qnm1kQ27mcARUNMb9BBRu39ln3EAv5EfTS5ZRqEsVyKDe
-         yPIU/vZ6tGreDBlONsCvas2pkHeuE45aIESIKPbXkloV3dKy995J0qxO93RuVuPaVEPM
-         VHZWYQGGmaiyhNgwKuSIX9jZhbflkkfuEdOqhQ4bpBArsB+vS3wHb/t/Psu/acneJv0b
-         ZFLw==
-X-Gm-Message-State: AOAM531GugnQQF+36A0m1B9fqBpom3w6y04IWzq45KnSNgmEAocGsdlI
-        pMYf7vxKC3ooivUfPeLm42zU7Q==
-X-Google-Smtp-Source: ABdhPJxjYZY985v8Pfrex1Cnl+eJoXXj6gpnlZklI4bIIFwGaCNeV6NELuvZ0KWRcpU1IjSmuy37Mg==
-X-Received: by 2002:a17:906:52c7:b0:6ce:a880:50a3 with SMTP id w7-20020a17090652c700b006cea88050a3mr8643692ejn.437.1650282211473;
-        Mon, 18 Apr 2022 04:43:31 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id n14-20020a50934e000000b0042053e79386sm6936955eda.91.2022.04.18.04.43.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 04:43:30 -0700 (PDT)
-Message-ID: <1e3ede4e-994b-4d87-b907-ec68661fb958@linaro.org>
-Date:   Mon, 18 Apr 2022 13:43:29 +0200
+        Mon, 18 Apr 2022 07:47:26 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B8263C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:44:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650282288; x=1681818288;
+  h=message-id:date:mime-version:cc:to:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=ed9XtiWvuduH3tePyFDVZz4+lZ73C5IN2pEFYdP+YKI=;
+  b=aw2Mjak+93FclCcIlf9i+OqhUpfmbIf6LjOV46n7HlmdtYKeBgR7Fr9r
+   60LN4nRizwPhYgbSBZgwSq+bx2m/aVs6VmxVAMsTWxP5h9GGNxNbpz5ks
+   3nitAuArXAwhmituSAobqgS1Q/2rtdlcMEwe2Yfql+5AU9w965a4QP0/M
+   BJtb5N1HExkEUgpFt40pOFrtME4VQen4oO/A4/Qx1R/1Mt5AyuPwt7zTe
+   Gwmec3B0+fU8CIlrVNjfVNdliPD7LDHkI1X4pyVgQYBxBibvx8t1hHqO9
+   o+0Vf2c1obq9oipg7KwiwS+c+uzVtDgWxC0l/1TwFttXA2TI3eF8I625v
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262962853"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="262962853"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 04:44:48 -0700
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="575541874"
+Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.231]) ([10.254.208.231])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 04:44:46 -0700
+Message-ID: <46f51f30-28e9-4b91-acd5-1df43c1428d6@linux.intel.com>
+Date:   Mon, 18 Apr 2022 19:44:44 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 4/4] dt-bindings: mmc: convert sdhci-dove to JSON schema
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Cc:     baolu.lu@linux.intel.com,
+        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc:     ulf.hansson@linaro.org, robh+dt@kernel.org, krzk+dt@kernel.org,
-        gregory.clement@bootlin.com, sebastian.hesselbarth@gmail.com,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220414230603.567049-1-chris.packham@alliedtelesis.co.nz>
- <20220414230603.567049-5-chris.packham@alliedtelesis.co.nz>
- <YlivMII9rDCcB6lk@lunn.ch>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <YlivMII9rDCcB6lk@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+References: <20220416123049.879969-1-baolu.lu@linux.intel.com>
+ <20220416123049.879969-4-baolu.lu@linux.intel.com>
+ <BN9PR11MB5276BC4D5F9B133C84630CBA8CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+Subject: Re: [PATCH 3/3] iommu/vt-d: Size Page Request Queue to avoid overflow
+ condition
+In-Reply-To: <BN9PR11MB5276BC4D5F9B133C84630CBA8CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 01:33, Andrew Lunn wrote:
-> Hi Chris
-> 
->> +required:
->> +  - compatible
->> +  - reg
->> +  - interrupts
-> 
-> https://elixir.bootlin.com/linux/latest/source/drivers/mmc/host/sdhci-dove.c#L78
-> 
-> https://elixir.bootlin.com/linux/latest/source/arch/arm/boot/dts/dove.dtsi#L344
-> 
-> Dove does actually have a clock. It looks like it is optional in the
-> driver, but the .dtsi file has it. It is not documented in the current
-> .txt file, so i can understand you missing it.
-> 
-> I'm surprised the DT tools didn't complain about an unexpected
-> property.
+On 2022/4/18 15:00, Tian, Kevin wrote:
+>> From: Lu Baolu<baolu.lu@linux.intel.com>
+>> Sent: Saturday, April 16, 2022 8:31 PM
+>>
+>> PRQ overflow may cause I/O throughput congestion, resulting in unnecessary
+>> degradation of IO performance. Appropriately increasing the length of PRQ
+>> can greatly reduce the occurrence of PRQ overflow. The count of maximum
+>> page requests that can be generated in parallel by a PCIe device is
+>> statically defined in the Outstanding Page Request Capacity field of the
+>> PCIe ATS configure space.
+>>
+>> The new lenght of PRQ is calculated by summing up the value of Outstanding
+>> Page Request Capacity register across all devices where Page Requests are
+>> supported on the real PR-capable platfrom (Intel Sapphire Rapids). The
+>> result is round to the nearest higher power of 2.
+> The actual requirement is usage and platform specific. What about
+> doubling the default size and also provide an option for admin to
+> tune?
 
-They did. :)
-
-It seems binding is a bit out of date, so Chris should extend/update it.
-
-Same comments about maintainer as for patch #3.
+I also have this in my list to provide an opt-in interface for user. But
+I don't want to include it in this series as this is only for small
+tuning. The opt-in interface looks more like a new feature. :-)
 
 Best regards,
-Krzysztof
+baolu

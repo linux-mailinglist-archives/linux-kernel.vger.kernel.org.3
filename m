@@ -2,87 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BB8D505DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E756505DEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347309AbiDRSKn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:10:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
+        id S1347354AbiDRSPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiDRSKm (ORCPT
+        with ESMTP id S229523AbiDRSPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 14:10:42 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E426369E5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650305282; x=1681841282;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=dyyMH0xpZtsmvKPKBHxyzRSqFnhpIBPEXWOqpua1DEE=;
-  b=YQj2Wk+wvtCBxdy+uZDZsMmnM0HC+CaZ4JM8XrwDBqAtWtSEEEgzaY9o
-   VtBn5qPE5K0tuAPDvRvBO0JF7BkCeZy2MgeN94ENWwM9ywGbNRdVGvOwv
-   oNZv8rTk8dSt8Y2rFmcWN4sDiBsttCkZGS5IP5UUm/m85RfATpJJhNqb1
-   kY4Uf/Y6EzY4BOwgdIZpmIIS9AcoCSuMfJoYxQNiuBvi7rfDCNOlSja5s
-   zwjYDHwTBg8b/2XCNwzGGrPG+8s/x/fJfw8/GtU61vztofUqVpnD2wWXQ
-   FvORxNpSxfox6zdCiwpNJMST+dFO0PetUx2wdyxdHVHLcJ/+06m1SOV/c
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262440361"
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="262440361"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 11:08:01 -0700
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="529659339"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.7.198.157])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 11:08:01 -0700
-Date:   Mon, 18 Apr 2022 11:11:35 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "zhangfei.gao@foxmail.com" <zhangfei.gao@foxmail.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        jean-philippe <jean-philippe@linaro.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        x86 <x86@kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        iommu <iommu@lists.linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "Poimboe, Josh" <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH v4 05/11] iommu/sva: Assign a PASID to mm on PASID
- allocation and free it on mm exit
-Message-ID: <20220418111135.6260d450@jacob-builder>
-In-Reply-To: <BN9PR11MB52765490BFC5F08CD4F7A9208CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <tencent_9920B633D50E9B80D3A41A723BCE06972309@qq.com>
-        <f439dde5-0eaa-52e4-9cf7-2ed1f62ea07f@intel.com>
-        <tencent_F73C11A7DBAC6AF24D3369DF0DCA1D7E8308@qq.com>
-        <a139dbad-2f42-913b-677c-ef35f1eebfed@intel.com>
-        <tencent_B683AC1146DB6A6ABB4D73697C0D6A1D7608@qq.com>
-        <YlWBkyGeb2ZOGLKl@fyu1.sc.intel.com>
-        <tencent_A9458C6CEBAADD361DA765356477B00E920A@qq.com>
-        <tencent_8B6D7835F62688B4CD069C0EFC41B308B407@qq.com>
-        <YllADL6uMoLllzQo@fyu1.sc.intel.com>
-        <99bcb9f5-4776-9c40-a776-cdecfa9e1010@foxmail.com>
-        <YllN/OmjpYdT1tO9@otcwcpicx3.sc.intel.com>
-        <tencent_CD35B6A6FBB48186B38EF641F088BAED1407@qq.com>
-        <20220415140002.7c12b0d2@jacob-builder>
-        <BN9PR11MB52765490BFC5F08CD4F7A9208CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Mon, 18 Apr 2022 14:15:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C19072DD6F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:12:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650305555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1X1P7TWjalEM123qZYEn+EVXAidMNPjn8TgJk2XbTmY=;
+        b=c7tCX/v12VIwK/NuXj0h6W2aVl+0Z2bIdSXfZFsRFvHcptRZDvaaO6g8cLl6jxyiEs9ZOB
+        LXJMMF8VOkXzG1Wz78lhYg3Q2lte047TZF0p0GseKx1ReTzX8ciNF9DGzEoOACIELejnjn
+        0eAoWdBQtC5d5MWMLj0XUKvsYtwt/UI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-534-9tjdyVQgO8K919Vc6j2rHw-1; Mon, 18 Apr 2022 14:12:29 -0400
+X-MC-Unique: 9tjdyVQgO8K919Vc6j2rHw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6557C805F46;
+        Mon, 18 Apr 2022 18:12:29 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.8.122])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id D2F07200D8EF;
+        Mon, 18 Apr 2022 18:12:28 +0000 (UTC)
+Date:   Mon, 18 Apr 2022 14:12:27 -0400
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     Nicolas Schier <nicolas@fjasle.eu>
+Cc:     Petr Mladek <pmladek@suse.com>, live-patching@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org
+Subject: Re: [RFC PATCH v6 02/12] kbuild: Support for symbols.klp creation
+Message-ID: <Yl2qC7p7NDq4i+9B@redhat.com>
+References: <20220216163940.228309-1-joe.lawrence@redhat.com>
+ <20220216163940.228309-3-joe.lawrence@redhat.com>
+ <Ylfq7t0uOP7gCPEO@alley>
+ <YlhhHSQIWpLG0Cgn@fjasle.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YlhhHSQIWpLG0Cgn@fjasle.eu>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,70 +64,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kevin,
-
-On Mon, 18 Apr 2022 06:34:19 +0000, "Tian, Kevin" <kevin.tian@intel.com>
-wrote:
-
-> > From: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> > Sent: Saturday, April 16, 2022 5:00 AM
+On Thu, Apr 14, 2022 at 07:59:57PM +0200, Nicolas Schier wrote:
+> On Thu, Apr 14, 2022 at 11:35:42AM +0200 Petr Mladek wrote:
+> > On Wed 2022-02-16 11:39:30, Joe Lawrence wrote:
+> > > From: Joao Moreira <jmoreira@suse.de>
+> > > 
+> > > For automatic resolution of livepatch relocations, a file called
+> > > symbols.klp is used. This file maps symbols within every compiled kernel
+> > > object allowing the identification of symbols whose name is unique, thus
+> > > relocation can be automatically inferred, or providing information that
+> > > helps developers when code annotation is required for solving the
+> > > matter.
+> > > 
+> > > Add support for creating symbols.klp in the main Makefile. First, ensure
+> > > that built-in is compiled when CONFIG_LIVEPATCH is enabled (as required
+> > > to achieve a complete symbols.klp file). Define the command to build
+> > > symbols.klp (cmd_klp_map) and hook it in the modules rule.
+> > > 
+> > > As it is undesirable to have symbols from livepatch objects inside
+> > > symbols.klp, make livepatches discernible by modifying
+> > > scripts/Makefile.build to create a .livepatch file for each livepatch in
+> > > $(MODVERDIR). This file then used by cmd_klp_map to identify and bypass
+> > > livepatches.
+> > >
+> > > For identifying livepatches during the build process, a flag variable
+> > > LIVEPATCH_$(basetarget).o is considered in scripts/Makefile.build. This
+> > > way, set this flag for the livepatch sample Makefile in
+> > > samples/livepatch/Makefile.
 > > 
-> > Hi zhangfei.gao@foxmail.com,
+> > I do not see the related code in scripts/Makefile.build.
 > > 
-> > On Fri, 15 Apr 2022 19:52:03 +0800, "zhangfei.gao@foxmail.com"
-> > <zhangfei.gao@foxmail.com> wrote:
-> >   
-> > > >>> A PASID might be still used even though it is freed on mm exit.
-> > > >>>
-> > > >>> process A:
-> > > >>> 	sva_bind();
-> > > >>> 	ioasid_alloc() = N; // Get PASID N for the mm
-> > > >>> 	fork(): // spawn process B
-> > > >>> 	exit();
-> > > >>> 	ioasid_free(N);
-> > > >>>
-> > > >>> process B:
-> > > >>> 	device uses PASID N -> failure
-> > > >>> 	sva_unbind();
-> > > >>>
-> > > >>> Dave Hansen suggests to take a refcount on the mm whenever
-> > > >>> binding  
-> > the  
-> > > >>> PASID to a device and drop the refcount on unbinding. The mm
-> > > >>> won't  
-> > be  
-> > > >>> dropped if the PASID is still bound to it.
-> > > >>>
-> > > >>> Fixes: 701fac40384f ("iommu/sva: Assign a PASID to mm on PASID
-> > > >>> allocation and free it on mm exit")
-> > > >>>  
-> > Is process A's mm intended to be used by process B? Or you really should
-> > use PASID N on process B's mm? If the latter, it may work for a while
-> > until B changes mapping.
+> > > Finally, Add a clean rule to ensure that symbols.klp is removed during
+> > > clean.
+> > > 
+> > > Notes:
+> > > 
+> > > To achieve a correct symbols.klp file, all kernel objects must be
+> > > considered, thus, its construction require these objects to be priorly
+> > > built. On the other hand, invoking scripts/Makefile.modpost without
+> > > having a complete symbols.klp in place would occasionally lead to
+> > > in-tree livepatches being post-processed incorrectly.
 > > 
-> > It seems you are just extending the life of a defunct mm?
-> >   
+> > Honestly, I do not understand what it exactly means that "in-tree
+> > livepatches would occasionally be post-processed incorrectly".
+> > 
+> > Is it the problem that modpost is not able to handle the unresolved
+> > symbols that have to be updated by klp-convert?
+> > 
+> > > To prevent this
+> > > from becoming a circular dependency, the construction of symbols.klp
+> > > uses non-post-processed kernel objects and such does not cause harm as
+> > > the symbols normally referenced from within livepatches are visible at
+> > > this stage. Also due to these requirements, the spot in-between modules
+> > > compilation and the invocation of scripts/Makefile.modpost was picked
+> > > for hooking cmd_klp_map.
+> > > 
+> > > The approach based on .livepatch files was proposed as an alternative to
+> > > using MODULE_INFO statements. This approach was originally proposed by
+> > > Miroslav Benes as a workaround for identifying livepathes without
+> > > depending on modinfo during the modpost stage. It was moved to this
+> > > patch as the approach also shown to be useful while building
+> > > symbols.klp.
+> > 
+> > All the tricky code is removed in the 5th patch. My understanding is
+> > that the problem causing the cyclic dependency is solved by modifying
+> > modpost.
+> > 
+> > It looks like this patch is outdated and mostly obsoleted. On the
+> > other hand, the commit message in 5th patch is too short.
+> > 
+> > What about merging the two patches and updating the commit message?
 > 
-> IMHO the intention is not to allow B to access A's mm.
+> +1
 > 
-> The problem is that PASID N is released on exit() of A and then
-> reallocated to B before iommu driver gets the chance to quiesce
-> the device and clear the PASID entry. According to the discussion
-> the quiesce operation must be done when driver calls unbind()
-> instead of in mm exit. In this case a failure is reported when
-> B tries to call bind() on PASID N due to an already-present entry.
+> Yes, please merge those patches.  These '$(shell ...)' side-effect lines in the
+> definition of 'cmd_klp_map' are quite confusing.
 > 
-> Dave's patch extending the life of A's mm until unbind() is called.
-> With it B either gets a different PASID before A's unbind() is 
-> completed or same PASID N pointing to B's mm after A's unbind().
-> 
-As long as B gets a different PASID, that is fine. It seems PASID N has no
-use then.
 
-> Thanks
-> Kevin
-
+Sure.  Admittedly the kbuild integration is most confusing to me, so I
+leaned heavily on Joao's original notes and Masahiro's gracious tips and
+refactored code.  I'll try cutting to the final version in later patches
+rather than providing all the (confusing) code evolution along the way.
 
 Thanks,
+ 
+-- Joe
 
-Jacob

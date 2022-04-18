@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A0D2505FA1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:12:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5767505FA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:15:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiDRWPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:15:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
+        id S231356AbiDRWRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230506AbiDRWPa (ORCPT
+        with ESMTP id S231285AbiDRWQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:15:30 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE54427B3F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:12:49 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c23so13493425plo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:12:49 -0700 (PDT)
+        Mon, 18 Apr 2022 18:16:57 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4250927CE2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:14:16 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id bx5so14118072pjb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=sWWX2GTsw+MtALKWmopT7j+jipc7W7igl5gIqNLQGM8=;
-        b=BX5jTyHiYa5maCfpHH901AGhqCKQsy/+DQaDL94UEpRWnk8etBqCxBqNNWcBzGoXdJ
-         gMu5lQWoN2whmbKR/G8jsoSV8FdAaM4RiGCicjbGBy9dG3DTr4wgtSsLU5NhLzQVDxzG
-         xkgYtHmpEhu7uoJoFELzg55/FkwqXDAg//bJVZbFrmDXk7WHyM+/AIyoD8Wt6zPSphsZ
-         whvY+xVbBx5g03mOidV1JRxzidfuKXWUAiupujdt0z87gJLAFV1LFl2BIeRgc6jmpifo
-         9IZUyOcm+Nd/hd2iINbRWglyjgJvNgh53ykjVvrHA0ih2I06tZQiNh3f1ho0OydBe7VU
-         9J5w==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=l9iX3O76iQ19mxLdkIRQWetqHCUUN6Yl8wyXvju+L58=;
+        b=NKOJlVVw1gJhLASM4i9WIdrdYpP0RJ7udb9nNjDPBjFV9Hkyq8LHpDyLMYAcssOcbL
+         0uHls7TNNgwFLz/gtqaQluedACtFDmwdZFSDa7JarDlE0tEwsKcx5QxGyX9rKCLiWxHb
+         3KYOz6nsCtmjwv+CY46RN2KoQB0vIQOpmsfNs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=sWWX2GTsw+MtALKWmopT7j+jipc7W7igl5gIqNLQGM8=;
-        b=NmqNVPm9R+W5d0PJouLjHlqt/dr4iDQTp1G2xIJQytnNq0OjyGNSzC5iF9TTQL5FTp
-         ufGtBwnDAsp3DTeqQuno4WmtxiaUhBGZpFFEGLOTceef87e0Vci7BGJhAFC/cQeHrkMD
-         oRbkd4G4Q3jC7U0kJX1/xIfe6ifbt7ttxWpZCwlqWEVzLhTTrJniQ14+nBG8RSyjO1yL
-         lD0TpCrrZWyvCzG8Uovwwl99KtovoqCsN46flj53h8eVwPK5AYvfy21wMeuxS6VraVOj
-         cQzIXGkSvVafXcioI5PXqcBZzI6ai6o5RxRRVVjDbaJ2xbZNYvtH3KSMH+8Wawl1GmHb
-         W6lw==
-X-Gm-Message-State: AOAM530o2VIUEpd2GnliqG9bCb5BR0LzJ0rpWQDxbebIMWuV0zdsf3kl
-        Xi5oX/xHe1++X3ouLoxyvGcVcg==
-X-Google-Smtp-Source: ABdhPJwIjo3q1aAqS/oJjejwoLjmMkb+36qpIvU50nyfibKCTlL44ams67cHZ/9lQPsl29vYf8DhUA==
-X-Received: by 2002:a17:903:1210:b0:151:fa59:95ef with SMTP id l16-20020a170903121000b00151fa5995efmr12993125plh.57.1650319969360;
-        Mon, 18 Apr 2022 15:12:49 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id i2-20020a625402000000b004fdf66ab35fsm13731333pfb.21.2022.04.18.15.12.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 15:12:48 -0700 (PDT)
-Message-ID: <df4853fb-0e10-4d50-75cd-ee9b06da5ab1@kernel.dk>
-Date:   Mon, 18 Apr 2022 16:12:47 -0600
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=l9iX3O76iQ19mxLdkIRQWetqHCUUN6Yl8wyXvju+L58=;
+        b=fUAdDE7uKdtF7iXXZ+pjK0kpZt975wamuLxX48jDmHNvG6YDZfefB1gz9jP/FnECZe
+         rkZ389BA63qknrvMseNVn5IC9ECfSBkYrDSt1OZf9kxbghq7iGm9eU/dAF9eHYN8gxcv
+         FH11KcWyys5l6bV55YxeMOPxYaEKHh4sVwRZ1/RgwsuOdiNgFZ72vi5rQFLtB5yh2ln5
+         2k753PNYPUTSgXExquP9UIzWE4iKTaz8kL0NyMXgNtZFNblDMFKgBYhUUCv/n6jC02Ie
+         NlkL2UmQMFRCbi0M65C648uM2iDvumpsUX7mz/+qoZLIEQMj7XqT2chtDeCmxuuPdDy0
+         NuJQ==
+X-Gm-Message-State: AOAM530cNcdvK3SCVqB/bdTdF+IkurDoTNxuPR1Rj2tLz0MlyFcWNaB0
+        sPCizT6+PpZ3ySfHNxZTlnobSw==
+X-Google-Smtp-Source: ABdhPJxYWfaYuUfmsuYBP9tAVt7Q9FdYPOiskmz/BKG5SMVEEro5fUdapj1n24fWgg8kEKZu+KWh/g==
+X-Received: by 2002:a17:90b:3a90:b0:1d1:7733:a6a2 with SMTP id om16-20020a17090b3a9000b001d17733a6a2mr17042453pjb.79.1650320055731;
+        Mon, 18 Apr 2022 15:14:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b25-20020aa78719000000b0050a4b5cf892sm10676304pfo.60.2022.04.18.15.14.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 15:14:15 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 15:14:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>, dm-devel@redhat.com
+Subject: Re: [PATCH 0/3] LoadPin: Enable loading from trusted dm-verity
+ devices
+Message-ID: <202204181512.DA0C0C6EBD@keescook>
+References: <20220418211559.3832724-1-mka@chromium.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_v2=5d_fs-writeback=3a_writeback=5fsb=5fino?=
- =?UTF-8?Q?des=ef=bc=9aRecalculate_=27wrote=27_according_skipped_pages?=
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        yukuai3@huawei.com
-References: <20220418092824.3018714-1-chengzhihao1@huawei.com>
- <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com>
- <587c1849-f81b-13d6-fb1a-f22588d8cc2d@kernel.dk>
- <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418211559.3832724-1-mka@chromium.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/22 4:01 PM, Linus Torvalds wrote:
-> On Mon, Apr 18, 2022 at 2:16 PM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> So as far as I can tell, we really have two options:
->>
->> 1) Don't preempt a task that has a plug active
->> 2) Flush for any schedule out, not just going to sleep
->>
->> 1 may not be feasible if we're queueing lots of IO, which then leaves 2.
->> Linus, do you remember what your original patch here was motivated by?
->> I'm assuming it was an effiency thing, but do we really have a lot of
->> cases of IO submissions being preempted a lot and hence making the plug
->> less efficient than it should be at merging IO? Seems unlikely, but I
->> could be wrong.
-> 
-> No, it goes all the way back to 2011, my memory for those kinds of
-> details doesn't go that far back.
-> 
-> That said, it clearly is about preemption, and I wonder if we had an
-> actual bug there.
-> 
-> IOW, it might well not just in the "gather up more IO for bigger
-> requests" thing, but about "the IO plug is per-thread and doesn't have
-> locking because of that".
-> 
-> So doing plug flushing from a preemptible kernel context might race
-> with it all being set up.
+[oops, resending to actual CC list]
 
-Hmm yes. But doesn't preemption imply a full barrier? As long as we
-assign the plug at the end, we should be fine. And just now looking that
-up, there's even already a comment to that effect in blk_start_plug().
-So barring any weirdness with that, maybe that's the solution.
+On Mon, Apr 18, 2022 at 02:15:56PM -0700, Matthias Kaehlcke wrote:
+> This series extends LoadPin to allow loading of kernel files
+> from trusted dm-verity devices. It adds the concept of
+> trusted verity devices to LoadPin. Userspace can use the
+> new systl file 'loadpin/trusted_verity_root_digests' to
+> provide LoadPin with a list of root digests from dm-verity
+> devices that LoadPin should consider as trusted. When a
+> kernel file is read LoadPin first checks (as usual) whether
+> the file is located on the pinned root, if so the file can
+> be loaded. Otherwise, if the verity extension is enabled,
+> LoadPin determines whether the file is located on a verity
+> backed device and whether the root digest of that device
+> is in the list of trusted digests. The file can be loaded
+> if the verity device has a trusted root digest.
+> 
+> The list of trusted root digests can only be written once
+> (typically at boot time), to limit the possiblity of
+> attackers setting up rogue verity devices and marking them
+> as trusted.
 
-Your comment did jog my memory a bit though, and I do in fact think it
-was something related to that that made is change it. I'll dig through
-some old emails and see if I can find it.
+Hi,
 
-> Explicit io_schedule() etc obviously doesn't have that issue.
+Thanks for working all this out! Where does the list of trusted
+roothashes come from? I assume some chain of trust exists. Is the list
+maybe already stored on the rootfs?
 
-Right
+It'd be nice if there was some way to pass the trust chain to LoadPin
+more directly.
+
+-Kees
 
 -- 
-Jens Axboe
-
+Kees Cook

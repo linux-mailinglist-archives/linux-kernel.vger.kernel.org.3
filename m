@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8C0F50523A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D6A150549B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240453AbiDRMjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S243555AbiDRNKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239788AbiDRMd2 (ORCPT
+        with ESMTP id S241682AbiDRM65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E12561B798;
-        Mon, 18 Apr 2022 05:26:15 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EFB2DD79;
+        Mon, 18 Apr 2022 05:39:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A94D60F7C;
-        Mon, 18 Apr 2022 12:26:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78639C385A9;
-        Mon, 18 Apr 2022 12:25:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FBF9B80EDB;
+        Mon, 18 Apr 2022 12:39:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AF86C385AC;
+        Mon, 18 Apr 2022 12:39:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284744;
-        bh=XH/aPqskHsYqk183lo7pT+BSy3GImF4PNjTADsO1cVo=;
+        s=korg; t=1650285564;
+        bh=brtuF43pM50XqWsrLtaTVNwuTiY5ZTnr6ySqkkguyiw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IhPMJ30I+70DmqY7Q1fI/KTUBxxD9/8Y2hSNyJpAdjgt0FyxHFpPB32CestBiEES7
-         twIOfnVCJG5i2FgXiy+YzB5KAQe5lB0vAhs6pIkRdHSFoJDJWsp6IaIekCIrx42Exb
-         7LaGspwwzjRMAFtsfrkAazK3qcpYpJVfCjwzyp6c=
+        b=cJ0QvUxo0dGED9bEoAR7GvBWRCtgvtdgCmM0XWWe3vXA9v7pTLUJoLXJx47cyXuwR
+         cTwxKP3OremulL0Jb52MmjLbSsnKnEse3pypodR61qPi1uUTos6FnXjp2/cJhtCL+N
+         O2ZSePoGpk2zeFPrhi+ZnJcp1GQ9IcE6JmFLL2SY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Sven Peter <sven@svenpeter.dev>, Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.17 212/219] i2c: pasemi: Wait for write xfers to finish
+        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 059/105] arm64: alternatives: mark patch_alternative() as `noinstr`
 Date:   Mon, 18 Apr 2022 14:13:01 +0200
-Message-Id: <20220418121212.801276880@linuxfoundation.org>
+Message-Id: <20220418121148.162990767@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +56,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Joey Gouly <joey.gouly@arm.com>
 
-commit bd8963e602c77adc76dbbbfc3417c3cf14fed76b upstream.
+[ Upstream commit a2c0b0fbe01419f8f5d1c0b9c581631f34ffce8b ]
 
-Wait for completion of write transfers before returning from the driver.
-At first sight it may seem advantageous to leave write transfers queued
-for the controller to carry out on its own time, but there's a couple of
-issues with it:
+The alternatives code must be `noinstr` such that it does not patch itself,
+as the cache invalidation is only performed after all the alternatives have
+been applied.
 
- * Driver doesn't check for FIFO space.
+Mark patch_alternative() as `noinstr`. Mark branch_insn_requires_update()
+and get_alt_insn() with `__always_inline` since they are both only called
+through patch_alternative().
 
- * The queued writes can complete while the driver is in its I2C read
-   transfer path which means it will get confused by the raising of
-   XEN (the 'transaction ended' signal). This can cause a spurious
-   ENODATA error due to premature reading of the MRXFIFO register.
+Booting a kernel in QEMU TCG with KCSAN=y and ARM64_USE_LSE_ATOMICS=y caused
+a boot hang:
+[    0.241121] CPU: All CPU(s) started at EL2
 
-Adding the wait fixes some unreliability issues with the driver. There's
-some efficiency cost to it (especially with pasemi_smb_waitready doing
-its polling), but that will be alleviated once the driver receives
-interrupt support.
+The alternatives code was patching the atomics in __tsan_read4() from LL/SC
+atomics to LSE atomics.
 
-Fixes: beb58aa39e6e ("i2c: PA Semi SMBus driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The following fragment is using LL/SC atomics in the .text section:
+  | <__tsan_unaligned_read4+304>:     ldxr    x6, [x2]
+  | <__tsan_unaligned_read4+308>:     add     x6, x6, x5
+  | <__tsan_unaligned_read4+312>:     stxr    w7, x6, [x2]
+  | <__tsan_unaligned_read4+316>:     cbnz    w7, <__tsan_unaligned_read4+304>
+
+This LL/SC atomic sequence was to be replaced with LSE atomics. However since
+the alternatives code was instrumentable, __tsan_read4() was being called after
+only the first instruction was replaced, which led to the following code in memory:
+  | <__tsan_unaligned_read4+304>:     ldadd   x5, x6, [x2]
+  | <__tsan_unaligned_read4+308>:     add     x6, x6, x5
+  | <__tsan_unaligned_read4+312>:     stxr    w7, x6, [x2]
+  | <__tsan_unaligned_read4+316>:     cbnz    w7, <__tsan_unaligned_read4+304>
+
+This caused an infinite loop as the `stxr` instruction never completed successfully,
+so `w7` was always 0.
+
+Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/r/20220405104733.11476-1-joey.gouly@arm.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-pasemi-core.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/arm64/kernel/alternative.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/i2c/busses/i2c-pasemi-core.c
-+++ b/drivers/i2c/busses/i2c-pasemi-core.c
-@@ -137,6 +137,12 @@ static int pasemi_i2c_xfer_msg(struct i2
+diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
+index 73039949b5ce..5f8e4c2df53c 100644
+--- a/arch/arm64/kernel/alternative.c
++++ b/arch/arm64/kernel/alternative.c
+@@ -41,7 +41,7 @@ bool alternative_is_applied(u16 cpufeature)
+ /*
+  * Check if the target PC is within an alternative block.
+  */
+-static bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
++static __always_inline bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
+ {
+ 	unsigned long replptr = (unsigned long)ALT_REPL_PTR(alt);
+ 	return !(pc >= replptr && pc <= (replptr + alt->alt_len));
+@@ -49,7 +49,7 @@ static bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
  
- 		TXFIFO_WR(smbus, msg->buf[msg->len-1] |
- 			  (stop ? MTXFIFO_STOP : 0));
-+
-+		if (stop) {
-+			err = pasemi_smb_waitready(smbus);
-+			if (err)
-+				goto reset_out;
-+		}
- 	}
+ #define align_down(x, a)	((unsigned long)(x) & ~(((unsigned long)(a)) - 1))
  
- 	return 0;
+-static u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnptr)
++static __always_inline u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnptr)
+ {
+ 	u32 insn;
+ 
+@@ -94,7 +94,7 @@ static u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnp
+ 	return insn;
+ }
+ 
+-static void patch_alternative(struct alt_instr *alt,
++static noinstr void patch_alternative(struct alt_instr *alt,
+ 			      __le32 *origptr, __le32 *updptr, int nr_inst)
+ {
+ 	__le32 *replptr;
+-- 
+2.35.1
+
 
 

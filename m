@@ -2,110 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A60F504DA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:18:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE099504DA8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:19:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237188AbiDRIUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46772 "EHLO
+        id S237196AbiDRIVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:21:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234153AbiDRIUX (ORCPT
+        with ESMTP id S229636AbiDRIV3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:20:23 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE8A167D6;
-        Mon, 18 Apr 2022 01:17:45 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id l7so25656926ejn.2;
-        Mon, 18 Apr 2022 01:17:45 -0700 (PDT)
+        Mon, 18 Apr 2022 04:21:29 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598C2167D8;
+        Mon, 18 Apr 2022 01:18:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id k14so17650103pga.0;
+        Mon, 18 Apr 2022 01:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7KtsXjPh9lfFnODrrFCb9+TsBoLzX4dD8HDH0L28ETo=;
-        b=qGvm/KPaMmFmxeZQ9Ci1YPmBGPqYHItSqLu2nR0o7qsOBNcHjBa173id0xrm17VBJG
-         9SbkEWiHhoF7oPOJ8N+kwFWqBIUAjwnW6a1A56mOxc1woFJT2MDOGFJ3cMe6Ugfo/t2Z
-         DUwHEPpRk8hncMUuxz0lykj9cS7afW2on5arFNggQqo8M2W6v1Gf7KBXuoQOB2sGb4xG
-         qQEoMZSRDXbf6Wom/OCRdkORGdR6s+NHLG0loaaKYkezAJsPUrldfe2sNxEliP+owy/t
-         sHTMBTybK6EeByHtu0SAwFaBJkcVTMfLBXpDpVKfBf0qnPUBcsOFWi1E90IZwpv9ncY2
-         8BAA==
+        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
+        b=GWCh7Axovc+n32OceNnsigXAf/o8hGt3MJRtpKvMZoGI9wr3zWxS6HY+G7ePpWxnuE
+         K7rkGYJVcee7UIgwJ/up6hqHYVB3675nYqpKT31MZkmQZe1jr7HiQKoVslAEVN6Pazle
+         NQPuPQGvEZktumhJJUFBce0Mwykn2Zs2Ee9JMk192atchDJBmtEAuGaaUFamJxSBCdHS
+         PJ8adGyrcT4JvgqndH5IKFwkAqlVzusobcohzdv+8HwWSbPhCzBte4LPptJ8BDt5Bqir
+         iHLhDGvS2+Csu5sdDcw8aPeyN8L5b+fGT529kNwQlMHsqJU0ORIJKQBTCUfVC0lofzkP
+         rNDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=7KtsXjPh9lfFnODrrFCb9+TsBoLzX4dD8HDH0L28ETo=;
-        b=jDmvGFB3/DhV++Yw6JdvGHrQKEUr6l+Q7xpXjqg8PPpW7HBt3uoqa/8c1Tlfuy+u96
-         QVP8IGkPVQOXfg0oRd/qIzg3Obt7CIBDQ4BvjZBpy1SetPCtZFKokA/cdJ0OoXL5c72Q
-         S8IsMAwRgtm7toIg42ioP6hhuXwVVhREgGAZBc1CvQv8mMfUayfp2TSM5g0Nl3t/0K1s
-         RAlJcZkdI8S2luCmpz4/jmKGf4kSq4o5sdU5TXapJEVinoWUG2bcCRMnDgjFWtaB/fQ+
-         gTxLwhlxiJKIBVwilC+BO80xZMeVba9np2QHc442uZgWDpPSdFxRv792bu490wUQO1J5
-         expg==
-X-Gm-Message-State: AOAM530bK6kodHGxGPeZ6EyYgv/lMfTUC8Ypzp3cd8KonuMuctQBFbNZ
-        52Xls5vFtTUmkXUVA00AiWk=
-X-Google-Smtp-Source: ABdhPJzs0nbDO3Ua/XZPtya90bEQnjKykEsVRVQvWzz/925zERd1qCgU2TBxRtja+LwOMrTNL2p+hQ==
-X-Received: by 2002:a17:907:2d23:b0:6e8:807c:cd94 with SMTP id gs35-20020a1709072d2300b006e8807ccd94mr8085785ejc.502.1650269864091;
-        Mon, 18 Apr 2022 01:17:44 -0700 (PDT)
-Received: from localhost.localdomain (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id o5-20020a170906974500b006dfc781498dsm4346365ejy.37.2022.04.18.01.17.42
+        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
+        b=K2Q/pS5h6baqLZq/IZX1whxCoadt1I0/hiCViVOXtfTcsFiquemCaFkvI9YDOBSDMk
+         BUmWUPorsC0e8427RhKqGeuX6tzIu4fYcIdo2gpoAOJY8iKfWY61DlFuxWIG1Pn+THgC
+         cMs6P2X3grG+ITyHaWQBHA+ttz4/NYNx9hTsdMACZ6ezr2O9K10K3HL8DCSGU06iZUFM
+         WQJfF75zThrClNLesakcOKQvvxiZ2NQcs+WE9aPOlLZTb28iM2QfHOCUmv9jUfkS97xY
+         deyVABsOC6CV8oz3hymy6sg9us+I2su4xM95NPjItcYE83BL3esQLxqpLymkx7sB0bRc
+         GcXQ==
+X-Gm-Message-State: AOAM5316aBIrDx0xiIm4teRcNG0l6bFJ0FtgTP5heYccu0wJrQbgLmux
+        GkkYqmuSMpQIA3K6fF/HFeY=
+X-Google-Smtp-Source: ABdhPJy5ecPy3tYjBbv8BqYjQDZ9JlHc+eZlWxXe+vT/jIZeYVzhGPIQlHzbHEFym/a3gTfYiMmGog==
+X-Received: by 2002:a63:450d:0:b0:3a8:f2ed:1aa5 with SMTP id s13-20020a63450d000000b003a8f2ed1aa5mr6024926pga.367.1650269930978;
+        Mon, 18 Apr 2022 01:18:50 -0700 (PDT)
+Received: from localhost ([58.251.76.82])
+        by smtp.gmail.com with ESMTPSA id t20-20020a63eb14000000b0039e28245722sm12048717pgh.54.2022.04.18.01.18.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 01:17:42 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        outreachy@lists.linux.dev, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH] Documentation/vm: Include kernel-doc from highmem-internal.h
-Date:   Mon, 18 Apr 2022 10:17:40 +0200
-Message-Id: <20220418081740.21001-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 18 Apr 2022 01:18:50 -0700 (PDT)
+From:   Yunbo Yu <yuyunbo519@gmail.com>
+To:     nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
+        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        matthias.bgg@gmail.com, yuyunbo519@gmail.com
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] =?UTF-8?q?mt76=EF=BC=9Amt7603=EF=BC=9A=20move=20spin=5Flo?= =?UTF-8?q?ck=5Fbh()=20to=20spin=5Flock()?=
+Date:   Mon, 18 Apr 2022 16:18:44 +0800
+Message-Id: <20220418081844.1236577-1-yuyunbo519@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In Documentation/vm/highmem.rst the kernel-doc comments are missing,
-therefore kunmap_local() and kunmap_atomic() are yet undocumented.
+It is unnecessary to call spin_lock_bh(), for you are already in a tasklet.
 
-Add a kernel-doc directive to include the above-mentioned kernel-doc
-comments in highmem.rst.
-
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Matthew Wilcox <willy@infradead.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
 ---
+ drivers/net/wireless/mediatek/mt76/mt7603/beacon.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-This patch must be applied and built on top of 
-"[PATCH v3 2/2] Documentation/vm: Include kernel-doc to highmem.rst"
-https://lore.kernel.org/lkml/20220415231917.25962-3-fmdefrancesco@gmail.com/
-
- Documentation/vm/highmem.rst | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
-index 5dcee6233cd5..1a3e6a8f5d3e 100644
---- a/Documentation/vm/highmem.rst
-+++ b/Documentation/vm/highmem.rst
-@@ -161,3 +161,4 @@ Functions
- =========
+diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
+index 5d4522f440b7..b5e8308e0cc7 100644
+--- a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
++++ b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
+@@ -82,12 +82,12 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
+ 	__skb_queue_head_init(&data.q);
  
- .. kernel-doc:: include/linux/highmem.h
-+.. kernel-doc:: include/linux/highmem-internal.h
+ 	q = dev->mphy.q_tx[MT_TXQ_BEACON];
+-	spin_lock_bh(&q->lock);
++	spin_lock(&q->lock);
+ 	ieee80211_iterate_active_interfaces_atomic(mt76_hw(dev),
+ 		IEEE80211_IFACE_ITER_RESUME_ALL,
+ 		mt7603_update_beacon_iter, dev);
+ 	mt76_queue_kick(dev, q);
+-	spin_unlock_bh(&q->lock);
++	spin_unlock(&q->lock);
+ 
+ 	/* Flush all previous CAB queue packets */
+ 	mt76_wr(dev, MT_WF_ARB_CAB_FLUSH, GENMASK(30, 16) | BIT(0));
+@@ -117,7 +117,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
+ 		mt76_skb_set_moredata(data.tail[i], false);
+ 	}
+ 
+-	spin_lock_bh(&q->lock);
++	spin_lock(&q->lock);
+ 	while ((skb = __skb_dequeue(&data.q)) != NULL) {
+ 		struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
+ 		struct ieee80211_vif *vif = info->control.vif;
+@@ -126,7 +126,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
+ 		mt76_tx_queue_skb(dev, q, skb, &mvif->sta.wcid, NULL);
+ 	}
+ 	mt76_queue_kick(dev, q);
+-	spin_unlock_bh(&q->lock);
++	spin_unlock(&q->lock);
+ 
+ 	for (i = 0; i < ARRAY_SIZE(data.count); i++)
+ 		mt76_wr(dev, MT_WF_ARB_CAB_COUNT_B0_REG(i),
 -- 
-2.34.1
+2.25.1
 

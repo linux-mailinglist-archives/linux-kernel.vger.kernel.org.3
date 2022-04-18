@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A6750506B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C75E5051BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiDRMZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S240986AbiDRMjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:39:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238794AbiDRMWu (ORCPT
+        with ESMTP id S239847AbiDRMdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:22:50 -0400
+        Mon, 18 Apr 2022 08:33:31 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4E61EED0;
-        Mon, 18 Apr 2022 05:18:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BA61D0D4;
+        Mon, 18 Apr 2022 05:26:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1657960F5F;
-        Mon, 18 Apr 2022 12:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 075D0C385A8;
-        Mon, 18 Apr 2022 12:18:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 970B561048;
+        Mon, 18 Apr 2022 12:26:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A258DC385B4;
+        Mon, 18 Apr 2022 12:26:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284297;
-        bh=VHz+JMItJlNxJ/mL/82Bz5jA5c3poz8XFUIXJ7SB86g=;
+        s=korg; t=1650284814;
+        bh=zaHbHiM+ZIOFpggKBe2JpVmpB4u0kp8X235TNiWnL7Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CAdOalXHXViu2WI0vnK13CQdFbLOV1EZ0z6Mr6kq2iYfuOob5ADTyirU0hObgBixL
-         yu0c5RQVl6WOioVJMBve/eAx6dQDKqn+F2MhOZzWgqWL3paK0bO4Yv3chAdbVxgzlZ
-         CLviTbdQXeRp4O5fUBYYUPb2TJ6o2pDHYSkVroIo=
+        b=mREKbrU/gpQDETcPQN3Y9fQcdYXDes2zt+b2LN+2QYKSdbLpwj17H9AxNbtHe2DBA
+         cYjp3F/T1HN7cBANJpnUeMrlgIYxPoLGnQmyMacA94/U9OtrM/fjq5+AMoTPWnhabz
+         GayGr37VW21YnuuJst8LEkHbrsWZTBRxKEdMNibE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chuck Lever <chuck.lever@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 067/219] SUNRPC: Fix the svc_deferred_event trace class
-Date:   Mon, 18 Apr 2022 14:10:36 +0200
-Message-Id: <20220418121207.572204025@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 017/189] ALSA: sis7019: Fix the missing error handling
+Date:   Mon, 18 Apr 2022 14:10:37 +0200
+Message-Id: <20220418121201.004597197@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,71 +53,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chuck Lever <chuck.lever@oracle.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 4d5004451ab2218eab94a30e1841462c9316ba19 ]
+commit 2236a3243ff8291e97c70097dd11a0fdb8904380 upstream.
 
-Fix a NULL deref crash that occurs when an svc_rqst is deferred
-while the sunrpc tracing subsystem is enabled. svc_revisit() sets
-dr->xprt to NULL, so it can't be relied upon in the tracepoint to
-provide the remote's address.
+The previous cleanup with devres forgot to replace the snd_card_free()
+call with the devm version.  Moreover, it still needs the manual call
+of snd_card_free() at the probe error path, otherwise the reverse
+order of the releases may happen.  This patch addresses those issues.
 
-Unfortunately we can't revert the "svc_deferred_class" hunk in
-commit ece200ddd54b ("sunrpc: Save remote presentation address in
-svc_xprt for trace events") because there is now a specific check
-of event format specifiers for unsafe dereferences. The warning
-that check emits is:
-
-  event svc_defer_recv has unsafe dereference of argument 1
-
-A "%pISpc" format specifier with a "struct sockaddr *" is indeed
-flagged by this check.
-
-Instead, take the brute-force approach used by the svcrdma_qp_error
-tracepoint. Convert the dr::addr field into a presentation address
-in the TP_fast_assign() arm of the trace event, and store that as
-a string. This fix can be backported to -stable kernels.
-
-In the meantime, commit c6ced22997ad ("tracing: Update print fmt
-check to handle new __get_sockaddr() macro") is now in v5.18, so
-this wonky fix can be replaced with __sockaddr() and friends
-properly during the v5.19 merge window.
-
-Fixes: ece200ddd54b ("sunrpc: Save remote presentation address in svc_xprt for trace events")
-Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 499ddc16394c ("ALSA: sis7019: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-28-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/trace/events/sunrpc.h | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ sound/pci/sis7019.c |   14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
 
-diff --git a/include/trace/events/sunrpc.h b/include/trace/events/sunrpc.h
-index 5be3faf88c1a..06fe47fb3686 100644
---- a/include/trace/events/sunrpc.h
-+++ b/include/trace/events/sunrpc.h
-@@ -1956,17 +1956,18 @@ DECLARE_EVENT_CLASS(svc_deferred_event,
- 	TP_STRUCT__entry(
- 		__field(const void *, dr)
- 		__field(u32, xid)
--		__string(addr, dr->xprt->xpt_remotebuf)
-+		__array(__u8, addr, INET6_ADDRSTRLEN + 10)
- 	),
+--- a/sound/pci/sis7019.c
++++ b/sound/pci/sis7019.c
+@@ -1331,8 +1331,8 @@ static int sis_chip_create(struct snd_ca
+ 	return 0;
+ }
  
- 	TP_fast_assign(
- 		__entry->dr = dr;
- 		__entry->xid = be32_to_cpu(*(__be32 *)(dr->args +
- 						       (dr->xprt_hlen>>2)));
--		__assign_str(addr, dr->xprt->xpt_remotebuf);
-+		snprintf(__entry->addr, sizeof(__entry->addr) - 1,
-+			 "%pISpc", (struct sockaddr *)&dr->addr);
- 	),
+-static int snd_sis7019_probe(struct pci_dev *pci,
+-			     const struct pci_device_id *pci_id)
++static int __snd_sis7019_probe(struct pci_dev *pci,
++			       const struct pci_device_id *pci_id)
+ {
+ 	struct snd_card *card;
+ 	struct sis7019 *sis;
+@@ -1352,8 +1352,8 @@ static int snd_sis7019_probe(struct pci_
+ 	if (!codecs)
+ 		codecs = SIS_PRIMARY_CODEC_PRESENT;
  
--	TP_printk("addr=%s dr=%p xid=0x%08x", __get_str(addr), __entry->dr,
-+	TP_printk("addr=%s dr=%p xid=0x%08x", __entry->addr, __entry->dr,
- 		__entry->xid)
- );
+-	rc = snd_card_new(&pci->dev, index, id, THIS_MODULE,
+-			  sizeof(*sis), &card);
++	rc = snd_devm_card_new(&pci->dev, index, id, THIS_MODULE,
++			       sizeof(*sis), &card);
+ 	if (rc < 0)
+ 		return rc;
  
--- 
-2.35.1
-
+@@ -1386,6 +1386,12 @@ static int snd_sis7019_probe(struct pci_
+ 	return 0;
+ }
+ 
++static int snd_sis7019_probe(struct pci_dev *pci,
++			     const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_sis7019_probe(pci, pci_id));
++}
++
+ static struct pci_driver sis7019_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = snd_sis7019_ids,
 
 

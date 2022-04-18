@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 568C15054DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D2C505801
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241682AbiDRNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
+        id S238865AbiDRN7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240833AbiDRM55 (ORCPT
+        with ESMTP id S243078AbiDRNha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:57:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6523BE2;
-        Mon, 18 Apr 2022 05:38:16 -0700 (PDT)
+        Mon, 18 Apr 2022 09:37:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2FC5275EB;
+        Mon, 18 Apr 2022 05:58:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 796D4B80EDC;
-        Mon, 18 Apr 2022 12:38:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FF9C385A7;
-        Mon, 18 Apr 2022 12:38:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB7D4612BB;
+        Mon, 18 Apr 2022 12:58:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8F4C385A1;
+        Mon, 18 Apr 2022 12:58:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285493;
-        bh=zf+c42DAV0GN0eJ5S2P+F9YIgesB9POh7WPlYDoIUWo=;
+        s=korg; t=1650286693;
+        bh=+9tDQgM+/axT2d6rke1s+6yyXgquHpFdu21IBqWpF5k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kdPxTrpwRamBv6Sj1aVeflUgOR9uzHUlBYCk/bo02yEVBAXVeGcXFAPAxY680fopx
-         HkvSbajk/rHQMCDlUTs9niorR1QiTK/7fjhU9eglAuieKxCSkffj4Tdi9KQyvCsi1q
-         5F120RkqeIXG61dWZSTg26DLYQrvLWmKf1jyDjBA=
+        b=JsjakfSmvCXTmnQt1BHZNb9QgjBd/6iF5VI94p2hxgrPPTP/ZlNh0jJTEMtJkDPTw
+         YRFCndFFgW2VX0SmlWdr7ssEFfFkkD/bRKyGER705qiBNBoiwrdzrR3+u3/LP3A7QF
+         QjlCKWcGZ0a0326skxkDpqssBDg65vOoT82ATGr0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        Richard Leitner <richard.leitner@skidata.com>,
+        Thierry Reding <treding@nvidia.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 034/105] scsi: iscsi: Fix conn cleanup and stop race during iscsid restart
+Subject: [PATCH 4.14 175/284] ARM: tegra: tamonten: Fix I2C3 pad setting
 Date:   Mon, 18 Apr 2022 14:12:36 +0200
-Message-Id: <20220418121147.380776788@linuxfoundation.org>
+Message-Id: <20220418121216.716903978@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,152 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Richard Leitner <richard.leitner@skidata.com>
 
-[ Upstream commit 7c6e99c18167ed89729bf167ccb4a7e3ab3115ba ]
+[ Upstream commit 0092c25b541a5422d7e71892a13c55ee91abc34b ]
 
-If iscsid is doing a stop_conn at the same time the kernel is starting
-error recovery we can hit a race that allows the cleanup work to run on a
-valid connection. In the race, iscsi_if_stop_conn sees the cleanup bit set,
-but it calls flush_work on the clean_work before iscsi_conn_error_event has
-queued it. The flush then returns before the queueing and so the
-cleanup_work can run later and disconnect/stop a conn while it's in a
-connected state.
+This patch fixes the tristate configuration for i2c3 function assigned
+to the dtf pins on the Tamonten Tegra20 SoM.
 
-The patch:
-
-Commit 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in
-kernel space")
-
-added the late stop_conn call bug originally, and the patch:
-
-Commit 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
-
-attempted to fix it but only fixed the normal EH case and left the above
-race for the iscsid restart case. For the normal EH case we don't hit the
-race because we only signal userspace to start recovery after we have done
-the queueing, so the flush will always catch the queued work or see it
-completed.
-
-For iscsid restart cases like boot, we can hit the race because iscsid will
-call down to the kernel before the kernel has signaled any error, so both
-code paths can be running at the same time. This adds a lock around the
-setting of the cleanup bit and queueing so they happen together.
-
-Link: https://lore.kernel.org/r/20220408001314.5014-6-michael.christie@oracle.com
-Fixes: 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in kernel space")
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
+Signed-off-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 17 +++++++++++++++++
- include/scsi/scsi_transport_iscsi.h |  2 ++
- 2 files changed, 19 insertions(+)
+ arch/arm/boot/dts/tegra20-tamonten.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 38abc3a15692..21cc306a0f11 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2263,9 +2263,12 @@ static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
- 					 bool is_active)
- {
- 	/* Check if this was a conn error and the kernel took ownership */
-+	spin_lock_irq(&conn->lock);
- 	if (!test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
-+		spin_unlock_irq(&conn->lock);
- 		iscsi_ep_disconnect(conn, is_active);
- 	} else {
-+		spin_unlock_irq(&conn->lock);
- 		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
- 		mutex_unlock(&conn->ep_mutex);
- 
-@@ -2308,9 +2311,12 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 		/*
- 		 * Figure out if it was the kernel or userspace initiating this.
- 		 */
-+		spin_lock_irq(&conn->lock);
- 		if (!test_and_set_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
-+			spin_unlock_irq(&conn->lock);
- 			iscsi_stop_conn(conn, flag);
- 		} else {
-+			spin_unlock_irq(&conn->lock);
- 			ISCSI_DBG_TRANS_CONN(conn,
- 					     "flush kernel conn cleanup.\n");
- 			flush_work(&conn->cleanup_work);
-@@ -2319,7 +2325,9 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 		 * Only clear for recovery to avoid extra cleanup runs during
- 		 * termination.
- 		 */
-+		spin_lock_irq(&conn->lock);
- 		clear_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags);
-+		spin_unlock_irq(&conn->lock);
- 	}
- 	ISCSI_DBG_TRANS_CONN(conn, "iscsi if conn stop done.\n");
- 	return 0;
-@@ -2340,7 +2348,9 @@ static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
- 	 */
- 	if (conn->state != ISCSI_CONN_BOUND && conn->state != ISCSI_CONN_UP) {
- 		ISCSI_DBG_TRANS_CONN(conn, "Got error while conn is already failed. Ignoring.\n");
-+		spin_lock_irq(&conn->lock);
- 		clear_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags);
-+		spin_unlock_irq(&conn->lock);
- 		mutex_unlock(&conn->ep_mutex);
- 		return;
- 	}
-@@ -2400,6 +2410,7 @@ iscsi_create_conn(struct iscsi_cls_session *session, int dd_size, uint32_t cid)
- 		conn->dd_data = &conn[1];
- 
- 	mutex_init(&conn->ep_mutex);
-+	spin_lock_init(&conn->lock);
- 	INIT_LIST_HEAD(&conn->conn_list);
- 	INIT_WORK(&conn->cleanup_work, iscsi_cleanup_conn_work_fn);
- 	conn->transport = transport;
-@@ -2591,9 +2602,12 @@ void iscsi_conn_error_event(struct iscsi_cls_conn *conn, enum iscsi_err error)
- 	struct iscsi_uevent *ev;
- 	struct iscsi_internal *priv;
- 	int len = nlmsg_total_size(sizeof(*ev));
-+	unsigned long flags;
- 
-+	spin_lock_irqsave(&conn->lock, flags);
- 	if (!test_and_set_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags))
- 		queue_work(iscsi_conn_cleanup_workq, &conn->cleanup_work);
-+	spin_unlock_irqrestore(&conn->lock, flags);
- 
- 	priv = iscsi_if_transport_lookup(conn->transport);
- 	if (!priv)
-@@ -3736,11 +3750,14 @@ static int iscsi_if_transport_conn(struct iscsi_transport *transport,
- 		return -EINVAL;
- 
- 	mutex_lock(&conn->ep_mutex);
-+	spin_lock_irq(&conn->lock);
- 	if (test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
-+		spin_unlock_irq(&conn->lock);
- 		mutex_unlock(&conn->ep_mutex);
- 		ev->r.retcode = -ENOTCONN;
- 		return 0;
- 	}
-+	spin_unlock_irq(&conn->lock);
- 
- 	switch (nlh->nlmsg_type) {
- 	case ISCSI_UEVENT_BIND_CONN:
-diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
-index c5d7810fd792..037c77fb5dc5 100644
---- a/include/scsi/scsi_transport_iscsi.h
-+++ b/include/scsi/scsi_transport_iscsi.h
-@@ -211,6 +211,8 @@ struct iscsi_cls_conn {
- 	struct mutex ep_mutex;
- 	struct iscsi_endpoint *ep;
- 
-+	/* Used when accessing flags and queueing work. */
-+	spinlock_t lock;
- 	unsigned long flags;
- 	struct work_struct cleanup_work;
- 
+diff --git a/arch/arm/boot/dts/tegra20-tamonten.dtsi b/arch/arm/boot/dts/tegra20-tamonten.dtsi
+index 4d69d67792d1..b919ca29bb78 100644
+--- a/arch/arm/boot/dts/tegra20-tamonten.dtsi
++++ b/arch/arm/boot/dts/tegra20-tamonten.dtsi
+@@ -183,8 +183,8 @@
+ 			};
+ 			conf_ata {
+ 				nvidia,pins = "ata", "atb", "atc", "atd", "ate",
+-					"cdev1", "cdev2", "dap1", "dtb", "gma",
+-					"gmb", "gmc", "gmd", "gme", "gpu7",
++					"cdev1", "cdev2", "dap1", "dtb", "dtf",
++					"gma", "gmb", "gmc", "gmd", "gme", "gpu7",
+ 					"gpv", "i2cp", "irrx", "irtx", "pta",
+ 					"rm", "slxa", "slxk", "spia", "spib",
+ 					"uac";
+@@ -203,7 +203,7 @@
+ 			};
+ 			conf_crtp {
+ 				nvidia,pins = "crtp", "dap2", "dap3", "dap4",
+-					"dtc", "dte", "dtf", "gpu", "sdio1",
++					"dtc", "dte", "gpu", "sdio1",
+ 					"slxc", "slxd", "spdi", "spdo", "spig",
+ 					"uda";
+ 				nvidia,pull = <TEGRA_PIN_PULL_NONE>;
 -- 
-2.35.1
+2.34.1
 
 
 

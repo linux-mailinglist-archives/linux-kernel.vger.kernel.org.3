@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3101A5057CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D487C5053E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244070AbiDRN44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:56:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
+        id S240876AbiDRNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244888AbiDRNbA (ORCPT
+        with ESMTP id S240039AbiDRMwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:31:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5621D2F5;
-        Mon, 18 Apr 2022 05:57:01 -0700 (PDT)
+        Mon, 18 Apr 2022 08:52:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C642D1D6;
+        Mon, 18 Apr 2022 05:34:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A8360FE8;
-        Mon, 18 Apr 2022 12:57:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B6BC385A8;
-        Mon, 18 Apr 2022 12:56:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66D9B61014;
+        Mon, 18 Apr 2022 12:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5699FC385A8;
+        Mon, 18 Apr 2022 12:34:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286620;
-        bh=9QMv3lahHdv/z11XuDeuy250hfehrksyMfwOkrGc6GA=;
+        s=korg; t=1650285262;
+        bh=m9viVS1D+NUit2asz3mAmwwfeEnNpj04FNw9SDwXsWk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ldvB8+RGCPOwlxfNr9mTTJTfOcuidau/cHa/ZbYN8T5vQiLvRc2acu7iejb8XZGIv
-         FxYXTPWgHcb4IqD3/z1kIDWPsB+r+k52ynpNg/W1Cr6KWsPe6sdKmLZZQ8RABXByPm
-         Fp/P0KkV3ZCLEH2L+NNQWcyIjgfgSpNme2T3Q2pU=
+        b=khA8o2ejGlPjpD9rJww9ILCASCB2/WGkEEGqnZFB4PeZY2RZWX3GbCZ+MBrOwsHBu
+         fWlJh2DM9AzXTY7rrFBQ5+JAqAZui9yLO5x3+ras7OSPPobC3CYjTaonUqgO79NjFk
+         yASba/ZLExQ9oft2irCy08Ld5bRGwNpY2Wydmx34=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH 4.14 192/284] pinctrl: pinconf-generic: Print arguments for bias-pull-*
+        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
+        Shyam Prasad N <sprasad@microsoft.com>,
+        Xiaoli Feng <xifeng@redhat.com>,
+        Steve French <stfrench@microsoft.com>
+Subject: [PATCH 5.15 153/189] cifs: verify that tcon is valid before dereference in cifs_kill_sb
 Date:   Mon, 18 Apr 2022 14:12:53 +0200
-Message-Id: <20220418121217.193029383@linuxfoundation.org>
+Message-Id: <20220418121206.334508622@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen-Yu Tsai <wenst@chromium.org>
+From: Ronnie Sahlberg <lsahlber@redhat.com>
 
-commit 188e5834b930acd03ad3cf7c5e7aa24db9665a29 upstream.
+commit 8b6c58458ee3206dde345fce327a4cb83e69caf9 upstream.
 
-The bias-pull-* properties, or PIN_CONFIG_BIAS_PULL_* pin config
-parameters, accept optional arguments in ohms denoting the strength of
-the pin bias.
+On umount, cifs_sb->tlink_tree might contain entries that do not represent
+a valid tcon.
+Check the tcon for error before we dereference it.
 
-Print these values out in debugfs as well.
-
-Fixes: eec450713e5c ("pinctrl: pinconf-generic: Add flag to print arguments")
-Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Link: https://lore.kernel.org/r/20220308100956.2750295-2-wenst@chromium.org
-Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
+Reported-by: Xiaoli Feng <xifeng@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pinctrl/pinconf-generic.c |    6 +++---
+ fs/cifs/cifsfs.c |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/pinctrl/pinconf-generic.c
-+++ b/drivers/pinctrl/pinconf-generic.c
-@@ -31,10 +31,10 @@ static const struct pin_config_item conf
- 	PCONFDUMP(PIN_CONFIG_BIAS_BUS_HOLD, "input bias bus hold", NULL, false),
- 	PCONFDUMP(PIN_CONFIG_BIAS_DISABLE, "input bias disabled", NULL, false),
- 	PCONFDUMP(PIN_CONFIG_BIAS_HIGH_IMPEDANCE, "input bias high impedance", NULL, false),
--	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", NULL, false),
-+	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", "ohms", true),
- 	PCONFDUMP(PIN_CONFIG_BIAS_PULL_PIN_DEFAULT,
--				"input bias pull to pin specific state", NULL, false),
--	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", NULL, false),
-+				"input bias pull to pin specific state", "ohms", true),
-+	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", "ohms", true),
- 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_DRAIN, "output drive open drain", NULL, false),
- 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_SOURCE, "output drive open source", NULL, false),
- 	PCONFDUMP(PIN_CONFIG_DRIVE_PUSH_PULL, "output drive push pull", NULL, false),
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -266,10 +266,11 @@ static void cifs_kill_sb(struct super_bl
+ 	 * before we kill the sb.
+ 	 */
+ 	if (cifs_sb->root) {
+-		node = rb_first(root);
+-		while (node != NULL) {
++		for (node = rb_first(root); node; node = rb_next(node)) {
+ 			tlink = rb_entry(node, struct tcon_link, tl_rbnode);
+ 			tcon = tlink_tcon(tlink);
++			if (IS_ERR(tcon))
++				continue;
+ 			cfid = &tcon->crfid;
+ 			mutex_lock(&cfid->fid_mutex);
+ 			if (cfid->dentry) {
+@@ -277,7 +278,6 @@ static void cifs_kill_sb(struct super_bl
+ 				cfid->dentry = NULL;
+ 			}
+ 			mutex_unlock(&cfid->fid_mutex);
+-			node = rb_next(node);
+ 		}
+ 
+ 		/* finally release root dentry */
 
 

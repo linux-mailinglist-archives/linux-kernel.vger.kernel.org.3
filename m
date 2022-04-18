@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BAC505742
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7186505231
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241919AbiDRNqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
+        id S239337AbiDRMhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242089AbiDRN0l (ORCPT
+        with ESMTP id S239001AbiDRMb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:26:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D943E0F2;
-        Mon, 18 Apr 2022 05:53:08 -0700 (PDT)
+        Mon, 18 Apr 2022 08:31:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C862625288;
+        Mon, 18 Apr 2022 05:24:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24B65B80E4E;
-        Mon, 18 Apr 2022 12:53:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F85FC385A1;
-        Mon, 18 Apr 2022 12:53:01 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 0F8C3CE10A0;
+        Mon, 18 Apr 2022 12:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB2A7C385A9;
+        Mon, 18 Apr 2022 12:23:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286381;
-        bh=3NzfD2UjOx0eI3knVHB5Oq9qjUPNX2f6riZbUbbtJCc=;
+        s=korg; t=1650284637;
+        bh=uS/GY6ExnjhPYx2j4Wl+qD9StA6nkkAyHB9DsmGkl2U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iQqSdtNmXqkOLoRiOvRWSznNQPwm7mbvZWkTOYzNnEzfFHOFmRGIR/tdmPDxodAmc
-         PwCVrb1O25H/hRyF83NX3fppLZo9V3ZcRyf5uQPAqAFLmQdTgrXc+TBBikJLaWAuI1
-         JyEeR5gtJ/nrYbxYSdfFB62X9Q9MaOTu0dzRMD8w=
+        b=FqXqpi6cB/dVrA1tOVba0YrH5VI2VaqugJ7oUzbSAWlVPHV9lZKFkZ6eZnFmUekNC
+         VBrSI3qBvv4QiTh3I7tDiEylyXyXaMIQjZMSBHJPQs0dfEVnyXGLDfnOT4asKHh1ib
+         rLmRFeOU/OTY/XOKGCaZQeBMBaoomVk/Iga3WwEc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        stable@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 116/284] power: supply: wm8350-power: Handle error for wm8350_register_irq
-Date:   Mon, 18 Apr 2022 14:11:37 +0200
-Message-Id: <20220418121214.339332027@linuxfoundation.org>
+Subject: [PATCH 5.17 129/219] KVM: PPC: Book3S HV P9: Fix "lost kick" race
+Date:   Mon, 18 Apr 2022 14:11:38 +0200
+Message-Id: <20220418121210.507201101@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,156 +55,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Nicholas Piggin <npiggin@gmail.com>
 
-[ Upstream commit b0b14b5ba11bec56fad344a4a0b2e16449cc8b94 ]
+[ Upstream commit c7fa848ff01dad9ed3146a6b1a7d3622131bcedd ]
 
-As the potential failure of the wm8350_register_irq(),
-it should be better to check it and return error if fails.
-Also, use 'free_' in order to avoid same code.
+When new work is created that requires attention from the hypervisor
+(e.g., to inject an interrupt into the guest), fast_vcpu_kick is used to
+pull the target vcpu out of the guest if it may have been running.
 
-Fixes: 14431aa0c5a4 ("power_supply: Add support for WM8350 PMU")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+Therefore the work creation side looks like this:
+
+  vcpu->arch.doorbell_request = 1;
+  kvmppc_fast_vcpu_kick_hv(vcpu) {
+    smp_mb();
+    cpu = vcpu->cpu;
+    if (cpu != -1)
+        send_ipi(cpu);
+  }
+
+And the guest entry side *should* look like this:
+
+  vcpu->cpu = smp_processor_id();
+  smp_mb();
+  if (vcpu->arch.doorbell_request) {
+    // do something (abort entry or inject doorbell etc)
+  }
+
+But currently the store and load are flipped, so it is possible for the
+entry to see no doorbell pending, and the doorbell creation misses the
+store to set cpu, resulting lost work (or at least delayed until the
+next guest exit).
+
+Fix this by reordering the entry operations and adding a smp_mb
+between them. The P8 path appears to have a similar race which is
+commented but not addressed yet.
+
+Signed-off-by: Nicholas Piggin <npiggin@gmail.com>
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+Link: https://lore.kernel.org/r/20220303053315.1056880-2-npiggin@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/power/supply/wm8350_power.c | 96 ++++++++++++++++++++++++-----
- 1 file changed, 82 insertions(+), 14 deletions(-)
+ arch/powerpc/kvm/book3s_hv.c | 41 +++++++++++++++++++++++++++++-------
+ 1 file changed, 33 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/power/supply/wm8350_power.c b/drivers/power/supply/wm8350_power.c
-index a2740cf57ad3..c2a62e6568c6 100644
---- a/drivers/power/supply/wm8350_power.c
-+++ b/drivers/power/supply/wm8350_power.c
-@@ -410,44 +410,112 @@ static const struct power_supply_desc wm8350_usb_desc = {
-  *		Initialisation
-  *********************************************************************/
+diff --git a/arch/powerpc/kvm/book3s_hv.c b/arch/powerpc/kvm/book3s_hv.c
+index 791db769080d..316f61a4cb59 100644
+--- a/arch/powerpc/kvm/book3s_hv.c
++++ b/arch/powerpc/kvm/book3s_hv.c
+@@ -225,6 +225,13 @@ static void kvmppc_fast_vcpu_kick_hv(struct kvm_vcpu *vcpu)
+ 	int cpu;
+ 	struct rcuwait *waitp;
  
--static void wm8350_init_charger(struct wm8350 *wm8350)
-+static int wm8350_init_charger(struct wm8350 *wm8350)
- {
-+	int ret;
++	/*
++	 * rcuwait_wake_up contains smp_mb() which orders prior stores that
++	 * create pending work vs below loads of cpu fields. The other side
++	 * is the barrier in vcpu run that orders setting the cpu fields vs
++	 * testing for pending work.
++	 */
 +
- 	/* register our interest in charger events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT,
- 			    wm8350_charger_handler, 0, "Battery hot", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
-+	if (ret)
-+		goto err;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD,
- 			    wm8350_charger_handler, 0, "Battery cold", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
-+	if (ret)
-+		goto free_chg_bat_hot;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL,
- 			    wm8350_charger_handler, 0, "Battery fail", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
-+	if (ret)
-+		goto free_chg_bat_cold;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_TO,
- 			    wm8350_charger_handler, 0,
- 			    "Charger timeout", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
-+	if (ret)
-+		goto free_chg_bat_fail;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_END,
- 			    wm8350_charger_handler, 0,
- 			    "Charge end", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
-+	if (ret)
-+		goto free_chg_to;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_START,
- 			    wm8350_charger_handler, 0,
- 			    "Charge start", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
-+	if (ret)
-+		goto free_chg_end;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY,
- 			    wm8350_charger_handler, 0,
- 			    "Fast charge ready", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
-+	if (ret)
-+		goto free_chg_start;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.9V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
-+	if (ret)
-+		goto free_chg_fast_rdy;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <3.1V", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p9;
-+
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85,
- 			    wm8350_charger_handler, 0,
- 			    "Battery <2.85V", wm8350);
-+	if (ret)
-+		goto free_chg_vbatt_lt_3p1;
+ 	waitp = kvm_arch_vcpu_get_wait(vcpu);
+ 	if (rcuwait_wake_up(waitp))
+ 		++vcpu->stat.generic.halt_wakeup;
+@@ -1089,7 +1096,7 @@ int kvmppc_pseries_do_hcall(struct kvm_vcpu *vcpu)
+ 			break;
+ 		}
+ 		tvcpu->arch.prodded = 1;
+-		smp_mb();
++		smp_mb(); /* This orders prodded store vs ceded load */
+ 		if (tvcpu->arch.ceded)
+ 			kvmppc_fast_vcpu_kick_hv(tvcpu);
+ 		break;
+@@ -3771,6 +3778,14 @@ static noinline void kvmppc_run_core(struct kvmppc_vcore *vc)
+ 		pvc = core_info.vc[sub];
+ 		pvc->pcpu = pcpu + thr;
+ 		for_each_runnable_thread(i, vcpu, pvc) {
++			/*
++			 * XXX: is kvmppc_start_thread called too late here?
++			 * It updates vcpu->cpu and vcpu->arch.thread_cpu
++			 * which are used by kvmppc_fast_vcpu_kick_hv(), but
++			 * kick is called after new exceptions become available
++			 * and exceptions are checked earlier than here, by
++			 * kvmppc_core_prepare_to_enter.
++			 */
+ 			kvmppc_start_thread(vcpu, pvc);
+ 			kvmppc_create_dtl_entry(vcpu, pvc);
+ 			trace_kvm_guest_enter(vcpu);
+@@ -4492,6 +4507,21 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 	if (need_resched() || !kvm->arch.mmu_ready)
+ 		goto out;
  
- 	/* and supply change events */
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_USB_FB,
- 			    wm8350_charger_handler, 0, "USB", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
-+	if (ret)
-+		goto free_chg_vbatt_lt_2p85;
++	vcpu->cpu = pcpu;
++	vcpu->arch.thread_cpu = pcpu;
++	vc->pcpu = pcpu;
++	local_paca->kvm_hstate.kvm_vcpu = vcpu;
++	local_paca->kvm_hstate.ptid = 0;
++	local_paca->kvm_hstate.fake_suspend = 0;
 +
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_WALL_FB,
- 			    wm8350_charger_handler, 0, "Wall", wm8350);
--	wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
-+	if (ret)
-+		goto free_ext_usb_fb;
++	/*
++	 * Orders set cpu/thread_cpu vs testing for pending interrupts and
++	 * doorbells below. The other side is when these fields are set vs
++	 * kvmppc_fast_vcpu_kick_hv reading the cpu/thread_cpu fields to
++	 * kick a vCPU to notice the pending interrupt.
++	 */
++	smp_mb();
 +
-+	ret = wm8350_register_irq(wm8350, WM8350_IRQ_EXT_BAT_FB,
- 			    wm8350_charger_handler, 0, "Battery", wm8350);
-+	if (ret)
-+		goto free_ext_wall_fb;
-+
-+	return 0;
-+
-+free_ext_wall_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_WALL_FB, wm8350);
-+free_ext_usb_fb:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_EXT_USB_FB, wm8350);
-+free_chg_vbatt_lt_2p85:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_2P85, wm8350);
-+free_chg_vbatt_lt_3p1:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P1, wm8350);
-+free_chg_vbatt_lt_3p9:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_VBATT_LT_3P9, wm8350);
-+free_chg_fast_rdy:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_FAST_RDY, wm8350);
-+free_chg_start:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_START, wm8350);
-+free_chg_end:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_END, wm8350);
-+free_chg_to:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_TO, wm8350);
-+free_chg_bat_fail:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_FAIL, wm8350);
-+free_chg_bat_cold:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_COLD, wm8350);
-+free_chg_bat_hot:
-+	wm8350_free_irq(wm8350, WM8350_IRQ_CHG_BAT_HOT, wm8350);
-+err:
-+	return ret;
- }
+ 	if (!nested) {
+ 		kvmppc_core_prepare_to_enter(vcpu);
+ 		if (test_bit(BOOK3S_IRQPRIO_EXTERNAL,
+@@ -4511,13 +4541,6 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
  
- static void free_charger_irq(struct wm8350 *wm8350)
+ 	tb = mftb();
+ 
+-	vcpu->cpu = pcpu;
+-	vcpu->arch.thread_cpu = pcpu;
+-	vc->pcpu = pcpu;
+-	local_paca->kvm_hstate.kvm_vcpu = vcpu;
+-	local_paca->kvm_hstate.ptid = 0;
+-	local_paca->kvm_hstate.fake_suspend = 0;
+-
+ 	__kvmppc_create_dtl_entry(vcpu, pcpu, tb + vc->tb_offset, 0);
+ 
+ 	trace_kvm_guest_enter(vcpu);
+@@ -4619,6 +4642,8 @@ int kvmhv_run_single_vcpu(struct kvm_vcpu *vcpu, u64 time_limit,
+ 	run->exit_reason = KVM_EXIT_INTR;
+ 	vcpu->arch.ret = -EINTR;
+  out:
++	vcpu->cpu = -1;
++	vcpu->arch.thread_cpu = -1;
+ 	powerpc_local_irq_pmu_restore(flags);
+ 	preempt_enable();
+ 	goto done;
 -- 
-2.34.1
+2.35.1
 
 
 

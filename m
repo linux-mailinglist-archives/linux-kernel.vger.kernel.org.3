@@ -2,52 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C576E506002
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C422505FFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233729AbiDRW5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
+        id S233737AbiDRW5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233512AbiDRW4t (ORCPT
+        with ESMTP id S233497AbiDRW4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 18:56:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D745A2D1C5;
-        Mon, 18 Apr 2022 15:54:05 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCDE2CE3B;
+        Mon, 18 Apr 2022 15:54:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 24BEDB8114B;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17885B81148;
         Mon, 18 Apr 2022 22:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89EBDC385B7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E70AC385B6;
         Mon, 18 Apr 2022 22:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650322441;
-        bh=4F6D4WuqV0uCGvWLKe5pephkIMgIflKcXAmI/XqzuiM=;
+        bh=7YceAtQ4xCGuX9O3QcLmd4DKQm9RucoBz1BbPwEutSg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gOM59wfhUB1kqFMcXsEmM5bKcvdKaiD3+q6Zib+RPbrKMoVMSsuOr7RBuFLCQzYl/
-         5+cBSz2UNlUw+GQSAdi+bKckBf/ElV1qLqwk4vW08TqWfzLC8yZC9kTeTlDjfvyhi2
-         DZg0x/NSb3mgB9+i+MtZbwtFB92ZhtyEMoCam64HW3uVeiBGKvQNJKX592R/+JI+W9
-         1f9hnn36lb5tKosT29CjONUO/Awx+GE5csr2m0E+Npo7G5a8Ac4HevL/8gTRIMEbjT
-         ZPw/VPOsG6OMbnwFTSEZ4bY2b232I5+4bYEA/33JKw1Wa5vdydGeaufkSIMb+QSU6F
-         0r8VixORs1C0w==
+        b=ZmMN9xvPQderK9vVByZh5rBt/vyyHCPUQuUl6ftiTHVZ/2t43QFA+9TIRY5gm7jQX
+         CPayMZBHu5nKUzvMsIwSiEwjHqMlCDjWX1u37LzOpm9cw8vAl57hZ81tFiTA01+ZrD
+         Yo0fSZnkM+YE4fp04aoqH2qaY+PBW1Q3AMuxE+nu2cgIgikUJZwNgunlyqr0LnUUn9
+         rG2Mg8O7ChLolIdsuAwmhTjPXCm/4xwbytAmGXwmrdYhII1kadckulN//W1IQ/vwYm
+         STPglXypdkND0e9CillyEdx7/yUbs2bkaGajISr/Hfs1JUe1QoTOBccNGqON6w507o
+         XhsWqF3iozXMw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EAF665C0DFD; Mon, 18 Apr 2022 15:54:00 -0700 (PDT)
+        id ECC905C121E; Mon, 18 Apr 2022 15:54:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Valentin Schneider <valentin.schneider@arm.com>
-Subject: [PATCH rcu 07/11] rcu: Fix preemption mode check on synchronize_rcu[_expedited]()
-Date:   Mon, 18 Apr 2022 15:53:55 -0700
-Message-Id: <20220418225359.3945217-7-paulmck@kernel.org>
+        rostedt@goodmis.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 08/11] srcu: Drop needless initialization of sdp in srcu_gp_start()
+Date:   Mon, 18 Apr 2022 15:53:56 -0700
+Message-Id: <20220418225359.3945217-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
 References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
@@ -63,51 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-An early check on synchronize_rcu[_expedited]() tries to determine if
-the current CPU is in UP mode on an SMP no-preempt kernel, in which case
-there is no need to start a grace period since the current assumed
-quiescent state is all we need.
+Commit 9c7ef4c30f12 ("srcu: Make Tree SRCU able to operate without
+snp_node array") initializes the local variable sdp differently depending
+on the srcu's state in srcu_gp_start().  Either way, this initialization
+overwrites the value used when sdp is defined.
 
-However the preemption mode doesn't take into account the boot selected
-preemption mode under CONFIG_PREEMPT_DYNAMIC=y, missing a possible
-early return if the running flavour is "none" or "voluntary".
+This commit therefore drops this pointless definition-time initialization.
+Although there is no functional change, compiler code generation may
+be affected.
 
-Use the shiny new preempt mode accessors to fix this.  However,
-avoid invoking them during early boot because doing so triggers a
-WARN_ON_ONCE().
-
-[ paulmck: Update for mainlined API. ]
-
-Reported-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Valentin Schneider <valentin.schneider@arm.com>
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ kernel/rcu/srcutree.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 29669070348e..d3caa82b9954 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -3741,7 +3741,9 @@ static int rcu_blocking_is_gp(void)
+diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
+index 6833d8887181..e0ef018612a2 100644
+--- a/kernel/rcu/srcutree.c
++++ b/kernel/rcu/srcutree.c
+@@ -434,7 +434,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
+  */
+ static void srcu_gp_start(struct srcu_struct *ssp)
  {
- 	int ret;
+-	struct srcu_data *sdp = this_cpu_ptr(ssp->sda);
++	struct srcu_data *sdp;
+ 	int state;
  
--	if (IS_ENABLED(CONFIG_PREEMPTION))
-+	// Invoking preempt_model_*() too early gets a splat.
-+	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE ||
-+	    preempt_model_full() || preempt_model_rt())
- 		return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
- 	might_sleep();  /* Check for RCU read-side critical section. */
- 	preempt_disable();
+ 	lockdep_assert_held(&ACCESS_PRIVATE(ssp, lock));
 -- 
 2.31.1.189.g2e36527f23
 

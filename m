@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C8875055C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5105054D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241838AbiDRN0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
+        id S241983AbiDRNNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239214AbiDRNDw (ORCPT
+        with ESMTP id S242285AbiDRM7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17AC3BF5A;
-        Mon, 18 Apr 2022 05:45:06 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D332FFDB;
+        Mon, 18 Apr 2022 05:40:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D6F96611E4;
-        Mon, 18 Apr 2022 12:45:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DF8C385A7;
-        Mon, 18 Apr 2022 12:45:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA3EDB80EDB;
+        Mon, 18 Apr 2022 12:40:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293ACC385A7;
+        Mon, 18 Apr 2022 12:40:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285905;
-        bh=pZ9Cg/z8ut/ZxUUywIWgSASIaLci26urQY/3V/R3ssw=;
+        s=korg; t=1650285632;
+        bh=HUvu37Z9AailgtyzSCymtdSt1iU2nxgmgL3q7izu10o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2qBKOOuiboO77/EcxeOa++Edd1y32Zg2uG2g0wf3imON+pxTEOPtLPSY8xWXQbv8Z
-         Kn+SNFV7vCb7EKCiaja06t9YZnNzdkm64hgcYaHVRM5WpuqbopwFCF856ac441vjNP
-         NujLQ5NH7JTFwB1h1ECvKBF0LFurs2MSU51Dpq78=
+        b=eZ5U2iCovrZGRNJolAmRHpVr5uTlIZTKiOdw2kHgontJTRdWPav+YTDkv8p3pvccU
+         ipfSxc1bQAak/jr7VdIDpIsA/IC3SjciMtFuvqjFq7HvSBuYd6Q863JECGlYX74X+V
+         0VmXwPU9DTTZXpyUn8ru5WYv9gnK4mPXG7g2Bhc0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tyrel Datwyler <tyreld@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 23/63] scsi: ibmvscsis: Increase INITIAL_SRP_LIMIT to 1024
-Date:   Mon, 18 Apr 2022 14:13:20 +0200
-Message-Id: <20220418121135.701345639@linuxfoundation.org>
+        stable@vger.kernel.org, TOTE Robot <oslab@tsinghua.edu.cn>,
+        Jia-Ju Bai <baijiaju1990@gmail.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.10 079/105] btrfs: fix root ref counts in error handling in btrfs_get_root_ref
+Date:   Mon, 18 Apr 2022 14:13:21 +0200
+Message-Id: <20220418121148.875685525@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tyrel Datwyler <tyreld@linux.ibm.com>
+From: Jia-Ju Bai <baijiaju1990@gmail.com>
 
-[ Upstream commit 0bade8e53279157c7cc9dd95d573b7e82223d78a ]
+commit 168a2f776b9762f4021421008512dd7ab7474df1 upstream.
 
-The adapter request_limit is hardcoded to be INITIAL_SRP_LIMIT which is
-currently an arbitrary value of 800. Increase this value to 1024 which
-better matches the characteristics of the typical IBMi Initiator that
-supports 32 LUNs and a queue depth of 32.
+In btrfs_get_root_ref(), when btrfs_insert_fs_root() fails,
+btrfs_put_root() can happen for two reasons:
 
-This change also has the secondary benefit of being a power of two as
-required by the kfifo API. Since, Commit ab9bb6318b09 ("Partially revert
-"kfifo: fix kfifo_alloc() and kfifo_init()"") the size of IU pool for each
-target has been rounded down to 512 when attempting to kfifo_init() those
-pools with the current request_limit size of 800.
+- the root already exists in the tree, in that case it returns the
+  reference obtained in btrfs_lookup_fs_root()
 
-Link: https://lore.kernel.org/r/20220322194443.678433-1-tyreld@linux.ibm.com
-Signed-off-by: Tyrel Datwyler <tyreld@linux.ibm.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+- another error so the cleanup is done in the fail label
+
+Calling btrfs_put_root() unconditionally would lead to double decrement
+of the root reference possibly freeing it in the second case.
+
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Fixes: bc44d7c4b2b1 ("btrfs: push btrfs_grab_fs_root into btrfs_get_fs_root")
+CC: stable@vger.kernel.org # 5.10+
+Signed-off-by: Jia-Ju Bai <baijiaju1990@gmail.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/disk-io.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-index a929fe76102b..d5b2917aea44 100644
---- a/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-+++ b/drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c
-@@ -35,7 +35,7 @@
+--- a/fs/btrfs/disk-io.c
++++ b/fs/btrfs/disk-io.c
+@@ -1596,9 +1596,10 @@ again:
  
- #define IBMVSCSIS_VERSION	"v0.2"
- 
--#define	INITIAL_SRP_LIMIT	800
-+#define	INITIAL_SRP_LIMIT	1024
- #define	DEFAULT_MAX_SECTORS	256
- #define MAX_TXU			1024 * 1024
- 
--- 
-2.35.1
-
+ 	ret = btrfs_insert_fs_root(fs_info, root);
+ 	if (ret) {
+-		btrfs_put_root(root);
+-		if (ret == -EEXIST)
++		if (ret == -EEXIST) {
++			btrfs_put_root(root);
+ 			goto again;
++		}
+ 		goto fail;
+ 	}
+ 	return root;
 
 

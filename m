@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D487C5053E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA52505513
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240876AbiDRNCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:02:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S242587AbiDRNOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240039AbiDRMwP (ORCPT
+        with ESMTP id S242399AbiDRM7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:52:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5C642D1D6;
-        Mon, 18 Apr 2022 05:34:23 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276F6201B2;
+        Mon, 18 Apr 2022 05:41:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 66D9B61014;
-        Mon, 18 Apr 2022 12:34:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5699FC385A8;
-        Mon, 18 Apr 2022 12:34:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B91A760FB6;
+        Mon, 18 Apr 2022 12:41:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADAB7C385A1;
+        Mon, 18 Apr 2022 12:41:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285262;
-        bh=m9viVS1D+NUit2asz3mAmwwfeEnNpj04FNw9SDwXsWk=;
+        s=korg; t=1650285666;
+        bh=oeyh0lVaDlwDWlKs2RBO8CFapC5V+Qr1deEGbcU334c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=khA8o2ejGlPjpD9rJww9ILCASCB2/WGkEEGqnZFB4PeZY2RZWX3GbCZ+MBrOwsHBu
-         fWlJh2DM9AzXTY7rrFBQ5+JAqAZui9yLO5x3+ras7OSPPobC3CYjTaonUqgO79NjFk
-         yASba/ZLExQ9oft2irCy08Ld5bRGwNpY2Wydmx34=
+        b=dj94Xa7VQkrkdKtlFknuxJzuBGz/pG9KlGzk22M6stKQge5K3N83Xkc+djE8Pss5n
+         mJgjRT5/R0YSl4rYTnqP9m426Jv+ZzU/LVaiAfR7C9hor9oQbO40NfGe44GoQDxWNS
+         t/w8dg9JUGIvKDz3ZRJMuAggCLTGnJrOcDdhdaLM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Xiaoli Feng <xifeng@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.15 153/189] cifs: verify that tcon is valid before dereference in cifs_kill_sb
+        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 051/105] Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
 Date:   Mon, 18 Apr 2022 14:12:53 +0200
-Message-Id: <20220418121206.334508622@linuxfoundation.org>
+Message-Id: <20220418121147.931548862@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Michael Kelley <mikelley@microsoft.com>
 
-commit 8b6c58458ee3206dde345fce327a4cb83e69caf9 upstream.
+[ Upstream commit b6cae15b5710c8097aad26a2e5e752c323ee5348 ]
 
-On umount, cifs_sb->tlink_tree might contain entries that do not represent
-a valid tcon.
-Check the tcon for error before we dereference it.
+When reading a packet from a host-to-guest ring buffer, there is no
+memory barrier between reading the write index (to see if there is
+a packet to read) and reading the contents of the packet. The Hyper-V
+host uses store-release when updating the write index to ensure that
+writes of the packet data are completed first. On the guest side,
+the processor can reorder and read the packet data before the write
+index, and sometimes get stale packet data. Getting such stale packet
+data has been observed in a reproducible case in a VM on ARM64.
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Reported-by: Xiaoli Feng <xifeng@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fix this by using virt_load_acquire() to read the write index,
+ensuring that reads of the packet data cannot be reordered
+before it. Preventing such reordering is logically correct, and
+with this change, getting stale data can no longer be reproduced.
+
+Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+Link: https://lore.kernel.org/r/1648394710-33480-1-git-send-email-mikelley@microsoft.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsfs.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/hv/ring_buffer.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -266,10 +266,11 @@ static void cifs_kill_sb(struct super_bl
- 	 * before we kill the sb.
- 	 */
- 	if (cifs_sb->root) {
--		node = rb_first(root);
--		while (node != NULL) {
-+		for (node = rb_first(root); node; node = rb_next(node)) {
- 			tlink = rb_entry(node, struct tcon_link, tl_rbnode);
- 			tcon = tlink_tcon(tlink);
-+			if (IS_ERR(tcon))
-+				continue;
- 			cfid = &tcon->crfid;
- 			mutex_lock(&cfid->fid_mutex);
- 			if (cfid->dentry) {
-@@ -277,7 +278,6 @@ static void cifs_kill_sb(struct super_bl
- 				cfid->dentry = NULL;
- 			}
- 			mutex_unlock(&cfid->fid_mutex);
--			node = rb_next(node);
- 		}
+diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
+index 356e22159e83..769851b6e74c 100644
+--- a/drivers/hv/ring_buffer.c
++++ b/drivers/hv/ring_buffer.c
+@@ -378,7 +378,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
+ static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
+ {
+ 	u32 priv_read_loc = rbi->priv_read_index;
+-	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
++	u32 write_loc;
++
++	/*
++	 * The Hyper-V host writes the packet data, then uses
++	 * store_release() to update the write_index.  Use load_acquire()
++	 * here to prevent loads of the packet data from being re-ordered
++	 * before the read of the write_index and potentially getting
++	 * stale data.
++	 */
++	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
  
- 		/* finally release root dentry */
+ 	if (write_loc >= priv_read_loc)
+ 		return write_loc - priv_read_loc;
+-- 
+2.35.1
+
 
 

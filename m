@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88FF5505FBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F10E505FC8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbiDRW2b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:28:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43982 "EHLO
+        id S231796AbiDRWcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231560AbiDRW22 (ORCPT
+        with ESMTP id S231727AbiDRWcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:28:28 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E29D2A73F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:25:48 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j8so13443421pll.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:25:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kWeSEYtYBPSYXGJ5RGMLqKeBHN5Pc+xvOucSvPfOeZg=;
-        b=CnIjaqlaeuJAiO6U112UMkMu+Gs3ua/Wk/YIozUrSHz51MEzfGmavFOIenjJeW0Vgd
-         L8aP+vVXpId30nfUrXvNJqLmAaksYO1xM54mkfwFef/KAGXC5KHfNqnunzckHHsCx+co
-         jii3Lhdi2Snj9b8i/smtl/SChsn/lBKmKoC7g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kWeSEYtYBPSYXGJ5RGMLqKeBHN5Pc+xvOucSvPfOeZg=;
-        b=1IDNP9SRMrei/hJ7wxogrcQPzAjI2ZSNEg+DKDAasMPIYjL3aGKI5HOHdV4REbaeTW
-         m69I4X9Ekc+exJAFNm7dGlAhoI8L7s+lfMW8Ff/cKBg/5gwD2RQfHOx5N1noIO2Ffom3
-         1UyUXoIfktl2dM/bkgMQ1ERYVDNCDRDHFBB5KevThqH4Uou6vFdTGAwZanbxKX1TvFdU
-         pHjLbvP0TV71I/zg/PjQEVljCPjc/ezyoyw4hHC2u+x+Zdl020oWBg1J5cFPXB3aoaYh
-         vWjgKrVpCKsXDAM9j2H5bqemcRBx5HZfquMQ8boanMT9ZRr86e2O9Ma1vNEfwyrYMA0B
-         ww+g==
-X-Gm-Message-State: AOAM532IPcx5NSU84qKpHQDVr4i7T6D1UPV+DhM4qDpXaSzaJ1uE/85s
-        MfGE3v5atm2YeNPdqE5+eaRWnw==
-X-Google-Smtp-Source: ABdhPJymv4/Uhq/UT762Up/mlbsIqwm8nYfkq9DeRGXW5Oq43p/ox3HaSjeX+atWC4G1+vCbPYJ8Mw==
-X-Received: by 2002:a17:902:9a8c:b0:15a:a21:b52a with SMTP id w12-20020a1709029a8c00b0015a0a21b52amr1278514plp.86.1650320748108;
-        Mon, 18 Apr 2022 15:25:48 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w123-20020a623081000000b005056a4d71e3sm13571318pfw.77.2022.04.18.15.25.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 15:25:47 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:25:47 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Dan Li <ashimida@linux.alibaba.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: Re: [kees:for-next/lkdtm 6/6] drivers/misc/lkdtm/cfi.c:62:37:
- warning: cast from pointer to integer of different size
-Message-ID: <202204181515.FC6649DC81@keescook>
-References: <202204170710.LwCV5Ec0-lkp@intel.com>
+        Mon, 18 Apr 2022 18:32:17 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7E32AC58;
+        Mon, 18 Apr 2022 15:29:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650320977; x=1681856977;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x3LX6huKtEVcSvcP8lAWxAATuMO8mjnqdyupJ1IbV6g=;
+  b=kX/s7S7fdjWviEkE4A04E+T9J1USapJYe3my0Hk6daEs0j4lI6sohx7v
+   XCLWEpMcQNxMOn1iXgks3VLmOaxhMnCEyA/7zrZJLDdhsurtD4s9AYRHJ
+   ULhHCSbjmsDcRfvAGc1T27sFpy0TwJtkjck2YzfQbwBGTBGPxUH8DyPav
+   3rU9dVjYyeew9HMARpdYLVVHPX2JBUYBpramr4G3HbuFMJgiar+pQQCS9
+   sLY8Lzt+cu5KJiInaUpeu410gVM77UWzgmUxGh+KqGt0DNNTC1vh+i3uP
+   yxsctxmqijS5WvudDMsUZaaVQyo4OrJzeddblExBzwTLpneGEmlDghw8Y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262483945"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="262483945"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:29:37 -0700
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="657406058"
+Received: from efiguero-mobl.amr.corp.intel.com (HELO [10.212.242.93]) ([10.212.242.93])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:29:36 -0700
+Message-ID: <8e2269a7-3e71-5030-8d04-1e8e3fc4323f@linux.intel.com>
+Date:   Mon, 18 Apr 2022 15:29:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202204170710.LwCV5Ec0-lkp@intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.7.0
+Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
+Content-Language: en-US
+To:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     seanjc@google.com, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,44 +68,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 07:26:33AM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/lkdtm
-> head:   2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
-> commit: 2e53b877dc1258d4ac3de98f496bb88ec3bf5e25 [6/6] lkdtm: Add CFI_BACKWARD to test ROP mitigations
-> config: sparc-randconfig-r026-20220417 (https://download.01.org/0day-ci/archive/20220417/202204170710.LwCV5Ec0-lkp@intel.com/config)
-> compiler: sparc-linux-gcc (GCC) 11.2.0
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?id=2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
->         git remote add kees https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git
->         git fetch --no-tags kees for-next/lkdtm
->         git checkout 2e53b877dc1258d4ac3de98f496bb88ec3bf5e25
->         # save the config file to linux build tree
->         mkdir build_dir
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/misc/lkdtm/
-> 
-> If you fix the issue, kindly add following tag as appropriate
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/misc/lkdtm/cfi.c: In function 'set_return_addr_unchecked':
-> >> drivers/misc/lkdtm/cfi.c:62:37: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
->       62 |         ((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
->          |                                     ^
->    drivers/misc/lkdtm/cfi.c:72:13: note: in expansion of macro 'no_pac_addr'
->       72 |         if (no_pac_addr(*ret_addr) == expected)
->          |             ^~~~~~~~~~~
 
-Hmm. I don't see why this is warning. The macro looks like untagged_addr():
 
-#define untagged_addr(addr)     ({ \
-        u64 __addr = (__force u64)(addr); \
-        __addr &= __untagged_addr(__addr); \
-        (__force __typeof__(addr))__addr; \
-})
+On 4/5/22 9:49 PM, Kai Huang wrote:
+> +/* BIOS must configure SEAMRR registers for all cores consistently */
+> +static u64 seamrr_base, seamrr_mask;
+> +
+> +static bool __seamrr_enabled(void)
+> +{
+> +	return (seamrr_mask & SEAMRR_ENABLED_BITS) == SEAMRR_ENABLED_BITS;
+> +}
+> +
+> +static void detect_seam_bsp(struct cpuinfo_x86 *c)
+> +{
+> +	u64 mtrrcap, base, mask;
+> +
+> +	/* SEAMRR is reported via MTRRcap */
+> +	if (!boot_cpu_has(X86_FEATURE_MTRR))
+> +		return;
+> +
+> +	rdmsrl(MSR_MTRRcap, mtrrcap);
+> +	if (!(mtrrcap & MTRR_CAP_SEAMRR))
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+> +	if (!(base & SEAMRR_PHYS_BASE_CONFIGURED)) {
+> +		pr_info("SEAMRR base is not configured by BIOS\n");
+> +		return;
+> +	}
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+> +	if ((mask & SEAMRR_ENABLED_BITS) != SEAMRR_ENABLED_BITS) {
+> +		pr_info("SEAMRR is not enabled by BIOS\n");
+> +		return;
+> +	}
+> +
+> +	seamrr_base = base;
+> +	seamrr_mask = mask;
+> +}
+> +
+> +static void detect_seam_ap(struct cpuinfo_x86 *c)
+> +{
+> +	u64 base, mask;
+> +
+> +	/*
+> +	 * Don't bother to detect this AP if SEAMRR is not
+> +	 * enabled after earlier detections.
+> +	 */
+> +	if (!__seamrr_enabled())
+> +		return;
+> +
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+> +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+> +
+> +	if (base == seamrr_base && mask == seamrr_mask)
+> +		return;
+> +
+> +	pr_err("Inconsistent SEAMRR configuration by BIOS\n");
 
+Do we need to panic for SEAM config issue (for security)?
+
+> +	/* Mark SEAMRR as disabled. */
+> +	seamrr_base = 0;
+> +	seamrr_mask = 0
+> +}
+> +
+> +static void detect_seam(struct cpuinfo_x86 *c)
+> +{
+
+why not do this check directly in tdx_detect_cpu()?
+
+> +	if (c == &boot_cpu_data)
+> +		detect_seam_bsp(c);
+> +	else
+> +		detect_seam_ap(c);
+> +}
+> +
+> +void tdx_detect_cpu(struct cpuinfo_x86 *c)
+> +{
+> +	detect_seam(c);
+> +}
 
 -- 
-Kees Cook
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

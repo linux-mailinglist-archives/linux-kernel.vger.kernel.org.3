@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AECB35056AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B30DF505205
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240027AbiDRNg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S241049AbiDRMj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:39:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243729AbiDRNKY (ORCPT
+        with ESMTP id S240039AbiDRMdm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:10:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1375E272A;
-        Mon, 18 Apr 2022 05:49:53 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DDE1EC6F;
+        Mon, 18 Apr 2022 05:27:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7814F61254;
-        Mon, 18 Apr 2022 12:49:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ACF6C385A1;
-        Mon, 18 Apr 2022 12:49:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3934A60FD6;
+        Mon, 18 Apr 2022 12:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 329B6C385A1;
+        Mon, 18 Apr 2022 12:26:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286191;
-        bh=77qcZ1Uzak7g1HQpiucAyiTuDej5Yx4twTR1oQQDeQw=;
+        s=korg; t=1650284820;
+        bh=DqSnWmtTjt20ip4PilBbLWeY/hyoXisj1Ij00cb+nAc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gj1XhWoB2wkVx2xVwEOklXDy40a5yHHNV01nUiGtZ/dAhVLiTFwDT7ENsJVvSCtPf
-         iKYzsoA3g4LjH2SBPTkEf4tz+1gAJmyXOa9WX7U3uokmC4UEYW57ttDIKjCYBFwQh+
-         f89Z/Icenfs24Z8s9CBHeQfo/AcW+p4WkeO5OgJQ=
+        b=JlaJ6Y2YRhlr0h9btotRVVKLZVRTUIVYIoQYO6iSar+1PzSi6KSK80ihvAbpk0qc9
+         dIddJ61mshhDJi97sB4ASymsXTJVPYJ5ihr+oQs07Rl7uLP9WpOn6F6UeIfUsrciv0
+         TrKG28mCp2x9X3hIIzjkBcLaOBRab24cuq6UquH0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Qing <wangqing@vivo.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 057/284] spi: pxa2xx-pci: Balance reference count for PCI DMA device
-Date:   Mon, 18 Apr 2022 14:10:38 +0200
-Message-Id: <20220418121212.315243090@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 019/189] ALSA: als300: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:39 +0200
+Message-Id: <20220418121201.061540624@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,77 +53,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 609d7ffdc42199a0ec949db057e3b4be6745d6c5 ]
+commit ab8bce9da6102c575c473c053672547589bc4c59 upstream.
 
-The pci_get_slot() increases its reference count, the caller
-must decrement the reference count by calling pci_dev_put().
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Fixes: 743485ea3bee ("spi: pxa2xx-pci: Do a specific setup in a separate function")
-Fixes: 25014521603f ("spi: pxa2xx-pci: Enable DMA for Intel Merrifield")
-Reported-by: Wang Qing <wangqing@vivo.com>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Link: https://lore.kernel.org/r/20220223191637.31147-1-andriy.shevchenko@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes it by calling snd_card_free() manually on the error
+from the probe callback.
+
+Fixes: 21a9314cf93b ("ALSA: als300: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-31-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/spi/spi-pxa2xx-pci.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+ sound/pci/als300.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi-pxa2xx-pci.c b/drivers/spi/spi-pxa2xx-pci.c
-index 1736a48bbcce..54e316eb0891 100644
---- a/drivers/spi/spi-pxa2xx-pci.c
-+++ b/drivers/spi/spi-pxa2xx-pci.c
-@@ -72,14 +72,23 @@ static bool lpss_dma_filter(struct dma_chan *chan, void *param)
- 	return true;
+diff --git a/sound/pci/als300.c b/sound/pci/als300.c
+index b86565dcdbe4..c70aff060120 100644
+--- a/sound/pci/als300.c
++++ b/sound/pci/als300.c
+@@ -708,7 +708,7 @@ static int snd_als300_probe(struct pci_dev *pci,
+ 
+ 	err = snd_als300_create(card, pci, chip_type);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	strcpy(card->driver, "ALS300");
+ 	if (chip->chip_type == DEVICE_ALS300_PLUS)
+@@ -723,11 +723,15 @@ static int snd_als300_probe(struct pci_dev *pci,
+ 
+ 	err = snd_card_register(card);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	pci_set_drvdata(pci, card);
+ 	dev++;
+ 	return 0;
++
++ error:
++	snd_card_free(card);
++	return err;
  }
  
-+static void lpss_dma_put_device(void *dma_dev)
-+{
-+	pci_dev_put(dma_dev);
-+}
-+
- static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- {
- 	struct pci_dev *dma_dev;
-+	int ret;
- 
- 	c->num_chipselect = 1;
- 	c->max_clk_rate = 50000000;
- 
- 	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(PCI_SLOT(dev->devfn), 0));
-+	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-+	if (ret)
-+		return ret;
- 
- 	if (c->tx_param) {
- 		struct dw_dma_slave *slave = c->tx_param;
-@@ -103,8 +112,9 @@ static int lpss_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- 
- static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- {
--	struct pci_dev *dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
- 	struct dw_dma_slave *tx, *rx;
-+	struct pci_dev *dma_dev;
-+	int ret;
- 
- 	switch (PCI_FUNC(dev->devfn)) {
- 	case 0:
-@@ -129,6 +139,11 @@ static int mrfld_spi_setup(struct pci_dev *dev, struct pxa_spi_info *c)
- 		return -ENODEV;
- 	}
- 
-+	dma_dev = pci_get_slot(dev->bus, PCI_DEVFN(21, 0));
-+	ret = devm_add_action_or_reset(&dev->dev, lpss_dma_put_device, dma_dev);
-+	if (ret)
-+		return ret;
-+
- 	tx = c->tx_param;
- 	tx->dma_dev = &dma_dev->dev;
- 
+ static struct pci_driver als300_driver = {
 -- 
-2.34.1
+2.35.2
 
 
 

@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B148C505504
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3F4C5053E6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242757AbiDRNOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
+        id S240806AbiDRNBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242186AbiDRM7l (ORCPT
+        with ESMTP id S239652AbiDRMuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF1A2FE5E;
-        Mon, 18 Apr 2022 05:40:19 -0700 (PDT)
+        Mon, 18 Apr 2022 08:50:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B772CCB7;
+        Mon, 18 Apr 2022 05:34:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6D7ECB80EDD;
-        Mon, 18 Apr 2022 12:40:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6230C385A7;
-        Mon, 18 Apr 2022 12:40:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1EEEBB80EDC;
+        Mon, 18 Apr 2022 12:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8CDC385A1;
+        Mon, 18 Apr 2022 12:34:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285617;
-        bh=hnSeruQ5WyddU9pPERbn+e7vShbePPJJ1EYBzggJ3bY=;
+        s=korg; t=1650285252;
+        bh=6/aVB/eAzoB2Sz2DHvIrvyJiFvWJ+nwIA8Dtc/D44Yc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kOxwiLTxVPGmJaLw7pmKAB4NRFpfIxBVoZWXNw4nF6tMI0zcRoWZ1+EmD+OmW0ZnL
-         mDFuD2ZwjJn4C/vSUtFxeigUjIPE1RWgGuWw4e5fxjGKhgr9rpgvozYEldB5XPw56E
-         d2E1SX9Xtop685uh4OjVMVtlTS5LFo7nqY19OSs0=
+        b=WuA9qrZpE2E7CxgB0aHVPYd1EeGSXqN6lCCO1BApf1brKAuQdjMam+M4Sa06s9pmy
+         9nbllwG5BDzHc/KPV8Z6t06TPotQqZmacoJmW5VHr3RUhVLGBRZZUKHM6TotJP2yBF
+         3lpjrS8YS3y26GoXmlww+aNS26HukUBtXPRVi8Gc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tushar Patel <tushar.patel@amd.com>,
-        Felix Kuehling <felix.kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 048/105] drm/amdkfd: Fix Incorrect VMIDs passed to HWS
+        stable@vger.kernel.org, Trond Myklebust <trondmy@hammerspace.com>,
+        Chuck Lever <chuck.lever@oracle.com>
+Subject: [PATCH 5.15 150/189] SUNRPC: Fix NFSDs request deferral on RDMA transports
 Date:   Mon, 18 Apr 2022 14:12:50 +0200
-Message-Id: <20220418121147.846266718@linuxfoundation.org>
+Message-Id: <20220418121206.130360041@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +54,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tushar Patel <tushar.patel@amd.com>
+From: Chuck Lever <chuck.lever@oracle.com>
 
-[ Upstream commit b7dfbd2e601f3fee545bc158feceba4f340fe7cf ]
+commit 773f91b2cf3f52df0d7508fdbf60f37567cdaee4 upstream.
 
-Compute-only GPUs have more than 8 VMIDs allocated to KFD. Fix
-this by passing correct number of VMIDs to HWS
+Trond Myklebust reports an NFSD crash in svc_rdma_sendto(). Further
+investigation shows that the crash occurred while NFSD was handling
+a deferred request.
 
-v2: squash in warning fix (Alex)
+This patch addresses two inter-related issues that prevent request
+deferral from working correctly for RPC/RDMA requests:
 
-Signed-off-by: Tushar Patel <tushar.patel@amd.com>
-Reviewed-by: Felix Kuehling <felix.kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+1. Prevent the crash by ensuring that the original
+   svc_rqst::rq_xprt_ctxt value is available when the request is
+   revisited. Otherwise svc_rdma_sendto() does not have a Receive
+   context available with which to construct its reply.
+
+2. Possibly since before commit 71641d99ce03 ("svcrdma: Properly
+   compute .len and .buflen for received RPC Calls"),
+   svc_rdma_recvfrom() did not include the transport header in the
+   returned xdr_buf. There should have been no need for svc_defer()
+   and friends to save and restore that header, as of that commit.
+   This issue is addressed in a backport-friendly way by simply
+   having svc_rdma_recvfrom() set rq_xprt_hlen to zero
+   unconditionally, just as svc_tcp_recvfrom() does. This enables
+   svc_deferred_recv() to correctly reconstruct an RPC message
+   received via RPC/RDMA.
+
+Reported-by: Trond Myklebust <trondmy@hammerspace.com>
+Link: https://lore.kernel.org/linux-nfs/82662b7190f26fb304eb0ab1bb04279072439d4e.camel@hammerspace.com/
+Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 +-
- drivers/gpu/drm/amd/amdkfd/kfd_device.c | 11 +++--------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ include/linux/sunrpc/svc.h              |    1 +
+ net/sunrpc/svc_xprt.c                   |    3 +++
+ net/sunrpc/xprtrdma/svc_rdma_recvfrom.c |    2 +-
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index ed13a2f76884..30659c1776e8 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -632,7 +632,7 @@ MODULE_PARM_DESC(sched_policy,
-  * Maximum number of processes that HWS can schedule concurrently. The maximum is the
-  * number of VMIDs assigned to the HWS, which is also the default.
-  */
--int hws_max_conc_proc = 8;
-+int hws_max_conc_proc = -1;
- module_param(hws_max_conc_proc, int, 0444);
- MODULE_PARM_DESC(hws_max_conc_proc,
- 	"Max # processes HWS can execute concurrently when sched_policy=0 (0 = no concurrency, #VMIDs for KFD = Maximum(default))");
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-index 84313135c2ea..148e43dee657 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-@@ -664,15 +664,10 @@ bool kgd2kfd_device_init(struct kfd_dev *kfd,
- 			- kfd->vm_info.first_vmid_kfd + 1;
+--- a/include/linux/sunrpc/svc.h
++++ b/include/linux/sunrpc/svc.h
+@@ -384,6 +384,7 @@ struct svc_deferred_req {
+ 	size_t			addrlen;
+ 	struct sockaddr_storage	daddr;	/* where reply must come from */
+ 	size_t			daddrlen;
++	void			*xprt_ctxt;
+ 	struct cache_deferred_req handle;
+ 	size_t			xprt_hlen;
+ 	int			argslen;
+--- a/net/sunrpc/svc_xprt.c
++++ b/net/sunrpc/svc_xprt.c
+@@ -1213,6 +1213,8 @@ static struct cache_deferred_req *svc_de
+ 		dr->daddr = rqstp->rq_daddr;
+ 		dr->argslen = rqstp->rq_arg.len >> 2;
+ 		dr->xprt_hlen = rqstp->rq_xprt_hlen;
++		dr->xprt_ctxt = rqstp->rq_xprt_ctxt;
++		rqstp->rq_xprt_ctxt = NULL;
  
- 	/* Verify module parameters regarding mapped process number*/
--	if ((hws_max_conc_proc < 0)
--			|| (hws_max_conc_proc > kfd->vm_info.vmid_num_kfd)) {
--		dev_err(kfd_device,
--			"hws_max_conc_proc %d must be between 0 and %d, use %d instead\n",
--			hws_max_conc_proc, kfd->vm_info.vmid_num_kfd,
--			kfd->vm_info.vmid_num_kfd);
-+	if (hws_max_conc_proc >= 0)
-+		kfd->max_proc_per_quantum = min((u32)hws_max_conc_proc, kfd->vm_info.vmid_num_kfd);
-+	else
- 		kfd->max_proc_per_quantum = kfd->vm_info.vmid_num_kfd;
--	} else
--		kfd->max_proc_per_quantum = hws_max_conc_proc;
+ 		/* back up head to the start of the buffer and copy */
+ 		skip = rqstp->rq_arg.len - rqstp->rq_arg.head[0].iov_len;
+@@ -1251,6 +1253,7 @@ static noinline int svc_deferred_recv(st
+ 	rqstp->rq_xprt_hlen   = dr->xprt_hlen;
+ 	rqstp->rq_daddr       = dr->daddr;
+ 	rqstp->rq_respages    = rqstp->rq_pages;
++	rqstp->rq_xprt_ctxt   = dr->xprt_ctxt;
+ 	svc_xprt_received(rqstp->rq_xprt);
+ 	return (dr->argslen<<2) - dr->xprt_hlen;
+ }
+--- a/net/sunrpc/xprtrdma/svc_rdma_recvfrom.c
++++ b/net/sunrpc/xprtrdma/svc_rdma_recvfrom.c
+@@ -826,7 +826,7 @@ int svc_rdma_recvfrom(struct svc_rqst *r
+ 		goto out_err;
+ 	if (ret == 0)
+ 		goto out_drop;
+-	rqstp->rq_xprt_hlen = ret;
++	rqstp->rq_xprt_hlen = 0;
  
- 	/* calculate max size of mqds needed for queues */
- 	size = max_num_of_queues_per_device *
--- 
-2.35.1
-
+ 	if (svc_rdma_is_reverse_direction_reply(xprt, ctxt))
+ 		goto out_backchannel;
 
 

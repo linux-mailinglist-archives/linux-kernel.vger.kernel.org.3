@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEE02505766
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:53:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92B5505240
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243995AbiDRNzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
+        id S240000AbiDRMnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:43:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244875AbiDRNa7 (ORCPT
+        with ESMTP id S239691AbiDRMdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642341F601;
-        Mon, 18 Apr 2022 05:56:53 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9009B63E7;
+        Mon, 18 Apr 2022 05:25:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F3F4B80E44;
-        Mon, 18 Apr 2022 12:56:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C44C385A7;
-        Mon, 18 Apr 2022 12:56:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC40460E97;
+        Mon, 18 Apr 2022 12:25:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA30C385A1;
+        Mon, 18 Apr 2022 12:25:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286610;
-        bh=jpf1n49PwEk7KXAiKU/xbsttVCN7nX+VUnABwoWLeKo=;
+        s=korg; t=1650284705;
+        bh=PR1E3ZPlJQI92WZdb6Vzp2GTXD7XvS1wO5FB00WKHTs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mw/TEFT4eT+URZ1P8+Tv8mf1p9wJvqD2kCtFadh5pDrQRnJ2UnkbkRrXu3wjWJTI0
-         mmnntDv4Qb7ctISgqxVvKkaXah9Wjcap0Vy1gyqo1uC+LNBRSEmpKSMTUxt6+pgLXH
-         Ow7PHkl5yzMabCGglosl0KtWu4mzHpnaMLiH+724=
+        b=t+X3dsiXCf7WemyjZBMQ/fUeNis8fTiBnyUsP5zjktQp6VqBnMBY0g3vXSJ2Scjn8
+         rsnb+qWsg7fIf5S9fr9vNW1T8Eja5QfpxfE47VCEHRVzFSyfZFUKREup0rYkq6t5IQ
+         zK4xweQpHG7jySFdoNYWk//xntn52nmXrmczcwMU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>
-Subject: [PATCH 4.14 189/284] can: mcba_usb: mcba_usb_start_xmit(): fix double dev_kfree_skb in error path
+        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Neelima Krishnan <neelima.krishnan@intel.com>
+Subject: [PATCH 5.17 201/219] x86/tsx: Use MSR_TSX_CTRL to clear CPUID bits
 Date:   Mon, 18 Apr 2022 14:12:50 +0200
-Message-Id: <20220418121217.109843903@linuxfoundation.org>
+Message-Id: <20220418121212.497100194@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +56,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 04c9b00ba83594a29813d6b1fb8fdc93a3915174 upstream.
+commit 258f3b8c3210b03386e4ad92b4bd8652b5c1beb3 upstream.
 
-There is no need to call dev_kfree_skb() when usb_submit_urb() fails
-because can_put_echo_skb() deletes original skb and
-can_free_echo_skb() deletes the cloned skb.
+tsx_clear_cpuid() uses MSR_TSX_FORCE_ABORT to clear CPUID.RTM and
+CPUID.HLE. Not all CPUs support MSR_TSX_FORCE_ABORT, alternatively use
+MSR_IA32_TSX_CTRL when supported.
 
-Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
-Link: https://lore.kernel.org/all/20220311080208.45047-1-hbh25y@gmail.com
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
+  [ bp: Document how and why TSX gets disabled. ]
+
+Fixes: 293649307ef9 ("x86/tsx: Clear CPUID bits when TSX always force aborts")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/5b323e77e251a9c8bcdda498c5cc0095be1e1d3c.1646943780.git.pawan.kumar.gupta@linux.intel.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/can/usb/mcba_usb.c |    1 -
- 1 file changed, 1 deletion(-)
+ arch/x86/kernel/cpu/intel.c |    1 
+ arch/x86/kernel/cpu/tsx.c   |   54 ++++++++++++++++++++++++++++++++++++++------
+ 2 files changed, 48 insertions(+), 7 deletions(-)
 
---- a/drivers/net/can/usb/mcba_usb.c
-+++ b/drivers/net/can/usb/mcba_usb.c
-@@ -379,7 +379,6 @@ static netdev_tx_t mcba_usb_start_xmit(s
- xmit_failed:
- 	can_free_echo_skb(priv->netdev, ctx->ndx);
- 	mcba_usb_free_ctx(ctx);
--	dev_kfree_skb(skb);
- 	stats->tx_dropped++;
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -722,6 +722,7 @@ static void init_intel(struct cpuinfo_x8
+ 	else if (tsx_ctrl_state == TSX_CTRL_DISABLE)
+ 		tsx_disable();
+ 	else if (tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT)
++		/* See comment over that function for more details. */
+ 		tsx_clear_cpuid();
  
- 	return NETDEV_TX_OK;
+ 	split_lock_init();
+--- a/arch/x86/kernel/cpu/tsx.c
++++ b/arch/x86/kernel/cpu/tsx.c
+@@ -58,7 +58,7 @@ void tsx_enable(void)
+ 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
+ }
+ 
+-static bool __init tsx_ctrl_is_supported(void)
++static bool tsx_ctrl_is_supported(void)
+ {
+ 	u64 ia32_cap = x86_read_arch_cap_msr();
+ 
+@@ -84,6 +84,44 @@ static enum tsx_ctrl_states x86_get_tsx_
+ 	return TSX_CTRL_ENABLE;
+ }
+ 
++/*
++ * Disabling TSX is not a trivial business.
++ *
++ * First of all, there's a CPUID bit: X86_FEATURE_RTM_ALWAYS_ABORT
++ * which says that TSX is practically disabled (all transactions are
++ * aborted by default). When that bit is set, the kernel unconditionally
++ * disables TSX.
++ *
++ * In order to do that, however, it needs to dance a bit:
++ *
++ * 1. The first method to disable it is through MSR_TSX_FORCE_ABORT and
++ * the MSR is present only when *two* CPUID bits are set:
++ *
++ * - X86_FEATURE_RTM_ALWAYS_ABORT
++ * - X86_FEATURE_TSX_FORCE_ABORT
++ *
++ * 2. The second method is for CPUs which do not have the above-mentioned
++ * MSR: those use a different MSR - MSR_IA32_TSX_CTRL and disable TSX
++ * through that one. Those CPUs can also have the initially mentioned
++ * CPUID bit X86_FEATURE_RTM_ALWAYS_ABORT set and for those the same strategy
++ * applies: TSX gets disabled unconditionally.
++ *
++ * When either of the two methods are present, the kernel disables TSX and
++ * clears the respective RTM and HLE feature flags.
++ *
++ * An additional twist in the whole thing presents late microcode loading
++ * which, when done, may cause for the X86_FEATURE_RTM_ALWAYS_ABORT CPUID
++ * bit to be set after the update.
++ *
++ * A subsequent hotplug operation on any logical CPU except the BSP will
++ * cause for the supported CPUID feature bits to get re-detected and, if
++ * RTM and HLE get cleared all of a sudden, but, userspace did consult
++ * them before the update, then funny explosions will happen. Long story
++ * short: the kernel doesn't modify CPUID feature bits after booting.
++ *
++ * That's why, this function's call in init_intel() doesn't clear the
++ * feature flags.
++ */
+ void tsx_clear_cpuid(void)
+ {
+ 	u64 msr;
+@@ -97,6 +135,10 @@ void tsx_clear_cpuid(void)
+ 		rdmsrl(MSR_TSX_FORCE_ABORT, msr);
+ 		msr |= MSR_TFA_TSX_CPUID_CLEAR;
+ 		wrmsrl(MSR_TSX_FORCE_ABORT, msr);
++	} else if (tsx_ctrl_is_supported()) {
++		rdmsrl(MSR_IA32_TSX_CTRL, msr);
++		msr |= TSX_CTRL_CPUID_CLEAR;
++		wrmsrl(MSR_IA32_TSX_CTRL, msr);
+ 	}
+ }
+ 
+@@ -106,13 +148,11 @@ void __init tsx_init(void)
+ 	int ret;
+ 
+ 	/*
+-	 * Hardware will always abort a TSX transaction if both CPUID bits
+-	 * RTM_ALWAYS_ABORT and TSX_FORCE_ABORT are set. In this case, it is
+-	 * better not to enumerate CPUID.RTM and CPUID.HLE bits. Clear them
+-	 * here.
++	 * Hardware will always abort a TSX transaction when the CPUID bit
++	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
++	 * CPUID.RTM and CPUID.HLE bits. Clear them here.
+ 	 */
+-	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT) &&
+-	    boot_cpu_has(X86_FEATURE_TSX_FORCE_ABORT)) {
++	if (boot_cpu_has(X86_FEATURE_RTM_ALWAYS_ABORT)) {
+ 		tsx_ctrl_state = TSX_CTRL_RTM_ALWAYS_ABORT;
+ 		tsx_clear_cpuid();
+ 		setup_clear_cpu_cap(X86_FEATURE_RTM);
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E46EC5054EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8E3505465
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242061AbiDRNWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41070 "EHLO
+        id S241140AbiDRNGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241762AbiDRND1 (ORCPT
+        with ESMTP id S240350AbiDRMzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C36528E34;
-        Mon, 18 Apr 2022 05:44:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DE4220BFE;
+        Mon, 18 Apr 2022 05:36:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A75BB80EDB;
-        Mon, 18 Apr 2022 12:44:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF9FEC385A1;
-        Mon, 18 Apr 2022 12:44:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A06E60F0E;
+        Mon, 18 Apr 2022 12:36:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3665BC385A7;
+        Mon, 18 Apr 2022 12:36:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285854;
-        bh=kqCp4Kd1Dcil/DNJrkrnFjYds6a3mXSl6nnJmBPCzWM=;
+        s=korg; t=1650285393;
+        bh=h6KgK4UlLuqt00S7/NelzItnrRfUYPhvikAZc4K9Z2M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=U1tzouWbro0QOdoA0bSePFtJwbi0Sqg9JVcOc6uE3AlcxfYAeuQtlJl0flprXtqLB
-         omhDRpvy3qH8Z0lh/KJnq1nh3ZyYxSAM819tSxvG5321fWfCWHkRYZxg95A7A5N77+
-         lsZmj5GWd7gHjaYLrB1k48SdMtZxzhSZym/dfY5Q=
+        b=GtSm1Rwt4DcGG0J3uahZOD+O1ZeNEijqChWejOxCacUZSLT+TFYUM7XIPnRXHd5a3
+         CDIsGuDJVwiDoBTfGa8ZtJkWIXDjc6VkteX2WsXS9Zlab+Xr7zV41QTf1JJW4G/Ibq
+         Y8274t6t8rDrRfPBpnEcSbGX6nBYHuxyIxvKtsOQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tushar Patel <tushar.patel@amd.com>,
-        Felix Kuehling <felix.kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 19/63] drm/amdkfd: Fix Incorrect VMIDs passed to HWS
+        stable@vger.kernel.org, Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
+        Gao Liang <liang.gao@intel.com>, Chao Gao <chao.gao@intel.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Christoph Hellwig <hch@lst.de>
+Subject: [PATCH 5.15 176/189] dma-direct: avoid redundant memory sync for swiotlb
 Date:   Mon, 18 Apr 2022 14:13:16 +0200
-Message-Id: <20220418121135.452428065@linuxfoundation.org>
+Message-Id: <20220418121207.935479247@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +56,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tushar Patel <tushar.patel@amd.com>
+From: Chao Gao <chao.gao@intel.com>
 
-[ Upstream commit b7dfbd2e601f3fee545bc158feceba4f340fe7cf ]
+commit 9e02977bfad006af328add9434c8bffa40e053bb upstream.
 
-Compute-only GPUs have more than 8 VMIDs allocated to KFD. Fix
-this by passing correct number of VMIDs to HWS
+When we looked into FIO performance with swiotlb enabled in VM, we found
+swiotlb_bounce() is always called one more time than expected for each DMA
+read request.
 
-v2: squash in warning fix (Alex)
+It turns out that the bounce buffer is copied to original DMA buffer twice
+after the completion of a DMA request (one is done by in
+dma_direct_sync_single_for_cpu(), the other by swiotlb_tbl_unmap_single()).
+But the content in bounce buffer actually doesn't change between the two
+rounds of copy. So, one round of copy is redundant.
 
-Signed-off-by: Tushar Patel <tushar.patel@amd.com>
-Reviewed-by: Felix Kuehling <felix.kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Pass DMA_ATTR_SKIP_CPU_SYNC flag to swiotlb_tbl_unmap_single() to
+skip the memory copy in it.
+
+This fix increases FIO 64KB sequential read throughput in a guest with
+swiotlb=force by 5.6%.
+
+Fixes: 55897af63091 ("dma-direct: merge swiotlb_dma_ops into the dma_direct code")
+Reported-by: Wang Zhaoyang1 <zhaoyang1.wang@intel.com>
+Reported-by: Gao Liang <liang.gao@intel.com>
+Signed-off-by: Chao Gao <chao.gao@intel.com>
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+Signed-off-by: Christoph Hellwig <hch@lst.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 +-
- drivers/gpu/drm/amd/amdkfd/kfd_device.c | 11 +++--------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ kernel/dma/direct.h |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index e8e172010416..ffd754713522 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -633,7 +633,7 @@ MODULE_PARM_DESC(sched_policy,
-  * Maximum number of processes that HWS can schedule concurrently. The maximum is the
-  * number of VMIDs assigned to the HWS, which is also the default.
-  */
--int hws_max_conc_proc = 8;
-+int hws_max_conc_proc = -1;
- module_param(hws_max_conc_proc, int, 0444);
- MODULE_PARM_DESC(hws_max_conc_proc,
- 	"Max # processes HWS can execute concurrently when sched_policy=0 (0 = no concurrency, #VMIDs for KFD = Maximum(default))");
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-index ad9483b9eea3..60ee1a832112 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-@@ -609,15 +609,10 @@ bool kgd2kfd_device_init(struct kfd_dev *kfd,
- 			- kfd->vm_info.first_vmid_kfd + 1;
+--- a/kernel/dma/direct.h
++++ b/kernel/dma/direct.h
+@@ -114,6 +114,7 @@ static inline void dma_direct_unmap_page
+ 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
  
- 	/* Verify module parameters regarding mapped process number*/
--	if ((hws_max_conc_proc < 0)
--			|| (hws_max_conc_proc > kfd->vm_info.vmid_num_kfd)) {
--		dev_err(kfd_device,
--			"hws_max_conc_proc %d must be between 0 and %d, use %d instead\n",
--			hws_max_conc_proc, kfd->vm_info.vmid_num_kfd,
--			kfd->vm_info.vmid_num_kfd);
-+	if (hws_max_conc_proc >= 0)
-+		kfd->max_proc_per_quantum = min((u32)hws_max_conc_proc, kfd->vm_info.vmid_num_kfd);
-+	else
- 		kfd->max_proc_per_quantum = kfd->vm_info.vmid_num_kfd;
--	} else
--		kfd->max_proc_per_quantum = hws_max_conc_proc;
- 
- 	/* Allocate global GWS that is shared by all KFD processes */
- 	if (hws_gws_support && amdgpu_amdkfd_alloc_gws(kfd->kgd,
--- 
-2.35.1
-
+ 	if (unlikely(is_swiotlb_buffer(dev, phys)))
+-		swiotlb_tbl_unmap_single(dev, phys, size, dir, attrs);
++		swiotlb_tbl_unmap_single(dev, phys, size, dir,
++					 attrs | DMA_ATTR_SKIP_CPU_SYNC);
+ }
+ #endif /* _KERNEL_DMA_DIRECT_H */
 
 

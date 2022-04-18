@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94584505A2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:41:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83914505A31
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242014AbiDROnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S1345038AbiDROmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:42:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344746AbiDROmc (ORCPT
+        with ESMTP id S1344387AbiDROmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 10:42:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD37026F2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 06:27:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650288449; x=1681824449;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NPCmjA3Z2nYHOcj0RRTKEmm/t+LnZAxBuqaqadnU+TM=;
-  b=g3HQh7zxmwoBoia9C0dfHGePJ6MxIjFzyjgGGP3JejfmkFJrimLZPHr+
-   ykstlPTu/k/szk9LWiO3OIvDTEUeLB/2iHNPqINdSorQfBPcHa956V/E6
-   PXFI0IW6k5OcWSTGRzQyOLQM20Klp2hCO6dCMIhIBs5G9252B2f2CfmNt
-   DlMRzq+qEExysYUj39De47r4+d6vv/ibzqhFWGYXBzh9mU3FhUxqFQhGj
-   WsCQM/FzJnX2YWoTySXPKe9Rn2bkWnquAzL3IvFu3dFSlzc9sjEpXI2oh
-   L4FUx9S67QGtnwhe7lw80NuHMFtX8QFgxYXtIA+HrFpfxTd6mccJE5XNy
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="243448541"
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="243448541"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 06:27:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="665180974"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 18 Apr 2022 06:27:28 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngRPb-0004fJ-N0;
-        Mon, 18 Apr 2022 13:27:27 +0000
-Date:   Mon, 18 Apr 2022 21:27:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Max Filippov <jcmvbkbc@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: xtensa-linux-ld: section .Level2InterruptVector.text VMA
- [0000000000000180,0000000000000193] overlaps section .data VMA
- [0000000000000000,000000000019233f]
-Message-ID: <202204182128.PrSavz1o-lkp@intel.com>
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DEC81122;
+        Mon, 18 Apr 2022 06:27:12 -0700 (PDT)
+Received: from kwepemi500003.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Khnl82BBYz1GCPs;
+        Mon, 18 Apr 2022 21:26:28 +0800 (CST)
+Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
+ kwepemi500003.china.huawei.com (7.221.188.51) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 21:27:10 +0800
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 21:27:09 +0800
+Subject: Re: [PATCH v2] fs-writeback: writeback_sb_inodes: Recalculate 'wrote'
+ according skipped pages
+To:     Hillf Danton <hdanton@sina.com>
+CC:     <hch@lst.de>, <torvalds@linux-foundation.org>,
+        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <yukuai3@huawei.com>
+References: <20220418112745.1761-1-hdanton@sina.com>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <4df77267-09f0-c4be-116e-86e447cbd292@huawei.com>
+Date:   Mon, 18 Apr 2022 21:27:09 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220418112745.1761-1-hdanton@sina.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: c20e1117d9aa22c558646a1060ddd1dd042fb107 xtensa: add kernel ABI selection to Kconfig
-date:   6 weeks ago
-config: xtensa-randconfig-r001-20220417 (https://download.01.org/0day-ci/archive/20220418/202204182128.PrSavz1o-lkp@intel.com/config)
-compiler: xtensa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c20e1117d9aa22c558646a1060ddd1dd042fb107
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout c20e1117d9aa22c558646a1060ddd1dd042fb107
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=xtensa SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> xtensa-linux-ld: section .Level2InterruptVector.text VMA [0000000000000180,0000000000000193] overlaps section .data VMA [0000000000000000,000000000019233f]
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+HI Hillf,
+> On Mon, 18 Apr 2022 17:28:24 +0800 Zhihao Cheng wrote:
+>> Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
+>> writeback_inodes_wb()") has us holding a plug during wb_writeback, which
+>> may cause a potential ABBA dead lock:
+>>
+>>      wb_writeback		fat_file_fsync
+>> blk_start_plug(&plug)
+>> for (;;) {
+>>    iter i-1: some reqs have been added into plug->mq_list  // LOCK A
+>>    iter i:
+>>      progress = __writeback_inodes_wb(wb, work)
+>>      . writeback_sb_inodes // fat's bdev
+See comments " fat's bdev".
+> 
+> 	if (inode->i_state & I_SYNC) {
+> 		/* Wait for I_SYNC. This function drops i_lock... */
+> 		inode_sleep_on_writeback(inode);
+> 		/* Inode may be gone, start again */
+> 		spin_lock(&wb->list_lock);
+> 		continue;
+> 	}
+> 	inode->i_state |= I_SYNC;
+This inode is fat's bdev's inode.
+> 
+>>      .   __writeback_single_inode
+>>      .   . generic_writepages
+>>      .   .   __block_write_full_page
+>>      .   .   . . 	    __generic_file_fsync
+>>      .   .   . . 	      sync_inode_metadata
+>>      .   .   . . 	        writeback_single_inode
+> 
+> 				if (inode->i_state & I_SYNC) {
+This inode is fat's inode.
+> 					/*
+> 					 * Writeback is already running on the inode.  For WB_SYNC_NONE,
+> 					 * that's enough and we can just return.  For WB_SYNC_ALL, we
+> 					 * must wait for the existing writeback to complete, then do
+> 					 * writeback again if there's anything left.
+> 					 */
+> 					if (wbc->sync_mode != WB_SYNC_ALL)
+> 						goto out;
+> 					__inode_wait_for_writeback(inode);
+> 				}
+> 				inode->i_state |= I_SYNC;
+> 
+>>      .   .   . . 		  __writeback_single_inode
+>>      .   .   . . 		    fat_write_inode
+>>      .   .   . . 		      __fat_write_inode
+>>      .   .   . . 		        sync_dirty_buffer	// fat's bdev
+>>      .   .   . . 			  lock_buffer(bh)	// LOCK B
+>>      .   .   . . 			    submit_bh
+>>      .   .   . . 			      blk_mq_get_tag	// LOCK A
+>>      .   .   . trylock_buffer(bh)  // LOCK B
+> 
+> Given I_SYNC checked on both sides, the chance for ABBA deadlock is zero.
+Above two inodes are not same.

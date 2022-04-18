@@ -2,125 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EB78505B25
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:33:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84B16505B27
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345369AbiDRPfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48320 "EHLO
+        id S245593AbiDRPhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345404AbiDRPfj (ORCPT
+        with ESMTP id S1345379AbiDRPgw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:35:39 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9302C31500
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:53:11 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id lc2so27216722ejb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:53:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=DH6JdY2Df2NMHSgp+NcPipbg3dAcuG9vODo0rK+nRUs=;
-        b=xT6xA0HxpRBU8B+pXYJkiW8X6ZzUuy0w+9Wo+OhesUtTOHfK/nAPPhqlqkCSSnK4BN
-         aUlyBqDRCLaft0jhx0B0btf8hnrx7/CIoK3xMCVDcBuBpeV1Grar1RIrGr8WNqFfLBxq
-         4ev5G5LYxLvPOCXOIlBHcrhALERz7/fyVWSlDEYNjKApCIb55dOqycf49QVw+xicUeWF
-         osGZPSEnMJe2Fonw1nZaV2PN2oEB9rnTBhR6BdYEHbMuZcyz1WyifPyiumQQhErsn0lk
-         wKDI6ej2OnXtJgnf3MJF7SqQu+OYSp6ApkfCKTVXEVhJQkY1DDhoFuR0pMbKZz/1LHY8
-         Fycw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=DH6JdY2Df2NMHSgp+NcPipbg3dAcuG9vODo0rK+nRUs=;
-        b=FJwCs0AKYbiYsxbsjtskod1OkcS9A0p61Ix+gQeNGLyy7mttdTFnCoOhPQndKJuhgU
-         UL5UM9NTBnjv6WLT5uXLz2ecjobeWCz8crYGqBBT+EWpjlsWUYEmjk/RyNkqxf7j5JYn
-         CPCkJp9bqYijVLCFVae8kXUPHvbCyR5hSccomc+p3AMfnbZbfKF/NjJF4DEe874+5fRx
-         W61Qd4e0sS98DxxBXeH1Z05XPNkCTGht721rbZSHqMPcZXINDvLYdOdiFeaOy2Xi+wNa
-         ZTWpA7iqcyt+03Vr42jWgbcDtSoGldhNjFxM4VmrAD2FuhINOzNMSN1NnsWAbVeQq9co
-         lUDw==
-X-Gm-Message-State: AOAM533KYTi1UFmyuK2t7J9lSe00FTrjYrYPFQFcTBN592vGYYW/55bI
-        oqPJybOiNu5skSRivtK2Sgk+Cg==
-X-Google-Smtp-Source: ABdhPJyS5QJICv3KZXNdlmWf/CzBB7I6w4cejS8iQeq2nG/5Q9SQbz7fDw7bFDQUMeVEARWjs2uMdQ==
-X-Received: by 2002:a17:907:6e1e:b0:6ef:5a59:2bd4 with SMTP id sd30-20020a1709076e1e00b006ef5a592bd4mr9673198ejc.143.1650293589988;
-        Mon, 18 Apr 2022 07:53:09 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id la10-20020a170907780a00b006e889ee7741sm4641977ejc.75.2022.04.18.07.53.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 07:53:09 -0700 (PDT)
-Message-ID: <7c8ac7c6-d56c-63b1-195f-ac9b4c22977a@linaro.org>
-Date:   Mon, 18 Apr 2022 16:53:08 +0200
+        Mon, 18 Apr 2022 11:36:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 74CEC583B2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:56:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650293812;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=7lZX+S4magYauDVmNSYsgT0vN1ofTMVqqC/tGiJW/RM=;
+        b=FAC0rSVXyzsPaajnI2T6EdrwLKvMxYfZ7zZLMRjMgz5YqyFC09DZkhA8ymMv7IlmH+9bzK
+        NFuttvA6lJ431u4kot9PIP2Yes7iVEaRXai+yEzKCfrjluY5gSGudK5oVDCd9khd4DXVBU
+        0KMid9E7JCAyhQy+Hc2u+685DKP/2KY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-412-ClJwkAGEPOq92FhgC0R87g-1; Mon, 18 Apr 2022 10:56:41 -0400
+X-MC-Unique: ClJwkAGEPOq92FhgC0R87g-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 77A1F811E7A;
+        Mon, 18 Apr 2022 14:56:41 +0000 (UTC)
+Received: from llong.com (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 3A70EC27E94;
+        Mon, 18 Apr 2022 14:56:41 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Joe Mario <jmario@redhat.com>,
+        Barry Marson <bmarson@redhat.com>,
+        Rafael Aquini <aquini@redhat.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [RFC PATCH] mm/mmap: Map MAP_STACK to VM_STACK
+Date:   Mon, 18 Apr 2022 10:56:20 -0400
+Message-Id: <20220418145620.788664-1-longman@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: arm: fsl: Add Engicam i.Core MX8M
- Plus EDIMM2.2 Starter Kit
-Content-Language: en-US
-To:     Manoj Sai <abbaraju.manojsai@amarulasolutions.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Matteo Lisi <matteo.lisi@engicam.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Suniel Mahesh <sunil@amarulasolutions.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>
-References: <20220330191437.614065-2-abbaraju.manojsai@amarulasolutions.com>
- <20220418144907.327511-1-abbaraju.manojsai@amarulasolutions.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220418144907.327511-1-abbaraju.manojsai@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 16:49, Manoj Sai wrote:
-> i.Core MX8M Plus is an EDIMM SoM based on NXP i.MX8M Plus from Engicam.
-> 
-> EDIMM2.2 Starter Kit is an EDIMM 2.2 Form Factor Capacitive Evaluation
-> Board from Engicam.
-> 
-> i.Core MX8M Plus needs to mount on top of this Evaluation board for
-> creating complete i.Core MX8M Plus EDIMM2.2 Starter Kit.
-> 
-> Add bindings for it.
-> 
-> Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-> Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
-> ---
-> Changes for v2 :
->  -added the device binding of imx8mp as per soc order.
-> ---
->  Documentation/devicetree/bindings/arm/fsl.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
-> index b6cc34115362..3bdc490cfbe2 100644
-> --- a/Documentation/devicetree/bindings/arm/fsl.yaml
-> +++ b/Documentation/devicetree/bindings/arm/fsl.yaml
-> @@ -936,6 +936,13 @@ properties:
->            - const: toradex,verdin-imx8mp          # Verdin iMX8M Plus Module
->            - const: fsl,imx8mp
->  
-> +      - description: Engicam i.Core MX8M Plus SoM based boards
+One of the flags of mmap(2) is MAP_STACK to request a memory segment
+suitable for a process or thread stack. The kernel currently ignores
+this flags. Glibc uses MAP_STACK when mmapping a thread stack. However,
+selinux has an execstack check in selinux_file_mprotect() which disallows
+a stack VMA to be made executable.
 
-Still not matching the existing convention in that file. :(
+Since MAP_STACK is a noop, it is possible for a stack VMA to be merged
+with an adjacent anonymous VMA. With that merging, using mprotect(2)
+to change a part of the merged anonymous VMA to make it executable may
+fail. This can lead to sporadic failure of applications that need to
+make those changes.
 
-This should be just before PHYTEC.
+One possible fix is to make sure that a stack VMA will not be merged with
+a non-stack anonymous VMA. That requires a vm flag that can be used to
+distinguish a stack VMA from a regular anonymous VMA. One can add a new
+dummy vm flag for that purpose. However, there is only 1 bit left in the
+lower 32 bits of vm_flags. Another alternative is to use an existing vm
+flag. VM_STACK (= VM_GROWSDOWN for most arches) can certainly be used for
+this purpose. The downside is that it is a change in existing behavior.
 
+Making a stack VMA growable by default certainly fits the need of a
+process or thread stack. This patch now maps MAP_STACK to VM_STACK to
+prevent unwanted merging with adjacent non-stack VMAs and make the VMA
+more suitable for being used as a stack.
 
-Best regards,
-Krzysztof
+Reported-by: Joe Mario <jmario@redhat.com>
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ include/linux/mman.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/include/linux/mman.h b/include/linux/mman.h
+index b66e91b8176c..6e2b29040e48 100644
+--- a/include/linux/mman.h
++++ b/include/linux/mman.h
+@@ -156,6 +156,7 @@ calc_vm_flag_bits(unsigned long flags)
+ 	return _calc_vm_trans(flags, MAP_GROWSDOWN,  VM_GROWSDOWN ) |
+ 	       _calc_vm_trans(flags, MAP_LOCKED,     VM_LOCKED    ) |
+ 	       _calc_vm_trans(flags, MAP_SYNC,	     VM_SYNC      ) |
++	       _calc_vm_trans(flags, MAP_STACK,	     VM_STACK     ) |
+ 	       arch_calc_vm_flag_bits(flags);
+ }
+ 
+-- 
+2.27.0
+

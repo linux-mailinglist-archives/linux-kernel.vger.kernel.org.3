@@ -2,48 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C181505533
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5BAA5054B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243006AbiDRNXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S239862AbiDRNMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:12:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241562AbiDRNDL (ORCPT
+        with ESMTP id S242151AbiDRM7j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B123233A01;
-        Mon, 18 Apr 2022 05:43:44 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E1F2F3AB;
+        Mon, 18 Apr 2022 05:40:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 53B13B80E4B;
-        Mon, 18 Apr 2022 12:43:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96C9AC385A7;
-        Mon, 18 Apr 2022 12:43:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B3A36101A;
+        Mon, 18 Apr 2022 12:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9069DC385A9;
+        Mon, 18 Apr 2022 12:40:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285822;
-        bh=F/OZBsf7gsEVsuEtLus6uNoNHf2ItOqfNd80QgQ8Ig4=;
+        s=korg; t=1650285614;
+        bh=5k8FW0xfgGxI6vUMlHLTkoJOHhqS69JmSk5lxa58BJ0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Cx2wF4GnFOov0Hic/SQ4T4IJ5yKq0wrto/KTwliiC+TVzsTexTj0mqctsMwL05O8t
-         J0CM9oZGuCetGYen1BXNj5jHJRErf2pgmJBxUje64GWnYNFdoP3WWxnTdQxg6Sgjki
-         HeIxNTbVKIl2e84Gc1swLuPEamF7qo+ngszhRU18=
+        b=W01ore2y11CYw1abn/b6jdmnQVxH38VXEB9Bn/0d0ubOhE/c+5bNT81u/oZI26vnq
+         uk7QPj3kFqlmi4Ov5Lyj8Z+oZT0jTAy0xqfI0M5+bTQPoEik3gW3DEgZMslCWT+wi4
+         luT3rvV/PjM/FD5Lb1/Hmnu5hWZD3SGn4Il0J81s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chris Park <Chris.Park@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 18/63] drm/amd/display: Update VTEM Infopacket definition
-Date:   Mon, 18 Apr 2022 14:13:15 +0200
-Message-Id: <20220418121135.388319503@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.10 074/105] KVM: Dont create VM debugfs files outside of the VM directory
+Date:   Mon, 18 Apr 2022 14:13:16 +0200
+Message-Id: <20220418121148.729694346@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,50 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo (Hanghong) Ma <hanghong.ma@amd.com>
+From: Oliver Upton <oupton@google.com>
 
-[ Upstream commit c9fbf6435162ed5fb7201d1d4adf6585c6a8c327 ]
+commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
 
-[Why & How]
-The latest HDMI SPEC has updated the VTEM packet structure,
-so change the VTEM Infopacket defined in the driver side to align
-with the SPEC.
+Unfortunately, there is no guarantee that KVM was able to instantiate a
+debugfs directory for a particular VM. To that end, KVM shouldn't even
+attempt to create new debugfs files in this case. If the specified
+parent dentry is NULL, debugfs_create_file() will instantiate files at
+the root of debugfs.
 
-Reviewed-by: Chris Park <Chris.Park@amd.com>
-Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Leo (Hanghong) Ma <hanghong.ma@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+For arm64, it is possible to create the vgic-state file outside of a
+VM directory, the file is not cleaned up when a VM is destroyed.
+Nonetheless, the corresponding struct kvm is freed when the VM is
+destroyed.
+
+Nip the problem in the bud for all possible errant debugfs file
+creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
+debugfs_create_file() will fail instead of creating the file in the root
+directory.
+
+Cc: stable@kernel.org
+Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- .../gpu/drm/amd/display/modules/info_packet/info_packet.c    | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ virt/kvm/kvm_main.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
-index d885d642ed7f..537736713598 100644
---- a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
-+++ b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
-@@ -85,7 +85,8 @@
- //PB7 = MD0
- #define MASK_VTEM_MD0__VRR_EN         0x01
- #define MASK_VTEM_MD0__M_CONST        0x02
--#define MASK_VTEM_MD0__RESERVED2      0x0C
-+#define MASK_VTEM_MD0__QMS_EN         0x04
-+#define MASK_VTEM_MD0__RESERVED2      0x08
- #define MASK_VTEM_MD0__FVA_FACTOR_M1  0xF0
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -673,7 +673,7 @@ static void kvm_destroy_vm_debugfs(struc
+ {
+ 	int i;
  
- //MD1
-@@ -94,7 +95,7 @@
- //MD2
- #define MASK_VTEM_MD2__BASE_REFRESH_RATE_98  0x03
- #define MASK_VTEM_MD2__RB                    0x04
--#define MASK_VTEM_MD2__RESERVED3             0xF8
-+#define MASK_VTEM_MD2__NEXT_TFR              0xF8
+-	if (!kvm->debugfs_dentry)
++	if (IS_ERR(kvm->debugfs_dentry))
+ 		return;
  
- //MD3
- #define MASK_VTEM_MD3__BASE_REFRESH_RATE_07  0xFF
--- 
-2.35.1
-
+ 	debugfs_remove_recursive(kvm->debugfs_dentry);
+@@ -693,6 +693,12 @@ static int kvm_create_vm_debugfs(struct
+ 	struct kvm_stat_data *stat_data;
+ 	struct kvm_stats_debugfs_item *p;
+ 
++	/*
++	 * Force subsequent debugfs file creations to fail if the VM directory
++	 * is not created.
++	 */
++	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
++
+ 	if (!debugfs_initialized())
+ 		return 0;
+ 
+@@ -4731,7 +4737,7 @@ static void kvm_uevent_notify_change(uns
+ 	}
+ 	add_uevent_var(env, "PID=%d", kvm->userspace_pid);
+ 
+-	if (kvm->debugfs_dentry) {
++	if (!IS_ERR(kvm->debugfs_dentry)) {
+ 		char *tmp, *p = kmalloc(PATH_MAX, GFP_KERNEL_ACCOUNT);
+ 
+ 		if (p) {
 
 

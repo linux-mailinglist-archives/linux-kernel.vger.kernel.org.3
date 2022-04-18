@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D8E5054F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2553505436
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241927AbiDRNNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S240838AbiDRNEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242264AbiDRM7p (ORCPT
+        with ESMTP id S239858AbiDRMzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4240420181;
-        Mon, 18 Apr 2022 05:40:32 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFBD20F4F;
+        Mon, 18 Apr 2022 05:35:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BC8A4B80EC0;
-        Mon, 18 Apr 2022 12:40:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E604C385A1;
-        Mon, 18 Apr 2022 12:40:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4924F61014;
+        Mon, 18 Apr 2022 12:35:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F71C385A1;
+        Mon, 18 Apr 2022 12:35:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285629;
-        bh=zfFhwuW+2QehhZz510GLnDsyoSabLcv+Oi0qhLXKq+8=;
+        s=korg; t=1650285346;
+        bh=tCeOiBqGrp+xpXOvWNxrImRBzOezrzh5RKwZ8svsIrI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JkGXa1SktDPIybrOwKM20Lc9p2xy+pF3AjGSpqHIa0OYVdMRwAtclUSumDhpMfBTj
-         TliWrIvPd2/2gI2di6V3OSWbg9jNd0bp0W+gm54XgcYkflldXpTHg3FrWReHfAP7+i
-         WrflHcDtddHgR2hAT3vsLeDc8O/5sAIc8WLO+Dd0=
+        b=AYMyyx21CatBmqeUfDodF+W4HhJCOrgvw+2aNqysI8w5RDyizP2yi3e2kYXKCGF16
+         kHqSB7zr8ifwalIVd2wIqopAH1JPII5OvIeQUSGnN+9GqQyJkdPa1gnWZkt47u9UZD
+         qDA3QO9ulZWbYNhAQ4muLyva+4LqS5hZtrO3RjD4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Peter Seiderer <ps.report@gmx.net>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 078/105] ath9k: Fix usage of driver-private space in tx_info
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Alex Elder <elder@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [PATCH 5.15 180/189] net: ipa: fix a build dependency
 Date:   Mon, 18 Apr 2022 14:13:20 +0200
-Message-Id: <20220418121148.847148334@linuxfoundation.org>
+Message-Id: <20220418121208.223621522@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@redhat.com>
+From: Alex Elder <elder@linaro.org>
 
-commit 5a6b06f5927c940fa44026695779c30b7536474c upstream.
+commit caef14b7530c065fb85d54492768fa48fdb5093e upstream.
 
-The ieee80211_tx_info_clear_status() helper also clears the rate counts and
-the driver-private part of struct ieee80211_tx_info, so using it breaks
-quite a few other things. So back out of using it, and instead define a
-ath-internal helper that only clears the area between the
-status_driver_data and the rates info. Combined with moving the
-ath_frame_info struct to status_driver_data, this avoids clearing anything
-we shouldn't be, and so we can keep the existing code for handling the rate
-information.
+An IPA build problem arose in the linux-next tree the other day.
+The problem is that a recent commit adds a new dependency on some
+code, and the Kconfig file for IPA doesn't reflect that dependency.
+As a result, some configurations can fail to build (particularly
+when COMPILE_TEST is enabled).
 
-While fixing this I also noticed that the setting of
-tx_info->status.rates[tx_rateindex].count on hardware underrun errors was
-always immediately overridden by the normal setting of the same fields, so
-rearrange the code so that the underrun detection actually takes effect.
+The recent patch adds calls to qmp_get(), qmp_put(), and qmp_send(),
+and those are built based on the QCOM_AOSS_QMP config option.  If
+that symbol is not defined, stubs are defined, so we just need to
+ensure QCOM_AOSS_QMP is compatible with QCOM_IPA, or it's not
+defined.
 
-The new helper could be generalised to a 'memset_between()' helper, but
-leave it as a driver-internal helper for now since this needs to go to
-stable.
-
-Cc: stable@vger.kernel.org
-Reported-by: Peter Seiderer <ps.report@gmx.net>
-Fixes: 037250f0a45c ("ath9k: Properly clear TX status area before reporting to mac80211")
-Signed-off-by: Toke Høiland-Jørgensen <toke@redhat.com>
-Reviewed-by: Peter Seiderer <ps.report@gmx.net>
-Tested-by: Peter Seiderer <ps.report@gmx.net>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220404204800.2681133-1-toke@toke.dk
+Reported-by: Randy Dunlap <rdunlap@infradead.org>
+Fixes: 34a081761e4e3 ("net: ipa: request IPA register values be retained")
+Signed-off-by: Alex Elder <elder@linaro.org>
+Tested-by: Randy Dunlap <rdunlap@infradead.org>
+Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath9k/main.c |    2 +-
- drivers/net/wireless/ath/ath9k/xmit.c |   30 ++++++++++++++++++++----------
- 2 files changed, 21 insertions(+), 11 deletions(-)
+ drivers/net/ipa/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/net/wireless/ath/ath9k/main.c
-+++ b/drivers/net/wireless/ath/ath9k/main.c
-@@ -839,7 +839,7 @@ static bool ath9k_txq_list_has_key(struc
- 			continue;
- 
- 		txinfo = IEEE80211_SKB_CB(bf->bf_mpdu);
--		fi = (struct ath_frame_info *)&txinfo->rate_driver_data[0];
-+		fi = (struct ath_frame_info *)&txinfo->status.status_driver_data[0];
- 		if (fi->keyix == keyix)
- 			return true;
- 	}
---- a/drivers/net/wireless/ath/ath9k/xmit.c
-+++ b/drivers/net/wireless/ath/ath9k/xmit.c
-@@ -141,8 +141,8 @@ static struct ath_frame_info *get_frame_
- {
- 	struct ieee80211_tx_info *tx_info = IEEE80211_SKB_CB(skb);
- 	BUILD_BUG_ON(sizeof(struct ath_frame_info) >
--		     sizeof(tx_info->rate_driver_data));
--	return (struct ath_frame_info *) &tx_info->rate_driver_data[0];
-+		     sizeof(tx_info->status.status_driver_data));
-+	return (struct ath_frame_info *) &tx_info->status.status_driver_data[0];
- }
- 
- static void ath_send_bar(struct ath_atx_tid *tid, u16 seqno)
-@@ -2501,6 +2501,16 @@ skip_tx_complete:
- 	spin_unlock_irqrestore(&sc->tx.txbuflock, flags);
- }
- 
-+static void ath_clear_tx_status(struct ieee80211_tx_info *tx_info)
-+{
-+	void *ptr = &tx_info->status;
-+
-+	memset(ptr + sizeof(tx_info->status.rates), 0,
-+	       sizeof(tx_info->status) -
-+	       sizeof(tx_info->status.rates) -
-+	       sizeof(tx_info->status.status_driver_data));
-+}
-+
- static void ath_tx_rc_status(struct ath_softc *sc, struct ath_buf *bf,
- 			     struct ath_tx_status *ts, int nframes, int nbad,
- 			     int txok)
-@@ -2512,7 +2522,7 @@ static void ath_tx_rc_status(struct ath_
- 	struct ath_hw *ah = sc->sc_ah;
- 	u8 i, tx_rateindex;
- 
--	ieee80211_tx_info_clear_status(tx_info);
-+	ath_clear_tx_status(tx_info);
- 
- 	if (txok)
- 		tx_info->status.ack_signal = ts->ts_rssi;
-@@ -2528,6 +2538,13 @@ static void ath_tx_rc_status(struct ath_
- 	tx_info->status.ampdu_len = nframes;
- 	tx_info->status.ampdu_ack_len = nframes - nbad;
- 
-+	tx_info->status.rates[tx_rateindex].count = ts->ts_longretry + 1;
-+
-+	for (i = tx_rateindex + 1; i < hw->max_rates; i++) {
-+		tx_info->status.rates[i].count = 0;
-+		tx_info->status.rates[i].idx = -1;
-+	}
-+
- 	if ((ts->ts_status & ATH9K_TXERR_FILT) == 0 &&
- 	    (tx_info->flags & IEEE80211_TX_CTL_NO_ACK) == 0) {
- 		/*
-@@ -2549,13 +2566,6 @@ static void ath_tx_rc_status(struct ath_
- 			tx_info->status.rates[tx_rateindex].count =
- 				hw->max_rate_tries;
- 	}
--
--	for (i = tx_rateindex + 1; i < hw->max_rates; i++) {
--		tx_info->status.rates[i].count = 0;
--		tx_info->status.rates[i].idx = -1;
--	}
--
--	tx_info->status.rates[tx_rateindex].count = ts->ts_longretry + 1;
- }
- 
- static void ath_tx_processq(struct ath_softc *sc, struct ath_txq *txq)
+--- a/drivers/net/ipa/Kconfig
++++ b/drivers/net/ipa/Kconfig
+@@ -4,6 +4,7 @@ config QCOM_IPA
+ 	depends on ARCH_QCOM || COMPILE_TEST
+ 	depends on INTERCONNECT
+ 	depends on QCOM_RPROC_COMMON || (QCOM_RPROC_COMMON=n && COMPILE_TEST)
++	depends on QCOM_AOSS_QMP || QCOM_AOSS_QMP=n
+ 	select QCOM_MDT_LOADER if ARCH_QCOM
+ 	select QCOM_SCM
+ 	select QCOM_QMI_HELPERS
 
 

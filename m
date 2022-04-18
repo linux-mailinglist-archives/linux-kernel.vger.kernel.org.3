@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 118EC50582A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:59:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF6B5054E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245227AbiDROB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:01:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S241733AbiDRNWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243696AbiDRNly (ORCPT
+        with ESMTP id S241714AbiDRNDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:41:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440F130F58;
-        Mon, 18 Apr 2022 05:59:30 -0700 (PDT)
+        Mon, 18 Apr 2022 09:03:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2AD33E3F;
+        Mon, 18 Apr 2022 05:44:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C2B576097A;
-        Mon, 18 Apr 2022 12:59:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD0F4C385A8;
-        Mon, 18 Apr 2022 12:59:28 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DC4BBB80E44;
+        Mon, 18 Apr 2022 12:44:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40EDAC385A7;
+        Mon, 18 Apr 2022 12:44:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286769;
-        bh=X+DTD49G5uqzfzVm7vlJteDH5J5cgeu8LZ3LAc5aAyw=;
+        s=korg; t=1650285845;
+        bh=YGLGlNKPSRLiIJ8DH4C8/86MKO/vsoWNz1NimBChd3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BqytGLrWiR/GECKA3c+HoFEIJFp3RbW9oQ010CyeF8u+mKvPgPf3GNxiqUFMt00hw
-         NHxr7H9eOxa8fySUdFZmdea4pmCBDIbiy9sJJ8ZVSotpiykOXkYk3Q7MJQZN2/wzV+
-         27wlsxtkTRlbX6eLpRdMRNys3KrcubIokQhrWHZU=
+        b=ad/u1OWMhMtxskg/iB4iFxSWRQ9bLXxopMTlyDA4PW95eSYY0i61J8fCZwgtz02pl
+         YYnTsl5Vd2rcqsvLXaRbJrs9teQtzyzAcXgrLECN2ZE60nVOHm74HA7uwAsYO4IqWk
+         PuOJ5BxrKCy8cGUzYeMLo6m2tIh+qVknb4TaWR4o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 239/284] drm/amdgpu: fix off by one in amdgpu_gfx_kiq_acquire()
+        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 43/63] btrfs: remove unused variable in btrfs_{start,write}_dirty_block_groups()
 Date:   Mon, 18 Apr 2022 14:13:40 +0200
-Message-Id: <20220418121218.535097775@linuxfoundation.org>
+Message-Id: <20220418121137.110669226@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Nathan Chancellor <nathan@kernel.org>
 
-[ Upstream commit 1647b54ed55d4d48c7199d439f8834626576cbe9 ]
+commit 6d4a6b515c39f1f8763093e0f828959b2fbc2f45 upstream.
 
-This post-op should be a pre-op so that we do not pass -1 as the bit
-number to test_bit().  The current code will loop downwards from 63 to
--1.  After changing to a pre-op, it loops from 63 to 0.
+Clang's version of -Wunused-but-set-variable recently gained support for
+unary operations, which reveals two unused variables:
 
-Fixes: 71c37505e7ea ("drm/amdgpu/gfx: move more common KIQ code to amdgpu_gfx.c")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+  fs/btrfs/block-group.c:2949:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+          int num_started = 0;
+              ^
+  fs/btrfs/block-group.c:3116:6: error: variable 'num_started' set but not used [-Werror,-Wunused-but-set-variable]
+          int num_started = 0;
+              ^
+  2 errors generated.
+
+These variables appear to be unused from their introduction, so just
+remove them to silence the warnings.
+
+Fixes: c9dc4c657850 ("Btrfs: two stage dirty block group writeout")
+Fixes: 1bbc621ef284 ("Btrfs: allow block group cache writeout outside critical section in commit")
+CC: stable@vger.kernel.org # 5.4+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1614
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/block-group.c |    4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-index 4f6c68fc1dd9..f3bdd14e13a0 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.c
-@@ -157,7 +157,7 @@ static int amdgpu_gfx_kiq_acquire(struct amdgpu_device *adev,
- 		    * adev->gfx.mec.num_pipe_per_mec
- 		    * adev->gfx.mec.num_queue_per_pipe;
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -2388,7 +2388,6 @@ int btrfs_start_dirty_block_groups(struc
+ 	struct btrfs_path *path = NULL;
+ 	LIST_HEAD(dirty);
+ 	struct list_head *io = &cur_trans->io_bgs;
+-	int num_started = 0;
+ 	int loops = 0;
  
--	while (queue_bit-- >= 0) {
-+	while (--queue_bit >= 0) {
- 		if (test_bit(queue_bit, adev->gfx.mec.queue_bitmap))
- 			continue;
+ 	spin_lock(&cur_trans->dirty_bgs_lock);
+@@ -2455,7 +2454,6 @@ again:
+ 			cache->io_ctl.inode = NULL;
+ 			ret = btrfs_write_out_cache(trans, cache, path);
+ 			if (ret == 0 && cache->io_ctl.inode) {
+-				num_started++;
+ 				should_put = 0;
  
--- 
-2.35.1
-
+ 				/*
+@@ -2556,7 +2554,6 @@ int btrfs_write_dirty_block_groups(struc
+ 	int should_put;
+ 	struct btrfs_path *path;
+ 	struct list_head *io = &cur_trans->io_bgs;
+-	int num_started = 0;
+ 
+ 	path = btrfs_alloc_path();
+ 	if (!path)
+@@ -2614,7 +2611,6 @@ int btrfs_write_dirty_block_groups(struc
+ 			cache->io_ctl.inode = NULL;
+ 			ret = btrfs_write_out_cache(trans, cache, path);
+ 			if (ret == 0 && cache->io_ctl.inode) {
+-				num_started++;
+ 				should_put = 0;
+ 				list_add_tail(&cache->io_list, io);
+ 			} else {
 
 

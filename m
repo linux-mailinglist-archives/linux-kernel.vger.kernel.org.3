@@ -2,194 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BAC2505D6D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A9AD505D74
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346956AbiDRRVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
+        id S1346914AbiDRRVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346914AbiDRRVA (ORCPT
+        with ESMTP id S243899AbiDRRVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:21:00 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5163D275D3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:20 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id c23so12900472plo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:20 -0700 (PDT)
+        Mon, 18 Apr 2022 13:21:38 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1D524F18;
+        Mon, 18 Apr 2022 10:18:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=0L53oYHs2xpfM/0KB2PlQH0P4g81nTwUTRYFuIiNd6s=;
-        b=SHR/KylnuOzbyVvA4+77Ue/k9IdDmAtt8aBCNSTq/nr7FLyGHwlCa/pcUhFnJei4a/
-         C4IkQ48bsYfYG2UcAY6qTvN8W2T6z7Jcp892r6/5IHKnnuWTdLzwNaU32cbYKmmLOKg6
-         nl/SrmrEI4ZhdyKfnUzjgd7rPhb20sHsFLXa4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=0L53oYHs2xpfM/0KB2PlQH0P4g81nTwUTRYFuIiNd6s=;
-        b=EcOv4eYNBLpUMnEssIGxUdG7mDk835VC5q22X7OE/jlOX514a7RxSFtsm51WMRDmzT
-         ZQfztues8CfNhbe1PY6YpgacnophGLlWamk82FW+wkLq/QoFn8FbrZ4WZhWXALm1eTEO
-         Oel2q2QkDf94nkIJrNRkzvgnJfN+VBqUELDKCd1ob2dSm8UNduwZYCfRCbU72lLAkWTO
-         XhoEc6cswMXsUcBm6rAC5RdyfCMVc1P2FKvEEIjNFNfc1MAJ/Op3J0d1WVQr9zXgT3HQ
-         ROSn3RsmBcyauLSwf207RBOVvQ83P4xcsCbF+DyP57KaVGy+iZmijxwzlcD+d05tSLZs
-         hPig==
-X-Gm-Message-State: AOAM5329/AJNI/A4bqJ26GHccazgdBWCORER55n8b7sCpEMQHE4aWTxB
-        KJLoc9jEy5uwG5gPfCTct5emog==
-X-Google-Smtp-Source: ABdhPJwzp7RGoB6onpQd3C54oM0zRaPbuNYByMs7PwmxihVrPr9s2193nd4iN+vyhOXz6UgvxvB7PQ==
-X-Received: by 2002:a17:902:a502:b0:151:8289:b19 with SMTP id s2-20020a170902a50200b0015182890b19mr11683674plq.149.1650302299824;
-        Mon, 18 Apr 2022 10:18:19 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:94f4:f90:c59f:129b])
-        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm12152126pfn.204.2022.04.18.10.18.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:18:19 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] drm/bridge: parade-ps8640: Provide wait_hpd_asserted() in struct drm_dp_aux
-Date:   Mon, 18 Apr 2022 10:17:57 -0700
-Message-Id: <20220418101725.v3.4.Ie827321ce263be52fdb8c1276f6f8cc00d78029f@changeid>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-In-Reply-To: <20220418171757.2282651-1-dianders@chromium.org>
-References: <20220418171757.2282651-1-dianders@chromium.org>
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650302339; x=1681838339;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=aS1bVisrBd3QOj5a6CZubpWAy5nSBKoHXXLMDdDSDL4=;
+  b=FdcrCk4arQdkvcvMScdMiXFVlqDjM58D8CpBhE611asyFIcvlYqkReVu
+   3fj134wQYoS+EwiLB5ydV9WP73748ZlLhT/t26WHQkRTqakWP+b481K6z
+   sa1jRRFi/UF1rF+vTJBZN82wzIon/K1aTGogCnLvmk5vuOz43KZPYtswr
+   I=;
+Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 18 Apr 2022 10:18:58 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 10:18:58 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 18 Apr 2022 10:18:58 -0700
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Mon, 18 Apr 2022 10:18:57 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
+        <quic_bbhatt@quicinc.com>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH v3] bus: mhi: host: Add soc_reset sysfs
+Date:   Mon, 18 Apr 2022 11:18:47 -0600
+Message-ID: <1650302327-30439-1-git-send-email-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the callback added by the patch ("drm/dp: Add
-wait_hpd_asserted() callback to struct drm_dp_aux").
+The MHI bus supports a standardized hardware reset, which is known as the
+"SoC Reset".  This reset is similar to the reset sysfs for PCI devices -
+a hardware mechanism to reset the state back to square one.
 
-With this change and all the two "DP AUX Endpoint" drivers changed to
-use wait_hpd_asserted(), we no longer need to have an long delay in
-the AUX transfer function. It's up to the panel code to make sure that
-the panel is powered now. If someone tried to call the aux transfer
-function without making sure the panel is powered we'll just get a
-normal transfer failure.
+The MHI SoC Reset is described in the spec as a reset of last resort.  If
+some unrecoverable error has occurred where other resets have failed, SoC
+Reset is the "big hammer" that ungracefully resets the device.  This is
+effectivly the same as yanking the power on the device, and reapplying it.
+However, depending on the nature of the particular issue, the underlying
+transport link may remain active and configured.  If the link remains up,
+the device will flag a MHI system error early in the boot process after
+the reset is executed, which allows the MHI bus to process a fatal error
+event, and clean up appropiately.
 
-We'll still keep the wait for HPD in the pre_enable() function. Though
-it's probably not actually needed there, this driver is used in the
-old mode (pre-DP AUX Endpoints) and it may be important for those
-cases. If nothing else, it shouldn't cause any big problems.
+While the SoC Reset is generally intended as a means of recovery when all
+else has failed, it can be useful in non-error scenarios.  For example,
+if the device loads firmware from the host filesystem, the device may need
+to be fully rebooted inorder to pick up the new firmware.  In this
+scenario, the system administrator may use the soc_reset sysfs to cause
+the device to pick up the new firmware that the admin placed on the
+filesystem.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Reviewed-by: Bhaumik Bhatt <quic_bbhatt@quicinc.com>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
 
-(no changes since v2)
+v3:
+Cleanup email domain change
 
-Changes in v2:
-- Change is_hpd_asserted() to wait_hpd_asserted()
+v2:
+Rebase
 
- drivers/gpu/drm/bridge/parade-ps8640.c | 34 ++++++++++++++++----------
- 1 file changed, 21 insertions(+), 13 deletions(-)
+ Documentation/ABI/stable/sysfs-bus-mhi | 10 ++++++++++
+ drivers/bus/mhi/host/init.c            | 14 ++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 9766cbbd62ad..2f19a8c89880 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -168,23 +168,30 @@ static bool ps8640_of_panel_on_aux_bus(struct device *dev)
- 	return true;
- }
- 
--static int ps8640_ensure_hpd(struct ps8640 *ps_bridge)
-+static int _ps8640_wait_hpd_asserted(struct ps8640 *ps_bridge, unsigned long wait_us)
- {
- 	struct regmap *map = ps_bridge->regmap[PAGE2_TOP_CNTL];
--	struct device *dev = &ps_bridge->page[PAGE2_TOP_CNTL]->dev;
- 	int status;
--	int ret;
- 
- 	/*
- 	 * Apparently something about the firmware in the chip signals that
- 	 * HPD goes high by reporting GPIO9 as high (even though HPD isn't
- 	 * actually connected to GPIO9).
- 	 */
--	ret = regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
--				       status & PS_GPIO9, 20 * 1000, 200 * 1000);
-+	return regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
-+					status & PS_GPIO9, wait_us / 10, wait_us);
-+}
- 
--	if (ret < 0)
--		dev_warn(dev, "HPD didn't go high: %d\n", ret);
-+static int ps8640_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
-+{
-+	struct ps8640 *ps_bridge = aux_to_ps8640(aux);
-+	struct device *dev = &ps_bridge->page[PAGE0_DP_CNTL]->dev;
-+	int ret;
+diff --git a/Documentation/ABI/stable/sysfs-bus-mhi b/Documentation/ABI/stable/sysfs-bus-mhi
+index ecfe766..96ccc33 100644
+--- a/Documentation/ABI/stable/sysfs-bus-mhi
++++ b/Documentation/ABI/stable/sysfs-bus-mhi
+@@ -19,3 +19,13 @@ Description:	The file holds the OEM PK Hash value of the endpoint device
+ 		read without having the device power on at least once, the file
+ 		will read all 0's.
+ Users:		Any userspace application or clients interested in device info.
 +
-+	pm_runtime_get_sync(dev);
-+	ret = _ps8640_wait_hpd_asserted(ps_bridge, wait_us);
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 
- 	return ret;
++What:           /sys/bus/mhi/devices/.../soc_reset
++Date:           April 2022
++KernelVersion:  5.19
++Contact:        mhi@lists.linux.dev
++Description:	Initiates a SoC reset on the MHI controller.  A SoC reset is
++                a reset of last resort, and will require a complete re-init.
++                This can be useful as a method of recovery if the device is
++                non-responsive, or as a means of loading new firmware as a
++                system administration task.
+diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+index a665b8e..a8c18c5f 100644
+--- a/drivers/bus/mhi/host/init.c
++++ b/drivers/bus/mhi/host/init.c
+@@ -108,9 +108,23 @@ static ssize_t oem_pk_hash_show(struct device *dev,
  }
-@@ -323,9 +330,7 @@ static ssize_t ps8640_aux_transfer(struct drm_dp_aux *aux,
- 	int ret;
+ static DEVICE_ATTR_RO(oem_pk_hash);
  
- 	pm_runtime_get_sync(dev);
--	ret = ps8640_ensure_hpd(ps_bridge);
--	if (!ret)
--		ret = ps8640_aux_transfer_msg(aux, msg);
-+	ret = ps8640_aux_transfer_msg(aux, msg);
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
- 
-@@ -369,8 +374,8 @@ static int __maybe_unused ps8640_resume(struct device *dev)
- 	 * Mystery 200 ms delay for the "MCU to be ready". It's unclear if
- 	 * this is truly necessary since the MCU will already signal that
- 	 * things are "good to go" by signaling HPD on "gpio 9". See
--	 * ps8640_ensure_hpd(). For now we'll keep this mystery delay just in
--	 * case.
-+	 * _ps8640_wait_hpd_asserted(). For now we'll keep this mystery delay
-+	 * just in case.
- 	 */
- 	msleep(200);
- 
-@@ -406,7 +411,9 @@ static void ps8640_pre_enable(struct drm_bridge *bridge)
- 	int ret;
- 
- 	pm_runtime_get_sync(dev);
--	ps8640_ensure_hpd(ps_bridge);
-+	ret = _ps8640_wait_hpd_asserted(ps_bridge, 200 * 1000);
-+	if (ret < 0)
-+		dev_warn(dev, "HPD didn't go high: %d\n", ret);
- 
- 	/*
- 	 * The Manufacturer Command Set (MCS) is a device dependent interface
-@@ -652,6 +659,7 @@ static int ps8640_probe(struct i2c_client *client)
- 	ps_bridge->aux.name = "parade-ps8640-aux";
- 	ps_bridge->aux.dev = dev;
- 	ps_bridge->aux.transfer = ps8640_aux_transfer;
-+	ps_bridge->aux.wait_hpd_asserted = ps8640_wait_hpd_asserted;
- 	drm_dp_aux_init(&ps_bridge->aux);
- 
- 	pm_runtime_enable(dev);
++static ssize_t soc_reset_store(struct device *dev,
++			       struct device_attribute *attr,
++			       const char *buf,
++			       size_t count)
++{
++	struct mhi_device *mhi_dev = to_mhi_device(dev);
++	struct mhi_controller *mhi_cntrl = mhi_dev->mhi_cntrl;
++
++	mhi_soc_reset(mhi_cntrl);
++	return count;
++}
++static DEVICE_ATTR_WO(soc_reset);
++
+ static struct attribute *mhi_dev_attrs[] = {
+ 	&dev_attr_serial_number.attr,
+ 	&dev_attr_oem_pk_hash.attr,
++	&dev_attr_soc_reset.attr,
+ 	NULL,
+ };
+ ATTRIBUTE_GROUPS(mhi_dev);
 -- 
-2.36.0.rc0.470.gd361397f0d-goog
+2.7.4
 

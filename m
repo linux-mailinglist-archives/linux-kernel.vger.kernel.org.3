@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9C6505065
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E155056A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231528AbiDRMYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S244193AbiDRNjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239025AbiDRMXS (ORCPT
+        with ESMTP id S243983AbiDRNKk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:23:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DAFF1FA5E;
-        Mon, 18 Apr 2022 05:18:48 -0700 (PDT)
+        Mon, 18 Apr 2022 09:10:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C53393E6;
+        Mon, 18 Apr 2022 05:50:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6853760F01;
-        Mon, 18 Apr 2022 12:18:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74EE9C385A1;
-        Mon, 18 Apr 2022 12:18:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BEC93B80E59;
+        Mon, 18 Apr 2022 12:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 108E9C385A1;
+        Mon, 18 Apr 2022 12:50:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284327;
-        bh=CsCTfSsNjHS16QQ1DIkCgSALfrwY92Y131KIND27RZQ=;
+        s=korg; t=1650286214;
+        bh=X5H9BqfkMB5wENUQ9tWRiZUL8aXoYpGMNdqsm5+hhp0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VGN8+KmQolXWpXwlROHJiGI7Y4bofTsZyB6OQgcZcnL1J/UwImWtIPs6kRo0pxR67
-         xYhhUng9U9wRMyen+8Zd/GUaO3EOn68fFbHemwJjI16Uuy2EC7EhbaRiaMLjookbjU
-         moMQFi7fsto7WjLT4GInjoRz77TRNWqPsc2cT+hQ=
+        b=aY3CbWw9lYPlcLoVJnnHggFLFVSp2VDEGTa7/XnvHf3BVkyUjWFse8W+6I1oO7VSr
+         n/TbgRP2hx+a2Otfnz2Uzjqj2Uli4TlIgfQzTTuc5CTQsaRsJG5D8o5Mbxu1ecyFTP
+         7qTbbfPXNzCV9wuc+NjgVrAZ1pFVj547B9BAjhxs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yi Chen <yiche@redhat.com>,
-        Xin Long <lucien.xin@gmail.com>,
-        Ondrej Mosnacek <omosnace@redhat.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        "Huang, Ying" <ying.huang@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 076/219] sctp: use the correct skb for security_sctp_assoc_request
+Subject: [PATCH 4.14 064/284] ACPI: APEI: fix return value of __setup handlers
 Date:   Mon, 18 Apr 2022 14:10:45 +0200
-Message-Id: <20220418121208.176976872@linuxfoundation.org>
+Message-Id: <20220418121212.511197127@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,69 +57,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Long <lucien.xin@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit e2d88f9ce678cd33763826ae2f0412f181251314 ]
+[ Upstream commit f3303ff649dbf7dcdc6a6e1a922235b12b3028f4 ]
 
-Yi Chen reported an unexpected sctp connection abort, and it occurred when
-COOKIE_ECHO is bundled with DATA Fragment by SCTP HW GSO. As the IP header
-is included in chunk->head_skb instead of chunk->skb, it failed to check
-IP header version in security_sctp_assoc_request().
+__setup() handlers should return 1 to indicate that the boot option
+has been handled. Returning 0 causes a boot option to be listed in
+the Unknown kernel command line parameters and also added to init's
+arg list (if no '=' sign) or environment list (if of the form 'a=b').
 
-According to Ondrej, SELinux only looks at IP header (address and IPsec
-options) and XFRM state data, and these are all included in head_skb for
-SCTP HW GSO packets. So fix it by using head_skb when calling
-security_sctp_assoc_request() in processing COOKIE_ECHO.
+Unknown kernel command line parameters "erst_disable
+  bert_disable hest_disable BOOT_IMAGE=/boot/bzImage-517rc6", will be
+  passed to user space.
 
-v1->v2:
-  - As Ondrej noticed, chunk->head_skb should also be used for
-    security_sctp_assoc_established() in sctp_sf_do_5_1E_ca().
+ Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+     erst_disable
+     bert_disable
+     hest_disable
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc6
 
-Fixes: e215dab1c490 ("security: call security_sctp_assoc_request in sctp_sf_do_5_1D_ce")
-Reported-by: Yi Chen <yiche@redhat.com>
-Signed-off-by: Xin Long <lucien.xin@gmail.com>
-Reviewed-by: Ondrej Mosnacek <omosnace@redhat.com>
-Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Link: https://lore.kernel.org/r/71becb489e51284edf0c11fc15246f4ed4cef5b6.1649337862.git.lucien.xin@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: a3e2acc5e37b ("ACPI / APEI: Add Boot Error Record Table (BERT) support")
+Fixes: a08f82d08053 ("ACPI, APEI, Error Record Serialization Table (ERST) support")
+Fixes: 9dc966641677 ("ACPI, APEI, HEST table parsing")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/sctp/sm_statefuns.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/acpi/apei/bert.c | 2 +-
+ drivers/acpi/apei/erst.c | 2 +-
+ drivers/acpi/apei/hest.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/net/sctp/sm_statefuns.c b/net/sctp/sm_statefuns.c
-index 7f342bc12735..52edee1322fc 100644
---- a/net/sctp/sm_statefuns.c
-+++ b/net/sctp/sm_statefuns.c
-@@ -781,7 +781,7 @@ enum sctp_disposition sctp_sf_do_5_1D_ce(struct net *net,
- 		}
- 	}
+diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+index 12771fcf0417..876824948c19 100644
+--- a/drivers/acpi/apei/bert.c
++++ b/drivers/acpi/apei/bert.c
+@@ -82,7 +82,7 @@ static int __init setup_bert_disable(char *str)
+ {
+ 	bert_disable = 1;
  
--	if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
-+	if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
- 		sctp_association_free(new_asoc);
- 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
- 	}
-@@ -932,7 +932,7 @@ enum sctp_disposition sctp_sf_do_5_1E_ca(struct net *net,
+-	return 0;
++	return 1;
+ }
+ __setup("bert_disable", setup_bert_disable);
  
- 	/* Set peer label for connection. */
- 	if (security_sctp_assoc_established((struct sctp_association *)asoc,
--					    chunk->skb))
-+					    chunk->head_skb ?: chunk->skb))
- 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
+diff --git a/drivers/acpi/apei/erst.c b/drivers/acpi/apei/erst.c
+index 5b149d2d52f4..575c63260fc8 100644
+--- a/drivers/acpi/apei/erst.c
++++ b/drivers/acpi/apei/erst.c
+@@ -898,7 +898,7 @@ EXPORT_SYMBOL_GPL(erst_clear);
+ static int __init setup_erst_disable(char *str)
+ {
+ 	erst_disable = 1;
+-	return 0;
++	return 1;
+ }
  
- 	/* Verify that the chunk length for the COOKIE-ACK is OK.
-@@ -2262,7 +2262,7 @@ enum sctp_disposition sctp_sf_do_5_2_4_dupcook(
- 	}
+ __setup("erst_disable", setup_erst_disable);
+diff --git a/drivers/acpi/apei/hest.c b/drivers/acpi/apei/hest.c
+index 9cb74115a43d..3af53ae1f276 100644
+--- a/drivers/acpi/apei/hest.c
++++ b/drivers/acpi/apei/hest.c
+@@ -214,7 +214,7 @@ static int __init hest_ghes_dev_register(unsigned int ghes_count)
+ static int __init setup_hest_disable(char *str)
+ {
+ 	hest_disable = HEST_DISABLED;
+-	return 0;
++	return 1;
+ }
  
- 	/* Update socket peer label if first association. */
--	if (security_sctp_assoc_request(new_asoc, chunk->skb)) {
-+	if (security_sctp_assoc_request(new_asoc, chunk->head_skb ?: chunk->skb)) {
- 		sctp_association_free(new_asoc);
- 		return sctp_sf_pdiscard(net, ep, asoc, type, arg, commands);
- 	}
+ __setup("hest_disable", setup_hest_disable);
 -- 
-2.35.1
+2.34.1
 
 
 

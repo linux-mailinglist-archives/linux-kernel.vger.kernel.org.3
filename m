@@ -2,170 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BBF6505EE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:23:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE43505EE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238597AbiDRUZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S238614AbiDRUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiDRUZh (ORCPT
+        with ESMTP id S233813AbiDRUbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:25:37 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F5B2ED5C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:22:57 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bu29so25993650lfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:22:57 -0700 (PDT)
+        Mon, 18 Apr 2022 16:31:55 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8647230546;
+        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id u2so20888028pgq.10;
+        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=mLWlEzJdMk6tuaRzUj9I+DP1OAyBtJ6ETvbVsO93HOU=;
-        b=yZIHcmsAVppuK5qGX6G7Ih1KsaYwCGYPWcLwUZ27iXpxzXC8ZDAaHgGx5sYhn9MaCP
-         xmLMaguzDZIuQDxf+3nkkYN3A5yqEEx48BjaZ0e6az1nMfgAklIa3Os763c4R+X+N6el
-         QaYjjkSK2R8mjyRoG2lpWhBp5IOolBIOsRov4CLNh+OfkZDYKvgvTneU6MFu+rau3Wk5
-         bkLeeQKm54yRp+3IuYfgQdJwuNhEovhToYoM9FNb4pNcSLZ+NSYUtbPsqQS1mvxdlUPN
-         2InIBy8S//cm7hYkWhSU5Hk0FsYBts2vpIF6rafJ0L7gGOIfM+MEvGH3gfvM57loO7W9
-         SFwg==
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=k/abdeQtikDllXMZliiNaxu3T30egp/N7n/c1q2jeho=;
+        b=bu4kqdq3VHWRMLr7I/h/TZC4Yw19uxTafRT3cIHkpRFm5D9FAbtj6y0e9xln3kd8n8
+         RgMxsIyszGG/zJgvPinizHcA6tN/KB0PAIy0zdEM6gLDsHPiCdq6bzKBZTsKMsc/r0gL
+         J0b7ShPeq+4g+uBXqaRy8uswAFx4uWfbXFMpdQwJBlKEtEfKW5KYVTrhZuUw12wbRbVv
+         OAa+xVOYqZvoncTyLUsFxR05IbR/n2vz9HNBy/gU+URyT+4Fk7qpLb/+e8aJ0s/R3e8M
+         2OmFresFFfrMRvMZUwbnFuNFPlBKBDA6JiDdvLCHr1KzrUTUUewM1kM91PHft6VQZ/fr
+         AbHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=mLWlEzJdMk6tuaRzUj9I+DP1OAyBtJ6ETvbVsO93HOU=;
-        b=jrw9UJ/ZxEyJjzfQT5qqIYi4AEk0dXJuQUZpY9ROy9jC/IMNKq/maBAqs1gMPXJRlr
-         5wG2n3hSYny3TJbVDK/juQS0FGgWA118YyONoM9EYtt57JWpqQMYb5cMI/5RvkHu1LPu
-         MfLWkKopHH/URg3isvkJ7HlW//ZlCfen+rrkIzBjoc6UWnm1gF1yG/5ms+wddynq/ihS
-         CrWNpsDDNGmq8x8BDZ0bV6E8lVcQ+G5oNy7O3Z42DpiN0RnF36XInFMT2PZJ59qzzYkf
-         beSCzLDN3ar/LNkYQMjzZ9hlm6qG8k848xTOS+WHgxQMWgfj/ahww+pSJ2oHN9DjKAlM
-         gQUg==
-X-Gm-Message-State: AOAM530yC8BZSquRHQ46mKw6JWUhVWNLw7kDOaKwGbvP6baXsVNvm5dq
-        2mJjtDjgALHyIs6gL3htKrgQMQ==
-X-Google-Smtp-Source: ABdhPJznQzqX7bRzuIcLKDjKwu+NX1wiOv40zQz/yldUBixOb1SSMsMrFJrGumBZeV0L5NkatxL6aw==
-X-Received: by 2002:a05:6512:ac9:b0:470:e6d0:1bd8 with SMTP id n9-20020a0565120ac900b00470e6d01bd8mr7300071lfu.614.1650313375515;
-        Mon, 18 Apr 2022 13:22:55 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id z1-20020a0565120c0100b00447a7c10e4dsm1313059lfu.31.2022.04.18.13.22.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 13:22:54 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id 64BF5103A61; Mon, 18 Apr 2022 23:24:31 +0300 (+03)
-Date:   Mon, 18 Apr 2022 23:24:31 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
- <Yl2UHOQ4iZJ29k0q@zn.tnic>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=k/abdeQtikDllXMZliiNaxu3T30egp/N7n/c1q2jeho=;
+        b=4olzw5/R9FpdzuTzt7cTSyes38g4RrSrRNarlday9c8Nf5/XrbUmJZBhhggtKQz0b9
+         IrChTSpgkZXIJscx4EIzqPIiASFTqvDhTUonJlfcQRbNLh7Rkyw3OEHkhXJTI96+torj
+         DSHfT/6+i7l0mqqUEMkO1IZStTBZQYaK4VpnNv2f4rqkz61nsNZ9xLP1KchmhFPnLnv/
+         9vtDko2rY4dztG33z/wBkickdNNT7C0rJBTKFZ/ZXGRni1mod7TEXULbGOAoGYYycu6f
+         bJW8a0rdywQkS0Ddn4kiWFmyICyennR0Psf8YUgVWfy9ScPtATAqj8Lbn55tM3k+HyT4
+         emIA==
+X-Gm-Message-State: AOAM5331RRVYLp60D1iMWC3YZPxCaxPqrAFicd+//1B7gUK24SF0Bou9
+        iDie8iM80N5l8n7jGnZjOYs=
+X-Google-Smtp-Source: ABdhPJxDpiiWgelGw7kG+xTCy5WR0yNUZ5uRXVaiikQO+7ICh5SveRXc4grac7bztBqnWzyrzhKA+A==
+X-Received: by 2002:a62:17cf:0:b0:50a:4601:36fe with SMTP id 198-20020a6217cf000000b0050a460136femr14196270pfx.4.1650313755010;
+        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a7c0800b001cb63a477eesm13989930pjf.12.2022.04.18.13.29.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 13:29:14 -0700 (PDT)
+Message-ID: <f4aea108-b50a-aca2-f118-6f809303d2a0@gmail.com>
+Date:   Mon, 18 Apr 2022 13:29:12 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl2UHOQ4iZJ29k0q@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220418121203.462784814@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 06:38:52PM +0200, Borislav Petkov wrote:
-> > Could you explain what rules are?
+
+
+On 4/18/2022 5:09 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.17.4 release.
+> There are 219 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Library-like stuff like types.h, linkage.h, etc we could include for now
-> but including linux/kernel.h which pulls in everything but the kitchen
-> sink is bad.
-
-<linux/bitmap> doesn't include <linux/kernel.h> or similar things.
-Is it okay for now?
-
-
-> > Hm. accept_or_mark_unaccepted()?
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
 > 
-> What's wrong with early_accept_memory()?
-
-But the goal of the function is not to accept the memory, but mark it
-as unaccepted in the bitmap. Your proposal is more confusing, not less.
-
-> > > Immediately? As opposed to delayed?
-> > 
-> > Yes. Otherwise accept is delayed until the first allocation of the memory.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
+> and the diffstat can be found below.
 > 
-> Yes, put that in the comment pls.
-
-Okay.
-
-> memory, but it is not
-> > 1:1 match. Unaccepted memory can be present without memory ecnryption if
-> > data secruty and integrity guaranteed by other means.
+> thanks,
 > 
-> Really?
-> 
-> Please elaborate. I thought memory acceptance is a feature solely for
-> TDX and SNP guests to use.
+> greg k-h
 
-Conceptionally, it is just memory that requires additional action before
-it can be accessed. Yes, at the moment TDX and SEV are the only users.
-It is implementation detail that TDX and SEV use memory encryption.
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
 
-> > <asm/mem_encrypt.h> is very AMD SME/SEV centric.
-> 
-> So?
-> 
-> > I'm not sure it need to exist in the way it is now.
-> 
-> I'm not sure what your argument actually is for having yet another
-> separate header vs putting it in a header which already deals with that
-> stuff.
-
-Because I don't think it is a good fit. Frankly, even <asm/coco.h> fits
-better, although I'm no a fan either.
-
-Do we have file shortage? I would rather keep it separate.
-
-> > Okay, I will move it into a separate function, but it has to be called
-> > from allocate_e820() because it allocates and free the map.
-> 
-> You mean, you want for allocate_e820() to call this new function because
-> both allocate and free?
-> 
-> Might have to explain what you mean here exactly.
-
-Both allocate_e820() and handling unaccepted memory requires access to the
-efi memory map. We only need the size of memory map for e820, while
-unaccepted memory requires walking the map. We can serve both by
-requesting the map from the firmware once. It requires allocation and
-freeing memory for the map.
-
-Makes sense?
-
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
 -- 
- Kirill A. Shutemov
+Florian

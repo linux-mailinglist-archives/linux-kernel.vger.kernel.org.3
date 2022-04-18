@@ -2,101 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB938505F19
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B25C4505F21
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347898AbiDRVER (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:04:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43706 "EHLO
+        id S1347929AbiDRVHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347856AbiDRVEE (ORCPT
+        with ESMTP id S242971AbiDRVHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:04:04 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4174329CB5;
-        Mon, 18 Apr 2022 14:01:22 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Khzqx1T40z4xR9;
-        Tue, 19 Apr 2022 07:01:16 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650315680;
-        bh=J+ThAFs1lwgbJGvGifYpWhoLEGe9lkumqw+eteyhro4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=tAvF/ogKoUmDknKLvd4uc+14DtKaIgRejWw9+SLHfC5Xxz4x7sjq2USPe29238guh
-         it4AzTcB/WWn16uLOCu5lT91jUhxhl4VHQ+SfLpmcOj2X9H5RRNh8TwAd3L6pDf60b
-         7GhnZFRoWMYdOkfSZXO5KMwu9noQOGGlc0eJtCC35uUX8QC0dqefi56/Uyco9+uBJh
-         xjIWIEc2fZk+4Fgo+pY2RrNcXG3rQxoMOKZ75JUXGVcv+4AEtPH0URq0gvNCZIpjnd
-         waOHg/deSqQXGDnAA0POjvtEYend3EqjrPAs2Hct8r0Q25voz/qmd5gk6YtgH3bKIX
-         sPWPSYa9PaBLQ==
-Date:   Tue, 19 Apr 2022 07:01:16 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Paul Menzel <pmenzel@molgen.mpg.de>,
-        Piotr Maziarz <piotrx.maziarz@linux.intel.com>,
-        Lawrence Hileman <larry.hileman@xconn-tech.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Bob Moore <robert.moore@intel.com>
-Subject: linux-next: Signed-off-by missing for commits in the pm tree
-Message-ID: <20220419070116.2974bddb@canb.auug.org.au>
+        Mon, 18 Apr 2022 17:07:04 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578B22A70A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:04:23 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id c10so19936710wrb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:04:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=2xC56SbahR+A86XAZ1Xr5CheL4zTUR2Yl2PX5kgsh60=;
+        b=jVefXpeaUqA2UhMsfdWRxwA6dVOS/OubaUhUbzQiNiw6Sh3TSAJzNrupAImg7ews6u
+         ouky8CJKsd6yjdaomtrNrSxPMKZP+c97cnIiq7aCvfyOB3Zo2igqk7ZzmDrKYxU+tRSO
+         KQDZwYpTzB/quuQMmvwf+tJfSs56zyhk/X1TmvSqzjrNzoiyiPuOgilveEhPfr6UrDik
+         LMDrw2bn4aNZwLp0nSoYHc3bU6cNSlhsY/a960ueZeONiv4HRR+50dS6yF1nnlKXtx+h
+         4Ahw7F5i6QXCSQxeJ7S+OQuPdWULZcgWYcHIbC+AL6xSQF993ov+8VTg+Ti7DdcevQrz
+         WlVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=2xC56SbahR+A86XAZ1Xr5CheL4zTUR2Yl2PX5kgsh60=;
+        b=XjJfdOr6Ae2vsD1t+I4VZ+XWggrpFarGRa/tqCjDLzPozIZygUoTHX5ZvB1Xlm3675
+         ev7sQkp42zTiYNLdfBrVK7m39Sq9tKzOKM2d41dlZiESJxsqON+0ueYLpCixHYMVOAC8
+         i8uKYZ0H1FvH1dJs4IjTILz7kABlNS1AQ2uoueyaZT8WII0KAMmqmEwscpqCYisIR68H
+         vxH+63Bd7mbIoLgdQurDu2bpv9aDu3ZYMTHFlYM3NQtLt1OK9cdPHmX0ym4l4HQjvnPb
+         XQm54+Mzuu/WNZz6YIEzcTEkvpEYh/c1HUfNIKM9DauaqZW3SRJ3ylWcQa/dzIEcdYU2
+         ai5w==
+X-Gm-Message-State: AOAM533Q3saPZfUqV8X/+iSU4hU5IUNsgntVJDMDAUiMA3FLS/dy17q2
+        O/Nv2u94tTNihpPcIHYpPaVoSg==
+X-Google-Smtp-Source: ABdhPJyEZlaRcGyCo1uMJOZOgoyGccFvv75S9XwuahzLFfjLlKLpcoWdx5eV5TRokdsECQsOSl9nyA==
+X-Received: by 2002:a5d:47aa:0:b0:20a:8b96:5b2c with SMTP id 10-20020a5d47aa000000b0020a8b965b2cmr8152221wrb.621.1650315861737;
+        Mon, 18 Apr 2022 14:04:21 -0700 (PDT)
+Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
+        by smtp.gmail.com with ESMTPSA id n5-20020adf8b05000000b00207a4fd0185sm11234964wra.7.2022.04.18.14.04.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 14:04:21 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 22:04:18 +0100
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     Jens Axboe <axboe@kernel.dk>, Enze Li <lienze@kylinos.cn>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org
+Subject: Re: [PATCH] cdrom: do not print info list when there is no cdrom
+ device
+Message-ID: <Yl3SUr9+qzoRlQt8@equinox>
+References: <20220408084221.1681592-1-lienze@kylinos.cn>
+ <25390602-cfa0-dba3-bfbc-a35ed6b44bcf@kernel.dk>
+ <20220409122530.60353fcd@asus>
+ <YlFA7USiCtqsFvVD@equinox>
+ <f74b6933-5357-6b2c-3127-7a3465dadbdf@kylinos.cn>
+ <226c4072-a3ca-a5a4-1b7f-f7104b43af03@kernel.dk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2C6+iNBGJWD6WElNTn+wcKR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <226c4072-a3ca-a5a4-1b7f-f7104b43af03@kernel.dk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2C6+iNBGJWD6WElNTn+wcKR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Apr 11, 2022 at 10:51:28AM -0600, Jens Axboe wrote:
+> >   20  -- Modify sysctl/proc interface. I plan on having one directory per                 
+> >   21  drive, with entries for outputing general drive information, and sysctl             
+> >   22  based tunable parameters such as whether the tray should auto-close for             
+> >   23  that drive. Suggestions (or patches) for this welcome!
+> > ================================================
+> > I'd like to know if the relevant patches are still welcome?
+> > 
+> > IIUC, the TODO List says that we need to implement a modification of the
+> > following form:
+> > ----------------------------------------------------------------------------------------------------------
+> > $ tree /proc/sys/dev/cdrom
+> > /proc/sys/dev/cdrom
+> > |--sr0--autoclose
+> > |       |-autoeject
+> > |       |-check_media
+> > |       |-debug
+> > |       |-info
+> > |       |-lock
+> > |
+> > |--sr1--autoclose
+> > |       |-autoeject
+> > |       |-check_media
+> > |       |-debug
+> > |       |-info
+> > |       |-lock
+> > |
+> > |--sr2 ...
+> > .
+> > .
+> > .
+> > ----------------------------------------------------------------------------------------------------------
+> > I would appreciate it if you could give me some advice.
+> 
+> Let's not do that, this advice is perhaps 20 years old. /proc isn't to
+> be used for anything like that these days.
+> 
+> -- 
+> Jens Axboe
+>
 
-Hi all,
+Hi Both,
 
-Commits
+I will send a patch alongside others during the next merge window to
+remove this TODO section for now. It was part of the initial mainline
+git commit (17 years and two days ago), so it (as Jens says) is almost
+certainly even older than this.
 
-  6eaf08770ee8 ("ACPICA: executer/exsystem: Warn about sleeps greater than =
-10 ms")
-  ace8f1c54a02 ("ACPICA: executer/exsystem: Inform users about ACPI spec vi=
-olation")
-  1838ffe7001b ("ACPICA: executer/exsystem: Add units to time variable name=
-s")
-  8bd24835db17 ("ACPICA: iASL: NHLT: Rename linux specific strucures to dev=
-ice_info")
-  ab1ba87bd71a ("ACPICA: iASL: NHLT: Fix parsing undocumented bytes at the =
-end of Endpoint Descriptor")
-  90037551c68d ("ACPICA: iASL: NHLT: Treat Terminator as specific_config")
-  a95d2fb08538 ("ACPICA: Add the subtable CFMWS to the CEDT table")
-  62b32fd961cf ("ACPICA: Add support for the Windows 11 _OSI string")
-
-are missing a Signed-off-by from their authors.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/2C6+iNBGJWD6WElNTn+wcKR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJd0ZwACgkQAVBC80lX
-0GxYIwgAm7rJ6fR5Zbs6fcwIZOu3QdHvX9PRfn6keG93eeLJz9eM7P8f0ytnnGCm
-OzUqb20aSCh73N8PtyfzN+6Uw0JZNOg6cuzKYOrPa6nsiOOCGJ2m/GksB8xdH6Gc
-bIjcLa1tDzJRSidN7lFM+//oWeQbVw1EZlhT4+swh8SBcW8CZkw/PzvJy/Zeq/+N
-R79mmPCE2yfqTIawkBvqzTPv+P9pUraeXcYn1vZifZw1iXRX0LvrXfD90UIqeMbV
-U0Z7Qvy2hcupPx79pZ24P8aS9z9nE8rbu0DTVmy+r9QI54yy3sUBCp+XAGTEFpen
-nn9wyIVG0cJDKEJyCjjiwsbv+Ev6GA==
-=4oPa
------END PGP SIGNATURE-----
-
---Sig_/2C6+iNBGJWD6WElNTn+wcKR--
+Regards,
+Phil

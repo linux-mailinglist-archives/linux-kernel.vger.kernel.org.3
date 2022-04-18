@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC023505714
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 484855052DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238858AbiDRNti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
+        id S230075AbiDRMwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:52:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244221AbiDRNaM (ORCPT
+        with ESMTP id S240937AbiDRMjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:12 -0400
+        Mon, 18 Apr 2022 08:39:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7BC841320;
-        Mon, 18 Apr 2022 05:54:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4955A65FA;
+        Mon, 18 Apr 2022 05:31:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C1F3061254;
-        Mon, 18 Apr 2022 12:54:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B484BC385A1;
-        Mon, 18 Apr 2022 12:54:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5B1160F0A;
+        Mon, 18 Apr 2022 12:31:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC8A1C385A8;
+        Mon, 18 Apr 2022 12:31:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286452;
-        bh=9blielkUU3jnaei6YyQ5N0kO0yi6eCp8QevtmQDr0no=;
+        s=korg; t=1650285091;
+        bh=NodVTfbBo4kPp+4JKLC1nc+6gVfRmn1PlEy2ow5AuWY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d20A0Ci+UpPFlUwn+uAPblYMhPgz3Tw9j5B+nQqcvlgDvojG5aJgRRql1CA5YmcP8
-         C3S/oSS5KFiL/2fd00CggmOpNzk6wcX8EIouqUhZaxe3C9w2PkXZFz9Qj11pSeqdzF
-         tz5DwPC0RtZFv67Bqx4uwzRCIft3lDlOYhEqOzYw=
+        b=UrWiaaAxS+2BlD943oCdXvsUgBrbes+E0uaf91NciqwhunNlhN3869IjT5DsR6ur1
+         TIbDnpT1aRsRHYSiu2I1seoxJpiBpeg25FxeSr7/KIsTrxQj5t8+88VHnSMYmzSnH9
+         GQIURO6YUBqFSj8OuC9Kvv/2luaoQCeWBrMa9Ss4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        stable@vger.kernel.org, Khazhismel Kumykov <khazhy@google.com>,
+        Mike Snitzer <snitzer@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 140/284] NFS: remove unneeded check in decode_devicenotify_args()
+Subject: [PATCH 5.15 101/189] dm mpath: only use ktime_get_ns() in historical selector
 Date:   Mon, 18 Apr 2022 14:12:01 +0200
-Message-Id: <20220418121215.439766961@linuxfoundation.org>
+Message-Id: <20220418121203.369856490@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexey Khoroshilov <khoroshilov@ispras.ru>
+From: Khazhismel Kumykov <khazhy@google.com>
 
-[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
+[ Upstream commit ce40426fdc3c92acdba6b5ca74bc7277ffaa6a3d ]
 
-[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
+Mixing sched_clock() and ktime_get_ns() usage will give bad results.
 
-Overflow check in not needed anymore after we switch to kmalloc_array().
+Switch hst_select_path() from using sched_clock() to ktime_get_ns().
+Also rename path_service_time()'s 'sched_now' variable to 'now'.
 
-Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
-Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
-Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
+Fixes: 2613eab11996 ("dm mpath: add Historical Service Time Path Selector")
+Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
+Signed-off-by: Mike Snitzer <snitzer@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/nfs/callback_xdr.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/md/dm-ps-historical-service-time.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
-index 36c34be839d0..737c37603fb1 100644
---- a/fs/nfs/callback_xdr.c
-+++ b/fs/nfs/callback_xdr.c
-@@ -278,10 +278,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
- 	n = ntohl(*p++);
- 	if (n == 0)
- 		goto out;
--	if (n > ULONG_MAX / sizeof(*args->devs)) {
--		status = htonl(NFS4ERR_BADXDR);
--		goto out;
--	}
+diff --git a/drivers/md/dm-ps-historical-service-time.c b/drivers/md/dm-ps-historical-service-time.c
+index 1856a1b125cc..82f2a06153dc 100644
+--- a/drivers/md/dm-ps-historical-service-time.c
++++ b/drivers/md/dm-ps-historical-service-time.c
+@@ -432,7 +432,7 @@ static struct dm_path *hst_select_path(struct path_selector *ps,
+ {
+ 	struct selector *s = ps->context;
+ 	struct path_info *pi = NULL, *best = NULL;
+-	u64 time_now = sched_clock();
++	u64 time_now = ktime_get_ns();
+ 	struct dm_path *ret = NULL;
+ 	unsigned long flags;
  
- 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
- 	if (!args->devs) {
+@@ -473,7 +473,7 @@ static int hst_start_io(struct path_selector *ps, struct dm_path *path,
+ 
+ static u64 path_service_time(struct path_info *pi, u64 start_time)
+ {
+-	u64 sched_now = ktime_get_ns();
++	u64 now = ktime_get_ns();
+ 
+ 	/* if a previous disk request has finished after this IO was
+ 	 * sent to the hardware, pretend the submission happened
+@@ -482,11 +482,11 @@ static u64 path_service_time(struct path_info *pi, u64 start_time)
+ 	if (time_after64(pi->last_finish, start_time))
+ 		start_time = pi->last_finish;
+ 
+-	pi->last_finish = sched_now;
+-	if (time_before64(sched_now, start_time))
++	pi->last_finish = now;
++	if (time_before64(now, start_time))
+ 		return 0;
+ 
+-	return sched_now - start_time;
++	return now - start_time;
+ }
+ 
+ static int hst_end_io(struct path_selector *ps, struct dm_path *path,
 -- 
-2.34.1
+2.35.1
 
 
 

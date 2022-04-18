@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2195504F40
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A02ED504F42
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237882AbiDRLIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40968 "EHLO
+        id S236806AbiDRLJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:09:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237868AbiDRLIW (ORCPT
+        with ESMTP id S229594AbiDRLJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:08:22 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FD413EAE;
-        Mon, 18 Apr 2022 04:05:44 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id e22so10657980qvf.9;
-        Mon, 18 Apr 2022 04:05:44 -0700 (PDT)
+        Mon, 18 Apr 2022 07:09:21 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D721E167CA;
+        Mon, 18 Apr 2022 04:06:42 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id j9so3460257qkg.1;
+        Mon, 18 Apr 2022 04:06:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HPUttj4kngshxe6tgSoij7Hk/MCoacGhY2Ysb5anUQU=;
-        b=bNVqIeTJhXUKv7SROKyONwvaOF9eOB5ackpIHf/JM7ejwo+s0rpddHWyN0u7BmQL5N
-         2tKUMTi6+A35MkpR3Ir1U/b1rlm68VVdZqxMgNSlPIpli6518tPzs5OaFGplP0PkHpy8
-         V56uxiBvT4lQcdWcGr9yJTSyI4UfDrqSciiDdU+JJecJiFivOZ1bXJotVGaCvxstYouv
-         /i9Vw9ybQBwSnxcyZYXKwMrUihc4W4wiSI0U9XRVVJssfxjzmn83BS1PI6fTUZk8aGec
-         T0HW60dvfyqU4tJjA81/xUt+bZK0ZeldtejTSQ34/avyaaM6/Wr7f/RYBomiAxTz4nsp
-         UfnA==
+        bh=lqJmuDMxHf0+2DSiEcjcAGw9d4Qde4FyLEfuQ+SFSHM=;
+        b=CnglA6xk2NZryMtm33UXdAO03ocKVbgcmV2BauxBuUyRitBKeWS0agJLi5sHze5JNo
+         m6nld8pbSw7H5nbGAWaMHgf+jQXd/9Cdjdm5MyewtKKURfv/DhnyDUcXpUnPRUmTCFb5
+         IePPpRSuVwqipEAgZSA2DhquU+ftdVw2Nle8dDVxuFW7tkavJ3KrmK/e4EqdnNKWx2k7
+         oxhgZykU5H2HpsNnMDg5Y4ip7CnQT6xGQ+dInyYIz4/onA0rE6BiUkAKNX+/p1JPUpmY
+         uM1WmsxXJxtCh3okRyFZrRw00xl5UNyz8eJEl5wxYPchvsABCWCC+YLi6xyWTc6MsF8z
+         tcYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=HPUttj4kngshxe6tgSoij7Hk/MCoacGhY2Ysb5anUQU=;
-        b=TyCSDNlM9fulGEDTplaRopNY4IJkn902FXdiKgZ/eYzjASqtjCiqPMn45cXga86AmP
-         8MT9KbBi7rCwxW313oIjFNapOl6Xvk87tQIafOYdzSWXw78aCZi0M70ivslqD3WMd8VI
-         7jMnmIdH33Oje0dBlDZLwXDBFYYXN2m7jFYoiXUarFkRmz+JFwv+qUFbqKvddbi1r3YE
-         97OKEAstt1pIG4kQg+TxOpMFznUcHStkKWm5cH9zkfEc7k4jLANwhzqgf1T1nu6DrSss
-         3apJ2AFRpNFdwmvL8X/K7mPTcQ0GSgvORqQp7JDSndLmRzSuCAIUlHkHF31C8axUc0Hc
-         Zs4w==
-X-Gm-Message-State: AOAM533/fsdmnZgsz3jVa2vsRl9AmblVF+1ZJKaMXfxCU0MkrtR757OH
-        X1GN0ip/lTvdhBG8q/sz4XdkydXSy4A=
-X-Google-Smtp-Source: ABdhPJwoxQ1cwLQXeEj76PhEnDL5f/1HxC5Ox2h9pUYvdXrJ/M841zaE58ZGLXSpluZ2nA4PKgI8PQ==
-X-Received: by 2002:a05:6214:3006:b0:443:cf1e:58d7 with SMTP id ke6-20020a056214300600b00443cf1e58d7mr7517072qvb.53.1650279943356;
-        Mon, 18 Apr 2022 04:05:43 -0700 (PDT)
+        bh=lqJmuDMxHf0+2DSiEcjcAGw9d4Qde4FyLEfuQ+SFSHM=;
+        b=J6nE7A7TEh/3SMYpXvS2QOCgW3yJyKLa3xduQwZY3Lg63SvSHIr0ynVv7DRA+4+Qf7
+         kKi98PNO1tn350UzRfgKfMAk41KXi3ETvLXHbSnmVhXLkmTmMAGm00ewyJrJqyCaRxwY
+         WevPZJI8IwLoEZ/zkALbuOZrZuL49mbP2w72LhdTyFht4/Ex+xBgQUzxe6Fd2z0bqG/f
+         kVl3DUMUzzueg1ou60NXgB2MVdvzkHyi4Emmpp3Ko7vukn9ZYZ81uuy4zgYra7521W3t
+         eznsa5zU9GYhVWnGxz18iLhpb442tKzkUO3FyWg2vkjQkdr9Hh5ahWmAMIhqOUQK8MJA
+         6XDw==
+X-Gm-Message-State: AOAM530jl27cKSNjleTb0muZ9sCd74WzM3G2vVD/csOviIu0aQWjDM5Z
+        L9UMcsuTt729BqktFgr4Y4Y=
+X-Google-Smtp-Source: ABdhPJxNgNMH4f+6bA2msZobJNl4R8938/9xGvUG7VsuEH/doVkNMOxMxEiGkxOGHju6jcrMCIHZlw==
+X-Received: by 2002:a37:697:0:b0:69e:6246:b69a with SMTP id 145-20020a370697000000b0069e6246b69amr6168569qkg.206.1650280002050;
+        Mon, 18 Apr 2022 04:06:42 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a76-20020ae9e84f000000b0069e80daa17asm2952482qkg.113.2022.04.18.04.05.40
+        by smtp.gmail.com with ESMTPSA id z64-20020a37b043000000b0069c0a57f42fsm6588987qke.24.2022.04.18.04.06.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 04:05:43 -0700 (PDT)
+        Mon, 18 Apr 2022 04:06:41 -0700 (PDT)
 From:   cgel.zte@gmail.com
 X-Google-Original-From: chi.minghao@zte.com.cn
-To:     clabbe.montjoie@gmail.com
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+To:     robh@kernel.org
+Cc:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
         Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] crypto: sun8i-ss: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon, 18 Apr 2022 11:05:37 +0000
-Message-Id: <20220418110537.2559328-1-chi.minghao@zte.com.cn>
+Subject: [PATCH] tty: serdev: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Mon, 18 Apr 2022 11:06:35 +0000
+Message-Id: <20220418110635.2559391-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -80,27 +79,27 @@ for simplifing code
 Reported-by: Zeal Robot <zealci@zte.com.cn>
 Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c | 6 ++----
+ drivers/tty/serdev/core.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c
-index 246a6782674c..dd677e9ed06f 100644
---- a/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c
-+++ b/drivers/crypto/allwinner/sun8i-ss/sun8i-ss-prng.c
-@@ -112,11 +112,9 @@ int sun8i_ss_prng_generate(struct crypto_rng *tfm, const u8 *src,
- 		goto err_iv;
- 	}
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index 0180e1e4e75d..e550ad3e7f2b 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -156,11 +156,9 @@ int serdev_device_open(struct serdev_device *serdev)
+ 	if (ret)
+ 		return ret;
  
--	err = pm_runtime_get_sync(ss->dev);
--	if (err < 0) {
--		pm_runtime_put_noidle(ss->dev);
-+	err = pm_runtime_resume_and_get(ss->dev);
-+	if (err < 0)
- 		goto err_pm;
+-	ret = pm_runtime_get_sync(&ctrl->dev);
+-	if (ret < 0) {
+-		pm_runtime_put_noidle(&ctrl->dev);
++	ret = pm_runtime_resume_and_get(&ctrl->dev);
++	if (ret < 0)
+ 		goto err_close;
 -	}
- 	err = 0;
  
- 	mutex_lock(&ss->mlock);
+ 	return 0;
+ 
 -- 
 2.25.1
 

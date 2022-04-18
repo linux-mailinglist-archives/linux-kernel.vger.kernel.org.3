@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5B150579E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17EDB505197
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245400AbiDRNx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
+        id S239352AbiDRMgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244726AbiDRNau (ORCPT
+        with ESMTP id S229937AbiDRM3n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D6221B7BD;
-        Mon, 18 Apr 2022 05:55:10 -0700 (PDT)
+        Mon, 18 Apr 2022 08:29:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA77240B2;
+        Mon, 18 Apr 2022 05:23:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 95D396115A;
-        Mon, 18 Apr 2022 12:55:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E4FCC385A7;
-        Mon, 18 Apr 2022 12:55:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35386B80ED6;
+        Mon, 18 Apr 2022 12:23:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 757FAC385A1;
+        Mon, 18 Apr 2022 12:23:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286509;
-        bh=arOqiv7s1sG8hM57x5heqLv9MAqGzAu1E9HVg0Oq938=;
+        s=korg; t=1650284606;
+        bh=8p6sHrCNWDb/b9rRZVYP6ujSYlaRGOqUN5v6ThNtLsU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1VNg90cMovVze2AwOi8DaQYbSTgkN1OPucsmkpNo5qRKxkECQuOdfA8j11oZwOVnV
-         mWn++9QyykQ2pfeAk5icLqMH1hg50fZdmSa+39lEW6u2DT5mJu+cuOjetI66B+xA5S
-         6MPdO9M98aXjmMIs3hvxVXT2uvo0wyHva1fUMDSk=
+        b=IpC+mhCbnex3Q2nIj+AUgSPRt3MUauFo3JndkSU7v7fnjJ80QQMWRvTVeLon6kJY6
+         8wgdzCpFoKUgOYBMII8sPtdMvzplXp4p4Ej04aHSRntJkqAEo2yCwk1/Oj2PT/vxXm
+         /qziu8lOTGT/oFVNNa7E1L0xb7J/UByiH9FIwQcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Chaitanya Kulkarni <kch@nvidia.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 156/284] loop: use sysfs_emit() in the sysfs xxx show()
+        stable@vger.kernel.org, Alexey Galakhov <agalakhov@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 168/219] scsi: mvsas: Add PCI ID of RocketRaid 2640
 Date:   Mon, 18 Apr 2022 14:12:17 +0200
-Message-Id: <20220418121216.165386341@linuxfoundation.org>
+Message-Id: <20220418121211.584691472@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,73 +55,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chaitanya Kulkarni <kch@nvidia.com>
+From: Alexey Galakhov <agalakhov@gmail.com>
 
-[ Upstream commit b27824d31f09ea7b4a6ba2c1b18bd328df3e8bed ]
+[ Upstream commit 5f2bce1e222028dc1c15f130109a17aa654ae6e8 ]
 
-sprintf does not know the PAGE_SIZE maximum of the temporary buffer
-used for outputting sysfs content and it's possible to overrun the
-PAGE_SIZE buffer length.
+The HighPoint RocketRaid 2640 is a low-cost SAS controller based on Marvell
+chip. The chip in question was already supported by the kernel, just the
+PCI ID of this particular board was missing.
 
-Use a generic sysfs_emit function that knows the size of the
-temporary buffer and ensures that no overrun is done for offset
-attribute in
-loop_attr_[offset|sizelimit|autoclear|partscan|dio]_show() callbacks.
-
-Signed-off-by: Chaitanya Kulkarni <kch@nvidia.com>
-Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
-Link: https://lore.kernel.org/r/20220215213310.7264-2-kch@nvidia.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Link: https://lore.kernel.org/r/20220309212535.402987-1-agalakhov@gmail.com
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/block/loop.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/mvsas/mv_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index c6157ccb9498..4c115c1e9209 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -765,33 +765,33 @@ static ssize_t loop_attr_backing_file_show(struct loop_device *lo, char *buf)
- 
- static ssize_t loop_attr_offset_show(struct loop_device *lo, char *buf)
- {
--	return sprintf(buf, "%llu\n", (unsigned long long)lo->lo_offset);
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)lo->lo_offset);
- }
- 
- static ssize_t loop_attr_sizelimit_show(struct loop_device *lo, char *buf)
- {
--	return sprintf(buf, "%llu\n", (unsigned long long)lo->lo_sizelimit);
-+	return sysfs_emit(buf, "%llu\n", (unsigned long long)lo->lo_sizelimit);
- }
- 
- static ssize_t loop_attr_autoclear_show(struct loop_device *lo, char *buf)
- {
- 	int autoclear = (lo->lo_flags & LO_FLAGS_AUTOCLEAR);
- 
--	return sprintf(buf, "%s\n", autoclear ? "1" : "0");
-+	return sysfs_emit(buf, "%s\n", autoclear ? "1" : "0");
- }
- 
- static ssize_t loop_attr_partscan_show(struct loop_device *lo, char *buf)
- {
- 	int partscan = (lo->lo_flags & LO_FLAGS_PARTSCAN);
- 
--	return sprintf(buf, "%s\n", partscan ? "1" : "0");
-+	return sysfs_emit(buf, "%s\n", partscan ? "1" : "0");
- }
- 
- static ssize_t loop_attr_dio_show(struct loop_device *lo, char *buf)
- {
- 	int dio = (lo->lo_flags & LO_FLAGS_DIRECT_IO);
- 
--	return sprintf(buf, "%s\n", dio ? "1" : "0");
-+	return sysfs_emit(buf, "%s\n", dio ? "1" : "0");
- }
- 
- LOOP_ATTR_RO(backing_file);
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index 44df7c03aab8..605a8eb7344a 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -646,6 +646,7 @@ static struct pci_device_id mvs_pci_table[] = {
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1300), chip_1300 },
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1320), chip_1320 },
+ 	{ PCI_VDEVICE(ADAPTEC2, 0x0450), chip_6440 },
++	{ PCI_VDEVICE(TTI, 0x2640), chip_6440 },
+ 	{ PCI_VDEVICE(TTI, 0x2710), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2720), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2721), chip_9480 },
 -- 
-2.34.1
+2.35.1
 
 
 

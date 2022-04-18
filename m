@@ -2,135 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC4E2504FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:13:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF1A95054DC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238056AbiDRMQK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:16:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S239394AbiDRNVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233086AbiDRMQI (ORCPT
+        with ESMTP id S241460AbiDRNDG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:16:08 -0400
-Received: from ssl.serverraum.org (ssl.serverraum.org [176.9.125.105])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E15F1A82E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:13:30 -0700 (PDT)
-Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        Mon, 18 Apr 2022 09:03:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070AA338A4;
+        Mon, 18 Apr 2022 05:43:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ssl.serverraum.org (Postfix) with ESMTPSA id 920A122175;
-        Mon, 18 Apr 2022 14:13:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
-        t=1650284008;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sDTjYlCaBa9GLh++sa/WCQdXuUrcubJCdTwx3SdcA1Q=;
-        b=hzXAChF9N1ILebUw69v7FcCfSE9sAXERxDXW3a/CotuLCpZBsGXKG1XdWjLEjkWmngXnWn
-        gUazAnZpwYWZz0SfXIFiXCWZAbIDjBnh1xOoOE3zQl21SBxUiY9RKR1vj9Sd+tf27qs1U2
-        qgWiIvXubT6htCbhqMTTfZv3JAd4bBc=
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+        by ams.source.kernel.org (Postfix) with ESMTPS id AEA69B80E59;
+        Mon, 18 Apr 2022 12:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2156AC385A1;
+        Mon, 18 Apr 2022 12:43:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650285807;
+        bh=9bSQ4S1IDUAnhmQfnggx2NYyttspU22heoTUTR8pNyE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=fY0inlDLd1ogSB5n1xIl074T+KUNmLdYoxb7RwI76ap6YjwleZ86lya+WKJsYp4Yq
+         L0xk7Da4j7oXUG9L/3mmw2TtPhwXBtE/Kwkygd1aSIZl5Q6IXZs4iz5qGM9LE9Cxhz
+         GPDgahSwBzZb2JJR52fjK/JIhVh6qS5m/pWbyUww=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Hung <alex.hung@amd.com>, Roman Li <Roman.Li@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 31/63] drm/amd/display: Fix allocate_mst_payload assert on resume
 Date:   Mon, 18 Apr 2022 14:13:28 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <p.yadav@ti.com>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC v1 2/2] mtd: spi-nor: expose internal parameters via
- debugfs
-In-Reply-To: <20220418121044.2825448-2-michael@walle.cc>
-References: <20220418121044.2825448-1-michael@walle.cc>
- <20220418121044.2825448-2-michael@walle.cc>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <fca7f401141caee41f574cdd0339a6e1@walle.cc>
-X-Sender: michael@walle.cc
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Message-Id: <20220418121136.200190338@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-04-18 14:10, schrieb Michael Walle:
-> There is no way to gather all information to verify support for a new
-> flash chip. Also if you want to convert an existing flash chip to the
-> new SFDP parsing, there is not enough information to determine if the
-> flash will work like before. To ease this development, expose internal
-> parameters via the debugfs.
+From: Roman Li <Roman.Li@amd.com>
 
-Here's an example:
-# cat params
-name		w25q32dw
-id		ef6016
-size		4.00 MiB
-write size	1
-page size	256
-address width	3
-flags		HAS_SR_TB|HAS_LOCK|HAS_16BIT_SR|NO_READ_CR|SOFT_RESET
+[ Upstream commit f4346fb3edf7720db3f7f5e1cab1f667cd024280 ]
 
-opcodes
-  read		3b
-   dummy cycles	8
-  erase		20
-  program	02
-  8D extension	none
+[Why]
+On resume we do link detection for all non-MST connectors.
+MST is handled separately. However the condition for telling
+if connector is on mst branch is not enough for mst hub case.
+Link detection for mst branch link leads to mst topology reset.
+That causes assert in dc_link_allocate_mst_payload()
 
-protocols
-  read		1S-1S-2S
-  write		1S-1S-1S
-  register	1S-1S-1S
+[How]
+Use link type as indicator for mst link.
 
-erase commands
-  20 (4.00 KiB) [1]
-  52 (32.0 KiB) [2]
-  d8 (64.0 KiB) [3]
-  c7 (4.00 MiB)
+Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Roman Li <Roman.Li@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-sector map
-  region              | erase mask | flags
-  --------------------+------------+----------
-  00000000 - 003fffff |     [ 123] |
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index c5231c50c412..de33864af70b 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -1210,7 +1210,8 @@ static int dm_resume(void *handle)
+ 		 * this is the case when traversing through already created
+ 		 * MST connectors, should be skipped
+ 		 */
+-		if (aconnector->mst_port)
++		if (aconnector->dc_link &&
++		    aconnector->dc_link->type == dc_connection_mst_branch)
+ 			continue;
+ 
+ 		mutex_lock(&aconnector->hpd_lock);
+-- 
+2.35.1
 
-# cat capabilities
-Supported read modes by the flash
-1S-1S-1S
-   opcode	03
-   mode cycles	00
-   dummy cycles	00
-1S-1S-1S (fast read)
-   opcode	0b
-   mode cycles	00
-   dummy cycles	08
-1S-1S-2S
-   opcode	3b
-   mode cycles	00
-   dummy cycles	08
-1S-2S-2S
-   opcode	bb
-   mode cycles	02
-   dummy cycles	02
-1S-1S-4S
-   opcode	6b
-   mode cycles	00
-   dummy cycles	08
-1S-4S-4S
-   opcode	eb
-   mode cycles	02
-   dummy cycles	04
-4S-4S-4S
-   opcode	eb
-   mode cycles	02
-   dummy cycles	00
 
-Supported page program modes by the flash
-1S-1S-1S
-   opcode	02
+

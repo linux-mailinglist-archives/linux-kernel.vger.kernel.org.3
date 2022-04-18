@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C8C0505F28
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:14:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC673505F2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:16:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347968AbiDRVQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50356 "EHLO
+        id S1347981AbiDRVSu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:18:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345194AbiDRVQ0 (ORCPT
+        with ESMTP id S237880AbiDRVSq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:16:26 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E508A2CCBB;
-        Mon, 18 Apr 2022 14:13:46 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58fe329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58fe:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E8E751EC04D6;
-        Mon, 18 Apr 2022 23:13:40 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650316421;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=kNgT3g7hZWr4L1MacL0M4zuzvv4T8Jt/QpST8Er4IZM=;
-        b=gPt9RlH7iaDq4qO0X02NbLmNo1Osv7wwJMGEXgYVBZ85QjgItXneHUk4Gg9nYeekB6ujvI
-        Q5IovE9huXF72e7p8yZu+AW0/2V31GAXASCAwfW7d6uflj0nNFhP4I3ZW39lZtmOARR986
-        YqmaDAFfz9oOsa2WMMLrFnNyfsB3y+0=
-Date:   Mon, 18 Apr 2022 23:13:36 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tyler Hicks <tyhicks@linux.microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sasha Levin <sashal@kernel.org>, Lei Wang <lewan@microsoft.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <Yl3UgPtVV3t4pzVe@zn.tnic>
-References: <YeRkGvestiloCAUV@zn.tnic>
- <20220118152816.GA89184@sequoia>
- <Yeb4sK+ZmSHjWPWL@zn.tnic>
- <20220118195401.GB89184@sequoia>
- <YecrXidqecoYI/xg@zn.tnic>
- <YefXQHXNlsxk8yUc@kroah.com>
- <Yefb7zO9p1iPF3Jm@zn.tnic>
- <YefnuCPwMq5V2lgl@kroah.com>
- <20220404215640.GA626436@sequoia>
- <20220418204029.GA31854@sequoia>
+        Mon, 18 Apr 2022 17:18:46 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793C82CE18
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:16:05 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id k14so21126981pga.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:16:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/8XJRkQ+Ngj+SVndYkt5Kqwy78yKeKiW3fonsocHm3g=;
+        b=J1vTHu7C5Uh3f4LfAcKQPO/5Pz9IYhPGuzvmzDr/r76LDgWCFm6fpTDSrrFHEEVVIx
+         HoP+BhBTxIiOZ7XsJWw/ir1ytJ3YVKtGcIHkRd/zEskK37Gf+Vg1VyHaF6EzqMYxqYqD
+         bUrRL1EQr8iUt/oCRE7WlIxQqTZeCfihNOTrk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=/8XJRkQ+Ngj+SVndYkt5Kqwy78yKeKiW3fonsocHm3g=;
+        b=rI+6gMYHFLlId6NNGrlMPABgAvLj7MhTCmnl8PjF8QI9S/D87Ush6WO10LUJiwbaGY
+         tqLr9HK1pUhBTnCP5E6VL4GQhECJIQRXBKZAa+hX1ut+uHKjpheIkqh4/JpspdbmX0Xa
+         GE0Ofs8gH6fvtJtN5+77jY4sPdgqZsKCoiqXD26+XLwTcdLSy6Itk+yJBeJgoq56GHO9
+         tPnhy2ct8KHecI7xdqoCpGqJCv0EnOjVSXzC6MvoeZIEMwfiat92B4tjXsLrpTnixkov
+         wPUOEP7gAKn9MZWcPAtDZgQRSnFdmH3ugS7VEsSAU7CEkF6u3OzNGlGyyT/YwWUkraAQ
+         T6iw==
+X-Gm-Message-State: AOAM53220VXmKmAzdXf1uY9NHGuFJflFMl8KMVoLqNQGk3WZIrIRDicZ
+        XHSP5e4QMsyUFzf1kgnkqOaFBw==
+X-Google-Smtp-Source: ABdhPJy4XB+bbS97AAyRfwYXg0SHO4S5mnpEPALFnmvLrX6gjHaVLEhGa0FV74GcCXM0EQkzZfmXGg==
+X-Received: by 2002:a63:1543:0:b0:39d:9729:1992 with SMTP id 3-20020a631543000000b0039d97291992mr11756352pgv.155.1650316565036;
+        Mon, 18 Apr 2022 14:16:05 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:6b32:a0a5:ec32:c287])
+        by smtp.gmail.com with UTF8SMTPSA id y23-20020a056a00181700b0050839558f4bsm14438421pfa.40.2022.04.18.14.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 14:16:04 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>, dm-devel@redhat.com,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH 0/3] LoadPin: Enable loading from trusted dm-verity devices
+Date:   Mon, 18 Apr 2022 14:15:56 -0700
+Message-Id: <20220418211559.3832724-1-mka@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220418204029.GA31854@sequoia>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 03:40:29PM -0500, Tyler Hicks wrote:
-> > The API argument seems to have fizzled out in v2:
-> > 
-> >  https://lore.kernel.org/lkml/20220212201631.12648-1-s.shtylyov@omp.ru/
+As of now LoadPin restricts loading of kernel files to a single
+pinned filesystem, typically the rootfs. This works for many
+systems, however it can result in a bloated rootfs (and OTA
+updates) on platforms where multiple boards with different
+hardware configurations use the same rootfs image. Especially
+when 'optional' files are large it may be preferable to
+download/install them only when they are actually needed by a
+given board. Chrome OS uses Downloadable Content (DLC) [1] to
+deploy certain 'packages' at runtime. As an example a DLC
+package could contain firmware for a peripheral that is not
+present on all boards. DLCs use dm-verity [2] to verify the
+integrity of the DLC content.
 
-I don't see those two upstream yet, on a quick glance. Perhaps in Greg's tree?
+This series extends LoadPin to allow loading of kernel files
+from trusted dm-verity devices. It adds the concept of
+trusted verity devices to LoadPin. Userspace can use the
+new systl file 'loadpin/trusted_verity_root_digests' to
+provide LoadPin with a list of root digests from dm-verity
+devices that LoadPin should consider as trusted. When a
+kernel file is read LoadPin first checks (as usual) whether
+the file is located on the pinned root, if so the file can
+be loaded. Otherwise, if the verity extension is enabled,
+LoadPin determines whether the file is located on a verity
+backed device and whether the root digest of that device
+is in the list of trusted digests. The file can be loaded
+if the verity device has a trusted root digest.
 
-Greg, what's the latest with that platform_get_*_optional() fun?
+The list of trusted root digests can only be written once
+(typically at boot time), to limit the possiblity of
+attackers setting up rogue verity devices and marking them
+as trusted.
 
-Also, the second of those two patches above has:
+[1] https://chromium.googlesource.com/chromiumos/platform2/+/HEAD/dlcservice/docs/developer.md
+[2] https://www.kernel.org/doc/html/latest/admin-guide/device-mapper/verity.html
 
-+ * Return: non-zero IRQ number on success, 0 if IRQ wasn't found, negative error
-+ * number on failure.
-  */
- int platform_get_irq_byname_optional(struct platform_device *dev,
 
-and your patch does:
+Matthias Kaehlcke (3):
+  dm: Add verity helpers for LoadPin
+  LoadPin: Enable loading from trusted dm-verity devices
+  dm: verity-loadpin: Use CONFIG_SECURITY_LOADPIN_VERITY for conditional
+    compilation
 
-+		irq = platform_get_irq_byname_optional(pdev, dmc520_irq_configs[idx].name);
- 		irqs[idx] = irq;
-
-so on failure, it would still write the negative error value in
-irqs[idx].
-
-How can that be right?
+ drivers/md/Makefile               |   1 +
+ drivers/md/dm-verity-loadpin.c    |  80 ++++++++++++++
+ drivers/md/dm-verity-target.c     |  34 ++++++
+ drivers/md/dm-verity.h            |   4 +
+ include/linux/dm-verity-loadpin.h |  27 +++++
+ security/loadpin/Kconfig          |  11 ++
+ security/loadpin/loadpin.c        | 168 +++++++++++++++++++++++++++++-
+ 7 files changed, 324 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/md/dm-verity-loadpin.c
+ create mode 100644 include/linux/dm-verity-loadpin.h
 
 -- 
-Regards/Gruss,
-    Boris.
+2.36.0.rc0.470.gd361397f0d-goog
 
-https://people.kernel.org/tglx/notes-about-netiquette

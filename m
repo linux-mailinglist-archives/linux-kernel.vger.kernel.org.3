@@ -2,51 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E666A505E9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91329505EA3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:43:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343871AbiDRTl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 15:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
+        id S1347732AbiDRTpv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 15:45:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiDRTlz (ORCPT
+        with ESMTP id S1347724AbiDRTpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 15:41:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BF522B18;
-        Mon, 18 Apr 2022 12:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E31D60E17;
-        Mon, 18 Apr 2022 19:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA664C385A7;
-        Mon, 18 Apr 2022 19:39:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650310754;
-        bh=AbxVf+7jcuV5QIoBysMgSF50hqQeyLxUm06G4wHRIkA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iVkV6Fk1yLH11i4LUH1lECsemTWLh8XpSZ1G27KLxSshaR75zZDFMMNMjH9jIC9WU
-         MRymmlXKIhsa4NUu7eCZSl5Q56NxH1GpvyQFUG3jgyqkncvYVT/MPuyoQMy5mSgRcz
-         G3Gn5pAVgXUydiWOOiuzBZ0+P40BPgdlNcEZLXdSuU1P4koS0CdrPtTBZI5EM/z8Md
-         VPepnZZGIzRQFNU7UiCWcvwycydcYbrqRqBqgMa1Hph6PfOun5DnD/tVkRkLRYj2/R
-         ErtFGxiU3DaiuoB7e4NnEKJLhDXmAKJW6153av0rWMEJ2San7xDjWbRFGWZQNrAEHB
-         uvqTqYT9oNN0Q==
-Date:   Mon, 18 Apr 2022 12:39:13 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] random: document crng_fast_key_erasure() destination
- possibility
-Message-ID: <Yl2+YfuFNQzhFVbP@sol.localdomain>
-References: <20220418192344.1510712-1-Jason@zx2c4.com>
+        Mon, 18 Apr 2022 15:45:49 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8410024968
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:43:09 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: dmitry.osipenko)
+        with ESMTPSA id 90E4C1F41C3C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650310988;
+        bh=e3aXhhV0iMbSTBQMtpX2+7/OpY3JByN6nT0sgNfy5eo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WA4NVuAj0cyf/adVZpyR3XPEfwqgPhrzLAbhFfdZ/CinSZF97KjZJlY+8CmMSQ1qp
+         rz0ySyDia/c9dEvKixvPeeWbcTKuGhvZXpgiwNJNstgRssmJ+jfWaRuzUfveZgwan5
+         5lnLlEaj6uqh5m8DHyyVeqVEk0Qgigr4NG5/4nEiBomB56hAIa+uBVLdkiK+JAfNnD
+         x+S9+U4j6V9J3+8wxQUFLlHRR7o/Zq1EuSPiFUcGV4/8fkUuMors8F2UExujcMVm/y
+         HBn3KRF8mfjuvaPO5ZQXzIguoHfErPiYd5rFd6/wppwnDBlF05URRJOvG9HfzrFHFN
+         jscGbrCLtAOew==
+Message-ID: <33625122-6aad-86c1-444a-07144325835c@collabora.com>
+Date:   Mon, 18 Apr 2022 22:43:03 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418192344.1510712-1-Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v4 09/15] drm/shmem-helper: Correct doc-comment of
+ drm_gem_shmem_get_sg_table()
+Content-Language: en-US
+To:     Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Robin Murphy <robin.murphy@arm.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        Dmitry Osipenko <digetx@gmail.com>
+References: <20220417223707.157113-1-dmitry.osipenko@collabora.com>
+ <20220417223707.157113-10-dmitry.osipenko@collabora.com>
+ <eefe5120-638a-40bc-5ed8-e26defe178ca@suse.de>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <eefe5120-638a-40bc-5ed8-e26defe178ca@suse.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,41 +74,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 09:23:44PM +0200, Jason A. Donenfeld wrote:
-> This reverts 35a33ff3807d ("random: use memmove instead of memcpy for
-> remaining 32 bytes"), which was made on a totally bogus basis. The thing
-> it was worried about overlapping came from the stack, not from one of
-> its arguments, as Eric pointed out.
+On 4/18/22 21:25, Thomas Zimmermann wrote:
+> Hi
 > 
-> But the fact that this confusion even happened draws attention to the
-> fact that it's a bit non-obvious that the random_data parameter can
-> alias chacha_state, and in fact should do so when the caller can't rely
-> on the stack being cleared in a timely manner. So this commit documents
-> that.
+> Am 18.04.22 um 00:37 schrieb Dmitry Osipenko:
+>> drm_gem_shmem_get_sg_table() never returns NULL on error, but a ERR_PTR.
+>> Correct the doc comment which says that it returns NULL on error.
+>>
+>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 > 
-> Reported-by: Eric Biggers <ebiggers@kernel.org>
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+> 
+>> ---
+>>   drivers/gpu/drm/drm_gem_shmem_helper.c | 5 +++--
+>>   1 file changed, 3 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/drm_gem_shmem_helper.c
+>> b/drivers/gpu/drm/drm_gem_shmem_helper.c
+>> index 8ad0e02991ca..30ee46348a99 100644
+>> --- a/drivers/gpu/drm/drm_gem_shmem_helper.c
+>> +++ b/drivers/gpu/drm/drm_gem_shmem_helper.c
+>> @@ -662,7 +662,7 @@ EXPORT_SYMBOL(drm_gem_shmem_print_info);
+>>    * drm_gem_shmem_get_pages_sgt() instead.
+>>    *
+>>    * Returns:
+>> - * A pointer to the scatter/gather table of pinned pages or NULL on
+>> failure.
+>> + * A pointer to the scatter/gather table of pinned pages or errno on
+>> failure.
+> 
+> ', or an ERR_PTR()-encoded errno code on failure'
+> 
+>>    */
+>>   struct sg_table *drm_gem_shmem_get_sg_table(struct
+>> drm_gem_shmem_object *shmem)
+>>   {
+>> @@ -688,7 +688,8 @@ EXPORT_SYMBOL_GPL(drm_gem_shmem_get_sg_table);
+>>    * drm_gem_shmem_get_sg_table() should not be directly called by
+>> drivers.
+>>    *
+>>    * Returns:
+>> - * A pointer to the scatter/gather table of pinned pages or errno on
+>> failure.
+>> + * A pointer to the scatter/gather table of pinned pages
+>> ERR_PTR()-encoded
+> 
+> ', or an' before ERR_PTR
+> 
+> With the improved grammar:
+> 
+> Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
 
-Reviewed-by: Eric Biggers <ebiggers@google.com>
+Thanks, something went wrong with these comments in this patch and I
+haven't noticed that :)
 
-... but one nit below:
-
-> diff --git a/drivers/char/random.c b/drivers/char/random.c
-> index 3a293f919af9..87302e85759f 100644
-> --- a/drivers/char/random.c
-> +++ b/drivers/char/random.c
-> @@ -318,6 +318,13 @@ static void crng_reseed(bool force)
->   * the resultant ChaCha state to the user, along with the second
->   * half of the block containing 32 bytes of random data that may
->   * be used; random_data_len may not be greater than 32.
-> + *
-> + * The returned ChaCha state contains within it a copy of the old
-> + * key value, at index 4, so that state should always be zeroed
-> + * out immediately after using in order to maintain forward secrecy.
-> + * If that state cannot be erased in a timely manner, then it is
-
-"that state" => "this state" or "the state" in the two places above, otherwise
-the first sentence can be misparsed (as "So that, state" rather than "So, that
-state").
-
-- Eric

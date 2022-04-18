@@ -2,112 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83530504F89
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807B8504F8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbiDRLtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
+        id S237459AbiDRLt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:49:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236879AbiDRLs5 (ORCPT
+        with ESMTP id S236879AbiDRLt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:48:57 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F15564D7;
-        Mon, 18 Apr 2022 04:46:19 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso136282027b3.11;
-        Mon, 18 Apr 2022 04:46:19 -0700 (PDT)
+        Mon, 18 Apr 2022 07:49:26 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E05167C0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:46:47 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id u18so17186330eda.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:46:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R+k5R+6Tf+kVP5/jwUVVJcqexRzi8y2ZOUAjpeAiUi4=;
-        b=Ce5lUboHlt/gmpUKC++rrBFPSCnQ9wxILvj8LVkvjt0FOXtEEJUt8jEE2p/+9xEXrX
-         AGEhhymndfCana7cViuokWV7Um9RmFBZjENGfgzG7eyBVYy62vB6s4ilKjGc+rfJXTQe
-         pAqrR9cf3zEDv/Y0t39vAsx6ptucgIysTn7d0pEIcrOk4xjwsuyDMAt47QfQ5aaBQoug
-         a7y+fNQYoNbUHae8C9QBgSzxRYnafMZjkFX1M7iI5OimZch5nzLHI8nJ7czhhtbBsmRJ
-         0ppqCtGxFQHePbG1lMZToT2EfPEmBK6/TNedmw9WpRxcnxYpYQa6xqqeAj+2jcoMTrdX
-         AfuQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=+cw4FNIPaljad3e8DVkQCepUmXxjBo/m/1jzgFfcs8U=;
+        b=EMcu0tCDeljFb7yHhoncmFDGX2SNBoNZN7shP4Vbct870LIS3zdaHeLX47ou4Q+5D9
+         dZYybx1/z7lfr+84/yT46CL0XbfDr0nSxKz6+vCHyIkyZCrn6zfEgtJ+x98m1m8v0PTG
+         2TgpWiJex5byMDJ6mi53I5qkeuPWAQnBT4PxO7Rohb8x3nlcVJL08dz+kXpL++Nl4RBv
+         5fPp0twwX/XxBTU1wbXFwyCQGxfxf6PaqWgB2ChGMpLe2o42PTgXTrqS3Vvcip0zbOXm
+         uGRIKClvBlJGV52N3TULTQfRzrTbSqgGgXPF5rg9GTw1NVnQ8BU2teLRbn2vOPdR6fsQ
+         Z9UA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R+k5R+6Tf+kVP5/jwUVVJcqexRzi8y2ZOUAjpeAiUi4=;
-        b=UKkpuM2cWrYTVHxM260/vuOkB4Ra5dzhD/iZzhplBAV3m1wfDi3mODpJh1/ork5+jD
-         oSBHwOQQTNOednqjsegzoC8fKRDupZxNw8Xrtz/b80ZvRga2wEst8vdGnrfvpvgDgKzv
-         vk/amL4VUxXsH2vytfSDJZwtlJA+8lSEDie+ZIJrAyfrA09xF/pyzkuYpfqwl2i9Beix
-         eEszwtAw6BQYpvy6seWRRMkC6V3iQIcE2w3bu5W+g0TSOyajNXExnW7v7lK40zaoic2X
-         RAc255am8R+KRRwH8/KMRbQaxBL7N0xJ0e0zROvdht76hlut349b/vCxOklqweqjitkX
-         qT+g==
-X-Gm-Message-State: AOAM5308aVQIwcX9zRyoavOMoxDgi7AQ0g7k0YwuzxdEDx+voQEq7tUd
-        QJGWPUgyrGynML27hNVhab8ZcAF4LENTehIRGJrj1h1i1ztJJw==
-X-Google-Smtp-Source: ABdhPJye5yqT98SnUYRLXzqx8takuFC8eq2pX1Rbb4eUcIiR85AzHfMDt6Qbgw4uG0I1YL+4XsFc6rnW3OecwaE1v5A=
-X-Received: by 2002:a81:5904:0:b0:2eb:f900:882e with SMTP id
- n4-20020a815904000000b002ebf900882emr9347609ywb.281.1650282378263; Mon, 18
- Apr 2022 04:46:18 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=+cw4FNIPaljad3e8DVkQCepUmXxjBo/m/1jzgFfcs8U=;
+        b=V1iGQbXPmVe7s0L0yZ84ybeK5fmQLiFivimJ2AY6IG/wEmjAOfssxUxZXJtRFWikj7
+         kwAfKcbOdH3CeMiKJy1hzuNrZFINfuTiLG/VFQD1jkxOpO59eNUF5Mn1sPuE2t6PUoGl
+         cjcqvYIzuLRIMZFuc/lS2LjJCgcIT6alW6BRZ9u8UFjp2tm5/cb1Z1Z1w7ZQeE0hfTCn
+         iPbmpGAev8xx3mGvAiiDBx7lhPhd+zvvgclRAfxBHNZqP6UNv5tytRmTN3BCSp/J/mzQ
+         0g6A1wxBzDrpUITW1dF0VKiLOw4YpoU5fVSG5Nj1/ypPFeekRGXCFUNyeSyGyxxF96fm
+         TMZw==
+X-Gm-Message-State: AOAM5317RjB9HrZTiKQA8KvRfWdaqCBpZEQsW/ZrfZHs0ydAEZ5qAx+V
+        ku933+NqnYGLMp9SeNSvlXK7/Q==
+X-Google-Smtp-Source: ABdhPJywPDma12a05kBaxZILSMPLyMoVhakudsXTChLuj+deflBnxYq4hwWmM8t0rSpj543MZo2mCQ==
+X-Received: by 2002:a05:6402:2056:b0:41d:70c3:2904 with SMTP id bc22-20020a056402205600b0041d70c32904mr11725923edb.397.1650282406266;
+        Mon, 18 Apr 2022 04:46:46 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id p2-20020a056402154200b0042323822e15sm4345412edx.74.2022.04.18.04.46.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 04:46:45 -0700 (PDT)
+Message-ID: <df46a147-c4c7-c0bc-e195-d47344413b29@linaro.org>
+Date:   Mon, 18 Apr 2022 13:46:44 +0200
 MIME-Version: 1.0
-References: <20220329094446.415219-1-tobetter@gmail.com> <CAMdYzYrCZtfDiB6O20Jtp56YQhHj3jMVhCt9aCYNLbD_xwFc3g@mail.gmail.com>
- <ff0135dc-da30-18b5-f5f4-cefdb0455c6b@kernel.org> <12089439.O9o76ZdvQC@phil> <d3cb233a-1962-af6b-2663-c057e7823a2b@kernel.org>
-In-Reply-To: <d3cb233a-1962-af6b-2663-c057e7823a2b@kernel.org>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 18 Apr 2022 07:46:07 -0400
-Message-ID: <CAMdYzYr6ONFiuA7dhYEdjTXHAN90=NBCEGK3gOY=BBLzf7P-4A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add Hardkernel ODROID-M1 board
-To:     Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Dongjin Kim <tobetter@gmail.com>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 2/2] arm64: dts: mediatek: mt8195: add UFS HCI node
+Content-Language: en-US
+To:     Fabien Parent <fparent@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220415165939.1861470-1-fparent@baylibre.com>
+ <20220415165939.1861470-2-fparent@baylibre.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220415165939.1861470-2-fparent@baylibre.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 7:21 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 17/04/2022 22:55, Heiko Stuebner wrote:
-> >> Usually adding - in subsequent DTS files - means increasing the numbers
-> >> so if you have regulator-[012] then just use regulator-[345] in other
-> >> files. I see potential mess when you combine several DTSI files, each
-> >> defining regulators, so in such case "some-name-regulator" (or reversed)
-> >> is also popular approach.
-> >
-> > so going with
-> >
-> >       dc_12v: dc-12v-regulator {
-> >       };
-> >
-> > i.e. doing a some-name-regulator would be an in-spec way to go?
-> >
-> > In this case I would definitely prefer this over doing a numbered thing.
-> >
-> > I.e. regulator-0 can create really hard to debug issues, when you have
-> > another accidential regulator-0 for a different regulator in there, which
-> > then would create some sort of merged node.
->
-> I don't think such case happens frequently, because all regulators are
-> usually used by something (as a phandle) thus they should have a label.
-> This label should be descriptive, so if one can assign same label to
-> entirely different regulators, then the same chances are that same
-> descriptive node will be used.
->
-> IOW, if you think such mistake with regulator names can happen, then the
-> same can happen with the label...
->
-> Anyway, answering the question - "dc-12v-regulator" is still not
-> matching exactly the Devicetree spec recommendation, but it's okay for
-> me. :)
+On 15/04/2022 18:59, Fabien Parent wrote:
+> Add the node for the UFS HCI controller for the MediaTek MT8195 SoC.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 24 ++++++++++++++++++++++++
+>  1 file changed, 24 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index b57e620c2c72..2255e19cc3b2 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -619,6 +619,30 @@ mmc2: mmc@11250000 {
+>  			status = "disabled";
+>  		};
+>  
+> +		ufshci: ufshci@11270000 {
 
-This seems like an excellent compromise, thanks!
+Generic node name, so just "ufs".
 
->
->
-> Best regards,
-> Krzysztof
+
+Best regards,
+Krzysztof

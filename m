@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A690950536E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87FBE505590
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241091AbiDRM6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S243086AbiDRNJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240428AbiDRMtg (ORCPT
+        with ESMTP id S241101AbiDRM6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:49:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11B22B1BD;
-        Mon, 18 Apr 2022 05:33:46 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610A24F30;
+        Mon, 18 Apr 2022 05:38:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57995B80ED6;
-        Mon, 18 Apr 2022 12:33:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6A8C385A7;
-        Mon, 18 Apr 2022 12:33:43 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7F90FCE10AF;
+        Mon, 18 Apr 2022 12:38:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C12C385A1;
+        Mon, 18 Apr 2022 12:38:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285224;
-        bh=g8Q2+7CHiKjILami8t6hn7pMcUNJyhDrXAmITMxT9QM=;
+        s=korg; t=1650285514;
+        bh=JQnow2SOT802oNKrq1lbJ5cGXDWXQkeciol61Csm9AI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=u1HXsKbKnAHlq26JRJZDOUgjpyH2y3El7GkHPTOvtmMr4yynzNy9b2zOS8qxtvNUW
-         Slev7VFn2PLet6Xd19pPViyZ6HfFpbMhFjdXDLN5ufm/9Gh5DT3cTjJj8qd4UxW2QF
-         wY8y+OjesHUu2jIw+4bIMlb+v7mEVJCaIU6B4ZHg=
+        b=FH2w2omKBKUH9XGk2a4iH1XxIBrvv14eNjqAimMuQbXjPtnCbVM9kvgJL7LFd3+Yg
+         HDxe6+M91eZKeBvbkL3gVliVW4wi5u9nvcDh493IdN0UMt9i91jgl2ellz7TP+BRbD
+         qphU7e3OaGgMAkNHgL/L7sRyoqHhJPRG9f72Y1Gs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 142/189] io_uring: use nospec annotation for more indexes
-Date:   Mon, 18 Apr 2022 14:12:42 +0200
-Message-Id: <20220418121205.588146582@linuxfoundation.org>
+        stable@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 041/105] net: bcmgenet: Revert "Use stronger register read/writes to assure ordering"
+Date:   Mon, 18 Apr 2022 14:12:43 +0200
+Message-Id: <20220418121147.644952639@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,64 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Jeremy Linton <jeremy.linton@arm.com>
 
-[ Upstream commit 4cdd158be9d09223737df83136a1fb65269d809a ]
+[ Upstream commit 2df3fc4a84e917a422935cc5bae18f43f9955d31 ]
 
-There are still several places that using pre array_index_nospec()
-indexes, fix them up.
+It turns out after digging deeper into this bug, that it was being
+triggered by GCC12 failing to call the bcmgenet_enable_dma()
+routine. Given that a gcc12 fix has been merged [1] and the genet
+driver now works properly when built with gcc12, this commit should
+be reverted.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/b01ef5ee83f72ed35ad525912370b729f5d145f4.1649336342.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+[1]
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=aabb9a261ef060cf24fd626713f1d7d9df81aa57
+
+Fixes: 8d3ea3d402db ("net: bcmgenet: Use stronger register read/writes to assure ordering")
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220412210420.1129430-1-jeremy.linton@arm.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index ca207e9a87cd..1bf1ea2cd8b0 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -8489,7 +8489,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
- 	struct io_ring_ctx *ctx = req->ctx;
- 	struct io_fixed_file *file_slot;
- 	struct file *file;
--	int ret, i;
-+	int ret;
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index 7dcd5613ee56..a2062144d7ca 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -76,7 +76,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
+ 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+ 		__raw_writel(value, offset);
+ 	else
+-		writel(value, offset);
++		writel_relaxed(value, offset);
+ }
  
- 	io_ring_submit_lock(ctx, !(issue_flags & IO_URING_F_NONBLOCK));
- 	ret = -ENXIO;
-@@ -8502,8 +8502,8 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
- 	if (ret)
- 		goto out;
+ static inline u32 bcmgenet_readl(void __iomem *offset)
+@@ -84,7 +84,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
+ 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+ 		return __raw_readl(offset);
+ 	else
+-		return readl(offset);
++		return readl_relaxed(offset);
+ }
  
--	i = array_index_nospec(offset, ctx->nr_user_files);
--	file_slot = io_fixed_file_slot(&ctx->file_table, i);
-+	offset = array_index_nospec(offset, ctx->nr_user_files);
-+	file_slot = io_fixed_file_slot(&ctx->file_table, offset);
- 	ret = -EBADF;
- 	if (!file_slot->file_ptr)
- 		goto out;
-@@ -8559,8 +8559,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
- 
- 		if (file_slot->file_ptr) {
- 			file = (struct file *)(file_slot->file_ptr & FFS_MASK);
--			err = io_queue_rsrc_removal(data, up->offset + done,
--						    ctx->rsrc_node, file);
-+			err = io_queue_rsrc_removal(data, i, ctx->rsrc_node, file);
- 			if (err)
- 				break;
- 			file_slot->file_ptr = 0;
-@@ -9229,7 +9228,7 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
- 
- 		i = array_index_nospec(offset, ctx->nr_user_bufs);
- 		if (ctx->user_bufs[i] != ctx->dummy_ubuf) {
--			err = io_queue_rsrc_removal(ctx->buf_data, offset,
-+			err = io_queue_rsrc_removal(ctx->buf_data, i,
- 						    ctx->rsrc_node, ctx->user_bufs[i]);
- 			if (unlikely(err)) {
- 				io_buffer_unmap(ctx, &imu);
+ static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
 -- 
 2.35.1
 

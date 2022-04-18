@@ -2,133 +2,231 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D94505C0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D040E505C1A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346089AbiDRP53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S1345938AbiDRP7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:59:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345998AbiDRP5O (ORCPT
+        with ESMTP id S1345926AbiDRP6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:57:14 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F53BE09
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:48:11 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id s137so19566611pgs.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:48:11 -0700 (PDT)
+        Mon, 18 Apr 2022 11:58:54 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9765CF42
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:52:46 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id b15so17907915edn.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:52:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=bblbj/fcJFwOLUNIwNuNwpTk1JwxMlxkSB/YW/1NkA8=;
-        b=Ql/rsJabvCjhBQBFo9Rm6AmknNrjQobKZJ2h5Gk1G74DoLtW1OApk2N7YbeUgIcQch
-         VhZ2BsHKlL2VYyg6IGk4Q1V66ktJAe/O/lh14ggl5/mHN9UlsAKL7RbfWD29K2u3mKUp
-         yMqAWbYBFO+2tgm8/mDo2ukQ5E0Dv71chGMtQhMr3u6YwHRWtnpeBMImKg6BYMOfgWJz
-         wBP97DlulgoTSdrAfcJwibewHQ2e54AU21nSC3/4ljdNAHclsT2/NFrRriOQ9cWkCjZN
-         UVk7efZ/kErjL8+6c+Q5VrxtQQNB07aWtx1HyF6k7dXLHtvYf1Gjg2Cr0MK0Z1eNXHQV
-         XnWg==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=abJDI08Lc7Q5g8VlHjGfKe5QhiMExOEQf4wgN2a+RHA=;
+        b=REIPpBv9+zKU2ZT+KemRxGZ9DSPZZbEaRR+gMJenHjpHtT5+sTxrrOrLc76LN2vKgu
+         h4v2XQXSR4rABJpUQ92eNqBwTc18XmobtJwP8fg2j2RQv6CCyOU6lHF2o1RiC0cnARlA
+         2abgMVv0T7NWnjfgppgzO/uKHqBB+n4eUM5NXgY30pYAVVVuw3X2l9Sr9hQvqOXrvpz4
+         6DLbV8F9k7M0UAEtn81wI1XnB88IzEmnJRoohVtSsMT98doO4ErrGJJLkKd7QDyL59LO
+         PZx2MusxeiMNwZtRUOECwVRE8HLrR0mQvwjEMvWfng6eTCpwKLJAjeLhYIRSZ+EyBFrY
+         2IZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=bblbj/fcJFwOLUNIwNuNwpTk1JwxMlxkSB/YW/1NkA8=;
-        b=LuefLQMl5xl6fkJeHltGIwA5+84r5tUVr8gws5fy0eSPQEQyi8UMEkRZOAO8CtYNzp
-         VIoP8aHqE854huqd98dK8VP6B/C52oK+8f/OMw7T5fBq5EUcmkBZWK1aBEvorAdmogwf
-         E4RiFKKM5rn1pJsnRzh6uwtUd5x+a4/XAxXR5zMaUq4whAKggmoj+Si833pTQCG5P0AA
-         ucT+IRAmrneVzQ6AQL+Wpir/zzO1Sta2mwE11Nv3vgjK9rNZ6MzZzlTCf4hmz9k1DY+Z
-         K+YlAnsyznM5kGOQaDeJxl8v6c0F8jRtZ5XH5FGKSZtIvVlJYMTyVoiRHrKx7arOyJWm
-         4XHg==
-X-Gm-Message-State: AOAM531hJHERRPH+MXWuE4qirH5seS0VJwUDZLYBauZLadwP7l3hHu8A
-        CUE7SHyLF8gAdEuMwEJsjnlM3Q==
-X-Google-Smtp-Source: ABdhPJxANphA5knqQ12sEaZqn+gwYLT7+9jsJDRzjOj7/Xl6HgrPjE8BccGXxvS9znUgXnXTpJ5yBw==
-X-Received: by 2002:a63:79ce:0:b0:3a9:efa0:17d with SMTP id u197-20020a6379ce000000b003a9efa0017dmr5523712pgc.170.1650296890896;
-        Mon, 18 Apr 2022 08:48:10 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id a9-20020aa78649000000b004fe3d6c1731sm13295314pfo.175.2022.04.18.08.48.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 08:48:10 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:48:07 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     Mingwei Zhang <mizhang@google.com>, kvm <kvm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] KVM: SEV: Add cond_resched() to loop in
- sev_clflush_pages()
-Message-ID: <Yl2IN6CHQzkts4XE@google.com>
-References: <20220330164306.2376085-1-pgonda@google.com>
- <CAL715W+S-SJwXBhYO=_T-9uAPLt6cQ-Hn+_+ehefAh6+kQ_zOA@mail.gmail.com>
- <YkYdlfYM/FWlMqMg@google.com>
- <CAL715WLhy7EkJCyO7vzak3O8iw8GDRHkPF8aRtDedPXO1vx_Qw@mail.gmail.com>
- <Yk3bSmQTspjZHUZf@google.com>
- <CAMkAt6obVDW_LFvQzUYw6v7okiNq1KAbUOMoM3bN6zeJUGg6Xw@mail.gmail.com>
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=abJDI08Lc7Q5g8VlHjGfKe5QhiMExOEQf4wgN2a+RHA=;
+        b=oTxi7pK8oofiOgl372SbOYkMLvHg4L8OFJIgXBoogx9YJwxql40srfpkksO9G6jWP9
+         gEz9KwS776jK1gMfrphQ5U/uDS1ixhWy4cQPWmFWZS1tfrS02wkimHZu/Ela8RHfBzFW
+         MNrF90coUoynl6Z9jMvSrXsDCh2CR6LpBaBoK+oCXPsLJ/BYXiaDlGucCyO/Poi6Y8P3
+         Du/w3KFvqP/4SmrGG822rVq/qPKtaCHj4pQVt1umxctOEN7gHtGeaOQcAaLAKEEsPn1r
+         /MQNiJTXNHXPHo+uKog7UbOfB3oaL3jgRtrVCnEHhzRgeDBvehxL6eUQ/7Oii9ef7rPH
+         yWYQ==
+X-Gm-Message-State: AOAM531tPumENdGf4FHn59Vm81i8kcz0Er0admHfW6/MrXjYqp/6mRMm
+        V6Rld506Tt37qfR8RNHR2E8qMQ==
+X-Google-Smtp-Source: ABdhPJyfEwWf4+56J/c9AYnYtTrFbjMzR15QZUG+Fx5x4Kt6Dp9Zte46ycbpvWYbYXD+km9cl8+z9A==
+X-Received: by 2002:a05:6402:1e88:b0:423:d43d:8c65 with SMTP id f8-20020a0564021e8800b00423d43d8c65mr10837622edf.226.1650297165161;
+        Mon, 18 Apr 2022 08:52:45 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id t21-20020a170906609500b006e83679d8acsm4700002ejj.185.2022.04.18.08.52.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 08:52:44 -0700 (PDT)
+Message-ID: <38e60bb2-123b-09cf-d6ef-3a07c6984108@linaro.org>
+Date:   Mon, 18 Apr 2022 17:52:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMkAt6obVDW_LFvQzUYw6v7okiNq1KAbUOMoM3bN6zeJUGg6Xw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC/RFT 1/6] dt-bindings: phy: rockchip: add pcie3 phy
+Content-Language: en-US
+To:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20220416135458.104048-1-linux@fw-web.de>
+ <20220416135458.104048-2-linux@fw-web.de>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220416135458.104048-2-linux@fw-web.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 06, 2022, Peter Gonda wrote:
-> On Wed, Apr 6, 2022 at 12:26 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Wed, Apr 06, 2022, Mingwei Zhang wrote:
-> > > Hi Sean,
-> > >
-> > > > > > diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-> > > > > > index 75fa6dd268f0..c2fe89ecdb2d 100644
-> > > > > > --- a/arch/x86/kvm/svm/sev.c
-> > > > > > +++ b/arch/x86/kvm/svm/sev.c
-> > > > > > @@ -465,6 +465,7 @@ static void sev_clflush_pages(struct page *pages[], unsigned long npages)
-> > > > > >                 page_virtual = kmap_atomic(pages[i]);
-> > > > > >                 clflush_cache_range(page_virtual, PAGE_SIZE);
-> > > > > >                 kunmap_atomic(page_virtual);
-> > > > > > +               cond_resched();
-> > > > >
-> > > > > If you add cond_resched() here, the frequency (once per 4K) might be
-> > > > > too high. You may want to do it once per X pages, where X could be
-> > > > > something like 1G/4K?
-> > > >
-> > > > No, every iteration is perfectly ok.  The "cond"itional part means that this will
-> > > > reschedule if and only if it actually needs to be rescheduled, e.g. if the task's
-> > > > timeslice as expired.  The check for a needed reschedule is cheap, using
-> > > > cond_resched() in tight-ish loops is ok and intended, e.g. KVM does a reched
-> > > > check prior to enterring the guest.
-> > >
-> > > Double check on the code again. I think the point is not about flag
-> > > checking. Obviously branch prediction could really help. The point I
-> > > think is the 'call' to cond_resched(). Depending on the kernel
-> > > configuration, cond_resched() may not always be inlined, at least this
-> > > is my understanding so far? So if that is true, then it still might
-> > > not always be the best to call cond_resched() that often.
-> >
-> > Eh, compared to the cost of 64 back-to-back CLFLUSHOPTs, the cost of __cond_resched()
-> > is peanuts.  Even accounting for the rcu_all_qs() work, it's still dwarfed by the
-> > cost of flushing data from the cache.  E.g. based on Agner Fog's wonderful uop
-> > latencies[*], the actual flush time for a single page is going to be upwards of
-> > 10k cycles, whereas __cond_resched() is going to well under 100 cycles in the happy
-> > case of no work.  Even if those throughput numbers are off by an order of magnitude,
-> > e.g. CLFLUSHOPT can complete in 15 cycles, that's still ~1k cycles.
-> >
-> > Peter, don't we also theoretically need cond_resched() in the loops in
-> > sev_launch_update_data()?  AFAICT, there's no articifical restriction on the size
-> > of the payload, i.e. the kernel is effectively relying on userspace to not update
-> > large swaths of memory.
+On 16/04/2022 15:54, Frank Wunderlich wrote:
+> From: Frank Wunderlich <frank-w@public-files.de>
 > 
-> Yea we probably do want to cond_resched() in the for loop inside of
-> sev_launch_update_data(). Ithink in  sev_dbg_crypt() userspace could
-> request a large number of pages to be decrypted/encrypted for
-> debugging but se have a call to sev_pin_memory() in the loop so that
-> will have a cond_resded() inside of __get_users_pages(). Or should we
-> have a cond_resded() inside of the loop in sev_dbg_crypt() too?
+> Add a new binding file for Rockchip PCIe V3 phy driver.
 
-I believe sev_dbg_crypt() needs a cond_resched() of its own, sev_pin_memory()
-isn't guaranteed to get into the slow path of internal_get_user_pages_fast().
+Thank you for your patch. There is something to discuss/improve.
+
+> 
+> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
+> ---
+>  .../bindings/phy/rockchip-pcie3-phy.yaml      | 77 +++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml b/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml
+> new file mode 100644
+> index 000000000000..58a8ce175f13
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml
+
+Filename: vendor,hardware
+so for example "rockchip,pcie3-phy" although Rob proposed recently for
+other bindings using compatible as a base:
+https://lore.kernel.org/linux-devicetree/YlhkwvGdcf4ozTzG@robh.at.kernel.org/
+
+
+> @@ -0,0 +1,77 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/phy/rockchip-pcie3-phy.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Rockchip PCIe v3 phy
+> +
+> +maintainers:
+> +  - Heiko Stuebner <heiko@sntech.de>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - rockchip,rk3568-pcie3-phy
+> +      - rockchip,rk3588-pcie3-phy
+> +
+> +  reg:
+> +    maxItems: 2
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 3
+> +
+> +  clock-names:
+> +    contains:
+> +      anyOf:
+> +        - enum: [ refclk_m, refclk_n, pclk ]
+
+The list should be strictly ordered (defined), so:
+  items:
+    - const: ...
+    - const: ...
+    - const: ...
+  minItems: 1
+
+However the question is - why the clocks have different amount? Is it
+per different SoC implementation?
+
+> +
+> +  "#phy-cells":
+> +    const: 0
+> +
+> +  resets:
+> +    maxItems: 1
+> +
+> +  reset-names:
+> +    const: phy
+> +
+> +  rockchip,phy-grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the syscon managing the phy "general register files"
+> +
+> +  rockchip,pipe-grf:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description: phandle to the syscon managing the pipe "general register files"
+> +
+> +  rockchip,pcie30-phymode:
+> +    $ref: '/schemas/types.yaml#/definitions/uint32'
+> +    description: |
+> +      use PHY_MODE_PCIE_AGGREGATION if not defined
+
+I don't understand the description. Do you mean here a case when the
+variable is missing?
+
+> +    minimum: 0x0
+> +    maximum: 0x4
+
+Please explain these values. Register values should not be part of
+bindings, but instead some logical behavior of hardware or its logic.
+
+> +
+> +
+
+Just one blank line.
+
+> +required:
+> +  - compatible
+> +  - reg
+> +  - rockchip,phy-grf
+
+phy-cells as well
+
+> +
+> +additionalProperties: false
+> +
+> +unevaluatedProperties: false
+
+Just one please, additionalProperties.
+
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/rk3568-cru.h>
+> +    pcie30phy: phy@fe8c0000 {
+> +      compatible = "rockchip,rk3568-pcie3-phy";
+> +      reg = <0x0 0xfe8c0000 0x0 0x20000>;
+> +      #phy-cells = <0>;
+> +      clocks = <&pmucru CLK_PCIE30PHY_REF_M>, <&pmucru CLK_PCIE30PHY_REF_N>,
+> +       <&cru PCLK_PCIE30PHY>;
+
+Align the entry with opening '<'. Usually the most readable is one clock
+per line.
+
+> +      clock-names = "refclk_m", "refclk_n", "pclk";
+> +      resets = <&cru SRST_PCIE30PHY>;
+> +      reset-names = "phy";
+> +      rockchip,phy-grf = <&pcie30_phy_grf>;
+> +    };
+
+
+Best regards,
+Krzysztof

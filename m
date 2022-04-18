@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8858C504FC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4F15054B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238053AbiDRMPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42534 "EHLO
+        id S237029AbiDRNPg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:15:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236080AbiDRMP1 (ORCPT
+        with ESMTP id S241007AbiDRM6Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:15:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD211A829;
-        Mon, 18 Apr 2022 05:12:48 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2851D24970;
+        Mon, 18 Apr 2022 05:38:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 790FF60F07;
-        Mon, 18 Apr 2022 12:12:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5363FC385A7;
-        Mon, 18 Apr 2022 12:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650283967;
-        bh=sTDHUW8H0Ju0SV7mP2T0ccSD+m9Wyqkx8gNkRMj7XuA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E+HI4BvBiOBx8bp1xWUOYDFCgyTltZVUIUBGmnsrzDETzHjyJWg5Ji2+mOuaJ4gXo
-         80R/HdIt1py897GU53mJ+a3spXGgkcdA33nkaLX2cj8Ns2KSMv89sOaKPbAYW7WKD0
-         CPzz9Y97vVBYe88R6rd2XDlbttF33OrlOK06waRoH8XyJLbIwVtKeiCfquqvyP0qvK
-         VnSWyj+x3sx6hWQ9wvHgXaXEbPEFMi2uQEPj/nZMFUMIHZqBYwsDxdhFCEX2wAPmYy
-         Bg+CQr4SFsZa/g9EFsDeJ8ggtgKe52vh8ss6dyHC1ATdHi8MPhmc1jHfDvgf0KuKTb
-         4GIAkbtCDfifA==
-Date:   Mon, 18 Apr 2022 20:12:41 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-Cc:     linux-amarula@amarulasolutions.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Joakim Zhang <qiangqing.zhang@nxp.com>,
-        Li Jun <jun.li@nxp.com>, Richard Zhu <hongxing.zhu@nxp.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] arm64: dts: imx8mm-evk: add pwm1/backlight support
-Message-ID: <20220418121241.GL391514@dragon>
-References: <20220413213313.11511-1-tommaso.merciai@amarulasolutions.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A256B80EDB;
+        Mon, 18 Apr 2022 12:38:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5B2CC385A1;
+        Mon, 18 Apr 2022 12:38:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650285508;
+        bh=13uqSbcFy9CU1E4qNH4I2MjFXcw2DKhAZLaXAqPt79c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=YxJoGzNBKTkruwEcgN0Yrxa/gNWuuWqLCvr1nCuRduJCqmX+AEKz+bAmQg3AhpQd9
+         jQKUK1hZMp8tIDjJntVNBPbdX04LMVT/5rnf7bkF6Jx5AQt3Vay6zbcC6Dd6QvoTG4
+         zdhJExiL0cxXIzfiodFnjY3EAzjHcaI0KyEWrBUA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 039/105] cifs: potential buffer overflow in handling symlinks
+Date:   Mon, 18 Apr 2022 14:12:41 +0200
+Message-Id: <20220418121147.586348885@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220413213313.11511-1-tommaso.merciai@amarulasolutions.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,13 +57,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 11:33:11PM +0200, Tommaso Merciai wrote:
-> Add pwm1/backlight support nodes for imx8mm_evk board.
-> Align with u-boot dts
-> 
-> References:
->  - https://patchwork.ozlabs.org/project/uboot/patch/20220326111911.13720-9-tommaso.merciai@amarulasolutions.com/
-> 
-> Signed-off-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
 
-Applied, thanks!
+[ Upstream commit 64c4a37ac04eeb43c42d272f6e6c8c12bfcf4304 ]
+
+Smatch printed a warning:
+	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
+	__memcpy() 'dctx->buf' too small (16 vs u32max)
+
+It's caused because Smatch marks 'link_len' as untrusted since it comes
+from sscanf(). Add a check to ensure that 'link_len' is not larger than
+the size of the 'link_str' buffer.
+
+Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
+Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ fs/cifs/link.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/cifs/link.c b/fs/cifs/link.c
+index 94dab4309fbb..85d30fef98a2 100644
+--- a/fs/cifs/link.c
++++ b/fs/cifs/link.c
+@@ -97,6 +97,9 @@ parse_mf_symlink(const u8 *buf, unsigned int buf_len, unsigned int *_link_len,
+ 	if (rc != 1)
+ 		return -EINVAL;
+ 
++	if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
++		return -EINVAL;
++
+ 	rc = symlink_hash(link_len, link_str, md5_hash);
+ 	if (rc) {
+ 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+-- 
+2.35.1
+
+
+

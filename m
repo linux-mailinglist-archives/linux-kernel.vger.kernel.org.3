@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED257505908
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232E150597B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:19:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245395AbiDRONx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45676 "EHLO
+        id S1344057AbiDROUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244180AbiDRN5J (ORCPT
+        with ESMTP id S244922AbiDROCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 290B82AC5C;
-        Mon, 18 Apr 2022 06:06:13 -0700 (PDT)
+        Mon, 18 Apr 2022 10:02:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967D010D;
+        Mon, 18 Apr 2022 06:09:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B9D3B60EF6;
-        Mon, 18 Apr 2022 13:06:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A3DC385A7;
-        Mon, 18 Apr 2022 13:06:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D61BB60F5B;
+        Mon, 18 Apr 2022 13:08:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5DDBC385A1;
+        Mon, 18 Apr 2022 13:08:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287172;
-        bh=UQMJBEqSEzRA2WC3QzBiQD3uGBerdW8gVgMOUOvXT4U=;
+        s=korg; t=1650287334;
+        bh=Gl4CpDpYBSs+GVaD9xzRWE0zGENQQBpLb5YM7JkpmkA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V7KpqmBVpYGRoKjsVUiHV4VFhTEZNsZksXRzR04slGo//i9bK+Bh3/Jt5lB83PTKA
-         RthpL2TMK4+BDe8k+wb3/V8uFN2R0/w8RICFlAOMaj8dmwFk0IiOQi7h2+IBbgmc8Z
-         V/Rza2t/3V4sm99lFiAZG06JRD4vs7KCawIK2khQ=
+        b=2Ze0nYr9BcriulTIJT+a/sSgOiqm+wdM6ibude07SrmF2fKD0sOKmNgfxu5neVVA+
+         +SNQl4Vtb2DWhQRpuljPHuMubba6IlLkSbA8cIDguUP4PQHMXK5ShwZPvPxHAEowvb
+         mvSsbRXcoDg4wY3Ry+t/K0hz2t4qqyKqWMTpGLg0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 077/218] mtd: onenand: Check for error irq
-Date:   Mon, 18 Apr 2022 14:12:23 +0200
-Message-Id: <20220418121201.811247206@linuxfoundation.org>
+        stable@vger.kernel.org, Maxime Ripard <maxime@cerno.tech>,
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 078/218] drm/edid: Dont clear formats if using deep color
+Date:   Mon, 18 Apr 2022 14:12:24 +0200
+Message-Id: <20220418121201.838745973@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,45 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Maxime Ripard <maxime@cerno.tech>
 
-[ Upstream commit 3e68f331c8c759c0daa31cc92c3449b23119a215 ]
+[ Upstream commit 75478b3b393bcbdca4e6da76fe3a9f1a4133ec5d ]
 
-For the possible failure of the platform_get_irq(), the returned irq
-could be error number and will finally cause the failure of the
-request_irq().
-Consider that platform_get_irq() can now in certain cases return
--EPROBE_DEFER, and the consequences of letting request_irq() effectively
-convert that into -EINVAL, even at probe time rather than later on.
-So it might be better to check just now.
+The current code, when parsing the EDID Deep Color depths, that the
+YUV422 cannot be used, referring to the HDMI 1.3 Specification.
 
-Fixes: 2c22120fbd01 ("MTD: OneNAND: interrupt based wait support")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220104162658.1988142-1-jiasheng@iscas.ac.cn
+This specification, in its section 6.2.4, indeed states:
+
+  For each supported Deep Color mode, RGB 4:4:4 shall be supported and
+  optionally YCBCR 4:4:4 may be supported.
+
+  YCBCR 4:2:2 is not permitted for any Deep Color mode.
+
+This indeed can be interpreted like the code does, but the HDMI 1.4
+specification further clarifies that statement in its section 6.2.4:
+
+  For each supported Deep Color mode, RGB 4:4:4 shall be supported and
+  optionally YCBCR 4:4:4 may be supported.
+
+  YCBCR 4:2:2 is also 36-bit mode but does not require the further use
+  of the Deep Color modes described in section 6.5.2 and 6.5.3.
+
+This means that, even though YUV422 can be used with 12 bit per color,
+it shouldn't be treated as a deep color mode.
+
+This is also broken with YUV444 if it's supported by the display, but
+DRM_EDID_HDMI_DC_Y444 isn't set. In such a case, the code will clear
+color_formats of the YUV444 support set previously in
+drm_parse_cea_ext(), but will not set it back.
+
+Since the formats supported are already setup properly in
+drm_parse_cea_ext(), let's just remove the code modifying the formats in
+drm_parse_hdmi_deep_color_info()
+
+Fixes: d0c94692e0a3 ("drm/edid: Parse and handle HDMI deep color modes.")
+Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220120151625.594595-3-maxime@cerno.tech
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/onenand/generic.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/drm_edid.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-diff --git a/drivers/mtd/onenand/generic.c b/drivers/mtd/onenand/generic.c
-index 125da34d8ff9..23a878e7974e 100644
---- a/drivers/mtd/onenand/generic.c
-+++ b/drivers/mtd/onenand/generic.c
-@@ -58,7 +58,12 @@ static int generic_onenand_probe(struct platform_device *pdev)
+diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
+index b07b32eb0c4b..6f93250518e3 100644
+--- a/drivers/gpu/drm/drm_edid.c
++++ b/drivers/gpu/drm/drm_edid.c
+@@ -3791,16 +3791,8 @@ static void drm_parse_hdmi_deep_color_info(struct drm_connector *connector,
+ 		  connector->name, dc_bpc);
+ 	info->bpc = dc_bpc;
+ 
+-	/*
+-	 * Deep color support mandates RGB444 support for all video
+-	 * modes and forbids YCRCB422 support for all video modes per
+-	 * HDMI 1.3 spec.
+-	 */
+-	info->color_formats = DRM_COLOR_FORMAT_RGB444;
+-
+ 	/* YCRCB444 is optional according to spec. */
+ 	if (hdmi[6] & DRM_EDID_HDMI_DC_Y444) {
+-		info->color_formats |= DRM_COLOR_FORMAT_YCRCB444;
+ 		DRM_DEBUG("%s: HDMI sink does YCRCB444 in deep color.\n",
+ 			  connector->name);
  	}
- 
- 	info->onenand.mmcontrol = pdata ? pdata->mmcontrol : NULL;
--	info->onenand.irq = platform_get_irq(pdev, 0);
-+
-+	err = platform_get_irq(pdev, 0);
-+	if (err < 0)
-+		goto out_iounmap;
-+
-+	info->onenand.irq = err;
- 
- 	info->mtd.dev.parent = &pdev->dev;
- 	info->mtd.priv = &info->onenand;
 -- 
 2.34.1
 

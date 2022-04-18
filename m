@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D4505054CE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 890855054C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242811AbiDRNTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:19:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S242703AbiDRNXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242571AbiDRNAK (ORCPT
+        with ESMTP id S241609AbiDRNDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:00:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2C7C31368;
-        Mon, 18 Apr 2022 05:41:37 -0700 (PDT)
+        Mon, 18 Apr 2022 09:03:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D88633A3B;
+        Mon, 18 Apr 2022 05:43:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5A028B80EDE;
-        Mon, 18 Apr 2022 12:41:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA20AC385A1;
-        Mon, 18 Apr 2022 12:41:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49108B80E4E;
+        Mon, 18 Apr 2022 12:43:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D9CC385A1;
+        Mon, 18 Apr 2022 12:43:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285695;
-        bh=X0t+T/PV6H7afRr7VxLAQykE69EkNrL4/q4ZlSkuoE4=;
+        s=korg; t=1650285834;
+        bh=m6wrNkZWmg7a6xR1Fe3uV67ua/HPGqp18ze6bgN7Ofs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=poeKVeqaXl3ARTvZrpqkaVTT4btJArzFmSW1PsLK3MCjJWfdK0bIkft6xAzcH4RAe
-         64LUsvSsGHq7Q+v7GbL0rT4Rng7Yqu22Rgp7O2h7p8/ywCpkHDGFWcdHhOAWmuHDbu
-         A4eJOYozOsxSGt1pEAwwjvnBK0fgNIZ2H47WN50g=
+        b=ElkFRu/h0PD7F0pAbJVKGxKTHEr+Z3bMXWI6QueIuabPoJvJSyjpGn3eCMyI/8iAZ
+         49D/1OMwoJa5ZDpE9CzchEgTRnLoe3VNxHlDTBYgmVPQk+iMCGksUDQo0wvHDS4UVj
+         Uqi7iugQQS8zIczkw2NJiIsjJOSCLzjmec49KEqI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
-        Sven Peter <sven@svenpeter.dev>, Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.10 093/105] i2c: pasemi: Wait for write xfers to finish
-Date:   Mon, 18 Apr 2022 14:13:35 +0200
-Message-Id: <20220418121149.276158364@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>
+Subject: [PATCH 5.4 39/63] KVM: Dont create VM debugfs files outside of the VM directory
+Date:   Mon, 18 Apr 2022 14:13:36 +0200
+Message-Id: <20220418121136.835516666@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,50 +54,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Povišer <povik+lin@cutebit.org>
+From: Oliver Upton <oupton@google.com>
 
-commit bd8963e602c77adc76dbbbfc3417c3cf14fed76b upstream.
+commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
 
-Wait for completion of write transfers before returning from the driver.
-At first sight it may seem advantageous to leave write transfers queued
-for the controller to carry out on its own time, but there's a couple of
-issues with it:
+Unfortunately, there is no guarantee that KVM was able to instantiate a
+debugfs directory for a particular VM. To that end, KVM shouldn't even
+attempt to create new debugfs files in this case. If the specified
+parent dentry is NULL, debugfs_create_file() will instantiate files at
+the root of debugfs.
 
- * Driver doesn't check for FIFO space.
+For arm64, it is possible to create the vgic-state file outside of a
+VM directory, the file is not cleaned up when a VM is destroyed.
+Nonetheless, the corresponding struct kvm is freed when the VM is
+destroyed.
 
- * The queued writes can complete while the driver is in its I2C read
-   transfer path which means it will get confused by the raising of
-   XEN (the 'transaction ended' signal). This can cause a spurious
-   ENODATA error due to premature reading of the MRXFIFO register.
+Nip the problem in the bud for all possible errant debugfs file
+creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
+debugfs_create_file() will fail instead of creating the file in the root
+directory.
 
-Adding the wait fixes some unreliability issues with the driver. There's
-some efficiency cost to it (especially with pasemi_smb_waitready doing
-its polling), but that will be alleviated once the driver receives
-interrupt support.
-
-Fixes: beb58aa39e6e ("i2c: PA Semi SMBus driver")
-Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Cc: stable@kernel.org
+Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
+Signed-off-by: Oliver Upton <oupton@google.com>
+Signed-off-by: Marc Zyngier <maz@kernel.org>
+Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/i2c/busses/i2c-pasemi.c |    6 ++++++
- 1 file changed, 6 insertions(+)
+ virt/kvm/kvm_main.c |   10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
---- a/drivers/i2c/busses/i2c-pasemi.c
-+++ b/drivers/i2c/busses/i2c-pasemi.c
-@@ -137,6 +137,12 @@ static int pasemi_i2c_xfer_msg(struct i2
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -623,7 +623,7 @@ static void kvm_destroy_vm_debugfs(struc
+ {
+ 	int i;
  
- 		TXFIFO_WR(smbus, msg->buf[msg->len-1] |
- 			  (stop ? MTXFIFO_STOP : 0));
+-	if (!kvm->debugfs_dentry)
++	if (IS_ERR(kvm->debugfs_dentry))
+ 		return;
+ 
+ 	debugfs_remove_recursive(kvm->debugfs_dentry);
+@@ -643,6 +643,12 @@ static int kvm_create_vm_debugfs(struct
+ 	struct kvm_stat_data *stat_data;
+ 	struct kvm_stats_debugfs_item *p;
+ 
++	/*
++	 * Force subsequent debugfs file creations to fail if the VM directory
++	 * is not created.
++	 */
++	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
 +
-+		if (stop) {
-+			err = pasemi_smb_waitready(smbus);
-+			if (err)
-+				goto reset_out;
-+		}
- 	}
+ 	if (!debugfs_initialized())
+ 		return 0;
  
- 	return 0;
+@@ -4399,7 +4405,7 @@ static void kvm_uevent_notify_change(uns
+ 	}
+ 	add_uevent_var(env, "PID=%d", kvm->userspace_pid);
+ 
+-	if (kvm->debugfs_dentry) {
++	if (!IS_ERR(kvm->debugfs_dentry)) {
+ 		char *tmp, *p = kmalloc(PATH_MAX, GFP_KERNEL_ACCOUNT);
+ 
+ 		if (p) {
 
 

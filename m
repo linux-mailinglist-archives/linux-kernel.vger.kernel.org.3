@@ -2,202 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 025B7504AB7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E29D504ABB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:57:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235697AbiDRB4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 21:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S235744AbiDRB7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 21:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235610AbiDRB4W (ORCPT
+        with ESMTP id S231700AbiDRB7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 21:56:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F9C7183A3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 18:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650246824;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TmgtMzqaKnL8aPpoTFZVoZARNQjGgBGisAlqoiEq6pY=;
-        b=UUcvn0a95nOMcucVI8oruihUvWBg1myNUOIT/LWaZFirGcbTXkvNXtLzWe8DAXyUniDiUg
-        JdukxniV3Tz/OtZn+GvWLIC2Et3fU9MPW2Kr46uQKOwULjoTYI3i8aUHPHeykltCFqxAoi
-        4ivBtK2ZocHve69SPMPInxvUbQx2iFA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-116-JLpaGNtRMqOds3ODpEuqrg-1; Sun, 17 Apr 2022 21:53:41 -0400
-X-MC-Unique: JLpaGNtRMqOds3ODpEuqrg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37AA78001EA;
-        Mon, 18 Apr 2022 01:53:40 +0000 (UTC)
-Received: from localhost (ovpn-12-21.pek2.redhat.com [10.72.12.21])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id BBE2E2029F8F;
-        Mon, 18 Apr 2022 01:53:35 +0000 (UTC)
-Date:   Mon, 18 Apr 2022 09:53:32 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Coiby Xu <coxu@redhat.com>
-Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
-        Michal Suchanek <msuchanek@suse.de>,
-        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
-        "Eric W . Biederman" <ebiederm@xmission.com>,
-        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
-        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-        stable@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Yinghai Lu <yinghai@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6 2/4] kexec, KEYS: make the code in
- bzImage64_verify_sig generic
-Message-ID: <YlzChw5kPOlPmK9Z@MiWiFi-R3L-srv>
-References: <20220414014344.228523-1-coxu@redhat.com>
- <20220414014344.228523-3-coxu@redhat.com>
+        Sun, 17 Apr 2022 21:59:44 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7EF18397;
+        Sun, 17 Apr 2022 18:57:06 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id s70so3568393qke.8;
+        Sun, 17 Apr 2022 18:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x6skCzjnPnfmaS7HpmFApF1dSN6+QpLWVgexcP1E8vQ=;
+        b=Gp4O0bN2vCo+5nkLdlS2Bx/PD+7K7u0tRutLBkwTlr8udDd9nOP9Tyt4TAu0+zge0a
+         y8XAbrcZJssNfj/+1UdeCddGXWcnYlCT1zxhwXDsUk1kLYX4U9w1T63Gh7Lo1uWz5ass
+         azHU/KB1oDmC/K7nMiO2/1FwP9XUy6Rt7Nhd7BL7jHSlNjCtJBvjGK2tsjyghRZtc/kH
+         TU6ADYsjFyy0+Nq4+4NgTQXpK3ZI37a1I3kDUNxZv67tpl2xGLAQJns9XgHZT6GmesCK
+         iN7VqZ6PaS+5rTXl1AVmJNAjU0M4+boZwrSC3Ath7d7vnImjDmr7j+NQ6/NgUtRsZHrH
+         GX9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=x6skCzjnPnfmaS7HpmFApF1dSN6+QpLWVgexcP1E8vQ=;
+        b=khFA9fWlSzh0/1loN/OHAIrRgUkExA1eGbGqfHWrHfhtlxICk6Cp+5R1+RNMwBIsvG
+         qFYF2apyMXzjPSE8F3VQy4WRZFVYKc6p5FdvoFwUdaJMlgg5zH+PxEezkn1wa6kA4yux
+         9VxcfXXKosbbQh1Nf0xOVwBixhEEWx8CkV4h4nU76uXznViEigNXBPPIUOsZ+RQnsRDq
+         li+f6iHNyxuGdvteKKFc02iaJjrnivfKu53s+rX2O8adHvtzQRIoD3kGSFxGPcVWyzrq
+         t9zOXsZ+t2mut9xpUk+r0CzcCqJNRJfRLxnHCODnPCD2uNi0NNxPl6B61v5BTcR6bQ6g
+         c/fA==
+X-Gm-Message-State: AOAM532xsNNYCyARMJSH7wQ8vl30VBInRG2xXq7g6RMZKSj1rHdQeM5m
+        C9Ox0OoLKRV5AHmOozE2kDY=
+X-Google-Smtp-Source: ABdhPJx768t4koiQGIMbqKbqc3sIQ8bjo19VJUdpyYcW9FuUBCH2Mn1+obKzgl4c+BGVG2Yo8tbzDw==
+X-Received: by 2002:a37:bf04:0:b0:69e:6243:f141 with SMTP id p4-20020a37bf04000000b0069e6243f141mr5340443qkf.229.1650247025944;
+        Sun, 17 Apr 2022 18:57:05 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id c79-20020ae9ed52000000b0069e9bfecd6esm994205qkg.98.2022.04.17.18.57.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Apr 2022 18:57:05 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: lv.ruyi@zte.com.cn
+To:     daniele.alessandrelli@intel.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lv Ruyi <lv.ruyi@zte.com.cn>, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] crypto: Make use of the helper function devm_platform_ioremap_resource()
+Date:   Mon, 18 Apr 2022 01:57:00 +0000
+Message-Id: <20220418015700.2556801-1-lv.ruyi@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220414014344.228523-3-coxu@redhat.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/14/22 at 09:43am, Coiby Xu wrote:
-> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
-> signature verify") adds platform keyring support on x86 kexec but not
-> arm64.
-> 
-> The code in bzImage64_verify_sig makes use of system keyrings including
-> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
-> verify signed kernel image as PE file. Make it generic so both x86_64
-> and arm64 can use it.
-> 
-> Fixes: 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
+From: Lv Ruyi <lv.ruyi@zte.com.cn>
 
-Will the code in bzImage64_verify_sig generic not being genric cause any
-issue? Asking this because I don't get why making code generic need add
-'Fixes' tag.
+Use the devm_platform_ioremap_resource() helper instead of calling
+platform_get_resource() and devm_ioremap_resource() separately.Make the
+code simpler without functional changes.
 
-> Cc: kexec@lists.infradead.org
-> Cc: keyrings@vger.kernel.org
-> Cc: linux-security-module@vger.kernel.org
-> Cc: stable@kernel.org
-> Reviewed-by: Michal Suchanek <msuchanek@suse.de>
-> Signed-off-by: Coiby Xu <coxu@redhat.com>
-> ---
->  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
->  include/linux/kexec.h             |  7 +++++++
->  kernel/kexec_file.c               | 17 +++++++++++++++++
->  3 files changed, 25 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
-> index 170d0fd68b1f..f299b48f9c9f 100644
-> --- a/arch/x86/kernel/kexec-bzimage64.c
-> +++ b/arch/x86/kernel/kexec-bzimage64.c
-> @@ -17,7 +17,6 @@
->  #include <linux/kernel.h>
->  #include <linux/mm.h>
->  #include <linux/efi.h>
-> -#include <linux/verification.h>
->  
->  #include <asm/bootparam.h>
->  #include <asm/setup.h>
-> @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
->  	return 0;
->  }
->  
-> -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
-> -{
-> -	int ret;
-> -
-> -	ret = verify_pefile_signature(kernel, kernel_len,
-> -				      VERIFY_USE_SECONDARY_KEYRING,
-> -				      VERIFYING_KEXEC_PE_SIGNATURE);
-> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> -		ret = verify_pefile_signature(kernel, kernel_len,
-> -					      VERIFY_USE_PLATFORM_KEYRING,
-> -					      VERIFYING_KEXEC_PE_SIGNATURE);
-> -	}
-> -	return ret;
-> -}
-> -#endif
-> -
->  const struct kexec_file_ops kexec_bzImage64_ops = {
->  	.probe = bzImage64_probe,
->  	.load = bzImage64_load,
->  	.cleanup = bzImage64_cleanup,
->  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
-> -	.verify_sig = bzImage64_verify_sig,
-> +	.verify_sig = kexec_kernel_verify_pe_sig,
->  #endif
->  };
-> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
-> index 413235c6c797..da83abfc628b 100644
-> --- a/include/linux/kexec.h
-> +++ b/include/linux/kexec.h
-> @@ -19,6 +19,7 @@
->  #include <asm/io.h>
->  
->  #include <uapi/linux/kexec.h>
-> +#include <linux/verification.h>
->  
->  /* Location of a reserved region to hold the crash kernel.
->   */
-> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
->  				 const Elf_Shdr *relsec,
->  				 const Elf_Shdr *symtab);
->  int arch_kimage_file_post_load_cleanup(struct kimage *image);
-> +#ifdef CONFIG_KEXEC_SIG
-> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> +int kexec_kernel_verify_pe_sig(const char *kernel,
-> +				    unsigned long kernel_len);
-> +#endif
-> +#endif
->  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
->  
->  extern int kexec_add_buffer(struct kexec_buf *kbuf);
-> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
-> index 3720435807eb..754885b96aab 100644
-> --- a/kernel/kexec_file.c
-> +++ b/kernel/kexec_file.c
-> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
->  }
->  
->  #ifdef CONFIG_KEXEC_SIG
-> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
-> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
-> +{
-> +	int ret;
-> +
-> +	ret = verify_pefile_signature(kernel, kernel_len,
-> +				      VERIFY_USE_SECONDARY_KEYRING,
-> +				      VERIFYING_KEXEC_PE_SIGNATURE);
-> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
-> +		ret = verify_pefile_signature(kernel, kernel_len,
-> +					      VERIFY_USE_PLATFORM_KEYRING,
-> +					      VERIFYING_KEXEC_PE_SIGNATURE);
-> +	}
-> +	return ret;
-> +}
-> +#endif
-> +
->  static int kexec_image_verify_sig(struct kimage *image, void *buf,
->  		unsigned long buf_len)
->  {
-> -- 
-> 2.34.1
-> 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+---
+ drivers/crypto/keembay/keembay-ocs-aes-core.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
+
+diff --git a/drivers/crypto/keembay/keembay-ocs-aes-core.c b/drivers/crypto/keembay/keembay-ocs-aes-core.c
+index e2a39fdaf623..9953f5590ac4 100644
+--- a/drivers/crypto/keembay/keembay-ocs-aes-core.c
++++ b/drivers/crypto/keembay/keembay-ocs-aes-core.c
+@@ -1598,7 +1598,6 @@ static int kmb_ocs_aes_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct ocs_aes_dev *aes_dev;
+-	struct resource *aes_mem;
+ 	int rc;
+ 
+ 	aes_dev = devm_kzalloc(dev, sizeof(*aes_dev), GFP_KERNEL);
+@@ -1616,13 +1615,7 @@ static int kmb_ocs_aes_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	/* Get base register address. */
+-	aes_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	if (!aes_mem) {
+-		dev_err(dev, "Could not retrieve io mem resource\n");
+-		return -ENODEV;
+-	}
+-
+-	aes_dev->base_reg = devm_ioremap_resource(&pdev->dev, aes_mem);
++	aes_dev->base_reg = devm_platform_ioremap_resource(pdev, 0);
+ 	if (IS_ERR(aes_dev->base_reg))
+ 		return PTR_ERR(aes_dev->base_reg);
+ 
+-- 
+2.25.1
 

@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4638A505442
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D58D6505248
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbiDRNFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41820 "EHLO
+        id S239512AbiDRMht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:37:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240419AbiDRMzC (ORCPT
+        with ESMTP id S239129AbiDRMca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D32D21BE8E;
-        Mon, 18 Apr 2022 05:35:34 -0700 (PDT)
+        Mon, 18 Apr 2022 08:32:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BB425C63;
+        Mon, 18 Apr 2022 05:24:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70549611AD;
-        Mon, 18 Apr 2022 12:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805C0C385A1;
-        Mon, 18 Apr 2022 12:35:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8057DB80EDC;
+        Mon, 18 Apr 2022 12:24:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1627C385A8;
+        Mon, 18 Apr 2022 12:24:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285333;
-        bh=uiy+onWZJlI1b7zdv8YW06FhqRpBBM8vOy6Sxuf3GMc=;
+        s=korg; t=1650284655;
+        bh=3bHy/wYQTMAAnmXKp8hsCqv0GdHuis91S7ttaakptnE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1XFBHwjWejRUlKw9fbpODeydugxSx+zpq38jHkNgCfv1sL40pQLMjYGYFRT7QBA9+
-         xC5ggCtfdT0Pk620F5n0GkUcMhJdHdvxF0ZVKFoG5XK1DEKLemw/BN6cm1YyuHQSdt
-         XnF9cVgoYuA0t3gLY9l/zVDmQp6rvcC4ciI7OEa0=
+        b=JJSrVOnisbw873t5LLTsHKWrmoNl3JIH1Cc8C0TUW5go8LMJ5Vu0BuBOggp6xBpev
+         aVZexuCcbnnR1PhWWjTbzdZoB4PFOghaV9IAf4T0euFtnUQ/g9REnhib8cdQur/of+
+         C2ygbksQk4vUWGGhO2QMJV4da6ml7Sef48Nw4b/c=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wayne Lin <Wayne.Lin@amd.com>,
-        Alex Hung <alex.hung@amd.com>, Roman Li <Roman.Li@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 135/189] drm/amd/display: Fix allocate_mst_payload assert on resume
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.17 186/219] gcc-plugins: latent_entropy: use /dev/urandom
 Date:   Mon, 18 Apr 2022 14:12:35 +0200
-Message-Id: <20220418121205.132416669@linuxfoundation.org>
+Message-Id: <20220418121212.085302880@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,46 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Li <Roman.Li@amd.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit f4346fb3edf7720db3f7f5e1cab1f667cd024280 ]
+commit c40160f2998c897231f8454bf797558d30a20375 upstream.
 
-[Why]
-On resume we do link detection for all non-MST connectors.
-MST is handled separately. However the condition for telling
-if connector is on mst branch is not enough for mst hub case.
-Link detection for mst branch link leads to mst topology reset.
-That causes assert in dc_link_allocate_mst_payload()
+While the latent entropy plugin mostly doesn't derive entropy from
+get_random_const() for measuring the call graph, when __latent_entropy is
+applied to a constant, then it's initialized statically to output from
+get_random_const(). In that case, this data is derived from a 64-bit
+seed, which means a buffer of 512 bits doesn't really have that amount
+of compile-time entropy.
 
-[How]
-Use link type as indicator for mst link.
+This patch fixes that shortcoming by just buffering chunks of
+/dev/urandom output and doling it out as requested.
 
-Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
-Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Roman Li <Roman.Li@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+At the same time, it's important that we don't break the use of
+-frandom-seed, for people who want the runtime benefits of the latent
+entropy plugin, while still having compile-time determinism. In that
+case, we detect whether gcc's set_random_seed() has been called by
+making a call to get_random_seed(noinit=true) in the plugin init
+function, which is called after set_random_seed() is called but before
+anything that calls get_random_seed(noinit=false), and seeing if it's
+zero or not. If it's not zero, we're in deterministic mode, and so we
+just generate numbers with a basic xorshift prng.
+
+Note that we don't detect if -frandom-seed is being used using the
+documented local_tick variable, because it's assigned via:
+   local_tick = (unsigned) tv.tv_sec * 1000 + tv.tv_usec / 1000;
+which may well overflow and become -1 on its own, and so isn't
+reliable: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105171
+
+[kees: The 256 byte rnd_buf size was chosen based on average (250),
+ median (64), and std deviation (575) bytes of used entropy for a
+ defconfig x86_64 build]
+
+Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
+Cc: stable@vger.kernel.org
+Cc: PaX Team <pageexec@freemail.hu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220405222815.21155-1-Jason@zx2c4.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ scripts/gcc-plugins/latent_entropy_plugin.c |   44 +++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 7e9e2eb85eca..ec75613618b1 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -2296,7 +2296,8 @@ static int dm_resume(void *handle)
- 		 * this is the case when traversing through already created
- 		 * MST connectors, should be skipped
- 		 */
--		if (aconnector->mst_port)
-+		if (aconnector->dc_link &&
-+		    aconnector->dc_link->type == dc_connection_mst_branch)
- 			continue;
+--- a/scripts/gcc-plugins/latent_entropy_plugin.c
++++ b/scripts/gcc-plugins/latent_entropy_plugin.c
+@@ -86,25 +86,31 @@ static struct plugin_info latent_entropy
+ 	.help		= "disable\tturn off latent entropy instrumentation\n",
+ };
  
- 		mutex_lock(&aconnector->hpd_lock);
--- 
-2.35.1
-
+-static unsigned HOST_WIDE_INT seed;
+-/*
+- * get_random_seed() (this is a GCC function) generates the seed.
+- * This is a simple random generator without any cryptographic security because
+- * the entropy doesn't come from here.
+- */
++static unsigned HOST_WIDE_INT deterministic_seed;
++static unsigned HOST_WIDE_INT rnd_buf[32];
++static size_t rnd_idx = ARRAY_SIZE(rnd_buf);
++static int urandom_fd = -1;
++
+ static unsigned HOST_WIDE_INT get_random_const(void)
+ {
+-	unsigned int i;
+-	unsigned HOST_WIDE_INT ret = 0;
+-
+-	for (i = 0; i < 8 * sizeof(ret); i++) {
+-		ret = (ret << 1) | (seed & 1);
+-		seed >>= 1;
+-		if (ret & 1)
+-			seed ^= 0xD800000000000000ULL;
++	if (deterministic_seed) {
++		unsigned HOST_WIDE_INT w = deterministic_seed;
++		w ^= w << 13;
++		w ^= w >> 7;
++		w ^= w << 17;
++		deterministic_seed = w;
++		return deterministic_seed;
+ 	}
+ 
+-	return ret;
++	if (urandom_fd < 0) {
++		urandom_fd = open("/dev/urandom", O_RDONLY);
++		gcc_assert(urandom_fd >= 0);
++	}
++	if (rnd_idx >= ARRAY_SIZE(rnd_buf)) {
++		gcc_assert(read(urandom_fd, rnd_buf, sizeof(rnd_buf)) == sizeof(rnd_buf));
++		rnd_idx = 0;
++	}
++	return rnd_buf[rnd_idx++];
+ }
+ 
+ static tree tree_get_random_const(tree type)
+@@ -537,8 +543,6 @@ static void latent_entropy_start_unit(vo
+ 	tree type, id;
+ 	int quals;
+ 
+-	seed = get_random_seed(false);
+-
+ 	if (in_lto_p)
+ 		return;
+ 
+@@ -573,6 +577,12 @@ __visible int plugin_init(struct plugin_
+ 	const struct plugin_argument * const argv = plugin_info->argv;
+ 	int i;
+ 
++	/*
++	 * Call get_random_seed() with noinit=true, so that this returns
++	 * 0 in the case where no seed has been passed via -frandom-seed.
++	 */
++	deterministic_seed = get_random_seed(true);
++
+ 	static const struct ggc_root_tab gt_ggc_r_gt_latent_entropy[] = {
+ 		{
+ 			.base = &latent_entropy_decl,
 
 

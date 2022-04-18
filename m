@@ -2,121 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7835B504B28
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAB1504B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235939AbiDRDHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 23:07:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35012 "EHLO
+        id S235954AbiDRDKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 23:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235941AbiDRDHb (ORCPT
+        with ESMTP id S235950AbiDRDKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 23:07:31 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8D4B12;
-        Sun, 17 Apr 2022 20:04:53 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id md4so11933986pjb.4;
-        Sun, 17 Apr 2022 20:04:53 -0700 (PDT)
+        Sun, 17 Apr 2022 23:10:11 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9411918B0D;
+        Sun, 17 Apr 2022 20:07:33 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id f7so4406038uap.4;
+        Sun, 17 Apr 2022 20:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=MxqIUjNDmotUpRJvqMX8HiRsI8PcgO9pEtW2E7+We90=;
-        b=YqY1IpEAJtY+3nSKPKovbX5ZPmB16lHTBhps7tBI5vu7uRBP7DyQW0OBOeRSOJDOn+
-         0ctKzKpzcQrGT0CvL014ak+s7bBvi4a2CsEfzfNgxKQx0KwryTGuqW41B6qcXdLyLHuX
-         L5yWrUrNqmcI9tLvM4o+DuVY9kg8G7EEVaXrmowaWOrnXobd6koUunt8Nou+iInsahHq
-         +yNKAO51p7Ti1HP7o7NWUMDr73mB66aY5o+XSnhSodHYN+Kn62U4J0dWnueB3nWQ4AWw
-         l08EQ3IhEbMApmH00CrWqw9kNQ30sQPGlKBScnJGBrsCeoLzoqod0z+qv2PHcynSm0Oj
-         GidQ==
+         :cc:content-transfer-encoding;
+        bh=tNjjyGaUEQ8lUKWlzMg1jMDbdSXdCmUFakLqiNuNiG8=;
+        b=mVWSz28HnIW7UGdwHQ9Pim8IwvN/k61x7XuAbnp6HBASWmnWsgHZFnJK9SoO/3TENd
+         qFw5XS5DkZtd2I0JG6EKulOKgQl0LOsmZ2qw9lMTT8yrUzAoojuIfpD8giPfiIO7U8+E
+         rXqBnA2MOD919ZaSbv9a+HpqK3c30BFuHmLPvQ2zfcTnP0C8mMkxskzknziFzMS3Qiu0
+         A9q5GlpfUayZ9nk8ZGjJocVDuGRYc/SOWIEvOINiMP2sTPfbVv36ZxkKFHSd8EEz5awS
+         xDGvMnYJhH+s3oPQviw6HmHV6mM73l6Ipx8WAHEuUnJ6rxH3JRsoXe6lf3k/mFgGOn71
+         L2Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=MxqIUjNDmotUpRJvqMX8HiRsI8PcgO9pEtW2E7+We90=;
-        b=lfPOgAEoZt9V2y+eD++O5AR6HeuAQV5QvvBwY7b7ibO5UyGKbh5EY7STl1s/baqAAg
-         gKnfRvRluHjPqG4UUWwa9135bQQsRswPZVuB8xEQkbylIli5pV6q/codPbEanns8AC4k
-         /tmf3kY/GL3ifYuAIR3Z5Jr/SSDoLgq7sPq3atNYIcSPTdRAVoP/Yn4PJ4xG+/KUkevb
-         68euZGLOyuWR8f2fEYknQX6eX5So8ZbysM1sA4Ia/m/3z0Q4X86Qld8oJQpgQouoEqqz
-         LJtUjipSVNf5rAkxzQiwp+9lR39qKghGKg2YN5U7d5EhO5NP/5KzqVQNBK8KlVZdgiOG
-         I8Qg==
-X-Gm-Message-State: AOAM531M+mB+VbxwnbGH4JNDViNFYmr2UyePFEHXAo2ZgTdT39LtQ1Xy
-        YDjb+IXIKgs5M4UVB4l6mUQxrFF1LfN0P8XRus11l2wOyLkCRQw=
-X-Google-Smtp-Source: ABdhPJzLwuwIwIsKQeNrnOR1eH70BULF3eMjhhDGorPZ/67ziabUCa8Bt5AjvyU66TFxRjL2ouuiqWiDVlNuMvGSADM=
-X-Received: by 2002:a17:902:b18d:b0:158:9e97:deee with SMTP id
- s13-20020a170902b18d00b001589e97deeemr9006742plr.31.1650251093000; Sun, 17
- Apr 2022 20:04:53 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=tNjjyGaUEQ8lUKWlzMg1jMDbdSXdCmUFakLqiNuNiG8=;
+        b=QnpAwUz7yQxvQRl8V3G7nMx/SxrX9WyZYTPmQ6Lrv+x3k3wzvzZQM1nU1fuOGu2kBt
+         vXl2e4hG370Xb5TO/9JMRLaBfcsp8FGA0wHwzFbyuftUw/VVD1GZ2ca0ZL35P0ZVHjLP
+         g6c5NbVJQRmHKj3wwdYsbPwdOSFZK7dhG/m8kSAese7zPzh7popr8T1X3xPg+p+mlnrp
+         nKUFX3qOmiIbw4QbWi0emiuGG9wNSFN21I9BOxnDe25Uq1CaMa56SG0LtDeJGY53phfs
+         E7FE5fW4KHpw7cKgkas4YSsnsu8+KMWOIkUCViXE6+UZ4KFrsF2q6L5XKdBxdg3Q1YGB
+         ZUag==
+X-Gm-Message-State: AOAM533raX4o0q2hZSDMKAkabOEm8OSBNoXsOXknsD6jSU0JSxN9b0PZ
+        iWKjHNYx+0CenmxAm6cWdxeH0JnFgbrs3jxEwPbMShpcKQvIcw==
+X-Google-Smtp-Source: ABdhPJzDlWT4b6XmkHk9RENmkRsTi5OYlhZMVY04k+uYdTNe0NBDTUr3NYQwuOaj6746OpaTNxAORnKjX0nLmE9rk7A=
+X-Received: by 2002:ab0:6f8f:0:b0:35d:5045:46c4 with SMTP id
+ f15-20020ab06f8f000000b0035d504546c4mr1856021uav.116.1650251252646; Sun, 17
+ Apr 2022 20:07:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220409062449.3752252-1-zheyuma97@gmail.com> <CA++WF2Np7Bk_qT68Uc3mrC38mN5p3fm9eVT7VA8NoX6=es2r2w@mail.gmail.com>
-In-Reply-To: <CA++WF2Np7Bk_qT68Uc3mrC38mN5p3fm9eVT7VA8NoX6=es2r2w@mail.gmail.com>
-From:   Zheyu Ma <zheyuma97@gmail.com>
-Date:   Mon, 18 Apr 2022 11:04:41 +0800
-Message-ID: <CAMhUBjkWcg4+YYynsd90jX1A+zp95tUUcLgYrTPAqSmbxM7TJA@mail.gmail.com>
-Subject: Re: [PATCH] wireless: ipw2x00: Refine the error handling of ipw2100_pci_init_one()
-To:     Stanislav Yakovlev <stas.yakovlev@gmail.com>
-Cc:     kvalo@kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>, pabeni@redhat.com,
-        wireless <linux-wireless@vger.kernel.org>,
-        netdev@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHp75Veo30c0BWb4Fykgvd-czSnEXsyA8wyMTeKQdS49=e5-nw@mail.gmail.com>
+ <20220417165208.39754-1-schspa@gmail.com> <CAHp75Vc8HwheQVOpcn_Lxk-bOOMLybr=m6OdO7mJ-vE9xywBLg@mail.gmail.com>
+In-Reply-To: <CAHp75Vc8HwheQVOpcn_Lxk-bOOMLybr=m6OdO7mJ-vE9xywBLg@mail.gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Mon, 18 Apr 2022 11:07:21 +0800
+Message-ID: <CAMA88Tr6NvfEiPYnt0A60GiQKiiT6LT7X83GRku-4PDcG2EtoA@mail.gmail.com>
+Subject: Re: [PATCH] gpio: use raw spinlock for gpio chip shadowed data
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
+        "hoan@os.amperecomputing.com" <hoan@os.amperecomputing.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "opendmb@gmail.com" <opendmb@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 2:40 AM Stanislav Yakovlev
-<stas.yakovlev@gmail.com> wrote:
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
 >
-> On Sat, 9 Apr 2022 at 02:25, Zheyu Ma <zheyuma97@gmail.com> wrote:
-> >
-> > The driver should release resources in reverse order, i.e., the
-> > resources requested first should be released last, and the driver
-> > should adjust the order of error handling code by this rule.
-> >
-> > Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
-> > ---
-> >  drivers/net/wireless/intel/ipw2x00/ipw2100.c | 34 +++++++++-----------
-> >  1 file changed, 16 insertions(+), 18 deletions(-)
-> >
-> [Skipped]
+>  Changelog:
+>  v1 -> v2:
+>          - Reduce the useless stacktrace.
+>          - Split to series of patches
 >
-> > @@ -6306,9 +6303,13 @@ static int ipw2100_pci_init_one(struct pci_dev *pci_dev,
-> >  out:
-> >         return err;
-> >
-> > -      fail_unlock:
-> > +fail_unlock:
-> >         mutex_unlock(&priv->action_mutex);
-> > -      fail:
-> > +fail:
-> > +       pci_release_regions(pci_dev);
-> > +fail_disable:
-> > +       pci_disable_device(pci_dev);
-> We can't move these functions before the following block.
+> Changelog usually goes after cutter =E2=80=98--- =E2=80=98 line.  Besides=
+ that you haven=E2=80=99t compiled your tree just after this patch.
 >
-> > +fail_dev:
-> >         if (dev) {
-> >                 if (registered >= 2)
-> >                         unregister_netdev(dev);
-> This block continues with a function call to ipw2100_hw_stop_adapter
-> which assumes that device is still accessible via pci bus.
 
-Thanks for your reminder, but the existing error handling does need to
-be revised, I got the following warning when the probing fails at
-pci_resource_flags():
+Yes, thanks for reminding me, I will fix it by upload another version
+of patch if there is no other problems.
 
-[   20.712160] WARNING: CPU: 1 PID: 462 at lib/iomap.c:44 pci_iounmap+0x40/0x50
-[   20.716583] RIP: 0010:pci_iounmap+0x40/0x50
-[   20.726342]  <TASK>
-[   20.726550]  ipw2100_pci_init_one+0x101/0x1ee0 [ipw2100]
+>  Link: https://lore.kernel.org/all/20220415165505.30383-1-schspa@gmail.co=
+m/
+>
+>  Signed-off-by: Schspa Shi <schspa@gmail.com>
+>  ---
+>   drivers/gpio/gpio-mmio.c    | 22 +++++++++++-----------
+>   include/linux/gpio/driver.h |  2 +-
+>
+> You can=E2=80=99t do it for one driver only. As I told it will require to=
+o much of additional churn to make this to be series.
+>
 
-Since I am not familiar with the ipw2100, could someone give me some
-advice to fix this.
+It seems I have misunderstood your "too much of additional churn". Can
+you explain it?
+The gpio-mmio.c and driver.h here are the basics of other gpio
+drivers. In my opinion, these two files
+belong to the basic code of gpio, and functions such as bgpio_init are
+declared in
+include/linux/gpio/driver.h and implemented in
+drivers/gpio/gpio-mmio.c. So there is no churn.
 
-Thanks,
-Zheyu Ma
+
+--
+Schspa Shi
+BRs

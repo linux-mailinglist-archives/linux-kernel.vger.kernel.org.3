@@ -2,66 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80F80505CE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBF4B505CD9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:52:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346633AbiDRQyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55778 "EHLO
+        id S1346485AbiDRQyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346522AbiDRQxy (ORCPT
+        with ESMTP id S1346530AbiDRQxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 12:53:54 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9D6DF33366
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9686C3337E
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650300671;
+        s=mimecast20190719; t=1650300672;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=3Z+DKCRf8I0VDKhczbT7dFWZdHYvbA+t2UZbUuCO6Ts=;
-        b=UyhO7NiyibcT3cmH82cTUJf9Mf8EPjMYuDN3X9KEF4rv134gSVoow15I6nmwllzkXdoYv5
-        iYAfTTkiPXqu/lDy1OtOaCRUYkjlP5ys5jyF2jO3UkbehOdJ/l2Iv2MKkrXB2VecLXV6NN
-        nGdfq2LKkGFeXbm3x8J7+t1l4ZJYPgs=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=x9Fz+Xc8RoGhISO17r8oqMWhPNYKVczvw/S/wtXruE8=;
+        b=TXc8k1lX28H+jxqwBqEF8/mSreSqlmRKLe0q63WejVhdL59POmuk6zXqJVS2v1k7X4Ld9Q
+        RTRp+fCjfNQgfcovV66hQ9k7jxIoi9TRflhlXfXaZpCqsLBESX8xisnfdtrXiM7C5umCyv
+        PBNeYfBNoB1vo/wGiIo55Mq25Bks9gI=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-230-ihUzUyyoO-uMBgaYwYy8MA-1; Mon, 18 Apr 2022 12:51:09 -0400
-X-MC-Unique: ihUzUyyoO-uMBgaYwYy8MA-1
-Received: by mail-qk1-f199.google.com with SMTP id m23-20020a05620a221700b006809e1fa4fdso10733423qkh.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:09 -0700 (PDT)
+ us-mta-58-wk0xCG6vN12dc_HJz4oq4g-1; Mon, 18 Apr 2022 12:51:11 -0400
+X-MC-Unique: wk0xCG6vN12dc_HJz4oq4g-1
+Received: by mail-qt1-f198.google.com with SMTP id s9-20020ac87589000000b002e1cfb25db9so2060767qtq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=3Z+DKCRf8I0VDKhczbT7dFWZdHYvbA+t2UZbUuCO6Ts=;
-        b=qfreXPYYBUCoInA6BVkTsQ901UJ+65Jg995uDeE67XEaIiVG057EYL5WFj6hqepdwZ
-         2alS7Ges3Vu9vI5QtUDXpGf/gYQPyfFyiSIOa8D50dIfWXiVEsXp/BZZmgGkStpCiBXc
-         7x7nm3Ht8Qp7/vE0Z3jCt+4IFCecOSQ7lI3XIQ2x7yV6maDVjcT9IxY46224KdjJRiqj
-         DnlgDExcey0thYajgVhVU4chv0Qa/Ka3ZxKF4hnZkPWFCTEYp9WY8WqXHUj9WId6+x3c
-         nMY/jiqiTQwfZnN/PVqcOOeLiIuUjxbX5Ffr1FN+7RCZ/UqzKeEnawLWiQlY3LGZ/kEJ
-         caPA==
-X-Gm-Message-State: AOAM531xrjDR/2UF3bmnxOmPl9Y8qfVglW5l4SySZR45hO8uyxdf11j1
-        AsKUI5WsesyEWq8AWqmRvS+7OquReVBU3QnVrSyU25yCuxv+R+AYw3BcspsOIoc+NXK73csUsk4
-        kIxxrpIRjTu5bL2GqbC/GNwyq
-X-Received: by 2002:a05:6214:5189:b0:446:5077:7f75 with SMTP id kl9-20020a056214518900b0044650777f75mr6152349qvb.37.1650300669303;
-        Mon, 18 Apr 2022 09:51:09 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyAY8Sj56hJ4OUrUe7do9WO80TQYnEhocgTEB6pUtL57k2idWMkKrSsRT1InFO4PNiKSRCiLQ==
-X-Received: by 2002:a05:6214:5189:b0:446:5077:7f75 with SMTP id kl9-20020a056214518900b0044650777f75mr6152339qvb.37.1650300669049;
-        Mon, 18 Apr 2022 09:51:09 -0700 (PDT)
+        bh=x9Fz+Xc8RoGhISO17r8oqMWhPNYKVczvw/S/wtXruE8=;
+        b=dBg39bdWPRQw/BDdgiqX5ye/5CJE7hXFIusVibfirY6o8m/RmqgUSgr+1pfnTvNqQG
+         /gLd0HfMJFaamONYsaWAbDMNql4HMJyf4ajJBR65OJBKHlpyfZZ6wwS5ectxREdrxcXk
+         MzjyDMW5ATTdqKvgh3V5Utw3k0u9ZNZ525idiTGo0E4z2uOQZP+pOW8RQlqKn2lB0qqZ
+         VWLQzH1sSghVcWbvWa1Mbj+WZnCwpmoL7KXBIfPT0+biMk5i+kmlXb+sunvPZHtU/lKS
+         DsTkm2x8ZexUzts7TMmNyD2fw3Bit5xRff3ilHKP5lkTdjC+ct0BlV8oadZQCsCPjE8C
+         gT7w==
+X-Gm-Message-State: AOAM532zrkULyGltP+F/0F3XRD9lzkcRQRnq6FIRNmvWj8gexyzotFkD
+        ynS+4QXmgWmHRObupEdekRfv5eem+q+yVdHHXlWg0+rVnbYq4kZ60svUFjfdVc5sPWus/+i+kZY
+        GekxS3VqEEDMbKuWDfwtvB3uD
+X-Received: by 2002:ac8:590e:0:b0:2e1:dcaf:bbb6 with SMTP id 14-20020ac8590e000000b002e1dcafbbb6mr7591137qty.644.1650300670762;
+        Mon, 18 Apr 2022 09:51:10 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwoacZs4E+r8OSfJFZkgztLmXpm2DEK+jp7Kds0Xtg7vwOt61QvoeNvi5Ah8ZbViMiVka4j/g==
+X-Received: by 2002:ac8:590e:0:b0:2e1:dcaf:bbb6 with SMTP id 14-20020ac8590e000000b002e1dcafbbb6mr7591122qty.644.1650300670509;
+        Mon, 18 Apr 2022 09:51:10 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id e15-20020ac8670f000000b002e22d9c756dsm7277059qtp.30.2022.04.18.09.51.07
+        by smtp.gmail.com with ESMTPSA id e15-20020ac8670f000000b002e22d9c756dsm7277059qtp.30.2022.04.18.09.51.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:51:08 -0700 (PDT)
+        Mon, 18 Apr 2022 09:51:10 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 11/25] objtool: Use offstr() to print address of missing ENDBR
-Date:   Mon, 18 Apr 2022 09:50:30 -0700
-Message-Id: <95d12e800c736a3f7d08d61dabb760b2d5251a8e.1650300597.git.jpoimboe@redhat.com>
+        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: [PATCH v2 12/25] objtool: Add option to print section addresses
+Date:   Mon, 18 Apr 2022 09:50:31 -0700
+Message-Id: <2cea4d5299d53d1a4c09212a6ad7820aa46fda7a.1650300597.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1650300597.git.jpoimboe@redhat.com>
 References: <cover.1650300597.git.jpoimboe@redhat.com>
@@ -78,27 +79,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+To help prevent objtool users from having to do math to convert function
+addresses to section addresses, and to help out with finding data
+addresses reported by IBT validation, add an option to print the section
+address in addition to the function address.
+
+Normal:
+
+  vmlinux.o: warning: objtool: fixup_exception()+0x2d1: unreachable instruction
+
+With '--sec-address':
+
+  vmlinux.o: warning: objtool: fixup_exception()+0x2d1 (.text+0x76c51): unreachable instruction
+
+Suggested-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
 ---
- tools/objtool/check.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ tools/objtool/builtin-check.c           |  1 +
+ tools/objtool/include/objtool/builtin.h |  1 +
+ tools/objtool/include/objtool/warn.h    | 31 ++++++++++++++-----------
+ 3 files changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 97026c1b4bd6..49d5f0986a52 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3219,9 +3219,8 @@ validate_ibt_reloc(struct objtool_file *file, struct reloc *reloc)
- static void warn_noendbr(const char *msg, struct section *sec, unsigned long offset,
- 			 struct instruction *dest)
+diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
+index 8c3eed5b67e4..6acfebd2c6ca 100644
+--- a/tools/objtool/builtin-check.c
++++ b/tools/objtool/builtin-check.c
+@@ -50,6 +50,7 @@ const struct option check_options[] = {
+ 	OPT_BOOLEAN(0, "module", &opts.module, "object is part of a kernel module"),
+ 	OPT_BOOLEAN(0, "no-fp", &opts.no_fp, "skip frame pointer validation"),
+ 	OPT_BOOLEAN(0, "no-unreachable", &opts.no_unreachable, "skip 'unreachable instruction' warnings"),
++	OPT_BOOLEAN(0, "sec-address", &opts.sec_address, "print section addresses in warnings"),
+ 	OPT_BOOLEAN(0, "stats", &opts.stats, "print statistics"),
+ 	OPT_BOOLEAN(0, "vmlinux", &opts.vmlinux, "vmlinux.o validation"),
+ 
+diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
+index 44548e24473c..e0972fbfa09e 100644
+--- a/tools/objtool/include/objtool/builtin.h
++++ b/tools/objtool/include/objtool/builtin.h
+@@ -28,6 +28,7 @@ struct opts {
+ 	bool module;
+ 	bool no_fp;
+ 	bool no_unreachable;
++	bool sec_address;
+ 	bool stats;
+ 	bool vmlinux;
+ };
+diff --git a/tools/objtool/include/objtool/warn.h b/tools/objtool/include/objtool/warn.h
+index c4bde3e2a79c..a3e79ae75f2e 100644
+--- a/tools/objtool/include/objtool/warn.h
++++ b/tools/objtool/include/objtool/warn.h
+@@ -11,30 +11,33 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
++#include <objtool/builtin.h>
+ #include <objtool/elf.h>
+ 
+ extern const char *objname;
+ 
+ static inline char *offstr(struct section *sec, unsigned long offset)
  {
--	WARN_FUNC("%srelocation to !ENDBR: %s+0x%lx", sec, offset, msg,
--		  dest->func ? dest->func->name : dest->sec->name,
--		  dest->func ? dest->offset - dest->func->offset : dest->offset);
-+	WARN_FUNC("%srelocation to !ENDBR: %s", sec, offset, msg,
-+		  offstr(dest->sec, dest->offset));
+-	struct symbol *func;
+-	char *name, *str;
+-	unsigned long name_off;
++	bool is_text = (sec->sh.sh_flags & SHF_EXECINSTR);
++	struct symbol *sym = NULL;
++	char *str;
++	int len;
+ 
+-	func = find_func_containing(sec, offset);
+-	if (!func)
+-		func = find_symbol_containing(sec, offset);
+-	if (func) {
+-		name = func->name;
+-		name_off = offset - func->offset;
++	if (is_text)
++		sym = find_func_containing(sec, offset);
++	if (!sym)
++		sym = find_symbol_containing(sec, offset);
++
++	if (sym) {
++		str = malloc(strlen(sym->name) + strlen(sec->name) + 40);
++		len = sprintf(str, "%s+0x%lx", sym->name, offset - sym->offset);
++		if (opts.sec_address)
++			sprintf(str+len, " (%s+0x%lx)", sec->name, offset);
+ 	} else {
+-		name = sec->name;
+-		name_off = offset;
++		str = malloc(strlen(sec->name) + 20);
++		sprintf(str, "%s+0x%lx", sec->name, offset);
+ 	}
+ 
+-	str = malloc(strlen(name) + 20);
+-	sprintf(str, "%s+0x%lx", name, name_off);
+-
+ 	return str;
  }
  
- static void validate_ibt_dest(struct objtool_file *file, struct instruction *insn,
 -- 
 2.34.1
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78A73505190
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95BA3505196
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239282AbiDRMfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51064 "EHLO
+        id S239185AbiDRMf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240121AbiDRM3V (ORCPT
+        with ESMTP id S240149AbiDRM3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 08:29:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C883237E9;
-        Mon, 18 Apr 2022 05:23:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A5A23BC4;
+        Mon, 18 Apr 2022 05:23:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3136E60F01;
-        Mon, 18 Apr 2022 12:23:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 286D4C385A7;
-        Mon, 18 Apr 2022 12:23:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6051760FD6;
+        Mon, 18 Apr 2022 12:23:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529B1C385A1;
+        Mon, 18 Apr 2022 12:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284597;
-        bh=+ejOrvs9N56pFSmkdeef6otjykKTRwH3KNG1uuMcZYU=;
+        s=korg; t=1650284600;
+        bh=TXP33MxQcoGXqH6pSq59ip2G3OXzzhTeruKASjNglEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kJtK3qFTYjo9bIioRvdf3jUYHlC8cBfP8ETwx3Kqecn6Xz8ljCGRQtetL29VMZJtM
-         VlOx/hgr8ROa3aQbXTqAiZS9odqP4ow3FBUtuGg9res5uo4z/K2Yb0cNAobNQJoIQr
-         s1Zip1XUv1DIWXR6k5mZfndXvLO7hU1E0XXpHX4A=
+        b=wKtl8zD6V+B9hSW8trAQfLNWpQb3rAC4ROZMjnxxuhS+2fY9kSeT7Ofqg7GZLbVS5
+         5JCazhkyQkXDcWKH2YmeVfPSYrvk6FFqhoZyWwMo8yYrEulVOB6CPY7cjHbDlk/gwj
+         7g2SONt4kx6yQLLML+FjQjfbEO1EJDS1aN0ESTmU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wayne Lin <Wayne.Lin@amd.com>,
-        Alex Hung <alex.hung@amd.com>, Roman Li <Roman.Li@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christoph=20B=C3=B6hmwalder?= 
+        <christoph.boehmwalder@linbit.com>, Jens Axboe <axboe@kernel.dk>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 165/219] drm/amd/display: Fix allocate_mst_payload assert on resume
-Date:   Mon, 18 Apr 2022 14:12:14 +0200
-Message-Id: <20220418121211.501993388@linuxfoundation.org>
+Subject: [PATCH 5.17 166/219] drbd: set QUEUE_FLAG_STABLE_WRITES
+Date:   Mon, 18 Apr 2022 14:12:15 +0200
+Message-Id: <20220418121211.529665024@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -57,44 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Li <Roman.Li@amd.com>
+From: Christoph Böhmwalder <christoph@boehmwalder.at>
 
-[ Upstream commit f4346fb3edf7720db3f7f5e1cab1f667cd024280 ]
+[ Upstream commit 286901941fd18a52b2138fddbbf589ad3639eb00 ]
 
-[Why]
-On resume we do link detection for all non-MST connectors.
-MST is handled separately. However the condition for telling
-if connector is on mst branch is not enough for mst hub case.
-Link detection for mst branch link leads to mst topology reset.
-That causes assert in dc_link_allocate_mst_payload()
+We want our pages not to change while they are being written.
 
-[How]
-Use link type as indicator for mst link.
-
-Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
-Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Roman Li <Roman.Li@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Christoph Böhmwalder <christoph.boehmwalder@linbit.com>
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/block/drbd/drbd_main.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index 90c017859ad4..24db2297857b 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -2693,7 +2693,8 @@ static int dm_resume(void *handle)
- 		 * this is the case when traversing through already created
- 		 * MST connectors, should be skipped
- 		 */
--		if (aconnector->mst_port)
-+		if (aconnector->dc_link &&
-+		    aconnector->dc_link->type == dc_connection_mst_branch)
- 			continue;
+diff --git a/drivers/block/drbd/drbd_main.c b/drivers/block/drbd/drbd_main.c
+index 5d5beeba3ed4..478ba959362c 100644
+--- a/drivers/block/drbd/drbd_main.c
++++ b/drivers/block/drbd/drbd_main.c
+@@ -2739,6 +2739,7 @@ enum drbd_ret_code drbd_create_device(struct drbd_config_context *adm_ctx, unsig
+ 	sprintf(disk->disk_name, "drbd%d", minor);
+ 	disk->private_data = device;
  
- 		mutex_lock(&aconnector->hpd_lock);
++	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, disk->queue);
+ 	blk_queue_write_cache(disk->queue, true, true);
+ 	/* Setting the max_hw_sectors to an odd value of 8kibyte here
+ 	   This triggers a max_bio_size message upon first attach or connect */
 -- 
 2.35.1
 

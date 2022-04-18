@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355E95058F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BE545058F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245642AbiDROMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41914 "EHLO
+        id S1343504AbiDROMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244638AbiDRNz4 (ORCPT
+        with ESMTP id S244636AbiDRNz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:55:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428A763F2;
-        Mon, 18 Apr 2022 06:04:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4959D63F7;
+        Mon, 18 Apr 2022 06:04:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7214760EFE;
-        Mon, 18 Apr 2022 13:04:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6586DC385A7;
-        Mon, 18 Apr 2022 13:04:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2E9860B3C;
+        Mon, 18 Apr 2022 13:04:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A257EC385A7;
+        Mon, 18 Apr 2022 13:04:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287090;
-        bh=MRpcpigbdUcyIz0YZFJXFYvTk7BmDiTCNg9TecT49io=;
+        s=korg; t=1650287094;
+        bh=WqEEUibnJyDSWHpSvgPQFIUTBrand5AvG1Pzvk93Tkg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EaWvbdZ2lVQKhFjPfZuT4gSFd6vDTtNkHUldRcmfDSZtHwx/X8XcfUi0m2PookWxn
-         qIW3/iDFkLLyTdb4QcSNedwwQQh5uKIg0O9K4yk4sjcJPGsvIUgXZtvYcMMtUXTs4f
-         +bR2tjIngP2x1uwx1sZjH/iqrhE3OYRFzVtRBqzU=
+        b=RPGwzHD+XoOuq82M5bdU6ivjCgdvNy16I2gIPyZIsiuXZbT+zl3Zu42wvkBLqh1nU
+         CEGQGfAZWmeiZ/ZOGD0M+kUnEt9d2tvU6DwltZRMYmDLo5SM2ATg7aAHX0i1ZuQeiL
+         y8LeUGjLzWw0Kua7Ecgd3BHuJ1h+vJF9v7IhDA9g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 054/218] perf/x86/intel/pt: Fix address filter config for 32-bit kernel
-Date:   Mon, 18 Apr 2022 14:12:00 +0200
-Message-Id: <20220418121201.158874814@linuxfoundation.org>
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Wang Hai <wanghai38@huawei.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 055/218] video: fbdev: smscufx: Fix null-ptr-deref in ufx_usb_probe()
+Date:   Mon, 18 Apr 2022 14:12:01 +0200
+Message-Id: <20220418121201.187537751@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,35 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Adrian Hunter <adrian.hunter@intel.com>
+From: Wang Hai <wanghai38@huawei.com>
 
-[ Upstream commit e5524bf1047eb3b3f3f33b5f59897ba67b3ade87 ]
+[ Upstream commit 1791f487f877a9e83d81c8677bd3e7b259e7cb27 ]
 
-Change from shifting 'unsigned long' to 'u64' to prevent the config bits
-being lost on a 32-bit kernel.
+I got a null-ptr-deref report:
 
-Fixes: eadf48cab4b6b0 ("perf/x86/intel/pt: Add support for address range filtering in PT")
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220131072453.2839535-5-adrian.hunter@intel.com
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+...
+RIP: 0010:fb_destroy_modelist+0x38/0x100
+...
+Call Trace:
+ ufx_usb_probe.cold+0x2b5/0xac1 [smscufx]
+ usb_probe_interface+0x1aa/0x3c0 [usbcore]
+ really_probe+0x167/0x460
+...
+ ret_from_fork+0x1f/0x30
+
+If fb_alloc_cmap() fails in ufx_usb_probe(), fb_destroy_modelist() will
+be called to destroy modelist in the error handling path. But modelist
+has not been initialized yet, so it will result in null-ptr-deref.
+
+Initialize modelist before calling fb_alloc_cmap() to fix this bug.
+
+Fixes: 3c8a63e22a08 ("Add support for SMSC UFX6000/7000 USB display adapters")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Wang Hai <wanghai38@huawei.com>
+Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/events/intel/pt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/video/fbdev/smscufx.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index 1808c57ce161..2539aaddd137 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -410,7 +410,7 @@ static u64 pt_config_filters(struct perf_event *event)
- 			pt->filters.filter[range].msr_b = filter->msr_b;
- 		}
+diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
+index ec2e7e353685..aa387c5188e7 100644
+--- a/drivers/video/fbdev/smscufx.c
++++ b/drivers/video/fbdev/smscufx.c
+@@ -1671,6 +1671,7 @@ static int ufx_usb_probe(struct usb_interface *interface,
+ 	info->par = dev;
+ 	info->pseudo_palette = dev->pseudo_palette;
+ 	info->fbops = &ufx_ops;
++	INIT_LIST_HEAD(&info->modelist);
  
--		rtit_ctl |= filter->config << pt_address_ranges[range].reg_off;
-+		rtit_ctl |= (u64)filter->config << pt_address_ranges[range].reg_off;
- 	}
+ 	retval = fb_alloc_cmap(&info->cmap, 256, 0);
+ 	if (retval < 0) {
+@@ -1681,8 +1682,6 @@ static int ufx_usb_probe(struct usb_interface *interface,
+ 	INIT_DELAYED_WORK(&dev->free_framebuffer_work,
+ 			  ufx_free_framebuffer_work);
  
- 	return rtit_ctl;
+-	INIT_LIST_HEAD(&info->modelist);
+-
+ 	retval = ufx_reg_read(dev, 0x3000, &id_rev);
+ 	check_warn_goto_error(retval, "error %d reading 0x3000 register from device", retval);
+ 	dev_dbg(dev->gdev, "ID_REV register value 0x%08x", id_rev);
 -- 
 2.34.1
 

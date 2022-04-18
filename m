@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB1685051D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36EE505510
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240375AbiDRMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54010 "EHLO
+        id S243389AbiDRNUb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:20:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239765AbiDRMdY (ORCPT
+        with ESMTP id S241126AbiDRNCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1ACB1EACE;
-        Mon, 18 Apr 2022 05:25:37 -0700 (PDT)
+        Mon, 18 Apr 2022 09:02:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC34C32995;
+        Mon, 18 Apr 2022 05:42:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99B9AB80ED6;
-        Mon, 18 Apr 2022 12:25:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9092C385A1;
-        Mon, 18 Apr 2022 12:25:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 46AD361014;
+        Mon, 18 Apr 2022 12:42:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E5ADC385A7;
+        Mon, 18 Apr 2022 12:42:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284735;
-        bh=OheKLmfXH/0ETv6AsmLPpvnGotO5nZR5o2vxS0ci7Fg=;
+        s=korg; t=1650285761;
+        bh=cVRz0cipYmNcykCb4P8YGJfJ8LfaJNccgHJSaUWty8w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AuwHufPjomyMb7lTLMdJDK5W8CyJtiihdnkkgtjTbEH8IS0JYBueWurCvWxCSdsGY
-         A79ZAmkL708y02glhaqlpseGH2PSv1l/GNHmA05mknGcwcQKVQOuxd0C2Fk63NYS23
-         WPtBiYjyqbmLCMAawBTYyIC2nluQHw6umQZLhkE4=
+        b=xAsRO9z+D+zzNcZRgBISJI621RwD7qh2zWeq4UXQBDbZrS8rq9aQcdAMrQIr9BY36
+         2MZHx47KxjJDPtRu/BYCoDRoEPpfsCmLsb2nT7OF3FPXoZnPAohv5KBlzblzvz6dm9
+         tuTWm7pz1mbiOygq8YFdU6Oj27arxkABJEyYfWcw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.17 210/219] smp: Fix offline cpu check in flush_smp_call_function_queue()
+        stable@vger.kernel.org, Vlad Buslov <vladbu@nvidia.com>,
+        Jiri Pirko <jiri@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 02/63] net/sched: flower: fix parsing of ethertype following VLAN header
 Date:   Mon, 18 Apr 2022 14:12:59 +0200
-Message-Id: <20220418121212.746298475@linuxfoundation.org>
+Message-Id: <20220418121134.315981712@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +56,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+From: Vlad Buslov <vladbu@nvidia.com>
 
-commit 9e949a3886356fe9112c6f6f34a6e23d1d35407f upstream.
+[ Upstream commit 2105f700b53c24aa48b65c15652acc386044d26a ]
 
-The check in flush_smp_call_function_queue() for callbacks that are sent
-to offline CPUs currently checks whether the queue is empty.
+A tc flower filter matching TCA_FLOWER_KEY_VLAN_ETH_TYPE is expected to
+match the L2 ethertype following the first VLAN header, as confirmed by
+linked discussion with the maintainer. However, such rule also matches
+packets that have additional second VLAN header, even though filter has
+both eth_type and vlan_ethtype set to "ipv4". Looking at the code this
+seems to be mostly an artifact of the way flower uses flow dissector.
+First, even though looking at the uAPI eth_type and vlan_ethtype appear
+like a distinct fields, in flower they are all mapped to the same
+key->basic.n_proto. Second, flow dissector skips following VLAN header as
+no keys for FLOW_DISSECTOR_KEY_CVLAN are set and eventually assigns the
+value of n_proto to last parsed header. With these, such filters ignore any
+headers present between first VLAN header and first "non magic"
+header (ipv4 in this case) that doesn't result
+FLOW_DISSECT_RET_PROTO_AGAIN.
 
-However, flush_smp_call_function_queue() has just deleted all the
-callbacks from the queue and moved all the entries into a local list.
-This checks would only be positive if some callbacks were added in the
-short time after llist_del_all() was called. This does not seem to be
-the intention of this check.
+Fix the issue by extending flow dissector VLAN key structure with new
+'vlan_eth_type' field that matches first ethertype following previously
+parsed VLAN header. Modify flower classifier to set the new
+flow_dissector_key_vlan->vlan_eth_type with value obtained from
+TCA_FLOWER_KEY_VLAN_ETH_TYPE/TCA_FLOWER_KEY_CVLAN_ETH_TYPE uAPIs.
 
-Change the check to look at the local list to which the entries were
-moved instead of the queue from which all the callbacks were just
-removed.
-
-Fixes: 8d056c48e4862 ("CPU hotplug, smp: flush any pending IPI callbacks before CPU offline")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220319072015.1495036-1-namit@vmware.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/all/Yjhgi48BpTGh6dig@nanopsycho/
+Fixes: 9399ae9a6cb2 ("net_sched: flower: Add vlan support")
+Fixes: d64efd0926ba ("net/sched: flower: Add supprt for matching on QinQ vlan headers")
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/smp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/net/flow_dissector.h |  2 ++
+ net/core/flow_dissector.c    |  1 +
+ net/sched/cls_flower.c       | 18 +++++++++++++-----
+ 3 files changed, 16 insertions(+), 5 deletions(-)
 
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -579,7 +579,7 @@ static void flush_smp_call_function_queu
+diff --git a/include/net/flow_dissector.h b/include/net/flow_dissector.h
+index 78f6437cbc3a..02171416c68e 100644
+--- a/include/net/flow_dissector.h
++++ b/include/net/flow_dissector.h
+@@ -51,6 +51,8 @@ struct flow_dissector_key_vlan {
+ 		vlan_dei:1,
+ 		vlan_priority:3;
+ 	__be16	vlan_tpid;
++	__be16	vlan_eth_type;
++	u16	padding;
+ };
  
- 	/* There shouldn't be any pending callbacks on an offline CPU. */
- 	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
--		     !warned && !llist_empty(head))) {
-+		     !warned && entry != NULL)) {
- 		warned = true;
- 		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
+ struct flow_dissector_key_mpls {
+diff --git a/net/core/flow_dissector.c b/net/core/flow_dissector.c
+index b740a74f06f2..4dac27c98623 100644
+--- a/net/core/flow_dissector.c
++++ b/net/core/flow_dissector.c
+@@ -1149,6 +1149,7 @@ bool __skb_flow_dissect(const struct net *net,
+ 					 VLAN_PRIO_MASK) >> VLAN_PRIO_SHIFT;
+ 			}
+ 			key_vlan->vlan_tpid = saved_vlan_tpid;
++			key_vlan->vlan_eth_type = proto;
+ 		}
  
+ 		fdret = FLOW_DISSECT_RET_PROTO_AGAIN;
+diff --git a/net/sched/cls_flower.c b/net/sched/cls_flower.c
+index 26979b4853bd..007fbc199352 100644
+--- a/net/sched/cls_flower.c
++++ b/net/sched/cls_flower.c
+@@ -784,6 +784,7 @@ static int fl_set_key_mpls(struct nlattr **tb,
+ static void fl_set_key_vlan(struct nlattr **tb,
+ 			    __be16 ethertype,
+ 			    int vlan_id_key, int vlan_prio_key,
++			    int vlan_next_eth_type_key,
+ 			    struct flow_dissector_key_vlan *key_val,
+ 			    struct flow_dissector_key_vlan *key_mask)
+ {
+@@ -802,6 +803,11 @@ static void fl_set_key_vlan(struct nlattr **tb,
+ 	}
+ 	key_val->vlan_tpid = ethertype;
+ 	key_mask->vlan_tpid = cpu_to_be16(~0);
++	if (tb[vlan_next_eth_type_key]) {
++		key_val->vlan_eth_type =
++			nla_get_be16(tb[vlan_next_eth_type_key]);
++		key_mask->vlan_eth_type = cpu_to_be16(~0);
++	}
+ }
+ 
+ static void fl_set_key_flag(u32 flower_key, u32 flower_mask,
+@@ -1076,8 +1082,9 @@ static int fl_set_key(struct net *net, struct nlattr **tb,
+ 
+ 		if (eth_type_vlan(ethertype)) {
+ 			fl_set_key_vlan(tb, ethertype, TCA_FLOWER_KEY_VLAN_ID,
+-					TCA_FLOWER_KEY_VLAN_PRIO, &key->vlan,
+-					&mask->vlan);
++					TCA_FLOWER_KEY_VLAN_PRIO,
++					TCA_FLOWER_KEY_VLAN_ETH_TYPE,
++					&key->vlan, &mask->vlan);
+ 
+ 			if (tb[TCA_FLOWER_KEY_VLAN_ETH_TYPE]) {
+ 				ethertype = nla_get_be16(tb[TCA_FLOWER_KEY_VLAN_ETH_TYPE]);
+@@ -1085,6 +1092,7 @@ static int fl_set_key(struct net *net, struct nlattr **tb,
+ 					fl_set_key_vlan(tb, ethertype,
+ 							TCA_FLOWER_KEY_CVLAN_ID,
+ 							TCA_FLOWER_KEY_CVLAN_PRIO,
++							TCA_FLOWER_KEY_CVLAN_ETH_TYPE,
+ 							&key->cvlan, &mask->cvlan);
+ 					fl_set_key_val(tb, &key->basic.n_proto,
+ 						       TCA_FLOWER_KEY_CVLAN_ETH_TYPE,
+@@ -2272,13 +2280,13 @@ static int fl_dump_key(struct sk_buff *skb, struct net *net,
+ 		goto nla_put_failure;
+ 
+ 	if (mask->basic.n_proto) {
+-		if (mask->cvlan.vlan_tpid) {
++		if (mask->cvlan.vlan_eth_type) {
+ 			if (nla_put_be16(skb, TCA_FLOWER_KEY_CVLAN_ETH_TYPE,
+ 					 key->basic.n_proto))
+ 				goto nla_put_failure;
+-		} else if (mask->vlan.vlan_tpid) {
++		} else if (mask->vlan.vlan_eth_type) {
+ 			if (nla_put_be16(skb, TCA_FLOWER_KEY_VLAN_ETH_TYPE,
+-					 key->basic.n_proto))
++					 key->vlan.vlan_eth_type))
+ 				goto nla_put_failure;
+ 		}
+ 	}
+-- 
+2.35.1
+
 
 

@@ -2,83 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58AEE504C95
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E53B5504C88
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236756AbiDRGYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
+        id S236733AbiDRGVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:21:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236750AbiDRGYn (ORCPT
+        with ESMTP id S236728AbiDRGVO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:24:43 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711341837C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:22:05 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id u18so16496302eda.3
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:22:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=R0p9SyM2Gw6ezgsQBgHwJlt6cnUQdSZIr2Akmm0cjIc=;
-        b=Bur8D9FzAagdjm0aTmG8lxdbZQSBX+S1iB2gHK6R/tkzttSR9FtCfwBNjrIvsxJkS5
-         bZdSK7WCvDEnspxJx4B0zK+YQidIQh0FdRHVycq3xBIYuelw2lrcYBA9pVFOclpqNA7Q
-         o6rr6cGN0F8093vbW3/OHtdLHM81o5SRn4cKE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=R0p9SyM2Gw6ezgsQBgHwJlt6cnUQdSZIr2Akmm0cjIc=;
-        b=t89tUJdsDESSkc+6UK8X+exOD++ujaTnMCWrJdJbtnFR40VlKiNiQGhdgKbTvU+PgG
-         QKbtculB1ri0z0acJTMDjCUneHrXjqTWdzxEuWroVCts5Kp+yVEj4yqRZMofI1bDwyqj
-         WaFEwHGykgfzDehOjjbh3G7U2xSnxAZ0qLPq0Zbe8g8Ds0vDgUp522QPoQwimPr60SAh
-         vSUxeOzoDDDTz2hmYC8kUgf+dEO1EDlwifH00RsJXBKqomUMu4sx5mSvjdI9gXAgizbS
-         nMy3gdTCnqKCgn7IP0/zh71Op8nXatUaswD+VfAo3WP1xUx9zkyFncez+thsFjUJQ/PY
-         tO4Q==
-X-Gm-Message-State: AOAM5304YmxQwALnwQs3DWkJp9PptEftid8k1nKXETib1WUGI5klygev
-        9C+zzJUxx+0HgJkZJP50oRnY9zAEMzVUdkRA
-X-Google-Smtp-Source: ABdhPJxID1yOMjT4HmM7LRUgnpy+7A1YSIU0u0Armb5lUpXQITzkHiHGiYclR5OFP7XzBzMoV10M5Q==
-X-Received: by 2002:a05:6402:b2c:b0:41d:7adc:e441 with SMTP id bo12-20020a0564020b2c00b0041d7adce441mr10780039edb.285.1650262923849;
-        Sun, 17 Apr 2022 23:22:03 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id q2-20020a056402032200b00423d4516387sm3120604edw.75.2022.04.17.23.22.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 17 Apr 2022 23:22:03 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id l3-20020a05600c1d0300b0038ff89c938bso3053909wms.0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:22:03 -0700 (PDT)
-X-Received: by 2002:a7b:cbc1:0:b0:38e:7c42:fe38 with SMTP id
- n1-20020a7bcbc1000000b0038e7c42fe38mr14247667wmi.51.1650262606781; Sun, 17
- Apr 2022 23:16:46 -0700 (PDT)
+        Mon, 18 Apr 2022 02:21:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F29517E23;
+        Sun, 17 Apr 2022 23:18:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 272A0B80D86;
+        Mon, 18 Apr 2022 06:18:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32FCFC385A1;
+        Mon, 18 Apr 2022 06:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650262712;
+        bh=9oskifXqIiYjZvZC5tbGoi3TIlLus0DwcumHm6gcSfg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mzVDsw3TrQBkM0ByTgc5Kl02nqK+9z398XeRQjJTr0q+o74gIPN+RpcEwF6jKcsCo
+         V2yPf96oub1Rho5UPg7G4QLHAPtevsKTJaE+5lxkYWnANdNfbKPq0yc7RtBRZ0EInN
+         kKyOFtPaC7k1txPLmeWzGZvRonN3ENVvfXSqRrq+3FdttfY6vkgtTymwCnYQce2Ftv
+         S5aMJFfYk+05xeLaBQSwBFcPo3Isad9gzRos6qdGPD+7Y+pIHFQmgwKVxm29eSnCVd
+         sJImHyPzt3j84VrIGTxUmTX/TxdFmVTH6xrFLChDvlBlBBbjHCISQ13iG2jiaa3uej
+         26oxJNEIHNKLA==
+Date:   Mon, 18 Apr 2022 11:48:24 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     konrad.dybcio@somainline.org
+Cc:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com,
+        stable@vger.kernel.org, quic_mdalam@quicinc.com
+Subject: Re: [PATCH V3] mtd: rawnand: qcom: fix memory corruption that causes
+ panic
+Message-ID: <20220418061824.GG7431@thinkpad>
+References: <1650259141-20923-1-git-send-email-quic_mdalam@quicinc.com>
 MIME-Version: 1.0
-References: <20220414025023.11516-1-Nick.Fan@mediatek.com> <20220414025023.11516-2-Nick.Fan@mediatek.com>
-In-Reply-To: <20220414025023.11516-2-Nick.Fan@mediatek.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Mon, 18 Apr 2022 14:16:10 +0800
-X-Gmail-Original-Message-ID: <CAC=S1ni=pHPDAJUV2b=qWm-O26fS37wQjuL014eKoE491K6wGQ@mail.gmail.com>
-Message-ID: <CAC=S1ni=pHPDAJUV2b=qWm-O26fS37wQjuL014eKoE491K6wGQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/2] arm64: dts: mt8192: Add node for the Mali GPU
-To:     Nick Fan <Nick.Fan@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        srv_heupstream@mediatek.com,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        devicetree@vger.kernel.org, wenst@chromium.org,
-        alyssa.rosenzweig@collabora.com,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1650259141-20923-1-git-send-email-quic_mdalam@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,10 +57,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 10:53 AM Nick Fan <Nick.Fan@mediatek.com> wrote:
->
-> Add a basic GPU node for mt8192.
->
-> Signed-off-by: Nick Fan <Nick.Fan@mediatek.com>
+On Mon, Apr 18, 2022 at 10:49:01AM +0530, Md Sadre Alam wrote:
+> This patch fixes a memory corruption that occurred in the
+> nand_scan() path for Hynix nand device.
+> 
+> On boot, for Hynix nand device will panic at a weird place:
+> | Unable to handle kernel NULL pointer dereference at virtual
+>   address 00000070
+> | [00000070] *pgd=00000000
+> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+> | Modules linked in:
+> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+>   #38
+> | Hardware name: Generic DT based system
+> | PC is at nandc_set_reg+0x8/0x1c
+> | LR is at qcom_nandc_command+0x20c/0x5d0
+> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
+> | r10: 000000a3  r9 : 00000000  r8 : 00000040
+> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+> | Control: 10c5387d  Table: 8020406a  DAC: 00000051
+> | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
+>   64 size 2048
+> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+> | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
+> | qcom_nandc_command from nand_readid_op+0x198/0x1e8
+> | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
+> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+> | qcom_nandc_probe from platform_probe+0x58/0xac
+> 
+> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+> is updating the nandc->max_cwperpage from 1 to 4.This causes the
+> sg_init_table of clear_bam_transaction() in the driver's
+> qcom_nandc_command() to memset much more than what was initially
+> allocated by alloc_bam_transaction().
+> 
+> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
+> returns, and remove updating nandc->max_cwperpage from
+> qcom_nand_attach_chip call back.
+> 
 
-Reviewed-by: Fei Shao <fshao@chromium.org>
+Konrad, can you please verify if this patch fixes the crash on your device?
+Similar crash was seen on SDX65 and this patch fixes the issue.
+
+Thanks,
+Mani
+
+> Cc: stable@vger.kernel.org
+> Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
+> Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+> ---
+> [V3]
+>  * Updated commit message Fixes, Cc, Reported-by
+> 
+>  drivers/mtd/nand/raw/qcom_nandc.c | 24 +++++++++++++-----------
+>  1 file changed, 13 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+> index 1a77542..048b255 100644
+> --- a/drivers/mtd/nand/raw/qcom_nandc.c
+> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+> @@ -2651,10 +2651,23 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
+>  	ecc->engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
+>  
+>  	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
+> +	/* Free the initially allocated BAM transaction for reading the ONFI params */
+> +	if (nandc->props->is_bam)
+> +		free_bam_transaction(nandc);
+>  
+>  	nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
+>  				     cwperpage);
+>  
+> +	/* Now allocate the BAM transaction based on updated max_cwperpage */
+> +	if (nandc->props->is_bam) {
+> +		nandc->bam_txn = alloc_bam_transaction(nandc);
+> +		if (!nandc->bam_txn) {
+> +			dev_err(nandc->dev,
+> +				"failed to allocate bam transaction\n");
+> +			return -ENOMEM;
+> +		}
+> +	}
+> +
+>  	/*
+>  	 * DATA_UD_BYTES varies based on whether the read/write command protects
+>  	 * spare data with ECC too. We protect spare data by default, so we set
+> @@ -2955,17 +2968,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (nandc->props->is_bam) {
+> -		free_bam_transaction(nandc);
+> -		nandc->bam_txn = alloc_bam_transaction(nandc);
+> -		if (!nandc->bam_txn) {
+> -			dev_err(nandc->dev,
+> -				"failed to allocate bam transaction\n");
+> -			nand_cleanup(chip);
+> -			return -ENOMEM;
+> -		}
+> -	}
+> -
+>  	ret = mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
+>  	if (ret)
+>  		nand_cleanup(chip);
+> -- 
+> 2.7.4
+> 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C16B45056ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BECD65050C0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242659AbiDRNls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54668 "EHLO
+        id S239083AbiDRM1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241934AbiDRNNH (ORCPT
+        with ESMTP id S238781AbiDRM0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:13:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60A9639BB8;
-        Mon, 18 Apr 2022 05:50:56 -0700 (PDT)
+        Mon, 18 Apr 2022 08:26:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A86E089;
+        Mon, 18 Apr 2022 05:20:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB1D86128D;
-        Mon, 18 Apr 2022 12:50:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3368C385A8;
-        Mon, 18 Apr 2022 12:50:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83D0E60F0C;
+        Mon, 18 Apr 2022 12:20:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9400AC385A7;
+        Mon, 18 Apr 2022 12:20:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286255;
-        bh=wq+2Jo2ycQGQ6rd/zMFPBA3/65ZNrOu88pNHJPRppgI=;
+        s=korg; t=1650284410;
+        bh=G++U9rtoxfQSlDamiCXkUBLmwjBH2Lkb15OC1vNC2oE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sIW7wbJ7143pco4oO0+btrxMtnbORnUDJ56IXXYUfUwBxIhXRLhwwXUx1NVzVu15U
-         yOqjQ7YrAnlp+/6dkCh4itCvvlVbQfZxyrMYA+vA6pUdfcLj5JFe1mlKXbzrs2Wkyi
-         fzdJDmntwYmDwUdOwYTrj0lFuVPtBDgKabi3Qcm8=
+        b=CeuRRLWBSVLYllrUnpR27u/pllWMc0yLo5FpXFCIw/da3O/OX4RLrq8/XrOYoWgQN
+         rCtoyOzoZZoX50UVPEOnunHlz9w4gdsXgrNciv6b4UWqcxJcG/x/oKSSDOLlGCSnJC
+         M1d/JolXB7hLiwEtpWFbj0EJjqLs7GVJ47SW0u6A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
+        Topi Miettinen <toiwoton@gmail.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 076/284] media: usb: go7007: s2250-board: fix leak in probe()
-Date:   Mon, 18 Apr 2022 14:10:57 +0200
-Message-Id: <20220418121212.848356319@linuxfoundation.org>
+Subject: [PATCH 5.17 089/219] netfilter: nft_socket: make cgroup match work in input too
+Date:   Mon, 18 Apr 2022 14:10:58 +0200
+Message-Id: <20220418121209.039001224@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Florian Westphal <fw@strlen.de>
 
-[ Upstream commit 67e4550ecd6164bfbdff54c169e5bbf9ccfaf14d ]
+[ Upstream commit 05ae2fba821c4d122ab4ba3e52144e21586c4010 ]
 
-Call i2c_unregister_device(audio) on this error path.
+cgroupv2 helper function ignores the already-looked up sk
+and uses skb->sk instead.
 
-Fixes: d3b2ccd9e307 ("[media] s2250: convert to the control framework")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Just pass sk from the calling function instead; this will
+make cgroup matching work for udp and tcp in input even when
+edemux did not set skb->sk already.
+
+Fixes: e0bb96db96f8 ("netfilter: nft_socket: add support for cgroupsv2")
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Tested-by: Topi Miettinen <toiwoton@gmail.com>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/go7007/s2250-board.c | 10 ++++------
- 1 file changed, 4 insertions(+), 6 deletions(-)
+ net/netfilter/nft_socket.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
-index 1466db150d82..625e77f4dbd2 100644
---- a/drivers/media/usb/go7007/s2250-board.c
-+++ b/drivers/media/usb/go7007/s2250-board.c
-@@ -512,6 +512,7 @@ static int s2250_probe(struct i2c_client *client,
- 	u8 *data;
- 	struct go7007 *go = i2c_get_adapdata(adapter);
- 	struct go7007_usb *usb = go->hpi_context;
-+	int err = -EIO;
+diff --git a/net/netfilter/nft_socket.c b/net/netfilter/nft_socket.c
+index d601974c9d2e..b8f011145765 100644
+--- a/net/netfilter/nft_socket.c
++++ b/net/netfilter/nft_socket.c
+@@ -36,12 +36,11 @@ static void nft_socket_wildcard(const struct nft_pktinfo *pkt,
  
- 	audio = i2c_new_dummy(adapter, TLV320_ADDRESS >> 1);
- 	if (audio == NULL)
-@@ -540,11 +541,8 @@ static int s2250_probe(struct i2c_client *client,
- 		V4L2_CID_HUE, -512, 511, 1, 0);
- 	sd->ctrl_handler = &state->hdl;
- 	if (state->hdl.error) {
--		int err = state->hdl.error;
--
--		v4l2_ctrl_handler_free(&state->hdl);
--		kfree(state);
--		return err;
-+		err = state->hdl.error;
-+		goto fail;
- 	}
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ static noinline bool
+-nft_sock_get_eval_cgroupv2(u32 *dest, const struct nft_pktinfo *pkt, u32 level)
++nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo *pkt, u32 level)
+ {
+-	struct sock *sk = skb_to_full_sk(pkt->skb);
+ 	struct cgroup *cgrp;
  
- 	state->std = V4L2_STD_NTSC;
-@@ -608,7 +606,7 @@ static int s2250_probe(struct i2c_client *client,
- 	i2c_unregister_device(audio);
- 	v4l2_ctrl_handler_free(&state->hdl);
- 	kfree(state);
--	return -EIO;
-+	return err;
- }
+-	if (!sk || !sk_fullsock(sk) || !net_eq(nft_net(pkt), sock_net(sk)))
++	if (!sk_fullsock(sk))
+ 		return false;
  
- static int s2250_remove(struct i2c_client *client)
+ 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
+@@ -108,7 +107,7 @@ static void nft_socket_eval(const struct nft_expr *expr,
+ 		break;
+ #ifdef CONFIG_SOCK_CGROUP_DATA
+ 	case NFT_SOCKET_CGROUPV2:
+-		if (!nft_sock_get_eval_cgroupv2(dest, pkt, priv->level)) {
++		if (!nft_sock_get_eval_cgroupv2(dest, sk, pkt, priv->level)) {
+ 			regs->verdict.code = NFT_BREAK;
+ 			return;
+ 		}
 -- 
-2.34.1
+2.35.1
 
 
 

@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A301250507B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C15D505683
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238676AbiDRMZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:25:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38398 "EHLO
+        id S243436AbiDRNkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:40:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbiDRMYb (ORCPT
+        with ESMTP id S241228AbiDRNLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:24:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4B31C112;
-        Mon, 18 Apr 2022 05:19:10 -0700 (PDT)
+        Mon, 18 Apr 2022 09:11:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 575532D1EB;
+        Mon, 18 Apr 2022 05:50:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 94870B80ED6;
-        Mon, 18 Apr 2022 12:19:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45E5C385A1;
-        Mon, 18 Apr 2022 12:19:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 682346124E;
+        Mon, 18 Apr 2022 12:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73A3AC385A1;
+        Mon, 18 Apr 2022 12:50:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284348;
-        bh=I2bv2t5XZ8U/levWLZuCsmK2on3Lpul6SH2CZmzcaDI=;
+        s=korg; t=1650286236;
+        bh=1cn7iqV1/VA5auhQIF5ZOU3vvMVP3+j/fH3lSoEABec=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g90TRH5b4AHC3NUHMGyODktrd4Z/zoeXc52AIeaJMLbJO7cy70keIPws7+WyMBl7B
-         n69sUi8orTNYroKUst3SmNz3IbWGGR50BNmPC+KC6WnY/Fo7ASx9VMJFC9s61UaRP5
-         qkSU//nlJiW3lUm99tmTu4te96qhxZ6MTQR/ueok=
+        b=LgA22JARBjXL4GzVGdrxoefHUzNoHlNh+SdhtLVxmYOA68yahCFCTie30WqoMkLDj
+         1broqMuob38STX2vmNRw1VZHISkhaHS7ZWA6BgWUz4r56koxR50o4IqtLR0OIleUCM
+         ErKzSY7ln4j60/mRTi7l7ixB8BksG2jo10UnRtDQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 082/219] KVM: selftests: riscv: Fix alignment of the guest_hang() function
+Subject: [PATCH 4.14 070/284] perf/x86/intel/pt: Fix address filter config for 32-bit kernel
 Date:   Mon, 18 Apr 2022 14:10:51 +0200
-Message-Id: <20220418121208.591239042@linuxfoundation.org>
+Message-Id: <20220418121212.679319544@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,41 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anup Patel <apatel@ventanamicro.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit ebdef0de2dbc40e697adaa6b3408130f7a7b8351 ]
+[ Upstream commit e5524bf1047eb3b3f3f33b5f59897ba67b3ade87 ]
 
-The guest_hang() function is used as the default exception handler
-for various KVM selftests applications by setting it's address in
-the vstvec CSR. The vstvec CSR requires exception handler base address
-to be at least 4-byte aligned so this patch fixes alignment of the
-guest_hang() function.
+Change from shifting 'unsigned long' to 'u64' to prevent the config bits
+being lost on a 32-bit kernel.
 
-Fixes: 3e06cdf10520 ("KVM: selftests: Add initial support for RISC-V
-64-bit")
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Tested-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-Signed-off-by: Anup Patel <anup@brainfault.org>
+Fixes: eadf48cab4b6b0 ("perf/x86/intel/pt: Add support for address range filtering in PT")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/r/20220131072453.2839535-5-adrian.hunter@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/kvm/lib/riscv/processor.c | 2 +-
+ arch/x86/events/intel/pt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index d377f2603d98..3961487a4870 100644
---- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-+++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-@@ -268,7 +268,7 @@ void vcpu_dump(FILE *stream, struct kvm_vm *vm, uint32_t vcpuid, uint8_t indent)
- 		core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
- }
+diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
+index 990ca9614b23..ad273bba5126 100644
+--- a/arch/x86/events/intel/pt.c
++++ b/arch/x86/events/intel/pt.c
+@@ -460,7 +460,7 @@ static u64 pt_config_filters(struct perf_event *event)
+ 			pt->filters.filter[range].msr_b = filter->msr_b;
+ 		}
  
--static void guest_hang(void)
-+static void __aligned(16) guest_hang(void)
- {
- 	while (1)
- 		;
+-		rtit_ctl |= filter->config << pt_address_ranges[range].reg_off;
++		rtit_ctl |= (u64)filter->config << pt_address_ranges[range].reg_off;
+ 	}
+ 
+ 	return rtit_ctl;
 -- 
-2.35.1
+2.34.1
 
 
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C75059CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12547505893
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346301AbiDROZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:25:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S245229AbiDROFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343628AbiDROMr (ORCPT
+        with ESMTP id S241766AbiDRNrU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:12:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1525381B3;
-        Mon, 18 Apr 2022 06:11:59 -0700 (PDT)
+        Mon, 18 Apr 2022 09:47:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BC92980D;
+        Mon, 18 Apr 2022 06:01:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 51BB9B80EC0;
-        Mon, 18 Apr 2022 13:11:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 950F2C385A1;
-        Mon, 18 Apr 2022 13:11:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 983B160929;
+        Mon, 18 Apr 2022 13:01:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89BF0C385A1;
+        Mon, 18 Apr 2022 13:01:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287517;
-        bh=G1cCzSEmSyEJgD7avDuvFKb78yXZro2e0oLgp9BKbiU=;
+        s=korg; t=1650286867;
+        bh=x0vO82PgmsO84hJdKK64ihCc5vTDwaWia8Yej7d8jas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fGvTkVxvVZ/ktyKkYsI3czHVVkvKoE9zM5sJ6HHxDsyaaiRFveRWTb1eG2di04o2Q
-         w1SJyDh/CUCE0YkAKPl8aHA5+THIUAAPP72XISBLOr36OcFTAG0WGfnRUgTayiffV3
-         iwJgXHPjcv3qtqshp7gbXUR2w/1tmox+v3Aw1s1w=
+        b=g3hVQ8SLd2EM8Gg3vbg+xZG/N/qWIG6Wft3ttX0p2sYIdwndznsEc113vA96uo+tN
+         gzuv750cdWsCl7e59HLT5IrQa7IZFrUbzWNCZDPe7gKMpDJ852ZdzsN+lqsxkHMdXc
+         MAGu5qwzVn+ZWOwuqa06Kj+frVAo7RE3Of2heLrQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
-        Haimin Zhang <tcs_kernel@tencent.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        stable@vger.kernel.org, Bodo Stroesser <bostroesser@gmail.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 186/218] jfs: prevent NULL deref in diFree
+Subject: [PATCH 4.14 271/284] scsi: target: tcmu: Fix possible page UAF
 Date:   Mon, 18 Apr 2022 14:14:12 +0200
-Message-Id: <20220418121206.448774066@linuxfoundation.org>
+Message-Id: <20220418121220.588425893@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,46 +56,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haimin Zhang <tcs_kernel@tencent.com>
+From: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
 
-[ Upstream commit a53046291020ec41e09181396c1e829287b48d47 ]
+[ Upstream commit a6968f7a367f128d120447360734344d5a3d5336 ]
 
-Add validation check for JFS_IP(ipimap)->i_imap to prevent a NULL deref
-in diFree since diFree uses it without do any validations.
-When function jfs_mount calls diMount to initialize fileset inode
-allocation map, it can fail and JFS_IP(ipimap)->i_imap won't be
-initialized. Then it calls diFreeSpecial to close fileset inode allocation
-map inode and it will flow into jfs_evict_inode. Function jfs_evict_inode
-just validates JFS_SBI(inode->i_sb)->ipimap, then calls diFree. diFree use
-JFS_IP(ipimap)->i_imap directly, then it will cause a NULL deref.
+tcmu_try_get_data_page() looks up pages under cmdr_lock, but it does not
+take refcount properly and just returns page pointer. When
+tcmu_try_get_data_page() returns, the returned page may have been freed by
+tcmu_blocks_release().
 
-Reported-by: TCS Robot <tcs_robot@tencent.com>
-Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
-Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+We need to get_page() under cmdr_lock to avoid concurrent
+tcmu_blocks_release().
+
+Link: https://lore.kernel.org/r/20220311132206.24515-1-xiaoguang.wang@linux.alibaba.com
+Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jfs/inode.c | 3 ++-
+ drivers/target/target_core_user.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/fs/jfs/inode.c b/fs/jfs/inode.c
-index 87b41edc800d..68779cc3609a 100644
---- a/fs/jfs/inode.c
-+++ b/fs/jfs/inode.c
-@@ -156,12 +156,13 @@ void jfs_evict_inode(struct inode *inode)
- 		dquot_initialize(inode);
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 96601fda47b1..f687481ccfdc 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -1165,6 +1165,7 @@ static struct page *tcmu_try_get_block_page(struct tcmu_dev *udev, uint32_t dbi)
+ 	mutex_lock(&udev->cmdr_lock);
+ 	page = tcmu_get_block_page(udev, dbi);
+ 	if (likely(page)) {
++		get_page(page);
+ 		mutex_unlock(&udev->cmdr_lock);
+ 		return page;
+ 	}
+@@ -1233,6 +1234,7 @@ static int tcmu_vma_fault(struct vm_fault *vmf)
+ 		/* For the vmalloc()ed cmd area pages */
+ 		addr = (void *)(unsigned long)info->mem[mi].addr + offset;
+ 		page = vmalloc_to_page(addr);
++		get_page(page);
+ 	} else {
+ 		uint32_t dbi;
  
- 		if (JFS_IP(inode)->fileset == FILESYSTEM_I) {
-+			struct inode *ipimap = JFS_SBI(inode->i_sb)->ipimap;
- 			truncate_inode_pages_final(&inode->i_data);
+@@ -1243,7 +1245,6 @@ static int tcmu_vma_fault(struct vm_fault *vmf)
+ 			return VM_FAULT_NOPAGE;
+ 	}
  
- 			if (test_cflag(COMMIT_Freewmap, inode))
- 				jfs_free_zero_link(inode);
- 
--			if (JFS_SBI(inode->i_sb)->ipimap)
-+			if (ipimap && JFS_IP(ipimap)->i_imap)
- 				diFree(inode);
- 
- 			/*
+-	get_page(page);
+ 	vmf->page = page;
+ 	return 0;
+ }
 -- 
 2.35.1
 

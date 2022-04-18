@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79065505162
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF175052DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239140AbiDRMef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S240211AbiDRMww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239181AbiDRM1u (ORCPT
+        with ESMTP id S240804AbiDRMji (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:27:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BB01EEFD;
-        Mon, 18 Apr 2022 05:21:27 -0700 (PDT)
+        Mon, 18 Apr 2022 08:39:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AD42FD;
+        Mon, 18 Apr 2022 05:30:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E737FB80EDC;
-        Mon, 18 Apr 2022 12:21:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 134B9C385A8;
-        Mon, 18 Apr 2022 12:21:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 306D260F04;
+        Mon, 18 Apr 2022 12:30:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 161F7C385A1;
+        Mon, 18 Apr 2022 12:30:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284484;
-        bh=Tz8etSiYKMM7cHcBHuerXjlDFxuy+vKXDjCA1BuI+eg=;
+        s=korg; t=1650285040;
+        bh=8OKQIQQZsaln7GT2sWzd5OsKT2yNQHkboQCMYcljvFI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xG3Ioe5uyA4Wjt2g53MXx/9PLLNGDon2OU3OgW3t9ibAfgjCniWUARtDlMa6yr00x
-         bMfesURg0pz6g1L3rjai31xxa9h36Ng53bTKJkYtlB4nGIKtLpWVmsejPC5QLnWRIi
-         PGQgalmIhLR0Wdlmdsjnhj1fG8AQ3bRpVodi2TKU=
+        b=MIaPRZItuzOEIGBC76F0w/XnT9GkUCYG3skFS91IcZWt0e/EYqrf8G9r3rVtHr54h
+         S1SQ3x9d2yw1Hg75fTjvHl4jkfPpGbegXDNkGqVVsAqJGshJaLMUOAa56wE0cBUY9Z
+         xMOs60l6esD8715uvpS3H4HLt714psBC7Ghup3Ik=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Antoine Tenart <atenart@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 106/219] netfilter: nf_tables: nft_parse_register can return a negative value
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 055/189] ALSA: nm256: Dont call card private_free at probe error path
 Date:   Mon, 18 Apr 2022 14:11:15 +0200
-Message-Id: <20220418121209.864337143@linuxfoundation.org>
+Message-Id: <20220418121202.073042721@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +53,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Antoine Tenart <atenart@kernel.org>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 6c6f9f31ecd47dce1d0dafca4bec8805f9bc97cd ]
+commit f20ae5074dfb38f23b0c07c62bdf8e7254a0acf8 upstream.
 
-Since commit 6e1acfa387b9 ("netfilter: nf_tables: validate registers
-coming from userspace.") nft_parse_register can return a negative value,
-but the function prototype is still returning an unsigned int.
+The card destructor of nm256 driver does merely stopping the running
+streams, and it's superfluous for the probe error handling.  Moreover,
+calling this via the previous devres change would lead to another
+problem due to the reverse call order.
 
-Fixes: 6e1acfa387b9 ("netfilter: nf_tables: validate registers coming from userspace.")
-Signed-off-by: Antoine Tenart <atenart@kernel.org>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch moves the setup of the private_free callback after the card
+registration, so that it can be used only after fully set up.
+
+Fixes: c19935f04784 ("ALSA: nm256: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-40-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/netfilter/nf_tables_api.c | 2 +-
+ sound/pci/nm256/nm256.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 1f5a0eece0d1..30d29d038d09 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -9275,7 +9275,7 @@ int nft_parse_u32_check(const struct nlattr *attr, int max, u32 *dest)
- }
- EXPORT_SYMBOL_GPL(nft_parse_u32_check);
+diff --git a/sound/pci/nm256/nm256.c b/sound/pci/nm256/nm256.c
+index c9c178504959..f99a1e96e923 100644
+--- a/sound/pci/nm256/nm256.c
++++ b/sound/pci/nm256/nm256.c
+@@ -1573,7 +1573,6 @@ snd_nm256_create(struct snd_card *card, struct pci_dev *pci)
+ 	chip->coeffs_current = 0;
  
--static unsigned int nft_parse_register(const struct nlattr *attr, u32 *preg)
-+static int nft_parse_register(const struct nlattr *attr, u32 *preg)
- {
- 	unsigned int reg;
+ 	snd_nm256_init_chip(chip);
+-	card->private_free = snd_nm256_free;
  
+ 	// pci_set_master(pci); /* needed? */
+ 	return 0;
+@@ -1680,6 +1679,7 @@ static int snd_nm256_probe(struct pci_dev *pci,
+ 	err = snd_card_register(card);
+ 	if (err < 0)
+ 		return err;
++	card->private_free = snd_nm256_free;
+ 
+ 	pci_set_drvdata(pci, card);
+ 	return 0;
 -- 
-2.35.1
+2.35.2
 
 
 

@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4578505ECD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5651505ED8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:13:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238520AbiDRUE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48448 "EHLO
+        id S238529AbiDRUQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbiDRUEZ (ORCPT
+        with ESMTP id S237141AbiDRUQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:04:25 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0BAA2DD7A;
-        Mon, 18 Apr 2022 13:01:45 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id bg9so20750819pgb.9;
-        Mon, 18 Apr 2022 13:01:45 -0700 (PDT)
+        Mon, 18 Apr 2022 16:16:13 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC5B82E6B3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:13:32 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id w127so15924918oig.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:13:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=0+kZsE73VgEeBbqhD1myF7KMCvhPaJ3w14vUYyxTE3o=;
-        b=pKx+g1rYuVcoJk+5fXHi6io0yaJIjSrEVSUFfLzU4UtUy/zQKXRYMC6Pwge7RGQby/
-         PsmGr5+2owyPTFUXI11E/CZF3ycB5ZNU5dQ6dS8+Xy+Y2g2jh8j6qgcjfeTZaakkpQTR
-         tedw1Q8Y2gNuzq1gnBRHOjizNdZ2QPqiVAWvS3Jg6HayKe1k9VLEf+Boqj8AIc4wNsXf
-         KIysQeI9olR98IYuQ/R3yJ73/AY8ARL1maoPkuz3LJc2jY4kYrOxq9l8E1rrShlBEOyn
-         JAlTYO73dpp2Z1m54/BUN/+x4yqMFdmuDLl2DSscbt0wNraKELse5pGyzAvpvwNCMhKZ
-         /sAw==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/bCpvuooTMQFHb8fBAPBgClqkOF+kRRFnzjAvhAnIUI=;
+        b=OWTlGQDNWs980Ym0XDdFMdsBJhP9HeAYgCAOahMB2uE+IG6fr2FeT+Fp+tELDQbtEv
+         wn80c2ciI6JJJfzsdBDFB8Y8AxTVEoTWXZOed9qaGVM6m5scibLNaVII7JSTayS/XEq/
+         aekc9iNLbKkreeFTnIRbp2tW4rAoQVstluUS04LGLEYZfvQws3Ct3MIol4jJM8oCs9Tz
+         GuymAa1S7NY3wHtlktFKn8hIMnI+u67sEktIcOrqLMuEpXPVU2ZY3N4dLXBWlTEIrQ0U
+         OH38BxiRKkxdJRIwFbPGRWsen0MaGtcQ/yzO+iEOBbtao/gLrGn4wyIz8hffNoCLxPx7
+         rGzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=0+kZsE73VgEeBbqhD1myF7KMCvhPaJ3w14vUYyxTE3o=;
-        b=r9/y7Kux8niuXlPYtDzZ1BNcqpac3vozXaWmG+5ul0YYImKnUNQSlEfyOJxW5WzgYw
-         ZJXEGwsqqI23cXPSXrobFJTDhiIauZ/a+2L7W2QfrYbIT7AXO+n+JhQObzaylo4x6rKv
-         /yGQuJclLqJK8dwdbKgX5ZClOr/PHRhKV2bpIv+3iveEqyKrq9/6UUuRFOTFT3GhjOY/
-         MPCRIGzeBKMpULShb/5Wp/KJG63MmsBFwhnUhPGvctUsoECtQRNvMNIKrGEcMXhTOY9u
-         HknZV5nMMW4N76B9uttm8sFQObXV2U2J+2W7UKNXYRCurMxHdG2q0eqq6ikJMv5Yzo0l
-         R0fg==
-X-Gm-Message-State: AOAM532ikUujuVX1pm/TltpMPTUeNd5ebM1JjUmWaKJ7R/gyNSZP3l1a
-        NeyI+oYQxPCvW1xBIy3cdvc=
-X-Google-Smtp-Source: ABdhPJwRf1e/B77RcLxn/QGADVvVfQW9IGD65PInAFuGXBHvYSa4VAH8zyTubbVOrYTX2Q+shOqtXw==
-X-Received: by 2002:a65:5acd:0:b0:399:24bc:bbfd with SMTP id d13-20020a655acd000000b0039924bcbbfdmr11488417pgt.323.1650312105301;
-        Mon, 18 Apr 2022 13:01:45 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id w60-20020a17090a6bc200b001cbc1a6963asm14038059pjj.29.2022.04.18.13.01.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 13:01:44 -0700 (PDT)
-Message-ID: <70453a26-ef94-bff5-8bb9-3c17af52dcf7@gmail.com>
-Date:   Mon, 18 Apr 2022 13:01:42 -0700
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/bCpvuooTMQFHb8fBAPBgClqkOF+kRRFnzjAvhAnIUI=;
+        b=afFvs+1/urT9QvLtmL4XDPsrsjScCJUdJ49YE8BhyWIhJBGtmOrH0Zjcgvp1OSb8UZ
+         EAyn2NpKzsigMPuBQtff4arRU7itoedlDVw0iZTlt1s8hAXGeGGr8TZGRtUj2jv4p5ig
+         xD/9bn1sp8ZYO6SukLi9OrjOydceT4wNabQw3naT1Zb8MdH/bJE907jIawD1rWoT2lvu
+         apuddqMM3Y8t7iblu/0APXSpM7wf1nGMTv2D5zb48bVofCH8yQZSYcZoPWWPi97sjrD1
+         QgGDGH0KUdaxNJ+JphGOFChIy589dq0wSBmeixHWI1J3NypuUZs5+J1YFB5y9CsjR2NT
+         eeAA==
+X-Gm-Message-State: AOAM530fQPlQRThDvmij1m15WlLs5NyGKMqQ0xfu5EMPqgBGm0K9o5NJ
+        QublmNevUIwsxcvErEq3bDOtevY50MOrJBSuGaCiQQ==
+X-Google-Smtp-Source: ABdhPJydPcLdynJb9dyw+0KvivU1+NK3qxSQNTgnfFlahabXUFTqteI9cKwcM5vSQ4rxqbrgw/byCEPS2u2RK9o26/o=
+X-Received: by 2002:a05:6808:bc2:b0:2ec:e7f0:c11e with SMTP id
+ o2-20020a0568080bc200b002ece7f0c11emr7794828oik.126.1650312811792; Mon, 18
+ Apr 2022 13:13:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 5.10 000/105] 5.10.112-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220418121145.140991388@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220218082428.11699-1-sj@kernel.org> <9a7f8d0b-3f0f-8584-6c12-423b0d5a979d@linuxfoundation.org>
+ <CAJj2-QEcyO4NrfC7w2X0KA9uRKFhF=3hEf8sOr37EGY6xckUdA@mail.gmail.com>
+In-Reply-To: <CAJj2-QEcyO4NrfC7w2X0KA9uRKFhF=3hEf8sOr37EGY6xckUdA@mail.gmail.com>
+From:   Yuanchu Xie <yuanchu@google.com>
+Date:   Mon, 18 Apr 2022 13:13:20 -0700
+Message-ID: <CAJj2-QEjtM8L2vu5hGT6vWasuFXPDKEuW+Df7x10o4qT_dfmGQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests/damon: make selftests executable
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        SeongJae Park <sj@kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +72,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/18/2022 5:12 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.112 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.112-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
+> I don't recall why we decided to add the check in runner.sh - let's keep them
+> consistent with the rest of the scripts. If we get rid of the check, we can
+> make the change then.
+>
 > thanks,
-> 
-> greg k-h
+> -- Shuah
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+It seems reasonable to add the x bit for these tests to be consistent with
+the rest.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+I also received an email from a patchwork-bot+linux-kselftest@kernel.org
+telling me my patch series was included in shuah/linux-kselftest.git, but
+that does not seem to be the case.
+Is this a bug?
+
+Sorry about the previous non-plain-text email. I never replied to anyone
+before and didn't know what I was doing.
+
+> Hello:
+>
+>
+> This series was applied to shuah/linux-kselftest.git (next)
+>
+> by Jakub Kicinski <kuba@kernel.org>:
+>
+>
+> On Fri, 18 Feb 2022 00:10:15 +0000 you wrote:
+> > These patches fixes trivial errors with building
+> > and running DAMON selftests.
+> >
+> > Yuanchu Xie (2):
+> >   selftests/damon: add damon to selftests root Makefile
+> >   selftests/damon: make selftests executable
+> >
+> > [...]
+>
+>
+> Here is the summary with links:
+>   - [1/2] selftests/damon: add damon to selftests root Makefile
+>     (no matching commit)
+>   - [2/2] selftests/damon: make selftests executable
+>     https://git.kernel.org/shuah/linux-kselftest/c/1335648f0b6f
+>
+> You are awesome, thank you!
+> --
+> Deet-doot-dot, I am a bot.
+> https://korg.docs.kernel.org/patchwork/pwbot.html

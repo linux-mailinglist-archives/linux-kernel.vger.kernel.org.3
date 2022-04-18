@@ -2,160 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EDC505C83
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 078DA505C89
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:40:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245269AbiDRQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:41:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
+        id S1346348AbiDRQmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237467AbiDRQlm (ORCPT
+        with ESMTP id S1346323AbiDRQmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:41:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA23206F;
-        Mon, 18 Apr 2022 09:39:02 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b58fe329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58fe:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1188D1EC032C;
-        Mon, 18 Apr 2022 18:38:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1650299937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=oej/f1X9fcL38mCIYYKYA2X6taoESV0tpCWvTijPE1Y=;
-        b=EjQpq8SbHnY7wyfCBF21dDs+DWQkHOJBxTzKXKwdF/fY44dG9E82HlJrL+9S38NL6uTat4
-        iRCqom1TwEuFW+cVv6nwZQYGp/VEamF5P1S5lZ/r7PZwoA0N5LRrLhBdYV+lW5fBXiqChC
-        MMfAynX1oFVxy0VW0wPKK+rmHxnVRSc=
-Date:   Mon, 18 Apr 2022 18:38:52 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <Yl2UHOQ4iZJ29k0q@zn.tnic>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+        Mon, 18 Apr 2022 12:42:49 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC801CB1E;
+        Mon, 18 Apr 2022 09:40:09 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id i27so27801231ejd.9;
+        Mon, 18 Apr 2022 09:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=FuAliLqkyYXn5Ey/EtjXF/Yu7oHI4/uKKrNgvBgX40c=;
+        b=HebNsdKGP3yphWPGFSkZWvD1iaQWfLNxZhW5jTbTLcZ0S9fAgKGiXLbBg0TTnvT1FV
+         c+JA3Udj18Mo6SUExXKSxsdd9J7tPqMULdZH0/E38SvMlKDPHNy2U+HBA4bTUcZCELQ9
+         7aWOae4pdxva6sKGa8anR8axhqdxJafsgCBs6B0HLBVIqjT55F6K0yVvqtpVlHgzSsR3
+         oqcazq59cY18iTwty+ozgl8CAztirZoyHNS+kPeicq2sOhwdQVAYx5IGmz7Eo8t2HBO/
+         16egiV3IkjJrfXb4R7JU3+I3tsrPwTNDTiTQRUITme099wLOvPIWWFiseZdAVpqdnhIs
+         Fs0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=FuAliLqkyYXn5Ey/EtjXF/Yu7oHI4/uKKrNgvBgX40c=;
+        b=Q8FLVFVIVU4kLNZvewQoOd+PBOS90CheqTms8PWlcJM2WQNdUmSo1SQQa73Vq7+55S
+         Df7nDdSIVwbv9LZQMu4gCGCTa9g7ePItHUnp2fZJnxog1MhUxP1PWKsDqwIxT626GO1C
+         dcskOXS71Q/MG9CWlUyCfT3Woc+EkxPk2T3z0LeA7uWUZCvTj8mvEMEpfQ//Z20+eOi6
+         IukD4siND63melzMKiW1TlAS/QzwkirABdCOk9bqNcdmYSs1j3y5uojp9o/O+pS/tPTa
+         QqhP6vkwHHT4EjtHNOQmAcXj0q+IfGroXCrbld8hP1ClIzA/7t1R63iSXRXuW480JL1Z
+         JBcQ==
+X-Gm-Message-State: AOAM532D5Qu1BCfX/q03pZTpuPufybxYONt2JM4cXE1ppmbkA9vQ6lXl
+        iWBlVwjegane26gVLIXSgPBTS9hvXkfHwDC7kZK18fapW40=
+X-Google-Smtp-Source: ABdhPJyaKoj4mv6UqdwrhwT31wWEjGcRuUu2PMnQVHnJsiFOgYOIT6nlTXzwAvL3RiTlQyiw6ulI4AiN0g5tlciXxKs=
+X-Received: by 2002:a17:907:7d90:b0:6e8:cd12:8893 with SMTP id
+ oz16-20020a1709077d9000b006e8cd128893mr10072953ejc.13.1650300008182; Mon, 18
+ Apr 2022 09:40:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+References: <tencent_FE734C50BC851F2AB5FE1380F833A7E67A0A@qq.com>
+In-Reply-To: <tencent_FE734C50BC851F2AB5FE1380F833A7E67A0A@qq.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 18 Apr 2022 18:39:57 +0200
+Message-ID: <CAFBinCC=Dp4bXT9sbmT=ZTiVfC1Mj=oRVxeDXfKbDczq45iekQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: meson: meson8b: fix a memory leak in meson8b_clkc_init_common()
+To:     xkernel.wang@foxmail.com
+Cc:     Neil Armstrong <narmstrong@baylibre.com>, jbrunet@baylibre.com,
+        mturquette@baylibre.com, sboyd@kernel.org, khilman@baylibre.com,
+        p.zabel@pengutronix.de, linux-amlogic@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 06:55:45PM +0300, Kirill A. Shutemov wrote:
-> I'm confused here. What is wrong with linux/ include namespace?
+Hello,
 
-The problem is that you need all kinds of workarounds so that the
-decompressor builds. Just look at the beginning of
+first of all: thank you for this patch!
 
-arch/x86/boot/compressed/misc.h
+On Thu, Apr 7, 2022 at 11:28 AM <xkernel.wang@foxmail.com> wrote:
+>
+> From: Xiaoke Wang <xkernel.wang@foxmail.com>
+>
+> `rstc` is allocated by kzalloc() for resetting the controller register,
+> however, if reset_controller_register() fails, `rstc` is not properly
+> released before returning, which can lead to memory leak.
+> Therefore, this patch adds kfree(rstc) on the above error path.
+In general I am fine with this approach. There's some more "return"
+statements below. Should these be covered as well?
 
-Even you had to do them:
+Also a note about meson8b_clkc_init_common() itself: failures in that
+function will result in a non-working system.
+If we can't register the reset controller then most devices won't
+probe and CPU SMP cannot work.
+If registering any clock or the clock controller doesn't work then the
+system also won't work as clocks are not available to other drivers.
+So freeing memory in case of an error is good to have, but the end
+result is still the same: the system won't work.
 
-/* cpu_feature_enabled() cannot be used this early */
-#define USE_EARLY_PGTABLE_L5
 
-That thing sprinkled everywhere is not a clean solution.
-
-> Yes, we had story with <asm/io.h> that actually caused issue in
-> decompression code, but linux/ has a lot of perfectly portable
-> library-like stuff.
-
-Yes, those are fine except that not everything that leaks into the
-decompressor code through includes is perfectly portable.
-
-> Could you explain what rules are?
-
-Library-like stuff like types.h, linkage.h, etc we could include for now
-but including linux/kernel.h which pulls in everything but the kitchen
-sink is bad.
-
-So I'd like for the decompressor to be completely separate from kernel
-proper because it is a whole different thing and I want for us to be
-able to include headers in it without ugly workarounds just so that
-kernel proper include changes do not influence the decompressor.
-
-> Hm. accept_or_mark_unaccepted()?
-
-What's wrong with early_accept_memory()?
-
-> > Immediately? As opposed to delayed?
-> 
-> Yes. Otherwise accept is delayed until the first allocation of the memory.
-
-Yes, put that in the comment pls.
-
-> Memory encryption can be a reason to have unaccepted memory, but it is not
-> 1:1 match. Unaccepted memory can be present without memory ecnryption if
-> data secruty and integrity guaranteed by other means.
-
-Really?
-
-Please elaborate. I thought memory acceptance is a feature solely for
-TDX and SNP guests to use.
-
-> <asm/mem_encrypt.h> is very AMD SME/SEV centric.
-
-So?
-
-> I'm not sure it need to exist in the way it is now.
-
-I'm not sure what your argument actually is for having yet another
-separate header vs putting it in a header which already deals with that
-stuff.
-
-> Okay, I will move it into a separate function, but it has to be called
-> from allocate_e820() because it allocates and free the map.
-
-You mean, you want for allocate_e820() to call this new function because
-both allocate and free?
-
-Might have to explain what you mean here exactly.
-
-> > And you're saying that that efi_allocate_pages() below can really give a
-> > 256M contiguous chunk?
-> 
-> Yes, that's assumption. Is it too high ask to deal with 4PiB of PA?
-
-From my experience, asking firmware to do stuff for ya is always a risky
-thing. I guess such a huge allocation, when it fails, will be caught
-early in platform verification so whatever...
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Best regards,
+Martin

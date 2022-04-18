@@ -2,111 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98366505D5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81B9A505D76
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346861AbiDRRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35450 "EHLO
+        id S1346978AbiDRRXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346890AbiDRRRg (ORCPT
+        with ESMTP id S242820AbiDRRXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:17:36 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74728AE6F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:14:56 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id w1so1760240lfa.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:14:55 -0700 (PDT)
+        Mon, 18 Apr 2022 13:23:47 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8541F31935
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:21:07 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id o5-20020a17090ad20500b001ca8a1dc47aso17794240pju.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:21:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=lDDzMF7def6Z3A0mNNBKl8WggzgVJx7e2B3vzhGya4k=;
-        b=YCkmRSV2aipmAdUvTJ9mZvlRB7CoOQS8uhckO+ec/hsoJ1rzwQghZhWzLTkISdGBN4
-         /BUZhUIi6TqLgPL4gUEd1NJCRB7bbblqthgC+tSsLvWEH/Up4TvhBQjgrm/QpfsaIQzZ
-         kZ1pmCErLdIV3J1mdHtQ4pTxVWMl+NBIm08oTJkglzc37kmkj3X15wiZi1ostQBDM+4X
-         iDuMIIptafWY61S6H4YdEhOQiD99od9OMyZeAqEZyDjaIPMGOjLHpchiGKy+j1X2V6aa
-         WcMgJU7Ka1OTGTAc3aHNW9C8QJvdThdcNskW0Wu9LTX/JW0IH51FiWpYXPSnY3WoeG6C
-         iNPw==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iQ7zMObbxBwpwrmjodRH3jIXu53bzE9nhd/lk8gMVG0=;
+        b=N27U19zOBTYQfhc3bgkjYTIy8VPlnXYzPv3bvnCJHxVIGdoj6Dz995yQF6LlOPCvTr
+         BSsZ6cxg55iljThZtwy6r0pNbEQpmpTlAy87IBBTZdvMau1M/zmRDEh4hK1zgOBL0uge
+         VENqT2H+vNAC49WV+/Z4KPqtM4awCnGbTH7UyDkEmGNHPrn0PXFedpdb7EAn/CNfdqlh
+         247BiGGCsoUiN5RhPrOcsztxDbmWCYSrUsuMfIuqrO+cBMjYO4hw1D126HqZvf07pj3C
+         9bNgLiJENjKHtOO/4F468dhRDAhjam2oB+ydxWBy5w0zJTJCKYyRgJfqEmG2oTnafSpS
+         tKiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=lDDzMF7def6Z3A0mNNBKl8WggzgVJx7e2B3vzhGya4k=;
-        b=onUQRiIFUZf2bbnAAiarCgaKuftucY0TSps1iTQY+O0DHsTrUXv4Mjt2j8DyMU5ugH
-         7Oj2CUXb8dI7YAQ5p1+fGuPDddk/O0iyznj44RYizRHaV+goQnbQsOWgMleljm9i7XMx
-         /jcKYDZOrqHwXLTGTuLhD9sERgHBJOp6X12Admc6qRq7R1Jua6D5j0JFKAud9mWM4tyq
-         xY+P7zHHXBKsxAFvphHWQ3W/sjB25IHtBvGchVAKZnr+esqgV34m0XaREF/g1Jdhhzcf
-         /G7LwDipb6SIgAaODDcgaY+O3OQfhN/g17cqEa7Mdo74YYV3Db6Rhfj6VTUPA/wXUHlm
-         318Q==
-X-Gm-Message-State: AOAM531LH2Bjc/1DXUJJfU+LPGmSHlQ442lL6CiFvPIWu2mQDhELF3qg
-        OL9yKYMim/B35FjPi0faZylnVJr3QUMRaBvipAkbEg==
-X-Google-Smtp-Source: ABdhPJxOSRLyeRFQOklWTRHy7cXiZuJLGYvvg5iD+qxNCg1OQzXMRA8UWdanZZV6xUeHz+6I/QY9A0J3mJIJSWi9Ffc=
-X-Received: by 2002:a05:6512:39c7:b0:46b:8140:fb45 with SMTP id
- k7-20020a05651239c700b0046b8140fb45mr8384160lfu.361.1650302093981; Mon, 18
- Apr 2022 10:14:53 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=iQ7zMObbxBwpwrmjodRH3jIXu53bzE9nhd/lk8gMVG0=;
+        b=KPRv7kABW5IqSfJ/UIizkwQcg8vKx4LGBMuwg4o4EAAlbJHvjodOAV1Po0+TM8NhJX
+         V6JDa0uCwzEo8WTqBPjI4L83WUKDAa5ZEGmD8oPKbHULOqtR5FQ+2CdMIeYgMM5vmJNJ
+         DGUEjOcp7rxY18lijU90DSGs7wC2R+VWKIwVe2ViBvanLh/anOgBQZNNUlYeiSghWxJ5
+         4QCRK+GGXQvc+YHGjzutlpeoqJ30BA05N/Wku04UaO3u42JsqqUimgAoQ/JCyyxIR9RE
+         fe6szyVfO4FNHit89rnJfc0tgsBM6SHmXRzvRmHDlwSyOMlsfZhqjrr2zgfbtUCEYFPA
+         42xA==
+X-Gm-Message-State: AOAM531MkV59Bl4ff8LKyfuX3wXiHvGgzyGeXmBb0SlZ4HTHAPnTuhT9
+        kXS/0cZ/DpOIU2bzKcz2Mu/oCo7GeMG3zQ==
+X-Google-Smtp-Source: ABdhPJz++PL/lJOqM3fzQXj2jrTDz43c8/cBZ4e+c+pV3rnK5BSZJnTiluFjWyDif1IdjKep3RWv4w==
+X-Received: by 2002:a17:90b:1a8a:b0:1c7:c60b:f12 with SMTP id ng10-20020a17090b1a8a00b001c7c60b0f12mr13989087pjb.139.1650302467000;
+        Mon, 18 Apr 2022 10:21:07 -0700 (PDT)
+Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
+        by smtp.gmail.com with ESMTPSA id y9-20020aa78f29000000b005098201d2f5sm13041394pfr.205.2022.04.18.10.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 10:21:06 -0700 (PDT)
+From:   Aliya Rahmani <aliyarahmani786@gmail.com>
+To:     clabbe@baylibre.com
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Aliya Rahmani <aliyarahmani786@gmail.com>
+Subject: [PATCH v3 0/3] staging: media: zoran: fix warnings reported by checkpatch
+Date:   Mon, 18 Apr 2022 22:44:50 +0530
+Message-Id: <20220418171453.16971-1-aliyarahmani786@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220418121203.462784814@linuxfoundation.org> <20220418121212.002023130@linuxfoundation.org>
-In-Reply-To: <20220418121212.002023130@linuxfoundation.org>
-From:   Oliver Upton <oupton@google.com>
-Date:   Mon, 18 Apr 2022 10:14:42 -0700
-Message-ID: <CAOQ_QsgUrEyqLmjWPP2k_EUgp-VYv7ocT1w6EbJD=mxU+gPAfw@mail.gmail.com>
-Subject: Re: [PATCH 5.17 183/219] KVM: Dont create VM debugfs files outside of
- the VM directory
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        stable@kernel.org, Marc Zyngier <maz@kernel.org>,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+These patches address style issues found by checkpatch in the
+zoran/videocodec.c file.
 
-On Mon, Apr 18, 2022 at 5:24 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> From: Oliver Upton <oupton@google.com>
->
-> commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
->
-> Unfortunately, there is no guarantee that KVM was able to instantiate a
-> debugfs directory for a particular VM. To that end, KVM shouldn't even
-> attempt to create new debugfs files in this case. If the specified
-> parent dentry is NULL, debugfs_create_file() will instantiate files at
-> the root of debugfs.
->
-> For arm64, it is possible to create the vgic-state file outside of a
-> VM directory, the file is not cleaned up when a VM is destroyed.
-> Nonetheless, the corresponding struct kvm is freed when the VM is
-> destroyed.
->
-> Nip the problem in the bud for all possible errant debugfs file
-> creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
-> debugfs_create_file() will fail instead of creating the file in the root
-> directory.
->
-> Cc: stable@kernel.org
-> Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
-> Signed-off-by: Oliver Upton <oupton@google.com>
-> Signed-off-by: Marc Zyngier <maz@kernel.org>
-> Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+changes since v2:
+PATCH[2/3] : Rework commit description and subject
+PATCH[3/3] : Rework commit description and subject
 
-Can you drop this patch from stable for the time being? There's a bug
-in it because KVM does init/destroy awkwardly. Sean working on a fix
-[1].
+Aliya Rahmani (3):
+ staging: media: zoran: use seq_puts() instead of seq_printf()
+ staging: media: zoran: else is not generally useful after a break or return
+ staging: media: zoran: avoid macro argument precedence issues
 
-[1]: https://lore.kernel.org/kvm/20220415004622.2207751-1-seanjc@google.com/
+drivers/staging/media/zoran/videocodec.c | 9++++-----
+1 file changed, 4 insertions(+), 5 deletions(-)
 
---
-Thanks,
-Oliver
+-- 
+2.25.1
+

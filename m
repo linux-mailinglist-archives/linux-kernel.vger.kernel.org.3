@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E1E505826
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC83250556C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240657AbiDROAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:00:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
+        id S242833AbiDRNJa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:09:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243280AbiDRNhd (ORCPT
+        with ESMTP id S240862AbiDRM6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:37:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE4E27B0E;
-        Mon, 18 Apr 2022 05:58:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:58:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74B623BD1;
+        Mon, 18 Apr 2022 05:38:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E45AD612CF;
-        Mon, 18 Apr 2022 12:58:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D34FCC385A9;
-        Mon, 18 Apr 2022 12:58:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0FD3CB80EDE;
+        Mon, 18 Apr 2022 12:38:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B7EAC385A1;
+        Mon, 18 Apr 2022 12:38:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286696;
-        bh=4QpLtH7S8RdCIQtLmepIpbKl1cszcxf5LaxKnqz6APU=;
+        s=korg; t=1650285495;
+        bh=FwdpkxLnSJ53/l0PCJZf/GNvyxyRvT/+Ukilz4wFld4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uz2wBtK2FK5ZLVGdDZrCD5nZonYJEaBbOKJdevg2/qK9EG/qiQxqW/HmSYj0s7AkN
-         2fz15UKAwuN5el4adDQ29ixaK6FLsZbtpKROZkmHWWCjVuPNIoNCqmTnUoZXBfnAxU
-         PPM1/ceAhsZ0ov//YggbuTRHGsHVFr780wtnE0cM=
+        b=bclpOq2XwRv253ZptPaWn1T2lKCcsQe7KeL653l2Rh4Txm5bKfo0O20oKp6GTjv9/
+         IwLurQuntnzihNXdVPVP1uIIPJjFxqADF6EOku/LMMUhEOI9R5DmDEwdh2BtMo2cqq
+         HabI5E7NFC6vcKglomLFq+REhlUlwFNPq+w6KgSw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Arnd Bergmann <arnd@arndb.de>,
+        stable@vger.kernel.org, Petr Malat <oss@malat.biz>,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 176/284] ARM: mmp: Fix failure to remove sram device
+Subject: [PATCH 5.10 035/105] sctp: Initialize daddr on peeled off socket
 Date:   Mon, 18 Apr 2022 14:12:37 +0200
-Message-Id: <20220418121216.744989715@linuxfoundation.org>
+Message-Id: <20220418121147.426483325@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,76 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Petr Malat <oss@malat.biz>
 
-[ Upstream commit 4036b29a146b2749af3bb213b003eb69f3e5ecc4 ]
+[ Upstream commit 8467dda0c26583547731e7f3ea73fc3856bae3bf ]
 
-Make sure in .probe() to set driver data before the function is left to
-make it possible in .remove() to undo the actions done.
+Function sctp_do_peeloff() wrongly initializes daddr of the original
+socket instead of the peeled off socket, which makes getpeername()
+return zeroes instead of the primary address. Initialize the new socket
+instead.
 
-This fixes a potential memory leak and stops returning an error code in
-.remove() that is ignored by the driver core anyhow.
-
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Fixes: d570ee490fb1 ("[SCTP]: Correctly set daddr for IPv6 sockets during peeloff")
+Signed-off-by: Petr Malat <oss@malat.biz>
+Acked-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Link: https://lore.kernel.org/r/20220409063611.673193-1-oss@malat.biz
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/mach-mmp/sram.c | 22 ++++++++++++----------
- 1 file changed, 12 insertions(+), 10 deletions(-)
+ net/sctp/socket.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/mach-mmp/sram.c b/arch/arm/mach-mmp/sram.c
-index bf5e64906e65..a41162dc4af4 100644
---- a/arch/arm/mach-mmp/sram.c
-+++ b/arch/arm/mach-mmp/sram.c
-@@ -75,6 +75,8 @@ static int sram_probe(struct platform_device *pdev)
- 	if (!info)
- 		return -ENOMEM;
+diff --git a/net/sctp/socket.c b/net/sctp/socket.c
+index 0a9e2c7d8e5f..e9b4ea3d934f 100644
+--- a/net/sctp/socket.c
++++ b/net/sctp/socket.c
+@@ -5518,7 +5518,7 @@ int sctp_do_peeloff(struct sock *sk, sctp_assoc_t id, struct socket **sockp)
+ 	 * Set the daddr and initialize id to something more random and also
+ 	 * copy over any ip options.
+ 	 */
+-	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sk);
++	sp->pf->to_sk_daddr(&asoc->peer.primary_addr, sock->sk);
+ 	sp->pf->copy_ip_options(sk, sock->sk);
  
-+	platform_set_drvdata(pdev, info);
-+
- 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
- 	if (res == NULL) {
- 		dev_err(&pdev->dev, "no memory resource defined\n");
-@@ -110,8 +112,6 @@ static int sram_probe(struct platform_device *pdev)
- 	list_add(&info->node, &sram_bank_list);
- 	mutex_unlock(&sram_lock);
- 
--	platform_set_drvdata(pdev, info);
--
- 	dev_info(&pdev->dev, "initialized\n");
- 	return 0;
- 
-@@ -130,17 +130,19 @@ static int sram_remove(struct platform_device *pdev)
- 	struct sram_bank_info *info;
- 
- 	info = platform_get_drvdata(pdev);
--	if (info == NULL)
--		return -ENODEV;
- 
--	mutex_lock(&sram_lock);
--	list_del(&info->node);
--	mutex_unlock(&sram_lock);
-+	if (info->sram_size) {
-+		mutex_lock(&sram_lock);
-+		list_del(&info->node);
-+		mutex_unlock(&sram_lock);
-+
-+		gen_pool_destroy(info->gpool);
-+		iounmap(info->sram_virt);
-+		kfree(info->pool_name);
-+	}
- 
--	gen_pool_destroy(info->gpool);
--	iounmap(info->sram_virt);
--	kfree(info->pool_name);
- 	kfree(info);
-+
- 	return 0;
- }
- 
+ 	/* Populate the fields of the newsk from the oldsk and migrate the
 -- 
-2.34.1
+2.35.1
 
 
 

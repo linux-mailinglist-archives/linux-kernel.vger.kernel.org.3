@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14AD505D51
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:12:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CCDE505D53
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:12:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346850AbiDRRPM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:15:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60142 "EHLO
+        id S1346873AbiDRRPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:15:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344650AbiDRRPI (ORCPT
+        with ESMTP id S1346820AbiDRRPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 13:15:08 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87EE21244
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:27 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id s137so19973846pgs.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:27 -0700 (PDT)
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0CA21263
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:29 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id be5so12815211plb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=ZcVLSMeauHEXtyp9AxODJlBHCvOIwedUfh2n14tYNhg=;
-        b=Kh069mCyQDD1Y5M3hVm1c19pBzUk9OtdZt0beL1xQQMGBPnr7ybJCSEYJeHYnzabIJ
-         ZSJS2x+gJvZaYOeD7cReTdfPPVd1g8iV6edzOH/l41QgdemSRI8S6HNZ71OY0zlUU50H
-         g3XTxdXlAaSv9pNa+/+HIMOcxUEWmsF30Ya2b0duly5ISRC6uZOiMVob7SgezA92nwFS
-         lD3DzVmRr42rvwbkZYIJHIrcgmrappui2yjI6ppCsEzt3NMpzvJGvDWinCJUMCk3Mr/y
-         PGtsX4KL297rQjfAq6h5+29aJEoqRoQfLAkpcBoTe971eAPoF/2qIGiZlBp4FdH6Y2OI
-         ByXA==
+        bh=zoZQxmtb8wh8rIrYIwJh8EMCnLpoLNcQ3bLBdyTYQ6w=;
+        b=oGePhJ4CL//kwxYgrL7T7zj0lNgwSohAJEPCTFN2QQEJnJn5Pp66ypPFowafWAlYDl
+         uLeT7zCb7k+aar64pu4/2c2306Ut4jcNmn34NZI3na7reYJKjwNdJTF1RgrWj8jYj2cu
+         kpHLzdpHj4gx5TJg44hXhNBfUnGai8YQlj8/Id+UbZCwx2oYkKqxjxfEOBVvfQPtgVu0
+         DviuhV5Tnf8/GwojjvmUAw8AGrCIjYUUa98K3dNB/qYpkQUOPAa6MR+//mnVw4YrTRQo
+         J+5gSqU1UwamONsNn/oBbkv1C+Pp56celep1KU5sWr20BJVJXeLFzXMWtAuGAdLxdFfH
+         yzDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=ZcVLSMeauHEXtyp9AxODJlBHCvOIwedUfh2n14tYNhg=;
-        b=5/D5ZqkjZtR9jpxnwxNm8ptaWZt/xCNdZgvw42v8KVeblD1HemWfBzhSdURy6ElHy6
-         2kCkS70X+5oK6gZLBmtYBaci5qane9BCkwK2ANkpFfLWOR0471Tu595Yl5QRiNRT5U8D
-         Woqq9x7srQGZEc2e7tGUBC4JrTfLY3EYtth7BNbQOMQ2vAMn3lVFwsIgIVkff1XMm+WV
-         wuiJAiyNVICYOyeKacmMCCSGX0d/f2lKj9lxcskbI4Yoh+Hb5mqnrJK0xBbpoOnJxYW0
-         QtNyLapN5sQIt14A3GszdfV6JPPdGyYAZM5O2lPSgwyYjgdoPlY2Ss07CJUDXw1lH8Ly
-         pikA==
-X-Gm-Message-State: AOAM530jR6Xc4SGn6/QrTdr0eAUK7HJskP0hFxPxMFvACJ/yNAhTCjFe
-        JlfLBnSwbGfSj6SAOzrDrUcIOyNKN0A=
-X-Google-Smtp-Source: ABdhPJywZ8F7/klptc0K5IM/nCi5QCWKkMLD3NHglOQ/IGD3XB4+QiafjpYCENkVMSsIfCs8jBnfGA==
-X-Received: by 2002:a63:e557:0:b0:39d:2965:a7f0 with SMTP id z23-20020a63e557000000b0039d2965a7f0mr10964189pgj.158.1650301947223;
-        Mon, 18 Apr 2022 10:12:27 -0700 (PDT)
+        bh=zoZQxmtb8wh8rIrYIwJh8EMCnLpoLNcQ3bLBdyTYQ6w=;
+        b=16YL/5h7UEfsFXF0TrVcif8bGrCN5hVW792AwnpcEIUp9nrn/r1GUASrVpBcQhNppG
+         /BSO/ztNW1+1gMS52t4pO9tBoyQd9iO8eDS4QWXzN2Xv71ZkF1FajfWGAR9kUZf/HNIy
+         vKNYZjVWOLYFj8NiM2mqdDNRX83CDAyp4cEKhaIxiwYc/ODnOgpTImjKAgLC2vsXoyqR
+         gA+rTPEckQahCPsQYmwu7R3O4A073e30H+KpA4DRXeQWc6PWBjenTTH2cQqn1akSEpeo
+         0f4msouur4OnQ9WCHB82GsZO1oA0zVWN2G2fftsSCP7JNLudGZjgAG4j0ZLAFLOchj8/
+         Cc9A==
+X-Gm-Message-State: AOAM532tacV+XO81QNWLJTcDogdOKlHASzbMX70UqXdlQBuZNUpbkSLf
+        UXD5/7DBCYvCWExIOAeqcrc=
+X-Google-Smtp-Source: ABdhPJyYTfhMqf837S2fuUtQSWU6SysAvp5Z7RY2vZSt/y/eY/bblzWbZV44btEVv4w2YhKfxN4w1Q==
+X-Received: by 2002:a17:902:8c81:b0:156:7fee:643b with SMTP id t1-20020a1709028c8100b001567fee643bmr11866552plo.59.1650301948714;
+        Mon, 18 Apr 2022 10:12:28 -0700 (PDT)
 Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:3f09:380c:8f11:5a8a])
-        by smtp.gmail.com with ESMTPSA id e16-20020a63ee10000000b0039d1c7e80bcsm13637138pgi.75.2022.04.18.10.12.25
+        by smtp.gmail.com with ESMTPSA id e16-20020a63ee10000000b0039d1c7e80bcsm13637138pgi.75.2022.04.18.10.12.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:12:26 -0700 (PDT)
+        Mon, 18 Apr 2022 10:12:28 -0700 (PDT)
 From:   Max Filippov <jcmvbkbc@gmail.com>
 To:     linux-xtensa@linux-xtensa.org
 Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
         Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 2/5] xtensa: move trace_hardirqs_off call back to entry.S
-Date:   Mon, 18 Apr 2022 10:12:02 -0700
-Message-Id: <20220418171205.2413168-3-jcmvbkbc@gmail.com>
+Subject: [PATCH 3/5] xtensa: use abi_* register names in the kernel exit code
+Date:   Mon, 18 Apr 2022 10:12:03 -0700
+Message-Id: <20220418171205.2413168-4-jcmvbkbc@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220418171205.2413168-1-jcmvbkbc@gmail.com>
 References: <20220418171205.2413168-1-jcmvbkbc@gmail.com>
@@ -71,94 +71,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Context tracking call must be done after hardirq tracking call,
-otherwise lockdep_assert_irqs_disabled called from rcu_eqs_exit gives
-a warning. To avoid context tracking logic duplication for IRQ/exception
-entry paths move trace_hardirqs_off call back to common entry code.
+Using plain register names is prone to errors when code is changed and
+new calls are added between the register load and use. Change plain
+register names to abi_* names in the call-heavy part of the kernel exit
+code to clearly indicate what's supposed to be preserved and what's not.
+Re-align code while at it.
 
 Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
 ---
- arch/xtensa/kernel/entry.S | 19 +++++++++++++------
- arch/xtensa/kernel/traps.c | 11 ++---------
- 2 files changed, 15 insertions(+), 15 deletions(-)
+ arch/xtensa/kernel/entry.S | 82 +++++++++++++++++++-------------------
+ 1 file changed, 42 insertions(+), 40 deletions(-)
 
 diff --git a/arch/xtensa/kernel/entry.S b/arch/xtensa/kernel/entry.S
-index 3c0b1aac7aba..c85597a734aa 100644
+index c85597a734aa..d09f2c38ba84 100644
 --- a/arch/xtensa/kernel/entry.S
 +++ b/arch/xtensa/kernel/entry.S
-@@ -424,7 +424,6 @@ KABI_W	or	a3, a3, a0
- 	moveqz	a3, a0, a2		# a3 = LOCKLEVEL iff interrupt
- KABI_W	movi	a2, PS_WOE_MASK
- KABI_W	or	a3, a3, a2
--	rsr	a2, exccause
- #endif
- 
- 	/* restore return address (or 0 if return to userspace) */
-@@ -451,19 +450,27 @@ KABI_W	or	a3, a3, a2
- 
- 	save_xtregs_opt a1 a3 a4 a5 a6 a7 PT_XTREGS_OPT
- 	
-+#ifdef CONFIG_TRACE_IRQFLAGS
-+	rsr		abi_tmp0, ps
-+	extui		abi_tmp0, abi_tmp0, PS_INTLEVEL_SHIFT, PS_INTLEVEL_WIDTH
-+	beqz		abi_tmp0, 1f
-+	abi_call	trace_hardirqs_off
-+1:
-+#endif
-+
- 	/* Go to second-level dispatcher. Set up parameters to pass to the
+@@ -462,11 +462,11 @@ KABI_W	or	a3, a3, a2
  	 * exception handler and call the exception handler.
  	 */
  
--	rsr	a4, excsave1
--	addx4	a4, a2, a4
--	l32i	a4, a4, EXC_TABLE_DEFAULT		# load handler
--	mov	abi_arg1, a2			# pass EXCCAUSE
-+	l32i	abi_arg1, a1, PT_EXCCAUSE	# pass EXCCAUSE
-+	rsr	abi_tmp0, excsave1
-+	addx4	abi_tmp0, abi_arg1, abi_tmp0
-+	l32i	abi_tmp0, abi_tmp0, EXC_TABLE_DEFAULT	# load handler
- 	mov	abi_arg0, a1			# pass stack frame
+-	l32i	abi_arg1, a1, PT_EXCCAUSE	# pass EXCCAUSE
+-	rsr	abi_tmp0, excsave1
+-	addx4	abi_tmp0, abi_arg1, abi_tmp0
+-	l32i	abi_tmp0, abi_tmp0, EXC_TABLE_DEFAULT	# load handler
+-	mov	abi_arg0, a1			# pass stack frame
++	l32i		abi_arg1, a1, PT_EXCCAUSE	# pass EXCCAUSE
++	rsr		abi_tmp0, excsave1
++	addx4		abi_tmp0, abi_arg1, abi_tmp0
++	l32i		abi_tmp0, abi_tmp0, EXC_TABLE_DEFAULT	# load handler
++	mov		abi_arg0, a1			# pass stack frame
  
  	/* Call the second-level handler */
  
--	abi_callx	a4
-+	abi_callx	abi_tmp0
+@@ -477,23 +477,23 @@ KABI_W	or	a3, a3, a2
+ common_exception_return:
  
- 	/* Jump here for exception exit */
- 	.global common_exception_return
-diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-index 82ced7b25b77..515719c7e750 100644
---- a/arch/xtensa/kernel/traps.c
-+++ b/arch/xtensa/kernel/traps.c
-@@ -242,12 +242,8 @@ DEFINE_PER_CPU(unsigned long, nmi_count);
+ #if XTENSA_FAKE_NMI
+-	l32i	abi_tmp0, a1, PT_EXCCAUSE
+-	movi	abi_tmp1, EXCCAUSE_MAPPED_NMI
+-	l32i	abi_saved1, a1, PT_PS
+-	beq	abi_tmp0, abi_tmp1, .Lrestore_state
++	l32i		abi_tmp0, a1, PT_EXCCAUSE
++	movi		abi_tmp1, EXCCAUSE_MAPPED_NMI
++	l32i		abi_saved1, a1, PT_PS
++	beq		abi_tmp0, abi_tmp1, .Lrestore_state
+ #endif
+ .Ltif_loop:
+-	irq_save a2, a3
++	irq_save	abi_tmp0, abi_tmp1
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	abi_call	trace_hardirqs_off
+ #endif
  
- void do_nmi(struct pt_regs *regs)
- {
--	struct pt_regs *old_regs;
-+	struct pt_regs *old_regs = set_irq_regs(regs);
+ 	/* Jump if we are returning from kernel exceptions. */
  
--	if ((regs->ps & PS_INTLEVEL_MASK) < LOCKLEVEL)
--		trace_hardirqs_off();
+-	l32i	abi_saved1, a1, PT_PS
+-	GET_THREAD_INFO(a2, a1)
+-	l32i	a4, a2, TI_FLAGS
+-	_bbci.l	abi_saved1, PS_UM_BIT, .Lexit_tif_loop_kernel
++	l32i		abi_saved1, a1, PT_PS
++	GET_THREAD_INFO(abi_tmp0, a1)
++	l32i		abi_saved0, abi_tmp0, TI_FLAGS
++	_bbci.l		abi_saved1, PS_UM_BIT, .Lexit_tif_loop_kernel
+ 
+ 	/* Specific to a user exception exit:
+ 	 * We need to check some flags for signal handling and rescheduling,
+@@ -502,75 +502,77 @@ common_exception_return:
+ 	 * Note that we don't disable interrupts here. 
+ 	 */
+ 
+-	_bbsi.l	a4, TIF_NEED_RESCHED, .Lresched
+-	movi	a2, _TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_NOTIFY_SIGNAL
+-	bnone	a4, a2, .Lexit_tif_loop_user
++	_bbsi.l		abi_saved0, TIF_NEED_RESCHED, .Lresched
++	movi		abi_tmp0, _TIF_SIGPENDING | _TIF_NOTIFY_RESUME | _TIF_NOTIFY_SIGNAL
++	bnone		abi_saved0, abi_tmp0, .Lexit_tif_loop_user
+ 
+-	l32i	a4, a1, PT_DEPC
+-	bgeui	a4, VALID_DOUBLE_EXCEPTION_ADDRESS, .Lrestore_state
++	l32i		abi_tmp0, a1, PT_DEPC
++	bgeui		abi_tmp0, VALID_DOUBLE_EXCEPTION_ADDRESS, .Lrestore_state
+ 
+ 	/* Call do_signal() */
+ 
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	abi_call	trace_hardirqs_on
+ #endif
+-	rsil	a2, 0
+-	mov	abi_arg0, a1
++	rsil		abi_tmp0, 0
++	mov		abi_arg0, a1
+ 	abi_call	do_notify_resume	# int do_notify_resume(struct pt_regs*)
+-	j	.Ltif_loop
++	j		.Ltif_loop
+ 
+ .Lresched:
+ #ifdef CONFIG_TRACE_IRQFLAGS
+ 	abi_call	trace_hardirqs_on
+ #endif
+-	rsil	a2, 0
++	rsil		abi_tmp0, 0
+ 	abi_call	schedule	# void schedule (void)
+-	j	.Ltif_loop
++	j		.Ltif_loop
+ 
+ .Lexit_tif_loop_kernel:
+ #ifdef CONFIG_PREEMPTION
+-	_bbci.l	a4, TIF_NEED_RESCHED, .Lrestore_state
++	_bbci.l		abi_saved0, TIF_NEED_RESCHED, .Lrestore_state
+ 
+ 	/* Check current_thread_info->preempt_count */
+ 
+-	l32i	a4, a2, TI_PRE_COUNT
+-	bnez	a4, .Lrestore_state
++	l32i		abi_tmp1, abi_tmp0, TI_PRE_COUNT
++	bnez		abi_tmp1, .Lrestore_state
+ 	abi_call	preempt_schedule_irq
+ #endif
+-	j	.Lrestore_state
++	j		.Lrestore_state
+ 
+ .Lexit_tif_loop_user:
+ #ifdef CONFIG_HAVE_HW_BREAKPOINT
+-	_bbci.l	a4, TIF_DB_DISABLED, 1f
++	_bbci.l		abi_saved0, TIF_DB_DISABLED, 1f
+ 	abi_call	restore_dbreak
+ 1:
+ #endif
+ #ifdef CONFIG_DEBUG_TLB_SANITY
+-	l32i	a4, a1, PT_DEPC
+-	bgeui	a4, VALID_DOUBLE_EXCEPTION_ADDRESS, .Lrestore_state
++	l32i		abi_tmp0, a1, PT_DEPC
++	bgeui		abi_tmp0, VALID_DOUBLE_EXCEPTION_ADDRESS, .Lrestore_state
+ 	abi_call	check_tlb_sanity
+ #endif
+ 
+ .Lrestore_state:
+ #ifdef CONFIG_TRACE_IRQFLAGS
+-	extui	a4, abi_saved1, PS_INTLEVEL_SHIFT, PS_INTLEVEL_WIDTH
+-	bgei	a4, LOCKLEVEL, 1f
++	extui		abi_tmp0, abi_saved1, PS_INTLEVEL_SHIFT, PS_INTLEVEL_WIDTH
++	bgei		abi_tmp0, LOCKLEVEL, 1f
+ 	abi_call	trace_hardirqs_on
+ 1:
+ #endif
+-	/* Restore optional registers. */
++	/*
++	 * Restore optional registers.
++	 * abi_arg* are used as temporary registers here.
++	 */
+ 
+-	load_xtregs_opt a1 a2 a4 a5 a6 a7 PT_XTREGS_OPT
++	load_xtregs_opt a1 abi_tmp0 abi_arg0 abi_arg1 abi_arg2 abi_arg3 PT_XTREGS_OPT
+ 
+ 	/* Restore SCOMPARE1 */
+ 
+ #if XCHAL_HAVE_S32C1I
+-	l32i    a2, a1, PT_SCOMPARE1
+-	wsr     a2, scompare1
++	l32i		abi_tmp0, a1, PT_SCOMPARE1
++	wsr		abi_tmp0, scompare1
+ #endif
+-	wsr	abi_saved1, ps		/* disable interrupts */
 -
--	old_regs = set_irq_regs(regs);
- 	nmi_enter();
- 	++*this_cpu_ptr(&nmi_count);
- 	check_valid_nmi();
-@@ -269,12 +265,9 @@ void do_interrupt(struct pt_regs *regs)
- 		XCHAL_INTLEVEL6_MASK,
- 		XCHAL_INTLEVEL7_MASK,
- 	};
--	struct pt_regs *old_regs;
-+	struct pt_regs *old_regs = set_irq_regs(regs);
- 	unsigned unhandled = ~0u;
+-	_bbci.l	abi_saved1, PS_UM_BIT, kernel_exception_exit
++	wsr		abi_saved1, ps		/* disable interrupts */
++	_bbci.l		abi_saved1, PS_UM_BIT, kernel_exception_exit
  
--	trace_hardirqs_off();
--
--	old_regs = set_irq_regs(regs);
- 	irq_enter();
+ user_exception_exit:
  
- 	for (;;) {
 -- 
 2.30.2
 

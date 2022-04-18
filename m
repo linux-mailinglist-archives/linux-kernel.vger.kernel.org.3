@@ -2,119 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D8B504F45
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9A3504F47
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231488AbiDRLLA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:11:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S232280AbiDRLMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbiDRLK4 (ORCPT
+        with ESMTP id S229933AbiDRLMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:10:56 -0400
-Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479EB1A070;
-        Mon, 18 Apr 2022 04:08:18 -0700 (PDT)
-Received: by mail-qt1-x82f.google.com with SMTP id bb21so865216qtb.3;
-        Mon, 18 Apr 2022 04:08:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4tdq9jroPOUGvAM0f6joaa1S+NnnIuEuwiI5ZeawYNY=;
-        b=nEgmj51yeSp/gGYWuzhNlADPnABnZJXoKAF6oS5fLL6Q7WyHLCf3GJJl+PRf/GxHlk
-         h71VvqVgo3ltgufH8bpxfc9wXUIfLUpt7CJEjmvQkh0ahzDHE6Iwo/MiBEqjLpgj0pkU
-         M4FGs7cJNW/tgAGH/jg7zZiW44YsJMS0Dzci8BIubF/NecUUzDhv/ZEXfGCL3eQLoskq
-         Co0UOcdZPLa5pYfVUdEyXegsc6aYWo7Wm5Gd2LZhT5xSBLr+fNrDKq8MzTarZbAtka8l
-         NP0JqSuKkT4CCx7/sj6hEjsgAJWWyT/ZLhinIRNw6U02dPLgUC5KZ8JD8XzUE9YbWw/P
-         E5VA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4tdq9jroPOUGvAM0f6joaa1S+NnnIuEuwiI5ZeawYNY=;
-        b=gKTufSIe6n1YL/CQq3ajyHrSKsauGTBo4fGws0ndHV1xM8hOyXSzZagKZi8km4aKfA
-         Sb8za2x2M4mNTUJsi85sFgq8Qj6ffpyyEbC+QfBwCiOGCONiDxhtykUQAQur7TwXAlGd
-         LYJI0yK6WWS9bTtKDmhtvwuZVQqGh2pqXGuVv33v8hGBlUHPvloiNgdsSNvakdR5VKoQ
-         B171nChXCEQnupV1iWkx4j7QmozB5SR5Bt2vgxgWXcWlAS2Lbg/J5T5f8GijW3CwitCP
-         CxwtVOEnSRF1yAE6uwr0k4L8I2AdSmhq6l0anAQ6w89TIVKWH4yJusuhEcRfGOwnjWEC
-         DMrw==
-X-Gm-Message-State: AOAM531EZb+HEGzETjlK6PGF29LA++FBgAuBGpnlDRE8YtZ0B4yN7fDE
-        UZ7+e4A3MjuKawhi6bzdyJk=
-X-Google-Smtp-Source: ABdhPJwB/RG4xddzAg3xzpgVkMBxWQSFr1LPn0T5ZmG+MxMtUsepspdSWnl3eUhQY0TVJ5FEEdjHRA==
-X-Received: by 2002:ac8:5894:0:b0:2e1:c997:a61e with SMTP id t20-20020ac85894000000b002e1c997a61emr6506536qta.388.1650280097499;
-        Mon, 18 Apr 2022 04:08:17 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id v65-20020a376144000000b0069e7842f2f5sm3196193qkb.52.2022.04.18.04.08.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 04:08:17 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     brgl@bgdev.pl
-Cc:     arnd@arndb.de, gregkh@linuxfoundation.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] misc/eeprom: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon, 18 Apr 2022 11:08:11 +0000
-Message-Id: <20220418110811.2559529-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 07:12:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 848F21A072
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:09:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650280161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gQ5I1K+ZmaJUXOQE28CgU+0HLTQ8wWEKYgkOaeYQd00=;
+        b=euHp4uwi+/wS+ccUUbQUzNV2mDQOCBQhcnqrCOAVU1jewwsija/Q+M5j8/6bSVoxwVyXHq
+        G8JLLwdsJuFBpz7kkJT8yKacx5dMjMUfaaLClXnZ8I1DGT0aB9GyFJCpSZA7Op4JWsIeLf
+        Diu0uVKF8xr7eRjRQSQh7mrj9ga2ERk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-a6NjJP4lNR-26d2T0ycYVA-1; Mon, 18 Apr 2022 07:09:16 -0400
+X-MC-Unique: a6NjJP4lNR-26d2T0ycYVA-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A425F80159B;
+        Mon, 18 Apr 2022 11:09:15 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8AE2AC5097F;
+        Mon, 18 Apr 2022 11:09:13 +0000 (UTC)
+Message-ID: <26b02f98e88b1097ce5823007a7bc06b25678252.camel@redhat.com>
+Subject: Re: [PATCH v2 06/12] KVM: SVM: Do not support updating APIC ID when
+ in x2APIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Mon, 18 Apr 2022 14:09:12 +0300
+In-Reply-To: <20220412115822.14351-7-suravee.suthikulpanit@amd.com>
+References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
+         <20220412115822.14351-7-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
+> In X2APIC mode, the Logical Destination Register is read-only,
+> which provides a fixed mapping between the logical and physical
+> APIC IDs. Therefore, there is no Logical APIC ID table in X2AVIC
+> and the processor uses the X2APIC ID in the backing page to create
+> a vCPU’s logical ID.
+> 
+> In addition, KVM does not support updating APIC ID in x2APIC mode,
+> which means AVIC does not need to handle this case.
+> 
+> Therefore, check x2APIC mode when handling physical and logical
+> APIC ID update, and when invalidating logical APIC ID table.
+> 
+> Suggested-by: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 19 ++++++++++++++++++-
+>  1 file changed, 18 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 609dcbe52a86..22ee1098e2a5 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -424,8 +424,13 @@ static void avic_invalidate_logical_id_entry(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	bool flat = svm->dfr_reg == APIC_DFR_FLAT;
+> -	u32 *entry = avic_get_logical_id_entry(vcpu, svm->ldr_reg, flat);
+> +	u32 *entry;
+>  
+> +	/* Note: x2AVIC does not use logical APIC ID table */
+> +	if (apic_x2apic_mode(vcpu->arch.apic))
+> +		return;
+> +
+> +	entry = avic_get_logical_id_entry(vcpu, svm->ldr_reg, flat);
+>  	if (entry)
+>  		clear_bit(AVIC_LOGICAL_ID_ENTRY_VALID_BIT, (unsigned long *)entry);
+>  }
+> @@ -437,6 +442,10 @@ static int avic_handle_ldr_update(struct kvm_vcpu *vcpu)
+>  	u32 ldr = kvm_lapic_get_reg(vcpu->arch.apic, APIC_LDR);
+>  	u32 id = kvm_xapic_id(vcpu->arch.apic);
+>  
+> +	/* AVIC does not support LDR update for x2APIC */
+> +	if (apic_x2apic_mode(vcpu->arch.apic))
+> +		return 0;
+> +
+>  	if (ldr == svm->ldr_reg)
+>  		return 0;
+>  
+> @@ -457,6 +466,14 @@ static int avic_handle_apic_id_update(struct kvm_vcpu *vcpu)
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	u32 id = kvm_xapic_id(vcpu->arch.apic);
+>  
+> +	/*
+> +	 * KVM does not support apic ID update for x2APIC.
+> +	 * Also, need to check if the APIC ID exceed 254.
+> +	 */
+> +	if (apic_x2apic_mode(vcpu->arch.apic) ||
+> +	    (vcpu->vcpu_id >= APIC_BROADCAST))
+> +		return 0;
+> +
+>  	if (vcpu->vcpu_id == id)
+>  		return 0;
+>  
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+Honestly I won't even bother with this - avic_handle_apic_id_update
+zeros the initial apic id entry, after it moves it contents to new location.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/misc/eeprom/at24.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+If it is called again (and it will be called next time there is avic inhibition),
+it will just fail as the initial entry will be zero, or copy wrong entry
+if something else was written there meanwhile.
 
-diff --git a/drivers/misc/eeprom/at24.c b/drivers/misc/eeprom/at24.c
-index 633e1cf08d6e..0a5bdd629427 100644
---- a/drivers/misc/eeprom/at24.c
-+++ b/drivers/misc/eeprom/at24.c
-@@ -431,11 +431,9 @@ static int at24_read(void *priv, unsigned int off, void *val, size_t count)
- 	if (off + count > at24->byte_len)
- 		return -EINVAL;
- 
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/*
- 	 * Read data from chip, protecting against concurrent updates
-@@ -478,11 +476,9 @@ static int at24_write(void *priv, unsigned int off, void *val, size_t count)
- 	if (off + count > at24->byte_len)
- 		return -EINVAL;
- 
--	ret = pm_runtime_get_sync(dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(dev);
-+	ret = pm_runtime_resume_and_get(dev);
-+	if (ret < 0)
- 		return ret;
--	}
- 
- 	/*
- 	 * Write data to chip, protecting against concurrent updates
--- 
-2.25.1
+That code just needs to be removed, and AVIC be conditional on read-only apic id.
 
+But overall this patch doesn't make things worse, so
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
 

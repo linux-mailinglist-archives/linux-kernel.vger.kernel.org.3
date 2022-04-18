@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBCF505402
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAFA5057ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241425AbiDRNDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
+        id S244896AbiDRN6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240031AbiDRMyU (ORCPT
+        with ESMTP id S244922AbiDRNbB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:54:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A248DDEFB;
-        Mon, 18 Apr 2022 05:34:56 -0700 (PDT)
+        Mon, 18 Apr 2022 09:31:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3425F7A;
+        Mon, 18 Apr 2022 05:57:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A2E4261033;
-        Mon, 18 Apr 2022 12:34:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FA5CC385A7;
-        Mon, 18 Apr 2022 12:34:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76E01B80E44;
+        Mon, 18 Apr 2022 12:57:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B31FBC385A1;
+        Mon, 18 Apr 2022 12:57:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285295;
-        bh=vvHpU+KgIweUqNvKAilXjclDlU910lIZwZVqcIdTsFQ=;
+        s=korg; t=1650286652;
+        bh=BDHcUQSNa1S0BCOI9hvVcHxRA8beiJyH0ZTyLXXOohY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d6uQY2eET8SDrpDXQBl+ihfhOVdynkdP+xCPman1wPWtHvec6MLMHBWDpySk2C2Oy
-         7JMSRPsQ542S/vMea7lA8hbRfmkyYdZIptZkgqwStjmLzMefz5CreZjfXdTeM7KOGl
-         9Mm+8yza+c/NoEC7kdLZu/EoSwGI+cT2bDQ+nv14=
+        b=TIVwER6vXkvT1NTOlx603d2hdnRik3f8qV8xBafOfr4Yf1hGnDHvBfPPRrDgXSxvX
+         FvQQDoRA0X440BU5+A1O9C+C+1qKQOITQ5w7qN7mr7WAD+InnZ3lQU+5c00RE6Qy6X
+         gK3A3XcnQCA4A5l3lXz1ReNrUi+K9fJ54acOUe3k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kongweibin <kongweibin2@huawei.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.15 162/189] ipv6: fix panic when forwarding a pkt with no in6 dev
+        stable@vger.kernel.org,
+        Martin Varghese <martin.varghese@nokia.com>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH 4.14 201/284] openvswitch: Fixed nd target mask field in the flow dump.
 Date:   Mon, 18 Apr 2022 14:13:02 +0200
-Message-Id: <20220418121206.952686849@linuxfoundation.org>
+Message-Id: <20220418121217.441844751@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Martin Varghese <martin.varghese@nokia.com>
 
-commit e3fa461d8b0e185b7da8a101fe94dfe6dd500ac0 upstream.
+commit f19c44452b58a84d95e209b847f5495d91c9983a upstream.
 
-kongweibin reported a kernel panic in ip6_forward() when input interface
-has no in6 dev associated.
+IPv6 nd target mask was not getting populated in flow dump.
 
-The following tc commands were used to reproduce this panic:
-tc qdisc del dev vxlan100 root
-tc qdisc add dev vxlan100 root netem corrupt 5%
+In the function __ovs_nla_put_key the icmp code mask field was checked
+instead of icmp code key field to classify the flow as neighbour discovery.
 
-CC: stable@vger.kernel.org
-Fixes: ccd27f05ae7b ("ipv6: fix 'disable_policy' for fwd packets")
-Reported-by: kongweibin <kongweibin2@huawei.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+ufid:bdfbe3e5-60c2-43b0-a5ff-dfcac1c37328, recirc_id(0),dp_hash(0/0),
+skb_priority(0/0),in_port(ovs-nm1),skb_mark(0/0),ct_state(0/0),
+ct_zone(0/0),ct_mark(0/0),ct_label(0/0),
+eth(src=00:00:00:00:00:00/00:00:00:00:00:00,
+dst=00:00:00:00:00:00/00:00:00:00:00:00),
+eth_type(0x86dd),
+ipv6(src=::/::,dst=::/::,label=0/0,proto=58,tclass=0/0,hlimit=0/0,frag=no),
+icmpv6(type=135,code=0),
+nd(target=2001::2/::,
+sll=00:00:00:00:00:00/00:00:00:00:00:00,
+tll=00:00:00:00:00:00/00:00:00:00:00:00),
+packets:10, bytes:860, used:0.504s, dp:ovs, actions:ovs-nm2
+
+Fixes: e64457191a25 (openvswitch: Restructure datapath.c and flow.c)
+Signed-off-by: Martin Varghese <martin.varghese@nokia.com>
+Link: https://lore.kernel.org/r/20220328054148.3057-1-martinvarghesenokia@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/ipv6/ip6_output.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/openvswitch/flow_netlink.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -485,7 +485,7 @@ int ip6_forward(struct sk_buff *skb)
- 		goto drop;
+--- a/net/openvswitch/flow_netlink.c
++++ b/net/openvswitch/flow_netlink.c
+@@ -1827,8 +1827,8 @@ static int __ovs_nla_put_key(const struc
+ 			icmpv6_key->icmpv6_type = ntohs(output->tp.src);
+ 			icmpv6_key->icmpv6_code = ntohs(output->tp.dst);
  
- 	if (!net->ipv6.devconf_all->disable_policy &&
--	    !idev->cnf.disable_policy &&
-+	    (!idev || !idev->cnf.disable_policy) &&
- 	    !xfrm6_policy_check(NULL, XFRM_POLICY_FWD, skb)) {
- 		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
- 		goto drop;
+-			if (icmpv6_key->icmpv6_type == NDISC_NEIGHBOUR_SOLICITATION ||
+-			    icmpv6_key->icmpv6_type == NDISC_NEIGHBOUR_ADVERTISEMENT) {
++			if (swkey->tp.src == htons(NDISC_NEIGHBOUR_SOLICITATION) ||
++			    swkey->tp.src == htons(NDISC_NEIGHBOUR_ADVERTISEMENT)) {
+ 				struct ovs_key_nd *nd_key;
+ 
+ 				nla = nla_reserve(skb, OVS_KEY_ATTR_ND, sizeof(*nd_key));
 
 

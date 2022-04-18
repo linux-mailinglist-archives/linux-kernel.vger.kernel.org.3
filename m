@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24DF05057EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 921F15054F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244822AbiDRN54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40892 "EHLO
+        id S243433AbiDRNUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244918AbiDRNbB (ORCPT
+        with ESMTP id S241127AbiDRNCv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:31:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B920226EA;
-        Mon, 18 Apr 2022 05:57:31 -0700 (PDT)
+        Mon, 18 Apr 2022 09:02:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B5026AC4;
+        Mon, 18 Apr 2022 05:42:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F71FB80D9C;
-        Mon, 18 Apr 2022 12:57:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0EF5C385A1;
-        Mon, 18 Apr 2022 12:57:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93C9D6101A;
+        Mon, 18 Apr 2022 12:42:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943BEC385A1;
+        Mon, 18 Apr 2022 12:42:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286649;
-        bh=cOWNMoWg3qlnPk/yhEttGH1oR7VfOw0Ae+GeojOdPBU=;
+        s=korg; t=1650285768;
+        bh=YToBz85raWH3bOY3oZd3oarc05aULhwErBF63mT+3xM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ykx2iKiJOrFZ9c4YtTdPBFpxdPxhbuVoHPKcgkVZGzcB/oX3IB5oCrcyoou+F8w0E
-         ZWhR0bBEI2NJpIXWEPwgIhm8761DP7dwBHDMMlLFH5SaHw+ZQah4NOnQDDexPnM6kL
-         VIftuw1oyC6fdiQgnkwCCZJItb/k+99T35TmQbqU=
+        b=M82EkonytlkzFTlAH6e/DYO4qqSuA6+J41oVcnlBOJmYcUDuQQ+7NTQyXYmgkTosT
+         homwjznt1ztRPfmcuL7k6AekShvRz7jC4z7QQIAGugZef+lprpQk4znswQQGcdaUf7
+         i519PuKI6+V76QDY7oAg29en8/eYptVbd0M1AydA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Kuldeep Singh <singh.kuldeep87k@gmail.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 4.14 200/284] ARM: dts: spear13xx: Update SPI dma properties
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.4 04/63] gpiolib: acpi: use correct format characters
 Date:   Mon, 18 Apr 2022 14:13:01 +0200
-Message-Id: <20220418121217.414193633@linuxfoundation.org>
+Message-Id: <20220418121134.434148411@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,37 +56,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-commit 31d3687d6017c7ce6061695361598d9cda70807a upstream.
+[ Upstream commit 213d266ebfb1621aab79cfe63388facc520a1381 ]
 
-Reorder dmas and dma-names property for spi controller node to make it
-compliant with bindings.
+When compiling with -Wformat, clang emits the following warning:
 
-Fixes: 6e8887f60f60 ("ARM: SPEAr13xx: Pass generic DW DMAC platform data from DT")
-Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Link: https://lore.kernel.org/r/20220326042313.97862-2-singh.kuldeep87k@gmail.com'
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  gpiolib-acpi.c:393:4: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+                        pin);
+                        ^~~
+
+So warning that '%hhX' is paired with an 'int' is all just completely
+mindless and wrong. Sadly, I can see a different bogus warning reason
+why people would want to use '%02hhX'.
+
+Again, the *sane* thing from a human perspective is to use '%02X. But
+if the compiler doesn't do any range analysis at all, it could decide
+that "Oh, that print format could need up to 8 bytes of space in the
+result". Using '%02hhX' would cut that down to two.
+
+And since we use
+
+        char ev_name[5];
+
+and currently use "_%c%02hhX" as the format string, even a compiler
+that doesn't notice that "pin <= 255" test that guards this all will
+go "OK, that's at most 4 bytes and the final NUL termination, so it's
+fine".
+
+While a compiler - like gcc - that only sees that the original source
+of the 'pin' value is a 'unsigned short' array, and then doesn't take
+the "pin <= 255" into account, will warn like this:
+
+  gpiolib-acpi.c: In function 'acpi_gpiochip_request_interrupt':
+  gpiolib-acpi.c:206:24: warning: '%02X' directive writing between 2 and 4 bytes into a region of size 3 [-Wformat-overflow=]
+       sprintf(ev_name, "_%c%02X",
+                            ^~~~
+  gpiolib-acpi.c:206:20: note: directive argument in the range [0, 65535]
+
+because gcc isn't being very good at that argument range analysis either.
+
+In other words, the original use of 'hhx' was bogus to begin with, and
+due to *another* compiler warning being bad, and we had that bad code
+being written back in 2016 to work around _that_ compiler warning
+(commit e40a3ae1f794: "gpio: acpi: work around false-positive
+-Wstring-overflow warning").
+
+Sadly, two different bad compiler warnings together does not make for
+one good one.
+
+It just makes for even more pain.
+
+End result: I think the simplest and cleanest option is simply the
+proposed change which undoes that '%hhX' change for gcc, and replaces
+it with just using a slightly bigger stack allocation. It's not like
+a 5-byte allocation is in any way likely to have saved any actual stack,
+since all the other variables in that function are 'int' or bigger.
+
+False-positive compiler warnings really do make people write worse
+code, and that's a problem. But on a scale of bad code, I feel that
+extending the buffer trivially is better than adding a pointless cast
+that literally makes no sense.
+
+At least in this case the end result isn't unreadable or buggy. We've
+had several cases of bad compiler warnings that caused changes that
+were actually horrendously wrong.
+
+Fixes: e40a3ae1f794 ("gpio: acpi: work around false-positive -Wstring-overflow warning")
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/boot/dts/spear13xx.dtsi |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpio/gpiolib-acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/arch/arm/boot/dts/spear13xx.dtsi
-+++ b/arch/arm/boot/dts/spear13xx.dtsi
-@@ -290,9 +290,9 @@
- 				#size-cells = <0>;
- 				interrupts = <0 31 0x4>;
- 				status = "disabled";
--				dmas = <&dwdma0 4 0 0>,
--					<&dwdma0 5 0 0>;
--				dma-names = "tx", "rx";
-+				dmas = <&dwdma0 5 0 0>,
-+					<&dwdma0 4 0 0>;
-+				dma-names = "rx", "tx";
- 			};
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index 13c6eee481da..d71c7b9b9665 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -275,8 +275,8 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+ 	pin = agpio->pin_table[0];
  
- 			rtc@e0580000 {
+ 	if (pin <= 255) {
+-		char ev_name[5];
+-		sprintf(ev_name, "_%c%02hhX",
++		char ev_name[8];
++		sprintf(ev_name, "_%c%02X",
+ 			agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+ 			pin);
+ 		if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
+-- 
+2.35.1
+
 
 

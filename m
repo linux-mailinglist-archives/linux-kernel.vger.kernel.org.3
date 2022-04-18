@@ -2,138 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8963505D93
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:39:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFEDE505D97
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347169AbiDRRmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58976 "EHLO
+        id S1347180AbiDRRmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233607AbiDRRmV (ORCPT
+        with ESMTP id S1347173AbiDRRmd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:42:21 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3292634668
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:39:42 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d15so12885706pll.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F/6jEswmwOAmnHJw/Z7NeFz92t2kSVNLzcVtS0Sf4kA=;
-        b=RIdfh/Cx5VQRx41iMREwtJZLMcZj0gF41mm2ff3l/BFEvW8d773E2rDfXT6Zj+p18P
-         wGUyW1kl9TUd9wp14H7XQTV/CR4M1q9fgf2giFEmt4e56IyhoHqQVKjEAtlo/Ha9mXey
-         bbUNisaaxbYWoQgdxdq7vmNibfYgXZkBoib8/ZdspXWolt45K7+jg4RGzQoP9OYhGDKI
-         KDhNbao0ELHEW2R/WXRIahnszeb/Y0B1PCwXWSa/Iv7W1VqpSs/J/2oDnrDFYwDcnVU1
-         LysHLHDVFf77gH3neJkj97FDN7mbJpKqrJt9Rb4IXWwK8g+ieNRJucPdnSjU/PlInR0c
-         YXGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=F/6jEswmwOAmnHJw/Z7NeFz92t2kSVNLzcVtS0Sf4kA=;
-        b=pDNA/G13NLG/C0fG2ose6AUzk9v+iWPNMP+nDfj5nG7miGOUZE/R9OkXEXs+8dPvmt
-         0gSgt3TPEIOr1fDK5Lq46jNXw128HaogdSSwiS6YqiZDJdlL16EYitfy58hj5vZITJvE
-         7yGp5UH9IULSK8X3yV2zKhKlwFlml103opPp/t7NzWii3y4GnBewXaUJW6Ra6iE3lSRa
-         dtI0r+6KkqHEGLpAS+BeBCbOHJYwRtthQePvgJOpSlkYlLx02RKDav9GkIfAYRMVM/tt
-         NPPBbrMSy/VmhmR8LFRKcc0fIrZbd5jL+jqoq3/oAAFxxPrmdQruKkHJ8m+teEq/ANbu
-         9inw==
-X-Gm-Message-State: AOAM533g2FWI7BeAPMTCF/6sMChi3mw8wU/0jR5WaVtk4YszcVLeNpuX
-        SqKXXlk3mkZM1elq4Hgt2N86yA==
-X-Google-Smtp-Source: ABdhPJx7X8qxRF/0CUmEkmDMmpwMka7fQnEnV5qlU+xAcna/NC7jX6aXDDXnHzq5S4ArvSDg2uZBFQ==
-X-Received: by 2002:a17:90b:17c6:b0:1d2:8450:49b3 with SMTP id me6-20020a17090b17c600b001d2845049b3mr8724918pjb.246.1650303581711;
-        Mon, 18 Apr 2022 10:39:41 -0700 (PDT)
-Received: from localhost.localdomain ([50.39.160.154])
-        by smtp.gmail.com with ESMTPSA id x6-20020a17090a294600b001cba3274bd0sm17159326pjf.28.2022.04.18.10.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:39:41 -0700 (PDT)
-From:   Tadeusz Struk <tadeusz.struk@linaro.org>
-To:     Namjae Jeon <linkinjeon@kernel.org>
-Cc:     Tadeusz Struk <tadeusz.struk@linaro.org>,
-        Sungjong Seo <sj1557.seo@samsung.com>,
-        linux-fsdevel@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Subject: [PATCH] exfat: check if cluster num is valid
-Date:   Mon, 18 Apr 2022 10:39:23 -0700
-Message-Id: <20220418173923.193173-1-tadeusz.struk@linaro.org>
-X-Mailer: git-send-email 2.35.1
+        Mon, 18 Apr 2022 13:42:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B37EE633E;
+        Mon, 18 Apr 2022 10:39:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650303593; x=1681839593;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=oXo/QPoLwcbb7sHSUsxAGl9pqn0ndImlQcoCnhT9XcE=;
+  b=Op2bTl9dH4y/nE1CvLYBWjbhJO1slGYbWhERYoz2/uC8hpeOsczUA79F
+   h4NdbWRf6Oq+pwRfweL2q8x3+XLVeiRaWWIfCuM3uc0Uwm91mPZ4gmfxm
+   UfyaH6UAO/KrkQ9hM8EBcyNk2P1Rnw3Chsz7odWnaGi4opaytMQLJHv6u
+   PKbc6l776KOg/n/EWSrSgPryPM54PdQhiZmkYOENxpx3BalVgPMzsl5d9
+   pMA43f3PkiOOqV1u4/HQA+fTm7AyFgl5Gfx8uZ/ZbSRM1TmJhUHnX29au
+   rDQ+CTzieOYN8nLNFxHaflbBN1Pcc4cwZJUWQ5/8lp9Rj1AhFkAMeq4Qy
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263036390"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="263036390"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 10:39:51 -0700
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="804370380"
+Received: from alanadu-mobl2.amr.corp.intel.com (HELO vcostago-mobl3) ([10.251.2.172])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 10:39:49 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Jeff Evanson <jeff.evanson@gmail.com>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     jeff.evanson@qsc.com, jeff.evanson@gmail.com
+Subject: Re: [PATCH 1/2] Fix race in igc_xdp_xmit_zc
+In-Reply-To: <20220415210421.11217-1-jeff.evanson@qsc.com>
+References: <20220415210421.11217-1-jeff.evanson@qsc.com>
+Date:   Mon, 18 Apr 2022 13:39:48 -0400
+Message-ID: <871qxu5lzv.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported slab-out-of-bounds read in exfat_clear_bitmap.
-This was triggered by reproducer calling truncate with size 0,
-which causes the following trace:
+Hi Jeff,
 
-BUG: KASAN: slab-out-of-bounds in exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
-Read of size 8 at addr ffff888115aa9508 by task syz-executor251/365
+Jeff Evanson <jeff.evanson@gmail.com> writes:
 
-Call Trace:
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack_lvl+0x1e2/0x24b lib/dump_stack.c:118
- print_address_description+0x81/0x3c0 mm/kasan/report.c:233
- __kasan_report mm/kasan/report.c:419 [inline]
- kasan_report+0x1a4/0x1f0 mm/kasan/report.c:436
- __asan_report_load8_noabort+0x14/0x20 mm/kasan/report_generic.c:309
- exfat_clear_bitmap+0x147/0x490 fs/exfat/balloc.c:174
- exfat_free_cluster+0x25a/0x4a0 fs/exfat/fatent.c:181
- __exfat_truncate+0x99e/0xe00 fs/exfat/file.c:217
- exfat_truncate+0x11b/0x4f0 fs/exfat/file.c:243
- exfat_setattr+0xa03/0xd40 fs/exfat/file.c:339
- notify_change+0xb76/0xe10 fs/attr.c:336
- do_truncate+0x1ea/0x2d0 fs/open.c:65
+> in igc_xdp_xmit_zc, initialize next_to_use while holding the netif_tx_lock
+> to prevent racing with other users of the tx ring
 
-Add checks to validate if cluster number is within valid range in
-exfat_clear_bitmap() and exfat_set_bitmap()
+Some style things to change:
+ - Some more details on what is the effect of the race condition, and
+ perhaps the conditions to reproduce it (what I could imagine is that
+ you would need two applications (one using AF_XDP and another one using
+ AF_PACKET, for example) sending packets to the same queue.
+ - I think this patch is solving a real problem, so directing this patch
+ to the net-queue (using 'PATCH net-queue' as subject prefix) would make
+ sense.
+ - Please add the 'Fixes:' tag so this commit can be applied to any
+ stable tree that makes sense.
 
-Cc: Namjae Jeon <linkinjeon@kernel.org>
-Cc: Sungjong Seo <sj1557.seo@samsung.com>
-Cc: linux-fsdevel@vger.kernel.org
-Cc: stable@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
+Apart from those style changes, the code looks good.
 
-Link: https://syzkaller.appspot.com/bug?id=50381fc73821ecae743b8cf24b4c9a04776f767c
-Reported-by: syzbot+a4087e40b9c13aad7892@syzkaller.appspotmail.com
-Fixes: 1e49a94cf707 ("exfat: add bitmap operations")
-Signed-off-by: Tadeusz Struk <tadeusz.struk@linaro.org>
----
- fs/exfat/balloc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
 
-diff --git a/fs/exfat/balloc.c b/fs/exfat/balloc.c
-index 03f142307174..4ed81f86f993 100644
---- a/fs/exfat/balloc.c
-+++ b/fs/exfat/balloc.c
-@@ -149,6 +149,9 @@ int exfat_set_bitmap(struct inode *inode, unsigned int clu, bool sync)
- 	struct exfat_sb_info *sbi = EXFAT_SB(sb);
- 
- 	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (clu > EXFAT_DATA_CLUSTER_COUNT(sbi))
-+		return -EINVAL;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
-@@ -167,6 +170,9 @@ void exfat_clear_bitmap(struct inode *inode, unsigned int clu, bool sync)
- 	struct exfat_mount_options *opts = &sbi->options;
- 
- 	WARN_ON(clu < EXFAT_FIRST_CLUSTER);
-+	if (clu > EXFAT_DATA_CLUSTER_COUNT(sbi))
-+		return;
-+
- 	ent_idx = CLUSTER_TO_BITMAP_ENT(clu);
- 	i = BITMAP_OFFSET_SECTOR_INDEX(sb, ent_idx);
- 	b = BITMAP_OFFSET_BIT_IN_SECTOR(sb, ent_idx);
+>
+> Signed-off-by: Jeff Evanson <jeff.evanson@qsc.com>
+> ---
+>  drivers/net/ethernet/intel/igc/igc_main.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+> index 1c00ee310c19..a36a18c84aeb 100644
+> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+> @@ -2598,7 +2598,7 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  	struct netdev_queue *nq = txring_txq(ring);
+>  	union igc_adv_tx_desc *tx_desc = NULL;
+>  	int cpu = smp_processor_id();
+> -	u16 ntu = ring->next_to_use;
+> +	u16 ntu;
+>  	struct xdp_desc xdp_desc;
+>  	u16 budget;
+>  
+> @@ -2607,6 +2607,8 @@ static void igc_xdp_xmit_zc(struct igc_ring *ring)
+>  
+>  	__netif_tx_lock(nq, cpu);
+>  
+> +	ntu = ring->next_to_use;
+> +
+>  	budget = igc_desc_unused(ring);
+>  
+>  	while (xsk_tx_peek_desc(pool, &xdp_desc) && budget--) {
+> -- 
+> 2.17.1
+>
+
 -- 
-2.35.1
-
+Vinicius

@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D70E65053D7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1A650521A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241059AbiDRNCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S240274AbiDRMiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240370AbiDRMxU (ORCPT
+        with ESMTP id S239756AbiDRMdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:53:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD46821E37;
-        Mon, 18 Apr 2022 05:34:40 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:23 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB9B91E3EF;
+        Mon, 18 Apr 2022 05:25:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 227F560F0A;
-        Mon, 18 Apr 2022 12:34:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6EFEC385A7;
-        Mon, 18 Apr 2022 12:34:38 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 22184CE1099;
+        Mon, 18 Apr 2022 12:25:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8465C385A1;
+        Mon, 18 Apr 2022 12:25:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285279;
-        bh=kWIOsAfVh097LX5UBqLwlo1iWlNSZwF1NC7P4gxMwe4=;
+        s=korg; t=1650284729;
+        bh=in+Tjq7u2HtEgipwNeDYze3KLACNyZ5YX46Zm/zoWb0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kXZcGOY4PxvBCQFKGDNrjBxO4ok112KF5t4NRykiCVTGSR71TsOefvYLE+Z/YSMb1
-         Gaubp2V7pdXqayDq4NnoTLcIaf+t45veYmuSmeXSoFNfI+4wyMwFo0xl7s8d+YmznG
-         sK/1GMXMdFo7nbMvqlUria6GdWFMZE2lymvg0VZg=
+        b=h4Sx3TV0D62WbFN67BEILoo9hpc9NAAEORmbb43kAHJMjfjpcxcGQjg92ObLcDYm/
+         f5mbcHlHiLMlLebn17KBqZCG7CC9b5yyM5BhadhBdGUjeAzvS7gB0UQOk2cxJBAGMf
+         GCrdEPD1PjO4aT8gB8Lklw12A82cADEdhu/zKPbs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        Naohiro Aota <naohiro.aota@wdc.com>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.15 157/189] btrfs: mark resumed async balance as writing
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.17 208/219] i2c: dev: check return value when calling dev_set_name()
 Date:   Mon, 18 Apr 2022 14:12:57 +0200
-Message-Id: <20220418121206.609235266@linuxfoundation.org>
+Message-Id: <20220418121212.690559498@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,39 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Naohiro Aota <naohiro.aota@wdc.com>
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-commit a690e5f2db4d1dca742ce734aaff9f3112d63764 upstream.
+commit 993eb48fa199b5f476df8204e652eff63dd19361 upstream.
 
-When btrfs balance is interrupted with umount, the background balance
-resumes on the next mount. There is a potential deadlock with FS freezing
-here like as described in commit 26559780b953 ("btrfs: zoned: mark
-relocation as writing"). Mark the process as sb_writing to avoid it.
+If dev_set_name() fails, the dev_name() is null, check the return
+value of dev_set_name() to avoid the null-ptr-deref.
 
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-CC: stable@vger.kernel.org # 4.9+
-Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Fixes: 1413ef638aba ("i2c: dev: Fix the race between the release of i2c_dev and cdev")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/volumes.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/i2c-dev.c |   15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -4389,10 +4389,12 @@ static int balance_kthread(void *data)
- 	struct btrfs_fs_info *fs_info = data;
- 	int ret = 0;
+--- a/drivers/i2c/i2c-dev.c
++++ b/drivers/i2c/i2c-dev.c
+@@ -668,16 +668,21 @@ static int i2cdev_attach_adapter(struct
+ 	i2c_dev->dev.class = i2c_dev_class;
+ 	i2c_dev->dev.parent = &adap->dev;
+ 	i2c_dev->dev.release = i2cdev_dev_release;
+-	dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
++
++	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
++	if (res)
++		goto err_put_i2c_dev;
  
-+	sb_start_write(fs_info->sb);
- 	mutex_lock(&fs_info->balance_mutex);
- 	if (fs_info->balance_ctl)
- 		ret = btrfs_balance(fs_info, fs_info->balance_ctl, NULL);
- 	mutex_unlock(&fs_info->balance_mutex);
-+	sb_end_write(fs_info->sb);
+ 	res = cdev_device_add(&i2c_dev->cdev, &i2c_dev->dev);
+-	if (res) {
+-		put_i2c_dev(i2c_dev, false);
+-		return res;
+-	}
++	if (res)
++		goto err_put_i2c_dev;
  
- 	return ret;
+ 	pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
+ 	return 0;
++
++err_put_i2c_dev:
++	put_i2c_dev(i2c_dev, false);
++	return res;
  }
+ 
+ static int i2cdev_detach_adapter(struct device *dev, void *dummy)
 
 

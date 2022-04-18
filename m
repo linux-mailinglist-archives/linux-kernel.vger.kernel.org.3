@@ -2,129 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8D01505ADC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDC44505AE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345312AbiDRPVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
+        id S1345233AbiDRPVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345335AbiDRPVA (ORCPT
+        with ESMTP id S1345332AbiDRPUw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:21:00 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E84AC90D4;
-        Mon, 18 Apr 2022 07:18:33 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id r13so27115382ejd.5;
-        Mon, 18 Apr 2022 07:18:33 -0700 (PDT)
+        Mon, 18 Apr 2022 11:20:52 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B3EC6F09;
+        Mon, 18 Apr 2022 07:18:17 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id k29so19094202pgm.12;
+        Mon, 18 Apr 2022 07:18:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=oOl2Vvn39de4P/DDrUZWEr84mmGT3rwLK0gEKwLAL8s=;
-        b=feQ/p3x3itOtxrZySLUf9P1K/spqoY+VBwv9Mw7CupMcn5JjSmTKkUXI1XqY58sgaK
-         ZE1a4kHzGa6udfdNlTfq8ZvlxxKfJ34i3sFiItah1UdF7QYBx3MWEYn/+HzMXV5uqaqN
-         ZVb06EQfGacflVk1OY/RtH8iBal8ndnq1y+hNExQJoBbV9mSP0JccLpiqM8BISegKiRk
-         5W6HOV0p2FgJWkxjRixrm2pMuPg/5LougDAkWMgIwChis5frWI0awCSL2kFuFtvSNttk
-         qNh2QBxMtvahjsePbNKidSeD/M1+LRYKoHFKus6u1JO3L3O13UbYbAm8NqAmtldqDx4P
-         PFpA==
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
+        b=fjCzVFXPD9OAxM7+2jsCqxQ4PEfquLRnb9QTjwSjnrdwevPE9rfwvUUjggapYNp35g
+         QAOMgxgQX/YW/gRIkBW9KcXuOSOhdGlaLFaf3L8SCkewDRw9Eo0MAWW9Ee0ud8XcU0+i
+         DAjcuCXPnzUMb4zaB0yN2r/AuTVX3UoabyBxrjQN3ILYXuttMs8z2Tts2KmQjAEGdYj8
+         gCby6L4hbsCLE+NNwUxxY9Z4iV52gFxw1i8VWclmzDenqDi4fSrB6373Ua9NmD1+jtES
+         RyCny3yCVu4HDdetIrVUvznYdcNYg4e5ko9/Oer4DktpMBEXxfkCYB/PKgFEo1lVsvpk
+         8rZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=oOl2Vvn39de4P/DDrUZWEr84mmGT3rwLK0gEKwLAL8s=;
-        b=8Edyc/UIioHPjn4Ui09moB/fTStNYNzjhX+jYNM8lfwenwj4ESFUvyD2qDDpLI29GU
-         51G99pGePxl6K8U+B0yP3iX0o4O+HyOp0sgBca5oqkkeIaML6MG+lGPgbDN2Qu6ckqFW
-         6JbK4CnHyH8MH2EodftV5bIbwIJBira0E9wYmn+wWKzIOP4EbbRNA4DoZrXICsJlG4d3
-         c5W6hCoEb39Qi4gF8p9DcZNDqETyNA1IryNJhQeEexbQijCJSh9uYjI7X4X9OOCYRDfy
-         f/2ToPb6QTrey6fJJbJLzQLT7bIOT+dMximovk6WjH3Xcv5cce/LU+EUO9os1W/8S7VW
-         qPAA==
-X-Gm-Message-State: AOAM532LtrZO4yIxNYe0ai/a7bDWszxNIVuVIGYQjc3PaaCwYZAIeiwU
-        GP7WeQcJKqilngANndmuCo+T6Y1HGrGayLmU82dWIcfQILQdqg==
-X-Google-Smtp-Source: ABdhPJxZqT8orVqZJEjJnG+1HrtAMGQsn7w9U6Xue8OXM1mLz/pcCdG0gxwym3p1qyPW5h99bK9s+W0vta9BrZJGeEQ=
-X-Received: by 2002:a17:907:8a14:b0:6e8:9691:62f7 with SMTP id
- sc20-20020a1709078a1400b006e8969162f7mr9478736ejc.497.1650291511577; Mon, 18
- Apr 2022 07:18:31 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
+        b=54+PFQP12pi0ChshNua3Xiav23e7VXJ2znsaM3gL76T8lBXOQQns9fhcgsUliUNxG1
+         m88B2dfoaI1XHmVGCCNO8C4RZqwplVeC7KDSRZnw3EqJZ00jqRBiwxm8M4VEGW8d8sAm
+         2pIzboa9rNduLInK9955IsA16LZbYlfRtEZ09VO01/1cqcTjVxhnas2sshfnWuapwwqg
+         Fl+DyV6/V1MJcxdSHzDCMvxfajWdttHbMK4wwgsXZb0CwPSjjozpN5cH3cNCNbgSGxWF
+         lfh27cXg3+0WVzlwBvGAA+6An+EUMggBq53Rilb+EW///WqiETFtlRz2QOwUXhJcpy+b
+         v43Q==
+X-Gm-Message-State: AOAM5331AS3xDfdXXje1qbKd0SGWGt0yn6w8nx1XONn5WIFId9ClYV3a
+        01uKmgOBbAPSNvfTuW7oiyg=
+X-Google-Smtp-Source: ABdhPJyclV+Mcqdo47GuHlkPNpUunZsBuvzLTCkjM4VHFjbJlQBd3Tq5rdfTbOgaRdONkgckNqzgxQ==
+X-Received: by 2002:a05:6a00:c8d:b0:50a:62e5:6d30 with SMTP id a13-20020a056a000c8d00b0050a62e56d30mr8676119pfv.47.1650291497089;
+        Mon, 18 Apr 2022 07:18:17 -0700 (PDT)
+Received: from localhost ([58.251.76.82])
+        by smtp.gmail.com with ESMTPSA id u25-20020a62ed19000000b004f140515d56sm12703148pfh.46.2022.04.18.07.18.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 07:18:16 -0700 (PDT)
+From:   Yunbo Yu <yuyunbo519@gmail.com>
+To:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yunbo Yu <yuyunbo519@gmail.com>
+Subject: [PATCH] net: cdc-ncm:  Move spin_lock_bh() to spin_lock()
+Date:   Mon, 18 Apr 2022 22:18:12 +0800
+Message-Id: <20220418141812.1241307-1-yuyunbo519@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220414025705.598-1-mario.limonciello@amd.com>
- <20966c6b-9045-9f8b-ba35-bf44091ce380@gmail.com> <67df4178-5943-69d8-0d61-f533671a1248@amd.com>
- <CAHp75VceVwAq68s_hnpXt8VvLBHVUMxFTJR+_Tnph_mvpxGVPw@mail.gmail.com> <49dceaa1-7e8a-671a-0601-2ee92a5d3818@leemhuis.info>
-In-Reply-To: <49dceaa1-7e8a-671a-0601-2ee92a5d3818@leemhuis.info>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 17:17:55 +0300
-Message-ID: <CAHp75Vd1VKeGx2EJnKnSBf-DvnPPajDNs=+kQ1f6j5JU8hNLMg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
-To:     Thorsten Leemhuis <regressions@leemhuis.info>
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        firew4lker <firew4lker@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Richard.Gong@amd.com, Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 4:58 PM Thorsten Leemhuis
-<regressions@leemhuis.info> wrote:
->
-> On 18.04.22 13:42, Andy Shevchenko wrote:
-> > On Mon, Apr 18, 2022 at 7:34 AM Mario Limonciello
-> > <mario.limonciello@amd.com> wrote:
-> >> On 4/17/22 07:24, firew4lker wrote:
-> >
-> > ...
-> >
-> >> Linus Walleij,
-> >>
-> >> As this is backported to 5.15.y, 5.16.y, 5.17.y and those all had point
-> >> releases a bunch of people are hitting it now.  If you choose to adopt
-> >> this patch instead of revert the broken one, you can add to the commit
-> >> message too:
-> >>
-> >> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/1976
-> >
-> > I prefer to explicitly tell that this is a link to a bug report, hence BugLink:.
-> > But this is just my 2 cents.
->
-> Please use "Link:" as explained by the kernel's documentation in
-> Documentation/process/submitting-patches.rst
-> Documentation/process/5.Posting.rst (disclaimer: I recently made this
-> more explicit, but the concept it old). That's important, as people have
-> tools that rely on it -- I for example run one to track regressions, but
-> I might not be the only one running a tool that relies on proper tags.
+It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
 
-To me it looks like a documentation confusion since Link is what is
-added automatically by `b4` tool. Having Link from the patch thread
-(and not always the one with the discussion) as well as link to the
-issue will be confusing.
+Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
+---
+ drivers/net/usb/cdc_ncm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-> And FWIW: I'm all for making this more explicit, but people already use
-> various different tags (BugLink is just one of them) for that and that
-> just results in a mess.
-
-Nope, it results otherwise. The Link is Link to the thread, which you
-may find a lot in the kernel history. Making bug report links and
-links to the patch threads that's what results in a mess.
-
-> I proposed consistent tags, but that didn't get
-> much feedback. Maybe I should try again. Makes me wonder: where does
-> BugLink come from? Is that something that people are used to from
-> GitLab, GitHub, or something?
-
-It comes from kernel history :-)
-
-
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 15f91d691bba..cdca00c0dc1f 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1492,19 +1492,19 @@ static void cdc_ncm_txpath_bh(struct tasklet_struct *t)
+ 	struct cdc_ncm_ctx *ctx = from_tasklet(ctx, t, bh);
+ 	struct usbnet *dev = ctx->dev;
+ 
+-	spin_lock_bh(&ctx->mtx);
++	spin_lock(&ctx->mtx);
+ 	if (ctx->tx_timer_pending != 0) {
+ 		ctx->tx_timer_pending--;
+ 		cdc_ncm_tx_timeout_start(ctx);
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 	} else if (dev->net != NULL) {
+ 		ctx->tx_reason_timeout++;	/* count reason for transmitting */
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 		netif_tx_lock_bh(dev->net);
+ 		usbnet_start_xmit(NULL, dev->net);
+ 		netif_tx_unlock_bh(dev->net);
+ 	} else {
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 	}
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
+2.25.1
+

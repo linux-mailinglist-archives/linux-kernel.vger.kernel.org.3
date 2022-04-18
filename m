@@ -2,148 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9A3504F47
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26A7504F4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:13:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiDRLMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:12:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S231199AbiDRLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:15:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbiDRLMB (ORCPT
+        with ESMTP id S229658AbiDRLPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:12:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 848F21A072
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:09:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650280161;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gQ5I1K+ZmaJUXOQE28CgU+0HLTQ8wWEKYgkOaeYQd00=;
-        b=euHp4uwi+/wS+ccUUbQUzNV2mDQOCBQhcnqrCOAVU1jewwsija/Q+M5j8/6bSVoxwVyXHq
-        G8JLLwdsJuFBpz7kkJT8yKacx5dMjMUfaaLClXnZ8I1DGT0aB9GyFJCpSZA7Op4JWsIeLf
-        Diu0uVKF8xr7eRjRQSQh7mrj9ga2ERk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-a6NjJP4lNR-26d2T0ycYVA-1; Mon, 18 Apr 2022 07:09:16 -0400
-X-MC-Unique: a6NjJP4lNR-26d2T0ycYVA-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Mon, 18 Apr 2022 07:15:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B61A076;
+        Mon, 18 Apr 2022 04:13:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A425F80159B;
-        Mon, 18 Apr 2022 11:09:15 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8AE2AC5097F;
-        Mon, 18 Apr 2022 11:09:13 +0000 (UTC)
-Message-ID: <26b02f98e88b1097ce5823007a7bc06b25678252.camel@redhat.com>
-Subject: Re: [PATCH v2 06/12] KVM: SVM: Do not support updating APIC ID when
- in x2APIC mode
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Mon, 18 Apr 2022 14:09:12 +0300
-In-Reply-To: <20220412115822.14351-7-suravee.suthikulpanit@amd.com>
-References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
-         <20220412115822.14351-7-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00669B80E6D;
+        Mon, 18 Apr 2022 11:13:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA83C385A8;
+        Mon, 18 Apr 2022 11:13:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650280391;
+        bh=wwE2D7Hcj5fftw+S9d3Tubx9RVx84/kTA+8TdD2y+QQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BzsRy9QHW20BPD2GJc81aJi3R2/go2onQvbzoPWGcEcF9WaVazkwFFRYfd5dzxgf6
+         JNHDDxdjDMuXxYnJzFPaHVxeRVlySOr7AbZXW0kILvm5zoS2KYnL9s1ZeE+LsZEkqn
+         5eORYfsQ8HXS2m3ZbJFiHN33QyPk42cMQh3ETaJfLUmIgttdE4au83CwoelXTF/LTx
+         DAYMluTVHB6wZ0G6Ac2MF1QmkTQX8TfQEpFVcZIyabO+MjdYaSbnGo4Jl9n+/Od5bb
+         ymTpWooG4/9oFbmzFAzifW5/RS7VbY+EjMN4wfaOipVFtyJDF8KK/3VJVWyotdMAcn
+         dJFuo+3kCkSVw==
+Message-ID: <de9b0114-23b5-04b4-86b3-0d393441a267@kernel.org>
+Date:   Mon, 18 Apr 2022 13:13:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+References: <20220319204628.1759635-1-michael@walle.cc>
+ <20220319204628.1759635-7-michael@walle.cc>
+ <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
+ <e02e22920ffe23b49237c0c1379e888b@walle.cc>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <e02e22920ffe23b49237c0c1379e888b@walle.cc>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
-> In X2APIC mode, the Logical Destination Register is read-only,
-> which provides a fixed mapping between the logical and physical
-> APIC IDs. Therefore, there is no Logical APIC ID table in X2AVIC
-> and the processor uses the X2APIC ID in the backing page to create
-> a vCPU’s logical ID.
+On 18/04/2022 10:19, Michael Walle wrote:
+> [resend, use Krysztof's new email address]
 > 
-> In addition, KVM does not support updating APIC ID in x2APIC mode,
-> which means AVIC does not need to handle this case.
+> Am 2022-04-18 01:41, schrieb Linus Walleij:
+>> On Sat, Mar 19, 2022 at 9:47 PM Michael Walle <michael@walle.cc> wrote:
+>>
+>>> Convert the ocelot-pinctrl device tree binding to the new YAML format.
+>>>
+>>> Additionally to the original binding documentation, add interrupt
+>>> properties which are optional and already used on several SoCs like
+>>> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
+>>>
+>>> Also, on the sparx5 and the lan966x SoCs there are two items for the
+>>> reg property.
+>>>
+>>> Signed-off-by: Michael Walle <michael@walle.cc>
+>>
+>> So is this single patch something I should apply to the pin control 
+>> tree?
 > 
-> Therefore, check x2APIC mode when handling physical and logical
-> APIC ID update, and when invalidating logical APIC ID table.
+> The first five patches will fix the validation errrors once the
+> binding is converted to the YAML format. So, do they need to go
+> through the same tree?
 > 
-> Suggested-by: Maxim Levitsky <mlevitsk@redhat.com>
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 19 ++++++++++++++++++-
->  1 file changed, 18 insertions(+), 1 deletion(-)
+> Also as mentioned, there is this pending series [1] which is the
+> reason I've converted the binding to YAML in the first place. So
+> at least the first patch of this series will have to go through
+> the same tree as the YAML conversion patch.
 > 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 609dcbe52a86..22ee1098e2a5 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -424,8 +424,13 @@ static void avic_invalidate_logical_id_entry(struct kvm_vcpu *vcpu)
->  {
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  	bool flat = svm->dfr_reg == APIC_DFR_FLAT;
-> -	u32 *entry = avic_get_logical_id_entry(vcpu, svm->ldr_reg, flat);
-> +	u32 *entry;
->  
-> +	/* Note: x2AVIC does not use logical APIC ID table */
-> +	if (apic_x2apic_mode(vcpu->arch.apic))
-> +		return;
-> +
-> +	entry = avic_get_logical_id_entry(vcpu, svm->ldr_reg, flat);
->  	if (entry)
->  		clear_bit(AVIC_LOGICAL_ID_ENTRY_VALID_BIT, (unsigned long *)entry);
->  }
-> @@ -437,6 +442,10 @@ static int avic_handle_ldr_update(struct kvm_vcpu *vcpu)
->  	u32 ldr = kvm_lapic_get_reg(vcpu->arch.apic, APIC_LDR);
->  	u32 id = kvm_xapic_id(vcpu->arch.apic);
->  
-> +	/* AVIC does not support LDR update for x2APIC */
-> +	if (apic_x2apic_mode(vcpu->arch.apic))
-> +		return 0;
-> +
->  	if (ldr == svm->ldr_reg)
->  		return 0;
->  
-> @@ -457,6 +466,14 @@ static int avic_handle_apic_id_update(struct kvm_vcpu *vcpu)
->  	struct vcpu_svm *svm = to_svm(vcpu);
->  	u32 id = kvm_xapic_id(vcpu->arch.apic);
->  
-> +	/*
-> +	 * KVM does not support apic ID update for x2APIC.
-> +	 * Also, need to check if the APIC ID exceed 254.
-> +	 */
-> +	if (apic_x2apic_mode(vcpu->arch.apic) ||
-> +	    (vcpu->vcpu_id >= APIC_BROADCAST))
-> +		return 0;
-> +
->  	if (vcpu->vcpu_id == id)
->  		return 0;
->  
+> How can we move forward here? Krzysztof, maybe all of the dt
+> bindings patches can go through your tree and I'll reposting
+> the second patch of [1] afterwards?
 
-Honestly I won't even bother with this - avic_handle_apic_id_update
-zeros the initial apic id entry, after it moves it contents to new location.
+I think you got all necessary acks for this pinctrl bindings change and
+the dependency ("add reset property"), so both can go via Linus' tree.
+That's preferred.
 
-If it is called again (and it will be called next time there is avic inhibition),
-it will just fail as the initial entry will be zero, or copy wrong entry
-if something else was written there meanwhile.
+DTS patches goes through your SoC maintainer tree.
 
-That code just needs to be removed, and AVIC be conditional on read-only apic id.
-
-But overall this patch doesn't make things worse, so
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+At least this is the usual scenario, but maybe I missed here something.
 
 Best regards,
-	Maxim Levitsky
-
+Krzysztof

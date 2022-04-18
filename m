@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47D45058F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40475058F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343678AbiDROM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S1343537AbiDROMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:12:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244447AbiDRN4v (ORCPT
+        with ESMTP id S244519AbiDRN4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:56:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6266A7659;
-        Mon, 18 Apr 2022 06:05:05 -0700 (PDT)
+        Mon, 18 Apr 2022 09:56:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380CCA1AF;
+        Mon, 18 Apr 2022 06:05:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFB3D60EFC;
-        Mon, 18 Apr 2022 13:05:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAAFC385A7;
-        Mon, 18 Apr 2022 13:05:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E3AF3B80EC4;
+        Mon, 18 Apr 2022 13:05:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19F6EC385A1;
+        Mon, 18 Apr 2022 13:05:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287104;
-        bh=GGrkfxQJtWp/0SeDfaJWxZOvk7/7VEfsdbqZjyvAJiI=;
+        s=korg; t=1650287107;
+        bh=wq+2Jo2ycQGQ6rd/zMFPBA3/65ZNrOu88pNHJPRppgI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=elsUgkWAiFRsO4tNhvFP4onxlXCTYeCXAEDF5HrpzAsG2b4XDa8ytCg01RVG4KQ/I
-         YxaR7/4zsyx5pXx6WTCFlWW+vWJL85xzsfOJxJhuUsr9DwpSao9F60Tc0SIhA1TM7j
-         j2T1q9rGewElTGNmRwdKtAe2KfunN8k4qCna3k5k=
+        b=T/ucsbKigkJz99bRbsL+9/40AIhwQGQq+eJa2InRg59JCpJjwWYZ9Iplpvt35H5Ua
+         2bSPZGtjYqTQE63COA6/l/amKMADIT6S1h2n09fz5RBWXABDb5qFxVROmopEivfPVu
+         kXXSJ6ifSqFKTjMC1obwfnERyVHs4nv1iZOwe+fI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Nishanth Menon <nm@ti.com>, Dave Gerlach <d-gerlach@ti.com>,
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 058/218] soc: ti: wkup_m3_ipc: Fix IRQ check in wkup_m3_ipc_probe
-Date:   Mon, 18 Apr 2022 14:12:04 +0200
-Message-Id: <20220418121201.273640743@linuxfoundation.org>
+Subject: [PATCH 4.9 059/218] media: usb: go7007: s2250-board: fix leak in probe()
+Date:   Mon, 18 Apr 2022 14:12:05 +0200
+Message-Id: <20220418121201.302202028@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,45 +55,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit c3d66a164c726cc3b072232d3b6d87575d194084 ]
+[ Upstream commit 67e4550ecd6164bfbdff54c169e5bbf9ccfaf14d ]
 
-platform_get_irq() returns negative error number instead 0 on failure.
-And the doc of platform_get_irq() provides a usage example:
+Call i2c_unregister_device(audio) on this error path.
 
-    int irq = platform_get_irq(pdev, 0);
-    if (irq < 0)
-        return irq;
-
-Fix the check of return value to catch errors correctly.
-
-Fixes: cdd5de500b2c ("soc: ti: Add wkup_m3_ipc driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
-Acked-by: Dave Gerlach <d-gerlach@ti.com>
-Link: https://lore.kernel.org/r/20220114062840.16620-1-linmq006@gmail.com
+Fixes: d3b2ccd9e307 ("[media] s2250: convert to the control framework")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/ti/wkup_m3_ipc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/media/usb/go7007/s2250-board.c | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/soc/ti/wkup_m3_ipc.c b/drivers/soc/ti/wkup_m3_ipc.c
-index fc33bfdc957c..ead96fe2e7f5 100644
---- a/drivers/soc/ti/wkup_m3_ipc.c
-+++ b/drivers/soc/ti/wkup_m3_ipc.c
-@@ -405,9 +405,9 @@ static int wkup_m3_ipc_probe(struct platform_device *pdev)
+diff --git a/drivers/media/usb/go7007/s2250-board.c b/drivers/media/usb/go7007/s2250-board.c
+index 1466db150d82..625e77f4dbd2 100644
+--- a/drivers/media/usb/go7007/s2250-board.c
++++ b/drivers/media/usb/go7007/s2250-board.c
+@@ -512,6 +512,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	u8 *data;
+ 	struct go7007 *go = i2c_get_adapdata(adapter);
+ 	struct go7007_usb *usb = go->hpi_context;
++	int err = -EIO;
+ 
+ 	audio = i2c_new_dummy(adapter, TLV320_ADDRESS >> 1);
+ 	if (audio == NULL)
+@@ -540,11 +541,8 @@ static int s2250_probe(struct i2c_client *client,
+ 		V4L2_CID_HUE, -512, 511, 1, 0);
+ 	sd->ctrl_handler = &state->hdl;
+ 	if (state->hdl.error) {
+-		int err = state->hdl.error;
+-
+-		v4l2_ctrl_handler_free(&state->hdl);
+-		kfree(state);
+-		return err;
++		err = state->hdl.error;
++		goto fail;
  	}
  
- 	irq = platform_get_irq(pdev, 0);
--	if (!irq) {
-+	if (irq < 0) {
- 		dev_err(&pdev->dev, "no irq resource\n");
--		return -ENXIO;
-+		return irq;
- 	}
+ 	state->std = V4L2_STD_NTSC;
+@@ -608,7 +606,7 @@ static int s2250_probe(struct i2c_client *client,
+ 	i2c_unregister_device(audio);
+ 	v4l2_ctrl_handler_free(&state->hdl);
+ 	kfree(state);
+-	return -EIO;
++	return err;
+ }
  
- 	ret = devm_request_irq(dev, irq, wkup_m3_txev_handler,
+ static int s2250_remove(struct i2c_client *client)
 -- 
 2.34.1
 

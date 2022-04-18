@@ -2,108 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1495053D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E98505448
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241518AbiDRNDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
+        id S240702AbiDRNFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240237AbiDRMyr (ORCPT
+        with ESMTP id S240265AbiDRMzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:54:47 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BC313DFC;
-        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso6985564pjj.3;
-        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:09 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D74A6558
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:36:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id g18so26571427ejc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:36:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
-        b=puV6g1yAwYY4foiMBzImH0StiMfyjOvPeJvoVgBw5FXrWP12gxeBSDewkBPPDL0UMP
-         OnsiSeTUOtD2dt28KD7TjjUfMcvCct7teSPmd01Mi++avp/moQxkogI9938ZARZOvatB
-         C4EScWnZgyPc73V+fzOmIWkXlnn8OLQTiVroOwHGt5yhPvFJkoyINAFS87YaVa3mGo38
-         VEGR6u6xAArgzgf7QhRhwcvQ75y5W/MgnOYNyz4cJ+9uIeKR2I13+vuEW7Zr/EKeibDw
-         shtLw3sOFM7PuhJQANQts3YHpCDaT3zWuqzqNXCIuetd6O1sjU+ogdCSvutPYNDmBp60
-         ffKA==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=KIwsXQoVYuaJT+XhBvopyVp04YidsTycNWZlsexYoV8=;
+        b=TDZPLnwCwj43QLyh01A29lvHe9rB0Yzy9mqnx7koLAdQ2GcZz1hXFcZe9lQ77HpV6p
+         VuvSPHruw/fsTjhhmVnE+15WnETzgfSkF56IFI/nlaffQzJqcuOVoyHHtq3jAI6jRtmR
+         bHqAoIR1KdYspNc1vE5hbtev2jK4G0rWGTUB1QYGxcU0VMOnrckaOimd9YE90mDRggVw
+         sFaoz9Ls73gPsMBAZK3/phasY95gnv0EBMQcrmppO7Uf/zN7n/g3ondTXXj1Q+Bb9nMK
+         p4e1c/5KqMmMr7cAYg21hZYR0TG6BHuswrce9gd3bkVuRV1Y8kmJBJr5/DKo3CWQNze9
+         Plww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
-        b=Xb8utgI4FArzRafGLJgLFuTd4xNzbFxyF3GkDn85H0HNmSTMcVbFTVeumyFDkBeDqX
-         z4h78P2QFEzjjVW0zTkYWbbCpnWxI+6HGmebgQw8Yd8GavDG9UArZ65ixsgI8KrPWglo
-         vRDlLuMGOrnugl5uYUj2ZPtuDEcwzKHuhpI+liiEF1GViP19Sstf7CmCRA0jXG3VL41S
-         w4c5a/njDXV2GJXFVC9DZRhkl7QXcJXlCfX764R1EZbdribBq/6agKvlmjhjqJa3DH0W
-         vWIgJrCgV+5Z7CJxvHHwQE734RR366P/jIR+9qnvfFmjWDdK+Q6ctS97tc5QKSwZwhvK
-         ipdQ==
-X-Gm-Message-State: AOAM533zzDQtTM6xXsKiJlKWNTduKJwwArHlLf3YTqM4TrdSJGTcHoo2
-        E+IwuDTiqZR+eDYJpL7318U=
-X-Google-Smtp-Source: ABdhPJzzDcDZsjDzFZEes1dI7IHd8sgP2uwsDyC+87JYg88yja6QtTIVb54SIoCzIBV43/NDyFAWCA==
-X-Received: by 2002:a17:902:e9c4:b0:158:f77d:afb7 with SMTP id 4-20020a170902e9c400b00158f77dafb7mr6454683plk.143.1650285300765;
-        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
-Received: from localhost ([58.251.76.82])
-        by smtp.gmail.com with ESMTPSA id y131-20020a626489000000b00505a8f36965sm12354645pfb.184.2022.04.18.05.35.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
-From:   Yunbo Yu <yuyunbo519@gmail.com>
-To:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yunbo Yu <yuyunbo519@gmail.com>
-Subject: [PATCH] net: cdc-ncm:  Move spin_lock_bh() to spin_lock()
-Date:   Mon, 18 Apr 2022 20:34:38 +0800
-Message-Id: <20220418123438.1240676-1-yuyunbo519@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=KIwsXQoVYuaJT+XhBvopyVp04YidsTycNWZlsexYoV8=;
+        b=vRsYBHSKFy0P+ApDm97f+zQUpsBijYdFXlsWvuI+rLxtXi2tPhIeGfQRRDbLKZr7Du
+         u6HC/aBT86kZ56Nto9ovloPdE6eSsB9KeUZbOQEqx6rUjeUIu88pYu6TI/YCBcz3WsQM
+         BXlx8RQ/l2MAHWaFiGVW+4P4wOOS8eTCLSfOUNwW3DcfhSrBfJwvkjU8sTpHFEKKtYgP
+         8EEk1HXR+TRXC6sbWtq9w3X5WL+G+CSuXEl5IzZvRtTPslgmMbGmIaVB768U/OnS5U9h
+         k/GnNAwdooLPzyXe9E7/12WL9K1UGIfapWm7874o7dKx7BQE8+BWfi5up6YNmgyNjYyL
+         xcfg==
+X-Gm-Message-State: AOAM531Suu6BP5VHGinFvhPUBrxU4CMdPLIcfQE9MG63288EAFu/dREQ
+        MCEAbWoVdH8dO8Svl32rz4AMxA==
+X-Google-Smtp-Source: ABdhPJylYq9wtloVACt/9TIMLxl8PbADYHU7rrVgCfap+famI3Nog+m29OKqmQCeEkz5lghiq46Tug==
+X-Received: by 2002:a17:907:2d90:b0:6e8:720c:d8e1 with SMTP id gt16-20020a1709072d9000b006e8720cd8e1mr8882601ejc.514.1650285378686;
+        Mon, 18 Apr 2022 05:36:18 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id a18-20020a170906671200b006e05929e66csm4539348ejp.20.2022.04.18.05.36.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 05:36:18 -0700 (PDT)
+Message-ID: <2b0f8488-0fe2-80e8-1b49-a3eadbc8dad3@linaro.org>
+Date:   Mon, 18 Apr 2022 14:36:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 09/23] ARM: dts: qcom-msm8974-fp2: Use &labels
+Content-Language: en-US
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht
+Cc:     martin.botka@somainline.org,
+        angelogioacchino.delregno@somainline.org,
+        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220415115633.575010-1-konrad.dybcio@somainline.org>
+ <20220415115633.575010-10-konrad.dybcio@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220415115633.575010-10-konrad.dybcio@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
+On 15/04/2022 13:56, Konrad Dybcio wrote:
+> Use &labels to align with the style used in new DTS and apply tiny
+> style fixes.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> ---
+>  .../boot/dts/qcom-msm8974-fairphone-fp2.dts   | 579 +++++++++---------
+>  arch/arm/boot/dts/qcom-msm8974.dtsi           |   2 +-
+>  2 files changed, 277 insertions(+), 304 deletions(-)
+> 
 
-Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
----
- drivers/net/usb/cdc_ncm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Unfortunately you duplicated quite a lot of work :(
 
-diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
-index 15f91d691bba..cdca00c0dc1f 100644
---- a/drivers/net/usb/cdc_ncm.c
-+++ b/drivers/net/usb/cdc_ncm.c
-@@ -1492,19 +1492,19 @@ static void cdc_ncm_txpath_bh(struct tasklet_struct *t)
- 	struct cdc_ncm_ctx *ctx = from_tasklet(ctx, t, bh);
- 	struct usbnet *dev = ctx->dev;
- 
--	spin_lock_bh(&ctx->mtx);
-+	spin_lock(&ctx->mtx);
- 	if (ctx->tx_timer_pending != 0) {
- 		ctx->tx_timer_pending--;
- 		cdc_ncm_tx_timeout_start(ctx);
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 	} else if (dev->net != NULL) {
- 		ctx->tx_reason_timeout++;	/* count reason for transmitting */
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 		netif_tx_lock_bh(dev->net);
- 		usbnet_start_xmit(NULL, dev->net);
- 		netif_tx_unlock_bh(dev->net);
- 	} else {
--		spin_unlock_bh(&ctx->mtx);
-+		spin_unlock(&ctx->mtx);
- 	}
- }
- 
--- 
-2.25.1
+https://lore.kernel.org/all/20220401201035.189106-7-krzysztof.kozlowski@linaro.org/
 
+
+Best regards,
+Krzysztof

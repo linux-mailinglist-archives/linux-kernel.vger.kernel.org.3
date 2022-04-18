@@ -2,74 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6083D505BAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 048FE505BBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244903AbiDRPrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60962 "EHLO
+        id S1344030AbiDRPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345793AbiDRPqQ (ORCPT
+        with ESMTP id S1345849AbiDRPrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:46:16 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582C15AA46;
-        Mon, 18 Apr 2022 08:13:51 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id v77so25976550ybi.12;
-        Mon, 18 Apr 2022 08:13:51 -0700 (PDT)
+        Mon, 18 Apr 2022 11:47:33 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B60E2C13F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:14:56 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id v12so12581963plv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:14:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=UD05IbcZ2rf5qvJ6A93X+/jr+vU3bRZx5RLWQDEGt1I=;
-        b=Pjj9yRLO9dfTboleo6SJMPQgWC8TvkyB63hnmKy8gYvh0uGqQdx3aGD6CzWSQXEddN
-         tPuhqFSulSxiwq996BZ9ztVVYJZQWGZ+HG7wT3kxTdHO+KCfMeVWxPnKJRPl67IKCggy
-         sE6Ga1oTaw8UdJAxivjX1oDAcpjDoROMAbn+qVzTmEA2j4UIlSmPLr6p4xOHkapm7MDP
-         mBPYUiDkuyOBPnGQqjpa2Vw5GBl/n2f0L6D3Lvn4vQ4G5acCVRe2KsR0uezYt02+MLyg
-         f4SobePJdgLFuZMdRMTKguUTIxzt9zRSJPNx16UVjLkBzjnmkL5AJ6FUpJ1ZlAbdul8c
-         Lp/Q==
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=B53fka1F3qxqQdxFr9SFgaJ7tbAOPZYraoihVoIiog0=;
+        b=lU9I3+KSYNMyQdy1jahGZNiQONptfa7XVZSpq6ccWkud1YanLo2MnxmbwjUu7xPtey
+         sHES3gLFWy29nz2uKm1FgqIPzRQmMbFp3uxQJ561Dt5+4dKfsIDdpeuKGt4WsnPGDNVq
+         hngDN2TI+UKJNGqI6zICbKSEO1ctCKiiz0bnNV5+pfPDHD5wBObw7CDLG+4xbMR7QUTn
+         elDurf84ml/MAFJIwJvg8NBA1JJTcWIJM/oyd69nwXUep2ju6DvdlFTFdShz9FfbWKrw
+         Ki4oyYGKQb0RD+lY8U+istt85FQ7tI/7ji7RoyLzxyMXBScOD03syEolLZx2Kpw4fLOU
+         aR6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=UD05IbcZ2rf5qvJ6A93X+/jr+vU3bRZx5RLWQDEGt1I=;
-        b=RMsOy39LlyAq7MqqEB5tMo/rTFleQyhXuU7cVxTqSbTbwtjkV5DzdXzy2Qi4AsLBGd
-         M7nL9ywIsyP69xUWAL7j29j/XNToJdrXlFpzJxeLGvVVxwWW7JSet/bT5uScEzKIzdd8
-         n0u5Qfff3hN86dbjvWzZdPn2+FJwTE+F+6E7q3wwVFRQTaoIm+LCt4aglCOgJiE/j5uZ
-         feTrJU0N3DD/nHUCrmp3rNmmE80CJnDkitMrh5FGR/xIPsp2RC4Pcw6euJILQTM312bu
-         CMaHWuvW/eAsauAnQmPJk0FCOVVTcvnoMbJ9vxqmsF7P+KnD5FOeMjEtuxjcanBPAmsu
-         yYNA==
-X-Gm-Message-State: AOAM53144zXXusUAUeA6CXEHMPKS+YNf4zxCv8paQ95/eoQ8svwUlQ4F
-        OhotdL89KJU2dvwP/E5pJtChDK1S8umGJsnFeSI=
-X-Google-Smtp-Source: ABdhPJyglgnLuoSw1DyURkg6CGKqtEJL4ymjfUewdv/sJ/JuvH0Bue0GwV9LJ769SlOf0P2VWW9+SDrsMuiERFAhTZI=
-X-Received: by 2002:a25:c54b:0:b0:641:cfe9:27e9 with SMTP id
- v72-20020a25c54b000000b00641cfe927e9mr9915958ybe.228.1650294830426; Mon, 18
- Apr 2022 08:13:50 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=B53fka1F3qxqQdxFr9SFgaJ7tbAOPZYraoihVoIiog0=;
+        b=CTtnTzeElvsLljGz5OCYqNZykPfA+76XV2k9F+dCJ2KcoeB3AsZC62H9bl1oqEONQz
+         KxK8kFMp3O8OwQgJjppoulTNuGfSnRcHIq4Chm3Ky/GdfZT65Kvufi9qxRrSTvFvVkZb
+         xn67ErJDwTM6SQi0qB7bbXenU0KjM0hYY+4OEUsfjjgbZUI9t639nfLNTknWu5IpsYXm
+         tIqVc68XcQhLs7Ot9aHt5x6myk9XOgv68h/1TTcGPbCIp2IGoGZ7uVq/wc2hyP2rGjxh
+         EULWvUK53NH58CR7lumxIOGuPhzcBanMUOgl4Y/x4FeFvNtC3cxLuyzxCPBNMcl6hRds
+         K1IQ==
+X-Gm-Message-State: AOAM531I0g7sMGVAlb79g4veXG3vaj+CsgUy4usKmgjVfSvFGI/MB0Db
+        SfM4t6PY7T9y5Wv+1yZBIRAaMg==
+X-Google-Smtp-Source: ABdhPJwZ8N3FhPhpLHRas8PFdxxK3sGwC8rzRSRTSNYXeIDF8PM79p7kg+Plnw1pNvxBpvGU6f28ig==
+X-Received: by 2002:a17:902:9b87:b0:156:bf3e:9ab5 with SMTP id y7-20020a1709029b8700b00156bf3e9ab5mr11225355plp.119.1650294895863;
+        Mon, 18 Apr 2022 08:14:55 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id j24-20020aa78d18000000b0050564584660sm12482867pfe.32.2022.04.18.08.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 08:14:55 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 15:14:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Zeng Guang <guang.zeng@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
+Subject: Re: [PATCH v8 9/9] KVM: VMX: enable IPI virtualization
+Message-ID: <Yl2AaxXFh7UfvpFx@google.com>
+References: <20220411090447.5928-1-guang.zeng@intel.com>
+ <20220411090447.5928-10-guang.zeng@intel.com>
+ <YlmOUtXgIdQcUTO1@google.com>
+ <20220418092500.GA14409@gao-cwp>
 MIME-Version: 1.0
-References: <20220416110507.642398-1-pgwipeout@gmail.com> <20220416110507.642398-3-pgwipeout@gmail.com>
- <308e9c47197d4f7ae5a31cfcb5a10886@kernel.org> <CAMdYzYo+YeAgT92baMOoWpra230wro_WynRcajL-__9RNkeE9Q@mail.gmail.com>
- <87zgkk9gtc.wl-maz@kernel.org> <CAMdYzYo_+7rakc=GCTueEZvH_F4Co6+=eKAUztJaafiDXSKKXQ@mail.gmail.com>
- <87sfqaa7uv.wl-maz@kernel.org>
-In-Reply-To: <87sfqaa7uv.wl-maz@kernel.org>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 18 Apr 2022 11:13:39 -0400
-Message-ID: <CAMdYzYouLoYX89EWjQTRAjd-1bvJEJtfYQa2KrtFH22Kp-4Efw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/4] PCI: dwc: rockchip: add legacy interrupt support
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>,
-        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418092500.GA14409@gao-cwp>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,103 +89,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 8:34 AM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Mon, 18 Apr 2022 12:37:00 +0100,
-> Peter Geis <pgwipeout@gmail.com> wrote:
+On Mon, Apr 18, 2022, Chao Gao wrote:
+> On Fri, Apr 15, 2022 at 03:25:06PM +0000, Sean Christopherson wrote:
+> >On Mon, Apr 11, 2022, Zeng Guang wrote:
+> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> >> index d1a39285deab..23fbf52f7bea 100644
+> >> --- a/arch/x86/kvm/x86.c
+> >> +++ b/arch/x86/kvm/x86.c
+> >> @@ -11180,11 +11180,15 @@ static int sync_regs(struct kvm_vcpu *vcpu)
+> >>  
+> >>  int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
+> >>  {
+> >> +	int ret = 0;
+> >> +
+> >>  	if (kvm_check_tsc_unstable() && atomic_read(&kvm->online_vcpus) != 0)
+> >>  		pr_warn_once("kvm: SMP vm created on host with unstable TSC; "
+> >>  			     "guest TSC will not be reliable\n");
+> >>  
+> >> -	return 0;
+> >> +	if (kvm_x86_ops.alloc_ipiv_pid_table)
+> >> +		ret = static_call(kvm_x86_alloc_ipiv_pid_table)(kvm);
 > >
-> > On Sun, Apr 17, 2022 at 5:53 AM Marc Zyngier <maz@kernel.org> wrote:
-> > >
-> > > On Sat, 16 Apr 2022 14:24:26 +0100,
-> > > Peter Geis <pgwipeout@gmail.com> wrote:
-> > > >
-> > > > Okay, that makes sense. I'm hitting the entire block when it should be
-> > > > the individual IRQ.
-> > > > I also notice some drivers protect this with a spinlock while others
-> > > > do not, how should this be handled?
-> > >
-> > > It obviously depends on how the HW. works. If this is a shared
-> > > register using a RMW sequence, then you need some form of mutual
-> > > exclusion in order to preserve the atomicity of the update.
-> > >
-> > > If the HW supports updating the masks using a set of hot bits (with
-> > > separate clear/set registers), than there is no need for locking.  In
-> > > your case PCIE_CLIENT_INTR_MASK_LEGACY seems to support this odd
-> > > "write-enable" feature which can probably be used to implement a
-> > > lockless access, something like:
-> > >
-> > >         void mask(struct irq_data *d)
-> > >         {
-> > >                 u32 val = BIT(d->hwirq + 16) | BIT(d->hwirq);
+> >Add a generic kvm_x86_ops.vcpu_precreate, no reason to make this so specific.
+> >And use KVM_X86_OP_RET0 instead of KVM_X86_OP_OPTIONAL, then this can simply be
 > >
-> > This is what HIWORD_UPDATE_BIT does, it's rather common in Rockchip code.
-> > I believe I can safely drop the spinlock when enabling/disabling
-> > individual interrupts.
->
-> Yes.
->
+> >	return static_call(kvm_x86_vcpu_precreate);
 > >
-> > >                 writel_relaxed(val, ...);
-> > >         }
-> > >
-> > >         void mask(struct irq_data *d)
-> > >         {
-> > >                 u32 val = BIT(d->hwirq + 16);
-> > >                 writel_relaxed(val, ...);
-> > >         }
-> > >
-> > > Another thing is that it is completely unclear to me what initialises
-> > > these interrupts the first place (INTR_MASK_LEGACY, INTR_EN_LEGACY).
-> > > Are you relying on the firmware to do that for you?
+> >That said, there's a flaw in my genius plan.
 > >
-> > There is no dedicated mask or enable/disable for the legacy interrupt
-> > line (unless it's undocumented).
->
-> I'm talking about the INTR_MASK_LEGACY and INTR_EN_LEGACY registers,
-> which control the INTx (although the latter seems to default to some
-> reserved values). I don't see where you initialise them to a state
-> where they are enabled and masked, which should be the initial state
-> once this driver has probed. The output interrupt itself is obviously
-> controlled by the GIC driver.
+> >  1. KVM_CREATE_VM
+> >  2. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=1
+> >  3. KVM_CREATE_VCPU, create IPIv table but ultimately fails
+> >  4. KVM decrements created_vcpus back to '0'
+> >  5. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=4096
+> >  6. KVM_CREATE_VCPU w/ ID out of range
+> >
+> >In other words, malicious userspace could trigger buffer overflow.
+> 
+> can we simply return an error (e.g., -EEXIST) on step 5 (i.e.,
+> max_vcpu_ids cannot be changed after being set once)?
+> 
+> or
+> 
+> can we detect the change of max_vcpu_ids in step 6 and re-allocate PID
+> table?
 
-PCIE_CLIENT_INTR_MASK_LEGACY is the register I use here to mask/unmask
-the interrupts.
-It defaults to all masked on reset.
-The current rk3568 trm v1.1 does not reference an INTR_EN_LEGACY register.
+Returning an error is viable, but would be a rather odd ABI.  Re-allocating isn't
+a good option because the PID table could be in active use by other vCPUs, e.g.
+KVM would need to send a request and kick all vCPUs to have all vCPUs update their
+VMCS.
 
->
-> > It appears to be enabled via an "or" function with the emulated interrupts.
-> > As far as I can tell this is common for dw-pcie, looking at the other drivers.
->
-> I think we're talking past each other. I'm solely concerned with the
-> initialisation of the input control registers, for which I see no code
-> in this patch.
+And with both of those alternatives, I still don't like that every feature that
+acts on max_vcpu_ids would need to handle this same edge case.
 
-Downstream points to the mask/unmask functions for the enable/disable
-functions, which would be superfluous here as mainline defaults to
-that anyways if they are null.
+An alternative to another new ioctl() would be to to make KVM_CAP_MAX_VCPU_ID
+write-once, i.e. reject attempts to change the max once set (though we could allow
+re-writing the same value).  I think I like that idea better than adding an ioctl().
 
-I've double checked and downstream only uses the mask register, enable
-and routing config appears to be left as is from reset.
-I'm rather concerned about the lack of any obvious way to control
-routing, nor an ack mechanism for the irq.
-I see other implementations reference the core registers or vendor
-defined registers for these functions.
-Unfortunately the rk3568 trm does not include the core register
-definitions, and the designware documentation appears to be behind a
-paywall/nda.
+It can even be done without an extra flag by zero-initializing the field and instead
+waiting until vCPU pre-create to lock in the value.  That would also help detect
+bad usage of max_vcpu_ids, especially if we added a wrapper to get the value, e.g.
+the wrapper could WARN_ON(!kvm->arch.max_vcpu_ids).
 
-I suspect most of the confusion here boils down to a lack of
-documentation, but it's entirely possible I am simply not
-understanding the question.
-I'm already aware of other functions that I need documentation for
-that is currently unavailable.
+E.g.
 
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
+{
+	if (kvm_check_tsc_unstable() && atomic_read(&kvm->online_vcpus) != 0)
+		pr_warn_once("kvm: SMP vm created on host with unstable TSC; "
+			     "guest TSC will not be reliable\n");
 
-Thank you for your time,
-Peter
+	if (!kvm->arch.max_vcpu_ids)
+		kvm->arch.max_vcpu_ids = KVM_MAX_VCPU_IDS;
+
+	return 0;
+}
+
+
+	case KVM_CAP_MAX_VCPU_ID:
+		r = -EINVAL;
+		if (cap->args[0] > KVM_MAX_VCPU_IDS)
+			break;
+
+		mutex_lock(&kvm->lock);
+                if (kvm->arch.max_vcpu_ids == cap->args[0]) {
+                        r = 0;
+                } else if (!kvm->arch.max_vcpu_ids) {
+			kvm->arch.max_vcpu_ids = cap->args[0];
+			r = 0;
+		}
+		mutex_unlock(&kvm->lock);
+		break;

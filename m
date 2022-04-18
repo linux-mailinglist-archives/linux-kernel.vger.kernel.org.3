@@ -2,51 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921CD505C85
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EDC505C83
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239052AbiDRQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42670 "EHLO
+        id S245269AbiDRQlo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:41:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343585AbiDRQmL (ORCPT
+        with ESMTP id S237467AbiDRQlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:42:11 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B11F32074
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:39:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=25YuxAr1PTEePBc5J+xHwi7RoAPIjjwOJ1WIOV6Xjlc=;
-  b=cc5C7Y0S5vPI2P1rMhz6zgwMuDm5mltRgTpz2sFyqlwTJJwgfOVucB5F
-   KcZtCakb5NbQD6PGzfGeohj+YRI+M5Ftd/DvSpopqr5gpYxt5QdJ4wJ+B
-   Z13tE1u75Vw4HkiSweG27ilaqyluu0z+FR6heZhk0hMlVhudes/jXuoxI
-   M=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,270,1643670000"; 
-   d="scan'208";a="11802383"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:39:20 +0200
-Date:   Mon, 18 Apr 2022 18:37:53 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Aliya Rahmani <aliyarahmani786@gmail.com>
-cc:     clabbe@baylibre.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, outreachy@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] staging: media: zoran: else is not generally
- useful after a break or return
-In-Reply-To: <20220418162244.15346-3-aliyarahmani786@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204181837420.13551@hadrien>
-References: <20220418162244.15346-1-aliyarahmani786@gmail.com> <20220418162244.15346-3-aliyarahmani786@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 18 Apr 2022 12:41:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACA23206F;
+        Mon, 18 Apr 2022 09:39:02 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58fe329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58fe:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1188D1EC032C;
+        Mon, 18 Apr 2022 18:38:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650299937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=oej/f1X9fcL38mCIYYKYA2X6taoESV0tpCWvTijPE1Y=;
+        b=EjQpq8SbHnY7wyfCBF21dDs+DWQkHOJBxTzKXKwdF/fY44dG9E82HlJrL+9S38NL6uTat4
+        iRCqom1TwEuFW+cVv6nwZQYGp/VEamF5P1S5lZ/r7PZwoA0N5LRrLhBdYV+lW5fBXiqChC
+        MMfAynX1oFVxy0VW0wPKK+rmHxnVRSc=
+Date:   Mon, 18 Apr 2022 18:38:52 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <Yl2UHOQ4iZJ29k0q@zn.tnic>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,39 +75,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 18, 2022 at 06:55:45PM +0300, Kirill A. Shutemov wrote:
+> I'm confused here. What is wrong with linux/ include namespace?
 
+The problem is that you need all kinds of workarounds so that the
+decompressor builds. Just look at the beginning of
 
-On Mon, 18 Apr 2022, Aliya Rahmani wrote:
+arch/x86/boot/compressed/misc.h
 
-> Remove the else without affecting the logic. Fixes the checkpatch warning: else is not generally useful after a break or return
+Even you had to do them:
 
-This line is still too long.
+/* cpu_feature_enabled() cannot be used this early */
+#define USE_EARLY_PGTABLE_L5
 
-julia
+That thing sprinkled everywhere is not a clean solution.
 
->
-> Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
-> ---
->  drivers/staging/media/zoran/videocodec.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-> index 16a1f23a7f19..19732a47c8bd 100644
-> --- a/drivers/staging/media/zoran/videocodec.c
-> +++ b/drivers/staging/media/zoran/videocodec.c
-> @@ -98,9 +98,8 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
->
->  				h->attached += 1;
->  				return codec;
-> -			} else {
-> -				kfree(codec);
->  			}
-> +			kfree(codec);
->  		}
->  		h = h->next;
->  	}
-> --
-> 2.25.1
->
->
->
+> Yes, we had story with <asm/io.h> that actually caused issue in
+> decompression code, but linux/ has a lot of perfectly portable
+> library-like stuff.
+
+Yes, those are fine except that not everything that leaks into the
+decompressor code through includes is perfectly portable.
+
+> Could you explain what rules are?
+
+Library-like stuff like types.h, linkage.h, etc we could include for now
+but including linux/kernel.h which pulls in everything but the kitchen
+sink is bad.
+
+So I'd like for the decompressor to be completely separate from kernel
+proper because it is a whole different thing and I want for us to be
+able to include headers in it without ugly workarounds just so that
+kernel proper include changes do not influence the decompressor.
+
+> Hm. accept_or_mark_unaccepted()?
+
+What's wrong with early_accept_memory()?
+
+> > Immediately? As opposed to delayed?
+> 
+> Yes. Otherwise accept is delayed until the first allocation of the memory.
+
+Yes, put that in the comment pls.
+
+> Memory encryption can be a reason to have unaccepted memory, but it is not
+> 1:1 match. Unaccepted memory can be present without memory ecnryption if
+> data secruty and integrity guaranteed by other means.
+
+Really?
+
+Please elaborate. I thought memory acceptance is a feature solely for
+TDX and SNP guests to use.
+
+> <asm/mem_encrypt.h> is very AMD SME/SEV centric.
+
+So?
+
+> I'm not sure it need to exist in the way it is now.
+
+I'm not sure what your argument actually is for having yet another
+separate header vs putting it in a header which already deals with that
+stuff.
+
+> Okay, I will move it into a separate function, but it has to be called
+> from allocate_e820() because it allocates and free the map.
+
+You mean, you want for allocate_e820() to call this new function because
+both allocate and free?
+
+Might have to explain what you mean here exactly.
+
+> > And you're saying that that efi_allocate_pages() below can really give a
+> > 256M contiguous chunk?
+> 
+> Yes, that's assumption. Is it too high ask to deal with 4PiB of PA?
+
+From my experience, asking firmware to do stuff for ya is always a risky
+thing. I guess such a huge allocation, when it fails, will be caught
+early in platform verification so whatever...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

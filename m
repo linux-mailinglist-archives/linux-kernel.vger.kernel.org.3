@@ -2,101 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B992505A7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:05:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 916CA505A94
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244614AbiDRPID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:08:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41492 "EHLO
+        id S244083AbiDRPJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:09:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345393AbiDRPHk (ORCPT
+        with ESMTP id S244069AbiDRPI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:07:40 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6D438E1A6;
-        Mon, 18 Apr 2022 06:59:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 527D01F75D;
-        Mon, 18 Apr 2022 13:59:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650290374; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KPeaGa1p82s2eYcsNFRY7rxYiJ/jMxjPDAxuhJ07BsU=;
-        b=A13IgqmZyHKzM+crWTQFObajY7Z7rQ1XCDSx+f53UgTovUeOGHIBEBv9BGq/Z6nJosb1MG
-        4WDddD9QfFL1m1ZCFZi1rgxK+fDjEMQx/vtMPm1VdXYXLf/wJhdjlSmL641JNycp/OJqO0
-        ZG4w9Y5GkvB9kwuevQX4UT0EkDp/TUQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650290374;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KPeaGa1p82s2eYcsNFRY7rxYiJ/jMxjPDAxuhJ07BsU=;
-        b=hotTrITyhaslQ9exb3WDWbwSnGcDWIGWRE+MQv+m8sXkDjYDoRme0yk7Kk7YAqnDzcpbvL
-        lrmLghpAx8vZlyCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF8C913A9B;
-        Mon, 18 Apr 2022 13:59:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id cNGjM8VuXWLiOwAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 18 Apr 2022 13:59:33 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id c21201d9;
-        Mon, 18 Apr 2022 13:59:58 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Jeff Layton <jlayton@kernel.org>, Xiubo Li <xiubli@redhat.com>,
-        Ilya Dryomov <idryomov@gmail.com>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-Subject: [PATCH v5 5/5] ceph: prevent snapshots to be created in encrypted locked directories
-Date:   Mon, 18 Apr 2022 14:59:57 +0100
-Message-Id: <20220418135957.12056-6-lhenriques@suse.de>
-In-Reply-To: <20220418135957.12056-1-lhenriques@suse.de>
-References: <20220418135957.12056-1-lhenriques@suse.de>
+        Mon, 18 Apr 2022 11:08:56 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA46B8FE62;
+        Mon, 18 Apr 2022 07:00:40 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so8850632wmn.1;
+        Mon, 18 Apr 2022 07:00:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B6x/x31zD6jdr7v3jc1uXumCewA6SO4UbVpg60xKCXk=;
+        b=MzV3Dc04CvwAAiwc8eYESy/kUaiawkJiTKLqHR78r064hc0eGHjL0wY8jaNT6CT5u7
+         aCZsjaiV/ws6ZL/JvWYudvnvWAvGUfJJlxJ4Hb48PqzawA817UQTH3dsQKlPAWtkvFsj
+         Ih67M4YTAfVmXn4I2pee+/ksFZ5deFcTkONGa04NQt+PZ/j0UhBcY0BM34E8tJ5kzEdS
+         D4yCc3nSVc87XqniZVIvrb7MPFYr4rB/N5hydMUpF1gcWlilGGpa/plQeImgOjuVeQTw
+         EsICi6rN5bmvq/V+Z/aYb4kN6Pm808V2chgU+Zd/+k5ll2oQfbiAFEJv9J+FM8QdH+b3
+         yqXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=B6x/x31zD6jdr7v3jc1uXumCewA6SO4UbVpg60xKCXk=;
+        b=AsEKwQBOMXBTscgTf4dqiOhvhAVxGHuVKBzwmbhtcH8LTtgAyOc1+j1x7yD1DT9d0n
+         UT6BheX5yytyDbZEEO3NrxptY7zKCRwa4Ub62aciKbyIE7lOQasMfPHFT49lz6SPsIES
+         WKwlQ2iqy5D7aDXvCLf1HpGi/GyA6Y8ZCJn0zlb7d41OX79c1f84HWmyoPqPGimX7whb
+         uF0Nz/z2egHX0Hl01r2cJRMjMFXS7NZjKTYP9yvHdXDnNqhxEr77uzAjk8+nkKPCxCJy
+         NeUVYHh5AQu9DU1QWtBJ5yyXFmq3xGRar+Fq6iMcwXm7F9+7G+B3NqGR4kzzjNofG2vS
+         ZUaQ==
+X-Gm-Message-State: AOAM530J7svxk9O6cjwZL/Y7cQBhhbyXqEaP01LinIcOwG7fmutxnhxp
+        DuQ9JN3c7awxSkPZzExrPzI=
+X-Google-Smtp-Source: ABdhPJymwRgSS/QTCpphJK2gWO5fWNVAensdOd5debCCtyT1eqh6vN7nhxp1YqM5axzZBxB5ViUQIA==
+X-Received: by 2002:a05:600c:34c5:b0:38f:fbcb:e45 with SMTP id d5-20020a05600c34c500b0038ffbcb0e45mr15309073wmq.66.1650290439536;
+        Mon, 18 Apr 2022 07:00:39 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id p14-20020a05600c1d8e00b0038ecb2d2feasm12977678wms.4.2022.04.18.07.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 07:00:39 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        ntfs3@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] fs/ntfs3: remove redundant assignment to variable vcn
+Date:   Mon, 18 Apr 2022 15:00:38 +0100
+Message-Id: <20220418140038.82843-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With snapshot names encryption we can not allow snapshots to be created in
-locked directories because the names wouldn't be encrypted.  This patch
-forces the directory to be unlocked to allow a snapshot to be created.
+Variable vcn is being assigned a value that is never read, it is
+being re-assigned again in the initialization of a for-loop.  The
+assignment is redundant and can be removed.
 
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
+Cleans up clang scan build warning:
+fs/ntfs3/attrib.c:1176:7: warning: Value stored to 'vcn' during its
+initialization is never read [deadcode.DeadStores]
+
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
- fs/ceph/dir.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ fs/ntfs3/attrib.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/ceph/dir.c b/fs/ceph/dir.c
-index f48f1ff20927..44b7114ca267 100644
---- a/fs/ceph/dir.c
-+++ b/fs/ceph/dir.c
-@@ -1071,6 +1071,11 @@ static int ceph_mkdir(struct user_namespace *mnt_userns, struct inode *dir,
- 		err = -EDQUOT;
- 		goto out;
- 	}
-+	if ((op == CEPH_MDS_OP_MKSNAP) && IS_ENCRYPTED(dir) &&
-+	    !fscrypt_has_encryption_key(dir)) {
-+		err = -ENOKEY;
-+		goto out;
-+	}
- 
- 
- 	req = ceph_mdsc_create_request(mdsc, op, USE_AUTH_MDS);
+diff --git a/fs/ntfs3/attrib.c b/fs/ntfs3/attrib.c
+index e8c00dda42ad..fc0623b029e6 100644
+--- a/fs/ntfs3/attrib.c
++++ b/fs/ntfs3/attrib.c
+@@ -1173,7 +1173,7 @@ int attr_load_runs_range(struct ntfs_inode *ni, enum ATTR_TYPE type,
+ {
+ 	struct ntfs_sb_info *sbi = ni->mi.sbi;
+ 	u8 cluster_bits = sbi->cluster_bits;
+-	CLST vcn = from >> cluster_bits;
++	CLST vcn;
+ 	CLST vcn_last = (to - 1) >> cluster_bits;
+ 	CLST lcn, clen;
+ 	int err;
+-- 
+2.35.1
+

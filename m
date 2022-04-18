@@ -2,120 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8724D504CF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:03:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CBEA504CF8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236565AbiDRHF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 03:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
+        id S236909AbiDRHK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 03:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230081AbiDRHF1 (ORCPT
+        with ESMTP id S230108AbiDRHKV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 03:05:27 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E42727;
-        Mon, 18 Apr 2022 00:02:48 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id ks6so25402531ejb.1;
-        Mon, 18 Apr 2022 00:02:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :user-agent:mime-version:content-transfer-encoding;
-        bh=1gFxdoicgPAwmlV8o1tsLddS7qSbrf3VwqTa9k37xvE=;
-        b=W4lI4+bHoC/yfI5uEvATGxwYQ3wMZQscD9cXYkYyUkxubmhOJauGLdXqMQ4FO/Di1P
-         f3HDG95xwgJOMEF9WXnzNp+NXi+tVz25dALxT/LX/DDzi0QVQdZVSh8YQvwIj14oDONa
-         s8zBPZlPaqFPZghx3UkayPf0FEyKeSHqHZ8BiLUwHJ1OtQ/7EA1rI2qZthhIwXMe2Cb4
-         tP/G9qsp2XnULoW9YufKyplA7Vxu3ZFvG9eyBtRkTRJmyAwSrRPSXxsrX8LYMLdH/kJa
-         Ho1OoDKRwLlB+bgUamtWzB84FTB1VMhXizn9/MyV3PviVMbH8W9L1PzpaD0I3dn/bVVu
-         3M4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:user-agent:mime-version:content-transfer-encoding;
-        bh=1gFxdoicgPAwmlV8o1tsLddS7qSbrf3VwqTa9k37xvE=;
-        b=wPjHAbGxTQk/Rp7SG7gBXzyaq/JEtKbJXnwnOR2sI3zmUvGKhGMxHhsChgTxsRunTD
-         R9OZtO/LcMQTIyQbsO+/2RiSJRe+CAa/doIdBHRCeeXT57sF68wXGjwzXUpgnWllaBQY
-         u+6Tush+BeRRL6y5spS3oxYNZB48y48LQ4A3teigSFgm+omUqFVobRdW0QTODd9pnwyo
-         qNbpfs96m5q2QFOukxl73yygZU2McZy4l+tQ+ye7m4VQgf4mQusnE+2SGT7vd01Yko3y
-         MZCqUzYtEuyyxTK5ddMOMtRNOSjBzkw078bY4JZ4sFBE42qyM8si59PY47DsWPUE3sdr
-         G4LQ==
-X-Gm-Message-State: AOAM533IPOWdk/C3dFVkOWez6bSm2BJC+fcdHUbt/+LHR9xC6vcJ4XYt
-        kT7H/azsBB15G+KviBD+OBwTmUfpRiIhzMxh
-X-Google-Smtp-Source: ABdhPJxp/5FaUasy/UnwFg5HQ/pK7TUTLO6u8erRBshd3B2WMjwHIfQf53rSiwpo3xjbugHXaCkW4g==
-X-Received: by 2002:a17:906:7947:b0:6da:892f:2503 with SMTP id l7-20020a170906794700b006da892f2503mr7881427ejo.710.1650265367005;
-        Mon, 18 Apr 2022 00:02:47 -0700 (PDT)
-Received: from giga-mm.localdomain ([195.245.23.54])
-        by smtp.gmail.com with ESMTPSA id r23-20020aa7da17000000b00423d9e50fb6sm2470811eds.55.2022.04.18.00.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 00:02:46 -0700 (PDT)
-Message-ID: <2cc9141e27d6c5317a8129af60decd30ac8470ce.camel@gmail.com>
-Subject: Re: [PATCH] input: Make use of the helper function
- devm_platform_ioremap_resource()
-From:   Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To:     cgel.zte@gmail.com, dmitry.torokhov@gmail.com
-Cc:     lv.ruyi@zte.com.cn, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Date:   Mon, 18 Apr 2022 09:02:44 +0200
-In-Reply-To: <20220418015036.2556731-1-lv.ruyi@zte.com.cn>
-References: <20220418015036.2556731-1-lv.ruyi@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Mon, 18 Apr 2022 03:10:21 -0400
+Received: from mx2.smtp.larsendata.com (mx2.smtp.larsendata.com [91.221.196.228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E04167DF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:07:42 -0700 (PDT)
+Received: from mail01.mxhotel.dk (mail01.mxhotel.dk [91.221.196.236])
+        by mx2.smtp.larsendata.com (Halon) with ESMTPS
+        id 3e71f98d-bee6-11ec-9ac0-0050568cd888;
+        Mon, 18 Apr 2022 07:07:44 +0000 (UTC)
+Received: from mailproxy3.cst.dirpod4-cph3.one.com (mailproxy3.pub.dirpod4-cph3.one.com [104.37.34.136])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: sam@ravnborg.org)
+        by mail01.mxhotel.dk (Postfix) with ESMTPSA id 5F784194B38;
+        Mon, 18 Apr 2022 09:07:39 +0200 (CEST)
+Date:   Mon, 18 Apr 2022 09:07:35 +0200
+X-Report-Abuse-To: abuse@mxhotel.dk
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        kbuild-all <kbuild-all@lists.01.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] drm/panel: newvision-nv3052c: Fix build
+Message-ID: <Yl0ON+E7bYluGIYG@ravnborg.org>
+References: <20220409100016.9337-1-paul@crapouillou.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220409100016.9337-1-paul@crapouillou.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Lv!
-
-On Mon, 2022-04-18 at 01:50 +0000, cgel.zte@gmail.com wrote:
-> From: Lv Ruyi <lv.ruyi@zte.com.cn>
+On Sat, Apr 09, 2022 at 11:00:16AM +0100, Paul Cercueil wrote:
+> The driver was compile-tested then rebased on drm-misc-next, and not
+> compile-tested after the rebase; unfortunately the driver didn't compile
+> anymore when it hit drm-misc-next.
 > 
-> Use the devm_platform_ioremap_resource() helper instead of calling
-> platform_get_resource() and devm_ioremap_resource() separately.Make the
-> code simpler without functional changes.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
-
-Acked-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-
+> Fixes: 49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C based LCDs")
+> Cc: Christophe Branchereau <cbranchereau@gmail.com>
+> Cc: kbuild-all <kbuild-all@lists.01.org>
+> Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+Acked-by: Sam Ravnborg <sam@ravnborg.org>
 > ---
->  drivers/input/keyboard/ep93xx_keypad.c | 7 +------
->  1 file changed, 1 insertion(+), 6 deletions(-)
+>  drivers/gpu/drm/panel/panel-newvision-nv3052c.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/drivers/input/keyboard/ep93xx_keypad.c b/drivers/input/keyboard/ep93xx_keypad.c
-> index 272a4f1c6e81..7a3b0664ab4f 100644
-> --- a/drivers/input/keyboard/ep93xx_keypad.c
-> +++ b/drivers/input/keyboard/ep93xx_keypad.c
-> @@ -231,7 +231,6 @@ static int ep93xx_keypad_probe(struct platform_device *pdev)
->         struct ep93xx_keypad *keypad;
->         const struct matrix_keymap_data *keymap_data;
->         struct input_dev *input_dev;
-> -       struct resource *res;
->         int err;
->  
->         keypad = devm_kzalloc(&pdev->dev, sizeof(*keypad), GFP_KERNEL);
-> @@ -250,11 +249,7 @@ static int ep93xx_keypad_probe(struct platform_device *pdev)
->         if (keypad->irq < 0)
->                 return keypad->irq;
->  
-> -       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> -       if (!res)
-> -               return -ENXIO;
+> diff --git a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> index 127bcfdb59df..cf078f0d3cd3 100644
+> --- a/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> +++ b/drivers/gpu/drm/panel/panel-newvision-nv3052c.c
+> @@ -416,15 +416,13 @@ static int nv3052c_probe(struct spi_device *spi)
+>  	return 0;
+>  }
+>  
+> -static int nv3052c_remove(struct spi_device *spi)
+> +static void nv3052c_remove(struct spi_device *spi)
+>  {
+>  	struct nv3052c *priv = spi_get_drvdata(spi);
+>  
+>  	drm_panel_remove(&priv->panel);
+>  	drm_panel_disable(&priv->panel);
+>  	drm_panel_unprepare(&priv->panel);
 > -
-> -       keypad->mmio_base = devm_ioremap_resource(&pdev->dev, res);
-> +       keypad->mmio_base = devm_platform_ioremap_resource(pdev, 0);
->         if (IS_ERR(keypad->mmio_base))
->                 return PTR_ERR(keypad->mmio_base);
->  
-
--- 
-Alexander Sverdlin.
-
+> -	return 0;
+>  }
+>  
+>  static const struct drm_display_mode ltk035c5444t_modes[] = {
+> -- 
+> 2.35.1

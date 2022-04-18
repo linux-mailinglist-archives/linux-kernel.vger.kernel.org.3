@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D58D6505248
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 568C15054DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239512AbiDRMht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53928 "EHLO
+        id S241682AbiDRNMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239129AbiDRMca (ORCPT
+        with ESMTP id S240833AbiDRM55 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:32:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BB425C63;
-        Mon, 18 Apr 2022 05:24:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:57:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A6523BE2;
+        Mon, 18 Apr 2022 05:38:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8057DB80EDC;
-        Mon, 18 Apr 2022 12:24:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1627C385A8;
-        Mon, 18 Apr 2022 12:24:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 796D4B80EDC;
+        Mon, 18 Apr 2022 12:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3FF9C385A7;
+        Mon, 18 Apr 2022 12:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284655;
-        bh=3bHy/wYQTMAAnmXKp8hsCqv0GdHuis91S7ttaakptnE=;
+        s=korg; t=1650285493;
+        bh=zf+c42DAV0GN0eJ5S2P+F9YIgesB9POh7WPlYDoIUWo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JJSrVOnisbw873t5LLTsHKWrmoNl3JIH1Cc8C0TUW5go8LMJ5Vu0BuBOggp6xBpev
-         aVZexuCcbnnR1PhWWjTbzdZoB4PFOghaV9IAf4T0euFtnUQ/g9REnhib8cdQur/of+
-         C2ygbksQk4vUWGGhO2QMJV4da6ml7Sef48Nw4b/c=
+        b=kdPxTrpwRamBv6Sj1aVeflUgOR9uzHUlBYCk/bo02yEVBAXVeGcXFAPAxY680fopx
+         HkvSbajk/rHQMCDlUTs9niorR1QiTK/7fjhU9eglAuieKxCSkffj4Tdi9KQyvCsi1q
+         5F120RkqeIXG61dWZSTg26DLYQrvLWmKf1jyDjBA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: [PATCH 5.17 186/219] gcc-plugins: latent_entropy: use /dev/urandom
-Date:   Mon, 18 Apr 2022 14:12:35 +0200
-Message-Id: <20220418121212.085302880@linuxfoundation.org>
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 034/105] scsi: iscsi: Fix conn cleanup and stop race during iscsid restart
+Date:   Mon, 18 Apr 2022 14:12:36 +0200
+Message-Id: <20220418121147.380776788@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,121 +57,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jason A. Donenfeld <Jason@zx2c4.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-commit c40160f2998c897231f8454bf797558d30a20375 upstream.
+[ Upstream commit 7c6e99c18167ed89729bf167ccb4a7e3ab3115ba ]
 
-While the latent entropy plugin mostly doesn't derive entropy from
-get_random_const() for measuring the call graph, when __latent_entropy is
-applied to a constant, then it's initialized statically to output from
-get_random_const(). In that case, this data is derived from a 64-bit
-seed, which means a buffer of 512 bits doesn't really have that amount
-of compile-time entropy.
+If iscsid is doing a stop_conn at the same time the kernel is starting
+error recovery we can hit a race that allows the cleanup work to run on a
+valid connection. In the race, iscsi_if_stop_conn sees the cleanup bit set,
+but it calls flush_work on the clean_work before iscsi_conn_error_event has
+queued it. The flush then returns before the queueing and so the
+cleanup_work can run later and disconnect/stop a conn while it's in a
+connected state.
 
-This patch fixes that shortcoming by just buffering chunks of
-/dev/urandom output and doling it out as requested.
+The patch:
 
-At the same time, it's important that we don't break the use of
--frandom-seed, for people who want the runtime benefits of the latent
-entropy plugin, while still having compile-time determinism. In that
-case, we detect whether gcc's set_random_seed() has been called by
-making a call to get_random_seed(noinit=true) in the plugin init
-function, which is called after set_random_seed() is called but before
-anything that calls get_random_seed(noinit=false), and seeing if it's
-zero or not. If it's not zero, we're in deterministic mode, and so we
-just generate numbers with a basic xorshift prng.
+Commit 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in
+kernel space")
 
-Note that we don't detect if -frandom-seed is being used using the
-documented local_tick variable, because it's assigned via:
-   local_tick = (unsigned) tv.tv_sec * 1000 + tv.tv_usec / 1000;
-which may well overflow and become -1 on its own, and so isn't
-reliable: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105171
+added the late stop_conn call bug originally, and the patch:
 
-[kees: The 256 byte rnd_buf size was chosen based on average (250),
- median (64), and std deviation (575) bytes of used entropy for a
- defconfig x86_64 build]
+Commit 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
 
-Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
-Cc: stable@vger.kernel.org
-Cc: PaX Team <pageexec@freemail.hu>
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20220405222815.21155-1-Jason@zx2c4.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+attempted to fix it but only fixed the normal EH case and left the above
+race for the iscsid restart case. For the normal EH case we don't hit the
+race because we only signal userspace to start recovery after we have done
+the queueing, so the flush will always catch the queued work or see it
+completed.
+
+For iscsid restart cases like boot, we can hit the race because iscsid will
+call down to the kernel before the kernel has signaled any error, so both
+code paths can be running at the same time. This adds a lock around the
+setting of the cleanup bit and queueing so they happen together.
+
+Link: https://lore.kernel.org/r/20220408001314.5014-6-michael.christie@oracle.com
+Fixes: 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in kernel space")
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- scripts/gcc-plugins/latent_entropy_plugin.c |   44 +++++++++++++++++-----------
- 1 file changed, 27 insertions(+), 17 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 17 +++++++++++++++++
+ include/scsi/scsi_transport_iscsi.h |  2 ++
+ 2 files changed, 19 insertions(+)
 
---- a/scripts/gcc-plugins/latent_entropy_plugin.c
-+++ b/scripts/gcc-plugins/latent_entropy_plugin.c
-@@ -86,25 +86,31 @@ static struct plugin_info latent_entropy
- 	.help		= "disable\tturn off latent entropy instrumentation\n",
- };
- 
--static unsigned HOST_WIDE_INT seed;
--/*
-- * get_random_seed() (this is a GCC function) generates the seed.
-- * This is a simple random generator without any cryptographic security because
-- * the entropy doesn't come from here.
-- */
-+static unsigned HOST_WIDE_INT deterministic_seed;
-+static unsigned HOST_WIDE_INT rnd_buf[32];
-+static size_t rnd_idx = ARRAY_SIZE(rnd_buf);
-+static int urandom_fd = -1;
-+
- static unsigned HOST_WIDE_INT get_random_const(void)
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 38abc3a15692..21cc306a0f11 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2263,9 +2263,12 @@ static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
+ 					 bool is_active)
  {
--	unsigned int i;
--	unsigned HOST_WIDE_INT ret = 0;
--
--	for (i = 0; i < 8 * sizeof(ret); i++) {
--		ret = (ret << 1) | (seed & 1);
--		seed >>= 1;
--		if (ret & 1)
--			seed ^= 0xD800000000000000ULL;
-+	if (deterministic_seed) {
-+		unsigned HOST_WIDE_INT w = deterministic_seed;
-+		w ^= w << 13;
-+		w ^= w >> 7;
-+		w ^= w << 17;
-+		deterministic_seed = w;
-+		return deterministic_seed;
+ 	/* Check if this was a conn error and the kernel took ownership */
++	spin_lock_irq(&conn->lock);
+ 	if (!test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
++		spin_unlock_irq(&conn->lock);
+ 		iscsi_ep_disconnect(conn, is_active);
+ 	} else {
++		spin_unlock_irq(&conn->lock);
+ 		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
+ 		mutex_unlock(&conn->ep_mutex);
+ 
+@@ -2308,9 +2311,12 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 		/*
+ 		 * Figure out if it was the kernel or userspace initiating this.
+ 		 */
++		spin_lock_irq(&conn->lock);
+ 		if (!test_and_set_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
++			spin_unlock_irq(&conn->lock);
+ 			iscsi_stop_conn(conn, flag);
+ 		} else {
++			spin_unlock_irq(&conn->lock);
+ 			ISCSI_DBG_TRANS_CONN(conn,
+ 					     "flush kernel conn cleanup.\n");
+ 			flush_work(&conn->cleanup_work);
+@@ -2319,7 +2325,9 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 		 * Only clear for recovery to avoid extra cleanup runs during
+ 		 * termination.
+ 		 */
++		spin_lock_irq(&conn->lock);
+ 		clear_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags);
++		spin_unlock_irq(&conn->lock);
  	}
- 
--	return ret;
-+	if (urandom_fd < 0) {
-+		urandom_fd = open("/dev/urandom", O_RDONLY);
-+		gcc_assert(urandom_fd >= 0);
-+	}
-+	if (rnd_idx >= ARRAY_SIZE(rnd_buf)) {
-+		gcc_assert(read(urandom_fd, rnd_buf, sizeof(rnd_buf)) == sizeof(rnd_buf));
-+		rnd_idx = 0;
-+	}
-+	return rnd_buf[rnd_idx++];
- }
- 
- static tree tree_get_random_const(tree type)
-@@ -537,8 +543,6 @@ static void latent_entropy_start_unit(vo
- 	tree type, id;
- 	int quals;
- 
--	seed = get_random_seed(false);
--
- 	if (in_lto_p)
+ 	ISCSI_DBG_TRANS_CONN(conn, "iscsi if conn stop done.\n");
+ 	return 0;
+@@ -2340,7 +2348,9 @@ static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
+ 	 */
+ 	if (conn->state != ISCSI_CONN_BOUND && conn->state != ISCSI_CONN_UP) {
+ 		ISCSI_DBG_TRANS_CONN(conn, "Got error while conn is already failed. Ignoring.\n");
++		spin_lock_irq(&conn->lock);
+ 		clear_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags);
++		spin_unlock_irq(&conn->lock);
+ 		mutex_unlock(&conn->ep_mutex);
  		return;
+ 	}
+@@ -2400,6 +2410,7 @@ iscsi_create_conn(struct iscsi_cls_session *session, int dd_size, uint32_t cid)
+ 		conn->dd_data = &conn[1];
  
-@@ -573,6 +577,12 @@ __visible int plugin_init(struct plugin_
- 	const struct plugin_argument * const argv = plugin_info->argv;
- 	int i;
+ 	mutex_init(&conn->ep_mutex);
++	spin_lock_init(&conn->lock);
+ 	INIT_LIST_HEAD(&conn->conn_list);
+ 	INIT_WORK(&conn->cleanup_work, iscsi_cleanup_conn_work_fn);
+ 	conn->transport = transport;
+@@ -2591,9 +2602,12 @@ void iscsi_conn_error_event(struct iscsi_cls_conn *conn, enum iscsi_err error)
+ 	struct iscsi_uevent *ev;
+ 	struct iscsi_internal *priv;
+ 	int len = nlmsg_total_size(sizeof(*ev));
++	unsigned long flags;
  
-+	/*
-+	 * Call get_random_seed() with noinit=true, so that this returns
-+	 * 0 in the case where no seed has been passed via -frandom-seed.
-+	 */
-+	deterministic_seed = get_random_seed(true);
-+
- 	static const struct ggc_root_tab gt_ggc_r_gt_latent_entropy[] = {
- 		{
- 			.base = &latent_entropy_decl,
++	spin_lock_irqsave(&conn->lock, flags);
+ 	if (!test_and_set_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags))
+ 		queue_work(iscsi_conn_cleanup_workq, &conn->cleanup_work);
++	spin_unlock_irqrestore(&conn->lock, flags);
+ 
+ 	priv = iscsi_if_transport_lookup(conn->transport);
+ 	if (!priv)
+@@ -3736,11 +3750,14 @@ static int iscsi_if_transport_conn(struct iscsi_transport *transport,
+ 		return -EINVAL;
+ 
+ 	mutex_lock(&conn->ep_mutex);
++	spin_lock_irq(&conn->lock);
+ 	if (test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
++		spin_unlock_irq(&conn->lock);
+ 		mutex_unlock(&conn->ep_mutex);
+ 		ev->r.retcode = -ENOTCONN;
+ 		return 0;
+ 	}
++	spin_unlock_irq(&conn->lock);
+ 
+ 	switch (nlh->nlmsg_type) {
+ 	case ISCSI_UEVENT_BIND_CONN:
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index c5d7810fd792..037c77fb5dc5 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -211,6 +211,8 @@ struct iscsi_cls_conn {
+ 	struct mutex ep_mutex;
+ 	struct iscsi_endpoint *ep;
+ 
++	/* Used when accessing flags and queueing work. */
++	spinlock_t lock;
+ 	unsigned long flags;
+ 	struct work_struct cleanup_work;
+ 
+-- 
+2.35.1
+
 
 

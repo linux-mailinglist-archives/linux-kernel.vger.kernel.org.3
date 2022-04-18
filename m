@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F199D505793
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914765054E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244149AbiDRN4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41254 "EHLO
+        id S241500AbiDRNQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244863AbiDRNa7 (ORCPT
+        with ESMTP id S241474AbiDRM6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:59 -0400
+        Mon, 18 Apr 2022 08:58:47 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3961EEE5;
-        Mon, 18 Apr 2022 05:56:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F3C286FB;
+        Mon, 18 Apr 2022 05:39:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 66A01B80E44;
-        Mon, 18 Apr 2022 12:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2F5DC385A7;
-        Mon, 18 Apr 2022 12:56:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E2421B80EDF;
+        Mon, 18 Apr 2022 12:39:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10DA0C385A7;
+        Mon, 18 Apr 2022 12:39:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286598;
-        bh=Ch4wZSjhV/oo/hLKg9DEfBsu9sBf4PX4u2g8wngGSyQ=;
+        s=korg; t=1650285548;
+        bh=w7aXpuwOrzhppGfZ0NAyhIFazOsTIW/sc7x6w0mpvO4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QougPDleAIt8Zs+N4XrpkF2UyY9Ot2+WeHgLGvnxRzM812SnhozDUm2K/HhqBCL7i
-         zbCNX//qD9wH+0iVZSI2XZzPPNMWkFcf/aB/ssybaFDDIZE0P6LCJS5m69zOCAXKQJ
-         3IcvO4H0ZGTlhfBh99aSUiMnJRSiHCkQcH1VASiI=
+        b=efcOvuTwCCX2zfnznnA4Fmq56I3JRA9lK/PJ9MszPf2FxBZPvr7bGGcq/Sp7xYGDj
+         ptHQUERiOREmYcY1nEZEoXDDR7KnfRniymLbZJT1dS8vOrLcFlnzKcboVvjqd6mloE
+         WWwJPAJPVGfReK9Na1amlD52kNIIxN+jqGHrWGYE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.14 186/284] ubifs: Add missing iput if do_tmpfile() failed in rename whiteout
-Date:   Mon, 18 Apr 2022 14:12:47 +0200
-Message-Id: <20220418121217.026455608@linuxfoundation.org>
+        stable@vger.kernel.org, Anthony Koo <Anthony.Koo@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Chiawen Huang <chiawen.huang@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 046/105] drm/amd/display: FEC check in timing validation
+Date:   Mon, 18 Apr 2022 14:12:48 +0200
+Message-Id: <20220418121147.788986359@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Chiawen Huang <chiawen.huang@amd.com>
 
-commit 716b4573026bcbfa7b58ed19fe15554bac66b082 upstream.
+[ Upstream commit 7d56a154e22ffb3613fdebf83ec34d5225a22993 ]
 
-whiteout inode should be put when do_tmpfile() failed if inode has been
-initialized. Otherwise we will get following warning during umount:
-  UBIFS error (ubi0:0 pid 1494): ubifs_assert_failed [ubifs]: UBIFS
-  assert failed: c->bi.dd_growth == 0, in fs/ubifs/super.c:1930
-  VFS: Busy inodes after unmount of ubifs. Self-destruct in 5 seconds.
+[Why]
+disable/enable leads FEC mismatch between hw/sw FEC state.
 
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Suggested-by: Sascha Hauer <s.hauer@pengutronix.de>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+[How]
+check FEC status to fastboot on/off.
+
+Reviewed-by: Anthony Koo <Anthony.Koo@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Chiawen Huang <chiawen.huang@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ubifs/dir.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -468,6 +468,8 @@ out_inode:
- 	make_bad_inode(inode);
- 	if (!instantiated)
- 		iput(inode);
-+	else if (whiteout)
-+		iput(*whiteout);
- out_budg:
- 	ubifs_release_budget(c, &req);
- 	if (!instantiated)
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 93f5229c303e..ac5323596c65 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -1173,6 +1173,10 @@ bool dc_validate_seamless_boot_timing(const struct dc *dc,
+ 	if (!link->link_enc->funcs->is_dig_enabled(link->link_enc))
+ 		return false;
+ 
++	/* Check for FEC status*/
++	if (link->link_enc->funcs->fec_is_active(link->link_enc))
++		return false;
++
+ 	enc_inst = link->link_enc->funcs->get_dig_frontend(link->link_enc);
+ 
+ 	if (enc_inst == ENGINE_ID_UNKNOWN)
+-- 
+2.35.1
+
 
 

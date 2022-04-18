@@ -2,135 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651C5504ABF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:59:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 025B7504AB7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbiDRCBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 22:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45250 "EHLO
+        id S235697AbiDRB4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 21:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235756AbiDRCBf (ORCPT
+        with ESMTP id S235610AbiDRB4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 22:01:35 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FEAD183B7;
-        Sun, 17 Apr 2022 18:58:56 -0700 (PDT)
-X-UUID: 0679de9cd634460f8d358ad0faa66faf-20220418
-X-UUID: 0679de9cd634460f8d358ad0faa66faf-20220418
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw02.mediatek.com
-        (envelope-from <lina.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1957503384; Mon, 18 Apr 2022 09:58:52 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 18 Apr 2022 09:58:51 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Apr
- 2022 09:58:51 +0800
-Received: from mbjsdccf07.mediatek.inc (10.15.20.246) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 18 Apr 2022 09:58:50 +0800
-From:   <Lina.Wang@mediatek.com>
-To:     Daniel Borkmann <daniel@iogearbox.net>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        <linux-kernel@vger.kernel.org>,
-        Maciej enczykowski <maze@google.com>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-Subject: Re: [PATCH v5 1/3] selftests: bpf: add test for bpf_skb_change_proto
-Date:   Mon, 18 Apr 2022 09:52:30 +0800
-Message-ID: <20220418015230.4481-1-Lina.Wang@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
-References: <9dc51533-92d2-1c82-2a6e-96e1ac747bb7@iogearbox.net>
+        Sun, 17 Apr 2022 21:56:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F9C7183A3
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 18:53:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650246824;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=TmgtMzqaKnL8aPpoTFZVoZARNQjGgBGisAlqoiEq6pY=;
+        b=UUcvn0a95nOMcucVI8oruihUvWBg1myNUOIT/LWaZFirGcbTXkvNXtLzWe8DAXyUniDiUg
+        JdukxniV3Tz/OtZn+GvWLIC2Et3fU9MPW2Kr46uQKOwULjoTYI3i8aUHPHeykltCFqxAoi
+        4ivBtK2ZocHve69SPMPInxvUbQx2iFA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-116-JLpaGNtRMqOds3ODpEuqrg-1; Sun, 17 Apr 2022 21:53:41 -0400
+X-MC-Unique: JLpaGNtRMqOds3ODpEuqrg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 37AA78001EA;
+        Mon, 18 Apr 2022 01:53:40 +0000 (UTC)
+Received: from localhost (ovpn-12-21.pek2.redhat.com [10.72.12.21])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id BBE2E2029F8F;
+        Mon, 18 Apr 2022 01:53:35 +0000 (UTC)
+Date:   Mon, 18 Apr 2022 09:53:32 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Coiby Xu <coxu@redhat.com>
+Cc:     kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+        Michal Suchanek <msuchanek@suse.de>,
+        Dave Young <dyoung@redhat.com>, Will Deacon <will@kernel.org>,
+        "Eric W . Biederman" <ebiederm@xmission.com>,
+        Mimi Zohar <zohar@linux.ibm.com>, Chun-Yi Lee <jlee@suse.com>,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        stable@kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Yinghai Lu <yinghai@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6 2/4] kexec, KEYS: make the code in
+ bzImage64_verify_sig generic
+Message-ID: <YlzChw5kPOlPmK9Z@MiWiFi-R3L-srv>
+References: <20220414014344.228523-1-coxu@redhat.com>
+ <20220414014344.228523-3-coxu@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="y"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220414014344.228523-3-coxu@redhat.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-07 at 17:22 +0200, Daniel Borkmann wrote:
-> Hi Lina,
+On 04/14/22 at 09:43am, Coiby Xu wrote:
+> commit 278311e417be ("kexec, KEYS: Make use of platform keyring for
+> signature verify") adds platform keyring support on x86 kexec but not
+> arm64.
 > 
-> On 4/7/22 10:47 AM, Lina Wang wrote:
-> > The code is copied from the Android Open Source Project and the
-> > author(
-> > Maciej Żenczykowski) has gave permission to relicense it under
-> > GPLv2.
-> > 
-> > The test is to change input IPv6 packets to IPv4 ones and output
-> > IPv4 to
-> > IPv6 with bpf_skb_change_proto.
-> > ---
+> The code in bzImage64_verify_sig makes use of system keyrings including
+> .buitin_trusted_keys, .secondary_trusted_keys and .platform keyring to
+> verify signed kernel image as PE file. Make it generic so both x86_64
+> and arm64 can use it.
 > 
-> Your patch 2/3 is utilizing this program out of
-> selftests/net/udpgro_frglist.sh,
-> however, this is a bit problematic given BPF CI which runs on every
-> BPF submitted
-> patch. Meaning, udpgro_frglist.sh won't be covered by CI and only
-> needs to be run
-> manually. Could you properly include this into test_progs from BPF
-> suite (that way,
-> BPF CI will also pick it up)? See also [2] for more complex netns
-> setups.
+> Fixes: 278311e417be ("kexec, KEYS: Make use of platform keyring for signature verify")
 
-more complex netns setups? Do u mean I should c code netns setups to
-make a complete bpf test?It is complicated for my case, i just want to
-simulate udp gro+ bpf to verify my fix-issue patch.
-maybe I can move nat6to4.c to net/, not bpf/prog_test, then
-udpgro_frglist.sh is complete.
+Will the code in bzImage64_verify_sig generic not being genric cause any
+issue? Asking this because I don't get why making code generic need add
+'Fixes' tag.
 
-> > +
-> > +// bionic kernel uapi linux/udp.h header is munged...
+> Cc: kexec@lists.infradead.org
+> Cc: keyrings@vger.kernel.org
+> Cc: linux-security-module@vger.kernel.org
+> Cc: stable@kernel.org
+> Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+> Signed-off-by: Coiby Xu <coxu@redhat.com>
+> ---
+>  arch/x86/kernel/kexec-bzimage64.c | 20 +-------------------
+>  include/linux/kexec.h             |  7 +++++++
+>  kernel/kexec_file.c               | 17 +++++++++++++++++
+>  3 files changed, 25 insertions(+), 19 deletions(-)
 > 
-> nit: Throughout the file, please use C style comments as per kernel
-> coding convention.
+> diff --git a/arch/x86/kernel/kexec-bzimage64.c b/arch/x86/kernel/kexec-bzimage64.c
+> index 170d0fd68b1f..f299b48f9c9f 100644
+> --- a/arch/x86/kernel/kexec-bzimage64.c
+> +++ b/arch/x86/kernel/kexec-bzimage64.c
+> @@ -17,7 +17,6 @@
+>  #include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/efi.h>
+> -#include <linux/verification.h>
+>  
+>  #include <asm/bootparam.h>
+>  #include <asm/setup.h>
+> @@ -528,28 +527,11 @@ static int bzImage64_cleanup(void *loader_data)
+>  	return 0;
+>  }
+>  
+> -#ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> -static int bzImage64_verify_sig(const char *kernel, unsigned long kernel_len)
+> -{
+> -	int ret;
+> -
+> -	ret = verify_pefile_signature(kernel, kernel_len,
+> -				      VERIFY_USE_SECONDARY_KEYRING,
+> -				      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> -		ret = verify_pefile_signature(kernel, kernel_len,
+> -					      VERIFY_USE_PLATFORM_KEYRING,
+> -					      VERIFYING_KEXEC_PE_SIGNATURE);
+> -	}
+> -	return ret;
+> -}
+> -#endif
+> -
+>  const struct kexec_file_ops kexec_bzImage64_ops = {
+>  	.probe = bzImage64_probe,
+>  	.load = bzImage64_load,
+>  	.cleanup = bzImage64_cleanup,
+>  #ifdef CONFIG_KEXEC_BZIMAGE_VERIFY_SIG
+> -	.verify_sig = bzImage64_verify_sig,
+> +	.verify_sig = kexec_kernel_verify_pe_sig,
+>  #endif
+>  };
+> diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+> index 413235c6c797..da83abfc628b 100644
+> --- a/include/linux/kexec.h
+> +++ b/include/linux/kexec.h
+> @@ -19,6 +19,7 @@
+>  #include <asm/io.h>
+>  
+>  #include <uapi/linux/kexec.h>
+> +#include <linux/verification.h>
+>  
+>  /* Location of a reserved region to hold the crash kernel.
+>   */
+> @@ -202,6 +203,12 @@ int arch_kexec_apply_relocations(struct purgatory_info *pi,
+>  				 const Elf_Shdr *relsec,
+>  				 const Elf_Shdr *symtab);
+>  int arch_kimage_file_post_load_cleanup(struct kimage *image);
+> +#ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel,
+> +				    unsigned long kernel_len);
+> +#endif
+> +#endif
+>  int arch_kexec_locate_mem_hole(struct kexec_buf *kbuf);
+>  
+>  extern int kexec_add_buffer(struct kexec_buf *kbuf);
+> diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+> index 3720435807eb..754885b96aab 100644
+> --- a/kernel/kexec_file.c
+> +++ b/kernel/kexec_file.c
+> @@ -165,6 +165,23 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+>  }
+>  
+>  #ifdef CONFIG_KEXEC_SIG
+> +#ifdef CONFIG_SIGNED_PE_FILE_VERIFICATION
+> +int kexec_kernel_verify_pe_sig(const char *kernel, unsigned long kernel_len)
+> +{
+> +	int ret;
+> +
+> +	ret = verify_pefile_signature(kernel, kernel_len,
+> +				      VERIFY_USE_SECONDARY_KEYRING,
+> +				      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	if (ret == -ENOKEY && IS_ENABLED(CONFIG_INTEGRITY_PLATFORM_KEYRING)) {
+> +		ret = verify_pefile_signature(kernel, kernel_len,
+> +					      VERIFY_USE_PLATFORM_KEYRING,
+> +					      VERIFYING_KEXEC_PE_SIGNATURE);
+> +	}
+> +	return ret;
+> +}
+> +#endif
+> +
+>  static int kexec_image_verify_sig(struct kimage *image, void *buf,
+>  		unsigned long buf_len)
+>  {
+> -- 
+> 2.34.1
 > 
-Np
-
-> > +#define __kernel_udphdr udphdr
-> > +#include <linux/udp.h>
-> > +
-> > +#include <bpf/bpf_helpers.h>
-> > +
-> > +#define htons(x) (__builtin_constant_p(x) ? ___constant_swab16(x)
-> > : __builtin_bswap16(x))
-> > +#define htonl(x) (__builtin_constant_p(x) ? ___constant_swab32(x)
-> > : __builtin_bswap32(x))
-> > +#define ntohs(x) htons(x)
-> > +#define ntohl(x) htonl(x)
-> 
-> nit: Please use libbpf's bpf_htons() and friends helpers [3].
-> 
-OK
-
-> OT: In Cilium we run similar NAT46/64 translation for XDP and tc/BPF
-> for our LB services [4] (that is,
-> v4 VIP with v6 backends, and v6 VIP with v4 backends).
-> 
->    [4] 
-> https://github.com/cilium/cilium/blob/master/bpf/lib/nat_46x64.h
->        
-> https://github.com/cilium/cilium/blob/master/test/nat46x64/test.sh
-
-It is complicated for me, my case doesnot use XDP driver.I use xdp_dummy 
-just to enable veth NAPI GRO, not real XDP driver code. My test case is 
-simple and enough for my patch, I think. I have covered tcp and udp, 
-normal and SO_SEGMENT.
-
-Thanks!
 

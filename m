@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E819505060
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035215056AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238484AbiDRMYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:24:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49032 "EHLO
+        id S243734AbiDRNiW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:38:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbiDRMXN (ORCPT
+        with ESMTP id S243861AbiDRNKa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:23:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945B31CFE2;
-        Mon, 18 Apr 2022 05:18:33 -0700 (PDT)
+        Mon, 18 Apr 2022 09:10:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2C6387AF;
+        Mon, 18 Apr 2022 05:50:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E95860F01;
-        Mon, 18 Apr 2022 12:18:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F31C385A7;
-        Mon, 18 Apr 2022 12:18:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 531A8B80E44;
+        Mon, 18 Apr 2022 12:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B40C0C385A1;
+        Mon, 18 Apr 2022 12:49:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284312;
-        bh=5ajFwOk6KfGLb865QHi3RnfFyJFGq3UdTX4t670FKxA=;
+        s=korg; t=1650286198;
+        bh=KTN0X4FW5gLMAt9HwX2qa26OsxYjrrPzmMtT5dx7FlQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zF6DGRzoPHU5XXCPQdgE809Pdb27JEi7zZZrWwD8T/7iY7tUqTCAFL40g03NZydm1
-         hVKbWk9e4xWWGLFGJQLDwX0SkzS9cOEB9QFvI+V3c9T6fUQwy53mtiHOMLW+fkqkOq
-         s3PbokQpkS5K07BsFCUlaydct9UHmf3lVaewABMc=
+        b=GWeg6El1MwT5lDg7jsoz2BHl1TqDovwdtmC7+jHx+oNCMrsCw2EqAbI3vnwajvJjr
+         mZDRsH1E9ONiK1JqqqKk3Qx41faqgePdqBS0IYgkLni3a9OCnO5fIAmUEG0RfZVpu2
+         IOTtpfXp87X6TqNK7BF1t7utKuK1iGyX+PbxPnPo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Armin Wolf <W_Armin@gmx.de>,
+        Hans de Goede <hdegoede@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 071/219] cifs: release cached dentries only if mount is complete
+Subject: [PATCH 4.14 059/284] hwmon: (sch56xx-common) Replace WDOG_ACTIVE with WDOG_HW_RUNNING
 Date:   Mon, 18 Apr 2022 14:10:40 +0200
-Message-Id: <20220418121207.836572675@linuxfoundation.org>
+Message-Id: <20220418121212.371027809@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,68 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shyam Prasad N <sprasad@microsoft.com>
+From: Armin Wolf <W_Armin@gmx.de>
 
-[ Upstream commit d788e51636462e61c6883f7d96b07b06bc291650 ]
+[ Upstream commit 647d6f09bea7dacf4cdb6d4ea7e3051883955297 ]
 
-During cifs_kill_sb, we first dput all the dentries that we have cached.
-However this function can also get called for mount failures.
-So dput the cached dentries only if the filesystem mount is complete.
-i.e. cifs_sb->root is populated.
+If the watchdog was already enabled by the BIOS after booting, the
+watchdog infrastructure needs to regularly send keepalives to
+prevent a unexpected reset.
+WDOG_ACTIVE only serves as an status indicator for userspace,
+we want to use WDOG_HW_RUNNING instead.
 
-Fixes: 5e9c89d43fa6 ("cifs: Grab a reference for the dentry of the cached directory during the lifetime of the cache")
-Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Since my Fujitsu Esprimo P720 does not support the watchdog,
+this change is compile-tested only.
+
+Suggested-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: fb551405c0f8 (watchdog: sch56xx: Use watchdog core)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+Link: https://lore.kernel.org/r/20220131211935.3656-5-W_Armin@gmx.de
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsfs.c | 28 +++++++++++++++-------------
- 1 file changed, 15 insertions(+), 13 deletions(-)
+ drivers/hwmon/sch56xx-common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 6e5246122ee2..9f0f6bdb3a4d 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -266,22 +266,24 @@ static void cifs_kill_sb(struct super_block *sb)
- 	 * before we kill the sb.
- 	 */
- 	if (cifs_sb->root) {
-+		node = rb_first(root);
-+		while (node != NULL) {
-+			tlink = rb_entry(node, struct tcon_link, tl_rbnode);
-+			tcon = tlink_tcon(tlink);
-+			cfid = &tcon->crfid;
-+			mutex_lock(&cfid->fid_mutex);
-+			if (cfid->dentry) {
-+				dput(cfid->dentry);
-+				cfid->dentry = NULL;
-+			}
-+			mutex_unlock(&cfid->fid_mutex);
-+			node = rb_next(node);
-+		}
-+
-+		/* finally release root dentry */
- 		dput(cifs_sb->root);
- 		cifs_sb->root = NULL;
- 	}
--	node = rb_first(root);
--	while (node != NULL) {
--		tlink = rb_entry(node, struct tcon_link, tl_rbnode);
--		tcon = tlink_tcon(tlink);
--		cfid = &tcon->crfid;
--		mutex_lock(&cfid->fid_mutex);
--		if (cfid->dentry) {
--			dput(cfid->dentry);
--			cfid->dentry = NULL;
--		}
--		mutex_unlock(&cfid->fid_mutex);
--		node = rb_next(node);
--	}
+diff --git a/drivers/hwmon/sch56xx-common.c b/drivers/hwmon/sch56xx-common.c
+index bda3d5285586..e1c4e6937a64 100644
+--- a/drivers/hwmon/sch56xx-common.c
++++ b/drivers/hwmon/sch56xx-common.c
+@@ -437,7 +437,7 @@ struct sch56xx_watchdog_data *sch56xx_watchdog_register(struct device *parent,
+ 	if (nowayout)
+ 		set_bit(WDOG_NO_WAY_OUT, &data->wddev.status);
+ 	if (output_enable & SCH56XX_WDOG_OUTPUT_ENABLE)
+-		set_bit(WDOG_ACTIVE, &data->wddev.status);
++		set_bit(WDOG_HW_RUNNING, &data->wddev.status);
  
- 	kill_anon_super(sb);
- 	cifs_umount(cifs_sb);
+ 	/* Since the watchdog uses a downcounter there is no register to read
+ 	   the BIOS set timeout from (if any was set at all) ->
 -- 
-2.35.1
+2.34.1
 
 
 

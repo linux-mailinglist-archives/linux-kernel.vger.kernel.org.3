@@ -2,92 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1F51505EDE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:20:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BBF6505EE0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238570AbiDRUXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:23:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
+        id S238597AbiDRUZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiDRUXS (ORCPT
+        with ESMTP id S234092AbiDRUZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:23:18 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7571D2E9EF
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 64-20020a630843000000b0039d909676d5so9612921pgi.16
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
+        Mon, 18 Apr 2022 16:25:37 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F5B2ED5C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:22:57 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bu29so25993650lfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:22:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
-        b=iGKBSQMhB5Dcpvx90+XkjZsRwajkAuHhifHP93zi8BjBNhyUN6cd6lDfkfvOIzlP7l
-         dZAf5VimM8LMXGHpL11bN/5/HMIk4F+WG/l90ME7Y5gxjEIq3N+Cs2g1gWYXNRpcgr14
-         l4JWFolmT/LUz2cvHBkecDrGenJ/HYRecqWqJovbOF7lAX9gCsYpWvLny+3uegoP+Ye7
-         Oahw6Cocr64RS2PxJte0noEKgVzaUPM9RSAynaBVWSVrKLklHVl3P+RYRn8qiuGtOIy+
-         Ms0IjPqovGZ/n9e4pPRoh/kDxniUmKKBDVI/fJs0//g6zR2Ke5ymUGOO89n2HSNloNT/
-         ZrIw==
+        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=mLWlEzJdMk6tuaRzUj9I+DP1OAyBtJ6ETvbVsO93HOU=;
+        b=yZIHcmsAVppuK5qGX6G7Ih1KsaYwCGYPWcLwUZ27iXpxzXC8ZDAaHgGx5sYhn9MaCP
+         xmLMaguzDZIuQDxf+3nkkYN3A5yqEEx48BjaZ0e6az1nMfgAklIa3Os763c4R+X+N6el
+         QaYjjkSK2R8mjyRoG2lpWhBp5IOolBIOsRov4CLNh+OfkZDYKvgvTneU6MFu+rau3Wk5
+         bkLeeQKm54yRp+3IuYfgQdJwuNhEovhToYoM9FNb4pNcSLZ+NSYUtbPsqQS1mvxdlUPN
+         2InIBy8S//cm7hYkWhSU5Hk0FsYBts2vpIF6rafJ0L7gGOIfM+MEvGH3gfvM57loO7W9
+         SFwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
-        b=JA3aKrGfr93+46ocFbDh3Bjxv93wN5ZbR6y/aA0wgrmm88ErW6GzJjMfTkCd0DWRW2
-         qZGCzkbe/u8dJmBpn0gKN1BF2x06PI+HzY6e8x278hYeoYBqpLhbZtf9iSsyN4jrZoYQ
-         53MyTGfyAetg/qQxgwlMrkzhd3JDNXsVVfmOA9gFhU9azcoKOSHEe0urvahYmt7Anni7
-         19XY+BouiCF0DRqB39zFE75Bh8jTep7k0NSinCL48w5raxW9vR1pGyNwwWFUVjE6wKzy
-         WT5JAfpfRR3i5mITcSPvue+Lkqnx6XMmpNVyyXxPEICQPQ4SJ6WM2Vv4TIOl3FW8Bdme
-         eihA==
-X-Gm-Message-State: AOAM5309N59F/TioIPfj5Db39fGbykV6tarlRtAMTOjXSHhEaaaXrDwh
-        /h3aHe1kOIzSPrVmxcdjwCo+fmFiUfVk
-X-Google-Smtp-Source: ABdhPJxiVFcTI4z0xGMr9ZyulQytlCLw/B1VBP49S/XaxYsvHk5VzyCtbJSYi+urWup0bdAjQ4KVIcmi8IVE
-X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
- (user=yuanchu job=sendgmr) by 2002:a17:902:ec8e:b0:158:fefd:a2c2 with SMTP id
- x14-20020a170902ec8e00b00158fefda2c2mr6244114plg.85.1650313237814; Mon, 18
- Apr 2022 13:20:37 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 20:20:17 +0000
-Message-Id: <20220418202017.3583638-1-yuanchu@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH RESEND] selftests/damon: add damon to selftests root Makefile
-From:   Yuanchu Xie <yuanchu@google.com>
-To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
-        SeongJae Park <sj@kernel.org>
-Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=mLWlEzJdMk6tuaRzUj9I+DP1OAyBtJ6ETvbVsO93HOU=;
+        b=jrw9UJ/ZxEyJjzfQT5qqIYi4AEk0dXJuQUZpY9ROy9jC/IMNKq/maBAqs1gMPXJRlr
+         5wG2n3hSYny3TJbVDK/juQS0FGgWA118YyONoM9EYtt57JWpqQMYb5cMI/5RvkHu1LPu
+         MfLWkKopHH/URg3isvkJ7HlW//ZlCfen+rrkIzBjoc6UWnm1gF1yG/5ms+wddynq/ihS
+         CrWNpsDDNGmq8x8BDZ0bV6E8lVcQ+G5oNy7O3Z42DpiN0RnF36XInFMT2PZJ59qzzYkf
+         beSCzLDN3ar/LNkYQMjzZ9hlm6qG8k848xTOS+WHgxQMWgfj/ahww+pSJ2oHN9DjKAlM
+         gQUg==
+X-Gm-Message-State: AOAM530yC8BZSquRHQ46mKw6JWUhVWNLw7kDOaKwGbvP6baXsVNvm5dq
+        2mJjtDjgALHyIs6gL3htKrgQMQ==
+X-Google-Smtp-Source: ABdhPJznQzqX7bRzuIcLKDjKwu+NX1wiOv40zQz/yldUBixOb1SSMsMrFJrGumBZeV0L5NkatxL6aw==
+X-Received: by 2002:a05:6512:ac9:b0:470:e6d0:1bd8 with SMTP id n9-20020a0565120ac900b00470e6d01bd8mr7300071lfu.614.1650313375515;
+        Mon, 18 Apr 2022 13:22:55 -0700 (PDT)
+Received: from box.localdomain ([86.57.175.117])
+        by smtp.gmail.com with ESMTPSA id z1-20020a0565120c0100b00447a7c10e4dsm1313059lfu.31.2022.04.18.13.22.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 13:22:54 -0700 (PDT)
+Received: by box.localdomain (Postfix, from userid 1000)
+        id 64BF5103A61; Mon, 18 Apr 2022 23:24:31 +0300 (+03)
+Date:   Mon, 18 Apr 2022 23:24:31 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
+Message-ID: <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
+References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
+ <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
+ <Ylnwmvygp796+qcA@zn.tnic>
+ <20220418155545.a567xnxa6elglapl@box.shutemov.name>
+ <Yl2UHOQ4iZJ29k0q@zn.tnic>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl2UHOQ4iZJ29k0q@zn.tnic>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the damon selftests are not built with the rest of the
-selftests. We add damon to the list of targets.
+On Mon, Apr 18, 2022 at 06:38:52PM +0200, Borislav Petkov wrote:
+> > Could you explain what rules are?
+> 
+> Library-like stuff like types.h, linkage.h, etc we could include for now
+> but including linux/kernel.h which pulls in everything but the kitchen
+> sink is bad.
 
-Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
-Reviewed-by: SeongJae Park <sj@kernel.org>
-Signed-off-by: Yuanchu Xie <yuanchu@google.com>
----
- tools/testing/selftests/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+<linux/bitmap> doesn't include <linux/kernel.h> or similar things.
+Is it okay for now?
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index d08fe4cfe811..ffe453760a12 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -9,6 +9,7 @@ TARGETS += clone3
- TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
-+TARGETS += damon
- TARGETS += drivers/dma-buf
- TARGETS += efivarfs
- TARGETS += exec
+
+> > Hm. accept_or_mark_unaccepted()?
+> 
+> What's wrong with early_accept_memory()?
+
+But the goal of the function is not to accept the memory, but mark it
+as unaccepted in the bitmap. Your proposal is more confusing, not less.
+
+> > > Immediately? As opposed to delayed?
+> > 
+> > Yes. Otherwise accept is delayed until the first allocation of the memory.
+> 
+> Yes, put that in the comment pls.
+
+Okay.
+
+> memory, but it is not
+> > 1:1 match. Unaccepted memory can be present without memory ecnryption if
+> > data secruty and integrity guaranteed by other means.
+> 
+> Really?
+> 
+> Please elaborate. I thought memory acceptance is a feature solely for
+> TDX and SNP guests to use.
+
+Conceptionally, it is just memory that requires additional action before
+it can be accessed. Yes, at the moment TDX and SEV are the only users.
+It is implementation detail that TDX and SEV use memory encryption.
+
+> > <asm/mem_encrypt.h> is very AMD SME/SEV centric.
+> 
+> So?
+> 
+> > I'm not sure it need to exist in the way it is now.
+> 
+> I'm not sure what your argument actually is for having yet another
+> separate header vs putting it in a header which already deals with that
+> stuff.
+
+Because I don't think it is a good fit. Frankly, even <asm/coco.h> fits
+better, although I'm no a fan either.
+
+Do we have file shortage? I would rather keep it separate.
+
+> > Okay, I will move it into a separate function, but it has to be called
+> > from allocate_e820() because it allocates and free the map.
+> 
+> You mean, you want for allocate_e820() to call this new function because
+> both allocate and free?
+> 
+> Might have to explain what you mean here exactly.
+
+Both allocate_e820() and handling unaccepted memory requires access to the
+efi memory map. We only need the size of memory map for e820, while
+unaccepted memory requires walking the map. We can serve both by
+requesting the map from the firmware once. It requires allocation and
+freeing memory for the map.
+
+Makes sense?
+
 -- 
-2.35.1.265.g69c8d7142f-goog
-
+ Kirill A. Shutemov

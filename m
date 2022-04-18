@@ -2,93 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7CA505F42
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7496505F5A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:30:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232432AbiDRVYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58628 "EHLO
+        id S229526AbiDRVcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:32:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbiDRVX5 (ORCPT
+        with ESMTP id S230205AbiDRVcm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:23:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3906529CAD
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:21:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD58160FEA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28742C385AB
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:21:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650316876;
-        bh=KAav+VCFSYr91LEhdYGTPh0+hHoGFkG2lJeNL06UyDs=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=qeqbaJuAD+RFOY8cE/lIYy/P4cy7ZmPjKqgvDxKSiajfesnctZFuC99HiJ8TUqLF7
-         cwaTqCxi5qNdoLluehUu9gPAFFWUUoSn+NWOmhsyhr0bbxwH26MWYKM0wfq/nX9oWZ
-         dvjfxuOKeYJhK/wd9UrIwes34158zGoN4V+7DsNtsSiDtWxxnT/vNGemhHMFOnm8M9
-         bpeyfhDMzr2GNr6CQRT6b1UIl3ArxUuAgPR4yq9a/2b3Wg4v82UrWAIOeZ/0Zu0zDl
-         RYvDD69q6w7VUlXtzoVwoR7MCMhTfUi4fhTgqEtC2gaWC1NpYeAPF6fZbY8CrtCuL7
-         5PCtNSXapgeoQ==
-Received: by mail-wr1-f42.google.com with SMTP id e21so19942932wrc.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:21:16 -0700 (PDT)
-X-Gm-Message-State: AOAM531uEPlFiEQPnt/jzpKAybfcW9wvqbQvp0TkpgXDtOo3uKO3s6Q2
-        6CpyQfzs3CMlXkNMUBt7/P3yU6WJwPVReuYf0NM=
-X-Google-Smtp-Source: ABdhPJxkncmo4ORlw7zomxpWYmpYkP0uGqq0sLEjKNrhhFTmoEv/ShhDQl+AGPgqziemJBJ2yBx/M531Aq661utXpH8=
-X-Received: by 2002:a5d:64a3:0:b0:20a:7931:5b84 with SMTP id
- m3-20020a5d64a3000000b0020a79315b84mr9825822wrp.407.1650316874305; Mon, 18
- Apr 2022 14:21:14 -0700 (PDT)
+        Mon, 18 Apr 2022 17:32:42 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A5C92C101
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:29:56 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id v4so18882546edl.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:29:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=/7LTWo0OPBrGCZjHYoN1cmnPJEUpa4jNozIjdW1Tjhc=;
+        b=En4TB4U44B8KkvJ/oE6YRz8ktzHBFO2hSHQvrSQgM/I7HmDnWkoLceq8ho8OUiCv3e
+         E5mWA0s4dFFlcwHdf18d6P/398+fXbLU3vorFjZjmSoyICv0siRicj2wlfEcXsi8nUG4
+         u4gsxmjXMnIZAbFF7qKRl5GlhpeDJFS3t/aU6rEG16IG8yrQAJyfN/O33LGJ0qPLd94C
+         UpWhiPZuaHS5uRDRVMLeteofq3HLTT6BrnUzikZt50XLXM3bo5xrBZKWfXGjc/48H6Be
+         do5u0dX1oc4P60EgwzwKUeCUA/BRmcYkAID84Hidmcdxag7E4TNazut9vePsJXPnefVw
+         S6sQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=/7LTWo0OPBrGCZjHYoN1cmnPJEUpa4jNozIjdW1Tjhc=;
+        b=BTtYrk+8VONg0xgb9KFZKX1Vn0Gs0aQiSC5GE5+ux4XucOATilpQDipSXe8WntzqgP
+         vhxZK/YWq5l89N9NtkgrW1y8KvKVmPoWfL0r+tXx8Wn6NZp8lkDoyUiA7SVpREN4rfmA
+         geVrHrKxR2FbkyllKsxv+2sAm+GqT+e9g498yeio0YVVjLfZAw8ThumjP6LNlSTcNgx0
+         FRFL1gOxvmYT/6apg4f59RyZcb43B4sc/MS49IylG24QPWAdBlaRHJAfGau51Gk/hJEK
+         9ePy7gSuSv1PCevTt334/ZAcHB1H8nZkpc0GbiXaIKBduonby6YTyQ7PG8X8JUrcunhA
+         ySWg==
+X-Gm-Message-State: AOAM5335p/o520OhB1d8k8DpRLNhe2gflbJRiiN/nSMVuJ4J01bOfh1j
+        CoPf++Rn9MhBu7hZz+vg+6Q5udl0KzrxfUKPBJGQjQ==
+X-Google-Smtp-Source: ABdhPJyV9fmS+hwdvvRUN2r//PwngZikr7xomDByGbznu+vO3elnnfiwHQRO9t3F2pz2zrmStYKSa7R9cdyG24KOkxQ=
+X-Received: by 2002:a05:6402:1e8b:b0:41c:59f6:2c26 with SMTP id
+ f11-20020a0564021e8b00b0041c59f62c26mr14349493edf.156.1650317394544; Mon, 18
+ Apr 2022 14:29:54 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
-In-Reply-To: <CAKwvOdmumch3vnv_qL7m+h1szDgbFZj-ATrufvKKR8i-8jdkAQ@mail.gmail.com>
-From:   Arnd Bergmann <arnd@kernel.org>
-Date:   Mon, 18 Apr 2022 23:20:58 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
-Message-ID: <CAK8P3a3A9s3m1zRh3cp0Y2k6DpXBU=1vXtSOPCkMZkZWzO2GZg@mail.gmail.com>
-Subject: Re: kernel.org binaries and sysroots
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     "Jose E. Marchesi" <jemarch@gnu.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Saleem Abdulrasool <compnerd@compnerd.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
+References: <20220417102807.10b91497ed@19d04f311a0a9de>
+In-Reply-To: <20220417102807.10b91497ed@19d04f311a0a9de>
+From:   Brendan Higgins <brendanhiggins@google.com>
+Date:   Mon, 18 Apr 2022 17:29:43 -0400
+Message-ID: <CAFd5g46iNr_EnQ1zQGiXk34mND8-Xo3vTykpgKfbr-8_e5OOCw@mail.gmail.com>
+Subject: Re: [PATCH] Documentation: kunit: change complete_and_exit to kthread_complete_and_exit
+To:     Andreas-Christian Hagau <ach@hagau.se>
+Cc:     Jonathan Corbet <corbet@lwn.net>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 11:44 PM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
+On Sun, Apr 17, 2022 at 4:37 AM Andreas-Christian Hagau <ach@hagau.se> wrote:
 >
-> Hi Arnd,
-> Jose and I are currently in the planning process to put together a
-> Kernel+Toolchain microconference track at Linux Plumbers Conference
-> this year (Sept 12-14) in Dublin, Ireland.
+> Commit cead18552660 ("exit: Rename complete_and_exit to
+> kthread_complete_and_exit") renamed complete_and_exit to
+> kthread_complete_and_exit.
 >
-> I was curious if you (or others) would find it worthwhile to carve out
-> time to discuss further kernel.org binaries (and potentially even
-> sysroots) at such a Kernel+Toolchain MC?
+> Signed-off-by: Andreas-Christian Hagau <ach@hagau.se>
 
-I'm still undecided about attending Plumbers myself. If that topic ends up
-on the list and I'm in Dublin, I would obviously attend, but there might not
-actually be that much to discuss other than who would do the work.
-
-I inherited the scripts from Tony Breeds who did it before. If you or someone
-else wants to add clang binaries, I can help you get it onto the kernel.org
-server as well, same for building more complete toolchains.
-
-My build environment at the moment is on my old workstation running
-an older Ubuntu 16.04 chroot, to allow building binaries for a large variety
-of distros. As I'm moving to working purely on an arm64 workstation that
-doesn't have this yet, I will likely have to revisit the way I'm building these
-anyway for future releases.
-
-      Arnd
+Reviewed-by: Brendan Higgins <brendanhiggins@google.com>

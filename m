@@ -2,213 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C717A504C76
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:08:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47568504C79
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:12:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236718AbiDRGLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
+        id S233413AbiDRGOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236713AbiDRGLF (ORCPT
+        with ESMTP id S229464AbiDRGOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:11:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4CB17AB7;
-        Sun, 17 Apr 2022 23:08:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 932CDB80E40;
-        Mon, 18 Apr 2022 06:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECABC385AC;
-        Mon, 18 Apr 2022 06:08:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650262105;
-        bh=XNZr/IKeGY/pGlzCIWto86GY7XWEV0Np1gDcwopi1Xg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lysp/owBXLrObu8oZX/jv3OR7J3MTz+Ji1yeSgbxa5CiTMoYhoVEEb192Qt+8nf4g
-         /QP7VfXAVglQTvXMG1AQMBOx8gv5wizHkAwJNJAsr7tgf4jS21aGQ4EFTAXoB2khbv
-         YWiZEL7BPukNyb9GLBGI9bWJ3s+cCYqyW+5EKRW7WsHTunAUBXN6Q7syxOYKsAlXbr
-         E5tFGUQh3h76fZQf0Z78KweCQgj0QGptZNhBsWXZE4784Hpu22ElUuRIBuoC13PstZ
-         EGHU9oi2v4/uxKrfVuFpPUzG1p2zvuORhsX5wXXSFJRspcMfdW24xZabXZpS9SUD72
-         yI69d+S5vZhUA==
-Date:   Mon, 18 Apr 2022 11:38:18 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     loic.poulain@linaro.org, quic_hemantk@quicinc.com,
-        quic_bbhatt@quicinc.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>
-Subject: Re: [PATCH v3 2/2] bus: mhi: host: Optimize and update MMIO register
- write method
-Message-ID: <20220418060818.GF7431@thinkpad>
-References: <1649865406-30198-1-git-send-email-quic_jhugo@quicinc.com>
- <1649865406-30198-3-git-send-email-quic_jhugo@quicinc.com>
+        Mon, 18 Apr 2022 02:14:52 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A217A8C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:12:14 -0700 (PDT)
+Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Khc3B69nnzFptq;
+        Mon, 18 Apr 2022 14:09:42 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 14:12:11 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 14:12:10 +0800
+Message-ID: <0b023809-8138-a44f-83e2-db54a7446954@huawei.com>
+Date:   Mon, 18 Apr 2022 14:12:09 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1649865406-30198-3-git-send-email-quic_jhugo@quicinc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 0/4]mm: page_table_check: add support on arm64
+ and riscv
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-riscv@lists.infradead.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220418034444.520928-1-tongtiangen@huawei.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <20220418034444.520928-1-tongtiangen@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 09:56:46AM -0600, Jeffrey Hugo wrote:
-> From: Bhaumik Bhatt <bbhatt@codeaurora.org>
-> 
-> As of now, MMIO writes done after ready state transition use the
-> mhi_write_reg_field() API even though the whole register is being
-> written in most cases. Optimize this process by using mhi_write_reg()
-> API instead for those writes and use the mhi_write_reg_field()
-> API for MHI config registers only.
-> 
-> Signed-off-by: Bhaumik Bhatt <bbhatt@codeaurora.org>
-> Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
-> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> ---
->  drivers/bus/mhi/host/init.c | 62 ++++++++++++++++++++++-----------------------
->  1 file changed, 31 insertions(+), 31 deletions(-)
-> 
-> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-> index 9ac93b7..04c409b 100644
-> --- a/drivers/bus/mhi/host/init.c
-> +++ b/drivers/bus/mhi/host/init.c
-> @@ -425,74 +425,65 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
->  	struct {
->  		u32 offset;
-> -		u32 mask;
->  		u32 val;
->  	} reg_info[] = {
->  		{
-> -			CCABAP_HIGHER, U32_MAX,
-> +			CCABAP_HIGHER,
->  			upper_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
->  		},
->  		{
-> -			CCABAP_LOWER, U32_MAX,
-> +			CCABAP_LOWER,
->  			lower_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
->  		},
->  		{
-> -			ECABAP_HIGHER, U32_MAX,
-> +			ECABAP_HIGHER,
->  			upper_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
->  		},
->  		{
-> -			ECABAP_LOWER, U32_MAX,
-> +			ECABAP_LOWER,
->  			lower_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
->  		},
->  		{
-> -			CRCBAP_HIGHER, U32_MAX,
-> +			CRCBAP_HIGHER,
->  			upper_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
->  		},
->  		{
-> -			CRCBAP_LOWER, U32_MAX,
-> +			CRCBAP_LOWER,
->  			lower_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
->  		},
->  		{
-> -			MHICFG, MHICFG_NER_MASK,
-> -			mhi_cntrl->total_ev_rings,
-> -		},
-> -		{
-> -			MHICFG, MHICFG_NHWER_MASK,
-> -			mhi_cntrl->hw_ev_rings,
-> -		},
-> -		{
-> -			MHICTRLBASE_HIGHER, U32_MAX,
-> +			MHICTRLBASE_HIGHER,
->  			upper_32_bits(mhi_cntrl->iova_start),
->  		},
->  		{
-> -			MHICTRLBASE_LOWER, U32_MAX,
-> +			MHICTRLBASE_LOWER,
->  			lower_32_bits(mhi_cntrl->iova_start),
->  		},
->  		{
-> -			MHIDATABASE_HIGHER, U32_MAX,
-> +			MHIDATABASE_HIGHER,
->  			upper_32_bits(mhi_cntrl->iova_start),
->  		},
->  		{
-> -			MHIDATABASE_LOWER, U32_MAX,
-> +			MHIDATABASE_LOWER,
->  			lower_32_bits(mhi_cntrl->iova_start),
->  		},
->  		{
-> -			MHICTRLLIMIT_HIGHER, U32_MAX,
-> +			MHICTRLLIMIT_HIGHER,
->  			upper_32_bits(mhi_cntrl->iova_stop),
->  		},
->  		{
-> -			MHICTRLLIMIT_LOWER, U32_MAX,
-> +			MHICTRLLIMIT_LOWER,
->  			lower_32_bits(mhi_cntrl->iova_stop),
->  		},
->  		{
-> -			MHIDATALIMIT_HIGHER, U32_MAX,
-> +			MHIDATALIMIT_HIGHER,
->  			upper_32_bits(mhi_cntrl->iova_stop),
->  		},
->  		{
-> -			MHIDATALIMIT_LOWER, U32_MAX,
-> +			MHIDATALIMIT_LOWER,
->  			lower_32_bits(mhi_cntrl->iova_stop),
->  		},
-> -		{ 0, 0, 0 }
-> +		{0, 0}
->  	};
->  
->  	dev_dbg(dev, "Initializing MHI registers\n");
-> @@ -533,13 +524,22 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
->  	mhi_cntrl->mhi_cmd[PRIMARY_CMD_RING].ring.db_addr = base + CRDB_LOWER;
->  
->  	/* Write to MMIO registers */
-> -	for (i = 0; reg_info[i].offset; i++) {
-> -		ret = mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
-> -					  reg_info[i].mask, reg_info[i].val);
-> -		if (ret) {
-> -			dev_err(dev, "Unable to write to MMIO registers");
-> -			return ret;
-> -		}
-> +	for (i = 0; reg_info[i].offset; i++)
-> +		mhi_write_reg(mhi_cntrl, base, reg_info[i].offset,
-> +			      reg_info[i].val);
-> +
-> +	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NER_MASK,
-> +				  mhi_cntrl->total_ev_rings);
-> +	if (ret) {
-> +		dev_err(dev, "Unable to read MHICFG register\n");
+Hi Andrew, Catalin, Palmer:
 
-"Unable to write"?
-
-> +		return ret;
-> +	}
-> +
-> +	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NHWER_MASK,
-> +				  mhi_cntrl->hw_ev_rings);
-> +	if (ret) {
-> +		dev_err(dev, "Unable to read MHICFG register\n");
-
-Same here.
+This patch modifies the code related to the mm/x86/arm64/riscv, who can 
+help me merge it if no object, Maybe Andrew is more appropriate?
 
 Thanks,
-Mani
+Tong.
 
-> +		return ret;
->  	}
->  
->  	return 0;
-> -- 
-> 2.7.4
+在 2022/4/18 11:44, Tong Tiangen 写道:
+> Page table check performs extra verifications at the time when new
+> pages become accessible from the userspace by getting their page
+> table entries (PTEs PMDs etc.) added into the table. It is supported
+> on X86[1].
+> 
+> This patchset made some simple changes and make it easier to support
+> new architecture, then we support this feature on ARM64 and RISCV.
+> 
+> [1]https://lore.kernel.org/lkml/20211123214814.3756047-1-pasha.tatashin@soleen.com/
+> 
+> v3 -> v4:
+>   1. Adapt to next-20220414
+> 
+> v2 -> v3:
+>    1. Modify ptep_clear() in include/linux/pgtable.h, using IS_ENABLED
+>       according to the suggestions of Pasha.
+> 
+> v1 -> v2:
+>    1. Fix arm64's pte/pmd/pud_user_accessible_page() according to the
+>       suggestions of Catalin.
+>    2. Also fix riscv's pte_pmd_pud_user_accessible_page().
+> 
+> Kefeng Wang (2):
+>    mm: page_table_check: move pxx_user_accessible_page into x86
+>    arm64: mm: add support for page table check
+> 
+> Tong Tiangen (2):
+>    mm: page_table_check: add hooks to public helpers
+>    riscv: mm: add support for page table check
+> 
+>   arch/arm64/Kconfig               |  1 +
+>   arch/arm64/include/asm/pgtable.h | 65 ++++++++++++++++++++++++---
+>   arch/riscv/Kconfig               |  1 +
+>   arch/riscv/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++---
+>   arch/x86/include/asm/pgtable.h   | 29 +++++++-----
+>   include/linux/pgtable.h          | 26 +++++++----
+>   mm/page_table_check.c            | 25 ++++-------
+>   7 files changed, 178 insertions(+), 46 deletions(-)
 > 

@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDC550536F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47F2C5053A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241040AbiDRM6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
+        id S240566AbiDRNAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240369AbiDRMtd (ORCPT
+        with ESMTP id S240385AbiDRMte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:49:33 -0400
+        Mon, 18 Apr 2022 08:49:34 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7272AE3E;
-        Mon, 18 Apr 2022 05:33:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87C42B197;
+        Mon, 18 Apr 2022 05:33:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 16A00B80EC0;
-        Mon, 18 Apr 2022 12:33:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C5AEC385A1;
-        Mon, 18 Apr 2022 12:33:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3FE8EB80EDC;
+        Mon, 18 Apr 2022 12:33:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71023C385BA;
+        Mon, 18 Apr 2022 12:33:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285217;
-        bh=wGDd1DgJlG3tYf/4Bdpf9xiaoMr7SoRx3JYSlpBk7xQ=;
+        s=korg; t=1650285220;
+        bh=9KPFsXyNlSibgf458VjxpKttCCI7QLhJZMPkhmVqe00=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BqchcZ3iR10wjmcmfnDimN0SxNpNepCOvrRpzf61AFhJPQPVBoOGfhjT84YkWYgAy
-         Es3nCxKTLpdEMGmUDYAxgNVfGXJI7/xug4xbmrPhmi7SHuKdKZsiZmR3XWw18+z53a
-         p3qkh0kMKiNh8ruoF6stHV4nueEaZirTwfAcgQlE=
+        b=PZz6Fvko+o9a8I+03xylR0WlVNDrTry7JcQJlzv42Zy4S8P22OCR2hDMUXXhXO/gK
+         Xn08JGtx4geIGAmX1msS6cqn69rWoWTQquds2LWGPbNWcAR1J0+JmX/c42sJ23j3Rx
+         WT097jDuzrrpEwNoViBbaaNIz2SHZq3MyhEq16zE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 140/189] drivers: net: slip: fix NPD bug in sl_tx_timeout()
-Date:   Mon, 18 Apr 2022 14:12:40 +0200
-Message-Id: <20220418121205.466467473@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 141/189] io_uring: zero tag on rsrc removal
+Date:   Mon, 18 Apr 2022 14:12:41 +0200
+Message-Id: <20220418121205.527241427@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
 References: <20220418121200.312988959@linuxfoundation.org>
@@ -56,58 +54,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duoming Zhou <duoming@zju.edu.cn>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit ec4eb8a86ade4d22633e1da2a7d85a846b7d1798 ]
+[ Upstream commit 8f0a24801bb44aa58496945aabb904c729176772 ]
 
-When a slip driver is detaching, the slip_close() will act to
-cleanup necessary resources and sl->tty is set to NULL in
-slip_close(). Meanwhile, the packet we transmit is blocked,
-sl_tx_timeout() will be called. Although slip_close() and
-sl_tx_timeout() use sl->lock to synchronize, we don`t judge
-whether sl->tty equals to NULL in sl_tx_timeout() and the
-null pointer dereference bug will happen.
+Automatically default rsrc tag in io_queue_rsrc_removal(), it's safer
+than leaving it there and relying on the rest of the code to behave and
+not use it.
 
-   (Thread 1)                 |      (Thread 2)
-                              | slip_close()
-                              |   spin_lock_bh(&sl->lock)
-                              |   ...
-...                           |   sl->tty = NULL //(1)
-sl_tx_timeout()               |   spin_unlock_bh(&sl->lock)
-  spin_lock(&sl->lock);       |
-  ...                         |   ...
-  tty_chars_in_buffer(sl->tty)|
-    if (tty->ops->..) //(2)   |
-    ...                       |   synchronize_rcu()
-
-We set NULL to sl->tty in position (1) and dereference sl->tty
-in position (2).
-
-This patch adds check in sl_tx_timeout(). If sl->tty equals to
-NULL, sl_tx_timeout() will goto out.
-
-Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
-Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-Link: https://lore.kernel.org/r/20220405132206.55291-1-duoming@zju.edu.cn
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/1cf262a50df17478ea25b22494dcc19f3a80301f.1649336342.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/slip/slip.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/io_uring.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/slip/slip.c b/drivers/net/slip/slip.c
-index 5435b5689ce6..2a3892528ec3 100644
---- a/drivers/net/slip/slip.c
-+++ b/drivers/net/slip/slip.c
-@@ -469,7 +469,7 @@ static void sl_tx_timeout(struct net_device *dev, unsigned int txqueue)
- 	spin_lock(&sl->lock);
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index cc0a07a9fe9c..ca207e9a87cd 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8413,13 +8413,15 @@ static int io_sqe_file_register(struct io_ring_ctx *ctx, struct file *file,
+ static int io_queue_rsrc_removal(struct io_rsrc_data *data, unsigned idx,
+ 				 struct io_rsrc_node *node, void *rsrc)
+ {
++	u64 *tag_slot = io_get_tag_slot(data, idx);
+ 	struct io_rsrc_put *prsrc;
  
- 	if (netif_queue_stopped(dev)) {
--		if (!netif_running(dev))
-+		if (!netif_running(dev) || !sl->tty)
- 			goto out;
+ 	prsrc = kzalloc(sizeof(*prsrc), GFP_KERNEL);
+ 	if (!prsrc)
+ 		return -ENOMEM;
  
- 		/* May be we must check transmitter timeout here ?
+-	prsrc->tag = *io_get_tag_slot(data, idx);
++	prsrc->tag = *tag_slot;
++	*tag_slot = 0;
+ 	prsrc->rsrc = rsrc;
+ 	list_add(&prsrc->list, &node->rsrc_list);
+ 	return 0;
 -- 
 2.35.1
 

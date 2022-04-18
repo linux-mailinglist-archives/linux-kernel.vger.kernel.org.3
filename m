@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52754505125
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8FD65052BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiDRMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
+        id S239828AbiDRMvD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:51:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239283AbiDRM2P (ORCPT
+        with ESMTP id S240821AbiDRMjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:28:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80701EEDC;
-        Mon, 18 Apr 2022 05:21:34 -0700 (PDT)
+        Mon, 18 Apr 2022 08:39:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E55BEC;
+        Mon, 18 Apr 2022 05:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3159260F0C;
-        Mon, 18 Apr 2022 12:21:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C7DC385A1;
-        Mon, 18 Apr 2022 12:21:33 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 04089B80ED6;
+        Mon, 18 Apr 2022 12:30:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD4AC385A7;
+        Mon, 18 Apr 2022 12:30:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284493;
-        bh=p7NdsMGXXKY2Y4BdmKFIYeZ2BS38rKxgfbm27drUnCI=;
+        s=korg; t=1650285052;
+        bh=PegEbT3n0i2LdUmAqbH0lGb/v7kofzcUA1BCGaGp0fs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=C13KDllqz9UFfVKIeYzjIgzs6DI/9qRO4Eagu+HMzBy3I6DW8vcfZvPz38+Xm3ja7
-         0fEq+VB3vQ5DCFNMVASiIxS4lWycqOXn1qnPLtHaG17bLLe4DzJ266d0+6Z4/kVyS/
-         Y6aXHrExXJ/XCctszav3xoAP8rC/kE39zrDaPMx8=
+        b=IttAV4hHuVVIiUL0PeCR8FzemweEL5ZJlYAvuGSHAShNRnVcE01lRM34NZXRLIuR8
+         RQPUfsRonTXPYXY+Q7B4XdOtQR2YVaEzNilknlnvpC+Hsq/IF0DaUPO0chOHTrND1A
+         VqmRC1bEHgMQb4Ag+MF2m0kUpTtZFDUfPtRnH8pg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 109/219] ALSA: mtpav: Dont call card private_free at probe error path
-Date:   Mon, 18 Apr 2022 14:11:18 +0200
-Message-Id: <20220418121209.950400644@linuxfoundation.org>
+        stable@vger.kernel.org, Anilkumar Kolli <quic_akolli@quicinc.com>,
+        Kalle Valo <kvalo@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 059/189] Revert "ath11k: mesh: add support for 256 bitmap in blockack frames in 11ax"
+Date:   Mon, 18 Apr 2022 14:11:19 +0200
+Message-Id: <20220418121202.185148438@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +54,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Anilkumar Kolli <quic_akolli@quicinc.com>
 
-[ Upstream commit 4fb27190879b82e48ce89a56e9d6c04437dbc065 ]
+[ Upstream commit 10cb21f4ff3f9cb36d1e1c39bf80426f02f4986a ]
 
-The card destructor of nm256 driver does merely stopping the running
-timer, and it's superfluous for the probe error handling.  Moreover,
-calling this via the previous devres change would lead to another
-problem due to the reverse call order.
+This reverts commit 743b9065fe6348a5f8f5ce04869ce2d701e5e1bc.
 
-This patch moves the setup of the private_free callback after the card
-registration, so that it can be used only after fully set up.
+The original commit breaks the 256 bitmap in blockack frames in AP
+mode. After reverting the commit the feature works again in both AP and
+mesh modes
 
-Fixes: aa92050f10f0 ("ALSA: mtpav: Allocate resources with device-managed APIs")
-Link: https://lore.kernel.org/r/20220412102636.16000-39-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Tested-on: IPQ8074 hw2.0 PCI WLAN.HK.2.6.0.1-00786-QCAHKSWPL_SILICONZ-1
+
+Fixes: 743b9065fe63 ("ath11k: mesh: add support for 256 bitmap in blockack frames in 11ax")
+Signed-off-by: Anilkumar Kolli <quic_akolli@quicinc.com>
+Signed-off-by: Kalle Valo <kvalo@kernel.org>
+Link: https://lore.kernel.org/r/1648701477-16367-1-git-send-email-quic_akolli@quicinc.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/drivers/mtpav.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/wireless/ath/ath11k/mac.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-diff --git a/sound/drivers/mtpav.c b/sound/drivers/mtpav.c
-index 11235baaf6fa..f212f233ea61 100644
---- a/sound/drivers/mtpav.c
-+++ b/sound/drivers/mtpav.c
-@@ -693,8 +693,6 @@ static int snd_mtpav_probe(struct platform_device *dev)
- 	mtp_card->outmidihwport = 0xffffffff;
- 	timer_setup(&mtp_card->timer, snd_mtpav_output_timer, 0);
+diff --git a/drivers/net/wireless/ath/ath11k/mac.c b/drivers/net/wireless/ath/ath11k/mac.c
+index 3834be158705..07004564a3ec 100644
+--- a/drivers/net/wireless/ath/ath11k/mac.c
++++ b/drivers/net/wireless/ath/ath11k/mac.c
+@@ -2156,6 +2156,19 @@ static void ath11k_mac_op_bss_info_changed(struct ieee80211_hw *hw,
+ 		if (ret)
+ 			ath11k_warn(ar->ab, "failed to update bcn template: %d\n",
+ 				    ret);
++		if (vif->bss_conf.he_support) {
++			ret = ath11k_wmi_vdev_set_param_cmd(ar, arvif->vdev_id,
++							    WMI_VDEV_PARAM_BA_MODE,
++							    WMI_BA_MODE_BUFFER_SIZE_256);
++			if (ret)
++				ath11k_warn(ar->ab,
++					    "failed to set BA BUFFER SIZE 256 for vdev: %d\n",
++					    arvif->vdev_id);
++			else
++				ath11k_dbg(ar->ab, ATH11K_DBG_MAC,
++					   "Set BA BUFFER SIZE 256 for VDEV: %d\n",
++					   arvif->vdev_id);
++		}
+ 	}
  
--	card->private_free = snd_mtpav_free;
+ 	if (changed & (BSS_CHANGED_BEACON_INFO | BSS_CHANGED_BEACON)) {
+@@ -2191,14 +2204,6 @@ static void ath11k_mac_op_bss_info_changed(struct ieee80211_hw *hw,
+ 
+ 		if (arvif->is_up && vif->bss_conf.he_support &&
+ 		    vif->bss_conf.he_oper.params) {
+-			ret = ath11k_wmi_vdev_set_param_cmd(ar, arvif->vdev_id,
+-							    WMI_VDEV_PARAM_BA_MODE,
+-							    WMI_BA_MODE_BUFFER_SIZE_256);
+-			if (ret)
+-				ath11k_warn(ar->ab,
+-					    "failed to set BA BUFFER SIZE 256 for vdev: %d\n",
+-					    arvif->vdev_id);
 -
- 	err = snd_mtpav_get_RAWMIDI(mtp_card);
- 	if (err < 0)
- 		return err;
-@@ -716,6 +714,8 @@ static int snd_mtpav_probe(struct platform_device *dev)
- 	if (err < 0)
- 		return err;
- 
-+	card->private_free = snd_mtpav_free;
-+
- 	platform_set_drvdata(dev, card);
- 	printk(KERN_INFO "Motu MidiTimePiece on parallel port irq: %d ioport: 0x%lx\n", irq, port);
- 	return 0;
+ 			param_id = WMI_VDEV_PARAM_HEOPS_0_31;
+ 			param_value = vif->bss_conf.he_oper.params;
+ 			ret = ath11k_wmi_vdev_set_param_cmd(ar, arvif->vdev_id,
 -- 
 2.35.1
 

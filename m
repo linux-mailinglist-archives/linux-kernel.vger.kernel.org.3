@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9477A5056E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 663F3504FF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242909AbiDRNml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S238153AbiDRMUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241533AbiDRNIC (ORCPT
+        with ESMTP id S238300AbiDRMTs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:08:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23172B1BA;
-        Mon, 18 Apr 2022 05:47:43 -0700 (PDT)
+        Mon, 18 Apr 2022 08:19:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43891BE98;
+        Mon, 18 Apr 2022 05:16:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6750461251;
-        Mon, 18 Apr 2022 12:47:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6504BC385A7;
-        Mon, 18 Apr 2022 12:47:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8281B80ED1;
+        Mon, 18 Apr 2022 12:16:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E797C385A7;
+        Mon, 18 Apr 2022 12:16:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286062;
-        bh=Hi+qGAM0+K6aRhN2ffkWQJ1vVgUzo9g09tmdPd5/DCc=;
+        s=korg; t=1650284189;
+        bh=V+OmPu9yX54w8KA9uMNf+LGzMmg24e60JxprMKf1Nhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ySL21fj6H1k7yr0sbWl+7Ss+10QH1ly1TeDGGm0Q8anGO0CStPNw7QKQU5NXhsSzB
-         IaSOUPvYDqvQ/wQwTc1hmnUprS28kqA758piTLyjCQrjw5DmEX80TANYlQwZO7gpKB
-         PHyXNTs3mvo+oIs/Bb/WPtmvr8ZkvLWkB0byFbp0=
+        b=jp5zVLhvNpRFmHIHI5yhamhmk8uWkXaOLBnqATTh+QecwRWdqPh76InWM9dIWxdC9
+         8fsPYTP44sAbH0Q0pamXMmc9wHLMws0+VPbrdblF1mwn8gS17ECdorlA2KL37pgFml
+         U1J/QT8+v1OB0fnf6UVTZhS9DzmZEF3qce/uwdUs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 4.14 018/284] clk: uniphier: Fix fixed-rate initialization
-Date:   Mon, 18 Apr 2022 14:09:59 +0200
-Message-Id: <20220418121211.215907720@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
+        Zheyu Ma <zheyuma97@gmail.com>
+Subject: [PATCH 5.17 031/219] ALSA: echoaudio: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:00 +0200
+Message-Id: <20220418121205.143768308@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,35 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-commit ca85a66710a8a1f6b0719397225c3e9ee0abb692 upstream.
+commit 313c7e57035125cb7533b53ddd0bc7aa562b433c upstream.
 
-Fixed-rate clocks in UniPhier don't have any parent clocks, however,
-initial data "init.flags" isn't initialized, so it might be determined
-that there is a parent clock for fixed-rate clock.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-This sets init.flags to zero as initialization.
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
 
+Fixes: 9c211bf392bb ("ALSA: echoaudio: Allocate resources with device-managed APIs")
+Reported-and-tested-by: Zheyu Ma <zheyuma97@gmail.com>
 Cc: <stable@vger.kernel.org>
-Fixes: 734d82f4a678 ("clk: uniphier: add core support code for UniPhier clock driver")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1646808918-30899-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Link: https://lore.kernel.org/r/CAMhUBjm2AdyEZ_-EgexdNDN7SvY4f89=4=FwAL+c0Mg0O+X50A@mail.gmail.com
+Link: https://lore.kernel.org/r/20220412093141.8008-3-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/uniphier/clk-uniphier-fixed-rate.c |    1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/echoaudio/echoaudio.c |    9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-+++ b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-@@ -33,6 +33,7 @@ struct clk_hw *uniphier_clk_register_fix
+--- a/sound/pci/echoaudio/echoaudio.c
++++ b/sound/pci/echoaudio/echoaudio.c
+@@ -1970,8 +1970,8 @@ static int snd_echo_create(struct snd_ca
+ }
  
- 	init.name = name;
- 	init.ops = &clk_fixed_rate_ops;
-+	init.flags = 0;
- 	init.parent_names = NULL;
- 	init.num_parents = 0;
+ /* constructor */
+-static int snd_echo_probe(struct pci_dev *pci,
+-			  const struct pci_device_id *pci_id)
++static int __snd_echo_probe(struct pci_dev *pci,
++			    const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -2139,6 +2139,11 @@ static int snd_echo_probe(struct pci_dev
+ 	return 0;
+ }
  
++static int snd_echo_probe(struct pci_dev *pci,
++			  const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_echo_probe(pci, pci_id));
++}
+ 
+ 
+ #if defined(CONFIG_PM_SLEEP)
 
 

@@ -2,247 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0E5E504CC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:41:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E18F8504CD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:46:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbiDRGnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59364 "EHLO
+        id S236849AbiDRGrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236824AbiDRGnZ (ORCPT
+        with ESMTP id S236822AbiDRGqw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:43:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DC7213DD0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:40:46 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I5WvHH007123;
-        Mon, 18 Apr 2022 06:40:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=E2Zn3AY9jysDVP1+aZfS54RO47VY1Tec/MLxakNq/V0=;
- b=IzvW5Ok9yWpGCx3yt21doL5RealkfYdv+X67MrWV/f2AcBvl5rEAHVqTmzHKNwkwUoHk
- wvyxWFWd1Bk7UnF9Cgn1C86G0bpaxq6Jr8jHd6iegBRaZvaK3h5bsXDiF7csJUxX5gbM
- lmfrYraacYsP4n/GmUbdGS9qdvtny4EivQi4JATnp3XULLniKHt2eXgA+cJcV+m1EyzK
- LWjgVLSqMpBoRnWIb+Uiv+356LcbRSjDV5/616eAvGfp0e27KbACSBYKEB1wVgjt9Yp7
- a2L2VdIleRKl7BWrn45EPQCXNtvVixL+QAksKxTTxXfDz6FMtkgQHKPAFG2yk3d9TZxe 3w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fg77hx1kk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:40:11 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23I6eBPD005441;
-        Mon, 18 Apr 2022 06:40:11 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fg77hx1jt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:40:11 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I6d201007638;
-        Mon, 18 Apr 2022 06:40:09 GMT
-Received: from b06avi18878370.portsmouth.uk.ibm.com (b06avi18878370.portsmouth.uk.ibm.com [9.149.26.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3ffn2hsvsy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:40:09 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06avi18878370.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I6eH9X45482248
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Apr 2022 06:40:17 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2211442045;
-        Mon, 18 Apr 2022 06:40:07 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7D26D4203F;
-        Mon, 18 Apr 2022 06:40:06 +0000 (GMT)
-Received: from localhost (unknown [9.43.2.186])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Mon, 18 Apr 2022 06:40:06 +0000 (GMT)
-Date:   Mon, 18 Apr 2022 12:10:04 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v1 08/22] powerpc/ftrace: Make __ftrace_make_{nop/call}()
- common to PPC32 and PPC64
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
-        <fb60b19f154db8132a00c2df7aca7db3e85603b5.1648131740.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <fb60b19f154db8132a00c2df7aca7db3e85603b5.1648131740.git.christophe.leroy@csgroup.eu>
+        Mon, 18 Apr 2022 02:46:52 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8760019021;
+        Sun, 17 Apr 2022 23:44:10 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id j71so3721693pge.11;
+        Sun, 17 Apr 2022 23:44:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:from:subject:to:cc
+         :references:content-language:in-reply-to:content-transfer-encoding;
+        bh=afjJNp66CnOhPMa973ezhZwuSP+3vtgA4sRXX7R/zkk=;
+        b=bUgO0sfnCFDRDUfZk/tX6mX/33+7xHHGXcXr6ABF3sBqwmwhyaGKo+7dBJUOJVS1hq
+         irJtPpS2OtBE2o3VhNy178IiUgBc4O+2iKZ81hFu1ErTZLuhcPPTBMzqzQrYFTG+xyTO
+         CvygdN9MQw5pGYi1eY90JfjHQWQXa8daWqs59fEyWFDV5mR4L+aqSK0C1MndN4JlJpMx
+         uT/v216kkQHY77k598ZaWK2eTW5oG3pe8ay+beb30uMzvJ8wEwKZ/GUfAcrLS3jtNSKr
+         hOI5JweYEXr+79C+6F+k7+TXi8zU5HqIuchpC75uz5Pf86huP687YB2UAo1jC4WZevkU
+         36VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:from
+         :subject:to:cc:references:content-language:in-reply-to
+         :content-transfer-encoding;
+        bh=afjJNp66CnOhPMa973ezhZwuSP+3vtgA4sRXX7R/zkk=;
+        b=lZ3AMyzrzs9MapAHcOPweNvzxAmIQl4runHzl7hArm3hl83oCjuHgnVHIf//dXobgQ
+         NQoWh9jo6OELea75qqGCfCH3imhdpuWrMKvS5d3C/P/9t2W1IR0kAUvJ9+coBkwEHRmW
+         AANkfNcYn3yoyHduoCQijtcB2WK80iK1bRAs08SPqLmqdtAtMIhcLNLwfE2McWsriR2y
+         PccksuE4SmMwPBUlVASWhm6VsSl8aAP8FfZ2GzaqJLFzb3g0Esi7o1EnMOYX3/ZbxnpT
+         JknWCmsVyJ2t2VPTv87qSmYPgx80ZyQZsLD9D0gBDFco/opKFNdP26RO6OTstzXKlZrO
+         usAw==
+X-Gm-Message-State: AOAM530EHtqgqpkDyvyOjGV8Hsv25LJ1esmkQJcVpwIMwlvXreAYGBce
+        WcgGYqItgyKMpdMRfYoCtoVWLbYZNX8=
+X-Google-Smtp-Source: ABdhPJxHPMNPmQC9p96JTP64fIi9uINectvMKZx8d2t/mgSu5ClcTKHfsSOevb0RUDxmK3ZZno1Wqg==
+X-Received: by 2002:a65:4b84:0:b0:382:65ea:bb10 with SMTP id t4-20020a654b84000000b0038265eabb10mr8902804pgq.50.1650264250023;
+        Sun, 17 Apr 2022 23:44:10 -0700 (PDT)
+Received: from [192.168.11.5] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id b10-20020a056a00114a00b004f784ba5e6asm11814867pfm.17.2022.04.17.23.44.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 17 Apr 2022 23:44:09 -0700 (PDT)
+Message-ID: <40b763ab-d35d-03de-9d27-bca2af56dd34@gmail.com>
+Date:   Mon, 18 Apr 2022 15:44:04 +0900
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1650262952.h2adiu8czw.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ZtEeHyqeNCRQxQEjOnsSbQ1pNk3Vxv9c
-X-Proofpoint-ORIG-GUID: AR7z4CLw4NJSZkjawAleBSiPhNfPK8Q_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=999 spamscore=0 impostorscore=0
- bulkscore=0 adultscore=0 phishscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204180037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+From:   Akira Yokosawa <akiyks@gmail.com>
+Subject: Re: [PATCH] docs/trans/ja_JP/howto: Don't mention specific kernel
+ versions
+To:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Tsugikazu Shibata <shibata@linuxfoundation.org>,
+        linux-doc@vger.kernel.org, Akira Yokosawa <akiyks@gmail.com>
+References: <20220417070451.19736-1-fujimotokosuke0@gmail.com>
+Content-Language: en-US
+In-Reply-To: <20220417070451.19736-1-fujimotokosuke0@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Since c93d4f6ecf4b ("powerpc/ftrace: Add module_trampoline_target()
-> for PPC32"), __ftrace_make_nop() for PPC32 is very similar to the
-> one for PPC64.
->=20
-> Same for __ftrace_make_call().
->=20
-> Make them common.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+Hi Fujimoto-san,
+
+This looks mostly good to me.
+Please find inline comments below on a couple of conventions expected in
+this community.
+
+On Sun, 17 Apr 2022 16:04:51 +0900,
+Kosuke Fujimoto wrote:
+> [PATCH] docs/trans/ja_JP/howto: Don't mention specific kernel versions
+
+It looks like patches to Chinese docs carry a simpler "docs/zh_CN:" prefix [1].
+So "docs/ja_JP/howto:" should suffice.
+
+[1]: example: https://lore.kernel.org/r/2fc8a76e1308e15823eebf614f35f36f322a55d3.1649384633.git.siyanteng@loongson.cn/
+
+> This change is based on commit d2b008f134b7 (Documentation/process/howto: Update for 4.x -> 5.x versioning)
+
+In changelog explanation, lines should not exceed 75 chars unless you
+have a good reason.
+The rule is stricter than the contents of documents because some of git
+commands auto indent changelogs by 4 spaces, and the result should fit
+in an 80-column wide terminal.
+Also, the title of the referenced commit should be enclosed in a pair
+of double quotation marks.  So this should be:
+
+   This change is based on commit d2b008f134b7
+   ("Documentation/process/howto: Update for 4.x -> 5.x versioning").
+
+[with a punctuation fix]
+
+> Replace "4.x kernel version" with generic term such as "mainline tree"
+> 
+> Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Tsugikazu Shibata <shibata@linuxfoundation.org>
+> Cc: Akira Yokosawa <akiyks@gmail.com>
+> Cc: linux-doc@vger.kernel.org
+Please note that the above mentioned width limit does not apply to
+tags.  E.g., Fixes: and Link: tags should not wrap.
+
+These conventions are covered in the latter part of Section "Describe
+your changes" and Section "The canonical patch format" of
+Documentation/process/submitting-patches.rst.
+
+So I'd suggest that you post a v2 with the subject and changelog
+fixed.
+But please wait a few days for comments from someone else.
+
+With the above addressed, feel free to add:
+
+Reviewed-by: Akira Yokosawa <akiyks@gmail.com>
+
+        Thanks, Akira
+
 > ---
->  arch/powerpc/kernel/trace/ftrace.c | 108 +++--------------------------
->  1 file changed, 8 insertions(+), 100 deletions(-)
->=20
-> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/tra=
-ce/ftrace.c
-> index 1b05d33f96c6..2c7e42e439bb 100644
-> --- a/arch/powerpc/kernel/trace/ftrace.c
-> +++ b/arch/powerpc/kernel/trace/ftrace.c
-> @@ -114,7 +114,6 @@ static unsigned long find_bl_target(unsigned long ip,=
- ppc_inst_t op)
->  }
->=20
->  #ifdef CONFIG_MODULES
-> -#ifdef CONFIG_PPC64
->  static int
->  __ftrace_make_nop(struct module *mod,
->  		  struct dyn_ftrace *rec, unsigned long addr)
-> @@ -154,10 +153,11 @@ __ftrace_make_nop(struct module *mod,
->  		return -EINVAL;
->  	}
->=20
-> -#ifdef CONFIG_MPROFILE_KERNEL
-> -	/* When using -mkernel_profile there is no load to jump over */
-> +	/* When using -mkernel_profile or PPC32 there is no load to jump over *=
-/
-                      -mprofile-kernel
-
-Since you are modifying that line anyway ^^
-
-
->  	pop =3D ppc_inst(PPC_RAW_NOP());
->=20
-> +#ifdef CONFIG_PPC64
-> +#ifdef CONFIG_MPROFILE_KERNEL
->  	if (copy_inst_from_kernel_nofault(&op, (void *)(ip - 4))) {
->  		pr_err("Fetching instruction at %lx failed.\n", ip - 4);
->  		return -EFAULT;
-> @@ -201,6 +201,7 @@ __ftrace_make_nop(struct module *mod,
->  		return -EINVAL;
->  	}
->  #endif /* CONFIG_MPROFILE_KERNEL */
-> +#endif /* PPC64 */
->=20
->  	if (patch_instruction((u32 *)ip, pop)) {
->  		pr_err("Patching NOP failed.\n");
-> @@ -209,48 +210,6 @@ __ftrace_make_nop(struct module *mod,
->=20
->  	return 0;
->  }
-> -
-> -#else /* !PPC64 */
-> -static int
-> -__ftrace_make_nop(struct module *mod,
-> -		  struct dyn_ftrace *rec, unsigned long addr)
-> -{
-> -	ppc_inst_t op;
-> -	unsigned long ip =3D rec->ip;
-> -	unsigned long tramp, ptr;
-> -
-> -	if (copy_from_kernel_nofault(&op, (void *)ip, MCOUNT_INSN_SIZE))
-> -		return -EFAULT;
-> -
-> -	/* Make sure that that this is still a 24bit jump */
-> -	if (!is_bl_op(op)) {
-> -		pr_err("Not expected bl: opcode is %s\n", ppc_inst_as_str(op));
-> -		return -EINVAL;
-> -	}
-> -
-> -	/* lets find where the pointer goes */
-> -	tramp =3D find_bl_target(ip, op);
-> -
-> -	/* Find where the trampoline jumps to */
-> -	if (module_trampoline_target(mod, tramp, &ptr)) {
-> -		pr_err("Failed to get trampoline target\n");
-> -		return -EFAULT;
-> -	}
-> -
-> -	if (ptr !=3D addr) {
-> -		pr_err("Trampoline location %08lx does not match addr\n",
-> -		       tramp);
-> -		return -EINVAL;
-> -	}
-> -
-> -	op =3D ppc_inst(PPC_RAW_NOP());
-> -
-> -	if (patch_instruction((u32 *)ip, op))
-> -		return -EPERM;
-> -
-> -	return 0;
-> -}
-> -#endif /* PPC64 */
->  #endif /* CONFIG_MODULES */
->=20
->  static unsigned long find_ftrace_tramp(unsigned long ip)
-> @@ -437,13 +396,12 @@ int ftrace_make_nop(struct module *mod,
->  }
->=20
->  #ifdef CONFIG_MODULES
-> -#ifdef CONFIG_PPC64
->  /*
->   * Examine the existing instructions for __ftrace_make_call.
->   * They should effectively be a NOP, and follow formal constraints,
->   * depending on the ABI. Return false if they don't.
->   */
-> -#ifndef CONFIG_MPROFILE_KERNEL
-> +#ifndef CONFIG_DYNAMIC_FTRACE_WITH_REGS
-
-It is better to gate this on PPC64_ELF_ABI_v1
-
->  static int
->  expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
->  {
-> @@ -465,7 +423,7 @@ expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_i=
-nst_t op1)
->  static int
->  expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
->  {
-> -	/* look for patched "NOP" on ppc64 with -mprofile-kernel */
-> +	/* look for patched "NOP" on ppc64 with -mprofile-kernel or ppc32 */
->  	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP())))
->  		return 0;
->  	return 1;
-> @@ -484,8 +442,10 @@ __ftrace_make_call(struct dyn_ftrace *rec, unsigned =
-long addr)
->  	if (copy_inst_from_kernel_nofault(op, ip))
->  		return -EFAULT;
->=20
-> +#ifndef CONFIG_DYNAMIC_FTRACE_WITH_REGS
->  	if (copy_inst_from_kernel_nofault(op + 1, ip + 4))
->  		return -EFAULT;
-> +#endif
-
-Here too...
-
-
-- Naveen
+>  Documentation/translations/ja_JP/howto.rst | 43 ++++++++++------------
+>  1 file changed, 20 insertions(+), 23 deletions(-)
+> 
+[...]
 

@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980955051C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5E85051DF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240075AbiDRMij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
+        id S229840AbiDRMlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:41:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239718AbiDRMdV (ORCPT
+        with ESMTP id S239725AbiDRMdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:21 -0400
+        Mon, 18 Apr 2022 08:33:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737B065BD;
-        Mon, 18 Apr 2022 05:25:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC77BC97;
+        Mon, 18 Apr 2022 05:25:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B3BBF60B40;
-        Mon, 18 Apr 2022 12:25:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BACFEC385A7;
-        Mon, 18 Apr 2022 12:25:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AE43E60FDF;
+        Mon, 18 Apr 2022 12:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27D1C385A7;
+        Mon, 18 Apr 2022 12:25:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284714;
-        bh=PRKKSlC++3tu0htGySyF7EK6m/IfUhB+bYRdOYfYruw=;
+        s=korg; t=1650284717;
+        bh=1JykyhsvrgAJMNPlqTzg89ghRr1ddfmnxPAANLww/Ho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TjogNQiGu4TeiPDMrslnTQyeZHKnXHrACpA1OJi8MM8qQZo4GkXHQZpftAC4pIJXP
-         HtW5bT5GoEWDVVoa9emqZKHOowNMBo4KnDaYBgZfULJiE2PxnlWq4FoIIsPxqEO/NO
-         Xe+flkSB+AZana9Dz+p5DppmiSKn3KNc3YAL3H3k=
+        b=okkD8Kx1ZbUAc6F4ZoFvw6pX7901TnPsLHEqTsOvHU1PPLtnD+o5BvGYOI3RIMMdS
+         NG8chS0dWxv9lCVVuvldQ01AZ5HGGoANcumGZP63HK6ApksjScDRn3sE4486WrsgFk
+         IUAruogB/YTgNnV2E0yB0NCNSdodOZ3mmVp/oln4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ming Lei <ming.lei@redhat.com>
-Subject: [PATCH 5.17 203/219] genirq/affinity: Consider that CPUs on nodes can be unbalanced
-Date:   Mon, 18 Apr 2022 14:12:52 +0200
-Message-Id: <20220418121212.552659088@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Paul Gortmaker <paul.gortmaker@windriver.com>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: [PATCH 5.17 204/219] tick/nohz: Use WARN_ON_ONCE() to prevent console saturation
+Date:   Mon, 18 Apr 2022 14:12:53 +0200
+Message-Id: <20220418121212.579747555@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -55,47 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+From: Paul Gortmaker <paul.gortmaker@windriver.com>
 
-commit 08d835dff916bfe8f45acc7b92c7af6c4081c8a7 upstream.
+commit 40e97e42961f8c6cc7bd5fe67cc18417e02d78f1 upstream.
 
-If CPUs on a node are offline at boot time, the number of nodes is
-different when building affinity masks for present cpus and when building
-affinity masks for possible cpus. This causes the following problem:
+While running some testing on code that happened to allow the variable
+tick_nohz_full_running to get set but with no "possible" NOHZ cores to
+back up that setting, this warning triggered:
 
-In the case that the number of vectors is less than the number of nodes
-there are cases where bits of masks for present cpus are overwritten when
-building masks for possible cpus.
+        if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE))
+                WARN_ON(tick_nohz_full_running);
 
-Fix this by excluding CPUs, which are not part of the current build mask
-(present/possible).
+The console was overwhemled with an endless stream of one WARN per tick
+per core and there was no way to even see what was going on w/o using a
+serial console to capture it and then trace it back to this.
 
-[ tglx: Massaged changelog and added comment ]
+Change it to WARN_ON_ONCE().
 
-Fixes: b82592199032 ("genirq/affinity: Spread IRQs to all available NUMA nodes")
-Signed-off-by: Rei Yamamoto <yamamoto.rei@jp.fujitsu.com>
+Fixes: 08ae95f4fd3b ("nohz_full: Allow the boot CPU to be nohz_full")
+Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
 Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20220331003309.10891-1-yamamoto.rei@jp.fujitsu.com
+Link: https://lore.kernel.org/r/20211206145950.10927-3-paul.gortmaker@windriver.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/irq/affinity.c |    5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ kernel/time/tick-sched.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/kernel/irq/affinity.c
-+++ b/kernel/irq/affinity.c
-@@ -269,8 +269,9 @@ static int __irq_build_affinity_masks(un
+--- a/kernel/time/tick-sched.c
++++ b/kernel/time/tick-sched.c
+@@ -186,7 +186,7 @@ static void tick_sched_do_timer(struct t
  	 */
- 	if (numvecs <= nodes) {
- 		for_each_node_mask(n, nodemsk) {
--			cpumask_or(&masks[curvec].mask, &masks[curvec].mask,
--				   node_to_cpumask[n]);
-+			/* Ensure that only CPUs which are in both masks are set */
-+			cpumask_and(nmsk, cpu_mask, node_to_cpumask[n]);
-+			cpumask_or(&masks[curvec].mask, &masks[curvec].mask, nmsk);
- 			if (++curvec == last_affv)
- 				curvec = firstvec;
- 		}
+ 	if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE)) {
+ #ifdef CONFIG_NO_HZ_FULL
+-		WARN_ON(tick_nohz_full_running);
++		WARN_ON_ONCE(tick_nohz_full_running);
+ #endif
+ 		tick_do_timer_cpu = cpu;
+ 	}
 
 

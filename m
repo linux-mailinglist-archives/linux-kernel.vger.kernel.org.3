@@ -2,55 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76A69505618
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:29:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923A650549C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242016AbiDRNcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:32:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S243099AbiDRNTn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:19:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239696AbiDRNFs (ORCPT
+        with ESMTP id S240400AbiDRNAR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:05:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124F420F73;
-        Mon, 18 Apr 2022 05:46:44 -0700 (PDT)
+        Mon, 18 Apr 2022 09:00:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF79931906;
+        Mon, 18 Apr 2022 05:41:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A29D960FB6;
-        Mon, 18 Apr 2022 12:46:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDC5C385A7;
-        Mon, 18 Apr 2022 12:46:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EAFBB80EC3;
+        Mon, 18 Apr 2022 12:41:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35CCDC385A1;
+        Mon, 18 Apr 2022 12:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286003;
-        bh=rdVpADfyBNxl/+AyT3aBrtWFN62gbyQxxv4XkXkKf2U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=G08K/LSWNU3n5tce5NWFz7epoANbraR442LDC48PzQ+iF0kgPAnD2E84xOl/6qLtm
-         7BMqWQdHTzVrf2DRnN4ecEb0Pd0EM8B8AnC+v93NxClb+wDnXspeyW25pdwDXBCBne
-         uIKIb2m8JTGP4GXyABdqOGN3VjIMtRnYpeFexK6Q=
+        s=korg; t=1650285710;
+        bh=K8XrQc/ubFAMXZJhjuTpvI8f92jO4EsjVVLcmWbnMIM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GO8uk7EGdhpYUyeWa7S5ZrvjLWnle2Okln6EqgHbb19qgQCwBNcsllmss50VsSPZ7
+         a66cpIIROF2YZilYBgJdWJsN/OdhtWIGtKU7aUMMsulgiR7y69AV0VlJ/3102zVrIR
+         w29y2cxXn8eRA+e8kJ7zhReU5btLUbMyOfIHylvE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-Subject: [PATCH 4.19 00/32] 4.19.239-rc1 review
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.10 098/105] ax25: add refcount in ax25_dev to avoid UAF bugs
 Date:   Mon, 18 Apr 2022 14:13:40 +0200
-Message-Id: <20220418121127.127656835@linuxfoundation.org>
+Message-Id: <20220418121149.421321511@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.239-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.19.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.19.239-rc1
-X-KernelTest-Deadline: 2022-04-20T12:11+00:00
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,168 +55,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.19.239 release.
-There are 32 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-Anything received after that time might be too late.
+commit d01ffb9eee4af165d83b08dd73ebdf9fe94a519b upstream.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.239-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-and the diffstat can be found below.
+If we dereference ax25_dev after we call kfree(ax25_dev) in
+ax25_dev_device_down(), it will lead to concurrency UAF bugs.
+There are eight syscall functions suffer from UAF bugs, include
+ax25_bind(), ax25_release(), ax25_connect(), ax25_ioctl(),
+ax25_getname(), ax25_sendmsg(), ax25_getsockopt() and
+ax25_info_show().
 
-thanks,
+One of the concurrency UAF can be shown as below:
 
-greg k-h
+  (USE)                       |    (FREE)
+                              |  ax25_device_event
+                              |    ax25_dev_device_down
+ax25_bind                     |    ...
+  ...                         |      kfree(ax25_dev)
+  ax25_fillin_cb()            |    ...
+    ax25_fillin_cb_from_dev() |
+  ...                         |
 
--------------
-Pseudo-Shortlog of commits:
+The root cause of UAF bugs is that kfree(ax25_dev) in
+ax25_dev_device_down() is not protected by any locks.
+When ax25_dev, which there are still pointers point to,
+is released, the concurrency UAF bug will happen.
 
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.19.239-rc1
+This patch introduces refcount into ax25_dev in order to
+guarantee that there are no pointers point to it when ax25_dev
+is released.
 
-Martin Povišer <povik+lin@cutebit.org>
-    i2c: pasemi: Wait for write xfers to finish
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 5.10: adjusted context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ include/net/ax25.h    |   10 ++++++++++
+ net/ax25/af_ax25.c    |    2 ++
+ net/ax25/ax25_dev.c   |   12 ++++++++++--
+ net/ax25/ax25_route.c |    3 +++
+ 4 files changed, 25 insertions(+), 2 deletions(-)
 
-Nadav Amit <namit@vmware.com>
-    smp: Fix offline cpu check in flush_smp_call_function_queue()
-
-Nathan Chancellor <nathan@kernel.org>
-    ARM: davinci: da850-evm: Avoid NULL pointer dereference
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    ipv6: fix panic when forwarding a pkt with no in6 dev
-
-Fabio M. De Francesco <fmdefrancesco@gmail.com>
-    ALSA: pcm: Test for "silence" field in struct "pcm_format_data"
-
-Tim Crawford <tcrawford@system76.com>
-    ALSA: hda/realtek: Add quirk for Clevo PD50PNT
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    gcc-plugins: latent_entropy: use /dev/urandom
-
-Oliver Upton <oupton@google.com>
-    KVM: Don't create VM debugfs files outside of the VM directory
-
-Patrick Wang <patrick.wang.shcn@gmail.com>
-    mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
-
-Juergen Gross <jgross@suse.com>
-    mm, page_alloc: fix build_zonerefs_node()
-
-Duoming Zhou <duoming@zju.edu.cn>
-    drivers: net: slip: fix NPD bug in sl_tx_timeout()
-
-Alexey Galakhov <agalakhov@gmail.com>
-    scsi: mvsas: Add PCI ID of RocketRaid 2640
-
-Roman Li <Roman.Li@amd.com>
-    drm/amd/display: Fix allocate_mst_payload assert on resume
-
-Joey Gouly <joey.gouly@arm.com>
-    arm64: alternatives: mark patch_alternative() as `noinstr`
-
-Leo Ruan <tingquan.ruan@cn.bosch.com>
-    gpu: ipu-v3: Fix dev_dbg frequency output
-
-Christian Lamparter <chunkeey@gmail.com>
-    ata: libata-core: Disable READ LOG DMA EXT for Samsung 840 EVOs
-
-Randy Dunlap <rdunlap@infradead.org>
-    net: micrel: fix KS8851_MLL Kconfig
-
-Tyrel Datwyler <tyreld@linux.ibm.com>
-    scsi: ibmvscsis: Increase INITIAL_SRP_LIMIT to 1024
-
-Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
-    scsi: target: tcmu: Fix possible page UAF
-
-Michael Kelley <mikelley@microsoft.com>
-    Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
-
-QintaoShen <unSimple1993@163.com>
-    drm/amdkfd: Check for potential null return of kmalloc_array()
-
-Aurabindo Pillai <aurabindo.pillai@amd.com>
-    drm/amd: Add USBC connector ID
-
-Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-    cifs: potential buffer overflow in handling symlinks
-
-Lin Ma <linma@zju.edu.cn>
-    nfc: nci: add flush_workqueue to prevent uaf
-
-Athira Rajeev <atrajeev@linux.vnet.ibm.com>
-    testing/selftests/mqueue: Fix mq_perf_tests to free the allocated cpu set
-
-Petr Malat <oss@malat.biz>
-    sctp: Initialize daddr on peeled off socket
-
-Dinh Nguyen <dinguyen@kernel.org>
-    net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
-
-Vadim Pasternak <vadimp@nvidia.com>
-    mlxsw: i2c: Fix initialization error flow
-
-Linus Torvalds <torvalds@linux-foundation.org>
-    gpiolib: acpi: use correct format characters
-
-Guillaume Nault <gnault@redhat.com>
-    veth: Ensure eth header is in skb's linear part
-
-Vlad Buslov <vladbu@nvidia.com>
-    net/sched: flower: fix parsing of ethertype following VLAN header
-
-Miaoqian Lin <linmq006@gmail.com>
-    memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |  4 +-
- arch/arm/mach-davinci/board-da850-evm.c            |  4 +-
- arch/arm64/kernel/alternative.c                    |  6 +--
- drivers/ata/libata-core.c                          |  3 ++
- drivers/gpio/gpiolib-acpi.c                        |  4 +-
- drivers/gpu/drm/amd/amdgpu/ObjectID.h              |  1 +
- drivers/gpu/drm/amd/amdkfd/kfd_events.c            |  2 +
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  3 +-
- drivers/gpu/ipu-v3/ipu-di.c                        |  5 ++-
- drivers/hv/ring_buffer.c                           | 11 +++++-
- drivers/i2c/busses/i2c-pasemi.c                    |  6 +++
- drivers/memory/atmel-ebi.c                         | 23 ++++++++---
- drivers/net/ethernet/mellanox/mlxsw/i2c.c          |  1 +
- drivers/net/ethernet/micrel/Kconfig                |  1 +
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c |  8 ----
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h |  4 ++
- .../net/ethernet/stmicro/stmmac/dwmac-socfpga.c    | 13 +++----
- drivers/net/slip/slip.c                            |  2 +-
- drivers/net/veth.c                                 |  2 +-
- drivers/scsi/ibmvscsi_tgt/ibmvscsi_tgt.c           |  2 +-
- drivers/scsi/mvsas/mv_init.c                       |  1 +
- drivers/target/target_core_user.c                  |  3 +-
- fs/cifs/link.c                                     |  3 ++
- include/net/flow_dissector.h                       |  2 +
- kernel/smp.c                                       |  2 +-
- mm/kmemleak.c                                      |  8 ++--
- mm/page_alloc.c                                    |  2 +-
- net/core/flow_dissector.c                          |  1 +
- net/ipv6/ip6_output.c                              |  2 +-
- net/nfc/nci/core.c                                 |  4 ++
- net/sched/cls_flower.c                             | 18 ++++++---
- net/sctp/socket.c                                  |  2 +-
- scripts/gcc-plugins/latent_entropy_plugin.c        | 44 +++++++++++++---------
- sound/core/pcm_misc.c                              |  2 +-
- sound/pci/hda/patch_realtek.c                      |  1 +
- tools/testing/selftests/mqueue/mq_perf_tests.c     | 25 ++++++++----
- virt/kvm/kvm_main.c                                |  8 +++-
- 37 files changed, 155 insertions(+), 78 deletions(-)
+--- a/include/net/ax25.h
++++ b/include/net/ax25.h
+@@ -236,6 +236,7 @@ typedef struct ax25_dev {
+ #if defined(CONFIG_AX25_DAMA_SLAVE) || defined(CONFIG_AX25_DAMA_MASTER)
+ 	ax25_dama_info		dama;
+ #endif
++	refcount_t		refcount;
+ } ax25_dev;
+ 
+ typedef struct ax25_cb {
+@@ -290,6 +291,15 @@ static __inline__ void ax25_cb_put(ax25_
+ 	}
+ }
+ 
++#define ax25_dev_hold(__ax25_dev) \
++	refcount_inc(&((__ax25_dev)->refcount))
++
++static __inline__ void ax25_dev_put(ax25_dev *ax25_dev)
++{
++	if (refcount_dec_and_test(&ax25_dev->refcount)) {
++		kfree(ax25_dev);
++	}
++}
+ static inline __be16 ax25_type_trans(struct sk_buff *skb, struct net_device *dev)
+ {
+ 	skb->dev      = dev;
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -98,6 +98,7 @@ again:
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
+ 			s->ax25_dev = NULL;
++			ax25_dev_put(ax25_dev);
+ 			release_sock(sk);
+ 			ax25_disconnect(s, ENETUNREACH);
+ 			spin_lock_bh(&ax25_list_lock);
+@@ -446,6 +447,7 @@ static int ax25_ctl_ioctl(const unsigned
+ 	  }
+ 
+ out_put:
++	ax25_dev_put(ax25_dev);
+ 	ax25_cb_put(ax25);
+ 	return ret;
+ 
+--- a/net/ax25/ax25_dev.c
++++ b/net/ax25/ax25_dev.c
+@@ -37,6 +37,7 @@ ax25_dev *ax25_addr_ax25dev(ax25_address
+ 	for (ax25_dev = ax25_dev_list; ax25_dev != NULL; ax25_dev = ax25_dev->next)
+ 		if (ax25cmp(addr, (ax25_address *)ax25_dev->dev->dev_addr) == 0) {
+ 			res = ax25_dev;
++			ax25_dev_hold(ax25_dev);
+ 		}
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 
+@@ -56,6 +57,7 @@ void ax25_dev_device_up(struct net_devic
+ 		return;
+ 	}
+ 
++	refcount_set(&ax25_dev->refcount, 1);
+ 	dev->ax25_ptr     = ax25_dev;
+ 	ax25_dev->dev     = dev;
+ 	dev_hold(dev);
+@@ -83,6 +85,7 @@ void ax25_dev_device_up(struct net_devic
+ 	spin_lock_bh(&ax25_dev_lock);
+ 	ax25_dev->next = ax25_dev_list;
+ 	ax25_dev_list  = ax25_dev;
++	ax25_dev_hold(ax25_dev);
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 
+ 	ax25_register_dev_sysctl(ax25_dev);
+@@ -112,20 +115,22 @@ void ax25_dev_device_down(struct net_dev
+ 
+ 	if ((s = ax25_dev_list) == ax25_dev) {
+ 		ax25_dev_list = s->next;
++		ax25_dev_put(ax25_dev);
+ 		spin_unlock_bh(&ax25_dev_lock);
+ 		dev->ax25_ptr = NULL;
+ 		dev_put(dev);
+-		kfree(ax25_dev);
++		ax25_dev_put(ax25_dev);
+ 		return;
+ 	}
+ 
+ 	while (s != NULL && s->next != NULL) {
+ 		if (s->next == ax25_dev) {
+ 			s->next = ax25_dev->next;
++			ax25_dev_put(ax25_dev);
+ 			spin_unlock_bh(&ax25_dev_lock);
+ 			dev->ax25_ptr = NULL;
+ 			dev_put(dev);
+-			kfree(ax25_dev);
++			ax25_dev_put(ax25_dev);
+ 			return;
+ 		}
+ 
+@@ -133,6 +138,7 @@ void ax25_dev_device_down(struct net_dev
+ 	}
+ 	spin_unlock_bh(&ax25_dev_lock);
+ 	dev->ax25_ptr = NULL;
++	ax25_dev_put(ax25_dev);
+ }
+ 
+ int ax25_fwd_ioctl(unsigned int cmd, struct ax25_fwd_struct *fwd)
+@@ -149,6 +155,7 @@ int ax25_fwd_ioctl(unsigned int cmd, str
+ 		if (ax25_dev->forward != NULL)
+ 			return -EINVAL;
+ 		ax25_dev->forward = fwd_dev->dev;
++		ax25_dev_put(fwd_dev);
+ 		break;
+ 
+ 	case SIOCAX25DELFWD:
+@@ -161,6 +168,7 @@ int ax25_fwd_ioctl(unsigned int cmd, str
+ 		return -EINVAL;
+ 	}
+ 
++	ax25_dev_put(ax25_dev);
+ 	return 0;
+ }
+ 
+--- a/net/ax25/ax25_route.c
++++ b/net/ax25/ax25_route.c
+@@ -116,6 +116,7 @@ static int __must_check ax25_rt_add(stru
+ 	ax25_rt->dev          = ax25_dev->dev;
+ 	ax25_rt->digipeat     = NULL;
+ 	ax25_rt->ip_mode      = ' ';
++	ax25_dev_put(ax25_dev);
+ 	if (route->digi_count != 0) {
+ 		if ((ax25_rt->digipeat = kmalloc(sizeof(ax25_digi), GFP_ATOMIC)) == NULL) {
+ 			write_unlock_bh(&ax25_route_lock);
+@@ -172,6 +173,7 @@ static int ax25_rt_del(struct ax25_route
+ 			}
+ 		}
+ 	}
++	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
+ 
+ 	return 0;
+@@ -214,6 +216,7 @@ static int ax25_rt_opt(struct ax25_route
+ 	}
+ 
+ out:
++	ax25_dev_put(ax25_dev);
+ 	write_unlock_bh(&ax25_route_lock);
+ 	return err;
+ }
 
 

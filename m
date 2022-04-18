@@ -2,58 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8C2506008
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AD7050600C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234070AbiDRW7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:59:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51502 "EHLO
+        id S234211AbiDRXBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 19:01:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233856AbiDRW70 (ORCPT
+        with ESMTP id S234163AbiDRXBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:59:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78E12CE2E;
-        Mon, 18 Apr 2022 15:56:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A43D60FC5;
-        Mon, 18 Apr 2022 22:56:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F2D3C385A8;
-        Mon, 18 Apr 2022 22:56:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650322604;
-        bh=aoxHRcD5CE1ksNMOtptxB5UStULjmR/2Os4/NqSTB9w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=CzeP9fMoz/970D1bk1F5wcGZQvAuQEvERKqPa7U2pjTUKchZ2ZbHs1JP2izKTEH5q
-         wvyQPZY9HaBEApBK9aUYNFN5wd8LgQLUzYo/I2gStVexBxfAYLVkHH9K2/XyPbgb7h
-         Ju/szWCGQuTqtm8zmSPIsUxKzX/R2A01qZIfKZ1N0p+jqTPFdMBKq0hNSdar7EfpQI
-         it+vjLBj/nxajlYVhpeobRMV5CcLzo83ipiQZpojrxMQcPG5xxQRsTWrqei7qJqkcY
-         ez3AftZ8qFXlofV1cIlwRSDL6tfgmc/wRRNv8HnVeZHg1AyP81fhCjDqAS9JeExpZ/
-         Tb061OLev6Gng==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 132DD5C0A23; Mon, 18 Apr 2022 15:56:44 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Uladzislau Rezki <uladzislau.rezki@sony.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 5/5] rcu/nocb: Initialize nocb kthreads only for boot CPU prior SMP initialization
-Date:   Mon, 18 Apr 2022 15:56:42 -0700
-Message-Id: <20220418225642.3945539-5-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220418225633.GA3945428@paulmck-ThinkPad-P17-Gen-1>
-References: <20220418225633.GA3945428@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 18 Apr 2022 19:01:47 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E9752D1F4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:59:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650322747; x=1681858747;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Qb24R7mKiVGUdMVc7ONgEkmnK/atyRN5jqb3qYtPfig=;
+  b=Ftd53XdM506ufa/F6uWwdt+xR7/ORgUXrHKlQYGkIMhBrXlXlvba0wc+
+   4XtXtTlOoZxnv9+NBvQl1UjuO9XiRLZdQ+JpEpZxYcV5WFZLNovc5k8JS
+   8Nfvc9rNC9gnIrCmg9rSEXDWI0QBcyzOpz+qZCdZz+YCWF50qVzWco83E
+   Xa0Z90LdRUdPssbqpCsA4oHC+6tPCtOxjB54nFvr/kRilwQBpCA3okXDz
+   IQqqL2yNm3cxeURjwRsm0NC6AENM/8fvTiArgtjqSSvhorc51633JWRz5
+   ps1bjNNadAp9kS7N6ikw0ZpDXukJUhgPv0IG2ycfNLeBgF5sdxtX8zMnh
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243560840"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="243560840"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:59:06 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="647033809"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2022 15:59:04 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngaKl-00054C-98;
+        Mon, 18 Apr 2022 22:59:03 +0000
+Date:   Tue, 19 Apr 2022 06:58:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Tom Rix <trix@redhat.com>, nsaenz@kernel.org,
+        bcm-kernel-feedback-list@broadcom.com, gregkh@linuxfoundation.org,
+        stefan.wahren@i2se.com, gascoar@gmail.com, ojaswin98@gmail.com
+Cc:     kbuild-all@lists.01.org, linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH] staging: vchiq_arm: change vchiq_platform_init from
+ global to static
+Message-ID: <202204190650.yy0x0YCl-lkp@intel.com>
+References: <20220418164356.3532969-1-trix@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418164356.3532969-1-trix@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,93 +70,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Frederic Weisbecker <frederic@kernel.org>
+Hi Tom,
 
-The rcu_spawn_gp_kthread() function is called as an early initcall, which
-means that SMP initialization hasn't happened yet and only the boot CPU is
-online. Therefore, create only the NOCB kthreads related to the boot CPU.
+I love your patch! Perhaps something to improve:
 
-Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
-Cc: Uladzislau Rezki <uladzislau.rezki@sony.com>
-Cc: Joel Fernandes <joel@joelfernandes.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- kernel/rcu/tree.c      |  6 +++++-
- kernel/rcu/tree.h      |  1 -
- kernel/rcu/tree_nocb.h | 20 --------------------
- 3 files changed, 5 insertions(+), 22 deletions(-)
+[auto build test WARNING on staging/staging-testing]
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 70b33c55d39a..9f7441a78f90 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -4498,9 +4498,13 @@ static int __init rcu_spawn_gp_kthread(void)
- 	smp_store_release(&rcu_state.gp_kthread, t);  /* ^^^ */
- 	raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
- 	wake_up_process(t);
--	rcu_spawn_nocb_kthreads();
- 	/* This is a pre-SMP initcall, we expect a single CPU */
- 	WARN_ON(num_online_cpus() > 1);
-+	/*
-+	 * Those kthreads couldn't be created on rcu_init() -> rcutree_prepare_cpu()
-+	 * due to rcu_scheduler_fully_active.
-+	 */
-+	rcu_spawn_cpu_nocb_kthread(smp_processor_id());
- 	rcu_spawn_one_boost_kthread(rdp->mynode);
- 	rcu_spawn_core_kthreads();
- 	return 0;
-diff --git a/kernel/rcu/tree.h b/kernel/rcu/tree.h
-index b2a0f2613ab9..25dc4166f218 100644
---- a/kernel/rcu/tree.h
-+++ b/kernel/rcu/tree.h
-@@ -439,7 +439,6 @@ static int rcu_nocb_need_deferred_wakeup(struct rcu_data *rdp, int level);
- static bool do_nocb_deferred_wakeup(struct rcu_data *rdp);
- static void rcu_boot_init_nocb_percpu_data(struct rcu_data *rdp);
- static void rcu_spawn_cpu_nocb_kthread(int cpu);
--static void __init rcu_spawn_nocb_kthreads(void);
- static void show_rcu_nocb_state(struct rcu_data *rdp);
- static void rcu_nocb_lock(struct rcu_data *rdp);
- static void rcu_nocb_unlock(struct rcu_data *rdp);
-diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-index 3c00240833d6..46694e13398a 100644
---- a/kernel/rcu/tree_nocb.h
-+++ b/kernel/rcu/tree_nocb.h
-@@ -1266,22 +1266,6 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
- 	WRITE_ONCE(rdp->nocb_gp_kthread, rdp_gp->nocb_gp_kthread);
- }
- 
--/*
-- * Once the scheduler is running, spawn rcuo kthreads for all online
-- * no-CBs CPUs.  This assumes that the early_initcall()s happen before
-- * non-boot CPUs come online -- if this changes, we will need to add
-- * some mutual exclusion.
-- */
--static void __init rcu_spawn_nocb_kthreads(void)
--{
--	int cpu;
--
--	if (rcu_state.nocb_is_setup) {
--		for_each_online_cpu(cpu)
--			rcu_spawn_cpu_nocb_kthread(cpu);
--	}
--}
--
- /* How many CB CPU IDs per GP kthread?  Default of -1 for sqrt(nr_cpu_ids). */
- static int rcu_nocb_gp_stride = -1;
- module_param(rcu_nocb_gp_stride, int, 0444);
-@@ -1538,10 +1522,6 @@ static void rcu_spawn_cpu_nocb_kthread(int cpu)
- {
- }
- 
--static void __init rcu_spawn_nocb_kthreads(void)
--{
--}
--
- static void show_rcu_nocb_state(struct rcu_data *rdp)
- {
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Tom-Rix/staging-vchiq_arm-change-vchiq_platform_init-from-global-to-static/20220419-004611
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging.git bed6d200f8ca38e1ecbdd8fb7e0564884002abd1
+config: sparc-randconfig-c004-20220417 (https://download.01.org/0day-ci/archive/20220419/202204190650.yy0x0YCl-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/192ca8cdfd692f17162557c64e8d533c816eccff
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Tom-Rix/staging-vchiq_arm-change-vchiq_platform_init-from-global-to-static/20220419-004611
+        git checkout 192ca8cdfd692f17162557c64e8d533c816eccff
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=sparc SHELL=/bin/bash drivers/staging/vc04_services/
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:20,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:8:
+   In function 'memcpy_to_page',
+       inlined from 'free_pagelist' at drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:434:4:
+>> arch/sparc/include/asm/string.h:15:25: warning: argument 2 null where non-null expected [-Wnonnull]
+      15 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/highmem.h:353:9: note: in expansion of macro 'memcpy'
+     353 |         memcpy(to + offset, from, len);
+         |         ^~~~~~
+   drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c: In function 'free_pagelist':
+   arch/sparc/include/asm/string.h:15:25: note: in a call to built-in function '__builtin_memcpy'
+      15 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/highmem.h:353:9: note: in expansion of macro 'memcpy'
+     353 |         memcpy(to + offset, from, len);
+         |         ^~~~~~
+   In function 'memcpy_to_page',
+       inlined from 'free_pagelist' at drivers/staging/vc04_services/interface/vchiq_arm/vchiq_arm.c:441:4:
+   arch/sparc/include/asm/string.h:15:25: warning: '__builtin_memcpy' offset 0 is out of the bounds [0, 0] [-Warray-bounds]
+      15 | #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/highmem.h:353:9: note: in expansion of macro 'memcpy'
+     353 |         memcpy(to + offset, from, len);
+         |         ^~~~~~
+
+
+vim +15 arch/sparc/include/asm/string.h
+
+70a6fcf3283a0a Al Viro 2016-01-17  13  
+70a6fcf3283a0a Al Viro 2016-01-17  14  #define __HAVE_ARCH_MEMCPY
+70a6fcf3283a0a Al Viro 2016-01-17 @15  #define memcpy(t, f, n) __builtin_memcpy(t, f, n)
+70a6fcf3283a0a Al Viro 2016-01-17  16  
+
 -- 
-2.31.1.189.g2e36527f23
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

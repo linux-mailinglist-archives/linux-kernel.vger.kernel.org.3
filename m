@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8FAD505AC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:14:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2529505AB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:13:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345156AbiDRPRT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:17:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50504 "EHLO
+        id S240742AbiDRPP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240101AbiDRPPl (ORCPT
+        with ESMTP id S242180AbiDRPPm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:15:41 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8D0B89BB
+        Mon, 18 Apr 2022 11:15:42 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB035B9181
         for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:12:29 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KhpjL273FzFppB;
-        Mon, 18 Apr 2022 22:09:58 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Khpm761BBzhXX5;
+        Mon, 18 Apr 2022 22:12:23 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 18 Apr
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>
 CC:     <vbabka@suse.cz>, <pintu@codeaurora.org>,
         <charante@codeaurora.org>, <linux-mm@kvack.org>,
         <linux-kernel@vger.kernel.org>, <linmiaohe@huawei.com>
-Subject: [PATCH 01/12] mm: compaction: remove unneeded return value of kcompactd_run
-Date:   Mon, 18 Apr 2022 22:12:42 +0800
-Message-ID: <20220418141253.24298-2-linmiaohe@huawei.com>
+Subject: [PATCH 02/12] mm: compaction: remove unneeded pfn update
+Date:   Mon, 18 Apr 2022 22:12:43 +0800
+Message-ID: <20220418141253.24298-3-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220418141253.24298-1-linmiaohe@huawei.com>
 References: <20220418141253.24298-1-linmiaohe@huawei.com>
@@ -49,66 +49,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of kcompactd_run() is unused now.  Clean it up.
+pfn is unused in this do while loop. Remove the unneeded pfn update.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- include/linux/compaction.h | 5 ++---
- mm/compaction.c            | 7 ++-----
- 2 files changed, 4 insertions(+), 8 deletions(-)
+ mm/compaction.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/include/linux/compaction.h b/include/linux/compaction.h
-index 34bce35c808d..52a9ff65faee 100644
---- a/include/linux/compaction.h
-+++ b/include/linux/compaction.h
-@@ -177,7 +177,7 @@ static inline bool compaction_withdrawn(enum compact_result result)
- bool compaction_zonelist_suitable(struct alloc_context *ac, int order,
- 					int alloc_flags);
- 
--extern int kcompactd_run(int nid);
-+extern void kcompactd_run(int nid);
- extern void kcompactd_stop(int nid);
- extern void wakeup_kcompactd(pg_data_t *pgdat, int order, int highest_zoneidx);
- 
-@@ -212,9 +212,8 @@ static inline bool compaction_withdrawn(enum compact_result result)
- 	return true;
- }
- 
--static inline int kcompactd_run(int nid)
-+static inline void kcompactd_run(int nid)
- {
--	return 0;
- }
- static inline void kcompactd_stop(int nid)
- {
 diff --git a/mm/compaction.c b/mm/compaction.c
-index baf654b5e073..2e838992b324 100644
+index 2e838992b324..f9e628a5306a 100644
 --- a/mm/compaction.c
 +++ b/mm/compaction.c
-@@ -3016,21 +3016,18 @@ static int kcompactd(void *p)
-  * This kcompactd start function will be called by init and node-hot-add.
-  * On node-hot-add, kcompactd will moved to proper cpus if cpus are hot-added.
-  */
--int kcompactd_run(int nid)
-+void kcompactd_run(int nid)
- {
- 	pg_data_t *pgdat = NODE_DATA(nid);
--	int ret = 0;
+@@ -317,7 +317,6 @@ __reset_isolation_pfn(struct zone *zone, unsigned long pfn, bool check_source,
+ 		}
  
- 	if (pgdat->kcompactd)
--		return 0;
-+		return;
+ 		page += (1 << PAGE_ALLOC_COSTLY_ORDER);
+-		pfn += (1 << PAGE_ALLOC_COSTLY_ORDER);
+ 	} while (page <= end_page);
  
- 	pgdat->kcompactd = kthread_run(kcompactd, pgdat, "kcompactd%d", nid);
- 	if (IS_ERR(pgdat->kcompactd)) {
- 		pr_err("Failed to start kcompactd on node %d\n", nid);
--		ret = PTR_ERR(pgdat->kcompactd);
- 		pgdat->kcompactd = NULL;
- 	}
--	return ret;
- }
- 
- /*
+ 	return false;
 -- 
 2.23.0
 

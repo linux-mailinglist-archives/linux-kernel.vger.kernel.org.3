@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726215055C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A087F505239
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241631AbiDRNZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41108 "EHLO
+        id S240215AbiDRMis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241182AbiDRNCx (ORCPT
+        with ESMTP id S239772AbiDRMdZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9039F205FE;
-        Mon, 18 Apr 2022 05:42:57 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9161A065;
+        Mon, 18 Apr 2022 05:25:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 48BE3B80E59;
-        Mon, 18 Apr 2022 12:42:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A37FAC385AB;
-        Mon, 18 Apr 2022 12:42:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B111C60FB0;
+        Mon, 18 Apr 2022 12:25:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDF5C385A1;
+        Mon, 18 Apr 2022 12:25:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285775;
-        bh=/pmbGVed1QynH04LNNFMYKg9d+inH3YumC2wrFxBQ2s=;
+        s=korg; t=1650284752;
+        bh=bGYkXoPOnvp4MwQT0EEyeTjnTv8wsS679jpaRsBAs/o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uQyZLB6G8Z9xhEhSTrPA1CfSxJ4noaMPBAXeorEHWkOjDgaCSuvSKW2EU+9lT3Gbd
-         cBAU0NstDcT1M1kJOZ1fiZ+Wc2QsXXEh82Sz67NkbBvCJKfBrdSUOi+Tt/TLQt54Ch
-         xJulfzDJAPs3QEOxu0uw27VnQRZiuEZVamFvUAqM=
+        b=QOqIqeDm07NmIhAdmPmzfB2C8vw/YUHQtRa53sgpBr2dUEm28O8H8vqHggta6zBEd
+         q9g9+PGeIlZsmRM9EGfcWo1cPnPZtF43yzA9yGSxLhQSj+FMnCMBPfQ0wHw2fClz6u
+         UmaPQyVz0IUYEYzPnlDCslWkIQg5aSe6fHYccuFg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Vlad Buslov <vladbu@nvidia.com>,
-        Davide Caratti <dcaratti@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 06/63] net/sched: fix initialization order when updating chain 0 head
+        stable@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH 5.17 214/219] timers: Fix warning condition in __run_timers()
 Date:   Mon, 18 Apr 2022 14:13:03 +0200
-Message-Id: <20220418121134.570518425@linuxfoundation.org>
+Message-Id: <20220418121212.856664521@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,66 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+From: Anna-Maria Behnsen <anna-maria@linutronix.de>
 
-[ Upstream commit e65812fd22eba32f11abe28cb377cbd64cfb1ba0 ]
+commit c54bc0fc84214b203f7a0ebfd1bd308ce2abe920 upstream.
 
-Currently, when inserting a new filter that needs to sit at the head
-of chain 0, it will first update the heads pointer on all devices using
-the (shared) block, and only then complete the initialization of the new
-element so that it has a "next" element.
+When the timer base is empty, base::next_expiry is set to base::clk +
+NEXT_TIMER_MAX_DELTA and base::next_expiry_recalc is false. When no timer
+is queued until jiffies reaches base::next_expiry value, the warning for
+not finding any expired timer and base::next_expiry_recalc is false in
+__run_timers() triggers.
 
-This can lead to a situation that the chain 0 head is propagated to
-another CPU before the "next" initialization is done. When this race
-condition is triggered, packets being matched on that CPU will simply
-miss all other filters, and will flow through the stack as if there were
-no other filters installed. If the system is using OVS + TC, such
-packets will get handled by vswitchd via upcall, which results in much
-higher latency and reordering. For other applications it may result in
-packet drops.
+To prevent triggering the warning in this valid scenario
+base::timers_pending needs to be added to the warning condition.
 
-This is reproducible with a tc only setup, but it varies from system to
-system. It could be reproduced with a shared block amongst 10 veth
-tunnels, and an ingress filter mirroring packets to another veth.
-That's because using the last added veth tunnel to the shared block to
-do the actual traffic, it makes the race window bigger and easier to
-trigger.
-
-The fix is rather simple, to just initialize the next pointer of the new
-filter instance (tp) before propagating the head change.
-
-The fixes tag is pointing to the original code though this issue should
-only be observed when using it unlocked.
-
-Fixes: 2190d1d0944f ("net: sched: introduce helpers to work with filter chains")
-Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
-Reviewed-by: Davide Caratti <dcaratti@redhat.com>
-Link: https://lore.kernel.org/r/b97d5f4eaffeeb9d058155bcab63347527261abf.1649341369.git.marcelo.leitner@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 31cd0e119d50 ("timers: Recalculate next timer interrupt only when necessary")
+Reported-by: Johannes Berg <johannes@sipsolutions.net>
+Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
+Link: https://lore.kernel.org/r/20220405191732.7438-3-anna-maria@linutronix.de
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- net/sched/cls_api.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/time/timer.c |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
-index 80205b138d11..919c7fa5f02d 100644
---- a/net/sched/cls_api.c
-+++ b/net/sched/cls_api.c
-@@ -1639,10 +1639,10 @@ static int tcf_chain_tp_insert(struct tcf_chain *chain,
- 	if (chain->flushing)
- 		return -EAGAIN;
+--- a/kernel/time/timer.c
++++ b/kernel/time/timer.c
+@@ -1722,11 +1722,14 @@ static inline void __run_timers(struct t
+ 	       time_after_eq(jiffies, base->next_expiry)) {
+ 		levels = collect_expired_timers(base, heads);
+ 		/*
+-		 * The only possible reason for not finding any expired
+-		 * timer at this clk is that all matching timers have been
+-		 * dequeued.
++		 * The two possible reasons for not finding any expired
++		 * timer at this clk are that all matching timers have been
++		 * dequeued or no timer has been queued since
++		 * base::next_expiry was set to base::clk +
++		 * NEXT_TIMER_MAX_DELTA.
+ 		 */
+-		WARN_ON_ONCE(!levels && !base->next_expiry_recalc);
++		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
++			     && base->timers_pending);
+ 		base->clk++;
+ 		base->next_expiry = __next_timer_interrupt(base);
  
-+	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
- 	if (*chain_info->pprev == chain->filter_chain)
- 		tcf_chain0_head_change(chain, tp);
- 	tcf_proto_get(tp);
--	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
- 	rcu_assign_pointer(*chain_info->pprev, tp);
- 
- 	return 0;
--- 
-2.35.1
-
 
 

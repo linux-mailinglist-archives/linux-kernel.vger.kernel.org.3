@@ -2,135 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE1C0504FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA1D5054C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238063AbiDRMRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43440 "EHLO
+        id S241938AbiDRNWt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:22:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231868AbiDRMRD (ORCPT
+        with ESMTP id S241785AbiDRND2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:17:03 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26DB61A82E;
-        Mon, 18 Apr 2022 05:14:22 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id c64so17219105edf.11;
-        Mon, 18 Apr 2022 05:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=9Yi3JLK4e1JeX9Duse43qaRJcbvheP09jxiZrAgIDBU=;
-        b=DxLelIcLuvrBmf7L8udOP+AY3bWeeIv36zEOdsZuLI+OadRQs5Tj2cNMLfYjQabwPA
-         YL240QfjEFUTl4D1PGG3Nt7vYLxEZlrvgSl1R3KUVvXsOLzXLweH+1gjr9fPAHAbWV6p
-         X6QPcD5V0fGP1kEuqp8b2pnI4LKKRkTLOjfANG55K0CA33htMblD8hAyzXSxoepuRoWp
-         Oizl9sDGNVU/myD7YD9Ks5QeYeZtiQGQOPMjYDWHHhnA9BfumJMsob+KvM3mVq2VSnER
-         t3QbDq3FMzEQThxSnZKojKFHBo/DrQuRe9lW0xkHoz+xpkuHdI589Vh/HuRxEYdGk6bf
-         BPQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=9Yi3JLK4e1JeX9Duse43qaRJcbvheP09jxiZrAgIDBU=;
-        b=e8X4Us+/Za9OxNlTw5zadBWh81gmC5p7Jke3wLxJ5IVJrdgNSNLk2cjxnkXGQMH4Gt
-         lIKikSumIWXsQJJX279p3ViUBImQ7Nx6pkM5nW54G/XJWw6qTKVnvYHCgt21W7F8Mlca
-         SiZlAEvAegqP15Lb915Re+oOAd5Oj/fOd2ug2dHb7Tg6mC7btqYETuTrnb7hguQTwBRf
-         /0qloluy4GGkUN0Q67nSmxE+fvtVApMa9BNNHVIVFXM5Upvr7fKZX97tt6RVzHkPyjHP
-         1sIMF/lAvWjNc51NMBiKrnfIc5qe3HKpwWIMoMH32wS6pBaSpzti8/825tTcG2yq/tm3
-         xEbw==
-X-Gm-Message-State: AOAM5303xGnRvCzqvZjF5qapTaY4swEOq++sVaQb0ETUTSL2uG97JXCT
-        rcyIEHoa9hTJC10QjbSs2ywla93almM5fUmhBrMj/GHfqJ9kzw==
-X-Google-Smtp-Source: ABdhPJw9OLFzWqDY5GO1qkj761DGYpTL/KDZbxcg1DmwEBkgenFKvVhRHy5LQTjCOPt3MrdJ9RmgO06nOEDblpXd9HE=
-X-Received: by 2002:a50:e696:0:b0:419:998d:5feb with SMTP id
- z22-20020a50e696000000b00419998d5febmr12073094edm.122.1650284060716; Mon, 18
- Apr 2022 05:14:20 -0700 (PDT)
-MIME-Version: 1.0
-References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162123320.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204162123320.9383@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:13:44 +0300
-Message-ID: <CAHp75VdTzd56DzWsjf9GW3zfCtYh4ej3U6KTS7j3aXSVkWOOig@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] serial: 8250: Correct the clock for EndRun
- PTP/1588 PCIe device
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+        Mon, 18 Apr 2022 09:03:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9417D2980D;
+        Mon, 18 Apr 2022 05:44:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2EF056101A;
+        Mon, 18 Apr 2022 12:44:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24D24C385A1;
+        Mon, 18 Apr 2022 12:44:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650285863;
+        bh=N4kUl1m4/k9Jg2FDyVMzcG2XwXjRVFC50zJ6fetJ8/c=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ZKQenHz2KBykkENAuN//iGL0zE4Gejqwq3PHchFYfRc39YPdTW6JloDQroARgs/nj
+         GTSrR+AFm5M6StUBLUW9K+8VEwYNMnXVCZiMlbSLpT314fdX8TirJlb2fznbFtiptd
+         A7XT6ctS8CEH52wFJS3+Lya2mS027mTRw0VgtuH0=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        stable@vger.kernel.org, Melissa Wen <mwen@igalia.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Simon Ser <contact@emersion.fr>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.4 48/63] drm/amd/display: dont ignore alpha property on pre-multiplied mode
+Date:   Mon, 18 Apr 2022 14:13:45 +0200
+Message-Id: <20220418121137.430721035@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> The EndRun PTP/1588 dual serial port device is based on the Oxford
-> Semiconductor OXPCIe952 UART device with the PCI vendor:device ID set
-> for EndRun Technologies and is therefore driven by a fixed 62.5MHz clock
-> input derived from the 100MHz PCI Express clock.  The clock rate is
-> divided by the oversampling rate of 16 as it is supplied to the baud
-> rate generator, yielding the baud base of 3906250.
->
-> Replace the incorrect baud base of 4000000 with the right value of
-> 3906250 then, complementing commit 6cbe45d8ac93 ("serial: 8250: Correct
-> the clock for OxSemi PCIe devices").
+From: Melissa Wen <mwen@igalia.com>
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+commit e4f1541caf60fcbe5a59e9d25805c0b5865e546a upstream.
 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: 1bc8cde46a159 ("8250_pci: Added driver for Endrun Technologies PTP PCIe card.")
-> ---
-> New change in v4, factored out from 2/5.
-> ---
->  drivers/tty/serial/8250/8250_pci.c |    8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> linux-serial-8250-endrun-pcie-clock.diff
-> Index: linux-macro/drivers/tty/serial/8250/8250_pci.c
-> ===================================================================
-> --- linux-macro.orig/drivers/tty/serial/8250/8250_pci.c
-> +++ linux-macro/drivers/tty/serial/8250/8250_pci.c
-> @@ -2667,7 +2667,7 @@ enum pci_board_num_t {
->         pbn_panacom2,
->         pbn_panacom4,
->         pbn_plx_romulus,
-> -       pbn_endrun_2_4000000,
-> +       pbn_endrun_2_3906250,
->         pbn_oxsemi,
->         pbn_oxsemi_1_3906250,
->         pbn_oxsemi_2_3906250,
-> @@ -3195,10 +3195,10 @@ static struct pciserial_board pci_boards
->         * signal now many ports are available
->         * 2 port 952 Uart support
->         */
-> -       [pbn_endrun_2_4000000] = {
-> +       [pbn_endrun_2_3906250] = {
->                 .flags          = FL_BASE0,
->                 .num_ports      = 2,
-> -               .base_baud      = 4000000,
-> +               .base_baud      = 3906250,
->                 .uart_offset    = 0x200,
->                 .first_offset   = 0x1000,
->         },
-> @@ -4128,7 +4128,7 @@ static const struct pci_device_id serial
->         */
->         {       PCI_VENDOR_ID_ENDRUN, PCI_DEVICE_ID_ENDRUN_1588,
->                 PCI_ANY_ID, PCI_ANY_ID, 0, 0,
-> -               pbn_endrun_2_4000000 },
-> +               pbn_endrun_2_3906250 },
->         /*
->          * Quatech cards. These actually have configurable clocks but for
->          * now we just use the default.
+"Pre-multiplied" is the default pixel blend mode for KMS/DRM, as
+documented in supported_modes of drm_plane_create_blend_mode_property():
+https://cgit.freedesktop.org/drm/drm-misc/tree/drivers/gpu/drm/drm_blend.c
+
+In this mode, both 'pixel alpha' and 'plane alpha' participate in the
+calculation, as described by the pixel blend mode formula in KMS/DRM
+documentation:
+
+out.rgb = plane_alpha * fg.rgb +
+          (1 - (plane_alpha * fg.alpha)) * bg.rgb
+
+Considering the blend config mechanisms we have in the driver so far,
+the alpha mode that better fits this blend mode is the
+_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN, where the value for global_gain
+is the plane alpha (global_alpha).
+
+With this change, alpha property stops to be ignored. It also addresses
+Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1734
+
+v2:
+ * keep the 8-bit value for global_alpha_value (Nicholas)
+ * correct the logical ordering for combined global gain (Nicholas)
+ * apply to dcn10 too (Nicholas)
+
+Signed-off-by: Melissa Wen <mwen@igalia.com>
+Tested-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+Tested-by: Simon Ser <contact@emersion.fr>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c |   14 +++++++++-----
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c        |   14 +++++++++-----
+ 2 files changed, 18 insertions(+), 10 deletions(-)
+
+--- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
+@@ -2202,14 +2202,18 @@ static void dcn10_update_mpcc(struct dc
+ 				&blnd_cfg.black_color);
+ 	}
+ 
+-	if (per_pixel_alpha)
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
+-	else
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
+-
+ 	blnd_cfg.overlap_only = false;
+ 	blnd_cfg.global_gain = 0xff;
+ 
++	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
++		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
++	} else if (per_pixel_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
++	} else {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
++	}
++
+ 	if (pipe_ctx->plane_state->global_alpha)
+ 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
+ 	else
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
+@@ -1740,14 +1740,18 @@ static void dcn20_update_mpcc(struct dc
+ 				pipe_ctx, &blnd_cfg.black_color);
+ 	}
+ 
+-	if (per_pixel_alpha)
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
+-	else
+-		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
+-
+ 	blnd_cfg.overlap_only = false;
+ 	blnd_cfg.global_gain = 0xff;
+ 
++	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
++		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
++	} else if (per_pixel_alpha) {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
++	} else {
++		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
++	}
++
+ 	if (pipe_ctx->plane_state->global_alpha)
+ 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
+ 	else
 
 
-
--- 
-With Best Regards,
-Andy Shevchenko

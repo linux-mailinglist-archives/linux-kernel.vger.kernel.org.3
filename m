@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5B850601F
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:16:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D979506024
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:18:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234585AbiDRXSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 19:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S234636AbiDRXUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 19:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiDRXSx (ORCPT
+        with ESMTP id S234591AbiDRXUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 19:18:53 -0400
-Received: from mail-ot1-x336.google.com (mail-ot1-x336.google.com [IPv6:2607:f8b0:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B34314037
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:16:13 -0700 (PDT)
-Received: by mail-ot1-x336.google.com with SMTP id r12-20020a056830418c00b006054e1142acso2405685otu.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:16:13 -0700 (PDT)
+        Mon, 18 Apr 2022 19:20:38 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BB423BC8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:17:57 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id t2so11101141qtw.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:17:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
-         :subject:to:cc;
-        bh=vGtdbsSp8b8nLU4Y/i6FQSyOLmQMuRTm5ZwD7/D+i1s=;
-        b=jgK3NDmxYiGiXrvwIF9JP5KaHQCBLDysQYQyI0VDu1zPG41/TDrZf2azvwl3r8ZnO4
-         nc3RuE5w4R5yBC/EOgvpHOYUE9bq3dqqPe57CspsGXhuZJ0t6oDC6JjostCdHR9+VRV8
-         3+Nb0wffjdbfQHiWkCAGCdg9g3UXEXwNt7f5s=
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gV7UtmajIQUducVZbRr5/Bay12YbRA1rsedm6F/j0xI=;
+        b=M0q72AcD9jfg+dANbrjyHrlpiw+otlCPC3XzOhu55g0oelda3LhwCOxsI7RPsfE08t
+         3qog70rS3rB1uw2/b749YJpqemXtQmY72xz+nPXSqczpIr4rs/yRwh2WfcSXUpHqxzzo
+         s/HLNq4ZtgOuiSICTaKPyOUcwceY7Lt7dvYh0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:in-reply-to:references:from
-         :user-agent:date:message-id:subject:to:cc;
-        bh=vGtdbsSp8b8nLU4Y/i6FQSyOLmQMuRTm5ZwD7/D+i1s=;
-        b=C1WUOe4XZfg3bx6ZECgiMjyAFRRujSDZL3PhtKJt0Z/HH76vxavZPGznjRNmFzil1i
-         sFzL9qElfAEYL0g1IFtxihcJxQXBSL1gzv4xzVA0k0RPKosyg3oecnagDVGpoMAmNvCQ
-         f4bl+we0wuY40GrwL4BJzOgOfNEKVo43wCBC0u5dUgh/wAPAC30ayj9OvpdH7MxNjVja
-         yj+K6It6gcw0/BoH+bvOcPNSGSGXxXUScZ3pYKd7uY9RlyBDyMAmrok0oVLp05gvH+Rp
-         M1uR7VoMVtSkSh/+3/RQYvSJhfrZc6TO9sSTuXPDG7IUkhkAAvlHnLK1qo/kTl2gXRn4
-         wPWg==
-X-Gm-Message-State: AOAM533MkSrh2xDSFCbWc0In2RlVlx+L1lKyQhmatDOFPisCEuTcKvUK
-        z/gfnUixJbIBp3Ly8mBNlkAgxC8tSt6lTUxoArKfEg==
-X-Google-Smtp-Source: ABdhPJxsGMjYSfJVeUmnawX6RQY6qfIzj5inCYphSGrgNmplvoLLSpR/QIIy2rU3B3oFFZTNwxXUyug6TCFm36/81tU=
-X-Received: by 2002:a9d:20a1:0:b0:5e8:d2b6:f63f with SMTP id
- x30-20020a9d20a1000000b005e8d2b6f63fmr4747770ota.159.1650323772740; Mon, 18
- Apr 2022 16:16:12 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 18 Apr 2022 16:16:12 -0700
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gV7UtmajIQUducVZbRr5/Bay12YbRA1rsedm6F/j0xI=;
+        b=al1D5gQEsysF0+8vLqwWWbs1dBRMA17lv/1B29vzzqyvTqT7vt3dphoo6kKJDOk5+t
+         ciAyA1UzRn5m9U9V9drW/XapijobrtFt231CDCbFaYFBFnJKhlB4WIFX4nEdsyvDi4DY
+         wSQol/TXQxsQ17Htx9WqktHt5FuZ6eh12S4ahm8KqW8LQPazLapozbr9yXpopMdfBndv
+         NFcgCD7RRVoSG41YtPvqdybQCO45kc2R9dimwNOPuBdcD5dwV0dsVcSD9KXk851DwcBD
+         eQhsEYvU3IzY8/0jcE3dZ8MAnP/nHR5cMPgQK+zWZTu0fAnCQmOzVMhOR1HF27ZYn2OV
+         xRuQ==
+X-Gm-Message-State: AOAM532p8X5jsuLBNaYQ+705vFWWpkpBpZJg4TYiI/wIV1wcJxfYq1gm
+        8XfnYu2ZsK06mbTF7IcLuJKK1g==
+X-Google-Smtp-Source: ABdhPJzH71KiFd0XgGFFJT13Z9K5HJ1+NRM6zFLxHEeOW6BBln/hR2wG3NyC9DFPKGe+vfPXcGk5lg==
+X-Received: by 2002:ac8:5dca:0:b0:2f1:fcc6:d85a with SMTP id e10-20020ac85dca000000b002f1fcc6d85amr5238941qtx.72.1650323876585;
+        Mon, 18 Apr 2022 16:17:56 -0700 (PDT)
+Received: from grundler-glapstation.lan ([70.134.62.80])
+        by smtp.gmail.com with ESMTPSA id a1-20020a05622a02c100b002f17cba4930sm8214048qtx.85.2022.04.18.16.17.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 16:17:55 -0700 (PDT)
+From:   Grant Grundler <grundler@chromium.org>
+To:     Igor Russkikh <irusskikh@marvell.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Aashay Shringarpure <aashay@google.com>,
+        Yi Chou <yich@google.com>,
+        Shervin Oloumi <enlightened@google.com>,
+        Grant Grundler <grundler@chromium.org>
+Subject: [PATCH 0/5] net: atlantic: more fuzzing fixes
+Date:   Mon, 18 Apr 2022 16:17:41 -0700
+Message-Id: <20220418231746.2464800-1-grundler@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-In-Reply-To: <Yl3vd4kfgwJXMs/w@chromium.org>
-References: <20220415003253.1973106-1-swboyd@chromium.org> <20220415003253.1973106-2-swboyd@chromium.org>
- <Yl3vd4kfgwJXMs/w@chromium.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 18 Apr 2022 16:16:12 -0700
-Message-ID: <CAE-0n53N1k_b9vWJ84nBdm9sxpYV3o4-FLJQM1HGqEhQsdr19A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] platform/chrome: cros_ec_proto: Add peripheral
- charger count API
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Lee Jones <lee.jones@linaro.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +71,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Prashant Malani (2022-04-18 16:08:39)
-> On Apr 14 17:32, Stephen Boyd wrote:
-> > diff --git a/drivers/platform/chrome/cros_ec_proto.c b/drivers/platform/chrome/cros_ec_proto.c
-> > index c4caf2e2de82..42269703ca6c 100644
-> > --- a/drivers/platform/chrome/cros_ec_proto.c
-> > +++ b/drivers/platform/chrome/cros_ec_proto.c
-> > @@ -832,6 +832,37 @@ bool cros_ec_check_features(struct cros_ec_dev *ec, int feature)
-> >  }
-> >  EXPORT_SYMBOL_GPL(cros_ec_check_features);
-> >
-> > +/**
-> > + * cros_ec_pchg_port_count() - Return the number of peripheral charger ports.
-> > + * @ec: EC device.
-> > + *
-> > + * Return: Number of peripheral charger ports, or 0 in case of error.
-> > + */
-> > +unsigned int cros_ec_pchg_port_count(struct cros_ec_dev *ec)
-> > +{
-> > +     struct cros_ec_command *msg;
-> > +     const struct ec_response_pchg_count *rsp;
-> > +     struct cros_ec_device *ec_dev = ec->ec_dev;
-> > +     int ret, count = 0;
-> > +
-> > +     msg = kzalloc(sizeof(*msg) + sizeof(*rsp), GFP_KERNEL);
-> > +     if (!msg)
-> > +             return 0;
-> > +
-> > +     msg->command = EC_CMD_PCHG_COUNT + ec->cmd_offset;
-> > +     msg->insize = sizeof(*rsp);
-> > +
-> > +     ret = cros_ec_cmd_xfer_status(ec_dev, msg);
-> > +     if (ret >= 0) {
-> > +             rsp = (const struct ec_response_pchg_count *)msg->data;
-> > +             count = rsp->port_count;
-> > +     }
-> > +     kfree(msg);
->
-> Can we use the wrapper function cros_ec_command() [1] here, which does
-> the kzalloc and msg construction?
->
+The Chrome OS fuzzing team posted a "Fuzzing" report for atlantic driver
+in Q4 2021 using Chrome OS v5.4 kernel and "Cable Matters
+Thunderbolt 3 to 10 Gb Ethernet" (b0 version):
+    https://docs.google.com/document/d/e/2PACX-1vT4oCGNhhy_AuUqpu6NGnW0N9HF_jxf2kS7raOpOlNRqJNiTHAtjiHRthXYSeXIRTgfeVvsEt0qK9qK/pub
 
-Sure. I take it that I can drop this function entirely then? BTW, why is
-that function name the same as a struct name? It confuses my ctags.
+It essentially describes four problems:
+1) validate rxd_wb->next_desc_ptr before populating buff->next
+2) "frag[0] not initialized" case in aq_ring_rx_clean()
+3) limit iterations handling fragments in aq_ring_rx_clean()
+4) validate hw_head_ in hw_atl_b0_hw_ring_tx_head_update()
+
+I've added one "clean up" contribution:
+    "net: atlantic: reduce scope of is_rsc_complete"
+
+I tested the "original" patches using chromeos-v5.4 kernel branch:
+    https://chromium-review.googlesource.com/q/hashtag:pcinet-atlantic-2022q1+(status:open%20OR%20status:merged)
+
+The fuzzing team will retest using the chromeos-v5.4 patches and the b0 HW.
+
+I've forward ported those patches to 5.18-rc2 and compiled them but am
+currently unable to test them on 5.18-rc2 kernel (logistics problems).
+
+I'm confident in all but the last patch:
+   "net: atlantic: verify hw_head_ is reasonable"
+
+Please verify I'm not confusing how ring->sw_head and ring->sw_tail
+are used in hw_atl_b0_hw_ring_tx_head_update().
+
+Credit largely goes to Chrome OS Fuzzing team members:
+    Aashay Shringarpure, Yi Chou, Shervin Oloumi
+
+cheers,
+grant

@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200E25053C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81125051BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240745AbiDRNBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60364 "EHLO
+        id S236166AbiDRMkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbiDRMuB (ORCPT
+        with ESMTP id S239676AbiDRMdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:50:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25A62C670;
-        Mon, 18 Apr 2022 05:34:10 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0AB63C2;
+        Mon, 18 Apr 2022 05:25:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 328E060F0A;
-        Mon, 18 Apr 2022 12:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24622C385A8;
-        Mon, 18 Apr 2022 12:34:08 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 792A2B80ED1;
+        Mon, 18 Apr 2022 12:25:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE469C385A7;
+        Mon, 18 Apr 2022 12:25:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285249;
-        bh=r4KJeC1hq/dLbL0hwHTFO4ZUpTu4Ri7ks3FGBX/69GA=;
+        s=korg; t=1650284702;
+        bh=2pRgpl+ehN+GQk+VgDxgZnQU0ERx1IPYjSzEqeOKiso=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZlBkbAksYhcmgw+ejtsNAFG8a9i1axVRFYe+nl+Fb75SUloOBgIeG4IBFNkwN5JV5
-         RM7WcUo13rk4IsIaaKmoJCHz6u7NkeuU9/7CSAOdtGb90JDakyiSBGaBU38iypBBCf
-         ftCdwKyjWpSQi1TO0cLnhpAISNJb1E9K9sxC4Os0=
+        b=Z4K0PNXl88I6UrA4jp55S4/GHMQnWQMqHMwiEfs8nj6+LFCLJppBz2N/Xh8bCko5h
+         KNCdmBoZgyj+CFnbCVRMxYiU+D/wUftLt26jddZ8otU3EounHbYyASRlD28KkReRCe
+         cl/zI2ShwEuNjU88rIPySr6Kf9WB8k+ZtqWQ6EQM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.15 149/189] KVM: Dont create VM debugfs files outside of the VM directory
+        stable@vger.kernel.org,
+        =?UTF-8?q?Tomasz=20Mo=C5=84?= <desowin@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: [PATCH 5.17 200/219] drm/amdgpu: Enable gfxoff quirk on MacBook Pro
 Date:   Mon, 18 Apr 2022 14:12:49 +0200
-Message-Id: <20220418121206.062496106@linuxfoundation.org>
+Message-Id: <20220418121212.469733435@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Upton <oupton@google.com>
+From: Tomasz Moń <desowin@gmail.com>
 
-commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
+commit 4593c1b6d159f1e5c35c07a7f125e79e5a864302 upstream.
 
-Unfortunately, there is no guarantee that KVM was able to instantiate a
-debugfs directory for a particular VM. To that end, KVM shouldn't even
-attempt to create new debugfs files in this case. If the specified
-parent dentry is NULL, debugfs_create_file() will instantiate files at
-the root of debugfs.
+Enabling gfxoff quirk results in perfectly usable graphical user
+interface on MacBook Pro (15-inch, 2019) with Radeon Pro Vega 20 4 GB.
 
-For arm64, it is possible to create the vgic-state file outside of a
-VM directory, the file is not cleaned up when a VM is destroyed.
-Nonetheless, the corresponding struct kvm is freed when the VM is
-destroyed.
+Without the quirk, X server is completely unusable as every few seconds
+there is gpu reset due to ring gfx timeout.
 
-Nip the problem in the bud for all possible errant debugfs file
-creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
-debugfs_create_file() will fail instead of creating the file in the root
-directory.
-
-Cc: stable@kernel.org
-Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
-Signed-off-by: Oliver Upton <oupton@google.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
+Signed-off-by: Tomasz Moń <desowin@gmail.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- virt/kvm/kvm_main.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -911,7 +911,7 @@ static void kvm_destroy_vm_debugfs(struc
- 	int kvm_debugfs_num_entries = kvm_vm_stats_header.num_desc +
- 				      kvm_vcpu_stats_header.num_desc;
+--- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
+@@ -1334,6 +1334,8 @@ static const struct amdgpu_gfxoff_quirk
+ 	{ 0x1002, 0x15dd, 0x103c, 0x83e7, 0xd3 },
+ 	/* GFXOFF is unstable on C6 parts with a VBIOS 113-RAVEN-114 */
+ 	{ 0x1002, 0x15dd, 0x1002, 0x15dd, 0xc6 },
++	/* Apple MacBook Pro (15-inch, 2019) Radeon Pro Vega 20 4 GB */
++	{ 0x1002, 0x69af, 0x106b, 0x019a, 0xc0 },
+ 	{ 0, 0, 0, 0, 0 },
+ };
  
--	if (!kvm->debugfs_dentry)
-+	if (IS_ERR(kvm->debugfs_dentry))
- 		return;
- 
- 	debugfs_remove_recursive(kvm->debugfs_dentry);
-@@ -934,6 +934,12 @@ static int kvm_create_vm_debugfs(struct
- 	int kvm_debugfs_num_entries = kvm_vm_stats_header.num_desc +
- 				      kvm_vcpu_stats_header.num_desc;
- 
-+	/*
-+	 * Force subsequent debugfs file creations to fail if the VM directory
-+	 * is not created.
-+	 */
-+	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
-+
- 	if (!debugfs_initialized())
- 		return 0;
- 
-@@ -5373,7 +5379,7 @@ static void kvm_uevent_notify_change(uns
- 	}
- 	add_uevent_var(env, "PID=%d", kvm->userspace_pid);
- 
--	if (kvm->debugfs_dentry) {
-+	if (!IS_ERR(kvm->debugfs_dentry)) {
- 		char *tmp, *p = kmalloc(PATH_MAX, GFP_KERNEL_ACCOUNT);
- 
- 		if (p) {
 
 

@@ -2,203 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E043505BF1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0288B505BF6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:51:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345822AbiDRPwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40778 "EHLO
+        id S1345825AbiDRPxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345853AbiDRPwB (ORCPT
+        with ESMTP id S1346066AbiDRPwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:52:01 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776671D320
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:31:48 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id c23so12659266plo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:31:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:content-transfer-encoding:in-reply-to;
-        bh=LtMMRF4JcWs/Onf4a3Y3tlIdji7WoSU9k4+P0Hcpjbc=;
-        b=hE0KBI9KwKkNqK+Xv2o8tsioJRsnAaFJ1eB+X2QNyQ99MfbSVlUxQCxCZEvC+IM/my
-         bYEURWsF0lHBi4/PKzpg/bpURMLdcgDvFus+NSJivkPCdzyMjRUFAmnDpeysop2l0FXl
-         48JcA53FUXsLakhyZWhH2QzWikVPyhBok6KcU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=LtMMRF4JcWs/Onf4a3Y3tlIdji7WoSU9k4+P0Hcpjbc=;
-        b=k14VFM0eqk0JYVY5qrrpGmIyUiNwOB7FnUbhpJtQTaCN19WrWAYVbb48RkjQV8l9p3
-         apIpWsNgqj8Ph6HrQQrJ65lMav/EmKZR9BOop9KjS0NrJJxHpM4EtqIu7l5P01VPfZwj
-         1aJKaVkJhU2rUQu2siFrApvtyXNkA6qs3Vy1E9s7B47vDkjzoWAb7CKmVLINjuebxx0Y
-         MCeJrzliN0hVxCiWWKS4us6GjFNAWvPTnKA8x22+e4J95bIE/G3anXHbipt7cdcQzURP
-         ErJi0C2y80SFz2loRtcCrakALgW0sxaEx6BX+rxJkgHiow2PMskM5KT8Lq23oEVaZyJQ
-         DCuA==
-X-Gm-Message-State: AOAM533MZEF94wF9+wPHZ94HvoNfA7W4LrZEya5byQYFgulN0T90/27f
-        vdNsO8CMmzGA7DODKjq9xUJKRQ==
-X-Google-Smtp-Source: ABdhPJzdL3yAngu9mDayKXsveGQ3aVDfr4Jr1rlnzREStGhXw+y1x2674SLwT528JlAC51feQLysSw==
-X-Received: by 2002:a17:90b:1c86:b0:1bf:2a7e:5c75 with SMTP id oo6-20020a17090b1c8600b001bf2a7e5c75mr13585777pjb.145.1650295907897;
-        Mon, 18 Apr 2022 08:31:47 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6b32:a0a5:ec32:c287])
-        by smtp.gmail.com with UTF8SMTPSA id z5-20020a056a00240500b004e15d39f15fsm13525530pfh.83.2022.04.18.08.31.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 08:31:47 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 08:31:44 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     agross@kernel.org, bjorn.andersson@linaro.org, robh+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_rohkumar@quicinc.com,
-        srinivas.kandagatla@linaro.org, dianders@chromium.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-Subject: Re: [PATCH v7 4/4] arm64: dts: qcom: sc7280: Add dt nodes for sound
- card
-Message-ID: <Yl2EYIdMdz7Lnk26@google.com>
-References: <1649863277-31615-1-git-send-email-quic_srivasam@quicinc.com>
- <1649863277-31615-5-git-send-email-quic_srivasam@quicinc.com>
- <Ylc/aR0hUGa6OKBO@google.com>
- <78b1e04c-e7d0-a81d-799e-5c570c2bf106@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <78b1e04c-e7d0-a81d-799e-5c570c2bf106@quicinc.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Mon, 18 Apr 2022 11:52:39 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6430A13D22;
+        Mon, 18 Apr 2022 08:33:31 -0700 (PDT)
+Received: from ubuntu.localdomain (unknown [10.15.192.164])
+        by mail-app3 (Coremail) with SMTP id cC_KCgD3ScrDhF1i+V5vAg--.33517S2;
+        Mon, 18 Apr 2022 23:33:27 +0800 (CST)
+From:   Duoming Zhou <duoming@zju.edu.cn>
+To:     linux-kernel@vger.kernel.org, shiraz.saleem@intel.com
+Cc:     mustafa.ismail@intel.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-rdma@vger.kernel.org, Duoming Zhou <duoming@zju.edu.cn>
+Subject: [PATCH V6] RDMA/irdma: Fix deadlock in irdma_cleanup_cm_core()
+Date:   Mon, 18 Apr 2022 23:33:22 +0800
+Message-Id: <20220418153322.42524-1-duoming@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID: cC_KCgD3ScrDhF1i+V5vAg--.33517S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Aw13Ar15Xw1rZryxtF43Jrb_yoW8ArWrpr
+        WDWw1Skryq9F42ka18Xw1kAF9xXw1kXa9Fvryqv395ZFn5XFyUAFnFyr10qFZ8JF9Fgr4f
+        GF1FvryrCasIvr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcV
+        Aq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j
+        6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64
+        vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v
+        1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
+        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
+        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
+        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
+        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAg0EAVZdtZQIiwADsg
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 07:39:44PM +0530, Srinivasa Rao Mandadapu wrote:
-> 
-> On 4/14/2022 2:53 AM, Matthias Kaehlcke wrote:
-> Thanks for your time Matthias!!!
-> > On Wed, Apr 13, 2022 at 08:51:17PM +0530, Srinivasa Rao Mandadapu wrote:
-> > > Add dt nodes for sound card support, which is using WCD938x headset
-> > > playback, capture, I2S speaker playback and DMICs via VA macro.
-> > > 
-> > > Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> > > Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> > > Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
-> > > ---
-> > >   arch/arm64/boot/dts/qcom/sc7280-crd.dts  | 23 ++++++++
-> > >   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi | 93 ++++++++++++++++++++++++++++++++
-> > >   2 files changed, 116 insertions(+)
-> > > 
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd.dts b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> > > index b944366..1e16854 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7280-crd.dts
-> > You need to refresh your tree, this file has been renamed to
-> > sc7280-crd-r3.dts. That DT is for the CRD <= 2.x, newer versions
-> > use sc7280-herobrine-crd.dts.
-> Okay. will update accordingly.
-> > 
-> > > @@ -90,6 +90,29 @@ ap_ts_pen_1v8: &i2c13 {
-> > >   	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
-> > >   };
-> > > +&sound {
-> > > +	audio-routing =
-> > > +		"IN1_HPHL", "HPHL_OUT",
-> > > +		"IN2_HPHR", "HPHR_OUT",
-> > > +		"AMIC1", "MIC BIAS1",
-> > > +		"AMIC2", "MIC BIAS2",
-> > > +		"VA DMIC0", "MIC BIAS1",
-> > > +		"VA DMIC1", "MIC BIAS1",
-> > > +		"VA DMIC2", "MIC BIAS3",
-> > > +		"VA DMIC3", "MIC BIAS3",
-> > > +		"TX SWR_ADC0", "ADC1_OUTPUT",
-> > > +		"TX SWR_ADC1", "ADC2_OUTPUT",
-> > > +		"TX SWR_ADC2", "ADC3_OUTPUT",
-> > > +		"TX SWR_DMIC0", "DMIC1_OUTPUT",
-> > > +		"TX SWR_DMIC1", "DMIC2_OUTPUT",
-> > > +		"TX SWR_DMIC2", "DMIC3_OUTPUT",
-> > > +		"TX SWR_DMIC3", "DMIC4_OUTPUT",
-> > > +		"TX SWR_DMIC4", "DMIC5_OUTPUT",
-> > > +		"TX SWR_DMIC5", "DMIC6_OUTPUT",
-> > > +		"TX SWR_DMIC6", "DMIC7_OUTPUT",
-> > > +		"TX SWR_DMIC7", "DMIC8_OUTPUT";
-> > > +};
-> > > +
-> > >   &tlmm {
-> > >   	tp_int_odl: tp-int-odl {
-> > >   		pins = "gpio7";
-> > > diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > index cf62d06..a7c884a 100644
-> > > --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
-> > > @@ -84,6 +84,99 @@
-> > >   		pinctrl-names = "default";
-> > >   		pinctrl-0 = <&nvme_pwren>;
-> > >   	};
-> > > +
-> > > +	sound: sound {
-> > > +		compatible = "google,sc7280-herobrine";
-> > > +		model = "sc7280-wcd938x-max98360a-1mic";
-> > > +
-> > > +		audio-routing =
-> > > +			"IN1_HPHL", "HPHL_OUT",
-> > > +			"IN2_HPHR", "HPHR_OUT",
-> > > +			"AMIC1", "MIC BIAS1",
-> > > +			"AMIC2", "MIC BIAS2",
-> > > +			"VA DMIC0", "MIC BIAS3",
-> > > +			"VA DMIC1", "MIC BIAS3",
-> > > +			"VA DMIC2", "MIC BIAS1",
-> > > +			"VA DMIC3", "MIC BIAS1",
-> > > +			"TX SWR_ADC0", "ADC1_OUTPUT",
-> > > +			"TX SWR_ADC1", "ADC2_OUTPUT",
-> > > +			"TX SWR_ADC2", "ADC3_OUTPUT",
-> > > +			"TX SWR_DMIC0", "DMIC1_OUTPUT",
-> > > +			"TX SWR_DMIC1", "DMIC2_OUTPUT",
-> > > +			"TX SWR_DMIC2", "DMIC3_OUTPUT",
-> > > +			"TX SWR_DMIC3", "DMIC4_OUTPUT",
-> > > +			"TX SWR_DMIC4", "DMIC5_OUTPUT",
-> > > +			"TX SWR_DMIC5", "DMIC6_OUTPUT",
-> > > +			"TX SWR_DMIC6", "DMIC7_OUTPUT",
-> > > +			"TX SWR_DMIC7", "DMIC8_OUTPUT";
-> > > +
-> > > +		qcom,msm-mbhc-hphl-swh = <1>;
-> > > +		qcom,msm-mbhc-gnd-swh = <1>;
-> > > +
-> > > +		#address-cells = <1>;
-> > > +		#size-cells = <0>;
-> > > +		#sound-dai-cells = <0>;
-> > > +
-> > > +		dai-link@1 {
-> > > +			link-name = "MAX98360A";
-> > > +			reg = <MI2S_SECONDARY>;
-> > Dumb question: is this value actually used? A quick glance through
-> > qcom_snd_parse_of() suggests it isn't. And the CPU DAI id is already
-> > specified in the 'sound-dai' property below.
-> > 
-> > In a quick test I replaced the corresponding 'reg' values in
-> > sc7180-trogdor.dtsi with 'random' values and audio playback on
-> > my coachz (sc7180-trogdor-coachz-r3.dts) still works ...
-> 
-> Yes. agree that it's not being used. But i am not sure of general syntax
-> followed.
-> 
-> for now  will delete it.
+There is a deadlock in irdma_cleanup_cm_core(), which is shown
+below:
 
-The binding requires it though. I think the correct thing would be to remove it
-from the binding and from all device trees currently using it. But that might be
-beyond the scope of this series.
+   (Thread 1)              |      (Thread 2)
+                           | irdma_schedule_cm_timer()
+irdma_cleanup_cm_core()    |  add_timer()
+ spin_lock_irqsave() //(1) |  (wait a time)
+ ...                       | irdma_cm_timer_tick()
+ del_timer_sync()          |  spin_lock_irqsave() //(2)
+ (wait timer to stop)      |  ...
 
-Maybe a two step approach would be the best: add 'reg' in this series, get it
-landed and then send another series that changes the binding and deletes all
-'reg' entries (and adjusts the 'address' in the node name).
+We hold cm_core->ht_lock in position (1) of thread 1 and
+use del_timer_sync() to wait timer to stop, but timer handler
+also need cm_core->ht_lock in position (2) of thread 2.
+As a result, irdma_cleanup_cm_core() will block forever.
 
-I don't think the CPU DAI id should be in the node name either. It isn't even
-necessarily a unique identifier if I understand correctly. A SoC could have
-multiple IP blocks with audio buses, each with their own enumeration of DAIs.
-I suggest to just enumerate the nodes (and 'reg' while it's there) linearly
-starting with 0, or maybe even change the node name in the binding (in a
-second step) to dai-link-N.
+This patch removes the check of timer_pending() in
+irdma_cleanup_cm_core(), because the del_timer_sync()
+function will just return directly if there isn't a
+pending timer. As a result, the lock is redundant,
+because there is no resource it could protect.
+
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+---
+Changes in V6:
+  - Change subject line prefixed with "RDMA/irdma: ".
+
+ drivers/infiniband/hw/irdma/cm.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/drivers/infiniband/hw/irdma/cm.c b/drivers/infiniband/hw/irdma/cm.c
+index dedb3b7edd8..4b6b1065f85 100644
+--- a/drivers/infiniband/hw/irdma/cm.c
++++ b/drivers/infiniband/hw/irdma/cm.c
+@@ -3251,10 +3251,7 @@ void irdma_cleanup_cm_core(struct irdma_cm_core *cm_core)
+ 	if (!cm_core)
+ 		return;
+ 
+-	spin_lock_irqsave(&cm_core->ht_lock, flags);
+-	if (timer_pending(&cm_core->tcp_timer))
+-		del_timer_sync(&cm_core->tcp_timer);
+-	spin_unlock_irqrestore(&cm_core->ht_lock, flags);
++	del_timer_sync(&cm_core->tcp_timer);
+ 
+ 	destroy_workqueue(cm_core->event_wq);
+ 	cm_core->dev->ws_reset(&cm_core->iwdev->vsi);
+-- 
+2.17.1
+

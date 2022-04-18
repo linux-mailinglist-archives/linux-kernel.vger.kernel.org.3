@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACC1F5052DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39752505738
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239956AbiDRMvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S244833AbiDRNsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240873AbiDRMjn (ORCPT
+        with ESMTP id S244104AbiDRN36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:43 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8BD63E3;
-        Mon, 18 Apr 2022 05:31:23 -0700 (PDT)
+        Mon, 18 Apr 2022 09:29:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7C4B4091D;
+        Mon, 18 Apr 2022 05:54:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id B8FADCE109F;
-        Mon, 18 Apr 2022 12:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9F4C385A7;
-        Mon, 18 Apr 2022 12:31:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E949961254;
+        Mon, 18 Apr 2022 12:54:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCECDC385A1;
+        Mon, 18 Apr 2022 12:54:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285080;
-        bh=l7ywPy9WOxnNXRM84kKMPQxICOfShXRpAX2etMq0YZk=;
+        s=korg; t=1650286446;
+        bh=MIc6Qg8gQ/Ha65kerfjhPUV40AaPn9yZ72gnUp8pj+Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jDjazF3rzrt07txWrZAQORr9kWo8LETz63DjdLgyLgLOA1LrRP4tVJ+yp7XHU6/gJ
-         pa1hltbTeARe4FjaiyNUyOm4x+OMsdk6EUTDyXjhUYLU8ARvQt5LgpZWLobKJixhKP
-         SAONlELFxBBEc2o2UAZ4JIA/p+ARMA2a8ZAxiXio=
+        b=IW1UdWbPmTfJmdlCQn7FvzFjkYRGBdYmOwbrpgam9veH2/LAUzrURwQMwWkc5K7oq
+         VMD6tgnLmNLqqZ1Bs6nfqnBzc+Rfj9uX999XRjnNjLlOGWzOappUar+ONSlc1OGE7i
+         x/saU+/cLP+YZbnFbZCNFsmvYLJT2X5KOG564CXY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dylan Hung <dylan_hung@aspeedtech.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Stephen Boyd <sboyd@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 098/189] net: ftgmac100: access hardware register after clock ready
-Date:   Mon, 18 Apr 2022 14:11:58 +0200
-Message-Id: <20220418121203.285740100@linuxfoundation.org>
+Subject: [PATCH 4.14 138/284] clk: clps711x: Terminate clk_div_table with sentinel element
+Date:   Mon, 18 Apr 2022 14:11:59 +0200
+Message-Id: <20220418121215.350394567@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,54 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dylan Hung <dylan_hung@aspeedtech.com>
+From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
 
-[ Upstream commit 3d2504524531990b32a0629cc984db44f399d161 ]
+[ Upstream commit 8bed4ed5aa3431085d9d27afc35d684856460eda ]
 
-AST2600 MAC register 0x58 is writable only when the MAC clock is
-enabled.  Usually, the MAC clock is enabled by the bootloader so
-register 0x58 is set normally when the bootloader is involved.  To make
-ast2600 ftgmac100 work without the bootloader, postpone the register
-write until the clock is ready.
+In order that the end of a clk_div_table can be detected, it must be
+terminated with a sentinel element (.div = 0).
 
-Fixes: 137d23cea1c0 ("net: ftgmac100: Fix Aspeed ast2600 TX hang issue")
-Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 631c53478973d ("clk: Add CLPS711X clk driver")
+Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+Link: https://lore.kernel.org/r/20220218000922.134857-5-j.neuschaefer@gmx.net
+Signed-off-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/faraday/ftgmac100.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/clk/clk-clps711x.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
-index ff76e401a014..e1df2dc810a2 100644
---- a/drivers/net/ethernet/faraday/ftgmac100.c
-+++ b/drivers/net/ethernet/faraday/ftgmac100.c
-@@ -1817,11 +1817,6 @@ static int ftgmac100_probe(struct platform_device *pdev)
- 		priv->rxdes0_edorr_mask = BIT(30);
- 		priv->txdes0_edotr_mask = BIT(30);
- 		priv->is_aspeed = true;
--		/* Disable ast2600 problematic HW arbitration */
--		if (of_device_is_compatible(np, "aspeed,ast2600-mac")) {
--			iowrite32(FTGMAC100_TM_DEFAULT,
--				  priv->base + FTGMAC100_OFFSET_TM);
--		}
- 	} else {
- 		priv->rxdes0_edorr_mask = BIT(15);
- 		priv->txdes0_edotr_mask = BIT(15);
-@@ -1893,6 +1888,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
- 		err = ftgmac100_setup_clk(priv);
- 		if (err)
- 			goto err_phy_connect;
-+
-+		/* Disable ast2600 problematic HW arbitration */
-+		if (of_device_is_compatible(np, "aspeed,ast2600-mac"))
-+			iowrite32(FTGMAC100_TM_DEFAULT,
-+				  priv->base + FTGMAC100_OFFSET_TM);
- 	}
+diff --git a/drivers/clk/clk-clps711x.c b/drivers/clk/clk-clps711x.c
+index 9193f64561f6..4dcf15a88269 100644
+--- a/drivers/clk/clk-clps711x.c
++++ b/drivers/clk/clk-clps711x.c
+@@ -32,11 +32,13 @@ static const struct clk_div_table spi_div_table[] = {
+ 	{ .val = 1, .div = 8, },
+ 	{ .val = 2, .div = 2, },
+ 	{ .val = 3, .div = 1, },
++	{ /* sentinel */ }
+ };
  
- 	/* Default ring sizes */
+ static const struct clk_div_table timer_div_table[] = {
+ 	{ .val = 0, .div = 256, },
+ 	{ .val = 1, .div = 1, },
++	{ /* sentinel */ }
+ };
+ 
+ struct clps711x_clk {
 -- 
-2.35.1
+2.34.1
 
 
 

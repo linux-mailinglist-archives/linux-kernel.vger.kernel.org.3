@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E564B5052B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52754505125
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:29:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239812AbiDRMu6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:50:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S233504AbiDRMbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240815AbiDRMjj (ORCPT
+        with ESMTP id S239283AbiDRM2P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94929BD6;
-        Mon, 18 Apr 2022 05:30:52 -0700 (PDT)
+        Mon, 18 Apr 2022 08:28:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D80701EEDC;
+        Mon, 18 Apr 2022 05:21:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4AEC8B80EC0;
-        Mon, 18 Apr 2022 12:30:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9364DC385A9;
-        Mon, 18 Apr 2022 12:30:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3159260F0C;
+        Mon, 18 Apr 2022 12:21:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38C7DC385A1;
+        Mon, 18 Apr 2022 12:21:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285049;
-        bh=tv4zKBl+I3vxx2xHCn4Ct8zhqbx9Pth5UP2RUme5oVg=;
+        s=korg; t=1650284493;
+        bh=p7NdsMGXXKY2Y4BdmKFIYeZ2BS38rKxgfbm27drUnCI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fZUI+x/hZgh57M/lkPD4bcbxT1+EI9rVmUCAhcZtXI5u5y3HOKhTKY+q3C3Rg26Gx
-         ayNrPridAIObJD4bmKsFCKpitSnCRxQ4RZXe4L43RhNkfDQzYIpiN1EVHFT2NUPP22
-         QVzBbtPTZbySoNfw8Aww86qnbijqT+EhG3hgBFyo=
+        b=C13KDllqz9UFfVKIeYzjIgzs6DI/9qRO4Eagu+HMzBy3I6DW8vcfZvPz38+Xm3ja7
+         0fEq+VB3vQ5DCFNMVASiIxS4lWycqOXn1qnPLtHaG17bLLe4DzJ266d0+6Z4/kVyS/
+         Y6aXHrExXJ/XCctszav3xoAP8rC/kE39zrDaPMx8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 058/189] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
+Subject: [PATCH 5.17 109/219] ALSA: mtpav: Dont call card private_free at probe error path
 Date:   Mon, 18 Apr 2022 14:11:18 +0200
-Message-Id: <20220418121202.156879229@linuxfoundation.org>
+Message-Id: <20220418121209.950400644@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +54,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
+[ Upstream commit 4fb27190879b82e48ce89a56e9d6c04437dbc065 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+The card destructor of nm256 driver does merely stopping the running
+timer, and it's superfluous for the probe error handling.  Moreover,
+calling this via the previous devres change would lead to another
+problem due to the reverse call order.
 
-Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This patch moves the setup of the private_free callback after the card
+registration, so that it can be used only after fully set up.
+
+Fixes: aa92050f10f0 ("ALSA: mtpav: Allocate resources with device-managed APIs")
+Link: https://lore.kernel.org/r/20220412102636.16000-39-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ sound/drivers/mtpav.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-index c267283b01fd..e749dcb3ddea 100644
---- a/drivers/memory/atmel-ebi.c
-+++ b/drivers/memory/atmel-ebi.c
-@@ -544,20 +544,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
+diff --git a/sound/drivers/mtpav.c b/sound/drivers/mtpav.c
+index 11235baaf6fa..f212f233ea61 100644
+--- a/sound/drivers/mtpav.c
++++ b/sound/drivers/mtpav.c
+@@ -693,8 +693,6 @@ static int snd_mtpav_probe(struct platform_device *dev)
+ 	mtp_card->outmidihwport = 0xffffffff;
+ 	timer_setup(&mtp_card->timer, snd_mtpav_output_timer, 0);
  
- 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
--	if (IS_ERR(ebi->smc.regmap))
--		return PTR_ERR(ebi->smc.regmap);
-+	if (IS_ERR(ebi->smc.regmap)) {
-+		ret = PTR_ERR(ebi->smc.regmap);
-+		goto put_node;
-+	}
+-	card->private_free = snd_mtpav_free;
+-
+ 	err = snd_mtpav_get_RAWMIDI(mtp_card);
+ 	if (err < 0)
+ 		return err;
+@@ -716,6 +714,8 @@ static int snd_mtpav_probe(struct platform_device *dev)
+ 	if (err < 0)
+ 		return err;
  
- 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
--	if (IS_ERR(ebi->smc.layout))
--		return PTR_ERR(ebi->smc.layout);
-+	if (IS_ERR(ebi->smc.layout)) {
-+		ret = PTR_ERR(ebi->smc.layout);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.clk = of_clk_get(smc_np, 0);
- 	if (IS_ERR(ebi->smc.clk)) {
--		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
--			return PTR_ERR(ebi->smc.clk);
-+		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
-+			ret = PTR_ERR(ebi->smc.clk);
-+			goto put_node;
-+		}
- 
- 		ebi->smc.clk = NULL;
- 	}
-+	of_node_put(smc_np);
- 	ret = clk_prepare_enable(ebi->smc.clk);
- 	if (ret)
- 		return ret;
-@@ -608,6 +615,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	}
- 
- 	return of_platform_populate(np, NULL, NULL, dev);
++	card->private_free = snd_mtpav_free;
 +
-+put_node:
-+	of_node_put(smc_np);
-+	return ret;
- }
- 
- static __maybe_unused int atmel_ebi_resume(struct device *dev)
+ 	platform_set_drvdata(dev, card);
+ 	printk(KERN_INFO "Motu MidiTimePiece on parallel port irq: %d ioport: 0x%lx\n", irq, port);
+ 	return 0;
 -- 
 2.35.1
 

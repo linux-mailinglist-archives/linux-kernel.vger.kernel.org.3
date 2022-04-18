@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2144B5058F2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB965058EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245723AbiDROMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S245595AbiDROMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244541AbiDRNzd (ORCPT
+        with ESMTP id S243897AbiDRNzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:55:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F549CB8;
-        Mon, 18 Apr 2022 06:04:43 -0700 (PDT)
+        Mon, 18 Apr 2022 09:55:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53201FA;
+        Mon, 18 Apr 2022 06:04:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC0FB80EBA;
-        Mon, 18 Apr 2022 13:04:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE44C385A1;
-        Mon, 18 Apr 2022 13:04:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A8DE60EF6;
+        Mon, 18 Apr 2022 13:04:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A8ACC385A7;
+        Mon, 18 Apr 2022 13:04:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287081;
-        bh=+XMqqrBb38EBhTzQh3Oh6qV6xs3FM0f4cVtmUcnUl0U=;
+        s=korg; t=1650287084;
+        bh=aJDnQahAdolgCm31aFSMor8WM5Dq3BlzHYzAoX8UhME=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dv0obRAi08vll18mLHDh2m6RAEpD3gCM4W3YFKrVIuODDqV73Gmg24Ot3A5hP1zIU
-         7jDywbCqNagwyJ8E4gSYPhuDeQ9shH6/Sn5Hx+MIkZ4My9rvSeEb912JS8bWRVUVVE
-         1lK6Uz2y5IyR74gYivC6+NGWdFrEHDj4l3cwQKas=
+        b=iXYK3ZCbzE5lhVeS3dDRmqCNLX9rT26EncnpKw06M2wMgnL4OiBms3xgHhB3S0Rp7
+         iQVsUjx8on+K4vX+7eG5c2znZtURpwmjMdom2kZ7s5khRzg/WzysWclcaRtB8c3irt
+         s3VIYjKbmMR0AMJVcf0p7zUzZqh1Fm4P1QmkCDtc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bharata B Rao <bharata@amd.com>,
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        Mel Gorman <mgorman@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 052/218] sched/debug: Remove mpol_get/put and task_lock/unlock from sched_show_numa
-Date:   Mon, 18 Apr 2022 14:11:58 +0200
-Message-Id: <20220418121201.102275824@linuxfoundation.org>
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 053/218] perf/core: Fix address filter parser for multiple filters
+Date:   Mon, 18 Apr 2022 14:11:59 +0200
+Message-Id: <20220418121201.130751827@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,56 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bharata B Rao <bharata@amd.com>
+From: Adrian Hunter <adrian.hunter@intel.com>
 
-[ Upstream commit 28c988c3ec29db74a1dda631b18785958d57df4f ]
+[ Upstream commit d680ff24e9e14444c63945b43a37ede7cd6958f9 ]
 
-The older format of /proc/pid/sched printed home node info which
-required the mempolicy and task lock around mpol_get(). However
-the format has changed since then and there is no need for
-sched_show_numa() any more to have mempolicy argument,
-asssociated mpol_get/put and task_lock/unlock. Remove them.
+Reset appropriate variables in the parser loop between parsing separate
+filters, so that they do not interfere with parsing the next filter.
 
-Fixes: 397f2378f1361 ("sched/numa: Fix numa balancing stats in /proc/pid/sched")
-Signed-off-by: Bharata B Rao <bharata@amd.com>
+Fixes: 375637bc524952 ("perf/core: Introduce address range filtering")
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-Acked-by: Mel Gorman <mgorman@suse.de>
-Link: https://lore.kernel.org/r/20220118050515.2973-1-bharata@amd.com
+Link: https://lore.kernel.org/r/20220131072453.2839535-4-adrian.hunter@intel.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/sched/debug.c | 10 ----------
- 1 file changed, 10 deletions(-)
+ kernel/events/core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
-index fa178b62ea79..69c3252d151b 100644
---- a/kernel/sched/debug.c
-+++ b/kernel/sched/debug.c
-@@ -836,25 +836,15 @@ void print_numa_stats(struct seq_file *m, int node, unsigned long tsf,
- static void sched_show_numa(struct task_struct *p, struct seq_file *m)
- {
- #ifdef CONFIG_NUMA_BALANCING
--	struct mempolicy *pol;
--
- 	if (p->mm)
- 		P(mm->numa_scan_seq);
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index e56a74fd5c81..396abd52962b 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -8306,8 +8306,11 @@ perf_event_parse_addr_filter(struct perf_event *event, char *fstr,
+ 			}
  
--	task_lock(p);
--	pol = p->mempolicy;
--	if (pol && !(pol->flags & MPOL_F_MORON))
--		pol = NULL;
--	mpol_get(pol);
--	task_unlock(p);
--
- 	P(numa_pages_migrated);
- 	P(numa_preferred_nid);
- 	P(total_numa_faults);
- 	SEQ_printf(m, "current_node=%d, numa_group_id=%d\n",
- 			task_node(p), task_numa_group_id(p));
- 	show_numa_stats(p, m);
--	mpol_put(pol);
- #endif
- }
+ 			/* ready to consume more filters */
++			kfree(filename);
++			filename = NULL;
+ 			state = IF_STATE_ACTION;
+ 			filter = NULL;
++			kernel = 0;
+ 		}
+ 	}
  
 -- 
 2.34.1

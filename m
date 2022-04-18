@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2AF5056D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61755505116
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:28:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239915AbiDRNps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55580 "EHLO
+        id S234802AbiDRMbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241826AbiDRN0I (ORCPT
+        with ESMTP id S239066AbiDRM1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:26:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FECF3D4A0;
-        Mon, 18 Apr 2022 05:53:04 -0700 (PDT)
+        Mon, 18 Apr 2022 08:27:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E4C1EAF7;
+        Mon, 18 Apr 2022 05:21:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3017B80EDB;
-        Mon, 18 Apr 2022 12:52:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC125C385AB;
-        Mon, 18 Apr 2022 12:52:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 59E0060FBC;
+        Mon, 18 Apr 2022 12:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A0B5C385A7;
+        Mon, 18 Apr 2022 12:21:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286378;
-        bh=O34HfqQmSB8Ffe9PET8fc6aq5j5lIAnMeD0GOTv4ips=;
+        s=korg; t=1650284475;
+        bh=fqp40Y9UjZn+SQBAxw+bQ8zFxntrr6A8v5QsewFp2MY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ummj0U42CU6ZcztEZH/5ARTv6swAmdukoCmUabXV3Nqc5dVillVghVo/gL3+ZPEj6
-         t+XELs6I9y28YlPsxmYlk92jhIE8S29DDa3fn4sBSgHEAYT1qu6xDK7l6JMffNMtvl
-         b7wQzYjgEr/bbw0mq290iypau/6uPIpGFgDsR/Mw=
+        b=DHHW67GyJc0n4hZ6a5SwZsNN8CAhFhIIlOrOf7DutWfNBVxAg2ycx4WbZZDbRM21k
+         S5tTGCHMMG9EbpazOOhjQ26CKJ501Dg9UmpKPD1p6wiv1cyYyTFEu4kqYI81jJMfpp
+         VQUpC5Jelt6Ub1UtyXYVI6w7F4XLp4C/42l4hUt8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Robert Hancock <robert.hancock@calian.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 115/284] i2c: xiic: Make bus names unique
+        stable@vger.kernel.org, Ming Lei <ming.lei@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 127/219] block: null_blk: end timed out poll request
 Date:   Mon, 18 Apr 2022 14:11:36 +0200
-Message-Id: <20220418121214.296108828@linuxfoundation.org>
+Message-Id: <20220418121210.451529719@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +54,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Robert Hancock <robert.hancock@calian.com>
+From: Ming Lei <ming.lei@redhat.com>
 
-[ Upstream commit 1d366c2f9df8279df2adbb60471f86fc40a1c39e ]
+[ Upstream commit 3e3876d322aef82416ecc496a4d4a587e0fdf7a3 ]
 
-This driver is for an FPGA logic core, so there can be arbitrarily many
-instances of the bus on a given system. Previously all of the I2C bus
-names were "xiic-i2c" which caused issues with lm_sensors when trying to
-map human-readable names to sensor inputs because it could not properly
-distinguish the busses, for example. Append the platform device name to
-the I2C bus name so it is unique between different instances.
+When poll request is timed out, it is removed from the poll list,
+but not completed, so the request is leaked, and never get chance
+to complete.
 
-Fixes: e1d5b6598cdc ("i2c: Add support for Xilinx XPS IIC Bus Interface")
-Signed-off-by: Robert Hancock <robert.hancock@calian.com>
-Tested-by: Michal Simek <michal.simek@xilinx.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
+Fix the issue by ending it in timeout handler.
+
+Fixes: 0a593fbbc245 ("null_blk: poll queue support")
+Signed-off-by: Ming Lei <ming.lei@redhat.com>
+Link: https://lore.kernel.org/r/20220413084836.1571995-1-ming.lei@redhat.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/busses/i2c-xiic.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/block/null_blk/main.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.c
-index 5a94f732049e..da526cc471cc 100644
---- a/drivers/i2c/busses/i2c-xiic.c
-+++ b/drivers/i2c/busses/i2c-xiic.c
-@@ -731,7 +731,6 @@ static const struct i2c_adapter_quirks xiic_quirks = {
- 
- static const struct i2c_adapter xiic_adapter = {
- 	.owner = THIS_MODULE,
--	.name = DRIVER_NAME,
- 	.class = I2C_CLASS_DEPRECATED,
- 	.algo = &xiic_algorithm,
- 	.quirks = &xiic_quirks,
-@@ -768,6 +767,8 @@ static int xiic_i2c_probe(struct platform_device *pdev)
- 	i2c_set_adapdata(&i2c->adap, i2c);
- 	i2c->adap.dev.parent = &pdev->dev;
- 	i2c->adap.dev.of_node = pdev->dev.of_node;
-+	snprintf(i2c->adap.name, sizeof(i2c->adap.name),
-+		 DRIVER_NAME " %s", pdev->name);
- 
- 	mutex_init(&i2c->lock);
- 	init_waitqueue_head(&i2c->wait);
+diff --git a/drivers/block/null_blk/main.c b/drivers/block/null_blk/main.c
+index 13004beb48ca..233577b14141 100644
+--- a/drivers/block/null_blk/main.c
++++ b/drivers/block/null_blk/main.c
+@@ -1606,7 +1606,7 @@ static enum blk_eh_timer_return null_timeout_rq(struct request *rq, bool res)
+ 	 * Only fake timeouts need to execute blk_mq_complete_request() here.
+ 	 */
+ 	cmd->error = BLK_STS_TIMEOUT;
+-	if (cmd->fake_timeout)
++	if (cmd->fake_timeout || hctx->type == HCTX_TYPE_POLL)
+ 		blk_mq_complete_request(rq);
+ 	return BLK_EH_DONE;
+ }
 -- 
-2.34.1
+2.35.1
 
 
 

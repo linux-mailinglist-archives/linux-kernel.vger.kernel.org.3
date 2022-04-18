@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37ECA505A5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5011505A5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:56:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344580AbiDRO6C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:58:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58094 "EHLO
+        id S235300AbiDRO6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345398AbiDRO5b (ORCPT
+        with ESMTP id S1345110AbiDRO6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:57:31 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248F3710DB;
-        Mon, 18 Apr 2022 06:45:41 -0700 (PDT)
+        Mon, 18 Apr 2022 10:58:05 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCEC32EF8;
+        Mon, 18 Apr 2022 06:46:06 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id e21so18618068wrc.8;
+        Mon, 18 Apr 2022 06:46:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650289544; x=1681825544;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=H1X3BJlerqrWJy2a4jlLXxCz96pB+HYEXK0sfC2JpLo=;
-  b=w1jC6vmk9mtwIuGwBeMMSVZ4AVyE+NPEeIdJMU6RQqTYk+l/SwdQ4hee
-   kzhoGTRRO4Y975QCjtbW+VmIZ/71VIr9ZKs6KXLt6IAFrj0gBCqT/cB9G
-   i383m4fZr5fATgrYgOrK/g9N0/PvNvW534akU9rIFhZv0Oel8NAl9Z47h
-   8=;
-Received: from unknown (HELO ironmsg03-sd.qualcomm.com) ([10.53.140.143])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 18 Apr 2022 06:45:08 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg03-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 06:45:08 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Apr 2022 06:45:07 -0700
-Received: from [10.226.58.18] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 18 Apr
- 2022 06:45:06 -0700
-Message-ID: <2c776c00-5742-516f-06e3-80db9f572cb4@quicinc.com>
-Date:   Mon, 18 Apr 2022 07:45:06 -0600
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yoyp44JzkHGTT8ZqJq8l6tDNGuUOI937tn9ZpUzw9Wk=;
+        b=gh/1az9LTsIQ8Waf71s3RlA7yMXX3Mse3hATc2/up5VvELAIhgtHel3pbElJrsVo2Z
+         ekz2AFEXacg2HIbAA2Fp1xbsgwpbyk0bAfqoC2FOK0P62HXf9rb8Zmo7vAj1LTpS3iEj
+         Ixi6t4b9Pd20eV09JXiONq1W46dNqBFKz4bhgiWiBdq2AVyq4uzV/BH3bEucMunsQkiF
+         E8kaThovYTKQQnqJ4dxlKqjbJUWNMkNR497vhYUMVd3zuW+G4AoI9Gz8tzqCZOLjjWk1
+         De79kUsuZqELYp1BmokBLWJ1QBrvDibANF6ZLTZEaqs49XeQBlZVX0ADsMUjKf2KtgH2
+         iUHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=yoyp44JzkHGTT8ZqJq8l6tDNGuUOI937tn9ZpUzw9Wk=;
+        b=lrOeSFWCoskZ4Z+OQ6Ryh0SW6EarHVbbpXdWVrS/PjcdlIbicCrokbR05kLALVW6AS
+         VNxeX2HAnZBhvOeCGEXBQMQ0wZ8aANlGbcHN0SDwniedJFEL6+LA81fEo/iNoNsAWcq9
+         OBki691CMZyBuB4Sa8lOz6jx3Kfpt+Fp+jq9pWR6JJW+8DzQkbpz+hBPJlLgWh1etIOy
+         W1QVSQXu/Hky51rpubp99scZX5ZbjbG5EEnhxPrb/0nsJd1ZmDGOpdEr53asYNfc8Jcy
+         SMEniYxZ6BCfEfRZV2DsMRfm+llcHJXuJGNEkZHSqHG6pH9024Uk1evIsOAbSJyko8WN
+         tP6A==
+X-Gm-Message-State: AOAM531rjiDvVPE7DLYAyW+WvY204F75s1ftjWkUDQyv2P6uymHEnRql
+        rD9EdgNE9hrzZnPYfphrYoDVNeoMvXw=
+X-Google-Smtp-Source: ABdhPJxAVkklnnI5HFoDgPCIommVtr6wdWI7ulYdjfDzlnh9LUgLfiMDzA4l6bYkJLTgZA9t1un9QA==
+X-Received: by 2002:a5d:67d2:0:b0:207:a5cf:c14d with SMTP id n18-20020a5d67d2000000b00207a5cfc14dmr8421376wrw.365.1650289564671;
+        Mon, 18 Apr 2022 06:46:04 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id v11-20020a056000144b00b0020a9c02f60dsm1835302wrx.50.2022.04.18.06.46.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 06:46:04 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-iio@vger.kernel.org, linux-staging@lists.linux.dev
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Subject: [PATCH] staging: iio: ad2s1210: remove redundant assignment to variable negative
+Date:   Mon, 18 Apr 2022 14:46:03 +0100
+Message-Id: <20220418134603.81336-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] bus: mhi: host: Add soc_reset sysfs
-Content-Language: en-US
-To:     Manivannan Sadhasivam <mani@kernel.org>
-CC:     <quic_hemantk@quicinc.com>, <quic_bbhatt@quicinc.com>,
-        <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1649883619-17609-1-git-send-email-quic_jhugo@quicinc.com>
- <20220418054649.GB7431@thinkpad>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20220418054649.GB7431@thinkpad>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/17/2022 11:46 PM, Manivannan Sadhasivam wrote:
-> On Wed, Apr 13, 2022 at 03:00:19PM -0600, Jeffrey Hugo wrote:
->> From: Jeffrey Hugo <jhugo@codeaurora.org>
->>
->> The MHI bus supports a standardized hardware reset, which is known as the
->> "SoC Reset".  This reset is similar to the reset sysfs for PCI devices -
->> a hardware mechanism to reset the state back to square one.
->>
->> The MHI SoC Reset is described in the spec as a reset of last resort.  If
->> some unrecoverable error has occurred where other resets have failed, SoC
->> Reset is the "big hammer" that ungracefully resets the device.  This is
->> effectivly the same as yanking the power on the device, and reapplying it.
->> However, depending on the nature of the particular issue, the underlying
->> transport link may remain active and configured.  If the link remains up,
->> the device will flag a MHI system error early in the boot process after
->> the reset is executed, which allows the MHI bus to process a fatal error
->> event, and clean up appropiately.
->>
->> While the SoC Reset is generally intended as a means of recovery when all
->> else has failed, it can be useful in non-error scenarios.  For example,
->> if the device loads firmware from the host filesystem, the device may need
->> to be fully rebooted inorder to pick up the new firmware.  In this
->> scenario, the system administrator may use the soc_reset sysfs to cause
->> the device to pick up the new firmware that the admin placed on the
->> filesystem.
->>
->> Signed-off-by: Jeffrey Hugo <jhugo@codeaurora.org>
->> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> 
-> Do you need double signed-off because of change in domain?
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Variable negative is being assigned a value that is never read, it is
+being re-assigned later. The assignment is redundant and can be removed.
 
-That seems to be the convention that I see in the community.  As I 
-understand it, the SoB is linked to the Developers Certificate of 
-Origin.  This version of the change is coming from 
-"quic_jhugo@quicinc.com" and that entity needs to certify they can share 
-the code under the Cert of Origin.
+Cleans up clang scan build warning:
+drivers/staging/iio/resolver/ad2s1210.c:502:3: warning: Value stored
+to 'negative' is never read [deadcode.DeadStores]
 
-In theory, I could have avoided this by sending this version under the 
-codeaurora address.  The problem is that the codeaurora domain no longer 
-exists, so sending/receiving email from that id is not possible.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/staging/iio/resolver/ad2s1210.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-If I'm not understanding things correctly, please educate me.
+diff --git a/drivers/staging/iio/resolver/ad2s1210.c b/drivers/staging/iio/resolver/ad2s1210.c
+index 74adb82f37c3..c0b2716d0511 100644
+--- a/drivers/staging/iio/resolver/ad2s1210.c
++++ b/drivers/staging/iio/resolver/ad2s1210.c
+@@ -499,7 +499,6 @@ static int ad2s1210_read_raw(struct iio_dev *indio_dev,
+ 		ret = IIO_VAL_INT;
+ 		break;
+ 	case IIO_ANGL_VEL:
+-		negative = st->rx[0] & 0x80;
+ 		vel = be16_to_cpup((__be16 *)st->rx);
+ 		vel >>= 16 - st->resolution;
+ 		if (vel & 0x8000) {
+-- 
+2.35.1
+

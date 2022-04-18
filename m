@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17D4505BBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BDE505B52
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343735AbiDRPsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58272 "EHLO
+        id S1345250AbiDRPkY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:40:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345509AbiDRPrO (ORCPT
+        with ESMTP id S244785AbiDRPj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:47:14 -0400
-Received: from sonic311-30.consmr.mail.ne1.yahoo.com (sonic311-30.consmr.mail.ne1.yahoo.com [66.163.188.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324FF5BE45
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:14:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650294873; bh=69UohOF3eRTLQZh2FjF33Zrm4UgU6zPehXD/dlT5I2I=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=oPVbAjSlM89WvAYoyW62RqgjWWq9lBP3EPNHrTTYNreUeen7rPmgI+LfWY3fYutUqoGiyBvow9EzgyFStP/GJMt3ODF+rPbYK516PILPVvDv3kKkLHc2FCizVKY9DIeYnAvzC7tGBQx/15i/K2ZDihonyJYQHf7ynlPMTtAV0B19idYcI+0hjAkKlJcQ8nGzQuN8LmgsZhNZV8yE/YcGxfiEFwQikTW+6LOMEOvC9CouRJFMlDiPpSW9kHGEsURemIZp1eVNmot7n/R/9qGKRzmi20MXAtFuoBUkuhlO+qaCOpggJaSBjMC6PNq12lbW3fBdOrRWzVqmZEOOOoDy3g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1650294873; bh=nS8fn6QTXDQjCIFL+o4u3xtJmoD/VojRgAaADHs79/N=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=Bncmwg8/E86xI+dhKQGx8TE1QoDA5TsT7JlDL/j5EeBkMENq9v5feXTGpZZvwzAWamQKnRcOmOBy0D2S3qrHc1nLLZ6yZ1VfBbAPpWwrd8ln/uxN/TCOmeeW033KXPImGdTcZx3ecu3DFtVIcR4gLo5xrGeudSla69NExcDxCI5QTx0QQMRAnAYH5ShIaRT68GhtxzOK1bw3IlzlC3MyAkT1hCne2gKBg15gV9oi3hOfrlNssZTNyRpxcH/H0wYYbcn+dPR/dvFULs37TUg8k3QeyDBiMbUqtJZtYxqy85lP+hgvMthOAyR6HtYLl5XMFPbnFOHSfL1xH+uuB622NA==
-X-YMail-OSG: QUP9NT8VM1kDlX2S3pPL7dScr7DG3GjZ6wegZmh610UDvje.9iESBMDAqFuJ4.f
- .hr8_548_RU.rtXup7vMN4SfiDHc5kIWFMkX5S3xEhZ2Sxbu5PyrfY5pxESQaHSkHdHna6ogWumK
- nK0UPC0yktGSpXh9mj.d6dTmi8MlHmVyxaYeOTSzhorVD6epBCgnAExPGFZw7nerAqUwIaWYgkk6
- jAsYK2togydhUh26HcbpNXMOGfVlJE4LkRNjSaYGl03_j8ZyOLuK9kq60.mlQZCVuhOKnN5C2v1x
- Vbm.TierF3_FypZAaS6nWxrTqAAx9XG6Yj5CwxcsGj3aoixbpGUKbnT3Bm6qUdopsNVw7CV.JvbC
- s7LnNw2252ISxbVevHTuEPG.b8jAjhghexCEvSKaMVTBk7J14a5olqgQBUSwhRKvSBVkY1IuUU3c
- nDLLwd_weFHKgAB5VyFGQCWWOCNGOd9Qm9Q1TTd3FosVBBYF.NOcDzb5SlFbHPxf_yJzClWVmObp
- A4jQjkhroswUvQruEsqdbYjrTmQG6FfUuCUmR7OH07XKX2xTrDb_BKmHUtubbSHA7Qyt1ma6wiF2
- lYkaH2ft.fl0LS7QdafM7Ucdf_46IyfFx3kYwaxY8fEe3lDL8d3SXLyAyVXzc7m1BDph9zp7ueaN
- liL0AJEn9DQcvPcXQqi0whlZ80V1nN4RxjmFds3g1vmoVXQa5.SaEA.yWYzVHAzXhIIsjtYpBVZT
- TzqLXck18baYqd_UR6je4IAVADlXG51p5Rgr7hCOfK_1Eqf2Vk5UnsC.N7_OclQjtTCLtsWjs5FI
- AEJlujVIoqqxOn2QuPl4.kT6Vbi.FW7YILV4nKr_ngSa527n23ohM8Bgipvpcq6PpVHf7i4lBhJ6
- HfXUGtmHsHsk0QtRSlLCcRUEZ6Ceqow_gfAB5SfATrAnYofx9rv6m0UHrDM8Zb3QVEyVv6VMpkdg
- b3S.yvZEpt3xUek5.vhU8F7Jw0N4OGUL4jEZdSjgU_ByEnuhzu3VuE0i9kKL5UaWwCbKZrNjfXt9
- CmTZO25.KDtWxpBACluCbYDqUC0DOJIKesFP7Qsx69Pyo50G_Ip.x84I4_uyhfcY4oD2LGWTn.Qa
- fbKLzZafTUjgsFCfF507lsDsm9kJ_9Fs836pUomgNieFdhdAMZye45b8DAZWavQ1ALdWSXOOhhXg
- hybqo4ROveJbrRXY6v5caezUdmQ14hFaKl0PXi4jvTXORqgoZEV.rwDVp421PU2ES5X31OaguxKe
- cYn1IaIM88r3yAeDnzriahqmcWbE.._QQGNZoQSgRvlxE6hCyHJ194Ctr1rhSS.DL9cDU8Mrugju
- j9m8KPCu.xwCEm95g758rD4_StuyVhLW..GkPBgMAm6RSD9X7YoDlQljTkwSPMPdyVAuUx3WncHh
- 47ctydbWZqBuSr3pw6Z.vUYq0obBNAQFxPOgh9oxKgGKcGb14ZkrvjawZSzjzjCNzG61q7fKoCKu
- DIFJw5gnCelDqH_gz7uRBiSnybzkyS_Nf.4O9NpLOuphIMALUBHfQoKpEvjNyGMih3nCJERKncYC
- ZiZrTV3DkOyj0bgmfreLl6a32uDkQ.D3LdNtNE0.vLoudAwBnz3tiK5r7K7_vVYQYXRZUtHNozjq
- 0Hk.ovkmTeC3H81rHVTjZo8yC_8X6iXyKKW_ThcNQ.dLz.GL4vr0nsvVmcX3FBR3qUCSkOr1rEln
- u9.eEDE8ok1jrXlVx51FMzskg0A4vqVLJBlG4._2vdzhE3o_EdQ.x6RZzrXgKUmtHQgTJURWRuAm
- LwBt_3jlABbP2h.KTxCaQKbP3CSyFPdWwhMFkFQ4p.3TeWJTTsasMwbe9E2xsm7fJ.NhaKEVrlbN
- eq9Ae_po6x.pISY1elJliiuPWhfKrdaMYL60Dj3XC3mvloQALfQkXqh1yvbkoXkEmmeHGuZpaT3R
- Iqnp4yQ5qwlT0c2yFB26vKPKNZMeWlcOp18SaGgPe0iASTCRYFZqqHK_qgsOEX9Tx5lUzX_0kXhJ
- AIrRpqHDnGWJTCp5OnDsiU.2DQT_kUTzL44UFJOuar0_Y5bamnQkfUXgpI8.s8dLn1NvyECThIVf
- gNJCY408awzB.SpvxKgwRIJOHit4lyILnMkHWQtvyHuLIpYgz5pmK6tVRc4fszqsOiJfIEvW5wvF
- wPZEcq7WkXevoGfdnHNGXmDV6J4IfQ5NigdBMeLWxPrMiCUtqDULAmZ2rkk8V4rACst8tNRIECEq
- Ulv3rjP3EctNMxyVygVzW26PTW2BHv6lMBhVmVYYkqNib9sNNWa6Ql8XLWs51vwqhOLatNZU954C
- 1Ag--
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic311.consmr.mail.ne1.yahoo.com with HTTP; Mon, 18 Apr 2022 15:14:33 +0000
-Received: by hermes--canary-production-bf1-5f49dbcd6-xjccz (VZM Hermes SMTP Server) with ESMTPA ID 311eab809775b4af02ae966c725fa26b;
-          Mon, 18 Apr 2022 15:14:29 +0000 (UTC)
-From:   Casey Schaufler <casey@schaufler-ca.com>
-To:     casey.schaufler@intel.com, jmorris@namei.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org
-Cc:     casey@schaufler-ca.com, linux-audit@redhat.com,
-        keescook@chromium.org, john.johansen@canonical.com,
-        penguin-kernel@i-love.sakura.ne.jp, paul@paul-moore.com,
-        stephen.smalley.work@gmail.com, linux-kernel@vger.kernel.org
-Subject: [PATCH v35 29/29] AppArmor: Remove the exclusive flag
-Date:   Mon, 18 Apr 2022 07:59:45 -0700
-Message-Id: <20220418145945.38797-30-casey@schaufler-ca.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220418145945.38797-1-casey@schaufler-ca.com>
-References: <20220418145945.38797-1-casey@schaufler-ca.com>
+        Mon, 18 Apr 2022 11:39:59 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5FDB13E1F;
+        Mon, 18 Apr 2022 08:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650294206; x=1681830206;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Mm1ye/WQVxQp/MY2hRmkn81yEIqLrJ2QUUa96JnW2oA=;
+  b=l4B8wogXd/3cWGZJpAo8plb5BY8xuC70Pk9IBneAJwVgeN13dafhxFjR
+   jRUN2qKVcw8XaeWact8fofvxf41syTsJ41ZvX1fegiewH7HJgV/Q6ruwe
+   IyzOH2XKlekSya/lN3esmq6elEJhbyo7eQLDEo7EVt+QkQv4ojc8QclMr
+   lG9oxaRAtRJkaelu9bbeN1tW5VR7Uy0sIyv5cOmzo+eyjG0W+0g/EFCzD
+   kYzobdnRt4dCA6xrox5S/99Ri9ZAWmKKjWawJj2v9oPak62ZTEYHx41oR
+   0V03IBCda/lmXFiomT6SqlPPfClzn/as9iNiJjSGQWE3BcLZZPolR7Zxb
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263293880"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="263293880"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 08:03:07 -0700
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="726670038"
+Received: from skuppusw-desk2.jf.intel.com ([10.165.154.101])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 08:03:07 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Russell Currey <ruscur@russell.cc>,
+        Oliver OHalloran <oohall@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Subject: [PATCH v3] PCI/AER: Handle Multi UnCorrectable/Correctable errors properly
+Date:   Mon, 18 Apr 2022 15:02:37 +0000
+Message-Id: <20220418150237.1021519-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,66 +62,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the inclusion of the interface LSM process attribute
-mechanism AppArmor no longer needs to be treated as an
-"exclusive" security module. Remove the flag that indicates
-it is exclusive. Remove the stub getpeersec_dgram AppArmor
-hook as it has no effect in the single LSM case and
-interferes in the multiple LSM case.
+Currently the aer_irq() handler returns IRQ_NONE for cases without bits
+PCI_ERR_ROOT_UNCOR_RCV or PCI_ERR_ROOT_COR_RCV are set. But this
+assumption is incorrect.
 
-Acked-by: Stephen Smalley <stephen.smalley.work@gmail.com>
-Acked-by: John Johansen <john.johansen@canonical.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+Consider a scenario where aer_irq() is triggered for a correctable
+error, and while we process the error and before we clear the error
+status in "Root Error Status" register, if the same kind of error
+is triggered again, since aer_irq() only clears events it saw, the
+multi-bit error is left in tact. This will cause the interrupt to fire
+again, resulting in entering aer_irq() with just the multi-bit error
+logged in the "Root Error Status" register.
+
+Repeated AER recovery test has revealed this condition does happen
+and this prevents any new interrupt from being triggered. Allow to
+process interrupt even if only multi-correctable (BIT 1) or
+multi-uncorrectable bit (BIT 3) is set.
+
+Also note that, for cases with only multi-bit error is set, since this
+is not the first occurrence of the error, PCI_ERR_ROOT_ERR_SRC may have
+zero or some junk value. So we cannot cleanly process this error
+information using aer_isr_one_error(). All we are attempting with this
+fix is to make sure error interrupt processing can continue in this
+scenario.
+
+This error can be reproduced by making following changes to the
+aer_irq() function and by executing the given test commands.
+
+ static irqreturn_t aer_irq(int irq, void *context)
+         struct aer_err_source e_src = {};
+
+         pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS,
+				&e_src.status);
+ +       pci_dbg(pdev->port, "Root Error Status: %04x\n",
+ +		e_src.status);
+         if (!(e_src.status & AER_ERR_STATUS_MASK))
+                 return IRQ_NONE;
+
+ +       mdelay(5000);
+
+ # Prep injection data for a correctable error.
+ $ cd /sys/kernel/debug/apei/einj
+ $ echo 0x00000040 > error_type
+ $ echo 0x4 > flags
+ $ echo 0x891000 > param4
+
+ # Root Error Status is initially clear
+ $ setpci -s <Dev ID> ECAP0001+0x30.w
+ 0000
+
+ # Inject one error
+ $ echo 1 > error_inject
+
+ # Interrupt received
+ pcieport <Dev ID>: AER: Root Error Status 0001
+
+ # Inject another error (within 5 seconds)
+ $ echo 1 > error_inject
+
+ # You will get a new IRQ with only multiple ERR_COR bit set
+ pcieport <Dev ID>: AER: Root Error Status 0002
+
+Currently, the above issue has been only reproduced in the ICL server
+platform.
+
+[Eric: proposed reproducing steps]
+Fixes: 4696b828ca37 ("PCI/AER: Hoist aerdrv.c, aer_inject.c up to drivers/pci/pcie/")
+Reported-by: Eric Badger <ebadger@purestorage.com>
+Reviewed-by: Ashok Raj <ashok.raj@intel.com>
+Signed-off-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 ---
- security/apparmor/lsm.c | 20 +-------------------
- 1 file changed, 1 insertion(+), 19 deletions(-)
 
-diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
-index 1ee58c1491ab..388298a15556 100644
---- a/security/apparmor/lsm.c
-+++ b/security/apparmor/lsm.c
-@@ -1145,22 +1145,6 @@ static int apparmor_socket_getpeersec_stream(struct socket *sock,
- 	return error;
- }
+Changes since v2:
+ * Added more details to the commit log.
+ * Rebased on v5.18-rc1.
+
+Changes since v1:
+ * Added Fixes tag.
+ * Included reproducing steps proposed by Eric.
+
+ drivers/pci/pcie/aer.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index 9fa1f97e5b27..7952e5efd6cf 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -101,6 +101,11 @@ struct aer_stats {
+ #define ERR_COR_ID(d)			(d & 0xffff)
+ #define ERR_UNCOR_ID(d)			(d >> 16)
  
--/**
-- * apparmor_socket_getpeersec_dgram - get security label of packet
-- * @sock: the peer socket
-- * @skb: packet data
-- * @secid: pointer to where to put the secid of the packet
-- *
-- * Sets the netlabel socket state on sk from parent
-- */
--static int apparmor_socket_getpeersec_dgram(struct socket *sock,
--					    struct sk_buff *skb, u32 *secid)
--
--{
--	/* TODO: requires secid support */
--	return -ENOPROTOOPT;
--}
--
- /**
-  * apparmor_sock_graft - Initialize newly created socket
-  * @sk: child sock
-@@ -1264,8 +1248,6 @@ static struct security_hook_list apparmor_hooks[] __lsm_ro_after_init = {
- #endif
- 	LSM_HOOK_INIT(socket_getpeersec_stream,
- 		      apparmor_socket_getpeersec_stream),
--	LSM_HOOK_INIT(socket_getpeersec_dgram,
--		      apparmor_socket_getpeersec_dgram),
- 	LSM_HOOK_INIT(sock_graft, apparmor_sock_graft),
- #ifdef CONFIG_NETWORK_SECMARK
- 	LSM_HOOK_INIT(inet_conn_request, apparmor_inet_conn_request),
-@@ -1919,7 +1901,7 @@ static int __init apparmor_init(void)
++#define AER_ERR_STATUS_MASK		(PCI_ERR_ROOT_UNCOR_RCV |	\
++					PCI_ERR_ROOT_COR_RCV |		\
++					PCI_ERR_ROOT_MULTI_COR_RCV |	\
++					PCI_ERR_ROOT_MULTI_UNCOR_RCV)
++
+ static int pcie_aer_disable;
+ static pci_ers_result_t aer_root_reset(struct pci_dev *dev);
  
- DEFINE_LSM(apparmor) = {
- 	.name = "apparmor",
--	.flags = LSM_FLAG_LEGACY_MAJOR | LSM_FLAG_EXCLUSIVE,
-+	.flags = LSM_FLAG_LEGACY_MAJOR,
- 	.enabled = &apparmor_enabled,
- 	.blobs = &apparmor_blob_sizes,
- 	.init = apparmor_init,
+@@ -1196,7 +1201,7 @@ static irqreturn_t aer_irq(int irq, void *context)
+ 	struct aer_err_source e_src = {};
+ 
+ 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_STATUS, &e_src.status);
+-	if (!(e_src.status & (PCI_ERR_ROOT_UNCOR_RCV|PCI_ERR_ROOT_COR_RCV)))
++	if (!(e_src.status & AER_ERR_STATUS_MASK))
+ 		return IRQ_NONE;
+ 
+ 	pci_read_config_dword(rp, aer + PCI_ERR_ROOT_ERR_SRC, &e_src.id);
 -- 
-2.35.1
+2.25.1
 

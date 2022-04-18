@@ -2,108 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEFEA504A84
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71191504A8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 03:38:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235612AbiDRBgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 21:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45806 "EHLO
+        id S235621AbiDRBkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 21:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235617AbiDRBfv (ORCPT
+        with ESMTP id S232339AbiDRBka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 21:35:51 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013651835C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 18:32:48 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id n33-20020a17090a5aa400b001d28f5ee3f9so1282594pji.4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 18:32:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:in-reply-to:references:subject:message-id:date
-         :mime-version:content-transfer-encoding;
-        bh=KJfLbwgngO3OiGtIZhQTnGZUpV/6KTf4a6VxaVn0jHA=;
-        b=fUiWEs30cpVdTgnRTDuIunTyD3sFwyNXIMjD2xrDFFhby9PvozDytSBEVj5TLA3enQ
-         WJg5PUCFZhavWnDTUSjcqiWdtbmRSnwGPVoJqfidCHXMsRiC/8miYakfaAZVFsJvX3bS
-         5rW4pfgKMUPRH4xvCV8Ayqx16fXXcBpmLJ8ouv1MDWzBzzeX6sTvregS6+W7imKu2o9s
-         JkpStrFdIm2UGzcq7WrYJf9XXlMNLf1O1L3ohQXq8EaSjdqThCTtF7dsfLFbH0M279GX
-         9j/pkX//BLTGvZs/WRmTotqH1MNj+h8ET2s+rsNWcTHLVYqXbzx2Z0wD2+tsX+cqIWVh
-         IhOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject
-         :message-id:date:mime-version:content-transfer-encoding;
-        bh=KJfLbwgngO3OiGtIZhQTnGZUpV/6KTf4a6VxaVn0jHA=;
-        b=7bs5kh85CGxPWKXbjcgw47ogasHn0pdLrTJwVJDpNl8dFtFfTiqy/c8YzYcjYrUIIT
-         W/Y2Q+Hibc+VZVMyePBphRLBWzhSU310se+GXu9QekybBqE4IoYUnx20feCu2fHe6HOb
-         zePjZGv1O4Wy9y+y1FBf59OmqwaRtMFZlkpTHMggyr4gg6mTyAM5Wp868gTCVsbmGxqE
-         yTNv6EieimzSaSYv5/A/Qxey/dVrjaRozRNqKVhSivI+8Jdsy1fvYRGTPX6ganuZpkeN
-         pR9/2y+MzNXQCN8lWtytZYm/2nSf2WDQi06K9hVoWwr2TzxMIcjokwrfLxbzvKoYoaGE
-         LJMA==
-X-Gm-Message-State: AOAM533rA12HEHYJnJ3jqrb4bTlY8tbsC0HsSKnWqHy0GhapJ7A+9x4e
-        xQdI+BnKBQA+x+Y4FKMb5qHK9w==
-X-Google-Smtp-Source: ABdhPJxH3Tcv8urG8TWDL99aaKBrMqsxLK1RCMCg75RZRVpxh7Td568gOGSDadX3DzyNp9aRqA2iCg==
-X-Received: by 2002:a17:903:2406:b0:158:f6f0:6c44 with SMTP id e6-20020a170903240600b00158f6f06c44mr4676524plo.88.1650245568439;
-        Sun, 17 Apr 2022 18:32:48 -0700 (PDT)
-Received: from [127.0.1.1] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g15-20020a63be4f000000b0039934531e95sm10726611pgo.18.2022.04.17.18.32.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 18:32:47 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     linux-block@vger.kernel.org, phillip@squashfs.org.uk,
-        target-devel@vger.kernel.org, colyli@suse.de,
-        linux-btrfs@vger.kernel.org, martin.petersen@oracle.com,
-        linux-raid@vger.kernel.org, dsterba@suse.com, josef@toxicpanda.com,
-        song@kernel.org, dm-devel@redhat.com, snitzer@redhat.com,
-        linux-bcache@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20220406061228.410163-1-hch@lst.de>
-References: <20220406061228.410163-1-hch@lst.de>
-Subject: Re: cleanup bio_kmalloc v3
-Message-Id: <165024556441.258485.6980891929042026868.b4-ty@kernel.dk>
-Date:   Sun, 17 Apr 2022 19:32:44 -0600
+        Sun, 17 Apr 2022 21:40:30 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12846B87C;
+        Sun, 17 Apr 2022 18:37:52 -0700 (PDT)
+X-UUID: 1227b60080594bb489291a5e9899a0b5-20220418
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.4,REQID:a9652940-7633-4f59-b913-3764e1a50e25,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACT
+        ION:release,TS:45
+X-CID-INFO: VERSION:1.1.4,REQID:a9652940-7633-4f59-b913-3764e1a50e25,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,RULE:Release_Ham,ACTIO
+        N:release,TS:45
+X-CID-META: VersionHash:faefae9,CLOUDID:430f2eef-06b0-4305-bfbf-554bfc9d151a,C
+        OID:IGNORED,Recheck:0,SF:13|15|28|17|19|48,TC:nil,Content:0,EDM:-3,File:ni
+        l,QS:0,BEC:nil
+X-UUID: 1227b60080594bb489291a5e9899a0b5-20220418
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <rex-bc.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 731530093; Mon, 18 Apr 2022 09:37:46 +0800
+Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
+ mtkmbs07n1.mediatek.inc (172.21.101.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.2; Mon, 18 Apr 2022 09:37:45 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
+ (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Apr
+ 2022 09:37:45 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Mon, 18 Apr 2022 09:37:45 +0800
+Message-ID: <3a1fe42adace3a1355b6a95fbd55abc724c1053d.camel@mediatek.com>
+Subject: Re: [PATCH V3 04/15] cpufreq: mediatek: Record previous target
+ vproc value
+From:   Rex-BC Chen <rex-bc.chen@mediatek.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, <rafael@kernel.org>,
+        <viresh.kumar@linaro.org>, <robh+dt@kernel.org>,
+        <krzk+dt@kernel.org>, <matthias.bgg@gmail.com>
+CC:     <jia-wei.chang@mediatek.com>, <roger.lu@mediatek.com>,
+        <hsinyi@google.com>, <khilman@baylibre.com>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        "Andrew-sh . Cheng" <andrew-sh.cheng@mediatek.com>
+Date:   Mon, 18 Apr 2022 09:37:45 +0800
+In-Reply-To: <9751622e-f969-c025-2a39-efcc9a612392@collabora.com>
+References: <20220415055916.28350-1-rex-bc.chen@mediatek.com>
+         <20220415055916.28350-5-rex-bc.chen@mediatek.com>
+         <9751622e-f969-c025-2a39-efcc9a612392@collabora.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 6 Apr 2022 08:12:23 +0200, Christoph Hellwig wrote:
-> this series finishes off the bio allocation interface cleanups by dealing
-> with the weirdest member of the famility.  bio_kmalloc combines a kmalloc
-> for the bio and bio_vecs with a hidden bio_init call and magic cleanup
-> semantics.
+On Fri, 2022-04-15 at 14:24 +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/04/22 07:59, Rex-BC Chen ha scritto:
+> > From: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > 
+> > We found the buck voltage may not be exactly the same with what we
+> > set
+> > because CPU may share the same buck with other module.
+> > Therefore, we need to record the previous desired value instead of
+> > reading
+> > it from regulators.
+> > 
+> > Signed-off-by: Andrew-sh.Cheng <andrew-sh.cheng@mediatek.com>
+> > Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> > Signed-off-by: Rex-BC Chen <rex-bc.chen@mediatek.com>
+> > ---
+> >   drivers/cpufreq/mediatek-cpufreq.c | 17 +++++++++++++----
+> >   1 file changed, 13 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/cpufreq/mediatek-cpufreq.c
+> > b/drivers/cpufreq/mediatek-cpufreq.c
+> > index ff27f77e8ee6..fa8b193bf27b 100644
+> > --- a/drivers/cpufreq/mediatek-cpufreq.c
+> > +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> > @@ -40,6 +40,7 @@ struct mtk_cpu_dvfs_info {
+> >   	struct list_head list_head;
+> >   	int intermediate_voltage;
+> >   	bool need_voltage_tracking;
+> > +	int pre_vproc;
+> >   };
+> >   
+> >   static LIST_HEAD(dvfs_info_list);
+> > @@ -191,11 +192,17 @@ static int
+> > mtk_cpufreq_voltage_tracking(struct mtk_cpu_dvfs_info *info,
+> >   
+> >   static int mtk_cpufreq_set_voltage(struct mtk_cpu_dvfs_info
+> > *info, int vproc)
+> >   {
+> > +	int ret;
+> > +
+> >   	if (info->need_voltage_tracking)
+> > -		return mtk_cpufreq_voltage_tracking(info, vproc);
+> > +		ret = mtk_cpufreq_voltage_tracking(info, vproc);
+> >   	else
+> > -		return regulator_set_voltage(info->proc_reg, vproc,
+> > -					     vproc + VOLT_TOL);
+> > +		ret = regulator_set_voltage(info->proc_reg, vproc,
+> > +					    MAX_VOLT_LIMIT);
+> > +	if (!ret)
+> > +		info->pre_vproc = vproc;
+> > +
+> > +	return ret;
+> >   }
+> >   
+> >   static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
+> > @@ -213,7 +220,9 @@ static int mtk_cpufreq_set_target(struct
+> > cpufreq_policy *policy,
+> >   	inter_vproc = info->intermediate_voltage;
+> >   
+> >   	pre_freq_hz = clk_get_rate(cpu_clk);
+> > -	pre_vproc = regulator_get_voltage(info->proc_reg);
+> > +	pre_vproc = info->pre_vproc;
+> > +	if (pre_vproc <= 0)
+> > +		pre_vproc = regulator_get_voltage(info->proc_reg);
 > 
-> This series moves a few callers away from bio_kmalloc and then turns
-> bio_kmalloc into a simple wrapper for a slab allocation of a bio and the
-> inline biovecs.  The callers need to manually call bio_init instead with
-> all that entails and the magic that turns bio_put into a kfree goes away
-> as well, allowing for a proper debug check in bio_put that catches
-> accidental use on a bio_init()ed bio.
+> I would do it like that, instead:
 > 
-> [...]
+> 	if (unlikely(info->pre_vproc <= 0))
+> 		pre_vproc = regulator_get_voltage(info->proc_reg);
+> 	else
+> 		pre_vproc = info->pre_vproc;
+> 
+> ....as even though it is indeed possible that info->pre_vproc is <=
+> 0, it is
+> very unlikely to happen ;-)
+> This also solves a 'pre_vproc' double assignment issue, by the way.
+> 
+> Cheers,
+> Angelo
+> 
+> 
+> 
 
-Applied, thanks!
+Hello Angelo,
 
-[1/5] btrfs: simplify ->flush_bio handling
-      commit: f9e69aa9ccd7e51c47b147e45e03987ea0ef9aa3
-[2/5] squashfs: always use bio_kmalloc in squashfs_bio_read
-      commit: 46a2d4ccc49903923506685a8368ca88312bbdc9
-[3/5] target/pscsi: remove pscsi_get_bio
-      commit: 7655db80932d95f501a0811544d9520ec720e38d
-[4/5] block: turn bio_kmalloc into a simple kmalloc wrapper
-      commit: 066ff571011d8416e903d3d4f1f41e0b5eb91e1d
-[5/5] pktcdvd: stop using bio_reset
-      commit: 852ad96cb03621f7995764b4b31cbff9801d8bcd
+OK, I will add this in next version.
+Thanks for your suggestion.
 
-Best regards,
--- 
-Jens Axboe
-
+BRs,
+Rex
 

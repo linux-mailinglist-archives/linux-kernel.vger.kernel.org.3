@@ -2,93 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F158504FC2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9835052A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238032AbiDRMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
+        id S233460AbiDRMqz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:46:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230296AbiDRMOB (ORCPT
+        with ESMTP id S240096AbiDRMik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:14:01 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA13E1A810
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:11:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=nlZTs2EHSVsUyk1Bfx1ucHBhq1nc96y85fwK/m4VS8o=;
-  b=Ztt7IfzFy0k4GPLo5+lWjD1pdUNA//BQgMpRhdMXMTeRKWFiqkQ5s6Yc
-   t8Jzt/OY2XlpCdk1Kxb6l5CDVSGiIXObShwXElOiEWXJwzfUFxxpuEDf6
-   bIwlHANpRUE0P8LMwUlHpB3f/AL79uBMKoCG1ec3roHLgtNwdq82vuRcV
-   8=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.90,269,1643670000"; 
-   d="scan'208";a="11791770"
-Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:11:21 +0200
-Date:   Mon, 18 Apr 2022 14:11:21 +0200 (CEST)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Aliya Rahmani <aliyarahmani786@gmail.com>
-cc:     clabbe@baylibre.com, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, outreachy@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] staging: media: zoran: Code cleanup - else is not
- generally useful after a break or return
-In-Reply-To: <20220418115948.5456-3-aliyarahmani786@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204181409550.11986@hadrien>
-References: <20220418115948.5456-1-aliyarahmani786@gmail.com> <20220418115948.5456-3-aliyarahmani786@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 18 Apr 2022 08:38:40 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F9F2528E;
+        Mon, 18 Apr 2022 05:29:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id D9409CE1099;
+        Mon, 18 Apr 2022 12:29:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BABFEC385A1;
+        Mon, 18 Apr 2022 12:29:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650284954;
+        bh=AVO+MOL+bqK/XmS+YnMfmQ7LUvClj07a1xA0LE9tqAE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=PEihDcDk2ULAOvB27uYwexCbdWNEhsgvt26j24OHnsv/3EVe0K46VaroOQ8bMOuPm
+         tH6TtrhVk1qc6uQHfmR1s/EYNnA8J1PFuDH9HSj1ue9suuIu3i67RzKx7eod/F8spA
+         BR0po25784pAhfPCON1BBLC56pW/plo97/DqImKM=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Dragan Simic <dragan.simic@gmail.com>,
+        Kyle Copperfield <kmcopper@danwin1210.me>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 061/189] media: rockchip/rga: do proper error checking in probe
+Date:   Mon, 18 Apr 2022 14:11:21 +0200
+Message-Id: <20220418121202.241741556@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just say concisely what you did in the subject line.  For example, "remove
-unneeded else".  The reader can wait to see the message to find out the
-details.  "Code cleanup" takes up a lot of space, and doesn't give much
-information.
+From: Kyle Copperfield <kmcopper@danwin1210.me>
 
-On Mon, 18 Apr 2022, Aliya Rahmani wrote:
+[ Upstream commit 6150f276073a1480030242a7e006a89e161d6cd6 ]
 
-> Remove the else without affecting the logic. Fixes the checkpatch warning: else is not generally useful after a break or return
+The latest fix for probe error handling contained a typo that causes
+probing to fail with the following message:
 
-Commit log messages should be limited to around 70 characters per line.
+  rockchip-rga: probe of ff680000.rga failed with error -12
 
-julia
+This patch fixes the typo.
 
-> Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
-> ---
->  drivers/staging/media/zoran/videocodec.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
->
-> diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-> index 16a1f23a7f19..19732a47c8bd 100644
-> --- a/drivers/staging/media/zoran/videocodec.c
-> +++ b/drivers/staging/media/zoran/videocodec.c
-> @@ -98,9 +98,8 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
->
->  				h->attached += 1;
->  				return codec;
-> -			} else {
-> -				kfree(codec);
->  			}
-> +			kfree(codec);
->  		}
->  		h = h->next;
->  	}
-> --
-> 2.25.1
->
->
->
+Fixes: e58430e1d4fd (media: rockchip/rga: fix error handling in probe)
+Reviewed-by: Dragan Simic <dragan.simic@gmail.com>
+Signed-off-by: Kyle Copperfield <kmcopper@danwin1210.me>
+Reviewed-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+Reviewed-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/media/platform/rockchip/rga/rga.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 6759091b15e0..d99ea8973b67 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -895,7 +895,7 @@ static int rga_probe(struct platform_device *pdev)
+ 	}
+ 	rga->dst_mmu_pages =
+ 		(unsigned int *)__get_free_pages(GFP_KERNEL | __GFP_ZERO, 3);
+-	if (rga->dst_mmu_pages) {
++	if (!rga->dst_mmu_pages) {
+ 		ret = -ENOMEM;
+ 		goto free_src_pages;
+ 	}
+-- 
+2.35.1
+
+
+

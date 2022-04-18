@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F0C504C1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:05:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2C4504C1E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236467AbiDRFHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 01:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S236595AbiDRFLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 01:11:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiDRFHR (ORCPT
+        with ESMTP id S236133AbiDRFLe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 01:07:17 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63F313EA5;
-        Sun, 17 Apr 2022 22:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650258277; x=1681794277;
-  h=subject:to:cc:references:from:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=ZMG6fm2lkB7RZ8Q28HhGEgjCp9U5LmWS+t5nYwhSo0c=;
-  b=otGsnRQLOF13q1K4xmrT50sxMV6lW5U8bMQCswjLQQ42dk8eqXQ3/OJI
-   f7m39L8JVGYZ1QMFwOYVjbTyvXpmhqe1oOovvgk3opvvYgoYqEvtTzE6i
-   L4oL6qk7KJjlYpw6EQsNSrTsET/iah5Z2BxQa+xEy1ie6XXFcyuYDAv1J
-   I=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 17 Apr 2022 22:04:36 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 22:04:35 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Sun, 17 Apr 2022 22:04:34 -0700
-Received: from [10.216.41.150] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 17 Apr
- 2022 22:04:29 -0700
-Subject: Re: [PATCH V10 4/9] mfd: pm8008: Add reset-gpios
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Lee Jones <lee.jones@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_collinsd@quicinc.com>,
-        <quic_subbaram@quicinc.com>, <quic_jprakash@quicinc.com>
-References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
- <1649939418-19861-5-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-Message-ID: <010bd223-94a0-fe8c-d1ab-39153bb68a7d@quicinc.com>
-Date:   Mon, 18 Apr 2022 10:34:26 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Mon, 18 Apr 2022 01:11:34 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4637B7F7
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 22:08:56 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I13Qnv026767;
+        Mon, 18 Apr 2022 05:08:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
+ : date : message-id : mime-version : content-type :
+ content-transfer-encoding; s=pp1;
+ bh=1B9HmxI97eZmALrkLGN8vR22mu6dkzI6rcrbvJVUpZU=;
+ b=jRRUERDBMDMVpp3Is1SKjX0fBMP5DY21ybzicOFHS1rlT8I/0PYVQgVmnBTZWzfoMfUr
+ 0IQBLCZSl6JPTsvjWfJMH0JxHmpkC5o319nSUZZtaY4xFb94n4QsB2+XkMri1JsMZSTx
+ 55A9JKaILWtiHEe6Vx6qOPOr9MaaEQd9Yy8udkwA99l1M2P/xu/pzChgRo5sRKcTygq5
+ pCRbK291+ErZy31r50EIWPYgNp95RJ+UJiOyqD/yupJwmoTv14jtnLzuO+aRWFehx7Ly
+ tLJ1XMfGn8/zXPYvD0nZKzdyXh+tHI9Il40E0SALrKkA7PMuB82MLPlxNTt8rrWwdEyf 9A== 
+Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7k9ccjy-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 05:08:38 +0000
+Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
+        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I56ln3030023;
+        Mon, 18 Apr 2022 05:08:36 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma05fra.de.ibm.com with ESMTP id 3ffne8ssnu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 05:08:36 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I58XJK39911710
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Apr 2022 05:08:33 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5E2D711C04C;
+        Mon, 18 Apr 2022 05:08:33 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1E09511C04A;
+        Mon, 18 Apr 2022 05:08:32 +0000 (GMT)
+Received: from lep8c.aus.stglabs.ibm.com (unknown [9.40.192.207])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Mon, 18 Apr 2022 05:08:31 +0000 (GMT)
+Subject: [RFC PATCH] ndtest: Make ndtest a module on its own
+From:   Shivaprasad G Bhat <sbhat@linux.ibm.com>
+To:     nvdimm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        dan.j.williams@intel.com
+Cc:     aneesh.kumar@linux.ibm.com, sbhat@linux.ibm.com,
+        vaibhav@linux.ibm.com, ira.weiny@intel.com, mpe@ellerman.id.au,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 18 Apr 2022 00:08:31 -0500
+Message-ID: <165025849452.2974989.6131145460098517848.stgit@lep8c.aus.stglabs.ibm.com>
+User-Agent: StGit/1.1+40.g1b20
 MIME-Version: 1.0
-In-Reply-To: <CAE-0n50HR6w-v3ub8HR_K2PsqqTTrVAaQa0pZ7QjY39WmkDyQQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: YWSwhUvagZgljzKvY77wYBufnpNLGhba
+X-Proofpoint-GUID: YWSwhUvagZgljzKvY77wYBufnpNLGhba
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-18_01,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ priorityscore=1501 adultscore=0 malwarescore=0 suspectscore=0 phishscore=0
+ mlxscore=0 mlxlogscore=668 bulkscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204180031
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,47 +85,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Today ndtest module is compiled as nfit_test.ko depending on
+if the CONFIG_ACPI_NFIT defined or not.
 
-On 4/15/2022 5:40 AM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-04-14 05:30:13)
->> diff --git a/drivers/mfd/qcom-pm8008.c b/drivers/mfd/qcom-pm8008.c
->> index c472d7f..97a72da 100644
->> --- a/drivers/mfd/qcom-pm8008.c
->> +++ b/drivers/mfd/qcom-pm8008.c
->> @@ -239,6 +241,13 @@ static int pm8008_probe(struct i2c_client *client)
->>                          dev_err(chip->dev, "Failed to probe irq periphs: %d\n", rc);
->>          }
->>
->> +       chip->reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_HIGH);
->> +       if (IS_ERR(chip->reset_gpio)) {
->> +               dev_err(chip->dev, "failed to acquire reset gpio\n");
-> The API looks to print debug messages. This print doesn't look required.
+It is more advantageous to make ndtest a module on its own
+so that the unit tests can be run serially on the same host
+without a need for recompilation of sources.
 
+The patch modifies the Kbuild file to take care of that.
 
-Okay.
+Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
+Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
+---
+ tools/testing/nvdimm/test/Kbuild |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-
->> +               return PTR_ERR(chip->reset_gpio);
->> +       }
->> +       gpiod_set_value(chip->reset_gpio, 1);
-> Does this do anything? Does this work just as well?
->
-> 	reset_gpio = devm_gpiod_get(chip->dev, "reset", GPIOD_OUT_LOW);
-> 	if (IS_ERR(reset_gpio))
-> 		return PTR_ERR(reset_gpio);
->
-> Note that there's no point to store the reset gpio in the structure if
-> it won't be used outside of probe.
-
-
-Okay, I'll use a local variable.
-
-
-> This should work fine? I used
-> GPIOD_OUT_LOW to indicate that the reset should be returned to this
-> function deasserted, i.e. taking the PMIC out of reset.
-
-
-I'll try this out.
+diff --git a/tools/testing/nvdimm/test/Kbuild b/tools/testing/nvdimm/test/Kbuild
+index 197bcb2b7f35..4d4835f73b46 100644
+--- a/tools/testing/nvdimm/test/Kbuild
++++ b/tools/testing/nvdimm/test/Kbuild
+@@ -2,12 +2,12 @@
+ ccflags-y := -I$(srctree)/drivers/nvdimm/
+ ccflags-y += -I$(srctree)/drivers/acpi/nfit/
+ 
+-obj-m += nfit_test.o
++obj-m += ndtest.o
+ obj-m += nfit_test_iomap.o
+ 
+ ifeq  ($(CONFIG_ACPI_NFIT),m)
++	obj-m += nfit_test.o
+ 	nfit_test-y := nfit.o
+-else
+-	nfit_test-y := ndtest.o
+ endif
++
+ nfit_test_iomap-y := iomap.o
 
 

@@ -2,95 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22966504B7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 06:01:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF79504B6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236224AbiDREDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 00:03:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
+        id S236118AbiDRD4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 23:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236215AbiDREDk (ORCPT
+        with ESMTP id S229449AbiDRD4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 00:03:40 -0400
-Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7470018B31
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:01:03 -0700 (PDT)
-Received: by mail-pg1-x542.google.com with SMTP id u2so16637369pgq.10
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:01:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=WDL1LdNCgcBojb3ge+3pVQIK1RVySUq4qbmbuvDh6aM=;
-        b=h7h1nXmldfg6Ma6isM9+5oIdvEdeoX6annXY4zG+KmSd+Oo9+OyzgT7R8J40vSH8lF
-         VKIzoLdn4opHnUt+zP0iYwz4qZCzDcawKprYLI2jPxkepfUry+WAFc2GvbDtObPsK01L
-         3t8yaLPHPn7C35fNEAK5wqET+qShNKc7WFeDt6lyWIYzJZ4phfV0pS6+vFTTLpdjaYVt
-         JGQ/Wcr/ahflqcJpnw1vZ8x9oJNJqzz8Qe02w/42dPlx91y92uwRuQEfh/4j/9ankgGE
-         PHGN6zRs3vCDTA1hV5d1HuVU8Z+uu+ELmkNy9CX/QjPieEB3ww5rxoSum9nv7OD+WTc/
-         /vIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=WDL1LdNCgcBojb3ge+3pVQIK1RVySUq4qbmbuvDh6aM=;
-        b=F2r8YJIbm6Nn8zRx9WrKwPgiridzPAQmxJod2rBFfgX74ZIaq2Z2JXC5Yq0q4DUhPt
-         VMzfMNTiXnFY3YTps1Q5e2kMR64to36faEar6o2Q9ivkXi6DuzCkyAkPEiSBAOCsyf4h
-         q85yRU9O2HyG5fB1eM9akTE5MvaDbhcfWx+GBSs3cy6Egxc5yJe4vBin81i/YlNVxxO7
-         KsVNXyPzZxjQRRt88i4xPAA5KE8+wz1YDvQYo+G5qionU4oOy9FMdx2iv4m6RKNHVPn7
-         MaDIs0O64Y/dk7/BY3+HrYQ6IbbLKSTvIxonfhqgL0g8RmFZVsidi60JZOU8bm5AljCQ
-         VM1Q==
-X-Gm-Message-State: AOAM530ZBIk4/gx3t4c8gMHJTy5UkBSvtNwctXYp6Wc+jmrnl89kir/s
-        zirDaYomdQE1dl1cuAvil8U=
-X-Google-Smtp-Source: ABdhPJykXDe0gp+/XzGRlhpFer2xNQGb2VKm+tH66pl2cpaeyf8rwhJ5Y+rXsRprsibUqrLemIE8kw==
-X-Received: by 2002:a63:fa06:0:b0:39c:f169:18e6 with SMTP id y6-20020a63fa06000000b0039cf16918e6mr8667168pgh.129.1650254462888;
-        Sun, 17 Apr 2022 21:01:02 -0700 (PDT)
-Received: from localhost ([152.70.90.187])
-        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm10935762pfl.148.2022.04.17.21.01.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 21:01:02 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 12:00:58 +0800
-From:   Wang Cheng <wanngchenng@gmail.com>
-To:     Pavel Skripkin <paskripkin@gmail.com>
-Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
-Message-ID: <20220418040058.ws6ijoeggnycs22y@ppc.localdomain>
-References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
- <68484555-f763-bc42-eb4c-9cea2ee8dadb@gmail.com>
- <20220415095741.3zfuztivtgidvpqc@ppc.localdomain>
- <5d9181be-0a02-0623-7741-1d4352d62610@gmail.com>
+        Sun, 17 Apr 2022 23:56:12 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A2118B11;
+        Sun, 17 Apr 2022 20:53:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KhY203xDLzgYv6;
+        Mon, 18 Apr 2022 11:53:28 +0800 (CST)
+Received: from dggpemm500019.china.huawei.com (7.185.36.180) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 11:53:26 +0800
+Received: from k04.huawei.com (10.67.174.115) by
+ dggpemm500019.china.huawei.com (7.185.36.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 11:53:26 +0800
+From:   Pu Lehui <pulehui@huawei.com>
+To:     <bpf@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+CC:     <andrii@kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
+        <kafai@fb.com>, <songliubraving@fb.com>, <yhs@fb.com>,
+        <john.fastabend@gmail.com>, <kpsingh@kernel.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <pulehui@huawei.com>
+Subject: [PATCH bpf-next] libbpf: Support riscv USDT argument parsing logic
+Date:   Mon, 18 Apr 2022 12:22:22 +0800
+Message-ID: <20220418042222.2464199-1-pulehui@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5d9181be-0a02-0623-7741-1d4352d62610@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.115]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500019.china.huawei.com (7.185.36.180)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/04/16 01:57PM, Pavel Skripkin wrote:
-> Hi Wang,
-> 
-> On 4/15/22 12:57, Wang Cheng wrote:
-> > Hi Pavel, thx for your review.
-> > 
-> > Sorry, this patch is just confined to fixing uninit-values with
-> > modifying the original code as less as possible. It sounds good to
-> > refactor r8712_usbctrl_vendorreq() with better API.
-> > 
-> 
-> I understand your idea, but this will just hide the real problem until
-> syzbot hit it in different place. So, I believe, it's better to fix the root
-> case instead of hiding local cases.
+Add riscv-specific USDT argument specification parsing logic.
+riscv USDT argument format is shown below:
+- Memory dereference case:
+  "size@off(reg)", e.g. "-8@-88(s0)"
+- Constant value case:
+  "size@val", e.g. "4@5"
+- Register read case:
+  "size@reg", e.g. "-8@a1"
 
-Of course, I agree on fixing the root case. I will think about replacing
-APIs properly.
+s8 will be marked as poison while it's a reg of riscv, we need
+to alias it in advance.
 
-thanks,
-- w
+Signed-off-by: Pu Lehui <pulehui@huawei.com>
+---
+ tools/lib/bpf/usdt.c | 107 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 107 insertions(+)
+
+diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+index 934c25301ac1..b8af409cc763 100644
+--- a/tools/lib/bpf/usdt.c
++++ b/tools/lib/bpf/usdt.c
+@@ -10,6 +10,11 @@
+ #include <linux/ptrace.h>
+ #include <linux/kernel.h>
+ 
++/* s8 will be marked as poison while it's a reg of riscv */
++#if defined(__riscv)
++#define rv_s8 s8
++#endif
++
+ #include "bpf.h"
+ #include "libbpf.h"
+ #include "libbpf_common.h"
+@@ -1400,6 +1405,108 @@ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec
+ 	return len;
+ }
+ 
++#elif defined(__riscv)
++
++static int calc_pt_regs_off(const char *reg_name)
++{
++	static struct {
++		const char *name;
++		size_t pt_regs_off;
++	} reg_map[] = {
++		{ "ra", offsetof(struct user_regs_struct, ra) },
++		{ "sp", offsetof(struct user_regs_struct, sp) },
++		{ "gp", offsetof(struct user_regs_struct, gp) },
++		{ "tp", offsetof(struct user_regs_struct, tp) },
++		{ "t0", offsetof(struct user_regs_struct, t0) },
++		{ "t1", offsetof(struct user_regs_struct, t1) },
++		{ "t2", offsetof(struct user_regs_struct, t2) },
++		{ "s0", offsetof(struct user_regs_struct, s0) },
++		{ "s1", offsetof(struct user_regs_struct, s1) },
++		{ "a0", offsetof(struct user_regs_struct, a0) },
++		{ "a1", offsetof(struct user_regs_struct, a1) },
++		{ "a2", offsetof(struct user_regs_struct, a2) },
++		{ "a3", offsetof(struct user_regs_struct, a3) },
++		{ "a4", offsetof(struct user_regs_struct, a4) },
++		{ "a5", offsetof(struct user_regs_struct, a5) },
++		{ "a6", offsetof(struct user_regs_struct, a6) },
++		{ "a7", offsetof(struct user_regs_struct, a7) },
++		{ "s2", offsetof(struct user_regs_struct, s2) },
++		{ "s3", offsetof(struct user_regs_struct, s3) },
++		{ "s4", offsetof(struct user_regs_struct, s4) },
++		{ "s5", offsetof(struct user_regs_struct, s5) },
++		{ "s6", offsetof(struct user_regs_struct, s6) },
++		{ "s7", offsetof(struct user_regs_struct, s7) },
++		{ "s8", offsetof(struct user_regs_struct, rv_s8) },
++		{ "s9", offsetof(struct user_regs_struct, s9) },
++		{ "s10", offsetof(struct user_regs_struct, s10) },
++		{ "s11", offsetof(struct user_regs_struct, s11) },
++		{ "t3", offsetof(struct user_regs_struct, t3) },
++		{ "t4", offsetof(struct user_regs_struct, t4) },
++		{ "t5", offsetof(struct user_regs_struct, t5) },
++		{ "t6", offsetof(struct user_regs_struct, t6) },
++	};
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(reg_map); i++) {
++		if (strcmp(reg_name, reg_map[i].name) == 0)
++			return reg_map[i].pt_regs_off;
++	}
++
++	pr_warn("usdt: unrecognized register '%s'\n", reg_name);
++	return -ENOENT;
++}
++
++static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
++{
++	char *reg_name = NULL;
++	int arg_sz, len, reg_off;
++	long off;
++
++	if (sscanf(arg_str, " %d @ %ld ( %m[a-z0-9] ) %n", &arg_sz, &off, &reg_name, &len) == 3) {
++		/* Memory dereference case, e.g., -8@-88(s0) */
++		arg->arg_type = USDT_ARG_REG_DEREF;
++		arg->val_off = off;
++		reg_off = calc_pt_regs_off(reg_name);
++		free(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
++	} else if (sscanf(arg_str, " %d @ %ld %n", &arg_sz, &off, &len) == 2) {
++		/* Constant value case, e.g., 4@5 */
++		arg->arg_type = USDT_ARG_CONST;
++		arg->val_off = off;
++		arg->reg_off = 0;
++	} else if (sscanf(arg_str, " %d @ %m[a-z0-9] %n", &arg_sz, &reg_name, &len) == 2) {
++		/* Register read case, e.g., -8@a1 */
++		arg->arg_type = USDT_ARG_REG;
++		arg->val_off = 0;
++		reg_off = calc_pt_regs_off(reg_name);
++		free(reg_name);
++		if (reg_off < 0)
++			return reg_off;
++		arg->reg_off = reg_off;
++	} else {
++		pr_warn("usdt: unrecognized arg #%d spec '%s'\n", arg_num, arg_str);
++		return -EINVAL;
++	}
++
++	arg->arg_signed = arg_sz < 0;
++	if (arg_sz < 0)
++		arg_sz = -arg_sz;
++
++	switch (arg_sz) {
++	case 1: case 2: case 4: case 8:
++		arg->arg_bitshift = 64 - arg_sz * 8;
++		break;
++	default:
++		pr_warn("usdt: unsupported arg #%d (spec '%s') size: %d\n",
++			arg_num, arg_str, arg_sz);
++		return -EINVAL;
++	}
++
++	return len;
++}
++
+ #else
+ 
+ static int parse_usdt_arg(const char *arg_str, int arg_num, struct usdt_arg_spec *arg)
+-- 
+2.25.1
+

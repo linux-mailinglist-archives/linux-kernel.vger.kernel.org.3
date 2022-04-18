@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57255505761
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE2A5057B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343967AbiDRNye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
+        id S1343780AbiDRNyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244856AbiDRNa6 (ORCPT
+        with ESMTP id S244858AbiDRNa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:30:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0974D1EC76;
-        Mon, 18 Apr 2022 05:56:19 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE971EEC2;
+        Mon, 18 Apr 2022 05:56:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A6126115A;
-        Mon, 18 Apr 2022 12:56:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90FC3C385A1;
-        Mon, 18 Apr 2022 12:56:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BB20E6115A;
+        Mon, 18 Apr 2022 12:56:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC078C385A1;
+        Mon, 18 Apr 2022 12:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286578;
-        bh=WsQmzVYhg7AoJM6h2+L3TxB4xdaSC3QVKOdOnG/kFGk=;
+        s=korg; t=1650286581;
+        bh=sTsH2Qwwj13HSsZEu6b9iSRxdM+AXbOcmfy7G/HYpPc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=M+u5sgW5nHMi2Zsbin2GFGGSkeUewprIJhRQ/Ulx8dTEDMLkVgyAOTOA4dQ9jMC0E
-         Ljybbi6OcYPeBEN+5vW3HsU8HOsF5Ah3qfnW2nOcMxWBpltD267Fo1cqZmZ0av6LqO
-         FbUC15QG2U+1wruEGZm5r2r+Mo6BBicfIZqtrZ84=
+        b=aAVj6Lje3TGw6NKOPFJ5uN9w69aG7d4tCaQVBP45oJpYQWs9he1zNy1EE8QhKF7wV
+         IcGn7scKjDvQpd2l8w6OoQm/rDldrdiJ3Cnlu/nj9u7ZSZFEwNCxwM4l/Z8wLLCuN2
+         wLrTzBCvhv8mInyQErLG41D4HLwr3AkULtYRelBM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
         Anders Roxell <anders.roxell@linaro.org>,
+        Segher Boessenkool <segher@kernel.crashing.org>,
         Michael Ellerman <mpe@ellerman.id.au>
-Subject: [PATCH 4.14 180/284] powerpc/lib/sstep: Fix sthcx instruction
-Date:   Mon, 18 Apr 2022 14:12:41 +0200
-Message-Id: <20220418121216.855883590@linuxfoundation.org>
+Subject: [PATCH 4.14 181/284] powerpc/lib/sstep: Fix build errors with newer binutils
+Date:   Mon, 18 Apr 2022 14:12:42 +0200
+Message-Id: <20220418121216.884316023@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
 References: <20220418121210.689577360@linuxfoundation.org>
@@ -57,33 +58,59 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Anders Roxell <anders.roxell@linaro.org>
 
-commit a633cb1edddaa643fadc70abc88f89a408fa834a upstream.
+commit 8219d31effa7be5dbc7ff915d7970672e028c701 upstream.
 
-Looks like there been a copy paste mistake when added the instruction
-'stbcx' twice and one was probably meant to be 'sthcx'. Changing to
-'sthcx' from 'stbcx'.
+Building tinyconfig with gcc (Debian 11.2.0-16) and assembler (Debian
+2.37.90.20220207) the following build error shows up:
+
+  {standard input}: Assembler messages:
+  {standard input}:10576: Error: unrecognized opcode: `stbcx.'
+  {standard input}:10680: Error: unrecognized opcode: `lharx'
+  {standard input}:10694: Error: unrecognized opcode: `lbarx'
+
+Rework to add assembler directives [1] around the instruction.  The
+problem with this might be that we can trick a power6 into
+single-stepping through an stbcx. for instance, and it will execute that
+in kernel mode.
+
+[1] https://sourceware.org/binutils/docs/as/PowerPC_002dPseudo.html#PowerPC_002dPseudo
 
 Fixes: 350779a29f11 ("powerpc: Handle most loads and stores in instruction emulation code")
 Cc: stable@vger.kernel.org # v4.14+
-Reported-by: Arnd Bergmann <arnd@arndb.de>
+Co-developed-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+Reviewed-by: Segher Boessenkool <segher@kernel.crashing.org>
 Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
-Link: https://lore.kernel.org/r/20220224162215.3406642-1-anders.roxell@linaro.org
+Link: https://lore.kernel.org/r/20220224162215.3406642-3-anders.roxell@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/powerpc/lib/sstep.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/powerpc/lib/sstep.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
 --- a/arch/powerpc/lib/sstep.c
 +++ b/arch/powerpc/lib/sstep.c
-@@ -2776,7 +2776,7 @@ int emulate_loadstore(struct pt_regs *re
- 			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
- 			break;
- 		case 2:
--			__put_user_asmx(op->val, ea, err, "stbcx.", cr);
-+			__put_user_asmx(op->val, ea, err, "sthcx.", cr);
- 			break;
- #endif
- 		case 4:
+@@ -908,7 +908,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
+ 
+ #define __put_user_asmx(x, addr, err, op, cr)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	" op " %2,0,%3\n"		\
++		".machine pop\n"			\
+ 		"	mfcr	%1\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+@@ -921,7 +924,10 @@ NOKPROBE_SYMBOL(emulate_dcbz);
+ 
+ #define __get_user_asmx(x, addr, err, op)		\
+ 	__asm__ __volatile__(				\
++		".machine push\n"			\
++		".machine power8\n"			\
+ 		"1:	"op" %1,0,%2\n"			\
++		".machine pop\n"			\
+ 		"2:\n"					\
+ 		".section .fixup,\"ax\"\n"		\
+ 		"3:	li	%0,%3\n"		\
 
 

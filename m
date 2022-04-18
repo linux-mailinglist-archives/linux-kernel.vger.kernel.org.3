@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FD7C50519D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37EC45052F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239034AbiDRMfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
+        id S240026AbiDRMyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239995AbiDRM3M (ORCPT
+        with ESMTP id S239568AbiDRMkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF0C205D9;
-        Mon, 18 Apr 2022 05:23:02 -0700 (PDT)
+        Mon, 18 Apr 2022 08:40:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CF1F63E;
+        Mon, 18 Apr 2022 05:32:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABFBE60EF4;
-        Mon, 18 Apr 2022 12:23:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D93EC385A7;
-        Mon, 18 Apr 2022 12:23:00 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D8ED61033;
+        Mon, 18 Apr 2022 12:32:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A01C385A7;
+        Mon, 18 Apr 2022 12:31:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284581;
-        bh=7XTqroqFO/okzB1xM2ykxMbeDx4n0Pp7JOnf+IK9yyc=;
+        s=korg; t=1650285119;
+        bh=RO4VURSzGblH2Wzjw1WVHexM3Ohq0iWaMKap2YwaHcc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GyLbVDr/MoIZ5LCSgsi4US9zLP57q3av4BHbDCBg7pKOrYlShtuhRYT2LC9mBu9oG
-         uJ/A9Xfh9NRcDIo5BSlfTqwUy+cXBtODW6D6XuqaLxaouopTW6f/B0qsniMiqG18DV
-         bh9kdKl8mBSJQSks5/iDFN93AqYKYrm/3RjTHLPM=
+        b=BVqAGQRkqgsgyzBf1Xl1Es8iLbUpxG3VsOxtl/ogiRvoojEAQ7j8WOSsqY4snHdOi
+         JgdQsHohGPlGCRVW4HrHVDsbL8AyPHUqRYsOvJam3LvIPTgPv2V2HCEpgq+cFK9z9h
+         FHDWMZ8eDdMTJsN2tyTv3AZlifscQafR9An8u9Cs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaomeng Tong <xiam0nd.tong@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 160/219] myri10ge: fix an incorrect free for skb in myri10ge_sw_tso
+Subject: [PATCH 5.15 109/189] drm/amdgpu/gmc: use PCI BARs for APUs in passthrough
 Date:   Mon, 18 Apr 2022 14:12:09 +0200
-Message-Id: <20220418121211.362126379@linuxfoundation.org>
+Message-Id: <20220418121203.594746025@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xiaomeng Tong <xiam0nd.tong@gmail.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit b423e54ba965b4469b48e46fd16941f1e1701697 ]
+[ Upstream commit b818a5d374542ccec73dcfe578a081574029820e ]
 
-All remaining skbs should be released when myri10ge_xmit fails to
-transmit a packet. Fix it within another skb_list_walk_safe.
+If the GPU is passed through to a guest VM, use the PCI
+BAR for CPU FB access rather than the physical address of
+carve out.  The physical address is not valid in a guest.
 
-Signed-off-by: Xiaomeng Tong <xiam0nd.tong@gmail.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+v2: Fix HDP handing as suggested by Michel
+
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Michel Dänzer <mdaenzer@redhat.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/myricom/myri10ge/myri10ge.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c     | 2 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c      | 5 +++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c      | 2 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c      | 2 +-
+ 5 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-index 50ac3ee2577a..21d2645885ce 100644
---- a/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-+++ b/drivers/net/ethernet/myricom/myri10ge/myri10ge.c
-@@ -2903,11 +2903,9 @@ static netdev_tx_t myri10ge_sw_tso(struct sk_buff *skb,
- 		status = myri10ge_xmit(curr, dev);
- 		if (status != 0) {
- 			dev_kfree_skb_any(curr);
--			if (segs != NULL) {
--				curr = segs;
--				segs = next;
-+			skb_list_walk_safe(next, curr, next) {
- 				curr->next = NULL;
--				dev_kfree_skb_any(segs);
-+				dev_kfree_skb_any(curr);
- 			}
- 			goto drop;
- 		}
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 33026b3eafd2..2f2ae26a8068 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -5625,7 +5625,7 @@ void amdgpu_device_flush_hdp(struct amdgpu_device *adev,
+ 		struct amdgpu_ring *ring)
+ {
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU)
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev))
+ 		return;
+ #endif
+ 	if (adev->gmc.xgmi.connected_to_cpu)
+@@ -5641,7 +5641,7 @@ void amdgpu_device_invalidate_hdp(struct amdgpu_device *adev,
+ 		struct amdgpu_ring *ring)
+ {
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU)
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev))
+ 		return;
+ #endif
+ 	if (adev->gmc.xgmi.connected_to_cpu)
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+index 3c01be661014..93a4da4284ed 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+@@ -788,7 +788,7 @@ static int gmc_v10_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
+ 
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU) {
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = adev->gfxhub.funcs->get_mc_fb_offset(adev);
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
+ 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+index 0a50fdaced7e..63c47f61d0df 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+@@ -381,8 +381,9 @@ static int gmc_v7_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
+ 
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU &&
+-	    adev->gmc.real_vram_size > adev->gmc.aper_size) {
++	if ((adev->flags & AMD_IS_APU) &&
++	    adev->gmc.real_vram_size > adev->gmc.aper_size &&
++	    !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = ((u64)RREG32(mmMC_VM_FB_OFFSET)) << 22;
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
+ 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+index 63b890f1e8af..bef9610084f1 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+@@ -581,7 +581,7 @@ static int gmc_v8_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
+ 
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU) {
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = ((u64)RREG32(mmMC_VM_FB_OFFSET)) << 22;
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
+ 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+index 6dc16ccf6c81..0e731016921b 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+@@ -1387,7 +1387,7 @@ static int gmc_v9_0_mc_init(struct amdgpu_device *adev)
+ 	 */
+ 
+ 	/* check whether both host-gpu and gpu-gpu xgmi links exist */
+-	if ((adev->flags & AMD_IS_APU) ||
++	if (((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) ||
+ 	    (adev->gmc.xgmi.supported &&
+ 	     adev->gmc.xgmi.connected_to_cpu)) {
+ 		adev->gmc.aper_base =
 -- 
 2.35.1
 

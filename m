@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AA050551F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FAF50576F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242502AbiDRNJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42110 "EHLO
+        id S232696AbiDRNzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238173AbiDRM4n (ORCPT
+        with ESMTP id S244871AbiDRNa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:56:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B861A816;
-        Mon, 18 Apr 2022 05:37:57 -0700 (PDT)
+        Mon, 18 Apr 2022 09:30:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E471EEE9;
+        Mon, 18 Apr 2022 05:56:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A236D6118A;
-        Mon, 18 Apr 2022 12:37:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE251C385A7;
-        Mon, 18 Apr 2022 12:37:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06814B80E4B;
+        Mon, 18 Apr 2022 12:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DED4C385A7;
+        Mon, 18 Apr 2022 12:56:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285476;
-        bh=x85HsX1QKJi6SwkS29AzK7v1ZonuON6s7Mrr8XxuSHw=;
+        s=korg; t=1650286604;
+        bh=o6yvl3mQE+1+NChV+lOG93OdAgrAvTWNdi3fmZLSDEw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yGxymUdEWtZMJqXl7IE+y1WOjQmrutkgK2/n1+2CcwNnBWYEYotaR+GwuwSWi3sQF
-         viz8ynYQRqUk+pYfHRDemxU+7UtsyWcGu7ngzX30criZS3rKGNt1jbeXrZvaHzpuvl
-         ksQcO13zKa+JtmOZelp5av58K3W4G96eWH++rHHM=
+        b=iRIuGlUBBVyea71v6tLuq2WUHL2sN/HxkcQIT+757k6ZBo01YI1MyqC9EuRNNzaMY
+         gjKvTKlRW5Tj4HXK8uKLHpWfEPGNFzBelgidnxLt6jDVePOz7YZWuGuVIavH/ali6Y
+         24p4kmUZAiyvKgqHEcUOTkJIP1E8TIlDVpf3omBU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Lee Duncan <lduncan@suse.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Richard Schleich <rs@noreya.tech>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 029/105] scsi: iscsi: Use system_unbound_wq for destroy_work
+Subject: [PATCH 4.14 170/284] ARM: dts: bcm2837: Add the missing L1/L2 cache information
 Date:   Mon, 18 Apr 2022 14:12:31 +0200
-Message-Id: <20220418121147.156679890@linuxfoundation.org>
+Message-Id: <20220418121216.578046097@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,78 +56,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Richard Schleich <rs@noreya.tech>
 
-[ Upstream commit b25b957d2db1585602c2c70fdf4261a5641fe6b7 ]
+[ Upstream commit bdf8762da268d2a34abf517c36528413906e9cd5 ]
 
-Use the system_unbound_wq for async session destruction. We don't need a
-dedicated workqueue for async session destruction because:
+This patch fixes the kernel warning
+"cacheinfo: Unable to detect cache hierarchy for CPU 0"
+for the bcm2837 on newer kernel versions.
 
- 1. perf does not seem to be an issue since we only allow 1 active work.
-
- 2. it does not have deps with other system works and we can run them in
-    parallel with each other.
-
-Link: https://lore.kernel.org/r/20210525181821.7617-6-michael.christie@oracle.com
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Richard Schleich <rs@noreya.tech>
+Tested-by: Stefan Wahren <stefan.wahren@i2se.com>
+[florian: Align and remove comments matching property values]
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+ arch/arm/boot/dts/bcm2837.dtsi | 49 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 49 insertions(+)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index f93660142e35..ed0c7e812445 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -95,8 +95,6 @@ static DECLARE_WORK(stop_conn_work, stop_conn_work_fn);
- static atomic_t iscsi_session_nr; /* sysfs session id for next new session */
- static struct workqueue_struct *iscsi_eh_timer_workq;
+diff --git a/arch/arm/boot/dts/bcm2837.dtsi b/arch/arm/boot/dts/bcm2837.dtsi
+index d5d058a568c3..20407a5aafc8 100644
+--- a/arch/arm/boot/dts/bcm2837.dtsi
++++ b/arch/arm/boot/dts/bcm2837.dtsi
+@@ -32,12 +32,26 @@
+ 		#size-cells = <0>;
+ 		enable-method = "brcm,bcm2836-smp"; // for ARM 32-bit
  
--static struct workqueue_struct *iscsi_destroy_workq;
--
- static DEFINE_IDA(iscsi_sess_ida);
- /*
-  * list of registered transports and lock that must
-@@ -3717,7 +3715,7 @@ iscsi_if_recv_msg(struct sk_buff *skb, struct nlmsghdr *nlh, uint32_t *group)
- 			list_del_init(&session->sess_list);
- 			spin_unlock_irqrestore(&sesslock, flags);
++		/* Source for d/i-cache-line-size and d/i-cache-sets
++		 * https://developer.arm.com/documentation/ddi0500/e/level-1-memory-system
++		 * /about-the-l1-memory-system?lang=en
++		 *
++		 * Source for d/i-cache-size
++		 * https://magpi.raspberrypi.com/articles/raspberry-pi-3-specs-benchmarks
++		 */
+ 		cpu0: cpu@0 {
+ 			device_type = "cpu";
+ 			compatible = "arm,cortex-a53";
+ 			reg = <0>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0x0 0x000000d8>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
++			next-level-cache = <&l2>;
+ 		};
  
--			queue_work(iscsi_destroy_workq, &session->destroy_work);
-+			queue_work(system_unbound_wq, &session->destroy_work);
- 		}
- 		break;
- 	case ISCSI_UEVENT_UNBIND_SESSION:
-@@ -4813,18 +4811,8 @@ static __init int iscsi_transport_init(void)
- 		goto release_nls;
- 	}
+ 		cpu1: cpu@1 {
+@@ -46,6 +60,13 @@
+ 			reg = <1>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0x0 0x000000e0>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
++			next-level-cache = <&l2>;
+ 		};
  
--	iscsi_destroy_workq = alloc_workqueue("%s",
--			WQ_SYSFS | __WQ_LEGACY | WQ_MEM_RECLAIM | WQ_UNBOUND,
--			1, "iscsi_destroy");
--	if (!iscsi_destroy_workq) {
--		err = -ENOMEM;
--		goto destroy_wq;
--	}
--
- 	return 0;
+ 		cpu2: cpu@2 {
+@@ -54,6 +75,13 @@
+ 			reg = <2>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0x0 0x000000e8>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
++			next-level-cache = <&l2>;
+ 		};
  
--destroy_wq:
--	destroy_workqueue(iscsi_eh_timer_workq);
- release_nls:
- 	netlink_kernel_release(nls);
- unregister_flashnode_bus:
-@@ -4846,7 +4834,6 @@ static __init int iscsi_transport_init(void)
- 
- static void __exit iscsi_transport_exit(void)
- {
--	destroy_workqueue(iscsi_destroy_workq);
- 	destroy_workqueue(iscsi_eh_timer_workq);
- 	netlink_kernel_release(nls);
- 	bus_unregister(&iscsi_flashnode_bus);
+ 		cpu3: cpu@3 {
+@@ -62,6 +90,27 @@
+ 			reg = <3>;
+ 			enable-method = "spin-table";
+ 			cpu-release-addr = <0x0 0x000000f0>;
++			d-cache-size = <0x8000>;
++			d-cache-line-size = <64>;
++			d-cache-sets = <128>; // 32KiB(size)/64(line-size)=512ways/4-way set
++			i-cache-size = <0x8000>;
++			i-cache-line-size = <64>;
++			i-cache-sets = <256>; // 32KiB(size)/64(line-size)=512ways/2-way set
++			next-level-cache = <&l2>;
++		};
++
++		/* Source for cache-line-size + cache-sets
++		 * https://developer.arm.com/documentation/ddi0500
++		 * /e/level-2-memory-system/about-the-l2-memory-system?lang=en
++		 * Source for cache-size
++		 * https://datasheets.raspberrypi.com/cm/cm1-and-cm3-datasheet.pdf
++		 */
++		l2: l2-cache0 {
++			compatible = "cache";
++			cache-size = <0x80000>;
++			cache-line-size = <64>;
++			cache-sets = <512>; // 512KiB(size)/64(line-size)=8192ways/16-way set
++			cache-level = <2>;
+ 		};
+ 	};
+ };
 -- 
-2.35.1
+2.34.1
 
 
 

@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CAB75051E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35E9505370
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241022AbiDRMjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
+        id S239997AbiDRM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:57:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239789AbiDRMd2 (ORCPT
+        with ESMTP id S239564AbiDRMpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1CA61B796;
-        Mon, 18 Apr 2022 05:26:11 -0700 (PDT)
+        Mon, 18 Apr 2022 08:45:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B549328E20;
+        Mon, 18 Apr 2022 05:32:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A9E86B80EDB;
-        Mon, 18 Apr 2022 12:26:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED991C385A1;
-        Mon, 18 Apr 2022 12:26:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 61A36B80EC0;
+        Mon, 18 Apr 2022 12:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A893CC385A1;
+        Mon, 18 Apr 2022 12:32:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284770;
-        bh=7lAvJYzy1QYp8+7W7uKPyGmGnOkYsJY8pHmnEPIg9bA=;
+        s=korg; t=1650285166;
+        bh=/SrTrWU+LeV3TKzN5aOB97yjjBF+58xluB+OKVYBegw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wCNrP5y617BKmWRSvpd9+RguckciNKFVLb2DNsoyAMOXMXeILJEQrgBxaaTkDDEHH
-         Etb5bIigvpPyQQpoXr/ijOD7an3rloW6q+qgoxlY2s2lkOvXaHuihNTWGKDukRuuxj
-         Jc2qhVgjaAH+Z1T+apuUtZ9RAa71f741noaDyFuo=
+        b=cp1kgLkAmUshwmX+MrW3bQ4P151a7J5sxZS5+fUziMG3HkfO/8qvpNuNK2wLbQnoY
+         BuU3cb+1vtcIE+NNFMJvvTsiFI1US4mR9NAEXu7grGF5MSAGsfLMCgPoIHxuNATViw
+         FjOIOV8WNcN1F+XofqDdmd5HTeWDDW7gfzlQdzpI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 172/219] io_uring: zero tag on rsrc removal
-Date:   Mon, 18 Apr 2022 14:12:21 +0200
-Message-Id: <20220418121211.694562414@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 122/189] net: micrel: fix KS8851_MLL Kconfig
+Date:   Mon, 18 Apr 2022 14:12:22 +0200
+Message-Id: <20220418121204.187413699@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,43 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit 8f0a24801bb44aa58496945aabb904c729176772 ]
+[ Upstream commit c3efcedd272aa6dd5929e20cf902a52ddaa1197a ]
 
-Automatically default rsrc tag in io_queue_rsrc_removal(), it's safer
-than leaving it there and relying on the rest of the code to behave and
-not use it.
+KS8851_MLL selects MICREL_PHY, which depends on PTP_1588_CLOCK_OPTIONAL,
+so make KS8851_MLL also depend on PTP_1588_CLOCK_OPTIONAL since
+'select' does not follow any dependency chains.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/1cf262a50df17478ea25b22494dcc19f3a80301f.1649336342.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Fixes kconfig warning and build errors:
+
+WARNING: unmet direct dependencies detected for MICREL_PHY
+  Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
+  Selected by [y]:
+  - KS8851_MLL [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && HAS_IOMEM [=y]
+
+ld: drivers/net/phy/micrel.o: in function `lan8814_ts_info':
+micrel.c:(.text+0xb35): undefined reference to `ptp_clock_index'
+ld: drivers/net/phy/micrel.o: in function `lan8814_probe':
+micrel.c:(.text+0x2586): undefined reference to `ptp_clock_register'
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/net/ethernet/micrel/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/fs/io_uring.c b/fs/io_uring.c
-index 6f93bff7633c..53b20d8b1129 100644
---- a/fs/io_uring.c
-+++ b/fs/io_uring.c
-@@ -8536,13 +8536,15 @@ static int io_sqe_file_register(struct io_ring_ctx *ctx, struct file *file,
- static int io_queue_rsrc_removal(struct io_rsrc_data *data, unsigned idx,
- 				 struct io_rsrc_node *node, void *rsrc)
- {
-+	u64 *tag_slot = io_get_tag_slot(data, idx);
- 	struct io_rsrc_put *prsrc;
- 
- 	prsrc = kzalloc(sizeof(*prsrc), GFP_KERNEL);
- 	if (!prsrc)
- 		return -ENOMEM;
- 
--	prsrc->tag = *io_get_tag_slot(data, idx);
-+	prsrc->tag = *tag_slot;
-+	*tag_slot = 0;
- 	prsrc->rsrc = rsrc;
- 	list_add(&prsrc->list, &node->rsrc_list);
- 	return 0;
+diff --git a/drivers/net/ethernet/micrel/Kconfig b/drivers/net/ethernet/micrel/Kconfig
+index 93df3049cdc0..1b632cdd7630 100644
+--- a/drivers/net/ethernet/micrel/Kconfig
++++ b/drivers/net/ethernet/micrel/Kconfig
+@@ -39,6 +39,7 @@ config KS8851
+ config KS8851_MLL
+ 	tristate "Micrel KS8851 MLL"
+ 	depends on HAS_IOMEM
++	depends on PTP_1588_CLOCK_OPTIONAL
+ 	select MII
+ 	select CRC32
+ 	select EEPROM_93CX6
 -- 
 2.35.1
 

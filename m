@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3655F50548C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B0B505833
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:59:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242786AbiDRNTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59900 "EHLO
+        id S245139AbiDROBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242565AbiDRNAJ (ORCPT
+        with ESMTP id S243416AbiDRNkM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:00:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B297B31362;
-        Mon, 18 Apr 2022 05:41:34 -0700 (PDT)
+        Mon, 18 Apr 2022 09:40:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD032F03F;
+        Mon, 18 Apr 2022 05:59:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5CBE8B80EC3;
-        Mon, 18 Apr 2022 12:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976EFC385A1;
-        Mon, 18 Apr 2022 12:41:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12FBB612D4;
+        Mon, 18 Apr 2022 12:59:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 137F5C385A7;
+        Mon, 18 Apr 2022 12:59:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285692;
-        bh=X5VqiY22ZhhGMKTjPjEHHjQro/Fe7DdjAuffpRjJ934=;
+        s=korg; t=1650286753;
+        bh=G1cCzSEmSyEJgD7avDuvFKb78yXZro2e0oLgp9BKbiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XErRkIWJ5AIWgrBGB4LWoky2wOaXJPmNBkidcvDeNPBv3fH4gTzR/y2320ux05ij0
-         IbCgi9wXME4kj94Ss1g1qriidtXMt4gy/DaXT4zS2Wq51zBE7g8BkBkkQVC33E7+iS
-         SmteZ2SfHwaDMkK7KAIu5i60BRFkRRfwhVqAdQaA=
+        b=xiFFt4PkCBBAxWNPuszFVbptYJENM9NiS0WV8X/KNSsHNmnVGkBinejtu9O5idRvn
+         O4l9p70KlRHNwpzSWwMLtd8fVzufg4Vb189a7RzyPBX0g6NxnkDOtfmnvBCVAmQuok
+         CgOzFCqljv6s1YEWJX7ijdO45KRSo43r4Ts0wfTI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.10 092/105] smp: Fix offline cpu check in flush_smp_call_function_queue()
-Date:   Mon, 18 Apr 2022 14:13:34 +0200
-Message-Id: <20220418121149.248407638@linuxfoundation.org>
+        stable@vger.kernel.org, TCS Robot <tcs_robot@tencent.com>,
+        Haimin Zhang <tcs_kernel@tencent.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 234/284] jfs: prevent NULL deref in diFree
+Date:   Mon, 18 Apr 2022 14:13:35 +0200
+Message-Id: <20220418121218.366890470@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +56,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+From: Haimin Zhang <tcs_kernel@tencent.com>
 
-commit 9e949a3886356fe9112c6f6f34a6e23d1d35407f upstream.
+[ Upstream commit a53046291020ec41e09181396c1e829287b48d47 ]
 
-The check in flush_smp_call_function_queue() for callbacks that are sent
-to offline CPUs currently checks whether the queue is empty.
+Add validation check for JFS_IP(ipimap)->i_imap to prevent a NULL deref
+in diFree since diFree uses it without do any validations.
+When function jfs_mount calls diMount to initialize fileset inode
+allocation map, it can fail and JFS_IP(ipimap)->i_imap won't be
+initialized. Then it calls diFreeSpecial to close fileset inode allocation
+map inode and it will flow into jfs_evict_inode. Function jfs_evict_inode
+just validates JFS_SBI(inode->i_sb)->ipimap, then calls diFree. diFree use
+JFS_IP(ipimap)->i_imap directly, then it will cause a NULL deref.
 
-However, flush_smp_call_function_queue() has just deleted all the
-callbacks from the queue and moved all the entries into a local list.
-This checks would only be positive if some callbacks were added in the
-short time after llist_del_all() was called. This does not seem to be
-the intention of this check.
-
-Change the check to look at the local list to which the entries were
-moved instead of the queue from which all the callbacks were just
-removed.
-
-Fixes: 8d056c48e4862 ("CPU hotplug, smp: flush any pending IPI callbacks before CPU offline")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220319072015.1495036-1-namit@vmware.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reported-by: TCS Robot <tcs_robot@tencent.com>
+Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/smp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/jfs/inode.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -346,7 +346,7 @@ static void flush_smp_call_function_queu
+diff --git a/fs/jfs/inode.c b/fs/jfs/inode.c
+index 87b41edc800d..68779cc3609a 100644
+--- a/fs/jfs/inode.c
++++ b/fs/jfs/inode.c
+@@ -156,12 +156,13 @@ void jfs_evict_inode(struct inode *inode)
+ 		dquot_initialize(inode);
  
- 	/* There shouldn't be any pending callbacks on an offline CPU. */
- 	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
--		     !warned && !llist_empty(head))) {
-+		     !warned && entry != NULL)) {
- 		warned = true;
- 		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
+ 		if (JFS_IP(inode)->fileset == FILESYSTEM_I) {
++			struct inode *ipimap = JFS_SBI(inode->i_sb)->ipimap;
+ 			truncate_inode_pages_final(&inode->i_data);
  
+ 			if (test_cflag(COMMIT_Freewmap, inode))
+ 				jfs_free_zero_link(inode);
+ 
+-			if (JFS_SBI(inode->i_sb)->ipimap)
++			if (ipimap && JFS_IP(ipimap)->i_imap)
+ 				diFree(inode);
+ 
+ 			/*
+-- 
+2.35.1
+
 
 

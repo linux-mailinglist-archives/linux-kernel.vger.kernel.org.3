@@ -2,75 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE43505EE5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2806F505EF0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:40:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238614AbiDRUb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
+        id S1346113AbiDRUnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233813AbiDRUbz (ORCPT
+        with ESMTP id S238691AbiDRUnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:31:55 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8647230546;
-        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id u2so20888028pgq.10;
-        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=k/abdeQtikDllXMZliiNaxu3T30egp/N7n/c1q2jeho=;
-        b=bu4kqdq3VHWRMLr7I/h/TZC4Yw19uxTafRT3cIHkpRFm5D9FAbtj6y0e9xln3kd8n8
-         RgMxsIyszGG/zJgvPinizHcA6tN/KB0PAIy0zdEM6gLDsHPiCdq6bzKBZTsKMsc/r0gL
-         J0b7ShPeq+4g+uBXqaRy8uswAFx4uWfbXFMpdQwJBlKEtEfKW5KYVTrhZuUw12wbRbVv
-         OAa+xVOYqZvoncTyLUsFxR05IbR/n2vz9HNBy/gU+URyT+4Fk7qpLb/+e8aJ0s/R3e8M
-         2OmFresFFfrMRvMZUwbnFuNFPlBKBDA6JiDdvLCHr1KzrUTUUewM1kM91PHft6VQZ/fr
-         AbHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=k/abdeQtikDllXMZliiNaxu3T30egp/N7n/c1q2jeho=;
-        b=4olzw5/R9FpdzuTzt7cTSyes38g4RrSrRNarlday9c8Nf5/XrbUmJZBhhggtKQz0b9
-         IrChTSpgkZXIJscx4EIzqPIiASFTqvDhTUonJlfcQRbNLh7Rkyw3OEHkhXJTI96+torj
-         DSHfT/6+i7l0mqqUEMkO1IZStTBZQYaK4VpnNv2f4rqkz61nsNZ9xLP1KchmhFPnLnv/
-         9vtDko2rY4dztG33z/wBkickdNNT7C0rJBTKFZ/ZXGRni1mod7TEXULbGOAoGYYycu6f
-         bJW8a0rdywQkS0Ddn4kiWFmyICyennR0Psf8YUgVWfy9ScPtATAqj8Lbn55tM3k+HyT4
-         emIA==
-X-Gm-Message-State: AOAM5331RRVYLp60D1iMWC3YZPxCaxPqrAFicd+//1B7gUK24SF0Bou9
-        iDie8iM80N5l8n7jGnZjOYs=
-X-Google-Smtp-Source: ABdhPJxDpiiWgelGw7kG+xTCy5WR0yNUZ5uRXVaiikQO+7ICh5SveRXc4grac7bztBqnWzyrzhKA+A==
-X-Received: by 2002:a62:17cf:0:b0:50a:4601:36fe with SMTP id 198-20020a6217cf000000b0050a460136femr14196270pfx.4.1650313755010;
-        Mon, 18 Apr 2022 13:29:15 -0700 (PDT)
-Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
-        by smtp.gmail.com with ESMTPSA id v8-20020a17090a7c0800b001cb63a477eesm13989930pjf.12.2022.04.18.13.29.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 13:29:14 -0700 (PDT)
-Message-ID: <f4aea108-b50a-aca2-f118-6f809303d2a0@gmail.com>
-Date:   Mon, 18 Apr 2022 13:29:12 -0700
+        Mon, 18 Apr 2022 16:43:13 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567FB1D8;
+        Mon, 18 Apr 2022 13:40:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KhzMr3F3wz4xNl;
+        Tue, 19 Apr 2022 06:40:24 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650314425;
+        bh=9agyEmuiypG94eVvorJ8y98r2UF29vOEKNsFpbFyjlw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ac2dkAz0llnwnNB5YUtu6riurHAHp972Vg8P1VDBIWZQ5nJBL5Tv4cO9e7OmsIuX2
+         NI3syIuGu75oSp4/ePK8uC2BTLBcNopqqZp/SyLYUG6jn9D8TIo9CicqIUZhRyKT3U
+         13fdljVBlvaAQUWvgKcmXENOMdP8ZD32mv0VMQV9onBhvvxeBqRQmCVCM02nm0/JhE
+         ccmdjIqu/iGseYeylkL8aTqUHTIFFc/6r0vbpJdjo46925XsPpwSUE2hhELpuSpmVo
+         yNTwRPJqFvUj3FXNwDOJmVUm8s3ox2jWkdIEqJlkk0+6rk74SSvJOKNG+3bOtJplpC
+         7J8ExDiJM///w==
+Date:   Tue, 19 Apr 2022 06:40:23 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Vineet Gupta <vgupta@kernel.org>
+Cc:     Rolf Eike Beer <eb@emlix.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the arc-current tree
+Message-ID: <20220419064023.4cedc139@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220418121203.462784814@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/8/RFPmKQV81F.6qG3noSAiT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,29 +51,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/8/RFPmKQV81F.6qG3noSAiT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
+Hi all,
 
-On 4/18/2022 5:09 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.4 release.
-> There are 219 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+In commit
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+  a20aadab6ad6 ("arc: drop definitions of pgd_index() and pgd_offset{, _k}(=
+) entirely")
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+Fixes tag
+
+  Fixes: 974b9b2c68f ("mm: consolidate pte_index() and pte_offset_*() defin=
+itions")
+
+has these problem(s):
+
+  - SHA1 should be at least 12 digits long
+    This can be fixed for the future by setting core.abbrev to 12 (or
+    more) or (for git v2.11 or later) just making sure it is not set
+    (or set to "auto").
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8/RFPmKQV81F.6qG3noSAiT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJdzLcACgkQAVBC80lX
+0Gxzrgf/cBzXqxXAffJqAd5iI5tgZDAaXJm191s7Orxj0lhicR9vqjOaM94arZZk
+SnVmvWHdW9p0FZE5nFeurTJv/282t3/LsuFaQao6yIde8DgVLIuqirGhnU0E6CrV
+83Aim1LkRbwa85wcWLHndHx/Ei0iTNWEdYQy/IFgNkN5QUsA+rcd84pD83IP3pZz
+XNwFy9wsJUkKEYFSbWTscIzUikFOwuhfGoKaGnJ5/GV0bCNxbh8k5SqDfekRWN39
+3w79rEs3lPdmn9wikLFNf1ZwhwxIpwl7ql8k7anUCw7r/3AvKxqaDemYfuXvhHDL
+2toyBMrLbDzUXtjp135HQlIKxNXY9Q==
+=v5cv
+-----END PGP SIGNATURE-----
+
+--Sig_/8/RFPmKQV81F.6qG3noSAiT--

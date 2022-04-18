@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9488504C3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:20:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57BF1504C3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236637AbiDRFWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 01:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S236646AbiDRFWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 01:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236629AbiDRFWU (ORCPT
+        with ESMTP id S235281AbiDRFW1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 01:22:20 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B4101FF;
-        Sun, 17 Apr 2022 22:19:42 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23I5JFaH028353;
-        Mon, 18 Apr 2022 00:19:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650259155;
-        bh=oMWykkOjn8YbIp9yDJTk+cdjfn72U31dolM6E1w49f0=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=qnL/fy+pfPzITq0xHATdSQdu/TXEJvlUemKTTBDdGpFB63mAHtJeJCyVodYucRFuM
-         6L6e696W49GJ+kJGbRAOqiKEa+WW7YrdQPE7ZiLsXdnWz0rVpDddCT3g32m2iY4qhn
-         AhjszOZkY37Kf6c7LHl2GYt3spFnwmbO7vpl6Hc0=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23I5JFms006926
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 18 Apr 2022 00:19:15 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
- Apr 2022 00:19:14 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 18 Apr 2022 00:19:14 -0500
-Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23I5J96x066544;
-        Mon, 18 Apr 2022 00:19:10 -0500
-Message-ID: <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
-Date:   Mon, 18 Apr 2022 10:49:08 +0530
+        Mon, 18 Apr 2022 01:22:27 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FA702DD6;
+        Sun, 17 Apr 2022 22:19:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650259190; x=1681795190;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=PhylthLBQ2glQtoRReWB3UsVRn+3t3bqEnBQKi8vT3U=;
+  b=ixCS5lkeFRyxYdV7xJrqMStNDXkxEQ0uPD0W1L+LPNP/DgZul+YpFDH4
+   1y9xXp2ltJmwjsrPf7pHBJxhgCjFY21h+ufPOEOmyBexfOroMfFMC7vgf
+   +w+gkSZU2jBgPeUorqG4pjSG872tKMUTRQC1kzKM0Wk6JUOh1Tg+Byi69
+   I=;
+Received: from unknown (HELO ironmsg05-sd.qualcomm.com) ([10.53.140.145])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 17 Apr 2022 22:19:49 -0700
+X-QCInternal: smtphost
+Received: from unknown (HELO nasanex01a.na.qualcomm.com) ([10.52.223.231])
+  by ironmsg05-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 22:19:49 -0700
+Received: from [10.201.2.159] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Sun, 17 Apr
+ 2022 22:19:46 -0700
+Message-ID: <8140244d-81d8-6837-7fb9-728b042c115f@quicinc.com>
+Date:   Mon, 18 Apr 2022 10:49:43 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
- property optional
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V2] mtd: rawnand: qcom: fix memory corruption that causes
+ panic
 Content-Language: en-US
-To:     Roger Quadros <rogerq@kernel.org>
-CC:     Vignesh Raghavendra <vigneshr@ti.com>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Hector Martin <marcan@marcan.st>,
-        Martin Kepplinger <martink@posteo.de>,
-        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
-        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220414083120.22535-1-a-govindraju@ti.com>
- <20220414083120.22535-2-a-govindraju@ti.com>
- <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
-From:   Aswath Govindraju <a-govindraju@ti.com>
-In-Reply-To: <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     <richard@nod.at>, <vigneshr@ti.com>,
+        <linux-mtd@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <konrad.dybcio@somainline.org>,
+        <quic_srichara@quicinc.com>
+References: <1649950217-32272-1-git-send-email-quic_mdalam@quicinc.com>
+ <20220414173642.56baedf5@xps13> <20220414155319.GB20493@thinkpad>
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+In-Reply-To: <20220414155319.GB20493@thinkpad>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Roger,
 
-On 14/04/22 23:40, Roger Quadros wrote:
-> Hi,
-> 
-> On 14/04/2022 11:31, Aswath Govindraju wrote:
->> Support for polling has been added in the driver, which will be used by
->> default if interrupts property is not populated. Therefore, remove
->> interrupts and interrupt-names from the required properties and add a note
->> under interrupts property describing the above support in driver.
+On 4/14/2022 9:23 PM, Manivannan Sadhasivam wrote:
+> WARNING: This email originated from outside of Qualcomm. Please be wary of any links or attachments, and do not enable macros.
+>
+> On Thu, Apr 14, 2022 at 05:36:42PM +0200, Miquel Raynal wrote:
+>> Hi Md,
 >>
->> Suggested-by: Roger Quadros <rogerq@kernel.org>
-> 
-> I did not suggest to make interrupts optional by default.
-> 
-> What I suggested was that if a DT property exists to explicitly
-> indicate polling mode then interrupts are not required.
-> 
-
-ohh okay, got it. However, may I know if adding a dt property to
-indicate polling for aiding the driver, is the correct approach to model it?
-
-In terms of modelling hardware, as interrupts are not connected we are
-not populating the interrupts property. Shouldn't that be all. If we are
-adding a property explicitly to indicate polling that can be used by
-driver, wouldn't that be a software aid being added in the device tree?
-
-Thanks,
-Aswath
-
->> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
->> ---
->>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
->>  1 file changed, 2 insertions(+), 2 deletions(-)
+>> quic_mdalam@quicinc.com wrote on Thu, 14 Apr 2022 21:00:17 +0530:
 >>
->> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->> index a4c53b1f1af3..1c4b8c6233e5 100644
->> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
->> @@ -25,6 +25,8 @@ properties:
->>  
->>    interrupts:
->>      maxItems: 1
->> +    description:
->> +      If interrupts are not populated then by default polling will be used.
->>  
->>    interrupt-names:
->>      items:
->> @@ -33,8 +35,6 @@ properties:
->>  required:
->>    - compatible
->>    - reg
->> -  - interrupts
->> -  - interrupt-names
->>  
->>  additionalProperties: true
->>  
-> 
-> cheers,
-> -roger
+>>> This patch fixes a memory corruption that occurred in the
+>>> nand_scan() path for Hynix nand device.
+>>>
+>>> On boot, for Hynix nand device will panic at a weird place:
+>>> | Unable to handle kernel NULL pointer dereference at virtual
+>>>    address 00000070
+>>> | [00000070] *pgd=00000000
+>>> | Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+>>> | Modules linked in:
+>>> | CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+>>>    #38
+>>> | Hardware name: Generic DT based system
+>>> | PC is at nandc_set_reg+0x8/0x1c
+>>> | LR is at qcom_nandc_command+0x20c/0x5d0
+>>> | pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+>>> | sp : c14adc50  ip : c14ee208  fp : c0cc970c
+>>> | r10: 000000a3  r9 : 00000000  r8 : 00000040
+>>> | r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+>>> | r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+>>> | Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+>>> | Control: 10c5387d  Table: 8020406a  DAC: 00000051
+>>> | Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
+>>>    64 size 2048
+>>> | Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+>>> | nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
+>>> | qcom_nandc_command from nand_readid_op+0x198/0x1e8
+>>> | nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
+>>> | hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+>>> | hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+>>> | nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+>>> | qcom_nandc_probe from platform_probe+0x58/0xac
+>>>
+>>> The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+>>> is updating the nandc->max_cwperpage from 1 to 4.This causes the
+>>> sg_init_table of clear_bam_transaction() in the driver's
+>>> qcom_nandc_command() to memset much more than what was initially
+>>> allocated by alloc_bam_transaction().
+>>>
+>>> This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
+>>> returns, and remove updating nandc->max_cwperpage from
+>>> qcom_nand_attach_chip call back.
+>> Please update also the commit log.
+>>
+>> Fixes: ?
+>> Cc: stable ?
+> Also please add Reported-by to credit Konrad.
+    Updated in V3 patch.
+>
+> Thanks,
+> Mani
+>
+>>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>>> Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+>>> ---
+>>> [V2]
+>> Thanks,
+>> Miquèl

@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9167505203
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F14E505211
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbiDRMh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53978 "EHLO
+        id S239750AbiDRMiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239161AbiDRMcb (ORCPT
+        with ESMTP id S239231AbiDRMcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:32:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 818FF25C7F;
-        Mon, 18 Apr 2022 05:24:19 -0700 (PDT)
+        Mon, 18 Apr 2022 08:32:41 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BAB26104;
+        Mon, 18 Apr 2022 05:24:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8B7260FB0;
-        Mon, 18 Apr 2022 12:24:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D11F4C385AB;
-        Mon, 18 Apr 2022 12:24:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A24BCB80EDA;
+        Mon, 18 Apr 2022 12:24:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBE91C385A8;
+        Mon, 18 Apr 2022 12:24:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284658;
-        bh=m9viVS1D+NUit2asz3mAmwwfeEnNpj04FNw9SDwXsWk=;
+        s=korg; t=1650284661;
+        bh=xykrMrmiv5+u/RvlY5+4iaJ7HcGO82DMt1+l6pSg8os=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xMluKMGrhUKe4zD6KVHac4WFhX/K6nXW6lTvFAW/Vn9K2Kqa7mELZhFAdoFCDMl/U
-         6DXGXVFcR7ZPpnGTm3nd8IryjhbsD0UR238EmCYdwUcKyq61sy60hkGCxsNVh8bM7n
-         vW7MEX/oelJhEWdTmMWomW0QW6iaezCCjABMzwhM=
+        b=vdwA3fwPMQ9noXcaQca1I1a3nxhol1MGI5dJGS6pPXb4Qpd+APZn2GID0Pyt0fuBg
+         cq8Icl2CbHEYOAAoamiHZ0fnGd5bYTS2NcQuSssvGMtRRlotO+IjebzpPnchOykJVe
+         PlIp4Zh+yIm2RmcW5akN339VBtMJCuWnCZJH8/+A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ronnie Sahlberg <lsahlber@redhat.com>,
-        Shyam Prasad N <sprasad@microsoft.com>,
-        Xiaoli Feng <xifeng@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.17 187/219] cifs: verify that tcon is valid before dereference in cifs_kill_sb
-Date:   Mon, 18 Apr 2022 14:12:36 +0200
-Message-Id: <20220418121212.112167732@linuxfoundation.org>
+        stable@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH 5.17 188/219] gpio: sim: fix setting and getting multiple lines
+Date:   Mon, 18 Apr 2022 14:12:37 +0200
+Message-Id: <20220418121212.139304618@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -56,47 +54,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ronnie Sahlberg <lsahlber@redhat.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
 
-commit 8b6c58458ee3206dde345fce327a4cb83e69caf9 upstream.
+commit 3836c73e6a2585561af928c6641d74528a8bdfa4 upstream.
 
-On umount, cifs_sb->tlink_tree might contain entries that do not represent
-a valid tcon.
-Check the tcon for error before we dereference it.
+We need to take mask into account in the set/get_multiple() callbacks.
+Use bitmap_replace() instead of bitmap_copy().
 
-Signed-off-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Fixes: cb8c474e79be ("gpio: sim: new testing module")
 Cc: stable@vger.kernel.org
-Reviewed-by: Shyam Prasad N <sprasad@microsoft.com>
-Reported-by: Xiaoli Feng <xifeng@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/cifs/cifsfs.c |    6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ drivers/gpio/gpio-sim.c |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -266,10 +266,11 @@ static void cifs_kill_sb(struct super_bl
- 	 * before we kill the sb.
- 	 */
- 	if (cifs_sb->root) {
--		node = rb_first(root);
--		while (node != NULL) {
-+		for (node = rb_first(root); node; node = rb_next(node)) {
- 			tlink = rb_entry(node, struct tcon_link, tl_rbnode);
- 			tcon = tlink_tcon(tlink);
-+			if (IS_ERR(tcon))
-+				continue;
- 			cfid = &tcon->crfid;
- 			mutex_lock(&cfid->fid_mutex);
- 			if (cfid->dentry) {
-@@ -277,7 +278,6 @@ static void cifs_kill_sb(struct super_bl
- 				cfid->dentry = NULL;
- 			}
- 			mutex_unlock(&cfid->fid_mutex);
--			node = rb_next(node);
- 		}
+--- a/drivers/gpio/gpio-sim.c
++++ b/drivers/gpio/gpio-sim.c
+@@ -134,7 +134,7 @@ static int gpio_sim_get_multiple(struct
+ 	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
  
- 		/* finally release root dentry */
+ 	mutex_lock(&chip->lock);
+-	bitmap_copy(bits, chip->value_map, gc->ngpio);
++	bitmap_replace(bits, bits, chip->value_map, mask, gc->ngpio);
+ 	mutex_unlock(&chip->lock);
+ 
+ 	return 0;
+@@ -146,7 +146,7 @@ static void gpio_sim_set_multiple(struct
+ 	struct gpio_sim_chip *chip = gpiochip_get_data(gc);
+ 
+ 	mutex_lock(&chip->lock);
+-	bitmap_copy(chip->value_map, bits, gc->ngpio);
++	bitmap_replace(chip->value_map, chip->value_map, bits, mask, gc->ngpio);
+ 	mutex_unlock(&chip->lock);
+ }
+ 
 
 

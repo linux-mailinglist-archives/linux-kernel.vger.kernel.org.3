@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EE085055BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C86A2505542
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234787AbiDRNZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32982 "EHLO
+        id S239502AbiDRNOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240571AbiDRNDm (ORCPT
+        with ESMTP id S242215AbiDRM7m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E726329;
-        Mon, 18 Apr 2022 05:45:00 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D94FD2FFEE;
+        Mon, 18 Apr 2022 05:40:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA52F611E4;
-        Mon, 18 Apr 2022 12:44:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC606C385A7;
-        Mon, 18 Apr 2022 12:44:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 86A13B80EC0;
+        Mon, 18 Apr 2022 12:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0407C385A1;
+        Mon, 18 Apr 2022 12:40:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285899;
-        bh=9T8bL2EPWJPPlfceRC/6fA7bh51kA+mxwyKL6iDHjn8=;
+        s=korg; t=1650285623;
+        bh=dJzCn9cIQspghMBiSeA+o7H9D+g3/toGnQtHulXDBOU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=psuSjgD22FQidQkJAT75RiTsxiSAHGJ7osGh3MDm1FJPUV37Vy7aTP6kwtVcbJuFr
-         DxVhO3/uZWZrr+EveP7VAYTlH7kncfmn/lq6WN7sZUxOQYeJfVnre+W+Q9H3qo/DzX
-         Q8EQJ3TpNOsNYAowAO6NJhffBrf9stYAIqlwzvpI=
+        b=cRpEMikYia1nxFhKqOYKhLoAfS6liHhPM42nNNIx6ZatXKet5xmCeCenk83XS4U2m
+         0M9dQn48ISJwHbWp+JFkmXIqlyCKj76R3UBRsIGonctBbGmj6ypOFxLuxsa/EyGNrg
+         Y29cpUkazqiI8mlwNrQSZrTD+zCACh1XlJ1oGCq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 21/63] Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
+        stable@vger.kernel.org, PaX Team <pageexec@freemail.hu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: [PATCH 5.10 076/105] gcc-plugins: latent_entropy: use /dev/urandom
 Date:   Mon, 18 Apr 2022 14:13:18 +0200
-Message-Id: <20220418121135.573232247@linuxfoundation.org>
+Message-Id: <20220418121148.788977851@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Jason A. Donenfeld <Jason@zx2c4.com>
 
-[ Upstream commit b6cae15b5710c8097aad26a2e5e752c323ee5348 ]
+commit c40160f2998c897231f8454bf797558d30a20375 upstream.
 
-When reading a packet from a host-to-guest ring buffer, there is no
-memory barrier between reading the write index (to see if there is
-a packet to read) and reading the contents of the packet. The Hyper-V
-host uses store-release when updating the write index to ensure that
-writes of the packet data are completed first. On the guest side,
-the processor can reorder and read the packet data before the write
-index, and sometimes get stale packet data. Getting such stale packet
-data has been observed in a reproducible case in a VM on ARM64.
+While the latent entropy plugin mostly doesn't derive entropy from
+get_random_const() for measuring the call graph, when __latent_entropy is
+applied to a constant, then it's initialized statically to output from
+get_random_const(). In that case, this data is derived from a 64-bit
+seed, which means a buffer of 512 bits doesn't really have that amount
+of compile-time entropy.
 
-Fix this by using virt_load_acquire() to read the write index,
-ensuring that reads of the packet data cannot be reordered
-before it. Preventing such reordering is logically correct, and
-with this change, getting stale data can no longer be reproduced.
+This patch fixes that shortcoming by just buffering chunks of
+/dev/urandom output and doling it out as requested.
 
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/1648394710-33480-1-git-send-email-mikelley@microsoft.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+At the same time, it's important that we don't break the use of
+-frandom-seed, for people who want the runtime benefits of the latent
+entropy plugin, while still having compile-time determinism. In that
+case, we detect whether gcc's set_random_seed() has been called by
+making a call to get_random_seed(noinit=true) in the plugin init
+function, which is called after set_random_seed() is called but before
+anything that calls get_random_seed(noinit=false), and seeing if it's
+zero or not. If it's not zero, we're in deterministic mode, and so we
+just generate numbers with a basic xorshift prng.
+
+Note that we don't detect if -frandom-seed is being used using the
+documented local_tick variable, because it's assigned via:
+   local_tick = (unsigned) tv.tv_sec * 1000 + tv.tv_usec / 1000;
+which may well overflow and become -1 on its own, and so isn't
+reliable: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105171
+
+[kees: The 256 byte rnd_buf size was chosen based on average (250),
+ median (64), and std deviation (575) bytes of used entropy for a
+ defconfig x86_64 build]
+
+Fixes: 38addce8b600 ("gcc-plugins: Add latent_entropy plugin")
+Cc: stable@vger.kernel.org
+Cc: PaX Team <pageexec@freemail.hu>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20220405222815.21155-1-Jason@zx2c4.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hv/ring_buffer.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ scripts/gcc-plugins/latent_entropy_plugin.c |   44 +++++++++++++++++-----------
+ 1 file changed, 27 insertions(+), 17 deletions(-)
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 9a03b163cbbd..59f1e64908b1 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -378,7 +378,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- {
- 	u32 priv_read_loc = rbi->priv_read_index;
--	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
-+	u32 write_loc;
-+
-+	/*
-+	 * The Hyper-V host writes the packet data, then uses
-+	 * store_release() to update the write_index.  Use load_acquire()
-+	 * here to prevent loads of the packet data from being re-ordered
-+	 * before the read of the write_index and potentially getting
-+	 * stale data.
-+	 */
-+	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
+--- a/scripts/gcc-plugins/latent_entropy_plugin.c
++++ b/scripts/gcc-plugins/latent_entropy_plugin.c
+@@ -86,25 +86,31 @@ static struct plugin_info latent_entropy
+ 	.help		= "disable\tturn off latent entropy instrumentation\n",
+ };
  
- 	if (write_loc >= priv_read_loc)
- 		return write_loc - priv_read_loc;
--- 
-2.35.1
-
+-static unsigned HOST_WIDE_INT seed;
+-/*
+- * get_random_seed() (this is a GCC function) generates the seed.
+- * This is a simple random generator without any cryptographic security because
+- * the entropy doesn't come from here.
+- */
++static unsigned HOST_WIDE_INT deterministic_seed;
++static unsigned HOST_WIDE_INT rnd_buf[32];
++static size_t rnd_idx = ARRAY_SIZE(rnd_buf);
++static int urandom_fd = -1;
++
+ static unsigned HOST_WIDE_INT get_random_const(void)
+ {
+-	unsigned int i;
+-	unsigned HOST_WIDE_INT ret = 0;
+-
+-	for (i = 0; i < 8 * sizeof(ret); i++) {
+-		ret = (ret << 1) | (seed & 1);
+-		seed >>= 1;
+-		if (ret & 1)
+-			seed ^= 0xD800000000000000ULL;
++	if (deterministic_seed) {
++		unsigned HOST_WIDE_INT w = deterministic_seed;
++		w ^= w << 13;
++		w ^= w >> 7;
++		w ^= w << 17;
++		deterministic_seed = w;
++		return deterministic_seed;
+ 	}
+ 
+-	return ret;
++	if (urandom_fd < 0) {
++		urandom_fd = open("/dev/urandom", O_RDONLY);
++		gcc_assert(urandom_fd >= 0);
++	}
++	if (rnd_idx >= ARRAY_SIZE(rnd_buf)) {
++		gcc_assert(read(urandom_fd, rnd_buf, sizeof(rnd_buf)) == sizeof(rnd_buf));
++		rnd_idx = 0;
++	}
++	return rnd_buf[rnd_idx++];
+ }
+ 
+ static tree tree_get_random_const(tree type)
+@@ -549,8 +555,6 @@ static void latent_entropy_start_unit(vo
+ 	tree type, id;
+ 	int quals;
+ 
+-	seed = get_random_seed(false);
+-
+ 	if (in_lto_p)
+ 		return;
+ 
+@@ -585,6 +589,12 @@ __visible int plugin_init(struct plugin_
+ 	const struct plugin_argument * const argv = plugin_info->argv;
+ 	int i;
+ 
++	/*
++	 * Call get_random_seed() with noinit=true, so that this returns
++	 * 0 in the case where no seed has been passed via -frandom-seed.
++	 */
++	deterministic_seed = get_random_seed(true);
++
+ 	static const struct ggc_root_tab gt_ggc_r_gt_latent_entropy[] = {
+ 		{
+ 			.base = &latent_entropy_decl,
 
 

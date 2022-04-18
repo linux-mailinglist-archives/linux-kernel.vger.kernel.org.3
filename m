@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458C65057A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066805051A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245135AbiDRNwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S239303AbiDRMg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:36:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243355AbiDRN24 (ORCPT
+        with ESMTP id S239042AbiDRMa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:28:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89E63F309;
-        Mon, 18 Apr 2022 05:53:31 -0700 (PDT)
+        Mon, 18 Apr 2022 08:30:28 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7020BBF;
+        Mon, 18 Apr 2022 05:23:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E259BB80D9C;
-        Mon, 18 Apr 2022 12:53:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB42C385A1;
-        Mon, 18 Apr 2022 12:53:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 16201CE1077;
+        Mon, 18 Apr 2022 12:23:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAE1C385A1;
+        Mon, 18 Apr 2022 12:23:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286408;
-        bh=uwWUHcocqa18DATC5hnFI4mO2NFYAmc2DXMf4447H+g=;
+        s=korg; t=1650284625;
+        bh=kHv6hQD5t7JI2Qskfwudj9tOHcppLAkN/iiMY1xPhck=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Pi/ISS/Dd2aCLujLLobdstcNOLxeMiv6fLn+cZMGJ2KJt0ul0g8j2rG2H4VKGBsWD
-         z4oyfNKrbcyJYH+2jSwYgrK32XPFAuauvah+wuCc+7i7MS6QEnlKaorLVjz2oq0Mp6
-         2+TkdFsy+4TgQJSMhp0esouGNBRR88F/5wfLeqKQ=
+        b=anzIyJEEYmo0ZmydHfhAci23rTNMQl1HSiEDgz8d4JTXetQkHO6MolWAQdD2Qnfkn
+         oo0W00cI6AVkuOKR+ahWtnVf6bZM8tIkjvwnq6XAh1mLgMC8ADXEzhxhttZlqzqBtU
+         DvLcv9uM21z+KbfXYADA9qa8ZTEfciI1ZzP6Tr8A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiyu Yang <xiyuyang19@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>,
-        Xin Xiong <xiongx18@fudan.edu.cn>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
+        stable@vger.kernel.org, Alvin Lee <Alvin.Lee2@amd.com>,
+        Aric Cyr <Aric.Cyr@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 123/284] mtd: rawnand: atmel: fix refcount issue in atmel_nand_controller_init
+Subject: [PATCH 5.17 135/219] drm/amd/display: fix audio format not updated after edid updated
 Date:   Mon, 18 Apr 2022 14:11:44 +0200
-Message-Id: <20220418121214.658422150@linuxfoundation.org>
+Message-Id: <20220418121210.673122656@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,75 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Xin Xiong <xiongx18@fudan.edu.cn>
+From: Charlene Liu <Charlene.Liu@amd.com>
 
-[ Upstream commit fecbd4a317c95d73c849648c406bcf1b6a0ec1cf ]
+[ Upstream commit 5e8a71cf13bc9184fee915b2220be71b4c6cac74 ]
 
-The reference counting issue happens in several error handling paths
-on a refcounted object "nc->dmac". In these paths, the function simply
-returns the error code, forgetting to balance the reference count of
-"nc->dmac", increased earlier by dma_request_channel(), which may
-cause refcount leaks.
+[why]
+for the case edid change only changed audio format.
+driver still need to update stream.
 
-Fix it by decrementing the refcount of specific object in those error
-paths.
-
-Fixes: f88fc122cc34 ("mtd: nand: Cleanup/rework the atmel_nand driver")
-Co-developed-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Signed-off-by: Xiyu Yang <xiyuyang19@fudan.edu.cn>
-Co-developed-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Miquel Raynal <miquel.raynal@bootlin.com>
-Link: https://lore.kernel.org/linux-mtd/20220304085330.3610-1-xiongx18@fudan.edu.cn
+Reviewed-by: Alvin Lee <Alvin.Lee2@amd.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Charlene Liu <Charlene.Liu@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/nand/atmel/nand-controller.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/mtd/nand/atmel/nand-controller.c b/drivers/mtd/nand/atmel/nand-controller.c
-index d5a493e8ee08..475c751f2d1e 100644
---- a/drivers/mtd/nand/atmel/nand-controller.c
-+++ b/drivers/mtd/nand/atmel/nand-controller.c
-@@ -1998,13 +1998,15 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	nc->mck = of_clk_get(dev->parent->of_node, 0);
- 	if (IS_ERR(nc->mck)) {
- 		dev_err(dev, "Failed to retrieve MCK clk\n");
--		return PTR_ERR(nc->mck);
-+		ret = PTR_ERR(nc->mck);
-+		goto out_release_dma;
- 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+index ac3071e38e4a..f0a97b82c33a 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+@@ -1667,8 +1667,8 @@ bool dc_is_stream_unchanged(
+ 	if (old_stream->ignore_msa_timing_param != stream->ignore_msa_timing_param)
+ 		return false;
  
- 	np = of_parse_phandle(dev->parent->of_node, "atmel,smc", 0);
- 	if (!np) {
- 		dev_err(dev, "Missing or invalid atmel,smc property\n");
--		return -EINVAL;
-+		ret = -EINVAL;
-+		goto out_release_dma;
- 	}
+-	// Only Have Audio left to check whether it is same or not. This is a corner case for Tiled sinks
+-	if (old_stream->audio_info.mode_count != stream->audio_info.mode_count)
++	/*compare audio info*/
++	if (memcmp(&old_stream->audio_info, &stream->audio_info, sizeof(stream->audio_info)) != 0)
+ 		return false;
  
- 	nc->smc = syscon_node_to_regmap(np);
-@@ -2012,10 +2014,16 @@ static int atmel_nand_controller_init(struct atmel_nand_controller *nc,
- 	if (IS_ERR(nc->smc)) {
- 		ret = PTR_ERR(nc->smc);
- 		dev_err(dev, "Could not get SMC regmap (err = %d)\n", ret);
--		return ret;
-+		goto out_release_dma;
- 	}
- 
- 	return 0;
-+
-+out_release_dma:
-+	if (nc->dmac)
-+		dma_release_channel(nc->dmac);
-+
-+	return ret;
- }
- 
- static int
+ 	return true;
 -- 
-2.34.1
+2.35.1
 
 
 

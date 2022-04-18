@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2D9505783
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 742B3505356
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245618AbiDRNxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41356 "EHLO
+        id S240412AbiDRM4n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244778AbiDRNay (ORCPT
+        with ESMTP id S239500AbiDRMpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2FE42A19;
-        Mon, 18 Apr 2022 05:55:19 -0700 (PDT)
+        Mon, 18 Apr 2022 08:45:03 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A28E28E12;
+        Mon, 18 Apr 2022 05:32:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 59B1D6115A;
-        Mon, 18 Apr 2022 12:55:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49AE4C385A1;
-        Mon, 18 Apr 2022 12:55:18 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 45982CE10A0;
+        Mon, 18 Apr 2022 12:32:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2249FC385A1;
+        Mon, 18 Apr 2022 12:32:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286518;
-        bh=YgEmVX4A3A766D6wWpo2mQbxWZWAWD0HoACV1S8a+Cc=;
+        s=korg; t=1650285159;
+        bh=g9xA4Z958SwzJiov5Xvy3braVNOc8Gmzi+GDvD2yjeM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kOP7U5hZMmLSRVDy6gaNT7moAOMu3r/sWyrK1tOisg0N7Z3LQqPd3ldR8KzxzQj/Q
-         UXf6v//mqq3jNQQiTnFAzFOK+Vdujo5kurL6Z5x00yuJuDjVNTo7G16sVCDZUg8GXg
-         ZtdWW1nPZg1DucMeUIq9S5QdDEOicGxMNTBim/qk=
+        b=aV9qqRkvm0/bmVRTi98PUBQw+yRQpIB/vUW37y0fYSIwj0gLGs2BYFDKFkKSnTLWv
+         c6frI2RpdH+DDBGD4w2g3WUhpa8kiHF/tXy+Sb1k/D2NX3s/ZQjikubrtbz1w8uMOm
+         lPTo15Hi1RrtM1jwTvQsqKPuzGE07c+37c0zQf7M=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 159/284] ACPICA: Avoid walking the ACPI Namespace if it is not there
+Subject: [PATCH 5.15 120/189] scsi: lpfc: Fix queue failures when recovering from PCI parity error
 Date:   Mon, 18 Apr 2022 14:12:20 +0200
-Message-Id: <20220418121216.265246199@linuxfoundation.org>
+Message-Id: <20220418121203.949852749@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+From: James Smart <jsmart2021@gmail.com>
 
-[ Upstream commit 0c9992315e738e7d6e927ef36839a466b080dba6 ]
+[ Upstream commit df0101197c4d9596682901631f3ee193ed354873 ]
 
-ACPICA commit b1c3656ef4950098e530be68d4b589584f06cddc
+When recovering from a pci-parity error the driver is failing to re-create
+queues, causing recovery to fail. Looking deeper, it was found that the
+interrupt vector count allocated on the recovery was fewer than the vectors
+originally allocated. This disparity resulted in CPU map entries with stale
+information. When the driver tries to re-create the queues, it attempts to
+use the stale information which indicates an eq/interrupt vector that was
+no longer created.
 
-Prevent acpi_ns_walk_namespace() from crashing when called with
-start_node equal to ACPI_ROOT_OBJECT if the Namespace has not been
-instantiated yet and acpi_gbl_root_node is NULL.
+Fix by clearng the cpup map array before enabling and requesting the IRQs
+in the lpfc_sli_reset_slot_s4 routine().
 
-For instance, this can happen if the kernel is run with "acpi=off"
-in the command line.
-
-Link: https://github.com/acpica/acpica/commit/b1c3656ef4950098e530be68d4b589584f06cddc
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0hJWW_vZ3wwajE7xT38aWjY7cZyvqMJpXHzUL98-SiCVQ@mail.gmail.com/
-Reported-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Link: https://lore.kernel.org/r/20220317032737.45308-4-jsmart2021@gmail.com
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/acpi/acpica/nswalk.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/lpfc/lpfc_init.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/acpi/acpica/nswalk.c b/drivers/acpi/acpica/nswalk.c
-index 6b6e6f498cff..129fc61f14c4 100644
---- a/drivers/acpi/acpica/nswalk.c
-+++ b/drivers/acpi/acpica/nswalk.c
-@@ -203,6 +203,9 @@ acpi_ns_walk_namespace(acpi_object_type type,
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 3eebcae52784..16246526e4c1 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -15105,6 +15105,8 @@ lpfc_io_slot_reset_s4(struct pci_dev *pdev)
+ 	psli->sli_flag &= ~LPFC_SLI_ACTIVE;
+ 	spin_unlock_irq(&phba->hbalock);
  
- 	if (start_node == ACPI_ROOT_OBJECT) {
- 		start_node = acpi_gbl_root_node;
-+		if (!start_node) {
-+			return_ACPI_STATUS(AE_NO_NAMESPACE);
-+		}
- 	}
- 
- 	/* Null child means "get first node" */
++	/* Init cpu_map array */
++	lpfc_cpu_map_array_init(phba);
+ 	/* Configure and enable interrupt */
+ 	intr_mode = lpfc_sli4_enable_intr(phba, phba->intr_mode);
+ 	if (intr_mode == LPFC_INTR_ERROR) {
 -- 
-2.34.1
+2.35.1
 
 
 

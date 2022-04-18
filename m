@@ -2,107 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8947E505EF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1C2505EFF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:53:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347815AbiDRUnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
+        id S1347829AbiDRU4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238691AbiDRUne (ORCPT
+        with ESMTP id S231984AbiDRU4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:43:34 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FEABE021;
-        Mon, 18 Apr 2022 13:40:54 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id EFA1820C360D;
-        Mon, 18 Apr 2022 13:40:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EFA1820C360D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1650314453;
-        bh=hPnBPHuEdxt7/RqdefOcSrFj/zJr1c5qyKGbEWwgZto=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NDlStXEMY3e+2PB0wsTLbHO/ghp3MpfX0wZQHagUiBmg8hqzac+IOSEoSa9T8CtGQ
-         OmjLVgjrsS/nEZsSLKC6MvH/zG2/1gnH/HsNt1bmMDheMh6lKAJc9l+Vx+MapQVJE7
-         Du3FPoqmZyXq2vdgYUqhRQkyE9HPEcUK8VCFWwfE=
-Date:   Mon, 18 Apr 2022 15:40:29 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Lei Wang <lewan@microsoft.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <20220418204029.GA31854@sequoia>
-References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
- <YeRkGvestiloCAUV@zn.tnic>
- <20220118152816.GA89184@sequoia>
- <Yeb4sK+ZmSHjWPWL@zn.tnic>
- <20220118195401.GB89184@sequoia>
- <YecrXidqecoYI/xg@zn.tnic>
- <YefXQHXNlsxk8yUc@kroah.com>
- <Yefb7zO9p1iPF3Jm@zn.tnic>
- <YefnuCPwMq5V2lgl@kroah.com>
- <20220404215640.GA626436@sequoia>
+        Mon, 18 Apr 2022 16:56:07 -0400
+X-Greylist: delayed 586 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Apr 2022 13:53:26 PDT
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797E022BD9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:53:26 -0700 (PDT)
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:105:465:1:2:0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4KhzRW3NyFz9sRj;
+        Mon, 18 Apr 2022 22:43:35 +0200 (CEST)
+Date:   Mon, 18 Apr 2022 22:43:29 +0200
+From:   Hagen Paul Pfeifer <hagen@jauu.net>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Subject: Re: [PATCH v8 00/12] user_events: Enable user processes to create
+ and write to trace events
+Message-ID: <Yl3NcRRIJMrd0WZu@laniakea>
+References: <20211216173511.10390-1-beaub@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220404215640.GA626436@sequoia>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20211216173511.10390-1-beaub@linux.microsoft.com>
+X-Key-Id: 98350C22
+X-Key-Fingerprint: 490F 557B 6C48 6D7E 5706 2EA2 4A22 8D45 9835 0C22
+X-GPG-Key: gpg --recv-keys --keyserver wwwkeys.eu.pgp.net 98350C22
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-04 16:56:58, Tyler Hicks wrote:
-> On 2022-01-19 11:28:08, Greg Kroah-Hartman wrote:
-> > On Wed, Jan 19, 2022 at 10:37:51AM +0100, Borislav Petkov wrote:
-> > > On Wed, Jan 19, 2022 at 10:17:52AM +0100, Greg Kroah-Hartman wrote:
-> > > > For this specific change, I do NOT think it should be backported at all,
-> > > > mostly for the reason that people are still arguing over the whole
-> > > > platform_get_*_optional() mess that we currently have.  Let's not go and
-> > > > backport anything right now to stable trees until we have all of that
-> > > > sorted out, as it looks like it all might be changing again.  See:
-> > > > 	https://lore.kernel.org/r/20220110195449.12448-1-s.shtylyov@omp.ru
-> > > > for all of the gory details and the 300+ emails written on the topic so
-> > > > far.
-> > > 
-> > > It sounds to me I should not even take this patch upstream yet,
-> > > considering that's still ongoing...
-> > 
-> > Yes, I would not take that just yet at all.  Let's let the api argument
-> > settle down a bit first.
-> 
-> The API argument seems to have fizzled out in v2:
-> 
->  https://lore.kernel.org/lkml/20220212201631.12648-1-s.shtylyov@omp.ru/
-> 
-> Can this fix be merged since there seem to be no API changes coming
-> soon? Boris, feel free to strip off the cc stable tag.
+* Beau Belgrave | 2021-12-16 09:34:59 [-0800]:
 
-Hi Boris - I just double checked that this still looks correct and
-applies cleanly to linux-next. Anything I can do on my end to help get
-this little fix merged into the ras.git tree? Thanks!
+>The typical scenario is on process start to mmap user_events_status. Processes
+>then register the events they plan to use via the REG ioctl. The ioctl reads
+>and updates the passed in user_reg struct. The status_index of the struct is
+>used to know the byte in the status page to check for that event. The
+>write_index of the struct is used to describe that event when writing out to
+>the fd that was used for the ioctl call. The data must always include this
+>index first when writing out data for an event. Data can be written either by
+>write() or by writev().
 
-Tyler
+Hey Beau, a little bit late to the party. A few questions from my side: What
+are the exact weak points of USDT compared to User Events that stand in the
+way of further extend USDT (in a non-compatible way, sure, just as an
+different approach!)? The nice thing about USDT is that I can search for all
+possible probes of the system via "find / | readelf | ". Since they are listed
+in a dedicated ELF section (.note.stapsdt) - they are visible & transparent. I
+can also map a hierarchy/structure in Executable/DSO via clever choice of
+names. The big disadvantage of USDT is the lack of type information, but from
+a registration, explicit point of view, they are nice.
 
-> 
-> Tyler
-> 
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
+Or in other words: why not extends the USDT approach? Why not
+
+u32 val = 23;
+const char *garbage = "tracestring";
+
+DYNAMIC_TRACE_PROBE2("foo:bar", val, u32, garbage, cstring);
+
+
+Sure, the argument names, here "val" and "garbage" should also be saved. I
+also like the "just one additional header to the project to get things
+running" (#include "sdt.h"). Sure, a DYNAMIC_TRACE_IS_ACTIVE("foo:bar") would
+be great. But in fact we have never needed that in the past.
+
+
+hgn
+

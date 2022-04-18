@@ -2,48 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F14E5051A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00CEA505744
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239005AbiDRMhE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:37:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49580 "EHLO
+        id S244285AbiDRNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:47:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239043AbiDRMa2 (ORCPT
+        with ESMTP id S243810AbiDRN3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:30:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8091C24BD2;
-        Mon, 18 Apr 2022 05:23:49 -0700 (PDT)
+        Mon, 18 Apr 2022 09:29:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AB72183;
+        Mon, 18 Apr 2022 05:53:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AA3D560EF4;
-        Mon, 18 Apr 2022 12:23:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE7B1C385A7;
-        Mon, 18 Apr 2022 12:23:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C8601B80E44;
+        Mon, 18 Apr 2022 12:53:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22286C385A7;
+        Mon, 18 Apr 2022 12:53:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284628;
-        bh=fkf5ldK1t7XscBFXOpFzJDYdU3w9kmWDjQui+LrUG/4=;
+        s=korg; t=1650286430;
+        bh=imPm8s3163js/UbzvT+fhP1EWKFf3vbLroPYzRpbxfQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sgDftx2bl+eh3JsACW1Sl5ratK6/phRM+FvDDso6mb+GXZxy1I9ss366yx99He9+n
-         TrfSKz5TjVOsNyVNoB2dtv8PFc4H1VoVzT0rVOB2XFLkKVccOHyM7krSeCiqo6u6l7
-         9unqxL3OwEiAy/wyW/mRAOT3utd5uE7xbg7UWSdg=
+        b=ly8JZqrQVoIFgcHyNmbzX8OxLvJegTdCw3AX5AIa67qacl7B/y+MtqMLobP8SpLsj
+         u7H+9asZuzaCppIOnQC1idUKfjBNeZL+B0NsyNAwE0uoQg4duzIHiFbg+oTKZb7abv
+         bLzIeRLDWhxUlr2InY2yP58NHwqEDFXDMCfucjok=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anthony Koo <Anthony.Koo@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        Chiawen Huang <chiawen.huang@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 136/219] drm/amd/display: FEC check in timing validation
-Date:   Mon, 18 Apr 2022 14:11:45 +0200
-Message-Id: <20220418121210.700622301@linuxfoundation.org>
+Subject: [PATCH 4.14 125/284] af_netlink: Fix shift out of bounds in group mask calculation
+Date:   Mon, 18 Apr 2022 14:11:46 +0200
+Message-Id: <20220418121214.755164993@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,43 +56,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chiawen Huang <chiawen.huang@amd.com>
+From: Petr Machata <petrm@nvidia.com>
 
-[ Upstream commit 7d56a154e22ffb3613fdebf83ec34d5225a22993 ]
+[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
 
-[Why]
-disable/enable leads FEC mismatch between hw/sw FEC state.
+When a netlink message is received, netlink_recvmsg() fills in the address
+of the sender. One of the fields is the 32-bit bitfield nl_groups, which
+carries the multicast group on which the message was received. The least
+significant bit corresponds to group 1, and therefore the highest group
+that the field can represent is 32. Above that, the UB sanitizer flags the
+out-of-bounds shift attempts.
 
-[How]
-check FEC status to fastboot on/off.
+Which bits end up being set in such case is implementation defined, but
+it's either going to be a wrong non-zero value, or zero, which is at least
+not misleading. Make the latter choice deterministic by always setting to 0
+for higher-numbered multicast groups.
 
-Reviewed-by: Anthony Koo <Anthony.Koo@amd.com>
-Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Chiawen Huang <chiawen.huang@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+To get information about membership in groups >= 32, userspace is expected
+to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
+socket option.
+[0] https://lwn.net/Articles/147608/
+
+The way to trigger this issue is e.g. through monitoring the BRVLAN group:
+
+	# bridge monitor vlan &
+	# ip link add name br type bridge
+
+Which produces the following citation:
+
+	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
+	shift exponent 32 is too large for 32-bit type 'int'
+
+Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ net/netlink/af_netlink.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index 62bc6ce88753..78e17a4af4ab 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -1495,6 +1495,10 @@ bool dc_validate_seamless_boot_timing(const struct dc *dc,
- 	if (!link->link_enc->funcs->is_dig_enabled(link->link_enc))
- 		return false;
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index 0563b4d34eae..24e8ac2b724e 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -154,6 +154,8 @@ static const struct rhashtable_params netlink_rhashtable_params;
  
-+	/* Check for FEC status*/
-+	if (link->link_enc->funcs->fec_is_active(link->link_enc))
-+		return false;
-+
- 	enc_inst = link->link_enc->funcs->get_dig_frontend(link->link_enc);
+ static inline u32 netlink_group_mask(u32 group)
+ {
++	if (group > 32)
++		return 0;
+ 	return group ? 1 << (group - 1) : 0;
+ }
  
- 	if (enc_inst == ENGINE_ID_UNKNOWN)
 -- 
-2.35.1
+2.34.1
 
 
 

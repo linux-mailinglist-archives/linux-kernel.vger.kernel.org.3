@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1225057FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9B0750555A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243905AbiDRN7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
+        id S242784AbiDRNOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:14:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242045AbiDRNgB (ORCPT
+        with ESMTP id S240754AbiDRM5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:36:01 -0400
+        Mon, 18 Apr 2022 08:57:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A581B24F00;
-        Mon, 18 Apr 2022 05:58:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 341561EAE1;
+        Mon, 18 Apr 2022 05:38:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BA42A612D0;
-        Mon, 18 Apr 2022 12:58:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E75C385A1;
-        Mon, 18 Apr 2022 12:58:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C45F0611C9;
+        Mon, 18 Apr 2022 12:38:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC17FC385A1;
+        Mon, 18 Apr 2022 12:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286690;
-        bh=3oTTFOn4x8U2QCSUJl8IaTqxzpbx4bG6EGPFTDb8hoA=;
+        s=korg; t=1650285490;
+        bh=i7p1YOA6p0fYT/6rbcn2SjUD3Aoez1I2BKuR2Y8Sbf8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=a5s50/rtmHq1o5Sur/PJWIN/zJsXtOs3OSz6gfzbZ+TLvlNPBPMP3yQNyt0WFTviS
-         3aME7xlB4GlYyXer1tba01Ifz7dHPWaN+agvYH9MZhI3YrmnJbY53HxqsQIBQm0wqd
-         mKY2BzlxYIVujJg/oTW+XEixwB/jQikC4/OFI0QE=
+        b=gy7Od/FRNmMlYOnPMekhz2LOpNjolo7iQki+gdCbXWlYrjU8Rdg/oITSmv1xNxlLp
+         kjHFTpEWE0x9QqPuVtKaF/0P/GN4tuu9pek1/QONhm3lFdL8yD1antJRiHlEskNIj9
+         0Tu/TgL5N5zJQZ9dPYdn3XYjlPQ5NABnOktY+/Fg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 174/284] media: cx88-mpeg: clear interrupt status register before streaming video
+Subject: [PATCH 5.10 033/105] scsi: iscsi: Fix offload conn cleanup when iscsid restarts
 Date:   Mon, 18 Apr 2022 14:12:35 +0200
-Message-Id: <20220418121216.689136716@linuxfoundation.org>
+Message-Id: <20220418121147.335723112@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +57,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel González Cabanelas <dgcbueu@gmail.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
+[ Upstream commit cbd2283aaf47fef4ded4b29124b1ef3beb515f3a ]
 
-Some cx88 video cards may have transport stream status interrupts set
-to 1 from cold start, causing errors like this:
+When userspace restarts during boot or upgrades it won't know about the
+offload driver's endpoint and connection mappings. iscsid will start by
+cleaning up the old session by doing a stop_conn call. Later, if we are
+able to create a new connection, we clean up the old endpoint during the
+binding stage. The problem is that if we do stop_conn before doing the
+ep_disconnect call offload, drivers can still be executing I/O. We then
+might free tasks from the under the card/driver.
 
-  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
-  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+This moves the ep_disconnect call to before we do the stop_conn call for
+this case. It will then work and look like a normal recovery/cleanup
+procedure from the driver's point of view.
 
-According to CX2388x datasheet, the interrupt status register should be
-cleared before enabling IRQs to stream video.
-
-Fix it by clearing the Transport Stream Interrupt Status register.
-
-Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+Link: https://lore.kernel.org/r/20220408001314.5014-3-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/scsi_transport_iscsi.c | 48 +++++++++++++++++------------
+ 1 file changed, 28 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
-index 52ff00ebd4bd..281eca525340 100644
---- a/drivers/media/pci/cx88/cx88-mpeg.c
-+++ b/drivers/media/pci/cx88/cx88-mpeg.c
-@@ -171,6 +171,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
- 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
- 	q->count = 0;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 8f6dc391356d..38abc3a15692 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2258,6 +2258,23 @@ static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
+ 	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
+ }
  
-+	/* clear interrupt status register */
-+	cx_write(MO_TS_INTSTAT,  0x1f1111);
++static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
++					 struct iscsi_endpoint *ep,
++					 bool is_active)
++{
++	/* Check if this was a conn error and the kernel took ownership */
++	if (!test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
++		iscsi_ep_disconnect(conn, is_active);
++	} else {
++		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
++		mutex_unlock(&conn->ep_mutex);
 +
- 	/* enable irqs */
- 	dprintk(1, "setting the interrupt mask\n");
- 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
++		flush_work(&conn->cleanup_work);
++
++		mutex_lock(&conn->ep_mutex);
++	}
++}
++
+ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 			      struct iscsi_uevent *ev)
+ {
+@@ -2278,6 +2295,16 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 		cancel_work_sync(&conn->cleanup_work);
+ 		iscsi_stop_conn(conn, flag);
+ 	} else {
++		/*
++		 * For offload, when iscsid is restarted it won't know about
++		 * existing endpoints so it can't do a ep_disconnect. We clean
++		 * it up here for userspace.
++		 */
++		mutex_lock(&conn->ep_mutex);
++		if (conn->ep)
++			iscsi_if_disconnect_bound_ep(conn, conn->ep, true);
++		mutex_unlock(&conn->ep_mutex);
++
+ 		/*
+ 		 * Figure out if it was the kernel or userspace initiating this.
+ 		 */
+@@ -3006,16 +3033,7 @@ static int iscsi_if_ep_disconnect(struct iscsi_transport *transport,
+ 	}
+ 
+ 	mutex_lock(&conn->ep_mutex);
+-	/* Check if this was a conn error and the kernel took ownership */
+-	if (test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
+-		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
+-		mutex_unlock(&conn->ep_mutex);
+-
+-		flush_work(&conn->cleanup_work);
+-		goto put_ep;
+-	}
+-
+-	iscsi_ep_disconnect(conn, false);
++	iscsi_if_disconnect_bound_ep(conn, ep, false);
+ 	mutex_unlock(&conn->ep_mutex);
+ put_ep:
+ 	iscsi_put_endpoint(ep);
+@@ -3726,16 +3744,6 @@ static int iscsi_if_transport_conn(struct iscsi_transport *transport,
+ 
+ 	switch (nlh->nlmsg_type) {
+ 	case ISCSI_UEVENT_BIND_CONN:
+-		if (conn->ep) {
+-			/*
+-			 * For offload boot support where iscsid is restarted
+-			 * during the pivot root stage, the ep will be intact
+-			 * here when the new iscsid instance starts up and
+-			 * reconnects.
+-			 */
+-			iscsi_ep_disconnect(conn, true);
+-		}
+-
+ 		session = iscsi_session_lookup(ev->u.b_conn.sid);
+ 		if (!session) {
+ 			err = -EINVAL;
 -- 
-2.34.1
+2.35.1
 
 
 

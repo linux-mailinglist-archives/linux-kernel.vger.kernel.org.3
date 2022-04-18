@@ -2,52 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C13150574F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AE1505519
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243866AbiDRNuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:50:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57242 "EHLO
+        id S241630AbiDRNI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244470AbiDRNab (ORCPT
+        with ESMTP id S240377AbiDRMzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:31 -0400
+        Mon, 18 Apr 2022 08:55:39 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB4412742;
-        Mon, 18 Apr 2022 05:54:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB392BCA;
+        Mon, 18 Apr 2022 05:37:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2623B80EBA;
-        Mon, 18 Apr 2022 12:54:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DC8C385A1;
-        Mon, 18 Apr 2022 12:54:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4794AB80EDC;
+        Mon, 18 Apr 2022 12:37:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA05CC385A1;
+        Mon, 18 Apr 2022 12:37:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286471;
-        bh=+GLEJZPMdNnOUodzXhHjndU9yOjabO6mSPPMQ04fUSI=;
+        s=korg; t=1650285449;
+        bh=cjgxeclnMlt0Wf4GDnGqD7fbo9ohrM+9rOQvJXfpy14=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IZyBdW363Qe1CsiBn9FwpousON2bfn6DAGexiNUKZr4q225/di2ffGlbPiT6k3tPI
-         CE7xg4bkyKl2GS4XNrKNzAk4UMry9bZQjYY7pNlFC2wpFhcXbEE0tyPTAfnzcsrZBn
-         m3Ig4UlvvrlrVvzuAxGja3Ls8BxTBJIPdXhhpYII=
+        b=sFeSgsz7ZCmRbBMqJk2WFDyF3nCVXqmv7yrpWwK9ebDBLL3P71flimB/EM7Vt9Rod
+         YFc1YI4YvBkVUxG2BmSUncEjh0Bf8ntxfOtLnJe9SfMJV8WxCb7dnZ1eDq07Qa1NvJ
+         mZjyjELcbXD145LuRB+XUW4G3v81W+q9sFQpQug4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, He Zhe <zhe.he@windriver.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        linux-serial@vger.kernel.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 145/284] kgdboc: fix return value of __setup handler
+        stable@vger.kernel.org, Sudeep Holla <sudeep.holla@arm.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.10 004/105] cpuidle: PSCI: Move the `has_lpi` check to the beginning of the function
 Date:   Mon, 18 Apr 2022 14:12:06 +0200
-Message-Id: <20220418121215.677608345@linuxfoundation.org>
+Message-Id: <20220418121145.434691010@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -62,76 +55,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-[ Upstream commit ab818c7aa7544bf8d2dd4bdf68878b17a02eb332 ]
+commit 01f6c7338ce267959975da65d86ba34f44d54220 upstream.
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
-So return 1 from kgdboc_option_setup().
+Currently the first thing checked is whether the PCSI cpu_suspend function
+has been initialized.
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
+Another change will be overloading `acpi_processor_ffh_lpi_probe` and
+calling it sooner.  So make the `has_lpi` check the first thing checked
+to prepare for that change.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 1bd54d851f50 ("kgdboc: Passing ekgdboc to command line causes panic")
-Fixes: f2d937f3bf00 ("consoles: polling support, kgdboc")
-Cc: He Zhe <zhe.he@windriver.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: linux-serial@vger.kernel.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220309033018.17936-1-rdunlap@infradead.org
+Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/kgdboc.c | 6 +++---
+ arch/arm64/kernel/cpuidle.c |    6 +++---
  1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 0314e78e31ff..72b89702d008 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -304,16 +304,16 @@ static int kgdboc_option_setup(char *opt)
- {
- 	if (!opt) {
- 		pr_err("config string not provided\n");
+--- a/arch/arm64/kernel/cpuidle.c
++++ b/arch/arm64/kernel/cpuidle.c
+@@ -54,6 +54,9 @@ static int psci_acpi_cpu_init_idle(unsig
+ 	struct acpi_lpi_state *lpi;
+ 	struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
++	if (unlikely(!pr || !pr->flags.has_lpi))
++		return -EINVAL;
++
+ 	/*
+ 	 * If the PSCI cpu_suspend function hook has not been initialized
+ 	 * idle states must not be enabled, so bail out
+@@ -61,9 +64,6 @@ static int psci_acpi_cpu_init_idle(unsig
+ 	if (!psci_ops.cpu_suspend)
+ 		return -EOPNOTSUPP;
+ 
+-	if (unlikely(!pr || !pr->flags.has_lpi))
 -		return -EINVAL;
-+		return 1;
- 	}
- 
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		pr_err("config string too long\n");
--		return -ENOSPC;
-+		return 1;
- 	}
- 	strcpy(config, opt);
- 
--	return 0;
-+	return 1;
- }
- 
- __setup("kgdboc=", kgdboc_option_setup);
--- 
-2.34.1
-
+-
+ 	count = pr->power.count - 1;
+ 	if (count <= 0)
+ 		return -ENODEV;
 
 

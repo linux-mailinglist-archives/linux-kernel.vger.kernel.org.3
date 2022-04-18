@@ -2,117 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47568504C79
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EDF504C80
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:16:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233413AbiDRGOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S236723AbiDRGRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiDRGOw (ORCPT
+        with ESMTP id S233647AbiDRGRO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:14:52 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A217A8C
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:12:14 -0700 (PDT)
-Received: from kwepemi100002.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Khc3B69nnzFptq;
-        Mon, 18 Apr 2022 14:09:42 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100002.china.huawei.com (7.221.188.188) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 14:12:11 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 14:12:10 +0800
-Message-ID: <0b023809-8138-a44f-83e2-db54a7446954@huawei.com>
-Date:   Mon, 18 Apr 2022 14:12:09 +0800
+        Mon, 18 Apr 2022 02:17:14 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E5917AB7;
+        Sun, 17 Apr 2022 23:14:36 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id n126-20020a1c2784000000b0038e8af3e788so8281450wmn.1;
+        Sun, 17 Apr 2022 23:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8ZuwAsZvFhjWYjd8yTG5wsLv6buaB3HfTucRNG+UqI=;
+        b=WBAxuBJojSU2AxQ868FqVcQ6bk55DcVrjS+gy3jAnt3nvDlRlbljqO97Jz3Cz5AMiT
+         rA4ZZ5BibfwSetqgnPmUrzvxgW5Rr3ceJV5T4gk8DGbjt369zJGMLqsD8d7D8Sc2b1Wt
+         fJPj/M94vOwbducPtV5E9Ih0H1Ei+Oy623kbixxJycErlhhEub46YERI5B0USCLjqV9p
+         pvq4FJxxKKN4YNjvfDQwT6GLNuqnymE6X7+nDqcD2WjR/4u3vAx8degW1ZL9ouFlwHW+
+         t24S0hCJL4SePnhvBYckJXIkD5weNDMB2sTTJwICx+uvdewNGWsguBuV5ZFlwtHGzKlc
+         m02A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=e8ZuwAsZvFhjWYjd8yTG5wsLv6buaB3HfTucRNG+UqI=;
+        b=3jRnIFeg/QoWyoTlrtU96AnptlJ0Yi95PyytQr2kusvILxroptBtBuESyHQuYfkG8R
+         3VUUU6vzfQe69Oje38oIsR7P/thjPhaclsJBFGGPrEF9HOMjmXAYrPtUtTSJ0uKJDIYi
+         AMtdolK96ISQ2JBbUIfU79ypqdqcSqHtEBlLRQmnGfq236rLVgaVxT9Fo2DUEhhDDi+k
+         WtmI5tUA3F8I9mmmi20A/FLtVpbdHpi2Oa5XeQPPia350nKi6oLriG+mADXxAbnIN/Jo
+         bV0HFwutmkLLJEQUsPbGzljxN+rKARdu9rw4pkdZNfVBJRXR/tFdyC+8/UCAZy23XYCj
+         3q9Q==
+X-Gm-Message-State: AOAM5319Quq09GsaGhytarfRifs/gbveg8eBnjwyZgnf2lloG26hmC3A
+        FsGOosYCknj+qLaikUDCA/sSWmYj+CXn7A==
+X-Google-Smtp-Source: ABdhPJyPTRA13mBsIiG+RM0ugphkP3LSbXaCVQcb4zssDaNxL91RgVJA7llncwPOS67rRpAbsu7dxw==
+X-Received: by 2002:a05:600c:5114:b0:38e:bd9c:9cb0 with SMTP id o20-20020a05600c511400b0038ebd9c9cb0mr13433157wms.153.1650262474907;
+        Sun, 17 Apr 2022 23:14:34 -0700 (PDT)
+Received: from alaa-emad ([197.57.90.163])
+        by smtp.gmail.com with ESMTPSA id z17-20020adfec91000000b0020a98f5f8a7sm1654811wrn.6.2022.04.17.23.14.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Apr 2022 23:14:34 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH v4] intel: igb: igb_ethtool.c: Convert kmap() to kmap_local_page()
+Date:   Mon, 18 Apr 2022 08:14:30 +0200
+Message-Id: <20220418061430.6605-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next v4 0/4]mm: page_table_check: add support on arm64
- and riscv
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-riscv@lists.infradead.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>
-References: <20220418034444.520928-1-tongtiangen@huawei.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <20220418034444.520928-1-tongtiangen@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew, Catalin, Palmer:
+The use of kmap() is being deprecated in favor of kmap_local_page()
+where it is feasible.
 
-This patch modifies the code related to the mm/x86/arm64/riscv, who can 
-help me merge it if no object, Maybe Andrew is more appropriate?
+With kmap_local_page(), the mapping is per thread, CPU local and not
+globally visible. Therefore igb_check_lbtest_frame() is a function
+where the use of kmap_local_page() in place of kmap() is correctly
+suited.
 
-Thanks,
-Tong.
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+---
+changes in V2:
+	fix kunmap_local path value to take address of the mapped page.
+---
+changes in V3:
+	edit commit message to be clearer
+---
+changes in V4:
+	edit the commit message
+---
+ drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-在 2022/4/18 11:44, Tong Tiangen 写道:
-> Page table check performs extra verifications at the time when new
-> pages become accessible from the userspace by getting their page
-> table entries (PTEs PMDs etc.) added into the table. It is supported
-> on X86[1].
-> 
-> This patchset made some simple changes and make it easier to support
-> new architecture, then we support this feature on ARM64 and RISCV.
-> 
-> [1]https://lore.kernel.org/lkml/20211123214814.3756047-1-pasha.tatashin@soleen.com/
-> 
-> v3 -> v4:
->   1. Adapt to next-20220414
-> 
-> v2 -> v3:
->    1. Modify ptep_clear() in include/linux/pgtable.h, using IS_ENABLED
->       according to the suggestions of Pasha.
-> 
-> v1 -> v2:
->    1. Fix arm64's pte/pmd/pud_user_accessible_page() according to the
->       suggestions of Catalin.
->    2. Also fix riscv's pte_pmd_pud_user_accessible_page().
-> 
-> Kefeng Wang (2):
->    mm: page_table_check: move pxx_user_accessible_page into x86
->    arm64: mm: add support for page table check
-> 
-> Tong Tiangen (2):
->    mm: page_table_check: add hooks to public helpers
->    riscv: mm: add support for page table check
-> 
->   arch/arm64/Kconfig               |  1 +
->   arch/arm64/include/asm/pgtable.h | 65 ++++++++++++++++++++++++---
->   arch/riscv/Kconfig               |  1 +
->   arch/riscv/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++---
->   arch/x86/include/asm/pgtable.h   | 29 +++++++-----
->   include/linux/pgtable.h          | 26 +++++++----
->   mm/page_table_check.c            | 25 ++++-------
->   7 files changed, 178 insertions(+), 46 deletions(-)
-> 
+diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+index 2a5782063f4c..c14fc871dd41 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
++++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+@@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page);
++	data = kmap_local_page(rx_buffer->page);
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
++	kunmap_local(data);
+ 
+ 	return match;
+ }
+-- 
+2.35.2
+

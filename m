@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FC05054A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E171E50544D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241855AbiDRNRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
+        id S241027AbiDRNF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242115AbiDRM7h (ORCPT
+        with ESMTP id S240310AbiDRMzK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 897D5102E;
-        Mon, 18 Apr 2022 05:40:04 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8417655;
+        Mon, 18 Apr 2022 05:36:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B37FAB80EE1;
-        Mon, 18 Apr 2022 12:40:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E97C6C385A1;
-        Mon, 18 Apr 2022 12:40:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CF69B80EC4;
+        Mon, 18 Apr 2022 12:36:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2B9FC385A1;
+        Mon, 18 Apr 2022 12:36:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285601;
-        bh=TSlR0DyoCKgQRplhNDleYNwHNDhDfIdpEPWanxOmbAU=;
+        s=korg; t=1650285384;
+        bh=X0t+T/PV6H7afRr7VxLAQykE69EkNrL4/q4ZlSkuoE4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zfuDxvLz7PyZItyPSfZMPAJac0Pn6F6t0HN9bYbPpItAqF7rlJ2IOWptoftIFRogq
-         n/Xy55qGjoTWztMngnm13zdSymr8TTQup3ip+jV7cIQcqNjvQ+Cvq91LYQOVACKbqB
-         W6GU0vrgYtVOaUIC4qebw+6P4Y/QRZSJMWVo6iqs=
+        b=Ec5LpsY0Y4eCY89WvJb9JgOIj/XnKZhuxUDmSO3+LSO7UmbWR5ZQx1AnXDCz0djek
+         vHzdLZrbMT+cmRhnWKqn2E1sm+/aE9qkpL91Opj8+tdyj98/Musg7cb3EyJ/R9Ro9u
+         2meltaV4Q1xoqDUfSIVct7V2m3Xmg7/CLi9d52+k=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Juergen Gross <jgross@suse.com>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>, Michal Hocko <mhocko@suse.com>,
-        David Hildenbrand <david@redhat.com>,
-        Wei Yang <richard.weiyang@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 070/105] mm, page_alloc: fix build_zonerefs_node()
-Date:   Mon, 18 Apr 2022 14:13:12 +0200
-Message-Id: <20220418121148.479008373@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Sven Peter <sven@svenpeter.dev>, Wolfram Sang <wsa@kernel.org>
+Subject: [PATCH 5.15 173/189] i2c: pasemi: Wait for write xfers to finish
+Date:   Mon, 18 Apr 2022 14:13:13 +0200
+Message-Id: <20220418121207.732245569@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -59,66 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Juergen Gross <jgross@suse.com>
+From: Martin Povišer <povik+lin@cutebit.org>
 
-commit e553f62f10d93551eb883eca227ac54d1a4fad84 upstream.
+commit bd8963e602c77adc76dbbbfc3417c3cf14fed76b upstream.
 
-Since commit 6aa303defb74 ("mm, vmscan: only allocate and reclaim from
-zones with pages managed by the buddy allocator") only zones with free
-memory are included in a built zonelist.  This is problematic when e.g.
-all memory of a zone has been ballooned out when zonelists are being
-rebuilt.
+Wait for completion of write transfers before returning from the driver.
+At first sight it may seem advantageous to leave write transfers queued
+for the controller to carry out on its own time, but there's a couple of
+issues with it:
 
-The decision whether to rebuild the zonelists when onlining new memory
-is done based on populated_zone() returning 0 for the zone the memory
-will be added to.  The new zone is added to the zonelists only, if it
-has free memory pages (managed_zone() returns a non-zero value) after
-the memory has been onlined.  This implies, that onlining memory will
-always free the added pages to the allocator immediately, but this is
-not true in all cases: when e.g. running as a Xen guest the onlined new
-memory will be added only to the ballooned memory list, it will be freed
-only when the guest is being ballooned up afterwards.
+ * Driver doesn't check for FIFO space.
 
-Another problem with using managed_zone() for the decision whether a
-zone is being added to the zonelists is, that a zone with all memory
-used will in fact be removed from all zonelists in case the zonelists
-happen to be rebuilt.
+ * The queued writes can complete while the driver is in its I2C read
+   transfer path which means it will get confused by the raising of
+   XEN (the 'transaction ended' signal). This can cause a spurious
+   ENODATA error due to premature reading of the MRXFIFO register.
 
-Use populated_zone() when building a zonelist as it has been done before
-that commit.
+Adding the wait fixes some unreliability issues with the driver. There's
+some efficiency cost to it (especially with pasemi_smb_waitready doing
+its polling), but that will be alleviated once the driver receives
+interrupt support.
 
-There was a report that QubesOS (based on Xen) is hitting this problem.
-Xen has switched to use the zone device functionality in kernel 5.9 and
-QubesOS wants to use memory hotplugging for guests in order to be able
-to start a guest with minimal memory and expand it as needed.  This was
-the report leading to the patch.
-
-Link: https://lkml.kernel.org/r/20220407120637.9035-1-jgross@suse.com
-Fixes: 6aa303defb74 ("mm, vmscan: only allocate and reclaim from zones with pages managed by the buddy allocator")
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Acked-by: Michal Hocko <mhocko@suse.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Cc: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-Reviewed-by: Wei Yang <richard.weiyang@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Fixes: beb58aa39e6e ("i2c: PA Semi SMBus driver")
+Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_alloc.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/i2c/busses/i2c-pasemi.c |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -5653,7 +5653,7 @@ static int build_zonerefs_node(pg_data_t
- 	do {
- 		zone_type--;
- 		zone = pgdat->node_zones + zone_type;
--		if (managed_zone(zone)) {
-+		if (populated_zone(zone)) {
- 			zoneref_set_zone(zone, &zonerefs[nr_zones++]);
- 			check_highest_zone(zone_type);
- 		}
+--- a/drivers/i2c/busses/i2c-pasemi.c
++++ b/drivers/i2c/busses/i2c-pasemi.c
+@@ -137,6 +137,12 @@ static int pasemi_i2c_xfer_msg(struct i2
+ 
+ 		TXFIFO_WR(smbus, msg->buf[msg->len-1] |
+ 			  (stop ? MTXFIFO_STOP : 0));
++
++		if (stop) {
++			err = pasemi_smb_waitready(smbus);
++			if (err)
++				goto reset_out;
++		}
+ 	}
+ 
+ 	return 0;
 
 

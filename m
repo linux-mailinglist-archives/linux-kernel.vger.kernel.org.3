@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4FB505FF0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B03505FF5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:53:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233133AbiDRW4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43446 "EHLO
+        id S233216AbiDRW4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233008AbiDRW4B (ORCPT
+        with ESMTP id S233096AbiDRW41 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:56:01 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE12B2BB11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:53:20 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id t12so13516397pll.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=afvg5NWVwD/qVAkdktGqgMo9aOSaMIcJ+XINPIEZDPs=;
-        b=E6XIMT0VFA3wpgpCaSaflm+uvbJL7CGEu+tBAucnRfcBXoD3NmWmgurBI47Nl5Ml+C
-         E5qvU1DX9IHya8+jp9x+gUHliBhJCRTqtaKyNAn076FDV3LbeO8cOCpGqpWyCf/WiNIo
-         H2RdDcaOvuJeW3zpvJtJwdpPxOqVQmGQP4vH4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=afvg5NWVwD/qVAkdktGqgMo9aOSaMIcJ+XINPIEZDPs=;
-        b=CkIZlA8vrNUikWi6g8N0SlJE9VasrmRzH45gYqFH5Jw9hi3DGw4/AKLp42X1maS8o3
-         G9LSruO8fTCVGZjvZ2XOld3InOT5hG5YJ2yKiYjBn4ehNhFh+Fjc0sIc7l+n543BzHsd
-         +i9BBuK6o5u2Og/4uuXZrKzLP3isMFHEGXXaqFYoGMfNBevalsInIEsVpacZavKtVkpN
-         CLQYIbeqvxrxhHdQVKvtC0ltpf0xCTm7zP0Nb467hVU9I/o0DcZUxfz4MBobqePwkjb8
-         SmuR8RHCxP3AR0YQEaETeuhXmh9007CTk2DM+8eFhwYxBVUE8YtjKmFYNEBaVFgznsN9
-         erkA==
-X-Gm-Message-State: AOAM532PRGUoEgMb00PMoXxSsp18Ubx1qwxbzkT5qSHFPl4qmdaoJr7O
-        xaw03VMuN/cEV7O+gOOSmAQIYQ==
-X-Google-Smtp-Source: ABdhPJxgNiCCQXH3r6Ye7JvBt5yRcdnLBD7xC7vmaL9G1C+elNu5N4RNV8qu7p5gxM9T3Zk8wDIVmg==
-X-Received: by 2002:a17:90b:38cb:b0:1d2:6c52:5be0 with SMTP id nn11-20020a17090b38cb00b001d26c525be0mr12880416pjb.32.1650322400522;
-        Mon, 18 Apr 2022 15:53:20 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6b32:a0a5:ec32:c287])
-        by smtp.gmail.com with UTF8SMTPSA id x5-20020aa79ac5000000b0050a4f4c4251sm10319715pfp.206.2022.04.18.15.53.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 15:53:19 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:53:18 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] regulator: core: Replace _regulator_enable_delay()
- with fsleep()
-Message-ID: <Yl3r3tiJ6uFTqbd2@google.com>
-References: <20220418141158.1.If0fc61a894f537b052ca41572aff098cf8e7e673@changeid>
- <20220418141158.2.I31ef0014c9597d53722ab513890f839f357fdfb3@changeid>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220418141158.2.I31ef0014c9597d53722ab513890f839f357fdfb3@changeid>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Mon, 18 Apr 2022 18:56:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28DC2C648;
+        Mon, 18 Apr 2022 15:53:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73D8D61183;
+        Mon, 18 Apr 2022 22:53:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81B4C385A7;
+        Mon, 18 Apr 2022 22:53:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650322425;
+        bh=rWhmhUMtdpZrg81Duj60cEzYJ4LxtasGcSah4PuyDcQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=BzGw5yGl8f86SHdpWaRO3N0W6Eu2t/rqO9J/315qJBr7UiglDnTrssBf1TdThb5BA
+         3uEcUiMlwCUXwnwlJ5B6/DqHxtHRfwzZqM7hOqT2mxRb9xMAsb6cA4HgFHlqSSvnE4
+         rNcDhyklS/+z3efqGfveFoPyPn3DMETucjW/ahr8Ai65uDxZsE4htcj98IOyDWD0vT
+         heFKO6ijGhKlH+zKYdP6J0txm+aoh92+rWp6D2sO9szMizMp4wdlmriLJ4991jkwfo
+         cz4IyCaWZxcHz/hpqr37uo3A5oqkocV3YlVkqzpXH179kXB1NLXjrKN2tasEe+/VP7
+         RtUc39pLpda/w==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=billy-the-mountain.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ngaFb-005Aof-7r; Mon, 18 Apr 2022 23:53:43 +0100
+Date:   Mon, 18 Apr 2022 23:53:41 +0100
+Message-ID: <878rs2c8ay.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Peter Geis <pgwipeout@gmail.com>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v7 2/4] PCI: dwc: rockchip: add legacy interrupt support
+In-Reply-To: <CAMdYzYouLoYX89EWjQTRAjd-1bvJEJtfYQa2KrtFH22Kp-4Efw@mail.gmail.com>
+References: <20220416110507.642398-1-pgwipeout@gmail.com>
+        <20220416110507.642398-3-pgwipeout@gmail.com>
+        <308e9c47197d4f7ae5a31cfcb5a10886@kernel.org>
+        <CAMdYzYo+YeAgT92baMOoWpra230wro_WynRcajL-__9RNkeE9Q@mail.gmail.com>
+        <87zgkk9gtc.wl-maz@kernel.org>
+        <CAMdYzYo_+7rakc=GCTueEZvH_F4Co6+=eKAUztJaafiDXSKKXQ@mail.gmail.com>
+        <87sfqaa7uv.wl-maz@kernel.org>
+        <CAMdYzYouLoYX89EWjQTRAjd-1bvJEJtfYQa2KrtFH22Kp-4Efw@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: pgwipeout@gmail.com, lorenzo.pieralisi@arm.com, robh@kernel.org, kw@linux.com, bhelgaas@google.com, heiko@sntech.de, linux-rockchip@lists.infradead.org, linux-pci@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,15 +80,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 02:12:40PM -0700, Brian Norris wrote:
-> fsleep() was designed to handle exactly the same thing as
-> _regulator_enable_delay(): flexible sleep lengths, according to the
-> guidelines at Documentation/timers/timers-howto.rst. Let's use it,
-> instead of duplicating it.
+On Mon, 18 Apr 2022 16:13:39 +0100,
+Peter Geis <pgwipeout@gmail.com> wrote:
 > 
-> One notable difference: fsleep() allows a usleep range of twice the
-> requested amount instead of a fixed +100us.
+> On Mon, Apr 18, 2022 at 8:34 AM Marc Zyngier <maz@kernel.org> wrote:
+> >
+> > On Mon, 18 Apr 2022 12:37:00 +0100,
+> > Peter Geis <pgwipeout@gmail.com> wrote:
+> > >
+> > > On Sun, Apr 17, 2022 at 5:53 AM Marc Zyngier <maz@kernel.org> wrote:
+> > > >
+> > > > On Sat, 16 Apr 2022 14:24:26 +0100,
+> > > > Peter Geis <pgwipeout@gmail.com> wrote:
+> > > > >
+> > > > > Okay, that makes sense. I'm hitting the entire block when it should be
+> > > > > the individual IRQ.
+> > > > > I also notice some drivers protect this with a spinlock while others
+> > > > > do not, how should this be handled?
+> > > >
+> > > > It obviously depends on how the HW. works. If this is a shared
+> > > > register using a RMW sequence, then you need some form of mutual
+> > > > exclusion in order to preserve the atomicity of the update.
+> > > >
+> > > > If the HW supports updating the masks using a set of hot bits (with
+> > > > separate clear/set registers), than there is no need for locking.  In
+> > > > your case PCIE_CLIENT_INTR_MASK_LEGACY seems to support this odd
+> > > > "write-enable" feature which can probably be used to implement a
+> > > > lockless access, something like:
+> > > >
+> > > >         void mask(struct irq_data *d)
+> > > >         {
+> > > >                 u32 val = BIT(d->hwirq + 16) | BIT(d->hwirq);
+> > >
+> > > This is what HIWORD_UPDATE_BIT does, it's rather common in Rockchip code.
+> > > I believe I can safely drop the spinlock when enabling/disabling
+> > > individual interrupts.
+> >
+> > Yes.
+> >
+> > >
+> > > >                 writel_relaxed(val, ...);
+> > > >         }
+> > > >
+> > > >         void mask(struct irq_data *d)
+> > > >         {
+> > > >                 u32 val = BIT(d->hwirq + 16);
+> > > >                 writel_relaxed(val, ...);
+> > > >         }
+> > > >
+> > > > Another thing is that it is completely unclear to me what initialises
+> > > > these interrupts the first place (INTR_MASK_LEGACY, INTR_EN_LEGACY).
+> > > > Are you relying on the firmware to do that for you?
+> > >
+> > > There is no dedicated mask or enable/disable for the legacy interrupt
+> > > line (unless it's undocumented).
+> >
+> > I'm talking about the INTR_MASK_LEGACY and INTR_EN_LEGACY registers,
+> > which control the INTx (although the latter seems to default to some
+> > reserved values). I don't see where you initialise them to a state
+> > where they are enabled and masked, which should be the initial state
+> > once this driver has probed. The output interrupt itself is obviously
+> > controlled by the GIC driver.
 > 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> PCIE_CLIENT_INTR_MASK_LEGACY is the register I use here to mask/unmask
+> the interrupts.
+> It defaults to all masked on reset.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+And? Are your really expecting that the firmware that runs before the
+kernel will preserve this register and not write anything silly to it
+because, oh wait, it wants to use interrupts? Or that nobody will
+kexec a secondary kernel from the first one after having used these
+interrupts?
+
+Rule #1: Initialise the HW to sensible values
+Rule #2: See Rule #1
+
+> The current rk3568 trm v1.1 does not reference an INTR_EN_LEGACY register.
+
+The TRM for RK3588 mentions it, and is the same IP.
+
+> >
+> > > It appears to be enabled via an "or" function with the emulated interrupts.
+> > > As far as I can tell this is common for dw-pcie, looking at the other drivers.
+> >
+> > I think we're talking past each other. I'm solely concerned with the
+> > initialisation of the input control registers, for which I see no code
+> > in this patch.
+> 
+> Downstream points to the mask/unmask functions for the enable/disable
+> functions, which would be superfluous here as mainline defaults to
+> that anyways if they are null.
+
+Yeah, that's completely dumb. But there is no shortage of dumb stuff
+in the RK downstream code...
+
+> 
+> I've double checked and downstream only uses the mask register, enable
+> and routing config appears to be left as is from reset.
+
+And that's a bug.
+
+> I'm rather concerned about the lack of any obvious way to control
+> routing, nor an ack mechanism for the irq.
+
+Which routing? Do you mean the affinity? You can't change it, as this
+would change the affinity of all interrupts at once.
+
+> I see other implementations reference the core registers or vendor
+> defined registers for these functions.
+> Unfortunately the rk3568 trm does not include the core register
+> definitions, and the designware documentation appears to be behind a
+> paywall/nda.
+
+If you use a search engine, you'll find *CONFIDENTIAL* copies of the
+DW stuff. The whole thing is a laugh anyway.
+
+> 
+> I suspect most of the confusion here boils down to a lack of
+> documentation, but it's entirely possible I am simply not
+> understanding the question.
+
+My only ask is that you properly initialise the HW. This will save
+countless amount of head-scratching once you have a decent firmware or
+kexec.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.

@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EB85052EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39885056E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240096AbiDRMwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S244268AbiDRNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:47:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240038AbiDRMif (ORCPT
+        with ESMTP id S243720AbiDRN3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:38:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE0B27149;
-        Mon, 18 Apr 2022 05:29:10 -0700 (PDT)
+        Mon, 18 Apr 2022 09:29:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D183FBEE;
+        Mon, 18 Apr 2022 05:53:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4867CB80ED7;
-        Mon, 18 Apr 2022 12:29:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DDAAC385A1;
-        Mon, 18 Apr 2022 12:29:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 21799612C3;
+        Mon, 18 Apr 2022 12:53:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FE7C385A1;
+        Mon, 18 Apr 2022 12:53:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284947;
-        bh=VeEhEUrliP6/o3JwmIDWYWdQAVOhcne8xo41rXksrYQ=;
+        s=korg; t=1650286424;
+        bh=pbWOlWjYLriqB3tA+WF6LhE82z+m6RnhJZXV0L8KsbI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kOojLEsszTdW42LnKfRZwWVolcuKdWcsW7I49o0Gc1HwpjIa5wf1MlnWSMZHzm3sJ
-         R61cdKtW+9FR/tcw1/tsLCjDGZTY1uk2moaHsP5kns0xj6t5J+5RYNtBEgVCQnKlG1
-         zJboIygTMUt8mkaiUzHCRRmedmTsfWgXJM58uFZg=
+        b=mY2w91xtZp1i+7NfZ6C4pUiLgL/Sx+NA5YMOG5fOOpymAHiBMHQY9lgAfDAnxKrfE
+         XQcQLtbM629/GtnJ5PdaAhrZMZaCu3q+627QVZKKrVQl8BMU2MwHD7M5oa07WmF/XI
+         oRVITD8ko1RMFoxPYo+BP5jBsgoAWrkecGsOnqQk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 051/189] ALSA: sc6000: Fix the missing snd_card_free() call at probe error
+        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 090/284] ASoC: fsi: Add check for clk_enable
 Date:   Mon, 18 Apr 2022 14:11:11 +0200
-Message-Id: <20220418121201.961188407@linuxfoundation.org>
+Message-Id: <20220418121213.245644392@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,55 +55,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 
-commit d72458071150b802940204950d0d462ea3c913b1 upstream.
+[ Upstream commit 405afed8a728f23cfaa02f75bbc8bdd6b7322123 ]
 
-The previous cleanup with devres may lead to the incorrect release
-orders at the probe error handling due to the devres's nature.  Until
-we register the card, snd_card_free() has to be called at first for
-releasing the stuff properly when the driver tries to manage and
-release the stuff via card->private_free().
+As the potential failure of the clk_enable(),
+it should be better to check it and return error
+if fails.
 
-This patch fixes it by calling snd_card_free() on the error from the
-probe callback using a new helper function.
-
-Fixes: 111601ff76e9 ("ALSA: sc6000: Allocate resources with device-managed APIs")
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220412102636.16000-3-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Link: https://lore.kernel.org/r/20220302062844.46869-1-jiasheng@iscas.ac.cn
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/isa/sc6000.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ sound/soc/sh/fsi.c | 19 ++++++++++++++++---
+ 1 file changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/sound/isa/sc6000.c b/sound/isa/sc6000.c
-index 26ab7ff80768..60398fced046 100644
---- a/sound/isa/sc6000.c
-+++ b/sound/isa/sc6000.c
-@@ -537,7 +537,7 @@ static void snd_sc6000_free(struct snd_card *card)
- 		sc6000_setup_board(vport, 0);
- }
+diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
+index 6d3c7706d93f..b564accb6098 100644
+--- a/sound/soc/sh/fsi.c
++++ b/sound/soc/sh/fsi.c
+@@ -820,14 +820,27 @@ static int fsi_clk_enable(struct device *dev,
+ 			return ret;
+ 		}
  
--static int snd_sc6000_probe(struct device *devptr, unsigned int dev)
-+static int __snd_sc6000_probe(struct device *devptr, unsigned int dev)
- {
- 	static const int possible_irqs[] = { 5, 7, 9, 10, 11, -1 };
- 	static const int possible_dmas[] = { 1, 3, 0, -1 };
-@@ -662,6 +662,11 @@ static int snd_sc6000_probe(struct device *devptr, unsigned int dev)
- 	return 0;
- }
+-		clk_enable(clock->xck);
+-		clk_enable(clock->ick);
+-		clk_enable(clock->div);
++		ret = clk_enable(clock->xck);
++		if (ret)
++			goto err;
++		ret = clk_enable(clock->ick);
++		if (ret)
++			goto disable_xck;
++		ret = clk_enable(clock->div);
++		if (ret)
++			goto disable_ick;
  
-+static int snd_sc6000_probe(struct device *devptr, unsigned int dev)
-+{
-+	return snd_card_free_on_error(devptr, __snd_sc6000_probe(devptr, dev));
-+}
+ 		clock->count++;
+ 	}
+ 
+ 	return ret;
 +
- static struct isa_driver snd_sc6000_driver = {
- 	.match		= snd_sc6000_match,
- 	.probe		= snd_sc6000_probe,
++disable_ick:
++	clk_disable(clock->ick);
++disable_xck:
++	clk_disable(clock->xck);
++err:
++	return ret;
+ }
+ 
+ static int fsi_clk_disable(struct device *dev,
 -- 
-2.35.2
+2.34.1
 
 
 

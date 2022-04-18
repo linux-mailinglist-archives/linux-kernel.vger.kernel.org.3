@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE6D50517D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7650E505369
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbiDRMfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38218 "EHLO
+        id S240821AbiDRM5y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:57:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239564AbiDRM2d (ORCPT
+        with ESMTP id S239768AbiDRMrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:28:33 -0400
+        Mon, 18 Apr 2022 08:47:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6541FCC4;
-        Mon, 18 Apr 2022 05:22:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B841D2A24F;
+        Mon, 18 Apr 2022 05:33:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B14560FAD;
-        Mon, 18 Apr 2022 12:22:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE6F7C385A8;
-        Mon, 18 Apr 2022 12:22:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4817D61170;
+        Mon, 18 Apr 2022 12:33:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F840C385A7;
+        Mon, 18 Apr 2022 12:33:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284524;
-        bh=4rQkhM+RJN5qC5mkIJ7o7Iyrqs+aVLeQY8i7Xhtec2o=;
+        s=korg; t=1650285194;
+        bh=i4z+os5u3h4C2r/+ZIZBW6EK61j0wr3aOjEa0iZMvrY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jWn3ZysGXRkV87rvdTlsE5fPu/zcM8f490pA4NxRgzwdtPzFTjvPzAO14MbubsKRH
-         5gLKM70dDCebo50o0wVJLDr3edqFPpqegzKAp9fOK4eDCZcmhIvOmGGu9NhqWC4wb2
-         p42fxxXCUfJMWE17nse3FsWY1ZVg2Sa9T9E3NzFg=
+        b=JLUSYTMoOLp+aKHiDWTImuj91O3hKA8MGwUBGVw0R4lbh6bE59qL4H1X67muhZCx3
+         GmeuXfuOoJXMuCwe+ZzEU9vIQgIgEke/+nyX4sK65AuDyu56hbHEaYzqJkf0ilxABC
+         BKb1ZuKRduT3uFhfyQYMrmsABVWFL0WjbtTfD/90=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 144/219] Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
-Date:   Mon, 18 Apr 2022 14:11:53 +0200
-Message-Id: <20220418121210.921396673@linuxfoundation.org>
+        stable@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 094/189] ALSA: usb-audio: Increase max buffer size
+Date:   Mon, 18 Apr 2022 14:11:54 +0200
+Message-Id: <20220418121203.174073547@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit b6cae15b5710c8097aad26a2e5e752c323ee5348 ]
+[ Upstream commit fee2ec8cceb33b8886bc5894fb07e0b2e34148af ]
 
-When reading a packet from a host-to-guest ring buffer, there is no
-memory barrier between reading the write index (to see if there is
-a packet to read) and reading the contents of the packet. The Hyper-V
-host uses store-release when updating the write index to ensure that
-writes of the packet data are completed first. On the guest side,
-the processor can reorder and read the packet data before the write
-index, and sometimes get stale packet data. Getting such stale packet
-data has been observed in a reproducible case in a VM on ARM64.
+The current limit of max buffer size 1MB seems too small for modern
+devices with lots of channels and high sample rates.
+Let's make bigger, 4MB.
 
-Fix this by using virt_load_acquire() to read the write index,
-ensuring that reads of the packet data cannot be reordered
-before it. Preventing such reordering is logically correct, and
-with this change, getting stale data can no longer be reproduced.
-
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/1648394710-33480-1-git-send-email-mikelley@microsoft.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Reviewed-by: Jaroslav Kysela <perex@perex.cz>
+Link: https://lore.kernel.org/r/20220407212740.17920-1-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/ring_buffer.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ sound/usb/pcm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 71efacb90965..3d215d9dec43 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -439,7 +439,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- {
- 	u32 priv_read_loc = rbi->priv_read_index;
--	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
-+	u32 write_loc;
-+
-+	/*
-+	 * The Hyper-V host writes the packet data, then uses
-+	 * store_release() to update the write_index.  Use load_acquire()
-+	 * here to prevent loads of the packet data from being re-ordered
-+	 * before the read of the write_index and potentially getting
-+	 * stale data.
-+	 */
-+	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
+diff --git a/sound/usb/pcm.c b/sound/usb/pcm.c
+index 6fa9115e322b..866a82b69d8d 100644
+--- a/sound/usb/pcm.c
++++ b/sound/usb/pcm.c
+@@ -659,7 +659,7 @@ static int snd_usb_pcm_prepare(struct snd_pcm_substream *substream)
+ #define hwc_debug(fmt, args...) do { } while(0)
+ #endif
  
- 	if (write_loc >= priv_read_loc)
- 		return write_loc - priv_read_loc;
+-#define MAX_BUFFER_BYTES	(1024 * 1024)
++#define MAX_BUFFER_BYTES	(4 * 1024 * 1024)
+ #define MAX_PERIOD_BYTES	(512 * 1024)
+ 
+ static const struct snd_pcm_hardware snd_usb_hardware =
 -- 
 2.35.1
 

@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6C3A504DE8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:32:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14487504DEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:35:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233884AbiDRIeu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:34:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58518 "EHLO
+        id S237327AbiDRIhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:37:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbiDRIes (ORCPT
+        with ESMTP id S237320AbiDRIhj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:34:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9896167E8;
-        Mon, 18 Apr 2022 01:32:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Mon, 18 Apr 2022 04:37:39 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A388E1153;
+        Mon, 18 Apr 2022 01:34:59 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b58ab329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:58ab:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F0FFB80E54;
-        Mon, 18 Apr 2022 08:32:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E74BEC385A7;
-        Mon, 18 Apr 2022 08:32:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650270727;
-        bh=P2NdWkh7ANLrGntriy9pXp5aAVb9pf2tB9MolKSyazw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=bD+4Rnk1eMoVY5LbC9EVp+Mc08r19hgjO2/21zpEAIBFsUsAe1pzMeVmokPs0bl1/
-         clYaZI4kUjm4qPQBKXWtlC8k+9WA6F7FH3Igsl13ljl47+1qPANg4Oq+LsCN66xNe+
-         BBejCgD8dFY51mWHJ0E3t2m6jykGeWOc2fz11OmSkMBVHfd2lvYN8e4WIOrk1eB6Hi
-         G2Bs/57Lhy5E9J1mTjz8ykj80+9J7Fte2B5X7wp5wPpBfIoT0RHSwD5H3Gmn9UZj+S
-         tR5ZoRRvaCo9+e/MqFReUmssrddyi8pIqESgZw2yTz/CxnTmjUY8eEY2uia3wJEQD2
-         zEV0SWgRnvpwg==
-Date:   Mon, 18 Apr 2022 16:32:01 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Tim Harvey <tharvey@gateworks.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Subject: Re: [PATCH v3] arm64: dts: imx8m{m,n}-venice-*: add missing
- uart-has-rtscts property to UARTs
-Message-ID: <20220418083201.GG391514@dragon>
-References: <20220411194638.5706-1-tharvey@gateworks.com>
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A06151EC02DD;
+        Mon, 18 Apr 2022 10:34:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1650270893;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=q+XDers0XIvDdW7vUKCyJcBFK6oFj+5tsPlNb+wjkx8=;
+        b=hVpBNWvcZE2nHkI5mXwH1qteyJCk4jPuOg+FGverK4MOUk8yRJDHV0kDGfx/yx1r0bGSaw
+        CGobXRm99Nk5L7spbp5FJls157+br7yP9alhXrmXUqmL5R+EmfqTtVKWIjyjoZAZwJvtSI
+        OUFj3WwGhMtSapknCmLnvNNwmD9byMs=
+Date:   Mon, 18 Apr 2022 10:34:49 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sherry Sun <sherry.sun@nxp.com>,
+        "michal.simek@xilinx.com" <michal.simek@xilinx.com>
+Cc:     "mchehab@kernel.org" <mchehab@kernel.org>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "rric@kernel.org" <rric@kernel.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        dl-linux-imx <linux-imx@nxp.com>
+Subject: Re: [PATCH 0/2] fix some bugs in V3.X Synopsys EDAC DDR driver
+Message-ID: <Yl0iqXnsFm8rMBms@zn.tnic>
+References: <20220318111742.15730-1-sherry.sun@nxp.com>
+ <AS8PR04MB84044DD3E5EC879F7C281B9792F39@AS8PR04MB8404.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220411194638.5706-1-tharvey@gateworks.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <AS8PR04MB84044DD3E5EC879F7C281B9792F39@AS8PR04MB8404.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 11, 2022 at 12:46:38PM -0700, Tim Harvey wrote:
-> Add the missing 'uart-has-rtscts' property to UART's that have hardware
-> flow control capability.
-> 
-> Signed-off-by: Tim Harvey <tharvey@gateworks.com>
+On Mon, Apr 18, 2022 at 02:27:21AM +0000, Sherry Sun wrote:
+> Hi Borislav, do you have any comments regarding this patch set?
 
-Applied, thanks!
+Yes, for EDAC drivers which have designated maintainers, I usually wait
+first for them to have a look. In this case, Michal.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

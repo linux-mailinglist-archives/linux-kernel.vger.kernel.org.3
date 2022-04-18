@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0959C505AF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:25:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D97E2505AF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:26:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345373AbiDRP22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:28:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39638 "EHLO
+        id S245246AbiDRP3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345216AbiDRP2S (ORCPT
+        with ESMTP id S232663AbiDRP3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:28:18 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB5DEF0A6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:30:23 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id q5-20020a0566022f0500b00654a56b1dfbso1335199iow.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:30:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:in-reply-to:message-id:subject
-         :from:to;
-        bh=BN5fWD0TeLhPc5Z6oQepdojRwLAV8DN+bsBK6JxWVII=;
-        b=49aCuH5SCS1MRcnEFLrYFY5cB13N7Pv4sFjPqvL95XgYmzAC2N3Nsc37qeid8EcYke
-         h1CjJ3+adoLn3qYLcNztAKi4A341HyhFNL39dRvqYc1tDMqu2uO0zbpgsn6kHlhjedd7
-         iBXliiwdH8ZEUG6QJsiRxKQ4QjfbKSQuEizhwoVG3zP0/g+9W3QicPlIXA7V4aimdtBF
-         z8jpc80TZSAwMDvNAD2aI4DLEUK+OcJdizS0w+OoJFOLyLXtwA/xzLwkXdmm/r6K7tDX
-         dtgCjWX2oDM3+ls4v27H99djdEl1BOJ2lNwoqLXwrgp/RXSvUmwCjdiyoDJU53jDef0J
-         kKbQ==
-X-Gm-Message-State: AOAM532atVHspVENkGoMqf4YPagMmsO96OilUqaVui4QC/qk8lDsrLB9
-        bXHN6s4wTDOICK07qqomnHqU/iNYWv7jYJZKjmVazlVpq7AN
-X-Google-Smtp-Source: ABdhPJzWzBG11rL3flvX+FuNHTYL4B70FkdlZ6XZyc/KiElQOgqmWmo2ZwISJladuE/r+A9XJjK3YpY4W+BcKBB6DJbhhk1fR4gc
+        Mon, 18 Apr 2022 11:29:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E45154684;
+        Mon, 18 Apr 2022 07:31:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C4E6060F6F;
+        Mon, 18 Apr 2022 14:31:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5950C385A1;
+        Mon, 18 Apr 2022 14:31:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650292282;
+        bh=4Mke+YoC+26JsXzgwtOWJUwQVtYTiEGxubXFKQGh2hA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=U59yE0j2Byft95NCGV+ne4Lw6QxAKXjd60HAk+kKoOr6QwbqtpgdUdja9ZVx9qEPQ
+         GPMbZZr6WmwK1Jw4aHWjBpxmbRf2xz2E3ryl31eKzTZQO23JLJPE/q/aTv2cNwYLhP
+         cz/h1logaZ1X5+m2I5wIbxDqQk9dXOAvapn5l7fKig8BFs23OA5dhnhA6Ncp4kjVeV
+         j2d0UVNYyhVzpnGruhYwjEwQ287mmK/tywA+pdKzKcHXspNU4by7ulgIUse7Ny3yCj
+         ckTh7Z1VljRKr+wIZ++xan/iMhuV8Q5GdJKI6yqfd5CHYzHSDJoWPV2H5NO3YIStib
+         ydKNifx8CuoHQ==
+Message-ID: <c75e80afbc476dae349f1b5f1cca7a71984e68d9.camel@kernel.org>
+Subject: Re: [PATCH v5 0/5] ceph: add support for snapshot names encryption
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 18 Apr 2022 10:31:20 -0400
+In-Reply-To: <20220418135957.12056-1-lhenriques@suse.de>
+References: <20220418135957.12056-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:b29:b0:2cc:354:a156 with SMTP id
- e9-20020a056e020b2900b002cc0354a156mr4757883ilu.194.1650292210558; Mon, 18
- Apr 2022 07:30:10 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 07:30:10 -0700
-In-Reply-To: <20220418140008.1853-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000fc726305dcee9845@google.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in __snd_rawmidi_transmit_peek
-From:   syzbot <syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,19 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 2022-04-18 at 14:59 +0100, Luís Henriques wrote:
+> Hi!
+> 
+> And here's yet another revision.  The main difference from v4 is the
+> addition of a patch to prevent the creation of snapshots in directories
+> that are encrypted but that are not unlocked (i.e. no key available).
+> 
+> As before, the following ceph PRs are required:
+> 
+>   mds: add protection from clients without fscrypt support #45073
+>   mds: use the whole string as the snapshot long name #45192
+>   mds: support alternate names for snapshots #45224
+>   mds: limit the snapshot names to 240 characters #45312
+> 
+> Changes since v4:
+> 
+> - Explicitly added the encoding base for kstrtou64() as we do know that
+>   the inode numbers are in decimal.
+> 
+> - New patch to prevent the creation of snapshots in encrypted directories
+>   that do not have the key loaded.
+> 
+> Changes since v3:
+> 
+> - Fixed WARN_ON() in ceph_encode_encrypted_dname()
+> 
+> - Updated documentation and copyright notice for the base64
+>   encoding/decoding implementaiton which was taken from the fscrypt base.
+> 
+> Changes since v2:
+> 
+> - Use ceph_find_inode() instead of ceph_get_inode() for finding a snapshot
+>   parent in function parse_longname().  I've also added a fallback to
+>   ceph_get_inode() in case we fail to find the inode.  This may happen if,
+>   for example, the mount root doesn't include that inode.  The iput() was
+>   also complemented by a discard_new_inode() if the inode is in the I_NEW
+>   state. (patch 0002)
+> 
+> - Move the check for '_' snapshots further up in the ceph_fname_to_usr()
+>   and ceph_encode_encrypted_dname().  This fixes the case pointed out by
+>   Xiubo in v2. (patch 0002)
+> 
+> - Use NAME_MAX for tmp arrays (patch 0002)
+> 
+> - Added an extra patch for replacing the base64url encoding by a different
+>   encoding standard, the one used for IMAP mailboxes (which uses '+' and
+>   ',' instead of '-' and '_').  This should fix the issue with snapshot
+>   names starting with '_'. (patch 0003)
+> 
+> Changes since v1:
+> 
+> - Dropped the dentry->d_flags change in ceph_mkdir().  Thanks to Xiubo
+>   suggestion, patch 0001 now skips calling ceph_fscrypt_prepare_context()
+>   if we're handling a snapshot.
+> 
+> - Added error handling to ceph_get_snapdir() in patch 0001 (Jeff had
+>   already pointed that out but I forgot to include that change in previous
+>   revision).
+> 
+> - Rebased patch 0002 to the latest wip-fscrypt branch.
+> 
+> - Added some documentation regarding snapshots naming restrictions.
+> 
+> 
+> Luís Henriques (5):
+>   ceph: add support for encrypted snapshot names
+>   ceph: add support for handling encrypted snapshot names
+>   ceph: update documentation regarding snapshot naming limitations
+>   ceph: replace base64url by the encoding used for mailbox names
+>   ceph: prevent snapshots to be created in encrypted locked directories
+> 
+>  Documentation/filesystems/ceph.rst |  10 ++
+>  fs/ceph/crypto.c                   | 252 +++++++++++++++++++++++++----
+>  fs/ceph/crypto.h                   |  14 +-
+>  fs/ceph/dir.c                      |   7 +-
+>  fs/ceph/inode.c                    |  33 +++-
+>  5 files changed, 278 insertions(+), 38 deletions(-)
+> 
 
-syzbot has tested the proposed patch and the reproducer did not trigger any issue:
+Looks good. I'll plan to merge these into wip-fscrypt later today.
 
-Reported-and-tested-by: syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com
-
-Tested on:
-
-commit:         a1994480 Merge tag 'hardening-v5.18-rc3' of git://git...
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eb177500e563582f
-dashboard link: https://syzkaller.appspot.com/bug?extid=70e777a39907d6d5fd0a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=13d94b3f700000
-
-Note: testing is done by a robot and is best-effort only.
+Thanks!
+-- 
+Jeff Layton <jlayton@kernel.org>

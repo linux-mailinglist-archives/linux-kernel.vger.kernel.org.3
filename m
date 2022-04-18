@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537DC505559
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB9B6505751
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243330AbiDRNKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59868 "EHLO
+        id S243810AbiDRNuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241275AbiDRM6b (ORCPT
+        with ESMTP id S244543AbiDRNag (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06712275CB;
-        Mon, 18 Apr 2022 05:38:52 -0700 (PDT)
+        Mon, 18 Apr 2022 09:30:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211213FBE6;
+        Mon, 18 Apr 2022 05:54:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58232B80EDD;
-        Mon, 18 Apr 2022 12:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F7DAC385A1;
-        Mon, 18 Apr 2022 12:38:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B2FE660FF7;
+        Mon, 18 Apr 2022 12:54:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C66FEC385A7;
+        Mon, 18 Apr 2022 12:54:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285530;
-        bh=7pljjTtnQK7vSOC4UMs/AsmTYE4EvmJi4DnLDl8Bdgo=;
+        s=korg; t=1650286481;
+        bh=JZZmyJXJTfR9m3f1cBsQ6R4p/0iYOIJFlYrSFLblW2s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kqgN2cCF9d4QE1+4rePZFDQAn+z6Vc5UM67b+KGIEfmo5Qn3M68DMzQ5MImoTh/tH
-         XL8fQjaH7AL6bd7Ja+j2Yme4KREo43wgXhiTxhoqNBQQoM5265RFwLLc5eCARwrPzw
-         DrkLw0lrxPPGbIfZCfYeuTYJ1M6WQR5dC0BMO8a0=
+        b=k6OHHc/zHZEcGaaLF68cUFDjRRH6Y//RO9uCesTMQjJtOs9YnoEiXsy9FVte8QUZC
+         tL8is8djPAqEFLx6ZX6hAYY6rCZEq0BIJveCfITYGfzkEsT0k6o04RNec9rifaBK2Y
+         Vli1K+sbdqX8WFUydzUMv7nrxwgoJBkGobCjJ0kg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Sven Auhagen <sven.auhagen@voleatech.de>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 007/105] drm/msm: Add missing put_task_struct() in debugfs path
+Subject: [PATCH 4.14 148/284] netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
 Date:   Mon, 18 Apr 2022 14:12:09 +0200
-Message-Id: <20220418121145.657156428@linuxfoundation.org>
+Message-Id: <20220418121215.811257073@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,32 +55,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit ac3e4f42d5ec459f701743debd9c1ad2f2247402 ]
+[ Upstream commit f2dd495a8d589371289981d5ed33e6873df94ecc ]
 
-Fixes: 25faf2f2e065 ("drm/msm: Show process names in gem_describe")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20220317184550.227991-1-robdclark@gmail.com
+Do not reset IP_CT_TCP_FLAG_BE_LIBERAL flag in out-of-sync scenarios
+coming before the TCP window tracking, otherwise such connections will
+fail in the window check.
+
+Update tcp_options() to leave this flag in place and add a new helper
+function to reset the tcp window state.
+
+Based on patch from Sven Auhagen.
+
+Fixes: c4832c7bbc3f ("netfilter: nf_ct_tcp: improve out-of-sync situation in TCP tracking")
+Tested-by: Sven Auhagen <sven.auhagen@voleatech.de>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/msm_gem.c | 1 +
- 1 file changed, 1 insertion(+)
+ net/netfilter/nf_conntrack_proto_tcp.c | 17 +++++++++++++----
+ 1 file changed, 13 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 819567e40565..9c05bf6c4551 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -849,6 +849,7 @@ void msm_gem_describe(struct drm_gem_object *obj, struct seq_file *m)
- 					get_pid_task(aspace->pid, PIDTYPE_PID);
- 				if (task) {
- 					comm = kstrdup(task->comm, GFP_KERNEL);
-+					put_task_struct(task);
- 				} else {
- 					comm = NULL;
- 				}
+diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
+index cba1c6ffe51a..5239c502c016 100644
+--- a/net/netfilter/nf_conntrack_proto_tcp.c
++++ b/net/netfilter/nf_conntrack_proto_tcp.c
+@@ -383,8 +383,8 @@ static void tcp_options(const struct sk_buff *skb,
+ 				 length, buff);
+ 	BUG_ON(ptr == NULL);
+ 
+-	state->td_scale =
+-	state->flags = 0;
++	state->td_scale = 0;
++	state->flags &= IP_CT_TCP_FLAG_BE_LIBERAL;
+ 
+ 	while (length > 0) {
+ 		int opcode=*ptr++;
+@@ -797,6 +797,16 @@ static unsigned int *tcp_get_timeouts(struct net *net)
+ 	return tcp_pernet(net)->timeouts;
+ }
+ 
++static void nf_ct_tcp_state_reset(struct ip_ct_tcp_state *state)
++{
++	state->td_end		= 0;
++	state->td_maxend	= 0;
++	state->td_maxwin	= 0;
++	state->td_maxack	= 0;
++	state->td_scale		= 0;
++	state->flags		&= IP_CT_TCP_FLAG_BE_LIBERAL;
++}
++
+ /* Returns verdict for packet, or -1 for invalid. */
+ static int tcp_packet(struct nf_conn *ct,
+ 		      const struct sk_buff *skb,
+@@ -897,8 +907,7 @@ static int tcp_packet(struct nf_conn *ct,
+ 			ct->proto.tcp.last_flags &= ~IP_CT_EXP_CHALLENGE_ACK;
+ 			ct->proto.tcp.seen[ct->proto.tcp.last_dir].flags =
+ 				ct->proto.tcp.last_flags;
+-			memset(&ct->proto.tcp.seen[dir], 0,
+-			       sizeof(struct ip_ct_tcp_state));
++			nf_ct_tcp_state_reset(&ct->proto.tcp.seen[dir]);
+ 			break;
+ 		}
+ 		ct->proto.tcp.last_index = index;
 -- 
-2.35.1
+2.34.1
 
 
 

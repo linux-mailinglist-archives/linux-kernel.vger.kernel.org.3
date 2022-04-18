@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B93505518
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3438F50543F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242056AbiDRNSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:18:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S241208AbiDRNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242233AbiDRM7n (ORCPT
+        with ESMTP id S240406AbiDRMzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381F330542;
-        Mon, 18 Apr 2022 05:40:29 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EC223143;
+        Mon, 18 Apr 2022 05:35:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8CD5B80EDE;
-        Mon, 18 Apr 2022 12:40:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03814C385A1;
-        Mon, 18 Apr 2022 12:40:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E7B9611A9;
+        Mon, 18 Apr 2022 12:35:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E33AC385A7;
+        Mon, 18 Apr 2022 12:35:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285626;
-        bh=epETK8RMdi/qHauVcO3oyZYPjLD8fCCYT0QAkxHcJgc=;
+        s=korg; t=1650285343;
+        bh=YPMbbLIAUrOz/F2QyLrf7EQrMAlFpXdWqGq42AxwZwE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RsBj2/H9g6aj6UmGbT+mEMhMAhszreIyvSfAJzqJgi+1TffVOtac9j2aFfiASCIfv
-         UlhIkDZPlhfahsTcNAP7G64yy5ENzvvNIx30KOL1l+s1SKp0okdXTlSJNyPuYPsuFs
-         zoogEN7HV2u19eyuQaFNJAoYEKnmF2GVJO8OIDCA=
+        b=jjSW9deWpf4DQ3Qca74QDiN0d0MXxcW67UGWh61Qe7VPl1+9gr/bruxIM/P7IMo9O
+         JpTfYC+9X24L+SwEVqPchOYVEqiDBRyg4EQ5nexnR80eo54fF1lzmSy5OUxtdaXh6H
+         C5qBcYM1RI7zcarZd+sYoU5uqZq+zzGvgc9hvu/I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.10 077/105] ath9k: Properly clear TX status area before reporting to mac80211
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: [PATCH 5.15 179/189] soc: qcom: aoss: Fix missing put_device call in qmp_get
 Date:   Mon, 18 Apr 2022 14:13:19 +0200
-Message-Id: <20220418121148.818096123@linuxfoundation.org>
+Message-Id: <20220418121208.151534900@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@toke.dk>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-commit 037250f0a45cf9ecf5b52d4b9ff8eadeb609c800 upstream.
+commit 4b41a9d0fe3db5f91078a380f62f0572c3ecf2dd upstream.
 
-The ath9k driver was not properly clearing the status area in the
-ieee80211_tx_info struct before reporting TX status to mac80211. Instead,
-it was manually filling in fields, which meant that fields introduced later
-were left as-is.
+The reference taken by 'of_find_device_by_node()' must be released when
+not needed anymore.
+Add the corresponding 'put_device()' in the error handling paths.
 
-Conveniently, mac80211 actually provides a helper to zero out the status
-area, so use that to make sure we zero everything.
-
-The last commit touching the driver function writing the status information
-seems to have actually been fixing an issue that was also caused by the
-area being uninitialised; but it only added clearing of a single field
-instead of the whole struct. That is now redundant, though, so revert that
-commit and use it as a convenient Fixes tag.
-
-Fixes: cc591d77aba1 ("ath9k: Make sure to zero status.tx_time before reporting TX status")
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220330164409.16645-1-toke@toke.dk
+Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220108095931.21527-1-linmq006@gmail.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/wireless/ath/ath9k/xmit.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/soc/qcom/qcom_aoss.c |    6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
---- a/drivers/net/wireless/ath/ath9k/xmit.c
-+++ b/drivers/net/wireless/ath/ath9k/xmit.c
-@@ -2512,6 +2512,8 @@ static void ath_tx_rc_status(struct ath_
- 	struct ath_hw *ah = sc->sc_ah;
- 	u8 i, tx_rateindex;
+--- a/drivers/soc/qcom/qcom_aoss.c
++++ b/drivers/soc/qcom/qcom_aoss.c
+@@ -551,7 +551,11 @@ struct qmp *qmp_get(struct device *dev)
  
-+	ieee80211_tx_info_clear_status(tx_info);
-+
- 	if (txok)
- 		tx_info->status.ack_signal = ts->ts_rssi;
+ 	qmp = platform_get_drvdata(pdev);
  
-@@ -2554,9 +2556,6 @@ static void ath_tx_rc_status(struct ath_
- 	}
- 
- 	tx_info->status.rates[tx_rateindex].count = ts->ts_longretry + 1;
--
--	/* we report airtime in ath_tx_count_airtime(), don't report twice */
--	tx_info->status.tx_time = 0;
+-	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
++	if (!qmp) {
++		put_device(&pdev->dev);
++		return ERR_PTR(-EPROBE_DEFER);
++	}
++	return qmp;
  }
+ EXPORT_SYMBOL(qmp_get);
  
- static void ath_tx_processq(struct ath_softc *sc, struct ath_txq *txq)
 
 

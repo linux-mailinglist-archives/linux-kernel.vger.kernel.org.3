@@ -2,49 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B33F1505946
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:16:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE90A505961
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344081AbiDRORf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45996 "EHLO
+        id S1344545AbiDROSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241917AbiDRN5O (ORCPT
+        with ESMTP id S244436AbiDRN5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F30562AE15;
-        Mon, 18 Apr 2022 06:07:14 -0700 (PDT)
+        Mon, 18 Apr 2022 09:57:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A872AE1E;
+        Mon, 18 Apr 2022 06:07:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8643460EFC;
-        Mon, 18 Apr 2022 13:07:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63381C385A1;
-        Mon, 18 Apr 2022 13:07:13 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8FB9DCE10A2;
+        Mon, 18 Apr 2022 13:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75C7DC385A7;
+        Mon, 18 Apr 2022 13:07:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287234;
-        bh=uKM1IrRUnR0at9+BarVT8h1V2qi4LheOzIpIvXhYmuU=;
+        s=korg; t=1650287236;
+        bh=f3e+vqqfFi+yOYOkwD6c5uvOfSo/vM7p0zi3JOoiFoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=itfihk6X6yneFH0jn76tKD7EdmebPL4VjWoNN9AsnV0M7hkZO/tZj0foA7VypbeLZ
-         DPRxH/VA39C7DH05iOnR8yYtCOHfkj6Afcnuy8M0We5k0FpAQeo38vgw4e9LbCvGWv
-         UyETD6Pj5GOvwvuatrUBoXCoGQWW+uXKz6iMje1g=
+        b=WJ605g+4cC/exH2wJBru1ZZmSZE21xGM11gRh6uBWjxPADVaLKRYp4qk/7y+wkqHK
+         6BRU8p2KC3bLHvTbQhV2Y/J9QVTaAewXs9o9CJ2uVjDo9vLBAFYWdfkYJUw2A8wtmr
+         v53nfEttWpv7AhL7JenK5cL55CFv/q7ry7WZspKM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Phil Sutter <n0-1@freewrt.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Daniel Walter <dwalter@google.com>,
+        stable@vger.kernel.org, Alan Stern <stern@rowland.harvard.edu>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 098/218] MIPS: RB532: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:12:44 +0200
-Message-Id: <20220418121202.408882383@linuxfoundation.org>
+Subject: [PATCH 4.9 099/218] USB: storage: ums-realtek: fix error code in rts51x_read_mem()
+Date:   Mon, 18 Apr 2022 14:12:45 +0200
+Message-Id: <20220418121202.437054399@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -62,55 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit 8755d57ba1ff910666572fab9e32890e8cc6ed3b ]
+[ Upstream commit b07cabb8361dc692522538205552b1b9dab134be ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) argument or environment
-strings. Also, error return codes don't mean anything to
-obsolete_checksetup() -- only non-zero (usually 1) or zero.
-So return 1 from setup_kmac().
+The rts51x_read_mem() function should return negative error codes.
+Currently if the kmalloc() fails it returns USB_STOR_TRANSPORT_ERROR (3)
+which is treated as success by the callers.
 
-Fixes: 9e21c7e40b7e ("MIPS: RB532: Replace parse_mac_addr() with mac_pton().")
-Fixes: 73b4390fb234 ("[MIPS] Routerboard 532: Support for base system")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-From: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Phil Sutter <n0-1@freewrt.org>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Ralf Baechle <ralf@linux-mips.org>
-Cc: Daniel Walter <dwalter@google.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 065e60964e29 ("ums_realtek: do not use stack memory for DMA")
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/r/20220304073504.GA26464@kili
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/rb532/devices.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/usb/storage/realtek_cr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 0966adccf520..ed921f7b4364 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -313,11 +313,9 @@ static int __init plat_setup_devices(void)
- static int __init setup_kmac(char *s)
- {
- 	printk(KERN_INFO "korina mac = %s\n", s);
--	if (!mac_pton(s, korina_dev0_data.mac)) {
-+	if (!mac_pton(s, korina_dev0_data.mac))
- 		printk(KERN_ERR "Invalid mac\n");
--		return -EINVAL;
--	}
--	return 0;
-+	return 1;
- }
+diff --git a/drivers/usb/storage/realtek_cr.c b/drivers/usb/storage/realtek_cr.c
+index d955761fce6f..d9d69637d614 100644
+--- a/drivers/usb/storage/realtek_cr.c
++++ b/drivers/usb/storage/realtek_cr.c
+@@ -377,7 +377,7 @@ static int rts51x_read_mem(struct us_data *us, u16 addr, u8 *data, u16 len)
  
- __setup("kmac=", setup_kmac);
+ 	buf = kmalloc(len, GFP_NOIO);
+ 	if (buf == NULL)
+-		return USB_STOR_TRANSPORT_ERROR;
++		return -ENOMEM;
+ 
+ 	usb_stor_dbg(us, "addr = 0x%x, len = %d\n", addr, len);
+ 
 -- 
 2.34.1
 

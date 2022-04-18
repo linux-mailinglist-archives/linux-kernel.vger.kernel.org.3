@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F250B50537B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A34505372
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240506AbiDRM5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47604 "EHLO
+        id S240610AbiDRM52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:57:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239589AbiDRMpv (ORCPT
+        with ESMTP id S239634AbiDRMqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:45:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C97EA28E38;
-        Mon, 18 Apr 2022 05:32:55 -0700 (PDT)
+        Mon, 18 Apr 2022 08:46:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE1129823;
+        Mon, 18 Apr 2022 05:33:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 0104FCE10A2;
-        Mon, 18 Apr 2022 12:32:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBEDFC385A7;
-        Mon, 18 Apr 2022 12:32:51 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7ED0F61014;
+        Mon, 18 Apr 2022 12:32:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77467C385A8;
+        Mon, 18 Apr 2022 12:32:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285172;
-        bh=h3/4h0H471UJtADRLo2a8XhpcTHhAAbQKbJpOEoncW4=;
+        s=korg; t=1650285178;
+        bh=PdqZVzizgk6/NDj9Gpg1f+LUl/smdkF9TxT+ushn/pk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QANXYxXPqftzPW/2TwIopWHM3r620oqxiDjf8sg9A1v3HwGOoAAj0QcDM0+YwkeL2
-         zPwU2nlENo3MFHleEzcVngzQ+BLXNWr7zGGxgazycP6LmzASdxoogJkOZSXOcX2lTy
-         rKfdxW7tPs2yEXod+uOdfPKbOIcw79h7IPBVmywo=
+        b=VQAiG0sQ3yfCc+15vAtVXoyQ5idV9mlWcjU+1f6hHrZIbSIHkT2/KQXrGZSN5QqYF
+         lZcYOe2NNxJaz2CdVqV36jK02hpC1l21VlE0ovRSl216uAnDHsn5VxK0PCvX6bilbC
+         ocoh8c6VOKkUwtyeQgH/nD+DUHRTxkEFderM5q8s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Leo Ruan <tingquan.ruan@cn.bosch.com>,
-        Mark Jonas <mark.jonas@de.bosch.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
+        stable@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 124/189] gpu: ipu-v3: Fix dev_dbg frequency output
-Date:   Mon, 18 Apr 2022 14:12:24 +0200
-Message-Id: <20220418121204.388596778@linuxfoundation.org>
+Subject: [PATCH 5.15 125/189] regulator: wm8994: Add an off-on delay for WM8994 variant
+Date:   Mon, 18 Apr 2022 14:12:25 +0200
+Message-Id: <20220418121204.476721313@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
 References: <20220418121200.312988959@linuxfoundation.org>
@@ -56,51 +56,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Leo Ruan <tingquan.ruan@cn.bosch.com>
+From: Jonathan Bakker <xc-racer2@live.ca>
 
-[ Upstream commit 070a88fd4a03f921b73a2059e97d55faaa447dab ]
+[ Upstream commit 92d96b603738ec4f35cde7198c303ae264dd47cb ]
 
-This commit corrects the printing of the IPU clock error percentage if
-it is between -0.1% to -0.9%. For example, if the pixel clock requested
-is 27.2 MHz but only 27.0 MHz can be achieved the deviation is -0.8%.
-But the fixed point math had a flaw and calculated error of 0.2%.
+As per Table 130 of the wm8994 datasheet at [1], there is an off-on
+delay for LDO1 and LDO2.  In the wm8958 datasheet [2], I could not
+find any reference to it.  I could not find a wm1811 datasheet to
+double-check there, but as no one has complained presumably it works
+without it.
 
-Before:
-  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
-  IPU clock can give 27000000 with divider 10, error 0.2%
-  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
+This solves the issue on Samsung Aries boards with a wm8994 where
+register writes fail when the device is powered off and back-on
+quickly.
 
-After:
-  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
-  IPU clock can give 27000000 with divider 10, error -0.8%
-  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
+[1] https://statics.cirrus.com/pubs/proDatasheet/WM8994_Rev4.6.pdf
+[2] https://statics.cirrus.com/pubs/proDatasheet/WM8958_v3.5.pdf
 
-Signed-off-by: Leo Ruan <tingquan.ruan@cn.bosch.com>
-Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
-Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
-Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
-Link: https://lore.kernel.org/r/20220207151411.5009-1-mark.jonas@de.bosch.com
+Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
+Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+Link: https://lore.kernel.org/r/CY4PR04MB056771CFB80DC447C30D5A31CB1D9@CY4PR04MB0567.namprd04.prod.outlook.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/ipu-v3/ipu-di.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/regulator/wm8994-regulator.c | 42 ++++++++++++++++++++++++++--
+ 1 file changed, 39 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/ipu-v3/ipu-di.c b/drivers/gpu/ipu-v3/ipu-di.c
-index 666223c6bec4..0a34e0ab4fe6 100644
---- a/drivers/gpu/ipu-v3/ipu-di.c
-+++ b/drivers/gpu/ipu-v3/ipu-di.c
-@@ -447,8 +447,9 @@ static void ipu_di_config_clock(struct ipu_di *di,
+diff --git a/drivers/regulator/wm8994-regulator.c b/drivers/regulator/wm8994-regulator.c
+index cadea0344486..40befdd9dfa9 100644
+--- a/drivers/regulator/wm8994-regulator.c
++++ b/drivers/regulator/wm8994-regulator.c
+@@ -71,6 +71,35 @@ static const struct regulator_ops wm8994_ldo2_ops = {
+ };
  
- 		error = rate / (sig->mode.pixelclock / 1000);
- 
--		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %d.%u%%\n",
--			rate, div, (signed)(error - 1000) / 10, error % 10);
-+		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %c%d.%d%%\n",
-+			rate, div, error < 1000 ? '-' : '+',
-+			abs(error - 1000) / 10, abs(error - 1000) % 10);
- 
- 		/* Allow a 1% error */
- 		if (error < 1010 && error >= 990) {
+ static const struct regulator_desc wm8994_ldo_desc[] = {
++	{
++		.name = "LDO1",
++		.id = 1,
++		.type = REGULATOR_VOLTAGE,
++		.n_voltages = WM8994_LDO1_MAX_SELECTOR + 1,
++		.vsel_reg = WM8994_LDO_1,
++		.vsel_mask = WM8994_LDO1_VSEL_MASK,
++		.ops = &wm8994_ldo1_ops,
++		.min_uV = 2400000,
++		.uV_step = 100000,
++		.enable_time = 3000,
++		.off_on_delay = 36000,
++		.owner = THIS_MODULE,
++	},
++	{
++		.name = "LDO2",
++		.id = 2,
++		.type = REGULATOR_VOLTAGE,
++		.n_voltages = WM8994_LDO2_MAX_SELECTOR + 1,
++		.vsel_reg = WM8994_LDO_2,
++		.vsel_mask = WM8994_LDO2_VSEL_MASK,
++		.ops = &wm8994_ldo2_ops,
++		.enable_time = 3000,
++		.off_on_delay = 36000,
++		.owner = THIS_MODULE,
++	},
++};
++
++static const struct regulator_desc wm8958_ldo_desc[] = {
+ 	{
+ 		.name = "LDO1",
+ 		.id = 1,
+@@ -172,9 +201,16 @@ static int wm8994_ldo_probe(struct platform_device *pdev)
+ 	 * regulator core and we need not worry about it on the
+ 	 * error path.
+ 	 */
+-	ldo->regulator = devm_regulator_register(&pdev->dev,
+-						 &wm8994_ldo_desc[id],
+-						 &config);
++	if (ldo->wm8994->type == WM8994) {
++		ldo->regulator = devm_regulator_register(&pdev->dev,
++							 &wm8994_ldo_desc[id],
++							 &config);
++	} else {
++		ldo->regulator = devm_regulator_register(&pdev->dev,
++							 &wm8958_ldo_desc[id],
++							 &config);
++	}
++
+ 	if (IS_ERR(ldo->regulator)) {
+ 		ret = PTR_ERR(ldo->regulator);
+ 		dev_err(wm8994->dev, "Failed to register LDO%d: %d\n",
 -- 
 2.35.1
 

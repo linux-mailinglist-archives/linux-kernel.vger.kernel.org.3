@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1605058B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92B6A5058AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344378AbiDROJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:09:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
+        id S1343898AbiDROIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245260AbiDRNxJ (ORCPT
+        with ESMTP id S245361AbiDRNx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:53:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9E345AC0;
-        Mon, 18 Apr 2022 06:02:36 -0700 (PDT)
+        Mon, 18 Apr 2022 09:53:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5DD6583;
+        Mon, 18 Apr 2022 06:02:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B78560B70;
-        Mon, 18 Apr 2022 13:02:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C71C385A7;
-        Mon, 18 Apr 2022 13:02:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CF7660B70;
+        Mon, 18 Apr 2022 13:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBE1C385A8;
+        Mon, 18 Apr 2022 13:02:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286955;
-        bh=Os+qxn1DhxDjshDTdAdlcK8Fy8Mz/bgvQq9b255khpM=;
+        s=korg; t=1650286958;
+        bh=j1ibkf07OPqJJuH+STE0U3Yp+RdmbtTkDExfewtsS1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=preuBGKJ0mzjpeZSfevrIAMQ9hOReme5yy5Hjfr7Pa0v5wRVMYDXL+oA9UmpfIStP
-         UB7JcyMb2loV/TDGbeZw36jeAkq8jqubC1yV03pPUu1NLdLZgsbaLGNnV75I2aRBOJ
-         Fxj4vTuFpE42M+v2Zv+7kgN/bb+Q4mKijPbtruL8=
+        b=W1JH7E6Pf82vxD+tKdIkI6c5zSfGo5T03Zt0GCxAwvx0UNBE2MxSmswstxaUgGWSz
+         +SEUn+0FJ5+e7v4/ZtA37ifdgGqjzvWswWGAPjRl4CYFdKSgIsQGWwjHLfLq6sVR8B
+         zd88NTGaRMjzTD6bPUdZqtco7EOFcefzsgFSCJFk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Jann Horn <jannh@google.com>,
-        "Eric W. Biederman" <ebiederm@xmission.com>
-Subject: [PATCH 4.9 014/218] ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
-Date:   Mon, 18 Apr 2022 14:11:20 +0200
-Message-Id: <20220418121159.422178664@linuxfoundation.org>
+        stable@vger.kernel.org, NeilBrown <neilb@suse.de>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>
+Subject: [PATCH 4.9 015/218] SUNRPC: avoid race between mod_timer() and del_timer_sync()
+Date:   Mon, 18 Apr 2022 14:11:21 +0200
+Message-Id: <20220418121159.475432000@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,105 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jann Horn <jannh@google.com>
+From: NeilBrown <neilb@suse.de>
 
-commit ee1fee900537b5d9560e9f937402de5ddc8412f3 upstream.
+commit 3848e96edf4788f772d83990022fa7023a233d83 upstream.
 
-Setting PTRACE_O_SUSPEND_SECCOMP is supposed to be a highly privileged
-operation because it allows the tracee to completely bypass all seccomp
-filters on kernels with CONFIG_CHECKPOINT_RESTORE=y. It is only supposed to
-be settable by a process with global CAP_SYS_ADMIN, and only if that
-process is not subject to any seccomp filters at all.
+xprt_destory() claims XPRT_LOCKED and then calls del_timer_sync().
+Both xprt_unlock_connect() and xprt_release() call
+ ->release_xprt()
+which drops XPRT_LOCKED and *then* xprt_schedule_autodisconnect()
+which calls mod_timer().
 
-However, while these permission checks were done on the PTRACE_SETOPTIONS
-path, they were missing on the PTRACE_SEIZE path, which also sets
-user-specified ptrace flags.
+This may result in mod_timer() being called *after* del_timer_sync().
+When this happens, the timer may fire long after the xprt has been freed,
+and run_timer_softirq() will probably crash.
 
-Move the permissions checks out into a helper function and let both
-ptrace_attach() and ptrace_setoptions() call it.
+The pairing of ->release_xprt() and xprt_schedule_autodisconnect() is
+always called under ->transport_lock.  So if we take ->transport_lock to
+call del_timer_sync(), we can be sure that mod_timer() will run first
+(if it runs at all).
 
-Cc: stable@kernel.org
-Fixes: 13c4a90119d2 ("seccomp: add ptrace options for suspend/resume")
-Signed-off-by: Jann Horn <jannh@google.com>
-Link: https://lkml.kernel.org/r/20220319010838.1386861-1-jannh@google.com
-Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: NeilBrown <neilb@suse.de>
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/ptrace.c |   47 ++++++++++++++++++++++++++++++++---------------
- 1 file changed, 32 insertions(+), 15 deletions(-)
+ net/sunrpc/xprt.c |    7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -371,6 +371,26 @@ bool ptrace_may_access(struct task_struc
- 	return !err;
- }
+--- a/net/sunrpc/xprt.c
++++ b/net/sunrpc/xprt.c
+@@ -1446,7 +1446,14 @@ static void xprt_destroy(struct rpc_xprt
+ 	/* Exclude transport connect/disconnect handlers */
+ 	wait_on_bit_lock(&xprt->state, XPRT_LOCKED, TASK_UNINTERRUPTIBLE);
  
-+static int check_ptrace_options(unsigned long data)
-+{
-+	if (data & ~(unsigned long)PTRACE_O_MASK)
-+		return -EINVAL;
-+
-+	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
-+		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
-+		    !IS_ENABLED(CONFIG_SECCOMP))
-+			return -EINVAL;
-+
-+		if (!capable(CAP_SYS_ADMIN))
-+			return -EPERM;
-+
-+		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
-+		    current->ptrace & PT_SUSPEND_SECCOMP)
-+			return -EPERM;
-+	}
-+	return 0;
-+}
-+
- static int ptrace_attach(struct task_struct *task, long request,
- 			 unsigned long addr,
- 			 unsigned long flags)
-@@ -382,8 +402,16 @@ static int ptrace_attach(struct task_str
- 	if (seize) {
- 		if (addr != 0)
- 			goto out;
-+		/*
-+		 * This duplicates the check in check_ptrace_options() because
-+		 * ptrace_attach() and ptrace_setoptions() have historically
-+		 * used different error codes for unknown ptrace options.
-+		 */
- 		if (flags & ~(unsigned long)PTRACE_O_MASK)
- 			goto out;
-+		retval = check_ptrace_options(flags);
-+		if (retval)
-+			return retval;
- 		flags = PT_PTRACED | PT_SEIZED | (flags << PT_OPT_FLAG_SHIFT);
- 	} else {
- 		flags = PT_PTRACED;
-@@ -656,22 +684,11 @@ int ptrace_writedata(struct task_struct
- static int ptrace_setoptions(struct task_struct *child, unsigned long data)
- {
- 	unsigned flags;
-+	int ret;
++	/*
++	 * xprt_schedule_autodisconnect() can run after XPRT_LOCKED
++	 * is cleared.  We use ->transport_lock to ensure the mod_timer()
++	 * can only run *before* del_time_sync(), never after.
++	 */
++	spin_lock(&xprt->transport_lock);
+ 	del_timer_sync(&xprt->timer);
++	spin_unlock(&xprt->transport_lock);
  
--	if (data & ~(unsigned long)PTRACE_O_MASK)
--		return -EINVAL;
--
--	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
--		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
--		    !IS_ENABLED(CONFIG_SECCOMP))
--			return -EINVAL;
--
--		if (!capable(CAP_SYS_ADMIN))
--			return -EPERM;
--
--		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
--		    current->ptrace & PT_SUSPEND_SECCOMP)
--			return -EPERM;
--	}
-+	ret = check_ptrace_options(data);
-+	if (ret)
-+		return ret;
- 
- 	/* Avoid intermediate state when all opts are cleared */
- 	flags = child->ptrace;
+ 	rpc_xprt_debugfs_unregister(xprt);
+ 	rpc_destroy_wait_queue(&xprt->binding);
 
 

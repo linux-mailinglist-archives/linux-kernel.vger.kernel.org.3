@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB40B505D55
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:13:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3367505D56
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346895AbiDRRPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S1346835AbiDRRQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346835AbiDRRPL (ORCPT
+        with ESMTP id S243486AbiDRRP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:15:11 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12B320F7F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:31 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso341831pjk.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:12:31 -0700 (PDT)
+        Mon, 18 Apr 2022 13:15:57 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593812BB28
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:13:13 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id t184so6981742pgd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:13:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Lh5wkQZbkXRgnC4EjKjmQBHmFIjrKbl6A7v1jfavo8o=;
-        b=is/oplsxgXfd3Ca6GkmGp/PT4EJfLLlwOkdjXIO+h+IRZ/KytNrxvBQ7S7U93JQFP4
-         h0EIGyI3NDzkkojrNsgnru7Wp36kdWkr3t++Lq0G7KWoA2HaQ8azVDY+JmWVcD3TSeuD
-         hCBDHEkv0HsJPCSP7iEz1QT1xMIlq8fpqZ1Tw6W2kiPa/7IE8koX4YVjJ7ObKjiZvwiq
-         boJAkxtbq681aAKCnvFCbm4tr0IrYJAsYzZlVobT77ozxlsIanEvkV0tDo0OswmqmYNi
-         BoOnWh25d4UF2lJ4TRaGMnEf2xZ1pS5y8TRzDsYh0bOcbdFxnIs064KyEXpt1agvzoVw
-         XDUQ==
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=BvtRLSGlIqgoZJw83CHbKmm9w5RaBORQkePsPwp3Jcs=;
+        b=X4HUkGNZmS19IamCaufLPwvkr3VU3muJTy0uqV5g7ZncQwXZXwPRIPzafxazChGNEO
+         ybOPX5th1MG/Yh4Yz1AYYEXYUO1Km9yplsj4dJUgklqGMwCcUAJo+voR9rMmHwE28Lm/
+         TIHSSMmO6CjeQWVmvdyA9zhyPjvF5wnXzN01hFDq8nqhN4iJW+KLB58OFFV91GkgEig8
+         38brj/8xk4X5b7UkhN2nVvDuccfkk7KvvWk+JROL/vggq0uL2noWR2Zxih8fX6AdYzxh
+         Iq4Ye/qp4Z4iCOcRuFSskjr57JNOXttTftidMDZGNvCaK3+CvUxVdqWpFHuQadh2LhUI
+         GWHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Lh5wkQZbkXRgnC4EjKjmQBHmFIjrKbl6A7v1jfavo8o=;
-        b=Uw4oj5xBMtQEwnBI0vD15rBZGYRj5ptTJ8mOsn5M8/k2SVHF5eJsFUS8RitArc3FY9
-         uphFHJbl9nyKL0KhKl8SCFkDAvbW2Z3cisi4CahXltxUV2gQ7oASgLOID5lCijUYVrYS
-         hr2YHbhUS06JXg36q+qpzA++tsHov3w19MIek7xy4MYblFdYCACGJzbUBnnIi3W7c6IC
-         v8bd6KsVl590SnfR0kS51gKuuHX4nXT7YBgU9ASBbGklgBX4rjJIf18Efo0KB3PE7095
-         2dmqRx0+8xQGUprzeoeodiVV2yQgLsJmEp3cFhfCiI5EEmqKZ6Hjb8URMtT5yNmEphJ/
-         RXXg==
-X-Gm-Message-State: AOAM530oGTLa1Twv+JsHIoMsWOylFmXt8O0vCKTPvsyP6S9uRXVkyAHg
-        0lymlIpamT9FJRvJY8nfbmw=
-X-Google-Smtp-Source: ABdhPJzGYxA05zBkmyGOb7yOlqsx0I2fv8L9tibsLM/3cNljPB8O80/1ZQdTEI1c4YF4iR6ksa/r3g==
-X-Received: by 2002:a17:90a:d584:b0:1bc:e520:91f2 with SMTP id v4-20020a17090ad58400b001bce52091f2mr19800353pju.192.1650301951534;
-        Mon, 18 Apr 2022 10:12:31 -0700 (PDT)
-Received: from octofox.hsd1.ca.comcast.net ([2601:641:401:1d20:3f09:380c:8f11:5a8a])
-        by smtp.gmail.com with ESMTPSA id e16-20020a63ee10000000b0039d1c7e80bcsm13637138pgi.75.2022.04.18.10.12.30
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=BvtRLSGlIqgoZJw83CHbKmm9w5RaBORQkePsPwp3Jcs=;
+        b=pwjobDvfaJ/wKpd8OL3WZy7gQl7nGRHLxZKjsglwQSrSdyIhQjAjziHEs5+4Hz2UtI
+         HG3ZVYhJbjFL7GyQ7ppDFdlnq84TTu3umjBN8QDEYGEQ60y7LqTI75Wcc4ahjOZHsbK4
+         ISZ6SESV1+ebmFqMFvvlHctMElD/usTiy9Vmz8BgfE8Lfs7Ptj/9RcGaQSb5aCj5cWYh
+         A0NXnubQgFWNl8z43QMwbqihI4op+Dq3n0VP+oW5v4dU1X0ibbhyYH47+tyf8dIZulhx
+         Gb/vfDSTWnauAgeuq+NhcTGMItIlPKc+CfsmArPYNQZVX/x8+TvacwFLwkWPAp/ahGF+
+         /g8Q==
+X-Gm-Message-State: AOAM533/H+zVoBlSwAInJ3a48+CoHwdfGNV7g4z1rrHyAflWI09LhJDI
+        xS79HAzStZOgtipct52ssdD7nQ==
+X-Google-Smtp-Source: ABdhPJx+xxEgbzOInBcT6iUBxz+NtIWz/XvFoiE0lFt8D8qcoTK1TxWsyQtJDP8JzSBdLixiTYwdjw==
+X-Received: by 2002:a62:1c8d:0:b0:4fa:8dcb:6da2 with SMTP id c135-20020a621c8d000000b004fa8dcb6da2mr13217641pfc.19.1650301992571;
+        Mon, 18 Apr 2022 10:13:12 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id u26-20020a63471a000000b003aa1ad643bdsm1809062pga.47.2022.04.18.10.13.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:12:30 -0700 (PDT)
-From:   Max Filippov <jcmvbkbc@gmail.com>
-To:     linux-xtensa@linux-xtensa.org
-Cc:     Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        Max Filippov <jcmvbkbc@gmail.com>
-Subject: [PATCH 5/5] xtensa: enable HAVE_VIRT_CPU_ACCOUNTING_GEN
-Date:   Mon, 18 Apr 2022 10:12:05 -0700
-Message-Id: <20220418171205.2413168-6-jcmvbkbc@gmail.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220418171205.2413168-1-jcmvbkbc@gmail.com>
-References: <20220418171205.2413168-1-jcmvbkbc@gmail.com>
+        Mon, 18 Apr 2022 10:13:10 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 11:13:08 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     bjorn.andersson@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH V4] remoteproc: imx_rproc: Ignore create mem entry for
+ resource table
+Message-ID: <20220418171308.GA952787@p14s>
+References: <20220415025737.1561976-1-peng.fan@oss.nxp.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415025737.1561976-1-peng.fan@oss.nxp.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,38 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's no direct cputime_t manipulation in the xtensa arch code, so
-generic virt CPU accounting may be enabled.
+On Fri, Apr 15, 2022 at 10:57:37AM +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Resource table is used by Linux to get information published by
+> remote processor. It should be not be used for memory allocation, so
+> not create rproc mem entry.
+> 
+> Fixes: b29b4249f8f0 ("remoteproc: imx_rproc: add i.MX specific parse fw hook")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+> 
+> V4:
+>  Typo fix
+>  use strcmp, not strncmp
+> 
+> V3:
+>  Update commit log
+>  Update Fixes tag
+> 
+> V2:
+>  Add Fixes tag
+>  Separate the patch from https://patchwork.kernel.org/project/linux-remoteproc/patch/20220111033333.403448-7-peng.fan@oss.nxp.com/
+>  Address typo
+> 
+> 
+>  drivers/remoteproc/imx_rproc.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 7a096f1891e6..91eb037089ef 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -423,6 +423,9 @@ static int imx_rproc_prepare(struct rproc *rproc)
+>  		if (!strcmp(it.node->name, "vdev0buffer"))
+>  			continue;
+>  
+> +		if (!strcmp(it.node->name, "rsc-table"))
+> +			continue;
+> +
 
-Signed-off-by: Max Filippov <jcmvbkbc@gmail.com>
----
- Documentation/features/time/virt-cpuacct/arch-support.txt | 2 +-
- arch/xtensa/Kconfig                                       | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+Applied.
 
-diff --git a/Documentation/features/time/virt-cpuacct/arch-support.txt b/Documentation/features/time/virt-cpuacct/arch-support.txt
-index 5163a60a1c1e..c905aa3c1d81 100644
---- a/Documentation/features/time/virt-cpuacct/arch-support.txt
-+++ b/Documentation/features/time/virt-cpuacct/arch-support.txt
-@@ -27,5 +27,5 @@
-     |       sparc: |  ok  |
-     |          um: | TODO |
-     |         x86: |  ok  |
--    |      xtensa: | TODO |
-+    |      xtensa: |  ok  |
-     -----------------------
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 6134808a633d..797355c142b3 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -43,6 +43,7 @@ config XTENSA
- 	select HAVE_PERF_EVENTS
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
-+	select HAVE_VIRT_CPU_ACCOUNTING_GEN
- 	select IRQ_DOMAIN
- 	select MODULES_USE_ELF_RELA
- 	select PERF_USE_VMALLOC
--- 
-2.30.2
+Thanks,
+Mathieu
 
+>  		rmem = of_reserved_mem_lookup(it.node);
+>  		if (!rmem) {
+>  			dev_err(priv->dev, "unable to acquire memory-region\n");
+> -- 
+> 2.25.1
+> 

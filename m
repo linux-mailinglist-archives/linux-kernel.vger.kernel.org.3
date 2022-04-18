@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3211F505D35
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:59:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6204505D39
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:01:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346740AbiDRRBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S241062AbiDRRDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346696AbiDRRBU (ORCPT
+        with ESMTP id S235507AbiDRRDu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:01:20 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3F32AD
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:58:40 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id j8so12782060pll.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:58:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=Dgl5eKn4iSzXB9l06M4fwVd6TIsHNtzaSHHFv1Wa9zw=;
-        b=BZQFA9pcqNGWWm/TFoYFFVZdh6KTVdcVLfXm/LYOkpxORHlZJkWyJzamzdep7WPyws
-         ZJPpjlwYhKtM38pYvGQB8OV5r2gkjnNdFrinAOXarjmIh5CKSeQ/Vs4R8ZuF+eIU37zE
-         vXeyRDrb56V0yWMcCRSp96qh6Aytunonn02UM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=Dgl5eKn4iSzXB9l06M4fwVd6TIsHNtzaSHHFv1Wa9zw=;
-        b=4GBEQJn/jKPrvpkV2ltiZcdTRFCPiQrLWMxLI4bZ3NnMltBl62TafLIScrXM7AVpNN
-         /CaJLOy8lUEWlNRNp6fM+lLJUV3k1qo/fR3OFdrrSE6cL+2ZFqgntMU35LP/7y2iCsHF
-         A/kPbmAHeEK51EjIBFCcT9XGEWp98RFR9Te/4s7kgJodTPiWyzSkHSwyxcyBbzAuILYO
-         lqUFLUY/bKktArVPbO262uoFgGDNFeXXAuADfUzcqcfXDbTcVDnEL8KVkvUafCa9CVVv
-         JeosrbEvQr2E/IuXDBJ6cGJQibrKUts6Q4ssXMzsjQcy8n5wrlp+R7DC7zDyX0dLtRZp
-         XFWA==
-X-Gm-Message-State: AOAM533KZoAs69M6CuXJJ67/v/CFqpqREte4cwX9rE0muTVXnjz0RDmx
-        l19/o4vvrASINVEwFQbZZRxK7Q==
-X-Google-Smtp-Source: ABdhPJxQVsYC/f7eoCzdIS38t+LLRJmAkBiI96AdewmBzcUliQs0YJQ/uNxYdYHYGIw1Keing25HWQ==
-X-Received: by 2002:a17:90a:c781:b0:1d0:c23e:5842 with SMTP id gn1-20020a17090ac78100b001d0c23e5842mr18487206pjb.182.1650301119843;
-        Mon, 18 Apr 2022 09:58:39 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:94f4:f90:c59f:129b])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a150800b001cbaf536a3esm17700980pja.18.2022.04.18.09.58.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:58:39 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philip Chen <philipchen@chromium.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
+        Mon, 18 Apr 2022 13:03:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C371CB31;
+        Mon, 18 Apr 2022 10:01:08 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23IF3chh007549;
+        Mon, 18 Apr 2022 17:01:08 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=FL3zNX7ORY2U/0LFBD8/RdrYIHzgYNqvN+ETkc+/j2Y=;
+ b=aI3H/+uHjIXusoLj/aCVwpUFA8B8FZjh8E6kmOuIIOM7Olgudvz/jRtf1U6IYwn0r/r/
+ e1v4Ub3surhCLT8NkFCQGiKQifaqAEWYuF7+9qG22IxxrbfazxPk9AvR4PvDNIVvc8+B
+ T2dcOBajKXy3cvpYPV97XdFvq1lk6Fyj8Fv76+zv8sUb3W9tlqtYPKm5oko19pQY5SLE
+ W9LuDXFKDcihj+LpWO1hY8BLXeGG9VgQYKxM9I1GRQWHZjQUoeATiwZiDgZvkgEW5I9C
+ uM9Jan1PSKB+h9cOCpLLPAwjzl26H8EvHxXhwd4OTvbXW/sttY5I2G7BMZLQ3doBzSus bQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7cshdd8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 17:01:08 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23IGdoN2018966;
+        Mon, 18 Apr 2022 17:01:07 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7cshdc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 17:01:07 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23IGwxGD031143;
+        Mon, 18 Apr 2022 17:01:05 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3ffne92d5d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 17:01:04 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23IH11i447382894
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Apr 2022 17:01:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 76160A4055;
+        Mon, 18 Apr 2022 17:01:01 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 01362A4051;
+        Mon, 18 Apr 2022 17:01:01 +0000 (GMT)
+Received: from osiris (unknown [9.145.50.158])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Mon, 18 Apr 2022 17:01:00 +0000 (GMT)
+Date:   Mon, 18 Apr 2022 19:00:59 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Tony Krowiak <akrowiak@linux.ibm.com>
+Cc:     Thomas Huth <thuth@redhat.com>, Halil Pasic <pasic@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        linux-s390@vger.kernel.org,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] drm/bridge: parade-ps8640: Provide wait_hpd_asserted() in struct drm_dp_aux
-Date:   Mon, 18 Apr 2022 09:56:42 -0700
-Message-Id: <20220418095557.v2.4.Ie827321ce263be52fdb8c1276f6f8cc00d78029f@changeid>
-X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-In-Reply-To: <20220418165642.2218514-1-dianders@chromium.org>
-References: <20220418165642.2218514-1-dianders@chromium.org>
+Subject: Re: [PATCH] s390: vfio-ap: Remove the superfluous
+ MODULE_DEVICE_TABLE declaration
+Message-ID: <Yl2ZS7lyzyit9lbk@osiris>
+References: <20220413094416.412114-1-thuth@redhat.com>
+ <2440b3f3-6961-4091-438f-7120b9177164@linux.ibm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2440b3f3-6961-4091-438f-7120b9177164@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 8bLREk_6SrKyhrgG76-ng5n46aKYmpBL
+X-Proofpoint-ORIG-GUID: OfQwYNTHlYKBLGOWzykv_SpB6f8_4VHf
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=769 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204180101
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,113 +100,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This implements the callback added by the patch ("drm/dp: Add
-wait_hpd_asserted() callback to struct drm_dp_aux").
+On Mon, Apr 18, 2022 at 10:23:38AM -0400, Tony Krowiak wrote:
+> Reviewed-by: Tony Krowiak <akrowiak@linux.ibm.com>
+> 
+> On 4/13/22 5:44 AM, Thomas Huth wrote:
+> > The vfio_ap module tries to register for the vfio_ap bus - but that's
+> > the interface that it provides itself, so this does not make much sense,
+> > thus let's simply drop this statement now.
+> > 
+> > Signed-off-by: Thomas Huth <thuth@redhat.com>
+> > ---
+> >   See also my previous patch to register it for the "ap" bus instead:
+> >   https://lore.kernel.org/linux-s390/20211201141110.94636-1-thuth@redhat.com/
+> >   ... but since it has been decided to not auto-load the module uncondi-
+> >   tionally, I'd like to suggest to rather drop this line now instead.
+> > 
+> >   drivers/s390/crypto/vfio_ap_drv.c | 2 --
+> >   1 file changed, 2 deletions(-)
 
-With this change and all the two "DP AUX Endpoint" drivers changed to
-use wait_hpd_asserted(), we no longer need to have an long delay in
-the AUX transfer function. It's up to the panel code to make sure that
-the panel is powered now. If someone tried to call the aux transfer
-function without making sure the panel is powered we'll just get a
-normal transfer failure.
+...
 
-We'll still keep the wait for HPD in the pre_enable() function. Though
-it's probably not actually needed there, this driver is used in the
-old mode (pre-DP AUX Endpoints) and it may be important for those
-cases. If nothing else, it shouldn't cause any big problems.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
-Changes in v2:
-- Change is_hpd_asserted() to wait_hpd_asserted()
-
- drivers/gpu/drm/bridge/parade-ps8640.c | 34 ++++++++++++++++----------
- 1 file changed, 21 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bridge/parade-ps8640.c
-index 9766cbbd62ad..2f19a8c89880 100644
---- a/drivers/gpu/drm/bridge/parade-ps8640.c
-+++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-@@ -168,23 +168,30 @@ static bool ps8640_of_panel_on_aux_bus(struct device *dev)
- 	return true;
- }
- 
--static int ps8640_ensure_hpd(struct ps8640 *ps_bridge)
-+static int _ps8640_wait_hpd_asserted(struct ps8640 *ps_bridge, unsigned long wait_us)
- {
- 	struct regmap *map = ps_bridge->regmap[PAGE2_TOP_CNTL];
--	struct device *dev = &ps_bridge->page[PAGE2_TOP_CNTL]->dev;
- 	int status;
--	int ret;
- 
- 	/*
- 	 * Apparently something about the firmware in the chip signals that
- 	 * HPD goes high by reporting GPIO9 as high (even though HPD isn't
- 	 * actually connected to GPIO9).
- 	 */
--	ret = regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
--				       status & PS_GPIO9, 20 * 1000, 200 * 1000);
-+	return regmap_read_poll_timeout(map, PAGE2_GPIO_H, status,
-+					status & PS_GPIO9, wait_us / 10, wait_us);
-+}
- 
--	if (ret < 0)
--		dev_warn(dev, "HPD didn't go high: %d\n", ret);
-+static int ps8640_wait_hpd_asserted(struct drm_dp_aux *aux, unsigned long wait_us)
-+{
-+	struct ps8640 *ps_bridge = aux_to_ps8640(aux);
-+	struct device *dev = &ps_bridge->page[PAGE0_DP_CNTL]->dev;
-+	int ret;
-+
-+	pm_runtime_get_sync(dev);
-+	ret = _ps8640_wait_hpd_asserted(ps_bridge, wait_us);
-+	pm_runtime_mark_last_busy(dev);
-+	pm_runtime_put_autosuspend(dev);
- 
- 	return ret;
- }
-@@ -323,9 +330,7 @@ static ssize_t ps8640_aux_transfer(struct drm_dp_aux *aux,
- 	int ret;
- 
- 	pm_runtime_get_sync(dev);
--	ret = ps8640_ensure_hpd(ps_bridge);
--	if (!ret)
--		ret = ps8640_aux_transfer_msg(aux, msg);
-+	ret = ps8640_aux_transfer_msg(aux, msg);
- 	pm_runtime_mark_last_busy(dev);
- 	pm_runtime_put_autosuspend(dev);
- 
-@@ -369,8 +374,8 @@ static int __maybe_unused ps8640_resume(struct device *dev)
- 	 * Mystery 200 ms delay for the "MCU to be ready". It's unclear if
- 	 * this is truly necessary since the MCU will already signal that
- 	 * things are "good to go" by signaling HPD on "gpio 9". See
--	 * ps8640_ensure_hpd(). For now we'll keep this mystery delay just in
--	 * case.
-+	 * _ps8640_wait_hpd_asserted(). For now we'll keep this mystery delay
-+	 * just in case.
- 	 */
- 	msleep(200);
- 
-@@ -406,7 +411,9 @@ static void ps8640_pre_enable(struct drm_bridge *bridge)
- 	int ret;
- 
- 	pm_runtime_get_sync(dev);
--	ps8640_ensure_hpd(ps_bridge);
-+	ret = _ps8640_wait_hpd_asserted(ps_bridge, 200 * 1000);
-+	if (ret < 0)
-+		dev_warn(dev, "HPD didn't go high: %d\n", ret);
- 
- 	/*
- 	 * The Manufacturer Command Set (MCS) is a device dependent interface
-@@ -652,6 +659,7 @@ static int ps8640_probe(struct i2c_client *client)
- 	ps_bridge->aux.name = "parade-ps8640-aux";
- 	ps_bridge->aux.dev = dev;
- 	ps_bridge->aux.transfer = ps8640_aux_transfer;
-+	ps_bridge->aux.wait_hpd_asserted = ps8640_wait_hpd_asserted;
- 	drm_dp_aux_init(&ps_bridge->aux);
- 
- 	pm_runtime_enable(dev);
--- 
-2.36.0.rc0.470.gd361397f0d-goog
-
+Applied, thanks.

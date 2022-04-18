@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31E25058DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9035D50591D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344287AbiDROJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42952 "EHLO
+        id S1343764AbiDROPC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:15:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343842AbiDRNy2 (ORCPT
+        with ESMTP id S244631AbiDRN5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:54:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D857488A3;
-        Mon, 18 Apr 2022 06:03:45 -0700 (PDT)
+        Mon, 18 Apr 2022 09:57:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718352AC69;
+        Mon, 18 Apr 2022 06:06:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3642FB80E44;
-        Mon, 18 Apr 2022 13:03:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82157C385A9;
-        Mon, 18 Apr 2022 13:03:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C89560EF6;
+        Mon, 18 Apr 2022 13:06:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F30CFC385A1;
+        Mon, 18 Apr 2022 13:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287023;
-        bh=n88RAwmxd0hDwGtqqxhQZQW18D2OdrVTSm5q8/xhMJ8=;
+        s=korg; t=1650287192;
+        bh=LMlQNGlYN3hy8CPToMdfFBPok9Av3xw6NjdEtCImleg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=N71lud2R3yDobNidNVCtvaGHJret6W6Lb8nrr0PKptKGAh48Fq18qQPFhKj7GdxA9
-         EoXnLMDrmK8kgh7qIq4QWBN2sscvFCkq1eCMM8amJukVGVU0Qz9TomWIzNB2Ox/I/B
-         nt1fXRe1EvHzBcyIn9bRHX4G+aHSnRPbdiYviYvY=
+        b=JYicHKyMTS8RqkCJ1mznjUKwmx2ImTK2DFqvkLJ5gNfqwrn5VRe0FBC/xyyFl7Vao
+         l2RLhmhjeoV0/zdDAekugJhlYpWLBY9ohL79ofllIznvdVq26o05D2OjslC/XcP0Vc
+         5i8l8RCZUn6XHqeZRuvBOY8nLdzNoNmknSDhf8lI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 4.9 033/218] thermal: int340x: Increase bitmap size
-Date:   Mon, 18 Apr 2022 14:11:39 +0200
-Message-Id: <20220418121200.372337811@linuxfoundation.org>
+        =?UTF-8?q?Dirk=20M=C3=BCller?= <dmueller@suse.de>,
+        Paul Menzel <pmenzel@molgen.mpg.de>, Song Liu <song@kernel.org>
+Subject: [PATCH 4.9 034/218] lib/raid6/test: fix multiple definition linking error
+Date:   Mon, 18 Apr 2022 14:11:40 +0200
+Message-Id: <20220418121200.417020033@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,35 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+From: Dirk Müller <dmueller@suse.de>
 
-commit 668f69a5f863b877bc3ae129efe9a80b6f055141 upstream.
+commit a5359ddd052860bacf957e65fe819c63e974b3a6 upstream.
 
-The number of policies are 10, so can't be supported by the bitmap size
-of u8.
+GCC 10+ defaults to -fno-common, which enforces proper declaration of
+external references using "extern". without this change a link would
+fail with:
 
-Even though there are no platfoms with these many policies, but
-for correctness increase to u32.
+  lib/raid6/test/algos.c:28: multiple definition of `raid6_call';
+  lib/raid6/test/test.c:22: first defined here
 
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Fixes: 16fc8eca1975 ("thermal/int340x_thermal: Add additional UUIDs")
-Cc: 5.1+ <stable@vger.kernel.org> # 5.1+
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+the pq.h header that is included already includes an extern declaration
+so we can just remove the redundant one here.
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Dirk Müller <dmueller@suse.de>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+Signed-off-by: Song Liu <song@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/thermal/int340x_thermal/int3400_thermal.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/raid6/test/test.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/drivers/thermal/int340x_thermal/int3400_thermal.c
-+++ b/drivers/thermal/int340x_thermal/int3400_thermal.c
-@@ -51,7 +51,7 @@ struct int3400_thermal_priv {
- 	struct art *arts;
- 	int trt_count;
- 	struct trt *trts;
--	u8 uuid_bitmap;
-+	u32 uuid_bitmap;
- 	int rel_misc_dev_res;
- 	int current_uuid_index;
- };
+--- a/lib/raid6/test/test.c
++++ b/lib/raid6/test/test.c
+@@ -22,7 +22,6 @@
+ #define NDISKS		16	/* Including P and Q */
+ 
+ const char raid6_empty_zero_page[PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
+-struct raid6_calls raid6_call;
+ 
+ char *dataptrs[NDISKS];
+ char data[NDISKS][PAGE_SIZE] __attribute__((aligned(PAGE_SIZE)));
 
 

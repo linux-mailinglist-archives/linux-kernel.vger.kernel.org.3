@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C625A5051FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA9235057D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240144AbiDRMin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53232 "EHLO
+        id S244665AbiDRN5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239743AbiDRMdW (ORCPT
+        with ESMTP id S244891AbiDRNbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381F71E3E3;
-        Mon, 18 Apr 2022 05:25:28 -0700 (PDT)
+        Mon, 18 Apr 2022 09:31:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4509ACE4;
+        Mon, 18 Apr 2022 05:57:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71832B80ED1;
-        Mon, 18 Apr 2022 12:25:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7198C385A1;
-        Mon, 18 Apr 2022 12:25:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4310612BB;
+        Mon, 18 Apr 2022 12:57:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9A0AC385A7;
+        Mon, 18 Apr 2022 12:57:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284726;
-        bh=6xnc8GCF0VylzUgLpI+zJ8wz47soPErwv3vp/zZrPmk=;
+        s=korg; t=1650286633;
+        bh=CFRDh/5VyK388caysqLX/bAjGN9S5E6mM71EURz4BgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GLIO7cFaT19V7lydSyjiKGYxXtz7X1RSuwJPWE9in3Ai3lo/JmhdjVLVbaBjlml/h
-         S/bxatC1APauobPxVS2WmxSlQ0GsAwgCjMCk+AIjrxVLcxPZvL42VbrxnXPxishYhR
-         XrXkaE2VS70n8s0FEMq3IJv4FdEvjVsDds+hJozU=
+        b=um2CiFW9tAI0rZBZmOTaAov5Hre48zlnCtuC/nni/XKE9VB4UsyosXh6KC+oLnUXc
+         F3wFiLWP/58OnZDCKIh6DU/8klRWS/Bu6jfxZoI77hq7LuBvTsy18o2MgptQ7/+JxW
+         cICF/qIYdOxk6QqTGNhQawuKuSS43590QVG/WBHo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Mikulas Patocka <mpatocka@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>
-Subject: [PATCH 5.17 207/219] dm integrity: fix memory corruption when tag_size is less than digest size
-Date:   Mon, 18 Apr 2022 14:12:56 +0200
-Message-Id: <20220418121212.661717902@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vladimir Davydov <vdavydov.dev@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.14 196/284] mm/memcontrol: return 1 from cgroup.memory __setup() handler
+Date:   Mon, 18 Apr 2022 14:12:57 +0200
+Message-Id: <20220418121217.302617191@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,53 +61,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mikulas Patocka <mpatocka@redhat.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 08c1af8f1c13bbf210f1760132f4df24d0ed46d6 upstream.
+commit 460a79e18842caca6fa0c415de4a3ac1e671ac50 upstream.
 
-It is possible to set up dm-integrity in such a way that the
-"tag_size" parameter is less than the actual digest size. In this
-situation, a part of the digest beyond tag_size is ignored.
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; it just pollutes init's
+environment).
 
-In this case, dm-integrity would write beyond the end of the
-ic->recalc_tags array and corrupt memory. The corruption happened in
-integrity_recalc->integrity_sector_checksum->crypto_shash_final.
+The only reason that this particular __setup handler does not pollute
+init's environment is that the setup string contains a '.', as in
+"cgroup.memory".  This causes init/main.c::unknown_boottoption() to
+consider it to be an "Unused module parameter" and ignore it.  (This is
+for parsing of loadable module parameters any time after kernel init.)
+Otherwise the string "cgroup.memory=whatever" would be added to init's
+environment strings.
 
-Fix this corruption by increasing the tags array so that it has enough
-padding at the end to accomodate the loop in integrity_recalc() being
-able to write a full digest size for the last member of the tags
-array.
+Instead of relying on this '.' quirk, just return 1 to indicate that the
+boot option has been handled.
 
-Cc: stable@vger.kernel.org # v4.19+
-Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Note that there is no warning message if someone enters:
+	cgroup.memory=anything_invalid
+
+Link: https://lkml.kernel.org/r/20220222005811.10672-1-rdunlap@infradead.org
+Fixes: f7e1cb6ec51b0 ("mm: memcontrol: account socket memory in unified hierarchy memory controller")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Vladimir Davydov <vdavydov.dev@gmail.com>
+Cc: Roman Gushchin <roman.gushchin@linux.dev>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/md/dm-integrity.c |    7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ mm/memcontrol.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/md/dm-integrity.c
-+++ b/drivers/md/dm-integrity.c
-@@ -4400,6 +4400,7 @@ try_smaller_buffer:
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -5978,7 +5978,7 @@ static int __init cgroup_memory(char *s)
+ 		if (!strcmp(token, "nokmem"))
+ 			cgroup_memory_nokmem = true;
  	}
+-	return 0;
++	return 1;
+ }
+ __setup("cgroup.memory=", cgroup_memory);
  
- 	if (ic->internal_hash) {
-+		size_t recalc_tags_size;
- 		ic->recalc_wq = alloc_workqueue("dm-integrity-recalc", WQ_MEM_RECLAIM, 1);
- 		if (!ic->recalc_wq ) {
- 			ti->error = "Cannot allocate workqueue";
-@@ -4413,8 +4414,10 @@ try_smaller_buffer:
- 			r = -ENOMEM;
- 			goto bad;
- 		}
--		ic->recalc_tags = kvmalloc_array(RECALC_SECTORS >> ic->sb->log2_sectors_per_block,
--						 ic->tag_size, GFP_KERNEL);
-+		recalc_tags_size = (RECALC_SECTORS >> ic->sb->log2_sectors_per_block) * ic->tag_size;
-+		if (crypto_shash_digestsize(ic->internal_hash) > ic->tag_size)
-+			recalc_tags_size += crypto_shash_digestsize(ic->internal_hash) - ic->tag_size;
-+		ic->recalc_tags = kvmalloc(recalc_tags_size, GFP_KERNEL);
- 		if (!ic->recalc_tags) {
- 			ti->error = "Cannot allocate tags for recalculating";
- 			r = -ENOMEM;
 
 

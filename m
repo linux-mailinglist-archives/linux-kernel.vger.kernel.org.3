@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07A845055DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0B5D505873
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243320AbiDRN2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41096 "EHLO
+        id S245657AbiDRODx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239762AbiDRNFS (ORCPT
+        with ESMTP id S244746AbiDRNp1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:05:18 -0400
+        Mon, 18 Apr 2022 09:45:27 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEE819017;
-        Mon, 18 Apr 2022 05:45:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1F2F326D0;
+        Mon, 18 Apr 2022 06:00:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0671E6124D;
-        Mon, 18 Apr 2022 12:45:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB30FC385A7;
-        Mon, 18 Apr 2022 12:45:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 332856097A;
+        Mon, 18 Apr 2022 13:00:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429CFC385A1;
+        Mon, 18 Apr 2022 13:00:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285945;
-        bh=h7wCG4XjaYle+ieR3ESj44+7lHbRR0+fYce5PBuCF8I=;
+        s=korg; t=1650286819;
+        bh=6qmuWssJE8BGwTQm90LV/eDA7PH3hvnsKvgw2QngIXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PVvEEHRY7u5ChLhf2rBwoBdhhBeikv3quzMxFrjGsbOOjuVYIfVVD437yrGIU/egK
-         Us4NudR38hsoinGrc5dJVGecG5I55xwLDUHpOUWfPV/RiWM4/gSMJTpuw1ICgulZjk
-         Qc16j5LEzeRxJ0AJUOrKC6+pUO08+Bbd/1NsrC1M=
+        b=J5IQdmmPPc0nl6bhA/IHIi7h/q1XE7orO61bUQF2TGhwaI9rXOteOFvzdA8Vhlpfp
+         dhObSKR39iFxVnxysTRvJvcQYi9G+/SusX20IFwhHxK/fi2ZdDxFRL+yPVLMBD5ocG
+         F9AE9SnIptA6lAxv1WLDAyqNjNXVdE67bMZ5IQ7o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 13/32] Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
-Date:   Mon, 18 Apr 2022 14:13:53 +0200
-Message-Id: <20220418121127.515948805@linuxfoundation.org>
+        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 4.14 253/284] dmaengine: Revert "dmaengine: shdma: Fix runtime PM imbalance on error"
+Date:   Mon, 18 Apr 2022 14:13:54 +0200
+Message-Id: <20220418121219.505902220@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
-References: <20220418121127.127656835@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,57 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Vinod Koul <vkoul@kernel.org>
 
-[ Upstream commit b6cae15b5710c8097aad26a2e5e752c323ee5348 ]
+commit d143f939a95696d38ff800ada14402fa50ebbd6c upstream.
 
-When reading a packet from a host-to-guest ring buffer, there is no
-memory barrier between reading the write index (to see if there is
-a packet to read) and reading the contents of the packet. The Hyper-V
-host uses store-release when updating the write index to ensure that
-writes of the packet data are completed first. On the guest side,
-the processor can reorder and read the packet data before the write
-index, and sometimes get stale packet data. Getting such stale packet
-data has been observed in a reproducible case in a VM on ARM64.
+This reverts commit 455896c53d5b ("dmaengine: shdma: Fix runtime PM
+imbalance on error") as the patch wrongly reduced the count on error and
+did not bail out. So drop the count by reverting the patch .
 
-Fix this by using virt_load_acquire() to read the write index,
-ensuring that reads of the packet data cannot be reordered
-before it. Preventing such reordering is logically correct, and
-with this change, getting stale data can no longer be reproduced.
-
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/1648394710-33480-1-git-send-email-mikelley@microsoft.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/hv/ring_buffer.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/dma/sh/shdma-base.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 6cb45f256107..d97b30af9e03 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -365,7 +365,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- {
- 	u32 priv_read_loc = rbi->priv_read_index;
--	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
-+	u32 write_loc;
-+
-+	/*
-+	 * The Hyper-V host writes the packet data, then uses
-+	 * store_release() to update the write_index.  Use load_acquire()
-+	 * here to prevent loads of the packet data from being re-ordered
-+	 * before the read of the write_index and potentially getting
-+	 * stale data.
-+	 */
-+	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
+--- a/drivers/dma/sh/shdma-base.c
++++ b/drivers/dma/sh/shdma-base.c
+@@ -118,10 +118,8 @@ static dma_cookie_t shdma_tx_submit(stru
+ 		ret = pm_runtime_get(schan->dev);
  
- 	if (write_loc >= priv_read_loc)
- 		return write_loc - priv_read_loc;
--- 
-2.35.1
-
+ 		spin_unlock_irq(&schan->chan_lock);
+-		if (ret < 0) {
++		if (ret < 0)
+ 			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
+-			pm_runtime_put(schan->dev);
+-		}
+ 
+ 		pm_runtime_barrier(schan->dev);
+ 
 
 

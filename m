@@ -2,114 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB39505C29
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 050B8505C2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343696AbiDRQAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:00:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
+        id S238618AbiDRQEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240781AbiDRQAj (ORCPT
+        with ESMTP id S230451AbiDRQEh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:00:39 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462D3FD
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:57:59 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id r13so27612439ejd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:57:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=JSWOMZN2s2Uc0MEkuAEzkTwIlDrpbxDUKksft1URO94=;
-        b=YaonER1hHD5j2WB24Y1TDR5agDK/8GipcH6XQtLpJvLQUYyNs/yzLom/3nWNxnUo6q
-         YqoyLmh7HQhRyrMnXAi48T0lw0hyJ92orPa7RZ+4tKjzhdsxzZLw7tbWAUyiNRmIRdCk
-         Kw6xbsaLrC1/cYPgAYj2xML93L6Pgg4nis5VkTFvSbh72lVU9wNKBK1ew1k6WfvBdIm3
-         vzy0138x4ewlUmiH8I+HFmylHN0q/nshWvsx6vVHZ9ahWWj/8jsZ5ye36orkaELgOqDL
-         gAw7BGV6QVkY9ZszGIFam5A1qUQ0fBKv15tMF+8zuIMV1a6DjZcdd8Xl2j78WE+qtpAU
-         BSAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=JSWOMZN2s2Uc0MEkuAEzkTwIlDrpbxDUKksft1URO94=;
-        b=FXOqNtpcc+HEd1PKUs11PykVlnb/6XumH657t+dixAspmfDW/exk3gacs18g5HsBYX
-         efWFE6/OH4Lq57MKaaueB2GvJ0tpVqbZKY7bCJck9Q+d9bl+tTE6IeblcxHvlWMFr8vn
-         GMcKXzdVWSRHcGXjKh3gzKpiu7Hk6PuqrokzCUJabnskQ5R3gDnyHAvstHYK05OyjLkp
-         2PG3oI1gcUqE4ed/jjtOJ6u5xFY1YDH1eGyZf/CJ9n4sxNpAPo6vSUHMgBbumomeYgwR
-         23+1wOmIpR8GH1oYgJVOXo2GnkVIJZRng4omv3C03vEdqH1sQ5MxQCqv0At2yDW9clw3
-         RVcQ==
-X-Gm-Message-State: AOAM533Q04g1grYTjEwImK7J+teI4j3AaeQ4WgP3Py3Z4s6nBz1FSMLF
-        6AYWXaBjyZe4kXJZWtGxj9l1Sw==
-X-Google-Smtp-Source: ABdhPJzbfk8QTJK5jVB6BLByUTxvMVPAib1GsPEBJahAxLMAbDnMR0ih2p6z1HqOoX7v85bcyO5p2Q==
-X-Received: by 2002:a17:907:1b06:b0:6e7:f58a:9b91 with SMTP id mp6-20020a1709071b0600b006e7f58a9b91mr10073346ejc.291.1650297477805;
-        Mon, 18 Apr 2022 08:57:57 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id gq5-20020a170906e24500b006e87644f2f7sm4661020ejb.38.2022.04.18.08.57.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 08:57:57 -0700 (PDT)
-Message-ID: <195bc220-05c1-d216-6596-0a54c177c5a6@linaro.org>
-Date:   Mon, 18 Apr 2022 17:57:56 +0200
+        Mon, 18 Apr 2022 12:04:37 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F84D1263E;
+        Mon, 18 Apr 2022 09:01:56 -0700 (PDT)
+Received: from [192.168.1.107] ([37.4.249.94]) by mrelayeu.kundenserver.de
+ (mreue012 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1McZfZ-1oBxc824lh-00d0eK; Mon, 18 Apr 2022 18:01:33 +0200
+Message-ID: <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
+Date:   Mon, 18 Apr 2022 18:01:31 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [RFC/RFT 6/6] arm64: dts: rockchip: Add PCIe v3 nodes to
- BPI-R2-Pro
+Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
 Content-Language: en-US
-To:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org
-Cc:     Frank Wunderlich <frank-w@public-files.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20220416135458.104048-1-linux@fw-web.de>
- <20220416135458.104048-7-linux@fw-web.de>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220416135458.104048-7-linux@fw-web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+To:     "Ivan T. Ivanov" <iivanov@suse.de>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Phil Elwell <phil@raspberrypi.org>,
+        kernel test robot <lkp@intel.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220404125113.80239-1-iivanov@suse.de>
+ <20220414105656.qt52zmr5vjmjdcxc@suse>
+ <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
+ <20220418110516.s7jxsfa3jl7aagrf@suse>
+ <2a46bd1c-600b-5bd9-1c19-20c809f63945@i2se.com>
+ <20220418113801.uree7rvkzxpiwyni@suse>
+From:   Stefan Wahren <stefan.wahren@i2se.com>
+In-Reply-To: <20220418113801.uree7rvkzxpiwyni@suse>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:somyTe8OKM+gwMLHE0W9aM3scGr9zISIgwFNXJUxuaeY1grPwQq
+ zwe/l9QjjFBVWXHE5RWylPudfTtBVJv+ge88de36wgx1+9qOmOpSfnqOPhY9YL7+/XXXOgR
+ WomYlQ5UvWWDQDr1K4TY87GCVGfILbhtzVxUQiVIzLUwj7S27AX3bwRiz56SWiONFtjtI9Q
+ QFL3NepSpMQQ60mx6yN/w==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:4RHdFWUUmV4=:tU8hjna7N5CmiJVvNdndmL
+ 43hLDo7Iy1d6+z1rLM1D+rVHImaV9kuvIX45KHqk6PRuJTEkN01YO5x93bswzPJ9HCU9HLzwf
+ wlXwunxAZ3FWtBLf6LLp3R312O1Q8YQlgyyjq0Fb/91tjHWFMdO9soQPLD6C+bc0MjhgVW8Tf
+ gi45xDwBUnBzHH2WXVdzhyJGOt9Ur7Xa2bQ4WJiMbKr/+9+v44aH2DIKJTQ21JWgBbGc/OLoL
+ PbUHG52dhpSutI/hkdTcPq78YOZyULWNUhWgarCCk2QGhGZHqRnKYa4I6Z+88au6JOcZTDy+u
+ 5myaIqWJaKvhs5GSnXb5CZ5V9EJCOwnB/y+uHcUYUGKSOtzYAvuesMEstu5nwPhoxBseAMfjW
+ c9u9FJBI0pUvdWXO/rHfuQ820tMcV0ir66jo1TcS2dqVoxYwVzqj7AFvDv3E0zfei3tIlgJiL
+ Ap5EP1rM5IJkJqB11XUCUo2MhzzbTNnkjnSIaPtLVX0YZvZA3K0u/LeuoDXBYTtIdkICgpjj6
+ 7Nc4zFnluECn3DKfCXG3bWbNSKxsWV4576hLbKR4czFq+4GZB8c8qCRb25RkJMLnslLbzhh51
+ je4mINwWH0u6Jboje0Dl8rLcwUL7DvEPHzZKFOztEex0DvkEGEp5G3g6+G6ShBo7t83aMJwIl
+ bzNA+q63ZT0RGt8Wv/kxaMA/ChXI1LzlxYB9l2caIQDnMrx/CfrG5ydGCoGSg4SoEJtgjybus
+ sgPNkFK/sAVq7tNg
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16/04/2022 15:54, Frank Wunderlich wrote:
+Am 18.04.22 um 13:38 schrieb Ivan T. Ivanov:
+> On 04-18 13:22, Stefan Wahren wrote:
+>> Hi Ivan,
+>>
+>> Am 18.04.22 um 13:05 schrieb Ivan T. Ivanov:
+>>> Hi Stefan,
+>>>
+>>> On 04-15 10:52, Stefan Wahren wrote:
+>>>> Hi Ivan,
+>>>>
+>>>> Am 14.04.22 um 12:56 schrieb Ivan T. Ivanov:
+>>>>> Hi Stefan,
+>>>>>
+>>>>> Please, could you take a look into following patch?
+>>>> yes, but i cannot give a technical review. But from my gut feeling this
+>>>> doesn't look really elegant to me.
+>>>>> Thanks!
+>>>>> Ivan
+>>>>>
+>>>>> On 04-04 15:51, Ivan T. Ivanov wrote:
+>>>>>> Subject: [PATCH v2] clk: bcm2835: Round UART input clock up
+>>>>>> Message-Id: <20220404125113.80239-1-iivanov@suse.de>
+>>>>>>
+>>>>>> The UART clock is initialised to be as close to the requested
+>>>>>> frequency as possible without exceeding it. Now that there is a
+>>>>>> clock manager that returns the actual frequencies, an expected
+>>>>>> 48MHz clock is reported as 47999625. If the requested baudrate
+>>>>>> == requested clock/16, there is no headroom and the slight
+>>>>>> reduction in actual clock rate results in failure.
+>>>>>>
+>>>>>> If increasing a clock by less than 0.1% changes it from ..999..
+>>>>>> to ..000.., round it up.
+>>>> Based on this commit message this looks like a fix / workaround for an
+>>>> issue. It would be very helpful to know:
+>>>>
+>>>> What issue should be fixed?
+>>>>
+>>>> Why is it fixed here and not in the UART driver for instance?
+>>> The UART driver is amba-pl011. Original fix, see below Github link,
+>>> was inside pl011 module, but somehow it didn't look as the right
+>>> place either. Beside that this rounding function is not exactly
+>>> perfect for all possible clock values. So I deiced to move the hack
+>>> to the platform which actually need it.
+>> thanks for your explanation. These are import information which belongs in
+>> the commit log, because the motivation and the affected UART is very
+>> important.
+>>>> In case it fixes a regression, a Fixes tag should be necessary.
+>>> I found the issue because it was reported that RPi3[1] and RPi Zero 2W
+>>> boards have issues with the Bluetooth. So it turns out that when
+>>> switching from initial to operation speed host and device no longer
+>>> can talk each other because host uses incorrect baud rate.
+>> Now i remember this issue, for the mainline kernel we decide to workaround
+>> the issue by lowering the BT baudrate to 2000000 baud.
+> I have workaranded this the same, at first, but then decided to look at
+> vendor tree and voilà!
+>
+>> I didn't investigate
+>> the issue further, but your approach is a better solution.
+>>
+>> Do you use the mainline DTS or the vendor DTS to see this issue?
+>>
+> For (open)SUSE we use downstream DTS.
 
-(...)
+This is popular and bad at the same time. We as the mainline kernel 
+developer cannot guarantee that this works as expected. A lot of issues 
+are caused by mixing vendor DTS with mainline kernel, so in general (not 
+for this specific issue) you are on your own with this approach.
 
-> +	pcie30_avdd1v8: pcie30-avdd1v8 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "pcie30_avdd1v8";
-> +		regulator-always-on;
-> +		regulator-boot-on;
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		vin-supply = <&vcc3v3_sys>;
-> +	};
-> +
-> +	/* pi6c pcie clock generator feeds both ports */
-> +	vcc3v3_pi6c_05: vcc3v3_pi6c_05-regulator {
+I know this is a little bit off topic but except from overlay support, 
+can you provide a list of most missing features of the mainline kernel / 
+DTS?
 
-No underscores in node names. Same in other places.
-
-
-Best regards,
-Krzysztof
+> Do you think that if I put better description in commit message fix will
+> be more acceptable.
+At least it would increase the chance to be accepted. This rounding 
+behavior looks open coded, maybe there is already a function to achieve 
+this.
+> Or if someone could suggest anything else I am open
+> to discussion.
+>
+> Regards,
+> Ivan
+>
+>
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel

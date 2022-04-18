@@ -2,196 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F08A506060
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:58:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E61C50606A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235988AbiDSAAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:00:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
+        id S236297AbiDSADA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235925AbiDSAAe (ORCPT
+        with ESMTP id S235925AbiDSACz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:00:34 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4629CA7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:57:54 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id t13so21732149pgn.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:57:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6DTfyGY4J+aCud1WtrxDpmeZLZK9HwCoRH/ZKq7p0NY=;
-        b=MpJYZqhS/4wevygKpX5CVGmCIl7fpr/siGQ+44MFb9SHbahqi50UNuu5Rol1xchxjN
-         aNky1Oy1UkUOLUOAKwBTb4JXgAuRru33uEuY9kTeCdLaZUZb+MnwrkYEU8FnELc4oqPm
-         kAB/WHOilbj00EbxBKW+LNOdSwg57Zh+qtJ3480IneLi31Upq7YzBEx6d94gCDrUZYKM
-         KuV0Sw/+ZPbympbXikCSy0hv5RuOsnx68DVBFKiPSTurvh/MZ7m5xiOw3GO1QpG7I+7T
-         vbP4VmXtR027F0y7rPZnFWIR+5ixC0BQktvD6wNpz+rFr+oe2hV2Rxr7LEH2iuZLdkva
-         d5EQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6DTfyGY4J+aCud1WtrxDpmeZLZK9HwCoRH/ZKq7p0NY=;
-        b=6ptKvEtA4EVuRK1zrEJCSIjEHMV/mXD2kcq5zTdbs1Uhfrh+L+jm12g0tmiinl4FvR
-         BeF0Sg2sCejDjTEAFTzV8UF23oHEsAA8Ads0LikrBQ+Y09B0iHNEy2Vs1NLKexzVMbgq
-         G7+fQEYXATliOibt7H6c6TZqTRbH1zNq9Q18/h1EVFb6dmXyX87TtSQqheL7xJ5ZgZ2D
-         +7K2Q0U7gBy6SZvOb2RA3HtWEAz0yeqpL+mInNFw5QLckj6ruylB/GYte1NTtjiZbVso
-         Gkl9IIDbeY8qRa598EY77hVmbcDvzoJEeQzGve0Ok/gopAxrapTvLamybmvLTqTA31FK
-         9pvA==
-X-Gm-Message-State: AOAM531LEZh4hT16sdvKVRn6F1d8uI7N/JOy+gKIVEl9659pO5cN/R3K
-        Q2ZdOb5gKzdlSPdehwvs4dB6pA==
-X-Google-Smtp-Source: ABdhPJwGbAEcmZ3Ri9bRNtcMxJHs0CrJhc9Y8lGnJ3QNwvBq4WwRrkz1+U7Kith1lRipZxV8xB3qEw==
-X-Received: by 2002:a63:6e04:0:b0:398:409:2928 with SMTP id j4-20020a636e04000000b0039804092928mr12229537pgc.250.1650326273031;
-        Mon, 18 Apr 2022 16:57:53 -0700 (PDT)
-Received: from google.com ([2620:15c:211:200:e2b4:e46f:41ee:4499])
-        by smtp.gmail.com with ESMTPSA id bc11-20020a656d8b000000b0039cc4dbb295sm13381698pgb.60.2022.04.18.16.57.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 16:57:52 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 16:57:46 -0700
-From:   Kalesh Singh <kaleshsingh@google.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
-Subject: Re: [PATCH v4] rcu/nocb: Add an option to offload all CPUs on boot
-Message-ID: <Yl36+skjQn26Mg43@google.com>
-References: <20220418175403.2553842-1-joel@joelfernandes.org>
+        Mon, 18 Apr 2022 20:02:55 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7940EBC96
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:00:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650326414; x=1681862414;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MAqT9RMA6b4dnkmNoVjddZGKEP09Mmugkj11bMGsY1M=;
+  b=N4da43k38tC+WdXewxPB30lnQbDuvCT4FWahCwh0+C8lTJAIqAEVZhJh
+   bc2u5m4LpBoOl79RfwIkoQDL7dn7fq9ka7GFPaSUvxaJvwCECOWR+OAbY
+   cm+1k+MNHZauL8qcFWFavYO/DiZXMZ/JbXPVUX3Rk6lWB/V+hAxTczUaI
+   /ttAwuwK/t0OrOIvEak6P/u/oxW/TeVaXNVVGx0nHiHZzWdlkBnSGbxAE
+   o0ToN6YZbWWsdSxp01IwYj5S7BSYM9tZX8GIo/q472fMqNtSfrsWQz4bL
+   unJcFwjk09U5g9a55Ejh+GRBN/ORQ5rhs+gd+DjiJtR2FRLbRqOYYGoa5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263395151"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="263395151"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 17:00:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="592571222"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 18 Apr 2022 17:00:07 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngbHq-00056m-Tj;
+        Tue, 19 Apr 2022 00:00:06 +0000
+Date:   Tue, 19 Apr 2022 07:59:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 84/2356]
+ arch/mips/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13:
+ warning: no previous prototype for 'per_task_common'
+Message-ID: <202204190758.aysUCWYS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418175403.2553842-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 05:54:03PM +0000, Joel Fernandes (Google) wrote:
-> From: Joel Fernandes <joel@joelfernandes.org>
-> 
-> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> which ends up not offloading any CPU. This patch removes a dependency
-> from the bootloader having to know about RCU and about how to provide
-> the mask.
-> 
-> With the new option enabled, all CPUs will be offloaded on boot unless
-> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
-> 
-> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   af93551cf39027d176f30b9beafc60a4c130998a
+commit: dcac6390a2220f99834d2d14650fb82f2da9136b [84/2356] headers/deps: per_task: Add the per_task infrastructure for x86, arm64, sparc and MIPS
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220419/202204190758.aysUCWYS-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=dcac6390a2220f99834d2d14650fb82f2da9136b
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout dcac6390a2220f99834d2d14650fb82f2da9136b
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=mips prepare
 
-Hi Joel,
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-You can add Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
+All warnings (new ones prefixed by >>):
 
-Thanks,
-Kalesh
+   In file included from arch/mips/kernel/asm-offsets.c:29:
+>> arch/mips/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+       9 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:35:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      35 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:87:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      87 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:101:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+     101 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:117:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+     117 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:141:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+     141 | void output_thread_fpu_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:184:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     184 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:223:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     223 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:258:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
+     258 | void output_signal_defined(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:325:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+     325 | void output_pbe_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:337:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
+     337 | void output_pm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:351:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+     351 | void output_kvm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:395:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
+     395 | void output_cps_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+--
+   In file included from arch/mips/kernel/asm-offsets.c:29:
+>> arch/mips/kernel/../../../kernel/sched/per_task_area_struct_defs.h:9:13: warning: no previous prototype for 'per_task_common' [-Wmissing-prototypes]
+       9 | void __used per_task_common(void)
+         |             ^~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:35:6: warning: no previous prototype for 'output_ptreg_defines' [-Wmissing-prototypes]
+      35 | void output_ptreg_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:87:6: warning: no previous prototype for 'output_task_defines' [-Wmissing-prototypes]
+      87 | void output_task_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:101:6: warning: no previous prototype for 'output_thread_info_defines' [-Wmissing-prototypes]
+     101 | void output_thread_info_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:117:6: warning: no previous prototype for 'output_thread_defines' [-Wmissing-prototypes]
+     117 | void output_thread_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:141:6: warning: no previous prototype for 'output_thread_fpu_defines' [-Wmissing-prototypes]
+     141 | void output_thread_fpu_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:184:6: warning: no previous prototype for 'output_mm_defines' [-Wmissing-prototypes]
+     184 | void output_mm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:223:6: warning: no previous prototype for 'output_sc_defines' [-Wmissing-prototypes]
+     223 | void output_sc_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:258:6: warning: no previous prototype for 'output_signal_defined' [-Wmissing-prototypes]
+     258 | void output_signal_defined(void)
+         |      ^~~~~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:325:6: warning: no previous prototype for 'output_pbe_defines' [-Wmissing-prototypes]
+     325 | void output_pbe_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:337:6: warning: no previous prototype for 'output_pm_defines' [-Wmissing-prototypes]
+     337 | void output_pm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:351:6: warning: no previous prototype for 'output_kvm_defines' [-Wmissing-prototypes]
+     351 | void output_kvm_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
+   arch/mips/kernel/asm-offsets.c:395:6: warning: no previous prototype for 'output_cps_defines' [-Wmissing-prototypes]
+     395 | void output_cps_defines(void)
+         |      ^~~~~~~~~~~~~~~~~~
 
-> ---
-> v4: mostly style related fixes.
-> v3 is back to v1 but with a config option defaulting to 'n'.
-> v2 was forcing the option to override no_cbs=
-> 
->  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
->  kernel/rcu/Kconfig                              | 13 +++++++++++++
->  kernel/rcu/tree_nocb.h                          | 15 ++++++++++++++-
->  3 files changed, 33 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index f5a27f067db9..4beb15ccac1a 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3506,6 +3506,9 @@
->  			just as if they had also been called out in the
->  			rcu_nocbs= boot parameter.
->  
-> +			Note that this argument takes precedence over
-> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
-> +
->  	noiotrap	[SH] Disables trapped I/O port accesses.
->  
->  	noirqdebug	[X86-32] Disables the code which attempts to detect and
-> @@ -4398,6 +4401,9 @@
->  			no-callback mode from boot but the mode may be
->  			toggled at runtime via cpusets.
->  
-> +			Note that this argument takes precedence over
-> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
-> +
->  	rcu_nocb_poll	[KNL]
->  			Rather than requiring that offloaded CPUs
->  			(specified by rcu_nocbs= above) explicitly
-> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> index bf8e341e75b4..746a668bf81d 100644
-> --- a/kernel/rcu/Kconfig
-> +++ b/kernel/rcu/Kconfig
-> @@ -223,6 +223,19 @@ config RCU_NOCB_CPU
->  	  Say Y here if you need reduced OS jitter, despite added overhead.
->  	  Say N here if you are unsure.
->  
-> +config RCU_NOCB_CPU_DEFAULT_ALL
-> +	bool "Offload RCU callback processing from all CPUs by default"
-> +	depends on RCU_NOCB_CPU
-> +	default n
-> +	help
-> +	  Use this option to offload callback processing from all CPUs
-> +	  by default, in the absence of the rcu_nocbs or nohz_full boot
-> +	  parameter. This also avoids the need to use any boot parameters
-> +	  to achieve the effect of offloading all CPUs on boot.
-> +
-> +	  Say Y here if you want offload all CPUs by default on boot.
-> +	  Say N here if you are unsure.
-> +
->  config TASKS_TRACE_RCU_READ_MB
->  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
->  	depends on RCU_EXPERT
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index eeafb546a7a0..f648f773600a 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1166,11 +1166,21 @@ void __init rcu_init_nohz(void)
->  {
->  	int cpu;
->  	bool need_rcu_nocb_mask = false;
-> +	bool offload_all = false;
->  	struct rcu_data *rdp;
->  
-> +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> +	if (!rcu_nocb_is_setup) {
-> +		need_rcu_nocb_mask = true;
-> +		offload_all = true;
-> +	}
-> +#endif
-> +
->  #if defined(CONFIG_NO_HZ_FULL)
-> -	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
-> +	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
->  		need_rcu_nocb_mask = true;
-> +		offload_all = false; /* NO_HZ_FULL has its own mask. */
-> +	}
->  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->  
->  	if (need_rcu_nocb_mask) {
-> @@ -1191,6 +1201,9 @@ void __init rcu_init_nohz(void)
->  		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
->  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->  
-> +	if (offload_all)
-> +		cpumask_setall(rcu_nocb_mask);
-> +
->  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
->  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-> -- 
-> 2.36.0.rc0.470.gd361397f0d-goog
-> 
-> 
+
+vim +/per_task_common +9 arch/mips/kernel/../../../kernel/sched/per_task_area_struct_defs.h
+
+     8	
+   > 9	void __used per_task_common(void)
+    10	{
+    11	#ifdef CONFIG_THREAD_INFO_IN_TASK
+    12		DEF_PER_TASK(ti);
+    13	#endif
+    14		DEF_PER_TASK(stack);
+    15		DEF_PER_TASK(usage);
+    16		DEF_PER_TASK(flags);
+    17		DEF_PER_TASK(ptrace);
+    18	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

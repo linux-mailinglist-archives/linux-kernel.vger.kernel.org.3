@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 651895058F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4AED5058EF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343710AbiDROND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46188 "EHLO
+        id S241497AbiDROMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244368AbiDRN41 (ORCPT
+        with ESMTP id S244615AbiDRNz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:56:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC8E642E;
-        Mon, 18 Apr 2022 06:04:58 -0700 (PDT)
+        Mon, 18 Apr 2022 09:55:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C603644E;
+        Mon, 18 Apr 2022 06:05:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C51BD60EF6;
-        Mon, 18 Apr 2022 13:04:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D353EC385A1;
-        Mon, 18 Apr 2022 13:04:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D389E60B41;
+        Mon, 18 Apr 2022 13:05:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB252C385A7;
+        Mon, 18 Apr 2022 13:04:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287097;
-        bh=zEeKefMZYRslSx40JLS5O+6+t08QoeqPa7ZuL/Iyqg4=;
+        s=korg; t=1650287100;
+        bh=i+JI9UrSlJ9lR9oXzCCtQFELKsXp9qJxUUkEM8ZK+xY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=HPHH3rAECFYX1hu5VJ/hGn6Vt7XPQR0O7nRRgvofFL1w6iWX9BUYEQe40nafbJnIN
-         1Nt3LV4Tqrty/NR+lHtQZ1P6NL2evajkt51trvEE+orFFzmQ5GkELMu7zfWmaY3jLa
-         tPIBRim9j2XFYvajEFle7dWn4dAGBQdmYRktxVQ8=
+        b=d/Q9gyZHLDzngseVrE3TNHNri6p6fnfjspNPQvWDw4LgSkCvLguUzuDcMr+SpaoHM
+         atMK33vf1cCtrw9uK9asGs9BEAofyiznYanx9HYkL5C+MWzpcmmzTjF5Sa44ZQjfpq
+         Nka/hJfXKsahaNrNhawQQlbFFz9Zy084e2phFC6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 056/218] video: fbdev: fbcvt.c: fix printing in fb_cvt_print_name()
-Date:   Mon, 18 Apr 2022 14:12:02 +0200
-Message-Id: <20220418121201.216181667@linuxfoundation.org>
+        stable@vger.kernel.org, Pavel Kubelun <be.dissent@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Christian Lamparter <chunkeey@gmail.com>
+Subject: [PATCH 4.9 057/218] ARM: dts: qcom: ipq4019: fix sleep clock
+Date:   Mon, 18 Apr 2022 14:12:03 +0200
+Message-Id: <20220418121201.244491447@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -54,109 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Pavel Kubelun <be.dissent@gmail.com>
 
-[ Upstream commit 78482af095abd9f4f29f1aa3fe575d25c6ae3028 ]
+[ Upstream commit 3d7e7980993d2c1ae42d3d314040fc2de6a9c45f ]
 
-This code has two bugs:
-1) "cnt" is 255 but the size of the buffer is 256 so the last byte is
-   not used.
-2) If we try to print more than 255 characters then "cnt" will be
-   negative and that will trigger a WARN() in snprintf(). The fix for
-   this is to use scnprintf() instead of snprintf().
+It seems like sleep_clk was copied from ipq806x.
+Fix ipq40xx sleep_clk to the value QSDK defines.
 
-We can re-write this code to be cleaner:
-1) Rename "offset" to "off" because that's shorter.
-2) Get rid of the "cnt" variable and just use "size - off" directly.
-3) Get rid of the "read" variable and just increment "off" directly.
-
-Fixes: 96fe6a2109db ("fbdev: Add VESA Coordinated Video Timings (CVT) support")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://source.codeaurora.org/quic/qsdk/oss/kernel/linux-msm/commit/?id=d92ec59973484acc86dd24b67f10f8911b4b4b7d
+Link: https://patchwork.kernel.org/comment/22721613/
+Fixes: bec6ba4cdf2a ("qcom: ipq4019: Add basic board/dts support for IPQ4019 SoC")
+Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org> (clock-output-names)
+Signed-off-by: Pavel Kubelun <be.dissent@gmail.com>
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com> (removed clock rename)
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20211220170352.34591-1-chunkeey@gmail.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/core/fbcvt.c | 53 +++++++++++++-------------------
- 1 file changed, 21 insertions(+), 32 deletions(-)
+ arch/arm/boot/dts/qcom-ipq4019.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/video/fbdev/core/fbcvt.c b/drivers/video/fbdev/core/fbcvt.c
-index 55d2bd0ce5c0..64843464c661 100644
---- a/drivers/video/fbdev/core/fbcvt.c
-+++ b/drivers/video/fbdev/core/fbcvt.c
-@@ -214,9 +214,11 @@ static u32 fb_cvt_aspect_ratio(struct fb_cvt_data *cvt)
- static void fb_cvt_print_name(struct fb_cvt_data *cvt)
- {
- 	u32 pixcount, pixcount_mod;
--	int cnt = 255, offset = 0, read = 0;
--	u8 *buf = kzalloc(256, GFP_KERNEL);
-+	int size = 256;
-+	int off = 0;
-+	u8 *buf;
- 
-+	buf = kzalloc(size, GFP_KERNEL);
- 	if (!buf)
- 		return;
- 
-@@ -224,43 +226,30 @@ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
- 	pixcount_mod = (cvt->xres * (cvt->yres/cvt->interlace)) % 1000000;
- 	pixcount_mod /= 1000;
- 
--	read = snprintf(buf+offset, cnt, "fbcvt: %dx%d@%d: CVT Name - ",
--			cvt->xres, cvt->yres, cvt->refresh);
--	offset += read;
--	cnt -= read;
-+	off += scnprintf(buf + off, size - off, "fbcvt: %dx%d@%d: CVT Name - ",
-+			    cvt->xres, cvt->yres, cvt->refresh);
- 
--	if (cvt->status)
--		snprintf(buf+offset, cnt, "Not a CVT standard - %d.%03d Mega "
--			 "Pixel Image\n", pixcount, pixcount_mod);
--	else {
--		if (pixcount) {
--			read = snprintf(buf+offset, cnt, "%d", pixcount);
--			cnt -= read;
--			offset += read;
--		}
-+	if (cvt->status) {
-+		off += scnprintf(buf + off, size - off,
-+				 "Not a CVT standard - %d.%03d Mega Pixel Image\n",
-+				 pixcount, pixcount_mod);
-+	} else {
-+		if (pixcount)
-+			off += scnprintf(buf + off, size - off, "%d", pixcount);
- 
--		read = snprintf(buf+offset, cnt, ".%03dM", pixcount_mod);
--		cnt -= read;
--		offset += read;
-+		off += scnprintf(buf + off, size - off, ".%03dM", pixcount_mod);
- 
- 		if (cvt->aspect_ratio == 0)
--			read = snprintf(buf+offset, cnt, "3");
-+			off += scnprintf(buf + off, size - off, "3");
- 		else if (cvt->aspect_ratio == 3)
--			read = snprintf(buf+offset, cnt, "4");
-+			off += scnprintf(buf + off, size - off, "4");
- 		else if (cvt->aspect_ratio == 1 || cvt->aspect_ratio == 4)
--			read = snprintf(buf+offset, cnt, "9");
-+			off += scnprintf(buf + off, size - off, "9");
- 		else if (cvt->aspect_ratio == 2)
--			read = snprintf(buf+offset, cnt, "A");
--		else
--			read = 0;
--		cnt -= read;
--		offset += read;
--
--		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK) {
--			read = snprintf(buf+offset, cnt, "-R");
--			cnt -= read;
--			offset += read;
--		}
-+			off += scnprintf(buf + off, size - off, "A");
-+
-+		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK)
-+			off += scnprintf(buf + off, size - off, "-R");
- 	}
- 
- 	printk(KERN_INFO "%s\n", buf);
+diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+index 5ee84e3cb3e9..1fd63f485d3b 100644
+--- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
++++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
+@@ -93,7 +93,8 @@
+ 	clocks {
+ 		sleep_clk: sleep_clk {
+ 			compatible = "fixed-clock";
+-			clock-frequency = <32768>;
++			clock-frequency = <32000>;
++			clock-output-names = "gcc_sleep_clk_src";
+ 			#clock-cells = <0>;
+ 		};
+ 	};
 -- 
 2.34.1
 

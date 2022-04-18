@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 364C3505554
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C476C5053CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241727AbiDRNQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:16:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S241011AbiDRNCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241559AbiDRM6w (ORCPT
+        with ESMTP id S240372AbiDRMxU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0778A2DD5F;
-        Mon, 18 Apr 2022 05:39:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:53:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7752DD47;
+        Mon, 18 Apr 2022 05:34:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82B70B80EDC;
-        Mon, 18 Apr 2022 12:39:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E939FC385A7;
-        Mon, 18 Apr 2022 12:39:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4601B6116E;
+        Mon, 18 Apr 2022 12:34:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37957C385A9;
+        Mon, 18 Apr 2022 12:34:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285555;
-        bh=v0HGRTeIY/aQdkkcBrv7ONr+/xXqUXqC0m+W9mnTLLo=;
+        s=korg; t=1650285282;
+        bh=gS4lCrLy9Ke0NYXYAEZO3ZEnbzbn6edVQDjA5QkHjsA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ubN2p4685ixPHEJMSwpa4tgTzjYfiofBXKyUb2hmddO5qDWEkiAEf0yUcFT/dj9fE
-         3nwGENYRS6gOUwSlFgn6k+A1iI0YMHF1NEZOZYFKLckm/R7pu+nktHx3npz2RdbpaI
-         +eXoZXV4/YVzd4jiyj+AiS/yZlAxmSqDME8Euyxc=
+        b=lmyOTYJ9zrzzP9io+7yllQ13Ye5pWM65ipOCiHdGSsAS4LaV31pdTycCipUesAH6a
+         YxZgwUOWRJqlL2LmSsqg7v7EeMcNU4DvjcA9tLDMzGGWgJ9TjAVbHdLHv8OpTgO3Sw
+         xDUlpGXKEy6ytgsKPvR0RijrZms9SLd98lmo+16Y=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 056/105] ata: libata-core: Disable READ LOG DMA EXT for Samsung 840 EVOs
+        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 158/189] ALSA: hda/realtek: Add quirk for Clevo PD50PNT
 Date:   Mon, 18 Apr 2022 14:12:58 +0200
-Message-Id: <20220418121148.077134618@linuxfoundation.org>
+Message-Id: <20220418121206.689468977@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lamparter <chunkeey@gmail.com>
+From: Tim Crawford <tcrawford@system76.com>
 
-[ Upstream commit 5399752299396a3c9df6617f4b3c907d7aa4ded8 ]
+commit 9eb6f5c388060d8cef3c8b616cc31b765e022359 upstream.
 
-Samsung' 840 EVO with the latest firmware (EXT0DB6Q) locks up with
-the a message: "READ LOG DMA EXT failed, trying PIO" during boot.
+Fixes speaker output and headset detection on Clevo PD50PNT.
 
-Initially this was discovered because it caused a crash
-with the sata_dwc_460ex controller on a WD MyBook Live DUO.
-
-The reporter "Tice Rex" which has the unique opportunity that he
-has two Samsung 840 EVO SSD! One with the older firmware "EXT0BB0Q"
-which booted fine and didn't expose "READ LOG DMA EXT". But the
-newer/latest firmware "EXT0DB6Q" caused the headaches.
-
-BugLink: https://github.com/openwrt/openwrt/issues/9505
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Tim Crawford <tcrawford@system76.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220405182029.27431-1-tcrawford@system76.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/ata/libata-core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index d2b544bdc7b5..f963a0a7da46 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -3974,6 +3974,9 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Crucial_CT*MX100*",		"MU01",	ATA_HORKAGE_NO_NCQ_TRIM |
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
-+	{ "Samsung SSD 840 EVO*",	NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
-+						ATA_HORKAGE_NO_DMA_LOG |
-+						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Samsung SSD 840*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Samsung SSD 850*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -2614,6 +2614,7 @@ static const struct snd_pci_quirk alc882
+ 	SND_PCI_QUIRK(0x1558, 0x65e1, "Clevo PB51[ED][DF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x65e5, "Clevo PC50D[PRS](?:-D|-G)?", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x65f1, "Clevo PC50HS", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
++	SND_PCI_QUIRK(0x1558, 0x65f5, "Clevo PD50PN[NRT]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x67d1, "Clevo PB71[ER][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x67e1, "Clevo PB71[DE][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+ 	SND_PCI_QUIRK(0x1558, 0x67e5, "Clevo PC70D[PRS](?:-D|-G)?", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
 
 

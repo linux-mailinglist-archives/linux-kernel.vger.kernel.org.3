@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFC175058A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22ED15059DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343542AbiDROHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
+        id S1345510AbiDROZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:25:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244981AbiDRNvF (ORCPT
+        with ESMTP id S245577AbiDROMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:51:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EE444A06;
-        Mon, 18 Apr 2022 06:02:09 -0700 (PDT)
+        Mon, 18 Apr 2022 10:12:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA83B37AAD;
+        Mon, 18 Apr 2022 06:11:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA19B80E4B;
-        Mon, 18 Apr 2022 13:02:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6DCC385A8;
-        Mon, 18 Apr 2022 13:02:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EA1060EFC;
+        Mon, 18 Apr 2022 13:11:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F609C385A1;
+        Mon, 18 Apr 2022 13:11:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286927;
-        bh=1e+kMqmuq0XgPzihm05kZ+rHyIgwe3Ceg9otdTGMBhY=;
+        s=korg; t=1650287484;
+        bh=WBNDiG05gPwN3KYzMZB4phUJsfyThFDNRPvbhfd8Qa8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KbH0CF1ue9YS1wzx2Mqz3HoawYruPKouEI/MevVPbsTsFSnUXGz2bZBDcXv6iJEut
-         PGZYQhN5X44IEu38PGEUog7E5DV9ja5Dys/XR1eqv8kJqoORvbfzuKYArA6/XIV8D6
-         C1b/o4KDkKYqKZfyAd3xGPi2vbbT/xw/1Gr76XBE=
+        b=yDPpynslCp6sVm+8uQ3P9VnK4bm/5W3XZO9C2DsRH+Zq14nHY/U8dLzOfrbmFkm+p
+         Gs4qWapPpattgPUBYGagihOVIaz9x1s3hoJQzD7GzlYVjHF0oEC1twMWXANiQo+chZ
+         XiXnphYgQskxxgueF+svIt7VRu0BjLwopLzF2oz8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org, Hannes Reinecke <hare@suse.de>,
+        Jianglei Nie <niejianglei2021@163.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 261/284] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
-Date:   Mon, 18 Apr 2022 14:14:02 +0200
-Message-Id: <20220418121219.998650141@linuxfoundation.org>
+Subject: [PATCH 4.9 177/218] scsi: libfc: Fix use after free in fc_exch_abts_resp()
+Date:   Mon, 18 Apr 2022 14:14:03 +0200
+Message-Id: <20220418121205.815454939@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +56,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Jianglei Nie <niejianglei2021@163.com>
 
-[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
+[ Upstream commit 271add11994ba1a334859069367e04d2be2ebdd4 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+fc_exch_release(ep) will decrease the ep's reference count. When the
+reference count reaches zero, it is freed. But ep is still used in the
+following code, which will lead to a use after free.
 
-Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Return after the fc_exch_release() call to avoid use after free.
+
+Link: https://lore.kernel.org/r/20220303015115.459778-1-niejianglei2021@163.com
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Jianglei Nie <niejianglei2021@163.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/scsi/libfc/fc_exch.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-index 2b9283d4fcb1..8e7b5a1d2983 100644
---- a/drivers/memory/atmel-ebi.c
-+++ b/drivers/memory/atmel-ebi.c
-@@ -524,20 +524,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
- 
- 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
--	if (IS_ERR(ebi->smc.regmap))
--		return PTR_ERR(ebi->smc.regmap);
-+	if (IS_ERR(ebi->smc.regmap)) {
-+		ret = PTR_ERR(ebi->smc.regmap);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
--	if (IS_ERR(ebi->smc.layout))
--		return PTR_ERR(ebi->smc.layout);
-+	if (IS_ERR(ebi->smc.layout)) {
-+		ret = PTR_ERR(ebi->smc.layout);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.clk = of_clk_get(smc_np, 0);
- 	if (IS_ERR(ebi->smc.clk)) {
--		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
--			return PTR_ERR(ebi->smc.clk);
-+		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
-+			ret = PTR_ERR(ebi->smc.clk);
-+			goto put_node;
-+		}
- 
- 		ebi->smc.clk = NULL;
- 	}
-+	of_node_put(smc_np);
- 	ret = clk_prepare_enable(ebi->smc.clk);
- 	if (ret)
- 		return ret;
-@@ -587,6 +594,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
+diff --git a/drivers/scsi/libfc/fc_exch.c b/drivers/scsi/libfc/fc_exch.c
+index 59fd6101f188..177e494b5e47 100644
+--- a/drivers/scsi/libfc/fc_exch.c
++++ b/drivers/scsi/libfc/fc_exch.c
+@@ -1663,6 +1663,7 @@ static void fc_exch_abts_resp(struct fc_exch *ep, struct fc_frame *fp)
+ 	if (cancel_delayed_work_sync(&ep->timeout_work)) {
+ 		FC_EXCH_DBG(ep, "Exchange timer canceled due to ABTS response\n");
+ 		fc_exch_release(ep);	/* release from pending timer hold */
++		return;
  	}
  
- 	return of_platform_populate(np, NULL, NULL, dev);
-+
-+put_node:
-+	of_node_put(smc_np);
-+	return ret;
- }
- 
- static __maybe_unused int atmel_ebi_resume(struct device *dev)
+ 	spin_lock_bh(&ep->ex_lock);
 -- 
 2.35.1
 

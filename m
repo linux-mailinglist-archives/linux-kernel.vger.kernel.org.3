@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC684505538
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6DE15054A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241886AbiDRNRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
+        id S242006AbiDRNSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:18:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242114AbiDRM7h (ORCPT
+        with ESMTP id S242138AbiDRM7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3802F028;
-        Mon, 18 Apr 2022 05:40:10 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:38 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C681C2F390;
+        Mon, 18 Apr 2022 05:40:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A405B80EDB;
-        Mon, 18 Apr 2022 12:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCD3C385A1;
-        Mon, 18 Apr 2022 12:40:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 174F7B80EC0;
+        Mon, 18 Apr 2022 12:40:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 724CEC385A8;
+        Mon, 18 Apr 2022 12:40:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285607;
-        bh=8p+aReAVSXNj6og1QN3uqqCJu5j0sLTXlG5WVaeT6ko=;
+        s=korg; t=1650285610;
+        bh=eFm/z1FzKhlQoFaHivE7WVio1H+d0l+bTcBspXqzQ4s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=d2HoygYAypb58cGcntkTqioHWm7rDp7i+AtTNwBHKLudbYZ9xNX0Di3s5vpTHCQGB
-         9SrKz9uZDhc6RHpIc7G93nCthZmtVZMm6hdvclL1vGx28h0puYyS0niDdPxBkU1z+i
-         zaAq+ueagBcqVxcdBWgHHJN3U2KXYbFqJBY9EYhQ=
+        b=hpaE+1CWEw5CgFfbq9DW/5O3lTLQg2Z8Oi+UAleI94RD33FrdRh56Wu5jyhrCUw1P
+         us3ap4ruGw8NIsLP9cpjA8bkVY70b4n1dtcAdH1Loc04sbdRVb5vIAhkJNeQizWF6Q
+         dOzyT4YdYpIOUmup1iV5k3+o/JN3UaTzfE2pZ0QA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrick Wang <patrick.wang.shcn@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.10 072/105] mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
-Date:   Mon, 18 Apr 2022 14:13:14 +0200
-Message-Id: <20220418121148.536397803@linuxfoundation.org>
+        stable@vger.kernel.org, Bruno Goncalves <bgoncalv@redhat.com>,
+        Jan Stancek <jstancek@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: [PATCH 5.10 073/105] KVM: x86/mmu: Resolve nx_huge_pages when kvm.ko is loaded
+Date:   Mon, 18 Apr 2022 14:13:15 +0200
+Message-Id: <20220418121148.565894452@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
 References: <20220418121145.140991388@linuxfoundation.org>
@@ -56,96 +56,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Wang <patrick.wang.shcn@gmail.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 23c2d497de21f25898fbea70aeb292ab8acc8c94 upstream.
+commit 1d0e84806047f38027d7572adb4702ef7c09b317 upstream.
 
-The kmemleak_*_phys() apis do not check the address for lowmem's min
-boundary, while the caller may pass an address below lowmem, which will
-trigger an oops:
+Resolve nx_huge_pages to true/false when kvm.ko is loaded, leaving it as
+-1 is technically undefined behavior when its value is read out by
+param_get_bool(), as boolean values are supposed to be '0' or '1'.
 
-  # echo scan > /sys/kernel/debug/kmemleak
-  Unable to handle kernel paging request at virtual address ff5fffffffe00000
-  Oops [#1]
-  Modules linked in:
-  CPU: 2 PID: 134 Comm: bash Not tainted 5.18.0-rc1-next-20220407 #33
-  Hardware name: riscv-virtio,qemu (DT)
-  epc : scan_block+0x74/0x15c
-   ra : scan_block+0x72/0x15c
-  epc : ffffffff801e5806 ra : ffffffff801e5804 sp : ff200000104abc30
-   gp : ffffffff815cd4e8 tp : ff60000004cfa340 t0 : 0000000000000200
-   t1 : 00aaaaaac23954cc t2 : 00000000000003ff s0 : ff200000104abc90
-   s1 : ffffffff81b0ff28 a0 : 0000000000000000 a1 : ff5fffffffe01000
-   a2 : ffffffff81b0ff28 a3 : 0000000000000002 a4 : 0000000000000001
-   a5 : 0000000000000000 a6 : ff200000104abd7c a7 : 0000000000000005
-   s2 : ff5fffffffe00ff9 s3 : ffffffff815cd998 s4 : ffffffff815d0e90
-   s5 : ffffffff81b0ff28 s6 : 0000000000000020 s7 : ffffffff815d0eb0
-   s8 : ffffffffffffffff s9 : ff5fffffffe00000 s10: ff5fffffffe01000
-   s11: 0000000000000022 t3 : 00ffffffaa17db4c t4 : 000000000000000f
-   t5 : 0000000000000001 t6 : 0000000000000000
-  status: 0000000000000100 badaddr: ff5fffffffe00000 cause: 000000000000000d
-    scan_gray_list+0x12e/0x1a6
-    kmemleak_scan+0x2aa/0x57e
-    kmemleak_write+0x32a/0x40c
-    full_proxy_write+0x56/0x82
-    vfs_write+0xa6/0x2a6
-    ksys_write+0x6c/0xe2
-    sys_write+0x22/0x2a
-    ret_from_syscall+0x0/0x2
+Alternatively, KVM could define a custom getter for the param, but the
+auto value doesn't depend on the vendor module in any way, and printing
+"auto" would be unnecessarily unfriendly to the user.
 
-The callers may not quite know the actual address they pass(e.g. from
-devicetree).  So the kmemleak_*_phys() apis should guarantee the address
-they finally use is in lowmem range, so check the address for lowmem's
-min boundary.
+In addition to fixing the undefined behavior, resolving the auto value
+also fixes the scenario where the auto value resolves to N and no vendor
+module is loaded.  Previously, -1 would result in Y being printed even
+though KVM would ultimately disable the mitigation.
 
-Link: https://lkml.kernel.org/r/20220413122925.33856-1-patrick.wang.shcn@gmail.com
-Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Rename the existing MMU module init/exit helpers to clarify that they're
+invoked with respect to the vendor module, and add comments to document
+why KVM has two separate "module init" flows.
+
+  =========================================================================
+  UBSAN: invalid-load in kernel/params.c:320:33
+  load of value 255 is not a valid value for type '_Bool'
+  CPU: 6 PID: 892 Comm: tail Not tainted 5.17.0-rc3+ #799
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 0.0.0 02/06/2015
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x34/0x44
+   ubsan_epilogue+0x5/0x40
+   __ubsan_handle_load_invalid_value.cold+0x43/0x48
+   param_get_bool.cold+0xf/0x14
+   param_attr_show+0x55/0x80
+   module_attr_show+0x1c/0x30
+   sysfs_kf_seq_show+0x93/0xc0
+   seq_read_iter+0x11c/0x450
+   new_sync_read+0x11b/0x1a0
+   vfs_read+0xf0/0x190
+   ksys_read+0x5f/0xe0
+   do_syscall_64+0x3b/0xc0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+   </TASK>
+  =========================================================================
+
+Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
+Cc: stable@vger.kernel.org
+Reported-by: Bruno Goncalves <bgoncalv@redhat.com>
+Reported-by: Jan Stancek <jstancek@redhat.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Message-Id: <20220331221359.3912754-1-seanjc@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/kmemleak.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/include/asm/kvm_host.h |    5 +++--
+ arch/x86/kvm/mmu/mmu.c          |   20 ++++++++++++++++----
+ arch/x86/kvm/x86.c              |   20 ++++++++++++++++++--
+ 3 files changed, 37 insertions(+), 8 deletions(-)
 
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1123,7 +1123,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
- void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
- 			       gfp_t gfp)
- {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1340,8 +1340,9 @@ static inline int kvm_arch_flush_remote_
+ 		return -ENOTSUPP;
  }
- EXPORT_SYMBOL(kmemleak_alloc_phys);
-@@ -1137,7 +1137,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
-  */
- void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
- {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_free_part(__va(phys), size);
+ 
+-int kvm_mmu_module_init(void);
+-void kvm_mmu_module_exit(void);
++void kvm_mmu_x86_module_init(void);
++int kvm_mmu_vendor_module_init(void);
++void kvm_mmu_vendor_module_exit(void);
+ 
+ void kvm_mmu_destroy(struct kvm_vcpu *vcpu);
+ int kvm_mmu_create(struct kvm_vcpu *vcpu);
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -5876,12 +5876,24 @@ static int set_nx_huge_pages(const char
+ 	return 0;
  }
- EXPORT_SYMBOL(kmemleak_free_part_phys);
-@@ -1149,7 +1149,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
-  */
- void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ 
+-int kvm_mmu_module_init(void)
++/*
++ * nx_huge_pages needs to be resolved to true/false when kvm.ko is loaded, as
++ * its default value of -1 is technically undefined behavior for a boolean.
++ */
++void kvm_mmu_x86_module_init(void)
  {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_not_leak(__va(phys));
+-	int ret = -ENOMEM;
+-
+ 	if (nx_huge_pages == -1)
+ 		__set_nx_huge_pages(get_nx_auto_mode());
++}
++
++/*
++ * The bulk of the MMU initialization is deferred until the vendor module is
++ * loaded as many of the masks/values may be modified by VMX or SVM, i.e. need
++ * to be reset when a potentially different vendor module is loaded.
++ */
++int kvm_mmu_vendor_module_init(void)
++{
++	int ret = -ENOMEM;
+ 
+ 	/*
+ 	 * MMU roles use union aliasing which is, generally speaking, an
+@@ -5955,7 +5967,7 @@ void kvm_mmu_destroy(struct kvm_vcpu *vc
+ 	mmu_free_memory_caches(vcpu);
  }
- EXPORT_SYMBOL(kmemleak_not_leak_phys);
-@@ -1161,7 +1161,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
-  */
- void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ 
+-void kvm_mmu_module_exit(void)
++void kvm_mmu_vendor_module_exit(void)
  {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_ignore(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_ignore_phys);
+ 	mmu_destroy_caches();
+ 	percpu_counter_destroy(&kvm_total_used_mmu_pages);
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -8005,7 +8005,7 @@ int kvm_arch_init(void *opaque)
+ 		goto out_free_x86_emulator_cache;
+ 	}
+ 
+-	r = kvm_mmu_module_init();
++	r = kvm_mmu_vendor_module_init();
+ 	if (r)
+ 		goto out_free_percpu;
+ 
+@@ -8065,7 +8065,7 @@ void kvm_arch_exit(void)
+ 	cancel_work_sync(&pvclock_gtod_work);
+ #endif
+ 	kvm_x86_ops.hardware_enable = NULL;
+-	kvm_mmu_module_exit();
++	kvm_mmu_vendor_module_exit();
+ 	free_percpu(user_return_msrs);
+ 	kmem_cache_destroy(x86_emulator_cache);
+ 	kmem_cache_destroy(x86_fpu_cache);
+@@ -11426,3 +11426,19 @@ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_avic_un
+ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_avic_incomplete_ipi);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_avic_ga_log);
+ EXPORT_TRACEPOINT_SYMBOL_GPL(kvm_apicv_update_request);
++
++static int __init kvm_x86_init(void)
++{
++	kvm_mmu_x86_module_init();
++	return 0;
++}
++module_init(kvm_x86_init);
++
++static void __exit kvm_x86_exit(void)
++{
++	/*
++	 * If module_init() is implemented, module_exit() must also be
++	 * implemented to allow module unload.
++	 */
++}
++module_exit(kvm_x86_exit);
 
 

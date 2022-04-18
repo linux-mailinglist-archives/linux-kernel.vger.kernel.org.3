@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5BE5056AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B4CD5051F0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242579AbiDRNhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53784 "EHLO
+        id S239929AbiDRMn2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:43:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243911AbiDRNKf (ORCPT
+        with ESMTP id S239903AbiDRMde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:10:35 -0400
+        Mon, 18 Apr 2022 08:33:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B39C38BCB;
-        Mon, 18 Apr 2022 05:49:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C2B1EC6A;
+        Mon, 18 Apr 2022 05:26:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CC0161267;
-        Mon, 18 Apr 2022 12:49:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0F89C385A7;
-        Mon, 18 Apr 2022 12:49:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBFD460B40;
+        Mon, 18 Apr 2022 12:26:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6757C385A8;
+        Mon, 18 Apr 2022 12:26:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286185;
-        bh=3SRV4St52/FhRN6i2PSM1NQl46JAcRfsEjy14dO9vks=;
+        s=korg; t=1650284817;
+        bh=ySO7GTBaEjzR2TeAio7eXrxjSfOfiGxEe0t48xlU2Xo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fPUW7bKQJRyUNrU08vcvHC/TRojFwexokC7QpuOPJQcMBbvmBWBN2ydyezFjsG6nJ
-         7DO1q5bldiJlUfCz45iIEutLzmT2MVoHUrffHCmp8yC+JeLr5hRkgvC7mk4kP1A6Ow
-         wLg7K+a4KtKmdhThpUgCYficVu7XzXOxt/H18nEo=
+        b=YRxKajxUXIWKCbnIwvldumXp49ZKCc3Qlby30hScVVO4FWUIXPs5H75lm2WQ4RMZ0
+         iSShdC3BsKQfzGyqXKzDIaTw0VIoq6oiKZx88WYqrbrslq00BZwA9hvBlBTd0vghrk
+         RW0gBR8maBC7yshS7Q/ombBXvqFNRpIQfE/rB7vE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 056/284] selftests/x86: Add validity check and allow field splitting
-Date:   Mon, 18 Apr 2022 14:10:37 +0200
-Message-Id: <20220418121212.287228499@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 018/189] ALSA: ali5451: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:38 +0200
+Message-Id: <20220418121201.033545609@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,40 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit b06e15ebd5bfb670f93c7f11a29b8299c1178bc6 ]
+commit 19401a9441236cfbbbeb1bef4ef4c8668db45dfc upstream.
 
-Add check to test if CC has a string. CC can have multiple sub-strings
-like "ccache gcc". Erorr pops up if it is treated as single string and
-double quotes are used around it. This can be fixed by removing the
-quotes and not treating CC as a single string.
+The recent cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220214184109.3739179-2-usama.anjum@collabora.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
+
+Fixes: 1f0819979248 ("ALSA: ali5451: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-5-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/x86/check_cc.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/pci/ali5451/ali5451.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
-index 172d3293fb7b..356689c56397 100755
---- a/tools/testing/selftests/x86/check_cc.sh
-+++ b/tools/testing/selftests/x86/check_cc.sh
-@@ -7,7 +7,7 @@ CC="$1"
- TESTPROG="$2"
- shift 2
+diff --git a/sound/pci/ali5451/ali5451.c b/sound/pci/ali5451/ali5451.c
+index 92eb59db106d..2378a39abaeb 100644
+--- a/sound/pci/ali5451/ali5451.c
++++ b/sound/pci/ali5451/ali5451.c
+@@ -2124,8 +2124,8 @@ static int snd_ali_create(struct snd_card *card,
+ 	return 0;
+ }
  
--if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-+if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-     echo 1
- else
-     echo 0
+-static int snd_ali_probe(struct pci_dev *pci,
+-			 const struct pci_device_id *pci_id)
++static int __snd_ali_probe(struct pci_dev *pci,
++			   const struct pci_device_id *pci_id)
+ {
+ 	struct snd_card *card;
+ 	struct snd_ali *codec;
+@@ -2170,6 +2170,12 @@ static int snd_ali_probe(struct pci_dev *pci,
+ 	return 0;
+ }
+ 
++static int snd_ali_probe(struct pci_dev *pci,
++			 const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_ali_probe(pci, pci_id));
++}
++
+ static struct pci_driver ali5451_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = snd_ali_ids,
 -- 
-2.34.1
+2.35.2
 
 
 

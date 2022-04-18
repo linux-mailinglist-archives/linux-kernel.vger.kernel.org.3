@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21640505939
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C1C15058CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343571AbiDROPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
+        id S1344519AbiDROK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244629AbiDRN5J (ORCPT
+        with ESMTP id S238615AbiDRNyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949882AC66;
-        Mon, 18 Apr 2022 06:06:31 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311B249691;
+        Mon, 18 Apr 2022 06:04:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4FF58B80D9C;
-        Mon, 18 Apr 2022 13:06:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 976F6C385A1;
-        Mon, 18 Apr 2022 13:06:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A86D160B6E;
+        Mon, 18 Apr 2022 13:04:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C13C385A7;
+        Mon, 18 Apr 2022 13:04:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287189;
-        bh=3SRV4St52/FhRN6i2PSM1NQl46JAcRfsEjy14dO9vks=;
+        s=korg; t=1650287053;
+        bh=wHUA8y+hSqZEFb6ydmufON260cATP0HuJBPr/sWgbHQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r8lyh/xi7nXdH4JnBYWZfubRWK6yk7IkDMtEVFcyzKXClAnTvD1qwCZjSgC3HZt9X
-         QLri15MvMFYVgtzxLI2TQwmgnlnNtZX/aAyDdgQZsXIGfK/3BX55c4A28FXAQJ/Akf
-         JWoc8RpV2b+NeSryJQ4ciH1agE5EbXkzEbX4BR/g=
+        b=nmDzAZB2gut4dpIKR5dDqYl4t+lcWjHNJx+S7kaHlgz8oRLTBvEfoY4CqfO5tQyxa
+         JlaQV1epN8PwjcRgGgFsUOusGHk3jEBMgDOG018y8cY7YyGaEsyuolV2LgNPOQQbmt
+         17E74WcSPWyW973eq0BXqjZUDYp+mIaJdwIc17KM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "kernelci.org bot" <bot@kernelci.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        stable@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        Alan Tull <atull@opensource.altera.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 043/218] selftests/x86: Add validity check and allow field splitting
-Date:   Mon, 18 Apr 2022 14:11:49 +0200
-Message-Id: <20220418121200.810004348@linuxfoundation.org>
+Subject: [PATCH 4.9 044/218] hwmon: (pmbus) Add mutex to regulator ops
+Date:   Mon, 18 Apr 2022 14:11:50 +0200
+Message-Id: <20220418121200.847847579@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,38 +58,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+From: Patrick Rudolph <patrick.rudolph@9elements.com>
 
-[ Upstream commit b06e15ebd5bfb670f93c7f11a29b8299c1178bc6 ]
+[ Upstream commit 686d303ee6301261b422ea51e64833d7909a2c36 ]
 
-Add check to test if CC has a string. CC can have multiple sub-strings
-like "ccache gcc". Erorr pops up if it is treated as single string and
-double quotes are used around it. This can be fixed by removing the
-quotes and not treating CC as a single string.
+On PMBUS devices with multiple pages, the regulator ops need to be
+protected with the update mutex. This prevents accidentally changing
+the page in a separate thread while operating on the PMBUS_OPERATION
+register.
 
-Fixes: e9886ace222e ("selftests, x86: Rework x86 target architecture detection")
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/20220214184109.3739179-2-usama.anjum@collabora.com
+Tested on Infineon xdpe11280 while a separate thread polls for sensor
+data.
+
+Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+Link: https://lore.kernel.org/r/b991506bcbf665f7af185945f70bf9d5cf04637c.1645804976.git.sylv@sylv.io
+Fixes: ddbb4db4ced1b ("hwmon: (pmbus) Add regulator support")
+Cc: Alan Tull <atull@opensource.altera.com>
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/x86/check_cc.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hwmon/pmbus/pmbus_core.c | 16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/x86/check_cc.sh b/tools/testing/selftests/x86/check_cc.sh
-index 172d3293fb7b..356689c56397 100755
---- a/tools/testing/selftests/x86/check_cc.sh
-+++ b/tools/testing/selftests/x86/check_cc.sh
-@@ -7,7 +7,7 @@ CC="$1"
- TESTPROG="$2"
- shift 2
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 0d75bc7b5065..ed8c0d276388 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1818,10 +1818,14 @@ static int pmbus_regulator_is_enabled(struct regulator_dev *rdev)
+ {
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	u8 page = rdev_get_id(rdev);
+ 	int ret;
  
--if "$CC" -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-+if [ -n "$CC" ] && $CC -o /dev/null "$TESTPROG" -O0 "$@" 2>/dev/null; then
-     echo 1
- else
-     echo 0
++	mutex_lock(&data->update_lock);
+ 	ret = pmbus_read_byte_data(client, page, PMBUS_OPERATION);
++	mutex_unlock(&data->update_lock);
++
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1832,11 +1836,17 @@ static int _pmbus_regulator_on_off(struct regulator_dev *rdev, bool enable)
+ {
+ 	struct device *dev = rdev_get_dev(rdev);
+ 	struct i2c_client *client = to_i2c_client(dev->parent);
++	struct pmbus_data *data = i2c_get_clientdata(client);
+ 	u8 page = rdev_get_id(rdev);
++	int ret;
+ 
+-	return pmbus_update_byte_data(client, page, PMBUS_OPERATION,
+-				      PB_OPERATION_CONTROL_ON,
+-				      enable ? PB_OPERATION_CONTROL_ON : 0);
++	mutex_lock(&data->update_lock);
++	ret = pmbus_update_byte_data(client, page, PMBUS_OPERATION,
++				     PB_OPERATION_CONTROL_ON,
++				     enable ? PB_OPERATION_CONTROL_ON : 0);
++	mutex_unlock(&data->update_lock);
++
++	return ret;
+ }
+ 
+ static int pmbus_regulator_enable(struct regulator_dev *rdev)
 -- 
 2.34.1
 

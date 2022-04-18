@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1635D505CC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:51:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91F37505D0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346466AbiDRQxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
+        id S1346645AbiDRQ5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:57:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346463AbiDRQxe (ORCPT
+        with ESMTP id S1346630AbiDRQ4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:53:34 -0400
+        Mon, 18 Apr 2022 12:56:40 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC08232987
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:50:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 653B434BB4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650300653;
+        s=mimecast20190719; t=1650300733;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=fyzXINo6y2QrduRhxp75HTMIHm/ydfaEUWJWblGQAqE=;
-        b=ahU2arIgWRnBmkT1V0p1diTgyO0RGKO+lp+GbmIivmzpzeLXsFwCB7lCRu/B84WoJSbh78
-        KdXqB0cDyTkrJyV/JodsGSa3wEbqSY+QIh12PnMjZ09YdluJ+RxHTcDyCdG3HSXso1ag8x
-        l1BfupdrIfqy4ZB6U4JtgIsDQJpAfRE=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WHwtgBFXaVRPDxpgXVknAcXgf6im9N3NqhP05P8+ItY=;
+        b=K+tLHQOcqfZJqA82ngLxu9EfYGZvJbRyelKKqYwawmF/hctj9LBgQ042fo11ncrIVdBp/n
+        oerK0SYisg1sIg0vJJb7+OK8H451gp12QjeR/5C3f6oK1a1mhT0GqIb4iDYv1yRYgpnOKC
+        LzMRiVd8AMJ07+eB/vrUy6ew3T0iVJ4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-227-oOW2zVPYMjODZdrpz6Ny5g-1; Mon, 18 Apr 2022 12:50:52 -0400
-X-MC-Unique: oOW2zVPYMjODZdrpz6Ny5g-1
-Received: by mail-qk1-f197.google.com with SMTP id ay14-20020a05620a178e00b0069a9c319c64so10756020qkb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:50:52 -0700 (PDT)
+ us-mta-359-SHPNHb6tO6mlmiXqA_mGFA-1; Mon, 18 Apr 2022 12:50:54 -0400
+X-MC-Unique: SHPNHb6tO6mlmiXqA_mGFA-1
+Received: by mail-qv1-f72.google.com with SMTP id eo13-20020ad4594d000000b004466661ece9so1379959qvb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:50:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=fyzXINo6y2QrduRhxp75HTMIHm/ydfaEUWJWblGQAqE=;
-        b=RtzCOvxz5GgMNO8g8G2tTISOxlyFI+kR3FAKGbWK+CQOjGP3m8dvNVgxd2J2KLrILY
-         v5hA9Ls6A6aF77meX8ZpfUJ3gRX9SAn6SacCfy1kXySIfgQq63jLgR5NiBbDBC2DusBF
-         G9gqexmYhnE3/tvNG9PrUZHG96EIp8jQGdqBMXIt0sENxlD/gelyW7+WYcqY/Sb9cXb4
-         kpgYUqfcBrSdso8wtHaytKDqw9X5pnuEDfxlUZstZDQy49uP4g5w2oqIezuVzyoem0+E
-         l5ckvPZOidGNLHL0zYbdHfQij8ZZewW8Hssd/JVFsBI9dCX4piVSpvQqSaCBEnGJZzoZ
-         VMqA==
-X-Gm-Message-State: AOAM530F2HZXwA6dEzieKY9F9cAI5X+1bM2V2Evq7v2lHXJriBRYKNk3
-        qPjzUwMdjq1My+CcTzBQiZkmXc595gtY9/w/q7hJqGhHX0RefY+xzShJsBcPpy4C35D8QHUvTuP
-        Xj31D5623uvgvfyjxA2oZKdYE
-X-Received: by 2002:a37:6412:0:b0:69e:68cf:d889 with SMTP id y18-20020a376412000000b0069e68cfd889mr6906614qkb.443.1650300651973;
-        Mon, 18 Apr 2022 09:50:51 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxGS7XNj9k6vkLVulKPyUGJigJpGiBiFPW9pzDfAR7seHumvCYupquhlpx2IBMy2+usjgwkbg==
-X-Received: by 2002:a37:6412:0:b0:69e:68cf:d889 with SMTP id y18-20020a376412000000b0069e68cfd889mr6906602qkb.443.1650300651711;
-        Mon, 18 Apr 2022 09:50:51 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=WHwtgBFXaVRPDxpgXVknAcXgf6im9N3NqhP05P8+ItY=;
+        b=Cp20nsAWqDC9+AA2EFTaoLZPerTNyVXB8bMJOyWYrvh2u31x+uxWVTvG5yfNIy/+QQ
+         Tj7z1wD5cihWeMvlTK785KJB4ZGbA5poo8Jlm8MnW+eJU0E09zgyZRgFE5hZeEEyRTTG
+         q6Jf8mgPU/mYiPPE7cab98HXkfMeouDQNIwMW7Gqo3PMIws/kCgYZ+erw4fetIH3CjLU
+         4Lz71ob4RkW4LTqtkrxv/V8uJRDu/IRENKf6qnEaO7xaqWPM4peG6RmFsjLy/kZqX+vZ
+         dLRqFAJqfXhZWiUf6NoC3iq5MgajX2YLnwG9JgsfIg35xwH8Gb1vEOIx/jbtOdN6EUOv
+         PdIw==
+X-Gm-Message-State: AOAM532rS29tf7quGAg9RCoD7XLfsxfz6iv4dXZj1WAR7BcLn2c2/iN0
+        tXXm20r7zdo9lYYJTZT/1Ec4LF2SCr7ptLonHr0+18FthuqhZQGKcdwrTlu6o+WdPId21JmI6Z7
+        9I2WP4TiPLDr9cVOwN7ujDmCN
+X-Received: by 2002:a05:620a:6db:b0:69e:84e3:5059 with SMTP id 27-20020a05620a06db00b0069e84e35059mr5494234qky.709.1650300653947;
+        Mon, 18 Apr 2022 09:50:53 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJwbWQYYsvn90H1BnF5L8o1UGM3/9JXhiIclvSAkzCGZCOu7kfxyf1pecjQS5e4NPEffWlm8uw==
+X-Received: by 2002:a05:620a:6db:b0:69e:84e3:5059 with SMTP id 27-20020a05620a06db00b0069e84e35059mr5494227qky.709.1650300653717;
+        Mon, 18 Apr 2022 09:50:53 -0700 (PDT)
 Received: from treble.redhat.com ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id e15-20020ac8670f000000b002e22d9c756dsm7277059qtp.30.2022.04.18.09.50.50
+        by smtp.gmail.com with ESMTPSA id e15-20020ac8670f000000b002e22d9c756dsm7277059qtp.30.2022.04.18.09.50.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:50:51 -0700 (PDT)
+        Mon, 18 Apr 2022 09:50:53 -0700 (PDT)
 From:   Josh Poimboeuf <jpoimboe@redhat.com>
 To:     x86@kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 00/25] objtool: Interface overhaul
-Date:   Mon, 18 Apr 2022 09:50:19 -0700
-Message-Id: <cover.1650300597.git.jpoimboe@redhat.com>
+Subject: [PATCH v2 01/25] objtool: Enable unreachable warnings for CLANG LTO
+Date:   Mon, 18 Apr 2022 09:50:20 -0700
+Message-Id: <7b12df54bceeb0761fe9fc8269ea0c00501214a9.1650300597.git.jpoimboe@redhat.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1650300597.git.jpoimboe@redhat.com>
+References: <cover.1650300597.git.jpoimboe@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -75,152 +78,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v2:
-- extricate sls
-- fix ibt regressions in v1
-- fix issues found by improved ibt logic
-- split '--hacks' into two
-- add objdump-func script
-- remove "()" in function address strings
-- add '--sec-address' option
-- add '--link'
+With IBT support in, objtool is now fully capable of following vmlinux
+code flow in LTO mode.  Start reporting unreachable warnings for Clang
+LTO as well.
 
+Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+---
+ scripts/Makefile.build  | 2 +-
+ scripts/link-vmlinux.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Objtool's interface has some issues:
-
-- Several features are done unconditionally, without any way to turn
-  them off.  Some of them might be surprising.  This makes objtool
-  tricky to use, and prevents porting individual features to other
-  arches.
-
-- The config dependencies are too coarse-grained.  Objtool enablement is
-  tied to CONFIG_STACK_VALIDATION, but it has several other features
-  independent of that.
-
-- The objtool subcmds ("check" and "orc") are clumsy: "check" is really
-  a subset of "orc", so it has all the same options.  The subcmd model
-  has never really worked for objtool, as it only has a single purpose:
-  "do some combination of things on an object file".
-
-- The '--lto' and '--vmlinux' options are nonsensical and have
-  surprising behavior.
-
-
-Overhaul the interface:
-
-- get rid of subcmds
-
-- make all features individually selectable
-
-- remove and/or clarify confusing/obsolete options
-
-- update the documentation
-
-- fix some bugs found along the way
-
-
-TODO: rename files...
-
-
-$ tools/objtool/objtool --help
-
- Usage: objtool <actions> [<options>] file.o
-
-Actions:
-    -h, --hacks[=<jump_label,noinstr>]
-                          patch toolchain bugs/limitations
-    -i, --ibt             validate and annotate IBT
-    -l, --sls             validate straight-line-speculation mitigations
-    -m, --mcount          annotate mcount/fentry calls for ftrace
-    -n, --noinstr         validate noinstr rules
-    -o, --orc             generate ORC metadata
-    -r, --retpoline       validate and annotate retpoline usage
-    -s, --stackval        validate frame pointer rules
-    -t, --static-call     annotate static calls
-    -u, --uaccess         validate uaccess rules for SMAP
-        --dump[=<orc>]    dump metadata
-
-Options:
-        --backtrace       unwind on error
-        --backup          create .orig files before modification
-        --dry-run         don't write modifications
-        --link            object is a linked object
-        --module          object is part of a kernel module
-        --no-unreachable  skip 'unreachable instruction' warnings
-        --sec-address     print section addresses in warnings
-        --stats           print statistics
-
-
-
-Josh Poimboeuf (25):
-  objtool: Enable unreachable warnings for CLANG LTO
-  libsubcmd: Fix OPTION_GROUP sorting
-  x86/static_call: Add ANNOTATE_NOENDBR to static call trampoline
-  x86/retpoline: Add ANNOTATE_ENDBR for retpolines
-  x86/uaccess: Add ENDBR to __put_user_nocheck*()
-  x86/xen: Add ANNOTATE_ENDBR to startup_xen()
-  objtool: Reorganize cmdline options
-  objtool: Ditch subcommands
-  objtool: Don't print parentheses in function addresses
-  objtool: Print data address for "!ENDBR" data warnings
-  objtool: Use offstr() to print address of missing ENDBR
-  objtool: Add option to print section addresses
-  scripts: Create objdump-func helper script
-  objtool: Make stack validation optional
-  objtool: Rework ibt and extricate from stack validation
-  objtool: Extricate sls from stack validation
-  objtool: Add CONFIG_OBJTOOL
-  objtool: Make stack validation frame-pointer-specific
-  objtool: Make static call annotation optional
-  objtool: Make jump label hack optional
-  objtool: Make noinstr hacks optional
-  objtool: Rename "VMLINUX_VALIDATION" -> "NOINSTR_VALIDATION"
-  objtool: Add HAVE_NOINSTR_VALIDATION
-  objtool: Remove --lto and --vmlinux in favor of --link
-  objtool: Update documentation
-
- Makefile                                      |   2 +-
- arch/Kconfig                                  |  18 +-
- arch/x86/Kconfig                              |  21 +-
- arch/x86/Kconfig.debug                        |   2 +-
- arch/x86/include/asm/jump_label.h             |   6 +-
- arch/x86/include/asm/static_call.h            |   1 +
- arch/x86/kernel/alternative.c                 |   6 +-
- arch/x86/lib/putuser.S                        |   4 +
- arch/x86/lib/retpoline.S                      |   2 +-
- arch/x86/xen/xen-head.S                       |   1 +
- include/linux/compiler.h                      |   6 +-
- include/linux/instrumentation.h               |   6 +-
- include/linux/objtool.h                       |   6 +-
- kernel/trace/Kconfig                          |   1 +
- lib/Kconfig.debug                             |  22 +-
- lib/Kconfig.kcsan                             |   4 +-
- lib/Kconfig.ubsan                             |   2 +-
- scripts/Makefile.build                        |  23 +-
- scripts/link-vmlinux.sh                       |  66 ++-
- scripts/objdump-func                          |  18 +
- scripts/package/builddeb                      |   2 +-
- tools/include/linux/objtool.h                 |   6 +-
- tools/lib/subcmd/parse-options.c              |  17 +-
- tools/objtool/Build                           |  12 +-
- .../{stack-validation.txt => objtool.txt}     | 122 ++++-
- tools/objtool/Makefile                        |   8 +-
- tools/objtool/arch/x86/decode.c               |   2 +-
- tools/objtool/arch/x86/special.c              |   2 +-
- tools/objtool/builtin-check.c                 | 156 ++++--
- tools/objtool/builtin-orc.c                   |  73 ---
- tools/objtool/check.c                         | 456 ++++++++++--------
- tools/objtool/elf.c                           |  11 +-
- tools/objtool/include/objtool/builtin.h       |  34 +-
- tools/objtool/include/objtool/elf.h           |  12 +-
- tools/objtool/include/objtool/warn.h          |  35 +-
- tools/objtool/objtool.c                       | 103 +---
- tools/objtool/weak.c                          |   9 +-
- 37 files changed, 719 insertions(+), 558 deletions(-)
- create mode 100755 scripts/objdump-func
- rename tools/objtool/Documentation/{stack-validation.txt => objtool.txt} (80%)
- delete mode 100644 tools/objtool/builtin-orc.c
-
+diff --git a/scripts/Makefile.build b/scripts/Makefile.build
+index 9717e6f6fb31..33c1ed581522 100644
+--- a/scripts/Makefile.build
++++ b/scripts/Makefile.build
+@@ -231,7 +231,7 @@ objtool_args =								\
+ 	$(if $(part-of-module), --module)				\
+ 	$(if $(CONFIG_X86_KERNEL_IBT), --lto --ibt)			\
+ 	$(if $(CONFIG_FRAME_POINTER),, --no-fp)				\
+-	$(if $(CONFIG_GCOV_KERNEL)$(CONFIG_LTO_CLANG), --no-unreachable)\
++	$(if $(CONFIG_GCOV_KERNEL), --no-unreachable)			\
+ 	$(if $(CONFIG_RETPOLINE), --retpoline)				\
+ 	$(if $(CONFIG_X86_SMAP), --uaccess)				\
+ 	$(if $(CONFIG_FTRACE_MCOUNT_USE_OBJTOOL), --mcount)		\
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 20f44504a644..9361a1ef02c9 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -140,7 +140,7 @@ objtool_link()
+ 		if ! is_enabled CONFIG_FRAME_POINTER; then
+ 			objtoolopt="${objtoolopt} --no-fp"
+ 		fi
+-		if is_enabled CONFIG_GCOV_KERNEL || is_enabled CONFIG_LTO_CLANG; then
++		if is_enabled CONFIG_GCOV_KERNEL; then
+ 			objtoolopt="${objtoolopt} --no-unreachable"
+ 		fi
+ 		if is_enabled CONFIG_RETPOLINE; then
 -- 
 2.34.1
 

@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EF7505741
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28465505091
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244191AbiDRNnd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:43:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59478 "EHLO
+        id S238822AbiDRM0n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:26:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241543AbiDRNR1 (ORCPT
+        with ESMTP id S238734AbiDRMZj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:17:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B46743B3F3;
-        Mon, 18 Apr 2022 05:51:33 -0700 (PDT)
+        Mon, 18 Apr 2022 08:25:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69E6A20F49;
+        Mon, 18 Apr 2022 05:19:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8551561254;
-        Mon, 18 Apr 2022 12:51:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95491C385A9;
-        Mon, 18 Apr 2022 12:51:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A798B80EC1;
+        Mon, 18 Apr 2022 12:19:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83CE8C385A1;
+        Mon, 18 Apr 2022 12:19:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286293;
-        bh=uL8gsqBp9qxoVBEHIUetvCQwCqbDjLIqa0SXOg5/iJ4=;
+        s=korg; t=1650284377;
+        bh=0Ymae+/lWrCSGLRGJd05hbVEKxQU9VlRVBkRnq+xuC4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x5UArXw+10r7bV5PHDoFK1qcN8mCqX3L6FsLS2ZPX+GoSRcDFoqRuF2SrvrQXvpfz
-         8JpiZXpXhg5iodlyNIlHHzNNDXTpaDu21xDUh98bbUcj7KJX0pS95M498u8z0zg8Ut
-         /hLQmdafVr2r73vhV1zOu7JdT8W6wADqceQEHoGg=
+        b=FEjQedCju+69FNVzt/0Csv3tV8oJRyOYvUxd947Ww2V3oSZh43F4T4+DCi4rArYB4
+         tA84/1PSaCXVGwHBug2Hueg/Na08JSb/AxgxGszPCqaDUZLKLQimAF7svKshYefA7g
+         DYYcnRMbVVOJzojgXeU1ZgZAZIFjCvGQSuNbqZiY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com,
+        Karsten Graul <kgraul@linux.ibm.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 082/284] ASoC: mxs-saif: Handle errors for clk_enable
-Date:   Mon, 18 Apr 2022 14:11:03 +0200
-Message-Id: <20220418121213.017075916@linuxfoundation.org>
+Subject: [PATCH 5.17 095/219] net/smc: Fix NULL pointer dereference in smc_pnet_find_ib()
+Date:   Mon, 18 Apr 2022 14:11:04 +0200
+Message-Id: <20220418121209.388218330@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,40 +57,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Karsten Graul <kgraul@linux.ibm.com>
 
-[ Upstream commit 2ecf362d220317debf5da376e0390e9f7a3f7b29 ]
+[ Upstream commit d22f4f977236f97e01255a80bca2ea93a8094fc8 ]
 
-As the potential failure of the clk_enable(),
-it should be better to check it, like mxs_saif_trigger().
+dev_name() was called with dev.parent as argument but without to
+NULL-check it before.
+Solve this by checking the pointer before the call to dev_name().
 
-Fixes: d0ba4c014934 ("ASoC: mxs-saif: set a base clock rate for EXTMASTER mode work")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220301081717.3727190-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: af5f60c7e3d5 ("net/smc: allow PCI IDs as ib device names in the pnet table")
+Reported-by: syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com
+Signed-off-by: Karsten Graul <kgraul@linux.ibm.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/mxs/mxs-saif.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+ net/smc/smc_pnet.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/mxs/mxs-saif.c b/sound/soc/mxs/mxs-saif.c
-index 156aa7c00787..93c019670199 100644
---- a/sound/soc/mxs/mxs-saif.c
-+++ b/sound/soc/mxs/mxs-saif.c
-@@ -467,7 +467,10 @@ static int mxs_saif_hw_params(struct snd_pcm_substream *substream,
- 		* basic clock which should be fast enough for the internal
- 		* logic.
- 		*/
--		clk_enable(saif->clk);
-+		ret = clk_enable(saif->clk);
-+		if (ret)
-+			return ret;
-+
- 		ret = clk_set_rate(saif->clk, 24000000);
- 		clk_disable(saif->clk);
- 		if (ret)
+diff --git a/net/smc/smc_pnet.c b/net/smc/smc_pnet.c
+index 29f0a559d884..4769f76505af 100644
+--- a/net/smc/smc_pnet.c
++++ b/net/smc/smc_pnet.c
+@@ -311,8 +311,9 @@ static struct smc_ib_device *smc_pnet_find_ib(char *ib_name)
+ 	list_for_each_entry(ibdev, &smc_ib_devices.list, list) {
+ 		if (!strncmp(ibdev->ibdev->name, ib_name,
+ 			     sizeof(ibdev->ibdev->name)) ||
+-		    !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
+-			     IB_DEVICE_NAME_MAX - 1)) {
++		    (ibdev->ibdev->dev.parent &&
++		     !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
++			     IB_DEVICE_NAME_MAX - 1))) {
+ 			goto out;
+ 		}
+ 	}
 -- 
-2.34.1
+2.35.1
 
 
 

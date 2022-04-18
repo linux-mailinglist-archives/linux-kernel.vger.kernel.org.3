@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFF6D505E84
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD94505E88
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:27:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242249AbiDRT1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 15:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
+        id S1347720AbiDRTaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 15:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235659AbiDRT1m (ORCPT
+        with ESMTP id S237761AbiDRTaH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 15:27:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B9C963D6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:25:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26B58B8105F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 19:25:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B38D7C385AA;
-        Mon, 18 Apr 2022 19:24:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650309899;
-        bh=XO6QdT0AxcpOfTrBUN8I/egwTmX28Rqx6jsl8iAbxFE=;
-        h=Date:Subject:To:References:From:In-Reply-To:From;
-        b=ZyGusz2Ixuba0KZlwLtaw7gFz5yMbl7ZTz0fCUaAXA6wj3fb4eHSBKBmZjPkihQUb
-         wlSwqgp0d7Tb4ZAM3idlCf2cYpd2zhiUiSRrTz0ZIz93RXIMUBGEyuWEUi9gPyoUNj
-         zHxwW/erY4UkoofX6OLskgqgrLrq90/U2UdDEubdXXXpF/SqHuBVhNJLDtFeMy5m4D
-         E8gdmDf/NbQN7EUesis8T/AVn4/08zBZXgs46kU1foFV0wsvaDKGA0J2xGRhG9ZG8Z
-         cLUl0ze48T9vAGM3vomn5jmeV+tXBHBy1ReKg1fbYMQCFiMrLjdCUBt7PMjGp5oEtM
-         rXDzqhmbt+Xdg==
-Message-ID: <39f4141f-3ec8-1929-e029-9916a495e49b@kernel.org>
-Date:   Mon, 18 Apr 2022 12:24:58 -0700
+        Mon, 18 Apr 2022 15:30:07 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE141176;
+        Mon, 18 Apr 2022 12:27:28 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id bx5so13790710pjb.3;
+        Mon, 18 Apr 2022 12:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=F+OdSGTAnIEJSUgGpzlltUFmc6PQAZrJed35GOZ5DHc=;
+        b=YByHTPdpVJZcPEAovX0IgWXavcHP7vm/vlzK9+Z4V63SwNzsIxJRSJVv4dTwsHww2s
+         WgEJkMUVWN61zoxfmSlQcX2ZvJm3qJaS5iYgd/X1N7fNz7gDgMNu26cM7orUuhGyenuM
+         6zbg73hTlpIwJDAGBp7qsOHjSPEQtqYxIYAppNOhBtdh6azSYa9pHn78SoLLbWJsk54C
+         qUFC4BZPi0BgZl5avF3oZZegwCMI6mWq/iEuUrOlOr7BYjwSHT1xctEBSET7ujmyY5ox
+         QR08B95TIQyIlWvgZF+Mb0CILNjYi2rm4bXMNRD9a/UVcc9s/8tpBykhWnSFrDzXoGLT
+         F5rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=F+OdSGTAnIEJSUgGpzlltUFmc6PQAZrJed35GOZ5DHc=;
+        b=iMorcdt2lvgd2qZ0EdviVhfqsIMfywb4tSOrKGIFDuCW4/YYeflXDJe3u4JyMzunAI
+         MCO11WgIvEgNRN3PkG+wm9pEJp4+ksOzif+B6bnlldfFQ3IxHjSGs9stS37qg/CXWpqY
+         S1RHuqUrSMevH9InSbI1MWgEdHD4CBGCNLrtHSlHbvnlrfk2iGSQJqOkQnp+POi0Ix3k
+         gqcvbRVhCAGMbuzM0WEXPuqERUoP3yGcOQkqTRuYTAL557kaLMQaoLVY5DzNWjnA30Xy
+         bmdBLN0UN/sWJ0j0LmVBzrUYnnVTxnYXEdd3GXAqpAYXGnK+1VN3nRN98NytKrpkPGb8
+         T0Tg==
+X-Gm-Message-State: AOAM5338NR347KirlzOiUVvj2BeDgROxe3NNjU+hF5JrZazBOBNUjoWX
+        lcqpTSNVCumGvoHN8OBf8Iox2kg8hR8=
+X-Google-Smtp-Source: ABdhPJzyexcTwHx6iBvzCp/0ZitXIcYa+5GQJvNZamARcMIbWb2DthFC/wWxEOO0myRdgowOB+WvpQ==
+X-Received: by 2002:a17:902:6506:b0:158:251b:cb61 with SMTP id b6-20020a170902650600b00158251bcb61mr12227840plk.157.1650310047629;
+        Mon, 18 Apr 2022 12:27:27 -0700 (PDT)
+Received: from 9a2d8922b8f1 ([122.161.51.18])
+        by smtp.gmail.com with ESMTPSA id v65-20020a626144000000b0050a839e490bsm2902710pfb.185.2022.04.18.12.27.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 12:27:27 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 00:57:21 +0530
+From:   Kuldeep Singh <singh.kuldeep87k@gmail.com>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3 3/6] arm64: dts: qcom: msm8996: User generic node name
+ for DMA
+Message-ID: <20220418192721.GA6884@9a2d8922b8f1>
+References: <20220417210436.6203-1-singh.kuldeep87k@gmail.com>
+ <20220417210436.6203-4-singh.kuldeep87k@gmail.com>
+ <CAH=2Nty6gTX-u1LZZ_g3FZfpkX2CaV3Gh+R8DJODuh4489nCyw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] arc: drop definitions of pgd_index() and pgd_offset{,
- _k}() entirely
-Content-Language: en-US
-To:     Rolf Eike Beer <eb@emlix.com>, Vineet Gupta <vgupta@kernel.org>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <3749315.OSCKaROI16@mobilepool36.emlix.com>
-From:   Vineet Gupta <vgupta@kernel.org>
-In-Reply-To: <3749315.OSCKaROI16@mobilepool36.emlix.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH=2Nty6gTX-u1LZZ_g3FZfpkX2CaV3Gh+R8DJODuh4489nCyw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,23 +78,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Apr 18, 2022 at 11:02:11AM +0530, Bhupesh Sharma wrote:
+> This is already fixed with in-flight patch
+> <https://lore.kernel.org/lkml/20220211214941.f55q5yksittut3ep@amazon.com/T/#mb84230b9b8e06544859ccf5e16a7651fac79c933>
 
-
-On 3/28/22 01:15, Rolf Eike Beer wrote:
-> They were in <asm/pgtables.h> and have been removed from there in
-> 974b9b2c68f ("mm: consolidate pte_index() and pte_offset_*() definitions")
-> in favor of the generic version. But that missed that the same definitons
-> also existed in <asm/pgtable-levels.h>, where they were (inadvertently?)
-> introduced in fe6cb7b043b6 ("ARC: mm: disintegrate pgtable.h into levels
-> and flags").
->
-> Fixes: 974b9b2c68f ("mm: consolidate pte_index() and pte_offset_*() definitions")
-> Fixes: fe6cb7b043b6 ("ARC: mm: disintegrate pgtable.h into levels and flags")
-> Signed-off-by: Rolf Eike Beer<eb@emlix.com>
-
-Indeed I missed the upstream change when doing the rework for paging levels.
-
-Applied !
-
-Thx,
--Vineet
+Your change is currently not accepted/merged and don't think it's in
+maintainer's queue as well. So, probably it's not in-flight patch as of
+now.

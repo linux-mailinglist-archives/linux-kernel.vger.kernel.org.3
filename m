@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A9EA50504D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:21:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7444D5056B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231449AbiDRMXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
+        id S243926AbiDRNih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238707AbiDRMWp (ORCPT
+        with ESMTP id S243438AbiDRNKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:22:45 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24FBD1EC6C;
-        Mon, 18 Apr 2022 05:18:07 -0700 (PDT)
+        Mon, 18 Apr 2022 09:10:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCF237BFF;
+        Mon, 18 Apr 2022 05:49:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C7A1FB80ED6;
-        Mon, 18 Apr 2022 12:18:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3678DC385A7;
-        Mon, 18 Apr 2022 12:18:04 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 253DAB80D9C;
+        Mon, 18 Apr 2022 12:49:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7095EC385A9;
+        Mon, 18 Apr 2022 12:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284284;
-        bh=i9onWB9tRvxnJHS7hD+ihyIKDO/WpE3i++NR8WHGdnA=;
+        s=korg; t=1650286172;
+        bh=sBAlfitv7a3m15anPihIPdD3jKEWTRAgL6gHf+iR2EQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lPDtiW4xJRLBaLWZQ1JUCBQsrUpxjMC35wIcFBiOlq1nypyfNesOvqLZKiyl1/b2e
-         KqHd1OkbRazFi+Fm5bVOcmZ+I9mP9/7g6lbG62s6y65LSOmVznbkhYTKTsTkZ9+2oX
-         sdVjY/WU07FkeED4LyrQY7NjDGeFcfxLEV/fkI9A=
+        b=TxsF93e5RLHypZZ8AOZHMboIjrlL6pn7VVTBXjPMxHiFejCFAzCVkuIXG0AJqiy0f
+         uI4ZlV3nnwj3LFhXxTveACDMBDlTH2rvkTlVCzUeM5akPZjg6HUrairzRJSQsMdTS8
+         lyvIp1ebZUrXzTeme3bFHkINDcnPOQ8T4VMs9zpw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 063/219] firmware: arm_scmi: Fix sorting of retrieved clock rates
-Date:   Mon, 18 Apr 2022 14:10:32 +0200
-Message-Id: <20220418121207.320306740@linuxfoundation.org>
+        Liguang Zhang <zhangliguang@linux.alibaba.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH 4.14 052/284] PCI: pciehp: Clear cmd_busy bit in polling mode
+Date:   Mon, 18 Apr 2022 14:10:33 +0200
+Message-Id: <20220418121212.175619271@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+From: Liguang Zhang <zhangliguang@linux.alibaba.com>
 
-[ Upstream commit 23274739a5b6166f74d8d9cb5243d7bf6b46aab9 ]
+commit 92912b175178c7e895f5e5e9f1e30ac30319162b upstream.
 
-During SCMI Clock protocol initialization, after having retrieved from the
-SCMI platform all the available discrete rates for a specific clock, the
-clock rates array is sorted, unfortunately using a pointer to its end as
-a base instead of its start, so that sorting does not work.
+Writes to a Downstream Port's Slot Control register are PCIe hotplug
+"commands."  If the Port supports Command Completed events, software must
+wait for a command to complete before writing to Slot Control again.
 
-Fix invocation of sort() passing as base a pointer to the start of the
-retrieved clock rates array.
+pcie_do_write_cmd() sets ctrl->cmd_busy when it writes to Slot Control.  If
+software notification is enabled, i.e., PCI_EXP_SLTCTL_HPIE and
+PCI_EXP_SLTCTL_CCIE are set, ctrl->cmd_busy is cleared by pciehp_isr().
 
-Link: https://lore.kernel.org/r/20220318092813.49283-1-cristian.marussi@arm.com
-Fixes: dccec73de91d ("firmware: arm_scmi: Keep the discrete clock rates sorted")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+But when software notification is disabled, as it is when pcie_init()
+powers off an empty slot, pcie_wait_cmd() uses pcie_poll_cmd() to poll for
+command completion, and it neglects to clear ctrl->cmd_busy, which leads to
+spurious timeouts:
+
+  pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x01c0 (issued 2264 msec ago)
+  pcieport 0000:00:03.0: pciehp: Timeout on hotplug command 0x05c0 (issued 2288 msec ago)
+
+Clear ctrl->cmd_busy in pcie_poll_cmd() when it detects a Command Completed
+event (PCI_EXP_SLTSTA_CC).
+
+[bhelgaas: commit log]
+Fixes: a5dd4b4b0570 ("PCI: pciehp: Wait for hotplug command completion where necessary")
+Link: https://lore.kernel.org/r/20211111054258.7309-1-zhangliguang@linux.alibaba.com
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=215143
+Link: https://lore.kernel.org/r/20211126173309.GA12255@wunner.de
+Signed-off-by: Liguang Zhang <zhangliguang@linux.alibaba.com>
+Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+Reviewed-by: Lukas Wunner <lukas@wunner.de>
+Cc: stable@vger.kernel.org	# v4.19+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/firmware/arm_scmi/clock.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/pci/hotplug/pciehp_hpc.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-index 35b56c8ba0c0..492f3a9197ec 100644
---- a/drivers/firmware/arm_scmi/clock.c
-+++ b/drivers/firmware/arm_scmi/clock.c
-@@ -204,7 +204,8 @@ scmi_clock_describe_rates_get(const struct scmi_protocol_handle *ph, u32 clk_id,
- 
- 	if (rate_discrete && rate) {
- 		clk->list.num_rates = tot_rate_cnt;
--		sort(rate, tot_rate_cnt, sizeof(*rate), rate_cmp_func, NULL);
-+		sort(clk->list.rates, tot_rate_cnt, sizeof(*rate),
-+		     rate_cmp_func, NULL);
- 	}
- 
- 	clk->rate_discrete = rate_discrete;
--- 
-2.35.1
-
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -120,6 +120,8 @@ static int pcie_poll_cmd(struct controll
+ 		if (slot_status & PCI_EXP_SLTSTA_CC) {
+ 			pcie_capability_write_word(pdev, PCI_EXP_SLTSTA,
+ 						   PCI_EXP_SLTSTA_CC);
++			ctrl->cmd_busy = 0;
++			smp_mb();
+ 			return 1;
+ 		}
+ 		if (timeout < 0)
 
 

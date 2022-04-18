@@ -2,96 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7477F504FB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B827504FC5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:12:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237982AbiDRMHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:07:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S238044AbiDRMOM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:14:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237980AbiDRMHB (ORCPT
+        with ESMTP id S238034AbiDRMOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:07:01 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4933B1A802
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:04:23 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id z6-20020a17090a398600b001cb9fca3210so13892960pjb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:04:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=l539e+cloHDtMJA9q+CEgCemouxdeXvEIx3a6xENmiw=;
-        b=EME2rXuHZN/iDCQ2+/fD2SnBtcWDY/WxEDU7zV371DULgDSxAkHyqIHk2HsT9pzYwq
-         X0jHxUfQBFj9UbfsPHqd5q6wAhE84cWLfeeR84Dp7k0+QIVeRMQY+B+Aiusixji2MZG2
-         ifwV6vhzgL5s5XDlv14p3JgMD+dfhdrtGG2ExdeaqSrKkXm5Ivd/5dMRW7F+tu/ZFwWL
-         /WwRqSCNYjFeDgdsPPIuvc0L1BcoHGgxV/4uQAyt138812M31T3nP2qmLeor7vPaz7uH
-         KnG4Stv+RmjZ8soo1W61p7OiNnozgmmTtN6ORA2jETC6mtk/2TsMF7NefT1qCxwcdhkp
-         6CYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=l539e+cloHDtMJA9q+CEgCemouxdeXvEIx3a6xENmiw=;
-        b=sDDrBXQPRcR6CRge18hW+kKj+6H2c6RE9zSodTxgdhbI8iD4ekx0/0WxYuVFPf6bmP
-         OBHCrgxSq0yUvQ9RaDhaeRZ5cZhE+khNhav8IkY9QRzlG2KVWChi8LYpnyIsnwl8Q9kH
-         eKnssQK0OnrcLRy1DIEUkGZCEenPA6PwRKLIok97IiVUde8iBd9HBh/m7p1NU1GvlKj+
-         cZ7v3hbie0qCdXWGR8MUCtY7GZiYZpvOmkuRznHBFuLgMV9jN//9iPxW63crJtl6PGsg
-         vohhE+MMtPB7YXQWrePGxUSuYWvGLb+zXxS2l3Vf+njg/7wr0j6fS9Gt/XohS7wtagwK
-         ajkw==
-X-Gm-Message-State: AOAM533LIgU4s4Ra8PqVuxcGcf2xlVvAtuUAPS35oTnrRRyGra6xa/eW
-        s2ZHdhENgetpqHw4nZTokdQ=
-X-Google-Smtp-Source: ABdhPJz5tpVjRVY7oW3rrsbG8qVY4KsncSBVc/mgVKR/4pTyMQpqlw0yWDuainxpF/jrj6yIKwpaMg==
-X-Received: by 2002:a17:90a:4403:b0:1ca:a4a3:6824 with SMTP id s3-20020a17090a440300b001caa4a36824mr12603150pjg.20.1650283462701;
-        Mon, 18 Apr 2022 05:04:22 -0700 (PDT)
-Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
-        by smtp.gmail.com with ESMTPSA id p1-20020a17090a680100b001d28905b214sm3840628pjj.39.2022.04.18.05.04.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 05:04:22 -0700 (PDT)
-From:   Aliya Rahmani <aliyarahmani786@gmail.com>
-To:     clabbe@baylibre.com
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Aliya Rahmani <aliyarahmani786@gmail.com>
-Subject: [PATCH 3/3] staging: media: zoran: avoid macro argument precedence issues
-Date:   Mon, 18 Apr 2022 17:29:52 +0530
-Message-Id: <20220418115948.5456-4-aliyarahmani786@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220418115948.5456-1-aliyarahmani786@gmail.com>
-References: <20220418115948.5456-1-aliyarahmani786@gmail.com>
+        Mon, 18 Apr 2022 08:14:09 -0400
+Received: from abedmanico.biharhotel.com (abedmanico.biharhotel.com [194.31.98.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAC21A816
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:11:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=dkim; d=biharhotel.com;
+ h=Reply-To:From:To:Subject:Date:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding; i=mar.veg@biharhotel.com;
+ bh=dnkE0QHVOCf1aNji21hnkG44FB8=;
+ b=cJ9ikhMLEvxAfpDGzdEHJBJROoy8TW3/czW39vQGB7eMJORaFM4fjrpdoVrU57/It+z0FI68eIiX
+   M/bdbGezQQHfNFUbF2vylp+PggXFZsbshjhzyLo4eIB8kNDUUSdvyc2ErBZVUr7dlvW1dCiMXgD1
+   CFyFYNf4+ElRl5lQLxmDkmVF4eS194mVNfLcN31727/IImNmcDa/sLz/OY5SMZTFOiNubTqpwDaO
+   2N36gN9oMY8ht7Q6C35WGxXYyq65famQtio+m3NTUdq7m1ajFGLef4ac4qQmgDQgrHNvygFNAkm/
+   SZ/bkmVylPp8KtdSMXn50ncwMvEqcclucqvskg==
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=dkim; d=biharhotel.com;
+ b=G0IEJSyzl3dScCnbFZxJ+x1w28Pp6wcDDlZmgFZUuEcoj5sHEMQD/mB54CAbIDtW+zxtZQmO6isu
+   id0g8sfKekkkLyTZriRdF1SMH77kw1eKTLQfA6xe1M+AxYyykz06r7atKqNI0+qtWCASAuHN8W+u
+   b+iZmxLw/BgtFZgBBStEToIFOlAInsl6kAL+RqiweiDvBWUHCVuDOYFt73w+B72dHZTrgBKVbsx3
+   TaSSm9bFsFsnXMsyjB5vxYat32q1tznYvdmMFxqeS/K8wtuo12Z1QiUngg+xQK4bf9bBh8f5lka2
+   C2pFQkt/092qwDWCABnf5CUAksa+8dvt2ctsig==;
+Reply-To: bradleywrubel@scotfoundation.org
+From:   "MACKENZIE SCOTT (Scott Foundation)" <mar.veg@biharhotel.com>
+To:     linux-kernel@vger.kernel.org
+Subject: CONGRATULATIONS...
+Date:   18 Apr 2022 14:03:33 +0200
+Message-ID: <20220418140333.8799D6E5AF9759E0@biharhotel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,LOTS_OF_MONEY,NIXSPAM_IXHASH,
+        RCVD_IN_BL_SPAMCOP_NET,RCVD_IN_MSPIKE_BL,RCVD_IN_MSPIKE_L4,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,T_US_DOLLARS_3
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes checkpatch warnings of precedence issues. Added parentheses
-around macro argument 'num'.
+Hello,
 
-Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
----
- drivers/staging/media/zoran/videocodec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm Mackenzie Scott, Ex-wife to Jeff Bezos (Amazon Founder and=20
+CEO). I'm donating $4 billion to charities, churches, individuals,=20
+colleges and businesses across the Globe from Scott's Foundation to=20
+provide immediate support to people and businesses suffering=20
+economically from the impact of COVID-19 pandemic and the ongoing=20
+war in Ukraine. Your email emerged as one of the lucky winners=20
+after an electronically conducted ballot process.
 
-diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-index 19732a47c8bd..925f90fd5885 100644
---- a/drivers/staging/media/zoran/videocodec.c
-+++ b/drivers/staging/media/zoran/videocodec.c
-@@ -22,7 +22,7 @@ MODULE_PARM_DESC(videocodec_debug, "Debug level (0-4)");
- 
- #define dprintk(num, format, args...) \
- 	do { \
--		if (videocodec_debug >= num) \
-+		if (videocodec_debug >= (num)) \
- 			printk(format, ##args); \
- 	} while (0)
- 
--- 
-2.25.1
+I have a donation grant worth $8,500,000.00 Dollars for you. You=20
+are to contact Mr. BRADLEY WRUBEL for more information if you're=20
+interested.
 
+Mr. BRADLEY WRUBEL
+bradleywrubel@scotfoundation.org
+
+Congratulations.
+
+Yours Sincerely
+Mackenzie Scott
+The Scott Foundation
+P.O. Box 1513
+Los Gatos, CA 95031-1513
+USA.

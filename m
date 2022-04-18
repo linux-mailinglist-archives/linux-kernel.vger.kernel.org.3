@@ -2,45 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3332150545E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:04:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69341505503
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240686AbiDRNGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:06:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41940 "EHLO
+        id S241441AbiDRNMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240258AbiDRMzJ (ORCPT
+        with ESMTP id S242074AbiDRM7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 877FE6418;
-        Mon, 18 Apr 2022 05:36:17 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D08227140;
+        Mon, 18 Apr 2022 05:39:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E2B6B80EDC;
-        Mon, 18 Apr 2022 12:36:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80BFDC385A1;
-        Mon, 18 Apr 2022 12:36:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B779D611E4;
+        Mon, 18 Apr 2022 12:39:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86BD4C385A7;
+        Mon, 18 Apr 2022 12:39:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285374;
-        bh=in+Tjq7u2HtEgipwNeDYze3KLACNyZ5YX46Zm/zoWb0=;
+        s=korg; t=1650285598;
+        bh=ftcoYDX4lSTjIY+xR9BpC/tIkm4h6JHMIQXWmz8MeKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s29PyUG4H6huEKv/CJZECgcjrq/vQznzcDiaV88l4MwGZKP0lpBptoyeDaMl7bjYi
-         ETvAGYxyYXmNhkarz3sqVjizfVOouQduD+CYaSoyQb30JX3VXqmiDPMwswdkL297Mu
-         +DUiVxzNEr9BnlcUUsuAoAGDKELiEtHDcs44apsQ=
+        b=pvwTmHS7aDZoGYv8uJDb4gEtKff+z5M2tW/VuZHUkmsuUVI3kyf8RLFVe2fRtZATb
+         PZ75GUK3B99mHzkZ5t6a14RzMZewFyzC0SjHCltvAfuDS0dXrOqz+J03xOAt3UAKvR
+         0Fk/HEaVEet738iDjafsxC1TLFxaolIUT++nXTm8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Wolfram Sang <wsa@kernel.org>
-Subject: [PATCH 5.15 171/189] i2c: dev: check return value when calling dev_set_name()
+        stable@vger.kernel.org, Borislav Petkov <bp@suse.de>,
+        Frank Li <Frank.li@nxp.com>, Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 069/105] perf/imx_ddr: Fix undefined behavior due to shift overflowing the constant
 Date:   Mon, 18 Apr 2022 14:13:11 +0200
-Message-Id: <20220418121207.588078401@linuxfoundation.org>
+Message-Id: <20220418121148.450631845@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +62,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+From: Borislav Petkov <bp@suse.de>
 
-commit 993eb48fa199b5f476df8204e652eff63dd19361 upstream.
+[ Upstream commit d02b4dd84e1a90f7f1444d027c0289bf355b0d5a ]
 
-If dev_set_name() fails, the dev_name() is null, check the return
-value of dev_set_name() to avoid the null-ptr-deref.
+Fix:
 
-Fixes: 1413ef638aba ("i2c: dev: Fix the race between the release of i2c_dev and cdev")
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Wolfram Sang <wsa@kernel.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  In file included from <command-line>:0:0:
+  In function ‘ddr_perf_counter_enable’,
+      inlined from ‘ddr_perf_irq_handler’ at drivers/perf/fsl_imx8_ddr_perf.c:651:2:
+  ././include/linux/compiler_types.h:352:38: error: call to ‘__compiletime_assert_729’ \
+	declared with attribute error: FIELD_PREP: mask is not constant
+    _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+...
+
+See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+details as to why it triggers with older gccs only.
+
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: Frank Li <Frank.li@nxp.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Sascha Hauer <s.hauer@pengutronix.de>
+Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+Cc: Fabio Estevam <festevam@gmail.com>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Acked-by: Will Deacon <will@kernel.org>
+Link: https://lore.kernel.org/r/20220405151517.29753-10-bp@alien8.de
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/i2c/i2c-dev.c |   15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ drivers/perf/fsl_imx8_ddr_perf.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/i2c/i2c-dev.c
-+++ b/drivers/i2c/i2c-dev.c
-@@ -668,16 +668,21 @@ static int i2cdev_attach_adapter(struct
- 	i2c_dev->dev.class = i2c_dev_class;
- 	i2c_dev->dev.parent = &adap->dev;
- 	i2c_dev->dev.release = i2cdev_dev_release;
--	dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
-+
-+	res = dev_set_name(&i2c_dev->dev, "i2c-%d", adap->nr);
-+	if (res)
-+		goto err_put_i2c_dev;
+diff --git a/drivers/perf/fsl_imx8_ddr_perf.c b/drivers/perf/fsl_imx8_ddr_perf.c
+index 7f7bc0993670..e09bbf3890c4 100644
+--- a/drivers/perf/fsl_imx8_ddr_perf.c
++++ b/drivers/perf/fsl_imx8_ddr_perf.c
+@@ -29,7 +29,7 @@
+ #define CNTL_OVER_MASK		0xFFFFFFFE
  
- 	res = cdev_device_add(&i2c_dev->cdev, &i2c_dev->dev);
--	if (res) {
--		put_i2c_dev(i2c_dev, false);
--		return res;
--	}
-+	if (res)
-+		goto err_put_i2c_dev;
+ #define CNTL_CSV_SHIFT		24
+-#define CNTL_CSV_MASK		(0xFF << CNTL_CSV_SHIFT)
++#define CNTL_CSV_MASK		(0xFFU << CNTL_CSV_SHIFT)
  
- 	pr_debug("adapter [%s] registered as minor %d\n", adap->name, adap->nr);
- 	return 0;
-+
-+err_put_i2c_dev:
-+	put_i2c_dev(i2c_dev, false);
-+	return res;
- }
- 
- static int i2cdev_detach_adapter(struct device *dev, void *dummy)
+ #define EVENT_CYCLES_ID		0
+ #define EVENT_CYCLES_COUNTER	0
+-- 
+2.35.1
+
 
 

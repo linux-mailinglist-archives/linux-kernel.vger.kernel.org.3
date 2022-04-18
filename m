@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163335056E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559BB5057A1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244630AbiDRNrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
+        id S245149AbiDRNwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243837AbiDRN3I (ORCPT
+        with ESMTP id S243901AbiDRN3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:29:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF09E3FDBF;
-        Mon, 18 Apr 2022 05:53:54 -0700 (PDT)
+        Mon, 18 Apr 2022 09:29:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809DE403E7;
+        Mon, 18 Apr 2022 05:53:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5408C61256;
-        Mon, 18 Apr 2022 12:53:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1EBC385A1;
-        Mon, 18 Apr 2022 12:53:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3104BB80D9C;
+        Mon, 18 Apr 2022 12:53:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E854C385A8;
+        Mon, 18 Apr 2022 12:53:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286433;
-        bh=/2x/q4mlIFL9BwYCaIST01f86A6ArGaP8uHZ5o93I1E=;
+        s=korg; t=1650286436;
+        bh=WzYIqXqByWHCrwmyZ4RHJr/fXLMPS+3t8jJ7fa2r+80=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=na/69LXuqYuvEche5TPOtKghh2NdbAE4MbBdp87un2oSTVauoAAxSb9hD8ssAOiMY
-         c3CSH14QH9qiowR9MGpjSoQ1FiMT60DsIpuXG9pL2FjDwey7PdgYRH1mOfC57BSzRX
-         L/KHcQscFN0wtu8ZpfymBLW9ArajnBEtY6sWj9Qg=
+        b=gBzPQTm2GntKVDojf1f6S0mTth0YFFVjndsWuzKVpyTf3h81QRkKED2FpDpUiRArL
+         nvOP4PuPVvfwoQ62pJlCbtYlSnzaa36zQhGULk86bKHI0IxI5OI7tz52VZ8jcNrYqT
+         94m2cjzKOTScqIZJTDbfeGHTOwP5Fe/bbU2VWTRw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        stable@vger.kernel.org, Taniya Das <tdas@codeaurora.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 134/284] iio: adc: Add check for devm_request_threaded_irq
-Date:   Mon, 18 Apr 2022 14:11:55 +0200
-Message-Id: <20220418121215.170464131@linuxfoundation.org>
+Subject: [PATCH 4.14 135/284] clk: qcom: clk-rcg2: Update the frac table for pixel clock
+Date:   Mon, 18 Apr 2022 14:11:56 +0200
+Message-Id: <20220418121215.214865498@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
 References: <20220418121210.689577360@linuxfoundation.org>
@@ -55,36 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Taniya Das <tdas@codeaurora.org>
 
-[ Upstream commit b30537a4cedcacf0ade2f33ebb7610178ed1e7d7 ]
+[ Upstream commit b527358cb4cd58a8279c9062b0786f1fab628fdc ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value and return
-error if fails.
+Support the new numerator and denominator for pixel clock on SM8350 and
+support rgb101010, RGB888 use cases on SM8450.
 
-Fixes: fa659a40b80b ("iio: adc: twl6030-gpadc: Use devm_* API family")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220224062849.3280966-1-jiasheng@iscas.ac.cn
-Signed-off-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Fixes: 99cbd064b059f ("clk: qcom: Support display RCG clocks")
+Signed-off-by: Taniya Das <tdas@codeaurora.org>
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
+Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Link: https://lore.kernel.org/r/20220227175536.3131-2-tdas@codeaurora.org
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/iio/adc/twl6030-gpadc.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/clk/qcom/clk-rcg2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/iio/adc/twl6030-gpadc.c b/drivers/iio/adc/twl6030-gpadc.c
-index bc0e60b9da45..6a4ec58eb9c5 100644
---- a/drivers/iio/adc/twl6030-gpadc.c
-+++ b/drivers/iio/adc/twl6030-gpadc.c
-@@ -927,6 +927,8 @@ static int twl6030_gpadc_probe(struct platform_device *pdev)
- 	ret = devm_request_threaded_irq(dev, irq, NULL,
- 				twl6030_gpadc_irq_handler,
- 				IRQF_ONESHOT, "twl6030_gpadc", indio_dev);
-+	if (ret)
-+		return ret;
+diff --git a/drivers/clk/qcom/clk-rcg2.c b/drivers/clk/qcom/clk-rcg2.c
+index 6091d9b6a27b..9743af6ae84f 100644
+--- a/drivers/clk/qcom/clk-rcg2.c
++++ b/drivers/clk/qcom/clk-rcg2.c
+@@ -702,6 +702,7 @@ static const struct frac_entry frac_table_pixel[] = {
+ 	{ 2, 9 },
+ 	{ 4, 9 },
+ 	{ 1, 1 },
++	{ 2, 3 },
+ 	{ }
+ };
  
- 	ret = twl6030_gpadc_enable_irq(TWL6030_GPADC_RT_SW1_EOC_MASK);
- 	if (ret < 0) {
 -- 
 2.34.1
 

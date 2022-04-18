@@ -2,49 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5FC5055DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B8285054F5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242632AbiDRN2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S241748AbiDRNWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241190AbiDRNFJ (ORCPT
+        with ESMTP id S241735AbiDRND0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:05:09 -0400
+        Mon, 18 Apr 2022 09:03:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5282913E2E;
-        Mon, 18 Apr 2022 05:45:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5090028E24;
+        Mon, 18 Apr 2022 05:44:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0FD10B80D9C;
-        Mon, 18 Apr 2022 12:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5946CC385A7;
-        Mon, 18 Apr 2022 12:45:32 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 01E56B80E4E;
+        Mon, 18 Apr 2022 12:44:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F23FC385A7;
+        Mon, 18 Apr 2022 12:44:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285932;
-        bh=1e+kMqmuq0XgPzihm05kZ+rHyIgwe3Ceg9otdTGMBhY=;
+        s=korg; t=1650285848;
+        bh=W8Qgew+xVsT4zAeS8SnOsUkxaVYgAcTrbSpslSyck9s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PSl/SBRGfFBiSYuqgw53M7ttXamNgQpDeJfDx9Jk1BYeeyF3jmGCH8OEatbmxlsN9
-         jc8lLxlmLDgbs68xNJqErhuYzk8WuIp8Fxdv/KdBP+R9LxKOvwR1S5tD8C+O51VGf2
-         7BwBTAU6v+CU+ccitwB8MCpDSUftoNqSPbIhOkvY=
+        b=Wn+PJ0Kl+ANRs63R0wiqn5d/r6eAZewk+q+NfRkKD50wZqzos+XWJLSikT2tWJZ85
+         2iAJe40i/CkTfgDLHameIRChcfTZAHnAamOSNHFe9UajT0xUdwgxfNxxKUVx6N3I3d
+         nkFsj+jzj92go77YnVFj6CaUWs7Uly1kWflQTJoQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 01/32] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.4 44/63] btrfs: mark resumed async balance as writing
 Date:   Mon, 18 Apr 2022 14:13:41 +0200
-Message-Id: <20220418121127.172096762@linuxfoundation.org>
+Message-Id: <20220418121137.174176151@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
-References: <20220418121127.127656835@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,74 +55,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
+commit a690e5f2db4d1dca742ce734aaff9f3112d63764 upstream.
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+When btrfs balance is interrupted with umount, the background balance
+resumes on the next mount. There is a potential deadlock with FS freezing
+here like as described in commit 26559780b953 ("btrfs: zoned: mark
+relocation as writing"). Mark the process as sb_writing to avoid it.
 
-Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+CC: stable@vger.kernel.org # 4.9+
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Reviewed-by: David Sterba <dsterba@suse.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ fs/btrfs/volumes.c |    2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-index 2b9283d4fcb1..8e7b5a1d2983 100644
---- a/drivers/memory/atmel-ebi.c
-+++ b/drivers/memory/atmel-ebi.c
-@@ -524,20 +524,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
+--- a/fs/btrfs/volumes.c
++++ b/fs/btrfs/volumes.c
+@@ -4320,10 +4320,12 @@ static int balance_kthread(void *data)
+ 	struct btrfs_fs_info *fs_info = data;
+ 	int ret = 0;
  
- 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
--	if (IS_ERR(ebi->smc.regmap))
--		return PTR_ERR(ebi->smc.regmap);
-+	if (IS_ERR(ebi->smc.regmap)) {
-+		ret = PTR_ERR(ebi->smc.regmap);
-+		goto put_node;
-+	}
++	sb_start_write(fs_info->sb);
+ 	mutex_lock(&fs_info->balance_mutex);
+ 	if (fs_info->balance_ctl)
+ 		ret = btrfs_balance(fs_info, fs_info->balance_ctl, NULL);
+ 	mutex_unlock(&fs_info->balance_mutex);
++	sb_end_write(fs_info->sb);
  
- 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
--	if (IS_ERR(ebi->smc.layout))
--		return PTR_ERR(ebi->smc.layout);
-+	if (IS_ERR(ebi->smc.layout)) {
-+		ret = PTR_ERR(ebi->smc.layout);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.clk = of_clk_get(smc_np, 0);
- 	if (IS_ERR(ebi->smc.clk)) {
--		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
--			return PTR_ERR(ebi->smc.clk);
-+		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
-+			ret = PTR_ERR(ebi->smc.clk);
-+			goto put_node;
-+		}
- 
- 		ebi->smc.clk = NULL;
- 	}
-+	of_node_put(smc_np);
- 	ret = clk_prepare_enable(ebi->smc.clk);
- 	if (ret)
- 		return ret;
-@@ -587,6 +594,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	}
- 
- 	return of_platform_populate(np, NULL, NULL, dev);
-+
-+put_node:
-+	of_node_put(smc_np);
-+	return ret;
+ 	return ret;
  }
- 
- static __maybe_unused int atmel_ebi_resume(struct device *dev)
--- 
-2.35.1
-
 
 

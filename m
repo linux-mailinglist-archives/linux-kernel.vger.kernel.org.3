@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864D05051AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FF9F5052E0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239116AbiDRMhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S236180AbiDRMx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238850AbiDRMbX (ORCPT
+        with ESMTP id S240993AbiDRMjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:31:23 -0400
+        Mon, 18 Apr 2022 08:39:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4563265DA;
-        Mon, 18 Apr 2022 05:23:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C2551E3EB;
+        Mon, 18 Apr 2022 05:31:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC55160FA7;
-        Mon, 18 Apr 2022 12:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2F2C385A1;
-        Mon, 18 Apr 2022 12:23:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18817610F4;
+        Mon, 18 Apr 2022 12:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDFFC385AC;
+        Mon, 18 Apr 2022 12:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284634;
-        bh=o9UeWxKkM9jX9uo9YHO5gX9DFUxD0MbX7Flqn3YqACs=;
+        s=korg; t=1650285104;
+        bh=5A2iilz+GY/CVqLC/3lEyDwlSG4xio9NDI5nH4Q8VI8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NDs6gAeoN1SgHcjzAIsaBwkyiPvekOhFH4OhMfbflTaFRU5mSXjhVUOZoubKfhjaQ
-         kWaOy84SiFCeInKvCp3yoNJHimtez938jGVf8IBzR00EGes4yeZGQIzTQgQCYcQML1
-         vjoTej/rBAiRoWmjow6De2DAhLPTHGfYyRWilBCw=
+        b=KXf5E7DKbst23Zq/ulRe/7Gyp+PJtPaBG9e/ChHDMZa+ZuN6N6+Hy0XrF6ixN4Kbf
+         xXqs6ozqP6e+x8q2Qx1uGiLn7KRgz77T/fOLKuHxZPzQR1x+pZRX5TVP7JxCh2Ve69
+         MWWX/rvbY6Xqwihe+9sT+9SC6s8UPFh6EXNota3I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tushar Patel <tushar.patel@amd.com>,
-        Felix Kuehling <felix.kuehling@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
+        stable@vger.kernel.org, Antoine Tenart <atenart@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 138/219] drm/amdkfd: Fix Incorrect VMIDs passed to HWS
+Subject: [PATCH 5.15 087/189] netfilter: nf_tables: nft_parse_register can return a negative value
 Date:   Mon, 18 Apr 2022 14:11:47 +0200
-Message-Id: <20220418121210.756181971@linuxfoundation.org>
+Message-Id: <20220418121202.977312655@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,60 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tushar Patel <tushar.patel@amd.com>
+From: Antoine Tenart <atenart@kernel.org>
 
-[ Upstream commit b7dfbd2e601f3fee545bc158feceba4f340fe7cf ]
+[ Upstream commit 6c6f9f31ecd47dce1d0dafca4bec8805f9bc97cd ]
 
-Compute-only GPUs have more than 8 VMIDs allocated to KFD. Fix
-this by passing correct number of VMIDs to HWS
+Since commit 6e1acfa387b9 ("netfilter: nf_tables: validate registers
+coming from userspace.") nft_parse_register can return a negative value,
+but the function prototype is still returning an unsigned int.
 
-v2: squash in warning fix (Alex)
-
-Signed-off-by: Tushar Patel <tushar.patel@amd.com>
-Reviewed-by: Felix Kuehling <felix.kuehling@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Fixes: 6e1acfa387b9 ("netfilter: nf_tables: validate registers coming from userspace.")
+Signed-off-by: Antoine Tenart <atenart@kernel.org>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c |  2 +-
- drivers/gpu/drm/amd/amdkfd/kfd_device.c | 11 +++--------
- 2 files changed, 4 insertions(+), 9 deletions(-)
+ net/netfilter/nf_tables_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-index 284892b2d3b4..c853266957ce 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-@@ -686,7 +686,7 @@ MODULE_PARM_DESC(sched_policy,
-  * Maximum number of processes that HWS can schedule concurrently. The maximum is the
-  * number of VMIDs assigned to the HWS, which is also the default.
-  */
--int hws_max_conc_proc = 8;
-+int hws_max_conc_proc = -1;
- module_param(hws_max_conc_proc, int, 0444);
- MODULE_PARM_DESC(hws_max_conc_proc,
- 	"Max # processes HWS can execute concurrently when sched_policy=0 (0 = no concurrency, #VMIDs for KFD = Maximum(default))");
-diff --git a/drivers/gpu/drm/amd/amdkfd/kfd_device.c b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-index 2b65d0acae2c..2fdbe2f475e4 100644
---- a/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-+++ b/drivers/gpu/drm/amd/amdkfd/kfd_device.c
-@@ -480,15 +480,10 @@ bool kgd2kfd_device_init(struct kfd_dev *kfd,
- 	}
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 3e7f97a70721..2feb88ffcd81 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -9208,7 +9208,7 @@ int nft_parse_u32_check(const struct nlattr *attr, int max, u32 *dest)
+ }
+ EXPORT_SYMBOL_GPL(nft_parse_u32_check);
  
- 	/* Verify module parameters regarding mapped process number*/
--	if ((hws_max_conc_proc < 0)
--			|| (hws_max_conc_proc > kfd->vm_info.vmid_num_kfd)) {
--		dev_err(kfd_device,
--			"hws_max_conc_proc %d must be between 0 and %d, use %d instead\n",
--			hws_max_conc_proc, kfd->vm_info.vmid_num_kfd,
--			kfd->vm_info.vmid_num_kfd);
-+	if (hws_max_conc_proc >= 0)
-+		kfd->max_proc_per_quantum = min((u32)hws_max_conc_proc, kfd->vm_info.vmid_num_kfd);
-+	else
- 		kfd->max_proc_per_quantum = kfd->vm_info.vmid_num_kfd;
--	} else
--		kfd->max_proc_per_quantum = hws_max_conc_proc;
+-static unsigned int nft_parse_register(const struct nlattr *attr, u32 *preg)
++static int nft_parse_register(const struct nlattr *attr, u32 *preg)
+ {
+ 	unsigned int reg;
  
- 	/* calculate max size of mqds needed for queues */
- 	size = max_num_of_queues_per_device *
 -- 
 2.35.1
 

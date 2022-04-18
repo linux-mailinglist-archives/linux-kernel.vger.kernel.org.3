@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFECF505698
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20AD50523D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243671AbiDRNiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53776 "EHLO
+        id S240164AbiDRMnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:43:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243913AbiDRNKg (ORCPT
+        with ESMTP id S238962AbiDRMdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:10:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FE4F21833;
-        Mon, 18 Apr 2022 05:50:09 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8772120F5B;
+        Mon, 18 Apr 2022 05:27:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEC0061257;
-        Mon, 18 Apr 2022 12:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C49E6C385A7;
-        Mon, 18 Apr 2022 12:50:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D25561009;
+        Mon, 18 Apr 2022 12:27:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C6CFC385A1;
+        Mon, 18 Apr 2022 12:27:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286208;
-        bh=5ei0AvfUFz5VyRFx6wipvp0Rm05AiCHILJrtzFpMfyM=;
+        s=korg; t=1650284832;
+        bh=TonmvN+JcIpROxF13maxx2oGiva/r9GnVhHhVGDmt5w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fmOQD4DDCT4I7oo0x03HPTIhijZKImZ5MYuOWeFARrs22OiOcBuQShh+BWgGyb4O+
-         49zqfPo29Z/TYdd2b1UUN1LAno+BZbqQX7L+4a2cK+fj+cwmniCpxI7NB/v0rLH5EK
-         vgK7HWZUf9Oyt7sKo0FmxwVCb8WGjJ59Lreg1VJs=
+        b=bot7jGjU/1uSQ/ABOTtjt4Z9X4TBsRRg2MnLGiTVUyMp1I1Of653AO3rQCLwFvITI
+         zEt7R7qNre5ROjMn/g4Jg8pYFFcMn0FDtpSf0fNjp4uFlQ2+I7f9KhMPA2K9p+Mcuf
+         1Xc7HTj6UoSJ+uftVGa2CUjpa9yu58LSFG2c6x4U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 062/284] hwrng: atmel - disable trng on failure path
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 023/189] ALSA: aw2: Fix the missing snd_card_free() call at probe error
 Date:   Mon, 18 Apr 2022 14:10:43 +0200
-Message-Id: <20220418121212.455206444@linuxfoundation.org>
+Message-Id: <20220418121201.173965651@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,34 +53,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Claudiu Beznea <claudiu.beznea@microchip.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit a223ea9f89ab960eb254ba78429efd42eaf845eb ]
+commit bf4067e8a19eae67c45659a956c361d59251ba57 upstream.
 
-Call atmel_trng_disable() on failure path of probe.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Fixes: a1fa98d8116f ("hwrng: atmel - disable TRNG during suspend")
-Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes it by calling snd_card_free() manually on the error
+from the probe callback.
+
+Fixes: 33631012cd06 ("ALSA: aw2: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-32-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/char/hw_random/atmel-rng.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/aw2/aw2-alsa.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/char/hw_random/atmel-rng.c b/drivers/char/hw_random/atmel-rng.c
-index 661c82cde0f2..92a8960ceba5 100644
---- a/drivers/char/hw_random/atmel-rng.c
-+++ b/drivers/char/hw_random/atmel-rng.c
-@@ -95,6 +95,7 @@ static int atmel_trng_probe(struct platform_device *pdev)
+diff --git a/sound/pci/aw2/aw2-alsa.c b/sound/pci/aw2/aw2-alsa.c
+index d56f126d6fdd..29a4bcdec237 100644
+--- a/sound/pci/aw2/aw2-alsa.c
++++ b/sound/pci/aw2/aw2-alsa.c
+@@ -275,7 +275,7 @@ static int snd_aw2_probe(struct pci_dev *pci,
+ 	/* (3) Create main component */
+ 	err = snd_aw2_create(card, pci);
+ 	if (err < 0)
+-		return err;
++		goto error;
  
- err_register:
- 	clk_disable_unprepare(trng->clk);
-+	atmel_trng_disable(trng);
- 	return ret;
+ 	/* initialize mutex */
+ 	mutex_init(&chip->mtx);
+@@ -294,13 +294,17 @@ static int snd_aw2_probe(struct pci_dev *pci,
+ 	/* (6) Register card instance */
+ 	err = snd_card_register(card);
+ 	if (err < 0)
+-		return err;
++		goto error;
+ 
+ 	/* (7) Set PCI driver data */
+ 	pci_set_drvdata(pci, card);
+ 
+ 	dev++;
+ 	return 0;
++
++ error:
++	snd_card_free(card);
++	return err;
  }
  
+ /* open callback */
 -- 
-2.34.1
+2.35.2
 
 
 

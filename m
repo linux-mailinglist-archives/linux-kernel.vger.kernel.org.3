@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE712505763
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:53:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5B750534B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:53:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245297AbiDRNxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S240519AbiDRM4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244713AbiDRNat (ORCPT
+        with ESMTP id S233251AbiDRMn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA30E0FE;
-        Mon, 18 Apr 2022 05:55:03 -0700 (PDT)
+        Mon, 18 Apr 2022 08:43:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122ED26AD8;
+        Mon, 18 Apr 2022 05:32:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13ED160FE8;
-        Mon, 18 Apr 2022 12:55:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 192E8C385A7;
-        Mon, 18 Apr 2022 12:55:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B1652B80EDC;
+        Mon, 18 Apr 2022 12:32:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209DCC385A8;
+        Mon, 18 Apr 2022 12:32:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286502;
-        bh=ArEFoaSFryx8GdalJQBJX+zoEu1WRX8cLaTmZZD7D+s=;
+        s=korg; t=1650285146;
+        bh=udydudFpXI5RsOzbFPzo0ugZyhEPmUnyeJk9tXbSHNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nRZ8dSVWG2J6chj9ksHThBrsAU6PgejwaobxZOuOfnOWROyqfeSljSOqGDyh5h8ci
-         BDUM6ZcyEHLBNb3SNI10VCeLc5ssqS1fgp8sE9pzeLZmvvz5Cc34Nt23388tUKClMJ
-         rodIoDXPJvfVyQ2v99zLhuQXZYe6ZH4s2oro3CXY=
+        b=FZRsV4N1TunqLWB86XYmvmcZqIbeJpmvZR9Zu41tHl7eTgYRL0ydkV6PQJHFcSwHv
+         LKp1s/ponMO60ORdHkYkwMix1aImNfqCsglfjes1o0hICR9onzvR13EwA5Ut3xZx3a
+         jcvWj74OZgTAUA7XjU5UwIq1X7IhY9Bm7CIjLvpU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 154/284] lib/test: use after free in register_test_dev_kmod()
-Date:   Mon, 18 Apr 2022 14:12:15 +0200
-Message-Id: <20220418121216.079476391@linuxfoundation.org>
+        stable@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
+        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
+        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 116/189] Drivers: hv: vmbus: Deactivate sysctl_record_panic_msg by default in isolated guests
+Date:   Mon, 18 Apr 2022 14:12:16 +0200
+Message-Id: <20220418121203.790593859@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dan Carpenter <dan.carpenter@oracle.com>
+From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
 
-[ Upstream commit dc0ce6cc4b133f5f2beb8b47dacae13a7d283c2c ]
+[ Upstream commit 9f8b577f7b43b2170628d6c537252785dcc2dcea ]
 
-The "test_dev" pointer is freed but then returned to the caller.
+hv_panic_page might contain guest-sensitive information, do not dump it
+over to Hyper-V by default in isolated guests.
 
-Fixes: d9c6a72d6fa2 ("kmod: add test driver to stress test the module loader")
-Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+While at it, update some comments in hyperv_{panic,die}_event().
+
+Reported-by: Dexuan Cui <decui@microsoft.com>
+Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+Reviewed-by: Dexuan Cui <decui@microsoft.com>
+Link: https://lore.kernel.org/r/20220301141135.2232-1-parri.andrea@gmail.com
+Signed-off-by: Wei Liu <wei.liu@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/test_kmod.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/hv/vmbus_drv.c | 18 ++++++++++++------
+ 1 file changed, 12 insertions(+), 6 deletions(-)
 
-diff --git a/lib/test_kmod.c b/lib/test_kmod.c
-index c0ce0156d54b..74f8d386f85e 100644
---- a/lib/test_kmod.c
-+++ b/lib/test_kmod.c
-@@ -1162,6 +1162,7 @@ static struct kmod_test_device *register_test_dev_kmod(void)
- 	if (ret) {
- 		pr_err("could not register misc device: %d\n", ret);
- 		free_test_dev_kmod(test_dev);
-+		test_dev = NULL;
- 		goto out;
- 	}
+diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
+index a939ca1a8d54..aea8125a4db8 100644
+--- a/drivers/hv/vmbus_drv.c
++++ b/drivers/hv/vmbus_drv.c
+@@ -76,8 +76,8 @@ static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
  
+ 	/*
+ 	 * Hyper-V should be notified only once about a panic.  If we will be
+-	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
+-	 * the notification here.
++	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
++	 * here.
+ 	 */
+ 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE
+ 	    && hyperv_report_reg()) {
+@@ -99,8 +99,8 @@ static int hyperv_die_event(struct notifier_block *nb, unsigned long val,
+ 
+ 	/*
+ 	 * Hyper-V should be notified only once about a panic.  If we will be
+-	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
+-	 * the notification here.
++	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
++	 * here.
+ 	 */
+ 	if (hyperv_report_reg())
+ 		hyperv_report_panic(regs, val, true);
+@@ -1545,14 +1545,20 @@ static int vmbus_bus_init(void)
+ 	if (ret)
+ 		goto err_connect;
+ 
++	if (hv_is_isolation_supported())
++		sysctl_record_panic_msg = 0;
++
+ 	/*
+ 	 * Only register if the crash MSRs are available
+ 	 */
+ 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
+ 		u64 hyperv_crash_ctl;
+ 		/*
+-		 * Sysctl registration is not fatal, since by default
+-		 * reporting is enabled.
++		 * Panic message recording (sysctl_record_panic_msg)
++		 * is enabled by default in non-isolated guests and
++		 * disabled by default in isolated guests; the panic
++		 * message recording won't be available in isolated
++		 * guests should the following registration fail.
+ 		 */
+ 		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
+ 		if (!hv_ctl_table_hdr)
 -- 
-2.34.1
+2.35.1
 
 
 

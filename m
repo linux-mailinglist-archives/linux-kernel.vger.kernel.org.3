@@ -2,60 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A41C1504C43
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:23:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED782504C4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbiDRFZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 01:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54906 "EHLO
+        id S232542AbiDRFar (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 01:30:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiDRFZv (ORCPT
+        with ESMTP id S233504AbiDRFaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 01:25:51 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DB81835F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 22:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650259393; x=1681795393;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=iQcjTCb6Q+ghre79b3gzNiS2TrP3j5XZAtf78c1/8s4=;
-  b=ZA4R1rU0M06FvaXF+AZBuPjykZd86HzVJgXNieetn66evJRetJFs+jy6
-   v/NR5B1Fd2NaPhh/KTx3mWddSdx3c98RC+INNCFGxT6Q0NmYfB6M5qLuW
-   25VzRqjl3ndlkvzw13Lu5CboCJ6kulfDlZukymi4S3JFeo7KbReH4ZKom
-   e8QvRrt1BxTxF4ofVhh/bNxQeUgJI4KhlKUpGBEsUoolao1h0rsK013bE
-   tPriajBK5q7t67h1MMOfCM2ifTs3d9D/2RcAsKvgkJ9TESuBcU1tVjA8E
-   VAegt7Lezt37VNyWga0fdUzfntvbI0ivuqpCCZO2uEGhuN0Dy/zs1r8K0
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="263211429"
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="263211429"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 22:23:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="625180658"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Apr 2022 22:23:11 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngJqx-0004Mp-4s;
-        Mon, 18 Apr 2022 05:23:11 +0000
-Date:   Mon, 18 Apr 2022 13:22:09 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alexander Fomichev <fomichev.ru@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-ntb@googlegroups.com,
-        linux-kernel@vger.kernel.org, Jon Mason <jdmason@kudzu.us>
-Subject: [jonmason-ntb:ntb-next 2/2] drivers/ntb/test/ntb_perf.c:1144:
- undefined reference to `__umoddi3'
-Message-ID: <202204181358.WWjsittG-lkp@intel.com>
+        Mon, 18 Apr 2022 01:30:46 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B99C12AEB
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 22:28:07 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id s16so1845503oie.0
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 22:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=7DgzO/pa67nPfiBA+VFEyWTBNJsOUG34PB2hcnwbIoc=;
+        b=bd7K3fqHtTpDsDgDTYOvqsmdjMsec5ObOtdaj9zcjM8jz8dlxHRaRZSPjXBwSgWLNv
+         nMLNffxgLORyfwQQefNwCqVdVg+BtluJuRHb23NbrtkL1sooIT80tL2rKo/iE8UOubXE
+         A05na/OraG4ZhFZFQLXB8RrRvsCtdp6X2YPJARca0eTAoe/tLZYJpaM/xLSZBw6h9kr6
+         uV0Crwx44CIClY/QIxPlvgp6m0G71jWNas+dZimSPynCJ5ZMGoCva3enZO07QjJmQrhS
+         xqxMOKoW2wB8U5M50EPh6qsWF5CQcsbWPGz1rR9YwTQYHMqZ3SPuFch6weG4Lkwpv821
+         KGbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=7DgzO/pa67nPfiBA+VFEyWTBNJsOUG34PB2hcnwbIoc=;
+        b=JNsLG7ogT2ryKU1lSdW0mkoFjtOYFxIyYmXQsVlpjSE3TpuonE5NojZzB+WBOA/EZv
+         n87f78vbL2wjYz81xDugCViqwDNvJXj7YupiXOr+ne9+qCFrjz3vjyEGrZOzw/dOly9o
+         18y10YfOV3hTbqjgHevdfxeJGWW0SokbP4VBeBW/WEEJojkW8wonRlOQQkSPCPz6Wl3o
+         YOYWFk0JPx4o3su5XIm177J56VT4mfau/E61JyrHMZZoq4U5mm0qHMYA2kseqbU4L50P
+         jHikil5SyAPo9eCGG6lqm1S9TazERGYbAQAk1M7qEDT2dwbdNqoSyUKmP5CRwPB1iI4u
+         kIMA==
+X-Gm-Message-State: AOAM531KSk17Yw37JLb9VDl7ur3nc9QFc4juoml+1yi8Bm7LI1cNPexb
+        F427gxh0ZCxx/VCLcB2iCVk9hINr3piQpv97JPDgn5D/G3IMJA==
+X-Google-Smtp-Source: ABdhPJwTmeemQ1FlD7kIucZJFielIhrz/iqz0jntpX5/XzAFZlSiCfDlDHE/Kfrf67Mxbfm59seuG3cv3yukIX8Cbwg=
+X-Received: by 2002:a05:6808:1287:b0:2da:5cea:fb11 with SMTP id
+ a7-20020a056808128700b002da5ceafb11mr4227916oiw.147.1650259686315; Sun, 17
+ Apr 2022 22:28:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com> <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+In-Reply-To: <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Mon, 18 Apr 2022 10:57:55 +0530
+Message-ID: <CAH=2Ntx1D8C6xu+RysO0o5OkG5kPMMJ-Xr+B-udLtizY+4HiaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
+ to json format
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,92 +72,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jonmason/ntb ntb-next
-head:   10003e852471b1214f4383d79592497b3f4c7b39
-commit: 10003e852471b1214f4383d79592497b3f4c7b39 [2/2] ntb_perf: extend with burst/poll/doorbell latency measurement
-config: i386-randconfig-c021-20220418 (https://download.01.org/0day-ci/archive/20220418/202204181358.WWjsittG-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/jonmason/ntb/commit/10003e852471b1214f4383d79592497b3f4c7b39
-        git remote add jonmason-ntb https://github.com/jonmason/ntb
-        git fetch --no-tags jonmason-ntb ntb-next
-        git checkout 10003e852471b1214f4383d79592497b3f4c7b39
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Hi Kuldeep,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+On Sun, 10 Apr 2022 at 23:21, Kuldeep Singh <singh.kuldeep87k@gmail.com> wrote:
+>
+> Convert Qualcomm BAM DMA controller binding to DT schema format using
+> json schema.
 
-All errors (new ones prefixed by >>):
+Please see <https://lore.kernel.org/lkml/20220211214941.f55q5yksittut3ep@amazon.com/T/#m6700c2695ee78e79060ac338d208ffd08ac39592>,
+I already have an effort ongoing for converting qcom bam DMA bindings
+to YAML format.
 
-   ld: drivers/ntb/test/ntb_perf.o: in function `perf_run_latency':
->> drivers/ntb/test/ntb_perf.c:1144: undefined reference to `__umoddi3'
+I will send a new version of the same shortly. Please try and use the same.
 
+Thanks,
+Bhupesh
 
-vim +1144 drivers/ntb/test/ntb_perf.c
-
-  1113	
-  1114	static int perf_run_latency(struct perf_thread *pthr)
-  1115	{
-  1116		struct perf_peer *peer = pthr->perf->test_peer;
-  1117		struct ntb_dev *ntb = pthr->perf->ntb;
-  1118		void *flt_src;
-  1119		void __iomem *flt_dst, *bnd_dst;
-  1120		int ret;
-  1121		u64 stop_at = ktime_get_real_fast_ns() + lat_time_ms * NSEC_PER_MSEC;
-  1122	
-  1123		pthr->tries = 0;
-  1124		pthr->latency = ktime_get();
-  1125		flt_src = pthr->src;
-  1126		flt_dst = peer->outbuf;
-  1127		bnd_dst = peer->outbuf + peer->outbuf_size;
-  1128	
-  1129		while (ktime_get_real_fast_ns() < stop_at) {
-  1130			ret = perf_copy_chunk(pthr, flt_dst, flt_src, 1, false);
-  1131			if (ret) {
-  1132				dev_err(&ntb->dev, "%d: Latency testing error %d\n",
-  1133					pthr->tidx, ret);
-  1134				pthr->latency = ktime_set(0, 0);
-  1135				return ret;
-  1136			}
-  1137	
-  1138			pthr->tries++;
-  1139			flt_dst++;
-  1140			flt_src++;
-  1141	
-  1142			if (flt_dst >= bnd_dst || flt_dst < peer->outbuf) {
-  1143				flt_dst = peer->outbuf;
-> 1144				flt_src = pthr->src;
-  1145			}
-  1146	
-  1147			/* Avoid processor soft lock-ups */
-  1148			if (!(pthr->tries % RESCHEDULE_RATIO))
-  1149				schedule();
-  1150		}
-  1151	
-  1152		/* Stop timer */
-  1153		pthr->latency = ktime_sub(ktime_get(), pthr->latency);
-  1154	
-  1155		if (pthr->tries < LAT_MIN_TRIES) {
-  1156			dev_err(&ntb->dev, "%d: Too few steps to measure Latency. "
-  1157					"Increase test time\n", pthr->tidx);
-  1158			pthr->latency = ktime_set(0, 0);
-  1159			return -EINVAL;
-  1160		}
-  1161	
-  1162		dev_dbg(&ntb->dev, "%d: made %llu tries, lasted %llu usecs\n",
-  1163			pthr->tidx, pthr->tries, ktime_to_us(pthr->latency));
-  1164	
-  1165		pthr->latency = ns_to_ktime(ktime_divns(pthr->latency, pthr->tries));
-  1166	
-  1167		dev_dbg(&ntb->dev, "%d: latency %llu us (%llu ns)\n", pthr->tidx,
-  1168			ktime_to_us(pthr->latency), ktime_to_ns(pthr->latency));
-  1169	
-  1170		return 0;
-  1171	}
-  1172	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> Signed-off-by: Kuldeep Singh <singh.kuldeep87k@gmail.com>
+> ---
+>  .../devicetree/bindings/dma/qcom,bam-dma.yaml | 94 +++++++++++++++++++
+>  .../devicetree/bindings/dma/qcom_bam_dma.txt  | 52 ----------
+>  2 files changed, 94 insertions(+), 52 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
+>
+> diff --git a/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> new file mode 100644
+> index 000000000000..b32175d54dca
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/dma/qcom,bam-dma.yaml
+> @@ -0,0 +1,94 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/dma/qcom,bam-dma.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Technologies Inc BAM DMA controller
+> +
+> +maintainers:
+> +  - Andy Gross <agross@kernel.org>
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +allOf:
+> +  - $ref: "dma-controller.yaml#"
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - qcom,bam-v1.3.0
+> +      - qcom,bam-v1.4.0
+> +      - qcom,bam-v1.7.0
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-names:
+> +    items:
+> +      - const: bam_clk
+> +
+> +  "#dma-cells":
+> +    const: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  iommus:
+> +    minItems: 1
+> +    maxItems: 4
+> +
+> +  num-channels:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Indicates supported number of DMA channels in a remotely controlled bam.
+> +
+> +  qcom,controlled-remotely:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Indicates that the bam is controlled by remote proccessor i.e. execution
+> +      environment.
+> +
+> +  qcom,ee:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Indicates the active Execution Environment identifier (0-7) used in the
+> +      secure world.
+> +
+> +  qcom,num-ees:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      Indicates supported number of Execution Environments in a remotely
+> +      controlled bam.
+> +
+> +  qcom,powered-remotely:
+> +    $ref: /schemas/types.yaml#/definitions/flag
+> +    description:
+> +      Indicates that the bam is powered up by a remote processor but must be
+> +      initialized by the local processor.
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - "#dma-cells"
+> +  - interrupts
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +    #include <dt-bindings/clock/qcom,gcc-msm8974.h>
+> +
+> +    dma-controller@f9944000 {
+> +        compatible = "qcom,bam-v1.4.0";
+> +        reg = <0xf9944000 0x15000>;
+> +        interrupts = <GIC_SPI 94 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&gcc GCC_BLSP2_AHB_CLK>;
+> +        clock-names = "bam_clk";
+> +        #dma-cells = <1>;
+> +        qcom,ee = <0>;
+> +    };
+> +...
+> diff --git a/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt b/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
+> deleted file mode 100644
+> index 6e9a5497b3f2..000000000000
+> --- a/Documentation/devicetree/bindings/dma/qcom_bam_dma.txt
+> +++ /dev/null
+> @@ -1,52 +0,0 @@
+> -QCOM BAM DMA controller
+> -
+> -Required properties:
+> -- compatible: must be one of the following:
+> - * "qcom,bam-v1.4.0" for MSM8974, APQ8074 and APQ8084
+> - * "qcom,bam-v1.3.0" for APQ8064, IPQ8064 and MSM8960
+> - * "qcom,bam-v1.7.0" for MSM8916
+> -- reg: Address range for DMA registers
+> -- interrupts: Should contain the one interrupt shared by all channels
+> -- #dma-cells: must be <1>, the cell in the dmas property of the client device
+> -  represents the channel number
+> -- clocks: required clock
+> -- clock-names: must contain "bam_clk" entry
+> -- qcom,ee : indicates the active Execution Environment identifier (0-7) used in
+> -  the secure world.
+> -- qcom,controlled-remotely : optional, indicates that the bam is controlled by
+> -  remote proccessor i.e. execution environment.
+> -- qcom,powered-remotely : optional, indicates that the bam is powered up by
+> -  a remote processor but must be initialized by the local processor.
+> -- num-channels : optional, indicates supported number of DMA channels in a
+> -  remotely controlled bam.
+> -- qcom,num-ees : optional, indicates supported number of Execution Environments
+> -  in a remotely controlled bam.
+> -
+> -Example:
+> -
+> -       uart-bam: dma@f9984000 = {
+> -               compatible = "qcom,bam-v1.4.0";
+> -               reg = <0xf9984000 0x15000>;
+> -               interrupts = <0 94 0>;
+> -               clocks = <&gcc GCC_BAM_DMA_AHB_CLK>;
+> -               clock-names = "bam_clk";
+> -               #dma-cells = <1>;
+> -               qcom,ee = <0>;
+> -       };
+> -
+> -DMA clients must use the format described in the dma.txt file, using a two cell
+> -specifier for each channel.
+> -
+> -Example:
+> -       serial@f991e000 {
+> -               compatible = "qcom,msm-uart";
+> -               reg = <0xf991e000 0x1000>
+> -                       <0xf9944000 0x19000>;
+> -               interrupts = <0 108 0>;
+> -               clocks = <&gcc GCC_BLSP1_UART2_APPS_CLK>,
+> -                       <&gcc GCC_BLSP1_AHB_CLK>;
+> -               clock-names = "core", "iface";
+> -
+> -               dmas = <&uart-bam 0>, <&uart-bam 1>;
+> -               dma-names = "rx", "tx";
+> -       };
+> --
+> 2.25.1
+>

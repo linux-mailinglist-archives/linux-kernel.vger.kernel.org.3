@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B795057BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEE02505766
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244427AbiDRNyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:54:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S243995AbiDRNzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244872AbiDRNa7 (ORCPT
+        with ESMTP id S244875AbiDRNa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:30:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148E91EEF1;
-        Mon, 18 Apr 2022 05:56:49 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642341F601;
+        Mon, 18 Apr 2022 05:56:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A393460FD9;
-        Mon, 18 Apr 2022 12:56:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916F1C385A1;
-        Mon, 18 Apr 2022 12:56:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F3F4B80E44;
+        Mon, 18 Apr 2022 12:56:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C44C385A7;
+        Mon, 18 Apr 2022 12:56:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286608;
-        bh=RyYRvTh/gCaabpitJ9QTL82+jjl5OBhyZhWNKY8lAcA=;
+        s=korg; t=1650286610;
+        bh=jpf1n49PwEk7KXAiKU/xbsttVCN7nX+VUnABwoWLeKo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mvogsyMsPle8pu55q1MgFhhZv+Niey59jG2CZhGVVvDNwEjN5/1j8DQAgb+xe5MWR
-         o0n+5LzsXsi8dKaCeYEDQXzAyAfrMkzI3zINmQTNWWgjT32+NwnJz5IKlC2ErrvvBr
-         Yx3NFOqgZTuQLvoQ3nK/tD41ApmnI2Owes5pnSpY=
+        b=mw/TEFT4eT+URZ1P8+Tv8mf1p9wJvqD2kCtFadh5pDrQRnJ2UnkbkRrXu3wjWJTI0
+         mmnntDv4Qb7ctISgqxVvKkaXah9Wjcap0Vy1gyqo1uC+LNBRSEmpKSMTUxt6+pgLXH
+         Ow7PHkl5yzMabCGglosl0KtWu4mzHpnaMLiH+724=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Baokun Li <libaokun1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.14 188/284] ubifs: rename_whiteout: correct old_dir size computing
-Date:   Mon, 18 Apr 2022 14:12:49 +0200
-Message-Id: <20220418121217.081930940@linuxfoundation.org>
+        stable@vger.kernel.org, Hangyu Hua <hbh25y@gmail.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>
+Subject: [PATCH 4.14 189/284] can: mcba_usb: mcba_usb_start_xmit(): fix double dev_kfree_skb in error path
+Date:   Mon, 18 Apr 2022 14:12:50 +0200
+Message-Id: <20220418121217.109843903@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
 References: <20220418121210.689577360@linuxfoundation.org>
@@ -55,35 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Baokun Li <libaokun1@huawei.com>
+From: Hangyu Hua <hbh25y@gmail.com>
 
-commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
+commit 04c9b00ba83594a29813d6b1fb8fdc93a3915174 upstream.
 
-When renaming the whiteout file, the old whiteout file is not deleted.
-Therefore, we add the old dentry size to the old dir like XFS.
-Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
-in check_indes.
+There is no need to call dev_kfree_skb() when usb_submit_urb() fails
+because can_put_echo_skb() deletes original skb and
+can_free_echo_skb() deletes the cloned skb.
 
-Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
-Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
+Fixes: 51f3baad7de9 ("can: mcba_usb: Add support for Microchip CAN BUS Analyzer")
+Link: https://lore.kernel.org/all/20220311080208.45047-1-hbh25y@gmail.com
+Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
+Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/ubifs/dir.c |    3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/can/usb/mcba_usb.c |    1 -
+ 1 file changed, 1 deletion(-)
 
---- a/fs/ubifs/dir.c
-+++ b/fs/ubifs/dir.c
-@@ -1452,6 +1452,9 @@ static int do_rename(struct inode *old_d
- 			if (unlink)
- 				drop_nlink(old_dir);
- 		}
-+
-+		/* Add the old_dentry size to the old_dir size. */
-+		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
- 	}
+--- a/drivers/net/can/usb/mcba_usb.c
++++ b/drivers/net/can/usb/mcba_usb.c
+@@ -379,7 +379,6 @@ static netdev_tx_t mcba_usb_start_xmit(s
+ xmit_failed:
+ 	can_free_echo_skb(priv->netdev, ctx->ndx);
+ 	mcba_usb_free_ctx(ctx);
+-	dev_kfree_skb(skb);
+ 	stats->tx_dropped++;
  
- 	old_dir->i_size -= old_sz;
+ 	return NETDEV_TX_OK;
 
 

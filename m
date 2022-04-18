@@ -2,257 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81919504D3F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84652504D43
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236994AbiDRHtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 03:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
+        id S237001AbiDRHvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 03:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbiDRHtH (ORCPT
+        with ESMTP id S231948AbiDRHvX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 03:49:07 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5877812AAC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:46:28 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id i20so17651127wrb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:46:28 -0700 (PDT)
+        Mon, 18 Apr 2022 03:51:23 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1D512AC2;
+        Mon, 18 Apr 2022 00:48:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=s7kT8l0sl8+OhaJJZSAGVVrmqAaGW5JCBigejiw9azA=;
-        b=Bk/TFaAXnpaA67NDY7CYQt2yjCAzscM9fQpgb7ObGschBr57GNCMUTDT161Jf0+T7C
-         zqQ0W07vsb+mzDE3QxFgVg2dlIaongS9a1x6zjnC9B+BoUUidPJjpLb+vbcHPV9VTPXk
-         46zOS7fQJGOVoFji841SzlxJVARNGEpJX9LjJbZxvl0trILE8C0KfG5aXFM7QnqaOBuR
-         XxKRMTwyr5a3gMuaSftqWfZy/6urnrt2BWZpXsdvabt4gKigTU81Z8djom3VXzExaLfF
-         X/UK1ep0oqfksXR1ZHbesEffmtRCuYUyPBFtIsolcGXIaS0AlH8SEONw59dHd28uYw+O
-         261w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=s7kT8l0sl8+OhaJJZSAGVVrmqAaGW5JCBigejiw9azA=;
-        b=Wh6HU/tnTxme4hik4l3gjDl7xM/R5ysziwUCxGyxefpN/6GMK3ATWBaL/zscaDnk7X
-         KivTht3JXfk1NVrw+zdc+d1nzFMjJXHG+wkcOc0V/CXed8nSWUizyh/gOTE8kPTHHvXW
-         dZDDBX7PYvTXApJPFh0aS/kUddLnmayDnSIDnSxoyj2ncq8HbcNRThX965Hxasg57Hd8
-         28b8A1EaQWE6wIPmhIvZTO12ttQGtp5z+BRCi28mwPnelFsKFHp7zSQen8gvxSQAo+2y
-         1Ha7rZnBShQmkUQS6uKr3FdqxU6u9kdvNWdO5yrmGCXbu0uDUY2cdG9fvUW+Q8m/52RN
-         j+7A==
-X-Gm-Message-State: AOAM531Bic+JFLW4rRokJnXRpTPXZxA9ovPYXqD1M3VhPOtuGXaGq/1g
-        FBvktDULpXG6CSFlENbEHHCVUw==
-X-Google-Smtp-Source: ABdhPJxNJMWnPRARXvoGwKBa7j+9kLL/agzx0E6HN78ndKs1xKtDKEXgvpg+KLRbHaXBiaIFVh4VCw==
-X-Received: by 2002:adf:eb86:0:b0:1e6:8c92:af6b with SMTP id t6-20020adfeb86000000b001e68c92af6bmr7340476wrn.116.1650267986749;
-        Mon, 18 Apr 2022 00:46:26 -0700 (PDT)
-Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id l126-20020a1c2584000000b00387d4f35651sm16232460wml.10.2022.04.18.00.46.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 00:46:26 -0700 (PDT)
-Message-ID: <679f73ad-1ee7-3077-407a-aedc5c212c28@linaro.org>
-Date:   Mon, 18 Apr 2022 09:46:25 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650268125; x=1681804125;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=BRAn0U4nU1iXPzkNXhy3le4FtpcPveKVfc77KqxVXkg=;
+  b=jRqZX5oXXoPdd1i5KKEPN4oho5u03Rmt86N4U/NOfo/eKQHUvSte0Cfz
+   SBRUutRxjGc/9MYhFr9zcG0YvIQNQFSGpPSKNZ2YplSlZcFmj15o5KQmz
+   8mu3wx1HGEtMOOo1UWAE7o92h6i26F5ceqWrHHhgO92xphAbyN9VbhSKE
+   s=;
+Received: from ironmsg07-lv.qualcomm.com ([10.47.202.151])
+  by alexa-out.qualcomm.com with ESMTP; 18 Apr 2022 00:48:45 -0700
+X-QCInternal: smtphost
+Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
+  by ironmsg07-lv.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Apr 2022 00:48:43 -0700
+X-QCInternal: smtphost
+Received: from mdalam-linux.qualcomm.com ([10.201.2.71])
+  by ironmsg02-blr.qualcomm.com with ESMTP; 18 Apr 2022 13:18:30 +0530
+Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
+        id 50AE520D38; Mon, 18 Apr 2022 13:18:29 +0530 (IST)
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     mani@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     konrad.dybcio@somainline.org, quic_srichara@quicinc.com,
+        quic_mdalam@quicinc.com, stable@vger.kernel.org
+Subject: [PATCH V5] mtd: rawnand: qcom: fix memory corruption that causes panic
+Date:   Mon, 18 Apr 2022 13:18:27 +0530
+Message-Id: <1650268107-5363-1-git-send-email-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
- <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
- <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
- <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
- <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
- <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
- <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
- <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
- <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
- <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
- <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch fixes a memory corruption that occurred in the
+nand_scan() path for Hynix nand device.
 
-Hi Srinivas,
+On boot, for Hynix nand device will panic at a weird place:
+| Unable to handle kernel NULL pointer dereference at virtual
+  address 00000070
+| [00000070] *pgd=00000000
+| Internal error: Oops: 5 [#1] PREEMPT SMP ARM
+| Modules linked in:
+| CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
+  #38
+| Hardware name: Generic DT based system
+| PC is at nandc_set_reg+0x8/0x1c
+| LR is at qcom_nandc_command+0x20c/0x5d0
+| pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
+| sp : c14adc50  ip : c14ee208  fp : c0cc970c
+| r10: 000000a3  r9 : 00000000  r8 : 00000040
+| r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
+| r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
+| Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
+| Control: 10c5387d  Table: 8020406a  DAC: 00000051
+| Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
+  64 size 2048
+| Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
+| nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
+| qcom_nandc_command from nand_readid_op+0x198/0x1e8
+| nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
+| hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
+| hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
+| nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
+| qcom_nandc_probe from platform_probe+0x58/0xac
 
-thanks for the fix !
+The problem is that the nand_scan()'s qcom_nand_attach_chip callback
+is updating the nandc->max_cwperpage from 1 to 4 or 8 based on page size.
+This causes the sg_init_table of clear_bam_transaction() in the driver's
+qcom_nandc_command() to memset much more than what was initially
+allocated by alloc_bam_transaction().
 
-On 18/04/2022 05:36, srinivas pandruvada wrote:
-> Hi Daniel,
-> 
-> The attached diff fixes the crash,
-> 
-> Also when you run in daemon mode, you need to use some pid lock file.
-> Otherwise it launches multiple daemons.
+This patch will update nandc->max_cwperpage 1 to 4 or 8 based on page
+size in qcom_nand_attach_chip call back after freeing the previously
+allocated memory for bam txn as per nandc->max_cwperpage = 1 and then
+again allocating bam txn as per nandc->max_cwperpage = 4 or 8 based on
+page size in qcom_nand_attach_chip call back itself.
 
-Thanks for the feedback, I'll add it
+Cc: stable@vger.kernel.org
+Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
+Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
+Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+---
+Changes in V5:
 
-   -- Daniel
+ * Incorporated "missing Co-developed-by tag" comment from Mani
+ * Added Co-developed-by tag Co-developed-by: Sricharan R <quic_srichara@quicinc.com>
+ * Incorporated " Add Reviewed-by tag" comment from Mani
+ * Added Reviewed-by tag Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-> 
-> On Sun, 2022-04-17 at 10:20 +0200, Daniel Lezcano wrote:
->>
->> Hi Srinivas,
->>
->> thanks for the information. I've indeed not tested on x86_64 but on
->> ARM64.
->>
->> I'll give a try to reproduce and fix the issue.
->>
->> Thanks again for taking the time to run it
->>
->>     -- Daniel
->>
->> On 17/04/2022 06:23, srinivas pandruvada wrote:
->>> Hi Daniel,
->>>
->>> On Sat, 2022-04-16 at 09:55 +0200, Daniel Lezcano wrote:
->>>>
->>>> Hi Srinivas,
->>>>
->>>>
->>>> On 16/04/2022 05:50, srinivas pandruvada wrote:
->>>>> On Wed, 2022-04-13 at 10:21 -0700, srinivas pandruvada wrote:
->>>>>> On Wed, 2022-04-13 at 17:06 +0200, Rafael J. Wysocki wrote:
->>>>>>> On Wed, Apr 6, 2022 at 4:44 PM Daniel Lezcano <
->>>>>>> daniel.lezcano@linaro.org> wrote:
->>>>>>>>
->>>>>
->>>
->>> [...]
->>>
->>>>> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/the
->>>>> rmal-
->>>>> engine#
->>>>> LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
->>>>> ./thermal-engine -l DEBUG
->>>>> Segmentation fault (core dumped)
->>>>> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/the
->>>>> rmal-
->>>>> engine#
->>>>> LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
->>>>> ./thermal-engine --loglevel DEBUG
->>>>> Segmentation fault (core dumped)
->>>>> root@srinivas-otcpl-icl-u:~/development/linux/tools/thermal/the
->>>>> rmal-
->>>>> engine#
->>>>> LD_LIBRARY_PATH=../lib:../../lib/thermal:$LD_LIBRARY_pATH
->>>>> ./thermal-engine -s
->>>>> Segmentation fault (core dumped)
->>>>
->>>> Is CONFIG_THERMAL_NETLINK set ?
->>>
->>> Yes, Thermometer program works fine. Just thermal-engine fails.
->>> CONFIG_THERMAL=y
->>> CONFIG_THERMAL_NETLINK=y
->>> CONFIG_THERMAL_STATISTICS=y
->>> CONFIG_THERMAL_EMERGENCY_POWEROFF_DELAY_MS=0
->>> CONFIG_THERMAL_HWMON=y
->>> CONFIG_THERMAL_WRITABLE_TRIPS=y
->>> CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
->>> # CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
->>> # CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
->>> CONFIG_THERMAL_GOV_FAIR_SHARE=y
->>> CONFIG_THERMAL_GOV_STEP_WISE=y
->>> CONFIG_THERMAL_GOV_BANG_BANG=y
->>> CONFIG_THERMAL_GOV_USER_SPACE=y
->>> CONFIG_DEVFREQ_THERMAL=y
->>> CONFIG_THERMAL_EMULATION=y
->>>
->>> This may help
->>>
->>> #gdb ./thermal-engine
->>> GNU gdb (Ubuntu 8.1.1-0ubuntu1) 8.1.1
->>> Copyright (C) 2018 Free Software Foundation, Inc.
->>> License GPLv3+: GNU GPL version 3 or later
->>> <http://gnu.org/licenses/gpl.html>
->>> This is free software: you are free to change and redistribute it.
->>> There is NO WARRANTY, to the extent permitted by law.  Type "show
->>> copying"
->>> and "show warranty" for details.
->>> This GDB was configured as "x86_64-linux-gnu".
->>> Type "show configuration" for configuration details.
->>> For bug reporting instructions, please see:
->>> <http://www.gnu.org/software/gdb/bugs/>.
->>> Find the GDB manual and other documentation resources online at:
->>> <http://www.gnu.org/software/gdb/documentation/>.
->>> For help, type "help".
->>> Type "apropos word" to search for commands related to "word"...
->>> Reading symbols from ./thermal-engine...(no debugging symbols
->>> found)...done.
->>> (gdb) run
->>> Starting program:
->>> /home/labuser/development/linux/tools/thermal/thermal-
->>> engine/thermal-
->>> engine
->>> [Thread debugging using libthread_db enabled]
->>> Using host libthread_db library "/lib/x86_64-linux-
->>> gnu/libthread_db.so.1".
->>>
->>> Program received signal SIGSEGV, Segmentation fault.
->>> 0x00007ffff7402036 in parse_tz_get_trip (info=0x7fffffffdf60,
->>> tz=0x555555607898) at commands.c:143
->>> 143             __tt[size].id = -1;
->>> (gdb) backtrace
->>> #0  0x00007ffff7402036 in parse_tz_get_trip (info=0x7fffffffdf60,
->>> tz=0x555555607898) at commands.c:143
->>> #1  0x00007ffff7402233 in handle_netlink (unused=0x0,
->>> cmd=0x7ffff76052f8 <thermal_cmds+120>, info=0x7fffffffdf60,
->>> arg=0x555555607898) at commands.c:206
->>> #2  0x00007ffff7003435 in ?? () from /lib/x86_64-linux-gnu/libnl-
->>> genl-
->>> 3.so.200
->>> #3  0x00007ffff6810c1c in nl_recvmsgs_report () from /lib/x86_64-
->>> linux-
->>> gnu/libnl-3.so.200
->>> #4  0x00007ffff6811049 in nl_recvmsgs () from /lib/x86_64-linux-
->>> gnu/libnl-3.so.200
->>> #5  0x00007ffff7402eaf in nl_send_msg (sock=0x555555606040,
->>> cb=0x5555556065d0, msg=0x555555606110, rx_handler=0x7ffff70036f0
->>> <genl_handle_msg>, data=0x555555607898) at thermal_nl.c:70
->>> #6  0x00007ffff7402327 in thermal_genl_auto (th=0x5555556048a0,
->>> id=1,
->>> cmd=2, flags=0, arg=0x555555607898) at commands.c:282
->>> #7  0x00007ffff74023e0 in thermal_cmd_get_trip (th=0x5555556048a0,
->>> tz=0x555555607898) at commands.c:304
->>> #8  0x00007ffff74039db in __thermal_zone_discover
->>> (tz=0x555555607898,
->>> th=0x5555556048a0) at thermal.c:71
->>> #9  0x00007ffff7403842 in for_each_thermal_zone (tz=0x555555607860,
->>> cb=0x7ffff74039b8 <__thermal_zone_discover>, arg=0x5555556048a0) at
->>> thermal.c:33
->>> #10 0x00007ffff7403a5b in thermal_zone_discover (th=0x5555556048a0)
->>> at
->>> thermal.c:87
->>> #11 0x00005555554019bd in main ()
->>>
->>> Thanks,
->>> Srinivas
->>>
->>>>
->>>
->>>
->>
->>
-> 
+Changes in V4:
 
+ * Incorporated "commit log wrong" comment from Mani
+ * Updated commit log
 
+Changes in V3:
+
+ * Incorporated "Fixes tags are missing" comment from Miquèl
+ * Added Fixes tag Fixes:6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
+ * Incorporated "stable tag missing" comment from Miquèl
+ * Added stable tag Cc: stable@vger.kernel.org
+ * Incorporated "Reported-by tag missing" comment from Mani
+ * Added Reported-by tag Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+
+Changes in V2:
+
+ * Incorporated "alloc_bam_transaction inside qcom_nand_attach_chip" suggestion from Mani
+ * Freed previously alloacted memory for bam txn before updating max_cwperpage inside
+   qcom_nand_attach_chip().
+ * Moved alloc_bam_transaction() inside qcom_nand_attach_chip(). after upding max_cwperpage
+   4 or 8 based on page size.
+
+ drivers/mtd/nand/raw/qcom_nandc.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
+index 1a77542..048b255 100644
+--- a/drivers/mtd/nand/raw/qcom_nandc.c
++++ b/drivers/mtd/nand/raw/qcom_nandc.c
+@@ -2651,10 +2651,23 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
+ 	ecc->engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
+ 
+ 	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
++	/* Free the initially allocated BAM transaction for reading the ONFI params */
++	if (nandc->props->is_bam)
++		free_bam_transaction(nandc);
+ 
+ 	nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
+ 				     cwperpage);
+ 
++	/* Now allocate the BAM transaction based on updated max_cwperpage */
++	if (nandc->props->is_bam) {
++		nandc->bam_txn = alloc_bam_transaction(nandc);
++		if (!nandc->bam_txn) {
++			dev_err(nandc->dev,
++				"failed to allocate bam transaction\n");
++			return -ENOMEM;
++		}
++	}
++
+ 	/*
+ 	 * DATA_UD_BYTES varies based on whether the read/write command protects
+ 	 * spare data with ECC too. We protect spare data by default, so we set
+@@ -2955,17 +2968,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
+ 	if (ret)
+ 		return ret;
+ 
+-	if (nandc->props->is_bam) {
+-		free_bam_transaction(nandc);
+-		nandc->bam_txn = alloc_bam_transaction(nandc);
+-		if (!nandc->bam_txn) {
+-			dev_err(nandc->dev,
+-				"failed to allocate bam transaction\n");
+-			nand_cleanup(chip);
+-			return -ENOMEM;
+-		}
+-	}
+-
+ 	ret = mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
+ 	if (ret)
+ 		nand_cleanup(chip);
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+2.7.4
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

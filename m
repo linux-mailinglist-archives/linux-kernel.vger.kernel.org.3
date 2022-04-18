@@ -2,43 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A343B505956
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BAD9505945
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345158AbiDROSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S1343972AbiDRORZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244426AbiDRN5Q (ORCPT
+        with ESMTP id S244402AbiDRN5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:16 -0400
+        Mon, 18 Apr 2022 09:57:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B262AE1F;
-        Mon, 18 Apr 2022 06:07:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968A32182C;
+        Mon, 18 Apr 2022 06:07:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4D42BB80EDF;
-        Mon, 18 Apr 2022 13:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B381C385A1;
-        Mon, 18 Apr 2022 13:07:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 416B0B80D9C;
+        Mon, 18 Apr 2022 13:07:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A36E1C385A1;
+        Mon, 18 Apr 2022 13:07:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287240;
-        bh=DIc246/X8wYTM5k2axiagUIBH36M/LUB6zhxhna5S8M=;
+        s=korg; t=1650287243;
+        bh=A2OvgRXUH8AWEyjfgaWIlA14tdS3A0N61n6t1B2cyJU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=USEWtSjiZR7TFQ1L//tktJy1xldolqjzfpWY3j0jmNcTZ+y5zIQ5CeknZq1IBwapY
-         wDhS1WxqNYOv/TMPlvLVzKN8PzMUFQLZiGEa5Ne47+i/aIsDen5JEL46lIJX8QYtZU
-         2m1B/QJndUiYuy5MILkTrKmF2KqMAkNoZIMvn8Ts=
+        b=GaMJOiHesPTj3KMpxSXICUuBWUHsvPzLDrAjxQnP26Y6bkd8S3epMe72rwkS6yGMh
+         gL/RjEwbW+zaNtzjeJvJfZRsQ9Mhu2yppwTyyKxe8tjaUpIrbGtG8Yja7lipGMmnmS
+         VqgDWetcnp2tjy8vZ0lkbUJT+cT3O0Ja2jlVhcyI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 100/218] af_netlink: Fix shift out of bounds in group mask calculation
-Date:   Mon, 18 Apr 2022 14:12:46 +0200
-Message-Id: <20220418121202.465021832@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Rosin <peda@axentia.se>,
+        Wolfram Sang <wsa@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 101/218] i2c: mux: demux-pinctrl: do not deactivate a master that is not active
+Date:   Mon, 18 Apr 2022 14:12:47 +0200
+Message-Id: <20220418121202.492700750@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,60 +54,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Peter Rosin <peda@axentia.se>
 
-[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
+[ Upstream commit 1a22aabf20adf89cb216f566913196128766f25b ]
 
-When a netlink message is received, netlink_recvmsg() fills in the address
-of the sender. One of the fields is the 32-bit bitfield nl_groups, which
-carries the multicast group on which the message was received. The least
-significant bit corresponds to group 1, and therefore the highest group
-that the field can represent is 32. Above that, the UB sanitizer flags the
-out-of-bounds shift attempts.
+Attempting to rollback the activation of the current master when
+the current master has not been activated is bad. priv->cur_chan
+and priv->cur_adap are both still zeroed out and the rollback
+may result in attempts to revert an of changeset that has not been
+applied and do result in calls to both del and put the zeroed out
+i2c_adapter. Maybe it crashes, or whatever, but it's bad in any
+case.
 
-Which bits end up being set in such case is implementation defined, but
-it's either going to be a wrong non-zero value, or zero, which is at least
-not misleading. Make the latter choice deterministic by always setting to 0
-for higher-numbered multicast groups.
-
-To get information about membership in groups >= 32, userspace is expected
-to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
-socket option.
-[0] https://lwn.net/Articles/147608/
-
-The way to trigger this issue is e.g. through monitoring the BRVLAN group:
-
-	# bridge monitor vlan &
-	# ip link add name br type bridge
-
-Which produces the following citation:
-
-	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
-	shift exponent 32 is too large for 32-bit type 'int'
-
-Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: e9d1a0a41d44 ("i2c: mux: demux-pinctrl: Fix an error handling path in 'i2c_demux_pinctrl_probe()'")
+Signed-off-by: Peter Rosin <peda@axentia.se>
+Signed-off-by: Wolfram Sang <wsa@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/i2c/muxes/i2c-demux-pinctrl.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 13d69cbd14c2..8aef475fef31 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -161,6 +161,8 @@ static const struct rhashtable_params netlink_rhashtable_params;
+diff --git a/drivers/i2c/muxes/i2c-demux-pinctrl.c b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+index a86c511c29e0..c347860b3690 100644
+--- a/drivers/i2c/muxes/i2c-demux-pinctrl.c
++++ b/drivers/i2c/muxes/i2c-demux-pinctrl.c
+@@ -259,7 +259,7 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
  
- static inline u32 netlink_group_mask(u32 group)
- {
-+	if (group > 32)
-+		return 0;
- 	return group ? 1 << (group - 1) : 0;
- }
+ 	err = device_create_file(&pdev->dev, &dev_attr_available_masters);
+ 	if (err)
+-		goto err_rollback;
++		goto err_rollback_activation;
  
+ 	err = device_create_file(&pdev->dev, &dev_attr_current_master);
+ 	if (err)
+@@ -269,8 +269,9 @@ static int i2c_demux_pinctrl_probe(struct platform_device *pdev)
+ 
+ err_rollback_available:
+ 	device_remove_file(&pdev->dev, &dev_attr_available_masters);
+-err_rollback:
++err_rollback_activation:
+ 	i2c_demux_deactivate_master(priv);
++err_rollback:
+ 	for (j = 0; j < i; j++) {
+ 		of_node_put(priv->chan[j].parent_np);
+ 		of_changeset_destroy(&priv->chan[j].chgset);
 -- 
 2.34.1
 

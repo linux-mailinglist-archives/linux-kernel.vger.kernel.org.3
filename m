@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349E75051EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1225057FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239476AbiDRMhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
+        id S243905AbiDRN7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239038AbiDRMcW (ORCPT
+        with ESMTP id S242045AbiDRNgB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:32:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4755512600;
-        Mon, 18 Apr 2022 05:24:15 -0700 (PDT)
+        Mon, 18 Apr 2022 09:36:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A581B24F00;
+        Mon, 18 Apr 2022 05:58:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6A888B80EDD;
-        Mon, 18 Apr 2022 12:24:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0E9DC385A9;
-        Mon, 18 Apr 2022 12:24:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA42A612D0;
+        Mon, 18 Apr 2022 12:58:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9E75C385A1;
+        Mon, 18 Apr 2022 12:58:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284652;
-        bh=6ooF/igZC8v7MEPYVcrIFfABu53YfusY7o79++JXHv4=;
+        s=korg; t=1650286690;
+        bh=3oTTFOn4x8U2QCSUJl8IaTqxzpbx4bG6EGPFTDb8hoA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=S4RxF87Hvb177crG5fzbR9DchAMmrDSo52yo5zG7FtS0MoTTYz94KQPHe4I3D/enj
-         O+NzGk+4/lu7w9qa1buMHII7upGYdr/5y2+XXyYE168PEO2cX7fbUQeM4o7y3Wofb7
-         C3aaRfRvczwHuOcydtGgoFFix7tI+XPa6dx1kL+Q=
+        b=a5s50/rtmHq1o5Sur/PJWIN/zJsXtOs3OSz6gfzbZ+TLvlNPBPMP3yQNyt0WFTviS
+         3aME7xlB4GlYyXer1tba01Ifz7dHPWaN+agvYH9MZhI3YrmnJbY53HxqsQIBQm0wqd
+         mKY2BzlxYIVujJg/oTW+XEixwB/jQikC4/OFI0QE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>,
-        Johan Hovold <johan@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 5.17 185/219] memory: renesas-rpc-if: fix platform-device leak in error path
-Date:   Mon, 18 Apr 2022 14:12:34 +0200
-Message-Id: <20220418121212.056675339@linuxfoundation.org>
+        =?UTF-8?q?Daniel=20Gonz=C3=A1lez=20Cabanelas?= <dgcbueu@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 174/284] media: cx88-mpeg: clear interrupt status register before streaming video
+Date:   Mon, 18 Apr 2022 14:12:35 +0200
+Message-Id: <20220418121216.689136716@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,49 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johan Hovold <johan@kernel.org>
+From: Daniel González Cabanelas <dgcbueu@gmail.com>
 
-commit b452dbf24d7d9a990d70118462925f6ee287d135 upstream.
+[ Upstream commit 56cb61f70e547e1b0cdfe6ff5a1f1ce6242e6d96 ]
 
-Make sure to free the flash platform device in the event that
-registration fails during probe.
+Some cx88 video cards may have transport stream status interrupts set
+to 1 from cold start, causing errors like this:
 
-Fixes: ca7d8b980b67 ("memory: add Renesas RPC-IF driver")
-Cc: stable@vger.kernel.org      # 5.8
-Cc: Sergei Shtylyov <sergei.shtylyov@cogentembedded.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
-Link: https://lore.kernel.org/r/20220303180632.3194-1-johan@kernel.org
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  cx88xx: cx88_print_irqbits: core:irq mpeg  [0x100000] ts_err?*
+  cx8802: cx8802_mpeg_irq: mpeg:general errors: 0x00100000
+
+According to CX2388x datasheet, the interrupt status register should be
+cleared before enabling IRQs to stream video.
+
+Fix it by clearing the Transport Stream Interrupt Status register.
+
+Signed-off-by: Daniel González Cabanelas <dgcbueu@gmail.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/renesas-rpc-if.c |   10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/media/pci/cx88/cx88-mpeg.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/memory/renesas-rpc-if.c
-+++ b/drivers/memory/renesas-rpc-if.c
-@@ -651,6 +651,7 @@ static int rpcif_probe(struct platform_d
- 	struct platform_device *vdev;
- 	struct device_node *flash;
- 	const char *name;
-+	int ret;
+diff --git a/drivers/media/pci/cx88/cx88-mpeg.c b/drivers/media/pci/cx88/cx88-mpeg.c
+index 52ff00ebd4bd..281eca525340 100644
+--- a/drivers/media/pci/cx88/cx88-mpeg.c
++++ b/drivers/media/pci/cx88/cx88-mpeg.c
+@@ -171,6 +171,9 @@ int cx8802_start_dma(struct cx8802_dev    *dev,
+ 	cx_write(MO_TS_GPCNTRL, GP_COUNT_CONTROL_RESET);
+ 	q->count = 0;
  
- 	flash = of_get_next_child(pdev->dev.of_node, NULL);
- 	if (!flash) {
-@@ -674,7 +675,14 @@ static int rpcif_probe(struct platform_d
- 		return -ENOMEM;
- 	vdev->dev.parent = &pdev->dev;
- 	platform_set_drvdata(pdev, vdev);
--	return platform_device_add(vdev);
++	/* clear interrupt status register */
++	cx_write(MO_TS_INTSTAT,  0x1f1111);
 +
-+	ret = platform_device_add(vdev);
-+	if (ret) {
-+		platform_device_put(vdev);
-+		return ret;
-+	}
-+
-+	return 0;
- }
- 
- static int rpcif_remove(struct platform_device *pdev)
+ 	/* enable irqs */
+ 	dprintk(1, "setting the interrupt mask\n");
+ 	cx_set(MO_PCI_INTMSK, core->pci_irqmask | PCI_INT_TSINT);
+-- 
+2.34.1
+
 
 

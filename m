@@ -2,46 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4577505888
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F21D5058D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244182AbiDROFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
+        id S245293AbiDROG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:06:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244926AbiDRNsh (ORCPT
+        with ESMTP id S239972AbiDRNuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:48:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764CE338B8;
-        Mon, 18 Apr 2022 06:01:17 -0700 (PDT)
+        Mon, 18 Apr 2022 09:50:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABC943AFE;
+        Mon, 18 Apr 2022 06:01:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D831B603E0;
-        Mon, 18 Apr 2022 13:01:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCE1C385A7;
-        Mon, 18 Apr 2022 13:01:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 25285B80EC3;
+        Mon, 18 Apr 2022 13:01:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F780C385A7;
+        Mon, 18 Apr 2022 13:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286876;
-        bh=m2wwDRKEUb1FSsfsa8zID9Em893Bo+8xBvdGNWAui70=;
+        s=korg; t=1650286910;
+        bh=GR6Dfnbb9uN0r2QYDYz1vhQwHWD3lOdfcpRoWQ+ksZ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=g1CICoKlpggb6chhetbOUQxXPyCO1P3PTX5P0kzSYKBf+suvVik4iyHvbaAb/a2la
-         iKTm9czw5MWbwIbG85RyHxX5/hNTLlUCDf3Wnyh1CLv2aYlPJ7ZBtqOibVb6WV4IXI
-         4VBlGEG6VxvCR356uUQlsmG1eZVKYhyqEUaKg34Q=
+        b=yP1xb6P2ws+Uvo3C+XwyFqJDVA8Oof7xCet1o00FrZUlRWbRLp1dIs3Lliwkh12p0
+         h+RXuz2hrZsdB67zvKJu03t+0vv7woa7go9/9U5UEWU/sUPHN7Gu8SyNtmJ0Mp8q5O
+         9bNd0UpqBS66N49xnIDWNK9DONulvIjujcwhylr4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
-        Justin Forbes <jforbes@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Rafael Aquini <aquini@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 256/284] mm/sparsemem: fix mem_section will never be NULL gcc 12 warning
-Date:   Mon, 18 Apr 2022 14:13:57 +0200
-Message-Id: <20220418121219.686110669@linuxfoundation.org>
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Linus Torvalds <torvalds@linuxfoundation.org>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Tejun Heo <tj@kernel.org>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 4.14 257/284] cgroup: Use open-time credentials for process migraton perm checks
+Date:   Mon, 18 Apr 2022 14:13:58 +0200
+Message-Id: <20220418121219.735989441@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
 References: <20220418121210.689577360@linuxfoundation.org>
@@ -59,77 +57,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Waiman Long <longman@redhat.com>
+From: Tejun Heo <tj@kernel.org>
 
-commit a431dbbc540532b7465eae4fc8b56a85a9fc7d17 upstream.
+commit 1756d7994ad85c2479af6ae5a9750b92324685af upstream.
 
-The gcc 12 compiler reports a "'mem_section' will never be NULL" warning
-on the following code:
+cgroup process migration permission checks are performed at write time as
+whether a given operation is allowed or not is dependent on the content of
+the write - the PID. This currently uses current's credentials which is a
+potential security weakness as it may allow scenarios where a less
+privileged process tricks a more privileged one into writing into a fd that
+it created.
 
-    static inline struct mem_section *__nr_to_section(unsigned long nr)
-    {
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-        if (!mem_section)
-                return NULL;
-    #endif
-        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
-                return NULL;
-       :
+This patch makes both cgroup2 and cgroup1 process migration interfaces to
+use the credentials saved at the time of open (file->f_cred) instead of
+current's.
 
-It happens with CONFIG_SPARSEMEM_EXTREME off.  The mem_section definition
-is
-
-    #ifdef CONFIG_SPARSEMEM_EXTREME
-    extern struct mem_section **mem_section;
-    #else
-    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
-    #endif
-
-In the !CONFIG_SPARSEMEM_EXTREME case, mem_section is a static
-2-dimensional array and so the check "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-doesn't make sense.
-
-Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
-check up inside the CONFIG_SPARSEMEM_EXTREME block and adding an
-explicit NR_SECTION_ROOTS check to make sure that there is no
-out-of-bound array access.
-
-Link: https://lkml.kernel.org/r/20220331180246.2746210-1-longman@redhat.com
-Fixes: 3e347261a80b ("sparsemem extreme implementation")
-Signed-off-by: Waiman Long <longman@redhat.com>
-Reported-by: Justin Forbes <jforbes@redhat.com>
-Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc: Ingo Molnar <mingo@kernel.org>
-Cc: Rafael Aquini <aquini@redhat.com>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Reported-by: "Eric W. Biederman" <ebiederm@xmission.com>
+Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
+Fixes: 187fe84067bd ("cgroup: require write perm on common ancestor when moving processes on the default hierarchy")
+Reviewed-by: Michal Koutný <mkoutny@suse.com>
+Signed-off-by: Tejun Heo <tj@kernel.org>
+[OP: backport to v4.14: apply original __cgroup_procs_write() changes to
+cgroup_threads_write() and cgroup_procs_write()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- include/linux/mmzone.h |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ kernel/cgroup/cgroup-v1.c |    7 ++++---
+ kernel/cgroup/cgroup.c    |   17 ++++++++++++++++-
+ 2 files changed, 20 insertions(+), 4 deletions(-)
 
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -1160,13 +1160,16 @@ extern struct mem_section mem_section[NR
+--- a/kernel/cgroup/cgroup-v1.c
++++ b/kernel/cgroup/cgroup-v1.c
+@@ -535,10 +535,11 @@ static ssize_t __cgroup1_procs_write(str
+ 		goto out_unlock;
  
- static inline struct mem_section *__nr_to_section(unsigned long nr)
+ 	/*
+-	 * Even if we're attaching all tasks in the thread group, we only
+-	 * need to check permissions on one of them.
++	 * Even if we're attaching all tasks in the thread group, we only need
++	 * to check permissions on one of them. Check permissions using the
++	 * credentials from file open to protect against inherited fd attacks.
+ 	 */
+-	cred = current_cred();
++	cred = of->file->f_cred;
+ 	tcred = get_task_cred(task);
+ 	if (!uid_eq(cred->euid, GLOBAL_ROOT_UID) &&
+ 	    !uid_eq(cred->euid, tcred->uid) &&
+--- a/kernel/cgroup/cgroup.c
++++ b/kernel/cgroup/cgroup.c
+@@ -4381,6 +4381,7 @@ static ssize_t cgroup_procs_write(struct
  {
-+	unsigned long root = SECTION_NR_TO_ROOT(nr);
-+
-+	if (unlikely(root >= NR_SECTION_ROOTS))
-+		return NULL;
-+
- #ifdef CONFIG_SPARSEMEM_EXTREME
--	if (!mem_section)
-+	if (!mem_section || !mem_section[root])
- 		return NULL;
- #endif
--	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
--		return NULL;
--	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
-+	return &mem_section[root][nr & SECTION_ROOT_MASK];
- }
- extern int __section_nr(struct mem_section* ms);
- extern unsigned long usemap_size(void);
+ 	struct cgroup *src_cgrp, *dst_cgrp;
+ 	struct task_struct *task;
++	const struct cred *saved_cred;
+ 	ssize_t ret;
+ 
+ 	dst_cgrp = cgroup_kn_lock_live(of->kn, false);
+@@ -4397,8 +4398,15 @@ static ssize_t cgroup_procs_write(struct
+ 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
+ 	spin_unlock_irq(&css_set_lock);
+ 
++	/*
++	 * Process and thread migrations follow same delegation rule. Check
++	 * permissions using the credentials from file open to protect against
++	 * inherited fd attacks.
++	 */
++	saved_cred = override_creds(of->file->f_cred);
+ 	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp,
+ 					    of->file->f_path.dentry->d_sb);
++	revert_creds(saved_cred);
+ 	if (ret)
+ 		goto out_finish;
+ 
+@@ -4422,6 +4430,7 @@ static ssize_t cgroup_threads_write(stru
+ {
+ 	struct cgroup *src_cgrp, *dst_cgrp;
+ 	struct task_struct *task;
++	const struct cred *saved_cred;
+ 	ssize_t ret;
+ 
+ 	buf = strstrip(buf);
+@@ -4440,9 +4449,15 @@ static ssize_t cgroup_threads_write(stru
+ 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
+ 	spin_unlock_irq(&css_set_lock);
+ 
+-	/* thread migrations follow the cgroup.procs delegation rule */
++	/*
++	 * Process and thread migrations follow same delegation rule. Check
++	 * permissions using the credentials from file open to protect against
++	 * inherited fd attacks.
++	 */
++	saved_cred = override_creds(of->file->f_cred);
+ 	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp,
+ 					    of->file->f_path.dentry->d_sb);
++	revert_creds(saved_cred);
+ 	if (ret)
+ 		goto out_finish;
+ 
 
 

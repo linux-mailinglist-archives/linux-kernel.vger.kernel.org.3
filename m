@@ -2,51 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D68D1505768
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8422E5052ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245240AbiDRNxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S239846AbiDRMxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244406AbiDRNaZ (ORCPT
+        with ESMTP id S237028AbiDRMkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2802E41FBB;
-        Mon, 18 Apr 2022 05:54:29 -0700 (PDT)
+        Mon, 18 Apr 2022 08:40:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34491EC53;
+        Mon, 18 Apr 2022 05:31:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAECA60FF7;
-        Mon, 18 Apr 2022 12:54:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD364C385A1;
-        Mon, 18 Apr 2022 12:54:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89699B80ED6;
+        Mon, 18 Apr 2022 12:31:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CFEC385A1;
+        Mon, 18 Apr 2022 12:31:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286468;
-        bh=HdTCbxXmi97X+8HPp5MEw73kNU7TxTpS0a89CHqUl8Q=;
+        s=korg; t=1650285110;
+        bh=ogGjmCDq5QrMaH3jBGzB1qxKHkMwVdOZIsCxhf3tPrk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=w5tNk306Jhs9/huupA8eROQDzH7gu1tT0oSRJz3d1GY7lb4YuRU/Rby+JdfoNuhcc
-         w+JGM8MK0nrikzEjoxdR5VzWM3WSP6flWVxxdB9HqSUeikAF6Vp/ZOdZI+AuK+5DRX
-         ZEF4hhn4R1kHK9GT0VpUMtY3ikGtwTdMzICHPvR4=
+        b=P+C3BQCtmfu4DZTinspYQW5HZpeHYTsxZre/XA30BgoB7sqwUjV9+xQhenYDOz1he
+         V9VQ1qWQo5vBkNk1DwLP558Z6wg7zmkfbvb1nAC38yeskhKV111npXFTS9MxhTi1lL
+         jvF7iL0Tb7Bxa2yQ3d/z/FzoaENsyx9v2eWr3BgE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jingoo Han <jg1.han@samsung.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Julian Wiedmann <jwi@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        David Sterba <dsterba@suse.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 144/284] tty: hvc: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:12:05 +0200
-Message-Id: <20220418121215.631162033@linuxfoundation.org>
+Subject: [PATCH 5.15 106/189] btrfs: fix fallocate to use file_modified to update permissions consistently
+Date:   Mon, 18 Apr 2022 14:12:06 +0200
+Message-Id: <20220418121203.510546204@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -61,50 +56,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Darrick J. Wong <djwong@kernel.org>
 
-[ Upstream commit 53819a0d97aace1425bb042829e3446952a9e8a9 ]
+[ Upstream commit 05fd9564e9faf0f23b4676385e27d9405cef6637 ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled or 0 to indicate that it was not handled.
-Add a pr_warn() message if the option value is invalid and then
-always return 1.
+Since the initial introduction of (posix) fallocate back at the turn of
+the century, it has been possible to use this syscall to change the
+user-visible contents of files.  This can happen by extending the file
+size during a preallocation, or through any of the newer modes (punch,
+zero range).  Because the call can be used to change file contents, we
+should treat it like we do any other modification to a file -- update
+the mtime, and drop set[ug]id privileges/capabilities.
 
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: 86b40567b917 ("tty: replace strict_strtoul() with kstrtoul()")
-Cc: Jingoo Han <jg1.han@samsung.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Julian Wiedmann <jwi@linux.ibm.com>
-Cc: Vasily Gorbik <gor@linux.ibm.com>
-Cc: linuxppc-dev@lists.ozlabs.org
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308024228.20477-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+The VFS function file_modified() does all this for us if pass it a
+locked inode, so let's make fallocate drop permissions correctly.
+
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Signed-off-by: Darrick J. Wong <djwong@kernel.org>
+Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/hvc/hvc_iucv.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ fs/btrfs/file.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/hvc/hvc_iucv.c b/drivers/tty/hvc/hvc_iucv.c
-index a74680729825..be1bef7896a5 100644
---- a/drivers/tty/hvc/hvc_iucv.c
-+++ b/drivers/tty/hvc/hvc_iucv.c
-@@ -1470,7 +1470,9 @@ static int __init hvc_iucv_init(void)
-  */
- static	int __init hvc_iucv_config(char *val)
- {
--	 return kstrtoul(val, 10, &hvc_iucv_devices);
-+	if (kstrtoul(val, 10, &hvc_iucv_devices))
-+		pr_warn("hvc_iucv= invalid parameter value '%s'\n", val);
-+	return 1;
+diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
+index a1762363f61f..dc1e4d1b7291 100644
+--- a/fs/btrfs/file.c
++++ b/fs/btrfs/file.c
+@@ -2878,8 +2878,9 @@ int btrfs_replace_file_extents(struct btrfs_inode *inode,
+ 	return ret;
  }
  
+-static int btrfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
++static int btrfs_punch_hole(struct file *file, loff_t offset, loff_t len)
+ {
++	struct inode *inode = file_inode(file);
+ 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
+ 	struct btrfs_root *root = BTRFS_I(inode)->root;
+ 	struct extent_state *cached_state = NULL;
+@@ -2911,6 +2912,10 @@ static int btrfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
+ 		goto out_only_mutex;
+ 	}
  
++	ret = file_modified(file);
++	if (ret)
++		goto out_only_mutex;
++
+ 	lockstart = round_up(offset, btrfs_inode_sectorsize(BTRFS_I(inode)));
+ 	lockend = round_down(offset + len,
+ 			     btrfs_inode_sectorsize(BTRFS_I(inode))) - 1;
+@@ -3351,7 +3356,7 @@ static long btrfs_fallocate(struct file *file, int mode,
+ 		return -EOPNOTSUPP;
+ 
+ 	if (mode & FALLOC_FL_PUNCH_HOLE)
+-		return btrfs_punch_hole(inode, offset, len);
++		return btrfs_punch_hole(file, offset, len);
+ 
+ 	/*
+ 	 * Only trigger disk allocation, don't trigger qgroup reserve
+@@ -3373,6 +3378,10 @@ static long btrfs_fallocate(struct file *file, int mode,
+ 			goto out;
+ 	}
+ 
++	ret = file_modified(file);
++	if (ret)
++		goto out;
++
+ 	/*
+ 	 * TODO: Move these two operations after we have checked
+ 	 * accurate reserved space, or fallocate can still fail but
 -- 
-2.34.1
+2.35.1
 
 
 

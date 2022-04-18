@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33B2C5052D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B77B65056FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240364AbiDRMxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S241503AbiDRNpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240659AbiDRMj0 (ORCPT
+        with ESMTP id S241883AbiDRNZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B48312AA3;
-        Mon, 18 Apr 2022 05:30:04 -0700 (PDT)
+        Mon, 18 Apr 2022 09:25:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1E115819;
+        Mon, 18 Apr 2022 05:52:58 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E8C1CB80EC0;
-        Mon, 18 Apr 2022 12:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A86BC385A7;
-        Mon, 18 Apr 2022 12:30:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE5D4612B5;
+        Mon, 18 Apr 2022 12:52:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCCD0C385A1;
+        Mon, 18 Apr 2022 12:52:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285001;
-        bh=eVtYDTBmxFuv+Xved2iAQEP6AKTHEepLKoeFsRZqxlI=;
+        s=korg; t=1650286375;
+        bh=XHhJvtTAVSezNouZIbqSrgobfO0e7Br0xeWb1Sc4/XM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uDKbhBghjvgPdb0IO50PfF1gtvV9FaobGa/71D5bFlFHE2mxPL4XCZX9tlIcPjRaW
-         Mzs3XAgzSsFSuW6xTdT6MDp9dGAqcWeStolfOaiJh5Xb0Kbm4ghlAjfhYuYgtFs4Wo
-         L0oVrL1g091b+IMMpBbzQaGq1zNETQqDH1Wci1KI=
+        b=KeTAKfat5jtd0jDaTkxyVQ1fSTWVdq1J8mBUH/fiUnj2mKtAoUNSAGEeM9OAdi1Qg
+         1DlYqq90qhtY9Rkz7uaB6pL/+XUQa3CIyDvJxX+9CBOa73Ro9A7Gu6Ei4xEV8HeS44
+         83GRZ/kZ66KL/YeFgvx4lIYc33us6ujLs5E1XKL4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 075/189] drm/msm: Fix range size vs end confusion
+Subject: [PATCH 4.14 114/284] KVM: x86/emulator: Defer not-present segment check in __load_segment_descriptor()
 Date:   Mon, 18 Apr 2022 14:11:35 +0200
-Message-Id: <20220418121202.637999742@linuxfoundation.org>
+Message-Id: <20220418121214.252056985@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-[ Upstream commit 537fef808be5ea56f6fc06932162550819a3b3c3 ]
+[ Upstream commit ca85f002258fdac3762c57d12d5e6e401b6a41af ]
 
-The fourth param is size, rather than range_end.
+Per Intel's SDM on the "Instruction Set Reference", when
+loading segment descriptor, not-present segment check should
+be after all type and privilege checks. But the emulator checks
+it first, then #NP is triggered instead of #GP if privilege fails
+and segment is not present. Put not-present segment check after
+type and privilege checks in __load_segment_descriptor().
 
-Note that we could increase the address space size if we had a way to
-prevent buffers from spanning a 4G split, mostly just to avoid fw bugs
-with 64b math.
-
-Fixes: 84c31ee16f90 ("drm/msm/a6xx: Add support for per-instance pagetables")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20220407202836.1211268-1-robdclark@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Fixes: 38ba30ba51a00 (KVM: x86 emulator: Emulate task switch in emulator.c)
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <52573c01d369f506cadcf7233812427cf7db81a7.1644292363.git.houwenlong.hwl@antgroup.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/emulate.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index f54bfdb1ebff..9b41e2f82fc2 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1711,7 +1711,7 @@ a6xx_create_private_address_space(struct msm_gpu *gpu)
- 		return ERR_CAST(mmu);
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 23d3329e1c73..c5f2a72343e3 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1682,11 +1682,6 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		goto exception;
+ 	}
  
- 	return msm_gem_address_space_create(mmu,
--		"gpu", 0x100000000ULL, 0x1ffffffffULL);
-+		"gpu", 0x100000000ULL, SZ_4G);
- }
+-	if (!seg_desc.p) {
+-		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
+-		goto exception;
+-	}
+-
+ 	dpl = seg_desc.dpl;
  
- static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+ 	switch (seg) {
+@@ -1726,6 +1721,10 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 	case VCPU_SREG_TR:
+ 		if (seg_desc.s || (seg_desc.type != 1 && seg_desc.type != 9))
+ 			goto exception;
++		if (!seg_desc.p) {
++			err_vec = NP_VECTOR;
++			goto exception;
++		}
+ 		old_desc = seg_desc;
+ 		seg_desc.type |= 2; /* busy */
+ 		ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
+@@ -1750,6 +1749,11 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		break;
+ 	}
+ 
++	if (!seg_desc.p) {
++		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
++		goto exception;
++	}
++
+ 	if (seg_desc.s) {
+ 		/* mark segment as accessed */
+ 		if (!(seg_desc.type & 1)) {
 -- 
-2.35.1
+2.34.1
 
 
 

@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7998E5056EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C87F50527E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243338AbiDRNmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
+        id S237672AbiDRMpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:45:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242381AbiDRNNv (ORCPT
+        with ESMTP id S239569AbiDRMhw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:13:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE7E3A5CE;
-        Mon, 18 Apr 2022 05:51:05 -0700 (PDT)
+        Mon, 18 Apr 2022 08:37:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 175BB22BD3;
+        Mon, 18 Apr 2022 05:28:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEBD761287;
-        Mon, 18 Apr 2022 12:51:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2D6DC385A7;
-        Mon, 18 Apr 2022 12:51:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 588A160F09;
+        Mon, 18 Apr 2022 12:28:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66CD6C385A7;
+        Mon, 18 Apr 2022 12:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286264;
-        bh=NAcl7/luNxaqo7WGAyVzIXBeNq36zhOZfxuDr7K0cYA=;
+        s=korg; t=1650284889;
+        bh=wUrxekk7te8F4nK3rkkkNfbsAMdG980RM7Ae8xrGKRk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MdIiIToDS3bnu3JYhYYBlQ8LUToBnrR701BVCx1aaqB5IpeOXCp5/HdB/vPKeCuT8
-         O3aaIEjZZTXQsg4N/q9LRQBB2pULn8ZTCcAhyr/I6OfzsxsrCoIaamql/WqvTTEakD
-         UED9buqAUOtxkBlpSGeCZm7LGsA0mfxjCW0V0w50=
+        b=InXnYnAZls1dneGreRe5n7ga+ybu+eMd5SZPkIy5YWlWIPoey2D4VZ541iM4JwffA
+         +blvRKor4bCvBpK8i2xRT+Do3aH7tS5XPm0yEA/jT4G6OTVnZ5DrtbPNpTT6JLsE08
+         qH6KaLUjZnKrtvfGjkptFskBwxB7+2AQiuVHNde8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 078/284] ALSA: spi: Add check for clk_enable()
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 039/189] ALSA: ice1724: Fix the missing snd_card_free() call at probe error
 Date:   Mon, 18 Apr 2022 14:10:59 +0200
-Message-Id: <20220418121212.904487633@linuxfoundation.org>
+Message-Id: <20220418121201.623758072@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,92 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit ca1697eb09208f0168d94b88b72f57505339cbe5 ]
+commit 4a850a0079ce601c0c4016f4edb7d618e811ed7d upstream.
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Fixes: 3568459a5113 ("ALSA: at73c213: manage SSC clock")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220228022839.3547266-1-jiasheng@iscas.ac.cn
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
+
+Fixes: 314f6dbb1f33 ("ALSA: ice1724: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-18-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/spi/at73c213.c | 27 +++++++++++++++++++++------
- 1 file changed, 21 insertions(+), 6 deletions(-)
+ sound/pci/ice1712/ice1724.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/sound/spi/at73c213.c b/sound/spi/at73c213.c
-index 1ef52edeb538..3763f06ed784 100644
---- a/sound/spi/at73c213.c
-+++ b/sound/spi/at73c213.c
-@@ -221,7 +221,9 @@ static int snd_at73c213_pcm_open(struct snd_pcm_substream *substream)
- 	runtime->hw = snd_at73c213_playback_hw;
- 	chip->substream = substream;
+diff --git a/sound/pci/ice1712/ice1724.c b/sound/pci/ice1712/ice1724.c
+index f6275868877a..6fab2ad85bbe 100644
+--- a/sound/pci/ice1712/ice1724.c
++++ b/sound/pci/ice1712/ice1724.c
+@@ -2519,8 +2519,8 @@ static int snd_vt1724_create(struct snd_card *card,
+  *
+  */
  
--	clk_enable(chip->ssc->clk);
-+	err = clk_enable(chip->ssc->clk);
-+	if (err)
-+		return err;
- 
+-static int snd_vt1724_probe(struct pci_dev *pci,
+-			    const struct pci_device_id *pci_id)
++static int __snd_vt1724_probe(struct pci_dev *pci,
++			      const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -2662,6 +2662,12 @@ static int snd_vt1724_probe(struct pci_dev *pci,
  	return 0;
  }
-@@ -787,7 +789,9 @@ static int snd_at73c213_chip_init(struct snd_at73c213 *chip)
- 		goto out;
  
- 	/* Enable DAC master clock. */
--	clk_enable(chip->board->dac_clk);
-+	retval = clk_enable(chip->board->dac_clk);
-+	if (retval)
-+		goto out;
- 
- 	/* Initialize at73c213 on SPI bus. */
- 	retval = snd_at73c213_write_reg(chip, DAC_RST, 0x04);
-@@ -900,7 +904,9 @@ static int snd_at73c213_dev_init(struct snd_card *card,
- 	chip->card = card;
- 	chip->irq = -1;
- 
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval)
-+		return retval;
- 
- 	retval = request_irq(irq, snd_at73c213_interrupt, 0, "at73c213", chip);
- 	if (retval) {
-@@ -1019,7 +1025,9 @@ static int snd_at73c213_remove(struct spi_device *spi)
- 	int retval;
- 
- 	/* Stop playback. */
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval)
-+		goto out;
- 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXDIS));
- 	clk_disable(chip->ssc->clk);
- 
-@@ -1099,9 +1107,16 @@ static int snd_at73c213_resume(struct device *dev)
++static int snd_vt1724_probe(struct pci_dev *pci,
++			    const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_vt1724_probe(pci, pci_id));
++}
++
+ #ifdef CONFIG_PM_SLEEP
+ static int snd_vt1724_suspend(struct device *dev)
  {
- 	struct snd_card *card = dev_get_drvdata(dev);
- 	struct snd_at73c213 *chip = card->private_data;
-+	int retval;
- 
--	clk_enable(chip->board->dac_clk);
--	clk_enable(chip->ssc->clk);
-+	retval = clk_enable(chip->board->dac_clk);
-+	if (retval)
-+		return retval;
-+	retval = clk_enable(chip->ssc->clk);
-+	if (retval) {
-+		clk_disable(chip->board->dac_clk);
-+		return retval;
-+	}
- 	ssc_writel(chip->ssc->regs, CR, SSC_BIT(CR_TXEN));
- 
- 	return 0;
 -- 
-2.34.1
+2.35.2
 
 
 

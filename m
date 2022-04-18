@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67817505721
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A48505707
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244568AbiDRNox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45858 "EHLO
+        id S244604AbiDRNpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243605AbiDRNUp (ORCPT
+        with ESMTP id S239915AbiDRNVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:20:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 129F8DFC1;
-        Mon, 18 Apr 2022 05:52:22 -0700 (PDT)
+        Mon, 18 Apr 2022 09:21:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91B713F33;
+        Mon, 18 Apr 2022 05:52:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3DC5612B8;
-        Mon, 18 Apr 2022 12:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B09D7C385A1;
-        Mon, 18 Apr 2022 12:52:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 76F7FB80E59;
+        Mon, 18 Apr 2022 12:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71A1C385A1;
+        Mon, 18 Apr 2022 12:52:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286341;
-        bh=5Vu58Yk2Zx4cG8gAi8bvaJonI26eB80nSuLfPciLTAY=;
+        s=korg; t=1650286344;
+        bh=I9+hmMEX95nBcS2rDU1DWsybxkUdrLHSzo3sdWdHvhs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0hvOobZK1YQhF6A45pHuZ1N1IBlu1nGIuDdDcHtGi9ihCFwqfxbw32NK79RE1uEdy
-         XpFbOkVX/J0PwohBtX+dS6T9ivJmSvhfbljiiTqQ+RoDi+FXw/8FTaUazVqBHzQGxk
-         2BpRyvmEq5JaIz0B+r5pdmYKzHx5m7gFwH6zgxu8=
+        b=Sne+qbE9A7iT3qNmav247NLxuUz38WBjgujgvL1ehMnDsDg8x/x8vP2DhdHmEhYMZ
+         DdvZvxFAXp0bPAUvtM0+3OUhabJdCIrzaQVLW5aT5T53tnrha6Tqhklilok8gmkAWk
+         S/CdOcn6OJRukeJrB8gHNmF16HYwMwrQBlXQtzkQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aashish Sharma <shraash@google.com>,
-        Mike Snitzer <snitzer@redhat.com>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 104/284] dm crypt: fix get_key_size compiler warning if !CONFIG_KEYS
-Date:   Mon, 18 Apr 2022 14:11:25 +0200
-Message-Id: <20220418121213.818218543@linuxfoundation.org>
+Subject: [PATCH 4.14 105/284] scsi: pm8001: Fix command initialization in pm80XX_send_read_log()
+Date:   Mon, 18 Apr 2022 14:11:26 +0200
+Message-Id: <20220418121213.859927557@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
 References: <20220418121210.689577360@linuxfoundation.org>
@@ -55,38 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aashish Sharma <shraash@google.com>
+From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-[ Upstream commit 6fc51504388c1a1a53db8faafe9fff78fccc7c87 ]
+[ Upstream commit 1a37b6738b58d86f6b144b3fc754ace0f2e0166d ]
 
-Explicitly convert unsigned int in the right of the conditional
-expression to int to match the left side operand and the return type,
-fixing the following compiler warning:
+Since the sata_cmd struct is zeroed out before its fields are initialized,
+there is no need for using "|=" to initialize the ncqtag_atap_dir_m
+field. Using a standard assignment removes the sparse warning:
 
-drivers/md/dm-crypt.c:2593:43: warning: signed and unsigned
-type in conditional expression [-Wsign-compare]
+warning: invalid assignment: |=
 
-Fixes: c538f6ec9f56 ("dm crypt: add ability to use keys from the kernel key retention service")
-Signed-off-by: Aashish Sharma <shraash@google.com>
-Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Also, since the ncqtag_atap_dir_m field has type __le32, use cpu_to_le32()
+to generate the assigned value.
+
+Link: https://lore.kernel.org/r/20220220031810.738362-5-damien.lemoal@opensource.wdc.com
+Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
+Reviewed-by: John Garry <john.garry@huawei.com>
+Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-crypt.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
+ drivers/scsi/pm8001/pm80xx_hwi.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/md/dm-crypt.c b/drivers/md/dm-crypt.c
-index b8a9695af141..0b6d4337aaab 100644
---- a/drivers/md/dm-crypt.c
-+++ b/drivers/md/dm-crypt.c
-@@ -2114,7 +2114,7 @@ static int crypt_set_keyring_key(struct crypt_config *cc, const char *key_string
+diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
+index f374abfb7f1f..853dba857239 100644
+--- a/drivers/scsi/pm8001/pm8001_hwi.c
++++ b/drivers/scsi/pm8001/pm8001_hwi.c
+@@ -1826,7 +1826,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
  
- static int get_key_size(char **key_string)
- {
--	return (*key_string[0] == ':') ? -EINVAL : strlen(*key_string) >> 1;
-+	return (*key_string[0] == ':') ? -EINVAL : (int)(strlen(*key_string) >> 1);
- }
+ 	sata_cmd.tag = cpu_to_le32(ccb_tag);
+ 	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
+-	sata_cmd.ncqtag_atap_dir_m |= ((0x1 << 7) | (0x5 << 9));
++	sata_cmd.ncqtag_atap_dir_m = cpu_to_le32((0x1 << 7) | (0x5 << 9));
+ 	memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
  
- #endif
+ 	res = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sata_cmd, 0);
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index df5f0bc29587..162b819f3a89 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1504,7 +1504,7 @@ static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
+ 
+ 	sata_cmd.tag = cpu_to_le32(ccb_tag);
+ 	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
+-	sata_cmd.ncqtag_atap_dir_m_dad |= ((0x1 << 7) | (0x5 << 9));
++	sata_cmd.ncqtag_atap_dir_m_dad = cpu_to_le32(((0x1 << 7) | (0x5 << 9)));
+ 	memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
+ 
+ 	res = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sata_cmd, 0);
 -- 
 2.34.1
 

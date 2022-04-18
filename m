@@ -2,158 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D8A504C39
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9488504C3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 07:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236627AbiDRFWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 01:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S236637AbiDRFWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 01:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235427AbiDRFV7 (ORCPT
+        with ESMTP id S236629AbiDRFWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 01:21:59 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B64101FF;
-        Sun, 17 Apr 2022 22:19:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650259161; x=1681795161;
-  h=from:to:cc:subject:date:message-id;
-  bh=EK+0u9UC8xwiVIg1UZKWQ0D//oOqEbDa4F6BgDV60IE=;
-  b=OUyd7fiBYTiox8tDXnwp2U4gR4u5j5Xxljndp1BnEGJ9IrX7DMBVYE85
-   ciSb4432N8eLul+yueacglj2iXZRiHKiJw46aQ0q7B+jxReViA84uPrTR
-   wF/kouu6ZJjI6Sz6VntuZ3Rs6SBsj3PsUTmwYCeVJvCkKZXu30b1Ovs9+
-   A=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 17 Apr 2022 22:19:21 -0700
-X-QCInternal: smtphost
-Received: from ironmsg02-blr.qualcomm.com ([10.86.208.131])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 17 Apr 2022 22:19:19 -0700
-X-QCInternal: smtphost
-Received: from mdalam-linux.qualcomm.com ([10.201.2.71])
-  by ironmsg02-blr.qualcomm.com with ESMTP; 18 Apr 2022 10:49:06 +0530
-Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
-        id 3BD3A229F2; Mon, 18 Apr 2022 10:49:04 +0530 (IST)
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-To:     mani@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     konrad.dybcio@somainline.org, quic_srichara@quicinc.com,
-        quic_mdalam@quicinc.com, stable@vger.kernel.org
-Subject: [PATCH V3] mtd: rawnand: qcom: fix memory corruption that causes panic
-Date:   Mon, 18 Apr 2022 10:49:01 +0530
-Message-Id: <1650259141-20923-1-git-send-email-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 18 Apr 2022 01:22:20 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D0B4101FF;
+        Sun, 17 Apr 2022 22:19:42 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23I5JFaH028353;
+        Mon, 18 Apr 2022 00:19:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650259155;
+        bh=oMWykkOjn8YbIp9yDJTk+cdjfn72U31dolM6E1w49f0=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=qnL/fy+pfPzITq0xHATdSQdu/TXEJvlUemKTTBDdGpFB63mAHtJeJCyVodYucRFuM
+         6L6e696W49GJ+kJGbRAOqiKEa+WW7YrdQPE7ZiLsXdnWz0rVpDddCT3g32m2iY4qhn
+         AhjszOZkY37Kf6c7LHl2GYt3spFnwmbO7vpl6Hc0=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23I5JFms006926
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 18 Apr 2022 00:19:15 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
+ Apr 2022 00:19:14 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 18 Apr 2022 00:19:14 -0500
+Received: from [10.24.69.236] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23I5J96x066544;
+        Mon, 18 Apr 2022 00:19:10 -0500
+Message-ID: <56c72151-af5f-366b-b17f-24b9fb6264da@ti.com>
+Date:   Mon, 18 Apr 2022 10:49:08 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH 1/2] dt-bindings: usb: tps6598x: Make the interrupts
+ property optional
+Content-Language: en-US
+To:     Roger Quadros <rogerq@kernel.org>
+CC:     Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Martin Kepplinger <martink@posteo.de>,
+        "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220414083120.22535-1-a-govindraju@ti.com>
+ <20220414083120.22535-2-a-govindraju@ti.com>
+ <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+From:   Aswath Govindraju <a-govindraju@ti.com>
+In-Reply-To: <be8ab691-98f1-5fb9-fec8-7213a2288d07@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes a memory corruption that occurred in the
-nand_scan() path for Hynix nand device.
+Hi Roger,
 
-On boot, for Hynix nand device will panic at a weird place:
-| Unable to handle kernel NULL pointer dereference at virtual
-  address 00000070
-| [00000070] *pgd=00000000
-| Internal error: Oops: 5 [#1] PREEMPT SMP ARM
-| Modules linked in:
-| CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.17.0-01473-g13ae1769cfb0
-  #38
-| Hardware name: Generic DT based system
-| PC is at nandc_set_reg+0x8/0x1c
-| LR is at qcom_nandc_command+0x20c/0x5d0
-| pc : [<c088b74c>]    lr : [<c088d9c8>]    psr: 00000113
-| sp : c14adc50  ip : c14ee208  fp : c0cc970c
-| r10: 000000a3  r9 : 00000000  r8 : 00000040
-| r7 : c16f6a00  r6 : 00000090  r5 : 00000004  r4 :c14ee040
-| r3 : 00000000  r2 : 0000000b  r1 : 00000000  r0 :c14ee040
-| Flags: nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM Segment none
-| Control: 10c5387d  Table: 8020406a  DAC: 00000051
-| Register r0 information: slab kmalloc-2k start c14ee000 pointer offset
-  64 size 2048
-| Process swapper/0 (pid: 1, stack limit = 0x(ptrval))
-| nandc_set_reg from qcom_nandc_command+0x20c/0x5d0
-| qcom_nandc_command from nand_readid_op+0x198/0x1e8
-| nand_readid_op from hynix_nand_has_valid_jedecid+0x30/0x78
-| hynix_nand_has_valid_jedecid from hynix_nand_init+0xb8/0x454
-| hynix_nand_init from nand_scan_with_ids+0xa30/0x14a8
-| nand_scan_with_ids from qcom_nandc_probe+0x648/0x7b0
-| qcom_nandc_probe from platform_probe+0x58/0xac
+On 14/04/22 23:40, Roger Quadros wrote:
+> Hi,
+> 
+> On 14/04/2022 11:31, Aswath Govindraju wrote:
+>> Support for polling has been added in the driver, which will be used by
+>> default if interrupts property is not populated. Therefore, remove
+>> interrupts and interrupt-names from the required properties and add a note
+>> under interrupts property describing the above support in driver.
+>>
+>> Suggested-by: Roger Quadros <rogerq@kernel.org>
+> 
+> I did not suggest to make interrupts optional by default.
+> 
+> What I suggested was that if a DT property exists to explicitly
+> indicate polling mode then interrupts are not required.
+> 
 
-The problem is that the nand_scan()'s qcom_nand_attach_chip callback
-is updating the nandc->max_cwperpage from 1 to 4.This causes the
-sg_init_table of clear_bam_transaction() in the driver's
-qcom_nandc_command() to memset much more than what was initially
-allocated by alloc_bam_transaction().
+ohh okay, got it. However, may I know if adding a dt property to
+indicate polling for aiding the driver, is the correct approach to model it?
 
-This patch will update nandc->max_cwperpage 1 to 4 after nand_scan()
-returns, and remove updating nandc->max_cwperpage from
-qcom_nand_attach_chip call back.
+In terms of modelling hardware, as interrupts are not connected we are
+not populating the interrupts property. Shouldn't that be all. If we are
+adding a property explicitly to indicate polling that can be used by
+driver, wouldn't that be a software aid being added in the device tree?
 
-Cc: stable@vger.kernel.org
-Fixes: 6a3cec64f18c ("mtd: rawnand: qcom: convert driver to nand_scan()")
-Reported-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-Signed-off-by: Sricharan R <quic_srichara@quicinc.com>
----
-[V3]
- * Updated commit message Fixes, Cc, Reported-by
+Thanks,
+Aswath
 
- drivers/mtd/nand/raw/qcom_nandc.c | 24 +++++++++++++-----------
- 1 file changed, 13 insertions(+), 11 deletions(-)
-
-diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-index 1a77542..048b255 100644
---- a/drivers/mtd/nand/raw/qcom_nandc.c
-+++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -2651,10 +2651,23 @@ static int qcom_nand_attach_chip(struct nand_chip *chip)
- 	ecc->engine_type = NAND_ECC_ENGINE_TYPE_ON_HOST;
- 
- 	mtd_set_ooblayout(mtd, &qcom_nand_ooblayout_ops);
-+	/* Free the initially allocated BAM transaction for reading the ONFI params */
-+	if (nandc->props->is_bam)
-+		free_bam_transaction(nandc);
- 
- 	nandc->max_cwperpage = max_t(unsigned int, nandc->max_cwperpage,
- 				     cwperpage);
- 
-+	/* Now allocate the BAM transaction based on updated max_cwperpage */
-+	if (nandc->props->is_bam) {
-+		nandc->bam_txn = alloc_bam_transaction(nandc);
-+		if (!nandc->bam_txn) {
-+			dev_err(nandc->dev,
-+				"failed to allocate bam transaction\n");
-+			return -ENOMEM;
-+		}
-+	}
-+
- 	/*
- 	 * DATA_UD_BYTES varies based on whether the read/write command protects
- 	 * spare data with ECC too. We protect spare data by default, so we set
-@@ -2955,17 +2968,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
- 	if (ret)
- 		return ret;
- 
--	if (nandc->props->is_bam) {
--		free_bam_transaction(nandc);
--		nandc->bam_txn = alloc_bam_transaction(nandc);
--		if (!nandc->bam_txn) {
--			dev_err(nandc->dev,
--				"failed to allocate bam transaction\n");
--			nand_cleanup(chip);
--			return -ENOMEM;
--		}
--	}
--
- 	ret = mtd_device_parse_register(mtd, probes, NULL, NULL, 0);
- 	if (ret)
- 		nand_cleanup(chip);
--- 
-2.7.4
-
+>> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+>> ---
+>>  Documentation/devicetree/bindings/usb/ti,tps6598x.yaml | 4 ++--
+>>  1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>> index a4c53b1f1af3..1c4b8c6233e5 100644
+>> --- a/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>> +++ b/Documentation/devicetree/bindings/usb/ti,tps6598x.yaml
+>> @@ -25,6 +25,8 @@ properties:
+>>  
+>>    interrupts:
+>>      maxItems: 1
+>> +    description:
+>> +      If interrupts are not populated then by default polling will be used.
+>>  
+>>    interrupt-names:
+>>      items:
+>> @@ -33,8 +35,6 @@ properties:
+>>  required:
+>>    - compatible
+>>    - reg
+>> -  - interrupts
+>> -  - interrupt-names
+>>  
+>>  additionalProperties: true
+>>  
+> 
+> cheers,
+> -roger

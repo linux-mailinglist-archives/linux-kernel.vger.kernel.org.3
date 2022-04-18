@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D8DE505E05
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 946B4505E0C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:47:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347429AbiDRSp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35888 "EHLO
+        id S1347456AbiDRSty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiDRSp5 (ORCPT
+        with ESMTP id S234453AbiDRStw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 14:45:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 695082E0A9
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650307397;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7Mu6cyCpF/3BISjDmjITKcopLcMo5pZQG/PaAVYDLr4=;
-        b=IKpvctZKg/o5TTkdQOkMZV+Fz7YdqPFIg845jaZUiD0G9Sarsb/eMELsLSbmkRuQZ7Ngdr
-        lVcY8cd0SGat32GGckh09d7fomSvYIh9rpzbrO4/dv5m1KpGlcvZPvl9V7QVu+Qp+BxOk6
-        6oUejj+Hs39LkEVSsBw8aRhVUxgvmJA=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-557-d4ODusgeMo6AFSJv_NKnZA-1; Mon, 18 Apr 2022 14:43:16 -0400
-X-MC-Unique: d4ODusgeMo6AFSJv_NKnZA-1
-Received: by mail-qk1-f200.google.com with SMTP id bl27-20020a05620a1a9b00b0069994eeb30cso10920020qkb.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:43:16 -0700 (PDT)
+        Mon, 18 Apr 2022 14:49:52 -0400
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEAC167C1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:47:12 -0700 (PDT)
+Received: by mail-io1-xd2c.google.com with SMTP id n134so10164593iod.5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:47:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=subject:to:cc:references:from:message-id:date:user-agent
+         :mime-version:in-reply-to:content-language:content-transfer-encoding;
+        bh=+xlC0/vhq9DS4MywfAGPmUw8P8N5+SAf6g0dQ1E684k=;
+        b=bTZWrTYZ8Skc1emb+YBn8UeXzm1GU2rzq1c5vlTuSFaVK7bQr/KMzez2D5Sm8Fzciv
+         c6lmv4tP0d/pF1OrUBtW4X3QVNdbJQ/JvvU348OAleDoPSDf29+uOqKYDA22FgaIoMAI
+         s//z8OUxTmA5rkuBQYeS6Z6Z8kJKx/mVBZPoI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
+         :user-agent:mime-version:in-reply-to:content-language
          :content-transfer-encoding;
-        bh=7Mu6cyCpF/3BISjDmjITKcopLcMo5pZQG/PaAVYDLr4=;
-        b=6DXYBdodlT10r6q9RUTpyN+nEoyzfMNVk/DkMciMj5UBisWoMFRtQvDCed7XeyDiQs
-         1wMdu3rD63RmgH2I6f551hICkngGI2+rqCMjc86s2+GWbWq2899SqPovDWfruWWvREQQ
-         4vZI6QXLpfnOckNMzOW8UM3m4cC+uIMFu0dA37rS2h9OKo8XAd/TR66vnojgQPAWllbC
-         WeZ/NP3XHVmon+PT4RddRuv0MW60xJAMu3X3dshQNZV6DhT1X8++tKKQkYcoTDjDhSoj
-         4Oj/xX3Q1jsb95TNUgAxPUrXoz0eNZESNijIi3sl65TtmKi/kihCO/FvD3KW/vZDmvm+
-         qhfQ==
-X-Gm-Message-State: AOAM53325Sq9LBpBqGSJmE6u71o10zdxj9lOW7ZJAEHqGx4jimNtd8CW
-        qz3t/Td8dEdmVFoYXvX5vgLqw21tLIohGN12Is0wfzrxCDd9lB1hPlG8tUi4Ay/5HHnUvZOUotr
-        DwZJqqZK7YSZbKhIq2cKoRpZZ
-X-Received: by 2002:a05:620a:424b:b0:67d:36cc:5afb with SMTP id w11-20020a05620a424b00b0067d36cc5afbmr7582587qko.598.1650307395844;
-        Mon, 18 Apr 2022 11:43:15 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyfGQkn6dnqMjz7y0axxCwL1U3OsrmH65jMUG4jPmIQ3Nu/EHeBdM6RJfE75Zn/PAHSQMDxfA==
-X-Received: by 2002:a05:620a:424b:b0:67d:36cc:5afb with SMTP id w11-20020a05620a424b00b0067d36cc5afbmr7582583qko.598.1650307395643;
-        Mon, 18 Apr 2022 11:43:15 -0700 (PDT)
-Received: from [192.168.0.188] ([24.48.139.231])
-        by smtp.gmail.com with ESMTPSA id c3-20020ac87d83000000b002e1d1b3df15sm8141117qtd.44.2022.04.18.11.43.14
+        bh=+xlC0/vhq9DS4MywfAGPmUw8P8N5+SAf6g0dQ1E684k=;
+        b=A9PuYZtF49ZcPTObvTD3K+YKAPGBPjAzejm39PmQy4X/AWeSjnmndX4AjRnbVWAhBy
+         tZCWLCwueMTTTTkJQEyulc4s+ik1w1YIi2n4m6wbYRMd4FaVdiUOotcTFvaQbO4nmBLE
+         DLZVtsPNzqYtZ+lgW0bYiDlBlCaJSqaC3120riAgUNFFL4PHVbkkO5++t4y91S0Xiwom
+         CCywlVtLFDMduMQjKQ//1S96SAYTR3CwBy8TchQw4G7+sYs7mAB+QlidUiaMVgZh8HWr
+         /2NyBb9GBWRaoG6XhONt3R9FkMoyxwVySI0IR3DWUwIt0dItSb1JR1/IokLQv2nCY+zp
+         Nb3Q==
+X-Gm-Message-State: AOAM533uhEHsTME3tckNn5A9mlb1MziC1qtAq3VM7tB/yAjK2Sch81lU
+        997dk5mzyvWbqjSmbMsa23GGoA==
+X-Google-Smtp-Source: ABdhPJwHyd9CLmCOOxk2j/UdG5zFE9tkCKjdtWQ9zOONUVAhbubxfI8FDeYhENTOdUzghpJEEe7YtA==
+X-Received: by 2002:a02:93e1:0:b0:326:7a7d:a2b0 with SMTP id z88-20020a0293e1000000b003267a7da2b0mr5470151jah.44.1650307631765;
+        Mon, 18 Apr 2022 11:47:11 -0700 (PDT)
+Received: from [192.168.1.128] ([71.205.29.0])
+        by smtp.gmail.com with ESMTPSA id a3-20020a5ec303000000b006496b4dd21csm8439237iok.5.2022.04.18.11.47.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 11:43:15 -0700 (PDT)
-Message-ID: <06087446-c053-7099-b8f1-40a467781186@redhat.com>
-Date:   Mon, 18 Apr 2022 14:43:14 -0400
+        Mon, 18 Apr 2022 11:47:11 -0700 (PDT)
+Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc1 review
+To:     Guenter Roeck <linux@roeck-us.net>,
+        =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
+ <ec6408b7-14f4-fc97-3371-3f6cd9a46d24@applied-asynchrony.com>
+ <8d09a73f-acbd-82dc-77f0-540d106b6e67@roeck-us.net>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <4e2a8939-faf3-44c2-a0a8-9f6fd996db34@linuxfoundation.org>
+Date:   Mon, 18 Apr 2022 12:47:09 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.0
-Subject: Re: [PATCH] lib/Kconfig.debug: change KUnit tests to default to
- KUNIT_ALL_TESTS
+In-Reply-To: <8d09a73f-acbd-82dc-77f0-540d106b6e67@roeck-us.net>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Daniel Latypov <dlatypov@google.com>, brendanhiggins@google.com,
-        davidgow@google.com
-Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-References: <20220405190619.540177-1-dlatypov@google.com>
-From:   Nico Pache <npache@redhat.com>
-In-Reply-To: <20220405190619.540177-1-dlatypov@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/18/22 10:27 AM, Guenter Roeck wrote:
+> On 4/18/22 07:07, Holger Hoffstätte wrote:
+>> On 2022-04-18 14:10, Greg Kroah-Hartman wrote:
+>>> This is the start of the stable review cycle for the 5.15.35 release.
+>>> There are 189 patches in this series, all will be posted as a response
+>>> to this one.  If anyone has any issues with these being applied, please
+>>> let me know.
+>>
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c: In function hubbub31_verify_allow_pstate_change_high':
+>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:994:17: error: implicit declaration of function 'udelay' [-Werror=implicit-function-declaration]
+>>    994 |                 udelay(1);
+>>        |                 ^~~~~~
+>>
+>> Caused by "drm-amd-display-add-pstate-verification-and-recovery-for-dcn31.patch".
+>> Explicitly includng <linux/delay.h> in dcn31_hubbub.c fixes it.
+>>
+>> Current mainline version of dcn31_hubbub.c does not explicitly include
+>> <linux/delay.h>, so there seems to be some general inconsistency wrt.
+>> which dcn module includes what.
+>>
+>> CC'ing Nicholas Kazlauskas.
+>>
+> Should add: The problem is only seen with 32-bit (i386) builds.
+> 
+
+I am seeing the same build failure on x86_64 build on AMD Ryzen 7 4700Gtest system
+
+drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:994:17: error: implicit declaration of function ‘udelay’ [-Werror=implicit-function-declaration]
+cc1: all warnings being treated as errors
 
 
-On 4/5/22 15:06, Daniel Latypov wrote:
-> This is in line with Documentation/dev-tools/kunit/style.rst.
-> Some of these tests predate that so they don't follow this convention.
-> 
-> With this and commit b0841b51cac9 ("kunit: arch/um/configs: Enable
-> KUNIT_ALL_TESTS by default"), kunit.py will now run these tests by
-> default. This hopefully makes it easier to run and maintain the tests.
-> If any of these were to start failing, people would notice much quicker.
-> 
-> Note: this commit doesn't update LINEAR_RANGES_TEST since that would
-> select its dependency (LINEAR_RANGES). We don't want KUNIT_ALL_TESTS
-> to enable anything other than test kconfigs.
-> 
-> Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> ---
-I have tried posting something similar in the past!
-https://lore.kernel.org/lkml/f427ed5cbc08da83086c504fbb3ad1bab50340cd.1618388989.git.npache@redhat.com/
-
-Reviewed-by: Nico Pache <npache@redhat.com>
-Acked-by: Nico Pache <npache@redhat.com>
+thanks,
+-- Shuah
 

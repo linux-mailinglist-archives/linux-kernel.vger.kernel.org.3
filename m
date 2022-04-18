@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BA2505730
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AD05050A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244759AbiDRNpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S238786AbiDRM0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:26:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242584AbiDRNX0 (ORCPT
+        with ESMTP id S238683AbiDRMZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:23:26 -0400
+        Mon, 18 Apr 2022 08:25:41 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29E53D1DA;
-        Mon, 18 Apr 2022 05:52:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB5EC13;
+        Mon, 18 Apr 2022 05:19:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1F7E1B80E59;
-        Mon, 18 Apr 2022 12:52:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 865F8C385A1;
-        Mon, 18 Apr 2022 12:52:42 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45C3BB80EDB;
+        Mon, 18 Apr 2022 12:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87972C385A9;
+        Mon, 18 Apr 2022 12:19:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286362;
-        bh=WUAPkXaX+FIRxRV6F+q0jv1YQE4laA/FQC2MJMuYRH0=;
+        s=korg; t=1650284383;
+        bh=Xe2AbJ8/FRjja0awDq2I0DB0l+XsLNsfBPUqt1HnJaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rrIxQlEKXSMZ1yjmvZQHUo6a6gY2Hh02SdZrs9qMTvhf0fMMahvPdu4HfgE7fcHUq
-         n4KmbigA40EYCOUdCLaYOYYHQW0A5B9t4b4oIRs+P45ps35nhEaUpkMe1ITU9dGEBe
-         s+FsPLOXhzZhCwHQpNacUqNuhpxErJC3HPjFJkUg=
+        b=GGtHrZIS90sL7y3vUf3AbeBDbkquh5AtnSBbxLuZMPxJFX3RpMV3hEmErsNugehfq
+         iAgsMu9XPhQC2/sFUhFPzFS+TT7zKanUN6DO7dzkTcT5Yd8RaXHdWPpibt29bAdrOl
+         jwckVE7+9v34FtqjK0GkwdqwdI2+ZZGE1ObxYbtw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        stable@vger.kernel.org,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Ajish Koshy <Ajish.Koshy@microchip.com>,
+        Viswas G <Viswas.G@microchip.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 084/284] memory: emif: Add check for setup_interrupts
-Date:   Mon, 18 Apr 2022 14:11:05 +0200
-Message-Id: <20220418121213.074400308@linuxfoundation.org>
+Subject: [PATCH 5.17 097/219] scsi: pm80xx: Enable upper inbound, outbound queues
+Date:   Mon, 18 Apr 2022 14:11:06 +0200
+Message-Id: <20220418121209.491526549@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,49 +59,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Ajish Koshy <Ajish.Koshy@microchip.com>
 
-[ Upstream commit fd7bd80b46373887b390852f490f21b07e209498 ]
+[ Upstream commit bcd8a45223470e00b5f254018174d64a75db4bbe ]
 
-As the potential failure of the devm_request_threaded_irq(),
-it should be better to check the return value of the
-setup_interrupts() and return error if fails.
+Executing driver on servers with more than 32 CPUs were faced with command
+timeouts. This is because we were not geting completions for commands
+submitted on IQ32 - IQ63.
 
-Fixes: 68b4aee35d1f ("memory: emif: add interrupt and temperature handling")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220224025444.3256530-1-jiasheng@iscas.ac.cn
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>
+Set E64Q bit to enable upper inbound and outbound queues 32 to 63 in the
+MPI main configuration table.
+
+Added 500ms delay after successful MPI initialization as mentioned in
+controller datasheet.
+
+Link: https://lore.kernel.org/r/20220411064603.668448-3-Ajish.Koshy@microchip.com
+Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
+Signed-off-by: Viswas G <Viswas.G@microchip.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/emif.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/drivers/memory/emif.c b/drivers/memory/emif.c
-index 88c32b8dc88a..ed6c5fcb136f 100644
---- a/drivers/memory/emif.c
-+++ b/drivers/memory/emif.c
-@@ -1517,7 +1517,7 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
- {
- 	struct emif_data	*emif;
- 	struct resource		*res;
--	int			irq;
-+	int			irq, ret;
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 2dea48933ef9..5853b3c0d76d 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -766,6 +766,10 @@ static void init_default_table_values(struct pm8001_hba_info *pm8001_ha)
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.pcs_event_log_severity	= 0x01;
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt		= 0x01;
  
- 	if (pdev->dev.of_node)
- 		emif = of_get_memory_device_details(pdev->dev.of_node, &pdev->dev);
-@@ -1551,7 +1551,9 @@ static int __init_or_module emif_probe(struct platform_device *pdev)
- 	emif_onetime_settings(emif);
- 	emif_debugfs_init(emif);
- 	disable_and_clear_all_interrupts(emif);
--	setup_interrupts(emif, irq);
-+	ret = setup_interrupts(emif, irq);
-+	if (ret)
-+		goto error;
++	/* Enable higher IQs and OQs, 32 to 63, bit 16 */
++	if (pm8001_ha->max_q_num > 32)
++		pm8001_ha->main_cfg_tbl.pm80xx_tbl.fatal_err_interrupt |=
++							1 << 16;
+ 	/* Disable end to end CRC checking */
+ 	pm8001_ha->main_cfg_tbl.pm80xx_tbl.crc_core_dump = (0x1 << 16);
  
- 	/* One-time actions taken on probing the first device */
- 	if (!emif1) {
+@@ -1027,6 +1031,13 @@ static int mpi_init_check(struct pm8001_hba_info *pm8001_ha)
+ 	if (0x0000 != gst_len_mpistate)
+ 		return -EBUSY;
+ 
++	/*
++	 *  As per controller datasheet, after successful MPI
++	 *  initialization minimum 500ms delay is required before
++	 *  issuing commands.
++	 */
++	msleep(500);
++
+ 	return 0;
+ }
+ 
 -- 
-2.34.1
+2.35.1
 
 
 

@@ -2,101 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC20505AE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:21:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A72C505AE8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345335AbiDRPXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
+        id S1344979AbiDRPXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345448AbiDRPWh (ORCPT
+        with ESMTP id S245435AbiDRPWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:22:37 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C8AD64D4;
-        Mon, 18 Apr 2022 07:20:25 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id j71so5622082pge.11;
-        Mon, 18 Apr 2022 07:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccR/mnwveIJy1+ZaW/EVppjy7Ucpakkl1UjrV+8YXAk=;
-        b=XEiadJDP5pRoh9TElIIjDpGwvXHzinAi+cZWXrgMmFKiX356STHcLvNbO/c4ZXqYR+
-         Knr6EZeYjIYRu+IGA4188A6O5jEjDX+gUVdW9aHQQlKjhWwpyR56ED5Vp8stWXA4J1ak
-         8AHGY95ejcUuPKxQJ1d+az7rMgzmOIpfUxg2dgkIvTXy+XBlc1r3waKeAPgceGMgZ7mg
-         puYi4vLQaxF1WxYlH6DaagWeva2/CIpCKVWQNfy+fjeue2xiKePqXJgpnSzW2mH1gbJE
-         oTccNo7N0WvpV3hPRzj37uMo0R6+5UHRTP0CT34GEOwDNcTdxLBet0zw5PCYmFZjPFM4
-         wEPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ccR/mnwveIJy1+ZaW/EVppjy7Ucpakkl1UjrV+8YXAk=;
-        b=7fEOISAzpKMNi3Kfp4ZYYp++bpV7TZ9q+EByBMjbDcEivS7VV1+Gcv4w4KCJNMvLLB
-         wFb4sXwti+Pe7lyxeQ1OQbNLqojmFtICsbX/v7ISY80krrkv8qTguTSKw+vCLMqOSnV+
-         WxMHajkQpo0pRZAPHUFepslWZQ3Acri5MdshwbUUG44Yxd2Y7l/yApDxW/ggEgBAhw1d
-         gvG2D0m8si05T9mUle+x9shahDGtc8E7is26qW4CDecsc+7cuAokxqm09PrCxw6afPBC
-         1NIfUt+kjmZfAP2pzYuRMas2nBVEn2LHn9Z5jJiQsF5FA5HHdodSf82O0ubpGiiGwpIE
-         yTAg==
-X-Gm-Message-State: AOAM532h7p+tCBLRal/8Z9JeLEeCzhwkS1WIMY98ugwVEk+B6TQzlHw5
-        buHi9c8PdEidYZ5H0EUt+bneZWgP5ZJhB/NQyVs=
-X-Google-Smtp-Source: ABdhPJz9os8jYLIPcOuVijLhtTg5dh1Z5J9eTsNjGg6jB1Kc2u6VraFunUrIqz9QmP5si3ls5lZ3OA==
-X-Received: by 2002:a05:6a00:1310:b0:4ca:cc46:20c7 with SMTP id j16-20020a056a00131000b004cacc4620c7mr12720042pfu.44.1650291624922;
-        Mon, 18 Apr 2022 07:20:24 -0700 (PDT)
-Received: from localhost ([210.21.229.138])
-        by smtp.gmail.com with ESMTPSA id y15-20020a17090a1f4f00b001c7ecaf9e13sm13425938pjy.35.2022.04.18.07.20.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 07:20:24 -0700 (PDT)
-From:   Yunbo Yu <yuyunbo519@gmail.com>
-To:     logang@deltatee.com, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yunbo Yu <yuyunbo519@gmail.com>
-Subject: [PATCH] dmaengine: plx_dma: Move spin_lock_bh() to spin_lock()
-Date:   Mon, 18 Apr 2022 22:20:21 +0800
-Message-Id: <20220418142021.1241558-1-yuyunbo519@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 11:22:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169624EDF6;
+        Mon, 18 Apr 2022 07:23:43 -0700 (PDT)
+Received: from pps.filterd (m0098394.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23IE0XXD008922;
+        Mon, 18 Apr 2022 14:23:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=D1vKXONw+AN3xZoH/6lkKMME4+9BmnWR8NIKVXFFFvE=;
+ b=WyVJMTRxXzus39hsjIeMlmB9OjWEE5T8IRNyWRZwrJX9ubNwF5uJ/ERIamgxasbQprUu
+ xWWzaJIh/fFPZWdCoVOkZA7FkiPzIlYlPMG+9jnqnartpLH6twfNnDmzlKcAw2X0kjCJ
+ k8erWqJ99YwqyGAWZAZJNuRPJrUJhSbRCl6Zmnbfz3rKcUSuBaxkRpVkqrPnaZNX+OF/
+ ZF2MfsjVbrBdItiQEAMo+T9eYzHGDrZUok6ULjAK3HP90tm+/TK32RmgrBacMllUUu54
+ 6k7mPyX2YX3a8Y2PXge9y6TROfwpSo6Yl8Xy1NnHCjbCgogsI7YVglS82Fy0nTt/hGzD Iw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79we4hk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 14:23:42 +0000
+Received: from m0098394.ppops.net (m0098394.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23IDuZWQ019475;
+        Mon, 18 Apr 2022 14:23:42 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79we4h6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 14:23:42 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23IE8pFT000838;
+        Mon, 18 Apr 2022 14:23:41 GMT
+Received: from b03cxnp08025.gho.boulder.ibm.com (b03cxnp08025.gho.boulder.ibm.com [9.17.130.17])
+        by ppma04dal.us.ibm.com with ESMTP id 3ffne9j20v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 14:23:41 +0000
+Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
+        by b03cxnp08025.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23IENdZB24052116
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 18 Apr 2022 14:23:39 GMT
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B161FBE054;
+        Mon, 18 Apr 2022 14:23:39 +0000 (GMT)
+Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BF979BE059;
+        Mon, 18 Apr 2022 14:23:38 +0000 (GMT)
+Received: from [9.65.204.148] (unknown [9.65.204.148])
+        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
+        Mon, 18 Apr 2022 14:23:38 +0000 (GMT)
+Message-ID: <2440b3f3-6961-4091-438f-7120b9177164@linux.ibm.com>
+Date:   Mon, 18 Apr 2022 10:23:38 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] s390: vfio-ap: Remove the superfluous MODULE_DEVICE_TABLE
+ declaration
+Content-Language: en-US
+To:     Thomas Huth <thuth@redhat.com>, Halil Pasic <pasic@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>, linux-s390@vger.kernel.org
+Cc:     Harald Freudenberger <freude@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-kernel@vger.kernel.org
+References: <20220413094416.412114-1-thuth@redhat.com>
+From:   Tony Krowiak <akrowiak@linux.ibm.com>
+In-Reply-To: <20220413094416.412114-1-thuth@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: AtQlH9Wnul7p-xAysXU9EKk-XjnnFnGF
+X-Proofpoint-ORIG-GUID: OiiHRIG7GVSf_sLXQNA_cASzx8tlliLJ
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 phishscore=0
+ adultscore=0 impostorscore=0 lowpriorityscore=0 malwarescore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204180083
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
+Reviewed-by: Tony Krowiak <akrowiak@linux.ibm.com>
 
-Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
----
- drivers/dma/plx_dma.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
-index 1ffcb5ca9788..12725fa1655f 100644
---- a/drivers/dma/plx_dma.c
-+++ b/drivers/dma/plx_dma.c
-@@ -137,7 +137,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
- 	struct plx_dma_desc *desc;
- 	u32 flags;
- 
--	spin_lock_bh(&plxdev->ring_lock);
-+	spin_lock(&plxdev->ring_lock);
- 
- 	while (plxdev->tail != plxdev->head) {
- 		desc = plx_dma_get_desc(plxdev, plxdev->tail);
-@@ -165,7 +165,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
- 		plxdev->tail++;
- 	}
- 
--	spin_unlock_bh(&plxdev->ring_lock);
-+	spin_unlock(&plxdev->ring_lock);
- }
- 
- static void plx_dma_abort_desc(struct plx_dma_dev *plxdev)
--- 
-2.25.1
+On 4/13/22 5:44 AM, Thomas Huth wrote:
+> The vfio_ap module tries to register for the vfio_ap bus - but that's
+> the interface that it provides itself, so this does not make much sense,
+> thus let's simply drop this statement now.
+>
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
+> ---
+>   See also my previous patch to register it for the "ap" bus instead:
+>   https://lore.kernel.org/linux-s390/20211201141110.94636-1-thuth@redhat.com/
+>   ... but since it has been decided to not auto-load the module uncondi-
+>   tionally, I'd like to suggest to rather drop this line now instead.
+>
+>   drivers/s390/crypto/vfio_ap_drv.c | 2 --
+>   1 file changed, 2 deletions(-)
+>
+> diff --git a/drivers/s390/crypto/vfio_ap_drv.c b/drivers/s390/crypto/vfio_ap_drv.c
+> index 29ebd54f8919..4ac9c6521ec1 100644
+> --- a/drivers/s390/crypto/vfio_ap_drv.c
+> +++ b/drivers/s390/crypto/vfio_ap_drv.c
+> @@ -46,8 +46,6 @@ static struct ap_device_id ap_queue_ids[] = {
+>   	{ /* end of sibling */ },
+>   };
+>   
+> -MODULE_DEVICE_TABLE(vfio_ap, ap_queue_ids);
+> -
+>   static struct ap_matrix_mdev *vfio_ap_mdev_for_queue(struct vfio_ap_queue *q)
+>   {
+>   	struct ap_matrix_mdev *matrix_mdev;
 

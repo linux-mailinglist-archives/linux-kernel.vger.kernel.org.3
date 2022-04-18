@@ -2,48 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA310505717
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDE85050AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244433AbiDRNrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S238873AbiDRM1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243492AbiDRN3A (ORCPT
+        with ESMTP id S238495AbiDRMZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:29:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D59983F884;
-        Mon, 18 Apr 2022 05:53:37 -0700 (PDT)
+        Mon, 18 Apr 2022 08:25:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CFB65DA;
+        Mon, 18 Apr 2022 05:19:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 71A9EB80EE3;
-        Mon, 18 Apr 2022 12:53:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4234C385A1;
-        Mon, 18 Apr 2022 12:53:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8225460F0C;
+        Mon, 18 Apr 2022 12:19:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B34C385A1;
+        Mon, 18 Apr 2022 12:19:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286415;
-        bh=EDS44k4+oZZm5OBv8TayznwgljQV0mGj2t6/7PAilQ8=;
+        s=korg; t=1650284390;
+        bh=X7qBUUgV1LaOs2vD6Ys+38lRH+s//Ob0CYGiP9aS3nI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xHb4NgoumR9vHyrP7XZTRE7bY6n/IISElMfTH2fMwC7XbUmsGkdeYbMlk5lIPACeA
-         ljJI5O0z35jWKPdn7oHFVeikWuEk8Fv9UDSZ0FMgcOdg2mxojNk98GsDL4gdf3ZyN8
-         kjgGNCYlXSlCRlhCmO4yNa4r0AondyjzQVlCwJUY=
+        b=UarzniptMGxljpM24c7syi3qq68HoojlR4B8kdSsAIFQVizA68fXbMUsYoMqd56T8
+         aoM0IwSUpA3ZmKLxTcp6eJJR20SIOXhdREaAlEXRB2ig/bLTVkFmsVWnaWkrUxLTJx
+         fBDqbSs+zZgDr2gD1iliYZavP4zGWN3njivvDUA4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dafna Hirschfeld <dafna.hirschfeld@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 087/284] media: stk1160: If start stream fails, return buffers with VB2_BUF_STATE_QUEUED
+Subject: [PATCH 5.17 099/219] scsi: iscsi: Fix offload conn cleanup when iscsid restarts
 Date:   Mon, 18 Apr 2022 14:11:08 +0200
-Message-Id: <20220418121213.159652979@linuxfoundation.org>
+Message-Id: <20220418121209.590264608@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,142 +57,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit fbe04b49a54e31f4321d632270207f0e6304cd16 ]
+[ Upstream commit cbd2283aaf47fef4ded4b29124b1ef3beb515f3a ]
 
-If the callback 'start_streaming' fails, then all
-queued buffers in the driver should be returned with
-state 'VB2_BUF_STATE_QUEUED'. Currently, they are
-returned with 'VB2_BUF_STATE_ERROR' which is wrong.
-Fix this. This also fixes the warning:
+When userspace restarts during boot or upgrades it won't know about the
+offload driver's endpoint and connection mappings. iscsid will start by
+cleaning up the old session by doing a stop_conn call. Later, if we are
+able to create a new connection, we clean up the old endpoint during the
+binding stage. The problem is that if we do stop_conn before doing the
+ep_disconnect call offload, drivers can still be executing I/O. We then
+might free tasks from the under the card/driver.
 
-[   65.583633] WARNING: CPU: 5 PID: 593 at drivers/media/common/videobuf2/videobuf2-core.c:1612 vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.585027] Modules linked in: snd_usb_audio snd_hwdep snd_usbmidi_lib snd_rawmidi snd_soc_hdmi_codec dw_hdmi_i2s_audio saa7115 stk1160 videobuf2_vmalloc videobuf2_memops videobuf2_v4l2 videobuf2_common videodev mc crct10dif_ce panfrost snd_soc_simple_card snd_soc_audio_graph_card snd_soc_spdif_tx snd_soc_simple_card_utils gpu_sched phy_rockchip_pcie snd_soc_rockchip_i2s rockchipdrm analogix_dp dw_mipi_dsi dw_hdmi cec drm_kms_helper drm rtc_rk808 rockchip_saradc industrialio_triggered_buffer kfifo_buf rockchip_thermal pcie_rockchip_host ip_tables x_tables ipv6
-[   65.589383] CPU: 5 PID: 593 Comm: v4l2src0:src Tainted: G        W         5.16.0-rc4-62408-g32447129cb30-dirty #14
-[   65.590293] Hardware name: Radxa ROCK Pi 4B (DT)
-[   65.590696] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   65.591304] pc : vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.591850] lr : vb2_start_streaming+0x6c/0x160 [videobuf2_common]
-[   65.592395] sp : ffff800012bc3ad0
-[   65.592685] x29: ffff800012bc3ad0 x28: 0000000000000000 x27: ffff800012bc3cd8
-[   65.593312] x26: 0000000000000000 x25: ffff00000d8a7800 x24: 0000000040045612
-[   65.593938] x23: ffff800011323000 x22: ffff800012bc3cd8 x21: ffff00000908a8b0
-[   65.594562] x20: ffff00000908a8c8 x19: 00000000fffffff4 x18: ffffffffffffffff
-[   65.595188] x17: 000000040044ffff x16: 00400034b5503510 x15: ffff800011323f78
-[   65.595813] x14: ffff000013163886 x13: ffff000013163885 x12: 00000000000002ce
-[   65.596439] x11: 0000000000000028 x10: 0000000000000001 x9 : 0000000000000228
-[   65.597064] x8 : 0101010101010101 x7 : 7f7f7f7f7f7f7f7f x6 : fefefeff726c5e78
-[   65.597690] x5 : ffff800012bc3990 x4 : 0000000000000000 x3 : ffff000009a34880
-[   65.598315] x2 : 0000000000000000 x1 : 0000000000000000 x0 : ffff000007cd99f0
-[   65.598940] Call trace:
-[   65.599155]  vb2_start_streaming+0xd4/0x160 [videobuf2_common]
-[   65.599672]  vb2_core_streamon+0x17c/0x1a8 [videobuf2_common]
-[   65.600179]  vb2_streamon+0x54/0x88 [videobuf2_v4l2]
-[   65.600619]  vb2_ioctl_streamon+0x54/0x60 [videobuf2_v4l2]
-[   65.601103]  v4l_streamon+0x3c/0x50 [videodev]
-[   65.601521]  __video_do_ioctl+0x1a4/0x428 [videodev]
-[   65.601977]  video_usercopy+0x320/0x828 [videodev]
-[   65.602419]  video_ioctl2+0x3c/0x58 [videodev]
-[   65.602830]  v4l2_ioctl+0x60/0x90 [videodev]
-[   65.603227]  __arm64_sys_ioctl+0xa8/0xe0
-[   65.603576]  invoke_syscall+0x54/0x118
-[   65.603911]  el0_svc_common.constprop.3+0x84/0x100
-[   65.604332]  do_el0_svc+0x34/0xa0
-[   65.604625]  el0_svc+0x1c/0x50
-[   65.604897]  el0t_64_sync_handler+0x88/0xb0
-[   65.605264]  el0t_64_sync+0x16c/0x170
-[   65.605587] ---[ end trace 578e0ba07742170d ]---
+This moves the ep_disconnect call to before we do the stop_conn call for
+this case. It will then work and look like a normal recovery/cleanup
+procedure from the driver's point of view.
 
-Fixes: 8ac456495a33d ("[media] stk1160: Stop device and unqueue buffers when start_streaming() fails")
-Signed-off-by: Dafna Hirschfeld <dafna.hirschfeld@collabora.com>
-Reviewed-by: Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Link: https://lore.kernel.org/r/20220408001314.5014-3-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/usb/stk1160/stk1160-core.c |  2 +-
- drivers/media/usb/stk1160/stk1160-v4l.c  | 10 +++++-----
- drivers/media/usb/stk1160/stk1160.h      |  2 +-
- 3 files changed, 7 insertions(+), 7 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 48 +++++++++++++++++------------
+ 1 file changed, 28 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/media/usb/stk1160/stk1160-core.c b/drivers/media/usb/stk1160/stk1160-core.c
-index 8e434b31cb98..7f02c2739ec2 100644
---- a/drivers/media/usb/stk1160/stk1160-core.c
-+++ b/drivers/media/usb/stk1160/stk1160-core.c
-@@ -410,7 +410,7 @@ static void stk1160_disconnect(struct usb_interface *interface)
- 	/* Here is the only place where isoc get released */
- 	stk1160_uninit_isoc(dev);
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 126f6f23bffa..03cda2da80ef 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2255,6 +2255,23 @@ static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
+ 	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
+ }
  
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
- 
- 	video_unregister_device(&dev->vdev);
- 	v4l2_device_disconnect(&dev->v4l2_dev);
-diff --git a/drivers/media/usb/stk1160/stk1160-v4l.c b/drivers/media/usb/stk1160/stk1160-v4l.c
-index 77b759a0bcd9..43676abc1694 100644
---- a/drivers/media/usb/stk1160/stk1160-v4l.c
-+++ b/drivers/media/usb/stk1160/stk1160-v4l.c
-@@ -269,7 +269,7 @@ static int stk1160_start_streaming(struct stk1160 *dev)
- 	stk1160_uninit_isoc(dev);
- out_stop_hw:
- 	usb_set_interface(dev->udev, 0, 0);
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_QUEUED);
- 
- 	mutex_unlock(&dev->v4l_lock);
- 
-@@ -317,7 +317,7 @@ static int stk1160_stop_streaming(struct stk1160 *dev)
- 
- 	stk1160_stop_hw(dev);
- 
--	stk1160_clear_queue(dev);
-+	stk1160_clear_queue(dev, VB2_BUF_STATE_ERROR);
- 
- 	stk1160_dbg("streaming stopped\n");
- 
-@@ -762,7 +762,7 @@ static const struct video_device v4l_template = {
- /********************************************************************/
- 
- /* Must be called with both v4l_lock and vb_queue_lock hold */
--void stk1160_clear_queue(struct stk1160 *dev)
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state)
++static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
++					 struct iscsi_endpoint *ep,
++					 bool is_active)
++{
++	/* Check if this was a conn error and the kernel took ownership */
++	if (!test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
++		iscsi_ep_disconnect(conn, is_active);
++	} else {
++		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
++		mutex_unlock(&conn->ep_mutex);
++
++		flush_work(&conn->cleanup_work);
++
++		mutex_lock(&conn->ep_mutex);
++	}
++}
++
+ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 			      struct iscsi_uevent *ev)
  {
- 	struct stk1160_buffer *buf;
- 	unsigned long flags;
-@@ -773,7 +773,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = list_first_entry(&dev->avail_bufs,
- 			struct stk1160_buffer, list);
- 		list_del(&buf->list);
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
+@@ -2275,6 +2292,16 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 		cancel_work_sync(&conn->cleanup_work);
+ 		iscsi_stop_conn(conn, flag);
+ 	} else {
++		/*
++		 * For offload, when iscsid is restarted it won't know about
++		 * existing endpoints so it can't do a ep_disconnect. We clean
++		 * it up here for userspace.
++		 */
++		mutex_lock(&conn->ep_mutex);
++		if (conn->ep)
++			iscsi_if_disconnect_bound_ep(conn, conn->ep, true);
++		mutex_unlock(&conn->ep_mutex);
++
+ 		/*
+ 		 * Figure out if it was the kernel or userspace initiating this.
+ 		 */
+@@ -3003,16 +3030,7 @@ static int iscsi_if_ep_disconnect(struct iscsi_transport *transport,
  	}
-@@ -783,7 +783,7 @@ void stk1160_clear_queue(struct stk1160 *dev)
- 		buf = dev->isoc_ctl.buf;
- 		dev->isoc_ctl.buf = NULL;
  
--		vb2_buffer_done(&buf->vb.vb2_buf, VB2_BUF_STATE_ERROR);
-+		vb2_buffer_done(&buf->vb.vb2_buf, vb2_state);
- 		stk1160_dbg("buffer [%p/%d] aborted\n",
- 			    buf, buf->vb.vb2_buf.index);
- 	}
-diff --git a/drivers/media/usb/stk1160/stk1160.h b/drivers/media/usb/stk1160/stk1160.h
-index acd1c811db08..54a046aacd33 100644
---- a/drivers/media/usb/stk1160/stk1160.h
-+++ b/drivers/media/usb/stk1160/stk1160.h
-@@ -177,7 +177,7 @@ struct regval {
- int stk1160_vb2_setup(struct stk1160 *dev);
- int stk1160_video_register(struct stk1160 *dev);
- void stk1160_video_unregister(struct stk1160 *dev);
--void stk1160_clear_queue(struct stk1160 *dev);
-+void stk1160_clear_queue(struct stk1160 *dev, enum vb2_buffer_state vb2_state);
+ 	mutex_lock(&conn->ep_mutex);
+-	/* Check if this was a conn error and the kernel took ownership */
+-	if (test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
+-		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
+-		mutex_unlock(&conn->ep_mutex);
+-
+-		flush_work(&conn->cleanup_work);
+-		goto put_ep;
+-	}
+-
+-	iscsi_ep_disconnect(conn, false);
++	iscsi_if_disconnect_bound_ep(conn, ep, false);
+ 	mutex_unlock(&conn->ep_mutex);
+ put_ep:
+ 	iscsi_put_endpoint(ep);
+@@ -3723,16 +3741,6 @@ static int iscsi_if_transport_conn(struct iscsi_transport *transport,
  
- /* Provided by stk1160-video.c */
- int stk1160_alloc_isoc(struct stk1160 *dev);
+ 	switch (nlh->nlmsg_type) {
+ 	case ISCSI_UEVENT_BIND_CONN:
+-		if (conn->ep) {
+-			/*
+-			 * For offload boot support where iscsid is restarted
+-			 * during the pivot root stage, the ep will be intact
+-			 * here when the new iscsid instance starts up and
+-			 * reconnects.
+-			 */
+-			iscsi_ep_disconnect(conn, true);
+-		}
+-
+ 		session = iscsi_session_lookup(ev->u.b_conn.sid);
+ 		if (!session) {
+ 			err = -EINVAL;
 -- 
-2.34.1
+2.35.1
 
 
 

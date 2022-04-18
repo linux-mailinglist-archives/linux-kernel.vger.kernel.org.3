@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C01F505451
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:03:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC684505538
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239494AbiDRNFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S241886AbiDRNRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240335AbiDRMzK (ORCPT
+        with ESMTP id S242114AbiDRM7h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9299AE5C;
-        Mon, 18 Apr 2022 05:36:29 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3802F028;
+        Mon, 18 Apr 2022 05:40:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BD33B80EDB;
-        Mon, 18 Apr 2022 12:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D77AAC385A8;
-        Mon, 18 Apr 2022 12:36:26 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1A405B80EDB;
+        Mon, 18 Apr 2022 12:40:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CCD3C385A1;
+        Mon, 18 Apr 2022 12:40:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285387;
-        bh=pNqvtigH1UvR7xszdOOR5JgxaJmqI6f+QEhS7rm9qFk=;
+        s=korg; t=1650285607;
+        bh=8p+aReAVSXNj6og1QN3uqqCJu5j0sLTXlG5WVaeT6ko=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tXizCNydTmbm7zf1XtmwQq6/3Ti75WSXh75mxKvI+n2+lvJoOXmieZ9oAXLYzo92/
-         bE/xmgn8krad5iJ8jf35Rpi932a0Q794Nl4Kj6jzFmhPp9SWem11oK8Ar0m26/jPw2
-         GyPMyy9yOhS6lucdZcsIHvYoYNNNw60j7kAQBLNQ=
+        b=d2HoygYAypb58cGcntkTqioHWm7rDp7i+AtTNwBHKLudbYZ9xNX0Di3s5vpTHCQGB
+         9SrKz9uZDhc6RHpIc7G93nCthZmtVZMm6hdvclL1vGx28h0puYyS0niDdPxBkU1z+i
+         zaAq+ueagBcqVxcdBWgHHJN3U2KXYbFqJBY9EYhQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dongjin Yang <dj76.yang@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH 5.15 174/189] dt-bindings: net: snps: remove duplicate name
+        stable@vger.kernel.org, Patrick Wang <patrick.wang.shcn@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.10 072/105] mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
 Date:   Mon, 18 Apr 2022 14:13:14 +0200
-Message-Id: <20220418121207.801781560@linuxfoundation.org>
+Message-Id: <20220418121148.536397803@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dongjin Yang <dj76.yang@samsung.com>
+From: Patrick Wang <patrick.wang.shcn@gmail.com>
 
-commit ce8b3ad1071b764e963d9b08ac34ffddddf12da6 upstream.
+commit 23c2d497de21f25898fbea70aeb292ab8acc8c94 upstream.
 
-snps,dwmac has duplicated name for loongson,ls2k-dwmac and
-loongson,ls7a-dwmac.
+The kmemleak_*_phys() apis do not check the address for lowmem's min
+boundary, while the caller may pass an address below lowmem, which will
+trigger an oops:
 
-Signed-off-by: Dongjin Yang <dj76.yang@samsung.com>
-Fixes: 68277749a013 ("dt-bindings: dwmac: Add bindings for new Loongson SoC and bridge chip")
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Rob Herring <robh@kernel.org>
-Link: https://lore.kernel.org/r/20220404022857epcms1p6e6af1a6a86569f339e50c318abde7d3c@epcms1p6
+  # echo scan > /sys/kernel/debug/kmemleak
+  Unable to handle kernel paging request at virtual address ff5fffffffe00000
+  Oops [#1]
+  Modules linked in:
+  CPU: 2 PID: 134 Comm: bash Not tainted 5.18.0-rc1-next-20220407 #33
+  Hardware name: riscv-virtio,qemu (DT)
+  epc : scan_block+0x74/0x15c
+   ra : scan_block+0x72/0x15c
+  epc : ffffffff801e5806 ra : ffffffff801e5804 sp : ff200000104abc30
+   gp : ffffffff815cd4e8 tp : ff60000004cfa340 t0 : 0000000000000200
+   t1 : 00aaaaaac23954cc t2 : 00000000000003ff s0 : ff200000104abc90
+   s1 : ffffffff81b0ff28 a0 : 0000000000000000 a1 : ff5fffffffe01000
+   a2 : ffffffff81b0ff28 a3 : 0000000000000002 a4 : 0000000000000001
+   a5 : 0000000000000000 a6 : ff200000104abd7c a7 : 0000000000000005
+   s2 : ff5fffffffe00ff9 s3 : ffffffff815cd998 s4 : ffffffff815d0e90
+   s5 : ffffffff81b0ff28 s6 : 0000000000000020 s7 : ffffffff815d0eb0
+   s8 : ffffffffffffffff s9 : ff5fffffffe00000 s10: ff5fffffffe01000
+   s11: 0000000000000022 t3 : 00ffffffaa17db4c t4 : 000000000000000f
+   t5 : 0000000000000001 t6 : 0000000000000000
+  status: 0000000000000100 badaddr: ff5fffffffe00000 cause: 000000000000000d
+    scan_gray_list+0x12e/0x1a6
+    kmemleak_scan+0x2aa/0x57e
+    kmemleak_write+0x32a/0x40c
+    full_proxy_write+0x56/0x82
+    vfs_write+0xa6/0x2a6
+    ksys_write+0x6c/0xe2
+    sys_write+0x22/0x2a
+    ret_from_syscall+0x0/0x2
+
+The callers may not quite know the actual address they pass(e.g. from
+devicetree).  So the kmemleak_*_phys() apis should guarantee the address
+they finally use is in lowmem range, so check the address for lowmem's
+min boundary.
+
+Link: https://lkml.kernel.org/r/20220413122925.33856-1-patrick.wang.shcn@gmail.com
+Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- Documentation/devicetree/bindings/net/snps,dwmac.yaml |    6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ mm/kmemleak.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-+++ b/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-@@ -53,20 +53,18 @@ properties:
-         - allwinner,sun8i-r40-emac
-         - allwinner,sun8i-v3s-emac
-         - allwinner,sun50i-a64-emac
--        - loongson,ls2k-dwmac
--        - loongson,ls7a-dwmac
-         - amlogic,meson6-dwmac
-         - amlogic,meson8b-dwmac
-         - amlogic,meson8m2-dwmac
-         - amlogic,meson-gxbb-dwmac
-         - amlogic,meson-axg-dwmac
--        - loongson,ls2k-dwmac
--        - loongson,ls7a-dwmac
-         - ingenic,jz4775-mac
-         - ingenic,x1000-mac
-         - ingenic,x1600-mac
-         - ingenic,x1830-mac
-         - ingenic,x2000-mac
-+        - loongson,ls2k-dwmac
-+        - loongson,ls7a-dwmac
-         - rockchip,px30-gmac
-         - rockchip,rk3128-gmac
-         - rockchip,rk3228-gmac
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1123,7 +1123,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+@@ -1137,7 +1137,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+@@ -1149,7 +1149,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+@@ -1161,7 +1161,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
 
 

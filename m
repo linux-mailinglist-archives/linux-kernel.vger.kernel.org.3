@@ -2,42 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7925055E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7E85055E1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243465AbiDRN3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S243743AbiDRN3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240983AbiDRNFX (ORCPT
+        with ESMTP id S239374AbiDRNF2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:05:23 -0400
+        Mon, 18 Apr 2022 09:05:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CF4340DA;
-        Mon, 18 Apr 2022 05:45:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91853340DE;
+        Mon, 18 Apr 2022 05:46:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5EA5660FB6;
-        Mon, 18 Apr 2022 12:45:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F97EC385A1;
-        Mon, 18 Apr 2022 12:45:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D88E6124F;
+        Mon, 18 Apr 2022 12:46:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EAF1C385A1;
+        Mon, 18 Apr 2022 12:46:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285957;
-        bh=Ro/CPlPrB2+4gFbWWaN9lTICA1APWeL2RMTpJRBah8s=;
+        s=korg; t=1650285960;
+        bh=rHmNXuzeV8iJKUzH6+x3ln2ySZEFmVKkG1uO2fuHIks=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xn92+hcy9+NTb+DYG857wQHhNWrzJGTb7Nzwz6HFUWdk4m8zv+gOyXOd+6wuskMx7
-         pXcuPgpGjdC+q52iZgOFjuNIrvuZGzeq6nF/W4ieCOlMuhdYiuj+XfQGgpidKkC2ZZ
-         B7pOwLjYIig2Zib6W8kZ/QFn2OKCrV3/nLxpvnGE=
+        b=XwrszLyjtTIGc56s8LrwtnCl4FY0eBde2xGy1KociSaeC8yAkRIujHjqU43cslK2y
+         InwI2KoKNCewma5x+LvJw4AyS2P6z0N+M53vQe4K8pPE+FlAciKPFFBIOSsZAD+x6A
+         0eoTwO6IshQlz7kH6wVlIWurDDoEMALhONizzpfA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        stable@vger.kernel.org, Leo Ruan <tingquan.ruan@cn.bosch.com>,
+        Mark Jonas <mark.jonas@de.bosch.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 17/32] ata: libata-core: Disable READ LOG DMA EXT for Samsung 840 EVOs
-Date:   Mon, 18 Apr 2022 14:13:57 +0200
-Message-Id: <20220418121127.630064036@linuxfoundation.org>
+Subject: [PATCH 4.19 18/32] gpu: ipu-v3: Fix dev_dbg frequency output
+Date:   Mon, 18 Apr 2022 14:13:58 +0200
+Message-Id: <20220418121127.659107387@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
 References: <20220418121127.127656835@linuxfoundation.org>
@@ -55,43 +56,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Lamparter <chunkeey@gmail.com>
+From: Leo Ruan <tingquan.ruan@cn.bosch.com>
 
-[ Upstream commit 5399752299396a3c9df6617f4b3c907d7aa4ded8 ]
+[ Upstream commit 070a88fd4a03f921b73a2059e97d55faaa447dab ]
 
-Samsung' 840 EVO with the latest firmware (EXT0DB6Q) locks up with
-the a message: "READ LOG DMA EXT failed, trying PIO" during boot.
+This commit corrects the printing of the IPU clock error percentage if
+it is between -0.1% to -0.9%. For example, if the pixel clock requested
+is 27.2 MHz but only 27.0 MHz can be achieved the deviation is -0.8%.
+But the fixed point math had a flaw and calculated error of 0.2%.
 
-Initially this was discovered because it caused a crash
-with the sata_dwc_460ex controller on a WD MyBook Live DUO.
+Before:
+  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+  IPU clock can give 27000000 with divider 10, error 0.2%
+  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
 
-The reporter "Tice Rex" which has the unique opportunity that he
-has two Samsung 840 EVO SSD! One with the older firmware "EXT0BB0Q"
-which booted fine and didn't expose "READ LOG DMA EXT". But the
-newer/latest firmware "EXT0DB6Q" caused the headaches.
+After:
+  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+  IPU clock can give 27000000 with divider 10, error -0.8%
+  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
 
-BugLink: https://github.com/openwrt/openwrt/issues/9505
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Leo Ruan <tingquan.ruan@cn.bosch.com>
+Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220207151411.5009-1-mark.jonas@de.bosch.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/ata/libata-core.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/gpu/ipu-v3/ipu-di.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
-index 33d3728f3622..0c10d9557754 100644
---- a/drivers/ata/libata-core.c
-+++ b/drivers/ata/libata-core.c
-@@ -4598,6 +4598,9 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Crucial_CT*MX100*",		"MU01",	ATA_HORKAGE_NO_NCQ_TRIM |
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
-+	{ "Samsung SSD 840 EVO*",	NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
-+						ATA_HORKAGE_NO_DMA_LOG |
-+						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Samsung SSD 840*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
- 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
- 	{ "Samsung SSD 850*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+diff --git a/drivers/gpu/ipu-v3/ipu-di.c b/drivers/gpu/ipu-v3/ipu-di.c
+index d2f1bd9d3deb..c498dc7d8838 100644
+--- a/drivers/gpu/ipu-v3/ipu-di.c
++++ b/drivers/gpu/ipu-v3/ipu-di.c
+@@ -460,8 +460,9 @@ static void ipu_di_config_clock(struct ipu_di *di,
+ 
+ 		error = rate / (sig->mode.pixelclock / 1000);
+ 
+-		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %d.%u%%\n",
+-			rate, div, (signed)(error - 1000) / 10, error % 10);
++		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %c%d.%d%%\n",
++			rate, div, error < 1000 ? '-' : '+',
++			abs(error - 1000) / 10, abs(error - 1000) % 10);
+ 
+ 		/* Allow a 1% error */
+ 		if (error < 1010 && error >= 990) {
 -- 
 2.35.1
 

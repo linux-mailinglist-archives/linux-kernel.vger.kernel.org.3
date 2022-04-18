@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5945056A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B11CC5050B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243261AbiDRNkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53540 "EHLO
+        id S238804AbiDRM1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235578AbiDRNMC (ORCPT
+        with ESMTP id S238719AbiDRM0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:12:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55ED92D1F4;
-        Mon, 18 Apr 2022 05:50:45 -0700 (PDT)
+        Mon, 18 Apr 2022 08:26:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1990B7F5;
+        Mon, 18 Apr 2022 05:20:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 011C3B80E4B;
-        Mon, 18 Apr 2022 12:50:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40E1EC385A7;
-        Mon, 18 Apr 2022 12:50:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F59960EF4;
+        Mon, 18 Apr 2022 12:20:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B7EC385A7;
+        Mon, 18 Apr 2022 12:19:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286242;
-        bh=FsWshQH8zkPlqgJV6Rgm23aYYDRNwTmQRak3RDzTGdo=;
+        s=korg; t=1650284399;
+        bh=RdVROE4Lh6lnDHPlv1aR88ULzX+GC3km3JLh6bS0wgM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wSi5utzhqlLOxnlKPWbb132ee0tOb3aJLPytlEaunoavux73i9fHxGDlx91FI13qy
-         sLpC6sdH0WHvLpHSACacVenaMEQKARMBsH8LkcQgR0nVBXAVupvh35pvdUUXk0IMVh
-         On3suFrkr+mQxtWGYLDhjb0D+mxne1RoJZpk7sIs=
+        b=v9t77ZH00aLccZNKh4fzKDJSWLacht3ntjH2jQy5atAwKz0CHo/xhcMNKjqSDmjcw
+         QsoJ0/TmJVsA9+zaL67IPp3eKyf9gIOvkJRgTeHOK6br9T/IEug7p+PWzuIV7o/PZH
+         k7ShOA7sX0p63cafXzQMvRsFtSrUmvDtzj+a+Cqw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
-        Wang Hai <wanghai38@huawei.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 072/284] video: fbdev: smscufx: Fix null-ptr-deref in ufx_usb_probe()
-Date:   Mon, 18 Apr 2022 14:10:53 +0200
-Message-Id: <20220418121212.735308807@linuxfoundation.org>
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 085/219] net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+Date:   Mon, 18 Apr 2022 14:10:54 +0200
+Message-Id: <20220418121208.799292404@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wang Hai <wanghai38@huawei.com>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit 1791f487f877a9e83d81c8677bd3e7b259e7cb27 ]
+[ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
 
-I got a null-ptr-deref report:
+When using a fixed-link, the altr_tse_pcs driver crashes
+due to null-pointer dereference as no phy_device is provided to
+tse_pcs_fix_mac_speed function. Fix this by adding a check for
+phy_dev before calling the tse_pcs_fix_mac_speed() function.
 
-BUG: kernel NULL pointer dereference, address: 0000000000000000
-...
-RIP: 0010:fb_destroy_modelist+0x38/0x100
-...
-Call Trace:
- ufx_usb_probe.cold+0x2b5/0xac1 [smscufx]
- usb_probe_interface+0x1aa/0x3c0 [usbcore]
- really_probe+0x167/0x460
-...
- ret_from_fork+0x1f/0x30
+Also clean up the tse_pcs_fix_mac_speed function a bit. There is
+no need to check for splitter_base and sgmii_adapter_base
+because the driver will fail if these 2 variables are not
+derived from the device tree.
 
-If fb_alloc_cmap() fails in ufx_usb_probe(), fb_destroy_modelist() will
-be called to destroy modelist in the error handling path. But modelist
-has not been initialized yet, so it will result in null-ptr-deref.
-
-Initialize modelist before calling fb_alloc_cmap() to fix this bug.
-
-Fixes: 3c8a63e22a08 ("Add support for SMSC UFX6000/7000 USB display adapters")
-Reported-by: Hulk Robot <hulkci@huawei.com>
-Signed-off-by: Wang Hai <wanghai38@huawei.com>
-Acked-by: Thomas Zimmermann <tzimmermann@suse.de>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Fixes: fb3bbdb85989 ("net: ethernet: Add TSE PCS support to dwmac-socfpga")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/video/fbdev/smscufx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |  8 --------
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |  4 ++++
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 13 +++++--------
+ 3 files changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/video/fbdev/smscufx.c b/drivers/video/fbdev/smscufx.c
-index 2275e80b5776..1b244bea24b8 100644
---- a/drivers/video/fbdev/smscufx.c
-+++ b/drivers/video/fbdev/smscufx.c
-@@ -1672,6 +1672,7 @@ static int ufx_usb_probe(struct usb_interface *interface,
- 	info->par = dev;
- 	info->pseudo_palette = dev->pseudo_palette;
- 	info->fbops = &ufx_ops;
-+	INIT_LIST_HEAD(&info->modelist);
+diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+index cd478d2cd871..00f6d347eaf7 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+@@ -57,10 +57,6 @@
+ #define TSE_PCS_USE_SGMII_ENA				BIT(0)
+ #define TSE_PCS_IF_USE_SGMII				0x03
  
- 	retval = fb_alloc_cmap(&info->cmap, 256, 0);
- 	if (retval < 0) {
-@@ -1682,8 +1683,6 @@ static int ufx_usb_probe(struct usb_interface *interface,
- 	INIT_DELAYED_WORK(&dev->free_framebuffer_work,
- 			  ufx_free_framebuffer_work);
- 
--	INIT_LIST_HEAD(&info->modelist);
+-#define SGMII_ADAPTER_CTRL_REG				0x00
+-#define SGMII_ADAPTER_DISABLE				0x0001
+-#define SGMII_ADAPTER_ENABLE				0x0000
 -
- 	retval = ufx_reg_read(dev, 0x3000, &id_rev);
- 	check_warn_goto_error(retval, "error %d reading 0x3000 register from device", retval);
- 	dev_dbg(dev->gdev, "ID_REV register value 0x%08x", id_rev);
+ #define AUTONEGO_LINK_TIMER				20
+ 
+ static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
+@@ -202,12 +198,8 @@ void tse_pcs_fix_mac_speed(struct tse_pcs *pcs, struct phy_device *phy_dev,
+ 			   unsigned int speed)
+ {
+ 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
+-	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
+ 	u32 val;
+ 
+-	writew(SGMII_ADAPTER_ENABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+-
+ 	pcs->autoneg = phy_dev->autoneg;
+ 
+ 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+index 442812c0a4bd..694ac25ef426 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+@@ -10,6 +10,10 @@
+ #include <linux/phy.h>
+ #include <linux/timer.h>
+ 
++#define SGMII_ADAPTER_CTRL_REG		0x00
++#define SGMII_ADAPTER_ENABLE		0x0000
++#define SGMII_ADAPTER_DISABLE		0x0001
++
+ struct tse_pcs {
+ 	struct device *dev;
+ 	void __iomem *tse_pcs_base;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+index b7c2579c963b..ac9e6c7a33b5 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -18,9 +18,6 @@
+ 
+ #include "altr_tse_pcs.h"
+ 
+-#define SGMII_ADAPTER_CTRL_REG                          0x00
+-#define SGMII_ADAPTER_DISABLE                           0x0001
+-
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
+@@ -62,16 +59,14 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+ {
+ 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
+ 	void __iomem *splitter_base = dwmac->splitter_base;
+-	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
+ 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
+ 	struct device *dev = dwmac->dev;
+ 	struct net_device *ndev = dev_get_drvdata(dev);
+ 	struct phy_device *phy_dev = ndev->phydev;
+ 	u32 val;
+ 
+-	if ((tse_pcs_base) && (sgmii_adapter_base))
+-		writew(SGMII_ADAPTER_DISABLE,
+-		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	writew(SGMII_ADAPTER_DISABLE,
++	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 
+ 	if (splitter_base) {
+ 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
+@@ -93,7 +88,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+ 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
+ 	}
+ 
+-	if (tse_pcs_base && sgmii_adapter_base)
++	writew(SGMII_ADAPTER_ENABLE,
++	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	if (phy_dev)
+ 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
+ }
+ 
 -- 
-2.34.1
+2.35.1
 
 
 

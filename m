@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58200505018
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:18:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E057250501C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:18:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238421AbiDRMV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
+        id S238448AbiDRMVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238144AbiDRMVC (ORCPT
+        with ESMTP id S238329AbiDRMVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:21:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C1A1AF24;
-        Mon, 18 Apr 2022 05:17:10 -0700 (PDT)
+        Mon, 18 Apr 2022 08:21:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236301AF10;
+        Mon, 18 Apr 2022 05:17:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33A8860EF4;
-        Mon, 18 Apr 2022 12:17:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30D2CC385A7;
-        Mon, 18 Apr 2022 12:17:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BBCB5B80ED7;
+        Mon, 18 Apr 2022 12:17:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164BDC385A1;
+        Mon, 18 Apr 2022 12:17:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284229;
-        bh=2eW/C51TwqfkdoErXQym1CHihSsTcqaYUfBGjlwTP8I=;
+        s=korg; t=1650284232;
+        bh=PGMSCHIq8Ea2LVix5FCymQtAbWUPzEE/jy1wS8r+Rxw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zgTfIbG+1ycxcdgQZWvskGHmqpjl0XsJeHqieyKXxRgNHioMQfhlJz0q8c7exc5tt
-         AO4xozM/Ar6ml7Gf5h1ExW1kXtU8op9B4LaLF2qkRC/VAZJ9gWUjggKhAXLDB5iNMY
-         Fm5Vc2bBYNfp2q22rjV9/WTkiZQhANS/PynbCJJY=
+        b=HDhdSyCKxYGOhYP0JaJIZ4K/9Y2EXrEt2C7WJfLSIMOtC7PucXHsMTTRzi10LCVz+
+         OwuWdpUr1nqE8TWOJ5Xv1mHbE5Cn3L30y0Akk26/x6GMvJhukNO0kkCj3pn/8NTz9Z
+         5dMRYqSRGLtaV4HcWJz8YYgknfHWMJWiNqAxA5Hg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dennis Zhou <dennis@kernel.org>,
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
         David Sterba <dsterba@suse.com>
-Subject: [PATCH 5.17 015/219] btrfs: fix btrfs_submit_compressed_write cgroup attribution
-Date:   Mon, 18 Apr 2022 14:09:44 +0200
-Message-Id: <20220418121203.955676572@linuxfoundation.org>
+Subject: [PATCH 5.17 016/219] btrfs: return allocated block group from do_chunk_alloc()
+Date:   Mon, 18 Apr 2022 14:09:45 +0200
+Message-Id: <20220418121204.075353134@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -54,53 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dennis Zhou <dennis@kernel.org>
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-commit acee08aaf6d158d03668dc82b0a0eef41100531b upstream.
+commit 820c363bd526ec8e133e4b84e6ad1fda12023b4b upstream.
 
-This restores the logic from commit 46bcff2bfc5e ("btrfs: fix compressed
-write bio blkcg attribution") which added cgroup attribution to btrfs
-writeback. It also adds back the REQ_CGROUP_PUNT flag for these ios.
+Return the allocated block group from do_chunk_alloc(). This is a
+preparation patch for the next patch.
 
-Fixes: 91507240482e ("btrfs: determine stripe boundary at bio allocation time in btrfs_submit_compressed_write")
 CC: stable@vger.kernel.org # 5.16+
-Signed-off-by: Dennis Zhou <dennis@kernel.org>
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Tested-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
 Signed-off-by: David Sterba <dsterba@suse.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- fs/btrfs/compression.c |    8 ++++++++
- 1 file changed, 8 insertions(+)
+ fs/btrfs/block-group.c |   16 +++++++++++++---
+ 1 file changed, 13 insertions(+), 3 deletions(-)
 
---- a/fs/btrfs/compression.c
-+++ b/fs/btrfs/compression.c
-@@ -534,6 +534,9 @@ blk_status_t btrfs_submit_compressed_wri
- 	cb->orig_bio = NULL;
- 	cb->nr_pages = nr_pages;
+--- a/fs/btrfs/block-group.c
++++ b/fs/btrfs/block-group.c
+@@ -3427,7 +3427,7 @@ int btrfs_force_chunk_alloc(struct btrfs
+ 	return btrfs_chunk_alloc(trans, alloc_flags, CHUNK_ALLOC_FORCE);
+ }
  
-+	if (blkcg_css)
-+		kthread_associate_blkcg(blkcg_css);
-+
- 	while (cur_disk_bytenr < disk_start + compressed_len) {
- 		u64 offset = cur_disk_bytenr - disk_start;
- 		unsigned int index = offset >> PAGE_SHIFT;
-@@ -552,6 +555,8 @@ blk_status_t btrfs_submit_compressed_wri
- 				bio = NULL;
- 				goto finish_cb;
- 			}
-+			if (blkcg_css)
-+				bio->bi_opf |= REQ_CGROUP_PUNT;
- 		}
- 		/*
- 		 * We should never reach next_stripe_start start as we will
-@@ -609,6 +614,9 @@ blk_status_t btrfs_submit_compressed_wri
- 	return 0;
+-static int do_chunk_alloc(struct btrfs_trans_handle *trans, u64 flags)
++static struct btrfs_block_group *do_chunk_alloc(struct btrfs_trans_handle *trans, u64 flags)
+ {
+ 	struct btrfs_block_group *bg;
+ 	int ret;
+@@ -3514,7 +3514,11 @@ static int do_chunk_alloc(struct btrfs_t
+ out:
+ 	btrfs_trans_release_chunk_metadata(trans);
  
- finish_cb:
-+	if (blkcg_css)
-+		kthread_associate_blkcg(NULL);
+-	return ret;
++	if (ret)
++		return ERR_PTR(ret);
 +
- 	if (bio) {
- 		bio->bi_status = ret;
- 		bio_endio(bio);
++	btrfs_get_block_group(bg);
++	return bg;
+ }
+ 
+ /*
+@@ -3629,6 +3633,7 @@ int btrfs_chunk_alloc(struct btrfs_trans
+ {
+ 	struct btrfs_fs_info *fs_info = trans->fs_info;
+ 	struct btrfs_space_info *space_info;
++	struct btrfs_block_group *ret_bg;
+ 	bool wait_for_alloc = false;
+ 	bool should_alloc = false;
+ 	int ret = 0;
+@@ -3722,9 +3727,14 @@ int btrfs_chunk_alloc(struct btrfs_trans
+ 			force_metadata_allocation(fs_info);
+ 	}
+ 
+-	ret = do_chunk_alloc(trans, flags);
++	ret_bg = do_chunk_alloc(trans, flags);
+ 	trans->allocating_chunk = false;
+ 
++	if (IS_ERR(ret_bg))
++		ret = PTR_ERR(ret_bg);
++	else
++		btrfs_put_block_group(ret_bg);
++
+ 	spin_lock(&space_info->lock);
+ 	if (ret < 0) {
+ 		if (ret == -ENOSPC)
 
 

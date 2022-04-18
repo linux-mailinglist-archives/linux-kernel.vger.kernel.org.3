@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4660C5053DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC945055AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240895AbiDRNCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43308 "EHLO
+        id S242505AbiDRNOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240084AbiDRMw2 (ORCPT
+        with ESMTP id S242416AbiDRM7x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:52:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67ABD2D1FE;
-        Mon, 18 Apr 2022 05:34:27 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A61126111;
+        Mon, 18 Apr 2022 05:41:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F27A7611D1;
-        Mon, 18 Apr 2022 12:34:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0B61C385A1;
-        Mon, 18 Apr 2022 12:34:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3578960FB6;
+        Mon, 18 Apr 2022 12:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27E91C385A1;
+        Mon, 18 Apr 2022 12:41:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285266;
-        bh=epETK8RMdi/qHauVcO3oyZYPjLD8fCCYT0QAkxHcJgc=;
+        s=korg; t=1650285672;
+        bh=frfWCP/WFjSy1bdWI3vnHvvSGgCADe10jnfJswe0OCM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RM7sZPCP+YmyC1ZMsz0/2JpdGU/94X8psuasxV3hid7fFoKFVrTc0y1TjVUshFFEJ
-         FzCFVILrZXHyk1ETxjtx5/DfzzR11Hw2A++134N7bw5YpzgBADDex5nWym95YDgH2m
-         tgDEQ7Q0EGexp2ezdqshHOjDEwJhcClhukfIB/x0=
+        b=zph4xvoIoWJXwKWBHxAjkTAhaq1ScJiT1KjVziWlVmcCRvU3WpJPX8fNMUyiicomM
+         Evp2foBgS614A9/OYa9Dzm/ElmhCrE/NQ9mpNjAP+mEtKIdBBYCqeBaH+sQoV90tx6
+         cmzn8aQhsSFyIuKCdMdZdzNvfHSCStFtolDYdRrY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Bagas Sanjaya <bagasdotme@gmail.com>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Valo <kvalo@kernel.org>
-Subject: [PATCH 5.15 154/189] ath9k: Properly clear TX status area before reporting to mac80211
-Date:   Mon, 18 Apr 2022 14:12:54 +0200
-Message-Id: <20220418121206.392831461@linuxfoundation.org>
+        stable@vger.kernel.org, Justin Tee <justin.tee@broadcom.com>,
+        James Smart <jsmart2021@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 053/105] scsi: lpfc: Fix queue failures when recovering from PCI parity error
+Date:   Mon, 18 Apr 2022 14:12:55 +0200
+Message-Id: <20220418121147.989206538@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,56 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Toke Høiland-Jørgensen <toke@toke.dk>
+From: James Smart <jsmart2021@gmail.com>
 
-commit 037250f0a45cf9ecf5b52d4b9ff8eadeb609c800 upstream.
+[ Upstream commit df0101197c4d9596682901631f3ee193ed354873 ]
 
-The ath9k driver was not properly clearing the status area in the
-ieee80211_tx_info struct before reporting TX status to mac80211. Instead,
-it was manually filling in fields, which meant that fields introduced later
-were left as-is.
+When recovering from a pci-parity error the driver is failing to re-create
+queues, causing recovery to fail. Looking deeper, it was found that the
+interrupt vector count allocated on the recovery was fewer than the vectors
+originally allocated. This disparity resulted in CPU map entries with stale
+information. When the driver tries to re-create the queues, it attempts to
+use the stale information which indicates an eq/interrupt vector that was
+no longer created.
 
-Conveniently, mac80211 actually provides a helper to zero out the status
-area, so use that to make sure we zero everything.
+Fix by clearng the cpup map array before enabling and requesting the IRQs
+in the lpfc_sli_reset_slot_s4 routine().
 
-The last commit touching the driver function writing the status information
-seems to have actually been fixing an issue that was also caused by the
-area being uninitialised; but it only added clearing of a single field
-instead of the whole struct. That is now redundant, though, so revert that
-commit and use it as a convenient Fixes tag.
-
-Fixes: cc591d77aba1 ("ath9k: Make sure to zero status.tx_time before reporting TX status")
-Reported-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Toke Høiland-Jørgensen <toke@toke.dk>
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
-Signed-off-by: Kalle Valo <kvalo@kernel.org>
-Link: https://lore.kernel.org/r/20220330164409.16645-1-toke@toke.dk
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220317032737.45308-4-jsmart2021@gmail.com
+Co-developed-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: Justin Tee <justin.tee@broadcom.com>
+Signed-off-by: James Smart <jsmart2021@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/wireless/ath/ath9k/xmit.c |    5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/lpfc/lpfc_init.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/drivers/net/wireless/ath/ath9k/xmit.c
-+++ b/drivers/net/wireless/ath/ath9k/xmit.c
-@@ -2512,6 +2512,8 @@ static void ath_tx_rc_status(struct ath_
- 	struct ath_hw *ah = sc->sc_ah;
- 	u8 i, tx_rateindex;
+diff --git a/drivers/scsi/lpfc/lpfc_init.c b/drivers/scsi/lpfc/lpfc_init.c
+index 1149bfc42fe6..134e4ee5dc48 100644
+--- a/drivers/scsi/lpfc/lpfc_init.c
++++ b/drivers/scsi/lpfc/lpfc_init.c
+@@ -13614,6 +13614,8 @@ lpfc_io_slot_reset_s4(struct pci_dev *pdev)
+ 	psli->sli_flag &= ~LPFC_SLI_ACTIVE;
+ 	spin_unlock_irq(&phba->hbalock);
  
-+	ieee80211_tx_info_clear_status(tx_info);
-+
- 	if (txok)
- 		tx_info->status.ack_signal = ts->ts_rssi;
- 
-@@ -2554,9 +2556,6 @@ static void ath_tx_rc_status(struct ath_
- 	}
- 
- 	tx_info->status.rates[tx_rateindex].count = ts->ts_longretry + 1;
--
--	/* we report airtime in ath_tx_count_airtime(), don't report twice */
--	tx_info->status.tx_time = 0;
- }
- 
- static void ath_tx_processq(struct ath_softc *sc, struct ath_txq *txq)
++	/* Init cpu_map array */
++	lpfc_cpu_map_array_init(phba);
+ 	/* Configure and enable interrupt */
+ 	intr_mode = lpfc_sli4_enable_intr(phba, phba->intr_mode);
+ 	if (intr_mode == LPFC_INTR_ERROR) {
+-- 
+2.35.1
+
 
 

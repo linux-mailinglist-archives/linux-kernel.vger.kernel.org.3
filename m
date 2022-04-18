@@ -2,43 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E51C505929
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27A2350594B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245638AbiDRORI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45936 "EHLO
+        id S1344459AbiDROSE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:18:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244697AbiDRN5f (ORCPT
+        with ESMTP id S244699AbiDRN5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:57:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC7910A;
-        Mon, 18 Apr 2022 06:07:56 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D62E2BE;
+        Mon, 18 Apr 2022 06:08:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2DFD960F16;
-        Mon, 18 Apr 2022 13:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3DDC8C385A1;
-        Mon, 18 Apr 2022 13:07:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F2C78B80E4B;
+        Mon, 18 Apr 2022 13:07:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E115C385A7;
+        Mon, 18 Apr 2022 13:07:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287275;
-        bh=BRuUqAYpx7hVvQbjyAKSFqWzC7BwgXQsQmdvFvhsVmc=;
+        s=korg; t=1650287278;
+        bh=JVt47S6x1EuP+6ogtx2Rw3Px24qUwKdWURS3QWyrprI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kv4HiisFiJjEmZuZJEXf/UFUOfAxNq7OHsHFChYW000CuKI/DpTnY45Jkee1CUj+o
-         nqhfYMiMoxhXBZnUv5UcUIcWhoey5VoZcOSmFFD5i1lcyhooyUYAFtQ/WNwCPdy+rv
-         SNn7nXG+F2Ce1W6SBLsy7KIevvosLRd/92ZiuLyQ=
+        b=V1NEGwF81jRNbz26DIyIlcZ6rELVt11Y5qMd5zPCT2GlGmKAx9tcHyUWihR1ZHfyM
+         296jcml6NK+bVCm1TINor5+fO8X6HACPvuyvvcBjWboeNRo0yUxTU9X5cfyivf2qTJ
+         L8gD33MAA2vnnHYXf7n2ky4ie/D+/bx3NYUWct64=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 110/218] clk: tegra: tegra124-emc: Fix missing put_device() call in emc_ensure_emc_driver
-Date:   Mon, 18 Apr 2022 14:12:56 +0200
-Message-Id: <20220418121202.745675031@linuxfoundation.org>
+Subject: [PATCH 4.9 111/218] NFS: remove unneeded check in decode_devicenotify_args()
+Date:   Mon, 18 Apr 2022 14:12:57 +0200
+Message-Id: <20220418121202.773509072@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,36 +55,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Alexey Khoroshilov <khoroshilov@ispras.ru>
 
-[ Upstream commit 6d6ef58c2470da85a99119f74d34216c8074b9f0 ]
+[ Upstream commit cb8fac6d2727f79f211e745b16c9abbf4d8be652 ]
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+[You don't often get email from khoroshilov@ispras.ru. Learn why this is important at http://aka.ms/LearnAboutSenderIdentification.]
 
-Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-Link: https://lore.kernel.org/r/20220112104501.30655-1-linmq006@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Overflow check in not needed anymore after we switch to kmalloc_array().
+
+Signed-off-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
+Fixes: a4f743a6bb20 ("NFSv4.1: Convert open-coded array allocation calls to kmalloc_array()")
+Signed-off-by: Trond Myklebust <trond.myklebust@hammerspace.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-emc.c | 1 +
- 1 file changed, 1 insertion(+)
+ fs/nfs/callback_xdr.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-emc.c b/drivers/clk/tegra/clk-emc.c
-index 74e7544f861b..348e7196b7b9 100644
---- a/drivers/clk/tegra/clk-emc.c
-+++ b/drivers/clk/tegra/clk-emc.c
-@@ -190,6 +190,7 @@ static struct tegra_emc *emc_ensure_emc_driver(struct tegra_clk_emc *tegra)
+diff --git a/fs/nfs/callback_xdr.c b/fs/nfs/callback_xdr.c
+index 67903eeb2ca4..00e58a42e637 100644
+--- a/fs/nfs/callback_xdr.c
++++ b/fs/nfs/callback_xdr.c
+@@ -319,10 +319,6 @@ __be32 decode_devicenotify_args(struct svc_rqst *rqstp,
+ 	n = ntohl(*p++);
+ 	if (n <= 0)
+ 		goto out;
+-	if (n > ULONG_MAX / sizeof(*args->devs)) {
+-		status = htonl(NFS4ERR_BADXDR);
+-		goto out;
+-	}
  
- 	tegra->emc = platform_get_drvdata(pdev);
- 	if (!tegra->emc) {
-+		put_device(&pdev->dev);
- 		pr_err("%s: cannot find EMC driver\n", __func__);
- 		return NULL;
- 	}
+ 	args->devs = kmalloc_array(n, sizeof(*args->devs), GFP_KERNEL);
+ 	if (!args->devs) {
 -- 
 2.34.1
 

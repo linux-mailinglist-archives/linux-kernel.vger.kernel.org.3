@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95BBD50595E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B39505960
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345689AbiDROT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
+        id S1345815AbiDROTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240673AbiDROAq (ORCPT
+        with ESMTP id S245044AbiDROAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:00:46 -0400
+        Mon, 18 Apr 2022 10:00:54 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA222B255;
-        Mon, 18 Apr 2022 06:09:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15522C66B;
+        Mon, 18 Apr 2022 06:09:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 88AC9B80E59;
-        Mon, 18 Apr 2022 13:08:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7766C385A1;
-        Mon, 18 Apr 2022 13:08:30 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 798DEB80EE4;
+        Mon, 18 Apr 2022 13:08:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD526C385A1;
+        Mon, 18 Apr 2022 13:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287311;
-        bh=4dvxpgY0PMs2FnGrlQP1Tssyec05K+DaanBcZRXoVao=;
+        s=korg; t=1650287314;
+        bh=MQ80TICDoU0k4gTgTnLQ3uHrBBGBTGfzc7zcAeNUXYA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1EaM3W72+OI4iKD6nmlEqsJsUxaxg766RxbKQDOVI11XL+dE2gFGjRvvxPRwB7GFx
-         Kd506UrXB8pk5RjrF9MG/Ipon0KbQPrk6wFR8QpfVKyWCIyPGi3qCCFWI7FptZC0oh
-         EbhQ8UxgrbtOicdWSDIYWFf1HAmRHwhAV0FsTMlU=
+        b=BeFzdhQcqk/rJr3RE7csAbb8ZrpsTHZo7D8Bub/L+LAAUZkNpC3Hn4EBarp2Bn6o0
+         PnXMbrpvibz0QhhPKyegt9w8gXI3KD0g7ZkacnBiM29zCmZyVnsSbJY7mM9UQq9Row
+         qtbAowGrQxYNG29RP0viruvC+b5Kb35RgQvuEVw4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Tom Rix <trix@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 120/218] net: phy: broadcom: Fix brcm_fet_config_init()
-Date:   Mon, 18 Apr 2022 14:13:06 +0200
-Message-Id: <20220418121203.026291358@linuxfoundation.org>
+Subject: [PATCH 4.9 121/218] qlcnic: dcb: default to returning -EOPNOTSUPP
+Date:   Mon, 18 Apr 2022 14:13:07 +0200
+Message-Id: <20220418121203.054580796@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,77 +55,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+From: Tom Rix <trix@redhat.com>
 
-[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
+[ Upstream commit 1521db37f0d42334a88e8ff28198a27d1ed5cd7b ]
 
-A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
-Broadcom UniMAC MDIO controller as not completing the turn around
-properly since the PHY expects 65 MDC clock cycles to complete a write
-cycle, and the MDIO controller was only sending 64 MDC clock cycles as
-determined by looking at a scope shot.
+Clang static analysis reports this issue
+qlcnic_dcb.c:382:10: warning: Assigned value is
+  garbage or undefined
+  mbx_out = *val;
+          ^ ~~~~
 
-This would make the subsequent read fail with the UniMAC MDIO controller
-command field having MDIO_READ_FAIL set and we would abort the
-brcm_fet_config_init() function and thus not probe the PHY at all.
+val is set in the qlcnic_dcb_query_hw_capability() wrapper.
+If there is no query_hw_capability op in dcp, success is
+returned without setting the val.
 
-After issuing a software reset, wait for at least 1ms which is well
-above the 1us reset delay advertised by the datasheet and issue a dummy
-read to let the PHY turn around the line properly. This read
-specifically ignores -EIO which would be returned by MDIO controllers
-checking for the line being turned around.
+For this and similar wrappers, return -EOPNOTSUPP.
 
-If we have a genuine reaad failure, the next read of the interrupt
-status register would pick it up anyway.
-
-Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Fixes: 14d385b99059 ("qlcnic: dcb: Query adapter DCB capabilities.")
+Signed-off-by: Tom Rix <trix@redhat.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
-index 870327efccf7..6bea2b219e00 100644
---- a/drivers/net/phy/broadcom.c
-+++ b/drivers/net/phy/broadcom.c
-@@ -15,6 +15,7 @@
-  */
+diff --git a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+index f4aa6331b367..0a9d24e86715 100644
+--- a/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
++++ b/drivers/net/ethernet/qlogic/qlcnic/qlcnic_dcb.h
+@@ -52,7 +52,7 @@ static inline int qlcnic_dcb_get_hw_capability(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_hw_capability)
+ 		return dcb->ops->get_hw_capability(dcb);
  
- #include "bcm-phy-lib.h"
-+#include <linux/delay.h>
- #include <linux/module.h>
- #include <linux/phy.h>
- #include <linux/brcmphy.h>
-@@ -357,6 +358,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
- 	if (err < 0)
- 		return err;
+-	return 0;
++	return -EOPNOTSUPP;
+ }
  
-+	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
-+	 * build some slack here.
-+	 */
-+	usleep_range(1000, 2000);
-+
-+	/* The PHY requires 65 MDC clock cycles to complete a write operation
-+	 * and turnaround the line properly.
-+	 *
-+	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
-+	 * may flag the lack of turn-around as a read failure. This is
-+	 * particularly true with this combination since the MDIO controller
-+	 * only used 64 MDC cycles. This is not a critical failure in this
-+	 * specific case and it has no functional impact otherwise, so we let
-+	 * that one go through. If there is a genuine bus error, the next read
-+	 * of MII_BRCM_FET_INTREG will error out.
-+	 */
-+	err = phy_read(phydev, MII_BMCR);
-+	if (err < 0 && err != -EIO)
-+		return err;
-+
- 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
- 	if (reg < 0)
- 		return reg;
+ static inline void qlcnic_dcb_free(struct qlcnic_dcb *dcb)
+@@ -66,7 +66,7 @@ static inline int qlcnic_dcb_attach(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->attach)
+ 		return dcb->ops->attach(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int
+@@ -75,7 +75,7 @@ qlcnic_dcb_query_hw_capability(struct qlcnic_dcb *dcb, char *buf)
+ 	if (dcb && dcb->ops->query_hw_capability)
+ 		return dcb->ops->query_hw_capability(dcb, buf);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_get_info(struct qlcnic_dcb *dcb)
+@@ -90,7 +90,7 @@ qlcnic_dcb_query_cee_param(struct qlcnic_dcb *dcb, char *buf, u8 type)
+ 	if (dcb && dcb->ops->query_cee_param)
+ 		return dcb->ops->query_cee_param(dcb, buf, type);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+@@ -98,7 +98,7 @@ static inline int qlcnic_dcb_get_cee_cfg(struct qlcnic_dcb *dcb)
+ 	if (dcb && dcb->ops->get_cee_cfg)
+ 		return dcb->ops->get_cee_cfg(dcb);
+ 
+-	return 0;
++	return -EOPNOTSUPP;
+ }
+ 
+ static inline void qlcnic_dcb_aen_handler(struct qlcnic_dcb *dcb, void *msg)
 -- 
 2.34.1
 

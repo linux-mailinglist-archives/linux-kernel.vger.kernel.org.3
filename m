@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70E8D5051C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B933505506
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239946AbiDRMiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
+        id S240220AbiDRNPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239595AbiDRMdP (ORCPT
+        with ESMTP id S242468AbiDRM76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5586E114F;
-        Mon, 18 Apr 2022 05:24:56 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E73573121E;
+        Mon, 18 Apr 2022 05:41:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABFFB60FC4;
-        Mon, 18 Apr 2022 12:24:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C5E7C385A7;
-        Mon, 18 Apr 2022 12:24:54 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EFAA4B80EC3;
+        Mon, 18 Apr 2022 12:41:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F0A2C385A7;
+        Mon, 18 Apr 2022 12:41:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284695;
-        bh=vvHpU+KgIweUqNvKAilXjclDlU910lIZwZVqcIdTsFQ=;
+        s=korg; t=1650285678;
+        bh=xVm6RRwV0iebQzfEjV2PEmWJc2EKFy1OV3lmNHvO7uQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ll1OIU8R/6L0DEIeVSE/ZfBtFGMUt8Oooq4WNgOIOt3gZ0ZyG5xW+S1ZxZPmhUd5C
-         oArVB+Y6xdl3BmV8msV6uVBGZ4tFc+KLblsNw9abyIiR973cHwR7PtSbz0wZK8/GQD
-         dU7rBLU3QhIyNO9W7eje0bIav191IcHnhPWTSiwY=
+        b=hBnOh1VAq+D8KX7JMaZLUMU5A5jXPxE0gHIRnqjt2P2ZXG9H4xyBGJedhLDScxY9Q
+         3tgJGRTCo/y+okmhStDaMwOXcSi83icOybMawoyVE3NnsGBVxxjYyJOHPa/YkjjLzx
+         5plDFz+grcf40bT+ylV7CZAM4rlTMtTnHCg95o+Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kongweibin <kongweibin2@huawei.com>,
-        Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-        David Ahern <dsahern@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: [PATCH 5.17 198/219] ipv6: fix panic when forwarding a pkt with no in6 dev
+        stable@vger.kernel.org, Alvin Lee <Alvin.Lee2@amd.com>,
+        Aric Cyr <Aric.Cyr@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Charlene Liu <Charlene.Liu@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 045/105] drm/amd/display: fix audio format not updated after edid updated
 Date:   Mon, 18 Apr 2022 14:12:47 +0200
-Message-Id: <20220418121212.414825641@linuxfoundation.org>
+Message-Id: <20220418121147.759894866@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+From: Charlene Liu <Charlene.Liu@amd.com>
 
-commit e3fa461d8b0e185b7da8a101fe94dfe6dd500ac0 upstream.
+[ Upstream commit 5e8a71cf13bc9184fee915b2220be71b4c6cac74 ]
 
-kongweibin reported a kernel panic in ip6_forward() when input interface
-has no in6 dev associated.
+[why]
+for the case edid change only changed audio format.
+driver still need to update stream.
 
-The following tc commands were used to reproduce this panic:
-tc qdisc del dev vxlan100 root
-tc qdisc add dev vxlan100 root netem corrupt 5%
-
-CC: stable@vger.kernel.org
-Fixes: ccd27f05ae7b ("ipv6: fix 'disable_policy' for fwd packets")
-Reported-by: kongweibin <kongweibin2@huawei.com>
-Signed-off-by: Nicolas Dichtel <nicolas.dichtel@6wind.com>
-Reviewed-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Alvin Lee <Alvin.Lee2@amd.com>
+Reviewed-by: Aric Cyr <Aric.Cyr@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Charlene Liu <Charlene.Liu@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/ipv6/ip6_output.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/core/dc_resource.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/net/ipv6/ip6_output.c
-+++ b/net/ipv6/ip6_output.c
-@@ -485,7 +485,7 @@ int ip6_forward(struct sk_buff *skb)
- 		goto drop;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+index 5c5ccbad9658..1e47afc4ccc1 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_resource.c
+@@ -1701,8 +1701,8 @@ bool dc_is_stream_unchanged(
+ 	if (old_stream->ignore_msa_timing_param != stream->ignore_msa_timing_param)
+ 		return false;
  
- 	if (!net->ipv6.devconf_all->disable_policy &&
--	    !idev->cnf.disable_policy &&
-+	    (!idev || !idev->cnf.disable_policy) &&
- 	    !xfrm6_policy_check(NULL, XFRM_POLICY_FWD, skb)) {
- 		__IP6_INC_STATS(net, idev, IPSTATS_MIB_INDISCARDS);
- 		goto drop;
+-	// Only Have Audio left to check whether it is same or not. This is a corner case for Tiled sinks
+-	if (old_stream->audio_info.mode_count != stream->audio_info.mode_count)
++	/*compare audio info*/
++	if (memcmp(&old_stream->audio_info, &stream->audio_info, sizeof(stream->audio_info)) != 0)
+ 		return false;
+ 
+ 	return true;
+-- 
+2.35.1
+
 
 

@@ -2,53 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D985B505DC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:59:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7FCF505DCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347263AbiDRSCU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:02:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47972 "EHLO
+        id S1347276AbiDRSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:02:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbiDRSCS (ORCPT
+        with ESMTP id S1347272AbiDRSCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 14:02:18 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131C635249
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:39 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 38-20020a17090a09a900b001cb95d9ea46so9030093pjo.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:39 -0700 (PDT)
+        Mon, 18 Apr 2022 14:02:23 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C6A35249
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:40 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id k2-20020a170902ba8200b0015613b12004so8176213pls.22
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=date:message-id:mime-version:subject:from:to:cc;
-        bh=vhWzWD0c06OV0aukljkj0PRAdTdjkN73lYC7OTBumvk=;
-        b=TQbDokN3lq+qdZxam2TPeuTaXZ9+SEtwcvSVupju3yeggyb5ZcCUdNcWVeI9EifUsy
-         A45oEQITmVblS9/19nN10sbzqNSqLTCKXK99nQbVlqX4KCWDj0eQ2iVaIXfd4yIMgWZQ
-         h0vIli370QtN2a1Na+GTx4a2ZelbmUEtLkwqLhowKMCOBEVA1bz3W409U3JJYZ+0xmIk
-         Eg8kghWqV7LI08pf82ZXpmoDfL0rfZRIxO+kUDcG0k9fIzra0r2+pJH0UfSqLs+nxVRN
-         lLkXk8/Y14knw3nySUUP7aeX1U++V/f1GSw0uUJWQ1rEPNBdhng1fIb3/seQEmUV6GgR
-         DMJQ==
+        h=date:in-reply-to:message-id:mime-version:references:subject:from:to
+         :cc;
+        bh=r4E23OnZATIS+lk5aixNnqKMCFgUPEq6mE0xznooD8Q=;
+        b=Ae/sJwaupacpHLx5MtlaO/72tMhwQW3butupk70g0bqlEqW46BfYP642c+RYEnoVpL
+         BFdiDTFPTRU5I8o5yvvsKMP5tAzg1uwOJFxadYTreohSBRGoIgKKai0w0OXYRwvU5jI/
+         2wur/pyVHg3DwNdOnroCxTijDf3yZOGa/OcXkA6CHfGgfhyI9vuhiROqRmMMHiJLxW1y
+         Mq657bhjwfQPnqdb9V0Ep5N8AdQk3f+8ikWwI7aeIANWIY8VpWXTCYxziw8B+nYt9HPu
+         lTCYDV1pwDXZb0C+J6vZ7aRMv8JvQma6fBbls9tF0SXKiAnmrYLo5pAd+wSMoWB0GQmm
+         K7/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
-        bh=vhWzWD0c06OV0aukljkj0PRAdTdjkN73lYC7OTBumvk=;
-        b=ygvtk30Vs30sW9PDKd5rhaj1/Gs09iX7pi3l4ElTZmfIOsiy/s9zhyDxuS1oVU/8zt
-         wGTn/CXoLxx6Kt9nPcKdorjf+Oqp8yhrbbMfkrKkVMmgG9lvq7Rnsvz2qMCeSR6KBvwJ
-         HlomEcEKqe1kgAn6icQ0X85HUmfFNfxDwUOE60LZSmmZenF5qROC6elcx8RJghtuW37D
-         7oCTpw1lUOwh+TIM7FLe0mMxKsgZZ23k8vZEZYsGoM2IeV0/sdgsx/iANsnMshVBtUeH
-         GczoUShD77VP1VFvcmHmO3jDjwF1NLuuqVuiayfgqOmnVEGgXQ7hNQ1NlpwR4rS3ZbUq
-         HEmw==
-X-Gm-Message-State: AOAM532cF666/FEn2obdRgrdhTueYk/ASTSl511so+jMUx4+4+lgbvkJ
-        drS0FjAzKCWX4cPV8yPifiWe1ftE46Lyvg==
-X-Google-Smtp-Source: ABdhPJzWA97X0aRLo3oE+yWfJZyF6GWEv9k7Aug6u1Hjs2uzJwbuPs/WPufO7X8EmLmszuUEyzJU/yDKMhNHGw==
+        h=x-gm-message-state:date:in-reply-to:message-id:mime-version
+         :references:subject:from:to:cc;
+        bh=r4E23OnZATIS+lk5aixNnqKMCFgUPEq6mE0xznooD8Q=;
+        b=k1rllOR6q035k9b82iRGzk05b2wMCD0fV1fPA5L+2apFtEQW/RJBP2DUT5adzq7odh
+         9/f/qjl780+PUVPGZ/NvraJ8INhsVTPef9OAObHyok4jxYQc9iyXQjduwbfGodsaGqHM
+         xtw5wvXmlghezySYhT3ypME/8xZRWeO3sz4hYAcHs9D7nMVisnd4cL1iTR5nLRYfpxe/
+         u75O54E75bcqAD1O7ntSO4LUDK8/aJmdod8xOGCiisiryVuFBggySq8IWn8zgMCgG0jE
+         V0Og0uLtpOdl7eZazNNeuGpmTcuaRS0GVSbRIFF6zcWb1RqfBMF5Jv2SuzSsPRjq00pn
+         RPCA==
+X-Gm-Message-State: AOAM530lMR1isRHWDQleEtVOGpIVQg2w1uAOiOPkZnBUKVwUnM2y1Hok
+        ClY9EdkSnWTnTw1N1Hda+kf5+bTTq9yN0A==
+X-Google-Smtp-Source: ABdhPJxQSOxhrr3s0WCAgo0mfNesr2cbbIk81LRgy7vEHC4exxBn2q2r3vHXkXzkq5fWaDDVynSzYZkRwZxsFg==
 X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a17:902:e881:b0:159:828:b6dd with SMTP id
- w1-20020a170902e88100b001590828b6ddmr3139776plg.127.1650304778564; Mon, 18
- Apr 2022 10:59:38 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 17:59:30 +0000
-Message-Id: <20220418175932.1809770-1-wonchung@google.com>
+ (user=wonchung job=sendgmr) by 2002:a05:6a00:15c4:b0:50a:7fec:c656 with SMTP
+ id o4-20020a056a0015c400b0050a7fecc656mr3854566pfu.62.1650304780282; Mon, 18
+ Apr 2022 10:59:40 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 17:59:31 +0000
+In-Reply-To: <20220418175932.1809770-1-wonchung@google.com>
+Message-Id: <20220418175932.1809770-2-wonchung@google.com>
 Mime-Version: 1.0
+References: <20220418175932.1809770-1-wonchung@google.com>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH 0/2] thunderbolt: Link USB4 ports to their USB Type-C connectors
+Subject: [PATCH 1/2] misc/mei: Add NULL check to component match callback functions
 From:   Won Chung <wonchung@google.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
@@ -69,47 +73,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, USB port is linked to Type C connector, using the component
-framework, if they share the same _PLD fields from ACPI table. Type C
-port-mapper searches for devices with the same _PLD values, and
-aggregate them as components.
+Currently, component_match callback functions used in mei refers to the
+driver name, assuming that the component device being matched has a
+driver bound. It can cause a NULL pointer dereference when a device
+without a driver bound registers a component. This is due to the nature
+of the component framework where all registered components are matched
+in any component_match callback functions. So even if a component is
+registered by a totally irrelevant device, that component is also
+shared to these callbacks for i915 driver.
 
-When there is another device that share the same _PLD but does not
-registers a component, Type C connector (component master) would never
-be bound due to a component match entry device without a component
-registered. There exists some cases where USB4 port also shares the same
-_PLD with USB port and Type C connector, so we need to register a
-component for USB4 ports too, linking USB4 port with Type C connector.
-Otherwise, link between USB port and Type C connector would not
-work either.
+To prevent totally irrelevant device being matched for i915 and causing
+a NULL pointer dereference for checking driver name, add a NULL check on
+dev->driver to check if there is a driver bound before checking the
+driver name.
 
-Due to the nature of the component framework, all registered components
-are shared by all component match despite the relevance. MEI subsystems
-also use the component framework to bind to i915 driver, which try to
-match components registered by USB ports and USB4 ports. This can be
-problematic since MEI assumes that there is a driver bound to the
-component device, while USB4 port does not bind to any drivers. MEI's
-component match callback functions should handle such case to avoid NULL
-pointer dereference when USB4 port registers a component.
+In the future, the string compare on the driver name, "i915" may need to
+be refactored too.
 
-In summary this patch series
-1. Fixes MEI subsystem's component match callbacks to handle a component
-device without any driver bound
-2. Registers a component for USB4 ports to link them to Type C
-connectors, similar to USB ports.
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Signed-off-by: Won Chung <wonchung@google.com>
+---
+ drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
+ drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Heikki Krogerus (1):
-  thunderbolt: Link USB4 ports to their USB Type-C connectors
-
-Won Chung (1):
-  misc/mei: Add NULL check to component match callback functions
-
- .../ABI/testing/sysfs-bus-thunderbolt         | 10 +++++
- drivers/misc/mei/hdcp/mei_hdcp.c              |  2 +-
- drivers/misc/mei/pxp/mei_pxp.c                |  2 +-
- drivers/thunderbolt/usb4_port.c               | 38 +++++++++++++++++++
- 4 files changed, 50 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
+index ec2a4fce8581..e889a8bd7ac8 100644
+--- a/drivers/misc/mei/hdcp/mei_hdcp.c
++++ b/drivers/misc/mei/hdcp/mei_hdcp.c
+@@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
+ 
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_HDCP)
+ 		return 0;
+ 
+diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
+index f7380d387bab..5c39457e3f53 100644
+--- a/drivers/misc/mei/pxp/mei_pxp.c
++++ b/drivers/misc/mei/pxp/mei_pxp.c
+@@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
+ {
+ 	struct device *base = data;
+ 
+-	if (strcmp(dev->driver->name, "i915") ||
++	if (!dev->driver || strcmp(dev->driver->name, "i915") ||
+ 	    subcomponent != I915_COMPONENT_PXP)
+ 		return 0;
+ 
 -- 
 2.36.0.rc0.470.gd361397f0d-goog
 

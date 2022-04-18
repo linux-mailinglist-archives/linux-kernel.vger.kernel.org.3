@@ -2,63 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCB5505FB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:20:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C85505FB2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbiDRWW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39070 "EHLO
+        id S231618AbiDRWXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231379AbiDRWWY (ORCPT
+        with ESMTP id S231585AbiDRWXD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:22:24 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5C9E29CBD;
-        Mon, 18 Apr 2022 15:19:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650320383; x=1681856383;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=tkMPhmpg8zUnNqBW3w1L4glAPuX9BfNfJ6dlQLQ2H9M=;
-  b=STRyR/RdituV4m0VH/4ByF0w18ggDOcX57/KFCPcru1ARi7Fh/sqyudM
-   7MJPMwIpxVU/XHICxZlDKjQpPnBwFsg95Nq5vwvVV/BPAGQb1Odjkrmed
-   8/f7oTNr/QLYs4WYzPXl6JXqlfLwOHd43MtlK28+Z4ZEfBn/FnPbB8Qr/
-   vveGeI5dUZA8WQGrNY/YkPTXfhEnYcvZPDpN96qlCVkh4rzb1MV5URxtH
-   IzeFAB2mRQHsMMKnru3ER+rWXdeZtZ7mB18sBc9xO54sEIHklhwqBhGqL
-   byfwlwwF+sJMM+Z59J+wA2YtVhB47FAu0KSx+YZKWhR0MDfiYESTfDem4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245514082"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="245514082"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:19:43 -0700
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="726810261"
-Received: from moseshab-mobl1.amr.corp.intel.com (HELO localhost) ([10.209.143.127])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 15:19:42 -0700
-Date:   Mon, 18 Apr 2022 15:19:41 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
-Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
- kmap_local_page()
-Message-ID: <Yl3j/bOvoX13WGSW@iweiny-desk3>
-References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
- <alpine.DEB.2.22.394.2204161331080.3501@hadrien>
- <df4c0f81-454d-ab96-1d74-1c4fbc3dbd63@gmail.com>
+        Mon, 18 Apr 2022 18:23:03 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1CB629CB4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:20:22 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso539728pjj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language
+         :from:to:cc:references:in-reply-to:content-transfer-encoding;
+        bh=QfJ6O6pJjSyzKNyVh3XW9W2RO0ENxvM0U1QwJbKrVT0=;
+        b=1ll+QHmybrhWJ4738LKoxD4U6Rl6QEusQwAV+kkhjDvdgK419Gh4r3c7Xu8mn4xzbd
+         B4WDJ+t65sc7L5cvswgG+jBqNJc9sGi9WWgep2FVbHC6uBS7svU4XJHdb9ZXKvcTU7FX
+         YHyin7qGFTT8aFdJ5Sj66uyZZvtXU1krDSK+jxnR0aLk0d9GJzb0fI5IlHAVGMoyy5JC
+         yIuQDXQm1MNHmSdM50CFEM76yxA8gWU9TcGxklNJsUOO9BxAwSmyDrym/Fc0r3hgbgy2
+         9BRFR09B/0U/0+Sp4nR97RBi/ujHKVPb6PtXgAjmtep7jdk8VFc8LK1+NxxJRTgjp+W+
+         Jc6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:from:to:cc:references:in-reply-to
+         :content-transfer-encoding;
+        bh=QfJ6O6pJjSyzKNyVh3XW9W2RO0ENxvM0U1QwJbKrVT0=;
+        b=eGuUPCS/aC69Jqw4y+hqxO9str1v+tBNyBaQZrywXqrnYHeglGrud59MduO41jPEV3
+         ATTHvMGOWK0OyDP1lDorA1UngprvCoOBzX6jBppB/BD78NI5xa1kL3Xt5uvCDA1DOY2O
+         YaitIhJZysXCUcdqGqkxBqtWd/1ONpJK1guwLR248VmYmKYFaPS715aRquBxyszOnok0
+         7YuOF3d5XDWNkYt5fabqqoxxJGblRioyyklVYclinCNJfaPe/MfdfMletujoPxU/Q/HV
+         TptvlvRBcnKy1SFsjkS/3Iha/fiJc8arGtq0IO7SJCUqh/INyJI3/n8AA0aVQK53+JMJ
+         +xig==
+X-Gm-Message-State: AOAM533l+Mkhx8fPEd4VoPDpFL1IEqXz7yGySUzn03ibAxDGQ4gIw0my
+        M4H10s+j208QhOh39Ah2kaINww==
+X-Google-Smtp-Source: ABdhPJx51SQD/vUOWj0484tKVo3R3r4qdERpHZis3xgZUlmGPjPhzfzdnM3yLdtLaDKmVEtWCY+z4g==
+X-Received: by 2002:a17:90b:3c12:b0:1cb:70ef:240a with SMTP id pb18-20020a17090b3c1200b001cb70ef240amr14875731pjb.217.1650320422358;
+        Mon, 18 Apr 2022 15:20:22 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 204-20020a6302d5000000b00385f29b02b2sm13799887pgc.50.2022.04.18.15.20.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 15:20:21 -0700 (PDT)
+Message-ID: <b0167ea3-55ae-5e4e-7022-4105844b0495@kernel.dk>
+Date:   Mon, 18 Apr 2022 16:20:20 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <df4c0f81-454d-ab96-1d74-1c4fbc3dbd63@gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH_v2=5d_fs-writeback=3a_writeback=5fsb=5fino?=
+ =?UTF-8?Q?des=ef=bc=9aRecalculate_=27wrote=27_according_skipped_pages?=
+Content-Language: en-US
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        yukuai3@huawei.com
+References: <20220418092824.3018714-1-chengzhihao1@huawei.com>
+ <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com>
+ <587c1849-f81b-13d6-fb1a-f22588d8cc2d@kernel.dk>
+ <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
+ <df4853fb-0e10-4d50-75cd-ee9b06da5ab1@kernel.dk>
+In-Reply-To: <df4853fb-0e10-4d50-75cd-ee9b06da5ab1@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,132 +85,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Apr 16, 2022 at 03:14:57PM +0200, Alaa Mohamed wrote:
->    On ١٦‏/٤‏/٢٠٢٢ ١٣:٣١, Julia Lawall wrote:
+On 4/18/22 4:12 PM, Jens Axboe wrote:
+> On 4/18/22 4:01 PM, Linus Torvalds wrote:
+>> On Mon, Apr 18, 2022 at 2:16 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>>
+>>> So as far as I can tell, we really have two options:
+>>>
+>>> 1) Don't preempt a task that has a plug active
+>>> 2) Flush for any schedule out, not just going to sleep
+>>>
+>>> 1 may not be feasible if we're queueing lots of IO, which then leaves 2.
+>>> Linus, do you remember what your original patch here was motivated by?
+>>> I'm assuming it was an effiency thing, but do we really have a lot of
+>>> cases of IO submissions being preempted a lot and hence making the plug
+>>> less efficient than it should be at merging IO? Seems unlikely, but I
+>>> could be wrong.
+>>
+>> No, it goes all the way back to 2011, my memory for those kinds of
+>> details doesn't go that far back.
+>>
+>> That said, it clearly is about preemption, and I wonder if we had an
+>> actual bug there.
+>>
+>> IOW, it might well not just in the "gather up more IO for bigger
+>> requests" thing, but about "the IO plug is per-thread and doesn't have
+>> locking because of that".
+>>
+>> So doing plug flushing from a preemptible kernel context might race
+>> with it all being set up.
 > 
+> Hmm yes. But doesn't preemption imply a full barrier? As long as we
+> assign the plug at the end, we should be fine. And just now looking that
+> up, there's even already a comment to that effect in blk_start_plug().
+> So barring any weirdness with that, maybe that's the solution.
 > 
->  On Sat, 16 Apr 2022, Alaa Mohamed wrote:
-> 
-> 
->  Convert kmap() to kmap_local_page()
-> 
->  With kmap_local_page(), the mapping is per thread, CPU local and not
->  globally visible.
-> 
->  It's not clearer. 
-> 
->    I mean this " fix kunmap_local path value to take address of the mapped
->    page" be more clearer
-> 
->  This is a general statement about the function.  You
->  need to explain why it is appropriate to use it here.  Unless it is the
->  case that all calls to kmap should be converted to call kmap_local_page.
-> 
->    It's required to convert all calls kmap to kmap_local_page. So, I don't
->    what should the commit message be?
-> 
->    Is this will be good :
-> 
->    "kmap_local_page() was recently developed as a replacement for kmap(). 
->    The
->    kmap_local_page() creates a mapping which is restricted to local use by a
->    single thread of execution. "
-> 
+> Your comment did jog my memory a bit though, and I do in fact think it
+> was something related to that that made is change it. I'll dig through
+> some old emails and see if I can find it.
 
-I think I am missing some thread context here.  I'm not sure who said what
-above.  So I'm going to start over.
+Here's the thread:
 
-Alaa,
+https://lore.kernel.org/all/1295659049-2688-6-git-send-email-jaxboe@fusionio.com/
 
-It is important to remember that a good commit message says 2 things.
+I'll dig through it in a bit, but here's your reasoning for why it
+should not flush on preemption:
 
-	1) What is the problem you are trying to solve
-	2) Overview of the solution
+https://lore.kernel.org/all/BANLkTikBEJa7bJJoLFU7NoiEgOjVHVG08A@mail.gmail.com/
 
-First off I understand your frustration.  In my opinion fixes and clean ups
-like this are very hard to write good commit messages for because so often the
-code diff seems so self explanatory.  However, each code change comes at the
-identification of a problem.  And remember that 'problem' does not always mean
-a bug fix.
+-- 
+Jens Axboe
 
-The deprecation of kmap() may not seem like a problem.  I mean why can't we
-just leave kmap() as it is?  It works right?
-
-But the problem is that the kmap (highmem) interface has become stale and its
-original purpose was targeted toward large memory systems with 32 bit kernels.
-There are very few systems being run like that any longer.
-
-So how do we clean up the kmap interface to be more useful to the kernel
-community now that 32 bit kernels with highmem are so rare?
-
-The community has identified that a first step of that is to move away from and
-eventually remove the kmap() call.  This is due to the call being incorrectly
-used to create long term mappings.  Most calls to kmap() are not used
-incorrectly but those call sites needed something in between kmap() and
-kmap_atmoic().  That call is kmap_local_page().
-
-Now that kmap_local_page() exists the kmap() calls can be audited and most (I
-hope most)[1] can be replaced with kmap_local_page().
-
-The change you have below is correct.  But it lacks a good commit message.  We
-need to cover the 2 points above.
-
-	1) Julia is asking why you needed to do this change.  What is the
-	   problem or reason for this change?  (Ira told you to is not a good
-	   reason.  ;-)
-
-	   PS In fact me telling you to may actually be a very bad reason...
-	   j/k ;-)
-
-	2) Why is this solution ok as part of the deprecation and removal of
-	   kmap()?
-
-A final note; the 2 above points don't need a lot of text.  Here I used
-2 simple sentences.
-
-https://lore.kernel.org/lkml/20220124015409.807587-2-ira.weiny@intel.com/
-
-I hope this helps,
-Ira
-
-[1] But not all...  some uses of kmap() have been identified as being pretty
-complex.
-
-> 
->  julia
-> 
-> 
->  Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
->  ---
->  changes in V2:
->          fix kunmap_local path value to take address of the mapped page.
->  ---
->  changes in V3:
->          edit commit message to be clearer
->  ---
->   drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
->  diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->  index 2a5782063f4c..c14fc871dd41 100644
->  --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
->  +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
->  @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
-> 
->          frame_size >>= 1;
-> 
->  -       data = kmap(rx_buffer->page);
->  +       data = kmap_local_page(rx_buffer->page);
-> 
->          if (data[3] != 0xFF ||
->              data[frame_size + 10] != 0xBE ||
->              data[frame_size + 12] != 0xAF)
->                  match = false;
-> 
->  -       kunmap(rx_buffer->page);
->  +       kunmap_local(data);
-> 
->          return match;
->   }
->  --
->  2.35.2

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A85F50552F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559C950518E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:33:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243858AbiDRNKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:10:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59528 "EHLO
+        id S238941AbiDRMfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241315AbiDRM6h (ORCPT
+        with ESMTP id S240015AbiDRM3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3D27B3E;
-        Mon, 18 Apr 2022 05:38:56 -0700 (PDT)
+        Mon, 18 Apr 2022 08:29:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58564205F0;
+        Mon, 18 Apr 2022 05:23:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7E300B80EDB;
-        Mon, 18 Apr 2022 12:38:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA657C385A1;
-        Mon, 18 Apr 2022 12:38:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D0D0060F0C;
+        Mon, 18 Apr 2022 12:23:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFD71C385A8;
+        Mon, 18 Apr 2022 12:23:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285533;
-        bh=tv4zKBl+I3vxx2xHCn4Ct8zhqbx9Pth5UP2RUme5oVg=;
+        s=korg; t=1650284584;
+        bh=Y1aB9MwLiATjOiD+6V5TB0Qd/gFN1usrajp7Ns/Ldzs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fq9CW8hKpq3SMnzeoEmYyWfI0CTNJYXzMlz62JRvhtlO6smZEcVBBrS9xoTq9AnHZ
-         fRHgMX0/K+3RvvpU8Sff+8G/p7EuxwnWkpODuKAubWxh47eOlL4CETe0F+9AdFdliL
-         2m+2GY62x3lWeoKcfAML+PT0+1vW0LZCKI6rRi9I=
+        b=KKdjB+b3/lhhsIrsJcLkKOzhZ6EC+pNunPNsBZuCRhjg3xPSHYlY6ymFPzjwLSZm8
+         BarNK/9iVd0IepHbtKGy2aNG5P1G9d4P7XQEJQjCR1v9mfyJblwI3qAgikaagt9ptW
+         84SO/JhuxKsAr0Tb2VI2abFx19ScUrAldXwY92SU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        stable@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 008/105] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
+Subject: [PATCH 5.17 161/219] spi: cadence-quadspi: fix protocol setup for non-1-1-X operations
 Date:   Mon, 18 Apr 2022 14:12:10 +0200
-Message-Id: <20220418121145.725814242@linuxfoundation.org>
+Message-Id: <20220418121211.390290803@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,72 +56,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 
-[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
+[ Upstream commit 97e4827d775faa9a32b5e1a97959c69dd77d17a3 ]
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+cqspi_set_protocol() only set the data width, but ignored the command
+and address width (except for 8-8-8 DTR ops), leading to corruption of
+all transfers using 1-X-X or X-X-X ops. Fix by setting the other two
+widths as well.
 
-Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+While we're at it, simplify the code a bit by replacing the
+CQSPI_INST_TYPE_* constants with ilog2().
+
+Tested on a TI AM64x with a Macronix MX25U51245G QSPI flash with 1-4-4
+read and write operations.
+
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20220331110819.133392-1-matthias.schiffer@ew.tq-group.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ drivers/spi/spi-cadence-quadspi.c | 46 ++++++++-----------------------
+ 1 file changed, 12 insertions(+), 34 deletions(-)
 
-diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-index c267283b01fd..e749dcb3ddea 100644
---- a/drivers/memory/atmel-ebi.c
-+++ b/drivers/memory/atmel-ebi.c
-@@ -544,20 +544,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index b808c94641fa..75f356041138 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -19,6 +19,7 @@
+ #include <linux/iopoll.h>
+ #include <linux/jiffies.h>
+ #include <linux/kernel.h>
++#include <linux/log2.h>
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/of.h>
+@@ -102,12 +103,6 @@ struct cqspi_driver_platdata {
+ #define CQSPI_TIMEOUT_MS			500
+ #define CQSPI_READ_TIMEOUT_MS			10
  
- 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
--	if (IS_ERR(ebi->smc.regmap))
--		return PTR_ERR(ebi->smc.regmap);
-+	if (IS_ERR(ebi->smc.regmap)) {
-+		ret = PTR_ERR(ebi->smc.regmap);
-+		goto put_node;
-+	}
+-/* Instruction type */
+-#define CQSPI_INST_TYPE_SINGLE			0
+-#define CQSPI_INST_TYPE_DUAL			1
+-#define CQSPI_INST_TYPE_QUAD			2
+-#define CQSPI_INST_TYPE_OCTAL			3
+-
+ #define CQSPI_DUMMY_CLKS_PER_BYTE		8
+ #define CQSPI_DUMMY_BYTES_MAX			4
+ #define CQSPI_DUMMY_CLKS_MAX			31
+@@ -376,10 +371,6 @@ static unsigned int cqspi_calc_dummy(const struct spi_mem_op *op, bool dtr)
+ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 			      const struct spi_mem_op *op)
+ {
+-	f_pdata->inst_width = CQSPI_INST_TYPE_SINGLE;
+-	f_pdata->addr_width = CQSPI_INST_TYPE_SINGLE;
+-	f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+-
+ 	/*
+ 	 * For an op to be DTR, cmd phase along with every other non-empty
+ 	 * phase should have dtr field set to 1. If an op phase has zero
+@@ -389,32 +380,23 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 		       (!op->addr.nbytes || op->addr.dtr) &&
+ 		       (!op->data.nbytes || op->data.dtr);
  
- 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
--	if (IS_ERR(ebi->smc.layout))
--		return PTR_ERR(ebi->smc.layout);
-+	if (IS_ERR(ebi->smc.layout)) {
-+		ret = PTR_ERR(ebi->smc.layout);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.clk = of_clk_get(smc_np, 0);
- 	if (IS_ERR(ebi->smc.clk)) {
--		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
--			return PTR_ERR(ebi->smc.clk);
-+		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
-+			ret = PTR_ERR(ebi->smc.clk);
-+			goto put_node;
-+		}
- 
- 		ebi->smc.clk = NULL;
- 	}
-+	of_node_put(smc_np);
- 	ret = clk_prepare_enable(ebi->smc.clk);
- 	if (ret)
- 		return ret;
-@@ -608,6 +615,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	}
- 
- 	return of_platform_populate(np, NULL, NULL, dev);
+-	switch (op->data.buswidth) {
+-	case 0:
+-		break;
+-	case 1:
+-		f_pdata->data_width = CQSPI_INST_TYPE_SINGLE;
+-		break;
+-	case 2:
+-		f_pdata->data_width = CQSPI_INST_TYPE_DUAL;
+-		break;
+-	case 4:
+-		f_pdata->data_width = CQSPI_INST_TYPE_QUAD;
+-		break;
+-	case 8:
+-		f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
+-		break;
+-	default:
+-		return -EINVAL;
+-	}
++	f_pdata->inst_width = 0;
++	if (op->cmd.buswidth)
++		f_pdata->inst_width = ilog2(op->cmd.buswidth);
 +
-+put_node:
-+	of_node_put(smc_np);
-+	return ret;
- }
++	f_pdata->addr_width = 0;
++	if (op->addr.buswidth)
++		f_pdata->addr_width = ilog2(op->addr.buswidth);
++
++	f_pdata->data_width = 0;
++	if (op->data.buswidth)
++		f_pdata->data_width = ilog2(op->data.buswidth);
  
- static __maybe_unused int atmel_ebi_resume(struct device *dev)
+ 	/* Right now we only support 8-8-8 DTR mode. */
+ 	if (f_pdata->dtr) {
+ 		switch (op->cmd.buswidth) {
+ 		case 0:
+-			break;
+ 		case 8:
+-			f_pdata->inst_width = CQSPI_INST_TYPE_OCTAL;
+ 			break;
+ 		default:
+ 			return -EINVAL;
+@@ -422,9 +404,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 
+ 		switch (op->addr.buswidth) {
+ 		case 0:
+-			break;
+ 		case 8:
+-			f_pdata->addr_width = CQSPI_INST_TYPE_OCTAL;
+ 			break;
+ 		default:
+ 			return -EINVAL;
+@@ -432,9 +412,7 @@ static int cqspi_set_protocol(struct cqspi_flash_pdata *f_pdata,
+ 
+ 		switch (op->data.buswidth) {
+ 		case 0:
+-			break;
+ 		case 8:
+-			f_pdata->data_width = CQSPI_INST_TYPE_OCTAL;
+ 			break;
+ 		default:
+ 			return -EINVAL;
 -- 
 2.35.1
 

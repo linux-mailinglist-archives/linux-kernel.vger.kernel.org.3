@@ -2,110 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADDB15047AC
-	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 13:49:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7CC650479E
+	for <lists+linux-kernel@lfdr.de>; Sun, 17 Apr 2022 12:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234007AbiDQLvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 07:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59834 "EHLO
+        id S233958AbiDQK61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 06:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232401AbiDQLvb (ORCPT
+        with ESMTP id S229559AbiDQK6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 07:51:31 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7A4344E0
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 04:48:55 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id y20so2509865eju.7
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 04:48:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4Sb5MwZlN2yMxpkxo8ReoYsChI1LsnLBd53l7qgtB8w=;
-        b=JTBU4huSWjw4WvyksFXfBs27pd8RjBvsyNEFTQzVek49lRGs1jiwoFrXWbVnlsBKlg
-         oCy71aLpG2lUS0ALxfq3/6RI6bCm7jOW3mDd9XMt2Iu0caeRjEv3AYCjvKpClOkK6gn2
-         1fOcnP9VGPe52CYu8TLDUmntewJg4pxf2GGVdJDp+cZt67aJmf/Z88hHYlVzwy9K7Z2i
-         nzvZ3MsP8HL1gIb61hhYbRsb+5n8xEe4/+H6LA9537ePpzyLTqy+9CxNPIlBGSVuJq1v
-         0JfILfnGGvUg0jm23ydC8fWxH+022UxHoHyqe+fOVWDl5xPGPrRcLwOycDC4Py4qEFq2
-         PVpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=4Sb5MwZlN2yMxpkxo8ReoYsChI1LsnLBd53l7qgtB8w=;
-        b=ZGRoIGkOV1vzL0LCBZaA5Dmlv8R2vVJwJrcezL5McqY8UQGL1TMn4N0hptZTJktCrl
-         oRSMghA8zLzUGqEdDV8Su03XCcK6q0kmJ2FfjXYxaiLPjS77G33yls9hJNIYuzsvMTDN
-         AoMQ55nJc26QUdYZ4CL0co6gGyHR/6T8cvfqLdjlUs54e8pFNMJHOw+jFQ7dmTS019aV
-         /E61ZZdfPG6TzwgOjEtXQJ+g+o3V3cXev0Db95yb2C8+HWJPf8pw4B3G96PbdW6jWpUZ
-         ZE/82Nn1iJZK9l5SyS4pxaOpekXkwLw/SuqFzikditJ/C4T6JTiVTCxPOUyaYdqCRYrx
-         Uz0g==
-X-Gm-Message-State: AOAM533ZqL610QcGpATMfra/S4RSosqwbbZSQI1yzJLATURQyglwXaab
-        fL3l1OEFKYdcaE8BW/1+v9zd9w==
-X-Google-Smtp-Source: ABdhPJywdz0cASNHVewBWwUezqR/0l3LQF0BqQXVnJx7pQzrjX6eK/IeXLoBuBLaSaz4iyUJcASnDg==
-X-Received: by 2002:a17:906:dc93:b0:6e8:8d81:b4bb with SMTP id cs19-20020a170906dc9300b006e88d81b4bbmr5526764ejc.32.1650196134186;
-        Sun, 17 Apr 2022 04:48:54 -0700 (PDT)
-Received: from localhost.localdomain ([134.195.101.46])
-        by smtp.gmail.com with ESMTPSA id w1-20020a1709064a0100b006e89334f5dfsm3510574eju.136.2022.04.17.04.48.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Apr 2022 04:48:53 -0700 (PDT)
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH] perf script: Always allow field 'data_src' for auxtrace
-Date:   Sun, 17 Apr 2022 19:48:37 +0800
-Message-Id: <20220417114837.839896-1-leo.yan@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Sun, 17 Apr 2022 06:58:22 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA971010;
+        Sun, 17 Apr 2022 03:55:44 -0700 (PDT)
+Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Kh6Nn1xYyzFpXF;
+        Sun, 17 Apr 2022 18:53:13 +0800 (CST)
+Received: from dggpemm500017.china.huawei.com (7.185.36.178) by
+ dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sun, 17 Apr 2022 18:55:41 +0800
+Received: from huawei.com (10.175.101.6) by dggpemm500017.china.huawei.com
+ (7.185.36.178) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sun, 17 Apr
+ 2022 18:55:40 +0800
+From:   Wenchao Hao <haowenchao@huawei.com>
+To:     Mike Christie <michael.christie@oracle.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        <open-iscsi@googlegroups.com>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <linfeilong@huawei.com>, Wenchao Hao <haowenchao@huawei.com>
+Subject: [PATCH v2] scsi: iscsi: Fix multiple iscsi session unbind event sent to userspace
+Date:   Sun, 17 Apr 2022 20:06:28 -0400
+Message-ID: <20220418000627.474784-1-haowenchao@huawei.com>
+X-Mailer: git-send-email 2.32.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500017.china.huawei.com (7.185.36.178)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If use command 'perf script -F,+data_src' to dump memory samples with
-Arm SPE trace data, it reports error:
+I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
+for multiple times which should be fixed.
 
-  # perf script -F,+data_src
-  Samples for 'dummy:u' event do not have DATA_SRC attribute set. Cannot print 'data_src' field.
+This patch introduce target_unbound in iscsi_cls_session to make
+sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
 
-This is because the 'dummy:u' event is absent DATA_SRC bit in its sample
-type, so if a file contains AUX area tracing data then always allow
-field 'data_src' to be selected as an option for perf script.
+But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
+Report unbind session event when the target has been removed"). The issue
+is iscsid died for any reason after it send unbind session to kernel, once
+iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
 
-Fixes: e55ed3423c1b ("perf arm-spe: Synthesize memory event")
-Signed-off-by: Leo Yan <leo.yan@linaro.org>
+Now kernel think iscsi_cls_session has already sent an
+ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
+would cause userspace unable to logout. Actually the session is in
+invalid state(it's target_id is INVALID), iscsid should not sync this
+session in it's restart.
+
+So we need to check session's target unbound state during iscsid restart,
+if session is in unbound state, do not sync this session and perform
+session teardown. It's reasonable because once a session is unbound, we
+can not recover it any more(mainly because it's target id is INVALID)
+
+Changes from V1:
+- Using target_unbound rather than state to indicate session has been
+  unbound
+
+Signed-off-by: Wenchao Hao <haowenchao@huawei.com>
 ---
- tools/perf/builtin-script.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/scsi/scsi_transport_iscsi.c | 21 +++++++++++++++++++++
+ include/scsi/scsi_transport_iscsi.h |  1 +
+ 2 files changed, 22 insertions(+)
 
-diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
-index a2f117936188..cf5eab5431b4 100644
---- a/tools/perf/builtin-script.c
-+++ b/tools/perf/builtin-script.c
-@@ -461,7 +461,7 @@ static int evsel__check_attr(struct evsel *evsel, struct perf_session *session)
- 		return -EINVAL;
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 2c0dd64159b0..43ba31e595b4 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -1958,6 +1958,14 @@ static void __iscsi_unbind_session(struct work_struct *work)
  
- 	if (PRINT_FIELD(DATA_SRC) &&
--	    evsel__check_stype(evsel, PERF_SAMPLE_DATA_SRC, "DATA_SRC", PERF_OUTPUT_DATA_SRC))
-+	    evsel__do_check_stype(evsel, PERF_SAMPLE_DATA_SRC, "DATA_SRC", PERF_OUTPUT_DATA_SRC, allow_user_set))
- 		return -EINVAL;
+ 	ISCSI_DBG_TRANS_SESSION(session, "Unbinding session\n");
  
- 	if (PRINT_FIELD(WEIGHT) &&
++	spin_lock_irqsave(&session->lock, flags);
++	if (session->target_unbound) {
++		spin_unlock_irqrestore(&session->lock, flags);
++		return;
++	}
++	session->target_unbound = 1;
++	spin_unlock_irqrestore(&session->lock, flags);
++
+ 	/* Prevent new scans and make sure scanning is not in progress */
+ 	mutex_lock(&ihost->mutex);
+ 	spin_lock_irqsave(&session->lock, flags);
+@@ -2058,6 +2066,7 @@ int iscsi_add_session(struct iscsi_cls_session *session, unsigned int target_id)
+ 		session->target_id = target_id;
+ 
+ 	dev_set_name(&session->dev, "session%u", session->sid);
++	session->target_unbound = 0;
+ 	err = device_add(&session->dev);
+ 	if (err) {
+ 		iscsi_cls_session_printk(KERN_ERR, session,
+@@ -4319,6 +4328,15 @@ iscsi_session_attr(def_taskmgmt_tmo, ISCSI_PARAM_DEF_TASKMGMT_TMO, 0);
+ iscsi_session_attr(discovery_parent_idx, ISCSI_PARAM_DISCOVERY_PARENT_IDX, 0);
+ iscsi_session_attr(discovery_parent_type, ISCSI_PARAM_DISCOVERY_PARENT_TYPE, 0);
+ 
++static ssize_t
++show_priv_session_target_unbound(struct device *dev, struct device_attribute *attr,
++			char *buf)
++{
++	struct iscsi_cls_session *session = iscsi_dev_to_session(dev->parent);
++	return sysfs_emit(buf, "%d\n", session->target_unbound);
++}
++static ISCSI_CLASS_ATTR(priv_sess, target_unbound, S_IRUGO,
++			show_priv_session_target_unbound, NULL);
+ static ssize_t
+ show_priv_session_state(struct device *dev, struct device_attribute *attr,
+ 			char *buf)
+@@ -4422,6 +4440,7 @@ static struct attribute *iscsi_session_attrs[] = {
+ 	&dev_attr_priv_sess_recovery_tmo.attr,
+ 	&dev_attr_priv_sess_state.attr,
+ 	&dev_attr_priv_sess_creator.attr,
++	&dev_attr_priv_sess_target_unbound.attr,
+ 	&dev_attr_sess_chap_out_idx.attr,
+ 	&dev_attr_sess_chap_in_idx.attr,
+ 	&dev_attr_priv_sess_target_id.attr,
+@@ -4534,6 +4553,8 @@ static umode_t iscsi_session_attr_is_visible(struct kobject *kobj,
+ 		return S_IRUGO | S_IWUSR;
+ 	else if (attr == &dev_attr_priv_sess_state.attr)
+ 		return S_IRUGO;
++	else if (attr == &dev_attr_priv_sess_target_unbound.attr)
++		return S_IRUGO;
+ 	else if (attr == &dev_attr_priv_sess_creator.attr)
+ 		return S_IRUGO;
+ 	else if (attr == &dev_attr_priv_sess_target_id.attr)
+diff --git a/include/scsi/scsi_transport_iscsi.h b/include/scsi/scsi_transport_iscsi.h
+index 9acb8422f680..877632c25e56 100644
+--- a/include/scsi/scsi_transport_iscsi.h
++++ b/include/scsi/scsi_transport_iscsi.h
+@@ -256,6 +256,7 @@ struct iscsi_cls_session {
+ 	struct workqueue_struct *workq;
+ 
+ 	unsigned int target_id;
++	int target_unbound;   /* make sure unbind session only once */
+ 	bool ida_used;
+ 
+ 	/*
 -- 
-2.25.1
+2.32.0
 

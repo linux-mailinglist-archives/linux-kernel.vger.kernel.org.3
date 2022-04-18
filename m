@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1F25059FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E055058C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345720AbiDROZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:25:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
+        id S1343703AbiDROIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:08:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245584AbiDROMC (ORCPT
+        with ESMTP id S244448AbiDRNva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:12:02 -0400
+        Mon, 18 Apr 2022 09:51:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86DF37BCB;
-        Mon, 18 Apr 2022 06:11:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F88345045;
+        Mon, 18 Apr 2022 06:02:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 40E7FB80EDF;
-        Mon, 18 Apr 2022 13:11:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F58C385A1;
-        Mon, 18 Apr 2022 13:11:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEF88B80E44;
+        Mon, 18 Apr 2022 13:02:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2025EC385A1;
+        Mon, 18 Apr 2022 13:02:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287487;
-        bh=Vg4mEUV5tczHM8D4Ix/QNyA/taZrJacu2hRIn8sfJrc=;
+        s=korg; t=1650286933;
+        bh=owh/FpiM4SspLRdCCDMt5NcNvWYcFXL5FfK3I7YiHak=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VINRu3USVICRBc7EmaB5pCFpEJd2iqT7g5SoFOd6BJEf9YNalhD8WMSX1AyR3VrdE
-         3lYOTRn0kvnvNC9a2yguW3fK6pNrs6OuuZYe/F/RhqTJ0DtX9ngQSGc5kkMfnRrccX
-         w8nvJwUG6rk9+X8E38eMIqzK3hVHvNclslmN9gq8=
+        b=VhQwA0FzGFxu9XGJNJA/iyX//AruT5OTtCxXiFGEBqKyniH/uha8oIHUibrqlnoK6
+         owpucMjI1DO0RhdzGtvSt7AZxFTa504hSSPPy+pKhRvm9RloYFqTiOLn3JvrHrEhzX
+         uOtOyj3EyUgAMcJYVHQFMb7SJZcxaLcKE3k5VJKE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 178/218] usb: dwc3: omap: fix "unbalanced disables for smps10_out1" on omap5evm
+Subject: [PATCH 4.14 263/284] gpiolib: acpi: use correct format characters
 Date:   Mon, 18 Apr 2022 14:14:04 +0200
-Message-Id: <20220418121205.890863047@linuxfoundation.org>
+Message-Id: <20220418121220.120412769@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,72 +56,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: H. Nikolaus Schaller <hns@goldelico.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit ac01df343e5a6c6bcead2ed421af1fde30f73e7e ]
+[ Upstream commit 213d266ebfb1621aab79cfe63388facc520a1381 ]
 
-Usually, the vbus_regulator (smps10 on omap5evm) boots up disabled.
+When compiling with -Wformat, clang emits the following warning:
 
-Hence calling regulator_disable() indirectly through dwc3_omap_set_mailbox()
-during probe leads to:
+  gpiolib-acpi.c:393:4: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+                        pin);
+                        ^~~
 
-[   10.332764] WARNING: CPU: 0 PID: 1628 at drivers/regulator/core.c:2853 _regulator_disable+0x40/0x164
-[   10.351919] unbalanced disables for smps10_out1
-[   10.361298] Modules linked in: dwc3_omap(+) clk_twl6040 at24 gpio_twl6040 palmas_gpadc palmas_pwrbutton
-industrialio snd_soc_omap_mcbsp(+) snd_soc_ti_sdma display_connector ti_tpd12s015 drm leds_gpio
-drm_panel_orientation_quirks ip_tables x_tables ipv6 autofs4
-[   10.387818] CPU: 0 PID: 1628 Comm: systemd-udevd Not tainted 5.17.0-rc1-letux-lpae+ #8139
-[   10.405129] Hardware name: Generic OMAP5 (Flattened Device Tree)
-[   10.411455]  unwind_backtrace from show_stack+0x10/0x14
-[   10.416970]  show_stack from dump_stack_lvl+0x40/0x4c
-[   10.422313]  dump_stack_lvl from __warn+0xb8/0x170
-[   10.427377]  __warn from warn_slowpath_fmt+0x70/0x9c
-[   10.432595]  warn_slowpath_fmt from _regulator_disable+0x40/0x164
-[   10.439037]  _regulator_disable from regulator_disable+0x30/0x64
-[   10.445382]  regulator_disable from dwc3_omap_set_mailbox+0x8c/0xf0 [dwc3_omap]
-[   10.453116]  dwc3_omap_set_mailbox [dwc3_omap] from dwc3_omap_probe+0x2b8/0x394 [dwc3_omap]
-[   10.467021]  dwc3_omap_probe [dwc3_omap] from platform_probe+0x58/0xa8
-[   10.481762]  platform_probe from really_probe+0x168/0x2fc
-[   10.481782]  really_probe from __driver_probe_device+0xc4/0xd8
-[   10.481782]  __driver_probe_device from driver_probe_device+0x24/0xa4
-[   10.503762]  driver_probe_device from __driver_attach+0xc4/0xd8
-[   10.510018]  __driver_attach from bus_for_each_dev+0x64/0xa0
-[   10.516001]  bus_for_each_dev from bus_add_driver+0x148/0x1a4
-[   10.524880]  bus_add_driver from driver_register+0xb4/0xf8
-[   10.530678]  driver_register from do_one_initcall+0x90/0x1c4
-[   10.536661]  do_one_initcall from do_init_module+0x4c/0x200
-[   10.536683]  do_init_module from load_module+0x13dc/0x1910
-[   10.551159]  load_module from sys_finit_module+0xc8/0xd8
-[   10.561319]  sys_finit_module from __sys_trace_return+0x0/0x18
-[   10.561336] Exception stack(0xc344bfa8 to 0xc344bff0)
-[   10.561341] bfa0:                   b6fb5778 b6fab8d8 00000007 b6ecfbb8 00000000 b6ed0398
-[   10.561341] bfc0: b6fb5778 b6fab8d8 855c0500 0000017b 00020000 b6f9a3cc 00000000 b6fb5778
-[   10.595500] bfe0: bede18f8 bede18e8 b6ec9aeb b6dda1c2
-[   10.601345] ---[ end trace 0000000000000000 ]---
+So warning that '%hhX' is paired with an 'int' is all just completely
+mindless and wrong. Sadly, I can see a different bogus warning reason
+why people would want to use '%02hhX'.
 
-Fix this unnecessary warning by checking if the regulator is enabled.
+Again, the *sane* thing from a human perspective is to use '%02X. But
+if the compiler doesn't do any range analysis at all, it could decide
+that "Oh, that print format could need up to 8 bytes of space in the
+result". Using '%02hhX' would cut that down to two.
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-Link: https://lore.kernel.org/r/af3b750dc2265d875deaabcf5f80098c9645da45.1646744616.git.hns@goldelico.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+And since we use
+
+        char ev_name[5];
+
+and currently use "_%c%02hhX" as the format string, even a compiler
+that doesn't notice that "pin <= 255" test that guards this all will
+go "OK, that's at most 4 bytes and the final NUL termination, so it's
+fine".
+
+While a compiler - like gcc - that only sees that the original source
+of the 'pin' value is a 'unsigned short' array, and then doesn't take
+the "pin <= 255" into account, will warn like this:
+
+  gpiolib-acpi.c: In function 'acpi_gpiochip_request_interrupt':
+  gpiolib-acpi.c:206:24: warning: '%02X' directive writing between 2 and 4 bytes into a region of size 3 [-Wformat-overflow=]
+       sprintf(ev_name, "_%c%02X",
+                            ^~~~
+  gpiolib-acpi.c:206:20: note: directive argument in the range [0, 65535]
+
+because gcc isn't being very good at that argument range analysis either.
+
+In other words, the original use of 'hhx' was bogus to begin with, and
+due to *another* compiler warning being bad, and we had that bad code
+being written back in 2016 to work around _that_ compiler warning
+(commit e40a3ae1f794: "gpio: acpi: work around false-positive
+-Wstring-overflow warning").
+
+Sadly, two different bad compiler warnings together does not make for
+one good one.
+
+It just makes for even more pain.
+
+End result: I think the simplest and cleanest option is simply the
+proposed change which undoes that '%hhX' change for gcc, and replaces
+it with just using a slightly bigger stack allocation. It's not like
+a 5-byte allocation is in any way likely to have saved any actual stack,
+since all the other variables in that function are 'int' or bigger.
+
+False-positive compiler warnings really do make people write worse
+code, and that's a problem. But on a scale of bad code, I feel that
+extending the buffer trivially is better than adding a pointless cast
+that literally makes no sense.
+
+At least in this case the end result isn't unreadable or buggy. We've
+had several cases of bad compiler warnings that caused changes that
+were actually horrendously wrong.
+
+Fixes: e40a3ae1f794 ("gpio: acpi: work around false-positive -Wstring-overflow warning")
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/dwc3/dwc3-omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpio/gpiolib-acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
-index 8e69150776f5..a08b29fbaa50 100644
---- a/drivers/usb/dwc3/dwc3-omap.c
-+++ b/drivers/usb/dwc3/dwc3-omap.c
-@@ -245,7 +245,7 @@ static void dwc3_omap_set_mailbox(struct dwc3_omap *omap,
- 		break;
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index 60e394da9709..713dc43024c9 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -335,8 +335,8 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+ 	pin = agpio->pin_table[0];
  
- 	case OMAP_DWC3_ID_FLOAT:
--		if (omap->vbus_reg)
-+		if (omap->vbus_reg && regulator_is_enabled(omap->vbus_reg))
- 			regulator_disable(omap->vbus_reg);
- 		val = dwc3_omap_read_utmi_ctrl(omap);
- 		val |= USBOTGSS_UTMI_OTG_CTRL_IDDIG;
+ 	if (pin <= 255) {
+-		char ev_name[5];
+-		sprintf(ev_name, "_%c%02hhX",
++		char ev_name[8];
++		sprintf(ev_name, "_%c%02X",
+ 			agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+ 			pin);
+ 		if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
 -- 
 2.35.1
 

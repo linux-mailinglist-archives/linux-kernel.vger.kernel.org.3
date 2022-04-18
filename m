@@ -2,60 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DA2505225
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8436D5053F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240502AbiDRMjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54014 "EHLO
+        id S241806AbiDRND3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239790AbiDRMd2 (ORCPT
+        with ESMTP id S240368AbiDRMyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30F811B795;
-        Mon, 18 Apr 2022 05:26:10 -0700 (PDT)
+        Mon, 18 Apr 2022 08:54:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B281140D3;
+        Mon, 18 Apr 2022 05:35:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2773B80EDA;
-        Mon, 18 Apr 2022 12:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17F56C385A7;
-        Mon, 18 Apr 2022 12:26:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B85EAB80EDD;
+        Mon, 18 Apr 2022 12:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E252DC385A1;
+        Mon, 18 Apr 2022 12:35:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284767;
-        bh=Wctk2aoKj6BsmYLzjRR1rdJ2Gp0EagRN1YyBjezrbPg=;
+        s=korg; t=1650285308;
+        bh=v6yuNXdoFIyZYpzpbSX09Y32GwEic8VWpyIkKO0cXjQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xe9Hb3N0fGXC/7oKlNjBbj6J9aPWnHJySCOISJs2twLej8tPmkrm95NTvdkuZBV9B
-         HNnJJVCLHaktI8jgxOVHCsYQUfXqOa+akSIEOeqaeN3XaqIR+ZKJwkmeoGd2GGOKzX
-         oDIK4Yhm4OXAS9oP69ZBZ7d2y0ybe9rOKtA6FYW8=
+        b=i6VlJjY1RvLLFAMXaF1ng8NlGJ1ZyUpBKtvR4u3Lit4IF7fU7wBZmCICsj1umkI9l
+         /WsAB2LGGqb/bZ2xercg6oLBpDwCAd1vOM0fC1gx+xMvFse25cmchMisWahhIbaTKX
+         UEp+SMfXw1juT2P7WMLW3srckStgr8MDEahfBjKg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexey Dobriyan <adobriyan@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Chris Kennelly <ckennelly@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Fangrui Song <maskray@google.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>, Hugh Dickins <hughd@google.com>,
-        Ian Rogers <irogers@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Sandeep Patil <sspatil@google.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 181/219] revert "fs/binfmt_elf: use PT_LOAD p_align values for static PIE"
+        stable@vger.kernel.org, Marcin Kozlowski <marcinguy@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 130/189] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
 Date:   Mon, 18 Apr 2022 14:12:30 +0200
-Message-Id: <20220418121211.943564222@linuxfoundation.org>
+Message-Id: <20220418121204.791949082@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -70,60 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrew Morton <akpm@linux-foundation.org>
+From: Marcin Kozlowski <marcinguy@gmail.com>
 
-commit aeb7923733d100b86c6bc68e7ae32913b0cec9d8 upstream.
+[ Upstream commit afb8e246527536848b9b4025b40e613edf776a9d ]
 
-Despite Mike's attempted fix (925346c129da117122), regressions reports
-continue:
+aqc111_rx_fixup() contains several out-of-bounds accesses that can be
+triggered by a malicious (or defective) USB device, in particular:
 
-  https://lore.kernel.org/lkml/cb5b81bd-9882-e5dc-cd22-54bdbaaefbbc@leemhuis.info/
-  https://bugzilla.kernel.org/show_bug.cgi?id=215720
-  https://lkml.kernel.org/r/b685f3d0-da34-531d-1aa9-479accd3e21b@leemhuis.info
+ - The metadata array (desc_offset..desc_offset+2*pkt_count) can be out of bounds,
+   causing OOB reads and (on big-endian systems) OOB endianness flips.
+ - A packet can overlap the metadata array, causing a later OOB
+   endianness flip to corrupt data used by a cloned SKB that has already
+   been handed off into the network stack.
+ - A packet SKB can be constructed whose tail is far beyond its end,
+   causing out-of-bounds heap data to be considered part of the SKB's
+   data.
 
-So revert this patch.
+Found doing variant analysis. Tested it with another driver (ax88179_178a), since
+I don't have a aqc111 device to test it, but the code looks very similar.
 
-Fixes: 9630f0d60fec ("fs/binfmt_elf: use PT_LOAD p_align values for static PIE")
-Cc: Alexey Dobriyan <adobriyan@gmail.com>
-Cc: Al Viro <viro@zeniv.linux.org.uk>
-Cc: Chris Kennelly <ckennelly@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Fangrui Song <maskray@google.com>
-Cc: H.J. Lu <hjl.tools@gmail.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Ian Rogers <irogers@google.com>
-Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Sandeep Patil <sspatil@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Song Liu <songliubraving@fb.com>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Thorsten Leemhuis <regressions@leemhuis.info>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Marcin Kozlowski <marcinguy@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/binfmt_elf.c |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/usb/aqc111.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1116,11 +1116,11 @@ out_free_interp:
- 			 * independently randomized mmap region (0 load_bias
- 			 * without MAP_FIXED nor MAP_FIXED_NOREPLACE).
- 			 */
--			alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
--			if (alignment > ELF_MIN_ALIGN) {
-+			if (interpreter) {
- 				load_bias = ELF_ET_DYN_BASE;
- 				if (current->flags & PF_RANDOMIZE)
- 					load_bias += arch_mmap_rnd();
-+				alignment = maximum_alignment(elf_phdata, elf_ex->e_phnum);
- 				if (alignment)
- 					load_bias &= ~(alignment - 1);
- 				elf_flags |= MAP_FIXED_NOREPLACE;
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index 73b97f4cc1ec..e8d49886d695 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 	if (start_of_descs != desc_offset)
+ 		goto err;
+ 
+-	/* self check desc_offset from header*/
+-	if (desc_offset >= skb_len)
++	/* self check desc_offset from header and make sure that the
++	 * bounds of the metadata array are inside the SKB
++	 */
++	if (pkt_count * 2 + desc_offset >= skb_len)
+ 		goto err;
+ 
++	/* Packets must not overlap the metadata array */
++	skb_trim(skb, desc_offset);
++
+ 	if (pkt_count == 0)
+ 		goto err;
+ 
+-- 
+2.35.1
+
 
 

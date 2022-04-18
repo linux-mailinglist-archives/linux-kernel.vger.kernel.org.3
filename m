@@ -2,112 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D4C505F96
+	by mail.lfdr.de (Postfix) with ESMTP id C1D73505F97
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiDRWEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54972 "EHLO
+        id S230286AbiDRWFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbiDRWEe (ORCPT
+        with ESMTP id S230206AbiDRWFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:04:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 815B72127F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:01:54 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id y32so26266236lfa.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:01:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=WoSSB6D4okQIzxYw590H8J+GvX7tUDqFDdL3NG2PVow=;
-        b=Y0Azna+11Ygy4jE/LbD9k9ppPCkOldalF7CL1XSOIqHdcVg6oz83IRXODvqMA1a+NN
-         tChz+i0D6XlNe64llHhy8KDYypWThZpTpcoIfiAWaSpjbUV4w2FPfoDJ3w1oXQCKwbuq
-         pL6Tlwr0L738RSs3Y3jedLpure8WgxCDfUscs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=WoSSB6D4okQIzxYw590H8J+GvX7tUDqFDdL3NG2PVow=;
-        b=H0NfT+Txf82dJldMyErh001lRdrOv1fPHuryIzPQPu7ltNbNl1RktaGC8VvNfnXmaF
-         YUDJmhXllscGy25UhYXe0bWcY1JyHmWiB1lrk0X0ZVEtfq5A51DL6bH40TjcZHlv/9ZM
-         jxHoqzvk5QgJ/2fE/tt85yytmHB464npdO7RKZxtzLVUjTwR0BnJsjbdnTnkwwijOm+K
-         aA+CpB9Zd5sxio7383bKD/4rjOIWMuaALoSkdk8ZpJGgq34Z1ubPP0kGzZbkYKZnBW1V
-         J+ht36xc7dXbwxRmH95Q4JYfm7Ldfg2c738QC5FSc3gb9QRXTeyk2W5igqWhFQ948GzJ
-         1sIg==
-X-Gm-Message-State: AOAM531qoAREL2R+qXWO12ksUmEULUFHWitUfAF9vWYnC8/fnduZO6yz
-        z9dD8kMy/Jf83JKSOcAxZ39qXZCaiaYZndlzVwY=
-X-Google-Smtp-Source: ABdhPJyJ+KOisTOIOEbn6A+sBrjtc4nX5xpgrOZttdp4aSpAFsceMfxHU3y43tlbzzQWJaaq5xFDYg==
-X-Received: by 2002:ac2:4c4d:0:b0:44a:4d7e:84bf with SMTP id o13-20020ac24c4d000000b0044a4d7e84bfmr9158263lfk.634.1650319312569;
-        Mon, 18 Apr 2022 15:01:52 -0700 (PDT)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id n7-20020a196f47000000b0046d1859fc45sm1328614lfk.102.2022.04.18.15.01.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 15:01:52 -0700 (PDT)
-Received: by mail-lj1-f181.google.com with SMTP id y11so789395ljh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:01:50 -0700 (PDT)
-X-Received: by 2002:a2e:b8d6:0:b0:24b:6b40:a96a with SMTP id
- s22-20020a2eb8d6000000b0024b6b40a96amr8492009ljp.176.1650319309981; Mon, 18
- Apr 2022 15:01:49 -0700 (PDT)
+        Mon, 18 Apr 2022 18:05:09 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam08on2058.outbound.protection.outlook.com [40.107.100.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D11662127F;
+        Mon, 18 Apr 2022 15:02:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EYrCFOPFyxHqQCZhjk54G0sx+bCqsgGEFX+Ni2nfbEQVBTozEmnts1Do55t1YzVKDRUfqAE7s0YJRmwLPqcge+xFj8EDBS9Lc5QEPmwFa2JL6saJQD1m6EU9iDrMPgSPOkqE3nlvgcDlPvK4gKceX88B7r5jop1qvh6BojIx7fnVn0/p5Fnu3vih+xczc0jrmJLH/Y2SGiFqOVdZfGXB8M5VlwLsgq1c+AUTRqWTBMDV5BiUgm0XKRtSx8LGbPNoGTnjKOivElCil5ZkYcAbCl2pdnHbeGHbKdJtTTReKsQ9CabmV626cLIZuKX03d0z6lFBMFQswHocxXygNo2hNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rr2LOTJiujcBwHErCQNVDjYgyHtbqgsT6YfcVP1RV/Q=;
+ b=NSi+t+yG03y5GFQzjrALBNDN2par949TruPYa4STrq/5l9TRRtYB6r7YkuBiG+TGxGJryZlbfZswr+8zUcc2busgqrU1lSMklG4Tyq9bP11lTjEJI8dtqU7ZLyv8vX+OTkTP6Rib/CQCx82KT9vZ3EAMUuU1k5G3qB6Fkq1NNeFgiCvk0EdeaHJqvGiI3OMMyp8/pwnNctC9xVnOhn8gqhvVUXFSilPfATf51KFy0ATryzZLpGMENgxliEuEWyAPY8qIPzcVprly6LQWWSJ0rb8/2xmVUqk4K7bgJTa5u443FToXEXSDY/Hnj3To58oaaN0OLZaaNuSllGPnbD7MNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rr2LOTJiujcBwHErCQNVDjYgyHtbqgsT6YfcVP1RV/Q=;
+ b=uBxTc07Y5ZSGPisanAphy7dkpXCKg3hT4s3iEWwgfLY4cFZe3cwDNF+MmH/hYPXt08+zRlbLAFJhIFqoL7yKfe3/MQxE2i/D0jL1h6/MAg+n4wpwq/XiKvQv3UqcQEaYc4VtdjWnXpJAAPQnjVpl432lRHd56XsyOr/xk20KLN0=
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com (2603:10b6:208:308::15)
+ by DM6PR12MB3162.namprd12.prod.outlook.com (2603:10b6:5:15c::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.25; Mon, 18 Apr
+ 2022 22:02:26 +0000
+Received: from BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::3157:3164:59df:b603]) by BL1PR12MB5157.namprd12.prod.outlook.com
+ ([fe80::3157:3164:59df:b603%7]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
+ 22:02:26 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Nathan Chancellor <nathan@kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+CC:     "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>
+Subject: RE: [PATCH] platform/x86: amd-pmc: Shuffle location of
+ amd_pmc_get_smu_version()
+Thread-Topic: [PATCH] platform/x86: amd-pmc: Shuffle location of
+ amd_pmc_get_smu_version()
+Thread-Index: AQHYU2yuMeYidUswH0W6CvuzN7NHS6z2OP5w
+Date:   Mon, 18 Apr 2022 22:02:26 +0000
+Message-ID: <BL1PR12MB51578B2A60309327CA8CC397E2F39@BL1PR12MB5157.namprd12.prod.outlook.com>
+References: <20220418213800.21257-1-nathan@kernel.org>
+In-Reply-To: <20220418213800.21257-1-nathan@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Enabled=true;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SetDate=2022-04-18T22:02:00Z;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Method=Privileged;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_Name=Public-AIP 2.0;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ActionId=e642ed21-af8e-44ea-b113-9ded5a5867b2;
+ MSIP_Label_d4243a53-6221-4f75-8154-e4b33a5707a1_ContentBits=1
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_enabled: true
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_setdate: 2022-04-18T22:02:25Z
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_method: Privileged
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_name: Public-AIP 2.0
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_actionid: cd42888b-2898-4574-b6ca-789ffc875c09
+msip_label_d4243a53-6221-4f75-8154-e4b33a5707a1_contentbits: 0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 46c8ca44-770b-420c-2cf9-08da21872003
+x-ms-traffictypediagnostic: DM6PR12MB3162:EE_
+x-microsoft-antispam-prvs: <DM6PR12MB31627862627B067D7595B8A4E2F39@DM6PR12MB3162.namprd12.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: i7vBZf4iDXSSlQa94nxZJ0xOAu7haCRhUBYel2Ii9GUDouR8+7c9xY5G5Qj4rRyLa0A3I0tClreWES7yVJpKqFVTtDK9GIej70uhB31sxnQLytF+U/fE5GZiMNP6yrYVja1uaVDa821Ib/ZirxXpx600a6Yid2Dv3ROWcU7H7QUUdiH2Xpi4sWVHyle/or96HPvzj9S7arCBMLLBIjR+gUHVVApcgnOW80UiqLxJTv46D/0xFGy1Eu4Cv1HLkWOiKgzDIMncKSMRW9Dr7CeFoXrl7zraN14W5PxBG5VywH2AB2T1Ez7PGuV/YsdSczttf8v78Wnf6GFH0k2mLvCiOBrnUMppkl4tZDIH8N7yWBKeg6Fx6Od54CUV3GL0JX1JSgH3rwPRdnrRVaMzykDwMZqO4N7asiFL87znFDR1sCccVkTKffprQsc+OFKWIQ9i/u9ilVerSDN9UlcDDPljES1w5bYfQjOjzEq1bV+oCY4i5A8T8X5G6HNVhL5AFRJQw5NknfTQw3HoRt9yLG2ChJc4pDC1R228m2tEzt6zzUHU3KL63Ep3PFotee81k0Nq7fY2gRlkhm3yzCTUGPp76bkayIaM7/B/sW2Lx+WVgJr4GiJPCVRm1SG0IF1+RguSs0VsmJb5d/UlUFJMkDw0E/Nel40APbU32rHTGAhghHQ+a/kcI0ZGhujji3PvRCI0LIL5dH8HD1/n/GTbfMBiDQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5157.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66946007)(66556008)(122000001)(66476007)(76116006)(33656002)(110136005)(54906003)(64756008)(8676002)(5660300002)(316002)(66446008)(38100700002)(38070700005)(8936002)(4326008)(186003)(53546011)(55016003)(86362001)(71200400001)(2906002)(52536014)(26005)(508600001)(83380400001)(7696005)(9686003)(6506007);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?uetiYVO2i76FmI3x3VrOnCJTZVrLGrpTK9xYj8AZBoUIBWKYsspjKggwiORR?=
+ =?us-ascii?Q?d2zVBVOLjgrMDzCFRF1uHxcSRfHS2M2YFdE6asBhfWz1YIxXwQUedHmaN8nI?=
+ =?us-ascii?Q?9+7oUVkic+wOPVFM4datJmZ0f5Djr0J7XWE719Mo147KuXEGpMPLv84mbJGj?=
+ =?us-ascii?Q?oSWpiqjuV2wVM9hng+wyv+oCIVgfTFHmg7i5Uhdy1DgWfyhUsPNMHy5IRbfw?=
+ =?us-ascii?Q?hbDE6g/66pIS8c8TlQWpKciqfCQHwL4XRDAFJ2OCgU87OcqfbP+k6MeRjiPZ?=
+ =?us-ascii?Q?8tYMFDdAZxh8i00f+EPUIiMtEKmF7W4LMK997y0PtO3c7LAs2wuk3cnkrxsC?=
+ =?us-ascii?Q?/LqJZ0gSV3Dqk0elbFO9660pzoaNOzJXQbot9MVfY9BaTWxUozwPXpjlTznd?=
+ =?us-ascii?Q?EbV+GMXj2J9e03QC1cuhC9GcYBXzQ1QdloXYkTkXRmA6f3WK2CqJ7H++HoCR?=
+ =?us-ascii?Q?kMRTIF6436oURp3IhC1uex42XseXTEDk7d0sna7hA0Ss3R8o7EO82rcLwl0q?=
+ =?us-ascii?Q?yp2fPe4u5lmFRg+cltzk3HQvlZ0ED2TEG1G4DnZBL5DghoVoKNWCY2ZgSZm0?=
+ =?us-ascii?Q?k6OUhZVmbRgqqBkN9Qwg1/joVljHrbXerhpS3+cffW6yy8UQdwRIVsoerhry?=
+ =?us-ascii?Q?qrXem0CGyUOQGkoCEhECfcsdv4m6f4/OfEgkFvwfZoerGf/oP8wqdcp3nzOo?=
+ =?us-ascii?Q?YiybKqshzcM9jJvoH8qAY1kowfDWBfQxsJhd+jgZzwUolsYBe926aNAMuoDI?=
+ =?us-ascii?Q?EhKJNfNJJ7ELcWOKYHjEZ9UQc93HSEqVTIBllKym+bwYPIzhl5brY6QqrxS1?=
+ =?us-ascii?Q?Vyi9/VTeVBqTSMwPO5v3BcvF3MhTIPiRPo+j8ZT0j6c7NWQ67Z14cBb6c1Wr?=
+ =?us-ascii?Q?DMx3R3+iNJOMkQgKoS00nVbOrlkzLV+jc/8t5bFLgDkzXWr1vNDt3JZEBvj+?=
+ =?us-ascii?Q?jwJX4eW10FakT9pzO/8QDAcUYI62pluHAvii/9yiTOdp8RWWoY/LJzJci5U4?=
+ =?us-ascii?Q?gYD1vU38QkuDTkJJ83q1JTrjrI+1ZIPfO55HgVhA28UWWOyugAILQHVdJ478?=
+ =?us-ascii?Q?hdXePXopsd0Q5k3rqEXksA6jbnnePioe4ht9ipBK4B5IXPaiwFyCLBDn9BIL?=
+ =?us-ascii?Q?KEIXzcidTp4ITMmlKNJS3aed8tKOeuDHGvAF/3GVce9RVuRVjqVs3oFFRsLC?=
+ =?us-ascii?Q?e7Of8lvGfecAgp41xyzUFtMUCfeV8/Wn0VgQ0eyTBP/NMSdfY1N4LIEGhqcX?=
+ =?us-ascii?Q?JYW1HGHcW8Lr/TpfY8Id2YY5uJfn1fGMwGRcKo2W3u4J15dHIgv1E2kuaXml?=
+ =?us-ascii?Q?diIb1Jd1Nv3pVrH/kTlD2xsbz2yqGbcxZR6VDxIXvxWAbRBPPZnUDYdS+hP9?=
+ =?us-ascii?Q?V2Ut0324Oaxv3jz13GNHNV5UHccckCcVMQFHV3FxM7HZhzATCNnT5p1WjbPD?=
+ =?us-ascii?Q?9tC8OIxI6ayyMiFq3EwEqdZGv12IZRu3WNl/Bm+GuP4n0SXhOpthKJp3/wvX?=
+ =?us-ascii?Q?urusGRbW8xNqFVU8CTmb+z/HjCPThT4ZKwooiMOzlNRTVRIISRwk0rry1GFI?=
+ =?us-ascii?Q?+ef84IwQzsIxTG8zOqnOkanLIgGXnux8Cy0EaxYUUOY6UA3g0PnlEU9AOdm1?=
+ =?us-ascii?Q?rQgYApgrFZs0LhNnf5Nftdt8LgSRBameqSUfatX1hdOU+Frn4YPegD0r38WE?=
+ =?us-ascii?Q?WeF1MCgVLbGmaXpTsj0/ifbUfmlyj9qw8dNkQIbvl0OrFtAEDGQiZ9Vl652/?=
+ =?us-ascii?Q?Io3IHUer/A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220418092824.3018714-1-chengzhihao1@huawei.com>
- <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com> <587c1849-f81b-13d6-fb1a-f22588d8cc2d@kernel.dk>
-In-Reply-To: <587c1849-f81b-13d6-fb1a-f22588d8cc2d@kernel.dk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 18 Apr 2022 15:01:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
-Message-ID: <CAHk-=wjmFw1EBOVAN8vffPDHKJH84zZOtwZrLpE=Tn2MD6kEgQ@mail.gmail.com>
-Subject: =?UTF-8?Q?Re=3A_=5BPATCH_v2=5D_fs=2Dwriteback=3A_writeback=5Fsb=5Finodes=EF=BC=9AR?=
-        =?UTF-8?Q?ecalculate_=27wrote=27_according_skipped_pages?=
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        yukuai3@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5157.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46c8ca44-770b-420c-2cf9-08da21872003
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 22:02:26.6777
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: rXsLnpg0qpxRRRjuzgdMaiClEy1NBeBJ2w1otvLHA3fgCD4AKx4AA3V4v3Wr4uljNmMLsFTTtI1ZWqcFHg/FFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3162
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:16 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> So as far as I can tell, we really have two options:
->
-> 1) Don't preempt a task that has a plug active
-> 2) Flush for any schedule out, not just going to sleep
->
-> 1 may not be feasible if we're queueing lots of IO, which then leaves 2.
-> Linus, do you remember what your original patch here was motivated by?
-> I'm assuming it was an effiency thing, but do we really have a lot of
-> cases of IO submissions being preempted a lot and hence making the plug
-> less efficient than it should be at merging IO? Seems unlikely, but I
-> could be wrong.
+[Public]
 
-No, it goes all the way back to 2011, my memory for those kinds of
-details doesn't go that far back.
 
-That said, it clearly is about preemption, and I wonder if we had an
-actual bug there.
 
-IOW, it might well not just in the "gather up more IO for bigger
-requests" thing, but about "the IO plug is per-thread and doesn't have
-locking because of that".
+> -----Original Message-----
+> From: Nathan Chancellor <nathan@kernel.org>
+> Sent: Monday, April 18, 2022 16:38
+> To: S-k, Shyam-sundar <Shyam-sundar.S-k@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Hans de Goede <hdegoede@redhat.com>;
+> Mark Gross <markgross@kernel.org>
+> Cc: platform-driver-x86@vger.kernel.org; linux-kernel@vger.kernel.org;
+> patches@lists.linux.dev; Nathan Chancellor <nathan@kernel.org>
+> Subject: [PATCH] platform/x86: amd-pmc: Shuffle location of
+> amd_pmc_get_smu_version()
+>=20
+> When CONFIG_DEBUG_FS is disabled, amd_pmc_get_smu_version() is unused:
+>=20
+>   drivers/platform/x86/amd-pmc.c:196:12: warning: unused function
+> 'amd_pmc_get_smu_version' [-Wunused-function]
+>   static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+>              ^
+>   1 warning generated.
+>=20
+> Eliminate the warning by moving amd_pmc_get_smu_version() to the
+> CONFIG_DEBUG_FS block where it is used.
+>=20
+> Fixes: b0c07116c894 ("platform/x86: amd-pmc: Avoid reading SMU version at
+> probe time")
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-So doing plug flushing from a preemptible kernel context might race
-with it all being set up.
+Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
 
-Explicit io_schedule() etc obviously doesn't have that issue.
-
-                       Linus
+> ---
+>  drivers/platform/x86/amd-pmc.c | 40 +++++++++++++++++-----------------
+>  1 file changed, 20 insertions(+), 20 deletions(-)
+>=20
+> diff --git a/drivers/platform/x86/amd-pmc.c b/drivers/platform/x86/amd-pm=
+c.c
+> index 668a1d6c11ee..e266492d3ef7 100644
+> --- a/drivers/platform/x86/amd-pmc.c
+> +++ b/drivers/platform/x86/amd-pmc.c
+> @@ -193,26 +193,6 @@ struct smu_metrics {
+>  	u64 timecondition_notmet_totaltime[SOC_SUBSYSTEM_IP_MAX];
+>  } __packed;
+>=20
+> -static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+> -{
+> -	int rc;
+> -	u32 val;
+> -
+> -	rc =3D amd_pmc_send_cmd(dev, 0, &val, SMU_MSG_GETSMUVERSION,
+> 1);
+> -	if (rc)
+> -		return rc;
+> -
+> -	dev->smu_program =3D (val >> 24) & GENMASK(7, 0);
+> -	dev->major =3D (val >> 16) & GENMASK(7, 0);
+> -	dev->minor =3D (val >> 8) & GENMASK(7, 0);
+> -	dev->rev =3D (val >> 0) & GENMASK(7, 0);
+> -
+> -	dev_dbg(dev->dev, "SMU program %u version is %u.%u.%u\n",
+> -		dev->smu_program, dev->major, dev->minor, dev->rev);
+> -
+> -	return 0;
+> -}
+> -
+>  static int amd_pmc_stb_debugfs_open(struct inode *inode, struct file *fi=
+lp)
+>  {
+>  	struct amd_pmc_dev *dev =3D filp->f_inode->i_private;
+> @@ -417,6 +397,26 @@ static int s0ix_stats_show(struct seq_file *s, void
+> *unused)
+>  }
+>  DEFINE_SHOW_ATTRIBUTE(s0ix_stats);
+>=20
+> +static int amd_pmc_get_smu_version(struct amd_pmc_dev *dev)
+> +{
+> +	int rc;
+> +	u32 val;
+> +
+> +	rc =3D amd_pmc_send_cmd(dev, 0, &val, SMU_MSG_GETSMUVERSION,
+> 1);
+> +	if (rc)
+> +		return rc;
+> +
+> +	dev->smu_program =3D (val >> 24) & GENMASK(7, 0);
+> +	dev->major =3D (val >> 16) & GENMASK(7, 0);
+> +	dev->minor =3D (val >> 8) & GENMASK(7, 0);
+> +	dev->rev =3D (val >> 0) & GENMASK(7, 0);
+> +
+> +	dev_dbg(dev->dev, "SMU program %u version is %u.%u.%u\n",
+> +		dev->smu_program, dev->major, dev->minor, dev->rev);
+> +
+> +	return 0;
+> +}
+> +
+>  static int amd_pmc_idlemask_show(struct seq_file *s, void *unused)
+>  {
+>  	struct amd_pmc_dev *dev =3D s->private;
+>=20
+> base-commit: b0c07116c894325d40a218f558047f925e4b3bdb
+> --
+> 2.36.0

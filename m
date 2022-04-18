@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDAC505936
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8573505932
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:14:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343853AbiDRORC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:17:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S245634AbiDROON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244664AbiDRN5J (ORCPT
+        with ESMTP id S244645AbiDRN5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:57:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A859B2AC73;
-        Mon, 18 Apr 2022 06:06:51 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AECE2AC74;
+        Mon, 18 Apr 2022 06:06:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61178B80EC4;
-        Mon, 18 Apr 2022 13:06:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A81FFC385A7;
-        Mon, 18 Apr 2022 13:06:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1900260B42;
+        Mon, 18 Apr 2022 13:06:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2039C385A1;
+        Mon, 18 Apr 2022 13:06:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287209;
-        bh=M5nIWoCDWAZJVGuO+TpW1pNc9qLraQMLOH1DQnAwwjo=;
+        s=korg; t=1650287212;
+        bh=v+fV2FTUnMcbAmM9fFyazBBSOL7DKbZIxl4aUYPVLSk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pk5GpFfLwPsQBZjBi/7r6ARfPg2qss/dedb01KTiPtcOKcevpoOI2iN+OSVrIPWv4
-         Js1LwaEZuJ29c+qeyhkGC0ZBvJDRE9R/Hz91sbFIIGXMslZuOd6g5H2om8WHRSK/AH
-         eV8s0VjVJFQVe3uHGgFahvnIFWIAo/3zoxs8RiO4=
+        b=XwuGn4XdP1KEwCCy0001GJMGMkyT8tDhJ++Z9ly9kkqwciIEfKJFHxBaNW4dYUyuj
+         3x0LiC8UJkpLQs9DqvcGHxH3H5Zc/ZE3LaMLVDzAo2W7JXOkLmUmymf79Ort23syNk
+         YAcfHr6PuclVJCXL9XpC0MclV88DR2BlnRRENV7Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhenzhong Duan <zhenzhong.duan@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 091/218] KVM: x86: Fix emulation in writing cr8
-Date:   Mon, 18 Apr 2022 14:12:37 +0200
-Message-Id: <20220418121202.211278109@linuxfoundation.org>
+Subject: [PATCH 4.9 092/218] KVM: x86/emulator: Defer not-present segment check in __load_segment_descriptor()
+Date:   Mon, 18 Apr 2022 14:12:38 +0200
+Message-Id: <20220418121202.239025018@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,63 +56,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhenzhong Duan <zhenzhong.duan@intel.com>
+From: Hou Wenlong <houwenlong.hwl@antgroup.com>
 
-[ Upstream commit f66af9f222f08d5b11ea41c1bd6c07a0f12daa07 ]
+[ Upstream commit ca85f002258fdac3762c57d12d5e6e401b6a41af ]
 
-In emulation of writing to cr8, one of the lowest four bits in TPR[3:0]
-is kept.
+Per Intel's SDM on the "Instruction Set Reference", when
+loading segment descriptor, not-present segment check should
+be after all type and privilege checks. But the emulator checks
+it first, then #NP is triggered instead of #GP if privilege fails
+and segment is not present. Put not-present segment check after
+type and privilege checks in __load_segment_descriptor().
 
-According to Intel SDM 10.8.6.1(baremetal scenario):
-"APIC.TPR[bits 7:4] = CR8[bits 3:0], APIC.TPR[bits 3:0] = 0";
-
-and SDM 28.3(use TPR shadow):
-"MOV to CR8. The instruction stores bits 3:0 of its source operand into
-bits 7:4 of VTPR; the remainder of VTPR (bits 3:0 and bits 31:8) are
-cleared.";
-
-and AMD's APM 16.6.4:
-"Task Priority Sub-class (TPS)-Bits 3 : 0. The TPS field indicates the
-current sub-priority to be used when arbitrating lowest-priority messages.
-This field is written with zero when TPR is written using the architectural
-CR8 register.";
-
-so in KVM emulated scenario, clear TPR[3:0] to make a consistent behavior
-as in other scenarios.
-
-This doesn't impact evaluation and delivery of pending virtual interrupts
-because processor does not use the processor-priority sub-class to
-determine which interrupts to delivery and which to inhibit.
-
-Sub-class is used by hardware to arbitrate lowest priority interrupts,
-but KVM just does a round-robin style delivery.
-
-Fixes: b93463aa59d6 ("KVM: Accelerated apic support")
-Signed-off-by: Zhenzhong Duan <zhenzhong.duan@intel.com>
+Fixes: 38ba30ba51a00 (KVM: x86 emulator: Emulate task switch in emulator.c)
 Reviewed-by: Sean Christopherson <seanjc@google.com>
-Message-Id: <20220210094506.20181-1-zhenzhong.duan@intel.com>
+Signed-off-by: Hou Wenlong <houwenlong.hwl@antgroup.com>
+Message-Id: <52573c01d369f506cadcf7233812427cf7db81a7.1644292363.git.houwenlong.hwl@antgroup.com>
 Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/kvm/lapic.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ arch/x86/kvm/emulate.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index bfed29a4c2ce..e5f92488c3cd 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -1767,10 +1767,7 @@ void kvm_set_lapic_tscdeadline_msr(struct kvm_vcpu *vcpu, u64 data)
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 2e5553091f90..3edafdffa687 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -1674,11 +1674,6 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		goto exception;
+ 	}
  
- void kvm_lapic_set_tpr(struct kvm_vcpu *vcpu, unsigned long cr8)
- {
--	struct kvm_lapic *apic = vcpu->arch.apic;
+-	if (!seg_desc.p) {
+-		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
+-		goto exception;
+-	}
 -
--	apic_set_tpr(apic, ((cr8 & 0x0f) << 4)
--		     | (kvm_lapic_get_reg(apic, APIC_TASKPRI) & 4));
-+	apic_set_tpr(vcpu->arch.apic, (cr8 & 0x0f) << 4);
- }
+ 	dpl = seg_desc.dpl;
  
- u64 kvm_lapic_get_cr8(struct kvm_vcpu *vcpu)
+ 	switch (seg) {
+@@ -1718,6 +1713,10 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 	case VCPU_SREG_TR:
+ 		if (seg_desc.s || (seg_desc.type != 1 && seg_desc.type != 9))
+ 			goto exception;
++		if (!seg_desc.p) {
++			err_vec = NP_VECTOR;
++			goto exception;
++		}
+ 		old_desc = seg_desc;
+ 		seg_desc.type |= 2; /* busy */
+ 		ret = ctxt->ops->cmpxchg_emulated(ctxt, desc_addr, &old_desc, &seg_desc,
+@@ -1742,6 +1741,11 @@ static int __load_segment_descriptor(struct x86_emulate_ctxt *ctxt,
+ 		break;
+ 	}
+ 
++	if (!seg_desc.p) {
++		err_vec = (seg == VCPU_SREG_SS) ? SS_VECTOR : NP_VECTOR;
++		goto exception;
++	}
++
+ 	if (seg_desc.s) {
+ 		/* mark segment as accessed */
+ 		if (!(seg_desc.type & 1)) {
 -- 
 2.34.1
 

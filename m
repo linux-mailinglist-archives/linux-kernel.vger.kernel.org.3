@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DEBC504F3C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:05:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB765504F3E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:05:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237866AbiDRLHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38868 "EHLO
+        id S237874AbiDRLH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiDRLHq (ORCPT
+        with ESMTP id S237868AbiDRLH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:07:46 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF97BDF27;
-        Mon, 18 Apr 2022 04:05:07 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id q75so2225357qke.6;
-        Mon, 18 Apr 2022 04:05:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jtErJV/yyKIPlfj6WAn/f6RpUfUXiwNUlAwwF0kiTLk=;
-        b=R8MKlTysX7dLOUU3lP51WrJRysFMFndd1XIRz41qPtL4+6HWMU4856FdWWI85AsyAT
-         +GX9m5OTi2az5H+k9sGy76+KPqitU52nFE6frMi7UeS0tPCPTSmsVCQdo3JWYd01h+y8
-         gONj+4uEJVtHD4Q5402tzC3LZo++4qM9EiIERONCkE0LzZ1s5QWj3w9TlcvLFYK6HopX
-         JVu/Y2Osg9V0usnI2TzA53JasBDDWfw+4hQtrjZi4z/5AEOCeY/PJxAGqgc49gBXtRHC
-         th9fdr37ZqIVLzEhr3bUqwmRNpCi0xWQWx+cF69/cqFvTZFNxI4fNS6Sck4YJ3xkfT6m
-         zSFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=jtErJV/yyKIPlfj6WAn/f6RpUfUXiwNUlAwwF0kiTLk=;
-        b=ksepxschAI0urZgQ3C7eWP2Z02cWDA6Asye1OgJ5sLHl6kSnLBoYQTkYmH2vDLj+Cy
-         OwrJWvJQHpbB181XQ3s07a73oJTmoYDC3b1xzKxvj78C2wWJEt5Y1YVdTdV4qclnoT+M
-         O/95fsyXna6LApFwK1QkGe0kajjHAcTEI9yaSwS4VFV3MN5jQRLJRIxxrXW4rou+8BR+
-         teOigALFsIhb4NxLWGvSLtkkIbQDyCGMOvY7P0n8Ww/tFyGgauuDstvIi79deJDU6C6j
-         svhXpiNu8leoq2Z1jZbQqeeKJESZunpgrFp+xx+sSR9xFnYpaenhB9zeoFhv+Kfvaatv
-         p6CQ==
-X-Gm-Message-State: AOAM531CYFJfH5J+DDby5rR1DcSXMAr9D+tfL4ioXnNhYXyPNcR1zVBk
-        KX3UEr+zN23jLi3yUKcjgAA=
-X-Google-Smtp-Source: ABdhPJwWHWU0/ZdEMlcP0PKD1SIg6HseO//RD89kR9i/4h7bVGnmmPDMtqgBr3K5ML2c4gUxQzuxRQ==
-X-Received: by 2002:a05:620a:2847:b0:67d:2bad:422f with SMTP id h7-20020a05620a284700b0067d2bad422fmr6176151qkp.559.1650279906517;
-        Mon, 18 Apr 2022 04:05:06 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i17-20020a05620a405100b0069c45deb548sm6918521qko.130.2022.04.18.04.05.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 04:05:06 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: chi.minghao@zte.com.cn
-To:     mturquette@baylibre.com
-Cc:     sboyd@kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] clk: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
-Date:   Mon, 18 Apr 2022 11:04:55 +0000
-Message-Id: <20220418110455.2559264-1-chi.minghao@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 07:07:57 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DBC013E99;
+        Mon, 18 Apr 2022 04:05:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C21C61F37E;
+        Mon, 18 Apr 2022 11:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1650279916; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2MXv4CCJ+s8PPXj9xZt112RURp4scFtLvmiRjw8DjDE=;
+        b=jqQVK5TQAcVnxMDc24wO8sga6fhYUmXxKe/8xe6oNvirRP1ZB4/Rxosh+8BDucv1RhrfxO
+        G8tyVq4hWBa3PTg43o269xNS6pw92b2yAHP1pwyCzaBWQCvazwy5o1MyLEndH8ZkMY+6fr
+        gf3dF1nszgSfBB0JUNrPXQsDTOxulq8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1650279916;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2MXv4CCJ+s8PPXj9xZt112RURp4scFtLvmiRjw8DjDE=;
+        b=Sbf493i94lbj90nCvsJyBOr/qQN6eXypLFmYZ+SMhgy7KBdRG+HKj/qREfbcpaGSKhjYGq
+        R1qZ2lyVdA0YPOAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9EA8B13ACB;
+        Mon, 18 Apr 2022 11:05:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id J3MfJuxFXWIkFQAAMHmgww
+        (envelope-from <iivanov@suse.de>); Mon, 18 Apr 2022 11:05:16 +0000
+Date:   Mon, 18 Apr 2022 14:05:16 +0300
+From:   "Ivan T. Ivanov" <iivanov@suse.de>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ray Jui <rjui@broadcom.com>,
+        Scott Branden <sbranden@broadcom.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Phil Elwell <phil@raspberrypi.org>,
+        kernel test robot <lkp@intel.com>,
+        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
+Message-ID: <20220418110516.s7jxsfa3jl7aagrf@suse>
+References: <20220404125113.80239-1-iivanov@suse.de>
+ <20220414105656.qt52zmr5vjmjdcxc@suse>
+ <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+Hi Stefan,
 
-Using pm_runtime_resume_and_get is more appropriate
-for simplifing code
+On 04-15 10:52, Stefan Wahren wrote:
+> 
+> Hi Ivan,
+> 
+> Am 14.04.22 um 12:56 schrieb Ivan T. Ivanov:
+> > Hi Stefan,
+> > 
+> > Please, could you take a look into following patch?
+> yes, but i cannot give a technical review. But from my gut feeling this
+> doesn't look really elegant to me.
+> > 
+> > Thanks!
+> > Ivan
+> > 
+> > On 04-04 15:51, Ivan T. Ivanov wrote:
+> > > Subject: [PATCH v2] clk: bcm2835: Round UART input clock up
+> > > Message-Id: <20220404125113.80239-1-iivanov@suse.de>
+> > > 
+> > > The UART clock is initialised to be as close to the requested
+> > > frequency as possible without exceeding it. Now that there is a
+> > > clock manager that returns the actual frequencies, an expected
+> > > 48MHz clock is reported as 47999625. If the requested baudrate
+> > > == requested clock/16, there is no headroom and the slight
+> > > reduction in actual clock rate results in failure.
+> > > 
+> > > If increasing a clock by less than 0.1% changes it from ..999..
+> > > to ..000.., round it up.
+> 
+> Based on this commit message this looks like a fix / workaround for an
+> issue. It would be very helpful to know:
+> 
+> What issue should be fixed?
+> 
+> Why is it fixed here and not in the UART driver for instance?
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
----
- drivers/clk/clk.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+The UART driver is amba-pl011. Original fix, see below Github link,
+was inside pl011 module, but somehow it didn't look as the right
+place either. Beside that this rounding function is not exactly
+perfect for all possible clock values. So I deiced to move the hack
+to the platform which actually need it.
 
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index ed119182aa1b..544e940bf40b 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -113,12 +113,8 @@ static int clk_pm_runtime_get(struct clk_core *core)
- 	if (!core->rpm_enabled)
- 		return 0;
- 
--	ret = pm_runtime_get_sync(core->dev);
--	if (ret < 0) {
--		pm_runtime_put_noidle(core->dev);
--		return ret;
--	}
--	return 0;
-+	ret = pm_runtime_resume_and_get(core->dev);
-+	return ret;
- }
- 
- static void clk_pm_runtime_put(struct clk_core *core)
--- 
-2.25.1
+> 
+> In case it fixes a regression, a Fixes tag should be necessary.
 
+I found the issue because it was reported that RPi3[1] and RPi Zero 2W
+boards have issues with the Bluetooth. So it turns out that when
+switching from initial to operation speed host and device no longer
+can talk each other because host uses incorrect baud rate.
+
+I open to better solution of the issue.
+
+Thanks,
+Ivan
+
+> 
+> In best case this is explained in the commit message.
+> 
+> Best regards
+> 
+> > > 
+> > > This is reworked version of a downstream fix:
+> > > https://github.com/raspberrypi/linux/commit/ab3f1b39537f6d3825b8873006fbe2fc5ff057b7
+> > > 
+
+[1] https://bugzilla.suse.com/show_bug.cgi?id=1188238
 

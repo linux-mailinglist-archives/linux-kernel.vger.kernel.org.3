@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A326F505507
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A68B1505822
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:59:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242396AbiDRNNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32934 "EHLO
+        id S244777AbiDROAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242373AbiDRM7u (ORCPT
+        with ESMTP id S244252AbiDRNjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C89B1205C3;
-        Mon, 18 Apr 2022 05:41:00 -0700 (PDT)
+        Mon, 18 Apr 2022 09:39:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE5672E0AA;
+        Mon, 18 Apr 2022 05:58:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51625611FE;
-        Mon, 18 Apr 2022 12:41:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EF11C385A1;
-        Mon, 18 Apr 2022 12:40:59 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5937612BB;
+        Mon, 18 Apr 2022 12:58:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A09C385A7;
+        Mon, 18 Apr 2022 12:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285659;
-        bh=0pNCm8cPtRNE2lPaj50F4TUTtqGyvvsngKx3mqhnaVw=;
+        s=korg; t=1650286731;
+        bh=kLIZvva0TrNPgKx9Y7S4dXw5SpfgmKRbW6Q7tCDj1vM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AqIHTnzUMpX1GsCnY6tII6dexTo2YqF7H3DoFOtA286rj2HrFT7o1J+qbSlSS+5iH
-         RVVbVzUpr/whMuVtKG040wHepVGtCdWxgOiEdU7gjcAZ7HfXL9p0rQ0ZWZ4cdm1M5Q
-         GvU0BgN73yg3us+rLVRo1lkC4mJt3pA+pGEK1/Sg=
+        b=BgIwHLMhbLu9E1UP10KC9l3xxkMaHg8CBx64jkYao0QbY+5igPP+xXULYoh97PL1/
+         aHM/ErDKbwySTHjuDZLAbA7PYDOnZ6jpt19EVK+UE8GjEqGDnMvaBu7U6A4Kfyv9ud
+         FS9HqBemMFQhzyGLTCSj3ZwHSTut5Pac7QnQ4va8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <desowin@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 087/105] drm/amdgpu: Enable gfxoff quirk on MacBook Pro
+        stable@vger.kernel.org, Lucas Denefle <lucas.denefle@converge.io>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 228/284] w1: w1_therm: fixes w1_seq for ds28ea00 sensors
 Date:   Mon, 18 Apr 2022 14:13:29 +0200
-Message-Id: <20220418121149.104870040@linuxfoundation.org>
+Message-Id: <20220418121218.194117878@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomasz Moń <desowin@gmail.com>
+From: Lucas Denefle <lucas.denefle@converge.io>
 
-commit 4593c1b6d159f1e5c35c07a7f125e79e5a864302 upstream.
+[ Upstream commit 41a92a89eee819298f805c40187ad8b02bb53426 ]
 
-Enabling gfxoff quirk results in perfectly usable graphical user
-interface on MacBook Pro (15-inch, 2019) with Radeon Pro Vega 20 4 GB.
+w1_seq was failing due to several devices responding to the
+CHAIN_DONE at the same time. Now properly selects the current
+device in the chain with MATCH_ROM. Also acknowledgment was
+read twice.
 
-Without the quirk, X server is completely unusable as every few seconds
-there is gpu reset due to ring gfx timeout.
-
-Signed-off-by: Tomasz Moń <desowin@gmail.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Signed-off-by: Lucas Denefle <lucas.denefle@converge.io>
+Link: https://lore.kernel.org/r/20220223113558.232750-1-lucas.denefle@converge.io
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    2 ++
- 1 file changed, 2 insertions(+)
+ drivers/w1/slaves/w1_therm.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-@@ -1248,6 +1248,8 @@ static const struct amdgpu_gfxoff_quirk
- 	{ 0x1002, 0x15dd, 0x103c, 0x83e7, 0xd3 },
- 	/* GFXOFF is unstable on C6 parts with a VBIOS 113-RAVEN-114 */
- 	{ 0x1002, 0x15dd, 0x1002, 0x15dd, 0xc6 },
-+	/* Apple MacBook Pro (15-inch, 2019) Radeon Pro Vega 20 4 GB */
-+	{ 0x1002, 0x69af, 0x106b, 0x019a, 0xc0 },
- 	{ 0, 0, 0, 0, 0 },
- };
+diff --git a/drivers/w1/slaves/w1_therm.c b/drivers/w1/slaves/w1_therm.c
+index 259525c3382a..9b9870ba01cd 100644
+--- a/drivers/w1/slaves/w1_therm.c
++++ b/drivers/w1/slaves/w1_therm.c
+@@ -690,16 +690,20 @@ static ssize_t w1_seq_show(struct device *device,
+ 		if (sl->reg_num.id == reg_num->id)
+ 			seq = i;
  
++		if (w1_reset_bus(sl->master))
++			goto error;
++
++		/* Put the device into chain DONE state */
++		w1_write_8(sl->master, W1_MATCH_ROM);
++		w1_write_block(sl->master, (u8 *)&rn, 8);
+ 		w1_write_8(sl->master, W1_42_CHAIN);
+ 		w1_write_8(sl->master, W1_42_CHAIN_DONE);
+ 		w1_write_8(sl->master, W1_42_CHAIN_DONE_INV);
+-		w1_read_block(sl->master, &ack, sizeof(ack));
+ 
+ 		/* check for acknowledgment */
+ 		ack = w1_read_8(sl->master);
+ 		if (ack != W1_42_SUCCESS_CONFIRM_BYTE)
+ 			goto error;
+-
+ 	}
+ 
+ 	/* Exit from CHAIN state */
+-- 
+2.35.1
+
 
 

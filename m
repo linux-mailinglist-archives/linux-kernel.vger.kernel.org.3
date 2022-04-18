@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BAA5054B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14622505874
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239862AbiDRNMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S245690AbiDROD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242151AbiDRM7j (ORCPT
+        with ESMTP id S244619AbiDRNpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52E1F2F3AB;
-        Mon, 18 Apr 2022 05:40:15 -0700 (PDT)
+        Mon, 18 Apr 2022 09:45:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E34B32043;
+        Mon, 18 Apr 2022 06:00:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B3A36101A;
-        Mon, 18 Apr 2022 12:40:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9069DC385A9;
-        Mon, 18 Apr 2022 12:40:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84AFBB80D9C;
+        Mon, 18 Apr 2022 13:00:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF7B8C385A7;
+        Mon, 18 Apr 2022 13:00:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285614;
-        bh=5k8FW0xfgGxI6vUMlHLTkoJOHhqS69JmSk5lxa58BJ0=;
+        s=korg; t=1650286809;
+        bh=1X3jVFBcdpgqeellWvIrk80zSJ9UX1SgA+Li3Hq5Ql4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=W01ore2y11CYw1abn/b6jdmnQVxH38VXEB9Bn/0d0ubOhE/c+5bNT81u/oZI26vnq
-         uk7QPj3kFqlmi4Ov5Lyj8Z+oZT0jTAy0xqfI0M5+bTQPoEik3gW3DEgZMslCWT+wi4
-         luT3rvV/PjM/FD5Lb1/Hmnu5hWZD3SGn4Il0J81s=
+        b=Jlkw6hl+ZGZNpF3ilxXnW3XBfVMQjww75GtPrlyIHVyViAWpqijsJnlquTY52zYk3
+         N6AtcUqIhAhTjCF+lJjacHBczPYxB7Zze62q1yBRgT29r5aaLIMi8O9cLpRc8cpb+E
+         BCS0YzvsAjWgpveUX+dREZOW1Xg7siSGsELbP7N4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, stable@kernel.org,
-        Oliver Upton <oupton@google.com>, Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 5.10 074/105] KVM: Dont create VM debugfs files outside of the VM directory
+        stable@vger.kernel.org, Zhou Guanghui <zhouguanghui1@huawei.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 215/284] iommu/arm-smmu-v3: fix event handling soft lockup
 Date:   Mon, 18 Apr 2022 14:13:16 +0200
-Message-Id: <20220418121148.729694346@linuxfoundation.org>
+Message-Id: <20220418121217.828612769@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,68 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Oliver Upton <oupton@google.com>
+From: Zhou Guanghui <zhouguanghui1@huawei.com>
 
-commit a44a4cc1c969afec97dbb2aedaf6f38eaa6253bb upstream.
+[ Upstream commit 30de2b541af98179780054836b48825fcfba4408 ]
 
-Unfortunately, there is no guarantee that KVM was able to instantiate a
-debugfs directory for a particular VM. To that end, KVM shouldn't even
-attempt to create new debugfs files in this case. If the specified
-parent dentry is NULL, debugfs_create_file() will instantiate files at
-the root of debugfs.
+During event processing, events are read from the event queue one
+by one until the queue is empty.If the master device continuously
+requests address access at the same time and the SMMU generates
+events, the cyclic processing of the event takes a long time and
+softlockup warnings may be reported.
 
-For arm64, it is possible to create the vgic-state file outside of a
-VM directory, the file is not cleaned up when a VM is destroyed.
-Nonetheless, the corresponding struct kvm is freed when the VM is
-destroyed.
+arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
+arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
+watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
+Call trace:
+ _dev_info+0x7c/0xa0
+ arm_smmu_evtq_thread+0x1c0/0x230
+ irq_thread_fn+0x30/0x80
+ irq_thread+0x128/0x210
+ kthread+0x134/0x138
+ ret_from_fork+0x10/0x1c
+Kernel panic - not syncing: softlockup: hung tasks
 
-Nip the problem in the bud for all possible errant debugfs file
-creations by initializing kvm->debugfs_dentry to -ENOENT. In so doing,
-debugfs_create_file() will fail instead of creating the file in the root
-directory.
+Fix this by calling cond_resched() after the event information is
+printed.
 
-Cc: stable@kernel.org
-Fixes: 929f45e32499 ("kvm: no need to check return value of debugfs_create functions")
-Signed-off-by: Oliver Upton <oupton@google.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220406235615.1447180-2-oupton@google.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
+Link: https://lore.kernel.org/r/20220119070754.26528-1-zhouguanghui1@huawei.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- virt/kvm/kvm_main.c |   10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/iommu/arm-smmu-v3.c | 1 +
+ 1 file changed, 1 insertion(+)
 
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -673,7 +673,7 @@ static void kvm_destroy_vm_debugfs(struc
- {
- 	int i;
+diff --git a/drivers/iommu/arm-smmu-v3.c b/drivers/iommu/arm-smmu-v3.c
+index 29feafa8007f..878087b9ddfe 100644
+--- a/drivers/iommu/arm-smmu-v3.c
++++ b/drivers/iommu/arm-smmu-v3.c
+@@ -1210,6 +1210,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
+ 				dev_info(smmu->dev, "\t0x%016llx\n",
+ 					 (unsigned long long)evt[i]);
  
--	if (!kvm->debugfs_dentry)
-+	if (IS_ERR(kvm->debugfs_dentry))
- 		return;
++			cond_resched();
+ 		}
  
- 	debugfs_remove_recursive(kvm->debugfs_dentry);
-@@ -693,6 +693,12 @@ static int kvm_create_vm_debugfs(struct
- 	struct kvm_stat_data *stat_data;
- 	struct kvm_stats_debugfs_item *p;
- 
-+	/*
-+	 * Force subsequent debugfs file creations to fail if the VM directory
-+	 * is not created.
-+	 */
-+	kvm->debugfs_dentry = ERR_PTR(-ENOENT);
-+
- 	if (!debugfs_initialized())
- 		return 0;
- 
-@@ -4731,7 +4737,7 @@ static void kvm_uevent_notify_change(uns
- 	}
- 	add_uevent_var(env, "PID=%d", kvm->userspace_pid);
- 
--	if (kvm->debugfs_dentry) {
-+	if (!IS_ERR(kvm->debugfs_dentry)) {
- 		char *tmp, *p = kmalloc(PATH_MAX, GFP_KERNEL_ACCOUNT);
- 
- 		if (p) {
+ 		/*
+-- 
+2.35.1
+
 
 

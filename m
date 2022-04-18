@@ -2,184 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEED1505058
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:21:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EADDA505074
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238313AbiDRMYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:24:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
+        id S238515AbiDRMZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238780AbiDRMWt (ORCPT
+        with ESMTP id S238834AbiDRMWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:22:49 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD71CB33;
-        Mon, 18 Apr 2022 05:18:16 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id y10so9116656ejw.8;
-        Mon, 18 Apr 2022 05:18:16 -0700 (PDT)
+        Mon, 18 Apr 2022 08:22:53 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAECB1EEFD
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:18:23 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id k23so26534794ejd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:18:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=rBeq7r1LUr17BD3wzjfHgTsyokZ2FymR+3nXomEXu6g=;
-        b=Xx1vnBsJpTyBssMLec8mWL15r4vB/b1/DWYrrTDsZnx2crQM4QEDvWC1X35cKEKTw5
-         7FVXpOzPkGNXScfkmXRupkAvTHLeBqzzDsn6HcCjyRW7QI9+CmkoALZK8AYNZxWy1Vtf
-         vYx5aG7d1KK2A6okFaDTud0BRjgIP9b+6mZyLgNkXsDWEII974cqla2ix6TR9p9HQ3Xu
-         5d+p4lAGna3lySSQ8/seWqb6pSTbfMBjtSZrSSkECgoy81rnwU5J1xlKf1Icv7aYoyQV
-         1JSwfjcmHfbMsGx2pcbuIfpx30qH+cx7UenAXVLXlG1SOEY15IjTJLYBHDh9cfpzvlfP
-         gzUQ==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=304FwvbODPc/e7NTdlGUu0OxXKV91QMvJtVzbIwOzsY=;
+        b=oauAcvfa+/M3D5189r4makzPKYi0gCRiGm46EFxvtnJHKSzGdOdw+IekjUokWg84mc
+         /rr5jvl3u5ivgV3bvm3wQyLnaP5CfC36SOlsJU4Wevk5/RREie3FSqKEDgZS1TmOWAxH
+         aJEwSBcXIiX0WBv/QSZqjCivrgFhZLNODCv9X4f2om5D3JhiJp87qgRGS7DMYfYcTUSQ
+         pcoco8zBK29ToYbxN7NYkAzgTqL/G8njWL3GcEqAKChlRSwyFxORKmBbLMb0wJ42rvSS
+         k5RX1MVZkQ5ZakdB2Tomatx5c2GrMwJubXZQwEVZV9Di+0O3WSTNWPBWRoz+8B+RSpxs
+         +jFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=rBeq7r1LUr17BD3wzjfHgTsyokZ2FymR+3nXomEXu6g=;
-        b=ZRUdqZVj8KkYi8QjYtlTzhx1+7Rs4QqAcJf3qLyKGx5eKZRPYDNTJTyfn+2JlWHDVY
-         n64JPSzK7/RJGWC7Mq1INh0w3GpYnLGS4Dc8m1nwCxWUfkFMxyL+TiI1+N9Ad9WmB1Tp
-         BgQCJQeQ8y3xqKkPz1GTtinwbaRguyYvMg8hxgsEHVKfVtz/s2F7La8XTfFSIfovjZUU
-         IH7YjePYgM+8tZlbPZjVtCeYfB8iwB3bPj7qjHin3LwNZ5yLw7oUoTDaWiPbeJBJQgHW
-         wuoRJoyfYcvPWmtTzYrDMXBDOhkpxKMsF4XgdYbX8oKAI1Qr5gljjApiqEpruaQ6iwtg
-         w+6A==
-X-Gm-Message-State: AOAM533LDUpaamTixsN1iVbbr+svqg7VPc/OlzAkhbz8thqebTneu8ot
-        hVJt1k7RRpyPIhaXLdXdZq4PmXKsomg4so3Fv2g=
-X-Google-Smtp-Source: ABdhPJxP7RO/30UkizWDp1oKjdyab95YDtjf823TDAl+jEaenz5Jg7MGHYnl6v3ieJuCs7vAkX0IAv0IC6KFJDktHH4=
-X-Received: by 2002:a17:907:8a14:b0:6e8:9691:62f7 with SMTP id
- sc20-20020a1709078a1400b006e8969162f7mr8964573ejc.497.1650284294799; Mon, 18
- Apr 2022 05:18:14 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=304FwvbODPc/e7NTdlGUu0OxXKV91QMvJtVzbIwOzsY=;
+        b=Hieznn84v1vf93LXt0pmdJ02A/Rt5IY3ROXaM2WUXvzQPR54pXRiF8yvFuc0HXsIUQ
+         kbg5/BCC7IDeVLz8C5iihTQ1tPNjWdP8rGpjhfbZummmzrs9RXuZ4C0AxCHUxXKh8ZYs
+         8Q5uaYxivcxRC0K8zfM5HRBZ191C5acYlDevO6IOB/8wp/SOVlyDRCpZCvRr7cEXr/ul
+         tA8Wpe3EnWb2P8kF0yvZzbap4jCQbN+SiOfWPtPVYEBy1XPkN3fCJzweGqe6VqL4VeJJ
+         sEIr67ZMVndGUjCKNHJDXZqKx99xMoq5meBRVEg+BUp90MMbgpMjICEPxw6S0XmwQ86L
+         MdnA==
+X-Gm-Message-State: AOAM532hOJmc1x2HSKhDLVEKY2NBXe61rH4DLfvRiSbN+RerF3HPm7XP
+        PugwxByoI0GQWDdaft7YxiLA7g==
+X-Google-Smtp-Source: ABdhPJwitUmBeZrL4/JQi7iDB4R8V82XjKuvEHdTLZYkZ4ZYC6c9hFCwam2fEu49tYxcY++zvLSjng==
+X-Received: by 2002:a17:907:7206:b0:6ef:b47c:e5ec with SMTP id dr6-20020a170907720600b006efb47ce5ecmr3565212ejc.351.1650284301960;
+        Mon, 18 Apr 2022 05:18:21 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id h23-20020a0564020e9700b00420fff23180sm6441720eda.41.2022.04.18.05.18.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 05:18:21 -0700 (PDT)
+Message-ID: <2f8d2f6a-32dc-15cc-321c-f75721edf8a2@linaro.org>
+Date:   Mon, 18 Apr 2022 14:18:20 +0200
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162154250.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204162154250.9383@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:17:38 +0300
-Message-ID: <CAHp75Vem7twcS4bKXJZM4SfE+g9qC3rxtytTKpQsyszZpnrLqw@mail.gmail.com>
-Subject: Re: [PATCH v4 3/5] serial: 8250: Export ICR access helpers for
- internal use
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
+Content-Language: en-US
+To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, olof@lixom.net, will@kernel.org, soc@kernel.org,
+        cfli0@nuvoton.com
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-3-ychuang3@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220418082738.11301-3-ychuang3@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Make ICR access helpers available outside 8250_port.c, however retain
-> them as ordinary static functions so as not to regress code generation.
->
-> This is because `serial_icr_write' is currently automatically inlined by
-> GCC, however `serial_icr_read' is not.  Making them both static inline
-> would grow code produced, e.g.:
->
-> $ i386-linux-gnu-size --format=gnu 8250_port-{old,new}.o
->       text       data        bss      total filename
->      15065       3378          0      18443 8250_port-old.o
->      15289       3378          0      18667 8250_port-new.o
->
-> and:
->
-> $ riscv64-linux-gnu-size --format=gnu 8250_port-{old,new}.o
->       text       data        bss      total filename
->      16980       5306          0      22286 8250_port-old.o
->      17124       5306          0      22430 8250_port-new.o
->
-> while making them external would needlessly add a new module interface
-> and lose the benefit from `serial_icr_write' getting inlined outside
-> 8250_port.o.
+On 18/04/2022 10:27, Jacky Huang wrote:
+> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+> 
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-See one nit-pick below.
+You skipped the review tag, so I assume because of amount of changes.
+Usually it is nice to mention it...
 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
 > ---
-> New change in v4, factored out from 5/5.
-> ---
->  drivers/tty/serial/8250/8250.h      |   23 +++++++++++++++++++++++
->  drivers/tty/serial/8250/8250_port.c |   21 ---------------------
->  2 files changed, 23 insertions(+), 21 deletions(-)
->
-> linux-serial-8250-icr-access.diff
-> Index: linux-macro/drivers/tty/serial/8250/8250.h
-> ===================================================================
-> --- linux-macro.orig/drivers/tty/serial/8250/8250.h
-> +++ linux-macro/drivers/tty/serial/8250/8250.h
-> @@ -120,6 +120,29 @@ static inline void serial_out(struct uar
->         up->port.serial_out(&up->port, offset, value);
->  }
->
-> +/*
-> + * For the 16C950
-> + */
-> +static void __maybe_unused serial_icr_write(struct uart_8250_port *up,
-> +                                           int offset, int value)
-
-I think you may drop __maybe_unused here, because it's always used by
-the code below. So it will be eliminated altogether when the below
-won't be used.
-
-> +{
-> +       serial_out(up, UART_SCR, offset);
-> +       serial_out(up, UART_ICR, value);
-> +}
+>  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 63 +++++++++++++++++++
+>  1 file changed, 63 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> new file mode 100644
+> index 000000000000..d0d37c5e84af
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+> @@ -0,0 +1,63 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/clock/nuvoton,ma35d1-clk.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +static unsigned int __maybe_unused serial_icr_read(struct uart_8250_port *up,
-> +                                                  int offset)
-> +{
-> +       unsigned int value;
+> +title: Nuvoton MA35D1 Clock Control Module Binding
 > +
-> +       serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
-> +       serial_out(up, UART_SCR, offset);
-> +       value = serial_in(up, UART_ICR);
-> +       serial_icr_write(up, UART_ACR, up->acr);
+> +maintainers:
+> +  - Chi-Fang Li <cfli0@nuvoton.com>
+> +  - Jacky Huang <ychuang3@nuvoton.com>
 > +
-> +       return value;
-> +}
+> +description: |
+> +  The MA35D1 clock controller generates clocks for the whole chip,
+> +  including system clocks and all peripheral clocks.
 > +
->  void serial8250_clear_and_reinit_fifos(struct uart_8250_port *p);
->
->  static inline int serial_dl_read(struct uart_8250_port *up)
-> Index: linux-macro/drivers/tty/serial/8250/8250_port.c
-> ===================================================================
-> --- linux-macro.orig/drivers/tty/serial/8250/8250_port.c
-> +++ linux-macro/drivers/tty/serial/8250/8250_port.c
-> @@ -538,27 +538,6 @@ serial_port_out_sync(struct uart_port *p
->  }
->
->  /*
-> - * For the 16C950
-> - */
-> -static void serial_icr_write(struct uart_8250_port *up, int offset, int value)
-> -{
-> -       serial_out(up, UART_SCR, offset);
-> -       serial_out(up, UART_ICR, value);
-> -}
-> -
-> -static unsigned int serial_icr_read(struct uart_8250_port *up, int offset)
-> -{
-> -       unsigned int value;
-> -
-> -       serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
-> -       serial_out(up, UART_SCR, offset);
-> -       value = serial_in(up, UART_ICR);
-> -       serial_icr_write(up, UART_ACR, up->acr);
-> -
-> -       return value;
-> -}
-> -
-> -/*
->   * FIFO support.
->   */
->  static void serial8250_clear_fifos(struct uart_8250_port *p)
+> +  See also:
+> +    include/dt-bindings/clock/ma35d1-clk.h
+> +
+> +properties:
+> +  compatible:
+> +    const: nuvoton,ma35d1-clk
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  "#clock-cells":
+> +    const: 1
+> +
+> +  assigned-clocks:
+
+What about clocks? This depends on clocks. What clocks do you want to
+assign if they are not an input to the device?
+
+> +    minItems: 5
+> +    maxItems: 5
+
+This is different than before. minItems should not be here.
+
+Why do you need assigned-clocks in the binding at all?
+
+> +
+> +  assigned-clock-rates:
+> +    minItems: 5
+> +    maxItems: 5
+> +
+> +  nuvoton,clk-pll-mode:
+> +    A list of PLL operation mode corresponding to DDRPLL, APLL, EPLL,
+> +    and VPLL in sequential.
+
+This does not look like a binding which was tested. Read
+"writing-schema" and test your bindings.
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    minItems: 5
+
+No need for minItems.
+
+> +    maxItems: 5
+> +    items:
+> +      enum: [ 0, 1, 2 ]
+
+You need to describe the values in description, what's their meaning.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - "#clock-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/clock/nuvoton,ma35d1-clk.h>
+> +
+> +    clk: clock-controller@40460200 {
+> +        compatible = "nuvoton,ma35d1-clk";
+> +        reg = <0x0 0x40460200 0x0 0x100>;
+> +        #clock-cells = <1>;
+> +    };
+> +...
 
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof

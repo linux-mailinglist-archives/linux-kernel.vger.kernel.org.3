@@ -2,119 +2,291 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473E9505A38
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9D4F505A3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345177AbiDROtE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:49:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
+        id S1344478AbiDROte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345324AbiDROsx (ORCPT
+        with ESMTP id S1345314AbiDROtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:48:53 -0400
-Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C4E65812;
-        Mon, 18 Apr 2022 06:35:51 -0700 (PDT)
-Received: by mail-oo1-f52.google.com with SMTP id x22-20020a4aca96000000b00338fbaf797bso1224496ooq.10;
-        Mon, 18 Apr 2022 06:35:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:in-reply-to:references:subject:date
-         :message-id;
-        bh=/7DrYrmalKThMdy4LcLfM/HEgQyeZb4ql4+RxoW5Tek=;
-        b=n82QxnLUGM1ZVFYN1x60081DH8QIjn9dyhiDhQPB1TQixPgDHDEC2BfnunviyMMRGt
-         kvqpD97I6TQBAn1o7kSyMKMcfTKqe5fVpbPmLtPl713PxVIyq9JIxQbcabP/SrTx6mC4
-         Y8VCAW4LuNkCscXcFSu2Ic6wnTc4PfafYUBNygCKs0S6M1mO610YE/E5y16/edwMEDCB
-         NZp9MNABTsTzS8914mUZqJjbKL+iZJhDt+zfv1TkbZol0ODlrHSCHbI10yA0fnsJmakP
-         q0Dlejijiu0JEuJG2dEQsiHgrmENFP7M706VT/MJpsJpkA3oDf9S+TYGlY8BzjriEPYj
-         gOxQ==
-X-Gm-Message-State: AOAM530AOwmWD3vKoVW95y9I2+Px0nFGsmCpAtpieEN9hyEHag2Sh78i
-        3LO4QCWGfNVBx0CwSDiALg==
-X-Google-Smtp-Source: ABdhPJycojyv4H+nJQ2x1+adkeuVDAjldV3SjAu/92fF+LKn4/jU3ne8TQqcEwIkD35VyIOwx2l8gQ==
-X-Received: by 2002:a4a:8888:0:b0:321:7448:42df with SMTP id j8-20020a4a8888000000b00321744842dfmr3575456ooa.82.1650288951046;
-        Mon, 18 Apr 2022 06:35:51 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g15-20020a05687054cf00b000e29cbc65e4sm3956240oan.51.2022.04.18.06.35.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 06:35:50 -0700 (PDT)
-Received: (nullmailer pid 3125299 invoked by uid 1000);
-        Mon, 18 Apr 2022 13:35:48 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Jacky Huang <ychuang3@nuvoton.com>
-Cc:     robh+dt@kernel.org, krzk+dt@kernel.org, will@kernel.org,
-        arnd@arndb.de, ychuang570808@gmail.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        olof@lixom.net, cfli0@nuvoton.com, soc@kernel.org,
-        devicetree@vger.kernel.org, sboyd@kernel.org
-In-Reply-To: <20220418082738.11301-3-ychuang3@nuvoton.com>
-References: <20220418082738.11301-1-ychuang3@nuvoton.com> <20220418082738.11301-3-ychuang3@nuvoton.com>
-Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock controller bindings
-Date:   Mon, 18 Apr 2022 08:35:48 -0500
-Message-Id: <1650288948.503037.3125298.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Mon, 18 Apr 2022 10:49:00 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C997527B37;
+        Mon, 18 Apr 2022 06:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650288981; x=1681824981;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=8ULkbQDoXZKawL2vxp2JE0iQIBCqxX/7hJVpdFisWAg=;
+  b=KG/ybS6eFdrA+d1pIxY87H4QpVueaJ2K+FxBZjluAEklhDOE8X+NVzCQ
+   iGLJD+YOo4Yyn98FBdxWJ18mH65JaP0FcqKit8W3TiWboxY6m3zWLifMz
+   DT0O4l0f5NT6huEcuTEJ/8BADHgaNLpyv67Wnk0PhwX1YZ0+xi9sHEdfa
+   vpt9nvG6PvVc1sfX2jhe0N6IEOkA8NARciQHtB+kfKD++Vf8ElixquzqU
+   6jQjxZr9PmJ0Yq3xWTTU8RmIHbGXwMRtPr2YrdJ54BUWSuUKQSXhWGEuB
+   jR6L4jxUcEZmGFbfplRVBo0wrflBRBYAqpefBBXcFXIVkYRHMid8QQmyy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="323960696"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="323960696"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 06:36:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="726643966"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.101])
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 06:36:19 -0700
+Date:   Mon, 18 Apr 2022 21:36:09 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH] KVM: x86/mmu: Add RET_PF_CONTINUE to eliminate bool+int*
+ "returns"
+Message-ID: <20220418133609.GA31671@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220415005107.2221672-1-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415005107.2221672-1-seanjc@google.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 16:27:35 +0800, Jacky Huang wrote:
-> Add documentation to describe Nuvoton MA35D1 clock driver bindings.
+On Fri, Apr 15, 2022 at 12:51:07AM +0000, Sean Christopherson wrote:
+> Add RET_PF_CONTINUE and use it in handle_abnormal_pfn() and
+> kvm_faultin_pfn() to signal that the page fault handler should continue
+> doing its thing.  Aside from being gross and inefficient, using a boolean
+> return to signal continue vs. stop makes it extremely difficult to add
+> more helpers and/or move existing code to a helper.
 > 
-> Signed-off-by: Jacky Huang <ychuang3@nuvoton.com>
+> E.g. hypothetically, if nested MMUs were to gain a separate page fault
+> handler in the future, everything up to the "is self-modifying PTE" check
+> can be shared by all shadow MMUs, but communicating up the stack whether
+> to continue on or stop becomes a nightmare.
+> 
+> More concretely, proposed support for private guest memory ran into a
+> similar issue, where it'll be forced to forego a helper in order to yield
+> sane code: https://lore.kernel.org/all/YkJbxiL%2FAz7olWlq@google.com.
+
+Thanks for cooking this patch, it makes private memory patch much
+easier.
+
+> 
+> No functional change intended.
+> 
+> Cc: David Matlack <dmatlack@google.com>
+> Cc: Chao Peng <chao.p.peng@linux.intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
->  .../bindings/clock/nuvoton,ma35d1-clk.yaml    | 63 +++++++++++++++++++
->  1 file changed, 63 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml
+>  arch/x86/kvm/mmu/mmu.c          | 51 ++++++++++++++-------------------
+>  arch/x86/kvm/mmu/mmu_internal.h |  9 +++++-
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  6 ++--
+>  3 files changed, 34 insertions(+), 32 deletions(-)
 > 
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 69a30d6d1e2b..cb2982c6b513 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -2972,14 +2972,12 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+>  	return -EFAULT;
+>  }
+>  
+> -static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> -				unsigned int access, int *ret_val)
+> +static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> +			       unsigned int access)
+>  {
+>  	/* The pfn is invalid, report the error! */
+> -	if (unlikely(is_error_pfn(fault->pfn))) {
+> -		*ret_val = kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
+> -		return true;
+> -	}
+> +	if (unlikely(is_error_pfn(fault->pfn)))
+> +		return kvm_handle_bad_page(vcpu, fault->gfn, fault->pfn);
+>  
+>  	if (unlikely(!fault->slot)) {
+>  		gva_t gva = fault->is_tdp ? 0 : fault->addr;
+> @@ -2991,13 +2989,11 @@ static bool handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fa
+>  		 * touching the shadow page tables as attempting to install an
+>  		 * MMIO SPTE will just be an expensive nop.
+>  		 */
+> -		if (unlikely(!shadow_mmio_value)) {
+> -			*ret_val = RET_PF_EMULATE;
+> -			return true;
+> -		}
+> +		if (unlikely(!shadow_mmio_value))
+> +			return RET_PF_EMULATE;
+>  	}
+>  
+> -	return false;
+> +	return RET_PF_CONTINUE;
+>  }
+>  
+>  static bool page_fault_can_be_fast(struct kvm_page_fault *fault)
+> @@ -3888,7 +3884,7 @@ static bool kvm_arch_setup_async_pf(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa,
+>  				  kvm_vcpu_gfn_to_hva(vcpu, gfn), &arch);
+>  }
+>  
+> -static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault, int *r)
+> +static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  {
+>  	struct kvm_memory_slot *slot = fault->slot;
+>  	bool async;
+> @@ -3899,7 +3895,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  	 * be zapped before KVM inserts a new MMIO SPTE for the gfn.
+>  	 */
+>  	if (slot && (slot->flags & KVM_MEMSLOT_INVALID))
+> -		goto out_retry;
+> +		return RET_PF_RETRY;
+>  
+>  	if (!kvm_is_visible_memslot(slot)) {
+>  		/* Don't expose private memslots to L2. */
+> @@ -3907,7 +3903,7 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  			fault->slot = NULL;
+>  			fault->pfn = KVM_PFN_NOSLOT;
+>  			fault->map_writable = false;
+> -			return false;
+> +			return RET_PF_CONTINUE;
+>  		}
+>  		/*
+>  		 * If the APIC access page exists but is disabled, go directly
+> @@ -3916,10 +3912,8 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  		 * when the AVIC is re-enabled.
+>  		 */
+>  		if (slot && slot->id == APIC_ACCESS_PAGE_PRIVATE_MEMSLOT &&
+> -		    !kvm_apicv_activated(vcpu->kvm)) {
+> -			*r = RET_PF_EMULATE;
+> -			return true;
+> -		}
+> +		    !kvm_apicv_activated(vcpu->kvm))
+> +			return RET_PF_EMULATE;
+>  	}
+>  
+>  	async = false;
+> @@ -3927,26 +3921,23 @@ static bool kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  					  fault->write, &fault->map_writable,
+>  					  &fault->hva);
+>  	if (!async)
+> -		return false; /* *pfn has correct page already */
+> +		return RET_PF_CONTINUE; /* *pfn has correct page already */
+>  
+>  	if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
+>  		trace_kvm_try_async_get_page(fault->addr, fault->gfn);
+>  		if (kvm_find_async_pf_gfn(vcpu, fault->gfn)) {
+>  			trace_kvm_async_pf_doublefault(fault->addr, fault->gfn);
+>  			kvm_make_request(KVM_REQ_APF_HALT, vcpu);
+> -			goto out_retry;
+> -		} else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn))
+> -			goto out_retry;
+> +			return RET_PF_RETRY;
+> +		} else if (kvm_arch_setup_async_pf(vcpu, fault->addr, fault->gfn)) {
+> +			return RET_PF_RETRY;
+> +		}
+>  	}
+>  
+>  	fault->pfn = __gfn_to_pfn_memslot(slot, fault->gfn, false, NULL,
+>  					  fault->write, &fault->map_writable,
+>  					  &fault->hva);
+> -	return false;
+> -
+> -out_retry:
+> -	*r = RET_PF_RETRY;
+> -	return true;
+> +	return RET_PF_CONTINUE;
+>  }
+>  
+>  /*
+> @@ -4001,10 +3992,12 @@ static int direct_page_fault(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (kvm_faultin_pfn(vcpu, fault, &r))
+> +	r = kvm_faultin_pfn(vcpu, fault);
+> +	if (r != RET_PF_CONTINUE)
+>  		return r;
+>  
+> -	if (handle_abnormal_pfn(vcpu, fault, ACC_ALL, &r))
+> +	r = handle_abnormal_pfn(vcpu, fault, ACC_ALL);
+> +	if (r != RET_PF_CONTINUE)
+>  		return r;
+>  
+>  	r = RET_PF_RETRY;
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index 1bff453f7cbe..c0e502b17ef7 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -143,6 +143,7 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
+>  /*
+>   * Return values of handle_mmio_page_fault, mmu.page_fault, and fast_page_fault().
+>   *
+> + * RET_PF_CONTINUE: So far, so good, keep handling the page fault.
+>   * RET_PF_RETRY: let CPU fault again on the address.
+>   * RET_PF_EMULATE: mmio page fault, emulate the instruction directly.
+>   * RET_PF_INVALID: the spte is invalid, let the real page fault path update it.
+> @@ -151,9 +152,15 @@ unsigned int pte_list_count(struct kvm_rmap_head *rmap_head);
+>   *
+>   * Any names added to this enum should be exported to userspace for use in
+>   * tracepoints via TRACE_DEFINE_ENUM() in mmutrace.h
+> + *
+> + * Note, all values must be greater than or equal to zero so as not to encroach
+> + * on -errno return values.  Somewhat arbitrarily use '0' for CONTINUE, which
+> + * will allow for efficient machine code when checking for CONTINUE, e.g.
+> + * "TEST %rax, %rax, JNZ", as all "stop!" values are non-zero.
+>   */
+>  enum {
+> -	RET_PF_RETRY = 0,
+> +	RET_PF_CONTINUE = 0,
+> +	RET_PF_RETRY,
+>  	RET_PF_EMULATE,
+>  	RET_PF_INVALID,
+>  	RET_PF_FIXED,
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Unrelated to this patch but related to private memory patch, when
+implicit conversion happens, I'm thinking which return value I should
+use. Current -1 does not make much sense since it causes KVM_RUN
+returns an error while it's expected to be 0. None of the above
+including RET_PF_CONTINUE seems appropriate. Maybe we should go further
+to introduce another RET_PF_USER indicating we should exit to
+userspace for handling with a return value of 0 instead of -error in
+kvm_mmu_page_fault().
 
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml:41:9: [error] syntax error: mapping values are not allowed here (syntax)
-
-dtschema/dtc warnings/errors:
-make[1]: *** Deleting file 'Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts'
-Traceback (most recent call last):
-  File "/usr/local/bin/dt-extract-example", line 52, in <module>
-    binding = yaml.load(open(args.yamlfile, encoding='utf-8').read())
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/main.py", line 434, in load
-    return constructor.get_single_data()
-  File "/usr/local/lib/python3.8/dist-packages/ruamel/yaml/constructor.py", line 119, in get_single_data
-    node = self.composer.get_single_node()
-  File "_ruamel_yaml.pyx", line 706, in _ruamel_yaml.CParser.get_single_node
-  File "_ruamel_yaml.pyx", line 724, in _ruamel_yaml.CParser._compose_document
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 889, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 775, in _ruamel_yaml.CParser._compose_node
-  File "_ruamel_yaml.pyx", line 891, in _ruamel_yaml.CParser._compose_mapping_node
-  File "_ruamel_yaml.pyx", line 904, in _ruamel_yaml.CParser._parse_next_event
-ruamel.yaml.scanner.ScannerError: mapping values are not allowed in this context
-  in "<unicode string>", line 41, column 9
-make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.example.dts] Error 1
-make[1]: *** Waiting for unfinished jobs....
-./Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml:  mapping values are not allowed in this context
-  in "<unicode string>", line 41, column 9
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/clock/nuvoton,ma35d1-clk.yaml: ignoring, error parsing file
-make: *** [Makefile:1401: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Thanks,
+Chao
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index 66f1acf153c4..7038273d04ab 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -838,10 +838,12 @@ static int FNAME(page_fault)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+>  	mmu_seq = vcpu->kvm->mmu_notifier_seq;
+>  	smp_rmb();
+>  
+> -	if (kvm_faultin_pfn(vcpu, fault, &r))
+> +	r = kvm_faultin_pfn(vcpu, fault);
+> +	if (r != RET_PF_CONTINUE)
+>  		return r;
+>  
+> -	if (handle_abnormal_pfn(vcpu, fault, walker.pte_access, &r))
+> +	r = handle_abnormal_pfn(vcpu, fault, walker.pte_access);
+> +	if (r != RET_PF_CONTINUE)
+>  		return r;
+>  
+>  	/*
+> 
+> base-commit: 150866cd0ec871c765181d145aa0912628289c8a
+> -- 
+> 2.36.0.rc0.470.gd361397f0d-goog

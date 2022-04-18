@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D993A504D31
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:24:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2AA504D38
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 09:39:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236428AbiDRH0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 03:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58332 "EHLO
+        id S236977AbiDRHmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 03:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbiDRH0y (ORCPT
+        with ESMTP id S231948AbiDRHmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 03:26:54 -0400
+        Mon, 18 Apr 2022 03:42:08 -0400
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7F7C17056
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:24:15 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I7G1mo026797;
-        Mon, 18 Apr 2022 07:24:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- content-transfer-encoding : mime-version; s=pp1;
- bh=D6CBfan09eIT1E3CmNWuMcsc/lZWABsYnRNEbvHvyv0=;
- b=C5RwCnsVZ0l8aV54MpmE4lMJFH9FkrYa/tMX+36ugcTgzZgH/yjgCACCjjupuobv38zk
- B1KGb3V0gA/s8cAIr484+14Ohfu/VExBqJ80XHAmlhRCXpqeYcSr2t1K6z1AdZyOq7Yz
- 5ItGWvr8CYeAPpckn/COO3+ZyINaF2YT7/O2R4ZWkGODxdY+MGprmHHRFGVuBfpIjPuN
- Ir71k/uMgCb4kSxy8I2NBkoCVXu2UVaEfbb9iyrKAg6pW9EroplfAzW+GHgMcVFjnurS
- tagGMtDBMUlYqYrhV7GH3gJHtVAcbyK4WnDS0cFw17bYpdxgVqI9Ktcz17t7RnG5AWyV Rw== 
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0495017A95
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 00:39:29 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I6KQXM025334;
+        Mon, 18 Apr 2022 07:38:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
+ to : cc : references : in-reply-to : mime-version : message-id :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=SNgLfpe69QLtVVQ3QJ2iJ0rdiAHfaYYYlyUzcEE0+tw=;
+ b=KeDbAnS22FHj0aVkYtlxd+7DQUMOV/4vZdz23uyk4TW6fTA9tHHWcD0FNtpLLum2197O
+ a8/jwju0iboq/g3fMfytmoLPXAFncl+eOp6O/8jSyeN53jAMTiiufwoh6YFLZdKz2ROU
+ Z/9zokylNg6af1bgRWvoFGOs3+u1gdKJXqeDISR9dMGznU7AeUhFUYyc6qgVVhXfsawa
+ gMQo3BIaS3Cbm0wRFCc/HP5bBNuSse+BFhNa+J9dNZKloEWoIwdiBJKUi5NQ3Lanp/3H
+ eC+HmYgMVVcV47DawQjEdNR7/XTesETnH9iyMK8eH1z7GeS98ALVBLJrnB42aMX4nk0L IQ== 
 Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7916k5f-1
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7cs6tks-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:24:09 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23I7O99c034890;
-        Mon, 18 Apr 2022 07:24:09 GMT
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7916k4v-1
+        Mon, 18 Apr 2022 07:38:52 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23I7QH2I014456;
+        Mon, 18 Apr 2022 07:38:51 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7cs6tk4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:24:09 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I7NpkW008302;
-        Mon, 18 Apr 2022 07:24:06 GMT
-Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
-        by ppma04fra.de.ibm.com with ESMTP id 3ffvt99hrt-1
+        Mon, 18 Apr 2022 07:38:51 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I7cnXj011129;
+        Mon, 18 Apr 2022 07:38:49 GMT
+Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
+        by ppma03fra.de.ibm.com with ESMTP id 3ffne91ws2-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 07:24:06 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I7O4iY33161696
+        Mon, 18 Apr 2022 07:38:49 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I7ckZS40698248
         (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Apr 2022 07:24:04 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6C8D0AE056;
-        Mon, 18 Apr 2022 07:24:04 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA192AE04D;
-        Mon, 18 Apr 2022 07:24:03 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.145.146.209])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Mon, 18 Apr 2022 07:24:03 +0000 (GMT)
-Date:   Mon, 18 Apr 2022 10:24:02 +0300
-From:   Mike Rapoport <rppt@linux.ibm.com>
-To:     Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH] mm, page_alloc: check pfn is valid before moving to
- freelist
-Message-ID: <Yl0IZWT2nsiYtqBT@linux.ibm.com>
-References: <cover.1649794059.git.quic_sudaraja@quicinc.com>
- <fb3c8c008994b2ed96f74b6b9698ff998b689bd2.1649794059.git.quic_sudaraja@quicinc.com>
- <Ylc3JGy6DUq00ryv@linux.ibm.com>
- <ee7bfc09-80af-a348-36ab-9d4ba9c612fa@quicinc.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <ee7bfc09-80af-a348-36ab-9d4ba9c612fa@quicinc.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: fo9tXEcuP3tXt9eND5OvGuk3RvwYI5dM
-X-Proofpoint-GUID: fiXGtzHx8PQL0ieEOwaNWuySMQU6Lhma
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 18 Apr 2022 07:38:46 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9C1A452052;
+        Mon, 18 Apr 2022 07:38:46 +0000 (GMT)
+Received: from localhost (unknown [9.43.2.186])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id EC7125204E;
+        Mon, 18 Apr 2022 07:38:45 +0000 (GMT)
+Date:   Mon, 18 Apr 2022 13:08:44 +0530
+From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v1 13/22] powerpc/ftrace: Use PPC_RAW_xxx() macros instead
+ of opencoding.
+To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Ingo Molnar <mingo@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Paul Mackerras <paulus@samba.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
+        <bf3b854ca8f6f5abd29a7b2d9f74a7724fe35e33.1648131740.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <bf3b854ca8f6f5abd29a7b2d9f74a7724fe35e33.1648131740.git.christophe.leroy@csgroup.eu>
 MIME-Version: 1.0
+User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
+Message-Id: <1650267275.b63dsc56ds.naveen@linux.ibm.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: btr9vo6aSVtf_PD1FELqLw9mFP5BpH61
+X-Proofpoint-ORIG-GUID: wzvMJFnmrfYNqmw3Ovjbhxjz_on_oWNV
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
  definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- phishscore=0 suspectscore=0 spamscore=0 adultscore=0 mlxscore=0
- lowpriorityscore=0 impostorscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=992 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204180041
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
+ impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=966 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2202240000 definitions=main-2204180045
 X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,111 +95,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 02:30:52AM +0530, Sudarshan Rajagopalan wrote:
-> 
-> On 4/14/2022 2:18 AM, Mike Rapoport wrote:
-> > On Tue, Apr 12, 2022 at 01:16:23PM -0700, Sudarshan Rajagopalan wrote:
-> > > Check if pfn is valid before or not before moving it to freelist.
-> > > 
-> > > There are possible scenario where a pageblock can have partial physical
-> > > hole and partial part of System RAM. This happens when base address in RAM
-> > > partition table is not aligned to pageblock size.
-> > > 
-> > > Example:
-> > > 
-> > > Say we have this first two entries in RAM partition table -
-> > > 
-> > > Base Addr: 0x0000000080000000 Length: 0x0000000058000000
-> > > Base Addr: 0x00000000E3930000 Length: 0x0000000020000000
-> > I wonder what was done to memory DIMMs to get such an interesting
-> > physical memory layout...
-> 
-> We have a feature where we carve out some portion of memory in RAM partition
-> table, hence we see such base addresses here.
+Christophe Leroy wrote:
+> PPC_RAW_xxx() macros are self explanatory and less error prone
+> than open coding.
+>=20
+> Use them in ftrace.c
+>=20
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> ---
+>  arch/powerpc/include/asm/ppc-opcode.h |  3 +++
+>  arch/powerpc/kernel/trace/ftrace.c    | 32 +++++++++------------------
+>  2 files changed, 14 insertions(+), 21 deletions(-)
+>=20
+> diff --git a/arch/powerpc/include/asm/ppc-opcode.h b/arch/powerpc/include=
+/asm/ppc-opcode.h
+> index 82f1f0041c6f..281754aca0a3 100644
+> --- a/arch/powerpc/include/asm/ppc-opcode.h
+> +++ b/arch/powerpc/include/asm/ppc-opcode.h
+> @@ -294,6 +294,8 @@
+>  #define PPC_INST_BL			0x48000001
+>  #define PPC_INST_BRANCH_COND		0x40800000
+>=20
+> +#define PPC_INST_OFFSET24_MASK		0x03fffffc
 
-Cannot the firmware align that portion at some sensible boundary?
-Or at least report the carved out range as "reserved" (and maybe NOMAP)
-rather than as hole?
+This corresponds to the LI field, per the ISA. See section 8.1.2/1.7:=20
+'Instruction Fields'. Would it be better to name it PPC_INST_LI_MASK?
 
-> > > Physical hole: 0xD8000000 - 0xE3930000
-> > > 
-> > > With the pageblock which has partial physical hole at the beginning, we will
-> > > run into PFNs from the physical hole whose struct page is not initialized and
-> > > is invalid, and system would crash as we operate on invalid struct page to find
-> > > out of page is in Buddy or LRU or not
-> >
-> > struct page must be initialized and valid even for holes in the physical
-> > memory. When a pageblock spans both existing memory and a hole, the struct
-> > pages for the "hole" part should be marked as PG_Reserved.
-> > If you see that struct pages for memory holes exist but invalid, we should
-> > solve the underlying issue that causes wrong struct pages contents.
-> 
-> We are using 5.15 kernel, arm64 platform. For the pages belonging to the
-> physical hole, I don't see that pages are being initialized.
-> 
-> Looking into memmap_init code, we call init_unavailable_range() to
-> initialize the pages that belong to holes in the zone. But again we only do
-> this for PFNs that are valid according to below code snippet -
-> 
-> init_unavailable_range() {
-> 
-> 6667     for (pfn = spfn; pfn < epfn; pfn++) {
-> 6668         if (!pfn_valid(ALIGN_DOWN(pfn, pageblock_nr_pages))) {
-> 6669             pfn = ALIGN_DOWN(pfn, pageblock_nr_pages)
-> 6670                 + pageblock_nr_pages - 1;
-> 6671             continue;
-> 6672         }
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/mm/page_alloc.c?h=v5.15.34#n6668
-> 
-> With arm64 specific definition of pfn_valid(), a PFN which isn't present in
-> RAM partition table (i.e. belongs to physical hole), pfn_valid will return
-> FALSE. Hence we don't initialize any pages that belongs to physical hole
-> here.
-> 
-> Or am I missing anything in kernel that initializes pages belonging to
-> physical holes too? If so could you point me to that?
+> +
+>  /* Prefixes */
+>  #define PPC_INST_LFS			0xc0000000
+>  #define PPC_INST_STFS			0xd0000000
+> @@ -572,6 +574,7 @@
+>  #define PPC_RAW_EIEIO()			(0x7c0006ac)
+>=20
+>  #define PPC_RAW_BRANCH(addr)		(PPC_INST_BRANCH | ((addr) & 0x03fffffc))
+> +#define PPC_RAW_BL(offset)		(0x48000001 | ((offset) & PPC_INST_OFFSET24_=
+MASK))
+>=20
+>  /* Deal with instructions that older assemblers aren't aware of */
+>  #define	PPC_BCCTR_FLUSH		stringify_in_c(.long PPC_INST_BCCTR_FLUSH)
+> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/tra=
+ce/ftrace.c
+> index fdc0412c1d8a..afb1d12838c9 100644
+> --- a/arch/powerpc/kernel/trace/ftrace.c
+> +++ b/arch/powerpc/kernel/trace/ftrace.c
+> @@ -90,19 +90,19 @@ static int test_24bit_addr(unsigned long ip, unsigned=
+ long addr)
+>=20
+>  static int is_bl_op(ppc_inst_t op)
+>  {
+> -	return (ppc_inst_val(op) & 0xfc000003) =3D=3D 0x48000001;
+> +	return (ppc_inst_val(op) & ~PPC_INST_OFFSET24_MASK) =3D=3D PPC_RAW_BL(0=
+);
+>  }
+>=20
+>  static int is_b_op(ppc_inst_t op)
+>  {
+> -	return (ppc_inst_val(op) & 0xfc000003) =3D=3D 0x48000000;
+> +	return (ppc_inst_val(op) & ~PPC_INST_OFFSET24_MASK) =3D=3D PPC_RAW_BRAN=
+CH(0);
+>  }
+>=20
+>  static unsigned long find_bl_target(unsigned long ip, ppc_inst_t op)
+>  {
+>  	int offset;
+>=20
+> -	offset =3D (ppc_inst_val(op) & 0x03fffffc);
+> +	offset =3D (ppc_inst_val(op) & PPC_INST_OFFSET24_MASK);
+>  	/* make it signed */
+>  	if (offset & 0x02000000)
+>  		offset |=3D 0xfe000000;
+> @@ -182,7 +182,7 @@ __ftrace_make_nop(struct module *mod,
+>  	 * Use a b +8 to jump over the load.
+>  	 */
+>=20
+> -	pop =3D ppc_inst(PPC_INST_BRANCH | 8);	/* b +8 */
+> +	pop =3D ppc_inst(PPC_RAW_BRANCH(8));	/* b +8 */
+>=20
+>  	/*
+>  	 * Check what is in the next instruction. We can see ld r2,40(r1), but
+> @@ -394,17 +394,8 @@ int ftrace_make_nop(struct module *mod,
+>  static int
+>  expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+>  {
+> -	/*
+> -	 * We expect to see:
+> -	 *
+> -	 * b +8
+> -	 * ld r2,XX(r1)
+> -	 *
+> -	 * The load offset is different depending on the ABI. For simplicity
+> -	 * just mask it out when doing the compare.
+> -	 */
+> -	if (!ppc_inst_equal(op0, ppc_inst(0x48000008)) ||
+> -	    (ppc_inst_val(op1) & 0xffff0000) !=3D 0xe8410000)
+> +	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_BRANCH(8))) ||
+> +	    !ppc_inst_equal(op1, ppc_inst(PPC_INST_LD_TOC)))
 
-I agree with your analysis for 5.15, you just didn't mention that the
-problem happens with 5.15.
- 
-> I see that in next kernel versions, we are removing arm64 specific
-> definition of pfn_valid by Anshuman. Doing so, PFNs in hole would have
-> pfn_valid return TRUE and we would then initialize pages in holes as well.
+It would be good to move PPC_INST_LD_TOC to ppc-opcode.h
 
-That said, your patch will not fix anything in the current kernel because
-the issue should not happen there, right?
+>  		return 0;
+>  	return 1;
+>  }
+> @@ -412,7 +403,6 @@ expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_i=
+nst_t op1)
+>  static int
+>  expected_nop_sequence(void *ip, ppc_inst_t op0, ppc_inst_t op1)
+>  {
+> -	/* look for patched "NOP" on ppc64 with -mprofile-kernel or ppc32 */
+>  	if (!ppc_inst_equal(op0, ppc_inst(PPC_RAW_NOP())))
+>  		return 0;
+>  	return 1;
+> @@ -738,11 +728,11 @@ int __init ftrace_dyn_arch_init(void)
+>  	int i;
+>  	unsigned int *tramp[] =3D { ftrace_tramp_text, ftrace_tramp_init };
+>  	u32 stub_insns[] =3D {
+> -		0xe98d0000 | PACATOC,	/* ld      r12,PACATOC(r13)	*/
+> -		0x3d8c0000,		/* addis   r12,r12,<high>	*/
+> -		0x398c0000,		/* addi    r12,r12,<low>	*/
+> -		0x7d8903a6,		/* mtctr   r12			*/
+> -		0x4e800420,		/* bctr				*/
+> +		PPC_RAW_LD(_R12, _R13, PACATOC),
+> +		PPC_RAW_ADDIS(_R12, _R12, 0),
+> +		PPC_RAW_ADDIS(_R12, _R12, 0),
 
-> But this patch was reverted by Will Deacon on 5.15 kernel.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/arch/arm64/mm?h=v5.17.3&id=3de360c3fdb34fbdbaf6da3af94367d3fded95d3
+This should be PPC_RAW_ADDI.
 
-The reason for the revert was fixed by the commit a9c38c5d267c
-("dma-mapping: remove bogus test for pfn_valid from dma_map_resource").
 
-...
-
-> > > Hence, avoid operating on invalid pages within the same pageblock by checking
-> > > if pfn is valid or not.
-> > > Signed-off-by: Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>
-> > > Fixes: 4c7b9896621be ("mm: remove pfn_valid_within() and CONFIG_HOLES_IN_ZONE")
-> > > Cc: Mike Rapoport <rppt@linux.ibm.com>
-> > For now the patch looks like a band-aid for more fundamental bug, so
-> > 
-> > NAKED-by: Mike Rapoport <rppt@linux.ibm.com>
-> > 
-> This patch may look like work around solution but yes I think there's a
-> fundamental problem where kernel takes a pageblock which has partial holes
-> and partial System RAM as valid pageblock, which occurs when Base Address in
-> RAM partition table are not aligned to pageblock size.
-> 
-> This fundamental problem needs to be fixed, and looking for your
-> suggestions.
-
-I'd suggest backporting a9c38c5d267c ("dma-mapping: remove bogus test for
-pfn_valid from dma_map_resource") and 3de360c3fdb3 ("arm64/mm: drop
-HAVE_ARCH_PFN_VALID") to 5.15.
-
--- 
-Sincerely yours,
-Mike.
+- Naveen

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8575059DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFC175058A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345434AbiDROY5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:24:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56302 "EHLO
+        id S1343542AbiDROHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245580AbiDROMB (ORCPT
+        with ESMTP id S244981AbiDRNvF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:12:01 -0400
+        Mon, 18 Apr 2022 09:51:05 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC67F37AA2;
-        Mon, 18 Apr 2022 06:11:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EE444A06;
+        Mon, 18 Apr 2022 06:02:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 87B2CB80D9C;
-        Mon, 18 Apr 2022 13:11:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D54B4C385A1;
-        Mon, 18 Apr 2022 13:11:20 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5FA19B80E4B;
+        Mon, 18 Apr 2022 13:02:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6DCC385A8;
+        Mon, 18 Apr 2022 13:02:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287481;
-        bh=3Y9YjU9OXxN1+WzstwCpOp7WLxVX/NJnQa2cCjlYXt8=;
+        s=korg; t=1650286927;
+        bh=1e+kMqmuq0XgPzihm05kZ+rHyIgwe3Ceg9otdTGMBhY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nvpykfDvfnspQQDVMMXIaP40DSsEJx+OVh1esCVlh/6g/8po+OYpG1K7x5BcmNrQq
-         hs6pylCjyBC46p3oVwnrL7U1s3voXd/3L9QTQi4uRUXNieFfxwla2xv3rTgT3BUhVq
-         YPZgEIVviwCGFRLLw8rSzzqRWTAY4SogzAfNQrA0=
+        b=KbH0CF1ue9YS1wzx2Mqz3HoawYruPKouEI/MevVPbsTsFSnUXGz2bZBDcXv6iJEut
+         PGZYQhN5X44IEu38PGEUog7E5DV9ja5Dys/XR1eqv8kJqoORvbfzuKYArA6/XIV8D6
+         C1b/o4KDkKYqKZfyAd3xGPi2vbbT/xw/1Gr76XBE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alexander Lobakin <alobakin@pm.me>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 176/218] MIPS: fix fortify panic when copying asm exception handlers
+Subject: [PATCH 4.14 261/284] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
 Date:   Mon, 18 Apr 2022 14:14:02 +0200
-Message-Id: <20220418121205.754851319@linuxfoundation.org>
+Message-Id: <20220418121219.998650141@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,97 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Lobakin <alobakin@pm.me>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit d17b66417308996e7e64b270a3c7f3c1fbd4cfc8 ]
+[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
 
-With KCFLAGS="-O3", I was able to trigger a fortify-source
-memcpy() overflow panic on set_vi_srs_handler().
-Although O3 level is not supported in the mainline, under some
-conditions that may've happened with any optimization settings,
-it's just a matter of inlining luck. The panic itself is correct,
-more precisely, 50/50 false-positive and not at the same time.
->From the one side, no real overflow happens. Exception handler
-defined in asm just gets copied to some reserved places in the
-memory.
-But the reason behind is that C code refers to that exception
-handler declares it as `char`, i.e. something of 1 byte length.
-It's obvious that the asm function itself is way more than 1 byte,
-so fortify logics thought we are going to past the symbol declared.
-The standard way to refer to asm symbols from C code which is not
-supposed to be called from C is to declare them as
-`extern const u8[]`. This is fully correct from any point of view,
-as any code itself is just a bunch of bytes (including 0 as it is
-for syms like _stext/_etext/etc.), and the exact size is not known
-at the moment of compilation.
-Adjust the type of the except_vec_vi_*() and related variables.
-Make set_handler() take `const` as a second argument to avoid
-cast-away warnings and give a little more room for optimization.
+The device_node pointer is returned by of_parse_phandle() with refcount
+incremented. We should use of_node_put() on it when done.
 
-Signed-off-by: Alexander Lobakin <alobakin@pm.me>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/mips/include/asm/setup.h |  2 +-
- arch/mips/kernel/traps.c      | 22 +++++++++++-----------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
 
-diff --git a/arch/mips/include/asm/setup.h b/arch/mips/include/asm/setup.h
-index 4f5279a8308d..e301967fcffd 100644
---- a/arch/mips/include/asm/setup.h
-+++ b/arch/mips/include/asm/setup.h
-@@ -13,7 +13,7 @@ static inline void setup_8250_early_printk_port(unsigned long base,
- 	unsigned int reg_shift, unsigned int timeout) {}
- #endif
+diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
+index 2b9283d4fcb1..8e7b5a1d2983 100644
+--- a/drivers/memory/atmel-ebi.c
++++ b/drivers/memory/atmel-ebi.c
+@@ -524,20 +524,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
+ 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
  
--extern void set_handler(unsigned long offset, void *addr, unsigned long len);
-+void set_handler(unsigned long offset, const void *addr, unsigned long len);
- extern void set_uncached_handler(unsigned long offset, void *addr, unsigned long len);
+ 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
+-	if (IS_ERR(ebi->smc.regmap))
+-		return PTR_ERR(ebi->smc.regmap);
++	if (IS_ERR(ebi->smc.regmap)) {
++		ret = PTR_ERR(ebi->smc.regmap);
++		goto put_node;
++	}
  
- typedef void (*vi_handler_t)(void);
-diff --git a/arch/mips/kernel/traps.c b/arch/mips/kernel/traps.c
-index 5f717473d08e..278e81c9e614 100644
---- a/arch/mips/kernel/traps.c
-+++ b/arch/mips/kernel/traps.c
-@@ -2019,19 +2019,19 @@ static void *set_vi_srs_handler(int n, vi_handler_t addr, int srs)
- 		 * If no shadow set is selected then use the default handler
- 		 * that does normal register saving and standard interrupt exit
- 		 */
--		extern char except_vec_vi, except_vec_vi_lui;
--		extern char except_vec_vi_ori, except_vec_vi_end;
--		extern char rollback_except_vec_vi;
--		char *vec_start = using_rollback_handler() ?
--			&rollback_except_vec_vi : &except_vec_vi;
-+		extern const u8 except_vec_vi[], except_vec_vi_lui[];
-+		extern const u8 except_vec_vi_ori[], except_vec_vi_end[];
-+		extern const u8 rollback_except_vec_vi[];
-+		const u8 *vec_start = using_rollback_handler() ?
-+				      rollback_except_vec_vi : except_vec_vi;
- #if defined(CONFIG_CPU_MICROMIPS) || defined(CONFIG_CPU_BIG_ENDIAN)
--		const int lui_offset = &except_vec_vi_lui - vec_start + 2;
--		const int ori_offset = &except_vec_vi_ori - vec_start + 2;
-+		const int lui_offset = except_vec_vi_lui - vec_start + 2;
-+		const int ori_offset = except_vec_vi_ori - vec_start + 2;
- #else
--		const int lui_offset = &except_vec_vi_lui - vec_start;
--		const int ori_offset = &except_vec_vi_ori - vec_start;
-+		const int lui_offset = except_vec_vi_lui - vec_start;
-+		const int ori_offset = except_vec_vi_ori - vec_start;
- #endif
--		const int handler_len = &except_vec_vi_end - vec_start;
-+		const int handler_len = except_vec_vi_end - vec_start;
+ 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
+-	if (IS_ERR(ebi->smc.layout))
+-		return PTR_ERR(ebi->smc.layout);
++	if (IS_ERR(ebi->smc.layout)) {
++		ret = PTR_ERR(ebi->smc.layout);
++		goto put_node;
++	}
  
- 		if (handler_len > VECTORSPACING) {
- 			/*
-@@ -2251,7 +2251,7 @@ void per_cpu_trap_init(bool is_boot_cpu)
+ 	ebi->smc.clk = of_clk_get(smc_np, 0);
+ 	if (IS_ERR(ebi->smc.clk)) {
+-		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
+-			return PTR_ERR(ebi->smc.clk);
++		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
++			ret = PTR_ERR(ebi->smc.clk);
++			goto put_node;
++		}
+ 
+ 		ebi->smc.clk = NULL;
+ 	}
++	of_node_put(smc_np);
+ 	ret = clk_prepare_enable(ebi->smc.clk);
+ 	if (ret)
+ 		return ret;
+@@ -587,6 +594,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	return of_platform_populate(np, NULL, NULL, dev);
++
++put_node:
++	of_node_put(smc_np);
++	return ret;
  }
  
- /* Install CPU exception handler */
--void set_handler(unsigned long offset, void *addr, unsigned long size)
-+void set_handler(unsigned long offset, const void *addr, unsigned long size)
- {
- #ifdef CONFIG_CPU_MICROMIPS
- 	memcpy((void *)(ebase + offset), ((unsigned char *)addr - 1), size);
+ static __maybe_unused int atmel_ebi_resume(struct device *dev)
 -- 
 2.35.1
 

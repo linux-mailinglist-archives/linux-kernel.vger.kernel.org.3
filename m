@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF29550554A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D862750546D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242425AbiDRNN6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:13:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59772 "EHLO
+        id S240847AbiDRNGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242365AbiDRM7u (ORCPT
+        with ESMTP id S240259AbiDRMzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6E9201BF;
-        Mon, 18 Apr 2022 05:40:57 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C286E5F4F;
+        Mon, 18 Apr 2022 05:36:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 86928611FE;
-        Mon, 18 Apr 2022 12:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91101C385A9;
-        Mon, 18 Apr 2022 12:40:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CC636118A;
+        Mon, 18 Apr 2022 12:36:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6C9C385A7;
+        Mon, 18 Apr 2022 12:36:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285657;
-        bh=X1NBGVEBB4H5wW2n3F/zW1shQ120PbUXesGnU0MJgW8=;
+        s=korg; t=1650285371;
+        bh=tmqjaYgmc13WkmeeXp60lqwcgpDBG9snLnZAJqQutXk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2hvtBPBa6ExS0ndzkGcn7LSHoysc1V4ThGku8s2CpmAnwpDNUmrfsT6q91Gqk30lM
-         GOrAmKgvT5qG8OX0wYDH8Pz1gzjeL4HU3xDVcD8RNvEDwSjV9vcBmZoLjdOKQSaFWA
-         X+YSw3YAWsly0W3++18lSjQco26vhNncrMYK9kyQ=
+        b=1fX76QGrXG2kF4dbXTSgiY05WjSvGEnlfNdz0f5PrUE5JsIjtMdrVZEtzwIwYZrOf
+         VTIch43WoSrceQAElCLgbKC+dC+X3a5ErmCtTFJmqMlXuq+IDT/N+GxHe86JyC5sPT
+         30NvV5xfN3jo8FD6eJ+TRUx7e+TIAjGnHgH86woU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Melissa Wen <mwen@igalia.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Simon Ser <contact@emersion.fr>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.10 086/105] drm/amd/display: dont ignore alpha property on pre-multiplied mode
+        Duoming Zhou <duoming@zju.edu.cn>,
+        "David S. Miller" <davem@davemloft.net>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.15 188/189] ax25: Fix NULL pointer dereferences in ax25 timers
 Date:   Mon, 18 Apr 2022 14:13:28 +0200
-Message-Id: <20220418121149.076222948@linuxfoundation.org>
+Message-Id: <20220418121208.774657276@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,97 +55,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Melissa Wen <mwen@igalia.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-commit e4f1541caf60fcbe5a59e9d25805c0b5865e546a upstream.
+commit fc6d01ff9ef03b66d4a3a23b46fc3c3d8cf92009 upstream.
 
-"Pre-multiplied" is the default pixel blend mode for KMS/DRM, as
-documented in supported_modes of drm_plane_create_blend_mode_property():
-https://cgit.freedesktop.org/drm/drm-misc/tree/drivers/gpu/drm/drm_blend.c
+The previous commit 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
+move ax25_disconnect into lock_sock() in order to prevent NPD bugs. But
+there are race conditions that may lead to null pointer dereferences in
+ax25_heartbeat_expiry(), ax25_t1timer_expiry(), ax25_t2timer_expiry(),
+ax25_t3timer_expiry() and ax25_idletimer_expiry(), when we use
+ax25_kill_by_device() to detach the ax25 device.
 
-In this mode, both 'pixel alpha' and 'plane alpha' participate in the
-calculation, as described by the pixel blend mode formula in KMS/DRM
-documentation:
+One of the race conditions that cause null pointer dereferences can be
+shown as below:
 
-out.rgb = plane_alpha * fg.rgb +
-          (1 - (plane_alpha * fg.alpha)) * bg.rgb
+      (Thread 1)                    |      (Thread 2)
+ax25_connect()                      |
+ ax25_std_establish_data_link()     |
+  ax25_start_t1timer()              |
+   mod_timer(&ax25->t1timer,..)     |
+                                    | ax25_kill_by_device()
+   (wait a time)                    |  ...
+                                    |  s->ax25_dev = NULL; //(1)
+   ax25_t1timer_expiry()            |
+    ax25->ax25_dev->values[..] //(2)|  ...
+     ...                            |
 
-Considering the blend config mechanisms we have in the driver so far,
-the alpha mode that better fits this blend mode is the
-_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN, where the value for global_gain
-is the plane alpha (global_alpha).
+We set null to ax25_cb->ax25_dev in position (1) and dereference
+the null pointer in position (2).
 
-With this change, alpha property stops to be ignored. It also addresses
-Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/1734
+The corresponding fail log is shown below:
+===============================================================
+BUG: kernel NULL pointer dereference, address: 0000000000000050
+CPU: 1 PID: 0 Comm: swapper/1 Not tainted 5.17.0-rc6-00794-g45690b7d0
+RIP: 0010:ax25_t1timer_expiry+0x12/0x40
+...
+Call Trace:
+ call_timer_fn+0x21/0x120
+ __run_timers.part.0+0x1ca/0x250
+ run_timer_softirq+0x2c/0x60
+ __do_softirq+0xef/0x2f3
+ irq_exit_rcu+0xb6/0x100
+ sysvec_apic_timer_interrupt+0xa2/0xd0
+...
 
-v2:
- * keep the 8-bit value for global_alpha_value (Nicholas)
- * correct the logical ordering for combined global gain (Nicholas)
- * apply to dcn10 too (Nicholas)
+This patch moves ax25_disconnect() before s->ax25_dev = NULL
+and uses del_timer_sync() to delete timers in ax25_disconnect().
+If ax25_disconnect() is called by ax25_kill_by_device() or
+ax25->ax25_dev is NULL, the reason in ax25_disconnect() will be
+equal to ENETUNREACH, it will wait all timers to stop before we
+set null to s->ax25_dev in ax25_kill_by_device().
 
-Signed-off-by: Melissa Wen <mwen@igalia.com>
-Tested-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Reviewed-by: Harry Wentland <harry.wentland@amd.com>
-Tested-by: Simon Ser <contact@emersion.fr>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 7ec02f5ac8a5 ("ax25: fix NPD bug in ax25_disconnect")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+[OP: backport to 5.15: adjust context]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c |   14 +++++++++-----
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c        |   14 +++++++++-----
- 2 files changed, 18 insertions(+), 10 deletions(-)
+ net/ax25/af_ax25.c   |    4 ++--
+ net/ax25/ax25_subr.c |   20 ++++++++++++++------
+ 2 files changed, 16 insertions(+), 8 deletions(-)
 
---- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-@@ -2387,14 +2387,18 @@ void dcn10_update_mpcc(struct dc *dc, st
- 				&blnd_cfg.black_color);
- 	}
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -89,20 +89,20 @@ again:
+ 			sk = s->sk;
+ 			if (!sk) {
+ 				spin_unlock_bh(&ax25_list_lock);
+-				s->ax25_dev = NULL;
+ 				ax25_disconnect(s, ENETUNREACH);
++				s->ax25_dev = NULL;
+ 				spin_lock_bh(&ax25_list_lock);
+ 				goto again;
+ 			}
+ 			sock_hold(sk);
+ 			spin_unlock_bh(&ax25_list_lock);
+ 			lock_sock(sk);
++			ax25_disconnect(s, ENETUNREACH);
+ 			s->ax25_dev = NULL;
+ 			if (sk->sk_socket) {
+ 				dev_put(ax25_dev->dev);
+ 				ax25_dev_put(ax25_dev);
+ 			}
+-			ax25_disconnect(s, ENETUNREACH);
+ 			release_sock(sk);
+ 			spin_lock_bh(&ax25_list_lock);
+ 			sock_put(sk);
+--- a/net/ax25/ax25_subr.c
++++ b/net/ax25/ax25_subr.c
+@@ -261,12 +261,20 @@ void ax25_disconnect(ax25_cb *ax25, int
+ {
+ 	ax25_clear_queues(ax25);
  
--	if (per_pixel_alpha)
--		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
--	else
--		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
--
- 	blnd_cfg.overlap_only = false;
- 	blnd_cfg.global_gain = 0xff;
- 
-+	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
-+		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
-+	} else if (per_pixel_alpha) {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
+-	if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
+-		ax25_stop_heartbeat(ax25);
+-	ax25_stop_t1timer(ax25);
+-	ax25_stop_t2timer(ax25);
+-	ax25_stop_t3timer(ax25);
+-	ax25_stop_idletimer(ax25);
++	if (reason == ENETUNREACH) {
++		del_timer_sync(&ax25->timer);
++		del_timer_sync(&ax25->t1timer);
++		del_timer_sync(&ax25->t2timer);
++		del_timer_sync(&ax25->t3timer);
++		del_timer_sync(&ax25->idletimer);
 +	} else {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
++		if (!ax25->sk || !sock_flag(ax25->sk, SOCK_DESTROY))
++			ax25_stop_heartbeat(ax25);
++		ax25_stop_t1timer(ax25);
++		ax25_stop_t2timer(ax25);
++		ax25_stop_t3timer(ax25);
++		ax25_stop_idletimer(ax25);
 +	}
-+
- 	if (pipe_ctx->plane_state->global_alpha)
- 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
- 	else
---- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
-@@ -2270,14 +2270,18 @@ void dcn20_update_mpcc(struct dc *dc, st
- 				pipe_ctx, &blnd_cfg.black_color);
- 	}
  
--	if (per_pixel_alpha)
--		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
--	else
--		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
--
- 	blnd_cfg.overlap_only = false;
- 	blnd_cfg.global_gain = 0xff;
+ 	ax25->state = AX25_STATE_0;
  
-+	if (per_pixel_alpha && pipe_ctx->plane_state->global_alpha) {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA_COMBINED_GLOBAL_GAIN;
-+		blnd_cfg.global_gain = pipe_ctx->plane_state->global_alpha_value;
-+	} else if (per_pixel_alpha) {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_PER_PIXEL_ALPHA;
-+	} else {
-+		blnd_cfg.alpha_mode = MPCC_ALPHA_BLEND_MODE_GLOBAL_ALPHA;
-+	}
-+
- 	if (pipe_ctx->plane_state->global_alpha)
- 		blnd_cfg.global_alpha = pipe_ctx->plane_state->global_alpha_value;
- 	else
 
 

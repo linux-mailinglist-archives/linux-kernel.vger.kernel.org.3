@@ -2,96 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE055505EDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F51505EDE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:20:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238538AbiDRUSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S238570AbiDRUXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234092AbiDRUSr (ORCPT
+        with ESMTP id S234092AbiDRUXS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:18:47 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2F22E9CD
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:16:05 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-d6e29fb3d7so15333323fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:16:05 -0700 (PDT)
+        Mon, 18 Apr 2022 16:23:18 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7571D2E9EF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 64-20020a630843000000b0039d909676d5so9612921pgi.16
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 13:20:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxtx.org; s=google;
-        h=sender:date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=jfTSvzLEsIFzIGEdPP77hzD9OrKunCJ5pKCIypKdvDg=;
-        b=ahTXagNwJo70JaylxAX0XNNvg5yPuhHtZLp+npcHtRfQyz5en+ZC2yaG5EjR1FsTBV
-         wrCGYcvWwl7m0QQ4SM6anG8U+ib15ydg2IyXgnj8C29rWMLduL4hztznkQsMPG7RLrxA
-         62BoX046rDzch8H+qDTEoT5+krDPScFrYVHeI=
+        d=google.com; s=20210112;
+        h=date:message-id:mime-version:subject:from:to:cc;
+        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
+        b=iGKBSQMhB5Dcpvx90+XkjZsRwajkAuHhifHP93zi8BjBNhyUN6cd6lDfkfvOIzlP7l
+         dZAf5VimM8LMXGHpL11bN/5/HMIk4F+WG/l90ME7Y5gxjEIq3N+Cs2g1gWYXNRpcgr14
+         l4JWFolmT/LUz2cvHBkecDrGenJ/HYRecqWqJovbOF7lAX9gCsYpWvLny+3uegoP+Ye7
+         Oahw6Cocr64RS2PxJte0noEKgVzaUPM9RSAynaBVWSVrKLklHVl3P+RYRn8qiuGtOIy+
+         Ms0IjPqovGZ/n9e4pPRoh/kDxniUmKKBDVI/fJs0//g6zR2Ke5ymUGOO89n2HSNloNT/
+         ZrIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
-         :references:mime-version:content-disposition:in-reply-to;
-        bh=jfTSvzLEsIFzIGEdPP77hzD9OrKunCJ5pKCIypKdvDg=;
-        b=mEuinuPPdo3x/IX4vBEY0xvaS52jhyRlFImLlIrrWFzygGThEYflc/tsmAEcwxwLVw
-         l2aNmZzj6pvslpnHtTg1uQVNM/Of8EfQ999VoUdGAS2f1Q8SfwV2D8Pzr8ZHFj1Gu4Wa
-         WNi/dz3p3rS3cDxajmR5rzd7Tm4xdhQJbVMQ+qAs7ZdAs9RPxOkX4yT2x10L9xHAFaU/
-         Qz0drRAlWhNbyMaw19BAuT5IpdkVqRQcoc9horkfPrpccNKT8AmzNyISgMRgLA33BB7S
-         /nf0ccOxor7xAI6fJcXJkg9kIB4lzwWl8fU+U5eXIJC+fCxT/Kv/pGJOd/U1uhQ+8AbO
-         zzjw==
-X-Gm-Message-State: AOAM530QPN8NeLZgt76LuUHU8ruwKj3gmInV7yaCC9uWPGws+ceXE5d2
-        nxSuCiGedZO3O6hcxXUAt7Hrzw==
-X-Google-Smtp-Source: ABdhPJz2dYbMmK/Jx8T3ha2lBlZBZHo/j7P2UruqgSIgdYeFsWTf8S92eyUV3SikRkKWrO0FS/OX+w==
-X-Received: by 2002:a05:6870:c88a:b0:e2:125a:809b with SMTP id er10-20020a056870c88a00b000e2125a809bmr5003775oab.242.1650312964462;
-        Mon, 18 Apr 2022 13:16:04 -0700 (PDT)
-Received: from fedora64.linuxtx.org (104-189-158-32.lightspeed.rcsntx.sbcglobal.net. [104.189.158.32])
-        by smtp.gmail.com with ESMTPSA id l33-20020a0568302b2100b005cdad9100desm4734175otv.40.2022.04.18.13.16.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 13:16:03 -0700 (PDT)
-Sender: Justin Forbes <jmforbes@linuxtx.org>
-Date:   Mon, 18 Apr 2022 15:16:01 -0500
-From:   Justin Forbes <jforbes@fedoraproject.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
-Message-ID: <Yl3HAf+YuKL1F5hH@fedora64.linuxtx.org>
-References: <20220418121203.462784814@linuxfoundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        h=x-gm-message-state:date:message-id:mime-version:subject:from:to:cc;
+        bh=qRrjWLMfdu6yIcwripxOfFds2oSTzWm8NOly78GvImA=;
+        b=JA3aKrGfr93+46ocFbDh3Bjxv93wN5ZbR6y/aA0wgrmm88ErW6GzJjMfTkCd0DWRW2
+         qZGCzkbe/u8dJmBpn0gKN1BF2x06PI+HzY6e8x278hYeoYBqpLhbZtf9iSsyN4jrZoYQ
+         53MyTGfyAetg/qQxgwlMrkzhd3JDNXsVVfmOA9gFhU9azcoKOSHEe0urvahYmt7Anni7
+         19XY+BouiCF0DRqB39zFE75Bh8jTep7k0NSinCL48w5raxW9vR1pGyNwwWFUVjE6wKzy
+         WT5JAfpfRR3i5mITcSPvue+Lkqnx6XMmpNVyyXxPEICQPQ4SJ6WM2Vv4TIOl3FW8Bdme
+         eihA==
+X-Gm-Message-State: AOAM5309N59F/TioIPfj5Db39fGbykV6tarlRtAMTOjXSHhEaaaXrDwh
+        /h3aHe1kOIzSPrVmxcdjwCo+fmFiUfVk
+X-Google-Smtp-Source: ABdhPJxiVFcTI4z0xGMr9ZyulQytlCLw/B1VBP49S/XaxYsvHk5VzyCtbJSYi+urWup0bdAjQ4KVIcmi8IVE
+X-Received: from yuanchu.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1e51])
+ (user=yuanchu job=sendgmr) by 2002:a17:902:ec8e:b0:158:fefd:a2c2 with SMTP id
+ x14-20020a170902ec8e00b00158fefda2c2mr6244114plg.85.1650313237814; Mon, 18
+ Apr 2022 13:20:37 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 20:20:17 +0000
+Message-Id: <20220418202017.3583638-1-yuanchu@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+Subject: [PATCH RESEND] selftests/damon: add damon to selftests root Makefile
+From:   Yuanchu Xie <yuanchu@google.com>
+To:     Shuah Khan <shuah@kernel.org>, Markus Boehme <markubo@amazon.de>,
+        SeongJae Park <sj@kernel.org>
+Cc:     rientjes@google.com, Andrew Morton <akpm@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yuanchu Xie <yuanchu@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 02:09:29PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.17.4 release.
-> There are 219 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.17.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.17.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Currently the damon selftests are not built with the rest of the
+selftests. We add damon to the list of targets.
 
-Tested rc1 against the Fedora build system (aarch64, armv7, ppc64le,
-s390x, x86_64), and boot tested x86_64. No regressions noted.
+Fixes: b348eb7abd09 ("mm/damon: add user space selftests")
+Reviewed-by: SeongJae Park <sj@kernel.org>
+Signed-off-by: Yuanchu Xie <yuanchu@google.com>
+---
+ tools/testing/selftests/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-Tested-by: Justin M. Forbes <jforbes@fedoraproject.org>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index d08fe4cfe811..ffe453760a12 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -9,6 +9,7 @@ TARGETS += clone3
+ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
++TARGETS += damon
+ TARGETS += drivers/dma-buf
+ TARGETS += efivarfs
+ TARGETS += exec
+-- 
+2.35.1.265.g69c8d7142f-goog
+

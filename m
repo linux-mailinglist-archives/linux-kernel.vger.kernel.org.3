@@ -2,670 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A52505A04
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D09C505A25
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344833AbiDRObE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
+        id S1344931AbiDROkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343846AbiDRO0L (ORCPT
+        with ESMTP id S1345825AbiDROi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:26:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E36552E5F;
-        Mon, 18 Apr 2022 06:22:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE86560FE4;
-        Mon, 18 Apr 2022 13:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10188C385A1;
-        Mon, 18 Apr 2022 13:22:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650288137;
-        bh=fQ9k+lVCiU8YgftgVoJnd7lIPLzQ9u70bVRn6Lhqf4U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LlN/AkbFu4zaKaqy151gpcUYwvJ6OFNAJU0kalyeuVBw7vEIEX3nsQ3H02WxVbon6
-         FQKoAc7X+bzob43ShtfJcOCJQR1pG2LyqJnjgSB1rooIqajOl9DXy97/AL8LZOWxjM
-         fQVgXStEomKtNcc9bysZ1tBU4cLNhOVflmE0tENznLUJZ5FfgGRDItUvXaGvFuwFu8
-         zmFMhTdo9zQFgFjLz1+Qp6G0nA74w4KhlPtVVa5pJ4go+PwW9dCT93mzaUAIlUoXBO
-         NEOwwA2E7AtuyHv/V7wphTPL5AGMmzyVU1G9OoCh4n77E2bN7EitUYr8le13zRkg9F
-         DWTs14dbQDlFA==
-From:   guoren@kernel.org
-To:     guoren@kernel.org, arnd@arndb.de
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-csky@vger.kernel.org, Matteo Croce <mcroce@microsoft.com>,
-        Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH V3] csky: Add C based string functions
-Date:   Mon, 18 Apr 2022 21:22:02 +0800
-Message-Id: <20220418132202.2387760-1-guoren@kernel.org>
+        Mon, 18 Apr 2022 10:38:56 -0400
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BA7580CB;
+        Mon, 18 Apr 2022 06:24:37 -0700 (PDT)
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+        by mx0a-0064b401.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 23IDCPFP019859;
+        Mon, 18 Apr 2022 06:22:40 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=windriver.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=PPS06212021;
+ bh=xcVf/tshGNvkkpxR7Pvh+P+nL3qZp/fr2Jfx7bsaVNA=;
+ b=mmqtdAiS/aPzpm6mYvwix/zk/yGaaerlq0kEXRchIz0yaPCNYy86FyoIopyLxdFmFzr6
+ dpZrT6FVLJqf35Q1gTqtw/51OWvPqIj3tG4euRQ+2BPQm6th/swCWFZHaxyWj8MKNsnV
+ poFgURMpHTC1n6dB43nHosX7AJTIkam+Iq37uxqzEfYlLpshhEimnf95QUpbannn3qXW
+ c3YtIkjViSd6UsU0ifVU7K0OzEWtjaWNrt8+e9pPMEhqNmx9Tm6hzdM+dXcurBlTV86e
+ v6TS8UsiH39N3Ozsxll/rsqSC2irALJHRoONdibHKcM4O+HkGr7WyzctyMr3M+WZMRGL Zg== 
+Received: from nam02-dm3-obe.outbound.protection.outlook.com (mail-dm3nam07lp2043.outbound.protection.outlook.com [104.47.56.43])
+        by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 3ffwah150g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 18 Apr 2022 06:22:40 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=V5pHMDZmH6LL6tCOxu8Nm8PkISEGJDEfNk83iLPhU5UTaD4TeoGB9pRRpWP1GEcrYyIF0brJwU6rdCykAQL8QHu9g2QW2p6/2RQp0UKpd5ELZh76b/MUK4NNxtvzsPG6YutiGv1WE+Pk/TaWU9J9x4/JlFhT5OtQLgUa9qU4jZHvfUOr37lepzbGAN6/ux7pSBtV4+ligHTdRQ7po2FJHZO9VADXZidk9yeIeaDv25bVNEh4LwVyRa0LHAtHa0/iQvwLPSZivzmqPQf19uoxmRT0FfExnelsCbZAUAQkYqDn/qjMSeBwvh97Gd4y0DxuUsAlA45tMZ9vT453Mngr+w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xcVf/tshGNvkkpxR7Pvh+P+nL3qZp/fr2Jfx7bsaVNA=;
+ b=dWwFla4SV/XSHPDQChB4Ljx5SZXwg43Wu9nqjln0Ih3M3NmGcIuAa/J638uvWhZcOVwMQ11eyEnYv1/mc0O/x3JJ2ICpIzOuVUJZ36dRJfJpA258m8ph8ZqVu0nqa/3MIs+97lki7TtGUPgqofXtvNQ/COg8svJrbN78PmUPkgrS1QpBQik9JoNt8SBy3sz6ZgoJre7TCPr2pAj529ovJJcRuujWRMa3rriz4az3Jam7kNSSGZmXOzFu0RfKmZWnzn3gCdtsu0hnYj7T1DQIE72kaEQNZbmVfd32L5bHv5djVdCyEgEUEBubN5qx1OIziOTa3bnHuwj84UWqq6WjDA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=windriver.com; dmarc=pass action=none
+ header.from=windriver.com; dkim=pass header.d=windriver.com; arc=none
+Received: from MWHPR11MB1358.namprd11.prod.outlook.com (2603:10b6:300:23::8)
+ by DM6PR11MB2857.namprd11.prod.outlook.com (2603:10b6:5:cb::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Mon, 18 Apr
+ 2022 13:22:36 +0000
+Received: from MWHPR11MB1358.namprd11.prod.outlook.com
+ ([fe80::1cd4:125:344:9fc]) by MWHPR11MB1358.namprd11.prod.outlook.com
+ ([fe80::1cd4:125:344:9fc%7]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
+ 13:22:36 +0000
+From:   He Zhe <zhe.he@windriver.com>
+To:     catalin.marinas@arm.com, will@kernel.org, mark.rutland@arm.com,
+        tglx@linutronix.de, bp@alien8.de, dave.hansen@linux.intel.com,
+        keescook@chromium.org, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, benh@kernel.crashing.org,
+        paulus@samba.org, borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        hpa@zytor.com
+Cc:     x86@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, zhe.he@windriver.com
+Subject: [PATCH RFC 0/8] hardened usercopy and stacktrace improvement
+Date:   Mon, 18 Apr 2022 21:22:09 +0800
+Message-Id: <20220418132217.1573072-1-zhe.he@windriver.com>
 X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: HK2PR02CA0133.apcprd02.prod.outlook.com
+ (2603:1096:202:16::17) To MWHPR11MB1358.namprd11.prod.outlook.com
+ (2603:10b6:300:23::8)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 8381d4bd-4e4b-4e7a-dbdc-08da213e80ef
+X-MS-TrafficTypeDiagnostic: DM6PR11MB2857:EE_
+X-Microsoft-Antispam-PRVS: <DM6PR11MB2857B727AD3B43970BF5D48A8FF39@DM6PR11MB2857.namprd11.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tt9RUO5obMpwN+Zd/EA/TZVNF/8xeaob7d3xary3RR2UT5VdkhsCjpY9B7lAWFuSTPju0p3551Ic7MMkB+jsaJYFRrPgB/eLfxd5Jd9ovIVWfPgTPjBtcfLb7vX9DF0L62ZfaAndarK5iE9TxKkMoQYInPcCbeg2CTfTDuCPTucwneIEiySr13m8iiAisy/ix+tpTIDgj12l54ykjau3D5AZ/xwTpAQLyvJh3+tpVb4ULyzHguVAbtE1MSkP+Khg2XNrzh8N197JyLo36wJFY7XYOCVbb5qKRyLLPS/tjv770ngH/yrInGm0uv9DkJcgciyVfXESQPBGaLcBMaAxVObDuIi1fZjtvRj7wy3RBd4mETtnjzARO2hvQ4o9IFfr40CeuaxrIcb3eXb8BSIz/9pb3vPBUkhGmcOtZaAjmMVegPtJiWX0lQI7H+E1L8B9Yw76afsj7wiiQHNzWs+XDIdyFxsWNMHrqsWAhGcHsBrW+qYoJ5/CGfsbfvJKJQk/MFfwinkztQKrvReOtqrYwOdpU80M99Iwjxbom1qYLnZHIutqV8rbTV6OEH4DV7o2CzSIbw0GM3H/e2u1kvMgCf3dHhstxro96De60vsCxCvEj+03duI2lCjeEQ1092L9KIDJ8M/eBxFkERACof6rBXN2FPV87bXE1VRWrWQfik82bTkO930223OR9tLc236CoFoaPWkfOtyW/yN82pLcAdOcybH8PmiGoHYXMEYHp2c=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1358.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(66556008)(2616005)(186003)(86362001)(83380400001)(1076003)(38100700002)(66946007)(316002)(66476007)(7416002)(107886003)(8936002)(2906002)(4326008)(6506007)(38350700002)(5660300002)(508600001)(36756003)(52116002)(8676002)(26005)(6486002)(921005)(6512007)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i7+T7/VOuOhLWViCWrbM4Ro98WVFQpcDROo169zHxbH2NtsM+wD/MAOSZr6d?=
+ =?us-ascii?Q?HY8yJlH9N1kU45jkUVRq/XgUL30WGMpKUWebfe+RqQ5WbvNIp8amxIhkUvfr?=
+ =?us-ascii?Q?b8G1YwbMx5llKSPqu9PEzjgIaoQTOVugtMEVyEsZiWqWNS7MrfsXAZWYWcrO?=
+ =?us-ascii?Q?KQuGarMow6w2mKrYSww6uJqNkTmNbyP00L+1xJwVnlNMMh+J8P0No92GDGKT?=
+ =?us-ascii?Q?mn417eaR16fr0aL/t5g8lSJfZxyh83ud1T2Wr17XwgJQJ0BcZfg7wo52kbkB?=
+ =?us-ascii?Q?DNX69CTWlwrVY4qgGrL5/tO9DObK9L8RNDMILxilHC7oSTdN9ww7A7Zzv+O7?=
+ =?us-ascii?Q?iEGUrXJ9j7wlwMlX62LT6QXzX1YjrUnagssMXc4Ysk/oe0RQAeDTaU6Gem2r?=
+ =?us-ascii?Q?SSthr1WxR/o8Rb3a2OoaHbaYmmQXYdnV5YEtX/jla/BQHj7DurUSZ0CX+z+I?=
+ =?us-ascii?Q?oyThTnH29Nd4POQLlo1HQ+xMzrNmRX/mCuU/KW7vKzJLDi5TWFu3DsWfX/tY?=
+ =?us-ascii?Q?rsxoXGGCttOO/5ZIROIkqOfNExLEfpmR/SIPJ7cCoNAhob5kZ2PPkugB9WWz?=
+ =?us-ascii?Q?0OjsgJtcTltI3oIMesdAtbiy/6P0eedI6skYye+g1vQCH8UXCtPHgfXYzYpJ?=
+ =?us-ascii?Q?TdiEz5ImiiSW/4p2fdrze+31vHrwZSy0NcLk04nxYIV0aT00B38AfL1GE3dh?=
+ =?us-ascii?Q?qXFFsftt8RRTHExZr6pL90DDpquajZuwYEhlmHV+iYN7sPuMI7pyixUhK29y?=
+ =?us-ascii?Q?RfwN+U4U1Xx/GElkLt/Yy41HLZSCKsJIr41D74GGpwSU+bk8u2ffclicaTvA?=
+ =?us-ascii?Q?JHzvAHvaVTx5Sg/cR96FxALH1Z5DmEqdoG1KzthDrEJY6dSOpS/7UKvUCimd?=
+ =?us-ascii?Q?Cb2bB0UPrE9FqB/rIyQt8Idg1WfirYPtxXkv3479G7wORko2imDhR1WlOH0I?=
+ =?us-ascii?Q?lvtyVbYEh6LY+R4U6F3Dm4TlQoiNSEcYdEduyHQ3F4O6DASfMc/sd0NGSwjf?=
+ =?us-ascii?Q?yK1wi+TQ7WXpInM+1Dvc5R1E9LnVyoZzGx5ZAgqjq5QUDNNjl7sgp0E4I7e7?=
+ =?us-ascii?Q?Zl4ijD3WZ/l4CJLUoMcpzTxM3wt4FfKbFLldPWmwoMkZif9xZbTeNvplGybF?=
+ =?us-ascii?Q?x9sRIygRetsxk1XIQIp3T9nf6hT+EmqfOdsC8OzjolDM9DcKJqjvVp3+uw0y?=
+ =?us-ascii?Q?W9XhCOJ9OzP/b6w+NpGTC86dBcdh/oqVbnugWfR+LkKiunfLtgWl/bG/p2c4?=
+ =?us-ascii?Q?+vvIBsJEG54zOWcCO86ztYWwlZvL0/pK60SYJH3ts+S9iBZxq7UB2RD+yHTz?=
+ =?us-ascii?Q?v8PBx+Ci8DJOl46+g7ZTUZkN9fithfmKsXzAExt8GjWNauWc9oUdcB68PXIN?=
+ =?us-ascii?Q?+QAdITX9j4MIXil1iWZ0U3FLPnlUrmHV1KYPgNk4oH8b6bUYpLRKo+k5DbN7?=
+ =?us-ascii?Q?mrtU3V0Kqj3LPmbxsJ9sSgdbVv+SJCgth6GOxd9NuIB/eCh384LJMz+UHNYA?=
+ =?us-ascii?Q?Bn/ohkuHDZW23mjhgWrTgeR07HOsVCxfwx4HCwfUWxHJTO+O+x9nIKDlSwM8?=
+ =?us-ascii?Q?5k0YSoD2O6RwmuRVXMueMtzaYaesmIZgJ5gZwlLsBHufDGSESKoXQQNbTw+c?=
+ =?us-ascii?Q?ZoK8bx+yE7oFLkGApVTFqF0h3OgZ03sIaYuPMKx9Rcabcpvqk0/zbYD1ieez?=
+ =?us-ascii?Q?gLPlp/21vQYQYBX3didx9PdSrvEdTXQFW0ay798yfApwnP0L1k4qrZNB1Mz2?=
+ =?us-ascii?Q?kuqmYAyqbw=3D=3D?=
+X-OriginatorOrg: windriver.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8381d4bd-4e4b-4e7a-dbdc-08da213e80ef
+X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1358.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Apr 2022 13:22:36.2488
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ddb2873-a1ad-4a18-ae4e-4644631433be
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: GktaFGgGGENtFi7SkGbIJNO2WFbR1VKGaiqwn1422Tyq4lLANl6JbqoiJI3idJZ17ufb5IxrYQ/SFdQvSQg17w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB2857
+X-Proofpoint-ORIG-GUID: L92afs33CCEvUXDtHwxOnx65_ITv67TP
+X-Proofpoint-GUID: L92afs33CCEvUXDtHwxOnx65_ITv67TP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
+ definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ mlxlogscore=471 phishscore=0 lowpriorityscore=0 spamscore=0 suspectscore=0
+ priorityscore=1501 malwarescore=0 adultscore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
+ definitions=main-2204180078
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matteo Croce <mcroce@microsoft.com>
+This series is to add copy-beyond-the-frame detection for hardened usercopy
+for arm64 by adding more arguments to callbacks of stackstrace and by the way
+more potential checks in the future can be done. This is done by:
 
-Try to access RAM with the largest bit width possible, but without
-doing unaligned accesses.
+- Change stacktrace callback prototype to pass more information which currently
+  includes pc, current stack's fp and previous frame's fp, so copying beyond the
+  frame can be detected.
+- Add arch_within_stack_frames for arm64 based on existing x86 algorithm, but
+  via stacktrace.
+- Make other arch_stack_walk callbacks use the new prototype.
+- Tune lkdtm usercopy stack frame case. Currently the way to generate bad frame
+  use depends on stack layout of the architecture and compiler. It happens to
+  work with x86 but does not work for arm64 and it ruins the stack in
+  USERCOPY_STACK_FRAME_FROM and thus causes the call chain to return to NULL
+  address.
 
-A further improvement could be to use multiple read and writes as the
-assembly version was trying to do.
+He Zhe (8):
+  stacktrace: Change callback prototype to pass more information
+  arm64: stacktrace: Add arch_within_stack_frames
+  arm64: stacktrace: Make callbacks use new prototype with frame info
+  powerpc: stacktrace: Make callbacks use new prototype with frame info
+  riscv: stacktrace: Make callbacks use new prototype with frame info
+  s390: stacktrace: Make callbacks use new prototype with frame info
+  x86: stacktrace: Make callbacks use new prototype with frame info
+  lkdtm: usercopy: Make USERCOPY_STACK_FRAME_x able to work for all
+    archs
 
-Tested on a BeagleV Starlight with a SiFive U74 core, where the
-improvement is noticeable.
+ arch/arm64/Kconfig                   |  1 +
+ arch/arm64/include/asm/thread_info.h | 12 +++++
+ arch/arm64/kernel/perf_callchain.c   |  4 +-
+ arch/arm64/kernel/process.c          |  6 +--
+ arch/arm64/kernel/return_address.c   |  4 +-
+ arch/arm64/kernel/stacktrace.c       | 76 ++++++++++++++++++++++++++--
+ arch/arm64/kernel/time.c             |  6 +--
+ arch/powerpc/kernel/stacktrace.c     | 18 ++++---
+ arch/riscv/include/asm/stacktrace.h  |  2 +-
+ arch/riscv/kernel/perf_callchain.c   |  4 +-
+ arch/riscv/kernel/stacktrace.c       | 22 ++++----
+ arch/s390/kernel/stacktrace.c        | 14 ++---
+ arch/x86/kernel/stacktrace.c         | 28 ++++++----
+ drivers/misc/lkdtm/usercopy.c        | 24 +--------
+ include/linux/stacktrace.h           |  9 +++-
+ kernel/stacktrace.c                  | 10 ++--
+ 16 files changed, 161 insertions(+), 79 deletions(-)
 
-Signed-off-by: Matteo Croce <mcroce@microsoft.com>
-Co-developed-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
----
-Changes in V3:
- - Fixup conflict Kconfig name
-
-Changes in V2:
- - Fixup compile warning with __weak definition
----
- arch/csky/Kconfig          |   8 +
- arch/csky/abiv1/Makefile   |   2 -
- arch/csky/abiv1/memcpy.S   | 347 -------------------------------------
- arch/csky/abiv1/strksyms.c |   6 -
- arch/csky/abiv2/Makefile   |   2 +
- arch/csky/abiv2/strksyms.c |   4 +-
- arch/csky/lib/Makefile     |   3 +
- arch/csky/lib/string.c     | 134 ++++++++++++++
- 8 files changed, 150 insertions(+), 356 deletions(-)
- delete mode 100644 arch/csky/abiv1/memcpy.S
- delete mode 100644 arch/csky/abiv1/strksyms.c
- create mode 100644 arch/csky/lib/string.c
-
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 75ef86605d69..21d72b078eef 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -320,6 +320,14 @@ config HOTPLUG_CPU
- 	  controlled through /sys/devices/system/cpu/cpu1/hotplug/target.
- 
- 	  Say N if you want to disable CPU hotplug.
-+
-+config HAVE_EFFICIENT_UNALIGNED_STRING_OPS
-+	bool "Enable EFFICIENT_UNALIGNED_STRING_OPS for abiv2"
-+	depends on CPU_CK807 || CPU_CK810 || CPU_CK860
-+	help
-+	  Say Y here to enable EFFICIENT_UNALIGNED_STRING_OPS. Some CPU models could
-+	  deal with unaligned access by hardware.
-+
- endmenu
- 
- source "arch/csky/Kconfig.platforms"
-diff --git a/arch/csky/abiv1/Makefile b/arch/csky/abiv1/Makefile
-index 601ce3b2fb85..a4b2ade0fc67 100644
---- a/arch/csky/abiv1/Makefile
-+++ b/arch/csky/abiv1/Makefile
-@@ -4,5 +4,3 @@ obj-y					+= bswapdi.o
- obj-y					+= bswapsi.o
- obj-y					+= cacheflush.o
- obj-y					+= mmap.o
--obj-y					+= memcpy.o
--obj-y					+= strksyms.o
-diff --git a/arch/csky/abiv1/memcpy.S b/arch/csky/abiv1/memcpy.S
-deleted file mode 100644
-index 5078eb5169fa..000000000000
---- a/arch/csky/abiv1/memcpy.S
-+++ /dev/null
-@@ -1,347 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--// Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
--
--#include <linux/linkage.h>
--
--.macro	GET_FRONT_BITS rx y
--#ifdef	__cskyLE__
--	lsri	\rx, \y
--#else
--	lsli	\rx, \y
--#endif
--.endm
--
--.macro	GET_AFTER_BITS rx y
--#ifdef	__cskyLE__
--	lsli	\rx, \y
--#else
--	lsri	\rx, \y
--#endif
--.endm
--
--/* void *memcpy(void *dest, const void *src, size_t n); */
--ENTRY(memcpy)
--	mov	r7, r2
--	cmplti	r4, 4
--	bt	.L_copy_by_byte
--	mov	r6, r2
--	andi	r6, 3
--	cmpnei	r6, 0
--	jbt	.L_dest_not_aligned
--	mov	r6, r3
--	andi	r6, 3
--	cmpnei	r6, 0
--	jbt	.L_dest_aligned_but_src_not_aligned
--.L0:
--	cmplti	r4, 16
--	jbt	.L_aligned_and_len_less_16bytes
--	subi	sp, 8
--	stw	r8, (sp, 0)
--.L_aligned_and_len_larger_16bytes:
--	ldw	r1, (r3, 0)
--	ldw	r5, (r3, 4)
--	ldw	r8, (r3, 8)
--	stw	r1, (r7, 0)
--	ldw	r1, (r3, 12)
--	stw	r5, (r7, 4)
--	stw	r8, (r7, 8)
--	stw	r1, (r7, 12)
--	subi	r4, 16
--	addi	r3, 16
--	addi	r7, 16
--	cmplti	r4, 16
--	jbf	.L_aligned_and_len_larger_16bytes
--	ldw	r8, (sp, 0)
--	addi	sp, 8
--	cmpnei	r4, 0
--	jbf	.L_return
--
--.L_aligned_and_len_less_16bytes:
--	cmplti	r4, 4
--	bt	.L_copy_by_byte
--.L1:
--	ldw	r1, (r3, 0)
--	stw	r1, (r7, 0)
--	subi	r4, 4
--	addi	r3, 4
--	addi	r7, 4
--	cmplti	r4, 4
--	jbf	.L1
--	br	.L_copy_by_byte
--
--.L_return:
--	rts
--
--.L_copy_by_byte:                      /* len less than 4 bytes */
--	cmpnei	r4, 0
--	jbf	.L_return
--.L4:
--	ldb	r1, (r3, 0)
--	stb	r1, (r7, 0)
--	addi	r3, 1
--	addi	r7, 1
--	decne	r4
--	jbt	.L4
--	rts
--
--/*
-- * If dest is not aligned, just copying some bytes makes the dest align.
-- * Afther that, we judge whether the src is aligned.
-- */
--.L_dest_not_aligned:
--	mov	r5, r3
--	rsub	r5, r5, r7
--	abs	r5, r5
--	cmplt	r5, r4
--	bt	.L_copy_by_byte
--	mov	r5, r7
--	sub	r5, r3
--	cmphs	r5, r4
--	bf	.L_copy_by_byte
--	mov	r5, r6
--.L5:
--	ldb	r1, (r3, 0)              /* makes the dest align. */
--	stb	r1, (r7, 0)
--	addi	r5, 1
--	subi	r4, 1
--	addi	r3, 1
--	addi	r7, 1
--	cmpnei	r5, 4
--	jbt	.L5
--	cmplti	r4, 4
--	jbt	.L_copy_by_byte
--	mov	r6, r3                   /* judge whether the src is aligned. */
--	andi	r6, 3
--	cmpnei	r6, 0
--	jbf	.L0
--
--/* Judge the number of misaligned, 1, 2, 3? */
--.L_dest_aligned_but_src_not_aligned:
--	mov	r5, r3
--	rsub	r5, r5, r7
--	abs	r5, r5
--	cmplt	r5, r4
--	bt	.L_copy_by_byte
--	bclri	r3, 0
--	bclri	r3, 1
--	ldw	r1, (r3, 0)
--	addi	r3, 4
--	cmpnei	r6, 2
--	bf	.L_dest_aligned_but_src_not_aligned_2bytes
--	cmpnei	r6, 3
--	bf	.L_dest_aligned_but_src_not_aligned_3bytes
--
--.L_dest_aligned_but_src_not_aligned_1byte:
--	mov	r5, r7
--	sub	r5, r3
--	cmphs	r5, r4
--	bf	.L_copy_by_byte
--	cmplti	r4, 16
--	bf	.L11
--.L10:                                     /* If the len is less than 16 bytes */
--	GET_FRONT_BITS r1 8
--	mov	r5, r1
--	ldw	r6, (r3, 0)
--	mov	r1, r6
--	GET_AFTER_BITS r6 24
--	or	r5, r6
--	stw	r5, (r7, 0)
--	subi	r4, 4
--	addi	r3, 4
--	addi	r7, 4
--	cmplti	r4, 4
--	bf	.L10
--	subi	r3, 3
--	br	.L_copy_by_byte
--.L11:
--	subi	sp, 16
--	stw	r8, (sp, 0)
--	stw	r9, (sp, 4)
--	stw	r10, (sp, 8)
--	stw	r11, (sp, 12)
--.L12:
--	ldw	r5, (r3, 0)
--	ldw	r11, (r3, 4)
--	ldw	r8, (r3, 8)
--	ldw	r9, (r3, 12)
--
--	GET_FRONT_BITS r1 8               /* little or big endian? */
--	mov	r10, r5
--	GET_AFTER_BITS r5 24
--	or	r5, r1
--
--	GET_FRONT_BITS r10 8
--	mov	r1, r11
--	GET_AFTER_BITS r11 24
--	or	r11, r10
--
--	GET_FRONT_BITS r1 8
--	mov	r10, r8
--	GET_AFTER_BITS r8 24
--	or	r8, r1
--
--	GET_FRONT_BITS r10 8
--	mov	r1, r9
--	GET_AFTER_BITS r9 24
--	or	r9, r10
--
--	stw	r5, (r7, 0)
--	stw	r11, (r7, 4)
--	stw	r8, (r7, 8)
--	stw	r9, (r7, 12)
--	subi	r4, 16
--	addi	r3, 16
--	addi	r7, 16
--	cmplti	r4, 16
--	jbf	.L12
--	ldw	r8, (sp, 0)
--	ldw	r9, (sp, 4)
--	ldw	r10, (sp, 8)
--	ldw	r11, (sp, 12)
--	addi	sp , 16
--	cmplti	r4, 4
--	bf	.L10
--	subi	r3, 3
--	br	.L_copy_by_byte
--
--.L_dest_aligned_but_src_not_aligned_2bytes:
--	cmplti	r4, 16
--	bf	.L21
--.L20:
--	GET_FRONT_BITS r1 16
--	mov	r5, r1
--	ldw	r6, (r3, 0)
--	mov	r1, r6
--	GET_AFTER_BITS r6 16
--	or	r5, r6
--	stw	r5, (r7, 0)
--	subi	r4, 4
--	addi	r3, 4
--	addi	r7, 4
--	cmplti	r4, 4
--	bf	.L20
--	subi	r3, 2
--	br	.L_copy_by_byte
--	rts
--
--.L21:	/* n > 16 */
--	subi 	sp, 16
--	stw	r8, (sp, 0)
--	stw	r9, (sp, 4)
--	stw	r10, (sp, 8)
--	stw	r11, (sp, 12)
--
--.L22:
--	ldw	r5, (r3, 0)
--	ldw	r11, (r3, 4)
--	ldw	r8, (r3, 8)
--	ldw	r9, (r3, 12)
--
--	GET_FRONT_BITS r1 16
--	mov	r10, r5
--	GET_AFTER_BITS r5 16
--	or	r5, r1
--
--	GET_FRONT_BITS r10 16
--	mov	r1, r11
--	GET_AFTER_BITS r11 16
--	or	r11, r10
--
--	GET_FRONT_BITS r1 16
--	mov	r10, r8
--	GET_AFTER_BITS r8 16
--	or	r8, r1
--
--	GET_FRONT_BITS r10 16
--	mov	r1, r9
--	GET_AFTER_BITS r9 16
--	or	r9, r10
--
--	stw	r5, (r7, 0)
--	stw	r11, (r7, 4)
--	stw	r8, (r7, 8)
--	stw	r9, (r7, 12)
--	subi	r4, 16
--	addi	r3, 16
--	addi	r7, 16
--	cmplti	r4, 16
--	jbf	.L22
--	ldw	r8, (sp, 0)
--	ldw	r9, (sp, 4)
--	ldw	r10, (sp, 8)
--	ldw	r11, (sp, 12)
--	addi	sp, 16
--	cmplti	r4, 4
--	bf	.L20
--	subi	r3, 2
--	br	.L_copy_by_byte
--
--
--.L_dest_aligned_but_src_not_aligned_3bytes:
--	cmplti	r4, 16
--	bf	.L31
--.L30:
--	GET_FRONT_BITS r1 24
--	mov	r5, r1
--	ldw	r6, (r3, 0)
--	mov	r1, r6
--	GET_AFTER_BITS r6 8
--	or	r5, r6
--	stw	r5, (r7, 0)
--	subi	r4, 4
--	addi	r3, 4
--	addi	r7, 4
--	cmplti	r4, 4
--	bf	.L30
--	subi	r3, 1
--	br	.L_copy_by_byte
--.L31:
--	subi	sp, 16
--	stw	r8, (sp, 0)
--	stw	r9, (sp, 4)
--	stw	r10, (sp, 8)
--	stw	r11, (sp, 12)
--.L32:
--	ldw	r5, (r3, 0)
--	ldw	r11, (r3, 4)
--	ldw	r8, (r3, 8)
--	ldw	r9, (r3, 12)
--
--	GET_FRONT_BITS r1 24
--	mov	r10, r5
--	GET_AFTER_BITS r5 8
--	or	r5, r1
--
--	GET_FRONT_BITS r10 24
--	mov	r1, r11
--	GET_AFTER_BITS r11 8
--	or	r11, r10
--
--	GET_FRONT_BITS r1 24
--	mov	r10, r8
--	GET_AFTER_BITS r8 8
--	or	r8, r1
--
--	GET_FRONT_BITS r10 24
--	mov	r1, r9
--	GET_AFTER_BITS r9 8
--	or	r9, r10
--
--	stw	r5, (r7, 0)
--	stw	r11, (r7, 4)
--	stw	r8, (r7, 8)
--	stw	r9, (r7, 12)
--	subi	r4, 16
--	addi	r3, 16
--	addi	r7, 16
--	cmplti	r4, 16
--	jbf	.L32
--	ldw	r8, (sp, 0)
--	ldw	r9, (sp, 4)
--	ldw	r10, (sp, 8)
--	ldw	r11, (sp, 12)
--	addi	sp, 16
--	cmplti	r4, 4
--	bf	.L30
--	subi	r3, 1
--	br	.L_copy_by_byte
-diff --git a/arch/csky/abiv1/strksyms.c b/arch/csky/abiv1/strksyms.c
-deleted file mode 100644
-index c7ccbb27e8d7..000000000000
---- a/arch/csky/abiv1/strksyms.c
-+++ /dev/null
-@@ -1,6 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (C) 2018 Hangzhou C-SKY Microsystems co.,ltd.
--
--#include <linux/module.h>
--
--EXPORT_SYMBOL(memcpy);
-diff --git a/arch/csky/abiv2/Makefile b/arch/csky/abiv2/Makefile
-index c561efa5533c..ea8005fe01a8 100644
---- a/arch/csky/abiv2/Makefile
-+++ b/arch/csky/abiv2/Makefile
-@@ -2,9 +2,11 @@
- obj-y				+= cacheflush.o
- obj-$(CONFIG_CPU_HAS_FPU)	+= fpu.o
- obj-y				+= memcmp.o
-+ifeq ($(CONFIG_HAVE_EFFICIENT_UNALIGNED_STRING_OPS), y)
- obj-y				+= memcpy.o
- obj-y				+= memmove.o
- obj-y				+= memset.o
-+endif
- obj-y				+= strcmp.o
- obj-y				+= strcpy.o
- obj-y				+= strlen.o
-diff --git a/arch/csky/abiv2/strksyms.c b/arch/csky/abiv2/strksyms.c
-index 06da723d8202..8d1fd28c6cf9 100644
---- a/arch/csky/abiv2/strksyms.c
-+++ b/arch/csky/abiv2/strksyms.c
-@@ -3,10 +3,12 @@
- 
- #include <linux/module.h>
- 
-+#ifdef CONFIG_HAVE_EFFICIENT_UNALIGNED_STRING_OPS
- EXPORT_SYMBOL(memcpy);
- EXPORT_SYMBOL(memset);
--EXPORT_SYMBOL(memcmp);
- EXPORT_SYMBOL(memmove);
-+#endif
-+EXPORT_SYMBOL(memcmp);
- EXPORT_SYMBOL(strcmp);
- EXPORT_SYMBOL(strcpy);
- EXPORT_SYMBOL(strlen);
-diff --git a/arch/csky/lib/Makefile b/arch/csky/lib/Makefile
-index 7fbdbb2c4d12..d0ce6e2d7ab2 100644
---- a/arch/csky/lib/Makefile
-+++ b/arch/csky/lib/Makefile
-@@ -1,3 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- lib-y  := usercopy.o delay.o
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-+ifneq ($(CONFIG_HAVE_EFFICIENT_UNALIGNED_STRING_OPS), y)
-+lib-y  += string.o
-+endif
-diff --git a/arch/csky/lib/string.c b/arch/csky/lib/string.c
-new file mode 100644
-index 000000000000..d65626fcaeac
---- /dev/null
-+++ b/arch/csky/lib/string.c
-@@ -0,0 +1,134 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * String functions optimized for hardware which doesn't
-+ * handle unaligned memory accesses efficiently.
-+ *
-+ * Copyright (C) 2021 Matteo Croce
-+ */
-+
-+#include <linux/types.h>
-+#include <linux/module.h>
-+
-+/* Minimum size for a word copy to be convenient */
-+#define BYTES_LONG	sizeof(long)
-+#define WORD_MASK	(BYTES_LONG - 1)
-+#define MIN_THRESHOLD	(BYTES_LONG * 2)
-+
-+/* convenience union to avoid cast between different pointer types */
-+union types {
-+	u8 *as_u8;
-+	unsigned long *as_ulong;
-+	uintptr_t as_uptr;
-+};
-+
-+union const_types {
-+	const u8 *as_u8;
-+	unsigned long *as_ulong;
-+	uintptr_t as_uptr;
-+};
-+
-+void *memcpy(void *dest, const void *src, size_t count)
-+{
-+	union const_types s = { .as_u8 = src };
-+	union types d = { .as_u8 = dest };
-+	int distance = 0;
-+
-+	if (count < MIN_THRESHOLD)
-+		goto copy_remainder;
-+
-+	/* Copy a byte at time until destination is aligned. */
-+	for (; d.as_uptr & WORD_MASK; count--)
-+		*d.as_u8++ = *s.as_u8++;
-+
-+	distance = s.as_uptr & WORD_MASK;
-+
-+	if (distance) {
-+		unsigned long last, next;
-+
-+		/*
-+		 * s is distance bytes ahead of d, and d just reached
-+		 * the alignment boundary. Move s backward to word align it
-+		 * and shift data to compensate for distance, in order to do
-+		 * word-by-word copy.
-+		 */
-+		s.as_u8 -= distance;
-+
-+		next = s.as_ulong[0];
-+		for (; count >= BYTES_LONG; count -= BYTES_LONG) {
-+			last = next;
-+			next = s.as_ulong[1];
-+
-+			d.as_ulong[0] = last >> (distance * 8) |
-+				next << ((BYTES_LONG - distance) * 8);
-+
-+			d.as_ulong++;
-+			s.as_ulong++;
-+		}
-+
-+		/* Restore s with the original offset. */
-+		s.as_u8 += distance;
-+	} else {
-+		/*
-+		 * If the source and dest lower bits are the same, do a simple
-+		 * 32/64 bit wide copy.
-+		 */
-+		for (; count >= BYTES_LONG; count -= BYTES_LONG)
-+			*d.as_ulong++ = *s.as_ulong++;
-+	}
-+
-+copy_remainder:
-+	while (count--)
-+		*d.as_u8++ = *s.as_u8++;
-+
-+	return dest;
-+}
-+EXPORT_SYMBOL(memcpy);
-+
-+/*
-+ * Simply check if the buffer overlaps an call memcpy() in case,
-+ * otherwise do a simple one byte at time backward copy.
-+ */
-+void *memmove(void *dest, const void *src, size_t count)
-+{
-+	if (dest < src || src + count <= dest)
-+		return memcpy(dest, src, count);
-+
-+	if (dest > src) {
-+		const char *s = src + count;
-+		char *tmp = dest + count;
-+
-+		while (count--)
-+			*--tmp = *--s;
-+	}
-+	return dest;
-+}
-+EXPORT_SYMBOL(memmove);
-+
-+void *memset(void *s, int c, size_t count)
-+{
-+	union types dest = { .as_u8 = s };
-+
-+	if (count >= MIN_THRESHOLD) {
-+		unsigned long cu = (unsigned long)c;
-+
-+		/* Compose an ulong with 'c' repeated 4/8 times */
-+		cu |= cu << 8;
-+		cu |= cu << 16;
-+		/* Suppress warning on 32 bit machines */
-+		cu |= (cu << 16) << 16;
-+
-+		for (; count && dest.as_uptr & WORD_MASK; count--)
-+			*dest.as_u8++ = c;
-+
-+		/* Copy using the largest size allowed */
-+		for (; count >= BYTES_LONG; count -= BYTES_LONG)
-+			*dest.as_ulong++ = cu;
-+	}
-+
-+	/* copy the remainder */
-+	while (count--)
-+		*dest.as_u8++ = c;
-+
-+	return s;
-+}
-+EXPORT_SYMBOL(memset);
 -- 
 2.25.1
 

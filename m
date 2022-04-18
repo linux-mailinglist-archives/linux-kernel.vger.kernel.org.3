@@ -2,47 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83A48505707
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54AE65052AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244604AbiDRNpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44268 "EHLO
+        id S239599AbiDRMrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239915AbiDRNVH (ORCPT
+        with ESMTP id S240270AbiDRMiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:21:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91B713F33;
-        Mon, 18 Apr 2022 05:52:26 -0700 (PDT)
+        Mon, 18 Apr 2022 08:38:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDD027CE2;
+        Mon, 18 Apr 2022 05:29:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76F7FB80E59;
-        Mon, 18 Apr 2022 12:52:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C71A1C385A1;
-        Mon, 18 Apr 2022 12:52:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 286E960F7C;
+        Mon, 18 Apr 2022 12:29:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 033B8C385A1;
+        Mon, 18 Apr 2022 12:29:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286344;
-        bh=I9+hmMEX95nBcS2rDU1DWsybxkUdrLHSzo3sdWdHvhs=;
+        s=korg; t=1650284970;
+        bh=60V9n3F/8YQM6yXHDBJ4XdgIZTw+UUdv3AXJFOGfAVo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Sne+qbE9A7iT3qNmav247NLxuUz38WBjgujgvL1ehMnDsDg8x/x8vP2DhdHmEhYMZ
-         DdvZvxFAXp0bPAUvtM0+3OUhabJdCIrzaQVLW5aT5T53tnrha6Tqhklilok8gmkAWk
-         S/CdOcn6OJRukeJrB8gHNmF16HYwMwrQBlXQtzkQ=
+        b=PoH2roBBDqqCwnZOmTqreQ9HIn1IPBr6Gq5YYjTvzhKlrJXQTgicrqTCs4jtvahVY
+         E/KEF0LJ2vTZlXXK/O/DHeMgsN2Sp0/3rIuVgewJGnPZcuo3yvtP4gtwRZkgsBDCvc
+         lNlqqUG/CgxHMeOLOY2jj1qp2xNe0U5hsn7ErSU4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Shyam Prasad N <sprasad@microsoft.com>,
+        Ronnie Sahlberg <lsahlber@redhat.com>,
+        Steve French <stfrench@microsoft.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 105/284] scsi: pm8001: Fix command initialization in pm80XX_send_read_log()
+Subject: [PATCH 5.15 066/189] cifs: release cached dentries only if mount is complete
 Date:   Mon, 18 Apr 2022 14:11:26 +0200
-Message-Id: <20220418121213.859927557@linuxfoundation.org>
+Message-Id: <20220418121202.382430356@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,59 +56,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: Shyam Prasad N <sprasad@microsoft.com>
 
-[ Upstream commit 1a37b6738b58d86f6b144b3fc754ace0f2e0166d ]
+[ Upstream commit d788e51636462e61c6883f7d96b07b06bc291650 ]
 
-Since the sata_cmd struct is zeroed out before its fields are initialized,
-there is no need for using "|=" to initialize the ncqtag_atap_dir_m
-field. Using a standard assignment removes the sparse warning:
+During cifs_kill_sb, we first dput all the dentries that we have cached.
+However this function can also get called for mount failures.
+So dput the cached dentries only if the filesystem mount is complete.
+i.e. cifs_sb->root is populated.
 
-warning: invalid assignment: |=
-
-Also, since the ncqtag_atap_dir_m field has type __le32, use cpu_to_le32()
-to generate the assigned value.
-
-Link: https://lore.kernel.org/r/20220220031810.738362-5-damien.lemoal@opensource.wdc.com
-Fixes: c6b9ef5779c3 ("[SCSI] pm80xx: NCQ error handling changes")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Fixes: 5e9c89d43fa6 ("cifs: Grab a reference for the dentry of the cached directory during the lifetime of the cache")
+Signed-off-by: Shyam Prasad N <sprasad@microsoft.com>
+Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
+Signed-off-by: Steve French <stfrench@microsoft.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm8001_hwi.c | 2 +-
- drivers/scsi/pm8001/pm80xx_hwi.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ fs/cifs/cifsfs.c | 28 +++++++++++++++-------------
+ 1 file changed, 15 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm8001_hwi.c b/drivers/scsi/pm8001/pm8001_hwi.c
-index f374abfb7f1f..853dba857239 100644
---- a/drivers/scsi/pm8001/pm8001_hwi.c
-+++ b/drivers/scsi/pm8001/pm8001_hwi.c
-@@ -1826,7 +1826,7 @@ static void pm8001_send_read_log(struct pm8001_hba_info *pm8001_ha,
+diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
+index ed220daca3e1..92fd1a7e83dc 100644
+--- a/fs/cifs/cifsfs.c
++++ b/fs/cifs/cifsfs.c
+@@ -266,22 +266,24 @@ static void cifs_kill_sb(struct super_block *sb)
+ 	 * before we kill the sb.
+ 	 */
+ 	if (cifs_sb->root) {
++		node = rb_first(root);
++		while (node != NULL) {
++			tlink = rb_entry(node, struct tcon_link, tl_rbnode);
++			tcon = tlink_tcon(tlink);
++			cfid = &tcon->crfid;
++			mutex_lock(&cfid->fid_mutex);
++			if (cfid->dentry) {
++				dput(cfid->dentry);
++				cfid->dentry = NULL;
++			}
++			mutex_unlock(&cfid->fid_mutex);
++			node = rb_next(node);
++		}
++
++		/* finally release root dentry */
+ 		dput(cifs_sb->root);
+ 		cifs_sb->root = NULL;
+ 	}
+-	node = rb_first(root);
+-	while (node != NULL) {
+-		tlink = rb_entry(node, struct tcon_link, tl_rbnode);
+-		tcon = tlink_tcon(tlink);
+-		cfid = &tcon->crfid;
+-		mutex_lock(&cfid->fid_mutex);
+-		if (cfid->dentry) {
+-			dput(cfid->dentry);
+-			cfid->dentry = NULL;
+-		}
+-		mutex_unlock(&cfid->fid_mutex);
+-		node = rb_next(node);
+-	}
  
- 	sata_cmd.tag = cpu_to_le32(ccb_tag);
- 	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
--	sata_cmd.ncqtag_atap_dir_m |= ((0x1 << 7) | (0x5 << 9));
-+	sata_cmd.ncqtag_atap_dir_m = cpu_to_le32((0x1 << 7) | (0x5 << 9));
- 	memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
- 
- 	res = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sata_cmd, 0);
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index df5f0bc29587..162b819f3a89 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1504,7 +1504,7 @@ static void pm80xx_send_read_log(struct pm8001_hba_info *pm8001_ha,
- 
- 	sata_cmd.tag = cpu_to_le32(ccb_tag);
- 	sata_cmd.device_id = cpu_to_le32(pm8001_ha_dev->device_id);
--	sata_cmd.ncqtag_atap_dir_m_dad |= ((0x1 << 7) | (0x5 << 9));
-+	sata_cmd.ncqtag_atap_dir_m_dad = cpu_to_le32(((0x1 << 7) | (0x5 << 9)));
- 	memcpy(&sata_cmd.sata_fis, &fis, sizeof(struct host_to_dev_fis));
- 
- 	res = pm8001_mpi_build_cmd(pm8001_ha, circularQ, opc, &sata_cmd, 0);
+ 	kill_anon_super(sb);
+ 	cifs_umount(cifs_sb);
 -- 
-2.34.1
+2.35.1
 
 
 

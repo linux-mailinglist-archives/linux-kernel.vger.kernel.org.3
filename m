@@ -2,96 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2806F505EF0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8947E505EF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 22:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346113AbiDRUnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 16:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
+        id S1347815AbiDRUnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 16:43:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238691AbiDRUnN (ORCPT
+        with ESMTP id S238691AbiDRUne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 16:43:13 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2567FB1D8;
-        Mon, 18 Apr 2022 13:40:29 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KhzMr3F3wz4xNl;
-        Tue, 19 Apr 2022 06:40:24 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650314425;
-        bh=9agyEmuiypG94eVvorJ8y98r2UF29vOEKNsFpbFyjlw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Ac2dkAz0llnwnNB5YUtu6riurHAHp972Vg8P1VDBIWZQ5nJBL5Tv4cO9e7OmsIuX2
-         NI3syIuGu75oSp4/ePK8uC2BTLBcNopqqZp/SyLYUG6jn9D8TIo9CicqIUZhRyKT3U
-         13fdljVBlvaAQUWvgKcmXENOMdP8ZD32mv0VMQV9onBhvvxeBqRQmCVCM02nm0/JhE
-         ccmdjIqu/iGseYeylkL8aTqUHTIFFc/6r0vbpJdjo46925XsPpwSUE2hhELpuSpmVo
-         yNTwRPJqFvUj3FXNwDOJmVUm8s3ox2jWkdIEqJlkk0+6rk74SSvJOKNG+3bOtJplpC
-         7J8ExDiJM///w==
-Date:   Tue, 19 Apr 2022 06:40:23 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     Rolf Eike Beer <eb@emlix.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the arc-current tree
-Message-ID: <20220419064023.4cedc139@canb.auug.org.au>
+        Mon, 18 Apr 2022 16:43:34 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FEABE021;
+        Mon, 18 Apr 2022 13:40:54 -0700 (PDT)
+Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
+        by linux.microsoft.com (Postfix) with ESMTPSA id EFA1820C360D;
+        Mon, 18 Apr 2022 13:40:52 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EFA1820C360D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1650314453;
+        bh=hPnBPHuEdxt7/RqdefOcSrFj/zJr1c5qyKGbEWwgZto=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NDlStXEMY3e+2PB0wsTLbHO/ghp3MpfX0wZQHagUiBmg8hqzac+IOSEoSa9T8CtGQ
+         OmjLVgjrsS/nEZsSLKC6MvH/zG2/1gnH/HsNt1bmMDheMh6lKAJc9l+Vx+MapQVJE7
+         Du3FPoqmZyXq2vdgYUqhRQkyE9HPEcUK8VCFWwfE=
+Date:   Mon, 18 Apr 2022 15:40:29 -0500
+From:   Tyler Hicks <tyhicks@linux.microsoft.com>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        Lei Wang <lewan@microsoft.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sinan Kaya <okaya@kernel.org>,
+        Shiping Ji <shiping.linux@gmail.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
+ interrupt line
+Message-ID: <20220418204029.GA31854@sequoia>
+References: <20220111163800.22362-1-tyhicks@linux.microsoft.com>
+ <YeRkGvestiloCAUV@zn.tnic>
+ <20220118152816.GA89184@sequoia>
+ <Yeb4sK+ZmSHjWPWL@zn.tnic>
+ <20220118195401.GB89184@sequoia>
+ <YecrXidqecoYI/xg@zn.tnic>
+ <YefXQHXNlsxk8yUc@kroah.com>
+ <Yefb7zO9p1iPF3Jm@zn.tnic>
+ <YefnuCPwMq5V2lgl@kroah.com>
+ <20220404215640.GA626436@sequoia>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8/RFPmKQV81F.6qG3noSAiT";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220404215640.GA626436@sequoia>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8/RFPmKQV81F.6qG3noSAiT
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022-04-04 16:56:58, Tyler Hicks wrote:
+> On 2022-01-19 11:28:08, Greg Kroah-Hartman wrote:
+> > On Wed, Jan 19, 2022 at 10:37:51AM +0100, Borislav Petkov wrote:
+> > > On Wed, Jan 19, 2022 at 10:17:52AM +0100, Greg Kroah-Hartman wrote:
+> > > > For this specific change, I do NOT think it should be backported at all,
+> > > > mostly for the reason that people are still arguing over the whole
+> > > > platform_get_*_optional() mess that we currently have.  Let's not go and
+> > > > backport anything right now to stable trees until we have all of that
+> > > > sorted out, as it looks like it all might be changing again.  See:
+> > > > 	https://lore.kernel.org/r/20220110195449.12448-1-s.shtylyov@omp.ru
+> > > > for all of the gory details and the 300+ emails written on the topic so
+> > > > far.
+> > > 
+> > > It sounds to me I should not even take this patch upstream yet,
+> > > considering that's still ongoing...
+> > 
+> > Yes, I would not take that just yet at all.  Let's let the api argument
+> > settle down a bit first.
+> 
+> The API argument seems to have fizzled out in v2:
+> 
+>  https://lore.kernel.org/lkml/20220212201631.12648-1-s.shtylyov@omp.ru/
+> 
+> Can this fix be merged since there seem to be no API changes coming
+> soon? Boris, feel free to strip off the cc stable tag.
 
-Hi all,
+Hi Boris - I just double checked that this still looks correct and
+applies cleanly to linux-next. Anything I can do on my end to help get
+this little fix merged into the ras.git tree? Thanks!
 
-In commit
+Tyler
 
-  a20aadab6ad6 ("arc: drop definitions of pgd_index() and pgd_offset{, _k}(=
-) entirely")
-
-Fixes tag
-
-  Fixes: 974b9b2c68f ("mm: consolidate pte_index() and pte_offset_*() defin=
-itions")
-
-has these problem(s):
-
-  - SHA1 should be at least 12 digits long
-    This can be fixed for the future by setting core.abbrev to 12 (or
-    more) or (for git v2.11 or later) just making sure it is not set
-    (or set to "auto").
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/8/RFPmKQV81F.6qG3noSAiT
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJdzLcACgkQAVBC80lX
-0Gxzrgf/cBzXqxXAffJqAd5iI5tgZDAaXJm191s7Orxj0lhicR9vqjOaM94arZZk
-SnVmvWHdW9p0FZE5nFeurTJv/282t3/LsuFaQao6yIde8DgVLIuqirGhnU0E6CrV
-83Aim1LkRbwa85wcWLHndHx/Ei0iTNWEdYQy/IFgNkN5QUsA+rcd84pD83IP3pZz
-XNwFy9wsJUkKEYFSbWTscIzUikFOwuhfGoKaGnJ5/GV0bCNxbh8k5SqDfekRWN39
-3w79rEs3lPdmn9wikLFNf1ZwhwxIpwl7ql8k7anUCw7r/3AvKxqaDemYfuXvhHDL
-2toyBMrLbDzUXtjp135HQlIKxNXY9Q==
-=v5cv
------END PGP SIGNATURE-----
-
---Sig_/8/RFPmKQV81F.6qG3noSAiT--
+> 
+> Tyler
+> 
+> > 
+> > thanks,
+> > 
+> > greg k-h
+> > 

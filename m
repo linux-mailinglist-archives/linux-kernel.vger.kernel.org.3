@@ -2,122 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62A85504F9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:58:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3030504FAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235312AbiDRMBN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:01:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S237957AbiDRMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231689AbiDRMBL (ORCPT
+        with ESMTP id S231907AbiDRMEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:01:11 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B28C1929E;
-        Mon, 18 Apr 2022 04:58:31 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23IBwMjU049774;
-        Mon, 18 Apr 2022 06:58:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650283102;
-        bh=40Ngx4Pv4wSweCX1SRjdVfe8o99TDlani6CGjMT90cA=;
-        h=From:To:CC:Subject:Date;
-        b=r8o8itffMszj91f38GEwyKdNkYdx+LsdUL3NoPhwArFlMx4ChhfkgcNZHPTFDY6bk
-         b5GNsBodMIV/VfWpWQdkF5tOZ08RskdqsymsR6hpwp3noXNL4Su9AMP61jW6I0Ie1Y
-         TPn+myADnkWBpRDvGU8F72DJNlpQGK4RaMEQE4lo=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23IBwMqk020246
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 18 Apr 2022 06:58:22 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
- Apr 2022 06:58:22 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 18 Apr 2022 06:58:22 -0500
-Received: from gsaswath-HP-ProBook-640-G5.dal.design.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23IBwJEH110643;
-        Mon, 18 Apr 2022 06:58:19 -0500
-From:   Aswath Govindraju <a-govindraju@ti.com>
-CC:     Aswath Govindraju <a-govindraju@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH] arm64: dts: ti: k3-am62: Add support for MCAN
-Date:   Mon, 18 Apr 2022 17:28:01 +0530
-Message-ID: <20220418115802.5672-1-a-govindraju@ti.com>
-X-Mailer: git-send-email 2.17.1
+        Mon, 18 Apr 2022 08:04:40 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84AD113D3C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:02:01 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso6917604pjj.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:02:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gKolG0XQSgiHwIBW1X2xlM9KdTrIkpbhaF1LVD8QWbA=;
+        b=WwtsObfUy3X8kQq0ag32kuwqF0SbNvHSCJvveICT7tu2BXjLQIKdonv4p5+9reTdhZ
+         EFmjjmCW7RwT5lMWrQyHk71f7rcJfebUf2xt2S2ZY0nMGlaafG50NPJeKbwUw89hw6I0
+         D+Mc+KrjBDsD9Guc6lKvgGr+Z7TOsUeVosxRLRuWcGTilmmUN1ZDMk1pQXhI41CJ28sP
+         Q27U2h34lIvrVloq0VZSHKRyRonSkF7cW3q6MwZccl1O5hHfSxvYrKuD1vU3fULJs2tY
+         LuXYJjLGpLw42XGk3EPoiJIjQXHNpHr4pJm+ZPMXgaF9U36EcU8cXGubtibttECwZZZx
+         sIkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=gKolG0XQSgiHwIBW1X2xlM9KdTrIkpbhaF1LVD8QWbA=;
+        b=s+JsEDLNsYL62dAJ3ImfvI9CFTHzPmVvXCCtwcFqgM5Zl/LE3Dj4OvtLZTbDdCG0+n
+         bUdjyQIR2waDJQx2DBVgX09IYFPVYUWaU5QL/nfNQJpkR3zFrh4OIwb2A9b3W+4bmStZ
+         tIUL2HtRsMoeWgCPresdmKDKsfIGc9qgEBpySX9BPiXobuQhloRNWSan6O0pFgjUWm2t
+         QeEreyDcEWp+1x7OUxZCf0QM8Eiz9xhiM/T9hfv3EKCsAX7ZZvIPJNd+el/56MiF5kpP
+         l4fSjjBu5dtTTtgJC1CneNtJarwl91clNvQ9tZ4Ja+OQ1zED25D+lRUU3Sfh3zkIX4Fg
+         iNjw==
+X-Gm-Message-State: AOAM5313Ml+jRLGyDRlXsw1ObC6l9SyTHr9kldRqdzDnccHnZGwQiVn3
+        EshcqoinGzlae0RxtS2ckos=
+X-Google-Smtp-Source: ABdhPJznztowHDMO7det1bQWcePkzjntiqWp8qdvE06Y1zne+ZhGdDMSAsjRmM3tkaSmemAsn7L3ug==
+X-Received: by 2002:a17:90b:4c84:b0:1c7:7769:3cc7 with SMTP id my4-20020a17090b4c8400b001c777693cc7mr17887207pjb.73.1650283320894;
+        Mon, 18 Apr 2022 05:02:00 -0700 (PDT)
+Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
+        by smtp.gmail.com with ESMTPSA id p1-20020a17090a680100b001d28905b214sm3840628pjj.39.2022.04.18.05.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 05:02:00 -0700 (PDT)
+From:   Aliya Rahmani <aliyarahmani786@gmail.com>
+To:     clabbe@baylibre.com
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Aliya Rahmani <aliyarahmani786@gmail.com>
+Subject: [PATCH 0/3] staging: media: zoran: fix warnings reported by checkpatch
+Date:   Mon, 18 Apr 2022 17:29:46 +0530
+Message-Id: <20220418115948.5456-1-aliyarahmani786@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM62 SoC has one instance of MCAN in main domain. However, its
-corresponding CAN signals are not brought out through a transceiver, on the
-SK board. Therefore, add the device tree node in the main dt file and set
-the status to disabled in the SK board dts file.
+These patches address style issues found by checkpatch in the
+zoran/videocodec.c file.
 
-Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
----
+Aliya Rahmani (3):
+ staging: media: zoran: use seq_puts() instead of seq_printf()
+ staging: media: zoran: else is not generally useful after a break or return
+ staging: media: zoran: avoid macro argument precedence issues
 
-Notes:
-- This patch applies on top of,
-  https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=632573
+drivers/staging/media/zoran/videocodec.c | 9++++-----
+1 file changed, 4 insertions(+), 5 deletions(-)
 
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 14 ++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   |  4 ++++
- 2 files changed, 18 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index 4b6ba98dd0a2..8bb42fe24d7c 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -530,4 +530,18 @@
- 		ti,mbox-num-users = <4>;
- 		ti,mbox-num-fifos = <16>;
- 	};
-+
-+	main_mcan0: can@20701000 {
-+		compatible = "bosch,m_can";
-+		reg = <0x00 0x20701000 0x00 0x200>,
-+		      <0x00 0x20708000 0x00 0x8000>;
-+		reg-names = "m_can", "message_ram";
-+		power-domains = <&k3_pds 98 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 98 6>, <&k3_clks 98 1>;
-+		clock-names = "hclk", "cclk";
-+		interrupts = <GIC_SPI 155 IRQ_TYPE_LEVEL_HIGH>,
-+			     <GIC_SPI 156 IRQ_TYPE_LEVEL_HIGH>;
-+		interrupt-names = "int0", "int1";
-+		bosch,mram-cfg = <0x0 128 64 64 64 64 32 32>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index a0ea2cc66b31..3d7166e17d05 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -475,3 +475,7 @@
- 		};
- 	};
- };
-+
-+&main_mcan0 {
-+	status = "disabled";
-+};
 -- 
-2.17.1
+2.25.1
 

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E2CF5054BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09321505491
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243680AbiDRNU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:20:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41024 "EHLO
+        id S242320AbiDRNNs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:13:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241396AbiDRNDE (ORCPT
+        with ESMTP id S242324AbiDRM7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B7B633363;
-        Mon, 18 Apr 2022 05:43:19 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230C530F49;
+        Mon, 18 Apr 2022 05:40:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EDB6160FB6;
-        Mon, 18 Apr 2022 12:43:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A731C385A1;
-        Mon, 18 Apr 2022 12:43:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7CF5611CF;
+        Mon, 18 Apr 2022 12:40:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A779CC385A7;
+        Mon, 18 Apr 2022 12:40:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285798;
-        bh=brtuF43pM50XqWsrLtaTVNwuTiY5ZTnr6ySqkkguyiw=;
+        s=korg; t=1650285645;
+        bh=UYHUcoEgKn3na7teYp31D7rfV2SER4dpkGY85jOixaY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YjCE1YCos1u91ycHibQSmt8ae/+JmSE38UfFK9VDxBucw+eYonumt+dJK+ovQUZr+
-         8UFfC09OkoeeosvnSrB2yZTvdriuhUbUealXyUbhzfmrFBOeKJgXRoTHv1gKXv0nsl
-         1dh1OvJTONrv+JAFxqW0I8jKSIgpTY/z81kHB8mI=
+        b=1MNicW9XcqvSMDFF2MzOevww4422s4OB2KmqVb9uPezbTg7tgY8YWh5IpWDMoSVuC
+         DylJz3w5ZQKSiAcSCJEHy1qfOnSGj94pM9xm4r5/BxiSK5FJk6Hd5j+bWF9cxMnk1m
+         w2RKZbgNAOc8WG43WtxTye1ngli0fM4y5xRcARlI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Joey Gouly <joey.gouly@arm.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 28/63] arm64: alternatives: mark patch_alternative() as `noinstr`
+        stable@vger.kernel.org,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Takashi Iwai <tiwai@suse.de>,
+        syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
+Subject: [PATCH 5.10 083/105] ALSA: pcm: Test for "silence" field in struct "pcm_format_data"
 Date:   Mon, 18 Apr 2022 14:13:25 +0200
-Message-Id: <20220418121135.972319170@linuxfoundation.org>
+Message-Id: <20220418121148.990879701@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,86 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Joey Gouly <joey.gouly@arm.com>
+From: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-[ Upstream commit a2c0b0fbe01419f8f5d1c0b9c581631f34ffce8b ]
+commit 2f7a26abb8241a0208c68d22815aa247c5ddacab upstream.
 
-The alternatives code must be `noinstr` such that it does not patch itself,
-as the cache invalidation is only performed after all the alternatives have
-been applied.
+Syzbot reports "KASAN: null-ptr-deref Write in
+snd_pcm_format_set_silence".[1]
 
-Mark patch_alternative() as `noinstr`. Mark branch_insn_requires_update()
-and get_alt_insn() with `__always_inline` since they are both only called
-through patch_alternative().
+It is due to missing validation of the "silence" field of struct
+"pcm_format_data" in "pcm_formats" array.
 
-Booting a kernel in QEMU TCG with KCSAN=y and ARM64_USE_LSE_ATOMICS=y caused
-a boot hang:
-[    0.241121] CPU: All CPU(s) started at EL2
+Add a test for valid "pat" and, if it is not so, return -EINVAL.
 
-The alternatives code was patching the atomics in __tsan_read4() from LL/SC
-atomics to LSE atomics.
+[1] https://lore.kernel.org/lkml/000000000000d188ef05dc2c7279@google.com/
 
-The following fragment is using LL/SC atomics in the .text section:
-  | <__tsan_unaligned_read4+304>:     ldxr    x6, [x2]
-  | <__tsan_unaligned_read4+308>:     add     x6, x6, x5
-  | <__tsan_unaligned_read4+312>:     stxr    w7, x6, [x2]
-  | <__tsan_unaligned_read4+316>:     cbnz    w7, <__tsan_unaligned_read4+304>
-
-This LL/SC atomic sequence was to be replaced with LSE atomics. However since
-the alternatives code was instrumentable, __tsan_read4() was being called after
-only the first instruction was replaced, which led to the following code in memory:
-  | <__tsan_unaligned_read4+304>:     ldadd   x5, x6, [x2]
-  | <__tsan_unaligned_read4+308>:     add     x6, x6, x5
-  | <__tsan_unaligned_read4+312>:     stxr    w7, x6, [x2]
-  | <__tsan_unaligned_read4+316>:     cbnz    w7, <__tsan_unaligned_read4+304>
-
-This caused an infinite loop as the `stxr` instruction never completed successfully,
-so `w7` was always 0.
-
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Link: https://lore.kernel.org/r/20220405104733.11476-1-joey.gouly@arm.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Reported-and-tested-by: syzbot+205eb15961852c2c5974@syzkaller.appspotmail.com
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220409012655.9399-1-fmdefrancesco@gmail.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/kernel/alternative.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ sound/core/pcm_misc.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/kernel/alternative.c b/arch/arm64/kernel/alternative.c
-index 73039949b5ce..5f8e4c2df53c 100644
---- a/arch/arm64/kernel/alternative.c
-+++ b/arch/arm64/kernel/alternative.c
-@@ -41,7 +41,7 @@ bool alternative_is_applied(u16 cpufeature)
- /*
-  * Check if the target PC is within an alternative block.
-  */
--static bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
-+static __always_inline bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
- {
- 	unsigned long replptr = (unsigned long)ALT_REPL_PTR(alt);
- 	return !(pc >= replptr && pc <= (replptr + alt->alt_len));
-@@ -49,7 +49,7 @@ static bool branch_insn_requires_update(struct alt_instr *alt, unsigned long pc)
- 
- #define align_down(x, a)	((unsigned long)(x) & ~(((unsigned long)(a)) - 1))
- 
--static u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnptr)
-+static __always_inline u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnptr)
- {
- 	u32 insn;
- 
-@@ -94,7 +94,7 @@ static u32 get_alt_insn(struct alt_instr *alt, __le32 *insnptr, __le32 *altinsnp
- 	return insn;
- }
- 
--static void patch_alternative(struct alt_instr *alt,
-+static noinstr void patch_alternative(struct alt_instr *alt,
- 			      __le32 *origptr, __le32 *updptr, int nr_inst)
- {
- 	__le32 *replptr;
--- 
-2.35.1
-
+--- a/sound/core/pcm_misc.c
++++ b/sound/core/pcm_misc.c
+@@ -429,7 +429,7 @@ int snd_pcm_format_set_silence(snd_pcm_f
+ 		return 0;
+ 	width = pcm_formats[(INT)format].phys; /* physical width */
+ 	pat = pcm_formats[(INT)format].silence;
+-	if (! width)
++	if (!width || !pat)
+ 		return -EINVAL;
+ 	/* signed or 1 byte data */
+ 	if (pcm_formats[(INT)format].signd == 1 || width <= 8) {
 
 

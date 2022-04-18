@@ -2,86 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F0A85055C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5635055D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241674AbiDRN0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41074 "EHLO
+        id S242593AbiDRN2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:28:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241149AbiDRNCw (ORCPT
+        with ESMTP id S241188AbiDRNEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FBC329AA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650285773; x=1681821773;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=vh3DQilFivTLKU7aiHrGhIrC0B7OlrJdqfHNsLm4ZYQ=;
-  b=jEZ/a/DiMOgvJokIb7MpmR7vaSybIZk/3an//iLVOURsooNz18PS+azs
-   jvsOBen5tBhAoaGxQDGWSZ8RbXIW750paOxV3HgYpA0zWBO7xoMmgArvn
-   8aYWlJ++iMC9pZ/ZBGTV4NDbsSA58uNs34EO9PTTRlBhjEGAI1vjsJT+5
-   qWBJh4RPvInHLi+M+6AAyyBZNfBqBxKIM8jwiH65qhmTbwJ0gyedFdrnm
-   uwx1/MNT2VyfXYSZbp4lZe74RGjXa5sw4M1ZVZHDvI7aXUhy+s21ifRfV
-   0rUITSwSlhBUXTdnc4qw3/DRkUhMIreezymGENks+7iAIGUksTDiDNtW/
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="323951800"
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="323951800"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 05:42:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="528850158"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga006.jf.intel.com with ESMTP; 18 Apr 2022 05:42:52 -0700
-Received: from [10.212.211.251] (kliang2-MOBL.ccr.corp.intel.com [10.212.211.251])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Mon, 18 Apr 2022 09:04:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06BCE13D19;
+        Mon, 18 Apr 2022 05:45:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id B96D45808AE;
-        Mon, 18 Apr 2022 05:42:50 -0700 (PDT)
-Message-ID: <fd562e7b-75f5-0db3-3677-89b052312083@linux.intel.com>
-Date:   Mon, 18 Apr 2022 08:42:49 -0400
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7A4AAB80E59;
+        Mon, 18 Apr 2022 12:45:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6FE3C385A8;
+        Mon, 18 Apr 2022 12:45:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650285928;
+        bh=/tDM/kOeKnby+LKl2/CAtexYHHtPR60+MU4vvJhb8Ko=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=FaBbs1vwAw8T8Gk+3hGOMiB/Gdca8mEpGMicgFL7KgwPp1hGOC3EbHMZSrPGylKHm
+         1eOLqWubn1kv5D0XsiyGfj8NjBoADzelPy4GZWAqgwUQWWbLbWJ8JS0D9/wLMxIHL6
+         V208HWn4/WGbi1WyfL7qsAYxU93M4en98ysq8ALT/9XsU56XGDKmBr7Zn8Kd7IveFR
+         js9DgNbj5+LVcs2NTGGQVS5ocmWx6Pw1lG3X1jRXZw0NMX27GCn7F5pmHcJiutnsIK
+         OPOy89ADpdlpHHBcO5PWhIp8lP9BYOSvc4ozDqId8nIylgpxUucOt0oNjE43VNTxIP
+         tNnUrLgXj+ddA==
+Message-ID: <e96e36b62c5bfeeda567630c2256cf8ffb0de476.camel@kernel.org>
+Subject: Re: [PATCH v4 2/4] ceph: add support for handling encrypted
+ snapshot names
+From:   Jeff Layton <jlayton@kernel.org>
+To:     =?ISO-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
+        Xiubo Li <xiubli@redhat.com>, Ilya Dryomov <idryomov@gmail.com>
+Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Mon, 18 Apr 2022 08:45:26 -0400
+In-Reply-To: <20220414135122.26821-3-lhenriques@suse.de>
+References: <20220414135122.26821-1-lhenriques@suse.de>
+         <20220414135122.26821-3-lhenriques@suse.de>
+Content-Type: text/plain; charset="ISO-8859-15"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [LKP] Re: [perf vendor events] 3f5f0df7bf:
- perf-sanity-tests.perf_all_metrics_test.fail
-Content-Language: en-US
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>, Carel Si <beibei.si@intel.com>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        alexandre.torgue@foss.st.com, Andi Kleen <ak@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        James Clark <james.clark@arm.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        John Garry <john.garry@huawei.com>,
-        Mark Rutland <mark.rutland@arm.com>, mcoquelin.stm32@gmail.com,
-        Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        lkp@lists.01.org, kbuild test robot <lkp@intel.com>
-References: <20220304083329.GC20556@xsang-OptiPlex-9020>
- <CAP-5=fVz=arWo19PQR_4UKY_PyywyXoyp+MUnfAJxCFZy5rhWg@mail.gmail.com>
- <20220413070529.GA1320@linux.intel.com>
- <CAP-5=fXGqODZYGu781qjEEVtGFpCQJ=dCXi5shYOAbBSt5wQkw@mail.gmail.com>
- <85eed89f-e4a8-2887-a0b3-579704304357@linux.intel.com>
- <CAP-5=fXj+WT3ExNo-fL4d9b_Wm5swnKaCWd67rU85Q=QFg5KUw@mail.gmail.com>
- <74d36e66-5b16-ee10-bcae-171e2b681845@linux.intel.com>
- <CAP-5=fX+Hqf5xYTCqBXNCz5-ZPaZ7ChNUgoRyH1+JhiAqj79nQ@mail.gmail.com>
- <f020f05e-0e54-cc59-0666-810cf3a4fd14@linux.intel.com>
- <CAM9d7cic6AhJGrNF7wmyowUBpp0mPu8TdiVebL4XXcotFtLUuQ@mail.gmail.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <CAM9d7cic6AhJGrNF7wmyowUBpp0mPu8TdiVebL4XXcotFtLUuQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,109 +57,349 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 4/14/2022 6:58 PM, Namhyung Kim wrote:
-> Hi Kan,
+On Thu, 2022-04-14 at 14:51 +0100, Luís Henriques wrote:
+> When creating a snapshot, the .snap directories for every subdirectory will
+> show the snapshot name in the "long format":
 > 
-> On Thu, Apr 14, 2022 at 12:06 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->>
->>
->>
->> On 4/14/2022 12:09 PM, Ian Rogers wrote:
->>> ```
->>> $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,cycles,cycles}:W'
->>> -a sleep 1
->>>    Performance counter stats for 'system wide':
->>>
->>>        <not counted>      BR_INST_RETIRED.NEAR_CALL
->>>                  (0.00%)
->>>        <not counted>      BR_INST_RETIRED.NEAR_TAKEN
->>>                   (0.00%)
->>>        <not counted>      BR_INST_RETIRED.NOT_TAKEN
->>>                  (0.00%)
->>>        <not counted>      cycles
->>>                  (0.00%)
->>>        <not counted>      cycles
->>>                  (0.00%)
->>>
->>>          1.005599088 seconds time elapsed
->>>
->>> Some events weren't counted. Try disabling the NMI watchdog:
->>>           echo 0 > /proc/sys/kernel/nmi_watchdog
->>>           perf stat ...
->>>           echo 1 > /proc/sys/kernel/nmi_watchdog
->>> The events in group usually have to be from the same PMU. Try
->>> reorganizing the group.
->>> ```
->>>
->>> If we add two extra cycles or the original group is smaller then it is "fixed":
->>> ```
->>> $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,cycles}:W'
->>> -a sleep 1
->>>
->>>    Performance counter stats for 'system wide':
->>>
->>>           20,378,789      BR_INST_RETIRED.NEAR_CALL
->>>          168,420,963      BR_INST_RETIRED.NEAR_TAKEN
->>>           96,330,608      BR_INST_RETIRED.NOT_TAKEN
->>>        1,652,230,042      cycles
->>>
->>>          1.008757590 seconds time elapsed
->>>
->>> $ perf stat -e '{BR_INST_RETIRED.NEAR_CALL,BR_INST_RETIRED.NEAR_TAKEN,BR_INST_RETIRED.NOT_TAKEN,cycles,cycles,cycles}:W'
->>> -a sleep 1
->>>
->>>    Performance counter stats for 'system wide':
->>>
->>>           37,696,638      BR_INST_RETIRED.NEAR_CALL
->>>                  (66.62%)
->>>          298,535,151      BR_INST_RETIRED.NEAR_TAKEN
->>>                   (66.63%)
->>>          297,011,663      BR_INST_RETIRED.NOT_TAKEN
->>>                  (66.63%)
->>>        3,155,711,474      cycles
->>>                  (66.65%)
->>>        3,194,919,959      cycles
->>>                  (66.74%)
->>>        3,126,664,102      cycles
->>>                  (66.72%)
->>>
->>>          1.006237962 seconds time elapsed
->>> ```
->>>
->>> So the extra cycles is needed to fix weak groups when the nmi watchdog
->>> is enabled and the group is an architecture dependent size.
->>
->> Yes, the size of the group depends on the architecture, but perf tool
->> doesn't need to know the HW details. For this case, perf tool just sends
->> the request with an extra cycles event in the group and lets kernel decide.
+>   # mkdir .snap/my-snap
+>   # ls my-dir/.snap/
+>   _my-snap_1099511627782
 > 
-> I prefer doing this in the kernel even if it'd be incomplete.
+> Encrypted snapshots will need to be able to handle these snapshot names by
+> encrypting/decrypting only the snapshot part of the string ('my-snap').
+> 
+> Also, since the MDS prevents snapshot names to be bigger than 240 characters
+> it is necessary to adapt CEPH_NOHASH_NAME_MAX to accommodate this extra
+> limitation.
+> 
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>  fs/ceph/crypto.c | 190 ++++++++++++++++++++++++++++++++++++++++-------
+>  fs/ceph/crypto.h |  11 ++-
+>  2 files changed, 170 insertions(+), 31 deletions(-)
+> 
+> diff --git a/fs/ceph/crypto.c b/fs/ceph/crypto.c
+> index e24e61c51118..1fa9dd634a6f 100644
+> --- a/fs/ceph/crypto.c
+> +++ b/fs/ceph/crypto.c
+> @@ -129,16 +129,100 @@ void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_se
+>  	swap(req->r_fscrypt_auth, as->fscrypt_auth);
+>  }
+>  
+> -int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name, char *buf)
+> +/*
+> + * User-created snapshots can't start with '_'.  Snapshots that start with this
+> + * character are special (hint: there aren't real snapshots) and use the
+> + * following format:
+> + *
+> + *   _<SNAPSHOT-NAME>_<INODE-NUMBER>
+> + *
+> + * where:
+> + *  - <SNAPSHOT-NAME> - the real snapshot name that may need to be decrypted,
+> + *  - <INODE-NUMBER> - the inode number for the actual snapshot
 
-I tried a generic way to check all active pinned events from the kernel 
-side, but it's rejected.
-https://lore.kernel.org/lkml/1565977750-76693-1-git-send-email-kan.liang@linux.intel.com/
+Maybe specify the base here as well? Is the number in decimal or hex?
 
-> For the NMI watchdog, is it possible to check if it's enabled
-> at the moment, and set the fake_cpuc->idxmsk to prevent
-> scheduling events in validate_group()?
+> + *
+> + * This function parses these snapshot names and returns the inode
+> + * <INODE-NUMBER>.  'name_len' will also bet set with the <SNAPSHOT-NAME>
+> + * length.
+> + */
+> +static struct inode *parse_longname(const struct inode *parent, const char *name,
+> +				    int *name_len)
+>  {
+> +	struct inode *dir = NULL;
+> +	struct ceph_vino vino = { .snap = CEPH_NOSNAP };
+> +	char *inode_number;
+> +	char *name_end;
+> +	int orig_len = *name_len;
+> +	int ret = -EIO;
+> +
+> +	/* Skip initial '_' */
+> +	name++;
+> +	name_end = strrchr(name, '_');
+> +	if (!name_end) {
+> +		dout("Failed to parse long snapshot name: %s\n", name);
+> +		return ERR_PTR(-EIO);
+> +	}
+> +	*name_len = (name_end - name);
+> +	if (*name_len <= 0) {
+> +		pr_err("Failed to parse long snapshot name\n");
+> +		return ERR_PTR(-EIO);
+> +	}
+> +
+> +	/* Get the inode number */
+> +	inode_number = kmemdup_nul(name_end + 1,
+> +				   orig_len - *name_len - 2,
+> +				   GFP_KERNEL);
+> +	if (!inode_number)
+> +		return ERR_PTR(-ENOMEM);
+> +	ret = kstrtou64(inode_number, 0, &vino.ino);
 
-I think it's possible to check the status of the NMI watchdog via 
-nmi_watchdog_user_enabled. But I don't think we can simply change the 
-fake_cpuc->idxmsk. Because the fake_cpuc->event_constraint points to the 
-shared static event_constraint value, which should not be modified. What 
-we can do is to apply the dynamic constraint flag for all the events. 
-The kernel will create a copy of the constraint for each event. We can 
-change the idxmsk of the copy.
+You're using 0 as the base here. Are these numbers encoded in decimal or
+hex? If decimal, then this is probably safe enough. If it's in hex
+though, then this could be problematic if you get a value that is
+composed of only '0'-'9' characters.
 
-No matter how we update the idxmsk. The critical path 
-x86_schedule_events() has to be modified, which may slightly impact the 
-performance I guess. Not sure whether it worth.
+It'd probably be best to use an explicit base here either way since we
+presumably know how it should be encoded.
 
-Another benefit to implement the fix in the perf tool is that the fix 
-can be easily deployed on the stable env. It's much easier to upgrade 
-the perf tool than the kernel, right?
+> +	if (ret) {
+> +		dout("Failed to parse inode number: %s\n", name);
+> +		dir = ERR_PTR(ret);
+> +		goto out;
+> +	}
+> +
+> +	/* And finally the inode */
+> +	dir = ceph_find_inode(parent->i_sb, vino);
+> +	if (!dir) {
+> +		/* This can happen if we're not mounting cephfs on the root */
+> +		dir = ceph_get_inode(parent->i_sb, vino, NULL);
+> +		if (!dir)
+> +			dir = ERR_PTR(-ENOENT);
+> +	}
+> +	if (IS_ERR(dir))
+> +		dout("Can't find inode %s (%s)\n", inode_number, name);
+> +
+> +out:
+> +	kfree(inode_number);
+> +	return dir;
+> +}
+> +
+> +int ceph_encode_encrypted_dname(struct inode *parent, struct qstr *d_name, char *buf)
+> +{
+> +	struct inode *dir = parent;
+> +	struct qstr iname;
+>  	u32 len;
+> +	int name_len;
+>  	int elen;
+>  	int ret;
+> -	u8 *cryptbuf;
+> +	u8 *cryptbuf = NULL;
+> +
+> +	iname.name = d_name->name;
+> +	name_len = d_name->len;
+> +
+> +	/* Handle the special case of snapshot names that start with '_' */
+> +	if ((ceph_snap(dir) == CEPH_SNAPDIR) && (name_len > 0) &&
+> +	    (iname.name[0] == '_')) {
+> +		dir = parse_longname(parent, iname.name, &name_len);
+> +		if (IS_ERR(dir))
+> +			return PTR_ERR(dir);
+> +		iname.name++; /* skip initial '_' */
+> +	}
+> +	iname.len = name_len;
+>  
+> -	if (!fscrypt_has_encryption_key(parent)) {
+> +	if (!fscrypt_has_encryption_key(dir)) {
+>  		memcpy(buf, d_name->name, d_name->len);
+> -		return d_name->len;
+> +		elen = d_name->len;
+> +		goto out;
+>  	}
+>  
+>  	/*
+> @@ -147,18 +231,22 @@ int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name,
+>  	 *
+>  	 * See: fscrypt_setup_filename
+>  	 */
+> -	if (!fscrypt_fname_encrypted_size(parent, d_name->len, NAME_MAX, &len))
+> -		return -ENAMETOOLONG;
+> +	if (!fscrypt_fname_encrypted_size(dir, iname.len, NAME_MAX, &len)) {
+> +		elen = -ENAMETOOLONG;
+> +		goto out;
+> +	}
+>  
+>  	/* Allocate a buffer appropriate to hold the result */
+>  	cryptbuf = kmalloc(len > CEPH_NOHASH_NAME_MAX ? NAME_MAX : len, GFP_KERNEL);
+> -	if (!cryptbuf)
+> -		return -ENOMEM;
+> +	if (!cryptbuf) {
+> +		elen = -ENOMEM;
+> +		goto out;
+> +	}
+>  
+> -	ret = fscrypt_fname_encrypt(parent, d_name, cryptbuf, len);
+> +	ret = fscrypt_fname_encrypt(dir, &iname, cryptbuf, len);
+>  	if (ret) {
+> -		kfree(cryptbuf);
+> -		return ret;
+> +		elen = ret;
+> +		goto out;
+>  	}
+>  
+>  	/* hash the end if the name is long enough */
+> @@ -174,12 +262,30 @@ int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name,
+>  
+>  	/* base64 encode the encrypted name */
+>  	elen = fscrypt_base64url_encode(cryptbuf, len, buf);
+> -	kfree(cryptbuf);
+>  	dout("base64-encoded ciphertext name = %.*s\n", elen, buf);
+> +
+> +	/* To understand the 240 limit, see CEPH_NOHASH_NAME_MAX comments */
+> +	WARN_ON(elen > 240);
+> +	if ((elen > 0) && (dir != parent)) {
+> +		char tmp_buf[NAME_MAX];
+> +
+> +		elen = snprintf(tmp_buf, sizeof(tmp_buf), "_%.*s_%ld",
+> +				elen, buf, dir->i_ino);
+> +		memcpy(buf, tmp_buf, elen);
+> +	}
+> +
+> +out:
+> +	kfree(cryptbuf);
+> +	if (dir != parent) {
+> +		if ((dir->i_state & I_NEW))
+> +			discard_new_inode(dir);
+> +		else
+> +			iput(dir);
+> +	}
+>  	return elen;
+>  }
+>  
+> -int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentry, char *buf)
+> +int ceph_encode_encrypted_fname(struct inode *parent, struct dentry *dentry, char *buf)
+>  {
+>  	WARN_ON_ONCE(!fscrypt_has_encryption_key(parent));
+>  
+> @@ -204,29 +310,42 @@ int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentr
+>  int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>  		      struct fscrypt_str *oname, bool *is_nokey)
+>  {
+> -	int ret;
+> +	struct inode *dir = fname->dir;
+>  	struct fscrypt_str _tname = FSTR_INIT(NULL, 0);
+>  	struct fscrypt_str iname;
+> -
+> -	if (!IS_ENCRYPTED(fname->dir)) {
+> -		oname->name = fname->name;
+> -		oname->len = fname->name_len;
+> -		return 0;
+> -	}
+> +	char *name = fname->name;
+> +	int name_len = fname->name_len;
+> +	int ret;
+>  
+>  	/* Sanity check that the resulting name will fit in the buffer */
+>  	if (fname->name_len > NAME_MAX || fname->ctext_len > NAME_MAX)
+>  		return -EIO;
+>  
+> -	ret = __fscrypt_prepare_readdir(fname->dir);
+> +	/* Handle the special case of snapshot names that start with '_' */
+> +	if ((ceph_snap(dir) == CEPH_SNAPDIR) && (name_len > 0) &&
+> +	    (name[0] == '_')) {
+> +		dir = parse_longname(dir, name, &name_len);
+> +		if (IS_ERR(dir))
+> +			return PTR_ERR(dir);
+> +		name++; /* skip initial '_' */
+> +	}
+> +
+> +	if (!IS_ENCRYPTED(dir)) {
+> +		oname->name = fname->name;
+> +		oname->len = fname->name_len;
+> +		ret = 0;
+> +		goto out_inode;
+> +	}
+> +
+> +	ret = __fscrypt_prepare_readdir(dir);
+>  	if (ret)
+> -		return ret;
+> +		goto out_inode;
+>  
+>  	/*
+>  	 * Use the raw dentry name as sent by the MDS instead of
+>  	 * generating a nokey name via fscrypt.
+>  	 */
+> -	if (!fscrypt_has_encryption_key(fname->dir)) {
+> +	if (!fscrypt_has_encryption_key(dir)) {
+>  		if (fname->no_copy)
+>  			oname->name = fname->name;
+>  		else
+> @@ -234,7 +353,8 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>  		oname->len = fname->name_len;
+>  		if (is_nokey)
+>  			*is_nokey = true;
+> -		return 0;
+> +		ret = 0;
+> +		goto out_inode;
+>  	}
+>  
+>  	if (fname->ctext_len == 0) {
+> @@ -243,11 +363,11 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>  		if (!tname) {
+>  			ret = fscrypt_fname_alloc_buffer(NAME_MAX, &_tname);
+>  			if (ret)
+> -				return ret;
+> +				goto out_inode;
+>  			tname = &_tname;
+>  		}
+>  
+> -		declen = fscrypt_base64url_decode(fname->name, fname->name_len, tname->name);
+> +		declen = fscrypt_base64url_decode(name, name_len, tname->name);
+>  		if (declen <= 0) {
+>  			ret = -EIO;
+>  			goto out;
+> @@ -259,9 +379,25 @@ int ceph_fname_to_usr(const struct ceph_fname *fname, struct fscrypt_str *tname,
+>  		iname.len = fname->ctext_len;
+>  	}
+>  
+> -	ret = fscrypt_fname_disk_to_usr(fname->dir, 0, 0, &iname, oname);
+> +	ret = fscrypt_fname_disk_to_usr(dir, 0, 0, &iname, oname);
+> +	if (!ret && (dir != fname->dir)) {
+> +		char tmp_buf[FSCRYPT_BASE64URL_CHARS(NAME_MAX)];
+> +
+> +		name_len = snprintf(tmp_buf, sizeof(tmp_buf), "_%.*s_%ld",
+> +				    oname->len, oname->name, dir->i_ino);
+> +		memcpy(oname->name, tmp_buf, name_len);
+> +		oname->len = name_len;
+> +	}
+> +
+>  out:
+>  	fscrypt_fname_free_buffer(&_tname);
+> +out_inode:
+> +	if ((dir != fname->dir) && !IS_ERR(dir)) {
+> +		if ((dir->i_state & I_NEW))
+> +			discard_new_inode(dir);
+> +		else
+> +			iput(dir);
+> +	}
+>  	return ret;
+>  }
+>  
+> diff --git a/fs/ceph/crypto.h b/fs/ceph/crypto.h
+> index 0cf526f07567..0e10f934af5c 100644
+> --- a/fs/ceph/crypto.h
+> +++ b/fs/ceph/crypto.h
+> @@ -78,13 +78,16 @@ static inline u32 ceph_fscrypt_auth_len(struct ceph_fscrypt_auth *fa)
+>   * struct fscrypt_ceph_nokey_name {
+>   *	u8 bytes[157];
+>   *	u8 sha256[SHA256_DIGEST_SIZE];
+> - * }; // 189 bytes => 252 bytes base64-encoded, which is <= NAME_MAX (255)
+> + * }; // 180 bytes => 240 bytes base64-encoded, which is <= NAME_MAX (255)
+> + *
+> + * (240 bytes is the maximum size allowed for snapshot names to take into
+> + *  account the format: '_<SNAPSHOT-NAME>_<INODE-NUMBER>'.)
+>   *
+>   * Note that for long names that end up having their tail portion hashed, we
+>   * must also store the full encrypted name (in the dentry's alternate_name
+>   * field).
+>   */
+> -#define CEPH_NOHASH_NAME_MAX (189 - SHA256_DIGEST_SIZE)
+> +#define CEPH_NOHASH_NAME_MAX (180 - SHA256_DIGEST_SIZE)
+>  
+>  void ceph_fscrypt_set_ops(struct super_block *sb);
+>  
+> @@ -93,8 +96,8 @@ void ceph_fscrypt_free_dummy_policy(struct ceph_fs_client *fsc);
+>  int ceph_fscrypt_prepare_context(struct inode *dir, struct inode *inode,
+>  				 struct ceph_acl_sec_ctx *as);
+>  void ceph_fscrypt_as_ctx_to_req(struct ceph_mds_request *req, struct ceph_acl_sec_ctx *as);
+> -int ceph_encode_encrypted_dname(const struct inode *parent, struct qstr *d_name, char *buf);
+> -int ceph_encode_encrypted_fname(const struct inode *parent, struct dentry *dentry, char *buf);
+> +int ceph_encode_encrypted_dname(struct inode *parent, struct qstr *d_name, char *buf);
+> +int ceph_encode_encrypted_fname(struct inode *parent, struct dentry *dentry, char *buf);
+>  
+>  static inline int ceph_fname_alloc_buffer(struct inode *parent, struct fscrypt_str *fname)
+>  {
 
-Thanks,
-Kan
+-- 
+Jeff Layton <jlayton@kernel.org>

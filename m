@@ -2,103 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4599350603D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:32:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72C6D506043
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235349AbiDRXeq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 19:34:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S235402AbiDRXhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 19:37:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235330AbiDRXek (ORCPT
+        with ESMTP id S234905AbiDRXhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 19:34:40 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A198B27CDD
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:31:59 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id k14so21665452pga.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:31:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=u9HwDSu3jkL7GJkxdCGm5YU8ByJmgH0nknQ3b6eIwRs=;
-        b=k0TMbaYzoa+OpneeXjXULYrDQlTSjIF+F3LakzftsYDwdrmPYjl/VyFfYJI2HfdCGA
-         OT+k+eak3/T/cCFkYLP8k4W8e88ZFlObRsuM6NogdC6+D3Vpidz4HLP/TAiPtNXyIQoI
-         Yl0YWKbPRXDAvLag5neYUgdEm0xLQJ2AVw9Mo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=u9HwDSu3jkL7GJkxdCGm5YU8ByJmgH0nknQ3b6eIwRs=;
-        b=f+zMgqPdzwD/pMg2CaNrd0jz8yyOB2T+suRHZZP6Dbnk40w/kz185eNk9gWk8FlG12
-         ZLnfTacyH3GGJ3u115pGBi8Bp624PRtps7+yw3+TsaGciyYHDY9KsDaR5D6iQB4hKvrA
-         0fXPgsDqvBvwpVzS94okptk80TvWJ5Y6xj6f77Sjzx4DA4D2MzSpTugxr8vFy0P71SGY
-         Ct5+4r7dXN5a4rG4zQCna/0/aLEfzJ4xiS7RWPGATOakdM3VPY3mwV3p3qiYow4NAMJN
-         74mEmA6Klpfq8GAe2wB4sAZEt+o1k+aefrsnA143vGELbbAoB3sm8ah9xCi7+awcAGiE
-         deZQ==
-X-Gm-Message-State: AOAM532M1re1TsX6YWfkj1l+uW1GBuMaEUi7QFmYhOuXjWKuxrEiz0mX
-        +e+o/E8n/4gptLmXH+aHq2cO8w==
-X-Google-Smtp-Source: ABdhPJwxK5PaPInu/IR4v+tY4NZnK4X/5TSAG8oOcafdt4PbOYXt5YvZ4a1LKPMfOXWyZcuYYlyz5g==
-X-Received: by 2002:a05:6a00:2391:b0:50a:3ea9:e84d with SMTP id f17-20020a056a00239100b0050a3ea9e84dmr14999727pfc.21.1650324719179;
-        Mon, 18 Apr 2022 16:31:59 -0700 (PDT)
-Received: from chromium.org (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id k10-20020a056a00168a00b004f7e2a550ccsm14283141pfc.78.2022.04.18.16.31.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 16:31:58 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 23:31:57 +0000
-From:   Prashant Malani <pmalani@chromium.org>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Lee Jones <lee.jones@linaro.org>,
-        Daisuke Nojiri <dnojiri@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH 1/3] platform/chrome: cros_ec_proto: Add peripheral
- charger count API
-Message-ID: <Yl307fUo09z2/M+w@chromium.org>
-References: <20220415003253.1973106-1-swboyd@chromium.org>
- <20220415003253.1973106-2-swboyd@chromium.org>
- <Yl3vd4kfgwJXMs/w@chromium.org>
- <CAE-0n53N1k_b9vWJ84nBdm9sxpYV3o4-FLJQM1HGqEhQsdr19A@mail.gmail.com>
- <Yl3ykMvfCaQlQ7t9@chromium.org>
- <CAE-0n51PX1SgqiB5vgoOLunkrxiWxH2O=jCCM5gNL97O8Ltt4Q@mail.gmail.com>
+        Mon, 18 Apr 2022 19:37:20 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB3327CD2;
+        Mon, 18 Apr 2022 16:34:38 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Kj3Dr4N2zz4xNl;
+        Tue, 19 Apr 2022 09:34:35 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1650324877;
+        bh=/AeN/7aJIIso3ET4fMDtzGqTqxQGLuQTHEy8Tnj+Qh0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Orh87OQ3tq0CwVqFvHXAFQTBNqZWBQTQ/HVJJE0qQlPv961AWzRcbEIdK/VnVsJTH
+         FJ71EFObrYUmH+oit+iJ8nK7Yl50hBPBwuYT7nMCha+g6c4FJZ0SLWaZlLHCVIVswo
+         JNR34iG8wlYwcSeo3TNvMmSPctHpVJbgEdggpdXEqNQsrKOTbFyNKO/F1diR9IkOHK
+         YU20CiYZeQjRFy7C67oO/YT9qEgq99FvU11x3yAj4IAc95lfmMUszFNsLRe8s4rF12
+         PWZUEnau9HZ8q/PC8KahlUIVVcZiHY+voMyP722e/X5I/J2qDcirSaszCKxwZNPYfj
+         +MaROILBvmoVw==
+Date:   Tue, 19 Apr 2022 09:34:34 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>
+Cc:     Networking <netdev@vger.kernel.org>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220419093434.299253fc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n51PX1SgqiB5vgoOLunkrxiWxH2O=jCCM5gNL97O8Ltt4Q@mail.gmail.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/V9uDdZ69AsCGpskbcXSi__P";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Apr 18 16:29, Stephen Boyd wrote:
-> Quoting Prashant Malani (2022-04-18 16:21:52)
-> > On Apr 18 16:16, Stephen Boyd wrote:
-> > >
-> > > Sure. I take it that I can drop this function entirely then?
-> >
-> > Yeah, if it's a simple response, should be fine.
-> >
-> > > BTW, why is
-> > > that function name the same as a struct name? It confuses my ctags.
-> >
-> > Yeahhh, didn't think about ctags... :/
-> > Topic for another series: probably can be renamed to cros_ec_cmd() (just to keep ctags happy) ?
-> >
-> 
-> But then there'll be two cros_ec_cmd() because there's a
-> cros-ec-regulator. Fun! :)
+--Sig_/V9uDdZ69AsCGpskbcXSi__P
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ugh :S
+Hi all,
 
-I think we can get rid of that one; it looks to be the same as this
-one :)
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  drivers/net/ethernet/microchip/lan966x/lan966x_main.c
 
-I'll write up a cleanup series if it all looks OK.
+between commit:
 
+  d08ed852560e ("net: lan966x: Make sure to release ptp interrupt")
+
+from the net tree and commit:
+
+  c8349639324a ("net: lan966x: Add FDMA functionality")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 95830e3e2b1f,106d8c83544d..000000000000
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@@ -672,8 -687,8 +687,10 @@@ static void lan966x_cleanup_ports(struc
+  		lan966x->ana_irq =3D -ENXIO;
+  	}
+ =20
+ +	if (lan966x->ptp_irq)
+ +		devm_free_irq(lan966x->dev, lan966x->ptp_irq, lan966x);
++ 	if (lan966x->fdma)
++ 		devm_free_irq(lan966x->dev, lan966x->fdma_irq, lan966x);
+  }
+ =20
+  static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
+
+--Sig_/V9uDdZ69AsCGpskbcXSi__P
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJd9YoACgkQAVBC80lX
+0GyqWQf/euXTCgDxe+ali9/TS5X1yIQtAqS4WHWIZxOwbuloicnvuqvqm7tTnxxR
+Orxh6IFZx59A0k0JqV98efA0sey9e2gDKlsw5vmug92WVkW88mc3z5FLe4dqAE0M
+P0syTCPtO9GjLegmbpmRVzRHg1HbQ5hPzqG1m+EQDAx1zLnhyTt+jIWNGnXcC6P4
+HvylsXbLlcTQiVFzRgsMTOCRAKUwU8fOBxnKY+xakUadRA7Fj0XCt/nHlrh6U+G3
+ChmhPyMBLYLCSKGgtNQdiKg2knFnqTi5lBXNuwbea7OFBNzYroTASdvsqIl0MYQC
+BetiCaTVB5V+LCdbY1kSjQ2hF0iBcQ==
+=mgnY
+-----END PGP SIGNATURE-----
+
+--Sig_/V9uDdZ69AsCGpskbcXSi__P--

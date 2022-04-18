@@ -2,129 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E122504E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36AC504E05
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:53:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbiDRIyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50218 "EHLO
+        id S237344AbiDRIz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbiDRIx6 (ORCPT
+        with ESMTP id S231857AbiDRIzy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:53:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859F51836A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:51:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650271880; x=1681807880;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RccDOA0QR6hnkNnSRWR9U7GGJc4370EKT8hbWdn52BM=;
-  b=cDvsLHbnH8HVMlMQwrg/GIpZn6JF61VHPutBE0DPw2UsMPgptbhLaaDe
-   pghxR35QfdiaLs2GUhKWbyilbIr2xD4LKSovilTu+LCZOA8zTsYb6Hh6F
-   kDgDN1njZ2lm6anG+yLmKTDpLJfBWoBFHYSdjKbVljPPcH37PujYyG7qG
-   lm7H6a8WThPFQchwARHXJui4bsmVfB60TXhL+dBtBKvJaRZNpemD0cCjU
-   R1638kpdFEiaNd7PMcHG9ozROTUjev/PTgqDLFLEarFf5NzU5DkgiCEw+
-   T9S4OvIFGUAXHVWrvuPxIuV0aIo6CgJMsOZlVYI1oZD8UObAfkwAQZ6Si
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="261082979"
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="261082979"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 01:51:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="509674633"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 01:51:18 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngN6L-0004UB-Tl;
-        Mon, 18 Apr 2022 08:51:17 +0000
-Date:   Mon, 18 Apr 2022 16:51:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Kalle Valo <kvalo@codeaurora.org>
-Subject: drivers/net/wireless/ath/wcn36xx/smd.c:2921
- wcn36xx_smd_gtk_offload_get_info_rsp() warn: inconsistent indenting
-Message-ID: <202204181659.KoFawAGX-lkp@intel.com>
+        Mon, 18 Apr 2022 04:55:54 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E1B91836A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:53:16 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id y10so8325651ejw.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:53:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=zE0sCiZVTtSMdgP1a/N9nihFSo+cH8EmVh/82cgACw0=;
+        b=V1Wfx+v3TjmoBwTZ8PT3jZpp7wNmAElaXjBPKdiZGewaOtlJk9B3EAVRHxJ6t3zIAd
+         sDHQbEHCJQuOngStauVR1Jlc5jn9UC7Shk4Gv9WjXla8jl4avWcdBWfFZJ+P7m7bPagl
+         RlfRnabJiT8hJiQJFNJVFdoPBFeuL+KfEh4PQlY+H1UjSW57ih/FEwx70IO7GUzEMNaq
+         ShZbaa7Gz3V40ipqCLiNoGufGxt8J7yUB+G8FeWld02/vDV4MOYTpX41PYvg8Q9OHY8G
+         f5d2FV304tKL1CXYTULGbL+DjQLpvvXb+aOHWkUFNEctwS0/9orRBSj75YZyfsv+x5zt
+         LO2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=zE0sCiZVTtSMdgP1a/N9nihFSo+cH8EmVh/82cgACw0=;
+        b=FQC/p9te9kATDMh0mzarXaWVz093PbVVyVsBSH/m1EwQG44yuPD49/sRNfeasE91Ko
+         +AlODwRe5Y+Zux9ioilM7LZ4dt9eAhjx/q/Kf2Lh6y0GbiB1Di5GsDFQnLmHcH8LQ0cT
+         MlHodojCdip/ERYBPZdd1vtwn1CdCGpXi60HqiyN1q/v5U8cuSlIZJmEwEvNicZk5P+T
+         EzUmAdhzpe01eyF0tkdx1iBtfRROfvjA3e08f5O14kvlQNFTzlA+SdbOL1woUEnkHcrX
+         6rH5kS8Pr7iK0FOvT17cm8e7Ee1k1v+z8swzt7kBhUpgEMz3Q9yzp25svptVZaVHCg+a
+         JUGg==
+X-Gm-Message-State: AOAM533nsaCo/lv12z3XEwYsuyrhmkDzL37+2YB57zDWzHRvejSSM+PU
+        mCb2GZ0bLihFL2dvGWsEH8Sx9uMX7QJl8GIFxbE=
+X-Google-Smtp-Source: ABdhPJzA8PsW/F/rNN6VT3O+zAC3fKPA9J8KOlhZUV98FApGsxgqz8KPI0oRHrFixo+h8h0qdVOS9j4cO3DT2BmmpQ8=
+X-Received: by 2002:a17:907:c13:b0:6e8:c1be:3979 with SMTP id
+ ga19-20020a1709070c1300b006e8c1be3979mr8148934ejc.266.1650271994937; Mon, 18
+ Apr 2022 01:53:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220409100016.9337-1-paul@crapouillou.net> <Yl0ON+E7bYluGIYG@ravnborg.org>
+In-Reply-To: <Yl0ON+E7bYluGIYG@ravnborg.org>
+From:   Dave Airlie <airlied@gmail.com>
+Date:   Mon, 18 Apr 2022 18:53:03 +1000
+Message-ID: <CAPM=9twqpY33r0RpZcekwEtCDwJp1ohFRHxE6-dq8ySE=OinYA@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel: newvision-nv3052c: Fix build
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        kbuild-all <kbuild-all@lists.01.org>,
+        kernel test robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Christophe Branchereau <cbranchereau@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: bedf1169bcae2f762b37d40dc9db648fe7ad1952 wcn36xx: Add GTK offload info to WoWLAN resume
-date:   10 months ago
-config: x86_64-randconfig-m001-20220418 (https://download.01.org/0day-ci/archive/20220418/202204181659.KoFawAGX-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
+On Mon, 18 Apr 2022 at 17:07, Sam Ravnborg <sam@ravnborg.org> wrote:
+>
+> On Sat, Apr 09, 2022 at 11:00:16AM +0100, Paul Cercueil wrote:
+> > The driver was compile-tested then rebased on drm-misc-next, and not
+> > compile-tested after the rebase; unfortunately the driver didn't compile
+> > anymore when it hit drm-misc-next.
+> >
+> > Fixes: 49956b505c53 ("drm/panel: Add panel driver for NewVision NV3052C based LCDs")
+> > Cc: Christophe Branchereau <cbranchereau@gmail.com>
+> > Cc: kbuild-all <kbuild-all@lists.01.org>
+> > Cc: Stephen Rothwell <sfr@canb.auug.org.au>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> > ---
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Backmerge drm-next. I fixed this up when I merged this driver in the
+merge commit.
 
-New smatch warnings:
-drivers/net/wireless/ath/wcn36xx/smd.c:2921 wcn36xx_smd_gtk_offload_get_info_rsp() warn: inconsistent indenting
-
-Old smatch warnings:
-drivers/net/wireless/ath/wcn36xx/smd.c:525 wcn36xx_smd_load_nv() error: we previously assumed 'wcn->nv' could be null (see line 516)
-drivers/net/wireless/ath/wcn36xx/smd.c:1908 wcn36xx_smd_send_beacon() warn: potential spectre issue 'msg_body.beacon' [w]
-
-vim +2921 drivers/net/wireless/ath/wcn36xx/smd.c
-
-  2896	
-  2897	static int wcn36xx_smd_gtk_offload_get_info_rsp(struct wcn36xx *wcn,
-  2898							struct ieee80211_vif *vif)
-  2899	{
-  2900		struct wcn36xx_vif *vif_priv = wcn36xx_vif_to_priv(vif);
-  2901		struct wcn36xx_hal_gtk_offload_get_info_rsp_msg *rsp;
-  2902		__be64 replay_ctr;
-  2903	
-  2904		if (wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len))
-  2905			return -EIO;
-  2906	
-  2907		rsp = (struct wcn36xx_hal_gtk_offload_get_info_rsp_msg *)wcn->hal_buf;
-  2908	
-  2909		if (rsp->bss_index != vif_priv->bss_index) {
-  2910			wcn36xx_err("gtk_offload_info invalid response bss index %d\n",
-  2911				    rsp->bss_index);
-  2912			return -ENOENT;
-  2913		}
-  2914	
-  2915		if (vif_priv->rekey_data.replay_ctr != cpu_to_le64(rsp->key_replay_counter)) {
-  2916			replay_ctr = cpu_to_be64(rsp->key_replay_counter);
-  2917			vif_priv->rekey_data.replay_ctr =
-  2918				cpu_to_le64(rsp->key_replay_counter);
-  2919			ieee80211_gtk_rekey_notify(vif, vif->bss_conf.bssid,
-  2920						   (void *)&replay_ctr, GFP_KERNEL);
-> 2921			 wcn36xx_dbg(WCN36XX_DBG_HAL,
-  2922				     "GTK replay counter increment %llu\n",
-  2923				     rsp->key_replay_counter);
-  2924		}
-  2925	
-  2926		wcn36xx_dbg(WCN36XX_DBG_HAL,
-  2927			    "gtk offload info status %d last_rekey_status %d "
-  2928			    "replay_counter %llu total_rekey_count %d gtk_rekey_count %d "
-  2929			    "igtk_rekey_count %d bss_index %d\n",
-  2930			    rsp->status, rsp->last_rekey_status,
-  2931			    rsp->key_replay_counter, rsp->total_rekey_count,
-  2932			    rsp->gtk_rekey_count, rsp->igtk_rekey_count,
-  2933			    rsp->bss_index);
-  2934	
-  2935		return 0;
-  2936	}
-  2937	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Dave.

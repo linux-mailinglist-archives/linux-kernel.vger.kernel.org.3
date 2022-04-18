@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C208505779
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CAD50557E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245319AbiDRNxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S241553AbiDRNIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244769AbiDRNay (ORCPT
+        with ESMTP id S240293AbiDRMzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 780B52AC51;
-        Mon, 18 Apr 2022 05:55:16 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57F661CA;
+        Mon, 18 Apr 2022 05:37:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEA106115A;
-        Mon, 18 Apr 2022 12:55:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 910DAC385A7;
-        Mon, 18 Apr 2022 12:55:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E83DB60FB6;
+        Mon, 18 Apr 2022 12:37:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4CA1C385A1;
+        Mon, 18 Apr 2022 12:37:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286515;
-        bh=/NKQc/i2EtPguCbWqU+pLA0gE+pcVnSy/5UslyQ6ho8=;
+        s=korg; t=1650285432;
+        bh=WD4iaRL10tmK8wqJABIYPrj6QsBjPpiJ24L2xP1XoJs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1PXXHRVTy1Dxqs4N6s6J5Rq/oCV18wupGW86ZxVfzCVvK+SdZSU/gAYsWzx8ezXT/
-         Uh8yXIFtJ/gH+ZwbdAGRXYMjw+mwr3IqefIQMPOHA9iuG/CJBYiSMuymrbHl7xeXeC
-         4j0We+WArdDU9tfPyfo9BZce4gBULaanV0r3abTk=
+        b=YAxY1NmlDMNSYiwCH3Nooq1MB6WaJsIpKCQAmXUcJuVMHP3k406ifbxNbUckqM2am
+         +rlXlXlbcvG7REo8U0+0mfm/KVZ8UCGKBiKSZWLgDLKMgpC2zfmfug41JxoW/DcAFC
+         zRl3M3TC5oLXU4+LbFTBqxnYNwFWbupiBQPHDjbQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        "Souptick Joarder (HPE)" <jrdr.linux@gmail.com>,
-        Marc Zyngier <maz@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 158/284] irqchip/nvic: Release nvic_base upon failure
+        stable@vger.kernel.org,
+        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
+        Vlad Buslov <vladbu@nvidia.com>,
+        Davide Caratti <dcaratti@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 017/105] net/sched: fix initialization order when updating chain 0 head
 Date:   Mon, 18 Apr 2022 14:12:19 +0200
-Message-Id: <20220418121216.234073929@linuxfoundation.org>
+Message-Id: <20220418121146.459866104@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +58,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
+From: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
 
-[ Upstream commit e414c25e3399b2b3d7337dc47abccab5c71b7c8f ]
+[ Upstream commit e65812fd22eba32f11abe28cb377cbd64cfb1ba0 ]
 
-smatch warning was reported as below ->
+Currently, when inserting a new filter that needs to sit at the head
+of chain 0, it will first update the heads pointer on all devices using
+the (shared) block, and only then complete the initialization of the new
+element so that it has a "next" element.
 
-smatch warnings:
-drivers/irqchip/irq-nvic.c:131 nvic_of_init()
-warn: 'nvic_base' not released on lines: 97.
+This can lead to a situation that the chain 0 head is propagated to
+another CPU before the "next" initialization is done. When this race
+condition is triggered, packets being matched on that CPU will simply
+miss all other filters, and will flow through the stack as if there were
+no other filters installed. If the system is using OVS + TC, such
+packets will get handled by vswitchd via upcall, which results in much
+higher latency and reordering. For other applications it may result in
+packet drops.
 
-Release nvic_base upon failure.
+This is reproducible with a tc only setup, but it varies from system to
+system. It could be reproduced with a shared block amongst 10 veth
+tunnels, and an ingress filter mirroring packets to another veth.
+That's because using the last added veth tunnel to the shared block to
+do the actual traffic, it makes the race window bigger and easier to
+trigger.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-Signed-off-by: Souptick Joarder (HPE) <jrdr.linux@gmail.com>
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/20220218163303.33344-1-jrdr.linux@gmail.com
+The fix is rather simple, to just initialize the next pointer of the new
+filter instance (tp) before propagating the head change.
+
+The fixes tag is pointing to the original code though this issue should
+only be observed when using it unlocked.
+
+Fixes: 2190d1d0944f ("net: sched: introduce helpers to work with filter chains")
+Signed-off-by: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
+Signed-off-by: Vlad Buslov <vladbu@nvidia.com>
+Reviewed-by: Davide Caratti <dcaratti@redhat.com>
+Link: https://lore.kernel.org/r/b97d5f4eaffeeb9d058155bcab63347527261abf.1649341369.git.marcelo.leitner@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/irqchip/irq-nvic.c | 2 ++
- 1 file changed, 2 insertions(+)
+ net/sched/cls_api.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-nvic.c b/drivers/irqchip/irq-nvic.c
-index 9694529b709d..330beb62d015 100644
---- a/drivers/irqchip/irq-nvic.c
-+++ b/drivers/irqchip/irq-nvic.c
-@@ -108,6 +108,7 @@ static int __init nvic_of_init(struct device_node *node,
+diff --git a/net/sched/cls_api.c b/net/sched/cls_api.c
+index 9a789a057a74..b8ffb7e4f696 100644
+--- a/net/sched/cls_api.c
++++ b/net/sched/cls_api.c
+@@ -1656,10 +1656,10 @@ static int tcf_chain_tp_insert(struct tcf_chain *chain,
+ 	if (chain->flushing)
+ 		return -EAGAIN;
  
- 	if (!nvic_irq_domain) {
- 		pr_warn("Failed to allocate irq domain\n");
-+		iounmap(nvic_base);
- 		return -ENOMEM;
- 	}
++	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
+ 	if (*chain_info->pprev == chain->filter_chain)
+ 		tcf_chain0_head_change(chain, tp);
+ 	tcf_proto_get(tp);
+-	RCU_INIT_POINTER(tp->next, tcf_chain_tp_prev(chain, chain_info));
+ 	rcu_assign_pointer(*chain_info->pprev, tp);
  
-@@ -117,6 +118,7 @@ static int __init nvic_of_init(struct device_node *node,
- 	if (ret) {
- 		pr_warn("Failed to allocate irq chips\n");
- 		irq_domain_remove(nvic_irq_domain);
-+		iounmap(nvic_base);
- 		return ret;
- 	}
- 
+ 	return 0;
 -- 
-2.34.1
+2.35.1
 
 
 

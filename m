@@ -2,651 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00217504BB9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 06:38:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB41504BC3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 06:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236512AbiDRElG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 00:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49260 "EHLO
+        id S236529AbiDRErG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 00:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235907AbiDRElE (ORCPT
+        with ESMTP id S236526AbiDRErE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 00:41:04 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9992217A82
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:38:25 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I0bOY5023018;
-        Mon, 18 Apr 2022 04:38:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=subject : from : to : cc
- : date : message-id : content-type : content-transfer-encoding :
- mime-version; s=pp1; bh=yJ7tHfKNdQbcE59bUikRgH3u3FEBvaoVQ9aZdTozCeU=;
- b=RB7LmpXIM/vuzHyf6TSadfdhIVU1znnXsT/54uRV8aptT9K6VjDL5SWP+8jc42XbJglk
- q4urp0rCgzHVgc2h5UuQf64M+5q6o8t8Wm1IDtmtpKfRZ3RN4Pypd2q2sCE8fxmnCq4j
- tRipliUpftwGkSLPP6N2RHYqlOF+1JlmJS1Scb73V7pemcZC8NMk6CIlBLTo8GYdB3Yl
- mZKIn416e7Qmyeb5FuxlVp5vy9hGm8zDRoevYHK0vRYyFaxf1/GC9sEuLKYieDfMsMFv
- wdhOdTc2OTjbkXt/fr+22rRvRmbK7P0rspLmdboX3xKRtAfqGu9o9fd08J9un1f7K482 aw== 
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg79dkxsm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 04:38:15 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I4WwIE032280;
-        Mon, 18 Apr 2022 04:38:13 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma03fra.de.ibm.com with ESMTP id 3ffne91rjf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 04:38:13 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I4cA4O38535566
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Apr 2022 04:38:10 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E42F5204F;
-        Mon, 18 Apr 2022 04:38:10 +0000 (GMT)
-Received: from lep8c.aus.stglabs.ibm.com (unknown [9.40.192.207])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id C39865204E;
-        Mon, 18 Apr 2022 04:38:08 +0000 (GMT)
-Subject: [PATCH] powerpc/papr_scm: Move duplicate definitions to common header
- files
-From:   Shivaprasad G Bhat <sbhat@linux.ibm.com>
-To:     nvdimm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        dan.j.williams@intel.com, mpe@ellerman.id.au,
-        linux-kernel@vger.kernel.org
-Cc:     aneesh.kumar@linux.ibm.com, sbhat@linux.ibm.com,
-        vaibhav@linux.ibm.com, ira.weiny@intel.com
-Date:   Sun, 17 Apr 2022 23:38:07 -0500
-Message-ID: <165025666388.2927278.9540058958498766114.stgit@lep8c.aus.stglabs.ibm.com>
-User-Agent: StGit/1.1+40.g1b20
-Content-Type: text/plain; charset="utf-8"
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: FUfB6tNM6vvUu54buld4Sg0aQeLeONUT
-X-Proofpoint-ORIG-GUID: FUfB6tNM6vvUu54buld4Sg0aQeLeONUT
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 18 Apr 2022 00:47:04 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3658917E0C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:44:24 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id v13so9518506ljg.10
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:44:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:reply-to:from:date:message-id:subject:to;
+        bh=nHNcaP2opJoiVPNgT6D92ndSDlHaKErcUbJzx7GZU6Q=;
+        b=UYxfjlCnqtxStCWvNw3bSCO4kvQMA9fGUDnD9iVjoK5LyPvTMkNJEiSXg7FnXsRt2v
+         NgJxL2khX0UFfS4kvaXEE8KD9fNG49Oo0rfuWTmrtj5LNZcKT317MGtxte+V8XB0lcKL
+         c8bEjdDtk1SzObmDNgJkj/zegsF71L1bxGLugFlJ3tSTZ4KHH8QS+Afg1mY2QzNQ+0NQ
+         eYqBJFckNgThpcG5aKH8qhLMqBmkjzl4AoO0g5IRTJRyWbC2TO2RY+CudfvERfhCGZXD
+         ozAzHX4qA9StwR4Rs1ptOgkrOwxhrysVb/XROzqwM0gfZihY47R7/1/7HZA5zfGuQNlB
+         fo/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
+         :subject:to;
+        bh=nHNcaP2opJoiVPNgT6D92ndSDlHaKErcUbJzx7GZU6Q=;
+        b=n5EWx8bFt5u29JP4yfxDHwgWENyrJcLX/M8GKPb/ghB6Rx1fb6S9cCfa0CBseJPK+6
+         Gh+eIsxoa31CwonuI4/v/Qu1v4MKkSrg+8JdFBMHFaLQ/nQpmXxgrphYhM3jgjVV1tzp
+         qep7pbcNXrftpSnaUruGJp8qxZjn/Ch3Ke5fmjlaa8YYApCXP4UWOZKUfHI/YKF+NKuv
+         9RHXeXCZBMdQbFTEFH+pomIkrfxWNb8Wx2SVxJOms0tujq+SMqgydQ57gcV62eWmWvZE
+         8vGnktcMzNCYBVx/DS/MLafXRevqRm4SSHRjK6Tao+1c/jFouonovFmQgMzeUOiXSgWq
+         c2vA==
+X-Gm-Message-State: AOAM532utyy2Uak18d9GIio9IoRsCAx/VWFagitvadSUvlky+AwC7qMU
+        TjMrX0ubYC2IWTsKxCUT5EWS3DkmsEipzdVBAfE=
+X-Google-Smtp-Source: ABdhPJydphvW8mIe9BB18uGKVdwqjy+4LaecrWqg/EgXTbzh/M1if2L3Xkg2uCYdklEvuzHTXHqcCJS0jcU4nEP2d48=
+X-Received: by 2002:a2e:a54a:0:b0:24c:88db:783d with SMTP id
+ e10-20020a2ea54a000000b0024c88db783dmr6236486ljn.341.1650257062179; Sun, 17
+ Apr 2022 21:44:22 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-18_01,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- bulkscore=0 phishscore=0 clxscore=1011 malwarescore=0 spamscore=0
- priorityscore=1501 mlxscore=0 impostorscore=0 lowpriorityscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204180027
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Received: by 2002:ab3:734a:0:0:0:0:0 with HTTP; Sun, 17 Apr 2022 21:44:20
+ -0700 (PDT)
+Reply-To: vanselschoemancorporate@gmail.com
+From:   Grace Mugabe Family <mgee95374@gmail.com>
+Date:   Mon, 18 Apr 2022 06:44:20 +0200
+Message-ID: <CAMeTw8Ek8Tur81vUTS6CLspzTnJXJGXMCCBOJLdH4LUnd4_tBg@mail.gmail.com>
+Subject: FROM MRS. GRACE MUGABE
+To:     undisclosed-recipients:;
+Content-Type: multipart/mixed; boundary="000000000000facced05dce669b4"
+X-Spam-Status: Yes, score=6.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,SUBJ_ALL_CAPS,T_FREEMAIL_DOC_PDF,T_FREEMAIL_DOC_PDF_BCC,
+        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:22b listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4990]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mgee95374[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mgee95374[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+        *  0.0 T_FREEMAIL_DOC_PDF MS document or PDF attachment, from freemail
+        *  0.0 T_FREEMAIL_DOC_PDF_BCC MS document or PDF attachment, from
+        *      freemail, all recipients hidden
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-papr_scm and ndtest share common PDSM payload structs like
-nd_papr_pdsm_health. Presently these structs are duplicated across
-papr_pdsm.h and ndtest.h header files. Since 'ndtest' is essentially
-arch independent and can run on platforms other than PPC64, a way
-needs to be deviced to avoid redundancy and duplication of PDSM
-structs in future.
+--000000000000facced05dce669b4
+Content-Type: text/plain; charset="UTF-8"
 
-So the patch proposes moving the PDSM header from arch/powerpc/include-
--/uapi/ to the generic include/uapi/linux directory. Also, there are
-some #defines common between papr_scm and ndtest which are not exported
-to the user space. So, move them to a header file which can be shared
-across ndtest and papr_scm via newly introduced include/linux/papr_scm.h.
-
-Signed-off-by: Shivaprasad G Bhat <sbhat@linux.ibm.com>
-Signed-off-by: Vaibhav Jain <vaibhav@linux.ibm.com>
-Suggested-by: "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
----
-Changelog:
-Since v2:
-Link: https://patchwork.kernel.org/project/linux-nvdimm/patch/163454440296.431294.2368481747380790011.stgit@lep8c.aus.stglabs.ibm.com/
-* Made it like v1, and rebased.
-* Fixed repeating words in comments of the header file papr_scm.h
-
-Since v1:
-Link: https://patchwork.kernel.org/project/linux-nvdimm/patch/162505488483.72147.12741153746322191381.stgit@56e104a48989/
-* Removed dependency on this patch for the other patches
-
- MAINTAINERS                               |    2 
- arch/powerpc/include/uapi/asm/papr_pdsm.h |  165 -----------------------------
- arch/powerpc/platforms/pseries/papr_scm.c |   43 --------
- include/linux/papr_scm.h                  |   49 +++++++++
- include/uapi/linux/papr_pdsm.h            |  165 +++++++++++++++++++++++++++++
- tools/testing/nvdimm/test/ndtest.c        |    2 
- tools/testing/nvdimm/test/ndtest.h        |   31 -----
- 7 files changed, 220 insertions(+), 237 deletions(-)
- delete mode 100644 arch/powerpc/include/uapi/asm/papr_pdsm.h
- create mode 100644 include/linux/papr_scm.h
- create mode 100644 include/uapi/linux/papr_pdsm.h
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1699bb7cc867..03685b074dda 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11254,6 +11254,8 @@ F:	drivers/rtc/rtc-opal.c
- F:	drivers/scsi/ibmvscsi/
- F:	drivers/tty/hvc/hvc_opal.c
- F:	drivers/watchdog/wdrtas.c
-+F:	include/linux/papr_scm.h
-+F:	include/uapi/linux/papr_pdsm.h
- F:	tools/testing/selftests/powerpc
- N:	/pmac
- N:	powermac
-diff --git a/arch/powerpc/include/uapi/asm/papr_pdsm.h b/arch/powerpc/include/uapi/asm/papr_pdsm.h
-deleted file mode 100644
-index 17439925045c..000000000000
---- a/arch/powerpc/include/uapi/asm/papr_pdsm.h
-+++ /dev/null
-@@ -1,165 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * PAPR nvDimm Specific Methods (PDSM) and structs for libndctl
-- *
-- * (C) Copyright IBM 2020
-- *
-- * Author: Vaibhav Jain <vaibhav at linux.ibm.com>
-- */
--
--#ifndef _UAPI_ASM_POWERPC_PAPR_PDSM_H_
--#define _UAPI_ASM_POWERPC_PAPR_PDSM_H_
--
--#include <linux/types.h>
--#include <linux/ndctl.h>
--
--/*
-- * PDSM Envelope:
-- *
-- * The ioctl ND_CMD_CALL exchange data between user-space and kernel via
-- * envelope which consists of 2 headers sections and payload sections as
-- * illustrated below:
-- *  +-----------------+---------------+---------------------------+
-- *  |   64-Bytes      |   8-Bytes     |       Max 184-Bytes       |
-- *  +-----------------+---------------+---------------------------+
-- *  | ND-HEADER       |  PDSM-HEADER  |      PDSM-PAYLOAD         |
-- *  +-----------------+---------------+---------------------------+
-- *  | nd_family       |               |                           |
-- *  | nd_size_out     | cmd_status    |                           |
-- *  | nd_size_in      | reserved      |     nd_pdsm_payload       |
-- *  | nd_command      | payload   --> |                           |
-- *  | nd_fw_size      |               |                           |
-- *  | nd_payload ---> |               |                           |
-- *  +---------------+-----------------+---------------------------+
-- *
-- * ND Header:
-- * This is the generic libnvdimm header described as 'struct nd_cmd_pkg'
-- * which is interpreted by libnvdimm before passed on to papr_scm. Important
-- * member fields used are:
-- * 'nd_family'		: (In) NVDIMM_FAMILY_PAPR_SCM
-- * 'nd_size_in'		: (In) PDSM-HEADER + PDSM-IN-PAYLOAD (usually 0)
-- * 'nd_size_out'        : (In) PDSM-HEADER + PDSM-RETURN-PAYLOAD
-- * 'nd_command'         : (In) One of PAPR_PDSM_XXX
-- * 'nd_fw_size'         : (Out) PDSM-HEADER + size of actual payload returned
-- *
-- * PDSM Header:
-- * This is papr-scm specific header that precedes the payload. This is defined
-- * as nd_cmd_pdsm_pkg.  Following fields aare available in this header:
-- *
-- * 'cmd_status'		: (Out) Errors if any encountered while servicing PDSM.
-- * 'reserved'		: Not used, reserved for future and should be set to 0.
-- * 'payload'            : A union of all the possible payload structs
-- *
-- * PDSM Payload:
-- *
-- * The layout of the PDSM Payload is defined by various structs shared between
-- * papr_scm and libndctl so that contents of payload can be interpreted. As such
-- * its defined as a union of all possible payload structs as
-- * 'union nd_pdsm_payload'. Based on the value of 'nd_cmd_pkg.nd_command'
-- * appropriate member of the union is accessed.
-- */
--
--/* Max payload size that we can handle */
--#define ND_PDSM_PAYLOAD_MAX_SIZE 184
--
--/* Max payload size that we can handle */
--#define ND_PDSM_HDR_SIZE \
--	(sizeof(struct nd_pkg_pdsm) - ND_PDSM_PAYLOAD_MAX_SIZE)
--
--/* Various nvdimm health indicators */
--#define PAPR_PDSM_DIMM_HEALTHY       0
--#define PAPR_PDSM_DIMM_UNHEALTHY     1
--#define PAPR_PDSM_DIMM_CRITICAL      2
--#define PAPR_PDSM_DIMM_FATAL         3
--
--/* struct nd_papr_pdsm_health.extension_flags field flags */
--
--/* Indicate that the 'dimm_fuel_gauge' field is valid */
--#define PDSM_DIMM_HEALTH_RUN_GAUGE_VALID 1
--
--/* Indicate that the 'dimm_dsc' field is valid */
--#define PDSM_DIMM_DSC_VALID 2
--
--/*
-- * Struct exchanged between kernel & ndctl in for PAPR_PDSM_HEALTH
-- * Various flags indicate the health status of the dimm.
-- *
-- * extension_flags	: Any extension fields present in the struct.
-- * dimm_unarmed		: Dimm not armed. So contents wont persist.
-- * dimm_bad_shutdown	: Previous shutdown did not persist contents.
-- * dimm_bad_restore	: Contents from previous shutdown werent restored.
-- * dimm_scrubbed	: Contents of the dimm have been scrubbed.
-- * dimm_locked		: Contents of the dimm cant be modified until CEC reboot
-- * dimm_encrypted	: Contents of dimm are encrypted.
-- * dimm_health		: Dimm health indicator. One of PAPR_PDSM_DIMM_XXXX
-- * dimm_fuel_gauge	: Life remaining of DIMM as a percentage from 0-100
-- */
--struct nd_papr_pdsm_health {
--	union {
--		struct {
--			__u32 extension_flags;
--			__u8 dimm_unarmed;
--			__u8 dimm_bad_shutdown;
--			__u8 dimm_bad_restore;
--			__u8 dimm_scrubbed;
--			__u8 dimm_locked;
--			__u8 dimm_encrypted;
--			__u16 dimm_health;
--
--			/* Extension flag PDSM_DIMM_HEALTH_RUN_GAUGE_VALID */
--			__u16 dimm_fuel_gauge;
--
--			/* Extension flag PDSM_DIMM_DSC_VALID */
--			__u64 dimm_dsc;
--		};
--		__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
--	};
--};
--
--/* Flags for injecting specific smart errors */
--#define PDSM_SMART_INJECT_HEALTH_FATAL		(1 << 0)
--#define PDSM_SMART_INJECT_BAD_SHUTDOWN		(1 << 1)
--
--struct nd_papr_pdsm_smart_inject {
--	union {
--		struct {
--			/* One or more of PDSM_SMART_INJECT_ */
--			__u32 flags;
--			__u8 fatal_enable;
--			__u8 unsafe_shutdown_enable;
--		};
--		__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
--	};
--};
--
--/*
-- * Methods to be embedded in ND_CMD_CALL request. These are sent to the kernel
-- * via 'nd_cmd_pkg.nd_command' member of the ioctl struct
-- */
--enum papr_pdsm {
--	PAPR_PDSM_MIN = 0x0,
--	PAPR_PDSM_HEALTH,
--	PAPR_PDSM_SMART_INJECT,
--	PAPR_PDSM_MAX,
--};
--
--/* Maximal union that can hold all possible payload types */
--union nd_pdsm_payload {
--	struct nd_papr_pdsm_health health;
--	struct nd_papr_pdsm_smart_inject smart_inject;
--	__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
--} __packed;
--
--/*
-- * PDSM-header + payload expected with ND_CMD_CALL ioctl from libnvdimm
-- * Valid member of union 'payload' is identified via 'nd_cmd_pkg.nd_command'
-- * that should always precede this struct when sent to papr_scm via CMD_CALL
-- * interface.
-- */
--struct nd_pkg_pdsm {
--	__s32 cmd_status;	/* Out: Sub-cmd status returned back */
--	__u16 reserved[2];	/* Ignored and to be set as '0' */
--	union nd_pdsm_payload payload;
--} __packed;
--
--#endif /* _UAPI_ASM_POWERPC_PAPR_PDSM_H_ */
-diff --git a/arch/powerpc/platforms/pseries/papr_scm.c b/arch/powerpc/platforms/pseries/papr_scm.c
-index f58728d5f10d..75f6f8ece3cb 100644
---- a/arch/powerpc/platforms/pseries/papr_scm.c
-+++ b/arch/powerpc/platforms/pseries/papr_scm.c
-@@ -16,7 +16,8 @@
- #include <linux/nd.h>
- 
- #include <asm/plpar_wrappers.h>
--#include <asm/papr_pdsm.h>
-+#include <uapi/linux/papr_pdsm.h>
-+#include <linux/papr_scm.h>
- #include <asm/mce.h>
- #include <asm/unaligned.h>
- #include <linux/perf_event.h>
-@@ -29,46 +30,6 @@
- 	 (1ul << ND_CMD_SET_CONFIG_DATA) | \
- 	 (1ul << ND_CMD_CALL))
- 
--/* DIMM health bitmap bitmap indicators */
--/* SCM device is unable to persist memory contents */
--#define PAPR_PMEM_UNARMED                   (1ULL << (63 - 0))
--/* SCM device failed to persist memory contents */
--#define PAPR_PMEM_SHUTDOWN_DIRTY            (1ULL << (63 - 1))
--/* SCM device contents are persisted from previous IPL */
--#define PAPR_PMEM_SHUTDOWN_CLEAN            (1ULL << (63 - 2))
--/* SCM device contents are not persisted from previous IPL */
--#define PAPR_PMEM_EMPTY                     (1ULL << (63 - 3))
--/* SCM device memory life remaining is critically low */
--#define PAPR_PMEM_HEALTH_CRITICAL           (1ULL << (63 - 4))
--/* SCM device will be garded off next IPL due to failure */
--#define PAPR_PMEM_HEALTH_FATAL              (1ULL << (63 - 5))
--/* SCM contents cannot persist due to current platform health status */
--#define PAPR_PMEM_HEALTH_UNHEALTHY          (1ULL << (63 - 6))
--/* SCM device is unable to persist memory contents in certain conditions */
--#define PAPR_PMEM_HEALTH_NON_CRITICAL       (1ULL << (63 - 7))
--/* SCM device is encrypted */
--#define PAPR_PMEM_ENCRYPTED                 (1ULL << (63 - 8))
--/* SCM device has been scrubbed and locked */
--#define PAPR_PMEM_SCRUBBED_AND_LOCKED       (1ULL << (63 - 9))
--
--/* Bits status indicators for health bitmap indicating unarmed dimm */
--#define PAPR_PMEM_UNARMED_MASK (PAPR_PMEM_UNARMED |		\
--				PAPR_PMEM_HEALTH_UNHEALTHY)
--
--/* Bits status indicators for health bitmap indicating unflushed dimm */
--#define PAPR_PMEM_BAD_SHUTDOWN_MASK (PAPR_PMEM_SHUTDOWN_DIRTY)
--
--/* Bits status indicators for health bitmap indicating unrestored dimm */
--#define PAPR_PMEM_BAD_RESTORE_MASK  (PAPR_PMEM_EMPTY)
--
--/* Bit status indicators for smart event notification */
--#define PAPR_PMEM_SMART_EVENT_MASK (PAPR_PMEM_HEALTH_CRITICAL | \
--				    PAPR_PMEM_HEALTH_FATAL |	\
--				    PAPR_PMEM_HEALTH_UNHEALTHY)
--
--#define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
--#define PAPR_SCM_PERF_STATS_VERSION 0x1
--
- /* Struct holding a single performance metric */
- struct papr_scm_perf_stat {
- 	u8 stat_id[8];
-diff --git a/include/linux/papr_scm.h b/include/linux/papr_scm.h
-new file mode 100644
-index 000000000000..eb36453813db
---- /dev/null
-+++ b/include/linux/papr_scm.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+#ifndef __LINUX_PAPR_SCM_H
-+#define __LINUX_PAPR_SCM_H
-+
-+/* DIMM health bitmap indicators */
-+/* SCM device is unable to persist memory contents */
-+#define PAPR_PMEM_UNARMED                   (1ULL << (63 - 0))
-+/* SCM device failed to persist memory contents */
-+#define PAPR_PMEM_SHUTDOWN_DIRTY            (1ULL << (63 - 1))
-+/* SCM device contents are persisted from previous IPL */
-+#define PAPR_PMEM_SHUTDOWN_CLEAN            (1ULL << (63 - 2))
-+/* SCM device contents are not persisted from previous IPL */
-+#define PAPR_PMEM_EMPTY                     (1ULL << (63 - 3))
-+/* SCM device memory life remaining is critically low */
-+#define PAPR_PMEM_HEALTH_CRITICAL           (1ULL << (63 - 4))
-+/* SCM device will be garded off next IPL due to failure */
-+#define PAPR_PMEM_HEALTH_FATAL              (1ULL << (63 - 5))
-+/* SCM contents cannot persist due to current platform health status */
-+#define PAPR_PMEM_HEALTH_UNHEALTHY          (1ULL << (63 - 6))
-+/* SCM device is unable to persist memory contents in certain conditions */
-+#define PAPR_PMEM_HEALTH_NON_CRITICAL       (1ULL << (63 - 7))
-+/* SCM device is encrypted */
-+#define PAPR_PMEM_ENCRYPTED                 (1ULL << (63 - 8))
-+/* SCM device has been scrubbed and locked */
-+#define PAPR_PMEM_SCRUBBED_AND_LOCKED       (1ULL << (63 - 9))
-+
-+#define PAPR_PMEM_SAVE_FAILED               (1ULL << (63 - 10))
-+
-+/* Bits status indicators for health bitmap indicating unarmed dimm */
-+#define PAPR_PMEM_UNARMED_MASK (PAPR_PMEM_UNARMED |            \
-+				PAPR_PMEM_HEALTH_UNHEALTHY)
-+
-+/* Bits status indicators for health bitmap indicating unflushed dimm */
-+#define PAPR_PMEM_BAD_SHUTDOWN_MASK (PAPR_PMEM_SHUTDOWN_DIRTY)
-+
-+/* Bits status indicators for health bitmap indicating unrestored dimm */
-+#define PAPR_PMEM_BAD_RESTORE_MASK  (PAPR_PMEM_EMPTY)
-+
-+/* Bit status indicators for smart event notification */
-+#define PAPR_PMEM_SMART_EVENT_MASK (PAPR_PMEM_HEALTH_CRITICAL | \
-+					PAPR_PMEM_HEALTH_FATAL | \
-+					PAPR_PMEM_HEALTH_UNHEALTHY)
-+
-+#define PAPR_PMEM_SAVE_MASK                (PAPR_PMEM_SAVE_FAILED)
-+
-+#define PAPR_SCM_PERF_STATS_EYECATCHER __stringify(SCMSTATS)
-+#define PAPR_SCM_PERF_STATS_VERSION 0x1
-+
-+#endif /* __LINUX_PAPR_SCM_H */
-diff --git a/include/uapi/linux/papr_pdsm.h b/include/uapi/linux/papr_pdsm.h
-new file mode 100644
-index 000000000000..17439925045c
---- /dev/null
-+++ b/include/uapi/linux/papr_pdsm.h
-@@ -0,0 +1,165 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * PAPR nvDimm Specific Methods (PDSM) and structs for libndctl
-+ *
-+ * (C) Copyright IBM 2020
-+ *
-+ * Author: Vaibhav Jain <vaibhav at linux.ibm.com>
-+ */
-+
-+#ifndef _UAPI_ASM_POWERPC_PAPR_PDSM_H_
-+#define _UAPI_ASM_POWERPC_PAPR_PDSM_H_
-+
-+#include <linux/types.h>
-+#include <linux/ndctl.h>
-+
-+/*
-+ * PDSM Envelope:
-+ *
-+ * The ioctl ND_CMD_CALL exchange data between user-space and kernel via
-+ * envelope which consists of 2 headers sections and payload sections as
-+ * illustrated below:
-+ *  +-----------------+---------------+---------------------------+
-+ *  |   64-Bytes      |   8-Bytes     |       Max 184-Bytes       |
-+ *  +-----------------+---------------+---------------------------+
-+ *  | ND-HEADER       |  PDSM-HEADER  |      PDSM-PAYLOAD         |
-+ *  +-----------------+---------------+---------------------------+
-+ *  | nd_family       |               |                           |
-+ *  | nd_size_out     | cmd_status    |                           |
-+ *  | nd_size_in      | reserved      |     nd_pdsm_payload       |
-+ *  | nd_command      | payload   --> |                           |
-+ *  | nd_fw_size      |               |                           |
-+ *  | nd_payload ---> |               |                           |
-+ *  +---------------+-----------------+---------------------------+
-+ *
-+ * ND Header:
-+ * This is the generic libnvdimm header described as 'struct nd_cmd_pkg'
-+ * which is interpreted by libnvdimm before passed on to papr_scm. Important
-+ * member fields used are:
-+ * 'nd_family'		: (In) NVDIMM_FAMILY_PAPR_SCM
-+ * 'nd_size_in'		: (In) PDSM-HEADER + PDSM-IN-PAYLOAD (usually 0)
-+ * 'nd_size_out'        : (In) PDSM-HEADER + PDSM-RETURN-PAYLOAD
-+ * 'nd_command'         : (In) One of PAPR_PDSM_XXX
-+ * 'nd_fw_size'         : (Out) PDSM-HEADER + size of actual payload returned
-+ *
-+ * PDSM Header:
-+ * This is papr-scm specific header that precedes the payload. This is defined
-+ * as nd_cmd_pdsm_pkg.  Following fields aare available in this header:
-+ *
-+ * 'cmd_status'		: (Out) Errors if any encountered while servicing PDSM.
-+ * 'reserved'		: Not used, reserved for future and should be set to 0.
-+ * 'payload'            : A union of all the possible payload structs
-+ *
-+ * PDSM Payload:
-+ *
-+ * The layout of the PDSM Payload is defined by various structs shared between
-+ * papr_scm and libndctl so that contents of payload can be interpreted. As such
-+ * its defined as a union of all possible payload structs as
-+ * 'union nd_pdsm_payload'. Based on the value of 'nd_cmd_pkg.nd_command'
-+ * appropriate member of the union is accessed.
-+ */
-+
-+/* Max payload size that we can handle */
-+#define ND_PDSM_PAYLOAD_MAX_SIZE 184
-+
-+/* Max payload size that we can handle */
-+#define ND_PDSM_HDR_SIZE \
-+	(sizeof(struct nd_pkg_pdsm) - ND_PDSM_PAYLOAD_MAX_SIZE)
-+
-+/* Various nvdimm health indicators */
-+#define PAPR_PDSM_DIMM_HEALTHY       0
-+#define PAPR_PDSM_DIMM_UNHEALTHY     1
-+#define PAPR_PDSM_DIMM_CRITICAL      2
-+#define PAPR_PDSM_DIMM_FATAL         3
-+
-+/* struct nd_papr_pdsm_health.extension_flags field flags */
-+
-+/* Indicate that the 'dimm_fuel_gauge' field is valid */
-+#define PDSM_DIMM_HEALTH_RUN_GAUGE_VALID 1
-+
-+/* Indicate that the 'dimm_dsc' field is valid */
-+#define PDSM_DIMM_DSC_VALID 2
-+
-+/*
-+ * Struct exchanged between kernel & ndctl in for PAPR_PDSM_HEALTH
-+ * Various flags indicate the health status of the dimm.
-+ *
-+ * extension_flags	: Any extension fields present in the struct.
-+ * dimm_unarmed		: Dimm not armed. So contents wont persist.
-+ * dimm_bad_shutdown	: Previous shutdown did not persist contents.
-+ * dimm_bad_restore	: Contents from previous shutdown werent restored.
-+ * dimm_scrubbed	: Contents of the dimm have been scrubbed.
-+ * dimm_locked		: Contents of the dimm cant be modified until CEC reboot
-+ * dimm_encrypted	: Contents of dimm are encrypted.
-+ * dimm_health		: Dimm health indicator. One of PAPR_PDSM_DIMM_XXXX
-+ * dimm_fuel_gauge	: Life remaining of DIMM as a percentage from 0-100
-+ */
-+struct nd_papr_pdsm_health {
-+	union {
-+		struct {
-+			__u32 extension_flags;
-+			__u8 dimm_unarmed;
-+			__u8 dimm_bad_shutdown;
-+			__u8 dimm_bad_restore;
-+			__u8 dimm_scrubbed;
-+			__u8 dimm_locked;
-+			__u8 dimm_encrypted;
-+			__u16 dimm_health;
-+
-+			/* Extension flag PDSM_DIMM_HEALTH_RUN_GAUGE_VALID */
-+			__u16 dimm_fuel_gauge;
-+
-+			/* Extension flag PDSM_DIMM_DSC_VALID */
-+			__u64 dimm_dsc;
-+		};
-+		__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
-+	};
-+};
-+
-+/* Flags for injecting specific smart errors */
-+#define PDSM_SMART_INJECT_HEALTH_FATAL		(1 << 0)
-+#define PDSM_SMART_INJECT_BAD_SHUTDOWN		(1 << 1)
-+
-+struct nd_papr_pdsm_smart_inject {
-+	union {
-+		struct {
-+			/* One or more of PDSM_SMART_INJECT_ */
-+			__u32 flags;
-+			__u8 fatal_enable;
-+			__u8 unsafe_shutdown_enable;
-+		};
-+		__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
-+	};
-+};
-+
-+/*
-+ * Methods to be embedded in ND_CMD_CALL request. These are sent to the kernel
-+ * via 'nd_cmd_pkg.nd_command' member of the ioctl struct
-+ */
-+enum papr_pdsm {
-+	PAPR_PDSM_MIN = 0x0,
-+	PAPR_PDSM_HEALTH,
-+	PAPR_PDSM_SMART_INJECT,
-+	PAPR_PDSM_MAX,
-+};
-+
-+/* Maximal union that can hold all possible payload types */
-+union nd_pdsm_payload {
-+	struct nd_papr_pdsm_health health;
-+	struct nd_papr_pdsm_smart_inject smart_inject;
-+	__u8 buf[ND_PDSM_PAYLOAD_MAX_SIZE];
-+} __packed;
-+
-+/*
-+ * PDSM-header + payload expected with ND_CMD_CALL ioctl from libnvdimm
-+ * Valid member of union 'payload' is identified via 'nd_cmd_pkg.nd_command'
-+ * that should always precede this struct when sent to papr_scm via CMD_CALL
-+ * interface.
-+ */
-+struct nd_pkg_pdsm {
-+	__s32 cmd_status;	/* Out: Sub-cmd status returned back */
-+	__u16 reserved[2];	/* Ignored and to be set as '0' */
-+	union nd_pdsm_payload payload;
-+} __packed;
-+
-+#endif /* _UAPI_ASM_POWERPC_PAPR_PDSM_H_ */
-diff --git a/tools/testing/nvdimm/test/ndtest.c b/tools/testing/nvdimm/test/ndtest.c
-index 01ceb98c15a0..5eb946a02c95 100644
---- a/tools/testing/nvdimm/test/ndtest.c
-+++ b/tools/testing/nvdimm/test/ndtest.c
-@@ -13,6 +13,8 @@
- #include <nd-core.h>
- #include <linux/printk.h>
- #include <linux/seq_buf.h>
-+#include <linux/papr_scm.h>
-+#include <uapi/linux/papr_pdsm.h>
- 
- #include "../watermark.h"
- #include "nfit_test.h"
-diff --git a/tools/testing/nvdimm/test/ndtest.h b/tools/testing/nvdimm/test/ndtest.h
-index 2c54c9cbb90c..8f27ad6f7319 100644
---- a/tools/testing/nvdimm/test/ndtest.h
-+++ b/tools/testing/nvdimm/test/ndtest.h
-@@ -5,37 +5,6 @@
- #include <linux/platform_device.h>
- #include <linux/libnvdimm.h>
- 
--/* SCM device is unable to persist memory contents */
--#define PAPR_PMEM_UNARMED                   (1ULL << (63 - 0))
--/* SCM device failed to persist memory contents */
--#define PAPR_PMEM_SHUTDOWN_DIRTY            (1ULL << (63 - 1))
--/* SCM device contents are not persisted from previous IPL */
--#define PAPR_PMEM_EMPTY                     (1ULL << (63 - 3))
--#define PAPR_PMEM_HEALTH_CRITICAL           (1ULL << (63 - 4))
--/* SCM device will be garded off next IPL due to failure */
--#define PAPR_PMEM_HEALTH_FATAL              (1ULL << (63 - 5))
--/* SCM contents cannot persist due to current platform health status */
--#define PAPR_PMEM_HEALTH_UNHEALTHY          (1ULL << (63 - 6))
--
--/* Bits status indicators for health bitmap indicating unarmed dimm */
--#define PAPR_PMEM_UNARMED_MASK (PAPR_PMEM_UNARMED |		\
--				PAPR_PMEM_HEALTH_UNHEALTHY)
--
--#define PAPR_PMEM_SAVE_FAILED                (1ULL << (63 - 10))
--
--/* Bits status indicators for health bitmap indicating unflushed dimm */
--#define PAPR_PMEM_BAD_SHUTDOWN_MASK (PAPR_PMEM_SHUTDOWN_DIRTY)
--
--/* Bits status indicators for health bitmap indicating unrestored dimm */
--#define PAPR_PMEM_BAD_RESTORE_MASK  (PAPR_PMEM_EMPTY)
--
--/* Bit status indicators for smart event notification */
--#define PAPR_PMEM_SMART_EVENT_MASK (PAPR_PMEM_HEALTH_CRITICAL | \
--				    PAPR_PMEM_HEALTH_FATAL |	\
--				    PAPR_PMEM_HEALTH_UNHEALTHY)
--
--#define PAPR_PMEM_SAVE_MASK                (PAPR_PMEM_SAVE_FAILED)
--
- struct ndtest_config;
- 
- struct ndtest_priv {
+FIND ATTACHED COPY OF MY STORY
+IF INTERESTED, LETS PARTNER
 
 
+MRS. GRACE MUGABE
+HARARE
+ZIMBABWE
+
+--000000000000facced05dce669b4
+Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document; 
+	name="MRS. GRACE MUGABE.docx"
+Content-Disposition: attachment; filename="MRS. GRACE MUGABE.docx"
+Content-Transfer-Encoding: base64
+X-Attachment-Id: file0
+
+UEsDBBQABgAIAAAAIQAwySgMcgEAAKUFAAATAAgCW0NvbnRlbnRfVHlwZXNdLnhtbCCiBAIooAAC
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC0
+VMluwjAQvVfqP0S+Vomhh6qqCBy6HFuk0g8w9gSsepPHbH/fSaBR1UKQClwiJeO3+OXZg9HammwJ
+EbV3JesXPZaBk15pNyvZx+Qlv2cZJuGUMN5ByTaAbDS8vhpMNgEwI7TDks1TCg+co5yDFVj4AI4m
+lY9WJHqNMx6E/BQz4Le93h2X3iVwKU81BxsOnqASC5Oy5zV93jqJYJBlj9uFtVbJRAhGS5HIKV86
+9Usl3ykUhGzW4FwHvCEbjO9VqCeHBXa4N4omagXZWMT0KizZ4CsfFVdeLiztoeim2ePTV5WW0OJr
+thC9BETK3JqinVih3bf/gz7cwk4hEvL8RlrqoyYwbQzg+R1sebvkKaxx9AE5leNkfajrp0Dl9D8C
+xKSh7c/B/BFSovQvsfkdc9f2myomOnTAm2f/5AwamqOSFZ3LiZgaOFnvT/1b6qMmVjB9v1j6P8i7
+jLT9kz7+I4zvO6tG72kdby7Z4RcAAAD//wMAUEsDBBQABgAIAAAAIQAekRq38wAAAE4CAAALAAgC
+X3JlbHMvLnJlbHMgogQCKKAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAjJLbSgNBDIbvBd9hyH032woi0tneSKF3IusDhJnsAXcOzKTavr2j
+ILpQ217m9OfLT9abg5vUO6c8Bq9hWdWg2JtgR99reG23iwdQWchbmoJnDUfOsGlub9YvPJGUoTyM
+Maui4rOGQSQ+ImYzsKNchci+VLqQHEkJU4+RzBv1jKu6vsf0VwOamabaWQ1pZ+9AtcdYNl/WDl03
+Gn4KZu/Yy4kVyAdhb9kuYipsScZyjWop9SwabDDPJZ2RYqwKNuBpotX1RP9fi46FLAmhCYnP83x1
+nANaXg902aJ5x687HyFZLBZ9e/tDg7MvaD4BAAD//wMAUEsDBBQABgAIAAAAIQCzvosdCQEAALYD
+AAAcAAgBd29yZC9fcmVscy9kb2N1bWVudC54bWwucmVscyCiBAEooAABAAAAAAAAAAAAAAAAAAAA
+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
+eG1sUEsFBgAAAAAMAAwAAQMAADkyAAAAAA==
+--000000000000facced05dce669b4--

@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7249E505E02
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463D0505E09
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347423AbiDRSnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:43:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S1347447AbiDRSqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229900AbiDRSnt (ORCPT
+        with ESMTP id S1347440AbiDRSq2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 14:43:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 610D52E0A6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:41:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650307268;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VuGc/WdeVJI1eBiXvGHukz2whIa4wWjXqnrLuB6HMKY=;
-        b=U9uR7Kza2JFL2DWOti/2ZUcSc6uwtKgzucySpDOUbIwrpzkm1xASGwi6tNqcJP09SjnDBG
-        oipqg8xxkNv2A3qwAebg2H4WHzwbBT3jI7jVy4hTPLt2+LditRldr1ykVLjKVBJ31T1YTj
-        y5Uf2h40b7eov9JEBGYDarwcD7qklTQ=
-Received: from mail-vs1-f71.google.com (mail-vs1-f71.google.com
- [209.85.217.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-zfHJ2p90Mi-xQa6qKJYMbg-1; Mon, 18 Apr 2022 14:41:05 -0400
-X-MC-Unique: zfHJ2p90Mi-xQa6qKJYMbg-1
-Received: by mail-vs1-f71.google.com with SMTP id i190-20020a6722c7000000b00320cf551813so1759589vsi.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:41:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:organization:user-agent:mime-version
-         :content-transfer-encoding;
-        bh=VuGc/WdeVJI1eBiXvGHukz2whIa4wWjXqnrLuB6HMKY=;
-        b=TeWi/O08g+/od6t0+48dtpMcc4tR2PES0rn8jD9qchgU53kFC9Cg1EGR//TSWcHXHi
-         m2UVDPF20exw/ilACYOPyiL3zpbtbPB1wh5g/gA0gvpJdidK57IIBcRDcL0wGZffNwz2
-         Qu2KI6lCfcu0xYgb7XF6XSRDfYO6yuW1XOQlZO5CRds1EX6e2AqUqGLRW72u3T0Hljla
-         K9BtoY6X3sR4HfFt402uyelFn748Mk2IWfRS1ciHKNXH5cEn7FcsyQBTdHOJIYNeaJgP
-         j91KARE9/C13OgwPA3J5y6ksnRhuHZPuKjnxJC0xRoSKXx5ipA/bVyuBFFdfK4j7mMDX
-         Htvg==
-X-Gm-Message-State: AOAM532jzOU7alSnl9jwEX7ukwY9VnfJpoan+mE85JdlVgpiTT4amQl6
-        GzIR/XUt3fse3tkyIOd1hNU9WJ0tmsnJP8MNdw7qFtF12YPo4TRAR2FoOWNMCAcHlCo1GshMpZB
-        zcUgyp9VGpTAiqJeihYids/6y
-X-Received: by 2002:a1f:14c2:0:b0:345:3e0f:81b1 with SMTP id 185-20020a1f14c2000000b003453e0f81b1mr3190542vku.2.1650307264770;
-        Mon, 18 Apr 2022 11:41:04 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJzEjhYF2Aoq1MDzFFiHfewXPAu8UoNo+RuC8SC8/8YCVnNVsfULVrP7+ysF7haG+Vsfh9D7ig==
-X-Received: by 2002:a1f:14c2:0:b0:345:3e0f:81b1 with SMTP id 185-20020a1f14c2000000b003453e0f81b1mr3190533vku.2.1650307264525;
-        Mon, 18 Apr 2022 11:41:04 -0700 (PDT)
-Received: from [192.168.8.138] (pool-71-126-244-162.bstnma.fios.verizon.net. [71.126.244.162])
-        by smtp.gmail.com with ESMTPSA id t66-20020a1f2d45000000b00348da3c51bbsm1605500vkt.13.2022.04.18.11.41.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 11:41:03 -0700 (PDT)
-Message-ID: <bc995a702bfa0c0efa83792a0d5c46bfe1ff0a4b.camel@redhat.com>
-Subject: Re: [PATCH] drm/nouveau: change base917c_format from global to
- static
-From:   Lyude Paul <lyude@redhat.com>
-To:     Tom Rix <trix@redhat.com>, bskeggs@redhat.com, kherbst@redhat.com,
-        airlied@linux.ie, daniel@ffwll.ch
-Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Date:   Mon, 18 Apr 2022 14:41:02 -0400
-In-Reply-To: <20220418141842.296386-1-trix@redhat.com>
-References: <20220418141842.296386-1-trix@redhat.com>
-Organization: Red Hat Inc.
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 18 Apr 2022 14:46:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACE12E68F
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 11:43:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650307427; x=1681843427;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=N3A1POqgDp1mxQ9V0+SRZJCWPyA+HR3Nuje9R/F7YSA=;
+  b=Ox+U6SKmsZFMG+axraum1aenSs/eGTQ6RIJG7H3BNbxwJjJPHT0A2hyu
+   WceTLNAhH2dwnKFboAl3g6WtC6go3LnmFe+DLA+Mdr6J7sibk6EEMGog3
+   hymFU6/iPGUmCre95cBsuA3/U7yqyIi7nNXFwp6g4qoKjH4wStFfhY59z
+   DpSbstCAkID0uFXYkjPLYP/C5MyyatJhtoYQbl0udkwmE3a8WOEmCsg+G
+   yQn6na4DoqOBX++iiMBFf/S1+gvHLCAaN9sjcwkKNIcY4s0k5qJL8Qi7y
+   JN1w7vkZfA07s1w+IKZpNS+IzgG98sYxQj2kvJCf13IGDhpHNM+0myn3U
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="250889948"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="250889948"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 11:43:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="646960579"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 Apr 2022 11:43:45 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngWLh-0004sg-0E;
+        Mon, 18 Apr 2022 18:43:45 +0000
+Date:   Tue, 19 Apr 2022 02:43:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dmitry Osipenko <digetx@gmail.com>
+Subject: arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5:
+ warning: no previous prototype for function
+ 'LZ4_decompress_safe_forceExtDict'
+Message-ID: <202204190231.jAoAYNgP-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,41 +66,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Lyude Paul <lyude@redhat.com>
+Hi Krzysztof,
 
-Will push this to the appropriate branch in a little bit
+First bad commit (maybe != root cause):
 
-On Mon, 2022-04-18 at 10:18 -0400, Tom Rix wrote:
-> Smatch reports this issue
-> base917c.c:26:1: warning: symbol 'base917c_format'
->   was not declared. Should it be static?
-> 
-> base917c_format is only used in base917.c.  Single
-> file variables should not be global so change
-> base917c_format's storage-class specifier to static.
-> 
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/nouveau/dispnv50/base917c.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/nouveau/dispnv50/base917c.c
-> b/drivers/gpu/drm/nouveau/dispnv50/base917c.c
-> index a1baed4fe0e9..ca260509a4f1 100644
-> --- a/drivers/gpu/drm/nouveau/dispnv50/base917c.c
-> +++ b/drivers/gpu/drm/nouveau/dispnv50/base917c.c
-> @@ -22,7 +22,7 @@
->  #include "base.h"
->  #include "atom.h"
->  
-> -const u32
-> +static const u32
->  base917c_format[] = {
->         DRM_FORMAT_C8,
->         DRM_FORMAT_XRGB8888,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 84a0124a9d715d844675c8cfbe5bbc9147121f73 MIPS: ralink: define stubs for clk_set_parent to fix compile testing
+date:   1 year, 1 month ago
+config: mips-buildonly-randconfig-r002-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190231.jAoAYNgP-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install mips cross compiling tool for clang build
+        # apt-get install binutils-mips-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=84a0124a9d715d844675c8cfbe5bbc9147121f73
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 84a0124a9d715d844675c8cfbe5bbc9147121f73
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   arch/mips/boot/compressed/decompress.c:40:6: warning: no previous prototype for function 'error' [-Wmissing-prototypes]
+   void error(char *x)
+        ^
+   arch/mips/boot/compressed/decompress.c:40:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void error(char *x)
+   ^
+   static 
+   In file included from arch/mips/boot/compressed/decompress.c:62:
+   In file included from arch/mips/boot/compressed/../../../../lib/decompress_unlz4.c:10:
+   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:484:5: warning: no previous prototype for function 'LZ4_decompress_safe_withPrefix64k' [-Wmissing-prototypes]
+   int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
+       ^
+   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:484:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
+   ^
+   static 
+>> arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:5: warning: no previous prototype for function 'LZ4_decompress_safe_forceExtDict' [-Wmissing-prototypes]
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+       ^
+   arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c:506:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+   ^
+   static 
+   arch/mips/boot/compressed/decompress.c:83:6: warning: no previous prototype for function '__stack_chk_fail' [-Wmissing-prototypes]
+   void __stack_chk_fail(void)
+        ^
+   arch/mips/boot/compressed/decompress.c:83:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __stack_chk_fail(void)
+   ^
+   static 
+   arch/mips/boot/compressed/decompress.c:88:6: warning: no previous prototype for function 'decompress_kernel' [-Wmissing-prototypes]
+   void decompress_kernel(unsigned long boot_heap_start)
+        ^
+   arch/mips/boot/compressed/decompress.c:88:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void decompress_kernel(unsigned long boot_heap_start)
+   ^
+   static 
+   5 warnings generated.
+
+
+vim +/LZ4_decompress_safe_forceExtDict +506 arch/mips/boot/compressed/../../../../lib/lz4/lz4_decompress.c
+
+2209fda323e2fd Gao Xiang    2018-10-30  483  
+2209fda323e2fd Gao Xiang    2018-10-30 @484  int LZ4_decompress_safe_withPrefix64k(const char *source, char *dest,
+2209fda323e2fd Gao Xiang    2018-10-30  485  				      int compressedSize, int maxOutputSize)
+2209fda323e2fd Gao Xiang    2018-10-30  486  {
+2209fda323e2fd Gao Xiang    2018-10-30  487  	return LZ4_decompress_generic(source, dest,
+2209fda323e2fd Gao Xiang    2018-10-30  488  				      compressedSize, maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  489  				      endOnInputSize, decode_full_block,
+2209fda323e2fd Gao Xiang    2018-10-30  490  				      withPrefix64k,
+2209fda323e2fd Gao Xiang    2018-10-30  491  				      (BYTE *)dest - 64 * KB, NULL, 0);
+2209fda323e2fd Gao Xiang    2018-10-30  492  }
+2209fda323e2fd Gao Xiang    2018-10-30  493  
+2209fda323e2fd Gao Xiang    2018-10-30  494  static int LZ4_decompress_safe_withSmallPrefix(const char *source, char *dest,
+2209fda323e2fd Gao Xiang    2018-10-30  495  					       int compressedSize,
+2209fda323e2fd Gao Xiang    2018-10-30  496  					       int maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  497  					       size_t prefixSize)
+2209fda323e2fd Gao Xiang    2018-10-30  498  {
+2209fda323e2fd Gao Xiang    2018-10-30  499  	return LZ4_decompress_generic(source, dest,
+2209fda323e2fd Gao Xiang    2018-10-30  500  				      compressedSize, maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  501  				      endOnInputSize, decode_full_block,
+2209fda323e2fd Gao Xiang    2018-10-30  502  				      noDict,
+2209fda323e2fd Gao Xiang    2018-10-30  503  				      (BYTE *)dest - prefixSize, NULL, 0);
+4e1a33b105ddf2 Sven Schmidt 2017-02-24  504  }
+cffb78b0e0b3a3 Kyungsik Lee 2013-07-08  505  
+2209fda323e2fd Gao Xiang    2018-10-30 @506  int LZ4_decompress_safe_forceExtDict(const char *source, char *dest,
+2209fda323e2fd Gao Xiang    2018-10-30  507  				     int compressedSize, int maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  508  				     const void *dictStart, size_t dictSize)
+2209fda323e2fd Gao Xiang    2018-10-30  509  {
+2209fda323e2fd Gao Xiang    2018-10-30  510  	return LZ4_decompress_generic(source, dest,
+2209fda323e2fd Gao Xiang    2018-10-30  511  				      compressedSize, maxOutputSize,
+2209fda323e2fd Gao Xiang    2018-10-30  512  				      endOnInputSize, decode_full_block,
+2209fda323e2fd Gao Xiang    2018-10-30  513  				      usingExtDict, (BYTE *)dest,
+2209fda323e2fd Gao Xiang    2018-10-30  514  				      (const BYTE *)dictStart, dictSize);
+2209fda323e2fd Gao Xiang    2018-10-30  515  }
+2209fda323e2fd Gao Xiang    2018-10-30  516  
+
+:::::: The code at line 506 was first introduced by commit
+:::::: 2209fda323e2fd2a2d0885595fd5097717f8d2aa lib/lz4: update LZ4 decompressor module
+
+:::::: TO: Gao Xiang <gaoxiang25@huawei.com>
+:::::: CC: Linus Torvalds <torvalds@linux-foundation.org>
 
 -- 
-Cheers,
- Lyude Paul (she/her)
- Software Engineer at Red Hat
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

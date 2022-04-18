@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82BB550589D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E5D5059FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245073AbiDROGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
+        id S1344613AbiDRO1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244488AbiDRNuC (ORCPT
+        with ESMTP id S1344025AbiDROQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:50:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0B8443AD8;
-        Mon, 18 Apr 2022 06:01:48 -0700 (PDT)
+        Mon, 18 Apr 2022 10:16:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEC8396B7;
+        Mon, 18 Apr 2022 06:13:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8EF7F609EE;
-        Mon, 18 Apr 2022 13:01:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E08AC385A1;
-        Mon, 18 Apr 2022 13:01:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9246B60F16;
+        Mon, 18 Apr 2022 13:12:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E5C9C385A1;
+        Mon, 18 Apr 2022 13:12:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286908;
-        bh=GWct4j8vHMTNJlD+w0aPeGQoSvV2bVI6BpkNRMBq7SU=;
+        s=korg; t=1650287558;
+        bh=6qmuWssJE8BGwTQm90LV/eDA7PH3hvnsKvgw2QngIXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=go6cCsnkCiBPQVN1KXm1HfeRflzYCHlr7fdMQl99F35nEZozC+WdfTdxC5/YOIcey
-         KL/IXaP8S0Yo63VjoPnRivKeX9sKufx0nwkXjFssHimwTP5E+Kd5gpc7n+soce2nAR
-         5EMto/sgEnxQ5E5Bkn36PvEMr5/IaDPlnqgxFMm0=
+        b=pV5rk0noWlAfnxTm4pyHPl7XWD3UmNPlrP1Z8sKWceU6s3H72v7H7ba/sBtwA+ClT
+         PsePp1BM5rHoUSxgGwax57rYGUW1PqFKbYQvoyP46k0471EBvzcrRY0J74ZTTJgxnQ
+         JSsA0FtrN3uuw6NGHzLlpjDeiBE0Y+BqsesvB4P8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 4.14 283/284] smp: Fix offline cpu check in flush_smp_call_function_queue()
+        stable@vger.kernel.org, Vinod Koul <vkoul@kernel.org>
+Subject: [PATCH 4.9 198/218] dmaengine: Revert "dmaengine: shdma: Fix runtime PM imbalance on error"
 Date:   Mon, 18 Apr 2022 14:14:24 +0200
-Message-Id: <20220418121221.302446221@linuxfoundation.org>
+Message-Id: <20220418121207.282275188@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,42 +53,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+From: Vinod Koul <vkoul@kernel.org>
 
-commit 9e949a3886356fe9112c6f6f34a6e23d1d35407f upstream.
+commit d143f939a95696d38ff800ada14402fa50ebbd6c upstream.
 
-The check in flush_smp_call_function_queue() for callbacks that are sent
-to offline CPUs currently checks whether the queue is empty.
+This reverts commit 455896c53d5b ("dmaengine: shdma: Fix runtime PM
+imbalance on error") as the patch wrongly reduced the count on error and
+did not bail out. So drop the count by reverting the patch .
 
-However, flush_smp_call_function_queue() has just deleted all the
-callbacks from the queue and moved all the entries into a local list.
-This checks would only be positive if some callbacks were added in the
-short time after llist_del_all() was called. This does not seem to be
-the intention of this check.
-
-Change the check to look at the local list to which the entries were
-moved instead of the queue from which all the callbacks were just
-removed.
-
-Fixes: 8d056c48e4862 ("CPU hotplug, smp: flush any pending IPI callbacks before CPU offline")
-Signed-off-by: Nadav Amit <namit@vmware.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Link: https://lore.kernel.org/r/20220319072015.1495036-1-namit@vmware.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/smp.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/sh/shdma-base.c |    4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -221,7 +221,7 @@ static void flush_smp_call_function_queu
+--- a/drivers/dma/sh/shdma-base.c
++++ b/drivers/dma/sh/shdma-base.c
+@@ -118,10 +118,8 @@ static dma_cookie_t shdma_tx_submit(stru
+ 		ret = pm_runtime_get(schan->dev);
  
- 	/* There shouldn't be any pending callbacks on an offline CPU. */
- 	if (unlikely(warn_cpu_offline && !cpu_online(smp_processor_id()) &&
--		     !warned && !llist_empty(head))) {
-+		     !warned && entry != NULL)) {
- 		warned = true;
- 		WARN(1, "IPI on offline CPU %d\n", smp_processor_id());
+ 		spin_unlock_irq(&schan->chan_lock);
+-		if (ret < 0) {
++		if (ret < 0)
+ 			dev_err(schan->dev, "%s(): GET = %d\n", __func__, ret);
+-			pm_runtime_put(schan->dev);
+-		}
+ 
+ 		pm_runtime_barrier(schan->dev);
  
 
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6111550588E
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:04:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ADD35059AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245221AbiDROE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57508 "EHLO
+        id S1346086AbiDROZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243885AbiDRNqt (ORCPT
+        with ESMTP id S245734AbiDROM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:46:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198CE29809;
-        Mon, 18 Apr 2022 06:01:05 -0700 (PDT)
+        Mon, 18 Apr 2022 10:12:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BBF381A0;
+        Mon, 18 Apr 2022 06:11:56 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EAD160929;
-        Mon, 18 Apr 2022 13:01:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E3C3C385A1;
-        Mon, 18 Apr 2022 13:01:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2FB51B80EE2;
+        Mon, 18 Apr 2022 13:11:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 662E8C385A8;
+        Mon, 18 Apr 2022 13:11:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286863;
-        bh=+hLm5oVQl3rCOm+Tv3ZDVA98eqa1DK4EZn9zi/zyyP0=;
+        s=korg; t=1650287513;
+        bh=3yzvAodLOE8G2QKyg5PZZsSv/bFd6eznMK/fTDThLUA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ASE9RcXQMA/7Jw9AFJjfdZpPcp04Ahgk7s2soNEPEsUv9YLrNl2axB39+pLFz33Ut
-         15xU+kptUK3RiI/pX5mYG4uDEYVUbyYLS9157X0KxIITNa2j+lCv+3zVcA7DH4MUBS
-         EBoLgfpKcgtGi5uclezTXJqnr2Ec8rNbwRPVnPNk=
+        b=QCYOhFDn5cKtG1b5JOHgoex4gcrBMkbcZxP0FBtguJSZL2g03QuVgPghqVHGqPQ8h
+         EOU3hW4xQnfKx+W32k80TNmL5WrDNg4GU7tK1NfLNzQxctmHzOWX0/FudquOkxxsOg
+         XMkx7LAWmGhLOp8mmGm3mvRM31EmBRKq2yruzWh0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Michael Kelley <mikelley@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 270/284] Drivers: hv: vmbus: Prevent load re-ordering when reading ring buffer
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Amit Shah <amit@kernel.org>,
+        virtualization@lists.linux-foundation.org,
+        Arnd Bergmann <arnd@arndb.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 185/218] virtio_console: eliminate anonymous module_init & module_exit
 Date:   Mon, 18 Apr 2022 14:14:11 +0200
-Message-Id: <20220418121220.532174076@linuxfoundation.org>
+Message-Id: <20220418121206.380989124@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,55 +56,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Kelley <mikelley@microsoft.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-[ Upstream commit b6cae15b5710c8097aad26a2e5e752c323ee5348 ]
+[ Upstream commit fefb8a2a941338d871e2d83fbd65fbfa068857bd ]
 
-When reading a packet from a host-to-guest ring buffer, there is no
-memory barrier between reading the write index (to see if there is
-a packet to read) and reading the contents of the packet. The Hyper-V
-host uses store-release when updating the write index to ensure that
-writes of the packet data are completed first. On the guest side,
-the processor can reorder and read the packet data before the write
-index, and sometimes get stale packet data. Getting such stale packet
-data has been observed in a reproducible case in a VM on ARM64.
+Eliminate anonymous module_init() and module_exit(), which can lead to
+confusion or ambiguity when reading System.map, crashes/oops/bugs,
+or an initcall_debug log.
 
-Fix this by using virt_load_acquire() to read the write index,
-ensuring that reads of the packet data cannot be reordered
-before it. Preventing such reordering is logically correct, and
-with this change, getting stale data can no longer be reproduced.
+Give each of these init and exit functions unique driver-specific
+names to eliminate the anonymous names.
 
-Signed-off-by: Michael Kelley <mikelley@microsoft.com>
-Reviewed-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Link: https://lore.kernel.org/r/1648394710-33480-1-git-send-email-mikelley@microsoft.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+Example 1: (System.map)
+ ffffffff832fc78c t init
+ ffffffff832fc79e t init
+ ffffffff832fc8f8 t init
+
+Example 2: (initcall_debug log)
+ calling  init+0x0/0x12 @ 1
+ initcall init+0x0/0x12 returned 0 after 15 usecs
+ calling  init+0x0/0x60 @ 1
+ initcall init+0x0/0x60 returned 0 after 2 usecs
+ calling  init+0x0/0x9a @ 1
+ initcall init+0x0/0x9a returned 0 after 74 usecs
+
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reviewed-by: Amit Shah <amit@kernel.org>
+Cc: virtualization@lists.linux-foundation.org
+Cc: Arnd Bergmann <arnd@arndb.de>
+Link: https://lore.kernel.org/r/20220316192010.19001-3-rdunlap@infradead.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/ring_buffer.c | 11 ++++++++++-
- 1 file changed, 10 insertions(+), 1 deletion(-)
+ drivers/char/virtio_console.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hv/ring_buffer.c b/drivers/hv/ring_buffer.c
-index 74c1dfb8183b..6b08e9d9b382 100644
---- a/drivers/hv/ring_buffer.c
-+++ b/drivers/hv/ring_buffer.c
-@@ -340,7 +340,16 @@ int hv_ringbuffer_read(struct vmbus_channel *channel,
- static u32 hv_pkt_iter_avail(const struct hv_ring_buffer_info *rbi)
- {
- 	u32 priv_read_loc = rbi->priv_read_index;
--	u32 write_loc = READ_ONCE(rbi->ring_buffer->write_index);
-+	u32 write_loc;
-+
-+	/*
-+	 * The Hyper-V host writes the packet data, then uses
-+	 * store_release() to update the write_index.  Use load_acquire()
-+	 * here to prevent loads of the packet data from being re-ordered
-+	 * before the read of the write_index and potentially getting
-+	 * stale data.
-+	 */
-+	write_loc = virt_load_acquire(&rbi->ring_buffer->write_index);
+diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+index a6b6dc204c1f..ba4c546db756 100644
+--- a/drivers/char/virtio_console.c
++++ b/drivers/char/virtio_console.c
+@@ -2284,7 +2284,7 @@ static struct virtio_driver virtio_rproc_serial = {
+ 	.remove =	virtcons_remove,
+ };
  
- 	if (write_loc >= priv_read_loc)
- 		return write_loc - priv_read_loc;
+-static int __init init(void)
++static int __init virtio_console_init(void)
+ {
+ 	int err;
+ 
+@@ -2321,7 +2321,7 @@ static int __init init(void)
+ 	return err;
+ }
+ 
+-static void __exit fini(void)
++static void __exit virtio_console_fini(void)
+ {
+ 	reclaim_dma_bufs();
+ 
+@@ -2331,8 +2331,8 @@ static void __exit fini(void)
+ 	class_destroy(pdrvdata.class);
+ 	debugfs_remove_recursive(pdrvdata.debugfs_dir);
+ }
+-module_init(init);
+-module_exit(fini);
++module_init(virtio_console_init);
++module_exit(virtio_console_fini);
+ 
+ MODULE_DESCRIPTION("Virtio console driver");
+ MODULE_LICENSE("GPL");
 -- 
 2.35.1
 

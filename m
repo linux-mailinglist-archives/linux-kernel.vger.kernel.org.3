@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C12535057AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE1C150552B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243756AbiDRNyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41352 "EHLO
+        id S241199AbiDRNL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244867AbiDRNa7 (ORCPT
+        with ESMTP id S241872AbiDRM7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 785631EEEF;
-        Mon, 18 Apr 2022 05:56:42 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84342ED6A;
+        Mon, 18 Apr 2022 05:39:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F2BB26115A;
-        Mon, 18 Apr 2022 12:56:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F1FC385A1;
-        Mon, 18 Apr 2022 12:56:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EC09611E4;
+        Mon, 18 Apr 2022 12:39:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70BC3C385A8;
+        Mon, 18 Apr 2022 12:39:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286601;
-        bh=A/6IH/eVbD7pC1jgqsxa90n8fT6Oo4kz+pG3eQZ/lBo=;
+        s=korg; t=1650285582;
+        bh=YRvKQF4TGz2MGn3Qs1SdkPzV6jURwCpAx/ukdGPJ5Jc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=j3DwvvqAY606eE03kTZfhXxflHiuxEycdenqQ7yRIUKltuceK5KB6bnNpFnOhauyN
-         0jree+UZLLqjJpyIU+wsEVQoNg2SiFDkxqdubEgsf7kGnEldQospE94nuNf+HSqxEF
-         JDgbJX/NfJ0NLpyXo6n4bSKGi/mT1iGSEkmREdhs=
+        b=LGswZX1aQYZrpeo7kLHyp2/YBLnCZzQG4P4DnQQuTrm3xHQMAo1gEhYw9d9hF3A2a
+         /v3Z2jM/hlJVYkvryxV1JTwvH7Fg53D+9q1cn5EL64Kn2WBPvGbBHbon017C35B43p
+         bQU2R5aikVSL4ebZQvCkjB4sn+eB8ZezIBNV6jqg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.14 187/284] ubifs: setflags: Make dirtied_ino_d 8 bytes aligned
-Date:   Mon, 18 Apr 2022 14:12:48 +0200
-Message-Id: <20220418121217.054752068@linuxfoundation.org>
+        stable@vger.kernel.org, Chris Park <Chris.Park@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 047/105] drm/amd/display: Update VTEM Infopacket definition
+Date:   Mon, 18 Apr 2022 14:12:49 +0200
+Message-Id: <20220418121147.816426452@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,38 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Leo (Hanghong) Ma <hanghong.ma@amd.com>
 
-commit 1b83ec057db16b4d0697dc21ef7a9743b6041f72 upstream.
+[ Upstream commit c9fbf6435162ed5fb7201d1d4adf6585c6a8c327 ]
 
-Make 'ui->data_len' aligned with 8 bytes before it is assigned to
-dirtied_ino_d. Since 8871d84c8f8b0c6b("ubifs: convert to fileattr")
-applied, 'setflags()' only affects regular files and directories, only
-xattr inode, symlink inode and special inode(pipe/char_dev/block_dev)
-have none- zero 'ui->data_len' field, so assertion
-'!(req->dirtied_ino_d & 7)' cannot fail in ubifs_budget_space().
-To avoid assertion fails in future evolution(eg. setflags can operate
-special inodes), it's better to make dirtied_ino_d 8 bytes aligned,
-after all aligned size is still zero for regular files.
+[Why & How]
+The latest HDMI SPEC has updated the VTEM packet structure,
+so change the VTEM Infopacket defined in the driver side to align
+with the SPEC.
 
-Fixes: 1e51764a3c2ac05a ("UBIFS: add new flash file system")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Chris Park <Chris.Park@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Leo (Hanghong) Ma <hanghong.ma@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/ubifs/ioctl.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../gpu/drm/amd/display/modules/info_packet/info_packet.c    | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
---- a/fs/ubifs/ioctl.c
-+++ b/fs/ubifs/ioctl.c
-@@ -110,7 +110,7 @@ static int setflags(struct inode *inode,
- 	struct ubifs_inode *ui = ubifs_inode(inode);
- 	struct ubifs_info *c = inode->i_sb->s_fs_info;
- 	struct ubifs_budget_req req = { .dirtied_ino = 1,
--					.dirtied_ino_d = ui->data_len };
-+			.dirtied_ino_d = ALIGN(ui->data_len, 8) };
+diff --git a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+index 0fdf7a3e96de..96e18050a617 100644
+--- a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
++++ b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+@@ -100,7 +100,8 @@ enum vsc_packet_revision {
+ //PB7 = MD0
+ #define MASK_VTEM_MD0__VRR_EN         0x01
+ #define MASK_VTEM_MD0__M_CONST        0x02
+-#define MASK_VTEM_MD0__RESERVED2      0x0C
++#define MASK_VTEM_MD0__QMS_EN         0x04
++#define MASK_VTEM_MD0__RESERVED2      0x08
+ #define MASK_VTEM_MD0__FVA_FACTOR_M1  0xF0
  
- 	err = ubifs_budget_space(c, &req);
- 	if (err)
+ //MD1
+@@ -109,7 +110,7 @@ enum vsc_packet_revision {
+ //MD2
+ #define MASK_VTEM_MD2__BASE_REFRESH_RATE_98  0x03
+ #define MASK_VTEM_MD2__RB                    0x04
+-#define MASK_VTEM_MD2__RESERVED3             0xF8
++#define MASK_VTEM_MD2__NEXT_TFR              0xF8
+ 
+ //MD3
+ #define MASK_VTEM_MD3__BASE_REFRESH_RATE_07  0xFF
+-- 
+2.35.1
+
 
 

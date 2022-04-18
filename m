@@ -2,44 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BD36505497
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55B8F50524F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241718AbiDRNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
+        id S239711AbiDRMm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240033AbiDRMzj (ORCPT
+        with ESMTP id S239699AbiDRMdV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBD6633E;
-        Mon, 18 Apr 2022 05:37:35 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3839064C7;
+        Mon, 18 Apr 2022 05:25:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 924B0B80EE0;
-        Mon, 18 Apr 2022 12:37:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40F9C385A1;
-        Mon, 18 Apr 2022 12:37:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5F1160B40;
+        Mon, 18 Apr 2022 12:25:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2874C385A1;
+        Mon, 18 Apr 2022 12:25:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285452;
-        bh=R/MGdFWFUYLX3NQgsrRnXg/2rEzuiwpwdvMcLPjmzJw=;
+        s=korg; t=1650284708;
+        bh=PVzG1MWzkJT1O9czAbwBC3AKAl6ssTuVyBQ1P7VACoc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ns35Ozz/zyQ7WJ2eVEjp9Csz3zH70eiKhmEkdboDGFUm9SmL2D0t4AAAmmGdcOYPb
-         JNLFj9DTNM7ma4xUtrHIMcBHu5lkVXKc5YQiXo7Ggoe38aFkiRc0Diu1VX1445d3bX
-         Ck0clqsWqqufNAm0nJ14HgxIcWM77QO5YfxEmfXI=
+        b=JiaucOZ9AqEYirYCFIWhqRLDwu37BMTR997C495c9Hko+rJDaKzRzUMBCPUXeHVaw
+         JB/bplPbtLrcDefFX4Ie8/scQvqZylMavK3ngEI8q8G7TKXaq1QMbPYvRXNmeYRgZe
+         2Hziq8xl31/dkFhXIZSaYhni3B8sXJYwzPCN+eNY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 022/105] drm/msm: Fix range size vs end confusion
+        stable@vger.kernel.org, Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 5.17 175/219] mm/secretmem: fix panic when growing a memfd_secret
 Date:   Mon, 18 Apr 2022 14:12:24 +0200
-Message-Id: <20220418121146.761869533@linuxfoundation.org>
+Message-Id: <20220418121211.776725349@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,40 +58,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Axel Rasmussen <axelrasmussen@google.com>
 
-[ Upstream commit 537fef808be5ea56f6fc06932162550819a3b3c3 ]
+commit f9b141f93659e09a52e28791ccbaf69c273b8e92 upstream.
 
-The fourth param is size, rather than range_end.
+When one tries to grow an existing memfd_secret with ftruncate, one gets
+a panic [1].  For example, doing the following reliably induces the
+panic:
 
-Note that we could increase the address space size if we had a way to
-prevent buffers from spanning a 4G split, mostly just to avoid fw bugs
-with 64b math.
+    fd = memfd_secret();
 
-Fixes: 84c31ee16f90 ("drm/msm/a6xx: Add support for per-instance pagetables")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20220407202836.1211268-1-robdclark@gmail.com
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    ftruncate(fd, 10);
+    ptr = mmap(NULL, 10, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    strcpy(ptr, "123456789");
+
+    munmap(ptr, 10);
+    ftruncate(fd, 20);
+
+The basic reason for this is, when we grow with ftruncate, we call down
+into simple_setattr, and then truncate_inode_pages_range, and eventually
+we try to zero part of the memory.  The normal truncation code does this
+via the direct map (i.e., it calls page_address() and hands that to
+memset()).
+
+For memfd_secret though, we specifically don't map our pages via the
+direct map (i.e.  we call set_direct_map_invalid_noflush() on every
+fault).  So the address returned by page_address() isn't useful, and
+when we try to memset() with it we panic.
+
+This patch avoids the panic by implementing a custom setattr for
+memfd_secret, which detects resizes specifically (setting the size for
+the first time works just fine, since there are no existing pages to try
+to zero), and rejects them with EINVAL.
+
+One could argue growing should be supported, but I think that will
+require a significantly more lengthy change.  So, I propose a minimal
+fix for the benefit of stable kernels, and then perhaps to extend
+memfd_secret to support growing in a separate patch.
+
+[1]:
+
+  BUG: unable to handle page fault for address: ffffa0a889277028
+  #PF: supervisor write access in kernel mode
+  #PF: error_code(0x0002) - not-present page
+  PGD afa01067 P4D afa01067 PUD 83f909067 PMD 83f8bf067 PTE 800ffffef6d88060
+  Oops: 0002 [#1] PREEMPT SMP DEBUG_PAGEALLOC PTI
+  CPU: 0 PID: 281 Comm: repro Not tainted 5.17.0-dbg-DEV #1
+  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.15.0-1 04/01/2014
+  RIP: 0010:memset_erms+0x9/0x10
+  Code: c1 e9 03 40 0f b6 f6 48 b8 01 01 01 01 01 01 01 01 48 0f af c6 f3 48 ab 89 d1 f3 aa 4c 89 c8 c3 90 49 89 f9 40 88 f0 48 89 d1 <f3> aa 4c 89 c8 c3 90 49 89 fa 40 0f b6 ce 48 b8 01 01 01 01 01 01
+  RSP: 0018:ffffb932c09afbf0 EFLAGS: 00010246
+  RAX: 0000000000000000 RBX: ffffda63c4249dc0 RCX: 0000000000000fd8
+  RDX: 0000000000000fd8 RSI: 0000000000000000 RDI: ffffa0a889277028
+  RBP: ffffb932c09afc00 R08: 0000000000001000 R09: ffffa0a889277028
+  R10: 0000000000020023 R11: 0000000000000000 R12: ffffda63c4249dc0
+  R13: ffffa0a890d70d98 R14: 0000000000000028 R15: 0000000000000fd8
+  FS:  00007f7294899580(0000) GS:ffffa0af9bc00000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: ffffa0a889277028 CR3: 0000000107ef6006 CR4: 0000000000370ef0
+  DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+  DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+  Call Trace:
+   ? zero_user_segments+0x82/0x190
+   truncate_inode_partial_folio+0xd4/0x2a0
+   truncate_inode_pages_range+0x380/0x830
+   truncate_setsize+0x63/0x80
+   simple_setattr+0x37/0x60
+   notify_change+0x3d8/0x4d0
+   do_sys_ftruncate+0x162/0x1d0
+   __x64_sys_ftruncate+0x1c/0x20
+   do_syscall_64+0x44/0xa0
+   entry_SYSCALL_64_after_hwframe+0x44/0xae
+  Modules linked in: xhci_pci xhci_hcd virtio_net net_failover failover virtio_blk virtio_balloon uhci_hcd ohci_pci ohci_hcd evdev ehci_pci ehci_hcd 9pnet_virtio 9p netfs 9pnet
+  CR2: ffffa0a889277028
+
+[lkp@intel.com: secretmem_iops can be static]
+  Signed-off-by: kernel test robot <lkp@intel.com>
+[axelrasmussen@google.com: return EINVAL]
+
+Link: https://lkml.kernel.org/r/20220324210909.1843814-1-axelrasmussen@google.com
+Link: https://lkml.kernel.org/r/20220412193023.279320-1-axelrasmussen@google.com
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Matthew Wilcox <willy@infradead.org>
+Cc: <stable@vger.kernel.org>
+Cc: kernel test robot <lkp@intel.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/secretmem.c |   17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 9e09805575db..39563daff4a0 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1222,7 +1222,7 @@ a6xx_create_private_address_space(struct msm_gpu *gpu)
- 		return ERR_CAST(mmu);
+--- a/mm/secretmem.c
++++ b/mm/secretmem.c
+@@ -158,6 +158,22 @@ const struct address_space_operations se
+ 	.isolate_page	= secretmem_isolate_page,
+ };
  
- 	return msm_gem_address_space_create(mmu,
--		"gpu", 0x100000000ULL, 0x1ffffffffULL);
-+		"gpu", 0x100000000ULL, SZ_4G);
- }
++static int secretmem_setattr(struct user_namespace *mnt_userns,
++			     struct dentry *dentry, struct iattr *iattr)
++{
++	struct inode *inode = d_inode(dentry);
++	unsigned int ia_valid = iattr->ia_valid;
++
++	if ((ia_valid & ATTR_SIZE) && inode->i_size)
++		return -EINVAL;
++
++	return simple_setattr(mnt_userns, dentry, iattr);
++}
++
++static const struct inode_operations secretmem_iops = {
++	.setattr = secretmem_setattr,
++};
++
+ static struct vfsmount *secretmem_mnt;
  
- static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
--- 
-2.35.1
-
+ static struct file *secretmem_file_create(unsigned long flags)
+@@ -177,6 +193,7 @@ static struct file *secretmem_file_creat
+ 	mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
+ 	mapping_set_unevictable(inode->i_mapping);
+ 
++	inode->i_op = &secretmem_iops;
+ 	inode->i_mapping->a_ops = &secretmem_aops;
+ 
+ 	/* pretend we are a normal file with zero size */
 
 

@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F14B505176
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE26505145
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiDRMez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37608 "EHLO
+        id S234909AbiDRMb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239332AbiDRM2U (ORCPT
+        with ESMTP id S239369AbiDRM2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:28:20 -0400
+        Mon, 18 Apr 2022 08:28:22 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642ED20F76;
-        Mon, 18 Apr 2022 05:21:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D09A21241;
+        Mon, 18 Apr 2022 05:21:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB5DEB80EC4;
-        Mon, 18 Apr 2022 12:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F309C385A7;
-        Mon, 18 Apr 2022 12:21:35 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BE623B80ED6;
+        Mon, 18 Apr 2022 12:21:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 256C9C385A7;
+        Mon, 18 Apr 2022 12:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284496;
-        bh=+W/EQ3gjZLdXyHVEw5/wH21inEOSDOpQrHskV+1kTUc=;
+        s=korg; t=1650284499;
+        bh=zDfn1lGmLBtYBMqJBS6fF6HQOhZA5RF7ZoQrvNcctxc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KLfeR3m44ybmEXbfp+AB8JmcdYDdb6gtrkHFQGuEEG9c6rPZOGWjnuH7RKarnCC6s
-         VDAjQKCzNvv7kGHSYvs8TBBtmCNgZHQItJMNCFky2meILjKvhpaA5ui/KGzwMj5jno
-         gS1XE8hfgsln8DV39AycNoFgC0jLClC82ezZRS2M=
+        b=MUfTNBUxlh2d8by2COw+0wCeRuiPr9MExJGO52CJmYLLR1/i44llYqcsWQkpTXjGg
+         6dc7qkZi/0euOIok7A7Wmi5o0mb5+RKQSxY886BOEkaIH4IIuX5CXQz8vwKi7ZVLqr
+         g8wzT618LMawV5gTX2iYjwC4QQcUWVO5EKHHGYug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Dylan Yudaken <dylany@fb.com>,
         Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 110/219] io_uring: move io_uring_rsrc_update2 validation
-Date:   Mon, 18 Apr 2022 14:11:19 +0200
-Message-Id: <20220418121209.978272346@linuxfoundation.org>
+Subject: [PATCH 5.17 111/219] io_uring: verify that resv2 is 0 in io_uring_rsrc_update2
+Date:   Mon, 18 Apr 2022 14:11:20 +0200
+Message-Id: <20220418121210.006355712@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -56,42 +56,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Dylan Yudaken <dylany@fb.com>
 
-[ Upstream commit 565c5e616e8061b40a2e1d786c418a7ac3503a8d ]
+[ Upstream commit d8a3ba9c143bf89c032deced8a686ffa53b46098 ]
 
-Move validation to be more consistently straight after
-copy_from_user. This is already done in io_register_rsrc_update and so
-this removes that redundant check.
+Verify that the user does not pass in anything but 0 for this field.
 
+Fixes: 992da01aa932 ("io_uring: change registration/upd/rsrc tagging ABI")
 Signed-off-by: Dylan Yudaken <dylany@fb.com>
-Link: https://lore.kernel.org/r/20220412163042.2788062-2-dylany@fb.com
+Link: https://lore.kernel.org/r/20220412163042.2788062-3-dylany@fb.com
 Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/io_uring.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ fs/io_uring.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
 diff --git a/fs/io_uring.c b/fs/io_uring.c
-index e3d1fc954933..7da6fddaef4d 100644
+index 7da6fddaef4d..2838bc6cdbc8 100644
 --- a/fs/io_uring.c
 +++ b/fs/io_uring.c
-@@ -10784,8 +10784,6 @@ static int __io_register_rsrc_update(struct io_ring_ctx *ctx, unsigned type,
- 	__u32 tmp;
- 	int err;
+@@ -6466,6 +6466,7 @@ static int io_files_update(struct io_kiocb *req, unsigned int issue_flags)
+ 	up.nr = 0;
+ 	up.tags = 0;
+ 	up.resv = 0;
++	up.resv2 = 0;
  
--	if (up->resv)
--		return -EINVAL;
- 	if (check_add_overflow(up->offset, nr_args, &tmp))
- 		return -EOVERFLOW;
- 	err = io_rsrc_node_switch_start(ctx);
-@@ -10811,6 +10809,8 @@ static int io_register_files_update(struct io_ring_ctx *ctx, void __user *arg,
+ 	io_ring_submit_lock(ctx, needs_lock);
+ 	ret = __io_register_rsrc_update(ctx, IORING_RSRC_FILE,
+@@ -10809,7 +10810,7 @@ static int io_register_files_update(struct io_ring_ctx *ctx, void __user *arg,
  	memset(&up, 0, sizeof(up));
  	if (copy_from_user(&up, arg, sizeof(struct io_uring_rsrc_update)))
  		return -EFAULT;
-+	if (up.resv)
-+		return -EINVAL;
+-	if (up.resv)
++	if (up.resv || up.resv2)
+ 		return -EINVAL;
  	return __io_register_rsrc_update(ctx, IORING_RSRC_FILE, &up, nr_args);
  }
- 
+@@ -10823,7 +10824,7 @@ static int io_register_rsrc_update(struct io_ring_ctx *ctx, void __user *arg,
+ 		return -EINVAL;
+ 	if (copy_from_user(&up, arg, sizeof(up)))
+ 		return -EFAULT;
+-	if (!up.nr || up.resv)
++	if (!up.nr || up.resv || up.resv2)
+ 		return -EINVAL;
+ 	return __io_register_rsrc_update(ctx, type, &up, up.nr);
+ }
 -- 
 2.35.1
 

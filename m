@@ -2,107 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A928504B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22966504B7A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 06:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbiDREAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 00:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43792 "EHLO
+        id S236224AbiDREDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 00:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236159AbiDREAo (ORCPT
+        with ESMTP id S236215AbiDREDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 00:00:44 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C07F18B2A;
-        Sun, 17 Apr 2022 20:58:06 -0700 (PDT)
-X-UUID: ea25a7d6522849c189a7d4e46361b833-20220418
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.4,REQID:69bdaea4-6cd1-41b2-ae35-f368e81d687d,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,RULE:Release_Ham,ACTI
-        ON:release,TS:0
-X-CID-META: VersionHash:faefae9,CLOUDID:4e1509f0-da02-41b4-b6df-58f4ccd36682,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,File:nil,QS:0,BEC:nil
-X-UUID: ea25a7d6522849c189a7d4e46361b833-20220418
-Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
-        (envelope-from <jason-jh.lin@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1055210589; Mon, 18 Apr 2022 11:58:00 +0800
-Received: from mtkexhb01.mediatek.inc (172.21.101.102) by
- mtkmbs07n2.mediatek.inc (172.21.101.141) with Microsoft SMTP Server (TLS) id
- 15.0.1497.2; Mon, 18 Apr 2022 11:57:59 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by mtkexhb01.mediatek.inc
- (172.21.101.102) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 18 Apr
- 2022 11:57:59 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 18 Apr 2022 11:57:59 +0800
-Message-ID: <8ac63b04e66de3b1fb1a1ef4547982a345e24ed0.camel@mediatek.com>
-Subject: Re: [PATCH v19 10/10] soc: mediatek: remove DDP_DOMPONENT_DITHER
- enum
-From:   Jason-JH Lin <jason-jh.lin@mediatek.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>
-CC:     CK Hu <ck.hu@mediatek.com>, Nancy Lin <nancy.lin@mediatek.com>,
-        "Singo Chang" <singo.chang@mediatek.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>
-Date:   Mon, 18 Apr 2022 11:57:59 +0800
-In-Reply-To: <387ede3f-20be-cb84-f343-f68c75eaf5fd@collabora.com>
-References: <20220415083911.5186-1-jason-jh.lin@mediatek.com>
-         <20220415083911.5186-11-jason-jh.lin@mediatek.com>
-         <387ede3f-20be-cb84-f343-f68c75eaf5fd@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Mon, 18 Apr 2022 00:03:40 -0400
+Received: from mail-pg1-x542.google.com (mail-pg1-x542.google.com [IPv6:2607:f8b0:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7470018B31
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:01:03 -0700 (PDT)
+Received: by mail-pg1-x542.google.com with SMTP id u2so16637369pgq.10
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 21:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=WDL1LdNCgcBojb3ge+3pVQIK1RVySUq4qbmbuvDh6aM=;
+        b=h7h1nXmldfg6Ma6isM9+5oIdvEdeoX6annXY4zG+KmSd+Oo9+OyzgT7R8J40vSH8lF
+         VKIzoLdn4opHnUt+zP0iYwz4qZCzDcawKprYLI2jPxkepfUry+WAFc2GvbDtObPsK01L
+         3t8yaLPHPn7C35fNEAK5wqET+qShNKc7WFeDt6lyWIYzJZ4phfV0pS6+vFTTLpdjaYVt
+         JGQ/Wcr/ahflqcJpnw1vZ8x9oJNJqzz8Qe02w/42dPlx91y92uwRuQEfh/4j/9ankgGE
+         PHGN6zRs3vCDTA1hV5d1HuVU8Z+uu+ELmkNy9CX/QjPieEB3ww5rxoSum9nv7OD+WTc/
+         /vIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=WDL1LdNCgcBojb3ge+3pVQIK1RVySUq4qbmbuvDh6aM=;
+        b=F2r8YJIbm6Nn8zRx9WrKwPgiridzPAQmxJod2rBFfgX74ZIaq2Z2JXC5Yq0q4DUhPt
+         VMzfMNTiXnFY3YTps1Q5e2kMR64to36faEar6o2Q9ivkXi6DuzCkyAkPEiSBAOCsyf4h
+         q85yRU9O2HyG5fB1eM9akTE5MvaDbhcfWx+GBSs3cy6Egxc5yJe4vBin81i/YlNVxxO7
+         KsVNXyPzZxjQRRt88i4xPAA5KE8+wz1YDvQYo+G5qionU4oOy9FMdx2iv4m6RKNHVPn7
+         MaDIs0O64Y/dk7/BY3+HrYQ6IbbLKSTvIxonfhqgL0g8RmFZVsidi60JZOU8bm5AljCQ
+         VM1Q==
+X-Gm-Message-State: AOAM530ZBIk4/gx3t4c8gMHJTy5UkBSvtNwctXYp6Wc+jmrnl89kir/s
+        zirDaYomdQE1dl1cuAvil8U=
+X-Google-Smtp-Source: ABdhPJykXDe0gp+/XzGRlhpFer2xNQGb2VKm+tH66pl2cpaeyf8rwhJ5Y+rXsRprsibUqrLemIE8kw==
+X-Received: by 2002:a63:fa06:0:b0:39c:f169:18e6 with SMTP id y6-20020a63fa06000000b0039cf16918e6mr8667168pgh.129.1650254462888;
+        Sun, 17 Apr 2022 21:01:02 -0700 (PDT)
+Received: from localhost ([152.70.90.187])
+        by smtp.gmail.com with ESMTPSA id b2-20020a056a000a8200b004f1111c66afsm10935762pfl.148.2022.04.17.21.01.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 17 Apr 2022 21:01:02 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 12:00:58 +0800
+From:   Wang Cheng <wanngchenng@gmail.com>
+To:     Pavel Skripkin <paskripkin@gmail.com>
+Cc:     Larry.Finger@lwfinger.net, florian.c.schilhabel@googlemail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8712: fix uninit-value "data" and "mac"
+Message-ID: <20220418040058.ws6ijoeggnycs22y@ppc.localdomain>
+References: <20220414141223.qwiznrwgjyywngfg@ppc.localdomain>
+ <68484555-f763-bc42-eb4c-9cea2ee8dadb@gmail.com>
+ <20220415095741.3zfuztivtgidvpqc@ppc.localdomain>
+ <5d9181be-0a02-0623-7741-1d4352d62610@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5d9181be-0a02-0623-7741-1d4352d62610@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Angelo,
-
-Thanks for the reviews.
-
-On Fri, 2022-04-15 at 12:32 +0200, AngeloGioacchino Del Regno wrote:
-> Il 15/04/22 10:39, jason-jh.lin ha scritto:
-> > After mmsys and drm change DITHER enum to DDP_COMPONENT_DITHER0,
-> > mmsys header can remove the useless DDP_COMPONENT_DITHER enum.
+On 22/04/16 01:57PM, Pavel Skripkin wrote:
+> Hi Wang,
+> 
+> On 4/15/22 12:57, Wang Cheng wrote:
+> > Hi Pavel, thx for your review.
 > > 
-> > Signed-off-by: jason-jh.lin <jason-jh.lin@mediatek.com>
+> > Sorry, this patch is just confined to fixing uninit-values with
+> > modifying the original code as less as possible. It sounds good to
+> > refactor r8712_usbctrl_vendorreq() with better API.
+> > 
 > 
-> Can you please fix the commit title with:
-> soc: mediatek: remove DDP_DOMPONENT_DITHER from enum
-> 
-> that "from" is important, as you're not removing *an enum*, but *from
-> an enum*.
-> 
-Yes, I agree with you.
-I'll fix it in the next version.
-Thanks.
+> I understand your idea, but this will just hide the real problem until
+> syzbot hit it in different place. So, I believe, it's better to fix the root
+> case instead of hiding local cases.
 
-Regards,
-Jason-JH.Lin
+Of course, I agree on fixing the root case. I will think about replacing
+APIs properly.
 
-> After that:
-> 
-> Reviewed-by: AngeloGioacchino Del Regno <
-> angelogioacchino.delregno@collabora.com>
-> 
-> Thanks!
-> Angelo
--- 
-Jason-JH Lin <jason-jh.lin@mediatek.com>
-
+thanks,
+- w

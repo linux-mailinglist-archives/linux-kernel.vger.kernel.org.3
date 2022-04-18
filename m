@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D887950570C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACC1F5052DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240460AbiDRNtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
+        id S239956AbiDRMvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244067AbiDRN3z (ORCPT
+        with ESMTP id S240873AbiDRMjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:29:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121E540A15;
-        Mon, 18 Apr 2022 05:54:05 -0700 (PDT)
+        Mon, 18 Apr 2022 08:39:43 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8BD63E3;
+        Mon, 18 Apr 2022 05:31:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6443DB80EC3;
-        Mon, 18 Apr 2022 12:54:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98CE2C385A8;
-        Mon, 18 Apr 2022 12:54:02 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id B8FADCE109F;
+        Mon, 18 Apr 2022 12:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD9F4C385A7;
+        Mon, 18 Apr 2022 12:31:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286443;
-        bh=EWN/7L55u75adv+qjP3MgLPwUeZ7+C3NKYz1XAHFdGc=;
+        s=korg; t=1650285080;
+        bh=l7ywPy9WOxnNXRM84kKMPQxICOfShXRpAX2etMq0YZk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QQ14/D4CYfUgk1hj1njF8zFhod47O1Uqy8VwOFh0Yw5N4eP5ncAND6/KGlInG+k/P
-         vOOXviHkilbbiqttZSWxWP1ooV7Ig2L0HTm2XEBXxV0OeY5ORdCT+3y+PyPViKKOsy
-         If/m49eNTxsIMByXCZjQjdnha/HgPsN09XHDv0wo=
+        b=jDjazF3rzrt07txWrZAQORr9kWo8LETz63DjdLgyLgLOA1LrRP4tVJ+yp7XHU6/gJ
+         pa1hltbTeARe4FjaiyNUyOm4x+OMsdk6EUTDyXjhUYLU8ARvQt5LgpZWLobKJixhKP
+         SAONlELFxBBEc2o2UAZ4JIA/p+ARMA2a8ZAxiXio=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <f4bug@amsat.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Dylan Hung <dylan_hung@aspeedtech.com>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 137/284] clk: loongson1: Terminate clk_div_table with sentinel element
+Subject: [PATCH 5.15 098/189] net: ftgmac100: access hardware register after clock ready
 Date:   Mon, 18 Apr 2022 14:11:58 +0200
-Message-Id: <20220418121215.306895356@linuxfoundation.org>
+Message-Id: <20220418121203.285740100@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,37 +55,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
+From: Dylan Hung <dylan_hung@aspeedtech.com>
 
-[ Upstream commit 3eb00f89162e80083dfcaa842468b510462cfeaa ]
+[ Upstream commit 3d2504524531990b32a0629cc984db44f399d161 ]
 
-In order that the end of a clk_div_table can be detected, it must be
-terminated with a sentinel element (.div = 0).
+AST2600 MAC register 0x58 is writable only when the MAC clock is
+enabled.  Usually, the MAC clock is enabled by the bootloader so
+register 0x58 is set normally when the bootloader is involved.  To make
+ast2600 ftgmac100 work without the bootloader, postpone the register
+write until the clock is ready.
 
-Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
-Signed-off-by: Jonathan Neuschäfer <j.neuschaefer@gmx.net>
-Reviewed-by: Philippe Mathieu-Daudé <f4bug@amsat.org>
-Link: https://lore.kernel.org/r/20220218000922.134857-3-j.neuschaefer@gmx.net
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Fixes: 137d23cea1c0 ("net: ftgmac100: Fix Aspeed ast2600 TX hang issue")
+Signed-off-by: Dylan Hung <dylan_hung@aspeedtech.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/loongson1/clk-loongson1c.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/ethernet/faraday/ftgmac100.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
-index 3466f7320b40..e3aa502761a3 100644
---- a/drivers/clk/loongson1/clk-loongson1c.c
-+++ b/drivers/clk/loongson1/clk-loongson1c.c
-@@ -40,6 +40,7 @@ static const struct clk_div_table ahb_div_table[] = {
- 	[1] = { .val = 1, .div = 4 },
- 	[2] = { .val = 2, .div = 3 },
- 	[3] = { .val = 3, .div = 3 },
-+	[4] = { /* sentinel */ }
- };
+diff --git a/drivers/net/ethernet/faraday/ftgmac100.c b/drivers/net/ethernet/faraday/ftgmac100.c
+index ff76e401a014..e1df2dc810a2 100644
+--- a/drivers/net/ethernet/faraday/ftgmac100.c
++++ b/drivers/net/ethernet/faraday/ftgmac100.c
+@@ -1817,11 +1817,6 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 		priv->rxdes0_edorr_mask = BIT(30);
+ 		priv->txdes0_edotr_mask = BIT(30);
+ 		priv->is_aspeed = true;
+-		/* Disable ast2600 problematic HW arbitration */
+-		if (of_device_is_compatible(np, "aspeed,ast2600-mac")) {
+-			iowrite32(FTGMAC100_TM_DEFAULT,
+-				  priv->base + FTGMAC100_OFFSET_TM);
+-		}
+ 	} else {
+ 		priv->rxdes0_edorr_mask = BIT(15);
+ 		priv->txdes0_edotr_mask = BIT(15);
+@@ -1893,6 +1888,11 @@ static int ftgmac100_probe(struct platform_device *pdev)
+ 		err = ftgmac100_setup_clk(priv);
+ 		if (err)
+ 			goto err_phy_connect;
++
++		/* Disable ast2600 problematic HW arbitration */
++		if (of_device_is_compatible(np, "aspeed,ast2600-mac"))
++			iowrite32(FTGMAC100_TM_DEFAULT,
++				  priv->base + FTGMAC100_OFFSET_TM);
+ 	}
  
- void __init ls1x_clk_init(void)
+ 	/* Default ring sizes */
 -- 
-2.34.1
+2.35.1
 
 
 

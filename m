@@ -2,66 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B929504F87
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83530504F89
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236862AbiDRLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S237212AbiDRLtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236879AbiDRLrw (ORCPT
+        with ESMTP id S236879AbiDRLs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:47:52 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF04326ED;
-        Mon, 18 Apr 2022 04:45:13 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id v77so25039995ybi.12;
-        Mon, 18 Apr 2022 04:45:13 -0700 (PDT)
+        Mon, 18 Apr 2022 07:48:57 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F15564D7;
+        Mon, 18 Apr 2022 04:46:19 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-2eafabbc80aso136282027b3.11;
+        Mon, 18 Apr 2022 04:46:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=3QYWuVtVlC10CN/U+uRjoO+2nquc2+/bWq8BF83jGkg=;
-        b=jfQaZilDsjqziuXCg9rlesjzPfFiG3oIMyOIqq5lw8qAztwHtpWY4jtAArkSDne/hj
-         WHMReGX6BfrGLoQnV8WR5NKGH+wYTMucY49FMaoybLsVogUeG5UHNJB90L26is73oQ2a
-         HLEfKNtE1MPtZ0s2VfikMrbz7fcrUP/pZ7JNAwnlEcFoK33Mj/9Y7e/2CjMrd7ZeuZgy
-         pgf6YvEg8sa9VGkmZsUP1Tx72gvCoriVLtdKucG2AtMK1WjpswZgBVERLVq1qETCw6xu
-         aA9NlwqWySqcw07791GL/QEQWtHumXnMAHyu7bIBiQyNxqop33xJp5PvM1nnNFmAy6jK
-         RIzQ==
+        bh=R+k5R+6Tf+kVP5/jwUVVJcqexRzi8y2ZOUAjpeAiUi4=;
+        b=Ce5lUboHlt/gmpUKC++rrBFPSCnQ9wxILvj8LVkvjt0FOXtEEJUt8jEE2p/+9xEXrX
+         AGEhhymndfCana7cViuokWV7Um9RmFBZjENGfgzG7eyBVYy62vB6s4ilKjGc+rfJXTQe
+         pAqrR9cf3zEDv/Y0t39vAsx6ptucgIysTn7d0pEIcrOk4xjwsuyDMAt47QfQ5aaBQoug
+         a7y+fNQYoNbUHae8C9QBgSzxRYnafMZjkFX1M7iI5OimZch5nzLHI8nJ7czhhtbBsmRJ
+         0ppqCtGxFQHePbG1lMZToT2EfPEmBK6/TNedmw9WpRxcnxYpYQa6xqqeAj+2jcoMTrdX
+         AfuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=3QYWuVtVlC10CN/U+uRjoO+2nquc2+/bWq8BF83jGkg=;
-        b=k+KBrApq9ITCj/owHBTmsgdSupHP5JlZRz1A9odfwC/R6o/C/XmZGP1/dITPylZUAA
-         yYbT1hN40IGlJTF6BsKeG00LisnYpz9v5n+YZMHdQvVdnalmp15qV3plKFYERlL2bA13
-         NV1h1kukaOYcaNB0q8ZCzuBmS9OuSbnHHbkZzsz55Ij4lUAcHov50abIVvn0kjP+Me/t
-         mqG8SuV9tHxCCmUTO5JTa8qbIJbgrvzzHjPtIWiGtNMUW8nZ3ZN+E85T1Ai5F+9jnL+s
-         BvcJfHBvBE8x29Q9hZlMGmSV9vdy66M1tKFRbgoR4+YU5QXB/7ZJ+Ttm+AJouBOR+BfV
-         BoYw==
-X-Gm-Message-State: AOAM530IgADmSwhb78/mF2/TkMppWpLt93Sm70BM30i+lUdLw4QvXxKT
-        dJMEbyyR1byZu56yuo5Hhlt1L2PGJR6znwyJbXBHXjL+5pQ=
-X-Google-Smtp-Source: ABdhPJw+jWAcmcfFZ237nXEhtG2xq0d8v20HKmocJKhYOlQFPTgC1WBVREyz/ckqjsxTm4JfzpWxDClmhqtXY0reNTw=
-X-Received: by 2002:a05:6902:1249:b0:644:d8bb:e741 with SMTP id
- t9-20020a056902124900b00644d8bbe741mr7161250ybu.585.1650282313075; Mon, 18
- Apr 2022 04:45:13 -0700 (PDT)
+        bh=R+k5R+6Tf+kVP5/jwUVVJcqexRzi8y2ZOUAjpeAiUi4=;
+        b=UKkpuM2cWrYTVHxM260/vuOkB4Ra5dzhD/iZzhplBAV3m1wfDi3mODpJh1/ork5+jD
+         oSBHwOQQTNOednqjsegzoC8fKRDupZxNw8Xrtz/b80ZvRga2wEst8vdGnrfvpvgDgKzv
+         vk/amL4VUxXsH2vytfSDJZwtlJA+8lSEDie+ZIJrAyfrA09xF/pyzkuYpfqwl2i9Beix
+         eEszwtAw6BQYpvy6seWRRMkC6V3iQIcE2w3bu5W+g0TSOyajNXExnW7v7lK40zaoic2X
+         RAc255am8R+KRRwH8/KMRbQaxBL7N0xJ0e0zROvdht76hlut349b/vCxOklqweqjitkX
+         qT+g==
+X-Gm-Message-State: AOAM5308aVQIwcX9zRyoavOMoxDgi7AQ0g7k0YwuzxdEDx+voQEq7tUd
+        QJGWPUgyrGynML27hNVhab8ZcAF4LENTehIRGJrj1h1i1ztJJw==
+X-Google-Smtp-Source: ABdhPJye5yqT98SnUYRLXzqx8takuFC8eq2pX1Rbb4eUcIiR85AzHfMDt6Qbgw4uG0I1YL+4XsFc6rnW3OecwaE1v5A=
+X-Received: by 2002:a81:5904:0:b0:2eb:f900:882e with SMTP id
+ n4-20020a815904000000b002ebf900882emr9347609ywb.281.1650282378263; Mon, 18
+ Apr 2022 04:46:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220416100502.627289-1-pgwipeout@gmail.com> <20220416100502.627289-4-pgwipeout@gmail.com>
- <eadc4422-15bb-0b46-8235-db6e160e8d32@collabora.com> <CAMdYzYq=nQhwY_4+Y=PM9do_Dcrg1pD-jeD=q36D48ks=WDVgw@mail.gmail.com>
- <a8bb3ef6-8f37-709f-adfe-3608e5c1e11f@collabora.com>
-In-Reply-To: <a8bb3ef6-8f37-709f-adfe-3608e5c1e11f@collabora.com>
+References: <20220329094446.415219-1-tobetter@gmail.com> <CAMdYzYrCZtfDiB6O20Jtp56YQhHj3jMVhCt9aCYNLbD_xwFc3g@mail.gmail.com>
+ <ff0135dc-da30-18b5-f5f4-cefdb0455c6b@kernel.org> <12089439.O9o76ZdvQC@phil> <d3cb233a-1962-af6b-2663-c057e7823a2b@kernel.org>
+In-Reply-To: <d3cb233a-1962-af6b-2663-c057e7823a2b@kernel.org>
 From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Mon, 18 Apr 2022 07:45:02 -0400
-Message-ID: <CAMdYzYrwGyxRnB8YU9vvgqXsKhi9fZ1a7UJhixCbC5mGm9aP8Q@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] arm64: dts: rockchip: add rk3568 pcie2x1 controller
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        PCI <linux-pci@vger.kernel.org>,
+Date:   Mon, 18 Apr 2022 07:46:07 -0400
+Message-ID: <CAMdYzYr6ONFiuA7dhYEdjTXHAN90=NBCEGK3gOY=BBLzf7P-4A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] arm64: dts: rockchip: Add Hardkernel ODROID-M1 board
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Dongjin Kim <tobetter@gmail.com>,
         devicetree <devicetree@vger.kernel.org>,
         arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,33 +70,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 6:23 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Mon, Apr 18, 2022 at 7:21 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >
-> On 4/16/22 13:17, Peter Geis wrote:
-> > On Sat, Apr 16, 2022 at 6:08 AM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> Hi Peter,
-> >>
-> >> On 4/16/22 13:05, Peter Geis wrote:
-> >>> +     pcie2x1: pcie@fe260000 {
-> >>> +             compatible = "rockchip,rk3568-pcie";
-> >>> +             #address-cells = <3>;
-> >>> +             #size-cells = <2>;
-> >>> +             bus-range = <0x0 0xf>;
-> >>> +             assigned-clocks = <&cru ACLK_PCIE20_MST>, <&cru ACLK_PCIE20_SLV>,
-> >>> +                      <&cru ACLK_PCIE20_DBI>, <&cru PCLK_PCIE20>,
-> >>> +                      <&cru CLK_PCIE20_AUX_NDFT>;
-> >>
-> >> Why these assigned-clocks are needed? I don't see anything assigned in
-> >> this patchset.
+> On 17/04/2022 22:55, Heiko Stuebner wrote:
+> >> Usually adding - in subsequent DTS files - means increasing the numbers
+> >> so if you have regulator-[012] then just use regulator-[345] in other
+> >> files. I see potential mess when you combine several DTSI files, each
+> >> defining regulators, so in such case "some-name-regulator" (or reversed)
+> >> is also popular approach.
 > >
-> > Ah, those are remnants of early bringup when performance wasn't good
-> > and I was manually setting clock rates.
+> > so going with
+> >
+> >       dc_12v: dc-12v-regulator {
+> >       };
+> >
+> > i.e. doing a some-name-regulator would be an in-spec way to go?
+> >
+> > In this case I would definitely prefer this over doing a numbered thing.
+> >
+> > I.e. regulator-0 can create really hard to debug issues, when you have
+> > another accidential regulator-0 for a different regulator in there, which
+> > then would create some sort of merged node.
 >
-> If it's not needed, should it be removed then? Otherwise it looks like
-> something is missing in the DT in regards to the assigned clocks.
+> I don't think such case happens frequently, because all regulators are
+> usually used by something (as a phandle) thus they should have a label.
+> This label should be descriptive, so if one can assign same label to
+> entirely different regulators, then the same chances are that same
+> descriptive node will be used.
+>
+> IOW, if you think such mistake with regulator names can happen, then the
+> same can happen with the label...
+>
+> Anyway, answering the question - "dc-12v-regulator" is still not
+> matching exactly the Devicetree spec recommendation, but it's okay for
+> me. :)
 
-Yes, it has been removed from the V7.
-Thanks!
+This seems like an excellent compromise, thanks!
+
+>
+>
+> Best regards,
+> Krzysztof

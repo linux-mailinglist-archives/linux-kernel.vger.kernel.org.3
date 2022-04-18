@@ -2,45 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42FA85058D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B149B5059BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245447AbiDROH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S1344248AbiDRO0o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:26:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243861AbiDRNty (ORCPT
+        with ESMTP id S1343601AbiDROQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:49:54 -0400
+        Mon, 18 Apr 2022 10:16:08 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8301434B1;
-        Mon, 18 Apr 2022 06:01:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0682393E7;
+        Mon, 18 Apr 2022 06:12:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E3DE60B3C;
-        Mon, 18 Apr 2022 13:01:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E116C385A7;
-        Mon, 18 Apr 2022 13:01:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2B2060F5D;
+        Mon, 18 Apr 2022 13:12:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A16C385A1;
+        Mon, 18 Apr 2022 13:12:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286904;
-        bh=zMLP5TNIBiQ355nvXboytYzyDZtwOuVe7iSxgjN8PE4=;
+        s=korg; t=1650287555;
+        bh=Ct3Z8JcrfFbNyKARuB9w5qVtGQ0IISxETKl3CPVyniM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oo9197C7XejWPwZQETt1jGVZcA7yCYq4+xt7H2ly51dRPGIFuHGwiTHoYJmacpp78
-         N1j3Kcm+mSLXjQw0B2F22uJfxsakEK0Lt2CXz6/hbSHoU4ceC391UJZo6vK75Fgw8A
-         bl8Gt6MlIbXKz2HJObAAJgPv2KL5LEKRxN8g1gzM=
+        b=Hui+UAt9auF5a879jjN7/gPrhS0QXjTZRY4t3msdsV6T5W1mKzKG8wtH2Px0r4sMu
+         Q8mdEE+boUfJUu6+g+bwHQ8/OJVi1vPlw6nRQfIEKejKZPLmLBdZnm57hKgF/KRD7I
+         qasZRHcJo525gJL+COADrv8a7CrmGvXFI+x7awAI=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PATCH 4.14 282/284] ARM: davinci: da850-evm: Avoid NULL pointer dereference
+        stable@vger.kernel.org, Adrian Hunter <adrian.hunter@intel.com>,
+        Fangrui Song <maskray@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ian Rogers <irogers@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        John Keeping <john@metanate.com>, Leo Yan <leo.yan@linaro.org>,
+        Michael Petlan <mpetlan@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Sedat Dilek <sedat.dilek@gmail.com>
+Subject: [PATCH 4.9 197/218] tools build: Use $(shell ) instead of `` to get embedded libperls ccopts
 Date:   Mon, 18 Apr 2022 14:14:23 +0200
-Message-Id: <20220418121221.236242740@linuxfoundation.org>
+Message-Id: <20220418121207.211341124@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,58 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nathan Chancellor <nathan@kernel.org>
+From: Arnaldo Carvalho de Melo <acme@redhat.com>
 
-commit 83a1cde5c74bfb44b49cb2a940d044bb2380f4ea upstream.
+commit 541f695cbcb6932c22638b06e0cbe1d56177e2e9 upstream.
 
-With newer versions of GCC, there is a panic in da850_evm_config_emac()
-when booting multi_v5_defconfig in QEMU under the palmetto-bmc machine:
+Just like its done for ldopts and for both in tools/perf/Makefile.config.
 
-Unable to handle kernel NULL pointer dereference at virtual address 00000020
-pgd = (ptrval)
-[00000020] *pgd=00000000
-Internal error: Oops: 5 [#1] PREEMPT ARM
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.15.0 #1
-Hardware name: Generic DT based system
-PC is at da850_evm_config_emac+0x1c/0x120
-LR is at do_one_initcall+0x50/0x1e0
+Using `` to initialize PERL_EMBED_CCOPTS somehow precludes using:
 
-The emac_pdata pointer in soc_info is NULL because davinci_soc_info only
-gets populated on davinci machines but da850_evm_config_emac() is called
-on all machines via device_initcall().
+  $(filter-out SOMETHING_TO_FILTER,$(PERL_EMBED_CCOPTS))
 
-Move the rmii_en assignment below the machine check so that it is only
-dereferenced when running on a supported SoC.
+And we need to do it to allow for building with versions of clang where
+some gcc options selected by distros are not available.
 
-Fixes: bae105879f2f ("davinci: DA850/OMAP-L138 EVM: implement autodetect of RMII PHY")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/YcS4xVWs6bQlQSPC@archlinux-ax161/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Tested-by: Sedat Dilek <sedat.dilek@gmail.com> # Debian/Selfmade LLVM-14 (x86-64)
+Cc: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Fangrui Song <maskray@google.com>
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Ian Rogers <irogers@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: John Keeping <john@metanate.com>
+Cc: Leo Yan <leo.yan@linaro.org>
+Cc: Michael Petlan <mpetlan@redhat.com>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Link: http://lore.kernel.org/lkml/YktYX2OnLtyobRYD@kernel.org
+Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-davinci/board-da850-evm.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/build/feature/Makefile |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/mach-davinci/board-da850-evm.c
-+++ b/arch/arm/mach-davinci/board-da850-evm.c
-@@ -1035,11 +1035,13 @@ static int __init da850_evm_config_emac(
- 	int ret;
- 	u32 val;
- 	struct davinci_soc_info *soc_info = &davinci_soc_info;
--	u8 rmii_en = soc_info->emac_pdata->rmii_en;
-+	u8 rmii_en;
+--- a/tools/build/feature/Makefile
++++ b/tools/build/feature/Makefile
+@@ -162,7 +162,7 @@ strip-libs = $(filter-out -l%,$(1))
+ PERL_EMBED_LDOPTS = $(shell perl -MExtUtils::Embed -e ldopts 2>/dev/null)
+ PERL_EMBED_LDFLAGS = $(call strip-libs,$(PERL_EMBED_LDOPTS))
+ PERL_EMBED_LIBADD = $(call grep-libs,$(PERL_EMBED_LDOPTS))
+-PERL_EMBED_CCOPTS = `perl -MExtUtils::Embed -e ccopts 2>/dev/null`
++PERL_EMBED_CCOPTS = $(shell perl -MExtUtils::Embed -e ccopts 2>/dev/null)
+ FLAGS_PERL_EMBED=$(PERL_EMBED_CCOPTS) $(PERL_EMBED_LDOPTS)
  
- 	if (!machine_is_davinci_da850_evm())
- 		return 0;
- 
-+	rmii_en = soc_info->emac_pdata->rmii_en;
-+
- 	cfg_chip3_base = DA8XX_SYSCFG0_VIRT(DA8XX_CFGCHIP3_REG);
- 
- 	val = __raw_readl(cfg_chip3_base);
+ $(OUTPUT)test-libperl.bin:
 
 

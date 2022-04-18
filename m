@@ -2,79 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D27505FE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C60C505FEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232675AbiDRWws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:52:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S232846AbiDRWw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:52:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232591AbiDRWwq (ORCPT
+        with ESMTP id S232756AbiDRWww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:52:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC2FDEE6;
-        Mon, 18 Apr 2022 15:50:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B58C461037;
-        Mon, 18 Apr 2022 22:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18FA1C385A1;
-        Mon, 18 Apr 2022 22:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650322205;
-        bh=8cvzy785zxSOa8gRzab5YX1xtJ4ASbKug1EYu+u63YY=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=jTwwtzPi2X7Vwe4OeKW8EYi09RCIEoGyWaUqPrvJTCRNM8KAYqEqefgj8AHR7R67v
-         kuHETQ/a574Y4LdgYOvsn6DP9d8J2/x7lXFMBk5dPThRSXiXuJCN5K41baxUNvWlmL
-         I7HhjIjyej63FWQ0cEGSStciX9slpos80RfKadJhPHnlTWuEd1LqtK6B0RuosvQtS8
-         cZcOLsvH1AI86N8jPiqqOeKBwNIN7lVO/BWXxvOUBuwRpwGUWeBujaLJYtM21yt/H7
-         rot9NnZOw01bu1iJiu3JFgFuU8YVfR16rUEor4I7fb6UAITd6FJfrQo2iYY4MxSd0Y
-         xo+tkAW889TTg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id AB9195C04BD; Mon, 18 Apr 2022 15:50:04 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:50:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: [PATCH rcu 0/2] Documentation updates for v5.19
-Message-ID: <20220418225004.GA3944767@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Mon, 18 Apr 2022 18:52:52 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25AB1DF07
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:12 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id n11-20020a17090a73cb00b001d1d3a7116bso817644pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=qzBPeq4Z1Lm/THhXP/p+Guvp3S0k6RUjKQr12jgDsss=;
+        b=hLZrBdUqWLV/GYiIngWtZXbHDACKG/z6epibpsJFq1BaIhs2Z2KJfmWYmL7JO8Vs5k
+         4swMjagpii7pBDxG9mRqPPeS6+cXe1apDmO4ek/Qv/mUAJpFaHx9fhZDvMXAl0AlShoJ
+         XYxbWbjmNfZ32PLyYRZM4m4EXp55UekXWcwtBstrxxz6hHxw7520F0RQzIFyToh8VP+D
+         Ffs8JDKtdWvIpEbxcRKUFlIVYZe53XaVIxtRxrDLAJS9WEBVF5gJL1ic/B5qPNae79ZJ
+         yjrkV6x3IGT0C7jaHqXpaQxE41HZ84QaMG7W4wvJaomQFPKmNNzqNhQelaGrVlO38sDw
+         jFTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=qzBPeq4Z1Lm/THhXP/p+Guvp3S0k6RUjKQr12jgDsss=;
+        b=nrRDgJH7MkXXlxKtJa/1/lifk9BYU1S2WaZBzwcXJq+oGfNM7AjcnKjdtoGARJitkq
+         GfIXsdJQgGonKwNl3oyM0iF4flia1WXd7ylTGzMM0G9Y3wIwYYAWD5uHjBzQJBgxVDRs
+         xgQlDFC9n2feoXb9GVFAbnTu2jOvIl4+C0Ce+ITSxL6o6zzlPcEZuBLWUbl62NWax6Cb
+         zB5eVJx0FutT+ugmDT2uem2Y1sZXJ4nKtEZ3lsbqQLejvSc5v+N28bi0u0jbF32XYDC4
+         Q5uYypwHcD4JhCoUS9Fjae49rUjxN3niIAW8JcY+YenvZ/MNWjt9uRoRP5B18G+8CcVD
+         t5wg==
+X-Gm-Message-State: AOAM5317YMfuxTZ77nNN3duE/XCf+26cM6guHcHLJDZcgUSsCP4U5kcR
+        SHZE1BI0g13t5Yra41ujGBbSKw==
+X-Google-Smtp-Source: ABdhPJw+yaMkUZUnbOjaOzUM4WWyFmXWGGeEaX9APFm/5xhK/PVs2+8n3UnfCm5Ue6KnHOXHo1K/8w==
+X-Received: by 2002:a17:902:7404:b0:158:bff8:aa13 with SMTP id g4-20020a170902740400b00158bff8aa13mr12845518pll.133.1650322211428;
+        Mon, 18 Apr 2022 15:50:11 -0700 (PDT)
+Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
+        by smtp.gmail.com with ESMTPSA id bt21-20020a056a00439500b0050a4dfb7c44sm10012680pfb.155.2022.04.18.15.50.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 15:50:10 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 22:50:07 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Kai Huang <kai.huang@intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, pbonzini@redhat.com, dave.hansen@intel.com,
+        len.brown@intel.com, tony.luck@intel.com,
+        rafael.j.wysocki@intel.com, reinette.chatre@intel.com,
+        dan.j.williams@intel.com, peterz@infradead.org, ak@linux.intel.com,
+        kirill.shutemov@linux.intel.com, isaku.yamahata@intel.com
+Subject: Re: [PATCH v3 01/21] x86/virt/tdx: Detect SEAM
+Message-ID: <Yl3rHxI6M/+7nzNq@google.com>
+References: <cover.1649219184.git.kai.huang@intel.com>
+ <ab118fb9bd39b200feb843660a9b10421943aa70.1649219184.git.kai.huang@intel.com>
+ <8e2269a7-3e71-5030-8d04-1e8e3fc4323f@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <8e2269a7-3e71-5030-8d04-1e8e3fc4323f@linux.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Apr 18, 2022, Sathyanarayanan Kuppuswamy wrote:
+> > +static void detect_seam_ap(struct cpuinfo_x86 *c)
+> > +{
+> > +	u64 base, mask;
+> > +
+> > +	/*
+> > +	 * Don't bother to detect this AP if SEAMRR is not
+> > +	 * enabled after earlier detections.
+> > +	 */
+> > +	if (!__seamrr_enabled())
+> > +		return;
+> > +
+> > +	rdmsrl(MSR_IA32_SEAMRR_PHYS_BASE, base);
+> > +	rdmsrl(MSR_IA32_SEAMRR_PHYS_MASK, mask);
+> > +
+> > +	if (base == seamrr_base && mask == seamrr_mask)
+> > +		return;
+> > +
+> > +	pr_err("Inconsistent SEAMRR configuration by BIOS\n");
+> 
+> Do we need to panic for SEAM config issue (for security)?
 
-This series contains a couple of documentation updates:
+No, clearing seamrr_mask will effectively prevent the kernel from attempting to
+use TDX or any other feature that might depend on SEAM.  Panicking because the
+user's BIOS is crappy would be to kicking them while they're down. 
 
-1.	Add documentation for rude and trace RCU flavors.
+As for security, it's the TDX Module's responsibility to validate the security
+properties of the system, the kernel only cares about not dying/crashing.
 
-2.	Update RCU cross-references as suggested in doc-guide, courtesy
-	of Akira Yokosawa.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- Documentation/RCU/Design/Requirements/Requirements.rst                         |    4 -
- b/Documentation/RCU/Design/Data-Structures/Data-Structures.rst                 |    2 
- b/Documentation/RCU/Design/Expedited-Grace-Periods/Expedited-Grace-Periods.rst |    2 
- b/Documentation/RCU/Design/Requirements/Requirements.rst                       |   32 ++++++++++
- b/Documentation/RCU/arrayRCU.rst                                               |    4 -
- b/Documentation/RCU/checklist.rst                                              |    9 +-
- b/Documentation/RCU/rcu.rst                                                    |   13 +---
- b/Documentation/RCU/rculist_nulls.rst                                          |    2 
- b/Documentation/RCU/whatisRCU.rst                                              |   18 ++---
- 9 files changed, 57 insertions(+), 29 deletions(-)
+> > +	/* Mark SEAMRR as disabled. */
+> > +	seamrr_base = 0;
+> > +	seamrr_mask = 0
+> > +}

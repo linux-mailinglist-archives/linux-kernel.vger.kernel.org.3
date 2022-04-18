@@ -2,196 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4CCC504E48
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 11:14:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D8FC504E61
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 11:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237433AbiDRJQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 05:16:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S237536AbiDRJb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 05:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232095AbiDRJQx (ORCPT
+        with ESMTP id S231946AbiDRJbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 05:16:53 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B100E6444;
-        Mon, 18 Apr 2022 02:14:12 -0700 (PDT)
-Received: from kwepemi100014.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Khh2z45lfzCr8v;
-        Mon, 18 Apr 2022 17:09:47 +0800 (CST)
-Received: from kwepemm600013.china.huawei.com (7.193.23.68) by
- kwepemi100014.china.huawei.com (7.221.188.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 17:14:10 +0800
-Received: from huawei.com (10.175.127.227) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 18 Apr
- 2022 17:14:10 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <viro@zeniv.linux.org.uk>
-CC:     <hch@lst.de>, <torvalds@linux-foundation.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>, <yukuai3@huawei.com>
-Subject: [PATCH v2] =?UTF-8?q?fs-writeback:=20writeback=5Fsb=5Finodes?= =?UTF-8?q?=EF=BC=9ARecalculate=20'wrote'=20according=20skipped=20pages?=
-Date:   Mon, 18 Apr 2022 17:28:24 +0800
-Message-ID: <20220418092824.3018714-1-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Mon, 18 Apr 2022 05:31:53 -0400
+Received: from mail.meizu.com (edge07.meizu.com [112.91.151.210])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C553715FF1;
+        Mon, 18 Apr 2022 02:29:13 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail11.meizu.com
+ (172.16.1.15) with Microsoft SMTP Server (TLS) id 14.3.487.0; Mon, 18 Apr
+ 2022 17:29:06 +0800
+Received: from [172.16.137.70] (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Mon, 18 Apr
+ 2022 17:29:05 +0800
+Message-ID: <8b7485c9-eb17-e508-2d3e-a630fcaa998d@meizu.com>
+Date:   Mon, 18 Apr 2022 17:29:04 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH V3] docs/zh_CN: sync with original text
+ Documentation/vm/page_owner.rst
+To:     yanteng si <siyanteng01@gmail.com>,
+        =?UTF-8?B?5Y+45bu26IW+?= <siyanteng@loongson.cn>
+CC:     "alexs@kernel.org" <alexs@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <81254c7.3c4d.1802ad7fa26.Coremail.siyanteng@loongson.cn>
+ <CAEensMyRDFzcz11Zui8+U6bjZmUM1vKdya7rwDLDgYQi4Fv7pA@mail.gmail.com>
+ <CAEensMx3qvL7qmT=PhxYoJ4v5P8USn1qyAGBcB1WR5R4FQ24og@mail.gmail.com>
+From:   baihaowen <baihaowen@meizu.com>
+In-Reply-To: <CAEensMx3qvL7qmT=PhxYoJ4v5P8USn1qyAGBcB1WR5R4FQ24og@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.127.227]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 505a666ee3fc ("writeback: plug writeback in wb_writeback() and
-writeback_inodes_wb()") has us holding a plug during wb_writeback, which
-may cause a potential ABBA dead lock:
+在 4/18/22 9:58 AM, yanteng si 写道:
+> yanteng si <siyanteng01@gmail.com> 于2022年4月15日周五 10:09写道：
+>> 司延腾 <siyanteng@loongson.cn> 于2022年4月15日周五 09:31写道：
+>>> Dear siyanteng
+>>>
+>>> Could you help to review my translation？
+>>>
+>>> Certainly!
+>>>
+>>> --CC siyanteng01@gmail.com
+>>>
+>>> Thanks,
+>>> Yanteng
+>>>
+>>>
+>>>
+>>>
+>>>
+>>> -------- 原始邮件 --------
+>>> 发件人：白浩文 <baihaowen@meizu.com>
+>>> 时间：2022年4月12日 17:29
+>>> 收件人：alexs@kernel.org,corbet@lwn.net
+>>> 抄送：siyanteng@loongson.cn,白浩文 <baihaowen@meizu.com>,linux-doc@vger.kernel.org,linux-kernel@vger.kernel.org
+>>> 主题：[PATCH V3] docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
+>>>
+>>> As the tools/vm/page_owner_sort added some feature and original text
+>>> updated, sync the translation of zh_CN.
+>>>
+>>> Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+>>> ---
+>>> V1-&gt;V2: fix whitespace warning.
+>>> V2-&gt;V3: fix some tab Alignment issue.
+>>>
+>>> Documentation/translations/zh_CN/vm/page_owner.rst | 54 +++++++++++++++++++++-
+>>> 1 file changed, 53 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/Documentation/translations/zh_CN/vm/page_owner.rst b/Documentation/translations/zh_CN/vm/page_owner.rst
+>>> index 9e951fabba9d..0d4f94034db6 100644
+>>> --- a/Documentation/translations/zh_CN/vm/page_owner.rst
+>>> +++ b/Documentation/translations/zh_CN/vm/page_owner.rst
+>>> @@ -103,14 +103,66 @@ page owner在默认情况下是禁用的。所以，如果你想使用它，你
+>>> -m              按总内存排序
+>>> -p              按pid排序。
+>>> -P              按tgid排序。
+>>> +               -n              按任务名称排序。
+>>> -r              按内存释放时间排序。
+>>> -s              按堆栈跟踪排序。
+>>> -t              按时间排序（默认）。
+>>> +               --sort <order>  指定排序顺序。排序语法是 [+|-]key[,[+|-]key[,...]]. 从
+>>> +                                               **标准格式说明符**部分选择一个键。"+" 是可选的，因为默认方向是增加数字或字典顺序。
+>>> +                                               允许混合使用缩写键和全称键。
+>>> +
+>>> +               Examples:
+>>> +                               ./page_owner_sort <input> <output> --sort=n,+pid,-tgid
+>>> +                               ./page_owner_sort <input> <output> --sort=at
+>>>
+>>> 其它函数:
+>>>
+>>> Cull:
+>>> -               -c              通过比较堆栈跟踪而不是总块来进行剔除。
+>>> +               --cull <rules>
+>>> +                               指定筛选规则。筛选语法是 key[,key[,...]]。在**标准格式说明符**部分选择一个多字母键
+>>> +
+>>> +               <rules> 是逗号分隔列表形式的单个参数，它提供了一种指定单个筛选规则的方法。下面的**标准格式说明
+>>> +                               符**部分描述了可识别的关键字。<rules> 可以由键 k1,k2, ... 顺序指定，如下面的
+>>> +                               STANDARD SORT KEYS 部分所述。允许混合使用缩写形式和完整形式的键。
+>>>
+>>> +               Examples:
+>>> +                               ./page_owner_sort <input> <output> --cull=stacktrace
+>>> +                               ./page_owner_sort <input> <output> --cull=st,pid,name
+>>> +                               ./page_owner_sort <input> <output> --cull=n,f
+>>> Filter:
+>>> -f              过滤掉内存已被释放的块的信息。
+>>> +
+>>> +       Select:
+>>> +               --pid <pidlist>         通过 pid 进行选择。这将选择进程 ID 号出现在 <pidlist> 中的块。
+>>> +               --tgid <tgidlist>       通过 tgid 进行选择。这将选择线程组 ID 号出现在 <tgidlist> 中的块。
+>>> +               --name <cmdlist>        按任务名称选择。这将选择任务名称出现在 <cmdlist> 中的块。
+>>> +
+>>> +               <pidlist>、<tgidlist>、<cmdlist>是逗号分隔列表形式的单参数，它提供了一种指定单个选择规则的方法。
+>>> +
+>>> +
+>>> +               Examples:
+>>> +                               ./page_owner_sort <input> <output> --pid=1
+>>> +                               ./page_owner_sort <input> <output> --tgid=1,2,3
+>>> +                               ./page_owner_sort <input> <output> --name name1,name2
+>>> +
+>>> +       标准格式说明符
+>>> +==========================
+>> I ran a build test before reviewing and found the following ERROR：
+>>
+>> Sphinx parallel build error:
+>> docutils.utils.SystemMessage: .../vm/page_owner.rst:149: (SEVERE/4)
+>> Missing matching underline for section title overline.
+>>
+>> As for how to fix it, see：
+>> <https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#bullet-lists>
+>>
+>> ref:: Documentation/translations/zh_CN/index.rst
+>> 顺便说下，中文文档也需要遵守内核编码风格，风格中中文和英文的主要不同就是中文
+>> 的字符标点占用两个英文字符宽度， 所以，当英文要求不要超过每行100个字符时，
+>> 中文就不要超过50个字符。另外，也要注意'-'，'=' 等符号与相关标题的对齐。在将
+>> 补丁提交到社区之前，一定要进行必要的checkpatch.pl检查和编译测试。
+>>> _<
+> Oops! I forgot to write Haowen's email address last week.
+>
+> So, --to baihaowen@meizu.com
+>
+> 标准格式说明符
+> ==============
+>
+> In this way，It should fix this error. Then you need to pass the build
+> test yourself. The general steps are as follows:
+>
+> $ cd xxxx/linux-next
+> $ ./scripts/sphinx-pre-install
+> $ . sphinx_2.4.4/bin/activate
+> $ make cleandocs
+> $ make htmldocs
+>
+> If  there is no error and warning about zh_CN/vm/page_owner.rst，
+> Congratulations, passed!
+> else
+> Please try to fix them
+>
+> Thanks,
+> Yanteng
+>
+>
+>> Thanks,
+>> Yanteng
+>>
+>>> +--sort 选项:
+>>> +
+>>> +       缩写键             全称键             描述
+>>> +       p               pid             进程 ID
+>>> +       tg              tgid            线程组 ID
+>>> +       n               name            任务名称
+>>> +       st              stacktrace      页面分配的调用栈
+>>> +       T               txt             块的全文
+>>> +       ft              free_ts         页面被释放的时间戳
+>>> +       at              alloc_ts        页面分配的时间戳
+>>> +
+>>> +--curl 选项:
+>>> +
+>>> +       缩写键             全称键             描述
+>>> +       p               pid             进程 ID
+>>> +       tg              tgid            线程组 ID
+>>> +       n               name            任务名称
+>>> +       f               free            该页面是否已被释放
+>>> +       st              stacktrace      页面分配的调用栈
+>>> --
+>>> 2.7.4
+>>>
+>>>
+>>> </output></output></output></cmdlist></tgidlist></pidlist></cmdlist></cmdlist></tgidlist></tgidlist></pidlist></pidlist></output></output></output></rules></rules></rules></output></output></order></baihaowen@meizu.com></baihaowen@meizu.com></baihaowen@meizu.com>
+>>>
+>>> 本邮件及其附件含有龙芯中科的商业秘密信息，仅限于发送给上面地址中列出的个人或群组。禁止任何其他人以任何形式使用（包括但不限于全部或部分地泄露、复制或散发）本邮件及其附件中的信息。如果您错收本邮件，请您立即电话或邮件通知发件人并删除本邮件。
+>>> This email and its attachments contain confidential information from Loongson Technology , which is intended only for the person or entity whose address is listed above. Any use of the information contained herein in any way (including, but not limited to, total or partial disclosure, reproduction or dissemination) by persons other than the intended recipient(s) is prohibited. If you receive this email in error, please notify the sender by phone or email immediately and delete it.
+hi, yanteng
+Thank you for your help and review.
 
-    wb_writeback		fat_file_fsync
-blk_start_plug(&plug)
-for (;;) {
-  iter i-1: some reqs have been added into plug->mq_list  // LOCK A
-  iter i:
-    progress = __writeback_inodes_wb(wb, work)
-    . writeback_sb_inodes // fat's bdev
-    .   __writeback_single_inode
-    .   . generic_writepages
-    .   .   __block_write_full_page
-    .   .   . . 	    __generic_file_fsync
-    .   .   . . 	      sync_inode_metadata
-    .   .   . . 	        writeback_single_inode
-    .   .   . . 		  __writeback_single_inode
-    .   .   . . 		    fat_write_inode
-    .   .   . . 		      __fat_write_inode
-    .   .   . . 		        sync_dirty_buffer	// fat's bdev
-    .   .   . . 			  lock_buffer(bh)	// LOCK B
-    .   .   . . 			    submit_bh
-    .   .   . . 			      blk_mq_get_tag	// LOCK A
-    .   .   . trylock_buffer(bh)  // LOCK B
-    .   .   .   redirty_page_for_writepage
-    .   .   .     wbc->pages_skipped++
-    .   .   --wbc->nr_to_write
-    .   wrote += write_chunk - wbc.nr_to_write  // wrote > 0
-    .   requeue_inode
-    .     redirty_tail_locked
-    if (progress)    // progress > 0
-      continue;
-  iter i+1:
-      queue_io
-      // similar process with iter i, infinite for-loop !
-}
-blk_finish_plug(&plug)   // flush plug won't be called
-
-Above process triggers a hungtask like:
-[  399.044861] INFO: task bb:2607 blocked for more than 30 seconds.
-[  399.046824]       Not tainted 5.18.0-rc1-00005-gefae4d9eb6a2-dirty
-[  399.051539] task:bb              state:D stack:    0 pid: 2607 ppid:
-2426 flags:0x00004000
-[  399.051556] Call Trace:
-[  399.051570]  __schedule+0x480/0x1050
-[  399.051592]  schedule+0x92/0x1a0
-[  399.051602]  io_schedule+0x22/0x50
-[  399.051613]  blk_mq_get_tag+0x1d3/0x3c0
-[  399.051640]  __blk_mq_alloc_requests+0x21d/0x3f0
-[  399.051657]  blk_mq_submit_bio+0x68d/0xca0
-[  399.051674]  __submit_bio+0x1b5/0x2d0
-[  399.051708]  submit_bio_noacct+0x34e/0x720
-[  399.051718]  submit_bio+0x3b/0x150
-[  399.051725]  submit_bh_wbc+0x161/0x230
-[  399.051734]  __sync_dirty_buffer+0xd1/0x420
-[  399.051744]  sync_dirty_buffer+0x17/0x20
-[  399.051750]  __fat_write_inode+0x289/0x310
-[  399.051766]  fat_write_inode+0x2a/0xa0
-[  399.051783]  __writeback_single_inode+0x53c/0x6f0
-[  399.051795]  writeback_single_inode+0x145/0x200
-[  399.051803]  sync_inode_metadata+0x45/0x70
-[  399.051856]  __generic_file_fsync+0xa3/0x150
-[  399.051880]  fat_file_fsync+0x1d/0x80
-[  399.051895]  vfs_fsync_range+0x40/0xb0
-[  399.051929]  __x64_sys_fsync+0x18/0x30
-
-In my test, 'need_resched()' (which is imported by 590dca3a71 "fs-writeback:
-unplug before cond_resched in writeback_sb_inodes") in function
-'writeback_sb_inodes()' seldom comes true, unless cond_resched() is deleted
-from write_cache_pages().
-
-Fix it by correcting wrote number according number of skipped pages
-in writeback_sb_inodes().
-
-Goto Link to find a reproducer.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215837
-Cc: stable@vger.kernel.org # v4.3
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
----
- fs/fs-writeback.c | 15 +++++++++------
- 1 file changed, 9 insertions(+), 6 deletions(-)
-
-diff --git a/fs/fs-writeback.c b/fs/fs-writeback.c
-index 591fe9cf1659..9740c7d346aa 100644
---- a/fs/fs-writeback.c
-+++ b/fs/fs-writeback.c
-@@ -1775,11 +1775,12 @@ static long writeback_sb_inodes(struct super_block *sb,
- 	};
- 	unsigned long start_time = jiffies;
- 	long write_chunk;
--	long wrote = 0;  /* count both pages and inodes */
-+	long total_wrote = 0;  /* count both pages and inodes */
- 
- 	while (!list_empty(&wb->b_io)) {
- 		struct inode *inode = wb_inode(wb->b_io.prev);
- 		struct bdi_writeback *tmp_wb;
-+		long wrote;
- 
- 		if (inode->i_sb != sb) {
- 			if (work->sb) {
-@@ -1854,8 +1855,10 @@ static long writeback_sb_inodes(struct super_block *sb,
- 		__writeback_single_inode(inode, &wbc);
- 
- 		wbc_detach_inode(&wbc);
--		work->nr_pages -= write_chunk - wbc.nr_to_write;
--		wrote += write_chunk - wbc.nr_to_write;
-+		wrote = write_chunk - wbc.nr_to_write - wbc.pages_skipped;
-+		wrote = wrote < 0 ? 0 : wrote;
-+		work->nr_pages -= wrote;
-+		total_wrote += wrote;
- 
- 		if (need_resched()) {
- 			/*
-@@ -1877,7 +1880,7 @@ static long writeback_sb_inodes(struct super_block *sb,
- 		tmp_wb = inode_to_wb_and_lock_list(inode);
- 		spin_lock(&inode->i_lock);
- 		if (!(inode->i_state & I_DIRTY_ALL))
--			wrote++;
-+			total_wrote++;
- 		requeue_inode(inode, tmp_wb, &wbc);
- 		inode_sync_complete(inode);
- 		spin_unlock(&inode->i_lock);
-@@ -1891,14 +1894,14 @@ static long writeback_sb_inodes(struct super_block *sb,
- 		 * bail out to wb_writeback() often enough to check
- 		 * background threshold and other termination conditions.
- 		 */
--		if (wrote) {
-+		if (total_wrote) {
- 			if (time_is_before_jiffies(start_time + HZ / 10UL))
- 				break;
- 			if (work->nr_pages <= 0)
- 				break;
- 		}
- 	}
--	return wrote;
-+	return total_wrote;
- }
- 
- static long __writeback_inodes_wb(struct bdi_writeback *wb,
 -- 
-2.31.1
+Haowen Bai
 

@@ -2,61 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6090A505DBE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8754505DC1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236142AbiDRRxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S1346055AbiDRRyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:54:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237430AbiDRRx2 (ORCPT
+        with ESMTP id S233654AbiDRRyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:53:28 -0400
-Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D980516582;
-        Mon, 18 Apr 2022 10:50:48 -0700 (PDT)
+        Mon, 18 Apr 2022 13:54:38 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2149234B8D
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:51:59 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id a11so10527170qtb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:51:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650304249; x=1681840249;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Cbyg66neQZEsS6a0A9bUci2T5ICx1QxyL7MnY+bDDa8=;
-  b=ugMqHNs7dCfWpGC3iwVDpgkFZ8d7C4ZvWuGokWcRK+tktB1eeIbznoD2
-   ULYp2QMUvG+H/954axFIPoh/YPBA+9tWg687x8/bmmx0kukL554pwPp7W
-   LSSRVZ9McQx6YPVsL0ObcfhPrAJwvJpyCAZp+uyXThkBpKWQWO0Rr9BLj
-   s=;
-Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
-  by alexa-out.qualcomm.com with ESMTP; 18 Apr 2022 10:50:48 -0700
-X-QCInternal: smtphost
-Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 10:50:48 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Apr 2022 10:50:47 -0700
-Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 18 Apr 2022 10:50:47 -0700
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-To:     <mani@kernel.org>, <quic_hemantk@quicinc.com>,
-        <quic_bbhatt@quicinc.com>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Bhaumik Bhatt <bbhatt@codeaurora.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [PATCH v4 2/2] bus: mhi: host: Optimize and update MMIO register write method
-Date:   Mon, 18 Apr 2022 11:50:26 -0600
-Message-ID: <1650304226-11080-3-git-send-email-quic_jhugo@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1650304226-11080-1-git-send-email-quic_jhugo@quicinc.com>
-References: <1650304226-11080-1-git-send-email-quic_jhugo@quicinc.com>
+        d=joelfernandes.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=CF4XNFiOWH5Eo3YeFIexRr3vkZzKzTqeWNNAvXODhVk=;
+        b=tFoq+Zh8Xl0j2+4CVgdlgmgRcilf0t0hcLLhN1rgjaGcQhuSUd+u2ziUhAbF9wdG5r
+         i3MtpBNOII/qx4D2StE0W4/SlkHMleEwBIBrXANX+e+OqJA9KYELMjlZTsx6U0WvkJK+
+         v5CgRJgVN9e3tNZhoCCJUsb9mVpmZTPglNUpE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=CF4XNFiOWH5Eo3YeFIexRr3vkZzKzTqeWNNAvXODhVk=;
+        b=AQS1hhHQFJpS++5wW24UadGV/sFGDroIVF2C+KV7f95ygEvFv99gnQcJvpXIisUS9P
+         KvIZ8yly0/NriH1UttfzvI0iqtuvrQvsUTj0j46Ks5a9/DglOGsGmSRramWSjDUteWTy
+         CbeWwI1+yzpfsuoLtMiKY1tAynEXgGnvSjPkqbyiQ+1ZOEkxmFZX27/iaybUFZ1ugbjP
+         cWbkTfICrowCNUzccygD84b3vuFRqDz4n8KD9ubMg5fnTUSYGOcTmRR5pxwh92MlQZUX
+         f5AdI1siSLzI40EOFIVRiELd30ZXJ5VWXLO0KHnmjMdxZcdA2puUF74A4m5nGciHlKxY
+         8U9A==
+X-Gm-Message-State: AOAM533V2XgDMThwR2CdTs7QTovvAWA9hD5k43PS1V23BvVhl5gb0L1Q
+        xs1d0VZYJh/UMmRwwTmNSfAgeQ==
+X-Google-Smtp-Source: ABdhPJw/vtu7u+HS9H+xorA64+qGZQjA+kXLF1an9immjLJxWtC3TBMeSGXdtZud63iSBzfvYxp/Ew==
+X-Received: by 2002:ac8:5708:0:b0:2f1:fb71:4459 with SMTP id 8-20020ac85708000000b002f1fb714459mr4818301qtw.603.1650304318215;
+        Mon, 18 Apr 2022 10:51:58 -0700 (PDT)
+Received: from localhost (29.46.245.35.bc.googleusercontent.com. [35.245.46.29])
+        by smtp.gmail.com with ESMTPSA id b186-20020a3780c3000000b00699fbe4a238sm6717910qkd.69.2022.04.18.10.51.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 10:51:57 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 17:51:57 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        rcu@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v3] rcu/nocb: Add an option to offload all CPUs on boot
+Message-ID: <Yl2lPSKZ8fLOkfyZ@google.com>
+References: <20220415160224.1904505-1-joel@joelfernandes.org>
+ <20220415173515.GL4285@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220415173515.GL4285@paulmck-ThinkPad-P17-Gen-1>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -67,147 +72,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bhaumik Bhatt <bbhatt@codeaurora.org>
+On Fri, Apr 15, 2022 at 10:35:15AM -0700, Paul E. McKenney wrote:
+> On Fri, Apr 15, 2022 at 04:02:24PM +0000, Joel Fernandes (Google) wrote:
+> > From: Joel Fernandes <joel@joelfernandes.org>
+> 
+> Much better, thank you!
+> 
+> > On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> > which ends up not offloading any CPU. This patch removes a dependency
+> > from the bootloader having to know about RCU, about how many CPUs the
+> > system has, and about how to provide the mask.
+> 
+> The "about how many CPUs the system has" does not apply to current
+> mainline, in which "rcu_nocbs=0-N" says to offload all CPUs.  It can be
+> added back in for a backport to v5.10.  ;-)
 
-As of now, MMIO writes done after ready state transition use the
-mhi_write_reg_field() API even though the whole register is being
-written in most cases. Optimize this process by using mhi_write_reg()
-API instead for those writes and use the mhi_write_reg_field()
-API for MHI config registers only.
+True, will fix.
 
-Signed-off-by: Bhaumik Bhatt <bbhatt@codeaurora.org>
-Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
-Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
----
- drivers/bus/mhi/host/init.c | 62 ++++++++++++++++++++++-----------------------
- 1 file changed, 31 insertions(+), 31 deletions(-)
+> My thought is to queue this after some independent testing.
+> 
+> > ---
+> > v2 was forcing the option to override no_cbs=
+> > v3 is back to v1 but with a config option defaulting to 'n'.
+> > 
+> >  Documentation/admin-guide/kernel-parameters.txt |  3 +++
+> >  kernel/rcu/Kconfig                              | 13 +++++++++++++
+> >  kernel/rcu/tree_nocb.h                          | 16 ++++++++++++++--
+> >  3 files changed, 30 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index f5a27f067db9..7648a7dd335e 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -4398,6 +4398,9 @@
+> >  			no-callback mode from boot but the mode may be
+> >  			toggled at runtime via cpusets.
+> >  
+> > +			Note that this argument takes precedence over
+> > +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+> 
+> Very good, thank you!
+> 
+> Do we want to say the same about nohz_full?  Or am I misreading the
+> code below?
 
-diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
-index 3842611..cbb86b2 100644
---- a/drivers/bus/mhi/host/init.c
-+++ b/drivers/bus/mhi/host/init.c
-@@ -439,74 +439,65 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
- 	struct device *dev = &mhi_cntrl->mhi_dev->dev;
- 	struct {
- 		u32 offset;
--		u32 mask;
- 		u32 val;
- 	} reg_info[] = {
- 		{
--			CCABAP_HIGHER, U32_MAX,
-+			CCABAP_HIGHER,
- 			upper_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
- 		},
- 		{
--			CCABAP_LOWER, U32_MAX,
-+			CCABAP_LOWER,
- 			lower_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
- 		},
- 		{
--			ECABAP_HIGHER, U32_MAX,
-+			ECABAP_HIGHER,
- 			upper_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
- 		},
- 		{
--			ECABAP_LOWER, U32_MAX,
-+			ECABAP_LOWER,
- 			lower_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
- 		},
- 		{
--			CRCBAP_HIGHER, U32_MAX,
-+			CRCBAP_HIGHER,
- 			upper_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
- 		},
- 		{
--			CRCBAP_LOWER, U32_MAX,
-+			CRCBAP_LOWER,
- 			lower_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
- 		},
- 		{
--			MHICFG, MHICFG_NER_MASK,
--			mhi_cntrl->total_ev_rings,
--		},
--		{
--			MHICFG, MHICFG_NHWER_MASK,
--			mhi_cntrl->hw_ev_rings,
--		},
--		{
--			MHICTRLBASE_HIGHER, U32_MAX,
-+			MHICTRLBASE_HIGHER,
- 			upper_32_bits(mhi_cntrl->iova_start),
- 		},
- 		{
--			MHICTRLBASE_LOWER, U32_MAX,
-+			MHICTRLBASE_LOWER,
- 			lower_32_bits(mhi_cntrl->iova_start),
- 		},
- 		{
--			MHIDATABASE_HIGHER, U32_MAX,
-+			MHIDATABASE_HIGHER,
- 			upper_32_bits(mhi_cntrl->iova_start),
- 		},
- 		{
--			MHIDATABASE_LOWER, U32_MAX,
-+			MHIDATABASE_LOWER,
- 			lower_32_bits(mhi_cntrl->iova_start),
- 		},
- 		{
--			MHICTRLLIMIT_HIGHER, U32_MAX,
-+			MHICTRLLIMIT_HIGHER,
- 			upper_32_bits(mhi_cntrl->iova_stop),
- 		},
- 		{
--			MHICTRLLIMIT_LOWER, U32_MAX,
-+			MHICTRLLIMIT_LOWER,
- 			lower_32_bits(mhi_cntrl->iova_stop),
- 		},
- 		{
--			MHIDATALIMIT_HIGHER, U32_MAX,
-+			MHIDATALIMIT_HIGHER,
- 			upper_32_bits(mhi_cntrl->iova_stop),
- 		},
- 		{
--			MHIDATALIMIT_LOWER, U32_MAX,
-+			MHIDATALIMIT_LOWER,
- 			lower_32_bits(mhi_cntrl->iova_stop),
- 		},
--		{ 0, 0, 0 }
-+		{0, 0}
- 	};
- 
- 	dev_dbg(dev, "Initializing MHI registers\n");
-@@ -547,13 +538,22 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
- 	mhi_cntrl->mhi_cmd[PRIMARY_CMD_RING].ring.db_addr = base + CRDB_LOWER;
- 
- 	/* Write to MMIO registers */
--	for (i = 0; reg_info[i].offset; i++) {
--		ret = mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
--					  reg_info[i].mask, reg_info[i].val);
--		if (ret) {
--			dev_err(dev, "Unable to write to MMIO registers\n");
--			return ret;
--		}
-+	for (i = 0; reg_info[i].offset; i++)
-+		mhi_write_reg(mhi_cntrl, base, reg_info[i].offset,
-+			      reg_info[i].val);
-+
-+	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NER_MASK,
-+				  mhi_cntrl->total_ev_rings);
-+	if (ret) {
-+		dev_err(dev, "Unable to write MHICFG register\n");
-+		return ret;
-+	}
-+
-+	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NHWER_MASK,
-+				  mhi_cntrl->hw_ev_rings);
-+	if (ret) {
-+		dev_err(dev, "Unable to write MHICFG register\n");
-+		return ret;
- 	}
- 
- 	return 0;
--- 
-2.7.4
+You're right, will fix.
+
+> > +
+> >  	rcu_nocb_poll	[KNL]
+> >  			Rather than requiring that offloaded CPUs
+> >  			(specified by rcu_nocbs= above) explicitly
+> > diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> > index bf8e341e75b4..2f8bd694ed85 100644
+> > --- a/kernel/rcu/Kconfig
+> > +++ b/kernel/rcu/Kconfig
+> > @@ -223,6 +223,19 @@ config RCU_NOCB_CPU
+> >  	  Say Y here if you need reduced OS jitter, despite added overhead.
+> >  	  Say N here if you are unsure.
+> >  
+> > +config RCU_NOCB_CPU_DEFAULT_ALL
+> > +	bool "Offload RCU callback processing from all CPUs by default"
+> > +	depends on RCU_NOCB_CPU
+> 
+> The needed dependency on RCU_EXPERT is provided transitively via
+> RCU_NOCB_CPU, so this should be OK.  (To check, build a .config file,
+> queue this patch, and do "make oldconfig".  If any questions are asked,
+> a change is needed.)
+
+Ok. I did that and no questions were asked.
+
+> > +	default n
+> > +	help
+> > +	  Use this option to offload callback processing from all CPUs
+> > +	  by default, in the absence of the rcu_nocbs boot parameter.
+> 
+> And also in the absence of the nohz_full boot parameter, correct?
+
+Yes, fixed.
+
+> > +	  This also avoids the need to use any boot parameters to achieve
+> > +	  the effect of offloading all CPUs on boot.
+> > +
+> > +	  Say Y here if you want offload all CPUs by default on boot.
+> > +	  Say N here if you are unsure.
+> > +
+> >  config TASKS_TRACE_RCU_READ_MB
+> >  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+> >  	depends on RCU_EXPERT
+> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> > index eeafb546a7a0..673fa0d1f801 100644
+> > --- a/kernel/rcu/tree_nocb.h
+> > +++ b/kernel/rcu/tree_nocb.h
+> > @@ -1165,12 +1165,21 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
+> >  void __init rcu_init_nohz(void)
+> >  {
+> >  	int cpu;
+> > -	bool need_rcu_nocb_mask = false;
+> > +	bool need_rcu_nocb_mask = false, offload_all = false;
+> 
+> Please use the extra line to perserve alphabetical order.  (I do know
+> about inverse tree, though I have no idea why it is considered to be a
+> good thing.)
+
+Done.
+
+thanks,
+
+ - Joel
 

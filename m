@@ -2,313 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE4E9505B1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:32:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0107F505B1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238203AbiDRPel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42274 "EHLO
+        id S241323AbiDRPev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:34:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241101AbiDRPe2 (ORCPT
+        with ESMTP id S242780AbiDRPe2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 11:34:28 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEF503FBFA
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:49:33 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id z5-20020a17090a468500b001d2bc2743c4so729536pjf.0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=VT6BswVce3NNGDV5lCvPNNr92s597OFTrpnrkXMnbxk=;
-        b=VNdSs+jlISD7PtRv6rRbZTz6GsHvpX1OAIPiDOiC6DkHzHDHOcJjVXGEi2B0dfP/gx
-         snkC8+ua7gIuDMdY9K/G+gtv8cq4CtJMUlOVFIOmw6wsBB498lTjHQLvN4p+rbdRdawo
-         H/VRBGj8k2Ov0OF9hkqo4W4hfnx97mcMPo6xI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=VT6BswVce3NNGDV5lCvPNNr92s597OFTrpnrkXMnbxk=;
-        b=JHMfn94bJHgMtGJuzrGjgOw2bwRNndSpg9FA4jJQBMRUri6xI5ivDJ1t8dyzqEUi2G
-         MpvGtzIi9Mozv63QP90ll1acQYsnYLjyzdJdBOofnYEjPaAKRvYTzbO5vxV71rbapEhT
-         r1alhhXUVnsvWOlqwkHF9UADZGX1wWfZGOjkbvN7wTrh9uU3Ral+lcr2Ll7Q/IY6CY+G
-         /m1plj2GgdBPCx9hkjnO8QwPSn5Pne0Q2s9id9lgpFnklmaXSzu7CqaD+sflOFJDl/H0
-         rGMrJnh9xT0YfDbdwVb0hDIOBsildanTErIRpbV/7ZtylIU//e8kBTP71cymTRKEfbGb
-         f0IQ==
-X-Gm-Message-State: AOAM530juM67fSV9fC60QpSA9xcxhAgrn7823RD3bw5ocVTv0hi8x+xr
-        FEaXIiP5tsQOnJyYdvEP9G8DJw==
-X-Google-Smtp-Source: ABdhPJwLi19qmdWxV2YTusFSI0XQypHzk0s8urskBlhODwPGTNH9zTguHkwT8C+y2IrpDgv5C0shPA==
-X-Received: by 2002:a17:902:8f94:b0:151:64c5:7759 with SMTP id z20-20020a1709028f9400b0015164c57759mr11418837plo.4.1650293373225;
-        Mon, 18 Apr 2022 07:49:33 -0700 (PDT)
-Received: from localhost.localdomain ([183.83.137.38])
-        by smtp.gmail.com with ESMTPSA id d6-20020a056a00244600b004f701135460sm13508532pfj.146.2022.04.18.07.49.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 07:49:32 -0700 (PDT)
-From:   Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
-        Li Yang <leoyang.li@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>,
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A77143FD87;
+        Mon, 18 Apr 2022 07:49:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650293374; x=1681829374;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O8jCNttKfcTOfPhW6/iydPjwJI9EDwBsW/ipQu39Hh0=;
+  b=B3Ao3sc6+PxBjMfoK3jUdgpb7fM2h+csTYk87o/RJVwdsKk7xgdCf5cf
+   hGB/eewh7RjIh2MtIihtzkuwcKgUsKSJ9sKfdb0KQhGooTJ7732vkeUoi
+   nURGQFWPguFNJ6shpWU1Xb0G7HacLX3aglOKHQGsQ+D/tJY9mLOEDtrbl
+   vYXfYxGSkKYBT8FQUSzUbMaZAdmJVsRXZQiy/zR5nfm2IfgRCZDyxZrVc
+   IToP47/RfdqEvF5gZrdDbLg9xghCCYSOtRtJW4mnezaBkCgOWSmF0yRhT
+   KxkvdWtf3nvT3ghSp5+M5pXc4LV2U+YkjLpMRvPfn+TpizDthyefWAU6U
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245421912"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="245421912"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 07:49:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="726666030"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 07:49:31 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngSh0-0004iB-J8;
+        Mon, 18 Apr 2022 14:49:30 +0000
+Date:   Mon, 18 Apr 2022 22:49:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Aswath Govindraju <a-govindraju@ti.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzk@kernel.org>,
-        Matteo Lisi <matteo.lisi@engicam.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-amarula@amarulasolutions.com,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Rob Herring <robh@kernel.org>,
-        Suniel Mahesh <sunil@amarulasolutions.com>,
-        Michael Nazzareno Trimarchi <michael@amarulasolutions.com>,
-        Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-Subject: [PATCH v2 3/3] Engicam EDIMM2.2 Starter Kit is an EDIMM 2.2 Form Factor CapacitiveEvaluation Board.
-Date:   Mon, 18 Apr 2022 20:19:07 +0530
-Message-Id: <20220418144907.327511-3-abbaraju.manojsai@amarulasolutions.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220418144907.327511-1-abbaraju.manojsai@amarulasolutions.com>
-References: <20220330191437.614065-2-abbaraju.manojsai@amarulasolutions.com>
- <20220418144907.327511-1-abbaraju.manojsai@amarulasolutions.com>
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] drivers: mmc: sdhci_am654: Add the quirk to set
+ TESTCD bit
+Message-ID: <202204182202.yPPV6YZI-lkp@intel.com>
+References: <20220418102040.4993-3-a-govindraju@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418102040.4993-3-a-govindraju@ti.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Genaral features:
-- LCD 7" C.Touch
-- microSD slot
-- Ethernet 1Gb
-- Wifi/BT
-- 2x LVDS Full HD interfaces
-- 3x USB 2.0
-- 1x USB 3.0
-- HDMI Out
-- Plus PCIe
-- MIPI CSI
-- 2x CAN
-- Audio Out
+Hi Aswath,
 
-i.Core MX8M Plus is an EDIMM SoM based on NXP i.MX8M Plus from Engicam.
+I love your patch! Perhaps something to improve:
 
-i.Core MX8M Plus needs to mount on top of this Evaluation board for
-creating complete i.Core MX8M Plus EDIMM2.2 Starter Kit.
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master ulf-hansson-mmc-mirror/next v5.18-rc3 next-20220414]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch]
 
-Add support for it.
+url:    https://github.com/intel-lab-lkp/linux/commits/Aswath-Govindraju/MMC-Add-quirk-to-set-the-TESTCD-bit/20220418-182325
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+config: riscv-randconfig-r016-20220418 (https://download.01.org/0day-ci/archive/20220418/202204182202.yPPV6YZI-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/a7d917691f55e240b1ab0abf36b0b39d1194a323
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Aswath-Govindraju/MMC-Add-quirk-to-set-the-TESTCD-bit/20220418-182325
+        git checkout a7d917691f55e240b1ab0abf36b0b39d1194a323
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/mmc/host/
 
-Signed-off-by: Manoj Sai <abbaraju.manojsai@amarulasolutions.com>
-Signed-off-by: Matteo Lisi <matteo.lisi@engicam.com>
-Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
----
-Changes for v2:
- -corrected the naming convetion of nodes as per existing
-  sources and bindings.
- -added the iomux to the end as per nxp convention.
----
- arch/arm64/boot/dts/freescale/Makefile        |   1 +
- .../freescale/imx8mp-icore-mx8mp-edimm2.2.dts | 176 ++++++++++++++++++
- 2 files changed, 177 insertions(+)
- create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-index 85c2c9ba5110..1c06393b8ba9 100644
---- a/arch/arm64/boot/dts/freescale/Makefile
-+++ b/arch/arm64/boot/dts/freescale/Makefile
-@@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dahlia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-nonwifi-dev.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dahlia.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mp-verdin-wifi-dev.dtb
-+dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mq-evk.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mq-hummingboard-pulse.dtb
- dtb-$(CONFIG_ARCH_MXC) += imx8mq-kontron-pitx-imx8m.dtb
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
-new file mode 100644
-index 000000000000..d623ea9dea2b
---- /dev/null
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-icore-mx8mp-edimm2.2.dts
-@@ -0,0 +1,176 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2018 NXP
-+ * Copyright (c) 2019 Engicam srl
-+ * Copyright (c) 2020 Amarula Solutons(India)
-+ */
-+
-+/dts-v1/;
-+
-+#include "imx8mp.dtsi"
-+#include "imx8mp-icore-mx8mp.dtsi"
-+#include <dt-bindings/usb/pd.h>
-+
-+/ {
-+	model = "Engicam i.Core MX8M Plus EDIMM2.2 Starter Kit";
-+	compatible = "engicam,icore-mx8mp-edimm2.2", "engicam,icore-mx8mp",
-+		     "fsl,imx8mp";
-+
-+	chosen {
-+		stdout-path = &uart2;
-+	};
-+
-+	reg_usb1_vbus: regulator-usb1 {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usb1>;
-+		regulator-name = "usb1_host_vbus";
-+		regulator-min-microvolt = <5000000>;
-+		regulator-max-microvolt = <5000000>;
-+		regulator-always-on;
-+		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	reg_usdhc2_vmmc: regulator-usdhc2 {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_reg_usdhc2_vmmc>;
-+		regulator-name = "VSD_3V3";
-+		regulator-min-microvolt = <3300000>;
-+		regulator-max-microvolt = <3300000>;
-+		gpio = <&gpio2 19 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+};
-+
-+/* Ethernet */
-+&eqos {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_eqos>;
-+	phy-mode = "rgmii-id";
-+	phy-handle = <&ethphy0>;
-+	status = "okay";
-+
-+	mdio {
-+		compatible = "snps,dwmac-mdio";
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		ethphy0: ethernet-phy@7 {
-+			compatible = "ethernet-phy-ieee802.3-c22";
-+			micrel,led-mode = <0>;
-+			reg = <7>;
-+		};
-+	};
-+};
-+
-+/* console */
-+&uart2 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart2>;
-+	status = "okay";
-+};
-+
-+&usb3_phy0 {
-+	status = "okay";
-+};
-+
-+&usb3_0 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_0 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+&usb3_phy1 {
-+	status = "okay";
-+};
-+
-+&usb3_1 {
-+	status = "okay";
-+};
-+
-+&usb_dwc3_1 {
-+	dr_mode = "host";
-+	status = "okay";
-+};
-+
-+/* SDCARD */
-+&usdhc2 {
-+	pinctrl-names = "default" ;
-+	pinctrl-0 = <&pinctrl_usdhc2>, <&pinctrl_usdhc2_gpio>;
-+	cd-gpios = <&gpio2 12 GPIO_ACTIVE_LOW>;
-+	vmmc-supply = <&reg_usdhc2_vmmc>;
-+	bus-width = <4>;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl_eqos: eqosgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_ENET_MDC__ENET_QOS_MDC				0x3
-+			MX8MP_IOMUXC_ENET_MDIO__ENET_QOS_MDIO				0x3
-+			MX8MP_IOMUXC_ENET_RD0__ENET_QOS_RGMII_RD0			0x91
-+			MX8MP_IOMUXC_ENET_RD1__ENET_QOS_RGMII_RD1			0x91
-+			MX8MP_IOMUXC_ENET_RD2__ENET_QOS_RGMII_RD2			0x91
-+			MX8MP_IOMUXC_ENET_RD3__ENET_QOS_RGMII_RD3			0x91
-+			MX8MP_IOMUXC_ENET_RXC__CCM_ENET_QOS_CLOCK_GENERATE_RX_CLK	0x91
-+			MX8MP_IOMUXC_ENET_RX_CTL__ENET_QOS_RGMII_RX_CTL			0x91
-+			MX8MP_IOMUXC_ENET_TD0__ENET_QOS_RGMII_TD0			0x1f
-+			MX8MP_IOMUXC_ENET_TD1__ENET_QOS_RGMII_TD1			0x1f
-+			MX8MP_IOMUXC_ENET_TD2__ENET_QOS_RGMII_TD2			0x1f
-+			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3			0x1f
-+			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL			0x1f
-+			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x1f
-+			MX8MP_IOMUXC_NAND_DATA01__GPIO3_IO07				0x19
-+		>;
-+	};
-+
-+	pinctrl_reg_usdhc2_vmmc: regusdhc2vmmcgrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_RESET_B__GPIO2_IO19	0x41
-+		>;
-+	};
-+
-+	pinctrl_uart2: uart2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART2_RXD__UART2_DCE_RX	0x49
-+			MX8MP_IOMUXC_UART2_TXD__UART2_DCE_TX	0x49
-+		>;
-+	};
-+
-+	pinctrl_uart3: uart3grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_UART3_RXD__UART3_DCE_RX	0x140
-+			MX8MP_IOMUXC_UART3_TXD__UART3_DCE_TX	0x140
-+			MX8MP_IOMUXC_SD1_STROBE__UART3_DCE_CTS	0x140
-+		>;
-+	};
-+
-+	pinctrl_reg_usb1: regusb1grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x19
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CD_B__GPIO2_IO12	0x1c4
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX8MP_IOMUXC_SD2_CLK__USDHC2_CLK	0x190
-+			MX8MP_IOMUXC_SD2_CMD__USDHC2_CMD	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA0__USDHC2_DATA0	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA1__USDHC2_DATA1	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA2__USDHC2_DATA2	0x1d0
-+			MX8MP_IOMUXC_SD2_DATA3__USDHC2_DATA3	0x1d0
-+			MX8MP_IOMUXC_GPIO1_IO04__USDHC2_VSELECT	0xc1
-+		>;
-+	};
-+};
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/mmc/host/sdhci_am654.c:9:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:464:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:477:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/mmc/host/sdhci_am654.c:9:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:490:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/mmc/host/sdhci_am654.c:9:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/riscv/include/asm/io.h:136:
+   include/asm-generic/io.h:501:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:511:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:521:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:1024:55: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           return (port > MMIO_UPPER_LIMIT) ? NULL : PCI_IOBASE + port;
+                                                     ~~~~~~~~~~ ^
+>> drivers/mmc/host/sdhci_am654.c:375:6: warning: no previous prototype for function 'sdhci_am654_reset' [-Wmissing-prototypes]
+   void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+        ^
+   drivers/mmc/host/sdhci_am654.c:375:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+   ^
+   static 
+   8 warnings generated.
+
+
+vim +/sdhci_am654_reset +375 drivers/mmc/host/sdhci_am654.c
+
+   374	
+ > 375	void sdhci_am654_reset(struct sdhci_host *host, u8 mask)
+   376	{
+   377		u8 ctrl;
+   378		struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+   379		struct sdhci_am654_data *sdhci_am654 = sdhci_pltfm_priv(pltfm_host);
+   380	
+   381		sdhci_reset(host, mask);
+   382	
+   383		if (sdhci_am654->quirks & SDHCI_AM654_QUIRK_FORCE_CDTEST) {
+   384			ctrl = sdhci_readb(host, SDHCI_HOST_CONTROL);
+   385			ctrl |= SDHCI_CTRL_CDTEST_INS | SDHCI_CTRL_CDTEST_EN;
+   386			sdhci_writeb(host, ctrl, SDHCI_HOST_CONTROL);
+   387		}
+   388	}
+   389	
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

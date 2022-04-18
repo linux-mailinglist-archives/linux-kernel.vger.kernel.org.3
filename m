@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39885056E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:47:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 009745052F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244268AbiDRNr1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:47:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57308 "EHLO
+        id S240003AbiDRMyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243720AbiDRN3E (ORCPT
+        with ESMTP id S240477AbiDRMjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:29:04 -0400
+        Mon, 18 Apr 2022 08:39:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91D183FBEE;
-        Mon, 18 Apr 2022 05:53:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C95A286FD;
+        Mon, 18 Apr 2022 05:29:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 21799612C3;
-        Mon, 18 Apr 2022 12:53:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16FE7C385A1;
-        Mon, 18 Apr 2022 12:53:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EFE86112C;
+        Mon, 18 Apr 2022 12:29:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C96C385A7;
+        Mon, 18 Apr 2022 12:29:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286424;
-        bh=pbWOlWjYLriqB3tA+WF6LhE82z+m6RnhJZXV0L8KsbI=;
+        s=korg; t=1650284983;
+        bh=kw+P+Q2um2sfgDyO73eLtQasUJ3xATpBMsqOEloUQsg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mY2w91xtZp1i+7NfZ6C4pUiLgL/Sx+NA5YMOG5fOOpymAHiBMHQY9lgAfDAnxKrfE
-         XQcQLtbM629/GtnJ5PdaAhrZMZaCu3q+627QVZKKrVQl8BMU2MwHD7M5oa07WmF/XI
-         oRVITD8ko1RMFoxPYo+BP5jBsgoAWrkecGsOnqQk=
+        b=LstOI/JXU51y7Nfoz6dEqjR3oO+OayU3WmyP6mY04jT66CAOxObExmQD2SljPH8dX
+         g5AD4O34niya2G/3YofgtDMgQsZUws9dPubmpUxMvKQ503jBWCBWRaAT00xGQAnQSI
+         HVfJ3ddZa11xa3l16M8EBfoL5FX4cjOnNw9SwJsg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>,
-        Mark Brown <broonie@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 090/284] ASoC: fsi: Add check for clk_enable
-Date:   Mon, 18 Apr 2022 14:11:11 +0200
-Message-Id: <20220418121213.245644392@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 052/189] ALSA: sonicvibes: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:11:12 +0200
+Message-Id: <20220418121201.989013889@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 405afed8a728f23cfaa02f75bbc8bdd6b7322123 ]
+commit b087a381d7386ec95803222d0d9b1ac499550713 upstream.
 
-As the potential failure of the clk_enable(),
-it should be better to check it and return error
-if fails.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Fixes: ab6f6d85210c ("ASoC: fsi: add master clock control functions")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Link: https://lore.kernel.org/r/20220302062844.46869-1-jiasheng@iscas.ac.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
+
+Fixes: 2ca6cbde6ad7 ("ALSA: sonicvibes: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-25-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/soc/sh/fsi.c | 19 ++++++++++++++++---
- 1 file changed, 16 insertions(+), 3 deletions(-)
+ sound/pci/sonicvibes.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/sound/soc/sh/fsi.c b/sound/soc/sh/fsi.c
-index 6d3c7706d93f..b564accb6098 100644
---- a/sound/soc/sh/fsi.c
-+++ b/sound/soc/sh/fsi.c
-@@ -820,14 +820,27 @@ static int fsi_clk_enable(struct device *dev,
- 			return ret;
- 		}
- 
--		clk_enable(clock->xck);
--		clk_enable(clock->ick);
--		clk_enable(clock->div);
-+		ret = clk_enable(clock->xck);
-+		if (ret)
-+			goto err;
-+		ret = clk_enable(clock->ick);
-+		if (ret)
-+			goto disable_xck;
-+		ret = clk_enable(clock->div);
-+		if (ret)
-+			goto disable_ick;
- 
- 		clock->count++;
- 	}
- 
- 	return ret;
-+
-+disable_ick:
-+	clk_disable(clock->ick);
-+disable_xck:
-+	clk_disable(clock->xck);
-+err:
-+	return ret;
+diff --git a/sound/pci/sonicvibes.c b/sound/pci/sonicvibes.c
+index c8c49881008f..f91cbf6eeca0 100644
+--- a/sound/pci/sonicvibes.c
++++ b/sound/pci/sonicvibes.c
+@@ -1387,8 +1387,8 @@ static int snd_sonicvibes_midi(struct sonicvibes *sonic,
+ 	return 0;
  }
  
- static int fsi_clk_disable(struct device *dev,
+-static int snd_sonic_probe(struct pci_dev *pci,
+-			   const struct pci_device_id *pci_id)
++static int __snd_sonic_probe(struct pci_dev *pci,
++			     const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -1459,6 +1459,12 @@ static int snd_sonic_probe(struct pci_dev *pci,
+ 	return 0;
+ }
+ 
++static int snd_sonic_probe(struct pci_dev *pci,
++			   const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_sonic_probe(pci, pci_id));
++}
++
+ static struct pci_driver sonicvibes_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = snd_sonic_ids,
 -- 
-2.34.1
+2.35.2
 
 
 

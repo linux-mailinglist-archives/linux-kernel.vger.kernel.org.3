@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD84250506C
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DDD505071
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235897AbiDRMZW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:25:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49044 "EHLO
+        id S238602AbiDRMZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238453AbiDRMV4 (ORCPT
+        with ESMTP id S238461AbiDRMV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 08:21:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E639B1D0F5;
-        Mon, 18 Apr 2022 05:17:38 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CDC01D302;
+        Mon, 18 Apr 2022 05:17:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 759F0B80EC4;
-        Mon, 18 Apr 2022 12:17:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0C08C385A7;
-        Mon, 18 Apr 2022 12:17:35 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1650B60F0F;
+        Mon, 18 Apr 2022 12:17:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08C2CC385A1;
+        Mon, 18 Apr 2022 12:17:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284256;
-        bh=34W3T14ZyvuTjSBt3LK3XZum8D6tggDeBg81HxRc4to=;
+        s=korg; t=1650284259;
+        bh=dz40396YIqXB2jepd5Hjs99vJxDVQBUy5fYJDuU3p38=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=07zr/yAdkwn+WBXChzHl6tO6NwHhS4o/XwNAImB8fr+gQmi3D5rMxdkSdK8yOSY74
-         j/uVgjTb8XRAhdoxlIfBPw+DDMO1TTN0afGIqBtksFmiSBZjTlni9AMpsqEJqu3V33
-         QcMJfTPei9yH7gtAJJmwhDDvtVLurXYnvQRBycNU=
+        b=jzwajjdIzSsaH7NqhHg2LYZKuBF5MXijp7X2MSUa0fdFoXNTDK6HK/enY1cn7RtTx
+         6o0fwpCL3TNWlD3mc3QMe4OCX0CBScUV7GQBI+xDp97M73wFp2kzwq5vjgEQcGAYVt
+         Zc/LVJg0+4aTK2y6EBhveOai8/ACxuZsTcP57dMY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.17 055/219] ALSA: usb-audio: Cap upper limits of buffer/period bytes for implicit fb
-Date:   Mon, 18 Apr 2022 14:10:24 +0200
-Message-Id: <20220418121206.770245526@linuxfoundation.org>
+Subject: [PATCH 5.17 056/219] ALSA: memalloc: Add fallback SG-buffer allocations for x86
+Date:   Mon, 18 Apr 2022 14:10:25 +0200
+Message-Id: <20220418121206.846865273@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -55,159 +55,208 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Takashi Iwai <tiwai@suse.de>
 
-commit 98c27add5d96485db731a92dac31567b0486cae8 upstream.
+commit 925ca893b4a65177394581737b95d03fea2660f2 upstream.
 
-In the implicit feedback mode, some parameters are tied between both
-playback and capture streams.  One of the tied parameters is the
-period size, and this can be a problem if the device has different
-number of channels to both streams.  Assume that an application opens
-a playback stream that has an implicit feedback from a capture stream,
-and it allocates up to the max period and buffer size as much as
-possible.  When the capture device supports only more channels than
-the playback, the minimum period and buffer sizes become larger than
-the sizes the playback stream took.  That is, the minimum size will be
-over the max size the driver limits, and PCM core sees as if no
-available configuration is found, returning -EINVAL mercilessly.
+The recent change for memory allocator replaced the SG-buffer handling
+helper for x86 with the standard non-contiguous page handler.  This
+works for most cases, but there is a corner case I obviously
+overlooked, namely, the fallback of non-contiguous handler without
+IOMMU.  When the system runs without IOMMU, the core handler tries to
+use the continuous pages with a single SGL entry.  It works nicely for
+most cases, but when the system memory gets fragmented, the large
+allocation may fail frequently.
 
-For avoiding this problem, we have to look through the counter part of
-audioformat list for each sync ep, and checks the channels.  If more
-channels are found there, we reduce the max period and buffer sizes
-accordingly.
+Ideally the non-contig handler could deal with the proper SG pages,
+it's cumbersome to extend for now.  As a workaround, here we add new
+types for (minimalistic) SG allocations, instead, so that the
+allocator falls back to those types automatically when the allocation
+with the standard API failed.
 
-You may wonder that the patch adds only the evaluation of channels
-between streams, and what about other parameters?  Both the format and
-the rate are tied in the implicit fb mode, hence they are always
-identical.
+BTW, one better (but pretty minor) improvement from the previous
+SG-buffer code is that this provides the proper mmap support without
+the PCM's page fault handling.
 
-BugLink: https://bugzilla.kernel.org/show_bug.cgi?id=215792
-Fixes: 5a6c3e11c9c9 ("ALSA: usb-audio: Add hw constraint for implicit fb sync")
+Fixes: 2c95b92ecd92 ("ALSA: memalloc: Unify x86 SG-buffer handling (take#3)")
+BugLink: https://gitlab.freedesktop.org/pipewire/pipewire/-/issues/2272
+BugLink: https://bugzilla.suse.com/show_bug.cgi?id=1198248
 Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220407211657.15087-1-tiwai@suse.de
+Link: https://lore.kernel.org/r/20220413054808.7547-1-tiwai@suse.de
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- sound/usb/pcm.c |   89 ++++++++++++++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 87 insertions(+), 2 deletions(-)
+ include/sound/memalloc.h |   5 ++
+ sound/core/memalloc.c    | 111 ++++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 115 insertions(+), 1 deletion(-)
 
---- a/sound/usb/pcm.c
-+++ b/sound/usb/pcm.c
-@@ -659,6 +659,9 @@ static int snd_usb_pcm_prepare(struct sn
- #define hwc_debug(fmt, args...) do { } while(0)
+diff --git a/include/sound/memalloc.h b/include/sound/memalloc.h
+index 653dfffb3ac8..8d79cebf95f3 100644
+--- a/include/sound/memalloc.h
++++ b/include/sound/memalloc.h
+@@ -51,6 +51,11 @@ struct snd_dma_device {
+ #define SNDRV_DMA_TYPE_DEV_SG	SNDRV_DMA_TYPE_DEV /* no SG-buf support */
+ #define SNDRV_DMA_TYPE_DEV_WC_SG	SNDRV_DMA_TYPE_DEV_WC
  #endif
++/* fallback types, don't use those directly */
++#ifdef CONFIG_SND_DMA_SGBUF
++#define SNDRV_DMA_TYPE_DEV_SG_FALLBACK		10
++#define SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK	11
++#endif
  
-+#define MAX_BUFFER_BYTES	(1024 * 1024)
-+#define MAX_PERIOD_BYTES	(512 * 1024)
-+
- static const struct snd_pcm_hardware snd_usb_hardware =
- {
- 	.info =			SNDRV_PCM_INFO_MMAP |
-@@ -669,9 +672,9 @@ static const struct snd_pcm_hardware snd
- 				SNDRV_PCM_INFO_PAUSE,
- 	.channels_min =		1,
- 	.channels_max =		256,
--	.buffer_bytes_max =	1024 * 1024,
-+	.buffer_bytes_max =	MAX_BUFFER_BYTES,
- 	.period_bytes_min =	64,
--	.period_bytes_max =	512 * 1024,
-+	.period_bytes_max =	MAX_PERIOD_BYTES,
- 	.periods_min =		2,
- 	.periods_max =		1024,
+ /*
+  * info for buffer allocation
+diff --git a/sound/core/memalloc.c b/sound/core/memalloc.c
+index 6fd763d4d15b..15dc7160ba34 100644
+--- a/sound/core/memalloc.c
++++ b/sound/core/memalloc.c
+@@ -499,6 +499,10 @@ static const struct snd_malloc_ops snd_dma_wc_ops = {
  };
-@@ -971,6 +974,78 @@ static int hw_rule_periods_implicit_fb(s
- 				      ep->cur_buffer_periods);
- }
+ #endif /* CONFIG_X86 */
  
-+/* get the adjusted max buffer (or period) bytes that can fit with the
-+ * paired format for implicit fb
-+ */
-+static unsigned int
-+get_adjusted_max_bytes(struct snd_usb_substream *subs,
-+		       struct snd_usb_substream *pair,
-+		       struct snd_pcm_hw_params *params,
-+		       unsigned int max_bytes,
-+		       bool reverse_map)
-+{
-+	const struct audioformat *fp, *pp;
-+	unsigned int rmax = 0, r;
-+
-+	list_for_each_entry(fp, &subs->fmt_list, list) {
-+		if (!fp->implicit_fb)
-+			continue;
-+		if (!reverse_map &&
-+		    !hw_check_valid_format(subs, params, fp))
-+			continue;
-+		list_for_each_entry(pp, &pair->fmt_list, list) {
-+			if (pp->iface != fp->sync_iface ||
-+			    pp->altsetting != fp->sync_altsetting ||
-+			    pp->ep_idx != fp->sync_ep_idx)
-+				continue;
-+			if (reverse_map &&
-+			    !hw_check_valid_format(pair, params, pp))
-+				break;
-+			if (!reverse_map && pp->channels > fp->channels)
-+				r = max_bytes * fp->channels / pp->channels;
-+			else if (reverse_map && pp->channels < fp->channels)
-+				r = max_bytes * pp->channels / fp->channels;
-+			else
-+				r = max_bytes;
-+			rmax = max(rmax, r);
-+			break;
-+		}
-+	}
-+	return rmax;
-+}
-+
-+/* Reduce the period or buffer bytes depending on the paired substream;
-+ * when a paired configuration for implicit fb has a higher number of channels,
-+ * we need to reduce the max size accordingly, otherwise it may become unusable
-+ */
-+static int hw_rule_bytes_implicit_fb(struct snd_pcm_hw_params *params,
-+				     struct snd_pcm_hw_rule *rule)
-+{
-+	struct snd_usb_substream *subs = rule->private;
-+	struct snd_usb_substream *pair;
-+	struct snd_interval *it;
-+	unsigned int max_bytes;
-+	unsigned int rmax;
-+
-+	pair = &subs->stream->substream[!subs->direction];
-+	if (!pair->ep_num)
-+		return 0;
-+
-+	if (rule->var == SNDRV_PCM_HW_PARAM_PERIOD_BYTES)
-+		max_bytes = MAX_PERIOD_BYTES;
-+	else
-+		max_bytes = MAX_BUFFER_BYTES;
-+
-+	rmax = get_adjusted_max_bytes(subs, pair, params, max_bytes, false);
-+	if (!rmax)
-+		rmax = get_adjusted_max_bytes(pair, subs, params, max_bytes, true);
-+	if (!rmax)
-+		return 0;
-+
-+	it = hw_param_interval(params, rule->var);
-+	return apply_hw_params_minmax(it, 0, rmax);
-+}
++#ifdef CONFIG_SND_DMA_SGBUF
++static void *snd_dma_sg_fallback_alloc(struct snd_dma_buffer *dmab, size_t size);
++#endif
 +
  /*
-  * set up the runtime hardware information.
+  * Non-contiguous pages allocator
   */
-@@ -1085,6 +1160,16 @@ static int setup_hw_info(struct snd_pcm_
- 				  SNDRV_PCM_HW_PARAM_PERIODS, -1);
- 	if (err < 0)
- 		return err;
-+	err = snd_pcm_hw_rule_add(runtime, 0, SNDRV_PCM_HW_PARAM_BUFFER_BYTES,
-+				  hw_rule_bytes_implicit_fb, subs,
-+				  SNDRV_PCM_HW_PARAM_BUFFER_BYTES, -1);
-+	if (err < 0)
-+		return err;
-+	err = snd_pcm_hw_rule_add(runtime, 0, SNDRV_PCM_HW_PARAM_PERIOD_BYTES,
-+				  hw_rule_bytes_implicit_fb, subs,
-+				  SNDRV_PCM_HW_PARAM_PERIOD_BYTES, -1);
-+	if (err < 0)
-+		return err;
+@@ -509,8 +513,18 @@ static void *snd_dma_noncontig_alloc(struct snd_dma_buffer *dmab, size_t size)
  
- 	list_for_each_entry(fp, &subs->fmt_list, list) {
- 		if (fp->implicit_fb) {
+ 	sgt = dma_alloc_noncontiguous(dmab->dev.dev, size, dmab->dev.dir,
+ 				      DEFAULT_GFP, 0);
+-	if (!sgt)
++	if (!sgt) {
++#ifdef CONFIG_SND_DMA_SGBUF
++		if (dmab->dev.type == SNDRV_DMA_TYPE_DEV_WC_SG)
++			dmab->dev.type = SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK;
++		else
++			dmab->dev.type = SNDRV_DMA_TYPE_DEV_SG_FALLBACK;
++		return snd_dma_sg_fallback_alloc(dmab, size);
++#else
+ 		return NULL;
++#endif
++	}
++
+ 	dmab->dev.need_sync = dma_need_sync(dmab->dev.dev,
+ 					    sg_dma_address(sgt->sgl));
+ 	p = dma_vmap_noncontiguous(dmab->dev.dev, size, sgt);
+@@ -633,6 +647,8 @@ static void *snd_dma_sg_wc_alloc(struct snd_dma_buffer *dmab, size_t size)
+ 
+ 	if (!p)
+ 		return NULL;
++	if (dmab->dev.type != SNDRV_DMA_TYPE_DEV_WC_SG)
++		return p;
+ 	for_each_sgtable_page(sgt, &iter, 0)
+ 		set_memory_wc(sg_wc_address(&iter), 1);
+ 	return p;
+@@ -665,6 +681,95 @@ static const struct snd_malloc_ops snd_dma_sg_wc_ops = {
+ 	.get_page = snd_dma_noncontig_get_page,
+ 	.get_chunk_size = snd_dma_noncontig_get_chunk_size,
+ };
++
++/* Fallback SG-buffer allocations for x86 */
++struct snd_dma_sg_fallback {
++	size_t count;
++	struct page **pages;
++	dma_addr_t *addrs;
++};
++
++static void __snd_dma_sg_fallback_free(struct snd_dma_buffer *dmab,
++				       struct snd_dma_sg_fallback *sgbuf)
++{
++	size_t i;
++
++	if (sgbuf->count && dmab->dev.type == SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK)
++		set_pages_array_wb(sgbuf->pages, sgbuf->count);
++	for (i = 0; i < sgbuf->count && sgbuf->pages[i]; i++)
++		dma_free_coherent(dmab->dev.dev, PAGE_SIZE,
++				  page_address(sgbuf->pages[i]),
++				  sgbuf->addrs[i]);
++	kvfree(sgbuf->pages);
++	kvfree(sgbuf->addrs);
++	kfree(sgbuf);
++}
++
++static void *snd_dma_sg_fallback_alloc(struct snd_dma_buffer *dmab, size_t size)
++{
++	struct snd_dma_sg_fallback *sgbuf;
++	struct page **pages;
++	size_t i, count;
++	void *p;
++
++	sgbuf = kzalloc(sizeof(*sgbuf), GFP_KERNEL);
++	if (!sgbuf)
++		return NULL;
++	count = PAGE_ALIGN(size) >> PAGE_SHIFT;
++	pages = kvcalloc(count, sizeof(*pages), GFP_KERNEL);
++	if (!pages)
++		goto error;
++	sgbuf->pages = pages;
++	sgbuf->addrs = kvcalloc(count, sizeof(*sgbuf->addrs), GFP_KERNEL);
++	if (!sgbuf->addrs)
++		goto error;
++
++	for (i = 0; i < count; sgbuf->count++, i++) {
++		p = dma_alloc_coherent(dmab->dev.dev, PAGE_SIZE,
++				       &sgbuf->addrs[i], DEFAULT_GFP);
++		if (!p)
++			goto error;
++		sgbuf->pages[i] = virt_to_page(p);
++	}
++
++	if (dmab->dev.type == SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK)
++		set_pages_array_wc(pages, count);
++	p = vmap(pages, count, VM_MAP, PAGE_KERNEL);
++	if (!p)
++		goto error;
++	dmab->private_data = sgbuf;
++	return p;
++
++ error:
++	__snd_dma_sg_fallback_free(dmab, sgbuf);
++	return NULL;
++}
++
++static void snd_dma_sg_fallback_free(struct snd_dma_buffer *dmab)
++{
++	vunmap(dmab->area);
++	__snd_dma_sg_fallback_free(dmab, dmab->private_data);
++}
++
++static int snd_dma_sg_fallback_mmap(struct snd_dma_buffer *dmab,
++				    struct vm_area_struct *area)
++{
++	struct snd_dma_sg_fallback *sgbuf = dmab->private_data;
++
++	if (dmab->dev.type == SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK)
++		area->vm_page_prot = pgprot_writecombine(area->vm_page_prot);
++	return vm_map_pages(area, sgbuf->pages, sgbuf->count);
++}
++
++static const struct snd_malloc_ops snd_dma_sg_fallback_ops = {
++	.alloc = snd_dma_sg_fallback_alloc,
++	.free = snd_dma_sg_fallback_free,
++	.mmap = snd_dma_sg_fallback_mmap,
++	/* reuse vmalloc helpers */
++	.get_addr = snd_dma_vmalloc_get_addr,
++	.get_page = snd_dma_vmalloc_get_page,
++	.get_chunk_size = snd_dma_vmalloc_get_chunk_size,
++};
+ #endif /* CONFIG_SND_DMA_SGBUF */
+ 
+ /*
+@@ -736,6 +841,10 @@ static const struct snd_malloc_ops *dma_ops[] = {
+ #ifdef CONFIG_GENERIC_ALLOCATOR
+ 	[SNDRV_DMA_TYPE_DEV_IRAM] = &snd_dma_iram_ops,
+ #endif /* CONFIG_GENERIC_ALLOCATOR */
++#ifdef CONFIG_SND_DMA_SGBUF
++	[SNDRV_DMA_TYPE_DEV_SG_FALLBACK] = &snd_dma_sg_fallback_ops,
++	[SNDRV_DMA_TYPE_DEV_WC_SG_FALLBACK] = &snd_dma_sg_fallback_ops,
++#endif
+ #endif /* CONFIG_HAS_DMA */
+ };
+ 
+-- 
+2.35.2
+
 
 

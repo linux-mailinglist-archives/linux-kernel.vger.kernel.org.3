@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8F45051CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3169A5057D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240408AbiDRMjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53902 "EHLO
+        id S244153AbiDRN5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239734AbiDRMdW (ORCPT
+        with ESMTP id S244894AbiDRNbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:22 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACFFC1DA55;
-        Mon, 18 Apr 2022 05:25:26 -0700 (PDT)
+        Mon, 18 Apr 2022 09:31:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA19FBAB;
+        Mon, 18 Apr 2022 05:57:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 1680CCE106E;
-        Mon, 18 Apr 2022 12:25:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3C6FC385A7;
-        Mon, 18 Apr 2022 12:25:22 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 98439B80E44;
+        Mon, 18 Apr 2022 12:57:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7641C385A8;
+        Mon, 18 Apr 2022 12:57:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284723;
-        bh=ZHMZnOit5c8zTbyxv8NwyQI3YVinWF2OZ+PTUpwGha4=;
+        s=korg; t=1650286630;
+        bh=h5D9dmTuXR5USw/iDEBW2gw/P3OCRNs4k9/IFHHvGtM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=1XcLq9jfJMMcTzkAEGyI/I03hxWa/w1edK9f6sAU8Z8eES7sQ7BiDrAKJPNR7N/4X
-         Qfz1rAQiTGeWBIXbTX9haSevrvzcZ+srJdbTJRTTaZz5TLQ5m4K0shShscQ+1nt+AF
-         l4kJtgyqhHfahbh1MGFSUILFmdks7fmJr8E6Oofg=
+        b=eVVCWb0u7IIdpMIYyrnUtACFz18pjpSRJgzxAAoBe+ZsF1TM7sps1OM3UdxM9H+bC
+         u7DIL3aqXXJ8Z8QZ6RQKgghiQFlVymkbwCWvOiS8Y/N34jNeYINBU/Ne5rD4g8Mios
+         naaTCay8/DZ+KfrfcrhklgO18j8ZceFSDWrzEURM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Alexander Sverdlin <alexander.sverdlin@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: [PATCH 5.17 206/219] ep93xx: clock: Fix UAF in ep93xx_clk_register_gate()
-Date:   Mon, 18 Apr 2022 14:12:55 +0200
-Message-Id: <20220418121212.634259061@linuxfoundation.org>
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Igor Zhbanov <i.zhbanov@omprussia.ru>,
+        Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.14 195/284] mm/mmap: return 1 from stack_guard_gap __setup() handler
+Date:   Mon, 18 Apr 2022 14:12:56 +0200
+Message-Id: <20220418121217.275014933@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,45 +57,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 3b68b08885217abd9c57ff9b3bb3eb173eee02a9 upstream.
+commit e6d094936988910ce6e8197570f2753898830081 upstream.
 
-arch/arm/mach-ep93xx/clock.c:154:2: warning: Use of memory after it is freed [clang-analyzer-unix.Malloc]
-arch/arm/mach-ep93xx/clock.c:151:2: note: Taking true branch
-if (IS_ERR(clk))
-^
-arch/arm/mach-ep93xx/clock.c:152:3: note: Memory is released
-kfree(psc);
-^~~~~~~~~~
-arch/arm/mach-ep93xx/clock.c:154:2: note: Use of memory after it is freed
-return &psc->hw;
-^ ~~~~~~~~
+__setup() handlers should return 1 if the command line option is handled
+and 0 if not (or maybe never return 0; it just pollutes init's
+environment).  This prevents:
 
-Fixes: 9645ccc7bd7a ("ep93xx: clock: convert in-place to COMMON_CLK")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: stable@vger.kernel.org
-Link: https://lists.01.org/hyperkitty/list/kbuild-all@lists.01.org/thread/B5YCO2NJEXINCYE26Y255LCVMO55BGWW/
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+  Unknown kernel command line parameters \
+  "BOOT_IMAGE=/boot/bzImage-517rc5 stack_guard_gap=100", will be \
+  passed to user space.
+
+  Run /sbin/init as init process
+   with arguments:
+     /sbin/init
+   with environment:
+     HOME=/
+     TERM=linux
+     BOOT_IMAGE=/boot/bzImage-517rc5
+     stack_guard_gap=100
+
+Return 1 to indicate that the boot option has been handled.
+
+Note that there is no warning message if someone enters:
+	stack_guard_gap=anything_invalid
+and 'val' and stack_guard_gap are both set to 0 due to the use of
+simple_strtoul(). This could be improved by using kstrtoxxx() and
+checking for an error.
+
+It appears that having stack_guard_gap == 0 is valid (if unexpected) since
+using "stack_guard_gap=0" on the kernel command line does that.
+
+Link: https://lkml.kernel.org/r/20220222005817.11087-1-rdunlap@infradead.org
+Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
+Fixes: 1be7107fbe18e ("mm: larger stack guard gap, between vmas")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
+Cc: Hugh Dickins <hughd@google.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/mach-ep93xx/clock.c |    4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ mm/mmap.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/arch/arm/mach-ep93xx/clock.c
-+++ b/arch/arm/mach-ep93xx/clock.c
-@@ -148,8 +148,10 @@ static struct clk_hw *ep93xx_clk_registe
- 	psc->lock = &clk_lock;
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2426,7 +2426,7 @@ static int __init cmdline_parse_stack_gu
+ 	if (!*endptr)
+ 		stack_guard_gap = val << PAGE_SHIFT;
  
- 	clk = clk_register(NULL, &psc->hw);
--	if (IS_ERR(clk))
-+	if (IS_ERR(clk)) {
- 		kfree(psc);
-+		return ERR_CAST(clk);
-+	}
- 
- 	return &psc->hw;
+-	return 0;
++	return 1;
  }
+ __setup("stack_guard_gap=", cmdline_parse_stack_guard_gap);
+ 
 
 

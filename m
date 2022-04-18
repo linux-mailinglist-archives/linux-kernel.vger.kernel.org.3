@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FBE505590
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD16F505795
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243086AbiDRNJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:09:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50898 "EHLO
+        id S1343643AbiDRNyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241101AbiDRM6X (ORCPT
+        with ESMTP id S244859AbiDRNa6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:23 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2610A24F30;
-        Mon, 18 Apr 2022 05:38:38 -0700 (PDT)
+        Mon, 18 Apr 2022 09:30:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C291EEC9;
+        Mon, 18 Apr 2022 05:56:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7F90FCE10AF;
-        Mon, 18 Apr 2022 12:38:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69C12C385A1;
-        Mon, 18 Apr 2022 12:38:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1C4376115A;
+        Mon, 18 Apr 2022 12:56:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA13C385A1;
+        Mon, 18 Apr 2022 12:56:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285514;
-        bh=JQnow2SOT802oNKrq1lbJ5cGXDWXQkeciol61Csm9AI=;
+        s=korg; t=1650286584;
+        bh=fg5zFCcA8CyEjfMuNxKCF1EzV/gKnpC9HIKp+iAn9D8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FH2w2omKBKUH9XGk2a4iH1XxIBrvv14eNjqAimMuQbXjPtnCbVM9kvgJL7LFd3+Yg
-         HDxe6+M91eZKeBvbkL3gVliVW4wi5u9nvcDh493IdN0UMt9i91jgl2ellz7TP+BRbD
-         qphU7e3OaGgMAkNHgL/L7sRyoqHhJPRG9f72Y1Gs=
+        b=JyQ8Y31c5zxm090HR+TL6eRu3v2zfrQXumxY1HEWVWePWQm2s31k/N3+AfOpemQqC
+         iGNjgMCGveB289/uUS3lfXvW4wdk+LNlpM99UPVMaKP8I/cOHEc771N9CQmspxJ1Ca
+         KnzwkQwaA6L+yi9BgWVDTYAvEoLwAHb0LfKMkLb8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 041/105] net: bcmgenet: Revert "Use stronger register read/writes to assure ordering"
+        stable@vger.kernel.org,
+        Himanshu Madhani <himanshu.madhani@oracle.com>,
+        Nilesh Javali <njavali@marvell.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Subject: [PATCH 4.14 182/284] scsi: qla2xxx: Fix warning for missing error code
 Date:   Mon, 18 Apr 2022 14:12:43 +0200
-Message-Id: <20220418121147.644952639@linuxfoundation.org>
+Message-Id: <20220418121216.912614105@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jeremy Linton <jeremy.linton@arm.com>
+From: Nilesh Javali <njavali@marvell.com>
 
-[ Upstream commit 2df3fc4a84e917a422935cc5bae18f43f9955d31 ]
+commit 14cb838d245ae0d523b2f7804af5a02c22e79f5a upstream.
 
-It turns out after digging deeper into this bug, that it was being
-triggered by GCC12 failing to call the bcmgenet_enable_dma()
-routine. Given that a gcc12 fix has been merged [1] and the genet
-driver now works properly when built with gcc12, this commit should
-be reverted.
+Fix smatch-reported warning message:
 
-[1]
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
-https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=aabb9a261ef060cf24fd626713f1d7d9df81aa57
+drivers/scsi/qla2xxx/qla_target.c:3324 qlt_xmit_response() warn: missing error
+code 'res'
 
-Fixes: 8d3ea3d402db ("net: bcmgenet: Use stronger register read/writes to assure ordering")
-Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Link: https://lore.kernel.org/r/20220412210420.1129430-1-jeremy.linton@arm.com
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Link: https://lore.kernel.org/r/20220110050218.3958-12-njavali@marvell.com
+Fixes: 4a8f71014b4d ("scsi: qla2xxx: Fix unmap of already freed sgl")
+Cc: stable@vger.kernel.org
+Reviewed-by: Himanshu Madhani <himanshu.madhani@oracle.com>
+Signed-off-by: Nilesh Javali <njavali@marvell.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/qla2xxx/qla_target.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-index 7dcd5613ee56..a2062144d7ca 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-@@ -76,7 +76,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
- 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
- 		__raw_writel(value, offset);
- 	else
--		writel(value, offset);
-+		writel_relaxed(value, offset);
- }
+--- a/drivers/scsi/qla2xxx/qla_target.c
++++ b/drivers/scsi/qla2xxx/qla_target.c
+@@ -3095,6 +3095,7 @@ int qlt_xmit_response(struct qla_tgt_cmd
+ 			"RESET-RSP online/active/old-count/new-count = %d/%d/%d/%d.\n",
+ 			vha->flags.online, qla2x00_reset_active(vha),
+ 			cmd->reset_count, qpair->chip_reset);
++		res = 0;
+ 		goto out_unmap_unlock;
+ 	}
  
- static inline u32 bcmgenet_readl(void __iomem *offset)
-@@ -84,7 +84,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
- 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
- 		return __raw_readl(offset);
- 	else
--		return readl(offset);
-+		return readl_relaxed(offset);
- }
- 
- static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
--- 
-2.35.1
-
 
 

@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FE8A5051BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62F805051C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237283AbiDRMmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S239767AbiDRMml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239777AbiDRMd2 (ORCPT
+        with ESMTP id S239779AbiDRMd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 08:33:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285041AD89;
-        Mon, 18 Apr 2022 05:25:58 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9313C1B78C;
+        Mon, 18 Apr 2022 05:25:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A8120B80EC1;
-        Mon, 18 Apr 2022 12:25:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A46C385A1;
-        Mon, 18 Apr 2022 12:25:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E9C60FB6;
+        Mon, 18 Apr 2022 12:25:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21E64C385A1;
+        Mon, 18 Apr 2022 12:25:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284755;
-        bh=Z9gvILnq8qAN5mKp2WG4oy8iFeMwiV8WFhHAtNYT8WA=;
+        s=korg; t=1650284758;
+        bh=Axpk3aHDU/KFEP/kw1BzLaJ460vI15II9oA+dh++VWA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BnthfHNwus+JQtWMBDc2KHI3JlSTJ+47T5BiYiZlkNypdG6qLfxxbDle+4U4+X+Lg
-         SiIGIvyQQZXYW4vSHJZttMzG5He22f6E9Joo4Du73yg2KLR0dSukWKeyeU60TaQbcq
-         vrzJpz/eUrD2diGaw8vWQSiUn0Q7bC553zbnfCww=
+        b=lXgO8G9FXrA1qp/XzWa230EuomJtMI+5wOXyMpH1RBCzXkOAynrhUOY8dEFEUNi8K
+         8uQPh+WwRAXa8JN1iEjbcCZWA2gOCnSX82ObtVDpwGWrgs0TWRnOTWXqUTpizE7rBe
+         E+aGQR55RAkdq2zU7KECYEdEEZP3lnuCPn6A3gZo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Ivan Babrou <ivan@cloudflare.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        David Hildenbrand <david@redhat.com>,
+        stable@vger.kernel.org, Patrick Wang <patrick.wang.shcn@gmail.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 5.17 177/219] mm: fix unexpected zeroed page mapping with zram swap
-Date:   Mon, 18 Apr 2022 14:12:26 +0200
-Message-Id: <20220418121211.831849378@linuxfoundation.org>
+Subject: [PATCH 5.17 178/219] mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
+Date:   Mon, 18 Apr 2022 14:12:27 +0200
+Message-Id: <20220418121211.860028614@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -60,156 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minchan Kim <minchan@kernel.org>
+From: Patrick Wang <patrick.wang.shcn@gmail.com>
 
-commit e914d8f00391520ecc4495dd0ca0124538ab7119 upstream.
+commit 23c2d497de21f25898fbea70aeb292ab8acc8c94 upstream.
 
-Two processes under CLONE_VM cloning, user process can be corrupted by
-seeing zeroed page unexpectedly.
+The kmemleak_*_phys() apis do not check the address for lowmem's min
+boundary, while the caller may pass an address below lowmem, which will
+trigger an oops:
 
-      CPU A                        CPU B
+  # echo scan > /sys/kernel/debug/kmemleak
+  Unable to handle kernel paging request at virtual address ff5fffffffe00000
+  Oops [#1]
+  Modules linked in:
+  CPU: 2 PID: 134 Comm: bash Not tainted 5.18.0-rc1-next-20220407 #33
+  Hardware name: riscv-virtio,qemu (DT)
+  epc : scan_block+0x74/0x15c
+   ra : scan_block+0x72/0x15c
+  epc : ffffffff801e5806 ra : ffffffff801e5804 sp : ff200000104abc30
+   gp : ffffffff815cd4e8 tp : ff60000004cfa340 t0 : 0000000000000200
+   t1 : 00aaaaaac23954cc t2 : 00000000000003ff s0 : ff200000104abc90
+   s1 : ffffffff81b0ff28 a0 : 0000000000000000 a1 : ff5fffffffe01000
+   a2 : ffffffff81b0ff28 a3 : 0000000000000002 a4 : 0000000000000001
+   a5 : 0000000000000000 a6 : ff200000104abd7c a7 : 0000000000000005
+   s2 : ff5fffffffe00ff9 s3 : ffffffff815cd998 s4 : ffffffff815d0e90
+   s5 : ffffffff81b0ff28 s6 : 0000000000000020 s7 : ffffffff815d0eb0
+   s8 : ffffffffffffffff s9 : ff5fffffffe00000 s10: ff5fffffffe01000
+   s11: 0000000000000022 t3 : 00ffffffaa17db4c t4 : 000000000000000f
+   t5 : 0000000000000001 t6 : 0000000000000000
+  status: 0000000000000100 badaddr: ff5fffffffe00000 cause: 000000000000000d
+    scan_gray_list+0x12e/0x1a6
+    kmemleak_scan+0x2aa/0x57e
+    kmemleak_write+0x32a/0x40c
+    full_proxy_write+0x56/0x82
+    vfs_write+0xa6/0x2a6
+    ksys_write+0x6c/0xe2
+    sys_write+0x22/0x2a
+    ret_from_syscall+0x0/0x2
 
-  do_swap_page                do_swap_page
-  SWP_SYNCHRONOUS_IO path     SWP_SYNCHRONOUS_IO path
-  swap_readpage valid data
-    swap_slot_free_notify
-      delete zram entry
-                              swap_readpage zeroed(invalid) data
-                              pte_lock
-                              map the *zero data* to userspace
-                              pte_unlock
-  pte_lock
-  if (!pte_same)
-    goto out_nomap;
-  pte_unlock
-  return and next refault will
-  read zeroed data
+The callers may not quite know the actual address they pass(e.g. from
+devicetree).  So the kmemleak_*_phys() apis should guarantee the address
+they finally use is in lowmem range, so check the address for lowmem's
+min boundary.
 
-The swap_slot_free_notify is bogus for CLONE_VM case since it doesn't
-increase the refcount of swap slot at copy_mm so it couldn't catch up
-whether it's safe or not to discard data from backing device.  In the
-case, only the lock it could rely on to synchronize swap slot freeing is
-page table lock.  Thus, this patch gets rid of the swap_slot_free_notify
-function.  With this patch, CPU A will see correct data.
-
-      CPU A                        CPU B
-
-  do_swap_page                do_swap_page
-  SWP_SYNCHRONOUS_IO path     SWP_SYNCHRONOUS_IO path
-                              swap_readpage original data
-                              pte_lock
-                              map the original data
-                              swap_free
-                                swap_range_free
-                                  bd_disk->fops->swap_slot_free_notify
-  swap_readpage read zeroed data
-                              pte_unlock
-  pte_lock
-  if (!pte_same)
-    goto out_nomap;
-  pte_unlock
-  return
-  on next refault will see mapped data by CPU B
-
-The concern of the patch would increase memory consumption since it
-could keep wasted memory with compressed form in zram as well as
-uncompressed form in address space.  However, most of cases of zram uses
-no readahead and do_swap_page is followed by swap_free so it will free
-the compressed form from in zram quickly.
-
-Link: https://lkml.kernel.org/r/YjTVVxIAsnKAXjTd@google.com
-Fixes: 0bcac06f27d7 ("mm, swap: skip swapcache for swapin of synchronous device")
-Reported-by: Ivan Babrou <ivan@cloudflare.com>
-Tested-by: Ivan Babrou <ivan@cloudflare.com>
-Signed-off-by: Minchan Kim <minchan@kernel.org>
-Cc: Nitin Gupta <ngupta@vflare.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: David Hildenbrand <david@redhat.com>
-Cc: <stable@vger.kernel.org>	[4.14+]
+Link: https://lkml.kernel.org/r/20220413122925.33856-1-patrick.wang.shcn@gmail.com
+Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_io.c |   54 ------------------------------------------------------
- 1 file changed, 54 deletions(-)
+ mm/kmemleak.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
---- a/mm/page_io.c
-+++ b/mm/page_io.c
-@@ -51,54 +51,6 @@ void end_swap_bio_write(struct bio *bio)
- 	bio_put(bio);
- }
- 
--static void swap_slot_free_notify(struct page *page)
--{
--	struct swap_info_struct *sis;
--	struct gendisk *disk;
--	swp_entry_t entry;
--
--	/*
--	 * There is no guarantee that the page is in swap cache - the software
--	 * suspend code (at least) uses end_swap_bio_read() against a non-
--	 * swapcache page.  So we must check PG_swapcache before proceeding with
--	 * this optimization.
--	 */
--	if (unlikely(!PageSwapCache(page)))
--		return;
--
--	sis = page_swap_info(page);
--	if (data_race(!(sis->flags & SWP_BLKDEV)))
--		return;
--
--	/*
--	 * The swap subsystem performs lazy swap slot freeing,
--	 * expecting that the page will be swapped out again.
--	 * So we can avoid an unnecessary write if the page
--	 * isn't redirtied.
--	 * This is good for real swap storage because we can
--	 * reduce unnecessary I/O and enhance wear-leveling
--	 * if an SSD is used as the as swap device.
--	 * But if in-memory swap device (eg zram) is used,
--	 * this causes a duplicated copy between uncompressed
--	 * data in VM-owned memory and compressed data in
--	 * zram-owned memory.  So let's free zram-owned memory
--	 * and make the VM-owned decompressed page *dirty*,
--	 * so the page should be swapped out somewhere again if
--	 * we again wish to reclaim it.
--	 */
--	disk = sis->bdev->bd_disk;
--	entry.val = page_private(page);
--	if (disk->fops->swap_slot_free_notify && __swap_count(entry) == 1) {
--		unsigned long offset;
--
--		offset = swp_offset(entry);
--
--		SetPageDirty(page);
--		disk->fops->swap_slot_free_notify(sis->bdev,
--				offset);
--	}
--}
--
- static void end_swap_bio_read(struct bio *bio)
+--- a/mm/kmemleak.c
++++ b/mm/kmemleak.c
+@@ -1132,7 +1132,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
+ void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
+ 			       gfp_t gfp)
  {
- 	struct page *page = bio_first_page_all(bio);
-@@ -114,7 +66,6 @@ static void end_swap_bio_read(struct bio
- 	}
- 
- 	SetPageUptodate(page);
--	swap_slot_free_notify(page);
- out:
- 	unlock_page(page);
- 	WRITE_ONCE(bio->bi_private, NULL);
-@@ -392,11 +343,6 @@ int swap_readpage(struct page *page, boo
- 	if (sis->flags & SWP_SYNCHRONOUS_IO) {
- 		ret = bdev_read_page(sis->bdev, swap_page_sector(page), page);
- 		if (!ret) {
--			if (trylock_page(page)) {
--				swap_slot_free_notify(page);
--				unlock_page(page);
--			}
--
- 			count_vm_event(PSWPIN);
- 			goto out;
- 		}
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+ }
+ EXPORT_SYMBOL(kmemleak_alloc_phys);
+@@ -1146,7 +1146,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
+  */
+ void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_free_part(__va(phys), size);
+ }
+ EXPORT_SYMBOL(kmemleak_free_part_phys);
+@@ -1158,7 +1158,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
+  */
+ void __ref kmemleak_not_leak_phys(phys_addr_t phys)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_not_leak(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+@@ -1170,7 +1170,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
+  */
+ void __ref kmemleak_ignore_phys(phys_addr_t phys)
+ {
+-	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
++	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
+ 		kmemleak_ignore(__va(phys));
+ }
+ EXPORT_SYMBOL(kmemleak_ignore_phys);
 
 

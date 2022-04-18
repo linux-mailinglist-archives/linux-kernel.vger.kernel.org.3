@@ -2,197 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB3CA505E43
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA3CD505E49
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347584AbiDRTOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 15:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S1347596AbiDRTRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 15:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347571AbiDRTN7 (ORCPT
+        with ESMTP id S238177AbiDRTRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 15:13:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710DD32EE6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:11:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02CBFB80E6E
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 19:11:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BDD1C385AA;
-        Mon, 18 Apr 2022 19:11:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650309076;
-        bh=VegG9uE/cYW7iPEYsyywdBTiJppdUCAamOZypgp6yWg=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=dWKEoF6YDrqYBpKYvfAng6jhBLKMVcug1HKoz5+2L0SANk3CzFv06Gx4efZ7rQqom
-         yoiB7TEUpR+DC0KRPMlEbkVOWEGrzBIlgQH0Xss/9Gwk94ImpPFBKRJj3w1Sege4SV
-         l+SgzGOEzsHq9rUvnxfXSy58byJaX/PqgojrhXUXN+CniUyCzytq3UITOtzuB8qhYN
-         uMJZP4NCtqRtorHPsjEjvxneczklbQvDrIG3Qpq+IeLtSzZqwCF8s6eb12AR9pvR0o
-         C+X8FSqXeLzv22uwmwyy0S8kuDPOrc7QWkZkWTCOZVYN6hcOUHxkAr/TjiXDOpFQ9o
-         DFmewThitLLsg==
-Date:   Mon, 18 Apr 2022 12:11:16 -0700 (PDT)
-From:   Stefano Stabellini <sstabellini@kernel.org>
-X-X-Sender: sstabellini@ubuntu-linux-20-04-desktop
-To:     Oleksandr <olekstysh@gmail.com>
-cc:     Stefano Stabellini <sstabellini@kernel.org>,
-        xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>, Julien Grall <julien@xen.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [RFC PATCH 4/6] virtio: Various updates to xen-virtio DMA ops
- layer
-In-Reply-To: <84f5264c-6b98-6d56-b7ca-61c19dc502ca@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2204181156280.915916@ubuntu-linux-20-04-desktop>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com> <1649963973-22879-5-git-send-email-olekstysh@gmail.com> <alpine.DEB.2.22.394.2204151302350.915916@ubuntu-linux-20-04-desktop> <84f5264c-6b98-6d56-b7ca-61c19dc502ca@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 18 Apr 2022 15:17:13 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EF932EEB;
+        Mon, 18 Apr 2022 12:14:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 21so18568997edv.1;
+        Mon, 18 Apr 2022 12:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:subject:to:cc:message-id:in-reply-to:references
+         :mime-version;
+        bh=8vjH6cZOjMPKmMYM8U9yyT827f2QaB+PvuhuwLr3Xlk=;
+        b=lQut0xtvDeVyqYFPNTUqB22vY5AIURHZF+Fe0MzIHbLB827ZUpJlIGKgfE7xtIjJjx
+         Jgm8uySI+v0v3rL/dRX4/9A8Rv99A53Iey5zDd6KsgRsbKx6P6N9CC+Oaz+rY9zlRjUz
+         e8edov02aG07IciohsEZ3TGk7AmOKKC8ylg2s+iuD8IMccbF0jTZFREN4klRVT6Zgt7W
+         eVWCrafZJEP7Zm64CBJu9mRf++JU3PEbEVJTsZswm+5+ho7oRuqLlFRJhSO+6/n2HdBH
+         iC0cR7ZHrpFqa8qwexHoLPDIG40j6aqXk5sDAOaEMu5i3AeyKnllppZpjOGmuMuKz+0e
+         XZfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:subject:to:cc:message-id:in-reply-to
+         :references:mime-version;
+        bh=8vjH6cZOjMPKmMYM8U9yyT827f2QaB+PvuhuwLr3Xlk=;
+        b=iQGUBPjzdUqBbKp4cVpthytRMfNhxfrZ6kcUBCCnikPSHnZ+HNgDG5EQbLy/ikFBpk
+         azrToOexID6iIVOcP8DtCXUdOE8qh7phoWJbT4M/2fO3M1ozyAfU93l03ZGGbjirb/G/
+         CvWLt4rd9jCeU5OLz+1ji2cZcpj4mZla/P9xcBHxqChrq6KPMkh984apBORcJy3G4gyn
+         ZulqhIp8wRuoyAz1QjiiAcyR9HXzclznAilPLSDrdgaTkFz0gDSGP4TfzERKNf1TxE7Z
+         Io1Od58Z+nZiu5t9baYZNc7eDCSs2l+TTuOAyQHIjSbrphCNjSRLHNd7+SteJUhitEZd
+         pxMw==
+X-Gm-Message-State: AOAM531RnGeQD+y3NYc5/R6ZRRPIT1s8tDMnQQTZL6XS84q+28a81ZOL
+        JgCzDxxsEug4p4OBJ/kY+yg=
+X-Google-Smtp-Source: ABdhPJwev6wR4b0ex38BXGBB7t3VDqhLP5+ZMFkH/K4ICKFNkbcCGUKBkCym9mkKwf/H1vSzl6s9qA==
+X-Received: by 2002:a05:6402:515b:b0:41d:82c2:2749 with SMTP id n27-20020a056402515b00b0041d82c22749mr13806249edd.38.1650309271494;
+        Mon, 18 Apr 2022 12:14:31 -0700 (PDT)
+Received: from [192.168.11.247] (190-2-132-198.hosted-by-worldstream.net. [190.2.132.198])
+        by smtp.gmail.com with ESMTPSA id mx14-20020a1709065a0e00b006e8bc3ce121sm4841045ejc.6.2022.04.18.12.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 12:14:31 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 23:12:31 +0400
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+Subject: Re: [PATCH RESEND v2 1/9] dt-bindings: clk: qcom: msm8996-apcc: Add
+ CBF
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ilia Lin <ilia.lin@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Rob Herring <robh@kernel.org>
+Message-Id: <VOUJAR.IJKRF5T1P4ZE@gmail.com>
+In-Reply-To: <813f4a3d-255b-0ec1-cc3e-a1280e4d74ae@linaro.org>
+References: <20220416025637.83484-1-y.oudjana@protonmail.com>
+        <20220416025637.83484-2-y.oudjana@protonmail.com>
+        <813f4a3d-255b-0ec1-cc3e-a1280e4d74ae@linaro.org>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1608932710-1650308427=:915916"
-Content-ID: <alpine.DEB.2.22.394.2204181201160.915916@ubuntu-linux-20-04-desktop>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1608932710-1650308427=:915916
-Content-Type: text/plain; CHARSET=UTF-8
-Content-Transfer-Encoding: 8BIT
-Content-ID: <alpine.DEB.2.22.394.2204181201161.915916@ubuntu-linux-20-04-desktop>
+On Mon, Apr 18 2022 at 18:04:08 +0200, Krzysztof Kozlowski 
+<krzysztof.kozlowski@linaro.org> wrote:
+> On 16/04/2022 04:56, Yassine Oudjana wrote:
+>>  Add CBF clock and reg.
+>> 
+>>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+>>  Acked-by: Rob Herring <robh@kernel.org>
+>>  ---
+>>   .../devicetree/bindings/clock/qcom,msm8996-apcc.yaml   | 10 
+>> ++++++----
+>>   1 file changed, 6 insertions(+), 4 deletions(-)
+>> 
+>>  diff --git 
+>> a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml 
+>> b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  index a20cb10636dd..325f8aef53b2 100644
+>>  --- a/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  +++ b/Documentation/devicetree/bindings/clock/qcom,msm8996-apcc.yaml
+>>  @@ -10,8 +10,8 @@ maintainers:
+>>     - Loic Poulain <loic.poulain@linaro.org>
+>> 
+>>   description: |
+>>  -  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for 
+>> Power cluster
+>>  -  and clock 1 is for Perf cluster.
+>>  +  Qualcomm CPU clock controller for MSM8996 CPUs, clock 0 is for 
+>> Power cluster,
+>>  +  clock 1 is for Perf cluster, and clock 2 is for Coherent bus 
+>> fabric (CBF).
+>> 
+>>   properties:
+>>     compatible:
+>>  @@ -19,7 +19,9 @@ properties:
+>>         - qcom,msm8996-apcc
+>> 
+>>     reg:
+>>  -    maxItems: 1
+>>  +    items:
+>>  +      - description: Cluster clock registers
+>>  +      - description: CBF clock registers
+> 
+> This breaks the ABI (which might be okay or might be not, but was not
+> mentioned in the commit) and breaks existing DTSes. Please fix them
+> before this patch.
 
-On Sun, 17 Apr 2022, Oleksandr wrote:
-> On 16.04.22 01:02, Stefano Stabellini wrote:
-> > On Thu, 14 Apr 2022, Oleksandr Tyshchenko wrote:
-> > > From: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> > > 
-> > > In the context of current patch do the following:
-> > > 1. Update code to support virtio-mmio devices
-> > > 2. Introduce struct xen_virtio_data and account passed virtio devices
-> > >     (using list) as we need to store some per-device data
-> > > 3. Add multi-page support for xen_virtio_dma_map(unmap)_page callbacks
-> > > 4. Harden code against malicious backend
-> > > 5. Change to use alloc_pages_exact() instead of __get_free_pages()
-> > > 6. Introduce locking scheme to protect mappings (I am not 100% sure
-> > >     whether per-device lock is really needed)
-> > > 7. Handle virtio device's DMA mask
-> > > 8. Retrieve the ID of backend domain from DT for virtio-mmio device
-> > >     instead of hardcoding it.
-> > > 
-> > > Signed-off-by: Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-> > > ---
-> > >   arch/arm/xen/enlighten.c |  11 +++
-> > >   drivers/xen/Kconfig      |   2 +-
-> > >   drivers/xen/xen-virtio.c | 200
-> > > ++++++++++++++++++++++++++++++++++++++++++-----
-> > >   include/xen/xen-ops.h    |   5 ++
-> > >   4 files changed, 196 insertions(+), 22 deletions(-)
-> > > 
-> > > diff --git a/arch/arm/xen/enlighten.c b/arch/arm/xen/enlighten.c
-> > > index ec5b082..870d92f 100644
-> > > --- a/arch/arm/xen/enlighten.c
-> > > +++ b/arch/arm/xen/enlighten.c
-> > > @@ -409,6 +409,17 @@ int __init arch_xen_unpopulated_init(struct resource
-> > > **res)
-> > >   }
-> > >   #endif
-> > >   +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> > > +int arch_has_restricted_virtio_memory_access(void)
-> > > +{
-> > > +	if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
-> > > +		return 1;
-> > Instead of xen_hvm_domain(), you can just use xen_domain(). Also there
-> > is no need for the #ifdef
-> > CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS, given that:
-> > 
-> > CONFIG_XEN_HVM_VIRTIO_GRANT depends on XEN_VIRTIO which selects
-> > ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
-> 
-> 
-> Yes, but please see my comments in commit #2 regarding
-> CONFIG_XEN_HVM_VIRTIO_GRANT option and
-> arch_has_restricted_virtio_memory_access() on Arm.
-> 
-> I propose to have the following on Arm:
-> 
-> int arch_has_restricted_virtio_memory_access(void)
-> {
->      return xen_has_restricted_virtio_memory_access();
-> }
-> 
-> 
-> where common xen.h contain a helper to be used by both Arm and x86:
-> 
-> static inline int xen_has_restricted_virtio_memory_access(void)
-> {
->      if (IS_ENABLED(CONFIG_XEN_VIRTIO) && (xen_pv_domain() ||
-> xen_hvm_domain()))
->          return 1;
-> 
->      return 0;
-> }
-> 
-> 
-> But I would be happy with what you propose as well.
+This is only documenting changes made in an earlier patch[1] this
+series depends on, and the DTSes are fixed in another patch[2] that
+is also listed as a dependency in the cover letter (both patches
+aren't applied yet). Shouldn't the ABI changes should be mentioned in
+those patches instead?
 
-As I wrote in the previous reply, I also prefer to share the code
-between x86 and ARM, and I think it could look like:
-
-int arch_has_restricted_virtio_memory_access(void)
-{
-     return xen_has_restricted_virtio_memory_access();
-}
-[...]
-static inline int xen_has_restricted_virtio_memory_access(void)
-{
-     return (IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain());
-}
-
-But let's check with Juergen and Boris.
+[1] 
+https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-1-konrad.dybcio@somainline.org/
+[2] 
+https://lore.kernel.org/linux-arm-msm/20210528192541.1120703-2-konrad.dybcio@somainline.org/
 
 
-> > > +	return 0;
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
-> > > +#endif
-> > > +
-> > >   static void __init xen_dt_guest_init(void)
-> > >   {
-> > >   	struct device_node *xen_node;
-> > > diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
-> > > index fc61f7a..56afe6a 100644
-> > > --- a/drivers/xen/Kconfig
-> > > +++ b/drivers/xen/Kconfig
-> > > @@ -347,7 +347,7 @@ config XEN_VIRTIO
-> > >     config XEN_HVM_VIRTIO_GRANT
-> > >   	bool "Require virtio for fully virtualized guests to use grant
-> > > mappings"
-> > > -	depends on XEN_VIRTIO && X86_64
-> > > +	depends on XEN_VIRTIO && (X86_64 || ARM || ARM64)
-> > you can remove the architectural dependencies
-> 
-> 
-> According to the conversation in commit #2 we are considering just a single
-> XEN_VIRTIO option, but it is going to has the
-> same architectural dependencies: (X86_64 || ARM || ARM64)
-> 
-> By removing the architectural dependencies here, we will leave also X86_32
-> covered (neither XEN_HVM_VIRTIO_GRANT nor XEN_PV_VIRTIO covered it). I don't
-> know whether it is ok or not.
-> 
-> Shall I remove dependencies anyway?
-
-No, good point. I don't know about X86_32. This is another detail where
-Juergen or Boris should comment.
---8323329-1608932710-1650308427=:915916--

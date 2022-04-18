@@ -2,45 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB455057F7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B11E50555B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245334AbiDRN7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41278 "EHLO
+        id S242289AbiDRNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243318AbiDRNdl (ORCPT
+        with ESMTP id S240750AbiDRM5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:33:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C2923BEE;
-        Mon, 18 Apr 2022 05:57:57 -0700 (PDT)
+        Mon, 18 Apr 2022 08:57:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF9F237C3;
+        Mon, 18 Apr 2022 05:38:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6F80B80EC0;
-        Mon, 18 Apr 2022 12:57:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5A3C385A1;
-        Mon, 18 Apr 2022 12:57:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DFF3DB80EDC;
+        Mon, 18 Apr 2022 12:38:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A76C385AB;
+        Mon, 18 Apr 2022 12:38:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286674;
-        bh=i+ke+0LyftTFAtgMY5X7MwRW8EZFbLFNvYR/L4nrTng=;
+        s=korg; t=1650285487;
+        bh=RdZeJRexRc5cYyhfz/1ZZRz8dp2B8bRR03bjXvJaztI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EYf/meExEpBOiqouwIekXLZBKSzjTZ/s7klUF36+uTqxE1oQuZe/ja9sIawmYwYuJ
-         1u/zkdlfUKD5ILtExuKpouMfIeuUkvLj8pa1FkueU/MGvveKaDFn44wNWxtslzILvq
-         K45jzP5SxMTUYUZmcHXfISUplPlMDRH/arJRFpVY=
+        b=isiHAfljSsERzfcVnsNLvxYBU6bnfZUeN85ag2pRAV2f1xPX+0+xr2u47xGWyVa3f
+         tqg7NoFQzZ9pCvQMdiwggGybOYWangL5j8+83lTr0ruMVCUvLGCtZxk48WgiIis5Xr
+         +wj2DPUK/2OVqIHQzhlCm+8FnEkUdaPZeevqQaCA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Jing Yao <yao.jing2@zte.com.cn>, Helge Deller <deller@gmx.de>,
+        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
+        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 172/284] video: fbdev: omapfb: panel-tpo-td043mtea1: Use sysfs_emit() instead of snprintf()
-Date:   Mon, 18 Apr 2022 14:12:33 +0200
-Message-Id: <20220418121216.633458998@linuxfoundation.org>
+Subject: [PATCH 5.10 032/105] scsi: iscsi: Move iscsi_ep_disconnect()
+Date:   Mon, 18 Apr 2022 14:12:34 +0200
+Message-Id: <20220418121147.292355847@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,44 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jing Yao <yao.jing2@zte.com.cn>
+From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit c07a039cbb96748f54c02995bae8131cc9a73b0a ]
+[ Upstream commit c34f95e98d8fb750eefd4f3fe58b4f8b5e89253b ]
 
-Use sysfs_emit instead of scnprintf, snprintf or sprintf.
+This patch moves iscsi_ep_disconnect() so it can be called earlier in the
+next patch.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jing Yao <yao.jing2@zte.com.cn>
-Signed-off-by: Helge Deller <deller@gmx.de>
+Link: https://lore.kernel.org/r/20220408001314.5014-2-michael.christie@oracle.com
+Tested-by: Manish Rangankar <mrangankar@marvell.com>
+Reviewed-by: Lee Duncan <lduncan@suse.com>
+Reviewed-by: Chris Leech <cleech@redhat.com>
+Signed-off-by: Mike Christie <michael.christie@oracle.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- .../video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c  | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 38 ++++++++++++++---------------
+ 1 file changed, 19 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-index ea8c79a42b41..3f1389bfba6f 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/panel-tpo-td043mtea1.c
-@@ -173,7 +173,7 @@ static ssize_t tpo_td043_vmirror_show(struct device *dev,
- {
- 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->vmirror);
-+	return sysfs_emit(buf, "%d\n", ddata->vmirror);
+diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
+index 7246f7b2ff03..8f6dc391356d 100644
+--- a/drivers/scsi/scsi_transport_iscsi.c
++++ b/drivers/scsi/scsi_transport_iscsi.c
+@@ -2239,6 +2239,25 @@ static void iscsi_stop_conn(struct iscsi_cls_conn *conn, int flag)
+ 	ISCSI_DBG_TRANS_CONN(conn, "Stopping conn done.\n");
  }
  
- static ssize_t tpo_td043_vmirror_store(struct device *dev,
-@@ -203,7 +203,7 @@ static ssize_t tpo_td043_mode_show(struct device *dev,
++static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
++{
++	struct iscsi_cls_session *session = iscsi_conn_to_session(conn);
++	struct iscsi_endpoint *ep;
++
++	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep.\n");
++	conn->state = ISCSI_CONN_FAILED;
++
++	if (!conn->ep || !session->transport->ep_disconnect)
++		return;
++
++	ep = conn->ep;
++	conn->ep = NULL;
++
++	session->transport->unbind_conn(conn, is_active);
++	session->transport->ep_disconnect(ep);
++	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
++}
++
+ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 			      struct iscsi_uevent *ev)
  {
- 	struct panel_drv_data *ddata = dev_get_drvdata(dev);
- 
--	return snprintf(buf, PAGE_SIZE, "%d\n", ddata->mode);
-+	return sysfs_emit(buf, "%d\n", ddata->mode);
+@@ -2279,25 +2298,6 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
+ 	return 0;
  }
  
- static ssize_t tpo_td043_mode_store(struct device *dev,
+-static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
+-{
+-	struct iscsi_cls_session *session = iscsi_conn_to_session(conn);
+-	struct iscsi_endpoint *ep;
+-
+-	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep.\n");
+-	conn->state = ISCSI_CONN_FAILED;
+-
+-	if (!conn->ep || !session->transport->ep_disconnect)
+-		return;
+-
+-	ep = conn->ep;
+-	conn->ep = NULL;
+-
+-	session->transport->unbind_conn(conn, is_active);
+-	session->transport->ep_disconnect(ep);
+-	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
+-}
+-
+ static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
+ {
+ 	struct iscsi_cls_conn *conn = container_of(work, struct iscsi_cls_conn,
 -- 
-2.34.1
+2.35.1
 
 
 

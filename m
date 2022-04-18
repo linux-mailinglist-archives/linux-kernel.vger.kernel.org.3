@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333705054ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1885D505254
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240924AbiDRNK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:10:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59862 "EHLO
+        id S240564AbiDRMjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241837AbiDRM7G (ORCPT
+        with ESMTP id S239792AbiDRMd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:59:06 -0400
+        Mon, 18 Apr 2022 08:33:28 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AB102ED4A;
-        Mon, 18 Apr 2022 05:39:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0332B1B79B;
+        Mon, 18 Apr 2022 05:26:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B1B1B80EDB;
-        Mon, 18 Apr 2022 12:39:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A465C385AB;
-        Mon, 18 Apr 2022 12:39:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0E2AB80ED1;
+        Mon, 18 Apr 2022 12:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E60CC385A1;
+        Mon, 18 Apr 2022 12:26:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285579;
-        bh=Qn6auaIHQqy9g4NZVcZdSXXlNdVGB9qoFuf8cv48lK8=;
+        s=korg; t=1650284776;
+        bh=e2tQCsWF4ZZ7HEVZeNQHj3qSvi3dIOelinn6MUFjnOo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2m/IOkZdVl6RliLHXGlZJruV6HdAS0lGBEvXDT/jNWbvLadBFDGFGUXnohnr4MFu3
-         hv3YQNySIKiBXgodkuaa7frIjSiZrZ8AJu0mpqS4vvdBgIDYv/+y9RQgA95QQWaOOu
-         mrgiYBBRIe3Ep/AZH2D/bJwNRa8gSuOHY84ai5rE=
+        b=YsuRtTgzBz+9+k+xXzzTTYKmfpK3ks4cpkF8YJT2Y7ay9P1xgCR8xvhbCk/BHVrSc
+         zBgiEBlDG6DRoFMyQ+g4XbVNmc7qmER5ycn3d0uSY6TdDQX9uH0VtkjfpRzdLOGdCb
+         XDA/tEs13AZ/Psnj7mZfHy86XGmwP48Z9lbqC2fY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, George Shen <George.Shen@amd.com>,
-        Alex Hung <alex.hung@amd.com>,
-        Martin Leung <Martin.Leung@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 064/105] drm/amd/display: Revert FEC check in validation
+        stable@vger.kernel.org,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Lucas De Marchi <lucas.demarchi@intel.com>,
+        Matt Roper <matthew.d.roper@intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Subject: [PATCH 5.17 217/219] drm/i915: Sunset igpu legacy mmap support based on GRAPHICS_VER_FULL
 Date:   Mon, 18 Apr 2022 14:13:06 +0200
-Message-Id: <20220418121148.306443699@linuxfoundation.org>
+Message-Id: <20220418121212.940565142@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,40 +58,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Martin Leung <Martin.Leung@amd.com>
+From: Matt Roper <matthew.d.roper@intel.com>
 
-[ Upstream commit b2075fce104b88b789c15ef1ed2b91dc94198e26 ]
+commit 1acb34e7dd7720a1fff00cbd4d000ec3219dc9d6 upstream.
 
-why and how:
-causes failure on install on certain machines
+The intent of the version check in the mmap ioctl was to maintain
+support for existing platforms (i.e., ADL/RPL and earlier), but drop
+support on all future igpu platforms.  As we've seen on the dgpu side,
+the hardware teams are using a more fine-grained numbering system for IP
+version numbers these days, so it's possible the version number
+associated with our next igpu could be some form of "12.xx" rather than
+13 or higher.  Comparing against the full ver.release number will ensure
+the intent of the check is maintained no matter what numbering the
+hardware teams settle on.
 
-Reviewed-by: George Shen <George.Shen@amd.com>
-Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Martin Leung <Martin.Leung@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: d3f3baa3562a ("drm/i915: Reinstate the mmap ioctl for some platforms")
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+Signed-off-by: Matt Roper <matthew.d.roper@intel.com>
+Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220407161839.1073443-1-matthew.d.roper@intel.com
+(cherry picked from commit 8e7e5c077cd57ee9a36d58c65f07257dc49a88d5)
+Signed-off-by: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/display/dc/core/dc.c | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/gpu/drm/i915/gem/i915_gem_mman.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index ac5323596c65..93f5229c303e 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -1173,10 +1173,6 @@ bool dc_validate_seamless_boot_timing(const struct dc *dc,
- 	if (!link->link_enc->funcs->is_dig_enabled(link->link_enc))
- 		return false;
+--- a/drivers/gpu/drm/i915/gem/i915_gem_mman.c
++++ b/drivers/gpu/drm/i915/gem/i915_gem_mman.c
+@@ -67,7 +67,7 @@ i915_gem_mmap_ioctl(struct drm_device *d
+ 	 * mmap ioctl is disallowed for all discrete platforms,
+ 	 * and for all platforms with GRAPHICS_VER > 12.
+ 	 */
+-	if (IS_DGFX(i915) || GRAPHICS_VER(i915) > 12)
++	if (IS_DGFX(i915) || GRAPHICS_VER_FULL(i915) > IP_VER(12, 0))
+ 		return -EOPNOTSUPP;
  
--	/* Check for FEC status*/
--	if (link->link_enc->funcs->fec_is_active(link->link_enc))
--		return false;
--
- 	enc_inst = link->link_enc->funcs->get_dig_frontend(link->link_enc);
- 
- 	if (enc_inst == ENGINE_ID_UNKNOWN)
--- 
-2.35.1
-
+ 	if (args->flags & ~(I915_MMAP_WC))
 
 

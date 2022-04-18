@@ -2,91 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70FCD504C75
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:08:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C717A504C76
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236706AbiDRGKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54870 "EHLO
+        id S236718AbiDRGLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:11:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiDRGKv (ORCPT
+        with ESMTP id S236713AbiDRGLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:10:51 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6CD17AB4
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:08:13 -0700 (PDT)
-Received: from pps.filterd (m0098393.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23I385n4011941;
-        Mon, 18 Apr 2022 06:07:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : subject :
- to : cc : references : in-reply-to : mime-version : message-id :
- content-type : content-transfer-encoding; s=pp1;
- bh=hEYU7TSxmNSCWKfFM6R98nQJuLxOCA3m2I3lKbJSur0=;
- b=CNP2G9Ks3+J2PGhSb4L/bAZwLf0xeQSVfWGVBXVmh4pnqrpv2x2JIfGlyrMuUWooU8fj
- moLjXVG6PJIW1fILXtBLK80d6Ikjxk+v/dkF+gYjjq+4Uej2dXupLl9/fB5qxejziFCz
- GxfFhCbxeHoz3gXxICCDgZ9d7gIzy1atGGM7cwlzePQULOJKqUjsdy3xoOT1iMyip4r7
- 7iqy3kLRdHF8oPV+ZDJHWT3oiXZBGSE2usieUyj6S6jU9rUAdwVlnEjKR9ziR2ZuHddu
- aXum/kbAQH9YmpGcQrm0/os37Zty4UoCOE3++Zw2ccsRYy3nIPz12A8dbd9SgWbdXxHr 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7vmvvnp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:07:32 +0000
-Received: from m0098393.ppops.net (m0098393.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23I67UA9014131;
-        Mon, 18 Apr 2022 06:07:31 GMT
-Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7vmvvn2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:07:30 +0000
-Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
-        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23I63a5g029558;
-        Mon, 18 Apr 2022 06:07:28 GMT
-Received: from b06cxnps4074.portsmouth.uk.ibm.com (d06relay11.portsmouth.uk.ibm.com [9.149.109.196])
-        by ppma06ams.nl.ibm.com with ESMTP id 3ffn2htb05-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 18 Apr 2022 06:07:28 +0000
-Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
-        by b06cxnps4074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23I67Pd540698146
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 18 Apr 2022 06:07:25 GMT
-Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id CD15F5204E;
-        Mon, 18 Apr 2022 06:07:25 +0000 (GMT)
-Received: from localhost (unknown [9.43.2.186])
-        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTP id 5A1675204F;
-        Mon, 18 Apr 2022 06:07:25 +0000 (GMT)
-Date:   Mon, 18 Apr 2022 11:37:24 +0530
-From:   "Naveen N. Rao" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v1 06/22] powerpc/ftrace: Inline ftrace_modify_code()
-To:     Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Ingo Molnar <mingo@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paul Mackerras <paulus@samba.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-References: <cover.1648131740.git.christophe.leroy@csgroup.eu>
-        <3b651381f4c53988ede62f4a1505e7e8ccab56b4.1648131740.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <3b651381f4c53988ede62f4a1505e7e8ccab56b4.1648131740.git.christophe.leroy@csgroup.eu>
+        Mon, 18 Apr 2022 02:11:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4CB17AB7;
+        Sun, 17 Apr 2022 23:08:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 932CDB80E40;
+        Mon, 18 Apr 2022 06:08:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ECABC385AC;
+        Mon, 18 Apr 2022 06:08:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650262105;
+        bh=XNZr/IKeGY/pGlzCIWto86GY7XWEV0Np1gDcwopi1Xg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lysp/owBXLrObu8oZX/jv3OR7J3MTz+Ji1yeSgbxa5CiTMoYhoVEEb192Qt+8nf4g
+         /QP7VfXAVglQTvXMG1AQMBOx8gv5wizHkAwJNJAsr7tgf4jS21aGQ4EFTAXoB2khbv
+         YWiZEL7BPukNyb9GLBGI9bWJ3s+cCYqyW+5EKRW7WsHTunAUBXN6Q7syxOYKsAlXbr
+         E5tFGUQh3h76fZQf0Z78KweCQgj0QGptZNhBsWXZE4784Hpu22ElUuRIBuoC13PstZ
+         EGHU9oi2v4/uxKrfVuFpPUzG1p2zvuORhsX5wXXSFJRspcMfdW24xZabXZpS9SUD72
+         yI69d+S5vZhUA==
+Date:   Mon, 18 Apr 2022 11:38:18 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
+Cc:     loic.poulain@linaro.org, quic_hemantk@quicinc.com,
+        quic_bbhatt@quicinc.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bhaumik Bhatt <bbhatt@codeaurora.org>
+Subject: Re: [PATCH v3 2/2] bus: mhi: host: Optimize and update MMIO register
+ write method
+Message-ID: <20220418060818.GF7431@thinkpad>
+References: <1649865406-30198-1-git-send-email-quic_jhugo@quicinc.com>
+ <1649865406-30198-3-git-send-email-quic_jhugo@quicinc.com>
 MIME-Version: 1.0
-User-Agent: astroid/4d6b06ad (https://github.com/astroidmail/astroid)
-Message-Id: <1650261933.e8kr43zvw0.naveen@linux.ibm.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: c_Ai493M3FHtorzRm2KnCHnUJ-TXtrjP
-X-Proofpoint-GUID: 9G1SCLofCI3lLHSN_ZqL5heQ3oVtygPN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-18_02,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
- phishscore=0 suspectscore=0 bulkscore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 mlxlogscore=999 adultscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204180035
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1649865406-30198-3-git-send-email-quic_jhugo@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,37 +58,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe Leroy wrote:
-> Inlining ftrace_modify_code(), it increases a bit the
-> size of ftrace code but brings 5% improvment on ftrace
-> activation.
->=20
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+On Wed, Apr 13, 2022 at 09:56:46AM -0600, Jeffrey Hugo wrote:
+> From: Bhaumik Bhatt <bbhatt@codeaurora.org>
+> 
+> As of now, MMIO writes done after ready state transition use the
+> mhi_write_reg_field() API even though the whole register is being
+> written in most cases. Optimize this process by using mhi_write_reg()
+> API instead for those writes and use the mhi_write_reg_field()
+> API for MHI config registers only.
+> 
+> Signed-off-by: Bhaumik Bhatt <bbhatt@codeaurora.org>
+> Reviewed-by: Hemant Kumar <hemantk@codeaurora.org>
+> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 > ---
->  arch/powerpc/kernel/trace/ftrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/arch/powerpc/kernel/trace/ftrace.c b/arch/powerpc/kernel/tra=
-ce/ftrace.c
-> index 41c45b9c7f39..98e82fa4980f 100644
-> --- a/arch/powerpc/kernel/trace/ftrace.c
-> +++ b/arch/powerpc/kernel/trace/ftrace.c
-> @@ -53,7 +53,7 @@ ftrace_call_replace(unsigned long ip, unsigned long add=
-r, int link)
->  	return op;
->  }
->=20
-> -static int
-> +static inline int
->  ftrace_modify_code(unsigned long ip, ppc_inst_t old, ppc_inst_t new)
->  {
->  	ppc_inst_t replaced;
+>  drivers/bus/mhi/host/init.c | 62 ++++++++++++++++++++++-----------------------
+>  1 file changed, 31 insertions(+), 31 deletions(-)
+> 
+> diff --git a/drivers/bus/mhi/host/init.c b/drivers/bus/mhi/host/init.c
+> index 9ac93b7..04c409b 100644
+> --- a/drivers/bus/mhi/host/init.c
+> +++ b/drivers/bus/mhi/host/init.c
+> @@ -425,74 +425,65 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>  	struct device *dev = &mhi_cntrl->mhi_dev->dev;
+>  	struct {
+>  		u32 offset;
+> -		u32 mask;
+>  		u32 val;
+>  	} reg_info[] = {
+>  		{
+> -			CCABAP_HIGHER, U32_MAX,
+> +			CCABAP_HIGHER,
+>  			upper_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
+>  		},
+>  		{
+> -			CCABAP_LOWER, U32_MAX,
+> +			CCABAP_LOWER,
+>  			lower_32_bits(mhi_cntrl->mhi_ctxt->chan_ctxt_addr),
+>  		},
+>  		{
+> -			ECABAP_HIGHER, U32_MAX,
+> +			ECABAP_HIGHER,
+>  			upper_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
+>  		},
+>  		{
+> -			ECABAP_LOWER, U32_MAX,
+> +			ECABAP_LOWER,
+>  			lower_32_bits(mhi_cntrl->mhi_ctxt->er_ctxt_addr),
+>  		},
+>  		{
+> -			CRCBAP_HIGHER, U32_MAX,
+> +			CRCBAP_HIGHER,
+>  			upper_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
+>  		},
+>  		{
+> -			CRCBAP_LOWER, U32_MAX,
+> +			CRCBAP_LOWER,
+>  			lower_32_bits(mhi_cntrl->mhi_ctxt->cmd_ctxt_addr),
+>  		},
+>  		{
+> -			MHICFG, MHICFG_NER_MASK,
+> -			mhi_cntrl->total_ev_rings,
+> -		},
+> -		{
+> -			MHICFG, MHICFG_NHWER_MASK,
+> -			mhi_cntrl->hw_ev_rings,
+> -		},
+> -		{
+> -			MHICTRLBASE_HIGHER, U32_MAX,
+> +			MHICTRLBASE_HIGHER,
+>  			upper_32_bits(mhi_cntrl->iova_start),
+>  		},
+>  		{
+> -			MHICTRLBASE_LOWER, U32_MAX,
+> +			MHICTRLBASE_LOWER,
+>  			lower_32_bits(mhi_cntrl->iova_start),
+>  		},
+>  		{
+> -			MHIDATABASE_HIGHER, U32_MAX,
+> +			MHIDATABASE_HIGHER,
+>  			upper_32_bits(mhi_cntrl->iova_start),
+>  		},
+>  		{
+> -			MHIDATABASE_LOWER, U32_MAX,
+> +			MHIDATABASE_LOWER,
+>  			lower_32_bits(mhi_cntrl->iova_start),
+>  		},
+>  		{
+> -			MHICTRLLIMIT_HIGHER, U32_MAX,
+> +			MHICTRLLIMIT_HIGHER,
+>  			upper_32_bits(mhi_cntrl->iova_stop),
+>  		},
+>  		{
+> -			MHICTRLLIMIT_LOWER, U32_MAX,
+> +			MHICTRLLIMIT_LOWER,
+>  			lower_32_bits(mhi_cntrl->iova_stop),
+>  		},
+>  		{
+> -			MHIDATALIMIT_HIGHER, U32_MAX,
+> +			MHIDATALIMIT_HIGHER,
+>  			upper_32_bits(mhi_cntrl->iova_stop),
+>  		},
+>  		{
+> -			MHIDATALIMIT_LOWER, U32_MAX,
+> +			MHIDATALIMIT_LOWER,
+>  			lower_32_bits(mhi_cntrl->iova_stop),
+>  		},
+> -		{ 0, 0, 0 }
+> +		{0, 0}
+>  	};
+>  
+>  	dev_dbg(dev, "Initializing MHI registers\n");
+> @@ -533,13 +524,22 @@ int mhi_init_mmio(struct mhi_controller *mhi_cntrl)
+>  	mhi_cntrl->mhi_cmd[PRIMARY_CMD_RING].ring.db_addr = base + CRDB_LOWER;
+>  
+>  	/* Write to MMIO registers */
+> -	for (i = 0; reg_info[i].offset; i++) {
+> -		ret = mhi_write_reg_field(mhi_cntrl, base, reg_info[i].offset,
+> -					  reg_info[i].mask, reg_info[i].val);
+> -		if (ret) {
+> -			dev_err(dev, "Unable to write to MMIO registers");
+> -			return ret;
+> -		}
+> +	for (i = 0; reg_info[i].offset; i++)
+> +		mhi_write_reg(mhi_cntrl, base, reg_info[i].offset,
+> +			      reg_info[i].val);
+> +
+> +	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NER_MASK,
+> +				  mhi_cntrl->total_ev_rings);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to read MHICFG register\n");
 
-I thought gcc was free to inline functions without the need for=20
-'inline'. Don't you see this being inlined otherwise?
+"Unable to write"?
 
-On the flip side, don't we need __always_inline if we want to force=20
-inlining?
+> +		return ret;
+> +	}
+> +
+> +	ret = mhi_write_reg_field(mhi_cntrl, base, MHICFG, MHICFG_NHWER_MASK,
+> +				  mhi_cntrl->hw_ev_rings);
+> +	if (ret) {
+> +		dev_err(dev, "Unable to read MHICFG register\n");
 
+Same here.
 
-- Naveen
+Thanks,
+Mani
+
+> +		return ret;
+>  	}
+>  
+>  	return 0;
+> -- 
+> 2.7.4
+> 

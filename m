@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35E9505370
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58EC505208
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239997AbiDRM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
+        id S229740AbiDRMh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239564AbiDRMpg (ORCPT
+        with ESMTP id S239027AbiDRMbi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:45:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B549328E20;
-        Mon, 18 Apr 2022 05:32:48 -0700 (PDT)
+        Mon, 18 Apr 2022 08:31:38 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBD7252AB;
+        Mon, 18 Apr 2022 05:24:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61A36B80EC0;
-        Mon, 18 Apr 2022 12:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A893CC385A1;
-        Mon, 18 Apr 2022 12:32:45 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DA664CE1099;
+        Mon, 18 Apr 2022 12:24:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDF49C385A8;
+        Mon, 18 Apr 2022 12:23:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285166;
-        bh=/SrTrWU+LeV3TKzN5aOB97yjjBF+58xluB+OKVYBegw=;
+        s=korg; t=1650284640;
+        bh=saIBfUiOO9oi8JxUXD5UmunFw+zU/h9YE0bVKwbuzVI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cp1kgLkAmUshwmX+MrW3bQ4P151a7J5sxZS5+fUziMG3HkfO/8qvpNuNK2wLbQnoY
-         BuU3cb+1vtcIE+NNFMJvvTsiFI1US4mR9NAEXu7grGF5MSAGsfLMCgPoIHxuNATViw
-         FjOIOV8WNcN1F+XofqDdmd5HTeWDDW7gfzlQdzpI=
+        b=UJjt9ybm6uIqFWWHCsodVV6FJkCNVyOezB1A+DoJtImZEMu11qgZ1Vt5IlsVCPYlM
+         xVTL4hNJJ0+YGxUg+m/EgnNp9VyHBHcPGL9kNjIxxeM+2P0yYY6lt9KdlKRc9lU4vO
+         +8ZTETrROtFBG1ExG8GBrjpSbgfU8K/paKQTotGs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 122/189] net: micrel: fix KS8851_MLL Kconfig
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 173/219] io_uring: use nospec annotation for more indexes
 Date:   Mon, 18 Apr 2022 14:12:22 +0200
-Message-Id: <20220418121204.187413699@linuxfoundation.org>
+Message-Id: <20220418121211.721539889@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,48 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit c3efcedd272aa6dd5929e20cf902a52ddaa1197a ]
+[ Upstream commit 4cdd158be9d09223737df83136a1fb65269d809a ]
 
-KS8851_MLL selects MICREL_PHY, which depends on PTP_1588_CLOCK_OPTIONAL,
-so make KS8851_MLL also depend on PTP_1588_CLOCK_OPTIONAL since
-'select' does not follow any dependency chains.
+There are still several places that using pre array_index_nospec()
+indexes, fix them up.
 
-Fixes kconfig warning and build errors:
-
-WARNING: unmet direct dependencies detected for MICREL_PHY
-  Depends on [m]: NETDEVICES [=y] && PHYLIB [=y] && PTP_1588_CLOCK_OPTIONAL [=m]
-  Selected by [y]:
-  - KS8851_MLL [=y] && NETDEVICES [=y] && ETHERNET [=y] && NET_VENDOR_MICREL [=y] && HAS_IOMEM [=y]
-
-ld: drivers/net/phy/micrel.o: in function `lan8814_ts_info':
-micrel.c:(.text+0xb35): undefined reference to `ptp_clock_index'
-ld: drivers/net/phy/micrel.o: in function `lan8814_probe':
-micrel.c:(.text+0x2586): undefined reference to `ptp_clock_register'
-
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/b01ef5ee83f72ed35ad525912370b729f5d145f4.1649336342.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/micrel/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ fs/io_uring.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/net/ethernet/micrel/Kconfig b/drivers/net/ethernet/micrel/Kconfig
-index 93df3049cdc0..1b632cdd7630 100644
---- a/drivers/net/ethernet/micrel/Kconfig
-+++ b/drivers/net/ethernet/micrel/Kconfig
-@@ -39,6 +39,7 @@ config KS8851
- config KS8851_MLL
- 	tristate "Micrel KS8851 MLL"
- 	depends on HAS_IOMEM
-+	depends on PTP_1588_CLOCK_OPTIONAL
- 	select MII
- 	select CRC32
- 	select EEPROM_93CX6
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index 53b20d8b1129..f0febb2cb016 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8613,7 +8613,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	bool needs_lock = issue_flags & IO_URING_F_UNLOCKED;
+ 	struct io_fixed_file *file_slot;
+ 	struct file *file;
+-	int ret, i;
++	int ret;
+ 
+ 	io_ring_submit_lock(ctx, needs_lock);
+ 	ret = -ENXIO;
+@@ -8626,8 +8626,8 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (ret)
+ 		goto out;
+ 
+-	i = array_index_nospec(offset, ctx->nr_user_files);
+-	file_slot = io_fixed_file_slot(&ctx->file_table, i);
++	offset = array_index_nospec(offset, ctx->nr_user_files);
++	file_slot = io_fixed_file_slot(&ctx->file_table, offset);
+ 	ret = -EBADF;
+ 	if (!file_slot->file_ptr)
+ 		goto out;
+@@ -8683,8 +8683,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
+ 
+ 		if (file_slot->file_ptr) {
+ 			file = (struct file *)(file_slot->file_ptr & FFS_MASK);
+-			err = io_queue_rsrc_removal(data, up->offset + done,
+-						    ctx->rsrc_node, file);
++			err = io_queue_rsrc_removal(data, i, ctx->rsrc_node, file);
+ 			if (err)
+ 				break;
+ 			file_slot->file_ptr = 0;
+@@ -9357,7 +9356,7 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
+ 
+ 		i = array_index_nospec(offset, ctx->nr_user_bufs);
+ 		if (ctx->user_bufs[i] != ctx->dummy_ubuf) {
+-			err = io_queue_rsrc_removal(ctx->buf_data, offset,
++			err = io_queue_rsrc_removal(ctx->buf_data, i,
+ 						    ctx->rsrc_node, ctx->user_bufs[i]);
+ 			if (unlikely(err)) {
+ 				io_buffer_unmap(ctx, &imu);
 -- 
 2.35.1
 

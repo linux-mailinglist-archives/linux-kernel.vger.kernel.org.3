@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E40F25058A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1F25059FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343677AbiDROH5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:07:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
+        id S1345720AbiDROZI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:25:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245042AbiDRNvJ (ORCPT
+        with ESMTP id S245584AbiDROMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:51:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246544A15;
-        Mon, 18 Apr 2022 06:02:11 -0700 (PDT)
+        Mon, 18 Apr 2022 10:12:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C86DF37BCB;
+        Mon, 18 Apr 2022 06:11:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B34260B35;
-        Mon, 18 Apr 2022 13:02:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10859C385BA;
-        Mon, 18 Apr 2022 13:02:09 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 40E7FB80EDF;
+        Mon, 18 Apr 2022 13:11:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88F58C385A1;
+        Mon, 18 Apr 2022 13:11:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286930;
-        bh=9ptb2AvgTBNjYtiIEWQIWRJ+tyGVOrbHjqVSdH81hVY=;
+        s=korg; t=1650287487;
+        bh=Vg4mEUV5tczHM8D4Ix/QNyA/taZrJacu2hRIn8sfJrc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mwvrW72ruZBC3/RtuCPgl5lD/GjKyit7GbElNcTGd+MTO/A3OkESbnix23UOdZ7mF
-         tW1Aml1rt48P2goj/WwN8xMG16sxtH7TTw6JJ25M4CsrQoQFYACJ9dXHrcQR6dXabm
-         Y1W0swl/U3QYQMLXwcJoAPZxa+lLVXOLzOFXCzmA=
+        b=VINRu3USVICRBc7EmaB5pCFpEJd2iqT7g5SoFOd6BJEf9YNalhD8WMSX1AyR3VrdE
+         3lYOTRn0kvnvNC9a2yguW3fK6pNrs6OuuZYe/F/RhqTJ0DtX9ngQSGc5kkMfnRrccX
+         w8nvJwUG6rk9+X8E38eMIqzK3hVHvNclslmN9gq8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org, "H. Nikolaus Schaller" <hns@goldelico.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 262/284] veth: Ensure eth header is in skbs linear part
-Date:   Mon, 18 Apr 2022 14:14:03 +0200
-Message-Id: <20220418121220.057568533@linuxfoundation.org>
+Subject: [PATCH 4.9 178/218] usb: dwc3: omap: fix "unbalanced disables for smps10_out1" on omap5evm
+Date:   Mon, 18 Apr 2022 14:14:04 +0200
+Message-Id: <20220418121205.890863047@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,70 +54,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: H. Nikolaus Schaller <hns@goldelico.com>
 
-[ Upstream commit 726e2c5929de841fdcef4e2bf995680688ae1b87 ]
+[ Upstream commit ac01df343e5a6c6bcead2ed421af1fde30f73e7e ]
 
-After feeding a decapsulated packet to a veth device with act_mirred,
-skb_headlen() may be 0. But veth_xmit() calls __dev_forward_skb(),
-which expects at least ETH_HLEN byte of linear data (as
-__dev_forward_skb2() calls eth_type_trans(), which pulls ETH_HLEN bytes
-unconditionally).
+Usually, the vbus_regulator (smps10 on omap5evm) boots up disabled.
 
-Use pskb_may_pull() to ensure veth_xmit() respects this constraint.
+Hence calling regulator_disable() indirectly through dwc3_omap_set_mailbox()
+during probe leads to:
 
-kernel BUG at include/linux/skbuff.h:2328!
-RIP: 0010:eth_type_trans+0xcf/0x140
-Call Trace:
- <IRQ>
- __dev_forward_skb2+0xe3/0x160
- veth_xmit+0x6e/0x250 [veth]
- dev_hard_start_xmit+0xc7/0x200
- __dev_queue_xmit+0x47f/0x520
- ? skb_ensure_writable+0x85/0xa0
- ? skb_mpls_pop+0x98/0x1c0
- tcf_mirred_act+0x442/0x47e [act_mirred]
- tcf_action_exec+0x86/0x140
- fl_classify+0x1d8/0x1e0 [cls_flower]
- ? dma_pte_clear_level+0x129/0x1a0
- ? dma_pte_clear_level+0x129/0x1a0
- ? prb_fill_curr_block+0x2f/0xc0
- ? skb_copy_bits+0x11a/0x220
- __tcf_classify+0x58/0x110
- tcf_classify_ingress+0x6b/0x140
- __netif_receive_skb_core.constprop.0+0x47d/0xfd0
- ? __iommu_dma_unmap_swiotlb+0x44/0x90
- __netif_receive_skb_one_core+0x3d/0xa0
- netif_receive_skb+0x116/0x170
- be_process_rx+0x22f/0x330 [be2net]
- be_poll+0x13c/0x370 [be2net]
- __napi_poll+0x2a/0x170
- net_rx_action+0x22f/0x2f0
- __do_softirq+0xca/0x2a8
- __irq_exit_rcu+0xc1/0xe0
- common_interrupt+0x83/0xa0
+[   10.332764] WARNING: CPU: 0 PID: 1628 at drivers/regulator/core.c:2853 _regulator_disable+0x40/0x164
+[   10.351919] unbalanced disables for smps10_out1
+[   10.361298] Modules linked in: dwc3_omap(+) clk_twl6040 at24 gpio_twl6040 palmas_gpadc palmas_pwrbutton
+industrialio snd_soc_omap_mcbsp(+) snd_soc_ti_sdma display_connector ti_tpd12s015 drm leds_gpio
+drm_panel_orientation_quirks ip_tables x_tables ipv6 autofs4
+[   10.387818] CPU: 0 PID: 1628 Comm: systemd-udevd Not tainted 5.17.0-rc1-letux-lpae+ #8139
+[   10.405129] Hardware name: Generic OMAP5 (Flattened Device Tree)
+[   10.411455]  unwind_backtrace from show_stack+0x10/0x14
+[   10.416970]  show_stack from dump_stack_lvl+0x40/0x4c
+[   10.422313]  dump_stack_lvl from __warn+0xb8/0x170
+[   10.427377]  __warn from warn_slowpath_fmt+0x70/0x9c
+[   10.432595]  warn_slowpath_fmt from _regulator_disable+0x40/0x164
+[   10.439037]  _regulator_disable from regulator_disable+0x30/0x64
+[   10.445382]  regulator_disable from dwc3_omap_set_mailbox+0x8c/0xf0 [dwc3_omap]
+[   10.453116]  dwc3_omap_set_mailbox [dwc3_omap] from dwc3_omap_probe+0x2b8/0x394 [dwc3_omap]
+[   10.467021]  dwc3_omap_probe [dwc3_omap] from platform_probe+0x58/0xa8
+[   10.481762]  platform_probe from really_probe+0x168/0x2fc
+[   10.481782]  really_probe from __driver_probe_device+0xc4/0xd8
+[   10.481782]  __driver_probe_device from driver_probe_device+0x24/0xa4
+[   10.503762]  driver_probe_device from __driver_attach+0xc4/0xd8
+[   10.510018]  __driver_attach from bus_for_each_dev+0x64/0xa0
+[   10.516001]  bus_for_each_dev from bus_add_driver+0x148/0x1a4
+[   10.524880]  bus_add_driver from driver_register+0xb4/0xf8
+[   10.530678]  driver_register from do_one_initcall+0x90/0x1c4
+[   10.536661]  do_one_initcall from do_init_module+0x4c/0x200
+[   10.536683]  do_init_module from load_module+0x13dc/0x1910
+[   10.551159]  load_module from sys_finit_module+0xc8/0xd8
+[   10.561319]  sys_finit_module from __sys_trace_return+0x0/0x18
+[   10.561336] Exception stack(0xc344bfa8 to 0xc344bff0)
+[   10.561341] bfa0:                   b6fb5778 b6fab8d8 00000007 b6ecfbb8 00000000 b6ed0398
+[   10.561341] bfc0: b6fb5778 b6fab8d8 855c0500 0000017b 00020000 b6f9a3cc 00000000 b6fb5778
+[   10.595500] bfe0: bede18f8 bede18e8 b6ec9aeb b6dda1c2
+[   10.601345] ---[ end trace 0000000000000000 ]---
 
-Fixes: e314dbdc1c0d ("[NET]: Virtual ethernet device driver.")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fix this unnecessary warning by checking if the regulator is enabled.
+
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+Link: https://lore.kernel.org/r/af3b750dc2265d875deaabcf5f80098c9645da45.1646744616.git.hns@goldelico.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/veth.c | 2 +-
+ drivers/usb/dwc3/dwc3-omap.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index a69ad39ee57e..f0b26768a639 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -106,7 +106,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index 8e69150776f5..a08b29fbaa50 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -245,7 +245,7 @@ static void dwc3_omap_set_mailbox(struct dwc3_omap *omap,
+ 		break;
  
- 	rcu_read_lock();
- 	rcv = rcu_dereference(priv->peer);
--	if (unlikely(!rcv)) {
-+	if (unlikely(!rcv) || !pskb_may_pull(skb, ETH_HLEN)) {
- 		kfree_skb(skb);
- 		goto drop;
- 	}
+ 	case OMAP_DWC3_ID_FLOAT:
+-		if (omap->vbus_reg)
++		if (omap->vbus_reg && regulator_is_enabled(omap->vbus_reg))
+ 			regulator_disable(omap->vbus_reg);
+ 		val = dwc3_omap_read_utmi_ctrl(omap);
+ 		val |= USBOTGSS_UTMI_OTG_CTRL_IDDIG;
 -- 
 2.35.1
 

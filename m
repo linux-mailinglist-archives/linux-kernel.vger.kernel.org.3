@@ -2,68 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0695505D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97DF5505D5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347160AbiDRR3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:29:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49064 "EHLO
+        id S1346878AbiDRRST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347162AbiDRR2o (ORCPT
+        with ESMTP id S1346881AbiDRRSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:28:44 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE192B242
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:25:49 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id u2so20023601pgq.10
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:25:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=ZKuq0wU3+JeGnDXBmVteCxHEwvafVW2Ji4siv6RJc6g=;
-        b=Xhxa5K+utu+20ev8QXD3/Lag35QKJGaCMWBrtXNdffFxd4KBEDHQdfHNXN2MAU2oNe
-         47KiHyvukhJBBbUl45qknLCBmfya/36mwjvNNiTsO1I9igy2qNvLEHgfodUUULeJvp/Q
-         xRAIP/9qMTqxk4VHxG9yuN4UKq66u+zS1rxsFeYnKmsacrVfwjQ2qr7ynbAoobvMDm6n
-         rAquBQyNzQByJy4weYuIB1ex+xEf/r4IufPrMauOHxTByzfsfB1nlztfPjFoj115xEcJ
-         D+JfZjMAn9S82aMibIZsjpZ+b0lDuBd2fODhr9T8gtEuKlc2i4MyGySi0TkaXIhiWQqU
-         I11Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=ZKuq0wU3+JeGnDXBmVteCxHEwvafVW2Ji4siv6RJc6g=;
-        b=01lFIOCeYm8+PIYfML9VjVX48ePFOQSihGTEgNX/LbsSConX64LEPj+be/1lbrbN8Y
-         v49I1pLkquGAP1JBtAG5OdQXFyII2X0kUjTeB8KtR+wYQn40UeKSAkaKAoA3pTHBbX5e
-         xb1sJdTxRXDliiFgDvQuJsQm2kArvvKIW0RXszPa5si0SJZdUWygomnbA7RExgfxdQtH
-         +AH4mVgYdIfTPjwi9oWo6I3Zz2507L5OT7bjinSGY/Jx7t3w0rH2ilxLNw2IrO+znTzd
-         drlg5k5VxQbChIhcIIMNq/GcQFUpDCq0rYkI8vDsGhnxwHWVF9cRXhbDLGGDejKkXBwc
-         0VWQ==
-X-Gm-Message-State: AOAM53287bp0AMf7B5hfwW5Ki6esQG0HxGEqYYQd4aXoGGEvFxKvP7+/
-        szWj/EafU6fQrlwUnuEO5rWMoLuq/uvaXw==
-X-Google-Smtp-Source: ABdhPJy3JJAfOVN7tfyfI2+4b+4P83md/k20gxaF/4DLe0/MfcqlQs9FIeOyxP5Nqj4Fe1hS3IYReg==
-X-Received: by 2002:a63:7d49:0:b0:378:907d:1fc7 with SMTP id m9-20020a637d49000000b00378907d1fc7mr11130115pgn.252.1650302749267;
-        Mon, 18 Apr 2022 10:25:49 -0700 (PDT)
-Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
-        by smtp.gmail.com with ESMTPSA id y9-20020aa78f29000000b005098201d2f5sm13041394pfr.205.2022.04.18.10.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:25:49 -0700 (PDT)
-From:   Aliya Rahmani <aliyarahmani786@gmail.com>
-To:     clabbe@baylibre.com
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Aliya Rahmani <aliyarahmani786@gmail.com>
-Subject: [PATCH v3 3/3] staging: media: zoran: add parentheses on macro parameter
-Date:   Mon, 18 Apr 2022 22:44:56 +0530
-Message-Id: <20220418171453.16971-4-aliyarahmani786@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220418171453.16971-1-aliyarahmani786@gmail.com>
-References: <20220418171453.16971-1-aliyarahmani786@gmail.com>
+        Mon, 18 Apr 2022 13:18:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87CB624F10;
+        Mon, 18 Apr 2022 10:15:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C175DB81057;
+        Mon, 18 Apr 2022 17:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43B96C385AC;
+        Mon, 18 Apr 2022 17:15:32 +0000 (UTC)
+Date:   Mon, 18 Apr 2022 13:15:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Kurt Kanzenbach <kurt@linutronix.de>,
+        John Stultz <john.stultz@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Richard Cochran <richardcochran@gmail.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 1/3] timekeeping: Introduce fast accessor to clock
+ tai
+Message-ID: <20220418131530.6282fedc@gandalf.local.home>
+In-Reply-To: <87czhjemnn.ffs@tglx>
+References: <20220414091805.89667-1-kurt@linutronix.de>
+        <20220414091805.89667-2-kurt@linutronix.de>
+        <87czhjemnn.ffs@tglx>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,29 +53,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes checkpatch warnings of precedence issues. Add parentheses
-around macro argument 'num'.
+On Thu, 14 Apr 2022 16:59:24 +0200
+Thomas Gleixner <tglx@linutronix.de> wrote:
 
-Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
----
-changes since v2: Rework commit description and subject
----
- drivers/staging/media/zoran/videocodec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Steven, this is available for you to pull via:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip tai-for-tracing
+> 
+> It's a single tagged commit on top of 5.18-rc2
 
-diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
-index 19732a47c8bd..925f90fd5885 100644
---- a/drivers/staging/media/zoran/videocodec.c
-+++ b/drivers/staging/media/zoran/videocodec.c
-@@ -22,7 +22,7 @@ MODULE_PARM_DESC(videocodec_debug, "Debug level (0-4)");
- 
- #define dprintk(num, format, args...) \
- 	do { \
--		if (videocodec_debug >= num) \
-+		if (videocodec_debug >= (num)) \
- 			printk(format, ##args); \
- 	} while (0)
- 
--- 
-2.25.1
+Thanks. As I have not started putting together my next merge window series
+yet, I can start off of this commit.
 
+-- Steve

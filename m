@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9C1504F23
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:58:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AE46504F28
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237792AbiDRLBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33464 "EHLO
+        id S237818AbiDRLDu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:03:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231597AbiDRLBU (ORCPT
+        with ESMTP id S237808AbiDRLDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:01:20 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAF21A042;
-        Mon, 18 Apr 2022 03:58:41 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id f14so1284789qtq.1;
-        Mon, 18 Apr 2022 03:58:41 -0700 (PDT)
+        Mon, 18 Apr 2022 07:03:48 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3AB7BF73;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id x18so4027172qtw.4;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=KBHLdf5+QvefwDR+UhIgZhMctiIYYUPTV5ht3ttk1gk=;
-        b=acrUETUXsRb90NVKhjM5cMILzL7ERa5tJ8Ksj/KOX8YtBm9MKbkhG6x0n5PF7lF97w
-         Zm58YAChUX7Xi0yWzJAS7XsJrTEt8qVpKLJXHQmZ4uamK1uknTJ/45hsygi7m2WljddN
-         wGBLn1SOv9s0KOfQWrfCyyT9kLOaPXVOudu6DTMIh566ZMZkx1m+GG7YdZ8R/EJbhCNB
-         zejgQ722ln4xapLL1BekXFHvbE6s8dPVj7lrJPOZGv1dMsxp9VGNKj37RZfUDRRbVaZM
-         CLUTVR80ZW4MqYgklAcV4HN3ShbMeFXTqNrLxiJ0tlU6KmH25a9TYBDV1yv9bMMAdbNw
-         eOWQ==
+        bh=dwnN1oZ2LBUhFwxk5+UwL2jilzH2HcfZqt40jbuN85g=;
+        b=Ew5aYmqoNZIBryg+/E0QMgxvgFLxw5e9Ojf7kgtsq/5GRadgfw/nNX3Qherv83WaDW
+         iBDcTdV/wEpae8an3zhtaGa1aAKjwbgz7rCSSeWkuSBSgl8eDpwpk/+K8X2CExTtWjym
+         6ZQ9//pDyCj+d7iYK1dyd/Df+NNcBEQhaXehiSxOlNcauhhznehaj21Qav9EkJdgRJ28
+         8OOMy/GIvnbG2CrW9wqJu8HNgkKZx7LWSyVfu9OI5gX8Ll3KJVni/PLVhrWeRgs7E6Ox
+         TUbgZuWPESrkP6rnfdVAYggWzS5oFQrksZzEh4NJTMaG23q19J36Hpi2Ixf1KOTki338
+         IvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=KBHLdf5+QvefwDR+UhIgZhMctiIYYUPTV5ht3ttk1gk=;
-        b=iifynv7LIIvTKcGF2XiXVbJk+IDDiw7LU9B17m403AT1lOwoXt1YzwoDxc0915Nb5+
-         sz5fSbPPEfY0Y3+dy/2E4GzYSm3H13YSHLfnLmUbJlsIX2BkoVC7b+cM1/Nhv+hEe7Xz
-         6nNofzTUfQpPhp3XGJ5syx3jt8ZYBP6rMQxZ5oBKdawkjbaShEZtjkiOeLTfSL7TvLtT
-         STCAOBOpNs4Fy/MpbwbRzJPnx2gzPke1dJznFzUFo78vctrFf0mkkXhjbqfykDrDFCVJ
-         J1yEkQa62v3nI6YoM8wkI6akmzobEp85OCYZ6wl/NNwbW/ME30VwitF7P07R9TsRjpW7
-         HSdA==
-X-Gm-Message-State: AOAM5301Os/yF9SkiUDYf9jT53DS8Vhbps5uCUcvvoMrl6lWTHzU4KCw
-        pdrOhkLzldxRpHfr7wtH5bY=
-X-Google-Smtp-Source: ABdhPJxB0KSRZZbyLt6TfSDJ4wxLwKuIblWJKAELuPfHGq6ZPmLo0AtCEWuTbKMg+NJK0UzqXmgQ5Q==
-X-Received: by 2002:a05:622a:164a:b0:2f1:ffab:b3e0 with SMTP id y10-20020a05622a164a00b002f1ffabb3e0mr2430888qtj.553.1650279520751;
-        Mon, 18 Apr 2022 03:58:40 -0700 (PDT)
+        bh=dwnN1oZ2LBUhFwxk5+UwL2jilzH2HcfZqt40jbuN85g=;
+        b=EKxMYztnX2LLaWCDiH9C1gNKw6fxwgt7qdxtNixJ4yJ0BaDcRpjRubSfuOHHWJ0Wf3
+         mzofWq4b2GmwEeh6GCIEknkNFYKlK6buiAzivhj0NkeyEo3ZatxqNSGBPO4u3+rC0ny/
+         pY18b7VY34ipFRGExVCkpT+S/rh2HVO27tw0YB0cKhy9GJ3/mhz+PnJnGkKP+Kx30gc7
+         nxe6pCJ5WTCJvO6MA4wEL7H0fbbKLobU4+M1amH2vQTZYVvNah8e3h+WzoAP3n3N5AgB
+         JeVmYgQaHb4koVym/RiHQNFnZdwxCbUGCJnTUgYYsIhD8Ub2snqKHs6jxiV/3nelbDZR
+         vkGA==
+X-Gm-Message-State: AOAM532EaVOGaxVeK92LccjLUlBMFHwxXJbvIoS9bZYiXDbJb9E3eXZL
+        Z3qgsFL7gpkTqDb6ChI46awoddrIos0=
+X-Google-Smtp-Source: ABdhPJx8bBnkbnz7qkrkHRfSsDkReqERjEpBnW0mYBmi7AnalzZJiv5KbdOiFZ5/5N+rhvABa73VGw==
+X-Received: by 2002:ac8:7294:0:b0:2f1:e250:f21f with SMTP id v20-20020ac87294000000b002f1e250f21fmr6702394qto.526.1650279669141;
+        Mon, 18 Apr 2022 04:01:09 -0700 (PDT)
 Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b9-20020a05620a0f8900b0069e84c5352asm2689907qkn.47.2022.04.18.03.58.38
+        by smtp.gmail.com with ESMTPSA id u129-20020a376087000000b0067e401d7177sm6753428qkb.3.2022.04.18.04.01.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 03:58:40 -0700 (PDT)
+        Mon, 18 Apr 2022 04:01:08 -0700 (PDT)
 From:   cgel.zte@gmail.com
-X-Google-Original-From: lv.ruyi@zte.com.cn
-To:     kas@fi.muni.cz, davem@davemloft.net
-Cc:     kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     ldewangan@nvidia.com
+Cc:     broonie@kernel.org, linux-spi@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
         Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH] net: cosa: fix error check return value of register_chrdev()
-Date:   Mon, 18 Apr 2022 10:58:34 +0000
-Message-Id: <20220418105834.2558892-1-lv.ruyi@zte.com.cn>
+Subject: [PATCH] spi: spi-tegra20-sflash: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Mon, 18 Apr 2022 11:01:03 +0000
+Message-Id: <20220418110103.2558955-1-chi.minghao@zte.com.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -70,31 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lv Ruyi <lv.ruyi@zte.com.cn>
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
-If major equal 0, register_chrdev() returns error code when it fails.
-This function dynamically allocate a major and return its number on
-success, so we should use "< 0" to check it instead of "!".
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
 Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
 ---
- drivers/net/wan/cosa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/spi/spi-tegra20-sflash.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wan/cosa.c b/drivers/net/wan/cosa.c
-index 23d2954d9747..1e5672019922 100644
---- a/drivers/net/wan/cosa.c
-+++ b/drivers/net/wan/cosa.c
-@@ -349,7 +349,7 @@ static int __init cosa_init(void)
- 		}
- 	} else {
- 		cosa_major = register_chrdev(0, "cosa", &cosa_fops);
--		if (!cosa_major) {
-+		if (cosa_major < 0) {
- 			pr_warn("unable to register chardev\n");
- 			err = -EIO;
- 			goto out;
+diff --git a/drivers/spi/spi-tegra20-sflash.c b/drivers/spi/spi-tegra20-sflash.c
+index 2888d8a8dc6d..220ee08c4a06 100644
+--- a/drivers/spi/spi-tegra20-sflash.c
++++ b/drivers/spi/spi-tegra20-sflash.c
+@@ -486,10 +486,9 @@ static int tegra_sflash_probe(struct platform_device *pdev)
+ 			goto exit_pm_disable;
+ 	}
+ 
+-	ret = pm_runtime_get_sync(&pdev->dev);
++	ret = pm_runtime_resume_and_get(&pdev->dev);
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "pm runtime get failed, e = %d\n", ret);
+-		pm_runtime_put_noidle(&pdev->dev);
+ 		goto exit_pm_disable;
+ 	}
+ 
+@@ -549,9 +548,8 @@ static int tegra_sflash_resume(struct device *dev)
+ 	struct tegra_sflash_data *tsd = spi_master_get_devdata(master);
+ 	int ret;
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
+ 		dev_err(dev, "pm runtime failed, e = %d\n", ret);
+ 		return ret;
+ 	}
 -- 
 2.25.1
 

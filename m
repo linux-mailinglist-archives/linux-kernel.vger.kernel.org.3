@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE595059FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCCA4505959
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344813AbiDROaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:30:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S1345345AbiDROTB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:19:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345277AbiDROYu (ORCPT
+        with ESMTP id S244620AbiDRN73 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:24:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3E126AEE;
-        Mon, 18 Apr 2022 05:43:00 -0700 (PDT)
+        Mon, 18 Apr 2022 09:59:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB60D2B267;
+        Mon, 18 Apr 2022 06:08:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 41CE8B80E59;
-        Mon, 18 Apr 2022 12:42:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856ADC385A7;
-        Mon, 18 Apr 2022 12:42:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7301760EFE;
+        Mon, 18 Apr 2022 13:08:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84143C385A1;
+        Mon, 18 Apr 2022 13:08:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285777;
-        bh=mZnOf9xUlXUv3+sormyT6OZbJz0K6TaEqpkoWtR7N0Y=;
+        s=korg; t=1650287304;
+        bh=ofJ4spLJs3LiYL83YZiZiU6lv3R1zdUaKtVleqjM0Us=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NKWvhM8pTNtJei8e+K9WGdo353TXzxNSvR+2ZQzXKq7vypUR4dW5UF4rwtpnpsWGc
-         yRE57zgJ1rJh6SJSv3/MHDAyjNEtkHhfv8KBdxB4k5PRnvPdo1HBPVLhloSJn7nlhq
-         OQ/9PYYp4NMgdBHZN20rlNk2TyufoCT54lTeo4aU=
+        b=jNLKZN+gdxNxa7H2zR67sFw+yOxQrYES/sCgsu8Sskc4qvrPjCZ3tKkdfILFfSTcW
+         3njDtvlk/WNkUaFb3hxXYCLt5QkgPWsnruBS+DijP486wdBhrYTK2NRaF4JcZDsIY8
+         5+mYa4OGvj60/hkpsDEOcjfVrX/bGNyMKlp6kuqk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 07/63] net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
+        Dave Kleikamp <dave.kleikamp@oracle.com>,
+        Sasha Levin <sashal@kernel.org>,
+        syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+Subject: [PATCH 4.9 118/218] jfs: fix divide error in dbNextAG
 Date:   Mon, 18 Apr 2022 14:13:04 +0200
-Message-Id: <20220418121134.637335641@linuxfoundation.org>
+Message-Id: <20220418121202.970689228@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Pavel Skripkin <paskripkin@gmail.com>
 
-[ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
+[ Upstream commit 2cc7cc01c15f57d056318c33705647f87dcd4aab ]
 
-When using a fixed-link, the altr_tse_pcs driver crashes
-due to null-pointer dereference as no phy_device is provided to
-tse_pcs_fix_mac_speed function. Fix this by adding a check for
-phy_dev before calling the tse_pcs_fix_mac_speed() function.
+Syzbot reported divide error in dbNextAG(). The problem was in missing
+validation check for malicious image.
 
-Also clean up the tse_pcs_fix_mac_speed function a bit. There is
-no need to check for splitter_base and sgmii_adapter_base
-because the driver will fail if these 2 variables are not
-derived from the device tree.
+Syzbot crafted an image with bmp->db_numag equal to 0. There wasn't any
+validation checks, but dbNextAG() blindly use bmp->db_numag in divide
+expression
 
-Fixes: fb3bbdb85989 ("net: ethernet: Add TSE PCS support to dwmac-socfpga")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fix it by validating bmp->db_numag in dbMount() and return an error if
+image is malicious
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
+Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
+Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |  8 --------
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |  4 ++++
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 13 +++++--------
- 3 files changed, 9 insertions(+), 16 deletions(-)
+ fs/jfs/jfs_dmap.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-index cd478d2cd871..00f6d347eaf7 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-@@ -57,10 +57,6 @@
- #define TSE_PCS_USE_SGMII_ENA				BIT(0)
- #define TSE_PCS_IF_USE_SGMII				0x03
- 
--#define SGMII_ADAPTER_CTRL_REG				0x00
--#define SGMII_ADAPTER_DISABLE				0x0001
--#define SGMII_ADAPTER_ENABLE				0x0000
--
- #define AUTONEGO_LINK_TIMER				20
- 
- static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
-@@ -202,12 +198,8 @@ void tse_pcs_fix_mac_speed(struct tse_pcs *pcs, struct phy_device *phy_dev,
- 			   unsigned int speed)
+diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
+index 9ff510a489cb..6dac48e29d28 100644
+--- a/fs/jfs/jfs_dmap.c
++++ b/fs/jfs/jfs_dmap.c
+@@ -161,6 +161,7 @@ static const s8 budtab[256] = {
+  *	0	- success
+  *	-ENOMEM	- insufficient memory
+  *	-EIO	- i/o error
++ *	-EINVAL - wrong bmap data
+  */
+ int dbMount(struct inode *ipbmap)
  {
- 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
--	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
- 	u32 val;
- 
--	writew(SGMII_ADAPTER_ENABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
--
- 	pcs->autoneg = phy_dev->autoneg;
- 
- 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-index 442812c0a4bd..694ac25ef426 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-@@ -10,6 +10,10 @@
- #include <linux/phy.h>
- #include <linux/timer.h>
- 
-+#define SGMII_ADAPTER_CTRL_REG		0x00
-+#define SGMII_ADAPTER_ENABLE		0x0000
-+#define SGMII_ADAPTER_DISABLE		0x0001
+@@ -192,6 +193,12 @@ int dbMount(struct inode *ipbmap)
+ 	bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
+ 	bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
+ 	bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
++	if (!bmp->db_numag) {
++		release_metapage(mp);
++		kfree(bmp);
++		return -EINVAL;
++	}
 +
- struct tse_pcs {
- 	struct device *dev;
- 	void __iomem *tse_pcs_base;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index 70d41783329d..72e47621d27c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -18,9 +18,6 @@
- 
- #include "altr_tse_pcs.h"
- 
--#define SGMII_ADAPTER_CTRL_REG                          0x00
--#define SGMII_ADAPTER_DISABLE                           0x0001
--
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
-@@ -62,16 +59,14 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- {
- 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
- 	void __iomem *splitter_base = dwmac->splitter_base;
--	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
- 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
- 	struct device *dev = dwmac->dev;
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct phy_device *phy_dev = ndev->phydev;
- 	u32 val;
- 
--	if ((tse_pcs_base) && (sgmii_adapter_base))
--		writew(SGMII_ADAPTER_DISABLE,
--		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	writew(SGMII_ADAPTER_DISABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 
- 	if (splitter_base) {
- 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
-@@ -93,7 +88,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
- 	}
- 
--	if (tse_pcs_base && sgmii_adapter_base)
-+	writew(SGMII_ADAPTER_ENABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	if (phy_dev)
- 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
- }
- 
+ 	bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
+ 	bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
+ 	bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
 -- 
-2.35.1
+2.34.1
 
 
 

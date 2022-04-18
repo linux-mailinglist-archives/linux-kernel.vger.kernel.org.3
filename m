@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36CC050514B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8FB95057BC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239473AbiDRMdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38522 "EHLO
+        id S245167AbiDRNwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239804AbiDRM3B (ORCPT
+        with ESMTP id S244239AbiDRNaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:01 -0400
+        Mon, 18 Apr 2022 09:30:13 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 442C31C107;
-        Mon, 18 Apr 2022 05:22:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F0241625;
+        Mon, 18 Apr 2022 05:54:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F257CB80ED7;
-        Mon, 18 Apr 2022 12:22:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 126CAC385A7;
-        Mon, 18 Apr 2022 12:22:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 929F9B80D9C;
+        Mon, 18 Apr 2022 12:54:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02FAC385A7;
+        Mon, 18 Apr 2022 12:54:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284555;
-        bh=PdqZVzizgk6/NDj9Gpg1f+LUl/smdkF9TxT+ushn/pk=;
+        s=korg; t=1650286455;
+        bh=rk88CqsmYPt2GYpQNqnGaUUD5zAsEFFFkLN2OQiBwXs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kxMnhK0k0FhZHsKb7AD7xdtIxyDvPah2516zJZ6CmBA3e+s6Zdt6cZ49/colzLI2A
-         SB6TtmqpZpGcSMepCKUIongrlRBXz3Kh2FnDj6vTkHEhvxguDZXeMOOW6zxihPcygg
-         muRti7SLZTevRmBkaOWcPvJ3tWoIsZXBMQ2RrKgs=
+        b=r4/dD8Znx6U2BMdteLRn8bURLpenbRhnrBfW9kHM7TFda5Auk6uQXO6MvRB9jnOf8
+         NJgxg1X3EvH+PDDWO0uQbP6mU6l7uSfxJmkkMRJr6EBF2u+5TaNZ/uozsVrpg3z9dG
+         AjABn88qLryUzswvruNsEY3cjT5KAu0sIkAyYblE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Jonathan Bakker <xc-racer2@live.ca>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 153/219] regulator: wm8994: Add an off-on delay for WM8994 variant
+Subject: [PATCH 4.14 141/284] pinctrl: mediatek: Fix missing of_node_put() in mtk_pctrl_init
 Date:   Mon, 18 Apr 2022 14:12:02 +0200
-Message-Id: <20220418121211.168730067@linuxfoundation.org>
+Message-Id: <20220418121215.483405255@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,94 +57,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jonathan Bakker <xc-racer2@live.ca>
+From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit 92d96b603738ec4f35cde7198c303ae264dd47cb ]
+[ Upstream commit dab4df9ca919f59e5b9dd84385eaf34d4f20dbb0 ]
 
-As per Table 130 of the wm8994 datasheet at [1], there is an off-on
-delay for LDO1 and LDO2.  In the wm8958 datasheet [2], I could not
-find any reference to it.  I could not find a wm1811 datasheet to
-double-check there, but as no one has complained presumably it works
-without it.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-This solves the issue on Samsung Aries boards with a wm8994 where
-register writes fail when the device is powered off and back-on
-quickly.
-
-[1] https://statics.cirrus.com/pubs/proDatasheet/WM8994_Rev4.6.pdf
-[2] https://statics.cirrus.com/pubs/proDatasheet/WM8958_v3.5.pdf
-
-Signed-off-by: Jonathan Bakker <xc-racer2@live.ca>
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
-Link: https://lore.kernel.org/r/CY4PR04MB056771CFB80DC447C30D5A31CB1D9@CY4PR04MB0567.namprd04.prod.outlook.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: a6df410d420a ("pinctrl: mediatek: Add Pinctrl/GPIO driver for mt8135.")
+Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220308071155.21114-1-linmq006@gmail.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/regulator/wm8994-regulator.c | 42 ++++++++++++++++++++++++++--
- 1 file changed, 39 insertions(+), 3 deletions(-)
+ drivers/pinctrl/mediatek/pinctrl-mtk-common.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/regulator/wm8994-regulator.c b/drivers/regulator/wm8994-regulator.c
-index cadea0344486..40befdd9dfa9 100644
---- a/drivers/regulator/wm8994-regulator.c
-+++ b/drivers/regulator/wm8994-regulator.c
-@@ -71,6 +71,35 @@ static const struct regulator_ops wm8994_ldo2_ops = {
- };
- 
- static const struct regulator_desc wm8994_ldo_desc[] = {
-+	{
-+		.name = "LDO1",
-+		.id = 1,
-+		.type = REGULATOR_VOLTAGE,
-+		.n_voltages = WM8994_LDO1_MAX_SELECTOR + 1,
-+		.vsel_reg = WM8994_LDO_1,
-+		.vsel_mask = WM8994_LDO1_VSEL_MASK,
-+		.ops = &wm8994_ldo1_ops,
-+		.min_uV = 2400000,
-+		.uV_step = 100000,
-+		.enable_time = 3000,
-+		.off_on_delay = 36000,
-+		.owner = THIS_MODULE,
-+	},
-+	{
-+		.name = "LDO2",
-+		.id = 2,
-+		.type = REGULATOR_VOLTAGE,
-+		.n_voltages = WM8994_LDO2_MAX_SELECTOR + 1,
-+		.vsel_reg = WM8994_LDO_2,
-+		.vsel_mask = WM8994_LDO2_VSEL_MASK,
-+		.ops = &wm8994_ldo2_ops,
-+		.enable_time = 3000,
-+		.off_on_delay = 36000,
-+		.owner = THIS_MODULE,
-+	},
-+};
-+
-+static const struct regulator_desc wm8958_ldo_desc[] = {
- 	{
- 		.name = "LDO1",
- 		.id = 1,
-@@ -172,9 +201,16 @@ static int wm8994_ldo_probe(struct platform_device *pdev)
- 	 * regulator core and we need not worry about it on the
- 	 * error path.
- 	 */
--	ldo->regulator = devm_regulator_register(&pdev->dev,
--						 &wm8994_ldo_desc[id],
--						 &config);
-+	if (ldo->wm8994->type == WM8994) {
-+		ldo->regulator = devm_regulator_register(&pdev->dev,
-+							 &wm8994_ldo_desc[id],
-+							 &config);
-+	} else {
-+		ldo->regulator = devm_regulator_register(&pdev->dev,
-+							 &wm8958_ldo_desc[id],
-+							 &config);
-+	}
-+
- 	if (IS_ERR(ldo->regulator)) {
- 		ret = PTR_ERR(ldo->regulator);
- 		dev_err(wm8994->dev, "Failed to register LDO%d: %d\n",
+diff --git a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+index 3cf384f8b122..8b07439bb694 100644
+--- a/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
++++ b/drivers/pinctrl/mediatek/pinctrl-mtk-common.c
+@@ -1367,6 +1367,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
+ 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 0);
+ 	if (node) {
+ 		pctl->regmap1 = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(pctl->regmap1))
+ 			return PTR_ERR(pctl->regmap1);
+ 	} else if (regmap) {
+@@ -1380,6 +1381,7 @@ int mtk_pctrl_init(struct platform_device *pdev,
+ 	node = of_parse_phandle(np, "mediatek,pctl-regmap", 1);
+ 	if (node) {
+ 		pctl->regmap2 = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(pctl->regmap2))
+ 			return PTR_ERR(pctl->regmap2);
+ 	}
 -- 
-2.35.1
+2.34.1
 
 
 

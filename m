@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D925052FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A79415050FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:28:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240424AbiDRMxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
+        id S238906AbiDRMaf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:30:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240612AbiDRMjX (ORCPT
+        with ESMTP id S239029AbiDRM1k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FCA11A33;
-        Mon, 18 Apr 2022 05:29:59 -0700 (PDT)
+        Mon, 18 Apr 2022 08:27:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC481EAC0;
+        Mon, 18 Apr 2022 05:21:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31B3660FB6;
-        Mon, 18 Apr 2022 12:29:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F83C385A7;
-        Mon, 18 Apr 2022 12:29:57 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 28A2BB80EDA;
+        Mon, 18 Apr 2022 12:21:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E8DCC385A8;
+        Mon, 18 Apr 2022 12:21:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284998;
-        bh=G++U9rtoxfQSlDamiCXkUBLmwjBH2Lkb15OC1vNC2oE=;
+        s=korg; t=1650284469;
+        bh=cFl5lG2Pg2Qjf6ZNnxY9+UwfUX2+53t0n2KYI4zhjVM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=x/VvbUXqmhln07+JuWlQWW3LougpKCD7lVGyyrBejKOZ/A3nAkucROovapA8onpyv
-         oS7AP33DJexFZBso4nxBtOeNhc8+dHpMaaDGfE6PI/PRCK9CcEKD/r09Qes/B3won0
-         GRBfQzT6FW7UiIAy7VZ7Aoe4B9O3nkW7hnKREd1c=
+        b=C6Kuo9O6hq9R5GCGrucJi0GwyekRfBD8Y2sHQdo6qQYg8z63dnq5PFQAaRz4GyX8K
+         4olcjdk3DLH34BgIjwKQ1gChas8hDsIe7w7lRQdNqy+7UXO6P3Qe3cfZ/GC/B3mSxl
+         /Ydy3HDHIxhpvCA65cCDPRhscG/dh+2q0W6LjpEA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Florian Westphal <fw@strlen.de>,
-        Topi Miettinen <toiwoton@gmail.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Jeremy Linton <jeremy.linton@arm.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 074/189] netfilter: nft_socket: make cgroup match work in input too
+Subject: [PATCH 5.17 125/219] net: bcmgenet: Revert "Use stronger register read/writes to assure ordering"
 Date:   Mon, 18 Apr 2022 14:11:34 +0200
-Message-Id: <20220418121202.610066540@linuxfoundation.org>
+Message-Id: <20220418121210.396217125@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,54 +56,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Florian Westphal <fw@strlen.de>
+From: Jeremy Linton <jeremy.linton@arm.com>
 
-[ Upstream commit 05ae2fba821c4d122ab4ba3e52144e21586c4010 ]
+[ Upstream commit 2df3fc4a84e917a422935cc5bae18f43f9955d31 ]
 
-cgroupv2 helper function ignores the already-looked up sk
-and uses skb->sk instead.
+It turns out after digging deeper into this bug, that it was being
+triggered by GCC12 failing to call the bcmgenet_enable_dma()
+routine. Given that a gcc12 fix has been merged [1] and the genet
+driver now works properly when built with gcc12, this commit should
+be reverted.
 
-Just pass sk from the calling function instead; this will
-make cgroup matching work for udp and tcp in input even when
-edemux did not set skb->sk already.
+[1]
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105160
+https://gcc.gnu.org/git/?p=gcc.git;a=commit;h=aabb9a261ef060cf24fd626713f1d7d9df81aa57
 
-Fixes: e0bb96db96f8 ("netfilter: nft_socket: add support for cgroupsv2")
-Signed-off-by: Florian Westphal <fw@strlen.de>
-Tested-by: Topi Miettinen <toiwoton@gmail.com>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Fixes: 8d3ea3d402db ("net: bcmgenet: Use stronger register read/writes to assure ordering")
+Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+Acked-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220412210420.1129430-1-jeremy.linton@arm.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nft_socket.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/broadcom/genet/bcmgenet.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/netfilter/nft_socket.c b/net/netfilter/nft_socket.c
-index d601974c9d2e..b8f011145765 100644
---- a/net/netfilter/nft_socket.c
-+++ b/net/netfilter/nft_socket.c
-@@ -36,12 +36,11 @@ static void nft_socket_wildcard(const struct nft_pktinfo *pkt,
+diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+index bd5998012a87..2da804f84b48 100644
+--- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
++++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
+@@ -76,7 +76,7 @@ static inline void bcmgenet_writel(u32 value, void __iomem *offset)
+ 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+ 		__raw_writel(value, offset);
+ 	else
+-		writel(value, offset);
++		writel_relaxed(value, offset);
+ }
  
- #ifdef CONFIG_SOCK_CGROUP_DATA
- static noinline bool
--nft_sock_get_eval_cgroupv2(u32 *dest, const struct nft_pktinfo *pkt, u32 level)
-+nft_sock_get_eval_cgroupv2(u32 *dest, struct sock *sk, const struct nft_pktinfo *pkt, u32 level)
- {
--	struct sock *sk = skb_to_full_sk(pkt->skb);
- 	struct cgroup *cgrp;
+ static inline u32 bcmgenet_readl(void __iomem *offset)
+@@ -84,7 +84,7 @@ static inline u32 bcmgenet_readl(void __iomem *offset)
+ 	if (IS_ENABLED(CONFIG_MIPS) && IS_ENABLED(CONFIG_CPU_BIG_ENDIAN))
+ 		return __raw_readl(offset);
+ 	else
+-		return readl(offset);
++		return readl_relaxed(offset);
+ }
  
--	if (!sk || !sk_fullsock(sk) || !net_eq(nft_net(pkt), sock_net(sk)))
-+	if (!sk_fullsock(sk))
- 		return false;
- 
- 	cgrp = sock_cgroup_ptr(&sk->sk_cgrp_data);
-@@ -108,7 +107,7 @@ static void nft_socket_eval(const struct nft_expr *expr,
- 		break;
- #ifdef CONFIG_SOCK_CGROUP_DATA
- 	case NFT_SOCKET_CGROUPV2:
--		if (!nft_sock_get_eval_cgroupv2(dest, pkt, priv->level)) {
-+		if (!nft_sock_get_eval_cgroupv2(dest, sk, pkt, priv->level)) {
- 			regs->verdict.code = NFT_BREAK;
- 			return;
- 		}
+ static inline void dmadesc_set_length_status(struct bcmgenet_priv *priv,
 -- 
 2.35.1
 

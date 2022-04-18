@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C422505FFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A26D7505FFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233737AbiDRW5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44366 "EHLO
+        id S233424AbiDRW4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233497AbiDRW4t (ORCPT
+        with ESMTP id S233483AbiDRW4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 18:56:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCDE2CE3B;
-        Mon, 18 Apr 2022 15:54:04 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 627B92CE20;
+        Mon, 18 Apr 2022 15:54:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17885B81148;
-        Mon, 18 Apr 2022 22:54:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E70AC385B6;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 779E161037;
+        Mon, 18 Apr 2022 22:54:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C13C385B9;
         Mon, 18 Apr 2022 22:54:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650322441;
-        bh=7YceAtQ4xCGuX9O3QcLmd4DKQm9RucoBz1BbPwEutSg=;
+        bh=hK5x6BVv25qP8BKNXoIb9LDR8AFOXkO1p5pr+bQzLFU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZmMN9xvPQderK9vVByZh5rBt/vyyHCPUQuUl6ftiTHVZ/2t43QFA+9TIRY5gm7jQX
-         CPayMZBHu5nKUzvMsIwSiEwjHqMlCDjWX1u37LzOpm9cw8vAl57hZ81tFiTA01+ZrD
-         Yo0fSZnkM+YE4fp04aoqH2qaY+PBW1Q3AMuxE+nu2cgIgikUJZwNgunlyqr0LnUUn9
-         rG2Mg8O7ChLolIdsuAwmhTjPXCm/4xwbytAmGXwmrdYhII1kadckulN//W1IQ/vwYm
-         STPglXypdkND0e9CillyEdx7/yUbs2bkaGajISr/Hfs1JUe1QoTOBccNGqON6w507o
-         XhsWqF3iozXMw==
+        b=Maic1LuAc80j57STgy7M0pyeJzX0a0C1VVbSKtTsh+079xE+aljXM6mk7Hqsx6ECA
+         NZjLS4axQBYrFAY34jG7MWH3loaP6nFvMDbUP81auvSKrwA/59Y6Je0ng4u04YcAwa
+         re/pU06wwSXkeFGMS1QlTJME5q340n2ntNCBkd/SZwEicb7O8Nn23jQiR8/ZY7l+2i
+         Uv/f4U56agz3e70dhA9hzBooMgAQ2F7JIOP3ZGFTCeEyTWiRIqg0GMcF14UFTEk12a
+         wdhWcQrFf5ZP+HQSuSrIkwcVqP2LAe0ubWTJ2RVWnPFQ4anWYl2zlqRca7dAotBCvR
+         x+QPnAl/OvL9w==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id ECC905C121E; Mon, 18 Apr 2022 15:54:00 -0700 (PDT)
+        id EE8B15C12AB; Mon, 18 Apr 2022 15:54:00 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 08/11] srcu: Drop needless initialization of sdp in srcu_gp_start()
-Date:   Mon, 18 Apr 2022 15:53:56 -0700
-Message-Id: <20220418225359.3945217-8-paulmck@kernel.org>
+Subject: [PATCH rcu 09/11] rcu: Check for successful spawn of ->boost_kthread_task
+Date:   Mon, 18 Apr 2022 15:53:57 -0700
+Message-Id: <20220418225359.3945217-9-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
 References: <20220418225345.GA3945110@paulmck-ThinkPad-P17-Gen-1>
@@ -57,36 +57,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+From: Zqiang <qiang1.zhang@intel.com>
 
-Commit 9c7ef4c30f12 ("srcu: Make Tree SRCU able to operate without
-snp_node array") initializes the local variable sdp differently depending
-on the srcu's state in srcu_gp_start().  Either way, this initialization
-overwrites the value used when sdp is defined.
+For the spawning of the priority-boost kthreads can fail, improbable
+though this might seem.  This commit therefore refrains from attemoting
+to initiate RCU priority boosting when The ->boost_kthread_task pointer
+is NULL.
 
-This commit therefore drops this pointless definition-time initialization.
-Although there is no functional change, compiler code generation may
-be affected.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/srcutree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/rcu/tree_plugin.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 6833d8887181..e0ef018612a2 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -434,7 +434,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
-  */
- static void srcu_gp_start(struct srcu_struct *ssp)
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 176639c6215f..5c23aceecd62 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -1125,7 +1125,8 @@ static void rcu_initiate_boost(struct rcu_node *rnp, unsigned long flags)
+ 	__releases(rnp->lock)
  {
--	struct srcu_data *sdp = this_cpu_ptr(ssp->sda);
-+	struct srcu_data *sdp;
- 	int state;
- 
- 	lockdep_assert_held(&ACCESS_PRIVATE(ssp, lock));
+ 	raw_lockdep_assert_held_rcu_node(rnp);
+-	if (!rcu_preempt_blocked_readers_cgp(rnp) && rnp->exp_tasks == NULL) {
++	if (!rnp->boost_kthread_task ||
++	    (!rcu_preempt_blocked_readers_cgp(rnp) && !rnp->exp_tasks)) {
+ 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
+ 		return;
+ 	}
 -- 
 2.31.1.189.g2e36527f23
 

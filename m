@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDE85050AF
+	by mail.lfdr.de (Postfix) with ESMTP id 6837A5050B0
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238873AbiDRM1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:27:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38252 "EHLO
+        id S238879AbiDRM1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238495AbiDRMZm (ORCPT
+        with ESMTP id S234555AbiDRM0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:25:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CFB65DA;
-        Mon, 18 Apr 2022 05:19:50 -0700 (PDT)
+        Mon, 18 Apr 2022 08:26:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCB66AE77;
+        Mon, 18 Apr 2022 05:19:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8225460F0C;
-        Mon, 18 Apr 2022 12:19:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73B34C385A1;
-        Mon, 18 Apr 2022 12:19:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 74309B80EC1;
+        Mon, 18 Apr 2022 12:19:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC1E8C385A1;
+        Mon, 18 Apr 2022 12:19:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284390;
-        bh=X7qBUUgV1LaOs2vD6Ys+38lRH+s//Ob0CYGiP9aS3nI=;
+        s=korg; t=1650284393;
+        bh=hGsffzSflV0Zcd6vbMjc21DkqfkVDRAZ+jfyzuDs23Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UarzniptMGxljpM24c7syi3qq68HoojlR4B8kdSsAIFQVizA68fXbMUsYoMqd56T8
-         aoM0IwSUpA3ZmKLxTcp6eJJR20SIOXhdREaAlEXRB2ig/bLTVkFmsVWnaWkrUxLTJx
-         fBDqbSs+zZgDr2gD1iliYZavP4zGWN3njivvDUA4=
+        b=b2/BVx1QIbZnxtNU/YAv+AtZi6Pi1mFRUosIBWMiP4btDZJl00kSymkvt+WcWFjQI
+         3+EUP1yu9m09yemA+s82Pmz4OuG6wtxBBKnPGsUgNcAVC5av3kYYb/0V5Ggfh4tq2G
+         RCKsrNsNd3sdSJ1O/CUT9yM+AONpawZBzofL16sw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -37,9 +37,9 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Mike Christie <michael.christie@oracle.com>,
         "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 099/219] scsi: iscsi: Fix offload conn cleanup when iscsid restarts
-Date:   Mon, 18 Apr 2022 14:11:08 +0200
-Message-Id: <20220418121209.590264608@linuxfoundation.org>
+Subject: [PATCH 5.17 100/219] scsi: iscsi: Fix endpoint reuse regression
+Date:   Mon, 18 Apr 2022 14:11:09 +0200
+Message-Id: <20220418121209.637878903@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -59,21 +59,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Mike Christie <michael.christie@oracle.com>
 
-[ Upstream commit cbd2283aaf47fef4ded4b29124b1ef3beb515f3a ]
+[ Upstream commit 0aadafb5c34403a7cced1a8d61877048dc059f70 ]
 
-When userspace restarts during boot or upgrades it won't know about the
-offload driver's endpoint and connection mappings. iscsid will start by
-cleaning up the old session by doing a stop_conn call. Later, if we are
-able to create a new connection, we clean up the old endpoint during the
-binding stage. The problem is that if we do stop_conn before doing the
-ep_disconnect call offload, drivers can still be executing I/O. We then
-might free tasks from the under the card/driver.
+This patch fixes a bug where when using iSCSI offload we can free an
+endpoint while userspace still thinks it's active. That then causes the
+endpoint ID to be reused for a new connection's endpoint while userspace
+still thinks the ID is for the original connection. Userspace will then end
+up disconnecting a running connection's endpoint or trying to bind to
+another connection's endpoint.
 
-This moves the ep_disconnect call to before we do the stop_conn call for
-this case. It will then work and look like a normal recovery/cleanup
-procedure from the driver's point of view.
+This bug is a regression added in:
 
-Link: https://lore.kernel.org/r/20220408001314.5014-3-michael.christie@oracle.com
+Commit 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
+
+where we added a in kernel ep_disconnect call to fix a bug in:
+
+Commit 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in
+kernel space")
+
+where we would call stop_conn without having done ep_disconnect. This early
+ep_disconnect call will then free the endpoint and it's ID while userspace
+still thinks the ID is valid.
+
+Fix the early release of the ID by having the in kernel recovery code keep
+a reference to the endpoint until userspace has called into the kernel to
+finish cleaning up the endpoint/connection. It requires the previous commit
+"scsi: iscsi: Release endpoint ID when its freed" which moved the freeing
+of the ID until when the endpoint is released.
+
+Link: https://lore.kernel.org/r/20220408001314.5014-5-michael.christie@oracle.com
+Fixes: 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
 Tested-by: Manish Rangankar <mrangankar@marvell.com>
 Reviewed-by: Lee Duncan <lduncan@suse.com>
 Reviewed-by: Chris Leech <cleech@redhat.com>
@@ -81,89 +96,39 @@ Signed-off-by: Mike Christie <michael.christie@oracle.com>
 Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 48 +++++++++++++++++------------
- 1 file changed, 28 insertions(+), 20 deletions(-)
+ drivers/scsi/scsi_transport_iscsi.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 126f6f23bffa..03cda2da80ef 100644
+index 03cda2da80ef..4fa2fd7f4c72 100644
 --- a/drivers/scsi/scsi_transport_iscsi.c
 +++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2255,6 +2255,23 @@ static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
- 	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
- }
+@@ -2267,7 +2267,11 @@ static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
+ 		mutex_unlock(&conn->ep_mutex);
  
-+static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
-+					 struct iscsi_endpoint *ep,
-+					 bool is_active)
-+{
-+	/* Check if this was a conn error and the kernel took ownership */
-+	if (!test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
-+		iscsi_ep_disconnect(conn, is_active);
-+	} else {
-+		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
-+		mutex_unlock(&conn->ep_mutex);
-+
-+		flush_work(&conn->cleanup_work);
-+
-+		mutex_lock(&conn->ep_mutex);
-+	}
-+}
-+
- static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 			      struct iscsi_uevent *ev)
- {
-@@ -2275,6 +2292,16 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 		cancel_work_sync(&conn->cleanup_work);
- 		iscsi_stop_conn(conn, flag);
- 	} else {
+ 		flush_work(&conn->cleanup_work);
+-
 +		/*
-+		 * For offload, when iscsid is restarted it won't know about
-+		 * existing endpoints so it can't do a ep_disconnect. We clean
-+		 * it up here for userspace.
++		 * Userspace is now done with the EP so we can release the ref
++		 * iscsi_cleanup_conn_work_fn took.
 +		 */
-+		mutex_lock(&conn->ep_mutex);
-+		if (conn->ep)
-+			iscsi_if_disconnect_bound_ep(conn, conn->ep, true);
-+		mutex_unlock(&conn->ep_mutex);
-+
- 		/*
- 		 * Figure out if it was the kernel or userspace initiating this.
- 		 */
-@@ -3003,16 +3030,7 @@ static int iscsi_if_ep_disconnect(struct iscsi_transport *transport,
++		iscsi_put_endpoint(ep);
+ 		mutex_lock(&conn->ep_mutex);
+ 	}
+ }
+@@ -2342,6 +2346,12 @@ static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
+ 		return;
  	}
  
- 	mutex_lock(&conn->ep_mutex);
--	/* Check if this was a conn error and the kernel took ownership */
--	if (test_bit(ISCSI_CLS_CONN_BIT_CLEANUP, &conn->flags)) {
--		ISCSI_DBG_TRANS_CONN(conn, "flush kernel conn cleanup.\n");
--		mutex_unlock(&conn->ep_mutex);
--
--		flush_work(&conn->cleanup_work);
--		goto put_ep;
--	}
--
--	iscsi_ep_disconnect(conn, false);
-+	iscsi_if_disconnect_bound_ep(conn, ep, false);
- 	mutex_unlock(&conn->ep_mutex);
- put_ep:
- 	iscsi_put_endpoint(ep);
-@@ -3723,16 +3741,6 @@ static int iscsi_if_transport_conn(struct iscsi_transport *transport,
++	/*
++	 * Get a ref to the ep, so we don't release its ID until after
++	 * userspace is done referencing it in iscsi_if_disconnect_bound_ep.
++	 */
++	if (conn->ep)
++		get_device(&conn->ep->dev);
+ 	iscsi_ep_disconnect(conn, false);
  
- 	switch (nlh->nlmsg_type) {
- 	case ISCSI_UEVENT_BIND_CONN:
--		if (conn->ep) {
--			/*
--			 * For offload boot support where iscsid is restarted
--			 * during the pivot root stage, the ep will be intact
--			 * here when the new iscsid instance starts up and
--			 * reconnects.
--			 */
--			iscsi_ep_disconnect(conn, true);
--		}
--
- 		session = iscsi_session_lookup(ev->u.b_conn.sid);
- 		if (!session) {
- 			err = -EINVAL;
+ 	if (system_state != SYSTEM_RUNNING) {
 -- 
 2.35.1
 

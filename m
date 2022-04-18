@@ -2,49 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED1E15055D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45D05053DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242265AbiDRN1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59716 "EHLO
+        id S241191AbiDRNCy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:02:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240676AbiDRNCV (ORCPT
+        with ESMTP id S240404AbiDRMxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:21 -0400
+        Mon, 18 Apr 2022 08:53:21 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FD932052;
-        Mon, 18 Apr 2022 05:42:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3A4AF7E;
+        Mon, 18 Apr 2022 05:34:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 15A14B80EC0;
-        Mon, 18 Apr 2022 12:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53EC9C385A1;
-        Mon, 18 Apr 2022 12:42:19 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17A4CB80EC1;
+        Mon, 18 Apr 2022 12:34:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F90C385A7;
+        Mon, 18 Apr 2022 12:34:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285739;
-        bh=Ggr+6+C+2sIKH7fqo1v4Zh/JhyyIv7LXG1ueQsPg7b4=;
+        s=korg; t=1650285285;
+        bh=/XevgFNCFMbPaQIOU7/sUJWIr6xmrXGweCGgSVJZZgo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k5nOYffbBPTzlHOaUbMm6IgcX9NaYmHQvxJm7CLzsDWTpIqVYXH9OK8HHyiS+n+lJ
-         XrmEVRotZhYXzlnymOTXGVde6fwpuUb1Ar6hZ+oYNE4p11WFi4+Ol3ZSgafB6icadT
-         nQVPyHbpcVRMJWH2ka9XBYb9rAY3/2oC4yzmupDQ=
+        b=0cjAADgi4CgZ30HLiIDY1GJn2dXTJ8dzbqEExqR0nr0RwgFuN0aRvoI//Pt43ioV2
+         C1uYJM9H+TY9YJQgTN+htWBaFt0cfK7l+kt7PhWxHivJ46866MFNL6s1YusZQx45DH
+         h75wSDP9hMJmNtx3c18VFRU+6ieZztnACXdw7ac4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 01/63] memory: atmel-ebi: Fix missing of_node_put in atmel_ebi_probe
-Date:   Mon, 18 Apr 2022 14:12:58 +0200
-Message-Id: <20220418121134.249681245@linuxfoundation.org>
+        stable@vger.kernel.org, Tao Jin <tao-j@outlook.com>,
+        Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 159/189] ALSA: hda/realtek: add quirk for Lenovo Thinkpad X12 speakers
+Date:   Mon, 18 Apr 2022 14:12:59 +0200
+Message-Id: <20220418121206.758786496@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
-X-stable: review
-X-Patchwork-Hint: ignore
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -58,74 +54,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Tao Jin <tao-j@outlook.com>
 
-[ Upstream commit 6f296a9665ba5ac68937bf11f96214eb9de81baa ]
+commit 264fb03497ec1c7841bba872571bcd11beed57a7 upstream.
 
-The device_node pointer is returned by of_parse_phandle() with refcount
-incremented. We should use of_node_put() on it when done.
+For this specific device on Lenovo Thinkpad X12 tablet, the verbs were
+dumped by qemu running a guest OS that init this codec properly.
+After studying the dump, it turns out that
+the same quirk used by the other Lenovo devices can be reused.
 
-Fixes: 87108dc78eb8 ("memory: atmel-ebi: Enable the SMC clock if specified")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
-Link: https://lore.kernel.org/r/20220309110144.22412-1-linmq006@gmail.com
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The patch was tested working against the mainline kernel.
+
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Tao Jin <tao-j@outlook.com>
+Link: https://lore.kernel.org/r/CO6PR03MB6241CD73310B37858FE64C85E1E89@CO6PR03MB6241.namprd03.prod.outlook.com
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/memory/atmel-ebi.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
+ sound/pci/hda/patch_realtek.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/memory/atmel-ebi.c b/drivers/memory/atmel-ebi.c
-index 89646896a183..6f9cf6270a43 100644
---- a/drivers/memory/atmel-ebi.c
-+++ b/drivers/memory/atmel-ebi.c
-@@ -545,20 +545,27 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	smc_np = of_parse_phandle(dev->of_node, "atmel,smc", 0);
- 
- 	ebi->smc.regmap = syscon_node_to_regmap(smc_np);
--	if (IS_ERR(ebi->smc.regmap))
--		return PTR_ERR(ebi->smc.regmap);
-+	if (IS_ERR(ebi->smc.regmap)) {
-+		ret = PTR_ERR(ebi->smc.regmap);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.layout = atmel_hsmc_get_reg_layout(smc_np);
--	if (IS_ERR(ebi->smc.layout))
--		return PTR_ERR(ebi->smc.layout);
-+	if (IS_ERR(ebi->smc.layout)) {
-+		ret = PTR_ERR(ebi->smc.layout);
-+		goto put_node;
-+	}
- 
- 	ebi->smc.clk = of_clk_get(smc_np, 0);
- 	if (IS_ERR(ebi->smc.clk)) {
--		if (PTR_ERR(ebi->smc.clk) != -ENOENT)
--			return PTR_ERR(ebi->smc.clk);
-+		if (PTR_ERR(ebi->smc.clk) != -ENOENT) {
-+			ret = PTR_ERR(ebi->smc.clk);
-+			goto put_node;
-+		}
- 
- 		ebi->smc.clk = NULL;
- 	}
-+	of_node_put(smc_np);
- 	ret = clk_prepare_enable(ebi->smc.clk);
- 	if (ret)
- 		return ret;
-@@ -609,6 +616,10 @@ static int atmel_ebi_probe(struct platform_device *pdev)
- 	}
- 
- 	return of_platform_populate(np, NULL, NULL, dev);
-+
-+put_node:
-+	of_node_put(smc_np);
-+	return ret;
- }
- 
- static __maybe_unused int atmel_ebi_resume(struct device *dev)
--- 
-2.35.1
-
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9060,6 +9060,7 @@ static const struct snd_pci_quirk alc269
+ 	SND_PCI_QUIRK(0x17aa, 0x505d, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x505f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x5062, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
++	SND_PCI_QUIRK(0x17aa, 0x508b, "Thinkpad X12 Gen 1", ALC287_FIXUP_LEGION_15IMHG05_SPEAKERS),
+ 	SND_PCI_QUIRK(0x17aa, 0x5109, "Thinkpad", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
+ 	SND_PCI_QUIRK(0x17aa, 0x511e, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
+ 	SND_PCI_QUIRK(0x17aa, 0x511f, "Thinkpad", ALC298_FIXUP_TPT470_DOCK),
 
 

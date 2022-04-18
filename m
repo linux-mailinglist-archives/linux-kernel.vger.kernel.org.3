@@ -2,44 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F02315058AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3A485058CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240981AbiDROK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:10:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S245315AbiDROKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:10:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244276AbiDRNyk (ORCPT
+        with ESMTP id S244386AbiDRNz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:54:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C1E49909;
-        Mon, 18 Apr 2022 06:04:31 -0700 (PDT)
+        Mon, 18 Apr 2022 09:55:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA57C49C93;
+        Mon, 18 Apr 2022 06:04:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF57F60B6E;
-        Mon, 18 Apr 2022 13:04:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1BF9C385A1;
-        Mon, 18 Apr 2022 13:04:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D7CEB80D9C;
+        Mon, 18 Apr 2022 13:04:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCA79C385A1;
+        Mon, 18 Apr 2022 13:04:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287070;
-        bh=dg3+yoGPi8qGBLxN0RWRW4Fy4x8tFrAICEJV8MCbabA=;
+        s=korg; t=1650287073;
+        bh=wzvb9FIoUFC6bSJa/l8aijFtIo9uOpgHeZG/hc/Xuxg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=if7X9XdvETTzW7vWDo/PV0xKiXdiEm4yNGRnuC3OIzega0BsPm4UdWfMrM+CCTSiy
-         G0EICCDC6kjUYBI3u+5UTFvgjOiuB5+G0Q0yKPkHFM1hFDPWoHtVrVdIqblB3LifMV
-         O3ukM8+TRLJQlr+hScfjK4KyTiW9lh2lXlF80Djo=
+        b=yzp9XGLXr8xEYFwlHAtZ175JRUtVpn3MHPhmCxxMKsYupYvyxnQDdl2sK/2DzHHS6
+         ncfEcnVbl3qy/trBYZBT8p5pi6XOG3ZuqnU0z6HTQwFpZTnM5rVshjnQarVqqwuJY8
+         15b20ovXpzqMpE1dtrKqhmpIDC+DYcvw084++v5Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?D=C4=81vis=20Mos=C4=81ns?= <davispuh@gmail.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org, Brandon Wyman <bjwyman@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 049/218] crypto: ccp - ccp_dmaengine_unregister release dma channels
-Date:   Mon, 18 Apr 2022 14:11:55 +0200
-Message-Id: <20220418121201.014736647@linuxfoundation.org>
+Subject: [PATCH 4.9 050/218] hwmon: (pmbus) Add Vin unit off handling
+Date:   Mon, 18 Apr 2022 14:11:56 +0200
+Message-Id: <20220418121201.043754449@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -57,64 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dāvis Mosāns <davispuh@gmail.com>
+From: Brandon Wyman <bjwyman@gmail.com>
 
-[ Upstream commit 54cce8ecb9254f971b40a72911c6da403720a2d2 ]
+[ Upstream commit a5436af598779219b375c1977555c82def1c35d0 ]
 
-ccp_dmaengine_register adds dma_chan->device_node to dma_dev->channels list
-but ccp_dmaengine_unregister didn't remove them.
-That can cause crashes in various dmaengine methods that tries to use dma_dev->channels
+If there is an input undervoltage fault, reported in STATUS_INPUT
+command response, there is quite likely a "Unit Off For Insufficient
+Input Voltage" condition as well.
 
-Fixes: 58ea8abf4904 ("crypto: ccp - Register the CCP as a DMA...")
-Signed-off-by: Dāvis Mosāns <davispuh@gmail.com>
-Acked-by: John Allen <john.allen@amd.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
+attributes to include both bits in the mask for clearing faults.
+
+If an input undervoltage fault occurs, causing a unit off for
+insufficient input voltage, but the unit is off bit is not cleared, the
+STATUS_WORD will not be updated to clear the input fault condition.
+Including the unit is off bit (bit 3) allows for the input fault
+condition to completely clear.
+
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+Link: https://lore.kernel.org/r/20220317232123.2103592-1-bjwyman@gmail.com
+Fixes: b4ce237b7f7d3 ("hwmon: (pmbus) Introduce infrastructure to detect sensors and limit registers")
+[groeck: Dropped unnecessary ()]
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/ccp/ccp-dmaengine.c | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ drivers/hwmon/pmbus/pmbus.h      | 1 +
+ drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-index c4581510c3a1..6f9e228fc8ad 100644
---- a/drivers/crypto/ccp/ccp-dmaengine.c
-+++ b/drivers/crypto/ccp/ccp-dmaengine.c
-@@ -621,6 +621,20 @@ static int ccp_terminate_all(struct dma_chan *dma_chan)
- 	return 0;
- }
- 
-+static void ccp_dma_release(struct ccp_device *ccp)
-+{
-+	struct ccp_dma_chan *chan;
-+	struct dma_chan *dma_chan;
-+	unsigned int i;
-+
-+	for (i = 0; i < ccp->cmd_q_count; i++) {
-+		chan = ccp->ccp_dma_chan + i;
-+		dma_chan = &chan->dma_chan;
-+		tasklet_kill(&chan->cleanup_tasklet);
-+		list_del_rcu(&dma_chan->device_node);
-+	}
-+}
-+
- int ccp_dmaengine_register(struct ccp_device *ccp)
- {
- 	struct ccp_dma_chan *chan;
-@@ -715,6 +729,7 @@ int ccp_dmaengine_register(struct ccp_device *ccp)
- 	return 0;
- 
- err_reg:
-+	ccp_dma_release(ccp);
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 
- err_cache:
-@@ -728,6 +743,7 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
- 	struct dma_device *dma_dev = &ccp->dma_dev;
- 
- 	dma_async_device_unregister(dma_dev);
-+	ccp_dma_release(ccp);
- 
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 	kmem_cache_destroy(ccp->dma_cmd_cache);
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index bfcb13bae34b..8b6acb7497e2 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -262,6 +262,7 @@ enum pmbus_regs {
+ /*
+  * STATUS_VOUT, STATUS_INPUT
+  */
++#define PB_VOLTAGE_VIN_OFF		BIT(3)
+ #define PB_VOLTAGE_UV_FAULT		BIT(4)
+ #define PB_VOLTAGE_UV_WARNING		BIT(5)
+ #define PB_VOLTAGE_OV_WARNING		BIT(6)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index ed8c0d276388..a662702632a8 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1133,7 +1133,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
+ 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
+ 		.attr = "lcrit",
+ 		.alarm = "lcrit_alarm",
+-		.sbit = PB_VOLTAGE_UV_FAULT,
++		.sbit = PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF,
+ 	}, {
+ 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
+ 		.attr = "max",
 -- 
 2.34.1
 

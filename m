@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BE035051C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D41450524D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240910AbiDRMjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51070 "EHLO
+        id S232676AbiDRMoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239817AbiDRMda (ORCPT
+        with ESMTP id S239244AbiDRMfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66C71BE8C;
-        Mon, 18 Apr 2022 05:26:49 -0700 (PDT)
+        Mon, 18 Apr 2022 08:35:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8688620BDC;
+        Mon, 18 Apr 2022 05:27:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7677BB80EC1;
-        Mon, 18 Apr 2022 12:26:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BA15C385A8;
-        Mon, 18 Apr 2022 12:26:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A114660FB6;
+        Mon, 18 Apr 2022 12:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40E2C385A1;
+        Mon, 18 Apr 2022 12:27:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284807;
-        bh=F7jFz2PUQMud+q2P4/1QywOPlW8/vTq6rZs6faxrbOw=;
+        s=korg; t=1650284842;
+        bh=xoOqNW8QnXGo22oABOGmUCbKg4y5PZ8xL4qAa94Km+A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dFFYGJYVj8Eimic9Jl1OZlbN/vltusj/Nlt0MVd8Cinc223PzLAYYPCuUSPCGHhti
-         5NKkOoLT0ui3pAblp59Il0FQYLpnRm1gNC7gnu8oAI1YbiXDDzzmLqRT4aB+w7Sbbq
-         fRQYf5qv1rRLfXSkhhpuphKsRsgdmWM5epspNjDo=
+        b=dIpWT/kiS0n65dfSvHSLfVej3QTKbAt1gPk5XdkSNX58pWjDOaslbKU2r6U0dzMlH
+         yWpNiyZPrjOmDRAkq7su3dw6kWXEMFTjk4RG6RcGjk3goePAqtlD1NzoQHakGlFl5i
+         WK+JUHwIXIJlMR695NLx/WZdYiazzJiHiRLis5Os=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Richard Gong <richard.gong@amd.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 007/189] ACPI: processor idle: Allow playing dead in C3 state
-Date:   Mon, 18 Apr 2022 14:10:27 +0200
-Message-Id: <20220418121200.641255207@linuxfoundation.org>
+        stable@vger.kernel.org, Woody Suwalski <wsuwalski@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Subject: [PATCH 5.15 008/189] ACPI: processor: idle: fix lockup regression on 32-bit ThinkPad T40
+Date:   Mon, 18 Apr 2022 14:10:28 +0200
+Message-Id: <20220418121200.682225683@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
 References: <20220418121200.312988959@linuxfoundation.org>
@@ -56,37 +56,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Gong <richard.gong@amd.com>
+From: Woody Suwalski <wsuwalski@gmail.com>
 
-commit d6b88ce2eb9d2698eb24451eb92c0a1649b17bb1 upstream.
+commit bfe55a1f7fd6bfede16078bf04c6250fbca11588 upstream.
 
-When some cores are disabled on AMD platforms, the system will no longer
-be able to enter suspend-to-idle s0ix.
+Add and ACPI idle power level limit for 32-bit ThinkPad T40.
 
-Update to allow playing dead in C3 state so that the CPUs can enter the
-deepest state on AMD platforms.
+There is a regression on T40 introduced by commit d6b88ce2, starting
+with kernel 5.16:
 
-BugLink: https://gitlab.freedesktop.org/drm/amd/-/issues/1708
-Suggested-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Richard Gong <richard.gong@amd.com>
-[ rjw: Fixed coding style ]
+commit d6b88ce2eb9d2698eb24451eb92c0a1649b17bb1
+Author: Richard Gong <richard.gong@amd.com>
+Date:   Wed Sep 22 08:31:16 2021 -0500
+
+  ACPI: processor idle: Allow playing dead in C3 state
+
+The above patch is trying to enter C3 state during init, what is causing
+a T40 system freeze. I have not found a similar issue on any other of my
+32-bit machines.
+
+The fix is to add another exception to the processor_power_dmi_table[] list.
+As a result the dmesg shows as expected:
+
+[2.155398] ACPI: IBM ThinkPad T40 detected - limiting to C2 max_cstate. Override with "processor.max_cstate=9"
+[2.155404] ACPI: processor limited to max C-state 2
+
+The fix is trivial and affects only vintage T40 systems.
+
+Fixes: d6b88ce2eb9d ("CPI: processor idle: Allow playing dead in C3 state")
+Signed-off-by: Woody Suwalski <wsuwalski@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Cc: 5.16+ <stable@vger.kernel.org> # 5.16+
+[ rjw: New subject ]
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Cc: "Limonciello, Mario" <Mario.Limonciello@amd.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/processor_idle.c |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/acpi/processor_idle.c |    5 +++++
+ 1 file changed, 5 insertions(+)
 
 --- a/drivers/acpi/processor_idle.c
 +++ b/drivers/acpi/processor_idle.c
-@@ -789,7 +789,8 @@ static int acpi_processor_setup_cstates(
- 		state->enter = acpi_idle_enter;
+@@ -95,6 +95,11 @@ static const struct dmi_system_id proces
+ 	  DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK Computer Inc."),
+ 	  DMI_MATCH(DMI_PRODUCT_NAME,"L8400B series Notebook PC")},
+ 	 (void *)1},
++	/* T40 can not handle C3 idle state */
++	{ set_max_cstate, "IBM ThinkPad T40", {
++	  DMI_MATCH(DMI_SYS_VENDOR, "IBM"),
++	  DMI_MATCH(DMI_PRODUCT_NAME, "23737CU")},
++	 (void *)2},
+ 	{},
+ };
  
- 		state->flags = 0;
--		if (cx->type == ACPI_STATE_C1 || cx->type == ACPI_STATE_C2) {
-+		if (cx->type == ACPI_STATE_C1 || cx->type == ACPI_STATE_C2 ||
-+		    cx->type == ACPI_STATE_C3) {
- 			state->enter_dead = acpi_idle_play_dead;
- 			drv->safe_state_index = count;
- 		}
 
 

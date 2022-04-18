@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6FEA505781
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BE4505181
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245750AbiDRNyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41348 "EHLO
+        id S239198AbiDRMfE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244847AbiDRNa6 (ORCPT
+        with ESMTP id S239584AbiDRM2e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:58 -0400
+        Mon, 18 Apr 2022 08:28:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A681EC62;
-        Mon, 18 Apr 2022 05:56:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C771FCFC;
+        Mon, 18 Apr 2022 05:22:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1344360FC6;
-        Mon, 18 Apr 2022 12:56:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F60C385A1;
-        Mon, 18 Apr 2022 12:56:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E383D60F0C;
+        Mon, 18 Apr 2022 12:22:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCA1C385A7;
+        Mon, 18 Apr 2022 12:22:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286562;
-        bh=UxXYWUWORjtQSorJqBeJY6xegOta65KAaBiDjKZsXvQ=;
+        s=korg; t=1650284527;
+        bh=Ac1i+RF0ABR8FrSNXf/01Y/H4o1qgHwU85zwiKBQmvw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kmo10Zy7P8ofeELkr/5+r80TC2mdTIcw/QM/Dzr2BdmeX7aSiHLdgZOBWj+eRZwfe
-         c8wq9K8sxGuzHKAOlpGihlStzSrwyBNUTDitkx+e+oelWKgrKImdyb6qLpMZL6qH+s
-         IOWEl+AqIPpH8ky/tcN2EAfLUFV3qlxrvJp/O9eI=
+        b=H/clvQQ73WMn2pudcLsAvAFoLGiFr6OBStkvmp8zYO1+MnG0tvfx1a0BJRQdKqYIc
+         HDRpfHvVO8u4zqouHgMbbPWA32ILjxD4iXznPj9gDNGdoJiwp8cy9cZIwxVq+BISWs
+         6TlJpwAPX96lLO3hAlJYdvZTzixsxe/TeISy41Lk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 133/284] serial: 8250: Fix race condition in RTS-after-send handling
+        stable@vger.kernel.org, Bodo Stroesser <bostroesser@gmail.com>,
+        Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 145/219] scsi: target: tcmu: Fix possible page UAF
 Date:   Mon, 18 Apr 2022 14:11:54 +0200
-Message-Id: <20220418121215.122782309@linuxfoundation.org>
+Message-Id: <20220418121210.948801997@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
 
-[ Upstream commit dedab69fd650ea74710b2e626e63fd35584ef773 ]
+[ Upstream commit a6968f7a367f128d120447360734344d5a3d5336 ]
 
-Set em485->active_timer = NULL isn't always enough to take out the stop
-timer. While there is a check that it acts in the right state (i.e.
-waiting for RTS-after-send to pass after sending some chars) but the
-following might happen:
+tcmu_try_get_data_page() looks up pages under cmdr_lock, but it does not
+take refcount properly and just returns page pointer. When
+tcmu_try_get_data_page() returns, the returned page may have been freed by
+tcmu_blocks_release().
 
- - CPU1: some chars send, shifter becomes empty, stop tx timer armed
- - CPU0: more chars send before RTS-after-send expired
- - CPU0: shifter empty irq, port lock taken
- - CPU1: tx timer triggers, waits for port lock
- - CPU0: em485->active_timer = &em485->stop_tx_timer, hrtimer_start(),
-   releases lock()
- - CPU1: get lock, see em485->active_timer == &em485->stop_tx_timer,
-   tear down RTS too early
+We need to get_page() under cmdr_lock to avoid concurrent
+tcmu_blocks_release().
 
-This fix bases on research done by Steffen Trumtrar.
-
-Fixes: b86f86e8e7c5 ("serial: 8250: fix potential deadlock in rs485-mode")
-Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-Link: https://lore.kernel.org/r/20220215160236.344236-1-u.kleine-koenig@pengutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Link: https://lore.kernel.org/r/20220311132206.24515-1-xiaoguang.wang@linux.alibaba.com
+Reviewed-by: Bodo Stroesser <bostroesser@gmail.com>
+Signed-off-by: Xiaoguang Wang <xiaoguang.wang@linux.alibaba.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/tty/serial/8250/8250_port.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ drivers/target/target_core_user.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 7ac6bb38948f..9758d3b0c9fc 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -1596,6 +1596,18 @@ static inline void start_tx_rs485(struct uart_port *port)
- 	if (!(up->port.rs485.flags & SER_RS485_RX_DURING_TX))
- 		serial8250_stop_rx(&up->port);
+diff --git a/drivers/target/target_core_user.c b/drivers/target/target_core_user.c
+index 7b2a89a67cdb..06a5c4086551 100644
+--- a/drivers/target/target_core_user.c
++++ b/drivers/target/target_core_user.c
+@@ -1820,6 +1820,7 @@ static struct page *tcmu_try_get_data_page(struct tcmu_dev *udev, uint32_t dpi)
+ 	mutex_lock(&udev->cmdr_lock);
+ 	page = xa_load(&udev->data_pages, dpi);
+ 	if (likely(page)) {
++		get_page(page);
+ 		mutex_unlock(&udev->cmdr_lock);
+ 		return page;
+ 	}
+@@ -1876,6 +1877,7 @@ static vm_fault_t tcmu_vma_fault(struct vm_fault *vmf)
+ 		/* For the vmalloc()ed cmd area pages */
+ 		addr = (void *)(unsigned long)info->mem[mi].addr + offset;
+ 		page = vmalloc_to_page(addr);
++		get_page(page);
+ 	} else {
+ 		uint32_t dpi;
  
-+	/*
-+	 * While serial8250_em485_handle_stop_tx() is a noop if
-+	 * em485->active_timer != &em485->stop_tx_timer, it might happen that
-+	 * the timer is still armed and triggers only after the current bunch of
-+	 * chars is send and em485->active_timer == &em485->stop_tx_timer again.
-+	 * So cancel the timer. There is still a theoretical race condition if
-+	 * the timer is already running and only comes around to check for
-+	 * em485->active_timer when &em485->stop_tx_timer is armed again.
-+	 */
-+	if (em485->active_timer == &em485->stop_tx_timer)
-+		hrtimer_try_to_cancel(&em485->stop_tx_timer);
-+
- 	em485->active_timer = NULL;
+@@ -1886,7 +1888,6 @@ static vm_fault_t tcmu_vma_fault(struct vm_fault *vmf)
+ 			return VM_FAULT_SIGBUS;
+ 	}
  
- 	mcr = serial8250_in_MCR(up);
+-	get_page(page);
+ 	vmf->page = page;
+ 	return 0;
+ }
 -- 
-2.34.1
+2.35.1
 
 
 

@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 851EC505958
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE595059FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345275AbiDROS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:18:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
+        id S1344813AbiDROaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245068AbiDRN62 (ORCPT
+        with ESMTP id S1345277AbiDROYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:58:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A3A2AE2E;
-        Mon, 18 Apr 2022 06:08:19 -0700 (PDT)
+        Mon, 18 Apr 2022 10:24:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB3E126AEE;
+        Mon, 18 Apr 2022 05:43:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B478660F9E;
-        Mon, 18 Apr 2022 13:08:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74576C385B4;
-        Mon, 18 Apr 2022 13:08:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41CE8B80E59;
+        Mon, 18 Apr 2022 12:42:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 856ADC385A7;
+        Mon, 18 Apr 2022 12:42:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287298;
-        bh=D/YXNBknLSD5FbZhi+bIICAcRornIujXow4ySW5P9AY=;
+        s=korg; t=1650285777;
+        bh=mZnOf9xUlXUv3+sormyT6OZbJz0K6TaEqpkoWtR7N0Y=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fz1f5ZYWygiG2/Zb/GHYhHQOk48jVGZCzQ/hjVox28EykHu1/F25GtReWChZrBR2s
-         cymkMtqWuMosiEXqnNd80iJX1vjeL8aVYrV4gmVgZz4t+8tesB+XcLZV9UD5ebmOGN
-         guL+WoWNsQFuRfLXNb9M0qytvqG4tsJVQXqMo6yU=
+        b=NKWvhM8pTNtJei8e+K9WGdo353TXzxNSvR+2ZQzXKq7vypUR4dW5UF4rwtpnpsWGc
+         yRE57zgJ1rJh6SJSv3/MHDAyjNEtkHhfv8KBdxB4k5PRnvPdo1HBPVLhloSJn7nlhq
+         OQ/9PYYp4NMgdBHZN20rlNk2TyufoCT54lTeo4aU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
-        Jason Wessel <jason.wessel@windriver.com>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        Randy Dunlap <rdunlap@infradead.org>,
+        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 117/218] kgdbts: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:13:03 +0200
-Message-Id: <20220418121202.942462560@linuxfoundation.org>
+Subject: [PATCH 5.4 07/63] net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+Date:   Mon, 18 Apr 2022 14:13:04 +0200
+Message-Id: <20220418121134.637335641@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+References: <20220418121134.149115109@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -60,65 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Dinh Nguyen <dinguyen@kernel.org>
 
-[ Upstream commit 96c9e802c64014a7716865332d732cc9c7f24593 ]
+[ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
 
-__setup() handlers should return 1 to indicate that the boot option
-has been handled. A return of 0 causes the boot option/value to be
-listed as an Unknown kernel parameter and added to init's (limited)
-environment strings. So return 1 from kgdbts_option_setup().
+When using a fixed-link, the altr_tse_pcs driver crashes
+due to null-pointer dereference as no phy_device is provided to
+tse_pcs_fix_mac_speed function. Fix this by adding a check for
+phy_dev before calling the tse_pcs_fix_mac_speed() function.
 
-Unknown kernel command line parameters "BOOT_IMAGE=/boot/bzImage-517rc7
-  kgdboc=kbd kgdbts=", will be passed to user space.
+Also clean up the tse_pcs_fix_mac_speed function a bit. There is
+no need to check for splitter_base and sgmii_adapter_base
+because the driver will fail if these 2 variables are not
+derived from the device tree.
 
- Run /sbin/init as init process
-   with arguments:
-     /sbin/init
-   with environment:
-     HOME=/
-     TERM=linux
-     BOOT_IMAGE=/boot/bzImage-517rc7
-     kgdboc=kbd
-     kgdbts=
-
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Fixes: e8d31c204e36 ("kgdb: add kgdb internal test suite")
-Cc: kgdb-bugreport@lists.sourceforge.net
-Cc: Jason Wessel <jason.wessel@windriver.com>
-Cc: Daniel Thompson <daniel.thompson@linaro.org>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/r/20220308033255.22118-1-rdunlap@infradead.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: fb3bbdb85989 ("net: ethernet: Add TSE PCS support to dwmac-socfpga")
+Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/misc/kgdbts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |  8 --------
+ drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |  4 ++++
+ drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 13 +++++--------
+ 3 files changed, 9 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/misc/kgdbts.c b/drivers/misc/kgdbts.c
-index ab2184003c29..d75686c1c6e8 100644
---- a/drivers/misc/kgdbts.c
-+++ b/drivers/misc/kgdbts.c
-@@ -1066,10 +1066,10 @@ static int kgdbts_option_setup(char *opt)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+index cd478d2cd871..00f6d347eaf7 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
+@@ -57,10 +57,6 @@
+ #define TSE_PCS_USE_SGMII_ENA				BIT(0)
+ #define TSE_PCS_IF_USE_SGMII				0x03
+ 
+-#define SGMII_ADAPTER_CTRL_REG				0x00
+-#define SGMII_ADAPTER_DISABLE				0x0001
+-#define SGMII_ADAPTER_ENABLE				0x0000
+-
+ #define AUTONEGO_LINK_TIMER				20
+ 
+ static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
+@@ -202,12 +198,8 @@ void tse_pcs_fix_mac_speed(struct tse_pcs *pcs, struct phy_device *phy_dev,
+ 			   unsigned int speed)
  {
- 	if (strlen(opt) >= MAX_CONFIG_LEN) {
- 		printk(KERN_ERR "kgdbts: config string too long\n");
--		return -ENOSPC;
-+		return 1;
+ 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
+-	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
+ 	u32 val;
+ 
+-	writew(SGMII_ADAPTER_ENABLE,
+-	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+-
+ 	pcs->autoneg = phy_dev->autoneg;
+ 
+ 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
+diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+index 442812c0a4bd..694ac25ef426 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
++++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
+@@ -10,6 +10,10 @@
+ #include <linux/phy.h>
+ #include <linux/timer.h>
+ 
++#define SGMII_ADAPTER_CTRL_REG		0x00
++#define SGMII_ADAPTER_ENABLE		0x0000
++#define SGMII_ADAPTER_DISABLE		0x0001
++
+ struct tse_pcs {
+ 	struct device *dev;
+ 	void __iomem *tse_pcs_base;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+index 70d41783329d..72e47621d27c 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
+@@ -18,9 +18,6 @@
+ 
+ #include "altr_tse_pcs.h"
+ 
+-#define SGMII_ADAPTER_CTRL_REG                          0x00
+-#define SGMII_ADAPTER_DISABLE                           0x0001
+-
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
+ #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
+@@ -62,16 +59,14 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+ {
+ 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
+ 	void __iomem *splitter_base = dwmac->splitter_base;
+-	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
+ 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
+ 	struct device *dev = dwmac->dev;
+ 	struct net_device *ndev = dev_get_drvdata(dev);
+ 	struct phy_device *phy_dev = ndev->phydev;
+ 	u32 val;
+ 
+-	if ((tse_pcs_base) && (sgmii_adapter_base))
+-		writew(SGMII_ADAPTER_DISABLE,
+-		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	writew(SGMII_ADAPTER_DISABLE,
++	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
+ 
+ 	if (splitter_base) {
+ 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
+@@ -93,7 +88,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
+ 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
  	}
- 	strcpy(config, opt);
--	return 0;
-+	return 1;
+ 
+-	if (tse_pcs_base && sgmii_adapter_base)
++	writew(SGMII_ADAPTER_ENABLE,
++	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	if (phy_dev)
+ 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
  }
  
- __setup("kgdbts=", kgdbts_option_setup);
 -- 
-2.34.1
+2.35.1
 
 
 

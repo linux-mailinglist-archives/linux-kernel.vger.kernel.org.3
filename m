@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6DB50507A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:23:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F90B505274
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238540AbiDRMZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S239519AbiDRMpD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:45:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238389AbiDRMY0 (ORCPT
+        with ESMTP id S239426AbiDRMg7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:24:26 -0400
+        Mon, 18 Apr 2022 08:36:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857A81FCC7;
-        Mon, 18 Apr 2022 05:19:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D89032229C;
+        Mon, 18 Apr 2022 05:27:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 009CF60F01;
-        Mon, 18 Apr 2022 12:19:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 148EBC385A1;
-        Mon, 18 Apr 2022 12:19:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ACAC560F09;
+        Mon, 18 Apr 2022 12:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E711C385A7;
+        Mon, 18 Apr 2022 12:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284345;
-        bh=B0VnKu5hWY8Nkmb9H9cq2QHkp/C1sAFGmLN4yP3jlG0=;
+        s=korg; t=1650284862;
+        bh=pJIq3ZxK6Arfm3K0LxRQSwADTbZlCO3y4SpsBHByZyA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ui5J+W08h5H+x6vBj3N1ML549K7BJSIVosPUfsKHCkBCLDZptizZmFf7ogz4zh6yU
-         5obLlUZ8gnaio/r3C6Uvac/H4SSq0LClk0wt41YSn5dyL5I5BNPGpFEy0muoXSuEiv
-         2q4om+kzWjWvWJ/kQSN6v8gKHg4Q9h2HkAoXODAM=
+        b=PvtLgziijeWKnnDbmRiH2agczg2/48LuhVu8cBaHct8yuEHEaoidPapy2yuh686Q/
+         Sli8bFWdPHXXLPiAj/gnyNYKyoJ85XgPKMXDfBix947At4PqT8hpCZtaiyOI9xTQ1J
+         SumTu2wY2NvbdOqBtk6BZ++cALE1J+REMsS7/x6s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 081/219] KVM: selftests: riscv: Set PTE A and D bits in VS-stage page table
-Date:   Mon, 18 Apr 2022 14:10:50 +0200
-Message-Id: <20220418121208.514660383@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 031/189] ALSA: emu10k1x: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:51 +0200
+Message-Id: <20220418121201.398105343@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anup Patel <apatel@ventanamicro.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit fac3725364397f9a40a101f089b86ea655a58d06 ]
+commit f37019b6bfe2e13cc536af0e6a42ed62005392ae upstream.
 
-Supporting hardware updates of PTE A and D bits is optional for any
-RISC-V implementation so current software strategy is to always set
-these bits in both G-stage (hypervisor) and VS-stage (guest kernel).
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-If PTE A and D bits are not set by software (hypervisor or guest)
-then RISC-V implementations not supporting hardware updates of these
-bits will cause traps even for perfectly valid PTEs.
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
 
-Based on above explanation, the VS-stage page table created by various
-KVM selftest applications is not correct because PTE A and D bits are
-not set. This patch fixes VS-stage page table programming of PTE A and
-D bits for KVM selftests.
-
-Fixes: 3e06cdf10520 ("KVM: selftests: Add initial support for RISC-V
-64-bit")
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Tested-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-Signed-off-by: Anup Patel <anup@brainfault.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 2b377c6b6012 ("ALSA: emu10k1x: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-13-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- tools/testing/selftests/kvm/include/riscv/processor.h | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ sound/pci/emu10k1/emu10k1x.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-index dc284c6bdbc3..eca5c622efd2 100644
---- a/tools/testing/selftests/kvm/include/riscv/processor.h
-+++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-@@ -101,7 +101,9 @@ static inline void set_reg(struct kvm_vm *vm, uint32_t vcpuid, uint64_t id,
- #define PGTBL_PTE_WRITE_SHIFT			2
- #define PGTBL_PTE_READ_MASK			0x0000000000000002ULL
- #define PGTBL_PTE_READ_SHIFT			1
--#define PGTBL_PTE_PERM_MASK			(PGTBL_PTE_EXECUTE_MASK | \
-+#define PGTBL_PTE_PERM_MASK			(PGTBL_PTE_ACCESSED_MASK | \
-+						 PGTBL_PTE_DIRTY_MASK | \
-+						 PGTBL_PTE_EXECUTE_MASK | \
- 						 PGTBL_PTE_WRITE_MASK | \
- 						 PGTBL_PTE_READ_MASK)
- #define PGTBL_PTE_VALID_MASK			0x0000000000000001ULL
+diff --git a/sound/pci/emu10k1/emu10k1x.c b/sound/pci/emu10k1/emu10k1x.c
+index c49c44dc1082..89043392f3ec 100644
+--- a/sound/pci/emu10k1/emu10k1x.c
++++ b/sound/pci/emu10k1/emu10k1x.c
+@@ -1491,8 +1491,8 @@ static int snd_emu10k1x_midi(struct emu10k1x *emu)
+ 	return 0;
+ }
+ 
+-static int snd_emu10k1x_probe(struct pci_dev *pci,
+-			      const struct pci_device_id *pci_id)
++static int __snd_emu10k1x_probe(struct pci_dev *pci,
++				const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -1554,6 +1554,12 @@ static int snd_emu10k1x_probe(struct pci_dev *pci,
+ 	return 0;
+ }
+ 
++static int snd_emu10k1x_probe(struct pci_dev *pci,
++			      const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_emu10k1x_probe(pci, pci_id));
++}
++
+ // PCI IDs
+ static const struct pci_device_id snd_emu10k1x_ids[] = {
+ 	{ PCI_VDEVICE(CREATIVE, 0x0006), 0 },	/* Dell OEM version (EMU10K1) */
 -- 
-2.35.1
+2.35.2
 
 
 

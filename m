@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8422E5052ED
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C49D505185
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239846AbiDRMxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S239246AbiDRMfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237028AbiDRMkR (ORCPT
+        with ESMTP id S239901AbiDRM3H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:40:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34491EC53;
-        Mon, 18 Apr 2022 05:31:52 -0700 (PDT)
+        Mon, 18 Apr 2022 08:29:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F30922BC6;
+        Mon, 18 Apr 2022 05:22:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89699B80ED6;
-        Mon, 18 Apr 2022 12:31:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8CFEC385A1;
-        Mon, 18 Apr 2022 12:31:49 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9B49F60F5E;
+        Mon, 18 Apr 2022 12:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A40AEC385A1;
+        Mon, 18 Apr 2022 12:22:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285110;
-        bh=ogGjmCDq5QrMaH3jBGzB1qxKHkMwVdOZIsCxhf3tPrk=;
+        s=korg; t=1650284568;
+        bh=XTrLvknlgVp4TlnwSCgBg+A1FlHeQZ95oTe5GNJz45A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+C3BQCtmfu4DZTinspYQW5HZpeHYTsxZre/XA30BgoB7sqwUjV9+xQhenYDOz1he
-         V9VQ1qWQo5vBkNk1DwLP558Z6wg7zmkfbvb1nAC38yeskhKV111npXFTS9MxhTi1lL
-         jvF7iL0Tb7Bxa2yQ3d/z/FzoaENsyx9v2eWr3BgE=
+        b=Gbs8/ZmuIJifBEP/IsaG8eUvUtHFNs4Qarf0pEbfGBC5m75W091lmyzhITSpOsakl
+         RU022U6aQ/0JXQJPlearfUojcfeE/fjm6Gywfo1SuXDWphOce0FFL75SNDqsI1jyr+
+         VK2yBQPVRnqFxn1pETbHMI9EOeifesiqSGNAAA6U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Filipe Manana <fdmanana@suse.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        David Sterba <dsterba@suse.com>,
+        stable@vger.kernel.org, Andy Chiu <andy.chiu@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 106/189] btrfs: fix fallocate to use file_modified to update permissions consistently
+Subject: [PATCH 5.17 157/219] net: axienet: setup mdio unconditionally
 Date:   Mon, 18 Apr 2022 14:12:06 +0200
-Message-Id: <20220418121203.510546204@linuxfoundation.org>
+Message-Id: <20220418121211.279923973@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,75 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Darrick J. Wong <djwong@kernel.org>
+From: Andy Chiu <andy.chiu@sifive.com>
 
-[ Upstream commit 05fd9564e9faf0f23b4676385e27d9405cef6637 ]
+[ Upstream commit d1c4f93e3f0a023024a6f022a61528c06cf1daa9 ]
 
-Since the initial introduction of (posix) fallocate back at the turn of
-the century, it has been possible to use this syscall to change the
-user-visible contents of files.  This can happen by extending the file
-size during a preallocation, or through any of the newer modes (punch,
-zero range).  Because the call can be used to change file contents, we
-should treat it like we do any other modification to a file -- update
-the mtime, and drop set[ug]id privileges/capabilities.
+The call to axienet_mdio_setup should not depend on whether "phy-node"
+pressents on the DT. Besides, since `lp->phy_node` is used if PHY is in
+SGMII or 100Base-X modes, move it into the if statement. And the next patch
+will remove `lp->phy_node` from driver's private structure and do an
+of_node_put on it right away after use since it is not used elsewhere.
 
-The VFS function file_modified() does all this for us if pass it a
-locked inode, so let's make fallocate drop permissions correctly.
-
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
-Signed-off-by: Darrick J. Wong <djwong@kernel.org>
-Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+Reviewed-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/file.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/fs/btrfs/file.c b/fs/btrfs/file.c
-index a1762363f61f..dc1e4d1b7291 100644
---- a/fs/btrfs/file.c
-+++ b/fs/btrfs/file.c
-@@ -2878,8 +2878,9 @@ int btrfs_replace_file_extents(struct btrfs_inode *inode,
- 	return ret;
- }
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 90d96eb79984..a960227f61da 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2072,15 +2072,14 @@ static int axienet_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto cleanup_clk;
  
--static int btrfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
-+static int btrfs_punch_hole(struct file *file, loff_t offset, loff_t len)
- {
-+	struct inode *inode = file_inode(file);
- 	struct btrfs_fs_info *fs_info = btrfs_sb(inode->i_sb);
- 	struct btrfs_root *root = BTRFS_I(inode)->root;
- 	struct extent_state *cached_state = NULL;
-@@ -2911,6 +2912,10 @@ static int btrfs_punch_hole(struct inode *inode, loff_t offset, loff_t len)
- 		goto out_only_mutex;
- 	}
- 
-+	ret = file_modified(file);
+-	lp->phy_node = of_parse_phandle(pdev->dev.of_node, "phy-handle", 0);
+-	if (lp->phy_node) {
+-		ret = axienet_mdio_setup(lp);
+-		if (ret)
+-			dev_warn(&pdev->dev,
+-				 "error registering MDIO bus: %d\n", ret);
+-	}
++	ret = axienet_mdio_setup(lp);
 +	if (ret)
-+		goto out_only_mutex;
++		dev_warn(&pdev->dev,
++			 "error registering MDIO bus: %d\n", ret);
 +
- 	lockstart = round_up(offset, btrfs_inode_sectorsize(BTRFS_I(inode)));
- 	lockend = round_down(offset + len,
- 			     btrfs_inode_sectorsize(BTRFS_I(inode))) - 1;
-@@ -3351,7 +3356,7 @@ static long btrfs_fallocate(struct file *file, int mode,
- 		return -EOPNOTSUPP;
- 
- 	if (mode & FALLOC_FL_PUNCH_HOLE)
--		return btrfs_punch_hole(inode, offset, len);
-+		return btrfs_punch_hole(file, offset, len);
- 
- 	/*
- 	 * Only trigger disk allocation, don't trigger qgroup reserve
-@@ -3373,6 +3378,10 @@ static long btrfs_fallocate(struct file *file, int mode,
- 			goto out;
- 	}
- 
-+	ret = file_modified(file);
-+	if (ret)
-+		goto out;
-+
- 	/*
- 	 * TODO: Move these two operations after we have checked
- 	 * accurate reserved space, or fallocate can still fail but
+ 	if (lp->phy_mode == PHY_INTERFACE_MODE_SGMII ||
+ 	    lp->phy_mode == PHY_INTERFACE_MODE_1000BASEX) {
++		lp->phy_node = of_parse_phandle(pdev->dev.of_node, "phy-handle", 0);
+ 		if (!lp->phy_node) {
+ 			dev_err(&pdev->dev, "phy-handle required for 1000BaseX/SGMII\n");
+ 			ret = -EINVAL;
 -- 
 2.35.1
 

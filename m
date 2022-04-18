@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EE1504EF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:41:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 170E6504EFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:45:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237786AbiDRKod (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 06:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49486 "EHLO
+        id S232950AbiDRKsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 06:48:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237725AbiDRKoO (ORCPT
+        with ESMTP id S230293AbiDRKsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 06:44:14 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6532E15FDB;
-        Mon, 18 Apr 2022 03:41:36 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23IAfVdV131013;
-        Mon, 18 Apr 2022 05:41:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650278491;
-        bh=zgzNCrg2jxb2fMhf7Xl7w052aCeYSvcx7BoVAy9SRiQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=ykLWveiV+78TsboNldA3tI2cVhRQXjNQwkBbfY/o4NJnuheTRE3d1KNcyThsgI59l
-         /PM9VNRNYEikYpgUyxIu2ZsLHBC/iX+eWIYGiXGcTbjjw4LVS1cjslBnqxzPrmm1GK
-         cV4b4BmYc0IoBiBV8Y7qV6UvtvkZNmub1g67XchU=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23IAfVfQ057749
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 18 Apr 2022 05:41:31 -0500
-Received: from DFLE109.ent.ti.com (10.64.6.30) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
- Apr 2022 05:41:30 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Mon, 18 Apr 2022 05:41:30 -0500
-Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23IAfTR2027159;
-        Mon, 18 Apr 2022 05:41:30 -0500
-From:   Puranjay Mohan <p-mohan@ti.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
-        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
-        <kishon@ti.com>
-Subject: [PATCH v3 5/5] remoteproc: pru: Configure firmware based on client setup
-Date:   Mon, 18 Apr 2022 16:11:18 +0530
-Message-ID: <20220418104118.12878-6-p-mohan@ti.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220418104118.12878-1-p-mohan@ti.com>
-References: <20220418104118.12878-1-p-mohan@ti.com>
+        Mon, 18 Apr 2022 06:48:02 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C855E165A6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:45:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650278723; x=1681814723;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=744tLKIExCR72Ev5c6z5jZdyZeGFpl/1RFTBjyh3hTg=;
+  b=RuD0mkr4rNl0xDrCI79OcjKsjrAUiNg8x8HEZB3xaYhgoASOJWW26CiC
+   TjvHiFsRNmuYFcY325/HS0Daz+qp0ZTrC7fEZ4pr7IYjC3FMyOyGjWccK
+   va7ENwcLjiam4Hu39kGDaTubjjYH3LNPbZnttlf94he7fF42dLTXrd+Vs
+   mFB4MVt4Nwwbo0StLM2E2XLMSTnOpFkpLBxXjtpkFcsVN0opkPOHtU8cG
+   /j2gJ2qH8G2NzUnYSVTviPdF8mkbrOBT9dCbGm141JkLp9zAlmJUtd6Ss
+   WKvTpjxYU85n/W8lqabR/xrcViuixe0Ta4x/ZvFtp+ylYZewCJzAYq6Zl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="323938258"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="323938258"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:45:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="726599788"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 03:45:22 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngOsj-0004YZ-Fw;
+        Mon, 18 Apr 2022 10:45:21 +0000
+Date:   Mon, 18 Apr 2022 18:44:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [norov:bitmap 45/47] include/linux/bitmap.h:615:32: warning:
+ incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long
+ long') to parameter of type 'const u64 *' (aka 'const unsigned long long
+ *'); take the address with &
+Message-ID: <202204181828.5E4IAlMk-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,90 +65,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+tree:   https://github.com/norov/linux bitmap
+head:   45a9e3feb171ccf077979b7ff6a0c6a732cfc17b
+commit: 1a21df17d726b4f3c19a148e10d09ec632603f1c [45/47] lib: add bitmap_{from,to}_arr64
+config: powerpc-mvme5100_defconfig (https://download.01.org/0day-ci/archive/20220418/202204181828.5E4IAlMk-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install powerpc cross compiling tool for clang build
+        # apt-get install binutils-powerpc-linux-gnu
+        # https://github.com/norov/linux/commit/1a21df17d726b4f3c19a148e10d09ec632603f1c
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap
+        git checkout 1a21df17d726b4f3c19a148e10d09ec632603f1c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc prepare
 
-Client device node property firmware-name is now used to configure
-firmware for the PRU instances. The default firmware is also
-restored once releasing the PRU resource.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Co-developed-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
----
- drivers/remoteproc/pru_rproc.c | 35 ++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
+All warnings (new ones prefixed by >>):
 
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index d06b763e995e..2977eb50631b 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -171,6 +171,23 @@ void pru_control_set_reg(struct pru_rproc *pru, unsigned int reg,
- 	spin_unlock_irqrestore(&pru->rmw_lock, flags);
- }
- 
-+/**
-+ * pru_rproc_set_firmware() - set firmware for a pru core
-+ * @rproc: the rproc instance of the PRU
-+ * @fw_name: the new firmware name, or NULL if default is desired
-+ *
-+ * Return: 0 on success, or errno in error case.
-+ */
-+static int pru_rproc_set_firmware(struct rproc *rproc, const char *fw_name)
-+{
-+	struct pru_rproc *pru = rproc->priv;
-+
-+	if (!fw_name)
-+		fw_name = pru->fw_name;
-+
-+	return rproc_set_firmware(rproc, fw_name);
-+}
-+
- static struct rproc *__pru_rproc_get(struct device_node *np, int index)
- {
- 	struct device_node *rproc_np = NULL;
-@@ -231,6 +248,8 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct rproc *rproc;
- 	struct pru_rproc *pru;
- 	struct device *dev;
-+	const char *fw_name;
-+	int ret;
- 
- 	try_module_get(THIS_MODULE);
- 
-@@ -257,7 +276,21 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-+	ret = of_property_read_string_index(np, "firmware-name", index,
-+					    &fw_name);
-+	if (!ret) {
-+		ret = pru_rproc_set_firmware(rproc, fw_name);
-+		if (ret) {
-+			dev_err(dev, "failed to set firmware: %d\n", ret);
-+			goto err;
-+		}
-+	}
-+
- 	return rproc;
-+
-+err:
-+	pru_rproc_put(rproc);
-+	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(pru_rproc_get);
- 
-@@ -277,6 +310,8 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pru_rproc_set_firmware(rproc, NULL);
-+
- 	mutex_lock(&pru->lock);
- 
- 	if (!pru->client_np) {
+   In file included from arch/powerpc/kernel/asm-offsets.c:12:
+   In file included from include/linux/compat.h:14:
+   In file included from include/linux/sem.h:5:
+   In file included from include/uapi/linux/sem.h:5:
+   In file included from include/linux/ipc.h:5:
+   In file included from include/linux/spinlock.h:62:
+   In file included from include/linux/lockdep.h:14:
+   In file included from include/linux/smp.h:13:
+   In file included from include/linux/cpumask.h:12:
+>> include/linux/bitmap.h:615:32: warning: incompatible integer to pointer conversion passing 'u64' (aka 'unsigned long long') to parameter of type 'const u64 *' (aka 'const unsigned long long *'); take the address with & [-Wint-conversion]
+           return bitmap_from_arr64(dst, mask, 64);
+                                         ^~~~
+                                         &
+   include/linux/bitmap.h:300:58: note: passing argument to parameter 'buf' here
+   void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+                                                            ^
+   1 warning generated.
+   /usr/bin/ld: unrecognised emulation mode: elf32ppclinux
+   Supported emulations: elf_x86_64 elf32_x86_64 elf_i386 elf_iamcu elf_l1om elf_k1om i386pep i386pe
+   clang-15: error: linker command failed with exit code 1 (use -v to see invocation)
+   make[2]: *** [arch/powerpc/kernel/vdso/Makefile:65: arch/powerpc/kernel/vdso/vdso32.so.dbg] Error 1
+   make[2]: Target 'include/generated/vdso32-offsets.h' not remade because of errors.
+   make[1]: *** [arch/powerpc/Makefile:423: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +615 include/linux/bitmap.h
+
+   602	
+   603	/**
+   604	 * bitmap_from_u64 - Check and swap words within u64.
+   605	 *  @mask: source bitmap
+   606	 *  @dst:  destination bitmap
+   607	 *
+   608	 * In 32-bit Big Endian kernel, when using ``(u32 *)(&val)[*]``
+   609	 * to read u64 mask, we will get the wrong word.
+   610	 * That is ``(u32 *)(&val)[0]`` gets the upper 32 bits,
+   611	 * but we expect the lower 32-bits of u64.
+   612	 */
+   613	static inline void bitmap_from_u64(unsigned long *dst, u64 mask)
+   614	{
+ > 615		return bitmap_from_arr64(dst, mask, 64);
+   616	}
+   617	
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

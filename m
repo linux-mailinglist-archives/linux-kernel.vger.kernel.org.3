@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566385054BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5436850577C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241406AbiDRNHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
+        id S245529AbiDRNxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240320AbiDRMzf (ORCPT
+        with ESMTP id S244788AbiDRNay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85685BB8;
-        Mon, 18 Apr 2022 05:37:20 -0700 (PDT)
+        Mon, 18 Apr 2022 09:30:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52801C125;
+        Mon, 18 Apr 2022 05:55:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 247066119B;
-        Mon, 18 Apr 2022 12:37:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC941C385A7;
-        Mon, 18 Apr 2022 12:37:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 79889B80E44;
+        Mon, 18 Apr 2022 12:55:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8598C385A1;
+        Mon, 18 Apr 2022 12:55:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285439;
-        bh=wLJ/DC32A5+B2P/ZG4v9x8erR2BC+5mrdsXVZbjlQ2g=;
+        s=korg; t=1650286522;
+        bh=LU3YU8Is+ClPb+b7Qja4JiTHOQA7dUoTh51HHJU+U0I=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=zrgMKGLckp2tACZzR415plVFLVp4zEuup8s6VrEICEi19DcKlMkUYJB8wAk8jwPvF
-         zBjC9eLMBp3lcbLB1tFGplzWuKP6u9Q0NuUJwW80KBEO87ZO78bJPRL+qdsIEatZpE
-         Vuq6rteDMdfP0CrHHU7TpEfICUeWeeXC/9QLXYDQ=
+        b=ud4KaXtOqQehuIUYgL8XTKZVQ0gffm08r4Az2c7ktUIq3i6NUhuPgRBwbRW96T1/L
+         z8aayuDj7YyrWkJ4dBf9jzUSaXSUGlsvlhLU+FOILWhp8pkvOwSveWsT4JJyVCxk2T
+         l6WgSZI4BVFn/tdMN4OMppEFG7E/tZWm0p4f5wE4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        stable@vger.kernel.org,
+        Darren Hart <darren@os.amperecomputing.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 019/105] net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+Subject: [PATCH 4.14 160/284] ACPI/APEI: Limit printable size of BERT table data
 Date:   Mon, 18 Apr 2022 14:12:21 +0200
-Message-Id: <20220418121146.572357322@linuxfoundation.org>
+Message-Id: <20220418121216.294346534@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +56,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Darren Hart <darren@os.amperecomputing.com>
 
-[ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
+[ Upstream commit 3f8dec116210ca649163574ed5f8df1e3b837d07 ]
 
-When using a fixed-link, the altr_tse_pcs driver crashes
-due to null-pointer dereference as no phy_device is provided to
-tse_pcs_fix_mac_speed function. Fix this by adding a check for
-phy_dev before calling the tse_pcs_fix_mac_speed() function.
+Platforms with large BERT table data can trigger soft lockup errors
+while attempting to print the entire BERT table data to the console at
+boot:
 
-Also clean up the tse_pcs_fix_mac_speed function a bit. There is
-no need to check for splitter_base and sgmii_adapter_base
-because the driver will fail if these 2 variables are not
-derived from the device tree.
+  watchdog: BUG: soft lockup - CPU#160 stuck for 23s! [swapper/0:1]
 
-Fixes: fb3bbdb85989 ("net: ethernet: Add TSE PCS support to dwmac-socfpga")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Observed on Ampere Altra systems with a single BERT record of ~250KB.
+
+The original bert driver appears to have assumed relatively small table
+data. Since it is impractical to reassemble large table data from
+interwoven console messages, and the table data is available in
+
+  /sys/firmware/acpi/tables/data/BERT
+
+limit the size for tables printed to the console to 1024 (for no reason
+other than it seemed like a good place to kick off the discussion, would
+appreciate feedback from existing users in terms of what size would
+maintain their current usage model).
+
+Alternatively, we could make printing a CONFIG option, use the
+bert_disable boot arg (or something similar), or use a debug log level.
+However, all those solutions require extra steps or change the existing
+behavior for small table data. Limiting the size preserves existing
+behavior on existing platforms with small table data, and eliminates the
+soft lockups for platforms with large table data, while still making it
+available.
+
+Signed-off-by: Darren Hart <darren@os.amperecomputing.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |  8 --------
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |  4 ++++
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 13 +++++--------
- 3 files changed, 9 insertions(+), 16 deletions(-)
+ drivers/acpi/apei/bert.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-index cd478d2cd871..00f6d347eaf7 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-@@ -57,10 +57,6 @@
- #define TSE_PCS_USE_SGMII_ENA				BIT(0)
- #define TSE_PCS_IF_USE_SGMII				0x03
+diff --git a/drivers/acpi/apei/bert.c b/drivers/acpi/apei/bert.c
+index 876824948c19..d2212e092c50 100644
+--- a/drivers/acpi/apei/bert.c
++++ b/drivers/acpi/apei/bert.c
+@@ -31,6 +31,7 @@
  
--#define SGMII_ADAPTER_CTRL_REG				0x00
--#define SGMII_ADAPTER_DISABLE				0x0001
--#define SGMII_ADAPTER_ENABLE				0x0000
+ #undef pr_fmt
+ #define pr_fmt(fmt) "BERT: " fmt
++#define ACPI_BERT_PRINT_MAX_LEN 1024
+ 
+ static int bert_disable;
+ 
+@@ -59,8 +60,11 @@ static void __init bert_print_all(struct acpi_bert_region *region,
+ 		}
+ 
+ 		pr_info_once("Error records from previous boot:\n");
 -
- #define AUTONEGO_LINK_TIMER				20
+-		cper_estatus_print(KERN_INFO HW_ERR, estatus);
++		if (region_len < ACPI_BERT_PRINT_MAX_LEN)
++			cper_estatus_print(KERN_INFO HW_ERR, estatus);
++		else
++			pr_info_once("Max print length exceeded, table data is available at:\n"
++				     "/sys/firmware/acpi/tables/data/BERT");
  
- static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
-@@ -202,12 +198,8 @@ void tse_pcs_fix_mac_speed(struct tse_pcs *pcs, struct phy_device *phy_dev,
- 			   unsigned int speed)
- {
- 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
--	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
- 	u32 val;
- 
--	writew(SGMII_ADAPTER_ENABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
--
- 	pcs->autoneg = phy_dev->autoneg;
- 
- 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-index 442812c0a4bd..694ac25ef426 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-@@ -10,6 +10,10 @@
- #include <linux/phy.h>
- #include <linux/timer.h>
- 
-+#define SGMII_ADAPTER_CTRL_REG		0x00
-+#define SGMII_ADAPTER_ENABLE		0x0000
-+#define SGMII_ADAPTER_DISABLE		0x0001
-+
- struct tse_pcs {
- 	struct device *dev;
- 	void __iomem *tse_pcs_base;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index f37b6d57b2fe..8bb0106cb7ea 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -18,9 +18,6 @@
- 
- #include "altr_tse_pcs.h"
- 
--#define SGMII_ADAPTER_CTRL_REG                          0x00
--#define SGMII_ADAPTER_DISABLE                           0x0001
--
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
-@@ -62,16 +59,14 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- {
- 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
- 	void __iomem *splitter_base = dwmac->splitter_base;
--	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
- 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
- 	struct device *dev = dwmac->dev;
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct phy_device *phy_dev = ndev->phydev;
- 	u32 val;
- 
--	if ((tse_pcs_base) && (sgmii_adapter_base))
--		writew(SGMII_ADAPTER_DISABLE,
--		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	writew(SGMII_ADAPTER_DISABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 
- 	if (splitter_base) {
- 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
-@@ -93,7 +88,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
- 	}
- 
--	if (tse_pcs_base && sgmii_adapter_base)
-+	writew(SGMII_ADAPTER_ENABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	if (phy_dev)
- 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
- }
- 
+ 		/*
+ 		 * Because the boot error source is "one-time polled" type,
 -- 
-2.35.1
+2.34.1
 
 
 

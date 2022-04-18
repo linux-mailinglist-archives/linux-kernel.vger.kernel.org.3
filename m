@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B085053EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C5D5057F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240751AbiDRNDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S245144AbiDRN6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:58:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240392AbiDRMyw (ORCPT
+        with ESMTP id S242112AbiDRNca (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:54:52 -0400
+        Mon, 18 Apr 2022 09:32:30 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458DD140F7;
-        Mon, 18 Apr 2022 05:35:14 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D963220194;
+        Mon, 18 Apr 2022 05:57:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BDD4EB80EDB;
-        Mon, 18 Apr 2022 12:35:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18449C385A7;
-        Mon, 18 Apr 2022 12:35:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 50912B80EC0;
+        Mon, 18 Apr 2022 12:57:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78889C385A7;
+        Mon, 18 Apr 2022 12:57:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285311;
-        bh=6QwPEv8Gbl2+U4WZDjMiB/eG4gJ0Birl2xblfGOQaVY=;
+        s=korg; t=1650286665;
+        bh=ic7hdMjA7r9NBmROUJ0WQzteNOVUSZNfdmssxupQJ10=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OZ1F6Xil7QKMkIdb3aIH3XArhlBk9B8q8o/zjL3H8pePlovdaEIoysNTZPTDFBk29
-         +vACLVuyCbhwT+VeCSfBiw3ar2NNQ3As5tjOSPfBhe6RF2VoQjL6/0juYPVRfsjmSI
-         dGZOi6ej7cVjfbPMJ5mJp8Q6v+AKlvX1fKMDYi4k=
+        b=czbS4B748FaVfRCePAc7dDPc0TBPHZ/gCgB9wDxNMFZti9VJBZLReEfuLWw3TIEXb
+         ZVulTQ49ZzdDxKWHFAkMXcoPrm6HnyKZXSbOouFXV4gw3WgUTUqH8UcerC6PD1ZzKD
+         7V4q//3qZJkf/BNXUtDaZjg3EYtV3+G1/wmo6fco=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
-        Borislav Petkov <bp@suse.de>,
-        Neelima Krishnan <neelima.krishnan@intel.com>
-Subject: [PATCH 5.15 166/189] x86/tsx: Disable TSX development mode at boot
+        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
+        Ben Dooks <ben-linux@fluff.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, patches@armlinux.org.uk,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 205/284] ARM: 9187/1: JIVE: fix return value of __setup handler
 Date:   Mon, 18 Apr 2022 14:13:06 +0200
-Message-Id: <20220418121207.206002420@linuxfoundation.org>
+Message-Id: <20220418121217.552143742@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,201 +60,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+From: Randy Dunlap <rdunlap@infradead.org>
 
-commit 400331f8ffa3bec5c561417e5eec6848464e9160 upstream.
+[ Upstream commit 8b2360c7157b462c4870d447d1e65d30ef31f9aa ]
 
-A microcode update on some Intel processors causes all TSX transactions
-to always abort by default[*]. Microcode also added functionality to
-re-enable TSX for development purposes. With this microcode loaded, if
-tsx=on was passed on the cmdline, and TSX development mode was already
-enabled before the kernel boot, it may make the system vulnerable to TSX
-Asynchronous Abort (TAA).
+__setup() handlers should return 1 to obsolete_checksetup() in
+init/main.c to indicate that the boot option has been handled.
+A return of 0 causes the boot option/value to be listed as an Unknown
+kernel parameter and added to init's (limited) argument or environment
+strings. Also, error return codes don't mean anything to
+obsolete_checksetup() -- only non-zero (usually 1) or zero.
+So return 1 from jive_mtdset().
 
-To be on safer side, unconditionally disable TSX development mode during
-boot. If a viable use case appears, this can be revisited later.
-
-  [*]: Intel TSX Disable Update for Selected Processors, doc ID: 643557
-
-  [ bp: Drop unstable web link, massage heavily. ]
-
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Suggested-by: Borislav Petkov <bp@alien8.de>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/347bd844da3a333a9793c6687d4e4eb3b2419a3e.1646943780.git.pawan.kumar.gupta@linux.intel.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 9db829f485c5 ("[ARM] JIVE: Initial machine support for Logitech Jive")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Ben Dooks <ben-linux@fluff.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Alim Akhtar <alim.akhtar@samsung.com>
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-samsung-soc@vger.kernel.org
+Cc: patches@armlinux.org.uk
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/x86/include/asm/msr-index.h       |    4 +-
- arch/x86/kernel/cpu/common.c           |    2 +
- arch/x86/kernel/cpu/cpu.h              |    5 +--
- arch/x86/kernel/cpu/intel.c            |    8 -----
- arch/x86/kernel/cpu/tsx.c              |   50 +++++++++++++++++++++++++++++++--
- tools/arch/x86/include/asm/msr-index.h |    4 +-
- 6 files changed, 55 insertions(+), 18 deletions(-)
+ arch/arm/mach-s3c24xx/mach-jive.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -128,9 +128,9 @@
- #define TSX_CTRL_RTM_DISABLE		BIT(0)	/* Disable RTM feature */
- #define TSX_CTRL_CPUID_CLEAR		BIT(1)	/* Disable TSX enumeration */
+diff --git a/arch/arm/mach-s3c24xx/mach-jive.c b/arch/arm/mach-s3c24xx/mach-jive.c
+index 17821976f769..5de514940a9c 100644
+--- a/arch/arm/mach-s3c24xx/mach-jive.c
++++ b/arch/arm/mach-s3c24xx/mach-jive.c
+@@ -241,11 +241,11 @@ static int __init jive_mtdset(char *options)
+ 	unsigned long set;
  
--/* SRBDS support */
- #define MSR_IA32_MCU_OPT_CTRL		0x00000123
--#define RNGDS_MITG_DIS			BIT(0)
-+#define RNGDS_MITG_DIS			BIT(0)	/* SRBDS support */
-+#define RTM_ALLOW			BIT(1)	/* TSX development mode */
+ 	if (options == NULL || options[0] == '\0')
+-		return 0;
++		return 1;
  
- #define MSR_IA32_SYSENTER_CS		0x00000174
- #define MSR_IA32_SYSENTER_ESP		0x00000175
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1714,6 +1714,8 @@ void identify_secondary_cpu(struct cpuin
- 	validate_apic_and_package_id(c);
- 	x86_spec_ctrl_setup_ap();
- 	update_srbds_msr();
-+
-+	tsx_ap_init();
- }
- 
- static __init int setup_noclflush(char *arg)
---- a/arch/x86/kernel/cpu/cpu.h
-+++ b/arch/x86/kernel/cpu/cpu.h
-@@ -55,11 +55,10 @@ enum tsx_ctrl_states {
- extern __ro_after_init enum tsx_ctrl_states tsx_ctrl_state;
- 
- extern void __init tsx_init(void);
--extern void tsx_enable(void);
--extern void tsx_disable(void);
--extern void tsx_clear_cpuid(void);
-+void tsx_ap_init(void);
- #else
- static inline void tsx_init(void) { }
-+static inline void tsx_ap_init(void) { }
- #endif /* CONFIG_CPU_SUP_INTEL */
- 
- extern void get_cpu_cap(struct cpuinfo_x86 *c);
---- a/arch/x86/kernel/cpu/intel.c
-+++ b/arch/x86/kernel/cpu/intel.c
-@@ -717,14 +717,6 @@ static void init_intel(struct cpuinfo_x8
- 
- 	init_intel_misc_features(c);
- 
--	if (tsx_ctrl_state == TSX_CTRL_ENABLE)
--		tsx_enable();
--	else if (tsx_ctrl_state == TSX_CTRL_DISABLE)
--		tsx_disable();
--	else if (tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT)
--		/* See comment over that function for more details. */
--		tsx_clear_cpuid();
--
- 	split_lock_init();
- 	bus_lock_init();
- 
---- a/arch/x86/kernel/cpu/tsx.c
-+++ b/arch/x86/kernel/cpu/tsx.c
-@@ -19,7 +19,7 @@
- 
- enum tsx_ctrl_states tsx_ctrl_state __ro_after_init = TSX_CTRL_NOT_SUPPORTED;
- 
--void tsx_disable(void)
-+static void tsx_disable(void)
- {
- 	u64 tsx;
- 
-@@ -39,7 +39,7 @@ void tsx_disable(void)
- 	wrmsrl(MSR_IA32_TSX_CTRL, tsx);
- }
- 
--void tsx_enable(void)
-+static void tsx_enable(void)
- {
- 	u64 tsx;
- 
-@@ -122,7 +122,7 @@ static enum tsx_ctrl_states x86_get_tsx_
-  * That's why, this function's call in init_intel() doesn't clear the
-  * feature flags.
-  */
--void tsx_clear_cpuid(void)
-+static void tsx_clear_cpuid(void)
- {
- 	u64 msr;
- 
-@@ -142,11 +142,42 @@ void tsx_clear_cpuid(void)
+ 	if (kstrtoul(options, 10, &set)) {
+ 		printk(KERN_ERR "failed to parse mtdset=%s\n", options);
+-		return 0;
++		return 1;
  	}
- }
  
-+/*
-+ * Disable TSX development mode
-+ *
-+ * When the microcode released in Feb 2022 is applied, TSX will be disabled by
-+ * default on some processors. MSR 0x122 (TSX_CTRL) and MSR 0x123
-+ * (IA32_MCU_OPT_CTRL) can be used to re-enable TSX for development, doing so is
-+ * not recommended for production deployments. In particular, applying MD_CLEAR
-+ * flows for mitigation of the Intel TSX Asynchronous Abort (TAA) transient
-+ * execution attack may not be effective on these processors when Intel TSX is
-+ * enabled with updated microcode.
-+ */
-+static void tsx_dev_mode_disable(void)
-+{
-+	u64 mcu_opt_ctrl;
-+
-+	/* Check if RTM_ALLOW exists */
-+	if (!boot_cpu_has_bug(X86_BUG_TAA) || !tsx_ctrl_is_supported() ||
-+	    !cpu_feature_enabled(X86_FEATURE_SRBDS_CTRL))
-+		return;
-+
-+	rdmsrl(MSR_IA32_MCU_OPT_CTRL, mcu_opt_ctrl);
-+
-+	if (mcu_opt_ctrl & RTM_ALLOW) {
-+		mcu_opt_ctrl &= ~RTM_ALLOW;
-+		wrmsrl(MSR_IA32_MCU_OPT_CTRL, mcu_opt_ctrl);
-+		setup_force_cpu_cap(X86_FEATURE_RTM_ALWAYS_ABORT);
-+	}
-+}
-+
- void __init tsx_init(void)
- {
- 	char arg[5] = {};
- 	int ret;
- 
-+	tsx_dev_mode_disable();
-+
- 	/*
- 	 * Hardware will always abort a TSX transaction when the CPUID bit
- 	 * RTM_ALWAYS_ABORT is set. In this case, it is better not to enumerate
-@@ -215,3 +246,16 @@ void __init tsx_init(void)
- 		setup_force_cpu_cap(X86_FEATURE_HLE);
+ 	switch (set) {
+@@ -260,7 +260,7 @@ static int __init jive_mtdset(char *options)
+ 		       "using default.", set);
  	}
+ 
+-	return 0;
++	return 1;
  }
-+
-+void tsx_ap_init(void)
-+{
-+	tsx_dev_mode_disable();
-+
-+	if (tsx_ctrl_state == TSX_CTRL_ENABLE)
-+		tsx_enable();
-+	else if (tsx_ctrl_state == TSX_CTRL_DISABLE)
-+		tsx_disable();
-+	else if (tsx_ctrl_state == TSX_CTRL_RTM_ALWAYS_ABORT)
-+		/* See comment over that function for more details. */
-+		tsx_clear_cpuid();
-+}
---- a/tools/arch/x86/include/asm/msr-index.h
-+++ b/tools/arch/x86/include/asm/msr-index.h
-@@ -128,9 +128,9 @@
- #define TSX_CTRL_RTM_DISABLE		BIT(0)	/* Disable RTM feature */
- #define TSX_CTRL_CPUID_CLEAR		BIT(1)	/* Disable TSX enumeration */
  
--/* SRBDS support */
- #define MSR_IA32_MCU_OPT_CTRL		0x00000123
--#define RNGDS_MITG_DIS			BIT(0)
-+#define RNGDS_MITG_DIS			BIT(0)	/* SRBDS support */
-+#define RTM_ALLOW			BIT(1)	/* TSX development mode */
- 
- #define MSR_IA32_SYSENTER_CS		0x00000174
- #define MSR_IA32_SYSENTER_ESP		0x00000175
+ /* parse the mtdset= option given to the kernel command line */
+-- 
+2.35.1
+
 
 

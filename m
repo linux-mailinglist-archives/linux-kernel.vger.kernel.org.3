@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67246505753
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6A1E505132
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244311AbiDRNte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S239324AbiDRMcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244168AbiDRNaG (ORCPT
+        with ESMTP id S239768AbiDRM2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCCB40E7D;
-        Mon, 18 Apr 2022 05:54:12 -0700 (PDT)
+        Mon, 18 Apr 2022 08:28:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1F0F222BF;
+        Mon, 18 Apr 2022 05:22:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9A514B80E44;
-        Mon, 18 Apr 2022 12:54:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09F97C385A1;
-        Mon, 18 Apr 2022 12:54:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71D9460F0C;
+        Mon, 18 Apr 2022 12:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FB09C385A9;
+        Mon, 18 Apr 2022 12:22:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286449;
-        bh=pEFGY82kW++W5E6RdEZX1L0cTVXtC2pmpTFDmucn2x0=;
+        s=korg; t=1650284551;
+        bh=h3/4h0H471UJtADRLo2a8XhpcTHhAAbQKbJpOEoncW4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NR3mEj8v8z3MRawVz2YUEE8qahlL9enj3FbUYnuPPXHs5drBE1KHaq09Yd8AJtcF7
-         LWrx9hwF8w8uY8iBU8/TdATxDSBmtyVRTsbv9lS+l0bdsK2bQwv5bDS6u3ldecBq0H
-         Z62pWN4JDEeVSrGWczf6yDaIGEf+KzkU4bp59RNE=
+        b=g5DmO9XjABtqtoO5wtVAHfcwN8eTjGcoEj20cxy2LMC1+s1EJpjxyCpZT0CZN8Z33
+         TR011tlSkQbFtBTzDH7EgORObr+uBK374z223QcNuWs5hQlA8pLZsm2bO/ZH+6YgOW
+         i/k8h1KDcpEhfiwwp13jbibz29NBNYsqUXTkwLgM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Thierry Reding <treding@nvidia.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        stable@vger.kernel.org, Leo Ruan <tingquan.ruan@cn.bosch.com>,
+        Mark Jonas <mark.jonas@de.bosch.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 139/284] clk: tegra: tegra124-emc: Fix missing put_device() call in emc_ensure_emc_driver
-Date:   Mon, 18 Apr 2022 14:12:00 +0200
-Message-Id: <20220418121215.395941274@linuxfoundation.org>
+Subject: [PATCH 5.17 152/219] gpu: ipu-v3: Fix dev_dbg frequency output
+Date:   Mon, 18 Apr 2022 14:12:01 +0200
+Message-Id: <20220418121211.141002550@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +56,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Leo Ruan <tingquan.ruan@cn.bosch.com>
 
-[ Upstream commit 6d6ef58c2470da85a99119f74d34216c8074b9f0 ]
+[ Upstream commit 070a88fd4a03f921b73a2059e97d55faaa447dab ]
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling path.
+This commit corrects the printing of the IPU clock error percentage if
+it is between -0.1% to -0.9%. For example, if the pixel clock requested
+is 27.2 MHz but only 27.0 MHz can be achieved the deviation is -0.8%.
+But the fixed point math had a flaw and calculated error of 0.2%.
 
-Fixes: 2db04f16b589 ("clk: tegra: Add EMC clock driver")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Acked-by: Thierry Reding <treding@nvidia.com>
-Link: https://lore.kernel.org/r/20220112104501.30655-1-linmq006@gmail.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Before:
+  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+  IPU clock can give 27000000 with divider 10, error 0.2%
+  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
+
+After:
+  Clocks: IPU 270000000Hz DI 24716667Hz Needed 27200000Hz
+  IPU clock can give 27000000 with divider 10, error -0.8%
+  Want 27200000Hz IPU 270000000Hz DI 24716667Hz using IPU, 27000000Hz
+
+Signed-off-by: Leo Ruan <tingquan.ruan@cn.bosch.com>
+Signed-off-by: Mark Jonas <mark.jonas@de.bosch.com>
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220207151411.5009-1-mark.jonas@de.bosch.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clk/tegra/clk-emc.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/ipu-v3/ipu-di.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/clk/tegra/clk-emc.c b/drivers/clk/tegra/clk-emc.c
-index 11a5066e5c27..8b47d57cad17 100644
---- a/drivers/clk/tegra/clk-emc.c
-+++ b/drivers/clk/tegra/clk-emc.c
-@@ -190,6 +190,7 @@ static struct tegra_emc *emc_ensure_emc_driver(struct tegra_clk_emc *tegra)
+diff --git a/drivers/gpu/ipu-v3/ipu-di.c b/drivers/gpu/ipu-v3/ipu-di.c
+index 666223c6bec4..0a34e0ab4fe6 100644
+--- a/drivers/gpu/ipu-v3/ipu-di.c
++++ b/drivers/gpu/ipu-v3/ipu-di.c
+@@ -447,8 +447,9 @@ static void ipu_di_config_clock(struct ipu_di *di,
  
- 	tegra->emc = platform_get_drvdata(pdev);
- 	if (!tegra->emc) {
-+		put_device(&pdev->dev);
- 		pr_err("%s: cannot find EMC driver\n", __func__);
- 		return NULL;
- 	}
+ 		error = rate / (sig->mode.pixelclock / 1000);
+ 
+-		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %d.%u%%\n",
+-			rate, div, (signed)(error - 1000) / 10, error % 10);
++		dev_dbg(di->ipu->dev, "  IPU clock can give %lu with divider %u, error %c%d.%d%%\n",
++			rate, div, error < 1000 ? '-' : '+',
++			abs(error - 1000) / 10, abs(error - 1000) % 10);
+ 
+ 		/* Allow a 1% error */
+ 		if (error < 1010 && error >= 990) {
 -- 
-2.34.1
+2.35.1
 
 
 

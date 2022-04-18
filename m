@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D4235055D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3084C5057F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241923AbiDRN10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
+        id S245171AbiDRN6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:58:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240952AbiDRNCY (ORCPT
+        with ESMTP id S242681AbiDRNdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D180A26ACB;
-        Mon, 18 Apr 2022 05:42:25 -0700 (PDT)
+        Mon, 18 Apr 2022 09:33:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1EB201B7;
+        Mon, 18 Apr 2022 05:57:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 12F02B80EDD;
-        Mon, 18 Apr 2022 12:42:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D522C385A1;
-        Mon, 18 Apr 2022 12:42:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF9661259;
+        Mon, 18 Apr 2022 12:57:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0491EC385A1;
+        Mon, 18 Apr 2022 12:57:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285742;
-        bh=5x/hr0RTqZjcqu+gwHu6SeQi/Y//QzF22XW4sumoa3M=;
+        s=korg; t=1650286668;
+        bh=lo7FtlyJVfJXLnY912gcwlLUcCiexeAFG/oWgZWvNmA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=wtKs3G+OBkZuf61B0eZw09WE6Y/TRjqZKU4uEubDB/cDTeP/ifQYZCj5icJx1hDa3
-         BUwsb8C7iPnvLWOCdNvh5ZflwQH4G+c/aQXCfDuGQMYSTTH30Fj9oUFC59B1E3NApo
-         ZA4LELNik23ajVz9jV8d3MhBmWD933d5TSEay44A=
+        b=CoSOLRpCs8zvLJJ2I8VOuwl3x6f62oFzcNvWthJ38owO6YW8EeNVc3GYnssLhKfri
+         huA7q1OhhIPpzLuj12hVx06sqlpL+4xfipBh074GmVoCMe8L7UxEg46e6SEUlVFJX7
+         Ee4YcU4A1N0ONsVldNpQ2iwfEf+kGVUksfvJCEcY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <seanpaul@chromium.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org, Lotus Fenn <lotusf@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Like Xu <likexu@tencent.com>,
+        David Dunn <daviddunn@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 10/63] drm/msm/dsi: Use connector directly in msm_dsi_manager_connector_init()
+Subject: [PATCH 4.14 206/284] KVM: x86/svm: Clear reserved bits written to PerfEvtSeln MSRs
 Date:   Mon, 18 Apr 2022 14:13:07 +0200
-Message-Id: <20220418121134.839290788@linuxfoundation.org>
+Message-Id: <20220418121217.579718160@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,42 +58,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stephen Boyd <swboyd@chromium.org>
+From: Jim Mattson <jmattson@google.com>
 
-[ Upstream commit 47b7de6b88b962ef339a2427a023d2a23d161654 ]
+[ Upstream commit 9b026073db2f1ad0e4d8b61c83316c8497981037 ]
 
-The member 'msm_dsi->connector' isn't assigned until
-msm_dsi_manager_connector_init() returns (see msm_dsi_modeset_init() and
-how it assigns the return value). Therefore this pointer is going to be
-NULL here. Let's use 'connector' which is what was intended.
+AMD EPYC CPUs never raise a #GP for a WRMSR to a PerfEvtSeln MSR. Some
+reserved bits are cleared, and some are not. Specifically, on
+Zen3/Milan, bits 19 and 42 are not cleared.
 
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Sean Paul <seanpaul@chromium.org>
-Fixes: 6d5e78406991 ("drm/msm/dsi: Move dsi panel init into modeset init path")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Patchwork: https://patchwork.freedesktop.org/patch/478693/
-Link: https://lore.kernel.org/r/20220318000731.2823718-1-swboyd@chromium.org
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+When emulating such a WRMSR, KVM should not synthesize a #GP,
+regardless of which bits are set. However, undocumented bits should
+not be passed through to the hardware MSR. So, rather than checking
+for reserved bits and synthesizing a #GP, just clear the reserved
+bits.
+
+This may seem pedantic, but since KVM currently does not support the
+"Host/Guest Only" bits (41:40), it is necessary to clear these bits
+rather than synthesizing #GP, because some popular guests (e.g Linux)
+will set the "Host Only" bit even on CPUs that don't support
+EFER.SVME, and they don't expect a #GP.
+
+For example,
+
+root@Ubuntu1804:~# perf stat -e r26 -a sleep 1
+
+ Performance counter stats for 'system wide':
+
+                 0      r26
+
+       1.001070977 seconds time elapsed
+
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379957] unchecked MSR access error: WRMSR to 0xc0010200 (tried to write 0x0000020000130026) at rIP: 0xffffffff9b276a28 (native_write_msr+0x8/0x30)
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379958] Call Trace:
+Feb 23 03:59:58 Ubuntu1804 kernel: [  405.379963]  amd_pmu_disable_event+0x27/0x90
+
+Fixes: ca724305a2b0 ("KVM: x86/vPMU: Implement AMD vPMU code for KVM")
+Reported-by: Lotus Fenn <lotusf@google.com>
+Signed-off-by: Jim Mattson <jmattson@google.com>
+Reviewed-by: Like Xu <likexu@tencent.com>
+Reviewed-by: David Dunn <daviddunn@google.com>
+Message-Id: <20220226234131.2167175-1-jmattson@google.com>
+Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/kvm/pmu_amd.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-index 73127948f54d..f3ff2cdc288b 100644
---- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
-+++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
-@@ -625,7 +625,7 @@ struct drm_connector *msm_dsi_manager_connector_init(u8 id)
- 	return connector;
+diff --git a/arch/x86/kvm/pmu_amd.c b/arch/x86/kvm/pmu_amd.c
+index cd944435dfbd..e0473c72062e 100644
+--- a/arch/x86/kvm/pmu_amd.c
++++ b/arch/x86/kvm/pmu_amd.c
+@@ -139,12 +139,10 @@ static int amd_pmu_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 	/* MSR_K7_EVNTSELn */
+ 	pmc = get_gp_pmc(pmu, msr, MSR_K7_EVNTSEL0);
+ 	if (pmc) {
+-		if (data == pmc->eventsel)
+-			return 0;
+-		if (!(data & pmu->reserved_bits)) {
++		data &= ~pmu->reserved_bits;
++		if (data != pmc->eventsel)
+ 			reprogram_gp_counter(pmc, data);
+-			return 0;
+-		}
++		return 0;
+ 	}
  
- fail:
--	connector->funcs->destroy(msm_dsi->connector);
-+	connector->funcs->destroy(connector);
- 	return ERR_PTR(ret);
- }
- 
+ 	return 1;
 -- 
 2.35.1
 

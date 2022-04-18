@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEAA2505C6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 137F5505C72
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241262AbiDRQaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:30:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S242435AbiDRQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234285AbiDRQaT (ORCPT
+        with ESMTP id S1346197AbiDRQbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:30:19 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 131D82FE70
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:27:40 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id k29so19723021pgm.12
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:27:40 -0700 (PDT)
+        Mon, 18 Apr 2022 12:31:21 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A68842FFF6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:28:41 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id i24-20020a17090adc1800b001cd5529465aso12959709pjv.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:28:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jg3I++lP3pbQpRoWlcxdvPAkXeaHQxo24ELrvPlKM/E=;
-        b=cH2GtU4LOPOi/+XBRfxwnugAfu0MPMQBxc9Wu2WamMHh0/XU0iB5aWy/x2QibxbdMz
-         jonHhv2fpMfGsFFdksSLpzTUCMwZW3YH/LkQrMxrFq6/o1NgYMv/3a4SpODk1IojLyvY
-         IYHpnEVbqsTZvSEfJSCeZAJMTEcXlse58I9/w5JeWubORPPRGql+zsoMRWU7KaWJXA6r
-         s9zRR7+JN8jVq2cZJfhsYYNiX0z7gs7nWbFIP3tyG5Ic9AGftrDTlerwTY6jj1rfzrVl
-         cueDDFT9gAbj8d2+mXLK15eFIneY7baVO3j+ySLaQ1a+tJIHrQYJZaxyhVKGs6JqoMBr
-         IbZw==
+        h=from:to:cc:subject:date:message-id:in-reply-to:references
+         :mime-version:content-transfer-encoding;
+        bh=pHmIfYdFlbEBfg1s7Ca3bU++BraBxET9LrYHIdIzDOw=;
+        b=Gt4VzL3KTmWKfLKC7W25J/xX9fzpOGWcfANQQKWSw8ZY6PBC7ECL5WDiSRu61kFUXL
+         Klgvra4BD/Sxpee4hC5tkrqL9LTGsU6tE1A09569yjOGlXZRSMwgZrN4jM7gME6rLGRX
+         lwJr/N+1uGB9mtCSwCCOkBNqgltL3MiNyLDH3FhXVZDk1E34NyCJYmygtdju6pFmYRqF
+         SpEgA+g9b8Wghl+MGkZavW6JV8NQqX7w+9sd/VBAL7iklYy3x3EFpj7nv4Eh+cZyYnkJ
+         0fLOtNohqHo5uY6TfflUaq+1G70rRypZWnQ3NRdR6KcSL3LGZizaeLc1Vb2wVVWCUGAC
+         bfzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=Jg3I++lP3pbQpRoWlcxdvPAkXeaHQxo24ELrvPlKM/E=;
-        b=ijuqQ+9g+vvdNMuLoKvFKl4Ylc1DgQ5rD80akG8ZCMp0gGMNraP7reWi20u3mi+4ns
-         YDrePwLN8xbiMI1qCpAc9PTjRqL6DTucji1AsRDtH+RI00JbF6nZchCqUOXfRvGIFP+i
-         VaZiRsJx3McC01PU4RBfnLVTR5UdZHi+rnXhGdq0nM0TztWQBvNIxS+AiRp9yUO583oa
-         alqaC88oXPs6DEihSR7WFVmD+kSU7MFWj0DZn+dAgs8ijoj1oYolQ7e/YGBrjr8h6ehK
-         GnUORf2lJWPtIjD2c9vf8VNViN12RyfBKUJ64FM5TBE4qgPErGEQpwRUcSfPtUCsvHQI
-         6r0w==
-X-Gm-Message-State: AOAM533GopID+Rf+oqm9iqmwrbwmjF8V5zuql3l+5V+ydKV63L55uqRF
-        Ulu6fEOyf3J5IGBJTnhDFwV8FZ1bP8dWlA==
-X-Google-Smtp-Source: ABdhPJy/wZWcx8WwfVMjBPe1HkCVD8WdLwNDNvqg6YytGt/MvW2eDtFq6Wm1AVa01LsHpGX2s6ntKw==
-X-Received: by 2002:a05:6a00:cc4:b0:505:6998:69b8 with SMTP id b4-20020a056a000cc400b00505699869b8mr13078108pfv.19.1650299259424;
-        Mon, 18 Apr 2022 09:27:39 -0700 (PDT)
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
+         :references:mime-version:content-transfer-encoding;
+        bh=pHmIfYdFlbEBfg1s7Ca3bU++BraBxET9LrYHIdIzDOw=;
+        b=w2qTEGc2UvceYLSmBxdqjzbG9vVVC4rESf5Szl7leI9NfRTFwqhkbBbBniWAmLPxLT
+         PN+EFIFU0l60/yIzGtZAQN4YYvOIaOxtbyKbbR87bNRvFmH/v7Kih7GBikBc33B3Q/Lm
+         /QRmOd+NoE4OdYxJ0P82NYzU2lVsANKZEcSEX5l4f73sXvIMtb+2+OcjO2tWfgl2wnLf
+         EcrIKVSQhSmabQSDiSGEsiXTNz8lMNjmcrtJ/ktR82tFPvHerQmGrGBZFpsJ+AqQ9j9l
+         JpRYR+PM1rYwalpi9c2YZD+5DzXSR2sep2iHbCW/DaivSJ58v3T1fSqDcsel0WavWgD5
+         /a0g==
+X-Gm-Message-State: AOAM530nn4/oNwQtHztZgrrBEsQ1bwF9bAO6tQIB58onN1J4nrD1sArp
+        eyWGNMlMIn59oUhMT0NRIA8=
+X-Google-Smtp-Source: ABdhPJwa0etoZ3UYp1pfmXyyzdO+3SN5JsmGZJH9apOIyhcA7TVy4ZZD9uWEe1HhMAO++LdBOtht1Q==
+X-Received: by 2002:a17:902:7c01:b0:156:17a5:a68 with SMTP id x1-20020a1709027c0100b0015617a50a68mr11433631pll.166.1650299321045;
+        Mon, 18 Apr 2022 09:28:41 -0700 (PDT)
 Received: from aliyar-HP-Laptop-15-da1xxx.domain.name ([14.139.241.88])
-        by smtp.gmail.com with ESMTPSA id h18-20020a63c012000000b0039cc3c323f7sm13295602pgg.33.2022.04.18.09.27.36
+        by smtp.gmail.com with ESMTPSA id h18-20020a63c012000000b0039cc3c323f7sm13295602pgg.33.2022.04.18.09.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:27:39 -0700 (PDT)
+        Mon, 18 Apr 2022 09:28:40 -0700 (PDT)
 From:   Aliya Rahmani <aliyarahmani786@gmail.com>
 To:     clabbe@baylibre.com
 Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
         outreachy@lists.linux.dev, linux-kernel@vger.kernel.org,
         Aliya Rahmani <aliyarahmani786@gmail.com>
-Subject: [PATCH v2 0/3] staging: media: zoran: fix warnings reported by checkpatch
-Date:   Mon, 18 Apr 2022 21:52:42 +0530
-Message-Id: <20220418162244.15346-1-aliyarahmani786@gmail.com>
+Subject: [PATCH v2 1/3] staging: media: zoran: use seq_puts() instead of seq_printf()
+Date:   Mon, 18 Apr 2022 21:52:44 +0530
+Message-Id: <20220418162244.15346-2-aliyarahmani786@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220418162244.15346-1-aliyarahmani786@gmail.com>
+References: <20220418162244.15346-1-aliyarahmani786@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,20 +71,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches address style issues found by checkpatch in the
-zoran/videocodec.c file.
+Replace seq_printf() with seq_puts() for a constant format without
+additional arguments, reported by checkpatch.
 
-changes since v1: Rework commit description and subject.
+Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
+---
+ drivers/staging/media/zoran/videocodec.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Aliya Rahmani (3):
- staging: media: zoran: use seq_puts() instead of seq_printf()
- staging: media: zoran: else is not generally useful after a break or return
- staging: media: zoran: avoid macro argument precedence issues
-
-drivers/staging/media/zoran/videocodec.c | 9++++-----
-1 file changed, 4 insertions(+), 5 deletions(-)
-
-
+diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
+index 3af7d02bd910..16a1f23a7f19 100644
+--- a/drivers/staging/media/zoran/videocodec.c
++++ b/drivers/staging/media/zoran/videocodec.c
+@@ -250,8 +250,8 @@ int videocodec_debugfs_show(struct seq_file *m)
+ 	struct codec_list *h = codeclist_top;
+ 	struct attached_list *a;
+ 
+-	seq_printf(m, "<S>lave or attached <M>aster name  type flags    magic    ");
+-	seq_printf(m, "(connected as)\n");
++	seq_puts(m, "<S>lave or attached <M>aster name  type flags    magic    ");
++	seq_puts(m, "(connected as)\n");
+ 
 -- 
 2.25.1
 

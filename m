@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B7C5055AD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C45AB50584E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242891AbiDRNTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:19:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
+        id S245177AbiDROBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:01:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242600AbiDRNAM (ORCPT
+        with ESMTP id S243535AbiDRNlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:00:12 -0400
+        Mon, 18 Apr 2022 09:41:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 648F82654A;
-        Mon, 18 Apr 2022 05:41:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4ED02FFE9;
+        Mon, 18 Apr 2022 05:59:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DB13460FB6;
-        Mon, 18 Apr 2022 12:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCBBEC385A7;
-        Mon, 18 Apr 2022 12:41:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 177C6612E4;
+        Mon, 18 Apr 2022 12:59:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B9D8C385A1;
+        Mon, 18 Apr 2022 12:59:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285701;
-        bh=Odt4DJtsfZ7z8p8zyvoADS1a7B/5C/8yhLV1aaCq0Ak=;
+        s=korg; t=1650286759;
+        bh=wkWfM70BODSDCl/XojrcBlfzYnjeTE+/YGugU8Xmf+c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YMDLisGjlo+KkrzHZL0EBleZot6ofZlkHbKlLUyCr5h1Lfo6wX/r3tIY8IyoywGn9
-         f97g++lGIMmYT+rg5msdST1MF7PtcxcVNyIDuf5QwnHosQmDIOJwjoK5x3iZvMM0GZ
-         /PXaKsDb/ecA/HIrbDqQVOsHuGZ4H7M+hSSnkU9A=
+        b=gMSA9RsT4C6zI/DHCZQM6uceu4wTyJzQyVyDKjPFqf37QIVYsW2BO/XTF4XJ6SVkB
+         dCFf9RlBQfLeMu5JkBIq5YaJKiQnc/mYaxVmtc/NXqiYmcPkHzIq4V02sPoUXyI2HG
+         Qf92YV+v8Tm8tXqpun+IOt61hCRnxU3tFvJPauwg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wang Zhaoyang1 <zhaoyang1.wang@intel.com>,
-        Gao Liang <liang.gao@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Christoph Hellwig <hch@lst.de>
-Subject: [PATCH 5.10 095/105] dma-direct: avoid redundant memory sync for swiotlb
+        stable@vger.kernel.org, Willem de Bruijn <willemb@google.com>,
+        Soheil Hassas Yeganeh <soheil@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 236/284] ipv6: add missing tx timestamping on IPPROTO_RAW
 Date:   Mon, 18 Apr 2022 14:13:37 +0200
-Message-Id: <20220418121149.333362237@linuxfoundation.org>
+Message-Id: <20220418121218.423694271@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,47 +57,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chao Gao <chao.gao@intel.com>
+From: Willem de Bruijn <willemb@google.com>
 
-commit 9e02977bfad006af328add9434c8bffa40e053bb upstream.
+[ Upstream commit fbfb2321e950918b430e7225546296b2dcadf725 ]
 
-When we looked into FIO performance with swiotlb enabled in VM, we found
-swiotlb_bounce() is always called one more time than expected for each DMA
-read request.
+Raw sockets support tx timestamping, but one case is missing.
 
-It turns out that the bounce buffer is copied to original DMA buffer twice
-after the completion of a DMA request (one is done by in
-dma_direct_sync_single_for_cpu(), the other by swiotlb_tbl_unmap_single()).
-But the content in bounce buffer actually doesn't change between the two
-rounds of copy. So, one round of copy is redundant.
+IPPROTO_RAW takes a separate packet construction path. raw_send_hdrinc
+has an explicit call to sock_tx_timestamp, but rawv6_send_hdrinc does
+not. Add it.
 
-Pass DMA_ATTR_SKIP_CPU_SYNC flag to swiotlb_tbl_unmap_single() to
-skip the memory copy in it.
-
-This fix increases FIO 64KB sequential read throughput in a guest with
-swiotlb=force by 5.6%.
-
-Fixes: 55897af63091 ("dma-direct: merge swiotlb_dma_ops into the dma_direct code")
-Reported-by: Wang Zhaoyang1 <zhaoyang1.wang@intel.com>
-Reported-by: Gao Liang <liang.gao@intel.com>
-Signed-off-by: Chao Gao <chao.gao@intel.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 11878b40ed5c ("net-timestamp: SOCK_RAW and PING timestamping")
+Signed-off-by: Willem de Bruijn <willemb@google.com>
+Acked-by: Soheil Hassas Yeganeh <soheil@google.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/dma/direct.h |    3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ net/ipv6/raw.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
---- a/kernel/dma/direct.h
-+++ b/kernel/dma/direct.h
-@@ -114,6 +114,7 @@ static inline void dma_direct_unmap_page
- 		dma_direct_sync_single_for_cpu(dev, addr, size, dir);
+diff --git a/net/ipv6/raw.c b/net/ipv6/raw.c
+index 3d9d20074203..f0d8b7e9a685 100644
+--- a/net/ipv6/raw.c
++++ b/net/ipv6/raw.c
+@@ -622,7 +622,7 @@ static int rawv6_push_pending_frames(struct sock *sk, struct flowi6 *fl6,
  
- 	if (unlikely(is_swiotlb_buffer(phys)))
--		swiotlb_tbl_unmap_single(dev, phys, size, size, dir, attrs);
-+		swiotlb_tbl_unmap_single(dev, phys, size, size, dir,
-+					 attrs | DMA_ATTR_SKIP_CPU_SYNC);
- }
- #endif /* _KERNEL_DMA_DIRECT_H */
+ static int rawv6_send_hdrinc(struct sock *sk, struct msghdr *msg, int length,
+ 			struct flowi6 *fl6, struct dst_entry **dstp,
+-			unsigned int flags)
++			unsigned int flags, const struct sockcm_cookie *sockc)
+ {
+ 	struct ipv6_pinfo *np = inet6_sk(sk);
+ 	struct net *net = sock_net(sk);
+@@ -659,6 +659,8 @@ static int rawv6_send_hdrinc(struct sock *sk, struct msghdr *msg, int length,
+ 
+ 	skb->ip_summed = CHECKSUM_NONE;
+ 
++	sock_tx_timestamp(sk, sockc->tsflags, &skb_shinfo(skb)->tx_flags);
++
+ 	if (flags & MSG_CONFIRM)
+ 		skb_set_dst_pending_confirm(skb, 1);
+ 
+@@ -945,7 +947,8 @@ static int rawv6_sendmsg(struct sock *sk, struct msghdr *msg, size_t len)
+ 
+ back_from_confirm:
+ 	if (hdrincl)
+-		err = rawv6_send_hdrinc(sk, msg, len, &fl6, &dst, msg->msg_flags);
++		err = rawv6_send_hdrinc(sk, msg, len, &fl6, &dst,
++					msg->msg_flags, &sockc);
+ 	else {
+ 		ipc6.opt = opt;
+ 		lock_sock(sk);
+-- 
+2.35.1
+
 
 

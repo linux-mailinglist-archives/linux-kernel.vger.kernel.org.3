@@ -2,83 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9BE505C00
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:53:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4AFF505C03
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244180AbiDRPzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
+        id S1345897AbiDRP4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:56:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345901AbiDRPzX (ORCPT
+        with ESMTP id S1345820AbiDRPzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:55:23 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6427C32052;
-        Mon, 18 Apr 2022 08:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1650296562;
-        bh=7nSGdcM8ssqXUQMkFPDfbxODCXKpWyTY0AEUlY2QE+8=;
-        h=X-UI-Sender-Class:Date:From:Subject:To:Cc;
-        b=MZIzqJDmtClIeW4A4Xc8bB5ePyFUbjiLlJZ0RsrhB8wFm8AHswk0ncpzDmkggux5o
-         oU6BtkEB3tYtHukiZQPQ/6UE8OIn3UzfEqHyUEypwTP+TGn/xEL26K9hDci93ZC6KJ
-         lGJP0kgHk+hJPJmUjZnDcdwgDrS6dPetFItr6oUo=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.100.20] ([46.142.32.119]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5GE1-1o5SaN1vGf-011Bnd; Mon, 18
- Apr 2022 17:42:42 +0200
-Message-ID: <c15f209f-633e-b7a3-26b8-bdac060b63b4@gmx.de>
-Date:   Mon, 18 Apr 2022 17:42:41 +0200
+        Mon, 18 Apr 2022 11:55:52 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529133E2A;
+        Mon, 18 Apr 2022 08:43:26 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id m14so12972325vsp.11;
+        Mon, 18 Apr 2022 08:43:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=L+e1IwjPtrx8G13TcQrLOhPqxxbNlCk3hLHky4qfcOw=;
+        b=EJytDbeMBURt5rxmwjAU1L64BLz3FG+Ha6vj8642LRiUF/KP6mq8RUcOfKm5CEp2Sa
+         1pil1DOrqtnuIO+KzckywwE0qbOLQ+02sZbdMJJ7+9UYKhdrLaBy0zhpVbwsAu+ikM7W
+         /MF2dbWBAEoPqaIps0oKUi5XQB41eDZobexjouej9FImFZrX7o1igHJ4aPrnR4iVAxMK
+         QMiMD3Flr3Z0CQ74o+wImQBWNUhnOrweeKlHkGVAKKUo0n+arufcBMbcXe4FGu+bTxFI
+         eI2IiS04i8PBjGsEB61FjxdrZHHL5QIsqgdKlkuf33pw/dDc4yIEZt19hIxgWSinY9LR
+         KYvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=L+e1IwjPtrx8G13TcQrLOhPqxxbNlCk3hLHky4qfcOw=;
+        b=ZIjrjrY00Exbj9pVVy4KqugU6xSfUIhgY0HxdZCIHOzxTdeeW1Bu5Ww5/MwWlbwLE+
+         a6YYrtzOE6MljkVMRUgGyjZfxAOGwvoq7E0KGu2aVwXfZc4S1qEvt6issmdEDcPv4Z7n
+         POynyqheL9UHVDQP0fR9LYlVVKYkOlNv5GsKFsorxdjzcQnpZVYCX2HqlMX/0KuaBSn7
+         CjuuMDXn//R6pkJvb/9Wdb0e0YW5LeKGfpvy/8ypmGZ4LdFUZXurhg3o8DgcC7nwa+PJ
+         6wisKpEzT534B/Q7yTLP1q7gLM57NIZTRBCxRDfwuE/9I4A7tDIC1rWQY+SO/yVZpoaf
+         vknA==
+X-Gm-Message-State: AOAM531fKdavp+1GK744bgYyTgI8HTxdoP7ey1lVjvhGnfySdeUiWiMo
+        d/uj8aVYVacdTsJOE0ArkSUZZakO/ZWigs3M4mrPODWPEpEgXigK
+X-Google-Smtp-Source: ABdhPJwMY77Df/u7eQj1RsI6svvKlcNXcbpyqqK+8V8MjEalSfH0xmmviPMBT+4PI06eb9M0VJxgUYB7OdTYrR9xPfA=
+X-Received: by 2002:a67:a44d:0:b0:320:601b:2a08 with SMTP id
+ p13-20020a67a44d000000b00320601b2a08mr3051790vsh.70.1650296605300; Mon, 18
+ Apr 2022 08:43:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
-To:     stable@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-Content-Language: de-DE
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:05HGfcSZN7sjkQ8FVF3KgeZclF01op09qZqvCYoKe3hpSbbEq6D
- uy6BGDk8hz4EA5V3Gsh/G/kTB0AhhySKtWcjEmGt7tKEKGAeP3LAmoKbSIz3OenkBIejbNS
- siTa59c68H+ZWoqOV8eK2FGCGtA9sIIz2ymRN1uCczReXKXfm/JpxY9QkTDKDSGYuvm8cT+
- Ekoq/fO+erIoxPy3yWcuw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:x+N5joyxTB8=:8j+JTtI/tfu5Z/nWd5JWBQ
- tYu22rI4Z9E93r9PCA76XVWng3MuFYFZXMB6GQLaXTMwOHQhGzOtvSz9V+wqJ3o8wTYwqloji
- J7FoQj0vBOIiperRdyYhw2FBcb0sR/jNTQDRe6FOk7M0nl6JQ4/SDdMC/IBX7oD+/ZoIILuXL
- tdlfYxpDkYMXsbb8hEhzs/77ewww0jzRslTo7LM6bxDWv7kRjxb4Gwzp2ONmWiakYa8UrD3v5
- gFb7KkW/YZ8IgioJn6X/tbT0QQMMsyCX1Rk5wiTuY/OBNIJ9G0iwlwbPDgSQ0TadtyISh/O7b
- UHhKk5qKsul8IBVxXzPz3hgoykvinv/M5KlmyUX7HeK4OB4IJR4fqsKXcyMf3hHOm00vxe0Ay
- ll+cMm+Kfuv+L8flJrkBWbBw47eDiHVJY0RV4NEYZji9aUxVwwHWaqxX5d/UHdgIDu0aok+45
- 9PTv64oFHquknEU12HHqrLu2nPazScI5UJic0NgnUbLkD9XhCg+Ju8w2fLF+4Vv7kScx3FpMp
- klf5S6iqhq+/Oq1akmW1ddYtHiVqPduzn5v4BIFIrzQGdwdhwJYm/35T99hrNX90atOpa3A4O
- TQg4BKyRh7Z3zfVX0Prh1bcSETZEgEzpGM9qp8tlCltgHKn1sToiwIg5SNuNY2vvqGIw8NuMB
- vXN7vh1AD2H0HnpfBEjpmPjt+lXP5dxS17onQW/n4fEV5io+DQ/BdVlE1VQEOKSeCAf/QiSht
- WdgjpxdazpIY7KbZ32Gkxzi/BktOkO87sUyzr3U1zdbrfBB9Qswp9bbjKXHBX6EfQkpM5aluy
- 097zMwnyfV4Gmssw5XbUYbJh39s0tBkM0JBOIA82NHRGTU3f99FW0xgIpXxVTuEQbPdlQc3GC
- 5gPF2LVypDUa5K1LCQkgnhUGQB9ewTwp1+BEaZ6dYUYZTHA6GX05bseGuu98Yfi8Zz2yHPIoN
- dhWI/4JITZTCUyrYZnByl6pIawRUznyY4MNsc6/fIeuFie2LpJMUFJH+EIPfN//ZNJssbmt9m
- CHTbEa4z+2dTB3HupuaxR5LHzGejw8GcWK5RCCi1CAo/+DB2AcoQ+QUsvkW9ttjGlX0I4ZqQe
- +QCKXGxSQg4dVo=
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FAKE_REPLY_A1,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <CAHp75Veo30c0BWb4Fykgvd-czSnEXsyA8wyMTeKQdS49=e5-nw@mail.gmail.com>
+ <20220417165208.39754-1-schspa@gmail.com> <CAHp75Vc8HwheQVOpcn_Lxk-bOOMLybr=m6OdO7mJ-vE9xywBLg@mail.gmail.com>
+ <CAMA88Tr6NvfEiPYnt0A60GiQKiiT6LT7X83GRku-4PDcG2EtoA@mail.gmail.com>
+ <CAHp75VfcxACmuw5pwPgSB9ud06hWtHCUrMifU1rZJ+h+dwG+bg@mail.gmail.com> <CAHp75Vchpi0Cvkz5krA0LEZBj-fQTXxbEBzpKxU96mcDRGY--A@mail.gmail.com>
+In-Reply-To: <CAHp75Vchpi0Cvkz5krA0LEZBj-fQTXxbEBzpKxU96mcDRGY--A@mail.gmail.com>
+From:   Schspa Shi <schspa@gmail.com>
+Date:   Mon, 18 Apr 2022 23:43:14 +0800
+Message-ID: <CAMA88TruFbCZbvq84ep5NbSdxDgi-mPX2iXWk4c2qA-etMA8QQ@mail.gmail.com>
+Subject: Re: [PATCH] gpio: use raw spinlock for gpio chip shadowed data
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>
+Cc:     "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
+        "hoan@os.amperecomputing.com" <hoan@os.amperecomputing.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "opendmb@gmail.com" <opendmb@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hallo Greg
+Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-5.17.4-rc1
+> On Mon, Apr 18, 2022 at 2:38 PM Andy Shevchenko
+> <andy.shevchenko@gmail.com> wrote:
+>> On Mon, Apr 18, 2022 at 6:07 AM Schspa Shi <schspa@gmail.com> wrote:
+>> > Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+>>
+>> ...
+>>
+>> > >   drivers/gpio/gpio-mmio.c    | 22 +++++++++++-----------
+>> > >   include/linux/gpio/driver.h |  2 +-
+>> > >
+>> > > You can=E2=80=99t do it for one driver only. As I told it will requi=
+re too much of additional churn to make this to be series.
+>> > >
+>> >
+>> > It seems I have misunderstood your "too much of additional churn". Can
+>> > you explain it?
+>> > The gpio-mmio.c and driver.h here are the basics of other gpio
+>> > drivers. In my opinion, these two files
+>> > belong to the basic code of gpio, and functions such as bgpio_init are
+>> > declared in
+>> > include/linux/gpio/driver.h and implemented in
+>> > drivers/gpio/gpio-mmio.c. So there is no churn.
+>>
+>> When you change the member of the data structure, you have to change
+>> all its users. You can't change only one at a time because it will be
+>> a (compile-time) bisectability issue.
 
-compiles, boots and runs on x86_64
-(Intel i5-11400, Fedora 36 Beta)
 
-Thanks
+Yes, I understand and will take for bisectability use case for the next tim=
+e.
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de
+>
+> Answering your question here, it will require moving to union with an
+> additional member and corresponding core changes, convert all drivers
+> one-by-one, and remove the old type. It's not worth doing it, but as I
+> said let maintainers decide.
 
-Ronald
+Okay, sorry for my misunderstanding, I thought you were saying it's
+bad to modify too many different files in one patch, so I split the
+patch into a series of patchsets.
 
+So, let Linus Walleij or Bartosz Golaszewski to decide for it ?
+I have the same options as you, it's a small change, and no need to
+trouble everyone for it.
+
+Because this structure will be used as the same instance in multiple
+files, even if we change this variable to union first, it can be
+compiled, but the program will still not work properly. This is
+because bgpio_init is initialized with the type of raw_spinlock_t,
+but is still accessed as spinlock_t in other drivers, which is a
+serious abnormal initialization.

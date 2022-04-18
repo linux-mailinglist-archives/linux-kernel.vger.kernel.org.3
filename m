@@ -2,56 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2DC504CE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BDC504CE2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 08:57:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236867AbiDRG47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 02:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39432 "EHLO
+        id S236874AbiDRG7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 02:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiDRG44 (ORCPT
+        with ESMTP id S229605AbiDRG7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 02:56:56 -0400
+        Mon, 18 Apr 2022 02:59:11 -0400
 Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40381261A
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:54:17 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320E5165B6
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 23:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650264857; x=1681800857;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=LO0jpx7ym3NgYfKx2/ExFTYFtIrbp9tOSpSJefGCbIE=;
-  b=eqquplV+00gpcn/upvq9GpFq0AeitgcTWetLTcO5lxYLxcReuTPxKSDf
-   YhKJUUBe2E3iJh7zNri0UPPl2VurmwtzJhjGyjEIfuFddPbrrXaf/Sd+Y
-   7Yz0X2aC36ZgHeS5tqJKhCCEehkTdYtR26IhQtVc8idguTodgNvyhdLUh
-   k1Zhd/TzKy8ILLc4qfct7YfCWNnq35P0CVkyVlaVtqIvcCNiOmrdF0EHB
-   xjeaFBuih+aT/lyozJ+8qbWpetMeALDuJ4+O9npzdOg23EmZ0Xf7on34o
-   vRqxs51r6mU8X+05szAjf85EgkvA99fFrL9AQ2Nfw+f0xeqyWGIrePZo3
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262926455"
+  t=1650264993; x=1681800993;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=zEcOUkoNPp9cmzKVRlgHSy0ZBq/Fk3p3WaDgRtHycUk=;
+  b=f/k+9WE40u6Lw+RcWBrABNeD6Ny8FU1JTMLKHWRw1fvIfVtHSqQJLyQ7
+   s+TWriwbHqokHZ4/dxu5oSRIOcHEsCVENlBEp/C2lfPH2gZE8pKkaScOB
+   FIRPfYhEgvr7qGcs7aLE/ne7ZG7Or2b8fj6gmBvxMw4Dkq6HZjC7dCt+V
+   80KiNKCZIW8jsmePZNqvEWX/ByOAsL7M1vSyQe7Q79HH0tuGmWPiyHR1h
+   PlGu0Zz8BFls1ZUMF7TQaKCJVuueKCel8mupGk89paYxT3kL5V2TaTHID
+   lGrcjKGbJ70QqKh57BAjzZuW69akEpgrxuOS5x5eMwefOYdhjmiCsNhuz
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262926719"
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="262926455"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 23:54:17 -0700
+   d="scan'208";a="262926719"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 23:56:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="701725683"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Apr 2022 23:54:15 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngLH5-0004QV-54;
-        Mon, 18 Apr 2022 06:54:15 +0000
-Date:   Mon, 18 Apr 2022 14:53:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [norov:bitmap 45/47] include/linux/bitmap.h:305:25: warning: cast to
- pointer from integer of different size
-Message-ID: <202204181455.Fc3fM9NR-lkp@intel.com>
+   d="scan'208";a="528760018"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga006.jf.intel.com with ESMTP; 17 Apr 2022 23:56:32 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 17 Apr 2022 23:56:32 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27; Sun, 17 Apr 2022 23:56:31 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2308.27 via Frontend Transport; Sun, 17 Apr 2022 23:56:31 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.48) by
+ edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2308.27; Sun, 17 Apr 2022 23:56:31 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yj8NhClRgCMWvtUkFiP89Z4/4Mv5ymRR/QCeprqD1Pjk+Ju4ypndXKkaA1k6P0QrKaXVCuiIYk4TwBAKy2O9VAMRgLyo5IGaWAmucCTyRlPQWqwpbxJr4AvBxKkcwUCbvH3RObOa/bT4JbyM7I0WTs1ROf0SaEZf9EASHyxL69y8nc54MYRPGfX6spmWyvwJL26+cD6tSclxhNtBNST/sPzv/hN0c/1WWsYJKDcJ0/RbyfqaKHusX1c5sW1b4rykE6xCXsWMpB7SUEogU4TmBcZhY1C3Gaw34bibx8BSpWUUWR6eEQhYOeGx5mibvkhXh7qu8FEKxQcLvKq2c6Dg/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zkvH6WupurbqgMawe9OOxZgspwLeKuRmkgwpg3eVFi8=;
+ b=nPl6vzhJtUz4IWazEuzq8AuqHGTGL5Hb3olGJXzDXimiheVWJWTb32eqO9DgIHfTScGubhFI/4d/OS+48lAXL+px48FhmMrmEG2cW4oXs2QIV+D/1595w8NKm8LyKOYvl0FFO+kYLFZvLN5cf13h3dje2p3a3Ug0QfOPRTdFn5twrt+MN0YakUB+5gHU3NKD3kCN7ZJ7ljQ4IXQ6ZAm144n/odzFgsQCoScR2gPje+qZjtZH6cWPbo/+eltJVaD18Uzv3HfDJMAPBPF+zk0Ij3e0222zzKTNWPWSC5F/rEbPtGyeQb4RutMrWjmiAV00PDJqAaytX0AYJVM90V6G1Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SA0PR11MB4736.namprd11.prod.outlook.com (2603:10b6:806:9f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Mon, 18 Apr
+ 2022 06:56:24 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c4ea:a404:b70b:e54e]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::c4ea:a404:b70b:e54e%8]) with mapi id 15.20.5164.025; Mon, 18 Apr 2022
+ 06:56:24 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Lu Baolu <baolu.lu@linux.intel.com>,
+        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+CC:     "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 1/3] iommu/vt-d: Set PGSNP bit in pasid table entry for
+ sva binding
+Thread-Topic: [PATCH 1/3] iommu/vt-d: Set PGSNP bit in pasid table entry for
+ sva binding
+Thread-Index: AQHYUY4xoku8wzlx6k+6woIzZ5zzT6z1PxRg
+Date:   Mon, 18 Apr 2022 06:56:23 +0000
+Message-ID: <BN9PR11MB5276A47E4013FA692C7560D58CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220416123049.879969-1-baolu.lu@linux.intel.com>
+ <20220416123049.879969-2-baolu.lu@linux.intel.com>
+In-Reply-To: <20220416123049.879969-2-baolu.lu@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: e20c112b-8fef-411d-92f3-08da21088d63
+x-ms-traffictypediagnostic: SA0PR11MB4736:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-microsoft-antispam-prvs: <SA0PR11MB4736C158A330C7F83831C5AA8CF39@SA0PR11MB4736.namprd11.prod.outlook.com>
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nZhpFVNvH9+/xSytqkzClDlxbwI8VQ1AI74He2po40te1mj1MQxTeSqVjT8/DXlOi72XB1tRY6Qy1srWsLMQKuOAwIoTSTQIiawYhMXMpMhhpyqasA0YVhR79WO3OBw6+QWrvbwSMRWcaAK4h1aAxbYbDLARhcyNyTGBUPEJ2ALjTIqHVKZcbqNRfqf4/ahI3mG+CEqcd4us+BhrIkAdkyYspwNz2VdDCHUIQyEU8Qm1SiDyz1pFVRSkqud4S/g694hw7wb638xj5Y0wG1cXYP+SRkx7wYQG80EYvbrHZQCvcHKojo8lcPzVcc1ljbDP0UwsTE72fyb9+KDr1z1nVWibWatu2B7N1F78r0kjmZOq+/4VMfl3ZffAMDSBk5mWZULRZcoFd9PLSb7EUidaZAloOrCmyMFaRJSwsXUX3F9D76GWXUBZhcf6tLBmba/x0NI4FzjyYfP5tH0vPE9mMOBK3ETWd2TyQVkwtCM3/Y+I8iIBWzd+xt+esjU7030p46jxcskwHntMo7LTqnLY2t9gbvntqZyY5UXl06pnE8sp5Go8TEnYRS9ksMM/Zwyrx6VWFII3aPublrfhdoaBqR2vgRgT6VoWijOsg2oISzsGQyMyg31d5XOPhCRQh52UIMl9JdRMHdSBC+CzKM4+T5K0oXml6gCEgutO4XyD3msBN7bBabvw+mjEJAEs3o0OU39UcbE5IH9tJbWndTQQEw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(76116006)(66946007)(66556008)(66476007)(64756008)(8676002)(66446008)(122000001)(82960400001)(8936002)(5660300002)(9686003)(55016003)(86362001)(2906002)(26005)(52536014)(38070700005)(38100700002)(7696005)(508600001)(71200400001)(6636002)(4326008)(83380400001)(316002)(186003)(54906003)(6506007)(110136005)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?19DwfbeJZpM5b8XhXWq7mR958hkjAkgg+18ze7lVZqaJuIHR7vkgSklGtTxB?=
+ =?us-ascii?Q?sDTMM2VCLWHPpfQo9PL4nYvSeyBX6HdtrpZpTZq3ww9HeTKFOlQ1LNTdwu/z?=
+ =?us-ascii?Q?rI2LjLAKs4i96NhBR6ScN4peQV1g6rFLvpwM+YtbCwreXWvRKDxotBnApGS0?=
+ =?us-ascii?Q?7c36WKQDSNkQuwwRgw/x9sulaEUeJiGKX05kRXLquo16ou2P7l9qdUuaSmuS?=
+ =?us-ascii?Q?/cYP1tlwewnugvW9x5LfUPBaVqdswnuUYF8rz1oP9QI5gHfZ9nA+uh+r2H7U?=
+ =?us-ascii?Q?x71AztoHSIBQiyfKVoFHFRWg2wc2/SeUcUFz2TIf8owpRJNweiMkr053wAh+?=
+ =?us-ascii?Q?40Z9LphNho9MPXwKStjPFCK/xOy2PAKJ3369S4gP2fctxx8rpUxSGHcUevqm?=
+ =?us-ascii?Q?MKV4fMOkYLl233zj0r81Y9LLcbRwEiSCN8Ymff5tEAZ+o2Dp04GHK6IfnWmB?=
+ =?us-ascii?Q?0GWDdCX72ELna4ECZopsYmJOUhA0IWyB5HYVdvfdhAk8klARdPg6ZJ7f11Bx?=
+ =?us-ascii?Q?03teoMerapV21A2OSMrDP9Wh77zCYjnRfcfLs6+AbVVJ7CSh/AUdYVUkFdR9?=
+ =?us-ascii?Q?3J4HDuULuGaLIv/Ja5icRHWuiWjubPD/9p01Rd1g4jx3p0ltxDYipKvaW6zO?=
+ =?us-ascii?Q?rgAO6BOZ6lnyuAXnmJXo829Ii1/MM4m4JIx0gjG6SrNFf9IG9R2jFxT54Hzt?=
+ =?us-ascii?Q?M70PKgELtOhxpo/SyXVBA+pRgJ+WtDFOLTzBftCe/5cMGFwqZcaVwFskjtcG?=
+ =?us-ascii?Q?c/4GnZC9BKOF69Y6+J2yxQd+K3GbfJDXLMPMJ2MM+ehZ1BkjZg0yavwuhnpn?=
+ =?us-ascii?Q?+yOXk9wudLl5OfOug7GwnS0Buy2Nkv1xMvyRvpBFhqtlnolQAEZqf5Hl9tmj?=
+ =?us-ascii?Q?7ZwWu7RKXSBEwRZNc4+BPwoROjSpTNUFgB7/HOz08jQt7YqqcS2DB3HXXn3l?=
+ =?us-ascii?Q?LMxmLEfnL49DOvPOF7vlAoy4pmFPInIiDf8WjTYe9JZCttwcZgklh8iUdGtj?=
+ =?us-ascii?Q?r7i+i3F7NaAQgr5d9b0ywNa7S9a9Emt/o25fsx5lmAa4MgCoRB57Jx5GN+LM?=
+ =?us-ascii?Q?dQfVmbUNhsWSD2+9fNS6HgFSF7tsveiOOpm/5xppbt6urQHaglGisd6yILqA?=
+ =?us-ascii?Q?hzD+NZbc0gljrzwE/BlpjXx28OYLV66D32kHF8pEoX42zf4KRhKUDTu+6G9w?=
+ =?us-ascii?Q?lulbLucrl5Vf0wyJOFmnBAdjmqhv+CFcPKuyCDTJYnPM+Aug6GVZuafoA6kK?=
+ =?us-ascii?Q?eyZdFzzlCX17EH0PVuQN5NbTXrTk5FDE/dJE2QQrhRIA46G1mpGaUckTN/hT?=
+ =?us-ascii?Q?mRn8zxIwI+nSRHnWfrNjADvf5KaZo0YlFRW78Gj62a8ktnMzttNjvhyGcQlW?=
+ =?us-ascii?Q?/9NvOfQrpwSdQja9lLVTsx6qy/ewtSCeVrFItUS7BD3cOi6PagmzcPO6JPAr?=
+ =?us-ascii?Q?Fvg6vSleXH5cqYZsQbqZuKdpMUCjuTMQ5sPsjt+ZjWnDRr5fFrjvAOMs8iSj?=
+ =?us-ascii?Q?viKZS06cZykN495UGWONYxHrbMC8e9YcznaO7w/H70CqckiRqFxDMp6K2sPR?=
+ =?us-ascii?Q?kdqLzY1RskMvG7FPoTULb3tH66u1jg/SA3H+mhpahX00ljAP/sL+0/XEGkNn?=
+ =?us-ascii?Q?eqbEJ8upRubji7wL4KKHdt4klOOnrrYP/wEZr/VwZJEO1Tz25yjrubPMXAE6?=
+ =?us-ascii?Q?2sbG6AuuXSiW6C3LokmGiWv9kHnHjWe98LN1DcLTYHwuGZ73e7ljxvSuOgzD?=
+ =?us-ascii?Q?kVNdm7V3vA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e20c112b-8fef-411d-92f3-08da21088d63
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Apr 2022 06:56:23.8308
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uPTU+mfEccZRX4lwh5RHSZu4yn5IZZBBBuIvjVSjj3WFIZV+0N46U1TJlPOtlca69k2gAgWVLYRHfhVPh8AZkg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4736
+X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
@@ -62,306 +161,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/norov/linux bitmap
-head:   45a9e3feb171ccf077979b7ff6a0c6a732cfc17b
-commit: 1a21df17d726b4f3c19a148e10d09ec632603f1c [45/47] lib: add bitmap_{from,to}_arr64
-config: um-i386_defconfig (https://download.01.org/0day-ci/archive/20220418/202204181455.Fc3fM9NR-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://github.com/norov/linux/commit/1a21df17d726b4f3c19a148e10d09ec632603f1c
-        git remote add norov https://github.com/norov/linux
-        git fetch --no-tags norov bitmap
-        git checkout 1a21df17d726b4f3c19a148e10d09ec632603f1c
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=um SUBARCH=i386 prepare
+> From: Lu Baolu <baolu.lu@linux.intel.com>
+> Sent: Saturday, April 16, 2022 8:31 PM
+>=20
+> This field make the requests snoop processor caches irrespective of other
+> attributes in the request or other fields in paging structure entries
+> used to translate the request. The latest VT-d specification states that
+> this field is treated as Reserved(0) for implementations not supporting
+> Snoop Control (SC=3D0 in the Extended Capability Register). Hence add a
+> check in the code.
+>=20
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> ---
+>  drivers/iommu/intel/pasid.c | 2 +-
+>  drivers/iommu/intel/svm.c   | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+> index f8d215d85695..9ca3c67a2058 100644
+> --- a/drivers/iommu/intel/pasid.c
+> +++ b/drivers/iommu/intel/pasid.c
+> @@ -625,7 +625,7 @@ int intel_pasid_setup_first_level(struct intel_iommu
+> *iommu,
+>  		}
+>  	}
+>=20
+> -	if (flags & PASID_FLAG_PAGE_SNOOP)
+> +	if ((flags & PASID_FLAG_PAGE_SNOOP) && ecap_sc_support(iommu-
+> >ecap))
+>  		pasid_set_pgsnp(pte);
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+If the caller wants snoop for some reason is it correct to simply
+ignore the request when lacking of hw support? Suppose certain
+errno should be returned here...
 
-All warnings (new ones prefixed by >>):
+>=20
+>  	pasid_set_domain_id(pte, did);
+> diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+> index 23a38763c1d1..d88af37c20ef 100644
+> --- a/drivers/iommu/intel/svm.c
+> +++ b/drivers/iommu/intel/svm.c
+> @@ -394,6 +394,7 @@ static struct iommu_sva *intel_svm_bind_mm(struct
+> intel_iommu *iommu,
+>  	sflags =3D (flags & SVM_FLAG_SUPERVISOR_MODE) ?
+>  			PASID_FLAG_SUPERVISOR_MODE : 0;
+>  	sflags |=3D cpu_feature_enabled(X86_FEATURE_LA57) ?
+> PASID_FLAG_FL5LP : 0;
+> +	sflags |=3D PASID_FLAG_PAGE_SNOOP;
+>  	spin_lock_irqsave(&iommu->lock, iflags);
+>  	ret =3D intel_pasid_setup_first_level(iommu, dev, mm->pgd, mm-
+> >pasid,
+>  					    FLPT_DEFAULT_DID, sflags);
+> --
+> 2.25.1
 
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/rcupdate.h:29,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from arch/x86/um/shared/sysdep/kernel-offsets.h:3,
-                    from arch/um/kernel/asm-offsets.c:1:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   In file included from arch/um/kernel/asm-offsets.c:1:
-   arch/x86/um/shared/sysdep/kernel-offsets.h: At top level:
-   arch/x86/um/shared/sysdep/kernel-offsets.h:9:6: warning: no previous prototype for 'foo' [-Wmissing-prototypes]
-       9 | void foo(void)
-         |      ^~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/mm_types_task.h:14,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from arch/um/kernel/exec.c:7:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from arch/um/kernel/irq.c:10:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/irq.c: At top level:
-   arch/um/kernel/irq.c:646:13: warning: no previous prototype for 'init_IRQ' [-Wmissing-prototypes]
-     646 | void __init init_IRQ(void)
-         |             ^~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/mm_types_task.h:14,
-                    from include/linux/mm_types.h:5,
-                    from include/linux/buildid.h:5,
-                    from include/linux/module.h:14,
-                    from arch/um/kernel/mem.c:7:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/mem.c: At top level:
-   arch/um/kernel/mem.c:183:8: warning: no previous prototype for 'pgd_alloc' [-Wmissing-prototypes]
-     183 | pgd_t *pgd_alloc(struct mm_struct *mm)
-         |        ^~~~~~~~~
-   arch/um/kernel/mem.c:196:7: warning: no previous prototype for 'uml_kmalloc' [-Wmissing-prototypes]
-     196 | void *uml_kmalloc(int size, int flags)
-         |       ^~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/percpu.h:7,
-                    from include/linux/context_tracking_state.h:5,
-                    from include/linux/hardirq.h:5,
-                    from arch/um/kernel/process.c:11:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/process.c: At top level:
-   arch/um/kernel/process.c:50:5: warning: no previous prototype for 'pid_to_processor_id' [-Wmissing-prototypes]
-      50 | int pid_to_processor_id(int pid)
-         |     ^~~~~~~~~~~~~~~~~~~
-   arch/um/kernel/process.c:86:7: warning: no previous prototype for '__switch_to' [-Wmissing-prototypes]
-      86 | void *__switch_to(struct task_struct *from, struct task_struct *to)
-         |       ^~~~~~~~~~~
-   arch/um/kernel/process.c: In function 'new_thread_handler':
-   arch/um/kernel/process.c:121:28: warning: variable 'n' set but not used [-Wunused-but-set-variable]
-     121 |         int (*fn)(void *), n;
-         |                            ^
-   arch/um/kernel/process.c: At top level:
-   arch/um/kernel/process.c:139:6: warning: no previous prototype for 'fork_handler' [-Wmissing-prototypes]
-     139 | void fork_handler(void)
-         |      ^~~~~~~~~~~~
-   arch/um/kernel/process.c:215:6: warning: no previous prototype for 'arch_cpu_idle' [-Wmissing-prototypes]
-     215 | void arch_cpu_idle(void)
-         |      ^~~~~~~~~~~~~
-   arch/um/kernel/process.c:252:5: warning: no previous prototype for 'copy_to_user_proc' [-Wmissing-prototypes]
-     252 | int copy_to_user_proc(void __user *to, void *from, int size)
-         |     ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/process.c:262:5: warning: no previous prototype for 'clear_user_proc' [-Wmissing-prototypes]
-     262 | int clear_user_proc(void __user *buf, int size)
-         |     ^~~~~~~~~~~~~~~
-   arch/um/kernel/process.c:315:12: warning: no previous prototype for 'make_proc_sysemu' [-Wmissing-prototypes]
-     315 | int __init make_proc_sysemu(void)
-         |            ^~~~~~~~~~~~~~~~
-   arch/um/kernel/process.c:355:15: warning: no previous prototype for 'arch_align_stack' [-Wmissing-prototypes]
-     355 | unsigned long arch_align_stack(unsigned long sp)
-         |               ^~~~~~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/rcupdate.h:29,
-                    from include/linux/rculist.h:11,
-                    from include/linux/sched/signal.h:5,
-                    from arch/um/kernel/reboot.c:6:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/reboot.c: At top level:
-   arch/um/kernel/reboot.c:45:6: warning: no previous prototype for 'machine_restart' [-Wmissing-prototypes]
-      45 | void machine_restart(char * __unused)
-         |      ^~~~~~~~~~~~~~~
-   arch/um/kernel/reboot.c:51:6: warning: no previous prototype for 'machine_power_off' [-Wmissing-prototypes]
-      51 | void machine_power_off(void)
-         |      ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/reboot.c:57:6: warning: no previous prototype for 'machine_halt' [-Wmissing-prototypes]
-      57 | void machine_halt(void)
-         |      ^~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from include/linux/debugobjects.h:6,
-                    from include/linux/timer.h:8,
-                    from include/linux/clocksource.h:17,
-                    from include/linux/clockchips.h:14,
-                    from arch/um/kernel/time.c:10:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/time.c: At top level:
-   arch/um/kernel/time.c:778:13: warning: no previous prototype for 'time_init' [-Wmissing-prototypes]
-     778 | void __init time_init(void)
-         |             ^~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from arch/um/kernel/tlb.c:6:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/tlb.c: At top level:
-   arch/um/kernel/tlb.c:317:6: warning: no previous prototype for 'fix_range_common' [-Wmissing-prototypes]
-     317 | void fix_range_common(struct mm_struct *mm, unsigned long start_addr,
-         |      ^~~~~~~~~~~~~~~~
-   arch/um/kernel/tlb.c:579:6: warning: no previous prototype for 'flush_tlb_mm_range' [-Wmissing-prototypes]
-     579 | void flush_tlb_mm_range(struct mm_struct *mm, unsigned long start,
-         |      ^~~~~~~~~~~~~~~~~~
-   arch/um/kernel/tlb.c:595:6: warning: no previous prototype for 'force_flush_all' [-Wmissing-prototypes]
-     595 | void force_flush_all(void)
-         |      ^~~~~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/rcupdate.h:29,
-                    from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/delay.h:23,
-                    from arch/um/kernel/um_arch.c:6:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/um_arch.c: At top level:
-   arch/um/kernel/um_arch.c:402:19: warning: no previous prototype for 'read_initrd' [-Wmissing-prototypes]
-     402 | int __init __weak read_initrd(void)
-         |                   ^~~~~~~~~~~
-   arch/um/kernel/um_arch.c:421:13: warning: no previous prototype for 'check_bugs' [-Wmissing-prototypes]
-     421 | void __init check_bugs(void)
-         |             ^~~~~~~~~~
-   arch/um/kernel/um_arch.c:439:7: warning: no previous prototype for 'text_poke' [-Wmissing-prototypes]
-     439 | void *text_poke(void *addr, const void *opcode, size_t len)
-         |       ^~~~~~~~~
-   arch/um/kernel/um_arch.c:451:6: warning: no previous prototype for 'text_poke_sync' [-Wmissing-prototypes]
-     451 | void text_poke_sync(void)
-         |      ^~~~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from arch/um/kernel/kmsg_dump.c:3:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/kmsg_dump.c: At top level:
-   arch/um/kernel/kmsg_dump.c:54:12: warning: no previous prototype for 'kmsg_dumper_stdout_init' [-Wmissing-prototypes]
-      54 | int __init kmsg_dumper_stdout_init(void)
-         |            ^~~~~~~~~~~~~~~~~~~~~~~
---
-   In file included from include/linux/cpumask.h:12,
-                    from include/linux/smp.h:13,
-                    from include/linux/lockdep.h:14,
-                    from include/linux/spinlock.h:62,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/mm.h:7,
-                    from arch/um/kernel/skas/mmu.c:7:
-   include/linux/bitmap.h: In function 'bitmap_from_u64':
->> include/linux/bitmap.h:305:25: warning: cast to pointer from integer of different size [-Wint-to-pointer-cast]
-     305 |                         (const unsigned long *) (buf), (nbits))
-         |                         ^
-   include/linux/bitmap.h:615:16: note: in expansion of macro 'bitmap_from_arr64'
-     615 |         return bitmap_from_arr64(dst, mask, 64);
-         |                ^~~~~~~~~~~~~~~~~
-   arch/um/kernel/skas/mmu.c: At top level:
-   arch/um/kernel/skas/mmu.c:17:5: warning: no previous prototype for 'init_new_context' [-Wmissing-prototypes]
-      17 | int init_new_context(struct task_struct *task, struct mm_struct *mm)
-         |     ^~~~~~~~~~~~~~~~
-   arch/um/kernel/skas/mmu.c:60:6: warning: no previous prototype for 'destroy_context' [-Wmissing-prototypes]
-      60 | void destroy_context(struct mm_struct *mm)
-         |      ^~~~~~~~~~~~~~~
-..
-
-
-vim +305 include/linux/bitmap.h
-
-   292	
-   293	/*
-   294	 * On 64-bit systems bitmaps are represented as u64 arrays internally. On LE32
-   295	 * machines the order of hi and lo parts of nubmers match the bitmap structure.
-   296	 * In both cases conversion is not needed when copying data from/to arrays of
-   297	 * u64.
-   298	 */
-   299	#if (BITS_PER_LONG == 32) && defined (__BIG_ENDIAN)
-   300	void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
-   301	void bitmap_to_arr64(u64 *buf, const unsigned long *bitmap, unsigned int nbits);
-   302	#else
-   303	#define bitmap_from_arr64(bitmap, buf, nbits)			\
-   304		bitmap_copy_clear_tail((unsigned long *) (bitmap),	\
- > 305				(const unsigned long *) (buf), (nbits))
-   306	#define bitmap_to_arr64(buf, bitmap, nbits)			\
-   307		bitmap_copy_clear_tail((unsigned long *) (buf),		\
-   308				(const unsigned long *) (bitmap), (nbits))
-   309	#endif
-   310	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

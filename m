@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F533505752
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B4550519E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244080AbiDRNuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41212 "EHLO
+        id S239118AbiDRMfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:35:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244553AbiDRNai (ORCPT
+        with ESMTP id S239979AbiDRM3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DB1427F7;
-        Mon, 18 Apr 2022 05:54:44 -0700 (PDT)
+        Mon, 18 Apr 2022 08:29:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFCC201BE;
+        Mon, 18 Apr 2022 05:23:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4E6EDB80E44;
-        Mon, 18 Apr 2022 12:54:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3EF2C385A7;
-        Mon, 18 Apr 2022 12:54:37 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ECF33B80EC1;
+        Mon, 18 Apr 2022 12:22:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 487A8C385A7;
+        Mon, 18 Apr 2022 12:22:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286478;
-        bh=ofJ4spLJs3LiYL83YZiZiU6lv3R1zdUaKtVleqjM0Us=;
+        s=korg; t=1650284577;
+        bh=Bcm/L4B9jJWb+jV5TvnT5U/PTAjme2W/RGdOOBuZDt8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=JbChApY9B5un/u/+BhCTWRhRbcptz0ATSFoYCaNSc3hsyJPbdgHgws84C4bNkxE4m
-         e4gQ53L7xQnQjoVbBqdcAv8V1eVoBCGEep5rjZJtJ6ndWKKcllzr6QWvtcjjkNuMYh
-         LIo4XOG9KHJX4TboR8jzc+tZfvUXSsfuESG9asnY=
+        b=y3smYUyhasuUWXbEhS+aDzjeD+LDNRozqty4rPrqrzOqsUXvBpWet0iKKBn0g+WtY
+         xMGA7MLYEFlMoQwpDs22RdH8znNuMVHOvDZch/do/cf226Zyy2pcINcW9D1SpBZm20
+         ncingRStMIvohrdnfPaVwhjAONjQIZ0s0eF+MPw8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Skripkin <paskripkin@gmail.com>,
-        Dave Kleikamp <dave.kleikamp@oracle.com>,
-        Sasha Levin <sashal@kernel.org>,
-        syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Subject: [PATCH 4.14 147/284] jfs: fix divide error in dbNextAG
+        stable@vger.kernel.org, Marcin Kozlowski <marcinguy@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 159/219] net: usb: aqc111: Fix out-of-bounds accesses in RX fixup
 Date:   Mon, 18 Apr 2022 14:12:08 +0200
-Message-Id: <20220418121215.766250246@linuxfoundation.org>
+Message-Id: <20220418121211.334656665@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,56 +55,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Skripkin <paskripkin@gmail.com>
+From: Marcin Kozlowski <marcinguy@gmail.com>
 
-[ Upstream commit 2cc7cc01c15f57d056318c33705647f87dcd4aab ]
+[ Upstream commit afb8e246527536848b9b4025b40e613edf776a9d ]
 
-Syzbot reported divide error in dbNextAG(). The problem was in missing
-validation check for malicious image.
+aqc111_rx_fixup() contains several out-of-bounds accesses that can be
+triggered by a malicious (or defective) USB device, in particular:
 
-Syzbot crafted an image with bmp->db_numag equal to 0. There wasn't any
-validation checks, but dbNextAG() blindly use bmp->db_numag in divide
-expression
+ - The metadata array (desc_offset..desc_offset+2*pkt_count) can be out of bounds,
+   causing OOB reads and (on big-endian systems) OOB endianness flips.
+ - A packet can overlap the metadata array, causing a later OOB
+   endianness flip to corrupt data used by a cloned SKB that has already
+   been handed off into the network stack.
+ - A packet SKB can be constructed whose tail is far beyond its end,
+   causing out-of-bounds heap data to be considered part of the SKB's
+   data.
 
-Fix it by validating bmp->db_numag in dbMount() and return an error if
-image is malicious
+Found doing variant analysis. Tested it with another driver (ax88179_178a), since
+I don't have a aqc111 device to test it, but the code looks very similar.
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Reported-and-tested-by: syzbot+46f5c25af73eb8330eb6@syzkaller.appspotmail.com
-Signed-off-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Dave Kleikamp <dave.kleikamp@oracle.com>
+Signed-off-by: Marcin Kozlowski <marcinguy@gmail.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/jfs/jfs_dmap.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/net/usb/aqc111.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/fs/jfs/jfs_dmap.c b/fs/jfs/jfs_dmap.c
-index 9ff510a489cb..6dac48e29d28 100644
---- a/fs/jfs/jfs_dmap.c
-+++ b/fs/jfs/jfs_dmap.c
-@@ -161,6 +161,7 @@ static const s8 budtab[256] = {
-  *	0	- success
-  *	-ENOMEM	- insufficient memory
-  *	-EIO	- i/o error
-+ *	-EINVAL - wrong bmap data
-  */
- int dbMount(struct inode *ipbmap)
- {
-@@ -192,6 +193,12 @@ int dbMount(struct inode *ipbmap)
- 	bmp->db_nfree = le64_to_cpu(dbmp_le->dn_nfree);
- 	bmp->db_l2nbperpage = le32_to_cpu(dbmp_le->dn_l2nbperpage);
- 	bmp->db_numag = le32_to_cpu(dbmp_le->dn_numag);
-+	if (!bmp->db_numag) {
-+		release_metapage(mp);
-+		kfree(bmp);
-+		return -EINVAL;
-+	}
+diff --git a/drivers/net/usb/aqc111.c b/drivers/net/usb/aqc111.c
+index ea06d10e1c21..ca409d450a29 100644
+--- a/drivers/net/usb/aqc111.c
++++ b/drivers/net/usb/aqc111.c
+@@ -1102,10 +1102,15 @@ static int aqc111_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
+ 	if (start_of_descs != desc_offset)
+ 		goto err;
+ 
+-	/* self check desc_offset from header*/
+-	if (desc_offset >= skb_len)
++	/* self check desc_offset from header and make sure that the
++	 * bounds of the metadata array are inside the SKB
++	 */
++	if (pkt_count * 2 + desc_offset >= skb_len)
+ 		goto err;
+ 
++	/* Packets must not overlap the metadata array */
++	skb_trim(skb, desc_offset);
 +
- 	bmp->db_maxlevel = le32_to_cpu(dbmp_le->dn_maxlevel);
- 	bmp->db_maxag = le32_to_cpu(dbmp_le->dn_maxag);
- 	bmp->db_agpref = le32_to_cpu(dbmp_le->dn_agpref);
+ 	if (pkt_count == 0)
+ 		goto err;
+ 
 -- 
-2.34.1
+2.35.1
 
 
 

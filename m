@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D265055AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A690950536E
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242983AbiDRNJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59854 "EHLO
+        id S241091AbiDRM6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241063AbiDRM6U (ORCPT
+        with ESMTP id S240428AbiDRMtg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:58:20 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A1DA24BE9;
-        Mon, 18 Apr 2022 05:38:35 -0700 (PDT)
+        Mon, 18 Apr 2022 08:49:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11B22B1BD;
+        Mon, 18 Apr 2022 05:33:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A4984CE10A1;
-        Mon, 18 Apr 2022 12:38:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 985B3C385A1;
-        Mon, 18 Apr 2022 12:38:31 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57995B80ED6;
+        Mon, 18 Apr 2022 12:33:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D6A8C385A7;
+        Mon, 18 Apr 2022 12:33:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285512;
-        bh=OVLTAbOrvMnEDfWeixHUkUQ3+om6Pi0e+oQHgaH7RC4=;
+        s=korg; t=1650285224;
+        bh=g8Q2+7CHiKjILami8t6hn7pMcUNJyhDrXAmITMxT9QM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ql07T+5Ikd27H2rtKLvPyqPKshEynuhzlGrt7t0xrvBycC6bVjWdEfnhzYnceWhx3
-         axK8SYP4oIkTFP1S7ATxgk9W30htAK3Pe88TkmBCgz6ubWM0ZtG7yqoea0vudcYQzi
-         dt+CiZn0SaFWRJCIJn1MW+c8ySMG7Y05d6HByQ1c=
+        b=u1HXsKbKnAHlq26JRJZDOUgjpyH2y3El7GkHPTOvtmMr4yynzNy9b2zOS8qxtvNUW
+         Slev7VFn2PLet6Xd19pPViyZ6HfFpbMhFjdXDLN5ufm/9Gh5DT3cTjJj8qd4UxW2QF
+         wY8y+OjesHUu2jIw+4bIMlb+v7mEVJCaIU6B4ZHg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Khazhismel Kumykov <khazhy@google.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 040/105] dm mpath: only use ktime_get_ns() in historical selector
+        stable@vger.kernel.org, Pavel Begunkov <asml.silence@gmail.com>,
+        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 142/189] io_uring: use nospec annotation for more indexes
 Date:   Mon, 18 Apr 2022 14:12:42 +0200
-Message-Id: <20220418121147.616159582@linuxfoundation.org>
+Message-Id: <20220418121205.588146582@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,60 +54,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Khazhismel Kumykov <khazhy@google.com>
+From: Pavel Begunkov <asml.silence@gmail.com>
 
-[ Upstream commit ce40426fdc3c92acdba6b5ca74bc7277ffaa6a3d ]
+[ Upstream commit 4cdd158be9d09223737df83136a1fb65269d809a ]
 
-Mixing sched_clock() and ktime_get_ns() usage will give bad results.
+There are still several places that using pre array_index_nospec()
+indexes, fix them up.
 
-Switch hst_select_path() from using sched_clock() to ktime_get_ns().
-Also rename path_service_time()'s 'sched_now' variable to 'now'.
-
-Fixes: 2613eab11996 ("dm mpath: add Historical Service Time Path Selector")
-Signed-off-by: Khazhismel Kumykov <khazhy@google.com>
-Signed-off-by: Mike Snitzer <snitzer@kernel.org>
+Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
+Link: https://lore.kernel.org/r/b01ef5ee83f72ed35ad525912370b729f5d145f4.1649336342.git.asml.silence@gmail.com
+Signed-off-by: Jens Axboe <axboe@kernel.dk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/md/dm-historical-service-time.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ fs/io_uring.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/md/dm-historical-service-time.c b/drivers/md/dm-historical-service-time.c
-index 186f91e2752c..06fe43c13ba3 100644
---- a/drivers/md/dm-historical-service-time.c
-+++ b/drivers/md/dm-historical-service-time.c
-@@ -429,7 +429,7 @@ static struct dm_path *hst_select_path(struct path_selector *ps,
- {
- 	struct selector *s = ps->context;
- 	struct path_info *pi = NULL, *best = NULL;
--	u64 time_now = sched_clock();
-+	u64 time_now = ktime_get_ns();
- 	struct dm_path *ret = NULL;
- 	unsigned long flags;
+diff --git a/fs/io_uring.c b/fs/io_uring.c
+index ca207e9a87cd..1bf1ea2cd8b0 100644
+--- a/fs/io_uring.c
++++ b/fs/io_uring.c
+@@ -8489,7 +8489,7 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	struct io_ring_ctx *ctx = req->ctx;
+ 	struct io_fixed_file *file_slot;
+ 	struct file *file;
+-	int ret, i;
++	int ret;
  
-@@ -470,7 +470,7 @@ static int hst_start_io(struct path_selector *ps, struct dm_path *path,
+ 	io_ring_submit_lock(ctx, !(issue_flags & IO_URING_F_NONBLOCK));
+ 	ret = -ENXIO;
+@@ -8502,8 +8502,8 @@ static int io_close_fixed(struct io_kiocb *req, unsigned int issue_flags)
+ 	if (ret)
+ 		goto out;
  
- static u64 path_service_time(struct path_info *pi, u64 start_time)
- {
--	u64 sched_now = ktime_get_ns();
-+	u64 now = ktime_get_ns();
+-	i = array_index_nospec(offset, ctx->nr_user_files);
+-	file_slot = io_fixed_file_slot(&ctx->file_table, i);
++	offset = array_index_nospec(offset, ctx->nr_user_files);
++	file_slot = io_fixed_file_slot(&ctx->file_table, offset);
+ 	ret = -EBADF;
+ 	if (!file_slot->file_ptr)
+ 		goto out;
+@@ -8559,8 +8559,7 @@ static int __io_sqe_files_update(struct io_ring_ctx *ctx,
  
- 	/* if a previous disk request has finished after this IO was
- 	 * sent to the hardware, pretend the submission happened
-@@ -479,11 +479,11 @@ static u64 path_service_time(struct path_info *pi, u64 start_time)
- 	if (time_after64(pi->last_finish, start_time))
- 		start_time = pi->last_finish;
+ 		if (file_slot->file_ptr) {
+ 			file = (struct file *)(file_slot->file_ptr & FFS_MASK);
+-			err = io_queue_rsrc_removal(data, up->offset + done,
+-						    ctx->rsrc_node, file);
++			err = io_queue_rsrc_removal(data, i, ctx->rsrc_node, file);
+ 			if (err)
+ 				break;
+ 			file_slot->file_ptr = 0;
+@@ -9229,7 +9228,7 @@ static int __io_sqe_buffers_update(struct io_ring_ctx *ctx,
  
--	pi->last_finish = sched_now;
--	if (time_before64(sched_now, start_time))
-+	pi->last_finish = now;
-+	if (time_before64(now, start_time))
- 		return 0;
- 
--	return sched_now - start_time;
-+	return now - start_time;
- }
- 
- static int hst_end_io(struct path_selector *ps, struct dm_path *path,
+ 		i = array_index_nospec(offset, ctx->nr_user_bufs);
+ 		if (ctx->user_bufs[i] != ctx->dummy_ubuf) {
+-			err = io_queue_rsrc_removal(ctx->buf_data, offset,
++			err = io_queue_rsrc_removal(ctx->buf_data, i,
+ 						    ctx->rsrc_node, ctx->user_bufs[i]);
+ 			if (unlikely(err)) {
+ 				io_buffer_unmap(ctx, &imu);
 -- 
 2.35.1
 

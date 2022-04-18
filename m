@@ -2,45 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113A6505809
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42CEA505444
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244535AbiDRN7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:59:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S241139AbiDRNFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:05:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242707AbiDRNfk (ORCPT
+        with ESMTP id S240281AbiDRMzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:35:40 -0400
+        Mon, 18 Apr 2022 08:55:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC11F252B6;
-        Mon, 18 Apr 2022 05:58:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DCC722BE5;
+        Mon, 18 Apr 2022 05:35:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DBF612DB;
-        Mon, 18 Apr 2022 12:58:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECEAC385A1;
-        Mon, 18 Apr 2022 12:58:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7933E6118A;
+        Mon, 18 Apr 2022 12:35:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89277C385A1;
+        Mon, 18 Apr 2022 12:35:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286687;
-        bh=KILYHveAm1KA+QDA4KsMbD9x4kEXUusNdRBZBi+Vj3M=;
+        s=korg; t=1650285330;
+        bh=resUGCgfDFyLK6Iu5p0IhwFZLP0ZHosQKFmc2IXJMqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P5rgXukKKlEDX3UDAhRmvwO4zBGlaJly6TETrfCj+Y2geOW3yDE5Tit2/0omke74q
-         9zw7jbn5Q3euL0+2Kfs0pQX0cuk+c11vpaRyOJNj3NkrMpEamI1F/CX3MOY7tIjBnZ
-         tTgRQQEe3lGbtHqvZY/tJUDPBXrjJ97BJyDbZ+DU=
+        b=hSbh7MHHQ/RqcQCHNBNa9RCBoFR7oUrxmUoyK6QWnYNEPKpvhL9Crle0+LopoM5KG
+         PpIntdWXXO1NLi95P5p4tIbk4QRjAM0mkEbeX8sjXvl0eCDXyWYTuwLZ2rz1I+C3aI
+         twRsPTQEEkhzpMUA1EoHbOiaxWP5N6MOSFK4ZugA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org, George Shen <George.Shen@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Martin Leung <Martin.Leung@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 173/284] ASoC: soc-core: skip zero num_dai component in searching dai name
+Subject: [PATCH 5.15 134/189] drm/amd/display: Revert FEC check in validation
 Date:   Mon, 18 Apr 2022 14:12:34 +0200
-Message-Id: <20220418121216.661379213@linuxfoundation.org>
+Message-Id: <20220418121205.065490608@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,47 +58,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shengjiu Wang <shengjiu.wang@nxp.com>
+From: Martin Leung <Martin.Leung@amd.com>
 
-[ Upstream commit f7d344a2bd5ec81fbd1ce76928fd059e57ec9bea ]
+[ Upstream commit b2075fce104b88b789c15ef1ed2b91dc94198e26 ]
 
-In the case like dmaengine which's not a dai but as a component, the
-num_dai is zero, dmaengine component has the same component_of_node
-as cpu dai, when cpu dai component is not ready, but dmaengine component
-is ready, try to get cpu dai name, the snd_soc_get_dai_name() return
--EINVAL, not -EPROBE_DEFER, that cause below error:
+why and how:
+causes failure on install on certain machines
 
-asoc-simple-card <card name>: parse error -22
-asoc-simple-card: probe of <card name> failed with error -22
-
-The sound card failed to probe.
-
-So this patch fixes the issue above by skipping the zero num_dai
-component in searching dai name.
-
-Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-Link: https://lore.kernel.org/r/1644491952-7457-1-git-send-email-shengjiu.wang@nxp.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Reviewed-by: George Shen <George.Shen@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Martin Leung <Martin.Leung@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/soc/soc-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
-index 2a172de37466..febf2b649b96 100644
---- a/sound/soc/soc-core.c
-+++ b/sound/soc/soc-core.c
-@@ -4243,7 +4243,7 @@ int snd_soc_get_dai_name(struct of_phandle_args *args,
- 		if (!component_of_node && pos->dev->parent)
- 			component_of_node = pos->dev->parent->of_node;
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index 35a27fe48f66..b37c4d2e7a1e 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -1377,10 +1377,6 @@ bool dc_validate_seamless_boot_timing(const struct dc *dc,
+ 	if (!link->link_enc->funcs->is_dig_enabled(link->link_enc))
+ 		return false;
  
--		if (component_of_node != args->np)
-+		if (component_of_node != args->np || !pos->num_dai)
- 			continue;
+-	/* Check for FEC status*/
+-	if (link->link_enc->funcs->fec_is_active(link->link_enc))
+-		return false;
+-
+ 	enc_inst = link->link_enc->funcs->get_dig_frontend(link->link_enc);
  
- 		if (pos->driver->of_xlate_dai_name) {
+ 	if (enc_inst == ENGINE_ID_UNKNOWN)
 -- 
-2.34.1
+2.35.1
 
 
 

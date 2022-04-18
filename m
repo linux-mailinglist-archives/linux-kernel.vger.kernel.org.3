@@ -2,116 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392F5505C9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D97505D2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:56:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346405AbiDRQr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47762 "EHLO
+        id S1346748AbiDRQ7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:59:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346373AbiDRQrZ (ORCPT
+        with ESMTP id S1346874AbiDRQ7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:47:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E934CE08
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:44:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 18 Apr 2022 12:59:06 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E3C2DF4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:54:46 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id C10FD820C0A;
+        Mon, 18 Apr 2022 16:45:08 +0000 (UTC)
+Received: from pdx1-sub0-mail-a254.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id DDF1C820A27;
+        Mon, 18 Apr 2022 16:45:07 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1650300308; a=rsa-sha256;
+        cv=none;
+        b=cyyQ+JSYoXJyjM2Ws0QKaUM1dGyzFqXsSCvkwYc550j2MJ3BkhEWHD7IoIA+Ge+CiH2BOZ
+        ntIiFuwhnuADdPnu9irQldc2Jen0rjhvBNXHyCpG3PEnaX8kVNx2RyS/oaZbPYJ/Jsq1if
+        iul6AVqS+QtOWGLQdWQA73bTBdRxs0NyPaXeZ8OJM1JJnZ2/hI1EB2uehs5aL26sgisTJh
+        y5rlAEFITavdHxb0T60kbmfNwoVleI7np+lUOiHcvVd/94cBmJZuO2UKiCN1FOrzhTwAue
+        iX0Kfrf2a6gT5AziHprtyOT45tIuyI7MuCUcnWPxsy48JyT0rsB9Mimu8utf3g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1650300308;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=BMeE3theriLPeHe7OsqT9QG1VfC7A6W9rVpn1syfKUA=;
+        b=dHwCsVeIZYfExOX0wY9yHnIz3FKYSqPZgzf4hdHQzAGFwIPq2jfzkOIR2tmZOF5YSJtts7
+        g0CE+G7kNVcqLAgul++tllb0ijhTjJYIrjew6gMRjee/FOeI+MuQ8QfLst2yfJIwnvPSQc
+        i/S+2D3wtR8k6IjVhir6Y68JqyT2slLh3UAZFflGjcjBoQU57W5bD6I95WNo4k3S1zTH+O
+        XoRst9PN0oUjUTxKYFbGsTTvDAJvJvpC/gyKOwAlB6INfholvPRKNDEGLqbrOH6n7BW3NI
+        ODshuNFs8UYAw8V6T2OxjDbITE2mZC9xySrfD3D/pQmJGKgjJaMWy0XhxXQGQg==
+ARC-Authentication-Results: i=1;
+        rspamd-6969874869-45jtd;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from pdx1-sub0-mail-a254.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.125.123.25 (trex/6.7.1);
+        Mon, 18 Apr 2022 16:45:08 +0000
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Cooing-Trouble: 2c2a24835007ca77_1650300308401_362394076
+X-MC-Loop-Signature: 1650300308401:1218719460
+X-MC-Ingress-Time: 1650300308400
+Received: from offworld (unknown [104.36.29.107])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 37923B80FE4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBFFFC385A7;
-        Mon, 18 Apr 2022 16:44:40 +0000 (UTC)
-Date:   Mon, 18 Apr 2022 17:44:37 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Ard Biesheuvel <ardb@kernel.org>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH 07/10] crypto: Use ARCH_DMA_MINALIGN instead of
- ARCH_KMALLOC_MINALIGN
-Message-ID: <Yl2Vda/8S7qAvMjC@arm.com>
-References: <CAMj1kXFjLbtpJLFh-C_k3Ydcg4M7NqrCfOXnBY2iSxusWtBLbA@mail.gmail.com>
- <YllM24eca/uxf9y7@gondor.apana.org.au>
- <CAMj1kXH5O32H1nnm6y7=3KiH7R-_oakxzBpZ20wK+8kaD46aKw@mail.gmail.com>
- <YlvK9iefUECy361O@gondor.apana.org.au>
- <YlvQTci7RP5evtTy@arm.com>
- <YlvRbvWSWMTtBJiN@gondor.apana.org.au>
- <YlvU6ou14okbAbgW@arm.com>
- <YlvWtc/dJ6luXzZf@gondor.apana.org.au>
- <YlxAo5BAy+ARlvqj@arm.com>
- <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a254.dreamhost.com (Postfix) with ESMTPSA id 4Kht8L4SLTz1QS;
+        Mon, 18 Apr 2022 09:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1650300307;
+        bh=BMeE3theriLPeHe7OsqT9QG1VfC7A6W9rVpn1syfKUA=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=P+8d01HVOoeXDKa157TzKSvtsBjKR7DCshqwRA8ybsl6Hix/9wm7F7nhu7sAWC1MF
+         CJQ/L3xuLnFtOXn440u6xjaVDJVWhy/u9iwZ1zu/8+x1MuSRX5YDMDo3VvtJqBlisI
+         BTywpOC5EOqLwQwpzeBfk75A91cETxE+jkVAUdjnlr1VMyHaFpOeHu3tTGPeUA8fS7
+         b/UE3WwBE531gJTJUfGzrbFg+OIYnFQIuJjXv+KaFvlKuZSaFNmasKR1Pur9T1+8MJ
+         y9qcDSQC/xnPcs+YjGNjMSNpl2Dw4LYBwYkadXtYTfPvu5EbphdCQNzIxVDnBVrwfF
+         RtQCVezcQwghQ==
+Date:   Mon, 18 Apr 2022 09:45:03 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-mm@kvack.org, mhocko@kernel.org, akpm@linux-foundation.org,
+        rientjes@google.com, yosryahmed@google.com, hannes@cmpxchg.org,
+        shakeelb@google.com, dave.hansen@linux.intel.com,
+        tim.c.chen@linux.intel.com, roman.gushchin@linux.dev,
+        gthelen@google.com, a.manzanares@samsung.com,
+        heekwon.p@samsung.com, gim.jongmin@samsung.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 6/6] mm/migrate: export whether or not node is toptier in
+ sysf
+Message-ID: <20220418164503.jfips3aiwhnlfjrq@offworld>
+Mail-Followup-To: Dave Hansen <dave.hansen@intel.com>, linux-mm@kvack.org,
+        mhocko@kernel.org, akpm@linux-foundation.org, rientjes@google.com,
+        yosryahmed@google.com, hannes@cmpxchg.org, shakeelb@google.com,
+        dave.hansen@linux.intel.com, tim.c.chen@linux.intel.com,
+        roman.gushchin@linux.dev, gthelen@google.com,
+        a.manzanares@samsung.com, heekwon.p@samsung.com,
+        gim.jongmin@samsung.com, linux-kernel@vger.kernel.org
+References: <20220416053902.68517-1-dave@stgolabs.net>
+ <20220417034932.jborenmvfbqrfhlj@offworld>
+ <c1475d8e-3ad6-cdab-5cc9-b44fef998636@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <Yl0jPdfdUkaStDN5@gondor.apana.org.au>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c1475d8e-3ad6-cdab-5cc9-b44fef998636@intel.com>
+User-Agent: NeoMutt/20201120
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 04:37:17PM +0800, Herbert Xu wrote:
-> On Sun, Apr 17, 2022 at 05:30:27PM +0100, Catalin Marinas wrote:
-> > Do you mean as per Ard's proposal here:
-> > 
-> > https://lore.kernel.org/r/CAMj1kXH0x5Va7Wgs+mU1ONDwwsazOBuN4z4ihVzO2uG-n41Kbg@mail.gmail.com
-> > 
-> > struct crypto_request {
-> > 	union {
-> > 		struct {
-> > 			... fields ...
-> > 		};
-> > 		u8 __padding[ARCH_DMA_MINALIGN];
-> > 	};
-> > 	void __ctx[]  __aligned(CRYPTO_MINALIGN);
-> > };
-> > 
-> > If CRYPTO_MINALIGN is lowered to, say, 8 (to be the same as lowest
-> > ARCH_KMALLOC_MINALIGN), the __alignof__(req->__ctx) would be 8.
-> > Functions like crypto_tfm_ctx_alignment() will return 8 when what you
-> > need is 128. We can change those functions to return ARCH_DMA_MINALIGN
-> > instead or always bump cra_alignmask to ARCH_DMA_MINALIGN-1.
-> 
-> OK, at this point I think we need to let the code do the talking :)
-> 
-> I've seen Ard's patches already and I think I understand what your
-> needs are.  So let me whip up some code to show you guys what I
-> think needs to be done.
+On Mon, 18 Apr 2022, Dave Hansen wrote:
 
-BTW before you have a go at this, there's also Linus' idea that does not
-change the crypto code (at least not functionally). Of course, you and
-Ard can still try to figure out how to reduce the padding but if we go
-with Linus' idea of a new GFP_NODMA flag, there won't be any changes to
-the crypto code as long as it doesn't pass such flag. So, the options:
+>On 4/16/22 20:49, Davidlohr Bueso wrote:
+>> This allows userspace to know if the node is considered fast
+>> memory (with CPUs attached to it). While this can be already
+>> derived without a new file, this helps further encapsulate the
+>> concept.
+>
+>What is userspace supposed to *do* with this, though?
 
-1. Change ARCH_KMALLOC_MINALIGN to 8 (or ARCH_SLAB_MINALIGN if higher)
-   while keeping ARCH_DMA_MINALIGN to 128. By default kmalloc() will
-   honour the 128-byte alignment, unless GDP_NODMA is passed. This still
-   requires changing CRYPTO_MINALIGN to ARCH_DMA_MINALIGN but there is
-   no functional change, kmalloc() without the new flag will return
-   CRYPTO_MINALIGN-aligned pointers.
+This came as a scratch to my own itch. I wanted to start testing
+more tiering patches overall that I see pop up, and wanted a way
+to differentiate the slow vs the fast memories in order to better
+configure workload(s) working set sizes beyond what is your typical
+grep MemTotal /proc/meminfo. If there is a better way I'm all
+for it.
 
-2. Leave ARCH_KMALLOC_MINALIGN as ARCH_DMA_MINALIGN (128) and introduce
-   a new GFP_PACKED (I think it fits better than 'NODMA') flag that
-   reduces the minimum kmalloc() below ARCH_KMALLOC_MINALIGN (and
-   probably at least ARCH_SLAB_MINALIGN). It's equivalent to (1) but
-   does not touch the crypto code at all.
+>
+>What does "attached" mean?
 
-(1) and (2) are the same, just minor naming difference. Happy to go with
-any of them. They still have the downside that we need to add the new
-GFP_ flag to those hotspots that allocate small objects (Arnd provided
-an idea on how to find them with ftrace) but at least we know it won't
-inadvertently break anything.
+I'll rephrase.
 
--- 
-Catalin
+>Isn't it just asking for trouble to add (known) redundancy to the ABI?
+>It seems like a recipe for future inconsistency.
+
+Perhaps. It was mostly about the fact that the notion of top tier
+could also change as technology evolves.
+
+Thanks,
+Davidlohr

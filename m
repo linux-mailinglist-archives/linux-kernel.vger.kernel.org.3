@@ -2,118 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0898505F22
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:07:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 847CC505F24
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:11:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347933AbiDRVJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:09:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47098 "EHLO
+        id S1347941AbiDRVOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbiDRVJi (ORCPT
+        with ESMTP id S234528AbiDRVOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:09:38 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCB42C663
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:06:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650316017; x=1681852017;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=9R0wQrTZvHWCB6+wGqfmiOvTCNP5cqdXP8co6oMGGBU=;
-  b=fqEhBX0q8UCLs7ZBplD4fg+CxVL4yN0RyN2USg2Tv0otOHZ9FVBtGTug
-   6g7ZCitIrbLVgyTRZkr+XuRG/o9C3Y8gJA26dspU5NUMIAqGBBGJSLWnD
-   ECv6cREgqZxikQ8dAh0A0VYhI1dzfhfg2QvXACsBCYO9y2aenhTMb16gR
-   6Rw35b9HZhBZSStpYvXSKPUOtAPeEfI2qrIgFKHt4G/GQpdxBT6gyXFzN
-   8X8vReyKF5R3C69OdS8jGY+Pk5LVmG1tmmvGrckDFTcmcGixg6Z8kuKR5
-   ClQKJRNXAj1Ue90YEgxoHBMH2V1wSWX8UHCFynCEzBlYDwehVEgtJ2Vdf
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262471477"
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="262471477"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:06:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="804424499"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga006.fm.intel.com with ESMTP; 18 Apr 2022 14:06:56 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngYaF-0004yw-DQ;
-        Mon, 18 Apr 2022 21:06:55 +0000
-Date:   Tue, 19 Apr 2022 05:06:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 627/2356]
- include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No
- such file or directory
-Message-ID: <202204190507.HPPUYrSc-lkp@intel.com>
+        Mon, 18 Apr 2022 17:14:15 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1A72CC9D
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:11:33 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id w1so2721249lfa.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:11:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=yW/Xtlm2DEmdlcKAJWnGvn+AxAEQ2Q/PaAl/FxXatQg=;
+        b=JV/CeTBTDxZdIEZG5+RJY0irjC2pJax7Y3KJMpq7gZl5CU7YUloKLzx+QCW4CfmW55
+         9Oz7lZ8Att8s3JZ/bA7bXUMRScOMu4tvhUofd85ED8UuFme5d2Huk3M4Ah8wra0pkiYb
+         16GPSmTusg86p1fixswzzHNZPLMqwo08ove0Lv+FLpDgZc09NP4g8kUEY/v1Cv0sUbgP
+         GbN3CPFN2x5EMoWTwAVB2JnFwE5zE/Y4rwXiyryhryWK+7QjFxp5/q39lHvHthnFgixm
+         QyaGaHj2QubGxAf94ssvYNyqQyPb149btYKXQEACTGS+E+0MmmGLki1p1HnSSv3Q3mX8
+         HdWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=yW/Xtlm2DEmdlcKAJWnGvn+AxAEQ2Q/PaAl/FxXatQg=;
+        b=jkEmrSx5cn20RZfWG0cXm47ab+pzHclb+WficYPow6Q+N8qJVdwGaYUBIDVFz6CzvK
+         ckbPJrCVzK2LFNncVd4O1Fp9Q/yWLiiZkMQvWcnFXTVdz3iPPnbSBQk2JWcK42c0sOO3
+         RYuvA0Qlj7hpgmM0mbV1hc8RLniwI+fvgAooCh/+WTuHJdvqKRFZ6YvSV7w5PmxdGfk1
+         XW6BxobztmqAF2xqrVzNFnt4BVJ0TQ4qvOij6YWzrQg50Lv56wYocbC1rp5lpE59fYGa
+         GJJH2FMf30Ktl9iRFYiOAbV1sZQomEXpeuOfDtB6bXUXmrnifLQfp/fr09ampLaavxto
+         S38Q==
+X-Gm-Message-State: AOAM530tCpfVZZ827cv1oROXF8tD1Hc/BPGsQ5DXj/n3a77vHCPh3p1i
+        hVGIHP8lmSy+ZSQJSE97fOE=
+X-Google-Smtp-Source: ABdhPJwXuBbIcTDn0lCJ9h2jEXjyTyL7oT/gpzXMi3e722ZMsWgeAQypOZ2MzjKRMM+qs/5hId6dGQ==
+X-Received: by 2002:ac2:491d:0:b0:46d:ce9:69b2 with SMTP id n29-20020ac2491d000000b0046d0ce969b2mr9001484lfi.40.1650316291694;
+        Mon, 18 Apr 2022 14:11:31 -0700 (PDT)
+Received: from localhost ([46.188.51.232])
+        by smtp.gmail.com with ESMTPSA id x40-20020a056512132800b004489691436esm1319222lfu.146.2022.04.18.14.11.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 14:11:31 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 00:11:13 +0300
+From:   Alexander Fomichev <fomichev.ru@gmail.com>
+To:     Dave Jiang <dave.jiang@intel.com>
+Cc:     ntb@lists.linux.dev, linux@yadro.com, Jon Mason <jdmason@kudzu.us>,
+        Allen Hubbe <allenbh@gmail.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ntb_perf: extend with burst/poll/doorbell latency
+ measurement
+Message-ID: <20220418211113.oxidrif4jtjlqr2r@yadro.com>
+References: <20220417235517.26865-1-a.fomichev@yadro.com>
+ <9ad57247-36df-cb3d-d50f-feb3c80f17e6@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <9ad57247-36df-cb3d-d50f-feb3c80f17e6@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 8f4012659d7f54036074d08da273cb686c819191 [627/2356] headers/deps: Add header dependencies to .h files: <asm/vdso/processor.h>
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220419/202204190507.HPPUYrSc-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=8f4012659d7f54036074d08da273cb686c819191
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 8f4012659d7f54036074d08da273cb686c819191
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=arc prepare
-
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arc/include/asm/barrier.h:42,
-                    from arch/arc/include/asm/cmpxchg.h:12,
-                    from arch/arc/include/asm/atomic.h:13,
-                    from include/linux/atomic.h:7,
-                    from include/asm-generic/bitops/lock.h:5,
-                    from arch/arc/include/asm/bitops.h:188,
-                    from include/linux/bitops.h:28,
-                    from include/linux/log2.h:12,
-                    from kernel/bounds.c:13:
->> include/asm-generic/barrier.h:16:10: fatal error: asm/vdso/processor.h: No such file or directory
-      16 | #include <asm/vdso/processor.h>
-         |          ^~~~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-   make[2]: *** [scripts/Makefile.build:120: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +16 include/asm-generic/barrier.h
-
-    15	
-  > 16	#include <asm/vdso/processor.h>
-    17	#include <linux/compiler.h>
-    18	#include <linux/kcsan-checks.h>
-    19	#include <asm/rwonce.h>
-    20	
+On Mon, Apr 18, 2022 at 07:52:50AM -0700, Dave Jiang wrote:
+> 
+> I don't see any major issues with the code. However, is it possible to break
+> the introduction of these 3 metrics into 3 different patches for easier
+> review?
+> 
+Sure. I'll re-post the separate patches soon.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards,
+  Alexander

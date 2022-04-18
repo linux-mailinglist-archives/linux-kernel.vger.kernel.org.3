@@ -2,132 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4AFF505C03
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B906505C0B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345897AbiDRP4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53514 "EHLO
+        id S1346037AbiDRP5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345820AbiDRPzw (ORCPT
+        with ESMTP id S1345981AbiDRP5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:55:52 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3529133E2A;
-        Mon, 18 Apr 2022 08:43:26 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id m14so12972325vsp.11;
-        Mon, 18 Apr 2022 08:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=L+e1IwjPtrx8G13TcQrLOhPqxxbNlCk3hLHky4qfcOw=;
-        b=EJytDbeMBURt5rxmwjAU1L64BLz3FG+Ha6vj8642LRiUF/KP6mq8RUcOfKm5CEp2Sa
-         1pil1DOrqtnuIO+KzckywwE0qbOLQ+02sZbdMJJ7+9UYKhdrLaBy0zhpVbwsAu+ikM7W
-         /MF2dbWBAEoPqaIps0oKUi5XQB41eDZobexjouej9FImFZrX7o1igHJ4aPrnR4iVAxMK
-         QMiMD3Flr3Z0CQ74o+wImQBWNUhnOrweeKlHkGVAKKUo0n+arufcBMbcXe4FGu+bTxFI
-         eI2IiS04i8PBjGsEB61FjxdrZHHL5QIsqgdKlkuf33pw/dDc4yIEZt19hIxgWSinY9LR
-         KYvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=L+e1IwjPtrx8G13TcQrLOhPqxxbNlCk3hLHky4qfcOw=;
-        b=ZIjrjrY00Exbj9pVVy4KqugU6xSfUIhgY0HxdZCIHOzxTdeeW1Bu5Ww5/MwWlbwLE+
-         a6YYrtzOE6MljkVMRUgGyjZfxAOGwvoq7E0KGu2aVwXfZc4S1qEvt6issmdEDcPv4Z7n
-         POynyqheL9UHVDQP0fR9LYlVVKYkOlNv5GsKFsorxdjzcQnpZVYCX2HqlMX/0KuaBSn7
-         CjuuMDXn//R6pkJvb/9Wdb0e0YW5LeKGfpvy/8ypmGZ4LdFUZXurhg3o8DgcC7nwa+PJ
-         6wisKpEzT534B/Q7yTLP1q7gLM57NIZTRBCxRDfwuE/9I4A7tDIC1rWQY+SO/yVZpoaf
-         vknA==
-X-Gm-Message-State: AOAM531fKdavp+1GK744bgYyTgI8HTxdoP7ey1lVjvhGnfySdeUiWiMo
-        d/uj8aVYVacdTsJOE0ArkSUZZakO/ZWigs3M4mrPODWPEpEgXigK
-X-Google-Smtp-Source: ABdhPJwMY77Df/u7eQj1RsI6svvKlcNXcbpyqqK+8V8MjEalSfH0xmmviPMBT+4PI06eb9M0VJxgUYB7OdTYrR9xPfA=
-X-Received: by 2002:a67:a44d:0:b0:320:601b:2a08 with SMTP id
- p13-20020a67a44d000000b00320601b2a08mr3051790vsh.70.1650296605300; Mon, 18
- Apr 2022 08:43:25 -0700 (PDT)
+        Mon, 18 Apr 2022 11:57:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD57B381B2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:47:38 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Khrq65jkxzFq1Y;
+        Mon, 18 Apr 2022 23:45:06 +0800 (CST)
+Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 23:47:36 +0800
+Received: from [10.174.179.234] (10.174.179.234) by
+ kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Mon, 18 Apr 2022 23:47:34 +0800
+Message-ID: <ca13a4ec-17a6-8e29-e29e-39f9b47e78df@huawei.com>
+Date:   Mon, 18 Apr 2022 23:47:34 +0800
 MIME-Version: 1.0
-References: <CAHp75Veo30c0BWb4Fykgvd-czSnEXsyA8wyMTeKQdS49=e5-nw@mail.gmail.com>
- <20220417165208.39754-1-schspa@gmail.com> <CAHp75Vc8HwheQVOpcn_Lxk-bOOMLybr=m6OdO7mJ-vE9xywBLg@mail.gmail.com>
- <CAMA88Tr6NvfEiPYnt0A60GiQKiiT6LT7X83GRku-4PDcG2EtoA@mail.gmail.com>
- <CAHp75VfcxACmuw5pwPgSB9ud06hWtHCUrMifU1rZJ+h+dwG+bg@mail.gmail.com> <CAHp75Vchpi0Cvkz5krA0LEZBj-fQTXxbEBzpKxU96mcDRGY--A@mail.gmail.com>
-In-Reply-To: <CAHp75Vchpi0Cvkz5krA0LEZBj-fQTXxbEBzpKxU96mcDRGY--A@mail.gmail.com>
-From:   Schspa Shi <schspa@gmail.com>
-Date:   Mon, 18 Apr 2022 23:43:14 +0800
-Message-ID: <CAMA88TruFbCZbvq84ep5NbSdxDgi-mPX2iXWk4c2qA-etMA8QQ@mail.gmail.com>
-Subject: Re: [PATCH] gpio: use raw spinlock for gpio chip shadowed data
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>
-Cc:     "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
-        "hoan@os.amperecomputing.com" <hoan@os.amperecomputing.com>,
-        "linux-arm-kernel@lists.infradead.org" 
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH -next v4 3/4] arm64: mm: add support for page table check
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "opendmb@gmail.com" <opendmb@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        <linux-riscv@lists.infradead.org>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Guohanjun <guohanjun@huawei.com>
+References: <20220418034444.520928-1-tongtiangen@huawei.com>
+ <20220418034444.520928-4-tongtiangen@huawei.com>
+ <1c314feb-cd78-2bb3-462e-4ea3cefe122e@arm.com>
+From:   Tong Tiangen <tongtiangen@huawei.com>
+In-Reply-To: <1c314feb-cd78-2bb3-462e-4ea3cefe122e@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.179.234]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600017.china.huawei.com (7.193.23.234)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andy Shevchenko <andy.shevchenko@gmail.com> writes:
 
-> On Mon, Apr 18, 2022 at 2:38 PM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
->> On Mon, Apr 18, 2022 at 6:07 AM Schspa Shi <schspa@gmail.com> wrote:
->> > Andy Shevchenko <andy.shevchenko@gmail.com> writes:
+
+在 2022/4/18 17:28, Anshuman Khandual 写道:
+> On 4/18/22 09:14, Tong Tiangen wrote:
+>> From: Kefeng Wang <wangkefeng.wang@huawei.com>
 >>
->> ...
->>
->> > >   drivers/gpio/gpio-mmio.c    | 22 +++++++++++-----------
->> > >   include/linux/gpio/driver.h |  2 +-
->> > >
->> > > You can=E2=80=99t do it for one driver only. As I told it will requi=
-re too much of additional churn to make this to be series.
->> > >
->> >
->> > It seems I have misunderstood your "too much of additional churn". Can
->> > you explain it?
->> > The gpio-mmio.c and driver.h here are the basics of other gpio
->> > drivers. In my opinion, these two files
->> > belong to the basic code of gpio, and functions such as bgpio_init are
->> > declared in
->> > include/linux/gpio/driver.h and implemented in
->> > drivers/gpio/gpio-mmio.c. So there is no churn.
->>
->> When you change the member of the data structure, you have to change
->> all its users. You can't change only one at a time because it will be
->> a (compile-time) bisectability issue.
+[...]
+>>   #endif
+> 
+> Ran this series on arm64 platform after enabling
+> 
+> - CONFIG_PAGE_TABLE_CHECK
+> - CONFIG_PAGE_TABLE_CHECK_ENFORCED (avoiding kernel command line option)
+> 
+> After some time, the following error came up
+> 
+> [   23.266013] ------------[ cut here ]------------
+> [   23.266807] kernel BUG at mm/page_table_check.c:90!
+> [   23.267609] Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
+> [   23.268503] Modules linked in:
+> [   23.269012] CPU: 1 PID: 30 Comm: khugepaged Not tainted 5.18.0-rc3-00004-g60aa8e363a91 #2
+> [   23.270383] Hardware name: linux,dummy-virt (DT)
+> [   23.271210] pstate: 40400005 (nZcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   23.272445] pc : page_table_check_clear.isra.6+0x114/0x148
+> [   23.273429] lr : page_table_check_clear.isra.6+0x64/0x148
+> [   23.274395] sp : ffff80000afb3ca0
+> [   23.274994] x29: ffff80000afb3ca0 x28: fffffc00022558e8 x27: ffff80000a27f628
+> [   23.276260] x26: ffff800009f9f2b0 x25: ffff00008a8d5000 x24: ffff800009f09fa0
+> [   23.277527] x23: 0000ffff89e00000 x22: ffff800009f09fb8 x21: ffff000089414cc0
+> [   23.278798] x20: 0000000000000200 x19: fffffc00022a0000 x18: 0000000000000001
+> [   23.280066] x17: 0000000000000001 x16: 0000000000000000 x15: 0000000000000003
+> [   23.281331] x14: 0000000000000068 x13: 00000000000000c0 x12: 0000000000000010
+> [   23.282602] x11: fffffc0002320008 x10: fffffc0002320000 x9 : ffff800009fa1000
+> [   23.283868] x8 : 00000000ffffffff x7 : 0000000000000001 x6 : ffff800009fa1f08
+> [   23.285135] x5 : 0000000000000000 x4 : 0000000000000000 x3 : 0000000000000000
+> [   23.286406] x2 : 00000000ffffffff x1 : ffff000080f2800c x0 : ffff000080f28000
+> [   23.287673] Call trace:
+> [   23.288123]  page_table_check_clear.isra.6+0x114/0x148
+> [   23.289043]  __page_table_check_pmd_clear+0x3c/0x50
+> [   23.289918]  pmdp_collapse_flush+0x114/0x370
+> [   23.290692]  khugepaged+0x1170/0x19e0
+> [   23.291356]  kthread+0x110/0x120
+> [   23.291945]  ret_from_fork+0x10/0x20
+> [   23.292596] Code: 91001041 b8e80024 51000482 36fffd62 (d4210000)
+> [   23.293678] ---[ end trace 0000000000000000 ]---
+> [   23.294511] note: khugepaged[30] exited with preempt_count 2
+> 
+> Looking into file mm/page_table_check.c where this problem occured.
+> 
+> /*
+>   * An enty is removed from the page table, decrement the counters for that page
+>   * verify that it is of correct type and counters do not become negative.
+>   */
+> static void page_table_check_clear(struct mm_struct *mm, unsigned long addr,
+>                                     unsigned long pfn, unsigned long pgcnt)
+> {
+>          struct page_ext *page_ext;
+>          struct page *page;
+>          unsigned long i;
+>          bool anon;
+> 
+>          if (!pfn_valid(pfn))
+>                  return;
+> 
+>          page = pfn_to_page(pfn);
+>          page_ext = lookup_page_ext(page);
+>          anon = PageAnon(page);
+> 
+>          for (i = 0; i < pgcnt; i++) {
+>                  struct page_table_check *ptc = get_page_table_check(page_ext);
+> 
+>                  if (anon) {
+>                          BUG_ON(atomic_read(&ptc->file_map_count));
+>                          BUG_ON(atomic_dec_return(&ptc->anon_map_count) < 0);
+>                  } else {
+>                          BUG_ON(atomic_read(&ptc->anon_map_count));
+>   Triggered here ====>>  BUG_ON(atomic_dec_return(&ptc->file_map_count) < 0);
+>                  }
+>                  page_ext = page_ext_next(page_ext);
+>          }
+> }
+> 
+> Could you explain what was expected during pmdp_collapse_flush() which when
+> failed, triggered this BUG_ON() ? This counter seems to be page table check
+> specific, could it just go wrong ? I have not looked into the details about
+> page table check mechanism.
+> 
+> - Anshuman
+> .
 
+Hi Anshuman:
 
-Yes, I understand and will take for bisectability use case for the next tim=
-e.
+Thanks for your job.
 
->
-> Answering your question here, it will require moving to union with an
-> additional member and corresponding core changes, convert all drivers
-> one-by-one, and remove the old type. It's not worth doing it, but as I
-> said let maintainers decide.
+Let me briefly explain the principle of page table check(PTC).
 
-Okay, sorry for my misunderstanding, I thought you were saying it's
-bad to modify too many different files in one patch, so I split the
-patch into a series of patchsets.
+PTC introduces the following struct for page mapping type count:
+struct page_table_check {
+         atomic_t anon_map_count;
+         atomic_t file_map_count;
+};
+This structure can be obtained by "lookup_page_ext(page)"
 
-So, let Linus Walleij or Bartosz Golaszewski to decide for it ?
-I have the same options as you, it's a small change, and no need to
-trouble everyone for it.
+When page table entries are set(pud/pmd/pte), page_table_check_set()  is 
+called to increase the page mapping count, Also check for errors (eg:if 
+a page is used for anonymous mapping, then the page cannot be used for 
+file mapping at the same time).
 
-Because this structure will be used as the same instance in multiple
-files, even if we change this variable to union first, it can be
-compiled, but the program will still not work properly. This is
-because bgpio_init is initialized with the type of raw_spinlock_t,
-but is still accessed as spinlock_t in other drivers, which is a
-serious abnormal initialization.
+When page table entries are clear(pud/pmd/pte), page_table_check_clear() 
+  is called to decrease the page mapping count, Also check for errors.
+
+The error check rules are described in the following documents: 
+Documentation/vm/page_table_check.rst
+
+The setting and clearing of page table entries are symmetrical.
+
+Here __page_table_check_pmd_clear() trigger BUGON which indicates that 
+the pmd entry file mapping count has become negative.
+
+I guess if PTC didn't detect this exception, would there have been any 
+problems?
+
+Thanks,
+Tong.

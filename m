@@ -2,231 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A8D50605B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:49:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F08A506060
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 01:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbiDRXvY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 19:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32948 "EHLO
+        id S235988AbiDSAAh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:00:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiDRXvW (ORCPT
+        with ESMTP id S235925AbiDSAAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 19:51:22 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCEA41FCC7
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:48:41 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id g19so12734514lfv.2
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:48:41 -0700 (PDT)
+        Mon, 18 Apr 2022 20:00:34 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE4629CA7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:57:54 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id t13so21732149pgn.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 16:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shutemov-name.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=date:from:to:cc:subject:message-id:references:mime-version
          :content-disposition:in-reply-to;
-        bh=k7vM5EGVT6KdI2swDwwcMXe776ynFb2Yl6IyzXfhJeI=;
-        b=ESJRhquLN+MAL6lYlIl1smm5L7nmQA6K/3ntXSz9NsXtT1TEGjkzafLRKabL5qiufu
-         Iw6sEWGXKrpl+lr94lWBsYjN0LOFTF8ZzgrdlrfaE/LfSTfnRuXJptSysxzL1I9FmiuA
-         H392o4Tq275UsUGpk9mXQYqbXUx0WlX2x9D13md4h8+JNoPaCvd1TRrSL1sXlLoFUjVq
-         3wTQauIMFjKO5rU03tpSKCz3ODoVjo+UyOjZpHVTsqHRfsnEQ3zVADKtYUoXWG2R/fce
-         BJtDTSjR5RAGVW2gMMYgPG9nA+BnkS8xpHs4/Jk3Ft4vNy9C2j3lKwV6KfJ2KPGRCzxN
-         3JYw==
+        bh=6DTfyGY4J+aCud1WtrxDpmeZLZK9HwCoRH/ZKq7p0NY=;
+        b=MpJYZqhS/4wevygKpX5CVGmCIl7fpr/siGQ+44MFb9SHbahqi50UNuu5Rol1xchxjN
+         aNky1Oy1UkUOLUOAKwBTb4JXgAuRru33uEuY9kTeCdLaZUZb+MnwrkYEU8FnELc4oqPm
+         kAB/WHOilbj00EbxBKW+LNOdSwg57Zh+qtJ3480IneLi31Upq7YzBEx6d94gCDrUZYKM
+         KuV0Sw/+ZPbympbXikCSy0hv5RuOsnx68DVBFKiPSTurvh/MZ7m5xiOw3GO1QpG7I+7T
+         vbP4VmXtR027F0y7rPZnFWIR+5ixC0BQktvD6wNpz+rFr+oe2hV2Rxr7LEH2iuZLdkva
+         d5EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=k7vM5EGVT6KdI2swDwwcMXe776ynFb2Yl6IyzXfhJeI=;
-        b=ZLEc+2Hm8K9Ow57pjepKSvHcBVZ2BHHErb7drcAiqHVNi70J54hjKuBsD6jCpoqrrw
-         Vex+SN/WAxXaNlPX4vFigJQ9IK9vJlpYaTgjyDUV0sTpLCRQJCtJ/vWNLfGbO2JmG7hg
-         XyUQXkr/O+pP+Bl4Mz9CXFQPA+vDoM7JOmK/RicH04RYfcfBBFb+JuRF0rfGTVKkNKro
-         7S+6yHEJxb3TtMTK9tCmEKHItAn7hegdHifV8Vl0qK3QWqej1uikLUntZzh6qfwGObab
-         /hBrcgFsUHXP5uudoqok29EffUbt9iZ7NHf0Cj7i1BTJKAbwoAWLfzhqo7eWM14HsSJH
-         XJTw==
-X-Gm-Message-State: AOAM533HfZVNYxVN4tjKF3DS7tzc1VOsPesPaXfnZ+TLnaMfPXjFMdG+
-        KfEGeQYrBfMqymh2ovZZbSti+A==
-X-Google-Smtp-Source: ABdhPJxArqQbpLtSwHC4s3C/gv0LTHHj+6hI8Gu7EpEcRHZoKPTgTvSPnILonPZbmaIh9Q56Vhx+7g==
-X-Received: by 2002:a05:6512:33cc:b0:471:a439:8397 with SMTP id d12-20020a05651233cc00b00471a4398397mr1174152lfg.551.1650325719967;
-        Mon, 18 Apr 2022 16:48:39 -0700 (PDT)
-Received: from box.localdomain ([86.57.175.117])
-        by smtp.gmail.com with ESMTPSA id o6-20020a056512052600b0046f07d71846sm1222838lfc.163.2022.04.18.16.48.39
+        bh=6DTfyGY4J+aCud1WtrxDpmeZLZK9HwCoRH/ZKq7p0NY=;
+        b=6ptKvEtA4EVuRK1zrEJCSIjEHMV/mXD2kcq5zTdbs1Uhfrh+L+jm12g0tmiinl4FvR
+         BeF0Sg2sCejDjTEAFTzV8UF23oHEsAA8Ads0LikrBQ+Y09B0iHNEy2Vs1NLKexzVMbgq
+         G7+fQEYXATliOibt7H6c6TZqTRbH1zNq9Q18/h1EVFb6dmXyX87TtSQqheL7xJ5ZgZ2D
+         +7K2Q0U7gBy6SZvOb2RA3HtWEAz0yeqpL+mInNFw5QLckj6ruylB/GYte1NTtjiZbVso
+         Gkl9IIDbeY8qRa598EY77hVmbcDvzoJEeQzGve0Ok/gopAxrapTvLamybmvLTqTA31FK
+         9pvA==
+X-Gm-Message-State: AOAM531LEZh4hT16sdvKVRn6F1d8uI7N/JOy+gKIVEl9659pO5cN/R3K
+        Q2ZdOb5gKzdlSPdehwvs4dB6pA==
+X-Google-Smtp-Source: ABdhPJwGbAEcmZ3Ri9bRNtcMxJHs0CrJhc9Y8lGnJ3QNwvBq4WwRrkz1+U7Kith1lRipZxV8xB3qEw==
+X-Received: by 2002:a63:6e04:0:b0:398:409:2928 with SMTP id j4-20020a636e04000000b0039804092928mr12229537pgc.250.1650326273031;
+        Mon, 18 Apr 2022 16:57:53 -0700 (PDT)
+Received: from google.com ([2620:15c:211:200:e2b4:e46f:41ee:4499])
+        by smtp.gmail.com with ESMTPSA id bc11-20020a656d8b000000b0039cc4dbb295sm13381698pgb.60.2022.04.18.16.57.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 16:48:39 -0700 (PDT)
-Received: by box.localdomain (Postfix, from userid 1000)
-        id D13A5103A61; Tue, 19 Apr 2022 02:50:15 +0300 (+03)
-Date:   Tue, 19 Apr 2022 02:50:15 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Brijesh Singh <brijesh.singh@amd.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv4 3/8] efi/x86: Implement support for unaccepted memory
-Message-ID: <20220418235015.mnujtlmmlyin7y6m@box.shutemov.name>
-References: <20220405234343.74045-1-kirill.shutemov@linux.intel.com>
- <20220405234343.74045-4-kirill.shutemov@linux.intel.com>
- <Ylnwmvygp796+qcA@zn.tnic>
- <20220418155545.a567xnxa6elglapl@box.shutemov.name>
- <Yl2UHOQ4iZJ29k0q@zn.tnic>
- <20220418202431.whvql4w57c7l5vpw@box.shutemov.name>
- <Yl3RmPhdZieSr8W2@zn.tnic>
+        Mon, 18 Apr 2022 16:57:52 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 16:57:46 -0700
+From:   Kalesh Singh <kaleshsingh@google.com>
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
+Subject: Re: [PATCH v4] rcu/nocb: Add an option to offload all CPUs on boot
+Message-ID: <Yl36+skjQn26Mg43@google.com>
+References: <20220418175403.2553842-1-joel@joelfernandes.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl3RmPhdZieSr8W2@zn.tnic>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220418175403.2553842-1-joel@joelfernandes.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 11:01:12PM +0200, Borislav Petkov wrote:
-> On Mon, Apr 18, 2022 at 11:24:31PM +0300, Kirill A. Shutemov wrote:
-> > <linux/bitmap> doesn't include <linux/kernel.h> or similar things.
-> > Is it okay for now?
+On Mon, Apr 18, 2022 at 05:54:03PM +0000, Joel Fernandes (Google) wrote:
+> From: Joel Fernandes <joel@joelfernandes.org>
 > 
-> No, it is not ok because those linux/ includes are moving targets. They
-> keep changing and then that indirectly influences the decompressor.
+> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+> which ends up not offloading any CPU. This patch removes a dependency
+> from the bootloader having to know about RCU and about how to provide
+> the mask.
 > 
-> How much functionality from linux/bitmap.h do you actually need?
-
-Below is the bare minimum required to compile bitmap.c in decompresser.
-I only made it work on my config/compiler and did not care about all
-#ifdef branches.
-
-I find it strange that you go after <linux/bitmap.h> which has limited
-exposure while <linux/acpi.h> and <linux/efi.h> are there already.
-Starting small will backfire if once we find out that monstrous headers
-depend on what we try to replace. Bit fish has to be addressed first.
-
-What do you want me to do here?
-
-// <linux/bitmap.h>
-//
-#define BITMAP_FIRST_WORD_MASK(start) (~0UL << ((start) & (BITS_PER_LONG - 1)))
-#define BITMAP_LAST_WORD_MASK(nbits) (~0UL >> (-(nbits) & (BITS_PER_LONG - 1)))
-
-// <uapi/linux/swab.>
-
-/**
- * __swab64 - return a byteswapped 64-bit value
- * @x: value to byteswap
- */
-#ifdef __HAVE_BUILTIN_BSWAP64__
-#define __swab64(x) (__u64)__builtin_bswap64((__u64)(x))
-#else
-#define __swab64(x)				\
-	(__builtin_constant_p((__u64)(x)) ?	\
-	___constant_swab64(x) :			\
-	__fswab64(x))
-#endif
-
-static __always_inline unsigned long __swab(const unsigned long y)
-{
-#if __BITS_PER_LONG == 64
-	return __swab64(y);
-#else /* __BITS_PER_LONG == 32 */
-	return __swab32(y);
-#endif
-}
-
-// <linux/swab.h>
-
-# define swab __swab
-
-// <linux/bits.h>
-
-#define BIT_WORD(nr)		((nr) / BITS_PER_LONG)
-
-// <asm/bitops.h>
-//
-/**
- * __ffs - find first set bit in word
- * @word: The word to search
- *
- * Undefined if no bit exists, so code should check against 0 first.
- */
-static __always_inline unsigned long __ffs(unsigned long word)
-{
-	asm("rep; bsf %1,%0"
-		: "=r" (word)
-		: "rm" (word));
-	return word;
-}
-
-
-> > But the goal of the function is not to accept the memory, but mark it
-> > as unaccepted in the bitmap.
+> With the new option enabled, all CPUs will be offloaded on boot unless
+> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
 > 
-> Really?
+> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+
+Hi Joel,
+
+You can add Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
+
+Thanks,
+Kalesh
+
+> ---
+> v4: mostly style related fixes.
+> v3 is back to v1 but with a config option defaulting to 'n'.
+> v2 was forcing the option to override no_cbs=
 > 
-> +	 * Accept small regions that might not be able to be represented
-> +	 * in the bitmap:
-> +	 */
-> +	if (end - start < 2 * PMD_SIZE) {
-> +		__accept_memory(start, end);
+>  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+>  kernel/rcu/Kconfig                              | 13 +++++++++++++
+>  kernel/rcu/tree_nocb.h                          | 15 ++++++++++++++-
+>  3 files changed, 33 insertions(+), 1 deletion(-)
 > 
-> That looks like it is accepting to me.
-
-Yes, really.
-
-As 1 bit represents 2M, not all chunks can be represented in the bitmap
-and they have to be accepted. But the *goal* is to record unaccepted
-memory into bitmap. Some accepting is a side effect.
-
-The early_accept_memory() name is just wrong.
-
-> > Conceptionally, it is just memory that requires additional action before
-> > it can be accessed. Yes, at the moment TDX and SEV are the only users.
-> > It is implementation detail that TDX and SEV use memory encryption.
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> index f5a27f067db9..4beb15ccac1a 100644
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -3506,6 +3506,9 @@
+>  			just as if they had also been called out in the
+>  			rcu_nocbs= boot parameter.
+>  
+> +			Note that this argument takes precedence over
+> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+> +
+>  	noiotrap	[SH] Disables trapped I/O port accesses.
+>  
+>  	noirqdebug	[X86-32] Disables the code which attempts to detect and
+> @@ -4398,6 +4401,9 @@
+>  			no-callback mode from boot but the mode may be
+>  			toggled at runtime via cpusets.
+>  
+> +			Note that this argument takes precedence over
+> +			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
+> +
+>  	rcu_nocb_poll	[KNL]
+>  			Rather than requiring that offloaded CPUs
+>  			(specified by rcu_nocbs= above) explicitly
+> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+> index bf8e341e75b4..746a668bf81d 100644
+> --- a/kernel/rcu/Kconfig
+> +++ b/kernel/rcu/Kconfig
+> @@ -223,6 +223,19 @@ config RCU_NOCB_CPU
+>  	  Say Y here if you need reduced OS jitter, despite added overhead.
+>  	  Say N here if you are unsure.
+>  
+> +config RCU_NOCB_CPU_DEFAULT_ALL
+> +	bool "Offload RCU callback processing from all CPUs by default"
+> +	depends on RCU_NOCB_CPU
+> +	default n
+> +	help
+> +	  Use this option to offload callback processing from all CPUs
+> +	  by default, in the absence of the rcu_nocbs or nohz_full boot
+> +	  parameter. This also avoids the need to use any boot parameters
+> +	  to achieve the effect of offloading all CPUs on boot.
+> +
+> +	  Say Y here if you want offload all CPUs by default on boot.
+> +	  Say N here if you are unsure.
+> +
+>  config TASKS_TRACE_RCU_READ_MB
+>  	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+>  	depends on RCU_EXPERT
+> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+> index eeafb546a7a0..f648f773600a 100644
+> --- a/kernel/rcu/tree_nocb.h
+> +++ b/kernel/rcu/tree_nocb.h
+> @@ -1166,11 +1166,21 @@ void __init rcu_init_nohz(void)
+>  {
+>  	int cpu;
+>  	bool need_rcu_nocb_mask = false;
+> +	bool offload_all = false;
+>  	struct rcu_data *rdp;
+>  
+> +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
+> +	if (!rcu_nocb_is_setup) {
+> +		need_rcu_nocb_mask = true;
+> +		offload_all = true;
+> +	}
+> +#endif
+> +
+>  #if defined(CONFIG_NO_HZ_FULL)
+> -	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask))
+> +	if (tick_nohz_full_running && cpumask_weight(tick_nohz_full_mask)) {
+>  		need_rcu_nocb_mask = true;
+> +		offload_all = false; /* NO_HZ_FULL has its own mask. */
+> +	}
+>  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>  
+>  	if (need_rcu_nocb_mask) {
+> @@ -1191,6 +1201,9 @@ void __init rcu_init_nohz(void)
+>  		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+>  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+>  
+> +	if (offload_all)
+> +		cpumask_setall(rcu_nocb_mask);
+> +
+>  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+>  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+>  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+> -- 
+> 2.36.0.rc0.470.gd361397f0d-goog
 > 
-> So there *might* be some potential future use. Nothing concrete at the
-> moment.
 > 
-> > Because I don't think it is a good fit. Frankly, even <asm/coco.h> fits
-> > better, although I'm no a fan either.
-> > 
-> > Do we have file shortage? I would rather keep it separate.
-> 
-> So I have not read a single argument for why the unaccepted memory gunk
-> should be separate.
-
-> We have perfectly fine mem_encrypt.[ch] files everywhere which already
-> contain code which deals with the kernel running as encrypted guest.
-
-And some stuff for encrypted host (SME).
-
-> The unaccepted memory stuff is part of that - not something separate. If
-> it gets to get used for something different, sure, then it can be carved
-> out because it might need to be built separately, without the rest of
-> the encryption code. But as it is now, it doesn't have to. So please put
-> it in those files.
-
-Okay, I will do as you want, but I really hate it.
-
-With one hand you try to unwind header mess in decompresser code and with
-another propose to create a kitchen-sink header because topics somewhat
-related. Looks contradictory.
-
--- 
- Kirill A. Shutemov

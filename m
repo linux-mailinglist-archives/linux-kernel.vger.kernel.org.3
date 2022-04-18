@@ -2,261 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10FE2504A4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 02:54:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F11C504A38
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 02:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235551AbiDRAzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 20:55:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S235456AbiDRAxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 20:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235520AbiDRAzb (ORCPT
+        with ESMTP id S235050AbiDRAxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 20:55:31 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3AF413E3F
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 17:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650243173; x=1681779173;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=e4zKevnerCv3swR38QOP36pCi6FNMKl3EHNwss6IlEU=;
-  b=fu01Y2VKC6FwsihdP0zyay11DrPamXSOKuZi3hAOGoghjHEfn0Ke9sRa
-   MUTqxK2Y0HMJiml4WQQkpKWfT3l077w0HxD2ulzZ6cjrrXw8nrNAyM6Th
-   SfAZeUF3G12dsug0PyABrISxmPxnm0FkR/ssriDyDcsL8Jct4iAd8En+3
-   TVBIaiKuuMrxz+nSNAh0N4RsCxExtuL8bekUjVn/4FwlfVm2ZIZ08dTJl
-   qValdaWzLCNV/N7K1CSaDORDy8x4dfwWm9CpPArquG3ZcQV/+94RUy/sc
-   58OpELQuw+XYJYZJOGK/VS0n7GdfgTZbXm8GmXqEqD0JVDFJtZ6QWED/5
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="245313241"
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="245313241"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 17:52:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="701651323"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by fmsmga001.fm.intel.com with ESMTP; 17 Apr 2022 17:52:51 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v8 11/11] iommu: Remove iommu group changes notifier
-Date:   Mon, 18 Apr 2022 08:50:00 +0800
-Message-Id: <20220418005000.897664-12-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220418005000.897664-1-baolu.lu@linux.intel.com>
-References: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+        Sun, 17 Apr 2022 20:53:03 -0400
+X-Greylist: delayed 28523 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 17 Apr 2022 17:50:25 PDT
+Received: from mail-4322.protonmail.ch (mail-4322.protonmail.ch [185.70.43.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555BB13E3C
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 17:50:23 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 00:50:12 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.ch;
+        s=protonmail2; t=1650243021;
+        bh=75Tpo+HGOA92D2kzNg7s2ac7IWzgwCC10Y5QV0uZWNk=;
+        h=Date:To:From:Reply-To:Subject:Message-ID:From:To:Cc:Date:Subject:
+         Reply-To:Feedback-ID:Message-ID;
+        b=RD4Pb5wjSIWIItRkRE1ouO5bLorQmlM0mTa6SlLwtiAJdD5PnBC88k38eMI0zrqNb
+         LHo70XDI0YbO54QCT9tHfu+Nnl8Xblgf7IPhZ1t5Lyr4OTZOwlTHx8q03EWoJl9Oqw
+         M9VsrSLqIBEGcMCVzAIdoS6kOptwMF3XeZenvVTNfkOcwB8x8hVMKvnG0RI5l3dAMD
+         gRVq//98cRvDFIg+horcB/XmOSWY4PN1p5gEQoYjPXFfO1vwOCySk8m+8CuO6tpJ1T
+         lv7dTqV17L+mtYCouRVQa6pDheHyX63UPA9UFgWohAuSWLIRAjOqDwvINFtVvsRnYa
+         mkkuIOt13LEWA==
+To:     pshelar@ovn.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, dev@openvswitch.org,
+        linux-kernel@vger.kernel.org
+From:   Solomon Tan <solomonbstoner@protonmail.ch>
+Reply-To: Solomon Tan <solomonbstoner@protonmail.ch>
+Subject: [PATCH] openvswitch: meter: Remove unnecessary int
+Message-ID: <Yly1t/mE6QAGPS0e@ArchDesktop>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The iommu group changes notifer is not referenced in the tree. Remove it
-to avoid dead code.
+This patch addresses the checkpatch.pl warning that long long is
+preferred over long long int.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Solomon Tan <solomonbstoner@protonmail.ch>
 ---
- include/linux/iommu.h | 23 -------------
- drivers/iommu/iommu.c | 75 -------------------------------------------
- 2 files changed, 98 deletions(-)
+ net/openvswitch/meter.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 77972ef978b5..6ef2df258673 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -407,13 +407,6 @@ static inline const struct iommu_ops *dev_iommu_ops(struct device *dev)
- 	return dev->iommu->iommu_dev->ops;
- }
- 
--#define IOMMU_GROUP_NOTIFY_ADD_DEVICE		1 /* Device added */
--#define IOMMU_GROUP_NOTIFY_DEL_DEVICE		2 /* Pre Device removed */
--#define IOMMU_GROUP_NOTIFY_BIND_DRIVER		3 /* Pre Driver bind */
--#define IOMMU_GROUP_NOTIFY_BOUND_DRIVER		4 /* Post Driver bind */
--#define IOMMU_GROUP_NOTIFY_UNBIND_DRIVER	5 /* Pre Driver unbind */
--#define IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER	6 /* Post Driver unbind */
--
- extern int bus_set_iommu(struct bus_type *bus, const struct iommu_ops *ops);
- extern int bus_iommu_probe(struct bus_type *bus);
- extern bool iommu_present(struct bus_type *bus);
-@@ -478,10 +471,6 @@ extern int iommu_group_for_each_dev(struct iommu_group *group, void *data,
- extern struct iommu_group *iommu_group_get(struct device *dev);
- extern struct iommu_group *iommu_group_ref_get(struct iommu_group *group);
- extern void iommu_group_put(struct iommu_group *group);
--extern int iommu_group_register_notifier(struct iommu_group *group,
--					 struct notifier_block *nb);
--extern int iommu_group_unregister_notifier(struct iommu_group *group,
--					   struct notifier_block *nb);
- extern int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
- 					void *data);
-@@ -878,18 +867,6 @@ static inline void iommu_group_put(struct iommu_group *group)
+diff --git a/net/openvswitch/meter.c b/net/openvswitch/meter.c
+index 04a060ac7fdf..a790920c11d6 100644
+--- a/net/openvswitch/meter.c
++++ b/net/openvswitch/meter.c
+@@ -592,8 +592,8 @@ static int ovs_meter_cmd_del(struct sk_buff *skb, struc=
+t genl_info *info)
+ bool ovs_meter_execute(struct datapath *dp, struct sk_buff *skb,
+ =09=09       struct sw_flow_key *key, u32 meter_id)
  {
- }
- 
--static inline int iommu_group_register_notifier(struct iommu_group *group,
--						struct notifier_block *nb)
--{
--	return -ENODEV;
--}
--
--static inline int iommu_group_unregister_notifier(struct iommu_group *group,
--						  struct notifier_block *nb)
--{
--	return 0;
--}
--
- static inline
- int iommu_register_device_fault_handler(struct device *dev,
- 					iommu_dev_fault_handler_t handler,
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index eba8e8ccf19d..0c42ece25854 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -18,7 +18,6 @@
- #include <linux/errno.h>
- #include <linux/iommu.h>
- #include <linux/idr.h>
--#include <linux/notifier.h>
- #include <linux/err.h>
- #include <linux/pci.h>
- #include <linux/bitops.h>
-@@ -40,7 +39,6 @@ struct iommu_group {
- 	struct kobject *devices_kobj;
- 	struct list_head devices;
- 	struct mutex mutex;
--	struct blocking_notifier_head notifier;
- 	void *iommu_data;
- 	void (*iommu_data_release)(void *iommu_data);
- 	char *name;
-@@ -632,7 +630,6 @@ struct iommu_group *iommu_group_alloc(void)
- 	mutex_init(&group->mutex);
- 	INIT_LIST_HEAD(&group->devices);
- 	INIT_LIST_HEAD(&group->entry);
--	BLOCKING_INIT_NOTIFIER_HEAD(&group->notifier);
- 
- 	ret = ida_simple_get(&iommu_group_ida, 0, 0, GFP_KERNEL);
- 	if (ret < 0) {
-@@ -905,10 +902,6 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
- 	if (ret)
- 		goto err_put_group;
- 
--	/* Notify any listeners about change to group. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_ADD_DEVICE, dev);
--
- 	trace_add_device_to_group(group->id, dev);
- 
- 	dev_info(dev, "Adding to iommu group %d\n", group->id);
-@@ -950,10 +943,6 @@ void iommu_group_remove_device(struct device *dev)
- 
- 	dev_info(dev, "Removing from iommu group %d\n", group->id);
- 
--	/* Pre-notify listeners that a device is being removed. */
--	blocking_notifier_call_chain(&group->notifier,
--				     IOMMU_GROUP_NOTIFY_DEL_DEVICE, dev);
--
- 	mutex_lock(&group->mutex);
- 	list_for_each_entry(tmp_device, &group->devices, list) {
- 		if (tmp_device->dev == dev) {
-@@ -1075,36 +1064,6 @@ void iommu_group_put(struct iommu_group *group)
- }
- EXPORT_SYMBOL_GPL(iommu_group_put);
- 
--/**
-- * iommu_group_register_notifier - Register a notifier for group changes
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * This function allows iommu group users to track changes in a group.
-- * See include/linux/iommu.h for actions sent via this notifier.  Caller
-- * should hold a reference to the group throughout notifier registration.
-- */
--int iommu_group_register_notifier(struct iommu_group *group,
--				  struct notifier_block *nb)
--{
--	return blocking_notifier_chain_register(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_register_notifier);
--
--/**
-- * iommu_group_unregister_notifier - Unregister a notifier
-- * @group: the group to watch
-- * @nb: notifier block to signal
-- *
-- * Unregister a previously registered group notifier block.
-- */
--int iommu_group_unregister_notifier(struct iommu_group *group,
--				    struct notifier_block *nb)
--{
--	return blocking_notifier_chain_unregister(&group->notifier, nb);
--}
--EXPORT_SYMBOL_GPL(iommu_group_unregister_notifier);
--
- /**
-  * iommu_register_device_fault_handler() - Register a device fault handler
-  * @dev: the device
-@@ -1650,14 +1609,8 @@ static int remove_iommu_group(struct device *dev, void *data)
- static int iommu_bus_notifier(struct notifier_block *nb,
- 			      unsigned long action, void *data)
- {
--	unsigned long group_action = 0;
- 	struct device *dev = data;
--	struct iommu_group *group;
- 
--	/*
--	 * ADD/DEL call into iommu driver ops if provided, which may
--	 * result in ADD/DEL notifiers to group->notifier
--	 */
- 	if (action == BUS_NOTIFY_ADD_DEVICE) {
- 		int ret;
- 
-@@ -1668,34 +1621,6 @@ static int iommu_bus_notifier(struct notifier_block *nb,
- 		return NOTIFY_OK;
- 	}
- 
--	/*
--	 * Remaining BUS_NOTIFYs get filtered and republished to the
--	 * group, if anyone is listening
--	 */
--	group = iommu_group_get(dev);
--	if (!group)
--		return 0;
--
--	switch (action) {
--	case BUS_NOTIFY_BIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BIND_DRIVER;
--		break;
--	case BUS_NOTIFY_BOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_BOUND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBIND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBIND_DRIVER;
--		break;
--	case BUS_NOTIFY_UNBOUND_DRIVER:
--		group_action = IOMMU_GROUP_NOTIFY_UNBOUND_DRIVER;
--		break;
--	}
--
--	if (group_action)
--		blocking_notifier_call_chain(&group->notifier,
--					     group_action, dev);
--
--	iommu_group_put(group);
- 	return 0;
- }
- 
--- 
-2.25.1
+-=09long long int now_ms =3D div_u64(ktime_get_ns(), 1000 * 1000);
+-=09long long int long_delta_ms;
++=09long long now_ms =3D div_u64(ktime_get_ns(), 1000 * 1000);
++=09long long long_delta_ms;
+ =09struct dp_meter_band *band;
+ =09struct dp_meter *meter;
+ =09int i, band_exceeded_max =3D -1;
+@@ -622,7 +622,7 @@ bool ovs_meter_execute(struct datapath *dp, struct sk_b=
+uff *skb,
+ =09/* Make sure delta_ms will not be too large, so that bucket will not
+ =09 * wrap around below.
+ =09 */
+-=09delta_ms =3D (long_delta_ms > (long long int)meter->max_delta_t)
++=09delta_ms =3D (long_delta_ms > (long long)meter->max_delta_t)
+ =09=09   ? meter->max_delta_t : (u32)long_delta_ms;
+
+ =09/* Update meter statistics.
+@@ -645,7 +645,7 @@ bool ovs_meter_execute(struct datapath *dp, struct sk_b=
+uff *skb,
+
+ =09/* Update all bands and find the one hit with the highest rate. */
+ =09for (i =3D 0; i < meter->n_bands; ++i) {
+-=09=09long long int max_bucket_size;
++=09=09long long max_bucket_size;
+
+ =09=09band =3D &meter->bands[i];
+ =09=09max_bucket_size =3D band->burst_size * 1000LL;
+--
+2.35.3
+
 

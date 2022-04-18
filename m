@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A8D5058CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF1605058B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343818AbiDROI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34928 "EHLO
+        id S1344378AbiDROJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245244AbiDRNxJ (ORCPT
+        with ESMTP id S245260AbiDRNxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 09:53:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B640457AC;
-        Mon, 18 Apr 2022 06:02:35 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9E345AC0;
+        Mon, 18 Apr 2022 06:02:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AF401B80EBA;
-        Mon, 18 Apr 2022 13:02:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13455C385A1;
-        Mon, 18 Apr 2022 13:02:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B78560B70;
+        Mon, 18 Apr 2022 13:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C71C385A7;
+        Mon, 18 Apr 2022 13:02:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286952;
-        bh=Hi+qGAM0+K6aRhN2ffkWQJ1vVgUzo9g09tmdPd5/DCc=;
+        s=korg; t=1650286955;
+        bh=Os+qxn1DhxDjshDTdAdlcK8Fy8Mz/bgvQq9b255khpM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cOsuXgiUj41zg/jb7FsqneN2hgTUMQBrTDLyQkshNcy/JOfN3I0h6lXaQ09t27MXD
-         Rj9DtnoNbc7XHX5/O8k8QS3FHhu+DVG3JYDLw5pMoa6S7GQqOJUTWhYeiqabjLq2k/
-         +CWQ2FSvRP9HuV8PS5PawsKG7LPG5UsqVem4+eFU=
+        b=preuBGKJ0mzjpeZSfevrIAMQ9hOReme5yy5Hjfr7Pa0v5wRVMYDXL+oA9UmpfIStP
+         UB7JcyMb2loV/TDGbeZw36jeAkq8jqubC1yV03pPUu1NLdLZgsbaLGNnV75I2aRBOJ
+         Fxj4vTuFpE42M+v2Zv+7kgN/bb+Q4mKijPbtruL8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Subject: [PATCH 4.9 013/218] clk: uniphier: Fix fixed-rate initialization
-Date:   Mon, 18 Apr 2022 14:11:19 +0200
-Message-Id: <20220418121159.373216134@linuxfoundation.org>
+        stable@vger.kernel.org, stable@kernel.org,
+        Jann Horn <jannh@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: [PATCH 4.9 014/218] ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+Date:   Mon, 18 Apr 2022 14:11:20 +0200
+Message-Id: <20220418121159.422178664@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,35 +55,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+From: Jann Horn <jannh@google.com>
 
-commit ca85a66710a8a1f6b0719397225c3e9ee0abb692 upstream.
+commit ee1fee900537b5d9560e9f937402de5ddc8412f3 upstream.
 
-Fixed-rate clocks in UniPhier don't have any parent clocks, however,
-initial data "init.flags" isn't initialized, so it might be determined
-that there is a parent clock for fixed-rate clock.
+Setting PTRACE_O_SUSPEND_SECCOMP is supposed to be a highly privileged
+operation because it allows the tracee to completely bypass all seccomp
+filters on kernels with CONFIG_CHECKPOINT_RESTORE=y. It is only supposed to
+be settable by a process with global CAP_SYS_ADMIN, and only if that
+process is not subject to any seccomp filters at all.
 
-This sets init.flags to zero as initialization.
+However, while these permission checks were done on the PTRACE_SETOPTIONS
+path, they were missing on the PTRACE_SEIZE path, which also sets
+user-specified ptrace flags.
 
-Cc: <stable@vger.kernel.org>
-Fixes: 734d82f4a678 ("clk: uniphier: add core support code for UniPhier clock driver")
-Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Link: https://lore.kernel.org/r/1646808918-30899-1-git-send-email-hayashi.kunihiko@socionext.com
-Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+Move the permissions checks out into a helper function and let both
+ptrace_attach() and ptrace_setoptions() call it.
+
+Cc: stable@kernel.org
+Fixes: 13c4a90119d2 ("seccomp: add ptrace options for suspend/resume")
+Signed-off-by: Jann Horn <jannh@google.com>
+Link: https://lkml.kernel.org/r/20220319010838.1386861-1-jannh@google.com
+Signed-off-by: Eric W. Biederman <ebiederm@xmission.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/clk/uniphier/clk-uniphier-fixed-rate.c |    1 +
- 1 file changed, 1 insertion(+)
+ kernel/ptrace.c |   47 ++++++++++++++++++++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 15 deletions(-)
 
---- a/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-+++ b/drivers/clk/uniphier/clk-uniphier-fixed-rate.c
-@@ -33,6 +33,7 @@ struct clk_hw *uniphier_clk_register_fix
+--- a/kernel/ptrace.c
++++ b/kernel/ptrace.c
+@@ -371,6 +371,26 @@ bool ptrace_may_access(struct task_struc
+ 	return !err;
+ }
  
- 	init.name = name;
- 	init.ops = &clk_fixed_rate_ops;
-+	init.flags = 0;
- 	init.parent_names = NULL;
- 	init.num_parents = 0;
++static int check_ptrace_options(unsigned long data)
++{
++	if (data & ~(unsigned long)PTRACE_O_MASK)
++		return -EINVAL;
++
++	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
++		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
++		    !IS_ENABLED(CONFIG_SECCOMP))
++			return -EINVAL;
++
++		if (!capable(CAP_SYS_ADMIN))
++			return -EPERM;
++
++		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
++		    current->ptrace & PT_SUSPEND_SECCOMP)
++			return -EPERM;
++	}
++	return 0;
++}
++
+ static int ptrace_attach(struct task_struct *task, long request,
+ 			 unsigned long addr,
+ 			 unsigned long flags)
+@@ -382,8 +402,16 @@ static int ptrace_attach(struct task_str
+ 	if (seize) {
+ 		if (addr != 0)
+ 			goto out;
++		/*
++		 * This duplicates the check in check_ptrace_options() because
++		 * ptrace_attach() and ptrace_setoptions() have historically
++		 * used different error codes for unknown ptrace options.
++		 */
+ 		if (flags & ~(unsigned long)PTRACE_O_MASK)
+ 			goto out;
++		retval = check_ptrace_options(flags);
++		if (retval)
++			return retval;
+ 		flags = PT_PTRACED | PT_SEIZED | (flags << PT_OPT_FLAG_SHIFT);
+ 	} else {
+ 		flags = PT_PTRACED;
+@@ -656,22 +684,11 @@ int ptrace_writedata(struct task_struct
+ static int ptrace_setoptions(struct task_struct *child, unsigned long data)
+ {
+ 	unsigned flags;
++	int ret;
  
+-	if (data & ~(unsigned long)PTRACE_O_MASK)
+-		return -EINVAL;
+-
+-	if (unlikely(data & PTRACE_O_SUSPEND_SECCOMP)) {
+-		if (!IS_ENABLED(CONFIG_CHECKPOINT_RESTORE) ||
+-		    !IS_ENABLED(CONFIG_SECCOMP))
+-			return -EINVAL;
+-
+-		if (!capable(CAP_SYS_ADMIN))
+-			return -EPERM;
+-
+-		if (seccomp_mode(&current->seccomp) != SECCOMP_MODE_DISABLED ||
+-		    current->ptrace & PT_SUSPEND_SECCOMP)
+-			return -EPERM;
+-	}
++	ret = check_ptrace_options(data);
++	if (ret)
++		return ret;
+ 
+ 	/* Avoid intermediate state when all opts are cleared */
+ 	flags = child->ptrace;
 
 

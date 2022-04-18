@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DDFA505569
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8BF5053A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242150AbiDRNIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S240690AbiDRNAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:00:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240441AbiDRMzp (ORCPT
+        with ESMTP id S240589AbiDRMto (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29A64E0B1;
-        Mon, 18 Apr 2022 05:37:43 -0700 (PDT)
+        Mon, 18 Apr 2022 08:49:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1B122C12E;
+        Mon, 18 Apr 2022 05:33:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A79AE611CC;
-        Mon, 18 Apr 2022 12:37:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE24EC385A1;
-        Mon, 18 Apr 2022 12:37:41 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E98AB80ED6;
+        Mon, 18 Apr 2022 12:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CEEC385A1;
+        Mon, 18 Apr 2022 12:33:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285462;
-        bh=RSKVNnoqxfmMZybfBYToySTA/cVvPDlog7YmfbBL73w=;
+        s=korg; t=1650285237;
+        bh=EcZIn9B50ER/b5XM1sUKQIjm37ZI2VynoYO5vl94STY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=BNVOcS9/x41RTAb1d33uCPZNuvMPTbSkyDA9RHMCxQpMoaOsnY4JFU8CDGCItvZtQ
-         wc0zIsVjPaaBRuxTC3AMA0mYMQY2lnc/jFh4IM5rsD1gCzv5dGqDA6EGqCvT5xhpsA
-         hAACpDlNhsbbB0blaos+AkglEk2sywhzRjHWSOy4=
+        b=OWH2XQeHPaOmtUMMlQ5ltbYCwz0jv8Rs1vBgHvrH99So28tUtQQrbgUEYU5wJj9iA
+         dZBvQf8Zxxud6dNwjd3DGWISsLCra36qoxMrrLPrKObvQyLA0UScrN5VQhGQIrEWF6
+         ka3UGxlFYjUIZVa0BZ4572fnQF+qgwclLfJiLB+o=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Ajish Koshy <Ajish.Koshy@microchip.com>,
-        Viswas G <Viswas.G@microchip.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Andy Chiu <andy.chiu@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Robert Hancock <robert.hancock@calian.com>,
+        Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        "David S. Miller" <davem@davemloft.net>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 025/105] scsi: pm80xx: Mask and unmask upper interrupt vectors 32-63
-Date:   Mon, 18 Apr 2022 14:12:27 +0200
-Message-Id: <20220418121146.941739869@linuxfoundation.org>
+Subject: [PATCH 5.15 128/189] net: axienet: setup mdio unconditionally
+Date:   Mon, 18 Apr 2022 14:12:28 +0200
+Message-Id: <20220418121204.671340317@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,71 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ajish Koshy <Ajish.Koshy@microchip.com>
+From: Andy Chiu <andy.chiu@sifive.com>
 
-[ Upstream commit 294080eacf92a0781e6d43663448a55001ec8c64 ]
+[ Upstream commit d1c4f93e3f0a023024a6f022a61528c06cf1daa9 ]
 
-When upper inbound and outbound queues 32-63 are enabled, we see upper
-vectors 32-63 in interrupt service routine. We need corresponding registers
-to handle masking and unmasking of these upper interrupts.
+The call to axienet_mdio_setup should not depend on whether "phy-node"
+pressents on the DT. Besides, since `lp->phy_node` is used if PHY is in
+SGMII or 100Base-X modes, move it into the if statement. And the next patch
+will remove `lp->phy_node` from driver's private structure and do an
+of_node_put on it right away after use since it is not used elsewhere.
 
-To achieve this, we use registers MSGU_ODMR_U(0x34) to mask and
-MSGU_ODMR_CLR_U(0x3C) to unmask the interrupts. In these registers bit 0-31
-represents interrupt vectors 32-63.
-
-Link: https://lore.kernel.org/r/20220411064603.668448-2-Ajish.Koshy@microchip.com
-Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
-Reviewed-by: John Garry <john.garry@huawei.com>
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
-Signed-off-by: Viswas G <Viswas.G@microchip.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Signed-off-by: Andy Chiu <andy.chiu@sifive.com>
+Reviewed-by: Greentime Hu <greentime.hu@sifive.com>
+Reviewed-by: Robert Hancock <robert.hancock@calian.com>
+Reviewed-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Signed-off-by: David S. Miller <davem@davemloft.net>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/pm8001/pm80xx_hwi.c | 22 +++++++++++++---------
- 1 file changed, 13 insertions(+), 9 deletions(-)
+ drivers/net/ethernet/xilinx/xilinx_axienet_main.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
-index 4c03bf08b543..0543ff3ff1ba 100644
---- a/drivers/scsi/pm8001/pm80xx_hwi.c
-+++ b/drivers/scsi/pm8001/pm80xx_hwi.c
-@@ -1682,10 +1682,11 @@ static void
- pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	u32 mask;
--	mask = (u32)(1 << vec);
--
--	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, (u32)(mask & 0xFFFFFFFF));
-+	if (vec < 32)
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, 1U << vec);
-+	else
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
-+			    1U << (vec - 32));
- 	return;
- #endif
- 	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
-@@ -1701,12 +1702,15 @@ static void
- pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
- {
- #ifdef PM8001_USE_MSIX
--	u32 mask;
--	if (vec == 0xFF)
--		mask = 0xFFFFFFFF;
-+	if (vec == 0xFF) {
-+		/* disable all vectors 0-31, 32-63 */
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 0xFFFFFFFF);
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, 0xFFFFFFFF);
-+	} else if (vec < 32)
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 1U << vec);
- 	else
--		mask = (u32)(1 << vec);
--	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, (u32)(mask & 0xFFFFFFFF));
-+		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
-+			    1U << (vec - 32));
- 	return;
- #endif
- 	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
+diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+index 80637ffcca93..fbbbcfe0e891 100644
+--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
++++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+@@ -2127,15 +2127,14 @@ static int axienet_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto cleanup_clk;
+ 
+-	lp->phy_node = of_parse_phandle(pdev->dev.of_node, "phy-handle", 0);
+-	if (lp->phy_node) {
+-		ret = axienet_mdio_setup(lp);
+-		if (ret)
+-			dev_warn(&pdev->dev,
+-				 "error registering MDIO bus: %d\n", ret);
+-	}
++	ret = axienet_mdio_setup(lp);
++	if (ret)
++		dev_warn(&pdev->dev,
++			 "error registering MDIO bus: %d\n", ret);
++
+ 	if (lp->phy_mode == PHY_INTERFACE_MODE_SGMII ||
+ 	    lp->phy_mode == PHY_INTERFACE_MODE_1000BASEX) {
++		lp->phy_node = of_parse_phandle(pdev->dev.of_node, "phy-handle", 0);
+ 		if (!lp->phy_node) {
+ 			dev_err(&pdev->dev, "phy-handle required for 1000BaseX/SGMII\n");
+ 			ret = -EINVAL;
 -- 
 2.35.1
 

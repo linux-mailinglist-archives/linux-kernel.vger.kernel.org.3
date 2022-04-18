@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3C945058A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936AA5058BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245218AbiDROLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
+        id S1344068AbiDROI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:08:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245723AbiDRNx7 (ORCPT
+        with ESMTP id S1343508AbiDRNyC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:53:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0584706A;
-        Mon, 18 Apr 2022 06:03:08 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7B584739D;
+        Mon, 18 Apr 2022 06:03:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25F4D60B35;
-        Mon, 18 Apr 2022 13:03:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EA4C385A7;
-        Mon, 18 Apr 2022 13:03:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE5B8B80D9C;
+        Mon, 18 Apr 2022 13:03:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41852C385A7;
+        Mon, 18 Apr 2022 13:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286987;
-        bh=tS0bT0Ob+m2K2tG+sUf7Vtwmj0hwg1nLUyR2Yj1v28w=;
+        s=korg; t=1650286990;
+        bh=jBMyn2i7pYWv70T0Hw+HO5NaUB2lR2dmLPcZMm+pnfc=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YjEoRNEZpPbo34YDYmVxQuKpXFmTG8ZUAMRjuzrtj36wPxUYUc/8Ll+OiKIbUJaNF
-         6gZnOiFoZwAI9ELfmQFCDSXqnltlOnd4Ow280w9SmpKsg+cChQrFrmvVND60lIElbj
-         DYGoNQ/NE5nYN5IuyyTlpm4T6OL9I7dsOaryewTw=
+        b=DhjCvHr7pFnVdhdKZRkJnprkjEkspKMqlOZ95wHmmN+ZD2SKx+Ze6ztfLDEzhTUOf
+         TQTIkst040jVsXfCTy7bKDLBFQ5aVmgaV5WNKJOLMWn/eNDkaCF340eV+LBgGrGclE
+         2hu8aq6O5ckfbGs7vqxTsG5V/StzkVEvLorpu5ZA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
-        Jack Wang <jinpu.wang@ionos.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 4.9 023/218] scsi: libsas: Fix sas_ata_qc_issue() handling of NCQ NON DATA commands
-Date:   Mon, 18 Apr 2022 14:11:29 +0200
-Message-Id: <20220418121159.899603887@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Peter Hutterer <peter.hutterer@who-t.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Subject: [PATCH 4.9 024/218] Revert "Input: clear BTN_RIGHT/MIDDLE on buttonpads"
+Date:   Mon, 18 Apr 2022 14:11:30 +0200
+Message-Id: <20220418121159.949497174@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,41 +58,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-commit 8454563e4c2aafbfb81a383ab423ea8b9b430a25 upstream.
+commit 8b188fba75195745026e11d408e4a7e94e01d701 upstream.
 
-To detect for the DMA_NONE (no data transfer) DMA direction,
-sas_ata_qc_issue() tests if the command protocol is ATA_PROT_NODATA.  This
-test does not include the ATA_CMD_NCQ_NON_DATA command as this command
-protocol is defined as ATA_PROT_NCQ_NODATA (equal to ATA_PROT_FLAG_NCQ) and
-not as ATA_PROT_NODATA.
+This reverts commit 37ef4c19b4c659926ce65a7ac709ceaefb211c40.
 
-To include both NCQ and non-NCQ commands when testing for the DMA_NONE DMA
-direction, use "!ata_is_data()".
+The touchpad present in the Dell Precision 7550 and 7750 laptops
+reports a HID_DG_BUTTONTYPE of type MT_BUTTONTYPE_CLICKPAD. However,
+the device is not a clickpad, it is a touchpad with physical buttons.
 
-Link: https://lore.kernel.org/r/20220220031810.738362-2-damien.lemoal@opensource.wdc.com
-Fixes: 176ddd89171d ("scsi: libsas: Reset num_scatter if libata marks qc as NODATA")
+In order to fix this issue, a quirk for the device was introduced in
+libinput [1] [2] to disable the INPUT_PROP_BUTTONPAD property:
+
+	[Precision 7x50 Touchpad]
+	MatchBus=i2c
+	MatchUdevType=touchpad
+	MatchDMIModalias=dmi:*svnDellInc.:pnPrecision7?50*
+	AttrInputPropDisable=INPUT_PROP_BUTTONPAD
+
+However, because of the change introduced in 37ef4c19b4 ("Input: clear
+BTN_RIGHT/MIDDLE on buttonpads") the BTN_RIGHT key bit is not mapped
+anymore breaking the device right click button and making impossible to
+workaround it in user space.
+
+In order to avoid breakage on other present or future devices, revert
+the patch causing the issue.
+
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Peter Hutterer <peter.hutterer@who-t.net>
+Acked-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
 Cc: stable@vger.kernel.org
-Reviewed-by: John Garry <john.garry@huawei.com>
-Reviewed-by: Jack Wang <jinpu.wang@ionos.com>
-Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Link: https://lore.kernel.org/r/20220321184404.20025-1-jose.exposito89@gmail.com
+Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/scsi/libsas/sas_ata.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/input/input.c |    6 ------
+ 1 file changed, 6 deletions(-)
 
---- a/drivers/scsi/libsas/sas_ata.c
-+++ b/drivers/scsi/libsas/sas_ata.c
-@@ -220,7 +220,7 @@ static unsigned int sas_ata_qc_issue(str
- 		task->total_xfer_len = qc->nbytes;
- 		task->num_scatter = qc->n_elem;
- 		task->data_dir = qc->dma_dir;
--	} else if (qc->tf.protocol == ATA_PROT_NODATA) {
-+	} else if (!ata_is_data(qc->tf.protocol)) {
- 		task->data_dir = DMA_NONE;
- 	} else {
- 		for_each_sg(qc->sg, sg, qc->n_elem, si)
+--- a/drivers/input/input.c
++++ b/drivers/input/input.c
+@@ -2112,12 +2112,6 @@ int input_register_device(struct input_d
+ 	/* KEY_RESERVED is not supposed to be transmitted to userspace. */
+ 	__clear_bit(KEY_RESERVED, dev->keybit);
+ 
+-	/* Buttonpads should not map BTN_RIGHT and/or BTN_MIDDLE. */
+-	if (test_bit(INPUT_PROP_BUTTONPAD, dev->propbit)) {
+-		__clear_bit(BTN_RIGHT, dev->keybit);
+-		__clear_bit(BTN_MIDDLE, dev->keybit);
+-	}
+-
+ 	/* Make sure that bitmasks not mentioned in dev->evbit are clean. */
+ 	input_cleanse_bitmasks(dev);
+ 
 
 

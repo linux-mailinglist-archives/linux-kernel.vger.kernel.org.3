@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8AA2505E29
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0982B505E21
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344436AbiDRSxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S1346842AbiDRSy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:54:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347516AbiDRSxJ (ORCPT
+        with ESMTP id S1347541AbiDRSxV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 14:53:09 -0400
+        Mon, 18 Apr 2022 14:53:21 -0400
 Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3752722514;
-        Mon, 18 Apr 2022 11:50:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF6502409F;
+        Mon, 18 Apr 2022 11:50:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
         s=mail; t=1650307798; h=from:from:sender:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZlyW45e+iUvXF1qLLn4ctjlyJZvRF5CDmcQahzk9/7c=;
-        b=xvUbwuzxpT1C5eNIIh5SuS7eC7kyLp0vD6wa7o0r5T9+0juVMN+RGwSQnN43Cv7DcxTIOR
-        V/BrU3mFoYoWe4k6yGWi5RMcXCUo+HckygFA5zH2eeypi2LEno9dUCBCTZNLYiVgxmCg2K
-        lrmtCZob3rSKMzTsOx1W6cSvhCPxZKU=
+        bh=c/CT07nqqL/kRUfaHG3whhK5ysTGqgD0sA53BitiVSo=;
+        b=P/2SAq3V8XLIIw3N33ms4X7AHzfiKEDhTzzLbmZEhHIdJ5TuaQtBKB5nHUqwJ4DzEbNcuJ
+        HPKn1kEAJ7i0umFwILtCLvi7LEi1dQfpguqWX680yq5mBPy11xljkr8+zlonLjRze+5l42
+        mPQIc9Sh3Q5jiz7f4MM+HBUI9MHgWUU=
 From:   Paul Cercueil <paul@crapouillou.net>
 To:     Alessandro Zummo <a.zummo@towertech.it>,
         Alexandre Belloni <alexandre.belloni@bootlin.com>
 Cc:     list@opendingux.net, linux-rtc@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mips@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 4/5] rtc: jz4740: Register clock provider for the CLK32K pin
-Date:   Mon, 18 Apr 2022 19:49:32 +0100
-Message-Id: <20220418184933.13172-5-paul@crapouillou.net>
+Subject: [PATCH 5/5] rtc: jz4740: Support for fine-tuning the RTC clock
+Date:   Mon, 18 Apr 2022 19:49:33 +0100
+Message-Id: <20220418184933.13172-6-paul@crapouillou.net>
 In-Reply-To: <20220418184933.13172-1-paul@crapouillou.net>
 References: <20220418184933.13172-1-paul@crapouillou.net>
 MIME-Version: 1.0
@@ -46,128 +46,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On JZ4770 and JZ4780, the CLK32K pin is configurable. By default, it is
-configured as a GPIO in input mode, and its value can be read through
-GPIO PD14.
-
-With this change, clients can now request the 32 kHz clock on the CLK32K
-pin, through Device Tree. This clock is simply a pass-through of the
-input oscillator's clock with enable/disable operations.
-
-This will permit the WiFi/Bluetooth chip to work on the MIPS CI20 board,
-which does source one of its clocks from the CLK32K pin.
+Write the NC1HZ and ADJC register fields, which allow to tweak the
+frequency of the RTC clock, so that it can run as accurately as
+possible.
 
 Signed-off-by: Paul Cercueil <paul@crapouillou.net>
 ---
- drivers/rtc/rtc-jz4740.c | 50 ++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 48 insertions(+), 2 deletions(-)
+ drivers/rtc/rtc-jz4740.c | 45 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 45 insertions(+)
 
 diff --git a/drivers/rtc/rtc-jz4740.c b/drivers/rtc/rtc-jz4740.c
-index aac5f68bf626..f4c9b6058f07 100644
+index f4c9b6058f07..f275e58a9cea 100644
 --- a/drivers/rtc/rtc-jz4740.c
 +++ b/drivers/rtc/rtc-jz4740.c
-@@ -6,6 +6,7 @@
+@@ -5,6 +5,7 @@
+  *	 JZ4740 SoC RTC driver
   */
  
++#include <linux/bitfield.h>
  #include <linux/clk.h>
-+#include <linux/clk-provider.h>
+ #include <linux/clk-provider.h>
  #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/kernel.h>
-@@ -26,6 +27,7 @@
- #define JZ_REG_RTC_WAKEUP_FILTER	0x24
- #define JZ_REG_RTC_RESET_COUNTER	0x28
- #define JZ_REG_RTC_SCRATCHPAD	0x34
-+#define JZ_REG_RTC_CKPCR	0x40
+@@ -41,6 +42,9 @@
+ #define JZ_RTC_CTRL_AE		BIT(2)
+ #define JZ_RTC_CTRL_ENABLE	BIT(0)
  
- /* The following are present on the jz4780 */
- #define JZ_REG_RTC_WENR	0x3C
-@@ -48,10 +50,13 @@
- #define JZ_RTC_WAKEUP_FILTER_MASK	0x0000FFE0
- #define JZ_RTC_RESET_COUNTER_MASK	0x00000FE0
- 
-+#define JZ_RTC_CKPCR_CK32PULL_DIS	BIT(4)
-+#define JZ_RTC_CKPCR_CK32CTL_EN		(BIT(2) | BIT(1))
++#define JZ_RTC_REGULATOR_NC1HZ_MASK	GENMASK(15, 0)
++#define JZ_RTC_REGULATOR_ADJC_MASK	GENMASK(25, 16)
 +
- enum jz4740_rtc_type {
- 	ID_JZ4740,
- 	ID_JZ4760,
--	ID_JZ4780,
-+	ID_JZ4770,
- };
+ /* Magic value to enable writes on jz4780 */
+ #define JZ_RTC_WENR_MAGIC	0xA55A
  
- struct jz4740_rtc {
-@@ -60,6 +65,8 @@ struct jz4740_rtc {
+@@ -64,6 +68,7 @@ struct jz4740_rtc {
+ 	enum jz4740_rtc_type type;
  
  	struct rtc_device *rtc;
++	struct clk *clk;
  
-+	struct clk_hw clk32k;
-+
- 	spinlock_t lock;
- };
+ 	struct clk_hw clk32k;
  
-@@ -264,7 +271,8 @@ static void jz4740_rtc_clk_disable(void *data)
- static const struct of_device_id jz4740_rtc_of_match[] = {
- 	{ .compatible = "ingenic,jz4740-rtc", .data = (void *)ID_JZ4740 },
- 	{ .compatible = "ingenic,jz4760-rtc", .data = (void *)ID_JZ4760 },
--	{ .compatible = "ingenic,jz4780-rtc", .data = (void *)ID_JZ4780 },
-+	{ .compatible = "ingenic,jz4770-rtc", .data = (void *)ID_JZ4770 },
-+	{ .compatible = "ingenic,jz4780-rtc", .data = (void *)ID_JZ4770 },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, jz4740_rtc_of_match);
-@@ -305,6 +313,27 @@ static void jz4740_rtc_set_wakeup_params(struct jz4740_rtc *rtc,
- 	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_RESET_COUNTER, reset_ticks);
+@@ -222,12 +227,51 @@ static int jz4740_rtc_alarm_irq_enable(struct device *dev, unsigned int enable)
+ 	return jz4740_rtc_ctrl_set_bits(rtc, JZ_RTC_CTRL_AF_IRQ, enable);
  }
  
-+static int jz4740_rtc_clk32k_enable(struct clk_hw *hw)
++static int jz4740_rtc_read_offset(struct device *dev, long *offset)
 +{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
++	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
++	long rate = clk_get_rate(rtc->clk);
++	s32 nc1hz, adjc, offset1k;
++	u32 reg;
 +
-+	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR,
-+				    JZ_RTC_CKPCR_CK32PULL_DIS |
-+				    JZ_RTC_CKPCR_CK32CTL_EN);
++	reg = jz4740_rtc_reg_read(rtc, JZ_REG_RTC_REGULATOR);
++	nc1hz = FIELD_GET(JZ_RTC_REGULATOR_NC1HZ_MASK, reg);
++	adjc = FIELD_GET(JZ_RTC_REGULATOR_ADJC_MASK, reg);
++
++	offset1k = (nc1hz - rate + 1) * 1024L + adjc;
++	*offset = offset1k * 1000000L / (rate * 1024L);
++
++	return 0;
 +}
 +
-+static void jz4740_rtc_clk32k_disable(struct clk_hw *hw)
++static int jz4740_rtc_set_offset(struct device *dev, long offset)
 +{
-+	struct jz4740_rtc *rtc = container_of(hw, struct jz4740_rtc, clk32k);
++	struct jz4740_rtc *rtc = dev_get_drvdata(dev);
++	long rate = clk_get_rate(rtc->clk);
++	s32 offset1k, adjc, nc1hz;
 +
-+	jz4740_rtc_reg_write(rtc, JZ_REG_RTC_CKPCR, 0);
-+}
++	offset1k = div_s64_rem(offset * rate * 1024LL, 1000000LL, &adjc);
++	nc1hz = rate - 1 + offset1k / 1024L;
 +
-+static const struct clk_ops jz4740_rtc_clk32k_ops = {
-+	.enable = jz4740_rtc_clk32k_enable,
-+	.disable = jz4740_rtc_clk32k_disable,
-+};
-+
- static int jz4740_rtc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -407,6 +436,23 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
- 			dev_warn(dev, "Poweroff handler already present!\n");
- 	}
- 
-+	if (rtc->type == ID_JZ4770) {
-+		rtc->clk32k.init = CLK_HW_INIT("clk32k", "rtc",
-+					       &jz4740_rtc_clk32k_ops, 0);
-+
-+		ret = devm_clk_hw_register(dev, &rtc->clk32k);
-+		if (ret) {
-+			dev_err(dev, "Unable to register clk32k clock: %d\n", ret);
-+			return ret;
-+		}
-+
-+		ret = of_clk_add_hw_provider(np, of_clk_hw_simple_get, &rtc->clk32k);
-+		if (ret) {
-+			dev_err(dev, "Unable to register clk32k clock provider: %d\n", ret);
-+			return ret;
-+		}
++	if (adjc < 0) {
++		nc1hz--;
++		adjc += 1024;
 +	}
 +
- 	return 0;
- }
++	nc1hz = FIELD_PREP(JZ_RTC_REGULATOR_NC1HZ_MASK, nc1hz);
++	adjc = FIELD_PREP(JZ_RTC_REGULATOR_ADJC_MASK, adjc);
++
++	return jz4740_rtc_reg_write(rtc, JZ_REG_RTC_REGULATOR, nc1hz | adjc);
++}
++
+ static const struct rtc_class_ops jz4740_rtc_ops = {
+ 	.read_time	= jz4740_rtc_read_time,
+ 	.set_time	= jz4740_rtc_set_time,
+ 	.read_alarm	= jz4740_rtc_read_alarm,
+ 	.set_alarm	= jz4740_rtc_set_alarm,
+ 	.alarm_irq_enable = jz4740_rtc_alarm_irq_enable,
++	.read_offset	= jz4740_rtc_read_offset,
++	.set_offset	= jz4740_rtc_set_offset,
+ };
  
+ static irqreturn_t jz4740_rtc_irq(int irq, void *data)
+@@ -378,6 +422,7 @@ static int jz4740_rtc_probe(struct platform_device *pdev)
+ 
+ 	spin_lock_init(&rtc->lock);
+ 
++	rtc->clk = clk;
+ 	platform_set_drvdata(pdev, rtc);
+ 
+ 	device_init_wakeup(dev, 1);
 -- 
 2.35.1
 

@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E91A505F7A
+	by mail.lfdr.de (Postfix) with ESMTP id ECF82505F7B
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiDRVuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S229741AbiDRVyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiDRVum (ORCPT
+        with ESMTP id S229667AbiDRVx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:50:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECAC1DA47
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:48:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650318481; x=1681854481;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=zy4F/edl4tI2yMzSkwhLXZMwL7Js/XjfIr2YvR7zwDE=;
-  b=iXIRXeydDMb2ATJF6gjrXcIUKcolcZBlTtAmZm3/1BG8vpFodvkorvjY
-   lUZ/hw1Ia85gpT0DV2mC4FPATQmEJMgPN+tF2eAjLrBbfR4AIUjPZikxa
-   34xKxDTvTDO3rzwkj0CPEPPgXZK3qakGESao678ovol6DWZ50KHNrMfCw
-   +SgnPDajFAflJ2NX26DNkBpRet+/XERL72BDdKs9U3IpJ4GOy55wZbUES
-   eXMM6zPoXSlDhBIgGBGMg5Nqp298hjFUZATNH/+BpC2kcM+6o4ZHH5tIJ
-   LjalyLAjBuQxXOCIeUtiaN/rcYBrVqR8NpD0T+EVKR+n863EYjdgMFZFT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326517477"
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="326517477"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:48:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
-   d="scan'208";a="701964453"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 18 Apr 2022 14:47:59 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngZDz-00051S-13;
-        Mon, 18 Apr 2022 21:47:59 +0000
-Date:   Tue, 19 Apr 2022 05:47:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 2222/2356]
- include/linux/mm_types_task.h:11:10: fatal error: generated/bounds.h: No
- such file or directory
-Message-ID: <202204190545.DLGpryBz-lkp@intel.com>
+        Mon, 18 Apr 2022 17:53:57 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B2D101C0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:51:16 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id k29so21216745pgm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 14:51:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=McML/7aq2qYQeHtr+zF/mEmdaC5pb8ihc8HBw6Ng3QE=;
+        b=Xynf82T+YJ3L9WP7bS10BageZ9YV+V1bwOGz/uSRoxx9QL0km13oL6wprefg95OK6/
+         XiBa4U49OwIQ2CowIh/bUSmR5pHsIdN4GoSTAeAPT6z5ACOT2wveezuYjmKuGzUEhgWo
+         Y9GdnShjwgAxhuf2vba32qgkr9asYPszd/h2w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=McML/7aq2qYQeHtr+zF/mEmdaC5pb8ihc8HBw6Ng3QE=;
+        b=SyCzyzCjj5tgUwg5ZKFuvNmNn+NIccdeV5FA9m4kL/U17LYmJTIyqpG4xklj1a6+QM
+         Yfvaos60tLBWSMyUNc5YXTTa3Y3amNKBdPu5GP3l5K390gH5Jv7ezS3NeiOJWHNlMIs+
+         d0A244OWJOLtJcApG7EqbxB6NTag7UKE4iGv1dfYeQxs1X7pNlQ9XDiICUCXdLozdez1
+         fSLAgAEPKO67ha2C5q3B68ikixDRyQha6ohCHUQazIY1v1CxK1Ci7kXlHgCjhd9NHgrf
+         G2VTlC8S5HUmo5KwwoU//tkkwX0K6HDkzxuAZjrqPrNOvhND+wVRXlCdtfIk41M2MtJA
+         ysRQ==
+X-Gm-Message-State: AOAM530v7HKcwkNp94vzpKwiHqyvcqmyUfrVowtemZJ33ALxiGaJ8X16
+        lj+sjxA2wElqDvqyY5fXGSl7hw==
+X-Google-Smtp-Source: ABdhPJyoRoXMQ/9/BWXQveo5IafXB1/Wwz08+r4TNPjC4GYcIGRdF2i5UDHcNh6YZ4z0qrqlXYQQRA==
+X-Received: by 2002:a05:6a00:e8e:b0:4fa:a52f:59cf with SMTP id bo14-20020a056a000e8e00b004faa52f59cfmr14453638pfb.84.1650318675949;
+        Mon, 18 Apr 2022 14:51:15 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b13-20020a17090a7acd00b001d2cd88956esm203296pjl.24.2022.04.18.14.51.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 14:51:15 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 14:51:14 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dan Li <ashimida@linux.alibaba.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] lkdtm: Add CFI_BACKWARD to test ROP mitigations
+Message-ID: <202204181451.AC3DB70EE@keescook>
+References: <20220416001103.1524653-1-keescook@chromium.org>
+ <e1563d18-36d7-08b2-762c-def7021d1382@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <e1563d18-36d7-08b2-762c-def7021d1382@linux.alibaba.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,157 +69,233 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 1ac8ecdc4e754e164da21a64b262f7b0f097010f [2222/2356] headers/deps: bvec: Reduce <linux/bvec.h> dependencies, remove <linux/bvec_api.h> inclusion
-config: powerpc-allnoconfig (https://download.01.org/0day-ci/archive/20220419/202204190545.DLGpryBz-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=1ac8ecdc4e754e164da21a64b262f7b0f097010f
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 1ac8ecdc4e754e164da21a64b262f7b0f097010f
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc prepare
+On Sun, Apr 17, 2022 at 02:15:43AM -0700, Dan Li wrote:
+> 
+> 
+> On 4/15/22 17:11, Kees Cook wrote:
+> > In order to test various backward-edge control flow integrity methods,
+> > add a test that manipulates the return address on the stack. Currently
+> > only arm64 Pointer Authentication and Shadow Call Stack is supported.
+> > 
+> >   $ echo CFI_BACKWARD | cat >/sys/kernel/debug/provoke-crash/DIRECT
+> > 
+> > Under SCS, successful test of the mitigation is reported as:
+> > 
+> >   lkdtm: Performing direct entry CFI_BACKWARD
+> >   lkdtm: Attempting unchecked stack return address redirection ...
+> >   lkdtm: ok: redirected stack return address.
+> >   lkdtm: Attempting checked stack return address redirection ...
+> >   lkdtm: ok: control flow unchanged.
+> > 
+> > Under PAC, successful test of the mitigation is reported by the PAC
+> > exception handler:
+> > 
+> >   lkdtm: Performing direct entry CFI_BACKWARD
+> >   lkdtm: Attempting unchecked stack return address redirection ...
+> >   lkdtm: ok: redirected stack return address.
+> >   lkdtm: Attempting checked stack return address redirection ...
+> >   Unable to handle kernel paging request at virtual address bfffffc0088d0514
+> >   Mem abort info:
+> >     ESR = 0x86000004
+> >     EC = 0x21: IABT (current EL), IL = 32 bits
+> >     SET = 0, FnV = 0
+> >     EA = 0, S1PTW = 0
+> >     FSC = 0x04: level 0 translation fault
+> >   [bfffffc0088d0514] address between user and kernel address ranges
+> >   ...
+> > 
+> > If the CONFIGs are missing (or the mitigation isn't working), failure
+> > is reported as:
+> > 
+> >   lkdtm: Performing direct entry CFI_BACKWARD
+> >   lkdtm: Attempting unchecked stack return address redirection ...
+> >   lkdtm: ok: redirected stack return address.
+> >   lkdtm: Attempting checked stack return address redirection ...
+> >   lkdtm: FAIL: stack return address was redirected!
+> >   lkdtm: This is probably expected, since this kernel was built *without* CONFIG_ARM64_PTR_AUTH_KERNEL=y nor CONFIG_SHADOW_CALL_STACK=y
+> > 
+> > Co-developed-by: Dan Li <ashimida@linux.alibaba.com>
+> > Signed-off-by: Dan Li <ashimida@linux.alibaba.com>
+> > Cc: Arnd Bergmann <arnd@arndb.de>
+> > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v1: https://lore.kernel.org/lkml/20220413213917.711770-1-keescook@chromium.org
+> > v2:
+> >   - add PAGE_OFFSET setting for PAC bits (Dan Li)
+> > ---
+> >   drivers/misc/lkdtm/cfi.c                | 134 ++++++++++++++++++++++++
+> >   tools/testing/selftests/lkdtm/tests.txt |   1 +
+> >   2 files changed, 135 insertions(+)
+> > 
+> > diff --git a/drivers/misc/lkdtm/cfi.c b/drivers/misc/lkdtm/cfi.c
+> > index e88f778be0d5..804965a480b7 100644
+> > --- a/drivers/misc/lkdtm/cfi.c
+> > +++ b/drivers/misc/lkdtm/cfi.c
+> > @@ -3,6 +3,7 @@
+> >    * This is for all the tests relating directly to Control Flow Integrity.
+> >    */
+> >   #include "lkdtm.h"
+> > +#include <asm/page.h>
+> >   static int called_count;
+> > @@ -42,8 +43,141 @@ static void lkdtm_CFI_FORWARD_PROTO(void)
+> >   	pr_expected_config(CONFIG_CFI_CLANG);
+> >   }
+> > +/*
+> > + * This can stay local to LKDTM, as there should not be a production reason
+> > + * to disable PAC && SCS.
+> > + */
+> > +#ifdef CONFIG_ARM64_PTR_AUTH_KERNEL
+> > +# ifdef CONFIG_ARM64_BTI_KERNEL
+> > +#  define __no_pac             "branch-protection=bti"
+> > +# else
+> > +#  define __no_pac             "branch-protection=none"
+> > +# endif
+> > +# define __no_ret_protection   __noscs __attribute__((__target__(__no_pac)))
+> > +#else
+> > +# define __no_ret_protection   __noscs
+> > +#endif
+> > +
+> > +#define no_pac_addr(addr)      \
+> > +	((__force __typeof__(addr))((__force u64)(addr) | PAGE_OFFSET))
+> > +
+> > +/* The ultimate ROP gadget. */
+> > +static noinline __no_ret_protection
+> > +void set_return_addr_unchecked(unsigned long *expected, unsigned long *addr)
+> > +{
+> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> > +
+> > +	/* Make sure we've found the right place on the stack before writing it. */
+> > +	if (no_pac_addr(*ret_addr) == expected)
+> > +		*ret_addr = (addr);
+> > +	else
+> > +		/* Check architecture, stack layout, or compiler behavior... */
+> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> > +			*ret_addr, addr);
+> > +}
+> > +
+> > +static noinline
+> > +void set_return_addr(unsigned long *expected, unsigned long *addr)
+> > +{
+> > +	/* Use of volatile is to make sure final write isn't seen as a dead store. */
+> > +	unsigned long * volatile *ret_addr = (unsigned long **)__builtin_frame_address(0) + 1;
+> > +
+> > +	/* Make sure we've found the right place on the stack before writing it. */
+> > +	if (no_pac_addr(*ret_addr) == expected)
+> > +		*ret_addr = (addr);
+> > +	else
+> > +		/* Check architecture, stack layout, or compiler behavior... */
+> > +		pr_warn("Eek: return address mismatch! %px != %px\n",
+> > +			*ret_addr, addr);
+> > +}
+> > +
+> > +static volatile int force_check;
+> > +
+> > +static void lkdtm_CFI_BACKWARD(void)
+> > +{
+> > +	/* Use calculated gotos to keep labels addressable. */
+> > +	void *labels[] = {0, &&normal, &&redirected, &&check_normal, &&check_redirected};
+> > +
+> > +	pr_info("Attempting unchecked stack return address redirection ...\n");
+> > +
+> > +	/* Always false */
+> > +	if (force_check) {
+> > +		/*
+> > +		 * Prepare to call with NULLs to avoid parameters being treated as
+> > +		 * constants in -02.
+> > +		 */
+> > +		set_return_addr_unchecked(NULL, NULL);
+> > +		set_return_addr(NULL, NULL);
+> > +		if (force_check)
+> > +			goto *labels[1];
+> > +		if (force_check)
+> > +			goto *labels[2];
+> > +		if (force_check)
+> > +			goto *labels[3];
+> > +		if (force_check)
+> > +			goto *labels[4];
+> > +		return;
+> > +	}
+> > +
+> > +	/*
+> > +	 * Use fallthrough switch case to keep basic block ordering between
+> > +	 * set_return_addr*() and the label after it.
+> > +	 */
+> > +	switch (force_check) {
+> > +	case 0:
+> > +		set_return_addr_unchecked(&&normal, &&redirected);
+> > +		fallthrough;
+> > +	case 1:
+> > +normal:
+> > +		/* Always true */
+> > +		if (!force_check) {
+> > +			pr_err("FAIL: stack return address manipulation failed!\n");
+> > +			/* If we can't redirect "normally", we can't test mitigations. */
+> > +			return;
+> > +		}
+> > +		break;
+> > +	default:
+> > +redirected:
+> > +		pr_info("ok: redirected stack return address.\n");
+> > +		break;
+> > +	}
+> > +
+> > +	pr_info("Attempting checked stack return address redirection ...\n");
+> > +
+> > +	switch (force_check) {
+> > +	case 0:
+> > +		set_return_addr(&&check_normal, &&check_redirected);
+> > +		fallthrough;
+> > +	case 1:
+> > +check_normal:
+> > +		/* Always true */
+> > +		if (!force_check) {
+> > +			pr_info("ok: control flow unchanged.\n");
+> > +			return;
+> > +		}
+> > +
+> > +check_redirected:
+> > +		pr_err("FAIL: stack return address was redirected!\n");
+> > +		break;
+> > +	}
+> > +
+> > +	if (IS_ENABLED(CONFIG_ARM64_PTR_AUTH_KERNEL)) {
+> > +		pr_expected_config(CONFIG_ARM64_PTR_AUTH_KERNEL);
+> > +		return;
+> > +	}
+> > +	if (IS_ENABLED(CONFIG_SHADOW_CALL_STACK)) {
+> > +		pr_expected_config(CONFIG_SHADOW_CALL_STACK);
+> > +		return;
+> > +	}
+> > +	pr_warn("This is probably expected, since this %s was built *without* %s=y nor %s=y\n",
+> > +		lkdtm_kernel_info,
+> > +		"CONFIG_ARM64_PTR_AUTH_KERNEL", "CONFIG_SHADOW_CALL_STACK");
+> > +}
+> > +
+> >   static struct crashtype crashtypes[] = {
+> >   	CRASHTYPE(CFI_FORWARD_PROTO),
+> > +	CRASHTYPE(CFI_BACKWARD),
+> >   };
+> >   struct crashtype_category cfi_crashtypes = {
+> > diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
+> > index 243c781f0780..9dace01dbf15 100644
+> > --- a/tools/testing/selftests/lkdtm/tests.txt
+> > +++ b/tools/testing/selftests/lkdtm/tests.txt
+> > @@ -74,6 +74,7 @@ USERCOPY_STACK_BEYOND
+> >   USERCOPY_KERNEL
+> >   STACKLEAK_ERASING OK: the rest of the thread stack is properly erased
+> >   CFI_FORWARD_PROTO
+> > +CFI_BACKWARD call trace:|ok: control flow unchanged
+> >   FORTIFIED_STRSCPY
+> >   FORTIFIED_OBJECT
+> >   FORTIFIED_SUBOBJECT
+> 
+> 
+> Compiling with gcc/llvm 12 on aarch64 platform with scs/pac enabled
+> respectively, all four cases work fine for me :)
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-      83 | XCHG_GEN(u16, _relaxed, "cc");
-         | ^~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u8':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:206:1: note: in expansion of macro 'CMPXCHG_GEN'
-     206 | CMPXCHG_GEN(u8, , PPC_ATOMIC_ENTRY_BARRIER, PPC_ATOMIC_EXIT_BARRIER, "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u8_local':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:207:1: note: in expansion of macro 'CMPXCHG_GEN'
-     207 | CMPXCHG_GEN(u8, _local, , , "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u8_acquire':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:208:1: note: in expansion of macro 'CMPXCHG_GEN'
-     208 | CMPXCHG_GEN(u8, _acquire, , PPC_ACQUIRE_BARRIER, "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u8_relaxed':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:209:1: note: in expansion of macro 'CMPXCHG_GEN'
-     209 | CMPXCHG_GEN(u8, _relaxed, , , "cc");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u16':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:210:1: note: in expansion of macro 'CMPXCHG_GEN'
-     210 | CMPXCHG_GEN(u16, , PPC_ATOMIC_ENTRY_BARRIER, PPC_ATOMIC_EXIT_BARRIER, "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u16_local':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:211:1: note: in expansion of macro 'CMPXCHG_GEN'
-     211 | CMPXCHG_GEN(u16, _local, , , "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u16_acquire':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:212:1: note: in expansion of macro 'CMPXCHG_GEN'
-     212 | CMPXCHG_GEN(u16, _acquire, , PPC_ACQUIRE_BARRIER, "memory");
-         | ^~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h: In function '__cmpxchg_u16_relaxed':
-   arch/powerpc/include/asm/cmpxchg.h:11:63: error: 'BITS_PER_BYTE' undeclared (first use in this function); did you mean 'BITS_PER_LONG'?
-      11 | #define BITOFF_CAL(size, off)   ((sizeof(u32) - size - off) * BITS_PER_BYTE)
-         |                                                               ^~~~~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:47:18: note: in expansion of macro 'BITOFF_CAL'
-      47 |         bitoff = BITOFF_CAL(sizeof(type), off);                 \
-         |                  ^~~~~~~~~~
-   arch/powerpc/include/asm/cmpxchg.h:213:1: note: in expansion of macro 'CMPXCHG_GEN'
-     213 | CMPXCHG_GEN(u16, _relaxed, , , "cc");
-         | ^~~~~~~~~~~
-   In file included from include/linux/mm_types.h:7,
-                    from include/linux/mm_page_address.h:14,
-                    from include/asm-generic/memory_model.h:14,
-                    from arch/powerpc/include/asm/page.h:334,
-                    from arch/powerpc/include/asm/thread_info.h:13,
-                    from include/linux/thread_info.h:63,
-                    from arch/powerpc/include/asm/ptrace.h:323,
-                    from arch/powerpc/include/asm/hw_irq.h:12,
-                    from arch/powerpc/include/asm/irqflags.h:12,
-                    from include/linux/irqflags.h:16,
-                    from include/asm-generic/cmpxchg-local.h:6,
-                    from arch/powerpc/include/asm/cmpxchg.h:526,
-                    from arch/powerpc/include/asm/atomic.h:11,
-                    from include/linux/atomic_api.h:8,
-                    from include/linux/jump_label.h:257,
-                    from include/linux/page-flags.h:9,
-                    from kernel/bounds.c:12:
-   include/linux/mm_types_task.h: At top level:
->> include/linux/mm_types_task.h:11:10: fatal error: generated/bounds.h: No such file or directory
-      11 | #include <generated/bounds.h>
-         |          ^~~~~~~~~~~~~~~~~~~~
-   compilation terminated.
-   make[2]: *** [scripts/Makefile.build:120: kernel/bounds.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1194: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:219: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +11 include/linux/mm_types_task.h
-
-2e58f173ab89b2 Ingo Molnar 2017-02-04   4  
-9e7d2e44dd88ba Ingo Molnar 2017-02-04   5  /*
-9e7d2e44dd88ba Ingo Molnar 2017-02-04   6   * Here are the definitions of the MM data types that are embedded in 'struct task_struct'.
-9e7d2e44dd88ba Ingo Molnar 2017-02-04   7   *
-9e7d2e44dd88ba Ingo Molnar 2017-02-04   8   * (These are defined separately to decouple sched.h from mm_types.h as much as possible.)
-9e7d2e44dd88ba Ingo Molnar 2017-02-04   9   */
-9e7d2e44dd88ba Ingo Molnar 2017-02-04  10  
-09a39ba16c28d9 Ingo Molnar 2022-03-15 @11  #include <generated/bounds.h>
-09a39ba16c28d9 Ingo Molnar 2022-03-15  12  
-
-:::::: The code at line 11 was first introduced by commit
-:::::: 09a39ba16c28d98621d835b7e0618c2ee9daf6ef headers/deps: mm: Optimize <linux/mm_types.h> dependencies
-
-:::::: TO: Ingo Molnar <mingo@kernel.org>
-:::::: CC: Ingo Molnar <mingo@kernel.org>
+Great! Thanks for confirming it. :)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Kees Cook

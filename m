@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70453505580
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9265054E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243282AbiDRNUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:20:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
+        id S241264AbiDRNLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240959AbiDRNCY (ORCPT
+        with ESMTP id S241948AbiDRM72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA9E2657B;
-        Mon, 18 Apr 2022 05:42:27 -0700 (PDT)
+        Mon, 18 Apr 2022 08:59:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FF6B7C1;
+        Mon, 18 Apr 2022 05:39:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1468611E4;
-        Mon, 18 Apr 2022 12:42:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79BE5C385A7;
-        Mon, 18 Apr 2022 12:42:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5CCFCB80EDB;
+        Mon, 18 Apr 2022 12:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5EB1C385A1;
+        Mon, 18 Apr 2022 12:39:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285746;
-        bh=J5eHbvebqrWRc0sHdHjG1uKkhFIrhUmPDEPwc1laYe8=;
+        s=korg; t=1650285589;
+        bh=xukcHtLpxHrdsA4nZAemtS+kGBMlnhaTnD9PbJpFc+0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AS7ZScNpPrckkDOf+nD76GYHRX1slISceMBT6qw1ClEmLpC1s923WJDb8RIx15bzx
-         WuNjlS30YsixglcIaWqQb295vq4rbRk33nyyuhv8rLFu8ELA/8TGb8nnfR7auMF1og
-         rlItnTsfp+MQ0jENcZhjx0U55qr80Ae0/tNHY9A0=
+        b=rLnIQ2jqI6g3UF1NzXXHMACokSD31T9D5G/wbKjH0x3vvaRtQxvoZN15RvorWtDcM
+         tFebI8u5OMgpNzFWRJHNtDz/4IYeWplBaQSld/7lJ9Azj1xsIQgN5xeCWHmUBNP3cw
+         VJHgUL3RxDDPNIJa/xP7tvd0LmssyijXTSOt/j+s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Alexey Galakhov <agalakhov@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 11/63] net/smc: Fix NULL pointer dereference in smc_pnet_find_ib()
+Subject: [PATCH 5.10 066/105] scsi: mvsas: Add PCI ID of RocketRaid 2640
 Date:   Mon, 18 Apr 2022 14:13:08 +0200
-Message-Id: <20220418121134.905009513@linuxfoundation.org>
+Message-Id: <20220418121148.363727596@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,39 +55,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karsten Graul <kgraul@linux.ibm.com>
+From: Alexey Galakhov <agalakhov@gmail.com>
 
-[ Upstream commit d22f4f977236f97e01255a80bca2ea93a8094fc8 ]
+[ Upstream commit 5f2bce1e222028dc1c15f130109a17aa654ae6e8 ]
 
-dev_name() was called with dev.parent as argument but without to
-NULL-check it before.
-Solve this by checking the pointer before the call to dev_name().
+The HighPoint RocketRaid 2640 is a low-cost SAS controller based on Marvell
+chip. The chip in question was already supported by the kernel, just the
+PCI ID of this particular board was missing.
 
-Fixes: af5f60c7e3d5 ("net/smc: allow PCI IDs as ib device names in the pnet table")
-Reported-by: syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com
-Signed-off-by: Karsten Graul <kgraul@linux.ibm.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Link: https://lore.kernel.org/r/20220309212535.402987-1-agalakhov@gmail.com
+Signed-off-by: Alexey Galakhov <agalakhov@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_pnet.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/mvsas/mv_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/smc/smc_pnet.c b/net/smc/smc_pnet.c
-index 571e6d84da3b..660608202f28 100644
---- a/net/smc/smc_pnet.c
-+++ b/net/smc/smc_pnet.c
-@@ -295,8 +295,9 @@ static struct smc_ib_device *smc_pnet_find_ib(char *ib_name)
- 	list_for_each_entry(ibdev, &smc_ib_devices.list, list) {
- 		if (!strncmp(ibdev->ibdev->name, ib_name,
- 			     sizeof(ibdev->ibdev->name)) ||
--		    !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
--			     IB_DEVICE_NAME_MAX - 1)) {
-+		    (ibdev->ibdev->dev.parent &&
-+		     !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
-+			     IB_DEVICE_NAME_MAX - 1))) {
- 			goto out;
- 		}
- 	}
+diff --git a/drivers/scsi/mvsas/mv_init.c b/drivers/scsi/mvsas/mv_init.c
+index 0cfea7b2ab13..85ca8421fb86 100644
+--- a/drivers/scsi/mvsas/mv_init.c
++++ b/drivers/scsi/mvsas/mv_init.c
+@@ -646,6 +646,7 @@ static struct pci_device_id mvs_pci_table[] = {
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1300), chip_1300 },
+ 	{ PCI_VDEVICE(ARECA, PCI_DEVICE_ID_ARECA_1320), chip_1320 },
+ 	{ PCI_VDEVICE(ADAPTEC2, 0x0450), chip_6440 },
++	{ PCI_VDEVICE(TTI, 0x2640), chip_6440 },
+ 	{ PCI_VDEVICE(TTI, 0x2710), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2720), chip_9480 },
+ 	{ PCI_VDEVICE(TTI, 0x2721), chip_9480 },
 -- 
 2.35.1
 

@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5B750534B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483B950552A
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240519AbiDRM4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S241311AbiDRNHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233251AbiDRMn5 (ORCPT
+        with ESMTP id S240289AbiDRMzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:43:57 -0400
+        Mon, 18 Apr 2022 08:55:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 122ED26AD8;
-        Mon, 18 Apr 2022 05:32:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944A5C08;
+        Mon, 18 Apr 2022 05:37:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B1652B80EDC;
-        Mon, 18 Apr 2022 12:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 209DCC385A8;
-        Mon, 18 Apr 2022 12:32:25 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 29D8DB80EDD;
+        Mon, 18 Apr 2022 12:37:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63AF3C385A7;
+        Mon, 18 Apr 2022 12:37:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285146;
-        bh=udydudFpXI5RsOzbFPzo0ugZyhEPmUnyeJk9tXbSHNA=;
+        s=korg; t=1650285422;
+        bh=ayTuUEaLywRE6bf1Sw9c4Yv0rsafKHY50S9my7OaabA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=FZRsV4N1TunqLWB86XYmvmcZqIbeJpmvZR9Zu41tHl7eTgYRL0ydkV6PQJHFcSwHv
-         LKp1s/ponMO60ORdHkYkwMix1aImNfqCsglfjes1o0hICR9onzvR13EwA5Ut3xZx3a
-         jcvWj74OZgTAUA7XjU5UwIq1X7IhY9Bm7CIjLvpU=
+        b=OGC9Mfqnk0dsSY/a2jHzsBJ95Aqz5G+mgffyaiA5iJDy3P7ho4D/nkirQ9Qo/koct
+         c5CQoKYukPjn22XtQO+ubLuBDz67j/liebVszaJEhND2CX3WGYQsVh2A5JVTRdvE5/
+         lVFuAEwK9WsMJjqWnh8es9XS0WMK8tgUAzt14rSM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dexuan Cui <decui@microsoft.com>,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>,
-        Wei Liu <wei.liu@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 116/189] Drivers: hv: vmbus: Deactivate sysctl_record_panic_msg by default in isolated guests
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 014/105] gpiolib: acpi: use correct format characters
 Date:   Mon, 18 Apr 2022 14:12:16 +0200
-Message-Id: <20220418121203.790593859@linuxfoundation.org>
+Message-Id: <20220418121146.252530654@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,74 +56,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
+From: Linus Torvalds <torvalds@linux-foundation.org>
 
-[ Upstream commit 9f8b577f7b43b2170628d6c537252785dcc2dcea ]
+[ Upstream commit 213d266ebfb1621aab79cfe63388facc520a1381 ]
 
-hv_panic_page might contain guest-sensitive information, do not dump it
-over to Hyper-V by default in isolated guests.
+When compiling with -Wformat, clang emits the following warning:
 
-While at it, update some comments in hyperv_{panic,die}_event().
+  gpiolib-acpi.c:393:4: warning: format specifies type 'unsigned char' but the argument has type 'int' [-Wformat]
+                        pin);
+                        ^~~
 
-Reported-by: Dexuan Cui <decui@microsoft.com>
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Reviewed-by: Dexuan Cui <decui@microsoft.com>
-Link: https://lore.kernel.org/r/20220301141135.2232-1-parri.andrea@gmail.com
-Signed-off-by: Wei Liu <wei.liu@kernel.org>
+So warning that '%hhX' is paired with an 'int' is all just completely
+mindless and wrong. Sadly, I can see a different bogus warning reason
+why people would want to use '%02hhX'.
+
+Again, the *sane* thing from a human perspective is to use '%02X. But
+if the compiler doesn't do any range analysis at all, it could decide
+that "Oh, that print format could need up to 8 bytes of space in the
+result". Using '%02hhX' would cut that down to two.
+
+And since we use
+
+        char ev_name[5];
+
+and currently use "_%c%02hhX" as the format string, even a compiler
+that doesn't notice that "pin <= 255" test that guards this all will
+go "OK, that's at most 4 bytes and the final NUL termination, so it's
+fine".
+
+While a compiler - like gcc - that only sees that the original source
+of the 'pin' value is a 'unsigned short' array, and then doesn't take
+the "pin <= 255" into account, will warn like this:
+
+  gpiolib-acpi.c: In function 'acpi_gpiochip_request_interrupt':
+  gpiolib-acpi.c:206:24: warning: '%02X' directive writing between 2 and 4 bytes into a region of size 3 [-Wformat-overflow=]
+       sprintf(ev_name, "_%c%02X",
+                            ^~~~
+  gpiolib-acpi.c:206:20: note: directive argument in the range [0, 65535]
+
+because gcc isn't being very good at that argument range analysis either.
+
+In other words, the original use of 'hhx' was bogus to begin with, and
+due to *another* compiler warning being bad, and we had that bad code
+being written back in 2016 to work around _that_ compiler warning
+(commit e40a3ae1f794: "gpio: acpi: work around false-positive
+-Wstring-overflow warning").
+
+Sadly, two different bad compiler warnings together does not make for
+one good one.
+
+It just makes for even more pain.
+
+End result: I think the simplest and cleanest option is simply the
+proposed change which undoes that '%hhX' change for gcc, and replaces
+it with just using a slightly bigger stack allocation. It's not like
+a 5-byte allocation is in any way likely to have saved any actual stack,
+since all the other variables in that function are 'int' or bigger.
+
+False-positive compiler warnings really do make people write worse
+code, and that's a problem. But on a scale of bad code, I feel that
+extending the buffer trivially is better than adding a pointless cast
+that literally makes no sense.
+
+At least in this case the end result isn't unreadable or buggy. We've
+had several cases of bad compiler warnings that caused changes that
+were actually horrendously wrong.
+
+Fixes: e40a3ae1f794 ("gpio: acpi: work around false-positive -Wstring-overflow warning")
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hv/vmbus_drv.c | 18 ++++++++++++------
- 1 file changed, 12 insertions(+), 6 deletions(-)
+ drivers/gpio/gpiolib-acpi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index a939ca1a8d54..aea8125a4db8 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -76,8 +76,8 @@ static int hyperv_panic_event(struct notifier_block *nb, unsigned long val,
+diff --git a/drivers/gpio/gpiolib-acpi.c b/drivers/gpio/gpiolib-acpi.c
+index 55e4f402ec8b..44ee319da1b3 100644
+--- a/drivers/gpio/gpiolib-acpi.c
++++ b/drivers/gpio/gpiolib-acpi.c
+@@ -276,8 +276,8 @@ static acpi_status acpi_gpiochip_alloc_event(struct acpi_resource *ares,
+ 	pin = agpio->pin_table[0];
  
- 	/*
- 	 * Hyper-V should be notified only once about a panic.  If we will be
--	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
--	 * the notification here.
-+	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
-+	 * here.
- 	 */
- 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE
- 	    && hyperv_report_reg()) {
-@@ -99,8 +99,8 @@ static int hyperv_die_event(struct notifier_block *nb, unsigned long val,
- 
- 	/*
- 	 * Hyper-V should be notified only once about a panic.  If we will be
--	 * doing hyperv_report_panic_msg() later with kmsg data, don't do
--	 * the notification here.
-+	 * doing hv_kmsg_dump() with kmsg data later, don't do the notification
-+	 * here.
- 	 */
- 	if (hyperv_report_reg())
- 		hyperv_report_panic(regs, val, true);
-@@ -1545,14 +1545,20 @@ static int vmbus_bus_init(void)
- 	if (ret)
- 		goto err_connect;
- 
-+	if (hv_is_isolation_supported())
-+		sysctl_record_panic_msg = 0;
-+
- 	/*
- 	 * Only register if the crash MSRs are available
- 	 */
- 	if (ms_hyperv.misc_features & HV_FEATURE_GUEST_CRASH_MSR_AVAILABLE) {
- 		u64 hyperv_crash_ctl;
- 		/*
--		 * Sysctl registration is not fatal, since by default
--		 * reporting is enabled.
-+		 * Panic message recording (sysctl_record_panic_msg)
-+		 * is enabled by default in non-isolated guests and
-+		 * disabled by default in isolated guests; the panic
-+		 * message recording won't be available in isolated
-+		 * guests should the following registration fail.
- 		 */
- 		hv_ctl_table_hdr = register_sysctl_table(hv_root_table);
- 		if (!hv_ctl_table_hdr)
+ 	if (pin <= 255) {
+-		char ev_name[5];
+-		sprintf(ev_name, "_%c%02hhX",
++		char ev_name[8];
++		sprintf(ev_name, "_%c%02X",
+ 			agpio->triggering == ACPI_EDGE_SENSITIVE ? 'E' : 'L',
+ 			pin);
+ 		if (ACPI_SUCCESS(acpi_get_handle(handle, ev_name, &evt_handle)))
 -- 
 2.35.1
 

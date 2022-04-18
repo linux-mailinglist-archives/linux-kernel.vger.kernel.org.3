@@ -2,45 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5E85051DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3101A5057CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbiDRMlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S244070AbiDRN44 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239725AbiDRMdW (ORCPT
+        with ESMTP id S244888AbiDRNbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC77BC97;
-        Mon, 18 Apr 2022 05:25:18 -0700 (PDT)
+        Mon, 18 Apr 2022 09:31:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5621D2F5;
+        Mon, 18 Apr 2022 05:57:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AE43E60FDF;
-        Mon, 18 Apr 2022 12:25:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A27D1C385A7;
-        Mon, 18 Apr 2022 12:25:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A8360FE8;
+        Mon, 18 Apr 2022 12:57:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B6BC385A8;
+        Mon, 18 Apr 2022 12:56:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284717;
-        bh=1JykyhsvrgAJMNPlqTzg89ghRr1ddfmnxPAANLww/Ho=;
+        s=korg; t=1650286620;
+        bh=9QMv3lahHdv/z11XuDeuy250hfehrksyMfwOkrGc6GA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=okkD8Kx1ZbUAc6F4ZoFvw6pX7901TnPsLHEqTsOvHU1PPLtnD+o5BvGYOI3RIMMdS
-         NG8chS0dWxv9lCVVuvldQ01AZ5HGGoANcumGZP63HK6ApksjScDRn3sE4486WrsgFk
-         IUAruogB/YTgNnV2E0yB0NCNSdodOZ3mmVp/oln4=
+        b=ldvB8+RGCPOwlxfNr9mTTJTfOcuidau/cHa/ZbYN8T5vQiLvRc2acu7iejb8XZGIv
+         FxYXTPWgHcb4IqD3/z1kIDWPsB+r+k52ynpNg/W1Cr6KWsPe6sdKmLZZQ8RABXByPm
+         Fp/P0KkV3ZCLEH2L+NNQWcyIjgfgSpNme2T3Q2pU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Paul Gortmaker <paul.gortmaker@windriver.com>,
-        Thomas Gleixner <tglx@linutronix.de>
-Subject: [PATCH 5.17 204/219] tick/nohz: Use WARN_ON_ONCE() to prevent console saturation
+        stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: [PATCH 4.14 192/284] pinctrl: pinconf-generic: Print arguments for bias-pull-*
 Date:   Mon, 18 Apr 2022 14:12:53 +0200
-Message-Id: <20220418121212.579747555@linuxfoundation.org>
+Message-Id: <20220418121217.193029383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,43 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Gortmaker <paul.gortmaker@windriver.com>
+From: Chen-Yu Tsai <wenst@chromium.org>
 
-commit 40e97e42961f8c6cc7bd5fe67cc18417e02d78f1 upstream.
+commit 188e5834b930acd03ad3cf7c5e7aa24db9665a29 upstream.
 
-While running some testing on code that happened to allow the variable
-tick_nohz_full_running to get set but with no "possible" NOHZ cores to
-back up that setting, this warning triggered:
+The bias-pull-* properties, or PIN_CONFIG_BIAS_PULL_* pin config
+parameters, accept optional arguments in ohms denoting the strength of
+the pin bias.
 
-        if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE))
-                WARN_ON(tick_nohz_full_running);
+Print these values out in debugfs as well.
 
-The console was overwhemled with an endless stream of one WARN per tick
-per core and there was no way to even see what was going on w/o using a
-serial console to capture it and then trace it back to this.
-
-Change it to WARN_ON_ONCE().
-
-Fixes: 08ae95f4fd3b ("nohz_full: Allow the boot CPU to be nohz_full")
-Signed-off-by: Paul Gortmaker <paul.gortmaker@windriver.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/20211206145950.10927-3-paul.gortmaker@windriver.com
+Fixes: eec450713e5c ("pinctrl: pinconf-generic: Add flag to print arguments")
+Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Tested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Link: https://lore.kernel.org/r/20220308100956.2750295-2-wenst@chromium.org
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- kernel/time/tick-sched.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pinctrl/pinconf-generic.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
---- a/kernel/time/tick-sched.c
-+++ b/kernel/time/tick-sched.c
-@@ -186,7 +186,7 @@ static void tick_sched_do_timer(struct t
- 	 */
- 	if (unlikely(tick_do_timer_cpu == TICK_DO_TIMER_NONE)) {
- #ifdef CONFIG_NO_HZ_FULL
--		WARN_ON(tick_nohz_full_running);
-+		WARN_ON_ONCE(tick_nohz_full_running);
- #endif
- 		tick_do_timer_cpu = cpu;
- 	}
+--- a/drivers/pinctrl/pinconf-generic.c
++++ b/drivers/pinctrl/pinconf-generic.c
+@@ -31,10 +31,10 @@ static const struct pin_config_item conf
+ 	PCONFDUMP(PIN_CONFIG_BIAS_BUS_HOLD, "input bias bus hold", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_DISABLE, "input bias disabled", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_HIGH_IMPEDANCE, "input bias high impedance", NULL, false),
+-	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", NULL, false),
++	PCONFDUMP(PIN_CONFIG_BIAS_PULL_DOWN, "input bias pull down", "ohms", true),
+ 	PCONFDUMP(PIN_CONFIG_BIAS_PULL_PIN_DEFAULT,
+-				"input bias pull to pin specific state", NULL, false),
+-	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", NULL, false),
++				"input bias pull to pin specific state", "ohms", true),
++	PCONFDUMP(PIN_CONFIG_BIAS_PULL_UP, "input bias pull up", "ohms", true),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_DRAIN, "output drive open drain", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_OPEN_SOURCE, "output drive open source", NULL, false),
+ 	PCONFDUMP(PIN_CONFIG_DRIVE_PUSH_PULL, "output drive push pull", NULL, false),
 
 

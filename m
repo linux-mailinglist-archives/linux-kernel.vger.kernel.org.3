@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BDAA504EA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:06:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14B59504EA7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:09:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237500AbiDRKJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 06:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53696 "EHLO
+        id S237580AbiDRKME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 06:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233592AbiDRKJZ (ORCPT
+        with ESMTP id S233592AbiDRKMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 06:09:25 -0400
+        Mon, 18 Apr 2022 06:12:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A015612612;
-        Mon, 18 Apr 2022 03:06:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B74012763
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:09:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3BA45611AF;
-        Mon, 18 Apr 2022 10:06:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65657C385A7;
-        Mon, 18 Apr 2022 10:06:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 33D6C611C0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:09:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8577FC385A7;
+        Mon, 18 Apr 2022 10:09:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650276405;
-        bh=uoe2eTNjXAnSgEGbVFQxizx4XBjSzBp1lG6cswI6xbc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z4OT4i/LC2k/i92kWLfFKtTVBpAdJZEhrTM79Ipn6nV/ODqs9njDujOE7UGufhLQE
-         Do/HYbG4P6USOC8UsXPXuco19gPIs7rtCCd0Q3D6LSgvEU++x3yzPanyMqL06a1Fm9
-         aIIGSGvhWMb31LZbEuWeAEMUSjSc8Mly75z+om044xpunk0PUPohekuF8NmKJW9Rl1
-         4DywuvNrUFLI25dNnj/mashbTnlGTNXaZkLZHCAnCDWRjavDNqH5NBuxw3m6IIaFWI
-         vgV74FuUatDEOEi5SzMXSz4+aXblqTJNQjcDWglnKZ7EDbpbYmQ0eSH5YgD0p4uul1
-         B5eHWHALx3iWA==
-Date:   Mon, 18 Apr 2022 13:06:36 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Song Liu <songliubraving@fb.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Song Liu <song@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Kernel Team <Kernel-team@fb.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>
-Subject: Re: [PATCH v4 bpf 0/4] vmalloc: bpf: introduce VM_ALLOW_HUGE_VMAP
-Message-ID: <Yl04LO/PfB3GocvU@kernel.org>
-References: <20220415164413.2727220-1-song@kernel.org>
- <YlnCBqNWxSm3M3xB@bombadil.infradead.org>
- <YlpPW9SdCbZnLVog@infradead.org>
- <4AD023F9-FBCE-4C7C-A049-9292491408AA@fb.com>
- <CAHk-=wiMCndbBvGSmRVvsuHFWC6BArv-OEG2Lcasih=B=7bFNQ@mail.gmail.com>
- <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <B995F7EB-2019-4290-9C09-AE19C5BA3A70@fb.com>
+        s=k20201202; t=1650276562;
+        bh=TwWZh5ydoGNDbA/2K1N4I1qvcZf/L/ndLI81g5OpeGM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=kBqdAvO+Hss1W1O7ibP08osJiUufMkPO80GVoafqBf72T1J7BpCQFgCOT8V+gH6Fv
+         /eMmtOuiJ+5iThWiwvV8b6WY4hfARSSbYEHJhCjgTWwX2FzpBiBlUHOZ+BUQ6MCEPZ
+         FX9xFRkxgkiIqpHQhym5H0hHYUWPOHKfqEjdWwl5ImEF1juFc4pbh5xPZ/jDnIGGdl
+         3zL9t7cNqSQNmdGlBOOms+vWIdNpmQD8/iLOSxQebSqYo79pa0fkWPHr+Rw1QuznUh
+         +e5SULzRU1cZP/0ZL1MZlbaToB5Gc4NW0+ddQgdbokXk9q2xouCwhikrZ3Vda0HOYL
+         DeZYoPNvavShg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ngOJs-004yh4-1V; Mon, 18 Apr 2022 11:09:20 +0100
+Date:   Mon, 18 Apr 2022 11:09:19 +0100
+Message-ID: <87v8v6aek0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Kalesh Singh <kaleshsingh@google.com>
+Cc:     will@kernel.org, qperret@google.com, tabba@google.com,
+        surenb@google.com, kernel-team@android.com,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Andrew Walbran <qwandor@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Andrew Jones <drjones@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v7 5/6] KVM: arm64: Detect and handle hypervisor stack overflows
+In-Reply-To: <20220408200349.1529080-6-kaleshsingh@google.com>
+References: <20220408200349.1529080-1-kaleshsingh@google.com>
+        <20220408200349.1529080-6-kaleshsingh@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kaleshsingh@google.com, will@kernel.org, qperret@google.com, tabba@google.com, surenb@google.com, kernel-team@android.com, james.morse@arm.com, alexandru.elisei@arm.com, suzuki.poulose@arm.com, catalin.marinas@arm.com, qwandor@google.com, mark.rutland@arm.com, ardb@kernel.org, yuzenghui@huawei.com, drjones@redhat.com, nathan@kernel.org, masahiroy@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,47 +79,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Sat, Apr 16, 2022 at 10:26:08PM +0000, Song Liu wrote:
-> > On Apr 16, 2022, at 1:30 PM, Linus Torvalds <torvalds@linux-foundation.org> wrote:
-> > 
-> > Maybe I am missing something, but I really don't think this is ready
-> > for prime-time. We should effectively disable it all, and have people
-> > think through it a lot more.
+On Fri, 08 Apr 2022 21:03:28 +0100,
+Kalesh Singh <kaleshsingh@google.com> wrote:
 > 
-> This has been discussed on lwn.net: https://lwn.net/Articles/883454/. 
-> AFAICT, the biggest concern is whether reserving minimal 2MB for BPF
-> programs is a good trade-off for memory usage. This is again my fault
-> not to state the motivation clearly: the primary gain comes from less 
-> page table fragmentation and thus better iTLB efficiency. 
+> The hypervisor stacks (for both nVHE Hyp mode and nVHE protected mode)
+> are aligned such  that any valid stack address has PAGE_SHIFT bit as 1.
+> This allows us to conveniently check for overflow in the exception entry
+> without corrupting any GPRs. We won't recover from a stack overflow so
+> panic the hypervisor.
+> 
+> Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
+> Tested-by: Fuad Tabba <tabba@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> ---
+> 
+> Changes in v7:
+>   - Add Fuad's Reviewed-by and Tested-by tags.
+> 
+> Changes in v5:
+>   - Valid stack addresses now have PAGE_SHIFT bit as 1 instead of 0
+> 
+> Changes in v3:
+>   - Remove test_sp_overflow macro, per Mark
+>   - Add asmlinkage attribute for hyp_panic, hyp_panic_bad_stack, per Ard
+> 
+> 
+>  arch/arm64/kvm/hyp/nvhe/host.S   | 24 ++++++++++++++++++++++++
+>  arch/arm64/kvm/hyp/nvhe/switch.c |  7 ++++++-
+>  2 files changed, 30 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/nvhe/host.S b/arch/arm64/kvm/hyp/nvhe/host.S
+> index 3d613e721a75..be6d844279b1 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/host.S
+> +++ b/arch/arm64/kvm/hyp/nvhe/host.S
+> @@ -153,6 +153,18 @@ SYM_FUNC_END(__host_hvc)
+>  
+>  .macro invalid_host_el2_vect
+>  	.align 7
+> +
+> +	/*
+> +	 * Test whether the SP has overflowed, without corrupting a GPR.
+> +	 * nVHE hypervisor stacks are aligned so that the PAGE_SHIFT bit
+> +	 * of SP should always be 1.
+> +	 */
+> +	add	sp, sp, x0			// sp' = sp + x0
+> +	sub	x0, sp, x0			// x0' = sp' - x0 = (sp + x0) - x0 = sp
+> +	tbz	x0, #PAGE_SHIFT, .L__hyp_sp_overflow\@
+> +	sub	x0, sp, x0			// x0'' = sp' - x0' = (sp + x0) - sp = x0
+> +	sub	sp, sp, x0			// sp'' = sp' - x0 = (sp + x0) - x0 = sp
+> +
+>  	/* If a guest is loaded, panic out of it. */
+>  	stp	x0, x1, [sp, #-16]!
+>  	get_loaded_vcpu x0, x1
+> @@ -165,6 +177,18 @@ SYM_FUNC_END(__host_hvc)
+>  	 * been partially clobbered by __host_enter.
+>  	 */
+>  	b	hyp_panic
+> +
+> +.L__hyp_sp_overflow\@:
+> +	/*
+> +	 * Reset SP to the top of the stack, to allow handling the hyp_panic.
+> +	 * This corrupts the stack but is ok, since we won't be attempting
+> +	 * any unwinding here.
+> +	 */
+> +	ldr_this_cpu	x0, kvm_init_params + NVHE_INIT_STACK_HYP_VA, x1
+> +	mov	sp, x0
+> +
+> +	bl	hyp_panic_bad_stack
 
-Reserving 2MB pages for BPF programs will indeed reduce the fragmentation,
-but OTOH it will reduce memory utilization. If for large systems this may
-not be an issue, on smaller machines trading off memory for iTLB
-performance may be not that obvious.
- 
-> Other folks (in recent thread on this topic and offline in other 
-> discussions) also showed strong interests in using similar technical 
-> for text of kernel modules. So I would really like to learn your 
-> opinion on this. There are many details we can optimize, but I guess 
-> the general mechanism has to be something like:
->  - allocate a huge page, make it safe, and set it as executable;
->  - as users (BPF, kernel module, etc.) request memory for text, give
->    a chunk of the huge page to the user. 
->  - use some mechanism to update the chunk of memory safely. 
+Why bl? You clearly don't expect to return here, given that you have
+an ASM_BUG() right below, and that you are calling a __no_return
+function. I think we should be consistent with the rest of the code
+and just do a simple branch.
 
-There are use-cases that require 4K pages with non-default permissions in
-the direct map and the pages not necessarily should be executable. There
-were several suggestions to implement caches of 4K pages backed by 2M
-pages.
+It also gives us a chance to preserve an extra register from the
+context.
 
-I believe that "allocate huge page and split it to basic pages to hand out
-to users" concept should be implemented at page allocator level and I
-posted and RFC for this a while ago:
+> +	ASM_BUG()
+>  .endm
+>  
+>  .macro invalid_host_el1_vect
+> diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+> index 6410d21d8695..703a5d3f611b 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/switch.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+> @@ -347,7 +347,7 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
+>  	return exit_code;
+>  }
+>  
+> -void __noreturn hyp_panic(void)
+> +asmlinkage void __noreturn hyp_panic(void)
+>  {
+>  	u64 spsr = read_sysreg_el2(SYS_SPSR);
+>  	u64 elr = read_sysreg_el2(SYS_ELR);
+> @@ -369,6 +369,11 @@ void __noreturn hyp_panic(void)
+>  	unreachable();
+>  }
+>  
+> +asmlinkage void __noreturn hyp_panic_bad_stack(void)
+> +{
+> +	hyp_panic();
+> +}
+> +
+>  asmlinkage void kvm_unexpected_el2_exception(void)
+>  {
+>  	return __kvm_unexpected_el2_exception();
+> -- 
+> 2.35.1.1178.g4f1659d476-goog
+> 
+> 
 
-https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org/
+Thanks,
+
+	M.
 
 -- 
-Sincerely yours,
-Mike.
+Without deviation from the norm, progress is not possible.

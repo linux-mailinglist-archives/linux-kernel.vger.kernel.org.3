@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3438F50543F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0947C50586F
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241208AbiDRNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S245554AbiDRODd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240406AbiDRMzC (ORCPT
+        with ESMTP id S244789AbiDRNpk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80EC223143;
-        Mon, 18 Apr 2022 05:35:44 -0700 (PDT)
+        Mon, 18 Apr 2022 09:45:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C3D20BD9;
+        Mon, 18 Apr 2022 06:00:32 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E7B9611A9;
-        Mon, 18 Apr 2022 12:35:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E33AC385A7;
-        Mon, 18 Apr 2022 12:35:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4DFF360B3A;
+        Mon, 18 Apr 2022 13:00:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5844FC385A7;
+        Mon, 18 Apr 2022 13:00:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285343;
-        bh=YPMbbLIAUrOz/F2QyLrf7EQrMAlFpXdWqGq42AxwZwE=;
+        s=korg; t=1650286831;
+        bh=OPsG4lIfyPp+EMmOUqJDMmMNX5jHtTLsI/zUMojdeho=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jjSW9deWpf4DQ3Qca74QDiN0d0MXxcW67UGWh61Qe7VPl1+9gr/bruxIM/P7IMo9O
-         JpTfYC+9X24L+SwEVqPchOYVEqiDBRyg4EQ5nexnR80eo54fF1lzmSy5OUxtdaXh6H
-         C5qBcYM1RI7zcarZd+sYoU5uqZq+zzGvgc9hvu/I=
+        b=ILysvVZiKgKinLdG+S/K/gAw8Sz484cZeYKVl+aI/EidKus/hvOYfOdnn0kvKbC8h
+         PqU1hue7ooH4nr2cCJn1yGj/Jt7g7u8sELEkh+y0JoRPHWdysneDY0EzMgHga+SBFq
+         RQgEc0F8TFBQzh54ijyWTPnV+Y7cpGVK6KKPZmmc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH 5.15 179/189] soc: qcom: aoss: Fix missing put_device call in qmp_get
-Date:   Mon, 18 Apr 2022 14:13:19 +0200
-Message-Id: <20220418121208.151534900@linuxfoundation.org>
+        stable@vger.kernel.org, Dust Li <dust.li@linux.alibaba.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 219/284] net/smc: correct settings of RMB window update limit
+Date:   Mon, 18 Apr 2022 14:13:20 +0200
+Message-Id: <20220418121217.940558387@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,38 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Miaoqian Lin <linmq006@gmail.com>
+From: Dust Li <dust.li@linux.alibaba.com>
 
-commit 4b41a9d0fe3db5f91078a380f62f0572c3ecf2dd upstream.
+[ Upstream commit 6bf536eb5c8ca011d1ff57b5c5f7c57ceac06a37 ]
 
-The reference taken by 'of_find_device_by_node()' must be released when
-not needed anymore.
-Add the corresponding 'put_device()' in the error handling paths.
+rmbe_update_limit is used to limit announcing receive
+window updating too frequently. RFC7609 request a minimal
+increase in the window size of 10% of the receive buffer
+space. But current implementation used:
 
-Fixes: 8c75d585b931 ("soc: qcom: aoss: Expose send for generic usecase")
-Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20220108095931.21527-1-linmq006@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+  min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2)
+
+and SOCK_MIN_SNDBUF / 2 == 2304 Bytes, which is almost
+always less then 10% of the receive buffer space.
+
+This causes the receiver always sending CDC message to
+update its consumer cursor when it consumes more then 2K
+of data. And as a result, we may encounter something like
+"TCP silly window syndrome" when sending 2.5~8K message.
+
+This patch fixes this using max(rmbe_size / 10, SOCK_MIN_SNDBUF / 2).
+
+With this patch and SMC autocorking enabled, qperf 2K/4K/8K
+tcp_bw test shows 45%/75%/40% increase in throughput respectively.
+
+Signed-off-by: Dust Li <dust.li@linux.alibaba.com>
+Signed-off-by: David S. Miller <davem@davemloft.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/soc/qcom/qcom_aoss.c |    6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+ net/smc/smc_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
---- a/drivers/soc/qcom/qcom_aoss.c
-+++ b/drivers/soc/qcom/qcom_aoss.c
-@@ -551,7 +551,11 @@ struct qmp *qmp_get(struct device *dev)
- 
- 	qmp = platform_get_drvdata(pdev);
- 
--	return qmp ? qmp : ERR_PTR(-EPROBE_DEFER);
-+	if (!qmp) {
-+		put_device(&pdev->dev);
-+		return ERR_PTR(-EPROBE_DEFER);
-+	}
-+	return qmp;
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index 7dc907a45c68..a28e06c70e52 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -499,7 +499,7 @@ struct smc_buf_desc *smc_buf_get_slot(struct smc_link_group *lgr,
+  */
+ static inline int smc_rmb_wnd_update_limit(int rmbe_size)
+ {
+-	return min_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
++	return max_t(int, rmbe_size / 10, SOCK_MIN_SNDBUF / 2);
  }
- EXPORT_SYMBOL(qmp_get);
  
+ static struct smc_buf_desc *smc_new_buf_create(struct smc_link_group *lgr,
+-- 
+2.35.1
+
 
 

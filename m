@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97164505467
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 954C5505861
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiDRNFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42302 "EHLO
+        id S244859AbiDROCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240328AbiDRMzK (ORCPT
+        with ESMTP id S243842AbiDRNmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:55:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4A8B7F5;
-        Mon, 18 Apr 2022 05:36:31 -0700 (PDT)
+        Mon, 18 Apr 2022 09:42:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 492833121C;
+        Mon, 18 Apr 2022 05:59:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1913061033;
-        Mon, 18 Apr 2022 12:36:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C889C385A7;
-        Mon, 18 Apr 2022 12:36:29 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A1F1D609FA;
+        Mon, 18 Apr 2022 12:59:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4F76C385A7;
+        Mon, 18 Apr 2022 12:59:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285390;
-        bh=bGYkXoPOnvp4MwQT0EEyeTjnTv8wsS679jpaRsBAs/o=;
+        s=korg; t=1650286775;
+        bh=tAgNDFITJraa6hr2dQBON6qTAxbYC//JPNb21T8z+98=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0CD8BR/CN2w1vNcU6iQRAHFNxYSLFnerDlp3oypZLOvS6dR2L3qjuAmqK9Li2Ix7D
-         0c+fI/DsBx7jDnylJC32n6x4Cx9+EK2wFXoOKU9v2PuRD3ZlMwrwpsM0ZdSGe156Zl
-         7YbGsaZcAIUAXpEmOpR3n0YinM4hThGc+o72k4H0=
+        b=O1rJoViTNS+0kB2Ukx9wpqkldXqWW9yVZ63PGGJoIrd9X20htJTp90bAQZdTr3D36
+         E5f8C0Exi13B7LpWA5Jm22+TPBKiUkWoX1U71QiBK9NHTkxcj5T+q0s7BdDTLWH+rI
+         ZFBdn06BA6+BxMJgkHG1LNjLGoKygsVJOyNntkK4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH 5.15 175/189] timers: Fix warning condition in __run_timers()
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 214/284] PCI: aardvark: Fix support for MSI interrupts
 Date:   Mon, 18 Apr 2022 14:13:15 +0200
-Message-Id: <20220418121207.873707302@linuxfoundation.org>
+Message-Id: <20220418121217.801505300@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,50 +57,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Anna-Maria Behnsen <anna-maria@linutronix.de>
+From: Pali Rohár <pali@kernel.org>
 
-commit c54bc0fc84214b203f7a0ebfd1bd308ce2abe920 upstream.
+[ Upstream commit b0b0b8b897f8e12b2368e868bd7cdc5742d5c5a9 ]
 
-When the timer base is empty, base::next_expiry is set to base::clk +
-NEXT_TIMER_MAX_DELTA and base::next_expiry_recalc is false. When no timer
-is queued until jiffies reaches base::next_expiry value, the warning for
-not finding any expired timer and base::next_expiry_recalc is false in
-__run_timers() triggers.
+Aardvark hardware supports Multi-MSI and MSI_FLAG_MULTI_PCI_MSI is already
+set for the MSI chip. But when allocating MSI interrupt numbers for
+Multi-MSI, the numbers need to be properly aligned, otherwise endpoint
+devices send MSI interrupt with incorrect numbers.
 
-To prevent triggering the warning in this valid scenario
-base::timers_pending needs to be added to the warning condition.
+Fix this issue by using function bitmap_find_free_region() instead of
+bitmap_find_next_zero_area().
 
-Fixes: 31cd0e119d50 ("timers: Recalculate next timer interrupt only when necessary")
-Reported-by: Johannes Berg <johannes@sipsolutions.net>
-Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
-Link: https://lore.kernel.org/r/20220405191732.7438-3-anna-maria@linutronix.de
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To ensure that aligned MSI interrupt numbers are used by endpoint devices,
+we cannot use Linux virtual irq numbers (as they are random and not
+properly aligned). Instead we need to use the aligned hwirq numbers.
+
+This change fixes receiving MSI interrupts on Armada 3720 boards and
+allows using NVMe disks which use Multi-MSI feature with 3 interrupts.
+
+Without this NVMe disks freeze booting as linux nvme-core.c is waiting
+60s for an interrupt.
+
+Link: https://lore.kernel.org/r/20220110015018.26359-4-kabel@kernel.org
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Signed-off-by: Marek Behún <kabel@kernel.org>
+Signed-off-by: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/time/timer.c |   11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ drivers/pci/host/pci-aardvark.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
---- a/kernel/time/timer.c
-+++ b/kernel/time/timer.c
-@@ -1722,11 +1722,14 @@ static inline void __run_timers(struct t
- 	       time_after_eq(jiffies, base->next_expiry)) {
- 		levels = collect_expired_timers(base, heads);
- 		/*
--		 * The only possible reason for not finding any expired
--		 * timer at this clk is that all matching timers have been
--		 * dequeued.
-+		 * The two possible reasons for not finding any expired
-+		 * timer at this clk are that all matching timers have been
-+		 * dequeued or no timer has been queued since
-+		 * base::next_expiry was set to base::clk +
-+		 * NEXT_TIMER_MAX_DELTA.
- 		 */
--		WARN_ON_ONCE(!levels && !base->next_expiry_recalc);
-+		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
-+			     && base->timers_pending);
- 		base->clk++;
- 		base->next_expiry = __next_timer_interrupt(base);
+diff --git a/drivers/pci/host/pci-aardvark.c b/drivers/pci/host/pci-aardvark.c
+index 9ae544e113dc..124fd7cb5da5 100644
+--- a/drivers/pci/host/pci-aardvark.c
++++ b/drivers/pci/host/pci-aardvark.c
+@@ -834,7 +834,7 @@ static void advk_msi_irq_compose_msi_msg(struct irq_data *data,
  
+ 	msg->address_lo = lower_32_bits(msi_msg);
+ 	msg->address_hi = upper_32_bits(msi_msg);
+-	msg->data = data->irq;
++	msg->data = data->hwirq;
+ }
+ 
+ static int advk_msi_set_affinity(struct irq_data *irq_data,
+@@ -851,15 +851,11 @@ static int advk_msi_irq_domain_alloc(struct irq_domain *domain,
+ 	int hwirq, i;
+ 
+ 	mutex_lock(&pcie->msi_used_lock);
+-	hwirq = bitmap_find_next_zero_area(pcie->msi_used, MSI_IRQ_NUM,
+-					   0, nr_irqs, 0);
+-	if (hwirq >= MSI_IRQ_NUM) {
+-		mutex_unlock(&pcie->msi_used_lock);
+-		return -ENOSPC;
+-	}
+-
+-	bitmap_set(pcie->msi_used, hwirq, nr_irqs);
++	hwirq = bitmap_find_free_region(pcie->msi_used, MSI_IRQ_NUM,
++					order_base_2(nr_irqs));
+ 	mutex_unlock(&pcie->msi_used_lock);
++	if (hwirq < 0)
++		return -ENOSPC;
+ 
+ 	for (i = 0; i < nr_irqs; i++)
+ 		irq_domain_set_info(domain, virq + i, hwirq + i,
+@@ -877,7 +873,7 @@ static void advk_msi_irq_domain_free(struct irq_domain *domain,
+ 	struct advk_pcie *pcie = domain->host_data;
+ 
+ 	mutex_lock(&pcie->msi_used_lock);
+-	bitmap_clear(pcie->msi_used, d->hwirq, nr_irqs);
++	bitmap_release_region(pcie->msi_used, d->hwirq, order_base_2(nr_irqs));
+ 	mutex_unlock(&pcie->msi_used_lock);
+ }
+ 
+-- 
+2.35.1
+
 
 

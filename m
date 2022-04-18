@@ -2,90 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C6A504A36
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 02:51:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09F32504A50
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 02:54:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235444AbiDRAlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 20:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35282 "EHLO
+        id S235469AbiDRAzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 20:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235050AbiDRAlo (ORCPT
+        with ESMTP id S231322AbiDRAzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 20:41:44 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A46F13CE9
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 17:39:07 -0700 (PDT)
+        Sun, 17 Apr 2022 20:55:09 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115E313E3F
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 17:52:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650242347; x=1681778347;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=W/FOGbfBO1uzsedtaXhnrQ7XRiDUUeWu0fO23cE8nbg=;
-  b=JnxFnNvygYUZN3yxKHfiXKMnf0yqzEBKOPupm9b4ry0qcDXZ7UiUV2kb
-   I7Gu8zedtot23zjAHxueeSKglunvq9C9136wrAeQNb9A7GQ5EYlKSU6Ep
-   H6RRfP+NdqklcxditeD3G1CIsAXA8fqTwxbCQLwdx+AN9T5J0kHN5pHC8
-   wC/QvAmblgszQr54XgZAtQyGExjSNeNg5mzrjaRbDD8uRb0tmB59sywZJ
-   YDl30q9EZL/lVHFpbEqAVgyA328TsPpydJrOjq0srUfNjAz1slpwhmFyJ
-   /7UDUIptVyHeFN7DvhOBiysUc2hDwFDbfi48UByTukwZHZKinhcMIuW/z
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="349875288"
+  t=1650243153; x=1681779153;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=szoCLBC/pIys3NwbIzrfbRFurpriz5wEpftUR2JNNlw=;
+  b=giQmoFeeA4n9lrN3XXVEHmjc3hJ6tAUaA2TJ1ORojvcSZ5bVuO/TB9qD
+   PrD3aGOQr42Q44/AhI7Ujtzo8uyvB1Ci0pUPRu2Ch8JhXUZAclwKUUGY3
+   unsiEgwHs+fJaTpeFS4maRpRr4avAlmCEcRiN4XHG7/z7dhBn++nmRW+w
+   FCAUSbx5IaxAzXuI6chFWsUyxSGGT+KFkOORrvr5v2dA3Oy46H3tr2Oaa
+   P8uqJUZIwGGXLUrahT8GYlSpT7HrTIGWHJRBKHwyehXL06HIKshwqjAsx
+   4kKuc61kAVl4RVDybYIf8AEZIuVIRx7D4Mtle9D+C6YHn6PveFOqLwHxI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="245313205"
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="349875288"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 17:39:06 -0700
+   d="scan'208";a="245313205"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Apr 2022 17:52:32 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.90,267,1643702400"; 
-   d="scan'208";a="664869489"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 17 Apr 2022 17:39:05 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngFQ0-0004El-ND;
-        Mon, 18 Apr 2022 00:39:04 +0000
-Date:   Mon, 18 Apr 2022 08:38:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ilya Maximets <i.maximets@ovn.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [linux-stable-rc:queue/5.17 1407/1567]
- net/openvswitch/flow_netlink.o: warning: objtool:
- ovs_nla_free_nested_actions()+0x59: unreachable instruction
-Message-ID: <202204180805.B20PtvEM-lkp@intel.com>
+   d="scan'208";a="701651270"
+Received: from allen-box.sh.intel.com ([10.239.159.48])
+  by fmsmga001.fm.intel.com with ESMTP; 17 Apr 2022 17:52:30 -0700
+From:   Lu Baolu <baolu.lu@linux.intel.com>
+To:     Joerg Roedel <joro@8bytes.org>
+Cc:     Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Subject: [RESEND PATCH v8 00/11] Fix BUG_ON in vfio_iommu_group_notifier()
+Date:   Mon, 18 Apr 2022 08:49:49 +0800
+Message-Id: <20220418005000.897664-1-baolu.lu@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git queue/5.17
-head:   a0cf6ca05464247e59c4fa08d60effea9b1d3a5b
-commit: 53bce9d19b0a9d245b25cd050b81652ed974a509 [1407/1567] net: openvswitch: fix leak of nested actions
-config: x86_64-randconfig-a001-20220418 (https://download.01.org/0day-ci/archive/20220418/202204180805.B20PtvEM-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=53bce9d19b0a9d245b25cd050b81652ed974a509
-        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-        git fetch --no-tags linux-stable-rc queue/5.17
-        git checkout 53bce9d19b0a9d245b25cd050b81652ed974a509
-        # save the config file to linux build tree
-        mkdir build_dir
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/
+Hi Joerg,
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is a resend version of v8 posted here:
+https://lore.kernel.org/linux-iommu/20220308054421.847385-1-baolu.lu@linux.intel.com/
+as we discussed in this thread:
+https://lore.kernel.org/linux-iommu/Yk%2Fq1BGN8pC5HVZp@8bytes.org/
 
-All warnings (new ones prefixed by >>):
+All patches can be applied perfectly except this one:
+ - [PATCH v8 02/11] driver core: Add dma_cleanup callback in bus_type
+It conflicts with below refactoring commit:
+ - 4b775aaf1ea99 "driver core: Refactor sysfs and drv/bus remove hooks"
+The conflict has been fixed in this post.
 
->> net/openvswitch/flow_netlink.o: warning: objtool: ovs_nla_free_nested_actions()+0x59: unreachable instruction
+No functional changes in this series. I suppress cc-ing this series to
+all v8 reviewers in order to avoid spam.
+
+Please consider it for your iommu tree.
+
+Best regards,
+baolu
+
+Change log:
+- v8 and before:
+  - Please refer to v8 post for all the change history.
+
+- v8-resend
+  - Rebase the series on top of v5.18-rc3.
+  - Add Reviewed-by's granted by Robin.
+  - Add a Tested-by granted by Eric.
+
+Jason Gunthorpe (1):
+  vfio: Delete the unbound_list
+
+Lu Baolu (10):
+  iommu: Add DMA ownership management interfaces
+  driver core: Add dma_cleanup callback in bus_type
+  amba: Stop sharing platform_dma_configure()
+  bus: platform,amba,fsl-mc,PCI: Add device DMA ownership management
+  PCI: pci_stub: Set driver_managed_dma
+  PCI: portdrv: Set driver_managed_dma
+  vfio: Set DMA ownership for VFIO devices
+  vfio: Remove use of vfio_group_viable()
+  vfio: Remove iommu group notifier
+  iommu: Remove iommu group changes notifier
+
+ include/linux/amba/bus.h              |   8 +
+ include/linux/device/bus.h            |   3 +
+ include/linux/fsl/mc.h                |   8 +
+ include/linux/iommu.h                 |  54 +++---
+ include/linux/pci.h                   |   8 +
+ include/linux/platform_device.h       |  10 +-
+ drivers/amba/bus.c                    |  37 +++-
+ drivers/base/dd.c                     |   5 +
+ drivers/base/platform.c               |  21 ++-
+ drivers/bus/fsl-mc/fsl-mc-bus.c       |  24 ++-
+ drivers/iommu/iommu.c                 | 228 ++++++++++++++++--------
+ drivers/pci/pci-driver.c              |  18 ++
+ drivers/pci/pci-stub.c                |   1 +
+ drivers/pci/pcie/portdrv_pci.c        |   2 +
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 +
+ drivers/vfio/pci/vfio_pci.c           |   1 +
+ drivers/vfio/platform/vfio_amba.c     |   1 +
+ drivers/vfio/platform/vfio_platform.c |   1 +
+ drivers/vfio/vfio.c                   | 245 ++------------------------
+ 19 files changed, 338 insertions(+), 338 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

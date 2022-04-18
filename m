@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D3F5505952
+	by mail.lfdr.de (Postfix) with ESMTP id 25CF7505951
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344910AbiDROSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
+        id S1344863AbiDROSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:18:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244843AbiDRN57 (ORCPT
+        with ESMTP id S244856AbiDRN6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:57:59 -0400
+        Mon, 18 Apr 2022 09:58:00 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C620E0A;
-        Mon, 18 Apr 2022 06:08:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80115E6B;
+        Mon, 18 Apr 2022 06:08:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACC7760B41;
-        Mon, 18 Apr 2022 13:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3834C385B7;
-        Mon, 18 Apr 2022 13:08:04 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1602760F24;
+        Mon, 18 Apr 2022 13:08:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C590C385A7;
+        Mon, 18 Apr 2022 13:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287285;
-        bh=Huw4QjVEokonEiJdubj4pjRrSnu/+1KgJw3o/eDiWOA=;
+        s=korg; t=1650287288;
+        bh=TCCHLWZjI2lOSY90qAUVqxi++CpwCH2A11H+mYpGMHw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EqnhnS7/2+ywopUYSIxYxW+w06233QSdE3cComR337FTBh0MlAFfrrVCrwmXrhr1B
-         uWZqCFp7D5X+U0odDnxKPEW3alspjKaVTUpSk2PHRMMh85zP6Y5MEbduPRldaVfg0D
-         ti1X2n2ru16RYywbXYUmWhBFnegkRuyMqEYGFMj4=
+        b=UDbOR7HMznvD82PdYEy1Lgyaeve3FfM+EA0YCPGtEp8TYYOuZHwhI1kEPZTaUR0lx
+         nf5pkQ4HzZ8zUK7mgCLvCmIQi2QOm8stuhnQc+yPTHh2T8vLqZqeZmIfqXcFybUvKO
+         TFuEz19hhuzoUJ9eSnqmkL7tfuxrGty+e0O2vN3s=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org, Miaoqian Lin <linmq006@gmail.com>,
         Linus Walleij <linus.walleij@linaro.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 113/218] pinctrl: nomadik: Add missing of_node_put() in nmk_pinctrl_probe
-Date:   Mon, 18 Apr 2022 14:12:59 +0200
-Message-Id: <20220418121202.829787704@linuxfoundation.org>
+Subject: [PATCH 4.9 114/218] pinctrl/rockchip: Add missing of_node_put() in rockchip_pinctrl_probe
+Date:   Mon, 18 Apr 2022 14:13:00 +0200
+Message-Id: <20220418121202.857520763@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -57,37 +57,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Miaoqian Lin <linmq006@gmail.com>
 
-[ Upstream commit c09ac191b1f97cfa06f394dbfd7a5db07986cefc ]
+[ Upstream commit 89388f8730699c259f8090ec435fb43569efe4ac ]
 
-This node pointer is returned by of_parse_phandle() with refcount
-incremented in this function. Calling of_node_put() to avoid
-the refcount leak.
+The device_node pointer is returned by of_parse_phandle()  with refcount
+incremented. We should use of_node_put() on it when done.
 
-Fixes: 32e67eee670e ("pinctrl: nomadik: Allow prcm_base to be extracted from Device Tree")
+Fixes: 1e747e59cc4d ("pinctrl: rockchip: base regmap supplied by a syscon")
+Fixes: 14dee8677e19 ("pinctrl: rockchip: let pmu registers be supplied by a syscon")
 Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
-Link: https://lore.kernel.org/r/20220307115116.25316-1-linmq006@gmail.com
+Link: https://lore.kernel.org/r/20220307120234.28657-1-linmq006@gmail.com
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/pinctrl/nomadik/pinctrl-nomadik.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/pinctrl/pinctrl-rockchip.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pinctrl/nomadik/pinctrl-nomadik.c b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-index d318ca055489..6e237c46e1bd 100644
---- a/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-+++ b/drivers/pinctrl/nomadik/pinctrl-nomadik.c
-@@ -1916,8 +1916,10 @@ static int nmk_pinctrl_probe(struct platform_device *pdev)
+diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+index 17827a88b85e..9bcb238c2e12 100644
+--- a/drivers/pinctrl/pinctrl-rockchip.c
++++ b/drivers/pinctrl/pinctrl-rockchip.c
+@@ -2414,6 +2414,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,grf", 0);
+ 	if (node) {
+ 		info->regmap_base = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_base))
+ 			return PTR_ERR(info->regmap_base);
+ 	} else {
+@@ -2450,6 +2451,7 @@ static int rockchip_pinctrl_probe(struct platform_device *pdev)
+ 	node = of_parse_phandle(np, "rockchip,pmu", 0);
+ 	if (node) {
+ 		info->regmap_pmu = syscon_node_to_regmap(node);
++		of_node_put(node);
+ 		if (IS_ERR(info->regmap_pmu))
+ 			return PTR_ERR(info->regmap_pmu);
  	}
- 
- 	prcm_np = of_parse_phandle(np, "prcm", 0);
--	if (prcm_np)
-+	if (prcm_np) {
- 		npct->prcm_base = of_iomap(prcm_np, 0);
-+		of_node_put(prcm_np);
-+	}
- 	if (!npct->prcm_base) {
- 		if (version == PINCTRL_NMK_STN8815) {
- 			dev_info(&pdev->dev,
 -- 
 2.34.1
 

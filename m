@@ -2,78 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BBAB505034
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:20:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEED1505058
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:21:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238404AbiDRMWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49692 "EHLO
+        id S238313AbiDRMYP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:24:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237370AbiDRMVb (ORCPT
+        with ESMTP id S238780AbiDRMWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:21:31 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C591E1D0DB;
-        Mon, 18 Apr 2022 05:17:32 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id bj36so10709323ljb.13;
-        Mon, 18 Apr 2022 05:17:32 -0700 (PDT)
+        Mon, 18 Apr 2022 08:22:49 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCD71CB33;
+        Mon, 18 Apr 2022 05:18:16 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id y10so9116656ejw.8;
+        Mon, 18 Apr 2022 05:18:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=kHnbLPTYEwVnYoF1eArZeQYH5Pj76/3G5SiYikVll9w=;
-        b=jbpqdZoqwR4D4r4fMKzxzhrBt/Wqgr2sbvztY0dWatowOIRCrjg9R3NdU/WmdFuziD
-         EPV8lzAk1E91kiXFQSwW4A/8TaarCt2a7rLv3RRjIQNIjCZRxx0pLMpiRPQ49PYad7Ft
-         vdrzmozuDZNDm4wzbIudn/1Fv//fsqBxwSUezyrXVHyRRtwkT/Jdd7L4ZBqphvkQTFXk
-         qHGfsfnj9nfgqICnTlQwSg0LpVjTnLSciMjKxjOEhARZvQnps2FuOy6Wx91cL07D0sMy
-         lCYDkrLxsSzt4g3tvr8cHW2sATtwaGZYxCtByDEc8vAD0tCq79JWPLgOmeNhJXAks+j1
-         meHA==
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=rBeq7r1LUr17BD3wzjfHgTsyokZ2FymR+3nXomEXu6g=;
+        b=Xx1vnBsJpTyBssMLec8mWL15r4vB/b1/DWYrrTDsZnx2crQM4QEDvWC1X35cKEKTw5
+         7FVXpOzPkGNXScfkmXRupkAvTHLeBqzzDsn6HcCjyRW7QI9+CmkoALZK8AYNZxWy1Vtf
+         vYx5aG7d1KK2A6okFaDTud0BRjgIP9b+6mZyLgNkXsDWEII974cqla2ix6TR9p9HQ3Xu
+         5d+p4lAGna3lySSQ8/seWqb6pSTbfMBjtSZrSSkECgoy81rnwU5J1xlKf1Icv7aYoyQV
+         1JSwfjcmHfbMsGx2pcbuIfpx30qH+cx7UenAXVLXlG1SOEY15IjTJLYBHDh9cfpzvlfP
+         gzUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kHnbLPTYEwVnYoF1eArZeQYH5Pj76/3G5SiYikVll9w=;
-        b=KJW8k1QWdgjsq6wwtlon2V+Fhi/yzjdQvRgP+a7YYDrVAnbYq/7bvV+JhbxJW2SeKD
-         lB2ycLi3xPdj4s0SwSwMsAumcswESL7zHBGL3wVv6+dA4I78/XtogQ5OkHXQR5cJfp/1
-         KGOcH6XtmcP5QdC73eSCPAHRJUZaWPKCkYmKKNNKTMO8M+9WrOkMok6neuV4QjhKHsRB
-         42ec0iB1WHBpcnV10+Zh5kju7zR29ChMMVty2+eq2wrL9IG0WfTN1OkaRMBKFp6/IHzR
-         wOZXQdOAu3kbbtYMFigCMz9q2/MgkaheSP9zm+EUu2i7kIs16PgCbpO6AZQ0Hfc5c2Bb
-         d4Hw==
-X-Gm-Message-State: AOAM533W/AcQzeB2lFwyAkINPNza8LJ4Mrenj90RlZo6MggXb6P0j2j9
-        xaFLYvOkhdHG0vIzGt7d9Lk=
-X-Google-Smtp-Source: ABdhPJwFqvtH3vF5qgEO8VCRMK6W6mZpdiK3/Fns3+bt9EuI/0T5o4DWUcvmcWh5lCU6fMV6W8YuIw==
-X-Received: by 2002:a2e:302:0:b0:24a:c997:d34c with SMTP id 2-20020a2e0302000000b0024ac997d34cmr7107060ljd.445.1650284250575;
-        Mon, 18 Apr 2022 05:17:30 -0700 (PDT)
-Received: from mobilestation ([95.79.134.149])
-        by smtp.gmail.com with ESMTPSA id u19-20020a197913000000b00448a1f20261sm1199338lfc.34.2022.04.18.05.17.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 05:17:29 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:17:27 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 22/25] dmaengine: dw-edma: Replace chip ID number with
- device name
-Message-ID: <20220418121727.ct6pyx6jdq46uvq7@mobilestation>
-References: <20220324014836.19149-1-Sergey.Semin@baikalelectronics.ru>
- <20220324014836.19149-23-Sergey.Semin@baikalelectronics.ru>
- <20220325100204.GJ4675@thinkpad>
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=rBeq7r1LUr17BD3wzjfHgTsyokZ2FymR+3nXomEXu6g=;
+        b=ZRUdqZVj8KkYi8QjYtlTzhx1+7Rs4QqAcJf3qLyKGx5eKZRPYDNTJTyfn+2JlWHDVY
+         n64JPSzK7/RJGWC7Mq1INh0w3GpYnLGS4Dc8m1nwCxWUfkFMxyL+TiI1+N9Ad9WmB1Tp
+         BgQCJQeQ8y3xqKkPz1GTtinwbaRguyYvMg8hxgsEHVKfVtz/s2F7La8XTfFSIfovjZUU
+         IH7YjePYgM+8tZlbPZjVtCeYfB8iwB3bPj7qjHin3LwNZ5yLw7oUoTDaWiPbeJBJQgHW
+         wuoRJoyfYcvPWmtTzYrDMXBDOhkpxKMsF4XgdYbX8oKAI1Qr5gljjApiqEpruaQ6iwtg
+         w+6A==
+X-Gm-Message-State: AOAM533LDUpaamTixsN1iVbbr+svqg7VPc/OlzAkhbz8thqebTneu8ot
+        hVJt1k7RRpyPIhaXLdXdZq4PmXKsomg4so3Fv2g=
+X-Google-Smtp-Source: ABdhPJxP7RO/30UkizWDp1oKjdyab95YDtjf823TDAl+jEaenz5Jg7MGHYnl6v3ieJuCs7vAkX0IAv0IC6KFJDktHH4=
+X-Received: by 2002:a17:907:8a14:b0:6e8:9691:62f7 with SMTP id
+ sc20-20020a1709078a1400b006e8969162f7mr8964573ejc.497.1650284294799; Mon, 18
+ Apr 2022 05:18:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220325100204.GJ4675@thinkpad>
+References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162154250.9383@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2204162154250.9383@angie.orcam.me.uk>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 18 Apr 2022 15:17:38 +0300
+Message-ID: <CAHp75Vem7twcS4bKXJZM4SfE+g9qC3rxtytTKpQsyszZpnrLqw@mail.gmail.com>
+Subject: Re: [PATCH v4 3/5] serial: 8250: Export ICR access helpers for
+ internal use
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -84,101 +69,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 25, 2022 at 03:32:04PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Mar 24, 2022 at 04:48:33AM +0300, Serge Semin wrote:
-> > Using some abstract number as the DW eDMA chip identifier isn't really
-> > practical. First of all there can be more than one DW eDMA controller on
-> > the platform some of them can be detected as the PCIe end-points, some of
-> > them can be embedded into the DW PCIe Root Port/End-point controllers.
-> > Seeing some abstract number in for instance IRQ handlers list doesn't give
-> > a notion regarding their reference to the particular DMA controller.
-> > Secondly current DW eDMA chip id implementation doesn't provide the
-> > multi-eDMA platforms support for same reason of possibly having eDMA
-> > detected on different system buses. At the same time re-implementing
-> > something ida-based won't give much benefits especially seeing the DW eDMA
-> > chip ID is only used in the IRQ request procedure. So to speak in order to
-> > preserve the code simplicity and get to have the multi-eDMA platforms
-> > support let's just use the parental device name to create the DW eDMA
-> > controller name.
-> > 
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > ---
-> >  drivers/dma/dw-edma/dw-edma-core.c | 3 ++-
-> >  drivers/dma/dw-edma/dw-edma-core.h | 2 +-
-> >  drivers/dma/dw-edma/dw-edma-pcie.c | 1 -
-> >  include/linux/dma/edma.h           | 1 -
-> >  4 files changed, 3 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
-> > index dbe1119fd1d2..72a51970bfba 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.c
-> > @@ -970,7 +970,8 @@ int dw_edma_probe(struct dw_edma_chip *chip)
-> >  	if (!dw->chan)
-> >  		return -ENOMEM;
-> >  
-> > -	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%d", chip->id);
-> > +	snprintf(dw->name, sizeof(dw->name), "dw-edma-core:%s",
-> > +		 dev_name(chip->dev));
-> >  
-> >  	/* Disable eDMA, only to establish the ideal initial conditions */
-> >  	dw_edma_v0_core_off(dw);
-> > diff --git a/drivers/dma/dw-edma/dw-edma-core.h b/drivers/dma/dw-edma/dw-edma-core.h
-> > index 980adb079182..dc25798d4ba9 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-core.h
-> > +++ b/drivers/dma/dw-edma/dw-edma-core.h
-> > @@ -96,7 +96,7 @@ struct dw_edma_irq {
-> >  };
-> >  
-> >  struct dw_edma {
-> > -	char				name[20];
-> > +	char				name[30];
-> 
+On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
+>
+> Make ICR access helpers available outside 8250_port.c, however retain
+> them as ordinary static functions so as not to regress code generation.
+>
+> This is because `serial_icr_write' is currently automatically inlined by
+> GCC, however `serial_icr_read' is not.  Making them both static inline
+> would grow code produced, e.g.:
+>
+> $ i386-linux-gnu-size --format=gnu 8250_port-{old,new}.o
+>       text       data        bss      total filename
+>      15065       3378          0      18443 8250_port-old.o
+>      15289       3378          0      18667 8250_port-new.o
+>
+> and:
+>
+> $ riscv64-linux-gnu-size --format=gnu 8250_port-{old,new}.o
+>       text       data        bss      total filename
+>      16980       5306          0      22286 8250_port-old.o
+>      17124       5306          0      22430 8250_port-new.o
+>
+> while making them external would needlessly add a new module interface
+> and lose the benefit from `serial_icr_write' getting inlined outside
+> 8250_port.o.
 
-> I'm not sure if this length is sufficient. Other than this,
-> 
-> Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+See one nit-pick below.
 
-My calculations were based on the prefix+pci-device-name length. For
-instance, for the case of the remote eDMA the name length would be
-strlen("dw-edma-core:0000:00:00.0") = 25 + 1 (for '\0'). There's even
-some room left. Seeing the prefix is always used in the string there
-will be at most 16 chars for the unique part of the name. If you
-predict it to be greater than that I'll extend the length as you say.
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> ---
+> New change in v4, factored out from 5/5.
+> ---
+>  drivers/tty/serial/8250/8250.h      |   23 +++++++++++++++++++++++
+>  drivers/tty/serial/8250/8250_port.c |   21 ---------------------
+>  2 files changed, 23 insertions(+), 21 deletions(-)
+>
+> linux-serial-8250-icr-access.diff
+> Index: linux-macro/drivers/tty/serial/8250/8250.h
+> ===================================================================
+> --- linux-macro.orig/drivers/tty/serial/8250/8250.h
+> +++ linux-macro/drivers/tty/serial/8250/8250.h
+> @@ -120,6 +120,29 @@ static inline void serial_out(struct uar
+>         up->port.serial_out(&up->port, offset, value);
+>  }
+>
+> +/*
+> + * For the 16C950
+> + */
+> +static void __maybe_unused serial_icr_write(struct uart_8250_port *up,
+> +                                           int offset, int value)
 
--Sergey
+I think you may drop __maybe_unused here, because it's always used by
+the code below. So it will be eliminated altogether when the below
+won't be used.
 
-> 
-> Thanks,
-> Mani
-> 
-> >  
-> >  	struct dma_device		dma;
-> >  
-> > diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> > index f530bacfd716..3f9dadc73854 100644
-> > --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> > +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> > @@ -222,7 +222,6 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
-> >  
-> >  	/* Data structure initialization */
-> >  	chip->dev = dev;
-> > -	chip->id = pdev->devfn;
-> >  
-> >  	chip->mf = vsec_data.mf;
-> >  	chip->nr_irqs = nr_irqs;
-> > diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> > index 5cc87cfdd685..241c5a97ddf4 100644
-> > --- a/include/linux/dma/edma.h
-> > +++ b/include/linux/dma/edma.h
-> > @@ -73,7 +73,6 @@ enum dw_edma_map_format {
-> >   */
-> >  struct dw_edma_chip {
-> >  	struct device		*dev;
-> > -	int			id;
-> >  	int			nr_irqs;
-> >  	const struct dw_edma_core_ops   *ops;
-> >  	u32			flags;
-> > -- 
-> > 2.35.1
-> > 
+> +{
+> +       serial_out(up, UART_SCR, offset);
+> +       serial_out(up, UART_ICR, value);
+> +}
+> +
+> +static unsigned int __maybe_unused serial_icr_read(struct uart_8250_port *up,
+> +                                                  int offset)
+> +{
+> +       unsigned int value;
+> +
+> +       serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
+> +       serial_out(up, UART_SCR, offset);
+> +       value = serial_in(up, UART_ICR);
+> +       serial_icr_write(up, UART_ACR, up->acr);
+> +
+> +       return value;
+> +}
+> +
+>  void serial8250_clear_and_reinit_fifos(struct uart_8250_port *p);
+>
+>  static inline int serial_dl_read(struct uart_8250_port *up)
+> Index: linux-macro/drivers/tty/serial/8250/8250_port.c
+> ===================================================================
+> --- linux-macro.orig/drivers/tty/serial/8250/8250_port.c
+> +++ linux-macro/drivers/tty/serial/8250/8250_port.c
+> @@ -538,27 +538,6 @@ serial_port_out_sync(struct uart_port *p
+>  }
+>
+>  /*
+> - * For the 16C950
+> - */
+> -static void serial_icr_write(struct uart_8250_port *up, int offset, int value)
+> -{
+> -       serial_out(up, UART_SCR, offset);
+> -       serial_out(up, UART_ICR, value);
+> -}
+> -
+> -static unsigned int serial_icr_read(struct uart_8250_port *up, int offset)
+> -{
+> -       unsigned int value;
+> -
+> -       serial_icr_write(up, UART_ACR, up->acr | UART_ACR_ICRRD);
+> -       serial_out(up, UART_SCR, offset);
+> -       value = serial_in(up, UART_ICR);
+> -       serial_icr_write(up, UART_ACR, up->acr);
+> -
+> -       return value;
+> -}
+> -
+> -/*
+>   * FIFO support.
+>   */
+>  static void serial8250_clear_fifos(struct uart_8250_port *p)
+
+
+
+-- 
+With Best Regards,
+Andy Shevchenko

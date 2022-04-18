@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BC55050E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 336CF505316
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239351AbiDRM2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38160 "EHLO
+        id S240074AbiDRMzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:55:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238738AbiDRM0W (ORCPT
+        with ESMTP id S239334AbiDRMhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:26:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A348A12600;
-        Mon, 18 Apr 2022 05:20:23 -0700 (PDT)
+        Mon, 18 Apr 2022 08:37:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F04522511;
+        Mon, 18 Apr 2022 05:27:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 408C460F0A;
-        Mon, 18 Apr 2022 12:20:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512A8C385A7;
-        Mon, 18 Apr 2022 12:20:22 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5C96F60FAF;
+        Mon, 18 Apr 2022 12:27:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71369C385AC;
+        Mon, 18 Apr 2022 12:27:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284422;
-        bh=mgiNPNrYV+G7zNOVM3b/+0HrK8qaTh+zhMEjYBOPAb0=;
+        s=korg; t=1650284868;
+        bh=sGxXh6LHYvqBDz/i9hHkS8uc4Jl7VuUWJE/b37+LUJQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kSusfsMbz9VbkmQOz6aR3ddQ7CMTWdlYR92TkpPgu7vsr6BuFMByT6fUZNYunp8TH
-         kc/nVs0DHsjgpYiB5s2EoKOeOwI/0iwqgvVOEqMNEkTlltl9TizYCkehBcq6ppasHI
-         2js0q1dX9om/CyeqVbERsrXoRReVpxpw0EMWLhBY=
+        b=wEDSW+ESwieuEyWXkpm8JcJlS7CjMqTDE+hv5DxXWIMubIr72bkaNtEQ5b494NrdD
+         W5MLLjWEaPKZnRbI5kzOiKxEJYhHGywFiKpNfuhjbYdUekZ1zu6AJpyRPjMr1aBk0J
+         DZhLGDALsw09XyLbmlcxFuvVU/97SN3bU/H++dkc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Heiko Stuebner <heiko@sntech.de>,
-        Anup Patel <anup@brainfault.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 083/219] RISC-V: KVM: include missing hwcap.h into vcpu_fp
-Date:   Mon, 18 Apr 2022 14:10:52 +0200
-Message-Id: <20220418121208.652849112@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 033/189] ALSA: es1938: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:53 +0200
+Message-Id: <20220418121201.454898277@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,48 +53,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Heiko Stuebner <heiko@sntech.de>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 4054eee9290248bf66c5eacb58879c9aaad37f71 ]
+commit bc22628591e5913e67edb3c2a89b97849e30a8f8 upstream.
 
-vcpu_fp uses the riscv_isa_extension mechanism which gets
-defined in hwcap.h but doesn't include that head file.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-While it seems to work in most cases, in certain conditions
-this can lead to build failures like
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
 
-../arch/riscv/kvm/vcpu_fp.c: In function ‘kvm_riscv_vcpu_fp_reset’:
-../arch/riscv/kvm/vcpu_fp.c:22:13: error: implicit declaration of function ‘riscv_isa_extension_available’ [-Werror=implicit-function-declaration]
-   22 |         if (riscv_isa_extension_available(&isa, f) ||
-      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-../arch/riscv/kvm/vcpu_fp.c:22:49: error: ‘f’ undeclared (first use in this function)
-   22 |         if (riscv_isa_extension_available(&isa, f) ||
-
-Fix this by simply including the necessary header.
-
-Fixes: 0a86512dc113 ("RISC-V: KVM: Factor-out FP virtualization into separate
-sources")
-Signed-off-by: Heiko Stuebner <heiko@sntech.de>
-Signed-off-by: Anup Patel <anup@brainfault.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: 08e9d3ab4cc1 ("ALSA: es1938: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-15-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/riscv/kvm/vcpu_fp.c | 1 +
- 1 file changed, 1 insertion(+)
+ sound/pci/es1938.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/riscv/kvm/vcpu_fp.c b/arch/riscv/kvm/vcpu_fp.c
-index 4449a976e5a6..d4308c512007 100644
---- a/arch/riscv/kvm/vcpu_fp.c
-+++ b/arch/riscv/kvm/vcpu_fp.c
-@@ -11,6 +11,7 @@
- #include <linux/err.h>
- #include <linux/kvm_host.h>
- #include <linux/uaccess.h>
-+#include <asm/hwcap.h>
+diff --git a/sound/pci/es1938.c b/sound/pci/es1938.c
+index 00b976f42a3d..e34ec6f89e7e 100644
+--- a/sound/pci/es1938.c
++++ b/sound/pci/es1938.c
+@@ -1716,8 +1716,8 @@ static int snd_es1938_mixer(struct es1938 *chip)
+ }
+        
  
- #ifdef CONFIG_FPU
- void kvm_riscv_vcpu_fp_reset(struct kvm_vcpu *vcpu)
+-static int snd_es1938_probe(struct pci_dev *pci,
+-			    const struct pci_device_id *pci_id)
++static int __snd_es1938_probe(struct pci_dev *pci,
++			      const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -1796,6 +1796,12 @@ static int snd_es1938_probe(struct pci_dev *pci,
+ 	return 0;
+ }
+ 
++static int snd_es1938_probe(struct pci_dev *pci,
++			    const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_es1938_probe(pci, pci_id));
++}
++
+ static struct pci_driver es1938_driver = {
+ 	.name = KBUILD_MODNAME,
+ 	.id_table = snd_es1938_ids,
 -- 
-2.35.1
+2.35.2
 
 
 

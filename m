@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF84E5052FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F158504FC2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240082AbiDRMy0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:54:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S238032AbiDRMOD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:14:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240053AbiDRMih (ORCPT
+        with ESMTP id S230296AbiDRMOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:38:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D8C275C2;
-        Mon, 18 Apr 2022 05:29:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89656B80EC1;
-        Mon, 18 Apr 2022 12:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B82AEC385A7;
-        Mon, 18 Apr 2022 12:29:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284951;
-        bh=i9onWB9tRvxnJHS7hD+ihyIKDO/WpE3i++NR8WHGdnA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aLBK5Bi2wIiS1P1DkdOpwAstoZOHOZ1s964rRUmU2/ECf1cNHR/O+mR0CF7VW+/HK
-         ks1tAMJWOvUcDLbWyBXJgYzHEixJmze4xZ6RaTSTQPg3Eojr5I0QAdKT8LlGasreO/
-         T+006/wrvwXiNGAk/clP5CTnQN5/pdW0ORzbeUCo=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 060/189] firmware: arm_scmi: Fix sorting of retrieved clock rates
-Date:   Mon, 18 Apr 2022 14:11:20 +0200
-Message-Id: <20220418121202.213234033@linuxfoundation.org>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
-User-Agent: quilt/0.66
+        Mon, 18 Apr 2022 08:14:01 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA13E1A810
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:11:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=nlZTs2EHSVsUyk1Bfx1ucHBhq1nc96y85fwK/m4VS8o=;
+  b=Ztt7IfzFy0k4GPLo5+lWjD1pdUNA//BQgMpRhdMXMTeRKWFiqkQ5s6Yc
+   t8Jzt/OY2XlpCdk1Kxb6l5CDVSGiIXObShwXElOiEWXJwzfUFxxpuEDf6
+   bIwlHANpRUE0P8LMwUlHpB3f/AL79uBMKoCG1ec3roHLgtNwdq82vuRcV
+   8=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.90,269,1643670000"; 
+   d="scan'208";a="11791770"
+Received: from 203.107.68.85.rev.sfr.net (HELO hadrien) ([85.68.107.203])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:11:21 +0200
+Date:   Mon, 18 Apr 2022 14:11:21 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Aliya Rahmani <aliyarahmani786@gmail.com>
+cc:     clabbe@baylibre.com, gregkh@linuxfoundation.org,
+        linux-staging@lists.linux.dev, outreachy@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/3] staging: media: zoran: Code cleanup - else is not
+ generally useful after a break or return
+In-Reply-To: <20220418115948.5456-3-aliyarahmani786@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2204181409550.11986@hadrien>
+References: <20220418115948.5456-1-aliyarahmani786@gmail.com> <20220418115948.5456-3-aliyarahmani786@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cristian Marussi <cristian.marussi@arm.com>
+Just say concisely what you did in the subject line.  For example, "remove
+unneeded else".  The reader can wait to see the message to find out the
+details.  "Code cleanup" takes up a lot of space, and doesn't give much
+information.
 
-[ Upstream commit 23274739a5b6166f74d8d9cb5243d7bf6b46aab9 ]
+On Mon, 18 Apr 2022, Aliya Rahmani wrote:
 
-During SCMI Clock protocol initialization, after having retrieved from the
-SCMI platform all the available discrete rates for a specific clock, the
-clock rates array is sorted, unfortunately using a pointer to its end as
-a base instead of its start, so that sorting does not work.
+> Remove the else without affecting the logic. Fixes the checkpatch warning: else is not generally useful after a break or return
 
-Fix invocation of sort() passing as base a pointer to the start of the
-retrieved clock rates array.
+Commit log messages should be limited to around 70 characters per line.
 
-Link: https://lore.kernel.org/r/20220318092813.49283-1-cristian.marussi@arm.com
-Fixes: dccec73de91d ("firmware: arm_scmi: Keep the discrete clock rates sorted")
-Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
-Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/firmware/arm_scmi/clock.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+julia
 
-diff --git a/drivers/firmware/arm_scmi/clock.c b/drivers/firmware/arm_scmi/clock.c
-index 35b56c8ba0c0..492f3a9197ec 100644
---- a/drivers/firmware/arm_scmi/clock.c
-+++ b/drivers/firmware/arm_scmi/clock.c
-@@ -204,7 +204,8 @@ scmi_clock_describe_rates_get(const struct scmi_protocol_handle *ph, u32 clk_id,
- 
- 	if (rate_discrete && rate) {
- 		clk->list.num_rates = tot_rate_cnt;
--		sort(rate, tot_rate_cnt, sizeof(*rate), rate_cmp_func, NULL);
-+		sort(clk->list.rates, tot_rate_cnt, sizeof(*rate),
-+		     rate_cmp_func, NULL);
- 	}
- 
- 	clk->rate_discrete = rate_discrete;
--- 
-2.35.1
-
-
-
+> Signed-off-by: Aliya Rahmani <aliyarahmani786@gmail.com>
+> ---
+>  drivers/staging/media/zoran/videocodec.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/staging/media/zoran/videocodec.c b/drivers/staging/media/zoran/videocodec.c
+> index 16a1f23a7f19..19732a47c8bd 100644
+> --- a/drivers/staging/media/zoran/videocodec.c
+> +++ b/drivers/staging/media/zoran/videocodec.c
+> @@ -98,9 +98,8 @@ struct videocodec *videocodec_attach(struct videocodec_master *master)
+>
+>  				h->attached += 1;
+>  				return codec;
+> -			} else {
+> -				kfree(codec);
+>  			}
+> +			kfree(codec);
+>  		}
+>  		h = h->next;
+>  	}
+> --
+> 2.25.1
+>
+>
+>

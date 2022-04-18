@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F8E2504D7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:03:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 725A1504D8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237075AbiDRIGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36312 "EHLO
+        id S237108AbiDRIIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbiDRIGC (ORCPT
+        with ESMTP id S236344AbiDRIH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:06:02 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9AD1928C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lvGx/57LRCAClkTXqYBN9E9Z0ndJZZ3f3BxFPXiHEIY=; b=M2nhal4SneHWJyEAvf1CVjA8IX
-        koPKllbhV9MXr8exLMXodRFDbJ0i3WVIOmCdbri5Pwe75IuPaWG9rjn6ulSVj58GxUls4zzX0iejm
-        B9f3wbtI11SrvHlDGcqgxx7jMXZDE/dZZsML8oFpIvQ/LVX7W0KraQ1pQjUHxAs5D/dy3AgZrtLdj
-        iz6R9XYOexoV9niuV6h1BZflr4TGx5rljH+QpICYYKqbUwXPVRVqRH3hB13DwTwcr7wNlx5+NHVap
-        x6ULpsQBsz/1FU0Yfy66hm28HDbkPd1PoEUOsYuV6W7f95YrruuJvjkbggQ8uNDu+o5z74UNuK2GA
-        uvfQJWEg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58314)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1ngMLi-0007sc-Mj; Mon, 18 Apr 2022 09:03:06 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1ngMLf-0007xl-0U; Mon, 18 Apr 2022 09:03:03 +0100
-Date:   Mon, 18 Apr 2022 09:03:02 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yuanzheng Song <songyuanzheng@huawei.com>
-Cc:     ardb@kernel.org, arnd@arndb.de, linus.walleij@linaro.org,
-        akpm@linux-foundation.org, ebiederm@xmission.com,
-        wangkefeng.wang@huawei.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: fix the incorrect value of sp in __die()
-Message-ID: <Yl0bNhQwwnclGKKX@shell.armlinux.org.uk>
-References: <20220418034516.521046-1-songyuanzheng@huawei.com>
+        Mon, 18 Apr 2022 04:07:59 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63C1DF7A
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650269119; x=1681805119;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ORFKWVScGNsYP5nsezHq8UHqsDJYmFR4yB/252PQ2Mg=;
+  b=IM0RJqPsraDAEUmWAwxQL/esRMENwJV/Q9kFIZcx7zTyORdwrjyv/Nkl
+   rPPAk8HFi6Vo3rR8c8GP3ZLFRKy/57V0+asZ03pF+n/7UuFjjE/J9Gje7
+   y+VPd2EMFVRYfseRC2M8clLTCRS7mUTgXMeHww8yI/rZCdLIWB0+7ibxo
+   XFuVuAcAykPA3tIXSKf7NWVfhUa76wqJXrLOvO8HEiWsuo20tqB7WKrza
+   EeVg+x/p/AAWWJ1fI8xdP5ua6hQra2PDlRX0i8TWPy7NBixW0BKl4dr2i
+   /uPKbuDBoAE2Gb2UWEi2hnHCFm2HMEAUvydsC22jxs62jCDoSZEdGcSPR
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262936715"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="262936715"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 01:05:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="592319447"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 18 Apr 2022 01:05:17 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngMNp-0004Sr-6C;
+        Mon, 18 Apr 2022 08:05:17 +0000
+Date:   Mon, 18 Apr 2022 16:04:56 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [norov:bitmap 45/47] include/linux/bitmap.h:615:39: error: passing
+ argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast
+Message-ID: <202204181517.43MrUpzS-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418034516.521046-1-songyuanzheng@huawei.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,42 +62,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 03:45:16AM +0000, Yuanzheng Song wrote:
-> The dump_mem() will output useless content that exceed the stack
-> in __die(), because sp will exceed the top of stack when the
-> CONFIG_VMAP_STACK=y.
+tree:   https://github.com/norov/linux bitmap
+head:   45a9e3feb171ccf077979b7ff6a0c6a732cfc17b
+commit: 1a21df17d726b4f3c19a148e10d09ec632603f1c [45/47] lib: add bitmap_{from,to}_arr64
+config: powerpc-randconfig-m031-20220417 (https://download.01.org/0day-ci/archive/20220418/202204181517.43MrUpzS-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/norov/linux/commit/1a21df17d726b4f3c19a148e10d09ec632603f1c
+        git remote add norov https://github.com/norov/linux
+        git fetch --no-tags norov bitmap
+        git checkout 1a21df17d726b4f3c19a148e10d09ec632603f1c
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/platforms/powermac/ drivers/w1/masters/ lib/
 
-However, regs->ARM_sp _is_ the value of the stack pointer of the parent
-context when the exception was taken, and is the correct value to start
-printing the stack from.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-If the first few prints are unreadable, then that's useful information.
+All error/warnings (new ones prefixed by >>):
 
-> Insufficient stack space to handle exception!
-> Task stack:     [0xf09dc000..0xf09de000]
-> IRQ stack:      [0xf0800000..0xf0802000]
-> Overflow stack: [0xc210e000..0xc210f000]
-> Internal error: kernel stack overflow: 0 [#1] SMP ARM
-> Modules linked in:
-> CPU: 0 PID: 81 Comm: sh Not tainted 5.18.0-rc3 #4
-> Hardware name: ARM-Versatile Express
-> PC is at mmioset+0x20/0xa8
-> LR is at recursive_loop+0x34/0x9c
-> pc : [<c0777080>]    lr : [<c0a90c6c>]    psr: 20000013
-> sp : f09dbf48  ip : f09dbf4c  fp : 00219644
-> ...
-> Stack: (0xf09dbf48 to 0xf09de000)
-> bf40:                   ???????? ???????? ???????? ???????? ???????? ????????
-> bf60: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
-> bf80: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
-> bfa0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
-> bfc0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
-> bfe0: ???????? ???????? ???????? ???????? ???????? ???????? ???????? ????????
-> c000: 57ac6e9d 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/w1/masters/ds2490.c:8:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from lib/oid_registry.c:8:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/oid_registry.c: At top level:
+   lib/oid_registry.c:15:10: fatal error: oid_registry_data.c: No such file or directory
+      15 | #include "oid_registry_data.c"
+         |          ^~~~~~~~~~~~~~~~~~~~~
+   compilation terminated.
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from lib/crc64.c:36:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/crc64.c: At top level:
+   lib/crc64.c:39:10: fatal error: crc64table.h: No such file or directory
+      39 | #include "crc64table.h"
+         |          ^~~~~~~~~~~~~~
+   compilation terminated.
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from arch/powerpc/platforms/powermac/pic.c:15:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: error: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Werror=int-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from arch/powerpc/platforms/powermac/smp.c:21:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: error: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Werror=int-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   arch/powerpc/platforms/powermac/smp.c: At top level:
+   arch/powerpc/platforms/powermac/smp.c:416:13: error: no previous prototype for 'smp_psurge_take_timebase' [-Werror=missing-prototypes]
+     416 | void __init smp_psurge_take_timebase(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/platforms/powermac/smp.c:432:13: error: no previous prototype for 'smp_psurge_give_timebase' [-Werror=missing-prototypes]
+     432 | void __init smp_psurge_give_timebase(void)
+         |             ^~~~~~~~~~~~~~~~~~~~~~~~
+   cc1: all warnings being treated as errors
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/mm_types_task.h:14,
+                    from include/linux/mm_types.h:5,
+                    from include/linux/buildid.h:5,
+                    from include/linux/module.h:14,
+                    from drivers/w1/masters/ds1wm.c:14:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   drivers/w1/masters/ds1wm.c: In function 'ds1wm_probe':
+   drivers/w1/masters/ds1wm.c:512:12: warning: variable 'inten' set but not used [-Wunused-but-set-variable]
+     512 |         u8 inten;
+         |            ^~~~~
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from lib/ubsan.c:15:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/ubsan.c: At top level:
+   lib/ubsan.c:242:6: warning: no previous prototype for '__ubsan_handle_type_mismatch' [-Wmissing-prototypes]
+     242 | void __ubsan_handle_type_mismatch(struct type_mismatch_data *data,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from lib/radix-tree.c:12:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/radix-tree.c: At top level:
+   lib/radix-tree.c:288:6: warning: no previous prototype for 'radix_tree_node_rcu_free' [-Wmissing-prototypes]
+     288 | void radix_tree_node_rcu_free(struct rcu_head *head)
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/notifier.h:14,
+                    from include/linux/clk.h:14,
+                    from lib/vsprintf.c:22:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/vsprintf.c: In function 'va_format':
+   lib/vsprintf.c:1704:9: warning: function 'va_format' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+    1704 |         buf += vsnprintf(buf, end > buf ? end - buf : 0, va_fmt->fmt, va);
+         |         ^~~
+--
+   In file included from lib/bitmap.c:7:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/bitmap.c: In function 'bitmap_to_arr64':
+>> lib/bitmap.c:1570:30: warning: initialization discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
+    1570 |         unsigned long *end = bitmap + BITS_TO_LONGS(nbits);
+         |                              ^~~~~~
+   lib/bitmap.c:1575:43: warning: left shift count >= width of type [-Wshift-count-overflow]
+    1575 |                         *buf |= *bitmap++ << 32;
+         |                                           ^~
+--
+   In file included from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:62,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/radix-tree.h:12,
+                    from include/linux/idr.h:15,
+                    from lib/test_ida.c:9:
+   include/linux/bitmap.h: In function 'bitmap_from_u64':
+>> include/linux/bitmap.h:615:39: warning: passing argument 2 of 'bitmap_from_arr64' makes pointer from integer without a cast [-Wint-conversion]
+     615 |         return bitmap_from_arr64(dst, mask, 64);
+         |                                       ^~~~
+         |                                       |
+         |                                       u64 {aka long long unsigned int}
+   include/linux/bitmap.h:300:58: note: expected 'const u64 *' {aka 'const long long unsigned int *'} but argument is of type 'u64' {aka 'long long unsigned int'}
+     300 | void bitmap_from_arr64(unsigned long *bitmap, const u64 *buf, unsigned int nbits);
+         |                                               ~~~~~~~~~~~^~~
+   lib/test_ida.c: At top level:
+   lib/test_ida.c:16:6: warning: no previous prototype for 'ida_dump' [-Wmissing-prototypes]
+      16 | void ida_dump(struct ida *ida) { }
+         |      ^~~~~~~~
+..
 
-The above is useful information - it tells us that 0xf09dbf48 to
-0xf09dc000 fault when accessed.
+
+vim +/bitmap_from_arr64 +615 include/linux/bitmap.h
+
+   602	
+   603	/**
+   604	 * bitmap_from_u64 - Check and swap words within u64.
+   605	 *  @mask: source bitmap
+   606	 *  @dst:  destination bitmap
+   607	 *
+   608	 * In 32-bit Big Endian kernel, when using ``(u32 *)(&val)[*]``
+   609	 * to read u64 mask, we will get the wrong word.
+   610	 * That is ``(u32 *)(&val)[0]`` gets the upper 32 bits,
+   611	 * but we expect the lower 32-bits of u64.
+   612	 */
+   613	static inline void bitmap_from_u64(unsigned long *dst, u64 mask)
+   614	{
+ > 615		return bitmap_from_arr64(dst, mask, 64);
+   616	}
+   617	
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE61C505D62
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30794505D65
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:18:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346903AbiDRRTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37580 "EHLO
+        id S1346910AbiDRRU6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:20:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243899AbiDRRTs (ORCPT
+        with ESMTP id S232925AbiDRRUx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:19:48 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E905324F18;
-        Mon, 18 Apr 2022 10:17:08 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-e2fa360f6dso14832590fac.2;
-        Mon, 18 Apr 2022 10:17:08 -0700 (PDT)
+        Mon, 18 Apr 2022 13:20:53 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFC624F18
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:14 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id t184so7005674pgd.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=sender:message-id:date:mime-version:user-agent:content-language:to
-         :cc:references:from:subject:in-reply-to:content-transfer-encoding;
-        bh=Zg3Y0Niabr5mInc5x0j++5jaTsSFfuwq8dY4f1u/+7M=;
-        b=HPiklLcvKEBBdEi+y+TBmRnMf1JIihSvjWGShZBTFhx8IqyjSyPPjxzHmW9koKBqgR
-         azRqa99Ba3Fs4f1z58LxUawa0MLB9qr6Zq3PQOw149yt47qX/JMBsfdXRtZ5iE8tuayv
-         /U50RUgLF9hXreofMp0cJe+NJpSU0u3+OZj9qda11NkqjEBdiFQbwnjdcoFe/mWWGyoW
-         mBJ380RpRQvEEoByQC3LdXWKC9brJQX7+rWis5TLKb+yUkPOcJywJPGIXaQuuGqCKdQE
-         w3HHJKoNSbpeTgYgyANXSidYqy/ah2H/EJsol7+ZzQjGoA7qItu0RyIKT1XhMvdbJlyI
-         hfBQ==
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=6VccAa3X7Ms6K2SzwVUd0nrVrjIkZMldYG3f21qBakQ=;
+        b=Wu45mOMXTib78iHCt2WfxT3OuOVxcIwRYu2fpBCu2udIyfPFlb3hMAlwNmb216jy8Y
+         5Jg4h1Jin8fkEiz/z0cXM5xK7/LFaJAPAmpC/Shk6Rkf7kf8H3FzrcxupEw6uEzhlZ4n
+         xbK1PqTXijDz2ir1vKY2051TxWfLwrS2Nr9X4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:sender:message-id:date:mime-version:user-agent
-         :content-language:to:cc:references:from:subject:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=Zg3Y0Niabr5mInc5x0j++5jaTsSFfuwq8dY4f1u/+7M=;
-        b=o0ltf6mmiIA/a470E52Tv059YL4Gw57PBFovG1Ts6WnG87jX/h76jc1SJi2Pd8sLaT
-         Fz5jzsv8wodEv37C2cvah7ALzJR5Ci/5tJUBfcYV0AEo92uo8uITApfc72xnrbI2oUbR
-         HXXjYLyZtelPzY23uUL9OJJsCr1KqnwmwPsl6+QqpNX06V8K6tCAjBigZYHQpM3nNpLu
-         9JNUpq91JkJ2TLbNX3ReTAqJ/XgUTKM2+ON4fw4pGV/YYszF6M3PsuTsL8X5gXvXeNUu
-         +WbTowXtLOcPQvpO8U4rTi0W0FrS+WD1ziCVUBK/Q6YRsfo2riW/PeynZSRvDTeG/HTf
-         +lww==
-X-Gm-Message-State: AOAM532LxmjUfwAP36zILBy2fgpKoO2f0P8vFhHuf9KPNtUp+rrOq8iz
-        pYXaHtQ0nUcYwqar4zuFufY=
-X-Google-Smtp-Source: ABdhPJwcttx4d6za2ibxfAEVnOL1KQAEVp7bYKdZm2MbqbsgovdTR49vpbUrrYhZn2SVG4QV2FqpsQ==
-X-Received: by 2002:a05:6870:a2d0:b0:d9:ae66:b8e2 with SMTP id w16-20020a056870a2d000b000d9ae66b8e2mr6278442oak.7.1650302228063;
-        Mon, 18 Apr 2022 10:17:08 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c3-20020a056808138300b002f76b9a9ef6sm4253530oiw.10.2022.04.18.10.17.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 10:17:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <44a6bced-1e80-fa22-4c0c-0d07b2f8a83a@roeck-us.net>
-Date:   Mon, 18 Apr 2022 10:17:04 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Content-Language: en-US
-To:     =?UTF-8?Q?Holger_Hoffst=c3=a4tte?= <holger@applied-asynchrony.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        bh=6VccAa3X7Ms6K2SzwVUd0nrVrjIkZMldYG3f21qBakQ=;
+        b=ecEI8OZhd3dTyrb7u/OJC/ja2RGcIVAMx+IkHaysMIQYgFaeR/hdTFHOdASnw/mVeH
+         /VXEcpNKH7WmVqmocz5FAcDodx86wthgEiLlfaxoob+H6JZ5a7QzisWW6F/s5B2LJzuu
+         zNuN6/HYynAx4UH/bx9KD6l+Nmns3dwhOJY6TjWmMYS0OoSDoJuTTMMYRU2QpPOMKFJw
+         GHKiHP/v3Men9oJKUA0Dml6DmRMLFtO6OtnbtQb0lzswLzl6dU/jECuGlYhesoTl7MQo
+         8drrcofPTi10e6ogVrehjzWf6cKtgRfV/RNsQqRiJGD4MTK/BsUb6TYorqH6oA5sac4Y
+         8tmA==
+X-Gm-Message-State: AOAM53177f1q7Q5zD/iVw//ut/nS5wp3aqn9kBDv/VM0d9RRBUjc91dF
+        oKpwwDtWktM+7+pYoyjEurR7Qw==
+X-Google-Smtp-Source: ABdhPJzcbIa5UELYyDPJfDv8jCV3cTdq5XTaYyI/3HgRDpS9aMCXHdRatp1W5hnnE3AxNjy5N3DCEg==
+X-Received: by 2002:a05:6a00:b54:b0:50a:8eec:e449 with SMTP id p20-20020a056a000b5400b0050a8eece449mr1509710pfo.80.1650302293686;
+        Mon, 18 Apr 2022 10:18:13 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:94f4:f90:c59f:129b])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm12152126pfn.204.2022.04.18.10.18.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 10:18:13 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     dri-devel@lists.freedesktop.org
+Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        Philip Chen <philipchen@chromium.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Kees Cook <keescook@chromium.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>
-References: <20220418121200.312988959@linuxfoundation.org>
- <ec6408b7-14f4-fc97-3371-3f6cd9a46d24@applied-asynchrony.com>
- <8d09a73f-acbd-82dc-77f0-540d106b6e67@roeck-us.net>
- <fe7e1bac-60b0-ccab-b88e-243b41f64132@applied-asynchrony.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc1 review
-In-Reply-To: <fe7e1bac-60b0-ccab-b88e-243b41f64132@applied-asynchrony.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: [PATCH v3 0/4] drm/dp: Introduce wait_hpd_asserted() for the DP AUX bus
+Date:   Mon, 18 Apr 2022 10:17:53 -0700
+Message-Id: <20220418171757.2282651-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/18/22 09:49, Holger Hoffstätte wrote:
-> On 2022-04-18 18:27, Guenter Roeck wrote:
->> On 4/18/22 07:07, Holger Hoffstätte wrote:
->>> On 2022-04-18 14:10, Greg Kroah-Hartman wrote:
->>>> This is the start of the stable review cycle for the 5.15.35 release.
->>>> There are 189 patches in this series, all will be posted as a response
->>>> to this one.  If anyone has any issues with these being applied, please
->>>> let me know.
->>>
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c: In function hubbub31_verify_allow_pstate_change_high':
->>> drivers/gpu/drm/amd/amdgpu/../display/dc/dcn31/dcn31_hubbub.c:994:17: error: implicit declaration of function 'udelay' [-Werror=implicit-function-declaration]
->>>    994 |                 udelay(1);
->>>        |                 ^~~~~~
->>>
->>> Caused by "drm-amd-display-add-pstate-verification-and-recovery-for-dcn31.patch".
->>> Explicitly includng <linux/delay.h> in dcn31_hubbub.c fixes it.
->>>
->>> Current mainline version of dcn31_hubbub.c does not explicitly include
->>> <linux/delay.h>, so there seems to be some general inconsistency wrt.
->>> which dcn module includes what.
->>>
->>> CC'ing Nicholas Kazlauskas.
->>>
->> Should add: The problem is only seen with 32-bit (i386) builds.
-> 
-> I found this while building on my Zen2 Thinkpad, which is definitely 64 bits. :)
-> 
+This is the 2nd four patches from my RFC series ("drm/dp: Improvements
+for DP AUX channel") [1]. I've broken the series in two so we can make
+progress on the two halves separately.
 
-Interesting. I see it with i386:allmodconfig and i386:allyesconfig.
+v2 of this series changes to add wait_hpd_asserted() instead of
+is_hpd_asserted(). This allows us to move the extra delay needed for
+ps8640 into the ps8640 driver itself.
 
+The idea for this series came up during the review process of
+Sankeerth's series trying to add eDP for Qualcomm SoCs [2].
 
-Anyway, I suspect that commit 178fbb6d552f2 ("drm/amd/display:
-Implement DPIA training loop") may "fix" the problem; it adds the include
-of linux/delay.h to drivers/gpu/drm/amd/display/dc/os_types.h. I don't
-think it would be appropriate to backport this patch to v5.15.y, though.
+This _doesn't_ attempt to fix the Analogix driver. If this works out,
+ideally someone can post a patch up to do that.
 
-Guenter
+[1] https://lore.kernel.org/r/20220409023628.2104952-1-dianders@chromium.org/
+[2] https://lore.kernel.org/r/1648656179-10347-2-git-send-email-quic_sbillaka@quicinc.com/
+
+Changes in v3:
+- Don't check "hpd_asserted" boolean when unset.
+- Handle errors from gpiod_get_value_cansleep() properly.
+
+Changes in v2:
+- Change is_hpd_asserted() to wait_hpd_asserted()
+
+Douglas Anderson (4):
+  drm/dp: Add wait_hpd_asserted() callback to struct drm_dp_aux
+  drm/panel-edp: Take advantage of wait_hpd_asserted() in struct
+    drm_dp_aux
+  drm/panel: atna33xc20: Take advantage of wait_hpd_asserted() in struct
+    drm_dp_aux
+  drm/bridge: parade-ps8640: Provide wait_hpd_asserted() in struct
+    drm_dp_aux
+
+ drivers/gpu/drm/bridge/parade-ps8640.c        | 34 +++++++++------
+ drivers/gpu/drm/panel/panel-edp.c             | 33 ++++++++++-----
+ .../gpu/drm/panel/panel-samsung-atna33xc20.c  | 41 +++++++++++++------
+ include/drm/dp/drm_dp_helper.h                | 26 ++++++++++++
+ 4 files changed, 98 insertions(+), 36 deletions(-)
+
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

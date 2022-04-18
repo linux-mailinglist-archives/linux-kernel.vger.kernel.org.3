@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11CC5050B1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9315056AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238804AbiDRM1W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:27:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38462 "EHLO
+        id S243204AbiDRNkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:40:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238719AbiDRM0N (ORCPT
+        with ESMTP id S240072AbiDRNMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:26:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1990B7F5;
-        Mon, 18 Apr 2022 05:20:00 -0700 (PDT)
+        Mon, 18 Apr 2022 09:12:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC4E21251;
+        Mon, 18 Apr 2022 05:50:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3F59960EF4;
-        Mon, 18 Apr 2022 12:20:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B7EC385A7;
-        Mon, 18 Apr 2022 12:19:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 63F6F6124E;
+        Mon, 18 Apr 2022 12:50:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62722C385A1;
+        Mon, 18 Apr 2022 12:50:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284399;
-        bh=RdVROE4Lh6lnDHPlv1aR88ULzX+GC3km3JLh6bS0wgM=;
+        s=korg; t=1650286245;
+        bh=zEeKefMZYRslSx40JLS5O+6+t08QoeqPa7ZuL/Iyqg4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=v9t77ZH00aLccZNKh4fzKDJSWLacht3ntjH2jQy5atAwKz0CHo/xhcMNKjqSDmjcw
-         QsoJ0/TmJVsA9+zaL67IPp3eKyf9gIOvkJRgTeHOK6br9T/IEug7p+PWzuIV7o/PZH
-         k7ShOA7sX0p63cafXzQMvRsFtSrUmvDtzj+a+Cqw=
+        b=Pk/eRWSoUA3Wysw3T5ivxjULZYHbc6g9F/CYtBnjL8Iva+XihOiXELYxiVCgoaExV
+         reIoTxTMl0VQe5OwhwcZTpYNl9RzIwh2yOggicGIS2kNMhE4cXl537KPDOcSTDo+hU
+         r1ptq8VC5cYqFrx0jNDPqSXU+9D3VSL/kynmUAn0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Dinh Nguyen <dinguyen@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 085/219] net: ethernet: stmmac: fix altr_tse_pcs function when using a fixed-link
+        stable@vger.kernel.org, Dan Carpenter <dan.carpenter@oracle.com>,
+        Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 073/284] video: fbdev: fbcvt.c: fix printing in fb_cvt_print_name()
 Date:   Mon, 18 Apr 2022 14:10:54 +0200
-Message-Id: <20220418121208.799292404@linuxfoundation.org>
+Message-Id: <20220418121212.763660563@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,119 +54,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dinh Nguyen <dinguyen@kernel.org>
+From: Dan Carpenter <dan.carpenter@oracle.com>
 
-[ Upstream commit a6aaa00324240967272b451bfa772547bd576ee6 ]
+[ Upstream commit 78482af095abd9f4f29f1aa3fe575d25c6ae3028 ]
 
-When using a fixed-link, the altr_tse_pcs driver crashes
-due to null-pointer dereference as no phy_device is provided to
-tse_pcs_fix_mac_speed function. Fix this by adding a check for
-phy_dev before calling the tse_pcs_fix_mac_speed() function.
+This code has two bugs:
+1) "cnt" is 255 but the size of the buffer is 256 so the last byte is
+   not used.
+2) If we try to print more than 255 characters then "cnt" will be
+   negative and that will trigger a WARN() in snprintf(). The fix for
+   this is to use scnprintf() instead of snprintf().
 
-Also clean up the tse_pcs_fix_mac_speed function a bit. There is
-no need to check for splitter_base and sgmii_adapter_base
-because the driver will fail if these 2 variables are not
-derived from the device tree.
+We can re-write this code to be cleaner:
+1) Rename "offset" to "off" because that's shorter.
+2) Get rid of the "cnt" variable and just use "size - off" directly.
+3) Get rid of the "read" variable and just increment "off" directly.
 
-Fixes: fb3bbdb85989 ("net: ethernet: Add TSE PCS support to dwmac-socfpga")
-Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-Signed-off-by: David S. Miller <davem@davemloft.net>
+Fixes: 96fe6a2109db ("fbdev: Add VESA Coordinated Video Timings (CVT) support")
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c  |  8 --------
- drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h  |  4 ++++
- drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c | 13 +++++--------
- 3 files changed, 9 insertions(+), 16 deletions(-)
+ drivers/video/fbdev/core/fbcvt.c | 53 +++++++++++++-------------------
+ 1 file changed, 21 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-index cd478d2cd871..00f6d347eaf7 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.c
-@@ -57,10 +57,6 @@
- #define TSE_PCS_USE_SGMII_ENA				BIT(0)
- #define TSE_PCS_IF_USE_SGMII				0x03
- 
--#define SGMII_ADAPTER_CTRL_REG				0x00
--#define SGMII_ADAPTER_DISABLE				0x0001
--#define SGMII_ADAPTER_ENABLE				0x0000
--
- #define AUTONEGO_LINK_TIMER				20
- 
- static int tse_pcs_reset(void __iomem *base, struct tse_pcs *pcs)
-@@ -202,12 +198,8 @@ void tse_pcs_fix_mac_speed(struct tse_pcs *pcs, struct phy_device *phy_dev,
- 			   unsigned int speed)
+diff --git a/drivers/video/fbdev/core/fbcvt.c b/drivers/video/fbdev/core/fbcvt.c
+index 55d2bd0ce5c0..64843464c661 100644
+--- a/drivers/video/fbdev/core/fbcvt.c
++++ b/drivers/video/fbdev/core/fbcvt.c
+@@ -214,9 +214,11 @@ static u32 fb_cvt_aspect_ratio(struct fb_cvt_data *cvt)
+ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
  {
- 	void __iomem *tse_pcs_base = pcs->tse_pcs_base;
--	void __iomem *sgmii_adapter_base = pcs->sgmii_adapter_base;
- 	u32 val;
+ 	u32 pixcount, pixcount_mod;
+-	int cnt = 255, offset = 0, read = 0;
+-	u8 *buf = kzalloc(256, GFP_KERNEL);
++	int size = 256;
++	int off = 0;
++	u8 *buf;
  
--	writew(SGMII_ADAPTER_ENABLE,
--	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
++	buf = kzalloc(size, GFP_KERNEL);
+ 	if (!buf)
+ 		return;
+ 
+@@ -224,43 +226,30 @@ static void fb_cvt_print_name(struct fb_cvt_data *cvt)
+ 	pixcount_mod = (cvt->xres * (cvt->yres/cvt->interlace)) % 1000000;
+ 	pixcount_mod /= 1000;
+ 
+-	read = snprintf(buf+offset, cnt, "fbcvt: %dx%d@%d: CVT Name - ",
+-			cvt->xres, cvt->yres, cvt->refresh);
+-	offset += read;
+-	cnt -= read;
++	off += scnprintf(buf + off, size - off, "fbcvt: %dx%d@%d: CVT Name - ",
++			    cvt->xres, cvt->yres, cvt->refresh);
+ 
+-	if (cvt->status)
+-		snprintf(buf+offset, cnt, "Not a CVT standard - %d.%03d Mega "
+-			 "Pixel Image\n", pixcount, pixcount_mod);
+-	else {
+-		if (pixcount) {
+-			read = snprintf(buf+offset, cnt, "%d", pixcount);
+-			cnt -= read;
+-			offset += read;
+-		}
++	if (cvt->status) {
++		off += scnprintf(buf + off, size - off,
++				 "Not a CVT standard - %d.%03d Mega Pixel Image\n",
++				 pixcount, pixcount_mod);
++	} else {
++		if (pixcount)
++			off += scnprintf(buf + off, size - off, "%d", pixcount);
+ 
+-		read = snprintf(buf+offset, cnt, ".%03dM", pixcount_mod);
+-		cnt -= read;
+-		offset += read;
++		off += scnprintf(buf + off, size - off, ".%03dM", pixcount_mod);
+ 
+ 		if (cvt->aspect_ratio == 0)
+-			read = snprintf(buf+offset, cnt, "3");
++			off += scnprintf(buf + off, size - off, "3");
+ 		else if (cvt->aspect_ratio == 3)
+-			read = snprintf(buf+offset, cnt, "4");
++			off += scnprintf(buf + off, size - off, "4");
+ 		else if (cvt->aspect_ratio == 1 || cvt->aspect_ratio == 4)
+-			read = snprintf(buf+offset, cnt, "9");
++			off += scnprintf(buf + off, size - off, "9");
+ 		else if (cvt->aspect_ratio == 2)
+-			read = snprintf(buf+offset, cnt, "A");
+-		else
+-			read = 0;
+-		cnt -= read;
+-		offset += read;
 -
- 	pcs->autoneg = phy_dev->autoneg;
- 
- 	if (phy_dev->autoneg == AUTONEG_ENABLE) {
-diff --git a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-index 442812c0a4bd..694ac25ef426 100644
---- a/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/altr_tse_pcs.h
-@@ -10,6 +10,10 @@
- #include <linux/phy.h>
- #include <linux/timer.h>
- 
-+#define SGMII_ADAPTER_CTRL_REG		0x00
-+#define SGMII_ADAPTER_ENABLE		0x0000
-+#define SGMII_ADAPTER_DISABLE		0x0001
+-		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK) {
+-			read = snprintf(buf+offset, cnt, "-R");
+-			cnt -= read;
+-			offset += read;
+-		}
++			off += scnprintf(buf + off, size - off, "A");
 +
- struct tse_pcs {
- 	struct device *dev;
- 	void __iomem *tse_pcs_base;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-index b7c2579c963b..ac9e6c7a33b5 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-socfpga.c
-@@ -18,9 +18,6 @@
- 
- #include "altr_tse_pcs.h"
- 
--#define SGMII_ADAPTER_CTRL_REG                          0x00
--#define SGMII_ADAPTER_DISABLE                           0x0001
--
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_GMII_MII 0x0
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RGMII 0x1
- #define SYSMGR_EMACGRP_CTRL_PHYSEL_ENUM_RMII 0x2
-@@ -62,16 +59,14 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- {
- 	struct socfpga_dwmac *dwmac = (struct socfpga_dwmac *)priv;
- 	void __iomem *splitter_base = dwmac->splitter_base;
--	void __iomem *tse_pcs_base = dwmac->pcs.tse_pcs_base;
- 	void __iomem *sgmii_adapter_base = dwmac->pcs.sgmii_adapter_base;
- 	struct device *dev = dwmac->dev;
- 	struct net_device *ndev = dev_get_drvdata(dev);
- 	struct phy_device *phy_dev = ndev->phydev;
- 	u32 val;
- 
--	if ((tse_pcs_base) && (sgmii_adapter_base))
--		writew(SGMII_ADAPTER_DISABLE,
--		       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	writew(SGMII_ADAPTER_DISABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
- 
- 	if (splitter_base) {
- 		val = readl(splitter_base + EMAC_SPLITTER_CTRL_REG);
-@@ -93,7 +88,9 @@ static void socfpga_dwmac_fix_mac_speed(void *priv, unsigned int speed)
- 		writel(val, splitter_base + EMAC_SPLITTER_CTRL_REG);
++		if (cvt->flags & FB_CVT_FLAG_REDUCED_BLANK)
++			off += scnprintf(buf + off, size - off, "-R");
  	}
  
--	if (tse_pcs_base && sgmii_adapter_base)
-+	writew(SGMII_ADAPTER_ENABLE,
-+	       sgmii_adapter_base + SGMII_ADAPTER_CTRL_REG);
-+	if (phy_dev)
- 		tse_pcs_fix_mac_speed(&dwmac->pcs, phy_dev, speed);
- }
- 
+ 	printk(KERN_INFO "%s\n", buf);
 -- 
-2.35.1
+2.34.1
 
 
 

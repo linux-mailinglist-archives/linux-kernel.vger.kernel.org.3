@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDB45057BA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68C2D5054AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245449AbiDRNxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41650 "EHLO
+        id S241813AbiDRNIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:08:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244800AbiDRNaz (ORCPT
+        with ESMTP id S240360AbiDRMzi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55BC01FCF1;
-        Mon, 18 Apr 2022 05:55:31 -0700 (PDT)
+        Mon, 18 Apr 2022 08:55:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F25CEC74;
+        Mon, 18 Apr 2022 05:37:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1733AB80E4B;
-        Mon, 18 Apr 2022 12:55:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53593C385A7;
-        Mon, 18 Apr 2022 12:55:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F5F1611AD;
+        Mon, 18 Apr 2022 12:37:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996D6C385BA;
+        Mon, 18 Apr 2022 12:37:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286528;
-        bh=87Dy8mAAeekj4Khq5ieyQ/YtECtV+i9VCgc9SA9o5EY=;
+        s=korg; t=1650285446;
+        bh=kjdzpzAkNacLqUU5l4Mkqd7ZNHLTMKmnNuM76nBBmnE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=q6DwhAbVbY9fKM7n6yLSnICHUZQCpXVRfMyBn47gph0IxYgcaPR7O81U84Vz0WQ9l
-         cP6EktSsE0REaPmqauKZ8j/c7ui5g6HPlbpIqXhNprjWF3lXeENrry2QZrh3t8P3DN
-         xO4Hh2gcf5lpAkPLiCxTXtwYTO1BkOW45DMrMX3Q=
+        b=SdVuVAq/uOtQHca5xm5PlUyS4hcokQwL7nrKBUGhCT1P9+xY0yuwiy0Q6sndXCzh5
+         Lt0P/7Xofy68MaL+AHOsG5EgN/q6UO9BvMCnUgCTRu1PIXlqfpzqOASFOHyIrNNq5Z
+         dTZiVUiFOMTRDgjzmp1sBOd9mF5qdNOOr8qOdtWg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Mark Brown <broonie@kernel.org>,
+        stable@vger.kernel.org,
+        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
+        Johannes Berg <johannes.berg@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 162/284] spi: tegra20: Use of_device_get_match_data()
+Subject: [PATCH 5.10 021/105] cfg80211: hold bss_lock while updating nontrans_list
 Date:   Mon, 18 Apr 2022 14:12:23 +0200
-Message-Id: <20220418121216.351018227@linuxfoundation.org>
+Message-Id: <20220418121146.704752404@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Minghao Chi <chi.minghao@zte.com.cn>
+From: Rameshkumar Sundaram <quic_ramess@quicinc.com>
 
-[ Upstream commit c9839acfcbe20ce43d363c2a9d0772472d9921c0 ]
+[ Upstream commit a5199b5626cd6913cf8776a835bc63d40e0686ad ]
 
-Use of_device_get_match_data() to simplify the code.
+Synchronize additions to nontrans_list of transmitting BSS with
+bss_lock to avoid races. Also when cfg80211_add_nontrans_list() fails
+__cfg80211_unlink_bss() needs bss_lock to be held (has lockdep assert
+on bss_lock). So protect the whole block with bss_lock to avoid
+races and warnings. Found during code review.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-Link: https://lore.kernel.org/r/20220315023138.2118293-1-chi.minghao@zte.com.cn
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
+Signed-off-by: Rameshkumar Sundaram <quic_ramess@quicinc.com>
+Link: https://lore.kernel.org/r/1649668071-9370-1-git-send-email-quic_ramess@quicinc.com
+Signed-off-by: Johannes Berg <johannes.berg@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/spi/spi-tegra20-slink.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ net/wireless/scan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/spi/spi-tegra20-slink.c b/drivers/spi/spi-tegra20-slink.c
-index 1548f7b738c1..b520525df246 100644
---- a/drivers/spi/spi-tegra20-slink.c
-+++ b/drivers/spi/spi-tegra20-slink.c
-@@ -1016,14 +1016,8 @@ static int tegra_slink_probe(struct platform_device *pdev)
- 	struct resource		*r;
- 	int ret, spi_irq;
- 	const struct tegra_slink_chip_data *cdata = NULL;
--	const struct of_device_id *match;
+diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+index c1b2655682a8..6dc9b7e22b71 100644
+--- a/net/wireless/scan.c
++++ b/net/wireless/scan.c
+@@ -1968,11 +1968,13 @@ cfg80211_inform_single_bss_data(struct wiphy *wiphy,
+ 		/* this is a nontransmitting bss, we need to add it to
+ 		 * transmitting bss' list if it is not there
+ 		 */
++		spin_lock_bh(&rdev->bss_lock);
+ 		if (cfg80211_add_nontrans_list(non_tx_data->tx_bss,
+ 					       &res->pub)) {
+ 			if (__cfg80211_unlink_bss(rdev, res))
+ 				rdev->bss_generation++;
+ 		}
++		spin_unlock_bh(&rdev->bss_lock);
+ 	}
  
--	match = of_match_device(tegra_slink_of_match, &pdev->dev);
--	if (!match) {
--		dev_err(&pdev->dev, "Error: No device match found\n");
--		return -ENODEV;
--	}
--	cdata = match->data;
-+	cdata = of_device_get_match_data(&pdev->dev);
- 
- 	master = spi_alloc_master(&pdev->dev, sizeof(*tspi));
- 	if (!master) {
+ 	trace_cfg80211_return_bss(&res->pub);
 -- 
-2.34.1
+2.35.1
 
 
 

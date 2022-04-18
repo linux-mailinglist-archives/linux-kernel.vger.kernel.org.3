@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24775056CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A422550527B
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:44:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243126AbiDRNkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
+        id S236296AbiDRMpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241627AbiDRNMn (ORCPT
+        with ESMTP id S239540AbiDRMhu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:12:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7E1A2DD42;
-        Mon, 18 Apr 2022 05:50:51 -0700 (PDT)
+        Mon, 18 Apr 2022 08:37:50 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3289422B32;
+        Mon, 18 Apr 2022 05:28:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B1D2B80EE9;
-        Mon, 18 Apr 2022 12:50:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 746E9C385CD;
-        Mon, 18 Apr 2022 12:50:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 6BA74CE106E;
+        Mon, 18 Apr 2022 12:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A9A7C385A1;
+        Mon, 18 Apr 2022 12:28:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286248;
-        bh=p0MbWAnzvwt3dTYYBrs6U+4qEhiG9yYQrO6O9b1qWTs=;
+        s=korg; t=1650284880;
+        bh=1+mHDbx/2APMySnQ2Nnve3ZYUelcYmW+MeHsO0mit48=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uO8plcTcW9oCE2UzfQkisrDpPfylrixmL8VIGMkORPuL4WRFloJuT2QRgat3CqKRq
-         XL6h8j/qApAGJZoX5W5C08jkydRmYuozaJGfzXvuKeiWSh4RZ+Ob7RRseML/ckTrNC
-         6gb8thkvtbujMaqg7jft300Y52pm0nxNNNCiViSw=
+        b=b7pYnf7skrn5LaA3PaZ1r3gVFmVM+PXWaaN1wyWiEkGZyr4cgBzsA2XVodmQcFLUV
+         GTkqm/Jfuaz5NxXWp9htWi9CZ161PmHd9EQ6vdXgXuw6XRSI2RHpsp7LW/t79tk1R1
+         PipNnsX/cKoTclaDQRYSsRzsg7h5ve0dvM11Rw9A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Pavel Kubelun <be.dissent@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Christian Lamparter <chunkeey@gmail.com>
-Subject: [PATCH 4.14 074/284] ARM: dts: qcom: ipq4019: fix sleep clock
-Date:   Mon, 18 Apr 2022 14:10:55 +0200
-Message-Id: <20220418121212.791442411@linuxfoundation.org>
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 036/189] ALSA: galaxy: Fix the missing snd_card_free() call at probe error
+Date:   Mon, 18 Apr 2022 14:10:56 +0200
+Message-Id: <20220418121201.539623125@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,42 +53,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Kubelun <be.dissent@gmail.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 3d7e7980993d2c1ae42d3d314040fc2de6a9c45f ]
+commit 10b1881a97be240126891cb384bd3bc1869f52d8 upstream.
 
-It seems like sleep_clk was copied from ipq806x.
-Fix ipq40xx sleep_clk to the value QSDK defines.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-Link: https://source.codeaurora.org/quic/qsdk/oss/kernel/linux-msm/commit/?id=d92ec59973484acc86dd24b67f10f8911b4b4b7d
-Link: https://patchwork.kernel.org/comment/22721613/
-Fixes: bec6ba4cdf2a ("qcom: ipq4019: Add basic board/dts support for IPQ4019 SoC")
-Suggested-by: Bjorn Andersson <bjorn.andersson@linaro.org> (clock-output-names)
-Signed-off-by: Pavel Kubelun <be.dissent@gmail.com>
-Signed-off-by: Christian Lamparter <chunkeey@gmail.com> (removed clock rename)
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-Link: https://lore.kernel.org/r/20211220170352.34591-1-chunkeey@gmail.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
+
+Fixes: 35a245ec0619 ("ALSA: galaxy: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-2-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm/boot/dts/qcom-ipq4019.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ sound/isa/galaxy/galaxy.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/qcom-ipq4019.dtsi b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-index 19156cbb6003..ed218425a059 100644
---- a/arch/arm/boot/dts/qcom-ipq4019.dtsi
-+++ b/arch/arm/boot/dts/qcom-ipq4019.dtsi
-@@ -93,7 +93,8 @@
- 	clocks {
- 		sleep_clk: sleep_clk {
- 			compatible = "fixed-clock";
--			clock-frequency = <32768>;
-+			clock-frequency = <32000>;
-+			clock-output-names = "gcc_sleep_clk_src";
- 			#clock-cells = <0>;
- 		};
+diff --git a/sound/isa/galaxy/galaxy.c b/sound/isa/galaxy/galaxy.c
+index ea001c80149d..3164eb8510fa 100644
+--- a/sound/isa/galaxy/galaxy.c
++++ b/sound/isa/galaxy/galaxy.c
+@@ -478,7 +478,7 @@ static void snd_galaxy_free(struct snd_card *card)
+ 		galaxy_set_config(galaxy, galaxy->config);
+ }
  
+-static int snd_galaxy_probe(struct device *dev, unsigned int n)
++static int __snd_galaxy_probe(struct device *dev, unsigned int n)
+ {
+ 	struct snd_galaxy *galaxy;
+ 	struct snd_wss *chip;
+@@ -598,6 +598,11 @@ static int snd_galaxy_probe(struct device *dev, unsigned int n)
+ 	return 0;
+ }
+ 
++static int snd_galaxy_probe(struct device *dev, unsigned int n)
++{
++	return snd_card_free_on_error(dev, __snd_galaxy_probe(dev, n));
++}
++
+ static struct isa_driver snd_galaxy_driver = {
+ 	.match		= snd_galaxy_match,
+ 	.probe		= snd_galaxy_probe,
 -- 
-2.34.1
+2.35.2
 
 
 

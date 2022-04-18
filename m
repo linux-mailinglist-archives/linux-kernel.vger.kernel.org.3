@@ -2,95 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE57A504F83
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:45:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B929504F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236845AbiDRLr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:47:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50574 "EHLO
+        id S236862AbiDRLsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233053AbiDRLr0 (ORCPT
+        with ESMTP id S236879AbiDRLrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:47:26 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 906B8263C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:44:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650282288; x=1681818288;
-  h=message-id:date:mime-version:cc:to:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=ed9XtiWvuduH3tePyFDVZz4+lZ73C5IN2pEFYdP+YKI=;
-  b=aw2Mjak+93FclCcIlf9i+OqhUpfmbIf6LjOV46n7HlmdtYKeBgR7Fr9r
-   60LN4nRizwPhYgbSBZgwSq+bx2m/aVs6VmxVAMsTWxP5h9GGNxNbpz5ks
-   3nitAuArXAwhmituSAobqgS1Q/2rtdlcMEwe2Yfql+5AU9w965a4QP0/M
-   BJtb5N1HExkEUgpFt40pOFrtME4VQen4oO/A4/Qx1R/1Mt5AyuPwt7zTe
-   Gwmec3B0+fU8CIlrVNjfVNdliPD7LDHkI1X4pyVgQYBxBibvx8t1hHqO9
-   o+0Vf2c1obq9oipg7KwiwS+c+uzVtDgWxC0l/1TwFttXA2TI3eF8I625v
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="262962853"
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="262962853"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 04:44:48 -0700
-X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
-   d="scan'208";a="575541874"
-Received: from blu2-mobl3.ccr.corp.intel.com (HELO [10.254.208.231]) ([10.254.208.231])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 04:44:46 -0700
-Message-ID: <46f51f30-28e9-4b91-acd5-1df43c1428d6@linux.intel.com>
-Date:   Mon, 18 Apr 2022 19:44:44 +0800
+        Mon, 18 Apr 2022 07:47:52 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF04326ED;
+        Mon, 18 Apr 2022 04:45:13 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id v77so25039995ybi.12;
+        Mon, 18 Apr 2022 04:45:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=3QYWuVtVlC10CN/U+uRjoO+2nquc2+/bWq8BF83jGkg=;
+        b=jfQaZilDsjqziuXCg9rlesjzPfFiG3oIMyOIqq5lw8qAztwHtpWY4jtAArkSDne/hj
+         WHMReGX6BfrGLoQnV8WR5NKGH+wYTMucY49FMaoybLsVogUeG5UHNJB90L26is73oQ2a
+         HLEfKNtE1MPtZ0s2VfikMrbz7fcrUP/pZ7JNAwnlEcFoK33Mj/9Y7e/2CjMrd7ZeuZgy
+         pgf6YvEg8sa9VGkmZsUP1Tx72gvCoriVLtdKucG2AtMK1WjpswZgBVERLVq1qETCw6xu
+         aA9NlwqWySqcw07791GL/QEQWtHumXnMAHyu7bIBiQyNxqop33xJp5PvM1nnNFmAy6jK
+         RIzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=3QYWuVtVlC10CN/U+uRjoO+2nquc2+/bWq8BF83jGkg=;
+        b=k+KBrApq9ITCj/owHBTmsgdSupHP5JlZRz1A9odfwC/R6o/C/XmZGP1/dITPylZUAA
+         yYbT1hN40IGlJTF6BsKeG00LisnYpz9v5n+YZMHdQvVdnalmp15qV3plKFYERlL2bA13
+         NV1h1kukaOYcaNB0q8ZCzuBmS9OuSbnHHbkZzsz55Ij4lUAcHov50abIVvn0kjP+Me/t
+         mqG8SuV9tHxCCmUTO5JTa8qbIJbgrvzzHjPtIWiGtNMUW8nZ3ZN+E85T1Ai5F+9jnL+s
+         BvcJfHBvBE8x29Q9hZlMGmSV9vdy66M1tKFRbgoR4+YU5QXB/7ZJ+Ttm+AJouBOR+BfV
+         BoYw==
+X-Gm-Message-State: AOAM530IgADmSwhb78/mF2/TkMppWpLt93Sm70BM30i+lUdLw4QvXxKT
+        dJMEbyyR1byZu56yuo5Hhlt1L2PGJR6znwyJbXBHXjL+5pQ=
+X-Google-Smtp-Source: ABdhPJw+jWAcmcfFZ237nXEhtG2xq0d8v20HKmocJKhYOlQFPTgC1WBVREyz/ckqjsxTm4JfzpWxDClmhqtXY0reNTw=
+X-Received: by 2002:a05:6902:1249:b0:644:d8bb:e741 with SMTP id
+ t9-20020a056902124900b00644d8bbe741mr7161250ybu.585.1650282313075; Mon, 18
+ Apr 2022 04:45:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Cc:     baolu.lu@linux.intel.com,
-        "iommu@lists.linux-foundation.org" <iommu@lists.linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Pan, Jacob jun" <jacob.jun.pan@intel.com>,
-        "Raj, Ashok" <ashok.raj@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-References: <20220416123049.879969-1-baolu.lu@linux.intel.com>
- <20220416123049.879969-4-baolu.lu@linux.intel.com>
- <BN9PR11MB5276BC4D5F9B133C84630CBA8CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-Subject: Re: [PATCH 3/3] iommu/vt-d: Size Page Request Queue to avoid overflow
- condition
-In-Reply-To: <BN9PR11MB5276BC4D5F9B133C84630CBA8CF39@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220416100502.627289-1-pgwipeout@gmail.com> <20220416100502.627289-4-pgwipeout@gmail.com>
+ <eadc4422-15bb-0b46-8235-db6e160e8d32@collabora.com> <CAMdYzYq=nQhwY_4+Y=PM9do_Dcrg1pD-jeD=q36D48ks=WDVgw@mail.gmail.com>
+ <a8bb3ef6-8f37-709f-adfe-3608e5c1e11f@collabora.com>
+In-Reply-To: <a8bb3ef6-8f37-709f-adfe-3608e5c1e11f@collabora.com>
+From:   Peter Geis <pgwipeout@gmail.com>
+Date:   Mon, 18 Apr 2022 07:45:02 -0400
+Message-ID: <CAMdYzYrwGyxRnB8YU9vvgqXsKhi9fZ1a7UJhixCbC5mGm9aP8Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] arm64: dts: rockchip: add rk3568 pcie2x1 controller
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        PCI <linux-pci@vger.kernel.org>,
+        devicetree <devicetree@vger.kernel.org>,
+        arm-mail-list <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/4/18 15:00, Tian, Kevin wrote:
->> From: Lu Baolu<baolu.lu@linux.intel.com>
->> Sent: Saturday, April 16, 2022 8:31 PM
->>
->> PRQ overflow may cause I/O throughput congestion, resulting in unnecessary
->> degradation of IO performance. Appropriately increasing the length of PRQ
->> can greatly reduce the occurrence of PRQ overflow. The count of maximum
->> page requests that can be generated in parallel by a PCIe device is
->> statically defined in the Outstanding Page Request Capacity field of the
->> PCIe ATS configure space.
->>
->> The new lenght of PRQ is calculated by summing up the value of Outstanding
->> Page Request Capacity register across all devices where Page Requests are
->> supported on the real PR-capable platfrom (Intel Sapphire Rapids). The
->> result is round to the nearest higher power of 2.
-> The actual requirement is usage and platform specific. What about
-> doubling the default size and also provide an option for admin to
-> tune?
+On Sun, Apr 17, 2022 at 6:23 PM Dmitry Osipenko
+<dmitry.osipenko@collabora.com> wrote:
+>
+> On 4/16/22 13:17, Peter Geis wrote:
+> > On Sat, Apr 16, 2022 at 6:08 AM Dmitry Osipenko
+> > <dmitry.osipenko@collabora.com> wrote:
+> >>
+> >> Hi Peter,
+> >>
+> >> On 4/16/22 13:05, Peter Geis wrote:
+> >>> +     pcie2x1: pcie@fe260000 {
+> >>> +             compatible = "rockchip,rk3568-pcie";
+> >>> +             #address-cells = <3>;
+> >>> +             #size-cells = <2>;
+> >>> +             bus-range = <0x0 0xf>;
+> >>> +             assigned-clocks = <&cru ACLK_PCIE20_MST>, <&cru ACLK_PCIE20_SLV>,
+> >>> +                      <&cru ACLK_PCIE20_DBI>, <&cru PCLK_PCIE20>,
+> >>> +                      <&cru CLK_PCIE20_AUX_NDFT>;
+> >>
+> >> Why these assigned-clocks are needed? I don't see anything assigned in
+> >> this patchset.
+> >
+> > Ah, those are remnants of early bringup when performance wasn't good
+> > and I was manually setting clock rates.
+>
+> If it's not needed, should it be removed then? Otherwise it looks like
+> something is missing in the DT in regards to the assigned clocks.
 
-I also have this in my list to provide an opt-in interface for user. But
-I don't want to include it in this series as this is only for small
-tuning. The opt-in interface looks more like a new feature. :-)
-
-Best regards,
-baolu
+Yes, it has been removed from the V7.
+Thanks!

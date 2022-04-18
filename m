@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1794C5050AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:24:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 523335050BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232416AbiDRM1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33520 "EHLO
+        id S239199AbiDRM1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233937AbiDRM0M (ORCPT
+        with ESMTP id S238788AbiDRM0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:26:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A60766A;
-        Mon, 18 Apr 2022 05:19:56 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id r13so26554340ejd.5;
-        Mon, 18 Apr 2022 05:19:56 -0700 (PDT)
+        Mon, 18 Apr 2022 08:26:22 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB10712609
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:20:26 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id lc2so26482055ejb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=bPi1M4TpdIF35hZ6pGwoTFeZJUCgotNcWVS0tlq5Gy0=;
-        b=mWBRchCaMLmzqclRE3NU5WjLz7A7l7uKIZbpLiuae6iFeHIgrmuXM7rl1R3GlpYFEM
-         ///hkpMzhtANLw7rxbrSgN08RvqMYAZ3sjLUZInh/y0drfYcYI/Bs9zjbTHtMxa5X+aN
-         1WxXLWR0nhwUayIePh+RunzOtBllTHgbA1IkRq9ME8fQjdqNwte3L8LMCGaPVGwVoMNq
-         +4bxQfbHNz/YyGJ2FZ6c1olp+ainFaMRcC0M2coEUONZJIoujnwZX4jBr2RfWGLt0vrA
-         9gq2+vC+FjaEdsBcUO8VJKz30bX8hU5crDBJ8OjlXg5h4Ko8y3/+MiGFYgL6V6HZuI9c
-         rzdw==
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
+        b=EROJPtVhkTWMC362VRxsn28ErAWXjxRwSGzBrXd/ILtzWuytV08hvlbx49encLOOqc
+         yeMw9yc7SKrF1+IquHFumnC5nzv8sCjiS/9h3Ie6onCCBYKAmaLf0suDnplCv4q3oEDF
+         knghEFqpRQpYEfE3tDtNwMu2obylGzqhbXAdLhvCLWIQKLnEXd8Sw7hYct4HM0iizOxM
+         KJxVev9k4sh5XJ89IrjxtG8nz5L8AoKnxF88C74xHknJiavH0KHq7Pxu0mOPH9XvZWze
+         PiVvIKdjNyMdM4oEgTDgrWs57aI2jc86pzv2U3KyxgYxeQX5iqZEIrJxIMY3Y4NeUc0Y
+         leDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=bPi1M4TpdIF35hZ6pGwoTFeZJUCgotNcWVS0tlq5Gy0=;
-        b=uYUOw6SKlR62m5VDEk5pWyGasyzO+uC8gibSSWVarCujDjpXlyBKciiV/JpPD6MYdN
-         0DUHRH9g1w1dO2BzkhsiZFrK/GYa0KYtGyVb/7cCKFPk70bDJt5jeEF8pYrMvolGgUxY
-         0MOYVHgz5Ae5UQsMTty3n5Mg+bVlPqfPacH6O7EgOtUUMtj93rU+i/Egycpf0HfqA99N
-         uv+9XCSsFy09N/mdABZrKc9Vvi2ABm6S4DVFSXKYx8ufWOZSDfcZbrs9kvRQEE+qS920
-         zOyzjQ7laTANOOcI8ZbgS941p0sDcAl9JStbcM/vis2gb+TFs9EjC89k3CjOC39gBEF9
-         Ny3Q==
-X-Gm-Message-State: AOAM532v4VCKifsuVZhG5WmwQC7ynI0TIECAWWdTQ+ohX52RV4xEU6v5
-        sgz/OItfCd+7hGRbA87bZadezwdhgZVKWsdLIjeo0I5Dc1WH6w==
-X-Google-Smtp-Source: ABdhPJyPD6AIcVEj5ia6EDgEOLP4lzMXX7ielqUjla1STAukjxOqTZDEkgeuUuCFmmwrz2TlQNzd6QJLK/SqD3RDRTQ=
-X-Received: by 2002:a17:906:1cd1:b0:6ec:c59:6a1d with SMTP id
- i17-20020a1709061cd100b006ec0c596a1dmr8086964ejh.77.1650284395249; Mon, 18
- Apr 2022 05:19:55 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=IrspqwoC0i8xWBSDGv/e81WYq/G3Gaial55KaXcpMB4=;
+        b=vX67QmYTS7HZWsvw4mSjUK8uqaRzsyKwDUT8WUjVVPPxVIFm+8CzZF3jipVsOdHeCm
+         HABaOQ6hXzDyug1iYn6ALCL983E86Q6QZlCHT3GkpcbywSGPQVvMv/4eE4+ndsXWzmnl
+         xni2pYqGUj+9GxZiHsIREt7APPvIv297CN2aZ3h6BD5/YioU56Ff4hzwNpZELmhBOLfi
+         P65+FrZKVyU1HKsAxIcQjjua7lRGr3OUBYKZk6GmHaconyemCDukWzc0qLq9X+uEAxja
+         5zBrP38KHNB3rNSd7FjKwXPPQy/8Dgzw68XTEN1I0vLPwVhkXeA+tSbExtKTdUkBoyUN
+         nhNA==
+X-Gm-Message-State: AOAM532jqvkRSFdMnp23otN3Xj1lE/9RV0SPCA1+VbyMAURwVB19bGpp
+        bdKzt9I4KvjfmyPmYjrjTmo+Ug==
+X-Google-Smtp-Source: ABdhPJzoDxvcNzmEcyeGaDq97ow/WOeOSzYmXAahpLo2Kg1wrT2tHDDGSBII00dY0Cob+6Pqx4rvHQ==
+X-Received: by 2002:a17:907:7e9f:b0:6e8:92eb:4171 with SMTP id qb31-20020a1709077e9f00b006e892eb4171mr8636712ejc.53.1650284425490;
+        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170906774e00b006d5b915f27dsm4538016ejn.169.2022.04.18.05.20.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 05:20:25 -0700 (PDT)
+Message-ID: <60e50c11-118d-431f-7120-95fcbb53eeb5@linaro.org>
+Date:   Mon, 18 Apr 2022 14:20:24 +0200
 MIME-Version: 1.0
-References: <alpine.DEB.2.21.2204161848030.9383@angie.orcam.me.uk> <alpine.DEB.2.21.2204162156340.9383@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2204162156340.9383@angie.orcam.me.uk>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:19:19 +0300
-Message-ID: <CAHp75VccGqH-peGQHnM+guu8KfkGo6-R3wwGUPKRWKqQZid7AA@mail.gmail.com>
-Subject: Re: [PATCH v4 4/5] serial: 8250: Also set sticky MCR bits in console restoration
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 3/5] arm64: dts: nuvoton: Add initial support for
+ MA35D1
+Content-Language: en-US
+To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, olof@lixom.net, will@kernel.org, soc@kernel.org,
+        cfli0@nuvoton.com
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-4-ychuang3@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220418082738.11301-4-ychuang3@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 2:02 AM Maciej W. Rozycki <macro@orcam.me.uk> wrote:
->
-> Sticky MCR bits are lost in console restoration if console suspending
-> has been disabled.  This currently affects the AFE bit, which works in
-> combination with RTS which we set, so we want to make sure the UART
-> retains control of its FIFO where previously requested.  Also specific
-> drivers may need other bits in the future.
+On 18/04/2022 10:27, Jacky Huang wrote:
+> Add the initial device tree files for Nuvoton MA35D1 Soc.
+> 
 
-Since it's a fix it should be moved to the beginning of the series.
+(...)
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> +	gic: interrupt-controller@50800000 {
 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: 4516d50aabed ("serial: 8250: Use canary to restart console after suspend")
-> Cc: stable@vger.kernel.org # v4.0+
-> ---
-> New change in v4, factored out from 5/5.
-> ---
->  drivers/tty/serial/8250/8250_port.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> linux-serial-8250-mcr-restore.diff
-> Index: linux-macro/drivers/tty/serial/8250/8250_port.c
-> ===================================================================
-> --- linux-macro.orig/drivers/tty/serial/8250/8250_port.c
-> +++ linux-macro/drivers/tty/serial/8250/8250_port.c
-> @@ -3308,7 +3308,7 @@ static void serial8250_console_restore(s
->
->         serial8250_set_divisor(port, baud, quot, frac);
->         serial_port_out(port, UART_LCR, up->lcr);
-> -       serial8250_out_MCR(up, UART_MCR_DTR | UART_MCR_RTS);
-> +       serial8250_out_MCR(up, up->mcr | UART_MCR_DTR | UART_MCR_RTS);
->  }
->
->  /*
+The unit address does not match first reg property. Don't you have
+warnings with this?
 
+> +		compatible = "arm,gic-400";
+> +		#interrupt-cells = <3>;
+> +		interrupt-parent = <&gic>;
+> +		interrupt-controller;
+> +		reg = <0x0 0x50801000 0x0 0x1000>,
+> +		      <0x0 0x50802000 0x0 0x2000>,
+> +		      <0x0 0x50804000 0x0 0x2000>,
+> +		      <0x0 0x50806000 0x0 0x2000>;
+> +		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_RAW(0x13) |
+> +			      IRQ_TYPE_LEVEL_HIGH)>;
+> +	};
+> +};
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof

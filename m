@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028965055E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EC05054F4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244039AbiDRN3z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:29:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40976 "EHLO
+        id S243169AbiDRNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241069AbiDRNF2 (ORCPT
+        with ESMTP id S236411AbiDRNAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:05:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E641340E6;
-        Mon, 18 Apr 2022 05:46:24 -0700 (PDT)
+        Mon, 18 Apr 2022 09:00:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2F231DDE;
+        Mon, 18 Apr 2022 05:42:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1E697B80E44;
-        Mon, 18 Apr 2022 12:46:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EDD6C385A1;
-        Mon, 18 Apr 2022 12:46:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA72F60FB6;
+        Mon, 18 Apr 2022 12:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A54C385A1;
+        Mon, 18 Apr 2022 12:42:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285981;
-        bh=GEUZwU1+OofwnIqaqCFJ4mK78qVbnAHx4M3E9BKheew=;
+        s=korg; t=1650285723;
+        bh=Hsx+XDhKuSQxY+nQbguScR7itzsktnoERT/oXIEtSj0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LSbOdhr/wEJaaZtpAY+oX3QkR1OMZJTGJ8zgOd1RaY0ju4dwKkTS7nK7fqWWB4c7C
-         vOozQkmQfp9yN0G9+2uVGlEuDcOscZ81puMlFJrtCQXeBq66cGTP+yicmVIp21SoWo
-         O6PtmCAfMQPxJVmoSP9CihgOBE+ksHJUysdofAFc=
+        b=buNbcGP4gT6eXJ8IwvgqdGSrn4kvNjDT2iYw6eSY+1peONvGHvq6KtOAYbV/QmYK2
+         o/RLrPKznnTLhGlJ387mgTae1s+a6nU1nZjHhRL2JSh4OGQ0iXYSVASPWIQD72XcnS
+         KvzTc99gn7DR1KJGFsrNir7pwq+h8QuIXlAGvXHY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Guillaume Nault <gnault@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.19 03/32] veth: Ensure eth header is in skbs linear part
-Date:   Mon, 18 Apr 2022 14:13:43 +0200
-Message-Id: <20220418121127.228153394@linuxfoundation.org>
+        Duoming Zhou <duoming@zju.edu.cn>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ovidiu Panait <ovidiu.panait@windriver.com>
+Subject: [PATCH 5.10 102/105] ax25: fix UAF bug in ax25_send_control()
+Date:   Mon, 18 Apr 2022 14:13:44 +0200
+Message-Id: <20220418121149.534449844@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
-References: <20220418121127.127656835@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,72 +55,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guillaume Nault <gnault@redhat.com>
+From: Duoming Zhou <duoming@zju.edu.cn>
 
-[ Upstream commit 726e2c5929de841fdcef4e2bf995680688ae1b87 ]
+commit 5352a761308397a0e6250fdc629bb3f615b94747 upstream.
 
-After feeding a decapsulated packet to a veth device with act_mirred,
-skb_headlen() may be 0. But veth_xmit() calls __dev_forward_skb(),
-which expects at least ETH_HLEN byte of linear data (as
-__dev_forward_skb2() calls eth_type_trans(), which pulls ETH_HLEN bytes
-unconditionally).
+There are UAF bugs in ax25_send_control(), when we call ax25_release()
+to deallocate ax25_dev. The possible race condition is shown below:
 
-Use pskb_may_pull() to ensure veth_xmit() respects this constraint.
+      (Thread 1)              |     (Thread 2)
+ax25_dev_device_up() //(1)    |
+                              | ax25_kill_by_device()
+ax25_bind()          //(2)    |
+ax25_connect()                | ...
+ ax25->state = AX25_STATE_1   |
+ ...                          | ax25_dev_device_down() //(3)
 
-kernel BUG at include/linux/skbuff.h:2328!
-RIP: 0010:eth_type_trans+0xcf/0x140
-Call Trace:
- <IRQ>
- __dev_forward_skb2+0xe3/0x160
- veth_xmit+0x6e/0x250 [veth]
- dev_hard_start_xmit+0xc7/0x200
- __dev_queue_xmit+0x47f/0x520
- ? skb_ensure_writable+0x85/0xa0
- ? skb_mpls_pop+0x98/0x1c0
- tcf_mirred_act+0x442/0x47e [act_mirred]
- tcf_action_exec+0x86/0x140
- fl_classify+0x1d8/0x1e0 [cls_flower]
- ? dma_pte_clear_level+0x129/0x1a0
- ? dma_pte_clear_level+0x129/0x1a0
- ? prb_fill_curr_block+0x2f/0xc0
- ? skb_copy_bits+0x11a/0x220
- __tcf_classify+0x58/0x110
- tcf_classify_ingress+0x6b/0x140
- __netif_receive_skb_core.constprop.0+0x47d/0xfd0
- ? __iommu_dma_unmap_swiotlb+0x44/0x90
- __netif_receive_skb_one_core+0x3d/0xa0
- netif_receive_skb+0x116/0x170
- be_process_rx+0x22f/0x330 [be2net]
- be_poll+0x13c/0x370 [be2net]
- __napi_poll+0x2a/0x170
- net_rx_action+0x22f/0x2f0
- __do_softirq+0xca/0x2a8
- __irq_exit_rcu+0xc1/0xe0
- common_interrupt+0x83/0xa0
+      (Thread 3)
+ax25_release()                |
+ ax25_dev_put()  //(4) FREE   |
+ case AX25_STATE_1:           |
+  ax25_send_control()         |
+   alloc_skb()       //USE    |
 
-Fixes: e314dbdc1c0d ("[NET]: Virtual ethernet device driver.")
-Signed-off-by: Guillaume Nault <gnault@redhat.com>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+The refcount of ax25_dev increases in position (1) and (2), and
+decreases in position (3) and (4). The ax25_dev will be freed
+before dereference sites in ax25_send_control().
+
+The following is part of the report:
+
+[  102.297448] BUG: KASAN: use-after-free in ax25_send_control+0x33/0x210
+[  102.297448] Read of size 8 at addr ffff888009e6e408 by task ax25_close/602
+[  102.297448] Call Trace:
+[  102.303751]  ax25_send_control+0x33/0x210
+[  102.303751]  ax25_release+0x356/0x450
+[  102.305431]  __sock_release+0x6d/0x120
+[  102.305431]  sock_close+0xf/0x20
+[  102.305431]  __fput+0x11f/0x420
+[  102.305431]  task_work_run+0x86/0xd0
+[  102.307130]  get_signal+0x1075/0x1220
+[  102.308253]  arch_do_signal_or_restart+0x1df/0xc00
+[  102.308253]  exit_to_user_mode_prepare+0x150/0x1e0
+[  102.308253]  syscall_exit_to_user_mode+0x19/0x50
+[  102.308253]  do_syscall_64+0x48/0x90
+[  102.308253]  entry_SYSCALL_64_after_hwframe+0x44/0xae
+[  102.308253] RIP: 0033:0x405ae7
+
+This patch defers the free operation of ax25_dev and net_device after
+all corresponding dereference sites in ax25_release() to avoid UAF.
+
+Fixes: 9fd75b66b8f6 ("ax25: Fix refcount leaks caused by ax25_cb_del()")
+Signed-off-by: Duoming Zhou <duoming@zju.edu.cn>
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+[OP: backport to 5.10: adjust dev_put_track()->dev_put()]
+Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/veth.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ net/ax25/af_ax25.c |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/veth.c b/drivers/net/veth.c
-index 76e834ca54e7..ea999a663933 100644
---- a/drivers/net/veth.c
-+++ b/drivers/net/veth.c
-@@ -188,7 +188,7 @@ static netdev_tx_t veth_xmit(struct sk_buff *skb, struct net_device *dev)
+--- a/net/ax25/af_ax25.c
++++ b/net/ax25/af_ax25.c
+@@ -990,10 +990,6 @@ static int ax25_release(struct socket *s
+ 	sock_orphan(sk);
+ 	ax25 = sk_to_ax25(sk);
+ 	ax25_dev = ax25->ax25_dev;
+-	if (ax25_dev) {
+-		dev_put(ax25_dev->dev);
+-		ax25_dev_put(ax25_dev);
+-	}
  
- 	rcu_read_lock();
- 	rcv = rcu_dereference(priv->peer);
--	if (unlikely(!rcv)) {
-+	if (unlikely(!rcv) || !pskb_may_pull(skb, ETH_HLEN)) {
- 		kfree_skb(skb);
- 		goto drop;
+ 	if (sk->sk_type == SOCK_SEQPACKET) {
+ 		switch (ax25->state) {
+@@ -1055,6 +1051,10 @@ static int ax25_release(struct socket *s
+ 		sk->sk_state_change(sk);
+ 		ax25_destroy_socket(ax25);
  	}
--- 
-2.35.1
-
++	if (ax25_dev) {
++		dev_put(ax25_dev->dev);
++		ax25_dev_put(ax25_dev);
++	}
+ 
+ 	sock->sk   = NULL;
+ 	release_sock(sk);
 
 

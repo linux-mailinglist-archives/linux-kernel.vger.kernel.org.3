@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B16C50595D
+	by mail.lfdr.de (Postfix) with ESMTP id 95BBD50595E
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:17:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345600AbiDROTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:19:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
+        id S1345689AbiDROT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:19:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244676AbiDROAC (ORCPT
+        with ESMTP id S240673AbiDROAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:00:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A692C114;
-        Mon, 18 Apr 2022 06:09:07 -0700 (PDT)
+        Mon, 18 Apr 2022 10:00:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA222B255;
+        Mon, 18 Apr 2022 06:09:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DC8360F9C;
-        Mon, 18 Apr 2022 13:08:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D70DC385C8;
-        Mon, 18 Apr 2022 13:08:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88AC9B80E59;
+        Mon, 18 Apr 2022 13:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7766C385A1;
+        Mon, 18 Apr 2022 13:08:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287308;
-        bh=XIPSXsMqXkgYWJscQGEr7EjgGojV+9HwO2YU2rmqgy4=;
+        s=korg; t=1650287311;
+        bh=4dvxpgY0PMs2FnGrlQP1Tssyec05K+DaanBcZRXoVao=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KiWWd1b+XoUOXGNlEKl/CFgB0gT9aOrqYTOqWU5GD1o2hqGQhAqxtP9rZi9E2C1sM
-         yU/vWUCmYNNXkUIpwTr/p6tohJw3/8kMFFSPpTKOf4RUys1x9vg80m5RMk0FaQzNOH
-         5u9le01lTjh85elX8RvIs5FBiS9IEJ/19VkcBZa0=
+        b=1EaM3W72+OI4iKD6nmlEqsJsUxaxg766RxbKQDOVI11XL+dE2gFGjRvvxPRwB7GFx
+         Kd506UrXB8pk5RjrF9MG/Ipon0KbQPrk6wFR8QpfVKyWCIyPGi3qCCFWI7FptZC0oh
+         EbhQ8UxgrbtOicdWSDIYWFf1HAmRHwhAV0FsTMlU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Sven Auhagen <sven.auhagen@voleatech.de>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
+        stable@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 119/218] netfilter: nf_conntrack_tcp: preserve liberal flag in tcp options
-Date:   Mon, 18 Apr 2022 14:13:05 +0200
-Message-Id: <20220418121202.998475889@linuxfoundation.org>
+Subject: [PATCH 4.9 120/218] net: phy: broadcom: Fix brcm_fet_config_init()
+Date:   Mon, 18 Apr 2022 14:13:06 +0200
+Message-Id: <20220418121203.026291358@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,69 +55,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-[ Upstream commit f2dd495a8d589371289981d5ed33e6873df94ecc ]
+[ Upstream commit bf8bfc4336f7a34e48b3bbd19b1542bf085bdc3d ]
 
-Do not reset IP_CT_TCP_FLAG_BE_LIBERAL flag in out-of-sync scenarios
-coming before the TCP window tracking, otherwise such connections will
-fail in the window check.
+A Broadcom AC201 PHY (same entry as 5241) would be flagged by the
+Broadcom UniMAC MDIO controller as not completing the turn around
+properly since the PHY expects 65 MDC clock cycles to complete a write
+cycle, and the MDIO controller was only sending 64 MDC clock cycles as
+determined by looking at a scope shot.
 
-Update tcp_options() to leave this flag in place and add a new helper
-function to reset the tcp window state.
+This would make the subsequent read fail with the UniMAC MDIO controller
+command field having MDIO_READ_FAIL set and we would abort the
+brcm_fet_config_init() function and thus not probe the PHY at all.
 
-Based on patch from Sven Auhagen.
+After issuing a software reset, wait for at least 1ms which is well
+above the 1us reset delay advertised by the datasheet and issue a dummy
+read to let the PHY turn around the line properly. This read
+specifically ignores -EIO which would be returned by MDIO controllers
+checking for the line being turned around.
 
-Fixes: c4832c7bbc3f ("netfilter: nf_ct_tcp: improve out-of-sync situation in TCP tracking")
-Tested-by: Sven Auhagen <sven.auhagen@voleatech.de>
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+If we have a genuine reaad failure, the next read of the interrupt
+status register would pick it up anyway.
+
+Fixes: d7a2ed9248a3 ("broadcom: Add AC131 phy support")
+Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+Link: https://lore.kernel.org/r/20220324232438.1156812-1-f.fainelli@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netfilter/nf_conntrack_proto_tcp.c | 17 +++++++++++++----
- 1 file changed, 13 insertions(+), 4 deletions(-)
+ drivers/net/phy/broadcom.c | 21 +++++++++++++++++++++
+ 1 file changed, 21 insertions(+)
 
-diff --git a/net/netfilter/nf_conntrack_proto_tcp.c b/net/netfilter/nf_conntrack_proto_tcp.c
-index 69f687740c76..9e9ce570bb9e 100644
---- a/net/netfilter/nf_conntrack_proto_tcp.c
-+++ b/net/netfilter/nf_conntrack_proto_tcp.c
-@@ -390,8 +390,8 @@ static void tcp_options(const struct sk_buff *skb,
- 				 length, buff);
- 	BUG_ON(ptr == NULL);
+diff --git a/drivers/net/phy/broadcom.c b/drivers/net/phy/broadcom.c
+index 870327efccf7..6bea2b219e00 100644
+--- a/drivers/net/phy/broadcom.c
++++ b/drivers/net/phy/broadcom.c
+@@ -15,6 +15,7 @@
+  */
  
--	state->td_scale =
--	state->flags = 0;
-+	state->td_scale = 0;
-+	state->flags &= IP_CT_TCP_FLAG_BE_LIBERAL;
+ #include "bcm-phy-lib.h"
++#include <linux/delay.h>
+ #include <linux/module.h>
+ #include <linux/phy.h>
+ #include <linux/brcmphy.h>
+@@ -357,6 +358,26 @@ static int brcm_fet_config_init(struct phy_device *phydev)
+ 	if (err < 0)
+ 		return err;
  
- 	while (length > 0) {
- 		int opcode=*ptr++;
-@@ -806,6 +806,16 @@ static unsigned int *tcp_get_timeouts(struct net *net)
- 	return tcp_pernet(net)->timeouts;
- }
- 
-+static void nf_ct_tcp_state_reset(struct ip_ct_tcp_state *state)
-+{
-+	state->td_end		= 0;
-+	state->td_maxend	= 0;
-+	state->td_maxwin	= 0;
-+	state->td_maxack	= 0;
-+	state->td_scale		= 0;
-+	state->flags		&= IP_CT_TCP_FLAG_BE_LIBERAL;
-+}
++	/* The datasheet indicates the PHY needs up to 1us to complete a reset,
++	 * build some slack here.
++	 */
++	usleep_range(1000, 2000);
 +
- /* Returns verdict for packet, or -1 for invalid. */
- static int tcp_packet(struct nf_conn *ct,
- 		      const struct sk_buff *skb,
-@@ -907,8 +917,7 @@ static int tcp_packet(struct nf_conn *ct,
- 			ct->proto.tcp.last_flags &= ~IP_CT_EXP_CHALLENGE_ACK;
- 			ct->proto.tcp.seen[ct->proto.tcp.last_dir].flags =
- 				ct->proto.tcp.last_flags;
--			memset(&ct->proto.tcp.seen[dir], 0,
--			       sizeof(struct ip_ct_tcp_state));
-+			nf_ct_tcp_state_reset(&ct->proto.tcp.seen[dir]);
- 			break;
- 		}
- 		ct->proto.tcp.last_index = index;
++	/* The PHY requires 65 MDC clock cycles to complete a write operation
++	 * and turnaround the line properly.
++	 *
++	 * We ignore -EIO here as the MDIO controller (e.g.: mdio-bcm-unimac)
++	 * may flag the lack of turn-around as a read failure. This is
++	 * particularly true with this combination since the MDIO controller
++	 * only used 64 MDC cycles. This is not a critical failure in this
++	 * specific case and it has no functional impact otherwise, so we let
++	 * that one go through. If there is a genuine bus error, the next read
++	 * of MII_BRCM_FET_INTREG will error out.
++	 */
++	err = phy_read(phydev, MII_BMCR);
++	if (err < 0 && err != -EIO)
++		return err;
++
+ 	reg = phy_read(phydev, MII_BRCM_FET_INTREG);
+ 	if (reg < 0)
+ 		return reg;
 -- 
 2.34.1
 

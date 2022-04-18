@@ -2,51 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9224504EB0
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:12:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27CF0504EB1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237600AbiDRKPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 06:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57876 "EHLO
+        id S237607AbiDRKQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 06:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237593AbiDRKPD (ORCPT
+        with ESMTP id S230352AbiDRKQB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 06:15:03 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA38313DE0
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:12:23 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id c25-20020a5d9399000000b00652e2b23358so5091659iol.6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:12:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
-        bh=b3gHZlywNI1/W84NKsMn8/CEmdK4U5QuxkrPxRysdcM=;
-        b=UXbdAdkvMboUmPiCR0MXvseVCPYd2QIMI4nBGIWNb2rE9QrO4xIL3tWt7oUK3flp/D
-         VKZeKgtGZ43LxJtxHvqq6SzfBAFOLZM9AGpStLIzx8BQoOCOsqAflu1KHKWrx6gix/0P
-         4Cg4OAkT/YVUj7NYszKASiW3j+gtvQjqrvHcrfjOYKWRXhB6bdo9McehS5WgR0RwPjDi
-         rYHN1W3p/KH6BA/BU4G7FkKgCYgL60hg81KaH/QwPCPWHAJK79RZMGOOP165ZWBSKdeX
-         GztAmoyBP0UfhlNGPYu4O63YmA71lG1g2lARHEEFTu/fPAiVdK/ebH/8gKyfczC2VFG+
-         G96A==
-X-Gm-Message-State: AOAM531hZnwxdVwtpp4QOEf8zF0J7NZVrFIHXycI7MsR5NFBUpr/0YuL
-        5pipuoJWHY5WWFMwZ0XoBHcM/j+w1mjW/sisNhojwzE+iKT3
-X-Google-Smtp-Source: ABdhPJxUtJ19U32+3b1m1d/bYpjAejY2WcJpArwXMKR0aDB95BmPsDzddNd55pkaLueE5/brSM5yIzgKQiX6YnLOKPFZLIeIoymc
+        Mon, 18 Apr 2022 06:16:01 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97AC13CD7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:13:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650276802; x=1681812802;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nQF2jtCGMD/mT3g9u1gUk0MtABVPEyW0OYjrIfpl5gs=;
+  b=BDWCoJ+XRg8Ewa2DTlwGqFfcxaztvb5cWYUyQun52ixZrb/ziEu6laYj
+   ttc0OtfmTqGxUc89xSnigDnU9R26xKO3Tv0zPQa1kE7B4ibKg0Gg0xgl2
+   I3sL7DpQaFWsga7vWBKpRwhkblzSAbu3UUKg6FgxeAlzWJ3BSpCXaO9vQ
+   ztwGUNyAUOYpJkphbDiRgw0nxkvk+CJh1OJjYT7ZrarcDh/8pEvPZYLRY
+   SYHkYsyEkXhwMAfzZkj8YmGGYMUrMfoddVRha8t2y3bufxHF2NRwTnrqe
+   DFULlLVJeVu0mN+Pek5mbDLCycO6HuwnT01hLG3teL0FJhlic2Y2jmBso
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10320"; a="263666601"
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="263666601"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 03:13:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,269,1643702400"; 
+   d="scan'208";a="726592930"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 18 Apr 2022 03:13:20 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngONk-0004Wp-15;
+        Mon, 18 Apr 2022 10:13:20 +0000
+Date:   Mon, 18 Apr 2022 18:13:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@nxp.com>
+Subject: drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable
+ 'imx93_clk_of_match'
+Message-ID: <202204181828.VNB1sR4E-lkp@intel.com>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1485:b0:2cb:d7ce:bf36 with SMTP id
- n5-20020a056e02148500b002cbd7cebf36mr4263955ilk.255.1650276743335; Mon, 18
- Apr 2022 03:12:23 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 03:12:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000011555605dceaff03@google.com>
-Subject: [syzbot] KASAN: use-after-free Read in __snd_rawmidi_transmit_peek
-From:   syzbot <syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com>
-To:     alsa-devel@alsa-project.org, coding@diwic.se, colin.king@intel.com,
-        linux-kernel@vger.kernel.org, perex@perex.cz,
-        syzkaller-bugs@googlegroups.com, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,206 +63,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi Peng,
 
-syzbot found the following issue on:
+FYI, the error/warning still remains.
 
-HEAD commit:    a19944809fe9 Merge tag 'hardening-v5.18-rc3' of git://git...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=16a40ae0f00000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=eb177500e563582f
-dashboard link: https://syzkaller.appspot.com/bug?extid=70e777a39907d6d5fd0a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1590dfa8f00000
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 24defbe194b650218680fcd9dec8cd103537b531 clk: imx: add i.MX93 clk
+date:   6 weeks ago
+config: hexagon-randconfig-r045-20220417 (https://download.01.org/0day-ci/archive/20220418/202204181828.VNB1sR4E-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b27430f9f46b88bcd54d992debc8d72e131e1bd0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=24defbe194b650218680fcd9dec8cd103537b531
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 24defbe194b650218680fcd9dec8cd103537b531
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/clk/imx/
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+70e777a39907d6d5fd0a@syzkaller.appspotmail.com
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-==================================================================
-BUG: KASAN: use-after-free in __snd_rawmidi_transmit_peek+0x261/0x360 sound/core/rawmidi.c:1286
-Read of size 1 at addr ffff88807eac2072 by task kworker/1:1H/51
+All warnings (new ones prefixed by >>):
 
-CPU: 1 PID: 51 Comm: kworker/1:1H Not tainted 5.18.0-rc2-syzkaller-00050-ga19944809fe9 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
-Workqueue: events_highpri snd_usbmidi_out_work
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description.constprop.0.cold+0xeb/0x495 mm/kasan/report.c:313
- print_report mm/kasan/report.c:429 [inline]
- kasan_report.cold+0xf4/0x1c6 mm/kasan/report.c:491
- __snd_rawmidi_transmit_peek+0x261/0x360 sound/core/rawmidi.c:1286
- snd_rawmidi_transmit+0x8d/0xf0 sound/core/rawmidi.c:1411
- snd_usbmidi_standard_output+0x264/0xc10 sound/usb/midi.c:650
- snd_usbmidi_do_output+0x200/0x510 sound/usb/midi.c:311
- process_one_work+0x996/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e9/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:298
- </TASK>
-
-Allocated by task 5812:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track mm/kasan/common.c:45 [inline]
- set_alloc_info mm/kasan/common.c:436 [inline]
- ____kasan_kmalloc mm/kasan/common.c:515 [inline]
- ____kasan_kmalloc mm/kasan/common.c:474 [inline]
- __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:524
- kmalloc_node include/linux/slab.h:604 [inline]
- kvmalloc_node+0x3e/0x130 mm/util.c:580
- kvmalloc include/linux/slab.h:731 [inline]
- kvzalloc include/linux/slab.h:739 [inline]
- snd_rawmidi_runtime_create sound/core/rawmidi.c:162 [inline]
- open_substream+0x340/0x8b0 sound/core/rawmidi.c:306
- rawmidi_open_priv+0x591/0x6f0 sound/core/rawmidi.c:357
- snd_rawmidi_kernel_open+0x1b5/0x270 sound/core/rawmidi.c:392
- midisynth_use+0xee/0x270 sound/core/seq/seq_midi.c:215
- subscribe_port sound/core/seq/seq_ports.c:412 [inline]
- check_and_subscribe_port+0x89a/0xb80 sound/core/seq/seq_ports.c:495
- snd_seq_port_connect+0x382/0x540 sound/core/seq/seq_ports.c:581
- snd_seq_ioctl_subscribe_port+0x1fc/0x400 sound/core/seq/seq_clientmgr.c:1492
- snd_seq_kernel_client_ctl+0x102/0x1e0 sound/core/seq/seq_clientmgr.c:2369
- snd_seq_oss_midi_open+0x582/0x6e0 sound/core/seq/oss/seq_oss_midi.c:359
- snd_seq_oss_synth_setup_midi+0x12d/0x530 sound/core/seq/oss/seq_oss_synth.c:269
- snd_seq_oss_open+0x8c3/0xa80 sound/core/seq/oss/seq_oss_init.c:260
- odev_open+0x6c/0x90 sound/core/seq/oss/seq_oss.c:128
- soundcore_open+0x44e/0x620 sound/sound_core.c:593
- chrdev_open+0x266/0x770 fs/char_dev.c:414
- do_dentry_open+0x4a1/0x11e0 fs/open.c:824
- do_open fs/namei.c:3476 [inline]
- path_openat+0x1c71/0x2910 fs/namei.c:3609
- do_filp_open+0x1aa/0x400 fs/namei.c:3636
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1213
- do_sys_open fs/open.c:1229 [inline]
- __do_sys_openat fs/open.c:1245 [inline]
- __se_sys_openat fs/open.c:1240 [inline]
- __x64_sys_openat+0x13f/0x1f0 fs/open.c:1240
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Freed by task 5811:
- kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
- kasan_set_track+0x21/0x30 mm/kasan/common.c:45
- kasan_set_free_info+0x20/0x30 mm/kasan/generic.c:370
- ____kasan_slab_free mm/kasan/common.c:366 [inline]
- ____kasan_slab_free+0x166/0x1a0 mm/kasan/common.c:328
- kasan_slab_free include/linux/kasan.h:200 [inline]
- slab_free_hook mm/slub.c:1728 [inline]
- slab_free_freelist_hook+0x8b/0x1c0 mm/slub.c:1754
- slab_free mm/slub.c:3510 [inline]
- kfree+0xd6/0x4d0 mm/slub.c:4552
- kvfree+0x42/0x50 mm/util.c:615
- snd_rawmidi_runtime_free sound/core/rawmidi.c:176 [inline]
- close_substream.part.0+0x185/0x720 sound/core/rawmidi.c:528
- close_substream sound/core/rawmidi.c:507 [inline]
- rawmidi_release_priv+0x192/0x270 sound/core/rawmidi.c:547
- snd_rawmidi_kernel_release+0x39/0xd0 sound/core/rawmidi.c:564
- midisynth_unuse+0x45/0x80 sound/core/seq/seq_midi.c:244
- unsubscribe_port sound/core/seq/seq_ports.c:437 [inline]
- __delete_and_unsubscribe_port+0x270/0x4c0 sound/core/seq/seq_ports.c:537
- snd_seq_port_disconnect+0x41c/0x5d0 sound/core/seq/seq_ports.c:616
- snd_seq_ioctl_unsubscribe_port+0x1fc/0x400 sound/core/seq/seq_clientmgr.c:1537
- snd_seq_kernel_client_ctl+0x102/0x1e0 sound/core/seq/seq_clientmgr.c:2369
- snd_seq_oss_midi_close+0x44f/0x4d0 sound/core/seq/oss/seq_oss_midi.c:404
- snd_seq_oss_synth_reset+0x422/0x880 sound/core/seq/oss/seq_oss_synth.c:406
- snd_seq_oss_reset+0x6f/0x290 sound/core/seq/oss/seq_oss_init.c:435
- snd_seq_oss_release+0x78/0x1a0 sound/core/seq/oss/seq_oss_init.c:412
- odev_release+0x4f/0x70 sound/core/seq/oss/seq_oss.c:144
- __fput+0x277/0x9d0 fs/file_table.c:317
- task_work_run+0xdd/0x1a0 kernel/task_work.c:164
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:169 [inline]
- exit_to_user_mode_prepare+0x23c/0x250 kernel/entry/common.c:201
- __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
- syscall_exit_to_user_mode+0x19/0x60 kernel/entry/common.c:294
- do_syscall_64+0x42/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-The buggy address belongs to the object at ffff88807eac2000
- which belongs to the cache kmalloc-4k of size 4096
-The buggy address is located 114 bytes inside of
- 4096-byte region [ffff88807eac2000, ffff88807eac3000)
-
-The buggy address belongs to the physical page:
-page:ffffea0001fab000 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7eac0
-head:ffffea0001fab000 order:3 compound_mapcount:0 compound_pincount:0
-flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000010200 ffffea0001d2a000 dead000000000002 ffff888010c42140
-raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 3, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 3703, tgid 3703 (syz-executor.4), ts 1615766892626, free_ts 34515408626
- prep_new_page mm/page_alloc.c:2441 [inline]
- get_page_from_freelist+0xba2/0x3e00 mm/page_alloc.c:4182
- __alloc_pages+0x1b2/0x500 mm/page_alloc.c:5408
- alloc_pages+0x1aa/0x310 mm/mempolicy.c:2272
- alloc_slab_page mm/slub.c:1799 [inline]
- allocate_slab+0x26c/0x3c0 mm/slub.c:1944
- new_slab mm/slub.c:2004 [inline]
- ___slab_alloc+0x8df/0xf20 mm/slub.c:3005
- __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3092
- slab_alloc_node mm/slub.c:3183 [inline]
- slab_alloc mm/slub.c:3225 [inline]
- kmem_cache_alloc_trace+0x310/0x3f0 mm/slub.c:3256
- kmalloc include/linux/slab.h:581 [inline]
- kzalloc include/linux/slab.h:714 [inline]
- kobject_uevent_env+0x235/0x1660 lib/kobject_uevent.c:524
- device_add+0xb20/0x1e20 drivers/base/core.c:3386
- netdev_register_kobject+0x181/0x430 net/core/net-sysfs.c:2008
- register_netdevice+0xd9d/0x15b0 net/core/dev.c:9961
- __rtnl_newlink+0x1555/0x1760 net/core/rtnetlink.c:3485
- rtnl_newlink+0x64/0xa0 net/core/rtnetlink.c:3531
- rtnetlink_rcv_msg+0x413/0xb80 net/core/rtnetlink.c:5990
- netlink_rcv_skb+0x153/0x420 net/netlink/af_netlink.c:2496
- netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
- netlink_unicast+0x543/0x7f0 net/netlink/af_netlink.c:1345
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1356 [inline]
- free_pcp_prepare+0x549/0xd20 mm/page_alloc.c:1406
- free_unref_page_prepare mm/page_alloc.c:3328 [inline]
- free_unref_page+0x19/0x6a0 mm/page_alloc.c:3423
- qlink_free mm/kasan/quarantine.c:157 [inline]
- qlist_free_all+0x6a/0x170 mm/kasan/quarantine.c:176
- kasan_quarantine_reduce+0x180/0x200 mm/kasan/quarantine.c:283
- __kasan_slab_alloc+0xa2/0xc0 mm/kasan/common.c:446
- kasan_slab_alloc include/linux/kasan.h:224 [inline]
- slab_post_alloc_hook mm/slab.h:749 [inline]
- slab_alloc_node mm/slub.c:3217 [inline]
- kmem_cache_alloc_node+0x255/0x3f0 mm/slub.c:3267
- __alloc_skb+0x215/0x340 net/core/skbuff.c:414
- alloc_skb include/linux/skbuff.h:1300 [inline]
- alloc_skb_with_frags+0x93/0x730 net/core/skbuff.c:5995
- sock_alloc_send_pskb+0x793/0x920 net/core/sock.c:2600
- unix_dgram_sendmsg+0x414/0x1a90 net/unix/af_unix.c:1896
- sock_sendmsg_nosec net/socket.c:705 [inline]
- sock_sendmsg+0xcf/0x120 net/socket.c:725
- __sys_sendto+0x216/0x310 net/socket.c:2040
- __do_sys_sendto net/socket.c:2052 [inline]
- __se_sys_sendto net/socket.c:2048 [inline]
- __x64_sys_sendto+0xdd/0x1b0 net/socket.c:2048
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Memory state around the buggy address:
- ffff88807eac1f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807eac1f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->ffff88807eac2000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-                                                             ^
- ffff88807eac2080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
- ffff88807eac2100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-==================================================================
+>> drivers/clk/imx/clk-imx93.c:324:34: warning: unused variable 'imx93_clk_of_match' [-Wunused-const-variable]
+   static const struct of_device_id imx93_clk_of_match[] = {
+                                    ^
+   1 warning generated.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+vim +/imx93_clk_of_match +324 drivers/clk/imx/clk-imx93.c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+   323	
+ > 324	static const struct of_device_id imx93_clk_of_match[] = {
+   325		{ .compatible = "fsl,imx93-ccm" },
+   326		{ /* Sentinel */ },
+   327	};
+   328	MODULE_DEVICE_TABLE(of, imx93_clk_of_match);
+   329	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

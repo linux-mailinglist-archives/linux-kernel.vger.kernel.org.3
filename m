@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8994D505280
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:44:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C20C65052AA
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239569AbiDRMqM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:46:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38016 "EHLO
+        id S239475AbiDRMuJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:50:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239825AbiDRMiJ (ORCPT
+        with ESMTP id S240727AbiDRMjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:38:09 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 295A72409F;
-        Mon, 18 Apr 2022 05:28:42 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KhmSM06LKzhXYf;
-        Mon, 18 Apr 2022 20:28:35 +0800 (CST)
-Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 20:28:36 +0800
-Received: from [127.0.0.1] (10.67.108.67) by dggpemm500013.china.huawei.com
- (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Mon, 18 Apr
- 2022 20:28:36 +0800
-Message-ID: <0abfa1af-81ec-9048-6f95-cf5dda295139@huawei.com>
-Date:   Mon, 18 Apr 2022 20:28:33 +0800
+        Mon, 18 Apr 2022 08:39:35 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11EA713CED;
+        Mon, 18 Apr 2022 05:30:18 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23ICU9BC077061;
+        Mon, 18 Apr 2022 07:30:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1650285009;
+        bh=8G0h/3NF1tmnS3Le0+tUCjebMIA+1hV3rqMDN1tOb1Y=;
+        h=From:To:CC:Subject:Date;
+        b=lONBWY/egKTKEZSS/TN9UyPgIoqlPMAcwRFm0CFuSSUFDmcc4dtf9VzdmtqNKUakF
+         dGN4hXEHnMSCrgvI0gaSBwRQX2S8wf3vERCBfimUsQW2B8QOHHfHtKo09s7gV8y0cy
+         VKmm5jDiZygGfGgJFG7F2ePLbVy0DtkREhltXRH0=
+Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23ICU92C060480
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 18 Apr 2022 07:30:09 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Mon, 18
+ Apr 2022 07:30:08 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Mon, 18 Apr 2022 07:30:08 -0500
+Received: from localhost (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23ICU6pb010907;
+        Mon, 18 Apr 2022 07:30:07 -0500
+From:   Puranjay Mohan <p-mohan@ti.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-remoteproc@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <nm@ti.com>, <ssantosh@kernel.org>, <s-anna@ti.com>,
+        <p-mohan@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <rogerq@kernel.org>, <grygorii.strashko@ti.com>, <vigneshr@ti.com>,
+        <kishon@ti.com>
+Subject: [PATCH v2 0/6] Introduce PRU platform consumer API
+Date:   Mon, 18 Apr 2022 17:59:58 +0530
+Message-ID: <20220418123004.9332-1-p-mohan@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [RFC PATCH v1 0/9] arm64: livepatch: Use DWARF Call Frame
- Information for frame pointer validation
-Content-Language: en-US
-To:     Josh Poimboeuf <jpoimboe@redhat.com>
-CC:     "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        <mark.rutland@arm.com>, <broonie@kernel.org>, <ardb@kernel.org>,
-        <nobuta.keiya@fujitsu.com>, <sjitindarsingh@gmail.com>,
-        <catalin.marinas@arm.com>, <will@kernel.org>, <jmorris@namei.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <95691cae4f4504f33d0fc9075541b1e7deefe96f>
- <20220407202518.19780-1-madvenka@linux.microsoft.com>
- <20220408002147.pk7clzruj6sawj7z@treble>
- <15a22f4b-f04a-15e1-8f54-5b3147d8df7d@linux.microsoft.com>
- <35c99466-9024-a7fd-9632-5d21b3e558f7@huawei.com>
- <20220416005609.3znhltjlhpg475ff@treble>
-From:   Chen Zhongjin <chenzhongjin@huawei.com>
-In-Reply-To: <20220416005609.3znhltjlhpg475ff@treble>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.108.67]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500013.china.huawei.com (7.185.36.172)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Josh,
+This is the re-spin of the old patch series[1]. This doesn't have any 
+functional changes, the old series has been rebased on linux-next.
 
-IIUC, ORC on x86 can make reliable stack unwind for this scenario
-because objtool validates BP state.
+This series depends on another un-merged series in the remoteproc
+tree[2]. This series and the remoteproc series form the PRUSS comsumer
+API which can be used by consumer drivers to utilize the PRUs.
 
-I'm thinking that on arm64 there's no guarantee that LR will be pushed
-onto stack. When we meet similar scenario on arm64, we should recover
-(LR, FP) on pt_regs and continue to unwind the stack. And this is
-reliable only after we validate (LR, FP).
+One example of the consumer driver is the PRU-ICSSG ethernet driver,
+which depends on this series and the remoteproc series[2].
 
-So should we track LR on arm64 additionally as track BP on x86? Or can
-we just treat (LR, FP) as a pair? because as I know they are always set
-up together.
+I had earlier sent all the three series, this, remoteproc, and the 
+ethernet driver as RFC to get comments. It can be seen here[3] to
+understand the overall structure.
 
-On 2022/4/16 8:56, Josh Poimboeuf wrote:
-> On Tue, Apr 12, 2022 at 04:32:22PM +0800, Chen Zhongjin wrote:
->> By the way, I was thinking about a corner case, because arm64 CALL
->> instruction won't push LR onto stack atomically as x86. Before push LR, FP
->> to save frame there still can be some instructions such as bti, paciasp. If
->> an irq happens here, the stack frame is not constructed so the FP unwinder
->> will omit this function and provides a wrong stack trace to livepatch.
->>
->> It's just a guess and I have not built the test case. But I think it's a
->> defect on arm64 that FP unwinder can't work properly on prologue and
->> epilogue. Do you have any idea about this?
-> 
-> x86 has similar issues with frame pointers, if for example preemption or
-> page fault exception occurs in a leaf function, or in a function
-> prologue or epilogue, before or after the frame pointer setup.
-> 
-> This issue is solved by the "reliable" unwinder which detects
-> irqs/exceptions on the stack and reports the stack as unreliable.
-> 
+The Programmable Real-Time Unit and Industrial Communication Subsystem (PRU-ICSS
+or simply PRUSS) on various TI SoCs consists of dual 32-bit RISC cores
+(Programmable Real-Time Units, or PRUs) for program execution.
+
+There are 3 foundation components for TI PRUSS subsystem: the PRUSS platform
+driver, the PRUSS INTC driver and the PRUSS remoteproc driver.
+
+The programmable nature of the PRUs provide flexibility to implement custom
+peripheral interfaces, fast real-time responses, or specialized data handling.
+Example of a PRU consumer drivers will be: 
+  - Software UART over PRUSS
+  - PRU-ICSS Ethernet EMAC
+
+In order to make usage of common PRU resources and allow the consumer drivers to
+configure the PRU hardware for specific usage the PRU API is introduced.
+
+[1] https://patchwork.kernel.org/project/linux-remoteproc/cover/20201211184811.6490-1-grzegorz.jaszczyk@linaro.org/
+[2] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220418104118.12878-1-p-mohan@ti.com/
+[3] https://patchwork.kernel.org/project/linux-remoteproc/cover/20220406094358.7895-1-p-mohan@ti.com/
+
+Thanks,
+Puranjay Mohan
+
+Andrew F. Davis (1):
+  soc: ti: pruss: Add pruss_{request,release}_mem_region() API
+
+Suman Anna (3):
+  soc: ti: pruss: Add pruss_cfg_read()/update() API
+  soc: ti: pruss: Add helper functions to set GPI mode, MII_RT_event and
+    XFR
+  soc: ti: pruss: Add helper function to enable OCP master ports
+
+Tero Kristo (2):
+  soc: ti: pruss: Add pruss_get()/put() API
+  soc: ti: pruss: Add helper functions to get/set PRUSS_CFG_GPMUX
+
+ drivers/soc/ti/pruss.c       | 257 ++++++++++++++++++++++++++++++++++-
+ include/linux/pruss.h        | 221 ++++++++++++++++++++++++++++++
+ include/linux/pruss_driver.h |  72 +++++++---
+ 3 files changed, 526 insertions(+), 24 deletions(-)
+
+-- 
+2.17.1
 

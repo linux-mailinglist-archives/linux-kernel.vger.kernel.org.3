@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839295052BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5DA5051A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236209AbiDRMul (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:50:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S239296AbiDRMg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:36:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240776AbiDRMjh (ORCPT
+        with ESMTP id S238795AbiDRMa2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B89EF12772;
-        Mon, 18 Apr 2022 05:30:32 -0700 (PDT)
+        Mon, 18 Apr 2022 08:30:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69C6C26D2;
+        Mon, 18 Apr 2022 05:23:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 64C51B80ED6;
-        Mon, 18 Apr 2022 12:30:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A7CC385A1;
-        Mon, 18 Apr 2022 12:30:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7363B80EC1;
+        Mon, 18 Apr 2022 12:23:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49696C385A7;
+        Mon, 18 Apr 2022 12:23:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285030;
-        bh=hGsffzSflV0Zcd6vbMjc21DkqfkVDRAZ+jfyzuDs23Q=;
+        s=korg; t=1650284622;
+        bh=fDD8IhH9m96y6dBr8zEZRwcTHy7HPF8YLEDIQKohlcQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nYVdHyz3rbnLP0xoswKR36uS9t5EstnKMga+nmlL/tGPhMgRevmUUWILfrTFczFeA
-         f3klwqfrzDnSkGCOBDEFibAPPmlexHBALAdrGQAnC/RPeGCX8dlCghp5k5vedHdhJn
-         tmQ062RAyniOTmM57ToTDZPltV4wiViFjFOh4/Kk=
+        b=Y2N1ThTbpq8Sg4GZoWXXOeVikoKIu945gZQzAghg2092L3sfFZpHP+RMX7dnKkzcn
+         egs593Pv8eB9nEm+4vZdsm+Dpmv+FELpwIhgv35gE8rPbgM8TFlG0Jp5RFPo2/IvE+
+         JZ1tlXWb/txyas0UPiud7WUM4kBljxjG0xTPrTSc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?q?Michel=20D=C3=A4nzer?= <mdaenzer@redhat.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 083/189] scsi: iscsi: Fix endpoint reuse regression
+Subject: [PATCH 5.17 134/219] drm/amdgpu/gmc: use PCI BARs for APUs in passthrough
 Date:   Mon, 18 Apr 2022 14:11:43 +0200
-Message-Id: <20220418121202.863814974@linuxfoundation.org>
+Message-Id: <20220418121210.645214144@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,78 +57,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Alex Deucher <alexander.deucher@amd.com>
 
-[ Upstream commit 0aadafb5c34403a7cced1a8d61877048dc059f70 ]
+[ Upstream commit b818a5d374542ccec73dcfe578a081574029820e ]
 
-This patch fixes a bug where when using iSCSI offload we can free an
-endpoint while userspace still thinks it's active. That then causes the
-endpoint ID to be reused for a new connection's endpoint while userspace
-still thinks the ID is for the original connection. Userspace will then end
-up disconnecting a running connection's endpoint or trying to bind to
-another connection's endpoint.
+If the GPU is passed through to a guest VM, use the PCI
+BAR for CPU FB access rather than the physical address of
+carve out.  The physical address is not valid in a guest.
 
-This bug is a regression added in:
+v2: Fix HDP handing as suggested by Michel
 
-Commit 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
-
-where we added a in kernel ep_disconnect call to fix a bug in:
-
-Commit 0ab710458da1 ("scsi: iscsi: Perform connection failure entirely in
-kernel space")
-
-where we would call stop_conn without having done ep_disconnect. This early
-ep_disconnect call will then free the endpoint and it's ID while userspace
-still thinks the ID is valid.
-
-Fix the early release of the ID by having the in kernel recovery code keep
-a reference to the endpoint until userspace has called into the kernel to
-finish cleaning up the endpoint/connection. It requires the previous commit
-"scsi: iscsi: Release endpoint ID when its freed" which moved the freeing
-of the ID until when the endpoint is released.
-
-Link: https://lore.kernel.org/r/20220408001314.5014-5-michael.christie@oracle.com
-Fixes: 23d6fefbb3f6 ("scsi: iscsi: Fix in-kernel conn failure handling")
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Reviewed-by: Christian König <christian.koenig@amd.com>
+Reviewed-by: Michel Dänzer <mdaenzer@redhat.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 4 ++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c     | 2 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c      | 5 +++--
+ drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c      | 2 +-
+ drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c      | 2 +-
+ 5 files changed, 8 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 03cda2da80ef..4fa2fd7f4c72 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2267,7 +2267,11 @@ static void iscsi_if_disconnect_bound_ep(struct iscsi_cls_conn *conn,
- 		mutex_unlock(&conn->ep_mutex);
- 
- 		flush_work(&conn->cleanup_work);
--
-+		/*
-+		 * Userspace is now done with the EP so we can release the ref
-+		 * iscsi_cleanup_conn_work_fn took.
-+		 */
-+		iscsi_put_endpoint(ep);
- 		mutex_lock(&conn->ep_mutex);
- 	}
- }
-@@ -2342,6 +2346,12 @@ static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index b87dca6d09fa..052816f0efed 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -5678,7 +5678,7 @@ void amdgpu_device_flush_hdp(struct amdgpu_device *adev,
+ 		struct amdgpu_ring *ring)
+ {
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU)
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev))
  		return;
+ #endif
+ 	if (adev->gmc.xgmi.connected_to_cpu)
+@@ -5694,7 +5694,7 @@ void amdgpu_device_invalidate_hdp(struct amdgpu_device *adev,
+ 		struct amdgpu_ring *ring)
+ {
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU)
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev))
+ 		return;
+ #endif
+ 	if (adev->gmc.xgmi.connected_to_cpu)
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+index a2f8ed0e6a64..f1b794d5d87d 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v10_0.c
+@@ -788,7 +788,7 @@ static int gmc_v10_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
+ 
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU) {
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = adev->gfxhub.funcs->get_mc_fb_offset(adev);
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
  	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+index ab8adbff9e2d..5206e2da334a 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v7_0.c
+@@ -381,8 +381,9 @@ static int gmc_v7_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
  
-+	/*
-+	 * Get a ref to the ep, so we don't release its ID until after
-+	 * userspace is done referencing it in iscsi_if_disconnect_bound_ep.
-+	 */
-+	if (conn->ep)
-+		get_device(&conn->ep->dev);
- 	iscsi_ep_disconnect(conn, false);
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU &&
+-	    adev->gmc.real_vram_size > adev->gmc.aper_size) {
++	if ((adev->flags & AMD_IS_APU) &&
++	    adev->gmc.real_vram_size > adev->gmc.aper_size &&
++	    !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = ((u64)RREG32(mmMC_VM_FB_OFFSET)) << 22;
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
+ 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+index 054733838292..d07d36786836 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v8_0.c
+@@ -581,7 +581,7 @@ static int gmc_v8_0_mc_init(struct amdgpu_device *adev)
+ 	adev->gmc.aper_size = pci_resource_len(adev->pdev, 0);
  
- 	if (system_state != SYSTEM_RUNNING) {
+ #ifdef CONFIG_X86_64
+-	if (adev->flags & AMD_IS_APU) {
++	if ((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) {
+ 		adev->gmc.aper_base = ((u64)RREG32(mmMC_VM_FB_OFFSET)) << 22;
+ 		adev->gmc.aper_size = adev->gmc.real_vram_size;
+ 	}
+diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+index 34ee75cf7954..2fb24178eaef 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
++++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
+@@ -1420,7 +1420,7 @@ static int gmc_v9_0_mc_init(struct amdgpu_device *adev)
+ 	 */
+ 
+ 	/* check whether both host-gpu and gpu-gpu xgmi links exist */
+-	if ((adev->flags & AMD_IS_APU) ||
++	if (((adev->flags & AMD_IS_APU) && !amdgpu_passthrough(adev)) ||
+ 	    (adev->gmc.xgmi.supported &&
+ 	     adev->gmc.xgmi.connected_to_cpu)) {
+ 		adev->gmc.aper_base =
 -- 
 2.35.1
 

@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CF6504B50
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965DA504B55
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 05:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiDRD2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 17 Apr 2022 23:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
+        id S236041AbiDRD2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 17 Apr 2022 23:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236021AbiDRD2k (ORCPT
+        with ESMTP id S236031AbiDRD2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 17 Apr 2022 23:28:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C02DBBF7D
-        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 20:26:01 -0700 (PDT)
-Received: from kwepemi100003.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4KhXQC3fHczgYsv;
-        Mon, 18 Apr 2022 11:25:55 +0800 (CST)
+        Sun, 17 Apr 2022 23:28:46 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C692517ABA
+        for <linux-kernel@vger.kernel.org>; Sun, 17 Apr 2022 20:26:08 -0700 (PDT)
+Received: from kwepemi100004.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4KhXPc28kfz1J9jy;
+        Mon, 18 Apr 2022 11:25:24 +0800 (CST)
 Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- kwepemi100003.china.huawei.com (7.221.188.122) with Microsoft SMTP Server
+ kwepemi100004.china.huawei.com (7.221.188.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 11:25:59 +0800
+ 15.1.2375.24; Mon, 18 Apr 2022 11:26:06 +0800
 Received: from localhost.localdomain (10.175.112.125) by
  kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 18 Apr 2022 11:25:57 +0800
+ 15.1.2375.24; Mon, 18 Apr 2022 11:26:04 +0800
 From:   Tong Tiangen <tongtiangen@huawei.com>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
@@ -44,10 +44,12 @@ CC:     <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
         Tong Tiangen <tongtiangen@huawei.com>,
         Kefeng Wang <wangkefeng.wang@huawei.com>,
         Guohanjun <guohanjun@huawei.com>
-Subject: [PATCH -next v4 0/4]mm: page_table_check: add support on arm64 and riscv
-Date:   Mon, 18 Apr 2022 03:44:40 +0000
-Message-ID: <20220418034444.520928-1-tongtiangen@huawei.com>
+Subject: [PATCH -next v4 1/4] mm: page_table_check: move pxx_user_accessible_page into x86
+Date:   Mon, 18 Apr 2022 03:44:41 +0000
+Message-ID: <20220418034444.520928-2-tongtiangen@huawei.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220418034444.520928-1-tongtiangen@huawei.com>
+References: <20220418034444.520928-1-tongtiangen@huawei.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
@@ -64,45 +66,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Page table check performs extra verifications at the time when new
-pages become accessible from the userspace by getting their page
-table entries (PTEs PMDs etc.) added into the table. It is supported
-on X86[1].
+From: Kefeng Wang <wangkefeng.wang@huawei.com>
 
-This patchset made some simple changes and make it easier to support
-new architecture, then we support this feature on ARM64 and RISCV.
+The pxx_user_accessible_page() check the PTE bit, it's
+architecture-specific code, move them into x86's pgtable.h,
+also add default PMD/PUD_PAGE_SIZE definition, it's prepare
+for support page table check feature on new architecture.
 
-[1]https://lore.kernel.org/lkml/20211123214814.3756047-1-pasha.tatashin@soleen.com/
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Acked-by: Pasha Tatashin <pasha.tatashin@soleen.com>
+---
+ arch/x86/include/asm/pgtable.h | 19 +++++++++++++++++++
+ mm/page_table_check.c          | 25 ++++++++-----------------
+ 2 files changed, 27 insertions(+), 17 deletions(-)
 
-v3 -> v4:
- 1. Adapt to next-20220414
-
-v2 -> v3:
-  1. Modify ptep_clear() in include/linux/pgtable.h, using IS_ENABLED 
-     according to the suggestions of Pasha.
-
-v1 -> v2:
-  1. Fix arm64's pte/pmd/pud_user_accessible_page() according to the
-     suggestions of Catalin.
-  2. Also fix riscv's pte_pmd_pud_user_accessible_page().
-
-Kefeng Wang (2):
-  mm: page_table_check: move pxx_user_accessible_page into x86
-  arm64: mm: add support for page table check
-
-Tong Tiangen (2):
-  mm: page_table_check: add hooks to public helpers
-  riscv: mm: add support for page table check
-
- arch/arm64/Kconfig               |  1 +
- arch/arm64/include/asm/pgtable.h | 65 ++++++++++++++++++++++++---
- arch/riscv/Kconfig               |  1 +
- arch/riscv/include/asm/pgtable.h | 77 +++++++++++++++++++++++++++++---
- arch/x86/include/asm/pgtable.h   | 29 +++++++-----
- include/linux/pgtable.h          | 26 +++++++----
- mm/page_table_check.c            | 25 ++++-------
- 7 files changed, 178 insertions(+), 46 deletions(-)
-
+diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+index b7464f13e416..564abe42b0f7 100644
+--- a/arch/x86/include/asm/pgtable.h
++++ b/arch/x86/include/asm/pgtable.h
+@@ -1447,6 +1447,25 @@ static inline bool arch_has_hw_pte_young(void)
+ 	return true;
+ }
+ 
++#ifdef CONFIG_PAGE_TABLE_CHECK
++static inline bool pte_user_accessible_page(pte_t pte)
++{
++	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
++}
++
++static inline bool pmd_user_accessible_page(pmd_t pmd)
++{
++	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
++		(pmd_val(pmd) & _PAGE_USER);
++}
++
++static inline bool pud_user_accessible_page(pud_t pud)
++{
++	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
++		(pud_val(pud) & _PAGE_USER);
++}
++#endif
++
+ #endif	/* __ASSEMBLY__ */
+ 
+ #endif /* _ASM_X86_PGTABLE_H */
+diff --git a/mm/page_table_check.c b/mm/page_table_check.c
+index 2458281bff89..145f059d1c4d 100644
+--- a/mm/page_table_check.c
++++ b/mm/page_table_check.c
+@@ -10,6 +10,14 @@
+ #undef pr_fmt
+ #define pr_fmt(fmt)	"page_table_check: " fmt
+ 
++#ifndef PMD_PAGE_SIZE
++#define PMD_PAGE_SIZE	PMD_SIZE
++#endif
++
++#ifndef PUD_PAGE_SIZE
++#define PUD_PAGE_SIZE	PUD_SIZE
++#endif
++
+ struct page_table_check {
+ 	atomic_t anon_map_count;
+ 	atomic_t file_map_count;
+@@ -52,23 +60,6 @@ static struct page_table_check *get_page_table_check(struct page_ext *page_ext)
+ 	return (void *)(page_ext) + page_table_check_ops.offset;
+ }
+ 
+-static inline bool pte_user_accessible_page(pte_t pte)
+-{
+-	return (pte_val(pte) & _PAGE_PRESENT) && (pte_val(pte) & _PAGE_USER);
+-}
+-
+-static inline bool pmd_user_accessible_page(pmd_t pmd)
+-{
+-	return pmd_leaf(pmd) && (pmd_val(pmd) & _PAGE_PRESENT) &&
+-		(pmd_val(pmd) & _PAGE_USER);
+-}
+-
+-static inline bool pud_user_accessible_page(pud_t pud)
+-{
+-	return pud_leaf(pud) && (pud_val(pud) & _PAGE_PRESENT) &&
+-		(pud_val(pud) & _PAGE_USER);
+-}
+-
+ /*
+  * An enty is removed from the page table, decrement the counters for that page
+  * verify that it is of correct type and counters do not become negative.
 -- 
 2.25.1
 

@@ -2,149 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B68B0505E9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E666A505E9D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 21:39:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238134AbiDRTlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 15:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59968 "EHLO
+        id S1343871AbiDRTl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 15:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234364AbiDRTlH (ORCPT
+        with ESMTP id S234364AbiDRTlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 15:41:07 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4869E22B15
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:38:27 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id ks6so28706485ejb.1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 12:38:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=0voP44fyY7XGXFGcJkasfgBTf6x1VqclP4C49VR3XuM=;
-        b=QKLUw+3071xERftQyKvPl2WNNRY6O+4SZPC6715pcJO5SigVoGnGoWm61a1ET3u+20
-         uUW1QJ5rxlmh8o5Eb4EDED1D4tQG0GF0iGxvCCpHIzWXRgO+aH0uvsAdNFVAsWAcwna6
-         yr154rP1eJ47akx9Ri1IJV76X+Zkgyc8I3MvVBj4CKWTHjpeXch9JyCtb+heoqPaw7DI
-         j754EFIMjXuDQz9QQh99f/7kc4MunCF5uGT4uSIAf7TqQcCrq8Uu2Ft+vxEhdwty2uCG
-         i7YGf+ZxGRymBPZtuwpdRDy59gjUVnN2VyTRi4YloCP7bgC5jw2L5wfjhgY39BAfo+rG
-         rFwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=0voP44fyY7XGXFGcJkasfgBTf6x1VqclP4C49VR3XuM=;
-        b=jzQ3INzdkQKRPS9RJ+qEpHIk48jKV00lc+acc2j1OopLl8s3WhhH/NYvvuNGJKbW3S
-         3QVDkYK0PKA79dxCDI02SvANuyVPON/LguyebzE4x/toJXWupKURkwC0NqT5Ow0Flafj
-         d6ubNkcyhcf4QFAyY5T71ceud2osubCwNHwjjsaVvOK/6cbTYC3XURntsOQQAfeLMEqd
-         SsbRqO4h1Fk9Mw3SgFiQhgHt6AOPmJz5IqHTHkNFoPiyKOuWEn/Ep7KZVMXbxMDbnPVl
-         n4MZDiEHtomK+dC0mdm+OkLdYtw3WZEK/BJgRsZIIckE0M5uUPBrRTmGPcB209m+Ohs5
-         xyAg==
-X-Gm-Message-State: AOAM531k58bNazyYuyFJCA6V6oUbhNuZgVOGmpOTJbOsWiLQK3sQLaAu
-        PU8B5r6Z+/R4XN5FZb9aIILY/mDEt6H/DfTdDw0dTWSd/GqznRlm
-X-Google-Smtp-Source: ABdhPJzJFyOQr+32fWgDUc7K4tqLymuKG4FRwWqKBsFUMkY8P1sAYrl3abF8tYGoymgSkD4+g8CsO+ZJy+UfvKicuYs=
-X-Received: by 2002:a17:906:360d:b0:6e8:7f57:2d4d with SMTP id
- q13-20020a170906360d00b006e87f572d4dmr10750809ejb.736.1650310705836; Mon, 18
- Apr 2022 12:38:25 -0700 (PDT)
+        Mon, 18 Apr 2022 15:41:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8BF522B18;
+        Mon, 18 Apr 2022 12:39:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E31D60E17;
+        Mon, 18 Apr 2022 19:39:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA664C385A7;
+        Mon, 18 Apr 2022 19:39:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650310754;
+        bh=AbxVf+7jcuV5QIoBysMgSF50hqQeyLxUm06G4wHRIkA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iVkV6Fk1yLH11i4LUH1lECsemTWLh8XpSZ1G27KLxSshaR75zZDFMMNMjH9jIC9WU
+         MRymmlXKIhsa4NUu7eCZSl5Q56NxH1GpvyQFUG3jgyqkncvYVT/MPuyoQMy5mSgRcz
+         G3Gn5pAVgXUydiWOOiuzBZ0+P40BPgdlNcEZLXdSuU1P4koS0CdrPtTBZI5EM/z8Md
+         VPepnZZGIzRQFNU7UiCWcvwycydcYbrqRqBqgMa1Hph6PfOun5DnD/tVkRkLRYj2/R
+         ErtFGxiU3DaiuoB7e4NnEKJLhDXmAKJW6153av0rWMEJ2San7xDjWbRFGWZQNrAEHB
+         uvqTqYT9oNN0Q==
+Date:   Mon, 18 Apr 2022 12:39:13 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] random: document crng_fast_key_erasure() destination
+ possibility
+Message-ID: <Yl2+YfuFNQzhFVbP@sol.localdomain>
+References: <20220418192344.1510712-1-Jason@zx2c4.com>
 MIME-Version: 1.0
-References: <20220405135444.199295-1-maz@kernel.org>
-In-Reply-To: <20220405135444.199295-1-maz@kernel.org>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 18 Apr 2022 21:38:15 +0200
-Message-ID: <CAMRc=MfbpLPtx46pYSOt3X+EobHnwj-8aQzmyw+srVChkxbr7g@mail.gmail.com>
-Subject: Re: [PATCH v2 00/10] gpiolib: Handle immutable irq_chip structures
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Joey Gouly <joey.gouly@arm.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
-        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-tegra@vger.kernel.org,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        linux-arm-msm@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220418192344.1510712-1-Jason@zx2c4.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 5, 2022 at 3:55 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> This is a followup from [1].
->
-> I recently realised that the gpiolib play ugly tricks on the
-> unsuspecting irq_chip structures by patching the callbacks.
->
-> Not only this breaks when an irq_chip structure is made const (which
-> really should be the default case), but it also forces this structure
-> to be copied at nauseam for each instance of the GPIO block, which is
-> a waste of memory.
->
-> My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
-> which does what it says on the tin: don't you dare writing to them.
-> Gpiolib is further updated not to install its own callbacks, and it
-> becomes the responsibility of the driver to call into the gpiolib when
-> required. This is similar to what we do for other subsystems such as
-> PCI-MSI.
->
-> 5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
-> (as I actively use them) keeping a single irq_chip structure, marking
-> it const, and exposing the new flag.
->
-> Nothing breaks, the volume of change is small, the memory usage goes
-> down and we have fewer callbacks that can be used as attack vectors.
-> What's not to love?
->
-> * From v1 [1]:
->   - pl061 and AMD drivers converted
->   - New helpers to keep the changes small
->   - New warning for non-converted drivers
->   - Documentation and TODO updates
->
-> [1] https://lore.kernel.org/r/20220223154405.54912-1-maz@kernel.org
->
-> Marc Zyngier (10):
->   gpio: Don't fiddle with irqchips marked as immutable
->   gpio: Expose the gpiochip_irq_re[ql]res helpers
->   gpio: Add helpers to ease the transition towards immutable irq_chip
->   gpio: tegra186: Make the irqchip immutable
->   gpio: pl061: Make the irqchip immutable
->   pinctrl: apple-gpio: Make the irqchip immutable
->   pinctrl: msmgpio: Make the irqchip immutable
->   pinctrl: amd: Make the irqchip immutable
->   gpio: Update TODO to mention immutable irq_chip structures
->   Documentation: Update the recommended pattern for GPIO irqchips
->
->  Documentation/driver-api/gpio/driver.rst | 175 ++++++++++++++++++-----
->  drivers/gpio/TODO                        |  19 +++
->  drivers/gpio/gpio-pl061.c                |  32 +++--
->  drivers/gpio/gpio-tegra186.c             |  32 +++--
->  drivers/gpio/gpiolib.c                   |  13 +-
->  drivers/pinctrl/pinctrl-amd.c            |  11 +-
->  drivers/pinctrl/pinctrl-apple-gpio.c     |  29 ++--
->  drivers/pinctrl/qcom/pinctrl-msm.c       |  53 ++++---
->  include/linux/gpio/driver.h              |  16 +++
->  include/linux/irq.h                      |   2 +
->  kernel/irq/debugfs.c                     |   1 +
->  11 files changed, 293 insertions(+), 90 deletions(-)
->
-> --
-> 2.34.1
->
+On Mon, Apr 18, 2022 at 09:23:44PM +0200, Jason A. Donenfeld wrote:
+> This reverts 35a33ff3807d ("random: use memmove instead of memcpy for
+> remaining 32 bytes"), which was made on a totally bogus basis. The thing
+> it was worried about overlapping came from the stack, not from one of
+> its arguments, as Eric pointed out.
+> 
+> But the fact that this confusion even happened draws attention to the
+> fact that it's a bit non-obvious that the random_data parameter can
+> alias chacha_state, and in fact should do so when the caller can't rely
+> on the stack being cleared in a timely manner. So this commit documents
+> that.
+> 
+> Reported-by: Eric Biggers <ebiggers@kernel.org>
+> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 
-This may be coming too late but for the GPIO part:
+Reviewed-by: Eric Biggers <ebiggers@google.com>
 
-Reviewed-by: Bartosz Golaszewski <brgl@bgdev.pl>
+... but one nit below:
+
+> diff --git a/drivers/char/random.c b/drivers/char/random.c
+> index 3a293f919af9..87302e85759f 100644
+> --- a/drivers/char/random.c
+> +++ b/drivers/char/random.c
+> @@ -318,6 +318,13 @@ static void crng_reseed(bool force)
+>   * the resultant ChaCha state to the user, along with the second
+>   * half of the block containing 32 bytes of random data that may
+>   * be used; random_data_len may not be greater than 32.
+> + *
+> + * The returned ChaCha state contains within it a copy of the old
+> + * key value, at index 4, so that state should always be zeroed
+> + * out immediately after using in order to maintain forward secrecy.
+> + * If that state cannot be erased in a timely manner, then it is
+
+"that state" => "this state" or "the state" in the two places above, otherwise
+the first sentence can be misparsed (as "So that, state" rather than "So, that
+state").
+
+- Eric

@@ -2,42 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DF7A5058C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EEE75058A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344198AbiDROJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S1344500AbiDROKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:10:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343742AbiDRNyT (ORCPT
+        with ESMTP id S1343853AbiDRNy2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:54:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2283A13D5C;
-        Mon, 18 Apr 2022 06:03:31 -0700 (PDT)
+        Mon, 18 Apr 2022 09:54:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C12488A8;
+        Mon, 18 Apr 2022 06:03:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E29660B3C;
-        Mon, 18 Apr 2022 13:03:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DBDAC385A1;
-        Mon, 18 Apr 2022 13:03:29 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 41FBBB80D9C;
+        Mon, 18 Apr 2022 13:03:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E378C385A8;
+        Mon, 18 Apr 2022 13:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287009;
-        bh=v86yU2KzhbAfi1tTJiLt7A+HXLuAH1F0afqfBB61swM=;
+        s=korg; t=1650287027;
+        bh=A3BNRBlacHVDYbewZiH+BeNJRgRoXRk4/8nI2tf049M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=xHoRy5xcJ5MNUYDOh6Vww/OOAnInqpOt2wY9jTzMJ9VNtgc/9BBXNJ5Fznsz1Kvic
-         5BxH9RlXC+II0usVtFtZQqDwKyuu5alDhltQtc+/6vMhgAddwTp6zBxvPVZVMYrHvb
-         IJqj9SDLdSsGVXMTWyGClEVOSjpS8TIpSdALXwZY=
+        b=jVu28YEOfK1MDEjOBd+1/yQRPpPyR73a0jumxCEDzQqpRBSfNB9LwvqS6Xz/Aze1j
+         Q1x6W94NBHYps6X71Gelu6dW/rVghxLkbtideKC0NRhjinGOWx1/qTo+nbW3WzB+YA
+         8N3jRB7ag0MNt+FjedNQbReKnFiBC0VDMuW0quTo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
-        Pavel Machek <pavel@denx.de>
-Subject: [PATCH 4.9 003/218] netdevice: add the case if dev is NULL
-Date:   Mon, 18 Apr 2022 14:11:09 +0200
-Message-Id: <20220418121158.826759816@linuxfoundation.org>
+        stable@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 004/218] virtio_console: break out of buf poll on remove
+Date:   Mon, 18 Apr 2022 14:11:10 +0200
+Message-Id: <20220418121158.878641130@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -55,42 +54,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yajun Deng <yajun.deng@linux.dev>
+From: Michael S. Tsirkin <mst@redhat.com>
 
-commit b37a466837393af72fe8bcb8f1436410f3f173f3 upstream.
+[ Upstream commit 0e7174b9d5877130fec41fb4a16e0c2ee4958d44 ]
 
-Add the case if dev is NULL in dev_{put, hold}, so the caller doesn't
-need to care whether dev is NULL or not.
+A common pattern for device reset is currently:
+vdev->config->reset(vdev);
+.. cleanup ..
 
-Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
-Signed-off-by: David S. Miller <davem@davemloft.net>
-Cc: Pavel Machek <pavel@denx.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+reset prevents new interrupts from arriving and waits for interrupt
+handlers to finish.
+
+However if - as is common - the handler queues a work request which is
+flushed during the cleanup stage, we have code adding buffers / trying
+to get buffers while device is reset. Not good.
+
+This was reproduced by running
+	modprobe virtio_console
+	modprobe -r virtio_console
+in a loop.
+
+Fix this up by calling virtio_break_device + flush before reset.
+
+Bugzilla: https://bugzilla.redhat.com/show_bug.cgi?id=1786239
+Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/linux/netdevice.h |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/char/virtio_console.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -3410,7 +3410,8 @@ void netdev_run_todo(void);
-  */
- static inline void dev_put(struct net_device *dev)
- {
--	this_cpu_dec(*dev->pcpu_refcnt);
-+	if (dev)
-+		this_cpu_dec(*dev->pcpu_refcnt);
- }
+diff --git a/drivers/char/virtio_console.c b/drivers/char/virtio_console.c
+index 2632b0fdb1b5..a6b6dc204c1f 100644
+--- a/drivers/char/virtio_console.c
++++ b/drivers/char/virtio_console.c
+@@ -2004,6 +2004,13 @@ static void virtcons_remove(struct virtio_device *vdev)
+ 	list_del(&portdev->list);
+ 	spin_unlock_irq(&pdrvdata_lock);
  
- /**
-@@ -3421,7 +3422,8 @@ static inline void dev_put(struct net_de
-  */
- static inline void dev_hold(struct net_device *dev)
- {
--	this_cpu_inc(*dev->pcpu_refcnt);
-+	if (dev)
-+		this_cpu_inc(*dev->pcpu_refcnt);
- }
- 
- /* Carrier loss detection, dial on demand. The functions netif_carrier_on
++	/* Device is going away, exit any polling for buffers */
++	virtio_break_device(vdev);
++	if (use_multiport(portdev))
++		flush_work(&portdev->control_work);
++	else
++		flush_work(&portdev->config_work);
++
+ 	/* Disable interrupts for vqs */
+ 	vdev->config->reset(vdev);
+ 	/* Finish up work that's lined up */
+-- 
+2.34.1
+
 
 

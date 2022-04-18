@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38792505137
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D98EA505333
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:53:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239013AbiDRMeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38526 "EHLO
+        id S240461AbiDRM4D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:56:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240090AbiDRM3T (ORCPT
+        with ESMTP id S239928AbiDRMn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB75C23174;
-        Mon, 18 Apr 2022 05:23:13 -0700 (PDT)
+        Mon, 18 Apr 2022 08:43:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7B92613A;
+        Mon, 18 Apr 2022 05:32:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4DCC7B80ED6;
-        Mon, 18 Apr 2022 12:23:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BCEFC385A8;
-        Mon, 18 Apr 2022 12:23:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1C2FDB80ED7;
+        Mon, 18 Apr 2022 12:32:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EC89C385A1;
+        Mon, 18 Apr 2022 12:32:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284591;
-        bh=Baju3h8I6ftmB2znulzDklc3kpii9XeoY0YmYHSSxk4=;
+        s=korg; t=1650285131;
+        bh=okAbp2v/Y4eqFaui4seYNyJOzyps1nqQznQq5s+nF1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QZliK3l4liWjTMUNNASSTvbfOAaFf0G90TduOGXVoUTzNMnXbrxS2Tr+5LWI6d94e
-         FjljkXXMl2hu9An1U1EihWH0jDOVG1yKQIa5Zh3bSoGiwmnMM4eE55s3ja+0pHm1qb
-         gKMAz2QmAF8dV+r/rUzySepB90eb1mlHG7VUnHOM=
+        b=m1oX90WoqWkFuEe/+O3exLSLPOKreEfSVdSSGPsyjEbiCNzRYs+eqwk2lrhVOeo1S
+         kEjlebUq8ezodIzKm5LiGZek09OpMSsXdRM1/KYJxg4PvPgGpzc/Rw0L97n30n0SDP
+         4PvrmSrZth0s1lqACPTGPJRADc0tFK8ZHGjCm3+U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Anthony Koo <Anthony.Koo@amd.com>,
-        Eric Yang <Eric.Yang2@amd.com>, Alex Hung <alex.hung@amd.com>,
-        Roman Li <Roman.Li@amd.com>,
+        stable@vger.kernel.org, Chris Park <Chris.Park@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
         Daniel Wheeler <daniel.wheeler@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 163/219] drm/amd/display: Enable power gating before init_pipes
+Subject: [PATCH 5.15 112/189] drm/amd/display: Update VTEM Infopacket definition
 Date:   Mon, 18 Apr 2022 14:12:12 +0200
-Message-Id: <20220418121211.446404520@linuxfoundation.org>
+Message-Id: <20220418121203.679495975@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -58,104 +58,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roman Li <Roman.Li@amd.com>
+From: Leo (Hanghong) Ma <hanghong.ma@amd.com>
 
-[ Upstream commit 58e16c752e9540b28a873c44c3bee83e022007c1 ]
+[ Upstream commit c9fbf6435162ed5fb7201d1d4adf6585c6a8c327 ]
 
-[Why]
-In init_hw() we call init_pipes() before enabling power gating.
-init_pipes() tries to power gate dsc but it may fail because
-required force-ons are not released yet.
-As a result with dsc config the following errors observed on resume:
-"REG_WAIT timeout 1us * 1000 tries - dcn20_dsc_pg_control"
-"REG_WAIT timeout 1us * 1000 tries - dcn20_dpp_pg_control"
-"REG_WAIT timeout 1us * 1000 tries - dcn20_hubp_pg_control"
+[Why & How]
+The latest HDMI SPEC has updated the VTEM packet structure,
+so change the VTEM Infopacket defined in the driver side to align
+with the SPEC.
 
-[How]
-Move enable_power_gating_plane() before init_pipes() in init_hw()
-
-Reviewed-by: Anthony Koo <Anthony.Koo@amd.com>
-Reviewed-by: Eric Yang <Eric.Yang2@amd.com>
+Reviewed-by: Chris Park <Chris.Park@amd.com>
 Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Roman Li <Roman.Li@amd.com>
+Signed-off-by: Leo (Hanghong) Ma <hanghong.ma@amd.com>
 Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c | 5 +++--
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c        | 5 +++--
- drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c        | 5 +++--
- 3 files changed, 9 insertions(+), 6 deletions(-)
+ .../gpu/drm/amd/display/modules/info_packet/info_packet.c    | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-index a6703d17fcb6..c6a0daa56fa0 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn10/dcn10_hw_sequencer.c
-@@ -1501,6 +1501,9 @@ void dcn10_init_hw(struct dc *dc)
- 	if (dc->config.power_down_display_on_boot)
- 		dc_link_blank_all_dp_displays(dc);
+diff --git a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+index 57f198de5e2c..4e075b01d48b 100644
+--- a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
++++ b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+@@ -100,7 +100,8 @@ enum vsc_packet_revision {
+ //PB7 = MD0
+ #define MASK_VTEM_MD0__VRR_EN         0x01
+ #define MASK_VTEM_MD0__M_CONST        0x02
+-#define MASK_VTEM_MD0__RESERVED2      0x0C
++#define MASK_VTEM_MD0__QMS_EN         0x04
++#define MASK_VTEM_MD0__RESERVED2      0x08
+ #define MASK_VTEM_MD0__FVA_FACTOR_M1  0xF0
  
-+	if (hws->funcs.enable_power_gating_plane)
-+		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
-+
- 	/* If taking control over from VBIOS, we may want to optimize our first
- 	 * mode set, so we need to skip powering down pipes until we know which
- 	 * pipes we want to use.
-@@ -1553,8 +1556,6 @@ void dcn10_init_hw(struct dc *dc)
+ //MD1
+@@ -109,7 +110,7 @@ enum vsc_packet_revision {
+ //MD2
+ #define MASK_VTEM_MD2__BASE_REFRESH_RATE_98  0x03
+ #define MASK_VTEM_MD2__RB                    0x04
+-#define MASK_VTEM_MD2__RESERVED3             0xF8
++#define MASK_VTEM_MD2__NEXT_TFR              0xF8
  
- 		REG_UPDATE(DCFCLK_CNTL, DCFCLK_GATE_DIS, 0);
- 	}
--	if (hws->funcs.enable_power_gating_plane)
--		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
- 
- 	if (dc->clk_mgr->funcs->notify_wm_ranges)
- 		dc->clk_mgr->funcs->notify_wm_ranges(dc->clk_mgr);
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-index 1db1ca19411d..05dc0a3ae2a3 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-@@ -548,6 +548,9 @@ void dcn30_init_hw(struct dc *dc)
- 	if (dc->config.power_down_display_on_boot)
- 		dc_link_blank_all_dp_displays(dc);
- 
-+	if (hws->funcs.enable_power_gating_plane)
-+		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
-+
- 	/* If taking control over from VBIOS, we may want to optimize our first
- 	 * mode set, so we need to skip powering down pipes until we know which
- 	 * pipes we want to use.
-@@ -625,8 +628,6 @@ void dcn30_init_hw(struct dc *dc)
- 
- 		REG_UPDATE(DCFCLK_CNTL, DCFCLK_GATE_DIS, 0);
- 	}
--	if (hws->funcs.enable_power_gating_plane)
--		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
- 
- 	if (!dcb->funcs->is_accelerated_mode(dcb) && dc->res_pool->hubbub->funcs->init_watermarks)
- 		dc->res_pool->hubbub->funcs->init_watermarks(dc->res_pool->hubbub);
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-index 1e156f398065..bdc4467b40d7 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn31/dcn31_hwseq.c
-@@ -200,6 +200,9 @@ void dcn31_init_hw(struct dc *dc)
- 	if (dc->config.power_down_display_on_boot)
- 		dc_link_blank_all_dp_displays(dc);
- 
-+	if (hws->funcs.enable_power_gating_plane)
-+		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
-+
- 	/* If taking control over from VBIOS, we may want to optimize our first
- 	 * mode set, so we need to skip powering down pipes until we know which
- 	 * pipes we want to use.
-@@ -249,8 +252,6 @@ void dcn31_init_hw(struct dc *dc)
- 
- 		REG_UPDATE(DCFCLK_CNTL, DCFCLK_GATE_DIS, 0);
- 	}
--	if (hws->funcs.enable_power_gating_plane)
--		hws->funcs.enable_power_gating_plane(dc->hwseq, true);
- 
- 	if (!dcb->funcs->is_accelerated_mode(dcb) && dc->res_pool->hubbub->funcs->init_watermarks)
- 		dc->res_pool->hubbub->funcs->init_watermarks(dc->res_pool->hubbub);
+ //MD3
+ #define MASK_VTEM_MD3__BASE_REFRESH_RATE_07  0xFF
 -- 
 2.35.1
 

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D323505899
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A785059B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245265AbiDROGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
+        id S1344339AbiDRO0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244207AbiDRNtc (ORCPT
+        with ESMTP id S1343860AbiDROPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:49:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DADD42ED8;
-        Mon, 18 Apr 2022 06:01:36 -0700 (PDT)
+        Mon, 18 Apr 2022 10:15:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214F3393CF;
+        Mon, 18 Apr 2022 06:12:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F33E660B35;
-        Mon, 18 Apr 2022 13:01:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE84AC385A1;
-        Mon, 18 Apr 2022 13:01:34 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C34E1B80EC0;
+        Mon, 18 Apr 2022 13:12:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 255D8C385A1;
+        Mon, 18 Apr 2022 13:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286895;
-        bh=jc/F14J1Q5blMfhfcsVcA4oJiPqFkisi/RXSOeFA/4Q=;
+        s=korg; t=1650287548;
+        bh=J83axoU7BMJmk7eft+LTP3W1l5BGR6Lr9WESzPipDng=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=guy6q5UNtrChp2cVCFVCvyWeBntbrJjsXYBbxzwUWoBJoxgVIK/DJnKZMswwAmB+g
-         WjlGcO6zI/E+EQAYvufc7KATc2gu3otCtYpRSF+izK4mTarDVAsEcoyXEnuIwXPILF
-         5Ppn04LbvhvszMnrJE2tOLY36ZctS7X1cVzOSPhU=
+        b=hXhg9Qfvkf5W/kyjj3tOiT1gCwUNspGxSAOG3s1by9grR1sr7Dm0t3iiqli6AHGXU
+         t1GmLTfiJ+gohqOF0vrovyoW5Y6BSq2pdT9Y7jy1I8B21MpVfGsuHBfl+svVgBXYGx
+         qYtjzBbrvecob90gPSjNtdupbrsrF3XQFprdMSUM=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Patrick Wang <patrick.wang.shcn@gmail.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.14 279/284] mm: kmemleak: take a full lowmem check in kmemleak_*_phys()
-Date:   Mon, 18 Apr 2022 14:14:20 +0200
-Message-Id: <20220418121221.059720168@linuxfoundation.org>
+Subject: [PATCH 4.9 195/218] x86/speculation: Restore speculation related MSRs during S3 resume
+Date:   Mon, 18 Apr 2022 14:14:21 +0200
+Message-Id: <20220418121207.045167682@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,96 +58,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Wang <patrick.wang.shcn@gmail.com>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit 23c2d497de21f25898fbea70aeb292ab8acc8c94 upstream.
+commit e2a1256b17b16f9b9adf1b6fea56819e7b68e463 upstream.
 
-The kmemleak_*_phys() apis do not check the address for lowmem's min
-boundary, while the caller may pass an address below lowmem, which will
-trigger an oops:
+After resuming from suspend-to-RAM, the MSRs that control CPU's
+speculative execution behavior are not being restored on the boot CPU.
 
-  # echo scan > /sys/kernel/debug/kmemleak
-  Unable to handle kernel paging request at virtual address ff5fffffffe00000
-  Oops [#1]
-  Modules linked in:
-  CPU: 2 PID: 134 Comm: bash Not tainted 5.18.0-rc1-next-20220407 #33
-  Hardware name: riscv-virtio,qemu (DT)
-  epc : scan_block+0x74/0x15c
-   ra : scan_block+0x72/0x15c
-  epc : ffffffff801e5806 ra : ffffffff801e5804 sp : ff200000104abc30
-   gp : ffffffff815cd4e8 tp : ff60000004cfa340 t0 : 0000000000000200
-   t1 : 00aaaaaac23954cc t2 : 00000000000003ff s0 : ff200000104abc90
-   s1 : ffffffff81b0ff28 a0 : 0000000000000000 a1 : ff5fffffffe01000
-   a2 : ffffffff81b0ff28 a3 : 0000000000000002 a4 : 0000000000000001
-   a5 : 0000000000000000 a6 : ff200000104abd7c a7 : 0000000000000005
-   s2 : ff5fffffffe00ff9 s3 : ffffffff815cd998 s4 : ffffffff815d0e90
-   s5 : ffffffff81b0ff28 s6 : 0000000000000020 s7 : ffffffff815d0eb0
-   s8 : ffffffffffffffff s9 : ff5fffffffe00000 s10: ff5fffffffe01000
-   s11: 0000000000000022 t3 : 00ffffffaa17db4c t4 : 000000000000000f
-   t5 : 0000000000000001 t6 : 0000000000000000
-  status: 0000000000000100 badaddr: ff5fffffffe00000 cause: 000000000000000d
-    scan_gray_list+0x12e/0x1a6
-    kmemleak_scan+0x2aa/0x57e
-    kmemleak_write+0x32a/0x40c
-    full_proxy_write+0x56/0x82
-    vfs_write+0xa6/0x2a6
-    ksys_write+0x6c/0xe2
-    sys_write+0x22/0x2a
-    ret_from_syscall+0x0/0x2
+These MSRs are used to mitigate speculative execution vulnerabilities.
+Not restoring them correctly may leave the CPU vulnerable.  Secondary
+CPU's MSRs are correctly being restored at S3 resume by
+identify_secondary_cpu().
 
-The callers may not quite know the actual address they pass(e.g. from
-devicetree).  So the kmemleak_*_phys() apis should guarantee the address
-they finally use is in lowmem range, so check the address for lowmem's
-min boundary.
+During S3 resume, restore these MSRs for boot CPU when restoring its
+processor state.
 
-Link: https://lkml.kernel.org/r/20220413122925.33856-1-patrick.wang.shcn@gmail.com
-Signed-off-by: Patrick Wang <patrick.wang.shcn@gmail.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Fixes: 772439717dbf ("x86/bugs/intel: Set proper CPU features and setup RDS")
+Reported-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Acked-by: Borislav Petkov <bp@suse.de>
+Reviewed-by: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: stable@vger.kernel.org
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/kmemleak.c |    8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/power/cpu.c |   14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
---- a/mm/kmemleak.c
-+++ b/mm/kmemleak.c
-@@ -1192,7 +1192,7 @@ EXPORT_SYMBOL(kmemleak_no_scan);
- void __ref kmemleak_alloc_phys(phys_addr_t phys, size_t size, int min_count,
- 			       gfp_t gfp)
- {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_alloc(__va(phys), size, min_count, gfp);
+--- a/arch/x86/power/cpu.c
++++ b/arch/x86/power/cpu.c
+@@ -510,10 +510,24 @@ static int pm_cpu_check(const struct x86
+ 	return ret;
  }
- EXPORT_SYMBOL(kmemleak_alloc_phys);
-@@ -1203,7 +1203,7 @@ EXPORT_SYMBOL(kmemleak_alloc_phys);
-  */
- void __ref kmemleak_free_part_phys(phys_addr_t phys, size_t size)
+ 
++static void pm_save_spec_msr(void)
++{
++	u32 spec_msr_id[] = {
++		MSR_IA32_SPEC_CTRL,
++		MSR_IA32_TSX_CTRL,
++		MSR_TSX_FORCE_ABORT,
++		MSR_IA32_MCU_OPT_CTRL,
++		MSR_AMD64_LS_CFG,
++	};
++
++	msr_build_context(spec_msr_id, ARRAY_SIZE(spec_msr_id));
++}
++
+ static int pm_check_save_msr(void)
  {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_free_part(__va(phys), size);
+ 	dmi_check_system(msr_save_dmi_table);
+ 	pm_cpu_check(msr_save_cpu_table);
++	pm_save_spec_msr();
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL(kmemleak_free_part_phys);
-@@ -1214,7 +1214,7 @@ EXPORT_SYMBOL(kmemleak_free_part_phys);
-  */
- void __ref kmemleak_not_leak_phys(phys_addr_t phys)
- {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_not_leak(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_not_leak_phys);
-@@ -1225,7 +1225,7 @@ EXPORT_SYMBOL(kmemleak_not_leak_phys);
-  */
- void __ref kmemleak_ignore_phys(phys_addr_t phys)
- {
--	if (!IS_ENABLED(CONFIG_HIGHMEM) || PHYS_PFN(phys) < max_low_pfn)
-+	if (PHYS_PFN(phys) >= min_low_pfn && PHYS_PFN(phys) < max_low_pfn)
- 		kmemleak_ignore(__va(phys));
- }
- EXPORT_SYMBOL(kmemleak_ignore_phys);
 
 

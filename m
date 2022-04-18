@@ -2,108 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C69504DF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44820504DFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237316AbiDRIku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34686 "EHLO
+        id S237388AbiDRImt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:42:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237284AbiDRIks (ORCPT
+        with ESMTP id S237368AbiDRImr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:40:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F26A819C07
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650271089;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LdbvqaVaOQQPzji0XpZH7xN+F7oFT2JmFZMage+5BKI=;
-        b=EoYM7o5jiwnanELXscUnlps3relb6MK7EYwySYo3tdQ11aSq0+pObTzxIKPtfYTiFq7w87
-        c+XjzEYvNIa6+R2Dsoj/JLBspPM7evY3F2wWjKfCFq+HdLVWjAVy88pev07MPZOOED9zE0
-        kRfH9X5PoSQHRu8xVUTRJStxH5eS5yA=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-UeOd6_AiPpuzzfvLJa-NTw-1; Mon, 18 Apr 2022 04:38:06 -0400
-X-MC-Unique: UeOd6_AiPpuzzfvLJa-NTw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 45BA380005D;
-        Mon, 18 Apr 2022 08:37:55 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 89C71C5094E;
-        Mon, 18 Apr 2022 08:37:49 +0000 (UTC)
-Message-ID: <d2820bafeea6e908108bac863269a7ff7f519999.camel@redhat.com>
-Subject: Re: [PATCH 1/4] KVM: x86: Tag APICv DISABLE inhibit, not ABSENT, if
- APICv is disabled
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Gaoning Pan <pgn@zju.edu.cn>,
-        Yongkang Jia <kangel@zju.edu.cn>
-Date:   Mon, 18 Apr 2022 11:37:48 +0300
-In-Reply-To: <20220416034249.2609491-2-seanjc@google.com>
-References: <20220416034249.2609491-1-seanjc@google.com>
-         <20220416034249.2609491-2-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 18 Apr 2022 04:42:47 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98106440
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:40:08 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-2ef5380669cso116469537b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 01:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=VO1nEBpM2YEzpSjqSp5ZypN9/E5PvRPrZm9lD3pFwK0=;
+        b=UIaVzuEYO4Xoxd703BMfjdUKk4kojw9KBYsQ4zcjPaYygOQ4T/UOXau53e34VgPZPZ
+         +rhTZE653pDZ+6CDi5HRZE1C8QAUSsHfMBlxBrat3j4+UuH3ZWKDKp9ugeHG9IsYAIL8
+         D6evsiMhHBvRlaFWStjW9HR0t6TZQbzvB5fmvCmfNgX9WEclos33MyH9aYjOh3NfJ7N4
+         LEC94Nv2JAanVoP+y7+1nTPQNvig2q0+I0RmLN8cSUYDqUNzqw8nuQPvGUtDdsleW0rj
+         f6+aOYvlCyst3FrmsQjqKwzTpRWNV8d7e+2sQ4PrCEWOi0YyzNAJXF/1DnuRGgddyTdJ
+         QqkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=VO1nEBpM2YEzpSjqSp5ZypN9/E5PvRPrZm9lD3pFwK0=;
+        b=nOoWS3nm4P2PDDqrCc8B5Ny41KZrWcdyd7U8V+UMqDh53ypYO8hgtPYZxxvZBf/OHf
+         Q0K9XR2Zhillv4A5Jq/+HZ6SDYd2L/ilf937ZvXwMEL+rmIJV/Q/zow3hrENriTCNNzS
+         pn0LL8WDlgv5FPSMqrcx6Z5rVdRxhi4zvKq6puMEyWKTTtBthPINGBpYtOCFSKwUr8W0
+         veMWo4b9AnM62s3OfOeh9zVt88ccrcDyV6atmbQXi7tR0Yip94dlPk/XqVkFFgg/cOa0
+         3Aay9ERvC8EnsipRiwuEj8ljXuNx0IJb1d/LhVm76IfMunyQn6L8VFnTudxV6qxCnB2n
+         WjeA==
+X-Gm-Message-State: AOAM533ojEllFzS52JA1DNp90vhFJdjwHkW76vKRpyXobYsKRbocHdvk
+        dJ1j2txn/WrZUH9qXttyZFZu861JyrxhEWH7+jt05A==
+X-Google-Smtp-Source: ABdhPJwBsdJqYmnkgUOwR19QmRCRBStZn9e3VvdDBzctQiTa1N4fHUqW3RN/k4sO1BNcBrw/Ox1gi3Brn2Bt1M34N5U=
+X-Received: by 2002:a0d:f487:0:b0:2eb:54f5:3abf with SMTP id
+ d129-20020a0df487000000b002eb54f53abfmr9383836ywf.141.1650271207850; Mon, 18
+ Apr 2022 01:40:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220414110838.883074566@linuxfoundation.org>
+In-Reply-To: <20220414110838.883074566@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 18 Apr 2022 14:09:56 +0530
+Message-ID: <CA+G9fYvgzFW7sMZVdw5r970QNNg4OK8=pbQV0kDfbOX-rXu5Rw@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/338] 4.19.238-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com, Netdev <netdev@vger.kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2022-04-16 at 03:42 +0000, Sean Christopherson wrote:
-> Set the DISABLE inhibit, not the ABSENT inhibit, if APICv is disabled via
-> module param.  A recent refactoring to add a wrapper for setting/clearing
-> inhibits unintentionally changed the flag, probably due to a copy+paste
-> goof.
-> 
-> Fixes: 4f4c4a3ee53c ("KVM: x86: Trace all APICv inhibit changes and capture overall status")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/x86.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index ab336f7c82e4..753296902535 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9159,7 +9159,7 @@ static void kvm_apicv_init(struct kvm *kvm)
->  
->  	if (!enable_apicv)
->  		set_or_clear_apicv_inhibit(inhibits,
-> -					   APICV_INHIBIT_REASON_ABSENT, true);
-> +					   APICV_INHIBIT_REASON_DISABLE, true);
->  }
->  
->  static void kvm_sched_yield(struct kvm_vcpu *vcpu, unsigned long dest_id)
+On Thu, 14 Apr 2022 at 18:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.238 release.
+> There are 338 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sat, 16 Apr 2022 11:07:54 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.238-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-So ABSENT means that userspace didn't enable, it and DISABLE means kernel module param disabled it.
-I didn't follow patches that touched those but it feels like we can use a single inhibit reason for both,
-or at least make better names for this. APICV_INHIBIT_REASON_ABSENT doesn't sound good to me.
 
-Having said that, the patch is OK.
+Following kernel warning noticed on arm64 Juno-r2 while booting
+stable-rc 4.19.238. Here is the full test log link [1].
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+[    0.000000] Booting Linux on physical CPU 0x0000000100 [0x410fd033]
+[    0.000000] Linux version 4.19.238 (tuxmake@tuxmake) (gcc version
+11.2.0 (Debian 11.2.0-18)) #1 SMP PREEMPT @1650206156
+[    0.000000] Machine model: ARM Juno development board (r2)
+<trim>
+[   18.499895] ================================
+[   18.504172] WARNING: inconsistent lock state
+[   18.508451] 4.19.238 #1 Not tainted
+[   18.511944] --------------------------------
+[   18.516222] inconsistent {IN-SOFTIRQ-W} -> {SOFTIRQ-ON-W} usage.
+[   18.522242] kworker/u12:3/60 [HC0[0]:SC0[0]:HE1:SE1] takes:
+[   18.527826] (____ptrval____)
+(&(&xprt->transport_lock)->rlock){+.?.}, at: xprt_destroy+0x70/0xe0
+[   18.536648] {IN-SOFTIRQ-W} state was registered at:
+[   18.541543]   lock_acquire+0xc8/0x23c
+[   18.545216]   _raw_spin_lock+0x50/0x64
+[   18.548973]   xs_tcp_state_change+0x1b4/0x440
+[   18.553343]   tcp_rcv_state_process+0x684/0x1300
+[   18.557972]   tcp_v4_do_rcv+0x70/0x290
+[   18.561731]   tcp_v4_rcv+0xc34/0xda0
+[   18.565316]   ip_local_deliver_finish+0x16c/0x3c0
+[   18.570032]   ip_local_deliver+0x6c/0x240
+[   18.574051]   ip_rcv_finish+0x98/0xe4
+[   18.577722]   ip_rcv+0x68/0x210
+[   18.580871]   __netif_receive_skb_one_core+0x6c/0x9c
+[   18.585847]   __netif_receive_skb+0x2c/0x74
+[   18.590039]   netif_receive_skb_internal+0x88/0x20c
+[   18.594928]   netif_receive_skb+0x68/0x1a0
+[   18.599036]   smsc911x_poll+0x104/0x290
+[   18.602881]   net_rx_action+0x124/0x4bc
+[   18.606727]   __do_softirq+0x1d0/0x524
+[   18.610484]   irq_exit+0x11c/0x144
+[   18.613894]   __handle_domain_irq+0x84/0xe0
+[   18.618086]   gic_handle_irq+0x5c/0xb0
+[   18.621843]   el1_irq+0xb4/0x130
+[   18.625081]   cpuidle_enter_state+0xc0/0x3ec
+[   18.629361]   cpuidle_enter+0x38/0x4c
+[   18.633032]   do_idle+0x200/0x2c0
+[   18.636353]   cpu_startup_entry+0x30/0x50
+[   18.640372]   rest_init+0x260/0x270
+[   18.643870]   start_kernel+0x45c/0x490
+[   18.647625] irq event stamp: 18931
+[   18.651037] hardirqs last  enabled at (18931): [<ffff00000832e800>]
+kfree+0xe0/0x370
+[   18.658799] hardirqs last disabled at (18930): [<ffff00000832e7ec>]
+kfree+0xcc/0x370
+[   18.666564] softirqs last  enabled at (18920): [<ffff000008fbce94>]
+rpc_wake_up_first_on_wq+0xb4/0x1b0
+[   18.675893] softirqs last disabled at (18918): [<ffff000008fbce18>]
+rpc_wake_up_first_on_wq+0x38/0x1b0
+[   18.685217]
+[   18.685217] other info that might help us debug this:
+[   18.691758]  Possible unsafe locking scenario:
+[   18.691758]
+[   18.697689]        CPU0
+[   18.700137]        ----
+[   18.702586]   lock(&(&xprt->transport_lock)->rlock);
+[   18.707562]   <Interrupt>
+[   18.710184]     lock(&(&xprt->transport_lock)->rlock);
+[   18.715335]
+[   18.715335]  *** DEADLOCK ***
+[   18.715335]
+[   18.721270] 2 locks held by kworker/u12:3/60:
+[   18.725633]  #0: (____ptrval____)
+((wq_completion)\"rpciod\"){+.+.}, at: process_one_work+0x1e0/0x6c0
+[   18.734711]  #1: (____ptrval____)
+((work_completion)(&task->u.tk_work)){+.+.}, at:
+process_one_work+0x1e0/0x6c0
+[   18.744831]
+[   18.744831] stack backtrace:
+[   18.749202] CPU: 0 PID: 60 Comm: kworker/u12:3 Not tainted 4.19.238 #1
+[   18.755741] Hardware name: ARM Juno development board (r2) (DT)
+[   18.761678] Workqueue: rpciod rpc_async_schedule
+[   18.766305] Call trace:
+[   18.768758]  dump_backtrace+0x0/0x190
+[   18.772427]  show_stack+0x28/0x34
+[   18.775748]  dump_stack+0xb0/0xf8
+[   18.779072]  print_usage_bug.part.0+0x25c/0x270
+[   18.783613]  mark_lock+0x5d0/0x6e0
+[   18.787023]  __lock_acquire+0x6c4/0x16f0
+[   18.790955]  lock_acquire+0xc8/0x23c
+[   18.794539]  _raw_spin_lock+0x50/0x64
+[   18.798210]  xprt_destroy+0x70/0xe0
+[   18.801708]  xprt_put+0x44/0x50
+[   18.804857]  rpc_task_release_client+0x7c/0x90
+[   18.809311]  __rpc_execute+0x2a8/0x5f4
+[   18.813069]  rpc_async_schedule+0x24/0x30
+[   18.817089]  process_one_work+0x28c/0x6c0
+[   18.821108]  worker_thread+0x6c/0x450
+[   18.824779]  kthread+0x12c/0x16c
+[   18.828015]  ret_from_fork+0x10/0x24
+[   18.931718] VFS: Mounted root (nfs filesystem) on device 0:17.
 
-Best regards,
-	Maxim Levitsky
+metadata:
+  git_ref: linux-4.19.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: aaad8e56ca1e56fe34b5a33f30fb6f9279969020
+  git_describe: v4.19.238
+  kernel_version: 4.19.238
+  kernel-config: https://builds.tuxbuild.com/27vgbZzdS2aNU90tNu4Hl0IJuIP/config
 
+
+--
+Linaro LKFT
+https://lkft.linaro.org
+
+[1] https://lkft.validation.linaro.org/scheduler/job/4909565#L1141

@@ -2,181 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048FE505BBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA6F505BC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:46:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344030AbiDRPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:48:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34184 "EHLO
+        id S241957AbiDRPtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345849AbiDRPrd (ORCPT
+        with ESMTP id S1345653AbiDRPtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:47:33 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B60E2C13F
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:14:56 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id v12so12581963plv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=B53fka1F3qxqQdxFr9SFgaJ7tbAOPZYraoihVoIiog0=;
-        b=lU9I3+KSYNMyQdy1jahGZNiQONptfa7XVZSpq6ccWkud1YanLo2MnxmbwjUu7xPtey
-         sHES3gLFWy29nz2uKm1FgqIPzRQmMbFp3uxQJ561Dt5+4dKfsIDdpeuKGt4WsnPGDNVq
-         hngDN2TI+UKJNGqI6zICbKSEO1ctCKiiz0bnNV5+pfPDHD5wBObw7CDLG+4xbMR7QUTn
-         elDurf84ml/MAFJIwJvg8NBA1JJTcWIJM/oyd69nwXUep2ju6DvdlFTFdShz9FfbWKrw
-         Ki4oyYGKQb0RD+lY8U+istt85FQ7tI/7ji7RoyLzxyMXBScOD03syEolLZx2Kpw4fLOU
-         aR6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=B53fka1F3qxqQdxFr9SFgaJ7tbAOPZYraoihVoIiog0=;
-        b=CTtnTzeElvsLljGz5OCYqNZykPfA+76XV2k9F+dCJ2KcoeB3AsZC62H9bl1oqEONQz
-         KxK8kFMp3O8OwQgJjppoulTNuGfSnRcHIq4Chm3Ky/GdfZT65Kvufi9qxRrSTvFvVkZb
-         xn67ErJDwTM6SQi0qB7bbXenU0KjM0hYY+4OEUsfjjgbZUI9t639nfLNTknWu5IpsYXm
-         tIqVc68XcQhLs7Ot9aHt5x6myk9XOgv68h/1TTcGPbCIp2IGoGZ7uVq/wc2hyP2rGjxh
-         EULWvUK53NH58CR7lumxIOGuPhzcBanMUOgl4Y/x4FeFvNtC3cxLuyzxCPBNMcl6hRds
-         K1IQ==
-X-Gm-Message-State: AOAM531I0g7sMGVAlb79g4veXG3vaj+CsgUy4usKmgjVfSvFGI/MB0Db
-        SfM4t6PY7T9y5Wv+1yZBIRAaMg==
-X-Google-Smtp-Source: ABdhPJwZ8N3FhPhpLHRas8PFdxxK3sGwC8rzRSRTSNYXeIDF8PM79p7kg+Plnw1pNvxBpvGU6f28ig==
-X-Received: by 2002:a17:902:9b87:b0:156:bf3e:9ab5 with SMTP id y7-20020a1709029b8700b00156bf3e9ab5mr11225355plp.119.1650294895863;
-        Mon, 18 Apr 2022 08:14:55 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j24-20020aa78d18000000b0050564584660sm12482867pfe.32.2022.04.18.08.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 08:14:55 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:14:51 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Zeng Guang <guang.zeng@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jethro Beekman <jethro@fortanix.com>,
-        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>
-Subject: Re: [PATCH v8 9/9] KVM: VMX: enable IPI virtualization
-Message-ID: <Yl2AaxXFh7UfvpFx@google.com>
-References: <20220411090447.5928-1-guang.zeng@intel.com>
- <20220411090447.5928-10-guang.zeng@intel.com>
- <YlmOUtXgIdQcUTO1@google.com>
- <20220418092500.GA14409@gao-cwp>
+        Mon, 18 Apr 2022 11:49:07 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383A632062
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 08:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650295235; x=1681831235;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=2l5Hs/av5CYW+PzqQ6g7t7SAbqQBkxBQtdtVt1h1x+w=;
+  b=a1eaRnyvPA+3vkNbpWTwBQknQNn+pQ2k1vOu2pA+g7R9cQOcoKcu+73n
+   7TksafEFNW68NI/p/kgvDDVhs0P7XmH+eIXouKLRcjRzwb1NAcVbiKwAx
+   xIgQ4wuu+Ccxy8Xl3Y86wonRQe2s2KDPQBaEFJAAMvoJH1RWRJKqsHO6D
+   0sCAs3BzaUY8RWMZOsz5p1dIi9m49S+1PBXWnhSH9TCyOrYtJRn5c7ePQ
+   tjFEW/pNgK5lA9KXU+CPQ6tXd5CjX+Edy+iubOBhm/InqMb3YFGv8r3JG
+   jJi0igGu0IXI1ctFDKp1cZc6i7NEM3C3wIpMG/im7VlDoyhFPo+OhkFOm
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="250843706"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="250843706"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 08:20:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="529600585"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 08:20:32 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngTB1-0004ji-L0;
+        Mon, 18 Apr 2022 15:20:31 +0000
+Date:   Mon, 18 Apr 2022 23:20:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: WARNING: modpost: vmlinux.o(.text+0xa47e1): Section mismatch in
+ reference from the function __next_node() to the variable
+ .init.data:numa_nodes_parsed
+Message-ID: <202204182350.tOU3dyLx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220418092500.GA14409@gao-cwp>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022, Chao Gao wrote:
-> On Fri, Apr 15, 2022 at 03:25:06PM +0000, Sean Christopherson wrote:
-> >On Mon, Apr 11, 2022, Zeng Guang wrote:
-> >> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> >> index d1a39285deab..23fbf52f7bea 100644
-> >> --- a/arch/x86/kvm/x86.c
-> >> +++ b/arch/x86/kvm/x86.c
-> >> @@ -11180,11 +11180,15 @@ static int sync_regs(struct kvm_vcpu *vcpu)
-> >>  
-> >>  int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
-> >>  {
-> >> +	int ret = 0;
-> >> +
-> >>  	if (kvm_check_tsc_unstable() && atomic_read(&kvm->online_vcpus) != 0)
-> >>  		pr_warn_once("kvm: SMP vm created on host with unstable TSC; "
-> >>  			     "guest TSC will not be reliable\n");
-> >>  
-> >> -	return 0;
-> >> +	if (kvm_x86_ops.alloc_ipiv_pid_table)
-> >> +		ret = static_call(kvm_x86_alloc_ipiv_pid_table)(kvm);
-> >
-> >Add a generic kvm_x86_ops.vcpu_precreate, no reason to make this so specific.
-> >And use KVM_X86_OP_RET0 instead of KVM_X86_OP_OPTIONAL, then this can simply be
-> >
-> >	return static_call(kvm_x86_vcpu_precreate);
-> >
-> >That said, there's a flaw in my genius plan.
-> >
-> >  1. KVM_CREATE_VM
-> >  2. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=1
-> >  3. KVM_CREATE_VCPU, create IPIv table but ultimately fails
-> >  4. KVM decrements created_vcpus back to '0'
-> >  5. KVM_CAP_MAX_VCPU_ID, set max_vcpu_ids=4096
-> >  6. KVM_CREATE_VCPU w/ ID out of range
-> >
-> >In other words, malicious userspace could trigger buffer overflow.
-> 
-> can we simply return an error (e.g., -EEXIST) on step 5 (i.e.,
-> max_vcpu_ids cannot be changed after being set once)?
-> 
-> or
-> 
-> can we detect the change of max_vcpu_ids in step 6 and re-allocate PID
-> table?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 277a20a498d30753f5d8a607dbf967bc163552c1 lib: add fast path for find_next_*_bit()
+date:   12 months ago
+config: x86_64-randconfig-a016-20220418 (https://download.01.org/0day-ci/archive/20220418/202204182350.tOU3dyLx-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project b27430f9f46b88bcd54d992debc8d72e131e1bd0)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=277a20a498d30753f5d8a607dbf967bc163552c1
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 277a20a498d30753f5d8a607dbf967bc163552c1
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
 
-Returning an error is viable, but would be a rather odd ABI.  Re-allocating isn't
-a good option because the PID table could be in active use by other vCPUs, e.g.
-KVM would need to send a request and kick all vCPUs to have all vCPUs update their
-VMCS.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-And with both of those alternatives, I still don't like that every feature that
-acts on max_vcpu_ids would need to handle this same edge case.
+All warnings (new ones prefixed by >>, old ones prefixed by <<):
 
-An alternative to another new ioctl() would be to to make KVM_CAP_MAX_VCPU_ID
-write-once, i.e. reject attempts to change the max once set (though we could allow
-re-writing the same value).  I think I like that idea better than adding an ioctl().
+>> WARNING: modpost: vmlinux.o(.text+0xa47e1): Section mismatch in reference from the function __next_node() to the variable .init.data:numa_nodes_parsed
+The function __next_node() references
+the variable __initdata numa_nodes_parsed.
+This is often because __next_node lacks a __initdata
+annotation or the annotation of numa_nodes_parsed is wrong.
 
-It can even be done without an extra flag by zero-initializing the field and instead
-waiting until vCPU pre-create to lock in the value.  That would also help detect
-bad usage of max_vcpu_ids, especially if we added a wrapper to get the value, e.g.
-the wrapper could WARN_ON(!kvm->arch.max_vcpu_ids).
-
-E.g.
-
-int kvm_arch_vcpu_precreate(struct kvm *kvm, unsigned int id)
-{
-	if (kvm_check_tsc_unstable() && atomic_read(&kvm->online_vcpus) != 0)
-		pr_warn_once("kvm: SMP vm created on host with unstable TSC; "
-			     "guest TSC will not be reliable\n");
-
-	if (!kvm->arch.max_vcpu_ids)
-		kvm->arch.max_vcpu_ids = KVM_MAX_VCPU_IDS;
-
-	return 0;
-}
-
-
-	case KVM_CAP_MAX_VCPU_ID:
-		r = -EINVAL;
-		if (cap->args[0] > KVM_MAX_VCPU_IDS)
-			break;
-
-		mutex_lock(&kvm->lock);
-                if (kvm->arch.max_vcpu_ids == cap->args[0]) {
-                        r = 0;
-                } else if (!kvm->arch.max_vcpu_ids) {
-			kvm->arch.max_vcpu_ids = cap->args[0];
-			r = 0;
-		}
-		mutex_unlock(&kvm->lock);
-		break;
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

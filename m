@@ -2,102 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9319D505BF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:51:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0478B505BFD
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:52:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345991AbiDRPyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42540 "EHLO
+        id S1345819AbiDRPyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345954AbiDRPxz (ORCPT
+        with ESMTP id S1345941AbiDRPyK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:53:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DA03BB;
-        Mon, 18 Apr 2022 08:39:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 82E63B80E12;
-        Mon, 18 Apr 2022 15:39:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3CF9C385A1;
-        Mon, 18 Apr 2022 15:39:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650296386;
-        bh=L4TwukCazJJxirH/NADVnJR9xCpzOg3FMtBzbhJ2d4o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mwzOeYXox9cTChujjKBkG45GDBTH6d0RIXbSU1/0JxYyV9bXtv6KMueFxmipS/bnC
-         /OOStebVSOAh4xFukADUy1K8lpmMlcXbytBLgWsZ5KKf5vgVrnROT95f3X3BMRYdVB
-         fv+y6U7zHXeMxLg8QK3cy1VfA48VgitsBPlNr1PsuOJxeW9dTacYjVC/+dy4ePaHwL
-         XE7Pk9uoriP7Yz3bgSdO8gbnEAsDQJbxUuIt1VqW7wEnvri32COb2e7T5oK3QuCu1D
-         YlOGd8LpUoqvT/Zc4T4ObqjlPctACSra93jGHvG+3P2pUxbYaTh2rxCHZ3WElWbToL
-         Fo8uLFRg31SHg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 8438440407; Mon, 18 Apr 2022 12:39:42 -0300 (-03)
-Date:   Mon, 18 Apr 2022 12:39:42 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Xing Zhengjun <zhengjun.xing@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        John Garry <john.garry@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH 03/14] perf vendor events intel: Add sapphirerapids events
-Message-ID: <Yl2GPvQOxFtgvZHl@kernel.org>
-References: <20220413210503.3256922-1-irogers@google.com>
- <20220413210503.3256922-3-irogers@google.com>
- <368c5b92-f035-41cc-96a8-4908f1325462@linux.intel.com>
+        Mon, 18 Apr 2022 11:54:10 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 46D952E6A4;
+        Mon, 18 Apr 2022 08:41:05 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Mon, 18 Apr 2022 23:41:00
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.190.65.57]
+Date:   Mon, 18 Apr 2022 23:41:00 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   duoming@zju.edu.cn
+To:     "Saleem, Shiraz" <shiraz.saleem@intel.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Ismail, Mustafa" <mustafa.ismail@intel.com>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "leon@kernel.org" <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>
+Subject: Re: RE: [PATCH V5] drivers: infiniband: hw: Fix deadlock in
+ irdma_cleanup_cm_core()
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <MWHPR11MB0029A6F789272ED3AB28F0E7E9F39@MWHPR11MB0029.namprd11.prod.outlook.com>
+References: <20220417131414.98144-1-duoming@zju.edu.cn>
+ <MWHPR11MB0029A6F789272ED3AB28F0E7E9F39@MWHPR11MB0029.namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <368c5b92-f035-41cc-96a8-4908f1325462@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <7e8f030a.7535.1803d559499.Coremail.duoming@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgB3FMSMhl1i9TYAAg--.24505W
+X-CM-SenderInfo: qssqjiasttq6lmxovvfxof0/1tbiAgUEAVZdtZQI8gADsR
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Apr 14, 2022 at 11:03:03AM -0400, Liang, Kan escreveu:
-> 
-> 
-> On 4/13/2022 5:04 PM, Ian Rogers wrote:
-> > Events were generated from 01.org using:
-> > https://github.com/intel/event-converter-for-linux-perf
-> > 
-> > Signed-off-by: Ian Rogers<irogers@google.com>
-> > ---
-> >   tools/perf/pmu-events/arch/x86/mapfile.csv    |    1 +
-> >   .../arch/x86/sapphirerapids/cache.json        | 1083 ++++++++++++++
-> >   .../x86/sapphirerapids/floating-point.json    |  218 +++
-> >   .../arch/x86/sapphirerapids/frontend.json     |  471 ++++++
-> >   .../arch/x86/sapphirerapids/memory.json       |  415 ++++++
-> >   .../arch/x86/sapphirerapids/other.json        |  329 +++++
-> >   .../arch/x86/sapphirerapids/pipeline.json     | 1271 +++++++++++++++++
-> >   .../x86/sapphirerapids/virtual-memory.json    |  225 +++
-> 
-> Thank you very much Ian for the patches. They all looks good to me.
-> 
->     Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-
-Next time please reply with the Reviewed-by to the cover letter (PATCH
-00/14) so that the b4 tool can collect the Reviewed-by to all the
-patches.
-
-- Arnaldo
- 
-> BTW: I think the uncore events for SPR are also published in 01.org.
-> Do you have plan to add them later?
+SGVsbG8sCgpPbiBNb24sIDE4IEFwciAyMDIyIDE0OjU3OjA2ICswMDAwIFNhbGVlbSwgU2hpcmF6
+IHdyb3RlOgoKPiA+IFRoZXJlIGlzIGEgZGVhZGxvY2sgaW4gaXJkbWFfY2xlYW51cF9jbV9jb3Jl
+KCksIHdoaWNoIGlzIHNob3duCj4gPiBiZWxvdzoKPiA+IAo+ID4gICAgKFRocmVhZCAxKSAgICAg
+ICAgICAgICAgfCAgICAgIChUaHJlYWQgMikKPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAg
+IHwgaXJkbWFfc2NoZWR1bGVfY21fdGltZXIoKQo+ID4gaXJkbWFfY2xlYW51cF9jbV9jb3JlKCkg
+ICAgfCAgYWRkX3RpbWVyKCkKPiA+ICBzcGluX2xvY2tfaXJxc2F2ZSgpIC8vKDEpIHwgICh3YWl0
+IGEgdGltZSkKPiA+ICAuLi4gICAgICAgICAgICAgICAgICAgICAgIHwgaXJkbWFfY21fdGltZXJf
+dGljaygpCj4gPiAgZGVsX3RpbWVyX3N5bmMoKSAgICAgICAgICB8ICBzcGluX2xvY2tfaXJxc2F2
+ZSgpIC8vKDIpCj4gPiAgKHdhaXQgdGltZXIgdG8gc3RvcCkgICAgICB8ICAuLi4KPiA+IAo+ID4g
+V2UgaG9sZCBjbV9jb3JlLT5odF9sb2NrIGluIHBvc2l0aW9uICgxKSBvZiB0aHJlYWQgMSBhbmQg
+dXNlIGRlbF90aW1lcl9zeW5jKCkKPiA+IHRvIHdhaXQgdGltZXIgdG8gc3RvcCwgYnV0IHRpbWVy
+IGhhbmRsZXIgYWxzbyBuZWVkIGNtX2NvcmUtPmh0X2xvY2sgaW4gcG9zaXRpb24gKDIpCj4gPiBv
+ZiB0aHJlYWQgMi4KPiA+IEFzIGEgcmVzdWx0LCBpcmRtYV9jbGVhbnVwX2NtX2NvcmUoKSB3aWxs
+IGJsb2NrIGZvcmV2ZXIuCj4gPiAKPiA+IFRoaXMgcGF0Y2ggcmVtb3ZlcyB0aGUgY2hlY2sgb2Yg
+dGltZXJfcGVuZGluZygpIGluIGlyZG1hX2NsZWFudXBfY21fY29yZSgpLAo+ID4gYmVjYXVzZSB0
+aGUgZGVsX3RpbWVyX3N5bmMoKSBmdW5jdGlvbiB3aWxsIGp1c3QgcmV0dXJuIGRpcmVjdGx5IGlm
+IHRoZXJlIGlzbid0IGEKPiA+IHBlbmRpbmcgdGltZXIuIEFzIGEgcmVzdWx0LCB0aGUgbG9jayBp
+cyByZWR1bmRhbnQsIGJlY2F1c2UgdGhlcmUgaXMgbm8gcmVzb3VyY2UgaXQKPiA+IGNvdWxkIHBy
+b3RlY3QuCj4gPiAKPiA+IFNpZ25lZC1vZmYtYnk6IER1b21pbmcgWmhvdSA8ZHVvbWluZ0B6anUu
+ZWR1LmNuPgo+ID4gLS0tCj4gPiBDaGFuZ2VzIGluIFY1Ogo+ID4gICAtIFJlbW92ZSBtb2RfdGlt
+ZXIoKSBpbiBpcmRtYV9zY2hlZHVsZV9jbV90aW1lciBhbmQgaXJkbWFfY21fdGltZXJfdGljay4K
+PiA+IAo+ID4gIGRyaXZlcnMvaW5maW5pYmFuZC9ody9pcmRtYS9jbS5jIHwgNSArLS0tLQo+ID4g
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKSwgNCBkZWxldGlvbnMoLSkKPiA+IAo+ID4g
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvaW5maW5pYmFuZC9ody9pcmRtYS9jbS5jIGIvZHJpdmVycy9p
+bmZpbmliYW5kL2h3L2lyZG1hL2NtLmMKPiA+IGluZGV4IGRlZGIzYjdlZGQ4Li40YjZiMTA2NWY4
+NSAxMDA2NDQKPiA+IC0tLSBhL2RyaXZlcnMvaW5maW5pYmFuZC9ody9pcmRtYS9jbS5jCj4gPiAr
+KysgYi9kcml2ZXJzL2luZmluaWJhbmQvaHcvaXJkbWEvY20uYwo+ID4gQEAgLTMyNTEsMTAgKzMy
+NTEsNyBAQCB2b2lkIGlyZG1hX2NsZWFudXBfY21fY29yZShzdHJ1Y3QKPiA+IGlyZG1hX2NtX2Nv
+cmUgKmNtX2NvcmUpCj4gPiAgCWlmICghY21fY29yZSkKPiA+ICAJCXJldHVybjsKPiA+IAo+ID4g
+LQlzcGluX2xvY2tfaXJxc2F2ZSgmY21fY29yZS0+aHRfbG9jaywgZmxhZ3MpOwo+ID4gLQlpZiAo
+dGltZXJfcGVuZGluZygmY21fY29yZS0+dGNwX3RpbWVyKSkKPiA+IC0JCWRlbF90aW1lcl9zeW5j
+KCZjbV9jb3JlLT50Y3BfdGltZXIpOwo+ID4gLQlzcGluX3VubG9ja19pcnFyZXN0b3JlKCZjbV9j
+b3JlLT5odF9sb2NrLCBmbGFncyk7Cj4gPiArCWRlbF90aW1lcl9zeW5jKCZjbV9jb3JlLT50Y3Bf
+dGltZXIpOwo+ID4gCj4gPiAgCWRlc3Ryb3lfd29ya3F1ZXVlKGNtX2NvcmUtPmV2ZW50X3dxKTsK
+PiA+ICAJY21fY29yZS0+ZGV2LT53c19yZXNldCgmY21fY29yZS0+aXdkZXYtPnZzaSk7Cj4gPiAt
+LQo+IAo+IEkgYW0gbm90IHN1cmUgdGhlIGRlYWRsb2NrIGlzIHBvc3NpYmxlIHByYWN0aWNhbGx5
+IHNpbmNlIGFsbCBDTSBub2RlcyBzaG91bGQgYmUgY3VsbGVkIGJ5IHRoZSB0aW1lIHdlIGdldCB0
+byBpcmRtYV9jbGVhbnVwX2NtX2NvcmUuCgpJIHRoaW5rIHRoZSBkZWFkbG9jayBpcyBwb3NzaWJs
+ZSwgYmVjYXVzZSB0aGUgdGltZXIgaXMgYSBkZWxheSBtZWNoYW5pc20gdGhhdCBjb3VsZCBleGVj
+dXRlIGF0IGFueSB0aW1lLCBhbHRob3VnaCBhbGwgQ00gbm9kZXMgYXJlIGN1bGxlZC4KCj4gSG93
+ZXZlciwgdGltZXJfcGVuZGluZyBjaGVjayBhbmQgbG9ja3MgYXJlIHJlZHVuZGFudCBhbmQgc2hv
+dWxkIGJlIHJlbW92ZWQuCj4gCj4gVGhlIHN1YmplY3QgbGluZSBmb3IgcGF0Y2hlcyB0byBvdXIg
+ZHJpdmVyIGFyZSB0eXBpY2FsbHkgcHJlZml4ZWQgd2l0aCAiUkRNQS9pcmRtYTogIgoKSSBzZW50
+ICJbUEFUQ0ggVjZdIFJETUEvaXJkbWE6IEZpeCBkZWFkbG9jayBpbiBpcmRtYV9jbGVhbnVwX2Nt
+X2NvcmUoKSIganVzdCBub3cuCgpCZXN0IHJlZ2FyZHMsCkR1b21pbmcgWmhvdQo=

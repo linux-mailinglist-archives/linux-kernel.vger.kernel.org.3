@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CEA505744
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:48:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AC85051C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244285AbiDRNrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55972 "EHLO
+        id S233208AbiDRMhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243810AbiDRN3H (ORCPT
+        with ESMTP id S238966AbiDRMac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:29:07 -0400
+        Mon, 18 Apr 2022 08:30:32 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32AB72183;
-        Mon, 18 Apr 2022 05:53:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36DA24F07;
+        Mon, 18 Apr 2022 05:23:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C8601B80E44;
-        Mon, 18 Apr 2022 12:53:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22286C385A7;
-        Mon, 18 Apr 2022 12:53:49 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 700CCB80EDC;
+        Mon, 18 Apr 2022 12:23:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C89B7C385A1;
+        Mon, 18 Apr 2022 12:23:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286430;
-        bh=imPm8s3163js/UbzvT+fhP1EWKFf3vbLroPYzRpbxfQ=;
+        s=korg; t=1650284631;
+        bh=okAbp2v/Y4eqFaui4seYNyJOzyps1nqQznQq5s+nF1Q=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ly8JZqrQVoIFgcHyNmbzX8OxLvJegTdCw3AX5AIa67qacl7B/y+MtqMLobP8SpLsj
-         u7H+9asZuzaCppIOnQC1idUKfjBNeZL+B0NsyNAwE0uoQg4duzIHiFbg+oTKZb7abv
-         bLzIeRLDWhxUlr2InY2yP58NHwqEDFXDMCfucjok=
+        b=ljHpefv4PrYqWCTYfQ2T0gHD2/ee6K/mSsCTDhkj4mlNK8mbG8jrxvLT72ADLcISJ
+         DBhIwJlbwxPm4tlm0aQ9v0pKFnZ+//wcWx/NUQb1Qw/k0tyXfNLr4fAnah141OdLbV
+         Q6izd0OekOeMaIH4WU1lCM4JC3Rq2A8tyr6CDJug=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, Chris Park <Chris.Park@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        "Leo (Hanghong) Ma" <hanghong.ma@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.14 125/284] af_netlink: Fix shift out of bounds in group mask calculation
+Subject: [PATCH 5.17 137/219] drm/amd/display: Update VTEM Infopacket definition
 Date:   Mon, 18 Apr 2022 14:11:46 +0200
-Message-Id: <20220418121214.755164993@linuxfoundation.org>
+Message-Id: <20220418121210.728543143@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,62 +58,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Petr Machata <petrm@nvidia.com>
+From: Leo (Hanghong) Ma <hanghong.ma@amd.com>
 
-[ Upstream commit 0caf6d9922192dd1afa8dc2131abfb4df1443b9f ]
+[ Upstream commit c9fbf6435162ed5fb7201d1d4adf6585c6a8c327 ]
 
-When a netlink message is received, netlink_recvmsg() fills in the address
-of the sender. One of the fields is the 32-bit bitfield nl_groups, which
-carries the multicast group on which the message was received. The least
-significant bit corresponds to group 1, and therefore the highest group
-that the field can represent is 32. Above that, the UB sanitizer flags the
-out-of-bounds shift attempts.
+[Why & How]
+The latest HDMI SPEC has updated the VTEM packet structure,
+so change the VTEM Infopacket defined in the driver side to align
+with the SPEC.
 
-Which bits end up being set in such case is implementation defined, but
-it's either going to be a wrong non-zero value, or zero, which is at least
-not misleading. Make the latter choice deterministic by always setting to 0
-for higher-numbered multicast groups.
-
-To get information about membership in groups >= 32, userspace is expected
-to use nl_pktinfo control messages[0], which are enabled by NETLINK_PKTINFO
-socket option.
-[0] https://lwn.net/Articles/147608/
-
-The way to trigger this issue is e.g. through monitoring the BRVLAN group:
-
-	# bridge monitor vlan &
-	# ip link add name br type bridge
-
-Which produces the following citation:
-
-	UBSAN: shift-out-of-bounds in net/netlink/af_netlink.c:162:19
-	shift exponent 32 is too large for 32-bit type 'int'
-
-Fixes: f7fa9b10edbb ("[NETLINK]: Support dynamic number of multicast groups per netlink family")
-Signed-off-by: Petr Machata <petrm@nvidia.com>
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Link: https://lore.kernel.org/r/2bef6aabf201d1fc16cca139a744700cff9dcb04.1647527635.git.petrm@nvidia.com
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Chris Park <Chris.Park@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Leo (Hanghong) Ma <hanghong.ma@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/netlink/af_netlink.c | 2 ++
- 1 file changed, 2 insertions(+)
+ .../gpu/drm/amd/display/modules/info_packet/info_packet.c    | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 0563b4d34eae..24e8ac2b724e 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -154,6 +154,8 @@ static const struct rhashtable_params netlink_rhashtable_params;
+diff --git a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+index 57f198de5e2c..4e075b01d48b 100644
+--- a/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
++++ b/drivers/gpu/drm/amd/display/modules/info_packet/info_packet.c
+@@ -100,7 +100,8 @@ enum vsc_packet_revision {
+ //PB7 = MD0
+ #define MASK_VTEM_MD0__VRR_EN         0x01
+ #define MASK_VTEM_MD0__M_CONST        0x02
+-#define MASK_VTEM_MD0__RESERVED2      0x0C
++#define MASK_VTEM_MD0__QMS_EN         0x04
++#define MASK_VTEM_MD0__RESERVED2      0x08
+ #define MASK_VTEM_MD0__FVA_FACTOR_M1  0xF0
  
- static inline u32 netlink_group_mask(u32 group)
- {
-+	if (group > 32)
-+		return 0;
- 	return group ? 1 << (group - 1) : 0;
- }
+ //MD1
+@@ -109,7 +110,7 @@ enum vsc_packet_revision {
+ //MD2
+ #define MASK_VTEM_MD2__BASE_REFRESH_RATE_98  0x03
+ #define MASK_VTEM_MD2__RB                    0x04
+-#define MASK_VTEM_MD2__RESERVED3             0xF8
++#define MASK_VTEM_MD2__NEXT_TFR              0xF8
  
+ //MD3
+ #define MASK_VTEM_MD3__BASE_REFRESH_RATE_07  0xFF
 -- 
-2.34.1
+2.35.1
 
 
 

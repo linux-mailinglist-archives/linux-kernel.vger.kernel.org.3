@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26D45052D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F205052D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240316AbiDRMxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S240292AbiDRMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:53:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240689AbiDRMja (ORCPT
+        with ESMTP id S240711AbiDRMjd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1815412AEF;
-        Mon, 18 Apr 2022 05:30:12 -0700 (PDT)
+        Mon, 18 Apr 2022 08:39:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9E613CDC;
+        Mon, 18 Apr 2022 05:30:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AB4F760FB6;
-        Mon, 18 Apr 2022 12:30:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B217FC385A8;
-        Mon, 18 Apr 2022 12:30:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 84C6AB80EC0;
+        Mon, 18 Apr 2022 12:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AE6C385A1;
+        Mon, 18 Apr 2022 12:30:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285011;
-        bh=qwIOE+fxbtogB1kDF6uX/hsJ/sFljR0FKIcKVrSQsB0=;
+        s=korg; t=1650285014;
+        bh=kN7kp0z6+3glEndQphRk/Wj1ypFcaAiDQfd9EyAmZxE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=od9bJdb8cxdOadKM71PUo6KajvBDmXFkDU+fAz3JTkvJhb0zjn3fL1R5DmZ3wDcA4
-         jak3MPl5paMDEFSAX/Vo0qV5LNhaqoVSENivVfMcnKgdFYBBqDkN5HWyH3IBcSLZ1J
-         B1nRR2B/N1FIF6hSvny3DFSfnlMukERZrMmm2kqY=
+        b=rKqURGodkNCWcZWDEiEp3Rrv/fFvWbSPXg9wAxfMqlWBFFlsvIT3F1R2Xp4JXiBjj
+         makgUEme4dDI2pFV+QcwOuYkZf7VARj3z4/+Lp4gCNp6WQqO6j1Se7z3ocZLHHa1dE
+         P4nVMC3RZF/3BPW/ovaqj+97r+7aEt32GVnyN9ZY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com,
-        Karsten Graul <kgraul@linux.ibm.com>,
-        Jakub Kicinski <kuba@kernel.org>,
+        stable@vger.kernel.org, John Garry <john.garry@huawei.com>,
+        Jack Wang <jinpu.wang@ionos.com>,
+        Ajish Koshy <Ajish.Koshy@microchip.com>,
+        Viswas G <Viswas.G@microchip.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 078/189] net/smc: Fix NULL pointer dereference in smc_pnet_find_ib()
-Date:   Mon, 18 Apr 2022 14:11:38 +0200
-Message-Id: <20220418121202.722855729@linuxfoundation.org>
+Subject: [PATCH 5.15 079/189] scsi: pm80xx: Mask and unmask upper interrupt vectors 32-63
+Date:   Mon, 18 Apr 2022 14:11:39 +0200
+Message-Id: <20220418121202.751044975@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
 References: <20220418121200.312988959@linuxfoundation.org>
@@ -57,39 +58,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Karsten Graul <kgraul@linux.ibm.com>
+From: Ajish Koshy <Ajish.Koshy@microchip.com>
 
-[ Upstream commit d22f4f977236f97e01255a80bca2ea93a8094fc8 ]
+[ Upstream commit 294080eacf92a0781e6d43663448a55001ec8c64 ]
 
-dev_name() was called with dev.parent as argument but without to
-NULL-check it before.
-Solve this by checking the pointer before the call to dev_name().
+When upper inbound and outbound queues 32-63 are enabled, we see upper
+vectors 32-63 in interrupt service routine. We need corresponding registers
+to handle masking and unmasking of these upper interrupts.
 
-Fixes: af5f60c7e3d5 ("net/smc: allow PCI IDs as ib device names in the pnet table")
-Reported-by: syzbot+03e3e228510223dabd34@syzkaller.appspotmail.com
-Signed-off-by: Karsten Graul <kgraul@linux.ibm.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+To achieve this, we use registers MSGU_ODMR_U(0x34) to mask and
+MSGU_ODMR_CLR_U(0x3C) to unmask the interrupts. In these registers bit 0-31
+represents interrupt vectors 32-63.
+
+Link: https://lore.kernel.org/r/20220411064603.668448-2-Ajish.Koshy@microchip.com
+Fixes: 05c6c029a44d ("scsi: pm80xx: Increase number of supported queues")
+Reviewed-by: John Garry <john.garry@huawei.com>
+Acked-by: Jack Wang <jinpu.wang@ionos.com>
+Signed-off-by: Ajish Koshy <Ajish.Koshy@microchip.com>
+Signed-off-by: Viswas G <Viswas.G@microchip.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/smc/smc_pnet.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/scsi/pm8001/pm80xx_hwi.c | 22 +++++++++++++---------
+ 1 file changed, 13 insertions(+), 9 deletions(-)
 
-diff --git a/net/smc/smc_pnet.c b/net/smc/smc_pnet.c
-index 707615809e5a..79ee0618d919 100644
---- a/net/smc/smc_pnet.c
-+++ b/net/smc/smc_pnet.c
-@@ -310,8 +310,9 @@ static struct smc_ib_device *smc_pnet_find_ib(char *ib_name)
- 	list_for_each_entry(ibdev, &smc_ib_devices.list, list) {
- 		if (!strncmp(ibdev->ibdev->name, ib_name,
- 			     sizeof(ibdev->ibdev->name)) ||
--		    !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
--			     IB_DEVICE_NAME_MAX - 1)) {
-+		    (ibdev->ibdev->dev.parent &&
-+		     !strncmp(dev_name(ibdev->ibdev->dev.parent), ib_name,
-+			     IB_DEVICE_NAME_MAX - 1))) {
- 			goto out;
- 		}
- 	}
+diff --git a/drivers/scsi/pm8001/pm80xx_hwi.c b/drivers/scsi/pm8001/pm80xx_hwi.c
+index 5561057109de..aa6f114be064 100644
+--- a/drivers/scsi/pm8001/pm80xx_hwi.c
++++ b/drivers/scsi/pm8001/pm80xx_hwi.c
+@@ -1733,10 +1733,11 @@ static void
+ pm80xx_chip_interrupt_enable(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ {
+ #ifdef PM8001_USE_MSIX
+-	u32 mask;
+-	mask = (u32)(1 << vec);
+-
+-	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, (u32)(mask & 0xFFFFFFFF));
++	if (vec < 32)
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR, 1U << vec);
++	else
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_CLR_U,
++			    1U << (vec - 32));
+ 	return;
+ #endif
+ 	pm80xx_chip_intx_interrupt_enable(pm8001_ha);
+@@ -1752,12 +1753,15 @@ static void
+ pm80xx_chip_interrupt_disable(struct pm8001_hba_info *pm8001_ha, u8 vec)
+ {
+ #ifdef PM8001_USE_MSIX
+-	u32 mask;
+-	if (vec == 0xFF)
+-		mask = 0xFFFFFFFF;
++	if (vec == 0xFF) {
++		/* disable all vectors 0-31, 32-63 */
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 0xFFFFFFFF);
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U, 0xFFFFFFFF);
++	} else if (vec < 32)
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, 1U << vec);
+ 	else
+-		mask = (u32)(1 << vec);
+-	pm8001_cw32(pm8001_ha, 0, MSGU_ODMR, (u32)(mask & 0xFFFFFFFF));
++		pm8001_cw32(pm8001_ha, 0, MSGU_ODMR_U,
++			    1U << (vec - 32));
+ 	return;
+ #endif
+ 	pm80xx_chip_intx_interrupt_disable(pm8001_ha);
 -- 
 2.35.1
 

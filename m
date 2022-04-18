@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A84AF5057E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364C3505554
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244671AbiDRN5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41642 "EHLO
+        id S241727AbiDRNQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:16:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244897AbiDRNbA (ORCPT
+        with ESMTP id S241559AbiDRM6w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:31:00 -0400
+        Mon, 18 Apr 2022 08:58:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6CC2E51;
-        Mon, 18 Apr 2022 05:57:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0778A2DD5F;
+        Mon, 18 Apr 2022 05:39:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A4EF4B80E4B;
-        Mon, 18 Apr 2022 12:57:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E379BC385A7;
-        Mon, 18 Apr 2022 12:57:15 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82B70B80EDC;
+        Mon, 18 Apr 2022 12:39:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E939FC385A7;
+        Mon, 18 Apr 2022 12:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286636;
-        bh=fzk8MKUGqmpclWYl7A30PfvIc3vCf2G+DHGNqab7TAM=;
+        s=korg; t=1650285555;
+        bh=v0HGRTeIY/aQdkkcBrv7ONr+/xXqUXqC0m+W9mnTLLo=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Jc5T2q46t1Om+WxpvqAXcQith1Hmd7CWLK9/RWS+aUFy5Xxyc2GB8snC4Bw1PGVf/
-         9BOSEqJcW8hMavsnl+wxkOMPc4wMtL/CJwHzsUplxgRWJ5cOzio4HUI83z9wg6JuwW
-         XZpoM+qR9dby8Pot1b3o4LLRb6x0IaVm6cDqKAC8=
+        b=ubN2p4685ixPHEJMSwpa4tgTzjYfiofBXKyUb2hmddO5qDWEkiAEf0yUcFT/dj9fE
+         3nwGENYRS6gOUwSlFgn6k+A1iI0YMHF1NEZOZYFKLckm/R7pu+nktHx3npz2RdbpaI
+         +eXoZXV4/YVzd4jiyj+AiS/yZlAxmSqDME8Euyxc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: [PATCH 4.14 197/284] ubi: fastmap: Return error code if memory allocation fails in add_aeb()
+        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.10 056/105] ata: libata-core: Disable READ LOG DMA EXT for Samsung 840 EVOs
 Date:   Mon, 18 Apr 2022 14:12:58 +0200
-Message-Id: <20220418121217.330564674@linuxfoundation.org>
+Message-Id: <20220418121148.077134618@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,86 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhihao Cheng <chengzhihao1@huawei.com>
+From: Christian Lamparter <chunkeey@gmail.com>
 
-commit c3c07fc25f37c157fde041b3a0c3dfcb1590cbce upstream.
+[ Upstream commit 5399752299396a3c9df6617f4b3c907d7aa4ded8 ]
 
-Abort fastmap scanning and return error code if memory allocation fails
-in add_aeb(). Otherwise ubi will get wrong peb statistics information
-after scanning.
+Samsung' 840 EVO with the latest firmware (EXT0DB6Q) locks up with
+the a message: "READ LOG DMA EXT failed, trying PIO" during boot.
 
-Fixes: dbb7d2a88d2a7b ("UBI: Add fastmap core")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Initially this was discovered because it caused a crash
+with the sata_dwc_460ex controller on a WD MyBook Live DUO.
+
+The reporter "Tice Rex" which has the unique opportunity that he
+has two Samsung 840 EVO SSD! One with the older firmware "EXT0BB0Q"
+which booted fine and didn't expose "READ LOG DMA EXT". But the
+newer/latest firmware "EXT0DB6Q" caused the headaches.
+
+BugLink: https://github.com/openwrt/openwrt/issues/9505
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mtd/ubi/fastmap.c |   28 +++++++++++++++++++---------
- 1 file changed, 19 insertions(+), 9 deletions(-)
+ drivers/ata/libata-core.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/mtd/ubi/fastmap.c
-+++ b/drivers/mtd/ubi/fastmap.c
-@@ -478,7 +478,9 @@ static int scan_pool(struct ubi_device *
- 			if (err == UBI_IO_FF_BITFLIPS)
- 				scrub = 1;
- 
--			add_aeb(ai, free, pnum, ec, scrub);
-+			ret = add_aeb(ai, free, pnum, ec, scrub);
-+			if (ret)
-+				goto out;
- 			continue;
- 		} else if (err == 0 || err == UBI_IO_BITFLIPS) {
- 			dbg_bld("Found non empty PEB:%i in pool", pnum);
-@@ -648,8 +650,10 @@ static int ubi_attach_fastmap(struct ubi
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 0);
-+		ret = add_aeb(ai, &ai->free, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 0);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	/* read EC values from used list */
-@@ -659,8 +663,10 @@ static int ubi_attach_fastmap(struct ubi
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 0);
-+		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 0);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	/* read EC values from scrub list */
-@@ -670,8 +676,10 @@ static int ubi_attach_fastmap(struct ubi
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 1);
-+		ret = add_aeb(ai, &used, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 1);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	/* read EC values from erase list */
-@@ -681,8 +689,10 @@ static int ubi_attach_fastmap(struct ubi
- 		if (fm_pos >= fm_size)
- 			goto fail_bad;
- 
--		add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
--			be32_to_cpu(fmec->ec), 1);
-+		ret = add_aeb(ai, &ai->erase, be32_to_cpu(fmec->pnum),
-+			      be32_to_cpu(fmec->ec), 1);
-+		if (ret)
-+			goto fail;
- 	}
- 
- 	ai->mean_ec = div_u64(ai->ec_sum, ai->ec_count);
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index d2b544bdc7b5..f963a0a7da46 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -3974,6 +3974,9 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Crucial_CT*MX100*",		"MU01",	ATA_HORKAGE_NO_NCQ_TRIM |
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
++	{ "Samsung SSD 840 EVO*",	NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
++						ATA_HORKAGE_NO_DMA_LOG |
++						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Samsung SSD 840*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Samsung SSD 850*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+-- 
+2.35.1
+
 
 

@@ -2,109 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84A4A505F66
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFBB505F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 23:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiDRVhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 17:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47072 "EHLO
+        id S229992AbiDRVjc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 17:39:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbiDRVhh (ORCPT
+        with ESMTP id S229560AbiDRVja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 17:37:37 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72FB5655C;
-        Mon, 18 Apr 2022 14:34:57 -0700 (PDT)
-Received: from sequoia (162-237-133-238.lightspeed.rcsntx.sbcglobal.net [162.237.133.238])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 482EB2034C72;
-        Mon, 18 Apr 2022 14:34:56 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 482EB2034C72
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1650317697;
-        bh=vj0lnOdsk0bHFr5EZlPrXDBc40yXZt3qOC1HHQtuVGE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NyyLuiJ0VoRVuAIRC2aoUJ2gtQHHauWDD/gmDJcRNyEvsAl3rD5zEPKVCKdznx+WP
-         /PFgtpmyoDfsnCWG6x5WkBIe8W06JLcSj4O/w0ByAxZf2DcEBEG/WAdyPyLKU5A+do
-         3py4Q2MusGAI33EDBQQbXFSlU4RdqHHUBRR8xX78=
-Date:   Mon, 18 Apr 2022 16:34:53 -0500
-From:   Tyler Hicks <tyhicks@linux.microsoft.com>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Lei Wang <lewan@microsoft.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Sinan Kaya <okaya@kernel.org>,
-        Shiping Ji <shiping.linux@gmail.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>, linux-edac@vger.kernel.org,
+        Mon, 18 Apr 2022 17:39:30 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6522E9FB;
+        Mon, 18 Apr 2022 14:36:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650317810; x=1681853810;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eEJGoHVsFofaV6UR/94SRICq/E+Aa7hOKpo5pnC+TWg=;
+  b=OPq384zsCazXPpiowFRt49lJQYMQrk4oNsoezfiue+1L7H8rzsRhGHA1
+   mWeGwg5KWCUHiEVZA4C3Hzzmg9apXXW6vZe2YtkwY4LqEDH13QSq4QzoP
+   NHgrvRYqALkgDk/+n3OCRRF27svnwVtOzWOvIfhWRGm+WMYNJG0qCwiJu
+   kKmCsVIzAxl5Jqec6YqYs9cUtvJCQ2N48uTZh3xgUswtCOTlvW6QXj7j/
+   rgJHp3wQsdgDBPm7GPkptIAQHXmAV4uM+7ldVDLX/Z+FymYfSXbe8gAj/
+   POw70d3r6REzJhaJJvP17Pg9RVlLV4bcFV/m1csKuX8BVPum95WEt/PFr
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="250918424"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="250918424"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:36:50 -0700
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="804432221"
+Received: from moseshab-mobl1.amr.corp.intel.com (HELO localhost) ([10.209.143.127])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 14:36:49 -0700
+Date:   Mon, 18 Apr 2022 14:36:49 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Jiajian Ye <yejiajian2018@email.szu.edu.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthew Wilcox <willy@infradead.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        outreachy@lists.linux.dev, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] EDAC/dmc520: Don't print an error for each unconfigured
- interrupt line
-Message-ID: <20220418213453.GB31854@sequoia>
-References: <20220118152816.GA89184@sequoia>
- <Yeb4sK+ZmSHjWPWL@zn.tnic>
- <20220118195401.GB89184@sequoia>
- <YecrXidqecoYI/xg@zn.tnic>
- <YefXQHXNlsxk8yUc@kroah.com>
- <Yefb7zO9p1iPF3Jm@zn.tnic>
- <YefnuCPwMq5V2lgl@kroah.com>
- <20220404215640.GA626436@sequoia>
- <20220418204029.GA31854@sequoia>
- <Yl3UgPtVV3t4pzVe@zn.tnic>
+Subject: Re: [PATCH] Documentation/vm: Include kernel-doc from
+ highmem-internal.h
+Message-ID: <Yl3Z8Qll+zGo4v/D@iweiny-desk3>
+References: <20220418081740.21001-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yl3UgPtVV3t4pzVe@zn.tnic>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220418081740.21001-1-fmdefrancesco@gmail.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-04-18 23:13:36, Borislav Petkov wrote:
-> On Mon, Apr 18, 2022 at 03:40:29PM -0500, Tyler Hicks wrote:
-> > > The API argument seems to have fizzled out in v2:
-> > > 
-> > >  https://lore.kernel.org/lkml/20220212201631.12648-1-s.shtylyov@omp.ru/
+On Mon, Apr 18, 2022 at 10:17:40AM +0200, Fabio M. De Francesco wrote:
+> In Documentation/vm/highmem.rst the kernel-doc comments are missing,
+> therefore kunmap_local() and kunmap_atomic() are yet undocumented.
 > 
-> I don't see those two upstream yet, on a quick glance. Perhaps in Greg's tree?
+> Add a kernel-doc directive to include the above-mentioned kernel-doc
+> comments in highmem.rst.
 > 
-> Greg, what's the latest with that platform_get_*_optional() fun?
-> 
-> Also, the second of those two patches above has:
-> 
-> + * Return: non-zero IRQ number on success, 0 if IRQ wasn't found, negative error
-> + * number on failure.
->   */
->  int platform_get_irq_byname_optional(struct platform_device *dev,
-> 
-> and your patch does:
-> 
-> +		irq = platform_get_irq_byname_optional(pdev, dmc520_irq_configs[idx].name);
->  		irqs[idx] = irq;
-> 
-> so on failure, it would still write the negative error value in
-> irqs[idx].
-> 
-> How can that be right?
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Ira Weiny <ira.weiny@intel.com>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
 
-The patches to modify the API have become stale. There have been no
-new comments or revisions since Feb. What I'm proposing is to proceed
-with merging this simple fix and let the folks discussing the API
-changes adjust the use in the dmc250 driver if/when they decide to
-revive the API changes.
+I thought I saw a patch fly by which changed the comment of kunmap_atomic() in
+include/linux/highmem-internal.h?  Did I miss that somewhere?
 
-Tyler
+This is a good inclusion for now.  However, I think I would rather see this as
+part of a new series which puts the bulk of the documentation with the code as
+I proposed in patch 1/2 in your other series.
 
+For this particular change:
+
+Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+
+> ---
 > 
+> This patch must be applied and built on top of 
+> "[PATCH v3 2/2] Documentation/vm: Include kernel-doc to highmem.rst"
+> https://lore.kernel.org/lkml/20220415231917.25962-3-fmdefrancesco@gmail.com/
+> 
+>  Documentation/vm/highmem.rst | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/vm/highmem.rst b/Documentation/vm/highmem.rst
+> index 5dcee6233cd5..1a3e6a8f5d3e 100644
+> --- a/Documentation/vm/highmem.rst
+> +++ b/Documentation/vm/highmem.rst
+> @@ -161,3 +161,4 @@ Functions
+>  =========
+>  
+>  .. kernel-doc:: include/linux/highmem.h
+> +.. kernel-doc:: include/linux/highmem-internal.h
 > -- 
-> Regards/Gruss,
->     Boris.
-> 
-> https://people.kernel.org/tglx/notes-about-netiquette
+> 2.34.1
 > 

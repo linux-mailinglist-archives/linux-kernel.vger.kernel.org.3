@@ -2,118 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26A7504F4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:13:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F387504F50
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbiDRLPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S231203AbiDRLUE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 07:20:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiDRLPx (ORCPT
+        with ESMTP id S229658AbiDRLUC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 07:15:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 499B61A076;
-        Mon, 18 Apr 2022 04:13:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 18 Apr 2022 07:20:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B69E810FDE
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650280642;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=44kdO0O6qMKLwL+JUGZd9+81cd+e3YbuHIPiaqy8ItU=;
+        b=F/kaZHbSHtrRZ1K9tJ8rEAhVDKMUG4JU+Jhb7JhvmeETAoonJ7O3kIZ1+tb8OHtQdgLGlH
+        u8EcERCvqI1Z8uo3lEaZo00NSfqGrsmDbEDuwYcAbsmCHK8w+QvUf/XxYaq06pJFsLzrO8
+        i/Ie/5ZZR4dhVhwCnSPKsLQY+v+VLu0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-179-KOd_YMOcPUio8lV30C32bw-1; Mon, 18 Apr 2022 07:17:19 -0400
+X-MC-Unique: KOd_YMOcPUio8lV30C32bw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00669B80E6D;
-        Mon, 18 Apr 2022 11:13:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCA83C385A8;
-        Mon, 18 Apr 2022 11:13:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650280391;
-        bh=wwE2D7Hcj5fftw+S9d3Tubx9RVx84/kTA+8TdD2y+QQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=BzsRy9QHW20BPD2GJc81aJi3R2/go2onQvbzoPWGcEcF9WaVazkwFFRYfd5dzxgf6
-         JNHDDxdjDMuXxYnJzFPaHVxeRVlySOr7AbZXW0kILvm5zoS2KYnL9s1ZeE+LsZEkqn
-         5eORYfsQ8HXS2m3ZbJFiHN33QyPk42cMQh3ETaJfLUmIgttdE4au83CwoelXTF/LTx
-         DAYMluTVHB6wZ0G6Ac2MF1QmkTQX8TfQEpFVcZIyabO+MjdYaSbnGo4Jl9n+/Od5bb
-         ymTpWooG4/9oFbmzFAzifW5/RS7VbY+EjMN4wfaOipVFtyJDF8KK/3VJVWyotdMAcn
-         dJFuo+3kCkSVw==
-Message-ID: <de9b0114-23b5-04b4-86b3-0d393441a267@kernel.org>
-Date:   Mon, 18 Apr 2022 13:13:02 +0200
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 178B0185A7A4;
+        Mon, 18 Apr 2022 11:17:19 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id F1A2AC50975;
+        Mon, 18 Apr 2022 11:17:16 +0000 (UTC)
+Message-ID: <4ba971ad8df11732ab5da7a65166ac349427fbec.camel@redhat.com>
+Subject: Re: [PATCH v2 07/12] KVM: SVM: Adding support for configuring
+ x2APIC MSRs interception
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
+        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
+Date:   Mon, 18 Apr 2022 14:17:15 +0300
+In-Reply-To: <20220412115822.14351-8-suravee.suthikulpanit@amd.com>
+References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
+         <20220412115822.14351-8-suravee.suthikulpanit@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
- YAML format
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Paul Burton <paulburton@kernel.org>,
-        Quentin Schulz <quentin.schulz@bootlin.com>,
-        Antoine Tenart <atenart@kernel.org>,
-        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-References: <20220319204628.1759635-1-michael@walle.cc>
- <20220319204628.1759635-7-michael@walle.cc>
- <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
- <e02e22920ffe23b49237c0c1379e888b@walle.cc>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <e02e22920ffe23b49237c0c1379e888b@walle.cc>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/04/2022 10:19, Michael Walle wrote:
-> [resend, use Krysztof's new email address]
+On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
+> When enabling x2APIC virtualization (x2AVIC), the interception of
+> x2APIC MSRs must be disabled to let the hardware virtualize guest
+> MSR accesses.
 > 
-> Am 2022-04-18 01:41, schrieb Linus Walleij:
->> On Sat, Mar 19, 2022 at 9:47 PM Michael Walle <michael@walle.cc> wrote:
->>
->>> Convert the ocelot-pinctrl device tree binding to the new YAML format.
->>>
->>> Additionally to the original binding documentation, add interrupt
->>> properties which are optional and already used on several SoCs like
->>> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
->>>
->>> Also, on the sparx5 and the lan966x SoCs there are two items for the
->>> reg property.
->>>
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>
->> So is this single patch something I should apply to the pin control 
->> tree?
+> Current implementation keeps track of list of MSR interception state
+> in the svm_direct_access_msrs array. Therefore, extends the array to
+> include x2APIC MSRs.
 > 
-> The first five patches will fix the validation errrors once the
-> binding is converted to the YAML format. So, do they need to go
-> through the same tree?
+> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> ---
+>  arch/x86/kvm/svm/svm.c | 29 ++++++++++++++++++++++++++++-
+>  arch/x86/kvm/svm/svm.h |  5 +++--
+>  2 files changed, 31 insertions(+), 3 deletions(-)
 > 
-> Also as mentioned, there is this pending series [1] which is the
-> reason I've converted the binding to YAML in the first place. So
-> at least the first patch of this series will have to go through
-> the same tree as the YAML conversion patch.
-> 
-> How can we move forward here? Krzysztof, maybe all of the dt
-> bindings patches can go through your tree and I'll reposting
-> the second patch of [1] afterwards?
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index 5ec770a1b4e8..c85663b62d4e 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -76,7 +76,7 @@ static uint64_t osvw_len = 4, osvw_status;
+>  
+>  static DEFINE_PER_CPU(u64, current_tsc_ratio);
+>  
+> -static const struct svm_direct_access_msrs {
+> +static struct svm_direct_access_msrs {
+>  	u32 index;   /* Index of the MSR */
+>  	bool always; /* True if intercept is initially cleared */
+>  } direct_access_msrs[MAX_DIRECT_ACCESS_MSRS] = {
+> @@ -774,6 +774,32 @@ static void add_msr_offset(u32 offset)
+>  	BUG();
+>  }
+>  
+> +static void init_direct_access_msrs(void)
+> +{
+> +	int i, j;
+> +
+> +	/* Find first MSR_INVALID */
+> +	for (i = 0; i < MAX_DIRECT_ACCESS_MSRS; i++) {
+> +		if (direct_access_msrs[i].index == MSR_INVALID)
+> +			break;
+> +	}
+> +	BUG_ON(i >= MAX_DIRECT_ACCESS_MSRS);
+> +
+> +	/*
+> +	 * Initialize direct_access_msrs entries to intercept X2APIC MSRs
+> +	 * (range 0x800 to 0x8ff)
+> +	 */
+> +	for (j = 0; j < 0x100; j++) {
+> +		direct_access_msrs[i + j].index = APIC_BASE_MSR + j;
+> +		direct_access_msrs[i + j].always = false;
+> +	}
 
-I think you got all necessary acks for this pinctrl bindings change and
-the dependency ("add reset property"), so both can go via Linus' tree.
-That's preferred.
+That looks *much cleaner* code wise even though it is slower 
+because now we have 256 more msrs in this list.
 
-DTS patches goes through your SoC maintainer tree.
+So the best of the two worlds I think would be to add only APIC msrs that AVIC
+actually handles to the list.
 
-At least this is the usual scenario, but maybe I missed here something.
+SDM has a table of these registers in 
+
+"15.29.3.1 Virtual APIC Register Accesses"
+
+I would add the registers that are either read/write allowed 
+or at least cause traps.
+
+Besides this, the patch looks fine.
 
 Best regards,
-Krzysztof
+	Maxim Levitsky
+
+
+> +	BUG_ON(i + j >= MAX_DIRECT_ACCESS_MSRS);
+> +
+> +	/* Initialize last entry */
+> +	direct_access_msrs[i + j].index = MSR_INVALID;
+> +	direct_access_msrs[i + j].always = true;
+> +}
+> +
+>  static void init_msrpm_offsets(void)
+>  {
+>  	int i;
+> @@ -4739,6 +4765,7 @@ static __init int svm_hardware_setup(void)
+>  	memset(iopm_va, 0xff, PAGE_SIZE * (1 << order));
+>  	iopm_base = page_to_pfn(iopm_pages) << PAGE_SHIFT;
+>  
+> +	init_direct_access_msrs();
+>  	init_msrpm_offsets();
+>  
+>  	supported_xcr0 &= ~(XFEATURE_MASK_BNDREGS | XFEATURE_MASK_BNDCSR);
+> diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+> index c44326eeb3f2..e340c86941be 100644
+> --- a/arch/x86/kvm/svm/svm.h
+> +++ b/arch/x86/kvm/svm/svm.h
+> @@ -29,8 +29,9 @@
+>  #define	IOPM_SIZE PAGE_SIZE * 3
+>  #define	MSRPM_SIZE PAGE_SIZE * 2
+>  
+> -#define MAX_DIRECT_ACCESS_MSRS	20
+> -#define MSRPM_OFFSETS	16
+> +#define MAX_DIRECT_ACCESS_MSRS	(20 + 0x100)
+> +#define MSRPM_OFFSETS	30
+> +
+>  extern u32 msrpm_offsets[MSRPM_OFFSETS] __read_mostly;
+>  extern bool npt_enabled;
+>  extern bool intercept_smi;
+
+

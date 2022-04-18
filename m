@@ -2,44 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980305059A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:28:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4577505888
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244790AbiDRO3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S244182AbiDROFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344506AbiDROSH (ORCPT
+        with ESMTP id S244926AbiDRNsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 10:18:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF047AF5;
-        Mon, 18 Apr 2022 06:13:57 -0700 (PDT)
+        Mon, 18 Apr 2022 09:48:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 764CE338B8;
+        Mon, 18 Apr 2022 06:01:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E674EB80EEA;
-        Mon, 18 Apr 2022 13:13:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B54BC385A7;
-        Mon, 18 Apr 2022 13:13:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D831B603E0;
+        Mon, 18 Apr 2022 13:01:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCE1C385A7;
+        Mon, 18 Apr 2022 13:01:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287596;
-        bh=2SO/WK+/OcnDbPUELASOfoynAAfaA8Zv+4kTfAUH8VU=;
+        s=korg; t=1650286876;
+        bh=m2wwDRKEUb1FSsfsa8zID9Em893Bo+8xBvdGNWAui70=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=y0fhgC7MQT/uLj8+DN61G/18iTSITXK5S8/VKF+ZstU0V7UOw4RTe6V2bgZq7Pu22
-         N6qwiui6BmxW/mThenJ52sqGEnfMKjRbK9zHP38r7nZt7Dl54Aappgi8U4/tCKSXYQ
-         Cb0cxzBpc0oA8fqfQfQHvt9ZZDTi9r4TeecSFYqc=
+        b=g1CICoKlpggb6chhetbOUQxXPyCO1P3PTX5P0kzSYKBf+suvVik4iyHvbaAb/a2la
+         iKTm9czw5MWbwIbG85RyHxX5/hNTLlUCDf3Wnyh1CLv2aYlPJ7ZBtqOibVb6WV4IXI
+         4VBlGEG6VxvCR356uUQlsmG1eZVKYhyqEUaKg34Q=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhou Guanghui <zhouguanghui1@huawei.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 171/218] iommu/arm-smmu-v3: fix event handling soft lockup
+        stable@vger.kernel.org, Waiman Long <longman@redhat.com>,
+        Justin Forbes <jforbes@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Rafael Aquini <aquini@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 4.14 256/284] mm/sparsemem: fix mem_section will never be NULL gcc 12 warning
 Date:   Mon, 18 Apr 2022 14:13:57 +0200
-Message-Id: <20220418121205.435740005@linuxfoundation.org>
+Message-Id: <20220418121219.686110669@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
-References: <20220418121158.636999985@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,55 +59,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhou Guanghui <zhouguanghui1@huawei.com>
+From: Waiman Long <longman@redhat.com>
 
-[ Upstream commit 30de2b541af98179780054836b48825fcfba4408 ]
+commit a431dbbc540532b7465eae4fc8b56a85a9fc7d17 upstream.
 
-During event processing, events are read from the event queue one
-by one until the queue is empty.If the master device continuously
-requests address access at the same time and the SMMU generates
-events, the cyclic processing of the event takes a long time and
-softlockup warnings may be reported.
+The gcc 12 compiler reports a "'mem_section' will never be NULL" warning
+on the following code:
 
-arm-smmu-v3 arm-smmu-v3.34.auto: event 0x0a received:
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00007f220000280a
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x000010000000007e
-arm-smmu-v3 arm-smmu-v3.34.auto: 	0x00000000034e8670
-watchdog: BUG: soft lockup - CPU#0 stuck for 22s! [irq/268-arm-smm:247]
-Call trace:
- _dev_info+0x7c/0xa0
- arm_smmu_evtq_thread+0x1c0/0x230
- irq_thread_fn+0x30/0x80
- irq_thread+0x128/0x210
- kthread+0x134/0x138
- ret_from_fork+0x10/0x1c
-Kernel panic - not syncing: softlockup: hung tasks
+    static inline struct mem_section *__nr_to_section(unsigned long nr)
+    {
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+        if (!mem_section)
+                return NULL;
+    #endif
+        if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+                return NULL;
+       :
 
-Fix this by calling cond_resched() after the event information is
-printed.
+It happens with CONFIG_SPARSEMEM_EXTREME off.  The mem_section definition
+is
 
-Signed-off-by: Zhou Guanghui <zhouguanghui1@huawei.com>
-Link: https://lore.kernel.org/r/20220119070754.26528-1-zhouguanghui1@huawei.com
-Signed-off-by: Will Deacon <will@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+    #ifdef CONFIG_SPARSEMEM_EXTREME
+    extern struct mem_section **mem_section;
+    #else
+    extern struct mem_section mem_section[NR_SECTION_ROOTS][SECTIONS_PER_ROOT];
+    #endif
+
+In the !CONFIG_SPARSEMEM_EXTREME case, mem_section is a static
+2-dimensional array and so the check "!mem_section[SECTION_NR_TO_ROOT(nr)]"
+doesn't make sense.
+
+Fix this warning by moving the "!mem_section[SECTION_NR_TO_ROOT(nr)]"
+check up inside the CONFIG_SPARSEMEM_EXTREME block and adding an
+explicit NR_SECTION_ROOTS check to make sure that there is no
+out-of-bound array access.
+
+Link: https://lkml.kernel.org/r/20220331180246.2746210-1-longman@redhat.com
+Fixes: 3e347261a80b ("sparsemem extreme implementation")
+Signed-off-by: Waiman Long <longman@redhat.com>
+Reported-by: Justin Forbes <jforbes@redhat.com>
+Cc: "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
+Cc: Ingo Molnar <mingo@kernel.org>
+Cc: Rafael Aquini <aquini@redhat.com>
+Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
+Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/iommu/arm-smmu-v3.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/mmzone.h |   11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/iommu/arm-smmu-v3.c b/drivers/iommu/arm-smmu-v3.c
-index 48d382008788..db40ce599e97 100644
---- a/drivers/iommu/arm-smmu-v3.c
-+++ b/drivers/iommu/arm-smmu-v3.c
-@@ -1171,6 +1171,7 @@ static irqreturn_t arm_smmu_evtq_thread(int irq, void *dev)
- 				dev_info(smmu->dev, "\t0x%016llx\n",
- 					 (unsigned long long)evt[i]);
+--- a/include/linux/mmzone.h
++++ b/include/linux/mmzone.h
+@@ -1160,13 +1160,16 @@ extern struct mem_section mem_section[NR
  
-+			cond_resched();
- 		}
- 
- 		/*
--- 
-2.35.1
-
+ static inline struct mem_section *__nr_to_section(unsigned long nr)
+ {
++	unsigned long root = SECTION_NR_TO_ROOT(nr);
++
++	if (unlikely(root >= NR_SECTION_ROOTS))
++		return NULL;
++
+ #ifdef CONFIG_SPARSEMEM_EXTREME
+-	if (!mem_section)
++	if (!mem_section || !mem_section[root])
+ 		return NULL;
+ #endif
+-	if (!mem_section[SECTION_NR_TO_ROOT(nr)])
+-		return NULL;
+-	return &mem_section[SECTION_NR_TO_ROOT(nr)][nr & SECTION_ROOT_MASK];
++	return &mem_section[root][nr & SECTION_ROOT_MASK];
+ }
+ extern int __section_nr(struct mem_section* ms);
+ extern unsigned long usemap_size(void);
 
 

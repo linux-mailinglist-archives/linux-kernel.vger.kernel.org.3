@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880F35058B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185825058C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245286AbiDROLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36408 "EHLO
+        id S1344051AbiDROIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245656AbiDRNx4 (ORCPT
+        with ESMTP id S245717AbiDRNx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:53:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF8446B2B;
-        Mon, 18 Apr 2022 06:03:01 -0700 (PDT)
+        Mon, 18 Apr 2022 09:53:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4A013CDE;
+        Mon, 18 Apr 2022 06:03:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3103960B41;
-        Mon, 18 Apr 2022 13:03:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC4E2C385A1;
-        Mon, 18 Apr 2022 13:02:59 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6827CB80E44;
+        Mon, 18 Apr 2022 13:03:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC6B7C385A7;
+        Mon, 18 Apr 2022 13:03:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286980;
-        bh=yJYrJBgNulmR3o/byO7cIXdkdJYN2b1J95qZfq9l2vA=;
+        s=korg; t=1650286984;
+        bh=qE8UWPbT8RelWyN+oYq7RD4XhY8JxIrrtUCXbV049Zw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oKc7KkI8d9OzYgThZt1lUNVJzIqt+zc9i7W4LNIaZ+fRaUBvVs9TJM4PD4d+RkJoJ
-         2zoQ9LSG2Iw6T0OnTId4TuZ0ee0CD/waqbWgBXni5qz3CEbAbDo/eaVMNUAqf7cnM9
-         zkjOCbIMIhJsymd6lfAzY7Mm9sxBZP2k3yz2pWHM=
+        b=kpIzJfmydQ4IvAhJv+7BNdaFeJOTwjHhH7rLdFPR5yXl07P7LzTmbp8ohCJkzRDbG
+         PMoEa853ICbaUGsHCqs/hOtbl1i1rb/NapxIRr6Xj7/kLDbILtnk2Gb/YGzrMTvaoJ
+         ov/kfEz19R37Rmrj87MbsNhTkE+xHtlFfJGkAO2g=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Alistair Popple <apopple@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        John Hubbard <jhubbard@nvidia.com>, Zi Yan <ziy@nvidia.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Oscar Salvador <osalvador@suse.de>,
+        stable@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Oleg Nesterov <oleg@redhat.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
         Andrew Morton <akpm@linux-foundation.org>,
         Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 4.9 021/218] mm/pages_alloc.c: dont create ZONE_MOVABLE beyond the end of a node
-Date:   Mon, 18 Apr 2022 14:11:27 +0200
-Message-Id: <20220418121159.794534131@linuxfoundation.org>
+Subject: [PATCH 4.9 022/218] mempolicy: mbind_range() set_policy() after vma_merge()
+Date:   Mon, 18 Apr 2022 14:11:28 +0200
+Message-Id: <20220418121159.849894095@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -60,105 +58,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alistair Popple <apopple@nvidia.com>
+From: Hugh Dickins <hughd@google.com>
 
-commit ddbc84f3f595cf1fc8234a191193b5d20ad43938 upstream.
+commit 4e0906008cdb56381638aa17d9c32734eae6d37a upstream.
 
-ZONE_MOVABLE uses the remaining memory in each node.  Its starting pfn
-is also aligned to MAX_ORDER_NR_PAGES.  It is possible for the remaining
-memory in a node to be less than MAX_ORDER_NR_PAGES, meaning there is
-not enough room for ZONE_MOVABLE on that node.
+v2.6.34 commit 9d8cebd4bcd7 ("mm: fix mbind vma merge problem") introduced
+vma_merge() to mbind_range(); but unlike madvise, mlock and mprotect, it
+put a "continue" to next vma where its precedents go to update flags on
+current vma before advancing: that left vma with the wrong setting in the
+infamous vma_merge() case 8.
 
-Unfortunately this condition is not checked for.  This leads to
-zone_movable_pfn[] getting set to a pfn greater than the last pfn in a
-node.
+v3.10 commit 1444f92c8498 ("mm: merging memory blocks resets mempolicy")
+tried to fix that in vma_adjust(), without fully understanding the issue.
 
-calculate_node_totalpages() then sets zone->present_pages to be greater
-than zone->spanned_pages which is invalid, as spanned_pages represents
-the maximum number of pages in a zone assuming no holes.
+v3.11 commit 3964acd0dbec ("mm: mempolicy: fix mbind_range() &&
+vma_adjust() interaction") reverted that, and went about the fix in the
+right way, but chose to optimize out an unnecessary mpol_dup() with a
+prior mpol_equal() test.  But on tmpfs, that also pessimized out the vital
+call to its ->set_policy(), leaving the new mbind unenforced.
 
-Subsequently it is possible free_area_init_core() will observe a zone of
-size zero with present pages.  In this case it will skip setting up the
-zone, including the initialisation of free_lists[].
+The user visible effect was that the pages got allocated on the local
+node (happened to be 0), after the mbind() caller had specifically
+asked for them to be allocated on node 1.  There was not any page
+migration involved in the case reported: the pages simply got allocated
+on the wrong node.
 
-However populated_zone() checks zone->present_pages to see if a zone has
-memory available.  This is used by iterators such as
-walk_zones_in_node().  pagetypeinfo_showfree() uses this to walk the
-free_list of each zone in each node, which are assumed to be initialised
-due to the zone not being empty.
+Just delete that optimization now (though it could be made conditional on
+vma not having a set_policy).  Also remove the "next" variable: it turned
+out to be blameless, but also pointless.
 
-As free_area_init_core() never initialised the free_lists[] this results
-in the following kernel crash when trying to read /proc/pagetypeinfo:
-
-  BUG: kernel NULL pointer dereference, address: 0000000000000000
-  #PF: supervisor read access in kernel mode
-  #PF: error_code(0x0000) - not-present page
-  PGD 0 P4D 0
-  Oops: 0000 [#1] PREEMPT SMP DEBUG_PAGEALLOC NOPTI
-  CPU: 0 PID: 456 Comm: cat Not tainted 5.16.0 #461
-  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-  RIP: 0010:pagetypeinfo_show+0x163/0x460
-  Code: 9e 82 e8 80 57 0e 00 49 8b 06 b9 01 00 00 00 4c 39 f0 75 16 e9 65 02 00 00 48 83 c1 01 48 81 f9 a0 86 01 00 0f 84 48 02 00 00 <48> 8b 00 4c 39 f0 75 e7 48 c7 c2 80 a2 e2 82 48 c7 c6 79 ef e3 82
-  RSP: 0018:ffffc90001c4bd10 EFLAGS: 00010003
-  RAX: 0000000000000000 RBX: ffff88801105f638 RCX: 0000000000000001
-  RDX: 0000000000000001 RSI: 000000000000068b RDI: ffff8880163dc68b
-  RBP: ffffc90001c4bd90 R08: 0000000000000001 R09: ffff8880163dc67e
-  R10: 656c6261766f6d6e R11: 6c6261766f6d6e55 R12: ffff88807ffb4a00
-  R13: ffff88807ffb49f8 R14: ffff88807ffb4580 R15: ffff88807ffb3000
-  FS:  00007f9c83eff5c0(0000) GS:ffff88807dc00000(0000) knlGS:0000000000000000
-  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-  CR2: 0000000000000000 CR3: 0000000013c8e000 CR4: 0000000000350ef0
-  Call Trace:
-   seq_read_iter+0x128/0x460
-   proc_reg_read_iter+0x51/0x80
-   new_sync_read+0x113/0x1a0
-   vfs_read+0x136/0x1d0
-   ksys_read+0x70/0xf0
-   __x64_sys_read+0x1a/0x20
-   do_syscall_64+0x3b/0xc0
-   entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fix this by checking that the aligned zone_movable_pfn[] does not exceed
-the end of the node, and if it does skip creating a movable zone on this
-node.
-
-Link: https://lkml.kernel.org/r/20220215025831.2113067-1-apopple@nvidia.com
-Fixes: 2a1e274acf0b ("Create the ZONE_MOVABLE zone")
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
-Acked-by: David Hildenbrand <david@redhat.com>
-Acked-by: Mel Gorman <mgorman@techsingularity.net>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Zi Yan <ziy@nvidia.com>
-Cc: Anshuman Khandual <anshuman.khandual@arm.com>
-Cc: Oscar Salvador <osalvador@suse.de>
+Link: https://lkml.kernel.org/r/319e4db9-64ae-4bca-92f0-ade85d342ff@google.com
+Fixes: 3964acd0dbec ("mm: mempolicy: fix mbind_range() && vma_adjust() interaction")
+Signed-off-by: Hugh Dickins <hughd@google.com>
+Acked-by: Oleg Nesterov <oleg@redhat.com>
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
 Cc: <stable@vger.kernel.org>
 Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 Signed-off-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- mm/page_alloc.c |    9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ mm/mempolicy.c |    8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
 
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -6267,10 +6267,17 @@ restart:
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -734,7 +734,6 @@ static int vma_replace_policy(struct vm_
+ static int mbind_range(struct mm_struct *mm, unsigned long start,
+ 		       unsigned long end, struct mempolicy *new_pol)
+ {
+-	struct vm_area_struct *next;
+ 	struct vm_area_struct *prev;
+ 	struct vm_area_struct *vma;
+ 	int err = 0;
+@@ -750,8 +749,7 @@ static int mbind_range(struct mm_struct
+ 	if (start > vma->vm_start)
+ 		prev = vma;
  
- out2:
- 	/* Align start of ZONE_MOVABLE on all nids to MAX_ORDER_NR_PAGES */
--	for (nid = 0; nid < MAX_NUMNODES; nid++)
-+	for (nid = 0; nid < MAX_NUMNODES; nid++) {
-+		unsigned long start_pfn, end_pfn;
-+
- 		zone_movable_pfn[nid] =
- 			roundup(zone_movable_pfn[nid], MAX_ORDER_NR_PAGES);
+-	for (; vma && vma->vm_start < end; prev = vma, vma = next) {
+-		next = vma->vm_next;
++	for (; vma && vma->vm_start < end; prev = vma, vma = vma->vm_next) {
+ 		vmstart = max(start, vma->vm_start);
+ 		vmend   = min(end, vma->vm_end);
  
-+		get_pfn_range_for_nid(nid, &start_pfn, &end_pfn);
-+		if (zone_movable_pfn[nid] >= end_pfn)
-+			zone_movable_pfn[nid] = 0;
-+	}
-+
- out:
- 	/* restore the node_state */
- 	node_states[N_MEMORY] = saved_node_state;
+@@ -765,10 +763,6 @@ static int mbind_range(struct mm_struct
+ 				 new_pol, vma->vm_userfaultfd_ctx);
+ 		if (prev) {
+ 			vma = prev;
+-			next = vma->vm_next;
+-			if (mpol_equal(vma_policy(vma), new_pol))
+-				continue;
+-			/* vma_merge() joined vma && vma->next, case 8 */
+ 			goto replace;
+ 		}
+ 		if (vma->vm_start != vmstart) {
 
 

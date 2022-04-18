@@ -2,41 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC4495050C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DEFF5050C8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:27:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238905AbiDRM1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S238914AbiDRM1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238730AbiDRM0U (ORCPT
+        with ESMTP id S238645AbiDRM0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:26:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A4CE0D2;
-        Mon, 18 Apr 2022 05:20:16 -0700 (PDT)
+        Mon, 18 Apr 2022 08:26:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6487911156;
+        Mon, 18 Apr 2022 05:20:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42A22B80EDB;
-        Mon, 18 Apr 2022 12:20:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82E36C385A8;
-        Mon, 18 Apr 2022 12:20:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 27060B80ED7;
+        Mon, 18 Apr 2022 12:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68094C385A9;
+        Mon, 18 Apr 2022 12:20:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284413;
-        bh=Xcyb1ZziIShEl8l+imCTz4ijXgo4FealMcnreqRyWVA=;
+        s=korg; t=1650284416;
+        bh=wEqibby7SYUMkpvEnUyHpNDzShDLniGv9sMnw42cP9w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2fSd9nzjrBKR+F/RGGqmXNO6pMrw+tFiuTh6dt1DXgR8ML1DR0O86KmaT6aIwQwLt
-         tf1JyDFQkitiURhcYZyed7l3lvTwBl0E8zrdRsuiO4N3PAA09VLTSl0di8js74qSlK
-         JfX6T3EI1vbEqIWHivEnUL67/e27alhpEECALWTQ=
+        b=ZgvaTJh9+LigtGyg66NAR5yhabTW35bAf39sHgN63vzH2OB30nIIw2FSEHLq5qkY0
+         xynXq7a6lDa/YjdPRKY4k/PU76bxjz76POyPT+6TyFxq+b9NTx+y9TS1rT8IsppjF4
+         BZptR1VGCbR2oYhJPCIoKkaOt5GJsOUTbN+CYMPA=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        stable@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 090/219] drm/msm: Fix range size vs end confusion
-Date:   Mon, 18 Apr 2022 14:10:59 +0200
-Message-Id: <20220418121209.092445449@linuxfoundation.org>
+Subject: [PATCH 5.17 091/219] drm/msm/dsi: Use connector directly in msm_dsi_manager_connector_init()
+Date:   Mon, 18 Apr 2022 14:11:00 +0200
+Message-Id: <20220418121209.149093580@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
 References: <20220418121203.462784814@linuxfoundation.org>
@@ -54,38 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+From: Stephen Boyd <swboyd@chromium.org>
 
-[ Upstream commit 537fef808be5ea56f6fc06932162550819a3b3c3 ]
+[ Upstream commit 47b7de6b88b962ef339a2427a023d2a23d161654 ]
 
-The fourth param is size, rather than range_end.
+The member 'msm_dsi->connector' isn't assigned until
+msm_dsi_manager_connector_init() returns (see msm_dsi_modeset_init() and
+how it assigns the return value). Therefore this pointer is going to be
+NULL here. Let's use 'connector' which is what was intended.
 
-Note that we could increase the address space size if we had a way to
-prevent buffers from spanning a 4G split, mostly just to avoid fw bugs
-with 64b math.
-
-Fixes: 84c31ee16f90 ("drm/msm/a6xx: Add support for per-instance pagetables")
-Signed-off-by: Rob Clark <robdclark@chromium.org>
-Link: https://lore.kernel.org/r/20220407202836.1211268-1-robdclark@gmail.com
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sean Paul <seanpaul@chromium.org>
+Fixes: 6d5e78406991 ("drm/msm/dsi: Move dsi panel init into modeset init path")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/478693/
+Link: https://lore.kernel.org/r/20220318000731.2823718-1-swboyd@chromium.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 2 +-
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index 616be7265da4..19622fb1fa35 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -1714,7 +1714,7 @@ a6xx_create_private_address_space(struct msm_gpu *gpu)
- 		return ERR_CAST(mmu);
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index f19bae475c96..cd7b41b7d518 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -641,7 +641,7 @@ struct drm_connector *msm_dsi_manager_connector_init(u8 id)
+ 	return connector;
  
- 	return msm_gem_address_space_create(mmu,
--		"gpu", 0x100000000ULL, 0x1ffffffffULL);
-+		"gpu", 0x100000000ULL, SZ_4G);
+ fail:
+-	connector->funcs->destroy(msm_dsi->connector);
++	connector->funcs->destroy(connector);
+ 	return ERR_PTR(ret);
  }
  
- static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
 -- 
 2.35.1
 

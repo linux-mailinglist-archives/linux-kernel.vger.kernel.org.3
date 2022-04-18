@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F21D5058D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0678B5059FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:29:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245293AbiDROG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S1344494AbiDROa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239972AbiDRNuh (ORCPT
+        with ESMTP id S1343939AbiDRORB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:50:37 -0400
+        Mon, 18 Apr 2022 10:17:01 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABC943AFE;
-        Mon, 18 Apr 2022 06:01:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBE933A18F;
+        Mon, 18 Apr 2022 06:13:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25285B80EC3;
-        Mon, 18 Apr 2022 13:01:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F780C385A7;
-        Mon, 18 Apr 2022 13:01:50 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6CAEB80EE6;
+        Mon, 18 Apr 2022 13:13:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E62DC385A7;
+        Mon, 18 Apr 2022 13:13:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650286910;
-        bh=GR6Dfnbb9uN0r2QYDYz1vhQwHWD3lOdfcpRoWQ+ksZ4=;
+        s=korg; t=1650287599;
+        bh=+Xhxq35zIrS32x1vS5708oQRgbV77aN/xWOJSWv5kAQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=yP1xb6P2ws+Uvo3C+XwyFqJDVA8Oof7xCet1o00FrZUlRWbRLp1dIs3Lliwkh12p0
-         h+RXuz2hrZsdB67zvKJu03t+0vv7woa7go9/9U5UEWU/sUPHN7Gu8SyNtmJ0Mp8q5O
-         9bNd0UpqBS66N49xnIDWNK9DONulvIjujcwhylr4=
+        b=ToIpaQfPQQ4M4WhT7OomEBjD+IKtgp5djI+KqpVEz3iBNfwZ6nTy6iFdq1hwRM70q
+         GqXeRDnWnb0ZzFasBRLgAGUhI+JUUPCYtw45laTnL14ilmTXg7uQzmnWENX4KUI2n+
+         oxZGMPz7emqh4D7oFxAF1RI0AyPa2s66y1hx1l5A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Linus Torvalds <torvalds@linuxfoundation.org>,
-        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-        Tejun Heo <tj@kernel.org>,
-        Ovidiu Panait <ovidiu.panait@windriver.com>
-Subject: [PATCH 4.14 257/284] cgroup: Use open-time credentials for process migraton perm checks
+        stable@vger.kernel.org, Jordy Zomer <jordy@pwning.systems>,
+        Mike Snitzer <snitzer@redhat.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 172/218] dm ioctl: prevent potential spectre v1 gadget
 Date:   Mon, 18 Apr 2022 14:13:58 +0200
-Message-Id: <20220418121219.735989441@linuxfoundation.org>
+Message-Id: <20220418121205.498414131@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
-References: <20220418121210.689577360@linuxfoundation.org>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+References: <20220418121158.636999985@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,102 +55,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo <tj@kernel.org>
+From: Jordy Zomer <jordy@jordyzomer.github.io>
 
-commit 1756d7994ad85c2479af6ae5a9750b92324685af upstream.
+[ Upstream commit cd9c88da171a62c4b0f1c70e50c75845969fbc18 ]
 
-cgroup process migration permission checks are performed at write time as
-whether a given operation is allowed or not is dependent on the content of
-the write - the PID. This currently uses current's credentials which is a
-potential security weakness as it may allow scenarios where a less
-privileged process tricks a more privileged one into writing into a fd that
-it created.
+It appears like cmd could be a Spectre v1 gadget as it's supplied by a
+user and used as an array index. Prevent the contents of kernel memory
+from being leaked to userspace via speculative execution by using
+array_index_nospec.
 
-This patch makes both cgroup2 and cgroup1 process migration interfaces to
-use the credentials saved at the time of open (file->f_cred) instead of
-current's.
-
-Reported-by: "Eric W. Biederman" <ebiederm@xmission.com>
-Suggested-by: Linus Torvalds <torvalds@linuxfoundation.org>
-Fixes: 187fe84067bd ("cgroup: require write perm on common ancestor when moving processes on the default hierarchy")
-Reviewed-by: Michal Koutný <mkoutny@suse.com>
-Signed-off-by: Tejun Heo <tj@kernel.org>
-[OP: backport to v4.14: apply original __cgroup_procs_write() changes to
-cgroup_threads_write() and cgroup_procs_write()]
-Signed-off-by: Ovidiu Panait <ovidiu.panait@windriver.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Jordy Zomer <jordy@pwning.systems>
+Signed-off-by: Mike Snitzer <snitzer@redhat.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- kernel/cgroup/cgroup-v1.c |    7 ++++---
- kernel/cgroup/cgroup.c    |   17 ++++++++++++++++-
- 2 files changed, 20 insertions(+), 4 deletions(-)
+ drivers/md/dm-ioctl.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
---- a/kernel/cgroup/cgroup-v1.c
-+++ b/kernel/cgroup/cgroup-v1.c
-@@ -535,10 +535,11 @@ static ssize_t __cgroup1_procs_write(str
- 		goto out_unlock;
+diff --git a/drivers/md/dm-ioctl.c b/drivers/md/dm-ioctl.c
+index eb2659a12310..70245782e7f6 100644
+--- a/drivers/md/dm-ioctl.c
++++ b/drivers/md/dm-ioctl.c
+@@ -16,6 +16,7 @@
+ #include <linux/dm-ioctl.h>
+ #include <linux/hdreg.h>
+ #include <linux/compat.h>
++#include <linux/nospec.h>
  
- 	/*
--	 * Even if we're attaching all tasks in the thread group, we only
--	 * need to check permissions on one of them.
-+	 * Even if we're attaching all tasks in the thread group, we only need
-+	 * to check permissions on one of them. Check permissions using the
-+	 * credentials from file open to protect against inherited fd attacks.
- 	 */
--	cred = current_cred();
-+	cred = of->file->f_cred;
- 	tcred = get_task_cred(task);
- 	if (!uid_eq(cred->euid, GLOBAL_ROOT_UID) &&
- 	    !uid_eq(cred->euid, tcred->uid) &&
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -4381,6 +4381,7 @@ static ssize_t cgroup_procs_write(struct
- {
- 	struct cgroup *src_cgrp, *dst_cgrp;
- 	struct task_struct *task;
-+	const struct cred *saved_cred;
- 	ssize_t ret;
+ #include <asm/uaccess.h>
  
- 	dst_cgrp = cgroup_kn_lock_live(of->kn, false);
-@@ -4397,8 +4398,15 @@ static ssize_t cgroup_procs_write(struct
- 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
- 	spin_unlock_irq(&css_set_lock);
+@@ -1642,6 +1643,7 @@ static ioctl_fn lookup_ioctl(unsigned int cmd, int *ioctl_flags)
+ 	if (unlikely(cmd >= ARRAY_SIZE(_ioctls)))
+ 		return NULL;
  
-+	/*
-+	 * Process and thread migrations follow same delegation rule. Check
-+	 * permissions using the credentials from file open to protect against
-+	 * inherited fd attacks.
-+	 */
-+	saved_cred = override_creds(of->file->f_cred);
- 	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp,
- 					    of->file->f_path.dentry->d_sb);
-+	revert_creds(saved_cred);
- 	if (ret)
- 		goto out_finish;
- 
-@@ -4422,6 +4430,7 @@ static ssize_t cgroup_threads_write(stru
- {
- 	struct cgroup *src_cgrp, *dst_cgrp;
- 	struct task_struct *task;
-+	const struct cred *saved_cred;
- 	ssize_t ret;
- 
- 	buf = strstrip(buf);
-@@ -4440,9 +4449,15 @@ static ssize_t cgroup_threads_write(stru
- 	src_cgrp = task_cgroup_from_root(task, &cgrp_dfl_root);
- 	spin_unlock_irq(&css_set_lock);
- 
--	/* thread migrations follow the cgroup.procs delegation rule */
-+	/*
-+	 * Process and thread migrations follow same delegation rule. Check
-+	 * permissions using the credentials from file open to protect against
-+	 * inherited fd attacks.
-+	 */
-+	saved_cred = override_creds(of->file->f_cred);
- 	ret = cgroup_procs_write_permission(src_cgrp, dst_cgrp,
- 					    of->file->f_path.dentry->d_sb);
-+	revert_creds(saved_cred);
- 	if (ret)
- 		goto out_finish;
- 
++	cmd = array_index_nospec(cmd, ARRAY_SIZE(_ioctls));
+ 	*ioctl_flags = _ioctls[cmd].flags;
+ 	return _ioctls[cmd].fn;
+ }
+-- 
+2.35.1
+
 
 

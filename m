@@ -2,47 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD518505069
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0C93505200
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238530AbiDRMZC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:25:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49302 "EHLO
+        id S240141AbiDRMns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238970AbiDRMXP (ORCPT
+        with ESMTP id S240178AbiDRMdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:23:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A504D1FA4C;
-        Mon, 18 Apr 2022 05:18:39 -0700 (PDT)
+        Mon, 18 Apr 2022 08:33:54 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB64F205DF;
+        Mon, 18 Apr 2022 05:27:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4371460F0C;
-        Mon, 18 Apr 2022 12:18:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3583DC385A1;
-        Mon, 18 Apr 2022 12:18:38 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0C06AB80EDB;
+        Mon, 18 Apr 2022 12:27:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55E99C385A7;
+        Mon, 18 Apr 2022 12:27:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284318;
-        bh=dpSSTSPDfm32UkoTk+/PGGGWBTktO6DCFMgsrabB63E=;
+        s=korg; t=1650284829;
+        bh=ankRfE1NJGscVelAIBbvu7K3FN2QodaqU/jv0PZKqhw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ndjk5KfH2m79n4f1ZOri/iYcXm1VcYsaPq/gUj5gZZvBuTV5Pk4dMmKSC+ETZPnr4
-         srTHcRk6SuecxsnMsXCyMcP9rIBPgbqjLJXELP0zNEvREInGIc8ip8oVwWso0CNKn2
-         m2XcwBd7TLDRF9JoFylSXOJjCLmT8lM0oEjTjmHU=
+        b=hHzgpIpmKQOlVzw261UB/H3Yo31I8gOQ2B9mBQukMonv2D+rpwjhUqc1JHYKRuDGY
+         YwI3qjZla5AQXzClKtRvoeur/82lHAus6yxaz4Ma1sur5xQtpt+dm5BTnqK73F5M/s
+         8PSPrOdvWcPrgTyW7FkbVkMDP9Ql8V46dJHaBt+0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Mateusz Palczewski <mateusz.palczewski@intel.com>,
-        Konrad Jankowski <konrad0.jankowski@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 073/219] Revert "iavf: Fix deadlock occurrence during resetting VF interface"
+        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
+Subject: [PATCH 5.15 022/189] ALSA: au88x0: Fix the missing snd_card_free() call at probe error
 Date:   Mon, 18 Apr 2022 14:10:42 +0200
-Message-Id: <20220418121207.980484389@linuxfoundation.org>
+Message-Id: <20220418121201.145654760@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,60 +53,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mateusz Palczewski <mateusz.palczewski@intel.com>
+From: Takashi Iwai <tiwai@suse.de>
 
-[ Upstream commit 7d59706dbef8de83b3662026766507bc494223d7 ]
+commit b093de145bc8769c6e9207947afad9efe102f4f6 upstream.
 
-This change caused a regression with resetting while changing network
-namespaces. By clearing the IFF_UP flag, the kernel now thinks it has
-fully closed the device.
+The previous cleanup with devres may lead to the incorrect release
+orders at the probe error handling due to the devres's nature.  Until
+we register the card, snd_card_free() has to be called at first for
+releasing the stuff properly when the driver tries to manage and
+release the stuff via card->private_free().
 
-This reverts commit 0cc318d2e8408bc0ffb4662a0c3e5e57005ac6ff.
+This patch fixes it by calling snd_card_free() on the error from the
+probe callback using a new helper function.
 
-Fixes: 0cc318d2e840 ("iavf: Fix deadlock occurrence during resetting VF interface")
-Signed-off-by: Mateusz Palczewski <mateusz.palczewski@intel.com>
-Tested-by: Konrad Jankowski <konrad0.jankowski@intel.com>
-Signed-off-by: Tony Nguyen <anthony.l.nguyen@intel.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Fixes: e44b5b440609 ("ALSA: au88x0: Allocate resources with device-managed APIs")
+Cc: <stable@vger.kernel.org>
+Link: https://lore.kernel.org/r/20220412102636.16000-8-tiwai@suse.de
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/net/ethernet/intel/iavf/iavf_main.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+ sound/pci/au88x0/au88x0.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index d10e9a8e8011..f55ecb672768 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2817,7 +2817,6 @@ static void iavf_reset_task(struct work_struct *work)
- 	running = adapter->state == __IAVF_RUNNING;
+diff --git a/sound/pci/au88x0/au88x0.c b/sound/pci/au88x0/au88x0.c
+index 342ef2a6655e..eb234153691b 100644
+--- a/sound/pci/au88x0/au88x0.c
++++ b/sound/pci/au88x0/au88x0.c
+@@ -193,7 +193,7 @@ snd_vortex_create(struct snd_card *card, struct pci_dev *pci)
  
- 	if (running) {
--		netdev->flags &= ~IFF_UP;
- 		netif_carrier_off(netdev);
- 		netif_tx_stop_all_queues(netdev);
- 		adapter->link_up = false;
-@@ -2934,7 +2933,7 @@ static void iavf_reset_task(struct work_struct *work)
- 		 * to __IAVF_RUNNING
- 		 */
- 		iavf_up_complete(adapter);
--		netdev->flags |= IFF_UP;
-+
- 		iavf_irq_enable(adapter, true);
- 	} else {
- 		iavf_change_state(adapter, __IAVF_DOWN);
-@@ -2950,10 +2949,8 @@ static void iavf_reset_task(struct work_struct *work)
- reset_err:
- 	mutex_unlock(&adapter->client_lock);
- 	mutex_unlock(&adapter->crit_lock);
--	if (running) {
-+	if (running)
- 		iavf_change_state(adapter, __IAVF_RUNNING);
--		netdev->flags |= IFF_UP;
--	}
- 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
- 	iavf_close(netdev);
+ // constructor -- see "Constructor" sub-section
+ static int
+-snd_vortex_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
++__snd_vortex_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+ {
+ 	static int dev;
+ 	struct snd_card *card;
+@@ -310,6 +310,12 @@ snd_vortex_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
+ 	return 0;
  }
+ 
++static int
++snd_vortex_probe(struct pci_dev *pci, const struct pci_device_id *pci_id)
++{
++	return snd_card_free_on_error(&pci->dev, __snd_vortex_probe(pci, pci_id));
++}
++
+ // pci_driver definition
+ static struct pci_driver vortex_driver = {
+ 	.name = KBUILD_MODNAME,
 -- 
-2.35.1
+2.35.2
 
 
 

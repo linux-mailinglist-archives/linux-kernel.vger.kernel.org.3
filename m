@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8BC5055AF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ACA55054A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:22:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240667AbiDRNZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S241286AbiDRNR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241271AbiDRNC5 (ORCPT
+        with ESMTP id S241879AbiDRM7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:57 -0400
+        Mon, 18 Apr 2022 08:59:09 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC89032EEF;
-        Mon, 18 Apr 2022 05:43:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201AD10CE;
+        Mon, 18 Apr 2022 05:39:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43AC66101A;
-        Mon, 18 Apr 2022 12:43:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DA67C385A1;
-        Mon, 18 Apr 2022 12:43:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 976A16101A;
+        Mon, 18 Apr 2022 12:39:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B0C2C385A7;
+        Mon, 18 Apr 2022 12:39:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285783;
-        bh=kKwtNpqH1eptFQwlenIiu4gKJTeE25b2cy+Q38JetA8=;
+        s=korg; t=1650285586;
+        bh=4KgPI7ZD0G86IX3mS4fj0NeBKNa4lw2u47qQaePsz4U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h9q6R+oCH6BSwZO2GZSDKp6dP/e7FI8QG665nwf55hRaYhr4RfFQkv4dtFjz0tO1T
-         dsKCnqX7JMrGvz+8Fky4/yfzAm8c245TIrutVa0k8YJBKwQxG5VgRKO07DodflZQJg
-         SzgYWnfKX2AklA08Gm2/M2DD9DEDVcUZGJRQmOVQ=
+        b=msqd6vujt56TT9wPSD3+CqmDIZIaTpMtUbQd9RBuzKBZwW/6AGE3iHxwl8h0B/wU0
+         ohFKDbzbRRBeAxWAgiADL7w0xQFcQNBKUG+tj7usVrBM5HfXfAetkXQ50CkmpERQ4+
+         wxpUQ8OJ4LJbhZefWsJueOpIdfwyBig66i9KZdW0=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Rameshkumar Sundaram <quic_ramess@quicinc.com>,
-        Johannes Berg <johannes.berg@intel.com>,
+        stable@vger.kernel.org, Wayne Lin <Wayne.Lin@amd.com>,
+        Alex Hung <alex.hung@amd.com>, Roman Li <Roman.Li@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 09/63] cfg80211: hold bss_lock while updating nontrans_list
-Date:   Mon, 18 Apr 2022 14:13:06 +0200
-Message-Id: <20220418121134.779010105@linuxfoundation.org>
+Subject: [PATCH 5.10 065/105] drm/amd/display: Fix allocate_mst_payload assert on resume
+Date:   Mon, 18 Apr 2022 14:13:07 +0200
+Message-Id: <20220418121148.334708596@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+References: <20220418121145.140991388@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,43 +57,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rameshkumar Sundaram <quic_ramess@quicinc.com>
+From: Roman Li <Roman.Li@amd.com>
 
-[ Upstream commit a5199b5626cd6913cf8776a835bc63d40e0686ad ]
+[ Upstream commit f4346fb3edf7720db3f7f5e1cab1f667cd024280 ]
 
-Synchronize additions to nontrans_list of transmitting BSS with
-bss_lock to avoid races. Also when cfg80211_add_nontrans_list() fails
-__cfg80211_unlink_bss() needs bss_lock to be held (has lockdep assert
-on bss_lock). So protect the whole block with bss_lock to avoid
-races and warnings. Found during code review.
+[Why]
+On resume we do link detection for all non-MST connectors.
+MST is handled separately. However the condition for telling
+if connector is on mst branch is not enough for mst hub case.
+Link detection for mst branch link leads to mst topology reset.
+That causes assert in dc_link_allocate_mst_payload()
 
-Fixes: 0b8fb8235be8 ("cfg80211: Parsing of Multiple BSSID information in scanning")
-Signed-off-by: Rameshkumar Sundaram <quic_ramess@quicinc.com>
-Link: https://lore.kernel.org/r/1649668071-9370-1-git-send-email-quic_ramess@quicinc.com
-Signed-off-by: Johannes Berg <johannes.berg@intel.com>
+[How]
+Use link type as indicator for mst link.
+
+Reviewed-by: Wayne Lin <Wayne.Lin@amd.com>
+Acked-by: Alex Hung <alex.hung@amd.com>
+Signed-off-by: Roman Li <Roman.Li@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/wireless/scan.c | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/wireless/scan.c b/net/wireless/scan.c
-index 6cefaad3b7f8..6bb9437af28b 100644
---- a/net/wireless/scan.c
-+++ b/net/wireless/scan.c
-@@ -1457,11 +1457,13 @@ cfg80211_inform_single_bss_data(struct wiphy *wiphy,
- 		/* this is a nontransmitting bss, we need to add it to
- 		 * transmitting bss' list if it is not there
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+index e828f9414ba2..7bb151283f44 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+@@ -2022,7 +2022,8 @@ static int dm_resume(void *handle)
+ 		 * this is the case when traversing through already created
+ 		 * MST connectors, should be skipped
  		 */
-+		spin_lock_bh(&rdev->bss_lock);
- 		if (cfg80211_add_nontrans_list(non_tx_data->tx_bss,
- 					       &res->pub)) {
- 			if (__cfg80211_unlink_bss(rdev, res))
- 				rdev->bss_generation++;
- 		}
-+		spin_unlock_bh(&rdev->bss_lock);
- 	}
+-		if (aconnector->mst_port)
++		if (aconnector->dc_link &&
++		    aconnector->dc_link->type == dc_connection_mst_branch)
+ 			continue;
  
- 	trace_cfg80211_return_bss(&res->pub);
+ 		mutex_lock(&aconnector->hpd_lock);
 -- 
 2.35.1
 

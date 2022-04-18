@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B11E50555B
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113A6505809
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:56:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242289AbiDRNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59810 "EHLO
+        id S244535AbiDRN7Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:59:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240750AbiDRM5r (ORCPT
+        with ESMTP id S242707AbiDRNfk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:57:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF9F237C3;
-        Mon, 18 Apr 2022 05:38:10 -0700 (PDT)
+        Mon, 18 Apr 2022 09:35:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC11F252B6;
+        Mon, 18 Apr 2022 05:58:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFF3DB80EDC;
-        Mon, 18 Apr 2022 12:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38A76C385AB;
-        Mon, 18 Apr 2022 12:38:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8DBF612DB;
+        Mon, 18 Apr 2022 12:58:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9ECEAC385A1;
+        Mon, 18 Apr 2022 12:58:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285487;
-        bh=RdZeJRexRc5cYyhfz/1ZZRz8dp2B8bRR03bjXvJaztI=;
+        s=korg; t=1650286687;
+        bh=KILYHveAm1KA+QDA4KsMbD9x4kEXUusNdRBZBi+Vj3M=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=isiHAfljSsERzfcVnsNLvxYBU6bnfZUeN85ag2pRAV2f1xPX+0+xr2u47xGWyVa3f
-         tqg7NoFQzZ9pCvQMdiwggGybOYWangL5j8+83lTr0ruMVCUvLGCtZxk48WgiIis5Xr
-         +wj2DPUK/2OVqIHQzhlCm+8FnEkUdaPZeevqQaCA=
+        b=P5rgXukKKlEDX3UDAhRmvwO4zBGlaJly6TETrfCj+Y2geOW3yDE5Tit2/0omke74q
+         9zw7jbn5Q3euL0+2Kfs0pQX0cuk+c11vpaRyOJNj3NkrMpEamI1F/CX3MOY7tIjBnZ
+         tTgRQQEe3lGbtHqvZY/tJUDPBXrjJ97BJyDbZ+DU=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Manish Rangankar <mrangankar@marvell.com>,
-        Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Mark Brown <broonie@kernel.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.10 032/105] scsi: iscsi: Move iscsi_ep_disconnect()
+Subject: [PATCH 4.14 173/284] ASoC: soc-core: skip zero num_dai component in searching dai name
 Date:   Mon, 18 Apr 2022 14:12:34 +0200
-Message-Id: <20220418121147.292355847@linuxfoundation.org>
+Message-Id: <20220418121216.661379213@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-References: <20220418121145.140991388@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,82 +55,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Christie <michael.christie@oracle.com>
+From: Shengjiu Wang <shengjiu.wang@nxp.com>
 
-[ Upstream commit c34f95e98d8fb750eefd4f3fe58b4f8b5e89253b ]
+[ Upstream commit f7d344a2bd5ec81fbd1ce76928fd059e57ec9bea ]
 
-This patch moves iscsi_ep_disconnect() so it can be called earlier in the
-next patch.
+In the case like dmaengine which's not a dai but as a component, the
+num_dai is zero, dmaengine component has the same component_of_node
+as cpu dai, when cpu dai component is not ready, but dmaengine component
+is ready, try to get cpu dai name, the snd_soc_get_dai_name() return
+-EINVAL, not -EPROBE_DEFER, that cause below error:
 
-Link: https://lore.kernel.org/r/20220408001314.5014-2-michael.christie@oracle.com
-Tested-by: Manish Rangankar <mrangankar@marvell.com>
-Reviewed-by: Lee Duncan <lduncan@suse.com>
-Reviewed-by: Chris Leech <cleech@redhat.com>
-Signed-off-by: Mike Christie <michael.christie@oracle.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+asoc-simple-card <card name>: parse error -22
+asoc-simple-card: probe of <card name> failed with error -22
+
+The sound card failed to probe.
+
+So this patch fixes the issue above by skipping the zero num_dai
+component in searching dai name.
+
+Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+Link: https://lore.kernel.org/r/1644491952-7457-1-git-send-email-shengjiu.wang@nxp.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/scsi_transport_iscsi.c | 38 ++++++++++++++---------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ sound/soc/soc-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/scsi_transport_iscsi.c b/drivers/scsi/scsi_transport_iscsi.c
-index 7246f7b2ff03..8f6dc391356d 100644
---- a/drivers/scsi/scsi_transport_iscsi.c
-+++ b/drivers/scsi/scsi_transport_iscsi.c
-@@ -2239,6 +2239,25 @@ static void iscsi_stop_conn(struct iscsi_cls_conn *conn, int flag)
- 	ISCSI_DBG_TRANS_CONN(conn, "Stopping conn done.\n");
- }
+diff --git a/sound/soc/soc-core.c b/sound/soc/soc-core.c
+index 2a172de37466..febf2b649b96 100644
+--- a/sound/soc/soc-core.c
++++ b/sound/soc/soc-core.c
+@@ -4243,7 +4243,7 @@ int snd_soc_get_dai_name(struct of_phandle_args *args,
+ 		if (!component_of_node && pos->dev->parent)
+ 			component_of_node = pos->dev->parent->of_node;
  
-+static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
-+{
-+	struct iscsi_cls_session *session = iscsi_conn_to_session(conn);
-+	struct iscsi_endpoint *ep;
-+
-+	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep.\n");
-+	conn->state = ISCSI_CONN_FAILED;
-+
-+	if (!conn->ep || !session->transport->ep_disconnect)
-+		return;
-+
-+	ep = conn->ep;
-+	conn->ep = NULL;
-+
-+	session->transport->unbind_conn(conn, is_active);
-+	session->transport->ep_disconnect(ep);
-+	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
-+}
-+
- static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 			      struct iscsi_uevent *ev)
- {
-@@ -2279,25 +2298,6 @@ static int iscsi_if_stop_conn(struct iscsi_transport *transport,
- 	return 0;
- }
+-		if (component_of_node != args->np)
++		if (component_of_node != args->np || !pos->num_dai)
+ 			continue;
  
--static void iscsi_ep_disconnect(struct iscsi_cls_conn *conn, bool is_active)
--{
--	struct iscsi_cls_session *session = iscsi_conn_to_session(conn);
--	struct iscsi_endpoint *ep;
--
--	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep.\n");
--	conn->state = ISCSI_CONN_FAILED;
--
--	if (!conn->ep || !session->transport->ep_disconnect)
--		return;
--
--	ep = conn->ep;
--	conn->ep = NULL;
--
--	session->transport->unbind_conn(conn, is_active);
--	session->transport->ep_disconnect(ep);
--	ISCSI_DBG_TRANS_CONN(conn, "disconnect ep done.\n");
--}
--
- static void iscsi_cleanup_conn_work_fn(struct work_struct *work)
- {
- 	struct iscsi_cls_conn *conn = container_of(work, struct iscsi_cls_conn,
+ 		if (pos->driver->of_xlate_dai_name) {
 -- 
-2.35.1
+2.34.1
 
 
 

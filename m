@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52358505D73
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ACA7505D79
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:22:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346963AbiDRRWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
+        id S1346991AbiDRRYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:24:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346991AbiDRRWh (ORCPT
+        with ESMTP id S242820AbiDRRYp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:22:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9A1911A34
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650302396;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=BOeDwm19QZU5bj1yBihjhswrckaR7N4xxWK6qgyPxIA=;
-        b=ZCgurH657/diQCpZwxz0p2PUXks1fuUjzV2vVjVWeptahCfhdy45efJLaxS2FZGIkK134G
-        vyltAow0XPHCRmntnDKI8DELFmFentnefEuMyYPnWw4K0HFOMpeZOZfxuT6kCgJwsRXAu4
-        ZfpW1y0dacuBarmtuzvRt49sqNgCA0Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-7tjVyLDfNhGYyJThbh6otQ-1; Mon, 18 Apr 2022 13:19:52 -0400
-X-MC-Unique: 7tjVyLDfNhGYyJThbh6otQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4AC56811E78;
-        Mon, 18 Apr 2022 17:19:46 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.13])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 34F3840FD37C;
-        Mon, 18 Apr 2022 17:19:43 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 18 Apr 2022 19:19:45 +0200 (CEST)
-Date:   Mon, 18 Apr 2022 19:19:42 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     rjw@rjwysocki.net, mingo@kernel.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, mgorman@suse.de,
-        ebiederm@xmission.com, bigeasy@linutronix.de,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        tj@kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH 2/5] sched,ptrace: Fix ptrace_check_attach() vs PREEMPT_RT
-Message-ID: <20220418171941.GB16199@redhat.com>
-References: <20220413185909.GB30360@redhat.com>
- <20220413192053.GY2731@worktop.programming.kicks-ass.net>
- <20220413195612.GC2762@worktop.programming.kicks-ass.net>
- <20220414115410.GA32752@redhat.com>
- <20220414183433.GC32752@redhat.com>
- <YlikBjA3kL3XEQP5@hirez.programming.kicks-ass.net>
- <20220415101644.GA10421@redhat.com>
- <20220415105755.GA15217@redhat.com>
- <Yllep6B8eva2VURJ@hirez.programming.kicks-ass.net>
- <20220418170104.GA16199@redhat.com>
+        Mon, 18 Apr 2022 13:24:45 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90586338BC;
+        Mon, 18 Apr 2022 10:22:06 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 2so13523794pjw.2;
+        Mon, 18 Apr 2022 10:22:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=F0iRw3VgQscT6/0XFHxVh7cgsAmiEmZpweYGGHzkE3c=;
+        b=Vnc0dolzjhTYH+RUXDVsGRBcl3ihr+wXgH1YYpgicBJ6ojt04pBZxtqpY9GC2kzHCN
+         HoaEO77m/1nvx96MegKE+ctwSCP8m2gKgrhNj2zUZgnDQJIC2EaO6U3WivH8DVq6fqp3
+         RuJ7eAH+sakFgGO3vT7yyc1MCTcG+veIyWwLsgM5lbC2je92JHW/noAdXV/wC534Xw7R
+         y2lyZWLQzPtVVfzL/viNyJ+A9k5K53kx7pXvUPpMEwVcFs9LxgyCkX2qHQtu4dYrxKQI
+         EK5s2TjSlbv0c3gmVYaIrWjBpOBafuZ/iNS4C1DjnpNkO5FitrSguzKMyKGhW2ZUBejh
+         p1sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=F0iRw3VgQscT6/0XFHxVh7cgsAmiEmZpweYGGHzkE3c=;
+        b=jc6U6jq6qnRzDfEgZZwtbotj6l8wxDMQZ3m8CdE2YBXhoCdpybTj0Ns2O0MTC0b/1s
+         hvlcs1p7OAv4dBqNXO5dNKkNKN48zJqmJYIEbGp88OePUDPMhtWRGT3+J0pZa+PcFDA5
+         eQLqdUGBw/yEWJlQFh27aBbzlj/9WWGGYe9DgLy7ECkie0xHiHlk9k1AruLZSIRPDY4y
+         hwRb95Ap12lNHM4Ot3mwqamO5t+peTfi0jNk8uEtKa1G3HlkSrzyqEUoqW0p79HmECsn
+         sLCVKfQzHCd8WM/yHufoSafJkM5Jz40l5OOjVkSHz3UGHBu0qVEOFplCHx8xIG4VUrGr
+         Gtuw==
+X-Gm-Message-State: AOAM532iaImQxZF9Vb4r+aXoMh7xE4amhvGu6MxS0lRqR8q1QAHboDQt
+        lRo8gjgdXxRIBpIDTLvixDU=
+X-Google-Smtp-Source: ABdhPJx+DqNOjCvlY1CVI4tjfVPfe5BuPrfNf+ircXuy8BT0iwtFFea5fHiIiUoZY3+TBuvXKHG8BA==
+X-Received: by 2002:a17:903:2281:b0:158:e95e:e0a9 with SMTP id b1-20020a170903228100b00158e95ee0a9mr11148558plh.157.1650302526031;
+        Mon, 18 Apr 2022 10:22:06 -0700 (PDT)
+Received: from [192.168.1.3] (ip72-194-116-95.oc.oc.cox.net. [72.194.116.95])
+        by smtp.gmail.com with ESMTPSA id br10-20020a17090b0f0a00b001cd4fb89d38sm17054891pjb.9.2022.04.18.10.22.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Apr 2022 10:22:05 -0700 (PDT)
+Message-ID: <e4c167f7-bdbb-cf88-fcdc-fc0b07488b40@gmail.com>
+Date:   Mon, 18 Apr 2022 10:22:03 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418170104.GA16199@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 4.9 000/218] 4.9.311-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+References: <20220418121158.636999985@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04/18, Oleg Nesterov wrote:
->
->  static int ptrace_check_attach(struct task_struct *child, bool ignore_state)
->  {
-...
-> +	if (!traced)
-> +		return -ESRCH;
-> +
-> +	WARN_ON(READ_ONCE(child->__state) == __TASK_TRACED);
-> +	if (ignore_state)
-> +		return 0;
-> +
-> +	if (!task_is_traced(child))
-> +		return -ESRCH;
 
-This is the new check V1 didn't have, we need it to unsure that check_attach
-can't miss the change in child->jobctl and call wait_task_inactive() before
-the child marks itself as "traced" and clears JOBCTL_TRACED_XXX.
 
-Oleg.
+On 4/18/2022 5:11 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.9.311 release.
+> There are 218 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.311-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels:
+
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian

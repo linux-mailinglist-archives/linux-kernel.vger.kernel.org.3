@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81125051BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29B795057BF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236166AbiDRMkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:40:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54078 "EHLO
+        id S244427AbiDRNyr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:54:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239676AbiDRMdU (ORCPT
+        with ESMTP id S244872AbiDRNa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:33:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0AB63C2;
-        Mon, 18 Apr 2022 05:25:04 -0700 (PDT)
+        Mon, 18 Apr 2022 09:30:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148E91EEF1;
+        Mon, 18 Apr 2022 05:56:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 792A2B80ED1;
-        Mon, 18 Apr 2022 12:25:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE469C385A7;
-        Mon, 18 Apr 2022 12:25:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A393460FD9;
+        Mon, 18 Apr 2022 12:56:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 916F1C385A1;
+        Mon, 18 Apr 2022 12:56:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284702;
-        bh=2pRgpl+ehN+GQk+VgDxgZnQU0ERx1IPYjSzEqeOKiso=;
+        s=korg; t=1650286608;
+        bh=RyYRvTh/gCaabpitJ9QTL82+jjl5OBhyZhWNKY8lAcA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Z4K0PNXl88I6UrA4jp55S4/GHMQnWQMqHMwiEfs8nj6+LFCLJppBz2N/Xh8bCko5h
-         KNCdmBoZgyj+CFnbCVRMxYiU+D/wUftLt26jddZ8otU3EounHbYyASRlD28KkReRCe
-         cl/zI2ShwEuNjU88rIPySr6Kf9WB8k+ZtqWQ6EQM=
+        b=mvogsyMsPle8pu55q1MgFhhZv+Niey59jG2CZhGVVvDNwEjN5/1j8DQAgb+xe5MWR
+         o0n+5LzsXsi8dKaCeYEDQXzAyAfrMkzI3zINmQTNWWgjT32+NwnJz5IKlC2ErrvvBr
+         Yx3NFOqgZTuQLvoQ3nK/tD41ApmnI2Owes5pnSpY=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Tomasz=20Mo=C5=84?= <desowin@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: [PATCH 5.17 200/219] drm/amdgpu: Enable gfxoff quirk on MacBook Pro
+        stable@vger.kernel.org, Zhihao Cheng <chengzhihao1@huawei.com>,
+        Baokun Li <libaokun1@huawei.com>,
+        Richard Weinberger <richard@nod.at>
+Subject: [PATCH 4.14 188/284] ubifs: rename_whiteout: correct old_dir size computing
 Date:   Mon, 18 Apr 2022 14:12:49 +0200
-Message-Id: <20220418121212.469733435@linuxfoundation.org>
+Message-Id: <20220418121217.081930940@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,34 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tomasz Moń <desowin@gmail.com>
+From: Baokun Li <libaokun1@huawei.com>
 
-commit 4593c1b6d159f1e5c35c07a7f125e79e5a864302 upstream.
+commit 705757274599e2e064dd3054aabc74e8af31a095 upstream.
 
-Enabling gfxoff quirk results in perfectly usable graphical user
-interface on MacBook Pro (15-inch, 2019) with Radeon Pro Vega 20 4 GB.
+When renaming the whiteout file, the old whiteout file is not deleted.
+Therefore, we add the old dentry size to the old dir like XFS.
+Otherwise, an error may be reported due to `fscki->calc_sz != fscki->size`
+in check_indes.
 
-Without the quirk, X server is completely unusable as every few seconds
-there is gpu reset due to ring gfx timeout.
-
-Signed-off-by: Tomasz Moń <desowin@gmail.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Cc: stable@vger.kernel.org
+Fixes: 9e0a1fff8db56ea ("ubifs: Implement RENAME_WHITEOUT")
+Reported-by: Zhihao Cheng <chengzhihao1@huawei.com>
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+Signed-off-by: Richard Weinberger <richard@nod.at>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c |    2 ++
- 1 file changed, 2 insertions(+)
+ fs/ubifs/dir.c |    3 +++
+ 1 file changed, 3 insertions(+)
 
---- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_0.c
-@@ -1334,6 +1334,8 @@ static const struct amdgpu_gfxoff_quirk
- 	{ 0x1002, 0x15dd, 0x103c, 0x83e7, 0xd3 },
- 	/* GFXOFF is unstable on C6 parts with a VBIOS 113-RAVEN-114 */
- 	{ 0x1002, 0x15dd, 0x1002, 0x15dd, 0xc6 },
-+	/* Apple MacBook Pro (15-inch, 2019) Radeon Pro Vega 20 4 GB */
-+	{ 0x1002, 0x69af, 0x106b, 0x019a, 0xc0 },
- 	{ 0, 0, 0, 0, 0 },
- };
+--- a/fs/ubifs/dir.c
++++ b/fs/ubifs/dir.c
+@@ -1452,6 +1452,9 @@ static int do_rename(struct inode *old_d
+ 			if (unlink)
+ 				drop_nlink(old_dir);
+ 		}
++
++		/* Add the old_dentry size to the old_dir size. */
++		old_sz -= CALC_DENT_SIZE(fname_len(&old_nm));
+ 	}
  
+ 	old_dir->i_size -= old_sz;
 
 

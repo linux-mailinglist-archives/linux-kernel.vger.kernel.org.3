@@ -2,227 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438F5504F35
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77F29504F33
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 13:03:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbiDRLFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 07:05:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233283AbiDRLFp (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S237851AbiDRLFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 18 Apr 2022 07:05:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5F7AC1A051
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:03:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650279785;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nfyC20li/WBHgH83pgVNfBHAw+SVDU5iVEtFvCRSQgA=;
-        b=bWjmpOtOjQKOpb76lOBd2JAT3pnP6xmVH92PbguoLM1DohM/WHU5sGJh4+K8mDL2J27kI8
-        20kuJfcvpdaCjjn30pw6dl0FyoKmj5P4GEJbun2OAMCwX0/3nvM6DdX3PptlVeyRiKom7e
-        s7l3KjkuwgcsT71ssB0dF3ZcCtFltOU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-2-zcXAy2TyOdugN3c-IV-aQg-1; Mon, 18 Apr 2022 07:02:59 -0400
-X-MC-Unique: zcXAy2TyOdugN3c-IV-aQg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 83A25800B21;
-        Mon, 18 Apr 2022 11:02:58 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4CC38698CE9;
-        Mon, 18 Apr 2022 11:02:56 +0000 (UTC)
-Message-ID: <1e9ed17e6778b396927cfce5b3cdde889a61c305.camel@redhat.com>
-Subject: Re: [PATCH 1/2] KVM: SVM: Introduce avic_kick_target_vcpus_fast()
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Mon, 18 Apr 2022 14:02:55 +0300
-In-Reply-To: <20220414051151.77710-2-suravee.suthikulpanit@amd.com>
-References: <20220414051151.77710-1-suravee.suthikulpanit@amd.com>
-         <20220414051151.77710-2-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36414 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230338AbiDRLFo (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 18 Apr 2022 07:05:44 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C51991A055
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:03:05 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id hf18so9296699qtb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 04:03:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9uTmuIN0GlNXXY/94zNDu7yDIPOZyDJN9QkEI2mlu4M=;
+        b=ML7YQLQYLo1Dj4jfwiljD/Rekx6c5rxBTwLIXSQ1h7gbRcHk1gxsZFi9XqkkN39V7i
+         UVSFPbjACp274XdCF9D58o7ZAJmS4fUC91E2sQcZYNzYizNSKAjEsqw19vSrABzPoStF
+         BEG0uJOuipXZGI34TgRY8mrJWdYvwTwiYk/a4gCXq64OtbzMAXP+3m0dUpGlkb5A0343
+         ovHk0PYf92JZkmaqg8oAdgICygU8OiXaLfkybwvUln+TaIzN/8QUE/k4t3K1zd4d8P5M
+         +FVTOI+7Xi1NwWp+FK+/i0ZSZhvPJR9AFN2BciI1v/ih0HM1oY/FQQBysuoJcNPjK2a7
+         c60Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=9uTmuIN0GlNXXY/94zNDu7yDIPOZyDJN9QkEI2mlu4M=;
+        b=N7/NhylseAQ/+cMxvAD+Qqg0aKpUyELmlTM6jpnKtMy1XTg8Kx3wOXufUuEcrc7f/5
+         Ji4KfAQNCIliulyJO+knYgJteKO6sWuC01u7nRnYN5RKHYvT6UBRnGMlOapAtHPPpdHL
+         0dNOjH9WPqa5RdXGzTIK9NcuZfI6xEGdJ9Cb4bNt09BU8k3Xcesm2+1ViLh52HMpLkGS
+         HJbpOBSmpDtCu0wIWvm/vB2kWC7ISiyLAmzk0fhk8mNrdrU0gPeFetcuYwN4sdlASIyS
+         oNFhWJfiHr26DufY34INw+Gzc1YJPbytkIQioFOkV4ckO6lg+HnOF9V6m6+lv2Bj0OEw
+         GYuQ==
+X-Gm-Message-State: AOAM531J797eXXI7UpJhIGy5pubVXOeMvFVkc4HCuih3Lq83HKbxcarU
+        qx18k0WRntD4wL2iCNqP0lEq+A1v2ws=
+X-Google-Smtp-Source: ABdhPJxKhXQVaAvyNvVCH2UEO9ZuO7fvvlhPS2H/BF6eBn2Ammys6oZGbOC4QM/WYjW10au931GC+Q==
+X-Received: by 2002:a05:622a:4ce:b0:2e1:e18f:5b33 with SMTP id q14-20020a05622a04ce00b002e1e18f5b33mr6579274qtx.565.1650279784936;
+        Mon, 18 Apr 2022 04:03:04 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id w3-20020a376203000000b0069e9a4568f9sm1588004qkb.125.2022.04.18.04.03.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 04:03:04 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: chi.minghao@zte.com.cn
+To:     lgirdwood@gmail.com
+Cc:     broonie@kernel.org, patches@opensource.cirrus.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH] ASoC: codecs: wm8962: using pm_runtime_resume_and_get instead of pm_runtime_get_sync
+Date:   Mon, 18 Apr 2022 11:02:59 +0000
+Message-Id: <20220418110259.2559144-1-chi.minghao@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-04-14 at 00:11 -0500, Suravee Suthikulpanit wrote:
-> Currently, an AVIC-enabled VM suffers from performance bottleneck
-> when scaling to large number of vCPUs for I/O intensive workloads.
-> 
-> In such case, a vCPU often executes halt instruction to get into idle state
-> waiting for interrupts, in which KVM would de-schedule the vCPU from
-> physical CPU.
-> 
-> When AVIC HW tries to deliver interrupt to the halting vCPU, it would
-> result in AVIC incomplete IPI #vmexit to notify KVM to reschedule
-> the target vCPU into running state.
-> 
-> Investigation has shown the main hotspot is in the kvm_apic_match_dest()
-> in the following call stack where it tries to find target vCPUs
-> corresponded to the information in the ICRH/ICRL registers.
-> 
->   - handle_exit
->     - svm_invoke_exit_handler
->       - avic_incomplete_ipi_interception
->         - kvm_apic_match_dest
-> 
-> However, AVIC provides hints in the #vmexit info, which can be used to
-> retrieve the destination guest physical APIC ID.
-> 
-> In addition, since QEMU defines guest physical APIC ID to be the same as
-> vCPU ID, it can be used to quickly identify the target vCPU to deliver IPI,
-> and avoid the overhead from searching through all vCPUs to match the target
-> vCPU.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 91 +++++++++++++++++++++++++++++++++++++++--
->  1 file changed, 87 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index abcf761c0c53..92d8e0de1fb4 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -351,11 +351,94 @@ void avic_ring_doorbell(struct kvm_vcpu *vcpu)
->  	put_cpu();
->  }
->  
-> -static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
-> -				   u32 icrl, u32 icrh)
-> +/*
-> + * A fast-path version of avic_kick_target_vcpus(), which attempts to match
-> + * destination APIC ID to vCPU without looping through all vCPUs.
-> + */
-> +static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source,
-> +				       u32 icrl, u32 icrh, u32 index)
->  {
-> +	u32 dest, apic_id;
->  	struct kvm_vcpu *vcpu;
-> +	int dest_mode = icrl & APIC_DEST_MASK;
-> +	int shorthand = icrl & APIC_SHORT_MASK;
-> +	struct kvm_svm *kvm_svm = to_kvm_svm(kvm);
-> +	u32 *avic_logical_id_table = page_address(kvm_svm->avic_logical_id_table_page);
-> +
-> +	if (shorthand != APIC_DEST_NOSHORT)
-> +		return -EINVAL;
-> +
-> +	/*
-> +	 * The AVIC incomplete IPI #vmexit info provides index into
-> +	 * the physical APIC ID table, which can be used to derive 
-> +	 * guest physical APIC ID.
-> +	 */
-> +	if (dest_mode == APIC_DEST_PHYSICAL) {
-> +		apic_id = index;
-> +	} else {
-> +		if (!apic_x2apic_mode(source)) {
-> +			/* For xAPIC logical mode, the index is for logical APIC table. */
-> +			apic_id = avic_logical_id_table[index] & 0x1ff;
-> +		} else {
-> +			/* For x2APIC logical mode, cannot leverage the index.
-> +			 * Instead, calculate physical ID from logical ID in ICRH.
-> +			 */
-> +			int apic;
-> +			int first = ffs(icrh & 0xffff);
-> +			int last = fls(icrh & 0xffff);
-> +			int cluster = (icrh & 0xffff0000) >> 16;
-> +
-> +			/*
-> +			 * If the x2APIC logical ID sub-field (i.e. icrh[15:0]) contains zero
-> +			 * or more than 1 bits, we cannot match just one vcpu to kick for
-> +			 * fast path.
-> +			 */
-> +			if (!first || (first != last))
-> +				return -EINVAL;
-> +
-> +			apic = first - 1;
-> +			if ((apic < 0) || (apic > 15) || (cluster >= 0xfffff))
-> +				return -EINVAL;
-> +			apic_id = (cluster << 4) + apic;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * Assuming vcpu ID is the same as physical apic ID,
-> +	 * and use it to retrieve the target vCPU.
-> +	 */
-> +	vcpu = kvm_get_vcpu_by_id(kvm, apic_id);
-> +	if (!vcpu)
-> +		return -EINVAL;
-> +
-> +	if (apic_x2apic_mode(vcpu->arch.apic))
-> +		dest = icrh;
-> +	else
-> +		dest = GET_XAPIC_DEST_FIELD(icrh);
-> +
-> +	/*
-> +	 * Try matching the destination APIC ID with the vCPU.
-> +	 */
-> +	if (kvm_apic_match_dest(vcpu, source, shorthand, dest, dest_mode)) {
-> +		vcpu->arch.apic->irr_pending = true;
-> +		svm_complete_interrupt_delivery(vcpu,
-> +						icrl & APIC_MODE_MASK,
-> +						icrl & APIC_INT_LEVELTRIG,
-> +						icrl & APIC_VECTOR_MASK);
-> +		return 0;
-> +	}
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
-> +				   u32 icrl, u32 icrh, u32 index)
-> +{
->  	unsigned long i;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	if (!avic_kick_target_vcpus_fast(kvm, source, icrl, icrh, index))
-> +		return;
->  
->  	/*
->  	 * Wake any target vCPUs that are blocking, i.e. waiting for a wake
-> @@ -388,7 +471,7 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
->  	u32 icrh = svm->vmcb->control.exit_info_1 >> 32;
->  	u32 icrl = svm->vmcb->control.exit_info_1;
->  	u32 id = svm->vmcb->control.exit_info_2 >> 32;
-> -	u32 index = svm->vmcb->control.exit_info_2 & 0xFF;
-> +	u32 index = svm->vmcb->control.exit_info_2 & 0x1FF;
->  	struct kvm_lapic *apic = vcpu->arch.apic;
->  
->  	trace_kvm_avic_incomplete_ipi(vcpu->vcpu_id, icrh, icrl, id, index);
-> @@ -415,7 +498,7 @@ int avic_incomplete_ipi_interception(struct kvm_vcpu *vcpu)
->  		 * set the appropriate IRR bits on the valid target
->  		 * vcpus. So, we just need to kick the appropriate vcpu.
->  		 */
-> -		avic_kick_target_vcpus(vcpu->kvm, apic, icrl, icrh);
-> +		avic_kick_target_vcpus(vcpu->kvm, apic, icrl, icrh, index);
->  		break;
->  	case AVIC_IPI_FAILURE_INVALID_TARGET:
->  		break;
+From: Minghao Chi <chi.minghao@zte.com.cn>
 
+Using pm_runtime_resume_and_get is more appropriate
+for simplifing code
 
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
+---
+ sound/soc/codecs/wm8962.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+diff --git a/sound/soc/codecs/wm8962.c b/sound/soc/codecs/wm8962.c
+index 2c41d31956aa..f679cf0ddbc1 100644
+--- a/sound/soc/codecs/wm8962.c
++++ b/sound/soc/codecs/wm8962.c
+@@ -2896,9 +2896,8 @@ static int wm8962_set_fll(struct snd_soc_component *component, int fll_id, int s
+ 
+ 	reinit_completion(&wm8962->fll_lock);
+ 
+-	ret = pm_runtime_get_sync(component->dev);
++	ret = pm_runtime_resume_and_get(component->dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(component->dev);
+ 		dev_err(component->dev, "Failed to resume device: %d\n", ret);
+ 		return ret;
+ 	}
+@@ -3030,9 +3029,8 @@ static irqreturn_t wm8962_irq(int irq, void *data)
+ 	unsigned int active;
+ 	int reg, ret;
+ 
+-	ret = pm_runtime_get_sync(dev);
++	ret = pm_runtime_resume_and_get(dev);
+ 	if (ret < 0) {
+-		pm_runtime_put_noidle(dev);
+ 		dev_err(dev, "Failed to resume: %d\n", ret);
+ 		return IRQ_NONE;
+ 	}
+-- 
+2.25.1
 
-Best regards,
-	Maxim Levitsky
 

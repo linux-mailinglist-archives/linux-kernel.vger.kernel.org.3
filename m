@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA455058D9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2144B5058F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240369AbiDROKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 10:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
+        id S245723AbiDROMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244515AbiDRNzb (ORCPT
+        with ESMTP id S244541AbiDRNzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:55:31 -0400
+        Mon, 18 Apr 2022 09:55:33 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8441349CB1;
-        Mon, 18 Apr 2022 06:04:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325F549CB8;
+        Mon, 18 Apr 2022 06:04:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1C789B80D9C;
-        Mon, 18 Apr 2022 13:04:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD519C385A7;
-        Mon, 18 Apr 2022 13:04:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8FC0FB80EBA;
+        Mon, 18 Apr 2022 13:04:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBE44C385A1;
+        Mon, 18 Apr 2022 13:04:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650287077;
-        bh=Laee6Z8kRgfwvSsT2/Degvk8VHCNutJv4DH/bXPpJ8E=;
+        s=korg; t=1650287081;
+        bh=+XMqqrBb38EBhTzQh3Oh6qV6xs3FM0f4cVtmUcnUl0U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=X08lTcJpxJOXWjddJ14jVaqldhLatwLNLCNe5yxNAxsNPdIbL6/N/Iy3TlBOZ4tJZ
-         m5jZhkNeRUbv7Q0aHuqIQqTYUlQUIYLwRHmvAatL3SdjbK3S1CRX8MMXgHCuqEpuPq
-         W/ddsUn/YDbSct6SznI+Z3hY1z8nVGnZQUhUArGI=
+        b=dv0obRAi08vll18mLHDh2m6RAEpD3gCM4W3YFKrVIuODDqV73Gmg24Ot3A5hP1zIU
+         7jDywbCqNagwyJ8E4gSYPhuDeQ9shH6/Sn5Hx+MIkZ4My9rvSeEb912JS8bWRVUVVE
+         1lK6Uz2y5IyR74gYivC6+NGWdFrEHDj4l3cwQKas=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Randy Dunlap <rdunlap@infradead.org>,
-        Igor Zhbanov <i.zhbanov@omprussia.ru>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 4.9 051/218] clocksource: acpi_pm: fix return value of __setup handler
-Date:   Mon, 18 Apr 2022 14:11:57 +0200
-Message-Id: <20220418121201.072712001@linuxfoundation.org>
+        stable@vger.kernel.org, Bharata B Rao <bharata@amd.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
+        Mel Gorman <mgorman@suse.de>, Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.9 052/218] sched/debug: Remove mpol_get/put and task_lock/unlock from sched_show_numa
+Date:   Mon, 18 Apr 2022 14:11:58 +0200
+Message-Id: <20220418121201.102275824@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20220418121158.636999985@linuxfoundation.org>
 References: <20220418121158.636999985@linuxfoundation.org>
@@ -56,48 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Randy Dunlap <rdunlap@infradead.org>
+From: Bharata B Rao <bharata@amd.com>
 
-[ Upstream commit 6a861abceecb68497dd82a324fee45a5332dcece ]
+[ Upstream commit 28c988c3ec29db74a1dda631b18785958d57df4f ]
 
-__setup() handlers should return 1 to obsolete_checksetup() in
-init/main.c to indicate that the boot option has been handled.
-A return of 0 causes the boot option/value to be listed as an Unknown
-kernel parameter and added to init's (limited) environment strings.
+The older format of /proc/pid/sched printed home node info which
+required the mempolicy and task lock around mpol_get(). However
+the format has changed since then and there is no need for
+sched_show_numa() any more to have mempolicy argument,
+asssociated mpol_get/put and task_lock/unlock. Remove them.
 
-The __setup() handler interface isn't meant to handle negative return
-values -- they are non-zero, so they mean "handled" (like a return
-value of 1 does), but that's just a quirk. So return 1 from
-parse_pmtmr(). Also print a warning message if kstrtouint() returns
-an error.
-
-Fixes: 6b148507d3d0 ("pmtmr: allow command line override of ioport")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Reported-by: Igor Zhbanov <i.zhbanov@omprussia.ru>
-Link: lore.kernel.org/r/64644a2f-4a20-bab3-1e15-3b2cdd0defe3@omprussia.ru
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Fixes: 397f2378f1361 ("sched/numa: Fix numa balancing stats in /proc/pid/sched")
+Signed-off-by: Bharata B Rao <bharata@amd.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Acked-by: Mel Gorman <mgorman@suse.de>
+Link: https://lore.kernel.org/r/20220118050515.2973-1-bharata@amd.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/acpi_pm.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ kernel/sched/debug.c | 10 ----------
+ 1 file changed, 10 deletions(-)
 
-diff --git a/drivers/clocksource/acpi_pm.c b/drivers/clocksource/acpi_pm.c
-index 28037d0b8dcd..55348e7c1e6f 100644
---- a/drivers/clocksource/acpi_pm.c
-+++ b/drivers/clocksource/acpi_pm.c
-@@ -230,8 +230,10 @@ static int __init parse_pmtmr(char *arg)
- 	int ret;
+diff --git a/kernel/sched/debug.c b/kernel/sched/debug.c
+index fa178b62ea79..69c3252d151b 100644
+--- a/kernel/sched/debug.c
++++ b/kernel/sched/debug.c
+@@ -836,25 +836,15 @@ void print_numa_stats(struct seq_file *m, int node, unsigned long tsf,
+ static void sched_show_numa(struct task_struct *p, struct seq_file *m)
+ {
+ #ifdef CONFIG_NUMA_BALANCING
+-	struct mempolicy *pol;
+-
+ 	if (p->mm)
+ 		P(mm->numa_scan_seq);
  
- 	ret = kstrtouint(arg, 16, &base);
--	if (ret)
--		return ret;
-+	if (ret) {
-+		pr_warn("PMTMR: invalid 'pmtmr=' value: '%s'\n", arg);
-+		return 1;
-+	}
+-	task_lock(p);
+-	pol = p->mempolicy;
+-	if (pol && !(pol->flags & MPOL_F_MORON))
+-		pol = NULL;
+-	mpol_get(pol);
+-	task_unlock(p);
+-
+ 	P(numa_pages_migrated);
+ 	P(numa_preferred_nid);
+ 	P(total_numa_faults);
+ 	SEQ_printf(m, "current_node=%d, numa_group_id=%d\n",
+ 			task_node(p), task_numa_group_id(p));
+ 	show_numa_stats(p, m);
+-	mpol_put(pol);
+ #endif
+ }
  
- 	pr_info("PMTMR IOPort override: 0x%04x -> 0x%04x\n", pmtmr_ioport,
- 		base);
 -- 
 2.34.1
 

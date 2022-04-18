@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 870B7504FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC2F505694
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238014AbiDRMNJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:13:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S241152AbiDRNfx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:35:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235661AbiDRMNF (ORCPT
+        with ESMTP id S243074AbiDRNJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:13:05 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5B7DE9F;
-        Mon, 18 Apr 2022 05:10:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y10so9082552ejw.8;
-        Mon, 18 Apr 2022 05:10:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=JVPSPKy4jcGaphHDpx5hUle8QXu6cx0+LV1j9x5xpfQ=;
-        b=oM3cZjIQfJ349ghEoRQ0l6lMtZe9XojDljdUCtZlm8iGM2LRBO3PaQ1pS2NybUGQDK
-         ZEUEdWTPeXa1MxFSe1r/zn49QJ4OPeHinB2zgwQS/8d6+PNg8UFrfCRuvfQ5NPzyAMdZ
-         WdFK/tjcPgai32HBrmAlUBEaQ1hB5ULWeRr7Z6qeluB4bO1AqBbFTs/YwKqpl9fGjtDn
-         BEGlmWd7yKYIXzqK2sBEcvveVXiZW8JuEBwFj8NkAn8rwUyd75AqXJfivFk8Yn7MK061
-         a2jv262dWtZuu4X776BS0Zi8v2q2b1M1TIICwDrLDJWhAGwWUN6Fi3GAvd82+OPDwKSS
-         XjBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=JVPSPKy4jcGaphHDpx5hUle8QXu6cx0+LV1j9x5xpfQ=;
-        b=VmmbwU4n578z+3eV0BUqq/CotDG0hDsUhkHKo9jf6auUZwYF+Ly8egYpgdPCapBjIq
-         ZenaIOeXefQQUUXGCfxQgdEh/n8Salq/d11IHObTqH5siOODb8dHBlGlbiiILd7wgQBl
-         D47Jnp6+6HZnXuOepjQi8JhuNVGTGhgAHz5MdfS6hDnp1BCa2swOBf50Cn9amlbNYklj
-         zpKVhSisUlZASk85XFKz05oJNW8Yqr6EVmLa4E+pp6vtLhJkBmOGfpGAJEQ47E8YfjV4
-         gP3EjrXRhLWksGfwNQIoKNpJ4zC3CLP8myzjEA/lI74nyUH9DZQ3420q+5tgEbPZnVPn
-         KRqA==
-X-Gm-Message-State: AOAM532ZV61jRuEMl2Xtr/Zj8Pwrht0xUQ7CtaqyVwhWMrGGLjX8lPH6
-        +oEsZtRqeGgYkeTzwWfv4b1ZvvS1FljM8tVUZxE=
-X-Google-Smtp-Source: ABdhPJyNNskiSG4Dun0u/29PY0MPfeh8JQN+/nnHN7PsNrhegMi+99MqdnEN+kGgx3gyvXV6NAzYrzmCt56rzAp333Y=
-X-Received: by 2002:a17:907:968e:b0:6db:aed5:43c8 with SMTP id
- hd14-20020a170907968e00b006dbaed543c8mr8858684ejc.636.1650283825241; Mon, 18
- Apr 2022 05:10:25 -0700 (PDT)
+        Mon, 18 Apr 2022 09:09:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159BA2CCAC;
+        Mon, 18 Apr 2022 05:49:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3E030B80E4E;
+        Mon, 18 Apr 2022 12:49:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 537FEC385A7;
+        Mon, 18 Apr 2022 12:49:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1650286141;
+        bh=Mk1Iqrphq54417Wc0cBdCgN7loP8w3zoxuUin2+H7X0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=DgisBNabDwMPZgwaf3H3pXPMzkc9F2dHVb+2pYhl5jNd+CPqT8hN5p/Okg6XuCTd2
+         8TcNPk0Des+W54jrI7p5R/ZILrdByUXTh0cgWZ8Z7yVYy3/myJhWbOcSzK8Cd9T0GU
+         bn0DGI4o0zchtZrssl0b+A5WaNQn1EYuhfwRCS7g=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 007/284] spi: Fix erroneous sgs value with min_t()
+Date:   Mon, 18 Apr 2022 14:09:48 +0200
+Message-Id: <20220418121210.905523230@linuxfoundation.org>
+X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
+User-Agent: quilt/0.66
 MIME-Version: 1.0
-References: <20220418053202.24528-1-yu.tu@amlogic.com> <20220418053202.24528-2-yu.tu@amlogic.com>
-In-Reply-To: <20220418053202.24528-2-yu.tu@amlogic.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 18 Apr 2022 15:09:48 +0300
-Message-ID: <CAHp75VeW65dV9jJu8-yUWME+XKnaxZBu5Zv8iEJxP2dizA=HUg@mail.gmail.com>
-Subject: Re: [PATCH V2 1/2] tty: serial: meson: Add a 12MHz internal clock
- rate to calculate baud rate in order to meet the baud rate requirements of
- special BT modules
-To:     Yu Tu <yu.tu@amlogic.com>
-Cc:     "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        linux-amlogic <linux-amlogic@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 8:50 AM Yu Tu <yu.tu@amlogic.com> wrote:
->
-> A /2 divider over XTAL was introduced since G12A, and is preferred
-> to be used over the still present /3 divider since it provides much
-> closer frequencies vs the request baudrate.Especially the BT module
+From: Biju Das <biju.das.jz@bp.renesas.com>
 
-'e. E' (mind the space)
+[ Upstream commit ebc4cb43ea5ada3db46c80156fca58a54b9bbca8 ]
 
-> uses 3Mhz baud rate. 8Mhz calculations can lead to baud rate bias,
-> causing some problems.
+While computing sgs in spi_map_buf(), the data type
+used in min_t() for max_seg_size is 'unsigned int' where
+as that of ctlr->max_dma_len is 'size_t'.
 
-...
+min_t(unsigned int,x,y) gives wrong results if one of x/y is
+'size_t'
 
-> +struct meson_uart_data {
-> +       bool has_xtal_div2;
+Consider the below examples on a 64-bit machine (ie size_t is
+64-bits, and unsigned int is 32-bit).
+    case 1) min_t(unsigned int, 5, 0x100000001);
+    case 2) min_t(size_t, 5, 0x100000001);
 
-I would prefer to see this as an unsigned int and with a less
-particular name, e.g. xtal_div would suffice.
+Case 1 returns '1', where as case 2 returns '5'. As you can see
+the result from case 1 is wrong.
 
-> +};
+This patch fixes the above issue by using the data type of the
+parameters that are used in min_t with maximum data length.
 
-...
+Fixes: commit 1a4e53d2fc4f68aa ("spi: Fix invalid sgs value")
+Reported-by: Linus Torvalds <torvalds@linux-foundation.org>
+Suggested-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
+Reviewed-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Link: https://lore.kernel.org/r/20220316175317.465-1-biju.das.jz@bp.renesas.com
+Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/spi/spi.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +               unsigned int xtal_div = 3;
-
-> +               if (private_data && private_data->has_xtal_div2) {
-> +                       xtal_div = 2;
-
-Better to define privata data always
-
-
-> +                       val |= AML_UART_BAUD_XTAL_DIV2;
-> +               }
-> +               val |= DIV_ROUND_CLOSEST(port->uartclk / xtal_div, baud) - 1;
-
-
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index d26aefed16ac..1031c8e38144 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -774,10 +774,10 @@ static int spi_map_buf(struct spi_controller *ctlr, struct device *dev,
+ 	int i, ret;
+ 
+ 	if (vmalloced_buf || kmap_buf) {
+-		desc_len = min_t(unsigned int, max_seg_size, PAGE_SIZE);
++		desc_len = min_t(unsigned long, max_seg_size, PAGE_SIZE);
+ 		sgs = DIV_ROUND_UP(len + offset_in_page(buf), desc_len);
+ 	} else if (virt_addr_valid(buf)) {
+-		desc_len = min_t(unsigned int, max_seg_size, ctlr->max_dma_len);
++		desc_len = min_t(size_t, max_seg_size, ctlr->max_dma_len);
+ 		sgs = DIV_ROUND_UP(len, desc_len);
+ 	} else {
+ 		return -EINVAL;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.34.1
+
+
+

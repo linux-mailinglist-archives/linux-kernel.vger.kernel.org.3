@@ -2,100 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D75B5053BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1495053D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236612AbiDRNCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S241518AbiDRNDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240341AbiDRMxS (ORCPT
+        with ESMTP id S240237AbiDRMyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:53:18 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A47E82DAB6
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:34:39 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id c64so17270188edf.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:34:39 -0700 (PDT)
+        Mon, 18 Apr 2022 08:54:47 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8BC313DFC;
+        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id u5-20020a17090a6a8500b001d0b95031ebso6985564pjj.3;
+        Mon, 18 Apr 2022 05:35:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=6241TLHhdB4xCdwqVq3Y183uScpx6WRBDKMnSlRkT/0=;
-        b=I1q5WowfHGg4AYWPFBJrF0k2Mm0KNHheFaFAZF+qFn44/2/ZU1wcLieZom/0LMJun1
-         wAcnagi3X7LYKywHWjDtD8ofgNCACHohC6j19x17GLa0nvQEt5+OZxFr+fHYxhmLgOw3
-         wdppARxZDbxGEFroC4C2uWG12zG6baWjpcfOFsTFd5Y4RfQ/D7orgYrd+l1bY+++rqHg
-         i8f0G9RRsMNlVDTqFhIKpkiVPJ+W69qcrHWw/sNzmTr+u2T/1k2rYGwhViTIBqWP5LyQ
-         m1wiYXXKl+bjQ3mlReChOdVt8oB1BwQ0d1KsiypiABsQdsA9Eblo7EpDwEus/g8FOWsZ
-         SB/g==
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
+        b=puV6g1yAwYY4foiMBzImH0StiMfyjOvPeJvoVgBw5FXrWP12gxeBSDewkBPPDL0UMP
+         OnsiSeTUOtD2dt28KD7TjjUfMcvCct7teSPmd01Mi++avp/moQxkogI9938ZARZOvatB
+         C4EScWnZgyPc73V+fzOmIWkXlnn8OLQTiVroOwHGt5yhPvFJkoyINAFS87YaVa3mGo38
+         VEGR6u6xAArgzgf7QhRhwcvQ75y5W/MgnOYNyz4cJ+9uIeKR2I13+vuEW7Zr/EKeibDw
+         shtLw3sOFM7PuhJQANQts3YHpCDaT3zWuqzqNXCIuetd6O1sjU+ogdCSvutPYNDmBp60
+         ffKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
          :content-transfer-encoding;
-        bh=6241TLHhdB4xCdwqVq3Y183uScpx6WRBDKMnSlRkT/0=;
-        b=fq6kUZi7LUU5gYp9oO2DcsiJ59j5Fbw6e3hOu352RIR8Ugpd9cwfdAw0CYwvLsbAPv
-         PfIy0NMhaKTKCYNDmjwz3Nk4NUGbb3SchL6FEnTmcz903jBskjAiglNCSD4HeF+LHG5f
-         2Txenn5LeZjZ5EfLqN9RiVEQlnaKMi8H4OcI/mWq/PTvyILBguSuKU+RnQjBQTTHdbOH
-         KkAMHZa4JxIa6sXmdtY34Ym/ETY1xKCE+uoHgoILM40ssBvn2VwWICRfvxJtCLv/WE3z
-         wVs64r+yKY00/DpXFHlkE8xRUv2wQOdyhHqVzVSgHhMh31H3FZcczE8P/D0IcYkeEaXa
-         XKuQ==
-X-Gm-Message-State: AOAM530XV32d7KeONYWPOpHmGdm7ztfk/Wb3ceZzZ9EWJEl3oxqQkSVh
-        KqWe7SqaqFpjsHU0cQZc/AwSEA==
-X-Google-Smtp-Source: ABdhPJzaDF4We3SPdcNurLHia3kwHBzGwUL6pZjk9hZZG+CG6zXaVqs/Z3RnbdyrKl2P7P3n9lAMSw==
-X-Received: by 2002:a05:6402:14b:b0:418:d06e:5d38 with SMTP id s11-20020a056402014b00b00418d06e5d38mr11797329edu.90.1650285277781;
-        Mon, 18 Apr 2022 05:34:37 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id a18-20020a170906671200b006e05929e66csm4538082ejp.20.2022.04.18.05.34.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 05:34:36 -0700 (PDT)
-Message-ID: <eeb4218a-e0ec-f439-5161-0433eb6a8599@linaro.org>
-Date:   Mon, 18 Apr 2022 14:34:35 +0200
+        bh=BwBQWoszPE0WyBmS8eEzNdPIlmwnL6neVdJfMqZdeYs=;
+        b=Xb8utgI4FArzRafGLJgLFuTd4xNzbFxyF3GkDn85H0HNmSTMcVbFTVeumyFDkBeDqX
+         z4h78P2QFEzjjVW0zTkYWbbCpnWxI+6HGmebgQw8Yd8GavDG9UArZ65ixsgI8KrPWglo
+         vRDlLuMGOrnugl5uYUj2ZPtuDEcwzKHuhpI+liiEF1GViP19Sstf7CmCRA0jXG3VL41S
+         w4c5a/njDXV2GJXFVC9DZRhkl7QXcJXlCfX764R1EZbdribBq/6agKvlmjhjqJa3DH0W
+         vWIgJrCgV+5Z7CJxvHHwQE734RR366P/jIR+9qnvfFmjWDdK+Q6ctS97tc5QKSwZwhvK
+         ipdQ==
+X-Gm-Message-State: AOAM533zzDQtTM6xXsKiJlKWNTduKJwwArHlLf3YTqM4TrdSJGTcHoo2
+        E+IwuDTiqZR+eDYJpL7318U=
+X-Google-Smtp-Source: ABdhPJzzDcDZsjDzFZEes1dI7IHd8sgP2uwsDyC+87JYg88yja6QtTIVb54SIoCzIBV43/NDyFAWCA==
+X-Received: by 2002:a17:902:e9c4:b0:158:f77d:afb7 with SMTP id 4-20020a170902e9c400b00158f77dafb7mr6454683plk.143.1650285300765;
+        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
+Received: from localhost ([58.251.76.82])
+        by smtp.gmail.com with ESMTPSA id y131-20020a626489000000b00505a8f36965sm12354645pfb.184.2022.04.18.05.35.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 05:35:00 -0700 (PDT)
+From:   Yunbo Yu <yuyunbo519@gmail.com>
+To:     oliver@neukum.org, davem@davemloft.net, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yunbo Yu <yuyunbo519@gmail.com>
+Subject: [PATCH] net: cdc-ncm:  Move spin_lock_bh() to spin_lock()
+Date:   Mon, 18 Apr 2022 20:34:38 +0800
+Message-Id: <20220418123438.1240676-1-yuyunbo519@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 04/23] ARM: dts: qcom-msm8974*: Fix I2C labels
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        ~postmarketos/upstreaming@lists.sr.ht
-Cc:     martin.botka@somainline.org,
-        angelogioacchino.delregno@somainline.org,
-        marijn.suijten@somainline.org, jamipkettunen@somainline.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220415115633.575010-1-konrad.dybcio@somainline.org>
- <20220415115633.575010-5-konrad.dybcio@somainline.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220415115633.575010-5-konrad.dybcio@somainline.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/04/2022 13:56, Konrad Dybcio wrote:
-> Fix up the label names and add missing ones.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  arch/arm/boot/dts/qcom-msm8974.dtsi | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
-> 
+It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
 
-This might conflict with:
-https://lore.kernel.org/all/20220401201035.189106-7-krzysztof.kozlowski@linaro.org/
+Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
+---
+ drivers/net/usb/cdc_ncm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Actually all your further patches might.
+diff --git a/drivers/net/usb/cdc_ncm.c b/drivers/net/usb/cdc_ncm.c
+index 15f91d691bba..cdca00c0dc1f 100644
+--- a/drivers/net/usb/cdc_ncm.c
++++ b/drivers/net/usb/cdc_ncm.c
+@@ -1492,19 +1492,19 @@ static void cdc_ncm_txpath_bh(struct tasklet_struct *t)
+ 	struct cdc_ncm_ctx *ctx = from_tasklet(ctx, t, bh);
+ 	struct usbnet *dev = ctx->dev;
+ 
+-	spin_lock_bh(&ctx->mtx);
++	spin_lock(&ctx->mtx);
+ 	if (ctx->tx_timer_pending != 0) {
+ 		ctx->tx_timer_pending--;
+ 		cdc_ncm_tx_timeout_start(ctx);
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 	} else if (dev->net != NULL) {
+ 		ctx->tx_reason_timeout++;	/* count reason for transmitting */
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 		netif_tx_lock_bh(dev->net);
+ 		usbnet_start_xmit(NULL, dev->net);
+ 		netif_tx_unlock_bh(dev->net);
+ 	} else {
+-		spin_unlock_bh(&ctx->mtx);
++		spin_unlock(&ctx->mtx);
+ 	}
+ }
+ 
+-- 
+2.25.1
 
-Best regards,
-Krzysztof

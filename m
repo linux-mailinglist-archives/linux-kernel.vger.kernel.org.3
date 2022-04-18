@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B8A6505D68
+	by mail.lfdr.de (Postfix) with ESMTP id E1A97505D6B
 	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346936AbiDRRVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 13:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38124 "EHLO
+        id S1346949AbiDRRVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 13:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346908AbiDRRU5 (ORCPT
+        with ESMTP id S1346911AbiDRRU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 13:20:57 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F7624F18
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:17 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id j71so6483453pge.11
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:17 -0700 (PDT)
+        Mon, 18 Apr 2022 13:20:58 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FC526556
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:18 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id s14so12854028plk.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:18:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=DLAqWrA31cWgX8epcIr4h9J52vxj5o5pqIOrUPKn5S4=;
-        b=KILwivJrPWKKJ1y5zZh+ncB6eMJS2O9v9XkT5RRNeph3Mbmp0KiTr5egSKSVpefSaQ
-         fKFAKVw+EEQnsiQiq9QrFapzWOuW4D27bF0nMgQ9fvFQesXhKqLEXHPfsm2VxI4jehJK
-         zkPQPdkSLyfTs60HrShwO18Qi2n4W56nuc/Ak=
+        bh=CbyBbjg8gyQUteF6HieSyj7KxxSHSKGjYqQSaFd6TEU=;
+        b=Zwq7VaOgsewiCmFbE/n3kyjx9CnT9hrV1iH13ddciUfogTYoP3vKbKr2r6xIr489kr
+         OKKvgazeoIC641p9t8uY7He78fymv9yeCfFKojsIC6FDtcegdms0UggwymRnd6JZkrGq
+         5T8EUG8NWtHKJD8gs0BWpOtwKWiV2/vvYbvIE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=DLAqWrA31cWgX8epcIr4h9J52vxj5o5pqIOrUPKn5S4=;
-        b=ElKUx16vPtojPXxlvYr1DTkC63vFSPKF9YPU222IeawcR0RvZZ3B/xDioNJuVI/qR4
-         CKq06FFHFn9pOlg33jUFmm/F0Oi+XLJY75f8YQrAbqTrMTuGxvONw3d7ENJMOXK2HwSG
-         DwV5HEhOlG2/GnmJBF6VtH7JzJpnN9OuHxrvSu1PWnkR+RplYigByeUslCrep9CctSBG
-         uMl/TNE3vpULRkyqmnF+UtRkI/4Sou9ARxInVkHazK/JGyHhVjQIta3KM7KVuHHW9K8g
-         tkaay0RZ/p886Vw2KuaYYuFdAQvqmlTayXW78clgC8CtHkTpF0EsQRYqDZqIzOm6meGK
-         tAZw==
-X-Gm-Message-State: AOAM532zy010NXNjuMg7ARwwhQfwZdzb817yHVZS4+hDzihLsOvUZTIP
-        ayJEQPZrxVhXSsvQl/NqAK9lSv1HwXS2amrGUPI=
-X-Google-Smtp-Source: ABdhPJwymO4gXLgRq2ZPiT4Fq2+87RbqQjRO4fTV99PpIyLcWe1ylHS4ghzL7MVN0bYPqe/lCiBeuQ==
-X-Received: by 2002:a05:6a02:20c:b0:381:f276:98d6 with SMTP id bh12-20020a056a02020c00b00381f27698d6mr10702933pgb.39.1650302297040;
-        Mon, 18 Apr 2022 10:18:17 -0700 (PDT)
+        bh=CbyBbjg8gyQUteF6HieSyj7KxxSHSKGjYqQSaFd6TEU=;
+        b=lPV47yZm5Kva1tcXq7HhpKKHnM1tFB+fhAORJbXMluofcRudLHQ8cDEF8mX0kpdvY0
+         zbno+fIJBVlJXStHbdeK5aL2gkCV9JLqkfnuLuMEB1t4Nzq4B72EmsSbM1yr5uK6qkNO
+         KHeZxm6VbDsArlHbvULjv6jWbMdBZxSFl14yWfN2zwSWLiTw12jc+daqliXOht5ftO+V
+         gSdNDOjQFxFpRGAuYVHP1e+32FxhbI2m61bWpA4+tE4LZnPdBDB/4lp/F3x8whCd80Ff
+         6i0bBSO3ED47Mjk9Lz4n9cKqFQNYQVDjifVP+92mYGu8DQ27w0cXfnWYHXJYsPjKNhul
+         ZvYQ==
+X-Gm-Message-State: AOAM533eCtJayHS9vRKNYYznBhFaRJHPNs3KhMcJaYNHMIuZxXtjBQxm
+        AqvsNiLWUNYK0x4aQEMBofKFUQ==
+X-Google-Smtp-Source: ABdhPJyaED3SN66kMNUE2uFkmpidmKhbhonRfUkIPOEYVFjhxla397ZKSGrYrID4nNtyd6w2iBhLOw==
+X-Received: by 2002:a17:902:e98a:b0:159:5f7:49cf with SMTP id f10-20020a170902e98a00b0015905f749cfmr3763147plb.41.1650302298343;
+        Mon, 18 Apr 2022 10:18:18 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:94f4:f90:c59f:129b])
-        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm12152126pfn.204.2022.04.18.10.18.15
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0050a3bbd36d6sm12152126pfn.204.2022.04.18.10.18.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 10:18:16 -0700 (PDT)
+        Mon, 18 Apr 2022 10:18:18 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     dri-devel@lists.freedesktop.org
 Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
@@ -60,9 +60,9 @@ Cc:     Hsin-Yi Wang <hsinyi@chromium.org>,
         Sam Ravnborg <sam@ravnborg.org>,
         Thierry Reding <thierry.reding@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/4] drm/panel-edp: Take advantage of wait_hpd_asserted() in struct drm_dp_aux
-Date:   Mon, 18 Apr 2022 10:17:55 -0700
-Message-Id: <20220418101725.v3.2.Icea616f57331fbaa3d48c529f300c9a8ebd37fb5@changeid>
+Subject: [PATCH v3 3/4] drm/panel: atna33xc20: Take advantage of wait_hpd_asserted() in struct drm_dp_aux
+Date:   Mon, 18 Apr 2022 10:17:56 -0700
+Message-Id: <20220418101725.v3.3.I9ee239f6b95b944c8fa030f300ad222a7af9899d@changeid>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 In-Reply-To: <20220418171757.2282651-1-dianders@chromium.org>
 References: <20220418171757.2282651-1-dianders@chromium.org>
@@ -79,92 +79,104 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Let's add support for being able to read the HPD pin even if it's
-hooked directly to the controller. This will allow us to get more
-accurate delays also lets us take away the waiting in the AUX transfer
-functions of the eDP controller drivers.
+hooked directly to the controller. This will let us take away the
+waiting in the AUX transfer functions of the eDP controller drivers.
 
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
-(no changes since v2)
+Changes in v3:
+- Don't check "hpd_asserted" boolean when unset.
+- Handle errors from gpiod_get_value_cansleep() properly.
 
 Changes in v2:
 - Change is_hpd_asserted() to wait_hpd_asserted()
 
- drivers/gpu/drm/panel/panel-edp.c | 33 +++++++++++++++++++++----------
- 1 file changed, 23 insertions(+), 10 deletions(-)
+ .../gpu/drm/panel/panel-samsung-atna33xc20.c  | 41 +++++++++++++------
+ 1 file changed, 28 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-index 1732b4f56e38..086e0bf52fb9 100644
---- a/drivers/gpu/drm/panel/panel-edp.c
-+++ b/drivers/gpu/drm/panel/panel-edp.c
-@@ -417,6 +417,11 @@ static int panel_edp_get_hpd_gpio(struct device *dev, struct panel_edp *p)
- 	return 0;
- }
+diff --git a/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c b/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
+index 20666b6217e7..5ef1b4032c56 100644
+--- a/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
++++ b/drivers/gpu/drm/panel/panel-samsung-atna33xc20.c
+@@ -19,6 +19,10 @@
+ #include <drm/drm_edid.h>
+ #include <drm/drm_panel.h>
  
-+static bool panel_edp_can_read_hpd(struct panel_edp *p)
-+{
-+	return !p->no_hpd && (p->hpd_gpio || (p->aux && p->aux->wait_hpd_asserted));
-+}
++/* T3 VCC to HPD high is max 200 ms */
++#define HPD_MAX_MS	200
++#define HPD_MAX_US	(HPD_MAX_MS * 1000)
 +
- static int panel_edp_prepare_once(struct panel_edp *p)
+ struct atana33xc20_panel {
+ 	struct drm_panel base;
+ 	bool prepared;
+@@ -30,6 +34,7 @@ struct atana33xc20_panel {
+ 
+ 	struct regulator *supply;
+ 	struct gpio_desc *el_on3_gpio;
++	struct drm_dp_aux *aux;
+ 
+ 	struct edid *edid;
+ 
+@@ -79,7 +84,7 @@ static int atana33xc20_suspend(struct device *dev)
+ static int atana33xc20_resume(struct device *dev)
  {
- 	struct device *dev = p->base.dev;
-@@ -441,17 +446,21 @@ static int panel_edp_prepare_once(struct panel_edp *p)
- 	if (delay)
- 		msleep(delay);
+ 	struct atana33xc20_panel *p = dev_get_drvdata(dev);
+-	bool hpd_asserted = false;
++	int hpd_asserted;
+ 	int ret;
  
--	if (p->hpd_gpio) {
-+	if (panel_edp_can_read_hpd(p)) {
- 		if (p->desc->delay.hpd_absent)
- 			hpd_wait_us = p->desc->delay.hpd_absent * 1000UL;
- 		else
- 			hpd_wait_us = 2000000;
+ 	/* T12 (Power off time) is min 500 ms */
+@@ -91,20 +96,28 @@ static int atana33xc20_resume(struct device *dev)
+ 	p->powered_on_time = ktime_get();
  
--		err = readx_poll_timeout(gpiod_get_value_cansleep, p->hpd_gpio,
--					 hpd_asserted, hpd_asserted,
--					 1000, hpd_wait_us);
--		if (hpd_asserted < 0)
--			err = hpd_asserted;
-+		if (p->hpd_gpio) {
-+			err = readx_poll_timeout(gpiod_get_value_cansleep,
-+						 p->hpd_gpio, hpd_asserted,
-+						 hpd_asserted, 1000, hpd_wait_us);
-+			if (hpd_asserted < 0)
-+				err = hpd_asserted;
-+		} else {
-+			err = p->aux->wait_hpd_asserted(p->aux, hpd_wait_us);
-+		}
- 
- 		if (err) {
- 			if (err != -ETIMEDOUT)
-@@ -532,18 +541,22 @@ static int panel_edp_enable(struct drm_panel *panel)
  	/*
- 	 * If there is a "prepare_to_enable" delay then that's supposed to be
- 	 * the delay from HPD going high until we can turn the backlight on.
--	 * However, we can only count this if HPD is handled by the panel
--	 * driver, not if it goes to a dedicated pin on the controller.
-+	 * However, we can only count this if HPD is readable by the panel
-+	 * driver.
-+	 *
- 	 * If we aren't handling the HPD pin ourselves then the best we
- 	 * can do is assume that HPD went high immediately before we were
--	 * called (and link training took zero time).
-+	 * called (and link training took zero time). Note that "no-hpd"
-+	 * actually counts as handling HPD ourselves since we're doing the
-+	 * worst case delay (in prepare) ourselves.
- 	 *
- 	 * NOTE: if we ever end up in this "if" statement then we're
- 	 * guaranteed that the panel_edp_wait() call below will do no delay.
- 	 * It already handles that case, though, so we don't need any special
- 	 * code for it.
+-	 * Handle HPD. Note: if HPD is hooked up to a dedicated pin on the
+-	 * eDP controller then "no_hpd" will be false _and_ "hpd_gpio" will be
+-	 * NULL. It's up to the controller driver to wait for HPD after
+-	 * preparing the panel in that case.
++	 * Note that it's possible that no_hpd is false, hpd_gpio is
++	 * NULL, and wait_hpd_asserted is NULL. This is because
++	 * wait_hpd_asserted() is optional even if HPD is hooked up to
++	 * a dedicated pin on the eDP controller. In this case we just
++	 * assume that the controller driver will wait for HPD at the
++	 * right times.
  	 */
--	if (p->desc->delay.prepare_to_enable && !p->hpd_gpio && !p->no_hpd)
-+	if (p->desc->delay.prepare_to_enable &&
-+	    !panel_edp_can_read_hpd(p) && !p->no_hpd)
- 		delay = max(delay, p->desc->delay.prepare_to_enable);
+ 	if (p->no_hpd) {
+-		/* T3 VCC to HPD high is max 200 ms */
+-		msleep(200);
+-	} else if (p->hpd_gpio) {
+-		ret = readx_poll_timeout(gpiod_get_value_cansleep, p->hpd_gpio,
+-					 hpd_asserted, hpd_asserted,
+-					 1000, 200000);
+-		if (!hpd_asserted)
+-			dev_warn(dev, "Timeout waiting for HPD\n");
++		msleep(HPD_MAX_MS);
++	} else {
++		if (p->hpd_gpio) {
++			ret = readx_poll_timeout(gpiod_get_value_cansleep,
++						 p->hpd_gpio, hpd_asserted,
++						 hpd_asserted, 1000, HPD_MAX_US);
++			if (hpd_asserted < 0)
++				ret = hpd_asserted;
++		} else if (p->aux->wait_hpd_asserted) {
++			ret = p->aux->wait_hpd_asserted(p->aux, HPD_MAX_US);
++		}
++
++		if (ret)
++			dev_warn(dev, "Error waiting for HPD: %d\n", ret);
+ 	}
  
- 	if (delay)
+ 	return 0;
+@@ -263,6 +276,8 @@ static int atana33xc20_probe(struct dp_aux_ep_device *aux_ep)
+ 		return -ENOMEM;
+ 	dev_set_drvdata(dev, panel);
+ 
++	panel->aux = aux_ep->aux;
++
+ 	panel->supply = devm_regulator_get(dev, "power");
+ 	if (IS_ERR(panel->supply))
+ 		return dev_err_probe(dev, PTR_ERR(panel->supply),
 -- 
 2.36.0.rc0.470.gd361397f0d-goog
 

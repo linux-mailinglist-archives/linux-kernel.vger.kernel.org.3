@@ -2,43 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEC2750526D
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C3AF5056B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239274AbiDRMog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S244234AbiDRNjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:39:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239014AbiDRMfs (ORCPT
+        with ESMTP id S244003AbiDRNKl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:35:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282F321E13;
-        Mon, 18 Apr 2022 05:27:35 -0700 (PDT)
+        Mon, 18 Apr 2022 09:10:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE42396B0;
+        Mon, 18 Apr 2022 05:50:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76B28B80ED6;
-        Mon, 18 Apr 2022 12:27:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB846C385A1;
-        Mon, 18 Apr 2022 12:27:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B3CA6124D;
+        Mon, 18 Apr 2022 12:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CDEDC385A1;
+        Mon, 18 Apr 2022 12:50:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284845;
-        bh=ZfCISLiTSLnsxsDFoT/2M3LK7HS2N3dM6HsFA4pOOFg=;
+        s=korg; t=1650286220;
+        bh=orYsiMU+k0qTfJ8VPyrMiFa07oD/Li21kpYPCvQblcw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PnaQwC9wJpynTBEjBqJ/qRKEIQWK5vj+fuuLzx38T7bBTWI5v2yS1ku73d0escIpv
-         QtGcXUyuNs9KUt0EtFfP1EBEDB9kiiR96TJDxz25vaY+KdrKtBp0m8jAkNczpNI8m3
-         rR4yVjclr+wJe9Pp6T1tygJCp/0yE8nUeugVOsyw=
+        b=VKlWmfrUebCKzWNTfGeRKvXUZdZG0bgseHjnKM5BJeNb97LGzRJHkNrPmYLyZo2r9
+         OdHrW0Qow8aQk/L3utKPM7Ojg0jMgzfmEjyu9mlXcU68+1qxZZHp481UoiwChRK1fi
+         Li1iVfc5rRoZk6zuvIo3e/gadQPHX9D8mk3YnZ7U=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 026/189] ALSA: ca0106: Fix the missing snd_card_free() call at probe error
-Date:   Mon, 18 Apr 2022 14:10:46 +0200
-Message-Id: <20220418121201.258705279@linuxfoundation.org>
+        stable@vger.kernel.org, Brandon Wyman <bjwyman@gmail.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 066/284] hwmon: (pmbus) Add Vin unit off handling
+Date:   Mon, 18 Apr 2022 14:10:47 +0200
+Message-Id: <20220418121212.567383982@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,58 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Brandon Wyman <bjwyman@gmail.com>
 
-commit c79442cc5a38e46597bc647128c8f1de62d80020 upstream.
+[ Upstream commit a5436af598779219b375c1977555c82def1c35d0 ]
 
-The previous cleanup with devres may lead to the incorrect release
-orders at the probe error handling due to the devres's nature.  Until
-we register the card, snd_card_free() has to be called at first for
-releasing the stuff properly when the driver tries to manage and
-release the stuff via card->private_free().
+If there is an input undervoltage fault, reported in STATUS_INPUT
+command response, there is quite likely a "Unit Off For Insufficient
+Input Voltage" condition as well.
 
-This patch fixes it by calling snd_card_free() on the error from the
-probe callback using a new helper function.
+Add a constant for bit 3 of STATUS_INPUT. Update the Vin limit
+attributes to include both bits in the mask for clearing faults.
 
-Fixes: 1656fa6ea258 ("ALSA: ca0106: Allocate resources with device-managed APIs")
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220412102636.16000-10-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+If an input undervoltage fault occurs, causing a unit off for
+insufficient input voltage, but the unit is off bit is not cleared, the
+STATUS_WORD will not be updated to clear the input fault condition.
+Including the unit is off bit (bit 3) allows for the input fault
+condition to completely clear.
+
+Signed-off-by: Brandon Wyman <bjwyman@gmail.com>
+Link: https://lore.kernel.org/r/20220317232123.2103592-1-bjwyman@gmail.com
+Fixes: b4ce237b7f7d3 ("hwmon: (pmbus) Introduce infrastructure to detect sensors and limit registers")
+[groeck: Dropped unnecessary ()]
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/ca0106/ca0106_main.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+ drivers/hwmon/pmbus/pmbus.h      | 1 +
+ drivers/hwmon/pmbus/pmbus_core.c | 2 +-
+ 2 files changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/sound/pci/ca0106/ca0106_main.c b/sound/pci/ca0106/ca0106_main.c
-index 8577f9fa5ea6..cf1bac7a435f 100644
---- a/sound/pci/ca0106/ca0106_main.c
-+++ b/sound/pci/ca0106/ca0106_main.c
-@@ -1725,8 +1725,8 @@ static int snd_ca0106_midi(struct snd_ca0106 *chip, unsigned int channel)
- }
- 
- 
--static int snd_ca0106_probe(struct pci_dev *pci,
--					const struct pci_device_id *pci_id)
-+static int __snd_ca0106_probe(struct pci_dev *pci,
-+			      const struct pci_device_id *pci_id)
- {
- 	static int dev;
- 	struct snd_card *card;
-@@ -1786,6 +1786,12 @@ static int snd_ca0106_probe(struct pci_dev *pci,
- 	return 0;
- }
- 
-+static int snd_ca0106_probe(struct pci_dev *pci,
-+			    const struct pci_device_id *pci_id)
-+{
-+	return snd_card_free_on_error(&pci->dev, __snd_ca0106_probe(pci, pci_id));
-+}
-+
- #ifdef CONFIG_PM_SLEEP
- static int snd_ca0106_suspend(struct device *dev)
- {
+diff --git a/drivers/hwmon/pmbus/pmbus.h b/drivers/hwmon/pmbus/pmbus.h
+index fa613bd209e3..1fed8ed36d5e 100644
+--- a/drivers/hwmon/pmbus/pmbus.h
++++ b/drivers/hwmon/pmbus/pmbus.h
+@@ -262,6 +262,7 @@ enum pmbus_regs {
+ /*
+  * STATUS_VOUT, STATUS_INPUT
+  */
++#define PB_VOLTAGE_VIN_OFF		BIT(3)
+ #define PB_VOLTAGE_UV_FAULT		BIT(4)
+ #define PB_VOLTAGE_UV_WARNING		BIT(5)
+ #define PB_VOLTAGE_OV_WARNING		BIT(6)
+diff --git a/drivers/hwmon/pmbus/pmbus_core.c b/drivers/hwmon/pmbus/pmbus_core.c
+index 66c72aedde5e..b736fe1a05b7 100644
+--- a/drivers/hwmon/pmbus/pmbus_core.c
++++ b/drivers/hwmon/pmbus/pmbus_core.c
+@@ -1162,7 +1162,7 @@ static const struct pmbus_limit_attr vin_limit_attrs[] = {
+ 		.reg = PMBUS_VIN_UV_FAULT_LIMIT,
+ 		.attr = "lcrit",
+ 		.alarm = "lcrit_alarm",
+-		.sbit = PB_VOLTAGE_UV_FAULT,
++		.sbit = PB_VOLTAGE_UV_FAULT | PB_VOLTAGE_VIN_OFF,
+ 	}, {
+ 		.reg = PMBUS_VIN_OV_WARN_LIMIT,
+ 		.attr = "max",
 -- 
-2.35.2
+2.34.1
 
 
 

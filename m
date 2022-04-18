@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA16350579F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE3C7505772
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245107AbiDRNw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41288 "EHLO
+        id S244152AbiDRNzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 09:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244834AbiDRNa5 (ORCPT
+        with ESMTP id S244873AbiDRNa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:30:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4B2722315A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 05:55:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650286541;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=qFJ3DlKb+eUPu+S4bA6qaKNO41i7hF7RhsehUeP4a78=;
-        b=CiS/5yCWSHLu1WZRmQgbP0geShkAJ7ACi1icWDoonTQ+hUl7b/MH6SJqKRBDRSottghp4b
-        Wkd9P/zZAZ5xm79nHEjMWNKoGCAU2HvZv3xcV3ABnz4LhhGkS5S3YXGL7lFb29WreJgSE9
-        8NxqvucOWDGQXvqB8ZFUvy3f5j4WyfQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-655-ZAkUvhHMMkGL2Y6gwUNtQQ-1; Mon, 18 Apr 2022 08:55:38 -0400
-X-MC-Unique: ZAkUvhHMMkGL2Y6gwUNtQQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C309438149A3;
-        Mon, 18 Apr 2022 12:55:37 +0000 (UTC)
-Received: from starship (unknown [10.40.194.231])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A995340FD371;
-        Mon, 18 Apr 2022 12:55:35 +0000 (UTC)
-Message-ID: <dff229a39e30f84dcf8cc8caffc41f83bd5ece73.camel@redhat.com>
-Subject: Re: [PATCH v2 12/12] kvm/x86: Remove APICV activate mode
- inconsistency check
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com, joro@8bytes.org,
-        jon.grimm@amd.com, wei.huang2@amd.com, terry.bowman@amd.com
-Date:   Mon, 18 Apr 2022 15:55:34 +0300
-In-Reply-To: <20220412115822.14351-13-suravee.suthikulpanit@amd.com>
-References: <20220412115822.14351-1-suravee.suthikulpanit@amd.com>
-         <20220412115822.14351-13-suravee.suthikulpanit@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Mon, 18 Apr 2022 09:30:59 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919B11EEF3;
+        Mon, 18 Apr 2022 05:56:51 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id s137so18740387pgs.5;
+        Mon, 18 Apr 2022 05:56:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODAyrur2uuG6LpXXHU2KctLzjDAk76d6YTt1ZAO0Ttk=;
+        b=ZlVp1ObmY67pdpfEJIBhb4Gtc8gONWPpAeAZ65R65t+xXuKHjIhv7rfiTu6XtSSk6e
+         jnf0lQtyup4Yyvqc4/qRJ+RozRB9NFaffvcLgQL7anfu4sIEZKVxN3WlTyLQS22Nm4qH
+         ll/vRIlGniiGngEq0Ef3cyZDeiPKUljf7yPPnJea3kUeD7V/GnPioJK9S11dolGOaxXn
+         zIlg3QsWEdx52Ha2gnwiYtiKMb7vc0cep4qjR/8xgB2x0b5iJmlYC1SowZgl+7qpqhfE
+         k7nLOY/eaZ3CYZWG2lKku/qx7g2lRlDAweerrz46bEF8c8RSCNerthN4+immxkjWfzrK
+         utvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=ODAyrur2uuG6LpXXHU2KctLzjDAk76d6YTt1ZAO0Ttk=;
+        b=0sGD8tlOqnS0Nzxh8rduHWD1DEEliztOGIojiZyk/WfIDwTcEjfGoPglKJ4bPKt+00
+         iS/A1OmtzaiMSoeneWjT+QZLzmXuq2vgfsrpO6SsJzsAVI2LC0Po46/+cu3uXEHhkud4
+         w9dkyFbkCRJivv/Dy1BlTqAFojUDTwH4ZTTBM5MA8HoR8fFKkhud3UerPGdDWve872ri
+         RIynJ4028eqYPZ1sQeBfbux3clhNdM3kNOMtELxBNv00JDMaDoqxunWTwh3/VJtbJUUp
+         x6wHNApOBONVlB0ZpyKgyY5aW8lFqErDsWfnKUEoXi+UHcdPU5jNn1y1fDoeg7+p4jtA
+         NSeQ==
+X-Gm-Message-State: AOAM532XKxakk43guRmdeAHQQ9K/4D97bG47jyr8Or9E1jdTMwUWIxZj
+        /iW8pKB9pKQ5gQ7Mk2TeD64Idjzi3CU=
+X-Google-Smtp-Source: ABdhPJzYyEiG3pNKaLYXXQ5xjcjy2jalY3a7dOwMm/JW/Gxzs17ECpSZhAvtfVP9lHEgQ+isRQXw8g==
+X-Received: by 2002:a63:714e:0:b0:398:9bdc:e11a with SMTP id b14-20020a63714e000000b003989bdce11amr9721798pgn.572.1650286610963;
+        Mon, 18 Apr 2022 05:56:50 -0700 (PDT)
+Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
+        by smtp.gmail.com with ESMTPSA id 73-20020a63064c000000b003a216524089sm11358212pgg.57.2022.04.18.05.56.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 05:56:50 -0700 (PDT)
+From:   Cixi Geng <gengcixi@gmail.com>
+To:     mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
+        baolin.wang7@gmail.com, zhang.lyra@gmail.com
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V3 0/3] Add ums512 clocks and relative bindings file
+Date:   Mon, 18 Apr 2022 20:56:27 +0800
+Message-Id: <20220418125630.2342538-1-gengcixi@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-12 at 06:58 -0500, Suravee Suthikulpanit wrote:
-> When launching a VM with x2APIC and specify more than 255 vCPUs,
-> the guest kernel can disable x2APIC (e.g. specify nox2apic kernel option).
-> The VM fallbacks to xAPIC mode, and disable the vCPU ID 255.
-> 
-> In this case, APICV should be disabled for the vCPU ID 255.
-> Therefore, the APICV mode consisency check is no longer valid.
-> 
-> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-> ---
->  arch/x86/kvm/x86.c | 13 +++++--------
->  1 file changed, 5 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 0c0ca599a353..d0fac57e9996 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -9765,6 +9765,11 @@ void kvm_vcpu_update_apicv(struct kvm_vcpu *vcpu)
->  	down_read(&vcpu->kvm->arch.apicv_update_lock);
->  
->  	activate = kvm_apicv_activated(vcpu->kvm);
-> +
-> +	/* Do not activate AVIC when APIC is disabled */
-> +	if (kvm_get_apic_mode(vcpu) == LAPIC_MODE_DISABLED)
-> +		activate = false;
-> +
->  	if (vcpu->arch.apicv_active == activate)
->  		goto out;
->  
-> @@ -10159,14 +10164,6 @@ static int vcpu_enter_guest(struct kvm_vcpu *vcpu)
->  	guest_timing_enter_irqoff();
->  
->  	for (;;) {
-> -		/*
-> -		 * Assert that vCPU vs. VM APICv state is consistent.  An APICv
-> -		 * update must kick and wait for all vCPUs before toggling the
-> -		 * per-VM state, and responsing vCPUs must wait for the update
-> -		 * to complete before servicing KVM_REQ_APICV_UPDATE.
-> -		 */
-> -		WARN_ON_ONCE(kvm_apicv_activated(vcpu->kvm) != kvm_vcpu_apicv_active(vcpu));
-> -
->  		exit_fastpath = static_call(kvm_x86_vcpu_run)(vcpu);
->  		if (likely(exit_fastpath != EXIT_FASTPATH_REENTER_GUEST))
->  			break;
+From: Cixi Geng <cixi.geng1@unisoc.com>
 
-That warning catches bugs, please don't remove it.
+This patchset is add the UMS512 clocks support
 
-It can be made conditional on this vCPU having APIC enabled instead.
+v2 changes:
+  adjust description and add the "sprd,ums512-glbregs,syscon,simple-mfd"
+  compatibles to fix match failed logs in the dt_binding_check.
+  add the property license and copyright notice.
 
-Best regards,
-	Maxim Levitsky
+v3 changes:
+  fix wrong indentation and hint: "maxItems" is not needed with an "items" list
+  when use the latest dtschema.
+
+Cixi Geng (3):
+  dt-bindings: clk: sprd: Add bindings for ums512 clock controller
+  clk: sprd: Add dt-bindings include file for UMS512
+  clk: sprd: Add clocks support for UMS512
+
+ .../bindings/clock/sprd,ums512-clk.yaml       |  112 +
+ drivers/clk/sprd/Kconfig                      |    6 +
+ drivers/clk/sprd/Makefile                     |    1 +
+ drivers/clk/sprd/ums512-clk.c                 | 2199 +++++++++++++++++
+ include/dt-bindings/clock/sprd,ums512-clk.h   |  397 +++
+ 5 files changed, 2715 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+ create mode 100644 drivers/clk/sprd/ums512-clk.c
+ create mode 100644 include/dt-bindings/clock/sprd,ums512-clk.h
+
+-- 
+2.25.1
 

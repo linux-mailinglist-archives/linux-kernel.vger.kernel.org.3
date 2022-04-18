@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70A6450513A
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4882C5052E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiDRMe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
+        id S240138AbiDRMwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239052AbiDRM1l (ORCPT
+        with ESMTP id S240678AbiDRMj1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:27:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 604101EAD4;
-        Mon, 18 Apr 2022 05:21:13 -0700 (PDT)
+        Mon, 18 Apr 2022 08:39:27 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53A0912AC2;
+        Mon, 18 Apr 2022 05:30:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CD5E60F5E;
-        Mon, 18 Apr 2022 12:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87021C385AB;
-        Mon, 18 Apr 2022 12:21:12 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 05483B80EC0;
+        Mon, 18 Apr 2022 12:30:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BE87C385A7;
+        Mon, 18 Apr 2022 12:30:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284472;
-        bh=HBOleFK0d5W1x+uOvPz9btdF/LbqfYF/mI57FVMzAdY=;
+        s=korg; t=1650285004;
+        bh=ed67Mr0skf3NL21hEKATizgyI3mS1e80WUsHbS/+xgU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vD1tO03k8z9ddJcjj9RSRPAJSgRDmzd/j8LSCVQ4Cnu88B8tjaFUO7pIxd4pesDMk
-         cY2EmXII3yZoi77Pgj42g1qEXAM6n1XkceWsl70voFe/TNArdoqM1ok4VDH1qvNbBa
-         9465AtOStMk8DcT6w66AtmR1GLI60/CQGHmr8hQM=
+        b=XpFNQNu7oVTeYY4yOvKtZPRctrpz7IOAEW+GkMLngSRfqfT3qIcJ9cb6J4TwLMCkX
+         RwIHc4zHGyxInFyn3vdH2AuP+JTUsR5Pk1NNo8KRpKnxgGzhQmTwHHIjF/gHpwwLRC
+         88BUBS/Q18LpM5vnB7ptMnjritolWsWTBRlPjg7I=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         stable@vger.kernel.org,
-        Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>,
-        Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <seanpaul@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Rob Clark <robdclark@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 126/219] block: fix offset/size check in bio_trim()
-Date:   Mon, 18 Apr 2022 14:11:35 +0200
-Message-Id: <20220418121210.423946873@linuxfoundation.org>
+Subject: [PATCH 5.15 076/189] drm/msm/dsi: Use connector directly in msm_dsi_manager_connector_init()
+Date:   Mon, 18 Apr 2022 14:11:36 +0200
+Message-Id: <20220418121202.666410963@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,38 +58,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ming Lei <ming.lei@redhat.com>
+From: Stephen Boyd <swboyd@chromium.org>
 
-[ Upstream commit 8535c0185d14ea41f0efd6a357961b05daf6687e ]
+[ Upstream commit 47b7de6b88b962ef339a2427a023d2a23d161654 ]
 
-Unit of bio->bi_iter.bi_size is bytes, but unit of offset/size
-is sector.
+The member 'msm_dsi->connector' isn't assigned until
+msm_dsi_manager_connector_init() returns (see msm_dsi_modeset_init() and
+how it assigns the return value). Therefore this pointer is going to be
+NULL here. Let's use 'connector' which is what was intended.
 
-Fix the above issue in checking offset/size in bio_trim().
-
-Fixes: e83502ca5f1e ("block: fix argument type of bio_trim()")
-Cc: Chaitanya Kulkarni <chaitanya.kulkarni@wdc.com>
-Signed-off-by: Ming Lei <ming.lei@redhat.com>
-Link: https://lore.kernel.org/r/20220414084443.1736850-1-ming.lei@redhat.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Sean Paul <seanpaul@chromium.org>
+Fixes: 6d5e78406991 ("drm/msm/dsi: Move dsi panel init into modeset init path")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Patchwork: https://patchwork.freedesktop.org/patch/478693/
+Link: https://lore.kernel.org/r/20220318000731.2823718-1-swboyd@chromium.org
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Rob Clark <robdclark@chromium.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- block/bio.c | 2 +-
+ drivers/gpu/drm/msm/dsi/dsi_manager.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/block/bio.c b/block/bio.c
-index 1be1e360967d..342b1cf5d713 100644
---- a/block/bio.c
-+++ b/block/bio.c
-@@ -1570,7 +1570,7 @@ EXPORT_SYMBOL(bio_split);
- void bio_trim(struct bio *bio, sector_t offset, sector_t size)
- {
- 	if (WARN_ON_ONCE(offset > BIO_MAX_SECTORS || size > BIO_MAX_SECTORS ||
--			 offset + size > bio->bi_iter.bi_size))
-+			 offset + size > bio_sectors(bio)))
- 		return;
+diff --git a/drivers/gpu/drm/msm/dsi/dsi_manager.c b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+index fa4c396df6a9..6e43672f5807 100644
+--- a/drivers/gpu/drm/msm/dsi/dsi_manager.c
++++ b/drivers/gpu/drm/msm/dsi/dsi_manager.c
+@@ -643,7 +643,7 @@ struct drm_connector *msm_dsi_manager_connector_init(u8 id)
+ 	return connector;
  
- 	size <<= 9;
+ fail:
+-	connector->funcs->destroy(msm_dsi->connector);
++	connector->funcs->destroy(connector);
+ 	return ERR_PTR(ret);
+ }
+ 
 -- 
 2.35.1
 

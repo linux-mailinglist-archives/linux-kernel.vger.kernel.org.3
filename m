@@ -2,116 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128AD505CF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:52:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0BD4505CC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 18:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346689AbiDRQzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 12:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55756 "EHLO
+        id S1346449AbiDRQx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 12:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346503AbiDRQxz (ORCPT
+        with ESMTP id S1346447AbiDRQxY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 12:53:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1CA863388A
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650300674;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JBebpsVkjJ1lSSa3e/sJjGT51LMTkXLQURCTyHp5Tag=;
-        b=YxhW9qowef3VrOsmhhk/TUtI36X0oxQWmFoIAakfz1J2/dsIe/ZsAkeBoSj1DVJM3g6kYh
-        V309yypF0zZueXVLoZQrr/mLi0dpbbiNTTJPRBY8NXcFx0Fxsdroip5usEAwuTqGWD5Tux
-        mOVduBEc0kSJBJEiWowpnYWlfBO1AZ0=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-53-j7K3T6i4MMOS4KqbY4YEqQ-1; Mon, 18 Apr 2022 12:51:12 -0400
-X-MC-Unique: j7K3T6i4MMOS4KqbY4YEqQ-1
-Received: by mail-qt1-f200.google.com with SMTP id x10-20020ac8700a000000b002c3ef8fc44cso8837700qtm.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:51:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=JBebpsVkjJ1lSSa3e/sJjGT51LMTkXLQURCTyHp5Tag=;
-        b=nxI1vAny+DGZvz1FidcaZ/vMy6xUMVlWw8V0RBDQRg0wVjkvgRamnMKyTz7IYl05xM
-         /d3c698WuNNOOJPtjr9K0+mnFas7MA30f0KcP6axWyvonxMIVmdhpZvZb8DQW6t6CAxK
-         DmAZXFnkbOMXE4Gi2JUupW8wOVzEY68S+0p2EL6mDFKGzEPPAspWJGJPsvpvGxnTIEk+
-         JSoYo7whc1+bB7Zm1XlmBdjl5s8goJIFdmfHHp+RCBnoWKf91m5uBRXaQrgCc650pcKQ
-         K6bUfpBEdghasBYD/qhH2BqWRtCbKOT2Hlu0GyME9sURaXael7eRbL0rP7/WjC3qjZgV
-         E6kg==
-X-Gm-Message-State: AOAM531cjEiMPkoTwsyzxkDEZ24Uka8o9hHLjRTW1iDs2tbYR+zLT09X
-        w2HlilKV1Nj4iHq3fxrHWO1njsmFqBuUsQskhUeLtYdRhcfRcZe6a87qlGX7QdleNAFhLDwRfCr
-        DsB8Rufu/vrLerA/Mhr5/kjhG
-X-Received: by 2002:a05:6214:1cc4:b0:431:4cbc:1d91 with SMTP id g4-20020a0562141cc400b004314cbc1d91mr8819870qvd.64.1650300672338;
-        Mon, 18 Apr 2022 09:51:12 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJxdHQjzckS1sAzf8DfFbGiChE/dpSmAb18xOXxE4bOzMjLBlU1ffPU/tvpAO7aja87iutMc5g==
-X-Received: by 2002:a05:6214:1cc4:b0:431:4cbc:1d91 with SMTP id g4-20020a0562141cc400b004314cbc1d91mr8819852qvd.64.1650300672090;
-        Mon, 18 Apr 2022 09:51:12 -0700 (PDT)
-Received: from treble.redhat.com ([2600:1700:6e32:6c00::35])
-        by smtp.gmail.com with ESMTPSA id e15-20020ac8670f000000b002e22d9c756dsm7277059qtp.30.2022.04.18.09.51.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 09:51:11 -0700 (PDT)
-From:   Josh Poimboeuf <jpoimboe@redhat.com>
-To:     x86@kernel.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Miroslav Benes <mbenes@suse.cz>
-Subject: [PATCH v2 13/25] scripts: Create objdump-func helper script
-Date:   Mon, 18 Apr 2022 09:50:32 -0700
-Message-Id: <ab37c23d28a8b9cf7a6707cc5af5e1aef80ba4a3.1650300597.git.jpoimboe@redhat.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1650300597.git.jpoimboe@redhat.com>
-References: <cover.1650300597.git.jpoimboe@redhat.com>
+        Mon, 18 Apr 2022 12:53:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3CD32EFF
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 09:50:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650300637; x=1681836637;
+  h=message-id:date:mime-version:to:references:from:subject:
+   in-reply-to:content-transfer-encoding;
+  bh=T9DgsGykPJu/61nxfr6AZYfMrvU5yqC0wpyU4UQckBs=;
+  b=kbLypj4vUoXGNLt9eyOuZxrdqeuIKOvPfDhlIPpvgdMuY2aV8mBViOL/
+   CrS863w/iBoECNIYkT+Rib5LHihcT9Z805geve4zYt4sD2KzwbSmPh4pM
+   ydtukVBjM1rvDI3al2Q66ZzrGKlR+4u1+qT6gXmx3nd/ZGq4XVHv1b1mN
+   /UNdrODQEdkrjVrM7psEHpynhwxFho6+6bi0+L4yxw6XSbBxZo7C3DTuG
+   +xrvwRHoQPlxye5UHiMMWtwcH0fOTAv8UX3RLVH6QtZa0fm0zoJ+lMHa+
+   uBcW5hFQ6NZRN87X2MAdTe9TesE+OpPZvfrJCjpJF0bqchE1D1QI3UuGs
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="245453342"
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="245453342"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 09:50:35 -0700
+X-IronPort-AV: E=Sophos;i="5.90,270,1643702400"; 
+   d="scan'208";a="554310652"
+Received: from cebrown-mobl.amr.corp.intel.com (HELO [10.212.18.136]) ([10.212.18.136])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 09:50:34 -0700
+Message-ID: <9961bda1-687a-a681-743e-7eb7b9f6f751@intel.com>
+Date:   Mon, 18 Apr 2022 09:50:33 -0700
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-US
+To:     linux-mm@kvack.org, mhocko@kernel.org, akpm@linux-foundation.org,
+        rientjes@google.com, yosryahmed@google.com, hannes@cmpxchg.org,
+        shakeelb@google.com, dave.hansen@linux.intel.com,
+        tim.c.chen@linux.intel.com, roman.gushchin@linux.dev,
+        gthelen@google.com, a.manzanares@samsung.com,
+        heekwon.p@samsung.com, gim.jongmin@samsung.com,
+        linux-kernel@vger.kernel.org
+References: <20220416053902.68517-1-dave@stgolabs.net>
+ <20220417034932.jborenmvfbqrfhlj@offworld>
+ <c1475d8e-3ad6-cdab-5cc9-b44fef998636@intel.com>
+ <20220418164503.jfips3aiwhnlfjrq@offworld>
+From:   Dave Hansen <dave.hansen@intel.com>
+Subject: Re: [PATCH 6/6] mm/migrate: export whether or not node is toptier in
+ sysf
+In-Reply-To: <20220418164503.jfips3aiwhnlfjrq@offworld>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a simple script which disassembles a single function from an object
-file.  Comes in handy for objtool warnings and kernel stack traces.
+On 4/18/22 09:45, Davidlohr Bueso wrote:
+> On Mon, 18 Apr 2022, Dave Hansen wrote:
+>> On 4/16/22 20:49, Davidlohr Bueso wrote:
+>>> This allows userspace to know if the node is considered fast
+>>> memory (with CPUs attached to it). While this can be already
+>>> derived without a new file, this helps further encapsulate the
+>>> concept.
+>>
+>> What is userspace supposed to *do* with this, though?
+> 
+> This came as a scratch to my own itch. I wanted to start testing
+> more tiering patches overall that I see pop up, and wanted a way
+> to differentiate the slow vs the fast memories in order to better
+> configure workload(s) working set sizes beyond what is your typical
+> grep MemTotal /proc/meminfo. If there is a better way I'm all
+> for it.
 
-Originally-by: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
----
- scripts/objdump-func | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
- create mode 100755 scripts/objdump-func
+But how does this help you?  Does it save you a few lines in a shell
+script to find the nodes that have memory and CPUs?
 
-diff --git a/scripts/objdump-func b/scripts/objdump-func
-new file mode 100755
-index 000000000000..140646c456fc
---- /dev/null
-+++ b/scripts/objdump-func
-@@ -0,0 +1,18 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Disassemble a single function.
-+#
-+# usage: objdump-func <file> <func>
-+
-+set -o errexit
-+set -o nounset
-+
-+OBJDUMP="${CROSS_COMPILE:-}objdump"
-+
-+command -v awk >/dev/null 2>&1 || die "awk isn't installed"
-+
-+OBJ=$1; shift
-+FUNC=$1; shift
-+
-+${OBJDUMP} -wdr $@ $OBJ | awk "/^\$/ { P=0; } /$FUNC[^>]*>:\$/ { P=1; O=strtonum(\"0x\" \$1); } { if (P) { o=strtonum(\"0x\" \$1); printf(\"%04x \", o-O); print \$0; } }"
--- 
-2.34.1
+>> Isn't it just asking for trouble to add (known) redundancy to the ABI?
+>> It seems like a recipe for future inconsistency.
+> 
+> Perhaps. It was mostly about the fact that the notion of top tier
+> could also change as technology evolves.
 
+It seems like something arbitrary that everyone will just disagree on.
+I think we should try to stick to cold, hard facts as must as possible
+rather than trying to have the *kernel* dictate as a policy what is fast
+versus slow.

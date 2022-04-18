@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61298504EE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:39:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC2A504EE7
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 12:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237717AbiDRKlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 06:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47950 "EHLO
+        id S237730AbiDRKmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 06:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiDRKlk (ORCPT
+        with ESMTP id S237719AbiDRKmI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 06:41:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A363E15A31;
-        Mon, 18 Apr 2022 03:39:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B272611F1;
-        Mon, 18 Apr 2022 10:39:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A89F3C385A8;
-        Mon, 18 Apr 2022 10:38:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650278340;
-        bh=kI59jYqj7rPLfRHyWTPL69LKjL3lZ4/Nnt35pCVLnBg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Jp7IJKFwT6c2TCPMTwuMO6BXKiO408/DU1GjgWcyArka9l8DEGMqGvJYSBQy9NUEx
-         4MmsgFzxTyWL+FcJIRdARmZh0u46tsirEFTy2pkjEPMD9SOYdFbBvnHVlKvjTxQJ02
-         XFqXCe/TB3NfBg+5+4GJzx2g9DXkO/l0NRke+PmWpNEFuJGLc3pufqwKuVZtWZgeNL
-         BYeTqAmpETJzWlnhKNI1mIbkf68xILN/r78GDb86ZzZq7GDzwt8eFMA4JsDW9vZIiC
-         NdP/FOCtjC7Qj+njg9e0x/zgZqhRIIaM4dalY2amSIb9kPBd6p+Za4pvdu6lAJTHhE
-         1KHdkNdia9Vxg==
-Date:   Mon, 18 Apr 2022 16:08:55 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Frank Wunderlich <linux@fw-web.de>
-Cc:     linux-rockchip@lists.infradead.org,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [RFC/RFT 3/6] phy: rockchip: Support pcie v3
-Message-ID: <Yl0/v2101wx6hy7B@matsya>
-References: <20220416135458.104048-1-linux@fw-web.de>
- <20220416135458.104048-4-linux@fw-web.de>
+        Mon, 18 Apr 2022 06:42:08 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B8315A32
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:39:29 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-de3eda6b5dso13844335fac.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 03:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=62c026OOLAuNuBuSioyVpnipO8MJFXscIe6Hv24ZM6o=;
+        b=zJvN5SlP/3qCHDqJo/ZWanngiLrVz0gsXPmvbKN3q4nbnTv+VZ4W/LAl+DZ2KJrnrd
+         1C1sQ6Bde0CLweFJXSZ7icY3DY9ml2+FqluhS7m5A4EUIyznFTrVjjYYQbReT2UZKGrk
+         tew0f801Qq34i4eMznEJgmjrjiOVHVfclvubXogmUZFXwms1MkwMc4Pvu37vkdKtRkmR
+         +ZfczKhD+qFmDmFSbjj5OuxVs/WGPnvhkeRiqTefDiYDtdf8Ou9xh949bfo4msBBIYbp
+         n6VoEqFZA5H14v2w9fJTS0Vgd+tEE1pXFr3vk80xG6p/sb2PWhpDBNHX8KYsMQN40+X3
+         R7tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=62c026OOLAuNuBuSioyVpnipO8MJFXscIe6Hv24ZM6o=;
+        b=ncVgyFrzQzFihuggKbixw5wnqDTmncG2jK3lHJVpvsdqGYJK1uDn0oANYCJiktL3X5
+         jEPWX+bsYG4eUOwR2LJyXaudtnmabjF7gW8KFE2jfP2D9R7PFerTNKus17enXjAgDJ41
+         OzVPA9C9Wv3avprhK8+S1faJYnFhJWJJEtA7+4U//TPk6JgHRiXhKrOlqtFGJk+uCqr+
+         YlYaIE81KUZ1kl5PB0fuzaHs/on5QQJlbi0bhkAy1b1JktS+0Aq1QT610oSAlC2nCYZE
+         6YT916OhWQz1W0G90LNVUDf2tvaME5wBnzcka2C/8/JCRdB0yTSjyOHAZRDgFg1+QHSS
+         J/3g==
+X-Gm-Message-State: AOAM533gWmuUaSeirvbkXImGWM9K4K0wIKKOKCAoVEu+ed+J0J5tKFiN
+        M69P/1Ap+BCiDdKET6E2J9oVWvURDk3gimdRZzgCch4YZM/5nw==
+X-Google-Smtp-Source: ABdhPJxID8TnHzn6Zu3SHNeySQA/uhoKQT25r6qemvJbcXOXJ0tLPlPVCU0Nm7LeAugRnXZew0nK3yGf2zipJw+03Xw=
+X-Received: by 2002:a05:6870:2156:b0:e5:bb8d:f6e3 with SMTP id
+ g22-20020a056870215600b000e5bb8df6e3mr3434816oae.48.1650278369148; Mon, 18
+ Apr 2022 03:39:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416135458.104048-4-linux@fw-web.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220414122928.349126-1-bhupesh.sharma@linaro.org> <20220414141107.sazz72sl6giehpjx@SoMainline.org>
+In-Reply-To: <20220414141107.sazz72sl6giehpjx@SoMainline.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Mon, 18 Apr 2022 16:09:18 +0530
+Message-ID: <CAH=2NtzFGYAxc_0aEWUV-Jn4JwV4UtCNRui_KL7RRiG4BWF92g@mail.gmail.com>
+Subject: Re: [PATCH 1/1] arm64: dts: qcom: sm8350-sagami: UFS phy - add
+ 'vdda-pll-supply' & 'vdda-phy-supply'
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     linux-arm-msm@vger.kernel.org, bhupesh.linux@gmail.com,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, robh+dt@kernel.org,
+        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
+        Vinod Koul <vkoul@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,194 +73,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 16-04-22, 15:54, Frank Wunderlich wrote:
-> From: Frank Wunderlich <frank-w@public-files.de>
-> 
-> RK3568 supports PCIe v3 using not Combphy like PCIe v2 on rk3566.
-> It use a dedicated pcie-phy. Add support for this.
-> 
-> Signed-off-by: Frank Wunderlich <frank-w@public-files.de>
-> ---
-> driver was taken from linux 5.10 based on in
-> https://github.com/JeffyCN/mirrors
-> which now has disappeared
-> ---
->  drivers/phy/rockchip/Kconfig                  |   9 +
->  drivers/phy/rockchip/Makefile                 |   1 +
->  .../phy/rockchip/phy-rockchip-snps-pcie3.c    | 278 ++++++++++++++++++
->  include/dt-bindings/phy/phy-snps-pcie3.h      |  21 ++
->  include/linux/phy/pcie.h                      |  12 +
->  5 files changed, 321 insertions(+)
->  create mode 100644 drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
->  create mode 100644 include/dt-bindings/phy/phy-snps-pcie3.h
->  create mode 100644 include/linux/phy/pcie.h
-> 
-> diff --git a/drivers/phy/rockchip/Kconfig b/drivers/phy/rockchip/Kconfig
-> index 9022e395c056..94360fc96a6f 100644
-> --- a/drivers/phy/rockchip/Kconfig
-> +++ b/drivers/phy/rockchip/Kconfig
-> @@ -83,6 +83,15 @@ config PHY_ROCKCHIP_PCIE
->  	help
->  	  Enable this to support the Rockchip PCIe PHY.
->  
-> +config PHY_ROCKCHIP_SNPS_PCIE3
-> +	tristate "Rockchip Snps PCIe3 PHY Driver"
-> +	depends on (ARCH_ROCKCHIP && OF) || COMPILE_TEST
-> +	depends on HAS_IOMEM
-> +	select GENERIC_PHY
-> +	select MFD_SYSCON
-> +	help
-> +	  Enable this to support the Rockchip snps PCIe3 PHY.
-> +
->  config PHY_ROCKCHIP_TYPEC
->  	tristate "Rockchip TYPEC PHY Driver"
->  	depends on OF && (ARCH_ROCKCHIP || COMPILE_TEST)
-> diff --git a/drivers/phy/rockchip/Makefile b/drivers/phy/rockchip/Makefile
-> index a5041efb5b8f..7eab129230d1 100644
-> --- a/drivers/phy/rockchip/Makefile
-> +++ b/drivers/phy/rockchip/Makefile
-> @@ -8,5 +8,6 @@ obj-$(CONFIG_PHY_ROCKCHIP_INNO_HDMI)	+= phy-rockchip-inno-hdmi.o
->  obj-$(CONFIG_PHY_ROCKCHIP_INNO_USB2)	+= phy-rockchip-inno-usb2.o
->  obj-$(CONFIG_PHY_ROCKCHIP_NANENG_COMBO_PHY)	+= phy-rockchip-naneng-combphy.o
->  obj-$(CONFIG_PHY_ROCKCHIP_PCIE)		+= phy-rockchip-pcie.o
-> +obj-$(CONFIG_PHY_ROCKCHIP_SNPS_PCIE3)	+= phy-rockchip-snps-pcie3.o
->  obj-$(CONFIG_PHY_ROCKCHIP_TYPEC)	+= phy-rockchip-typec.o
->  obj-$(CONFIG_PHY_ROCKCHIP_USB)		+= phy-rockchip-usb.o
-> diff --git a/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c b/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
-> new file mode 100644
-> index 000000000000..992b9709a97a
-> --- /dev/null
-> +++ b/drivers/phy/rockchip/phy-rockchip-snps-pcie3.c
-> @@ -0,0 +1,278 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Rockchip PCIE3.0 phy driver
-> + *
-> + * Copyright (C) 2020 Rockchip Electronics Co., Ltd.
-> + */
-> +
-> +#include <linux/clk.h>
-> +#include <linux/delay.h>
-> +#include <linux/io.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/phy/pcie.h>
-> +#include <linux/phy/phy.h>
-> +#include <linux/regmap.h>
-> +#include <linux/reset.h>
-> +#include <dt-bindings/phy/phy-snps-pcie3.h>
-> +
-> +/* Register for RK3568 */
-> +#define GRF_PCIE30PHY_CON1 0x4
-> +#define GRF_PCIE30PHY_CON6 0x18
-> +#define GRF_PCIE30PHY_CON9 0x24
-> +#define GRF_PCIE30PHY_STATUS0 0x80
-> +#define SRAM_INIT_DONE(reg) (reg & BIT(14))
-> +
-> +/* Register for RK3588 */
-> +#define PHP_GRF_PCIESEL_CON 0x100
-> +#define RK3588_PCIE3PHY_GRF_CMN_CON0 0x0
-> +#define RK3588_PCIE3PHY_GRF_PHY0_STATUS1 0x904
-> +#define RK3588_PCIE3PHY_GRF_PHY1_STATUS1 0xa04
-> +#define RK3588_SRAM_INIT_DONE(reg) (reg & BIT(0))
-> +
-> +struct rockchip_p3phy_ops;
-> +
-> +struct rockchip_p3phy_priv {
-> +	const struct rockchip_p3phy_ops *ops;
-> +	void __iomem *mmio;
-> +	/* mode: RC, EP */
-> +	int mode;
-> +	/* pcie30_phymode: Aggregation, Bifurcation */
-> +	int pcie30_phymode;
-> +	struct regmap *phy_grf;
-> +	struct regmap *pipe_grf;
-> +	struct reset_control *p30phy;
-> +	struct phy *phy;
-> +	struct clk_bulk_data *clks;
-> +	int num_clks;
-> +	bool is_bifurcation;
-> +};
-> +
-> +struct rockchip_p3phy_ops {
-> +	int (*phy_init)(struct rockchip_p3phy_priv *priv);
-> +};
-> +
-> +static int rockchip_p3phy_set_mode(struct phy *phy, enum phy_mode mode, int submode)
-> +{
-> +	struct rockchip_p3phy_priv *priv = phy_get_drvdata(phy);
-> +
-> +	/* Actually We don't care EP/RC mode, but just record it */
-> +	switch (submode) {
-> +	case PHY_MODE_PCIE_RC:
-> +		priv->mode = PHY_MODE_PCIE_RC;
-> +		break;
-> +	case PHY_MODE_PCIE_EP:
-> +		priv->mode = PHY_MODE_PCIE_EP;
-> +		break;
-> +	case PHY_MODE_PCIE_BIFURCATION:
-> +		priv->is_bifurcation = true;
-> +		break;
-> +	default:
-> +		pr_info("%s, invalid mode\n", __func__);
+On Thu, 14 Apr 2022 at 19:41, Marijn Suijten
+<marijn.suijten@somainline.org> wrote:
+>
+> On 2022-04-14 17:59:28, Bhupesh Sharma wrote:
+> > As suggested by Bjorn during review of [1], the vdda-pll-supply' &
+> > 'vdda-phy-supply' supplies denote the power for the bus and the
+> > clock of the UFS PHY.
+> >
+> > For pdx215 to have a functional UFS [..] safe to assume [..]
+>
+> By "functional" you are referring to sending a certain UFS command that
+> accidentally wipes the bootloader [1] [2], turning the device into a
+> _very_ expensive (+$1000) paperweight?
+>
+> [1]: https://lore.kernel.org/lkml/20211111184630.605035-1-konrad.dybcio@somainline.org/
+> [2]: https://github.com/kholk/kernel/commit/2e7a9ee1c91a016baa0b826a7752ec45663a0561
+>
+> > In absence of the same 'make dtbs_check' leads to following warnings:
+> >
+> > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+> >  phy-wrapper@88e9000: 'vdda-phy-supply' is a required property
+> >
+> > arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami-pdx215.dt.yaml:
+> >  phy-wrapper@88e9000: 'vdda-pll-supply' is a required property
+> >
+> > [1]. https://lore.kernel.org/lkml/20220228123019.382037-9-bhupesh.sharma@linaro.org/
+> >
+> > Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+> > Cc: konrad.dybcio@somainline.org
+> > Cc: Vinod Koul <vkoul@kernel.org>
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  .../dts/qcom/sm8350-sony-xperia-sagami.dtsi   | 25 +++++++++++++++++++
+> >  1 file changed, 25 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > index 90b13cbe2fa6..238ac9380ca2 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8350-sony-xperia-sagami.dtsi
+> > @@ -3,6 +3,7 @@
+> >   * Copyright (c) 2021, Konrad Dybcio <konrad.dybcio@somainline.org>
+> >   */
+> >
+> > +#include <dt-bindings/regulator/qcom,rpmh-regulator.h>
+> >  #include "sm8350.dtsi"
+> >  #include "pm8350.dtsi"
+> >  #include "pm8350b.dtsi"
+> > @@ -75,6 +76,27 @@ ramoops@ffc00000 {
+> >       };
+> >  };
+> >
+> > +&apps_rsc {
+> > +     pm8350-rpmh-regulators {
+> > +             compatible = "qcom,pm8350-rpmh-regulators";
+> > +             qcom,pmic-id = "b";
+> > +
+> > +             vreg_l1b_0p88: ldo1 {
+> > +                     regulator-name = "vreg_l1b_0p88";
+> > +                     regulator-min-microvolt = <912000>;
+> > +                     regulator-max-microvolt = <920000>;
+> > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > +             };
+> > +
+> > +             vreg_l6b_1p2: ldo6 {
+> > +                     regulator-name = "vreg_l6b_1p2";
+> > +                     regulator-min-microvolt = <1200000>;
+> > +                     regulator-max-microvolt = <1208000>;
+> > +                     regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+> > +             };
+> > +     };
+> > +};
+> > +
+> >  &adsp {
+> >       status = "okay";
+> >       firmware-name = "qcom/adsp.mbn";
+> > @@ -256,4 +278,7 @@ &usb_1_hsphy {
+> >
+> >  &usb_1_qmpphy {
+> >       status = "okay";
+> > +
+> > +     vdda-phy-supply = <&vreg_l6b_1p2>;
+> > +     vdda-pll-supply = <&vreg_l1b_0p88>;
+>
+> I'm probably understanding your patch wrong, but this is the USB phy,
+> not the UFS phy?  The warning from dtbs_check on `phy-wrapper@88e9000`
+> is also the `qmp-usb3-phy`, not the `qmp-ufs-phy` - seems this patch has
+> little to do with UFS after all?
 
-this should be err log, also make it dev_err pls
+Indeed, it should be the qmp USB3 phy, instead.. my bad.. I will fix it in v2.
 
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int rockchip_p3phy_rk3568_init(struct rockchip_p3phy_priv *priv)
-> +{
-> +	int ret = 0;
+Do you see any issues with enabling these two regulators in the
+'sm8350-sony-xperia-sagami-pdx215' dts?
 
-initialization seems superfluous
+Thanks,
+Bhupesh
 
-> +	u32 reg;
-> +
-> +	/* Deassert PCIe PMA output clamp mode */
-> +	regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON9,
-> +		     (0x1 << 15) | (0x1 << 31));
-
-magic numbers.. sounds like BIT(15) and BIT(31)
-
-
-> +	/* Set bifurcation if needed, and it doesn't care RC/EP */
-> +	if (priv->is_bifurcation) {
-> +		regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON6,
-> +			     0x1 | (0xf << 16));
-> +		regmap_write(priv->phy_grf, GRF_PCIE30PHY_CON1,
-> +			     (0x1 << 15) | (0x1 << 31));
-> +	}
-> +
-> +	reset_control_deassert(priv->p30phy);
-> +
-> +	ret = regmap_read_poll_timeout(priv->phy_grf,
-> +				       GRF_PCIE30PHY_STATUS0,
-> +				       reg, SRAM_INIT_DONE(reg),
-> +				       0, 500);
-> +	if (ret)
-> +		pr_err("%s: lock failed 0x%x, check input refclk and power supply\n",
-> +		       __func__, reg);
-
-dev_err() pls
-
-> +	return ret;
-> +}
-> +
-> +static const struct rockchip_p3phy_ops rk3568_ops = {
-> +	.phy_init = rockchip_p3phy_rk3568_init,
-> +};
-> +
-> +static int rockchip_p3phy_rk3588_init(struct rockchip_p3phy_priv *priv)
-> +{
-> +	int ret = 0;
-
-superfluous init again
--- 
-~Vinod
+> >  };
+> > --
+> > 2.35.1
+> >

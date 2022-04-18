@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CF1D5052EC
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FBC50513C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:32:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239981AbiDRMvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S239381AbiDRMc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240920AbiDRMjr (ORCPT
+        with ESMTP id S239750AbiDRM2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:47 -0400
+        Mon, 18 Apr 2022 08:28:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E1E11B78F;
-        Mon, 18 Apr 2022 05:31:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD015222A7;
+        Mon, 18 Apr 2022 05:22:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63A7560F0A;
-        Mon, 18 Apr 2022 12:31:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E343C385A7;
-        Mon, 18 Apr 2022 12:31:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4105760EF4;
+        Mon, 18 Apr 2022 12:22:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40094C385A1;
+        Mon, 18 Apr 2022 12:22:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285087;
-        bh=1ZR11ZiS9Zx+BLT5iJLPGmUOQMhGcjaQF2rDXTOW1JA=;
+        s=korg; t=1650284548;
+        bh=GMIEaOIScEtB1Zc9XRUXVseCcFhS/WNAIgGvAF1MJiU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GQyKXcrFtnc2z6jGw9Sm8efQd1B/gYrV76FhFHkOrQDWdo5OBsUZuAhRcJSjiOhiF
-         5v5P/gENOPAsR3KxcsrGowcR24xvuUpPNBOu/kOe6Fjwp1IwyBcDLAykpnqGMjXtPX
-         BP5/tX8/KhYv+Jl7S2uK7wquJ0A1THerrc1qJC4o=
+        b=oA2Ox1QUf9eq9Em/SY5ydBi7IANjje3RY64MwnS5aHRBY2vM/mFxOPAQOaWQQVS4R
+         SbnDaKd1hB6YzmgYvOA1dj6U5hddeSBrPia/KdupgTtyaHQ+qYWukFvItks2v+DxvH
+         FBNnjHGl2eEmEebWCX9pzra9Or6fbbqxGvGfBtEg=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Christian Lamparter <chunkeey@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 100/189] cifs: potential buffer overflow in handling symlinks
+Subject: [PATCH 5.17 151/219] ata: libata-core: Disable READ LOG DMA EXT for Samsung 840 EVOs
 Date:   Mon, 18 Apr 2022 14:12:00 +0200
-Message-Id: <20220418121203.341805767@linuxfoundation.org>
+Message-Id: <20220418121211.113680599@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +55,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+From: Christian Lamparter <chunkeey@gmail.com>
 
-[ Upstream commit 64c4a37ac04eeb43c42d272f6e6c8c12bfcf4304 ]
+[ Upstream commit 5399752299396a3c9df6617f4b3c907d7aa4ded8 ]
 
-Smatch printed a warning:
-	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
-	__memcpy() 'dctx->buf' too small (16 vs u32max)
+Samsung' 840 EVO with the latest firmware (EXT0DB6Q) locks up with
+the a message: "READ LOG DMA EXT failed, trying PIO" during boot.
 
-It's caused because Smatch marks 'link_len' as untrusted since it comes
-from sscanf(). Add a check to ensure that 'link_len' is not larger than
-the size of the 'link_str' buffer.
+Initially this was discovered because it caused a crash
+with the sata_dwc_460ex controller on a WD MyBook Live DUO.
 
-Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+The reporter "Tice Rex" which has the unique opportunity that he
+has two Samsung 840 EVO SSD! One with the older firmware "EXT0BB0Q"
+which booted fine and didn't expose "READ LOG DMA EXT". But the
+newer/latest firmware "EXT0DB6Q" caused the headaches.
+
+BugLink: https://github.com/openwrt/openwrt/issues/9505
+Signed-off-by: Christian Lamparter <chunkeey@gmail.com>
+Signed-off-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/link.c | 3 +++
+ drivers/ata/libata-core.c | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/fs/cifs/link.c b/fs/cifs/link.c
-index 852e54ee82c2..bbdf3281559c 100644
---- a/fs/cifs/link.c
-+++ b/fs/cifs/link.c
-@@ -85,6 +85,9 @@ parse_mf_symlink(const u8 *buf, unsigned int buf_len, unsigned int *_link_len,
- 	if (rc != 1)
- 		return -EINVAL;
- 
-+	if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
-+		return -EINVAL;
-+
- 	rc = symlink_hash(link_len, link_str, md5_hash);
- 	if (rc) {
- 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
+index 0c854aebfe0b..760c0d81d148 100644
+--- a/drivers/ata/libata-core.c
++++ b/drivers/ata/libata-core.c
+@@ -4014,6 +4014,9 @@ static const struct ata_blacklist_entry ata_device_blacklist [] = {
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Crucial_CT*MX100*",		"MU01",	ATA_HORKAGE_NO_NCQ_TRIM |
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
++	{ "Samsung SSD 840 EVO*",	NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
++						ATA_HORKAGE_NO_DMA_LOG |
++						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Samsung SSD 840*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
+ 						ATA_HORKAGE_ZERO_AFTER_TRIM, },
+ 	{ "Samsung SSD 850*",		NULL,	ATA_HORKAGE_NO_NCQ_TRIM |
 -- 
 2.35.1
 

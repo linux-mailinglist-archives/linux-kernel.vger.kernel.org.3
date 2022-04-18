@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5CA9505560
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1446505864
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242106AbiDRNXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S245328AbiDROCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241761AbiDRND1 (ORCPT
+        with ESMTP id S244190AbiDRNnd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:03:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E31A28E33;
-        Mon, 18 Apr 2022 05:44:12 -0700 (PDT)
+        Mon, 18 Apr 2022 09:43:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D56231504;
+        Mon, 18 Apr 2022 05:59:43 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1715A60FB6;
-        Mon, 18 Apr 2022 12:44:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21CE2C385A1;
-        Mon, 18 Apr 2022 12:44:10 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DE319B80D9C;
+        Mon, 18 Apr 2022 12:59:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A259C385A7;
+        Mon, 18 Apr 2022 12:59:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285851;
-        bh=/MTiFzhPPBzBmRP6KphVyG6z6NjGrTicjIvssdJrpQs=;
+        s=korg; t=1650286780;
+        bh=Cie9xTbHTERLmiPE7EPVmZETpno/5UZwrKY6N28oaNY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rW2v9zG93PzB0reFQZ95GjAANLEhMBcqhzV9lJ5cl+piFYiX2Q1DyxHqsQnvFmm4t
-         ivalAe9VZ10fNejPxmXVGqP6bAySdSSdnBlT8uZXrsuPz8dxM5IWAertGEPujgy+pO
-         p4EogSSEeyZssNHn9EX3n6DlSPtQBkTm6dzlJtok=
+        b=LV5rc88M0hwh+DBOm/hVJN6Cj+jgfJaXEuuNk1OqZcXHIpfiuMcDN8nku0Vjr1SMI
+         bpc8ic1pWp68RT+7EAfv7iyctZUAgDMReBXzHUUDXhiCM9q9fEkFnv0V0PS2sJs64b
+         kU5yMmBah1Zm5kss9yqXbcPRtLldBX5ccK53pdvs=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tim Crawford <tcrawford@system76.com>,
-        Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.4 45/63] ALSA: hda/realtek: Add quirk for Clevo PD50PNT
-Date:   Mon, 18 Apr 2022 14:13:42 +0200
-Message-Id: <20220418121137.243846810@linuxfoundation.org>
+        stable@vger.kernel.org,
+        =?UTF-8?q?Jos=C3=A9=20Exp=C3=B3sito?= <jose.exposito89@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 4.14 242/284] drm/imx: Fix memory leak in imx_pd_connector_get_modes
+Date:   Mon, 18 Apr 2022 14:13:43 +0200
+Message-Id: <20220418121218.900232250@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,30 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tim Crawford <tcrawford@system76.com>
+From: José Expósito <jose.exposito89@gmail.com>
 
-commit 9eb6f5c388060d8cef3c8b616cc31b765e022359 upstream.
+[ Upstream commit bce81feb03a20fca7bbdd1c4af16b4e9d5c0e1d3 ]
 
-Fixes speaker output and headset detection on Clevo PD50PNT.
+Avoid leaking the display mode variable if of_get_drm_display_mode
+fails.
 
-Signed-off-by: Tim Crawford <tcrawford@system76.com>
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220405182029.27431-1-tcrawford@system76.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 76ecd9c9fb24 ("drm/imx: parallel-display: check return code from of_get_drm_display_mode()")
+Addresses-Coverity-ID: 1443943 ("Resource leak")
+Signed-off-by: José Expósito <jose.exposito89@gmail.com>
+Signed-off-by: Philipp Zabel <p.zabel@pengutronix.de>
+Link: https://lore.kernel.org/r/20220108165230.44610-1-jose.exposito89@gmail.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/patch_realtek.c |    1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/imx/parallel-display.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/sound/pci/hda/patch_realtek.c
-+++ b/sound/pci/hda/patch_realtek.c
-@@ -2568,6 +2568,7 @@ static const struct snd_pci_quirk alc882
- 	SND_PCI_QUIRK(0x1558, 0x65e1, "Clevo PB51[ED][DF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
- 	SND_PCI_QUIRK(0x1558, 0x65e5, "Clevo PC50D[PRS](?:-D|-G)?", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
- 	SND_PCI_QUIRK(0x1558, 0x65f1, "Clevo PC50HS", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
-+	SND_PCI_QUIRK(0x1558, 0x65f5, "Clevo PD50PN[NRT]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
- 	SND_PCI_QUIRK(0x1558, 0x67d1, "Clevo PB71[ER][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
- 	SND_PCI_QUIRK(0x1558, 0x67e1, "Clevo PB71[DE][CDF]", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
- 	SND_PCI_QUIRK(0x1558, 0x67e5, "Clevo PC70D[PRS](?:-D|-G)?", ALC1220_FIXUP_CLEVO_PB51ED_PINS),
+diff --git a/drivers/gpu/drm/imx/parallel-display.c b/drivers/gpu/drm/imx/parallel-display.c
+index 8def97d75030..6420dec6cc00 100644
+--- a/drivers/gpu/drm/imx/parallel-display.c
++++ b/drivers/gpu/drm/imx/parallel-display.c
+@@ -77,8 +77,10 @@ static int imx_pd_connector_get_modes(struct drm_connector *connector)
+ 		ret = of_get_drm_display_mode(np, &imxpd->mode,
+ 					      &imxpd->bus_flags,
+ 					      OF_USE_NATIVE_MODE);
+-		if (ret)
++		if (ret) {
++			drm_mode_destroy(connector->dev, mode);
+ 			return ret;
++		}
+ 
+ 		drm_mode_copy(mode, &imxpd->mode);
+ 		mode->type |= DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
+-- 
+2.35.1
+
 
 

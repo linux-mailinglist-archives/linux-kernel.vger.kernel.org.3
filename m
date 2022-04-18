@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29384505195
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E60C0505324
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239292AbiDRMfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38174 "EHLO
+        id S240118AbiDRMzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240047AbiDRM3Q (ORCPT
+        with ESMTP id S237951AbiDRMlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:29:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6960E20BDC;
-        Mon, 18 Apr 2022 05:23:08 -0700 (PDT)
+        Mon, 18 Apr 2022 08:41:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAB12019D;
+        Mon, 18 Apr 2022 05:32:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ECA4660F0C;
-        Mon, 18 Apr 2022 12:23:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DAFC385A8;
-        Mon, 18 Apr 2022 12:23:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F2C4861115;
+        Mon, 18 Apr 2022 12:32:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B7E1C385A1;
+        Mon, 18 Apr 2022 12:32:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650284587;
-        bh=FFtHTLViO7Kk3k4dRDhJk2ARFMqmxQ2ReCqBcHvNwIw=;
+        s=korg; t=1650285125;
+        bh=DDpiuvyZPMOVx2gNhL7oXsN4aLctbYZMvh6l2bO/8k4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=vuR3qDYveLGD9v7nr+gRJD6QtyuJshU2KmvtTXCLF3ZUMYVE1zsiyR+zvZFjpoqhh
-         0f0AHGXERA3m5R0RnOQpOLykXR6Y7IQNtHn2juYQLkbEKMxZbxeLNG+xcqdEo3IpJG
-         kGFDMeylCBAAOMZpiLyezM7kKJEKWY7HGZcQO4ec=
+        b=DgkaOx6fLpbS6JaeZxMEBl8A/5nztGY8HR+kyoDeuTPg493y4Fyvijd57p2ttozin
+         h/Ihi4dsaGykelXPqx3jbp32cZ3OeJ3GUWdOcNNOCttOO5Y+cqkvbn2L3ABuUy+Vzo
+         Kj5e4LpY4AB9PyRKIGJGfy0Pxlt0u+n3b/H7Iwog=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Wenjing Liu <Wenjing.Liu@amd.com>,
-        Alex Hung <alex.hung@amd.com>, Chris Park <Chris.Park@amd.com>,
+        stable@vger.kernel.org, Anthony Koo <Anthony.Koo@amd.com>,
+        Alex Hung <alex.hung@amd.com>,
+        Chiawen Huang <chiawen.huang@amd.com>,
         Daniel Wheeler <daniel.wheeler@amd.com>,
         Alex Deucher <alexander.deucher@amd.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.17 162/219] drm/amd/display: Correct Slice reset calculation
+Subject: [PATCH 5.15 111/189] drm/amd/display: FEC check in timing validation
 Date:   Mon, 18 Apr 2022 14:12:11 +0200
-Message-Id: <20220418121211.417970399@linuxfoundation.org>
+Message-Id: <20220418121203.650886422@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
-References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+References: <20220418121200.312988959@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,49 +58,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Park <Chris.Park@amd.com>
+From: Chiawen Huang <chiawen.huang@amd.com>
 
-[ Upstream commit 862a876c3a6372f2fa9d0c6510f1976ac94fc857 ]
+[ Upstream commit 7d56a154e22ffb3613fdebf83ec34d5225a22993 ]
 
 [Why]
-Once DSC slice cannot fit pixel clock, we incorrectly
-reset min slices to 0 and allow max slice to operate,
-even when max slice itself cannot fit the pixel clock
-properly.
+disable/enable leads FEC mismatch between hw/sw FEC state.
 
 [How]
-Change the sequence such that we correctly determine
-DSC is not possible when both min slices and max
-slices cannot fit pixel clock per slice.
+check FEC status to fastboot on/off.
 
-Reviewed-by: Wenjing Liu <Wenjing.Liu@amd.com>
+Reviewed-by: Anthony Koo <Anthony.Koo@amd.com>
 Acked-by: Alex Hung <alex.hung@amd.com>
-Signed-off-by: Chris Park <Chris.Park@amd.com>
+Signed-off-by: Chiawen Huang <chiawen.huang@amd.com>
 Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
 Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-index 9c74564cbd8d..8973d3a38f9c 100644
---- a/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-+++ b/drivers/gpu/drm/amd/display/dc/dsc/dc_dsc.c
-@@ -864,11 +864,11 @@ static bool setup_dsc_config(
- 		min_slices_h = inc_num_slices(dsc_common_caps.slice_caps, min_slices_h);
- 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index b37c4d2e7a1e..35a27fe48f66 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -1377,6 +1377,10 @@ bool dc_validate_seamless_boot_timing(const struct dc *dc,
+ 	if (!link->link_enc->funcs->is_dig_enabled(link->link_enc))
+ 		return false;
  
-+	is_dsc_possible = (min_slices_h <= max_slices_h);
++	/* Check for FEC status*/
++	if (link->link_enc->funcs->fec_is_active(link->link_enc))
++		return false;
 +
- 	if (pic_width % min_slices_h != 0)
- 		min_slices_h = 0; // DSC TODO: Maybe try increasing the number of slices first?
+ 	enc_inst = link->link_enc->funcs->get_dig_frontend(link->link_enc);
  
--	is_dsc_possible = (min_slices_h <= max_slices_h);
--
- 	if (min_slices_h == 0 && max_slices_h == 0)
- 		is_dsc_possible = false;
- 
+ 	if (enc_inst == ENGINE_ID_UNKNOWN)
 -- 
 2.35.1
 

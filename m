@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284A45055CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 15:28:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F804505877
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 16:02:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241665AbiDRN05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 09:26:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
+        id S1343550AbiDROEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 10:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241116AbiDRNCv (ORCPT
+        with ESMTP id S242584AbiDRNqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 09:02:51 -0400
+        Mon, 18 Apr 2022 09:46:20 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51AB32991;
-        Mon, 18 Apr 2022 05:42:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09EC26AF6;
+        Mon, 18 Apr 2022 06:00:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A381611E4;
-        Mon, 18 Apr 2022 12:42:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37730C385A1;
-        Mon, 18 Apr 2022 12:42:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC3E6097A;
+        Mon, 18 Apr 2022 13:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84AA2C385A7;
+        Mon, 18 Apr 2022 13:00:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285758;
-        bh=0VdI8qXu19UZJTHRWXu9rUPQhnfK/6Ja+SvEJ2DkiaM=;
+        s=korg; t=1650286837;
+        bh=WtsfyW9vwEdE0Pj9Wvf+LstXIUiwZavbvOHJg+kfrnU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AreO3Ltxed1Kt2EBVb0dyYAUSGaDoeslr0PbwSlvuClA5GiFheQugpXkrY7ErZGR/
-         1m/GxJ5188HxIcj6v1H/VbTVw1ahxfIQk8SXcB0C4c0S2dpM51rIh9gAoTPqWHFQ43
-         Ld1ORzHhKVbs9ehIPnDfaanV9ZKCrUR3FQxhsdr8=
+        b=raWfcjfcX840BfGPwqLsBLT0XxgbCMbFDWPvMAzi0YC7t7tGjgfJAE5EX0gSnwIr2
+         sqJ1jtQDqwS31LnEx5gfrEBn1NoMLucubIubNXkzjPNuvDEQX/hg4WPqGlTUADWMZs
+         2m4ynJ3NUwMVmb+/5gAjOYBkzHVANat5xdjl+7Ts=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>,
+        stable@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>,
+        Yang Guang <yang.guang5@zte.com.cn>,
+        David Yang <davidcomponentone@gmail.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.4 15/63] cifs: potential buffer overflow in handling symlinks
+Subject: [PATCH 4.14 211/284] scsi: bfa: Replace snprintf() with sysfs_emit()
 Date:   Mon, 18 Apr 2022 14:13:12 +0200
-Message-Id: <20220418121135.177447577@linuxfoundation.org>
+Message-Id: <20220418121217.718882489@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
-References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121210.689577360@linuxfoundation.org>
+References: <20220418121210.689577360@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -57,41 +57,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+From: Yang Guang <yang.guang5@zte.com.cn>
 
-[ Upstream commit 64c4a37ac04eeb43c42d272f6e6c8c12bfcf4304 ]
+[ Upstream commit 2245ea91fd3a04cafbe2f54911432a8657528c3b ]
 
-Smatch printed a warning:
-	arch/x86/crypto/poly1305_glue.c:198 poly1305_update_arch() error:
-	__memcpy() 'dctx->buf' too small (16 vs u32max)
+coccinelle report:
+./drivers/scsi/bfa/bfad_attr.c:908:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:860:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:888:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:853:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:808:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:728:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:822:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:927:9-17:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:900:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:874:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:714:8-16:
+WARNING: use scnprintf or sprintf
+./drivers/scsi/bfa/bfad_attr.c:839:8-16:
+WARNING: use scnprintf or sprintf
 
-It's caused because Smatch marks 'link_len' as untrusted since it comes
-from sscanf(). Add a check to ensure that 'link_len' is not larger than
-the size of the 'link_str' buffer.
+Use sysfs_emit() instead of scnprintf() or sprintf().
 
-Fixes: c69c1b6eaea1 ("cifs: implement CIFSParseMFSymlink()")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
+Link: https://lore.kernel.org/r/def83ff75faec64ba592b867a8499b1367bae303.1643181468.git.yang.guang5@zte.com.cn
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Yang Guang <yang.guang5@zte.com.cn>
+Signed-off-by: David Yang <davidcomponentone@gmail.com>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/link.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/scsi/bfa/bfad_attr.c | 26 +++++++++++++-------------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/fs/cifs/link.c b/fs/cifs/link.c
-index b736acd3917b..a24bcbbb5033 100644
---- a/fs/cifs/link.c
-+++ b/fs/cifs/link.c
-@@ -97,6 +97,9 @@ parse_mf_symlink(const u8 *buf, unsigned int buf_len, unsigned int *_link_len,
- 	if (rc != 1)
- 		return -EINVAL;
+diff --git a/drivers/scsi/bfa/bfad_attr.c b/drivers/scsi/bfa/bfad_attr.c
+index 0a70d54a4df6..47e599352468 100644
+--- a/drivers/scsi/bfa/bfad_attr.c
++++ b/drivers/scsi/bfa/bfad_attr.c
+@@ -722,7 +722,7 @@ bfad_im_serial_num_show(struct device *dev, struct device_attribute *attr,
+ 	char serial_num[BFA_ADAPTER_SERIAL_NUM_LEN];
  
-+	if (link_len > CIFS_MF_SYMLINK_LINK_MAXLEN)
-+		return -EINVAL;
-+
- 	rc = symlink_hash(link_len, link_str, md5_hash);
- 	if (rc) {
- 		cifs_dbg(FYI, "%s: MD5 hash failure: %d\n", __func__, rc);
+ 	bfa_get_adapter_serial_num(&bfad->bfa, serial_num);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", serial_num);
++	return sysfs_emit(buf, "%s\n", serial_num);
+ }
+ 
+ static ssize_t
+@@ -736,7 +736,7 @@ bfad_im_model_show(struct device *dev, struct device_attribute *attr,
+ 	char model[BFA_ADAPTER_MODEL_NAME_LEN];
+ 
+ 	bfa_get_adapter_model(&bfad->bfa, model);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", model);
++	return sysfs_emit(buf, "%s\n", model);
+ }
+ 
+ static ssize_t
+@@ -816,7 +816,7 @@ bfad_im_model_desc_show(struct device *dev, struct device_attribute *attr,
+ 		snprintf(model_descr, BFA_ADAPTER_MODEL_DESCR_LEN,
+ 			"Invalid Model");
+ 
+-	return snprintf(buf, PAGE_SIZE, "%s\n", model_descr);
++	return sysfs_emit(buf, "%s\n", model_descr);
+ }
+ 
+ static ssize_t
+@@ -830,7 +830,7 @@ bfad_im_node_name_show(struct device *dev, struct device_attribute *attr,
+ 	u64        nwwn;
+ 
+ 	nwwn = bfa_fcs_lport_get_nwwn(port->fcs_port);
+-	return snprintf(buf, PAGE_SIZE, "0x%llx\n", cpu_to_be64(nwwn));
++	return sysfs_emit(buf, "0x%llx\n", cpu_to_be64(nwwn));
+ }
+ 
+ static ssize_t
+@@ -847,7 +847,7 @@ bfad_im_symbolic_name_show(struct device *dev, struct device_attribute *attr,
+ 	bfa_fcs_lport_get_attr(&bfad->bfa_fcs.fabric.bport, &port_attr);
+ 	strlcpy(symname, port_attr.port_cfg.sym_name.symname,
+ 			BFA_SYMNAME_MAXLEN);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", symname);
++	return sysfs_emit(buf, "%s\n", symname);
+ }
+ 
+ static ssize_t
+@@ -861,14 +861,14 @@ bfad_im_hw_version_show(struct device *dev, struct device_attribute *attr,
+ 	char hw_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_pci_chip_rev(&bfad->bfa, hw_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", hw_ver);
++	return sysfs_emit(buf, "%s\n", hw_ver);
+ }
+ 
+ static ssize_t
+ bfad_im_drv_version_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_VERSION);
++	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_VERSION);
+ }
+ 
+ static ssize_t
+@@ -882,7 +882,7 @@ bfad_im_optionrom_version_show(struct device *dev,
+ 	char optrom_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_adapter_optrom_ver(&bfad->bfa, optrom_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", optrom_ver);
++	return sysfs_emit(buf, "%s\n", optrom_ver);
+ }
+ 
+ static ssize_t
+@@ -896,7 +896,7 @@ bfad_im_fw_version_show(struct device *dev, struct device_attribute *attr,
+ 	char fw_ver[BFA_VERSION_LEN];
+ 
+ 	bfa_get_adapter_fw_ver(&bfad->bfa, fw_ver);
+-	return snprintf(buf, PAGE_SIZE, "%s\n", fw_ver);
++	return sysfs_emit(buf, "%s\n", fw_ver);
+ }
+ 
+ static ssize_t
+@@ -908,7 +908,7 @@ bfad_im_num_of_ports_show(struct device *dev, struct device_attribute *attr,
+ 			(struct bfad_im_port_s *) shost->hostdata[0];
+ 	struct bfad_s *bfad = im_port->bfad;
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n",
++	return sysfs_emit(buf, "%d\n",
+ 			bfa_get_nports(&bfad->bfa));
+ }
+ 
+@@ -916,7 +916,7 @@ static ssize_t
+ bfad_im_drv_name_show(struct device *dev, struct device_attribute *attr,
+ 				char *buf)
+ {
+-	return snprintf(buf, PAGE_SIZE, "%s\n", BFAD_DRIVER_NAME);
++	return sysfs_emit(buf, "%s\n", BFAD_DRIVER_NAME);
+ }
+ 
+ static ssize_t
+@@ -935,14 +935,14 @@ bfad_im_num_of_discovered_ports_show(struct device *dev,
+ 	rports = kzalloc(sizeof(struct bfa_rport_qualifier_s) * nrports,
+ 			 GFP_ATOMIC);
+ 	if (rports == NULL)
+-		return snprintf(buf, PAGE_SIZE, "Failed\n");
++		return sysfs_emit(buf, "Failed\n");
+ 
+ 	spin_lock_irqsave(&bfad->bfad_lock, flags);
+ 	bfa_fcs_lport_get_rport_quals(port->fcs_port, rports, &nrports);
+ 	spin_unlock_irqrestore(&bfad->bfad_lock, flags);
+ 	kfree(rports);
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", nrports);
++	return sysfs_emit(buf, "%d\n", nrports);
+ }
+ 
+ static          DEVICE_ATTR(serial_number, S_IRUGO,
 -- 
 2.35.1
 

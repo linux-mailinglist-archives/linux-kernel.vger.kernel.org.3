@@ -2,43 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1245A50528F
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E135051A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 14:34:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239635AbiDRMuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 08:50:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S239347AbiDRMgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 08:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240731AbiDRMjf (ORCPT
+        with ESMTP id S239136AbiDRM1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 08:39:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C754D13D0D;
-        Mon, 18 Apr 2022 05:30:19 -0700 (PDT)
+        Mon, 18 Apr 2022 08:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0351EC47;
+        Mon, 18 Apr 2022 05:21:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 89753B80EC1;
-        Mon, 18 Apr 2022 12:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED19FC385AB;
-        Mon, 18 Apr 2022 12:30:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E58DB60EF4;
+        Mon, 18 Apr 2022 12:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F34C385A7;
+        Mon, 18 Apr 2022 12:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650285017;
-        bh=fyWxE0RF41ZGhWxkgiw4q/uIMlEk6YN9STlfHJYsxII=;
+        s=korg; t=1650284481;
+        bh=rYRFrmduGK9OPApLKSoWYm1uIg6/U0nzJAGC+goYJts=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ohq4ZIrZaxC5J65P2XbL5RLEUI74AcNuQpaFhgr1EWmyy2d5qTfdsnOCJTtpA9Vqm
-         o71r7WowEhKUX69c9XxkOFwxkiZZqmRTHhXlBqKBRdaXwlrY1rOr1KSw4TqfOqVNZv
-         Qu5Z/ovVOuDbCiAJazz/3wHlAfkegbQrIJ4Y1YQs=
+        b=qWmTlZyPd/lu4anGFFdtyBqhUjQxRSLKRA+FrVD975Mw+aOElgHPstbuUYYBVThVb
+         VPTutI3+0CjdJG3Wvd4ceXz1KjdjBQFMU8Eypp7CRM+abX0oi9Qw6ea/E1QwuGRBwG
+         yghdled1ZiaurCmVgvwBvDGt3gd02eXbf7GjS66A=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Takashi Iwai <tiwai@suse.de>
-Subject: [PATCH 5.15 053/189] ALSA: via82xx: Fix the missing snd_card_free() call at probe error
-Date:   Mon, 18 Apr 2022 14:11:13 +0200
-Message-Id: <20220418121202.017171306@linuxfoundation.org>
+        stable@vger.kernel.org,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.17 105/219] net: lan966x: Stop processing the MAC entry is port is wrong.
+Date:   Mon, 18 Apr 2022 14:11:14 +0200
+Message-Id: <20220418121209.833152383@linuxfoundation.org>
 X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
-References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+References: <20220418121203.462784814@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -53,87 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Takashi Iwai <tiwai@suse.de>
+From: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-commit 27a0963f9cea5be3c68281f07fe82cdf712ef333 upstream.
+[ Upstream commit 269219321eb7d7645a3122cf40a420c5dc655eb9 ]
 
-The previous cleanup with devres may lead to the incorrect release
-orders at the probe error handling due to the devres's nature.  Until
-we register the card, snd_card_free() has to be called at first for
-releasing the stuff properly when the driver tries to manage and
-release the stuff via card->private_free().
+Currently when getting a new MAC is learn, the HW generates an
+interrupt. So then the SW will check the new entry and checks if it
+arrived on a correct port. If it didn't just generate a warning.
+But this could still crash the system. Therefore stop processing that
+entry when an issue is seen.
 
-This patch fixes it by calling snd_card_free() on the error from the
-probe callback using a new helper function.
-
-Fixes: afaf99751d0c ("ALSA: via82xx: Allocate resources with device-managed APIs")
-Cc: <stable@vger.kernel.org>
-Link: https://lore.kernel.org/r/20220412102636.16000-26-tiwai@suse.de
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Fixes: 5ccd66e01cbef8 ("net: lan966x: add support for interrupts from analyzer")
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/via82xx.c       | 10 ++++++++--
- sound/pci/via82xx_modem.c | 10 ++++++++--
- 2 files changed, 16 insertions(+), 4 deletions(-)
+ drivers/net/ethernet/microchip/lan966x/lan966x_mac.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/sound/pci/via82xx.c b/sound/pci/via82xx.c
-index 65514f7e42d7..361b83fd721e 100644
---- a/sound/pci/via82xx.c
-+++ b/sound/pci/via82xx.c
-@@ -2458,8 +2458,8 @@ static int check_dxs_list(struct pci_dev *pci, int revision)
- 	return VIA_DXS_48K;
- };
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+index ce5970bdcc6a..2679111ef669 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_mac.c
+@@ -346,7 +346,8 @@ static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
  
--static int snd_via82xx_probe(struct pci_dev *pci,
--			     const struct pci_device_id *pci_id)
-+static int __snd_via82xx_probe(struct pci_dev *pci,
-+			       const struct pci_device_id *pci_id)
- {
- 	struct snd_card *card;
- 	struct via82xx *chip;
-@@ -2569,6 +2569,12 @@ static int snd_via82xx_probe(struct pci_dev *pci,
- 	return 0;
- }
+ 			lan966x_mac_process_raw_entry(&raw_entries[column],
+ 						      mac, &vid, &dest_idx);
+-			WARN_ON(dest_idx > lan966x->num_phys_ports);
++			if (WARN_ON(dest_idx > lan966x->num_phys_ports))
++				continue;
  
-+static int snd_via82xx_probe(struct pci_dev *pci,
-+			     const struct pci_device_id *pci_id)
-+{
-+	return snd_card_free_on_error(&pci->dev, __snd_via82xx_probe(pci, pci_id));
-+}
-+
- static struct pci_driver via82xx_driver = {
- 	.name = KBUILD_MODNAME,
- 	.id_table = snd_via82xx_ids,
-diff --git a/sound/pci/via82xx_modem.c b/sound/pci/via82xx_modem.c
-index 234f7fbed236..ca7f024bf8ec 100644
---- a/sound/pci/via82xx_modem.c
-+++ b/sound/pci/via82xx_modem.c
-@@ -1103,8 +1103,8 @@ static int snd_via82xx_create(struct snd_card *card,
- }
+ 			/* If the entry in SW is found, then there is nothing
+ 			 * to do
+@@ -392,7 +393,8 @@ static void lan966x_mac_irq_process(struct lan966x *lan966x, u32 row,
  
+ 		lan966x_mac_process_raw_entry(&raw_entries[column],
+ 					      mac, &vid, &dest_idx);
+-		WARN_ON(dest_idx > lan966x->num_phys_ports);
++		if (WARN_ON(dest_idx > lan966x->num_phys_ports))
++			continue;
  
--static int snd_via82xx_probe(struct pci_dev *pci,
--			     const struct pci_device_id *pci_id)
-+static int __snd_via82xx_probe(struct pci_dev *pci,
-+			       const struct pci_device_id *pci_id)
- {
- 	struct snd_card *card;
- 	struct via82xx_modem *chip;
-@@ -1157,6 +1157,12 @@ static int snd_via82xx_probe(struct pci_dev *pci,
- 	return 0;
- }
- 
-+static int snd_via82xx_probe(struct pci_dev *pci,
-+			     const struct pci_device_id *pci_id)
-+{
-+	return snd_card_free_on_error(&pci->dev, __snd_via82xx_probe(pci, pci_id));
-+}
-+
- static struct pci_driver via82xx_modem_driver = {
- 	.name = KBUILD_MODNAME,
- 	.id_table = snd_via82xx_modem_ids,
+ 		mac_entry = lan966x_mac_alloc_entry(mac, vid, dest_idx);
+ 		if (!mac_entry)
 -- 
-2.35.2
+2.35.1
 
 
 

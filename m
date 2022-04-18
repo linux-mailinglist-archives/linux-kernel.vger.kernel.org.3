@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5250C505ADA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A2E505AD8
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245061AbiDRPTh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:19:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56286 "EHLO
+        id S1345174AbiDRPTl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:19:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345179AbiDRPT2 (ORCPT
+        with ESMTP id S1345216AbiDRPT2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 11:19:28 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D41AF4A3DD;
-        Mon, 18 Apr 2022 07:15:39 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bv16so1576023wrb.9;
-        Mon, 18 Apr 2022 07:15:39 -0700 (PDT)
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B9D4A3D2
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:15:52 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 11so12581838edw.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 07:15:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aK4MeadfQ+1NbFGxEqfyTLxfUGxa4k4UU8oEM9B0q3s=;
-        b=fcEZ9fAONKGlYYsNruXnYxFgZt19JDTUK8qp+ByuHZ0JkZbH6apbRDkpc1XRJ59vft
-         0uVcpml9F0gde7E4M5U5QtNEoU2sKbwXixRQID624emGxR+19fSTboUFSCnNulgMuClO
-         xRHjqLPCpEr7hbf3m6k+ZimfLyIEmJKmcQh3JoiRI4Or8ZAX3uu4w3vPtsvzaD+63XeX
-         Ge6Mdc5QyyAExIhyfa6dhdyJSSYv4sbnf7LEuFrypf4ghQi3A7IkQAhvWGDbkm2bnCxR
-         1C/M8CoplMnC6av7EWCpT+cwepH0T2C+EQNsE45ZwoRGasPn7+VFXWA1VODqG9N5pfYs
-         qizA==
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=1yRTFCOVkKJ+RZAp8eeZzdpyUBkyVtfc+F85HDlfuoo=;
+        b=qJbSEayoZMj3xEnPNTw77RaMwsJN1g8UszegCEgci/5ry75g+KLusnOUdDuZGHmaCg
+         mICuDDV0J/zHJe+nFQCBWecX6ztTWK7BY7AcIW+dI8X/rsOE+pEmy0z5fEgpQfWIPytV
+         jEKeiMTcS9LiJzWAYOup9MHOUot003WTtRNpc+wD8Vc1Vmdf6WauErTEVZ/6kP/ocQIs
+         BiEgb7O45RnisJA4lhzE5VJdFemqFbHmdQCIpQUodTG/c38vO4caTnXEDngK4+wJ+m4t
+         cwTLhRT6MPIxfGHxab7NZoZOUUABbdhzwfIi/qMapP1QWRkFvuPEb/DDEFgHjAMQYFNX
+         Ev1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=aK4MeadfQ+1NbFGxEqfyTLxfUGxa4k4UU8oEM9B0q3s=;
-        b=vW8SQVlDIme23ufMD605rrYfeqltNwDHqch8kG9VcArVX6Wi6fG/apUWcarvUJM8Nv
-         5CEAW6/UBUgQ6zfmmU1MJnFU9UVImLv5zvLbr40d+pzJ3/eBvTXpEsHnTnTIGbK+k8cc
-         tr8CLCHpfQLOI4NVyJJmja4s/Wj4iZ3ZqoL4R7uiRf8J0TzPMYxc8BIdAsFfzPFDFn3O
-         jNSYWaja0EtTrG2+F9rA9R2gWpGFJvPK5014JKQMHW6NyPZSyYJAGxFs+gmbp4Lvct/v
-         s1m6vFhgTLJjNK/c1xKY07BqOrhZnGLSUBFnVT8VQlNDoaiPonMCSm7PnaL7ATee8Z/G
-         Ibgg==
-X-Gm-Message-State: AOAM531YnTt6g3WaKS17KWGsTlgmUiFUCeMDFN3URvu4f+qop2tK6foP
-        bP1/O8TInXXsbIgPXw7ade0=
-X-Google-Smtp-Source: ABdhPJw/7Vqg6N8cUyh7HbbfJ6gTu0/cjFNupDra5Dx1rU7/OccnES44M2MLGIYQlL+fIUwxVz4Dsw==
-X-Received: by 2002:a05:6000:154a:b0:20a:9529:aa8d with SMTP id 10-20020a056000154a00b0020a9529aa8dmr4413418wry.93.1650291338318;
-        Mon, 18 Apr 2022 07:15:38 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id j14-20020a05600c190e00b00392910b276csm6875688wmq.27.2022.04.18.07.15.37
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=1yRTFCOVkKJ+RZAp8eeZzdpyUBkyVtfc+F85HDlfuoo=;
+        b=eO0GRFy2hTGPOE5fndtJ+1mCmzsDr/6Kv/fGYh0EeSRCsyWBSYqSxg2WdDBcUSseEF
+         RfKjqcNInazdWVGV51A6lyMWJ4ATR/vDDn42SerC7fAFQF4ONLPZ56znQYCxo8uJSEt2
+         RNfJohPXQSYRH3WkM3xYXb4tYsCMs8jodaTGDjaVFjEDZgsxgLZphHQCCezvO9Hj1/lp
+         O5NGZNf35WNhappeblAzsVReZ1aI/zuMS3+/+5h04Gezlq9UEvkNIMb0dXB6l1GSTeFI
+         RA6+1HsnKSamVOWPSf9/7SKCiuVJmIYvC3/w6tl2WLDC2nVAUuAwwbDP8J7P0ma9piXR
+         WQSA==
+X-Gm-Message-State: AOAM531oU4rllGp8FButM7qF3PBhE2aYQNHVn/nJYCPdTRm7iXleWNZ9
+        H3XdeYxX6opnSyn1/1KmnqU=
+X-Google-Smtp-Source: ABdhPJwWbKxKE/s2WQA8BrT3wDax55L1kR1qRsK2tjFDUUbIrjWurn1uJ0uytKKfbXukb2UEpdJzNw==
+X-Received: by 2002:aa7:db0f:0:b0:41d:7b44:2613 with SMTP id t15-20020aa7db0f000000b0041d7b442613mr12292802eds.126.1650291350373;
+        Mon, 18 Apr 2022 07:15:50 -0700 (PDT)
+Received: from ryzen ([2001:b07:2e3:dacc:d3f3:c3c5:d3a2:5ee7])
+        by smtp.gmail.com with ESMTPSA id k26-20020a056402049a00b004197b0867e0sm7123850edv.42.2022.04.18.07.15.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 07:15:37 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-actions@lists.infradead.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] clk: actions: remove redundant assignment after a mask operation
-Date:   Mon, 18 Apr 2022 15:15:37 +0100
-Message-Id: <20220418141537.83994-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.35.1
+        Mon, 18 Apr 2022 07:15:49 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 16:15:44 +0200
+From:   Maurizio Avogadro <mavoga@gmail.com>
+To:     alsa-devel@alsa-project.org
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Andrea Fagiani <andfagiani@gmail.com>,
+        Timo Gurr <timo.gurr@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ALSA: usb-audio: add mapping for MSI MAG X570S Torpedo
+ MAX.
+Message-ID: <Yl1ykPaGgsFf3SnW@ryzen>
+References: <Yl1nXcsAKWrFOMbY@ryzen>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="CJqx0wKUgyWf6HFh"
+Content-Disposition: inline
+In-Reply-To: <Yl1nXcsAKWrFOMbY@ryzen>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -74,32 +72,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The assignment operation after a & mask operation is redundant,
-the &= operator can be replaced with just the & operator.
 
-Cleans up a clang-scan warning:
-drivers/clk/actions/owl-pll.c:28:9: warning: Although the value
-stored to 'mul' is used in the enclosing expression, the value is
-never actually read from 'mul' [deadcode.DeadStores]
+--CJqx0wKUgyWf6HFh
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Fixed description, sorry.
+
+--CJqx0wKUgyWf6HFh
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename="0001-ALSA-usb-audio-add-mapping-for-MSI-MAG-X570S-Torpedo.patch"
+
+From c49119b1dcfcca1fcefadd92e095463e6245d4e1 Mon Sep 17 00:00:00 2001
+From: Maurizio Avogadro <mavoga@gmail.com>
+Date: Mon, 18 Apr 2022 15:16:12 +0200
+Subject: [PATCH] ALSA: usb-audio: add mapping for MSI MAG X570S Torpedo MAX.
+
+The USB audio device 0db0:a073 based on the Realtek ALC4080 chipset
+exposes all playback volume controls as "PCM". This makes
+distinguishing the individual functions hard.
+The mapping already adopted for device 0db0:419c based on the same
+chipset fixes the issue, apply it for this device too.
+
+Signed-off-by: Maurizio Avogadro <mavoga@gmail.com>
 ---
- drivers/clk/actions/owl-pll.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ sound/usb/mixer_maps.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/clk/actions/owl-pll.c b/drivers/clk/actions/owl-pll.c
-index 02437bdedf4d..155f313986b4 100644
---- a/drivers/clk/actions/owl-pll.c
-+++ b/drivers/clk/actions/owl-pll.c
-@@ -25,7 +25,7 @@ static u32 owl_pll_calculate_mul(struct owl_pll_hw *pll_hw, unsigned long rate)
- 	else if (mul > pll_hw->max_mul)
- 		mul = pll_hw->max_mul;
- 
--	return mul &= mul_mask(pll_hw);
-+	return mul & mul_mask(pll_hw);
- }
- 
- static unsigned long _get_table_rate(const struct clk_pll_table *table,
+diff --git a/sound/usb/mixer_maps.c b/sound/usb/mixer_maps.c
+index 64f5544d0a0a..7ef7a8abcc2b 100644
+--- a/sound/usb/mixer_maps.c
++++ b/sound/usb/mixer_maps.c
+@@ -599,6 +599,10 @@ static const struct usbmix_ctl_map usbmix_ctl_maps[] = {
+ 		.id = USB_ID(0x0db0, 0x419c),
+ 		.map = msi_mpg_x570s_carbon_max_wifi_alc4080_map,
+ 	},
++	{	/* MSI MAG X570S Torpedo Max */
++		.id = USB_ID(0x0db0, 0xa073),
++		.map = msi_mpg_x570s_carbon_max_wifi_alc4080_map,
++	},
+ 	{	/* MSI TRX40 */
+ 		.id = USB_ID(0x0db0, 0x543d),
+ 		.map = trx40_mobo_map,
 -- 
 2.35.1
 
+
+--CJqx0wKUgyWf6HFh--

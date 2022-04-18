@@ -2,121 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE099504DA8
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96ED5504DAF
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 10:20:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237196AbiDRIVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 04:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47308 "EHLO
+        id S237216AbiDRIWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 04:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiDRIV3 (ORCPT
+        with ESMTP id S237202AbiDRIWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 04:21:29 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598C2167D8;
-        Mon, 18 Apr 2022 01:18:51 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id k14so17650103pga.0;
-        Mon, 18 Apr 2022 01:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
-        b=GWCh7Axovc+n32OceNnsigXAf/o8hGt3MJRtpKvMZoGI9wr3zWxS6HY+G7ePpWxnuE
-         K7rkGYJVcee7UIgwJ/up6hqHYVB3675nYqpKT31MZkmQZe1jr7HiQKoVslAEVN6Pazle
-         NQPuPQGvEZktumhJJUFBce0Mwykn2Zs2Ee9JMk192atchDJBmtEAuGaaUFamJxSBCdHS
-         PJ8adGyrcT4JvgqndH5IKFwkAqlVzusobcohzdv+8HwWSbPhCzBte4LPptJ8BDt5Bqir
-         iHLhDGvS2+Csu5sdDcw8aPeyN8L5b+fGT529kNwQlMHsqJU0ORIJKQBTCUfVC0lofzkP
-         rNDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=RKXep+OukE4SdMu+cRqxBY4lHOeFUaKFcve1sEKphTA=;
-        b=K2Q/pS5h6baqLZq/IZX1whxCoadt1I0/hiCViVOXtfTcsFiquemCaFkvI9YDOBSDMk
-         BUmWUPorsC0e8427RhKqGeuX6tzIu4fYcIdo2gpoAOJY8iKfWY61DlFuxWIG1Pn+THgC
-         cMs6P2X3grG+ITyHaWQBHA+ttz4/NYNx9hTsdMACZ6ezr2O9K10K3HL8DCSGU06iZUFM
-         WQJfF75zThrClNLesakcOKQvvxiZ2NQcs+WE9aPOlLZTb28iM2QfHOCUmv9jUfkS97xY
-         deyVABsOC6CV8oz3hymy6sg9us+I2su4xM95NPjItcYE83BL3esQLxqpLymkx7sB0bRc
-         GcXQ==
-X-Gm-Message-State: AOAM5316aBIrDx0xiIm4teRcNG0l6bFJ0FtgTP5heYccu0wJrQbgLmux
-        GkkYqmuSMpQIA3K6fF/HFeY=
-X-Google-Smtp-Source: ABdhPJy5ecPy3tYjBbv8BqYjQDZ9JlHc+eZlWxXe+vT/jIZeYVzhGPIQlHzbHEFym/a3gTfYiMmGog==
-X-Received: by 2002:a63:450d:0:b0:3a8:f2ed:1aa5 with SMTP id s13-20020a63450d000000b003a8f2ed1aa5mr6024926pga.367.1650269930978;
-        Mon, 18 Apr 2022 01:18:50 -0700 (PDT)
-Received: from localhost ([58.251.76.82])
-        by smtp.gmail.com with ESMTPSA id t20-20020a63eb14000000b0039e28245722sm12048717pgh.54.2022.04.18.01.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 01:18:50 -0700 (PDT)
-From:   Yunbo Yu <yuyunbo519@gmail.com>
-To:     nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
-        shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
-        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        matthias.bgg@gmail.com, yuyunbo519@gmail.com
-Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] =?UTF-8?q?mt76=EF=BC=9Amt7603=EF=BC=9A=20move=20spin=5Flo?= =?UTF-8?q?ck=5Fbh()=20to=20spin=5Flock()?=
-Date:   Mon, 18 Apr 2022 16:18:44 +0800
-Message-Id: <20220418081844.1236577-1-yuyunbo519@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 18 Apr 2022 04:22:38 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A9A17061;
+        Mon, 18 Apr 2022 01:20:00 -0700 (PDT)
+Received: from ssl.serverraum.org (web.serverraum.org [172.16.0.2])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id 50CC122239;
+        Mon, 18 Apr 2022 10:19:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1650269998;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ItaZUj1j8/Q4cJNZVZH/jRlztsg91VMkEGsyQtVlg/g=;
+        b=lKasnfwtvTIHScAKmuCRPXzH5gyD3HaPPzIYM17cp8CaseRivMofEeWvdkm7kepMmLHMf6
+        OMZMf8K4C/UKNL0GXzeIUacbcBiukqulZiQx0ucjcuKJI3CMNCo21kxen4SMVrNY3V65fv
+        +P0YbvlBSZtEmBhuYHHfQRp4d7Y04UI=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+Date:   Mon, 18 Apr 2022 10:19:58 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Paul Burton <paulburton@kernel.org>,
+        Quentin Schulz <quentin.schulz@bootlin.com>,
+        Antoine Tenart <atenart@kernel.org>,
+        Kavyasree Kotagiri <kavyasree.kotagiri@microchip.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 6/6] dt-bindings: pinctrl: convert ocelot-pinctrl to
+ YAML format
+In-Reply-To: <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
+References: <20220319204628.1759635-1-michael@walle.cc>
+ <20220319204628.1759635-7-michael@walle.cc>
+ <CACRpkdbrw7Hjt9mB9pr_iNsGi71g_d8BGhpT_ih1RVgKJ5U0qQ@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <e02e22920ffe23b49237c0c1379e888b@walle.cc>
+X-Sender: michael@walle.cc
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is unnecessary to call spin_lock_bh(), for you are already in a tasklet.
+[resend, use Krysztof's new email address]
 
-Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
----
- drivers/net/wireless/mediatek/mt76/mt7603/beacon.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Am 2022-04-18 01:41, schrieb Linus Walleij:
+> On Sat, Mar 19, 2022 at 9:47 PM Michael Walle <michael@walle.cc> wrote:
+> 
+>> Convert the ocelot-pinctrl device tree binding to the new YAML format.
+>> 
+>> Additionally to the original binding documentation, add interrupt
+>> properties which are optional and already used on several SoCs like
+>> SparX-5, Luton, Ocelot and LAN966x but were not documented before.
+>> 
+>> Also, on the sparx5 and the lan966x SoCs there are two items for the
+>> reg property.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+> 
+> So is this single patch something I should apply to the pin control 
+> tree?
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-index 5d4522f440b7..b5e8308e0cc7 100644
---- a/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt7603/beacon.c
-@@ -82,12 +82,12 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 	__skb_queue_head_init(&data.q);
- 
- 	q = dev->mphy.q_tx[MT_TXQ_BEACON];
--	spin_lock_bh(&q->lock);
-+	spin_lock(&q->lock);
- 	ieee80211_iterate_active_interfaces_atomic(mt76_hw(dev),
- 		IEEE80211_IFACE_ITER_RESUME_ALL,
- 		mt7603_update_beacon_iter, dev);
- 	mt76_queue_kick(dev, q);
--	spin_unlock_bh(&q->lock);
-+	spin_unlock(&q->lock);
- 
- 	/* Flush all previous CAB queue packets */
- 	mt76_wr(dev, MT_WF_ARB_CAB_FLUSH, GENMASK(30, 16) | BIT(0));
-@@ -117,7 +117,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 		mt76_skb_set_moredata(data.tail[i], false);
- 	}
- 
--	spin_lock_bh(&q->lock);
-+	spin_lock(&q->lock);
- 	while ((skb = __skb_dequeue(&data.q)) != NULL) {
- 		struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
- 		struct ieee80211_vif *vif = info->control.vif;
-@@ -126,7 +126,7 @@ void mt7603_pre_tbtt_tasklet(struct tasklet_struct *t)
- 		mt76_tx_queue_skb(dev, q, skb, &mvif->sta.wcid, NULL);
- 	}
- 	mt76_queue_kick(dev, q);
--	spin_unlock_bh(&q->lock);
-+	spin_unlock(&q->lock);
- 
- 	for (i = 0; i < ARRAY_SIZE(data.count); i++)
- 		mt76_wr(dev, MT_WF_ARB_CAB_COUNT_B0_REG(i),
--- 
-2.25.1
+The first five patches will fix the validation errrors once the
+binding is converted to the YAML format. So, do they need to go
+through the same tree?
 
+Also as mentioned, there is this pending series [1] which is the
+reason I've converted the binding to YAML in the first place. So
+at least the first patch of this series will have to go through
+the same tree as the YAML conversion patch.
+
+How can we move forward here? Krzysztof, maybe all of the dt
+bindings patches can go through your tree and I'll reposting
+the second patch of [1] afterwards?
+
+-michael
+
+[1] 
+https://lore.kernel.org/linux-gpio/20220313154640.63813-1-michael@walle.cc/

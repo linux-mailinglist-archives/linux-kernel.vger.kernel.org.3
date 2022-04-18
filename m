@@ -2,87 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880CE505C19
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D1BA505C1C
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 17:56:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345862AbiDRP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 11:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52602 "EHLO
+        id S1346057AbiDRP7d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 11:59:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346085AbiDRP64 (ORCPT
+        with ESMTP id S1346085AbiDRP70 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 11:58:56 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13A37B65;
-        Mon, 18 Apr 2022 08:53:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2054B80FF2;
-        Mon, 18 Apr 2022 15:53:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C21CBC385A7;
-        Mon, 18 Apr 2022 15:53:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650297195;
-        bh=aYZg1IKIfMQLIL0wtoZyeEOyQnwvMvDnvwNzngzlnjk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=WK68PO31YI8JAiYMovjg5uNw+os/75YZuU34TXqHwolxI1p74aZtz/bzsBeJS2o6U
-         XDCctIZIIFQVilDavTUVHZhHWR2Jt1fHHFWCVOe9rbFvIcc8ciz81dubr4LrAZFhcs
-         SMmcS5Wy/5EdOC0yQxaulXswLkjR+E8aaLGtAMAdcyivBNRa82nQFc4vIJExw+623B
-         h7vEevp/8sv3hSOxVo0tj8mZXwgaTvgZZXZGbBZAxOvnL36BJrqIfgQ2QdrSyw6wm+
-         iGNO7pxMJ59IoujLcls/JavFPbWQgzTXlFp9O+q+v1H1DHwIPfHzX2vDJ6s8kJeCB8
-         VWvXOc4T0am/Q==
-Date:   Mon, 18 Apr 2022 10:53:13 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: Re: [RFC/RFT 4/6] PCI: rockchip-dwc: add pcie bifurcation
-Message-ID: <20220418155313.GA1101563@bhelgaas>
+        Mon, 18 Apr 2022 11:59:26 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267242E7;
+        Mon, 18 Apr 2022 08:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=vC0Ih9le+ufoyxFprP99+GQ0JyIb9kJyMO1mXKJWmYQ=; b=O7SWBeNJrTuZVjyru9nyZRnBOe
+        22lwd7QeTzfHJA2QCmrdsDoma3MD9W/MoeQSd+uvgy6Xr484pvDd0tl3ualGpFtux1LAjYD76p02m
+        3ntUCfY3URytlDVrXSIKtpKrt9YpYfsAStJh/3L3BJrhZbg7W+hlDyEoHTIfqxPqny6qACytsYxgs
+        daN82zJzOqLoeOvrWU28bzXA3Lk0FlwvhCkbi0UZ0Gf2A6Fbn4b5ZlQ5n2hZu3uLz7TZl/3SZJIix
+        QwKgzC8H1UtmZnhxB+0zciw2LmBLKhbqt7IHcoEWIHDzHusSTRzzVSjgGjYAyPHSc0/pPOvTQ7+ot
+        H9y5yYEA==;
+Received: from guinness.priv.deltatee.com ([172.16.1.162])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1ngThm-00Aldv-Sx; Mon, 18 Apr 2022 09:54:25 -0600
+Message-ID: <f66e3fc3-ddf8-3223-f94c-dd98e1648a56@deltatee.com>
+Date:   Mon, 18 Apr 2022 09:54:22 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-a220fd81-2ee9-474d-bd65-505b9ed904b2-1650186482865@3c-app-gmx-bs58>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Content-Language: en-CA
+To:     Yunbo Yu <yuyunbo519@gmail.com>, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220418142021.1241558-1-yuyunbo519@gmail.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <20220418142021.1241558-1-yuyunbo519@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 172.16.1.162
+X-SA-Exim-Rcpt-To: yuyunbo519@gmail.com, vkoul@kernel.org, dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH] dmaengine: plx_dma: Move spin_lock_bh() to spin_lock()
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 17, 2022 at 11:08:02AM +0200, Frank Wunderlich wrote:
-> > On Sat, Apr 16, 2022 at 03:54:56PM +0200, Frank Wunderlich wrote:
-> > > From: Frank Wunderlich <frank-w@public-files.de>
-> > >
-> > > PCIe Lanes can be split to 2 slots with bifurcation.
-> > > Add support for this in existing pcie driver.
 
-> > Is the "rockchip,bifurcation" DT property something that should be
-> > generalized so it's not rockchip-specific?  Other controllers are
-> > likely to support similar functionality.
+
+On 2022-04-18 08:20, Yunbo Yu wrote:
+> It is unnecessary to call spin_lock_bh() for you are already in a tasklet.
 > 
-> I do not know if other controllers support similar functionality,
-> but i ack a property without vendor prefix is better. Should i use
-> "bifurcation" as name or do you think about a different name which
-> is more generic?
+> Signed-off-by: Yunbo Yu <yuyunbo519@gmail.com>
 
-Really a question for Rob about what name would be good and where it
-should go.
+Ah, thanks!
+
+Reviewed-by: Logan Gunthorpe <logang@deltatee.com>
+
+> ---
+>  drivers/dma/plx_dma.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/dma/plx_dma.c b/drivers/dma/plx_dma.c
+> index 1ffcb5ca9788..12725fa1655f 100644
+> --- a/drivers/dma/plx_dma.c
+> +++ b/drivers/dma/plx_dma.c
+> @@ -137,7 +137,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
+>  	struct plx_dma_desc *desc;
+>  	u32 flags;
+>  
+> -	spin_lock_bh(&plxdev->ring_lock);
+> +	spin_lock(&plxdev->ring_lock);
+>  
+>  	while (plxdev->tail != plxdev->head) {
+>  		desc = plx_dma_get_desc(plxdev, plxdev->tail);
+> @@ -165,7 +165,7 @@ static void plx_dma_process_desc(struct plx_dma_dev *plxdev)
+>  		plxdev->tail++;
+>  	}
+>  
+> -	spin_unlock_bh(&plxdev->ring_lock);
+> +	spin_unlock(&plxdev->ring_lock);
+>  }
+>  
+>  static void plx_dma_abort_desc(struct plx_dma_dev *plxdev)

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7FCF505DCA
-	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 19:59:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5716F505DCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 18 Apr 2022 20:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347276AbiDRSCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 14:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48050 "EHLO
+        id S1347284AbiDRSCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 14:02:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347272AbiDRSCX (ORCPT
+        with ESMTP id S1347271AbiDRSCX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 14:02:23 -0400
 Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C6A35249
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:40 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id k2-20020a170902ba8200b0015613b12004so8176213pls.22
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A48135256
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:42 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id j1-20020a170903028100b0014b1f9e0068so8182025plr.8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 10:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=date:in-reply-to:message-id:mime-version:references:subject:from:to
          :cc;
-        bh=r4E23OnZATIS+lk5aixNnqKMCFgUPEq6mE0xznooD8Q=;
-        b=Ae/sJwaupacpHLx5MtlaO/72tMhwQW3butupk70g0bqlEqW46BfYP642c+RYEnoVpL
-         BFdiDTFPTRU5I8o5yvvsKMP5tAzg1uwOJFxadYTreohSBRGoIgKKai0w0OXYRwvU5jI/
-         2wur/pyVHg3DwNdOnroCxTijDf3yZOGa/OcXkA6CHfGgfhyI9vuhiROqRmMMHiJLxW1y
-         Mq657bhjwfQPnqdb9V0Ep5N8AdQk3f+8ikWwI7aeIANWIY8VpWXTCYxziw8B+nYt9HPu
-         lTCYDV1pwDXZb0C+J6vZ7aRMv8JvQma6fBbls9tF0SXKiAnmrYLo5pAd+wSMoWB0GQmm
-         K7/Q==
+        bh=iuHwr81n4dn+L1ihy6nXq1mfk2kBOn+r4UOaqo83GJw=;
+        b=WRyWkwOGvkFKChN2vgQQTDI30Vye1r69Q1pThCHeIJpyD1i91ALknX+71pzv9EAflH
+         MXHKgUAmlMSunHfOMflHjEJP4Q9bFO/WxloegYnyhF9KUhEIA5IloGjWHaDHbqmIrNrs
+         Nn+TY1pjdvcmQo7NFCwWHqxEMU4HBPYUBe50fGO0+Ci8VqfUQao8UNfHsuL+2clN2P5w
+         RNoGxMQwmQLJDtyQnqiKO03w23iW+xvmLbzJuuon9WOpt1fq+cpu4CzaKSPovrk19UOo
+         hl3UkHpJvyyQ3tOcq3xVd4JuHS9AsKic2Qsixby8XopB4Z7p6EAWnlql13Y3uZJ0db8X
+         xRag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:in-reply-to:message-id:mime-version
          :references:subject:from:to:cc;
-        bh=r4E23OnZATIS+lk5aixNnqKMCFgUPEq6mE0xznooD8Q=;
-        b=k1rllOR6q035k9b82iRGzk05b2wMCD0fV1fPA5L+2apFtEQW/RJBP2DUT5adzq7odh
-         9/f/qjl780+PUVPGZ/NvraJ8INhsVTPef9OAObHyok4jxYQc9iyXQjduwbfGodsaGqHM
-         xtw5wvXmlghezySYhT3ypME/8xZRWeO3sz4hYAcHs9D7nMVisnd4cL1iTR5nLRYfpxe/
-         u75O54E75bcqAD1O7ntSO4LUDK8/aJmdod8xOGCiisiryVuFBggySq8IWn8zgMCgG0jE
-         V0Og0uLtpOdl7eZazNNeuGpmTcuaRS0GVSbRIFF6zcWb1RqfBMF5Jv2SuzSsPRjq00pn
-         RPCA==
-X-Gm-Message-State: AOAM530lMR1isRHWDQleEtVOGpIVQg2w1uAOiOPkZnBUKVwUnM2y1Hok
-        ClY9EdkSnWTnTw1N1Hda+kf5+bTTq9yN0A==
-X-Google-Smtp-Source: ABdhPJxQSOxhrr3s0WCAgo0mfNesr2cbbIk81LRgy7vEHC4exxBn2q2r3vHXkXzkq5fWaDDVynSzYZkRwZxsFg==
+        bh=iuHwr81n4dn+L1ihy6nXq1mfk2kBOn+r4UOaqo83GJw=;
+        b=Xq4Tfp9sJ0NqzG9VRpWrTtGhVSc8QSHPdth4N+FDpA1g6hh1dmTigTo6Bh9r+tbSPf
+         ugIa+HtPjJ55F8cWs2Wj0+nVNeMrKe7s6MT66/OmC0o80TchBgi/q07yYWTwWCk03tJv
+         8vslsdcyM8RLx+eFBmerbQ4HH0A5y8ggFO7WyjWotTsOmqD69bCUoH8S/H82iZdWNOcc
+         MJmiwj9Js112BS1yYXf3yW7DlcAyv9WZdrWBtHsdRNT57X3CcD9tm+iNPB4XHVREoOBH
+         ybxXdiKctd6khWSdhdAYjxmlvcqnN5vERlS8av2SIdkSx/5sFSLmKtxGoHSbHFvrneiL
+         srcA==
+X-Gm-Message-State: AOAM532j0VWFA4y9azSp0hnLCk5t6chRc7r6Rl2D7H+svv+/kNkA8Zlj
+        4Juj6ElvQ/FZTTITRaS3OVJ0HwTha2p0Lw==
+X-Google-Smtp-Source: ABdhPJzL1dRg1wEpGUGbWcfKGlCFOXV46fORxkmcdIfqO9xFmmLfOn9Nde9V9NafXduX8OgKQz7OtswxQngdOA==
 X-Received: from wonchungspecialist.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:1440])
- (user=wonchung job=sendgmr) by 2002:a05:6a00:15c4:b0:50a:7fec:c656 with SMTP
- id o4-20020a056a0015c400b0050a7fecc656mr3854566pfu.62.1650304780282; Mon, 18
- Apr 2022 10:59:40 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 17:59:31 +0000
+ (user=wonchung job=sendgmr) by 2002:a17:902:690b:b0:159:65c:9044 with SMTP id
+ j11-20020a170902690b00b00159065c9044mr3825600plk.47.1650304781783; Mon, 18
+ Apr 2022 10:59:41 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 17:59:32 +0000
 In-Reply-To: <20220418175932.1809770-1-wonchung@google.com>
-Message-Id: <20220418175932.1809770-2-wonchung@google.com>
+Message-Id: <20220418175932.1809770-3-wonchung@google.com>
 Mime-Version: 1.0
 References: <20220418175932.1809770-1-wonchung@google.com>
 X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
-Subject: [PATCH 1/2] misc/mei: Add NULL check to component match callback functions
+Subject: [PATCH 2/2] thunderbolt: Link USB4 ports to their USB Type-C connectors
 From:   Won Chung <wonchung@google.com>
 To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
         Alexander Usyskin <alexander.usyskin@intel.com>,
@@ -73,56 +73,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, component_match callback functions used in mei refers to the
-driver name, assuming that the component device being matched has a
-driver bound. It can cause a NULL pointer dereference when a device
-without a driver bound registers a component. This is due to the nature
-of the component framework where all registered components are matched
-in any component_match callback functions. So even if a component is
-registered by a totally irrelevant device, that component is also
-shared to these callbacks for i915 driver.
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-To prevent totally irrelevant device being matched for i915 and causing
-a NULL pointer dereference for checking driver name, add a NULL check on
-dev->driver to check if there is a driver bound before checking the
-driver name.
+Creating a symlink pointing to the correct USB Type-C
+connector for the on-board USB4 ports when they are created.
+The link will be created only if the firmware is able to
+describe the connection between the port and its connector.
 
-In the future, the string compare on the driver name, "i915" may need to
-be refactored too.
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Reviewed-by: Prashant Malani <pmalani@chromium.org>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 Signed-off-by: Won Chung <wonchung@google.com>
 ---
- drivers/misc/mei/hdcp/mei_hdcp.c | 2 +-
- drivers/misc/mei/pxp/mei_pxp.c   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ .../ABI/testing/sysfs-bus-thunderbolt         | 10 +++++
+ drivers/thunderbolt/usb4_port.c               | 38 +++++++++++++++++++
+ 2 files changed, 48 insertions(+)
 
-diff --git a/drivers/misc/mei/hdcp/mei_hdcp.c b/drivers/misc/mei/hdcp/mei_hdcp.c
-index ec2a4fce8581..e889a8bd7ac8 100644
---- a/drivers/misc/mei/hdcp/mei_hdcp.c
-+++ b/drivers/misc/mei/hdcp/mei_hdcp.c
-@@ -784,7 +784,7 @@ static int mei_hdcp_component_match(struct device *dev, int subcomponent,
+diff --git a/Documentation/ABI/testing/sysfs-bus-thunderbolt b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+index b7e87f6c7d47..f7570c240ce8 100644
+--- a/Documentation/ABI/testing/sysfs-bus-thunderbolt
++++ b/Documentation/ABI/testing/sysfs-bus-thunderbolt
+@@ -293,6 +293,16 @@ Contact:	thunderbolt-software@lists.01.org
+ Description:	This contains XDomain service specific settings as
+ 		bitmask. Format: %x
+ 
++What:		/sys/bus/thunderbolt/devices/usb4_portX/connector
++Date:		April 2022
++Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
++Description:
++		Symlink to the USB Type-C connector. This link is only
++		created when USB Type-C Connector Class is enabled,
++		and only if the system firmware is capable of
++		describing the connection between a port and its
++		connector.
++
+ What:		/sys/bus/thunderbolt/devices/usb4_portX/link
+ Date:		Sep 2021
+ KernelVersion:	v5.14
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index 29e2a4f9c9f5..6b02945624ee 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -7,9 +7,37 @@
+  */
+ 
+ #include <linux/pm_runtime.h>
++#include <linux/component.h>
++#include <linux/property.h>
+ 
+ #include "tb.h"
+ 
++static int connector_bind(struct device *dev, struct device *connector, void *data)
++{
++	int ret;
++
++	ret = sysfs_create_link(&dev->kobj, &connector->kobj, "connector");
++	if (ret)
++		return ret;
++
++	ret = sysfs_create_link(&connector->kobj, &dev->kobj, dev_name(dev));
++	if (ret)
++		sysfs_remove_link(&dev->kobj, "connector");
++
++	return ret;
++}
++
++static void connector_unbind(struct device *dev, struct device *connector, void *data)
++{
++	sysfs_remove_link(&connector->kobj, dev_name(dev));
++	sysfs_remove_link(&dev->kobj, "connector");
++}
++
++static const struct component_ops connector_ops = {
++	.bind = connector_bind,
++	.unbind = connector_unbind,
++};
++
+ static ssize_t link_show(struct device *dev, struct device_attribute *attr,
+ 			 char *buf)
  {
- 	struct device *base = data;
+@@ -246,6 +274,14 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
+ 		return ERR_PTR(ret);
+ 	}
  
--	if (strcmp(dev->driver->name, "i915") ||
-+	if (!dev->driver || strcmp(dev->driver->name, "i915") ||
- 	    subcomponent != I915_COMPONENT_HDCP)
- 		return 0;
- 
-diff --git a/drivers/misc/mei/pxp/mei_pxp.c b/drivers/misc/mei/pxp/mei_pxp.c
-index f7380d387bab..5c39457e3f53 100644
---- a/drivers/misc/mei/pxp/mei_pxp.c
-+++ b/drivers/misc/mei/pxp/mei_pxp.c
-@@ -131,7 +131,7 @@ static int mei_pxp_component_match(struct device *dev, int subcomponent,
++	if (dev_fwnode(&usb4->dev)) {
++		ret = component_add(&usb4->dev, &connector_ops);
++		if (ret) {
++			dev_err(&usb4->dev, "failed to add component\n");
++			device_unregister(&usb4->dev);
++		}
++	}
++
+ 	pm_runtime_no_callbacks(&usb4->dev);
+ 	pm_runtime_set_active(&usb4->dev);
+ 	pm_runtime_enable(&usb4->dev);
+@@ -265,6 +301,8 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
+  */
+ void usb4_port_device_remove(struct usb4_port *usb4)
  {
- 	struct device *base = data;
- 
--	if (strcmp(dev->driver->name, "i915") ||
-+	if (!dev->driver || strcmp(dev->driver->name, "i915") ||
- 	    subcomponent != I915_COMPONENT_PXP)
- 		return 0;
++	if (dev_fwnode(&usb4->dev))
++		component_del(&usb4->dev, &connector_ops);
+ 	device_unregister(&usb4->dev);
+ }
  
 -- 
 2.36.0.rc0.470.gd361397f0d-goog

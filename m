@@ -2,63 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344D8505FE9
+	by mail.lfdr.de (Postfix) with ESMTP id C4594505FEB
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 00:51:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232848AbiDRWxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 18:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38892 "EHLO
+        id S232959AbiDRWx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 18:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232745AbiDRWxL (ORCPT
+        with ESMTP id S232839AbiDRWxR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 18:53:11 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 740B31CFDC
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id s137so21482802pgs.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=hlb2EMJVRbxJY9nryaoQfoqqjbD8gDeVs4kmOgbzyns=;
-        b=Y15WH8ufHsPs909Ri+VdtpONn/6MTLfKFOuqPK6lFVv9bFYOcpty6TXA38L6B5zZiD
-         xbqvGKqaIV+AH7Wh1U/QUc8OAc++oDlVkdkt+gmVTI4WHkFETQWBHhNUHoR7xiksgJcw
-         3uSpRIu431vi6O3ctqpj6DAJ38jcLpLMI48xE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=hlb2EMJVRbxJY9nryaoQfoqqjbD8gDeVs4kmOgbzyns=;
-        b=YoNcqX6nASjsIb+7Vu9ubh5Zd58/jTgY6g9ZW5D3It4T7ov8LVzd/uM8rl0zSuF8Zr
-         k4dX5Wb6oQPus+QhEbCvNXsHXO3PPI0KXJ1o5/t68WDKUkj+sWFRzuurt+FAid2RBd+V
-         D2aGGQupqbYLANRNUoVr351SD7MpfzR1shDsJzLuOar40Xi2/nGexe6OADUgzp75KNuq
-         GUg6rYcfGSohDLP9UagLxM8JY3Vr9WqHhBNJr4K3EybLeBwUHNtx5gywf81z7v/bWvzb
-         OzpqlJ0tA4dltzTy0Udise7fJF9qTX82crozJUvSbhc7IuVPevn1Xgaq8yWqMnebCFtT
-         j98A==
-X-Gm-Message-State: AOAM531Heu376KSqhdYJNezw80ecNh7XmLO79c/6jznCDl8juz4ZBuXm
-        q2KWtgXXuObAxoWSmCp7AQNzng==
-X-Google-Smtp-Source: ABdhPJxWqTDnAXR28mJKj5rBjV8r/WVs4S8ffaGYUrQssCg0Z7LQVgkmftgrfj3M5qP+BZGGofOiFA==
-X-Received: by 2002:a05:6a00:b4d:b0:509:1ed1:570e with SMTP id p13-20020a056a000b4d00b005091ed1570emr14728356pfo.19.1650322231039;
-        Mon, 18 Apr 2022 15:50:31 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:6b32:a0a5:ec32:c287])
-        by smtp.gmail.com with UTF8SMTPSA id p17-20020a056a0026d100b00505ff62176asm13415099pfw.180.2022.04.18.15.50.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 15:50:30 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 15:50:29 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] regulator: core: Sleep (not delay) in set_voltage()
-Message-ID: <Yl3rNeaYTz0CPjmL@google.com>
-References: <20220418141158.1.If0fc61a894f537b052ca41572aff098cf8e7e673@changeid>
+        Mon, 18 Apr 2022 18:53:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4931EC4C;
+        Mon, 18 Apr 2022 15:50:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DF7961037;
+        Mon, 18 Apr 2022 22:50:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D42A6C385BC;
+        Mon, 18 Apr 2022 22:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650322235;
+        bh=wmIlJ6/WDhkwaS97Yp3hE9UBlU+pg5c4XkawO23USPg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=TUf7hJeKSLN3EUbzA3zrBuE0KCPYD2lpi6Cuee795GBF+pz306tBJ5vWmPMJ7NceF
+         s/TNMIJhjWU2I8Xx1MdfhmunIwwU0yMhq2sujc9qKqdlKIUDtLGpy0Df3XVLvR0X21
+         95/wzCrLbJacXSYx5h9RA5aQ/z8ZFX+Ir5tZfcbGcJfesaKA/1BAvGvdgHj28LrDqp
+         GzFus2OpAg10cz6zJuafMjVZTU5vL5mVNMzzOD9BlSvvFgsiHOHgBY9bgTL4ymui86
+         Ro5nJe2tKwOF1c1v7G5qjYCW5QgpYwSWDv9tCLWu001Q+RydFFaY6ZpHpvEutHAmGv
+         w/YxqLYObX/8A==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 85B565C04BD; Mon, 18 Apr 2022 15:50:35 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 1/2] docs: Add documentation for rude and trace RCU flavors
+Date:   Mon, 18 Apr 2022 15:50:32 -0700
+Message-Id: <20220418225033.3944860-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220418225004.GA3944767@paulmck-ThinkPad-P17-Gen-1>
+References: <20220418225004.GA3944767@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220418141158.1.If0fc61a894f537b052ca41572aff098cf8e7e673@changeid>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,26 +56,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 02:12:39PM -0700, Brian Norris wrote:
-> These delays can be relatively large (e.g., hundreds of microseconds on
-> RK3399 Gru systems). Per Documentation/timers/timers-howto.rst, that
-> should usually use a sleeping delay. Let's use fsleep() to handle both
-> large and small delays appropriately. This avoids burning a bunch of CPU
-> time and hurting scheduling latencies when hitting regulators a lot
-> (e.g., during cpufreq).
-> 
-> The sleep vs. delay issue choice has been made differently over time --
-> early versions of RK3399 Gru PWM-regulator support used usleep_range()
-> in pwm-regulator.c. More of this got moved into the regulator core,
-> in commits like:
-> 
-> 73e705bf81ce regulator: core: Add set_voltage_time op
-> 
-> At the same time, the sleep turned into a delay.
-> 
-> It's OK to sleep here, as we aren't in an atomic contexts. (All our
-> callers grab various mutexes already.)
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+This commit belatedly adds documentation of Tasks Rude RCU and Tasks
+Trace RCU to RCU's requirements document.
 
-Reviewed-by: Matthias Kaehlcke <mka@chromium.org>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ .../RCU/Design/Requirements/Requirements.rst  | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
+index 45278e2974c0..ff2be1ac54c4 100644
+--- a/Documentation/RCU/Design/Requirements/Requirements.rst
++++ b/Documentation/RCU/Design/Requirements/Requirements.rst
+@@ -2654,6 +2654,38 @@ synchronize_rcu(), and rcu_barrier(), respectively. In
+ three APIs are therefore implemented by separate functions that check
+ for voluntary context switches.
+ 
++Tasks Rude RCU
++~~~~~~~~~~~~~~
++
++Some forms of tracing need to wait for all preemption-disabled regions
++of code running on any online CPU, including those executed when RCU is
++not watching.  This means that synchronize_rcu() is insufficient, and
++Tasks Rude RCU must be used instead.  This flavor of RCU does its work by
++forcing a workqueue to be scheduled on each online CPU, hence the "Rude"
++moniker.  And this operation is considered to be quite rude by real-time
++workloads that don't want their ``nohz_full`` CPUs receiving IPIs and
++by battery-powered systems that don't want their idle CPUs to be awakened.
++
++The tasks-rude-RCU API is also reader-marking-free and thus quite compact,
++consisting of call_rcu_tasks_rude(), synchronize_rcu_tasks_rude(),
++and rcu_barrier_tasks_rude().
++
++Tasks Trace RCU
++~~~~~~~~~~~~~~~
++
++Some forms of tracing need to sleep in readers, but cannot tolerate
++SRCU's read-side overhead, which includes a full memory barrier in both
++srcu_read_lock() and srcu_read_unlock().  This need is handled by a
++Tasks Trace RCU that uses scheduler locking and IPIs to synchronize with
++readers.  Real-time systems that cannot tolerate IPIs may build their
++kernels with ``CONFIG_TASKS_TRACE_RCU_READ_MB=y``, which avoids the IPIs at
++the expense of adding full memory barriers to the read-side primitives.
++
++The tasks-trace-RCU API is also reasonably compact,
++consisting of rcu_read_lock_trace(), rcu_read_unlock_trace(),
++rcu_read_lock_trace_held(), call_rcu_tasks_trace(),
++synchronize_rcu_tasks_trace(), and rcu_barrier_tasks_trace().
++
+ Possible Future Changes
+ -----------------------
+ 
+-- 
+2.31.1.189.g2e36527f23
+

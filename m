@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19164507C78
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52ED1507C7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:22:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357815AbiDSWYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S1357768AbiDSWYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiDSWYS (ORCPT
+        with ESMTP id S229599AbiDSWYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:24:18 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EAA222B3B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:21:35 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id h11so22257639ljb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:21:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:reply-to:from:date:message-id:subject:to;
-        bh=5Dq6xFmjoDhCAFWh7f6P8JZuUY07YxNxqLZEbbotfUs=;
-        b=bnG8at8bVk0EKo/HPydqvv8x39hOuUXMWDPQ2OHMG46B6Cfytcc6PqhAvemrDn0kJ+
-         pzDX1JGQxEpU3XFZhBG9Cs+S2Fx2OPOVIS+NuLiWXqfpoHrlQgwoz58+v/saT6hahPH8
-         DsnwdlnRYfTbjh7qKevjs5SO1zSrZ2Ty42mFJZMaBCJEimfjXcYRU9k45rl5WyYLBWAq
-         qGMLEfdoMieJvVG27TukwdQw+1VXrmW/HJdhnOrIFQeosbn12d5Kgj8/dw5fTdQGB4ho
-         DxEFhP+pyHQOamhCnM2WAFHQvtUiZnd5/XPGFRlHyDrZ+inbuYdmhWrFPE46noBvCfw7
-         AD6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:reply-to:from:date:message-id
-         :subject:to;
-        bh=5Dq6xFmjoDhCAFWh7f6P8JZuUY07YxNxqLZEbbotfUs=;
-        b=PYd1qlEvbKTbqR4NmYOnP3mJ3mZaJYo741hJTZ0ae0B5R66f1B308hlxZIoCIbt+x1
-         JE+OQ45QNC9Z1PZeR1teZPZBbzqMXzujFhVlzoqyDtEiyIoHTuPL+Ur0OKa44qq7lkXA
-         y0XhX/kt02fQCUdmIND1rdxFdNBdXeFNUQtPBeU5fkCCKD9o7hRhd52Djjh95qYrJeFs
-         07iec8D07IF/Vi1hBXm8yIYvpHMg9UcXROphD303E8venMNqTthcGp+4Iqjde1zuL91m
-         IIrCIpcITjrqbttkqFiwn8UmVY87Uv1IsUkwZxIYDOxtyMtNLFuShnkw3A2Iq16VpcSG
-         EODg==
-X-Gm-Message-State: AOAM533a2Vi+v8SbuZ2pP7mDUK7aO0KAaZIgAeKXrU4KVwalve3QFUaO
-        1lxRqkc+qrmzXR42rYH25fdX5MG5dZP5jOMaVFA=
-X-Google-Smtp-Source: ABdhPJyjLWuZEWeve9+SN5nfG5uq7Udx/AYNAISBoHA2GtBQgSQSQSdXnokMAe7RemmnInm39JATTcVrnVGbmS7+mKQ=
-X-Received: by 2002:a05:651c:19a4:b0:24d:c2bd:ca9d with SMTP id
- bx36-20020a05651c19a400b0024dc2bdca9dmr5391689ljb.465.1650406893423; Tue, 19
- Apr 2022 15:21:33 -0700 (PDT)
-MIME-Version: 1.0
-Received: by 2002:a2e:8081:0:0:0:0:0 with HTTP; Tue, 19 Apr 2022 15:21:32
- -0700 (PDT)
-Reply-To: ritterhousesarah12022@gmail.com
-From:   sarah <loversloveme239@gmail.com>
-Date:   Tue, 19 Apr 2022 15:21:32 -0700
-Message-ID: <CA+M9X+tU=1umnfrwoZA=CiOMGW_w3FJeTX3mJTH-1j_D_QoeoQ@mail.gmail.com>
-Subject: HELLO DEAR,
-To:     undisclosed-recipients:;
+        Tue, 19 Apr 2022 18:24:46 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D39722BE7;
+        Tue, 19 Apr 2022 15:22:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650406922; x=1681942922;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=7FPoGNOFLlOXDs/xu3hONgTHzwKlS/vbPKmpCE0gDjo=;
+  b=HnWtQxI0xa8kEbGSLMjLYMwO1/Sk+XoD9m9VfiV0dQH+gUndEVooD5dG
+   KTI1ony/8LY7K1OEuaVUIxukdU/I3PuFDB2puJ0Ij2rDahI0W9a0nlL/L
+   jnoV4F9D/taV9eRoDbPBTHAvQBRMtcvihlMX2Xi1TeH+olCWEqYW1BADj
+   FUYnRS+L4OX0abGTn483wKveHwF2DM+P6KXNMReoEZJ8X+b9bYGWLHQ1b
+   5uU9tHibQ9mWepblGOjpsbZo0QwmW6+zvQYPA3+8zW8bnxj97iUHEmZCy
+   qyCnbnOOPuqUxQluq5hxVwMebIzYmt2Kvq2QvQiURxloWNJC+GNwk1NIJ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="264058068"
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="264058068"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 15:22:01 -0700
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="554918565"
+Received: from asaini1-mobl1.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.15])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 15:21:57 -0700
+Message-ID: <f40fe89d9b978d525ed5d56b0679d1c20b10864b.camel@intel.com>
+Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
+ attestation interface driver
+From:   Kai Huang <kai.huang@intel.com>
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <mgross@linux.intel.com>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Date:   Wed, 20 Apr 2022 10:21:55 +1200
+In-Reply-To: <975b5050-2108-9ace-cc71-46f17db0a731@intel.com>
+References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
+         <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
+         <975b5050-2108-9ace-cc71-46f17db0a731@intel.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:229 listed in]
-        [list.dnswl.org]
-        * -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
-        *      [score: 0.3995]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [ritterhousesarah12022[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [loversloveme239[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [loversloveme239[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.6 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I would like to talk to you about something very important, please
-reply very urgently, thank you
+On Tue, 2022-04-19 at 07:13 -0700, Dave Hansen wrote:
+> On 4/19/22 00:47, Kai Huang wrote:
+> > > From security's perspective, attestation is an essential part of TDX.  That
+> > being said, w/o attestation support in TD guest, I guess nobody will seriously
+> > use TD guest.
+> 
+> Are you saying you can't think of a single threat model where there's a
+> benefit to running a TDX guest without attestation?  Will TDX only be
+> used in environments where secrets are provisioned to guests on the
+> basis of attestation?
+> 
+> > 
+
+I don't think anyone should provision secret to a TD before it get attested that
+it is a genuine TD that he/she expected.  If someone does that, he/she takes the
+risk of losing the secret.  Of course if someone just want to try a TD then w/o
+attestation is totally fine.
+
+-- 
+Thanks,
+-Kai
+
+

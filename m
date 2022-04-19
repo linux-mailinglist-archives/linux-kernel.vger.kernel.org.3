@@ -2,163 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 460A750719B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860A05071B2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353787AbiDSP0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57962 "EHLO
+        id S1353802AbiDSP2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232322AbiDSP0v (ORCPT
+        with ESMTP id S1354260AbiDSP2S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:26:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B8BB2A724
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:24:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650381846; x=1681917846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=4hchj7+XS8cIR8ILuo+p/7IgHIWuIRQ5IdE8F7pNmyc=;
-  b=EVCUtGS6vjlHc6ZawVjsQA8BAHVCIPqnmbvzkL8H3V5bi0utaP86xTQ6
-   1EL9U1HujEQAomuz3+bUl2U6Lzoy8PBPcFNu3drYX7vB/XI7G/3F7L1+V
-   MA3mDYfviQo1qDD5N9EiZvr9wtbqrsgoOoisFRgu2U1GcaFRFdnB1e/wv
-   CPw7TQbxavlXGmGXXxeBbXJMbMqqKPNgI+Uwk3FB8FZ9J/oIgMNF1d6jp
-   MAUSiEq1I8Rr5R6/4LKjnwY1m8JsnX2q7JKwMU019edkaYUwfh/YmadJx
-   1jvpb42slmi1N7Rt5KKYxr3vrvzg+5+HPHEO1uX5xXdwI2iR7NW8q2wVe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="288889500"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="288889500"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 08:24:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="647297832"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Apr 2022 08:24:03 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngphy-0005u2-Oi;
-        Tue, 19 Apr 2022 15:24:02 +0000
-Date:   Tue, 19 Apr 2022 23:23:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Russ Weight <russell.h.weight@intel.com>, mcgrof@kernel.org,
-        rafael@kernel.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, trix@redhat.com, lgoncalv@redhat.com,
-        yilun.xu@intel.com, hao.wu@intel.com,
-        matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        Russ Weight <russell.h.weight@intel.com>
-Subject: Re: [PATCH v3 4/8] firmware_loader: Add firmware-upload support
-Message-ID: <202204192359.CTXNmgvX-lkp@intel.com>
-References: <20220418223753.639058-5-russell.h.weight@intel.com>
+        Tue, 19 Apr 2022 11:28:18 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E9ABDEDD;
+        Tue, 19 Apr 2022 08:25:34 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 59F30FF80D;
+        Tue, 19 Apr 2022 15:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650381932;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Bq9PeeGKcHRkxdXVgUr01rmzSL3+CeljQ3EucZX0P7Y=;
+        b=D5GBhDkyZrK5yvyrOhTnlTFai3nybJgtqeJ4Btz8MX+iAYbIB8QguBUEXby9NcFEsox2Ay
+        nEBVao0mKpzibIZwXRjI+fegNSQSw7yP0VTNq2TEF9zGIcyMj40seUL5zSgEDw6yP0fImV
+        lJF05G0KenAPpCFxgqJkSYhSYBiG/PZ/bVpCHQ4t0OlvyMid9HQRfk/ROI9Kgcj6DyTUMD
+        xvSthEuLiZuwLSoV+spy5qdHex3A5uN+vsMGrjnOmyQmI94UOSi1NIfHY47bk0U1gnoFxS
+        +z+RfEv5dQrJmZydxKRtn5ikkNVGrQpVuMaMw2rcPP/XoxZz0Iya3GbS7msmUg==
+Date:   Tue, 19 Apr 2022 17:25:28 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Liang Yang <liang.yang@amlogic.com>
+Cc:     <linux-mtd@lists.infradead.org>, Rob Herring <robh+dt@kernel.org>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Victor Wan <victor.wan@amlogic.com>,
+        XianWei Zhao <xianwei.zhao@amlogic.com>,
+        Kelvin Zhang <kelvin.zhang@amlogic.com>,
+        BiChao Zheng <bichao.zheng@amlogic.com>,
+        YongHui Yu <yonghui.yu@amlogic.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: Re: [PATCH v4 1/2] mtd: rawnand: meson: discard the common MMC sub
+ clock framework
+Message-ID: <20220419172528.2dd75e7b@xps13>
+In-Reply-To: <2e382e3e-c231-c9e4-73a1-0637288fcd4f@amlogic.com>
+References: <20220402074921.13316-1-liang.yang@amlogic.com>
+        <20220402074921.13316-2-liang.yang@amlogic.com>
+        <20220404103034.48ec16b1@xps13>
+        <50105d6b-8ced-1b72-30cb-a709c4a4dd26@amlogic.com>
+        <d5a33645-fac1-9c69-afe6-654bfe93ca48@amlogic.com>
+        <20220419102629.1c77aa2a@xps13>
+        <2e382e3e-c231-c9e4-73a1-0637288fcd4f@amlogic.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418223753.639058-5-russell.h.weight@intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russ,
+Hello,
 
-Thank you for the patch! Yet something to improve:
+liang.yang@amlogic.com wrote on Tue, 19 Apr 2022 17:17:48 +0800:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on shuah-kselftest/next mcgrof/sysctl-next linus/master v5.18-rc3 next-20220419]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch]
+> Hello Miquel,
+>=20
+> On 2022/4/19 16:26, Miquel Raynal wrote:
+> > [ EXTERNAL EMAIL ]
+> >=20
+> > Hello,
+> >=20
+> > liang.yang@amlogic.com wrote on Mon, 18 Apr 2022 11:40:10 +0800:
+> >  =20
+> >> Hi Miquel,
+> >>
+> >> i have some confusion when i prepare the patches. for DT compatibility=
+, it falls back to the old DT when failed to get resource by the new DT, bu=
+t there is some points:
+> >> a. old DT depends on MMC sub clock driver, but it never be merged, so =
+it can't work. =20
+> >=20
+> > I don't get what you mean here, sorry. I believe there is a new way to
+> > describe this clock but grabbing the one from the MMC still works, does
+> > not it?
+> >  =20
+>=20
+> No, it doesn't. after the NFC driver using the MMC sub clock framework wa=
+s merged into the mainline of kernel, we didn't continue to submit the seri=
+es of patches about MMC sub clock after v9. when i found that, we made a di=
+scussion to decide whether to recover the series of patches about MMC sub c=
+lock framework, finally, see the description from cover letter, we plan to =
+abandon it and adopt the new clock scheme in this series of patches.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Russ-Weight/Extend-FW-framework-for-user-FW-uploads/20220419-064126
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git 3123109284176b1532874591f7c81f3837bbdc17
-config: parisc-randconfig-r033-20220419 (https://download.01.org/0day-ci/archive/20220419/202204192359.CTXNmgvX-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 11.2.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/827b02dbc9848fee497e3f3edbe6ff441cae32f6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Russ-Weight/Extend-FW-framework-for-user-FW-uploads/20220419-064126
-        git checkout 827b02dbc9848fee497e3f3edbe6ff441cae32f6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/base/firmware_loader/
+I am not sure to follow. Is the current code completely broken? I
+believe it is not, so I don't understand your issue.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+Can you please summarize the situation?
 
-All errors (new ones prefixed by >>):
+>=20
+> Thanks.
+>=20
+> >> b. if it falls back to the old DT, beside the regmap lookup below, it =
+seems that we have to preserve the code of the old clock setting in nfc_clk=
+_init(). =20
+> >=20
+> > Yes, probably.
+> >  =20
+> >> do we still need to avoid break DT compatibility? =20
+> >=20
+> > We should try our best to avoid breaking the DT, yes.
+> >  =20
+> >>
+> >> Thanks.
+> >>
+> >> On 2022/4/11 10:40, Liang Yang wrote: =20
+> >>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 nfc->dev =3D dev;
+> >>>>> -=C2=A0=C2=A0=C2=A0 res =3D platform_get_resource(pdev, IORESOURCE_=
+MEM, 0);
+> >>>>> -=C2=A0=C2=A0=C2=A0 nfc->reg_base =3D devm_ioremap_resource(dev, re=
+s);
+> >>>>> +=C2=A0=C2=A0=C2=A0 nfc->reg_base =3D devm_platform_ioremap_resourc=
+e_byname(pdev, "nfc"); =20
+> >>>>
+> >>>> This change seems unrelated. =20
+> >>>
+> >>> To be consistent with the following > devm_platform_ioremap_resource_=
+byname(pdev, "emmc"). do you mean that we > don't need it?> =20
+> >>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->reg_base))
+> >>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_=
+ERR(nfc->reg_base);
+> >>>>> -=C2=A0=C2=A0=C2=A0 nfc->reg_clk =3D
+> >>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 syscon_regmap_lookup_by=
+_phandle(dev->of_node,
+> >>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "a=
+mlogic,mmc-syscon");
+> >>>>> -=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->reg_clk)) {
+> >>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_err(dev, "Failed to=
+ lookup clock base\n");
+> >>>>> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(nfc->reg=
+_clk);
+> >>>>> -=C2=A0=C2=A0=C2=A0 }
+> >>>>> +=C2=A0=C2=A0=C2=A0 nfc->sd_emmc_clock =3D devm_platform_ioremap_re=
+source_byname(pdev, >>> "emmc");
+> >>>>> +=C2=A0=C2=A0=C2=A0 if (IS_ERR(nfc->sd_emmc_clock))
+> >>>>> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return PTR_ERR(nfc->sd_=
+emmc_clock); =20
+> >>>>
+> >>>> While I agree this is much better than the previous solution, we can=
+not
+> >>>> break DT compatibility, so you need to try getting the emmc clock, b=
+ut
+> >>>> if it fails you should fallback to the regmap lookup. =20
+> >>>
+> >>> ok, i will fix it next version. thanks. =20
+> >>>    >>>>   >>>>>  =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 irq =3D platform_get_=
+irq(pdev, 0); =20
+> >=20
+> >=20
+> > Thanks,
+> > Miqu=C3=A8l
+> >=20
+> > . =20
 
-   In file included from drivers/base/firmware_loader/sysfs.c:9:
-   drivers/base/firmware_loader/sysfs.h: In function '__firmware_loading_timeout':
-   drivers/base/firmware_loader/sysfs.h:78:34: error: invalid use of undefined type 'struct firmware_fallback_config'
-      78 |         return fw_fallback_config.loading_timeout;
-         |                                  ^
-   drivers/base/firmware_loader/sysfs.h: In function '__fw_fallback_set_timeout':
-   drivers/base/firmware_loader/sysfs.h:84:27: error: invalid use of undefined type 'struct firmware_fallback_config'
-      84 |         fw_fallback_config.loading_timeout = timeout;
-         |                           ^
-   drivers/base/firmware_loader/sysfs.c: At top level:
->> drivers/base/firmware_loader/sysfs.c:113:5: error: redefinition of 'register_sysfs_loader'
-     113 | int register_sysfs_loader(void)
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/base/firmware_loader/sysfs.c:9:
-   drivers/base/firmware_loader/sysfs.h:52:19: note: previous definition of 'register_sysfs_loader' with type 'int(void)'
-      52 | static inline int register_sysfs_loader(void)
-         |                   ^~~~~~~~~~~~~~~~~~~~~
-   drivers/base/firmware_loader/sysfs.c: In function 'register_sysfs_loader':
->> drivers/base/firmware_loader/sysfs.c:119:16: error: implicit declaration of function 'register_firmware_config_sysctl' [-Werror=implicit-function-declaration]
-     119 |         return register_firmware_config_sysctl();
-         |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/base/firmware_loader/sysfs.c: At top level:
->> drivers/base/firmware_loader/sysfs.c:122:6: error: redefinition of 'unregister_sysfs_loader'
-     122 | void unregister_sysfs_loader(void)
-         |      ^~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/base/firmware_loader/sysfs.c:9:
-   drivers/base/firmware_loader/sysfs.h:57:20: note: previous definition of 'unregister_sysfs_loader' with type 'void(void)'
-      57 | static inline void unregister_sysfs_loader(void)
-         |                    ^~~~~~~~~~~~~~~~~~~~~~~
-   drivers/base/firmware_loader/sysfs.c: In function 'unregister_sysfs_loader':
->> drivers/base/firmware_loader/sysfs.c:124:9: error: implicit declaration of function 'unregister_firmware_config_sysctl' [-Werror=implicit-function-declaration]
-     124 |         unregister_firmware_config_sysctl();
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/base/firmware_loader/sysfs.c:9:
-   drivers/base/firmware_loader/sysfs.h: In function '__firmware_loading_timeout':
-   drivers/base/firmware_loader/sysfs.h:79:1: error: control reaches end of non-void function [-Werror=return-type]
-      79 | }
-         | ^
-   cc1: some warnings being treated as errors
 
-
-vim +/register_sysfs_loader +113 drivers/base/firmware_loader/sysfs.c
-
-7fb618c8a43c63 Russ Weight 2022-04-18  112  
-7fb618c8a43c63 Russ Weight 2022-04-18 @113  int register_sysfs_loader(void)
-7fb618c8a43c63 Russ Weight 2022-04-18  114  {
-7fb618c8a43c63 Russ Weight 2022-04-18  115  	int ret = class_register(&firmware_class);
-7fb618c8a43c63 Russ Weight 2022-04-18  116  
-7fb618c8a43c63 Russ Weight 2022-04-18  117  	if (ret != 0)
-7fb618c8a43c63 Russ Weight 2022-04-18  118  		return ret;
-7fb618c8a43c63 Russ Weight 2022-04-18 @119  	return register_firmware_config_sysctl();
-7fb618c8a43c63 Russ Weight 2022-04-18  120  }
-7fb618c8a43c63 Russ Weight 2022-04-18  121  
-7fb618c8a43c63 Russ Weight 2022-04-18 @122  void unregister_sysfs_loader(void)
-7fb618c8a43c63 Russ Weight 2022-04-18  123  {
-7fb618c8a43c63 Russ Weight 2022-04-18 @124  	unregister_firmware_config_sysctl();
-7fb618c8a43c63 Russ Weight 2022-04-18  125  	class_unregister(&firmware_class);
-7fb618c8a43c63 Russ Weight 2022-04-18  126  }
-7fb618c8a43c63 Russ Weight 2022-04-18  127  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Miqu=C3=A8l

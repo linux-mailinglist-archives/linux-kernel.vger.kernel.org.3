@@ -2,77 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B12506C56
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 001E7506C5F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:25:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352372AbiDSM1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:27:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S1352279AbiDSM0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352332AbiDSM0v (ORCPT
+        with ESMTP id S1352324AbiDSM0f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:26:51 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F453630B;
-        Tue, 19 Apr 2022 05:24:07 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id 11so15996928edw.0;
-        Tue, 19 Apr 2022 05:24:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=j9vVuKoFEUiAyR7uHlRWZOSe/ValeOqxLUrvDR3GU6A=;
-        b=UI3zSmDvVjSx3x59YT49ml46fOa2/gH7mpzyEwcgftQOKtwNdEbUOAIDY5Q/hL+sKA
-         uzbTUVkfv1BmEvyNIWb0Cz5mO5pJlCp9Jejgc72KTEnk5HFyD7ZMi7VUuT4fpzmc9u37
-         JGAjUj7WXDODpzlE1+42uBEPfS1GBjcBfBPEWkB+kE7B74d8QtO/fzawhGQ3OSPy9qR6
-         yMYCRDl1xNLOTOpefyVWmpteVpSkFKbwNHoUJSTewIv3OMro7YfCFCcamI9UP0igBszl
-         9dfO6IOIlSQUyKkwF2pW9dErF2UVDUtT06YMgaarnGBMGLlUdR0/N6uQNcOa70mNbFxY
-         THnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=j9vVuKoFEUiAyR7uHlRWZOSe/ValeOqxLUrvDR3GU6A=;
-        b=Fwclr8NzuzrKB7uIZmQRsIyv189cJxrICuOcoOfUk/7/+dmT7/dLVnWVgvBwvv7oNj
-         MnszkuH8hYTGk+I9VBYNaNUAP05+J5nvfzxFzHSJ/aTDgXrgwMj2oNg4t3k/zvxp87ME
-         dvWfRTA7YBBQsGawi+QBEaseb64oJJ9jHgHUxPqYTfWpiunvgd7XnYa1aS0dbaZOQ+U5
-         Zq7KNJt1donL5EmfXZALX2Ta7mlxZzJqkEA8dEp2h4ha7atb2veGgzsErIkeo6PP2xfi
-         crZZpn3Eyv7T75GjhoX6Y2i2/lpf09d0okYsgB8fv2F24a5D4rBhMjcGBAtxYMBW6iwl
-         n/Aw==
-X-Gm-Message-State: AOAM532mgSRL2aiwRfelHF9cUIeJE7zyFaINVCpgpHOlBT2MDHIsyT/a
-        AXh/vOgA3x7vfb0Qnv0UD3M=
-X-Google-Smtp-Source: ABdhPJwER2iIHbaJTcgShZKvo6stLL+1j9ZpSjYitNR6t4O4i1nSfwp/iVr7lNu+bDxW/YOV0NKekA==
-X-Received: by 2002:aa7:dcd3:0:b0:41d:70e4:bf4d with SMTP id w19-20020aa7dcd3000000b0041d70e4bf4dmr17093932edu.223.1650371046380;
-        Tue, 19 Apr 2022 05:24:06 -0700 (PDT)
-Received: from anparri.mshome.net (host-82-53-3-95.retail.telecomitalia.it. [82.53.3.95])
-        by smtp.gmail.com with ESMTPSA id z21-20020a170906435500b006e8669fae36sm5644685ejm.189.2022.04.19.05.24.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 05:24:05 -0700 (PDT)
-From:   "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-To:     KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Wei Hu <weh@microsoft.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        "Andrea Parri (Microsoft)" <parri.andrea@gmail.com>
-Subject: [PATCH v2 6/6] PCI: hv: Fix synchronization between channel callback and hv_compose_msi_msg()
-Date:   Tue, 19 Apr 2022 14:23:25 +0200
-Message-Id: <20220419122325.10078-7-parri.andrea@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419122325.10078-1-parri.andrea@gmail.com>
-References: <20220419122325.10078-1-parri.andrea@gmail.com>
+        Tue, 19 Apr 2022 08:26:35 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 743E436B6F
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:23:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 222CB1063;
+        Tue, 19 Apr 2022 05:23:45 -0700 (PDT)
+Received: from [10.0.0.18] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C9D1E3F766;
+        Tue, 19 Apr 2022 05:23:43 -0700 (PDT)
+Message-ID: <0d354ce1-9b43-feae-1065-5d8a78c56ccc@arm.com>
+Date:   Tue, 19 Apr 2022 13:23:27 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH v4 2/7] sched/fair: Decay task PELT values during wakeup
+ migration
+Content-Language: en-US
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org, dietmar.eggemann@arm.com,
+        morten.rasmussen@arm.com, chris.redpath@arm.com, qperret@google.com
+References: <20220412134220.1588482-1-vincent.donnefort@arm.com>
+ <20220412134220.1588482-3-vincent.donnefort@arm.com>
+ <CAKfTPtAZMwgKK8m5vdEjsXRJ73YWrZePoCtCu5KKBELtQMp3DA@mail.gmail.com>
+From:   Vincent Donnefort <vincent.donnefort@arm.com>
+In-Reply-To: <CAKfTPtAZMwgKK8m5vdEjsXRJ73YWrZePoCtCu5KKBELtQMp3DA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,143 +49,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dexuan wrote:
 
-  "[...]  when we disable AccelNet, the host PCI VSP driver sends a
-   PCI_EJECT message first, and the channel callback may set
-   hpdev->state to hv_pcichild_ejecting on a different CPU.  This can
-   cause hv_compose_msi_msg() to exit from the loop and 'return', and
-   the on-stack variable 'ctxt' is invalid.  Now, if the response
-   message from the host arrives, the channel callback will try to
-   access the invalid 'ctxt' variable, and this may cause a crash."
 
-Schematically:
+On 19/04/2022 11:08, Vincent Guittot wrote:
+> On Tue, 12 Apr 2022 at 15:42, Vincent Donnefort
+> <vincent.donnefort@arm.com> wrote:
+>>
+>> Before being migrated to a new CPU, a task sees its PELT values
+>> synchronized with rq last_update_time. Once done, that same task will also
+>> have its sched_avg last_update_time reset. This means the time between
+>> the migration and the last clock update (B) will not be accounted for in
+>> util_avg and a discontinuity will appear. This issue is amplified by the
+>> PELT clock scaling. If the clock hasn't been updated while the CPU is
+>> idle, clock_pelt will not be aligned with clock_task and that time (A)
+>> will be also lost.
+>>
+>>     ---------|----- A -----|-----------|------- B -----|>
+>>          clock_pelt   clock_task     clock            now
+>>
+>> This is especially problematic for asymmetric CPU capacity systems which
+>> need stable util_avg signals for task placement and energy estimation.
+>>
+>> Ideally, this problem would be solved by updating the runqueue clocks
+>> before the migration. But that would require taking the runqueue lock
+>> which is quite expensive [1]. Instead estimate the missing time and update
+>> the task util_avg with that value:
+>>
+>>    A + B = clock_task - clock_pelt + sched_clock_cpu() - clock
+>>
+>> Neither clock_task, clock_pelt nor clock can be accessed without the
+>> runqueue lock. The new cfs_rq last_update_lag is therefore created and
+>> contains those three values when the last_update_time value for that very
+>> same cfs_rq is updated.
+>>
+>>    last_update_lag = clock - clock_task + clock_pelt
+>>
+>> And we can then write the missing time as follow:
+>>
+>>    A + B = sched_clock_cpu() - last_update_lag
+>>
+>> The B. part of the missing time is however an estimation that doesn't take
+>> into account IRQ and Paravirt time.
+>>
+>> Now we have an estimation for A + B, we can create an estimator for the
+>> PELT value at the time of the migration. We need for this purpose to
+>> inject last_update_time which is a combination of both clock_pelt and
+>> lost_idle_time. The latter is a time value which is completely lost from a
+>> PELT point of view and must be ignored. And finally, we can write:
+>>
+>>    now = last_update_time + A + B
+>>        = last_update_time + sched_clock_cpu() - last_update_lag
+>>
+>> This estimation has a cost, mostly due to sched_clock_cpu(). Limit the
+>> usage to the case where the source CPU is idle as we know this is when the
+>> clock is having the biggest risk of being outdated.
+>>
+>> [1] https://lore.kernel.org/all/20190709115759.10451-1-chris.redpath@arm.com/
+>>
+>> Signed-off-by: Vincent Donnefort <vincent.donnefort@arm.com>
+>>
+>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+>> index 5dd38c9df0cc..e234d015657f 100644
+>> --- a/kernel/sched/fair.c
+>> +++ b/kernel/sched/fair.c
+>> @@ -3694,6 +3694,57 @@ static inline void add_tg_cfs_propagate(struct cfs_rq *cfs_rq, long runnable_sum
+>>
+>>   #endif /* CONFIG_FAIR_GROUP_SCHED */
+>>
+>> +#ifdef CONFIG_NO_HZ_COMMON
+>> +static inline void update_cfs_rq_lag(struct cfs_rq *cfs_rq)
+>> +{
+>> +       struct rq *rq = rq_of(cfs_rq);
+>> +
+>> +       u64_u32_store(cfs_rq->last_update_lag,
+>> +#ifdef CONFIG_CFS_BANDWIDTH
+>> +                     /* Timer stopped by throttling */
+>> +                     unlikely(cfs_rq->throttle_count) ? U64_MAX :
+>> +#endif
+>> +                     rq->clock - rq->clock_task + rq->clock_pelt);
+> 
+> I'm worried that we will call this for each and every
+> update_cfs_rq_load_avg() whereas the content will be used only when
+> idle and not throttled. Can't we use these conditions to save values
+> only when needed and limit the number of useless updates ?
 
-  Hyper-V sends PCI_EJECT msg
-    hv_pci_onchannelcallback()
-      state = hv_pcichild_ejecting
-                                       hv_compose_msi_msg()
-                                         alloc and init comp_pkt
-                                         state == hv_pcichild_ejecting
-  Hyper-V sends VM_PKT_COMP msg
-    hv_pci_onchannelcallback()
-      retrieve address of comp_pkt
-                                         'free' comp_pkt and return
-      comp_pkt->completion_func()
+I don't think we can use idle here as a condition, once it is idle, it 
+is too late to get those clock values.
+> 
+> A quick test with hackbench on a 8 cpus system gives
+> around 60k call for a duration 550 msec run a root level
+> and 180k from a 3rd level cgroups
 
-Dexuan also showed how the crash can be triggered after introducing
-suitable delays in the driver code, thus validating the 'assumption'
-that the host can still normally respond to the guest's compose_msi
-request after the host has started to eject the PCI device.
+If you think this is too much to have this store on this path, we could 
+though either:
 
-Fix the synchronization by leveraging the requestor lock as follows:
+a. restrict the feature to when we know it is the most important: EAS?
 
-  - Before 'return'-ing in hv_compose_msi_msg(), remove the ID (while
-    holding the requestor lock) associated to the completion packet.
+b. store the updated value only when "decayed" is non 0.
 
-  - Retrieve the address *and call ->completion_func() within a same
-    (requestor) critical section in hv_pci_onchannelcallback().
-
-Reported-by: Wei Hu <weh@microsoft.com>
-Reported-by: Dexuan Cui <decui@microsoft.com>
-Suggested-by: Michael Kelley <mikelley@microsoft.com>
-Signed-off-by: Andrea Parri (Microsoft) <parri.andrea@gmail.com>
-Reviewed-by: Michael Kelley <mikelley@microsoft.com>
----
-v1 included:
-
-Fixes: de0aa7b2f97d3 ("PCI: hv: Fix 2 hang issues in hv_compose_msi_msg()")
-
-as a reference, but not a reference for the stable-kernel bots.
-The back-port would depend on the entire series which, in turn,
-shouldn't be backported to commits preceding bf5fd8cae3c8f.
-
- drivers/pci/controller/pci-hyperv.c | 33 +++++++++++++++++++++++------
- 1 file changed, 27 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/pci/controller/pci-hyperv.c b/drivers/pci/controller/pci-hyperv.c
-index 0252b4bbc8d15..59f0197b94c78 100644
---- a/drivers/pci/controller/pci-hyperv.c
-+++ b/drivers/pci/controller/pci-hyperv.c
-@@ -1695,7 +1695,7 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 			struct pci_create_interrupt3 v3;
- 		} int_pkts;
- 	} __packed ctxt;
--
-+	u64 trans_id;
- 	u32 size;
- 	int ret;
- 
-@@ -1757,10 +1757,10 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 		goto free_int_desc;
- 	}
- 
--	ret = vmbus_sendpacket(hpdev->hbus->hdev->channel, &ctxt.int_pkts,
--			       size, (unsigned long)&ctxt.pci_pkt,
--			       VM_PKT_DATA_INBAND,
--			       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
-+	ret = vmbus_sendpacket_getid(hpdev->hbus->hdev->channel, &ctxt.int_pkts,
-+				     size, (unsigned long)&ctxt.pci_pkt,
-+				     &trans_id, VM_PKT_DATA_INBAND,
-+				     VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
- 	if (ret) {
- 		dev_err(&hbus->hdev->device,
- 			"Sending request for interrupt failed: 0x%x",
-@@ -1839,6 +1839,15 @@ static void hv_compose_msi_msg(struct irq_data *data, struct msi_msg *msg)
- 
- enable_tasklet:
- 	tasklet_enable(&channel->callback_event);
-+	/*
-+	 * The completion packet on the stack becomes invalid after 'return';
-+	 * remove the ID from the VMbus requestor if the identifier is still
-+	 * mapped to/associated with the packet.  (The identifier could have
-+	 * been 're-used', i.e., already removed and (re-)mapped.)
-+	 *
-+	 * Cf. hv_pci_onchannelcallback().
-+	 */
-+	vmbus_request_addr_match(channel, trans_id, (unsigned long)&ctxt.pci_pkt);
- free_int_desc:
- 	kfree(int_desc);
- drop_reference:
-@@ -2717,6 +2726,7 @@ static void hv_pci_onchannelcallback(void *context)
- 	struct pci_dev_inval_block *inval;
- 	struct pci_dev_incoming *dev_message;
- 	struct hv_pci_dev *hpdev;
-+	unsigned long flags;
- 
- 	buffer = kmalloc(bufferlen, GFP_ATOMIC);
- 	if (!buffer)
-@@ -2751,8 +2761,11 @@ static void hv_pci_onchannelcallback(void *context)
- 		switch (desc->type) {
- 		case VM_PKT_COMP:
- 
--			req_addr = chan->request_addr_callback(chan, req_id);
-+			lock_requestor(chan, flags);
-+			req_addr = __vmbus_request_addr_match(chan, req_id,
-+							      VMBUS_RQST_ADDR_ANY);
- 			if (req_addr == VMBUS_RQST_ERROR) {
-+				unlock_requestor(chan, flags);
- 				dev_err(&hbus->hdev->device,
- 					"Invalid transaction ID %llx\n",
- 					req_id);
-@@ -2760,9 +2773,17 @@ static void hv_pci_onchannelcallback(void *context)
- 			}
- 			comp_packet = (struct pci_packet *)req_addr;
- 			response = (struct pci_response *)buffer;
-+			/*
-+			 * Call ->completion_func() within the critical section to make
-+			 * sure that the packet pointer is still valid during the call:
-+			 * here 'valid' means that there's a task still waiting for the
-+			 * completion, and that the packet data is still on the waiting
-+			 * task's stack.  Cf. hv_compose_msi_msg().
-+			 */
- 			comp_packet->completion_func(comp_packet->compl_ctxt,
- 						     response,
- 						     bytes_recvd);
-+			unlock_requestor(chan, flags);
- 			break;
- 
- 		case VM_PKT_DATA_INBAND:
--- 
-2.25.1
-
+[...]

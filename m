@@ -2,79 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99A295076CB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:49:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D80D5076D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355031AbiDSRvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S232215AbiDSRws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351055AbiDSRvv (ORCPT
+        with ESMTP id S1356089AbiDSRwa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:51:51 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67EE211A02
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:49:07 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e2a00f2cc8so18305096fac.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:49:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=v0Lgvd+pxbfJ2W3ZxRXaPCr1PNTgOZ2EXZjCi/26sfE=;
-        b=HZ24tsFgTS0UneQxy/kJndTWpEV6TY/9sL3Ls4gEv6Z/xQJrtYc+EAVFY9m5xD285H
-         jK9Fdya2MWf9M/zifs91uMFst8nMzD5+JNkC50O382u4rqEgzAYnbIUl+kLc4TwSc+CQ
-         fca28DaLXvTMUstMgYKQOXdEEmvRhtJskkrxNSVofqbbNflnrpQhGCNeNGRWDyAIt9He
-         SKcRVBcYn8xpK+sn0O+GZIf8YIMqrsKSzrLyHnNHFyA618WyCTgZqyV7f0hr+CVzd8Sy
-         6qZnVNJrlQGOldsoFpDb76F35hQkdUpLIAJrpwsxtKzKZ8CWG2QrzGpG+e1ADanK3gAY
-         rHxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=v0Lgvd+pxbfJ2W3ZxRXaPCr1PNTgOZ2EXZjCi/26sfE=;
-        b=WeMYozKDtn0BNNdN1VJkP8aW7V6ftaeF3KOBPwhwIdR57CzhAXEOmcN/d5u2ByOnT6
-         wy6QibC9UGqX4mkX9DWSoMWRos8LDI2665HlE9f9yZ45yuk2cIty1MiMXg2PO5RYwRtJ
-         WwyW8DpFsggM75sNletKU0xzRMa8MfAjevHcKXTceAWRfLpObXy2ZN40AWn45fkWrqMl
-         EY43adyDs44WQZPQGTpO56TbSU9RalXcjQRpjLFd2MDkV+BfOJotbkzQQEM3Kr9dvEWF
-         ED4Go0IFSKqhNEaJS4RmOUTnayZDaJn8SWEvwOZ4PuKtKiU/mXVNcvOp0pi2KjjuWCq1
-         Ts7Q==
-X-Gm-Message-State: AOAM5314A5M4BYbsIjvYdsB7A2MgmewrYTAteFZgbG4YfcevoZ/WD2ws
-        qioVzfkPzk/otuRq2+HmgT9zcQ==
-X-Google-Smtp-Source: ABdhPJxKMEvgdGQ9s2QWLdj0NvPXza+GmM2oiG9jDhMtaY06uZWgp4xyPNG00nQX0j7wUUwmUSNHuQ==
-X-Received: by 2002:a05:6870:6098:b0:e1:cb99:9c47 with SMTP id t24-20020a056870609800b000e1cb999c47mr8588508oae.59.1650390546755;
-        Tue, 19 Apr 2022 10:49:06 -0700 (PDT)
-Received: from builder.lan ([2600:1700:a0:3dc8:3697:f6ff:fe85:aac9])
-        by smtp.gmail.com with ESMTPSA id u3-20020a4a9703000000b0033336ab4909sm5668955ooi.7.2022.04.19.10.49.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:49:06 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 12:49:04 -0500
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Yassine Oudjana <y.oudjana@protonmail.com>
-Cc:     Andy Gross <agross@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ilia Lin <ilia.lin@kernel.org>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 3/9] clk: qcom: msm8996-cpu: Add MSM8996 Pro CBF
- support
-Message-ID: <Yl72EFQbntGUi2tm@builder.lan>
-References: <kXrAkKv7RZct22X0wivLWqOAiLKpFuDCAY1KY_KSx649kn7BNmJ2IFFMrsYPAyDlcxIjbQCQ1PHb5KaNFawm9IGIXUbch-DI9OI_l73BAaM=@protonmail.com>
+        Tue, 19 Apr 2022 13:52:30 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48E50D9;
+        Tue, 19 Apr 2022 10:49:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1650390552;
+        bh=MDs+/hTTaszs+7phQ7fP55iuGTCGnxSxNB+AmfhvHuI=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=TnDZzT+t51BtIZ3ttWb8yCAiQ+bRXXd/u6G0viY+8w6Ni6c7lHcocNUuBZBnS4674
+         6WhQO0gk3GYZKK1EeXd9DNGPdu8vTbAeDU/gR+vtsnJYvfjdA+H3E5RicFlC3T2tAS
+         /Cabuc5TQs7rUXlCugCortddBqGUNVZKFqbOjqCc=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [217.61.157.75] ([217.61.157.75]) by web-mail.gmx.net
+ (3c-app-gmx-bap70.server.lan [172.19.172.170]) (via HTTP); Tue, 19 Apr 2022
+ 19:49:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <kXrAkKv7RZct22X0wivLWqOAiLKpFuDCAY1KY_KSx649kn7BNmJ2IFFMrsYPAyDlcxIjbQCQ1PHb5KaNFawm9IGIXUbch-DI9OI_l73BAaM=@protonmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Message-ID: <trinity-597cf8a3-2ad4-41e6-b3c9-b949f8610533-1650390552136@3c-app-gmx-bap70>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Frank Wunderlich <linux@fw-web.de>,
+        linux-rockchip@lists.infradead.org,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Johan Jonker <jbx6244@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Aw: Re: [RFC/RFT 1/6] dt-bindings: phy: rockchip: add pcie3 phy
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 19 Apr 2022 19:49:12 +0200
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <38e60bb2-123b-09cf-d6ef-3a07c6984108@linaro.org>
+References: <20220416135458.104048-1-linux@fw-web.de>
+ <20220416135458.104048-2-linux@fw-web.de>
+ <38e60bb2-123b-09cf-d6ef-3a07c6984108@linaro.org>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:/NkW5UmqezUBTPZZjBz4iBJWrJkbhZBwHKWh0V8Jyr+1pKhoCegGDlCq58zKMqOdmW2O8
+ qFWG3xBwI/JlRCsgKDIK8CQBYs6tKtGZZsYo934557XRhtF/eLBlrxHGW+UzzHL29Pk168fbvTc/
+ OvR820AunbkK1yc3njh3Sx5eugb5TtM0ugLFARb7bmwQSMoEXbcDtNqwCs1HHLKMQGPDYWPxxyZl
+ M74fV0GdY2s7Yh1BotHcRNi9nQgL9KwZxEVXJDSI7OKWmbxEcdT61wl+Hxv3VCTpwtjd+5o892Eg
+ Sw=
+X-UI-Out-Filterresults: notjunk:1;V03:K0:aqAasQSxCdg=:Z5mk/vux6jXB0lRqbcp7Bk
+ UJIJOWyt+bDd1jbTRt28lwBTb27anTGJNthdQC8F0KbTbeldXZ6uPBF1KXCOTiaQuMVtD1U+m
+ hnQsLazT8r/MPjhmNW1sEOVKNNGDeRSSq1q6n94Hj5X0T3Csa9tBFfqn917kEsmJ0dz/X3MY6
+ Pk7zvjDiDkn0d1KXq2xsqFbUbHykddiuEnvxe1/GsZObmeUy+WdaC1NKl7zG06q0r2nQpLC8P
+ u9MSbcKFFnUX7XsXmriHLY0xsYTPQozZgqgyfc5ZM4ouiuPS668cC5jyfkzWDZQtpyytMeceW
+ O+p4bn8kIgBzNqZzwkvk8daiwSRkvgl9QvojKWeUYZcxLhnbNOICkSniTGG9xdzr7WphdwgQZ
+ V6X22tRIkLgQzxrDi9Iji0l25j0z9ytR+sg4tgNwCjPn6IWljebWjcwrBdqYdCjhOJ6Nu5piy
+ vfaOouiSJYlKk03KU7CFw8yhUqkElk3b7fK2RO1KhvihNkcrFZNejEnXXYFur8E4j1+D/MIr2
+ 4q6UlSWznMyEYZXRW9crGkCR00/85yNxGSLaryFgsnn63K1WLWJMVlKmtPF009fPe6dh0NS5Z
+ f1N2k1OWEkQEyfujdvkJziA6iq9oT5quw2EoIIqx/7GTUPZAQ8ZmBS9d6CsKpjTyht8IS7tbJ
+ WIN9nu4KWK6d56emVSrxgdtX+kIf7x/3uqMqDlzyEpH5zjL9xHGNVd2cJPFm53xFHgXE/geLu
+ A5GmJR47U9xPnXwLPTlmwG7rjN79csWKr502balpYnJSX6BGb94rekgHxR9cQRdj5h2VI3ahs
+ kd7tLPH
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,179 +87,158 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 08 Apr 23:16 CDT 2022, Yassine Oudjana wrote:
+> Gesendet: Montag, 18. April 2022 um 17:52 Uhr
+> Von: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
+> > diff --git a/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.=
+yaml b/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml
+> > new file mode 100644
+> > index 000000000000..58a8ce175f13
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/phy/rockchip-pcie3-phy.yaml
+>
+> Filename: vendor,hardware
+> so for example "rockchip,pcie3-phy" although Rob proposed recently for
+> other bindings using compatible as a base:
+> https://lore.kernel.org/linux-devicetree/YlhkwvGdcf4ozTzG@robh.at.kernel=
+.org/
 
-> MSM8996 Pro (MSM8996SG) has a /4 divisor on the CBF clock
-> instead of /2. This allows it to reach a lower minimum frequency
-> of 192000000Hz compared to 307200000Hz on regular MSM8996.
-> Add support for setting the CBF clock divisor to /4 for MSM8996 Pro.
-> 
-> Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> ---
->  drivers/clk/qcom/clk-cpu-8996.c | 61 +++++++++++++++++++++------------
->  1 file changed, 40 insertions(+), 21 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/clk-cpu-8996.c b/drivers/clk/qcom/clk-cpu-8996.c
-> index 8afc271f92d0..231d8224fa16 100644
-> --- a/drivers/clk/qcom/clk-cpu-8996.c
-> +++ b/drivers/clk/qcom/clk-cpu-8996.c
-> @@ -70,11 +70,11 @@ enum _pmux_input {
-> 
->  enum {
->  	CBF_PLL_INDEX = 1,
-> -	CBF_DIV_2_INDEX,
-> +	CBF_DIV_INDEX,
->  	CBF_SAFE_INDEX
->  };
+ok, i rename
 
-I don't have this enum in my tree. Could you please double check that
-this works on linux-next?
+> > @@ -0,0 +1,77 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/phy/rockchip-pcie3-phy.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Rockchip PCIe v3 phy
+> > +
+> > +maintainers:
+> > +  - Heiko Stuebner <heiko@sntech.de>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - rockchip,rk3568-pcie3-phy
+> > +      - rockchip,rk3588-pcie3-phy
+> > +
+> > +  reg:
+> > +    maxItems: 2
+> > +
+> > +  clocks:
+> > +    minItems: 1
+> > +    maxItems: 3
+> > +
+> > +  clock-names:
+> > +    contains:
+> > +      anyOf:
+> > +        - enum: [ refclk_m, refclk_n, pclk ]
+>
+> The list should be strictly ordered (defined), so:
+>   items:
+>     - const: ...
+>     - const: ...
+>     - const: ...
+>   minItems: 1
+>
+> However the question is - why the clocks have different amount? Is it
+> per different SoC implementation?
 
-And can you please send the next revision using git send-email with a
-cover-letter, so that the patches are related in my inbox.
+i only know the rk3568, which needs the clocks defined here, don't know ab=
+out rk3588 yet.
+in rk3568 TPM i have the pcie-part seems missing (at least the specific re=
+gister definition), so i had used the driver as i got it from the downstre=
+am kernel.
 
-Thanks,
-Bjorn
+not yet looked if i find a rk3588 TPM and if this part is there as i canno=
+t test it (one of the reasons this is a rfc/rft).
 
-> 
-> -#define DIV_2_THRESHOLD		600000000
-> +#define DIV_THRESHOLD		600000000
->  #define PWRCL_REG_OFFSET 0x0
->  #define PERFCL_REG_OFFSET 0x80000
->  #define MUX_OFFSET	0x40
-> @@ -142,6 +142,17 @@ static const struct alpha_pll_config cbfpll_config = {
->  	.early_output_mask = BIT(3),
->  };
-> 
-> +static const struct alpha_pll_config cbfpll_config_pro = {
-> +	.l = 72,
-> +	.config_ctl_val = 0x200d4aa8,
-> +	.config_ctl_hi_val = 0x006,
-> +	.pre_div_mask = BIT(12),
-> +	.post_div_mask = 0x3 << 8,
-> +	.post_div_val = 0x3 << 8,
-> +	.main_output_mask = BIT(0),
-> +	.early_output_mask = BIT(3),
-> +};
-> +
->  static struct clk_alpha_pll perfcl_pll = {
->  	.offset = PERFCL_REG_OFFSET,
->  	.regs = prim_pll_regs,
-> @@ -230,7 +241,8 @@ struct clk_cpu_8996_mux {
->  	u8	width;
->  	struct notifier_block nb;
->  	struct clk_hw	*pll;
-> -	struct clk_hw	*pll_div_2;
-> +	struct clk_hw	*pll_div;
-> +	u8 div;
->  	struct clk_regmap clkr;
->  };
-> 
-> @@ -280,11 +292,11 @@ static int clk_cpu_8996_mux_determine_rate(struct clk_hw *hw,
->  	struct clk_cpu_8996_mux *cpuclk = to_clk_cpu_8996_mux_hw(hw);
->  	struct clk_hw *parent = cpuclk->pll;
-> 
-> -	if (cpuclk->pll_div_2 && req->rate < DIV_2_THRESHOLD) {
-> -		if (req->rate < (DIV_2_THRESHOLD / 2))
-> +	if (cpuclk->pll_div && req->rate < DIV_THRESHOLD) {
-> +		if (req->rate < (DIV_THRESHOLD / cpuclk->div))
->  			return -EINVAL;
-> 
-> -		parent = cpuclk->pll_div_2;
-> +		parent = cpuclk->pll_div;
->  	}
-> 
->  	req->best_parent_rate = clk_hw_round_rate(parent, req->rate);
-> @@ -336,7 +348,8 @@ static struct clk_cpu_8996_mux pwrcl_pmux = {
->  	.shift = 0,
->  	.width = 2,
->  	.pll = &pwrcl_pll.clkr.hw,
-> -	.pll_div_2 = &pwrcl_smux.clkr.hw,
-> +	.pll_div = &pwrcl_smux.clkr.hw,
-> +	.div = 2,
->  	.nb.notifier_call = cpu_clk_notifier_cb,
->  	.clkr.hw.init = &(struct clk_init_data) {
->  		.name = "pwrcl_pmux",
-> @@ -358,7 +371,8 @@ static struct clk_cpu_8996_mux perfcl_pmux = {
->  	.shift = 0,
->  	.width = 2,
->  	.pll = &perfcl_pll.clkr.hw,
-> -	.pll_div_2 = &perfcl_smux.clkr.hw,
-> +	.pll_div = &perfcl_smux.clkr.hw,
-> +	.div = 2,
->  	.nb.notifier_call = cpu_clk_notifier_cb,
->  	.clkr.hw.init = &(struct clk_init_data) {
->  		.name = "perfcl_pmux",
-> @@ -481,19 +495,23 @@ static int qcom_cbf_clk_msm8996_register_clks(struct device *dev,
->  					      struct regmap *regmap)
->  {
->  	int ret;
-> +	bool is_pro = of_device_is_compatible(dev->of_node, "qcom,msm8996pro-apcc");
-> 
-> -	cbf_mux.pll_div_2 = clk_hw_register_fixed_factor(dev, "cbf_pll_main",
-> -						      "cbf_pll", CLK_SET_RATE_PARENT,
-> -						      1, 2);
-> -	if (IS_ERR(cbf_mux.pll_div_2)) {
-> +	cbf_mux.div = is_pro ? 4 : 2;
-> +	cbf_mux.pll_div = clk_hw_register_fixed_factor(dev, "cbf_pll_main",
-> +						       "cbf_pll", CLK_SET_RATE_PARENT,
-> +						       1, cbf_mux.div);
-> +
-> +	if (IS_ERR(cbf_mux.pll_div)) {
->  		dev_err(dev, "Failed to initialize cbf_pll_main\n");
-> -		return PTR_ERR(cbf_mux.pll_div_2);
-> +		return PTR_ERR(cbf_mux.pll_div);
->  	}
-> 
->  	ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[0]);
->  	ret = devm_clk_register_regmap(dev, cbf_msm8996_clks[1]);
-> 
-> -	clk_alpha_pll_configure(&cbf_pll, regmap, &cbfpll_config);
-> +	clk_alpha_pll_configure(&cbf_pll, regmap, is_pro ?
-> +				&cbfpll_config_pro : &cbfpll_config);
->  	clk_set_rate(cbf_pll.clkr.hw.clk, 614400000);
->  	clk_prepare_enable(cbf_pll.clkr.hw.clk);
->  	clk_notifier_register(cbf_mux.clkr.hw.clk, &cbf_mux.nb);
-> @@ -575,7 +593,7 @@ static int cpu_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
->  		qcom_cpu_clk_msm8996_acd_init(base);
->  		break;
->  	case POST_RATE_CHANGE:
-> -		if (cnd->new_rate < DIV_2_THRESHOLD)
-> +		if (cnd->new_rate < DIV_THRESHOLD)
->  			ret = clk_cpu_8996_mux_set_parent(&cpuclk->clkr.hw,
->  							  DIV_2_INDEX);
->  		else
-> @@ -600,15 +618,15 @@ static int cbf_clk_notifier_cb(struct notifier_block *nb, unsigned long event,
-> 
->  	switch (event) {
->  	case PRE_RATE_CHANGE:
-> -		parent = clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> -		ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> +		parent = clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_DIV_INDEX);
-> +		ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_INDEX);
-> 
-> -		if (cnd->old_rate > DIV_2_THRESHOLD && cnd->new_rate < DIV_2_THRESHOLD)
-> -			ret = clk_set_rate(parent->clk, cnd->old_rate / 2);
-> +		if (cnd->old_rate > DIV_THRESHOLD && cnd->new_rate < DIV_THRESHOLD)
-> +			ret = clk_set_rate(parent->clk, cnd->old_rate / cbfclk->div);
->  		break;
->  	case POST_RATE_CHANGE:
-> -		if (cnd->new_rate < DIV_2_THRESHOLD)
-> -			ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_2_INDEX);
-> +		if (cnd->new_rate < DIV_THRESHOLD)
-> +			ret = clk_cpu_8996_mux_set_parent(&cbfclk->clkr.hw, CBF_DIV_INDEX);
->  		else {
->  			parent = clk_hw_get_parent_by_index(&cbfclk->clkr.hw, CBF_PLL_INDEX);
->  			ret = clk_set_rate(parent->clk, cnd->new_rate);
-> @@ -676,6 +694,7 @@ static int qcom_cpu_clk_msm8996_driver_remove(struct platform_device *pdev)
-> 
->  static const struct of_device_id qcom_cpu_clk_msm8996_match_table[] = {
->  	{ .compatible = "qcom,msm8996-apcc" },
-> +	{ .compatible = "qcom,msm8996pro-apcc" },
->  	{}
->  };
->  MODULE_DEVICE_TABLE(of, qcom_cpu_clk_msm8996_match_table);
-> --
-> 2.35.1
-> 
+> > +
+> > +  "#phy-cells":
+> > +    const: 0
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  reset-names:
+> > +    const: phy
+> > +
+> > +  rockchip,phy-grf:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: phandle to the syscon managing the phy "general regi=
+ster files"
+> > +
+> > +  rockchip,pipe-grf:
+> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > +    description: phandle to the syscon managing the pipe "general reg=
+ister files"
+> > +
+> > +  rockchip,pcie30-phymode:
+> > +    $ref: '/schemas/types.yaml#/definitions/uint32'
+> > +    description: |
+> > +      use PHY_MODE_PCIE_AGGREGATION if not defined
+>
+> I don't understand the description. Do you mean here a case when the
+> variable is missing?
+
+yes, if the property is not set, then value is PHY_MODE_PCIE_AGGREGATION =
+=3D 4
+
+> > +    minimum: 0x0
+> > +    maximum: 0x4
+>
+> Please explain these values. Register values should not be part of
+> bindings, but instead some logical behavior of hardware or its logic.
+
+it's a bitmask, so maybe
+
+    description: |
+      bit0: bifurcation for port 0
+      bit1: bifurcation for port 1
+      bit2: aggregation
+      use PHY_MODE_PCIE_AGGREGATION (4) as default
+
+> > +
+> > +
+>
+> Just one blank line.
+>
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - rockchip,phy-grf
+>
+> phy-cells as well
+>
+> > +
+> > +additionalProperties: false
+> > +
+> > +unevaluatedProperties: false
+>
+> Just one please, additionalProperties.
+ok
+
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/clock/rk3568-cru.h>
+> > +    pcie30phy: phy@fe8c0000 {
+> > +      compatible =3D "rockchip,rk3568-pcie3-phy";
+> > +      reg =3D <0x0 0xfe8c0000 0x0 0x20000>;
+> > +      #phy-cells =3D <0>;
+> > +      clocks =3D <&pmucru CLK_PCIE30PHY_REF_M>, <&pmucru CLK_PCIE30PH=
+Y_REF_N>,
+> > +       <&cru PCLK_PCIE30PHY>;
+>
+> Align the entry with opening '<'. Usually the most readable is one clock
+> per line.
+
+ok
+
+> > +      clock-names =3D "refclk_m", "refclk_n", "pclk";
+> > +      resets =3D <&cru SRST_PCIE30PHY>;
+> > +      reset-names =3D "phy";
+> > +      rockchip,phy-grf =3D <&pcie30_phy_grf>;
+> > +    };
+
+regards Frank

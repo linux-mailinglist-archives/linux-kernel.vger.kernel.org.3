@@ -2,92 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16D0507D60
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:50:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4229507D61
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358562AbiDSXwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 19:52:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S1358567AbiDSXxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 19:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358536AbiDSXwt (ORCPT
+        with ESMTP id S239341AbiDSXx3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:52:49 -0400
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93634DF73
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:50:04 -0700 (PDT)
-Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 926ED8027E04
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:50:01 +0000 (UTC)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id B00D510047D53
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:50:00 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id gxbcn7ShYb2WGgxbcnQgu0; Tue, 19 Apr 2022 23:50:00 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=PvVW0yA3 c=1 sm=1 tr=0 ts=625f4aa8
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=z0gMJWrwH1QA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=1Tpk2UOmd7KVafY+HBBYYPKu51iJiccL4hNj5lxOwtM=; b=IeUDOFNmbD+TUj+rw8vVQW9ygb
-        8yPCLnVGhFiBCG3lYd+dLg29K/3/EZQ+bvtNrS4adYXkk2W+yYw6fZ13EWgq/CdpNJTFsVVHbFrnr
-        6hSQ0vI+sJUCBqdE4sSYEDUE7Zg/H/yg56N4lprKrgpjI2ntCNIJ2zRPAgKTEjkkkRaFm8C8JH54t
-        aye6iZ1QffjbxP3jJFlHLAe3kSOYB1WKhEpW4Tylh7lDBOvxmcTWxGZVYFhnVjRTFHShtaunsIj8R
-        xAoMI10fEWgde11wWMA0Z2BQSJQ5w04OwieJyC3Ap2o+5C0X9uQy2wo6MULeszN8PBoxxJWSMLpHP
-        rqUNlrvQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60242 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <re@w6rz.net>)
-        id 1ngxbb-0005M9-ES; Tue, 19 Apr 2022 17:49:59 -0600
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220419073048.315594917@linuxfoundation.org>
-In-Reply-To: <20220419073048.315594917@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <e0606719-087b-3149-7a9e-0b37590bebca@w6rz.net>
-Date:   Tue, 19 Apr 2022 16:49:57 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Tue, 19 Apr 2022 19:53:29 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0EC2C10E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 16:50:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650412245; x=1681948245;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=PYoyR7Xe2S/QwQ7Oo2a24dUabMTMpAtJP6XbpDJJCVQ=;
+  b=a7Zw0yln0eJUQzC6fpMcaCZ2W1DL77ShgnZKWcNKma45er8uDrFcrf9c
+   BseCn98JWeQFX/1CQ49x2zoo1lcvmXPis3akDKeGF2M5d4hSPRPHWDaAB
+   m8t5QZnRiG+wj1YZkbcpr3La+dzBJg9o9/sgwbh/pCXxzLySgy1cwVdQ4
+   yx1eaNx3n/gJLsI5aC4vOM0dlLQRDdryQ5uwpra7JbZ/f25MNV4EVSeAl
+   mrTI0zFRq9ishb9SxVv9netyCXyj3XPpIHl7mmy+0eUma102yopM/V8ZG
+   bXRdk5OHnPi/+cPojmvNldCpZ46q/5vgqxCaMGU+cH58l3OiD4Lw5nK4/
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="264071401"
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="264071401"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 16:50:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,274,1643702400"; 
+   d="scan'208";a="862339364"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 19 Apr 2022 16:50:43 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngxcI-0006L0-Vi;
+        Tue, 19 Apr 2022 23:50:42 +0000
+Date:   Wed, 20 Apr 2022 07:50:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Kalle Valo <kvalo@codeaurora.org>
+Subject: drivers/net/wireless/ath/wcn36xx/smd.c:2921
+ wcn36xx_smd_gtk_offload_get_info_rsp() warn: inconsistent indenting
+Message-ID: <202204200707.L7roE4go-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1ngxbb-0005M9-ES
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:60242
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,26 +63,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/19/22 12:32 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.35 release.
-> There are 189 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 21 Apr 2022 07:30:20 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.35-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   559089e0a93d44280ec3ab478830af319c56dbe3
+commit: bedf1169bcae2f762b37d40dc9db648fe7ad1952 wcn36xx: Add GTK offload info to WoWLAN resume
+date:   10 months ago
+config: x86_64-randconfig-m001-20220418 (https://download.01.org/0day-ci/archive/20220420/202204200707.L7roE4go-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.2.0-19) 11.2.0
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Ron Economos <re@w6rz.net>
+New smatch warnings:
+drivers/net/wireless/ath/wcn36xx/smd.c:2921 wcn36xx_smd_gtk_offload_get_info_rsp() warn: inconsistent indenting
 
+Old smatch warnings:
+drivers/net/wireless/ath/wcn36xx/smd.c:525 wcn36xx_smd_load_nv() error: we previously assumed 'wcn->nv' could be null (see line 516)
+drivers/net/wireless/ath/wcn36xx/smd.c:1908 wcn36xx_smd_send_beacon() warn: potential spectre issue 'msg_body.beacon' [w]
+
+vim +2921 drivers/net/wireless/ath/wcn36xx/smd.c
+
+  2896	
+  2897	static int wcn36xx_smd_gtk_offload_get_info_rsp(struct wcn36xx *wcn,
+  2898							struct ieee80211_vif *vif)
+  2899	{
+  2900		struct wcn36xx_vif *vif_priv = wcn36xx_vif_to_priv(vif);
+  2901		struct wcn36xx_hal_gtk_offload_get_info_rsp_msg *rsp;
+  2902		__be64 replay_ctr;
+  2903	
+  2904		if (wcn36xx_smd_rsp_status_check(wcn->hal_buf, wcn->hal_rsp_len))
+  2905			return -EIO;
+  2906	
+  2907		rsp = (struct wcn36xx_hal_gtk_offload_get_info_rsp_msg *)wcn->hal_buf;
+  2908	
+  2909		if (rsp->bss_index != vif_priv->bss_index) {
+  2910			wcn36xx_err("gtk_offload_info invalid response bss index %d\n",
+  2911				    rsp->bss_index);
+  2912			return -ENOENT;
+  2913		}
+  2914	
+  2915		if (vif_priv->rekey_data.replay_ctr != cpu_to_le64(rsp->key_replay_counter)) {
+  2916			replay_ctr = cpu_to_be64(rsp->key_replay_counter);
+  2917			vif_priv->rekey_data.replay_ctr =
+  2918				cpu_to_le64(rsp->key_replay_counter);
+  2919			ieee80211_gtk_rekey_notify(vif, vif->bss_conf.bssid,
+  2920						   (void *)&replay_ctr, GFP_KERNEL);
+> 2921			 wcn36xx_dbg(WCN36XX_DBG_HAL,
+  2922				     "GTK replay counter increment %llu\n",
+  2923				     rsp->key_replay_counter);
+  2924		}
+  2925	
+  2926		wcn36xx_dbg(WCN36XX_DBG_HAL,
+  2927			    "gtk offload info status %d last_rekey_status %d "
+  2928			    "replay_counter %llu total_rekey_count %d gtk_rekey_count %d "
+  2929			    "igtk_rekey_count %d bss_index %d\n",
+  2930			    rsp->status, rsp->last_rekey_status,
+  2931			    rsp->key_replay_counter, rsp->total_rekey_count,
+  2932			    rsp->gtk_rekey_count, rsp->igtk_rekey_count,
+  2933			    rsp->bss_index);
+  2934	
+  2935		return 0;
+  2936	}
+  2937	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

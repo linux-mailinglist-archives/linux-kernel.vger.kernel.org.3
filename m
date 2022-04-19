@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B894506105
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:45:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B5DD506112
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241570AbiDSApX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39956 "EHLO
+        id S242199AbiDSApo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241024AbiDSApL (ORCPT
+        with ESMTP id S241094AbiDSApN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:45:11 -0400
+        Mon, 18 Apr 2022 20:45:13 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561AE2315B
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64D2A724
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF31861351
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE5961382
         for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9ECC385B7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07D0C385B9;
         Tue, 19 Apr 2022 00:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650328947;
-        bh=KBxg4+WCFRQHXJRwWF3oca+y8uUZrIRicem0al7Bhbo=;
+        bh=LIAUuKjPhnDlL3iLTwusab7z19Sgly7N5/hwAttZiuw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mE3SgOlNTpUgR6obtlKDT622moBURFBqcHWBiyvtx+nCUbfdmzoew84xIMg7eKbtw
-         BmUzzc7IxXHQZ8ZoQSTWwc2+u5XDTJOiva4bOz4Puam3Z3dFKxmB1LJ5Gg+Ktcienf
-         Oq4gVcyeb+JVdbS8E0sPd9A5kCz6m9Z8XFB+eXo+X5uV9u6oB7PqeEEllhizjrI7ql
-         FiTw4us8AUqf+uasnH1q6v/9w4+5VoYMMH2bLHl3qWSmj+un16uag0UrxCu+hFmLHB
-         uS4e5OcJGcAASXeZkGz8MRvLUhV+ctkCXfRUESaOOExLguZ5SyZcE5wW8BrCcIzJkX
-         vMqQC9ltMsl/w==
+        b=aWXqWGu4sbJfzZ7h3iXTISgudkU+6XIa2HyA/Ykche3PMDqLcH7vgsEHuHD+TwEVc
+         tJDJvknmjebuK/P/Dcw5lcaLkWT7RoiWVdaP73GWuQlm+kJf4H3m33GB89QC/jVPKk
+         oDZiq998L737uat3yukj9+cSkQVdqSiPqZWKqoO8vSSNjY9Vi1WIFhK5bITWvOCxhz
+         jOrBj1mdUPxrnl8erGFCB3fI8JU03sKo7EJR3apAy7OD2coFI5yjscF30TTuGZ2Zcg
+         2EPA2PN069RTYL2+tTeq3QG/nlBBrmAoSbxRZxyBir7SB6nMK8PCAUaECqil7gJNW7
+         X29rSQIX6XK8w==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1705A5C12AB; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
+        id 18E765C1308; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 09/61] tools/nolibc/ctype: split the is* functions to ctype.h
-Date:   Mon, 18 Apr 2022 17:41:33 -0700
-Message-Id: <20220419004225.3952530-9-paulmck@kernel.org>
+Subject: [PATCH nolibc 10/61] tools/nolibc/ctype: add the missing is* functions
+Date:   Mon, 18 Apr 2022 17:41:34 -0700
+Message-Id: <20220419004225.3952530-10-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
@@ -59,68 +59,107 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-In fact there's only isdigit() for now. More should definitely be added.
+There was only isdigit, this commit adds the other ones.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/ctype.h  | 22 ++++++++++++++++++++++
- tools/include/nolibc/nolibc.h |  7 +------
- 2 files changed, 23 insertions(+), 6 deletions(-)
- create mode 100644 tools/include/nolibc/ctype.h
+ tools/include/nolibc/ctype.h | 79 +++++++++++++++++++++++++++++++++++-
+ 1 file changed, 78 insertions(+), 1 deletion(-)
 
 diff --git a/tools/include/nolibc/ctype.h b/tools/include/nolibc/ctype.h
-new file mode 100644
-index 000000000000..6735bd906f25
---- /dev/null
+index 6735bd906f25..e3000b2992d7 100644
+--- a/tools/include/nolibc/ctype.h
 +++ b/tools/include/nolibc/ctype.h
-@@ -0,0 +1,22 @@
-+/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-+/*
-+ * ctype function definitions for NOLIBC
-+ * Copyright (C) 2017-2021 Willy Tarreau <w@1wt.eu>
-+ */
-+
-+#ifndef _NOLIBC_CTYPE_H
-+#define _NOLIBC_CTYPE_H
-+
-+#include "std.h"
-+
-+/*
-+ * As much as possible, please keep functions alphabetically sorted.
-+ */
-+
+@@ -13,10 +13,87 @@
+  * As much as possible, please keep functions alphabetically sorted.
+  */
+ 
 +static __attribute__((unused))
-+int isdigit(int c)
++int isascii(int c)
 +{
-+	return (unsigned int)(c - '0') <= 9;
++	/* 0x00..0x7f */
++	return (unsigned int)c <= 0x7f;
 +}
 +
-+#endif /* _NOLIBC_CTYPE_H */
-diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
-index b06bd5cb5651..c96c6cb7f3ae 100644
---- a/tools/include/nolibc/nolibc.h
-+++ b/tools/include/nolibc/nolibc.h
-@@ -87,18 +87,13 @@
- #include "arch.h"
- #include "types.h"
- #include "sys.h"
-+#include "ctype.h"
- #include "stdlib.h"
- #include "string.h"
- 
- /* Used by programs to avoid std includes */
- #define NOLIBC
- 
--static __attribute__((unused))
--int isdigit(int c)
--{
--	return (unsigned int)(c - '0') <= 9;
--}
--
++static __attribute__((unused))
++int isblank(int c)
++{
++	return c == '\t' || c == ' ';
++}
++
++static __attribute__((unused))
++int iscntrl(int c)
++{
++	/* 0x00..0x1f, 0x7f */
++	return (unsigned int)c < 0x20 || c == 0x7f;
++}
++
  static __attribute__((unused))
- const char *ltoa(long in)
+ int isdigit(int c)
  {
+-	return (unsigned int)(c - '0') <= 9;
++	return (unsigned int)(c - '0') < 10;
++}
++
++static __attribute__((unused))
++int isgraph(int c)
++{
++	/* 0x21..0x7e */
++	return (unsigned int)(c - 0x21) < 0x5e;
++}
++
++static __attribute__((unused))
++int islower(int c)
++{
++	return (unsigned int)(c - 'a') < 26;
++}
++
++static __attribute__((unused))
++int isprint(int c)
++{
++	/* 0x20..0x7e */
++	return (unsigned int)(c - 0x20) < 0x5f;
++}
++
++static __attribute__((unused))
++int isspace(int c)
++{
++	/* \t is 0x9, \n is 0xA, \v is 0xB, \f is 0xC, \r is 0xD */
++	return ((unsigned int)c == ' ') || (unsigned int)(c - 0x09) < 5;
++}
++
++static __attribute__((unused))
++int isupper(int c)
++{
++	return (unsigned int)(c - 'A') < 26;
++}
++
++static __attribute__((unused))
++int isxdigit(int c)
++{
++	return isdigit(c) || (unsigned int)(c - 'A') < 6 || (unsigned int)(c - 'a') < 6;
++}
++
++static __attribute__((unused))
++int isalpha(int c)
++{
++	return islower(c) || isupper(c);
++}
++
++static __attribute__((unused))
++int isalnum(int c)
++{
++	return isalpha(c) || isdigit(c);
++}
++
++static __attribute__((unused))
++int ispunct(int c)
++{
++	return isgraph(c) && !isalnum(c);
+ }
+ 
+ #endif /* _NOLIBC_CTYPE_H */
 -- 
 2.31.1.189.g2e36527f23
 

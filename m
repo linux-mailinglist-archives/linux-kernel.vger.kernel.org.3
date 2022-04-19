@@ -2,177 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14EDE507283
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:05:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8866150727F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354362AbiDSQHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38860 "EHLO
+        id S1354250AbiDSQHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:07:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354283AbiDSQHV (ORCPT
+        with ESMTP id S244370AbiDSQG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:07:21 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61157326DB;
-        Tue, 19 Apr 2022 09:04:35 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 045645FD07;
-        Tue, 19 Apr 2022 18:46:54 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1650383214;
-        bh=ueswjV/XHoMLOcUb0AgzqxhPxdZ9Fy3DQLChOJKaPrs=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=c232lX1i9ZwtOvn4+xiTwaAgxMlCkkIhPWeH7ctgh5Ibeel+kFPcn6dtNwIqVephm
-         wrQ1ZzsyCnI4bjy5tnFnMBUyhiS7VmA1yBLbuFGd1cVxQMm9czZYSYFKqbAHj919u4
-         x0XjYE0cjPIasvsoASnki5WAaa5vR51TivfLh9ryADrGYZbH4byT1iYUPWsJMzkEBA
-         GDYWaliV2/4rjYZdSYAYnYiwV5Glzoe6NK4XXEk69fMitJ2pqR9ZAG1rxqRxeMPBvl
-         GiasCipotYl3OJPtOQu47FKtUVUuvQYef4Tb1Ow/Si45UeVeRcmPdSmr1ioDX4sKuF
-         wlJ6YxM+PEu7g==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 18:46:53 +0300 (MSK)
-From:   Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>
-To:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>
-CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Rokosov Dmitry Dmitrievich <DDRokosov@sberdevices.ru>
-Subject: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema for
- msa311 accel driver
-Thread-Topic: [PATCH v1 3/3] dt-bindings: iio: accel: add dt-binding schema
- for msa311 accel driver
-Thread-Index: AQHYVASQQZC393Ji1keuDd+e+35bUg==
-Date:   Tue, 19 Apr 2022 15:45:58 +0000
-Message-ID: <20220419154555.24191-4-ddrokosov@sberdevices.ru>
-References: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
-In-Reply-To: <20220419154555.24191-1-ddrokosov@sberdevices.ru>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 19 Apr 2022 12:06:59 -0400
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CBE344FF;
+        Tue, 19 Apr 2022 09:04:16 -0700 (PDT)
+Received: by mail-yb1-f177.google.com with SMTP id j2so31958364ybu.0;
+        Tue, 19 Apr 2022 09:04:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=gELaQOf9Rj6C8VNSNQ3uNKSPk0ySJbTinIMoZcK7lh4=;
+        b=Ih44qOtKjwoUqThTCkb0+nJOa7pIQ7D1itRAo047QkPoZJq7WJBZY/IGMQalPzWPuI
+         RIe0sOUdV3L6Md5DA1LbktvulzV9/4zVnJidUkqhhU1u3koApXez160rh5RV1go0XWbY
+         4cE7Zi+Bu8cK8D63lwWP8EdaNlXuEMCB0mmqRQBeH8ge6+7/m6nR8vyL0F/c092ZmnGC
+         WqBXmNqmoL7WWzOZaPUYa2hdV36rTC540I/KLkvqZllcJEjLiWyjzRCLjCLQ0TIFEiLD
+         nPA6rhjPbpBNxPICUdntmu3aV4d4RLhL+noyXOrWZNxxx4+dlmR6m/TnHVd/Gs8AS7ZW
+         rpXg==
+X-Gm-Message-State: AOAM531+2FXdPJBF6bUxJcVNXNNwW76bfVbRsHBnQXdUYORRivjTfoMp
+        vvlSAICZ7YUJDpMw49WCOJzyKU0UXwgJw8aM857Wjvd1t7U=
+X-Google-Smtp-Source: ABdhPJySdZu7kJ80ddxqUSt6NhXZwCC1tFB5mB2i3+wMcDWa0g0Nk7Pb1wIM/KMByphQnRkIzRZ+2uzUnTOqWFaVIOs=
+X-Received: by 2002:a25:230d:0:b0:641:375c:b5ad with SMTP id
+ j13-20020a25230d000000b00641375cb5admr15404846ybj.137.1650384255763; Tue, 19
+ Apr 2022 09:04:15 -0700 (PDT)
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/04/19 10:34:00 #19304456
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220415133356.179706384@linutronix.de> <20220415161206.536733494@linutronix.de>
+In-Reply-To: <20220415161206.536733494@linutronix.de>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Tue, 19 Apr 2022 18:04:04 +0200
+Message-ID: <CAJZ5v0h07hXW3WuBq673yk1HOuQLSw7-hJTntX331FDZRh1tDA@mail.gmail.com>
+Subject: Re: [patch 03/10] x86/aperfmperf: Separate AP/BP frequency invariance init
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce devicetree binding json-schema for MSA311 tri-axial,
-low-g accelerometer driver.
+On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> This code is convoluted and because it can be invoked post init via the
+> ACPI/CPPC code, all of the initialization functionality is built in instead
+> of being part of init text and init data.
+>
+> As a first step create separate calls for the boot and the application
+> processors.
+>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> ---
+>  arch/x86/include/asm/topology.h  |   12 +++++-------
+>  arch/x86/kernel/acpi/cppc.c      |    3 ++-
+>  arch/x86/kernel/cpu/aperfmperf.c |   23 +++++++++++------------
+>  arch/x86/kernel/smpboot.c        |    4 ++--
+>  4 files changed, 20 insertions(+), 22 deletions(-)
+>
+> --- a/arch/x86/include/asm/topology.h
+> +++ b/arch/x86/include/asm/topology.h
+> @@ -216,14 +216,12 @@ extern void arch_scale_freq_tick(void);
+>  #define arch_scale_freq_tick arch_scale_freq_tick
+>
+>  extern void arch_set_max_freq_ratio(bool turbo_disabled);
+> -void init_freq_invariance(bool secondary, bool cppc_ready);
+> +extern void bp_init_freq_invariance(bool cppc_ready);
+> +extern void ap_init_freq_invariance(void);
+>  #else
+> -static inline void arch_set_max_freq_ratio(bool turbo_disabled)
+> -{
+> -}
+> -static inline void init_freq_invariance(bool secondary, bool cppc_ready)
+> -{
+> -}
+> +static inline void arch_set_max_freq_ratio(bool turbo_disabled) { }
+> +static inline void bp_init_freq_invariance(bool cppc_ready) { }
+> +static inline void ap_init_freq_invariance(void) { }
+>  #endif
+>
+>  #ifdef CONFIG_ACPI_CPPC_LIB
+> --- a/arch/x86/kernel/acpi/cppc.c
+> +++ b/arch/x86/kernel/acpi/cppc.c
+> @@ -96,7 +96,8 @@ void init_freq_invariance_cppc(void)
+>
+>         mutex_lock(&freq_invariance_lock);
+>
+> -       init_freq_invariance(secondary, true);
+> +       if (!secondary)
+> +               bp_init_freq_invariance(true);
+>         secondary = true;
+>
+>         mutex_unlock(&freq_invariance_lock);
+> --- a/arch/x86/kernel/cpu/aperfmperf.c
+> +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> @@ -428,31 +428,24 @@ static void register_freq_invariance_sys
+>  static inline void register_freq_invariance_syscore_ops(void) {}
+>  #endif
+>
+> -void init_freq_invariance(bool secondary, bool cppc_ready)
+> +void bp_init_freq_invariance(bool cppc_ready)
+>  {
+> -       bool ret = false;
+> +       bool ret;
+>
+> -       if (!boot_cpu_has(X86_FEATURE_APERFMPERF))
+> +       if (!cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+>                 return;
+>
+> -       if (secondary) {
+> -               if (static_branch_likely(&arch_scale_freq_key)) {
+> -                       init_counter_refs();
+> -               }
+> -               return;
+> -       }
+> +       init_counter_refs();
+>
+>         if (boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
+>                 ret = intel_set_max_freq_ratio();
+>         else if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD) {
+> -               if (!cppc_ready) {
+> +               if (!cppc_ready)
+>                         return;
+> -               }
+>                 ret = amd_set_max_freq_ratio(&arch_turbo_freq_ratio);
+>         }
+>
+>         if (ret) {
+> -               init_counter_refs();
+>                 static_branch_enable(&arch_scale_freq_key);
+>                 register_freq_invariance_syscore_ops();
+>                 pr_info("Estimated ratio of average max frequency by base frequency (times 1024): %llu\n", arch_max_freq_ratio);
+> @@ -461,6 +454,12 @@ void init_freq_invariance(bool secondary
+>         }
+>  }
+>
+> +void ap_init_freq_invariance(void)
+> +{
+> +       if (cpu_feature_enabled(X86_FEATURE_APERFMPERF))
+> +               init_counter_refs();
 
-Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
----
- .../bindings/iio/accel/memsensing,msa311.yaml      | 64 ++++++++++++++++++=
-++++
- MAINTAINERS                                        |  1 +
- 2 files changed, 65 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/accel/memsensing,=
-msa311.yaml
+This doesn't check arch_scale_freq_key now which may be a good thing
+to mention in the changelog.
 
-diff --git a/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.=
-yaml b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-new file mode 100644
-index 00000000..3e4660f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
-@@ -0,0 +1,64 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+
-+%YAML 1.2
-+---
-+$id: "http://devicetree.org/schemas/iio/accel/memsensing,msa311.yaml#"
-+$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-+
-+title: MEMSensing digital 3-Axis accelerometer
-+
-+maintainers:
-+  - Dmitry Rokosov <ddrokosov@sberdevices.ru>
-+
-+description: |
-+  MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-+  sensitivity consumer applications. It has dynamical user selectable full
-+  scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurement=
-s
-+  with output data rates from 1Hz to 1000Hz.
-+  Datasheet can be found at following URL
-+  https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
-+
-+properties:
-+  compatible:
-+    const: memsensing,msa311
-+
-+  "#address-cells":
-+    const: 1
-+
-+  "#size-cells":
-+    const: 0
-+
-+  reg:
-+    maxItems: 1
-+    description: I2C registers address
-+
-+  interrupts:
-+    maxItems: 1
-+    description: optional I2C int pin can be freely mapped to specific fun=
-c
-+
-+  interrupt-names:
-+    const: irq
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    i2c0 {
-+        #address-cells =3D <1>;
-+        #size-cells =3D <0>;
-+
-+        msa311: msa311@62 {
-+            compatible =3D "memsensing,msa311";
-+            reg =3D <0x62>;
-+            interrupt-parent =3D <&gpio_intc>;
-+            interrupts =3D <29 IRQ_TYPE_LEVEL_HIGH>;
-+            interrupt-names =3D "irq";
-+            status =3D "okay";
-+        };
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c75be17..4227914 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12482,6 +12482,7 @@ MEMSENSING MICROSYSTEMS MSA311 ACCELEROMETER DRIVER
- M:	Dmitry Rokosov <ddrokosov@sberdevices.ru>
- L:	linux-iio@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/iio/accel/memsensing,msa311.yaml
- F:	drivers/iio/accel/msa311.c
-=20
- MEN A21 WATCHDOG DRIVER
---=20
-2.9.5
+I don't see anything questionable in the patch, though, so
+
+Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+> +}
+> +
+>  static void disable_freq_invariance_workfn(struct work_struct *work)
+>  {
+>         static_branch_disable(&arch_scale_freq_key);
+> --- a/arch/x86/kernel/smpboot.c
+> +++ b/arch/x86/kernel/smpboot.c
+> @@ -186,7 +186,7 @@ static void smp_callin(void)
+>          */
+>         set_cpu_sibling_map(raw_smp_processor_id());
+>
+> -       init_freq_invariance(true, false);
+> +       ap_init_freq_invariance();
+>
+>         /*
+>          * Get our bogomips.
+> @@ -1396,7 +1396,7 @@ void __init native_smp_prepare_cpus(unsi
+>  {
+>         smp_prepare_cpus_common();
+>
+> -       init_freq_invariance(false, false);
+> +       bp_init_freq_invariance(false);
+>         smp_sanity_check();
+>
+>         switch (apic_intr_mode) {
+>

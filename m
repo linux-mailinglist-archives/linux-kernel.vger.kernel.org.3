@@ -2,143 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53F695072D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:17:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE1F5072CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:17:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354499AbiDSQSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S1354530AbiDSQTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354500AbiDSQSu (ORCPT
+        with ESMTP id S1354508AbiDSQTE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:18:50 -0400
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AE038BCE;
-        Tue, 19 Apr 2022 09:16:07 -0700 (PDT)
-Received: by mail-yb1-f170.google.com with SMTP id d19so3529942ybc.5;
-        Tue, 19 Apr 2022 09:16:07 -0700 (PDT)
+        Tue, 19 Apr 2022 12:19:04 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C7538BCE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:16:21 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id h14-20020a056e020d4e00b002cbcdda66ccso9803496ilj.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:16:21 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=RdJkQFegCpx/QCihmoNqss9vW3lewnxP27ekVArKHfw=;
-        b=ofpT7J+qkBpnLPhWNfQIOaHgKNILGpmIIkFiX8aeotW2Dfo46DK+xwvo03Tnws9ijo
-         YQS6fQL7hgGZBOPcZzzKQU7m8DrwKGLv678Opyv/u5x6QiUv1GC3O6+SK7/8nFHtOMqc
-         6IGxsWYtUMDhfw0NJspspuoI11F7wkJmahvnIie8yyJQQsbC8xIx/Ax8FYpdOT7JB5DO
-         Vrz4QuRwhG7/uFSGPjZOOYq5lmVzP6s+5VNhsIs+0Vesloe+eRiCK3Y/XClYH3mYM0A1
-         2pXJAahmSTTELndIEsEY4mg4Qb1UYoP/S5R69LD3pg4OXKLd5+HIx93bAeU8h6SkxSs2
-         YLAA==
-X-Gm-Message-State: AOAM5324cMemcSlYI2pyTt9sczPHRXNX5DUR1UntDjop5TnUTqgaux4L
-        EtQEyG5IzmOZ4CNmYqcDkajElrjvMnhpU9ouSbo=
-X-Google-Smtp-Source: ABdhPJxiVNde9jKEH2NeYbLowMGmePdDc0ZZQ/YbGNZnXsT0SNO4zMDbDEtbXKHc6MfCIBnc7cwq1XpjeOZWIgEewrU=
-X-Received: by 2002:a05:6902:1543:b0:642:3fd:316c with SMTP id
- r3-20020a056902154300b0064203fd316cmr15328475ybu.622.1650384966773; Tue, 19
- Apr 2022 09:16:06 -0700 (PDT)
+        h=x-gm-message-state:mime-version:date:message-id:subject:from:to;
+        bh=kIqlqbqI51kwTHRKj8IajF/Rvbxyiy/lRTS6WnhpTUY=;
+        b=NKowupxsjpuYY+o+8CmqIFGmCDD1ZyAc9GCpzLHEkPjlCW8S0EengFVYPia5cHtkPJ
+         1LDjqhuwS2kOWEJ4PZ+hyCn3JsH+U+8rAZMJxp+h/zSEBGGKoDKbPOYiXeEybvyl07iR
+         gX8eBKXxX+U/jFgV3w7fGbkN8PaXJ2JBCOuh3v9wWPGmMnFvCig/pB/sS34Wh6evBA78
+         aC8wvLpRAWK+I3+d2AS1L2Jd4n2eBMT/AMoIxWu3DJ/QH9JclfMMLXxV/IBvu527lic6
+         doIZkxrWIIq/KUL+Ed+z95w4ptM4JKJntNOBBkYtEgoIzfbyGNXX9SNp+Jyz0mEyZEin
+         JoVw==
+X-Gm-Message-State: AOAM531kfh3a6Njw5orMGFlJjg7XAZAcWmGqQfluApXTj1YCMAVEcbT3
+        pl1Rj2UJCc/8mxM1qK93olr3fYNy4BLO3PxExF17DeOVmXts
+X-Google-Smtp-Source: ABdhPJwEBE5Lj26y8ZDffyQ4B6Wm9CsVVAvAh4JnHLqDLoE6JQnMpbzREJqoWINF0cn/WVac/SCehmLIH6JrUlKuTZz3v028MvmA
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.648485667@linutronix.de>
-In-Reply-To: <20220415161206.648485667@linutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 18:15:56 +0200
-Message-ID: <CAJZ5v0hLn9APoLL13eEjTDKZNr0o5JnvTZrit793R2dAtvj79w@mail.gmail.com>
-Subject: Re: [patch 05/10] x86/aperfmperf: Put frequency invariance
- aperf/mperf data into a struct
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
+X-Received: by 2002:a02:7058:0:b0:326:70d9:5917 with SMTP id
+ f85-20020a027058000000b0032670d95917mr7644947jac.254.1650384980466; Tue, 19
+ Apr 2022 09:16:20 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 09:16:20 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000080e10e05dd043247@google.com>
+Subject: [syzbot] INFO: rcu detected stall in sys_lsetxattr
+From:   syzbot <syzbot+306090cfa3294f0bbfb3@syzkaller.appspotmail.com>
+To:     fweisbec@gmail.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mingo@kernel.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Preparation for sharing code with the CPU frequency portion of the
-> aperf/mperf code.
->
-> No functional change.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+Hello,
 
-All good AFAICS:
+syzbot found the following issue on:
 
-Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+HEAD commit:    40354149f4d7 Add linux-next specific files for 20220414
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=16ae0bd0f00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a44d62051576f6f5
+dashboard link: https://syzkaller.appspot.com/bug?extid=306090cfa3294f0bbfb3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164417ccf00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=104d63d0f00000
 
-> ---
->  arch/x86/kernel/cpu/aperfmperf.c |   26 +++++++++++++++-----------
->  1 file changed, 15 insertions(+), 11 deletions(-)
->
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -22,6 +22,13 @@
->
->  #include "cpu.h"
->
-> +struct aperfmperf {
-> +       u64             aperf;
-> +       u64             mperf;
-> +};
-> +
-> +static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples);
-> +
->  struct aperfmperf_sample {
->         unsigned int    khz;
->         atomic_t        scfpending;
-> @@ -194,8 +201,6 @@ unsigned int arch_freq_get_on_cpu(int cp
->
->  DEFINE_STATIC_KEY_FALSE(arch_scale_freq_key);
->
-> -static DEFINE_PER_CPU(u64, arch_prev_aperf);
-> -static DEFINE_PER_CPU(u64, arch_prev_mperf);
->  static u64 arch_turbo_freq_ratio = SCHED_CAPACITY_SCALE;
->  static u64 arch_max_freq_ratio = SCHED_CAPACITY_SCALE;
->
-> @@ -407,8 +412,8 @@ static void init_counter_refs(void)
->         rdmsrl(MSR_IA32_APERF, aperf);
->         rdmsrl(MSR_IA32_MPERF, mperf);
->
-> -       this_cpu_write(arch_prev_aperf, aperf);
-> -       this_cpu_write(arch_prev_mperf, mperf);
-> +       this_cpu_write(cpu_samples.aperf, aperf);
-> +       this_cpu_write(cpu_samples.mperf, mperf);
->  }
->
->  #ifdef CONFIG_PM_SLEEP
-> @@ -474,9 +479,8 @@ DEFINE_PER_CPU(unsigned long, arch_freq_
->
->  void arch_scale_freq_tick(void)
->  {
-> -       u64 freq_scale;
-> -       u64 aperf, mperf;
-> -       u64 acnt, mcnt;
-> +       struct aperfmperf *s = this_cpu_ptr(&cpu_samples);
-> +       u64 aperf, mperf, acnt, mcnt, freq_scale;
->
->         if (!arch_scale_freq_invariant())
->                 return;
-> @@ -484,11 +488,11 @@ void arch_scale_freq_tick(void)
->         rdmsrl(MSR_IA32_APERF, aperf);
->         rdmsrl(MSR_IA32_MPERF, mperf);
->
-> -       acnt = aperf - this_cpu_read(arch_prev_aperf);
-> -       mcnt = mperf - this_cpu_read(arch_prev_mperf);
-> +       acnt = aperf - s->aperf;
-> +       mcnt = mperf - s->mperf;
->
-> -       this_cpu_write(arch_prev_aperf, aperf);
-> -       this_cpu_write(arch_prev_mperf, mperf);
-> +       s->aperf = aperf;
-> +       s->mperf = mperf;
->
->         if (check_shl_overflow(acnt, 2*SCHED_CAPACITY_SHIFT, &acnt))
->                 goto error;
->
+The issue was bisected to:
+
+commit e257039f0fc7da36ac3a522ef9a5cb4ae7852e67
+Author: Al Viro <viro@zeniv.linux.org.uk>
+Date:   Tue Mar 1 04:04:20 2022 +0000
+
+    mount_setattr(): clean the control flow and calling conventions
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14622210f00000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16622210f00000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12622210f00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+306090cfa3294f0bbfb3@syzkaller.appspotmail.com
+Fixes: e257039f0fc7 ("mount_setattr(): clean the control flow and calling conventions")
+
+rcu: INFO: rcu_preempt self-detected stall on CPU
+rcu: 	1-....: (10499 ticks this GP) idle=23b/1/0x4000000000000000 softirq=5447/5447 fqs=5210 
+	(t=10500 jiffies g=4401 q=63 ncpus=2)
+NMI backtrace for cpu 1
+CPU: 1 PID: 3614 Comm: syz-executor153 Not tainted 5.18.0-rc2-next-20220414-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ <IRQ>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ nmi_cpu_backtrace.cold+0x47/0x144 lib/nmi_backtrace.c:111
+ nmi_trigger_cpumask_backtrace+0x1e6/0x230 lib/nmi_backtrace.c:62
+ trigger_single_cpu_backtrace include/linux/nmi.h:164 [inline]
+ rcu_dump_cpu_stacks+0x262/0x3f0 kernel/rcu/tree_stall.h:369
+ print_cpu_stall kernel/rcu/tree_stall.h:665 [inline]
+ check_cpu_stall kernel/rcu/tree_stall.h:749 [inline]
+ rcu_pending kernel/rcu/tree.c:4010 [inline]
+ rcu_sched_clock_irq.cold+0x144/0x8fc kernel/rcu/tree.c:2675
+ update_process_times+0x16d/0x200 kernel/time/timer.c:1811
+ tick_sched_handle+0x9b/0x180 kernel/time/tick-sched.c:243
+ tick_sched_timer+0xee/0x120 kernel/time/tick-sched.c:1473
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x1c0/0xe50 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1086 [inline]
+ __sysvec_apic_timer_interrupt+0x146/0x530 arch/x86/kernel/apic/apic.c:1103
+ sysvec_apic_timer_interrupt+0x8e/0xc0 arch/x86/kernel/apic/apic.c:1097
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x12/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0010:__mnt_want_write+0xdd/0x2e0 fs/namespace.c:348
+Code: 00 02 00 00 89 de e8 22 64 9c ff 85 db 74 42 48 b8 00 00 00 00 00 fc ff df 4d 89 ec 49 c1 ec 03 49 01 c4 e8 e5 61 9c ff f3 90 <41> 0f b6 04 24 84 c0 74 08 3c 03 0f 8e 99 01 00 00 8b 5d 10 31 ff
+RSP: 0018:ffffc90003acfdf0 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000200 RCX: 0000000000000000
+RDX: ffff8880209957c0 RSI: ffffffff81dda00b RDI: 0000000000000003
+RBP: ffff888140174c20 R08: 0000000000000000 R09: 0000000000000000
+R10: ffffffff81dda030 R11: 1ffffffff1f09899 R12: ffffed102802e986
+R13: ffff888140174c30 R14: ffff888140174c50 R15: 0000000000000000
+ mnt_want_write+0x13d/0x3e0 fs/namespace.c:394
+ path_setxattr+0xb2/0x1c0 fs/xattr.c:627
+ __do_sys_lsetxattr fs/xattr.c:652 [inline]
+ __se_sys_lsetxattr fs/xattr.c:648 [inline]
+ __x64_sys_lsetxattr+0xbd/0x150 fs/xattr.c:648
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x44/0xae
+RIP: 0033:0x7f7262608cc9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f72625992f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000bd
+RAX: ffffffffffffffda RBX: 00007f72626904b0 RCX: 00007f7262608cc9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000600
+RBP: 00007f726265e074 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0030656c69662f2e
+R13: 695f70756f72672c R14: 695f726573752c30 R15: 00007f72626904b8
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	00 02                	add    %al,(%rdx)
+   2:	00 00                	add    %al,(%rax)
+   4:	89 de                	mov    %ebx,%esi
+   6:	e8 22 64 9c ff       	callq  0xff9c642d
+   b:	85 db                	test   %ebx,%ebx
+   d:	74 42                	je     0x51
+   f:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
+  16:	fc ff df
+  19:	4d 89 ec             	mov    %r13,%r12
+  1c:	49 c1 ec 03          	shr    $0x3,%r12
+  20:	49 01 c4             	add    %rax,%r12
+  23:	e8 e5 61 9c ff       	callq  0xff9c620d
+  28:	f3 90                	pause
+* 2a:	41 0f b6 04 24       	movzbl (%r12),%eax <-- trapping instruction
+  2f:	84 c0                	test   %al,%al
+  31:	74 08                	je     0x3b
+  33:	3c 03                	cmp    $0x3,%al
+  35:	0f 8e 99 01 00 00    	jle    0x1d4
+  3b:	8b 5d 10             	mov    0x10(%rbp),%ebx
+  3e:	31 ff                	xor    %edi,%edi
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

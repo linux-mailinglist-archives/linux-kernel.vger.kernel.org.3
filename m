@@ -2,135 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C817B5060AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC89E5060B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238106AbiDSAKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S238591AbiDSALT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237916AbiDSAKe (ORCPT
+        with ESMTP id S238490AbiDSALL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:10:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2456146;
-        Mon, 18 Apr 2022 17:07:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8447B81123;
-        Tue, 19 Apr 2022 00:07:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 749CFC385AD;
-        Tue, 19 Apr 2022 00:07:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650326869;
-        bh=DTyMhxWth7RqAgPi1iypc1zMc6X4txtA5mNp5ZnXW0U=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Uch6D45tphaUYJEhFZ/9zQZIHDFs9/IWjA7ZiZvJbiN30ct9qpCv7JNCFsxyVhQ7c
-         f+B/9iKtRf8oE9CR6lCzDWB0omUhc5+kUoPakjImJ6xsYxlBXaqe+MZlJfMWaqABKD
-         Q96XHRF5vLojpMrq3olY+Yaa8/mf5WnX8AZ0dOkTcFpzlSZkPzvnBuluqmBblGONL+
-         CgY6T4/SiQqc+IJ5NLOQ5B9Gmezz8LE0h1bzFniIWb+s6BnAK611lkh0qjvYPWFDzn
-         ejpP5Aypt2SIa+QgfGZ213eRnfJ3vJ7ARCMQaAqsuD5j4Tt++2ZcHy/J0e/04E60dm
-         oqJlApUa1qcSg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 20D395C04BD; Mon, 18 Apr 2022 17:07:49 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 1/6] torture: Add rcu_normal and rcu_expedited runs to torture.sh
+        Mon, 18 Apr 2022 20:11:11 -0400
+Received: from qproxy5-pub.mail.unifiedlayer.com (qproxy5-pub.mail.unifiedlayer.com [69.89.21.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AA363882
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:08:16 -0700 (PDT)
+Received: from outbound-ss-761.bluehost.com (outbound-ss-761.bluehost.com [74.220.211.250])
+        by qproxy5.mail.unifiedlayer.com (Postfix) with ESMTP id 737188032AD2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:08:15 +0000 (UTC)
+Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
+        by progateway8.mail.pro1.eigbox.com (Postfix) with ESMTP id 3E60610043FBF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:07:45 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id gbPEnvACyb2WGgbPFnEOFa; Tue, 19 Apr 2022 00:07:45 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=FLvee8ks c=1 sm=1 tr=0 ts=625dfd51
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=z0gMJWrwH1QA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=36OQTUTh8JSVb8S2w5osYWQ/4Lqcw/BTNh1OC/B/n58=; b=NmajoqCBIobKJFhle2aMUBD8GN
+        LPcROPPGE4RteBOEgVJMq3XFxtbjHUzBhGKXwmnOC1dCXeqgcuMaYzY/tHlKzpiTaUBsnZXWqalkT
+        EPm+i32an0gBDjxdWT43RZ9M2r6jatIzc158NwAFv3VM22KJRdyYt9KyzxZWvVwDEHgBQ4kouztp7
+        vaoEoqxSlKFfW8VBkehl3ho356pizmpwU9nLjGAtG4KwGOKDvOQmOI1sYMo2HIcTbc35H9/0qBOwP
+        BJhzuYinE4BB2PXD/UkDUynR/We9ruKEZSQh0wPiYtpsOQO9/YCLY2Rp+205Hy0ICXa6nxlAujvUF
+        q06/vbKA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:60112 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <re@w6rz.net>)
+        id 1ngbPD-0002bA-QZ; Mon, 18 Apr 2022 18:07:43 -0600
+Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220418121200.312988959@linuxfoundation.org>
+In-Reply-To: <20220418121200.312988959@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <25bcc168-9f54-869a-fb25-01e7a92dddd8@w6rz.net>
 Date:   Mon, 18 Apr 2022 17:07:41 -0700
-Message-Id: <20220419000746.3949667-1-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220419000541.GA3949109@paulmck-ThinkPad-P17-Gen-1>
-References: <20220419000541.GA3949109@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1ngbPD-0002bA-QZ
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:60112
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the rcupdate.rcu_normal and rcupdate.rcu_expedited kernel
-boot parameters are not regularly tested.  The potential addition of
-polled expedited grace-period APIs increases the amount of code that is
-affected by these kernel boot parameters.  This commit therefore adds a
-"--do-rt" argument to torture.sh to exercise these kernel-boot options.
+On 4/18/22 5:10 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.35 release.
+> There are 189 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.35-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
----
- .../selftests/rcutorture/bin/torture.sh        | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-diff --git a/tools/testing/selftests/rcutorture/bin/torture.sh b/tools/testing/selftests/rcutorture/bin/torture.sh
-index bfe09e2829c8..e657a6e06417 100755
---- a/tools/testing/selftests/rcutorture/bin/torture.sh
-+++ b/tools/testing/selftests/rcutorture/bin/torture.sh
-@@ -54,6 +54,7 @@ do_kvfree=yes
- do_kasan=yes
- do_kcsan=no
- do_clocksourcewd=yes
-+do_rt=yes
- 
- # doyesno - Helper function for yes/no arguments
- function doyesno () {
-@@ -82,6 +83,7 @@ usage () {
- 	echo "       --do-rcuscale / --do-no-rcuscale"
- 	echo "       --do-rcutorture / --do-no-rcutorture"
- 	echo "       --do-refscale / --do-no-refscale"
-+	echo "       --do-rt / --do-no-rt"
- 	echo "       --do-scftorture / --do-no-scftorture"
- 	echo "       --duration [ <minutes> | <hours>h | <days>d ]"
- 	echo "       --kcsan-kmake-arg kernel-make-arguments"
-@@ -118,6 +120,7 @@ do
- 		do_scftorture=yes
- 		do_rcuscale=yes
- 		do_refscale=yes
-+		do_rt=yes
- 		do_kvfree=yes
- 		do_kasan=yes
- 		do_kcsan=yes
-@@ -148,6 +151,7 @@ do
- 		do_scftorture=no
- 		do_rcuscale=no
- 		do_refscale=no
-+		do_rt=no
- 		do_kvfree=no
- 		do_kasan=no
- 		do_kcsan=no
-@@ -162,6 +166,9 @@ do
- 	--do-refscale|--do-no-refscale)
- 		do_refscale=`doyesno "$1" --do-refscale`
- 		;;
-+	--do-rt|--do-no-rt)
-+		do_rt=`doyesno "$1" --do-rt`
-+		;;
- 	--do-scftorture|--do-no-scftorture)
- 		do_scftorture=`doyesno "$1" --do-scftorture`
- 		;;
-@@ -354,6 +361,17 @@ then
- 	torture_set "scftorture" tools/testing/selftests/rcutorture/bin/kvm.sh --torture scf --allcpus --duration "$duration_scftorture" --configs "$configs_scftorture" --kconfig "CONFIG_NR_CPUS=$HALF_ALLOTED_CPUS" --memory 1G --trust-make
- fi
- 
-+if test "$do_rt" = "yes"
-+then
-+	# With all post-boot grace periods forced to normal.
-+	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 rcupdate.rcu_normal=1"
-+	torture_set "rcurttorture" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration "$duration_rcutorture" --configs "TREE03" --trust-make
-+
-+	# With all post-boot grace periods forced to expedited.
-+	torture_bootargs="rcupdate.rcu_cpu_stall_suppress_at_boot=1 torture.disable_onoff_at_boot rcupdate.rcu_task_stall_timeout=30000 rcupdate.rcu_expedited=1"
-+	torture_set "rcurttorture-exp" tools/testing/selftests/rcutorture/bin/kvm.sh --allcpus --duration "$duration_rcutorture" --configs "TREE03" --trust-make
-+fi
-+
- if test "$do_refscale" = yes
- then
- 	primlist="`grep '\.name[ 	]*=' kernel/rcu/refscale.c | sed -e 's/^[^"]*"//' -e 's/".*$//'`"
--- 
-2.31.1.189.g2e36527f23
+Tested-by: Ron Economos <re@w6rz.net>
 

@@ -2,94 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB3915063C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64C715063BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:08:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348487AbiDSFPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
+        id S1347910AbiDSFKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbiDSFPb (ORCPT
+        with ESMTP id S238277AbiDSFKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:15:31 -0400
-X-Greylist: delayed 1138 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 18 Apr 2022 22:12:49 PDT
-Received: from gherkin.frus.com (cpe-67-11-228-40.satx.res.rr.com [67.11.228.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF995220C1;
-        Mon, 18 Apr 2022 22:12:49 -0700 (PDT)
-Received: by gherkin.frus.com (Postfix, from userid 500)
-        id 485DF61DAA; Mon, 18 Apr 2022 23:53:50 -0500 (CDT)
-Date:   Mon, 18 Apr 2022 23:53:50 -0500
-From:   Bob Tracy <rct@frus.com>
-To:     debian-alpha@lists.debian.org
-Cc:     Michael Cree <mcree@orcon.net.nz>, linux-alpha@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: 5.17.0 boot issue on Miata
-Message-ID: <Yl5AXvU+cBH5ex4K@gherkin.frus.com>
-References: <Yj0u150JJpsb9nj4@gherkin.frus.com>
- <20220326222157.GA13650@tower>
- <YkuejknyPDJoQEDC@gherkin.frus.com>
- <20220405050125.GA25969@tower>
- <YkxKRElYUhMgOOCN@gherkin.frus.com>
- <10d61d8f-edfc-fc39-0936-233692464dbd@gmx.de>
- <Yk4XsdHvjrLqN1LR@gherkin.frus.com>
- <YlAyZdZ6afL58Ege@gherkin.frus.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YlAyZdZ6afL58Ege@gherkin.frus.com>
-X-Spam-Status: No, score=2.4 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RCVD_IN_PBL,RCVD_IN_SORBS_DUL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+        Tue, 19 Apr 2022 01:10:02 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 366DB20190;
+        Mon, 18 Apr 2022 22:07:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650344841; x=1681880841;
+  h=from:to:cc:subject:date:message-id;
+  bh=GdTiCrZbPfX19PSnyI6txSuLTMmt+h3YnRZA1pn6xpo=;
+  b=s+XWdRNYeSSFV8ErztHPsulc9O2/QtTo8ggu3Rk2MlcLNJFjxNblXl5+
+   q1WGCLw7otFFU+o2VrdCMEwCDQpo6JL/5W+TwVMDmwJOZwhHgsbIQ/G34
+   yFcBQQJ9pfaBVxjlhbPWerUIsx6OLaCLSjyxdSfmQohGnVqyWsxsyEcZ1
+   0=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 18 Apr 2022 22:07:21 -0700
+X-QCInternal: smtphost
+Received: from ironmsg01-blr.qualcomm.com ([10.86.208.130])
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/AES256-SHA; 18 Apr 2022 22:07:19 -0700
+X-QCInternal: smtphost
+Received: from hu-dikshita-hyd.qualcomm.com (HELO hu-sgudaval-hyd.qualcomm.com) ([10.213.110.13])
+  by ironmsg01-blr.qualcomm.com with ESMTP; 19 Apr 2022 10:37:03 +0530
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id 7F22F434D; Tue, 19 Apr 2022 10:37:02 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hverkuil-cisco@xs4all.nl
+Cc:     linux-arm-msm@vger.kernel.org, ezequiel@collabora.com,
+        stanimir.varbanov@linaro.org, quic_vgarodia@quicinc.com,
+        quic_majja@quicinc.com, quic_jdas@quicinc.com,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH v5 0/2] Introduce Intra-refresh type control
+Date:   Tue, 19 Apr 2022 10:36:41 +0530
+Message-Id: <1650344803-6884-1-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(Adding linux-scsi and linux-kernel, now that bisection is complete.)
+Hi,
 
-On Wed, Apr 06, 2022 at 05:44:01PM -0500, Bob Tracy wrote:
-> v5.17-rc2 ok.  v5.17-rc3 I get the disk sector errors and hang that I
-> reported in the first message in this thread.
+This series add a new intra-refresh type control for encoders.
+this can be used to specify which intra refresh to be enabled, random, cyclic or none.
 
-This is on an Alpha Miata platform (PWS 433au) with QLogic ISP1020 controller.
+Change since v0:
+ Dropped INTRA_REFRESH_TYPE_NONE as it was not needed.
+ Intra refresh period value as zero will disable the intra  refresh.
 
-Here's the implicated commit:
+Change since v1:
+ Updated the control name for better undestanding.
+ Also updated the documentation accordingly.
 
-edb854a3680bacc9ef9b91ec0c5ff6105886f6f3 is the first bad commit
-commit edb854a3680bacc9ef9b91ec0c5ff6105886f6f3
-Author: Ming Lei <ming.lei@redhat.com>
-Date:   Thu Jan 27 23:37:33 2022 +0800
+Change since v2:
+ Updated the venus driver implementation as well to use the  correct control name. Missed in v2.
 
-    scsi: core: Reallocate device's budget map on queue depth change
-    
-    We currently use ->cmd_per_lun as initial queue depth for setting up the
-    budget_map. Martin Wilck reported that it is common for the queue_depth to
-    be subsequently updated in slave_configure() based on detected hardware
-    characteristics.
-    
-    As a result, for some drivers, the static host template settings for
-    cmd_per_lun and can_queue won't actually get used in practice. And if the
-    default values are used to allocate the budget_map, memory may be consumed
-    unnecessarily.
-    
-    Fix the issue by reallocating the budget_map after ->slave_configure()
-    returns. At that time the device queue_depth should accurately reflect what
-    the hardware needs.
-    
-    Link: https://lore.kernel.org/r/20220127153733.409132-1-ming.lei@redhat.com
-    Cc: Bart Van Assche <bvanassche@acm.org>
-    Reported-by: Martin Wilck <martin.wilck@suse.com>
-    Suggested-by: Martin Wilck <martin.wilck@suse.com>
-    Tested-by: Martin Wilck <mwilck@suse.com>
-    Reviewed-by: Martin Wilck <mwilck@suse.com>
-    Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-    Signed-off-by: Ming Lei <ming.lei@redhat.com>
-    Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
+Change since v3:
+ Addressed comments from Hans in v4l2 patch.
+ Enabled the support for cyclic intra refresh in venus driver.
 
- drivers/scsi/scsi_scan.c | 55 +++++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 50 insertions(+), 5 deletions(-)
+Change since v4:
+ fixed typos in v4l2 patch.
+ fix mask value in venus driver patch (Hans).
 
- Respectfully,
- --Bob
+Thanks,
+Dikshita
+
+
+Dikshita Agarwal (2):
+  media: v4l2-ctrls: Add intra-refresh type control
+  venus: venc: Add support for intra-refresh mode
+
+ .../userspace-api/media/v4l/ext-ctrls-codec.rst    | 22 ++++++++++++++++++++++
+ drivers/media/platform/qcom/venus/core.h           |  1 +
+ drivers/media/platform/qcom/venus/venc.c           |  6 +++++-
+ drivers/media/platform/qcom/venus/venc_ctrls.c     |  8 ++++++++
+ drivers/media/v4l2-core/v4l2-ctrls-defs.c          |  9 +++++++++
+ include/uapi/linux/v4l2-controls.h                 |  5 +++++
+ 6 files changed, 50 insertions(+), 1 deletion(-)
+
+-- 
+2.7.4
+

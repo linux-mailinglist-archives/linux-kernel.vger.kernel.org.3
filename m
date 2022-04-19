@@ -2,60 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A176C506C92
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:36:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCB8C506C13
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:14:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350102AbiDSMii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57196 "EHLO
+        id S245031AbiDSMQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiDSMig (ORCPT
+        with ESMTP id S1352201AbiDSMP4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:38:36 -0400
-X-Greylist: delayed 1387 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 05:35:51 PDT
-Received: from ppsw-41.csi.cam.ac.uk (ppsw-41.csi.cam.ac.uk [131.111.8.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC4E1573B
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:35:51 -0700 (PDT)
-X-Cam-AntiVirus: no malware found
-X-Cam-ScannerInfo: https://help.uis.cam.ac.uk/email-scanner-virus
-Received: from hades.srcf.societies.cam.ac.uk ([131.111.179.67]:56344)
-        by ppsw-41.csi.cam.ac.uk (ppsw.cam.ac.uk [131.111.8.139]:25)
-        with esmtps (TLS1.2:ECDHE-RSA-AES256-GCM-SHA384:256)
-        id 1ngmiN-000usy-QF (Exim 4.95)
-        (return-path <amc96@srcf.net>);
-        Tue, 19 Apr 2022 13:12:15 +0100
-Received: from [192.168.1.10] (host-92-26-109-251.as13285.net [92.26.109.251])
-        (Authenticated sender: amc96)
-        by hades.srcf.societies.cam.ac.uk (Postfix) with ESMTPSA id 7565F1FAD5;
-        Tue, 19 Apr 2022 13:12:14 +0100 (BST)
-Message-ID: <8fbbd4ca-54b1-8c1c-19bc-3d0e6044ff5d@srcf.net>
-Date:   Tue, 19 Apr 2022 13:12:14 +0100
+        Tue, 19 Apr 2022 08:15:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1BD2B205CF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650370365;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bpFSXrBn9i8XVmZWcxjOCjor87VdZpZNStC/r8yG5AE=;
+        b=Mkt2zo+1Td8hGp2LSMIQpwP6Uiovn/d3oCUQLsRDVMANcL5X7Ge6KpVI2fS1AUODQlB4Mf
+        eX9nLYtdEGuM5StSUHcVwpr+8umCE8lLfrDN9E3tZniG4HcMtpQg5t3a2mpu+7mUD9+TWD
+        5VTQCrQ8nGMl70vm6WDvLyTb8peNv2U=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-608-TscDhRYuON63ykgo5MIgQQ-1; Tue, 19 Apr 2022 08:12:44 -0400
+X-MC-Unique: TscDhRYuON63ykgo5MIgQQ-1
+Received: by mail-wm1-f70.google.com with SMTP id g13-20020a1c4e0d000000b0038eba16aa46so1133645wmh.7
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:12:43 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent
+         :content-language:to:cc:references:from:organization:subject
+         :in-reply-to:content-transfer-encoding;
+        bh=bpFSXrBn9i8XVmZWcxjOCjor87VdZpZNStC/r8yG5AE=;
+        b=BCZBBUpd5pnM3Bo2YccOEWHUjnq9f55PY8CnfbzVYelkTWo+ydePBPyL7f3W94OQsv
+         6GJrAvSEK9/hiRSwwOMlvWtk3S3s7KUN6GBDABtlW2gAqYFrr6QsZ/YKAs3TZF/OhcIS
+         54HdhjhlN7A+W17s44aZYQQKlFrUmhK9D+5r7oLgsH6k2wNR85zoZBIDoeuzDlDrbIlx
+         ZCRVhWpg47AozViI/yFRftEIt9imcYrJ4I9TDk9Q1oHO9rv4RK5ZuQRS1Hi5GLGeIBZD
+         DI49KQalAzy3/zdRSeXuBqEjwUAdOZL9YzHt5fBk1XR6bTz6zom94FwBxceOscZGOeZX
+         BtoQ==
+X-Gm-Message-State: AOAM530oDfEsvRC7NlxlHlhmL64hmW7PJZv5JofiWjp3icv0EDgimJVW
+        c8/pCKPJnwNM7Vtrrt0yC3g2OQAKtN4zITwSHwm4qkrY3uRbPHHk8CYuqc6UnqLi2lN5/yAJCEh
+        YI8cY6+mALx59f24yYq1tfBw8
+X-Received: by 2002:a05:600c:1e1e:b0:38e:baaa:aae0 with SMTP id ay30-20020a05600c1e1e00b0038ebaaaaae0mr15235091wmb.157.1650370362916;
+        Tue, 19 Apr 2022 05:12:42 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJz/QTfXp55+8oe5vjVX8Svx2TIPDgx3b4qKD4rBNj7p2vVxT+AoJNVa0rGfqlm+fH7v+GYhnQ==
+X-Received: by 2002:a05:600c:1e1e:b0:38e:baaa:aae0 with SMTP id ay30-20020a05600c1e1e00b0038ebaaaaae0mr15235068wmb.157.1650370362644;
+        Tue, 19 Apr 2022 05:12:42 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5d00:d8c2:fbf6:a608:957a? (p200300cbc7045d00d8c2fbf6a608957a.dip0.t-ipconnect.de. [2003:cb:c704:5d00:d8c2:fbf6:a608:957a])
+        by smtp.gmail.com with ESMTPSA id 9-20020a056000154900b0020a849e1c41sm9323296wry.13.2022.04.19.05.12.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 05:12:42 -0700 (PDT)
+Message-ID: <7308d733-1e0b-7d2e-bc34-0757555d39d6@redhat.com>
+Date:   Tue, 19 Apr 2022 14:12:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 06/25] x86/xen: Add ANNOTATE_ENDBR to startup_xen()
-Content-Language: en-GB
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        "xen-devel@lists.xenproject.org" <xen-devel@lists.xenproject.org>
-References: <cover.1650300597.git.jpoimboe@redhat.com>
- <a87bd48b06d11ec4b98122a429e71e489b4e48c3.1650300597.git.jpoimboe@redhat.com>
- <b94cbac6-0a4d-8e4a-ec58-bbd46e385d45@citrix.com>
- <20220419115737.GU2731@worktop.programming.kicks-ass.net>
-From:   Andrew Cooper <amc96@srcf.net>
-In-Reply-To: <20220419115737.GU2731@worktop.programming.kicks-ass.net>
+ Thunderbird/91.6.2
+Content-Language: en-US
+To:     Miaohe Lin <linmiaohe@huawei.com>, akpm@linux-foundation.org
+Cc:     willy@infradead.org, vbabka@suse.cz, dhowells@redhat.com,
+        neilb@suse.de, apopple@nvidia.com, surenb@google.com,
+        minchan@kernel.org, peterx@redhat.com, sfr@canb.auug.org.au,
+        rcampbell@nvidia.com, naoya.horiguchi@nec.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <b57fea1e-5c9b-f47e-f565-16b54f1e8782@redhat.com>
+ <1b614ac3-02c0-ec66-b51a-e9b7e1a375ad@huawei.com>
+ <c901938d-efcc-6a94-bbf4-93e7f4c2ea7d@redhat.com>
+ <a6707adc-6d3e-92bb-4bb3-29a6e1f350f1@huawei.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+In-Reply-To: <a6707adc-6d3e-92bb-4bb3-29a6e1f350f1@huawei.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +91,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 12:57, Peter Zijlstra wrote:
-> On Tue, Apr 19, 2022 at 11:42:12AM +0000, Andrew Cooper wrote:
->> On 18/04/2022 17:50, Josh Poimboeuf wrote:
->>> The startup_xen() kernel entry point is referenced by the ".note.Xen"
->>> section, but is presumably not indirect-branched to.
->> It's the real entrypoint of the VM.  It's "got to" by setting %rip
->> during vcpu setup.
+On 19.04.22 14:00, Miaohe Lin wrote:
+> On 2022/4/19 19:46, David Hildenbrand wrote:
+> ...
+>>> Do you mean that we should set the pfn to 0 for the hwpoison marker so that we can
+>>> distinguish swapin error case from real hwpoison case?
 >>
->> We could in principle support starting a PV VM with CET active, but that
->> sounds like an enormous quantity of effort for very little gain.  CET
->> for Xen PV requires paravirt anyway (because the kernel runs in CPL!=0)
->> so decisions like this can wait until someone feels like doing the work.
+>> I am not sure if we really have to distinguish. However, "0" seems to
+>> make sense to indicate "this is not an actual problematic PFN, the
+>> information is simply no longer around due to a hardware issue.
 >>
->>>   Add ANNOTATE_ENDBR
->>> to silence future objtool warnings.
->>>
->>> Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>
->>> Cc: Juergen Gross <jgross@suse.com>
->>> Cc: Stefano Stabellini <sstabellini@kernel.org>
->>> Cc: xen-devel@lists.xenproject.org
->>> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
->> FWIW, Reviewed-by: Andrew Cooper <andrew.cooper3@citrix.com>, preferably
->> with the commit message tweaked to remove the uncertainty.
-> Something like so then?
->
-> ---
-> Subject: x86/xen: Add ANNOTATE_ENDBR to startup_xen()
-> From: Josh Poimboeuf <jpoimboe@redhat.com>
-> Date: Mon, 18 Apr 2022 09:50:25 -0700
->
-> From: Josh Poimboeuf <jpoimboe@redhat.com>
->
-> The startup_xen() kernel entry point is referenced by the ".note.Xen"
-> section, and is the real entry point of the VM. It *will* be
-> indirectly branched to, *however* currently Xen doesn't support PV VM
-> with CET active.
+> 
+> IMHO, we have to distinguish. For example, we might need to return VM_FAULT_SIGBUS
+> instead of VM_FAULT_HWPOISON when user accesses the error page. Or should we simply
+> return VM_FAULT_HWPOISON to simplify the handling?
 
-Technically it's always IRET'd to, but the point is that it's never
-"branched to" by the execution context of the VM.
+Hm, you're right. In e.g., x86 do_sigbus() we would send an BUS_MCEERR_AR.
 
-So it would be better to say that it's never indirectly branched to. 
-That's what the IBT checks care about.
+So yes, if we reuse is_hwpoison_entry() we'd have to convert to either
+VM_FAULT_HWPOISON or VM_FAULT_SIGBUS.
 
->
-> Add ANNOTATE_ENDBR to silence future objtool warnings.
+Something like "is_error_entry()" that can further be refined to
+hwpoison or swapin could make sense. But what you have here is straight
+forward to me as well. Whatever you/others prefer.
 
-Only just spotted.  All text in the subject and commit message needs
-s/ENDBR/NOENDBR/
+Acked-by: David Hildenbrand <david@redhat.com>
 
-~Andrew
+
+NIT: I'd make the terminology make_swapin_error_entry() consistent with
+SWAP_READ_ERROR and especially existing SWP_.
+
+For example, calling the latter SWP_SWAPIN_ERROR
+
+-- 
+Thanks,
+
+David / dhildenb
+

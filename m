@@ -2,78 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E3C506BFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:12:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48F04506C05
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347512AbiDSMN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56394 "EHLO
+        id S1352038AbiDSMO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:14:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349864AbiDSMMS (ORCPT
+        with ESMTP id S1352260AbiDSMNB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:12:18 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF0636150;
-        Tue, 19 Apr 2022 05:07:00 -0700 (PDT)
-Received: from [192.168.1.111] (91-156-85-209.elisa-laajakaista.fi [91.156.85.209])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id DBDDD25B;
-        Tue, 19 Apr 2022 14:06:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1650370018;
-        bh=0Xeowu0RhaZtA8PPIHf6S0q1sgEvMK0EbPNkXmVElWU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QD4vRkbtdEt/jjwbeO5ht1/C2/Ay4r7c43mTcue5NwcNvy/ZCkIqsSWtGB2es2ScJ
-         F6CXO/c1XKEcqcsHT4DxDsRJ9e/GgFFw10M+JTRAiGlG6QEQP2bNWV0GR8vvGTVMkI
-         1AtdzPj6b2AfYmbhkEJ83H1Vi0wtF56c9pbxCrdc=
-Message-ID: <9e848e84-a31f-98ec-ed6b-c1dce022723b@ideasonboard.com>
-Date:   Tue, 19 Apr 2022 15:06:54 +0300
+        Tue, 19 Apr 2022 08:13:01 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A52377DD;
+        Tue, 19 Apr 2022 05:08:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1lvxcKnGXEZSQ46qlcZLm8oKI0iNua4Tz0vIoesYXjY=; b=FKaywvYRPXa1OdccTJp0XgAWdH
+        NajyWXuVIKm8rnPSk0vcaA4ZjwhurC8x2ybsH/rX9v+/rspbd4eFQ14BkZefitsVlI8dYf4XSy8xg
+        7x7zC6md/9FuDbjiAeGqRL6h/5tGHjPyV3KB3XTFspUGg+JfJWlVKTZMBROwmxKCc3xI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1ngmeF-00GUaa-9X; Tue, 19 Apr 2022 14:07:59 +0200
+Date:   Tue, 19 Apr 2022 14:07:59 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     cgel.zte@gmail.com
+Cc:     f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lv Ruyi <lv.ruyi@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH] net: phy: fix error check return value of phy_read()
+Message-ID: <Yl6mH0HKCGPxgejI@lunn.ch>
+References: <20220419014439.2561835-1-lv.ruyi@zte.com.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH 0/2] Update register & interrupt info in am65x DSS
-Content-Language: en-US
-To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Devicetree <devicetree@vger.kernel.org>,
-        Linux ARM Kernel <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        Nikhil Devshatwar <nikhil.nd@ti.com>
-References: <20220419070302.16502-1-a-bhatia1@ti.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <20220419070302.16502-1-a-bhatia1@ti.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220419014439.2561835-1-lv.ruyi@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 10:03, Aradhya Bhatia wrote:
-> The Display SubSystem IP on the ti's am65x soc has an additional
-> register space "common1" and services a maximum of 2 interrupts.
+On Tue, Apr 19, 2022 at 01:44:39AM +0000, cgel.zte@gmail.com wrote:
+> From: Lv Ruyi <lv.ruyi@zte.com.cn>
 > 
-> The first patch in the series adds the required updates to the yaml
-> file. The second patch then reflects the yaml updates in the DSS DT
-> node of am65x soc.
+> phy_read() returns a negative number if there's an error, but the
+> error-checking code in the bcm87xx driver's config_intr function
+> triggers if phy_read() returns non-zero.  Correct that.
 > 
-> Aradhya Bhatia (2):
->    dt-bindings: display: ti,am65x-dss: Add missing register & interrupt
->    arm64: dts: ti: k3-am65: Add missing register & interrupt in DSS node
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Lv Ruyi <lv.ruyi@zte.com.cn>
+> ---
+>  drivers/net/phy/bcm87xx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->   .../devicetree/bindings/display/ti/ti,am65x-dss.yaml   | 10 +++++++---
->   arch/arm64/boot/dts/ti/k3-am65-main.dtsi               |  6 ++++--
->   2 files changed, 11 insertions(+), 5 deletions(-)
-> 
+> diff --git a/drivers/net/phy/bcm87xx.c b/drivers/net/phy/bcm87xx.c
+> index 313563482690..e62b53718010 100644
+> --- a/drivers/net/phy/bcm87xx.c
+> +++ b/drivers/net/phy/bcm87xx.c
+> @@ -146,7 +146,7 @@ static int bcm87xx_config_intr(struct phy_device *phydev)
+>  
+>  	if (phydev->interrupts == PHY_INTERRUPT_ENABLED) {
+>  		err = phy_read(phydev, BCM87XX_LASI_STATUS);
+> -		if (err)
+> +		if (err < 0)
+>  			return err;
 
-Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+This should probably have a Fixes: tag, and be for net, not next-next.
+Please read the netdev FAQ about the trees, and submittinng fixes for
+netdev.
 
-How are you planning to use the common1 area?
-
-  Tomi
+     Andrew

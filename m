@@ -2,85 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0EF6506973
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63004506974
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:09:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350892AbiDSLLw convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 19 Apr 2022 07:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41062 "EHLO
+        id S1350911AbiDSLMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231945AbiDSLLv (ORCPT
+        with ESMTP id S231945AbiDSLL7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:11:51 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [217.70.178.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04FE2AC49
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:09:08 -0700 (PDT)
-Received: from relay4-d.mail.gandi.net (unknown [217.70.183.196])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 85CD1C2A32
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:09:07 +0000 (UTC)
-Received: (Authenticated sender: hadess@hadess.net)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7B084E0008;
-        Tue, 19 Apr 2022 11:08:59 +0000 (UTC)
-Message-ID: <3f0dd8e6d0d6d01483e21e7702f5f59ad60a077c.camel@hadess.net>
-Subject: Re: [PATCH] USB: using pm_runtime_resume_and_get instead of
- pm_runtime_get_sync
-From:   Bastien Nocera <hadess@hadess.net>
-To:     cgel.zte@gmail.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Minghao Chi <chi.minghao@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Date:   Tue, 19 Apr 2022 13:08:58 +0200
-In-Reply-To: <20220419110553.2574548-1-chi.minghao@zte.com.cn>
-References: <20220419110553.2574548-1-chi.minghao@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        Tue, 19 Apr 2022 07:11:59 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01FBC2B1AF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:09:16 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id m15-20020a7bca4f000000b0038fdc1394b1so1316196wml.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:content-transfer-encoding:in-reply-to;
+        bh=k9SQS6DEx7PcK3aZSt7NFnPshwNlUhuY2vj8QCcgdU8=;
+        b=f8jTBzdCgR6gZoEBSlPxq90yrNFz+cJET9rvKb4SBbgJ3hbal36VvgdomSIglGgnO2
+         3m52LyW2/NdxIy6Gtfurhq600ou6nWq7Vo8VlhKKUxdcfpzNbNSLAAfHScLAiqIPJnli
+         D04SCxBNOYYZDuahNhtsJDUlWB5unMRdTrn/kJnFc31Ui5htITjZeD61zi+pb1l97IW/
+         9L2Qo1bthVeE7l1MPTQDaeETEDSUvtMflBQ2dm1j4rDzIRWNfzKlW/Uw0sUAHMuob9pS
+         l8EMODJrZvsH0VNyDN0nBwcr4Kae1lvAroCpPCxGh5764YFDnTKwa7A2Abu/qUz8uQLW
+         /tNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:content-transfer-encoding
+         :in-reply-to;
+        bh=k9SQS6DEx7PcK3aZSt7NFnPshwNlUhuY2vj8QCcgdU8=;
+        b=EHDMi3YBnYudwcVLurLoTjlfMYyXlS20TNWTKGNpVvnGgX6MKDy8+lFj+gMoHKzYMg
+         LojihT+qeC8uvp+juQ6CeJyldyeXpCxE6FaX8E0U6T4MOPVHXSrci59+XoOWZ1ohOk5n
+         /hcDu7JzqqymTALEVCmRHY9LaZNyAiLijVRTo7txvKgPqBywhAaFqNTU4TnR62a6ym7A
+         K2SP7EjJbZeSUXl5GYtYsuxde9k9wYSNtNz2xpN0TEYmndPp0djU6QT8RHMU3ch/iRkk
+         RqTqUjUlkYYXR0QygRAs0BNeqWjmnP7lNkgOdNpthROz5de6xf2utVdU1K+w+vdu5G+N
+         hBuQ==
+X-Gm-Message-State: AOAM531uTo5mtkCha/uyPuOBcwVI8rktJGZ49G7/EQz+PKaR3z007dJq
+        oOrd/PUkfnCXtpNE2JJyf9zMNQ==
+X-Google-Smtp-Source: ABdhPJyom0pejQx9+muBJ4LXKjDgivoBsIZxgzm1mENjReqSKOE98rUgPTpWVyVn3NH52/xaRjs95g==
+X-Received: by 2002:a05:600c:4f87:b0:392:9236:3c73 with SMTP id n7-20020a05600c4f8700b0039292363c73mr11110988wmq.158.1650366554533;
+        Tue, 19 Apr 2022 04:09:14 -0700 (PDT)
+Received: from Red ([2a01:cb1d:3d5:a100:264b:feff:fe03:2806])
+        by smtp.googlemail.com with ESMTPSA id 7-20020a05600c024700b0038ec0c4a2e7sm18549936wmj.11.2022.04.19.04.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 04:09:14 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 13:09:11 +0200
+From:   LABBE Corentin <clabbe@baylibre.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     heiko@sntech.de, herbert@gondor.apana.org.au,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 24/33] dt-bindings: crypto: convert rockchip-crypto to
+ YAML
+Message-ID: <Yl6YV9nLVI4qYsPP@Red>
+References: <20220413190713.1427956-1-clabbe@baylibre.com>
+ <20220413190713.1427956-25-clabbe@baylibre.com>
+ <44efe8b6-1712-5b87-f030-2f1328533ee8@linaro.org>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <44efe8b6-1712-5b87-f030-2f1328533ee8@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-04-19 at 11:05 +0000, cgel.zte@gmail.com wrote:
-> From: Minghao Chi <chi.minghao@zte.com.cn>
+Le Wed, Apr 13, 2022 at 09:31:13PM +0200, Krzysztof Kozlowski a �crit :
+> On 13/04/2022 21:07, Corentin Labbe wrote:
+> > Convert rockchip-crypto to YAML.
 > 
-> Using pm_runtime_resume_and_get() to replace pm_runtime_get_sync and
-> pm_runtime_put_noidle. This change is just to simplify the code, no
-> actual functional changes.
+> Thank you for your patch. There is something to discuss/improve.
 > 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Minghao Chi <chi.minghao@zte.com.cn>
-
-Reviewed-by: Bastien Nocera <hadess@hadess.net>
-
-Thanks!
-
-> ---
->  drivers/usb/misc/apple-mfi-fastcharge.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - rockchip,rk3288-crypto
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 4
+> > +
+> > +  clock-names:
+> > +    maxItems: 4
 > 
-> diff --git a/drivers/usb/misc/apple-mfi-fastcharge.c
-> b/drivers/usb/misc/apple-mfi-fastcharge.c
-> index ac8695195c13..fba102245d8f 100644
-> --- a/drivers/usb/misc/apple-mfi-fastcharge.c
-> +++ b/drivers/usb/misc/apple-mfi-fastcharge.c
-> @@ -119,11 +119,9 @@ static int apple_mfi_fc_set_property(struct
-> power_supply *psy,
->  
->         dev_dbg(&mfi->udev->dev, "prop: %d\n", psp);
->  
-> -       ret = pm_runtime_get_sync(&mfi->udev->dev);
-> -       if (ret < 0) {
-> -               pm_runtime_put_noidle(&mfi->udev->dev);
-> +       ret = pm_runtime_resume_and_get(&mfi->udev->dev);
-> +       if (ret < 0)
->                 return ret;
-> -       }
->  
->         switch (psp) {
->         case POWER_SUPPLY_PROP_CHARGE_TYPE:
+> This is not needed and dt_bindings_check should complain.
+> 
+> > +    items:
+> > +      const: aclk
+> > +      const: hclk
+> > +      const: sclk
+> > +      const: apb_pclk
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  reset-names:
+> > +    maxItems: 1
+> 
+> The same.
+> 
 
+I forgot to test the intermediate patch...
+Before I send a new version, does the final document is okay ?

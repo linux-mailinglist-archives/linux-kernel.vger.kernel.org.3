@@ -2,89 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3EAB507B30
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:48:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 624D3507B3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357726AbiDSUvO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:51:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39526 "EHLO
+        id S1357734AbiDSUxR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:53:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233556AbiDSUvN (ORCPT
+        with ESMTP id S233556AbiDSUxP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:51:13 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23F94132E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:48:28 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id y20so15199180eju.7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:48:28 -0700 (PDT)
+        Tue, 19 Apr 2022 16:53:15 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB413E5D4;
+        Tue, 19 Apr 2022 13:50:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=CJf6mwEn+nVa2WZGxE3mxgQWoFOnhgooJvM6BUiZrIU=;
-        b=sadS+dg/MUv2FK1jNv4oLA4r90msuWn07eu+YnpcnwBkvjXKjO6ovMpPDB4WX89vRZ
-         Zp1LuWysBPu4wG2p3ssLPAi/GQs4kZqU4H1VDgTVidl981CgDIxKMKFQinTJBI4I+yYW
-         +0cOWB42lZ8nODDHXFHvfhNqDuWS9vmNUXhpVaaxc+Oc/oCltiOaLTAzHkyq4DtXDwXk
-         BzYB9hk0fGEU2BJg6zqmWAJRDRpytwPPLr5LLYQv39gWv2eTN/AY2gr3/BWHrglqfIZG
-         r34urJSf9o8CynG4VHbozLBcWTW0S+j6HzQPCeUOhvXYqe+V4somhsvQ6+oG4RPFWDr/
-         cxDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=CJf6mwEn+nVa2WZGxE3mxgQWoFOnhgooJvM6BUiZrIU=;
-        b=3+0PcQUfIa70aNQQAtMtTQbvLYG0cLiEIgvOJqOpib6N1C8P2iL76f4tlXOtbDVhWQ
-         OHC3DpyewxuAe0ZHYJiz9gHZzhFyKjA0uGlJK9xf3iqBiVwOl9+yB0qqLxhKvWaymHx5
-         mzf4h2uyv7P+O4ozPAGpCtTRSiw9ZksslbQzNLczGz4AslTeHPkIHKgyBVpTJvUZqiwZ
-         Zq7meVb698sI7mrWtVdPy/fW9EZhI1DD3qWZVY62/JwwTRsDr3ebCNLNfVOgtItXMnLo
-         8R6PxIUhS1cD05CZHntjMxrKrzuk9UzBPSvm3P+bSGCetmAHFHwJ8zPGjDFWqr0dXgR0
-         Da6A==
-X-Gm-Message-State: AOAM533mOpQtO4rkqSvg4lbBw79OR1Gr1jYLBrgEy+AdoVAYhtOsz6Zs
-        owh93/q68Gq346tzjdsTn4tA4w==
-X-Google-Smtp-Source: ABdhPJyQtcbsYxBk301NPuwUiPCLtudHHdOKEJcHue01td/XXGeGWYHsjUmYm8cYC0OuP1gllTZtKQ==
-X-Received: by 2002:a17:907:9005:b0:6da:81ae:a798 with SMTP id ay5-20020a170907900500b006da81aea798mr4214344ejc.699.1650401307466;
-        Tue, 19 Apr 2022 13:48:27 -0700 (PDT)
-Received: from [192.168.0.222] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id wi17-20020a170906fd5100b006e8b945ab94sm5905360ejb.216.2022.04.19.13.48.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 13:48:26 -0700 (PDT)
-Message-ID: <09339568-8901-991d-a3a4-1061fe5c90fa@linaro.org>
-Date:   Tue, 19 Apr 2022 22:48:25 +0200
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1650401432; x=1681937432;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Mxl40I/GVF4LYfYnv2CrUGvPyjKo5X9LbQFOPvAimOY=;
+  b=bvjQbMrlqNmENjrVbwCendq0ch5CGvA2YEArOj6eOdJ5lx0pmERLR/D+
+   eyOqsB2xznhDzDn1rsTgi0Xb/GbDeB1y115AJ/+NoHHUvi/r7HBe37cAW
+   Rv1yvF0SdfUhqgeLwD/HCsaI2qpb15nsv9dVgx6G1CvDq2czypOFYenvU
+   g=;
+Received: from ironmsg09-lv.qualcomm.com ([10.47.202.153])
+  by alexa-out.qualcomm.com with ESMTP; 19 Apr 2022 13:50:32 -0700
+X-QCInternal: smtphost
+Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
+  by ironmsg09-lv.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 13:50:32 -0700
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Tue, 19 Apr 2022 13:50:31 -0700
+Received: from [10.111.175.117] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Apr
+ 2022 13:50:28 -0700
+Message-ID: <e3b8dcea-2458-1a6b-7cfd-3818d029d548@quicinc.com>
+Date:   Tue, 19 Apr 2022 13:50:26 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: Aw: Re: Re: [RFC/RFT 1/6] dt-bindings: phy: rockchip: add pcie3
- phy
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v7 08/14] drm/msm/dpu: don't use merge_3d if DSC merge
+ topology is used
 Content-Language: en-US
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-rockchip@lists.infradead.org,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Johan Jonker <jbx6244@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Michael Riesch <michael.riesch@wolfvision.net>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-References: <20220416135458.104048-1-linux@fw-web.de>
- <20220416135458.104048-2-linux@fw-web.de>
- <38e60bb2-123b-09cf-d6ef-3a07c6984108@linaro.org>
- <trinity-597cf8a3-2ad4-41e6-b3c9-b949f8610533-1650390552136@3c-app-gmx-bap70>
- <fce0337a-0c71-a040-0a01-f20b55eb568b@linaro.org>
- <trinity-a5ae4007-e6e3-4869-80ad-3783109b6d4c-1650400612809@3c-app-gmx-bap70>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <trinity-a5ae4007-e6e3-4869-80ad-3783109b6d4c-1650400612809@3c-app-gmx-bap70>
-Content-Type: text/plain; charset=UTF-8
+To:     Vinod Koul <vkoul@kernel.org>, Rob Clark <robdclark@gmail.com>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Jonathan Marek" <jonathan@marek.ca>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>
+References: <20220406094031.1027376-1-vkoul@kernel.org>
+ <20220406094031.1027376-9-vkoul@kernel.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220406094031.1027376-9-vkoul@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -95,25 +74,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/2022 22:36, Frank Wunderlich wrote:
->> Just use default as I wrote above.
+
+
+On 4/6/2022 2:40 AM, Vinod Koul wrote:
+> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 > 
-> so like this?
+> DPU supports different topologies for the case when multiple INTFs are
+> being driven by the single phys_enc. The driver defaults to using 3DMux
+> in such cases. Don't use it if DSC merge is used instead.
 > 
->   rockchip,pcie30-phymode:
->     $ref: '/schemas/types.yaml#/definitions/uint32'
->     description: |
->       set the phy-mode for enabling bifurcation
->       bit0: bifurcation for port 0
->       bit1: bifurcation for port 1
->       bit2: aggregation
->       constants are defined in the dt-bindings/phy/phy-rockchip-pcie3.h
->     minimum: 0x0
->     maximum: 0x4
->     default: 0x4
+> Suggested-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Vinod Koul <vkoul@kernel.org>
 
-Yes.
+Thank you for making the change generic as suggested.
 
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 
-Best regards,
-Krzysztof
+> ---
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c      | 16 ++++++++++++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h      |  6 ++++++
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h |  4 +++-
+>   3 files changed, 25 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 4052486f19d8..95d1588f3bb6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -511,6 +511,22 @@ void dpu_encoder_helper_split_config(
+>   	}
+>   }
+>   
+> +bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc)
+> +{
+> +	struct dpu_encoder_virt *dpu_enc = to_dpu_encoder_virt(drm_enc);
+> +	int i, intf_count = 0, num_dsc = 0;
+> +
+> +	for (i = 0; i < MAX_PHYS_ENCODERS_PER_VIRTUAL; i++)
+> +		if (dpu_enc->phys_encs[i])
+> +			intf_count++;
+> +
+> +	/* See dpu_encoder_get_topology, we only support 2:2:1 topology */
+> +	if (dpu_enc->dsc)
+> +		num_dsc = 2;
+> +
+> +	return (num_dsc > 0) && (num_dsc > intf_count);
+> +}
+> +
+>   static struct msm_display_topology dpu_encoder_get_topology(
+>   			struct dpu_encoder_virt *dpu_enc,
+>   			struct dpu_kms *dpu_kms,
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> index ef873e5285a0..084c5265d7e5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.h
+> @@ -172,4 +172,10 @@ int dpu_encoder_get_linecount(struct drm_encoder *drm_enc);
+>    */
+>   int dpu_encoder_get_vsync_count(struct drm_encoder *drm_enc);
+>   
+> +/**
+> + * dpu_encoder_use_dsc_merge - returns true if the encoder uses DSC merge topology.
+> + * @drm_enc:    Pointer to previously created drm encoder structure
+> + */
+> +bool dpu_encoder_use_dsc_merge(struct drm_encoder *drm_enc);
+> +
+>   #endif /* __DPU_ENCODER_H__ */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> index 4842070fdfa8..b5ad43b8a19b 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys.h
+> @@ -314,8 +314,10 @@ static inline enum dpu_3d_blend_mode dpu_encoder_helper_get_3d_blend_mode(
+>   
+>   	dpu_cstate = to_dpu_crtc_state(phys_enc->parent->crtc->state);
+>   
+> +	/* Use merge_3d unless DSC MERGE topology is used */
+>   	if (phys_enc->split_role == ENC_ROLE_SOLO &&
+> -	    dpu_cstate->num_mixers == CRTC_DUAL_MIXERS)
+> +	    dpu_cstate->num_mixers == CRTC_DUAL_MIXERS &&
+> +	    !dpu_encoder_use_dsc_merge(phys_enc->parent))
+>   		return BLEND_3D_H_ROW_INT;
+>   
+>   	return BLEND_3D_NONE;

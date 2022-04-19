@@ -2,137 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03097506475
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48822506479
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348796AbiDSGcT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:32:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S1348831AbiDSGdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232518AbiDSGcR (ORCPT
+        with ESMTP id S1348816AbiDSGdG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:32:17 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C02824595;
-        Mon, 18 Apr 2022 23:29:35 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 23J6TNl9113316;
-        Tue, 19 Apr 2022 01:29:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1650349763;
-        bh=HzppkN7J13v++U+2V8ppDtlcFEoREbbLAFk/k+lsDF0=;
-        h=From:To:CC:Subject:Date;
-        b=XAHCX79G7wwBXcsZetogYqwKISwtxcv7JDRPpkA/7GPuW2Df04RS8i3oHSI/rDlMA
-         2Gs2YSipyXsSmwXAA1IGXSb2BF8PHih2RD36ysbtJD6XTNVej7lLonb7Sef8IMTV1t
-         o/pP9CGe5ppCDqbCnYjcclaMCfoCpNM607OvirUI=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 23J6TNQn089631
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 Apr 2022 01:29:23 -0500
-Received: from DLEE106.ent.ti.com (157.170.170.36) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 19
- Apr 2022 01:29:23 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE106.ent.ti.com
- (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 19 Apr 2022 01:29:23 -0500
-Received: from ula0132425.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 23J6TIAC058735;
-        Tue, 19 Apr 2022 01:29:19 -0500
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Grygorii Strashko <grygorii.strashko@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-am625-sk: Add ECAP APWM nodes
-Date:   Tue, 19 Apr 2022 11:59:02 +0530
-Message-ID: <20220419062902.196526-1-vigneshr@ti.com>
-X-Mailer: git-send-email 2.35.3
+        Tue, 19 Apr 2022 02:33:06 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EE6140C8
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:30:24 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 203so4073454pgb.3
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tiP99sT3eivRImBxBttVns7fKVfvM+7VWk7Xkm8d/Rw=;
+        b=ZtVX+m95lQjHGrRnXQfh090rMU59ANuqm5nT8eHMhvP5vPSXSbetkMeaLlOwMfuvSb
+         1h3NdUR2wz4bi+XK8fKtWebbsnKQ9cR6C6qAQe2Gnz1liqYppMm7LGcGx4EVlObf900A
+         cjrscspd5NR2l+qKtzBpRN2rpCwFYg61eT13M2kT3FfXCOpXjfPqJW3SEwevoxXVGMTw
+         4zQ1hzvN6z0gr2toNKr5xItR2ENhpP/f76rvUu1bY6J7uVFVypnONBQO0wWSbJhjsQU/
+         gY2vawpihsCXJCd/5R7a+qj1TPMLloTK5lDxKs7JCdA2e2CzNqAuCoyTIB7ZHWR/GyIk
+         IipQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=tiP99sT3eivRImBxBttVns7fKVfvM+7VWk7Xkm8d/Rw=;
+        b=fnN8ipEkVOo9YM20e3pyAZUuA9AU10YvvxjK2bvSe6Zk1C7QaAn87XW2BHp2QnDF4G
+         qENW+y9BqqbqRXtHzNCpa+eOwRHYuQkBcs2Wi5pGVao6JFexnBFdsIeUsMIkQaTcJCN0
+         aipQ5DhesaCMowof8f/EYhA3A1qbH7+BoMuzjJPfFDEwU2Ax8GIPWMua+pHJnTB9us+A
+         2MbkJRxATwEXGGjL4noApYMm1ol0dgnczNk2DVbep9IY3HB7i0Tnejlj3TP/LT2hjciP
+         9+gI9dXD5BG2JZcCBB3tgLebtKnR2MslMHqXQFYm3735YM6eixRBawGU2xo9rmc1aXFV
+         RK6g==
+X-Gm-Message-State: AOAM531AZa1wZlfzAzVUlWOYhLw7cZWCdWydTu4ucQiKawJ3ycpy1RX5
+        PUQJpZHaSoODFLt8xnh5Bi0=
+X-Google-Smtp-Source: ABdhPJyWzz4Dxl+xfPD7iNOmYT2csQOBC7cpLRA8Y4pexR9L+P/XSr3JUJtQ4t8tU26HYRlucWuEIA==
+X-Received: by 2002:a63:ff4b:0:b0:3aa:3083:5131 with SMTP id s11-20020a63ff4b000000b003aa30835131mr2263943pgk.148.1650349824058;
+        Mon, 18 Apr 2022 23:30:24 -0700 (PDT)
+Received: from localhost.localdomain ([2001:288:7001:2708:69a5:4ce1:831d:b544])
+        by smtp.gmail.com with ESMTPSA id bu7-20020a056a00410700b0050a4ccc6138sm11428188pfb.139.2022.04.18.23.30.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 23:30:23 -0700 (PDT)
+From:   Jui-Tse Huang <juitse.huang@gmail.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Jui-Tse Huang <juitse.huang@gmail.com>,
+        Ching-Chun Huang <jserv@ccns.ncku.edu.tw>
+Subject: [PATCH] scheduler/pelt: fix comment typo
+Date:   Tue, 19 Apr 2022 14:30:05 +0800
+Message-Id: <20220419063005.15098-1-juitse.huang@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AM62 has 3 ECAP instances with 1 APWM each. Add DT nodes for the same.
-Keep them disabled in am625-sk dts as these pins can be repurposed in
-user exp connector.
+A typo in the comment of the function __update_load_avg_blocked_se() is
+fixed.
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
+Signed-off-by: Jui-Tse Huang <juitse.huang@gmail.com>
 ---
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 27 ++++++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am625-sk.dts   | 12 +++++++++++
- 2 files changed, 39 insertions(+)
+ kernel/sched/pelt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index 4b6ba98dd0a2..dd972fcdaedb 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -530,4 +530,31 @@ mailbox0_cluster0: mailbox@29000000 {
- 		ti,mbox-num-users = <4>;
- 		ti,mbox-num-fifos = <16>;
- 	};
-+
-+	ecap0: pwm@23100000 {
-+		compatible = "ti,am3352-ecap";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x23100000 0x00 0x100>;
-+		power-domains = <&k3_pds 51 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 51 0>;
-+		clock-names = "fck";
-+	};
-+
-+	ecap1: pwm@23110000 {
-+		compatible = "ti,am3352-ecap";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x23110000 0x00 0x100>;
-+		power-domains = <&k3_pds 52 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 52 0>;
-+		clock-names = "fck";
-+	};
-+
-+	ecap2: pwm@23120000 {
-+		compatible = "ti,am3352-ecap";
-+		#pwm-cells = <3>;
-+		reg = <0x00 0x23120000 0x00 0x100>;
-+		power-domains = <&k3_pds 53 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 53 0>;
-+		clock-names = "fck";
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am625-sk.dts b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-index 5fc35898a1e2..2c5e0e5b826b 100644
---- a/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am625-sk.dts
-@@ -477,3 +477,15 @@ partition@3fc0000 {
- 		};
- 	};
- };
-+
-+&ecap0 {
-+	status = "disabled";
-+};
-+
-+&ecap1 {
-+	status = "disabled";
-+};
-+
-+&ecap2 {
-+	status = "disabled";
-+};
+diff --git a/kernel/sched/pelt.c b/kernel/sched/pelt.c
+index 0f310768260c..ec918a57bc3f 100644
+--- a/kernel/sched/pelt.c
++++ b/kernel/sched/pelt.c
+@@ -283,7 +283,7 @@ ___update_load_avg(struct sched_avg *sa, unsigned long load)
+  *   load_sum := runnable
+  *   load_avg = se_weight(se) * load_sum
+  *
+- * cfq_rq:
++ * cfs_rq:
+  *
+  *   runnable_sum = \Sum se->avg.runnable_sum
+  *   runnable_avg = \Sum se->avg.runnable_avg
 -- 
-2.35.3
+2.25.1
 

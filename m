@@ -2,95 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532BA50645D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:23:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C9D150645F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:24:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347723AbiDSG0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39868 "EHLO
+        id S1348762AbiDSG0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234215AbiDSG0K (ORCPT
+        with ESMTP id S1348055AbiDSG0o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:26:10 -0400
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7738721264;
-        Mon, 18 Apr 2022 23:23:29 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id t11so30734802eju.13;
-        Mon, 18 Apr 2022 23:23:29 -0700 (PDT)
+        Tue, 19 Apr 2022 02:26:44 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FBC21265
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:24:01 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id o5so14952058pjr.0
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:24:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=HcOm58iTm0VxH3c2zlAplu3ZQMbf9aIp/+cejmaeHyI=;
+        b=Dnyhh0NtgNw4iqSxEAh8EFGl3vpQRI+53TPg03N/0kNEMI4lxmK+gHgYXFksRh2lJ+
+         R9ZeebLpM/29twY5Dk273cwcDTP6bXpK2m8TMY6LY2CQakgcELYbZevqxvqI6c1bYVlQ
+         R2G62Cq2ZLnZ4URP++fpZCHVMxHfftsY4wuJUCDqmIUpI3I86QvvppKDc6OwquHsRjh+
+         10+sd+aud+oxLTKqw3H6EeJtj4tjw3296T7LZkE6YPHur22ET0HSE1+DQZgBWecrv2z8
+         0dn/wdDCIShvwFg7hxsnyt22mUxouahIXdxt0P4Q0igA+IHsVYCYFNH4ouw9voDf9LZt
+         17MQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=jwP013axk/Xi3hjjpQ/OgIUjcQAwbf0qJU2JCTW85/0=;
-        b=DO236g7Y+7NwCXMlxzw8aj/O6/eS8mfdKhAnCPZmZ91T0hWQ5TbyLnh1ACVlUq0DeK
-         kpITidB0I6gLuIauI9SP02BLRw1nUcf3XwTMZGt6a8dvZ/h3dIWGRd5tQk3L/qArUUcA
-         XHXb1vyQT/PDYZ5jQbZMHI9X5sJmlYp57VC1s8T0f4tS2AUWffpsHWpRErdXX4vXfIJ9
-         BOg4qRQCM3eRMSflljiV2Wp24Fsr6We6RXuQH3Mhd6Xvw8ePSUZbgqjDpEI2dTQnzxat
-         lQ36gtfLaZCJIpLt8YlEzukbnMCPzjiupp7mlmkTHmy8Y3G6IkSae3bc8pX9/9WvA89+
-         qT5w==
-X-Gm-Message-State: AOAM530thmnyuk6HoXjEAlE2WLPc5FAZmLHHxhsiPe+3w7A1Yr1gKLwH
-        MePw8oswpR+tC8KCBDv9D1w=
-X-Google-Smtp-Source: ABdhPJxU9AMXblps61nJCRVhiTakkkkx6QrNcnqkpqnkYCWD9TwwB6qS/UxRAgYNSNA10BjRaElryw==
-X-Received: by 2002:a17:907:6d91:b0:6e8:9b49:436a with SMTP id sb17-20020a1709076d9100b006e89b49436amr12244061ejc.464.1650349407850;
-        Mon, 18 Apr 2022 23:23:27 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id p17-20020a17090635d100b006efcc06218dsm1133415ejb.18.2022.04.18.23.23.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 23:23:25 -0700 (PDT)
-Message-ID: <2a54f2da-cdc0-078a-5dce-d79a736e9ebc@kernel.org>
-Date:   Tue, 19 Apr 2022 08:23:23 +0200
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=HcOm58iTm0VxH3c2zlAplu3ZQMbf9aIp/+cejmaeHyI=;
+        b=bfBmAA96ShRWDmAfDcF9q6yE24OBmC8nnLK2KswXuuS/hvJstVPQwpI0twIl7+sNet
+         MDmz7/SgI/EiZeZp2L7ye7rTlsgzkXVKepaSdAGF84E6Yl31noA/PA9lRCtdNP4etJO4
+         vE0hndaUb0kRX+2ycCcp35uFJN3moYO0FEqMMFtgAG4Rvf1ceR4oZyC3u1NxTyT9P313
+         cgOGQvDCqk2bdtzjxP4/4Ow8XsnMnvY6aatKgszwCRMP7LEl9ohXpVigumHvaCnkE9Na
+         I/LdvGWsnn+8fNTZYOHYP/zCXDYXSZ/C8rmfjdoeDT1sUTh88MxtpvFIVr1MjjhfEBZY
+         /QDw==
+X-Gm-Message-State: AOAM5300q37bG7hcpcZjw+fhDovcRra1QNuAn4mOnYYniDwC5ykrWUDN
+        NL0BZYtplEh4UOUwcCNu+6PlDQ==
+X-Google-Smtp-Source: ABdhPJzuga1jVkb36XA3IQbXLRjDomJ9OVFusCa5i5OWfpyfmH7OiSRCHdD4WQbuooR9m4UrxEc9IQ==
+X-Received: by 2002:a17:90b:255:b0:1cf:39e7:a7aa with SMTP id fz21-20020a17090b025500b001cf39e7a7aamr16924592pjb.137.1650349441107;
+        Mon, 18 Apr 2022 23:24:01 -0700 (PDT)
+Received: from localhost ([139.177.225.229])
+        by smtp.gmail.com with ESMTPSA id 35-20020a631763000000b0039d93f8c2f0sm14874164pgx.24.2022.04.18.23.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 23:24:00 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 14:23:56 +0800
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     corbet@lwn.net, mike.kravetz@oracle.com, mcgrof@kernel.org,
+        keescook@chromium.org, yzaikin@google.com, osalvador@suse.de,
+        david@redhat.com, masahiroy@kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        duanxiongchun@bytedance.com, smuchun@gmail.com
+Subject: Re: [PATCH v8 1/4] mm: hugetlb_vmemmap: introduce
+ CONFIG_HUGETLB_PAGE_HAS_OPTIMIZE_VMEMMAP
+Message-ID: <Yl5VfI1h6nUd8s8q@FVFYT0MHHV2J.usts.net>
+References: <20220413144748.84106-1-songmuchun@bytedance.com>
+ <20220413144748.84106-2-songmuchun@bytedance.com>
+ <20220413120804.3570dc230a958f4923e3f3c3@linux-foundation.org>
+ <YleQiQW7gFTO7SMk@FVFYT0MHHV2J.usts.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] scripts: dummy-tools, add pahole
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-References: <20220414091419.7654-1-jslaby@suse.cz>
- <CAK7LNATn2QrFn0fTixnbtZ-VOtWid2PvFKPmjfX+z_UtZgTMgA@mail.gmail.com>
- <ace87421-eefb-f4f6-307f-cd2990fb25eb@suse.cz>
- <810ab2b8-4138-1506-fc90-ae5c6ab0522e@suse.cz>
- <CAK7LNATgfosGQ6LRmu8DUxwnWL=Dyu1cOUUq1GBRtP6+BppNbw@mail.gmail.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <CAK7LNATgfosGQ6LRmu8DUxwnWL=Dyu1cOUUq1GBRtP6+BppNbw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YleQiQW7gFTO7SMk@FVFYT0MHHV2J.usts.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14. 04. 22, 17:18, Masahiro Yamada wrote:
->>> Well, the question is how do I that for every kernel developer in SUSE?
->>
->> IOW it'd be quite easier if the scripts/dummy-tools/pahole part of the
->> patch was in the tree. (I don't insist on the Makefile change.)
+On Thu, Apr 14, 2022 at 11:10:01AM +0800, Muchun Song wrote:
+> On Wed, Apr 13, 2022 at 12:08:04PM -0700, Andrew Morton wrote:
+> > On Wed, 13 Apr 2022 22:47:45 +0800 Muchun Song <songmuchun@bytedance.com> wrote:
+> > 
+> > > If the size of "struct page" is not the power of two but with the feature
+> > > of minimizing overhead of struct page associated with each HugeTLB is
+> > > enabled, then the vmemmap pages of HugeTLB will be corrupted after
+> > > remapping (panic is about to happen in theory).  But this only exists when
+> > > !CONFIG_MEMCG && !CONFIG_SLUB on x86_64.  However, it is not a conventional
+> > > configuration nowadays.  So it is not a real word issue, just the result
+> > > of a code review.
+> > 
+> > The patch does add a whole bunch of tricky junk to address something
+> > which won't happen.  How about we simply disable
+> > CONFIG_HUGETLB_PAGE_OPTIMIZE_VMEMMAP if (!CONFIG_MEMCG &&
+> > !CONFIG_SLUB)?
+> >
+>  
+> I'm afraid not. The size of 'struct page' also depends on
+> LAST_CPUPID_NOT_IN_PAGE_FLAGS which could be defined
+> when CONFIG_NODES_SHIFT or CONFIG_KASAN_SW_TAGS
+> or CONFIG_NR_CPUS is configured with a large value.  Then
+> the size would be more than 64 bytes.
 > 
-> 
-> I do not mind  scripts/dummy-tools/pahole
+> Seems like the approach [1] is more simple and feasible,
 
-Perfect!
+Sorry, forgot to post the Link.
 
-> although you need to do
-> make CROSS_COMPILE=scripts/dummy-tools
-> PAHOLE=scripts/dummy-tools/pahole  menuconfig
+[1] https://lore.kernel.org/all/20220323125523.79254-2-songmuchun@bytedance.com/
 
-That's easy -- the developers use a script that I can modify. (Oppositng 
-to writing files to their homes etc.)
+> which also could prevent the users from doing unexpected
+> configurations, however, it is objected by Masahiro.
+> Shall we look back at the approach again?
+>
 
-Will send a v2.
+Hi all,
 
-thanks,
--- 
-js
-suse labs
+Friendly ping.
+
+I have implemented 3 approaches to address this issue.
+
+  1) V8 has added a lot of tricky code.
+  2) V5 has added a feadback from Kbuild to Kconfig, as Masahiro
+     said, it is terrible.
+  3) V1 [2] has added a check of is_power_of_2() into hugetlb_vmemmap.c.
+
+Iterated and explored through 8 versions, v1 seems to be the easiest way
+to address this.  I think reusing v1 may be the best choice now.
+What do you think?
+
+[2] https://lore.kernel.org/all/20220228071022.26143-2-songmuchun@bytedance.com/
+
+Thanks.
+

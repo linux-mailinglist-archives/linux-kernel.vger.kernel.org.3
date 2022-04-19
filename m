@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 864B450720E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36CDA507211
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353992AbiDSPrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49274 "EHLO
+        id S1353997AbiDSPsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbiDSPrt (ORCPT
+        with ESMTP id S243401AbiDSPsc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:47:49 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B8BB1FE;
-        Tue, 19 Apr 2022 08:45:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650383106; x=1681919106;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=goZhZYJnHZgkuOSCSMHvvNP6QQJ/z1kYcKpHaLYnoeA=;
-  b=J0sKk9YNIfwLSFY1GOxY7jitz4OKbkfIIaoyQPHwe6JsuViEnTXb2XsO
-   bAVKWY+gOfHP0O9pMGjpIC/H+bEWNwKayWCleSHi+lf1Yi4PP1/UmStwk
-   9YfDKvIXF8PUrlgxr6xDbUX0g7AUCWRlSwM7/mcbPxf8OjNx0Pa/z2ZKH
-   2bWReroCwjUmOfc9U/aFmxdfiAwfDtP2d5WnMQUCqbnDUahSkiGj0NtIm
-   7jq1xVTbfvHBa8baLDw6IauYLHLizk9LwTTveOXDaqtSAMn/j32BSZtSv
-   xwXS684ePJGfMmIRj8bWP2WoBx7H/cfkyO2BU1fhx3nYWkGcXphJlWOI4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="326696215"
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="326696215"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 08:45:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
-   d="scan'208";a="614044552"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 19 Apr 2022 08:45:03 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngq2J-0005v4-Ap;
-        Tue, 19 Apr 2022 15:45:03 +0000
-Date:   Tue, 19 Apr 2022 23:44:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6:
- warning: no previous prototype for function
- 'fimc_isp_video_device_unregister'
-Message-ID: <202204192315.ZHbOex51-lkp@intel.com>
+        Tue, 19 Apr 2022 11:48:32 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F091BF6E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:45:49 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-e2fa360f6dso17941305fac.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=mime-version:in-reply-to:references:from:user-agent:date:message-id
+         :subject:to:cc;
+        bh=k80igm9bNYeo0/PuGUmVJIFnE85OFqPLleVrR/GfhOI=;
+        b=A+7wUP963dS6aGhmek9wwRA/GDmHbWws04i5dh9LdMjVk5cV3jP9YeQwl+QFX2HzL2
+         x6DqMrRlcX2wd5vLhkSRv+w1u9zmBNW/ZOb9wP38+SjnUbP2IktJq4yKXYSB2VaP+8MO
+         xcVitCJ4zLm9g/CHNyNdmeakGh3rr9tuojwwI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:in-reply-to:references:from
+         :user-agent:date:message-id:subject:to:cc;
+        bh=k80igm9bNYeo0/PuGUmVJIFnE85OFqPLleVrR/GfhOI=;
+        b=Rxvrfdyylr58WwqfwQw1tN4rY4oxI+dLUYkzHXePB73moqumMTEVSPKxorn7B3j7Fg
+         WvFsbYvs4eBmQZkc0RlBNTAAox63kXG7qkQyx2f57SaLwqFlawDWuVWaRRHbwguC2geM
+         hhnEujp8ejnkSDAt5NrPsi1we5MkNM1Aev6lpJLV25Q8HCGHKEHBdqo3rq90xYldMyFF
+         otsoJOfrAQxL1NFbUyasrD4Zrb58YLe7mIQy075FeUdjZfIb5ZDI6Pmbyr+4+UHiClNG
+         H2xY+g5P0T4bvOK/Hf0/B/fk/fKOBEaTl8Uoq/jpj7ndSfGIx7zm3vSCfwDc4Cz12Zz9
+         7atg==
+X-Gm-Message-State: AOAM532hriQrjdKsvIJkm8dX4D6p79aLtslQDCOjt1btUpcOCPXrOhQj
+        bcGO1qcfoC6z8t+Mp+kz4D00dzdAFPdid21vlEmqBg==
+X-Google-Smtp-Source: ABdhPJzk6+Q51TifhGU0xY14VkV/+mpM+40heyVecZrtV+q3RQACke7WNgpOzd0DTutcDoqHSMARdxnCqmfsiltD298=
+X-Received: by 2002:a05:6870:3907:b0:e5:a6fd:4047 with SMTP id
+ b7-20020a056870390700b000e5a6fd4047mr6541720oap.193.1650383148187; Tue, 19
+ Apr 2022 08:45:48 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 19 Apr 2022 08:45:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <Yl7Nb0mNjt7kV3uV@sirena.org.uk>
+References: <1649939418-19861-1-git-send-email-quic_c_skakit@quicinc.com>
+ <1649939418-19861-8-git-send-email-quic_c_skakit@quicinc.com>
+ <CAE-0n533obTi995x_rJG_ihUUquF3MQLJt6VMf7=oxyzMUL5DQ@mail.gmail.com> <Yl7Nb0mNjt7kV3uV@sirena.org.uk>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Tue, 19 Apr 2022 08:45:47 -0700
+Message-ID: <CAE-0n53zWdrT7S6MKM_aktnj=AwjUKH0XKySwSkfkX8vTv2w9w@mail.gmail.com>
+Subject: Re: [PATCH V10 7/9] regulator: Add a regulator driver for the PM8008 PMIC
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_collinsd@quicinc.com,
+        quic_subbaram@quicinc.com, quic_jprakash@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,61 +74,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+Quoting Mark Brown (2022-04-19 07:55:43)
+> On Thu, Apr 14, 2022 at 05:25:49PM -0700, Stephen Boyd wrote:
+> > Quoting Satya Priya (2022-04-14 05:30:16)
+>
+> > > +static struct platform_driver pm8008_regulator_driver = {
+> > > +       .driver = {
+> > > +               .name           = "qcom-pm8008-regulator",
+>
+> > I'd prefer to use an of_device_id table here. That would let us populate
+> > a "qcom,pm8008-regulators" node that had the ldo nodes as children and
+> > avoid mfd cells.
+>
+> That's encoding the current Linux way of splitting up drivers into the
+> DT rather than describing the hardware.
 
-FYI, the error/warning still remains.
+The DT binding has a subnode of the pm8008@8 node for 'regulators'.
+There's also a subnode for gpios (see qcom,pm8008-gpio). The gpio node
+has a reg property, so I'm confused how we can even have the regulators
+container node at the same level as the gpio node with a reg property.
+Every node that's a child of pm8008@8 either needs to have a reg
+property or not.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   b2d229d4ddb17db541098b83524d901257e93845
-commit: 238c84f71120f41c45301359902a912a19370f3d media: platform: rename exynos4-is/ to samsung/exynos4-is/
-date:   5 weeks ago
-config: mips-randconfig-c004-20220418 (https://download.01.org/0day-ci/archive/20220419/202204192315.ZHbOex51-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=238c84f71120f41c45301359902a912a19370f3d
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 238c84f71120f41c45301359902a912a19370f3d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/media/
+What benefit does it have to not describe secondary i2c addresses as
+nodes in DT? I think it's necessary because the reset gpio needs to be
+deasserted before i2c read/write to either address, 8 or 9, will work.
+Otherwise I don't understand. Having the reset puts us into a small bind
+though because child nodes sometimes have a reg property and other times
+don't.
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+This is the current example
 
-All warnings (new ones prefixed by >>):
+	i2c {
+	  pm8008@8 {
+	    compatible = "qcom,pm8008";
+	    #address-cells = <1>;
+	    #size-cells = <0>;
+	    reset-gpios = <&tlmm 23 GPIO_ACTIVE_HIGH>;
+	    gpios {
+	      compatible = "qcom,pm8008-gpio", "qcom,spmi-gpio";
+	      reg = <0xc000>;
+	      ...
 
-   In file included from drivers/media/platform/samsung/exynos4-is/fimc-isp.c:25:
->> drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:6: warning: no previous prototype for function 'fimc_isp_video_device_unregister' [-Wmissing-prototypes]
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-        ^
-   drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h:35:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-   ^
-   static 
-   1 warning generated.
+	    };
 
+	    regulators {
+	      vdd_l1_l2-supply = <&vreg_s8b_1p2>;
+	
+	      ldo1 {
+	        regulator-name = "pm8008_l1";
+	      };
+	      ldo2 {
+	        regulator-name = "pm8008_l2";
+	      };
+	    };
+	  };
+	};
 
-vim +/fimc_isp_video_device_unregister +35 drivers/media/platform/samsung/exynos4-is/fimc-isp-video.h
+What should the final result be? Dropping the regulators node would end
+up with the same problem where ldo1 has no reg property. Adding a reg
+property to ldo1 might work, but it would be a register offset inside
+i2c address 9 while the binding makes it look like a register offset
+within 9. The binding for the container node could get two address
+cells, so that the first cell describes the i2c address offset?
 
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  34  
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20 @35  void fimc_isp_video_device_unregister(struct fimc_isp *isp,
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  36  				enum v4l2_buf_type type)
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  37  {
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  38  }
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  39  #endif /* !CONFIG_VIDEO_EXYNOS4_ISP_DMA_CAPTURE */
-34947b8aebe3f2 drivers/media/platform/exynos4-is/fimc-isp-video.h Sylwester Nawrocki 2013-12-20  40  
+	i2c {
+	  pm8008@8 {
+	    compatible = "qcom,pm8008";
+	    #address-cells = <2>;
+	    #size-cells = <0>;
+	    reset-gpios = <&tlmm 23 GPIO_ACTIVE_HIGH>;
 
-:::::: The code at line 35 was first introduced by commit
-:::::: 34947b8aebe3f2d4eceb65fceafa92bf8dc97d96 [media] exynos4-is: Add the FIMC-IS ISP capture DMA driver
+	    vdd_l1_l2-supply = <&vreg_s8b_1p2>;
 
-:::::: TO: Sylwester Nawrocki <s.nawrocki@samsung.com>
-:::::: CC: Mauro Carvalho Chehab <m.chehab@samsung.com>
+	    gpios@0,c000 {
+	      compatible = "qcom,pm8008-gpio", "qcom,spmi-gpio";
+	      reg = <0x0 0xc000>;
+	      ...
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+	    };
+
+	    ldo1@1,30 {
+	      compatible = "qcom,pm8008-regulator";
+	      reg = <0x1 0x30>;
+	      regulator-name = "pm8008_l1";
+	    };
+	    ldo2@1,40 {
+	      compatible = "qcom,pm8008-regulator";
+	      reg = <0x1 0x40>;
+	      regulator-name = "pm8008_l2";
+	    };
+	  };
+	};
+
+We don't make a node for each gpio so I don't know why we would make a
+node for each regulator. The above could be changed to have the
+regulators node and a reg property like this
+
+	i2c {
+	  pm8008@8 {
+	    compatible = "qcom,pm8008";
+	    #address-cells = <2>;
+	    #size-cells = <0>;
+	    reset-gpios = <&tlmm 23 GPIO_ACTIVE_HIGH>;
+
+	    gpios@0,c000 {
+	      compatible = "qcom,pm8008-gpio", "qcom,spmi-gpio";
+	      reg = <0x0 0xc000>;
+	      ...
+
+	    };
+
+	    regulators@1,0 {
+	      compatible = "qcom,pm8008-regulators";
+	      vdd_l1_l2-supply = <&vreg_s8b_1p2>;
+
+	      reg = <0x1 0x0>;
+	      ldo1 {
+	      regulator-name = "pm8008_l1";
+	      };
+	      ldo2 {
+	        regulator-name = "pm8008_l2";
+	      };
+	    };
+	  };
+	};
+
+I wonder if there's a mapping table property like i2c-ranges or
+something like that which could be used to map the i2c dummy to the
+first reg property. That would be super awesome so that when the
+platform bus is populated we could match up the regmap for the i2c
+device to the platform device automatically.
+
+By the way, Is there any document on "best practices" for i2c devicetree
+bindings?  We should add details to the document to describe this
+situation so this can be conveyed faster next time.

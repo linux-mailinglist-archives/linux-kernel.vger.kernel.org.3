@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88C5C5071FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F4E507207
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:41:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353960AbiDSPmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:42:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43542 "EHLO
+        id S1353980AbiDSPo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353949AbiDSPmD (ORCPT
+        with ESMTP id S1354298AbiDSPnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:42:03 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7451A393;
-        Tue, 19 Apr 2022 08:39:20 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id y10so16344768ejw.8;
-        Tue, 19 Apr 2022 08:39:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=33LchwTrEhdlnLyKbglv7/dtQNUqBirb2JXkyZQUCOc=;
-        b=KgIPGLiNfLKXnt1jpVRt5QA9LPjkD93A6q67UDQbvKjwk1tPR46ssvNtz5bei+hj04
-         SlKXUGRKwYWBShyJwsfzhjHigOxQu3sVeCdW4s1zJVE8p94Nr45zTAXxwqCYEkU0GFGe
-         C/0EsUcK/XaZvOlWjewEUS56b0Ew01EqPoBd8ZnvxNSUaz06+xCUigeuNBmZimKP17IK
-         j75SAFsiQvC/GemVJjYpiHUXsRbnrl77h1HenYLdWDt5G3X77MFGj22Pn3/1GAdCm4bP
-         6QwtNuP5KPgFHOtFXAf8iXxCFbQWcem6mLg5KaNz+AHnO0zeE98TtjVJJVJjJ84XPaT5
-         XiSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=33LchwTrEhdlnLyKbglv7/dtQNUqBirb2JXkyZQUCOc=;
-        b=PojzisVRoinA0hZOQMyydtOnYHLzI4xZwnr5tAjGXw27/lU0qR+JW+ICTDpwdLh6t5
-         tKLiJ9bAMMKyfk2YFmR11uw0WcrUTyUmwuKPaq1cQQ688WTm7N4WMhCTifOih5/zZUxl
-         B3z/GBFfzuVVdhWZXE5+ztUxQmRfU4ZF3FtdXH7LKdn0dScyVrBdHAV230ClPdxIA478
-         ctLX/Px2s4BsQchaipoXhGIRjsGJ1EsVE9eeRxbrvao59c36MiVsjL08WOI6VvisCGzl
-         7xSgSbLbpk0JtETX+6XoPune8jXZIKlWHdGA+HOeU6hJUPb8FnCJgK71G+K/t1HbLBSj
-         tCMQ==
-X-Gm-Message-State: AOAM531x7XKRkhQ2JmaAd58zOqjqZgFbCdVrzPsLOpjisL5HlpVdBTQD
-        XNkNOrQ3OQD6SDXPgUMEVgM=
-X-Google-Smtp-Source: ABdhPJyTX2xrgCGJF499BXA4Zflfu2URrbPB7ZmtLtU3TlYb17I6w1x2kexgEL0gjvwBjhG+cAJrEQ==
-X-Received: by 2002:a17:906:4ad9:b0:6cf:93f:f77e with SMTP id u25-20020a1709064ad900b006cf093ff77emr14209516ejt.558.1650382758838;
-        Tue, 19 Apr 2022 08:39:18 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id kw3-20020a170907770300b006d2a835ac33sm5768030ejc.197.2022.04.19.08.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 08:39:18 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 16:39:16 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/189] 5.15.35-rc2 review
-Message-ID: <Yl7XpJ4DQQ/01UWa@debian>
-References: <20220419073048.315594917@linuxfoundation.org>
+        Tue, 19 Apr 2022 11:43:22 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3B43BA9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:40:39 -0700 (PDT)
+Received: from mail-wr1-f54.google.com ([209.85.221.54]) by
+ mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MkEdF-1oMoU03lnd-00kiSf for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022
+ 17:40:37 +0200
+Received: by mail-wr1-f54.google.com with SMTP id w4so22970378wrg.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:40:37 -0700 (PDT)
+X-Gm-Message-State: AOAM5323waBhnuy+fNFd9m111wyEUkyiJqah1LbswKqla13g5bpfQnqK
+        TB6THLQpVxevAfnfkMAzHM//cG6tFycoxsX6z/U=
+X-Google-Smtp-Source: ABdhPJx2j14opnoXVu+zRZ4O7R0W4B6Te+BYkmuTotpIld2KFF5dVZxiMPz0Ry5HHgFRVQndxUG068ioQAMMaGHobtE=
+X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
+ g3-20020a5d6983000000b00207a226df4bmr12156987wru.192.1650382837528; Tue, 19
+ Apr 2022 08:40:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419073048.315594917@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20191018154052.1276506-1-arnd@arndb.de> <20191018154201.1276638-21-arnd@arndb.de>
+ <87o8y0lgs1.fsf@belgarion.home>
+In-Reply-To: <87o8y0lgs1.fsf@belgarion.home>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Tue, 19 Apr 2022 17:40:21 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0Rwh-+483nxgWhmst8VdEByb8HCE8H-mEhb=Laq9qc4w@mail.gmail.com>
+Message-ID: <CAK8P3a0Rwh-+483nxgWhmst8VdEByb8HCE8H-mEhb=Laq9qc4w@mail.gmail.com>
+Subject: Re: [PATCH 21/46] ARM: pxa: spitz: use gpio descriptors for audio
+To:     Robert Jarzmik <robert.jarzmik@free.fr>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Provags-ID: V03:K1:B4KkuJO4O6p7OV9tY+r5w5ZQaXiO8EgcHvCXb7uRux5s14U8in4
+ EyOQyl0VWSOPyzI5Jwfg0HNTTEFV7nYnmdWrhOTIbMCOfF8mdMm8msY/pf43tS+bPioZcnZ
+ a9eELn/8HgNN1BWmsOPRirYZjhMKL8hTOeNiVPfw2VExNRVPi2ZWzz0BIxoVaMzgcXPJ4gN
+ NRnVG4uuBVlswLaDwRNbg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:oMNwgFhYYLA=:dz/tndUjM0DwM7UljviixW
+ dmzrfmFJnpCHlkO5+7Ht2VTlf4w2ce9MOdZ3c/GzFAEp0ULPah8wK7y0clV4CbGsg7bp63Qfw
+ 8dyLF2D9vDjqSMcjvPe8VgG4ghfg+35hJMw2G73dyX/lIkfxMnEKjmBAAfOjvBfGDQl06D91g
+ 18OfHw0SCDxM6UrnkhBwaYPvPo6yCmeLAnj4YIFqE5Q7HiOoY/4UK4ZsgOrcftwu2U/o5qgtP
+ f2tu1ui76WU9/55cEmXlt3gjzorO8ACMWvC1NgUG6nhq9FE3kFyjip2jwXQMVbWdAINj2nMzm
+ Ez9zNkjhfugtrXw3cWocHK/5ZBI3CXlWwHGzs5u7DLPyHBCmLlDQgt+ZC4RBWmCVwdXXGfXXq
+ tp8df2nDpX3S2l0TdOVBkFZVp+w72eUxofzha46S+X0WgDYl9ig139s41T6Od0T8ebHkApMVm
+ nM9GdqkrdZ/swEP8VXPDBDLh3g6agw3GXwq8isZkF0gCfLx19pS8N00q6ewksWYNISntikqkE
+ f42cCX2x2a1ST16E6ZEqO+KjiAUeOUXhpfZZVGTB3fwxgVIs/h2kgr8+n3Lzysik5r+Q53ub/
+ xggqm0TAaxL/H9gJSdGF264bhcdBSM3fhS1yg+sHy6YSxwKCGSmKGX66ZllA57Fmq0qSKgFiv
+ goS88iKxB4vxheWcQHUY8lEx17M7j6Q5NUbMgX/IJJokVLwHetX1IlgCWRNIQ+Hf1B2A=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Mon, Oct 28, 2019 at 10:08 PM Robert Jarzmik <robert.jarzmik@free.fr> wrote:
 
-On Tue, Apr 19, 2022 at 09:32:02AM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.35 release.
-> There are 189 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 21 Apr 2022 07:30:20 +0000.
-> Anything received after that time might be too late.
+> > +static struct gpiod_lookup_table akita_audio_gpio_table = {
+> > +     .dev_id = "spitz-audio",
+> > +     .table = {
+> > +             GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_L - SPITZ_SCP_GPIO_BASE,
+> > +                         "mute-l", GPIO_ACTIVE_HIGH),
+> > +             GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_R - SPITZ_SCP_GPIO_BASE,
+> > +                         "mute-r", GPIO_ACTIVE_HIGH),
+> > +             GPIO_LOOKUP("gpio-pxa", AKITA_GPIO_MIC_BIAS - AKITA_IOEXP_GPIO_BASE,
+> > +                         "mic", GPIO_ACTIVE_HIGH),
+> This last one looks a bit dubious, as it looks like a gpio on a gpio expander,
+> could you cross-check that "gpio-pxa" shouldn't be an I2C expander gpio please ?
 
-Build test:
-mips (gcc version 11.2.1 20220408): 62 configs -> no failure
-arm (gcc version 11.2.1 20220408): 100 configs -> no new failure
-arm64 (gcc version 11.2.1 20220408): 3 configs -> no failure
-x86_64 (gcc version 11.2.1 20220408): 4 configs -> no failure
+I'm revisiting this older patch series now, this was clearly a mistake
+in my original
+version, changed it now to
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-mips: Booted on ci20 board. No regression. [3]
+@@ -982,7 +982,7 @@ static struct gpiod_lookup_table akita_audio_gpio_table = {
+                            "mute-l", GPIO_ACTIVE_HIGH),
+                GPIO_LOOKUP("sharp-scoop.0", SPITZ_GPIO_MUTE_R -
+SPITZ_SCP_GPIO_BASE,
+                            "mute-r", GPIO_ACTIVE_HIGH),
+-               GPIO_LOOKUP("gpio-pxa", AKITA_GPIO_MIC_BIAS -
+AKITA_IOEXP_GPIO_BASE,
++               GPIO_LOOKUP("i2c-max7310", AKITA_GPIO_MIC_BIAS -
+AKITA_IOEXP_GPIO_BASE,
+                            "mic", GPIO_ACTIVE_HIGH),
+                { },
+        },
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1039
-[2]. https://openqa.qa.codethink.co.uk/tests/1040
-[3]. https://openqa.qa.codethink.co.uk/tests/1041
+I'm not 100% sure this is the correct name, as I don't fully
+understand how i2c device
+names are constructed. I see that Linus added a device name in commit
+32d1544880aa ("ARM: pxa: Add gpio descriptor lookup tables for MMC CD/WP"),
+and I guess I could do the same here, but I think that was only needed
+to disambiguate
+two instances of the same device in zylonite, which is not needed for spitz.
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+       Arnd

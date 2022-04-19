@@ -2,80 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 891B2506F6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1120A506F4D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241784AbiDSNvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52114 "EHLO
+        id S1347187AbiDSNvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352935AbiDSNvD (ORCPT
+        with ESMTP id S1352977AbiDSNvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:51:03 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2C23C700;
-        Tue, 19 Apr 2022 06:43:50 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id t15so10476402oie.1;
-        Tue, 19 Apr 2022 06:43:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:content-transfer-encoding
-         :in-reply-to;
-        bh=XqDuHpmLDFntsP2jEBxil35GSt8HrLq9Yvn71vpOLkE=;
-        b=ZF0gdgoTKdteJguyQzcrkOi0Hz2vLOhn2Iu6vWJ3mkVIxmkFqyDPb/Zl9MjjOahQv2
-         D3ri5kn6HpVVISgepWLTr4pUbKJw//gKFNTAfCiPQAwSekRptDgbq9MoTehJrFiyqH7G
-         pnHHe51ObdRLSOLQAwV91k1KCH7/VOhm36QdDJaP/KcYOhzoL6Skc2wyPqBXlhnHkxq2
-         3uC+Mr+SOupG+5Hn8un8yqj2xN+AGugVOoVtMuk/AUwysKN78dS5kf9GXQxi10f8JLEJ
-         KquIbVUdgagSXpKE4QEd735GTaudIrJNzOrVs0N389JIb6paf0WJhIbAMMe3EavkOQC6
-         jEqg==
-X-Gm-Message-State: AOAM533gEzLp5p+JVrzyhQBabhpg5dN11WFfZM97JP5DoRSGn872wBrB
-        kYx34ZdIm3IPbc3x7+MffbDK3nr9gw==
-X-Google-Smtp-Source: ABdhPJwPfM5JI/GH9JHg/IyrnQypQWW+jegdpZSSR4xN+LpwoqACSVtKbya0y5LQJGFb821UIOU0wQ==
-X-Received: by 2002:a05:6808:1402:b0:2da:b72:74f2 with SMTP id w2-20020a056808140200b002da0b7274f2mr9184543oiv.113.1650375829070;
-        Tue, 19 Apr 2022 06:43:49 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j9-20020a056808056900b0032252797ea4sm4159323oig.6.2022.04.19.06.43.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 06:43:48 -0700 (PDT)
-Received: (nullmailer pid 2431059 invoked by uid 1000);
-        Tue, 19 Apr 2022 13:43:47 -0000
-Date:   Tue, 19 Apr 2022 08:43:47 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 03/12] dt-bindings: net: pcs: add bindings for
- Renesas RZ/N1 MII converter
-Message-ID: <Yl68k22fUw7uBgV9@robh.at.kernel.org>
-References: <20220414122250.158113-1-clement.leger@bootlin.com>
- <20220414122250.158113-4-clement.leger@bootlin.com>
+        Tue, 19 Apr 2022 09:51:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A41E3CFDF;
+        Tue, 19 Apr 2022 06:44:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 02193B8198A;
+        Tue, 19 Apr 2022 13:44:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7769C385A5;
+        Tue, 19 Apr 2022 13:44:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650375856;
+        bh=IEvf1VadfccjTgyuZD9eFHxT3pNqruiC9nzVFI5CI6M=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=quAd3JUEJ3SjxeMFe61q1dJObQpSNjhpPWicWxr++OuHjdVpjb8bY64SeV8mf5pnF
+         z307sYWBRu9w1cDAb4ks/4geT6NANLgf+gTqGi3j6S+v/mUNU3/b6jIGSLU9XV0C4K
+         emXeOmviONadN21B1D0Vc/iBWTC504ffUykLvDvtyxc3q5XQRwTJCS52ytgiypBgbx
+         GQvphiKOC+QZXsuPtRpDmfph+y3LqhM4vqqC7QkZOGafv0ZrVRYNSUPt4lGatgeFDo
+         bryo/pI+Pkyd4tE6qjuvteZcM33ORvZOWAFyiI2HGfsPmWfFddLyEV4yQtFLz1ilFc
+         81y3J5WwY5nFw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 549EA5C0387; Tue, 19 Apr 2022 06:44:16 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 06:44:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Benedikt Spranger <b.spranger@linutronix.de>
+Subject: Re: [PATCH] rcu/torture: Change order of warning and trace dump
+Message-ID: <20220419134416.GD4285@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220411151903.28167-1-anna-maria@linutronix.de>
+ <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1>
+ <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
+ <alpine.DEB.2.21.2204190829070.1508@somnus>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220414122250.158113-4-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <alpine.DEB.2.21.2204190829070.1508@somnus>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,170 +61,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14, 2022 at 02:22:41PM +0200, Clément Léger wrote:
-> This MII converter can be found on the RZ/N1 processor family. The MII
-> converter ports are declared as subnodes which are then referenced by
-> users of the PCS driver such as the switch.
+On Tue, Apr 19, 2022 at 08:53:38AM +0200, Anna-Maria Behnsen wrote:
+> On Tue, 12 Apr 2022, Paul E. McKenney wrote:
 > 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> ---
->  .../bindings/net/pcs/renesas,rzn1-miic.yaml   | 95 +++++++++++++++++++
->  include/dt-bindings/net/pcs-rzn1-miic.h       | 19 ++++
->  2 files changed, 114 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
->  create mode 100644 include/dt-bindings/net/pcs-rzn1-miic.h
+> > On Mon, Apr 11, 2022 at 11:09:15AM -0700, Paul E. McKenney wrote:
+> > > On Mon, Apr 11, 2022 at 05:19:03PM +0200, Anna-Maria Behnsen wrote:
+> > > > Dumping a big ftrace buffer could lead to a RCU stall. So there is the
+> > > > ftrace buffer and the stall information which needs to be printed. When
+> > > > there is additionaly a WARN_ON() which describes the reason for the ftrace
+> > > > buffer dump and the WARN_ON() is executed _after_ ftrace buffer dump, the
+> > > > information get lost in the middle of the RCU stall information.
+> > > > 
+> > > > Therefore print WARN_ON() message before dumping the ftrace buffer in
+> > > > rcu_torture_writer().
+> > > > 
+> > > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> > > > Reviewed-by: Benedikt Spranger <b.spranger@linutronix.de>
+> > > 
+> > > Hello, Anna-Maria!
+> > > 
+> > > Good point, but we get caught out either way.  Either we take the chance
+> > > of losing the WARN() message as you say, or we take the chance of the
+> > > activity in the WARN() message overwriting needed information in the
+> > > trace buffer.
+> > > 
+> > > Would it work to shut off tracing, do the WARN(), and only then do the
+> > > rcu_ftrace_dump()?
+> > 
+> > And presumably you are looking at this because your testing is
+> > triggering it.  This WARN() assumes that the system running rcutorture
+> > is otherwise idle.  If you are (say) running kernel builds while also
+> > running rcutorture, then this WARN() is expected behavior.  So if you need
+> > this sort of testing, we need do something like adding another rcutorture
+> > module parameter (background_load?) that suppresses this warning.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml b/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
-> new file mode 100644
-> index 000000000000..ccb25ce6cbde
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/pcs/renesas,rzn1-miic.yaml
-> @@ -0,0 +1,95 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/pcs/renesas,rzn1-miic.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/N1 MII converter
-> +
-> +maintainers:
-> +  - Clément Léger <clement.leger@bootlin.com>
-> +
-> +description: |
-> +  This MII converter is present on the Renesas RZ/N1 SoC family. It is
-> +  responsible to do MII passthrough or convert it to RMII/RGMII.
-> +
-> +properties:
-> +  compatible:
-> +      const: renesas,rzn1-miic
+> I ran into this while testing with rcutorture kvm script. And I was the
+> only one working on the machine. So I do not need a parameter right
+> now. I'll come back to you when my testing requirements will change :)
 
-Need SoC specific compatibles.
+Sounds good, and thank you for the info!
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  "#address-cells":
-> +    const: 1
-> +
-> +  "#size-cells":
-> +    const: 0
-> +
-> +  clocks:
-> +    items:
-> +      - description: MII reference clock
-> +      - description: RGMII reference clock
-> +      - description: RMII reference clock
-> +      - description: AHB clock used for the MII converter register interface
-> +
-> +  renesas,miic-cfg-mode:
-> +    description: MII mux configuration mode. This value should use one of the
-> +                 value defined in dt-bindings/net/pcs-rzn1-miic.h.
-
-Describe possible values here as constraints. At present, I don't see 
-the point of this property if there is only 1 possible value and it is 
-required.
-
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +  
-> +patternProperties:
-> +  "^mii-conv@[0-4]$":
-> +    type: object
-
-       additionalProperties: false
-
-> +    description: MII converter port
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-
-Why do you need sub-nodes? They don't have any properties. A simple mask 
-property could tell you which ports are present/active/enabled if that's 
-what you are tracking. Or the SoC specific compatibles you need to add 
-can imply the ports if they are SoC specific.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - renesas,miic-cfg-mode
-> +  - "#address-cells"
-> +  - "#size-cells"
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/net/pcs-rzn1-miic.h>
-> +    #include <dt-bindings/clock/r9a06g032-sysctrl.h>
-> +
-> +    eth-miic@44030000 {
-> +      compatible = "renesas,rzn1-miic";
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      reg = <0x44030000 0x10000>;
-> +      clocks = <&sysctrl R9A06G032_CLK_MII_REF>,
-> +              <&sysctrl R9A06G032_CLK_RGMII_REF>,
-> +              <&sysctrl R9A06G032_CLK_RMII_REF>,
-> +              <&sysctrl R9A06G032_HCLK_SWITCH_RG>;
-> +      renesas,miic-cfg-mode = <MIIC_MUX_MAC2_MAC1_SWD_SWC_SWB_SWA>;
-> +
-> +      mii_conv0: mii-conv@0 {
-> +        reg = <0>;
-> +      };
-> +
-> +      mii_conv1: mii-conv@1 {
-> +        reg = <1>;
-> +      };
-> +
-> +      mii_conv2: mii-conv@2 {
-> +        reg = <2>;
-> +      };
-> +
-> +      mii_conv3: mii-conv@3 {
-> +        reg = <3>;
-> +      };
-> +
-> +      mii_conv4: mii-conv@4 {
-> +        reg = <4>;
-> +      };
-> +    };
-> \ No newline at end of file
-
-Fix this.
-
-> diff --git a/include/dt-bindings/net/pcs-rzn1-miic.h b/include/dt-bindings/net/pcs-rzn1-miic.h
-> new file mode 100644
-> index 000000000000..c5a0f382967b
-> --- /dev/null
-> +++ b/include/dt-bindings/net/pcs-rzn1-miic.h
-> @@ -0,0 +1,19 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-
-Dual license please.
-
-> +/*
-> + * Copyright (C) 2022 Schneider-Electric
-> + *
-> + * Clément Léger <clement.leger@bootlin.com>
-> + */
-> +
-> +#ifndef _DT_BINDINGS_PCS_RZN1_MIIC
-> +#define _DT_BINDINGS_PCS_RZN1_MIIC
-> +
-> +/*
-> + * Reefer to the datasheet [1] section 8.2.1, Internal Connection of Ethernet
-> + * Ports to check the meaning of these values.
-> + *
-> + * [1] REN_r01uh0750ej0140-rzn1-introduction_MAT_20210228.pdf
-> + */
-> +#define MIIC_MUX_MAC2_MAC1_SWD_SWC_SWB_SWA	0x13
-> +
-> +#endif
-> -- 
-> 2.34.1
-> 
-> 
+							Thanx, Paul

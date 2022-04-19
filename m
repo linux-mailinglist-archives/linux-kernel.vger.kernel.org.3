@@ -2,120 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D3B7506755
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72F7E50675A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350247AbiDSJCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
+        id S1350259AbiDSJDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350267AbiDSJCe (ORCPT
+        with ESMTP id S241296AbiDSJDl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:02:34 -0400
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10416B876;
-        Tue, 19 Apr 2022 01:59:51 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id q75so4289800qke.6;
-        Tue, 19 Apr 2022 01:59:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=2tS14D5PGmg/JLCqgQ04J95Jt9tqRjNAbrf1/kgwkng=;
-        b=duf6Gf8DnFDySzprLxJRPqjJacUoAkFKBAEiMVRMfLgDvkr1RZnUbp2X9jGfo0pbBw
-         3lihBbqPdKGoOYozgCT0GalQ8nd9HIXrcl6DYl0Rw3Pv73+HZPkg5920toXhs0bcF1Fp
-         onFBA3RvUp7ubUwF2R/gJaRah4tjA4edNZy0cNQj0f6TYflvvQ5gnbyuchhgdfvkjfRb
-         nJ5Z9iO0EfVH+v9XkUDk4CYq2fj/+DpYEDG8/G2/g/hI9+o0n0yCy64PioDhRqMEckyj
-         s6+MIQl0FIjc7CPUcT6NFULrGum97VFjMFfljQ8HQn7D7kMyuSWTGaGsmjLVgWvU4tvT
-         HObA==
-X-Gm-Message-State: AOAM531tdmIoQkhOOha/QfJEgKqsi178+qNNShY4RrQVwwV60HYTIQWR
-        cgcSldTX0gD21xnVzMmCF1mji4D1U/TiUA==
-X-Google-Smtp-Source: ABdhPJxEozh2DMFXsMVnUH8FLob95bDsBhAJJ4tjh+6WGam56QaPC4JWhorlliMEDC9t9b6Isb6JHA==
-X-Received: by 2002:a05:620a:2441:b0:69c:3451:2a60 with SMTP id h1-20020a05620a244100b0069c34512a60mr8674837qkn.181.1650358789985;
-        Tue, 19 Apr 2022 01:59:49 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id n22-20020ac85b56000000b002f1d7a2867dsm8945619qtw.67.2022.04.19.01.59.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 01:59:49 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-2ebf4b91212so164793507b3.8;
-        Tue, 19 Apr 2022 01:59:49 -0700 (PDT)
-X-Received: by 2002:a81:5210:0:b0:2ef:21e3:54dd with SMTP id
- g16-20020a815210000000b002ef21e354ddmr14521561ywb.438.1650358789297; Tue, 19
- Apr 2022 01:59:49 -0700 (PDT)
+        Tue, 19 Apr 2022 05:03:41 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FB631CB00;
+        Tue, 19 Apr 2022 02:00:59 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id 043701F41F4B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650358857;
+        bh=vSObtpwN/NrN2SG7r1nxYbjAQ+m9PuPNXDpx4u79Ua0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P8xTLXqJmMh8r2BGZRrueWKjl8Bhi+jGCK2T9VUIenRwsEZMEHpnTcv4ARxvQdWOh
+         QTHfvRFUH0dfhrDbpNGOh3l2Ay7J06J5W3FRCFmE2aC190YQ9wo3gGcQ55GnK0NbiU
+         gA6Q72AjZEmw2R8ucY0bGITpvb3WMjPZg296mbVw6JmW2K575izqrQu1R+6oE3QfQO
+         BVHWyl17k6/vi7epxNeRDdrqxyv9C4Oq7jS31Th7gYsazjTU6xJ86tVvO/ZhmY7BVO
+         VoaJH17OQCN290iXozEE1nlXLajxcAzARVgxCw2sAZiGtBxvW4zEPlCDbXxYrGqnQh
+         LCBzCibyjhplg==
+Message-ID: <d18394b7-7293-8e66-ed2e-649b771f0db6@collabora.com>
+Date:   Tue, 19 Apr 2022 11:00:53 +0200
 MIME-Version: 1.0
-References: <20220419085330.1178925-1-valentin.caron@foss.st.com> <20220419085330.1178925-2-valentin.caron@foss.st.com>
-In-Reply-To: <20220419085330.1178925-2-valentin.caron@foss.st.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 19 Apr 2022 10:59:38 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVCeuC5qStugnssWKUeOVWxd_3XyYtS0mrZpqQVaXAP2w@mail.gmail.com>
-Message-ID: <CAMuHMdVCeuC5qStugnssWKUeOVWxd_3XyYtS0mrZpqQVaXAP2w@mail.gmail.com>
-Subject: Re: [PATCH V3 1/3] serial: stm32: remove infinite loop possibility in
- putchar function
-To:     Valentin Caron <valentin.caron@foss.st.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v6 00/34] MT8195 IOMMU SUPPORT
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        linux-mediatek@lists.infradead.org, srv_heupstream@mediatek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org,
+        Hsin-Yi Wang <hsinyi@chromium.org>, youlin.pei@mediatek.com,
+        anan.sun@mediatek.com, xueqi.zhang@mediatek.com,
+        yen-chang.chen@mediatek.com, mingyuan.ma@mediatek.com,
+        yf.wang@mediatek.com, libo.kang@mediatek.com,
+        chengci.xu@mediatek.com
+References: <20220407075726.17771-1-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220407075726.17771-1-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Valentin,
+Il 07/04/22 09:56, Yong Wu ha scritto:
+> This patchset adds MT8195 iommu support.
+> 
 
-On Tue, Apr 19, 2022 at 10:54 AM Valentin Caron
-<valentin.caron@foss.st.com> wrote:
-> Rework stm32_usart_console_putchar() function in order to anticipate
-> the case where the character can never be sent.
->
-> Signed-off-by: Valentin Caron <valentin.caron@foss.st.com>
+Hello maintainers,
+This is a friendly ping to avoid forgetting about this fully reviewed and
+fully tested review.
 
-Thanks for your patch!
+Cheers,
+Angelo
 
-> --- a/drivers/tty/serial/stm32-usart.c
-> +++ b/drivers/tty/serial/stm32-usart.c
-> @@ -1640,10 +1640,16 @@ static void stm32_usart_console_putchar(struct uart_port *port, unsigned char ch
->  {
->         struct stm32_port *stm32_port = to_stm32_port(port);
->         const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
-> +       u32 isr;
-> +       int ret;
->
-> -       while (!(readl_relaxed(port->membase + ofs->isr) & USART_SR_TXE))
-> -               cpu_relax();
-> -
-> +       ret = readl_relaxed_poll_timeout_atomic(port->membase + ofs->isr, isr,
-> +                                               (isr & USART_SR_TXE), 100,
-> +                                               STM32_USART_TIMEOUT_USEC);
-> +       if (ret != 0) {
-> +               dev_err(port->dev, "Error while sending data in UART TX : %d\n", ret);
 
-Does it make sense to print this message, i.e. will the user ever see it?
-Or is the failure above temporary?
-I assume that you have seen this trigger?
+> MT8195 have 3 IOMMU HWs. 2 IOMMU HW is for multimedia, and 1 IOMMU HW is
+> for infra-master, like PCIe/USB.
+> 
+> About the 2 MM IOMMU HW, something like this:
+> 
+>          IOMMU(VDO)          IOMMU(VPP)
+>             |                   |
+>        SMI_COMMON(VDO)      SMI_COMMON(VPP)
+>        ---------------     ----------------
+>        |      |   ...      |      |     ...
+>      larb0 larb2  ...    larb1 larb3    ...
+> 
+> these two MM IOMMU HW share a pgtable.
+> 
+> About the INFRA IOMMU, it don't have larbs, the master connects the iommu
+> directly. It use a independent pgtable.
+> 
+> Also, mt8195 IOMMU bank supports. Normally the IOMMU register size only
+> is 0x1000. In this IOMMU HW, the register size is 5 * 0x1000. each 0x1000
+> is a bank. the banks' register look like this:
+>       ----------------------------------------
+>       |bank0  | bank1 | bank2 | bank3 | bank4|
+>       ----------------------------------------
+>       |global |
+>       |control|         null
+>       |regs   |
+>       -----------------------------------------
+>       |bank   |bank   |bank   |bank   |bank   |
+>       |regs   |regs   |regs   |regs   |regs   |
+>       |       |       |       |       |       |
+>       -----------------------------------------
+> All the banks share some global control registers, and each bank have its
+> special bank registers, like pgtable base register, tlb operation registers,
+> the fault status registers.
+>   
+> In mt8195, we enable this bank feature for infra iommu, We put PCIe in bank0
+> and USB in bank4. they have independent pgtable.
+> 
+> Change note:
+> v6: Rebase on v5.18-rc1.
+> 
+> v5: https://lore.kernel.org/linux-iommu/20220217113453.13658-1-yong.wu@mediatek.com
+>     1) Base on next-20220216
+>     2) Remove a patch for kmalloc for protect buffer. keep the kzalloc for it.
+>     3) minor fix from AngeloGioacchino, like rename the error label name
+>     (data_unlock to err_unlock).
+>     Note, keep the TODO for component compare_of[26/34].
+> 
+> v4: https://lore.kernel.org/linux-iommu/20220125085634.17972-1-yong.wu@mediatek.com/
+>     1) Base on v5.16-rc1
+>     2) Base on tlb logic 2 patchset, some patches in v3 has already gone
+>     through that patchset.
+>     3) Due to the unreadable union for v1/v2(comment in 26/33 of v3), I
+>     separate mtk_iommu_data for v1 and v2 totally, then remove mtk_iommu.h.
+>     please see patch[26/35][27/35].
+>     4) add two mutex for the internal data. patch[6/35][7/35].
+>     5) add a new flag PM_CLK_AO.
+> 
+> v3: https://lore.kernel.org/linux-mediatek/20210923115840.17813-1-yong.wu@mediatek.com/
+>      1) base on v5.15-rc1
+>      2) Adjust devlink with smi-common, not use the property(sub-sommon).
+>      3) Adjust tlb_flush_all flow,
+>         a) Fix tlb_flush_all only is supported in bank0.
+>         b) add tlb-flush-all in the resume callback.
+>         c) remove the pm status checking in tlb-flush-all.
+>         The reason are showed in the commit message.
+>      4) Allow IOMMU_DOMAIN_UNMANAGED since PCIe VFIO use that.
+>      5) Fix a clk warning and a null abort when unbind the iommu driver.
+> 
+> v2: https://lore.kernel.org/linux-mediatek/20210813065324.29220-1-yong.wu@mediatek.com/
+>      1) Base on v5.14-rc1.
+>      2) Fix build fail for arm32.
+>      3) Fix dt-binding issue from Rob.
+>      4) Fix the bank issue when tlb flush. v1 always use bank->base.
+>      5) adjust devlink with smi-common since the node may be smi-sub-common.
+>      6) other changes: like reword some commit message(removing many
+>         "This patch..."); seperate serveral patches.
+> 
+> v1: https://lore.kernel.org/linux-mediatek/20210630023504.18177-1-yong.wu@mediatek.com/
+>      Base on v5.13-rc1
+> 
+> Yong Wu (34):
+>    dt-bindings: mediatek: mt8195: Add binding for MM IOMMU
+>    dt-bindings: mediatek: mt8195: Add binding for infra IOMMU
+>    iommu/mediatek: Fix 2 HW sharing pgtable issue
+>    iommu/mediatek: Add list_del in mtk_iommu_remove
+>    iommu/mediatek: Remove clk_disable in mtk_iommu_remove
+>    iommu/mediatek: Add mutex for m4u_group and m4u_dom in data
+>    iommu/mediatek: Add mutex for data in the mtk_iommu_domain
+>    iommu/mediatek: Adapt sharing and non-sharing pgtable case
+>    iommu/mediatek: Add 12G~16G support for multi domains
+>    iommu/mediatek: Add a flag DCM_DISABLE
+>    iommu/mediatek: Add a flag NON_STD_AXI
+>    iommu/mediatek: Remove the granule in the tlb flush
+>    iommu/mediatek: Always enable output PA over 32bits in isr
+>    iommu/mediatek: Add SUB_COMMON_3BITS flag
+>    iommu/mediatek: Add IOMMU_TYPE flag
+>    iommu/mediatek: Contain MM IOMMU flow with the MM TYPE
+>    iommu/mediatek: Adjust device link when it is sub-common
+>    iommu/mediatek: Allow IOMMU_DOMAIN_UNMANAGED for PCIe VFIO
+>    iommu/mediatek: Add a PM_CLK_AO flag for infra iommu
+>    iommu/mediatek: Add infra iommu support
+>    iommu/mediatek: Add PCIe support
+>    iommu/mediatek: Add mt8195 support
+>    iommu/mediatek: Only adjust code about register base
+>    iommu/mediatek: Just move code position in hw_init
+>    iommu/mediatek: Separate mtk_iommu_data for v1 and v2
+>    iommu/mediatek: Remove mtk_iommu.h
+>    iommu/mediatek-v1: Just rename mtk_iommu to mtk_iommu_v1
+>    iommu/mediatek: Add mtk_iommu_bank_data structure
+>    iommu/mediatek: Initialise bank HW for each a bank
+>    iommu/mediatek: Change the domid to iova_region_id
+>    iommu/mediatek: Get the proper bankid for multi banks
+>    iommu/mediatek: Initialise/Remove for multi bank dev
+>    iommu/mediatek: Backup/restore regsiters for multi banks
+>    iommu/mediatek: mt8195: Enable multi banks for infra iommu
+> 
+>   .../bindings/iommu/mediatek,iommu.yaml        |  20 +-
+>   drivers/iommu/mtk_iommu.c                     | 955 +++++++++++++-----
+>   drivers/iommu/mtk_iommu.h                     | 101 --
+>   drivers/iommu/mtk_iommu_v1.c                  | 235 +++--
+>   .../dt-bindings/memory/mt8195-memory-port.h   | 408 ++++++++
+>   include/dt-bindings/memory/mtk-memory-port.h  |   2 +
+>   6 files changed, 1244 insertions(+), 477 deletions(-)
+>   delete mode 100644 drivers/iommu/mtk_iommu.h
+>   create mode 100644 include/dt-bindings/memory/mt8195-memory-port.h
+> 
 
-> +               return;
-> +       }
->         writel_relaxed(ch, port->membase + ofs->tdr);
->  }
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

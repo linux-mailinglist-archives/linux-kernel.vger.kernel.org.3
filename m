@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9DA5070E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:46:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7095070ED
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:46:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353666AbiDSOrK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:47:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34464 "EHLO
+        id S238173AbiDSOsq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:48:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352966AbiDSOq4 (ORCPT
+        with ESMTP id S233488AbiDSOsn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:46:56 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9233AA41;
-        Tue, 19 Apr 2022 07:43:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650379434; x=1681915434;
-  h=to:cc:references:from:subject:message-id:date:
-   mime-version:in-reply-to:content-transfer-encoding;
-  bh=GwM+DgH8oZbX2+k4dVfjkTJ+j6PIjW/gXCWsMBhCD78=;
-  b=CSi6jZFAAqwe4eSgfcVFWhKFG/eiOQuovTKtaMn2kusSx5APg055CkM8
-   WjYBvDmfn6f0/1jzK1KqCsSlVNSuuGEUq1PDfKcvCxdxACcAQoP7t2yrV
-   qHNb3MA9zjaufoFbZtCz2KqTAi5S1iij6OTrxBC0rRj4f1wK3YrOWfWK5
-   Y+EppsUeEQVImqOibpeozRy7iSGNfLWxZLSCFv7TXSdwYaGroGU2k5Q6n
-   mHDbbKv1nQkr1RrbAjDMDS2tCsfe7iyEzzl7WmKmvl/tCdHiVzBbTBkWC
-   JiP0gKwwXqB7L/atPSEFVkmvzvA7fvxqsC0BtfsgyfX6IK8EONLlAiPml
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243713020"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="243713020"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 07:43:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="727090766"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orsmga005.jf.intel.com with ESMTP; 19 Apr 2022 07:43:52 -0700
-To:     Surong Pang <surong.pang@gmail.com>, mathias.nyman@intel.com,
-        gregkh@linuxfoundation.org
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220412122524.26966-1-surong.pang@gmail.com>
-From:   Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: [PATCH V1 1/1] usb/host: Let usb phy shutdown later
-Message-ID: <610871b2-1707-dfba-868f-4ddecc4d554d@linux.intel.com>
-Date:   Tue, 19 Apr 2022 17:45:49 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Firefox/78.0 Thunderbird/78.14.0
+        Tue, 19 Apr 2022 10:48:43 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7907824963;
+        Tue, 19 Apr 2022 07:46:00 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (Authenticated sender: kholk11)
+        with ESMTPSA id F0FCF1F418EE
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1650379558;
+        bh=FVuKTUec4tBCzLgLqf1gROYOLTVYEwjYfzcNXIVZxLA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Dg7kzEFRHsPSTzBwTQUmD6Owo+bMJHYmWIxU6FFgzIoaYG+NLZ1deDBXubLqBI4kh
+         Nq9OlalmpgHIk01fCbDn6Ode2D13fDxy3w9rdbRl78lf0yvXRVpwSqZb9W5yeiH7Vr
+         TDKLMiPCWb0ZgWNs1kzaUv40MZbacg/a6VA9lO+wgm+cHOcg8P2DspuZ/MmLogKDrL
+         RbiwMJkmfn9GdZ6Yn8KzbbXUo23ABKHi7EBfmAgil2+/cPlsJzSXmYk+UU5MV32Zjw
+         PmxR0Bgp3KLlGD3V7qXwGngXqqFMop+r4cpQU7d5EtH3/qZNacGr1hmBjnSYnnT3B3
+         qjCNxSo3pfLlA==
+Message-ID: <3b622166-6d03-0e8c-8812-47e9fae6e374@collabora.com>
+Date:   Tue, 19 Apr 2022 16:45:55 +0200
 MIME-Version: 1.0
-In-Reply-To: <20220412122524.26966-1-surong.pang@gmail.com>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [RFC PATCH 1/7] clk: mediatek: Make mtk_clk_register_composite()
+ static
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+To:     Chen-Yu Tsai <wenst@chromium.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-clk@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220419081246.2546159-1-wenst@chromium.org>
+ <20220419081246.2546159-2-wenst@chromium.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220419081246.2546159-2-wenst@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +62,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.4.2022 15.25, Surong Pang wrote:
-> From: Surong Pang <surong.pang@unisoc.com>
+Il 19/04/22 10:12, Chen-Yu Tsai ha scritto:
+> mtk_clk_register_composite() is not used anywhere outside of the file it
+> is defined.
 > 
-> Let usb phy shutdown later in xhci_plat_remove function.
-> Some phy driver doesn't divide 3.0/2.0 very clear.
-> If calls usb_phy_shutdown earlier than usb_remove_hcd(hcd),
-> It will case 10s cmd timeout issue.
+> Make it static.
 > 
-> Call usb phy shutdown later has better compatibility.
-> 
-> Signed-off-by: Surong Pang <surong.pang@unisoc.com>
-> ---
->  drivers/usb/host/xhci-plat.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index 649ffd861b44..dc73a81cbe9b 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -390,7 +390,6 @@ static int xhci_plat_remove(struct platform_device *dev)
->  
->  	usb_remove_hcd(shared_hcd);
->  	xhci->shared_hcd = NULL;
-> -	usb_phy_shutdown(hcd->usb_phy);
->  
->  	usb_remove_hcd(hcd);
->  	usb_put_hcd(shared_hcd);
-> @@ -398,6 +397,7 @@ static int xhci_plat_remove(struct platform_device *dev)
->  	clk_disable_unprepare(clk);
->  	clk_disable_unprepare(reg_clk);
->  	usb_put_hcd(hcd);
-> +	usb_phy_shutdown(hcd->usb_phy);
+> Fixes: 9741b1a68035 ("clk: mediatek: Add initial common clock support for Mediatek SoCs.")
+> Signed-off-by: Chen-Yu Tsai <wenst@chromium.org>
 
-hcd might be freed already here.
-maybe call usb_phy_shutdown(hcd->usb_phy) before usb_put_hcd(hcd)
+Hello Chen-Yu,
+I think that you should send this patch separately from the rest, as this is
+just a simple cleanup that is totally unrelated to the more important conversion
+that you're doing in this series.
 
--Mathias
+By the way, for this one, feel free to take my
 
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>

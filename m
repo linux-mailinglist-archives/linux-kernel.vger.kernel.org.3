@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7CE506D1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D639A506D38
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351876AbiDSNLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38994 "EHLO
+        id S1352090AbiDSNNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:13:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242828AbiDSNLN (ORCPT
+        with ESMTP id S1352135AbiDSNMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:11:13 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D140E2C12C;
-        Tue, 19 Apr 2022 06:08:30 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id z2so13628150oic.6;
-        Tue, 19 Apr 2022 06:08:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=kuw11tGbCexpzngTq2n6w2uUJ2OJTLDgpBrRZMyM3vc=;
-        b=WPdfGsBtyz+O+dNCEYCLC11sPSoTlS9iQh4q5F8enKE0by0V524LXJYdoghn2kCa7X
-         ARxg+TB+ussQC0cqFcsIuISeVrruVUCAtapjEX44vyCnESNIAdFhGqn9Rq95oPU5xIPU
-         uGCMf6MzZQJAyHkTf6MoDqO/QP3WSOZOtOGwWgfJrAMwE/KY2MejXWXLKiPiZgFI6eet
-         IZbaG8VvzNhHlvm+T1HnXhM1JFLU7QDt82IIhLB++c5ejVa1M1B0wj1DoTrfnkKwdOt2
-         qGIDUTfWkoEX3963e0TbrC9lakHBliWNzdIeoTSj55M/Sb/afdMR7uLAdqSChXuG5a6w
-         AfCg==
-X-Gm-Message-State: AOAM531Mkt0bBhzGO8j9tY9spuLiXzHyyTB6snVhCGCROhIkwytJdpNI
-        HmIOAo8uQh1IPy4AUiOJIw==
-X-Google-Smtp-Source: ABdhPJzKxCN4i5eFMnIKtOQ8QW2GVwLNNO3fUffnNK/ceEOGTPpqRQ66KT732cWRNDIJThK8kAbbKw==
-X-Received: by 2002:a54:439a:0:b0:2ef:9bf6:e702 with SMTP id u26-20020a54439a000000b002ef9bf6e702mr9631818oiv.105.1650373710086;
-        Tue, 19 Apr 2022 06:08:30 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id 64-20020aca0643000000b002f9b8a6ca98sm5117722oig.4.2022.04.19.06.08.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 06:08:29 -0700 (PDT)
-Received: (nullmailer pid 2258727 invoked by uid 1000);
-        Tue, 19 Apr 2022 13:08:28 -0000
-Date:   Tue, 19 Apr 2022 08:08:28 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v3 2/4] dt-bindings: media: sun6i-a31-csi: Add ISP output
- port
-Message-ID: <Yl60TLYX+Cgkvb00@robh.at.kernel.org>
-References: <20220415153708.637804-1-paul.kocialkowski@bootlin.com>
- <20220415153708.637804-3-paul.kocialkowski@bootlin.com>
+        Tue, 19 Apr 2022 09:12:40 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2149463B6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:09:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650373797; x=1681909797;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=o20O9+6jXcWif5snFhuBg7R9/r5GeqAXVjS4hTtjZp4=;
+  b=R+zsFXqY3qg6ESBmUM/SDB8o96QnAaIptG/WazrCQHddMRZDRETlr5Zn
+   YLlwPSF8IRDCi4b+NFGFQQhqi5GjFIhHUpMhneLnIw8dIlNV7ib12O5HU
+   fRIUIy1I1qjDIThLDHoQUr32U/WM1mxqO6yIexsmOyHCnHcj/sfFZIgb4
+   zglNXc6guZ4ZKsTYjDU4Mqkn0e9HnwJS1huj6WuUVGY7naa82v7IYSlS3
+   V86VkQNHjahT+dRRkZUJ/WeyKTD1ePBwUsMxgtU+Me+JXrK12Lnzs61W7
+   27qFnhUjly1liG3qrGeVHCcimrJke9PdSWijr7KN+pw+YW1A68O2e/wMx
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="243692837"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="243692837"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 06:09:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="529302235"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 19 Apr 2022 06:09:55 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngncA-0005om-NS;
+        Tue, 19 Apr 2022 13:09:54 +0000
+Date:   Tue, 19 Apr 2022 21:09:01 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD REGRESSION
+ d6932dca19b1a7cbccad9d4acede8229e61cf97a
+Message-ID: <625eb46d.2vBpDJBHdzzQ5y4B%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220415153708.637804-3-paul.kocialkowski@bootlin.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,52 +63,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 05:37:06PM +0200, Paul Kocialkowski wrote:
-> Some Allwinner devices come with an Image Signal Processor (ISP) that
-> allows processing camera data to produce good-looking images,
-> especially from raw bayer representations.
-> 
-> The ISP does not have a dedicated capture path: it is fed directly by
-> one of the CSI controllers, which can be selected at run-time.
-> 
-> Represent this possibility as a graph connection between the CSI
-> controller and the ISP in the device-tree bindings.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> ---
->  .../bindings/media/allwinner,sun6i-a31-csi.yaml    | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> index 53aa6dbe8e2c..1b41a6008195 100644
-> --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml
-> @@ -87,6 +87,20 @@ properties:
->  
->          additionalProperties: false
->  
-> +      port@2:
-> +        $ref: /schemas/graph.yaml#/$defs/port-base
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: d6932dca19b1a7cbccad9d4acede8229e61cf97a  rcu/nocb: Add an option to offload all CPUs on boot
 
-If there are not any custom properties, then use 
-'/schemas/graph.yaml#/properties/port' and drop the 'properties' below.
+Error/Warning: (recently discovered and may have been fixed)
 
-> +        description: ISP output port
-> +
-> +        properties:
-> +          reg:
-> +            const: 2
-> +
-> +          endpoint:
-> +            $ref: /schemas/graph.yaml#/$defs/endpoint-base
-> +            unevaluatedProperties: false
-> +
-> +        additionalProperties: false
-> +
->      anyOf:
->        - required:
->            - port@0
-> -- 
-> 2.35.2
-> 
-> 
+kernel/rcu/tree_nocb.h:1162:14: error: 'rcu_nocb_is_setup' undeclared (first use in this function); did you mean 'rcu_nocb_setup'?
+
+Error/Warning ids grouped by kconfigs:
+
+gcc_recent_errors
+|-- alpha-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- i386-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- ia64-allmodconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- ia64-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- mips-allmodconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- mips-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- riscv-allmodconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- riscv-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+|-- sparc-allyesconfig
+|   `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+`-- x86_64-allyesconfig
+    `-- kernel-rcu-tree_nocb.h:error:rcu_nocb_is_setup-undeclared-(first-use-in-this-function)
+
+elapsed time: 911m
+
+configs tested: 98
+configs skipped: 3
+
+gcc tested configs:
+arm                              allyesconfig
+arm                                 defconfig
+arm                              allmodconfig
+arm64                               defconfig
+arm64                            allyesconfig
+powerpc                     pq2fads_defconfig
+powerpc                 mpc834x_mds_defconfig
+mips                       bmips_be_defconfig
+sh                          urquell_defconfig
+arm                  randconfig-c002-20220418
+i386                 randconfig-c001-20220418
+x86_64               randconfig-c001-20220418
+arm                  randconfig-c002-20220417
+ia64                             allmodconfig
+ia64                             allyesconfig
+ia64                                defconfig
+m68k                                defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+nios2                               defconfig
+arc                              allyesconfig
+csky                                defconfig
+nios2                            allyesconfig
+alpha                               defconfig
+alpha                            allyesconfig
+arc                                 defconfig
+sh                               allmodconfig
+h8300                            allyesconfig
+xtensa                           allyesconfig
+parisc                              defconfig
+parisc64                            defconfig
+s390                             allmodconfig
+parisc                           allyesconfig
+s390                                defconfig
+s390                             allyesconfig
+sparc                               defconfig
+i386                             allyesconfig
+sparc                            allyesconfig
+i386                                defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+mips                             allyesconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+x86_64               randconfig-a003-20220418
+x86_64               randconfig-a004-20220418
+x86_64               randconfig-a006-20220418
+x86_64               randconfig-a001-20220418
+x86_64               randconfig-a002-20220418
+x86_64               randconfig-a005-20220418
+arc                  randconfig-r043-20220419
+s390                 randconfig-r044-20220419
+arc                  randconfig-r043-20220418
+arc                  randconfig-r043-20220417
+riscv                randconfig-r042-20220417
+s390                 randconfig-r044-20220417
+riscv                               defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+x86_64                    rhel-8.3-kselftests
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                                  kexec
+x86_64                          rhel-8.3-func
+x86_64                               rhel-8.3
+x86_64                         rhel-8.3-kunit
+
+clang tested configs:
+mips                   sb1250_swarm_defconfig
+powerpc               mpc834x_itxgp_defconfig
+mips                         tb0219_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64               randconfig-a012-20220418
+x86_64               randconfig-a013-20220418
+x86_64               randconfig-a011-20220418
+x86_64               randconfig-a015-20220418
+x86_64               randconfig-a016-20220418
+x86_64               randconfig-a014-20220418
+i386                 randconfig-a011-20220418
+i386                 randconfig-a015-20220418
+i386                 randconfig-a016-20220418
+i386                 randconfig-a012-20220418
+i386                 randconfig-a013-20220418
+i386                 randconfig-a014-20220418
+hexagon              randconfig-r041-20220417
+hexagon              randconfig-r041-20220418
+hexagon              randconfig-r045-20220417
+hexagon              randconfig-r045-20220418
+riscv                randconfig-r042-20220418
+s390                 randconfig-r044-20220418
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,27 +2,27 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30B4350637E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EDCE506385
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348483AbiDSEwD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:52:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46126 "EHLO
+        id S1348351AbiDSEwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348357AbiDSEva (ORCPT
+        with ESMTP id S1348364AbiDSEvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:51:30 -0400
+        Tue, 19 Apr 2022 00:51:31 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916222F39C
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:48:49 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396402FFC1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:48:50 -0700 (PDT)
 Received: from dude.hi.pengutronix.de ([2001:67c:670:100:1d::7])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1ngfmx-0002uT-KM; Tue, 19 Apr 2022 06:48:31 +0200
+        id 1ngfmt-0002uU-Fc; Tue, 19 Apr 2022 06:48:27 +0200
 Received: from ore by dude.hi.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1ngfmr-0047QN-HS; Tue, 19 Apr 2022 06:48:25 +0200
+        id 1ngfmr-0047QW-IV; Tue, 19 Apr 2022 06:48:25 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     Rob Herring <robh+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>
 Cc:     David Jander <david@protonic.nl>,
@@ -32,9 +32,9 @@ Cc:     David Jander <david@protonic.nl>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Robin van der Gracht <robin@protonic.nl>
-Subject: [PATCH v2 04/17] ARM: dts: imx6qdl-vicut1/victgo: Remove UART2
-Date:   Tue, 19 Apr 2022 06:48:11 +0200
-Message-Id: <20220419044824.981747-5-o.rempel@pengutronix.de>
+Subject: [PATCH v2 05/17] ARM: dts: imx6qdl-vicut1.dtsi: Fix LED names
+Date:   Tue, 19 Apr 2022 06:48:12 +0200
+Message-Id: <20220419044824.981747-6-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419044824.981747-1-o.rempel@pengutronix.de>
 References: <20220419044824.981747-1-o.rempel@pengutronix.de>
@@ -55,80 +55,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: David Jander <david@protonic.nl>
 
-Only first prototype had UART2 and there are no plans to add it in the
-future.
+The names should be consistent with the names in imx6dl-victgo.dts
+
+This patch is preparation to unify vicut1 and victgo DTs.
 
 Signed-off-by: David Jander <david@protonic.nl>
 Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- arch/arm/boot/dts/imx6dl-victgo.dts   | 13 -------------
- arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 15 ---------------
- 2 files changed, 28 deletions(-)
+ arch/arm/boot/dts/imx6qdl-vicut1.dtsi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arm/boot/dts/imx6dl-victgo.dts b/arch/arm/boot/dts/imx6dl-victgo.dts
-index 7dd7fb165432..9cf4df3eaeb0 100644
---- a/arch/arm/boot/dts/imx6dl-victgo.dts
-+++ b/arch/arm/boot/dts/imx6dl-victgo.dts
-@@ -616,12 +616,6 @@ &uart1 {
- 	status = "okay";
- };
- 
--&uart2 {
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_uart2>;
--	status = "okay";
--};
--
- &uart3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart3>;
-@@ -905,13 +899,6 @@ MX6QDL_PAD_CSI0_DAT11__UART1_RX_DATA		0x1b0b1
- 		>;
- 	};
- 
--	pinctrl_uart2: uart2grp {
--		fsl,pins = <
--			MX6QDL_PAD_EIM_D26__UART2_TX_DATA		0x1b0b1
--			MX6QDL_PAD_EIM_D27__UART2_RX_DATA		0x1b0b1
--		>;
--	};
--
- 	/* YaCO Touchscreen UART */
- 	pinctrl_uart3: uart3grp {
- 		fsl,pins = <
 diff --git a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
-index b126ef4d5255..ea474aa93485 100644
+index ea474aa93485..b7a705b39178 100644
 --- a/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
 +++ b/arch/arm/boot/dts/imx6qdl-vicut1.dtsi
-@@ -463,12 +463,6 @@ &uart1 {
- 	status = "okay";
- };
+@@ -90,21 +90,21 @@ leds {
+ 		pinctrl-0 = <&pinctrl_leds>;
  
--&uart2 {
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_uart2>;
--	status = "okay";
--};
--
- &uart3 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart3>;
-@@ -728,15 +722,6 @@ MX6QDL_PAD_CSI0_DAT11__UART1_RX_DATA		0x1b0b1
- 		>;
- 	};
+ 		led-0 {
+-			label = "LED_DI0_DEBUG_0";
++			label = "debug0";
+ 			function = LED_FUNCTION_HEARTBEAT;
+ 			gpios = <&gpio4 16 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "heartbeat";
+ 		};
  
--	pinctrl_uart2: uart2grp {
--		fsl,pins = <
--			MX6QDL_PAD_EIM_D26__UART2_RX_DATA		0x1b0b1
--			MX6QDL_PAD_EIM_D27__UART2_TX_DATA		0x1b0b1
--			MX6QDL_PAD_EIM_D28__UART2_DTE_CTS_B		0x1b0b1
--			MX6QDL_PAD_EIM_D29__UART2_DTE_RTS_B		0x1b0b1
--		>;
--	};
--
- 	/* YaCO Touchscreen UART */
- 	pinctrl_uart3: uart3grp {
- 		fsl,pins = <
+ 		led-1 {
+-			label = "LED_DI0_DEBUG_1";
++			label = "debug1";
+ 			function = LED_FUNCTION_DISK;
+ 			gpios = <&gpio4 17 GPIO_ACTIVE_HIGH>;
+ 			linux,default-trigger = "disk-activity";
+ 		};
+ 
+ 		led-2 {
+-			label = "POWER_LED";
++			label = "power_led";
+ 			function = LED_FUNCTION_POWER;
+ 			gpios = <&gpio2 24 GPIO_ACTIVE_HIGH>;
+ 			default-state = "on";
 -- 
 2.30.2
 

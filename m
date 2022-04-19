@@ -2,137 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909C5507AA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:06:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 924F1507AAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356625AbiDSUIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:08:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
+        id S1356788AbiDSULS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1355603AbiDSUIc (ORCPT
+        with ESMTP id S1356714AbiDSULQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:08:32 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4F538798
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:05:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SbD8PCj0eWay7ftzmu/r7EPuMrGh9ftfP/J1oS1fIQeAHEAnaom29eT0qlq6IRj5TLrGZsq0KJB4Vq0Je3uuf5RaQNdvesezgfF7ELv5JaLNP7XWs3l7cVgcXSvvfbNrsFDbRtLUZAS0aGSx6S0WFM/W3Jv3oQfD3VIN1ji17CQEpR0bPazU6oZ7H9oBq66MGox8GPq2KGqo1i7PZE4cWziRc0gURFi32Z0Oll5cczCC/DkuAINudCo0hBsIJTIV8tH9necDNClq38hIURBVh7FF1ayNYkdlhQhHQzqfNrnQHqaI9tjCq7rxiFfJOi5ATvrx0f6zskuO0DldfM8AFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=59EwnifDT494WPEG/QrDkzsa8CAt8u8HgPN3snz1xLc=;
- b=PvyHhTlgg/ZVg6gPZw/+7tSGuGIRmtF7xq6xA2DsQjQyc35rmSFZBkVunA3Y9YyqS3PjxgbSqiqQo3dD0u5pPxiL7X8gXX+zsObyyG26CwJ7GlB7cOBpPU5GWfdKP5L2tlHtmcCD78whkYVHlM1rwz6erMpzpBpM3xEm+kXeizovzxJrrjKZ2iNRAydcux/CViXpjLhMkiVrjBm9duX7WQuBc7v/w8Bj7MSHFxA0gJs2LaKU5w6lPIk91lq37wkeIAwKO4vZ9cpzh9HwsD5AO+akpyIFvzDtl24S+1Vg1vd2dyzLvy2RcZMfgQ39TdfDXMTnnBWEvxdU8mW1ifhxxA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.236) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=59EwnifDT494WPEG/QrDkzsa8CAt8u8HgPN3snz1xLc=;
- b=RhVxpfl3RdmQrAzuDAZaRmY/QQS5MNfVNKeGNf5yGo6ZptbURTeiAoLatOIdCxNy7SkATHaHp5sjAxaimIavWE6dJAyrfRsa4COsN6rjVoKdeL5OoWnr31KJDEB7CDAEGdwU7HW41hu7TOwL1lgOchK2DFiAIGoXRb9fE+oPImWRSIELpRXwJO8Pzu3Z/EDxVHuXq5K5KjiUoU0kyanX27oLsjETWduPNEmVB42E5iw+7goRH7DoXMwu+ZQfIFbohG5LoL16FgBJUtRTZHC9+Y9dh7rdZEGxQdGtavjG4QPjofWW70oWWBnQhtTpqvTHFYQpk2xrdzTnVBKM9xpC7w==
-Received: from BN0PR04CA0049.namprd04.prod.outlook.com (2603:10b6:408:e8::24)
- by BL1PR12MB5780.namprd12.prod.outlook.com (2603:10b6:208:393::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.25; Tue, 19 Apr
- 2022 20:05:47 +0000
-Received: from BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::11) by BN0PR04CA0049.outlook.office365.com
- (2603:10b6:408:e8::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20 via Frontend
- Transport; Tue, 19 Apr 2022 20:05:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.236)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.236 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.236; helo=mail.nvidia.com;
-Received: from mail.nvidia.com (12.22.5.236) by
- BN8NAM11FT059.mail.protection.outlook.com (10.13.177.120) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5164.19 via Frontend Transport; Tue, 19 Apr 2022 20:05:47 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by DRHQMAIL109.nvidia.com
- (10.27.9.19) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Tue, 19 Apr
- 2022 20:05:46 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Apr
- 2022 13:05:45 -0700
-Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22 via Frontend
- Transport; Tue, 19 Apr 2022 13:05:44 -0700
-Date:   Tue, 19 Apr 2022 13:05:43 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@ziepe.ca>
-CC:     Robin Murphy <robin.murphy@arm.com>, <will@kernel.org>,
-        <joro@8bytes.org>, <thunder.leizhen@huawei.com>,
-        <tglx@linutronix.de>, <john.garry@huawei.com>,
-        <jean-philippe@linaro.org>, <christophe.jaillet@wanadoo.fr>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux-foundation.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Align size in __arm_smmu_tlb_inv_range
-Message-ID: <Yl8WF9R7tubSgREw@Asurada-Nvidia>
-References: <20220413041745.35174-1-nicolinc@nvidia.com>
- <37c02fc4-d793-b003-f612-206c987a8a42@arm.com>
- <YlcwPG5RXmJ6U7YS@Asurada-Nvidia>
- <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
- <Yloj6GM+yykImKvp@Asurada-Nvidia>
- <20220419200233.GN64706@ziepe.ca>
+        Tue, 19 Apr 2022 16:11:16 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA4E38BCF
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:08:32 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id b17so14019584qvp.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:08:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NWMctJBPqd3Nqrzh+o6oCbddsbwKUvBkj5/KoKf2Cc8=;
+        b=MCDmNQyCVndP9K3EWd38PCnfSdq3E/ILglxBt7hiPjgj+rB+I327MAMgd77OKl0/mx
+         yrSNZQNfrdWkugrUIcuopZXB/VHRZdHOhtcmU5KxpUnuZvS4MAQdv1v9t1AUA4m+/s1P
+         UHOjpZezt3WqWaEEajXQlEyPJTLgWwahXeZzU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=NWMctJBPqd3Nqrzh+o6oCbddsbwKUvBkj5/KoKf2Cc8=;
+        b=ehR9SCYpPOr38Tytfx/ngVTNy3VcOlDPD/xUJdOL9G2qvqP8d/GiCaGSaQNbmw0gdE
+         rNyZwy+ckT05/9N9clmUaHHReDRq0zcQU3Pm/z0OptGIU2rYgo1WiHd1zBp7MZLPfBeU
+         sjyufgt/Q9C5CXxQiE+ApcX4l1GnwsKKnJBc9Ei26nJ94tIkWkOhIykwlsDZpm/bely4
+         vWbucTfObknI3ihOP7CJNsXg6N9N2RnxC2SKdfQAal+0CaDdEBH2zjhKhY+NtZhZG7vM
+         ys1zXd5CN6tRfZT1VGGz1KsUKzEA+b+IXcRdUMyWUfZHSH+HW2cFsYkqUypoMtDan7Ui
+         pXHA==
+X-Gm-Message-State: AOAM533N1A6dm7isS6PKRUYgtQqkLNHhvOYXWhS+auVXBEkxDLEcfAJB
+        LvBJ4wEtrmNBTi+vxmlBFSeVAOKJwuKlHw==
+X-Google-Smtp-Source: ABdhPJxxnNBZjTwerxeByIyPIGXrWOg0m4+MpAaPBuU55S1MiSh//ZPlCCLW87jFxsKedRmuc7j0MQ==
+X-Received: by 2002:ad4:5986:0:b0:444:503e:eb0d with SMTP id ek6-20020ad45986000000b00444503eeb0dmr12930669qvb.44.1650398910863;
+        Tue, 19 Apr 2022 13:08:30 -0700 (PDT)
+Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
+        by smtp.gmail.com with ESMTPSA id y18-20020ac85f52000000b002ed08a7dc8dsm582804qta.13.2022.04.19.13.08.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 13:08:30 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rushikesh.s.kadam@intel.com, vineethrp@gmail.com, urezki@gmail.com
+Subject: [PATCH v4 rcu/dev] rcu/nocb: Add an option to offload all CPUs on boot
+Date:   Tue, 19 Apr 2022 20:08:23 +0000
+Message-Id: <20220419200823.2790490-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220419200233.GN64706@ziepe.ca>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ac803162-af4d-4316-4ff1-08da223ffe6a
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5780:EE_
-X-Microsoft-Antispam-PRVS: <BL1PR12MB5780E0A91E362BEA1F84E9D6ABF29@BL1PR12MB5780.namprd12.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iAgMmDgrWVUHOOA+ibaMJB3CpkCV+AndrNqn4V13D0bygSdrEKgOESkRQrEya4hu6/TayUce9cafTXYha41jJdmqp9nYx8AUpDl1ZU8uozK1rHHBnwuLRECW3eHVMHAh4bo8t/7zTFEQcAXQpRBoLpi6IKhFOz1Mv3LQi2hnlzZwFUYX10kiVSpsoWpBYRSTaA7R66jfIYRa6jnnN6esUL43zdYBO7ZyeTvtmYvyaqUQ6Cj8uG7t1FQ9mCJbq2bn9MBZZmbPQeFsZbhQJN5ozNLtuT49tKyBBOvncbxMSsXY7mJxfO7NtA4/oKDQeR4DbMJ3wXweg9Ut3Wp4zWoxRt/69XRZ6ZX7anFN9qkdYUyXYltijeDfbHeX6iC7Yu+jEPnFXybkIRtvDHd2DfCv8SCxS2857Ok+l+aoIWyHRv4aogXKUSsqmfI3Zc8CAJnVZMXX5Mp9o9PFO2FoS8E5Q9eWm+3iXlTjHij/am1CSxIgOe3Ah2OdpiBipx8L9UpsEM8P70TKxppWMGY3vuLQNhLlJ7hA91KFDmsHxbK5nbHm8TVTnHoa4+5eByv41h9N3JkiSA/aYZnudZ0UHNfWddGLXYTWIoeedPXJePWjT8kHNMsMebtPdytVH1Sy+ZEfdUBnUsPwXPqXJu1f/b2nOy372E8czU4AmCFEnzvxmhLcpx9czO5GD0wTM+Mj3OpuOfjIqiZGOEl6VELVEw4BXg==
-X-Forefront-Antispam-Report: CIP:12.22.5.236;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230001)(4636009)(46966006)(40470700004)(36840700001)(7416002)(55016003)(356005)(86362001)(8936002)(81166007)(316002)(54906003)(33716001)(6916009)(508600001)(70586007)(70206006)(186003)(40460700003)(426003)(8676002)(5660300002)(336012)(4326008)(36860700001)(47076005)(9686003)(82310400005)(26005)(4744005)(83380400001)(2906002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 20:05:47.1135
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ac803162-af4d-4316-4ff1-08da223ffe6a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.236];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT059.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5780
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:02:33PM -0300, Jason Gunthorpe wrote:
+From: Joel Fernandes <joel@joelfernandes.org>
 
-> > diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > index d816759a6bcf..e280568bb513 100644
-> > +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> > @@ -183,7 +183,7 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
-> >  {
-> >         struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
-> >         struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
-> > -       size_t size = end - start + 1;
-> > +       size_t size = end - start;
-> 
-> +1 to this bug fix. You should send a formal patch for stable with a fixes/etc
-> 
-> mmu notifiers uses 'end' not 'last' in alignment with how VMA's work:
-> 
-> include/linux/mm_types.h:       unsigned long vm_end;           /* The first byte after our end address
+On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
+which ends up not offloading any CPU. This patch removes a dependency
+from the bootloader having to know about RCU and about how to provide
+the mask.
 
-Thanks for the review!
+With the new option enabled, all CPUs will be offloaded on boot unless
+rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
 
-Yea, I will send a new patch.
+Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
+---
+v4: Rebased on rcu/dev, fixed conflict with Frederick's patch changing
+    location of nocb_is_setup variable.
 
-Nic
+ Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
+ kernel/rcu/Kconfig                              | 13 +++++++++++++
+ kernel/rcu/tree_nocb.h                          | 13 +++++++++++++
+ 3 files changed, 32 insertions(+)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 789ef586009b..1e82ecb7a649 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3572,6 +3572,9 @@
+ 			just as if they had also been called out in the
+ 			rcu_nocbs= boot parameter.
+ 
++			Note that this argument takes precedence over
++			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
++
+ 	noiotrap	[SH] Disables trapped I/O port accesses.
+ 
+ 	noirqdebug	[X86-32] Disables the code which attempts to detect and
+@@ -4475,6 +4478,9 @@
+ 			no-callback mode from boot but the mode may be
+ 			toggled at runtime via cpusets.
+ 
++			Note that this argument takes precedence over
++			the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
++
+ 	rcu_nocb_poll	[KNL]
+ 			Rather than requiring that offloaded CPUs
+ 			(specified by rcu_nocbs= above) explicitly
+diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
+index 1c630e573548..27aab870ae4c 100644
+--- a/kernel/rcu/Kconfig
++++ b/kernel/rcu/Kconfig
+@@ -262,6 +262,19 @@ config RCU_NOCB_CPU
+ 	  Say Y here if you need reduced OS jitter, despite added overhead.
+ 	  Say N here if you are unsure.
+ 
++config RCU_NOCB_CPU_DEFAULT_ALL
++	bool "Offload RCU callback processing from all CPUs by default"
++	depends on RCU_NOCB_CPU
++	default n
++	help
++	  Use this option to offload callback processing from all CPUs
++	  by default, in the absence of the rcu_nocbs or nohz_full boot
++	  parameter. This also avoids the need to use any boot parameters
++	  to achieve the effect of offloading all CPUs on boot.
++
++	  Say Y here if you want offload all CPUs by default on boot.
++	  Say N here if you are unsure.
++
+ config TASKS_TRACE_RCU_READ_MB
+ 	bool "Tasks Trace RCU readers use memory barriers in user and idle"
+ 	depends on RCU_EXPERT && TASKS_TRACE_RCU
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 4cf9a29bba79..9f29f25a0cbc 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -1197,11 +1197,21 @@ void __init rcu_init_nohz(void)
+ {
+ 	int cpu;
+ 	bool need_rcu_nocb_mask = false;
++	bool offload_all = false;
+ 	struct rcu_data *rdp;
+ 
++#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
++	if (!rcu_state.nocb_is_setup) {
++		need_rcu_nocb_mask = true;
++		offload_all = true;
++	}
++#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
++
+ #if defined(CONFIG_NO_HZ_FULL)
+ 	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
+ 		need_rcu_nocb_mask = true;
++		offload_all = false; /* NO_HZ_FULL has its own mask. */
++	}
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
+ 	if (need_rcu_nocb_mask) {
+@@ -1222,6 +1232,9 @@ void __init rcu_init_nohz(void)
+ 		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
+ #endif /* #if defined(CONFIG_NO_HZ_FULL) */
+ 
++	if (offload_all)
++		cpumask_setall(rcu_nocb_mask);
++
+ 	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
+ 		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
+ 		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
+-- 
+2.36.0.rc0.470.gd361397f0d-goog
+

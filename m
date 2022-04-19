@@ -2,547 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F2B55075C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:01:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7AF507316
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355771AbiDSQxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:53:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55128 "EHLO
+        id S1354696AbiDSQlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:41:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346236AbiDSQpr (ORCPT
+        with ESMTP id S238253AbiDSQlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:45:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9863339692;
-        Tue, 19 Apr 2022 09:43:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2247C61853;
-        Tue, 19 Apr 2022 16:43:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41ECDC385AD;
-        Tue, 19 Apr 2022 16:42:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650386582;
-        bh=XMfk0O3QBhz94b688wif9fT9MesrG60MJQFx6+JOR7A=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OyQ0i3+beAWzJBfVtjzbEbEG6UQmG0elXn7H/64gtW2jdmo85cTny3DFofm4YWk26
-         resGDEVxeYXDCEBoi+Mx+bHuhMlafP63G9kgkQD0pmbNlpXrgmphdLMFmSTDHKODM1
-         jUS2PLlKyzCtItMP5m8BWr2O7h90mAv4o3gzr2csamszwUDnuuc/49xNa8395GBqWJ
-         9gvv3KVEqBr8Fw340rBJDxyqUfV46LB5NeT2qOAhAiNk4ddchKUbBQTdHYcwd/MEej
-         ov5g41F+UxI/Qn/rxpRwVLD2MlH238KoEwdQas8Sb+V8WiQeUGVN3Vz4ZKQ+DKjHlg
-         vxdDK+bIiTV/Q==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     robert.jarzmik@free.fr, linux-arm-kernel@lists.infradead.org
-Cc:     Arnd Bergmann <arnd@arndb.de>, Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Marek Vasut <marek.vasut@gmail.com>,
-        Philipp Zabel <philipp.zabel@gmail.com>,
-        Lubomir Rintel <lkundrak@v3.sk>,
-        Paul Parsons <lost.distance@yahoo.com>,
-        Tomas Cech <sleep_walker@suse.com>,
-        Sergey Lapin <slapin@ossfans.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Helge Deller <deller@gmx.de>, Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-pm@vger.kernel.org, linux-input@vger.kernel.org,
-        patches@opensource.cirrus.com, linux-leds@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        alsa-devel@alsa-project.org
-Subject: [PATCH 32/48] ASoC: pxa: ac97: use normal MMIO accessors
-Date:   Tue, 19 Apr 2022 18:37:54 +0200
-Message-Id: <20220419163810.2118169-33-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220419163810.2118169-1-arnd@kernel.org>
-References: <20220419163810.2118169-1-arnd@kernel.org>
+        Tue, 19 Apr 2022 12:41:15 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0AE1409E
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:38:32 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id x17so30383454lfa.10
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=OQBJCdM90hvT5S/zAE5vLjVmVTwzQZE/0kHANhU68o4=;
+        b=mlAAnQdt5ZbjW5hkIOjAqKQ5iX4QuiTTeQ0I0cdeISpwbgIbmg3RUkkjFw4KpohCbP
+         8RGIByLJCRx2KA0kJsWTv1C/o6B7u0CXk+JrwaIWzh48UoWwa9uJakuvcBRHH6bFB/Ls
+         tX/58Bs+DDYjM2dLCVv6lqqTOUYnJ9PZUOv6ULGKhZceGWjGcHSGQPxkVpBiBs8F9Qnp
+         r07KFTHwyo7HRXZVntsjq1z3BLmxs7I/fJXElyz2uoOWD7csCPeiGFt/JWwuDWWr5NeM
+         urr+wNHsjgoNLx2FkaKlnQvDSUqXKDNBLrjpyvlsa+kZ0ya916mz3qV427umdREsO18+
+         xuPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=OQBJCdM90hvT5S/zAE5vLjVmVTwzQZE/0kHANhU68o4=;
+        b=OkUE5oka/IUnzmFq6I/BzkOm799SfiktAXxrUiJ1gF1qr1Jqxlb6ojCtPc+pPUZ9Zp
+         tX/lxFEdBb96MJVx8JW2l198D6oj4REw8pbdNgyw+QcS81n0j33VxI0PLwGwHsPPknZL
+         jJbLZd2OyV8oMaj5FnjhOjHa6/yDHPqm9RbRCLEkiZwY0mMNEeVH2/o3Ctve9khPshQ6
+         CGOaIVG/lyk2wnnkvK2k0BKkfS+bH0ObYs7PVoVN0zD5bmNZCz6SN0ACtIBHzQrOS7E4
+         A2Qjy9S5KPS1m1dbV3rb1KMjEjupeV29fPI/ebNXM5bGfEB79n6TXwSWDszP1xDRopr8
+         Blvg==
+X-Gm-Message-State: AOAM533SaSqeiCtDG65cRG8sOCyamuXztfD0z3WsYzEc3Ld8U/+VLtwJ
+        LyWjPaRClAWCGa9wKRwtIFht/Dvgok7B43wBjLps6Q==
+X-Google-Smtp-Source: ABdhPJy7I2GKesc7liKjiMsmsfYQ2u7aN/j0jHnPAFWYKa/qL6Bwrbr7ipVhkCDdP45fYwSBJO2iIe+zNJ/l2AeXGP0=
+X-Received: by 2002:a05:6512:3d8e:b0:471:b4d4:32f with SMTP id
+ k14-20020a0565123d8e00b00471b4d4032fmr491452lfv.288.1650386310460; Tue, 19
+ Apr 2022 09:38:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220419160407.1740458-1-Jason@zx2c4.com>
+In-Reply-To: <20220419160407.1740458-1-Jason@zx2c4.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Tue, 19 Apr 2022 18:37:54 +0200
+Message-ID: <CAG48ez3amS6=omb8XVDEz9H2bk3MxTEK_XPjD=ZO-cXcDqz-cg@mail.gmail.com>
+Subject: Re: [PATCH] random: add fork_event sysctl for polling VM forks
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        Alexander Graf <graf@amazon.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Colm MacCarthaigh <colmmacc@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Apr 19, 2022 at 6:04 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
+> In order to inform userspace of virtual machine forks, this commit adds
+> a "fork_event" sysctl, which does not return any data, but allows
+> userspace processes to poll() on it for notification of VM forks.
+>
+> It avoids exposing the actual vmgenid from the hypervisor to userspace,
+> in case there is any randomness value in keeping it secret. Rather,
+> userspace is expected to simply use getrandom() if it wants a fresh
+> value.
+>
+> For example, the following snippet can be used to print a message every
+> time a VM forks, after the RNG has been reseeded:
+>
+>   struct pollfd fd = { .fd = open("/proc/sys/kernel/random/fork_event", O_RDONLY)  };
+>   assert(fd.fd >= 0);
+>   for (;;) {
+>     assert(poll(&fd, 1, -1) > 0);
+>     puts("vm fork detected");
+>   }
 
-To avoid dereferencing hardwired constant pointers from a global header
-file, change the driver to use devm_platform_ioremap_resource for getting
-an __iomem pointer, and then using readl/writel on that.
-
-Each pointer dereference gets changed by a search&replace, which leads
-to a few overlong lines, but seems less risky than trying to clean up
-the code at the same time.
-
-Cc: alsa-devel@alsa-project.org
-Acked-by: Robert Jarzmik <robert.jarzmik@free.fr>
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- sound/arm/pxa2xx-ac97-lib.c                   | 124 ++++++++++--------
- .../arm/pxa2xx-ac97-regs.h                    |  42 +++---
- sound/arm/pxa2xx-ac97.c                       |   1 -
- 3 files changed, 92 insertions(+), 75 deletions(-)
- rename arch/arm/mach-pxa/include/mach/regs-ac97.h => sound/arm/pxa2xx-ac97-regs.h (71%)
-
-diff --git a/sound/arm/pxa2xx-ac97-lib.c b/sound/arm/pxa2xx-ac97-lib.c
-index 572b73d73762..e55c0421718b 100644
---- a/sound/arm/pxa2xx-ac97-lib.c
-+++ b/sound/arm/pxa2xx-ac97-lib.c
-@@ -21,15 +21,17 @@
- 
- #include <sound/pxa2xx-lib.h>
- 
--#include <mach/regs-ac97.h>
- #include <linux/platform_data/asoc-pxa.h>
- 
-+#include "pxa2xx-ac97-regs.h"
-+
- static DEFINE_MUTEX(car_mutex);
- static DECLARE_WAIT_QUEUE_HEAD(gsr_wq);
- static volatile long gsr_bits;
- static struct clk *ac97_clk;
- static struct clk *ac97conf_clk;
- static int reset_gpio;
-+static void __iomem *ac97_reg_base;
- 
- extern void pxa27x_configure_ac97reset(int reset_gpio, bool to_gpio);
- 
-@@ -46,7 +48,7 @@ extern void pxa27x_configure_ac97reset(int reset_gpio, bool to_gpio);
- int pxa2xx_ac97_read(int slot, unsigned short reg)
- {
- 	int val = -ENODEV;
--	volatile u32 *reg_addr;
-+	u32 __iomem *reg_addr;
- 
- 	if (slot > 0)
- 		return -ENODEV;
-@@ -55,31 +57,33 @@ int pxa2xx_ac97_read(int slot, unsigned short reg)
- 
- 	/* set up primary or secondary codec space */
- 	if (cpu_is_pxa25x() && reg == AC97_GPIO_STATUS)
--		reg_addr = slot ? &SMC_REG_BASE : &PMC_REG_BASE;
-+		reg_addr = ac97_reg_base +
-+			   (slot ? SMC_REG_BASE : PMC_REG_BASE);
- 	else
--		reg_addr = slot ? &SAC_REG_BASE : &PAC_REG_BASE;
-+		reg_addr = ac97_reg_base +
-+			   (slot ? SAC_REG_BASE : PAC_REG_BASE);
- 	reg_addr += (reg >> 1);
- 
- 	/* start read access across the ac97 link */
--	GSR = GSR_CDONE | GSR_SDONE;
-+	writel(GSR_CDONE | GSR_SDONE, ac97_reg_base + GSR);
- 	gsr_bits = 0;
--	val = (*reg_addr & 0xffff);
-+	val = (readl(reg_addr) & 0xffff);
- 	if (reg == AC97_GPIO_STATUS)
- 		goto out;
--	if (wait_event_timeout(gsr_wq, (GSR | gsr_bits) & GSR_SDONE, 1) <= 0 &&
--	    !((GSR | gsr_bits) & GSR_SDONE)) {
-+	if (wait_event_timeout(gsr_wq, (readl(ac97_reg_base + GSR) | gsr_bits) & GSR_SDONE, 1) <= 0 &&
-+	    !((readl(ac97_reg_base + GSR) | gsr_bits) & GSR_SDONE)) {
- 		printk(KERN_ERR "%s: read error (ac97_reg=%d GSR=%#lx)\n",
--				__func__, reg, GSR | gsr_bits);
-+				__func__, reg, readl(ac97_reg_base + GSR) | gsr_bits);
- 		val = -ETIMEDOUT;
- 		goto out;
- 	}
- 
- 	/* valid data now */
--	GSR = GSR_CDONE | GSR_SDONE;
-+	writel(GSR_CDONE | GSR_SDONE, ac97_reg_base + GSR);
- 	gsr_bits = 0;
--	val = (*reg_addr & 0xffff);
-+	val = (readl(reg_addr) & 0xffff);
- 	/* but we've just started another cycle... */
--	wait_event_timeout(gsr_wq, (GSR | gsr_bits) & GSR_SDONE, 1);
-+	wait_event_timeout(gsr_wq, (readl(ac97_reg_base + GSR) | gsr_bits) & GSR_SDONE, 1);
- 
- out:	mutex_unlock(&car_mutex);
- 	return val;
-@@ -88,25 +92,27 @@ EXPORT_SYMBOL_GPL(pxa2xx_ac97_read);
- 
- int pxa2xx_ac97_write(int slot, unsigned short reg, unsigned short val)
- {
--	volatile u32 *reg_addr;
-+	u32 __iomem *reg_addr;
- 	int ret = 0;
- 
- 	mutex_lock(&car_mutex);
- 
- 	/* set up primary or secondary codec space */
- 	if (cpu_is_pxa25x() && reg == AC97_GPIO_STATUS)
--		reg_addr = slot ? &SMC_REG_BASE : &PMC_REG_BASE;
-+		reg_addr = ac97_reg_base +
-+			   (slot ? SMC_REG_BASE : PMC_REG_BASE);
- 	else
--		reg_addr = slot ? &SAC_REG_BASE : &PAC_REG_BASE;
-+		reg_addr = ac97_reg_base +
-+			   (slot ? SAC_REG_BASE : PAC_REG_BASE);
- 	reg_addr += (reg >> 1);
- 
--	GSR = GSR_CDONE | GSR_SDONE;
-+	writel(GSR_CDONE | GSR_SDONE, ac97_reg_base + GSR);
- 	gsr_bits = 0;
--	*reg_addr = val;
--	if (wait_event_timeout(gsr_wq, (GSR | gsr_bits) & GSR_CDONE, 1) <= 0 &&
--	    !((GSR | gsr_bits) & GSR_CDONE)) {
-+	writel(val, reg_addr);
-+	if (wait_event_timeout(gsr_wq, (readl(ac97_reg_base + GSR) | gsr_bits) & GSR_CDONE, 1) <= 0 &&
-+	    !((readl(ac97_reg_base + GSR) | gsr_bits) & GSR_CDONE)) {
- 		printk(KERN_ERR "%s: write error (ac97_reg=%d GSR=%#lx)\n",
--				__func__, reg, GSR | gsr_bits);
-+				__func__, reg, readl(ac97_reg_base + GSR) | gsr_bits);
- 		ret = -EIO;
- 	}
- 
-@@ -120,17 +126,17 @@ static inline void pxa_ac97_warm_pxa25x(void)
- {
- 	gsr_bits = 0;
- 
--	GCR |= GCR_WARM_RST;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_WARM_RST), ac97_reg_base + GCR);
- }
- 
- static inline void pxa_ac97_cold_pxa25x(void)
- {
--	GCR &=  GCR_COLD_RST;  /* clear everything but nCRST */
--	GCR &= ~GCR_COLD_RST;  /* then assert nCRST */
-+	writel(readl(ac97_reg_base + GCR) & ( GCR_COLD_RST), ac97_reg_base + GCR);  /* clear everything but nCRST */
-+	writel(readl(ac97_reg_base + GCR) & (~GCR_COLD_RST), ac97_reg_base + GCR);  /* then assert nCRST */
- 
- 	gsr_bits = 0;
- 
--	GCR = GCR_COLD_RST;
-+	writel(GCR_COLD_RST, ac97_reg_base + GCR);
- }
- #endif
- 
-@@ -142,15 +148,15 @@ static inline void pxa_ac97_warm_pxa27x(void)
- 	/* warm reset broken on Bulverde, so manually keep AC97 reset high */
- 	pxa27x_configure_ac97reset(reset_gpio, true);
- 	udelay(10);
--	GCR |= GCR_WARM_RST;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_WARM_RST), ac97_reg_base + GCR);
- 	pxa27x_configure_ac97reset(reset_gpio, false);
- 	udelay(500);
- }
- 
- static inline void pxa_ac97_cold_pxa27x(void)
- {
--	GCR &=  GCR_COLD_RST;  /* clear everything but nCRST */
--	GCR &= ~GCR_COLD_RST;  /* then assert nCRST */
-+	writel(readl(ac97_reg_base + GCR) & ( GCR_COLD_RST), ac97_reg_base + GCR);  /* clear everything but nCRST */
-+	writel(readl(ac97_reg_base + GCR) & (~GCR_COLD_RST), ac97_reg_base + GCR);  /* then assert nCRST */
- 
- 	gsr_bits = 0;
- 
-@@ -158,7 +164,7 @@ static inline void pxa_ac97_cold_pxa27x(void)
- 	clk_prepare_enable(ac97conf_clk);
- 	udelay(5);
- 	clk_disable_unprepare(ac97conf_clk);
--	GCR = GCR_COLD_RST | GCR_WARM_RST;
-+	writel(GCR_COLD_RST | GCR_WARM_RST, ac97_reg_base + GCR);
- }
- #endif
- 
-@@ -168,26 +174,26 @@ static inline void pxa_ac97_warm_pxa3xx(void)
- 	gsr_bits = 0;
- 
- 	/* Can't use interrupts */
--	GCR |= GCR_WARM_RST;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_WARM_RST), ac97_reg_base + GCR);
- }
- 
- static inline void pxa_ac97_cold_pxa3xx(void)
- {
- 	/* Hold CLKBPB for 100us */
--	GCR = 0;
--	GCR = GCR_CLKBPB;
-+	writel(0, ac97_reg_base + GCR);
-+	writel(GCR_CLKBPB, ac97_reg_base + GCR);
- 	udelay(100);
--	GCR = 0;
-+	writel(0, ac97_reg_base + GCR);
- 
--	GCR &=  GCR_COLD_RST;  /* clear everything but nCRST */
--	GCR &= ~GCR_COLD_RST;  /* then assert nCRST */
-+	writel(readl(ac97_reg_base + GCR) & ( GCR_COLD_RST), ac97_reg_base + GCR);  /* clear everything but nCRST */
-+	writel(readl(ac97_reg_base + GCR) & (~GCR_COLD_RST), ac97_reg_base + GCR);  /* then assert nCRST */
- 
- 	gsr_bits = 0;
- 
- 	/* Can't use interrupts on PXA3xx */
--	GCR &= ~(GCR_PRIRDY_IEN|GCR_SECRDY_IEN);
-+	writel(readl(ac97_reg_base + GCR) & (~(GCR_PRIRDY_IEN|GCR_SECRDY_IEN)), ac97_reg_base + GCR);
- 
--	GCR = GCR_WARM_RST | GCR_COLD_RST;
-+	writel(GCR_WARM_RST | GCR_COLD_RST, ac97_reg_base + GCR);
- }
- #endif
- 
-@@ -213,10 +219,10 @@ bool pxa2xx_ac97_try_warm_reset(void)
- #endif
- 		snd_BUG();
- 
--	while (!((GSR | gsr_bits) & (GSR_PCR | GSR_SCR)) && timeout--)
-+	while (!((readl(ac97_reg_base + GSR) | gsr_bits) & (GSR_PCR | GSR_SCR)) && timeout--)
- 		mdelay(1);
- 
--	gsr = GSR | gsr_bits;
-+	gsr = readl(ac97_reg_base + GSR) | gsr_bits;
- 	if (!(gsr & (GSR_PCR | GSR_SCR))) {
- 		printk(KERN_INFO "%s: warm reset timeout (GSR=%#lx)\n",
- 				 __func__, gsr);
-@@ -250,10 +256,10 @@ bool pxa2xx_ac97_try_cold_reset(void)
- #endif
- 		snd_BUG();
- 
--	while (!((GSR | gsr_bits) & (GSR_PCR | GSR_SCR)) && timeout--)
-+	while (!((readl(ac97_reg_base + GSR) | gsr_bits) & (GSR_PCR | GSR_SCR)) && timeout--)
- 		mdelay(1);
- 
--	gsr = GSR | gsr_bits;
-+	gsr = readl(ac97_reg_base + GSR) | gsr_bits;
- 	if (!(gsr & (GSR_PCR | GSR_SCR))) {
- 		printk(KERN_INFO "%s: cold reset timeout (GSR=%#lx)\n",
- 				 __func__, gsr);
-@@ -268,8 +274,10 @@ EXPORT_SYMBOL_GPL(pxa2xx_ac97_try_cold_reset);
- 
- void pxa2xx_ac97_finish_reset(void)
- {
--	GCR &= ~(GCR_PRIRDY_IEN|GCR_SECRDY_IEN);
--	GCR |= GCR_SDONE_IE|GCR_CDONE_IE;
-+	u32 gcr = readl(ac97_reg_base + GCR);
-+	gcr &= ~(GCR_PRIRDY_IEN|GCR_SECRDY_IEN);
-+	gcr |= GCR_SDONE_IE|GCR_CDONE_IE;
-+	writel(gcr, ac97_reg_base + GCR);
- }
- EXPORT_SYMBOL_GPL(pxa2xx_ac97_finish_reset);
- 
-@@ -277,9 +285,9 @@ static irqreturn_t pxa2xx_ac97_irq(int irq, void *dev_id)
- {
- 	long status;
- 
--	status = GSR;
-+	status = readl(ac97_reg_base + GSR);
- 	if (status) {
--		GSR = status;
-+		writel(status, ac97_reg_base + GSR);
- 		gsr_bits |= status;
- 		wake_up(&gsr_wq);
- 
-@@ -287,9 +295,9 @@ static irqreturn_t pxa2xx_ac97_irq(int irq, void *dev_id)
- 		   since they tend to spuriously trigger when MMC is used
- 		   (hardware bug? go figure)... */
- 		if (cpu_is_pxa27x()) {
--			MISR = MISR_EOC;
--			PISR = PISR_EOC;
--			MCSR = MCSR_EOC;
-+			writel(MISR_EOC, ac97_reg_base + MISR);
-+			writel(PISR_EOC, ac97_reg_base + PISR);
-+			writel(MCSR_EOC, ac97_reg_base + MCSR);
- 		}
- 
- 		return IRQ_HANDLED;
-@@ -301,7 +309,7 @@ static irqreturn_t pxa2xx_ac97_irq(int irq, void *dev_id)
- #ifdef CONFIG_PM
- int pxa2xx_ac97_hw_suspend(void)
- {
--	GCR |= GCR_ACLINK_OFF;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_ACLINK_OFF), ac97_reg_base + GCR);
- 	clk_disable_unprepare(ac97_clk);
- 	return 0;
- }
-@@ -321,6 +329,12 @@ int pxa2xx_ac97_hw_probe(struct platform_device *dev)
- 	int irq;
- 	pxa2xx_audio_ops_t *pdata = dev->dev.platform_data;
- 
-+	ac97_reg_base = devm_platform_ioremap_resource(dev, 0);
-+	if (IS_ERR(ac97_reg_base)) {
-+		dev_err(&dev->dev, "Missing MMIO resource\n");
-+		return PTR_ERR(ac97_reg_base);
-+	}
-+
- 	if (pdata) {
- 		switch (pdata->reset_gpio) {
- 		case 95:
-@@ -398,7 +412,7 @@ int pxa2xx_ac97_hw_probe(struct platform_device *dev)
- 	return 0;
- 
- err_irq:
--	GCR |= GCR_ACLINK_OFF;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_ACLINK_OFF), ac97_reg_base + GCR);
- err_clk2:
- 	clk_put(ac97_clk);
- 	ac97_clk = NULL;
-@@ -416,7 +430,7 @@ void pxa2xx_ac97_hw_remove(struct platform_device *dev)
- {
- 	if (cpu_is_pxa27x())
- 		gpio_free(reset_gpio);
--	GCR |= GCR_ACLINK_OFF;
-+	writel(readl(ac97_reg_base + GCR) | (GCR_ACLINK_OFF), ac97_reg_base + GCR);
- 	free_irq(platform_get_irq(dev, 0), NULL);
- 	if (ac97conf_clk) {
- 		clk_put(ac97conf_clk);
-@@ -430,13 +444,19 @@ EXPORT_SYMBOL_GPL(pxa2xx_ac97_hw_remove);
- 
- u32 pxa2xx_ac97_read_modr(void)
- {
--	return MODR;
-+	if (!ac97_reg_base)
-+		return 0;
-+
-+	return readl(ac97_reg_base + MODR);
- }
- EXPORT_SYMBOL_GPL(pxa2xx_ac97_read_modr);
- 
- u32 pxa2xx_ac97_read_misr(void)
- {
--	return MISR;
-+	if (!ac97_reg_base)
-+		return 0;
-+
-+	return readl(ac97_reg_base + MISR);
- }
- EXPORT_SYMBOL_GPL(pxa2xx_ac97_read_misr);
- 
-diff --git a/arch/arm/mach-pxa/include/mach/regs-ac97.h b/sound/arm/pxa2xx-ac97-regs.h
-similarity index 71%
-rename from arch/arm/mach-pxa/include/mach/regs-ac97.h
-rename to sound/arm/pxa2xx-ac97-regs.h
-index ec09b9635e25..ae638a1b919b 100644
---- a/arch/arm/mach-pxa/include/mach/regs-ac97.h
-+++ b/sound/arm/pxa2xx-ac97-regs.h
-@@ -2,25 +2,23 @@
- #ifndef __ASM_ARCH_REGS_AC97_H
- #define __ASM_ARCH_REGS_AC97_H
- 
--#include "pxa-regs.h"
--
- /*
-  * AC97 Controller registers
-  */
- 
--#define POCR		__REG(0x40500000)  /* PCM Out Control Register */
-+#define POCR		(0x0000)  	/* PCM Out Control Register */
- #define POCR_FEIE	(1 << 3)	/* FIFO Error Interrupt Enable */
- #define POCR_FSRIE	(1 << 1)	/* FIFO Service Request Interrupt Enable */
- 
--#define PICR		__REG(0x40500004)  /* PCM In Control Register */
-+#define PICR		(0x0004) 	/* PCM In Control Register */
- #define PICR_FEIE	(1 << 3)	/* FIFO Error Interrupt Enable */
- #define PICR_FSRIE	(1 << 1)	/* FIFO Service Request Interrupt Enable */
- 
--#define MCCR		__REG(0x40500008)  /* Mic In Control Register */
-+#define MCCR		(0x0008)  	/* Mic In Control Register */
- #define MCCR_FEIE	(1 << 3)	/* FIFO Error Interrupt Enable */
- #define MCCR_FSRIE	(1 << 1)	/* FIFO Service Request Interrupt Enable */
- 
--#define GCR		__REG(0x4050000C)  /* Global Control Register */
-+#define GCR		(0x000C) 	 /* Global Control Register */
- #ifdef CONFIG_PXA3xx
- #define GCR_CLKBPB	(1 << 31)	/* Internal clock enable */
- #endif
-@@ -36,21 +34,21 @@
- #define GCR_COLD_RST	(1 << 1)	/* AC'97 Cold Reset (0 = active) */
- #define GCR_GIE		(1 << 0)	/* Codec GPI Interrupt Enable */
- 
--#define POSR		__REG(0x40500010)  /* PCM Out Status Register */
-+#define POSR		(0x0010)  	/* PCM Out Status Register */
- #define POSR_FIFOE	(1 << 4)	/* FIFO error */
- #define POSR_FSR	(1 << 2)	/* FIFO Service Request */
- 
--#define PISR		__REG(0x40500014)  /* PCM In Status Register */
-+#define PISR		(0x0014)  	/* PCM In Status Register */
- #define PISR_FIFOE	(1 << 4)	/* FIFO error */
- #define PISR_EOC	(1 << 3)	/* DMA End-of-Chain (exclusive clear) */
- #define PISR_FSR	(1 << 2)	/* FIFO Service Request */
- 
--#define MCSR		__REG(0x40500018)  /* Mic In Status Register */
-+#define MCSR		(0x0018)  	/* Mic In Status Register */
- #define MCSR_FIFOE	(1 << 4)	/* FIFO error */
- #define MCSR_EOC	(1 << 3)	/* DMA End-of-Chain (exclusive clear) */
- #define MCSR_FSR	(1 << 2)	/* FIFO Service Request */
- 
--#define GSR		__REG(0x4050001C)  /* Global Status Register */
-+#define GSR		(0x001C)  	/* Global Status Register */
- #define GSR_CDONE	(1 << 19)	/* Command Done */
- #define GSR_SDONE	(1 << 18)	/* Status Done */
- #define GSR_RDCS	(1 << 15)	/* Read Completion Status */
-@@ -69,34 +67,34 @@
- #define GSR_MIINT	(1 << 1)	/* Modem In Interrupt */
- #define GSR_GSCI	(1 << 0)	/* Codec GPI Status Change Interrupt */
- 
--#define CAR		__REG(0x40500020)  /* CODEC Access Register */
-+#define CAR		(0x0020)  	/* CODEC Access Register */
- #define CAR_CAIP	(1 << 0)	/* Codec Access In Progress */
- 
--#define PCDR		__REG(0x40500040)  /* PCM FIFO Data Register */
--#define MCDR		__REG(0x40500060)  /* Mic-in FIFO Data Register */
-+#define PCDR		(0x0040)  	/* PCM FIFO Data Register */
-+#define MCDR		(0x0060)  	/* Mic-in FIFO Data Register */
- 
--#define MOCR		__REG(0x40500100)  /* Modem Out Control Register */
-+#define MOCR		(0x0100)  	/* Modem Out Control Register */
- #define MOCR_FEIE	(1 << 3)	/* FIFO Error */
- #define MOCR_FSRIE	(1 << 1)	/* FIFO Service Request Interrupt Enable */
- 
--#define MICR		__REG(0x40500108)  /* Modem In Control Register */
-+#define MICR		(0x0108)  	/* Modem In Control Register */
- #define MICR_FEIE	(1 << 3)	/* FIFO Error */
- #define MICR_FSRIE	(1 << 1)	/* FIFO Service Request Interrupt Enable */
- 
--#define MOSR		__REG(0x40500110)  /* Modem Out Status Register */
-+#define MOSR		(0x0110)  	/* Modem Out Status Register */
- #define MOSR_FIFOE	(1 << 4)	/* FIFO error */
- #define MOSR_FSR	(1 << 2)	/* FIFO Service Request */
- 
--#define MISR		__REG(0x40500118)  /* Modem In Status Register */
-+#define MISR		(0x0118)  	/* Modem In Status Register */
- #define MISR_FIFOE	(1 << 4)	/* FIFO error */
- #define MISR_EOC	(1 << 3)	/* DMA End-of-Chain (exclusive clear) */
- #define MISR_FSR	(1 << 2)	/* FIFO Service Request */
- 
--#define MODR		__REG(0x40500140)  /* Modem FIFO Data Register */
-+#define MODR		(0x0140)  	/* Modem FIFO Data Register */
- 
--#define PAC_REG_BASE	__REG(0x40500200)  /* Primary Audio Codec */
--#define SAC_REG_BASE	__REG(0x40500300)  /* Secondary Audio Codec */
--#define PMC_REG_BASE	__REG(0x40500400)  /* Primary Modem Codec */
--#define SMC_REG_BASE	__REG(0x40500500)  /* Secondary Modem Codec */
-+#define PAC_REG_BASE	(0x0200)  	/* Primary Audio Codec */
-+#define SAC_REG_BASE	(0x0300)  	/* Secondary Audio Codec */
-+#define PMC_REG_BASE	(0x0400)  	/* Primary Modem Codec */
-+#define SMC_REG_BASE	(0x0500)  	/* Secondary Modem Codec */
- 
- #endif /* __ASM_ARCH_REGS_AC97_H */
-diff --git a/sound/arm/pxa2xx-ac97.c b/sound/arm/pxa2xx-ac97.c
-index 57c3e12e6629..c162086455ad 100644
---- a/sound/arm/pxa2xx-ac97.c
-+++ b/sound/arm/pxa2xx-ac97.c
-@@ -21,7 +21,6 @@
- #include <sound/pxa2xx-lib.h>
- #include <sound/dmaengine_pcm.h>
- 
--#include <mach/regs-ac97.h>
- #include <linux/platform_data/asoc-pxa.h>
- 
- static void pxa2xx_ac97_legacy_reset(struct snd_ac97 *ac97)
--- 
-2.29.2
-
+This is a bit of a weird API, because normally .poll is supposed to be
+level-triggered rather than edge-triggered... and AFAIK things like
+epoll also kinda assume that ->poll() doesn't modify state (but that
+only _really_ matters in weird cases). But at the same time, it looks
+like the existing proc_sys_poll() already goes against that? So I
+don't know what the right thing to do there is...

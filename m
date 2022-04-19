@@ -2,104 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F1F506BA9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:02:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCE87506BAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351979AbiDSMFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:05:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52348 "EHLO
+        id S1351961AbiDSMHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351975AbiDSMD0 (ORCPT
+        with ESMTP id S1352003AbiDSMFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:03:26 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20F528982;
-        Tue, 19 Apr 2022 04:59:14 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id s25so20467524edi.13;
-        Tue, 19 Apr 2022 04:59:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=Nke0HHcm55q7ZWg7KNIaQeK9cBWmjw2n9HY63k1pdI0=;
-        b=qitSMZa/gzmYJvc0wtUSmri9mXcQvVE05LwgF+gp11f/Ll9YV/2FqbHdxbcYIaVItL
-         RA/+2mhOCK1v650zNp6x87vcyaZvx+3V8Hdz1SFcA11QspFDlNV/YhUfrxv73+64VEDe
-         FRpunRGX37zofmTMs+GYOWdhPPaKHz8R7ein1VDlbuEpGhVbFFGEIHYz6mKxLBxswJec
-         ogVxSBFtEN1L/LnI2zaLoD7jMEEfjCrak0RBKLnlHJ3QbtIiHIQygfUT2Gj+jgUn/fxG
-         p5Vu3PwP2YSw2UEAFXgd3SXrVGgC03ckSmBMvBPWbXkgS/VxqkC5BSCoYRbt55Sk43tv
-         7c8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=Nke0HHcm55q7ZWg7KNIaQeK9cBWmjw2n9HY63k1pdI0=;
-        b=W9NqFuoe0WCWTWKKxo4Up1VFv+TzBnUJ+MmgnJ76TO2CVXTn5t1iw83dtJLhZL91bt
-         Dj1zVw/SUROg842mGErw8OasOhBcBAkW6HiG57EzLmDuLVmVMdlXIHUJMJe8g6wLcWV7
-         wdt3mOxPtzgeilFFELI4K3O8/1lbTFDCcm6huHWEAnpmBeAuvjhAZFrjqBmFhc/N1aJY
-         +r/wEEfWsBiYVS9ixpeGYv5hxY4b3Wrktczs79CQk15D544oT1sOTY6xpSYlKbSPuXuu
-         +E+sehRECxJYZfRgiDQ88/gGXV6TTOMXwv8o5fNW8GtU8efGfmkGqQHmSox3ctuJEXhh
-         xMZQ==
-X-Gm-Message-State: AOAM533wX+DWNtMIonTJAAUuIydMNHkNPLym8A1mRzLJA3IexRDFoKbb
-        +KlCesrzY8jKPKUK7CKLA0Y=
-X-Google-Smtp-Source: ABdhPJwC+kRxxlh7ja6yWcyvetpOISZ6zaYfBGlnmVoNx/vMlCHfW1uXDfa6mZ281Sq+VYUqHCwHYg==
-X-Received: by 2002:a05:6402:2689:b0:422:15c4:e17e with SMTP id w9-20020a056402268900b0042215c4e17emr17368136edd.33.1650369553437;
-        Tue, 19 Apr 2022 04:59:13 -0700 (PDT)
-Received: from debian (host-78-145-97-89.as13285.net. [78.145.97.89])
-        by smtp.gmail.com with ESMTPSA id n6-20020aa7c786000000b00410d2403ccfsm8395084eds.21.2022.04.19.04.59.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 04:59:13 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 12:59:11 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/32] 4.19.239-rc1 review
-Message-ID: <Yl6kD7jIYKaxAF3K@debian>
-References: <20220418121127.127656835@linuxfoundation.org>
+        Tue, 19 Apr 2022 08:05:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36F50326ED
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:00:35 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KjMhT1dWszCrBk;
+        Tue, 19 Apr 2022 19:56:09 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 20:00:32 +0800
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
+CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <apopple@nvidia.com>, <surenb@google.com>,
+        <minchan@kernel.org>, <peterx@redhat.com>, <sfr@canb.auug.org.au>,
+        <rcampbell@nvidia.com>, <naoya.horiguchi@nec.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <b57fea1e-5c9b-f47e-f565-16b54f1e8782@redhat.com>
+ <1b614ac3-02c0-ec66-b51a-e9b7e1a375ad@huawei.com>
+ <c901938d-efcc-6a94-bbf4-93e7f4c2ea7d@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <a6707adc-6d3e-92bb-4bb3-29a6e1f350f1@huawei.com>
+Date:   Tue, 19 Apr 2022 20:00:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220418121127.127656835@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c901938d-efcc-6a94-bbf4-93e7f4c2ea7d@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Mon, Apr 18, 2022 at 02:13:40PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.239 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 2022/4/19 19:46, David Hildenbrand wrote:
+...
+>> Do you mean that we should set the pfn to 0 for the hwpoison marker so that we can
+>> distinguish swapin error case from real hwpoison case?
 > 
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
+> I am not sure if we really have to distinguish. However, "0" seems to
+> make sense to indicate "this is not an actual problematic PFN, the
+> information is simply no longer around due to a hardware issue.
+> 
 
-Build test:
-mips (gcc version 11.2.1 20220314): 63 configs -> no failure
-arm (gcc version 11.2.1 20220314): 116 configs -> no new failure
-arm64 (gcc version 11.2.1 20220314): 2 configs -> no failure
-x86_64 (gcc version 11.2.1 20220314): 4 configs -> no failure
+IMHO, we have to distinguish. For example, we might need to return VM_FAULT_SIGBUS
+instead of VM_FAULT_HWPOISON when user accesses the error page. Or should we simply
+return VM_FAULT_HWPOISON to simplify the handling?
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1035
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip
-
+Thanks!

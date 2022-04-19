@@ -2,110 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0E0D5070B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95D6F5070AE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:36:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353456AbiDSOid (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55524 "EHLO
+        id S1353491AbiDSOiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353415AbiDSOib (ORCPT
+        with ESMTP id S1353466AbiDSOin (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:38:31 -0400
-Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C32C20182;
-        Tue, 19 Apr 2022 07:35:47 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id 4BFCF3C56FF;
-        Tue, 19 Apr 2022 10:35:46 -0400 (EDT)
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id R-VnQ2zxcchr; Tue, 19 Apr 2022 10:35:45 -0400 (EDT)
-Received: from localhost (localhost [127.0.0.1])
-        by mail.efficios.com (Postfix) with ESMTP id A522F3C53DD;
-        Tue, 19 Apr 2022 10:35:45 -0400 (EDT)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com A522F3C53DD
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
-        s=default; t=1650378945;
-        bh=633pQxxAWd4+mVGElSVB2wU4Sye2IG1UF5utL7p1Dgc=;
-        h=Date:From:To:Message-ID:MIME-Version;
-        b=R3sE6GhItWuYLql2uY0aAmuhV+/PQ9OW2IiW5iv3B9ErZm2vXI0CE83vlPXsmRpts
-         Pn49ntvqG+jlIK9iVxp0csKdQy+AK0lyskyeBvAKPefIp59JIZXc37weBZbeIssSAs
-         izuwiMeBFGbSClXT1xNkAUbGQ7mSzNQuOTRCvoED3yqAOh2O9FsSD1XZ5atKJyx6JY
-         v6llS0In4AglWGW/4MRkLGJmMCzsoofaSRTvuBbFPLCJ4vlj4elKmu9HWycYR5KS+a
-         MONTULd35JDGz0dVWjEByWsZBaIar90weJPqi9O0+QFlJb9SZ2M6Q97xgF9PGpWpjy
-         U/o0QciyKc+6w==
-X-Virus-Scanned: amavisd-new at efficios.com
-Received: from mail.efficios.com ([127.0.0.1])
-        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id CLySuEcIvIqG; Tue, 19 Apr 2022 10:35:45 -0400 (EDT)
-Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
-        by mail.efficios.com (Postfix) with ESMTP id 98BDD3C5747;
-        Tue, 19 Apr 2022 10:35:45 -0400 (EDT)
-Date:   Tue, 19 Apr 2022 10:35:45 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Message-ID: <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com>
-In-Reply-To: <20220401234309.21252-7-beaub@linux.microsoft.com>
-References: <20220401234309.21252-1-beaub@linux.microsoft.com> <20220401234309.21252-7-beaub@linux.microsoft.com>
-Subject: Re: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled
- status page data
+        Tue, 19 Apr 2022 10:38:43 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id A658020190
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:36:00 -0700 (PDT)
+Received: (qmail 594028 invoked by uid 1000); 19 Apr 2022 10:35:59 -0400
+Date:   Tue, 19 Apr 2022 10:35:59 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Evan Green <evgreen@chromium.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Mathias Nyman <mathias.nyman@intel.com>,
+        Rajat Jain <rajatja@chromium.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Razvan Heghedus <heghedus.razvan@gmail.com>,
+        Wei Ming Chen <jj251510319013@gmail.com>,
+        Youngjin Jang <yj84.jang@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] USB: Quiesce interrupts across pm freeze
+Message-ID: <Yl7Iz/lGk3fITzMK@rowland.harvard.edu>
+References: <20220418210046.2060937-1-evgreen@chromium.org>
+ <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [167.114.26.124]
-X-Mailer: Zimbra 8.8.15_GA_4257 (ZimbraWebClient - FF99 (Linux)/8.8.15_GA_4257)
-Thread-Topic: tracing/user_events: Use bits vs bytes for enabled status page data
-Thread-Index: 3mhe0Mcep7c7n2Jzj66zR4QLGQO38A==
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9f2752b5-8717-8ea3-1462-69bcfe42bb0e@suse.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
------ On Apr 1, 2022, at 7:43 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
-
-> User processes may require many events and when they do the cache
-> performance of a byte index status check is less ideal than a bit index.
-> The previous event limit per-page was 4096, the new limit is 32,768.
+On Tue, Apr 19, 2022 at 09:05:53AM +0200, Oliver Neukum wrote:
 > 
-> This change adds a mask property to the user_reg struct. Programs check
-> that the byte at status_index has a bit set by ANDing the status_mask.
 > 
-> Link:
-> https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
+> On 18.04.22 23:00, Evan Green wrote:
+> > The documentation for the freeze() method says that it "should quiesce
+> > the device so that it doesn't generate IRQs or DMA". The unspoken
+> > consequence of not doing this is that MSIs aimed at non-boot CPUs may
+> > get fully lost if they're sent during the period where the target CPU is
+> > offline.
+> >
+> > The current behavior of the USB subsystem still allows interrupts to
+> > come in after freeze, both in terms of remote wakeups and HC events
+> > related to things like root plug port activity. This can get controllers
+> > like XHCI, which is very sensitive to lost interrupts, in a wedged
+> > state. This series attempts to fully quiesce interrupts coming from USB
+> > across in a freeze or quiescent state.
+> >
+> > These patches are grouped together because they serve a united purpose,
+> > but are actually independent. They could be merged or reverted
+> > individually.
+> Hi,
 > 
-> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
+> sorry for being a bit late in this discussion. There was something that
+> I didn't remember immediately.
+> 
+> We have a set of quirky devices that need HID_QUIRK_ALWAYS_POLL.
+> They have the nasty firmware bug that, if you suspend them without
+> remote wakeup, they will crash or reset themselves.
+> I am afraid that has an obvious relevance to your cool patches.
+> I am not completely sure how to deal with this. It seems to me that the
+> quirk will need to be shifted from HID to core USB and thaw() needs to
+> be translated into usb_device_reset() + reset_resume() for them,
+> but I am not really sure about the optimal mechanism.
 
-Hi Beau,
+We may not need to do anything.  This patch specifically addresses 
+hibernation, not system suspend or runtime suspend.  A device crashing 
+or resetting during hibernation is not at all unusual; we should be able 
+to handle such cases properly.
 
-Considering this will be used in a fast-path, why choose bytewise
-loads for the byte at status_index and the status_mask ?
+The THAW part of suspend-to-hibernation is used only for writing the 
+memory image to permanent storage.  I doubt that a malfunctioning HID 
+device would interfere with this process.
 
-I'm concerned about the performance penalty associated with partial
-register stalls when working with bytewise ALU operations rather than
-operations using the entire registers.
-
-Ideally I would be tempted to use "unsigned long" type (32-bit on 32-bit
-binaries and 64-bit on 64-bit binaries) for both the array access
-and the status mask, but this brings extra complexity for 32-bit compat
-handling.
-
-Thanks,
-
-Mathieu
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-http://www.efficios.com
+Alan Stern

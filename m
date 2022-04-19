@@ -2,99 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5C25064DD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FEF35064E3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349003AbiDSG4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S1349016AbiDSG5K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:57:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbiDSG4V (ORCPT
+        with ESMTP id S240137AbiDSG5J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:56:21 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4756C275D7;
-        Mon, 18 Apr 2022 23:53:40 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 08:53:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650351218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VfB/lFbbIaTLc4JYRRlIfza6c66g4liJ7vVzC2/CPZI=;
-        b=m2rXdSBW8SVFqLQ/JmJnhUnyHB6UN0seD8/VXjF/vOIMr8QJ0cVypZv/EWlVzCXXYcNLxW
-        Q+5UuOwE7FYzs7Rar7HQQOgCZq13MUXT9sfuFVLYeg1zNnv8yGRJ4tLmEHjFyAFtvO5Olj
-        2mRfU3SVYQkXYr5/p3SnbwoIybAcMffQEQlc4InX0Mp+iEfTlD04z6EdWllwrpNpEH9Q9d
-        PCdmbUm1ZM24haDPDb3QnDetqz3se0GqVj4CG91OeiOwYyzRD+utuz4orG6DffE2/+OHrA
-        ycX2mzw5f9mhyiDQB1hArrzVSabPTLitiQTHJCTNj5se8bQuXj/ZH8W8Sr+OWg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650351218;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VfB/lFbbIaTLc4JYRRlIfza6c66g4liJ7vVzC2/CPZI=;
-        b=SRktH1B6xJ1k5gevnlUWN3E/MArZVAeyZiADNxZ5ea2fdkU8LGaQ2IAFX2l2oym1TXFQek
-        4K5mK8MeCpTH6DBQ==
-From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-cc:     linux-kernel@vger.kernel.org, rcu@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Benedikt Spranger <b.spranger@linutronix.de>
-Subject: Re: [PATCH] rcu/torture: Change order of warning and trace dump
-In-Reply-To: <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
-Message-ID: <alpine.DEB.2.21.2204190829070.1508@somnus>
-References: <20220411151903.28167-1-anna-maria@linutronix.de> <20220411180915.GY4285@paulmck-ThinkPad-P17-Gen-1> <20220412152501.GA2557395@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 19 Apr 2022 02:57:09 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1465030F7F;
+        Mon, 18 Apr 2022 23:54:27 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id j8-20020a17090a060800b001cd4fb60dccso1445555pjj.2;
+        Mon, 18 Apr 2022 23:54:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kqvbcpax/5BAvE+/ITwARKXkAXpTcgQy8gm5SuvjC6o=;
+        b=S4mhLO+spXNoihYrWOSiuqg4uAn+VblPH2JfsFQCeqpAW/yLpSqrudKuXsKe5xT65q
+         Wcm4KBtaopLWodfCOnrGN46YHk4dDBI7xSs/y5mTtJ1zsIWMuZoLibV4XZ2+ydLhlqDu
+         8RAXcM7zJJHGCjLcx0UH/WZS7NcKuWpcmxHmTP7+6rEMuX+k6ysVlqKgntwE73OZJiWu
+         U0wHNnAPGjM89kieqlfmzEMegCXkPBrW99j2RwtEocJqVIChPbKGK7dUh8y2my0Bmug+
+         xy1CkMNDAEsRDTLgKeAdRqprNNy5rqzrW6a5W2NIIdQgw00tUpSgif5RrXZYGqHna2r6
+         hrdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=kqvbcpax/5BAvE+/ITwARKXkAXpTcgQy8gm5SuvjC6o=;
+        b=rRXZPdtsqbsq7Dr1WUI4hxbESH2hybL5eT7aQrLz0T3RmE6toLIsEixt1itXds6gRQ
+         I3G+5xWf7Vim0HaQmPzTiTOuNJOmS83HNQZ/T/XFkxCJBBz6tfttJ5OgXZKbB0qOyKBR
+         0+6A8hN6SXPWhwlTxTl7G0SbIScIJro6E5Z72+b95oRMbr5U7zPskrypxVE7PkzoosVC
+         OkVLDmwzFdB6VTVTEFKKkfYCqMkOb4lkRTRHhk6bEKDUdwNBxFzlHCHwLcQzHl7VBnxX
+         +pfdn/CZi/Rt4xugkU+NXF+tYhJc3K/EEgFKeU4P5atJEnxayqHk9DD4LVKIVTuTysb0
+         HX6g==
+X-Gm-Message-State: AOAM5331sXNk+yUma+y7OAWhJN4rDLxhL55zXeE7iI3vI8j+VZcXK4iw
+        Hh0sBXb/0CQHPIyNbu2DKzN+ShpENDe0yPJnKCpycnHo
+X-Google-Smtp-Source: ABdhPJwwMGTl3mPiYBEKALnueEoRiJfQukZIEIg81vwAaBGk62VyfOB2IYbCH1bfx0+rgeUDxJEwAA==
+X-Received: by 2002:a17:902:ef43:b0:156:9c5d:b0fe with SMTP id e3-20020a170902ef4300b001569c5db0femr14318517plx.158.1650351266500;
+        Mon, 18 Apr 2022 23:54:26 -0700 (PDT)
+Received: from jason-ThinkPad-T14-Gen-1.lan ([66.187.5.142])
+        by smtp.gmail.com with ESMTPSA id q60-20020a17090a17c200b001cd567fecaesm14678960pja.26.2022.04.18.23.54.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 23:54:25 -0700 (PDT)
+From:   Hongyu Xie <xy521521@gmail.com>
+To:     johan@kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongyu Xie <xiehongyu1@kylinos.cn>, stable@vger.kernel.org,
+        "sheng . huang" <sheng.huang@ecastech.com>
+Subject: [RESEND PATCH -next] USB: serial: pl2303: implement reset_resume member
+Date:   Tue, 19 Apr 2022 14:54:08 +0800
+Message-Id: <20220419065408.2461091-1-xy521521@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 12 Apr 2022, Paul E. McKenney wrote:
+From: Hongyu Xie <xiehongyu1@kylinos.cn>
 
-> On Mon, Apr 11, 2022 at 11:09:15AM -0700, Paul E. McKenney wrote:
-> > On Mon, Apr 11, 2022 at 05:19:03PM +0200, Anna-Maria Behnsen wrote:
-> > > Dumping a big ftrace buffer could lead to a RCU stall. So there is the
-> > > ftrace buffer and the stall information which needs to be printed. When
-> > > there is additionaly a WARN_ON() which describes the reason for the ftrace
-> > > buffer dump and the WARN_ON() is executed _after_ ftrace buffer dump, the
-> > > information get lost in the middle of the RCU stall information.
-> > > 
-> > > Therefore print WARN_ON() message before dumping the ftrace buffer in
-> > > rcu_torture_writer().
-> > > 
-> > > Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
-> > > Reviewed-by: Benedikt Spranger <b.spranger@linutronix.de>
-> > 
-> > Hello, Anna-Maria!
-> > 
-> > Good point, but we get caught out either way.  Either we take the chance
-> > of losing the WARN() message as you say, or we take the chance of the
-> > activity in the WARN() message overwriting needed information in the
-> > trace buffer.
-> > 
-> > Would it work to shut off tracing, do the WARN(), and only then do the
-> > rcu_ftrace_dump()?
-> 
-> And presumably you are looking at this because your testing is
-> triggering it.  This WARN() assumes that the system running rcutorture
-> is otherwise idle.  If you are (say) running kernel builds while also
-> running rcutorture, then this WARN() is expected behavior.  So if you need
-> this sort of testing, we need do something like adding another rcutorture
-> module parameter (background_load?) that suppresses this warning.
-> 
+pl2303.c doesn't have reset_resume for hibernation.
+So needs_binding will be set to 1 duiring hibernation.
+usb_forced_unbind_intf will be called, and the port minor
+will be released (x in ttyUSBx).
+It works fine if you have only one USB-to-serial device.
+Assume you have 2 USB-to-serial device, nameing A and B.
+A gets a smaller minor(ttyUSB0), B gets a bigger one.
+And start to hibernate. When your PC is in hibernation,
+unplug device A. Then wake up your PC by pressing the
+power button. After waking up the whole system, device
+B gets ttyUSB0. This will casuse a problem if you were
+using those to ports(like opened two minicom process)
+before hibernation.
+So member reset_resume is needed in usb_serial_driver
+pl2303_device.
+Codes in pl2303_reset_resume are borrowed from pl2303_open.
 
-I ran into this while testing with rcutorture kvm script. And I was the
-only one working on the machine. So I do not need a parameter right
-now. I'll come back to you when my testing requirements will change :)
+As a matter of fact, all driver under drivers/usb/serial
+has the same problem except ch341.c.
 
-Thanks,
+Cc: stable@vger.kernel.org
+Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+Reported-by: sheng.huang <sheng.huang@ecastech.com>
+---
+ drivers/usb/serial/pl2303.c | 48 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-	Anna-Maria
+diff --git a/drivers/usb/serial/pl2303.c b/drivers/usb/serial/pl2303.c
+index 88b284d61681..7cc05123b88c 100644
+--- a/drivers/usb/serial/pl2303.c
++++ b/drivers/usb/serial/pl2303.c
+@@ -1218,6 +1218,53 @@ static void pl2303_process_read_urb(struct urb *urb)
+ 	tty_flip_buffer_push(&port->port);
+ }
+ 
++static int pl2303_configure(struct usb_serial *serial, struct pl2303_serial_private *priv)
++{
++	struct usb_serial_port *port = serial->port[0];
++
++	if (priv->quirks & PL2303_QUIRK_LEGACY) {
++		usb_clear_halt(serial->dev, port->write_urb->pipe);
++		usb_clear_halt(serial->dev, port->read_urb->pipe);
++	} else {
++		/* reset upstream data pipes */
++		if (priv->type == &pl2303_type_data[TYPE_HXN])
++			pl2303_vendor_write(serial, PL2303_HXN_RESET_REG,
++					PL2303_HXN_RESET_UPSTREAM_PIPE |
++					PL2303_HXN_RESET_DOWNSTREAM_PIPE);
++		else {
++			pl2303_vendor_write(serial, 8, 0);
++			pl2303_vendor_write(serial, 9, 0);
++		}
++	}
++	return 0;
++}
++
++static int pl2303_reset_resume(struct usb_serial *serial)
++{
++	struct usb_serial_port *port = serial->port[0];
++	struct pl2303_serial_private *priv = usb_get_serial_port_data(port);
++	struct tty_struct *tty = tty_port_tty_get(&port->port);
++	int ret;
++
++	/* reconfigure pl2303 serial port after bus-reset */
++	pl2303_configure(serial, priv);
++
++	/* Setup termios */
++	if (tty)
++		pl2303_set_termios(tty, port, NULL);
++
++	if (tty_port_initialized(&port->port)) {
++		ret = usb_submit_urb(port->interrupt_in_urb, GFP_NOIO);
++		if (ret) {
++			dev_err(&port->dev, "failed to submit interrupt urb: %d\n",
++				ret);
++			return ret;
++		}
++	}
++
++	return usb_serial_generic_resume(serial);
++}
++
+ static struct usb_serial_driver pl2303_device = {
+ 	.driver = {
+ 		.owner =	THIS_MODULE,
+@@ -1246,6 +1293,7 @@ static struct usb_serial_driver pl2303_device = {
+ 	.release =		pl2303_release,
+ 	.port_probe =		pl2303_port_probe,
+ 	.port_remove =		pl2303_port_remove,
++	.reset_resume =         pl2303_reset_resume,
+ };
+ 
+ static struct usb_serial_driver * const serial_drivers[] = {
+-- 
+2.25.1
 

@@ -2,71 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78031506CE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:58:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A52CA506D2C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243564AbiDSNAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S1351134AbiDSNGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240912AbiDSNAb (ORCPT
+        with ESMTP id S238368AbiDSNGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:00:31 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BE43388C;
-        Tue, 19 Apr 2022 05:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=8WBVcaV6iEXDOrTecuRrSTx95lLOpawtAYD16O9vexE=; b=VjL15INsCpOnI7UDTwDOjC1Ccr
-        Oz6NOqDOqp5VE8iQDKxVC9SNLs8DLGNJGXxHDAo4hYqT9q9MaPgReKl0744ilAFiowXf00llHmDL8
-        MY4a/6OUgQM7+RywlBbMU7wLSOJFOZ7ZpFjAa8y3DHNUIHM0OoWOa/a2spK3G5TkyxXY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1ngnQI-00GV3L-45; Tue, 19 Apr 2022 14:57:38 +0200
-Date:   Tue, 19 Apr 2022 14:57:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     =?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>
-Cc:     Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?iso-8859-1?Q?Miqu=E8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next 09/12] ARM: dts: r9a06g032: describe MII
- converter
-Message-ID: <Yl6xwmbsTLWMaXAv@lunn.ch>
-References: <YlismVi8y3Vf6PZ0@lunn.ch>
- <20220415102453.1b5b3f77@fixe.home>
- <Yll+Tpnwo5410B9H@lunn.ch>
- <20220415163853.683c0b6d@fixe.home>
- <YlmLWv4Hsm2uk8pa@lunn.ch>
- <20220415172954.64e53086@fixe.home>
- <YlmbIjoIZ8Xb4Kh/@lunn.ch>
- <20220415184541.0a6928f5@fixe.home>
- <YlrJQ47tkmQdhtMu@lunn.ch>
- <20220419110328.0241fb1f@fixe.home>
+        Tue, 19 Apr 2022 09:06:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E913702A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:03:35 -0700 (PDT)
+Received: from kwepemi500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KjP594XDTzCqwN;
+        Tue, 19 Apr 2022 20:59:09 +0800 (CST)
+Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
+ kwepemi500005.china.huawei.com (7.221.188.179) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 21:03:33 +0800
+Received: from localhost.localdomain (10.67.165.24) by
+ kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 21:03:33 +0800
+From:   Guangbin Huang <huangguangbin2@huawei.com>
+To:     <john.garry@huawei.com>, <will@kernel.org>, <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
+        <liuqi115@huawei.com>, <zhangshaokun@hisilicon.com>,
+        <f.fangjian@huawei.com>, <huangguangbin2@huawei.com>,
+        <lipeng321@huawei.com>, <shenjian15@huawei.com>,
+        <moyufeng@huawei.com>
+Subject: [PATCH V4 0/2] drivers/perf: hisi: Add driver for HNS3 PMU
+Date:   Tue, 19 Apr 2022 20:57:48 +0800
+Message-ID: <20220419125750.5924-1-huangguangbin2@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220419110328.0241fb1f@fixe.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.24]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600016.china.huawei.com (7.193.23.20)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,17 +54,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Hum, that could be done but since only some values/combinations are
-> allowed, it would potentially require to validate the setting at each
-> request, leading to potential non working devices due to invalid MUX
-> configuration required.
+This patch-set adds driver for HNS3(HiSilicon network system version 3)
+PMU and doc to descript it.
 
-Yes, validation is messy, you have to incrementally validate as each
-device probes and requests its PCS. I would not only return -EINVAL,
-but also dump the current partial configuration to the kernel log. I
-guess the implementation would have a big table as shown in the
-datasheet. You walk the table trying to find a match for those
-settings you have so far, and wildcard those you don't know yet. Fun
-little coding problem.
+Change logs:
+V3 -> V4:
+ - Modify the comments of John Garry.
+ - Link: https://lore.kernel.org/linux-arm-kernel/20220329113930.37631-1-huangguangbin2@huawei.com/
+V2 -> V3:
+ - Modify the comments of John Garry.
+ - Link: https://lore.kernel.org/linux-arm-kernel/20220228123955.30284-1-huangguangbin2@huawei.com/
+V1 -> V2:
+ - Modify the comments of John Garry.
+ - Link: https://lore.kernel.org/linux-arm-kernel/20220117015222.9617-1-huangguangbin2@huawei.com/
 
-	 Andrew
+Guangbin Huang (2):
+  drivers/perf: hisi: Add description for HNS3 PMU driver
+  drivers/perf: hisi: add driver for HNS3 PMU
+
+ Documentation/admin-guide/perf/hns3-pmu.rst |  136 ++
+ MAINTAINERS                                 |    6 +
+ drivers/perf/hisilicon/Kconfig              |    9 +
+ drivers/perf/hisilicon/Makefile             |    1 +
+ drivers/perf/hisilicon/hns3_pmu.c           | 1659 +++++++++++++++++++
+ include/linux/cpuhotplug.h                  |    1 +
+ 6 files changed, 1812 insertions(+)
+ create mode 100644 Documentation/admin-guide/perf/hns3-pmu.rst
+ create mode 100644 drivers/perf/hisilicon/hns3_pmu.c
+
+-- 
+2.33.0
+

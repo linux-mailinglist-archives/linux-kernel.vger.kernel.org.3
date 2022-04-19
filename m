@@ -2,203 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD25D506229
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 04:33:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A168550622C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 04:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344827AbiDSCgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 22:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
+        id S1344987AbiDSCgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 22:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235850AbiDSCgJ (ORCPT
+        with ESMTP id S235850AbiDSCgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 22:36:09 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64CD127F;
-        Mon, 18 Apr 2022 19:33:28 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id s33so1251426ybi.12;
-        Mon, 18 Apr 2022 19:33:28 -0700 (PDT)
+        Mon, 18 Apr 2022 22:36:38 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFF4CD6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 19:33:57 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id h5so22292694pgc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 19:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=mJzd1OHmVBqUUHfBhC3/rhDJy+1nObCvHWoH/G8oxB4=;
-        b=qn8HzkqoQ03SOdCAEZbLWhjc8oyF02heVUK4wYFtBJm/t8zhcb1toxrxRsb8rxuO1S
-         6h/UdVrFqDjf+rqGG3GCYq6MUuGB/tMmnEGmgScvij4jjZaegcGAf6RJUO8Qye3MMu3i
-         nJMKlnWmeKiEZ1eyjsgSyzAG9V/wQKQs5xvzbmH3I47qol5FfaCP0L/Zpx1wyJMPK1cB
-         cy5+grmByfmPtKGJZXMRvCttkSLt80pdwYVGqAv2VzFjceVMiWglBfx8mz8qhaGMwxUf
-         sgI/FN3gpOM6fI16ZsohWVxHPdjLKdffEMrj6uJfcwgrPrcqm9ppHPVBwjqgZOvPbzYk
-         5IAw==
+        d=chromium.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=j9cziDR8TTkRRjQK85vGUcJr91F0j+7nYT1sRtOWrYo=;
+        b=lRy2Rw0ouK1ZNqUKDuvy71QtiCjcxxosNCLk+/x5xISfQsazZY8DdeA6EvpOqH8jCt
+         owSdGVwU6RLJphr6tcOaSitTaJWQcTa3XQvYSY9EDlIXHdcaC/NJmgHvL/ribWQB/o2Q
+         kWmLB7auKAHcCx8Lqs1Vyljv+hPuWddx3mdww=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=mJzd1OHmVBqUUHfBhC3/rhDJy+1nObCvHWoH/G8oxB4=;
-        b=mAOj6AWlJDm/lViliBm2aHqVP/RqopqtwH4x4woV1zCzDu0zYdXur7J5BVDJNLxEXR
-         orcVofci07y0wBXsc2EOOUt9aR2JQkIhbPYrluw56EXzMv17+kXdNKDlNzydSegRU5Ih
-         sGr7pBdaEQM+w9W0+wFqjMVjwgwEmP/c+CsqIPsiDtdVm9s3gzvanCJYRbt9IXH1jVNb
-         0DzssgpxFj6GGmD4CeLKr9IWNnPpSUswlcG7nuaV9WVh2D8yRBQRENiRXVq0HuANoiHF
-         bPZ9TFJoz2zxp9b5rC1CpOGX8IPn5P4HQ4WOw5mMPWwEFsML4ha3VAR0Wgzp5UXGAhvL
-         wv6Q==
-X-Gm-Message-State: AOAM532PcRTboot/rq5UXLEDQgjcScURqk1StKtxTa7aDGHAC1B421vO
-        mFCJoOZI+pZ/242xSicQcFDxVGDZ5DXJgW3YbDI=
-X-Google-Smtp-Source: ABdhPJzUCVptJ8iXEuWXx290W+RxQKCQJLolMo0F8nGHDNl6793FVA8eIISGdnaZM0faPuYAwr/2kWPXblK1MkzDPaE=
-X-Received: by 2002:a25:9a43:0:b0:628:672c:e471 with SMTP id
- r3-20020a259a43000000b00628672ce471mr12220682ybo.73.1650335607553; Mon, 18
- Apr 2022 19:33:27 -0700 (PDT)
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=j9cziDR8TTkRRjQK85vGUcJr91F0j+7nYT1sRtOWrYo=;
+        b=oKcF9lVMGoRqI0Mo5/PKhj/RASPn0hctOFYH1oOjiumn5E0mgLCWWrCA9J2nvQXABR
+         RQimmmhJKIb0iPj41Yi+ksi7oLPHGTdg+DZGPVmGzotBATWqxexAetOyJO+zHHU79VNn
+         E1VKMy71B/S6fol3OqPctBL4mcv03oxWu5ckyL412mgESM9lCI+WFTFCvmG8I8z0hevf
+         d69su9Pe2CO4LrBreBOK1Yuox8U6m3mPLeFuvGX39wNTULQg6PnWHDupTmCkhiAQwy1q
+         C/rtu5Xd8x9mpgX50NplZMs6wPSv6Kfjsws9i6XTCXDUGyzvn86WkuzJLtWpIWGw1dBw
+         lRjQ==
+X-Gm-Message-State: AOAM530uejLyeQn3rD/r7bzSVAwlc/Mi8sD02hRJuEKWNjd/V2UfTW/Y
+        hw7sIZEB3ubTDWCAsAfS002Lpg==
+X-Google-Smtp-Source: ABdhPJxbQz3Vu6hsTbGBYxojsApKIqv4MmFTFy5f9XEVo+IQP8mxZsJhUUcVYLGxcRcQXCRGbyuF/A==
+X-Received: by 2002:a63:f341:0:b0:39d:3ce2:fc8d with SMTP id t1-20020a63f341000000b0039d3ce2fc8dmr12314343pgj.441.1650335637120;
+        Mon, 18 Apr 2022 19:33:57 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y131-20020a626489000000b00505a8f36965sm13955880pfb.184.2022.04.18.19.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 19:33:56 -0700 (PDT)
+Date:   Mon, 18 Apr 2022 19:33:55 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Matthias Kaehlcke <mka@chromium.org>
+Cc:     Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        James Morris <jmorris@namei.org>,
+        "Serge E . Hallyn" <serge@hallyn.com>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Song Liu <song@kernel.org>,
+        linux-security-module@vger.kernel.org,
+        Douglas Anderson <dianders@chromium.org>, dm-devel@redhat.com
+Subject: Re: [PATCH 0/3] LoadPin: Enable loading from trusted dm-verity
+ devices
+Message-ID: <202204181931.A618DFF2C@keescook>
+References: <20220418211559.3832724-1-mka@chromium.org>
+ <202204181512.DA0C0C6EBD@keescook>
+ <Yl3pj72hM/Bo+Kf5@google.com>
 MIME-Version: 1.0
-References: <CAEensMz1BWx2arYAqo_g5_0w1z+m-X3nRYATmSMvZ44rb05w4Q@mail.gmail.com>
- <1650334070-7233-1-git-send-email-baihaowen@meizu.com>
-In-Reply-To: <1650334070-7233-1-git-send-email-baihaowen@meizu.com>
-From:   yanteng si <siyanteng01@gmail.com>
-Date:   Tue, 19 Apr 2022 10:33:16 +0800
-Message-ID: <CAEensMza-D5LhMHAmAih-s6ZkjtV+ztUXLqFqEZyjCPpJCutJw@mail.gmail.com>
-Subject: Re: [PATCH V5] docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
-To:     Haowen Bai <baihaowen@meizu.com>
-Cc:     Alex Shi <alexs@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, Alex Shi <seakeel@gmail.com>,
-        Yanteng Si <siyanteng@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yl3pj72hM/Bo+Kf5@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGFvd2VuIEJhaSA8YmFpaGFvd2VuQG1laXp1LmNvbT4g5LqOMjAyMuW5tDTmnIgxOeaXpeWRqOS6
-jCAxMDowN+WGmemBk++8mg0KPg0KPiBBcyB0aGUgdG9vbHMvdm0vcGFnZV9vd25lcl9zb3J0IGFk
-ZGVkIHNvbWUgZmVhdHVyZSBhbmQgb3JpZ2luYWwgdGV4dA0KPiB1cGRhdGVkLCBzeW5jIHRoZSB0
-cmFuc2xhdGlvbiBvZiB6aF9DTi4NCj4NCj4gZml4IHRhZ3M6DQo+IDhiZDE2YmMwYTA4MSAoInRv
-b2xzL3ZtL3BhZ2Vfb3duZXJfc29ydC5jOiBzdXBwb3J0IHNvcnRpbmcgYmxvY2tzIGJ5IG11bHRp
-cGxlIGtleXMiKQ0KPiA3OGEwYjk0ZjM4MjkgKCJ0b29scy92bS9wYWdlX293bmVyX3NvcnQuYzog
-c3VwcG9ydCBmb3IgbXVsdGktdmFsdWUgc2VsZWN0aW9uIGluIHNpbmdsZSBhcmd1bWVudCIpDQo+
-IGM4OWIzYWQyZGVhMiAoImRvYy92bS9wYWdlX293bmVyLnJzdDogcmVtb3ZlIGNvbnRlbnQgcmVs
-YXRlZCB0byAtYyBvcHRpb24iKQ0KPiA5YzhhMGE4ZTU5OWYgKCJ0b29scy92bS9wYWdlX293bmVy
-X3NvcnQuYzogc3VwcG9ydCBmb3IgdXNlci1kZWZpbmVkIGN1bGxpbmcgcnVsZXMiKQ0KPiA4ZWE4
-NjEzYTYxNmEgKCJ0b29scy92bS9wYWdlX293bmVyX3NvcnQuYzogc3VwcG9ydCBmb3Igc2VsZWN0
-aW5nIGJ5IFBJRCwgVEdJRCBvciB0YXNrIGNvbW1hbmQgbmFtZSIpDQo+IDE5NGQ1MmQ3NzFiOCAo
-InRvb2xzL3ZtL3BhZ2Vfb3duZXJfc29ydDogc3VwcG9ydCBmb3Igc29ydGluZyBieSB0YXNrIGNv
-bW1hbmQgbmFtZSIpDQoNCkkgbWF5IG5vdCBoYXZlIGRlc2NyaWJlZCBpdCBjbGVhcmx5LCB5b3Ug
-Y2FuIHJlZmVyIHRvDQpEb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi9wcm9jZXNzL3N1
-Ym1pdHRpbmctcGF0Y2hlcy5yc3QNCg0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PQ0K5aaC5p6c5oKo5oOz6KaB5byV55So5LiA5Liq54m55a6a55qE5o+Q5Lqk77yM5LiN6KaB5Y+q
-5byV55So5o+Q5Lqk55qEIFNIQS0xIElE44CC6L+Y6K+35YyF5ous5o+Q5Lqk55qE5LiA6KGMDQrm
-kZjopoHvvIzku6Xkvr/kuo7lrqHpmIXogIXkuobop6PlroPmmK/lhbPkuo7ku4DkuYjnmoTjgILk
-vovlpoI6Og0KDQogICAgICAgIENvbW1pdCBlMjFkMjE3MGYzNjYwMmFlMjcwOCAoInZpZGVvOiBy
-ZW1vdmUgdW5uZWNlc3NhcnkNCiAgICAgICAgcGxhdGZvcm1fc2V0X2RydmRhdGEoKSIpIHJlbW92
-ZWQgdGhlIHVubmVjZXNzYXJ5DQogICAgICAgIHBsYXRmb3JtX3NldF9kcnZkYXRhKCksIGJ1dCBs
-ZWZ0IHRoZSB2YXJpYWJsZSAiZGV2IiB1bnVzZWQsDQogICAgICAgIGRlbGV0ZSBpdC4NCg0K5oKo
-6L+Y5bqU6K+l56Gu5L+d6Iez5bCR5L2/55So5YmNMTLkvY0gU0hBLTEgSUQuIOWGheaguOWtmOWC
-qOW6k+WMheWQqyrorrjlpJoq5a+56LGh77yM5L2/5LiO6L6D55+t55qESUQNCuWPkeeUn+WGsueq
-geeahOWPr+iDveaAp+W+iOWkp+OAguiusOS9j++8jOWNs+S9v+eOsOWcqOS4jeS8muS4juaCqOea
-hOWFreS4quWtl+espklE5Y+R55Sf5Yay56qB77yM6L+Z56eN5oOF5Ya1DQrlj6/og73kupTlubTl
-kI7mlLnlj5jjgIINCg0K5aaC5p6c5L+u6KGl56iL5bqP5L+u5aSN5LqG54m55a6a5o+Q5Lqk5Lit
-55qE6ZSZ6K+v77yM5L6L5aaC77yM5L2/55SoIGBgZ2l0IGJpc2N0YGAg77yM6K+35L2/55So5bim
-5pyJ5YmNDQoxMuS4quWtl+esplNIQS0xIElEIOeahCJGaXhlczoi5qCH6K6w5ZKM5Y2V6KGM5pGY
-6KaB44CC5Li65LqG566A5YyW5LiN6KaB5bCG5qCH6K6w5ouG5YiG5Li65aSa5Liq77yMDQrooYzj
-gIHmoIforrDkuI3lj5fliIbmnpDohJrmnKzigJw3NeWIl+aNouihjOKAneinhOWImeeahOmZkOWI
-tuOAguS+i+Wmgjo6DQoNCiAgICAgICAgRml4ZXM6IDU0YTRmMDIzOWYyZSAoIktWTTogTU1VOiBt
-YWtlIGt2bV9tbXVfemFwX3BhZ2UoKSByZXR1cm4NCnRoZSBudW1iZXIgb2YgcGFnZXMgaXQgYWN0
-dWFsbHkgZnJlZWQiKQ0KPT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09
-PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09PT09DQoNCkJUV++8
-jHlvdSBuZWVkIHRvIHVwZGF0ZSB0aGUgb3JpZ2luYWwgZG9jdW1lbnQgZmlyc3QsIGJlY2F1c2Ug
-dGhlDQp0cmFuc2xhdGlvbiBkb2N1bWVudCBpcyBkZXBlbmRlbnQgb24gdGhlIG9yaWdpbmFsIGRv
-Y3VtZW50LCB3aGljaA0KbWVhbnMgeW91IG5lZWQgdG8gdXBkYXRlIERvY3VtZW50YXRpb24vcHJv
-Y2Vzcy9zdWJtaXR0aW5nLXBhdGNoZXMucnN0DQpmaXJzdC4NClNvLCBsZXQncyBzdWJtaXQgYW5v
-dGhlciBzZXBhcmF0ZSBwYXRjaCB0byB1cGRhdGUNCkRvY3VtZW50YXRpb24vcHJvY2Vzcy9zdWJt
-aXR0aW5nLXBhdGNoZXMucnN0Lg0KDQpUaGFua3MsDQpZYW50ZW5nDQo+DQo+IFNpZ25lZC1vZmYt
-Ynk6IEhhb3dlbiBCYWkgPGJhaWhhb3dlbkBtZWl6dS5jbw0KPiAtLS0NCj4gVjEtPlYyOiBmaXgg
-d2hpdGVzcGFjZSB3YXJuaW5nLg0KPiBWMi0+VjM6IGZpeCBzb21lIHRhYiBBbGlnbm1lbnQgaXNz
-dWUuDQo+IFYzLT5WNDogZml4IHNwaGlueCB3YXJuaW5nDQo+IFY0LT5WNTogZml4IHdoaXRlc3Bh
-Y2Ugd2FybmluZzsgYWRkIGZpeCB0YWdzLg0KPg0KPiAgRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlv
-bnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QgfCA2MSArKysrKysrKysrKysrKysrKysrKystDQo+
-ICAxIGZpbGUgY2hhbmdlZCwgNjAgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQ0KPg0KPiBk
-aWZmIC0tZ2l0IGEvRG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25l
-ci5yc3QgYi9Eb2N1bWVudGF0aW9uL3RyYW5zbGF0aW9ucy96aF9DTi92bS9wYWdlX293bmVyLnJz
-dA0KPiBpbmRleCA5ZTk1MWZhYmJhOWQuLjRkNzE5NTQ3Y2U0ZiAxMDA2NDQNCj4gLS0tIGEvRG9j
-dW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QNCj4gKysrIGIv
-RG9jdW1lbnRhdGlvbi90cmFuc2xhdGlvbnMvemhfQ04vdm0vcGFnZV9vd25lci5yc3QNCj4gQEAg
-LTEwMywxNCArMTAzLDczIEBAIHBhZ2Ugb3duZXLlnKjpu5jorqTmg4XlhrXkuIvmmK/npoHnlKjn
-moTjgILmiYDku6XvvIzlpoLmnpzkvaDmg7Pkvb/nlKjlroPvvIzkvaANCj4gICAgICAgICAgICAg
-ICAgIC1tICAgICAgICAgICAgICDmjInmgLvlhoXlrZjmjpLluo8NCj4gICAgICAgICAgICAgICAg
-IC1wICAgICAgICAgICAgICDmjIlwaWTmjpLluo/jgIINCj4gICAgICAgICAgICAgICAgIC1QICAg
-ICAgICAgICAgICDmjIl0Z2lk5o6S5bqP44CCDQo+ICsgICAgICAgICAgICAgICAtbiAgICAgICAg
-ICAgICAg5oyJ5Lu75Yqh5ZCN56ew5o6S5bqP44CCDQo+ICAgICAgICAgICAgICAgICAtciAgICAg
-ICAgICAgICAg5oyJ5YaF5a2Y6YeK5pS+5pe26Ze05o6S5bqP44CCDQo+ICAgICAgICAgICAgICAg
-ICAtcyAgICAgICAgICAgICAg5oyJ5aCG5qCI6Lef6Liq5o6S5bqP44CCDQo+ICAgICAgICAgICAg
-ICAgICAtdCAgICAgICAgICAgICAg5oyJ5pe26Ze05o6S5bqP77yI6buY6K6k77yJ44CCDQo+ICsg
-ICAgICAgICAgICAgICAtLXNvcnQgPG9yZGVyPiAg5oyH5a6a5o6S5bqP6aG65bqP44CC5o6S5bqP
-6K+t5rOV5pivIFsrfC1da2V5WyxbK3wtXWtleVssLi4uXV0uIOS7jg0KPiArICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAqKuagh+WHhuagvOW8j+ivtOaYjues
-pioqIOmDqOWIhumAieaLqeS4gOS4qumUruOAgiIrIiDmmK/lj6/pgInnmoTvvIzlm6DkuLrpu5jo
-rqTmlrnlkJHmmK/lop7liqDmlbDlrZfmiJblrZflhbjpobrluo/jgIINCj4gKyAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg5YWB6K645re35ZCI5L2/55So57yp
-5YaZ6ZSu5ZKM5YWo56ew6ZSu44CCDQo+ICsNCj4gKyAgICAgICAgICAgICAgIEV4YW1wbGVzOg0K
-PiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1
-dD4gPG91dHB1dD4gLS1zb3J0PW4sK3BpZCwtdGdpZA0KPiArICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1zb3J0PWF0DQo+
-DQo+ICAgICDlhbblroPlh73mlbA6DQo+DQo+ICAgICAgICAgQ3VsbDoNCj4gLSAgICAgICAgICAg
-ICAgIC1jICAgICAgICAgICAgICDpgJrov4fmr5TovoPloIbmoIjot5/ouKrogIzkuI3mmK/mgLvl
-nZfmnaXov5vooYzliZTpmaTjgIINCj4gKyAgICAgICAgICAgICAgIC0tY3VsbCA8cnVsZXM+DQo+
-ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg5oyH5a6a562b6YCJ6KeE5YiZ44CC562b
-6YCJ6K+t5rOV5pivIGtleVssa2V5WywuLi5dXeOAguWcqCoq5qCH5YeG5qC85byP6K+05piO56ym
-Kirpg6jliIbpgInmi6nkuIDkuKrlpJrlrZfmr43plK4NCj4gKw0KPiArICAgICAgICAgICAgICAg
-PHJ1bGVzPiDmmK/pgJflj7fliIbpmpTliJfooajlvaLlvI/nmoTljZXkuKrlj4LmlbDvvIzlroPm
-j5DkvpvkuobkuIDnp43mjIflrprljZXkuKrnrZvpgInop4TliJnnmoTmlrnms5XjgILkuIvpnaLn
-moQqKuagh+WHhuagvOW8j+ivtOaYjg0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IOespioq6YOo5YiG5o+P6L+w5LqG5Y+v6K+G5Yir55qE5YWz6ZSu5a2X44CCPHJ1bGVzPiDlj6/k
-u6XnlLHplK4gazEsazIsIC4uLiDpobrluo/mjIflrprvvIzlpoLkuIvpnaLnmoQNCj4gKyAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICBTVEFOREFSRCBTT1JUIEtFWVMg6YOo5YiG5omA6L+w
-44CC5YWB6K645re35ZCI5L2/55So57yp5YaZ5b2i5byP5ZKM5a6M5pW05b2i5byP55qE6ZSu44CC
-DQo+DQo+ICsgICAgICAgICAgICAgICBFeGFtcGxlczoNCj4gKyAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxvdXRwdXQ+IC0tY3VsbD1zdGFj
-a3RyYWNlDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLi9wYWdlX293bmVyX3Nv
-cnQgPGlucHV0PiA8b3V0cHV0PiAtLWN1bGw9c3QscGlkLG5hbWUNCj4gKyAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAuL3BhZ2Vfb3duZXJfc29ydCA8aW5wdXQ+IDxvdXRwdXQ+IC0tY3Vs
-bD1uLGYNCj4gICAgICAgICBGaWx0ZXI6DQo+ICAgICAgICAgICAgICAgICAtZiAgICAgICAgICAg
-ICAg6L+H5ruk5o6J5YaF5a2Y5bey6KKr6YeK5pS+55qE5Z2X55qE5L+h5oGv44CCDQo+ICsNCj4g
-KyAgICAgICBTZWxlY3Q6DQo+ICsgICAgICAgICAgICAgICAtLXBpZCA8cGlkbGlzdD4gICAgICAg
-ICDpgJrov4cgcGlkIOi/m+ihjOmAieaLqeOAgui/meWwhumAieaLqei/m+eoiyBJRCDlj7flh7rn
-jrDlnKggPHBpZGxpc3Q+IOS4reeahOWdl+OAgg0KPiArICAgICAgICAgICAgICAgLS10Z2lkIDx0
-Z2lkbGlzdD4gICAgICAg6YCa6L+HIHRnaWQg6L+b6KGM6YCJ5oup44CC6L+Z5bCG6YCJ5oup57q/
-56iL57uEIElEIOWPt+WHuueOsOWcqCA8dGdpZGxpc3Q+IOS4reeahOWdl+OAgg0KPiArICAgICAg
-ICAgICAgICAgLS1uYW1lIDxjbWRsaXN0PiAgICAgICAg5oyJ5Lu75Yqh5ZCN56ew6YCJ5oup44CC
-6L+Z5bCG6YCJ5oup5Lu75Yqh5ZCN56ew5Ye6546w5ZyoIDxjbWRsaXN0PiDkuK3nmoTlnZfjgIIN
-Cj4gKw0KPiArICAgICAgICAgICAgICAgPHBpZGxpc3Q+44CBPHRnaWRsaXN0PuOAgTxjbWRsaXN0
-PuaYr+mAl+WPt+WIhumalOWIl+ihqOW9ouW8j+eahOWNleWPguaVsO+8jOWug+aPkOS+m+S6huS4
-gOenjeaMh+WumuWNleS4qumAieaLqeinhOWImeeahOaWueazleOAgg0KPiArDQo+ICsNCj4gKyAg
-ICAgICAgICAgICAgIEV4YW1wbGVzOg0KPiArICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
-IC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4gLS1waWQ9MQ0KPiArICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgIC4vcGFnZV9vd25lcl9zb3J0IDxpbnB1dD4gPG91dHB1dD4g
-LS10Z2lkPTEsMiwzDQo+ICsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgLi9wYWdlX293
-bmVyX3NvcnQgPGlucHV0PiA8b3V0cHV0PiAtLW5hbWUgbmFtZTEsbmFtZTINCj4gKw0KPiAr5qCH
-5YeG5qC85byP6K+05piO56ymDQo+ICs9PT09PT09PT09PT09PQ0KPiArDQo+ICstLXNvcnQg6YCJ
-6aG5Og0KPiArDQo+ICsgICAgICAgID09PT09PSAgICAgICAgICA9PT09PT09PT09ICAgICAgPT09
-PT09PT09PT09PT09PT09PQ0KPiArICAgICAgICDnvKnlhpnplK4gICAgICAgICAg5YWo56ew6ZSu
-ICAgICAgICAgIOaPj+i/sA0KPiArICAgICAgICA9PT09PT0gICAgICAgICAgPT09PT09PT09PSAg
-ICAgID09PT09PT09PT09PT09PT09PT0NCj4gKyAgICAgICAgcCAgICAgICAgICAgICAgIHBpZCAg
-ICAgICAgICAgICDov5vnqIsgSUQNCj4gKyAgICAgICAgdGcgICAgICAgICAgICAgIHRnaWQgICAg
-ICAgICAgICDnur/nqIvnu4QgSUQNCj4gKyAgICAgICAgbiAgICAgICAgICAgICAgIG5hbWUgICAg
-ICAgICAgICDku7vliqHlkI3np7ANCj4gKyAgICAgICAgc3QgICAgICAgICAgICAgIHN0YWNrdHJh
-Y2UgICAgICDpobXpnaLliIbphY3nmoTosIPnlKjmoIgNCj4gKyAgICAgICAgVCAgICAgICAgICAg
-ICAgIHR4dCAgICAgICAgICAgICDlnZfnmoTlhajmlocNCj4gKyAgICAgICAgZnQgICAgICAgICAg
-ICAgIGZyZWVfdHMgICAgICAgICDpobXpnaLooqvph4rmlL7nmoTml7bpl7TmiLMNCj4gKyAgICAg
-ICAgYXQgICAgICAgICAgICAgIGFsbG9jX3RzICAgICAgICDpobXpnaLliIbphY3nmoTml7bpl7Tm
-iLMNCj4gKyAgICAgICAgPT09PT09ICAgICAgICAgID09PT09PT09PT0gICAgICA9PT09PT09PT09
-PT09PT09PT09DQo+ICsNCj4gKy0tY3VybCDpgInpobk6DQo+ICsNCj4gKyAgICAgICAgPT09PT09
-ICAgICAgICAgID09PT09PT09PT0gICAgICA9PT09PT09PT09PT09PT09PT0NCj4gKyAgICAgICAg
-57yp5YaZ6ZSuICAgICAgICAgIOWFqOensOmUriAgICAgICAgICDmj4/ov7ANCj4gKyAgICAgICAg
-PT09PT09ICAgICAgICAgID09PT09PT09PT0gICAgICA9PT09PT09PT09PT09PT09PT0NCj4gKyAg
-ICAgICAgcCAgICAgICAgICAgICAgIHBpZCAgICAgICAgICAgICDov5vnqIsgSUQNCj4gKyAgICAg
-ICAgdGcgICAgICAgICAgICAgIHRnaWQgICAgICAgICAgICDnur/nqIvnu4QgSUQNCj4gKyAgICAg
-ICAgbiAgICAgICAgICAgICAgIG5hbWUgICAgICAgICAgICDku7vliqHlkI3np7ANCj4gKyAgICAg
-ICAgZiAgICAgICAgICAgICAgIGZyZWUgICAgICAgICAgICDor6XpobXpnaLmmK/lkKblt7Looqvp
-h4rmlL4NCj4gKyAgICAgICAgc3QgICAgICAgICAgICAgIHN0YWNrdHJhY2UgICAgICDpobXpnaLl
-iIbphY3nmoTosIPnlKjmoIgNCj4gKyAgICAgICAgPT09PT09ICAgICAgICAgID09PT09PT09PT0g
-ICAgICA9PT09PT09PT09PT09PT09PT0NCj4gLS0NCj4gMi43LjQNCj4NCg==
+On Mon, Apr 18, 2022 at 03:43:27PM -0700, Matthias Kaehlcke wrote:
+> Hi Kees,
+> 
+> On Mon, Apr 18, 2022 at 03:14:14PM -0700, Kees Cook wrote:
+> > [oops, resending to actual CC list]
+> > 
+> > On Mon, Apr 18, 2022 at 02:15:56PM -0700, Matthias Kaehlcke wrote:
+> > > This series extends LoadPin to allow loading of kernel files
+> > > from trusted dm-verity devices. It adds the concept of
+> > > trusted verity devices to LoadPin. Userspace can use the
+> > > new systl file 'loadpin/trusted_verity_root_digests' to
+> > > provide LoadPin with a list of root digests from dm-verity
+> > > devices that LoadPin should consider as trusted. When a
+> > > kernel file is read LoadPin first checks (as usual) whether
+> > > the file is located on the pinned root, if so the file can
+> > > be loaded. Otherwise, if the verity extension is enabled,
+> > > LoadPin determines whether the file is located on a verity
+> > > backed device and whether the root digest of that device
+> > > is in the list of trusted digests. The file can be loaded
+> > > if the verity device has a trusted root digest.
+> > > 
+> > > The list of trusted root digests can only be written once
+> > > (typically at boot time), to limit the possiblity of
+> > > attackers setting up rogue verity devices and marking them
+> > > as trusted.
+> 
+> 
+> > Thanks for working all this out! Where does the list of trusted
+> > roothashes come from? I assume some chain of trust exists. Is the list
+> > maybe already stored on the rootfs?
+> 
+> Yes, at least the content of the list comes from the rootfs. The
+> userspace part is still TBD (also pending on the evolution of this
+> patchset), having the list pre-formatted in a single file on the
+> rootfs should be fine.
+
+Ah-ha, that's perfect.
+
+> > It'd be nice if there was some way to pass the trust chain to LoadPin
+> > more directly.
+> 
+> I imagine you envision LoadPin reading the file itself, instead of
+> just processing the content. That should be doable. One option would
+> be to pass the path of the file with the hashes through the sysctl
+> file and use kernel_read_file_from_path() to read it if the path is
+> in the pinned root (or maybe even in any trusted file system ;-)
+
+It could be a boot param or a Kconfig too. But yeah, having LoadPin able
+to use itself to validate the file path would be much nicer.
+
+-- 
+Kees Cook

@@ -2,177 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D65F5076AC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4431A5076B0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348064AbiDSRjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47766 "EHLO
+        id S1355979AbiDSRky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232267AbiDSRjn (ORCPT
+        with ESMTP id S243229AbiDSRkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:39:43 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB104275CC
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:36:55 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id x12so1616948qtp.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:36:55 -0700 (PDT)
+        Tue, 19 Apr 2022 13:40:52 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37227CCB
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:38:09 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id m14so23433299wrb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ndufresne-ca.20210112.gappssmtp.com; s=20210112;
-        h=message-id:subject:from:to:cc:date:in-reply-to:references
-         :content-transfer-encoding:user-agent:mime-version;
-        bh=drE3Vvgc/V+fnpihrYOc9KMqNg1xdJOT7Hgu1lLOYXU=;
-        b=VNn55YznefnmFxbiHeFybFRRx10q4N3WTgm8faUA9fqMHT+kESq+EtXlHOqGO7ztG7
-         rfE/DMNA86nYIOWkCHqeYgSCZmxu2D41dL5JKAGJcEmSTzQHh/35AuzT+sCBnH+DWsUD
-         lBlNCL65a0dorLVD6Oy4LUMbr++3kxyIWjC8OxiGBuDWf8X9OXJ3/BdnDWPAxr/MjnN6
-         QB1dvv6lyaJgcQRpfZnvj0ZWkalUqHvHQy+JLy6VrQnnjrxy0+WsLkVeLOGHR1TRjl3n
-         +u02J2wpzF5x9MQk3tj2enbSMxmhyl7W6LIeBRYsloK1+gPSKB5TjzMDUXefmph2Js//
-         sOtg==
+        d=google.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc;
+        bh=4Hcnu+Y1xvTQT/d8TtH/DkfZU528Zec6EC6l/WHUGtw=;
+        b=CIQjN/Q+4uhjvLGUdKIpDCetpFRAAL1b0jKxHI6pNWCWGj6uodyebfvqMYTJH9JHXZ
+         REqxLvl8ztnJYis9WD5FWWeEhOcyDAQQLn1SHMd8KmuTQDoR0imYRPzXRHhWqrmbNH1S
+         QyrafESTkKiLUc57QNe1bvNaiDLi5rMGQl1aBjzi1Lqq9xiIXyRoInIF9/N3XLQGtL6+
+         3DAfFDiRIZYwqyq8olQkz3ucGHnwIV7yAF8ne+XvwiDO7pTHxn9NC2KIea7xtpNuUzhj
+         BPOnr2fxwdBodOYuwTPaW8gRvxdvu9PA2Pn5ijwjgwpAKqtIus+L19F9dim0h2U+bXsp
+         sWSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:subject:from:to:cc:date:in-reply-to
-         :references:content-transfer-encoding:user-agent:mime-version;
-        bh=drE3Vvgc/V+fnpihrYOc9KMqNg1xdJOT7Hgu1lLOYXU=;
-        b=LcG5vNlCIk9ahf7+OuU6nT/rVfsGFahCo/aGqUnbFTJtCDmdI2aIqEd3Y98mNnM/tu
-         bQAROcDI5jGZHSM6nsM9zHYjDxI+v/QbpY9k+5Lt5Bz0RARss8IUQFMlJhQNBtwo32Cg
-         g8eIn50kTfmK5UG8681a/wJ1bgXAqXByUKxDQAW1QAgHjbBwVctn6R+LVEdIDK/DSDV3
-         GNPPwKseHxPahAwOSSB1+bzr6yd2a5mqtsERs1ODYOSoEioALzUMH+9pxD0HCNgdjX1G
-         xff0kungIcipWdcPaKCtWxK9cVs2dvBZbH7c2P2+/doXaJ92nWMmw5XwFGTnjTEW4swU
-         ubXg==
-X-Gm-Message-State: AOAM5319xP8XYnwuzd5wxqkFG2rQtSxRmbf3jbHGRxmiFl7z0rfuxTM6
-        9QVRICIj4Xot2855aa4b22964g==
-X-Google-Smtp-Source: ABdhPJxnMU9m4mjCO6v+7IT7ueE/RLpN6eOxn8O3dDrOEvFY/F3Y84Lri4r/GTIDQkSg80Gu/bD0cQ==
-X-Received: by 2002:a05:622a:408f:b0:2ed:12b7:2e9c with SMTP id cg15-20020a05622a408f00b002ed12b72e9cmr11075993qtb.309.1650389814938;
-        Tue, 19 Apr 2022 10:36:54 -0700 (PDT)
-Received: from nicolas-tpx395.localdomain (173-246-12-168.qc.cable.ebox.net. [173.246.12.168])
-        by smtp.gmail.com with ESMTPSA id s17-20020a05620a16b100b0069eb1eb06b7sm290943qkj.131.2022.04.19.10.36.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:36:54 -0700 (PDT)
-Message-ID: <4b6b65e72b3f3cd74af5a3f0069838c86a6725e9.camel@ndufresne.ca>
-Subject: Re: [PATCH v3] media: usb: uvc: Add UVC_GUID_FORMAT_H265
-From:   Nicolas Dufresne <nicolas@ndufresne.ca>
-To:     Ricardo Ribalda <ribalda@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     James_Lin <Ping-lei.Lin@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Alexandre Courbot <acourbot@chromium.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, sherlock.chang@mediatek.com,
-        lecopzer.chen@mediatek.com, max.yan@mediatek.com,
-        tm.wu@mediatek.com
-Date:   Tue, 19 Apr 2022 13:36:53 -0400
-In-Reply-To: <CANiDSCv0BA5C8ijO-T_3c2rxGD_yC0LGuG77THkC7_52GZ-dtA@mail.gmail.com>
-References: <20220418090652.3156-1-Ping-lei.Lin@mediatek.com>
-         <CANiDSCvLb785H7qyAzSfTSBRpO2eM-oJFF5SgVHXdL1O-GusLA@mail.gmail.com>
-         <Yl6oYlv+t63+5dVP@pendragon.ideasonboard.com>
-         <CANiDSCv0BA5C8ijO-T_3c2rxGD_yC0LGuG77THkC7_52GZ-dtA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.0 (3.44.0-1.fc36) 
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc;
+        bh=4Hcnu+Y1xvTQT/d8TtH/DkfZU528Zec6EC6l/WHUGtw=;
+        b=z+gdKF3/BKxKLnaPqxhJFjXXwD9pIOLekyu/YxzXrETq41drRqhfym+FbEZbfmYT8K
+         BVhyILUaDgfe7KOzcvQIBwYHxIoR6ahOxv/7/J+POZlf6ssLlVppddIYATOgd7lE0QE/
+         XY11mY0ZerqtIlvCeRIQShKmOS3ic6R1GDVBwZV+buRFsFhMZQasaYxe4Kvp9pKmYbrU
+         /vb1jgmVR4s2QFv1b8II+GBsJTTDxkhYpQz4qiTQeMwncOlxuNMXgzNxiDeQwv42wEIo
+         OITp/Sa3RmzyTjbRvFO1GyGZ1wkTu7pS2VpTYMOqtbX6xitPRuzCKUodfJr3YOly9wkO
+         9oUg==
+X-Gm-Message-State: AOAM532FDB/kgDXz1xxtDlVorxoh4d0KWF8jBsJiGi7ntscgR8RdKhBH
+        2guAWHN978C3+nQ+MMMLB8yh+nxdi0jtYL/9TFtAcw==
+X-Google-Smtp-Source: ABdhPJzpHnn5Va+Zva11H7oHeOnzsrgG/lcYPxvwzn3M3FVNvkOV1Y1fDhhCyXgdlAWLhZa4n6At69/woFeeGpnw7nU=
+X-Received: by 2002:a5d:42cd:0:b0:207:af3f:79c9 with SMTP id
+ t13-20020a5d42cd000000b00207af3f79c9mr12547729wrr.577.1650389887738; Tue, 19
+ Apr 2022 10:38:07 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220314200148.2695206-1-kaleshsingh@google.com>
+ <20220314200148.2695206-8-kaleshsingh@google.com> <CA+EHjTwQRUCjvcMHNe1f0kPBdU=vS+f2+e_eefhnJDR4s73cQA@mail.gmail.com>
+ <CAC_TJveNRaDFcQGo9-eqKa3=1DnuVDs4U+ye795VcJ1ozVkMyg@mail.gmail.com> <YlbXHg64HK2d3dgm@FVFF77S0Q05N>
+In-Reply-To: <YlbXHg64HK2d3dgm@FVFF77S0Q05N>
+From:   Kalesh Singh <kaleshsingh@google.com>
+Date:   Tue, 19 Apr 2022 10:37:56 -0700
+Message-ID: <CAC_TJveJYFkHPQLYdL8SCEAwMPgwpF_-ctMqKJ9w=eDa_M0u5w@mail.gmail.com>
+Subject: Re: [PATCH v6 7/8] KVM: arm64: Unwind and dump nVHE HYP stacktrace
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Cc: Android Kernel" <kernel-team@android.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Mark Brown <broonie@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Peter Collingbourne <pcc@google.com>,
+        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Andrew Walbran <qwandor@google.com>,
+        Andrew Scull <ascull@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
+        <linux-arm-kernel@lists.infradead.org>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 19 avril 2022 =C3=A0 14:18 +0200, Ricardo Ribalda a =C3=A9crit=C2=
-=A0:
-> On Tue, 19 Apr 2022 at 14:17, Laurent Pinchart
-> <laurent.pinchart@ideasonboard.com> wrote:
-> >=20
-> > Hello,
-> >=20
-> > On Tue, Apr 19, 2022 at 01:46:15PM +0200, Ricardo Ribalda wrote:
-> > > On Mon, 18 Apr 2022 at 11:07, James_Lin <Ping-lei.Lin@mediatek.com> w=
-rote:
-> > > >=20
-> > > > This patch aims to add UVC_GUID_FORMAT_H265
-> > > > High Efficiency Video Coding (HEVC), also known as H.265 and MPEG-H=
- Part 2.
-> > > > They describe the same video encoding method.
-> > > > So for handling their behavior is the same.
-> > > > However, when external camera device describes this encoding method=
-,
-> > > > some use hevc, some use h265.
-> > > > There is no uniform specification to describe this encoding method.
-> > > > So if an external camera device use h265 to describe this encoding =
-method,
-> > > > driver will not recognize it.
-> > > > Therefore, this patch is to enable driver to read HEVC/H265
-> > > > and convert it to V4L2_PIX_FMT_HEVC.
-> > > >=20
-> > > > Signed-off-by: James_Lin <Ping-lei.Lin@mediatek.com>
-> > >=20
-> > > Reviewed-by: Ricardo Ribalda <ribalda@chromium.org>
-> > > > ---
-> > > >  drivers/media/usb/uvc/uvc_driver.c | 5 +++++
-> > > >  drivers/media/usb/uvc/uvcvideo.h   | 3 +++
-> > > >  2 files changed, 8 insertions(+)
-> > > >=20
-> > > > diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb=
-/uvc/uvc_driver.c
-> > > > index dda0f0aa78b8..e437e9f95890 100644
-> > > > --- a/drivers/media/usb/uvc/uvc_driver.c
-> > > > +++ b/drivers/media/usb/uvc/uvc_driver.c
-> > > > @@ -154,6 +154,11 @@ static struct uvc_format_desc uvc_fmts[] =3D {
-> > > >                 .guid           =3D UVC_GUID_FORMAT_H264,
-> > > >                 .fcc            =3D V4L2_PIX_FMT_H264,
-> > > >         },
-> > >=20
-> > > Maybe I would add a comment here saying that some cameras represent
-> > > hevc as h265.
-> >=20
-> > I wish there would be a 4CC and GUID standard with a centralized
-> > registry...
->=20
-> Thought that was the kernel codebase :)
+On Wed, Apr 13, 2022 at 6:59 AM Mark Rutland <mark.rutland@arm.com> wrote:
+>
+> Hi Kalesh,
+>
+> Sorry for the radiosilence.
+>
+> I see that in v7 you've dropped the stacktrace bits for now; I'm just
+> commenting here fot future reference.
+>
+> On Thu, Mar 31, 2022 at 12:22:05PM -0700, Kalesh Singh wrote:
+> > Hi everyone,
+> >
+> > There has been expressed interest in having hypervisor stack unwinding
+> > in production Android builds.
+> >
+> > The current design targets NVHE_EL2_DEBUG enabled builds and is not
+> > suitable for production environments, since this config disables host
+> > stage-2 protection on hyp_panic() which breaks security guarantees.
+> > The benefit of this approach is that the stack unwinding can happen at
+> > EL1 and allows us to reuse most of the unwinding logic from the host
+> > kernel unwinder.
+> >
+> > Proposal for how this can be done without disabling host stage-2 protection:
+> >   - The host allocates a "panic_info" page and shares it with the hypervisor.
+> >   - On hyp_panic(), the hypervisor can unwind and dump its stack
+> > addresses to the shared page.
+> >   - The host can read out this information and symbolize these addresses.
+> >
+> > This would allow for getting hyp stack traces in production while
+> > preserving the security model. The downside being that the core
+> > unwinding logic would be duplicated at EL2.
+> >
+> > Are there any objections to making this change?
+>
+> I'm fine with the concept of splitting the unwind and logging steps; this is
+> akin to doing:
+>
+>         stack_trace_save_tsk(...);
+>         ...
+>         stack_trace_print(...);
+>
+> ... and I'm fine with having a stack_trace_save_hyp(...) variant.
+>
+> However, I would like to ensure that we're reusing logic rather than
+> duplicating it wholesale.
 
-You'll find multiple fourcc for the same thing in the linux kernel ;-P
+Agreed. Although some reimplementation may be unavoidable, as we can't
+safely link against kernel code from the protected KVM hypervisor.
+Perhaps we can move some of the common logic to a shared header that
+can be included in both places (host, hyp), WDYT?
 
->=20
-> >=20
-> > Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-> >=20
-> > > > +       {
-> > > > +               .name           =3D "H.265",
-> > > > +               .guid           =3D UVC_GUID_FORMAT_H265,
-> > > > +               .fcc            =3D V4L2_PIX_FMT_HEVC,
-> > > > +       },
-> > > >         {
-> > > >                 .name           =3D "Greyscale 8 L/R (Y8I)",
-> > > >                 .guid           =3D UVC_GUID_FORMAT_Y8I,
-> > > > diff --git a/drivers/media/usb/uvc/uvcvideo.h b/drivers/media/usb/u=
-vc/uvcvideo.h
-> > > > index 143230b3275b..41f4d8c33f2a 100644
-> > > > --- a/drivers/media/usb/uvc/uvcvideo.h
-> > > > +++ b/drivers/media/usb/uvc/uvcvideo.h
-> > > > @@ -139,6 +139,9 @@
-> > > >  #define UVC_GUID_FORMAT_H264 \
-> > > >         { 'H',  '2',  '6',  '4', 0x00, 0x00, 0x10, 0x00, \
-> > > >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> > > > +#define UVC_GUID_FORMAT_H265 \
-> > > > +       { 'H',  '2',  '6',  '5', 0x00, 0x00, 0x10, 0x00, \
-> > > > +        0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> > > >  #define UVC_GUID_FORMAT_Y8I \
-> > > >         { 'Y',  '8',  'I',  ' ', 0x00, 0x00, 0x10, 0x00, \
-> > > >          0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71}
-> >=20
-> > --
-> > Regards,
-> >=20
-> > Laurent Pinchart
->=20
->=20
->=20
+> There are some changes I would like to make to the
+> stacktrace code in the near future that might make that a bit easier, e.g.
+> reworking the stack transition checks to be table-driven, and factoring out the
+> way we handle return trampolines.
 
+Sounds good to me.
+
+Thanks,
+Kalesh
+>
+> I'll Cc you on changes to the stacktrace code. There are some preparatory
+> cleanups I'd like to get out of the way first which I'll send shortly.
+>
+> Thanks,
+> Mark.

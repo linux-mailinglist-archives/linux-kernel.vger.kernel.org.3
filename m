@@ -2,123 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBB94507C42
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B703507C45
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358118AbiDSWAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49630 "EHLO
+        id S1358123AbiDSWB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232898AbiDSWAv (ORCPT
+        with ESMTP id S232898AbiDSWBz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:00:51 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D040B40A35
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:58:07 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-2eba37104a2so188313157b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:58:07 -0700 (PDT)
+        Tue, 19 Apr 2022 18:01:55 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DECD40E5A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:59:12 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id e7so8160730vkh.2
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:59:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
          :cc;
-        bh=b0FdhFvoto3cfbTufYpeHPpDSicSfoYk0f7qMia8Bdg=;
-        b=zBnm4d3bVKW2b5jnvekPM/eQx3z9hsp5xqRTJPjXSKoWx8tWLqOEJh6KYbJG2wb69H
-         p4hmQrXPrxhENGRIm+ntF1+pxpZ4NKRG2Fixd6R6prRK2orJSD+9XNUKjFrlgtrRdebx
-         MgnhSvb97qdcRwKYnD3JSdQDYXIPNWyT3PuMkmXZq2eSGoECCqUdBAzywbMwK6WD7kpD
-         2iUevzz1mkSflSKQ7deupPU/mMDZ5MvOVa40AFsNnnUc0TznAVIg593TmguN3uGP2GMa
-         zzkIEa7e/ZwnUMSQDi0i8hNBkDxnDI1MWnBumLEwD3hQC9a8H7pRkM2HnrkA5lHgsn/n
-         9HIQ==
+        bh=VjKt+RtbR1k15kh1tqHX+ikjM6kJamgbyERntatiKfs=;
+        b=LGj905/wmhK22s9AWhEYpxGIPBFA4gQKrEF/F5J77dAA2dtklqdI4oLRg9mFgkdTf0
+         qWaOWWalTRzHbrK60/AxZjAJ3wmRJf0GLbkwiihLlpCca8Z1iu9SPDMhAr6Y1p1jxLCI
+         sihxCsymgrjPESVLGrdxmnszzoOCwZ2YO0sAcdV10BQiZlr6r7C/XHBP9rsbO1088jYS
+         EVXUmrSHuOFpXGixSv+jvqRWSrfMPxyyusaLkJXvWslOL4zyYSMWgvTgbWz1l//PQizL
+         QMCLKHrB3Wuq2rj9tQ+W2wDwryvxQNmOG8bgIapWtDgDJwu/qF2tHuW9mp2XietnLbqk
+         v29w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
          :message-id:subject:to:cc;
-        bh=b0FdhFvoto3cfbTufYpeHPpDSicSfoYk0f7qMia8Bdg=;
-        b=CwQaFeNEO2hIhKfI0HPLbE9OSfFN79HubycjS0S0wu6yQKLocdI70QRQc4ZnNtbwu/
-         8CnKDwbgRQ9HEHO4+0Z+R5jsxwHS/echBCu4gakYHPB/W4+Y3HMeNeAIK3JmNGG4nIZT
-         9W6cu7RVoWhRHCD/h24E2erbY4yWHz1TDT2MQ4lxYC9TE3IQkaIzjjesaiB7/qr2QCcM
-         R9CiKo/KXl9yEQ2gASpvRdBjS8CcLOZ71uul6sVuVYce34SJaS/Fe+3wvjWR2tdP/kYp
-         cJEcoS2WH8casRo206dE16PTB02k/y9ur2L6tfAd/yCJBya/Qvwc1myHydapK2WjShI0
-         EWDg==
-X-Gm-Message-State: AOAM533fW2anNPDb6ESg9+zdDm9PQJRDQT6pn3BymP2ixf3W7RdLyY4O
-        lbvUhtuArFiUtjP+3P0dQWjUfhkZIUqUFYqGTJE8hg==
-X-Google-Smtp-Source: ABdhPJysZSO4rZI8aihXTH5ybXBow3i3c21+5d2zQBcxSPKt0OOZz8Icvk1xE0IDvZ4kpBqlx5RLDjaI/WPO9BTm0xU=
-X-Received: by 2002:a0d:ea46:0:b0:2ed:62f4:e23c with SMTP id
- t67-20020a0dea46000000b002ed62f4e23cmr17960656ywe.437.1650405487130; Tue, 19
- Apr 2022 14:58:07 -0700 (PDT)
+        bh=VjKt+RtbR1k15kh1tqHX+ikjM6kJamgbyERntatiKfs=;
+        b=mxoB+HPshab6sm3dAsZajX9pnIYLWGZCaLO/RJW3RIDghO0lxAI2LIjFhGSfMf6JAK
+         9sIgwASKaIeVL2a2fNa5nSyFW53MLpTAeCWSEc6utLwVhm13H1vBPnHpBb+MJZ/LaVPX
+         4+ynBuotwCo9bZN2mEE1Z+twFyBjHlzpPVPS9h1MtQX58R+CAAy7OfS9BXT4PwDti+jy
+         SVH6kuCxr1vjrJ1sjmaBXxENHnYy+1DjIwSHdfDefHP/rDFDD3s38SRLAIiYdEQ6BO/9
+         o5Zygm1bJiLKjs8P7VPbd6IQgs/4KRhK3jpqLUqaXAcELPq9F5UqI11q10gsyrnC//yd
+         1FKA==
+X-Gm-Message-State: AOAM533KEe8EMiI7tO4keeb41XEVCiMBSBgbVp+7EYX109pM24J2wuhm
+        CWaIHF2yVAXVOmP8F3u2wHk0AGUF3CncRlGm0efENw==
+X-Google-Smtp-Source: ABdhPJx+yyAkCv1sGORw0XUgLueRk1MDSGFQYXOlBaTzkXslvEZrf0oSx+CfB7wu9ZU8D89RmpUVqLxw2WalgPdssnM=
+X-Received: by 2002:a1f:314b:0:b0:331:fff6:a89e with SMTP id
+ x72-20020a1f314b000000b00331fff6a89emr5081691vkx.26.1650405551196; Tue, 19
+ Apr 2022 14:59:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAMRc=Meo4TbdxQzynb7paDgC7J19Tc6hhKU7du4mZvgP0mynTQ@mail.gmail.com>
- <20220419012810.88417-1-schspa@gmail.com>
-In-Reply-To: <20220419012810.88417-1-schspa@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Tue, 19 Apr 2022 23:57:56 +0200
-Message-ID: <CACRpkdYcCZ7zZkuVLMGnoqO69mJ5a-hEg2DV8PmzfwgBFzgVKQ@mail.gmail.com>
-Subject: Re: [PATCH v3] gpio: use raw spinlock for gpio chip shadowed data
-To:     Schspa Shi <schspa@gmail.com>
-Cc:     brgl@bgdev.pl, andy.shevchenko@gmail.com, f.fainelli@gmail.com,
-        fancer.lancer@gmail.com, hoan@os.amperecomputing.com,
-        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, opendmb@gmail.com
+References: <20220413235051.3a4eb7c86d31656c7aea250c@linux-foundation.org>
+ <20220414135706.rcn7zr36s2hcd5re@revolver> <CAOUHufaw8tZrxuc6Sfxe+ES_MFHBqU_=O+X3b4rbYYrWYJRjkg@mail.gmail.com>
+ <20220414171521.bgdvrirumd4atjhs@revolver> <20220414121911.8bb89fc3681b13af1566d79c@linux-foundation.org>
+ <YlkaiUopM5HKWEdX@google.com> <20220416010259.4gbz5hgvm2lgr3sj@revolver>
+ <CAOUHufZ8zPnpamkkpKK6KcSLTF91Eiba+S9VTX-ivhFrPQ_Cpw@mail.gmail.com>
+ <20220416151923.ig5zavuptjsufm3d@revolver> <CAOUHufZewjQyMy1pHKxRkY82J5STPbUSJor7Q2aJgrkpZvU6bw@mail.gmail.com>
+ <20220419155055.qf52xpcftqb3r5nj@revolver>
+In-Reply-To: <20220419155055.qf52xpcftqb3r5nj@revolver>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 19 Apr 2022 15:58:34 -0600
+Message-ID: <CAOUHufbX_aq+aHf-EVKFLN_jw6hXJ5vtKpG0jskD6uXVKB406w@mail.gmail.com>
+Subject: Re: [PATCH v7 00/70] Introducing the Maple Tree
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 3:28 AM Schspa Shi <schspa@gmail.com> wrote:
-
-> In case of PREEMPT_RT, there is a raw_spinlock -> spinlock dependency
-> as the lockdep report shows.
+On Tue, Apr 19, 2022 at 9:51 AM Liam Howlett <liam.howlett@oracle.com> wrote:
 >
-> __irq_set_handler
->   irq_get_desc_buslock
->     __irq_get_desc_lock
->       raw_spin_lock_irqsave(&desc->lock, *flags);  // raw spinlock get here
->   __irq_do_set_handler
->     mask_ack_irq
->       dwapb_irq_ack
->         spin_lock_irqsave(&gc->bgpio_lock, flags); // sleep able spinlock
->   irq_put_desc_busunlock
+> * Yu Zhao <yuzhao@google.com> [220416 15:30]:
+> > On Sat, Apr 16, 2022 at 9:19 AM Liam Howlett <liam.howlett@oracle.com> wrote:
+> > >
+> >
+> > <snipped>
+> >
+> > > How did you hit this issue?  Just on boot?
+> >
+> > I was hoping this is known to you or you have something I can verify for you.
 >
-> Replace with a raw lock to avoid BUGs. This lock is only used to access
-> registers, and It's safe to replace with the raw lock without bad
-> influence.
 >
-> [   15.090359][    T1] =============================
-> [   15.090365][    T1] [ BUG: Invalid wait context ]
-> [   15.090373][    T1] 5.10.59-rt52-00983-g186a6841c682-dirty #3 Not tainted
-> [   15.090386][    T1] -----------------------------
-> [   15.090392][    T1] swapper/0/1 is trying to lock:
-> [   15.090402][    T1] 70ff00018507c188 (&gc->bgpio_lock){....}-{3:3}, at: _raw_spin_lock_irqsave+0x1c/0x28
-> [   15.090470][    T1] other info that might help us debug this:
-> [   15.090477][    T1] context-{5:5}
-> [   15.090485][    T1] 3 locks held by swapper/0/1:
-> [   15.090497][    T1]  #0: c2ff0001816de1a0 (&dev->mutex){....}-{4:4}, at: __device_driver_lock+0x98/0x104
-> [   15.090553][    T1]  #1: ffff90001485b4b8 (irq_domain_mutex){+.+.}-{4:4}, at: irq_domain_associate+0xbc/0x6d4
-> [   15.090606][    T1]  #2: 4bff000185d7a8e0 (lock_class){....}-{2:2}, at: _raw_spin_lock_irqsave+0x1c/0x28
-> [   15.090654][    T1] stack backtrace:
-> [   15.090661][    T1] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.10.59-rt52-00983-g186a6841c682-dirty #3
-> [   15.090682][    T1] Hardware name: Horizon Robotics Journey 5 DVB (DT)
-> [   15.090692][    T1] Call trace:
-> ......
-> [   15.090811][    T1]  _raw_spin_lock_irqsave+0x1c/0x28
-> [   15.090828][    T1]  dwapb_irq_ack+0xb4/0x300
-> [   15.090846][    T1]  __irq_do_set_handler+0x494/0xb2c
-> [   15.090864][    T1]  __irq_set_handler+0x74/0x114
-> [   15.090881][    T1]  irq_set_chip_and_handler_name+0x44/0x58
-> [   15.090900][    T1]  gpiochip_irq_map+0x210/0x644
->
-> Signed-off-by: Schspa Shi <schspa@gmail.com>
+> Thanks, yes.  I believe that both crashes are the same root cause.  The
+> cause is that I was not cleaning up after the kmem bulk allocation
+> failure on my side.  Please test with this patch.
 
-LGTM
-Acked-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks. I applied this patch and hit a LOCKDEP and then a BUG_ON:
 
-Mostly hits drivers/gpio so this seems like something Bartosz
-should merge.
+  lib/maple_tree.c:847 suspicious rcu_dereference_protected() usage!
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x6c/0x9a
+   dump_stack+0x10/0x12
+   lockdep_rcu_suspicious+0x12c/0x140
+   __mt_destroy+0x96/0xd0
+   exit_mmap+0x2a0/0x360
+   __mmput+0x34/0x100
+   mmput+0x2f/0x40
+   free_bprm+0x64/0xe0
+   kernel_execve+0x129/0x330
+   call_usermodehelper_exec_async+0xd8/0x130
+   ? proc_cap_handler+0x210/0x210
+   ret_from_fork+0x1f/0x30
+   </TASK>
 
-Yours,
-Linus Walleij
+  BUG: unable to handle page fault for address: ffffa6072aff0060
+  RIP: 0010:mab_calc_split+0x103/0x1a0
+  Code: 29 c1 8b 86 64 02 00 00 0f b6 80 dc 7d a7 96 39 c1 7e 05 83 c3
+01 eb 06 81 c3 ff 00 00 00 0f b6 c3 45 84 d2 74 3f 41 0f b6 ca <48> 83
+bc ce 10 01 00 00 00 75 2d 41 83 c0 ff 41 39 c8 7e 20 0f b6
+  RSP: 0018:ffffa6072afef6d0 EFLAGS: 00010286
+  RAX: 0000000000000054 RBX: 0000000000000154 RCX: 00000000000000aa
+  RDX: ffffa6072afef83f RSI: ffffa6072afefa00 RDI: ffffa6072afefe80
+  RBP: ffffa6072afef6e0 R08: 0000000000000010 R09: 00000000000000ff
+  R10: 00000000000000aa R11: 0000000000000001 R12: 00000000000000ff
+  R13: ffffa6072afefa00 R14: ffffa6072afef9c0 R15: 0000000000000008
+  FS:  0000000001d75340(0000) GS:ffff8a56bf980000(0000) knlGS:0000000000000000
+  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+  CR2: ffffa6072aff0060 CR3: 00000004986ca002 CR4: 00000000001706e0
+  Call Trace:
+   <TASK>
+   mas_spanning_rebalance+0x416/0x2060
+   mas_wr_store_entry+0xa6d/0xa80
+   mas_store_gfp+0xf6/0x170
+   do_mas_align_munmap+0x32b/0x5c0
+   do_mas_munmap+0xf3/0x110
+   __vm_munmap+0xd4/0x180
+   __x64_sys_munmap+0x1b/0x20
+   do_syscall_64+0x44/0xa0
+
+$ ./scripts/faddr2line vmlinux mab_calc_split+0x103
+mab_calc_split+0x103/0x1a0:
+mab_no_null_split at lib/maple_tree.c:1787
+(inlined by) mab_calc_split at lib/maple_tree.c:1866

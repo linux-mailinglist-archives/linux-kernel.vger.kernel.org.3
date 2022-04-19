@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C2B506D2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E89506CA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:41:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351457AbiDSNG5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:06:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S1352329AbiDSMnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241707AbiDSNGx (ORCPT
+        with ESMTP id S241234AbiDSMnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:06:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A32377F7
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 06:04:09 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650373447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eupx91ipHUfoNRi4brayBvoybEh9b09e5p2b6SLiofg=;
-        b=cI4CmBORYShGFfnHSNBz9VGYvmJmfBwTLETF0Z+PuDFf2wTU9JTPwNPBirPKGGFshg//ha
-        hEm01DvI077mODBNvpXZmwmvGGMWqAmdNMd/4/ZU7LkaGNK+MH4oMc1HsdrR2A2y9ToDN9
-        dfvQYeRyQlJUbZY4c55MJJWGX3LXUKGf9VYOGlL0TsqvacsFbZhO1FhClqBpnu2SGWmCvc
-        7lSq2jkCKicVMT+fSn4X3fajQycGrcV+2XuHYsXNYlQ5/Qqc33b1GqObujveM64Ce16zdH
-        ATr4Od3B9zAyALcKk5CEKccPtc3Ysh6p38t04yUemeqV4CmuHDWqLziruWEyPQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650373447;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eupx91ipHUfoNRi4brayBvoybEh9b09e5p2b6SLiofg=;
-        b=rZwxEQnkdn25xC4vmQ1vWWlUtUGc2zX9kYvqyN9BrZ3mVG/9Iy+L5nK7KWr1dF4b/jpdj5
-        d8tqyF7f42zAWYBA==
-To:     Dave Hansen <dave.hansen@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
-        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Subject: Re: [patch 2/3] x86/fpu/xsave: Prepare for optimized compaction
-In-Reply-To: <d2f927c9-187a-906c-e1f3-33541b3b5a84@intel.com>
-References: <20220404103741.809025935@linutronix.de>
- <20220404104820.656881574@linutronix.de>
- <d2f927c9-187a-906c-e1f3-33541b3b5a84@intel.com>
-Date:   Tue, 19 Apr 2022 14:39:36 +0200
-Message-ID: <87k0bl9rhz.ffs@tglx>
+        Tue, 19 Apr 2022 08:43:41 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDD372E6BE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:40:58 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c64so21053414edf.11
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zbofyV1fic7pP6HMfJQj3Ab0tUOTAaFhAUHLIghCboE=;
+        b=cTVu7zsjpB+V8mcf4t7tPhQAGJA3R/7k2i9zy3/hbrMcuLvoqNvc4K3C2iIDPoYfIn
+         hx59pyXAFfjZ0MSTmaPYpESS8rBWCBSFkZgc7TMuJL4GxXc+IT9Ll/8OoOqYj+3Mg/4d
+         oLMhN5N0nSXheknxTYxPxn7865ghUQ1g//S75ODRFFGF52Sug7Zw4KzDBAOmSAJ1fT+W
+         t00H/i7xTSXocaEJFqY4rd7qb1Ijhw+Pv5VJyYDO4/sOxWsQvEY05IcczTlqrPvOlvYZ
+         cYiSeUKUlSzVTqlaSIRbVn3zzuH8e19vs5pPKReLMo6QUV5j/ppVl4VKZUdGDM36agT9
+         IyXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=zbofyV1fic7pP6HMfJQj3Ab0tUOTAaFhAUHLIghCboE=;
+        b=ys0/F2oKxz4scsvJBFEaXDHgubLbc51Mqkp6+ANtQmY0Yqy3WfEbhsfRnbnE7Fyfue
+         fdTiVYWFZH24P+CFvxlRM3XnNVe8r1DhV4j1kovE6ZAFoANMKIfzANJEK7YHhVfDhD5o
+         p8ZmZO8UA+8OwIoRz9exhqIyaL4thFs/7JckRx9bh1XDiUNKHvUhnfx8DCyax3c4zaB3
+         xcHqtsbatfa/6VZl+xkQRkqOmCcjoCegVk7da2BSxc+YT/gXNxK0Qc56UUPgM6zF/+hX
+         H0rdoxaSY2W0NZw367uuP4AJD0yHIWksmfzvS6DAvVkPTtIMDYEqrn+OVstfh7EBu7Cy
+         yEtA==
+X-Gm-Message-State: AOAM530UddHMmXx08IrR4DsISMC+BRuL9TYffGjQN/UVUbDW0NxKYkby
+        Y5DJQbkRfp9E3zQwtr9R+lV6OvUu5yBeDQ==
+X-Google-Smtp-Source: ABdhPJzW/SxmIzdPcj9hcji9IFgOetJZ1gdKF6CvMPrHf78Yj1B/Nf0TFxaXcKe8SGylB1AI0IQplA==
+X-Received: by 2002:a05:6402:42cb:b0:421:c735:1fd3 with SMTP id i11-20020a05640242cb00b00421c7351fd3mr17298386edc.341.1650372056866;
+        Tue, 19 Apr 2022 05:40:56 -0700 (PDT)
+Received: from fedora.lab.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id n27-20020a1709062bdb00b006da975173bfsm5709274ejg.170.2022.04.19.05.40.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 05:40:56 -0700 (PDT)
+From:   Patrick Rudolph <patrick.rudolph@9elements.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-i2c@vger.kernel.org
+Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [v8 0/3] Add support for Maxim MAX735x/MAX736x variants
+Date:   Tue, 19 Apr 2022 14:40:21 +0200
+Message-Id: <20220419124025.1733230-1-patrick.rudolph@9elements.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Apr 14 2022 at 08:46, Dave Hansen wrote:
-> On 4/4/22 05:11, Thomas Gleixner wrote:
-> Any interest in doing something like the attached to make
-> copy_uabi_to_xstate() easier to read?
+v8:
+- Move allOf in dt-binding and use double negation
 
-Yeah. I've picked it up.
+v7:
+- Reworked the commit message, comments and renamed a struct
+  field. No functional change.
 
->> +static void xsave_adjust_xcomp(struct fpstate *fpstate, u64 xuser)
->> +{
->> +	struct xregs_state *xsave = &fpstate->regs.xsave;
->> +	u64 xtmp, xall, xbv, xcur = xsave->header.xfeatures;
->> +	int i;
->> +
->> +	/* Nothing to do if optimized compaction is not in use */
->> +	if (!xsave_use_xgetbv1())
->> +		return;
->
-> The comment makes me wonder if we need a more descriptive name for
-> xsave_use_xgetbv1(), like:
->
-> 	if (!xsave_do_optimized_compaction())
-> 		return;
+v6:
+- Fix typo in dt-bindings
 
-Makes sense.
+v5:
+- Remove optional and make vdd-supply mandatory
 
->> +	/*
->> +	 * No more optimizations. Set the user features and move the
->> +	 * supervisor state(s). If the new user feature is past
->> +	 * the supervisor state, then the loop is moving nothing.
->> +	 */
->> +	xtmp = xbv & XFEATURE_MASK_SUPERVISOR_ALL;
->> +	xall = xbv | xuser;
->
->
-> I'd probably at least comment why the loop is backwards:
->
-> 	/*
-> 	 * Features are only be moved up in the buffer.  Start with
-> 	 * high features to avoid overwriting them with a lower ones.
-> 	 */
->
-> I know this is a very typical way to implement non-destructive moves,
-> but my stupid brain seems to default to assuming that for loops only go
-> forward.
+v4:
+- Add missing maxitems dt-bindings property
 
-:)
+v3:
+- Merge dt-bindings into i2c-mux-pca954x.yaml
 
->> +	for (i = fls64(xtmp) - 1; i >= FIRST_EXTENDED_XFEATURE;
->> +	     i = fls64(xtmp) - 1) {
->> +		unsigned int to, from;
->
-> Is it worth a check here like:
->
-> 		/* Do not move features in their init state: */
-> 		if (!(xcur & BIT_ULL(i))) {
-> 			xtmp &= ~BIT_ULL(i);
-> 			continue;
-> 		}
+v2:
+- Move dt-bindings to separate file
+- Added support for MAX736x as they are very similar
+- Fixed an issue found by kernel test robot
+- Dropped max735x property and custom IRQ check
+- Added MAX7357 config register defines instead of magic values
+- Renamed vcc-supply to vdd-supply
 
-That would also require to clear the bit in xall, but we can't do that
-in the loop as that affects offsets. Let me think about that.
+Patrick Rudolph (3):
+  dt-bindings: i2c: Add Maxim MAX735x/MAX736x variants
+  i2c: muxes: pca954x: Add MAX735x/MAX736x support
+  i2c: muxes: pca954x: Add regulator support
 
-Thanks,
+ .../bindings/i2c/i2c-mux-pca954x.yaml         |  39 +++++-
+ drivers/i2c/muxes/Kconfig                     |   4 +-
+ drivers/i2c/muxes/i2c-mux-pca954x.c           | 126 ++++++++++++++++--
+ 3 files changed, 153 insertions(+), 16 deletions(-)
 
-        tglx
+-- 
+2.35.1
+

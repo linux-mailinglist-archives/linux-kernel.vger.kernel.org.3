@@ -2,97 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BEF506C9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D454506CAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243262AbiDSMn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60708 "EHLO
+        id S243297AbiDSMow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237187AbiDSMnY (ORCPT
+        with ESMTP id S239819AbiDSMot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:43:24 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A581D2E6BA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:40:41 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id u15so32581721ejf.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:40:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=3mFrRGZ2hFvP8O4X+CuKmWb2rkzJm3vVXdrSrkWv/zg=;
-        b=cjosF7poiXNd0rfz6mXjywOG7hZq92kjmu1s+0SRlGUO40CwLaZs+070XiXHG1VFrY
-         FstDX8T0mZC39VkKY3v7X1GlDDNf7+WXE/HsHLCgvlnVSZA5BoVqsB2mTn4GzIkNVDNy
-         ck549tq8tRuD64t9SqYw0ylLLrbpUt4Z0Ahro0UmxfCPapgYV5RfrBwTfyJAouDLjP9D
-         UBMUrIpbMOTAlrLfhclT7EV2go8Hdksg+au2fp/2NQmccKopHUGbttF8J3YWzHpwixCB
-         OWxfod8jJpW6VRFmfAOheAnDv2VTBh7kX/wl3meQ8vvP+w9GGNuvYuz3ZfGjxwTgCM7o
-         kjMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=3mFrRGZ2hFvP8O4X+CuKmWb2rkzJm3vVXdrSrkWv/zg=;
-        b=ORrlWXSR8fOmU2kwan04FixWeed2QlhKVBNlFvyNVUKts6Q3PI3CVN1Nbw4X0M8TZc
-         hOWYvSpli2yQ9L8Z2ePL64XS+eCtHBERlwwq6UWL5X3bkO2ESFzCrIKa4ZFoEfD1j9/F
-         i0I7O8i3hhAB5XV2O0hDzPRscmzPnPmHLkkmfYVzNYZ2dHXe/4Ajxnp+Z20+yrSgqGq8
-         OgUNPkjxggvRsBizoM1QtyO2gxJsPdFnEJYn6pq7ioFuM86bPlF0i05wPKPftknwFLng
-         EYXuM4MZxeBtedHoth7MMRFt47jDbZUtyGw25THFjyDAb8ObFOXH5ehC3SGmOKeDWdct
-         tGRQ==
-X-Gm-Message-State: AOAM5331Tq7Ge3Ldq43c3hmohnmId1jCc7iA2INtJksDiCLxNg+m0RVW
-        ULKNAJyLl5YAWplRqlb38hqw/Q==
-X-Google-Smtp-Source: ABdhPJyVbGwvledAKMJPoCayIO5+opfeoj4KbZI87HqtQiKuhBGcWMaL+ILbHZfyTw5IwfsSlLDNWg==
-X-Received: by 2002:a17:907:96a8:b0:6ef:6a93:2e55 with SMTP id hd40-20020a17090796a800b006ef6a932e55mr13389481ejc.603.1650372040259;
-        Tue, 19 Apr 2022 05:40:40 -0700 (PDT)
-Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
-        by smtp.gmail.com with ESMTPSA id g1-20020a170906348100b006efc26c7b1dsm1572142ejb.195.2022.04.19.05.40.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 05:40:39 -0700 (PDT)
-Message-ID: <e9815733-3b65-d1ad-9af9-ca32e656f643@linaro.org>
-Date:   Tue, 19 Apr 2022 14:40:38 +0200
+        Tue, 19 Apr 2022 08:44:49 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3576936337
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:42:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9E1765C0116;
+        Tue, 19 Apr 2022 08:42:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 19 Apr 2022 08:42:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1650372123; x=1650458523; bh=2CW91igEwe
+        PZegpDjL9foZp6k13ppbUBF40Tcqf+HVQ=; b=BOiHcyv2jJej6NpzNAjMwylAoo
+        ZICE9iXbu8c3L+1t1WwuFdRwupaoBuSsj2dM56aXt7etOKRmOFN04XQjodC996lG
+        nGwrTZvpEM/DArKXcVIREpjLWDw9b40O3EkVeW4wBU0Yk3dUUp/9Jy9uOq/LuWt8
+        Gg+/4My4WNkClh3UMEVtWv44ihQYqZLGsKW8jONCCmGsuMHjLlFSL8Chf8Q+S8NO
+        zEewGCwaGw2ct8dTBMsTQeGrMtc3KhQbcwlWzFKNLaKVg3qYhdTGOrvW94swIvSo
+        k7xHZuqLCovoIersC8ypsGxnm578xSHd0Ck0CQTVL338q5ZuxNJrD9H5HP0g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1650372123; x=
+        1650458523; bh=2CW91igEwePZegpDjL9foZp6k13ppbUBF40Tcqf+HVQ=; b=O
+        JAR5WklXjDWJmAoYHjaTV+6Jf0iRSd4Xu5ghdjjl/ahAh9ZSTHHhSfl/nR+fK5HZ
+        SesihjpeexQ2SdDo5qlG+wB0Znmex/0RUf1A5LA4PRbAFqYnVuGW0dYC6+7VuJIS
+        iDHIE9O/0mRsivsivm4/BUDWdLB4hY+L3tiaiA2xSgJIXItZ6rltMrWFKcbZTOzB
+        URLEjPOUEXlJ6jnBD8f0vMTuA9C481Y25hXCWZUrhnK48ybu0m+3tQ5UjfNB2Y64
+        kdbyKEeJvCW/t75UQYJ7l/+hpWpGNuvFeRfy34ovfvKonTCulufreAlOLTPFUddg
+        YU94oH5GEoya5eE7AUb2g==
+X-ME-Sender: <xms:G65eYm0T8jxf1CpeIZfxLXG00gR3QaPMHewDOUOxBriebLFvskQeGg>
+    <xme:G65eYpFP-CYJN4OZlpGWCQBZZgZk1c1UiKjeDStgyXyzX_RfcWwINAA4NWt5FYucf
+    fF5-hY75Bzr3fC6tvM>
+X-ME-Received: <xmr:G65eYu5-Qr4PZmLkKNIE_8tuzYeAejKWsFnfa8fxguwf3jG0za7AD6LOMIUIM66CiTSVu-9c21VTiiojlySt2NH-OgII1omn7CtHCBg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvvddrvddtfedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvffukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgigihhm
+    vgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrfgrth
+    htvghrnhepuddvudfhkeekhefgffetffelgffftdehffduffegveetffehueeivddvjedv
+    gfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:G65eYn1LpWxGBED7QHhmyp7tFREdm3Y_NqcoAXAJGLphHBRCAdLAKQ>
+    <xmx:G65eYpE2s_24hYdR44fMvc1ZlUJKWjJEy5VN2b-Jm2De0a12x2_ryw>
+    <xmx:G65eYg8e55RB7egfaMLsy2ihAB3gcoruDZZ5r7B8C9OQRcESK7pTyg>
+    <xmx:G65eYu4tb7a0I47S3e2vGAbTo15Xm2gphMXFu9nPJ-_TyauOERyBtw>
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 19 Apr 2022 08:42:02 -0400 (EDT)
+Date:   Tue, 19 Apr 2022 14:41:59 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     emma@anholt.net, laurent.pinchart@ideasonboard.com,
+        airlied@linux.ie, daniel@ffwll.ch, p.zabel@pengutronix.de,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] drm/vc4: hdmi: Remove
+ vc4_hdmi_encoder.hdmi_monitor
+Message-ID: <20220419124159.2fjadxdornszocrk@houat>
+References: <20220415154745.170597-1-jose.exposito89@gmail.com>
+ <20220415154745.170597-3-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2] PM: opp: Fix NULL pointer exception on a v2 table
- combined with v1 opps
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220404123757.798917-1-krzysztof.kozlowski@linaro.org>
- <20220411024915.7zmoyphgongzorci@vireshk-i7>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220411024915.7zmoyphgongzorci@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="tlaqz3cdfyvvwz3z"
+Content-Disposition: inline
+In-Reply-To: <20220415154745.170597-3-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/04/2022 04:49, Viresh Kumar wrote:
-> On 04-04-22, 14:37, Krzysztof Kozlowski wrote:
->> dev_pm_opp_add() adds a v1 OPP.
-> 
-> That's not correct, it adds a simpler version of OPP and doesn't
-> support complex types. A opp v2 table with just freq and voltage
-> should be supported by dev_pm_opp_add() and we shouldn't disallow it.
-> 
-> I think all we need here is a couple of checks to make sure the
-> earlier OPPs don't have anything which the new OPP can't support. For
-> example checking required-opps field, etc.
 
-Would be useful to have list of such new-OPP properties somewhere. I'll
-try to rework the patch based on this.
+--tlaqz3cdfyvvwz3z
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
-Best regards,
-Krzysztof
+On Fri, Apr 15, 2022 at 05:47:45PM +0200, Jos=E9 Exp=F3sito wrote:
+> The vc4_hdmi_encoder.hdmi_monitor field was used to cache the value
+> returned by drm_detect_hdmi_monitor() in order to avoid calling it
+> multiple times.
+>=20
+> Now that drm_detect_hdmi_monitor() has been replaced with
+> drm_display_info.is_hdmi, there is no need to cache it in the driver
+> encoder struct.
+>=20
+> Remove vc4_hdmi_encoder.hdmi_monitor and use drm_display_info.is_hdmi
+> instead.
+>=20
+> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
+> ---
+>  drivers/gpu/drm/vc4/vc4_hdmi.c | 17 ++++++-----------
+>  drivers/gpu/drm/vc4/vc4_hdmi.h |  1 -
+>  2 files changed, 6 insertions(+), 12 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdm=
+i.c
+> index ecdb1ffc2023..9c73a211ae80 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -107,9 +107,9 @@ static bool vc4_hdmi_mode_needs_scrambling(const stru=
+ct drm_display_mode *mode)
+>  static bool vc4_hdmi_is_full_range_rgb(struct vc4_hdmi *vc4_hdmi,
+>  				       const struct drm_display_mode *mode)
+>  {
+> -	struct vc4_hdmi_encoder *vc4_encoder =3D &vc4_hdmi->encoder;
+> +	struct drm_display_info *display =3D &vc4_hdmi->connector.display_info;
+> =20
+> -	return !vc4_encoder->hdmi_monitor ||
+> +	return !display->is_hdmi ||
+>  		drm_default_rgb_quant_range(mode) =3D=3D HDMI_QUANTIZATION_RANGE_FULL;
+>  }
+> =20
+> @@ -216,7 +216,6 @@ vc4_hdmi_connector_detect(struct drm_connector *conne=
+ctor, bool force)
+> =20
+>  			if (edid) {
+>  				cec_s_phys_addr_from_edid(vc4_hdmi->cec_adap, edid);
+> -				vc4_hdmi->encoder.hdmi_monitor =3D connector->display_info.is_hdmi;
+
+I think the first patch could be squashed into this one
+
+>  				kfree(edid);
+>  			}
+>  		}
+> @@ -242,7 +241,6 @@ static void vc4_hdmi_connector_destroy(struct drm_con=
+nector *connector)
+>  static int vc4_hdmi_connector_get_modes(struct drm_connector *connector)
+>  {
+>  	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+> -	struct vc4_hdmi_encoder *vc4_encoder =3D &vc4_hdmi->encoder;
+>  	int ret =3D 0;
+>  	struct edid *edid;
+> =20
+> @@ -255,8 +253,6 @@ static int vc4_hdmi_connector_get_modes(struct drm_co=
+nnector *connector)
+>  		goto out;
+>  	}
+> =20
+> -	vc4_encoder->hdmi_monitor =3D connector->display_info.is_hdmi;
+> -
+>  	drm_connector_update_edid_property(connector, edid);
+>  	ret =3D drm_add_edid_modes(connector, edid);
+>  	kfree(edid);
+> @@ -578,13 +574,12 @@ static void vc4_hdmi_set_infoframes(struct drm_enco=
+der *encoder)
+>  static bool vc4_hdmi_supports_scrambling(struct drm_encoder *encoder,
+>  					 struct drm_display_mode *mode)
+>  {
+> -	struct vc4_hdmi_encoder *vc4_encoder =3D to_vc4_hdmi_encoder(encoder);
+>  	struct vc4_hdmi *vc4_hdmi =3D encoder_to_vc4_hdmi(encoder);
+>  	struct drm_display_info *display =3D &vc4_hdmi->connector.display_info;
+> =20
+>  	lockdep_assert_held(&vc4_hdmi->mutex);
+> =20
+> -	if (!vc4_encoder->hdmi_monitor)
+> +	if (!display->is_hdmi)
+>  		return false;
+> =20
+>  	if (!display->hdmi.scdc.supported ||
+> @@ -1147,7 +1142,7 @@ static void vc4_hdmi_encoder_post_crtc_enable(struc=
+t drm_encoder *encoder,
+>  {
+>  	struct vc4_hdmi *vc4_hdmi =3D encoder_to_vc4_hdmi(encoder);
+>  	struct drm_display_mode *mode =3D &vc4_hdmi->saved_adjusted_mode;
+> -	struct vc4_hdmi_encoder *vc4_encoder =3D to_vc4_hdmi_encoder(encoder);
+> +	struct drm_display_info *display =3D &vc4_hdmi->connector.display_info;
+>  	bool hsync_pos =3D mode->flags & DRM_MODE_FLAG_PHSYNC;
+>  	bool vsync_pos =3D mode->flags & DRM_MODE_FLAG_PVSYNC;
+>  	unsigned long flags;
+> @@ -1168,7 +1163,7 @@ static void vc4_hdmi_encoder_post_crtc_enable(struc=
+t drm_encoder *encoder,
+>  	HDMI_WRITE(HDMI_VID_CTL,
+>  		   HDMI_READ(HDMI_VID_CTL) & ~VC4_HD_VID_CTL_BLANKPIX);
+> =20
+> -	if (vc4_encoder->hdmi_monitor) {
+> +	if (display->is_hdmi) {
+>  		HDMI_WRITE(HDMI_SCHEDULER_CONTROL,
+>  			   HDMI_READ(HDMI_SCHEDULER_CONTROL) |
+>  			   VC4_HDMI_SCHEDULER_CONTROL_MODE_HDMI);
+> @@ -1195,7 +1190,7 @@ static void vc4_hdmi_encoder_post_crtc_enable(struc=
+t drm_encoder *encoder,
+>  			  "!VC4_HDMI_SCHEDULER_CONTROL_HDMI_ACTIVE\n");
+>  	}
+> =20
+> -	if (vc4_encoder->hdmi_monitor) {
+> +	if (display->is_hdmi) {
+>  		spin_lock_irqsave(&vc4_hdmi->hw_lock, flags);
+> =20
+>  		WARN_ON(!(HDMI_READ(HDMI_SCHEDULER_CONTROL) &
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.h b/drivers/gpu/drm/vc4/vc4_hdm=
+i.h
+> index 1076faeab616..44977002445f 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.h
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.h
+> @@ -11,7 +11,6 @@
+>  /* VC4 HDMI encoder KMS struct */
+>  struct vc4_hdmi_encoder {
+>  	struct vc4_encoder base;
+> -	bool hdmi_monitor;
+>  };
+
+And vc4_hdmi_encoder doesn't hold anything anymore now, so it can be
+removed as well. Doing it in a subsequent patch would probably be the
+most readable.
+
+Thanks!
+Maxime
+
+--tlaqz3cdfyvvwz3z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYl6uDAAKCRDj7w1vZxhR
+xb26AP4qmTCMJsoyhGfRmeNGezGrZz1LlSEaEoWXWFeq84ErQQD+LCu2JVg40UH6
+fqYdsSAZzRKTG0er8f0DZNdc6f4DWw4=
+=hGU/
+-----END PGP SIGNATURE-----
+
+--tlaqz3cdfyvvwz3z--

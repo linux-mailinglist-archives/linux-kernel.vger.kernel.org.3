@@ -2,155 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4431A5076B0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7E5E5076B3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:40:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355979AbiDSRky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:40:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48568 "EHLO
+        id S1354494AbiDSRnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243229AbiDSRkw (ORCPT
+        with ESMTP id S233221AbiDSRnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:40:52 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37227CCB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:38:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id m14so23433299wrb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=4Hcnu+Y1xvTQT/d8TtH/DkfZU528Zec6EC6l/WHUGtw=;
-        b=CIQjN/Q+4uhjvLGUdKIpDCetpFRAAL1b0jKxHI6pNWCWGj6uodyebfvqMYTJH9JHXZ
-         REqxLvl8ztnJYis9WD5FWWeEhOcyDAQQLn1SHMd8KmuTQDoR0imYRPzXRHhWqrmbNH1S
-         QyrafESTkKiLUc57QNe1bvNaiDLi5rMGQl1aBjzi1Lqq9xiIXyRoInIF9/N3XLQGtL6+
-         3DAfFDiRIZYwqyq8olQkz3ucGHnwIV7yAF8ne+XvwiDO7pTHxn9NC2KIea7xtpNuUzhj
-         BPOnr2fxwdBodOYuwTPaW8gRvxdvu9PA2Pn5ijwjgwpAKqtIus+L19F9dim0h2U+bXsp
-         sWSA==
+        Tue, 19 Apr 2022 13:43:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 197621D33A
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650390048;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Qnonzc6fh8TJnpE7gaNyUxgdtOHFsR6ybsN1q248jMI=;
+        b=X6Tvn6VnIaIFtuISjzE1K2ziDE77IHnNMLZLErc7XmPp73ZFd5uEa1is/92pwr6xOM+Hse
+        GwzUzXk84QmGjR5w9fR5FhFMDqU3JVz9ANzFJqj5iUCzYMLCZ+vtkcq0imuCCzqgsSy9zh
+        hBuscUe8WufueiRp9pmqnuRmMtdnevE=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-226-dsO5UCRrOaOuK_OQK1yd_g-1; Tue, 19 Apr 2022 13:40:47 -0400
+X-MC-Unique: dsO5UCRrOaOuK_OQK1yd_g-1
+Received: by mail-wm1-f72.google.com with SMTP id y11-20020a7bc18b000000b0038eac019fc0so1527238wmi.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:40:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=4Hcnu+Y1xvTQT/d8TtH/DkfZU528Zec6EC6l/WHUGtw=;
-        b=z+gdKF3/BKxKLnaPqxhJFjXXwD9pIOLekyu/YxzXrETq41drRqhfym+FbEZbfmYT8K
-         BVhyILUaDgfe7KOzcvQIBwYHxIoR6ahOxv/7/J+POZlf6ssLlVppddIYATOgd7lE0QE/
-         XY11mY0ZerqtIlvCeRIQShKmOS3ic6R1GDVBwZV+buRFsFhMZQasaYxe4Kvp9pKmYbrU
-         /vb1jgmVR4s2QFv1b8II+GBsJTTDxkhYpQz4qiTQeMwncOlxuNMXgzNxiDeQwv42wEIo
-         OITp/Sa3RmzyTjbRvFO1GyGZ1wkTu7pS2VpTYMOqtbX6xitPRuzCKUodfJr3YOly9wkO
-         9oUg==
-X-Gm-Message-State: AOAM532FDB/kgDXz1xxtDlVorxoh4d0KWF8jBsJiGi7ntscgR8RdKhBH
-        2guAWHN978C3+nQ+MMMLB8yh+nxdi0jtYL/9TFtAcw==
-X-Google-Smtp-Source: ABdhPJzpHnn5Va+Zva11H7oHeOnzsrgG/lcYPxvwzn3M3FVNvkOV1Y1fDhhCyXgdlAWLhZa4n6At69/woFeeGpnw7nU=
-X-Received: by 2002:a5d:42cd:0:b0:207:af3f:79c9 with SMTP id
- t13-20020a5d42cd000000b00207af3f79c9mr12547729wrr.577.1650389887738; Tue, 19
- Apr 2022 10:38:07 -0700 (PDT)
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=Qnonzc6fh8TJnpE7gaNyUxgdtOHFsR6ybsN1q248jMI=;
+        b=BPwGgL7zoshoZoFlw4kX1YGvLn2M97185vVjBK2EYADuCEc4RjRS1LsHgplGyEMGmV
+         eVHStftSpVUMS2+5YF3sn3VcWa20szJqtx26VXTDpiNuN3ihRaix9dzEhZUq1SjAlxq6
+         SgQ1D9jdjLSsxDdLYOGWkbrIz9R/9bDBm32lcGs/HvEJBIU5wro0FQIjiYI6wH12jru0
+         OFumjXpJGGrtnH5OqxF2L67Sgf1Pdq+aUnNt4i2vlN5j/tau2PxoE1Akx5prDtC3Vouq
+         1vSvN0R4+YCMrXriuV7qPmaixamNLnxROmbkFf+9zKNC4LyPMMRp7zTpnsCvly7d1h6s
+         a5zw==
+X-Gm-Message-State: AOAM532LBX6ujm/I2bE9Nb1xkWebAS47Y0PNHzJOX2DDsp8ZSe84wuIQ
+        7UlMkI4EQSJ4ZpQ1IIdhRqqxjHqpb6tdCKSV0+0K1kxin1QcSgLlqDjANEORay9AzK4vgDYelyt
+        hHg2Pxccww0cmV2z42ZsFYuYx
+X-Received: by 2002:a7b:cc17:0:b0:38d:af7:3848 with SMTP id f23-20020a7bcc17000000b0038d0af73848mr17231889wmh.41.1650390045845;
+        Tue, 19 Apr 2022 10:40:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxxUPHblxgqkkDRtIk+7piT1JWk/8UYZYpIWMN0Md1sGmtegk1Go/5gMBC2w/pEAh6nPUzCZA==
+X-Received: by 2002:a7b:cc17:0:b0:38d:af7:3848 with SMTP id f23-20020a7bcc17000000b0038d0af73848mr17231868wmh.41.1650390045650;
+        Tue, 19 Apr 2022 10:40:45 -0700 (PDT)
+Received: from [192.168.8.102] (dynamic-046-114-170-162.46.114.pool.telefonica.de. [46.114.170.162])
+        by smtp.gmail.com with ESMTPSA id 20-20020a05600c22d400b0038c8dbdc1a3sm16472044wmg.38.2022.04.19.10.40.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 10:40:45 -0700 (PDT)
+Message-ID: <07903c7d-5afc-ce95-0f51-3c643eab8b37@redhat.com>
+Date:   Tue, 19 Apr 2022 19:40:43 +0200
 MIME-Version: 1.0
-References: <20220314200148.2695206-1-kaleshsingh@google.com>
- <20220314200148.2695206-8-kaleshsingh@google.com> <CA+EHjTwQRUCjvcMHNe1f0kPBdU=vS+f2+e_eefhnJDR4s73cQA@mail.gmail.com>
- <CAC_TJveNRaDFcQGo9-eqKa3=1DnuVDs4U+ye795VcJ1ozVkMyg@mail.gmail.com> <YlbXHg64HK2d3dgm@FVFF77S0Q05N>
-In-Reply-To: <YlbXHg64HK2d3dgm@FVFF77S0Q05N>
-From:   Kalesh Singh <kaleshsingh@google.com>
-Date:   Tue, 19 Apr 2022 10:37:56 -0700
-Message-ID: <CAC_TJveJYFkHPQLYdL8SCEAwMPgwpF_-ctMqKJ9w=eDa_M0u5w@mail.gmail.com>
-Subject: Re: [PATCH v6 7/8] KVM: arm64: Unwind and dump nVHE HYP stacktrace
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Fuad Tabba <tabba@google.com>, Will Deacon <will@kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Quentin Perret <qperret@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Cc: Android Kernel" <kernel-team@android.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Mark Brown <broonie@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        "Madhavan T. Venkataraman" <madvenka@linux.microsoft.com>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Andrew Walbran <qwandor@google.com>,
-        Andrew Scull <ascull@google.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" 
-        <linux-arm-kernel@lists.infradead.org>,
-        kvmarm <kvmarm@lists.cs.columbia.edu>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 1/4] KVM: s390: selftests: Use TAP interface in the memop
+ test
+Content-Language: en-US
+To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>, kvm@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20220414105322.577439-1-thuth@redhat.com>
+ <20220414105322.577439-2-thuth@redhat.com>
+ <3c627856-5e66-3cbe-adab-464ae573e23d@linux.ibm.com>
+From:   Thomas Huth <thuth@redhat.com>
+In-Reply-To: <3c627856-5e66-3cbe-adab-464ae573e23d@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 13, 2022 at 6:59 AM Mark Rutland <mark.rutland@arm.com> wrote:
->
-> Hi Kalesh,
->
-> Sorry for the radiosilence.
->
-> I see that in v7 you've dropped the stacktrace bits for now; I'm just
-> commenting here fot future reference.
->
-> On Thu, Mar 31, 2022 at 12:22:05PM -0700, Kalesh Singh wrote:
-> > Hi everyone,
-> >
-> > There has been expressed interest in having hypervisor stack unwinding
-> > in production Android builds.
-> >
-> > The current design targets NVHE_EL2_DEBUG enabled builds and is not
-> > suitable for production environments, since this config disables host
-> > stage-2 protection on hyp_panic() which breaks security guarantees.
-> > The benefit of this approach is that the stack unwinding can happen at
-> > EL1 and allows us to reuse most of the unwinding logic from the host
-> > kernel unwinder.
-> >
-> > Proposal for how this can be done without disabling host stage-2 protection:
-> >   - The host allocates a "panic_info" page and shares it with the hypervisor.
-> >   - On hyp_panic(), the hypervisor can unwind and dump its stack
-> > addresses to the shared page.
-> >   - The host can read out this information and symbolize these addresses.
-> >
-> > This would allow for getting hyp stack traces in production while
-> > preserving the security model. The downside being that the core
-> > unwinding logic would be duplicated at EL2.
-> >
-> > Are there any objections to making this change?
->
-> I'm fine with the concept of splitting the unwind and logging steps; this is
-> akin to doing:
->
->         stack_trace_save_tsk(...);
->         ...
->         stack_trace_print(...);
->
-> ... and I'm fine with having a stack_trace_save_hyp(...) variant.
->
-> However, I would like to ensure that we're reusing logic rather than
-> duplicating it wholesale.
+On 14/04/2022 14.48, Janis Schoetterl-Glausch wrote:
+> On 4/14/22 12:53, Thomas Huth wrote:
+>> The memop test currently does not have any output (unless one of the
+>> TEST_ASSERT statement fails), so it's hard to say for a user whether
+>> a certain new sub-test has been included in the binary or not. Let's
+>> make this a little bit more user-friendly and include some TAP output
+>> via the kselftests.h interface.
+>>
+>> Signed-off-by: Thomas Huth <thuth@redhat.com>
+>> ---
+>>   tools/testing/selftests/kvm/s390x/memop.c | 90 ++++++++++++++++++-----
+>>   1 file changed, 73 insertions(+), 17 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+>> index b04c2c1b3c30..a2783d9afcac 100644
+>> --- a/tools/testing/selftests/kvm/s390x/memop.c
+>> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+>> @@ -12,6 +12,7 @@
+>>   
+>>   #include "test_util.h"
+>>   #include "kvm_util.h"
+>> +#include "kselftest.h"
+>>   
+>>   enum mop_target {
+>>   	LOGICAL,
+>> @@ -648,33 +649,88 @@ static void test_errors(void)
+>>   	kvm_vm_free(t.kvm_vm);
+>>   }
+>>   
+>> +struct testdef {
+>> +	const char *name;
+>> +	void (*test)(void);
+>> +	bool needs_extension;
+> 
+> Please make this numeric. You could also rename it to required_extension or similar.
+[...]
+>> +
+>> +	for (idx = 0; idx < ARRAY_SIZE(testlist); idx++) {
+>> +		if (!testlist[idx].needs_extension || extension_cap) {
+> 
+> Then check here that extension_cap >= the required extension.
+> This way the test can easily be adapted in case of future extensions.
 
-Agreed. Although some reimplementation may be unavoidable, as we can't
-safely link against kernel code from the protected KVM hypervisor.
-Perhaps we can move some of the common logic to a shared header that
-can be included in both places (host, hyp), WDYT?
+Not sure whether a ">=" will really be safe, since a future extension does 
+not necessarily assert that previous extensions are available at the same time.
 
-> There are some changes I would like to make to the
-> stacktrace code in the near future that might make that a bit easier, e.g.
-> reworking the stack transition checks to be table-driven, and factoring out the
-> way we handle return trampolines.
+But I can still turn the bool into a numeric to make it a little bit more 
+flexible for future use.
 
-Sounds good to me.
+  Thomas
 
-Thanks,
-Kalesh
->
-> I'll Cc you on changes to the stacktrace code. There are some preparatory
-> cleanups I'd like to get out of the way first which I'll send shortly.
->
-> Thanks,
-> Mark.

@@ -2,241 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D938F5066E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24FA45066FF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:33:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350008AbiDSI2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:28:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S1350043AbiDSIgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349846AbiDSI15 (ORCPT
+        with ESMTP id S1343749AbiDSIgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:27:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446EEBC38;
-        Tue, 19 Apr 2022 01:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650356714; x=1681892714;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Mr7NWpzJtoxsF8R73t8OHJ3Kqx2AgWs9cExzJxVDeS4=;
-  b=myJt6k6dkUBomEaKqd/wjlGJDV0jElqYx0BEOWKK03bPtTbSeo8b8nhg
-   3ZswsMl8ARiLzIowbHof+AItUm2bzYp40C6YxHGxmmq7blDca+4sU3cfQ
-   1+UVITWWHwpo0McoYIfeKwZ14uTylPntXcCb7ELPBfWJOsFllmw1WIb69
-   6EYTmDsqmVn+NYMYowzcUL1cW2Ef7v64eYmb3suxxElpTuyUD/F35kU0/
-   b44SeT8+2aoEvTWAqH6k7bdU1r2CJ8JwgjqPwMeEgT6vTejbrf90guV1F
-   XzhRxEV83ICzA3WbPqWWrQ93DgAK0I9Wsjzq/q3JUovBBmUlDu7csQK5L
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326609574"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="326609574"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 01:25:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="647181103"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by FMSMGA003.fm.intel.com with ESMTP; 19 Apr 2022 01:25:13 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 19 Apr 2022 01:25:13 -0700
-Received: from fmsmsx609.amr.corp.intel.com (10.18.126.89) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27; Tue, 19 Apr 2022 01:25:12 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx609.amr.corp.intel.com (10.18.126.89) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2308.27 via Frontend Transport; Tue, 19 Apr 2022 01:25:12 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.172)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2308.27; Tue, 19 Apr 2022 01:25:12 -0700
+        Tue, 19 Apr 2022 04:36:15 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2062.outbound.protection.outlook.com [40.107.94.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C24301D0EE
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:33:33 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C7EvaB+GVt5NNmJ0cHxXEZMGRnob9ZhnBTpzZMeeG2VnQIOHfVl2Q7pYsNPTi+Y8n6j00rf2ALjiRYvQOZMaE5+R6bCgVvlVxvVOilsgsiEjaeew2yRzNWoF+boJGYnVx1JZTm1ld+XQIRkNXC7gExG0DQi6upuFGhPrcgh8kmsXIyZaFcAAIjcJn0Bq45AInf0QsQJN3NLYq7ICrpxwak7vnyq2dj8cL1FH0j9v2BWVAwhqqLOpHjI8yCzb2aWxEGEKP37UofbB6Ig4rpHH7mX3JObBtHDWVRzYh94wo3+xZTyytNc9GeTCJ960MPqk+mF1+TkklFDPoblK2NCTkw==
+ b=TGUxycgxHGm1B+q/tW1HtGr8jreP0w4MwVrAYmGDxxSWvkc+3p57tln32vnQp6WA27NNLjo7TWkpXDN5I21uznCqzkmD83KBh4Uf07LnQVpNVWTTPSrSn7YW/HuaDZEAh8dwEmN+9aXgntMW90FmYodepvfnlOEfoebj6w7yWVu2oB/ygYCRHQsR7zGbd0nzKGc8BrxagCSNC8vXlZ8ixl5Xiw+tx1mlbe3yvCPpeziURp8aq1W+wurdsmo3gD/F/O03mx7+CS2+KaXjcJRa6CPsz107KIxOZClv53eFtoja6WZftFCwaKqfbhEz3ZgnlQNTL+1CWb9UzSCsE00m5w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wFi76f8ehE5wOKcCiyFBsoEmZZSgDx4Xmqti7zv81Cc=;
- b=aclln51K4j2cSHiu//NjgFNFnNDdgIQ6Zj1cUFf0g5cHbl8xzZelgrLae+aUW+del73PbIRzHAmVAnJhQBv1+2lyXka3IElJYTet/bMazI9vnsWXKuEWSTCdLXS0lD0/mx4iR5MdY1C3xoiB7sSW7ib3K3hpb0L+6Q4KFuZA3anGIjPNk/cYaE8LLAAGs68LfeInpFrRpnED1vTxZ6qjmZBeB17ZI/i0OWzULKi5GKp1snJug27HxlzCWgDbcDs0AwcxC+4aKhormZ0q5MaqrbK5A9jdGyBOV4HhEpmu5vhpw94hSbqxYMVvq1Qmu+9/5YXzfuhBviDE/b3y8cf8gQ==
+ bh=8lauG364Nj6Pl5XSlU2odqDc3wMHDCQBBZyZ1iP3KEc=;
+ b=by+BoLXty2SVnseKz3HbLmJOuYVtvf6mqd7VztwrpTbia8Kmsm54LbiE/ysCIA3591aYlLx/2LlU4myZuMcwnsJeFV2H/8h8XTCh7sJsplJAzvW/xIfe9JM455N1+jYWWDoymgFnbislOSLkODZuuoQ97K2+0TLtwnaWtUWXT01h0Pj8BKOQmg+PVqJXQIj95LvGxmBwk+Ea7VMCJIvKBkK7fEWCynoLgJPF1mFX2i7TMyTKffe4mIzi4H/WtR0L8ChtqozbDIzcJIonecRiaG7HcebQZM6slzbS9JvQhjWYySrKtbNxQtoLnxKW7b4/5t5Pe0FnYbThUJWtHDryow==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com (2603:10b6:408:104::10)
- by SJ0PR11MB5866.namprd11.prod.outlook.com (2603:10b6:a03:429::10) with
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8lauG364Nj6Pl5XSlU2odqDc3wMHDCQBBZyZ1iP3KEc=;
+ b=YhmV/FoB4qShRpM5Spxx98HahsfXMpdm2VgN/yUCVUluIsHtqfq33Cvlgf8/gKWGdJyN1+EPWDHA6sRmcclNhgYERjyneX/U/wDH1hsSsD4ypk/l13TEO7Io8FUjvThwAoW/6SaIhQ0qpd2F8tNKK6CVvHWP3cw5tu8cnAkUc7HyNZDknY7XSasKWadPSGUryz2BmYwJSRrQABjHyaeXizbQ/sJedEXIlAWWqjkiJC154ocEXHBRZrjEVzh4Wtzz6/yjBmKP81JQlPNtXdD2bxM71oF6bF4z48RxTEgPzScnpDfSL5AO54+M+SgZtWX/OsRfXIGovMUZwq3kSkToYQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by MW3PR12MB4506.namprd12.prod.outlook.com (2603:10b6:303:53::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 08:25:10 +0000
-Received: from BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22]) by BN9PR11MB5483.namprd11.prod.outlook.com
- ([fe80::c076:6436:db8e:ee22%9]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 08:25:10 +0000
-From:   "Zhang, Tianfei" <tianfei.zhang@intel.com>
-To:     "Wu, Hao" <hao.wu@intel.com>, "trix@redhat.com" <trix@redhat.com>,
-        "mdf@kernel.org" <mdf@kernel.org>,
-        "Xu, Yilun" <yilun.xu@intel.com>,
-        "linux-fpga@vger.kernel.org" <linux-fpga@vger.kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Matthew Gerlach" <matthew.gerlach@linux.intel.com>
-Subject: RE: [PATCH v2] uio: dfl: add HSSI feature id
-Thread-Topic: [PATCH v2] uio: dfl: add HSSI feature id
-Thread-Index: AQHYTjZdVn4DreM1yUm1T9RcZPeV3qz069sAgAIEAlA=
-Date:   Tue, 19 Apr 2022 08:25:10 +0000
-Message-ID: <BN9PR11MB548330FAA7EF6B9DAC2F0E76E3F29@BN9PR11MB5483.namprd11.prod.outlook.com>
-References: <20220412062353.53984-1-tianfei.zhang@intel.com>
- <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com>
-In-Reply-To: <DM6PR11MB38190E6EEF6DE3EB900290C585F39@DM6PR11MB3819.namprd11.prod.outlook.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.401.20
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 06b842d5-15e2-4fbd-c788-08da21de1e9a
-x-ms-traffictypediagnostic: SJ0PR11MB5866:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-microsoft-antispam-prvs: <SJ0PR11MB5866F40C6719FB1D37DBD1BFE3F29@SJ0PR11MB5866.namprd11.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: o9CD9xX55hGWwHNpVl+U33dibPhd2ROSjjvoI3Bkek9G9pUOXh0SLPzHukxu3XHmGgQoSDkx+28nRxzKrvoebB8nbNK5fbYTnnyUDT5yNug+jGzbXNRBdrKTJTsBN2VpjUkYL3Fc5Y1bB0G/U7aYpy90K69WScz6EFX+rTOHs2ojwk1u3qoVB0A7MwHFd4ZvYJ7qMAv38kg9Yjug11ZYdJmmIUFPCWcXP6dFrQbSBgAUK+YBbzo2VzDIJSDFoWGtWYhVIWbnUkt15Nnq/UvxAXTEk0HBP6QREy0aXosQeKNU0imfP2+C6vO3gxYNVcx4+1kBVh8aYxHefK2tF5Ruz9m7tXnaKNr/Pp7jhaPTUnY/lcRpbgDnUIJEuC9R7a1xh5gtMRvOfrgdRXhn4aneJg2S6hmFor/PVZ4DQk0KEtbxGLdoeoyImRa2KQksDY1TvIU+GTMz3law1ctUA7mkFYqG05ET0VEs2o7k8sMJ6fc3d/3Er/Vk3xfC7cyYdDpB0IInufnzCPbe4SjNFjKjvS50CSR6zv4Epjazdm4BRT+VPRiMiCFYmFKuzGD43bANcphtgdzEFF6PPzDYnSa9S+AS9O22UqShK5BXuA30TV/QdKLGdmc0X/IY9gjAj7Yb6jop7It2O7hOSMhu3yCYZMEpAwQYgn12JzSku0CM7XcUddZ+HFU1zXIC+9M4ow71NnpjAvrrA0UYdjftWPp9CnV/n8DvP7FiqAvIhfvpqS7NMR6nxQFwLj/7CNIcIe631JZa/vTX9yg5/malKEZNNHuGF0HLNVkzUuasmiOZjyyTc+ByfYdYSBKie+WYeh95
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5483.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(9686003)(5660300002)(966005)(6506007)(82960400001)(55016003)(83380400001)(508600001)(7696005)(186003)(2906002)(38070700005)(53546011)(71200400001)(26005)(38100700002)(122000001)(52536014)(66946007)(110136005)(66476007)(66446008)(86362001)(8936002)(54906003)(66556008)(76116006)(8676002)(33656002)(64756008)(4326008)(316002)(21314003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iAe4T6CSsvSjSJqU7mgX7evkBqmrY+jNrYg43ggDrAsNIMWPoLce6ag5s1rI?=
- =?us-ascii?Q?hCV3zU4jJVz+tDTcD8zRCvGWgRPNvDMxqwA6IwE8/AEi3lzpCIrI6O1fxle2?=
- =?us-ascii?Q?b333tPPwtJ+yUMxPJH6MerrKY5ZtTtT3rHVO+avfWg+3p/ta0yRcuOtjplPV?=
- =?us-ascii?Q?R0BnoZAGE/4mxQdFHrX+2tdJj0iG0svlxXZV5BcOaIBPhNNyHZbwe2zZbi5b?=
- =?us-ascii?Q?+BO180jKAcDP1q6Y/XRKAPBqzciez1uoNKnxmfcQO+7QaHrkCaeByM9wwzD5?=
- =?us-ascii?Q?R/BLEGcF9z17gTGRGPNaayZwYaLqMvctavu0JSUSkFbYI3Ok1TOvZ1EjPzl3?=
- =?us-ascii?Q?ecmINtk7E3T79FaBK/08oIPKd+m0MALHvAICjftpb8APkS3OIoCkz+i/S1zw?=
- =?us-ascii?Q?R+yrpv7W5NHXvTwWoL8+g9n2KICIMIIDD7zGQ7mh8x7n5gmibZIVS+66g+/j?=
- =?us-ascii?Q?4d9Q+nog8JDhBXZGTE7XhVW3ZEwV5zCmXQbxOR6r/BBQDb2ayn9BQwVK2A5h?=
- =?us-ascii?Q?DNchR6p7K4n4OT+DbQTCqmsh5bd/EaxVB4Sp9I5q1PiD4Kk7CD+3BTXII4Or?=
- =?us-ascii?Q?hTbGxDc6GYbduUFqj6bQwxM/RUMbCyN4y/yP2zoafj02BlAxh3fbPnnhV4bT?=
- =?us-ascii?Q?+4HAC9jJtx0zgjD7fsZ0E8dYZJzjb9Oj3uPrSfdJghSuxX9273x3jqCpuq0F?=
- =?us-ascii?Q?lYwBRa0I/HetGsM38H5jkLijyUi/TOkxyagNtq08B6SNVFN/w4EBv4KrJdOI?=
- =?us-ascii?Q?O9XJPERnPjnsF0jJjAdm1y7IiT5gweXhEAPMebNdBgE49SuD4+6ADmI7KgFQ?=
- =?us-ascii?Q?nnVYJ2hVVmQKKKBR5NJ67+ceRpAg5hHM/6Dwm5ptRR4lTmY7vdmMa6TqXL6E?=
- =?us-ascii?Q?PaKDNbsncJasYW+vHX/0AcLEFT+Asa6ie+68/KyLLj1B048vJcu3CFB0mrte?=
- =?us-ascii?Q?si/p518nOBJIeMgurJNHJ82CEc18OeM/V7OWuQllWVGZ8nkwLJdoXyXYSsUR?=
- =?us-ascii?Q?rTTYNENCI/G17NqLvLXScrOYhiVgWb8m1TtOcKM9wCEUHJPaKxXimR/r69WL?=
- =?us-ascii?Q?XgX8xj8sW5cXM0iG68f6DITljw5gG1zbiv+8dNY5su6EnGH6Rs5M9wELxtMn?=
- =?us-ascii?Q?ney3s33g5MyZPA7rwshYl0n8hgyF4JBz13sBhRoDrSfvXIvfnYHWn83/JLM+?=
- =?us-ascii?Q?DrmwqpmA1d6Se3gtYNF63dFLW+RHu1BD5S+PuJGpMI4x+XW0KbfZpK1hGfsw?=
- =?us-ascii?Q?/yhlPRzNfffrqSeLAC27/QRlQ0JAKcAneSlSNm8moeANRbLR71wY2E3kgbyh?=
- =?us-ascii?Q?ictmTaGLBOou3UNDNI1Vs6bbCaxU5GLkaGZ+FGhrFGaQ7Z406r4obkQ/Ykpj?=
- =?us-ascii?Q?rDR5iJeA2au3xChT8BGx8ccLbFWEeSs76cDiwXdhsHmpLDHjg3V2T1xI5Uqi?=
- =?us-ascii?Q?p0KfUc0fsLQ1yumUsvOkUH3XR1xL7+p72CfKC1MEbCzoq/cZo5yYs261Jkzv?=
- =?us-ascii?Q?DjORdS16yPRfltsVDYzswRD2njnTt41qchpaGpA4dWvKSqt8zoWxNT2OHfnZ?=
- =?us-ascii?Q?JdiNunUi+UP86YF41nRIGx4hzswonQBdAWmPRhDYuWgFjKl7Gw1uvdc04m50?=
- =?us-ascii?Q?Z0Epk9xnobmI5DdtiKRTXMHm0E2+e/RfshL/x6o1EpVQ8XpvyhMEeQiVJ5C3?=
- =?us-ascii?Q?LHEh+LiYDEp3rS2iSWEL6q86aL4O1sK+/Ecbbxit3BFPboFRgwu8gmZvj3lu?=
- =?us-ascii?Q?RQVaEXgq6w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ 2022 08:33:32 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::2d17:b68a:e101:4c18%6]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
+ 08:33:31 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>
+Subject: Re: [PATCH v8 01/23] mm: Introduce PTE_MARKER swap entry
+Date:   Tue, 19 Apr 2022 18:25:31 +1000
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014646.13522-2-peterx@redhat.com>
+User-agent: mu4e 1.6.9; emacs 27.1
+In-reply-to: <20220405014646.13522-2-peterx@redhat.com>
+Message-ID: <87o80xjwvd.fsf@nvdebian.thelocal>
+Content-Type: multipart/mixed; boundary="=-=-="
+X-ClientProxiedBy: BYAPR02CA0005.namprd02.prod.outlook.com
+ (2603:10b6:a02:ee::18) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1bf0980a-2afa-4246-b1c6-08da21df4810
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4506:EE_
+X-Microsoft-Antispam-PRVS: <MW3PR12MB450601039643A863CA3B2D84DFF29@MW3PR12MB4506.namprd12.prod.outlook.com>
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HiDnt2xUaz1kTs23se37laGAhlcm/YR2fLP0GczY12WBlP+SyTsMZb05d/6JGVqjDjhefdzc+gGGTNv/IGLln9fpxJ+dFIQm/E16Kx4O57z75SsvjOQqu2wqUTiyEuvJDngYXItePO7VQQ4xr8dj/tZpUx3EM/+WVfyCVSMWnJ7iSAB5IcnnaK5xM3D9whCzUjFnRVit09Du/gWnvGUgiweEdqq1doUBZVMzDUJx7IA3/hwjVXbkbjrgN7sTPZNxz4BrRnhqpk1ETnzyEvO0kN3aaAF/WT3zF0qOLeGvn1Qnj1yPuWnJPMWK+Dz2+XdmD26C3f+oQ6raR5VobX1n/Y4rlm9AuUTnAOY0/e12hDlNmhhysm2XVP6ZlY+4m6d2IEjzpzX+kDEpTn2K9/H0QoXvLvN/bXqwq8S/Kg0lUFqCncZs61SdR2BwCLMsu8CeIcHI4WG8T2T3t6W27Y9rwAr3pjemP2Q+ilzy87ZFZSCea3/A+pWMgBU5HjTpD7qSkke4HQjCfHkk0/I+QgZZbrUeXtHMJEPBqc7CONpTaiJmUTrMZaxhtplaDGTfpKjkHO0oFpxi7UOJ0gfhnDjJiGpLzQ47qezOkK6ttWXR/rXKK1U9eIXImDa6NN7vmj0eXMYQ7vgUqoFhAPqBjfJh46SEvudw47STefCFyRD4oN8ehwZ0l52afUoS7v13G06OlGs3ZXNLRCWZoUjaUP9PpfsrVhSLOpyngdeDdNOYqaQ=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(38100700002)(7416002)(8676002)(4326008)(2906002)(186003)(66476007)(66946007)(66556008)(83380400001)(5660300002)(86362001)(508600001)(9686003)(6512007)(8936002)(6916009)(54906003)(26005)(44144004)(6506007)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?D16fvS413GaLPK5EgJ2FSmcS3slvFDFE0Bs6k1d0rWOITfW7BUYCOPP9JLkV?=
+ =?us-ascii?Q?ocb5K4niSt4A3zHiZuqecoXIhbnFYzqgqKQIq32KRG61fWGd3dpN27oP9I3r?=
+ =?us-ascii?Q?0feQotohThAyHVK9dqRgRNTPBdM2y56/SkhyoWvYvIz3gI2GI83MwGr4prwR?=
+ =?us-ascii?Q?COe74NPCj6ImzGO71CdxCA5YGdKiDofT7WHz2jQVBMaY9/uilVD4EPfzS+L6?=
+ =?us-ascii?Q?VrUdH1IibsXCuvjb3anUijm3H3ijLWUZtgYoVoeNVFK40EG0ye00cL5RAzem?=
+ =?us-ascii?Q?75XQHm7k70LfGz6CjTlvu1uXq04QDE3NJ1FkwVa1CY6GqAdvbQpDD/1WJpW9?=
+ =?us-ascii?Q?SyA31hMDnmZhgw/ELYAR0xl8dvS7VAxhjno8VGsAG+RZoSV0Wks6H+v2lvts?=
+ =?us-ascii?Q?7Zo96MReoSRLZ7EDrBNHkrOywjRxgDMAUdvZhflop7qoXUhoi6FOCRho7hwd?=
+ =?us-ascii?Q?8R8g8N0mzFiN5Lu4b8H5NwEZklVdiiJjugtMJOnIIcNHbPdD/SbT2w0uhuhP?=
+ =?us-ascii?Q?rY7QWMxWo8mVHNd7vafN8vmHgdGaoF9dpkNL6jyGMI2qbnDyVCCx/6l1N3bi?=
+ =?us-ascii?Q?BJq6rceJrjQBQYhQ1Q/3gD7lSjKDu5IpjT//eHMVg6k3uRhv0eXIQIZ8YOfg?=
+ =?us-ascii?Q?LRyRluP3omNu4v+jy4kme0Tx8NckGZiXV252JNZqAkBhJgHI3lw6/XLZwusm?=
+ =?us-ascii?Q?qcvY8/h3jGJu0ofW10k+jLoVWsTmRc057f06mgrxUeBT9LndeDY1n2DVgSe/?=
+ =?us-ascii?Q?6oU5htXsjOKyeOvb2xn4ldTsfxme2aety8K/bRpx7Grr8G4f/GISHOxjaw/D?=
+ =?us-ascii?Q?Eg2+WayxYWdmjmdPNWDiDLGkI/3SLkOl6LpXobnMshworGNbm4PtO9ZQo30/?=
+ =?us-ascii?Q?abhxUZFmfuYw495aQJboMXAAQoC//BY6l0o+0qcPs2benD+xAscsbnedUj7O?=
+ =?us-ascii?Q?feYAgUChpfukXieEEUzLZZT816Tratr0137vSfTPvvxcQb0gmgceDQLR7hle?=
+ =?us-ascii?Q?ZM+ItMAhGq0bHr22iIALU79ZXWDZhuWm/nM5/IgbUcWJcV41KZsuPncdoUnT?=
+ =?us-ascii?Q?80aXESciPCtlD7snAf+aEdXsHzeAnzDE68PRCTygtd7TAMMbG8xxn3o7WExM?=
+ =?us-ascii?Q?7/eig+idsyVcHnzdsNEHr05cHOm9yVSmgt0M9FpVkWoi421Iqjrc8D8u0eGF?=
+ =?us-ascii?Q?WVEDgjlNdgcgKUQr1iWBlmkw+r6UXb9zLrIkoJO1eUTGnIgkrxCPAIHYnjiF?=
+ =?us-ascii?Q?ePMMigPpdxtw9wpVz+Q1dmLSSYs2PpOZRiS0vQnktKZVuqTiLSxY/cyekkFl?=
+ =?us-ascii?Q?Iod+F5B2ciicSjdEvBRPcQAJ3cdkZgkl59pnIvF2Fohhu7qUj8whZDILKxCD?=
+ =?us-ascii?Q?Z4gw8SEhiQQakyJEGfhpb1D54747GKS6YvkqAh/xgacvz8QjBgBZKRSaV9qC?=
+ =?us-ascii?Q?VbACTA/EgmQQVs8k46DMq4i38d9zqhbau51sVS25D06PyVZTu/p8noy54xvh?=
+ =?us-ascii?Q?EI8U2iEpBB83hEm/eQeci0dNOh31lvw1hO7Ud38pxyWs14tWJp58V+8aaIrg?=
+ =?us-ascii?Q?IzmpuYlhpRextvc8/WHcPxQnE+9E8GY/tDOPFmf41poPtHNVe9p9Bauz1Ree?=
+ =?us-ascii?Q?ZJfeu5KWNItCqNT5K6cw1RjA4W4Z4TCWtvhJ79ey9PXKYw3WvNEm/oRkWp9J?=
+ =?us-ascii?Q?GnGZGlKKRgSlCSRqRu41JE0NLBcw7QbRo6Jkxa2fvRpa2Il3A443NQQ8N1y2?=
+ =?us-ascii?Q?hJVzYsBIZQ=3D=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1bf0980a-2afa-4246-b1c6-08da21df4810
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5483.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06b842d5-15e2-4fbd-c788-08da21de1e9a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2022 08:25:10.4856
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 08:33:31.8228
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 5Im1XdSHFtpZrN85JzOxwpRBdQ93L6mpL+anqvDtdWQ1qeoBtIGeU4mZortZLTJdDPcO8kVnBtdcx4drJ1yvGw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB5866
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JgUeCJvE4agXzEg6KpzOTiP1ZzNjyBspLFW3d/L7b0UcPm7x1Lklo7m3dA4c5WMjDvcMV7OELjSG/HfOyYLzZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4506
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--=-=-=
+Content-Type: text/plain
+Content-Disposition: inline
 
+Peter Xu <peterx@redhat.com> writes:
 
-> > -----Original Message-----
-> > From: Zhang, Tianfei <tianfei.zhang@intel.com>
-> > Sent: Tuesday, April 12, 2022 2:24 PM
-> > To: Wu, Hao <hao.wu@intel.com>; trix@redhat.com; mdf@kernel.org; Xu,
-> > Yilun <yilun.xu@intel.com>; linux-fpga@vger.kernel.org;
-> > gregkh@linuxfoundation.org
-> > Cc: linux-kernel@vger.kernel.org; Matthew Gerlach
-> > <matthew.gerlach@linux.intel.com>; Zhang, Tianfei
-> > <tianfei.zhang@intel.com>
-> > Subject: [PATCH v2] uio: dfl: add HSSI feature id
-> >
-> > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> >
-> > Add the feature id of the OFS HSSI (High Speed Serial Interface)
->=20
-> We still don't see any description on what OFS is here, or will OFS be ad=
-ded to
-> title as well? we don't expect another submission with the same title but=
- for XXX
-> HSSI again.
+> This patch introduces a new swap entry type called PTE_MARKER.  It can be
+> installed for any pte that maps a file-backed memory when the pte is
+> temporarily zapped, so as to maintain per-pte information.
 
-This name of HSSI module in dfl feature id table is : OFS HSSI subsystem.
+Hi Peter,
 
-How about this tile:
-uio: dfl: add OFS HSSI device id
+Is there something I have missed that means PTE markers can only be used with
+file-backed memory? Obviously that's all you care about for this patch series,
+but if we needed to mark some anonymous PTE for special processing is there
+anything that would prevent us using a PTE marker? Specifically I was thinking
+about it in relation to this series:
+<https://lore.kernel.org/linux-mm/87pmldjxiq.fsf@nvdebian.thelocal/>
 
-Add OFS HSSI (Open FPGA Stack High Speed Serial Interface) device ID in uio=
-_dfl driver for Intel PAC N6000 Card.
+> The information that kept in the pte is called a "marker".  Here we define the
+> marker as "unsigned long" just to match pgoff_t, however it will only work if
+> it still fits in swp_offset(), which is e.g. currently 58 bits on x86_64.
+>
+> A new config CONFIG_PTE_MARKER is introduced too; it's by default off.  A bunch
+> of helpers are defined altogether to service the rest of the pte marker code.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  include/asm-generic/hugetlb.h |  9 ++++
+>  include/linux/swap.h          | 15 ++++++-
+>  include/linux/swapops.h       | 78 +++++++++++++++++++++++++++++++++++
+>  mm/Kconfig                    |  6 +++
+>  4 files changed, 107 insertions(+), 1 deletion(-)
+>
+> diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+> index 8e1e6244a89d..f39cad20ffc6 100644
+> --- a/include/asm-generic/hugetlb.h
+> +++ b/include/asm-generic/hugetlb.h
+> @@ -2,6 +2,9 @@
+>  #ifndef _ASM_GENERIC_HUGETLB_H
+>  #define _ASM_GENERIC_HUGETLB_H
+>
+> +#include <linux/swap.h>
+> +#include <linux/swapops.h>
+> +
+>  static inline pte_t mk_huge_pte(struct page *page, pgprot_t pgprot)
+>  {
+>  	return mk_pte(page, pgprot);
+> @@ -80,6 +83,12 @@ static inline int huge_pte_none(pte_t pte)
+>  }
+>  #endif
+>
+> +/* Please refer to comments above pte_none_mostly() for the usage */
+> +static inline int huge_pte_none_mostly(pte_t pte)
+> +{
+> +	return huge_pte_none(pte) || is_pte_marker(pte);
+> +}
+> +
+>  #ifndef __HAVE_ARCH_HUGE_PTE_WRPROTECT
+>  static inline pte_t huge_pte_wrprotect(pte_t pte)
+>  {
+> diff --git a/include/linux/swap.h b/include/linux/swap.h
+> index 7daae5a4b3e1..5553189d0215 100644
+> --- a/include/linux/swap.h
+> +++ b/include/linux/swap.h
+> @@ -55,6 +55,19 @@ static inline int current_is_kswapd(void)
+>   * actions on faults.
+>   */
+>
+> +/*
+> + * PTE markers are used to persist information onto PTEs that are mapped with
+> + * file-backed memories.  As its name "PTE" hints, it should only be applied to
+> + * the leaves of pgtables.
+> + */
+> +#ifdef CONFIG_PTE_MARKER
+> +#define SWP_PTE_MARKER_NUM 1
+> +#define SWP_PTE_MARKER     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
+> +			    SWP_MIGRATION_NUM + SWP_DEVICE_NUM)
+> +#else
+> +#define SWP_PTE_MARKER_NUM 0
+> +#endif
+> +
+>  /*
+>   * Unaddressable device memory support. See include/linux/hmm.h and
+>   * Documentation/vm/hmm.rst. Short description is we need struct pages for
+> @@ -107,7 +120,7 @@ static inline int current_is_kswapd(void)
+>
+>  #define MAX_SWAPFILES \
+>  	((1 << MAX_SWAPFILES_SHIFT) - SWP_DEVICE_NUM - \
+> -	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM)
+> +	SWP_MIGRATION_NUM - SWP_HWPOISON_NUM - SWP_PTE_MARKER_NUM)
+>
+>  /*
+>   * Magic header for a swap area. The first part of the union is
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index 32d517a28969..7a00627845f0 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -274,6 +274,84 @@ static inline int is_readable_migration_entry(swp_entry_t entry)
+>
+>  #endif
+>
+> +typedef unsigned long pte_marker;
+> +
+> +#define  PTE_MARKER_MASK     (0)
+> +
+> +#ifdef CONFIG_PTE_MARKER
+> +
+> +static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> +{
+> +	return swp_entry(SWP_PTE_MARKER, marker);
+> +}
+> +
+> +static inline bool is_pte_marker_entry(swp_entry_t entry)
+> +{
+> +	return swp_type(entry) == SWP_PTE_MARKER;
+> +}
+> +
+> +static inline pte_marker pte_marker_get(swp_entry_t entry)
+> +{
+> +	return swp_offset(entry) & PTE_MARKER_MASK;
+> +}
+> +
+> +static inline bool is_pte_marker(pte_t pte)
+> +{
+> +	return is_swap_pte(pte) && is_pte_marker_entry(pte_to_swp_entry(pte));
+> +}
+> +
+> +#else /* CONFIG_PTE_MARKER */
+> +
+> +static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+> +{
+> +	/* This should never be called if !CONFIG_PTE_MARKER */
+> +	WARN_ON_ONCE(1);
+> +	return swp_entry(0, 0);
+> +}
+> +
+> +static inline bool is_pte_marker_entry(swp_entry_t entry)
+> +{
+> +	return false;
+> +}
+> +
+> +static inline pte_marker pte_marker_get(swp_entry_t entry)
+> +{
+> +	return 0;
+> +}
+> +
+> +static inline bool is_pte_marker(pte_t pte)
+> +{
+> +	return false;
+> +}
+> +
+> +#endif /* CONFIG_PTE_MARKER */
+> +
+> +static inline pte_t make_pte_marker(pte_marker marker)
+> +{
+> +	return swp_entry_to_pte(make_pte_marker_entry(marker));
+> +}
+> +
+> +/*
+> + * This is a special version to check pte_none() just to cover the case when
+> + * the pte is a pte marker.  It existed because in many cases the pte marker
+> + * should be seen as a none pte; it's just that we have stored some information
+> + * onto the none pte so it becomes not-none any more.
+> + *
+> + * It should be used when the pte is file-backed, ram-based and backing
+> + * userspace pages, like shmem.  It is not needed upon pgtables that do not
+> + * support pte markers at all.  For example, it's not needed on anonymous
+> + * memory, kernel-only memory (including when the system is during-boot),
+> + * non-ram based generic file-system.  It's fine to be used even there, but the
+> + * extra pte marker check will be pure overhead.
+> + *
+> + * For systems configured with !CONFIG_PTE_MARKER this will be automatically
+> + * optimized to pte_none().
+> + */
+> +static inline int pte_none_mostly(pte_t pte)
+> +{
+> +	return pte_none(pte) || is_pte_marker(pte);
+> +}
+> +
+>  static inline struct page *pfn_swap_entry_to_page(swp_entry_t entry)
+>  {
+>  	struct page *p = pfn_to_page(swp_offset(entry));
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index 034d87953600..a1688b9314b2 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -909,6 +909,12 @@ config ANON_VMA_NAME
+>  	  area from being merged with adjacent virtual memory areas due to the
+>  	  difference in their name.
+>
+> +config PTE_MARKER
+> +	bool "Marker PTEs support"
+> +
+> +	help
+> +	  Allows to create marker PTEs for file-backed memory.
+> +
+>  source "mm/damon/Kconfig"
+>
+>  endmenu
 
->=20
-> > subsystem to table of ids supported by the uio_dfl driver. HSSI
-> > subsystem consists of harden/soft Ethernet MAC to support various
-> > ethernet usages and PCS/FEC/PMA direct modes for non-ethernet usages.
-> >
-> > We leverage the uio_dfl driver to access the HSSI subsystem on user
-> > space, because the HSSI subsystem was designed for specific purposes
-> > and does not fit into the standard MAC and net kernel subsystems.
-> >
-> > The Feature ID table of DFL can be found:
-> > https://github.com/OPAE/dfl-feature-id
->=20
-> Why you put it here? even this link there is no more descriptions to unde=
-rstand
-> what it is. Or can be removed here.
-
-Yes, I agree, I will remove it.
->=20
-> >
-> > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > Signed-off-by: Tianfei Zhang <tianfei.zhang@intel.com>
-> > ---
-> > v2: add HSSI introduction and the git repo of Feature ID table.
-> > ---
-> >  drivers/uio/uio_dfl.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c index
-> > 89c0fc7b0cbc..660e1d0bf6b9 100644
-> > --- a/drivers/uio/uio_dfl.c
-> > +++ b/drivers/uio/uio_dfl.c
-> > @@ -45,9 +45,11 @@ static int uio_dfl_probe(struct dfl_device *ddev)
-> > }
-> >
-> >  #define FME_FEATURE_ID_ETH_GROUP	0x10
-> > +#define FME_FEATURE_ID_OFS_HSSI		0x15
-> >
-> >  static const struct dfl_device_id uio_dfl_ids[] =3D {
-> >  	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
-> > +	{ FME_ID, FME_FEATURE_ID_OFS_HSSI },
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
-> > --
-> > 2.26.2
-
+--=-=-=--

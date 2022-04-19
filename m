@@ -2,259 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330B5507CD7
+	by mail.lfdr.de (Postfix) with ESMTP id EA594507CD9
 	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 00:50:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358356AbiDSWxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 18:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46842 "EHLO
+        id S1358343AbiDSWw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 18:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbiDSWxL (ORCPT
+        with ESMTP id S231893AbiDSWw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 18:53:11 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8559F1D305
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 15:50:27 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23JKITfr011972;
-        Tue, 19 Apr 2022 22:50:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2021-07-09;
- bh=/NnfWqSj5lf5krVoy6P9ss2Fo7O+Lb/kaCVnGCcfQJ0=;
- b=NVHu/ydYkdiie9uaTiqmEx1oqbQMGFnubJoR3xiULrAkau5zuwgpQW1Vwc2lNRoxCciw
- FqgpdWtO3H3hxQvNxWRdnOsrKSF/tziJGzpJhUvz7cTDiMguE1F/EfV/UjiwjujVGQ5l
- IPKiL5ylKjDbvvo5/KVcRWNro7dl6dFUGF0CRFiPHZLe3jNEXjfLOp+Px4rg7Ug6VrkG
- lipAdj8cSUkg7x3nEGSsxHONJSpIPlyCGzzNcqRYs1PplWxnbQZokk4gZtQSG7/bjMWm
- KDbuyvRn+y2n+EjJ5bR/X8/tM5NY2zS9KioHDCzSDcjwLX+rWa0QuxbsQaWKmSkACUC/ yQ== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com with ESMTP id 3ffpbv7gnu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 22:50:08 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.16.1.2/8.16.1.2) with SMTP id 23JMVsoI016275;
-        Tue, 19 Apr 2022 22:50:06 GMT
-Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2169.outbound.protection.outlook.com [104.47.56.169])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com with ESMTP id 3ffm88uc5p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 22:50:06 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V1hWMg3TRdm/+Mc+z/nBcdSZw1BnyNqEt72TF6niZPaDgVpvN2JITXhjsRqZuyQ0QTuTVJ4Y1E8GGt5efpBziggoXB0iQmv1N/l9/DeiNxBw14LwH1s7Mjte4TPrLmHqXQ2daxxQxbAWStUnslyBk6bySKQsQRbien65qvAv2YcwBpWZ1+gSp6SOKNiDLMlT9AoNuuyUDVOjYqzU65hkJeDtUX7hlaDnw5LZtvbe02V9Ogvn1SBPk2W7CNXoBU4h8bnCsWzE9gQPILWJZ9tObKhTvmnQfPmW6/CjYa6G0HdgJTbW5DowWa/iQQuTHwG5sP+WXvGzqNOcJqf16TP4og==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/NnfWqSj5lf5krVoy6P9ss2Fo7O+Lb/kaCVnGCcfQJ0=;
- b=mfXPvpt3JxjFZTZTIh62jaDfMTGPuj6F7yhHiYp5Ndp173//034X+qxmnbswmE/8uXwz7y1I1uLxrrRPO78lx1wxuhJBazmhGBxqyTmyQ21GOrRewuLWgRxf+b6VoKj/H0vLFJ49BjPEISDzFqWUXBOYezYt+kFIO19g/0IzvhMmnlsVss0VFHY00ixQ/MQFr3El+f2nRl9Klr6HKG25FmXiq/Fc2G7iWN7EFZreQB5y9h8dk/prVw1WqHjpsQU00IrWjOTLE+WgncI0P2J9nZZPWxMsTx3eMFht4HDDPZW7x3hpck8Gtz1+p8BVXHvGr3YWbtyHkMLmY+rP9+sUww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/NnfWqSj5lf5krVoy6P9ss2Fo7O+Lb/kaCVnGCcfQJ0=;
- b=RDPcwJfxCCsKrtf2jrzfuyMN2j+vX5U5NzRM580pXWu1UVnk7tP7+0u2dpF21sxPwHcmk4uDXElvMCEYsK3EX07eL5pz5Qs36r5aK1hDzXn5547vPDe7BRkk+xPAvcLl+kXYVMqiVjxUUm/AVlq14ty/CBjpqBFMVwTbkAqKUw8=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by SJ0PR10MB4528.namprd10.prod.outlook.com (2603:10b6:a03:2d4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 22:50:04 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::bd4a:8d2e:a938:56af]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::bd4a:8d2e:a938:56af%9]) with mapi id 15.20.5186.013; Tue, 19 Apr 2022
- 22:50:04 +0000
-Message-ID: <ec97313f-c7ce-ab23-3934-faddbb782336@oracle.com>
-Date:   Tue, 19 Apr 2022 15:50:00 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [RFC PATCH 0/5] hugetlb: Change huge pmd sharing
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220406204823.46548-1-mike.kravetz@oracle.com>
- <045a59a1-0929-a969-b184-1311f81504b8@redhat.com>
- <4ddf7d53-db45-4201-8ae0-095698ec7e1a@oracle.com>
- <dcda550d-a92a-c95e-bd08-c578924d7f8d@redhat.com>
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-In-Reply-To: <dcda550d-a92a-c95e-bd08-c578924d7f8d@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW3PR05CA0029.namprd05.prod.outlook.com
- (2603:10b6:303:2b::34) To BY5PR10MB4196.namprd10.prod.outlook.com
- (2603:10b6:a03:20d::23)
+        Tue, 19 Apr 2022 18:52:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 353791D305;
+        Tue, 19 Apr 2022 15:50:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F34B8B81CAD;
+        Tue, 19 Apr 2022 22:50:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87C59C385A7;
+        Tue, 19 Apr 2022 22:50:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650408610;
+        bh=6wVwcM+rCSuWgB240PgHPKTV1wdSBpdLNlDmNfUHYe4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=uVRFnvmi0zheCB8Z/P9yjO1I2s46oeQIwZQDTTp+v5e/TotS5XSXd3cblWCLUaTgD
+         fMgAHT6ZfvLgJknSZdJ96VCRnoAM2wRI3wA8+F99QrmLXRfZHojQn8OB021Viycez7
+         8yfNhpFQD2gqjHExgdf/a0XrlejuR7YjU28Q9Au7bRexN3LpOFnfRXuGN7nETkfZuy
+         Y55pCptsNFROnaGWOHWjuDf35LGTfrN6mS8DtJ4EPi6ur2etlkxRN929V7/VvE60Pa
+         tNCpWzFwvLgPjlK0Y57RztJ+DgnUIUS0hBvwV48aPhT5uinKhFDV5pcvLEmYSB8FVJ
+         hWu2Iv4XjzlKA==
+Date:   Tue, 19 Apr 2022 17:50:08 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [RESEND][PATCH v2] PCI: Sanitise firmware BAR assignments behind
+ a PCI-PCI bridge
+Message-ID: <20220419225008.GA1241595@bhelgaas>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: e79a4e4d-5c60-4957-9366-08da2256f187
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB4528:EE_
-X-Microsoft-Antispam-PRVS: <SJ0PR10MB4528EE000D037C470C6305F3E2F29@SJ0PR10MB4528.namprd10.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tj178MnehJjNF3Bijg8RRkDH5FAM5UDdzo7qRccfWZWZab8NWSWmfL52XTexN0ULZWPt9oTo2uFzbS/U6kHfICogqp7YAvhh8d3B6d8a4X+A8YAoVWXPrm72KlTczJpmlhgieAszM9BDcnJSB2VN1L7o7n1bFHqdXrncMXA0jwW5pOoSb2KCYwbqhkij5rgHDLCr04xIPacDe9C4yyL5up6YBIv74Kz4TeTG0yVGZqr8TrJI8dqZcxvxUvuXAQYoqcqVbRgPhI5PutBknv77BDmQ0DAnmTVmJgMRYHHhTww3/8LIHMx0VnHTBs87W0xuRDha9dDIiXVaWR04s4gzhhiHUbFLvVeaumyCkGzkTHXShrkQ4JxH9ngvx+Uv16XNuJE7/ci4I0PcL0B31LHQ2oeJhzrUOuDvzYKlDEJlNbfE43xe6KlF2ki/xIq6UCTUKgwy5/PV9KbaEKI509ZehvK/Y7ujw3kAKG/ATiT598L+V5ul+jHStUjNR8BTatwfjwftBnlIEWOzW53nU4KVroRGyFvwYCQRKiW0K37AxV5R5d4FOOSg06iA79n6JDKlIbUsCKOHYRhL2eD/SPxRxVBwoGU6mt0joT5aaBdUYmE78GRGpsy4XiZeSGvPPcAdioDPQUrLuOKWsrTOv7NMbZJVZTCqJ1SOt7ifpt8kw2HMOO/AP7+uCco3BIyd0NTa1PviAsIhzHGrpEk5Q64zTNIdvogi1KZB+HhQprA96ao8ywQG6YsWDPDZ8FjGCxMrIZdj9/OT1jsiZ5qhOtPPUc6mG18Mvy2545wAqfPZYR0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(366004)(2616005)(186003)(26005)(86362001)(31696002)(38100700002)(508600001)(8676002)(7416002)(38350700002)(66556008)(66476007)(83380400001)(66946007)(31686004)(5660300002)(316002)(6512007)(6486002)(6506007)(54906003)(53546011)(44832011)(2906002)(4326008)(8936002)(36756003)(6666004)(52116002)(14583001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUtXSUlkRmttTkEzbkxwWTVhNUFFMkFuazV1WCtBUjNVOUJWQnAzb2NodTN4?=
- =?utf-8?B?YTRFUXZ5OWI4SXVMa1hTSHhSa0FMM0djUUVCaHNXYzZtc2d0Tjd1a29zRUZv?=
- =?utf-8?B?RnI1eVM3WTM1SVVOWkVDKy92VUlpUWREZ2dRMkdsYmNjZGMxblFnbDRkWjJZ?=
- =?utf-8?B?SllaWWpFVUhJUFF5NlZudExFeWlaOFdqSkJVa29SVVlmTHUxUEpma1ZzcDZ3?=
- =?utf-8?B?ZVNYeFNaUEtBdnp0SnltQzZwQkJVNHdQQllTUWptdDI3VjdaeGJvUS94NnI5?=
- =?utf-8?B?SEF0TXhiM3VVbkQ1d3dRdGk0VlFuMkwzRi9tU3RmWklnRnJ3cTVlR0ovOUpk?=
- =?utf-8?B?SEZTVGJRV0wzajVBQ1JEd3hpK1JDTTNYNEs5WVFqRGd2bjM1SmtVMjBIMXhM?=
- =?utf-8?B?RnVDMGQ0dk9pZy9seUJIb3poSzFJTlYwSU85akNVbFJ2M2wrWXdhOVcvL3Rz?=
- =?utf-8?B?dHJnQzhYSkdhbGp2blFyQmkxaXcyUE1HL0lqbEJTaXBzTTNHZ2RPaVhqY0Zq?=
- =?utf-8?B?dk9ZVnhUT3ZiOGM4TlVmOGNpMFFQY2J0Y09uQ3FEVjdORkJMZTlCL0FTMUk3?=
- =?utf-8?B?eDhON0luVXE3Vi9TRjJCdWVtSjduOWRjWmEvSHM1b0N6cVh4cDhBbzl1ZmZL?=
- =?utf-8?B?QlhYVTY5d1V5a2J5bkJvMTBIdjhJNG9uOGl3RkdMWFlqd3lJTkZsUlVSckJM?=
- =?utf-8?B?bURyWWlSUGVNK2t2NDI4dGV2eFg3TTNBeVhlL3VMUWFLajU3Ymw1ajkxOGN5?=
- =?utf-8?B?UHFCTWs3RDE4TW5POWN6OEtmQ3dZME1lQmU4eWFKNFMvSGduODJ1UjJ6QlZK?=
- =?utf-8?B?VzFqd1lHVzJvN0c0dlJIcjBybnRMVjBaUWdBTUNOTGg5SkJHRGFmL2tacC81?=
- =?utf-8?B?Wk42NzR3NjhTbkVta2N0d2owaXQ3OFpzSFc3UElSbWY0WFQ5N2JQZDI2UlVV?=
- =?utf-8?B?Y3htY0pWT09JNXBIL1dhZ3c5SU9aUUhmRlU3NklQbkp4SmZkenlsNXFsdkVD?=
- =?utf-8?B?b05YdjYyTFZVbEI5MElkRHBCaCt1cndoOGZzRjl5MldSVVZYT3Uzc0orTkZF?=
- =?utf-8?B?bTBTQjJWYndqMzJ0dlVMblptb0UvRUVteWlvT0Y2emRSWS95SEx6MnQxb0Rv?=
- =?utf-8?B?TnFQYXhKMEdTVEV4N1NpQzZHRmppUktuN2t2UjNVR2JTR3ZrZUFVQXN1VHZs?=
- =?utf-8?B?TlpKTGorNjIxeWNzb1NJMnpuTTdtbElJMDlUa29YeGhoSEJHTjRqSURCMzJn?=
- =?utf-8?B?NDYvc1FQYURGbWxVRFRpTXhVd0xhRWpVZU54eG5HWGw3NzZhVU5KWlhwd2I3?=
- =?utf-8?B?enJSSi9vZ3l2eXVuOGpjN3lEbzNEc1pzUTcvSG5TeFR1YStxZ2VYUTF3cVk5?=
- =?utf-8?B?NTNiSE9vVXJSb2cwMnMvN0lHdkhNRklEa0FnbTdRQnZFUm11L0hSMHNlc2Ro?=
- =?utf-8?B?djVFazB0LzZkSFFDaVhlZW12Y2ZvS1dybGVpVlBzUVBnK1hTdXRBbzV4L3hH?=
- =?utf-8?B?NzdBaHdBL0lyQUhucmc2L245azExL213UTk0VWc0M0VPa2ovLy9QQzhyb2Na?=
- =?utf-8?B?NG5PeldZMlQ2aThZQjlWSEdLczZqcVZGZ3JjUW96L24rV0FuU0xKUms2TjVk?=
- =?utf-8?B?aVlPa0I3cU8vZjQ2cXFscmlrNzlsdDZYb2NyUWk4LyttNXNicDZBd3E3SVFJ?=
- =?utf-8?B?dU13UXdqbnplMkx3YzBma000dmdBSlU4U0hTdTl2YXQ0RjhrWjNBRnB0blZp?=
- =?utf-8?B?WnFKN1luZ05KRzkvMDFSSFFRWHdDNm1WT1U0Rk1JL0Y2VjYwR0o4Rno4Z2F5?=
- =?utf-8?B?VytpQTBuZCtvOFZjb0pwTzF6eGxUa3hEcU5UWVVmNlE1a2VRb3JMVUZPT1F2?=
- =?utf-8?B?bVluZ3kybGhHWGlYdVQwcXpZNjcydjFrUUVFVFpOWERMQVVrY1g1a1VKSTY4?=
- =?utf-8?B?NWNIY1NDSExPZnBGbkpRdjg0YkgrZEVrSXMzU3ZmcFlxOEFzQk4vamwvdkZ6?=
- =?utf-8?B?K3dqNzRsV282M2lDaE44eWdSb2ZvS2ZkNDl4Tjg4VEU1MVJQWXYxd2FOWjA3?=
- =?utf-8?B?L2VYdUduUlNjcHQ1dXVlYy92MTV1S2J5cGxhSWRWVFIyZW9sbC80dVhONG9B?=
- =?utf-8?B?dnRKcE1NMUtITlI4Um9RUkRvcGVsaXY2UjJ2UkRYaWVja253Y2tjR2IybDVI?=
- =?utf-8?B?K0t1Smlwc000WVJiZVZ6bUNYcXVjMmtia3FqN1NPSW9IKzBvdEJNVjY0bzZu?=
- =?utf-8?B?SkxwRXF5NVlMS1ZvTk0xa3gvd3NzTll4aFhVSWhOY1lzSHd2SmQ2cXdReHlB?=
- =?utf-8?B?SjRUdzBTamlLM2xnaVdZaitIU1UxL0JUajh2T1lybEhoNkQxN0w3Y2NJaDFI?=
- =?utf-8?Q?RhNh4LiYYD4Md+R4=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e79a4e4d-5c60-4957-9366-08da2256f187
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 22:50:04.3259
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /Fd62RXeAMe7veIl9Z+4OhSbuu5KgXH41DUJpUxK/zpbubiBl/CJG5qjI9aVVTbjRNEf0pXRS+eN8bKjnwSf2g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR10MB4528
-X-Proofpoint-Virus-Version: vendor=fsecure engine=2.50.10434:6.0.486,18.0.858
- definitions=2022-04-19_08:2022-04-15,2022-04-19 signatures=0
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0 mlxscore=0
- adultscore=0 mlxlogscore=593 suspectscore=0 spamscore=0 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2202240000
- definitions=main-2204190124
-X-Proofpoint-GUID: 0KDBK2XXEVJ5z4qJ5NfWTDFFtFy5O_hw
-X-Proofpoint-ORIG-GUID: 0KDBK2XXEVJ5z4qJ5NfWTDFFtFy5O_hw
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2202010150100.58572@angie.orcam.me.uk>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/8/22 02:26, David Hildenbrand wrote:
->>>
->>> Let's assume a 4 TiB device and 2 MiB hugepage size. That's 2097152 huge
->>> pages. Each such PMD entry consumes 8 bytes. That's 16 MiB.
->>>
->>> Sure, with thousands of processes sharing that memory, the size of page
->>> tables required would increase with each and every process. But TBH,
->>> that's in no way different to other file systems where we're even
->>> dealing with PTE tables.
->>
->> The numbers for a real use case I am frequently quoted are something like:
->> 1TB shared mapping, 10,000 processes sharing the mapping
->> 4K PMD Page per 1GB of shared mapping
->> 4M saving for each shared process
->> 9,999 * 4M ~= 39GB savings
+On Tue, Feb 01, 2022 at 10:51:11AM +0000, Maciej W. Rozycki wrote:
+> Fix an issue with the Tyan Tomcat IV S1564D system, the BIOS of which 
+> does not assign PCI buses beyond #2, where our resource reallocation 
+> code preserves the reset default of an I/O BAR assignment outside its 
+> upstream PCI-to-PCI bridge's I/O forwarding range for device 06:08.0 in 
+> this log:
 > 
-> 3.7 % of all memory. Noticeable if the feature is removed? yes. Do we
-> care about supporting such corner cases that result in a maintenance
-> burden? My take is a clear no.
-> 
->>
->> However, if you look at commit 39dde65c9940c which introduced huge pmd sharing
->> it states that performance rather than memory savings was the primary
->> objective.
->>
->> "For hugetlb, the saving on page table memory is not the primary
->>  objective (as hugetlb itself already cuts down page table overhead
->>  significantly), instead, the purpose of using shared page table on hugetlb is
->>  to allow faster TLB refill and smaller cache pollution upon TLB miss.
->>     
->>  With PT sharing, pte entries are shared among hundreds of processes, the
->>  cache consumption used by all the page table is smaller and in return,
->>  application gets much higher cache hit ratio.  One other effect is that
->>  cache hit ratio with hardware page walker hitting on pte in cache will be
->>  higher and this helps to reduce tlb miss latency.  These two effects
->>  contribute to higher application performance."
->>
->> That 'makes sense', but I have never tried to measure any such performance
->> benefit.  It is easier to calculate the memory savings.
-> 
-> It does makes sense; but then, again, what's specific here about hugetlb?
-> 
-> Most probably it was just easy to add to hugetlb in contrast to other
-> types of shared memory.
-> 
->>
->>>
->>> Which results in me wondering if
->>>
->>> a) We should simply use gigantic pages for such extreme use case. Allows
->>>    for freeing up more memory via vmemmap either way.
->>
->> The only problem with this is that many processors in use today have
->> limited TLB entries for gigantic pages.
->>
->>> b) We should instead look into reclaiming reconstruct-able page table.
->>>    It's hard to imagine that each and every process accesses each and
->>>    every part of the gigantic file all of the time.
->>> c) We should instead establish a more generic page table sharing
->>>    mechanism.
->>
->> Yes.  I think that is the direction taken by mshare() proposal.  If we have
->> a more generic approach we can certainly start deprecating hugetlb pmd
->> sharing.
-> 
-> My strong opinion is to remove it ASAP and get something proper into place.
-> 
+> pci_bus 0000:00: max bus depth: 4 pci_try_num: 5
+> [...]
+> pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.0: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+> pci 0000:06:08.0: BAR 4: assigned [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: failed to assign [io  size 0x0020]
+> pci 0000:05:00.0: PCI bridge to [bus 06]
+> pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
+> [...]
+> pci 0000:00:11.0: PCI bridge to [bus 01-06]
+> pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
+> pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
+> pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
+> pci_bus 0000:00: No. 2 try to assign unassigned res
+> [...]
+> pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.1: BAR 4: trying firmware assignment [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: [io  0xfce0-0xfcff] conflicts with 0000:06:08.0 [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: failed to assign [io  size 0x0020]
+> pci 0000:05:00.0: PCI bridge to [bus 06]
+> pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
+> [...]
+> pci 0000:00:11.0: PCI bridge to [bus 01-06]
+> pci 0000:00:11.0:   bridge window [io  0xe000-0xefff]
+> pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
+> pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
+> pci_bus 0000:00: No. 3 try to assign unassigned res
+> pci 0000:00:11.0: resource 7 [io  0xe000-0xefff] released
+> [...]
+> pci 0000:06:08.1: BAR 4: assigned [io  0x2000-0x201f]
+> pci 0000:05:00.0: PCI bridge to [bus 06]
+> pci 0000:05:00.0:   bridge window [io  0x2000-0x2fff]
+> pci 0000:05:00.0:   bridge window [mem 0xd8000000-0xd85fffff]
+> [...]
+> pci 0000:00:11.0: PCI bridge to [bus 01-06]
+> pci 0000:00:11.0:   bridge window [io  0x1000-0x2fff]
+> pci 0000:00:11.0:   bridge window [mem 0xd8000000-0xdfffffff]
+> pci 0000:00:11.0:   bridge window [mem 0xa8000000-0xafffffff 64bit pref]
+> pci_bus 0000:00: resource 4 [io  0x0000-0xffff]
+> pci_bus 0000:00: resource 5 [mem 0x00000000-0xffffffff]
+> pci_bus 0000:01: resource 0 [io  0x1000-0x2fff]
+> pci_bus 0000:01: resource 1 [mem 0xd8000000-0xdfffffff]
+> pci_bus 0000:01: resource 2 [mem 0xa8000000-0xafffffff 64bit pref]
+> pci_bus 0000:02: resource 0 [io  0x1000-0x2fff]
+> pci_bus 0000:02: resource 1 [mem 0xd8000000-0xd8bfffff]
+> pci_bus 0000:04: resource 0 [io  0x1000-0x1fff]
+> pci_bus 0000:04: resource 1 [mem 0xd8600000-0xd8afffff]
+> pci_bus 0000:05: resource 0 [io  0x2000-0x2fff]
+> pci_bus 0000:05: resource 1 [mem 0xd8000000-0xd85fffff]
+> pci_bus 0000:06: resource 0 [io  0x2000-0x2fff]
+> pci_bus 0000:06: resource 1 [mem 0xd8000000-0xd85fffff]
 
-No arguments about the complexity of this code.  However, there will be some
-people who will notice if it is removed.
+Let's include the URL to the you posted
+(https://lore.kernel.org/r/alpine.DEB.2.21.2203012338460.46819@angie.orcam.me.uk)
+and trim as much as possible out of the commit log.  E.g., the memory
+windows probably aren't relevant, the lspci output seems to repeat
+information that's already in the dmesg snippets (the dmesg log is
+intended to contain enough information to diagnose problems like this,
+so if it doesn't we should augment it), one or two samples of error
+messages should be enough, etc.
 
-Whether or not we remove huge pmd sharing support, I would still like to
-address the scalability issue.  To do so, taking i_mmap_rwsem in read mode
-for fault processing needs to go away.  With this gone, the issue of faults
-racing with truncation needs to be addressed as it depended on fault code
-taking the mutex.  At a high level, this is fairly simple but hugetlb
-reservations add to the complexity.  This was not completely addressed in
-this series.
+I don't think "try 2", "try 3", etc are really relevant to this
+problem.
 
-I will be sending out another RFC that more correctly address all the issues
-this series attempted to address.  I am not discounting your opinion that we
-should get rid of huge pmd sharing.  Rather, I would at least like to get
-some eyes on my approach to addressing the issue with reservations during
-fault and truncate races.
--- 
-Mike Kravetz
+> -- note that the assignment of 0xfce0-0xfcff is outside the range of 
+> 0x2000-0x2fff assigned to bus #6:
+> 
+> 05:00.0 PCI bridge: Texas Instruments XIO2000(A)/XIO2200A PCI Express-to-PCI Bridge (rev 03) (prog-if 00 [Normal decode])
+>         Flags: bus master, fast devsel, latency 0
+>         Bus: primary=05, secondary=06, subordinate=06, sec-latency=0
+>         I/O behind bridge: 00002000-00002fff
+>         Memory behind bridge: d8000000-d85fffff
+>         Capabilities: [50] Power Management version 2
+>         Capabilities: [60] Message Signalled Interrupts: 64bit+ Queue=0/4 Enable-
+>         Capabilities: [80] #0d [0000]
+>         Capabilities: [90] Express PCI/PCI-X Bridge IRQ 0
+> 
+> 06:08.0 USB controller: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller (rev 61) (prog-if 00 [UHCI])
+> 	Subsystem: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller
+>         Flags: bus master, medium devsel, latency 22, IRQ 5
+>         I/O ports at fce0 [size=32]
+>         Capabilities: [80] Power Management version 2
+> 
+> 06:08.1 USB controller: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller (rev 61) (prog-if 00 [UHCI])
+> 	Subsystem: VIA Technologies, Inc. VT82xx/62xx/VX700/8x0/900 UHCI USB 1.1 Controller
+>         Flags: bus master, medium devsel, latency 22, IRQ 5
+>         I/O ports at 2000 [size=32]
+>         Capabilities: [80] Power Management version 2
+> 
+> Since both 06:08.0 and 06:08.1 have the same reset defaults the latter 
+> device escapes its fate and gets a good assignment owing to an address 
+> conflict with the former device.
+> 
+> Consequently when the device driver tries to access 06:08.0 according to 
+> its designated address range it pokes at an unassigned I/O location, 
+> likely subtractively decoded by the southbridge and forwarded to ISA, 
+> causing the driver to become confused and bail out:
+> 
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> uhci_hcd 0000:06:08.0: host controller halted, very bad!
+> uhci_hcd 0000:06:08.0: HCRESET not completed yet!
+> uhci_hcd 0000:06:08.0: HC died; cleaning up
+> 
+> if good luck happens or if bad luck does, an infinite flood of messages:
+> 
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> uhci_hcd 0000:06:08.0: host system error, PCI problems?
+> uhci_hcd 0000:06:08.0: host controller process error, something bad happened!
+> [...]
+> 
+> making the system virtually unusuable.
+
+s/unusuable/unusable/
+
+> This is because we have code to deal with a situation from PR #16263, 
+> where broken ACPI firmware reports the wrong address range for the host 
+> bridge's decoding window and trying to adjust to the window causes more 
+> breakage than leaving the BIOS assignments intact.
+
+What is the antecedent of "this"?  Just the fact that we restore
+firmware assignments?  I think 58c84eda0756 ("PCI: fall back to
+original BIOS BAR addresses"), which you already reference, is enough
+to explain that part.
+
+Here we just need to explain that we know assigning a BAR that's not
+inside an upstream bridge's window cannot work, so we might as well
+fail so we can try something else.
+
+> This may work for a device directly on the root bus decoded by the host 
+> bridge only, but for a device behind one or more PCI-to-PCI (or CardBus) 
+> bridges those bridges' forwarding windows have been standardised and 
+> need to be respected, or leaving whatever has been there in a downstream 
+> device's BAR will have no effect as cycles for the addresses recorded 
+> there will have no chance to appear on the bus the device has been 
+> immediately attached to.
+> 
+> Make sure then for a device behind a PCI-to-PCI bridge that any firmware 
+> assignment is within the bridge's relevant forwarding window or do not 
+> restore the assignment, fixing the system concerned as follows:
+> 
+> pci_bus 0000:00: max bus depth: 4 pci_try_num: 5
+> [...]
+> pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.0: BAR 4: failed to assign [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.1: BAR 4: failed to assign [io  0xfce0-0xfcff]
+> [...]
+> pci_bus 0000:00: No. 2 try to assign unassigned res
+> [...]
+> pci 0000:06:08.0: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.0: BAR 4: failed to assign [io  0xfce0-0xfcff]
+> pci 0000:06:08.1: BAR 4: no space for [io  size 0x0020]
+> pci 0000:06:08.1: BAR 4: failed to assign [io  0xfce0-0xfcff]
+> [...]
+> pci_bus 0000:00: No. 3 try to assign unassigned res
+> [...]
+> pci 0000:06:08.0: BAR 4: assigned [io  0x2000-0x201f]
+> pci 0000:06:08.1: BAR 4: assigned [io  0x2020-0x203f]
+
+I don't think the failures add to the understanding here.
+
+> and making device 06:08.0 work correctly.
+> 
+> Cf. <https://bugzilla.kernel.org/show_bug.cgi?id=16263>
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 58c84eda0756 ("PCI: fall back to original BIOS BAR addresses")
+> Cc: stable@vger.kernel.org # v2.6.35+
+> ---
+> Hi,
+> 
+>  Resending this patch as it has gone into void.  Patch re-verified against 
+> 5.17-rc2.
+> 
+>  For the record the system's bus topology is as follows:
+> 
+> -[0000:00]-+-00.0
+>            +-07.0
+>            +-07.1
+>            +-07.2
+>            +-11.0-[0000:01-06]----00.0-[0000:02-06]--+-00.0-[0000:03]--
+>            |                                         +-01.0-[0000:04]--+-00.0
+>            |                                         |                 \-00.3
+>            |                                         \-02.0-[0000:05-06]----00.0-[0000:06]--+-05.0
+>            |                                                                                +-08.0
+>            |                                                                                +-08.1
+>            |                                                                                \-08.2
+>            +-12.0
+>            +-13.0
+>            \-14.0
+> 
+>   Maciej
+> 
+> Changes from v1:
+> 
+> - Do restore firmware BAR assignments behind a PCI-PCI bridge, but only if 
+>   within the bridge's forwarding window.
+> 
+> - Update the change description and heading accordingly (was: PCI: Do not 
+>   restore firmware BAR assignments behind a PCI-PCI bridge).
+> ---
+>  drivers/pci/setup-res.c |   12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
+> 
+> linux-pci-setup-res-fw-address-nobridge.diff
+> Index: linux-macro/drivers/pci/setup-res.c
+> ===================================================================
+> --- linux-macro.orig/drivers/pci/setup-res.c
+> +++ linux-macro/drivers/pci/setup-res.c
+> @@ -212,9 +212,19 @@ static int pci_revert_fw_address(struct
+>  	res->end = res->start + size - 1;
+>  	res->flags &= ~IORESOURCE_UNSET;
+>  
+> +	/*
+> +	 * If we're behind a P2P or CardBus bridge, make sure we're
+> +	 * inside the relevant forwarding window, or otherwise the
+> +	 * assignment must have been bogus and accesses intended for
+> +	 * the range assigned would not reach the device anyway.
+> +	 * On the root bus accept anything under the assumption the
+> +	 * host bridge will let it through.
+> +	 */
+>  	root = pci_find_parent_resource(dev, res);
+>  	if (!root) {
+> -		if (res->flags & IORESOURCE_IO)
+> +		if (dev->bus->parent)
+> +			return -ENXIO;
+> +		else if (res->flags & IORESOURCE_IO)
+>  			root = &ioport_resource;
+>  		else
+>  			root = &iomem_resource;
+
+Is there value in the ioport_resource and iomem_resource lines here?  
+They've been there since 58c84eda0756, when we didn't look for a
+parent resource.
+
+351fc6d1a517 ("PCI: Fix starting basis for resource requests") added
+the pci_find_parent_resource() call, and I think that *should* find
+the root bus resources if the device is on the root bus.  And the root
+bus resources should already include ioport_resource and
+iomem_resource if we don't have anything better.
+
+So I wonder if we should just always return failure when we don't find
+a parent resource?
+
+Bjorn

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 839E5507058
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:28:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D805507045
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:28:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240036AbiDSO2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S1353291AbiDSO3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353461AbiDSO2C (ORCPT
+        with ESMTP id S1353479AbiDSO2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:28:02 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0575A1A6;
-        Tue, 19 Apr 2022 07:25:19 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id q12so24004693pgj.13;
-        Tue, 19 Apr 2022 07:25:19 -0700 (PDT)
+        Tue, 19 Apr 2022 10:28:10 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514A36345;
+        Tue, 19 Apr 2022 07:25:23 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id s17so5074290plg.9;
+        Tue, 19 Apr 2022 07:25:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=7BT9llr4g/+oDP3xKYg2jTAN9BitQ9N2nDaLRe4C9L8=;
-        b=l0s1/fgYGGMkUDpubImf9KtVthkStloJXQpzF5HwjXY0rva98rf3OF/6VXv2HkPsFj
-         ian/TOBXVkkRpEj9mMMF+2fg8nNIv+7b56pwHHT4tUmRt8x/YEoUpE532f5cHjtMCbfv
-         Dp04EsHqbHRH7DeDK8cqeGGGT0tzIohpjEmtjspkXjPrSu1lCxtXRctAy1YYSGTS0dj+
-         4zTYOhrUqexuJ65J4cJiIamY1lEmhAhyALrXc+tmDLjze5OBgkhOBnTDUnLobSJVGEDd
-         5Lo07ewYnKjHw5aJgIIhWXuCggGuL7QPGDEHw7lCSZ1Uzw0Ksste3HgQATHFHaGMrbtX
-         Il0w==
+        bh=Ko/RssBDPm1apKVmyb31rJH5PtKu0iktDyD8GjzienE=;
+        b=AT2LD2z4usldjQEHGaIpPjWPfjU9OZMRl09tD0hS0EaToAraJXPQua9Haqj0VoMo17
+         vXioYK5qeLGVdpsdqNR+Di4KC8QhGFTvzCf1gBPbboMcemT9cwbyllpsDdUVVjnCyFhA
+         E52vTt1jFJNJc/GG4DxYIgIwt7J0dL4jVrWz/JI/y4v/S0prJu/P8KxEVQUzk38ztV9z
+         qxsXxvY6K7ptmYJXgzb/dUEQHxN9/hjz3oqLn2aiaQ6473Y86JUkHXl/hYcn50+6wkKa
+         U4yCWD1xftl2lTANYLUC3y4JSZ0DLh4x/kuL3AipfKvcNGfUnVU5HgliTP34zkBQEN4T
+         gatw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=7BT9llr4g/+oDP3xKYg2jTAN9BitQ9N2nDaLRe4C9L8=;
-        b=OvgZyKPnPsvSzWfR7wuzhUTzIhHoaieLgcRkufQcmYMflUxN4SXEKQI+OPpMlooCU0
-         dIKOW29tfxsPg2tMZ8GvupKtRRJ3Hqwx0YMNhfWX4F/Da7+h4LThaIwBuhyDXbdFUIOG
-         FhLO6twvD8e4pCiUYI/qiW3i5KIhyX3CUgTrlY5Ulk2iI12G3dt95W/wmQqXir9FWgVI
-         I/rO21Paa9HGYH2i68+GxHF7xpjZbiK15hJFQPD9soPMmCa/ZJzY6HixSPX5oyn9JP0u
-         b4nbvZDP++ZBEzRkWHxlb3RpvSPrP5w1JEqZ7kphYXsJtuz52QQCFwJXHUnwh6fX4F5N
-         0kkA==
-X-Gm-Message-State: AOAM531f+C/CDjs6HMQ2MfavwyrTQSo8tzGIJjwfge02IGhYzb5Xih8f
-        UVB+2ebTRz2GmHYIgL+jl9g=
-X-Google-Smtp-Source: ABdhPJydiHl3BqNtdyLwusS44ht++WhRYH+DcOAaqrNiELtQN5avq7CPRxgWc4m7Y+0K8ytnIDf/Rw==
-X-Received: by 2002:a63:4a48:0:b0:3a9:21ea:458d with SMTP id j8-20020a634a48000000b003a921ea458dmr11226733pgl.557.1650378319230;
-        Tue, 19 Apr 2022 07:25:19 -0700 (PDT)
+        bh=Ko/RssBDPm1apKVmyb31rJH5PtKu0iktDyD8GjzienE=;
+        b=S8tXXNoKIEOkAKr2OE6OCP5Y856wMw+56WfY3VISJRGKrnRo0bRjDsKDJ2zM45oKWK
+         z61iNMjK6Tin5u62SZhnh9UJZDh2l1ZLDJ41JzAn/icEFCGqhA6y6Ojnl3LJevKY02hD
+         VApjumFEUZlTucDyQwQ7dW30f0XNjHbIdSaHYodIUcl3ZzO3gkUTGY4HJI0nNLd9OZ7K
+         JlhP+9l6fMsatjM1P2hOvz6f28NUaj6taoiaByDGbZHCBHFHROO9n2m2tIp5nANYOhPI
+         oqiY+lAM/7vh8AWCoVjmBuDxKMlHwq59URT/hiorDRQSOWpM+SimAkawiJyc+SEbI9q2
+         uCpQ==
+X-Gm-Message-State: AOAM531HAJPDyD1sfHaIarMh4dU0ubRKYNQWjZrUVwZWLyzV+VQ0Ac80
+        VsLqrVg8G6l480+cLWjcvV4=
+X-Google-Smtp-Source: ABdhPJx3KnWme64jL4M8cSukpB6sV7smnMw5GpIQzO+Er8bsgY/GODLnxMENZ9W1UtDjW5lVXdJb+A==
+X-Received: by 2002:a17:902:bb94:b0:157:2ce:fac1 with SMTP id m20-20020a170902bb9400b0015702cefac1mr15999688pls.25.1650378322949;
+        Tue, 19 Apr 2022 07:25:22 -0700 (PDT)
 Received: from tj10039pcu.spreadtrum.com ([117.18.48.102])
-        by smtp.gmail.com with ESMTPSA id e15-20020a63ae4f000000b003995a4ce0aasm16681939pgp.22.2022.04.19.07.25.15
+        by smtp.gmail.com with ESMTPSA id e15-20020a63ae4f000000b003995a4ce0aasm16681939pgp.22.2022.04.19.07.25.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 07:25:18 -0700 (PDT)
+        Tue, 19 Apr 2022 07:25:22 -0700 (PDT)
 From:   Cixi Geng <gengcixi@gmail.com>
 To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, orsonzhai@gmail.com,
@@ -55,9 +55,9 @@ To:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
         yuming.zhu1@unisoc.com
 Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH V4 1/7] dt-bindings:iio:adc: add sprd,ump9620-adc dt-binding
-Date:   Tue, 19 Apr 2022 22:24:52 +0800
-Message-Id: <20220419142458.884933-2-gengcixi@gmail.com>
+Subject: [PATCH V4 2/7] iio: adc: sc27xx: fix read big scale voltage not right
+Date:   Tue, 19 Apr 2022 22:24:53 +0800
+Message-Id: <20220419142458.884933-3-gengcixi@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220419142458.884933-1-gengcixi@gmail.com>
 References: <20220419142458.884933-1-gengcixi@gmail.com>
@@ -75,97 +75,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Cixi Geng <cixi.geng1@unisoc.com>
 
-sprd,ump9620-adc is one variant of sc27xx series, add ump9620
-description and sample in dt-bindings.
+Fix wrong configuration value of SC27XX_ADC_SCALE_MASK and
+SC27XX_ADC_SCALE_SHIFT by spec documetation.
+Fixes: 5df362a6cf49c (iio: adc: Add Spreadtrum SC27XX PMICs ADC support)
 
 Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+Reviewed-by: Baolin Wang <baolin.wang7@gmail.com>
 ---
- .../bindings/iio/adc/sprd,sc2720-adc.yaml     | 59 +++++++++++++++++--
- 1 file changed, 53 insertions(+), 6 deletions(-)
+ drivers/iio/adc/sc27xx_adc.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml b/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-index caa3ee0b4b8c..c9fe45c1c0d8 100644
---- a/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-+++ b/Documentation/devicetree/bindings/iio/adc/sprd,sc2720-adc.yaml
-@@ -20,6 +20,7 @@ properties:
-       - sprd,sc2723-adc
-       - sprd,sc2730-adc
-       - sprd,sc2731-adc
-+      - sprd,ump9620-adc
+diff --git a/drivers/iio/adc/sc27xx_adc.c b/drivers/iio/adc/sc27xx_adc.c
+index 00098caf6d9e..aee076c8e2b1 100644
+--- a/drivers/iio/adc/sc27xx_adc.c
++++ b/drivers/iio/adc/sc27xx_adc.c
+@@ -36,8 +36,8 @@
  
-   reg:
-     maxItems: 1
-@@ -33,13 +34,38 @@ properties:
-   hwlocks:
-     maxItems: 1
+ /* Bits and mask definition for SC27XX_ADC_CH_CFG register */
+ #define SC27XX_ADC_CHN_ID_MASK		GENMASK(4, 0)
+-#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 8)
+-#define SC27XX_ADC_SCALE_SHIFT		8
++#define SC27XX_ADC_SCALE_MASK		GENMASK(10, 9)
++#define SC27XX_ADC_SCALE_SHIFT		9
  
--  nvmem-cells:
--    maxItems: 2
-+  nvmem-cells: true
- 
--  nvmem-cell-names:
--    items:
--      - const: big_scale_calib
--      - const: small_scale_calib
-+  nvmem-cell-names: true
-+
-+if:
-+  not:
-+    properties:
-+      compatible:
-+        contains:
-+          enum:
-+            - sprd,ump9620-adc
-+then:
-+  properties:
-+    nvmem-cells:
-+      maxItems: 2
-+    nvmem-cell-names:
-+      items:
-+        - const: big_scale_calib
-+        - const: small_scale_calib
-+
-+else:
-+  properties:
-+    nvmem-cells:
-+      maxItems: 6
-+    nvmem-cell-names:
-+      items:
-+        - const: big_scale_calib1
-+        - const: big_scale_calib2
-+        - const: small_scale_calib1
-+        - const: small_scale_calib2
-+        - const: vbat_det_cal1
-+        - const: vbat_det_cal2
- 
- required:
-   - compatible
-@@ -69,4 +95,25 @@ examples:
-             nvmem-cell-names = "big_scale_calib", "small_scale_calib";
-         };
-     };
-+
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    pmic {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        adc@504 {
-+            compatible = "sprd,ump9620-adc";
-+            reg = <0x504>;
-+            interrupt-parent = <&ump9620_pmic>;
-+            interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
-+            #io-channel-cells = <1>;
-+            hwlocks = <&hwlock 4>;
-+            nvmem-cells = <&adc_bcal1>, <&adc_bcal2>,
-+                          <&adc_scal1>, <&adc_scal2>,
-+                          <&vbat_det_cal1>, <&vbat_det_cal2>;
-+            nvmem-cell-names = "big_scale_calib1", "big_scale_calib2",
-+                               "small_scale_calib1", "small_scale_calib2",
-+                               "vbat_det_cal1", "vbat_det_cal2";
-+        };
-+    };
- ...
+ /* Bits definitions for SC27XX_ADC_INT_EN registers */
+ #define SC27XX_ADC_IRQ_EN		BIT(0)
 -- 
 2.25.1
 

@@ -2,189 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3276E5075B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 385FB5075CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:01:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1355167AbiDSQzw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:55:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57206 "EHLO
+        id S1355263AbiDSQ4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352873AbiDSQsU (ORCPT
+        with ESMTP id S1352787AbiDSQtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:48:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB47EA1BF;
-        Tue, 19 Apr 2022 09:45:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4862461883;
-        Tue, 19 Apr 2022 16:45:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6748FC385A7;
-        Tue, 19 Apr 2022 16:45:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650386728;
-        bh=G0OvqP43pBlucS2bwhbAfQlIUn2CHJUI1Pp798ChPPw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jhhGUe+s0QSuW058hOTgQRDXlLp07EUc0RpaIWBYFIkUe/WP3XBJhga9Ehm7dXgJz
-         VPVoU+3Qox99raGnuwwt+IMRCxX6x1G9enBw9BB7m5wUCCGckdk/mc+UOzL9dgwUMt
-         ji1s62SkIYKv9d+tyu2Tl878AV2ArQbwR/Nznr6E0P1kqtLdt1cDEMCvBJU285cyIS
-         2kvJTr+fBiw63HkIiFrp79WZUVxFQlbfZ7Dpy82rlclnMwH9jMtqg5Wih8dKJwjvyG
-         voxxODzyRe3U7c1GdW+MD5woPipjVGr8Kl7ulS4/SvhXnQrZDtilz8w1EZxoxq5uAX
-         3396mF+8umvEw==
-Date:   Tue, 19 Apr 2022 11:45:26 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     "Rafael J . Wysocki" <rjw@rjwysocki.net>,
-        Borislav Petkov <bp@alien8.de>,
-        "H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Myron Stowe <myron.stowe@redhat.com>,
-        Juha-Pekka Heikkila <juhapekka.heikkila@gmail.com>,
-        Benoit =?iso-8859-1?Q?Gr=E9goire?= <benoitg@coeus.ca>,
-        Hui Wang <hui.wang@canonical.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>
-Subject: Re: [PATCH v2 0/3] x86/PCI: Log E820 clipping
-Message-ID: <20220419164526.GA1204065@bhelgaas>
+        Tue, 19 Apr 2022 12:49:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C41015A28
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650386807;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9kufMCAz2neGn2snaxjHP25oQFrCvrJLIg2rPe9CbRw=;
+        b=gcV6GFrgVzchiRJkfobT3lJxCkXeDZEPYDXCAFuUi8ygYaNgXm3KPlfpPFy3MuRvMsBGo/
+        U2k6vw4a67pa1g6MrMRIaO4P6yDZ3VaLGXOXL6ujqKa49zNgN/alAA4AfcXmixb8RC3tM8
+        IvFG7hJA/CxvBeBLirEeIZL2dkyPbWk=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-NlzJfvUoORqb05sFYPXajg-1; Tue, 19 Apr 2022 12:46:46 -0400
+X-MC-Unique: NlzJfvUoORqb05sFYPXajg-1
+Received: by mail-wr1-f71.google.com with SMTP id j30-20020adfb31e000000b0020a9043abd7so822074wrd.12
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:46:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:organization:in-reply-to
+         :content-transfer-encoding;
+        bh=9kufMCAz2neGn2snaxjHP25oQFrCvrJLIg2rPe9CbRw=;
+        b=p7hFCLDN00cni8juM0aVnT9fXVlQclZ44pKKnaC4NpsFZL8jwAE77gXVBjMh14rCkt
+         pqeFyJuAXmHhUbAIMbvFjMYiZaescuiLA3T6Sb//dcUuufRppu19I6uxRPDjHws6AYRi
+         8z1eNFR4QXUHjxoCK3o7zC1IxDsRLUNof+hVfEhUK2ZM0R+pFv4nZLSegpQcWZu+I7/y
+         e3ArIWEHvdwyUn3ib/jhf7HPDEZQDBwvjJCg3DtjWb71d5T9CH+KYPuBhkC0knbrIt6m
+         eEc2wnLmke0EVAcejglEtcLdGJt6PotpskjiXzR98lzmqcS0e/7AGgQfukZpliLCDPw/
+         h5+g==
+X-Gm-Message-State: AOAM5306Va0plD+fjI18BqSYGQgZptXII6G2M+dtzpy/sR51wIbLLBFg
+        yQn6cOdAYIFwd0Oja505zr5TAQUXX3+IHxgeuwRbyuH+jYaHPgHfAAgEQhCykD8LFLVcPaC0ouI
+        LvpufwCIxN6gLisYfJGgG4auF
+X-Received: by 2002:adf:fb01:0:b0:205:c3e1:7980 with SMTP id c1-20020adffb01000000b00205c3e17980mr12252665wrr.639.1650386805294;
+        Tue, 19 Apr 2022 09:46:45 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxkjqO1nXwxthbwDxhp+J+nndk7TRLfFjKIKBZaN7QLJXPFINKCDtSEwUKtO4M09QieboCRIQ==
+X-Received: by 2002:adf:fb01:0:b0:205:c3e1:7980 with SMTP id c1-20020adffb01000000b00205c3e17980mr12252630wrr.639.1650386805064;
+        Tue, 19 Apr 2022 09:46:45 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c704:5d00:d8c2:fbf6:a608:957a? (p200300cbc7045d00d8c2fbf6a608957a.dip0.t-ipconnect.de. [2003:cb:c704:5d00:d8c2:fbf6:a608:957a])
+        by smtp.gmail.com with ESMTPSA id p4-20020a1c5444000000b00391ca5976c8sm14672796wmi.0.2022.04.19.09.46.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 09:46:44 -0700 (PDT)
+Message-ID: <219bd2d0-92ef-bcac-458a-0df6190fa387@redhat.com>
+Date:   Tue, 19 Apr 2022 18:46:43 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7fa9afde-5cc4-2e5d-30ac-ccc6ff4c8039@redhat.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v3 12/16] mm: remember exclusively mapped anonymous pages
+ with PG_anon_exclusive
+Content-Language: en-US
+To:     Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-13-david@redhat.com>
+ <012e3889-563b-e7fc-c2e3-e7a6373a55ac@suse.cz>
+ <2ae0a409-3d6d-9f6a-09e8-2f6867a4069a@redhat.com>
+ <5fc7d007-e59b-de8d-4d88-3f1b5adfa95b@suse.cz>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <5fc7d007-e59b-de8d-4d88-3f1b5adfa95b@suse.cz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 05:16:44PM +0200, Hans de Goede wrote:
-> Hi,
+On 13.04.22 20:28, Vlastimil Babka wrote:
+> On 4/13/22 18:39, David Hildenbrand wrote:
+>>>> @@ -3035,10 +3083,19 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+>>>>  
+>>>>  	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
+>>>>  	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
+>>>> +
+>>>> +	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+>>>> +	if (anon_exclusive && page_try_share_anon_rmap(page)) {
+>>>> +		set_pmd_at(mm, address, pvmw->pmd, pmdval);
+>>>> +		return;
+>>>
+>>> I am admittedly not too familiar with this code, but looks like this means
+>>> we fail to migrate the THP, right? But we don't seem to be telling the
+>>> caller, which is try_to_migrate_one(), so it will continue and not terminate
+>>> the walk and return false?
+>>
+>> Right, we're not returning "false". Returning "false" would be an
+>> optimization to make rmap_walk_anon() fail faster.
 > 
-> On 4/19/22 17:03, Bjorn Helgaas wrote:
-> > On Tue, Apr 19, 2022 at 11:59:17AM +0200, Hans de Goede wrote:
-> >> On 1/1/70 01:00, Bjorn Helgaas wrote:
-> >>> This is still work-in-progress on the issue of PNP0A03 _CRS methods that
-> >>> are buggy or not interpreted correctly by Linux.
-> >>>
-> >>> The previous try at:
-> >>>   https://lore.kernel.org/r/20220304035110.988712-1-helgaas@kernel.org
-> >>> caused regressions on some Chromebooks:
-> >>>   https://lore.kernel.org/r/Yjyv03JsetIsTJxN@sirena.org.uk
-> >>>
-> >>> This v2 drops the commit that caused the Chromebook regression, so it also
-> >>> doesn't fix the issue we were *trying* to fix on Lenovo Yoga and Clevo
-> >>> Barebones.
-> >>>
-> >>> The point of this v2 update is to split the logging patch into (1) a pure
-> >>> logging addition and (2) the change to only clip PCI windows, which was
-> >>> previously hidden inside the logging patch and not well documented.
-> >>>
-> >>> Bjorn Helgaas (3):
-> >>>   x86/PCI: Eliminate remove_e820_regions() common subexpressions
-> >>>   x86: Log resource clipping for E820 regions
-> >>>   x86/PCI: Clip only host bridge windows for E820 regions
-> >>
-> >> Thanks, the entire series looks good to me:
-> >>
-> >> Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > 
-> > Thank you!
-> > 
-> >> So what is the plan to actually fix the issue seen on some Lenovo models
-> >> and Clevo Barebones ?   As I mentioned previously I think that since all
-> >> our efforts have failed so far that we should maybe reconsider just
-> >> using DMI quirks to ignore the E820 reservation windows for host bridges
-> >> on affected models ?
-> > 
-> > I have been resisting DMI quirks but I'm afraid there's no other way.
-> 
-> Well there is the first match adjacent windows returned by _CRS and
-> only then do the "covers whole region" exception check. I still
-> think that would work at least for the chromebook regression...
+> Ah right, that's what I missed, it's an optimization and we will realize
+> elsewhere afterwards that the page has still mappings and we can't migrate...
 
-Without a crystal clear strategy, I think we're going to be tweaking
-the algorithm forever as the _CRS/E820 mix changes.  That's why I
-think that in the long term, a "use _CRS only, with quirks for
-exceptions" strategy will be simplest.
+I'll include that patch in v4 (to be tested):
 
-> So do you want me to give that a try; or shall I write a patch
-> using DMI quirks. And if we go the DMI quirks, what about
-> matching cmdline arguments?  If we add matching cmdline arguments,
-> which seems to be the sensible thing to do then to allow users
-> to test if they need the quirk, then we basically end up with my
-> first attempt at fixing this from 6 months ago:
-> 
-> https://lore.kernel.org/linux-pci/20211005150956.303707-1-hdegoede@redhat.com/
 
-So I think we should go ahead with DMI quirks instead of trying to
-make the algorithm smarter, and yes, I think we will need commandline
-arguments, probably one to force E820 clipping for future machines,
-and one to disable it for old machines.
+From 08fb0e45404e3d0f85c2ad23a473e95053396376 Mon Sep 17 00:00:00 2001
+From: David Hildenbrand <david@redhat.com>
+Date: Tue, 19 Apr 2022 18:39:23 +0200
+Subject: [PATCH] mm/rmap: fail try_to_migrate() early when setting a PMD
+ migration entry fails
 
-> > I think the web we've gotten into, where vendors have used E820 to
-> > interact with _CRS in incompatible and undocumented ways, is not
-> > sustainable.
-> > 
-> > I'm not aware of any spec that says the OS should use E820 to clip
-> > things out of _CRS, so I think the long term plan should be to
-> > decouple them by default.
-> 
-> Right and AFAICT the reason Windows is getting away with this is
-> the same as with the original Dell _CRS has overlap with
-> physical RAM issue (1), Linux assigns address to unassigneds BAR-s
-> starting with the lowest available address in the bridge window,
-> where as Windows assigns addresses from the highest available
-> address in the window.
+Let's fail right away in case we cannot clear PG_anon_exclusive because
+the anon THP may be pinned. Right now, we continue trying to
+install migration entries and the caller of try_to_migrate() will
+realize that the page is still mapped and has to restore the migration
+entries. Let's just fail fast just like for PTE migration entries.
 
-Right, I agree.  I'm guessing Chromebooks don't get tested with
-Windows at all, so we don't even have that level of testing to help.
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/swapops.h | 4 ++--
+ mm/huge_memory.c        | 8 +++++---
+ mm/rmap.c               | 6 +++++-
+ 3 files changed, 12 insertions(+), 6 deletions(-)
 
-> So the real fix here might very well be
-> to rework the BAR assignment code to switch to fill the window
-> from the top rather then from the bottom. AFAICT all issues where
-> excluding _E820 reservations have helped are with _E820 - bridge
-> window overlaps at the bottom of the window.
-> 
-> IOW these are really all bugs in the _CRS method for the bridge,
-> which Windows does not hit because it never actually uses
-> the lowest address(es) of the _CRS returned window.
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index 06280fc1c99b..8b6e4cd1fab8 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -299,7 +299,7 @@ static inline bool is_pfn_swap_entry(swp_entry_t entry)
+ struct page_vma_mapped_walk;
+ 
+ #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+-extern void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
++extern int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 		struct page *page);
+ 
+ extern void remove_migration_pmd(struct page_vma_mapped_walk *pvmw,
+@@ -332,7 +332,7 @@ static inline int is_pmd_migration_entry(pmd_t pmd)
+ 	return !pmd_present(pmd) && is_migration_entry(pmd_to_swp_entry(pmd));
+ }
+ #else
+-static inline void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
++static inline int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 		struct page *page)
+ {
+ 	BUILD_BUG();
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index c7ac1b462543..390f22334ee9 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3080,7 +3080,7 @@ late_initcall(split_huge_pages_debugfs);
+ #endif
+ 
+ #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
+-void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
++int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 		struct page *page)
+ {
+ 	struct vm_area_struct *vma = pvmw->vma;
+@@ -3092,7 +3092,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 	pmd_t pmdswp;
+ 
+ 	if (!(pvmw->pmd && !pvmw->pte))
+-		return;
++		return 0;
+ 
+ 	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
+ 	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
+@@ -3100,7 +3100,7 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+ 	if (anon_exclusive && page_try_share_anon_rmap(page)) {
+ 		set_pmd_at(mm, address, pvmw->pmd, pmdval);
+-		return;
++		return -EBUSY;
+ 	}
+ 
+ 	if (pmd_dirty(pmdval))
+@@ -3118,6 +3118,8 @@ void set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 	page_remove_rmap(page, vma, true);
+ 	put_page(page);
+ 	trace_set_migration_pmd(address, pmd_val(pmdswp));
++
++	return 0;
+ }
+ 
+ void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
+diff --git a/mm/rmap.c b/mm/rmap.c
+index 00418faaf4ce..68c2f61bf212 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1814,7 +1814,11 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 			VM_BUG_ON_FOLIO(folio_test_hugetlb(folio) ||
+ 					!folio_test_pmd_mappable(folio), folio);
+ 
+-			set_pmd_migration_entry(&pvmw, subpage);
++			if (set_pmd_migration_entry(&pvmw, subpage)) {
++				ret = false;
++				page_vma_mapped_walk_done(&pvmw);
++				break;
++			}
+ 			continue;
+ 		}
+ #endif
+-- 
+2.35.1
 
-Yes.  We actually did try this
-(https://git.kernel.org/linus/1af3c2e45e7a), but unfortunately we had
-to revert it.  Even more unfortunately, the revert
-(https://git.kernel.org/linus/5e52f1c5e85f) doesn't have any details
-about what went wrong.
 
-> 1) At least I read in either a bugzilla, or email thread about
-> this that Windows allocating bridge window space from the top
-> was assumed to be why Windows was not impacted.
-> 
-> > Straw man:
-> > 
-> >   - Disable E820 clipping by default.
-> > 
-> >   - Add a quirk to enable E820 clipping for machines older than X,
-> >     e.g., 2023, to avoid breaking machines that currently work.
-> > 
-> >   - Add quirks to disable E820 clipping for individual machines like
-> >     the Lenovo and Clevos that predate X, but E820 clipping breaks
-> >     them.
-> > 
-> >   - Add quirks to enable E820 clipping for individual machines like
-> >     the Chromebooks (and probably machines we don't know about yet)
-> >     that have devices that consume part of _CRS but are not
-> >     enumerable.
-> > 
-> >   - Communicate this to OEMs to try to prevent future machines that
-> >     need quirks.
-> > 
-> > Bjorn
-> > 
-> 
+
+-- 
+Thanks,
+
+David / dhildenb
+

@@ -2,78 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C5D507AE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39036507AEA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352632AbiDSU2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49236 "EHLO
+        id S1357018AbiDSU3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236926AbiDSU2V (ORCPT
+        with ESMTP id S236926AbiDSU3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:28:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C68C8344FC
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650399936;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ax1hiIZ0I02ZmnVoS1FQGYcdelIwXVMzf8EDN4fi9ww=;
-        b=MX1mpwCD52cQqxz8sOif9zOvldjgm9D006UbUprR12cmZEfz4mGvw6Jiq97AJ2DK3luDTl
-        iI40ge4fivcrPQpuAzsKawnwRUwx5bq5yK2F0N6nY52lSzezTXDTIMmcINfT+AHr638mRV
-        mCFqPtWnF5OLS1cXDzKypJimWGBGgz4=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-194-Cfy7skdqOmi5XAYVMQnx5A-1; Tue, 19 Apr 2022 16:25:35 -0400
-X-MC-Unique: Cfy7skdqOmi5XAYVMQnx5A-1
-Received: by mail-io1-f69.google.com with SMTP id s12-20020a056602168c00b00654ae9e6963so3450977iow.4
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:25:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=ax1hiIZ0I02ZmnVoS1FQGYcdelIwXVMzf8EDN4fi9ww=;
-        b=asBZS5LQvyZFK6DRiZV1NXOl7XYk97cDI4RsHbVLGOzeQCXJT3GPu5Hr8fo4FM7p2d
-         ELcA4bJBmrh8V3buJZbwcIZ8m+Tw5Sw+jkMZT0PzSO8forRhMDME7qsjfAQ6fOxQOOmj
-         I/kbhfkOS38AQYfRFmcVaXgxqKLf9Mtsx9zsSkE+Ax98M8bZjIi9wR0/qIvntcF4Sf+M
-         Ck+xIsG/aO/W37xnL1k3lbF0iSNfp5l6lQVt5HflKFMiYc9N50Iv4FAGi3wdeQ/pbgjo
-         pSmnfi44nNlHAlB22AX3cR69Uj49r2vnYyLcWotOxz+MJimbBWIBlatuvA3E6xHX3Jxx
-         em4Q==
-X-Gm-Message-State: AOAM531fiXF9KiKmu4iJqfqRu5fZox7dHMAR/If3yNU3HzbkzkYmMze9
-        z65yc8dHYKbtlDJpwrkNrTPSQDGtvSLoc2DUqkKWRcd/yxQPNgio4WScdUA9ncUvbAYJSNNO92N
-        ptTW+dUDddaWVc6mbCDrUh4hS
-X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id q8-20020a920508000000b002cbebd8a76bmr7979245ile.156.1650399934583;
-        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJwHYRlcO9x0OUHBCz2/TrnKyl0H5zUpCoJ20gT+VTXDMr9UebvFOOiY+EiFAxleSo0TP00xXg==
-X-Received: by 2002:a92:508:0:b0:2cb:ebd8:a76b with SMTP id q8-20020a920508000000b002cbebd8a76bmr7979232ile.156.1650399934379;
-        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
-Received: from localhost.localdomain (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
-        by smtp.gmail.com with ESMTPSA id i11-20020a92540b000000b002c9a82e8dacsm9403836ilb.32.2022.04.19.13.25.33
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 19 Apr 2022 13:25:34 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Alistair Popple <apopple@nvidia.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Axel Rasmussen <axelrasmussen@google.com>, peterx@redhat.com,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Rapoport <rppt@linux.vnet.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] mm/uffd: Hide PTE_MARKER option
-Date:   Tue, 19 Apr 2022 16:25:31 -0400
-Message-Id: <20220419202531.27415-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
+        Tue, 19 Apr 2022 16:29:21 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA65366A7;
+        Tue, 19 Apr 2022 13:26:37 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9f:8600:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 23JKPvrg1019330
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Tue, 19 Apr 2022 21:25:59 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:c9f:8602:8cd5:a7b0:d07:d516])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 23JKPsx11417014
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Tue, 19 Apr 2022 22:25:54 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1650399957; bh=GL1yC0TQSRHkqmV/DSr+k6th0pBM0w7r0/8fvjcp1gQ=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=N9XJCaG7CkPGlMm9+pIlPrXlHhqrZ26J43Ph+m4WbC7YPXplpV4mz+PSFefJbgrP3
+         wA5/ElIgfAPeVymYuL0n696i2vaJWOy0YQamWajOMi6L/UOPOCg6fAcx5x9U5Blb75
+         6fum5px+jibp89M1pvOY0iFtyjirVjbBnTpJIsJE=
+Received: (nullmailer pid 913495 invoked by uid 1000);
+        Tue, 19 Apr 2022 20:25:54 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Johan Hovold <johan@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Oliver Neukum <oliver@neukum.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+eabbf2aaa999cc507108@syzkaller.appspotmail.com,
+        USB <linux-usb@vger.kernel.org>, netdev <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] driver: usb: nullify dangling pointer in cdc_ncm_free
+Organization: m
+References: <20220409120901.267526-1-dzm91@hust.edu.cn>
+        <YlQbqnYP/jcYinvz@hovoldconsulting.com>
+        <CAHp75VeTqmdLhavZ+VbBYSFMDHr0FG4iKFGdbzE-wo5MCNikAA@mail.gmail.com>
+        <d851497f-7960-b606-2f87-eb9bff89c8ac@suse.com>
+Date:   Tue, 19 Apr 2022 22:25:54 +0200
+In-Reply-To: <d851497f-7960-b606-2f87-eb9bff89c8ac@suse.com> (Oliver Neukum's
+        message of "Tue, 19 Apr 2022 13:47:40 +0200")
+Message-ID: <871qxsrfal.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.5 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,53 +72,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The PTE_MARKER option should not need to be exposed to the kernel builder,
-keep it internal and remove the prompt so it won't be seen.
+Oliver Neukum <oneukum@suse.com> writes:
 
-Instead, make the PTE_MARKER_UFFD_WP option to explicitly choose PTE_MARKER
-when necessary.
+> It seems to me that fundamentally the order of actions to handle
+> a hotunplug must mirror the order in a hotplug. We can add more hooks
+> if that turns out to be necessary for some drivers, but the basic
+> reverse mirrored order must be supported and I very much favor
+> restoring it as default.
 
-While PTE_MARKER_UFFD_WP will still prompt to user, change the wording so
-that it'll not mention PTE_MARKER at all but renaming it to "Userfaultfd
-write protection support for shmem/hugetlbfs".
+FWIW, I agree 100% with this.  Please go ahead with the revert of commit
+2c9d6c2b871d ("usbnet: run unbind() before unregister_netdev()").
 
-Reported-by: Johannes Weiner <hannes@cmpxchg.org>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
+AFAICS, your proposed new hook should solve the original problem just
+fine.
 
-NOTE: IMHO this patch can either be standalone if easier, or be squashed
-into patch "mm: Enable PTE markers by default" in -mm.
 
-Please review, thanks.
----
- mm/Kconfig | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Bj=C3=B8rn
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 3eca34c864c5..d740e1ff3b2f 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -910,16 +910,16 @@ config ANON_VMA_NAME
- 	  difference in their name.
- 
- config PTE_MARKER
--	bool "Marker PTEs support"
--	default y
-+	bool
- 
- 	help
- 	  Allows to create marker PTEs for file-backed memory.
- 
- config PTE_MARKER_UFFD_WP
--	bool "Marker PTEs support for userfaultfd write protection"
-+	bool "Userfaultfd write protection support for shmem/hugetlbfs"
- 	default y
--	depends on PTE_MARKER && HAVE_ARCH_USERFAULTFD_WP
-+	depends on HAVE_ARCH_USERFAULTFD_WP
-+	select PTE_MARKER
- 
- 	help
- 	  Allows to create marker PTEs for userfaultfd write protection
--- 
-2.32.0
+
+
+
 

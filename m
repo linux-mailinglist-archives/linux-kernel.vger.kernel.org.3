@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42D4507A98
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98932507A9F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:05:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356474AbiDSUFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S1356518AbiDSUHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1356453AbiDSUFT (ORCPT
+        with ESMTP id S1356495AbiDSUHs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:05:19 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030CE2C669
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:02:36 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id d9so71056qty.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=6CDFEYPwind4oeNceo60bPcQaOBxmMPkcuZbyCW2XIc=;
-        b=H6yzMlPIaCOW2L5SHT3adB0uN2T9slwU5Iqe4dM8H4xTO8eaGW8mmBPQNO5u/dxvkl
-         j4K/dCwo+7rJK16wapkl8JEq7Xup/2+ubrRlqIiM8CisNBTobQHCV18/Azq18CqJEvu2
-         U/DXOVkogz+Erij+giIZb55ed9LnluaEj7E8Kc/0kLJ04uuKsy3Iks0wkbeZdX7R+AY6
-         eBD4dr5Ne1ez/yfVqghpn2MQ1N9CwbfOFYNXi2oh/cN4rbw9Iw+6As3dCXS3zOvMDZnD
-         xhNAP56KX3JKYi5ggqpejQ8fFPVseY4nHQ2AzyNsIU/8GVggvLB4JKnezC1XK0f+ddBE
-         Nd1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=6CDFEYPwind4oeNceo60bPcQaOBxmMPkcuZbyCW2XIc=;
-        b=4NZLc8O9/+rlIkKKSyK8mAWh3Qmek7mptJ6UQNG2yGTfbHxWoFTVNqvRK1598VA2NQ
-         brWLy7XcKKkmFIe+99ypoeHzjOB3133c70jgYN4mmEY2MZmpLlydDu3wYfmekZIdnI7G
-         AUHN5SBlqSlAzlIJPbimiZrF7DywT/y20VEUFEeBWAN3UnnYL2apokZ9HRsEG/xLA9VZ
-         xdkFVCETHdfUrjQIo8QKFqUVuqBAr1+8WCSEH11m4pv9SO/voxSkOUZsyh4GuJKW89Mr
-         e153Xxhoaf26VcmdrRPZbahbpMjlCnQvyR0K8wW0ytv43yaGgodgrduGTdHb7dithAGW
-         zcZA==
-X-Gm-Message-State: AOAM531n/TdUGcYHWxxGXH/iZcFhzOg3YkS6JAv9TMxfB9lxVaSHGmTu
-        BibHzpq0G6Cd2uKgMNsqQK0+tXg0Cu6jnQ==
-X-Google-Smtp-Source: ABdhPJxDoOZBm5NJUNt0Lmrkf9wvSWVfT2Aj29QkkmYznu4GEo/xOWzCwWugY9BzCInq4cE1rBPXWA==
-X-Received: by 2002:ac8:5c8a:0:b0:2e1:a65f:5122 with SMTP id r10-20020ac85c8a000000b002e1a65f5122mr11583018qta.239.1650398555129;
-        Tue, 19 Apr 2022 13:02:35 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id a28-20020a05620a02fc00b0069e8e766a0csm457007qko.94.2022.04.19.13.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 13:02:34 -0700 (PDT)
-Received: from jgg by mlx with local (Exim 4.94)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1ngu3V-005KB2-HU; Tue, 19 Apr 2022 17:02:33 -0300
-Date:   Tue, 19 Apr 2022 17:02:33 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, will@kernel.org,
-        joro@8bytes.org, thunder.leizhen@huawei.com, tglx@linutronix.de,
-        john.garry@huawei.com, jean-philippe@linaro.org,
-        christophe.jaillet@wanadoo.fr,
-        linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu/arm-smmu-v3: Align size in __arm_smmu_tlb_inv_range
-Message-ID: <20220419200233.GN64706@ziepe.ca>
-References: <20220413041745.35174-1-nicolinc@nvidia.com>
- <37c02fc4-d793-b003-f612-206c987a8a42@arm.com>
- <YlcwPG5RXmJ6U7YS@Asurada-Nvidia>
- <13c91dfb-c540-ed8d-daa7-eab7207df221@arm.com>
- <Yloj6GM+yykImKvp@Asurada-Nvidia>
+        Tue, 19 Apr 2022 16:07:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D40645E;
+        Tue, 19 Apr 2022 13:05:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 04CD4616B0;
+        Tue, 19 Apr 2022 20:05:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 018CAC385A7;
+        Tue, 19 Apr 2022 20:05:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650398703;
+        bh=A2qFOURET0e3VBZ9tKe16pxmX9MhilNw6SAjKsMMhX4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=h54xjPFYQ5UlVjImczhHBaUH3BHuzY7ey1mWTR43wzLoeWrs6AkZCzGqQiC0NluDQ
+         tGFqvAA8lem8JV64LBoXvcAukfPJ/ztdK7I48eWrPuej+kgtQTR8x0FIhhpYve2w65
+         T1aRBqFXf0UYl3Spgvsd0utJMwUElfwfxT2LboBX6ffvs1+5gaYMFSeYWicSqq6Nwq
+         P+WTUO+WaigptQv1hEFr08nExGCChJcPXBjcsD+kYVd27Y8BX5Ga6iI1crGEmVtuu5
+         qjdCK3lGUwBSV7Fwvtm20nI+1SgbIm9ttZDS/NgjjhkfHfBTKOOsPWV5hsM+O5Z5it
+         ZiQQWjnnf19eg==
+Message-ID: <6a9ac38a-5de0-3305-e14b-afd280411dd7@kernel.org>
+Date:   Tue, 19 Apr 2022 14:04:59 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yloj6GM+yykImKvp@Asurada-Nvidia>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.8.0
+Subject: Re: [PATCH net-next] net/ipv6: Enforce limits for
+ accept_unsolicited_na sysctl
+Content-Language: en-US
+To:     Arun Ajith S <aajith@arista.com>, netdev@vger.kernel.org
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        yoshfuji@linux-ipv6.org, kuba@kernel.org, pabeni@redhat.com
+References: <20220419105910.686-1-aajith@arista.com>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20220419105910.686-1-aajith@arista.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 07:03:20PM -0700, Nicolin Chen wrote:
+On 4/19/22 4:59 AM, Arun Ajith S wrote:
+> Fix mistake in the original patch where limits were specified but the
+> handler didn't take care of the limits.
+> 
+> Signed-off-by: Arun Ajith S <aajith@arista.com>
+> ---
+>  net/ipv6/addrconf.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-> diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> index d816759a6bcf..e280568bb513 100644
-> +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-> @@ -183,7 +183,7 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
->  {
->         struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
->         struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
-> -       size_t size = end - start + 1;
-> +       size_t size = end - start;
 
-+1 to this bug fix. You should send a formal patch for stable with a fixes/etc
+Reviewed-by: David Ahern <dsahern@kernel.org>
 
-mmu notifiers uses 'end' not 'last' in alignment with how VMA's work:
-
-include/linux/mm_types.h:       unsigned long vm_end;           /* The first byte after our end address
-
-Jason

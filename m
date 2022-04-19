@@ -2,60 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D71C50673D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:54:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F2E506746
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:55:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350178AbiDSI4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S1350204AbiDSI6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345296AbiDSI4t (ORCPT
+        with ESMTP id S237640AbiDSI6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:56:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8180220D5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:54:06 -0700 (PDT)
-Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KjHbT6Y5vzFqSY;
-        Tue, 19 Apr 2022 16:51:33 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 16:54:03 +0800
-Received: from [10.174.177.243] (10.174.177.243) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 19 Apr 2022 16:54:03 +0800
-Message-ID: <477dcc83-4298-b7e4-3a6a-c8fa23b27d01@huawei.com>
-Date:   Tue, 19 Apr 2022 16:54:02 +0800
+        Tue, 19 Apr 2022 04:58:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2F9F25E86
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 01:55:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650358528;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=sAp+F+npHVI/LvkJesk2bVKFg1Wa6g6pN0S+Js80XoI=;
+        b=Aw71b+3zqHHKd4FVZYq1L0a274qEGVML2saaD11UiuUz85rL/gTxz2E9e4NIQcMtTHqFqK
+        vFE42w1zeJ6yzBvNJeEGTO/UKP4r5W/dSxUojNDhkGuOKCsnLzViigrM8FGpssN11v8Lqs
+        kfjyFVYYUbSaTBmVLxsRu9WLwYaLPQQ=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-121-cvwRzkmxM9Szm0_kiSLc0w-1; Tue, 19 Apr 2022 04:55:24 -0400
+X-MC-Unique: cvwRzkmxM9Szm0_kiSLc0w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C56EF3811F2D;
+        Tue, 19 Apr 2022 08:55:23 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 465364087D60;
+        Tue, 19 Apr 2022 08:55:19 +0000 (UTC)
+Message-ID: <204c7265de2d69ed240d18e30c7595702277cdbb.camel@redhat.com>
+Subject: Re: [PATCH 1/3] KVM: x86: Don't re-acquire SRCU lock in
+ complete_emulated_io()
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, linuxppc-dev@lists.ozlabs.org,
+        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Date:   Tue, 19 Apr 2022 11:55:18 +0300
+In-Reply-To: <20220415004343.2203171-2-seanjc@google.com>
+References: <20220415004343.2203171-1-seanjc@google.com>
+         <20220415004343.2203171-2-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.5.1
-Subject: Re: [PATCH v3 1/4] hugetlb: Fix wrong use of nr_online_nodes
-Content-Language: en-US
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     Peng Liu <liupeng256@huawei.com>, <mike.kravetz@oracle.com>,
-        <david@redhat.com>, <yaozhenguo1@gmail.com>,
-        <baolin.wang@linux.alibaba.com>, <songmuchun@bytedance.com>,
-        <liuyuntao10@huawei.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220413032915.251254-1-liupeng256@huawei.com>
- <20220413032915.251254-2-liupeng256@huawei.com>
- <20220415020927.x7ylevbd5uaevfyt@offworld>
- <08896d0c-8821-000e-4cc2-9e64beda167f@huawei.com>
- <1407c3bb-89c4-ae11-7b09-d42115ab693e@huawei.com>
- <20220418214040.419a2e17254eb33f68f94b59@linux-foundation.org>
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-In-Reply-To: <20220418214040.419a2e17254eb33f68f94b59@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.243]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,93 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-04-15 at 00:43 +0000, Sean Christopherson wrote:
+> Don't re-acquire SRCU in complete_emulated_io() now that KVM acquires the
+> lock in kvm_arch_vcpu_ioctl_run().  More importantly, don't overwrite
+> vcpu->srcu_idx.  If the index acquired by complete_emulated_io() differs
+> from the one acquired by kvm_arch_vcpu_ioctl_run(), KVM will effectively
+> leak a lock and hang if/when synchronize_srcu() is invoked for the
+> relevant grace period.
+> 
+> Fixes: 8d25b7beca7e ("KVM: x86: pull kvm->srcu read-side to kvm_arch_vcpu_ioctl_run")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/x86.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index ab336f7c82e4..f35fe09de59d 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -10450,12 +10450,7 @@ static int vcpu_run(struct kvm_vcpu *vcpu)
+>  
+>  static inline int complete_emulated_io(struct kvm_vcpu *vcpu)
+>  {
+> -	int r;
+> -
+> -	vcpu->srcu_idx = srcu_read_lock(&vcpu->kvm->srcu);
+> -	r = kvm_emulate_instruction(vcpu, EMULTYPE_NO_DECODE);
+> -	srcu_read_unlock(&vcpu->kvm->srcu, vcpu->srcu_idx);
+> -	return r;
+> +	return kvm_emulate_instruction(vcpu, EMULTYPE_NO_DECODE);
+>  }
+>  
+>  static int complete_emulated_pio(struct kvm_vcpu *vcpu)
 
-On 2022/4/19 12:40, Andrew Morton wrote:
-> On Sat, 16 Apr 2022 09:21:45 +0800 Kefeng Wang <wangkefeng.wang@huawei.com> wrote:
->
->> On 2022/4/15 13:41, Kefeng Wang wrote:
->>> On 2022/4/15 10:09, Davidlohr Bueso wrote:
->>>> On Wed, 13 Apr 2022, Peng Liu wrote:
->>>>
->>>>> Certain systems are designed to have sparse/discontiguous nodes. In
->>>>> this case, nr_online_nodes can not be used to walk through numa node.
->>>>> Also, a valid node may be greater than nr_online_nodes.
->>>>>
->>>>> However, in hugetlb, it is assumed that nodes are contiguous. Recheck
->>>>> all the places that use nr_online_nodes, and repair them one by one.
->>>>>
->>>>> Suggested-by: David Hildenbrand <david@redhat.com>
->>>>> Fixes: 4178158ef8ca ("hugetlbfs: fix issue of preallocation of
->>>>> gigantic pages can't work")
->>>>> Fixes: b5389086ad7b ("hugetlbfs: extend the definition of hugepages
->>>>> parameter to support node allocation")
->>>>> Fixes: e79ce9832316 ("hugetlbfs: fix a truncation issue in hugepages
->>>>> parameter")
->>>>> Fixes: f9317f77a6e0 ("hugetlb: clean up potential spectre issue
->>>>> warnings")
->>>>> Signed-off-by: Peng Liu <liupeng256@huawei.com>
->>>>> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>>> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
->>>> Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
->>>>
->>>> ... but
->>>>
->>>>> ---
->>>>> mm/hugetlb.c | 12 ++++++------
->>>>> 1 file changed, 6 insertions(+), 6 deletions(-)
->>>>>
->>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->>>>> index b34f50156f7e..5b5a2a5a742f 100644
->>>>> --- a/mm/hugetlb.c
->>>>> +++ b/mm/hugetlb.c
->>>>> @@ -2979,7 +2979,7 @@ int __alloc_bootmem_huge_page(struct hstate
->>>>> *h, int nid)
->>>>>      struct huge_bootmem_page *m = NULL; /* initialize for clang */
->>>>>      int nr_nodes, node;
->>>>>
->>>>> -    if (nid != NUMA_NO_NODE && nid >= nr_online_nodes)
->>>>> +    if (nid != NUMA_NO_NODE && !node_online(nid))
->>>> afaict null_blk could also use this, actually the whole thing wants a
->>>> helper - node_valid()?
->>>>
->>> This one should be unnecessary, and this patch looks has a bug,
->>>
->>> if a very nid passed to node_online(), it may crash,  could you
->>> re-check it,
->>>
->>> see my changes below,
->>>
->>> 1) add tmp check against MAX_NUMNODES before node_online() check,
->>>
->>>      and move it after get tmp in hugepages_setup() , this could cover
->>> both per-node alloc and normal alloc
->> sorry，for normal alloc, tmp is the number of huge pages, we don't  need
->> the movement,   only add tmp >= MAX_NUMNODES is ok
->>
-> Does the v4 patch address the issues which were raised in this thread?
-Yes， v4 has fix this.
->
->
-> --- a/mm/hugetlb.c~hugetlb-fix-wrong-use-of-nr_online_nodes-v4
-> +++ a/mm/hugetlb.c
-> @@ -2986,8 +2986,6 @@ int __alloc_bootmem_huge_page(struct hst
->   	struct huge_bootmem_page *m = NULL; /* initialize for clang */
->   	int nr_nodes, node;
->   
-> -	if (nid != NUMA_NO_NODE && !node_online(nid))
-> -		return 0;
->   	/* do node specific alloc */
->   	if (nid != NUMA_NO_NODE) {
->   		m = memblock_alloc_try_nid_raw(huge_page_size(h), huge_page_size(h),
-> @@ -4174,7 +4172,7 @@ static int __init hugepages_setup(char *
->   				pr_warn("HugeTLB: architecture can't support node specific alloc, ignoring!\n");
->   				return 0;
->   			}
-> -			if (!node_online(tmp))
-> +			if (tmp >= MAX_NUMNODES || !node_online(tmp))
->   				goto invalid;
->   			node = array_index_nospec(tmp, MAX_NUMNODES);
->   			p += count + 1;
-> _
->
-> .
+I wonder how this did work....
+
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+
+Best regards,
+	Maxim Levitsky
+

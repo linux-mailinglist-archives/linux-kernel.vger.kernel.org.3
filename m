@@ -2,135 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A8AA5068E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:38:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 429E05068E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:41:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350688AbiDSKk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43608 "EHLO
+        id S242348AbiDSKo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238239AbiDSKk5 (ORCPT
+        with ESMTP id S1350706AbiDSKmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:40:57 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1653F2B1AA
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:38:15 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id p8so8456223pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:38:15 -0700 (PDT)
+        Tue, 19 Apr 2022 06:42:37 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD8013DFD
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:39:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id bv19so32007908ejb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:39:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sslab.ics.keio.ac.jp; s=google;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=v4bWODHAE/RCs4ytYs4rVZozOzTNQQhYomCKGYtkHnA=;
-        b=W8Wh+xVGh01Uc6uix5XTB5eMRgqUJ+4MkQcIETafwAEScVJukF0ttf7X4iq06hKoaf
-         cIPu+UaoGXFpd3kAAVt7vrZLTGo/1qMBHYSyyKQ6s6zXuUTVdPZ9+vrwmEaKjWJmwAmZ
-         XkR7r2pFM/dpnZ6mhMrqOs7cEAyVItIpifS5M=
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=GL2fYhpPazaoZcNVvKzwIzbLVWsgi0SqDsBRdlVnGFE=;
+        b=gU9fKApCIgWofdlZwPbCJoYJui79+QQoAMZ+f4btrxoIXH53zopKm0uPJ6pUKWZsWc
+         gnHSKHPdLUXuvoNRjU+smc3AFSRKapOOz1l2A93Tr56xhzFtCnJXZICCsNTEIC1QOjAa
+         y6WteyMqxwZuUXv/QrGy3nvxqzSXhWUi/WnOFo7DxBeRC7XHUww41gI6cmkEmdHIG3yI
+         O+364XZYQDQEFok1MDIIefNvKaokOD8yWwKrqQcpAO+hLsVB3TThs1dInqp38Bbkugnt
+         hvuYkI1b/6lQWTaNWVFQR4iYI+csOEqjepIweK8TweLlm0GihscIjXij9HRmrPOmDhLn
+         2+zQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
          :content-transfer-encoding;
-        bh=v4bWODHAE/RCs4ytYs4rVZozOzTNQQhYomCKGYtkHnA=;
-        b=j+HJO5yTc4PLWwAwZjKSfwy7m9VqfSAaMczdBcoRdTFhPsFl5dIjKQ1SF+6BMYV8uz
-         sGqWLE/Cme/oNgiTX4nVJ+dLbcILX2W9jYN/kP8eUNtPnDmz167+lqa/kz20UdBMcY5n
-         O/G6g/N6hA+ai83BLyJoL4s1GWs21edcixzmGBfg64hiKkd1jkTFKGZCcu30C7Q/latR
-         UB3RXJnc34kTQ1GtA7CjPKO8yUtBlsIQ+Rh3hbCUiKKlRa74l/qbholKN4Ckl7dbMEYM
-         ccVWF553D7cDnl11WsITG03Zx2B79sriRHvs91CQR7P6LJrvuD7pL3mIsXKH9hbuKoJA
-         b2DA==
-X-Gm-Message-State: AOAM530SQwWGRBGbN5YxlflXLIfjNBcLel4MBO/81i/jhEpVgLOlKfOh
-        InRbgv2xlkTmEPBKB5wq3HBFbA==
-X-Google-Smtp-Source: ABdhPJwByVB/GAZirrV7LzYHS9EcpAwq2tKDU98/ISXTP+74UwHctRW7VQ/dDonrNaJ1o+CdOq8ahA==
-X-Received: by 2002:a63:6a85:0:b0:398:9e2b:afd6 with SMTP id f127-20020a636a85000000b003989e2bafd6mr14279075pgc.582.1650364693955;
-        Tue, 19 Apr 2022 03:38:13 -0700 (PDT)
-Received: from saltlake.i.sslab.ics.keio.ac.jp (sslab-relay.ics.keio.ac.jp. [131.113.126.173])
-        by smtp.gmail.com with ESMTPSA id z15-20020a056a001d8f00b004fda37855ddsm15085869pfw.168.2022.04.19.03.38.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 03:38:13 -0700 (PDT)
-From:   Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
-Cc:     keitasuzuki.park@sslab.ics.keio.ac.jp,
-        Evan Quan <evan.quan@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amd/pm: fix double free in si_parse_power_table()
-Date:   Tue, 19 Apr 2022 10:37:19 +0000
-Message-Id: <20220419103721.4080045-1-keitasuzuki.park@sslab.ics.keio.ac.jp>
-X-Mailer: git-send-email 2.25.1
+        bh=GL2fYhpPazaoZcNVvKzwIzbLVWsgi0SqDsBRdlVnGFE=;
+        b=aW3WbW4jzzpH81H+FB+hQiRPisG8Y0kM8uw7EV0VXOUTf8QgG4R/6magv1gl9Pen6O
+         e0g5ZMnnLvtPPEQ/oTy16ojpD3KX9BAUJThuzBRaOJBcEaXatkAulQT7dGXrdjLfHqGo
+         SHh5PEvHvccdzO4AtXkKT0yz48ID76HEn5vAnykrI94CRJUZlwYHoJOq7ORTMhdAoDdm
+         2S/sUr+kX7pkvKM7E9qhzlO/okAjxEUiHV1k+k7rQf1dpFvGg0Ociv2IpKZkLG/E30Qm
+         Q7/N2C56UisoRxZQmQkBC/t5NcEf9DP9OXj3u4pP1zVnp/dMkngvaQMWDhja4zJs8Q67
+         MUzQ==
+X-Gm-Message-State: AOAM532p92nB0AfDbufc9LYxm3N4CtLyNMvQ9rLspeHBEAaxUb0YgLAC
+        MrqNn615z6Ry42k7VUvp0WKwQBjEKPsNyg==
+X-Google-Smtp-Source: ABdhPJx155Ovc/3OaXt56VJVSQL+8VeYbvwvfy68N2lcRmJQt54ZzMqfT/zGyNp+W/WNmFB8c5CVsw==
+X-Received: by 2002:a17:906:9c09:b0:6e8:89e7:9807 with SMTP id ff9-20020a1709069c0900b006e889e79807mr13019845ejc.473.1650364792867;
+        Tue, 19 Apr 2022 03:39:52 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id lb4-20020a170907784400b006e0d13f65e5sm5502888ejc.167.2022.04.19.03.39.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 03:39:50 -0700 (PDT)
+Message-ID: <b2e32685-73a6-98be-50be-5121c67431ed@linaro.org>
+Date:   Tue, 19 Apr 2022 12:39:48 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 2/5] dt-bindings: clock: Document MA35D1 clock
+ controller bindings
+Content-Language: en-US
+To:     Jacky Huang <ychuang3@nuvoton.com>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, ychuang570808@gmail.com
+Cc:     robh+dt@kernel.org, sboyd@kernel.org, krzk+dt@kernel.org,
+        arnd@arndb.de, olof@lixom.net, will@kernel.org, soc@kernel.org,
+        cfli0@nuvoton.com
+References: <20220418082738.11301-1-ychuang3@nuvoton.com>
+ <20220418082738.11301-3-ychuang3@nuvoton.com>
+ <2f8d2f6a-32dc-15cc-321c-f75721edf8a2@linaro.org>
+ <29b00c24-681a-7f6f-f27d-b7525c5b8485@nuvoton.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <29b00c24-681a-7f6f-f27d-b7525c5b8485@nuvoton.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In function si_parse_power_table(), array adev->pm.dpm.ps and its member
-is allocated. If the allocation of each member fails, the array itself
-is freed and returned with an error code. However, the array is later
-freed again in si_dpm_fini() function which is called when the function
-returns an error.
+On 19/04/2022 12:12, Jacky Huang wrote:
+>>> +
+>>> +  assigned-clock-rates:
+>>> +    minItems: 5
+>>> +    maxItems: 5
+>>> +
+>>> +  nuvoton,clk-pll-mode:
+>>> +    A list of PLL operation mode corresponding to DDRPLL, APLL, EPLL,
+>>> +    and VPLL in sequential.
+>> This does not look like a binding which was tested. Read
+>> "writing-schema" and test your bindings.
+> 
+> "nuvoton,clk-pll-mode" is a nonstandard property used to describe the 
+> operation mode of
+> corresponding PLLs.
+> 
+> (According to Device tree Specification section "2.2.4 Properties"
+> Nonstandard property names should specify a unique string prefix, such 
+> as a stock ticker symbol, identifying the name of
+> the company or organization that defined the property. Examples:
 
-This leads to potential double free of the array adev->pm.dpm.ps, as
-well as leak of its array members, since the members are not freed in
-the allocation function and the array is not nulled when freed.
-In addition adev->pm.dpm.num_ps, which keeps track of the allocated
-array member, is not updated until the member allocation is
-successfully finished, this could also lead to either use after free,
-or uninitialized variable access in si_dpm_fini().
+I am not saying about property name. I replied under some description
+below which fails to build.
 
-Fix this by postponing the free of the array until si_dpm_fini() and
-increment adev->pm.dpm.num_ps everytime the array member is allocated.
+Instead please test your bindings.
 
-Signed-off-by: Keita Suzuki <keitasuzuki.park@sslab.ics.keio.ac.jp>
----
- drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-index caae54487f9c..079888229485 100644
---- a/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-+++ b/drivers/gpu/drm/amd/pm/legacy-dpm/si_dpm.c
-@@ -7331,17 +7331,15 @@ static int si_parse_power_table(struct amdgpu_device *adev)
- 	if (!adev->pm.dpm.ps)
- 		return -ENOMEM;
- 	power_state_offset = (u8 *)state_array->states;
--	for (i = 0; i < state_array->ucNumEntries; i++) {
-+	for (adev->pm.dpm.num_ps = 0, i = 0; i < state_array->ucNumEntries; i++) {
- 		u8 *idx;
- 		power_state = (union pplib_power_state *)power_state_offset;
- 		non_clock_array_index = power_state->v2.nonClockInfoIndex;
- 		non_clock_info = (struct _ATOM_PPLIB_NONCLOCK_INFO *)
- 			&non_clock_info_array->nonClockInfo[non_clock_array_index];
- 		ps = kzalloc(sizeof(struct  si_ps), GFP_KERNEL);
--		if (ps == NULL) {
--			kfree(adev->pm.dpm.ps);
-+		if (ps == NULL)
- 			return -ENOMEM;
--		}
- 		adev->pm.dpm.ps[i].ps_priv = ps;
- 		si_parse_pplib_non_clock_info(adev, &adev->pm.dpm.ps[i],
- 					      non_clock_info,
-@@ -7363,8 +7361,8 @@ static int si_parse_power_table(struct amdgpu_device *adev)
- 			k++;
- 		}
- 		power_state_offset += 2 + power_state->v2.ucNumDPMLevels;
-+		adev->pm.dpm.num_ps++;
- 	}
--	adev->pm.dpm.num_ps = state_array->ucNumEntries;
- 
- 	/* fill in the vce power states */
- 	for (i = 0; i < adev->pm.dpm.num_of_vce_states; i++) {
--- 
-2.25.1
-
+Best regards,
+Krzysztof

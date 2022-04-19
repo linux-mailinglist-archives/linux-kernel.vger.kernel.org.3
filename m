@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93C33506FBF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:07:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7E2506FCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352926AbiDSOJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
+        id S242052AbiDSOKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351206AbiDSOJS (ORCPT
+        with ESMTP id S244266AbiDSOKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:09:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2C982AC44
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:06:35 -0700 (PDT)
+        Tue, 19 Apr 2022 10:10:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 88B832AC44
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1650377194;
+        s=mimecast20190719; t=1650377243;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=UrvBWaRXV3DlLVU6RimSG2jNQYfccJ/kwX+dgBkIis4=;
-        b=dhWVkO0z5IhByvCWbQ3TO8Qm2V1gZDYcPXki3l2UFdqWUUD/Mm4vSq3H+1Vpm4pGQfXJAJ
-        HlVidfvAKEDhHFpyRehX7B6UQLJneE762ummu9gyNV9Q/4bVTdfeIvDh7AyYL6E88B/Jr6
-        nxxXQKovb+NMG5eXZX/UsmdhoWSM87U=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=avwN5vEGwMPyhOCrMD1a05vTManbL4SDpzVBe7ItULs=;
+        b=A24lCJsVihwQRMJLAndHGnfr4hn6bJIFRxnCrRrpq/3LUaAbU1w9QhUsIfpJeO/jrZsI7e
+        XnZnJTRpo2l4Wmnrzj4Kk1PkkXY7zQLEWO+60LCfG41FSrACiBI+En37duDpjQTYdqHxcZ
+        y1Q1KJizrsnRPABk/FuNMek4ZZm1OZ0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-611-_-YUJcBhMkSokFuW9gNE_g-1; Tue, 19 Apr 2022 10:06:32 -0400
-X-MC-Unique: _-YUJcBhMkSokFuW9gNE_g-1
-Received: by mail-qk1-f199.google.com with SMTP id bp31-20020a05620a459f00b00699fabcc554so12503661qkb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=UrvBWaRXV3DlLVU6RimSG2jNQYfccJ/kwX+dgBkIis4=;
-        b=iFhevrffyav7iZ2yfaW0eQAU9t2Ount9jWRP9WiXuIuRiH8IyEzAUQlMkmsf5Yq+/R
-         xorHFpw6Rgd+nOFjIfvwCAs5dT+ZSVPQCQCa8SyoMdfoDxWtUhXRfyWStBwB+MXREbnW
-         kfp9aK6cPDRa7RFingCL5YBOy2e7KKpOEJepoj1Kkb9c0xy/AOlSq/dCeaCHqx7XMCtw
-         r2ua5LLzIBh+bIJ3Xg5TRuzpSNv7ip1y8NXHIoy3iX302ZciclSkZj3oe3yCxOWqneIz
-         OMpWkMD2MaYDKo5s2M2npn5YD1NuER5KTTCPd3TKVveMEmmFqnKFsZBGl9SrLPG3o70I
-         SVOQ==
-X-Gm-Message-State: AOAM533caUnDWg0jTqiz1KFyw61eH9ORg6y8UIrjqRP4aTKinq7/F7cx
-        NjbuxFVZzfrC+Y9DoNIhXgzKAVXnwo18NYsNnOxZ33BmX1d0SRHJBhquBlZujSMGEy+twIzzJzo
-        X0NiSoEeKSPJX9FLpH8578/K0
-X-Received: by 2002:a05:620a:258b:b0:680:f66e:3381 with SMTP id x11-20020a05620a258b00b00680f66e3381mr9472890qko.291.1650377192262;
-        Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
-X-Google-Smtp-Source: ABdhPJyB9cTVt0zydUHqWyNffYIDfCm9PGrZ/QTxmXsfj7ORbXn7UsWYrkuGD73ZFStBSxvCCJ7yOg==
-X-Received: by 2002:a05:620a:258b:b0:680:f66e:3381 with SMTP id x11-20020a05620a258b00b00680f66e3381mr9472870qko.291.1650377192017;
-        Tue, 19 Apr 2022 07:06:32 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id 2-20020a05620a06c200b0069ea498aec7sm59151qky.16.2022.04.19.07.06.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 07:06:31 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com
-Cc:     linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] USB2NET : SR9800 : change SR9800_BULKIN_SIZE from global to static
-Date:   Tue, 19 Apr 2022 10:06:25 -0400
-Message-Id: <20220419140625.2886328-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+ us-mta-440-no00TsvoNoeUNikNEe6h8Q-1; Tue, 19 Apr 2022 10:07:18 -0400
+X-MC-Unique: no00TsvoNoeUNikNEe6h8Q-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6CB383C23FA0;
+        Tue, 19 Apr 2022 14:07:17 +0000 (UTC)
+Received: from starship (unknown [10.40.194.231])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4743840885A1;
+        Tue, 19 Apr 2022 14:07:12 +0000 (UTC)
+Message-ID: <080d6ced254e56dbad2910447f81c5ea976fc419.camel@redhat.com>
+Subject: Re: [PATCH v8 6/9] KVM: x86: lapic: don't allow to change APIC ID
+ unconditionally
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Zeng Guang <guang.zeng@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jethro Beekman <jethro@fortanix.com>,
+        Kai Huang <kai.huang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Robert Hu <robert.hu@intel.com>,
+        Gao Chao <chao.gao@intel.com>
+Date:   Tue, 19 Apr 2022 17:07:11 +0300
+In-Reply-To: <YlmDtC73u/AouMsu@google.com>
+References: <20220411090447.5928-1-guang.zeng@intel.com>
+         <20220411090447.5928-7-guang.zeng@intel.com> <YlmDtC73u/AouMsu@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,32 +81,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch reports this issue
-sr9800.h:166:53: warning: symbol 'SR9800_BULKIN_SIZE' was not declared. Should it be static?
+On Fri, 2022-04-15 at 14:39 +0000, Sean Christopherson wrote:
+> On Mon, Apr 11, 2022, Zeng Guang wrote:
+> > From: Maxim Levitsky <mlevitsk@redhat.com>
+> > 
+> > No normal guest has any reason to change physical APIC IDs, and
+> > allowing this introduces bugs into APIC acceleration code.
+> > 
+> > And Intel recent hardware just ignores writes to APIC_ID in
+> > xAPIC mode. More background can be found at:
+> > https://lore.kernel.org/lkml/Yfw5ddGNOnDqxMLs@google.com/
+> > 
+> > Looks there is no much value to support writable xAPIC ID in
+> > guest except supporting some old and crazy use cases which
+> > probably would fail on real hardware. So, make xAPIC ID
+> > read-only for KVM guests.
+> 
+> AFAIK, the plan is to add a capability to let userspace opt-in to a fully read-only
+> APIC ID[*], but I haven't seen patches...
+> 
+> Maxim?
 
-Global variables should not be defined in header files.
-This only works because sr9800.h in only included by sr9800.c
-Change the storage-class specifier to static.
-And since it does not change add type qualifier const.
+Yep, I will start working on this pretty much today.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/net/usb/sr9800.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I was busy last 3 weeks stablilizing nested AVIC
+(I am getting ~600,000 IPIs/s instead of ~40,000 in L2 VM with nested AVIC!),
+with 700,000-900,000 IPIs native with AVIC, 
+almost bare metal IPI performance in L2!
 
-diff --git a/drivers/net/usb/sr9800.h b/drivers/net/usb/sr9800.h
-index 18f670251275..952e6f7c0321 100644
---- a/drivers/net/usb/sr9800.h
-+++ b/drivers/net/usb/sr9800.h
-@@ -163,7 +163,7 @@
- #define SR9800_MAX_BULKIN_24K		6
- #define SR9800_MAX_BULKIN_32K		7
- 
--struct {unsigned short size, byte_cnt, threshold; } SR9800_BULKIN_SIZE[] = {
-+static const struct {unsigned short size, byte_cnt, threshold; } SR9800_BULKIN_SIZE[] = {
- 	/* 2k */
- 	{2048, 0x8000, 0x8001},
- 	/* 4k */
--- 
-2.27.0
+(the result is from test which I will soon publish makes all 
+vCPUs send IPIs in round robin fashion, and a vCPU sends IPI only after 
+it received it from previous vCPU - the number is total
+number of IPIs send on 8 vCPUs).
+
+
+The fact that the dreadful AVIC errata dominates my testing again,
+supports my feeling that I mostly fixed nested AVIC bugs.'
+Tomorrow I'll send RFC v2 of the patches.
+
+
+About read-only apic ID cap, 
+I have few questions before I start implementing it:
+
+Paolo gave me recently an idea to make the APIC ID always read-only for 
+guest writes, and only allow host APIC ID changes (unless the cap is set).
+
+I am kind of torn about it - assuming that no guest writes APIC ID this will work just fine 
+in empty logical sense, but if a guest actually writes an apic id, 
+while it will migrate fine to a newer KVM, but then after a reboot 
+it won't be able to set its APIC ID again.
+
+On the other hand, versus fully unconditional read-only apic id, 
+that will support that very unlikely case if the hypervisor
+itself is actually the one that for some reason changes the apic id,
+from the initial value it gave.
+
+
+In terms of what I need:
+
+- In nested AVIC I strongly prefer read-only apic ids, and I can
+  make nested AVIC be conditional on the new cap.
+  IPI virtualization also can be made conditional on the new cap.
+
+
+- I also would love to remove broken code from *non nested* AVIC, 
+  which tries to support APIC ID change. 
+
+  I can make non nested AVIC *also* depend on the new cap, 
+  but that will technically be a regression, since this way users of 
+  older qemu and new kernel will suddenly have their AVIC inhibited. 
+
+  I don't know if that is such a big issue though because AVIC is
+  (sadly) by default disabled anyway.
+
+  If that is not possible the other way to solve this is to inhibit AVIC
+  as soon as the guest tries to change APIC ID.
+
+- I would also want to remove the ability to relocate apic base,
+  likely depending on the new cap as well, but if there are objections
+  I can drop this. I don't need this, but it is just nice to do while we
+  are at it.
+
+
+Paolo, Sean, and everyone else: What do you think?
+
+Also:
+Suggestions for the name for the new cap? Is this all right if
+the same cap would make both apic id read only and apic base
+(this is also something Paolo suggested to me)
+
+Best regards,
+	Maxim Levitsky
+
+
+> 
+> [*] https://lore.kernel.org/all/c903e82ed2a1e98f66910c35b5aabdcf56e08e72.camel@redhat.com
+> 
+
 

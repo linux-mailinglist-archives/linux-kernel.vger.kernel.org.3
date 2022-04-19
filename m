@@ -2,122 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF66506B3A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A143D506B27
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351848AbiDSLng (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:43:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
+        id S1349565AbiDSLoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352319AbiDSLnK (ORCPT
+        with ESMTP id S1351841AbiDSLmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:43:10 -0400
-Received: from mail1.wrs.com (unknown-3-146.windriver.com [147.11.3.146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A1211BE96;
-        Tue, 19 Apr 2022 04:40:21 -0700 (PDT)
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.corp.ad.wrs.com [147.11.82.252])
-        by mail1.wrs.com (8.15.2/8.15.2) with ESMTPS id 23JBbinf005017
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 19 Apr 2022 04:37:44 -0700
-Received: from otp-dpanait-l2.corp.ad.wrs.com (128.224.125.182) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+        Tue, 19 Apr 2022 07:42:12 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0931D37BE7;
+        Tue, 19 Apr 2022 04:37:20 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KjMCl1XB7zFqT6;
+        Tue, 19 Apr 2022 19:34:43 +0800 (CST)
+Received: from kwepemm600009.china.huawei.com (7.193.23.164) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2242.12; Tue, 19 Apr 2022 04:37:42 -0700
-From:   Dragos-Marian Panait <dragos.panait@windriver.com>
-To:     <stable@vger.kernel.org>
-CC:     <dragos.panait@windriver.com>, <wg@grandegger.com>,
-        <mkl@pengutronix.de>, <davem@davemloft.net>,
-        <paskripkin@gmail.com>, <gregkh@linuxfoundation.org>,
-        <hbh25y@gmail.com>, <linux-can@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 4.19 1/1] can: usb_8dev: usb_8dev_start_xmit(): fix double dev_kfree_skb() in error path
-Date:   Tue, 19 Apr 2022 14:36:42 +0300
-Message-ID: <20220419113642.3115359-2-dragos.panait@windriver.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220419113642.3115359-1-dragos.panait@windriver.com>
-References: <20220419113642.3115359-1-dragos.panait@windriver.com>
+ 15.1.2375.24; Tue, 19 Apr 2022 19:37:13 +0800
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 19:37:12 +0800
+Subject: Re: [PATCH -next 10/11] block, bfq: decrease
+ 'num_groups_with_pending_reqs' earlier
+To:     Jan Kara <jack@suse.cz>
+CC:     <tj@kernel.org>, <axboe@kernel.dk>, <paolo.valente@linaro.org>,
+        <cgroups@vger.kernel.org>, <linux-block@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20220305091205.4188398-1-yukuai3@huawei.com>
+ <20220305091205.4188398-11-yukuai3@huawei.com>
+ <20220413112816.fwobg4cp6ttpnpk6@quack3.lan>
+ <f3ed507a-7c85-cd69-3ad5-3e9c0e75c372@huawei.com>
+ <ef7bad8c-b8dd-f625-330c-9a22e303844b@huawei.com>
+ <20220419094955.ucjxadnhdyonfjdo@quack3.lan>
+From:   "yukuai (C)" <yukuai3@huawei.com>
+Message-ID: <d088c184-b67f-1afb-5f1c-0e166c665c50@huawei.com>
+Date:   Tue, 19 Apr 2022 19:37:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [128.224.125.182]
-X-ClientProxiedBy: ala-exchng01.corp.ad.wrs.com (147.11.82.252) To
- ala-exchng01.corp.ad.wrs.com (147.11.82.252)
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220419094955.ucjxadnhdyonfjdo@quack3.lan>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hangyu Hua <hbh25y@gmail.com>
+在 2022/04/19 17:49, Jan Kara 写道:
+> On Fri 15-04-22 09:10:06, yukuai (C) wrote:
+>> 在 2022/04/13 19:40, yukuai (C) 写道:
+>>> 在 2022/04/13 19:28, Jan Kara 写道:
+>>>> On Sat 05-03-22 17:12:04, Yu Kuai wrote:
+>>>>> Currently 'num_groups_with_pending_reqs' won't be decreased when
+>>>>> the group doesn't have any pending requests, while some child group
+>>>>> still have pending requests. The decrement is delayed to when all the
+>>>>> child groups doesn't have any pending requests.
+>>>>>
+>>>>> For example:
+>>>>> 1) t1 issue sync io on root group, t2 and t3 issue sync io on the same
+>>>>> child group. num_groups_with_pending_reqs is 2 now.
+>>>>> 2) t1 stopped, num_groups_with_pending_reqs is still 2. io from t2 and
+>>>>> t3 still can't be handled concurrently.
+>>>>>
+>>>>> Fix the problem by decreasing 'num_groups_with_pending_reqs'
+>>>>> immediately upon the weights_tree removal of last bfqq of the group.
+>>>>>
+>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+>>>>
+>>>> So I'd find the logic easier to follow if you completely removed
+>>>> entity->in_groups_with_pending_reqs and did updates of
+>>>> bfqd->num_groups_with_pending_reqs like:
+>>>>
+>>>>      if (!bfqg->num_entities_with_pending_reqs++)
+>>>>          bfqd->num_groups_with_pending_reqs++;
+>>>>
+>>> Hi,
+>>>
+>>> Indeed, this is an excellent idle, and much better than the way I did.
+>>>
+>>> Thanks,
+>>> Kuai
+>>>
+>>>> and similarly on the remove side. And there would we literally two places
+>>>> (addition & removal from weight tree) that would need to touch these
+>>>> counters. Pretty obvious and all can be done in patch 9.
+>>
+>> I think with this change, we can count root_group while activating bfqqs
+>> that are under root_group, thus there is no need to modify
+>> for_each_entity(or fake bfq_sched_data) any more.
+> 
+> Sure, if you can make this work, it would be easier :)
+> 
+>> The special case is that weight racing bfqqs are not inserted into
+>> weights tree, and I think this can be handled by adding a fake
+>> bfq_weight_counter for such bfqqs.
+> 
+> Do you mean "weight raised bfqqs"? Yes, you are right they would need
+> special treatment - maybe bfq_weights_tree_add() is not the best function
+> to use for this and we should rather use insertion / removal from the
+> service tree for maintaining num_entities_with_pending_reqs counter?
+> I can even see we already have bfqg->active_entities so maybe we could just
+> somehow tweak that accounting and use it for our purposes?
 
-commit 3d3925ff6433f98992685a9679613a2cc97f3ce2 upstream.
+The problem to use 'active_entities' is that bfqq can be deactivated
+while it still has pending requests.
 
-There is no need to call dev_kfree_skb() when usb_submit_urb() fails
-because can_put_echo_skb() deletes original skb and
-can_free_echo_skb() deletes the cloned skb.
+Anyway, I posted a new version aready, which still use weights_tree
+insertion / removal to count pending bfqqs. I'll be great if you can
+take a look:
 
-Fixes: 0024d8ad1639 ("can: usb_8dev: Add support for USB2CAN interface from 8 devices")
-Link: https://lore.kernel.org/all/20220311080614.45229-1-hbh25y@gmail.com
-Cc: stable@vger.kernel.org
-Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-Signed-off-by: Marc Kleine-Budde <mkl@pengutronix.de>
-[DP: adjusted params of can_free_echo_skb() for 4.19 stable]
-Signed-off-by: Dragos-Marian Panait <dragos.panait@windriver.com>
----
- drivers/net/can/usb/usb_8dev.c | 30 ++++++++++++++----------------
- 1 file changed, 14 insertions(+), 16 deletions(-)
+https://patchwork.kernel.org/project/linux-block/cover/20220416093753.3054696-1-yukuai3@huawei.com/
 
-diff --git a/drivers/net/can/usb/usb_8dev.c b/drivers/net/can/usb/usb_8dev.c
-index df99354ec12a..232f45f722f0 100644
---- a/drivers/net/can/usb/usb_8dev.c
-+++ b/drivers/net/can/usb/usb_8dev.c
-@@ -681,9 +681,20 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
- 	atomic_inc(&priv->active_tx_urbs);
- 
- 	err = usb_submit_urb(urb, GFP_ATOMIC);
--	if (unlikely(err))
--		goto failed;
--	else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
-+	if (unlikely(err)) {
-+		can_free_echo_skb(netdev, context->echo_index);
-+
-+		usb_unanchor_urb(urb);
-+		usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
-+
-+		atomic_dec(&priv->active_tx_urbs);
-+
-+		if (err == -ENODEV)
-+			netif_device_detach(netdev);
-+		else
-+			netdev_warn(netdev, "failed tx_urb %d\n", err);
-+		stats->tx_dropped++;
-+	} else if (atomic_read(&priv->active_tx_urbs) >= MAX_TX_URBS)
- 		/* Slow down tx path */
- 		netif_stop_queue(netdev);
- 
-@@ -702,19 +713,6 @@ static netdev_tx_t usb_8dev_start_xmit(struct sk_buff *skb,
- 
- 	return NETDEV_TX_BUSY;
- 
--failed:
--	can_free_echo_skb(netdev, context->echo_index);
--
--	usb_unanchor_urb(urb);
--	usb_free_coherent(priv->udev, size, buf, urb->transfer_dma);
--
--	atomic_dec(&priv->active_tx_urbs);
--
--	if (err == -ENODEV)
--		netif_device_detach(netdev);
--	else
--		netdev_warn(netdev, "failed tx_urb %d\n", err);
--
- nomembuf:
- 	usb_free_urb(urb);
- 
--- 
-2.17.1
+BTW, I was worried that you can't receive the emails because I got
+warnings that mails can't deliver to you:
 
+Your message could not be delivered for more than 6 hour(s).
+It will be retried until it is 1 day(s) old.
+
+For further assistance, please send mail to postmaster.
+
+If you do so, please include this problem report. You can
+delete your own text from the attached returned message.
+
+                    The mail system
+
+<jack@imap.suse.de> (expanded from <jack@suse.cz>): host
+     mail2.suse.de[149.44.160.157] said: 452 4.3.1 Insufficient system 
+storage
+
+Thanks,
+Kuai
+> 
+> 								Honza
+> 

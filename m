@@ -2,104 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B9DD5061A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:21:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EC465061AC
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239671AbiDSBYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36240 "EHLO
+        id S245299AbiDSB0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230466AbiDSBYC (ORCPT
+        with ESMTP id S230466AbiDSB0p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:24:02 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E8F286ED
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:21:21 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id y10so12479309ejw.8
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=zxbQ6TRPNn9gexb0jaIoX0c5WCAB0YeHHh5XcVddlu4=;
-        b=kUEg6N6xcZzu6vy23WArx+eRurR58Zws4VxetIoj7RYKnV/b97rc954MFQJvofcy6z
-         /v+kBQ2M2XVZHnrzej9b3KWSchdiXfLUXlRoebxpJR4Ud+JqzAMNPlZlIvloTDX9SvSs
-         goD3bIlVMMK0TecPMWAG/pVf/CGPh+Red09LmHLo8InfAzqkb51v3+VMcQp1Xlyp6QJO
-         E8goocgcYGWCi/0tPcoXu+fnBijeXF0P3mvWLRi/8yvo9bmrEdRhVRZdYHnqFOtSwkey
-         JQk6WdllD/yOUCd+6GRXnaGxLmws+bcUp96IOdozXA/N/BvSPmB+RqJHHMsqFn2X/9Ah
-         WEQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=zxbQ6TRPNn9gexb0jaIoX0c5WCAB0YeHHh5XcVddlu4=;
-        b=ZQjf1fdxACw1SwZ1rrdoxHzuA8e41xUpaZzwMxYhrO5uqLog/4lrJEI2mX5LRppmah
-         LrzFdStBGbECUd0BLpwI+Dw85DoV0mpy87LTvmWEr7BoCpsx+aap62qygbu80RSsHndk
-         ieSPgCl1QZeIk5tSilb6xORw5/C5of8YK19EHCoVQosIy74hlc2ktdzvVYSmxtSudp4K
-         4IglDz6toE/yr+J1b0cuOGuS+DEt4Qj7UkfeHXAx5qSBmLM6ZvwFl4yuE6DYsmrLQ7Hs
-         8BShtFseNE6bY8pLOFOwVTKL0wBaUhE+Ednm8TxxQDTEQGjTotjUz5JFF7j/tq6eOfh5
-         9rIA==
-X-Gm-Message-State: AOAM533EhvjUurcW+aSJJUE3pgtU8FUjMFRSHrRcdEOKLFKn+TbpglyU
-        iBc4WRi8rnuSUxy3ntbAy/+5JEFAT38z9oE9GtxpHw==
-X-Google-Smtp-Source: ABdhPJziwyj2afz/fzBMlMpMXsEiyH76Q2F7T1jddYljRwBxHA9iyxPKtGshpN6XD5v9WsIB64K6zw==
-X-Received: by 2002:a17:907:7f88:b0:6ef:e068:f5aa with SMTP id qk8-20020a1709077f8800b006efe068f5aamr390588ejc.238.1650331279998;
-        Mon, 18 Apr 2022 18:21:19 -0700 (PDT)
-Received: from leoy-ThinkPad-X240s ([104.245.96.34])
-        by smtp.gmail.com with ESMTPSA id b25-20020a056402139900b0041904036ab1sm7838317edv.5.2022.04.18.18.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Apr 2022 18:21:19 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 09:21:14 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ravi Bangoria <ravi.bangoria@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        German Gomez <german.gomez@arm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] perf report: Set PERF_SAMPLE_DATA_SRC bit for Arm SPE
- event
-Message-ID: <20220419012114.GF166256@leoy-ThinkPad-X240s>
-References: <20220414123201.842754-1-leo.yan@linaro.org>
- <Yl3eisj26sHBjokV@kernel.org>
+        Mon, 18 Apr 2022 21:26:45 -0400
+Received: from mail.meizu.com (unknown [14.29.68.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D41286ED;
+        Mon, 18 Apr 2022 18:24:02 -0700 (PDT)
+Received: from IT-EXMB-1-125.meizu.com (172.16.1.125) by mz-mail04.meizu.com
+ (172.16.1.16) with Microsoft SMTP Server (TLS) id 14.3.487.0; Tue, 19 Apr
+ 2022 09:24:04 +0800
+Received: from meizu.meizu.com (172.16.137.70) by IT-EXMB-1-125.meizu.com
+ (172.16.1.125) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2308.14; Tue, 19 Apr
+ 2022 09:24:00 +0800
+From:   Haowen Bai <baihaowen@meizu.com>
+To:     <seakeel@gmail.com>
+CC:     <alexs@kernel.org>, <baihaowen@meizu.com>, <corbet@lwn.net>,
+        <linux-doc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <siyanteng01@gmail.com>, <siyanteng@loongson.cn>
+Subject: [PATCH V4] docs/zh_CN: sync with original text Documentation/vm/page_owner.rst
+Date:   Tue, 19 Apr 2022 09:23:58 +0800
+Message-ID: <1650331438-4555-1-git-send-email-baihaowen@meizu.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <202ba5f5-f842-f4ce-dd67-c5166d94cc67@gmail.com>
+References: <202ba5f5-f842-f4ce-dd67-c5166d94cc67@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yl3eisj26sHBjokV@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.137.70]
+X-ClientProxiedBy: IT-EXMB-1-126.meizu.com (172.16.1.126) To
+ IT-EXMB-1-125.meizu.com (172.16.1.125)
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 06:56:26PM -0300, Arnaldo Carvalho de Melo wrote:
-> Em Thu, Apr 14, 2022 at 08:32:01PM +0800, Leo Yan escreveu:
-> > Since commit bb30acae4c4d ("perf report: Bail out --mem-mode if mem info
-> > is not available") "perf mem report" and "perf report --mem-mode"
-> > don't report result if the PERF_SAMPLE_DATA_SRC bit is missed in sample
-> > type.
-> > 
-> > The commit ffab48705205 ("perf: arm-spe: Fix perf report --mem-mode")
-> > partially fixes the issue.  It adds PERF_SAMPLE_DATA_SRC bit for Arm SPE
-> > event, this allows the perf data file generated by kernel v5.18-rc1 or
-> > later version can be reported properly.
-> > 
-> > On the other hand, perf tool still fails to be backward compatibility
-> > for a data file recorded by an older version's perf which contains Arm
-> > SPE trace data.  This patch is a workaround in reporting phase, when
-> > detects ARM SPE PMU event and without PERF_SAMPLE_DATA_SRC bit, it will
-> > force to set the bit in the sample type and give a warning info.
-> 
-> Thanks, applied.
+As the tools/vm/page_owner_sort added some feature and original text
+updated, sync the translation of zh_CN.
 
-Thank you, Arnaldo!
+Signed-off-by: Haowen Bai <baihaowen@meizu.com>
+---
+V1->V2: fix whitespace warning.
+V2->V3: fix some tab Alignment issue.
+V3->V4: fix sphinx warning
 
-Leo
+ Documentation/translations/zh_CN/vm/page_owner.rst | 61 +++++++++++++++++++++-
+ 1 file changed, 60 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/translations/zh_CN/vm/page_owner.rst b/Documentation/translations/zh_CN/vm/page_owner.rst
+index 9e951fabba9d..4d719547ce4f 100644
+--- a/Documentation/translations/zh_CN/vm/page_owner.rst
++++ b/Documentation/translations/zh_CN/vm/page_owner.rst
+@@ -103,14 +103,73 @@ page owner在默认情况下是禁用的。所以，如果你想使用它，你
+ 		-m		按总内存排序
+ 		-p		按pid排序。
+ 		-P		按tgid排序。
++		-n		按任务名称排序。
+ 		-r		按内存释放时间排序。
+ 		-s		按堆栈跟踪排序。
+ 		-t		按时间排序（默认）。
++		--sort <order>	指定排序顺序。排序语法是 [+|-]key[,[+|-]key[,...]]. 从
++						**标准格式说明符** 部分选择一个键。"+" 是可选的，因为默认方向是增加数字或字典顺序。
++						允许混合使用缩写键和全称键。
++
++		Examples:
++				./page_owner_sort <input> <output> --sort=n,+pid,-tgid
++				./page_owner_sort <input> <output> --sort=at
+ 
+    其它函数:
+ 
+ 	Cull:
+-		-c		通过比较堆栈跟踪而不是总块来进行剔除。
++		--cull <rules>
++				指定筛选规则。筛选语法是 key[,key[,...]]。在**标准格式说明符**部分选择一个多字母键
++
++		<rules> 是逗号分隔列表形式的单个参数，它提供了一种指定单个筛选规则的方法。下面的**标准格式说明
++				符**部分描述了可识别的关键字。<rules> 可以由键 k1,k2, ... 顺序指定，如下面的
++				STANDARD SORT KEYS 部分所述。允许混合使用缩写形式和完整形式的键。
+ 
++		Examples:
++				./page_owner_sort <input> <output> --cull=stacktrace
++				./page_owner_sort <input> <output> --cull=st,pid,name
++				./page_owner_sort <input> <output> --cull=n,f
+ 	Filter:
+ 		-f		过滤掉内存已被释放的块的信息。
++
++	Select:
++		--pid <pidlist>		通过 pid 进行选择。这将选择进程 ID 号出现在 <pidlist> 中的块。
++		--tgid <tgidlist>	通过 tgid 进行选择。这将选择线程组 ID 号出现在 <tgidlist> 中的块。
++		--name <cmdlist>	按任务名称选择。这将选择任务名称出现在 <cmdlist> 中的块。
++
++		<pidlist>、<tgidlist>、<cmdlist>是逗号分隔列表形式的单参数，它提供了一种指定单个选择规则的方法。
++
++
++		Examples:
++				./page_owner_sort <input> <output> --pid=1
++				./page_owner_sort <input> <output> --tgid=1,2,3
++				./page_owner_sort <input> <output> --name name1,name2
++
++标准格式说明符
++==============
++
++--sort 选项:
++
++        ======          ==========      ===================
++        缩写键          全称键          描述
++        ======          ==========      ===================
++        p               pid             进程 ID
++        tg              tgid            线程组 ID
++        n               name            任务名称
++        st              stacktrace      页面分配的调用栈
++        T               txt             块的全文
++        ft              free_ts         页面被释放的时间戳
++        at              alloc_ts        页面分配的时间戳
++        ======          ==========      ===================
++
++--curl 选项:
++
++        ======          ==========      ==================
++        缩写键          全称键          描述
++        ======          ==========      ==================
++        p               pid             进程 ID
++        tg              tgid            线程组 ID
++        n               name            任务名称
++        f               free            该页面是否已被释放
++        st              stacktrace      页面分配的调用栈
++        ======          ==========      ==================
+-- 
+2.7.4
+

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24F5507AE1
+	by mail.lfdr.de (Postfix) with ESMTP id 6ACCD507AE0
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:21:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1356681AbiDSUYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S1347911AbiDSUYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347789AbiDSUXy (ORCPT
+        with ESMTP id S1352873AbiDSUX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:23:54 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16DC5286CA;
-        Tue, 19 Apr 2022 13:21:11 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id ay36-20020a05600c1e2400b0038ebc885115so1420722wmb.1;
-        Tue, 19 Apr 2022 13:21:11 -0700 (PDT)
+        Tue, 19 Apr 2022 16:23:57 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6941D314;
+        Tue, 19 Apr 2022 13:21:13 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id v64-20020a1cac43000000b0038cfd1b3a6dso2318891wme.5;
+        Tue, 19 Apr 2022 13:21:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=from:to:cc:subject:date:message-id:in-reply-to:references
          :mime-version:content-transfer-encoding;
-        bh=XxuX79qNn642a66gAPHJUJU+SDUv1URkLNT8e6p6QeA=;
-        b=OkyizCXOo+WWlMBZLtcAQ1HbTqiTnP4SShdSeD2Qe5EcyCBc4S8v9uLfmQRki3oAWT
-         wCDpTfL3bQ7GOExUFaJ5wuTXGTlNburXZ3zWYEoG+X6L95R11zNDjVRaIXHnBHc8nfcz
-         d41+/LwkrB9MkKAirXROTyRrIp7jB88xpiIsClmAFolqkw+SPaO/SlJF5ikLe2HdiEjl
-         BBh6MquWBfDTPThhIxlOwI1jOUS00lUi1zljxxcfjdHJWnb/ENqLajvrEt+s2/BzciZX
-         3kbSmhsj2Ih/xXuvUhnbANxM2D1CxC6YG/M4BgZPrkcjVk+RlvebSxlvf9xzsCR0eRvN
-         n3fg==
+        bh=M0Qza2rtZ0RajpV4HFFpld0YJXw2QLLdgEYNKlixzhM=;
+        b=A7kGqzc0Q6KkHSPiL7QmBTAd8JFefcZvwK41ebKFz/0w9FyKWBw2cjxdlAlqXsEYeu
+         m6XcTcRokJm75kooNKVFccGnmWcfvJ/54LpjitkLTKdbc44rZnQFwY4/XvblrdCcsGP8
+         wsBIvtVfQP9c/uJlrxGwcSy6Kcq9x7UXtowpcfXisAucQ25uTwNcSdZGUMd0OX81oMMO
+         AJO+VEULTrYmKYp9AiY0A9NdWnqgRMKfVPU/ghhBQdF3LCd2S79KdS+koX7DfmwVhE9y
+         y/Du795x4jXahQ5PSW09g1b4mM3xGcvdPDKuY0SgqYjaC2Ok9FD2S+j5wauGmGTg474Q
+         9AFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
          :references:mime-version:content-transfer-encoding;
-        bh=XxuX79qNn642a66gAPHJUJU+SDUv1URkLNT8e6p6QeA=;
-        b=q9blqtkXS4LlXbBIUuDBTVu0b2n+vuwkkTg8d3sv5lXFHIPj/9qiGaX0O6iXE+/8+D
-         cn3NkVPI5KgzalLDxgt5b6LSRPrpG9QzLFs/wOlSOZE2+lWLR4zBPsMovKGF+MiP+raZ
-         JNtUDhHP9wC2Eqrf3qyd/fozcH8p0FVAvYL0RwxDNmTH+UUBmB6lmUrQrJvLrvK1E3Ga
-         REQt7JKH0t3RaZCTgfRQqEZglwOudD2TOnTof5tKas73wuWqDx4RU+lPkjrAdffna2Td
-         sXkTt+Zt2mUO8D0V9IM4LqUYSGrvZ+bVvEdXCLWcGSI5zOenEo9Yy4hBY1zV5xkXxmBM
-         6JiA==
-X-Gm-Message-State: AOAM531VsnOd9IHzv8AcwQ9cPfc6yykqupCS4vDVZifjjrN6R4Styigd
-        bd1H1UjpFzg+Q8H1vtUl3Sw=
-X-Google-Smtp-Source: ABdhPJxK3f5mSqPgiqCFMeFGrS2jKPSzG4BGI06yeTuIc580hSQfbhSMiNZnn/zJQXfSWajKc+wJ7g==
-X-Received: by 2002:a05:600c:3d0f:b0:38e:bc5f:5515 with SMTP id bh15-20020a05600c3d0f00b0038ebc5f5515mr281338wmb.128.1650399669690;
-        Tue, 19 Apr 2022 13:21:09 -0700 (PDT)
+        bh=M0Qza2rtZ0RajpV4HFFpld0YJXw2QLLdgEYNKlixzhM=;
+        b=Kx/eK0beAbZHufw4z7wREzlfcatWNXHMQLXW65Sfr2p+IeGM5LTfynz5X1uFWXKdxw
+         SBS7sSGpLw19y3YnZBHiDgixNgi+vOg7Ov1UtedHDYvEPnTJGQdj0Vote3W3qmkCA5eX
+         nA0xqtbC9/PUj5bs64cCSgIKfS98MeT39+q83ItyCLPPOjJBRwEhIqzT7zdOrIXxAmxT
+         QFaeLxkDpBeu5DRvfejgppvFt1rGrj84CbfiKkPz9DO7VNnc/wQKQ2nWpOqLZG6NWPLU
+         rGty3UsNHNggGPJaxvK5sZBi7yAlfnKDxY9uKkTLHRBeosTv+J3n5UFvHRdRWp91UiUR
+         afLA==
+X-Gm-Message-State: AOAM532n6kxTa/kczEYBQZnfqAlIqsNXSICzYZkC/gODhgsZo0lyOvv4
+        GRhIvDDTufTlbdOg8do8UWx5LxID4VQ=
+X-Google-Smtp-Source: ABdhPJwXaZ4sRx4KlXVYDxz6HIugRIaQA0yWiL8ZsbyMLa3V+sn8z8PKyyZsTahCeKX8maohyc1+zQ==
+X-Received: by 2002:a05:600c:1e85:b0:391:ca59:76be with SMTP id be5-20020a05600c1e8500b00391ca5976bemr271629wmb.184.1650399671690;
+        Tue, 19 Apr 2022 13:21:11 -0700 (PDT)
 Received: from localhost.localdomain ([141.72.243.13])
-        by smtp.gmail.com with ESMTPSA id b11-20020a5d45cb000000b0020a810f7726sm9959168wrs.5.2022.04.19.13.21.09
+        by smtp.gmail.com with ESMTPSA id b11-20020a5d45cb000000b0020a810f7726sm9959168wrs.5.2022.04.19.13.21.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 13:21:09 -0700 (PDT)
+        Tue, 19 Apr 2022 13:21:11 -0700 (PDT)
 From:   Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 To:     matt.ranostay@konsulko.com, mchehab@kernel.org,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
-Subject: [PATCH 1/3] media: i2c: video-i2c: Move defines to the top of the file
-Date:   Tue, 19 Apr 2022 22:20:49 +0200
-Message-Id: <20220419202051.44013-2-mosescb.dev@gmail.com>
+Subject: [PATCH 2/3] media: i2c: video-i2c: Replace constants with proper names
+Date:   Tue, 19 Apr 2022 22:20:50 +0200
+Message-Id: <20220419202051.44013-3-mosescb.dev@gmail.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220419202051.44013-1-mosescb.dev@gmail.com>
 References: <20220419202051.44013-1-mosescb.dev@gmail.com>
@@ -70,83 +70,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the defines in this driver are after some structs and
-functions, it makes more sense to move them up to the top of the file,
-so that the constants can be named together with other defines.
+Acc to MLX90640 datasheet:
+ - 0x0400 represents the start of RAM address
+ - 0x2400 represents the start of EEPROM address
+
+Reference: https://www.melexis.com/-/media/files/documents\
+           /datasheets/mlx90640-datasheet-melexis.pdf
 
 Signed-off-by: Moses Christopher Bollavarapu <mosescb.dev@gmail.com>
 ---
- drivers/media/i2c/video-i2c.c | 50 +++++++++++++++++------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ drivers/media/i2c/video-i2c.c | 10 ++++++++--
+ 1 file changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/media/i2c/video-i2c.c b/drivers/media/i2c/video-i2c.c
-index cb660b4bfd4b..b3fe9a507f7f 100644
+index b3fe9a507f7f..1d5f48329cb2 100644
 --- a/drivers/media/i2c/video-i2c.c
 +++ b/drivers/media/i2c/video-i2c.c
-@@ -34,6 +34,31 @@
+@@ -54,6 +54,12 @@
+ /* Temperature register */
+ #define AMG88XX_REG_T01L	0x80
  
- #define VIDEO_I2C_DRIVER	"video-i2c"
- 
-+/* Power control register */
-+#define AMG88XX_REG_PCTL	0x00
-+#define AMG88XX_PCTL_NORMAL		0x00
-+#define AMG88XX_PCTL_SLEEP		0x10
++/* RAM */
++#define MLX90640_RAM_START_ADDR		0x0400
 +
-+/* Reset register */
-+#define AMG88XX_REG_RST		0x01
-+#define AMG88XX_RST_FLAG		0x30
-+#define AMG88XX_RST_INIT		0x3f
++/* EEPROM */
++#define MLX90640_EEPROM_START_ADDR	0x2400
 +
-+/* Frame rate register */
-+#define AMG88XX_REG_FPSC	0x02
-+#define AMG88XX_FPSC_1FPS		BIT(0)
-+
-+/* Thermistor register */
-+#define AMG88XX_REG_TTHL	0x0e
-+
-+/* Temperature register */
-+#define AMG88XX_REG_T01L	0x80
-+
-+/* Control register */
-+#define MLX90640_REG_CTL1		0x800d
-+#define MLX90640_REG_CTL1_MASK		0x0380
-+#define MLX90640_REG_CTL1_MASK_SHIFT	7
-+
- struct video_i2c_chip;
- 
- struct video_i2c_buffer {
-@@ -135,31 +160,6 @@ static struct nvmem_config mlx90640_nvram_config = {
- 	.reg_read = mlx90640_nvram_read,
- };
- 
--/* Power control register */
--#define AMG88XX_REG_PCTL	0x00
--#define AMG88XX_PCTL_NORMAL		0x00
--#define AMG88XX_PCTL_SLEEP		0x10
--
--/* Reset register */
--#define AMG88XX_REG_RST		0x01
--#define AMG88XX_RST_FLAG		0x30
--#define AMG88XX_RST_INIT		0x3f
--
--/* Frame rate register */
--#define AMG88XX_REG_FPSC	0x02
--#define AMG88XX_FPSC_1FPS		BIT(0)
--
--/* Thermistor register */
--#define AMG88XX_REG_TTHL	0x0e
--
--/* Temperature register */
--#define AMG88XX_REG_T01L	0x80
--
--/* Control register */
--#define MLX90640_REG_CTL1		0x800d
--#define MLX90640_REG_CTL1_MASK		0x0380
--#define MLX90640_REG_CTL1_MASK_SHIFT	7
--
- static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+ /* Control register */
+ #define MLX90640_REG_CTL1		0x800d
+ #define MLX90640_REG_CTL1_MASK		0x0380
+@@ -149,7 +155,7 @@ static int mlx90640_nvram_read(void *priv, unsigned int offset, void *val,
  {
- 	return regmap_bulk_read(data->regmap, AMG88XX_REG_T01L, buf,
+ 	struct video_i2c_data *data = priv;
+ 
+-	return regmap_bulk_read(data->regmap, 0x2400 + offset, val, bytes);
++	return regmap_bulk_read(data->regmap, MLX90640_EEPROM_START_ADDR + offset, val, bytes);
+ }
+ 
+ static struct nvmem_config mlx90640_nvram_config = {
+@@ -168,7 +174,7 @@ static int amg88xx_xfer(struct video_i2c_data *data, char *buf)
+ 
+ static int mlx90640_xfer(struct video_i2c_data *data, char *buf)
+ {
+-	return regmap_bulk_read(data->regmap, 0x400, buf,
++	return regmap_bulk_read(data->regmap, MLX90640_RAM_START_ADDR, buf,
+ 				data->chip->buffer_size);
+ }
+ 
 -- 
 2.30.2
 

@@ -2,72 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A933506815
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:53:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D2ED506821
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:57:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350440AbiDSJzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
+        id S241367AbiDSJ7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350431AbiDSJzP (ORCPT
+        with ESMTP id S230005AbiDSJ7g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:55:15 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8876C20BFC;
-        Tue, 19 Apr 2022 02:52:33 -0700 (PDT)
-Received: from mail-wr1-f50.google.com ([209.85.221.50]) by
- mrelayeu.kundenserver.de (mreue012 [213.165.67.97]) with ESMTPSA (Nemesis) id
- 1MG90u-1nhuC32jIy-00GcBq; Tue, 19 Apr 2022 11:52:31 +0200
-Received: by mail-wr1-f50.google.com with SMTP id t1so21684582wra.4;
-        Tue, 19 Apr 2022 02:52:31 -0700 (PDT)
-X-Gm-Message-State: AOAM532JHFHrFKxAxcbMMCGIHGqaZiIfNYD84DnPtjvVv3f90mdSz7ks
-        lTv3KHO3+fVZZiN45Ydt22aiWdYrdcEDZA/YaqM=
-X-Google-Smtp-Source: ABdhPJzCXBI+RcttLx9ypMCYJp26DkP98+kkPTFl+n5n/hcn08b2tUYxS4vgAQ33NEwseKjHf7Qbovh8TXElWM6kX8E=
-X-Received: by 2002:a5d:6983:0:b0:207:a226:df4b with SMTP id
- g3-20020a5d6983000000b00207a226df4bmr11097055wru.192.1650361951213; Tue, 19
- Apr 2022 02:52:31 -0700 (PDT)
+        Tue, 19 Apr 2022 05:59:36 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189082127D
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:56:53 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 5EC0F240004;
+        Tue, 19 Apr 2022 09:56:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650362212;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Mq8173Yhb7PWseSDb2n4pQrTc0Fh+GdWcB9T/uTdM2M=;
+        b=HpO7PHrughSJxpPdJhGONJgxyf/vZiM5hnkdHg2WbBKu/FgmsuQ4mxb7LXxMz7f3DhyuEN
+        OTiDujbFsmL3Cu2rxisww3BxUdCbsTiOIs6J31m4sw3Uz5F0Y40B/XzOW/yP0QWwNNH9Ok
+        uZqVLxS9/yCfLkhWUCUqiGC+QZp7pbAGqELsIbrnQ7DOd7NvBBs/eBKjwF/JS1Q9VsfscM
+        eAtqgharoXWYaS+2+HR907QYRSIbXGf2gx99+xWVsGxpA1V24Wv6kqpJfagspDObipq29r
+        GuKPPZFaXyCSYJ1gz9N1KRGml+dxDafact1+n36DXtCK4cGP5YNKpH1AzcERTg==
+Date:   Tue, 19 Apr 2022 11:56:50 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        jagan@amarulasolutions.com, linus.walleij@linaro.org,
+        linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com,
+        mripard@kernel.org, thomas.petazzoni@bootlin.com,
+        tzimmermann@suse.de
+Subject: Re: [PATCH v3] drm: of: Properly try all possible cases for
+ bridge/panel detection
+Message-ID: <Yl6HYke4dJsrq9jj@aptenodytes>
+References: <20220329132732.628474-1-paul.kocialkowski@bootlin.com>
+ <20220416222141.72321-1-paul@crapouillou.net>
 MIME-Version: 1.0
-References: <20220415142055.30873-1-sven@svenpeter.dev> <20220415142055.30873-7-sven@svenpeter.dev>
- <20220419053157.GA31530@lst.de> <866f79b1-6c02-4248-ac98-594829fed204@www.fastmail.com>
-In-Reply-To: <866f79b1-6c02-4248-ac98-594829fed204@www.fastmail.com>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 19 Apr 2022 11:52:15 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a2CWZb3vdHQvseJZQwPbUFDRo5Z9aGb7iVgodT1YeB5Yw@mail.gmail.com>
-Message-ID: <CAK8P3a2CWZb3vdHQvseJZQwPbUFDRo5Z9aGb7iVgodT1YeB5Yw@mail.gmail.com>
-Subject: Re: [PATCH v2 6/6] nvme-apple: Add initial Apple SoC NVMe driver
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     "hch@lst.de" <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
-        "axboe@fb.com" <axboe@fb.com>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        Hector Martin <marcan@marcan.st>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Marc Zyngier <maz@kernel.org>,
-        DTML <devicetree@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-nvme@lists.infradead.org, linux-spdx@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:XMo+Fxs8ep4V8fBgB6R2KXUs6/FrFBHsYrJiuM+O+N73W005nxm
- ZidcQpb9RWcLf+btE5VXWD67zeP58eHKK/fufL2CoQlw5KAD+rKPSJyKrpMgSnMnsdOYjMb
- 0Ep31UvS9QRBeRRh62v1LxRypbUoRYVTQGkpeQ237KxH6k7BEgSBRy969Nla2JUn0ika/gy
- /wmtMpCUWYYdF7bXwUmqw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:WRARO1r46tU=:u1RlMeIaeFSmOBlNuwDqPT
- D9N7/nRjz57oeMY7TMX55x7aoMOQ3j1OA+/+WcNlpLdqJxYMoPWk+VNwHgAYbayKdBdjXo61w
- 310E3DzxUcZh6H/cbXWMzjNbbVbUzwqcn+zoBJTMFN78pRB/FncRo2heV75fWhMBOgCxUtmDB
- KyOKFxWF0l68nfRk/0f68L6OtfGQibaaMc3ah64qnBs3kVSQZmelAkVrtEtQ2lVWsId0ZrbE0
- bXUiwdn2izEsxN3QIRLyZSGsD5tprP3lk8zm+zCBSGim31lIN770kyrWSN5hNS4hbkMKKYVkY
- RfHQMu5bVt+qTKp+4TJBvovDsuJI8DRYd3ocoK8u2qa5flwcOIWuyGywBKC/s1TBO5L0Ts8OX
- GeuMDxVdsSMwJbzMB/xlXgZnp0k1o1qEvW6jGEqTLYs5EcGNN/1z+JQXvi/bgBFRZHggSxOhs
- aOfftIxwHiHFeqsGUWH/JkGHxC82pOAtfSmBbYOcCu2YuPbQbpne6Ew14IK6UA6HVaXkpe6Hi
- 7cP4DBlTtkIFk0OdJ834ee2btH+W5lXmHGecdRRHO5Ce9cnQ3wC8NW15th68kQTrCcDTjwXaB
- zpx1xBBLNvZ9HsZv4e3ajHJwfhK9F19mF+57wiZ5S4H1RAl005BImtYDLoBxl8hA3I6txeG2J
- UYR9/wgHBeMMYVYiowRkDe+NhtFsm+Hh9CUxA4o2AiJEeOyI16a2TBmInZvazFeIoCYG9kdiz
- VqTJOWicssnsUwj0DjSISUoflnKel2Rv+cSdlwlnsspvCy4EtGS0/TzP0XBfSg6iplECjRB6u
- cc5a+tLB8fu05Kndsz5mG/3Rfu5T0zblisotT6SkHVEpoQ2mrk=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="XgDB20WdwLjkKw76"
+Content-Disposition: inline
+In-Reply-To: <20220416222141.72321-1-paul@crapouillou.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,33 +56,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 11:47 AM Sven Peter <sven@svenpeter.dev> wrote:
-> On Tue, Apr 19, 2022, at 07:31, Christoph Hellwig wrote:
-> > On Fri, Apr 15, 2022 at 04:20:55PM +0200, Sven Peter wrote:
-> >> +++ b/drivers/nvme/host/apple.c
-> >> @@ -0,0 +1,1597 @@
-> >> +// SPDX-License-Identifier: GPL-2.0
-> >> +/*
-> >> + * Apple ANS NVM Express device driver
-> >> + * Copyright The Asahi Linux Contributors
-> >
-> > Is that actually a valid legal entity?
-> >
-> >> +#include <linux/io-64-nonatomic-lo-hi.h>
-> >
-> > Does this controller still not support 64-bit MMIO accesses like
-> > the old Apple PCIe controllers or is this just a leftover?
->
-> I just checked again and 64-bit accesses seem to work fine.
-> I'll remove the lo_hi_* calls and this include.
 
-If you remove the #include, it is no longer possible to compile-test
-this on all 32-bit architectures, though that is probably fine as long
-as the Kconfig file has the right dependencies, like
+--XgDB20WdwLjkKw76
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-      depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
+Hi Paul,
 
-I'd prefer to keep the #include here, but I don't mind the dependency
-if Christoph prefers it that way.
+On Sat 16 Apr 22, 23:21, Paul Cercueil wrote:
+> Hi Paul,
+>=20
+> This patch breaks the ingenic-drm driver.
+>=20
+> It calls drm_of_find_panel_or_bridge(np, 0, i, ...) starting for i=3D0, u=
+ntil
+> -ENODEV is returned, which does not happen anymore.
+>=20
+> The idea is to probe all the connected panels/bridges, should it be done
+> differently now?
 
-       Arnd
+I've sent out a different patch which restores -ENODEV at:
+https://patchwork.freedesktop.org/patch/481135/
+
+Feel free to try it and reply with tested-by/reviewed-by there.
+I've also made a proposal in the thread to skip the "child node" mechanism
+as soon as an of graph is present, which would allow covering more legit
+cases with -ENODEV (the patch linked above doesn't cover all cases that
+need -ENODEV).
+
+Ideally we'd like to remove the child node mechanism entirely, but it may
+already be part of a device-tree binding spec.
+
+Cheers,
+
+Paul
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--XgDB20WdwLjkKw76
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJeh2IACgkQ3cLmz3+f
+v9GBKAf8DA/g/QCGdK6HmqooGT+X0CNX9NbaVBgCVkWL/wnG+MEsNTNY0g54m8h/
+yQexs7+ZudJ19RzZAtJFgj3zcc9u/VXYxipI5Q+zFp9Q7UEuNDfZLS1yxSN+hfr9
+fEK1YarFnb/uo/mCWiP2SAJiDtipJe+flEzyutHK6Jf1p2jyAbED4DlZTED8fN1X
+uBkMw63pnPdzJcdx0+sm8xLnbY/bkaMjJasIjmfiimQsI09g+TCu5bBlEJIuMDG9
+2XrTsUWWN7kex6f+cMakL4nhwL8EM1Hmysga6S4cODnhzJqEODXjMiKtCI+yB+hP
+UEUj0lqOrQcgo/RpuKQiFQZxCSkhFA==
+=RY5S
+-----END PGP SIGNATURE-----
+
+--XgDB20WdwLjkKw76--

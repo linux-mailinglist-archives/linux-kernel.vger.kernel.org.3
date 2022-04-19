@@ -2,100 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48687506499
+	by mail.lfdr.de (Postfix) with ESMTP id CCAF050649A
 	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348879AbiDSGiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
+        id S1348888AbiDSGi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237424AbiDSGiR (ORCPT
+        with ESMTP id S1348884AbiDSGiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:38:17 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C53026102;
-        Mon, 18 Apr 2022 23:35:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjDZW0YyVz4xL4;
-        Tue, 19 Apr 2022 16:35:31 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650350131;
-        bh=2zXchq3Iadr40nqLp4y+pqrHVMUGLqlr9RfOa1Sl3TM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=i3mvc6PJhDqqjUk+mKQ4mN3oKUnUBR0rzeqaeiaukXmup/B6bDwZ0OwEbzN+13ju4
-         sOYdYIs7Yb4ONU9FjSV4PKShseKk2ez/2IfCk4gHld30GzdcsPtB2iNLFT7/usgcvm
-         k4vLjdCU04zJQvglCQL3eJcITV+8DXr/A92XQ2vhXOmEkCRO8Wa5DWD7qfmLU7pbcB
-         ZXLaENY10PYQG2Q+Me9ftmD767fRvBgekjcfKKNJvLCRJ6PCF7mz2DsOzrAmfA7fuC
-         bi+eFATLGZo3GwaU1/CBf64VdppGyo2Q6jxNW2BTHZRoq8+P9sQwrKyfbUAxE8k9F2
-         051LPRe9kOhHw==
-Date:   Tue, 19 Apr 2022 16:35:30 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Greg KH <greg@kroah.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>, Jiri Slaby <jslaby@suse.cz>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warning after merge of the tty tree
-Message-ID: <20220419163530.616d1a7e@canb.auug.org.au>
-In-Reply-To: <20220419163318.0682ffb8@canb.auug.org.au>
-References: <20220419163318.0682ffb8@canb.auug.org.au>
+        Tue, 19 Apr 2022 02:38:23 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10422714B
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:35:41 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4KjDZY35rWzhY01;
+        Tue, 19 Apr 2022 14:35:33 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 14:35:39 +0800
+Subject: Re: [PATCH] mm/madvise: fix potential pte_unmap_unlock pte error
+To:     Andrew Morton <akpm@linux-foundation.org>
+CC:     <minchan@kernel.org>, <hannes@cmpxchg.org>, <mhocko@suse.com>,
+        <hughd@google.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20220416081416.23304-1-linmiaohe@huawei.com>
+ <20220418210951.b87743ae8b7c01f883e571ea@linux-foundation.org>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <14389d75-bcc9-285a-f141-4de16fd34fac@huawei.com>
+Date:   Tue, 19 Apr 2022 14:35:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/6vauLnBhW0o0i/xOCoPqzbA";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220418210951.b87743ae8b7c01f883e571ea@linux-foundation.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/6vauLnBhW0o0i/xOCoPqzbA
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On 2022/4/19 12:09, Andrew Morton wrote:
+> On Sat, 16 Apr 2022 16:14:16 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> 
+>> We can't assume pte_offset_map_lock will return same orig_pte value. So
+>> it's necessary to reacquire the orig_pte or pte_unmap_unlock will unmap
+>> the stale pte.
+> 
+> hm, where did you learn this info about pte_offset_map_lock()?
+> 
+> I assume this is from code inspection only?  No observed runtime failures?
 
-Hi all,
+Yes, this is from code inspection. There is no observed runtime failures now due
+to the race window being really small. And this becomes noop in !CONFIG_HIGHMEM
+system (CONFIG_HIGHMEM system should be rare now). But this could be triggered theoretically.
 
-On Tue, 19 Apr 2022 16:33:18 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the tty tree, today's linux-next build (htmldocs) produced
-> this warning:
->=20
-> Documentation/driver-api/index.rst:14: WARNING: toctree contains referenc=
-e to nonexisting document 'driver-api/tty'
->=20
-> Introduced by commit
->=20
->   b96cd8b05ead ("Documentation: move tty to driver-api")
+Thanks!
 
-Also, this:
-
-Documentation/driver-api/tty/index.rst: WARNING: document isn't included in=
- any toctree
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/6vauLnBhW0o0i/xOCoPqzbA
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJeWDIACgkQAVBC80lX
-0Gz76wf/SeNvHIHUg48cWyk8VCm6OMVaxi/m/rVwEav4W4lGkHbGTDwaSv/I6MXk
-4xMU/IzdXMug5q5pdegzE9qfWNjTc8s2KJji7uiCi+V8y+MoJwaFiEKt81ctm833
-pPieOAOR5nVn2kLtKj7m7qACnsI5KsXQspfhZkC8pNY7ONNfEQV1cCk5c3y5roHQ
-FzuiPTDps5BBGlyaD8kQXg7+BV4S0J7umHo5yvzv7IKPn2vOyM49rM1MSMjuE9lG
-XISG+XUwVibKAnepSee5PkF90fK6PkN/7mwIO09FohuvTA4adYzChi14fRi2kDQp
-pQ6TcYqFC9+detIlS/EuEez36RZhDQ==
-=bjIe
------END PGP SIGNATURE-----
-
---Sig_/6vauLnBhW0o0i/xOCoPqzbA--
+> .
+> 

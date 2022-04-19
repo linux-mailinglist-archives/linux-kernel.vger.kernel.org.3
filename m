@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AA4E506D8B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2BDB506D96
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:37:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352058AbiDSNjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33328 "EHLO
+        id S1352055AbiDSNjE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:39:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242586AbiDSNiq (ORCPT
+        with ESMTP id S244976AbiDSNis (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:38:46 -0400
-Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e3e3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9B377C4;
-        Tue, 19 Apr 2022 06:36:03 -0700 (PDT)
+        Tue, 19 Apr 2022 09:38:48 -0400
+Received: from bhuna.collabora.co.uk (bhuna.collabora.co.uk [46.235.227.227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4017C377C4;
+        Tue, 19 Apr 2022 06:36:06 -0700 (PDT)
 Received: from [127.0.0.1] (localhost [127.0.0.1])
         (Authenticated sender: kholk11)
-        with ESMTPSA id E9FB11F41949
+        with ESMTPSA id 497021F4196E
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1650375362;
-        bh=kFgZwklCLt9uY71SZ4MBle/pcGaF0o432ETt0n7h+nI=;
+        s=mail; t=1650375365;
+        bh=l0PW7e+6W+aaMzk2U8nvs+mNTAlvq/0lMKfGCn5v1qo=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=HrjI+cYon1IK45n0Q9IlZPHlV6AwtIBuPD57SgOHXdsyyJPJiFd0TSX9TqUOQcIWz
-         1zgGk74CovGY743Fbb9PvdeenkW8d+bMcm4nowOlcFcNS2Sa7xp4q8udvEvwlf2/uQ
-         LPAzwT5fE/Fol/Aio4OeRypMBm0RD6Gs74UgdH76mc80UKgRPugXRoPQlOV69MK0IC
-         aVWredpPlLLvPCdWAVKCH1UjM6XMKkTrhnV0BShopwbY2rZlLIEk1qj9KsN6fFPR1O
-         33FAJ59c4qdDEPDshl4glCt8NclTnXClnM4Jwfo5dRpGNxTrGxqeNuHuJKmCmWtEe4
-         /0cv53df3hLGg==
-Message-ID: <6bd8dff2-1ed6-de6a-4759-5b2035ae7df5@collabora.com>
-Date:   Tue, 19 Apr 2022 15:35:59 +0200
+        b=lN4vsatvsaxNRST52TP7FxX+njdf8wsKm1XU7qdEqyhqhvJKCdPhSqsDATugOCz3Z
+         iQO4acUTT/i1lcBQx1+3gkwnBStD3gP1xRfD4/VfjWjiZqYVMcamKk9/BDuQ2W8WqA
+         eiAmym8AGy1rffeU01ZOZcpcMzZv8AMLm1TnBPDSo6kH5Qn1rh8pC6gROrlx7ksm4E
+         vNbVWqC6064eoSOGweSFBsmP+9x3p7r3U73Jvl0fni4GWGe2kpGy2/PAAP/mPJZ4mh
+         NZBq74/gHzc6evdgfQXDfFT09qnfTta7Qq/6km31D3Qof7JjQomWe0aFLPjg1VnFqi
+         OFW1tr+6lp4wQ==
+Message-ID: <3448a113-3ea3-08bb-950a-16c2ac6eec75@collabora.com>
+Date:   Tue, 19 Apr 2022 15:36:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.7.0
-Subject: Re: [PATCH v16 2/6] soc: mediatek: mutex: add 8183 MUTEX MOD settings
- for MDP
+Subject: Re: [PATCH v16 1/6] soc: mediatek: mutex: add common interface for
+ modules setting
 Content-Language: en-US
 To:     Moudy Ho <moudy.ho@mediatek.com>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
@@ -58,10 +58,10 @@ Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
         srv_heupstream@mediatek.com,
         Project_Global_Chrome_Upstream_Group@mediatek.com
 References: <20220418083018.1907-1-moudy.ho@mediatek.com>
- <20220418083018.1907-3-moudy.ho@mediatek.com>
+ <20220418083018.1907-2-moudy.ho@mediatek.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220418083018.1907-3-moudy.ho@mediatek.com>
+In-Reply-To: <20220418083018.1907-2-moudy.ho@mediatek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -75,9 +75,15 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 Il 18/04/22 10:30, Moudy Ho ha scritto:
-> For the purpose of module independence, related settings should be moved
-> from MDP to the corresponding driver.
-> This patch adds 8183 MUTEX MOD settings for MDP.
+> In order to allow multiple modules to operate MUTEX hardware through
+> a common interfrace, a flexible index "mtk_mutex_table_index" needs to
+> be added to replace original component ID so that like DDP and MDP
+> can add their own MUTEX table settings independently.
+> 
+> In addition, 4 generic interface "mtk_mutex_set_mod", "mtk_mutex_set_sof",
+> "mtk_mutex_clear_mod" and "mtk_mutex_clear_sof" have been added, which is
+> expected to replace the "mtk_mutex_add_comp" and "mtk_mutex_remove_comp"
+> pair originally dedicated to DDP in the future.
 > 
 > Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 

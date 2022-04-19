@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF9A507D3F
-	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:43:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B2E507D41
+	for <lists+linux-kernel@lfdr.de>; Wed, 20 Apr 2022 01:43:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354561AbiDSXpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 19:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S1357856AbiDSXqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 19:46:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243010AbiDSXps (ORCPT
+        with ESMTP id S1355340AbiDSXqB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 19:45:48 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86B4205EF;
-        Tue, 19 Apr 2022 16:43:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4KjgMy38VVz4xNm;
-        Wed, 20 Apr 2022 09:42:54 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1650411775;
-        bh=J7MkUMhWQdU5+xYSe/nobBFT2dwUOTLlJX16ZJ5gCZ8=;
-        h=Date:From:To:Cc:Subject:From;
-        b=DGSZuOWZM8pCiYTIENJ0+s6W1KftyaOAof61s/j2aB0TyVlAm0by7Pud090LGTSrE
-         sNmC6HGYoXcAG0Vv7yccphUoiWSvKu2KYHR0iyVodEdy6NklxJpwJh1hhO5q2O+d4Z
-         qynJMnBl3mQ+BPSbmgfa18YodD//89wO/jAmE+D8K27EsfvPZA7rVAqoPuf8qr85UM
-         Ne1GIZ3q6o+IpR+wVjL4Ih43JO0/R4qbZwM6uXarQ3RfB/AzE1lzNxddLJXvg1INV9
-         2sfVUEjtVTwa1WyCAt7wFKW4yxDGMciB6qtxEdYa/ggcLpnbmbspDrQXbQxm4Zbf+z
-         quVc/yQoGro0A==
-Date:   Wed, 20 Apr 2022 09:42:53 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Olof Johansson <olof@lixom.net>, Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the arm-soc tree with the
- samsung-krzk-fixes tree
-Message-ID: <20220420094253.2300b293@canb.auug.org.au>
+        Tue, 19 Apr 2022 19:46:01 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB989205D0;
+        Tue, 19 Apr 2022 16:43:17 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id x18so31142wrc.0;
+        Tue, 19 Apr 2022 16:43:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jpkNlHRMQuG+lJdQ+TUaFjLfxZlD8sn5DIiknsBbDyg=;
+        b=FHAUUHCg0T3/vQIQ/bRF+okFzhmCwTsm49QMr/HtsZY8D9NoBitjzbzAPlvKWo66mA
+         yUnvDeEbuMhjeA807IQhUI8Ctj3s439/+etFMhsfgrAA4Smy1dcxpn/EJH6TyW6FEAXR
+         0qJYEt8SkyFHjGdFjWy9fFJFKT0wFvbTjlg+365GEgIVkIXwPnyr3W3h9VMyJMureiGc
+         fIHdnE6wXYFzj2+u0dkSRs8aoLp39jBwBr3S6YvvhjCJvDa/XZxCiBjH6txwEF+AhdOm
+         fLy55B3TJrSbtkusmN4BB31KPN4I8UbQ8lMsuSCLDa2Kr87s9Q4E3TeaX1denTp6psgF
+         mEsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=jpkNlHRMQuG+lJdQ+TUaFjLfxZlD8sn5DIiknsBbDyg=;
+        b=VTUGno1gY7OVHiaHSogwAQUX0zZr6IkrFFbfDVtPXRVP3F7VIOk1VY0DZqHAcVMUDY
+         6M5jlEnh+Fq0zDAAMYZkFHZ9cZ0+sp7YukeDIVkas2FBFhGZBqT0OGflNytcAjsOu5PP
+         OL49EboBI/iaVxBme6c4On47fmRvMZABsbUIMGxFTT9zI1HvCHaLj2R04iK7Ty1A4tzW
+         fK9KF9ydVQ8AVnI8jHY/O0Ha9YNDwfQbEEw9IWZAwzHlfoPG7xAIHqxL8nVoulzZTyse
+         EQH/7p6cGCOUyYWIpQ9Uis6N71dlxQqiEsKzLz+rCpSDS5JXy1mA1178G42RvZ7NVqUb
+         yvBg==
+X-Gm-Message-State: AOAM530M0+EIE54uQAvS/2SgQVq4CqQm7v2+WQ1UCLUqxG6OOaxfuS/6
+        KMHFjUf2lMtoVK+5SJug4Hg=
+X-Google-Smtp-Source: ABdhPJz1SgnnztC1b+XjTbtAXZve8DQ0RYcKvnNS+M9/iIN1yJ4iCUjDKX3GZOoZrrU6LsOZfnM1eQ==
+X-Received: by 2002:adf:de90:0:b0:20a:8e73:aff1 with SMTP id w16-20020adfde90000000b0020a8e73aff1mr11180895wrl.151.1650411796437;
+        Tue, 19 Apr 2022 16:43:16 -0700 (PDT)
+Received: from alaa-emad ([102.41.109.205])
+        by smtp.gmail.com with ESMTPSA id z17-20020adfec91000000b0020a98f5f8a7sm5623982wrn.6.2022.04.19.16.43.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 16:43:16 -0700 (PDT)
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ira.weiny@intel.com,
+        eng.alaamohamedsoliman.am@gmail.com
+Subject: [PATCH v5] igb: Convert kmap() to kmap_local_page()
+Date:   Wed, 20 Apr 2022 01:43:13 +0200
+Message-Id: <20220419234313.10324-1-eng.alaamohamedsoliman.am@gmail.com>
+X-Mailer: git-send-email 2.35.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/DKp=N4C.Lgr+UUxrN6C=uKa";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,91 +71,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/DKp=N4C.Lgr+UUxrN6C=uKa
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+kmap() is being deprecated and these usages are all local to the thread
+so there is no reason kmap_local_page() can't be used.
 
-Hi all,
+Replace kmap() calls with kmap_local_page().
 
-Today's linux-next merge of the arm-soc tree got a conflict in:
-
-  arch/arm/Kconfig
-
-between commit:
-
-  436ce66003d5 ("ARM: s3c: mark as deprecated and schedule removal")
-
-from the samsung-krzk-fixes tree and commit:
-
-  8c1fb11b8a77 ("ARM: s3c: enable s3c24xx multiplatform support")
-
-from the arm-soc tree.
-
-I fixed it up (I used the latter version of this file and added the
-following merge fix patch) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Wed, 20 Apr 2022 09:38:18 +1000
-Subject: [PATCH] fixup for "ARM: s3c: mark as deprecated and schedule remov=
-al"
-
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
 ---
- arch/arm/mach-s3c/Kconfig.s3c24xx | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+changes in V2:
+	fix kunmap_local path value to take address of the mapped page.
+---
+changes in V3:
+	edit commit message to be clearer
+---
+changes in V4:
+	edit the commit message
+---
+changes in V5:
+	-edit commit subject
+	-edit commit message
+---
+ drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm/mach-s3c/Kconfig.s3c24xx b/arch/arm/mach-s3c/Kconfig.=
-s3c24xx
-index d7dc031abc7a..f151a6f6d89e 100644
---- a/arch/arm/mach-s3c/Kconfig.s3c24xx
-+++ b/arch/arm/mach-s3c/Kconfig.s3c24xx
-@@ -6,7 +6,7 @@
- # Copyright 2007 Simtec Electronics
-=20
- menuconfig ARCH_S3C24XX
--	bool "Samsung S3C24XX SoCs"
-+	bool "Samsung S3C24XX SoCs (deprecated, see help)"
- 	depends on ARCH_MULTI_V4T || ARCH_MULTI_V5
- 	depends on CPU_LITTLE_ENDIAN
- 	select ATAGS
-@@ -22,6 +22,11 @@ menuconfig ARCH_S3C24XX
- 	  (<http://www.simtec.co.uk/products/EB110ITX/>), the IPAQ 1940 or the
- 	  Samsung SMDK2410 development board (and derivatives).
-=20
-+	  The platform is deprecated and scheduled for removal. Please reach to
-+	  the maintainers of the platform and linux-samsung-soc@vger.kernel.org if
-+	  you still use it.
-+	  Without such feedback, the platform will be removed after 2022.
-+
- if ARCH_S3C24XX
-=20
- config PLAT_S3C24XX
---=20
-2.35.1
+diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+index 2a5782063f4c..c14fc871dd41 100644
+--- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
++++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+@@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+ 
+ 	frame_size >>= 1;
+ 
+-	data = kmap(rx_buffer->page);
++	data = kmap_local_page(rx_buffer->page);
+ 
+ 	if (data[3] != 0xFF ||
+ 	    data[frame_size + 10] != 0xBE ||
+ 	    data[frame_size + 12] != 0xAF)
+ 		match = false;
+ 
+-	kunmap(rx_buffer->page);
++	kunmap_local(data);
+ 
+ 	return match;
+ }
+-- 
+2.35.2
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/DKp=N4C.Lgr+UUxrN6C=uKa
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmJfSP0ACgkQAVBC80lX
-0GyrfQgAmh9MwcpRZSHBxgz5bDaAiL1XEFj1XQWe4T82DJXjOhdKQbuc4TiI7O36
-VXbLplS5ORqO9zhujJY/q5GJFYvcSa8nqm0JpETG0WroIfji2gvnqyH5s43gKDu4
-8JKCRKBnIElh1VFh9ubr6OEmlOCDLMkKby87P/UitNKfhpCbvxSuhxTC/ETFUh+6
-cxDMgv7EN4GT7AQLfqGdDw0/hmSOgDkGfdmUGJwjhI3kibNeGBzn8QeyKKYQ8tDT
-gGHAgUtA5GcgbIhdNsjd2oaJOSgFBWrqkaNg7f4IOyP4kwcXzeYc/Brt8ahy6t+v
-kgmNREgR2nn4GEipEBCUvtTwhJ5r1w==
-=DlxJ
------END PGP SIGNATURE-----
-
---Sig_/DKp=N4C.Lgr+UUxrN6C=uKa--

@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF65507ACC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06F42507ACE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352594AbiDSUMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:12:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S1357627AbiDSUMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357497AbiDSULa (ORCPT
+        with ESMTP id S244421AbiDSUL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:11:30 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E95638BCF;
-        Tue, 19 Apr 2022 13:08:47 -0700 (PDT)
+        Tue, 19 Apr 2022 16:11:29 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EFB63D1C0;
+        Tue, 19 Apr 2022 13:08:46 -0700 (PDT)
 Date:   Tue, 19 Apr 2022 20:08:44 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1650398926;
+        s=2020; t=1650398925;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dr9D43cyEIItLhjmCstfgE1otN6PsZi5WlZx0hk2dZY=;
-        b=QGnNwB8cyPcMaH/abxt6+NDtRRPyaQ85qaFyLzL3a/S1Mlluy1OwqEo+gC3VXG4xzs3Mgy
-        A3Oe3jiOiW+IUobxHgjLy3BelHSFSYuN67R4skTYLsBvYg2B61b9N1njOK5AORd94OkXvf
-        96Hig/f2CSI45SdhgIDclzdd0SiI+hhzxCi5/CiGgVKrQcxlOS1zerlr+o+qNZgY2uJ7Zg
-        jwSybQo/kOJLVDXPOWe17njRdd24LczYYLBkgzMzAK99oidsVq0bmvev8Fme68hImi818f
-        ZKE8JS3iSZ5HLzuzgMziPY9vZ4SqxwvckHcVNRowZYNdBgev0aQf2oNQRA3p3A==
+        bh=ZiuTe736S/g8bz8JecqlNfPJ4fy14sOPXIbM7FpJ/4w=;
+        b=rmQ2ActScofUKooJ9CRJO4q+u6ynPUNMSDiBB9DhU0weD1BCNKnTs04G3Ic60y/Afm/azz
+        5h3Nno1d0srrn4U7wDWZdZlF9uMtqTvjgpzbjS91yfnb337Ni0TIYBjRA2t9s0fON+8+Ee
+        lltz/27AYWUYpzNXIyJrgaxbhJFhLb8rmvabzvyJyEN7ItSHWB+lURTmYbhWE1GGfNOe77
+        zsAo9+WlLFg5WYKcaJ6hzwWPKCuEbPkAN/Ek+pRlHNVKmJsF28KeOLBL6uDjw8dBT0eR2p
+        +4UMj3ahtURltqiSiCgxmotSWTgb1YMrVBneHblfz2iDAcd25K/yFjhDXixDcw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1650398926;
+        s=2020e; t=1650398925;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=dr9D43cyEIItLhjmCstfgE1otN6PsZi5WlZx0hk2dZY=;
-        b=iba0/8T15yE2qDRTpHS8HC3BmtlqFWxxpeACDGX+lJj2mSeND1KLidtJag2EPura9VicxZ
-        lR/riXYVOwrk8CCQ==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+        bh=ZiuTe736S/g8bz8JecqlNfPJ4fy14sOPXIbM7FpJ/4w=;
+        b=2nGAyhpYIfjKiopOUphLXmGJpuGq3rYjgXGCCkXkBbhiF6P/shXv+jtgobbci76NxiIDs3
+        ucrUMrwscWteYXCA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] MAINTAINERS: Add x86 unwinding entry
-Cc:     Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+Subject: [tip: x86/urgent] lib/strn*,objtool: Enforce user_access_begin() rules
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <db2b764b735a9481df9f7717a3a1f75ba496fcc1.1650387176.git.jpoimboe@redhat.com>
-References: <db2b764b735a9481df9f7717a3a1f75ba496fcc1.1650387176.git.jpoimboe@redhat.com>
+In-Reply-To: <20220408094718.262932488@infradead.org>
+References: <20220408094718.262932488@infradead.org>
 MIME-Version: 1.0
-Message-ID: <165039892495.4207.6630628303987069418.tip-bot2@tip-bot2>
+Message-ID: <165039892407.4207.8696896474032855966.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,41 +68,53 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/urgent branch of tip:
 
-Commit-ID:     610abf3dea1092445b4b185e14ed130d1ec6aa74
-Gitweb:        https://git.kernel.org/tip/610abf3dea1092445b4b185e14ed130d1ec6aa74
-Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Tue, 19 Apr 2022 09:54:41 -07:00
+Commit-ID:     226d44acf6dfe71c9df5804b82364e93cf908b53
+Gitweb:        https://git.kernel.org/tip/226d44acf6dfe71c9df5804b82364e93cf908b53
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Fri, 08 Apr 2022 11:45:53 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 19 Apr 2022 21:58:47 +02:00
 
-MAINTAINERS: Add x86 unwinding entry
+lib/strn*,objtool: Enforce user_access_begin() rules
 
-Create a new section for x86 unwinder maintenance.
+Apparently GCC can fail to inline a 'static inline' single caller
+function:
 
-Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
-Link: https://lore.kernel.org/r/db2b764b735a9481df9f7717a3a1f75ba496fcc1.1650387176.git.jpoimboe@redhat.com
-Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+  lib/strnlen_user.o: warning: objtool: strnlen_user()+0x33: call to do_strnlen_user() with UACCESS enabled
+  lib/strncpy_from_user.o: warning: objtool: strncpy_from_user()+0x33: call to do_strncpy_from_user() with UACCESS enabled
+
+Reported-by: Thomas Gleixner <tglx@linutronix.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Link: https://lore.kernel.org/r/20220408094718.262932488@infradead.org
 ---
- MAINTAINERS |  9 +++++++++
- 1 file changed, 9 insertions(+)
+ lib/strncpy_from_user.c | 2 +-
+ lib/strnlen_user.c      | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 40fa195..63ace80 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -21434,6 +21434,15 @@ F:	arch/x86/include/asm/uv/
- F:	arch/x86/kernel/apic/x2apic_uv_x.c
- F:	arch/x86/platform/uv/
- 
-+X86 STACK UNWINDING
-+M:	Josh Poimboeuf <jpoimboe@redhat.com>
-+M:	Peter Zijlstra <peterz@infradead.org>
-+S:	Supported
-+F:	arch/x86/include/asm/unwind*.h
-+F:	arch/x86/kernel/dumpstack.c
-+F:	arch/x86/kernel/stacktrace.c
-+F:	arch/x86/kernel/unwind_*.c
-+
- X86 VDSO
- M:	Andy Lutomirski <luto@kernel.org>
- L:	linux-kernel@vger.kernel.org
+diff --git a/lib/strncpy_from_user.c b/lib/strncpy_from_user.c
+index 08fc72d..6432b8c 100644
+--- a/lib/strncpy_from_user.c
++++ b/lib/strncpy_from_user.c
+@@ -25,7 +25,7 @@
+  * hit it), 'max' is the address space maximum (and we return
+  * -EFAULT if we hit it).
+  */
+-static inline long do_strncpy_from_user(char *dst, const char __user *src,
++static __always_inline long do_strncpy_from_user(char *dst, const char __user *src,
+ 					unsigned long count, unsigned long max)
+ {
+ 	const struct word_at_a_time constants = WORD_AT_A_TIME_CONSTANTS;
+diff --git a/lib/strnlen_user.c b/lib/strnlen_user.c
+index bffa0eb..feeb935 100644
+--- a/lib/strnlen_user.c
++++ b/lib/strnlen_user.c
+@@ -20,7 +20,7 @@
+  * if it fits in a aligned 'long'. The caller needs to check
+  * the return value against "> max".
+  */
+-static inline long do_strnlen_user(const char __user *src, unsigned long count, unsigned long max)
++static __always_inline long do_strnlen_user(const char __user *src, unsigned long count, unsigned long max)
+ {
+ 	const struct word_at_a_time constants = WORD_AT_A_TIME_CONSTANTS;
+ 	unsigned long align, res = 0;

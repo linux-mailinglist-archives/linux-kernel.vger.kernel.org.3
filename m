@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDCEC507645
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F66E50764A
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 19:13:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240735AbiDSRP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 13:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39226 "EHLO
+        id S242570AbiDSRQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 13:16:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbiDSRPy (ORCPT
+        with ESMTP id S231878AbiDSRQZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 13:15:54 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95EC231935
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:13:10 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id i27so34268158ejd.9
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 10:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references
-         :mime-version:content-transfer-encoding;
-        bh=NTJziAao2qjs+uzVN3EQ0D56BQ/OVvAsLtpYcVjVn+A=;
-        b=hG7NRAEqY4fXRKjEEWouK2EPTs8ZUbSum41yScHVPKHzQW6kRIsvIQQf7MKFysPouZ
-         rMDSDrcUrcIxCR5H9c3YC5aN/E5iCNA0oeWmYSFd+shc2Tt3ndKZtfjXn47Mib49TtfW
-         L2SH72XksWJ41E60qngH1Jd5/XWOPf+6lD5741CqB59FY04TDi4o21+/+uKgDDSBemXa
-         2corbY0VeDFDsDZycBgtykqOUW3SZDEJ2Z1uuUjq97DC/eULR/VT5kvzc87oAxook6R4
-         01cEMSW7j1JvKlHrWApUdOmSyOJufn70BpMyFCyA86UXwOSQUNVKnqzd2r5yhk+roibR
-         DQhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references:mime-version:content-transfer-encoding;
-        bh=NTJziAao2qjs+uzVN3EQ0D56BQ/OVvAsLtpYcVjVn+A=;
-        b=Pd5DsxH+0Lbx+AoL1xGy7ZlkVoMjFkx1OH84bo/Om0GcuUIb8O7BMcpZx7cWRyLAyb
-         z9O+QTn80mYqpdDlMDnVhK4z0mFKtTZX1ygphVEMwlK5suybQAZHkAYEMWGbeTJ9vbNm
-         jqMts7y1rOPT1EHqm0qLJnjwgHKWQIcD0aTCuKAaM50/TygyTWXp858TxS7esfPVTiCO
-         u+ZJpwvzzBW8vc0HfpgoYPoISUCAXGfpIm6H1d0E9oR500b9G2iUhjxdMvvS+fvZMuBf
-         g3ahribU65cL3Eh2yi4VV8HOg4LVxClYL2TkYd0WDNUMkbfFM7R3+N2vHKBNAvnC6ZSF
-         QR8A==
-X-Gm-Message-State: AOAM531DboMPuImr81irTwQtHlW3ZsIwTShnODiAK6d4JR8UozFhyVy/
-        skrtB5NTVv8y8Yx/kGZcCHQ=
-X-Google-Smtp-Source: ABdhPJztdX9341/dhGDD0GY8ytvJkIc4J64GZtUxVsMBxk3Z+Nitg/4B9hvwDcDK5TIji2yzfgyXrQ==
-X-Received: by 2002:a17:907:1693:b0:6e8:c7e5:c297 with SMTP id hc19-20020a170907169300b006e8c7e5c297mr14963188ejc.138.1650388388796;
-        Tue, 19 Apr 2022 10:13:08 -0700 (PDT)
-Received: from leap.localnet (host-79-50-86-254.retail.telecomitalia.it. [79.50.86.254])
-        by smtp.gmail.com with ESMTPSA id q11-20020a170906144b00b006cf61dfb03esm5876958ejc.62.2022.04.19.10.13.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 10:13:07 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [PATCH v2] mm/highmem: Fix kernel-doc warnings in highmem*.h
-Date:   Tue, 19 Apr 2022 19:13:06 +0200
-Message-ID: <2147048.ZfL8zNpBrT@leap>
-In-Reply-To: <6767543.18pcnM708K@leap>
-References: <20220418175638.30018-1-fmdefrancesco@gmail.com> <Yl7MpmsXtzOfztHu@iweiny-desk3> <6767543.18pcnM708K@leap>
+        Tue, 19 Apr 2022 13:16:25 -0400
+Received: from aposti.net (aposti.net [89.234.176.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984A53B288;
+        Tue, 19 Apr 2022 10:13:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+        s=mail; t=1650388420; h=from:from:sender:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WEJ8CbC2loA9ib/adb/YR/+FsHaHYuHOlpUIXJDsAB4=;
+        b=BPT9gpfk8DmvqHBzhkVeHRjp10LlkU4LBYTMm1RctRHktZXxyIpGHoKdvck0XQP/3G3WAf
+        Kn+r7I5cXOiyllYH+RjCK8sNzE9j1VA6N70W6diDAvvqU4eN+FMc+l2zT9oJ/WyaP6+/wN
+        h8ev+MYmhZwaQCTCux3aSN/2d2pBlBc=
+Date:   Tue, 19 Apr 2022 18:13:30 +0100
+From:   Paul Cercueil <paul@crapouillou.net>
+Subject: Re: [PATCH 1/3] SPI: Ingenic: Add support for use GPIO as chip select
+ line.
+To:     =?UTF-8?b?5ZGo55Cw5p2w?= <zhouyanjie@wanyeetech.com>
+Cc:     broonie@kernel.org, robh+dt@kernel.org, krzk+dt@kernel.org,
+        linux-spi@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        contact@artur-rojek.eu, dongsheng.qiu@ingenic.com,
+        aric.pzqi@ingenic.com, rick.tyliu@ingenic.com,
+        sernia.zhou@foxmail.com, zhenwenjin@gmail.com, reimu@sudomaker.com
+Message-Id: <IUJLAR.XMD0PY9XJ5X41@crapouillou.net>
+In-Reply-To: <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
+References: <1650032528-118220-1-git-send-email-zhouyanjie@wanyeetech.com>
+        <1650032528-118220-2-git-send-email-zhouyanjie@wanyeetech.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On marted=C3=AC 19 aprile 2022 17:09:04 CEST Fabio M. De Francesco wrote:
-> On marted=C3=AC 19 aprile 2022 16:52:22 CEST Ira Weiny wrote:
-> > On Tue, Apr 19, 2022 at 03:25:16PM +0200, Fabio M. De Francesco wrote:
-> >
-> > [snip]
-> >=20
-> > I think you should gather all these patches together into a series and=
-=20
-> submit.
-> > If I am following correctly there are at least 4 patches now?  But I'm=
-=20
-> unsure
-> > of which ones are stand alone.
-> >=20
-> > It would be easier to see what changes are being made along the way as=
-=20
-> well as
-> > the final result of the fixes.
-> >=20
-> > Ira
+Hi Zhou,
+
+Le ven., avril 15 2022 at 22:22:06 +0800, =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou=
+ Yanjie)=20
+<zhouyanjie@wanyeetech.com> a =C3=A9crit :
+> Add support for using GPIOs as chip select lines on Ingenic SoCs.
 >=20
-> Yes, this is perfectly reasonable. There are only three patches (this=20
-patch=20
-> plus two more in a series).=20
+> Signed-off-by: =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanjie) <zhouyanjie@wany=
+eetech.com>
+> ---
+>  drivers/spi/spi-ingenic.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-ingenic.c b/drivers/spi/spi-ingenic.c
+> index 03077a7..672e4ed 100644
+> --- a/drivers/spi/spi-ingenic.c
+> +++ b/drivers/spi/spi-ingenic.c
+> @@ -380,7 +380,7 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	struct spi_controller *ctlr;
+>  	struct ingenic_spi *priv;
+>  	void __iomem *base;
+> -	int ret;
+> +	int num_cs, ret;
+>=20
+>  	pdata =3D of_device_get_match_data(dev);
+>  	if (!pdata) {
+> @@ -416,6 +416,11 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	if (IS_ERR(priv->flen_field))
+>  		return PTR_ERR(priv->flen_field);
+>=20
+> +	if (of_property_read_u32(dev->of_node, "num-cs", &num_cs)) {
 
-No, you are right. There are 4 patches in my queue for Highmem related=20
-files. I think I'm at a point where I'm starting to lose sight of the tasks=
-=20
-due :(
+One small comment here - I think it would be better to use=20
+device_property_read_u32().
 
-> Since they are all related in some way, it is=20
-> best to bring them together into one series which I will rework taking=20
-into=20
-> account both yours and Matthew's suggestions.
+The driver should also use device_get_match_data() instead of=20
+of_device_get_match_data(), but that's a cleanup that can be done later.
 
-The collection of all these patches in one series is confirmed for all 4.
+Cheers,
+-Paul
 
-Thanks,
-
-=46abio
-
+> +		dev_warn(dev, "Number of chip select lines not specified.\n");
+> +		num_cs =3D 2;
+> +	}
+> +
+>  	platform_set_drvdata(pdev, ctlr);
+>=20
+>  	ctlr->prepare_transfer_hardware =3D spi_ingenic_prepare_hardware;
+> @@ -429,7 +434,9 @@ static int spi_ingenic_probe(struct=20
+> platform_device *pdev)
+>  	ctlr->bits_per_word_mask =3D pdata->bits_per_word_mask;
+>  	ctlr->min_speed_hz =3D 7200;
+>  	ctlr->max_speed_hz =3D 54000000;
+> -	ctlr->num_chipselect =3D 2;
+> +	ctlr->use_gpio_descriptors =3D true;
+> +	ctlr->max_native_cs =3D 2;
+> +	ctlr->num_chipselect =3D num_cs;
+>  	ctlr->dev.of_node =3D pdev->dev.of_node;
+>=20
+>  	if (spi_ingenic_request_dma(ctlr, dev))
+> --
+> 2.7.4
+>=20
 
 

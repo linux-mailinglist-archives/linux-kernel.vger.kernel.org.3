@@ -2,72 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E34F507907
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:42:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B74F507917
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347251AbiDSSkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 14:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
+        id S243852AbiDSSl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 14:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352706AbiDSSkD (ORCPT
+        with ESMTP id S239603AbiDSSls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:40:03 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4153B3DDF5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:36:58 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d14so4999659qtw.5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 11:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=z6rZlfac8Ye6saOGMPLmjkY9uCNpacxOF3e5qKVDCFs=;
-        b=pUNRUP0C2APS8UkYdqD1g38qMZXlHCHTzwxIFeyub/nFDk5LOeX274rsdd11wSgmN8
-         uCHYhlPiAtBIqTpVWa4vJ2mVMAnikZbGWhzTnsCiwuM6ycLkGAAbHe7tn+xhM6UnN3er
-         z34qjnv+F9EnA9SU4Nz/CgToz/lCawKurVMefsW1qHE5jgzj7HPdDDF3kK+jrBKy4Bka
-         8gWfH2cjfiP7xm584wjQnehiYrUiUyLdyG8ZZbokhBgOPVSigkVAWz9dse6bUbQFjAiT
-         xOpXk0GwBwzihyqVDblqSEEnu7oLfrE3mVizFu0MAQddiKmMNN+joRWvdpfrZ1wmJwQ/
-         Kwmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=z6rZlfac8Ye6saOGMPLmjkY9uCNpacxOF3e5qKVDCFs=;
-        b=5qTfZKPbSvFftjUb55SxWvdi2L9jfJzj2EfFR8HKf4i3Wig6S2mvKvaXNBJQpncHYX
-         wQeuvwGFlWuHgpyZ91MSFblS0FzKDEGlX1+n/lOnTv0KV5qs+dWKfc9wAZS3IyfhWlfz
-         2tv73anSJZcGpaGiaP4zzLSoDttqkrPOJiQs8xbmUTOoiGZWgkWMMW9yxoQU0GQRYOhR
-         ZtsAhHw8vuLxgZA6inUswvqgyO8doDVSiahCkjnafpfXLNeSFfu7nL1Rm9OTQp16Ak3P
-         BmgwGmXz5c8aDaXrHiUswja31zwkJ/qW/3Ep1glgv7al5PI7fASThQvgQbV+pU9Ohcwl
-         Hcfg==
-X-Gm-Message-State: AOAM5329QZCOey54hGM9tGJ+8xQ55hQxGIAYinRUrEhTfUHg5JUkMYbA
-        cqsxgIXFvtg0w5nnu3IdPA==
-X-Google-Smtp-Source: ABdhPJzVl/QPKAmlpf46Xz5ohDwz/HUO0fPboNx6NNJqvpchra2rA+XyEIU2blLLyStCUGcBXkJKQA==
-X-Received: by 2002:a05:622a:130a:b0:2f3:3f25:b00 with SMTP id v10-20020a05622a130a00b002f33f250b00mr591679qtk.494.1650393417270;
-        Tue, 19 Apr 2022 11:36:57 -0700 (PDT)
-Received: from moria.home.lan (c-73-219-103-14.hsd1.vt.comcast.net. [73.219.103.14])
-        by smtp.gmail.com with ESMTPSA id m139-20020a37a391000000b0069e88edfdacsm375265qke.105.2022.04.19.11.36.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 11:36:56 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 14:36:54 -0400
-From:   Kent Overstreet <kent.overstreet@gmail.com>
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        linux-kernel@vger.kernel.org, Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH rfc 0/5] mm: introduce shrinker sysfs interface
-Message-ID: <20220419183654.axbxcjehs6fpqg4z@moria.home.lan>
-References: <20220416002756.4087977-1-roman.gushchin@linux.dev>
+        Tue, 19 Apr 2022 14:41:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019F73DA63;
+        Tue, 19 Apr 2022 11:39:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ADB9EB818EF;
+        Tue, 19 Apr 2022 18:39:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFC5DC385AB;
+        Tue, 19 Apr 2022 18:39:01 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="WgQ517dZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1650393535;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=VyT5yFR69WOgQEnV8/wlLftu+VkDei1XdPwIV0Ddyb0=;
+        b=WgQ517dZX1PkFikA0L8FPb1E5zZ61UG62xNcWSc9UuoM3uhaahS5lSMbJjp6NBVxW2smNZ
+        XnxIYBGqtD0eCNni+N4rT2sXqBm06tC7JHcYO+Uci8tNBzLRljtYUYgYAau9RiQ2piR/CJ
+        E+QXa6ZL9kEC6+5pOvVTUf1UTlUCDa8=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 612e3564 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
+        Tue, 19 Apr 2022 18:38:55 +0000 (UTC)
+Received: by mail-yb1-f178.google.com with SMTP id r189so12936660ybr.6;
+        Tue, 19 Apr 2022 11:38:54 -0700 (PDT)
+X-Gm-Message-State: AOAM533A6oTYzaYk83nt4tthXv9ctCUIH6blM5o6QHHL8ImZat1O1aTn
+        EQ73NgBstxwX65dIrY8POvHD5yYdBmFNj1Bc5+0=
+X-Google-Smtp-Source: ABdhPJygDGhFZIcjwzbmxEAjC5M4INHOWHqlOEzmD5UKXJ5M3M4pBOw2NrPU2pCGLpW8o7rnLG0GwAkXiG41Hu3MclU=
+X-Received: by 2002:a25:d88c:0:b0:645:570:72d2 with SMTP id
+ p134-20020a25d88c000000b00645057072d2mr11051453ybg.373.1650393531955; Tue, 19
+ Apr 2022 11:38:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220416002756.4087977-1-roman.gushchin@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220419111650.1582274-1-Jason@zx2c4.com> <20220419111650.1582274-8-Jason@zx2c4.com>
+ <Yl78gLLcSb3EHv0B@zn.tnic>
+In-Reply-To: <Yl78gLLcSb3EHv0B@zn.tnic>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Tue, 19 Apr 2022 20:38:41 +0200
+X-Gmail-Original-Message-ID: <CAHmME9q03Je-ROzzHCgZC0vy1n=y8bsGBOAs8U_K_r3ebLNHbw@mail.gmail.com>
+Message-ID: <CAHmME9q03Je-ROzzHCgZC0vy1n=y8bsGBOAs8U_K_r3ebLNHbw@mail.gmail.com>
+Subject: Re: [PATCH v5 07/11] x86: use fallback for random_get_entropy()
+ instead of zero
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Arnd Bergmann <arnd@arndb.de>, "Theodore Ts'o" <tytso@mit.edu>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "David S . Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        linux-arm-kernel <linux-arm-kernel@lists.infradead.org>,
+        linux-m68k <linux-m68k@lists.linux-m68k.org>,
+        "open list:BROADCOM NVRAM DRIVER" <linux-mips@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        sparclinux <sparclinux@vger.kernel.org>,
+        linux-um@lists.infradead.org, X86 ML <x86@kernel.org>,
+        linux-xtensa@linux-xtensa.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +95,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 05:27:51PM -0700, Roman Gushchin wrote:
-> 7) Don't display cgroups with less than 500 attached objects
->   $ echo 500 > count_memcg
->   $ cat count_memcg
->     53 817
->     1868 886
->     2396 799
->     2462 861
-> 
-> 8) Don't display cgroups with less than 500 attached objects (sum over all nodes)
->   $ echo "500" > count_memcg_node
->   $ cat count_memcg_node
->     53 810 7
->     1868 886 0
->     2396 799 0
->     2462 861 0
-> 
-> 9) Scan system/root shrinker
->   $ cat count
->     212
->   $ echo 100 > scan
->   $ cat scan
->     97
->   $ cat count
->     115
+Hi Borislav,
 
-This part seems entirely overengineered though and a really bad idea - can we
-please _not_ store query state in the kernel? It's not thread safe, and it seems
-like overengineering before we've done the basics (just getting this stuff in
-sysfs is a major improvement!).
+On Tue, Apr 19, 2022 at 8:16 PM Borislav Petkov <bp@alien8.de> wrote:
+> > +static inline unsigned long random_get_entropy(void)
+> > +{
+> > +#ifndef CONFIG_X86_TSC
+> > +     if (!boot_cpu_has(X86_FEATURE_TSC))
+>
+> cpu_feature_enabled() pls.
 
-I know kmemleak does something kinda sorta like this, but that's a special
-purpose debugging tool and this looks to be something more general purpose
-that'll get used in production.
+This function began as a carbon copy of get_cycles(), which reads:
+
+static inline cycles_t get_cycles(void)
+{
+#ifndef CONFIG_X86_TSC
+       if (!boot_cpu_has(X86_FEATURE_TSC))
+               return 0;
+#endif
+
+       return rdtsc();
+}
+
+As you see, random_get_entropy() is the same function, but with that
+zero replaced with the fallback. (Using the fallback in get_cycles()
+wouldn't be appropriate.)
+
+So, your options are:
+a) We keep this patch as-is, using boot_cpu_has(); or
+b) I make an unrelated change inside of this same patch to change
+get_cycles() to use cpu_feature_enabled() (in addition to the new
+random_get_entropy()).
+
+I think I prefer doing (a), and leaving (b) for another time when you
+or another x86 maintainer can do so. But I'll do whichever you say.
+Which would you like?
+
+Jason

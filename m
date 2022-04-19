@@ -2,53 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C33506088
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1567450608C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237679AbiDSAH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S237375AbiDSAIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiDSAGK (ORCPT
+        with ESMTP id S237575AbiDSAHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:06:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A06C1FA7E;
-        Mon, 18 Apr 2022 17:03:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 61FA1B81142;
-        Tue, 19 Apr 2022 00:03:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5655AC385CB;
-        Tue, 19 Apr 2022 00:03:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650326605;
-        bh=UYudwu1QrF7TbcsMmA2KTg1pYLeL053zgVc8k9emey8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=F0KjUbQ6RmtdKOR9u22u/p1b8WtaU3OW9MgNbw68SjOFVxyrgJ14FEVxnqaJTDdkm
-         IeFMPr7qYL1SN4hcRLnBT0kKRKSVltLRibOhKu9HYwf+HVI1NIl3jk9eKOTV0GpsYO
-         6wZoWy6NeAsN4tYzLXbYhcKyqSYcc63GaANK/+DGz6DuSAgdVIUgs+E5ljAzbuwnQ4
-         9N/2I9aIRJkAxZtRV+vp/1NQqOg3E6jeLSWcSbYvB261tkxR0Uettttmrzzc5nnwl2
-         CFx/iFR1vwiGQ93Nvhcd6ZjPeBHvJnNiIAyvlxEVni1mgYf4QnDRIkbtMKpY4AIICA
-         HxMheCjm7gRDA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 72BA55C30EA; Mon, 18 Apr 2022 17:03:24 -0700 (PDT)
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 21/21] srcu: Drop needless initialization of sdp in srcu_gp_start()
-Date:   Mon, 18 Apr 2022 17:03:22 -0700
-Message-Id: <20220419000322.3948903-21-paulmck@kernel.org>
-X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220419000315.GA3948789@paulmck-ThinkPad-P17-Gen-1>
-References: <20220419000315.GA3948789@paulmck-ThinkPad-P17-Gen-1>
+        Mon, 18 Apr 2022 20:07:17 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 782512DAA5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:04:11 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id mp16-20020a17090b191000b001cb5efbcab6so696424pjb.4
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7ea13iPnpt+q7dmqo2mRLY0/XBrF29qE6q2CxF1o/A=;
+        b=PSmNxogKyxaZ6FEJ0SgIM3n3i0PJZTT/kM7G2KnyuTqzyQaD95trQnfjILvGKWf5c/
+         rWLkeBAgiPFoKHS7OXgYT0cD6/rZPpThbWBHm1xvjM/R9VldOUXu5VOXc/Vbflm+Y9f7
+         qcnQR9Vq3+Ep6s8hNDEyPFW5/jezlN7+EFtQk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=s7ea13iPnpt+q7dmqo2mRLY0/XBrF29qE6q2CxF1o/A=;
+        b=xMvP5nUxBv5In3adfXN4uSqvUVLIhFGIebNNDHyYYP/ks1zKGqezM1zEIuJNcRS4cS
+         8yUyBIYgVetfEO9kcQbyx177TAXFsMCNp2XhKdLsrPiXVMR8I+nN1nOqkrOQwxlCo/y3
+         6EMUBrvqJj/T8r4rYebFe5B4SXsiFXD9/vlILoVZXJNIjwvDOyigxNvfOOR4AvV/giGi
+         lck/vmSbUMn4UlXqbe3VESBAz2K6w2VzjLYR+Xw5TW32yGm+kTQTEVtdWj8sfexoDdLU
+         2Xei8dpZe0BVYKL339Z4cPcnciotafqM3SjZ5g179zLmDHIe4H35O6RIu0Y9H6WkaBSH
+         Ca+w==
+X-Gm-Message-State: AOAM530ZJ05clrzK8i+l2BVdLhawrEeCoUDq8e9HFuZ1KUcaQQgtzmLl
+        k590C+hnsd/8kuqG6dTmE1Ujbw==
+X-Google-Smtp-Source: ABdhPJz1N+a3rBLZ1RqMg3FLpMZPuR57Nigj7DvPPXLWFtXb0YZjjek0X7KdVgVIlBcDzR6HwAMGrA==
+X-Received: by 2002:a17:902:ed83:b0:158:c459:ab59 with SMTP id e3-20020a170902ed8300b00158c459ab59mr13276330plj.161.1650326650775;
+        Mon, 18 Apr 2022 17:04:10 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:202:201:4c14:390b:e6f0:6df7])
+        by smtp.gmail.com with ESMTPSA id z8-20020aa785c8000000b005060d2d7085sm13695716pfn.151.2022.04.18.17.04.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 17:04:10 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Prashant Malani <pmalani@chromium.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Daisuke Nojiri <dnojiri@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev
+Subject: [PATCH v2] mfd: cros_ec_dev: Only register PCHG device if present
+Date:   Mon, 18 Apr 2022 17:04:08 -0700
+Message-Id: <20220419000408.3202635-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.36.0.rc0.470.gd361397f0d-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,36 +70,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Don't create a device for the peripheral charger (PCHG) if there aren't
+any peripheral charger ports. This removes a device on most ChromeOS
+systems, because the peripheral charger functionality isn't always
+present.
 
-Commit 9c7ef4c30f12 ("srcu: Make Tree SRCU able to operate without
-snp_node array") initializes the local variable sdp differently depending
-on the srcu's state in srcu_gp_start().  Either way, this initialization
-overwrites the value used when sdp is defined.
-
-This commit therefore drops this pointless definition-time initialization.
-Although there is no functional change, compiler code generation may
-be affected.
-
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+Cc: Prashant Malani <pmalani@chromium.org>
+Cc: Tzung-Bi Shih <tzungbi@kernel.org>
+Cc: Daisuke Nojiri <dnojiri@chromium.org>
+Cc: Benson Leung <bleung@chromium.org>
+Cc: Guenter Roeck <groeck@chromium.org>
+Cc: <chrome-platform@lists.linux.dev>
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
 ---
- kernel/rcu/srcutree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/srcutree.c b/kernel/rcu/srcutree.c
-index 6dd44e759f12..50ba70f019de 100644
---- a/kernel/rcu/srcutree.c
-+++ b/kernel/rcu/srcutree.c
-@@ -620,7 +620,7 @@ EXPORT_SYMBOL_GPL(__srcu_read_unlock);
-  */
- static void srcu_gp_start(struct srcu_struct *ssp)
- {
--	struct srcu_data *sdp = this_cpu_ptr(ssp->sda);
-+	struct srcu_data *sdp;
- 	int state;
+Changes from v1 (https://lore.kernel.org/r/20220415003253.1973106-1-swboyd@chromium.org):
+ * Use cros_ec_command()
+ * Drop the other patches that aren't needed anymore
+
+ drivers/mfd/cros_ec_dev.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/drivers/mfd/cros_ec_dev.c b/drivers/mfd/cros_ec_dev.c
+index 546feef851ab..596731caf407 100644
+--- a/drivers/mfd/cros_ec_dev.c
++++ b/drivers/mfd/cros_ec_dev.c
+@@ -114,6 +114,9 @@ static const struct mfd_cell cros_ec_platform_cells[] = {
+ 	{ .name = "cros-ec-chardev", },
+ 	{ .name = "cros-ec-debugfs", },
+ 	{ .name = "cros-ec-sysfs", },
++};
++
++static const struct mfd_cell cros_ec_pchg_cells[] = {
+ 	{ .name = "cros-ec-pchg", },
+ };
  
- 	if (smp_load_acquire(&ssp->srcu_size_state) < SRCU_SIZE_WAIT_BARRIER)
+@@ -137,6 +140,7 @@ static int ec_device_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct cros_ec_platform *ec_platform = dev_get_platdata(dev);
+ 	struct cros_ec_dev *ec = kzalloc(sizeof(*ec), GFP_KERNEL);
++	struct ec_response_pchg_count pchg_count;
+ 	int i;
+ 
+ 	if (!ec)
+@@ -242,6 +246,21 @@ static int ec_device_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
++	/*
++	 * The PCHG device cannot be detected by sending EC_FEATURE_GET_CMD, but
++	 * it can be detected by querying the number of peripheral chargers.
++	 */
++	retval = cros_ec_command(ec->ec_dev, 0, EC_CMD_PCHG_COUNT, NULL, 0,
++				 &pchg_count, sizeof(pchg_count));
++	if (retval >= 0 && pchg_count.port_count) {
++		retval = mfd_add_hotplug_devices(ec->dev,
++					cros_ec_pchg_cells,
++					ARRAY_SIZE(cros_ec_pchg_cells));
++		if (retval)
++			dev_warn(ec->dev, "failed to add pchg: %d\n",
++				 retval);
++	}
++
+ 	/*
+ 	 * The following subdevices cannot be detected by sending the
+ 	 * EC_FEATURE_GET_CMD to the Embedded Controller device.
+
+base-commit: 3123109284176b1532874591f7c81f3837bbdc17
 -- 
-2.31.1.189.g2e36527f23
+https://chromeos.dev
 

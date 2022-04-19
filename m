@@ -2,88 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E08450609A
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F12506098
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238806AbiDSAJN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:09:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S238354AbiDSAJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238678AbiDSAI5 (ORCPT
+        with ESMTP id S238392AbiDSAI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:08:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094D55FAE;
-        Mon, 18 Apr 2022 17:05:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 933E36123D;
-        Tue, 19 Apr 2022 00:05:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 048F3C385A1;
-        Tue, 19 Apr 2022 00:05:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650326742;
-        bh=80RmKPO7qR7Jhi+2GHCJ3qCRjzWLY69Zf9hVz16E/jY=;
-        h=Date:From:To:Cc:Subject:Reply-To:From;
-        b=U3UXeJD0ksm5YuJZfMrI18wsAuoUBj7eFZlqdceIysliJ2yo7M0FcMq3T9N5R1ZOx
-         x19PbPwuWX3GgX62QMUGY548JhxbhSWlf50ESLqgw+mJpYDVPwBYrkt//GUJ4ZxuJK
-         JGOt4XLXCcSCQGPNBfAJZVmnh0eCgOCvsR2WVvtyB0CdCAAKl/ZzPoMaKl1m3yzxRE
-         EbG/TOvx+fKECEQxgDz9JTRG7DVsIm4CdXAswRqaj4xdwzsuCE04Z+p96hbl7AXJRk
-         nXRce+1vyGlMWGzaMWOzQ0pIvZPGECwFGfo7/C5UK00M/SgvUI7+AMuqAN31nfRuZN
-         u78KAWtntMJ4Q==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A540B5C04BD; Mon, 18 Apr 2022 17:05:41 -0700 (PDT)
-Date:   Mon, 18 Apr 2022 17:05:41 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: [PATCH rcu 0/6] Torture-test updates for v5.19
-Message-ID: <20220419000541.GA3949109@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
+        Mon, 18 Apr 2022 20:08:59 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E408FD23;
+        Mon, 18 Apr 2022 17:05:57 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-de3eda6b5dso15891752fac.0;
+        Mon, 18 Apr 2022 17:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=sender:date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=uL+g4LiGSoHxKG5lc8Yfn2j7/n1lv4jEUcjjI32wVmw=;
+        b=mn24Ta0iNT/ci/J7cPMi91sD3HbX0pqciSaGPtJF6BOIfwSRZzPSb9Pzd073whdklE
+         vcc1fa2ocYWR+1gsR2Moqhp6qHoe9aj91cciExJkTP1gg2SlILlCKxtDzZCG6VeR8fzm
+         bDCeBCh34Ap98/fkzNpID6Jw+Q2tt1lIq5X3xAkCzzKT9MGCpJbu5zcCQnLkNhJHRabG
+         JSQZ2c+utC3COqgR9OEcGmaADLPB2wq2IsaF5+ztwZ/7m2Dt4KJLsfSd4KayUAGC6e4E
+         nGAqujzwcZKp6SZ0gEQcD/Dsevp77r7ypJ+aC5ukwyFOVEeCtnXCr1mmMx+EKT1Uh369
+         nGPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:sender:date:from:to:cc:subject:message-id
+         :references:mime-version:content-disposition:in-reply-to;
+        bh=uL+g4LiGSoHxKG5lc8Yfn2j7/n1lv4jEUcjjI32wVmw=;
+        b=LhStHu3uvJRubXZPX7NtFWNynDJjxYY3lRiu/qtj8Qxyc2+A6bE9ckWFD002FOwZdo
+         opdOOGtc9166l0nLdyEg2YYv+SVMgSLaOKZm7dv/wRIJImmpq/jIH2VufCvtxDW6XEKF
+         tWHQTOjyQTsj6LiWcNtVjOJf3BF4/PVc9deqIA+r784Plaqv5RXVWGzWmOz1Om5x03yY
+         inrX8y4FcnjypnDoAiBTMseIDmJBXqDvQ6MFmzhZeiU0oEkG/dLhCrz7yjhLB61tiBPn
+         gnZJE2m52ut/GAG49fgfKU774BBRdHCQa3MKV5waaU3nvJhajcJYV3TXHzLiFwSyuFeL
+         ud1g==
+X-Gm-Message-State: AOAM533qST4Dnwi9856B6VPzzvTL2QzaDphiPj3qVK9ttCzE/QI+eitN
+        Xj/Jwl9iEumgowZ35HyZPJ4=
+X-Google-Smtp-Source: ABdhPJyglRQzjtVLuFY5rAtcTK9/50EHdG37wurGAWA+qo3ECoKAjJXCGkH04p5crEZzoTE7+a7MZQ==
+X-Received: by 2002:a05:6870:2404:b0:e2:8913:98d7 with SMTP id n4-20020a056870240400b000e2891398d7mr7037679oap.16.1650326756367;
+        Mon, 18 Apr 2022 17:05:56 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id oa9-20020a056870bc0900b000e60e510d5esm646840oab.25.2022.04.18.17.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 17:05:55 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 18 Apr 2022 17:05:54 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 000/105] 5.10.112-rc1 review
+Message-ID: <20220419000554.GE1369577@roeck-us.net>
+References: <20220418121145.140991388@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+On Mon, Apr 18, 2022 at 02:12:02PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.112 release.
+> There are 105 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
+> 
 
-This series contains torture-test updates fixing some bugs in tests and
-closing some testing holes.
+Build results:
+	total: 161 pass: 161 fail: 0
+Qemu test results:
+	total: 477 pass: 477 fail: 0
 
-1.	Add rcu_normal and rcu_expedited runs to torture.sh.
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-2.	Suppress debugging grace period delays during flooding.
-
-3.	Fix distribution of short handler delays.
-
-4.	Avoid corner-case #DE with nsynctypes check, courtesy of David
-	Vernet.
-
-5.	Add missing return and use __func__ in warning, courtesy of
-	David Vernet.
-
-6.	Call preempt_schedule() through static call/key, courtesy of
-	Frederic Weisbecker.
-
-						Thanx, Paul
-
-------------------------------------------------------------------------
-
- b/include/linux/torture.h                           |    2 -
- b/kernel/rcu/rcu.h                                  |    4 ++
- b/kernel/rcu/rcutorture.c                           |    4 ++
- b/kernel/rcu/tree.c                                 |   32 ++++++++++++++++++--
- b/kernel/scftorture.c                               |    5 +--
- b/tools/testing/selftests/rcutorture/bin/torture.sh |   18 +++++++++++
- kernel/rcu/rcutorture.c                             |   14 ++++++++
- 7 files changed, 72 insertions(+), 7 deletions(-)
+Guenter

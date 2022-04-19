@@ -2,79 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47FFD5066CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0518E5066D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 10:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349856AbiDSIUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 04:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S1349909AbiDSIXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 04:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347046AbiDSIUu (ORCPT
+        with ESMTP id S237934AbiDSIXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 04:20:50 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB82B5FCF;
-        Tue, 19 Apr 2022 01:18:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=rRxmedwUzsUPi3oM81wvEiIXlzZjV8rSZCFbGT4aQEw=; b=KG4yrVW6YDkJYUvbVknV9ibkO9
-        8IsGMxingUi69r/wkNBP/v8NPQrdmmbtsKg4+dfmG8X1ofDkC3SOPn7N6LUZVbG05T/7vo23+vSV1
-        dq8xOolvvEe5DILX7bM8CajlS9jgctC16ydTR6r8CyO98x6Xlt7JCiRkTmke+tFDfB9d7l9zMHU6g
-        eFAp6ygTES8KkkKUMrwfF7H+iKZPeeUkZt4G/7poq08HIV8NkjXembkGrBbzATFy2nrvt0V0y6/QN
-        AvZmIq2Z2duZ6Cba1mMTp73XYeSPe72lDmDc7WeQCTRENCDcVXoaKRgqmqXMwE9FHEQwsp0Hetca9
-        7Rm5dlog==;
-Received: from j217100.upc-j.chello.nl ([24.132.217.100] helo=worktop.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1ngj3d-006lEh-DR; Tue, 19 Apr 2022 08:17:57 +0000
-Received: by worktop.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B47D398618A; Tue, 19 Apr 2022 10:17:55 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 10:17:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Zhihao Cheng <chengzhihao1@huawei.com>,
-        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2] fs-writeback: =?utf-8?Q?wri?=
- =?utf-8?Q?teback=5Fsb=5Finodes=EF=BC=9ARecalculat?= =?utf-8?Q?e?= 'wrote'
- according skipped pages
-Message-ID: <20220419081755.GN2731@worktop.programming.kicks-ass.net>
-References: <20220418092824.3018714-1-chengzhihao1@huawei.com>
- <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com>
+        Tue, 19 Apr 2022 04:23:13 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A3D32715B;
+        Tue, 19 Apr 2022 01:20:31 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id x1so840402pfj.2;
+        Tue, 19 Apr 2022 01:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FTopSLgJ2n3PXWtDskFTEfFV8BTHV9oM8z+ikuAV+ic=;
+        b=i3uBhJ2tVRdvok0bNuPj65kqsxeaM6leVUupmQNrGxSNJviBhNJVQAQ9rhS7yNvGUC
+         bfyI1tb+WUIRNhWtkxFCPR4muaRLaOOrNzHFxPpey5OZ6dVX94RdQeUoj2Gjh5GPxaiW
+         WO/PUiu05x4a52l+SrwTmxbHLghXjYsmf1YiFo7Xch6YuqOqpQ6jWlVPRBQs4kOtRCvp
+         koKZnnvS7kq6rqR8MeprwzA8h+rfJarKzmfDwMfGR68MqyRUxoOGo/21TNk2MiKEeXt/
+         HaDBNHPfVnQNsYSXlWaoKjud09ZRE6bAufLtkmQ1aT3DWqa3UztzUY+o/39pkRWghFBZ
+         cr9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=FTopSLgJ2n3PXWtDskFTEfFV8BTHV9oM8z+ikuAV+ic=;
+        b=XkigLi6d5Ji4xW9vxiRWdFZ7crKDOuPRZkL3mZPnGIMQlKT0v1jQvXHJVQja7vbqwF
+         PI96OblUMPwWy1QRrMjFFqzt9ZR+2MxcTSspUNvm1npajA2S9svpn//SEG0HsKUsFFwL
+         h/AsMVVNvbMgoHva71mPnlMAjfJ3c9cNAHPiS2yl0O9x1VnkAOIwiu+8j31XuALSKI2H
+         arxjWMIgguHq3ImmkKatS87oGjupjaRqLtEVwm1OS51HXKNLwXnWKbHRQMHUhBAz58SG
+         vchgvTSTVWeyolW8PJiF0V0+aUTcZ+zDqJvlENZacGLJAmaz/hYOYkWGGwSXogWqHKs8
+         oc4g==
+X-Gm-Message-State: AOAM533+rySFs4D7jWVh6R2viqq5cFACBfvBz1O87P/afp+7mDf6ySLK
+        hfkx9hBN3tceWxk0UyrbTZQ=
+X-Google-Smtp-Source: ABdhPJzqc+PBDxZ1Tbj3AaMVcrSMOUebhmsMu9TDtibfYoxNGpgjoyrqrxZTuL9vBYotbKMQH4ND6Q==
+X-Received: by 2002:a05:6a00:1c5c:b0:505:7469:134a with SMTP id s28-20020a056a001c5c00b005057469134amr16520442pfw.16.1650356430520;
+        Tue, 19 Apr 2022 01:20:30 -0700 (PDT)
+Received: from localhost.localdomain ([240b:12:16e1:e200:929:c115:ea25:1e5c])
+        by smtp.gmail.com with ESMTPSA id rm5-20020a17090b3ec500b001c7559762e9sm18673797pjb.20.2022.04.19.01.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 01:20:29 -0700 (PDT)
+From:   Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+To:     akiyks@gmail.com
+Cc:     Kosuke Fujimoto <fujimotokosuke0@gmail.com>,
+        linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] docs/ja_JP/index: update section title in Japanese
+Date:   Tue, 19 Apr 2022 17:18:13 +0900
+Message-Id: <20220419081813.6838-1-fujimotokosuke0@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wh7CqEu+34=jUsSaMcMHe4Uiz7JrgYjU+eE-SJ3MPS-Gg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 18, 2022 at 12:43:43PM -0700, Linus Torvalds wrote:
-> Which all brings us back to how we have that hacky thing in
-> writeback_sb_inodes() that does
-> 
->         if (need_resched()) {
->                 /*
->                  * We're trying to balance between building up a nice
->                  * long list of IOs to improve our merge rate, and
->                  * getting those IOs out quickly for anyone throttling
->                  * in balance_dirty_pages().  cond_resched() doesn't
->                  * unplug, so get our IOs out the door before we
->                  * give up the CPU.
->                  */
->                 blk_flush_plug(current->plug, false);
->                 cond_resched();
->         }
+Update section title "Japanese Translation" in Japanese instead of English
 
-Yeah, that's horribly broken for PREEMPT=y.
+Signed-off-by: Kosuke Fujimoto <fujimotokosuke0@gmail.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Akira Yokosawa <akiyks@gmail.com>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Cc: linux-doc@vger.kernel.org
+---
+ Documentation/translations/ja_JP/index.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Documentation/translations/ja_JP/index.rst b/Documentation/translations/ja_JP/index.rst
+index 20738c931d02..558a1f5642b0 100644
+--- a/Documentation/translations/ja_JP/index.rst
++++ b/Documentation/translations/ja_JP/index.rst
+@@ -5,7 +5,7 @@
+ 	\kerneldocCJKon
+ 	\kerneldocBeginJP{
+ 
+-Japanese translations
++日本語翻訳
+ =====================
+ 
+ .. toctree::
+-- 
+2.25.1
+

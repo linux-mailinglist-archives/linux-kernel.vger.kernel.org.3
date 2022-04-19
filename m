@@ -2,96 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A4E507BCD
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2821507BD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357934AbiDSVT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S1357943AbiDSVTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242666AbiDSVTZ (ORCPT
+        with ESMTP id S232409AbiDSVTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:19:25 -0400
-Received: from mout.gmx.com (mout.gmx.com [74.208.4.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0831C31DD5;
-        Tue, 19 Apr 2022 14:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.com;
-        s=dbd5af2cbaf7; t=1650403000;
-        bh=oVIT34MDI5tMjIfJ6/0G80LIiT9URv2qJqg4DFh6JfQ=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=I4v64/XaX/n3w8YY2WTWh2y5gNZEWcDd+jiOGnVMYXTEfjcTTOPZVxp0beMO5KNSL
-         6yDg//t1URzL1DrIcFBTtd5+bYUSPB1szD8snIf2lQanrvIK2YynAQlwironsK64Fp
-         JOSXZ4HI9KY+9Zhs+EK8W5iXL/J+bWrJdXJKIW9M=
-X-UI-Sender-Class: 214d933f-fd2f-45c7-a636-f5d79ae31a79
-Received: from localhost ([94.175.88.251]) by smtp.mail.com (mrgmxus005
- [74.208.5.15]) with ESMTPSA (Nemesis) id 0MCKtL-1npPeg2wwz-0095mB; Tue, 19
- Apr 2022 23:16:40 +0200
-From:   Rebecca White <rtw@null.net>
-To:     david.rheinsberg@gmail.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rebecca White <rtw@null.net>
-Subject: [PATCH] HID: hid-wiimote-core: Removed Unnecessary Braces
-Date:   Tue, 19 Apr 2022 22:15:30 +0100
-Message-Id: <20220419211530.10123-1-rtw@null.net>
-X-Mailer: git-send-email 2.35.3
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:g2/vYMUR0GCcQ918V5nyH7XuDMQumRX8jlky07kBA53hhgoNlKR
- tvWwe00llJkRxHX+q+JOKdg5ViJjRyrX19J93S0YRiif2j4g+5aKXbDP3RnIIol4Aeqwm0W
- 9M5v+kbJexaQB5nsW+yGERTprl9sZcPUvppqHJDYGeb2ZOQfZRFRxBfKcO2RS4n9E4mrBxr
- qqjajod5PXvqoetln6RgQ==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:u/2bk/s/tck=:ODoZX7jpBXeYocLduJmPt8
- r4DxbZcMq2CZ9nIhLxm4iL4mH+xCHwA47b02rU+sCnGv1D32DKoepuwwANB6rAwInYeGvi+FQ
- WTEmDzXtCca8/MoIkbZHfe1dL9VzyK2edMuY5lI3q4duykcnIl737ZwXw6g8KHUdByGyJ4yQL
- gxtzRHiT2EX1sG6xhft1CV/+l0wJxmT6lcoRt3rSV6RTfQdAfXql1D+ZNelNnzEougULgNyOB
- 1KgS0CTcahHOHCwemisBQqLR173OpWHvtDffvzoaVKoGUIAFAOUWuGjgiY4r1D3JTaJGj8i9R
- mr1h18odZ5Ea1/dPhjS4S6ArH+msCO9Imxtt0777DpJjz1npTKAeef+MFlRIMNKpHmCH4aSZZ
- c/D2s3meXoEwtPZNIkRPCE4QDAW+LOspshY7CyzGlroDO9iPOxsJnXaph8kmJmqxF6i6Q31/N
- 3ZT5YUl2YCMJ5pEpQDUh/ivx2A3dVo/JxYyhYneXdpUIVTgq37PtgiaV706YhjZwd4cATQP/r
- 3uL0vRA5mZhlXTAtzsrFwgDYGvi7GssmqWnpT7AH7Wq5OzpgSsWMaSqGxXoMo9a1abL5Uxzc6
- 6Mc13AFlbkxgfodvFYAIfpyXv6ftz7A1Upp/FZTyE6NWXCRZXejJnVykK2ZKeGJ3D7WR1Pbqn
- 1Ho8y4gAlu3Dxqm9WPQng11WcMghiOqiHjR0By78Kgew2tefGgIVBHJGDdt7d90T5MuIEnR7F
- XFOg2hN2huUCuSdEouYrVG6wZCtMhmIsNmXyNQeIjgWP9snuF1WrNvg1rSwP78ROAppwd0Gvv
- cFRd3lE0OY2Dc2WjgIYehr4Te+7HhEFraprH2E/Ui7KYNFkCxZYZF1etNlgN+V+qjGSqfd/bt
- V4MOtSSMvjYkQuuS/HmFcxEOK4y4SO6GZ8EkJfl1DEIcWHAw+dlu6X42Zze3TT9UPd7WJWIYi
- V95HNfQMzR1PynDlCmIis2gDvqUJEdmd+lAKXq0xN5/RsyG1/GkvJWr60oTOOQj62+n1sU6+b
- G84k/0OfEiepT6QtfpthaeRV4/9fHuWJXx+hauuLGds8+3j9pJ+Srxk6VjHlTZNhnQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 19 Apr 2022 17:19:51 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9DBA637BF6;
+        Tue, 19 Apr 2022 14:17:07 -0700 (PDT)
+Received: from apais-vm1.0synte4vioeebbvidf5q0vz2ua.xx.internal.cloudapp.net (unknown [52.183.86.224])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 163EF20E1A8D;
+        Tue, 19 Apr 2022 14:17:07 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 163EF20E1A8D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1650403027;
+        bh=iznUogW7Ui4gDR1RCeHw3LWMWiszvHx3w2StT5QPOGs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iyd0LIVB4sLS97ntxZkk6JG2qYRYJyz3Gjmc5L7O+QZGdxE2WCy9lUWhbferQ6zdk
+         MOW17Od2+AjTkSackgwX9AJCnuDBd3YBVlOW5mqphZu9DYCqKa8zhdysL7wuuMcUQZ
+         Mk7Z719+FVaw14+dnPCDRKuqao3xBQ3nuIHBV9Tk=
+From:   Allen Pais <apais@linux.microsoft.com>
+To:     olivier.dautricourt@orolia.com, sr@denx.de, vkoul@kernel.org
+Cc:     keescook@chromium.org, linux-hardening@vger.kernel.org,
+        ludovic.desroches@microchip.com, tudor.ambarus@microchip.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        bcm-kernel-feedback-list@broadcom.com, nsaenz@kernel.org,
+        paul@crapouillou.net, Eugeniy.Paltsev@synopsys.com,
+        gustavo.pimentel@synopsys.com, vireshk@kernel.org,
+        andriy.shevchenko@linux.intel.com, leoyang.li@nxp.com,
+        zw@zh-kernel.org, wangzhou1@hisilicon.com, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, sean.wang@mediatek.com,
+        matthias.bgg@gmail.com, afaerber@suse.de, mani@kernel.org,
+        logang@deltatee.com, sanju.mehta@amd.com, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        krzysztof.kozlowski@linaro.org, green.wan@sifive.com,
+        orsonzhai@gmail.com, baolin.wang7@gmail.com, zhang.lyra@gmail.com,
+        patrice.chotard@foss.st.com, linus.walleij@linaro.org,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC 0/1] refactor all tasklet users into other APIs
+Date:   Tue, 19 Apr 2022 21:16:57 +0000
+Message-Id: <20220419211658.11403-1-apais@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Removed unnecessary braces around a single line if/else statement
+ Tasklet is an old API that will be eventually deprecated.
+During the modernization of the tasklets API, there was a
+request to entirely remove the API from the kernel. 
+This series converts tasklets to simple work.
 
-Signed-off-by: Rebecca White <rtw@null.net>
-=2D--
- drivers/hid/hid-wiimote-core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ Feedback on the series would be of great help as we are in the
+process of dropping the usage of tasklets from the rest of the sub-systems.
 
-diff --git a/drivers/hid/hid-wiimote-core.c b/drivers/hid/hid-wiimote-core=
-.c
-index 4399d6c6a..84180f3b8 100644
-=2D-- a/drivers/hid/hid-wiimote-core.c
-+++ b/drivers/hid/hid-wiimote-core.c
-@@ -1681,11 +1681,10 @@ static ssize_t wiimote_ext_store(struct device *de=
-v,
- {
- 	struct wiimote_data *wdata =3D dev_to_wii(dev);
+ This is part of KSPP effort which is tracked at:
+https://github.com/KSPP/linux/issues/94
 
--	if (!strcmp(buf, "scan")) {
-+	if (!strcmp(buf, "scan"))
- 		wiimote_schedule(wdata);
--	} else {
-+	else
- 		return -EINVAL;
--	}
+This series replaces tasklets in drivers/dma/* with simple
+workqueue. 
 
- 	return strnlen(buf, PAGE_SIZE);
- }
-=2D-
-2.35.3
+Allen Pais (1):
+  drivers/dma/*: replace tasklets with workqueue
+
+ drivers/dma/altera-msgdma.c                   | 15 ++++----
+ drivers/dma/at_hdmac.c                        | 16 ++++-----
+ drivers/dma/at_hdmac_regs.h                   |  6 ++--
+ drivers/dma/at_xdmac.c                        | 14 ++++----
+ drivers/dma/bcm2835-dma.c                     |  2 +-
+ drivers/dma/dma-axi-dmac.c                    |  2 +-
+ drivers/dma/dma-jz4780.c                      |  2 +-
+ .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    |  2 +-
+ drivers/dma/dw-edma/dw-edma-core.c            |  4 +--
+ drivers/dma/dw/core.c                         | 13 +++----
+ drivers/dma/dw/regs.h                         |  2 +-
+ drivers/dma/ep93xx_dma.c                      | 15 ++++----
+ drivers/dma/fsl-edma-common.c                 |  2 +-
+ drivers/dma/fsl-qdma.c                        |  2 +-
+ drivers/dma/fsl_raid.c                        | 12 ++++---
+ drivers/dma/fsl_raid.h                        |  2 +-
+ drivers/dma/fsldma.c                          | 15 ++++----
+ drivers/dma/fsldma.h                          |  2 +-
+ drivers/dma/hisi_dma.c                        |  2 +-
+ drivers/dma/hsu/hsu.c                         |  2 +-
+ drivers/dma/idma64.c                          |  4 +--
+ drivers/dma/img-mdc-dma.c                     |  2 +-
+ drivers/dma/imx-dma.c                         | 27 +++++++-------
+ drivers/dma/imx-sdma.c                        |  6 ++--
+ drivers/dma/ioat/dma.c                        | 19 +++++-----
+ drivers/dma/ioat/dma.h                        |  4 +--
+ drivers/dma/ioat/init.c                       |  2 +-
+ drivers/dma/iop-adma.c                        | 12 +++----
+ drivers/dma/ipu/ipu_idmac.c                   | 22 ++++--------
+ drivers/dma/ipu/ipu_intern.h                  |  2 +-
+ drivers/dma/k3dma.c                           | 19 +++++-----
+ drivers/dma/mediatek/mtk-cqdma.c              | 35 ++++++++++---------
+ drivers/dma/mediatek/mtk-hsdma.c              |  4 +--
+ drivers/dma/mediatek/mtk-uart-apdma.c         |  4 +--
+ drivers/dma/mmp_pdma.c                        | 13 +++----
+ drivers/dma/mmp_tdma.c                        | 11 +++---
+ drivers/dma/mpc512x_dma.c                     | 17 ++++-----
+ drivers/dma/mv_xor.c                          | 13 +++----
+ drivers/dma/mv_xor.h                          |  4 +--
+ drivers/dma/mv_xor_v2.c                       | 23 ++++++------
+ drivers/dma/mxs-dma.c                         | 13 +++----
+ drivers/dma/nbpfaxi.c                         | 15 ++++----
+ drivers/dma/owl-dma.c                         |  2 +-
+ drivers/dma/pch_dma.c                         | 17 ++++-----
+ drivers/dma/pl330.c                           | 32 +++++++++--------
+ drivers/dma/plx_dma.c                         | 13 +++----
+ drivers/dma/ppc4xx/adma.c                     | 17 ++++-----
+ drivers/dma/ppc4xx/adma.h                     |  4 +--
+ drivers/dma/ptdma/ptdma-dev.c                 |  2 +-
+ drivers/dma/ptdma/ptdma.h                     |  4 +--
+ drivers/dma/pxa_dma.c                         |  2 +-
+ drivers/dma/qcom/bam_dma.c                    | 35 ++++++++++---------
+ drivers/dma/qcom/gpi.c                        | 18 +++++-----
+ drivers/dma/qcom/hidma.c                      | 11 +++---
+ drivers/dma/qcom/hidma.h                      |  6 ++--
+ drivers/dma/qcom/hidma_ll.c                   | 11 +++---
+ drivers/dma/qcom/qcom_adm.c                   |  2 +-
+ drivers/dma/s3c24xx-dma.c                     |  2 +-
+ drivers/dma/sa11x0-dma.c                      | 27 +++++++-------
+ drivers/dma/sf-pdma/sf-pdma.c                 | 24 +++++++------
+ drivers/dma/sf-pdma/sf-pdma.h                 |  4 +--
+ drivers/dma/sprd-dma.c                        |  2 +-
+ drivers/dma/st_fdma.c                         |  2 +-
+ drivers/dma/ste_dma40.c                       | 17 ++++-----
+ drivers/dma/sun6i-dma.c                       | 33 ++++++++---------
+ drivers/dma/tegra20-apb-dma.c                 | 19 +++++-----
+ drivers/dma/tegra210-adma.c                   |  2 +-
+ drivers/dma/ti/edma.c                         |  2 +-
+ drivers/dma/ti/k3-udma.c                      | 11 +++---
+ drivers/dma/ti/omap-dma.c                     |  2 +-
+ drivers/dma/timb_dma.c                        | 23 ++++++------
+ drivers/dma/txx9dmac.c                        | 30 ++++++++--------
+ drivers/dma/txx9dmac.h                        |  4 +--
+ drivers/dma/virt-dma.c                        |  9 ++---
+ drivers/dma/virt-dma.h                        |  8 ++---
+ drivers/dma/xgene-dma.c                       | 21 +++++------
+ drivers/dma/xilinx/xilinx_dma.c               | 23 ++++++------
+ drivers/dma/xilinx/xilinx_dpdma.c             | 19 +++++-----
+ drivers/dma/xilinx/zynqmp_dma.c               | 21 +++++------
+ include/linux/platform_data/dma-iop32x.h      |  4 +--
+ 80 files changed, 459 insertions(+), 429 deletions(-)
+
+-- 
+2.17.1
 

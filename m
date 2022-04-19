@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF212506850
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0B3506852
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348548AbiDSKJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 06:09:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34558 "EHLO
+        id S1350471AbiDSKJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231706AbiDSKJG (ORCPT
+        with ESMTP id S231706AbiDSKJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 06:09:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35024581;
-        Tue, 19 Apr 2022 03:06:24 -0700 (PDT)
+        Tue, 19 Apr 2022 06:09:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EBE25298;
+        Tue, 19 Apr 2022 03:06:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28262B81100;
-        Tue, 19 Apr 2022 10:06:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AABC385A5;
-        Tue, 19 Apr 2022 10:06:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7808660DF6;
+        Tue, 19 Apr 2022 10:06:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A840C385A7;
+        Tue, 19 Apr 2022 10:06:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1650362781;
-        bh=Xjd8xF6lDlknu1VxRG+stmss65nhtH4KHhx1LEffttI=;
+        s=korg; t=1650362798;
+        bh=A3Sh5pbusm5H9OKZcigTxWomGh4V96UysK52vKy8n4A=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gAZOVz8jTW3kGOUMy8Riy51iT0npPo1ZOrX0UteWXpiGJrUczBxY7vQTQH6n0Bhr7
-         7hlzSedRjb7Qbl6HU5QNiFJ2rBUZQNkE/n6bfoVKx9cKe7GBsISscl3eJT3xcpssKc
-         VpW5G6E6ob/4ugmQKxXXeBiFvtFPDE72zsHaIYLM=
-Date:   Tue, 19 Apr 2022 12:06:18 +0200
+        b=qbIjRW6ErLzAOJljXT4LXzZOdElpUjhsCr4puNiMqoiafx9PJqKbEOw2Bff4qE79j
+         JIBtzdO+STW7qtaa1Y4SAmtcRdZCVXJHneKAb9yIdcNMju922lkVgHnmS64VHmvYYu
+         MRJtEER6RcCOVFheCP8aqmQ1TXzCJuqpqzvLrckY=
+Date:   Tue, 19 Apr 2022 12:06:31 +0200
 From:   Greg KH <gregkh@linuxfoundation.org>
 To:     "D. Starke" <daniel.starke@siemens.com>
 Cc:     linux-serial@vger.kernel.org, jirislaby@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 16/20] tty: n_gsm: clean up dead code in gsm_queue()
-Message-ID: <Yl6Jmk/j7go9s+0i@kroah.com>
-References: <YlkRO6fAPCuWyT1Y@kroah.com>
- <20220419081713.5813-1-daniel.starke@siemens.com>
+Subject: Re: [PATCH v2 18/20] tty: n_gsm: clean up implicit CR bit encoding
+ in address field
+Message-ID: <Yl6JpwMtL87mZZb+@kroah.com>
+References: <YlkRvMhDfwgNZptV@kroah.com>
+ <20220419081930.5886-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220419081713.5813-1-daniel.starke@siemens.com>
+In-Reply-To: <20220419081930.5886-1-daniel.starke@siemens.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -52,36 +53,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 01:17:13AM -0700, D. Starke wrote:
+On Tue, Apr 19, 2022 at 01:19:30AM -0700, D. Starke wrote:
 > From: Daniel Starke <daniel.starke@siemens.com>
 > 
-> Remove commented out code as it is never used and if anyone accidentally
-> turned it on, it would be broken.
+> n_gsm is based on the 3GPP 07.010 and its newer version is the 3GPP 27.010.
+> See https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=1516
+> The changes from 07.010 to 27.010 are non-functional. Therefore, I refer to
+> the newer 27.010 here. Chapter 5.2.1.2 describes the encoding of the
+> address field within the frame header. It is made up of the DLCI address,
+> command/response (CR) bit and EA bit.
+> Use the predefined CR value instead of a plain 2 in alignment to the
+> remaining code and to make the encoding obvious.
 > 
 > Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
 > ---
->  drivers/tty/n_gsm.c | 4 ----
->  1 file changed, 4 deletions(-)
+>  drivers/tty/n_gsm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
 > diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index 07d03447cdfd..1b4077006744 100644
+> index 9bf5aa508f0e..1beb4b28cd18 100644
 > --- a/drivers/tty/n_gsm.c
 > +++ b/drivers/tty/n_gsm.c
-> @@ -1894,10 +1894,6 @@ static void gsm_queue(struct gsm_mux *gsm)
->  	case UI|PF:
->  	case UIH:
->  	case UIH|PF:
-> -#if 0
-> -		if (cr)
-> -			goto invalid;
-> -#endif
->  		if (dlci == NULL || dlci->state != DLCI_OPEN) {
->  			gsm_command(gsm, address, DM|PF);
->  			return;
+> @@ -751,7 +751,7 @@ static void __gsm_data_queue(struct gsm_dlci *dlci, struct gsm_msg *msg)
+>  
+>  	*--dp = msg->ctrl;
+>  	if (gsm->initiator)
+> -		*--dp = (msg->addr << 2) | 2 | EA;
+> +		*--dp = (msg->addr << 2) | CR | EA;
+>  	else
+>  		*--dp = (msg->addr << 2) | EA;
+>  	*fcs = gsm_fcs_add_block(INIT_FCS, dp , msg->data - dp);
 > -- 
 > 2.25.1
 > 
-
 
 Hi,
 

@@ -2,192 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F43507ABC
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B7B507AD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345150AbiDSUNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34932 "EHLO
+        id S1346775AbiDSUOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236200AbiDSUN3 (ORCPT
+        with ESMTP id S236200AbiDSUN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:13:29 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5683EB9E
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:10:46 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id e194so14405646iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:10:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=xy72vbVLGcLXHwzAazq9kOTgmNrIZnaiAvJsWfbG98A=;
-        b=yVKzq4L1BdioeLxoRlvJGvKbTQ/QSHZePO4l3VJhJlu8/ztbLwHekfdHxVw8A3z6KY
-         iB8pjlxwDqQLtl5asXV0eJXBkmrAD67Pbl9fhgbyeJ36pfSiEfVLlc5568bEhwKSeMi0
-         wYWnx9UBS1jKTIVJOZLCW9fE1vfNkziaTz7aY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=xy72vbVLGcLXHwzAazq9kOTgmNrIZnaiAvJsWfbG98A=;
-        b=uoV+pyTr5kKeELt1pPM8GcIKKXP2Pec1jdoYle1fTv2TNpnJthaWJp9uoJisAlFJIl
-         VUCCmxUxQYtBJRWCxIrT6iRkHsEaOFGEBMPxG1HywF0375T71W0ctaBgfVmKbkDJ4UKs
-         p0RTJJpVLKtirK7XiCc7gRnTuZ5cwpCLcDTdAFu1t1ZbEd0bg2naX8IhgJ/RnIsBBG39
-         jv+/Y16eGQ6xPvqCSH5h52xzs+jYqJlF/O3Z5mcENzjhOvgfbba2kV65EeFDD6hAetw1
-         YZ+zSw58Pzj7TfQxZ3jCgdhSg05pB6IhFhaLVXSd2TPG+BHL2ERXaKX96s407A31tkZT
-         /0Xg==
-X-Gm-Message-State: AOAM5317GnwY+pU9i08EEtwOVFFwqyL6FaEvwyu1ycVJoJ52anK1ue7J
-        WFLZMk+QLdc2E1q9UL4JWuch+/qI2qr/QMiFvQr5N1UIuFvulg==
-X-Google-Smtp-Source: ABdhPJwxzPCGWapE0i9RHBg2PrlUr2LIJyNPu4GvkU3NrTK+ZlXRqwHS6vGRBsoa8tBbnFU4KBQX6hCBA8p/L0Q4sT4=
-X-Received: by 2002:a05:6638:1612:b0:328:673b:d467 with SMTP id
- x18-20020a056638161200b00328673bd467mr8030900jas.180.1650399045652; Tue, 19
- Apr 2022 13:10:45 -0700 (PDT)
+        Tue, 19 Apr 2022 16:13:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2D78E40A22
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:11:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650399075;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=h+wPHJQZU8EGdYfueFz9b0UM3cK7M3jQjEoZVOhG1vs=;
+        b=HOnMjhKbho+/MJ+8vuZ7uWkRLhWS3xpGDv8imuuJkRq4UgvyMuk4+N0HRSWS6+AO9sUHdD
+        LrnQLiXM1TSJCdmxxddKD4EOoML4T/2PANq3cSCtYTShzDdRUoFaCHrrs7a2fRu4Fw8rMm
+        IrDltCn3wu3t3NMQ4UKxVy76sM5OML4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-390-jbRoj2DYNBWjBoepUpKjfA-1; Tue, 19 Apr 2022 16:11:12 -0400
+X-MC-Unique: jbRoj2DYNBWjBoepUpKjfA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A02FC38008A0;
+        Tue, 19 Apr 2022 20:11:11 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (file01.intranet.prod.int.rdu2.redhat.com [10.11.5.7])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 913BC469A43;
+        Tue, 19 Apr 2022 20:11:11 +0000 (UTC)
+Received: from file01.intranet.prod.int.rdu2.redhat.com (localhost [127.0.0.1])
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4) with ESMTP id 23JKBBKN019491;
+        Tue, 19 Apr 2022 16:11:11 -0400
+Received: from localhost (mpatocka@localhost)
+        by file01.intranet.prod.int.rdu2.redhat.com (8.14.4/8.14.4/Submit) with ESMTP id 23JKBBHe019487;
+        Tue, 19 Apr 2022 16:11:11 -0400
+X-Authentication-Warning: file01.intranet.prod.int.rdu2.redhat.com: mpatocka owned process doing -bs
+Date:   Tue, 19 Apr 2022 16:11:11 -0400 (EDT)
+From:   Mikulas Patocka <mpatocka@redhat.com>
+X-X-Sender: mpatocka@file01.intranet.prod.int.rdu2.redhat.com
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        the arch/x86 maintainers <x86@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] x86: __memcpy_flushcache: fix wrong alignment if size >
+ 2^32
+In-Reply-To: <CAHk-=wjNHZ1_sT4iN_TVu+2cmd_n2W+EYfd9vSL3L82kNJTmPg@mail.gmail.com>
+Message-ID: <alpine.LRH.2.02.2204191551430.16728@file01.intranet.prod.int.rdu2.redhat.com>
+References: <alpine.LRH.2.02.2204190948080.18399@file01.intranet.prod.int.rdu2.redhat.com> <CAHk-=wjNHZ1_sT4iN_TVu+2cmd_n2W+EYfd9vSL3L82kNJTmPg@mail.gmail.com>
+User-Agent: Alpine 2.02 (LRH 1266 2009-07-14)
 MIME-Version: 1.0
-References: <20220419200823.2790490-1-joel@joelfernandes.org>
-In-Reply-To: <20220419200823.2790490-1-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Tue, 19 Apr 2022 16:10:33 -0400
-Message-ID: <CAEXW_YS7cdrfP58Qvbt_WS2QRNkV=wVrwY6iTWmEH5qBxyStxQ@mail.gmail.com>
-Subject: Re: [PATCH v4 rcu/dev] rcu/nocb: Add an option to offload all CPUs on boot
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu <rcu@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        Vineeth Pillai <vineethrp@gmail.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: TEXT/PLAIN; charset=US-ASCII
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 4:08 PM Joel Fernandes (Google)
-<joel@joelfernandes.org> wrote:
->
-> From: Joel Fernandes <joel@joelfernandes.org>
->
-> On systems with CONFIG_RCU_NOCB_CPU=y, there is no default mask provided
-> which ends up not offloading any CPU. This patch removes a dependency
-> from the bootloader having to know about RCU and about how to provide
-> the mask.
->
-> With the new option enabled, all CPUs will be offloaded on boot unless
-> rcu_nocbs= or rcu_nohz_full= kernel parameters provide a CPU list.
->
-> Signed-off-by: Joel Fernandes <joel@joelfernandes.org>
-
-Oops, forgot to add Reviewed-by tags:
-Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Reviewed-by: Kalesh Singh <kaleshsingh@google.com>
-
-Paul, would you mind doing so, so I don't have to resend? Apologies.
-
-Thanks,
-
-Joel
 
 
-> ---
-> v4: Rebased on rcu/dev, fixed conflict with Frederick's patch changing
->     location of nocb_is_setup variable.
->
->  Documentation/admin-guide/kernel-parameters.txt |  6 ++++++
->  kernel/rcu/Kconfig                              | 13 +++++++++++++
->  kernel/rcu/tree_nocb.h                          | 13 +++++++++++++
->  3 files changed, 32 insertions(+)
->
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 789ef586009b..1e82ecb7a649 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3572,6 +3572,9 @@
->                         just as if they had also been called out in the
->                         rcu_nocbs= boot parameter.
->
-> +                       Note that this argument takes precedence over
-> +                       the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
-> +
->         noiotrap        [SH] Disables trapped I/O port accesses.
->
->         noirqdebug      [X86-32] Disables the code which attempts to detect and
-> @@ -4475,6 +4478,9 @@
->                         no-callback mode from boot but the mode may be
->                         toggled at runtime via cpusets.
->
-> +                       Note that this argument takes precedence over
-> +                       the CONFIG_RCU_NOCB_CPU_DEFAULT_ALL option.
-> +
->         rcu_nocb_poll   [KNL]
->                         Rather than requiring that offloaded CPUs
->                         (specified by rcu_nocbs= above) explicitly
-> diff --git a/kernel/rcu/Kconfig b/kernel/rcu/Kconfig
-> index 1c630e573548..27aab870ae4c 100644
-> --- a/kernel/rcu/Kconfig
-> +++ b/kernel/rcu/Kconfig
-> @@ -262,6 +262,19 @@ config RCU_NOCB_CPU
->           Say Y here if you need reduced OS jitter, despite added overhead.
->           Say N here if you are unsure.
->
-> +config RCU_NOCB_CPU_DEFAULT_ALL
-> +       bool "Offload RCU callback processing from all CPUs by default"
-> +       depends on RCU_NOCB_CPU
-> +       default n
-> +       help
-> +         Use this option to offload callback processing from all CPUs
-> +         by default, in the absence of the rcu_nocbs or nohz_full boot
-> +         parameter. This also avoids the need to use any boot parameters
-> +         to achieve the effect of offloading all CPUs on boot.
-> +
-> +         Say Y here if you want offload all CPUs by default on boot.
-> +         Say N here if you are unsure.
-> +
->  config TASKS_TRACE_RCU_READ_MB
->         bool "Tasks Trace RCU readers use memory barriers in user and idle"
->         depends on RCU_EXPERT && TASKS_TRACE_RCU
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 4cf9a29bba79..9f29f25a0cbc 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1197,11 +1197,21 @@ void __init rcu_init_nohz(void)
->  {
->         int cpu;
->         bool need_rcu_nocb_mask = false;
-> +       bool offload_all = false;
->         struct rcu_data *rdp;
->
-> +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> +       if (!rcu_state.nocb_is_setup) {
-> +               need_rcu_nocb_mask = true;
-> +               offload_all = true;
-> +       }
-> +#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
-> +
->  #if defined(CONFIG_NO_HZ_FULL)
->         if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
->                 need_rcu_nocb_mask = true;
-> +               offload_all = false; /* NO_HZ_FULL has its own mask. */
-> +       }
->  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->
->         if (need_rcu_nocb_mask) {
-> @@ -1222,6 +1232,9 @@ void __init rcu_init_nohz(void)
->                 cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
->  #endif /* #if defined(CONFIG_NO_HZ_FULL) */
->
-> +       if (offload_all)
-> +               cpumask_setall(rcu_nocb_mask);
-> +
->         if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->                 pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
->                 cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-> --
-> 2.36.0.rc0.470.gd361397f0d-goog
->
+On Tue, 19 Apr 2022, Linus Torvalds wrote:
+
+> On Tue, Apr 19, 2022 at 6:56 AM Mikulas Patocka <mpatocka@redhat.com> wrote:
+> >
+> > The first "if" condition in __memcpy_flushcache is supposed to align the
+> > "dest" variable to 8 bytes and copy data up to this alignment. However,
+> > this condition may misbehave if "size" is greater than 4GiB.
+> 
+> You're not wrong, but I also don't think it would be wrong to just have a
+> 
+>         if (WARN_ON_ONCE(size > MAX_INT))
+>                 return;
+> 
+> in there instead.
+
+If you skip copying, it could in theory have security or reliability 
+implications (the user may be reading stale data that he is not supposed 
+to read). So, I think it's better to just add WARN_ON_ONCE and proceed 
+with the copying.
+
+> It' not like "> 2**32" should ever really be a valid thing for any
+> kind of copy in the kernel. Even if that were to be what you actually
+
+For example, the dm-stats subsystem (drivers/md/dm-stats.c) can allocate 
+extremely large blocks of memory using vmalloc (it is only limited to 1/4 
+of total system memory) - though, it doesn't use memcpy on it.
+
+> wanted to do (which sounds very unlikely), you'd need to split it up
+> with cond_resched() just for latency reasons.
+> 
+>              Linus
+
+
+
+From: Mikulas Patocka <mpatocka@redhat.com>
+
+The first "if" condition in __memcpy_flushcache is supposed to align the
+"dest" variable to 8 bytes and copy data up to this alignment. However,
+this condition may misbehave if "size" is greater than 4GiB.
+
+The statement min_t(unsigned, size, ALIGN(dest, 8) - dest); casts both
+arguments to unsigned int and selects the smaller one. However, the cast
+truncates high bits in "size" and it results in misbehavior.
+
+For example:
+	suppose that size == 0x100000001, dest == 0x200000002
+	min_t(unsigned, size, ALIGN(dest, 8) - dest) == min_t(0x1, 0xe) == 0x1;
+	...
+	dest += 0x1;
+so we copy just one byte "and" dest remains unaligned.
+
+This patch fixes the bug by replacing unsigned with size_t.
+
+As the function is not supposed to be used with large size, the patch also
+adds a WARN_ON_ONCE there.
+
+Signed-off-by: Mikulas Patocka <mpatocka@redhat.com>
+
+---
+ arch/x86/lib/usercopy_64.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+Index: linux-2.6/arch/x86/lib/usercopy_64.c
+===================================================================
+--- linux-2.6.orig/arch/x86/lib/usercopy_64.c
++++ linux-2.6/arch/x86/lib/usercopy_64.c
+@@ -117,9 +117,11 @@ void __memcpy_flushcache(void *_dst, con
+ 	unsigned long dest = (unsigned long) _dst;
+ 	unsigned long source = (unsigned long) _src;
+ 
++	WARN_ON_ONCE(size > INT_MAX);
++
+ 	/* cache copy and flush to align dest */
+ 	if (!IS_ALIGNED(dest, 8)) {
+-		unsigned len = min_t(unsigned, size, ALIGN(dest, 8) - dest);
++		size_t len = min_t(size_t, size, ALIGN(dest, 8) - dest);
+ 
+ 		memcpy((void *) dest, (void *) source, len);
+ 		clean_cache_range((void *) dest, len);
+

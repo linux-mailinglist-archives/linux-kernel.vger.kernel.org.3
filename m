@@ -2,150 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E22FD506A48
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8AB5069CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351317AbiDSLZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:25:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
+        id S1348317AbiDSLXu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:23:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351217AbiDSLZG (ORCPT
+        with ESMTP id S242198AbiDSLXr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:25:06 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60060.outbound.protection.outlook.com [40.107.6.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A273C2ED4E;
-        Tue, 19 Apr 2022 04:21:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X+lJ3tRQCCMP95BGoXnefC8s0kqf/PPGxFg7XW1oaOjQ/ufpRu52QN+vhvMzLEEd/PT2V3v4ewLGY3taUEa3tSSm5xVbAq2xfH8L30xiQwlViem8/U4sdbvJPGmz/as/0hX2C9aE43Vam5poQfDUCini3L9/xG5CgvrAldlsLsmPfA/lR5VEMojFncsKndXc7JQItfQnX7yA6vbr9TJDbm/S/7IF8DNYhOPMQ2HH4jZ2k5bHnfz7aMUHciJyimMWZMkpw3RS7HRNAQkyENlAOoMJreWmM4sd9Z0kW9x9fkzxEM1at6rCgbpBzc80qGJb5ZJdkj6E1Xciyr11h4ai2A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wFGtMjRUQBtzpYd3zm5u5zd1w5ZSXyOMsXkAbLpFGyg=;
- b=FZJL+K1qg07GYQiwb8qS+zyiofUdatRack8BQdgrwHbnQTNpUoAn9ta/w9qBQdRXfIiMvkG2A5z9lSmtTahro55ywFBNK6Mpz8jUF8viSEtvwWNcALVjDAz56Yt8hS9EKcWJ/amUzvF6/pUNoQLXOxxhWw823NfO7At3hCDMWfsKBFJu3VOSZBbEo56fL4Dz7aGcBwIkBGFRgmPk+KEiNwLUXPX7Fc71pAtGOeLjK9Q52oAa50JEgKKz3ppLzgHVVNDm6MQq39SY1xY3YXBIv/C8sypv3LBfU8dCYakozWL7Kgd8S+EIDSTH2R9klGKip3+ddM1pYmYq+pVxosOVKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wFGtMjRUQBtzpYd3zm5u5zd1w5ZSXyOMsXkAbLpFGyg=;
- b=BN8wcksiFtIgqqUgYGxjKQPOLBY7GrviHFHYLIFxB4aLPO231LUzOfJTZyeO7Al5XEIy9vr+KfvokSIyoBvrfQLlvzEz5tUSflue+IryZ3CS/5HFmyRHoC/SxPJsz0dEABXRDS2eTAzRAkW+z3vEcjSMcLxiv/taj0itYUslafU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com (2603:10a6:803:6a::30)
- by AM9PR04MB7538.eurprd04.prod.outlook.com (2603:10a6:20b:2d8::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5164.20; Tue, 19 Apr
- 2022 11:21:29 +0000
-Received: from VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f]) by VI1PR04MB4688.eurprd04.prod.outlook.com
- ([fe80::a9d1:199:574b:502f%6]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 11:21:29 +0000
-From:   Abel Vesa <abel.vesa@nxp.com>
-To:     Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <fabio.estevam@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-mmc@vger.kernel.org, <netdev@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v7 13/13] dt-bindings: usb: usbmisc-imx: Add i.MX8DXL compatible string
-Date:   Tue, 19 Apr 2022 14:20:56 +0300
-Message-Id: <20220419112056.1808009-14-abel.vesa@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220419112056.1808009-1-abel.vesa@nxp.com>
-References: <20220419112056.1808009-1-abel.vesa@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: VI1PR0102CA0008.eurprd01.prod.exchangelabs.com
- (2603:10a6:802::21) To VI1PR04MB4688.eurprd04.prod.outlook.com
- (2603:10a6:803:6a::30)
+        Tue, 19 Apr 2022 07:23:47 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CFAC2657
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:21:05 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4KjLpt61nYzCr6X;
+        Tue, 19 Apr 2022 19:16:38 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 19 Apr 2022 19:21:02 +0800
+Subject: Re: [PATCH v2] mm/swapfile: unuse_pte can map random data if swap
+ read fails
+To:     David Hildenbrand <david@redhat.com>, <akpm@linux-foundation.org>
+CC:     <willy@infradead.org>, <vbabka@suse.cz>, <dhowells@redhat.com>,
+        <neilb@suse.de>, <apopple@nvidia.com>, <surenb@google.com>,
+        <minchan@kernel.org>, <peterx@redhat.com>, <sfr@canb.auug.org.au>,
+        <rcampbell@nvidia.com>, <naoya.horiguchi@nec.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220416030549.60559-1-linmiaohe@huawei.com>
+ <b57fea1e-5c9b-f47e-f565-16b54f1e8782@redhat.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <1b614ac3-02c0-ec66-b51a-e9b7e1a375ad@huawei.com>
+Date:   Tue, 19 Apr 2022 19:21:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 882a7335-9825-4060-efbb-08da21f6bf9c
-X-MS-TrafficTypeDiagnostic: AM9PR04MB7538:EE_
-X-Microsoft-Antispam-PRVS: <AM9PR04MB7538DBF8815CD44469F42C5FF6F29@AM9PR04MB7538.eurprd04.prod.outlook.com>
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: u8MMXrPBecG+IpLFjb4wA6qL3x+5HyoF4+SXdBbvL2Qz4GDWYtbWtQGwhdruGT1gDtL0jpjejMqNdhySnJujoatVG1FmRy85TcaLuRx+tfJM6H6SMEvwbdmU1xC0o2lOa4E2RcBdne4eyiXGj2t2NgnjUyNGmyz3/iakSAAXLCbBg0Q5ZDlDR8sg9pSY7QQLh+5eputDMAQ5ifH2Aq0n4ZW1t4CzZUVbyogtaHd7k7i6PerE0wBE5LwKBVFzDJeJzV4kOihe3/AWC/rIx7toOGCb0v9WYLVtm8NZlc2xI52PeMhccwhOvjlooyuMosQGYSrYL7suxw/2FVwz7YDkOx3yZfF78ge5J9IBvSnXMXk0fCPGa8SoaheKqAWTsfWArWlIHM9nyXeFO1Hh5IRpXeT+Ok6Jo3MPqc1Cf2KY5mWgvYl/rFsSzFOAOgxyFaz0PcASl8uokkGHOGqvmIV/BLytI3cyDuaDVOPZjRWFuNOONfW3t5RU1a7BJrOJANZDEPvR6lnmWpmN32UCsEy/J2l6yfqYLgOsYtjWvsmkAG1qjAb3/d+e4mkoDrbBBEWXxO9W3g2LW9utWi6NCQ0pgV/ELWP3dB0JeOKvSH7MvT3kHXGgyt1fcwYoJyoLVLDpF01JwPOKPdSQBuEOjAWDSyorw20NZ1Sax3EI6A17egO71CibduKOF51wGZD1hi/AiLwyOFh4JzFrZ8dPiGiV2Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4688.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(316002)(36756003)(66556008)(4326008)(8676002)(66476007)(66946007)(6486002)(1076003)(186003)(110136005)(4744005)(8936002)(7416002)(86362001)(38100700002)(54906003)(5660300002)(44832011)(38350700002)(2616005)(26005)(6506007)(6666004)(52116002)(6512007)(2906002)(508600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GbKK93PVipfkPxQKrE7xGDqWyWYAu4XzWQNtYEULRor9cJFHh2QQOXk2I0oV?=
- =?us-ascii?Q?FQJyMppgHDP5a9hKk3+UAsJ5e2pYynwNjuCkEshjbjoo081u2bwe2gyNFSYt?=
- =?us-ascii?Q?coIzpzbGQB1G5y8+0w0prth8vni5M5kSRdpQnzqZMvNzmKXO6ehibd4Fystx?=
- =?us-ascii?Q?wRSojO7Ia0eaGN/4DhtAvfJQxyTEoEZWz2ub3VtIvZNP9mMy28VmiIYclIeN?=
- =?us-ascii?Q?gSdHf5xZnESWyOpFhnAW9jO2lig2ce0cFXSddLV2hKwDeefs1E/TXqT7EhAu?=
- =?us-ascii?Q?HZvVHQKFKRezbAVr7eCwWTRzaffbSUnpCGefFikFybMfuPM6KBQFbARlLM9a?=
- =?us-ascii?Q?NAstDDOwH0BOR7Ajoco7hD5yOY/jLIWaw+eOsthbZgR+zKUEe4QO/Te+0Rbj?=
- =?us-ascii?Q?WuDdgHQ6qZKkwLqZ+W+5kTw5Y2CsMRrfyHEwUXgwksGynwMYWgXifXUXKSdc?=
- =?us-ascii?Q?YuGPX7xfg+5pwc07PTLyQepWOnSJBGiEgJSiOfgYZKt1fOziJf5x6ufqeXCI?=
- =?us-ascii?Q?3u+IrPkCpK4jlPOlmfdymTaDFrwHLXFB9AiOMylaxlaJNMRBLSrvoOpt5AXi?=
- =?us-ascii?Q?xKRDhP7gkerSdqRZWSlt3dfdK2GV06eM5C5nRuRLBB7eC/fZ0pxH+6LYntWU?=
- =?us-ascii?Q?cG53hUcl7wEMSR5EFHbfxDE6eykr2bOu6ssjPeeJ/KSo+K0IbPb4NANXhSvf?=
- =?us-ascii?Q?XsCClajje6IFb1X7yjTLIqOwRff9aeLy9DTJAKotQGYzg10xKLQmGSncix/l?=
- =?us-ascii?Q?PCdXaMDr1ZWR+q0BIR1zYH8OVMovlBcUvh9Fd/qE59U194s8eL3nqxG5bWHK?=
- =?us-ascii?Q?b/IEuzawhGuACXl4Deqsi+bF43RwfsMWR7XJviMLOyNZBLPsPP/E2srL/6Rq?=
- =?us-ascii?Q?TunsYFqmOWZsyiVDnZ53mQ+ElAJqfbyPs15oLz9OkJEVFDaCLbDXmZWy3EcO?=
- =?us-ascii?Q?3ap9FjdUDUcYaxgPzKaInKHK0G6VClraqNvKRt6pkLot4eIO0G9/bkfKc3l5?=
- =?us-ascii?Q?2Tsm8nxqyS6vRX3wYJ5Y82rXq8UE1mIzs8Ou0yBHYijJIyF2W1KkvZoWLCNa?=
- =?us-ascii?Q?vcbvdKodsk2UfVoPnuBW8hxaHLxVEy/aU0WdDFvmIGuZ0TjGxCt6JSGVxr5K?=
- =?us-ascii?Q?Lqx10mWWFMX0KmpH5FhK2zNlBaoD1vZ7dE6lx5Za/KPFYZlkBEuudR+aZw71?=
- =?us-ascii?Q?vAtVL8wAg4zoYonGwfTndBTxKbMtTO2X0+Sc9tsIoVOh8y3itzkj65zqON/y?=
- =?us-ascii?Q?HdvCS+urSLy3aS5QiXEpCxoatoSfLC5zINE2D7HX//2h9754qTO7/ud94pwE?=
- =?us-ascii?Q?8CoSly0PaR8rbRGgrkie6HaC5RjArPCdhDH3Y6GoU1Ywgv64D6ZwY4X6BYww?=
- =?us-ascii?Q?JYv2VwrkspmE4Dahc6TmI671ZDqbLhS2Nc2Bm5L8tmesJZrgX3R9q1VIBtYX?=
- =?us-ascii?Q?gBaKa6VpVvUVgd1JXY6XbsY1yZhqGPGOw1JF6B9vZvAeTgAyj/OfGP4R/gZ6?=
- =?us-ascii?Q?Y+JbLGSrA8XG7FIhmayKKmALDZUScMb9bUGBm36B1CofCMRF5IjXW+FjctMZ?=
- =?us-ascii?Q?mSRHWS5+I9Ray2EH65AihxNMQ59syydC/IwzbVxIKm/bDabuhimMv9/FRuVR?=
- =?us-ascii?Q?PkeTpmt4ZHlM3B/E7L4ovt5SXPpYyNSyoiir3Xa2ktbnKlE8uw8PJ79t7vyY?=
- =?us-ascii?Q?2H/ZfwCGMvJohvp/qlRG5Ylrg/Co95Ns6x/E/hekKOnpNODXT6HYJ/xN4BTV?=
- =?us-ascii?Q?WNswwfyd5Q=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 882a7335-9825-4060-efbb-08da21f6bf9c
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4688.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Apr 2022 11:21:28.8469
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jyDC4zmbaZGbA+0AT8XVjrsLVU9CgIWySvjao/cakpqZ2ZjUh1JfYBFOv4cwn7H3Tmbfqe+Wmnc8yRnmlU1t9g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR04MB7538
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <b57fea1e-5c9b-f47e-f565-16b54f1e8782@redhat.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8DXL compatible string to the usbmisc-imx bindings.
+On 2022/4/19 15:37, David Hildenbrand wrote:
+> On 16.04.22 05:05, Miaohe Lin wrote:
+>> There is a bug in unuse_pte(): when swap page happens to be unreadable,
+>> page filled with random data is mapped into user address space. In case
+>> of error, a special swap entry indicating swap read fails is set to the
+>> page table. So the swapcache page can be freed and the user won't end up
+>> with a permanently mounted swap because a sector is bad. And if the page
+>> is accessed later, the user process will be killed so that corrupted data
+>> is never consumed. On the other hand, if the page is never accessed, the
+>> user won't even notice it.
+>>
+>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>> ---
+>> v2:
+>>   use special swap entry to avoid permanently mounted swap
+>>   free the bad page in swapcache
+>> ---
+>>  include/linux/swap.h    |  7 ++++++-
+>>  include/linux/swapops.h | 10 ++++++++++
+>>  mm/memory.c             |  5 ++++-
+>>  mm/swapfile.c           | 11 +++++++++++
+>>  4 files changed, 31 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/include/linux/swap.h b/include/linux/swap.h
+>> index d112434f85df..03c576111737 100644
+>> --- a/include/linux/swap.h
+>> +++ b/include/linux/swap.h
+>> @@ -55,6 +55,10 @@ static inline int current_is_kswapd(void)
+>>   * actions on faults.
+>>   */
+>>  
+>> +#define SWAP_READ_ERROR_NUM 1
+>> +#define SWAP_READ_ERROR     (MAX_SWAPFILES + SWP_HWPOISON_NUM + \
+>> +			     SWP_MIGRATION_NUM + SWP_DEVICE_NUM + \
+>> +			     SWP_PTE_MARKER_NUM)
+> 
+> Does anything speak against reusing the hwpoison marker? At least from a
+> program POV it's similar "the previously well defined content at this
+> user space address is no longer readable/writable".
 
-Signed-off-by: Abel Vesa <abel.vesa@nxp.com>
-Acked-by: Rob Herring <robh@kernel.org>
----
- Documentation/devicetree/bindings/usb/usbmisc-imx.txt | 1 +
- 1 file changed, 1 insertion(+)
+Looks like a good idea. :)
 
-diff --git a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-index b796836d2ce7..6bebb7071c4f 100644
---- a/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-+++ b/Documentation/devicetree/bindings/usb/usbmisc-imx.txt
-@@ -8,6 +8,7 @@ Required properties:
- 	"fsl,imx6sx-usbmisc" for imx6sx
- 	"fsl,imx7d-usbmisc" for imx7d
- 	"fsl,imx7ulp-usbmisc" for imx7ulp
-+	"fsl,imx8dxl-usbmisc" for imx8dxl
- - reg: Should contain registers location and length
- 
- Examples:
--- 
-2.34.1
+> 
+> I recall that we can just set the pfn to 0 for the hwpoison marker.
+> 
+> There is e.g., check_hwpoisoned_entry() and it just stops if it finds
+> "pfn=0".
 
+Do you mean that we should set the pfn to 0 for the hwpoison marker so that we can
+distinguish swapin error case from real hwpoison case?
+
+> 
+> 
+
+Will try to do this in next version. Thanks a lot!

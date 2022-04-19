@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D2ED506821
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D617550682F
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 12:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241367AbiDSJ7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
+        id S1348573AbiDSKCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 06:02:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiDSJ7g (ORCPT
+        with ESMTP id S1347788AbiDSKCa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:59:36 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189082127D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:56:53 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5EC0F240004;
-        Tue, 19 Apr 2022 09:56:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1650362212;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Mq8173Yhb7PWseSDb2n4pQrTc0Fh+GdWcB9T/uTdM2M=;
-        b=HpO7PHrughSJxpPdJhGONJgxyf/vZiM5hnkdHg2WbBKu/FgmsuQ4mxb7LXxMz7f3DhyuEN
-        OTiDujbFsmL3Cu2rxisww3BxUdCbsTiOIs6J31m4sw3Uz5F0Y40B/XzOW/yP0QWwNNH9Ok
-        uZqVLxS9/yCfLkhWUCUqiGC+QZp7pbAGqELsIbrnQ7DOd7NvBBs/eBKjwF/JS1Q9VsfscM
-        eAtqgharoXWYaS+2+HR907QYRSIbXGf2gx99+xWVsGxpA1V24Wv6kqpJfagspDObipq29r
-        GuKPPZFaXyCSYJ1gz9N1KRGml+dxDafact1+n36DXtCK4cGP5YNKpH1AzcERTg==
-Date:   Tue, 19 Apr 2022 11:56:50 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        jagan@amarulasolutions.com, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, thomas.petazzoni@bootlin.com,
-        tzimmermann@suse.de
-Subject: Re: [PATCH v3] drm: of: Properly try all possible cases for
- bridge/panel detection
-Message-ID: <Yl6HYke4dJsrq9jj@aptenodytes>
-References: <20220329132732.628474-1-paul.kocialkowski@bootlin.com>
- <20220416222141.72321-1-paul@crapouillou.net>
+        Tue, 19 Apr 2022 06:02:30 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12DDB1097;
+        Tue, 19 Apr 2022 02:59:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650362388; x=1681898388;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=CPWMk0HA7+zJxEJI8LP26KB7c4E/Ei9njL+XirDH73I=;
+  b=EwoKqU2DWkzdHTaWrQENxBIN4JM4YqRI6N8yxjK4kjx9V76EXIc2PDFU
+   e0kK2H0cpWNm7CSDm3JgsCf1oIi38Vlhocp1Nk88vOBJV4Se607xEOh1w
+   bBau1GAMiXf2LVLXRhAOdopqSqXYd2a6D7bOl9dy7WL9A+ltAuxWuTrup
+   vtjnZIZ96wlHu+/VEyxcnqC720/9Y884n5GIbBvy5sA30sqwCwMxqG9n4
+   gRbSJGYn2z5bv8UarrPVzltShLZ20BRd2+clib+LfE2oYUrV7HYF9a9II
+   0ghg5EjmUGDF9YiWigcJ2aH9t95uK6166Ev4CRnnmB/Nl38f65ZYgjQU3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="261330030"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="261330030"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 02:59:47 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="592724335"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga001.jf.intel.com with ESMTP; 19 Apr 2022 02:59:45 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngke9-0005cm-1M;
+        Tue, 19 Apr 2022 09:59:45 +0000
+Date:   Tue, 19 Apr 2022 17:59:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Neil Armstrong <narmstrong@baylibre.com>
+Subject: ERROR: modpost: "snd_tea575x_hw_init"
+ [drivers/media/pci/bt8xx/bttv.ko] undefined!
+Message-ID: <202204191711.IKJJFjgU-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="XgDB20WdwLjkKw76"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220416222141.72321-1-paul@crapouillou.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   b2d229d4ddb17db541098b83524d901257e93845
+commit: 9958d30f38b96fb763a10d44d18ddad39127d5f4 media: Kconfig: cleanup VIDEO_DEV dependencies
+date:   5 weeks ago
+config: xtensa-randconfig-r022-20220419 (https://download.01.org/0day-ci/archive/20220419/202204191711.IKJJFjgU-lkp@intel.com/config)
+compiler: xtensa-linux-gcc (GCC) 11.2.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=9958d30f38b96fb763a10d44d18ddad39127d5f4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 9958d30f38b96fb763a10d44d18ddad39127d5f4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-11.2.0 make.cross W=1 O=build_dir ARCH=xtensa SHELL=/bin/bash
 
---XgDB20WdwLjkKw76
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Hi Paul,
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-On Sat 16 Apr 22, 23:21, Paul Cercueil wrote:
-> Hi Paul,
->=20
-> This patch breaks the ingenic-drm driver.
->=20
-> It calls drm_of_find_panel_or_bridge(np, 0, i, ...) starting for i=3D0, u=
-ntil
-> -ENODEV is returned, which does not happen anymore.
->=20
-> The idea is to probe all the connected panels/bridges, should it be done
-> differently now?
+>> ERROR: modpost: "snd_tea575x_hw_init" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+>> ERROR: modpost: "snd_tea575x_set_freq" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+>> ERROR: modpost: "snd_tea575x_s_hw_freq_seek" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+>> ERROR: modpost: "snd_tea575x_enum_freq_bands" [drivers/media/pci/bt8xx/bttv.ko] undefined!
+>> ERROR: modpost: "snd_tea575x_g_tuner" [drivers/media/pci/bt8xx/bttv.ko] undefined!
 
-I've sent out a different patch which restores -ENODEV at:
-https://patchwork.freedesktop.org/patch/481135/
-
-Feel free to try it and reply with tested-by/reviewed-by there.
-I've also made a proposal in the thread to skip the "child node" mechanism
-as soon as an of graph is present, which would allow covering more legit
-cases with -ENODEV (the patch linked above doesn't cover all cases that
-need -ENODEV).
-
-Ideally we'd like to remove the child node mechanism entirely, but it may
-already be part of a device-tree binding spec.
-
-Cheers,
-
-Paul
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---XgDB20WdwLjkKw76
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmJeh2IACgkQ3cLmz3+f
-v9GBKAf8DA/g/QCGdK6HmqooGT+X0CNX9NbaVBgCVkWL/wnG+MEsNTNY0g54m8h/
-yQexs7+ZudJ19RzZAtJFgj3zcc9u/VXYxipI5Q+zFp9Q7UEuNDfZLS1yxSN+hfr9
-fEK1YarFnb/uo/mCWiP2SAJiDtipJe+flEzyutHK6Jf1p2jyAbED4DlZTED8fN1X
-uBkMw63pnPdzJcdx0+sm8xLnbY/bkaMjJasIjmfiimQsI09g+TCu5bBlEJIuMDG9
-2XrTsUWWN7kex6f+cMakL4nhwL8EM1Hmysga6S4cODnhzJqEODXjMiKtCI+yB+hP
-UEUj0lqOrQcgo/RpuKQiFQZxCSkhFA==
-=RY5S
------END PGP SIGNATURE-----
-
---XgDB20WdwLjkKw76--
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

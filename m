@@ -2,113 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F24A150714D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE38F507160
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:07:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353559AbiDSPIl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S1345757AbiDSPKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:10:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236347AbiDSPIj (ORCPT
+        with ESMTP id S1345122AbiDSPJW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:08:39 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440CB3968B;
-        Tue, 19 Apr 2022 08:05:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E46C12129B;
-        Tue, 19 Apr 2022 15:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1650380755; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RIeKtDiX0nw/kN8tZFnbYwbUF0osRimfD25Cqjw9rO0=;
-        b=p0AkssQvCUGX2FIMw2M6305MzO023ILQ5u5IfEsBVHXyJHDV+Ebng9/Or4tm5v9ZLS2kLq
-        hoWrwtxaDSJOTaOA3LVtFIwda/AweGfgvh+HYRp+GubmdbcetanPTiaxtoKJsw/GevrmpQ
-        1tb0zNKv/NJqEwQgpoFNU25svmJC4qE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1650380755;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=RIeKtDiX0nw/kN8tZFnbYwbUF0osRimfD25Cqjw9rO0=;
-        b=VIM4uKnDgGnQYW+y/rVChWFXlTtd7njqOyGqs9fi4c7mcZ9x9bowKajd514kd6PgEoABL8
-        YF5T9AcBpjedztCw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C9CE2139BE;
-        Tue, 19 Apr 2022 15:05:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id kgk+MdPPXmLlMAAAMHmgww
-        (envelope-from <iivanov@suse.de>); Tue, 19 Apr 2022 15:05:55 +0000
-Date:   Tue, 19 Apr 2022 18:05:55 +0300
-From:   "Ivan T. Ivanov" <iivanov@suse.de>
-To:     Stefan Wahren <stefan.wahren@i2se.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Phil Elwell <phil@raspberrypi.org>,
-        kernel test robot <lkp@intel.com>,
-        bcm-kernel-feedback-list@broadcom.com, linux-clk@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: bcm2835: Round UART input clock up
-Message-ID: <20220419150555.igh6tdxgjb7meygx@suse>
-References: <20220404125113.80239-1-iivanov@suse.de>
- <20220414105656.qt52zmr5vjmjdcxc@suse>
- <0b3356c0-b4c8-91ed-dfde-9f50483ec36f@i2se.com>
- <20220418110516.s7jxsfa3jl7aagrf@suse>
- <2a46bd1c-600b-5bd9-1c19-20c809f63945@i2se.com>
- <20220418113801.uree7rvkzxpiwyni@suse>
- <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
+        Tue, 19 Apr 2022 11:09:22 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DCA3A1BB
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:06:39 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id z8so18415300oix.3
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=LO5D8IQiXerqDtltovMxrybBsDShYrVWcmmoOckwnnY=;
+        b=BYCn5F0XgInlZJxMgslo67sVMtt2pgaLsSywFeL7y0SzlubtCZN4KjtYRjeaE35OtQ
+         27A/WKCMQLQnnodLLNZEfSVk5omkbUkpzzD+EzJauEG5yidJBrMhI8oP7GuWSsSyHIjg
+         r5/cEb9FOsvRsXXMQFdEx6sXCAWHqnxsK2GI0iMJOr/mSo9CGcTC14E09Mf0sxLpxduJ
+         7uzpLcLyaKK5ZBONW0TnF6ciCj7Auuev7Bz0BFTduhnr3+3tXdM5dgql9D9HLWNV6Jjb
+         Bk6ifvWpSviwp8Gqxt6oQVUYwsAKxCh/9fEIo7a0/4dlVt4AXqw3KEJAKYXezHtqKozd
+         lc0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=LO5D8IQiXerqDtltovMxrybBsDShYrVWcmmoOckwnnY=;
+        b=jzSp2wCXhhknhzfgXr3l5SloWNwXaqO9BpyXBs+8X13qZjEFQvR6zgNIb7VAtDL+LX
+         cSg3ejbZMIWZnF0hMTFLhk82KnHw1Tx3GEcWxNc8OO/IKDlae3SHZg0uYKfXwcyS/5P9
+         4f3GJpsLn4xmwcbCmo69hwvyflLtOTHD0UHsiI5jSEMavXF2xvn9PMlvUnWZyK1HlJHI
+         w9ilikCJY2TjC7dn7RS3SOuxfZLS7CiLYDvUL90ORPJSC4l+7ICPkmBkdozqAnjCvXdL
+         DluIS7ZkZXJ8OAwD++NnGbdy9mJOGzX734L07htkpa/VqtuKB0k5le2o0JeBWl02nfs7
+         SROA==
+X-Gm-Message-State: AOAM533vOHseC/ADAbMAdaMRM5rZxuY4glfiCPzMSSwvdXxhvGdP3uyQ
+        lP7dLkicExHXXRytXIz55uhDJ3AC0yhgxW3Gv14=
+X-Google-Smtp-Source: ABdhPJw/9kNIDpUpFT0h8fEWyNrFgldUoKCfMk4FYkSedoqHAYOn3snP9dcAwic4oAGbzyN1EzSjxThP7jAiINQzwDw=
+X-Received: by 2002:a05:6808:1486:b0:2f9:e821:51d9 with SMTP id
+ e6-20020a056808148600b002f9e82151d9mr7614844oiw.253.1650380798833; Tue, 19
+ Apr 2022 08:06:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6adc9c1c-ec75-b52c-9c44-00296eaa00f6@i2se.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <alpine.DEB.2.22.394.2204161738390.3501@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2204161738390.3501@hadrien>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 19 Apr 2022 11:06:27 -0400
+Message-ID: <CADnq5_NgQ+wd174nD+fQi_uwaHhfbPbvpXd1pdnUYEOucmgPFg@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu/powerplay/vega10: fix minmax.cocci warnings
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     kbuild-all@lists.01.org, kernel test robot <lkp@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Denis Efremov <efremov@linux.com>,
+        Evan Quan <evan.quan@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        amd-gfx list <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 04-18 18:01, Stefan Wahren wrote:
-> > > 
-> > > Do you use the mainline DTS or the vendor DTS to see this issue?
-> > > 
-> > For (open)SUSE we use downstream DTS.
-> 
-> This is popular and bad at the same time. We as the mainline kernel
-> developer cannot guarantee that this works as expected. A lot of issues are
-> caused by mixing vendor DTS with mainline kernel, so in general (not for
-> this specific issue) you are on your own with this approach.
-> 
+On Sat, Apr 16, 2022 at 11:41 AM Julia Lawall <julia.lawall@inria.fr> wrote=
+:
+>
+> From: kernel test robot <lkp@intel.com>
+>
+> Use max to simplify the code.
+>
+> Generated by: scripts/coccinelle/misc/minmax.cocci
+>
+> CC: Denis Efremov <efremov@linux.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Julia Lawall <julia.lawall@inria.fr>
 
-Yep, I am aware of that. I am still trying to recover after recent
-gpio-ranges fiasco, also still working on fixing non-exported firmware
-clocks, which break HDMI output on some of the devices.
+This introduces a type comparison warning:
 
-> I know this is a little bit off topic but except from overlay support, can
-> you provide a list of most missing features of the mainline kernel / DTS?
+drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_hwmgr.c: In
+function =E2=80=98vega10_odn_initial_default_setting=E2=80=99:
+./include/linux/minmax.h:20:35: warning: comparison of distinct
+pointer types lacks a cast
+   20 |         (!!(sizeof((typeof(x) *)1 =3D=3D (typeof(y) *)1)))
+      |                                   ^~
+./include/linux/minmax.h:26:18: note: in expansion of macro =E2=80=98__type=
+check=E2=80=99
+   26 |                 (__typecheck(x, y) && __no_side_effects(x, y))
+      |                  ^~~~~~~~~~~
+./include/linux/minmax.h:36:31: note: in expansion of macro =E2=80=98__safe=
+_cmp=E2=80=99
+   36 |         __builtin_choose_expr(__safe_cmp(x, y), \
+      |                               ^~~~~~~~~~
+./include/linux/minmax.h:52:25: note: in expansion of macro =E2=80=98__care=
+ful_cmp=E2=80=99
+   52 | #define max(x, y)       __careful_cmp(x, y, >)
+      |                         ^~~~~~~~~~~~~
+drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/vega10_hwmgr.c:350:40:
+note: in expansion of macro =E2=80=98max=E2=80=99
+  350 |         od_table[2]->entries[i].vddc =3D max(odn_table->max_vddc,
+      |                                        ^~~
 
-Well, 260+ overlays for free is not insignificant benefit. Beside few
-breakages from time to time using downstream device tree works fine.
+Alex
 
-Regards,
-Ivan
-
+>
+> ---
+>
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
+t master
+> head:   028192fea1de083f4f12bfb1eb7c4d7beb5c8ecd
+> commit: 5f66f73b9ff4dcabd4e2405ba9c32e80e02f9408 coccinelle: misc: add mi=
+nmax script
+> :::::: branch date: 17 hours ago
+> :::::: commit date: 12 months ago
+>
+> Please take the patch only if it's a positive warning. Thanks!
+>
+>  drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c |   10 ++++------
+>  1 file changed, 4 insertions(+), 6 deletions(-)
+>
+> --- a/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
+> +++ b/drivers/gpu/drm/amd/pm/powerplay/hwmgr/vega10_hwmgr.c
+> @@ -345,12 +345,10 @@ static int vega10_odn_initial_default_se
+>                 odn_table->min_vddc =3D dep_table[0]->entries[0].vddc;
+>
+>         i =3D od_table[2]->count - 1;
+> -       od_table[2]->entries[i].clk =3D hwmgr->platform_descriptor.overdr=
+iveLimit.memoryClock > od_table[2]->entries[i].clk ?
+> -                                       hwmgr->platform_descriptor.overdr=
+iveLimit.memoryClock :
+> -                                       od_table[2]->entries[i].clk;
+> -       od_table[2]->entries[i].vddc =3D odn_table->max_vddc > od_table[2=
+]->entries[i].vddc ?
+> -                                       odn_table->max_vddc :
+> -                                       od_table[2]->entries[i].vddc;
+> +       od_table[2]->entries[i].clk =3D max(hwmgr->platform_descriptor.ov=
+erdriveLimit.memoryClock,
+> +                                         od_table[2]->entries[i].clk);
+> +       od_table[2]->entries[i].vddc =3D max(odn_table->max_vddc,
+> +                                          od_table[2]->entries[i].vddc);
+>
+>         return 0;
+>  }

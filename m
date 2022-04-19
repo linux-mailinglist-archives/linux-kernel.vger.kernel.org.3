@@ -2,68 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E451B50640E
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47B6F506414
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:56:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234428AbiDSF5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S1348732AbiDSF7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233616AbiDSF5G (ORCPT
+        with ESMTP id S234132AbiDSF7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:57:06 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8CE2AE15
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:54:24 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-2ec0bb4b715so160967317b3.5
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:54:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc:content-transfer-encoding;
-        bh=QJZmsK4vKYnU0w6RHfAyLK/7+Llp4RiGehU2CWjNg24=;
-        b=MhTzfQVye+t/qRemYQqmjYRJKDjUqBOQvpJ+vm+DynqeTzQtpiuwhW+P5dAAMDerwc
-         yIrlDwUlW/nRDgvYzWIInMqPergHzVYZQdmKnFGJsKI3FAUDP01ZDyxDmzzg9wj9r1F/
-         giJtLil6yYyApXeiobxAlpVxEMxxA39fx3JpvvfvtQwQ5kGu2IP384WS/qM6/jr8qrVT
-         gqHGp2r63JgLmMmbYJJh1dz1wNwD/B5LWtSUMnFFAkUi1ZQUhgD6RlyLkxK5LjAxucMA
-         Af4C3ovEhpBv2ZiAdlqV2IiNw3ABnxuANJ058Lfva9MdbTGXlKhNHKYpIuJQKvjqtLUS
-         7iaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc:content-transfer-encoding;
-        bh=QJZmsK4vKYnU0w6RHfAyLK/7+Llp4RiGehU2CWjNg24=;
-        b=cTcrBnQ/5bBxV4jjn0vATcYppEqOsih7ZGkLpEwpsDJn7bIvtJUsi4507vPY5E5ksj
-         OYnkNuDcBuJOTVy8mOLFk52jZFmFFAfXyXobk28mUNCNdlN3tM+YTe04PqwzMDwpcqGo
-         FrE5ye1+FO4RGyTgSPeUKr+6Ap4uy8wMLZu5YOXcAOratEwxQG8rFuIegJCfRO1Rt0Fk
-         i7t7aWoieI0PptzdywZeenkjMBqppRnGjNqmNsEIXlV4MBBfO6trdHHUtc/5QhP0YBfC
-         OToMKlDCeVso/zU2Pdeqcm5nDbZrbktV4C4WrPs1do01EaKOeoXAEsksuiVirDSClpnz
-         rr+A==
-X-Gm-Message-State: AOAM5325ZdjzjE1SyQBECh1mNemAuaXxDRzaN7VEbc8FFYs9YguE+OlI
-        umDAeRTlriGr9VEFAX22Hn6ZsuU29UMXZ4+qLYi68A==
-X-Google-Smtp-Source: ABdhPJy4PYoWE5mXWwVzU7jxjccKuw/CPG7c2pCjoZKungtIdrvFAnfLBLVdpY0XGt6ytjqagPbRK37uqQJhRkCjzYk=
-X-Received: by 2002:a0d:ffc3:0:b0:2eb:2327:3361 with SMTP id
- p186-20020a0dffc3000000b002eb23273361mr13779938ywf.36.1650347663981; Mon, 18
- Apr 2022 22:54:23 -0700 (PDT)
+        Tue, 19 Apr 2022 01:59:11 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3036A2C12C
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 22:56:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650347790; x=1681883790;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=MJNEMlUq642vw41WuZGW6kiev/7F+H45Wwus3epbUHI=;
+  b=I4ju/eYGvx1NgbzX2lG+7eaCxJ+AF3/D2NEzxyDEkaXL/UPQIETKrSZZ
+   uBI61DvbA4J79MTM/phqg+QOzi85K+aKbPk9XUuNKwqNc4v86YPu78ET5
+   zlno4BrtyZbNC8fuThbfhq2HFBgvP0+TDmBV5ypDsekXBIZAQLalDC9Lr
+   HX75AlmG+YhizGJ1fDLUxkCrCzRXsG9gLc0syZ+xA/9eQJTNvFxWwFM1J
+   HSu+eTT4xnlg8S1L4sHvyGY6SmkFtr7J5tqWudWULZ8DLDk+4Ho6hQUKD
+   lewe+qWyd0WQq7R87EdQ2uQkammkE36dxJ9CcSRBXkU228bH1tdNEayC5
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="326583575"
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="326583575"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 22:56:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
+   d="scan'208";a="529972598"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 18 Apr 2022 22:56:28 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1nggqh-0005P5-Hz;
+        Tue, 19 Apr 2022 05:56:27 +0000
+Date:   Tue, 19 Apr 2022 13:56:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 1769/2356]
+ drivers/clk/clk-renesas-pcie.c:115:5: warning: incompatible integer to
+ pointer conversion assigning to 'struct device_node *' from 'int'
+Message-ID: <202204191324.6JvhhTcF-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220418121145.140991388@linuxfoundation.org>
-In-Reply-To: <20220418121145.140991388@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 19 Apr 2022 11:24:12 +0530
-Message-ID: <CA+G9fYt2yK_jPhhWVqj74SrwaJ+DQeW3adeoUAkuBw9M+7TtgQ@mail.gmail.com>
-Subject: Re: [PATCH 5.10 000/105] 5.10.112-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,163 +64,134 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 18 Apr 2022 at 18:06, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.10.112 release.
-> There are 105 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.10.112-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.10.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   af93551cf39027d176f30b9beafc60a4c130998a
+commit: 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc [1769/2356] headers/deps: of: Optimize <linux/of.h> dependencies, remove <linux/of_api.h>
+config: i386-randconfig-a015-20220418 (https://download.01.org/0day-ci/archive/20220419/202204191324.6JvhhTcF-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout 9f931b54e4f33f52c5cc50956b4aa86a9395e4dc
+        # save the config file to linux build tree
+        mkdir build_dir
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/block/ drivers/clk/ drivers/iio/accel/ drivers/infiniband/core/ drivers/infiniband/ulp/ipoib/ drivers/input/touchscreen/ drivers/mmc/host/ drivers/net/dsa/ drivers/nvdimm/ drivers/powercap/ drivers/usb/typec/ mm/damon/ net/dsa/ net/smc/ sound/soc/codecs/
 
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+All warnings (new ones prefixed by >>):
 
-## Build
-* kernel: 5.10.112-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: d5c581fe77b5122ed284c7739724414ca5059b0e
-* git describe: v5.10.111-106-gd5c581fe77b5
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10=
-.111-106-gd5c581fe77b5
-
-## Test Regressions (compared to v5.10.110-171-g6c8e5cb264df)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.110-171-g6c8e5cb264df)
-No metric regressions found.
-
-## Test Fixes (compared to v5.10.110-171-g6c8e5cb264df)
-No metric fixes found.
-
-## Metric Fixes (compared to v5.10.110-171-g6c8e5cb264df)
-No metric fixes found.
-
-## Test result summary
-total: 95928, pass: 81529, fail: 646, skip: 13045, xfail: 708
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 296 total, 296 passed, 0 failed
-* arm64: 47 total, 47 passed, 0 failed
-* i386: 44 total, 41 passed, 3 failed
-* mips: 41 total, 38 passed, 3 failed
-* parisc: 14 total, 14 passed, 0 failed
-* powerpc: 65 total, 53 passed, 12 failed
-* riscv: 32 total, 29 passed, 3 failed
-* s390: 26 total, 26 passed, 0 failed
-* sh: 26 total, 24 passed, 2 failed
-* sparc: 14 total, 14 passed, 0 failed
-* x86_64: 47 total, 47 passed, 0 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* linux-log-parser
-* ltp-cap_bounds-tests
-* ltp-commands-tests
-* ltp-containers-tests
-* ltp-controllers-tests
-* ltp-cpuhotplug-tests
-* ltp-crypto-tests
-* ltp-cve-tests
-* ltp-dio-tests
-* ltp-fcntl-locktests-tests
-* ltp-filecaps-tests
-* ltp-fs-tests
-* ltp-fs_bind-tests
-* ltp-fs_perms_simple-tests
-* ltp-fsx-tests
-* ltp-hugetlb-tests
-* ltp-io-tests
-* ltp-ipc-tests
-* ltp-math-tests
-* ltp-mm-tests
-* ltp-nptl-tests
-* ltp-open-posix-tests
-* ltp-pty-tests
-* ltp-sched-tests
-* ltp-securebits-tests
-* ltp-syscalls-tests
-* ltp-tracing-tests
-* network-basic-tests
-* packetdrill
-* perf
-* perf/Zstd-perf.data-compression
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
+   drivers/clk/clk-renesas-pcie.c:115:7: error: implicit declaration of function 'of_get_child_by_name' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           np = of_get_child_by_name(client->dev.of_node, name);
+                ^
+>> drivers/clk/clk-renesas-pcie.c:115:5: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+           np = of_get_child_by_name(client->dev.of_node, name);
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/clk/clk-renesas-pcie.c:120:8: error: implicit declaration of function 'of_property_read_u32' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = of_property_read_u32(np, "renesas,slew-rate", &sr);
+                 ^
+   drivers/clk/clk-renesas-pcie.c:120:8: note: did you mean 'fwnode_property_read_u32'?
+   include/linux/property.h:202:19: note: 'fwnode_property_read_u32' declared here
+   static inline int fwnode_property_read_u32(const struct fwnode_handle *fwnode,
+                     ^
+   drivers/clk/clk-renesas-pcie.c:121:2: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           of_node_put(np);
+           ^
+   drivers/clk/clk-renesas-pcie.c:149:8: error: implicit declaration of function 'of_property_read_u32' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           ret = of_property_read_u32(np, "renesas,out-amplitude-microvolt",
+                 ^
+   1 warning and 4 errors generated.
 --
-Linaro LKFT
-https://lkft.linaro.org
+   drivers/powercap/dtpm.c:448:7: error: implicit declaration of function 'of_find_node_by_path' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           np = of_find_node_by_path(hierarchy->name);
+                ^
+>> drivers/powercap/dtpm.c:448:5: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+           np = of_find_node_by_path(hierarchy->name);
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/powercap/dtpm.c:462:4: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                           of_node_put(np);
+                           ^
+   drivers/powercap/dtpm.c:467:2: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           of_node_put(np);
+           ^
+   drivers/powercap/dtpm.c:576:7: error: implicit declaration of function 'of_find_node_by_path' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           np = of_find_node_by_path("/");
+                ^
+   drivers/powercap/dtpm.c:576:5: warning: incompatible integer to pointer conversion assigning to 'struct device_node *' from 'int' [-Wint-conversion]
+           np = of_find_node_by_path("/");
+              ^ ~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/powercap/dtpm.c:580:10: error: implicit declaration of function 'of_match_node' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           match = of_match_node(dtpm_match_table, np);
+                   ^
+>> drivers/powercap/dtpm.c:580:8: warning: incompatible integer to pointer conversion assigning to 'const struct of_device_id *' from 'int' [-Wint-conversion]
+           match = of_match_node(dtpm_match_table, np);
+                 ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/powercap/dtpm.c:582:2: error: implicit declaration of function 'of_node_put' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           of_node_put(np);
+           ^
+   3 warnings and 6 errors generated.
+--
+   sound/soc/codecs/tas5805m.c:558:21: error: implicit declaration of function 'of_match_ptr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+                   .of_match_table = of_match_ptr(tas5805m_of_match),
+                                     ^
+>> sound/soc/codecs/tas5805m.c:558:21: warning: incompatible integer to pointer conversion initializing 'const struct of_device_id *' with an expression of type 'int' [-Wint-conversion]
+                   .of_match_table = of_match_ptr(tas5805m_of_match),
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   sound/soc/codecs/tas5805m.c:558:21: error: initializer element is not a compile-time constant
+                   .of_match_table = of_match_ptr(tas5805m_of_match),
+                                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 warning and 2 errors generated.
+
+
+vim +115 drivers/clk/clk-renesas-pcie.c
+
+892e0ddea1aa6f Marek Vasut 2022-02-26  101  
+892e0ddea1aa6f Marek Vasut 2022-02-26  102  static int rs9_get_output_config(struct rs9_driver_data *rs9, int idx)
+892e0ddea1aa6f Marek Vasut 2022-02-26  103  {
+892e0ddea1aa6f Marek Vasut 2022-02-26  104  	struct i2c_client *client = rs9->client;
+892e0ddea1aa6f Marek Vasut 2022-02-26  105  	unsigned char name[5] = "DIF0";
+892e0ddea1aa6f Marek Vasut 2022-02-26  106  	struct device_node *np;
+892e0ddea1aa6f Marek Vasut 2022-02-26  107  	int ret;
+892e0ddea1aa6f Marek Vasut 2022-02-26  108  	u32 sr;
+892e0ddea1aa6f Marek Vasut 2022-02-26  109  
+892e0ddea1aa6f Marek Vasut 2022-02-26  110  	/* Set defaults */
+892e0ddea1aa6f Marek Vasut 2022-02-26  111  	rs9->clk_dif_sr &= ~RS9_REG_SR_DIF_MASK(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  112  	rs9->clk_dif_sr |= RS9_REG_SR_3V0_DIF(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  113  
+892e0ddea1aa6f Marek Vasut 2022-02-26  114  	snprintf(name, 5, "DIF%d", idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26 @115  	np = of_get_child_by_name(client->dev.of_node, name);
+892e0ddea1aa6f Marek Vasut 2022-02-26  116  	if (!np)
+892e0ddea1aa6f Marek Vasut 2022-02-26  117  		return 0;
+892e0ddea1aa6f Marek Vasut 2022-02-26  118  
+892e0ddea1aa6f Marek Vasut 2022-02-26  119  	/* Output clock slew rate */
+892e0ddea1aa6f Marek Vasut 2022-02-26  120  	ret = of_property_read_u32(np, "renesas,slew-rate", &sr);
+892e0ddea1aa6f Marek Vasut 2022-02-26  121  	of_node_put(np);
+892e0ddea1aa6f Marek Vasut 2022-02-26  122  	if (!ret) {
+892e0ddea1aa6f Marek Vasut 2022-02-26  123  		if (sr == 2000000) {		/* 2V/ns */
+892e0ddea1aa6f Marek Vasut 2022-02-26  124  			rs9->clk_dif_sr &= ~RS9_REG_SR_DIF_MASK(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  125  			rs9->clk_dif_sr |= RS9_REG_SR_2V0_DIF(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  126  		} else if (sr == 3000000) {	/* 3V/ns (default) */
+892e0ddea1aa6f Marek Vasut 2022-02-26  127  			rs9->clk_dif_sr &= ~RS9_REG_SR_DIF_MASK(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  128  			rs9->clk_dif_sr |= RS9_REG_SR_3V0_DIF(idx);
+892e0ddea1aa6f Marek Vasut 2022-02-26  129  		} else
+892e0ddea1aa6f Marek Vasut 2022-02-26  130  			ret = dev_err_probe(&client->dev, -EINVAL,
+892e0ddea1aa6f Marek Vasut 2022-02-26  131  					    "Invalid renesas,slew-rate value\n");
+892e0ddea1aa6f Marek Vasut 2022-02-26  132  	}
+892e0ddea1aa6f Marek Vasut 2022-02-26  133  
+892e0ddea1aa6f Marek Vasut 2022-02-26  134  	return ret;
+892e0ddea1aa6f Marek Vasut 2022-02-26  135  }
+892e0ddea1aa6f Marek Vasut 2022-02-26  136  
+
+:::::: The code at line 115 was first introduced by commit
+:::::: 892e0ddea1aa6f70b68cb2dd8e16bf271e20e72f clk: rs9: Add Renesas 9-series PCIe clock generator driver
+
+:::::: TO: Marek Vasut <marex@denx.de>
+:::::: CC: Stephen Boyd <sboyd@kernel.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

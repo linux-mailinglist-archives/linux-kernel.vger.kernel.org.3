@@ -2,401 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8FA15070D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:41:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10D355070CF
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:41:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348021AbiDSOns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58514 "EHLO
+        id S1350792AbiDSOn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351109AbiDSOng (ORCPT
+        with ESMTP id S233365AbiDSOnz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:43:36 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36AEA21819;
-        Tue, 19 Apr 2022 07:40:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E1E041063;
-        Tue, 19 Apr 2022 07:40:52 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.75.72])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A597E3F766;
-        Tue, 19 Apr 2022 07:40:49 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 15:40:45 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     He Zhe <zhe.he@windriver.com>
-Cc:     catalin.marinas@arm.com, will@kernel.org, tglx@linutronix.de,
-        bp@alien8.de, dave.hansen@linux.intel.com, keescook@chromium.org,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, benh@kernel.crashing.org, paulus@samba.org,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, hpa@zytor.com,
-        x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC 2/8] arm64: stacktrace: Add arch_within_stack_frames
-Message-ID: <Yl7J7aVzKiWRtrGi@FVFF77S0Q05N>
-References: <20220418132217.1573072-1-zhe.he@windriver.com>
- <20220418132217.1573072-3-zhe.he@windriver.com>
+        Tue, 19 Apr 2022 10:43:55 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DE6721828;
+        Tue, 19 Apr 2022 07:41:10 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8137D24000E;
+        Tue, 19 Apr 2022 14:41:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1650379268;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9u41AmvPYzaP5UxEoTmolh4l0tPcqavKOqVOLJJD3S4=;
+        b=ifnn0HaliB65Zi+kAJRPXi5a+jTdBu3WK28oWc6C177sY+9wmTGu2+9paSFyuEFrjwqb2I
+        EWmhc7RgywHsmIZBb9pI0Ued52Cd7GVuNZsmVt63Tc26FASbndA/TAKJYDc96j5pQyNOdu
+        fcYp1bnmDUwby5nsy3gnxN8NLoUnopiyswW2W7ktfnfeSQIXr4ulP7eyL+VtjVqYUL8PMj
+        f7zQx6OMXad5pt3DJZpF8QdOa5WCux7Pu4/l4/lIq2tIi3X+a0BoN0+vRum89II7OH1qCS
+        nbZrSCLzmE1NsrQeo7w8Btcm2ARDea8dHqdlyVBFfqroKGJjfWQumv3Lab1qbQ==
+Date:   Tue, 19 Apr 2022 16:41:05 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Marek Vasut <marek.vasut+renesas@gmail.com>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?UTF-8?B?V2lsY3p5xYRza2k=?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-pci <linux-pci@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Clement Leger <clement.leger@bootlin.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>
+Subject: Re: [PATCH v2 2/8] dt-bindings: PCI: renesas-pci-usb: Convert
+ bindings to json-schema
+Message-ID: <20220419164105.14bf82cf@bootlin.com>
+In-Reply-To: <CAMuHMdUhr7emtsxoxGP5EH2EzNK=PM_7+-32cesecjQjoW1ryQ@mail.gmail.com>
+References: <20220414074011.500533-1-herve.codina@bootlin.com>
+ <20220414074011.500533-3-herve.codina@bootlin.com>
+ <CAMuHMdUhr7emtsxoxGP5EH2EzNK=PM_7+-32cesecjQjoW1ryQ@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.31; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220418132217.1573072-3-zhe.he@windriver.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Geert,
 
-On Mon, Apr 18, 2022 at 09:22:11PM +0800, He Zhe wrote:
-> This function checks if the given address range crosses frame boundary.
+On Thu, 14 Apr 2022 10:28:47 +0200
+Geert Uytterhoeven <geert@linux-m68k.org> wrote:
 
-I don't think that's quite true, becuase arm64's procedure call standard
-(AAPCS64) doesn't give us enough information to determine this without
-additional metadata from the compiler, which we simply don't have today.
+> Hi Herv=C3=A9,
+>=20
+> On Thu, Apr 14, 2022 at 9:40 AM Herve Codina <herve.codina@bootlin.com> w=
+rote:
+> > Convert Renesas PCI bridge bindings documentation to json-schema.
+> > Also name it 'renesas,pci-usb' as it is specifically used to
+> > connect the PCI USB controllers to AHB bus.
+> >
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com> =20
+>=20
+> Thanks a lot for tackling this DT binding file!
+>=20
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml
+> > @@ -0,0 +1,134 @@
+> > +# SPDX-License-Identifier: GPL-2.0 =20
+>=20
+> scripts/checkpatch.pl says:
+> WARNING: DT binding documents should be licensed (GPL-2.0-only OR BSD-2-C=
+lause)
 
-Since there's a lot of confusion in this area, I've made a bit of an info dump
-below, before review on the patch itself, but TBH I'm struggling to see that
-this is all that useful.
+Right, changed to "GPL-2.0-only OR BSD-2-Clause"
 
-On arm64, we use a calling convention called AAPCS64, (in full: "Procedure Call
-Standard for the Arm® 64-bit Architecture (AArch64)"). That's maintained at:
+>=20
+> > +  reg:
+> > +    description: |
+> > +      A list of physical regions to access the device. The first is
+> > +      the operational registers for the OHCI/EHCI controllers and the
+> > +      second is for the bridge configuration and control registers.
+> > +    minItems: 2
+> > +    maxItems: 2 =20
+>=20
+> reg:
+>   items:
+>     - description: Operational registers for the OHCI/EHCI controllers.
+>     - description: Bridge configuration and control registers.
 
-  https://github.com/ARM-software/abi-aa
+Ok, changed.
 
-... with the latest release (as of today) at:
+>=20
+> > +
+> > +  interrupts:
+> > +    description: Interrupt for the device. =20
+>=20
+> maxItems: 1
+>=20
+> The description is not needed.
 
-  https://github.com/ARM-software/abi-aa/blob/60a8eb8c55e999d74dac5e368fc9d7e36e38dda4/aapcs64/aapcs64.rst
-  https://github.com/ARM-software/abi-aa/releases/download/2022Q1/aapcs64.pdf
+Ok, changed.
 
-In AAPCS64, there are two related but distinct things to be aware of:
+>=20
+> > +
+> > +  interrupt-map:
+> > +    description: |
+> > +      Standard property used to define the mapping of the PCI interrup=
+ts
+> > +      to the GIC interrupts.
+> > +
+> > +  interrupt-map-mask:
+> > +    description:
+> > +      Standard property that helps to define the interrupt mapping.
+> > +
+> > +  clocks:
+> > +    description: The reference to the device clock. =20
+>=20
+> maxItems: 1
+>=20
+> The description is not needed.
 
-* The "stack frame" of a function, which is the entire contiguous region of
-  stack memory used by a function.
+Ok, changed
 
-* The "frame record", which is the saved FP and LR placed *somewhere* within
-  the function's stack frame. The FP points at the most recent frame record on
-  the stack, and at function call boundaries points at the caller's frame
-  record.
+>=20
+> Missing "resets" and "power-domains" properties.
+>=20
+> Missing description of the child nodes.
 
-AAPCS64 doesn't say *where* a frame record is placed within a stack frame, and
-there are reasons for compilers to place above and below it. So in genral, a
-functionss stack frame looks like:
-      
-        +=========+
-        |  above  |
-        |---------|
-        | FP | LR |
-        |---------|
-        |  below  |
-        +=========+
+"resets", "power-domains" dans child nodes added
 
-... where the "above" or "below" portions might be any size (even 0 bytes).
+>=20
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - interrupt-map
+> > +  - interrupt-map-mask
+> > +  - clocks =20
+>=20
+> Missing "resets" and "power-domains".
 
-Typical code generation today means for most functions that the "below" portion
-is 0 bytes in size, but this is not guaranteed, and even today there are cases
-where this is not true.
+Added
 
-When one function calls another without a stack transition, that looks like:
+>=20
+> > +  - bus-range
+> > +  - "#address-cells"
+> > +  - "#size-cells"
+> > +  - "#interrupt-cells"
+> > +
+> > +unevaluatedProperties: false =20
+>=20
+> Why doesn't "make dtbs_check" complain about the presence of
+> e.g. "resets" in the actual DTS files?
+>=20
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/r8a7790-cpg-mssr.h>
+> > +
+> > +    bus {
+> > +        #address-cells =3D <2>;
+> > +        #size-cells =3D <2>; =20
+>=20
+> I think you should drop this (and the corresponding high addresses
+> below).
+>=20
 
-        +=========+ ___
-        |  above  |    \
-        |---------|    |
-     ,->| FP | LR |    +-- Caller's stack frame
-     |  |---------|    |
-     |  |  below  | ___/
-     |  +=========+ ___ 
-     |  |  above  |    \
-     |  |---------|    |
-     '--| FP | LR |    +-- Callee's stack frame
-        |---------|    |
-        |  below  | ___/
-        +=========+
+Ok
 
-Where there's a stack transition, and the new stack is at a *lower* VA than the
-old stack, that looks like:
+> > +
+> > +        pci0: pci@ee090000  {
+> > +            compatible =3D "renesas,pci-r8a7790", "renesas,pci-rcar-ge=
+n2";
+> > +            device_type =3D "pci";
+> > +            clocks =3D <&cpg CPG_MOD 703>;
+> > +            reg =3D <0 0xee090000 0 0xc00>,
+> > +                  <0 0xee080000 0 0x1100>;
+> > +            interrupts =3D <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH>; =20
+>=20
+>                         power-domains =3D <&sysc R8A7790_PD_ALWAYS_ON>;
+>                         resets =3D <&cpg 703>;
 
-        +=========+ ___
-        |  above  |    \
-        |---------|    |
-     ,->| FP | LR |    +-- Caller's stack frame
-     |  |---------|    |
-     |  |  below  | ___/
-     |  +=========+
-     | 
-     |  ~~~~~~~~~~~
-     |  Arbitrarily 
-     |  large gap,
-     |  potentially
-     |  including
-     |  other data
-     |  ~~~~~~~~~~~
-     |
-     |  +=========+ ___ 
-     |  |  above  |    \
-     |  |---------|    |
-     '--| FP | LR |    +-- Callee's stack frame
-        |---------|    |
-        |  below  | ___/
-        +=========+
+Ok
 
-Where there's a stack transition, and the new stack is at a *higher* VA than
-the old stack, that looks like:
+>=20
+> > +            status =3D "disabled";
+> > +
+> > +            bus-range =3D <0 0>;
+> > +            #address-cells =3D <3>;
+> > +            #size-cells =3D <2>;
+> > +            #interrupt-cells =3D <1>;
+> > +            ranges =3D <0x02000000 0 0xee080000 0 0xee080000 0 0x00010=
+000>;
+> > +            dma-ranges =3D <0x42000000 0 0x40000000 0 0x40000000 0 0x4=
+0000000>;
+> > +            interrupt-map-mask =3D <0xf800 0 0 0x7>;
+> > +            interrupt-map =3D <0x0000 0 0 1 &gic GIC_SPI 108 IRQ_TYPE_=
+LEVEL_HIGH>,
+> > +                            <0x0800 0 0 1 &gic GIC_SPI 108 IRQ_TYPE_LE=
+VEL_HIGH>,
+> > +                            <0x1000 0 0 2 &gic GIC_SPI 108 IRQ_TYPE_LE=
+VEL_HIGH>;
+> > +
+> > +            usb@1,0 {
+> > +                reg =3D <0x800 0 0 0 0>;
+> > +                phys =3D <&usb0 0>;
+> > +                phy-names =3D "usb";
+> > +            };
+> > + =20
+>=20
+> ERROR: trailing whitespace
+> #249: FILE: Documentation/devicetree/bindings/pci/renesas,pci-usb.yaml:12=
+7:
+> +            $
 
-        +=========+ ___ 
-        |  above  |    \
-        |---------|    |
-     ,--| FP | LR |    +-- Callee's stack frame
-     |  |---------|    |
-     |  |  below  | ___/
-     |  +=========+
-     |
-     |  ~~~~~~~~~~~
-     |  Arbitrarily 
-     |  large gap,
-     |  potentially
-     |  including
-     |  other data
-     |  ~~~~~~~~~~~
-     | 
-     |  +=========+ ___
-     |  |  above  |    \
-     |  |---------|    |
-     '->| FP | LR |    +-- Caller's stack frame
-        |---------|    |
-        |  below  | ___/
-        +=========+
- 
-In all of these cases, we *cannot* identify the boundary between the two stack
-frames, we can *only* identify where something overlaps a frame record. That
-might itself be a good thing, but it's not the same thing as what you describe
-in the commit message.
+Ok
 
-> It is based on the existing x86 algorithm, but implemented via stacktrace.
-> This can be tested by USERCOPY_STACK_FRAME_FROM and
-> USERCOPY_STACK_FRAME_TO in lkdtm.
+>=20
+> > +            usb@2,0 {
+> > +                reg =3D <0x1000 0 0 0 0>;
+> > +                phys =3D <&usb0 0>;
+> > +                phy-names =3D "usb";
+> > +            };
+> > +        };
+> > +    }; =20
+>=20
+> Gr{oetje,eeting}s,
+>=20
+>                         Geert
+>=20
+> --
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>=20
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
 
-Can you please explain *why* we'd want this?
+Thanks for the review,
+Herv=C3=A9
 
-Who do we expect to use this?
-
-What's the overhead in practice?
-
-Has this passed a more realistic stress test (e.g. running some userspace
-applications which make intensive use of copies to/from the kernel)?
-
-> 
-> Signed-off-by: He Zhe <zhe.he@windriver.com>
-> ---
->  arch/arm64/Kconfig                   |  1 +
->  arch/arm64/include/asm/thread_info.h | 12 +++++
->  arch/arm64/kernel/stacktrace.c       | 76 ++++++++++++++++++++++++++--
->  3 files changed, 85 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index 57c4c995965f..0f52a83d7771 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -165,6 +165,7 @@ config ARM64
->  	select HAVE_ARCH_TRACEHOOK
->  	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
->  	select HAVE_ARCH_VMAP_STACK
-> +	select HAVE_ARCH_WITHIN_STACK_FRAMES
->  	select HAVE_ARM_SMCCC
->  	select HAVE_ASM_MODVERSIONS
->  	select HAVE_EBPF_JIT
-> diff --git a/arch/arm64/include/asm/thread_info.h b/arch/arm64/include/asm/thread_info.h
-> index e1317b7c4525..b839ad9f2248 100644
-> --- a/arch/arm64/include/asm/thread_info.h
-> +++ b/arch/arm64/include/asm/thread_info.h
-> @@ -58,6 +58,18 @@ void arch_setup_new_exec(void);
->  void arch_release_task_struct(struct task_struct *tsk);
->  int arch_dup_task_struct(struct task_struct *dst,
->  				struct task_struct *src);
-> +/*
-> + * Walks up the stack frames to make sure that the specified object is
-> + * entirely contained by a single stack frame.
-> + *
-> + * Returns:
-> + *	GOOD_FRAME	if within a frame
-
-As above, we cannot identify this reliably.
-
-> + *	BAD_STACK	if placed across a frame boundary (or outside stack)
-> + *	NOT_STACK	unable to determine (no frame pointers, etc)
-
-On arm64 we always have frame pointers enabled, so this is a confusing comment.
-Is this a copy-paste from x86?
-
-> + */
-> +int arch_within_stack_frames(const void * const stack,
-> +		const void * const stackend,
-> +		const void *obj, unsigned long len);
->  
->  #endif
->  
-> diff --git a/arch/arm64/kernel/stacktrace.c b/arch/arm64/kernel/stacktrace.c
-> index e4103e085681..219b90c1de12 100644
-> --- a/arch/arm64/kernel/stacktrace.c
-> +++ b/arch/arm64/kernel/stacktrace.c
-> @@ -145,12 +145,17 @@ NOKPROBE_SYMBOL(unwind_frame);
->  
->  static void notrace walk_stackframe(struct task_struct *tsk,
->  				    struct stackframe *frame,
-> -				    bool (*fn)(void *, unsigned long), void *data)
-> +				    stack_trace_consume_fn fn, void *data)
->  {
-> +	struct frame_info fi;
-> +
->  	while (1) {
->  		int ret;
->  
-> -		if (!fn(data, frame->pc))
-> +		fi.pc = frame->pc;
-> +		fi.fp = frame->fp;
-> +		fi.prev_fp = frame->prev_fp;
-> +		if (!fn(data, &fi))
->  			break;
->  		ret = unwind_frame(tsk, frame);
->  		if (ret < 0)
-
-As on my prior comment, I don't think we want to alter our generic stack walker
-in this way. If we need more info, I'd prefer to expose this in layers, keeping
-arch_stack_walk unchanged, but having an arm64_stack_walk that can pass some
-arm64-specific data.
-
-> @@ -159,10 +164,10 @@ static void notrace walk_stackframe(struct task_struct
-> *tsk,
->  }
->  NOKPROBE_SYMBOL(walk_stackframe);
->  
-> -static bool dump_backtrace_entry(void *arg, unsigned long where)
-> +static bool dump_backtrace_entry(void *arg, struct frame_info *fi)
->  {
->  	char *loglvl = arg;
-> -	printk("%s %pSb\n", loglvl, (void *)where);
-> +	printk("%s %pSb\n", loglvl, (void *)fi->pc);
->  	return true;
->  }
->  
-> @@ -210,3 +215,66 @@ noinline notrace void arch_stack_walk(stack_trace_consume_fn consume_entry,
->  
->  	walk_stackframe(task, &frame, consume_entry, cookie);
->  }
-> +
-> +struct arch_stack_object {
-> +	unsigned long start;
-> +	unsigned long len;
-> +	int flag;
-
-What is "flag" ?
-
-> +};
-> +
-> +static bool arch_stack_object_check(void *data, struct frame_info *fi)
-> +{
-> +	struct arch_stack_object *obj = (struct arch_stack_object *)data;
-> +
-> +	/* Skip the frame of arch_within_stack_frames itself */
-> +	if (fi->prev_fp == 0)
-> +		return true;
-
-That's not what this is skipping. The first time arch_stack_walk() is called,
-it gives the PC of its caller (i.e. arch_within_stack_frames), and it's own
-synthetic FP. The next time around it gives the FP of it's caller.
-
-> +
-> +	/*
-> +	 * low ----------------------------------------------> high
-> +	 * [saved bp][saved ip][args][local vars][saved bp][saved ip]
-> +	 *                     ^----------------^
-> +	 *               allow copies only within here
-> +	 */
-
-This diagram is not valid for arm64. There is no "bp" or "ip", and each stack
-frame can be laid out more arbitrarily relative to the frame record.
-
-> +	if (obj->start + obj->len <= fi->fp) {
-> +		obj->flag = obj->start >=
-> +			fi->prev_fp + 2 * sizeof(void *) ?
-> +			GOOD_FRAME : BAD_STACK;
-
-This check is broken in several ways if there's a stack transition, since the
-placement of fp and prev_fp is legitimately arbitrary.
-
-This would also be a lot clearer if you bailed out early rather than nesting
-checks.
-
-The best thing you can realistically do is check that the object falls entirely
-within a given stack, then check that that no frames intersect the object. You
-don't need prev_fp for that, since you can just check each frame record in
-turn, then bail out once the object has been passed (i.e. once we've hit the
-correct stack, and either seen an FP above it or transitioned to another
-stack).
-
-> +		return false;
-> +	} else
-> +		return true;
-> +}
-> +
-> +/*
-> + * Walks up the stack frames to make sure that the specified object is
-> + * entirely contained by a single stack frame.
-> + *
-> + * Returns:
-> + *	GOOD_FRAME	if within a frame
-> + *	BAD_STACK	if placed across a frame boundary (or outside stack)
-> + *	NOT_STACK	unable to determine (no frame pointers, etc)
-> + */
-
-This is the exact same comment as in the header. My comments from there apply
-here, and one of the two should disappear.
-
-> +int arch_within_stack_frames(const void * const stack,
-> +		const void * const stackend,
-> +		const void *obj, unsigned long len)
-> +{
-> +#if defined(CONFIG_FRAME_POINTER)
-
-As above, this *cannot* be selected on arm64.
-
-> +	struct arch_stack_object object;
-> +	struct pt_regs regs;
-> +
-> +	if (__builtin_frame_address(1) == 0)
-> +		return NOT_STACK;
-
-When do you expect this to happen?
-
-> +
-> +	object.start = (unsigned long)obj;
-> +	object.len = len;
-> +	object.flag = NOT_STACK;
-> +
-> +	regs.regs[29] = (u64)__builtin_frame_address(1);
-
-NAK to making a synthetic pt_regs like this. That an abuse of the existing API,
-and you don't need to do this in the first place.
-
-> +
-> +	arch_stack_walk(arch_stack_object_check, (void *)&object, NULL, &regs);
-
-A void pointer cast is not necessary.
-
-Thanks,
-Mark.
-
-> +
-> +	return object.flag;
-> +#else
-> +	return NOT_STACK;
-> +#endif
-> +}
-> -- 
-> 2.25.1
-> 
+--=20
+Herv=C3=A9 Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

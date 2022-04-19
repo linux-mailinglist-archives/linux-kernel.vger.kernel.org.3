@@ -2,147 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FBC507A88
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 21:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB6B3507A8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 21:59:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345902AbiDST5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 15:57:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47708 "EHLO
+        id S1346625AbiDSUCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345719AbiDST5s (ORCPT
+        with ESMTP id S240510AbiDSUCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 15:57:48 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2726CBC8A
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:55:05 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id p8so9340603pfh.8
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:55:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=i6L4akEkVxKPhVRDAOiT0FePP0EWPGcPFgsC+RRy/gQ=;
-        b=bnlPfTSoWYmUXo/nUZ9t0gIb4mbtq/+ury0PkxRLIvhP2n132giaO0/k/ddiyI4vjR
-         D6if6T1Dp5dS+ovCaT2bmXVebbUo1/IEMb+aqjsIDHxuky2VnG1jfRHRwN+nOsTqOQIT
-         +pbAUJlzGUvLE+tgL44HpCken2Qu2XEzqlpzQDZbQ04wk+zaWlEhU6k6spJzHVNtdWZm
-         oQfy0zWk1taM9EC8ZgMBXa+/M9aOIdNEkOJv/oxqqr1lI5jTJuzyGYLqH8Nz1REcGZDC
-         +N3A764GiPsmZIBmwmtdLFt7HOF9Com+Fudh+DKy60Bys+SvW2fYdjyLY8ydh1TqFv1S
-         fTTw==
+        Tue, 19 Apr 2022 16:02:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4160426562
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:59:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1650398366;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S7aPPGBaDUbNbBaEN9oGo4CeP1VF+epNol9mo0bOqDU=;
+        b=UVZBNQXuAs3jWaULA0DgawKhMu6yvVwwtt7Xq2IKlh0ylN6YoIQ3I8fRHuyVrYmPloCboR
+        Dzc48DBPP0PZr8JDgeX9RVLLJGsbqfxoukB56mtOnZPacfpf1wkgJhrtB74tWwH4zryF4u
+        2TrELbVAuwHPWgOTfwc0AVsZUnpV7I8=
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
+ [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-359-Gb4GD24FO-qN6j3ntfFrgA-1; Tue, 19 Apr 2022 15:59:24 -0400
+X-MC-Unique: Gb4GD24FO-qN6j3ntfFrgA-1
+Received: by mail-il1-f197.google.com with SMTP id v14-20020a056e020f8e00b002caa6a5d918so10170870ilo.15
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 12:59:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:date:from:to:cc:subject:message-id:references
          :mime-version:content-disposition:in-reply-to;
-        bh=i6L4akEkVxKPhVRDAOiT0FePP0EWPGcPFgsC+RRy/gQ=;
-        b=EMC7zhaGuvGw+wiN3VDdW3ga9Ub8rQ8aYapavv0/r5eBevr2lemiZQy5DHeK51DLdN
-         MC9eQzklOLWyPeJbyxL4H89A+JlsK//MQiqcZUgVN2JZVTAE8fdxUyU+G0Lwb61LM0x2
-         FsUUsdBDtXFIt+PUBkddlf4FJF6E7vFXHZHWp2r7jLMtcleY/fKYUtUNNxrOvuSCwTgu
-         usRi+mSvhlO68RoFrFV8Hcug+W1vjPNsz9Rs2OI11z/4LFEpImtBbLmTaUu0TqQHFI0I
-         HGHRZcmXiD7b0dMPLpSZ5zKjiTSJMOprrZgZ7WELXLa8Y7eP0g6ol7L33csbwra4Wfmx
-         yE3A==
-X-Gm-Message-State: AOAM53052zBi+PwR0d7lnPhI/NiNLY4dvv6s3g2+bZ84A+eZDZLVQ/RE
-        fnm2mSteHx/CSkfln4gCVNEzSA==
-X-Google-Smtp-Source: ABdhPJzd7Sb6wK/ijaIdyJ3vw61yEiIZZ5v7n+nHco/OzJHhFQgoWm9yDCXBw6a3J+y81YaEUHZB9g==
-X-Received: by 2002:a65:6c10:0:b0:380:437a:c154 with SMTP id y16-20020a656c10000000b00380437ac154mr15914468pgu.549.1650398104459;
-        Tue, 19 Apr 2022 12:55:04 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id j10-20020a17090a31ca00b001cb87502e32sm16911021pjf.23.2022.04.19.12.55.03
+        bh=S7aPPGBaDUbNbBaEN9oGo4CeP1VF+epNol9mo0bOqDU=;
+        b=zb9ytoirsQupsd7qqs2MtW3snJgUw71cWNrJ0EcKqrw7UWEuOC+3uY5QfqUlhR4FRn
+         UWLuhzC9A2F1OhF09eKoTqE3GGP2Mub+Hb6O1k2zYDEdMimKlPhXMhmwv+Mc2olkNR++
+         GHkKKXprmxcryRaYMFmzILrIaL8G8us6YsfXcwS3f86S10cMM+K/94owL9HABRad7ehy
+         KhnBSBGT4fg7hHpUqPdtd/TcJwHtsx6Iwm8yznGvvbLDOPuHiK20CXjHQTC8WXqxvNjb
+         uyLpsRomQJMayqXW3bHnBAyf4ZRnmyQSYrnC1lAx+AzU42FutHPc2jjBpUCfgnqkwMIB
+         wQFQ==
+X-Gm-Message-State: AOAM533Tr5oiBtva7gRZw1TR9KBcLmZl8m+mxdLIazbXojbwRMudJx0k
+        xDmTgRsRbsnlbfBGRrMoWJlUg5+fhoq4ZjoofIOpc3QnMzW7tOADkTyyj5IfyDm1YfPRPPdWf6l
+        j+K2/DpjRdfj1TO6hUCy1/iiM
+X-Received: by 2002:a05:6e02:2162:b0:2cc:2a35:f3c7 with SMTP id s2-20020a056e02216200b002cc2a35f3c7mr4998321ilv.184.1650398364095;
+        Tue, 19 Apr 2022 12:59:24 -0700 (PDT)
+X-Google-Smtp-Source: ABdhPJxRZ2hcYzocaccI5T4mLAlPr9viJJ8p6Q4kGuzhBEr50gjPumBpL+trrzVZwbyw5BUdGzj5PA==
+X-Received: by 2002:a05:6e02:2162:b0:2cc:2a35:f3c7 with SMTP id s2-20020a056e02216200b002cc2a35f3c7mr4998312ilv.184.1650398363826;
+        Tue, 19 Apr 2022 12:59:23 -0700 (PDT)
+Received: from xz-m1.local (cpec09435e3e0ee-cmc09435e3e0ec.cpe.net.cable.rogers.com. [99.241.198.116])
+        by smtp.gmail.com with ESMTPSA id h24-20020a6bfb18000000b006497692016bsm10097741iog.15.2022.04.19.12.59.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Apr 2022 12:55:03 -0700 (PDT)
-Date:   Tue, 19 Apr 2022 19:55:00 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, isaku.yamahata@intel.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>, erdemaktas@google.com,
-        Connor Kuehl <ckuehl@redhat.com>
-Subject: Re: [RFC PATCH v5 042/104] KVM: x86/mmu: Track shadow MMIO
- value/mask on a per-VM basis
-Message-ID: <Yl8TlMTQGq5R69E6@google.com>
-References: <cover.1646422845.git.isaku.yamahata@intel.com>
- <b494b94bf2d6a5d841cb76e63e255d4cff906d83.1646422845.git.isaku.yamahata@intel.com>
- <84d56339-4a8a-6ddb-17cb-12074588ba9c@redhat.com>
- <20220408184659.GC857847@ls.amr.corp.intel.com>
+        Tue, 19 Apr 2022 12:59:23 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 15:59:21 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mike Rapoport <rppt@linux.vnet.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jerome Glisse <jglisse@redhat.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: Re: [PATCH v8 22/23] mm: Enable PTE markers by default
+Message-ID: <Yl8UmWQodLX+JkZ7@xz-m1.local>
+References: <20220405014646.13522-1-peterx@redhat.com>
+ <20220405014929.15158-1-peterx@redhat.com>
+ <Yl7RrKV5mXtNAAzi@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="VhobxqQN/RYdeTkm"
 Content-Disposition: inline
-In-Reply-To: <20220408184659.GC857847@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yl7RrKV5mXtNAAzi@cmpxchg.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sorry, missed my name...
 
-On Fri, Apr 08, 2022, Isaku Yamahata wrote:
-> On Tue, Apr 05, 2022 at 05:25:34PM +0200,
-> Paolo Bonzini <pbonzini@redhat.com> wrote:
+--VhobxqQN/RYdeTkm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+On Tue, Apr 19, 2022 at 11:13:48AM -0400, Johannes Weiner wrote:
+> Hi Peter,
+
+Hi, Johannes,
+
 > 
-> > On 3/4/22 20:48, isaku.yamahata@intel.com wrote:
-> > > +	if (enable_ept) {
-> > > +		const u64 init_value = enable_tdx ? VMX_EPT_SUPPRESS_VE_BIT : 0ull;
-> > >   		kvm_mmu_set_ept_masks(enable_ept_ad_bits,
-> > > -				      cpu_has_vmx_ept_execute_only());
-> > > +				      cpu_has_vmx_ept_execute_only(), init_value);
-> > > +		kvm_mmu_set_spte_init_value(init_value);
-> > > +	}
+> On Mon, Apr 04, 2022 at 09:49:29PM -0400, Peter Xu wrote:
+> > Enable PTE markers by default.  On x86_64 it means it'll auto-enable
+> > PTE_MARKER_UFFD_WP as well.
 > > 
-> > I think kvm-intel.ko should use VMX_EPT_SUPPRESS_VE_BIT unconditionally as
-> > the init value.  The bit is ignored anyway if the "EPT-violation #VE"
-> > execution control is 0.
-> > Otherwise looks good, but I have a couple more crazy ideas:
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  mm/Kconfig | 2 ++
+> >  1 file changed, 2 insertions(+)
 > > 
-> > 1) there could even be a test mode where KVM enables the execution control,
-> > traps #VE in the exception bitmap, and shouts loudly if it gets a #VE.  That
-> > might avoid hard-to-find bugs due to forgetting about
-> > VMX_EPT_SUPPRESS_VE_BIT.
-> > 
-> > 2) or even, perhaps the init_value for the TDP MMU could set bit 63
-> > _unconditionally_, because KVM always sets the NX bit on AMD hardware.
+> > diff --git a/mm/Kconfig b/mm/Kconfig
+> > index 6e7c2d59fa96..3eca34c864c5 100644
+> > --- a/mm/Kconfig
+> > +++ b/mm/Kconfig
+> > @@ -911,12 +911,14 @@ config ANON_VMA_NAME
+> >  
+> >  config PTE_MARKER
+> >  	bool "Marker PTEs support"
+> > +	default y
+> >  
+> >  	help
+> >  	  Allows to create marker PTEs for file-backed memory.
+> 
+> make oldconfig just prompted me on these:
+> 
+> ---
+> Marker PTEs support (PTE_MARKER) [Y/n/?] (NEW) ?
+> 
+> CONFIG_PTE_MARKER:
+> 
+> Allows to create marker PTEs for file-backed memory.
+> 
+> Symbol: PTE_MARKER [=y]
+> Type  : bool
+> Defined at mm/Kconfig:1046
+>   Prompt: Marker PTEs support
+>   Location:
+>     Main menu
+>       -> Memory Management options
+> ---
+> 
+> >  config PTE_MARKER_UFFD_WP
+> >  	bool "Marker PTEs support for userfaultfd write protection"
+> > +	default y
+> >  	depends on PTE_MARKER && HAVE_ARCH_USERFAULTFD_WP
+> 
+> It's not possible to answer them without looking at the code.
+> 
+> But after looking at the code, I'm still not sure why it asks
+> me. Isn't this infrastructure code?
+> 
+> Wouldn't it make more sense to remove the prompt string and have
+> userfaultfd simply select those?
+> 
+> If this is too experimental to enable per default, a more reasonable
+> question for the user would be a "userfaultfd file support" option or
+> something, and have *that* select the marker code.
 
-Heh, took me a minute to realize you mean EFER.NX.  To clarify:
+Thanks for raising this question.
 
-KVM requires NX support in hardware
+Actually it's right now enabled by default, so I kept the options just to
+make sure we can always explicitly disable those options when we want.
+That's majorly why I kept this patch standalone one so if we want we can
+even drop it.
 
-	if (!boot_cpu_has(X86_FEATURE_NX)) {
-		pr_err_ratelimited("NX (Execute Disable) not supported\n");
-		return -EOPNOTSUPP;
-	}
+Said that, I fully agree with you that having two options seem to be an
+overkill, especially the PTE_MARKER option will be too challenging to be
+correctly understood by anyone not familiar with it.
 
-and 64-bit or PAE paging to enable NPT
+So after a 2nd thought I'm trying to refine what I want to achieve with the
+kbuild system on this new feature:
 
-	if (!IS_ENABLED(CONFIG_X86_64) && !IS_ENABLED(CONFIG_X86_PAE))
-		npt_enabled = false;
+- On supported systems (x86_64), should be by default y with "make
+  olddefconfig", but able to turn it off using "make oldconfig" etc., so
+  the user will have a choice when they want.
 
-and the _kernel_ forces EFER.NX=1 for 64-bit and PAE kernels.
+- On not-supported systems (non-x86_64), should be always n without
+  any prompt asking, and user won't even see this entry.
 
-But whether or not EFER.NX is enabled is irrelevant, it's only the initial value,
-i.e. the SPTE is guaranteed to be !PRESENT, so hardware will never generate a
-reserved bit #PF.
+- PTE_MARKER option should always be hidden for all archs
 
-> > That would remove the whole infrastructure to keep shadow_init_value,
-> > because it would be constant 0 in mmu.c and constant BIT(63) in tdp_mmu.c.
-> > 
-> > Sean, what do you think?
+I plan to post a patch that is attached (I also reworded the entry to not
+mention about pte markers).  Does that look acceptable on your side?
 
-I like #2, though I suspect we'll still want shadow_init_value so that the MMU
-caches can be shared without creating a mess.   But I still like keeping that
-detail in the MMUs and out of the vendor modules, even though there's obviously
-a hard dependency on the MMU doing the right thing.
+Thanks,
 
-> Then, I'll start with 1) because it's a bit hard for me to test 2) with real AMD
-> hardware.  If someone is willing to test 2), I'm quite fine to implement 2)
-> on top of 1).  2) isn't exclusive with 1).
+-- 
+Peter Xu
 
-I can test #2.
+--VhobxqQN/RYdeTkm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-mm-uffd-Hide-PTE_MARKER-option.patch"
 
-Tangentially related, the kvm_gfn_stolen_mask() exception to MMIO SPTEs is unnecessarily
-convoluted and gross.  That's partly my fault as I should have just updated
-enable_mmio_caching when hardware can't support it instead of using shadow_mmio_value
-to convey that information.  I'll submit a patch to fix that, then is_mmio_spte()
-can be left alone in the TDX series.
+From 5d25e9d685bf129a1730caa61c1545fb16c094bb Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Tue, 19 Apr 2022 15:31:12 -0400
+Subject: [PATCH] mm/uffd: Hide PTE_MARKER option
+Content-type: text/plain
+
+The PTE_MARKER option should not need to be exposed to the kernel builder,
+keep it internal and remove the prompt so it won't be seen.
+
+Instead, make the PTE_MARKER_UFFD_WP option to explicitly choose PTE_MARKER
+when necessary.
+
+While PTE_MARKER_UFFD_WP will still prompt to user, change the wording so
+that it'll not mention PTE_MARKER at all but renaming it to "Userfaultfd
+write protection support for shmem/hugetlbfs".
+
+Reported-by: Johannes Weiner <hannes@cmpxchg.org>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/Kconfig | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 3eca34c864c5..d740e1ff3b2f 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -910,16 +910,16 @@ config ANON_VMA_NAME
+ 	  difference in their name.
+ 
+ config PTE_MARKER
+-	bool "Marker PTEs support"
+-	default y
++	bool
+ 
+ 	help
+ 	  Allows to create marker PTEs for file-backed memory.
+ 
+ config PTE_MARKER_UFFD_WP
+-	bool "Marker PTEs support for userfaultfd write protection"
++	bool "Userfaultfd write protection support for shmem/hugetlbfs"
+ 	default y
+-	depends on PTE_MARKER && HAVE_ARCH_USERFAULTFD_WP
++	depends on HAVE_ARCH_USERFAULTFD_WP
++	select PTE_MARKER
+ 
+ 	help
+ 	  Allows to create marker PTEs for userfaultfd write protection
+-- 
+2.32.0
+
+
+--VhobxqQN/RYdeTkm--
+

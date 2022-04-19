@@ -2,68 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD058506638
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFC2050663C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 09:48:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1349559AbiDSHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 03:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S1349570AbiDSHud (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 03:50:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349553AbiDSHuX (ORCPT
+        with ESMTP id S1349564AbiDSHua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 03:50:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68F12E0A6;
-        Tue, 19 Apr 2022 00:47:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650354461; x=1681890461;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LCuWwp4T8c+i/pzUc3TOqamLAZWFR89Br+QbZJimevc=;
-  b=NY5fRDZUyb0IcqmtsIl9vT4aGP2rj6KmF2P+YvMYW+/c122c4Pbn0gEi
-   6SDZuAvgHAuihRmBxxa/4oHkv6hqwgWBC4rHDLa38QfDyd1b0j5u/Ss3y
-   JBd+kPk98AB3a20+J/d8W67j0J5ggSZ9pfcVwscVo18flLz+0NhEdFPI6
-   iAA1H7dLiOSYsS7rklDgfJQTCz7a4QYXyvv9vPfbBb8DSU8nDHH3m9aQY
-   y7zrbc3YrnGHoHCpjqn13JE1UXO8txDeMmTw/hpOuEHnRTtvkeRMwiqz7
-   wk3jgp0ulqA4EnzKtG6tq5vzL+5Wl+8zU3daSpwtGE8GLN3rxvZ1CbssB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262563170"
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="262563170"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 00:47:40 -0700
-X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
-   d="scan'208";a="554614019"
-Received: from csambran-mobl.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.254.58.20])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 00:47:36 -0700
-Message-ID: <bd83067542a3519ee4c91f9d50e9bd4fac27e4bb.camel@intel.com>
-Subject: Re: [PATCH v3 4/4] platform/x86: intel_tdx_attest: Add TDX Guest
- attestation interface driver
-From:   Kai Huang <kai.huang@intel.com>
-To:     Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <mgross@linux.intel.com>
-Cc:     "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Date:   Tue, 19 Apr 2022 19:47:33 +1200
-In-Reply-To: <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-References: <20220415220109.282834-1-sathyanarayanan.kuppuswamy@linux.intel.com>
-         <20220415220109.282834-5-sathyanarayanan.kuppuswamy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-1.fc35) 
+        Tue, 19 Apr 2022 03:50:30 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF982DAAA
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:47:48 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id t25so20155642edt.9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=C0PGH+OMpKE6L74TE6jhieB2Brn97/rzhTTKeA9q/uU=;
+        b=pJGFE1TLlYKUSZZ8nx1OFLi/GSXW17TSV2iiypDaXosKmnlXPFEgQD4TDcGTWrcIWZ
+         KAzUpClu2+SNU4v/Gzk2wBA0MQTXrZtepF+IornOijYRy/BPfEsKAOKJBjlNTzwTyal4
+         OYga3cY3CArO8RopZLRsLAFtDwJaIHSKjMBbQ/hfxbu5nSf23FpHcRa81SzNchyaTuJS
+         G9KbjlopXIZJ+wOpJy+eB5nb6HAlD6kaYwZlc/IhgWKxDDpEffOKzq0YsZj2Ffm1kQlU
+         Qyf5zUdMnoks3bgaCj3PwRTBrJPajws+OK80WEW6lxTOZo7miEwNG5OPUgC/5MwEqTCD
+         lJdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=C0PGH+OMpKE6L74TE6jhieB2Brn97/rzhTTKeA9q/uU=;
+        b=Uunp/iTNQDkM6q67HAmXINzlKJ8HKyPJUiavfrNu2KCt6NqTumAwEawsNg8SZaeWaG
+         jH9EJhBjg7DHnj7d/IbB3eKesAu5IcVSHut++KIevCzmN4IWTBq6xqVlTbr+nq8z7xql
+         PLkPeBirEcKyF30hzcUSrKJBCh8KKyyfEpzDBMW7EPiH8o5/3EXEH6jw478Y45yeUjeS
+         xJwxf81jWDjNVIbnIOfkxg2GS5mjz6q3eZSAmPTzJ8wSJog+G/2VqpIDTty0qmMNcCN0
+         0DgHQ1tkbn2ryuBdedLdAShMYaeBn5iomv18QzSflkpouBDm0iFIMir4ZeG1sX2VofXb
+         fXGA==
+X-Gm-Message-State: AOAM532UVfAWkPnJY4ZMnj0gZlgwBJkCfgK4gF32aUM172rq8yYh1zxd
+        eVECGZrknI59NhUL9El3/8Ie0g==
+X-Google-Smtp-Source: ABdhPJztlccA1gfyQHHXSuSecllY6AcbHNzImIi5kfGI/UhPAB1xEEPE1IIUbnLO+ypjox1WyCKDNQ==
+X-Received: by 2002:a50:fb03:0:b0:41d:8d3f:9427 with SMTP id d3-20020a50fb03000000b0041d8d3f9427mr16055306edq.263.1650354466943;
+        Tue, 19 Apr 2022 00:47:46 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id y23-20020a170906071700b006e8a19cefa6sm5335821ejb.106.2022.04.19.00.47.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 00:47:46 -0700 (PDT)
+Message-ID: <1965ed9f-0258-cd28-f1c3-ef87272f6c03@linaro.org>
+Date:   Tue, 19 Apr 2022 09:47:45 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v2 6/6] dt-bindings: dma: Convert Qualcomm BAM DMA binding
+ to json format
+Content-Language: en-US
+To:     Kuldeep Singh <singh.kuldeep87k@gmail.com>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dmaengine@vger.kernel.org
+References: <20220410175056.79330-1-singh.kuldeep87k@gmail.com>
+ <20220410175056.79330-7-singh.kuldeep87k@gmail.com>
+ <CAH=2Ntx1D8C6xu+RysO0o5OkG5kPMMJ-Xr+B-udLtizY+4HiaQ@mail.gmail.com>
+ <20220418192012.GA6868@9a2d8922b8f1>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220418192012.GA6868@9a2d8922b8f1>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +84,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-04-15 at 15:01 -0700, Kuppuswamy Sathyanarayanan wrote:
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/tdx/Kconfig
-> @@ -0,0 +1,13 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# X86 TDX Platform Specific Drivers
-> +#
-> +
-> +config INTEL_TDX_ATTESTATION
-> +	tristate "Intel TDX attestation driver"
-> +	depends on INTEL_TDX_GUEST
-> +	help
-> +	  The TDX attestation driver provides IOCTL interfaces to the user to
-> +	  request TDREPORT from the TDX module or request quote from the VMM
-> +	  or to get quote buffer size. It is mainly used to get secure disk
-> +	  decryption keys from the key server.
-> diff --git a/drivers/platform/x86/intel/tdx/Makefile b/drivers/platform/x86/intel/tdx/Makefile
-> new file mode 100644
-> index 000000000000..94eea6108fbd
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/tdx/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +obj-$(CONFIG_INTEL_TDX_ATTESTATION)	+= intel_tdx_attest.o
-> diff --git a/drivers/platform/x86/intel/tdx/intel_tdx_attest.c b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
-> new file mode 100644
-> index 000000000000..9124db800d4f
-> --- /dev/null
-> +++ b/drivers/platform/x86/intel/tdx/intel_tdx_attest.c
+On 18/04/2022 21:20, Kuldeep Singh wrote:
+> On Mon, Apr 18, 2022 at 10:57:55AM +0530, Bhupesh Sharma wrote:
+>> Please see <https://lore.kernel.org/lkml/20220211214941.f55q5yksittut3ep@amazon.com/T/#m6700c2695ee78e79060ac338d208ffd08ac39592>,
+>> I already have an effort ongoing for converting qcom bam DMA bindings
+>> to YAML format.
+> 
+> Ohh ok, I wasn't aware you had similar series.
+> I just noticed your latest v5 version was rolled out ~5 months back,
+> usually this is a very long time considering the duration. Wondering
+> reason behind this..
+> 
+> My updated series(v3 version[1]) is kind of complete and mostly reviewed
+> by Krzysztof and takes care of armv7/8 based platforms. 
 
+My review was only about patch correctness, not overall patch preference.
 
-From security's perspective, attestation is an essential part of TDX.  That
-being said, w/o attestation support in TD guest, I guess nobody will seriously
-use TD guest.
+> With no offence,
+> I believe we should go with the current one as your series includes
+> changes more than BAM and will take long time to merge. Anyway, I'll be
+> fine with choice of the maintainers.
 
-From this perspective, I am not sure what's the value of having a dedicated
-INTEL_TDX_ATTESTATION Kconfig.  The attestation support code should be turned on
-unconditionally when CONFIG_INTEL_TDX_GUEST is on.  The code can also be just
-under arch/x86/coco/tdx/ I guess?
+I appreciate your work Kuldeep, it is important and valuable
+contribution. It is sad to see duplicated effort, I don't like it for my
+own patches either. In general, I believe the FIFO approach should be
+applied, so in this case Bhupesh patches.
 
-But I'll leave this to maintainers.
+Before starting the conversion the best is to look for prior work on lore:
+https://lore.kernel.org/lkml/?q=dfn%3Aqcom_bam_dma.txt
+This way you could easily avoid doing the same.
+
+Bhupesh,
+Please check what was stopping your work, you might need to rebase it
+and resend it.
+
+Best regards,
+Krzysztof

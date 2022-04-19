@@ -2,75 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0B7507BE9
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:28:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC9B507BEB
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 23:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345951AbiDSVa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 17:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56576 "EHLO
+        id S1357998AbiDSVbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 17:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346877AbiDSVa0 (ORCPT
+        with ESMTP id S1346877AbiDSVbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 17:30:26 -0400
-Received: from nibbler.cm4all.net (nibbler.cm4all.net [82.165.145.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C8539827
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:27:41 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by nibbler.cm4all.net (Postfix) with ESMTP id 651FAC00E1
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:27:40 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at nibbler.cm4all.net
-Received: from nibbler.cm4all.net ([127.0.0.1])
-        by localhost (nibbler.cm4all.net [127.0.0.1]) (amavisd-new, port 10024)
-        with LMTP id cQgGUAjwsX4n for <linux-kernel@vger.kernel.org>;
-        Tue, 19 Apr 2022 23:27:33 +0200 (CEST)
-Received: from zero.intern.cm-ag (zero.intern.cm-ag [172.30.16.10])
-        by nibbler.cm4all.net (Postfix) with SMTP id 479E3C00CB
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 23:27:33 +0200 (CEST)
-Received: (qmail 17150 invoked from network); 20 Apr 2022 03:17:38 +0200
-Received: from unknown (HELO rabbit.intern.cm-ag) (172.30.3.1)
-  by zero.intern.cm-ag with SMTP; 20 Apr 2022 03:17:38 +0200
-Received: by rabbit.intern.cm-ag (Postfix, from userid 1023)
-        id 1563E460F19; Tue, 19 Apr 2022 23:27:33 +0200 (CEST)
-Date:   Tue, 19 Apr 2022 23:27:33 +0200
-From:   Max Kellermann <mk@cm4all.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Max Kellermann <mk@cm4all.com>, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: fscache corruption in Linux 5.17?
-Message-ID: <Yl8pRVSW9y1o6MBV@rabbit.intern.cm-ag>
-References: <Yl7d++G25sNXIR+p@rabbit.intern.cm-ag>
- <YlWWbpW5Foynjllo@rabbit.intern.cm-ag>
- <507518.1650383808@warthog.procyon.org.uk>
- <509961.1650386569@warthog.procyon.org.uk>
+        Tue, 19 Apr 2022 17:31:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9689C39827
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 14:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650403718; x=1681939718;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=fSbBlg7Cy7c0Bm1hYCtAjichucsThj27NrOn/LHBa7M=;
+  b=Zgv06ufac9B4uqXYNuoRiVzOlcx/6yPVdsULNwqwKWh/77i+vyVff7dC
+   8orGLgWti20ljQZakjbXydg8GfeRPeRyGpiE+vXNeF9yTQH7FctpCQge6
+   8bRS4/LeeDpcanCleOTFWSQGRj48JrkIOvp9S3V2GzczazwNSJ5zd6D7Q
+   qAzm2jw9n31TLK770OFz454+oJWc9mGZlvuBMHE6buuh+iiQEqRNu2yvR
+   DwwKjudv8VELPZRxZRsaPw0Y4kpNz6l8yfcvCNx/twaR+Z8tIdzs/vGVO
+   32ai7QzVDJxF1kN4FXJHkPvn4k4tEA3nhCxngXMLBG2Nq3NfXXSwPum7G
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10322"; a="243808962"
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="243808962"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 14:28:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,273,1643702400"; 
+   d="scan'208";a="667025442"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 19 Apr 2022 14:28:36 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngvOm-0006CA-5I;
+        Tue, 19 Apr 2022 21:28:36 +0000
+Date:   Wed, 20 Apr 2022 05:28:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [mingo-tip:sched/headers 108/2579] init/main.c:887:13: warning: no
+ previous prototype for function 'init_per_task_early'
+Message-ID: <202204200512.Po4Qok6p-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <509961.1650386569@warthog.procyon.org.uk>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/04/19 18:42, David Howells <dhowells@redhat.com> wrote:
-> Could the file have been modified by a third party?  If you're using NFS3
-> there's a problem if two clients can modify a file at the same time.  The
-> second write can mask the first write and the client has no way to detect it.
-> The problem is inherent to the protocol design.  The NFS2 and NFS3 protocols
-> don't support anything better than {ctime,mtime,filesize} - the change
-> attribute only becomes available with NFS4.
+tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
+head:   49e1ec6c70a6eb4b7de9250a455b8b63eb42afbe
+commit: f1d7f3a4c6b375645905a0b0b71dd202c29af929 [108/2579] headers/deps: cpusets: Move task_struct::mems_allowed_seq to per_task()
+config: i386-randconfig-a013-20220418 (https://download.01.org/0day-ci/archive/20220420/202204200512.Po4Qok6p-lkp@intel.com/config)
+compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=f1d7f3a4c6b375645905a0b0b71dd202c29af929
+        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
+        git fetch --no-tags mingo-tip sched/headers
+        git checkout f1d7f3a4c6b375645905a0b0b71dd202c29af929
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-I tried to write a script to stress-test writing and reading, but
-found no clue so far.  I'll continue that tomorrow.
+If you fix the issue, kindly add following tag as appropriate
+Reported-by: kernel test robot <lkp@intel.com>
 
-My latest theory is that this is a race condition; what if one process
-writes to the file, which invalidates the cache; then, in the middle
-of invalidating the local cache and sending the write to the NFS
-server, another process (on the same server) reads the file; what
-modification time and what data will it see?  What if the cache gets
-filled with old data, while new data to-be-written is still in flight?
+All warnings (new ones prefixed by >>):
 
-Max
+   init/main.c:783:20: warning: no previous prototype for function 'mem_encrypt_init' [-Wmissing-prototypes]
+   void __init __weak mem_encrypt_init(void) { }
+                      ^
+   init/main.c:783:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init __weak mem_encrypt_init(void) { }
+   ^
+   static 
+>> init/main.c:887:13: warning: no previous prototype for function 'init_per_task_early' [-Wmissing-prototypes]
+   void __init init_per_task_early(void)
+               ^
+   init/main.c:887:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init init_per_task_early(void)
+   ^
+   static 
+   2 warnings generated.
+
+
+vim +/init_per_task_early +887 init/main.c
+
+   886	
+ > 887	void __init init_per_task_early(void)
+   888	{
+   889	#ifdef CONFIG_POSIX_TIMERS
+   890		per_task(&init_task, posix_cputimers) = (struct posix_cputimers) __INIT_CPU_TIMERS(init_task);
+   891	#endif
+   892	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

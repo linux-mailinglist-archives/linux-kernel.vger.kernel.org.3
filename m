@@ -2,332 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DCD506FEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D76950702C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 16:23:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347571AbiDSOTG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 10:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
+        id S1353171AbiDSOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 10:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346632AbiDSOTD (ORCPT
+        with ESMTP id S1353049AbiDSOVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 10:19:03 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBE75FE3;
-        Tue, 19 Apr 2022 07:16:18 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=e01e04400;MF=wenyang@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0VAVirkf_1650377772;
-Received: from 30.39.169.99(mailfrom:wenyang@linux.alibaba.com fp:SMTPD_---0VAVirkf_1650377772)
-          by smtp.aliyun-inc.com(127.0.0.1);
-          Tue, 19 Apr 2022 22:16:14 +0800
-Message-ID: <c33fd91c-8f8f-c82f-4e03-8799f3b8cd28@linux.alibaba.com>
-Date:   Tue, 19 Apr 2022 22:16:12 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.8.0
-Subject: Re: [RESEND PATCH 2/2] perf/x86: improve the event scheduling to
- avoid unnecessary pmu_stop/start
-From:   Wen Yang <wenyang@linux.alibaba.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Stephane Eranian <eranian@google.com>
-Cc:     Wen Yang <simon.wy@alibaba-inc.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tue, 19 Apr 2022 10:21:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4708E13CDB;
+        Tue, 19 Apr 2022 07:19:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12BDDB81975;
+        Tue, 19 Apr 2022 14:19:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3FBAC385A7;
+        Tue, 19 Apr 2022 14:19:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1650377940;
+        bh=ICxBTHVyBx6oDFSBR7idG6LwygjkNNNg6dcWhiAqEwM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=dA/ol6Zv5VYf/rCFYzrbyG6Y3fu84tC5xBn5pdPsdGnMjamFoLJLVfdzcbs66Hm2s
+         k46I1jk0NK1j12eN6otnWKIL8C1uKLABidL1P86wVA/GgcNZpXv+uSIoHYA8fL2OZq
+         PbZjYsgOq8/KjjGbxSHy49hesZ0e5jYBGFUk8qPCK4sVYQmlG0vrO8lv+z80Sr0Fpg
+         k8QtuJ7r7kPR8kRaTehbX4I4A5Fi8pcX+/5T6Hm6L6S9IncMizZIRpCKTLALB9eTo9
+         PmiTSngCO6n882Vcba2t61O3B5tbr1z+A8Pmh0sRLjGzq0RG7Utt2ljiTL0d1sVnTa
+         +AuN3x5dEEikA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.lan)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <maz@kernel.org>)
+        id 1ngoh0-005MFS-BI; Tue, 19 Apr 2022 15:18:58 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Joey Gouly <joey.gouly@arm.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Jeffrey Hugo <jeffrey.l.hugo@gmail.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        mark rutland <mark.rutland@arm.com>,
-        jiri olsa <jolsa@redhat.com>,
-        namhyung kim <namhyung@kernel.org>,
-        borislav petkov <bp@alien8.de>, x86@kernel.org,
-        "h. peter anvin" <hpa@zytor.com>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220304110351.47731-1-simon.wy@alibaba-inc.com>
- <20220304110351.47731-2-simon.wy@alibaba-inc.com>
- <YiIyrFn7upPEouVt@hirez.programming.kicks-ass.net>
- <0c119da1-053b-a2d6-1579-8fb09dbe8e63@linux.alibaba.com>
- <YidREXNn2AtI3V1c@hirez.programming.kicks-ass.net>
- <271bc186-7ffb-33c8-4934-cda2beb94816@linux.alibaba.com>
- <Yi8fELo+k9gmkJIa@hirez.programming.kicks-ass.net>
- <05861b8c-2c7c-ae89-613a-41fcace6a174@linux.alibaba.com>
- <e50c5307-8b2d-9338-0acc-9375b76c211d@linux.alibaba.com>
-In-Reply-To: <e50c5307-8b2d-9338-0acc-9375b76c211d@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        Basavaraj Natikar <Basavaraj.Natikar@amd.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, kernel-team@android.com
+Subject: [PATCH v3 00/10] gpiolib: Handle immutable irq_chip structures
+Date:   Tue, 19 Apr 2022 15:18:36 +0100
+Message-Id: <20220419141846.598305-1-maz@kernel.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-13.2 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, thierry.reding@gmail.com, joey.gouly@arm.com, jonathanh@nvidia.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, bjorn.andersson@linaro.org, agross@kernel.org, jeffrey.l.hugo@gmail.com, tglx@linutronix.de, Basavaraj.Natikar@amd.com, Shyam-sundar.S-k@amd.com, andy.shevchenko@gmail.com, linux-gpio@vger.kernel.org, linux-tegra@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, kernel-team@android.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is a followup from [2].
 
+I recently realised that the gpiolib play ugly tricks on the
+unsuspecting irq_chip structures by patching the callbacks.
 
-在 2022/4/17 下午11:06, Wen Yang 写道:
-> 
-> 
-> 在 2022/3/18 上午1:54, Wen Yang 写道:
->>
->>
->> 在 2022/3/14 下午6:55, Peter Zijlstra 写道:
->>> On Thu, Mar 10, 2022 at 11:50:33AM +0800, Wen Yang wrote:
->>>
->>>> As you pointed out, some non-compliant rdpmc can cause problems. But 
->>>> you
->>>> also know that linux is the foundation of cloud servers, and many
->>>> third-party programs run on it (we don't have any code for it), and 
->>>> we can
->>>> only observe that the monitoring data will jitter abnormally (the
->>>> probability of this issue is not high, about dozens of tens of 
->>>> thousands of
->>>> machines).
->>>
->>> This might be a novel insight, but I *really* don't give a crap about
->>> any of that. If they're not using it right, they get to keep the pieces.
->>>
->>> I'd almost make it reschedule more to force them to fix their stuff.
->>>
->>
->>
->> Thank you for your guidance.
->>
->> We also found a case in thousands of servers where the PMU counter is 
->> no longer updated due to frequent x86_pmu_stop/x86_pmu_start.
->>
->> We added logs in the kernel and found that a third-party program would 
->> cause the PMU counter to start/stop several times in just a few 
->> seconds, as follows:
->>
->>
->> [8993460.537776] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000001 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0x802a877ef302, hw.period_left=0x7fd578810cfe, 
->> event.count=0x14db802a877ecab4, event.prev_count=0x14db802a877ecab4
->> [8993460.915873] XXX x86_pmu_start line=1312 [cpu1] 
->> active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0xffff802a9cf6a166, hw.period_left=0x7fd563095e9a, 
->> event.count=0x14db802a9cf67918, event.prev_count=0x14db802a9cf67918
->> [8993461.104643] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000001 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0xffff802a9cf6a166, hw.period_left=0x7fd563095e9a, 
->> event.count=0x14db802a9cf67918, event.prev_count=0x14db802a9cf67918
->> [8993461.442508] XXX x86_pmu_start line=1312 [cpu1] 
->> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0xffff802a9cf8492e, hw.period_left=0x7fd56307b6d2, 
->> event.count=0x14db802a9cf820e0, event.prev_count=0x14db802a9cf820e0
->> [8993461.736927] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000001 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0xffff802a9cf8492e, hw.period_left=0x7fd56307b6d2, 
->> event.count=0x14db802a9cf820e0, event.prev_count=0x14db802a9cf820e0
->> [8993461.983135] XXX x86_pmu_start line=1312 [cpu1] 
->> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0xffff802a9cfc29ed, hw.period_left=0x7fd56303d613, 
->> event.count=0x14db802a9cfc019f, event.prev_count=0x14db802a9cfc019f
->> [8993462.274599] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000001 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0x802a9d24040e, hw.period_left=0x7fd562dbfbf2, 
->> event.count=0x14db802a9d23dbc0, event.prev_count=0x14db802a9d23dbc0
->> [8993462.519488] XXX x86_pmu_start line=1312 [cpu1] 
->> active_mask=200000004 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0xffff802ab0bb4719, hw.period_left=0x7fd54f44b8e7, 
->> event.count=0x14db802ab0bb1ecb, event.prev_count=0x14db802ab0bb1ecb
->> [8993462.726929] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000003 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=2, 
->> hw.prev_count=0xffff802ab0bb4719, hw.period_left=0x7fd54f44b8e7, 
->> event.count=0x14db802ab0bb1ecb, event.prev_count=0x14db802ab0bb1ecb
->> [8993463.035674] XXX x86_pmu_start line=1312 [cpu1] 
->> active_mask=200000008 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0xffff802ab0bcd328, hw.period_left=0x7fd54f432cd8, 
->> event.count=0x14db802ab0bcaada, event.prev_count=0x14db802ab0bcaada
->>
->>
->> Then, the PMU counter will not be updated：
->>
->> [8993463.333622] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802abea31354
->> [8993463.359905] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802abea31354, hw.period_left=0x7fd5415cecac, 
->> event.count=0x14db802abea2eb06,
->> [8993463.504783] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802ad8760160
->> [8993463.521138] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802ad8760160, hw.period_left=0x7fd52789fea0, 
->> event.count=0x14db802ad875d912,
->> [8993463.638337] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993463.654441] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->> [8993463.837321] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993463.861625] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->> [8993464.012398] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993464.012402] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->> [8993464.013676] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993464.013678] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->> [8993464.016123] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993464.016125] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->> [8993464.016196] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aecb4747b
->> [8993464.016199] x86_perf_event_update [cpu1] active_mask=30000000f 
->> event=ffff880a53411000, state=1, attr.config=0x0, attr.pinned=1, 
->> hw.idx=3, hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d,
->>
->> ......
->>
->>
->> Until 6 seconds later, the counter is stopped/started again：
->>
->>
->> [8993470.243959] XXX x86_pmu_stop line=1388 [cpu1] 
->> active_mask=100000001 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0x802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d, event.prev_count=0x14db802aecb44c2d
->> [8993470.243998] XXX x86_pmu_start line=1305 [cpu1] 
->> active_mask=200000000 event=ffff880a53411000, state=1, attr.type=0, 
->> attr.config=0x0, attr.pinned=1, hw.idx=3, 
->> hw.prev_count=0xffff802aecb4747b, hw.period_left=0x7fd5134b8b85, 
->> event.count=0x14db802aecb44c2d, event.prev_count=0x14db802aecb44c2d
->>
->> [8993470.245285] x86_perf_event_update, event=ffff880a53411000, 
->> new_raw_count=802aece1e6f6
->>
->> ...
->>
->> Such problems can be solved by avoiding unnecessary x86_pmu_{stop|start}.
->>
->> Please have a look again. Thanks.
->>
-> 
-> We recently tracked this issue again found that it may be related to the 
-> behavior of the third GP of  the Intel(R) Xeon(R) Platinum 8163 CPU:
-> 
-> 
-> [54511836.022997] CPU#1: ctrl:       000000070000000f
-> [54511836.022997] CPU#1: status:     0000000000000000
-> [54511836.022998] CPU#1: overflow:   0000000000000000
-> [54511836.022998] CPU#1: fixed:      00000000000000bb
-> [54511836.022998] CPU#1: pebs:       0000000000000000
-> [54511836.022999] CPU#1: debugctl:   0000000000000000
-> [54511836.022999] CPU#1: active:     000000030000000f
-> [54511836.023000] CPU#1:   gen-PMC0 ctrl:  000000000053412e
-> [54511836.023000] CPU#1:   gen-PMC0 count: 0000985b7d1a15e7
-> [54511836.023000] CPU#1:   gen-PMC0 left:  000067a483643939
-> [54511836.023001] CPU#1:   gen-PMC1 ctrl:  00000000005310d1
-> [54511836.023002] CPU#1:   gen-PMC1 count: 000080000016448e
-> [54511836.023002] CPU#1:   gen-PMC1 left:  00007ffffffffd37
-> [54511836.023003] CPU#1:   gen-PMC2 ctrl:  00000000005301d1
-> [54511836.023003] CPU#1:   gen-PMC2 count: 00008000e615b9ab
-> [54511836.023004] CPU#1:   gen-PMC2 left:  00007fffffffffff
-> [54511836.023005] CPU#1:   gen-PMC3 ctrl:  000000000053003c
-> [54511836.023005] CPU#1:   gen-PMC3 count: 0000801f6139b1e1
-> [54511836.023005] CPU#1:   gen-PMC3 left:  00007fe2a2dc14b7
-> [54511836.023006] CPU#1: fixed-PMC0 count: 00008e0fa307b34e
-> [54511836.023006] CPU#1: fixed-PMC1 count: 0000ffff3d01adb8
-> [54511836.023007] CPU#1: fixed-PMC2 count: 0000cf10d01b651e
-> 
-> 
-> The Gen-pmc3 Ctrl will be changed suddenly:
-> 
-> [54511836.023085] CPU#1: ctrl:       000000070000000f
-> [54511836.023085] CPU#1: status:     0000000000000000
-> [54511836.023085] CPU#1: overflow:   0000000000000000
-> [54511836.023086] CPU#1: fixed:      00000000000000bb
-> [54511836.023086] CPU#1: pebs:       0000000000000000
-> [54511836.023086] CPU#1: debugctl:   0000000000000000
-> [54511836.023087] CPU#1: active:     000000030000000f
-> [54511836.023087] CPU#1:   gen-PMC0 ctrl:  000000000053412e
-> [54511836.023088] CPU#1:   gen-PMC0 count: 0000985b7d1a183b
-> [54511836.023088] CPU#1:   gen-PMC0 left:  000067a483643939
-> [54511836.023089] CPU#1:   gen-PMC1 ctrl:  00000000005310d1
-> [54511836.023089] CPU#1:   gen-PMC1 count: 0000800000164ca8
-> [54511836.023090] CPU#1:   gen-PMC1 left:  00007ffffffffd37
-> [54511836.023091] CPU#1:   gen-PMC2 ctrl:  00000000005301d1
-> [54511836.023091] CPU#1:   gen-PMC2 count: 00008000e61634fd
-> [54511836.023092] CPU#1:   gen-PMC2 left:  00007fffffffffff
-> [54511836.023092] CPU#1:   gen-PMC3 ctrl:  000000010043003c
-> [54511836.023093] CPU#1:   gen-PMC3 count: 0000801f613b87d0
-> [54511836.023093] CPU#1:   gen-PMC3 left:  00007fe2a2dc14b7
-> [54511836.023094] CPU#1: fixed-PMC0 count: 00008e0fa309e091
-> [54511836.023095] CPU#1: fixed-PMC1 count: 0000ffff3d050901
-> [54511836.023095] CPU#1: fixed-PMC2 count: 0000cf10d01b651e
-> 
-> 
-> The gen-PMC3 ctrl changed,
-> 000000000053003c -> 000000010043003c
-> 
-> After that, the gen-PMC3 count remains 0000801f613b87d0 and will not be 
-> updated. A series of subsequent issues, such as abnormal CPI data, are 
-> generated.
-> 
-> However, the special value (000000010043003c) of the gen-pmc3 Ctrl is 
-> not actively set by the application. It is suspected that some special 
-> operation has caused the GP3 Ctrl to be changed, and it is still under 
-> discussion with Intel’s FAE.
-> > At present, only the above phenomenon has been observed, but the exact
-> cause has not yet been found.
+Not only this breaks when an irq_chip structure is made const (which
+really should be the default case), but it also forces this structure
+to be copied at nauseam for each instance of the GPIO block, which is
+a waste of memory.
 
+My current approach is to add a new irq_chip flag (IRQCHIP_IMMUTABLE)
+which does what it says on the tin: don't you dare writing to them.
+Gpiolib is further updated not to install its own callbacks, and it
+becomes the responsibility of the driver to call into the gpiolib when
+required. This is similar to what we do for other subsystems such as
+PCI-MSI.
 
-We finally found that TFA (TSX Force Abort) may affect PMC3's behavior, 
-refer to the following patch:
+5 drivers are updated to this new model: M1, QC, Tegra, pl061 and AMD
+(as I actively use them) keeping a single irq_chip structure, marking
+it const, and exposing the new flag.
 
-400816f60c54 perf/x86/intel:  ("Implement support for TSX Force Abort")
+Nothing breaks, the volume of change is small, the memory usage goes
+down and we have fewer callbacks that can be used as attack vectors.
+What's not to love?
 
-When the MSR gets set; the microcode will no longer use PMC3 but will
-Force Abort every TSX transaction (upon executing COMMIT).
+Since there wasn't any objection in the previous round of review, I'm
+going to take this series into -next to see if anything breaks at
+scale.
 
-When TSX Force Abort (TFA) is allowed (default); the MSR gets set when
-PMC3 gets scheduled and cleared when, after scheduling, PMC3 is
-unused.
+Thanks,
 
-When TFA is not allowed; clear PMC3 from all constraints such that it
-will not get used.
+	M.
 
+* From v2 [2]:
+  - Fixed documentation
+  - Collected RBs, with thanks
 
-> 
-> However, this patch attempts to avoid the switching of the pmu counters 
-> in various perf_events, so the special behavior of a single pmu counter 
-> will not be propagated to other events.
-> 
+* From v1 [1]:
+  - pl061 and AMD drivers converted
+  - New helpers to keep the changes small
+  - New warning for non-converted drivers
+  - Documentation and TODO updates
 
-Since PMC3 may have special behaviors, the continuous switching of PMU 
-counters may not only affects the performance, but also may lead to 
-abnormal data, please consider this patch again.
+[1] https://lore.kernel.org/r/20220223154405.54912-1-maz@kernel.org
+[2] https://lore.kernel.org/r/20220405135444.199295-1-maz@kernel.org
 
-Thanks.
+Marc Zyngier (10):
+  gpio: Don't fiddle with irqchips marked as immutable
+  gpio: Expose the gpiochip_irq_re[ql]res helpers
+  gpio: Add helpers to ease the transition towards immutable irq_chip
+  gpio: tegra186: Make the irqchip immutable
+  gpio: pl061: Make the irqchip immutable
+  pinctrl: apple-gpio: Make the irqchip immutable
+  pinctrl: msmgpio: Make the irqchip immutable
+  pinctrl: amd: Make the irqchip immutable
+  gpio: Update TODO to mention immutable irq_chip structures
+  Documentation: Update the recommended pattern for GPIO irqchips
 
-> -- 
-> Best wishes,
-> Wen
-> 
+ Documentation/driver-api/gpio/driver.rst | 175 ++++++++++++++++++-----
+ drivers/gpio/TODO                        |  19 +++
+ drivers/gpio/gpio-pl061.c                |  32 +++--
+ drivers/gpio/gpio-tegra186.c             |  32 +++--
+ drivers/gpio/gpiolib.c                   |  13 +-
+ drivers/pinctrl/pinctrl-amd.c            |  11 +-
+ drivers/pinctrl/pinctrl-apple-gpio.c     |  29 ++--
+ drivers/pinctrl/qcom/pinctrl-msm.c       |  53 ++++---
+ include/linux/gpio/driver.h              |  16 +++
+ include/linux/irq.h                      |   2 +
+ kernel/irq/debugfs.c                     |   1 +
+ 11 files changed, 293 insertions(+), 90 deletions(-)
+
+-- 
+2.34.1
+

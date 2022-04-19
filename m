@@ -2,114 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B8B0507AEE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:27:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C635507AF3
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 22:28:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357648AbiDSU3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 16:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50010 "EHLO
+        id S1346239AbiDSUat (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 16:30:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357634AbiDSU3n (ORCPT
+        with ESMTP id S241331AbiDSUaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 16:29:43 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914D637BD6
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id i20so23938253wrb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 13:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=message-id:date:mime-version:user-agent:subject:content-language:to
-         :cc:references:from:in-reply-to:content-transfer-encoding;
-        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
-        b=H6eovkAEjrrUdalXqH9x5o5ANwXAYXx7CLvPnFawTQCH6SmGtjjyiOqfvqrdRtoBNI
-         RssQb1+UpVSO/YjwFkymfQ2OMs107CLvnV3Q+ExNysayQpmHX5T6YKdo3iqM5G3akcUV
-         agfHui+RXf4FsBFmQ8ZFXKc/2q6DdBGnbSwGMFnAYaKDw6jpFuvMCdJq6IHAQd+uQ4Uh
-         5v4MxG9ws8gUx9QapfOBBYWPCEDNcyWSaFoJQ9mPzBnP1VxHVpeF98OjUZZg6xkTRo4J
-         CGIiEAWLGbFbVIb/lPLFRDpBQIbf4GUZCi6HUGlEBuGk6/HyQIg5P3+mSqALyf0TIxtW
-         eiPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
-         :content-language:to:cc:references:from:in-reply-to
-         :content-transfer-encoding;
-        bh=a+z1D78Gbz3cAV0zdLWG71fldhmePqsyHjdT7ED1WtM=;
-        b=cA8+mrBH1wV3/pmwH9eAQ6r+MjQY76SXjltCyFS23Da7dRECCWItcV/Mz40HqXx1yy
-         q9HslEsgresg+XEhXjkz116wqUqnPKNTqsSoZykMcDjqLVQPQs02B4koY0Cgg16gTd0/
-         LGJWyrCUIe1qeCIrjKPLMcpuAw8uZvmRyOLNfZ2SZ9sbwbCNsuEFUZKnQX2skRQCsaFy
-         A7zCuvOQlLNx/BG2oEecrvEHMkM4uf952r1+PBWLIkrgCmF7OmPHhmk24e8XAavnmADX
-         qZIA1ng2R1rUvsPB3l3F/m/ihKOECb57SLmLFKVv+sc+QLZBa0SNqaq7s5ZzD34t/0Ok
-         3Sbw==
-X-Gm-Message-State: AOAM533YmeXv8vJPqRVXtzIoWRdpwEKDRXMbz0zap4Z+1CqVL3oihg5E
-        6U5yE2R332iNiKONH2Z0gjCDKfuZhYqSdQ==
-X-Google-Smtp-Source: ABdhPJwadU/RPjdcz9vJPtrUlDEVudxpsmovS/6ztZj6n6p7UGQGVzfxzpSfgmyJBLoSxNrZaMeufw==
-X-Received: by 2002:adf:eed0:0:b0:207:9b35:62c4 with SMTP id a16-20020adfeed0000000b002079b3562c4mr12799484wrp.509.1650400018109;
-        Tue, 19 Apr 2022 13:26:58 -0700 (PDT)
-Received: from [192.168.1.41] (176-182-171-101.abo.bbox.fr. [176.182.171.101])
-        by smtp.googlemail.com with ESMTPSA id o10-20020a5d47ca000000b0020a992ce36esm5574680wrc.1.2022.04.19.13.26.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Apr 2022 13:26:57 -0700 (PDT)
-Message-ID: <51d63f20-4834-184b-2ac2-30c399bd9988@linaro.org>
-Date:   Tue, 19 Apr 2022 22:26:56 +0200
+        Tue, 19 Apr 2022 16:30:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F239B3AA4D;
+        Tue, 19 Apr 2022 13:28:02 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B5F0E106F;
+        Tue, 19 Apr 2022 13:28:02 -0700 (PDT)
+Received: from [10.57.41.251] (unknown [10.57.41.251])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 495383F73B;
+        Tue, 19 Apr 2022 13:28:00 -0700 (PDT)
+Message-ID: <52df6c79-3ee7-35e2-b72a-44ee9cb48c34@arm.com>
+Date:   Tue, 19 Apr 2022 21:27:54 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH v2 0/4] tools/thermal: thermal library and tools
-Content-Language: en-US
-To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20220330100444.3846661-1-daniel.lezcano@linaro.org>
- <f526d227-ffbb-4ac0-ceb6-c793ab912559@linaro.org>
- <5380fef6d45f2f7a0b8a5f681934f02943d5e138.camel@linux.intel.com>
- <9ccb342b-2f20-6efd-a668-96d593aa921e@linaro.org>
- <CAJZ5v0hrRuVz8pgD6-m7EhVdHPPn67O4ajx_7vkOOOYdTkv2BQ@mail.gmail.com>
- <0181977f5843fb9df4eae7d397d96c890846a0db.camel@linux.intel.com>
- <f1d2b1c7a9691c64ece07fbc1fc5a2d4e70aa00a.camel@linux.intel.com>
- <916d2e4c-7224-f824-f3cf-5c1dee411ed1@linaro.org>
- <dc9b317f88f7d43cd30141376156c0f3eec687d8.camel@linux.intel.com>
- <ba3cbf3d-938b-1530-1178-68b447f20a9c@linaro.org>
- <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <f7e4f4604f122dfab4aa5e589d68eb2c8773e00d.camel@linux.intel.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [Patch v1] iommu: arm-smmu: disable large page mappings for
+ Nvidia arm-smmu
+Content-Language: en-GB
+To:     Ashish Mhetre <amhetre@nvidia.com>, thierry.reding@gmail.com,
+        vdumpa@nvidia.com, will@kernel.org, joro@8bytes.org,
+        jonathanh@nvidia.com, linux-tegra@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org
+Cc:     nicolinc@nvidia.com, Snikam@nvidia.com,
+        Pritesh Raithatha <praithatha@nvidia.com>
+References: <20220417090432.21110-1-amhetre@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220417090432.21110-1-amhetre@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-04-17 10:04, Ashish Mhetre wrote:
+> Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
+> entries to not be invalidated correctly. The problem is that the walk
+> cache index generated for IOVA is not same across translation and
+> invalidation requests. This is leading to page faults when PMD entry is
+> released during unmap and populated with new PTE table during subsequent
+> map request. Disabling large page mappings avoids the release of PMD
+> entry and avoid translations seeing stale PMD entry in walk cache.
+> Fix this by limiting the page mappings to PAGE_SIZE for Tegra194 and
+> Tegra234 devices. This is recommended fix from Tegra hardware design
+> team.
 
-Hi Srinivas,
+Is this related to any of the several known MMU-500 invalidation errata, 
+or is it definitely specific to something NVIDIA have done with their 
+integration?
 
-
-On 18/04/2022 05:36, srinivas pandruvada wrote:
-> Hi Daniel,
+> Co-developed-by: Pritesh Raithatha <praithatha@nvidia.com>
+> Signed-off-by: Pritesh Raithatha <praithatha@nvidia.com>
+> Signed-off-by: Ashish Mhetre <amhetre@nvidia.com>
+> ---
+>   drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c | 23 ++++++++++++++++++++
+>   drivers/iommu/arm/arm-smmu/arm-smmu.c        |  3 +++
+>   drivers/iommu/arm/arm-smmu/arm-smmu.h        |  1 +
+>   3 files changed, 27 insertions(+)
 > 
-> The attached diff fixes the crash,
-> 
-> Also when you run in daemon mode, you need to use some pid lock file.
-> Otherwise it launches multiple daemons.
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+> index 01e9b50b10a1..b7a3d06da2f4 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-nvidia.c
+> @@ -258,6 +258,27 @@ static void nvidia_smmu_probe_finalize(struct arm_smmu_device *smmu, struct devi
+>   			dev_name(dev), err);
+>   }
+>   
+> +static void nvidia_smmu_cfg_pgsize_bitmap(struct arm_smmu_device *smmu)
+> +{
+> +	const struct device_node *np = smmu->dev->of_node;
+> +
+> +	/*
+> +	 * Tegra194 and Tegra234 SoCs have the erratum that causes walk cache
+> +	 * entries to not be invalidated correctly. The problem is that the walk
+> +	 * cache index generated for IOVA is not same across translation and
+> +	 * invalidation requests. This is leading to page faults when PMD entry
+> +	 * is released during unmap and populated with new PTE table during
+> +	 * subsequent map request. Disabling large page mappings avoids the
+> +	 * release of PMD entry and avoid translations seeing stale PMD entry in
+> +	 * walk cache.
+> +	 * Fix this by limiting the page mappings to PAGE_SIZE on Tegra194 and
+> +	 * Tegra234.
+> +	 */
+> +	if (of_device_is_compatible(np, "nvidia,tegra234-smmu") ||
+> +	    of_device_is_compatible(np, "nvidia,tegra194-smmu"))
+> +		smmu->pgsize_bitmap = PAGE_SIZE;
+> +}
+> +
+>   static const struct arm_smmu_impl nvidia_smmu_impl = {
+>   	.read_reg = nvidia_smmu_read_reg,
+>   	.write_reg = nvidia_smmu_write_reg,
+> @@ -268,10 +289,12 @@ static const struct arm_smmu_impl nvidia_smmu_impl = {
+>   	.global_fault = nvidia_smmu_global_fault,
+>   	.context_fault = nvidia_smmu_context_fault,
+>   	.probe_finalize = nvidia_smmu_probe_finalize,
+> +	.cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
+>   };
+>   
+>   static const struct arm_smmu_impl nvidia_smmu_single_impl = {
+>   	.probe_finalize = nvidia_smmu_probe_finalize,
+> +	.cfg_pgsize_bitmap = nvidia_smmu_cfg_pgsize_bitmap,
+>   };
+>   
+>   struct arm_smmu_device *nvidia_smmu_impl_init(struct arm_smmu_device *smmu)
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.c b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> index 568cce590ccc..3692a19a588a 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.c
+> @@ -1872,6 +1872,9 @@ static int arm_smmu_device_cfg_probe(struct arm_smmu_device *smmu)
+>   	if (smmu->features & ARM_SMMU_FEAT_FMT_AARCH64_64K)
+>   		smmu->pgsize_bitmap |= SZ_64K | SZ_512M;
+>   
+> +	if (smmu->impl && smmu->impl->cfg_pgsize_bitmap)
+> +		smmu->impl->cfg_pgsize_bitmap(smmu);
 
-I've been thinking about it and I don't think it is a problem to have 
-multiple instances of the daemon. The netlink allows multicast and can 
-be run as non-root user.
+I'm not the biggest fan of adding a super-specific hook for this, when 
+it seems like it could just as easily be handled in the init_context 
+hook, which is where it is precisely for the purpose of mangling the 
+pgtable_cfg to influence io-pgtable's behaviour.
 
-If the finality of the thermal engine is to manage the system and has 
-some code making actions on the system with the root privilege, the init 
-scripts can take care of the pid lock
+Thanks,
+Robin.
 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> +
+>   	if (arm_smmu_ops.pgsize_bitmap == -1UL)
+>   		arm_smmu_ops.pgsize_bitmap = smmu->pgsize_bitmap;
+>   	else
+> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu.h b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> index 2b9b42fb6f30..5d9b03024969 100644
+> --- a/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu.h
+> @@ -442,6 +442,7 @@ struct arm_smmu_impl {
+>   	void (*write_s2cr)(struct arm_smmu_device *smmu, int idx);
+>   	void (*write_sctlr)(struct arm_smmu_device *smmu, int idx, u32 reg);
+>   	void (*probe_finalize)(struct arm_smmu_device *smmu, struct device *dev);
+> +	void (*cfg_pgsize_bitmap)(struct arm_smmu_device *smmu);
+>   };
+>   
+>   #define INVALID_SMENDX			-1

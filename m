@@ -2,342 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCCE5506F4B
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:54:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37FC3506E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 15:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352972AbiDSNty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 09:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43508 "EHLO
+        id S1352237AbiDSNkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 09:40:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353012AbiDSNsg (ORCPT
+        with ESMTP id S237074AbiDSNkf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 09:48:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540B63A70D;
-        Tue, 19 Apr 2022 06:42:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D5DD61701;
-        Tue, 19 Apr 2022 13:42:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC2AC385A8;
-        Tue, 19 Apr 2022 13:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1650375765;
-        bh=8SjzAPUXuyYdBuZeXZuWD8MKomlpKInJxereWCjPZ2I=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bj8mAfqJbG9f8Tobba/toXaBDXDawlf39Zvj89ZdO7BT9DK41wGfqz76jTefdrSEI
-         5fvlfnruKntbjDgqHcKXFufc4Snzc7dab3DhYtrv1nLsbCXUbZu8wF7NzSJWMV5g9z
-         AxX8EDmfEpWS0NSFAcK/h1N2dYbjZouOPvfBrRp8Yku0+eXnmTkJ0HgkOMpCkCFQVp
-         RtpYkkA3hWaBy4EpijHEnvBQJhZIibL9D6mWCbs59B0bEmpOItzdFj3W5Xp78MvQ4S
-         iDAJ8RELJYOIwSYN+G2TH4AZ+tiI+GOUOR2OqcabCyrQ6runsc7yurMih4Uk4KdqJr
-         uD0LTru/eQVkw==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     linux-omap@vger.kernel.org, tony@atomide.com, aaro.koskinen@iki.fi,
-        jmkrzyszt@gmail.com
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Paul Walmsley <paul@pwsan.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Mark Brown <broonie@kernel.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Lee Jones <lee.jones@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-mmc@vger.kernel.org,
-        linux-serial@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH 41/41] [TO BE REBASED] ARM: omap1: enable multiplatform
-Date:   Tue, 19 Apr 2022 15:37:23 +0200
-Message-Id: <20220419133723.1394715-42-arnd@kernel.org>
-X-Mailer: git-send-email 2.29.2
-In-Reply-To: <20220419133723.1394715-1-arnd@kernel.org>
-References: <20220419133723.1394715-1-arnd@kernel.org>
+        Tue, 19 Apr 2022 09:40:35 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A964837AA3;
+        Tue, 19 Apr 2022 06:37:50 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id r19so4788278wmq.0;
+        Tue, 19 Apr 2022 06:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=BKJP+wMrhLiv8U5mTohtsHkHVrvr/Qn6/7wcj0YmhTU=;
+        b=KdaXrlnGCGTk+uPwx5slgKSFhnCLkbBPxUSL24gpJtec6AR0NnpchiHu4In5Ly1UsB
+         rXLZJ6GUAqjlmTHfVbhaxGzJ+AeoX7RXfjpE19dQYXAfmWCL1NGsKP+9gGeeggoOeocu
+         uxLTgHkscj2XdEc3tYKTux1IJx+e3FYvcy0A2oZaL9Vh0WHEd1hp7ed0hxiDrXL3zopH
+         SnUnzCXBB9R39gE/VoxX7/G4JHPFA5B6AlHuzOWvG3vTHwBYFAakkcNvfTEKvef+hpby
+         hW7L7spMZ+OUvwD/21tsN3aGHitmM87X/weekFDpGcZ9efcpvJYsJvgLJOdweorDjtps
+         m79w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=BKJP+wMrhLiv8U5mTohtsHkHVrvr/Qn6/7wcj0YmhTU=;
+        b=t2EapMsfTBGMn0zTzR1lAnzN6gJYx0blij4uUey+Hejmhz48L0h6a2EhdQIwbeN4oP
+         lyF5dCCSZetvbNcZNZZYNiMJIXHxVqIWAiwzTIlvCTJwVDqAX1cyXmUAKDvP2SYMX17n
+         NgDvW5LzqZhJgBzcLrcLUVlLIfi1lIYL4oFWOaMsquHqRcaOeSequXNCnHfi3A8Su6jv
+         AAL1wAabmCJXrYRgDGs7OzP2a5pO5R2sLUsUHcV7k6xJlQldMXysOsn+Iz//ydk/Oogl
+         tRwhop3JjXkN+TBRUHBQX+joU0onDbX8DQk+YN2zfBrdqPLt7LyBwxKKEcgZ3TSDiaK3
+         3yJQ==
+X-Gm-Message-State: AOAM5331WqI5zPzdho2NH2wE/9tHiBVYuugsiYtqzFgRJQTarCqKfoJb
+        G/MbewBV96kwIHOPiJhh0+0=
+X-Google-Smtp-Source: ABdhPJxDwv1X+/hRo9xop6SusTrN9bqC+b3UgjZEDmS4PvBBI8m7xydBHlVoZ0adElhpenF0fFUI4A==
+X-Received: by 2002:a1c:f719:0:b0:381:ba:5247 with SMTP id v25-20020a1cf719000000b0038100ba5247mr16059496wmh.183.1650375469098;
+        Tue, 19 Apr 2022 06:37:49 -0700 (PDT)
+Received: from [192.168.1.5] ([102.41.109.205])
+        by smtp.gmail.com with ESMTPSA id c12-20020a05600c0a4c00b00381141f4967sm17985490wmq.35.2022.04.19.06.37.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 06:37:48 -0700 (PDT)
+Message-ID: <21796697-e4e1-bf51-76fc-bdb0e28d6b60@gmail.com>
+Date:   Tue, 19 Apr 2022 15:37:47 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3] intel: igb: igb_ethtool.c: Convert kmap() to
+ kmap_local_page()
+Content-Language: en-US
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+        jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220416111457.5868-1-eng.alaamohamedsoliman.am@gmail.com>
+ <alpine.DEB.2.22.394.2204161331080.3501@hadrien>
+ <df4c0f81-454d-ab96-1d74-1c4fbc3dbd63@gmail.com>
+ <Yl3j/bOvoX13WGSW@iweiny-desk3>
+From:   Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+In-Reply-To: <Yl3j/bOvoX13WGSW@iweiny-desk3>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-With all the header files out of the way, and the clock driver
-converted to the common framework, nothing stops us from building
-OMAP together with the other platforms.
+On ١٩‏/٤‏/٢٠٢٢ ٠٠:١٩, Ira Weiny wrote:
+> On Sat, Apr 16, 2022 at 03:14:57PM +0200, Alaa Mohamed wrote:
+>>     On ١٦‏/٤‏/٢٠٢٢ ١٣:٣١, Julia Lawall wrote:
+>>
+>>
+>>   On Sat, 16 Apr 2022, Alaa Mohamed wrote:
+>>
+>>
+>>   Convert kmap() to kmap_local_page()
+>>
+>>   With kmap_local_page(), the mapping is per thread, CPU local and not
+>>   globally visible.
+>>
+>>   It's not clearer.
+>>
+>>     I mean this " fix kunmap_local path value to take address of the mapped
+>>     page" be more clearer
+>>
+>>   This is a general statement about the function.  You
+>>   need to explain why it is appropriate to use it here.  Unless it is the
+>>   case that all calls to kmap should be converted to call kmap_local_page.
+>>
+>>     It's required to convert all calls kmap to kmap_local_page. So, I don't
+>>     what should the commit message be?
+>>
+>>     Is this will be good :
+>>
+>>     "kmap_local_page() was recently developed as a replacement for kmap().
+>>     The
+>>     kmap_local_page() creates a mapping which is restricted to local use by a
+>>     single thread of execution. "
+>>
+> I think I am missing some thread context here.  I'm not sure who said what
+> above.  So I'm going to start over.
+>
+> Alaa,
+>
+> It is important to remember that a good commit message says 2 things.
+>
+> 	1) What is the problem you are trying to solve
+> 	2) Overview of the solution
+>
+> First off I understand your frustration.  In my opinion fixes and clean ups
+> like this are very hard to write good commit messages for because so often the
+> code diff seems so self explanatory.  However, each code change comes at the
+> identification of a problem.  And remember that 'problem' does not always mean
+> a bug fix.
+>
+> The deprecation of kmap() may not seem like a problem.  I mean why can't we
+> just leave kmap() as it is?  It works right?
+>
+> But the problem is that the kmap (highmem) interface has become stale and its
+> original purpose was targeted toward large memory systems with 32 bit kernels.
+> There are very few systems being run like that any longer.
+>
+> So how do we clean up the kmap interface to be more useful to the kernel
+> community now that 32 bit kernels with highmem are so rare?
+>
+> The community has identified that a first step of that is to move away from and
+> eventually remove the kmap() call.  This is due to the call being incorrectly
+> used to create long term mappings.  Most calls to kmap() are not used
+> incorrectly but those call sites needed something in between kmap() and
+> kmap_atmoic().  That call is kmap_local_page().
+>
+> Now that kmap_local_page() exists the kmap() calls can be audited and most (I
+> hope most)[1] can be replaced with kmap_local_page().
+>
+> The change you have below is correct.  But it lacks a good commit message.  We
+> need to cover the 2 points above.
+>
+> 	1) Julia is asking why you needed to do this change.  What is the
+> 	   problem or reason for this change?  (Ira told you to is not a good
+> 	   reason.  ;-)
+>
+> 	   PS In fact me telling you to may actually be a very bad reason...
+> 	   j/k ;-)
+>
+> 	2) Why is this solution ok as part of the deprecation and removal of
+> 	   kmap()?
+>
+> A final note; the 2 above points don't need a lot of text.  Here I used
+> 2 simple sentences.
+>
+> https://lore.kernel.org/lkml/20220124015409.807587-2-ira.weiny@intel.com/
+>
+> I hope this helps,
+> Ira
+>
+> [1] But not all...  some uses of kmap() have been identified as being pretty
+> complex.
 
-As usual, the decompressor support is a victim here, and is
-only available when CONFIG_DEBUG_LL is configured for the
-particular board.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm/Kconfig                              |  12 --
- arch/arm/configs/omap1_defconfig              |   3 +
- arch/arm/mach-omap1/Kconfig                   |  15 +++
- arch/arm/mach-omap1/hardware.h                |   2 +-
- arch/arm/mach-omap1/include/mach/uncompress.h | 117 ------------------
- arch/arm/mach-omap1/serial.c                  |   3 +-
- .../mach-omap1/{include/mach => }/serial.h    |   0
- 7 files changed, 20 insertions(+), 132 deletions(-)
- delete mode 100644 arch/arm/mach-omap1/include/mach/uncompress.h
- rename arch/arm/mach-omap1/{include/mach => }/serial.h (100%)
+Thanks a lot for detailed explaining , yes you help me a lot.
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index a65f2c05f01c..8794c6bee29b 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -483,18 +483,6 @@ config ARCH_S3C24XX
- 	  (<http://www.simtec.co.uk/products/EB110ITX/>), the IPAQ 1940 or the
- 	  Samsung SMDK2410 development board (and derivatives).
- 
--config ARCH_OMAP1
--	bool "TI OMAP1"
--	select CLKSRC_MMIO
--	select FORCE_PCI if PCCARD
--	select GENERIC_IRQ_CHIP
--	select GPIOLIB
--	select HAVE_LEGACY_CLK
--	select IRQ_DOMAIN
--	select SPARSE_IRQ
--	help
--	  Support for older TI OMAP1 (omap7xx, omap15xx or omap16xx)
--
- endchoice
- 
- menu "Multiple platform selection"
-diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-index 3148567b66b6..14c17a218ec5 100644
---- a/arch/arm/configs/omap1_defconfig
-+++ b/arch/arm/configs/omap1_defconfig
-@@ -17,6 +17,9 @@ CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODULE_FORCE_UNLOAD=y
- # CONFIG_BLK_DEV_BSG is not set
-+CONFIG_ARCH_MULTI_V4T=y
-+CONFIG_ARCH_MULTI_V5=y
-+# CONFIG_ARCH_MULTI_V7 is not set
- CONFIG_ARCH_OMAP=y
- CONFIG_ARCH_OMAP1=y
- CONFIG_OMAP_RESET_CLOCKS=y
-diff --git a/arch/arm/mach-omap1/Kconfig b/arch/arm/mach-omap1/Kconfig
-index d4b0cd91a4f9..9a7e5460b36a 100644
---- a/arch/arm/mach-omap1/Kconfig
-+++ b/arch/arm/mach-omap1/Kconfig
-@@ -1,4 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+menuconfig ARCH_OMAP1
-+	bool "TI OMAP1"
-+	depends on ARCH_MULTI_V4T || ARCH_MULTI_V5
-+	select ARCH_HAS_HOLES_MEMORYMODEL
-+	select ARCH_OMAP
-+	select CLKSRC_MMIO
-+	select FORCE_PCI if PCCARD
-+	select GPIOLIB
-+	help
-+	  Support for older TI OMAP1 (omap7xx, omap15xx or omap16xx)
-+
- if ARCH_OMAP1
- 
- menu "TI OMAP1 specific features"
-@@ -6,23 +17,27 @@ menu "TI OMAP1 specific features"
- comment "OMAP Core Type"
- 
- config ARCH_OMAP730
-+	depends on ARCH_MULTI_V5
- 	bool "OMAP730 Based System"
- 	select ARCH_OMAP_OTG
- 	select CPU_ARM926T
- 	select OMAP_MPU_TIMER
- 
- config ARCH_OMAP850
-+	depends on ARCH_MULTI_V5
- 	bool "OMAP850 Based System"
- 	select ARCH_OMAP_OTG
- 	select CPU_ARM926T
- 
- config ARCH_OMAP15XX
-+	depends on ARCH_MULTI_V4T
- 	default y
- 	bool "OMAP15xx Based System"
- 	select CPU_ARM925T
- 	select OMAP_MPU_TIMER
- 
- config ARCH_OMAP16XX
-+	depends on ARCH_MULTI_V5
- 	bool "OMAP16xx Based System"
- 	select ARCH_OMAP_OTG
- 	select CPU_ARM926T
-diff --git a/arch/arm/mach-omap1/hardware.h b/arch/arm/mach-omap1/hardware.h
-index 1af0238f8c05..4c3920ba83e3 100644
---- a/arch/arm/mach-omap1/hardware.h
-+++ b/arch/arm/mach-omap1/hardware.h
-@@ -64,7 +64,7 @@ static inline u32 omap_cs3_phys(void)
- #define OMAP1_IO_OFFSET		0x00fb0000	/* Virtual IO = 0xff000000 */
- #define OMAP1_IO_ADDRESS(pa)	IOMEM((pa) - OMAP1_IO_OFFSET)
- 
--#include <mach/serial.h>
-+#include "serial.h"
- 
- /*
-  * ---------------------------------------------------------------------------
-diff --git a/arch/arm/mach-omap1/include/mach/uncompress.h b/arch/arm/mach-omap1/include/mach/uncompress.h
-deleted file mode 100644
-index 9cca6a56788f..000000000000
---- a/arch/arm/mach-omap1/include/mach/uncompress.h
-+++ /dev/null
-@@ -1,117 +0,0 @@
--/*
-- * arch/arm/plat-omap/include/mach/uncompress.h
-- *
-- * Serial port stubs for kernel decompress status messages
-- *
-- * Initially based on:
-- * linux-2.4.15-rmk1-dsplinux1.6/arch/arm/plat-omap/include/mach1510/uncompress.h
-- * Copyright (C) 2000 RidgeRun, Inc.
-- * Author: Greg Lonnon <glonnon@ridgerun.com>
-- *
-- * Rewritten by:
-- * Author: <source@mvista.com>
-- * 2004 (c) MontaVista Software, Inc.
-- *
-- * This file is licensed under the terms of the GNU General Public License
-- * version 2. This program is licensed "as is" without any warranty of any
-- * kind, whether express or implied.
-- */
--
--#include <linux/types.h>
--#include <linux/serial_reg.h>
--
--#include <asm/memory.h>
--#include <asm/mach-types.h>
--
--#include "serial.h"
--
--#define MDR1_MODE_MASK			0x07
--
--volatile u8 *uart_base;
--int uart_shift;
--
--/*
-- * Store the DEBUG_LL uart number into memory.
-- * See also debug-macro.S, and serial.c for related code.
-- */
--static void set_omap_uart_info(unsigned char port)
--{
--	/*
--	 * Get address of some.bss variable and round it down
--	 * a la CONFIG_AUTO_ZRELADDR.
--	 */
--	u32 ram_start = (u32)&uart_shift & 0xf8000000;
--	u32 *uart_info = (u32 *)(ram_start + OMAP_UART_INFO_OFS);
--	*uart_info = port;
--}
--
--static inline void putc(int c)
--{
--	if (!uart_base)
--		return;
--
--	/* Check for UART 16x mode */
--	if ((uart_base[UART_OMAP_MDR1 << uart_shift] & MDR1_MODE_MASK) != 0)
--		return;
--
--	while (!(uart_base[UART_LSR << uart_shift] & UART_LSR_THRE))
--		barrier();
--	uart_base[UART_TX << uart_shift] = c;
--}
--
--static inline void flush(void)
--{
--}
--
--/*
-- * Macros to configure UART1 and debug UART
-- */
--#define _DEBUG_LL_ENTRY(mach, dbg_uart, dbg_shft, dbg_id)		\
--	if (machine_is_##mach()) {					\
--		uart_base = (volatile u8 *)(dbg_uart);			\
--		uart_shift = (dbg_shft);				\
--		port = (dbg_id);					\
--		set_omap_uart_info(port);				\
--		break;							\
--	}
--
--#define DEBUG_LL_OMAP7XX(p, mach)					\
--	_DEBUG_LL_ENTRY(mach, OMAP1_UART##p##_BASE, OMAP7XX_PORT_SHIFT,	\
--		OMAP1UART##p)
--
--#define DEBUG_LL_OMAP1(p, mach)						\
--	_DEBUG_LL_ENTRY(mach, OMAP1_UART##p##_BASE, OMAP_PORT_SHIFT,	\
--		OMAP1UART##p)
--
--static inline void arch_decomp_setup(void)
--{
--	int port = 0;
--
--	/*
--	 * Initialize the port based on the machine ID from the bootloader.
--	 * Note that we're using macros here instead of switch statement
--	 * as machine_is functions are optimized out for the boards that
--	 * are not selected.
--	 */
--	do {
--		/* omap7xx/8xx based boards using UART1 with shift 0 */
--		DEBUG_LL_OMAP7XX(1, herald);
--		DEBUG_LL_OMAP7XX(1, omap_perseus2);
--
--		/* omap15xx/16xx based boards using UART1 */
--		DEBUG_LL_OMAP1(1, ams_delta);
--		DEBUG_LL_OMAP1(1, nokia770);
--		DEBUG_LL_OMAP1(1, omap_h2);
--		DEBUG_LL_OMAP1(1, omap_h3);
--		DEBUG_LL_OMAP1(1, omap_innovator);
--		DEBUG_LL_OMAP1(1, omap_osk);
--		DEBUG_LL_OMAP1(1, omap_palmte);
--		DEBUG_LL_OMAP1(1, omap_palmz71);
--
--		/* omap15xx/16xx based boards using UART2 */
--		DEBUG_LL_OMAP1(2, omap_palmtt);
--
--		/* omap15xx/16xx based boards using UART3 */
--		DEBUG_LL_OMAP1(3, sx1);
--	} while (0);
--}
-diff --git a/arch/arm/mach-omap1/serial.c b/arch/arm/mach-omap1/serial.c
-index 299ae1106187..88928fc33b2e 100644
---- a/arch/arm/mach-omap1/serial.c
-+++ b/arch/arm/mach-omap1/serial.c
-@@ -19,8 +19,7 @@
- 
- #include <asm/mach-types.h>
- 
--#include <mach/serial.h>
--
-+#include "serial.h"
- #include "mux.h"
- #include "pm.h"
- #include "soc.h"
-diff --git a/arch/arm/mach-omap1/include/mach/serial.h b/arch/arm/mach-omap1/serial.h
-similarity index 100%
-rename from arch/arm/mach-omap1/include/mach/serial.h
-rename to arch/arm/mach-omap1/serial.h
--- 
-2.29.2
 
+Thanks again,
+
+Alaa
+
+>>   julia
+>>
+>>
+>>   Signed-off-by: Alaa Mohamed <eng.alaamohamedsoliman.am@gmail.com>
+>>   ---
+>>   changes in V2:
+>>           fix kunmap_local path value to take address of the mapped page.
+>>   ---
+>>   changes in V3:
+>>           edit commit message to be clearer
+>>   ---
+>>    drivers/net/ethernet/intel/igb/igb_ethtool.c | 4 ++--
+>>    1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>>   diff --git a/drivers/net/ethernet/intel/igb/igb_ethtool.c b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>>   index 2a5782063f4c..c14fc871dd41 100644
+>>   --- a/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>>   +++ b/drivers/net/ethernet/intel/igb/igb_ethtool.c
+>>   @@ -1798,14 +1798,14 @@ static int igb_check_lbtest_frame(struct igb_rx_buffer *rx_buffer,
+>>
+>>           frame_size >>= 1;
+>>
+>>   -       data = kmap(rx_buffer->page);
+>>   +       data = kmap_local_page(rx_buffer->page);
+>>
+>>           if (data[3] != 0xFF ||
+>>               data[frame_size + 10] != 0xBE ||
+>>               data[frame_size + 12] != 0xAF)
+>>                   match = false;
+>>
+>>   -       kunmap(rx_buffer->page);
+>>   +       kunmap_local(data);
+>>
+>>           return match;
+>>    }
+>>   --
+>>   2.35.2

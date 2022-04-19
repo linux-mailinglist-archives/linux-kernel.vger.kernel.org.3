@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21A85060D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:16:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E8A45060D8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbiDSAS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S240041AbiDSASp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:18:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239543AbiDSASM (ORCPT
+        with ESMTP id S239908AbiDSASM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 18 Apr 2022 20:18:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68F61140B9;
-        Mon, 18 Apr 2022 17:15:29 -0700 (PDT)
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A786513F7A;
+        Mon, 18 Apr 2022 17:15:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 800DE61345;
-        Tue, 19 Apr 2022 00:15:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CBD4C385C8;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 198E9B81144;
+        Tue, 19 Apr 2022 00:15:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77CCFC385C7;
         Tue, 19 Apr 2022 00:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650327327;
-        bh=l24NnFXImrXB1wlbsG6oWhuBGpxHWz1mLxrXcL33cVY=;
+        bh=Z7Z+/eQ/03NPG8mWKEObyqFMOTj5dMlYTAeNOeALIjA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bUTKNJSM9grlp7vlX57pNLQxKxFEGipN1VRjs6VBPtKUcfSokqFjqUaSguld5nsh1
-         nCsTjPgdvpw/FvXxPMZlgqiUoCHhor5R+bsjNrXV/yX0vlQAVokyqBEzBegHOJQhE0
-         eGm8bLojrdcvi554q/tfbf+1LTEl7/OX0bitRYOBsHl+tbKVSASfzVRBX7Hky72ler
-         5Ikdg5utDuAQLBURH4eBGppQSHtEhzGnBMEAXza+ywDbacFW7YRLJsjYoaz4z+Xp8A
-         5bJ1hs9cAjvRrZIe7PXOhwSMXukjEAiDdYrhPZyNqgFurZ+l8X8iv16SDBBUa9XMPx
-         az00sVM0GCEkQ==
+        b=VqD0HhKa9Pblww39evtkphIAXQObNV3BBKZOw9aESctc7G3Ph7/yhXDIEaf0vwg3P
+         aGExQUK1y/hGEtfc6AI1KIaN/te0dvqI1ZGRVIKgAFdZuOhbXKn4YCnh8UyS8MVv0E
+         /qA+gEZ9cM47QlXnpDvuzvb7TmzuCWZgDEX6A9dksw6o5yy+pNzyFk2y0s46LC5ok1
+         S6wVVhMkZp8yha6TSByMMSy5AU/8g/pTGl6FiqeQ1SMBAoVNMIP/jML4Wwl2c8muev
+         GPq08sIS12yFNNz38XHV/giYWRiXEccOsW4ecevqqcDG3VsNn/rUpovoHyAhi8nV5D
+         /3+dAADz1grEQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id CEF3A5C0DFD; Mon, 18 Apr 2022 17:15:26 -0700 (PDT)
+        id D0B545C121E; Mon, 18 Apr 2022 17:15:26 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 07/12] rcutorture: Adjust scenarios' Kconfig options for CONFIG_PREEMPT_DYNAMIC
-Date:   Mon, 18 Apr 2022 17:15:20 -0700
-Message-Id: <20220419001525.3950505-7-paulmck@kernel.org>
+Subject: [PATCH rcu 08/12] scftorture: Remove extraneous "scf" from per_version_boot_params
+Date:   Mon, 18 Apr 2022 17:15:21 -0700
+Message-Id: <20220419001525.3950505-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419001519.GA3950405@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419001519.GA3950405@paulmck-ThinkPad-P17-Gen-1>
@@ -56,78 +56,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that CONFIG_PREEMPT_DYNAMIC=y is the default, kernels that are
-ostensibly built with CONFIG_PREEMPT_NONE=y or CONFIG_PREEMPT_VOLUNTARY=y
-are now actually built with CONFIG_PREEMPT=y, but are by default booted
-so as to disable preemption.  Although this allows much more flexibility
-from a single kernel binary, it means that the current rcutorture
-scenarios won't find build errors that happen only when preemption is
-fully disabled at build time.
-
-This commit therefore adds CONFIG_PREEMPT_DYNAMIC=n to several scenarios,
-and while in the area switches one from CONFIG_PREEMPT_NONE=y to
-CONFIG_PREEMPT_VOLUNTARY=y to add coverage of this Kconfig option.
+There is an extraneous "scf" in the per_version_boot_params shell function
+used by scftorture.  No harm done in that it is just passed as an argument
+to the /init program in initrd, but this commit nevertheless removes it.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/testing/selftests/rcutorture/configs/rcu/TRACE01 | 1 +
- tools/testing/selftests/rcutorture/configs/rcu/TREE04  | 5 +++--
- tools/testing/selftests/rcutorture/configs/rcu/TREE07  | 1 +
- tools/testing/selftests/rcutorture/configs/rcu/TREE10  | 1 +
- 4 files changed, 6 insertions(+), 2 deletions(-)
+ .../testing/selftests/rcutorture/configs/scf/ver_functions.sh  | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TRACE01 b/tools/testing/selftests/rcutorture/configs/rcu/TRACE01
-index e4d74e5fc1d0..b54cefde6e87 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TRACE01
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TRACE01
-@@ -4,6 +4,7 @@ CONFIG_HOTPLUG_CPU=y
- CONFIG_PREEMPT_NONE=y
- CONFIG_PREEMPT_VOLUNTARY=n
- CONFIG_PREEMPT=n
-+CONFIG_PREEMPT_DYNAMIC=n
- CONFIG_DEBUG_LOCK_ALLOC=n
- CONFIG_PROVE_LOCKING=n
- #CHECK#CONFIG_PROVE_RCU=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE04 b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-index 22ad0261728d..ae395981b5e5 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE04
-@@ -1,8 +1,9 @@
- CONFIG_SMP=y
- CONFIG_NR_CPUS=8
--CONFIG_PREEMPT_NONE=y
--CONFIG_PREEMPT_VOLUNTARY=n
-+CONFIG_PREEMPT_NONE=n
-+CONFIG_PREEMPT_VOLUNTARY=y
- CONFIG_PREEMPT=n
-+CONFIG_PREEMPT_DYNAMIC=n
- #CHECK#CONFIG_TREE_RCU=y
- CONFIG_HZ_PERIODIC=n
- CONFIG_NO_HZ_IDLE=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE07 b/tools/testing/selftests/rcutorture/configs/rcu/TREE07
-index 2789b47e4ecd..d30922d8c883 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE07
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE07
-@@ -3,6 +3,7 @@ CONFIG_NR_CPUS=16
- CONFIG_PREEMPT_NONE=y
- CONFIG_PREEMPT_VOLUNTARY=n
- CONFIG_PREEMPT=n
-+CONFIG_PREEMPT_DYNAMIC=n
- #CHECK#CONFIG_TREE_RCU=y
- CONFIG_HZ_PERIODIC=n
- CONFIG_NO_HZ_IDLE=n
-diff --git a/tools/testing/selftests/rcutorture/configs/rcu/TREE10 b/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-index 4a00539bfdd7..a323d8948b7c 100644
---- a/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-+++ b/tools/testing/selftests/rcutorture/configs/rcu/TREE10
-@@ -3,6 +3,7 @@ CONFIG_NR_CPUS=56
- CONFIG_PREEMPT_NONE=y
- CONFIG_PREEMPT_VOLUNTARY=n
- CONFIG_PREEMPT=n
-+CONFIG_PREEMPT_DYNAMIC=n
- #CHECK#CONFIG_TREE_RCU=y
- CONFIG_HZ_PERIODIC=n
- CONFIG_NO_HZ_IDLE=y
+diff --git a/tools/testing/selftests/rcutorture/configs/scf/ver_functions.sh b/tools/testing/selftests/rcutorture/configs/scf/ver_functions.sh
+index d3d9e35d3d55..2d949e58f5a5 100644
+--- a/tools/testing/selftests/rcutorture/configs/scf/ver_functions.sh
++++ b/tools/testing/selftests/rcutorture/configs/scf/ver_functions.sh
+@@ -25,6 +25,5 @@ per_version_boot_params () {
+ 	echo $1 `scftorture_param_onoff "$1" "$2"` \
+ 		scftorture.stat_interval=15 \
+ 		scftorture.shutdown_secs=$3 \
+-		scftorture.verbose=1 \
+-		scf
++		scftorture.verbose=1
+ }
 -- 
 2.31.1.189.g2e36527f23
 

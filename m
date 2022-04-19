@@ -2,188 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DFB5063BF
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0D95063C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 07:11:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348007AbiDSFLE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 01:11:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36166 "EHLO
+        id S1348456AbiDSFOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 01:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiDSFK7 (ORCPT
+        with ESMTP id S229545AbiDSFOJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 01:10:59 -0400
-Received: from esa.hc3962-90.iphmx.com (esa.hc3962-90.iphmx.com [216.71.140.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6E5201A1;
-        Mon, 18 Apr 2022 22:08:15 -0700 (PDT)
+        Tue, 19 Apr 2022 01:14:09 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21DE21E21;
+        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id d19so4841854qko.3;
+        Mon, 18 Apr 2022 22:11:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qccesdkim1;
-  t=1650344895; x=1650949695;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=0Gm2BEjk01dWPU9VShBSRUCoafFByXaFxgxhVeHaVOk=;
-  b=eH6t1qPBe7bkTRHQ/lUxN/Iqjc+iVxkZGA22RKTJRSzUzO5KiSICEk3u
-   /B564Q4qdqHkLbadRZ410She2MAa4bhO2ANHHSbu9iJdw5kloj6z4/4gG
-   65p0cF11KQ2c+6l9WqN7y8BNIdqE+n9vQSSMiXfnfVGVXCkM5oLCuYt2Y
-   w=;
-Received: from mail-co1nam11lp2177.outbound.protection.outlook.com (HELO NAM11-CO1-obe.outbound.protection.outlook.com) ([104.47.56.177])
-  by ob1.hc3962-90.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 05:08:14 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nn3G9HbJ/jnhcC0o43GyoAIAamMP6wblbAqH93iEjXw19V5LuJC4965aTwnVNs0QBrlKDpkqf0hVhE23MWgJPBmYq3k0b/HmLk66PGJO446l+/1eJ4rlMk9kFherC1aI+VLmtKQvX7Lxh52t4+fLD8yI7lNGmOkwq7RgIPvM10S2NDibmIs+CJixCVBEbtQ8FVH6v+VoRnS+5Iu1WsTrstBwhQaoZj643iUfX8sobO4bM8kssQe7s4A8jP3CR5Y6xOzNZzfN63qpO53V+5xVE1Z9mCBpBy2frQOiwzbqymdEkuXYXUQYeg5ylwCDnWfS9964G9wjzLRfIn5l9Qol2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Gm2BEjk01dWPU9VShBSRUCoafFByXaFxgxhVeHaVOk=;
- b=OzBVb4fcMuSLRJiTirztN8LvQv57H9Qtc/DH4qWVijdmAt4rRFXQYebTXPdNWTMMZwgex4JT1gF4hLhPntt/EoV0OUb5xyxAu/K71LGbRVYKds9kHxOYUj1FoePi+Fs05fwmv4VPLWTVjcdgCzXLmOMXlH6LC/cbcOMwU4OE8d3XqG9bwLHsq45jLwYjMmv5AlP3Xef3YZ9fDOcm/OxUMAlzu1oH3CXb1mQekZv1I1Hmk3gXmqZ60aKB3ID1s2dYDduvyAwOy5VfEJ5zJtBB0cuAWeSjyzDcJURkkHkVu2ur+6HsoT2PFOhYthGalRIJWr4OFTGmCh6RajgT5jMEog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=quicinc.com; dmarc=pass action=none header.from=quicinc.com;
- dkim=pass header.d=quicinc.com; arc=none
-Received: from DM6PR02MB5148.namprd02.prod.outlook.com (2603:10b6:5:48::21) by
- PH0PR02MB7144.namprd02.prod.outlook.com (2603:10b6:510:9::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5164.20; Tue, 19 Apr 2022 05:08:11 +0000
-Received: from DM6PR02MB5148.namprd02.prod.outlook.com
- ([fe80::e9cb:6ab4:b2c0:5dd6]) by DM6PR02MB5148.namprd02.prod.outlook.com
- ([fe80::e9cb:6ab4:b2c0:5dd6%4]) with mapi id 15.20.5164.025; Tue, 19 Apr 2022
- 05:08:11 +0000
-From:   "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>
-To:     "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
-        "Dikshita Agarwal (QUIC)" <quic_dikshita@quicinc.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "hverkuil-cisco@xs4all.nl" <hverkuil-cisco@xs4all.nl>
-CC:     "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "ezequiel@collabora.com" <ezequiel@collabora.com>,
-        "stanimir.varbanov@linaro.org" <stanimir.varbanov@linaro.org>,
-        "Vikash Garodia (QUIC)" <quic_vgarodia@quicinc.com>,
-        "Maheshwar Ajja (QUIC)" <quic_majja@quicinc.com>,
-        quic_jdas <quic_jdas@quicinc.com>
-Subject: RE: [PATCH v4 0/2] Introduce Intra-refresh type control
-Thread-Topic: [PATCH v4 0/2] Introduce Intra-refresh type control
-Thread-Index: AQHYN4uuAoJtvWOorUSUOf0AwSqjm6zjeQOAgBNu0MA=
-Date:   Tue, 19 Apr 2022 05:08:10 +0000
-Message-ID: <DM6PR02MB5148F8DD51F2E69B6C739231F3F29@DM6PR02MB5148.namprd02.prod.outlook.com>
-References: <1647252574-30451-1-git-send-email-quic_dikshita@quicinc.com>
- <3987e143-59c6-f5dc-77a5-f58043e84de3@linaro.org>
-In-Reply-To: <3987e143-59c6-f5dc-77a5-f58043e84de3@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=quicinc.com;
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 2dd87cba-76b8-48ea-2f6e-08da21c2999f
-x-ms-traffictypediagnostic: PH0PR02MB7144:EE_
-x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
-x-microsoft-antispam-prvs: <PH0PR02MB7144A30514A5011A9A2B50168FF29@PH0PR02MB7144.namprd02.prod.outlook.com>
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 2XtZBWdxCqp5hVIIjo/Kg6On4crBQdtTQDJxl6McxvkCKQe5HIbZ1xe3ljBd8m3AjsHU+Liv4UbxPA73Vg2BhNTkMqaPyAPQTh6uIyqu2QaSft5CMfiin9ctTiB0rqHKpHhvT4ZTiEoH9hXl4KnxGXtfMtlUQJoMXhKseehOQAr0wwkHMYkCBxrOWJJ2En5Rxq4sAykHZGcM9YHY2vgPJ4tdlrwB++mdiW45UEYZQpsTLN7dLieRSAsFJv4wcBIm126xng00eKE0EquAeWwYdzVmIOkAfwuyYLKJBgySXQdaGSvma0fmls1GBl0d/PXU7faXn+fLwada/rrcZ1HBo8F8bouw2bHt9y+N+uPCA8eR34GIG7FUbTRVpIoawKj8q/plyuzzlnxK4rpPGwYML54y/w56XN3lIgMz/0whWbTSSoVfKL1tkZmeVQZGvpp8ibKZIbZu9dHjkVmXZ3FYEY1epifbdrwR6wHOXdARTYA2T4tv6HqiSnHrRizoPBEOy01SmJ6pJT7FcfbxSGLaA2ps+qIUcAbUM5gmx5fikBA8pwF2KaXFw5QYVlr8oPWWRQ3opRPxTDYAKuCRs9CIi4PshsRQfWQ3eHX4CYENJ3nPKW5VuUSbdMEoY4+KQDNHL+UNoIhCzIELlxAe+h5koCVuS05W5OQePMMQqhfDGqjhuAjWOQGb0d+fV9TW5Gxq2OFFK7PsVm1VLwkkUXL3kQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR02MB5148.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230001)(4636009)(366004)(55016003)(71200400001)(66946007)(76116006)(64756008)(4326008)(8676002)(2906002)(33656002)(38100700002)(5660300002)(83380400001)(122000001)(54906003)(110136005)(66556008)(66446008)(66476007)(86362001)(52536014)(8936002)(26005)(186003)(107886003)(508600001)(53546011)(9686003)(38070700005)(6506007)(316002)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OFJWODJ0NnJNaXJ3V0hhSmJRTnM1ZktRYm45ZzdZNHlQOHpORng2c0Y5WVVr?=
- =?utf-8?B?NzVJZTBsNGtxV1pGNitSZkYwN0J0VHRhaVJUOUtkNTVOS0d6Z0tRZWwxTGp1?=
- =?utf-8?B?L1RJT0RKR0pvdFYxa1RNVGZ0d09XYjhHQzJ3VGJscTdVVDFVdUlQS3BWMi85?=
- =?utf-8?B?QTBZOUhVS3J2R0MzcGFTenYzTnZTZ3gvd0lrQU1mbkRZekYvamt4RnQ4eFdk?=
- =?utf-8?B?UVBmSUt5Rnh0OGJ0TTcvY0g5K2laV0RMRDJsUnlZeHIwMDRDd1BzeGI3NTUz?=
- =?utf-8?B?UlZqVnBHZitrdmluM2xHZjRRckZ1Z0pFSmhLRnB4M1FkVXVFcGw0VzJFdVJi?=
- =?utf-8?B?WXNwREpLN2xtdGgrVmJtaEw3bHdMM1MvQmV5S3FQTjBEd0ZJcU1Na1UrejE4?=
- =?utf-8?B?dk9tVHBxZFAxZGRYMU9uYWt2MmxGVmJqQ042QkxYUGRwVWVaNDgxTUlMSk5n?=
- =?utf-8?B?ZEFEYzlha2NVZlBpNmtmRitjY25POUhYeFptYTBXWE9tZUNPSXpRazNjNzAr?=
- =?utf-8?B?SUxGbFRCQ2E2cmJsbFZPZTBqRnljT2F5WTV1SUZ6bXExU2tXZ1VMQll2bW9Z?=
- =?utf-8?B?SVhmV2k4MzAzRDNUcGY0QXV0djF1K0FxUkdTaGplUzlpenF2d1duTTF5UC9V?=
- =?utf-8?B?WnhDVlR3T1RicDROODVFeVc5dG91L05WT3hlbHZlSzRHakZaYW05RjdVZXBh?=
- =?utf-8?B?cXBiNUdiVE9wUVhXdkxvdzl6K0NaVWp6WGp5UE0rWmpHMGJOaE5FbUszNlhP?=
- =?utf-8?B?d2hwWE53WG9tSzZWSmdQam1pR3RrY1pmM2JZdDlLTVBYc05JNnhoUDZ1TGNK?=
- =?utf-8?B?YVowWVR2VGMzYVBjZHVXdTltN254MVduOE0vVEFENUdWTjR1UmZ2TU1iaVR1?=
- =?utf-8?B?Z3JVK3ZZUHQxSEpHYlUxOCtpMTFZRDZnbDRZd0hwdEJGUWNtbkdUK0UxRHB0?=
- =?utf-8?B?SGVzUTFIbEN2bFFiRkRqQTBRcldYLzd3ZWFiVWNBVEdlRGlkTTFMamw3WWhv?=
- =?utf-8?B?SUlmWXhsQjBObUtDd013blZ1NVpqT1hBSS9aaEkxaGFZNXUvUHk1VHZ6cWlu?=
- =?utf-8?B?TnFrMXZGNG9PYW1kUmFIQTBoUDl2dFpvdDd0T0dpQjNVMWFJLzJKb2xWMFEr?=
- =?utf-8?B?NEVmaEtubXRYWlhxVmdNRWY4QXdLdEpLN3F6MjZrU29Ed2UycXhyNDJUaTdF?=
- =?utf-8?B?bWZWb2tZRHEzQnFwL2tQVml2aENzOEV2MlFwdUZnOUMvVGpUeVFNeVl2VDZG?=
- =?utf-8?B?SUZOUExVTlB1RWVZcXAwWVRld2FuZlRDRHZqU25KOXVoTTlEc0JKQnBUU1FI?=
- =?utf-8?B?a0ZMdkFTUU9aSGVRWWlTYlNFYlB1dUFYVGV2anR6aERFK0U0eFplRDNvZWlC?=
- =?utf-8?B?c2FpdElEaEdZeXcrWUhwQ2Q4OHA5d3FPVGJMTy9hbEpBdXdlSFIzdFlnYW1y?=
- =?utf-8?B?U2VFMEhXQVVaeHA3NUdpcWlCak1ud3ZvMGNCNW1meFR1TVZ2bFdDVlFhZ0Fs?=
- =?utf-8?B?YTNtQldYZEoyTFdqZXdObW1kcTFtTkZ1SHFUY3NIREVEK1E5cTNUamQ1RUI1?=
- =?utf-8?B?WW1GRy9lMzU4ekQ5OERIUGYwRUNuendsMnhCRUVNdXR3ZlFSK3pZc2ZDNTBh?=
- =?utf-8?B?VXExWTcxbDRKd01oZmN4emFScTJveUNGbStTdmt0S29USkJnc3dvWmxYRmJh?=
- =?utf-8?B?SzhqUnluRUpIbm54dnZ0bVAzVXRCMkFmeG9xL2xuOUFwVktsWklwd2tzNE1B?=
- =?utf-8?B?MFNCSHU0ZUY4L0xxdDA1dEtVaG9OSEZZTlp5bklaZlFuM2F1ZGsxb05uMWlP?=
- =?utf-8?B?TTJEZFBKMGp5d0FjNHZiUlRVOXFSV2VPNkFidWdwRmowTHZ3dXQwNmRtRjVV?=
- =?utf-8?B?RnNhMWJrTG9ObDd4VUxTQlBTM0d5MERtck15Y2g3MWpJQUpXTjhiZnFvTHNX?=
- =?utf-8?B?OHE1OFV3bklFMGNrNUxvOWpnT2tsTzVrSlN5WUdJaFZCRGU0d3IzQ1hXM3Nh?=
- =?utf-8?B?OXIwUDc4Skt2a1VaWVdFTEwrV1JDVjI3VkllMWR5cU02aDJtbGt3NDlFN21N?=
- =?utf-8?B?MFpQQm5wbnJZaFhwdVU1MzBad1o5MFBtYXhCMis5THFRa1lPRVNkcW9TZGcz?=
- =?utf-8?B?d0psTWdBN2tQbVZhZTJDSkFOUkRiQXU0K2JVaytKWXBsUVdVK0dVM1AxemZI?=
- =?utf-8?B?SGRQNEU1WHRhbFZrREdWeFFGeE9YazdCSlZEWXFCS0FoYURtRHRKZDM5amMy?=
- =?utf-8?B?WG9zQnczdVhzN25JMEU5MEVnWExyOUYzN2ZyNEVwbm55WEVMNFk0YktxbnM4?=
- =?utf-8?B?VEhIZ2RkSmtyZ21TS2dIVE9SbVNGdkVtTmxCbXh2MHFUQjgyZE40Zz09?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        d=gmail.com; s=20210112;
+        h=from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
+        b=eII8IdHoWLxjcKl0Sg+2eT49DZP+AhiUxs7TAqxbXeF/yiv5sjwIDUKREFQEKWxzn4
+         kSnJJ1XwNvrRRwdX5GOzB9qaejlo8q7L5vi9bmG0ntRIXlvZpwIfyMCQJpGcgl92Pe69
+         DF5QLpTFc6wX8ijdI2lRKhCKS4VGlrKh2vFFnWSwPK2hA8iLfbAkaKvuSUxFenLECl0P
+         qzmXCo7ex0FCiLKn4X0oTUyBNPzczXwDlJstIk7jlj3UMuG9qnDF7lh+B/IQm+HZALNU
+         ZAPq5xhYHdKN8cptiEwAg/wXKel1AWBE//GqQ88X+fX8w7DYzE1E9pTcz/OEDtyuqgSv
+         Trhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
+         :content-transfer-encoding;
+        bh=JXEZ5C8fYOz+un4E/+M4H7uOYX0LQVxNU9wzlCZQgnI=;
+        b=mDnGX4q1KPobaDjBilkf82pg6P3F72xG+fgcCMYmDiBYJVgz9hhb+G10GA2h+nCIaw
+         eTWXigXB3FcWpEGqFjqhPUUjJ5kC9epwozgSuDPXAXXJiCGL20A/giBSeREQSxnyjA8u
+         DvF6mkat6MDfOt1A7mFEkp37DF76eOygcLaU9rSd06Nks2dp2QgnYbiqZMBS6vDJdIzo
+         Qfmwqx7sJ3/CIh4zsTFjVyhUT4vq+Soz73JUT09BBzAXkrqpP/SQCiKdh3y3/vZdC8s5
+         G6irql30l5iOu/wLxtP3OGtL5yh2cW7wI2qTrQGEp/fzj21vOuiC+KkThJb+ryOpo/xL
+         bXIQ==
+X-Gm-Message-State: AOAM533L897+uI3pNDuj0U0GTGNFjHw2DNRT52FUD9oFfeuoE81C2haZ
+        ZY5fbB0+viZHs5/p0NjzrL92AC9407s=
+X-Google-Smtp-Source: ABdhPJwxG8YlmBr7Dtj1KIGOFk9rucVNbIgI/EDbWfI/FxwsK8Eu2be6DFUis7xFz986aFYem0hfKw==
+X-Received: by 2002:a37:a196:0:b0:69e:b207:16ee with SMTP id k144-20020a37a196000000b0069eb20716eemr3051364qke.321.1650345086571;
+        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
+Received: from godwin.fios-router.home (pool-108-18-137-133.washdc.fios.verizon.net. [108.18.137.133])
+        by smtp.gmail.com with ESMTPSA id y85-20020a376458000000b0069e64801b7dsm5327222qkb.62.2022.04.18.22.11.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Apr 2022 22:11:26 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     linux-mips@vger.kernel.org, linux-clk@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Keguang Zhang <keguang.zhang@gmail.com>,
+        Du Huanpeng <dhu@hodcarrier.org>,
+        Stephen Boyd <sboyd@codeaurora.org>,
+        Yang Ling <gnaygnil@gmail.com>,
+        Sean Anderson <seanga2@gmail.com>
+Subject: [RFT PATCH] clk: ls1c: Fix PLL rate calculation
+Date:   Tue, 19 Apr 2022 01:11:14 -0400
+Message-Id: <20220419051114.1569291-1-seanga2@gmail.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-X-OriginatorOrg: quicinc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR02MB5148.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2dd87cba-76b8-48ea-2f6e-08da21c2999f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Apr 2022 05:08:10.9971
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: OvKnoXDyZvSSEXEf3iMKD9XN9H1h2RQozRarxE2JG/ZSwlFaY8vYB5w20BQi9uWoV+iePijss3FxIpXKN5I9Wx2tuo6hnqE7j6A8oPFrXhE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR02MB7144
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgU3RhbiwNCg0KSSB3YXMgd2FpdGluZyBmb3IgeW91ciBjb21tZW50cyBvbiBWZW51cyBjaGFu
-Z2VzIGlmIGFueSwgc28gdGhhdCBJIGNhbiBhZGRyZXNzIGFsbCBjb21tZW50cyB0b2dldGhlciBp
-biBuZXh0IHBhdGNoLg0KUG9zdGVkIGEgbmV3IHBhdGNoc2V0IHY1IG5vdywgcGxzIHJldmlldy4N
-Cg0KVGhhbmtzLA0KRGlrc2hpdGEgQWdhcndhbA0KDQotLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0t
-LQ0KRnJvbTogU3RhbmltaXIgVmFyYmFub3YgPHN0YW5pbWlyLnZhcmJhbm92QGxpbmFyby5vcmc+
-IA0KU2VudDogVGh1cnNkYXksIEFwcmlsIDA3LCAyMDIyIDE6NTMgQU0NClRvOiBEaWtzaGl0YSBB
-Z2Fyd2FsIChRVUlDKSA8cXVpY19kaWtzaGl0YUBxdWljaW5jLmNvbT47IGxpbnV4LW1lZGlhQHZn
-ZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgaHZlcmt1aWwtY2lz
-Y29AeHM0YWxsLm5sDQpDYzogbGludXgtYXJtLW1zbUB2Z2VyLmtlcm5lbC5vcmc7IGV6ZXF1aWVs
-QGNvbGxhYm9yYS5jb207IHN0YW5pbWlyLnZhcmJhbm92QGxpbmFyby5vcmc7IHF1aWNfdmdhcm9k
-aWFAcXVpY2luYy5jb207IE1haGVzaHdhciBBamphIChRVUlDKSA8cXVpY19tYWpqYUBxdWljaW5j
-LmNvbT47IHF1aWNfamRhcyA8cXVpY19qZGFzQHF1aWNpbmMuY29tPg0KU3ViamVjdDogUmU6IFtQ
-QVRDSCB2NCAwLzJdIEludHJvZHVjZSBJbnRyYS1yZWZyZXNoIHR5cGUgY29udHJvbA0KDQpEaWtz
-aGl0YSwNCg0KSSBjYW5ub3QgZmluZCBuZXcgdmVyc2lvbiBvZiB0aGlzIHBhdGNoc2V0IHdpdGgg
-SGFuJ3MgY29tbWVudHMgYWRkcmVzc2VkPw0KDQpPbiAzLzE0LzIyIDEyOjA5LCBxdWljX2Rpa3No
-aXRhQHF1aWNpbmMuY29tIHdyb3RlOg0KPiBGcm9tOiBEaWtzaGl0YSBBZ2Fyd2FsIDxxdWljX2Rp
-a3NoaXRhQHF1aWNpbmMuY29tPg0KPiANCj4gSGksDQo+IA0KPiBUaGlzIHNlcmllcyBhZGQgYSBu
-ZXcgaW50cmEtcmVmcmVzaCB0eXBlIGNvbnRyb2wgZm9yIGVuY29kZXJzLg0KPiB0aGlzIGNhbiBi
-ZSB1c2VkIHRvIHNwZWNpZnkgd2hpY2ggaW50cmEgcmVmcmVzaCB0byBiZSBlbmFibGVkLCByYW5k
-b20sIGN5Y2xpYyBvciBub25lLg0KPiANCj4gQ2hhbmdlIHNpbmNlIHYwOg0KPiAgRHJvcHBlZCBJ
-TlRSQV9SRUZSRVNIX1RZUEVfTk9ORSBhcyBpdCB3YXMgbm90IG5lZWRlZC4NCj4gIEludHJhIHJl
-ZnJlc2ggcGVyaW9kIHZhbHVlIGFzIHplcm8gd2lsbCBkaXNhYmxlIHRoZSBpbnRyYSAgcmVmcmVz
-aC4NCj4gDQo+IENoYW5nZSBzaW5jZSB2MToNCj4gIFVwZGF0ZWQgdGhlIGNvbnRyb2wgbmFtZSBm
-b3IgYmV0dGVyIHVuZGVzdGFuZGluZy4NCj4gIEFsc28gdXBkYXRlZCB0aGUgZG9jdW1lbnRhdGlv
-biBhY2NvcmRpbmdseS4NCj4gDQo+IENoYW5nZSBzaW5jZSB2MjoNCj4gIFVwZGF0ZWQgdGhlIHZl
-bnVzIGRyaXZlciBpbXBsZW1lbnRhdGlvbiBhcyB3ZWxsIHRvIHVzZSB0aGUgIGNvcnJlY3QgY29u
-dHJvbCBuYW1lLiBNaXNzZWQgaW4gdjIuDQo+IA0KPiBDaGFuZ2Ugc2luY2UgdjM6DQo+ICBBZGRy
-ZXNzZWQgY29tbWVudHMgZnJvbSBIYW5zIGluIHY0bDIgcGF0Y2guDQo+ICBFbmFibGVkIHRoZSBz
-dXBwb3J0IGZvciBjeWNsaWMgaW50cmEgcmVmcmVzaCBpbiB2ZW51cyBkcml2ZXIuDQo+IA0KPiBU
-aGFua3MsDQo+IERpa3NoaXRhDQo+IA0KPiBEaWtzaGl0YSBBZ2Fyd2FsICgyKToNCj4gICBtZWRp
-YTogdjRsMi1jdHJsczogQWRkIGludHJhLXJlZnJlc2ggdHlwZSBjb250cm9sDQo+ICAgdmVudXM6
-IHZlbmM6IEFkZCBzdXBwb3J0IGZvciBpbnRyYS1yZWZyZXNoIG1vZGUNCj4gDQo+ICAuLi4vdXNl
-cnNwYWNlLWFwaS9tZWRpYS92NGwvZXh0LWN0cmxzLWNvZGVjLnJzdCAgICB8IDIyICsrKysrKysr
-KysrKysrKysrKysrKysNCj4gIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0vcWNvbS92ZW51cy9jb3Jl
-LmggICAgICAgICAgIHwgIDEgKw0KPiAgZHJpdmVycy9tZWRpYS9wbGF0Zm9ybS9xY29tL3ZlbnVz
-L3ZlbmMuYyAgICAgICAgICAgfCAgNiArKysrKy0NCj4gIGRyaXZlcnMvbWVkaWEvcGxhdGZvcm0v
-cWNvbS92ZW51cy92ZW5jX2N0cmxzLmMgICAgIHwgMTAgKysrKysrKysrKw0KPiAgZHJpdmVycy9t
-ZWRpYS92NGwyLWNvcmUvdjRsMi1jdHJscy1kZWZzLmMgICAgICAgICAgfCAgOSArKysrKysrKysN
-Cj4gIGluY2x1ZGUvdWFwaS9saW51eC92NGwyLWNvbnRyb2xzLmggICAgICAgICAgICAgICAgIHwg
-IDUgKysrKysNCj4gIDYgZmlsZXMgY2hhbmdlZCwgNTIgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlv
-bigtKQ0KPiANCg0KLS0gDQpyZWdhcmRzLA0KU3Rhbg0K
+While reviewing Dhu's patch adding ls1c300 clock support to U-Boot [1], I
+noticed the following calculation, which is copied from
+drivers/clk/loongson1/clk-loongson1c.c:
+
+ulong ls1c300_pll_get_rate(struct clk *clk)
+{
+	unsigned int mult;
+	long long parent_rate;
+	void *base;
+	unsigned int val;
+
+	parent_rate = clk_get_parent_rate(clk);
+	base = (void *)clk->data;
+
+	val = readl(base + START_FREQ);
+	mult = FIELD_GET(FRAC_N, val) + FIELD_GET(M_PLL, val);
+	return (mult * parent_rate) / 4;
+}
+
+I would like to examine the use of M_PLL and FRAC_N to calculate the multiplier
+for the PLL. The datasheet has the following to say:
+
+START_FREQ 位    缺省值      描述
+========== ===== =========== ====================================
+FRAC_N     23:16 0           PLL 倍频系数的小数部分
+
+                 由          PLL 倍频系数的整数部分
+M_PLL      15:8  NAND_D[3:0] (理论可以达到 255，建议不要超过 100)
+                 配置
+
+which according to google translate means
+
+START_FREQ Bits  Default       Description
+========== ===== ============= ================================================
+FRAC_N     23:16 0             Fractional part of the PLL multiplication factor
+
+                 Depends on    Integer part of PLL multiplication factor
+M_PLL      15:8  NAND_D[3:0]   (Theoretically it can reach 255, [but] it is
+                 configuration  recommended not to exceed 100)
+
+So just based on this description, I would expect that the formula to be
+something like
+
+	rate = parent * (255 * M_PLL + FRAC_N) / 255 / 4
+
+However, the datasheet also gives the following formula:
+
+	rate = parent * (M_PLL + FRAC_N) / 4
+
+which is what the Linux driver has implemented. I find this very unusual.
+First, the datasheet specifically says that these fields are the integer and
+fractional parts of the multiplier. Second, I think such a construct does not
+easily map to traditional PLL building blocks. Implementing this formula in
+hardware would likely require an adder, just to then set the threshold of a
+clock divider.
+
+I think it is much more likely that the first formula is correct. The author of
+the datasheet may think of a multiplier of (say) 3.14 as
+
+	M_PLL = 3
+	FRAC_N = 0.14
+
+which together sum to the correct multiplier, even though the actual value
+stored in FRAC_N would be 36.
+
+I suspect that this has slipped by unnoticed because when FRAC_N is 0, there is
+no difference in the formulae. The following patch is untested, but I suspect
+it will fix this issue. I would appreciate if anyone with access to the
+hardware could measure the output of the PLL (or one of its derived clocks) and
+determine the correct formula.
+
+[1] https://lore.kernel.org/u-boot/20220418204519.19991-1-dhu@hodcarrier.org/T/#u
+
+Fixes: b4626a7f4892 ("CLK: Add Loongson1C clock support")
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+---
+
+ drivers/clk/loongson1/clk-loongson1c.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/clk/loongson1/clk-loongson1c.c b/drivers/clk/loongson1/clk-loongson1c.c
+index 703f87622cf5..2b98a116c1ea 100644
+--- a/drivers/clk/loongson1/clk-loongson1c.c
++++ b/drivers/clk/loongson1/clk-loongson1c.c
+@@ -21,9 +21,9 @@ static unsigned long ls1x_pll_recalc_rate(struct clk_hw *hw,
+ 	u32 pll, rate;
+ 
+ 	pll = __raw_readl(LS1X_CLK_PLL_FREQ);
+-	rate = ((pll >> 8) & 0xff) + ((pll >> 16) & 0xff);
++	rate = (pll & 0xff00) + ((pll >> 16) & 0xff);
+ 	rate *= OSC;
+-	rate >>= 2;
++	rate >>= 10;
+ 
+ 	return rate;
+ }
+-- 
+2.35.1
+

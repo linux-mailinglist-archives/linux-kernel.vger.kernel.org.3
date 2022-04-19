@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F00507179
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77D850717C
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353703AbiDSPPs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:15:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        id S1353717AbiDSPQQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:16:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244276AbiDSPPm (ORCPT
+        with ESMTP id S244276AbiDSPQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:15:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83E535847;
-        Tue, 19 Apr 2022 08:12:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80498B81A3C;
-        Tue, 19 Apr 2022 15:12:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 873D8C385A7;
-        Tue, 19 Apr 2022 15:12:55 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Q/37OvJm"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1650381170;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MQyU07hi01iEyPXxllEOCsC9A0SZXJB5Wi7OpTYio9w=;
-        b=Q/37OvJmn6L6JA4hxc+U0Bn3ttmZ0CZK7DJgmf01GPUpJjg128RaHv5HvvhszqeqWVGnDL
-        l2SlbN/Xi0ms/oUYvl2yitT4K4ENydlAVTCInOxrGQapJh2v0VztNLHKWKgpPG0QUe+Y1P
-        ctRzvD0PsnFwOfRBcf+wRwQBHLblAwA=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 275d05c0 (TLSv1.3:AEAD-AES256-GCM-SHA384:256:NO);
-        Tue, 19 Apr 2022 15:12:50 +0000 (UTC)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-2edbd522c21so175482327b3.13;
-        Tue, 19 Apr 2022 08:12:48 -0700 (PDT)
-X-Gm-Message-State: AOAM533gVCPqMvHGE/tc0zxBalXqRCbGFQ8VeIEKp8ciYRx1Rox1hYxO
-        Ls3I2/BcRbpBLbDfvj+sJVaaZvyqGlYZereFgXY=
-X-Google-Smtp-Source: ABdhPJwPT8kpwudgm4aOLhhyxVPvw6QiVqCwGpv5AaqyiB3KI2pHaKNZHoMfD/PEIqVraDr3btr5C9vb1YaKvou13Fo=
-X-Received: by 2002:a0d:c005:0:b0:2eb:d29d:8bf5 with SMTP id
- b5-20020a0dc005000000b002ebd29d8bf5mr17186902ywd.404.1650381167579; Tue, 19
- Apr 2022 08:12:47 -0700 (PDT)
+        Tue, 19 Apr 2022 11:16:12 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185D43B291
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:13:29 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id n8so16062676plh.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=date:from:to:cc:subject:message-id:references:mime-version
+         :content-disposition:in-reply-to;
+        bh=zSqKROW2j70JA8DM8gYUgW1/ARztLUcBd65hG17JcmE=;
+        b=qMnuP/7mxtfefsJv/k+IiMqzL2yLLWl0o5R385+BKCgwAxcQ5zQUtWulJ2exAk6Dok
+         kLd/2VRdMYRXddl6Ar3ExGShbBV9dCeIv5QMba+EDzTC16AT1LEm/YTU5DqIQNvVHmeN
+         +vUs5NWDijJ8YgrZCFECUZi/WMNTYjqgfAgkl0YkaUhDxR/WFxmoybm7kD7uqI+EbSzw
+         Kz5N/t600Mw2W+mlfjCMMsFXxg6NcrdAoe57mzhUVyssdyBjWBzktGRS8cX3pKyaPrZx
+         nwp6Y2b7ZvwaxLIPnR9UgJX2CXvH1xxnEBNuAeU31HPft3NpEeGNW2x0Me7sJ6UOSEg+
+         GIOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
+         :mime-version:content-disposition:in-reply-to;
+        bh=zSqKROW2j70JA8DM8gYUgW1/ARztLUcBd65hG17JcmE=;
+        b=4AHTMT0HnUGfeamCDTL/dbF9JO4aIXYH4p+5SjndM6ATKFez6fFEywGBWC9H4A/tMw
+         hXNVMMK/67OzhfHhbX3SeTRXDSvf5scolWnh4YKiTq4LoHtt/jvklzpgJ1eaSWei2J3U
+         lRJyjYoivkusjK9rjXscgjG4VPdB26pYwXhB4IxkfRNjrmTD9SoS9EgalmRkUKtlHHIg
+         nxhfAoI2pRvqHWDZbwMxMddTVUgf75hYdPe/nUH+K7S/x/VcYfADxaP0bGt9iCryiYqu
+         55kedMxpT7GLDbnOpjkNmpJvne2nd4FDBi0d2NH6ZFgUMRROdOJW5pnaf/Dvi9f3LnGM
+         zvrQ==
+X-Gm-Message-State: AOAM533hbBVLB+uBoCGrYLk2eFf8luHzR3MUBUcrhca8bBZAvYB2H9lg
+        clM/QErF3Ix3wGW3obmgV+G1
+X-Google-Smtp-Source: ABdhPJzGeAR7dhe85Bq8vjqZDwu3MBWPQQQd09aHXn3V8TzzsQ/+nSmTzQ3e7og0FAfsdSe7VswsEw==
+X-Received: by 2002:a17:902:eb46:b0:158:341d:93a3 with SMTP id i6-20020a170902eb4600b00158341d93a3mr16011554pli.1.1650381208560;
+        Tue, 19 Apr 2022 08:13:28 -0700 (PDT)
+Received: from thinkpad ([117.202.186.149])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056a0023cf00b004e17e11cb17sm18046389pfc.111.2022.04.19.08.13.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Apr 2022 08:13:28 -0700 (PDT)
+Date:   Tue, 19 Apr 2022 20:43:20 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+Cc:     quic_cang@quicinc.com, quic_asutoshd@quicinc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Bean Huo <beanhuo@micron.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Can Guo <cang@codeaurora.org>,
+        Asutosh Das <asutoshd@codeaurora.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/1] scsi: ufs: Increase the UIC command timeout to 5
+ seconds
+Message-ID: <20220419151320.GA8699@thinkpad>
+References: <55bd9cf4216e80e73e63cf25c042d60e67592b44.1650331167.git.quic_nguyenb@quicinc.com>
 MIME-Version: 1.0
-References: <Yh4+9+UpanJWAIyZ@zx2c4.com> <c5181fb5-38fb-f261-9de5-24655be1c749@amazon.com>
- <CAHmME9rTMDkE7UA3_wg87mrDVYps+YaHw+dZwF0EbM0zC4pQQw@mail.gmail.com> <47137806-9162-0f60-e830-1a3731595c8c@amazon.com>
-In-Reply-To: <47137806-9162-0f60-e830-1a3731595c8c@amazon.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 19 Apr 2022 17:12:36 +0200
-X-Gmail-Original-Message-ID: <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
-Message-ID: <CAHmME9pwfKfKp_qqbmAO5tEaQSZ5srCO5COThK3vWZR4avRF1g@mail.gmail.com>
-Subject: Re: propagating vmgenid outward and upward
-To:     Alexander Graf <graf@amazon.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        KVM list <kvm@vger.kernel.org>,
-        QEMU Developers <qemu-devel@nongnu.org>,
-        linux-hyperv@vger.kernel.org,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        adrian@parity.io, Laszlo Ersek <lersek@redhat.com>,
-        =?UTF-8?Q?Daniel_P=2E_Berrang=C3=A9?= <berrange@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Jann Horn <jannh@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Brown, Len" <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Colm MacCarthaigh <colmmacc@amazon.com>,
-        "Theodore Ts'o" <tytso@mit.edu>, Arnd Bergmann <arnd@arndb.de>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55bd9cf4216e80e73e63cf25c042d60e67592b44.1650331167.git.quic_nguyenb@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey Alex,
+On Mon, Apr 18, 2022 at 06:36:05PM -0700, Bao D. Nguyen wrote:
+> Increase the UIC command timeout to avoid false and unnecessary
+> UFS errors printout. There are increasing number of false UIC command
+> timeout error events where the actual cause of the issues is interrupt
+> starvation. When looking into these issues closely, it was clear that
+> the UIC command completed successfully, but the CPUs were hogged by other
+> subsystems for more than 500ms, causing a false UIC command timeout.
+> 
 
-On Thu, Mar 10, 2022 at 12:18 PM Alexander Graf <graf@amazon.com> wrote:
-> I agree on the slightly racy compromise and that it's a step into the
-> right direction. Doing this is a no brainer IMHO and I like the proc
-> based poll approach.
+UFS irq handler is a hardirq. Not sure how CPU starving can happen here.
+Unless all CPUs are occupied by hardirq handlers from other subsystems.
 
-Alright. I'm going to email a more serious patch for that in the next
-few hours and you can have a look. Let's do that for 5.19.
+Thanks,
+Mani
 
-> I have an additional problem you might have an idea for with the poll
-> based path. In addition to the clone notification, I'd need to know at
-> which point everyone who was listening to a clone notification is
-> finished acting up it. If I spawn a tiny VM to do "work", I want to know
-> when it's safe to hand requests into it. How do I find out when that
-> point in time is?
-
-Seems tricky to solve. Even a count of current waiters and a
-generation number won't be sufficient, since it wouldn't take into
-account users who haven't _yet_ gotten to waiting. But maybe it's not
-the right problem to solve? Or somehow not necessary? For example, if
-the problem is a bit more constrained a solution becomes easier: you
-have a fixed/known set of readers that you know about, and you
-guarantee that they're all waiting before the fork. Then after the
-fork, they all do something to alert you in their poll()er, and you
-count up how many alerts you get until it matches the number of
-expected waiters. Would that work? It seems like anything more general
-than that is just butting heads with the racy compromise we're already
-making.
-
-Jason
+> Increase the UIC command timeout to 5 seconds to avoid false and
+> time consuming support calls so that we can shift the focus to where
+> the real issue would be.
+> 
+> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+> ---
+>  drivers/scsi/ufs/ufshcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/scsi/ufs/ufshcd.c b/drivers/scsi/ufs/ufshcd.c
+> index 3f9caaf..806acf4 100644
+> --- a/drivers/scsi/ufs/ufshcd.c
+> +++ b/drivers/scsi/ufs/ufshcd.c
+> @@ -35,7 +35,7 @@
+>  				 UTP_TASK_REQ_COMPL |\
+>  				 UFSHCD_ERROR_MASK)
+>  /* UIC command timeout, unit: ms */
+> -#define UIC_CMD_TIMEOUT	500
+> +#define UIC_CMD_TIMEOUT	5000
+>  
+>  /* NOP OUT retries waiting for NOP IN response */
+>  #define NOP_OUT_RETRIES    10
+> -- 
+> The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+> a Linux Foundation Collaborative Project
+> 

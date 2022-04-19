@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50A865062EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 05:56:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F37506329
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347181AbiDSD6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 23:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S1347342AbiDSEGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:06:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235899AbiDSD6Q (ORCPT
+        with ESMTP id S1347285AbiDSEGg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 23:58:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6CD13E86
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 20:55:35 -0700 (PDT)
+        Tue, 19 Apr 2022 00:06:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17BB9240A1
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:03:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 101BAB8118D
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 03:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E316C385A7;
-        Tue, 19 Apr 2022 03:55:32 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16F2461158
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 04:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 113E7C385A5;
+        Tue, 19 Apr 2022 04:03:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1650340532;
-        bh=nibgm+F/f0uCqZcCAC6pQ5BE8cFf97BjnCM7yu3WDcQ=;
+        s=korg; t=1650341033;
+        bh=xhfzTucOQ3hmK/38S4jkVF5T/mzWkY07l0x1ixVkzkw=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=x3HUvsmJ98Fg2AORmS7dNPTHsUkdoXLB+QBZ9l9ra7yTPsuluL8hOVQ9T4DK+WUs/
-         xC3pDpSNTqQ13lRQngWTJCYLdpl/LIxNa5hwWqx0R7Vw2BAnALet5Jj/46kU/WWhjv
-         DluZUnMUXrrc1ulU79pNPDhgp/VY1QRzKORTaCuk=
-Date:   Mon, 18 Apr 2022 20:55:31 -0700
+        b=q4zP8XmxFdYO3yLCJQQsSZi3Zf/IHCjWAXeIp9NXHWuv1SXDmPT6fq2jVqZjk3evs
+         W9CwuS+lF9clvgwAjxRW2WSifAjpGEG2xpfJfIvggL1tExpVtnSQgbKQSobBih/J+C
+         8F79ECi2KOMr903EkBeUyIhSWJlUl1/nqqkCnFuI=
+Date:   Mon, 18 Apr 2022 21:03:52 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     <vbabka@suse.cz>, <pintu@codeaurora.org>,
-        <charante@codeaurora.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH 09/12] mm: compaction: avoid possible NULL pointer
- dereference in kcompactd_cpu_online
-Message-Id: <20220418205531.2e4ed0f72e0e537ef55c6468@linux-foundation.org>
-In-Reply-To: <20220418141253.24298-10-linmiaohe@huawei.com>
-References: <20220418141253.24298-1-linmiaohe@huawei.com>
-        <20220418141253.24298-10-linmiaohe@huawei.com>
+To:     Peng Liu <liupeng256@huawei.com>
+Cc:     <mike.kravetz@oracle.com>, <david@redhat.com>,
+        <yaozhenguo1@gmail.com>, <baolin.wang@linux.alibaba.com>,
+        <songmuchun@bytedance.com>, <liuyuntao10@huawei.com>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <wangkefeng.wang@huawei.com>, <dave@stgolabs.net>
+Subject: Re: [PATCH v4] hugetlb: Fix wrong use of nr_online_nodes
+Message-Id: <20220418210352.1d1d90aeba477d598bd6f0be@linux-foundation.org>
+In-Reply-To: <20220416103526.3287348-1-liupeng256@huawei.com>
+References: <20220413032915.251254-2-liupeng256@huawei.com>
+        <20220416103526.3287348-1-liupeng256@huawei.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -56,31 +56,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please cc David H on memhotplug stuff.
+On Sat, 16 Apr 2022 10:35:26 +0000 Peng Liu <liupeng256@huawei.com> wrote:
 
-On Mon, 18 Apr 2022 22:12:50 +0800 Miaohe Lin <linmiaohe@huawei.com> wrote:
+> Certain systems are designed to have sparse/discontiguous nodes. In
+> this case, nr_online_nodes can not be used to walk through numa node.
+> Also, a valid node may be greater than nr_online_nodes.
+> 
+> However, in hugetlb, it is assumed that nodes are contiguous. Recheck
+> all the places that use nr_online_nodes, and repair them one by one.
 
-> It's possible that kcompactd_run could fail to run kcompactd for a hot
-> added node and leave pgdat->kcompactd as NULL. So pgdat->kcompactd should
-> be checked here to avoid possible NULL pointer dereference.
->
-> ..
->
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -3052,7 +3052,8 @@ static int kcompactd_cpu_online(unsigned int cpu)
->  
->  		if (cpumask_any_and(cpu_online_mask, mask) < nr_cpu_ids)
->  			/* One of our CPUs online: restore mask */
-> -			set_cpus_allowed_ptr(pgdat->kcompactd, mask);
-> +			if (pgdat->kcompactd)
-> +				set_cpus_allowed_ptr(pgdat->kcompactd, mask);
->  	}
->  	return 0;
->  }
+oops.
 
-Why not fail to bring the node online if kcompactd_run() failed?
-
-Also, should we panic the system if kcompactd_run() failed in
-kcompactd_init()?
-
+What are the user-visible runtime effects of this flaw?

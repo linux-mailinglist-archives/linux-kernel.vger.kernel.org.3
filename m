@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B5DD506112
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FAE6506110
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:46:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242199AbiDSApo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40044 "EHLO
+        id S242269AbiDSAqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:46:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241094AbiDSApN (ORCPT
+        with ESMTP id S241123AbiDSApO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:45:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF64D2A724
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:31 -0700 (PDT)
+        Mon, 18 Apr 2022 20:45:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEF8029CA5
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 17:42:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BEE5961382
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:42:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B07D0C385B9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80BE2B81144
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 00:42:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACB33C385B8;
         Tue, 19 Apr 2022 00:42:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650328947;
-        bh=LIAUuKjPhnDlL3iLTwusab7z19Sgly7N5/hwAttZiuw=;
+        bh=y5fnbtEDxlIRgLdidVqgeaZ0Z82o98qJVKjRSnwleXw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aWXqWGu4sbJfzZ7h3iXTISgudkU+6XIa2HyA/Ykche3PMDqLcH7vgsEHuHD+TwEVc
-         tJDJvknmjebuK/P/Dcw5lcaLkWT7RoiWVdaP73GWuQlm+kJf4H3m33GB89QC/jVPKk
-         oDZiq998L737uat3yukj9+cSkQVdqSiPqZWKqoO8vSSNjY9Vi1WIFhK5bITWvOCxhz
-         jOrBj1mdUPxrnl8erGFCB3fI8JU03sKo7EJR3apAy7OD2coFI5yjscF30TTuGZ2Zcg
-         2EPA2PN069RTYL2+tTeq3QG/nlBBrmAoSbxRZxyBir7SB6nMK8PCAUaECqil7gJNW7
-         X29rSQIX6XK8w==
+        b=q7PzjNCcRGILEs7f4n9xctxnxdHlJsBULK7Qs/wuB9qQhHFobIkfg8sg03UpKVFO4
+         DSXUsE0YkvDkv0T4QP+x27CDnt+5u/9YlOPuZifNavBVMN4kubBFJqCkI+XqotwAHA
+         3o1uhlX3b304CYx3aRqvFeFYk1sjfVIld49QNjygZi+9c9b0W18mqAmvov+2E/mLk3
+         WiAyB0nHzU3c1wddwLUmjm5V6H0Gh04GfzzJo6O7+WRnVsE2pKxjAaWofqJS0/6Q4l
+         lh580j0WCn6mP5breEnQUvQAEXZRW79juXhMQUeZSOZmf02DZPl0bhZZqB7fR+oh+Z
+         OiN2WMfI6NM7g==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 18E765C1308; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
+        id 1ABFC5C1355; Mon, 18 Apr 2022 17:42:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
+        David Laight <David.Laight@aculab.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 10/61] tools/nolibc/ctype: add the missing is* functions
-Date:   Mon, 18 Apr 2022 17:41:34 -0700
-Message-Id: <20220419004225.3952530-10-paulmck@kernel.org>
+Subject: [PATCH nolibc 11/61] tools/nolibc/types: move the FD_* functions to macros in types.h
+Date:   Mon, 18 Apr 2022 17:41:35 -0700
+Message-Id: <20220419004225.3952530-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419004219.GA3952301@paulmck-ThinkPad-P17-Gen-1>
@@ -59,107 +60,87 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-There was only isdigit, this commit adds the other ones.
+FD_SET, FD_CLR, FD_ISSET, FD_ZERO are often expected to be macros and
+not functions. In addition we already have a file dedicated to such
+macros and types used by syscalls, it's types.h, so let's move them
+there and turn them to macros. FD_CLR() and FD_ISSET() were missing,
+so they were added. FD_ZERO() now deals with its own loop so that it
+doesn't rely on memset() that sets one byte at a time.
 
+Cc: David Laight <David.Laight@aculab.com>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/include/nolibc/ctype.h | 79 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+ tools/include/nolibc/nolibc.h | 14 --------------
+ tools/include/nolibc/types.h  | 30 ++++++++++++++++++++++++++++++
+ 2 files changed, 30 insertions(+), 14 deletions(-)
 
-diff --git a/tools/include/nolibc/ctype.h b/tools/include/nolibc/ctype.h
-index 6735bd906f25..e3000b2992d7 100644
---- a/tools/include/nolibc/ctype.h
-+++ b/tools/include/nolibc/ctype.h
-@@ -13,10 +13,87 @@
-  * As much as possible, please keep functions alphabetically sorted.
-  */
+diff --git a/tools/include/nolibc/nolibc.h b/tools/include/nolibc/nolibc.h
+index c96c6cb7f3ae..2267d98337ea 100644
+--- a/tools/include/nolibc/nolibc.h
++++ b/tools/include/nolibc/nolibc.h
+@@ -118,20 +118,6 @@ const char *ltoa(long in)
  
-+static __attribute__((unused))
-+int isascii(int c)
-+{
-+	/* 0x00..0x7f */
-+	return (unsigned int)c <= 0x7f;
-+}
-+
-+static __attribute__((unused))
-+int isblank(int c)
-+{
-+	return c == '\t' || c == ' ';
-+}
-+
-+static __attribute__((unused))
-+int iscntrl(int c)
-+{
-+	/* 0x00..0x1f, 0x7f */
-+	return (unsigned int)c < 0x20 || c == 0x7f;
-+}
-+
+ /* Here come a few helper functions */
+ 
+-static __attribute__((unused))
+-void FD_ZERO(fd_set *set)
+-{
+-	memset(set, 0, sizeof(*set));
+-}
+-
+-static __attribute__((unused))
+-void FD_SET(int fd, fd_set *set)
+-{
+-	if (fd < 0 || fd >= FD_SETSIZE)
+-		return;
+-	set->fd32[fd / 32] |= 1 << (fd & 31);
+-}
+-
+ /* WARNING, it only deals with the 4096 first majors and 256 first minors */
  static __attribute__((unused))
- int isdigit(int c)
- {
--	return (unsigned int)(c - '0') <= 9;
-+	return (unsigned int)(c - '0') < 10;
-+}
-+
-+static __attribute__((unused))
-+int isgraph(int c)
-+{
-+	/* 0x21..0x7e */
-+	return (unsigned int)(c - 0x21) < 0x5e;
-+}
-+
-+static __attribute__((unused))
-+int islower(int c)
-+{
-+	return (unsigned int)(c - 'a') < 26;
-+}
-+
-+static __attribute__((unused))
-+int isprint(int c)
-+{
-+	/* 0x20..0x7e */
-+	return (unsigned int)(c - 0x20) < 0x5f;
-+}
-+
-+static __attribute__((unused))
-+int isspace(int c)
-+{
-+	/* \t is 0x9, \n is 0xA, \v is 0xB, \f is 0xC, \r is 0xD */
-+	return ((unsigned int)c == ' ') || (unsigned int)(c - 0x09) < 5;
-+}
-+
-+static __attribute__((unused))
-+int isupper(int c)
-+{
-+	return (unsigned int)(c - 'A') < 26;
-+}
-+
-+static __attribute__((unused))
-+int isxdigit(int c)
-+{
-+	return isdigit(c) || (unsigned int)(c - 'A') < 6 || (unsigned int)(c - 'a') < 6;
-+}
-+
-+static __attribute__((unused))
-+int isalpha(int c)
-+{
-+	return islower(c) || isupper(c);
-+}
-+
-+static __attribute__((unused))
-+int isalnum(int c)
-+{
-+	return isalpha(c) || isdigit(c);
-+}
-+
-+static __attribute__((unused))
-+int ispunct(int c)
-+{
-+	return isgraph(c) && !isalnum(c);
- }
+ dev_t makedev(unsigned int major, unsigned int minor)
+diff --git a/tools/include/nolibc/types.h b/tools/include/nolibc/types.h
+index 2f09abaf95f1..a4dda0a22fc2 100644
+--- a/tools/include/nolibc/types.h
++++ b/tools/include/nolibc/types.h
+@@ -75,6 +75,36 @@ typedef struct {
+ 	uint32_t fd32[FD_SETSIZE / 32];
+ } fd_set;
  
- #endif /* _NOLIBC_CTYPE_H */
++#define FD_CLR(fd, set) do {                                            \
++		fd_set *__set = (set);                                  \
++		int __fd = (fd);                                        \
++		if (__fd >= 0)                                          \
++			__set->fd32[__fd / 32] &= ~(1U << (__fd & 31)); \
++	} while (0)
++
++#define FD_SET(fd, set) do {                                            \
++		fd_set *__set = (set);                                  \
++		int __fd = (fd);                                        \
++		if (__fd >= 0)                                          \
++			__set->fd32[__fd / 32] |= 1U << (__fd & 31);    \
++	} while (0)
++
++#define FD_ISSET(fd, set) ({                                                  \
++		fd_set *__set = (set);                                        \
++		int __fd = (fd);                                              \
++		int __r = 0;                                                  \
++		if (__fd >= 0)                                                \
++			__r = !!(__set->fd32[__fd / 32] & 1U << (__fd & 31)); \
++		__r;                                                          \
++	})
++
++#define FD_ZERO(set) do {                                               \
++		fd_set *__set = (set);                                  \
++		int __idx;                                              \
++		for (__idx = 0; __idx < FD_SETSIZE / 32; __idx ++)      \
++			__set->fd32[__idx] = 0;                         \
++	} while (0)
++
+ /* for poll() */
+ struct pollfd {
+ 	int fd;
 -- 
 2.31.1.189.g2e36527f23
 

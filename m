@@ -2,110 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CEF75072F5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5225072F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 18:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354634AbiDSQdo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 12:33:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
+        id S1354641AbiDSQeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 12:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiDSQdl (ORCPT
+        with ESMTP id S229538AbiDSQee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 12:33:41 -0400
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A5B167E5;
-        Tue, 19 Apr 2022 09:30:57 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id i20so31988704ybj.7;
-        Tue, 19 Apr 2022 09:30:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=1swu2cTkh+aC67hs8/dbpRCHUF/l5DGtGfoyG/d6XKk=;
-        b=J1/ruRcPMJaZq7qjrrx0TXkP7nD6MSIfWnWk/OX7rYokdQP1KbskYA6fUlCZvLuSFn
-         g8uX9SA372G0zPzbIjeC09mCtoKuZs25RzV9vnfZ0oZ/Jdzkf8kftk3/lwdpyJK6PcqR
-         6EyuXx2Rl+iyHeD5syP8HVXch2F0mjzBt61d5L92QNS4nfooxLW+Rayw5VObfyZ3dIOr
-         cUzikfsP2hXeHmEbH/8AiaEvbdqDHH3hIuyYLrImNgzx4xOM+2g5zLhU7fQN3GeRSEf6
-         dVzVMf740SlVQuXgLcyRldJ7VXU8zR2IGdx/DSH5Z57QJmMIaplMBfJ6wNpP71kXh2kY
-         0ang==
-X-Gm-Message-State: AOAM532Jv5Yd0NMFwGFd1HYvdjFkBWCR8sNAdcXmDnlY2zMCYLaFYTmD
-        UmAh9CSZWyqlp9bcaPEaWJug3tFwHILyI0wrpho=
-X-Google-Smtp-Source: ABdhPJwgJQoyFgoJ4viOOB7zae8VQfrZU3484x23p0NkjJKHc4tOrAbCdxVE+zqLVq/2BAz68JJcq87Hc3UBhR5fH7w=
-X-Received: by 2002:a05:6902:187:b0:63d:9c95:edca with SMTP id
- t7-20020a056902018700b0063d9c95edcamr15432354ybh.81.1650385856684; Tue, 19
- Apr 2022 09:30:56 -0700 (PDT)
+        Tue, 19 Apr 2022 12:34:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DEA323BF4
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 09:31:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E07011F753;
+        Tue, 19 Apr 2022 16:31:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1650385909; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FO3XX7Rny2nsJoT+gYq0ibjOzFl1Xd4EM1kydabFEzE=;
+        b=kjokVUJ3xRC0ikC463fBM8xhon5NE74/yvmE8X96/o1PsvEjmSm80uds6zRrMGyGjszGvm
+        rOy1yIYyESFXkRyVxxueBHQrQFCezHrP8mP0NmExj+b1M6/gfZIM5Sx/L/1vU9iqwEdxAq
+        CkATQbHpsq0f2Op5GAJyEbE+MCe5CnU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1650385909;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FO3XX7Rny2nsJoT+gYq0ibjOzFl1Xd4EM1kydabFEzE=;
+        b=T9zksfhxLXx1ImU1UANHvwz0/HZ5i5o86PA59TzsIBJeQPbjUuPRdFLYwkLrmTn4rBRLJg
+        EXWdcvejuv6xGpBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 88124132E7;
+        Tue, 19 Apr 2022 16:31:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id wDeNIPXjXmL5VQAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Tue, 19 Apr 2022 16:31:49 +0000
+Message-ID: <3cc33611-a430-1ce4-bb30-7dc62a530cb8@suse.cz>
+Date:   Tue, 19 Apr 2022 18:31:49 +0200
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.817702355@linutronix.de>
-In-Reply-To: <20220415161206.817702355@linutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 18:30:45 +0200
-Message-ID: <CAJZ5v0hzpitKZJxuP_UuMWpJJoYaLBqd4iHawn44HzYXYHkf1g@mail.gmail.com>
-Subject: Re: [patch 08/10] x86/aperfmperf: Store aperf/mperf data for cpu
- frequency reads
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.7.0
+Subject: Re: [PATCH v3 14/16] mm: support GUP-triggered unsharing of anonymous
+ pages
+Content-Language: en-US
+To:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        David Rientjes <rientjes@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Yang Shi <shy828301@gmail.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jann Horn <jannh@google.com>, Michal Hocko <mhocko@kernel.org>,
+        Nadav Amit <namit@vmware.com>, Rik van Riel <riel@surriel.com>,
+        Roman Gushchin <guro@fb.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        Donald Dutile <ddutile@redhat.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Oleg Nesterov <oleg@redhat.com>, Jan Kara <jack@suse.cz>,
+        Liang Zhang <zhangliang5@huawei.com>,
+        Pedro Gomes <pedrodemargomes@gmail.com>,
+        Oded Gabbay <oded.gabbay@gmail.com>, linux-mm@kvack.org
+References: <20220329160440.193848-1-david@redhat.com>
+ <20220329160440.193848-15-david@redhat.com>
+ <9005b167-db08-c967-463b-5e0e092cbb6c@suse.cz>
+ <c003964a-9fa1-b17c-158a-8ccbf4ff8656@redhat.com>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <c003964a-9fa1-b17c-158a-8ccbf4ff8656@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:20 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> Now that the MSR readout is unconditional, store the results in the per CPU
-> data structure along with a jiffies timestamp for the CPU frequency readout
-> code.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+On 4/19/22 18:29, David Hildenbrand wrote:
+>>> @@ -4515,8 +4550,11 @@ static inline vm_fault_t create_huge_pmd(struct vm_fault *vmf)
+>>>  /* `inline' is required to avoid gcc 4.1.2 build error */
+>>>  static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>>>  {
+>>> +	const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+>>> +
+>>>  	if (vma_is_anonymous(vmf->vma)) {
+>>> -		if (userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>>> +		if (unlikely(unshare) &&
+>> 
+>> Is this condition flipped, should it be "likely(!unshare)"? As the similar
+>> code in do_wp_page() does.
+> 
+> Good catch, this should affect uffd-wp on THP -- it wouldn't trigger as expected. Thanks a lot for finding that!
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Yay, glad I was right this time.
 
-> ---
->  arch/x86/kernel/cpu/aperfmperf.c |   14 +++++++++++++-
->  1 file changed, 13 insertions(+), 1 deletion(-)
->
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -24,11 +24,17 @@
->  #include "cpu.h"
->
->  struct aperfmperf {
-> +       seqcount_t      seq;
-> +       unsigned long   last_update;
-> +       u64             acnt;
-> +       u64             mcnt;
->         u64             aperf;
->         u64             mperf;
->  };
->
-> -static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples);
-> +static DEFINE_PER_CPU_SHARED_ALIGNED(struct aperfmperf, cpu_samples) = {
-> +       .seq = SEQCNT_ZERO(cpu_samples.seq)
-> +};
->
->  struct aperfmperf_sample {
->         unsigned int    khz;
-> @@ -515,6 +521,12 @@ void arch_scale_freq_tick(void)
->         s->aperf = aperf;
->         s->mperf = mperf;
->
-> +       raw_write_seqcount_begin(&s->seq);
-> +       s->last_update = jiffies;
-> +       s->acnt = acnt;
-> +       s->mcnt = mcnt;
-> +       raw_write_seqcount_end(&s->seq);
-> +
->         scale_freq_tick(acnt, mcnt);
->  }
->
->
+>> 
+>>> +		    userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>>>  			return handle_userfault(vmf, VM_UFFD_WP);
+>>>  		return do_huge_pmd_wp_page(vmf);
+>>>  	}
+>>> @@ -4651,10 +4689,11 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
+>>>  		update_mmu_tlb(vmf->vma, vmf->address, vmf->pte);
+>>>  		goto unlock;
+>>>  	}
+>>> -	if (vmf->flags & FAULT_FLAG_WRITE) {
+>>> +	if (vmf->flags & (FAULT_FLAG_WRITE|FAULT_FLAG_UNSHARE)) {
+>>>  		if (!pte_write(entry))
+>>>  			return do_wp_page(vmf);
+>>> -		entry = pte_mkdirty(entry);
+>>> +		else if (likely(vmf->flags & FAULT_FLAG_WRITE))
+>>> +			entry = pte_mkdirty(entry);
+>>>  	}
+>>>  	entry = pte_mkyoung(entry);
+>>>  	if (ptep_set_access_flags(vmf->vma, vmf->address, vmf->pte, entry,
+>> 
+> 
+> 
+> So the following on top, right?
+
+Looks good!
+
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 8b3cb73f5e44..4584c7e87a70 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -3137,7 +3137,7 @@ static vm_fault_t wp_page_copy(struct vm_fault *vmf)
+>                         free_swap_cache(old_page);
+>                 put_page(old_page);
+>         }
+> -       return page_copied && !unshare ? VM_FAULT_WRITE : 0;
+> +       return (page_copied && !unshare) ? VM_FAULT_WRITE : 0;
+>  oom_free_new:
+>         put_page(new_page);
+>  oom:
+> @@ -4604,7 +4604,7 @@ static inline vm_fault_t wp_huge_pmd(struct vm_fault *vmf)
+>         const bool unshare = vmf->flags & FAULT_FLAG_UNSHARE;
+>  
+>         if (vma_is_anonymous(vmf->vma)) {
+> -               if (unlikely(unshare) &&
+> +               if (likely(!unshare) &&
+>                     userfaultfd_huge_pmd_wp(vmf->vma, vmf->orig_pmd))
+>                         return handle_userfault(vmf, VM_UFFD_WP);
+>                 return do_huge_pmd_wp_page(vmf);
+> 
+> 
+

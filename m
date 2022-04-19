@@ -2,137 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50114506772
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:10:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C59D50677D
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350353AbiDSJM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39278 "EHLO
+        id S241458AbiDSJPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1350317AbiDSJMq (ORCPT
+        with ESMTP id S231799AbiDSJPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:12:46 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6933205F5
-        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:10:03 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J8UeR7014142;
-        Tue, 19 Apr 2022 09:09:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=C3L76yBVKtX0moocSyK7o95BiHWE2+V/apKeaccin9k=;
- b=Gp2yIQ32rKVdSvi5XtsFfmZmQgwlwzdbu7fbZpkC9IYyU/Dh2TBbUs8484v8bbGB+MlZ
- KIAdL/aBDagd7EOZl0UgFxeKHMYd0pphr0qm5JpuUAwzzIwc+X4CN1eWPlJutbL5ZNsQ
- zwCwBOgHTRDFglfOtPfzJtR4chm4yf+3zIOUwIqKMQ/DAISZSrN1PhbkI3FX7mocaDqq
- i/CPnm3lYs362yPTDa0YL6lmnBzeGrzyCFlfIwh0zZwv2gR/YYdiMluIQRnhZmNbdB/i
- lNqVhL68FnmBFx+qNBJ/yzmnGfI2eF5PE4fUCj1sY0fjOB+1EfoPPsFPX7O9aeF8Z01n Ug== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fg75qaurq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:09:49 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23J8mmKY023148;
-        Tue, 19 Apr 2022 09:09:49 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0b-001b2d01.pphosted.com with ESMTP id 3fg75qaur5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:09:48 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J92uG0006436;
-        Tue, 19 Apr 2022 09:09:47 GMT
-Received: from b06avi18626390.portsmouth.uk.ibm.com (b06avi18626390.portsmouth.uk.ibm.com [9.149.26.192])
-        by ppma02fra.de.ibm.com with ESMTP id 3fgu6u1q4w-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:09:47 +0000
-Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
-        by b06avi18626390.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J8uxk554133134
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 08:56:59 GMT
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BB105AE053;
-        Tue, 19 Apr 2022 09:09:44 +0000 (GMT)
-Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5AA65AE045;
-        Tue, 19 Apr 2022 09:09:44 +0000 (GMT)
-Received: from [9.145.173.247] (unknown [9.145.173.247])
-        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 09:09:44 +0000 (GMT)
-Message-ID: <e18a4b58-4551-aa68-ed52-baeeeaab56bb@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 11:09:43 +0200
+        Tue, 19 Apr 2022 05:15:45 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1620BD9
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:13:01 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 21so20465277edv.1
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 02:13:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=rgi3jG3IzfFk/97rZZxdzXA8E6nwdIahpnGwkXRZ4y4=;
+        b=R1TcrZ2RTC5pmzPgZI7aB8wTgTWhEWpZOOjfnnq7xYjPdQaybMCKhSvV5dDA8DI5h3
+         rr0PlQR8qMWMMK1DRZ95cbEnBdxJjgkZUv0msmH2BKLYGc6w2r0NeM3jBKfdp52S9nCl
+         A4rU1+4LhycdRF8KHn2KiqaczAUjM1Ptz3X9YqcG0lq5EHIs3NQDJqgaCRAHkHuzcV6U
+         Tt43ayianfVHmEa5yFDIHrPCbHO20Ol3lC8XNBFWRQRQrpqUgJduL1mTS63tkg01Hqhf
+         BiA3wPAJ3Bs6kVfPFDhz41/97+K9gufsiAAPXsxvsVSzQWK21dO3wtQ1aK/X3S1d9Etu
+         LA1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=rgi3jG3IzfFk/97rZZxdzXA8E6nwdIahpnGwkXRZ4y4=;
+        b=NXhPt6PUnNP7PA8Jx74s47CP9nvP5RGepk/DNJNrwLbRMWXVJxGHLD2IOwouwkf7/Q
+         CGS+TvIqE8m+mjLL7xlmrFLu73RCSB9wPvCTSFvTOwFvE9QPbokXuGQTl9pPXFeKg85Q
+         N9zyHrUul+xXP4fjgHTRQyngEwDINBMN+UbdMenDOW1IP9+cSaJKaIxwxS61r8tTxZFy
+         7Ag6cJon00cKs0/WVkwte6XW3ETWrlfz7U7su8Fttzyy5kyWg78ZBPbjoMq+XShi+4ZW
+         SmfGZnbhrwQ/HeQ9YlfSovMvDO/katRra1ROncM12YwwSuiujZxDbVy9eQpl8ZRwdfrl
+         GaWQ==
+X-Gm-Message-State: AOAM530A93TVMSZik9f8fsRwk1w4xVnoSjbMrIHuPSHRjDtXjX7L1j0d
+        Im0H6v5tgsIxw6ccpn8QBntJmA==
+X-Google-Smtp-Source: ABdhPJyuIVtA+uctlp9lLBFQpEOpgNfJfDW1L9ykM3qXhzLTfUxYzGOiHkJ2xPJAhqiqol9vRmoCgQ==
+X-Received: by 2002:aa7:dc49:0:b0:41d:72e2:d34e with SMTP id g9-20020aa7dc49000000b0041d72e2d34emr16100008edu.385.1650359580300;
+        Tue, 19 Apr 2022 02:13:00 -0700 (PDT)
+Received: from [192.168.0.217] (xdsl-188-155-176-92.adslplus.ch. [188.155.176.92])
+        by smtp.gmail.com with ESMTPSA id bm6-20020a170906c04600b006e89a5f5b8fsm5498890ejb.153.2022.04.19.02.12.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 19 Apr 2022 02:12:59 -0700 (PDT)
+Message-ID: <60955707-aabc-5313-aeb9-d65453538de0@linaro.org>
+Date:   Tue, 19 Apr 2022 11:12:58 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH] misc: ocxl: fix possible double free in
- ocxl_file_register_afu
+ Thunderbird/91.7.0
+Subject: Re: [PATCH] extcon: ptn5150: add usb role class support
 Content-Language: en-US
-To:     Hangyu Hua <hbh25y@gmail.com>, ajd@linux.ibm.com, arnd@arndb.de,
-        gregkh@linuxfoundation.org, mpe@ellerman.id.au,
-        alastair@d-silva.org
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-References: <20220418085758.38145-1-hbh25y@gmail.com>
-From:   Frederic Barrat <fbarrat@linux.ibm.com>
-In-Reply-To: <20220418085758.38145-1-hbh25y@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Jun Li <jun.li@nxp.com>
+Cc:     "myungjoo.ham@samsung.com" <myungjoo.ham@samsung.com>,
+        "cw00.choi@samsung.com" <cw00.choi@samsung.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Frank Li <frank.li@nxp.com>, Xu Yang <xu.yang_2@nxp.com>
+References: <1649238142-27564-1-git-send-email-jun.li@nxp.com>
+ <4ad9e733-7d8b-a73b-c59e-d9b6d5e58498@linaro.org>
+ <VI1PR04MB4333FE5742667FBE8AAACD2789E79@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <VI1PR04MB4333585DED292C3AC920B21E89F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <CAGE=qro_cWtZe1xVz0MrKXaKnhN_RU+kVPwtLdVj1wsjpSDMjA@mail.gmail.com>
+ <VI1PR04MB43330369E23F47E26248853989F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+ <3dafc432-849b-0a78-f3dd-954d88c74a61@linaro.org>
+ <VI1PR04MB433336414971E5EB6F4BAA8389F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <VI1PR04MB433336414971E5EB6F4BAA8389F29@VI1PR04MB4333.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: tqsESUJyAgQ5cgbTVcLJmO-gOrB5AY6G
-X-Proofpoint-GUID: hK1cENiVVV_RTiAQqrd1Pjvhhqe0EkBp
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_03,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- mlxlogscore=999 spamscore=0 suspectscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 priorityscore=1501 bulkscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190051
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 18/04/2022 10:57, Hangyu Hua wrote:
-> info_release() will be called in device_unregister() when info->dev's
-> reference count is 0. So there is no need to call ocxl_afu_put() and
-> kfree() again.
+On 19/04/2022 10:51, Jun Li wrote:
+> My test config is making USB_ROLE_SWITCH=m, but PTN5150=y
 > 
-> Fix this by adding free_minor() and return to err_unregister error path.
+> So with below header file: 
 > 
-> Fixes: 75ca758adbaf ("ocxl: Create a clear delineation between ocxl backend & frontend")
-> Signed-off-by: Hangyu Hua <hbh25y@gmail.com>
-> ---
-
-
-Thanks for fixing that error path!
-I'm now thinking it would be cleaner to have the call to free_minor() in 
-the info_release() callback but that would be another patch.
-In any case:
-Acked-by: Frederic Barrat <fbarrat@linux.ibm.com>
-
-   Fred
-
-
->   drivers/misc/ocxl/file.c | 2 ++
->   1 file changed, 2 insertions(+)
+> #if IS_ENABLED(CONFIG_USB_ROLE_SWITCH)
+> void usb_role_switch_put(struct usb_role_switch *sw);
+> #else
+> static inline void usb_role_switch_put(struct usb_role_switch *sw) { }
+> #endif
 > 
-> diff --git a/drivers/misc/ocxl/file.c b/drivers/misc/ocxl/file.c
-> index d881f5e40ad9..6777c419a8da 100644
-> --- a/drivers/misc/ocxl/file.c
-> +++ b/drivers/misc/ocxl/file.c
-> @@ -556,7 +556,9 @@ int ocxl_file_register_afu(struct ocxl_afu *afu)
->   
->   err_unregister:
->   	ocxl_sysfs_unregister_afu(info); // safe to call even if register failed
-> +	free_minor(info);
->   	device_unregister(&info->dev);
-> +	return rc;
->   err_put:
->   	ocxl_afu_put(afu);
->   	free_minor(info);
+> Will have link error.
+
+Yep, true. I cannot remember the solution for that... With the select
+you cannot disable USB_ROLE_SWITCH. With "depends on X || depends on
+!X", one still cannot disable USB_ROLE_SWITCH. However this is a common
+problem and I am pretty sure people were working on this. :)
+
+Best regards,
+Krzysztof

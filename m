@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8EF75060CE
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:16:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A30ED5060D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 02:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239594AbiDSASO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 20:18:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46742 "EHLO
+        id S240153AbiDSATJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 20:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239369AbiDSASI (ORCPT
+        with ESMTP id S239478AbiDSASM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 20:18:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AD96140B0;
-        Mon, 18 Apr 2022 17:15:28 -0700 (PDT)
+        Mon, 18 Apr 2022 20:18:12 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09AC140C0;
+        Mon, 18 Apr 2022 17:15:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABCA761337;
-        Tue, 19 Apr 2022 00:15:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172AFC385A9;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7ABC6B81136;
+        Tue, 19 Apr 2022 00:15:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26776C385AE;
         Tue, 19 Apr 2022 00:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1650327327;
-        bh=hKYFeLRAfs3mwen3Yl8UtSva8wR3rG52Yfm3W98aAE8=;
+        bh=dOetzT2hWmKf0ZVCajjiu0ZALSsbbVr5tC3LfTOHRL4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=o6CEjkvyr1ezViRAbjUXebY1+4VKLIihGoqKM9XlDTzvghptzNA5W9lukHxl5qFrk
-         dQBxZKNG2cD9BLOGhwPY5A/pSeZ4k+Cd/Kxlmw9IscjA1eraHwrhOa1Z6sPSdfO4ES
-         cLA6MmAK/7OD9nP1OqACfyIQmMcNn1Ycdzt3PWg7MStAxAlkxIdEr6ONlpBlgKtqsJ
-         cJFSCDf20BXGAkmQATZ4ModZdC54PfYkQrKtayKZC0Vi7uI0U760MGTjW5mIDMuRXS
-         G0td/ogxGZ2ZEuJAXe8VYUqfGe3Qoi7S6goQAFDcqC3/7+Bn4j/PURIBSxnKUIsUbt
-         RB3GXH9JgfTTQ==
+        b=Qnjm44LbV0sGS/H8GhrrpoHTpqTUknEOU7L7oODl85SETld2qx6nf8yXtT2TmKTCD
+         xxg8Cnx1MWfCeziTzK/j0jhiuA28FlwUdD/C/Qy7e2qqltpm2Q2z1qnXQj8lsnZ1t9
+         260oifser+uFbnqeCa56vxNtAw0mALjOQTowmPE7qUwjiygW6waSgLmwxBHlhR8vxw
+         978vUdJVwNXJlRNJ6ByuK3ow7w5YllAk9bEKc4Oav8wQ9FJSsYMhoIgr44RWqVRaaM
+         3Z/6G22MH5WYzwfrPCx/dsiClgSv4IUSA58V308Bu8rYs3GWv8J8EUYsbz7MrM7Lco
+         30K5ggQvuaZfA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id C6EDD5C0848; Mon, 18 Apr 2022 17:15:26 -0700 (PDT)
+        id C8CDB5C0A0D; Mon, 18 Apr 2022 17:15:26 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 03/12] torture: Permit running of experimental torture types
-Date:   Mon, 18 Apr 2022 17:15:16 -0700
-Message-Id: <20220419001525.3950505-3-paulmck@kernel.org>
+        rostedt@goodmis.org, Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 04/12] torture: Make thread detection more robust by using lspcu
+Date:   Mon, 18 Apr 2022 17:15:17 -0700
+Message-Id: <20220419001525.3950505-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220419001519.GA3950405@paulmck-ThinkPad-P17-Gen-1>
 References: <20220419001519.GA3950405@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,60 +57,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit weakens the checks of the kvm.sh script's --torture parameter
-and the kvm-recheck.sh script's parsing so that experimental torture tests
-may be created without updating these two scripts.  The changes required
-are to the appropriate Makefile and Kconfig file, plus a directory
-whose name begins with "X" must be added to the rcutorture/configs file.
-This new directory's name can then be passed in via the kvm.sh script's
---torture parameter.
+From: Paul Menzel <pmenzel@molgen.mpg.de>
 
+For consecutive numbers the lscpu command collapses the output and just
+shows the range with start and end. The processors are numbered that
+way on POWER8.
+
+    $ sudo ppc64_cpu --smt=8
+    $ lscpu | grep '^NUMA node'
+    NUMA node(s):                    2
+    NUMA node0 CPU(s):               0-79
+    NUMA node8 CPU(s):               80-159
+
+This causes the heuristic to detect the number threads per core, looking
+for the number after the first comma, to fail, and QEMU aborts because of
+invalid arguments.
+
+    $ lscpu | grep '^NUMA node0' | sed -e 's/^[^,-]*(,|\-)\([0-9]*\),.*$/\1/'
+    NUMA node0 CPU(s):               0-79
+
+But the lscpu command shows the number of threads per core:
+
+    $ sudo ppc64_cpu --smt=8
+    $ lscpu | grep 'Thread(s) per core'
+    Thread(s) per core:              8
+    $ sudo ppc64_cpu --smt=off
+    $ lscpu | grep 'Thread(s) per core'
+    Thread(s) per core:              1
+
+This commit therefore directly uses that value and replaces use of grep
+with "sed -n" and its "p" command.
+
+Signed-off-by: Paul Menzel <pmenzel@molgen.mpg.de>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/testing/selftests/rcutorture/bin/kvm-recheck.sh | 7 ++++++-
- tools/testing/selftests/rcutorture/bin/kvm.sh         | 4 ++--
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ tools/testing/selftests/rcutorture/bin/functions.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh b/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
-index 0a5419982ab3..0789c5606d2a 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-recheck.sh
-@@ -33,7 +33,12 @@ do
- 		TORTURE_SUITE="`cat $i/../torture_suite`"
- 		configfile=`echo $i | sed -e 's,^.*/,,'`
- 		rm -f $i/console.log.*.diags
--		kvm-recheck-${TORTURE_SUITE}.sh $i
-+		case "${TORTURE_SUITE}" in
-+		X*)
-+			;;
-+		*)
-+			kvm-recheck-${TORTURE_SUITE}.sh $i
-+		esac
- 		if test -f "$i/qemu-retval" && test "`cat $i/qemu-retval`" -ne 0 && test "`cat $i/qemu-retval`" -ne 137
- 		then
- 			echo QEMU error, output:
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm.sh b/tools/testing/selftests/rcutorture/bin/kvm.sh
-index 55b2c1533282..af58b86a503a 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm.sh
-@@ -86,7 +86,7 @@ usage () {
- 	echo "       --remote"
- 	echo "       --results absolute-pathname"
- 	echo "       --shutdown-grace seconds"
--	echo "       --torture lock|rcu|rcuscale|refscale|scf"
-+	echo "       --torture lock|rcu|rcuscale|refscale|scf|X*"
- 	echo "       --trust-make"
- 	exit 1
- }
-@@ -231,7 +231,7 @@ do
- 		shift
- 		;;
- 	--torture)
--		checkarg --torture "(suite name)" "$#" "$2" '^\(lock\|rcu\|rcuscale\|refscale\|scf\)$' '^--'
-+		checkarg --torture "(suite name)" "$#" "$2" '^\(lock\|rcu\|rcuscale\|refscale\|scf\|X.*\)$' '^--'
- 		TORTURE_SUITE=$2
- 		TORTURE_MOD="`echo $TORTURE_SUITE | sed -e 's/^\(lock\|rcu\|scf\)$/\1torture/'`"
- 		shift
+diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/testing/selftests/rcutorture/bin/functions.sh
+index c35ba24f994c..66d0414d8e4b 100644
+--- a/tools/testing/selftests/rcutorture/bin/functions.sh
++++ b/tools/testing/selftests/rcutorture/bin/functions.sh
+@@ -301,7 +301,7 @@ specify_qemu_cpus () {
+ 			echo $2 -smp $3
+ 			;;
+ 		qemu-system-ppc64)
+-			nt="`lscpu | grep '^NUMA node0' | sed -e 's/^[^,]*,\([0-9]*\),.*$/\1/'`"
++			nt="`lscpu | sed -n 's/^Thread(s) per core:\s*//p'`"
+ 			echo $2 -smp cores=`expr \( $3 + $nt - 1 \) / $nt`,threads=$nt
+ 			;;
+ 		esac
 -- 
 2.31.1.189.g2e36527f23
 

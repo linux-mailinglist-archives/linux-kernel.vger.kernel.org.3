@@ -2,71 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A125C506A23
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E2BE506A5E
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 13:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351329AbiDSL2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 07:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60488 "EHLO
+        id S1351216AbiDSL2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 07:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351340AbiDSL1k (ORCPT
+        with ESMTP id S1349331AbiDSL2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 07:27:40 -0400
-Received: from alexa-out-sd-02.qualcomm.com (alexa-out-sd-02.qualcomm.com [199.106.114.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB6AA18B;
-        Tue, 19 Apr 2022 04:24:58 -0700 (PDT)
+        Tue, 19 Apr 2022 07:28:52 -0400
+Received: from alexa-out.qualcomm.com (alexa-out.qualcomm.com [129.46.98.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAD7626107;
+        Tue, 19 Apr 2022 04:26:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
-  t=1650367498; x=1681903498;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=w7LPbHdBtF19813RNb9Io8T1jfXZuxIKBngxZzsH7HM=;
-  b=oMdfT8LBfhedBB5MDjUlX8CG7g9qRfMGIPsniRj3k+8kjdVhTAb5uRlB
-   vwBwGNpcxvTYbwxTietHuLeyECrV9ilizuQE7wGbLBUt+BL2fm9IQ7mMs
-   ssCQaOytoN0dbf6/SbYFLOwagNozBETsquUzMIKDle5I8gDuSVuM1Qn7B
-   E=;
-Received: from unknown (HELO ironmsg02-sd.qualcomm.com) ([10.53.140.142])
-  by alexa-out-sd-02.qualcomm.com with ESMTP; 19 Apr 2022 04:24:57 -0700
+  t=1650367569; x=1681903569;
+  h=from:to:cc:subject:date:message-id:mime-version;
+  bh=iLiidp+TGadOX0ZPyXvxXxQB0kCJMreyZrDBDHEpvHM=;
+  b=YpcaJM+1L/oFsNsMsjU5EcPAdgu8o1FRnZOyisd8gmR1U9qAtNyM1Ef8
+   wBSh/yqQpggIALCcYwTpvcBD5SgAZMsdQE1ZSBnpYrwFQzNIBNI4DDTuh
+   YDYqq624HXG0ce0LJKp11ZohEld9zzXlcfx7P2bBS3DV/TYoDp8qboQie
+   8=;
+Received: from ironmsg-lv-alpha.qualcomm.com ([10.47.202.13])
+  by alexa-out.qualcomm.com with ESMTP; 19 Apr 2022 04:26:09 -0700
 X-QCInternal: smtphost
 Received: from nasanex01c.na.qualcomm.com ([10.47.97.222])
-  by ironmsg02-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 04:24:57 -0700
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+  by ironmsg-lv-alpha.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 04:26:09 -0700
+Received: from hu-mojha-hyd.qualcomm.com (10.80.80.8) by
  nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 19 Apr 2022 04:24:57 -0700
-Received: from [10.216.20.240] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 19 Apr
- 2022 04:24:52 -0700
-Message-ID: <5ac149ac-4862-e8c9-185c-524c4b111961@quicinc.com>
-Date:   Tue, 19 Apr 2022 16:54:49 +0530
+ 15.2.986.22; Tue, 19 Apr 2022 04:26:06 -0700
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+To:     <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <quic_mojha@quicinc.com>
+Subject: [PATCH v4 ]  remoteproc: Use unbounded workqueue for recovery work
+Date:   Tue, 19 Apr 2022 16:55:54 +0530
+Message-ID: <1650367554-15510-1-git-send-email-quic_mojha@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v8 2/4] arm64: dts: qcom: sc7280: Add nodes for wcd9385
- and max98360a codec
-Content-Language: en-US
-To:     Matthias Kaehlcke <mka@chromium.org>
-CC:     <agross@kernel.org>, <bjorn.andersson@linaro.org>,
-        <robh+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_rohkumar@quicinc.com>, <srinivas.kandagatla@linaro.org>,
-        <dianders@chromium.org>, <swboyd@chromium.org>,
-        <judyhsiao@chromium.org>,
-        Venkata Prasad Potturu <quic_potturu@quicinc.com>
-References: <1650291252-30398-1-git-send-email-quic_srivasam@quicinc.com>
- <1650291252-30398-3-git-send-email-quic_srivasam@quicinc.com>
- <Yl2VmW18QAJl9v+m@google.com>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <Yl2VmW18QAJl9v+m@google.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.47.97.222)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,248 +56,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There could be a scenario when there is too much load on a core
+(n number of tasks which is affined) or in a case when multiple
+rproc subsystem is going for recovery, they queue their recovery
+work to one core so even though subsystem are independent their
+recovery will be delayed if one of the subsystem recovery work
+is taking more time in completing.
 
-On 4/18/2022 10:15 PM, Matthias Kaehlcke wrote:
-Thanks for your time and valuable inputs Matthias!!!
-> On Mon, Apr 18, 2022 at 07:44:10PM +0530, Srinivasa Rao Mandadapu wrote:
->> Add wcd938x and  max98360a codecs for audio use case on
->> sc7280 based platforms.
->> Add tlmm gpio property in wcd938x node for switching CTIA/OMTP Headset.
->> Add amp_en node for  max98360a codec.
-> General note: I don't think it's a good practice to add stuff like this to
-> multiple boards in a single patch. Why?
->
-> First the subject of such a patch tends to be vague ("arm64: dts: qcom:
-> sc7280: Add nodes for wcd9385 and max98360a codec"), in this case it gives
-> no hint about the boards. If someone was interested in picking changes
-> for a given board they can't easily identify from the subject that the
-> change is relevant for them.
->
-> Changes touching multiple boards are more likely to cause conflicts when
-> being picked (or reverted), both upstream and in downstream trees (which
-> unfortunately have to exist for product development). Downstream trees
-> might only pick changes for the board(s) they target, patches that touch
-> mutiple boards often cause conflicts due to context deltas in the
-> 'irrelevant' boards.
->
-> Lastly it's usually easier to get a patch reviewed (in the sense of
-> getting a 'Reviewed-by' tag) and landed that does a single thing.
+If we make this queue unbounded, the recovery work could be picked
+on any cpu. This patch is trying to address this.
 
-Yes, agree to your opinion. In a nutshell, we will include board 
-name(ex: herobrine)
+Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+---
+Changes in v4:
+  - Removed fallback option on @sarvana comment
+  - Fail the init on workqueue creation failure.
+  - modified commit text.
 
-in commit message and split the patches per external codec.
+Changes in v3:
+  - Add fallback option to go back to earlier path incase recovery wq
+    creation fails.
 
-Actually, in Initial herobrine boards, EVT and IDP, has both maxim 
-speaker and WCD codec,
+Changes in v2:
+  - Removed WQ_HIGHPRI.
+  - Updated commit text.
 
-hence we included in same patch.
 
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> Co-developed-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> Signed-off-by: Venkata Prasad Potturu <quic_potturu@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts     |  6 ++
->>   arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi |  8 +++
->>   arch/arm64/boot/dts/qcom/sc7280-idp.dtsi       | 97 ++++++++++++++++++++++++++
->>   3 files changed, 111 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->> index 344338a..aa0bf6e2 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-crd-r3.dts
->> @@ -87,6 +87,12 @@ ap_ts_pen_1v8: &i2c13 {
->>   	pins = "gpio51";
->>   };
->>   
->> +&wcd938x {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&us_euro_hs_sel>;
->> +	us-euro-gpios = <&tlmm 81 GPIO_ACTIVE_HIGH>;
->> +};
-> Since this is added for the CRD rev3 it probably should also be added to
-> sc7280-herobrine-crd.dts
-Okay. Will add in corresponding latest herobrine CRD dts file also.
->
->> +
->>   &tlmm {
->>   	tp_int_odl: tp-int-odl {
->>   		pins = "gpio7";
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> index d58045d..f247403 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine.dtsi
->> @@ -20,6 +20,14 @@
->>   #include "sc7280-chrome-common.dtsi"
->>   
->>   / {
->> +	max98360a: audio-codec-0 {
->> +		compatible = "maxim,max98360a";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&amp_en>;
->> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
->> +		#sound-dai-cells = <0>;
->> +	};
->> +
->>   	chosen {
->>   		stdout-path = "serial0:115200n8";
->>   	};
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> index 2f863c0..8dad599 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280-idp.dtsi
->> @@ -20,6 +20,42 @@
->>   		serial1 = &uart7;
->>   	};
->>   
->> +	max98360a: audio-codec-0 {
->> +		compatible = "maxim,max98360a";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&amp_en>;
->> +		sdmode-gpios = <&tlmm 63 GPIO_ACTIVE_HIGH>;
->> +		#sound-dai-cells = <0>;
->> +	};
->> +
->> +	wcd938x: audio-codec-1 {
-> Why 'wcd938x' and not 'wcd9385'?
+ drivers/remoteproc/remoteproc_core.c | 15 +++++++++++++--
+ 1 file changed, 13 insertions(+), 2 deletions(-)
 
-Actually same driver is used for both wcd9380 and wcd9385. Here we can 
-use specific name as per board.
+diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
+index c510125..c8a1e3e 100644
+--- a/drivers/remoteproc/remoteproc_core.c
++++ b/drivers/remoteproc/remoteproc_core.c
+@@ -59,6 +59,7 @@ static int rproc_release_carveout(struct rproc *rproc,
+ 
+ /* Unique indices for remoteproc devices */
+ static DEFINE_IDA(rproc_dev_index);
++static struct workqueue_struct *rproc_recovery_wq;
+ 
+ static const char * const rproc_crash_names[] = {
+ 	[RPROC_MMUFAULT]	= "mmufault",
+@@ -2755,8 +2756,7 @@ void rproc_report_crash(struct rproc *rproc, enum rproc_crash_type type)
+ 	dev_err(&rproc->dev, "crash detected in %s: type %s\n",
+ 		rproc->name, rproc_crash_to_string(type));
+ 
+-	/* Have a worker handle the error; ensure system is not suspended */
+-	queue_work(system_freezable_wq, &rproc->crash_handler);
++	queue_work(rproc_recovery_wq, &rproc->crash_handler);
+ }
+ EXPORT_SYMBOL(rproc_report_crash);
+ 
+@@ -2805,6 +2805,13 @@ static void __exit rproc_exit_panic(void)
+ 
+ static int __init remoteproc_init(void)
+ {
++	rproc_recovery_wq = alloc_workqueue("rproc_recovery_wq",
++						WQ_UNBOUND | WQ_FREEZABLE, 0);
++	if (!rproc_recovery_wq) {
++		pr_err("remoteproc: creation of rproc_recovery_wq failed\n");
++		return -ENOMEM;
++	}
++
+ 	rproc_init_sysfs();
+ 	rproc_init_debugfs();
+ 	rproc_init_cdev();
+@@ -2818,9 +2825,13 @@ static void __exit remoteproc_exit(void)
+ {
+ 	ida_destroy(&rproc_dev_index);
+ 
++	if (!rproc_recovery_wq)
++		return;
++
+ 	rproc_exit_panic();
+ 	rproc_exit_debugfs();
+ 	rproc_exit_sysfs();
++	destroy_workqueue(rproc_recovery_wq);
+ }
+ module_exit(remoteproc_exit);
+ 
+-- 
+2.7.4
 
-Will change accordingly.
-
->
->> +		compatible = "qcom,wcd9385-codec";
->> +		pinctrl-names = "default", "sleep";
->> +		pinctrl-0 = <&wcd_reset_n>;
->> +		pinctrl-1 = <&wcd_reset_n_sleep>;
->> +
->> +		reset-gpios = <&tlmm 83 GPIO_ACTIVE_HIGH>;
->> +
->> +		qcom,rx-device = <&wcd_rx>;
->> +		qcom,tx-device = <&wcd_tx>;
->> +
->> +		vdd-rxtx-supply = <&vreg_l18b_1p8>;
->> +		vdd-io-supply = <&vreg_l18b_1p8>;
->> +		vdd-buck-supply = <&vreg_l17b_1p8>;
->> +		vdd-mic-bias-supply = <&vreg_bob>;
->> +
->> +		qcom,micbias1-microvolt = <1800000>;
->> +		qcom,micbias2-microvolt = <1800000>;
->> +		qcom,micbias3-microvolt = <1800000>;
->> +		qcom,micbias4-microvolt = <1800000>;
->> +
->> +		qcom,mbhc-buttons-vthreshold-microvolt = <75000 150000 237000 500000 500000
->> +							  500000 500000 500000>;
->> +		qcom,mbhc-headset-vthreshold-microvolt = <1700000>;
->> +		qcom,mbhc-headphone-vthreshold-microvolt = <50000>;
->> +		#sound-dai-cells = <1>;
->> +	};
-> Also add this node to sc7280-herobrine-crd.dts?
-Okay. will do accordingly.
->
->> +
->>   	gpio-keys {
->>   		compatible = "gpio-keys";
->>   		label = "gpio-keys";
->> @@ -238,6 +274,19 @@
->>   	modem-init;
->>   };
->>   
->> +&lpass_rx_macro {
->> +	status = "okay";
->> +};
->> +
->> +&lpass_tx_macro {
->> +	status = "okay";
->> +};
->> +
->> +&lpass_va_macro {
->> +	status = "okay";
->> +	vdd-micb-supply = <&vreg_bob>;
->> +};
-> Enable these also in sc7280-herobrine.dtsi if other nodes are added to
-> sc7280-herobrine-crd.dts.
-Okay.
->
->> +
->>   &pcie1 {
->>   	status = "okay";
->>   	perst-gpio = <&tlmm 2 GPIO_ACTIVE_LOW>;
->> @@ -298,6 +347,26 @@
->>   	cd-gpios = <&tlmm 91 GPIO_ACTIVE_LOW>;
->>   };
->>   
->> +&swr0 {
->> +	status = "okay";
-> nit: add an empty line between properties and nodes
-Okay.
->
->> +	wcd_rx: codec@0,4 {
->> +		compatible = "sdw20217010d00";
->> +		reg = <0 4>;
->> +		#sound-dai-cells = <1>;
->> +		qcom,rx-port-mapping = <1 2 3 4 5>;
->> +	};
->> +};
->> +
->> +&swr1 {
->> +	status = "okay";
-> ditto
-Okay.
->
->> +	wcd_tx: codec@0,3 {
->> +		compatible = "sdw20217010d00";
->> +		reg = <0 3>;
->> +		#sound-dai-cells = <1>;
->> +		qcom,tx-port-mapping = <1 2 3 4>;
->> +	};
->> +};
-> Also add these to sc7280-herobrine-crd.dts?
-Okay.
->
->> +
->>   &uart5 {
->>   	compatible = "qcom,geni-debug-uart";
->>   	status = "okay";
->> @@ -561,6 +630,12 @@
->>   };
->>   
->>   &tlmm {
->> +	amp_en: amp-en {
->> +		pins = "gpio63";
->> +		bias-pull-down;
->> +		drive-strength = <2>;
->> +	};
->> +
->>   	bt_en: bt-en {
->>   		pins = "gpio85";
->>   		function = "gpio";
->> @@ -643,6 +718,28 @@
->>   		function = "gpio";
->>   		bias-pull-down;
->>   	};
->> +
->> +	us_euro_hs_sel: us-euro-hs-sel {
->> +		pins = "gpio81";
->> +		function = "gpio";
->> +		bias-pull-down;
->> +		drive-strength = <2>;
->> +	};
->> +
->> +	wcd_reset_n: wcd-reset-n {
->> +		pins = "gpio83";
->> +		function = "gpio";
->> +		drive-strength = <8>;
->> +		output-high;
->> +	};
->> +
->> +	wcd_reset_n_sleep: wcd-reset-n-sleep {
->> +		pins = "gpio83";
->> +		function = "gpio";
->> +		drive-strength = <8>;
->> +		bias-disable;
->> +		output-low;
->> +	};
-> Also add to sc7280-herobrine-crd.dts if the other nodes are added.
-Okay.

@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15BAB506478
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89F71506465
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243809AbiDSGcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44750 "EHLO
+        id S1348773AbiDSGaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234778AbiDSGcy (ORCPT
+        with ESMTP id S1348769AbiDSGa3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:32:54 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD7B245A3;
-        Mon, 18 Apr 2022 23:30:12 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 2EB092112B;
-        Tue, 19 Apr 2022 06:30:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1650349811; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=6PYEpXZsrPHI6tYDMP1XXwHhfvjOKvkuw7nJcNvq5q8=;
-        b=SfnPTskw+hZk4LM2kg8KkOlyP7BhXGlSPOVHYjwmLMiK+/0QYvrMd7BZVUne9l1GSX1yXp
-        eu3ZqqPD1V9yGDSgW1pB3i9PjPHbzVVDqFiOVNPsEb2y6Yb2WSwj18Te0LXBSKYLhik+HC
-        2kEv+uRbkQk7LnNR/S1ab5/C8dIbnVo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1650349811;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=6PYEpXZsrPHI6tYDMP1XXwHhfvjOKvkuw7nJcNvq5q8=;
-        b=sI6M0cRzuNarUU3nQojlroLXlQKq3tfkJQpFLgfZF/djiEKqsjWCRkZNRCqvJqLrcXc618
-        7ylbmjR9Z9JdfZCw==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id E5155A3B83;
-        Tue, 19 Apr 2022 06:30:10 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     masahiroy@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH v2] scripts: dummy-tools, add pahole
-Date:   Tue, 19 Apr 2022 08:30:09 +0200
-Message-Id: <20220419063009.25352-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.35.3
+        Tue, 19 Apr 2022 02:30:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14D24240A2;
+        Mon, 18 Apr 2022 23:27:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1650349665; x=1681885665;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iOqdApx4bR1Mpbme/Zm3fofbE/saRcmdrI2mEPKRRB4=;
+  b=fz+rsWUPKNDCL7DFcEvyXAt+re4M/uj9JPzoHjlh86ccXcxNs/hiWbQ0
+   ypoORsNo6F7euYHIheGacBNQ2wgMxyN2Zhs80fcBbW26GhOPgdwNEG71h
+   9yJvxxjwyeNo7vSlLiI0JkNu9Eqz+cXx6/3lgoCsL5q3V10hmJbwjO59M
+   WDDKYnzCzX2Fyoi8FVPYVr2Z/O5+j/wi2jr+pczve/Ztch2MJ/piwkQvy
+   UmiijqBRptseH850QfxREnCVLbsyU5MR9XAu8ViJGCDbLnq0l4Z3wrb/9
+   8JE+TJIo2lpSaoYcQhpov3YL0J+1K5Oc2lu+HzHvVU/QMWV73qLM5wpDF
+   A==;
+X-IronPort-AV: E=Sophos;i="5.90,272,1643698800"; 
+   d="scan'208";a="92757492"
+Received: from smtpout.microchip.com (HELO email.microchip.com) ([198.175.253.82])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 Apr 2022 23:27:44 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Mon, 18 Apr 2022 23:27:43 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2375.17 via Frontend
+ Transport; Mon, 18 Apr 2022 23:27:43 -0700
+Date:   Tue, 19 Apr 2022 08:30:57 +0200
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <UNGLinuxDriver@microchip.com>, <davem@davemloft.net>,
+        <pabeni@redhat.com>
+Subject: Re: [PATCH net] net: lan966x: Make sure to release ptp interrupt
+Message-ID: <20220419063057.gv262tcgq3kvlqc7@soft-dev3-1.localhost>
+References: <20220413195716.3796467-1-horatiu.vultur@microchip.com>
+ <20220415210139.2d338f4b@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <20220415210139.2d338f4b@kernel.org>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_PAHOLE_VERSION is a part of a config since the commit below. And
-when multiple people update the config, this value constantly changes.
-Even if they use dummy scripts.
+The 04/15/2022 21:01, Jakub Kicinski wrote:
+> 
+> On Wed, 13 Apr 2022 21:57:16 +0200 Horatiu Vultur wrote:
+> > When the lan966x driver is removed make sure to remove also the ptp_irq
+> > IRQ.
+> 
+> I presume it's because you want to disable the IRQ so it doesn't fire
+> during / after remove? Would be good to have such justifications
+> spelled out in the commit message in the future!
 
-To fix this, add a pahole dummy script returning v99.99. (This is
-translated into 9999 later in the process.)
+Sorry about this. I will improve the commit messages in the future.
 
-Thereafter, this script can be invoked easily for example as:
-make PAHOLE=scripts/dummy-tools/pahole oldconfig
+> 
+> > Fixes: e85a96e48e3309 ("net: lan966x: Add support for ptp interrupts")
+> > Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-Fixes: 613fe1692377 (kbuild: Add CONFIG_PAHOLE_VERSION)
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
-[v2] don't touch Makefile, add only the pahole script
-
- scripts/dummy-tools/pahole | 4 ++++
- 1 file changed, 4 insertions(+)
- create mode 100755 scripts/dummy-tools/pahole
-
-diff --git a/scripts/dummy-tools/pahole b/scripts/dummy-tools/pahole
-new file mode 100755
-index 000000000000..53501a36fa71
---- /dev/null
-+++ b/scripts/dummy-tools/pahole
-@@ -0,0 +1,4 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+echo v99.99
 -- 
-2.35.3
-
+/Horatiu

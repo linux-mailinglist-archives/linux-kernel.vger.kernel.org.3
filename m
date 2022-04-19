@@ -2,113 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBBD506C39
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6D5F506C40
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 14:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352225AbiDSMYe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 08:24:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43138 "EHLO
+        id S1352230AbiDSMYl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 08:24:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233378AbiDSMYc (ORCPT
+        with ESMTP id S1352224AbiDSMYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 08:24:32 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F99C2CC90;
-        Tue, 19 Apr 2022 05:21:50 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1ngmrU-000RXz-5F; Tue, 19 Apr 2022 14:21:40 +0200
-Received: from p57bd9f4f.dip0.t-ipconnect.de ([87.189.159.79] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_128_GCM_SHA256
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1ngmrT-003azM-Uv; Tue, 19 Apr 2022 14:21:40 +0200
-Message-ID: <d9ef4940-9aca-1932-c04d-e554cecfbe31@physik.fu-berlin.de>
-Date:   Tue, 19 Apr 2022 14:21:39 +0200
+        Tue, 19 Apr 2022 08:24:39 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4DDF2CC90
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 05:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1650370913; x=1681906913;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0otuNljz4+j3nvPWDBPORm6PDdN6rU5c7+S0wKF+DT8=;
+  b=DO4goivvgZ7LBlmlJoygqJrsiHxyrs6PB0pAi5lmgoW0E00JOqtrbJw1
+   1rXk6/uC9vm5XQYrZ7blsix6uF9R6Oy3RoRiUcDi4Egvfq6bMXsQh+PKZ
+   LGsop6KelD/Gg3LsSKfj3Yf/dhgLzL+5hr4jz3jJgnnGII0ce8el/Tdv8
+   1wCPqNwzUAjg8cxxDDGcljF6NkW6Nd/AG5s6J5NiegF2xjTNwUfzKsBjY
+   Snn3erethR2tL8zWjn1GQO9Gd27wQKHUP+erPFEuVVRZw9p+l0MGXqrv2
+   plWdGUy9USaER7qYVDCPrssCZ9s3MaVK+UA0zNBn/IaB9Ud6FD/+B+zaI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="262610395"
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="262610395"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Apr 2022 05:21:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.90,272,1643702400"; 
+   d="scan'208";a="530186601"
+Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 19 Apr 2022 05:21:51 -0700
+Received: from kbuild by 3abc53900bec with local (Exim 4.95)
+        (envelope-from <lkp@intel.com>)
+        id 1ngmrf-0005kq-2v;
+        Tue, 19 Apr 2022 12:21:51 +0000
+Date:   Tue, 19 Apr 2022 20:21:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Chris Redpath <chris.redpath@arm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@chromium.org>,
+        Patrick Bellasi <patrick.bellasi@arm.com>
+Subject: [RFC PATCH jsarha] ANDROID: sched/fair: __pcpu_scope_eenv_cache can
+ be static
+Message-ID: <Yl6pWPuKQxlB99D7@22daf826a52b>
+References: <202204192047.g1X4yydR-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.7.0
-Subject: Re: [PATCH] sh: make !MMU iounmap an inline function
-Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Rich Felker <dalias@libc.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc:     Vincent Whitchurch <vincent.whitchurch@axis.com>, kernel@axis.com,
-        Christoph Hellwig <hch@lst.de>,
-        kernel test robot <lkp@intel.com>,
-        Linux-sh list <linux-sh@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Rob Landley <rob@landley.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>
-References: <20220414081257.1487499-1-vincent.whitchurch@axis.com>
- <76a7b33d-6f8b-e660-c64d-027b1bc8e308@landley.net>
- <CAMuHMdW-8HaQip+DT5W2Owq8M8kbYwHsf8_Zd-5rRfSjSjK0=g@mail.gmail.com>
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-In-Reply-To: <CAMuHMdW-8HaQip+DT5W2Owq8M8kbYwHsf8_Zd-5rRfSjSjK0=g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.159.79
-X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202204192047.g1X4yydR-lkp@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert!
+kernel/sched/fair.c:6738:1: warning: symbol '__pcpu_scope_eenv_cache' was not declared. Should it be static?
 
-On 4/19/22 11:42, Geert Uytterhoeven wrote:
-> Hi Rich, Sato-san,
-> 
-> On Sat, Apr 16, 2022 at 12:01 AM Rob Landley <rob@landley.net> wrote:
->> On 4/14/22 03:12, Vincent Whitchurch wrote:
->>> The current definition of sh's !MMU iounmap makes it unusable in certain
->>> kinds of code, such as this instance caught by 0day on a patch posted to
->>> the mailing lists:
->>>
->>>  In file included from include/linux/io.h:13,
->>>                   from drivers/mtd/devices/phram.c:21:
->>>  drivers/mtd/devices/phram.c: In function 'register_device':
->>>  arch/sh/include/asm/io.h:274:33: error: expected expression before 'do'
->>>    274 | #define iounmap(addr)           do { } while (0)
->>>        |                                 ^~
->>>  drivers/mtd/devices/phram.c:150:44: note: in expansion of macro 'iounmap'
->>>    150 |         cached ? memunmap(new->mtd.priv) : iounmap(new->mtd.priv);
->>>        |                                            ^~~~~~~
->>>
->>> Make it an inline function as it was earlier.
->>>
->>> Link: https://lore.kernel.org/lkml/202204131446.omJ5mC54-lkp@intel.com/
->>> Fixes: 13f1fc870dd747131 ("sh: move the ioremap implementation out of line")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
->>
->> Tested-by: Rob Landley <rob@landley.net>
->>
->> Worked For Me.
-> 
-> Can we please get any of [1], [2], [3], or [4] applied and sent
-> upstream, so people can stop wasting time on recreating and
-> resubmitting similar patches all the time?
+Fixes: 0d2a194c5434 ("ANDROID: sched/fair: re-factor energy_diff to use a single (extensible) energy_env")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: kernel test robot <lkp@intel.com>
+---
+ kernel/sched/fair.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I agree. Those patches shouldn't be sent in vain. I very much appreciate everyone
-sending in patches to improve Linux support for SH which is why I find it saddening
-that the maintainers don't find enough time to review the patches.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer - glaubitz@debian.org
-`. `'   Freie Universitaet Berlin - glaubitz@physik.fu-berlin.de
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
-
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index dd2b286ea4905..f7a382a602c86 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -6735,7 +6735,7 @@ static bool cpu_overutilized(int cpu)
+ 	return (capacity_of(cpu) * 1024) < (cpu_util(cpu) * capacity_margin);
+ }
+ 
+-DEFINE_PER_CPU(struct energy_env, eenv_cache);
++static DEFINE_PER_CPU(struct energy_env, eenv_cache);
+ 
+ /* kernels often have NR_CPUS defined to be much
+  * larger than exist in practise on booted systems.

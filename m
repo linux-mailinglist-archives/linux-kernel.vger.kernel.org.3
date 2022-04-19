@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CD3507980
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3DB0507986
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 20:58:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345008AbiDSTAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 15:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45174 "EHLO
+        id S1354906AbiDSTA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 15:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241056AbiDSS76 (ORCPT
+        with ESMTP id S233003AbiDSTAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 14:59:58 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 59B25633B;
-        Tue, 19 Apr 2022 11:57:15 -0700 (PDT)
-Received: from kbox (c-73-140-2-214.hsd1.wa.comcast.net [73.140.2.214])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 5542D20E1A7F;
-        Tue, 19 Apr 2022 11:57:14 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5542D20E1A7F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1650394634;
-        bh=1xNKG1fM8YQNLY3HXkQavqzQsj2uT3iyFwC11lzWWJ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E49U5AUgtuDooLtNKXln9Uquk5N8njYn/p8Jn0+jlAPvoqQ81HqWPop36YDzCT+TR
-         lqwYq3NAWO41MAmse7ju1fSZke6kHpsi4LYP5bkB2hoHpfiw/7/9JMUvAGvSaNtCxL
-         Zh4so0YKfKMEr9gV2odjiQYCWk0hGGD50tj0eK9A=
-Date:   Tue, 19 Apr 2022 11:57:08 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-devel <linux-trace-devel@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 6/7] tracing/user_events: Use bits vs bytes for enabled
- status page data
-Message-ID: <20220419185708.GA1908@kbox>
-References: <20220401234309.21252-1-beaub@linux.microsoft.com>
- <20220401234309.21252-7-beaub@linux.microsoft.com>
- <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com>
+        Tue, 19 Apr 2022 15:00:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490D03EF0A;
+        Tue, 19 Apr 2022 11:58:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Bp4bwe3H7WczeFj56jWpI8QBoijIjdBXfNXBKn0bveA=; b=BnjvFkL1Ut5niN1GJU9Qqiqxk6
+        bSPHAiXL02AryU4BQbQpKlkwkXIt6mnpaGai1EkMfb0N77GoGMiPu82Wt1d4/+QTWXcjmBV6Ku7ag
+        5hFnENghTqRcnVGh//6lZ3HUdy935pKzoa0T5tTd6a06gSHsV+1rn8Io1dCb+FjgCxRGlfV1yw4Y7
+        cXkAHqXV7UtAWVHSPZreuF+Fv6h6X24hK0ekZ6grYTMiEtvlDlP9dUvb31vc66WRUZZTLiANfU0Sd
+        ijIbnGbDawioK8ZKRXJzI4YrOxtoaUSi1Hwf0K71Z6Ka7hBoV/5ziHXVUw7oTmuDiI0mQAuI0pLBc
+        s6mPA9Zw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58334)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1ngt2s-0001Sk-I9; Tue, 19 Apr 2022 19:57:50 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1ngt2g-00011J-Hx; Tue, 19 Apr 2022 19:57:38 +0100
+Date:   Tue, 19 Apr 2022 19:57:38 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        max.krummenacher@toradex.com, Shawn Guo <shawnguo@kernel.org>,
+        Stefano Stabellini <stefano.stabellini@xilinx.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Konrad Rzeszutek Wilk <konrad.wilk@oracle.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [next] arm: boot failed - PC is at cpu_ca15_set_pte_ext
+Message-ID: <Yl8GInPZyl2PqK7D@shell.armlinux.org.uk>
+References: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <337584634.26921.1650378945485.JavaMail.zimbra@efficios.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CA+G9fYuACgY2hcAgh_LwVb9AURjodMJbV6SsJb90wj-0aJKUOw@mail.gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 10:35:45AM -0400, Mathieu Desnoyers wrote:
-> ----- On Apr 1, 2022, at 7:43 PM, Beau Belgrave beaub@linux.microsoft.com wrote:
-> 
-> > User processes may require many events and when they do the cache
-> > performance of a byte index status check is less ideal than a bit index.
-> > The previous event limit per-page was 4096, the new limit is 32,768.
-> > 
-> > This change adds a mask property to the user_reg struct. Programs check
-> > that the byte at status_index has a bit set by ANDing the status_mask.
-> > 
-> > Link:
-> > https://lore.kernel.org/all/2059213643.196683.1648499088753.JavaMail.zimbra@efficios.com/
-> > 
-> > Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> > Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
-> 
-> Hi Beau,
-> 
-> Considering this will be used in a fast-path, why choose bytewise
-> loads for the byte at status_index and the status_mask ?
-> 
+On Tue, Apr 19, 2022 at 04:28:52PM +0530, Naresh Kamboju wrote:
+> Linux next 20220419 boot failed on arm architecture qemu_arm and BeagleBoard
+> x15 device.
 
-First, thanks for the review!
+Was the immediately previous linux-next behaving correctly?
 
-Which loads are you concerned about? The user programs can store the
-index and mask in another type after registration instead of an int.
+If so, nothing has changed in the ARM32 kernel tree, so this must be
+someone else's issue - code that someone else has pushed into
+linux-next.
 
-However, you may be referring to something on the kernel side?
+It looks to me like someone is walking the page tables incorrectly,
+somewhere buried in handle_mm_fault(), because the PTE pointer is in
+the upper-2k of a 4k page, which is most definitely illegal on arm32.
 
-> I'm concerned about the performance penalty associated with partial
-> register stalls when working with bytewise ALU operations rather than
-> operations using the entire registers.
-> 
-
-On the kernel side these only occur when a registration happens (pretty
-rare compared to enabled checks) or a delete (even rarer). But I have
-the feeling you are more concerned about the user side, right?
-
-> Ideally I would be tempted to use "unsigned long" type (32-bit on 32-bit
-> binaries and 64-bit on 64-bit binaries) for both the array access
-> and the status mask, but this brings extra complexity for 32-bit compat
-> handling.
-> 
-
-User programs can store the index and mask returned into better value
-types for their architecture.
-
-I agree it will cause compat handling issues if it's put into the user
-facing header as a long.
-
-I was hoping APIs, like libtracefs, could abstract many callers from how
-best to use the returned values. For example, it could save the index
-and mask as unsigned long for the callers and use those for the
-enablement checks.
-
-Do you think there is a way to enable these native types in the ABI
-without causing compat handling issues? I used ints to prevent compat
-issues between 32-bit user mode and 64-bit kernel mode.
-
-> Thanks,
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> http://www.efficios.com
-
-Thanks,
--Beau
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

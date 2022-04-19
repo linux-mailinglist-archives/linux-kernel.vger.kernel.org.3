@@ -2,174 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 758845067D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77F05067F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 11:44:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1350388AbiDSJju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 05:39:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40006 "EHLO
+        id S1345594AbiDSJrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 05:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344701AbiDSJjt (ORCPT
+        with ESMTP id S241722AbiDSJrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 05:39:49 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9009F1FA78;
-        Tue, 19 Apr 2022 02:37:06 -0700 (PDT)
-Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.16.1.2/8.16.1.2) with SMTP id 23J6v9q2027973;
-        Tue, 19 Apr 2022 09:37:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kBchHFFddx0ubwxodE+mu25lyI4qY8zeK88Z1KjjO5E=;
- b=AfCcDkW6ubzEwNdUAED35Cov2h+AzCdIWLiVakm+WS5An3bnSh2JygSE82SE/3rmMAwY
- ClaY98doMiXu51R2+fOIW1uwNs3hQdNqxVjO3ukI8gztImL/rhiLW2SaSGapblqK9Woh
- AzhQmILX2Jmd3t4pCz/y1PSCZx7cjKMYFsIYZ8YUIgU3Rhb2wbMf5pnh9r7Blg1f8lag
- 8KZYafCKXAEnOKGHvGPHmq7ba30S5ud74TeVLkmPzifcPDL0TTnBe6+dxoKxtCpXhHXC
- uDiPqu1ERsKbCqSZIQL2/4yKSswDjswiTDYX9dvCPQSIzk56CK1hDr5PjOirYecPCvGS 5Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7ct31tb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:37:06 +0000
-Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
-        by pps.reinject (8.16.0.43/8.16.0.43) with SMTP id 23J96vRo003352;
-        Tue, 19 Apr 2022 09:37:05 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com with ESMTP id 3fg7ct31su-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:37:05 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 23J9DKaF016307;
-        Tue, 19 Apr 2022 09:37:03 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma02fra.de.ibm.com with ESMTP id 3fgu6u1r4f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 19 Apr 2022 09:37:02 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 23J9axms50331922
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 19 Apr 2022 09:36:59 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BA8B642042;
-        Tue, 19 Apr 2022 09:36:59 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9CEBD42041;
-        Tue, 19 Apr 2022 09:36:58 +0000 (GMT)
-Received: from [9.171.88.57] (unknown [9.171.88.57])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Tue, 19 Apr 2022 09:36:58 +0000 (GMT)
-Message-ID: <b885fc5c-700a-6b5f-64ef-bf4afc8fd036@linux.ibm.com>
-Date:   Tue, 19 Apr 2022 11:40:16 +0200
+        Tue, 19 Apr 2022 05:47:02 -0400
+X-Greylist: delayed 203 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 19 Apr 2022 02:44:19 PDT
+Received: from lithium.sammserver.com (lithium.sammserver.com [168.119.122.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529C922B28;
+        Tue, 19 Apr 2022 02:44:19 -0700 (PDT)
+Received: from mail.sammserver.com (sammserver.wg [10.32.40.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by lithium.sammserver.com (Postfix) with ESMTPS id 496A331181E2;
+        Tue, 19 Apr 2022 11:40:54 +0200 (CEST)
+Received: from mail.sammserver.com (localhost.localdomain [127.0.0.1])
+        by mail.sammserver.com (Postfix) with ESMTP id D753441F32;
+        Tue, 19 Apr 2022 11:40:53 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cavoj.net; s=email;
+        t=1650361253; bh=FiIViUHrFRwZkM13AuWCuKWDSKKH/CAkIfoO4iiRyfk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DnTiafivrAjTJsKoHVBGX03OCf6WFR+8yVXcgY3DvCvc0Q9QkizrO8vol8/gXs5by
+         PG6510meHeznig0kl2WDEWzB/FMP0+lJ8vdrfi4G+H2OyOr44mZFIRdT+j3Mejk0fF
+         RSWTQQMX7mCbZU8l7WRjG7kRJAIXcml0z8wVPe9A=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.0
-Subject: Re: [PATCH v5 17/21] vfio-pci/zdev: add function handle to clp base
- capability
-Content-Language: en-US
-To:     Matthew Rosato <mjrosato@linux.ibm.com>, linux-s390@vger.kernel.org
-Cc:     alex.williamson@redhat.com, cohuck@redhat.com,
-        schnelle@linux.ibm.com, farman@linux.ibm.com,
-        borntraeger@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, frankja@linux.ibm.com, david@redhat.com,
-        imbrenda@linux.ibm.com, vneethv@linux.ibm.com,
-        oberpar@linux.ibm.com, freude@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, pbonzini@redhat.com, corbet@lwn.net,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220404174349.58530-1-mjrosato@linux.ibm.com>
- <20220404174349.58530-18-mjrosato@linux.ibm.com>
-From:   Pierre Morel <pmorel@linux.ibm.com>
-In-Reply-To: <20220404174349.58530-18-mjrosato@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: T8WIBnjWM6MvBX3_tNqyT9jVtqXKwptw
-X-Proofpoint-ORIG-GUID: 84tc4MUnk6hV2oqiXeAO9Vyy9JqnvAwG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.858,Hydra:6.0.486,FMLib:17.11.64.514
- definitions=2022-04-19_03,2022-04-15_01,2022-02-23_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- bulkscore=0 phishscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2202240000 definitions=main-2204190052
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 19 Apr 2022 11:40:53 +0200
+From:   =?UTF-8?Q?Samuel_=C4=8Cavoj?= <samuel@cavoj.net>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Basavaraj.Natikar@amd.com, Richard.Gong@amd.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] gpio: Request interrupts after IRQ is initialized
+In-Reply-To: <20220414025705.598-1-mario.limonciello@amd.com>
+References: <20220414025705.598-1-mario.limonciello@amd.com>
+User-Agent: Roundcube Webmail/1.4.11
+Message-ID: <932104ce8d454cfded85d1f65095510a@cavoj.net>
+X-Sender: samuel@cavoj.net
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Thanks,
 
+this fixes the issue on an ASUS UM325 laptop.
 
-On 4/4/22 19:43, Matthew Rosato wrote:
-> The function handle is a system-wide unique identifier for a zPCI
-> device.  It is used as input for various zPCI operations.
-
-The comment is a little too much obvious.
-May be add something like.
-"
-With the legacy instruction interception the PCI instructions used to be 
-executed by the host.
-With PCI instruction interpretation, the guest needs to use the real 
-function handle.
-Let's give it to the guest.
-"
-Or something like that.
-
-With a better comment:
-
-Reviewed-by: Pierre Morel <pmorel@linux.ibm.com>
-
+On 2022-04-14 04:57, Mario Limonciello wrote:
+> commit 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members 
+> before
+> initialization") attempted to fix a race condition that lead to a NULL
+> pointer, but in the process caused a regression for _AEI/_EVT declared
+> GPIOs. This manifests in messages showing deferred probing while trying
+> to allocate IRQs like so:
 > 
-> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+> [    0.688318] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x0000 to IRQ, err -517
+> [    0.688337] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x002C to IRQ, err -517
+> [    0.688348] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x003D to IRQ, err -517
+> [    0.688359] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x003E to IRQ, err -517
+> [    0.688369] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x003A to IRQ, err -517
+> [    0.688379] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x003B to IRQ, err -517
+> [    0.688389] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x0002 to IRQ, err -517
+> [    0.688399] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x0011 to IRQ, err -517
+> [    0.688410] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x0012 to IRQ, err -517
+> [    0.688420] amd_gpio AMDI0030:00: Failed to translate GPIO pin
+> 0x0007 to IRQ, err -517
+> 
+> The code for walking _AEI doesn't handle deferred probing and so this 
+> leads
+> to non-functional GPIO interrupts.
+> 
+> Fix this issue by moving the call to `acpi_gpiochip_request_interrupts` 
+> to
+> occur after gc->irc.initialized is set.
+> 
+> Cc: Shreeya Patel <shreeya.patel@collabora.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 5467801f1fcb ("gpio: Restrict usage of GPIO chip irq members
+> before initialization")
+> Reported-by: Mario Limonciello <mario.limonciello@amd.com>
+> Link:
+> https://lore.kernel.org/linux-gpio/BL1PR12MB51577A77F000A008AA694675E2EF9@BL1PR12MB5157.namprd12.prod.outlook.com/T/#u
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+
+Tested-By: Samuel Čavoj <samuel@cavoj.net>
+
 > ---
->   drivers/vfio/pci/vfio_pci_zdev.c | 5 +++--
->   include/uapi/linux/vfio_zdev.h   | 3 +++
->   2 files changed, 6 insertions(+), 2 deletions(-)
+>  drivers/gpio/gpiolib.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/vfio/pci/vfio_pci_zdev.c b/drivers/vfio/pci/vfio_pci_zdev.c
-> index ea4c0d2b0663..4a653ce480c7 100644
-> --- a/drivers/vfio/pci/vfio_pci_zdev.c
-> +++ b/drivers/vfio/pci/vfio_pci_zdev.c
-> @@ -23,14 +23,15 @@ static int zpci_base_cap(struct zpci_dev *zdev, struct vfio_info_cap *caps)
->   {
->   	struct vfio_device_info_cap_zpci_base cap = {
->   		.header.id = VFIO_DEVICE_INFO_CAP_ZPCI_BASE,
-> -		.header.version = 1,
-> +		.header.version = 2,
->   		.start_dma = zdev->start_dma,
->   		.end_dma = zdev->end_dma,
->   		.pchid = zdev->pchid,
->   		.vfn = zdev->vfn,
->   		.fmb_length = zdev->fmb_length,
->   		.pft = zdev->pft,
-> -		.gid = zdev->pfgid
-> +		.gid = zdev->pfgid,
-> +		.fh = zdev->fh
->   	};
->   
->   	return vfio_info_add_capability(caps, &cap.header, sizeof(cap));
-> diff --git a/include/uapi/linux/vfio_zdev.h b/include/uapi/linux/vfio_zdev.h
-> index b4309397b6b2..78c022af3d29 100644
-> --- a/include/uapi/linux/vfio_zdev.h
-> +++ b/include/uapi/linux/vfio_zdev.h
-> @@ -29,6 +29,9 @@ struct vfio_device_info_cap_zpci_base {
->   	__u16 fmb_length;	/* Measurement Block Length (in bytes) */
->   	__u8 pft;		/* PCI Function Type */
->   	__u8 gid;		/* PCI function group ID */
-> +	/* End of version 1 */
-> +	__u32 fh;		/* PCI function handle */
-> +	/* End of version 2 */
->   };
->   
->   /**
+> diff --git a/drivers/gpio/gpiolib.c b/drivers/gpio/gpiolib.c
+> index 085348e08986..b7694171655c 100644
+> --- a/drivers/gpio/gpiolib.c
+> +++ b/drivers/gpio/gpiolib.c
+> @@ -1601,8 +1601,6 @@ static int gpiochip_add_irqchip(struct gpio_chip 
+> *gc,
 > 
+>  	gpiochip_set_irq_hooks(gc);
+> 
+> -	acpi_gpiochip_request_interrupts(gc);
+> -
+>  	/*
+>  	 * Using barrier() here to prevent compiler from reordering
+>  	 * gc->irq.initialized before initialization of above
+> @@ -1612,6 +1610,8 @@ static int gpiochip_add_irqchip(struct gpio_chip 
+> *gc,
+> 
+>  	gc->irq.initialized = true;
+> 
+> +	acpi_gpiochip_request_interrupts(gc);
+> +
+>  	return 0;
+>  }
 
--- 
-Pierre Morel
-IBM Lab Boeblingen
+Sam

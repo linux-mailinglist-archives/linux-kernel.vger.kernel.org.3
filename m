@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88DE35071E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26DD05071E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 17:36:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353859AbiDSPiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 11:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
+        id S1353902AbiDSPie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 11:38:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354055AbiDSPh5 (ORCPT
+        with ESMTP id S1353862AbiDSPia (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 11:37:57 -0400
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69DAB86D;
-        Tue, 19 Apr 2022 08:35:08 -0700 (PDT)
-Received: by mail-yb1-f175.google.com with SMTP id d19so3311109ybc.5;
-        Tue, 19 Apr 2022 08:35:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=cYK+mSus6lKX2J8+IsFXmSmlA2Ef7OVLzpY5/HdayQU=;
-        b=1vWRS+SKfTOMQ41+nkvzPNmMv+QmXfavjtNUEGor68WJBuAnaVv46NdV1cVX4sSSdT
-         n/fFdaEzeQle88onvg7B9xhTojuz2uY/AehxdyZ3E7rjUJGo1to0zLBSKrWA93qm70D2
-         P6dG01Swbug1DQdbcGjaBGJZ6gEckf8Zt2yybwigRF2UCH9UVtXTf1Ckm2llO0BhhuxM
-         XgNOdiJzBVdNZOJNQZdl9CRyluUpr27vYbk0cqhUYX6+VgQSS0CZH68QhjYGuUAyZ5uZ
-         fGNFnH3XZ1s18gZMgha2GMCLCQu6SAL9KPW2rgH9GrQ8PE7ZfNLCepB5SVyRiBIs2d83
-         XYqg==
-X-Gm-Message-State: AOAM531wHevyrykZ3ph+hmrAPfApqRKL1tikxYXX2kCpBKRzsZOOQFfQ
-        DQsWBRiLjQ/ihSzc9z4j4RZpuL1FgBqDdMpok+w=
-X-Google-Smtp-Source: ABdhPJwDmO9+9C24sXjAZavu7CzsApnTtTT7vU16/f1c9ZI+vpUjXzYeo8Lw4VND0xYUMo6HcRe2v4Fqm3mIsA16qcw=
-X-Received: by 2002:a25:ac9b:0:b0:641:3c32:bee7 with SMTP id
- x27-20020a25ac9b000000b006413c32bee7mr14411799ybi.633.1650382507645; Tue, 19
- Apr 2022 08:35:07 -0700 (PDT)
+        Tue, 19 Apr 2022 11:38:30 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12D13F28
+        for <linux-kernel@vger.kernel.org>; Tue, 19 Apr 2022 08:35:47 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1ngpt7-0003su-Fg; Tue, 19 Apr 2022 17:35:33 +0200
+Received: from pengutronix.de (2a03-f580-87bc-d400-53ed-3d96-8b26-5d5d.ip6.dokom21.de [IPv6:2a03:f580:87bc:d400:53ed:3d96:8b26:5d5d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 9BC3166BF1;
+        Tue, 19 Apr 2022 15:35:30 +0000 (UTC)
+Date:   Tue, 19 Apr 2022 17:35:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     linux-can@vger.kernel.org, devicetree@vger.kernel.org,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        David Miller <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>, mark.rutland@arm.com,
+        Carsten Emde <c.emde@osadl.org>, armbru@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Marin Jerabek <martin.jerabek01@gmail.com>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Jiri Novak <jnovak@fel.cvut.cz>,
+        Jaroslav Beran <jara.beran@gmail.com>,
+        Petr Porazil <porazil@pikron.com>, Pavel Machek <pavel@ucw.cz>,
+        Drew Fustini <pdp7pdp7@gmail.com>,
+        Mataj Vasilevski <vasilmat@fel.cvut.cz>
+Subject: Re: [PATCH v8 0/7] CTU CAN FD open-source IP core SocketCAN driver,
+ PCI, platform integration and documentation
+Message-ID: <20220419153530.w2iovki72udt4o6q@pengutronix.de>
+References: <cover.1647904780.git.pisa@cmp.felk.cvut.cz>
+ <202203220918.33033.pisa@cmp.felk.cvut.cz>
+ <20220322092212.f5eaxm5k45j5khra@pengutronix.de>
+ <202204061020.42943.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-References: <20220415133356.179706384@linutronix.de> <20220415161206.419880163@linutronix.de>
-In-Reply-To: <20220415161206.419880163@linutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 19 Apr 2022 17:34:56 +0200
-Message-ID: <CAJZ5v0iNhn-TYiAWrY_m5+uOCOf-g3F-rzf1RjbEzmOcU4gVsQ@mail.gmail.com>
-Subject: Re: [patch 01/10] x86/aperfmperf: Dont wake idle CPUs in arch_freq_get_on_cpu()
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="han226cj42x6fohc"
+Content-Disposition: inline
+In-Reply-To: <202204061020.42943.pisa@cmp.felk.cvut.cz>
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 15, 2022 at 9:19 PM Thomas Gleixner <tglx@linutronix.de> wrote:
->
-> aperfmperf_get_khz() already excludes idle CPUs from APERF/MPERF sampling
-> and that's a reasonable decision. There is no point in sending up to two
-> IPIs to an idle CPU just because someone reads a sysfs file.
->
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+--han226cj42x6fohc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  arch/x86/kernel/cpu/aperfmperf.c |    3 +++
->  1 file changed, 3 insertions(+)
->
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -139,6 +139,9 @@ unsigned int arch_freq_get_on_cpu(int cp
->         if (!housekeeping_cpu(cpu, HK_TYPE_MISC))
->                 return 0;
->
-> +       if (rcu_is_idle_cpu(cpu))
-> +               return 0;
-> +
->         if (aperfmperf_snapshot_cpu(cpu, ktime_get(), true))
->                 return per_cpu(samples.khz, cpu);
->
->
+On 06.04.2022 10:20:42, Pavel Pisa wrote:
+> Hello Marc and others,
+>=20
+> On Tuesday 22 of March 2022 10:22:12 Marc Kleine-Budde wrote:
+> > On 22.03.2022 09:18:32, Pavel Pisa wrote:
+> > > > The driver looks much better now. Good work. Please have a look at =
+the
+> > > > TX path of the mcp251xfd driver, especially the tx_stop_queue and
+> > > > tx_wake_queue in mcp251xfd_start_xmit() and mcp251xfd_handle_tefif(=
+). A
+> > > > lockless implementation should work in your hardware, too.
+> > >
+> > > Is this blocker for now? I would like to start with years tested base.
+> >
+> > Makes sense.
+>=20
+> I have missed timing for 5.18 but v5.18-rc1 is out so I would be
+> happy if we do not miss 5.19 merge window at least with minimal version.
+
+I've taken the patch (almost) as is, I marked both can_bittiming_const
+static, as sparse complained about that and I changed the order of two
+variable declarations to look nicer :)
+
+Looking forward for more patches!
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
+
+--han226cj42x6fohc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmJe1r8ACgkQrX5LkNig
+012gmQf/cwPZqvtOnsCpr8islfiXx2a2TAZ8CfYj/LmEqyHKv9BOzaEdM6mRQfKO
+e6PZz8SEJsQOfD+p5/a701EoqSGRVv/tzUyN49hsYT8aCHYzwMylpDZr6+t1Fafv
+9RID31WTw8Lt4MsQlpnLgDEoLc7BdcRZZdFfIUcXbAdDKIcivk9n+6Y08Mwh8ORA
+wpE1xQ3lyFYPTASD1hfELoJnGFyY6zMfZ6f1Ahjz+T6Am7SQOKrNVk8lfSFKgvuj
+u5XS8l+eW3QKI0RFIGzLv9AMHswDDsSHy83lu2xpNt6mbudToZAxOA+RmH3cNyOl
++nk/MhI6ljXPoL3gLsZGWvQTsyWxBQ==
+=HGSt
+-----END PGP SIGNATURE-----
+
+--han226cj42x6fohc--

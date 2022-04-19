@@ -2,363 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 355215064A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:37:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4AB5064A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 08:37:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241450AbiDSGkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 02:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51908 "EHLO
+        id S1348915AbiDSGk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 02:40:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239584AbiDSGkS (ORCPT
+        with ESMTP id S239584AbiDSGk0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 02:40:18 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029662E9E1
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:37:36 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id bq30so27674937lfb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:37:35 -0700 (PDT)
+        Tue, 19 Apr 2022 02:40:26 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72B42F3BB
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:37:44 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id s33so1907890ybi.12
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 23:37:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=subject:to:cc:references:from:message-id:date:user-agent
-         :mime-version:in-reply-to:content-transfer-encoding:content-language;
-        bh=5XKHbxSoKgLV4l6KLfHSllkOSuhO/yQcH7URIe/RXvI=;
-        b=BYPkS0mpRwyVL9+QysC/keXryrD+pxuYOK+l6BJJIivxNikhJ0VtOVqV0+B0uiYhaL
-         DjZ23GRUAgibnxdNIYb+7rrBrziMLsMzetdRhrLEVUeEoQQrNLNYHbscuspqA1h/nqmj
-         6M48Lcp3KfrE1wn39oOaq5AA0prsFcogF73dVS8jB3fLuFfhoI040zgnqPgm3giiysBx
-         1yVaxxA5Dic0aV4U5zVVFA/g2Sx6Me5dYB4w5CpojlKhQwWaF2nLmKspLwI7WeV3yXms
-         kHxkI4gz+mi4riP69GlEkJdFijXXH8B+xc8x3GERO8+4CKKcLBqxOHAbnZeJriADnkHn
-         Sn5Q==
+        d=linaro.org; s=google;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=zRibhjTEex1v2Fhtb9E0ILRVral8i1DdlDaWcrDovnQ=;
+        b=nmGLSfeHFNicDyqy3/9Blb7YCJcnobWDoKSg721MhXUsuSn4Ju/aKEr1VMcNilrsSx
+         j6n0bcCUn90u9O2R+WjXBxkWv1/t0T9Q1ikQ3+gHsQZ6vklFdzXIOiqZFuBjIpeQcFcj
+         P05jVF8Gep11IPlvlMA1ORYaZuh99a9adTST347QWnCHk1qyCe8zafVgqkkFSk/1UPAD
+         bkbk6LPppR56qgfRolcPzOCo5TMBhbV1P8BK3XMdSr9O6JWYuktgmrdfKGXQmKoGLCYI
+         mjm5TaoK+gFEQlTVJqKElsswepEPfMxXrEPf5LUfmvflCFcgkSJo9x/+7UDiTFgDhhqv
+         Dtzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:subject:to:cc:references:from:message-id:date
-         :user-agent:mime-version:in-reply-to:content-transfer-encoding
-         :content-language;
-        bh=5XKHbxSoKgLV4l6KLfHSllkOSuhO/yQcH7URIe/RXvI=;
-        b=j2dNRpriv167/AifMV/krzNoHAUwjzL/tadbWWEylHH1KJs5CtXkCRfwhRsh3sHwmp
-         vtftPoeSfrL2VPH7LN0RIv2mppZya9ujTwucmX4HtF9Zba0xf3+OrYFhRGVRO2OV6yAx
-         XTkP3LW3EY4H/cfo+f99kbLUhM29bphzt6zTW/VBLnmF01MqSOvpLBcOqXasLDmDK0DI
-         1Oi3Q6oH3h1gs9T7ik3EwQfKMsN48M+/fhx6KVt5fRuuNw7OoPf7HM0LC+SzKcBdnwHH
-         clNV+qrZ3VFJHrigEI+IIczOEu/HGqeK8XF/aMJ4FUcfrOwqYP5h/BoJURoNZ5WI8dqP
-         asHA==
-X-Gm-Message-State: AOAM5306x1yFk8MM2u1ipZX8rJoDqIw1TGcAzFrEWT9XSURuZACePX1i
-        BxwJW1N3k8SCyTy5i53Nwiw=
-X-Google-Smtp-Source: ABdhPJx0KZwoC2ACm+X1wAjeDTfX3UjujeGdQe8hMMbvoAvvFDS4CUtPuCSHarytJl83njjUXCAAng==
-X-Received: by 2002:a05:6512:23a8:b0:470:77ac:64b1 with SMTP id c40-20020a05651223a800b0047077ac64b1mr9346732lfv.322.1650350253959;
-        Mon, 18 Apr 2022 23:37:33 -0700 (PDT)
-Received: from [192.168.1.7] ([212.22.223.21])
-        by smtp.gmail.com with ESMTPSA id b15-20020ac2562f000000b004437f2667bfsm1418167lff.308.2022.04.18.23.37.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Apr 2022 23:37:33 -0700 (PDT)
-Subject: Re: [RFC PATCH 2/6] virtio: add option to restrict memory access
- under Xen
-To:     Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Julien Grall <julien@xen.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Christoph Hellwig <hch@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>
-References: <1649963973-22879-1-git-send-email-olekstysh@gmail.com>
- <1649963973-22879-3-git-send-email-olekstysh@gmail.com>
- <alpine.DEB.2.22.394.2204151235440.915916@ubuntu-linux-20-04-desktop>
- <8a66ad42-a3e7-c29d-7d4e-35766dcccd15@gmail.com>
- <alpine.DEB.2.22.394.2204181151030.915916@ubuntu-linux-20-04-desktop>
- <ef637f17-0e9c-2f86-218b-918297cb9930@suse.com>
-From:   Oleksandr <olekstysh@gmail.com>
-Message-ID: <5b6f8f1c-1ffd-9582-89b4-54f73ec4f5c4@gmail.com>
-Date:   Tue, 19 Apr 2022 09:37:32 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=zRibhjTEex1v2Fhtb9E0ILRVral8i1DdlDaWcrDovnQ=;
+        b=6dNK7ErFme5p6K2xVhzX3y28rUlg+37Qo3U05HcgwfEHXvpuMLBuQ5ZambbQkQhtMo
+         jyT+CePRBub/mtyUYrK7qaQQEs/gEpsYUpBpeJsKVrJuvE3lqUlnTZ66i9u5Y/aN+xTL
+         qPNWRAKUgTz0LTAHA3seuwuWVSEP9fQppnxc+/ldP7ox6pDFaR+fqF+bJxbVjQ4aDzJ0
+         mxl4tSgwjqaEB9uX+K/nauEvmiG6qq7PpXqS/eNzs6i2HH4vN3aSzHluaHDL1MuEH+QV
+         AAhtJLzswFP9EbfxcYEIr540jwoFngI6/AdwPwHpyLQ4C1t+84pEPpzDziZOanEXKOVj
+         hQ8w==
+X-Gm-Message-State: AOAM531b0uEmkAlADGLrJ36sBbXqj2eEAHgmlCG3okLJ4dHQeQW8o2k0
+        JaMgZcXQsIG6G4Icc9Q+Kazlm0yUnmN8Vkmx9qDQww==
+X-Google-Smtp-Source: ABdhPJwJ0eU1W8ZHfBjyXP7H3BsHYcCslhOzHEKRIhh7/DRt+rhiQqzNNAgNsDcXCbbyTYTovM6tgL6mKbnshD+U4+k=
+X-Received: by 2002:a25:7316:0:b0:645:3fae:a830 with SMTP id
+ o22-20020a257316000000b006453faea830mr822091ybc.412.1650350263976; Mon, 18
+ Apr 2022 23:37:43 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ef637f17-0e9c-2f86-218b-918297cb9930@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220418121134.149115109@linuxfoundation.org>
+In-Reply-To: <20220418121134.149115109@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 19 Apr 2022 12:07:32 +0530
+Message-ID: <CA+G9fYtUDa=Ba_nABdRG08MVfpt2gnyNdnQ=6qhVN_K-y5ZOcg@mail.gmail.com>
+Subject: Re: [PATCH 5.4 00/63] 5.4.190-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Hello Stefano, Juergen
-
-
-On 19.04.22 09:21, Juergen Gross wrote:
-> On 18.04.22 21:11, Stefano Stabellini wrote:
->> On Sun, 17 Apr 2022, Oleksandr wrote:
->>> On 16.04.22 01:01, Stefano Stabellini wrote:
->>>> On Thu, 14 Apr 2022, Oleksandr Tyshchenko wrote:
->>>>> From: Juergen Gross <jgross@suse.com>
->>>>>
->>>>> In order to support virtio in Xen guests add a config option enabling
->>>>> the user to specify whether in all Xen guests virtio should be 
->>>>> able to
->>>>> access memory via Xen grant mappings only on the host side.
->>>>>
->>>>> This applies to fully virtualized guests only, as for paravirtualized
->>>>> guests this is mandatory.
->>>>>
->>>>> This requires to switch arch_has_restricted_virtio_memory_access()
->>>>> from a pure stub to a real function on x86 systems (Arm systems are
->>>>> not covered by now).
->>>>>
->>>>> Add the needed functionality by providing a special set of DMA ops
->>>>> handling the needed grant operations for the I/O pages.
->>>>>
->>>>> Signed-off-by: Juergen Gross <jgross@suse.com>
->>>>> ---
->>>>>    arch/x86/mm/init.c        |  15 ++++
->>>>>    arch/x86/mm/mem_encrypt.c |   5 --
->>>>>    arch/x86/xen/Kconfig      |   9 +++
->>>>>    drivers/xen/Kconfig       |  20 ++++++
->>>>>    drivers/xen/Makefile      |   1 +
->>>>>    drivers/xen/xen-virtio.c  | 177
->>>>> ++++++++++++++++++++++++++++++++++++++++++++++
->>>>>    include/xen/xen-ops.h     |   8 +++
->>>>>    7 files changed, 230 insertions(+), 5 deletions(-)
->>>>>    create mode 100644 drivers/xen/xen-virtio.c
->>>>>
->>>>> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
->>>>> index d8cfce2..526a3b2 100644
->>>>> --- a/arch/x86/mm/init.c
->>>>> +++ b/arch/x86/mm/init.c
->>>>> @@ -8,6 +8,8 @@
->>>>>    #include <linux/kmemleak.h>
->>>>>    #include <linux/sched/task.h>
->>>>>    +#include <xen/xen.h>
->>>>> +
->>>>>    #include <asm/set_memory.h>
->>>>>    #include <asm/e820/api.h>
->>>>>    #include <asm/init.h>
->>>>> @@ -1065,3 +1067,16 @@ unsigned long max_swapfile_size(void)
->>>>>        return pages;
->>>>>    }
->>>>>    #endif
->>>>> +
->>>>> +#ifdef CONFIG_ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->>>>> +int arch_has_restricted_virtio_memory_access(void)
->>>>> +{
->>>>> +    if (IS_ENABLED(CONFIG_XEN_PV_VIRTIO) && xen_pv_domain())
->>>>> +        return 1;
->>>>> +    if (IS_ENABLED(CONFIG_XEN_HVM_VIRTIO_GRANT) && xen_hvm_domain())
->>>>> +        return 1;
->>>> I think these two checks could be moved to a separate function in a 
->>>> Xen
->>>> header, e.g. xen_restricted_virtio_memory_access, and here you could
->>>> just
->>>>
->>>> if (xen_restricted_virtio_memory_access())
->>>>       return 1;
->>>
->>> Agree, will do
->>>
->>>
->>>>
->>>>
->>>>
->>>>> +    return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->>>>> +}
->>>>> +EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->>>>> +#endif
->>>>> diff --git a/arch/x86/mm/mem_encrypt.c b/arch/x86/mm/mem_encrypt.c
->>>>> index 50d2099..dda020f 100644
->>>>> --- a/arch/x86/mm/mem_encrypt.c
->>>>> +++ b/arch/x86/mm/mem_encrypt.c
->>>>> @@ -77,8 +77,3 @@ void __init mem_encrypt_init(void)
->>>>>        print_mem_encrypt_feature_info();
->>>>>    }
->>>>>    -int arch_has_restricted_virtio_memory_access(void)
->>>>> -{
->>>>> -    return cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT);
->>>>> -}
->>>>> -EXPORT_SYMBOL_GPL(arch_has_restricted_virtio_memory_access);
->>>>> diff --git a/arch/x86/xen/Kconfig b/arch/x86/xen/Kconfig
->>>>> index 85246dd..dffdffd 100644
->>>>> --- a/arch/x86/xen/Kconfig
->>>>> +++ b/arch/x86/xen/Kconfig
->>>>> @@ -92,3 +92,12 @@ config XEN_DOM0
->>>>>        select X86_X2APIC if XEN_PVH && X86_64
->>>>>        help
->>>>>          Support running as a Xen Dom0 guest.
->>>>> +
->>>>> +config XEN_PV_VIRTIO
->>>>> +    bool "Xen virtio support for PV guests"
->>>>> +    depends on XEN_VIRTIO && XEN_PV
->>>>> +    default y
->>>>> +    help
->>>>> +      Support virtio for running as a paravirtualized guest. This 
->>>>> will
->>>>> +      need support on the backend side (qemu or kernel, depending 
->>>>> on the
->>>>> +      virtio device types used).
->>>>> diff --git a/drivers/xen/Kconfig b/drivers/xen/Kconfig
->>>>> index 120d32f..fc61f7a 100644
->>>>> --- a/drivers/xen/Kconfig
->>>>> +++ b/drivers/xen/Kconfig
->>>>> @@ -335,4 +335,24 @@ config XEN_UNPOPULATED_ALLOC
->>>>>          having to balloon out RAM regions in order to obtain 
->>>>> physical memory
->>>>>          space to create such mappings.
->>>>>    +config XEN_VIRTIO
->>>>> +    bool "Xen virtio support"
->>>>> +    default n
->>>>> +    depends on VIRTIO && DMA_OPS
->>>>> +    select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->>>>> +    help
->>>>> +      Enable virtio support for running as Xen guest. Depending 
->>>>> on the
->>>>> +      guest type this will require special support on the backend 
->>>>> side
->>>>> +      (qemu or kernel, depending on the virtio device types used).
->>>>> +
->>>>> +config XEN_HVM_VIRTIO_GRANT
->>>>> +    bool "Require virtio for fully virtualized guests to use grant
->>>>> mappings"
->>>>> +    depends on XEN_VIRTIO && X86_64
->>>>> +    default y
->>>>> +    help
->>>>> +      Require virtio for fully virtualized guests to use grant 
->>>>> mappings.
->>>>> +      This will avoid the need to give the backend the right to 
->>>>> map all
->>>>> +      of the guest memory. This will need support on the backend 
->>>>> side
->>>>> +      (qemu or kernel, depending on the virtio device types used).
->>>> I don't think we need 3 visible kconfig options for this.
->>>>
->>>> In fact, I would only add one: XEN_VIRTIO. We can have any X86 (or 
->>>> ARM)
->>>> specific dependencies in the "depends" line under XEN_VIRTIO. And I
->>>> don't think we need XEN_HVM_VIRTIO_GRANT as a kconfig option
->>>> necessarely. It doesn't seem like some we want as build time 
->>>> option. At
->>>> most, it could be a runtime option (like a command line) or a debug
->>>> option (like an #define at the top of the source file.)
->>>
->>>
->>> I don't know what was the initial idea of having and extra 
->>> XEN_HVM_VIRTIO and
->>> XEN_PV_VIRTIO options, but taking into the account that
->>> they are only used in arch_has_restricted_virtio_memory_access() 
->>> currently, I
->>> share your opinion regarding a single XEN_VIRTIO option.
->>>
->>> Looking ahead (including changes in the commit #4), we can imagine the
->>> resulting option:
->>>
->>> config XEN_VIRTIO
->>>      bool "Xen virtio support"
->>>      default n
->>>      depends on VIRTIO && DMA_OPS
->>>      depends on (X86_64 || ARM || ARM64)
->>>      select ARCH_HAS_RESTRICTED_VIRTIO_MEMORY_ACCESS
->>>      help
->>>        Enable virtio support for running as Xen guest. Depending on the
->>>        guest type this will require special support on the backend side
->>>        (qemu or kernel, depending on the virtio device types used).
->>>
->>>
->>> and then arch_has_restricted_virtio_memory_access() per arch:
->>>
->>>
->>> 1. x86:
->>>
->>> int arch_has_restricted_virtio_memory_access(void)
->>> {
->>>      return (xen_has_restricted_virtio_memory_access() ||
->>>              cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT));
->>> }
->>>
->>>
->>> 2. Arm:
->>>
->>> int arch_has_restricted_virtio_memory_access(void)
->>> {
->>>      return xen_has_restricted_virtio_memory_access();
->>> }
->>>
->>>
->>> 3. xen.h:
->>>
->>> static inline int xen_has_restricted_virtio_memory_access(void)
->>> {
->>>      if (IS_ENABLED(CONFIG_XEN_VIRTIO) && (xen_pv_domain() ||
->>> xen_hvm_domain()))
->>>          return 1;
->>>
->>>      return 0;
->>> }
->>>
->>>
->>> Actually, as domain type on Arm is always XEN_HVM_DOMAIN, we could 
->>> probably
->>> have the following on Arm:
->>>
->>> int arch_has_restricted_virtio_memory_access(void)
->>> {
->>>      return IS_ENABLED(CONFIG_XEN_VIRTIO);
->>> }
->>>
->>> but I would prefer not to diverge and use common
->>> xen_has_restricted_virtio_memory_access().
->>>
->>> Any thoughts?
->>
->> Yes, I would also prefer not to diverge between the x86 and arm versions
->> of xen_has_restricted_virtio_memory_access. But what case are we trying
->> to catch with (xen_pv_domain() || xen_hvm_domain()) ? Even on x86, it is
->> not going to leave much out. Is it really meant only to exclude pvh
->> domains?
-
-Good question. By leaving (xen_pv_domain() || xen_hvm_domain()) here I 
-tried to retain what the *initial* version of 
-arch_has_restricted_virtio_memory_access() covered.
-
-
+On Mon, 18 Apr 2022 at 18:13, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> It wouldn't exclude pvh domains.
-
-
-ok
-
-
+> This is the start of the stable review cycle for the 5.4.190 release.
+> There are 63 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->>
->> I have the feeling that we could turn this check into:
->>
->> static inline int xen_has_restricted_virtio_memory_access(void)
->> {
->>      return IS_ENABLED(CONFIG_XEN_VIRTIO) && xen_domain();
->> }
->>
->> even on x86, but one of the xen/x86 maintainers should confirm.
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
 >
-> I do confirm this is better and functionally equivalent.
-
-
-Perfect, thank you for confirming. Will use that check.
-
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.190-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
 >
+> thanks,
 >
-> Juergen
+> greg k-h
 
--- 
-Regards,
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Oleksandr Tyshchenko
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 5.4.190-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: ab55553793398bae2b33694dbbf1b3529c5ac2db
+* git describe: v5.4.189-64-gab5555379339
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.1=
+89-64-gab5555379339
+
+## Test Regressions (compared to v5.4.188-468-g60d6fdc40ea0)
+No test regressions found.
+
+## Metric Regressions (compared to v5.4.188-468-g60d6fdc40ea0)
+No metric regressions found.
+
+## Test Fixes (compared to v5.4.188-468-g60d6fdc40ea0)
+No test fixes found.
+
+## Metric Fixes (compared to v5.4.188-468-g60d6fdc40ea0)
+No metric fixes found.
+
+## Test result summary
+total: 88726, pass: 73874, fail: 888, skip: 12818, xfail: 1146
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 290 total, 290 passed, 0 failed
+* arm64: 40 total, 34 passed, 6 failed
+* i386: 19 total, 19 passed, 0 failed
+* mips: 37 total, 37 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 60 total, 54 passed, 6 failed
+* riscv: 27 total, 27 passed, 0 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 40 total, 40 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* perf
+* perf/Zstd-perf.data-compression
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

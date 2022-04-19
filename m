@@ -2,149 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CBDA50632D
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E695D506320
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 06:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348164AbiDSEJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 19 Apr 2022 00:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35932 "EHLO
+        id S1348168AbiDSELK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 19 Apr 2022 00:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiDSEJZ (ORCPT
+        with ESMTP id S229923AbiDSELG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 19 Apr 2022 00:09:25 -0400
-Received: from mail-lf1-x144.google.com (mail-lf1-x144.google.com [IPv6:2a00:1450:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD1E25C62;
-        Mon, 18 Apr 2022 21:06:43 -0700 (PDT)
-Received: by mail-lf1-x144.google.com with SMTP id y32so27233793lfa.6;
-        Mon, 18 Apr 2022 21:06:43 -0700 (PDT)
+        Tue, 19 Apr 2022 00:11:06 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42BB025E80
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:08:22 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-2ebf3746f87so159458617b3.6
+        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 21:08:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=mime-version:references:in-reply-to:from:date:message-id:subject:to
-         :cc;
-        bh=epLdV4UvdCZrONMJO0C3C+PGoOiwBBja5yvoXKugUmA=;
-        b=npWZ+mAKk9cVHXApgzctzjGK8EdrADU8OQe5vjj9t35j4A1g0jvTgiJUWTiCxnibcf
-         lWPvK6wihzg0qVSYSff1uJDtMR+uWIiB2GaPBfk8Yn7wGPpH5fPLd5K3x5fwInFur2UM
-         1h/uoC9CV6N7ozgApbXkbphKvGkbbJmjrafhRL2cAIEdCKGsv8XJgf+6nWJuFQPTlrIV
-         rUbz6bJvvWwMHt/NuvbpTJz03yg6rYsbO0rYgd9C5kRCKPw2FomQvjFmqKX0CNl52YKk
-         K0f+uIIB7O+51L+M/z1x++IqOX011m0GCPP4FNhGjHM1MTVE0LEs3Z+UOMq1wXkFScYj
-         VUng==
+         :cc:content-transfer-encoding;
+        bh=RxUGvhohRZMIeX9k2FsUNWTiAWQS4Lj8VHpVf2o74vc=;
+        b=rK6n5jnhB7DrghnuvgvGSPpe3RiXShW0iDaNCCAbDamjvJ/0QkzMqhhWDSd2QTM5zN
+         EFiOAUPZ+v1cLMdvTJV95twIzof8Xk+HmS1LboIzSlYA3IxQPJyFuhoCFtTQEbhxeoxa
+         nLh+9A7M5CjIWYMINNhG8E2ov24+viameJm70+UdsiPFSKmSRPm5GgKU2+Yz2+1RuVUB
+         z2vT70qwVhQT3bFkpMixZ7ZqK3bzNXffTIm8e9NjV6TFm0F5FIpJlLjD7AagKSwBt9FU
+         su8d6ZFqLqg4N4wsDPjrMyprLK3g9ji2siBlIZJFRR7ILDNteTm+8u+3mVa4meGW51C1
+         1jHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=x-gm-message-state:mime-version:references:in-reply-to:from:date
-         :message-id:subject:to:cc;
-        bh=epLdV4UvdCZrONMJO0C3C+PGoOiwBBja5yvoXKugUmA=;
-        b=XOEOUo6VOMtBhGYHtLnbEvU1WvsnG1Gk7xZbql7mTkAo1fpdF1ZqhYj5j9JhlCdB3h
-         pv2SrroxLYrx0Tj1dEZ4RM8QZimCzL+1cWx4qKoH2p1GoRY1SrCP980nvkBsp9i9c8qR
-         Hp5YmRe2nssLE1Oop+C+GN+WyoN28b83D/p2NaDfGjBKO0FZzaNO3f0OsfwIERdrmg4P
-         ++kiui5NREhXOVozFraVdimq7H603Vp3QKCxZPAF21qugXuvJIegTeeLAEhtuH1K2Kyi
-         W+d8ypXMAq78L7uHOhbOtnhpmoiRmwfLLthM6g1ehx/u2b1PnnKKGvLGKjR8+fmKzOSh
-         kTcQ==
-X-Gm-Message-State: AOAM531IHm4+izEHwomMLW/mphYl0XrEZf3TnxX7z2C79ZiNINNhMti+
-        /1CT6u8qlvYvRI/MHyuDI2sfNKFaaApJQLN2QLY=
-X-Google-Smtp-Source: ABdhPJw7+eMesyIFQ53HzSW2TfwKjSMr2HaZsviv6ymYC5GjFElKa9NGyuGTWDnsqDbJ6xtXb84Sjzcr5Ob/6++NoUc=
-X-Received: by 2002:a05:6512:2207:b0:45d:cd01:d3ca with SMTP id
- h7-20020a056512220700b0045dcd01d3camr10070959lfu.561.1650341201575; Mon, 18
- Apr 2022 21:06:41 -0700 (PDT)
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RxUGvhohRZMIeX9k2FsUNWTiAWQS4Lj8VHpVf2o74vc=;
+        b=x0M8l7hZ4uzxe6vpBLpIviQ1IjAq2H1pfNcB8hvLV99Ovw7F8hhDfljQ7tvT/fjQ0T
+         54OqPQV60zRj/nQjQdlxgxWA3sm6PamWIvI7khw76lzuVQn2CJyAU3cBV12DJSkGL0ME
+         PnFcWzYMQTZSRCE3ra4R4cbbQBl6949tPd/7H3wsL0Sth0nC7E5fGgSxmXw4I9s6CrJ7
+         C2JsCPMmE1bGH89TzPISNey/6nvvfuDP0mjUn6vD60Wwxr6s4BQjYKbU3vk9o5I8odSS
+         6DxbFrBu9Vi0JiIeECe18pxJmYTSKiZ8mCRpV2Sq0mw/7kiCy2JVeMy3mLNERsUfXXBx
+         wvhQ==
+X-Gm-Message-State: AOAM532ohK/41lTb0Az6iRd3JdLXSuk8UXhAji5dgSrQNj1K5JRyLl02
+        8k2OQmVwAtCtyWryr5cfDe6MmoDAw9FfhS4x8d1TkQ==
+X-Google-Smtp-Source: ABdhPJzPeb0inENKSoaL9o+dm6OQC6zVJQXzkSSrIk/VVrICYu6dtVAnu0nLbyctSyP31xlz1JVwD/g8QECquLJzS1U=
+X-Received: by 2002:a0d:f587:0:b0:2f1:b1ca:287e with SMTP id
+ e129-20020a0df587000000b002f1b1ca287emr4936406ywf.60.1650341301128; Mon, 18
+ Apr 2022 21:08:21 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220418043735.11441-1-patrick.wang.shcn@gmail.com> <20220418143404.55c8fcab@gandalf.local.home>
-In-Reply-To: <20220418143404.55c8fcab@gandalf.local.home>
-From:   patrick wang <patrick.wang.shcn@gmail.com>
-Date:   Tue, 19 Apr 2022 12:06:30 +0800
-Message-ID: <CAGcnep8bH4Nncbt3t+VRLff35ZyD8JyzHcEgkq-u6TEq47jqzQ@mail.gmail.com>
-Subject: Re: [PATCH] rcu: ftrace: avoid tracing a few functions executed in multi_cpu_stop()
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     paulmck@kernel.org, frederic@kernel.org, quic_neeraju@quicinc.com,
-        josh@joshtriplett.org, mathieu.desnoyers@efficios.com,
-        jiangshanlai@gmail.com, joel@joelfernandes.org,
-        rcu@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220418121203.462784814@linuxfoundation.org>
+In-Reply-To: <20220418121203.462784814@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 19 Apr 2022 09:38:09 +0530
+Message-ID: <CA+G9fYt-DHhCDjnGfXi1=qn3JdQ-w=UnOXr81bZX1pvECPtD9g@mail.gmail.com>
+Subject: Re: [PATCH 5.17 000/219] 5.17.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 19, 2022 at 2:34 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, 18 Apr 2022 at 17:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> On Mon, 18 Apr 2022 12:37:35 +0800
-> Patrick Wang <patrick.wang.shcn@gmail.com> wrote:
+> This is the start of the stable review cycle for the 5.17.4 release.
+> There are 219 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> > A few functions are in the call chain of rcu_momentary_dyntick_idle()
-> > which is executed in multi_cpu_stop() and marked notrace. They are running
-> > in traced when ftrace modify code. This may cause non-ftrace_modify_code
-> > CPUs stall:
+> Responses should be made by Wed, 20 Apr 2022 12:11:14 +0000.
+> Anything received after that time might be too late.
 >
-> I'm confused by this. How is traced functions causing this exactly? Is this
-> on RISC-V?
-
-During ftrace modify code, these functions are running and their
-instructions will
-be modified by ftrace (I see the nop instructions in these functions
-from the compiler).
-When instructions are being modified, they shouldn't be executed. Or
-the executor
-may behave unpredictably.
-
-Yes, it is on RISC-V.
-
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.17.4-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.17.y
+> and the diffstat can be found below.
 >
-> >
-> > [   72.686113] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
-> > [   72.687344] rcu:   1-...!: (0 ticks this GP) idle=14f/1/0x4000000000000000 softirq=3397/3397 fqs=0
-> > [   72.687800] rcu:   3-...!: (0 ticks this GP) idle=ee9/1/0x4000000000000000 softirq=5168/5168 fqs=0
-> > [   72.688280]        (detected by 0, t=8137 jiffies, g=5889, q=2 ncpus=4)
-> > [   72.688739] Task dump for CPU 1:
-> > [   72.688991] task:migration/1     state:R  running task     stack:    0 pid:   19 ppid:     2 flags:0x00000000
-> > [   72.689594] Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
-> > [   72.690242] Call Trace:
-> > [   72.690603] Task dump for CPU 3:
-> > [   72.690761] task:migration/3     state:R  running task     stack:    0 pid:   29 ppid:     2 flags:0x00000000
-> > [   72.691135] Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
-> > [   72.691474] Call Trace:
-> > [   72.691733] rcu: rcu_preempt kthread timer wakeup didn't happen for 8136 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
-> > [   72.692180] rcu:   Possible timer handling issue on cpu=2 timer-softirq=594
-> > [   72.692485] rcu: rcu_preempt kthread starved for 8137 jiffies! g5889 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=2
-> > [   72.692876] rcu:   Unless rcu_preempt kthread gets sufficient CPU time, OOM is now expected behavior.
-> > [   72.693232] rcu: RCU grace-period kthread stack dump:
-> > [   72.693433] task:rcu_preempt     state:I stack:    0 pid:   14 ppid:     2 flags:0x00000000
-> > [   72.693788] Call Trace:
-> > [   72.694018] [<ffffffff807f3740>] schedule+0x56/0xc2
-> > [   72.694306] [<ffffffff807f9cd8>] schedule_timeout+0x82/0x184
-> > [   72.694539] [<ffffffff8007c456>] rcu_gp_fqs_loop+0x19a/0x318
-> > [   72.694809] [<ffffffff8007e408>] rcu_gp_kthread+0x11a/0x140
-> > [   72.695325] [<ffffffff800324d6>] kthread+0xee/0x118
-> > [   72.695657] [<ffffffff8000398a>] ret_from_exception+0x0/0x14
-> > [   72.696089] rcu: Stack dump where RCU GP kthread last ran:
-> > [   72.696383] Task dump for CPU 2:
-> > [   72.696562] task:migration/2     state:R  running task     stack:    0 pid:   24 ppid:     2 flags:0x00000000
-> > [   72.697059] Stopper: multi_cpu_stop+0x0/0x18c <- stop_machine_cpuslocked+0x128/0x174
-> > [   72.697471] Call Trace:
-> >
-> > Mark rcu_preempt_deferred_qs(), rcu_preempt_need_deferred_qs() and
-> > rcu_preempt_deferred_qs_irqrestore() notrace to avoid this.
-> >
+> thanks,
 >
-> The rcu_momentary_dyntick_idle() was marked notrace because of RISC-V not
-> being able to call functions from within stop machine. If that's what is
-> being prevented,
+> greg k-h
 
-Yes, that is.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-> then I'm fine with this (although I'm thinking we need
-> different kinds of "notrace" for different architectures as one arch's
-> limitation should not be cause for another's).
->
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Totally agree with this. The "notrace" currently is heavy, can effect all archs.
+## Build
+* kernel: 5.17.4-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.17.y
+* git commit: 12e5bd3d067695aa29a9780ccff9fa9d1e761337
+* git describe: v5.17.3-223-g12e5bd3d0676
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.17.y/build/v5.17=
+.3-223-g12e5bd3d0676
 
-Thanks
-Patrick
+## Test Regressions (compared to v5.17.3-8-g8a239d5c59a8)
+No test regressions found.
 
+## Metric Regressions (compared to v5.17.3-8-g8a239d5c59a8)
+No metric regressions found.
 
-> But before I ack this patch, I want to understand the real issues here.
->
-> -- Steve
+## Test Fixes (compared to v5.17.3-8-g8a239d5c59a8)
+No metric fixes found.
+
+## Metric Fixes (compared to v5.17.3-8-g8a239d5c59a8)
+No metric fixes found.
+
+## Test result summary
+total: 90780, pass: 78715, fail: 220, skip: 11125, xfail: 720
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 296 total, 293 passed, 3 failed
+* arm64: 47 total, 47 passed, 0 failed
+* i386: 44 total, 40 passed, 4 failed
+* mips: 41 total, 38 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 27 passed, 5 failed
+* s390: 26 total, 23 passed, 3 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 47 total, 47 passed, 0 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* linux-log-parser
+* ltp-cap_bounds-tests
+* ltp-commands-tests
+* ltp-containers-tests
+* ltp-controllers-tests
+* ltp-cpuhotplug-tests
+* ltp-crypto-tests
+* ltp-cve-tests
+* ltp-dio-tests
+* ltp-fcntl-locktests-te[
+* ltp-fcntl-locktests-tests
+* ltp-filecaps-tests
+* ltp-fs-tests
+* ltp-fs_bind-tests
+* ltp-fs_perms_simple-tests
+* ltp-fsx-tests
+* ltp-hugetlb-tests
+* ltp-io-tests
+* ltp-ipc-tests
+* ltp-math-tests
+* ltp-mm-tests
+* ltp-nptl-tests
+* ltp-open-posix-tests
+* ltp-pty-tests
+* ltp-sched-tests
+* ltp-securebits-tests
+* ltp-syscalls-tests
+* ltp-tracing-tests
+* network-basic-tests
+* packetdrill
+* rcutorture
+* ssuite
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org

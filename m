@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 667FB5061DB
-	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E82ED5061DE
+	for <lists+linux-kernel@lfdr.de>; Tue, 19 Apr 2022 03:54:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343977AbiDSB4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 18 Apr 2022 21:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57684 "EHLO
+        id S1344071AbiDSB45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 18 Apr 2022 21:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343930AbiDSB4L (ORCPT
+        with ESMTP id S245484AbiDSB44 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 18 Apr 2022 21:56:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38B2127CCE
-        for <linux-kernel@vger.kernel.org>; Mon, 18 Apr 2022 18:53:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1650333210; x=1681869210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=onaBKRMk1DhTJ8zWoTq8KheY5mYtnuJ8MW026J5UGO0=;
-  b=EtRZPiLH9jKIdwchRiX4n5fNlzLd0kYQqJrPb4aYcP3KWJBGSwkJu3gK
-   WYucXk3uSVPmW9ADtAeWiNF1j5DYoyWZqd/j0zepsD+Qq0vTw4HxXneZg
-   kXBhhjqxGX1QKqqnfdBc+VlyykTWbsalR628Uqugu9bcDZ+d8zHe9Z0x4
-   amUj+u0pCHIJ+E3kQxdSo8fN+UecyRHwiJTNeGnPi4O5jED/vmyWd7g6W
-   k3B+B0fpqdcsbLqleMWUgVqVzEER8zx0yA5XUpjPmJHzhBdrf99aL+3Z5
-   yTIkpQs4EBB/7Gi3TPXX/PlQzOZyR+8jy5c5pYZ4+uEpd8Lmy9lHGBJxh
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10321"; a="263826114"
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="263826114"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Apr 2022 18:53:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.90,271,1643702400"; 
-   d="scan'208";a="509953429"
-Received: from lkp-server01.sh.intel.com (HELO 3abc53900bec) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 18 Apr 2022 18:53:11 -0700
-Received: from kbuild by 3abc53900bec with local (Exim 4.95)
-        (envelope-from <lkp@intel.com>)
-        id 1ngd3H-0005BM-60;
-        Tue, 19 Apr 2022 01:53:11 +0000
-Date:   Tue, 19 Apr 2022 09:53:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Ingo Molnar <mingo@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [mingo-tip:sched/headers 1645/2356]
- drivers/thermal/intel/intel_hfi.c:401:25: warning: incompatible integer to
- pointer conversion assigning to 'void *' from 'int'
-Message-ID: <202204190947.AY5XKXTY-lkp@intel.com>
+        Mon, 18 Apr 2022 21:56:56 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B651A2A265;
+        Mon, 18 Apr 2022 18:54:14 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id o20-20020a05600c511400b0038ebbbb2ad8so570330wms.0;
+        Mon, 18 Apr 2022 18:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:references:in-reply-to:from:date:message-id:subject:to
+         :cc:content-transfer-encoding;
+        bh=RXHIuO3Zg/MMr8+Axpf8/PPvILA/PMGB3lcXS1iPaso=;
+        b=F8+43CuJ9YoLXL8CxHf19t5/rFf1MBn3vz//kBoy3/VGeE66S5LvVuZk/WGItU4AtY
+         nJBVQMKNqpBCvymiDhaWv2OBkZyfbBs0KyixioJTc7IX/+XTaELXLFl/qVPBuj+g9hqJ
+         4SKtgUNgUpj7RWBkdQMT9/dR5oH9DAChWwMUvNgRz9W7hZ5WHM6cJJ+Fm5MhuEdBVQ/Q
+         MsyuqcurFCPYnkdXsD5rU+v3fMk22IDOquOZeo14BZQdAQb6YcLfGXQPKJYSd4wT+0hM
+         rn9HrTscfeWEyhxJZTSgBJxdndvjKQP/387HxwTfkd6fkdYfWgLjuSAIFDd+6/PllI1o
+         NFQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:mime-version:references:in-reply-to:from:date
+         :message-id:subject:to:cc:content-transfer-encoding;
+        bh=RXHIuO3Zg/MMr8+Axpf8/PPvILA/PMGB3lcXS1iPaso=;
+        b=yVQ05r+J90W8hTZ/SErVQKammuxCyF2U+dFBtHvhyl/ks7+LrVNMEmTPlrj3v0bMZP
+         9olBw94zYlY/4XL4WzeTgd8uuVCSAXHKKZaKNYYm8/NgP8Zqh7M5klm6acLUTokAPpF2
+         ay9FsAzIaxWpEkgxItMIIYK/fUCzxFP07JeD6bZJinN+0ko2R5CeT5y7wfgNnV4FG7X9
+         YGC1Ud7Ry8iwF7nSnX5bW+pVWigvIRYSwYM8wKRFq6xFN6X3GiMWLde6nUZmLgT9/tW6
+         yjflvJM2ZrQB5ODN/QhoerUZZkrL7JCL6a6HXVoBZT5SwaumzLnT/Z2C0lP3oSXlCKQJ
+         549g==
+X-Gm-Message-State: AOAM5330CI4jjfd8i2iiDV4CN8yZ4Y4Sfm0PZev5W5IKPWjl+yxk4e4M
+        zX8w3udtHDS/Vtre7Fm1jwI74ygHqAo506m5mKY=
+X-Google-Smtp-Source: ABdhPJz6tK7tm2CrLT8+1v60pEArnfBEA7Be12W5T0Je3SDwxlYwvHGdSScaEn8EPULM1JSHyBv43dCv+XgnsGKbknk=
+X-Received: by 2002:a05:600c:a03:b0:38c:f953:ae13 with SMTP id
+ z3-20020a05600c0a0300b0038cf953ae13mr13482468wmp.99.1650333253086; Mon, 18
+ Apr 2022 18:54:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220418125630.2342538-1-gengcixi@gmail.com> <20220418125630.2342538-2-gengcixi@gmail.com>
+ <714caf6e-5f81-6d73-7629-b2c675f1f1d4@linaro.org>
+In-Reply-To: <714caf6e-5f81-6d73-7629-b2c675f1f1d4@linaro.org>
+From:   Cixi Geng <gengcixi@gmail.com>
+Date:   Tue, 19 Apr 2022 09:53:37 +0800
+Message-ID: <CAF12kFv6uioc7ATtXLpGTTDBFT1wYWZUBoyjQqP1bSUnut0pKA@mail.gmail.com>
+Subject: Re: [PATCH V3 1/3] dt-bindings: clk: sprd: Add bindings for ums512
+ clock controller
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>, sboyd@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        krzysztof.kozlowski+dt@linaro.org,
+        Orson Zhai <orsonzhai@gmail.com>,
+        "baolin.wang7@gmail.com" <baolin.wang7@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-clk@vger.kernel.org,
+        Devicetree List <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,161 +76,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git sched/headers
-head:   af93551cf39027d176f30b9beafc60a4c130998a
-commit: 96618ccf069eedafdb527ebc33c48b30b348a406 [1645/2356] headers/deps: mm: Remove the <linux/gfp_api.h> header from <linux/gfp.h>
-config: x86_64-randconfig-a012-20220418 (https://download.01.org/0day-ci/archive/20220419/202204190947.AY5XKXTY-lkp@intel.com/config)
-compiler: clang version 15.0.0 (https://github.com/llvm/llvm-project 429cbac0390654f90bba18a41799464adf31a5ec)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git/commit/?id=96618ccf069eedafdb527ebc33c48b30b348a406
-        git remote add mingo-tip git://git.kernel.org/pub/scm/linux/kernel/git/mingo/tip.git
-        git fetch --no-tags mingo-tip sched/headers
-        git checkout 96618ccf069eedafdb527ebc33c48b30b348a406
-        # save the config file to linux build tree
-        mkdir build_dir
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/kernel/ drivers/block/aoe/ drivers/bus/mhi/host/ drivers/gpu/drm/i915/gvt/ drivers/gpu/drm/tiny/ drivers/hwmon/ drivers/iio/dac/ drivers/misc/ drivers/platform/x86/ drivers/power/supply/ drivers/spi/ drivers/thermal/intel/ lib/crypto/ net/mctp/
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E4=BA=8E2022=E5=B9=B4=
+4=E6=9C=8819=E6=97=A5=E5=91=A8=E4=BA=8C 00:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On 18/04/2022 14:56, Cixi Geng wrote:
+> > From: Cixi Geng <cixi.geng1@unisoc.com>
+> >
+> > Add a new bindings to describe ums512 clock compatible string.
+> >
+> > Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> > ---
+> >  .../bindings/clock/sprd,ums512-clk.yaml       | 112 ++++++++++++++++++
+> >  1 file changed, 112 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/clock/sprd,ums512=
+-clk.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/clock/sprd,ums512-clk.ya=
+ml b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> > new file mode 100644
+> > index 000000000000..89824d7c6be4
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml
+> > @@ -0,0 +1,112 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +# Copyright 2022 Unisoc Inc.
+> > +%YAML 1.2
+> > +---
+> > +$id: "http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml#"
+> > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > +
+> > +title: UMS512 Clock Control Unit Device Tree Bindings
+>
+> Remove "Device Tree Bindings". You could do the same also in the
+> subject, because you repeat the prefix ("dt-bindings: clk: sprd: Add
+> ums512 clock controller").
+>
+> > +
+> > +maintainers:
+> > +  - Orson Zhai <orsonzhai@gmail.com>
+> > +  - Baolin Wang <baolin.wang7@gmail.com>
+> > +  - Chunyan Zhang <zhang.lyra@gmail.com>
+> > +
+> > +properties:
+> > +  "#clock-cells":
+> > +    const: 1
+> > +
+> > +  compatible:
+>
+> Put the compatible first, by convention and makes finding matching
+> bindings easier.
+>
+> > +    oneOf:
+> > +      - items:
+> > +          - const: sprd,ums512-glbregs
+> > +          - const: syscon
+> > +          - const: simple-mfd
+>
+> Why do you need simple-mfd for these? This looks like a regular syscon,
+> so usually does not come with children. What is more, why this "usual
+> syscon" is a separate clock controller in these bindings?
+there is a warning log before add these const.  and the reason we need
+the simply-mfd
+is some clock is a child of syscon node,which should set these compatible.
+failed to match any schema with compatible: ['sprd,ums512-glbregs',
+'syscon', 'simple-mfd']
+>
+> > +      - items:
+> > +          - enum:
+> > +              - sprd,ums512-apahb-gate
+> > +              - sprd,ums512-ap-clk
+> > +              - sprd,ums512-aonapb-clk
+> > +              - sprd,ums512-pmu-gate
+> > +              - sprd,ums512-g0-pll
+> > +              - sprd,ums512-g2-pll
+> > +              - sprd,ums512-g3-pll
+> > +              - sprd,ums512-gc-pll
+> > +              - sprd,ums512-aon-gate
+> > +              - sprd,ums512-audcpapb-gate
+> > +              - sprd,ums512-audcpahb-gate
+> > +              - sprd,ums512-gpu-clk
+> > +              - sprd,ums512-mm-clk
+> > +              - sprd,ums512-mm-gate-clk
+> > +              - sprd,ums512-apapb-gate
+> > +
+> > +  clocks:
+> > +    minItems: 1
+>
+> maxItems needed
+the previous version did has the maxitems, but makes error when run
+'make DT_CHECKER_FLAGS=3D-m dt_binding_check O=3D./dt-out  \
+DT_SCHEMA_FILES=3DDocumentation/devicetree/bindings/clock/sprd,ums512-clk.y=
+aml'
+  CHKDT   Documentation/devicetree/bindings/processed-schema.json
+/path-to-linux/Documentation/devicetree/bindings/clock/sprd,ums512-clk.yaml=
+:
+properties:clock-names: {'minItems': 1, 'maxItems': 4, 'items':
+[{'const': 'ext-26m'}, {'const': 'ext-32k'}, {'const': 'ext-4m'},
+{'const': 'rco-100m'}]} should not be valid under {'required':
+['maxItems']}
+hint: "maxItems" is not needed with an "items" list
 
-If you fix the issue, kindly add following tag as appropriate
-Reported-by: kernel test robot <lkp@intel.com>
+>
+> > +    description: |
+> > +      The input parent clock(s) phandle for this clock, only list fixe=
+d
+> > +      clocks which are declared in devicetree.
+>
+> The description does not make sense. These are bindings for a clock
+> controller, but you say here "for this clock", so what does "this" mean
+> here?
+>
+> > +
+> > +  clock-names:
+> > +    minItems: 1
+> > +    items:
+> > +      - const: ext-26m
+> > +      - const: ext-32k
+> > +      - const: ext-4m
+> > +      - const: rco-100m
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - '#clock-cells'
+>
+> Isn't reg also required? Always? Do you have examples where it is not
+> required? How do you configure the clocks without "reg"? I see you
+> copied a lot from sprd,sc9863a-clk.yaml but that file does not look corre=
+ct.
+>
+> You have nodes with reg but without unit address ("rpll"). These nodes
+> are modeled as children but they are not children - it's a workaround
+> for exposing syscon, isn't it? The sc9863a looks like broken design, so
+> please do not duplicate it here.
+>
+> > +
+> > +if:
+> > +  properties:
+> > +    compatible:
+> > +      enum:
+> > +        - sprd,ums512-ap-clk
+> > +        - sprd,ums512-aonapb-clk
+> > +        - sprd,ums512-mm-clk
+> > +then:
+> > +  required:
+> > +    - reg
+> > +
+> > +else:
+> > +  description: |
+> > +    Other UMS512 clock nodes should be the child of a syscon node in
+> > +    which compatible string should be:
+> > +            "sprd,ums512-glbregs", "syscon", "simple-mfd"
+> > +
+> > +    The 'reg' property for the clock node is also required if there is=
+ a sub
+> > +    range of registers for the clocks.
+> > +
+> > +additionalProperties: true
+>
+> false
+the "false" makes error log:
+/path-to-linux/Documentation/devicetree/bindings/clock/sprd,ums512-clk.exam=
+ple.dtb:
+syscon@71000000: '#address-cells', '#size-cells',
+'clock-controller@0', 'ranges' do not match any of the regexes:
+'pinctrl-[0-9]+'
+and I reference the patch
+[https://www.spinics.net/lists/linux-leds/msg17032.html]
 
-All warnings (new ones prefixed by >>):
+>
+> > +
+> > +examples:
+> > +  - |
+> > +    ap_clk: clock-controller@20200000 {
+> > +      compatible =3D "sprd,ums512-ap-clk";
+> > +      reg =3D <0x20200000 0x1000>;
+> > +      clocks =3D <&ext_26m>;
+> > +      clock-names =3D "ext-26m";
+> > +      #clock-cells =3D <1>;
+> > +    };
+> > +
+> > +  - |
+> > +    ap_apb_regs: syscon@71000000 {
+> > +      compatible =3D "sprd,ums512-glbregs", "syscon", "simple-mfd";
+>
+> So here is the answer why you added MFD, but I still don't get why do
+> you need it for one child? It is quite a dance here and in your drivers,
+> instead of adding "syscon" to your clock controller.
 
-   drivers/thermal/intel/intel_hfi.c:401:27: error: implicit declaration of function 'alloc_pages_exact' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-                                    ^
->> drivers/thermal/intel/intel_hfi.c:401:25: warning: incompatible integer to pointer conversion assigning to 'void *' from 'int' [-Wint-conversion]
-           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-                                  ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/thermal/intel/intel_hfi.c:448:2: error: implicit declaration of function 'free_pages_exact' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
-           ^
-   drivers/thermal/intel/intel_hfi.c:448:2: note: did you mean 'alloc_pages_exact'?
-   drivers/thermal/intel/intel_hfi.c:401:27: note: 'alloc_pages_exact' declared here
-           hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-                                    ^
-   1 warning and 2 errors generated.
+[1]in the if/else describtion,  th other UMS512 clock nodes should be
+the child of a syscon node in
+which compatible string should be:   "sprd,ums512-glbregs", "syscon",
+"simple-mfd"
 
-
-vim +401 drivers/thermal/intel/intel_hfi.c
-
-2d74e6319abe27 Ricardo Neri 2022-01-27  343  
-2d74e6319abe27 Ricardo Neri 2022-01-27  344  /**
-2d74e6319abe27 Ricardo Neri 2022-01-27  345   * intel_hfi_online() - Enable HFI on @cpu
-2d74e6319abe27 Ricardo Neri 2022-01-27  346   * @cpu:	CPU in which the HFI will be enabled
-2d74e6319abe27 Ricardo Neri 2022-01-27  347   *
-2d74e6319abe27 Ricardo Neri 2022-01-27  348   * Enable the HFI to be used in @cpu. The HFI is enabled at the die/package
-2d74e6319abe27 Ricardo Neri 2022-01-27  349   * level. The first CPU in the die/package to come online does the full HFI
-2d74e6319abe27 Ricardo Neri 2022-01-27  350   * initialization. Subsequent CPUs will just link themselves to the HFI
-2d74e6319abe27 Ricardo Neri 2022-01-27  351   * instance of their die/package.
-2d74e6319abe27 Ricardo Neri 2022-01-27  352   *
-2d74e6319abe27 Ricardo Neri 2022-01-27  353   * This function is called before enabling the thermal vector in the local APIC
-2d74e6319abe27 Ricardo Neri 2022-01-27  354   * in order to ensure that @cpu has an associated HFI instance when it receives
-2d74e6319abe27 Ricardo Neri 2022-01-27  355   * an HFI event.
-2d74e6319abe27 Ricardo Neri 2022-01-27  356   */
-2d74e6319abe27 Ricardo Neri 2022-01-27  357  void intel_hfi_online(unsigned int cpu)
-2d74e6319abe27 Ricardo Neri 2022-01-27  358  {
-2d74e6319abe27 Ricardo Neri 2022-01-27  359  	struct hfi_instance *hfi_instance;
-2d74e6319abe27 Ricardo Neri 2022-01-27  360  	struct hfi_cpu_info *info;
-2d74e6319abe27 Ricardo Neri 2022-01-27  361  	phys_addr_t hw_table_pa;
-2d74e6319abe27 Ricardo Neri 2022-01-27  362  	u64 msr_val;
-2d74e6319abe27 Ricardo Neri 2022-01-27  363  	u16 die_id;
-2d74e6319abe27 Ricardo Neri 2022-01-27  364  
-2d74e6319abe27 Ricardo Neri 2022-01-27  365  	/* Nothing to do if hfi_instances are missing. */
-2d74e6319abe27 Ricardo Neri 2022-01-27  366  	if (!hfi_instances)
-2d74e6319abe27 Ricardo Neri 2022-01-27  367  		return;
-2d74e6319abe27 Ricardo Neri 2022-01-27  368  
-2d74e6319abe27 Ricardo Neri 2022-01-27  369  	/*
-2d74e6319abe27 Ricardo Neri 2022-01-27  370  	 * Link @cpu to the HFI instance of its package/die. It does not
-2d74e6319abe27 Ricardo Neri 2022-01-27  371  	 * matter whether the instance has been initialized.
-2d74e6319abe27 Ricardo Neri 2022-01-27  372  	 */
-2d74e6319abe27 Ricardo Neri 2022-01-27  373  	info = &per_cpu(hfi_cpu_info, cpu);
-2d74e6319abe27 Ricardo Neri 2022-01-27  374  	die_id = topology_logical_die_id(cpu);
-2d74e6319abe27 Ricardo Neri 2022-01-27  375  	hfi_instance = info->hfi_instance;
-2d74e6319abe27 Ricardo Neri 2022-01-27  376  	if (!hfi_instance) {
-2d74e6319abe27 Ricardo Neri 2022-01-27  377  		if (die_id < 0 || die_id >= max_hfi_instances)
-2d74e6319abe27 Ricardo Neri 2022-01-27  378  			return;
-2d74e6319abe27 Ricardo Neri 2022-01-27  379  
-2d74e6319abe27 Ricardo Neri 2022-01-27  380  		hfi_instance = &hfi_instances[die_id];
-2d74e6319abe27 Ricardo Neri 2022-01-27  381  		info->hfi_instance = hfi_instance;
-2d74e6319abe27 Ricardo Neri 2022-01-27  382  	}
-2d74e6319abe27 Ricardo Neri 2022-01-27  383  
-2d74e6319abe27 Ricardo Neri 2022-01-27  384  	init_hfi_cpu_index(info);
-2d74e6319abe27 Ricardo Neri 2022-01-27  385  
-2d74e6319abe27 Ricardo Neri 2022-01-27  386  	/*
-2d74e6319abe27 Ricardo Neri 2022-01-27  387  	 * Now check if the HFI instance of the package/die of @cpu has been
-2d74e6319abe27 Ricardo Neri 2022-01-27  388  	 * initialized (by checking its header). In such case, all we have to
-2d74e6319abe27 Ricardo Neri 2022-01-27  389  	 * do is to add @cpu to this instance's cpumask.
-2d74e6319abe27 Ricardo Neri 2022-01-27  390  	 */
-2d74e6319abe27 Ricardo Neri 2022-01-27  391  	mutex_lock(&hfi_instance_lock);
-2d74e6319abe27 Ricardo Neri 2022-01-27  392  	if (hfi_instance->hdr) {
-2d74e6319abe27 Ricardo Neri 2022-01-27  393  		cpumask_set_cpu(cpu, hfi_instance->cpus);
-2d74e6319abe27 Ricardo Neri 2022-01-27  394  		goto unlock;
-2d74e6319abe27 Ricardo Neri 2022-01-27  395  	}
-2d74e6319abe27 Ricardo Neri 2022-01-27  396  
-2d74e6319abe27 Ricardo Neri 2022-01-27  397  	/*
-2d74e6319abe27 Ricardo Neri 2022-01-27  398  	 * Hardware is programmed with the physical address of the first page
-2d74e6319abe27 Ricardo Neri 2022-01-27  399  	 * frame of the table. Hence, the allocated memory must be page-aligned.
-2d74e6319abe27 Ricardo Neri 2022-01-27  400  	 */
-2d74e6319abe27 Ricardo Neri 2022-01-27 @401  	hfi_instance->hw_table = alloc_pages_exact(hfi_features.nr_table_pages,
-2d74e6319abe27 Ricardo Neri 2022-01-27  402  						   GFP_KERNEL | __GFP_ZERO);
-2d74e6319abe27 Ricardo Neri 2022-01-27  403  	if (!hfi_instance->hw_table)
-2d74e6319abe27 Ricardo Neri 2022-01-27  404  		goto unlock;
-2d74e6319abe27 Ricardo Neri 2022-01-27  405  
-2d74e6319abe27 Ricardo Neri 2022-01-27  406  	hw_table_pa = virt_to_phys(hfi_instance->hw_table);
-2d74e6319abe27 Ricardo Neri 2022-01-27  407  
-2d74e6319abe27 Ricardo Neri 2022-01-27  408  	/*
-2d74e6319abe27 Ricardo Neri 2022-01-27  409  	 * Allocate memory to keep a local copy of the table that
-2d74e6319abe27 Ricardo Neri 2022-01-27  410  	 * hardware generates.
-2d74e6319abe27 Ricardo Neri 2022-01-27  411  	 */
-2d74e6319abe27 Ricardo Neri 2022-01-27  412  	hfi_instance->local_table = kzalloc(hfi_features.nr_table_pages << PAGE_SHIFT,
-2d74e6319abe27 Ricardo Neri 2022-01-27  413  					    GFP_KERNEL);
-2d74e6319abe27 Ricardo Neri 2022-01-27  414  	if (!hfi_instance->local_table)
-2d74e6319abe27 Ricardo Neri 2022-01-27  415  		goto free_hw_table;
-2d74e6319abe27 Ricardo Neri 2022-01-27  416  
-2d74e6319abe27 Ricardo Neri 2022-01-27  417  	/*
-2d74e6319abe27 Ricardo Neri 2022-01-27  418  	 * Program the address of the feedback table of this die/package. On
-2d74e6319abe27 Ricardo Neri 2022-01-27  419  	 * some processors, hardware remembers the old address of the HFI table
-2d74e6319abe27 Ricardo Neri 2022-01-27  420  	 * even after having been reprogrammed and re-enabled. Thus, do not free
-2d74e6319abe27 Ricardo Neri 2022-01-27  421  	 * the pages allocated for the table or reprogram the hardware with a
-2d74e6319abe27 Ricardo Neri 2022-01-27  422  	 * new base address. Namely, program the hardware only once.
-2d74e6319abe27 Ricardo Neri 2022-01-27  423  	 */
-2d74e6319abe27 Ricardo Neri 2022-01-27  424  	msr_val = hw_table_pa | HW_FEEDBACK_PTR_VALID_BIT;
-2d74e6319abe27 Ricardo Neri 2022-01-27  425  	wrmsrl(MSR_IA32_HW_FEEDBACK_PTR, msr_val);
-2d74e6319abe27 Ricardo Neri 2022-01-27  426  
-2d74e6319abe27 Ricardo Neri 2022-01-27  427  	init_hfi_instance(hfi_instance);
-2d74e6319abe27 Ricardo Neri 2022-01-27  428  
-ab09b0744a9944 Ricardo Neri 2022-01-27  429  	INIT_DELAYED_WORK(&hfi_instance->update_work, hfi_update_work_fn);
-ab09b0744a9944 Ricardo Neri 2022-01-27  430  	raw_spin_lock_init(&hfi_instance->table_lock);
-ab09b0744a9944 Ricardo Neri 2022-01-27  431  	raw_spin_lock_init(&hfi_instance->event_lock);
-ab09b0744a9944 Ricardo Neri 2022-01-27  432  
-2d74e6319abe27 Ricardo Neri 2022-01-27  433  	cpumask_set_cpu(cpu, hfi_instance->cpus);
-2d74e6319abe27 Ricardo Neri 2022-01-27  434  
-ab09b0744a9944 Ricardo Neri 2022-01-27  435  	/*
-ab09b0744a9944 Ricardo Neri 2022-01-27  436  	 * Enable the hardware feedback interface and never disable it. See
-ab09b0744a9944 Ricardo Neri 2022-01-27  437  	 * comment on programming the address of the table.
-ab09b0744a9944 Ricardo Neri 2022-01-27  438  	 */
-ab09b0744a9944 Ricardo Neri 2022-01-27  439  	rdmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-ab09b0744a9944 Ricardo Neri 2022-01-27  440  	msr_val |= HW_FEEDBACK_CONFIG_HFI_ENABLE_BIT;
-ab09b0744a9944 Ricardo Neri 2022-01-27  441  	wrmsrl(MSR_IA32_HW_FEEDBACK_CONFIG, msr_val);
-ab09b0744a9944 Ricardo Neri 2022-01-27  442  
-2d74e6319abe27 Ricardo Neri 2022-01-27  443  unlock:
-2d74e6319abe27 Ricardo Neri 2022-01-27  444  	mutex_unlock(&hfi_instance_lock);
-2d74e6319abe27 Ricardo Neri 2022-01-27  445  	return;
-2d74e6319abe27 Ricardo Neri 2022-01-27  446  
-2d74e6319abe27 Ricardo Neri 2022-01-27  447  free_hw_table:
-2d74e6319abe27 Ricardo Neri 2022-01-27  448  	free_pages_exact(hfi_instance->hw_table, hfi_features.nr_table_pages);
-2d74e6319abe27 Ricardo Neri 2022-01-27  449  	goto unlock;
-2d74e6319abe27 Ricardo Neri 2022-01-27  450  }
-2d74e6319abe27 Ricardo Neri 2022-01-27  451  
-
-:::::: The code at line 401 was first introduced by commit
-:::::: 2d74e6319abe278981e79166b6c2d0c3ed39b1ae thermal: intel: hfi: Handle CPU hotplug events
-
-:::::: TO: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-:::::: CC: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>
+> This also pollutes the actual bindings because you did not add
+> properties required for clock controllers, because of describing here
+> the syscon part.
+>
+> > +      reg =3D <0x71000000 0x3000>;
+> > +      #address-cells =3D <1>;
+> > +      #size-cells =3D <1>;
+> > +      #clock-cells =3D <1>;
+> > +      ranges =3D <0 0x71000000 0x3000>;
+> > +
+> > +      apahb_gate: clock-controller@0 {
+> > +        compatible =3D "sprd,ums512-apahb-gate";
+> > +        reg =3D <0x0 0x2000>;
+> > +        #clock-cells =3D <1>;
+> > +      };
+> > +    };
+> > +
+> > +...
+>
+>
+> Best regards,
+> Krzysztof
